@@ -111,9 +111,11 @@
     class Dummy {
         function Dummy() {
         }
-        function aMethod() {
+        function aMethod($parameter) {
+            return $parameter;
         }
         function anotherMethod() {
+            return true;
         }
     }
     
@@ -440,6 +442,43 @@
             $mock->aMethod(1, 2);
             $mock->aMethod("Goodbye");
             $test->tally();
+        }
+    }
+    
+    Mock::generatePartial("Dummy", "TestDummy", array("anotherMethod"));
+    
+    class TestOfPartialMocks extends UnitTestCase {
+        function TestOfPartialMocks() {
+            $this->UnitTestCase();
+        }
+        function testMethodReplacement() {
+            $mock = &new TestDummy($this);
+            $this->assertEqual($mock->aMethod(99), 99);
+            $this->assertNull($mock->anotherMethod());
+        }
+        function testSettingReturns() {
+            $mock = &new TestDummy($this);
+            $mock->setReturnValue("anotherMethod", 33, array(3));
+            $mock->setReturnValue("anotherMethod", 22);
+            $mock->setReturnValueAt(2, "anotherMethod", 44, array(3));
+            $this->assertEqual($mock->anotherMethod(), 22);
+            $this->assertEqual($mock->anotherMethod(3), 33);
+            $this->assertEqual($mock->anotherMethod(3), 44);
+        }
+        function testReferences() {
+            $mock = &new TestDummy($this);
+            $object = new Dummy();
+            $mock->setReturnReferenceAt(0, "anotherMethod", $object, array(3));
+            $this->assertReference($mock->anotherMethod(3), $object);
+        }
+        function testExpectations() {
+            $mock = &new TestDummy($this);
+            $mock->expectCallCount("anotherMethod", 2);
+            $mock->expectArguments("anotherMethod", array(77));
+            $mock->expectArgumentsAt(1, "anotherMethod", array(66));
+            $mock->anotherMethod(77);
+            $mock->anotherMethod(66);
+            $mock->tally();
         }
     }
 ?>

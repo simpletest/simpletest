@@ -151,6 +151,7 @@
      */
     class SimpleStub {
         var $_wildcard;
+        var $_is_strict;
         var $_returns;
         var $_return_sequence;
         var $_call_counts;
@@ -158,10 +159,12 @@
         /**
          *    Sets up the wildcard and everything else empty.
          *    @param $wildcard    Parameter matching wildcard.
+         *    @param $is_strict   Enables method name checks.
          *    @public
          */
-        function SimpleStub($wildcard) {
+        function SimpleStub($wildcard, $is_strict = true) {
             $this->_wildcard = $wildcard;
+            $this->_is_strict = $is_strict;
             $this->_returns = array();
             $this->_return_sequence = array();
             $this->clearHistory();
@@ -207,7 +210,7 @@
          *    @protected
          */
         function _dieOnNoMethod($method, $task) {
-            if (!method_exists($this, $method)) {
+            if ($this->_is_strict && !method_exists($this, $method)) {
                 trigger_error(
                         "Cannot $task as no ${method}() in class " . get_class($this),
                         E_USER_ERROR);
@@ -274,7 +277,7 @@
          *                          including wildcards.
          *    @public
          */
-        function setReturnValueAt($timing, $method, $value, $args = "") {
+        function setReturnValueAt($timing, $method, $value, $args = false) {
             $this->_dieOnNoMethod($method, "set return value sequence");
             $method = strtolower($method);
             if (!isset($this->_return_sequence[$method])) {
@@ -295,7 +298,7 @@
          *                          including wildcards.
          *    @public
          */
-        function setReturnReference($method, &$reference, $args = "") {
+        function setReturnReference($method, &$reference, $args = false) {
             $this->_dieOnNoMethod($method, "set return reference");
             $method = strtolower($method);
             if (!isset($this->_returns[$method])) {
@@ -318,7 +321,7 @@
          *                          including wildcards.
          *    @public
          */
-        function setReturnReferenceAt($timing, $method, &$reference, $args = "") {
+        function setReturnReferenceAt($timing, $method, &$reference, $args = false) {
             $this->_dieOnNoMethod($method, "set return reference sequence");
             $method = strtolower($method);
             if (!isset($this->_return_sequence[$method])) {
@@ -372,10 +375,12 @@
          *    All call counts are set to zero.
          *    @param $wildcard    Parameter matching wildcard.
          *    @param $test        Test case to test expectations in.
+         *    @param $is_strict   Enables method name checks on
+         *                        expectations.
          *    @public
          */
-        function SimpleMock(&$test, $wildcard) {
-            $this->SimpleStub($wildcard);
+        function SimpleMock(&$test, $wildcard, $is_strict = true) {
+            $this->SimpleStub($wildcard, $is_strict);
             $this->_test = &$test;
             $this->_expected_counts = array();
             $this->_max_counts = array();
@@ -386,14 +391,14 @@
         /**
          *    @deprecated
          */
-        function setReturnValueSequence($timing, $method, $value, $args = "") {
+        function setReturnValueSequence($timing, $method, $value, $args = false) {
             return $this->setReturnValueAt($timing, $method, $value, $args);
         }
         
         /**
          *    @deprecated
          */
-        function setReturnReferenceSequence($timing, $method, &$reference, $args = "") {
+        function setReturnReferenceSequence($timing, $method, &$reference, $args = false) {
             return $this->setReturnReferenceAt($timing, $method, $reference, $args);
         }
          
@@ -407,7 +412,7 @@
          *                          including wildcards.
          *    @public
          */
-        function expectArguments($method, $args = "") {
+        function expectArguments($method, $args = false) {
             $this->_dieOnNoMethod($method, "set expected arguments");
             $args = (is_array($args) ? $args : array());
             $this->_expected_args[strtolower($method)] = new ParameterList(
@@ -427,7 +432,7 @@
          *                          including wildcards.
          *    @public
          */
-        function expectArgumentsAt($timing, $method, $args = "") {
+        function expectArgumentsAt($timing, $method, $args = false) {
             $this->_dieOnNoMethod($method, "set expected arguments at time");
             $args = (is_array($args) ? $args : array());
             if (!isset($this->_sequence_args[$timing])) {
@@ -442,7 +447,7 @@
         /**
          *    @deprecated
          */
-        function expectArgumentsSequence($timing, $method, $args = "") {
+        function expectArgumentsSequence($timing, $method, $args = false) {
             $this->expectArgumentsAt($timing, $method, $args);
         }
         
@@ -758,10 +763,33 @@
         }
         
         /**
-         *    The new mock class code in string form.
+         *    Generates a version of a class with selected
+         *    methods mocked only. Inherits the old class
+         *    and chains the mock methods of an aggregated
+         *    mock object.
+         *    @param $class            Class to clone.
+         *    @param $mock_class       New class name.
+         *    @param $methods          Methods to be overridden
+         *                             with mock versions.
+         *    @static
+         *    @public
+         */
+        function generatePartial($class, $mock_class, $methods) {
+            if (!class_exists($class)) {
+                return false;
+            }
+            if (class_exists($mock_class)) {
+                return false;
+            }
+            return eval(Mock::_extendClassCode($class, $mock_class, $methods));
+        }
+
+        /**
+         *    The new mock class code as a string.
          *    @param $class            Class to clone.
          *    @param $mock_class       New class name.
          *    @param $methods          Additional methods.
+         *    @return                  Code as a string.
          *    @static
          *    @private
          */
@@ -775,20 +803,100 @@
             $code .= "}\n";
             return $code;
         }
+
+        /**
+         *    The extension class code as astring.
+         *    @param $class            Class to extends.
+         *    @param $mock_class       New class name.
+         *    @param $methods          Additional methods.
+         *    @return                  Code as a string.
+         *    @static
+         *    @private
+         */
+        function _extendClassCode($class, $mock_class, $methods) {
+            $mock_base = Mock::setMockBaseClass();
+            $code  = "class $mock_class extends $class {\n";
+            $code .= "    var \$_mock;\n";
+            $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_WILDCARD) {\n";
+            $code .= "        \$this->_mock = &new $mock_base(&\$test, \$wildcard, false);\n";
+            $code .= "    }\n";
+            $code .= Mock::_chainMockReturns();
+            $code .= Mock::_chainMockExpectations();
+            $code .= Mock::_overrideMethods($methods);
+            $code .= "}\n";
+            return $code;
+        }
         
         /**
-         *    Generates a version of a class with selected
-         *    methods mocked only. Inherits the old class
-         *    and chains the mock methods of an aggregated
+         *    Creates source code for chaining to an aggregated
          *    mock object.
-         *    @param $class            Class to clone.
-         *    @param $mock_class       New class name.
+         *    @return                  Code as a string.
+         *    @private
+         */
+        function _chainMockReturns() {
+            $code = "    function setReturnValue(\$method, \$value, \$args = false) {\n";
+            $code .= "        \$this->_mock->setReturnValue(\$method, \$value, \$args);\n";
+            $code .= "    }\n";
+            $code .= "    function setReturnValueAt(\$timing, \$method, \$value, \$args = false) {\n";
+            $code .= "        \$this->_mock->setReturnValueAt(\$timing, \$method, \$value, \$args);\n";
+            $code .= "    }\n";
+            $code .= "    function setReturnReference(\$method, &\$ref, \$args = false) {\n";
+            $code .= "        \$this->_mock->setReturnReference(\$method, \$ref, \$args);\n";
+            $code .= "    }\n";
+            $code .= "    function setReturnReferenceAt(\$timing, \$method, &\$ref, \$args = false) {\n";
+            $code .= "        \$this->_mock->setReturnReferenceAt(\$timing, \$method, \$ref, \$args);\n";
+            $code .= "    }\n";
+            $code .= "    function getCallCount(\$method) {\n";
+            $code .= "        \$this->_mock->getCallCount(\$method);\n";
+            $code .= "    }\n";
+            $code .= "    function clearHistory() {\n";
+            $code .= "        \$this->_mock->clearHistory();\n";
+            $code .= "    }\n";
+            return $code;
+        }
+        
+        /**
+         *    Creates source code for chaining to an aggregated
+         *    mock object.
+         *    @return                  Code as a string.
+         *    @private
+         */
+        function _chainMockExpectations() {
+            $code = "    function expectArguments(\$method, \$args = false) {\n";
+            $code .= "        \$this->_mock->expectArguments(\$method, \$args);\n";
+            $code .= "    }\n";
+            $code .= "    function expectArgumentsAt(\$timing, \$method, \$args = false) {\n";
+            $code .= "        \$this->_mock->expectArgumentsAt(\$timing, \$method, \$args);\n";
+            $code .= "    }\n";
+            $code .= "    function expectCallCount(\$method, \$count) {\n";
+            $code .= "        \$this->_mock->expectCallCount(\$method, \$count);\n";
+            $code .= "    }\n";
+            $code .= "    function expectMaximumCallCount(\$method, \$count) {\n";
+            $code .= "        \$this->_mock->expectMaximumCallCount(\$method, \$count);\n";
+            $code .= "    }\n";
+            $code .= "    function tally() {\n";
+            $code .= "        \$this->_mock->tally();\n";
+            $code .= "    }\n";
+            return $code;
+        }
+        
+        /**
+         *    Creates source code to override a list of methods
+         *    with mock versions.
          *    @param $methods          Methods to be overridden
          *                             with mock versions.
-         *    @static
-         *    @public
+         *    @return                  Code as a string.
+         *    @private
          */
-        function generatePartial($class, $mock_class, $methods) {
+        function _overrideMethods($methods) {
+            $code = "";
+            foreach ($methods as $method) {
+                $code .= "    function &$method() {\n";
+                $code .= "        \$args = func_get_args();\n";
+                $code .= "        return \$this->_mock->_invoke(\"$method\", \$args);\n";
+                $code .= "    }\n";
+            }
+            return $code;
         }
         
         /**
