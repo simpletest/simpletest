@@ -30,6 +30,7 @@ Add case insensitivity (0/1) - done.
 Browser
 -------
 Add headers only fetch (4/3) - done.
+Fix URL bug with local hostnames (2).
 
 Web tester
 ----------
