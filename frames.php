@@ -109,6 +109,18 @@
         }
         
         /**
+         *    Test for the presence of a frameset.
+         *    @return boolean        True if frameset.
+         *    @access public
+         */
+        function hasFrames() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->hasFrames();
+            }
+            return true;;
+        }
+        
+        /**
          *    Accessor for frames information.
          *    @return boolean/array     False if no frameset or
          *                              otherwise a hash of frame URLs.
@@ -147,6 +159,42 @@
                 return $this->_frames[$this->_focus]->getTransportError();
             }
             return $this->_frameset->getTransportError();
+        }
+        
+        /**
+         *    Request method used to fetch this frame.
+         *    @return string      GET, POST or HEAD.
+         *    @access public
+         */
+        function getRequestMethod() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getRequestMethod();
+            }
+            return $this->_frameset->getRequestMethod();
+        }
+        
+        /**
+         *    Original resource name.
+         *    @return SimpleUrl        Current url.
+         *    @access public
+         */
+        function getRequestUrl() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getRequestUrl();
+            }
+            return $this->_frameset->getRequestUrl();
+        }
+        
+        /**
+         *    Original request data.
+         *    @return mixed              Sent content.
+         *    @access public
+         */
+        function getRequestData() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getRequestData();
+            }
+            return $this->_frameset->getRequestData();
         }
         
         /**
@@ -197,6 +245,18 @@
                 return $this->_frames[$this->_focus]->getRealm();
             }
             return $this->_frameset->getRealm();
+        }
+        
+        /**
+         *    Accessor for outgoing header information.
+         *    @return string      Header block.
+         *    @access public
+         */
+        function getRequest() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getRequest();
+            }
+            return $this->_frameset->getRequest();
         }
         
         /**
@@ -251,6 +311,42 @@
                 $urls = array_merge($urls, $frame->getRelativeUrls());
             }
             return array_values(array_unique($urls));
+        }
+        
+        /**
+         *    Accessor for URLs by the link label. Label will match
+         *    regardess of whitespace issues and case.
+         *    @param string $label    Text of link.
+         *    @return array           List of links with that label.
+         *    @access public
+         */
+        function getUrlsByLabel($label) {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getUrlsByLabel($label);
+            }
+            $urls = array();
+            foreach ($this->_frames as $frame) {
+                $urls = array_merge($urls, $frame->getUrlsByLabel($label));
+            }
+            return array_values(array_unique($urls));
+        }
+        
+        /**
+         *    Accessor for a URL by the id attribute. If in a frameset
+         *    then the first link found with taht ID attribute is
+         *    returned only. Focus on a frame if you want one from
+         *    a specific part of the frameset.
+         *    @param string $id       Id attribute of link.
+         *    @return string          URL with that id.
+         *    @access public
+         */
+        function getUrlById($id) {
+            foreach ($this->_frames as $frame) {
+                if ($url = $frame->getUrlById($id)) {
+                    return $url;
+                }
+            }
+            return false;
         }
        
         /**
