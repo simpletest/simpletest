@@ -487,6 +487,17 @@
         function setField($name, $value) {
             return $this->_browser->setField($name, $value);
         }
+          
+        /**
+         *    Sets all form fields with that name.
+         *    @param string/integer $id   Id of field in forms.
+         *    @param string $value        New value of field.
+         *    @return boolean             True if field exists, otherwise false.
+         *    @access public
+         */
+        function setFieldById($id, $value) {
+            return $this->_browser->setFieldById($id, $value);
+        }
         
         /**
          *    Confirms that the form element is currently set
@@ -513,7 +524,33 @@
                         sprintf($message, "Field [$name] should match with [%s]"));
             }
         }
-        
+         
+        /**
+         *    Confirms that the form element is currently set
+         *    to the expected value. A missing form will always
+         *    fail. If no ID is given then only the existence
+         *    of the field is checked.
+         *    @param string/integer $id  Name of field in forms.
+         *    @param mixed $expected     Expected string/aray value or
+         *                               false for unset fields.
+         *    @param string $message     Message to display. Default
+         *                               can be embedded with %s.
+         *    @access public
+         */
+        function assertFieldById($id, $expected = true, $message = "%s") {
+            $value = $this->_browser->getFieldById($id);
+            if ($expected === true) {
+                $this->assertTrue(
+                        isset($value),
+                        sprintf($message, "Field of ID [$id] should exist"));
+            } else {
+                $this->assertExpectation(
+                        new IdenticalExpectation($expected),
+                        $value,
+                        sprintf($message, "Field of ID [$id] should match with [%s]"));
+            }
+        }
+       
         /**
          *    Checks the response code against a list
          *    of possible values.

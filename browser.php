@@ -646,7 +646,18 @@
         function setField($name, $value) {
             return $this->_page->setField($name, $value);
         }
-        
+          
+        /**
+         *    Sets all form fields with that name.
+         *    @param string/integer $id   Id of field in forms.
+         *    @param string $value        New value of field.
+         *    @return boolean             True if field exists, otherwise false.
+         *    @access public
+         */
+        function setFieldById($id, $value) {
+            return $this->_page->setFieldById($id, $value);
+        }
+      
         /**
          *    Accessor for a form element value within the page.
          *    Finds the first match.
@@ -658,6 +669,18 @@
          */
         function getField($name) {
             return $this->_page->getField($name);
+        }
+        
+        /**
+         *    Accessor for a form element value within the page.
+         *    @param string/integer $id  Id of field in forms.
+         *    @return string/boolean     A string if the field is
+         *                               present, false if unchecked
+         *                               and null if missing.
+         *    @access public
+         */
+        function getFieldById($id) {
+            return $this->_page->getFieldById($id);
         }
         
         /**

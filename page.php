@@ -1019,6 +1019,41 @@
         }
         
         /**
+         *    Sets a field on each form in which the field is
+         *    available.
+         *    @param string $name        Field name.
+         *    @param string $value       Value to set field to.
+         *    @return boolean            True if value is valid.
+         *    @access public
+         */
+        function setField($name, $value) {
+            $is_set = false;
+            for ($i = 0; $i < count($this->_complete_forms); $i++) {
+                if ($this->_complete_forms[$i]->setField($name, $value)) {
+                    $is_set = true;
+                }
+            }
+            return $is_set;
+        }
+         
+        /**
+         *    Sets a field on the form in which the unique field is
+         *    available.
+         *    @param string/integer $id  Field ID attribute.
+         *    @param string $value       Value to set field to.
+         *    @return boolean            True if value is valid.
+         *    @access public
+         */
+        function setFieldById($id, $value) {
+            for ($i = 0; $i < count($this->_complete_forms); $i++) {
+                if ($this->_complete_forms[$i]->setFieldById($id, $value)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+       
+        /**
          *    Accessor for a form element value within a page.
          *    Finds the first match.
          *    @param string $name        Field name.
@@ -1036,23 +1071,24 @@
             }
             return null;
         }
-        
+         
         /**
-         *    Sets a field on each form in which the field is
-         *    available.
-         *    @param string $name        Field name.
-         *    @param string $value       Value to set field to.
-         *    @return boolean            True if value is valid.
+         *    Accessor for a form element value within a page.
+         *    Finds the first match.
+         *    @param string/integer $id  Field ID attribute.
+         *    @return string/boolean     A string if the field is
+         *                               present, false if unchecked
+         *                               and null if missing.
          *    @access public
          */
-        function setField($name, $value) {
-            $is_set = false;
+        function getFieldById($id) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->setField($name, $value)) {
-                    $is_set = true;
+                $value = $this->_complete_forms[$i]->getValueById($id);
+                if (isset($value)) {
+                    return $value;
                 }
             }
-            return $is_set;
+            return null;
         }
-    }
+  }
 ?>

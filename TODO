@@ -22,7 +22,7 @@ Parser
 Add framset tag (2/3) - done.
 Add frame tag (1/2) - done.
 Simplify builder callbacks (1/2) - done.
-Add image submit parsing (3/3).
+Add image submit parsing (3/6) - done.
 Make multivalue widgets PHP compatible (2).
 Confirm nested directory parsing with base URL (2/4) - done.
 Fix bug with URL arguments with no "=" (1/2) - done.

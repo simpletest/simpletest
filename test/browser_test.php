@@ -183,11 +183,16 @@
             $page->setReturnValue('getField', 'Value');
             $page->expectOnce('getField', array('key'));
             $page->expectOnce('setField', array('key', 'Value'));
-            
+            $page->setReturnValue('getFieldById', 'Id value');
+            $page->expectOnce('getFieldById', array(99));
+            $page->expectOnce('setFieldById', array(99, 'Id value'));
+
             $browser = &$this->loadPage($page);
-            $this->assertEqual($browser->getField('key'), 'Value');
-            
+            $this->assertEqual($browser->getField('key'), 'Value');            
+            $this->assertEqual($browser->getFieldById(99), 'Id value');            
             $browser->setField('key', 'Value');
+            $browser->setFieldById(99, 'Id value');
+            
             $page->tally();
         }
     }

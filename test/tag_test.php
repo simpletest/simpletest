@@ -372,6 +372,15 @@
             $this->assertNull($form->getValue('not_present'));
             $this->assertEqual($form->getValues(), array('me' => 'Not me'));
         }
+        function testTextWidgetById() {
+            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form->addWidget(new SimpleTextTag(
+                    array('Name' => 'me', 'Type' => 'text', 'Value' => 'Myself', 'id' => 50)));
+            $this->assertIdentical($form->getValueById(50), 'Myself');
+            $this->assertTrue($form->setFieldById(50, 'Not me'));
+            $this->assertIdentical($form->getValueById(50), 'Not me');
+            $this->assertEqual($form->getValues(), array('me' => 'Not me'));
+        }
         function testSubmitEmpty() {
             $form = &new SimpleForm(new SimpleFormTag(array()));
             $this->assertIdentical($form->submit(), array());

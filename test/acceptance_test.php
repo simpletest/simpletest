@@ -367,9 +367,24 @@
             $this->assertTrue($this->clickSubmitByName('go'));
             $this->assertWantedPattern('/go=\[Go!\]/');
         }
-        function testFormSubmissionById() {
+        function testFormSubmissionWithIds() {
             $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertFieldById(1, '');
+            $this->assertFieldById(2, 'Default text');
+            $this->assertFieldById(3, '');
+            $this->assertFieldById(4, 'd1');
+            $this->assertFieldById(5, false);
+            $this->setFieldById(1, 'aaa');
+            $this->setFieldById(2, 'bbb');
+            $this->setFieldById(3, 'ccc');
+            $this->setFieldById(4, 'D2');
+            $this->setFieldById(5, 'on');
             $this->assertTrue($this->clickSubmitById(99));
+            $this->assertWantedPattern('/a=\[aaa\]/');
+            $this->assertWantedPattern('/b=\[bbb\]/');
+            $this->assertWantedPattern('/c=\[ccc\]/');
+            $this->assertWantedPattern('/d=\[d2\]/');
+            $this->assertWantedPattern('/e=\[on\]/');
             $this->assertWantedPattern('/go=\[Go!\]/');
         }
         function testImageSubmissionByLabel() {

@@ -1144,6 +1144,22 @@
         }
         
         /**
+         *    Extracts current value from form by the ID.
+         *    @param string/integer $id  Keyed by widget ID attribute.
+         *    @return string             Value as string or null
+         *                               if not set.
+         *    @access public
+         */
+        function getValueById($id) {
+            foreach ($this->_widgets as $widget) {
+                if ($widget->getAttribute('id') == $id) {
+                    return $widget->getValue();
+                }
+            }
+            return null;
+        }
+        
+        /**
          *    Sets a widget value within the form.
          *    @param string $name     Name of widget tag.
          *    @param string $value    Value to input into the widget.
@@ -1158,7 +1174,25 @@
             }
             return false;
         }
-        
+         
+        /**
+         *    Sets a widget value within the form by using the ID.
+         *    @param string/integer $id   Name of widget tag.
+         *    @param string $value        Value to input into the widget.
+         *    @return boolean             True if value is legal, false
+         *                                otherwise. If the field is not
+         *                                present, nothing will be set.
+         *    @access public
+         */
+        function setFieldById($id, $value) {
+            foreach (array_keys($this->_widgets) as $name) {
+                if ($this->_widgets[$name]->getAttribute('id') == $id) {
+                    return $this->setField($name, $value);
+                }
+            }
+            return false;
+        }
+       
         /**
          *    Reads the current form values as a hash
          *    of submitted parameters. Repeated parameters

@@ -559,7 +559,7 @@
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue('getContent', '<html><head><form>' .
                     '<input type="text" name="a">' .
-                    '<input type="text" name="b" value="bbb">' .
+                    '<input type="text" name="b" value="bbb" id=3>' .
                     '</form></head></html>');
             
             $page = &$this->parse($response);
@@ -571,14 +571,17 @@
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue('getContent', '<html><head><form>' .
                     '<input type="text" name="a">' .
+                    '<input type="text" name="b" id=3>' .
                     '<input type="submit">' .
                     '</form></head></html>');
             
             $page = &$this->parse($response);
             $this->assertTrue($page->setField('a', 'aaa'));
             $this->assertEqual($page->getField('a'), 'aaa');
-            $this->assertFalse($page->setField('b', 'bbb'));
-            $this->assertNull($page->getField('b'));
+            $this->assertTrue($page->setFieldById(3, 'bbb'));
+            $this->assertEqual($page->getFieldById(3), 'bbb');
+            $this->assertFalse($page->setField('z', 'zzz'));
+            $this->assertNull($page->getField('z'));
         }
         function testReadingTextArea() {
             $response = &new MockSimpleHttpResponse($this);
