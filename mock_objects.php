@@ -6,9 +6,9 @@
      *	@version	$Id$
      */
 
-	/**
-	 * @ignore	originally defined in simple_test.php
-	 */
+    /**
+     * @ignore    originally defined in simple_test.php
+     */
     if (! defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
     }

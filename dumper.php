@@ -5,7 +5,9 @@
      *	@subpackage	UnitTester
      *	@version	$Id$
      */
-    
+    /**
+     * does type matter
+     */
     define('TYPE_MATTERS', true);
     
     /**

@@ -480,8 +480,14 @@
     
     /**
      *    @deprecated
+     *    @ignore
+     *    @package      SimpleTest
+     *    @subpackage   UnitTester
      */
     class TestDisplay extends SimpleReporter {
+        /**
+         *    @deprecated
+         */
         function TestDisplay() {
             $this->SimpleReporter();
         }

@@ -2,7 +2,7 @@
     /**
      *	adapter for SimpleTest to use PEAR PHPUnit test cases
      *	@package	SimpleTest
-     *	@subpackage	Adapter
+     *	@subpackage	Adapters
      *	@version	$Id$
      */
     
@@ -22,6 +22,8 @@
     /**
      *    Adapter for PEAR PHPUnit test case to allow
      *    legacy PEAR test cases to be used with SimpleTest.
+     *    @package      SimpleTest
+     *    @subpackage   Adapters
      */
     class PHPUnit_TestCase extends SimpleTestCase {
         var $_loosely_typed;

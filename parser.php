@@ -6,14 +6,21 @@
      *	@version	$Id$
      */
     
+    /**
+     * @ignore    originally defined in simple_test.php
+     */
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
     }
+    /**#@+
+     * lexer mode constant
+     */
     define("LEXER_ENTER", 1);
     define("LEXER_MATCHED", 2);
     define("LEXER_UNMATCHED", 3);
     define("LEXER_EXIT", 4);
     define("LEXER_SPECIAL", 5);
+    /**#@-*/
     
     /**
      *    Compounded regular expression. Any of

@@ -6,6 +6,9 @@
      *	@version	$Id$
      */
     
+    /**
+     * @ignore    originally defined in simple_test.php
+     */
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
     }
@@ -222,8 +225,14 @@
     
     /**
      *    @deprecated
+     *    @ignore
+ 	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class CommandLineReporter extends TextReporter {
+        /**
+         *    @deprecated
+         */
         function CommandLineReporter() {
             $this->TextReporter();
         }
