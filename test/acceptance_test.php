@@ -52,9 +52,9 @@
             $browser = &new SimpleBrowser();
             $browser->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
             $browser->get('http://www.lastcraft.com/test/set_cookies.php');
-            $this->assertEqual($browser->getBaseCookieValue('session_cookie'), 'A');
-            $this->assertEqual($browser->getBaseCookieValue('short_cookie'), 'B');
-            $this->assertEqual($browser->getBaseCookieValue('day_cookie'), 'C');
+            $this->assertEqual($browser->getCurrentCookieValue('session_cookie'), 'A');
+            $this->assertEqual($browser->getCurrentCookieValue('short_cookie'), 'B');
+            $this->assertEqual($browser->getCurrentCookieValue('day_cookie'), 'C');
         }
         function testSimpleSubmit() {
             $browser = &new SimpleBrowser();

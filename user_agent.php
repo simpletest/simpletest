@@ -165,7 +165,6 @@
         var $_proxy_username;
         var $_proxy_password;
         var $_connection_timeout;
-        var $_base_url;
         var $_additional_headers;
         
         /**
@@ -180,31 +179,7 @@
             $this->_proxy_username = false;
             $this->_proxy_password = false;
             $this->setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
-            $this->_base_url = false;
             $this->_additional_headers = array();
-        }
-        
-        /**
-         *    Sets the current location.
-         *    @param SimpleUrl $url      Current URL.
-         *    @access public
-         */
-        function setBaseUrl($url) {
-            $this->_base_url = $url;
-        }
-        
-        /**
-         *    Accessor for base URL worked out from the current URL.
-         *    @return string       Base URL.
-         *    @access public
-         */
-        function getBaseUrl() {
-            if (! $this->_base_url) {
-                return false;
-            }
-            return $this->_base_url->getScheme('http') . '://' .
-                    $this->_base_url->getHost() .
-                    $this->_base_url->getBasePath();
         }
         
         /**
@@ -280,18 +255,18 @@
         }
         
         /**
-         *    Reads the current cookies for the base URL.
-         *    @param string $name   Key of cookie to find.
-         *    @return string        Null if there is no base URL, false
-         *                          if the cookie is not set.
+         *    Reads the current cookies within the base URL.
+         *    @param string $name     Key of cookie to find.
+         *    @param SimpleUrl $base  Base URL to search from.
+         *    @return string          Null if there is no base URL, false
+         *                            if the cookie is not set.
          *    @access public
          */
-        function getBaseCookieValue($name) {
-            if (! $this->getBaseUrl()) {
+        function getBaseCookieValue($name, $base) {
+            if (! $base) {
                 return null;
             }
-            $url = new SimpleUrl($this->getBaseUrl());
-            return $this->getCookieValue($url->getHost(), $url->getPath(), $name);
+            return $this->getCookieValue($base->getHost(), $base->getPath(), $name);
         }
         
         /**
@@ -399,14 +374,13 @@
                 if ($response->isError()) {
                     return $response;
                 }
-                $this->setBaseUrl($url);
                 $headers = $response->getHeaders();
+                $location = new SimpleUrl($headers->getLocation());
+                $url = $location->makeAbsolute($url);
                 $this->_addCookiesToJar($url, $headers->getNewCookies());
                 if (! $headers->isRedirect()) {
                     break;
                 }
-                $location = new SimpleUrl($headers->getLocation());
-                $url = $location->makeAbsolute($url);
                 $method = 'GET';
                 $parameters = false;
             } while (! $this->_isTooManyRedirects(++$redirects));
@@ -507,23 +481,6 @@
                 }
                 $this->_cookie_jar->setCookie($cookie);
             }
-        }
-        
-        /**
-         *    Turns an incoming URL string or object into a
-         *    URL object, filling the relative URL if
-         *    a base URL is present.
-         *    @param string/SimpleUrl $base Browser current URL.
-         *    @param string/SimpleUrl $url  Incoming URL.
-         *    @return SimpleUrl             Absolute URL.
-         *    @access public
-         *    @static
-         */
-        function createAbsoluteUrl($base, $url) {
-            if (! is_object($url)) {
-                $url = new SimpleUrl($url);
-            }
-            return $url->makeAbsolute($base);
         }
     }
 ?>

@@ -684,7 +684,7 @@
          *    @access public
          */
         function assertCookie($name, $expected = false, $message = "%s") {
-            $value = $this->_browser->getBaseCookieValue($name);
+            $value = $this->_browser->getCurrentCookieValue($name);
             if ($expected) {
                 $this->assertTrue($value === $expected, sprintf(
                         $message,
@@ -705,7 +705,7 @@
          */
         function assertNoCookie($name, $message = "%s") {
             $this->assertTrue(
-                    $this->_browser->getBaseCookieValue($name) === false,
+                    $this->_browser->getCurrentCookieValue($name) === false,
                     sprintf($message, "Not expecting cookie [$name]"));
         }
     }

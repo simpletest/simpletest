@@ -364,14 +364,18 @@
                     new SimpleCookie("a", "AAA", "this/path/")));
             $agent = &$this->_createPartialFetcher($request);
             
-            $this->assertNull($agent->getBaseCookieValue("a"));
+            $this->assertNull($agent->getBaseCookieValue("a", false));
             $agent->fetchResponse(
                     'GET',
                     new SimpleUrl('http://this.com/this/path/page.html'),
                     array());
             $agent->setCookie("b", "BBB", "this.com", "this/path/");
-            $this->assertEqual($agent->getBaseCookieValue("a"), "AAA");
-            $this->assertEqual($agent->getBaseCookieValue("b"), "BBB");
+            $this->assertEqual(
+                    $agent->getBaseCookieValue("a", new SimpleUrl('http://this.com/this/path/page.html')),
+                    "AAA");
+            $this->assertEqual(
+                    $agent->getBaseCookieValue("b", new SimpleUrl('http://this.com/this/path/page.html')),
+                    "BBB");
         }
     }
 

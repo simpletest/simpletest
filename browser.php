@@ -340,14 +340,14 @@
         }
         
         /**
-         *    Reads the current cookies for the base URL.
+         *    Reads the current cookies for the current URL.
          *    @param string $name   Key of cookie to find.
-         *    @return string        Null if there is no base URL, false
+         *    @return string        Null if there is no current URL, false
          *                          if the cookie is not set.
          *    @access public
          */
-        function getBaseCookieValue($name) {
-            return $this->_user_agent->getBaseCookieValue($name);
+        function getCurrentCookieValue($name) {
+            return $this->_user_agent->getBaseCookieValue($name, $this->_page->getUrl());
         }
         
         /**

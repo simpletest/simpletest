@@ -5,6 +5,10 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+Missing method getBaseCookieValue()
+-----------------------------------
+This was renamed getCurrentCookieValue() in RC1.
+
 Missing files from the SimpleTest suite
 ---------------------------------------
 Versions of SimpleTest prior to Beta6 required a SIMPLE_TEST constant
