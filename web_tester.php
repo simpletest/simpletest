@@ -175,7 +175,7 @@
          *    to false to disable.
          *    @param string $proxy        Proxy URL.
          *    @param string $username     Proxy username for authentication.
-         *    @param string $password     Proxy password for autentication.
+         *    @param string $password     Proxy password for authentication.
          *    @access public
          */
         function useProxy($proxy, $username = false, $password = false) {
