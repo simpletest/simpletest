@@ -266,6 +266,19 @@
             $forms = $page->getForms();
             $this->assertIdentical($forms[0]->getAction(), 'here.php');
         }
+        function testExtraClosingFormTag() {
+            $page = &new SimplePage(new MockSimpleHttpResponse($this));
+            $page->acceptFormStart(
+                    new SimpleFormTag(array("method" => "GET", "action" => "here.php")));
+            $forms = $page->getForms();
+            $this->assertIdentical($forms[0]->getAction(), 'here.php');
+            $this->assertIdentical($forms[0]->getMethod(), 'get');
+            $page->acceptFormEnd();
+            $page->acceptFormEnd();
+            $forms = $page->getForms();
+            $this->assertEqual(count($forms), 1);
+            $this->assertIdentical($forms[0]->getAction(), 'here.php');
+        }
         function testNestedForm() {
             $page = &new SimplePage(new MockSimpleHttpResponse($this));
             $page->acceptFormStart(new SimpleFormTag(array("method" => "GET", "action" => "outer.php")));

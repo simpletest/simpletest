@@ -130,7 +130,8 @@
         }
         
         /**
-         *    Opens a tag for receiving content.
+         *    Opens a tag for receiving content. Multiple tags
+         *    will be receiving input at the same time.
          *    @param SimpleTag $tag        New content tag.
          *    @access private
          */
@@ -305,7 +306,7 @@
         }
         
         /**
-         *    Opens a form.
+         *    Opens a form. New widgets go here.
          *    @param SimpleFormTag $tag      Tag to accept.
          *    @access public
          */
@@ -318,7 +319,9 @@
          *    @access public
          */
         function acceptFormEnd() {
-            $this->_complete_forms[] = array_pop($this->_open_forms);
+            if (count($this->_open_forms)) {
+                $this->_complete_forms[] = array_pop($this->_open_forms);
+            }
         }
         
         /**
