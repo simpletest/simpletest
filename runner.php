@@ -5,13 +5,13 @@
      *    Can recieve test events and display them. Display
      *    is achieved by making display methods available
      *    and visiting the incoming event. Abstract.
+     *    @abstract
      */
     class TestReporter {
         
         /**
          *    Does nothing.
          *    @access public
-         *    @abstract
          */
         function TestReporter() {
         }
