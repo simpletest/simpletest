@@ -129,14 +129,22 @@
 	 *	  @subpackage WebTester
      */
     class HttpHeaderExpectation extends SimpleExpectation {
+        var $_expected_header;
+        var $_expected_value;
         
         /**
          *    Sets the field and value to compare against.
          *    @param string $header   Case insenstive header name.
-         *    @param string $value    Optional value to compare.
+         *    @param string $value    Optional value to compare. If not
+         *                            given then any value will match.
          *    @access public
          */
         function HttpHeaderExpectation($header, $value = false) {
+            $this->_expected_header = trim($header);
+            if (is_string($value)) {
+                $value = trim($value);
+            }
+            $this->_expected_value = $value;
         }
         
         /**
@@ -147,7 +155,43 @@
          *    @access public
          */
         function test($compare) {
+            return is_string($this->_findHeader($compare));
+        }
+        
+        /**
+         *    Searches the incoming result. Will extract the matching
+         *    line as text.
+         *    @param mixed $compare   Raw header block to search.
+         *    @return string          Matching header line.
+         *    @access protected
+         */
+        function _findHeader($compare) {
+            $lines = split("\r\n", $compare);
+            foreach ($lines as $line) {
+                if ($this->_testHeaderLine($line)) {
+                    return $line;
+                }
+            }
             return false;
+        }
+        
+        /**
+         *    Compares a single header line against the expectation.
+         *    @param string $line      A single line to compare.
+         *    @access protected
+         */
+        function _testHeaderLine($line) {
+            if (count($parsed = split(':', $line)) < 2) {
+                return false;
+            }
+            list($header, $value) = $parsed;
+            if (trim($header) != $this->_expected_header) {
+                return false;
+            }
+            if ($this->_expected_value === false) {
+                return true;
+            }
+            return (trim($value) == $this->_expected_value);
         }
         
         /**
@@ -158,6 +202,15 @@
          *    @access public
          */
         function testMessage($compare) {
+            $expectation = $this->_expected_header;
+            if ($this->_expected_value) {
+                $expectation .= ': '. $this->_expected_header;
+            }
+            if (is_string($line = $this->_findHeader($compare))) {
+                return "Searching for header [$expectation] found [$line]"
+            } else {
+                return "Failed to find header [$expectation]"
+            }
         }
     }
       
