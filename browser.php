@@ -125,7 +125,7 @@
     class SimpleBrowser {
         var $_cookie_jar;
         var $_response;
-        var $_base_url;
+        var $_current_url;
         var $_max_redirects;
         
         /**
@@ -136,8 +136,34 @@
         function SimpleBrowser() {
             $this->_cookie_jar = new CookieJar();
             $this->_response = false;
-            $this->_base_url = false;
+            $this->_current_url = false;
             $this->setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
+        }
+        
+        /**
+         *    Accessor for base URL worked out from the current URL.
+         *    @return        Base URL as string.
+         *    @public
+         */
+        function getBaseUrl() {
+            if (!$this->_current_url) {
+                return false;
+            }
+            return $this->_current_url->getScheme('http') . '://' .
+                    $this->_current_url->getHost() . $this->_current_url->getBasePath();
+        }
+        
+        /**
+         *    Accessor for the current browser location.
+         *    @return        Current URL as string.
+         *    @public
+         */
+        function getCurrentUrl() {
+            if (!$this->_current_url) {
+                return false;
+            }
+            return $this->_current_url->getScheme('http') . '://' .
+                    $this->_current_url->getHost() . $this->_current_url->getPath();
         }
         
         /**
@@ -201,10 +227,10 @@
          *    @public
          */
         function getBaseCookieValue($name) {
-            if (!$this->_base_url) {
+            if (! $this->getBaseUrl()) {
                 return null;
             }
-            $url = new SimpleUrl($this->_base_url);
+            $url = new SimpleUrl($this->getBaseUrl());
             return $this->getCookieValue($url->getHost(), $url->getPath(), $name);
         }
         
@@ -273,12 +299,12 @@
          *    @public
          */
         function get($raw_url, $parameters = false) {
-            $url = $this->createAbsoluteUrl($this->_base_url, $raw_url, $parameters);
+            $url = $this->createAbsoluteUrl($this->getBaseUrl(), $raw_url, $parameters);
             $response = &$this->fetchResponse('GET', $url, $parameters);
             if ($response->isError()) {
                 return false;
             }
-            $this->_extractBaseUrl($url);
+            $this->_current_url = $url;
             return $response->getContent();
         }
         
@@ -291,7 +317,7 @@
          *    @public
          */
         function head($raw_url, $parameters = false) {
-            $url = $this->createAbsoluteUrl($this->_base_url, $raw_url, $parameters);
+            $url = $this->createAbsoluteUrl($this->getBaseUrl(), $raw_url, $parameters);
             $response = &$this->fetchResponse('HEAD', $url, $parameters);
             return !$response->isError();
         }
@@ -304,12 +330,12 @@
          *    @public
          */
         function post($raw_url, $parameters = false) {
-            $url = $this->createAbsoluteUrl($this->_base_url, $raw_url, array());
+            $url = $this->createAbsoluteUrl($this->getBaseUrl(), $raw_url, array());
             $response = &$this->fetchResponse('POST', $url, $parameters);
             if ($response->isError()) {
                 return false;
             }
-            $this->_extractBaseUrl($url);
+            $this->_current_url = $url;
             return $response->getContent();
         }
         
@@ -385,26 +411,6 @@
             $url->addRequestParameters($parameters);
             $url->makeAbsolute($base_url);
             return $url;
-        }
-        
-        /**
-         *    Extracts the host and directory path so
-         *    as to set the base URL.
-         *    @param $url        URL object to read.
-         *    @private
-         */
-        function _extractBaseUrl($url) {
-            $this->_base_url = $url->getScheme("http") . "://" .
-                    $url->getHost() . $url->getBasePath();
-        }
-        
-        /**
-         *    Accessor for base URL.
-         *    @return        Base URL as string.
-         *    @public
-         */
-        function getBaseUrl() {
-            return $this->_base_url;
         }
     }
     

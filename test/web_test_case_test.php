@@ -147,5 +147,22 @@
             $this->assertTrue($this->clickSubmit("wobble"));
             $this->assertTitle('Done');
         }
+        function testFormGetWithNoAction() {
+            $browser = &$this->getBrowser();
+            $form_code = '<html><head><form method="get">';
+            $form_code .= '<input type="submit" name="wibble" value="wobble"/>';
+            $form_code .= '</form></head></html>';
+            $browser->setReturnValueAt(0, "get", $form_code);
+            $browser->setReturnValueAt(1, "get", '<html><title>Done</title></html>');
+            $browser->expectArgumentsAt(
+                    1,
+                    "get",
+                    array("http://my-site.com/index.html", array("wibble" => "wobble")));
+            $browser->expectCallCount("get", 2);
+            $browser->setReturnValue("getCurrentUrl", "http://my-site.com/index.html");
+            $this->get("http://my-site.com/");
+            $this->assertTrue($this->clickSubmit("wobble"));
+            $this->assertTitle('Done');
+        }
     }
 ?>

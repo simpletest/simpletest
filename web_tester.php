@@ -177,10 +177,13 @@
          */
         function clickSubmit($label = "Submit") {
             $page = &$this->_getHtml();
-            if (!($form = &$page->getFormByLabel($label))) {
+            if (! ($form = &$page->getFormByLabel($label))) {
                 return false;
             }
             $action = $form->getAction();
+            if (!$action) {
+                $action = $this->_current_browser->getCurrentUrl();
+            }
             if ($form->getMethod() == "post") {
                 return $this->post($action, $form->submitButtonByLabel($label));
             } else {
@@ -227,7 +230,7 @@
          */
         function clickLinkId($id) {
             $page = &$this->_getHtml();
-            if (!($url = $page->getUrlById($id))) {
+            if (! ($url = $page->getUrlById($id))) {
                 return false;
             }
             $this->get($url);
