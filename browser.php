@@ -8,7 +8,9 @@
     require_once(SIMPLE_TEST . 'simple_unit.php');
     
     /**
-     *    Repository for cookies.
+     *    Repository for cookies. The semantics are a bit
+     *    ropy until I can go through the cookie spec with
+     *    a fine tooth combe.
      */
     class CookieJar {
         var $_cookies;
@@ -22,11 +24,24 @@
         }
         
         /**
-         *    Adds a cookie to the jar.
+         *    Adds a cookie to the jar. This will overwrite
+         *    cookies with more specific paths.
          *    @param $cookie        New cookie.
          *    @public
          */
         function setCookie($cookie) {
+            for ($i = 0; $i < count($this->_cookies); $i++) {
+                $is_match = $this->_isMatch(
+                        $cookie,
+                        $this->_cookies[$i]->getHost(),
+                        $this->_cookies[$i]->getPath(),
+                        $this->_cookies[$i]->getName(),
+                        $this->_cookies[$i]->getExpiry());
+                if ($is_match) {
+                    $this->_cookies[$i] = $cookie;
+                    return;
+                }
+            }
             $this->_cookies[] = $cookie;
         }
         
@@ -36,7 +51,7 @@
          *    Any cookies with missing categories will not
          *    be filtered out by that category.         
          *    @param $host        Host name requirement.
-         *    @param $path        Path encompasing cookies.
+         *    @param $path        Path encompassing cookies.
          *    @param $date        Date to test expiries against,
          *                        either a timestamp or as a
          *                        cookie formatted date string.
@@ -47,23 +62,42 @@
         function getValidCookies($host = false, $path = "/", $date = false) {
             $valid_cookies = array();
             foreach ($this->_cookies as $cookie) {
-                if ($host && $cookie->getHost() && ($cookie->getHost() != $host)) {
-                    continue;
-                }
-                if (!$this->_isSubpath($cookie->getPath(), $path)) {
-                    continue;
-                }
-                if ($cookie->isExpired($date)) {
-                    continue;
-                }
-                if (isset($valid_cookies[$cookie->getName()])) {
-                    if (strlen($cookie->getPath()) < strlen($valid_cookies[$cookie->getName()]->getPath())) {
-                        continue;
+                if ($this->_isMatch($cookie, $host, $path, $cookie->getName(), $date)) {
+                    if ($cookie->getValue()) {
+                        $valid_cookies[$cookie->getName()] = $cookie;
                     }
                 }
-                $valid_cookies[$cookie->getName()] = $cookie;
             }
             return $valid_cookies;
+        }
+        
+        /**
+         *    Tests cookie for matching against search
+         *    criteria.
+         *    @param $cookie        Cookie to test.
+         *    @param $host          Host must match.
+         *    @param $path          Cookie path must be shorter than
+         *                          this path.
+         *    @param $name          Name must match.
+         *    @param $date          Cookie must not have expired at
+         *                          this time.
+         *    @return               True if matched.
+         *    @private
+         */
+        function _isMatch($cookie, $host, $path, $name, $date) {
+            if ($cookie->getName() != $name) {
+                return false;
+            }
+            if ($host && $cookie->getHost() && ($cookie->getHost() != $host)) {
+                return false;
+            }
+            if (!$this->_isSubpath($cookie->getPath(), $path)) {
+                return false;
+            }
+            if ($cookie->isExpired($date)) {
+                return false;
+            }
+            return true;
         }
         
         /**
@@ -100,15 +134,15 @@
         function TestBrowser(&$test) {
             $this->_test = &$test;
             $this->_response = false;
-            $this->clearExpectations();
             $this->_cookie_jar = new CookieJar();
+            $this->_clearExpectations();
         }
         
         /**
          *    Resets all expectations.
-         *    @public
+         *    @protected
          */
-        function clearExpectations() {
+        function _clearExpectations() {
             $this->_expect_connection = null;
             $this->_expected_response_codes = null;
             $this->_expected_mime_types = null;
@@ -132,7 +166,11 @@
             $this->_response = &$request->fetch();
             $this->_checkExpectations($url, $this->_response);
             foreach ($this->_response->getNewCookies() as $cookie) {
-                $this->setCookie($cookie);
+                $parsed_url = new SimpleUrl($url);
+                if ($parsed_url->getHost()) {
+                    $cookie->setHost($parsed_url->getHost());
+                }
+                $this->_cookie_jar->setCookie($cookie);
             }
             return $this->_response->getContent();
         }
@@ -152,7 +190,7 @@
          *    @param $codes        Array of allowed codes.
          *    @public
          */
-        function setExpectedResponseCodes($codes) {
+        function expectResponseCodes($codes) {
             $this->_expected_response_codes = $codes;
         }
         
@@ -162,17 +200,25 @@
          *    @param $types        Array of allowed types.
          *    @public
          */
-        function setExpectedMimeTypes($types) {
+        function expectMimeTypes($types) {
             $this->_expected_mime_types = $types;
         }
         
         /**
          *    Sets an additional cookie. If a cookie has
          *    the same name and path it is replaced.
-         *    @param $cookie        Cookie object.
+         *    @param $name            Cookie key.
+         *    @param $value           Value of cookie.
+         *    @param $host            Host upon which the cookie is valid.
+         *    @param $path            Cookie path if not host wide.
+         *    @param $expiry          Expiry date as string.
          *    @public
          */
-        function setCookie($cookie) {
+        function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
+            $cookie = new SimpleCookie($name, $value, $path, $expiry);
+            if ($host) {
+                $cookie->setHost();
+            }
             $this->_cookie_jar->setCookie($cookie);
         }
         
@@ -191,12 +237,16 @@
          *    @param $host        Host to search.
          *    @param $path        Applicable path.
          *    @param $name        Name of cookie to read.
+         *    @param $date        Time when cookie is to be tested.
          *    @return             Null if not present, else the
          *                        value as a string.
          *    @public
          */
-        function getCookieValue($host, $path, $name) {
-            $cookies = $this->_cookie_jar->getValidCookies();
+        function getCookieValue($host, $path, $name, $date = false) {
+            $cookies = $this->_cookie_jar->getValidCookies($host, $path, $date);
+            if (!isset($cookies[$name])) {
+                return null;
+            }
             return $cookies[$name]->getValue();
         }
         
@@ -231,18 +281,25 @@
         
         /**
          *    Checks that an expected cookie was present
-         *    in the incoming cookie list.
+         *    in the incoming cookie list. The cookie
+         *    should appear only once.
          *    @param $expected    Expected cookie.
          *    @param $cookies     Incoming.
          *    @return             True if expectation met.
+         *    @private
          */
         function _checkExpectedCookie($expected, $cookies) {
+            $is_match = false;
+            $message = "Expected cookie " . $expected["name"] . " not found";
             foreach ($cookies as $cookie) {
                 if ($cookie->getName() == $expected["name"]) {
-                    $message = "Expected cookie " . $expected["name"] . " value " . $expected["value"] . " should be [" . $cookie->getValue() . "]";
-                    $this->_assertTrue($cookie->getValue() == $expected["value"], $message);
+                    $is_match = ($cookie->getValue() == $expected["value"]);
+                    $message = "Expected cookie " . $expected["name"] .
+                            " value " . $expected["value"] .
+                            " should be [" . $cookie->getValue() . "]";
                 }
             }
+            $this->_assertTrue($is_match, $message);
         }
         
         /**

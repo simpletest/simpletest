@@ -78,6 +78,12 @@
             $this->assertEqual($cookies["a"]->getPath(), "/path/here/");
             $this->assertEqual($cookies["a"]->getValue(), "123");
         }
+        function testCookieClearing() {
+            $jar = new CookieJar();
+            $jar->setCookie(new SimpleCookie("a", "abc", "/"));
+            $jar->setCookie(new SimpleCookie("a", "", "/"));
+            $this->assertEqual(count($jar->getValidCookies(false, "/")), 0);
+        }
     }
 
     class TestOfBrowser extends UnitTestCase {
@@ -164,7 +170,7 @@
             $this->_test->setExpectedArguments("assertTrue", array(true, "*"));
             $this->_test->setExpectedCallCount("assertTrue", 1);
             $browser = &new TestBrowser($this->_test);
-            $browser->setExpectedResponseCodes(array(404));
+            $browser->expectResponseCodes(array(404));
             $browser->fetchUrl("http://this.host/this/path/page.html", &$this->_request);
             $this->_test->tally();
         }
@@ -173,7 +179,7 @@
             $this->_test->setExpectedArguments("assertTrue", array(false, "*"));
             $this->_test->setExpectedCallCount("assertTrue", 1);
             $browser = &new TestBrowser($this->_test);
-            $browser->setExpectedResponseCodes(array(100, 200));
+            $browser->expectResponseCodes(array(100, 200));
             $browser->fetchUrl("http://this.host/this/path/page.html", &$this->_request);
             $this->_test->tally();
         }
@@ -182,7 +188,7 @@
             $this->_test->setExpectedArguments("assertTrue", array(true, "*"));
             $this->_test->setExpectedCallCount("assertTrue", 1);
             $browser = &new TestBrowser($this->_test);
-            $browser->setExpectedMimeTypes(array("text/plain", "text/xml"));
+            $browser->expectMimeTypes(array("text/plain", "text/xml"));
             $browser->fetchUrl("http://this.host/this/path/page.xml", &$this->_request);
             $this->_test->tally();
         }
@@ -190,9 +196,9 @@
             $this->_response->setReturnValue("getResponseCode", 404);
             $this->_test->setExpectedCallCount("assertTrue", 0);
             $browser = &new TestBrowser($this->_test);
-            $browser->setExpectedResponseCodes(array(100, 200));
+            $browser->expectResponseCodes(array(100, 200));
             $browser->expectConnection();
-            $browser->clearExpectations();
+            $browser->_clearExpectations();
             $browser->fetchUrl("http://this.host/this/path/page.html", &$this->_request);
             $this->_test->tally();
         }
@@ -202,29 +208,46 @@
         function TestOfBrowserCookies() {
             $this->UnitTestCase();
         }
-        function testSendCookie() {
+        function &_createStandardResponse() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("isError", false);
             $response->setReturnValue("getNewCookies", array());
             $response->setReturnValue("getContent", "stuff");
-            $request = &new MockSimpleHttpRequest($this);
-            $request->setReturnReference("fetch", $response);
-            $request->setExpectedArguments("setCookie", array(new SimpleCookie("a", "A")));
-            $request->setExpectedCallCount("setCookie", 1);
-            $browser = &new TestBrowser(new MockUnitTestCase($this));
-            $browser->setCookie(new SimpleCookie("a", "A"));
-            $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
-            $request->tally();
+            return $response;
         }
-        function testNewCookie() {
+        function &_createCookieSite($cookies) {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("isError", false);
             $response->setReturnValue("getContent", "stuff");
-            $response->setReturnValue(
-                    "getNewCookies",
-                    array(new SimpleCookie("a", "A")));
+            $response->setReturnValue("getNewCookies", $cookies);
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
+            return $request;
+        }
+        function testSendCookie() {
+            $request = &new MockSimpleHttpRequest($this);
+            $request->setReturnReference("fetch", $this->_createStandardResponse());
+            $request->setExpectedArguments("setCookie", array(new SimpleCookie("a", "A")));
+            $request->setExpectedCallCount("setCookie", 1);
+            $browser = &new TestBrowser(new MockUnitTestCase($this));
+            $browser->setCookie("a", "A");
+            $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
+            $request->tally();
+        }
+        function testMissingCookie() {
+            $request = &new MockSimpleHttpRequest($this);
+            $request->setReturnReference("fetch", $this->_createStandardResponse());
+            $test = &new MockUnitTestCase($this);
+            $test->setExpectedArguments("assertTrue", array(false, "*"));
+            $test->setExpectedCallCount("assertTrue", 1);
+            $browser = &new TestBrowser($test);
+            $browser->expectCookie("a", "A");
+            $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
+            $test->tally();
+            $this->assertNull($browser->getCookieValue("this.host", "this/page/", "a"));
+        }
+        function testNewCookie() {
+            $request = &$this->_createCookieSite(array(new SimpleCookie("a", "A", "this/path/")));
             $test = &new MockUnitTestCase($this);
             $test->setExpectedArguments("assertTrue", array(true, "*"));
             $test->setExpectedCallCount("assertTrue", 1);
@@ -233,8 +256,22 @@
             $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
             $test->tally();
             $this->assertEqual($browser->getCookieValue("this.host", "this/path/", "a"), "A");
+            $this->assertNull($browser->getCookieValue("this.host", "this/", "a"));
+            $this->assertNull($browser->getCookieValue("another.host", "this/path/", "a"));
         }
-        function testReceiveExisting() {
+        function testReceiveExistingCookie() {
+            $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAAA", "this/path/")));
+            $browser = &new TestBrowser(new MockUnitTestCase($this));
+            $browser->setCookie("a", "A");
+            $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
+            $this->assertEqual($browser->getCookieValue("this.host", "this/path/", "a"), "AAAA");
+        }
+        function testClearCookie() {
+            $request = &$this->_createCookieSite(array(new SimpleCookie("a", "", "this/path/")));
+            $browser = &new TestBrowser(new MockUnitTestCase($this));
+            $browser->setCookie("a", "A");
+            $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
+            $this->assertNull($browser->getCookieValue("this.host", "this/path/", "a"));
         }
     }
 ?>
