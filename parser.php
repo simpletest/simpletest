@@ -346,13 +346,13 @@
          *    Parses the page text to create a new web
          *    page document model.
          *    @param $raw        Raw HTML text.
-         *    @param $page       Page to set information in.
-         *    @return            True if page was parsed
-         *                       successfully.
+         *    @param $page       Page to set information in
+         *                       for testing purposes.
+         *    @return            A page object or false on fail.
          *    @public
          */
-        function parse($raw, &$page) {
-            return true;
+        function parse($raw, $page = false) {
+            return $page;
         }
     }
     
@@ -360,25 +360,68 @@
      *    A wrapper for a web page.
      */
     class HtmlPage {
-        var $_links;
+        var $_absolute_links;
+        var $_relative_links;
         
         /**
          *    Parses a page ready to access it's contents.
          */
         function HtmlPage() {
-            $this->_links = array();
+            $this->_absolute_links = array();
+            $this->_relative_links = array();
         }
         
         /**
-         *    Adds a tag to the page.
+         *    Adds a link to the page.
          *    @param $url        Address.
          *    @param $label      Text label of link.
+         *    @param $is_strict  Will accept only correct
+         *                       relative URLs: must start
+         *                       "/", "./" or "../" or have
+         *                       a scheme.
+         *    @public
          */
-        function addLink($url, $label) {
-            if (!isset($this->_links[$label])) {
-                $this->_links[$label] = array();
+        function addLink($url, $label, $is_strict = false) {
+            $parsed_url = new SimpleUrl($url);
+            if ($parsed_url->getScheme() && $parsed_url->getHost()) {
+                $this->_addAbsoluteLink($url, $label);
+                return;
             }
-            array_push($this->_links[$label], $url);
+            if (!$is_strict && !$parsed_url->getScheme()) {
+                if (!preg_match('/^(\/|\.\/|\.\.\/)/', $url)) {
+                    $url = "./" . $url;
+                    $parsed_url = new SimpleUrl($url);
+                }
+            }
+            if (!$parsed_url->getHost()) {
+                $this->_addRelativeLink($url, $label);
+            }
+        }
+        
+        /**
+         *    Adds an absolute link to the page.
+         *    @param $url        Address.
+         *    @param $label      Text label of link.
+         *    @private
+         */
+        function _addAbsoluteLink($url, $label) {
+            if (!isset($this->_absolute_links[$label])) {
+                $this->_absolute_links[$label] = array();
+            }
+            array_push($this->_absolute_links[$label], $url);
+        }
+        
+        /**
+         *    Adds a relative link to the page.
+         *    @param $url        Address.
+         *    @param $label      Text label of link.
+         *    @private
+         */
+        function _addRelativeLink($url, $label) {
+            if (!isset($this->_relative_links[$label])) {
+                $this->_relative_links[$label] = array();
+            }
+            array_push($this->_relative_links[$label], $url);
         }
         
         /**
@@ -388,14 +431,11 @@
          *    @public
          */
         function getAbsoluteLinks() {
-            $external = array();
-            foreach ($this->_getLinks() as $link) {
-                $url = new SimpleUrl($link);
-                if ($url->getScheme() && $url->getHost()) {
-                    array_push($external, $link);
-                }
+            $all = array();
+            foreach ($this->_absolute_links as $label => $links) {
+                $all = array_merge($all, $links);
             }
-            return $external;
+            return $all;
         }
         
         /**
@@ -404,23 +444,8 @@
          *    @public
          */
         function getRelativeLinks() {
-            $internal = array();
-            foreach ($this->_getLinks() as $link) {
-                $url = new SimpleUrl($link);
-                if (!$url->getHost()) {
-                    array_push($internal, $link);
-                }
-            }
-            return $internal;
-        }
-        
-        /**
-         *    Accessor for flat list of links.
-         *    @private
-         */
-        function _getLinks() {
             $all = array();
-            foreach ($this->_links as $label => $links) {
+            foreach ($this->_relative_links as $label => $links) {
                 $all = array_merge($all, $links);
             }
             return $all;
@@ -434,10 +459,14 @@
          *    @public
          */
         function getUrls($label) {
-            if (!isset($this->_links[$label])) {
-                return array();
+            $all = array();
+            if (isset($this->_absolute_links[$label])) {
+                $all = $this->_absolute_links[$label];
             }
-            return $this->_links[$label];
+            if (isset($this->_relative_links[$label])) {
+                $all = array_merge($all, $this->_relative_links[$label]);
+            }
+            return $all;
         }
     }
 ?>

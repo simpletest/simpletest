@@ -267,12 +267,19 @@
             $this->assertIdentical($page->getRelativeLinks(), array(), "rel->%s");
             $this->assertEqual($page->getUrls("Label"), array("http://somewhere"));
         }
+        function testAddStrictInternalLink() {
+            $page = new HtmlPage();
+            $page->addLink("./somewhere.php", "Label", true);
+            $this->assertEqual($page->getAbsoluteLinks(), array(), "abs->%s");
+            $this->assertIdentical($page->getRelativeLinks(), array("./somewhere.php"), "rel->%s");
+            $this->assertEqual($page->getUrls("Label"), array("./somewhere.php"));
+        }
         function testAddInternalLink() {
             $page = new HtmlPage();
-            $page->addLink("../somewhere.php", "Label");
+            $page->addLink("somewhere.php", "Label");
             $this->assertEqual($page->getAbsoluteLinks(), array(), "abs->%s");
-            $this->assertIdentical($page->getRelativeLinks(), array("../somewhere.php"), "rel->%s");
-            $this->assertEqual($page->getUrls("Label"), array("../somewhere.php"));
+            $this->assertIdentical($page->getRelativeLinks(), array("./somewhere.php"), "rel->%s");
+            $this->assertEqual($page->getUrls("Label"), array("./somewhere.php"));
         }
     }
 ?>
