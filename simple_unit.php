@@ -5,6 +5,7 @@
         define("SIMPLE_TEST", "./");
     }
     require_once(SIMPLE_TEST . 'simple_test.php');
+    require_once(SIMPLE_TEST . 'assertion.php');
     
     /**
      *    Standard unit test class for day to day testing
@@ -66,7 +67,7 @@
         /**
          *    Type and class test. Will pass if class
          *    matches the type name or is a subclass or
-         *    is not an object, but the type is corect.
+         *    if not an object, but the type is correct.
          *    @param $object        Object to test.
          *    @param $type          Type name as string.
          *    @public
@@ -222,28 +223,12 @@
         
         /**
          *    Renders a variable in a shorter for than print_r().
-         *    @param $var        Variable to render as a string.
+         *    @param $value      Variable to render as a string.
+         *    @return            Human readable string form.
          *    @protected
          */
-        function _renderVariable($var) {
-            if (!isset($var)) {
-                return "NULL";
-            } elseif (is_bool($var)) {
-                return "Boolean: " . ($var ? "true" : "false");
-            } elseif (is_string($var)) {
-                return "String: $var";
-            } elseif (is_integer($var)) {
-                return "Integer: $var";
-            } elseif (is_float($var)) {
-                return "Float: $arg";
-            } elseif (is_array($var)) {
-                return "Array: " . count($var) . " items";
-            } elseif (is_resource($var)) {
-                return "Resource: $var";
-            } elseif (is_object($var)) {
-                return "Object: of " . get_class($var);
-            }
-            return "Unknown";
+        function _renderVariable($value) {
+            return Assertion::describeValue($value);
         }
     }
 ?>

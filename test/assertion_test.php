@@ -6,14 +6,18 @@
     }
     require_once(SIMPLE_TEST . 'assertion.php');
 
-    class TestOfAssertion extends UnitTestCase {
-        function TestOfAssertion() {
+    class TestOfEquality extends UnitTestCase {
+        function TestOfEquality() {
             $this->UnitTestCase();
         }
         function testStringMatch() {
-            $assertion = &new EqualityAssertion("Hello");
-            $this->assertTrue($assertion->is("Hello"));
-            $this->assertFalse($assertion->is("Goodbye"));
+            $hello = &new EqualityAssertion("Hello");
+            $this->assertTrue($hello->test("Hello"));
+            $this->assertFalse($hello->test("Goodbye"));
+            $this->assertEqual($hello->testMessage("Hello"), "Equal [String: Hello]");
+            $this->assertEqual(
+                    $hello->testMessage("Goodbye"),
+                    "[String: Hello] differs from [String: Goodbye] at character 0");
         }
     }
 ?>
