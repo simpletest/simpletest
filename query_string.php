@@ -40,6 +40,23 @@
         }
         
         /**
+         *    Accessor for single value.
+         *    @return string/array    False if missing, string
+         *                            if present and array if
+         *                            multiple entries.
+         *    @access public
+         */
+        function getValue($key) {
+            if (! isset($this->_request[$key])) {
+                return false;
+            } elseif (count($this->_request[$key]) == 1) {
+                return $this->_request[$key][0];
+            } else {
+                return $this->_request[$key];
+            }
+        }
+        
+        /**
          *    Renders the query string as a URL encoded
          *    request part.
          *    @return string        Part of URL.

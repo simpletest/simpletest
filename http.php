@@ -146,10 +146,10 @@
          *    @access private
          */
         function _parseRequest($raw) {
-            $request = array();
+            $request = new SimpleQueryString();
             foreach (split("&", $raw) as $pair) {
                 if (preg_match('/(.*?)=(.*)/', $pair, $matches)) {
-                    $request[$matches[1]] = urldecode($matches[2]);
+                    $request->add($matches[1], urldecode($matches[2]));
                 }
             }
             return $request;
@@ -262,25 +262,29 @@
          *    @access public
          */
         function getEncodedRequest() {
-            if (count($this->getRequest()) == 0) {
-                return "";
+            $query = $this->getRequest();
+            if ($encoded = $query->asString()) {
+                return "?$encoded";
             }
-            return "?" . $this->encodeRequest($this->getRequest());
+            return '';
         }
         
         /**
          *    Encodes parameters as HTTP request parameters.
-         *    @param SimpleQueryString $parameters    Request.
-         *    @return string                          Encoded request.
+         *    @param hash $parameters    Request as hash.
+         *    @return string             Encoded request.
          *    @access public
          *    @static
          */
         function encodeRequest($parameters) {
-            $encoded = array();
-            foreach ($parameters as $key => $value) {
-                $encoded[] = $key . "=" . urlencode($value);
+            if (! $parameters) {
+                return '';
             }
-            return implode("&", $encoded);
+            $query = &new SimpleQueryString();
+            foreach ($parameters as $key => $value) {
+                $query->add($key, $value);
+            }
+            return $query->asString();
         }
         
         /**
@@ -300,7 +304,7 @@
          *    @access public
          */
         function addRequestParameter($key, $value) {
-            $this->_request[$key] = $value;
+            $this->_request->add($key, $value);
         }
         
         /**
@@ -309,7 +313,9 @@
          *    @access public
          */
         function addRequestParameters($parameters) {
-            $this->_request = array_merge($this->_request, $parameters);
+            foreach ($parameters as $key => $value) {
+                $this->_request->add($key, $value);
+            }
         }
         
         /**

@@ -370,7 +370,7 @@
          *    @access private
          */
         function &_createCookieRequest($method, $url, $parameters = false) {
-            if (!$parameters) {
+            if (! $parameters) {
                 $parameters = array();
             }
             $request = &$this->_createRequest($method, $url, $parameters);
@@ -429,7 +429,9 @@
          */
         function createAbsoluteUrl($base_url, $raw_url, $parameters = false) {
             $url = new SimpleUrl($raw_url);
-            $url->addRequestParameters($parameters);
+            if ($parameters) {
+                $url->addRequestParameters($parameters);
+            }
             $url->makeAbsolute($base_url);
             return $url;
         }

@@ -4,6 +4,7 @@
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "../");
     }
+    require_once(SIMPLE_TEST . 'query_string.php');
     require_once(SIMPLE_TEST . 'http.php');
     require_once(SIMPLE_TEST . 'socket.php');
     Mock::generate("SimpleSocket");
@@ -33,39 +34,39 @@
             $this->assertEqual($url->getPath(), "../somewhere.php");
         }
         function testParseParameter() {
-            $url = new SimpleUrl("?a=A");
-            $this->assertEqual($url->getPath(), "/");
+            $url = new SimpleUrl('?a=A');
+            $this->assertEqual($url->getPath(), '/');
             $this->assertEqual(count($request = $url->getRequest()), 1);
-            $this->assertEqual($request["a"], "A");
+            $this->assertEqual($request->getValue('a'), 'A');
         }
         function testParseMultipleParameters() {
-            $url = new SimpleUrl("/?a=A&b=B");
-            $this->assertEqual($url->getPath(), "/");
-            $this->assertEqual(count($request = $url->getRequest()), 2);
-            $this->assertEqual($request["a"], "A");
-            $this->assertEqual($request["b"], "B");
+            $url = new SimpleUrl('/?a=A&b=B');
+            $this->assertEqual($url->getPath(), '/');
+            $request = $url->getRequest();
+            $this->assertEqual($request->getValue('a'), 'A');
+            $this->assertEqual($request->getValue('b'), 'B');
         }
         function testAddParameters() {
             $url = new SimpleUrl("");
             $url->addRequestParameter("a", "A");
-            $this->assertEqual(count($request = $url->getRequest()), 1);
-            $this->assertEqual($request["a"], "A");
+            $request = $url->getRequest();
+            $this->assertEqual($request->getValue('a'), 'A');
             $url->addRequestParameter("b", "B");
-            $this->assertEqual(count($request = $url->getRequest()), 2);
-            $this->assertEqual($request["b"], "B");
+            $request = $url->getRequest();
+            $this->assertEqual($request->getValue('b'), 'B');
             $url->addRequestParameter("a", "aaa");
-            $this->assertEqual(count($request = $url->getRequest()), 2);
-            $this->assertEqual($request["a"], "aaa");
+            $request = $url->getRequest();
+            $this->assertEqual($request->getValue('a'), array('A', 'aaa'));
         }
         function testEncodedParameters() {
             $url = new SimpleUrl("");
-            $url->addRequestParameter("a", '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-=');
+            $url->addRequestParameter('a', '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-=');
             $this->assertIdentical(
                     $request = $url->getEncodedRequest(),
-                    "?a=%3F%21%22%27%23%7E%40%5B%5D%7B%7D%3A%3B%3C%3E%2C.%2F%7C%A3%24%25%5E%26%2A%28%29_%2B-%3D");
-            $url = new SimpleUrl("?a=%3F%21%22%27%23%7E%40%5B%5D%7B%7D%3A%3B%3C%3E%2C.%2F%7C%A3%24%25%5E%26%2A%28%29_%2B-%3D");
+                    '?a=%3F%21%22%27%23%7E%40%5B%5D%7B%7D%3A%3B%3C%3E%2C.%2F%7C%A3%24%25%5E%26%2A%28%29_%2B-%3D');
+            $url = new SimpleUrl('?a=%3F%21%22%27%23%7E%40%5B%5D%7B%7D%3A%3B%3C%3E%2C.%2F%7C%A3%24%25%5E%26%2A%28%29_%2B-%3D');
             $request = $url->getRequest();
-            $this->assertEqual($request["a"], '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-=');
+            $this->assertEqual($request->getValue('a'), '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-=');
         }
         function testPageSplitting() {
             $url = new SimpleUrl("./here/../there/somewhere.php");
@@ -92,6 +93,15 @@
             $url->makeAbsolute("http://host.com/here/");
             $this->assertEqual($url->getPath(), "/here/there/somewhere.php");
             $base = new SimpleUrl("http://host.com/here/");
+        }
+        function testRequestEncoding() {
+            $this->assertEqual(
+                    SimpleUrl::encodeRequest(array('a' => '1')),
+                    'a=1');
+            $this->assertEqual(SimpleUrl::encodeRequest(false), '');
+            $this->assertEqual(
+                    SimpleUrl::encodeRequest(array('a' => array('1', '2'))),
+                    'a=1&a=2');
         }
         function testBlitz() {
             $this->assertUrl(
@@ -141,7 +151,7 @@
                     array(false, false, false, "me.net", false, "/tigger", "net", "", false));
         }
         function assertUrl($raw, $parts, $params = false) {
-            if (!is_array($params)) {
+            if (! is_array($params)) {
                 $params = array();
             }
             $url = new SimpleUrl($raw);
@@ -153,7 +163,11 @@
             $this->assertIdentical($url->getPath(), $parts[5], "[$raw] path->%s");
             $this->assertIdentical($url->getTld(), $parts[6], "[$raw] tld->%s");
             $this->assertIdentical($url->getEncodedRequest(), $parts[7], "[$raw] encoded->%s");
-            $this->assertIdentical($params, $url->getRequest(), "[$raw] request->%s");
+            $query = new SimpleQueryString();
+            foreach ($params as $key => $value) {
+                $query->add($key, $value);
+            }
+            $this->assertIdentical($url->getRequest(), $query, "[$raw] request->%s");
             $this->assertIdentical($url->getFragment(), $parts[8], "[$raw] fragment->%s");
         }
     }
