@@ -113,7 +113,7 @@ class TestOfLogging extends UnitTestCase {
     function tearDown() {
         @unlink('../temp/test.log');
     }<strong>
-    function getFileLine($filename, \$index) {
+    function getFileLine($filename, $index) {
         $messages = file($filename);
         return $messages[$index];
     }</strong>

@@ -31,7 +31,7 @@
                 The <code>WebTestCase</code> includes facilities
                 for navigation, content and cookie checks and form handling.
                 Usage of these test cases is similar to the
-                <code>UnitTestCase</code>...
+                <a local="unit_tester_documentation">UnitTestCase</a>...
 <php><![CDATA[
 <strong>class TestOfLastcraft extends WebTestCase {
 }</strong>
@@ -134,7 +134,7 @@ class TestOfLastcraft extends WebTestCase {
             <p>
                 So now we could instead test against the title tag with...
 <php><![CDATA[
-<strong>$this->assertTitle('The Last Craft?');</strong>
+<strong>$this->assertTitle('The Last Craft? Web developer tutorials on PHP, Extreme programming and Object Oriented development');</strong>
 ]]></php>
                 As well as the simple HTML content checks we can check
                 that the MIME type is in a list of allowed types with...
@@ -147,8 +147,8 @@ class TestOfLastcraft extends WebTestCase {
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
     
-    function testHomepage() {
-        $this->get('http://simpletest.sourceforge.net/');<strong>
+    function testRedirects() {
+        $this->get('http://www.lastcraft.com/test/redirect.php');
         $this->assertResponse(200);</strong>
     }
 }
@@ -156,9 +156,7 @@ class TestOfLastcraft extends WebTestCase {
                 Here we are checking that the fetch is successful by
                 allowing only a 200 HTTP response.
                 This test will pass, but it is not actually correct to do so.
-                There is no page for <em>http://simpletest.sourceforge.net/</em>,
-                instead the server issues a redirect to
-                <em>http://www.lastcraft.com/simple_test.php</em>.
+                There is no page, instead the server issues a redirect.
                 The <code>WebTestCase</code> will
                 automatically follow up to three such redirects.
                 The tests are more robust this way and we are usually
@@ -171,7 +169,7 @@ class TestOfLastcraft extends WebTestCase {
     
     function testHomepage() {<strong>
         $this->setMaximumRedirects(0);</strong>
-        $this->get('http://simpletest.sourceforge.net/');
+        $this->get('http://www.lastcraft.com/test/redirect.php');
         $this->assertResponse(200);
     }
 }
@@ -192,7 +190,7 @@ class TestOfLastcraft extends WebTestCase {
     
     function testHomepage() {
         $this->setMaximumRedirects(0);
-        $this->get('http://simpletest.sourceforge.net/');
+        $this->get('http://www.lastcraft.com/test/redirect.php');
         $this->assertResponse(<strong>array(301, 302, 303, 307)</strong>);
     }
 }
