@@ -69,6 +69,7 @@ version or two.
       <file role="php" baseinstalldir="simpletest" name="page.php"/>
       <file role="php" baseinstalldir="simpletest" name="parser.php"/>
       <file role="doc" baseinstalldir="simpletest" name="README"/>
+      <file role="php" baseinstalldir="simpletest" name="remote.php"/>
       <file role="php" baseinstalldir="simpletest" name="reporter.php"/>
       <file role="php" baseinstalldir="simpletest" name="runner.php"/>
       <file role="php" baseinstalldir="simpletest" name="shell_tester.php"/>
@@ -84,6 +85,7 @@ version or two.
       <!-- Docs -->
       <file role="doc" baseinstalldir="simpletest" name="docs/group_test_documentation.html"/>
       <file role="doc" baseinstalldir="simpletest" name="docs/index.html"/>
+      <file role="doc" baseinstalldir="simpletest" name="docs/expectation_documentation.html"/>
       <file role="doc" baseinstalldir="simpletest" name="docs/mock_objects_documentation.html"/>
       <file role="doc" baseinstalldir="simpletest" name="docs/overview.html"/>
       <file role="doc" baseinstalldir="simpletest" name="docs/partial_mocks_documentation.html"/>
@@ -105,6 +107,7 @@ version or two.
       <file role="test" baseinstalldir="simpletest" name="test/page_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/parser_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/real_sites_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/remote_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/shell_tester_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/simple_mock_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/socket_test.php"/>

@@ -33,7 +33,7 @@
         }
     }
     
-    if (!defined("TEST_RUNNING")) {
+    if (! defined("TEST_RUNNING")) {
         define("TEST_RUNNING", true);
         $test = &new UnitTests();
         if (SimpleReporter::inCli()) {
