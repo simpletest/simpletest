@@ -23,7 +23,7 @@ Parser
 ------
 Should tolerate missing form tag (2/2) - done.
 Fix Savant compatibility (3/8) - done.
-Refactor form data setting to use query directly (2).
+Form should pass form ecoding rahter than hash (2/1) - done.
 
 Browser
 -------

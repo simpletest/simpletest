@@ -1,6 +1,7 @@
 <?php
     // $Id$
     
+    require_once(dirname(__FILE__) . '/../encoding.php');
     require_once(dirname(__FILE__) . '/../http.php');
     require_once(dirname(__FILE__) . '/../socket.php');
     Mock::generate('SimpleSocket');
@@ -368,7 +369,7 @@
             $route->setReturnReference('createConnection', $socket);
             $route->expectArguments('createConnection', array('POST', 15));
             
-            $request = &new SimpleHttpRequest($route, 'POST', array());
+            $request = &new SimpleHttpRequest($route, 'POST', new SimpleFormEncoding());
             
             $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
             $socket->tally();
@@ -386,7 +387,10 @@
             $route->setReturnReference('createConnection', $socket);
             $route->expectArguments('createConnection', array('POST', 15));
             
-            $request = &new SimpleHttpRequest($route, 'POST', array('a' => 'A'));
+            $request = &new SimpleHttpRequest(
+                    $route,
+                    'POST',
+                    new SimpleFormEncoding(array('a' => 'A')));
             
             $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
             $socket->tally();

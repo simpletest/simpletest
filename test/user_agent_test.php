@@ -4,6 +4,7 @@
     require_once(dirname(__FILE__) . '/../user_agent.php');
     require_once(dirname(__FILE__) . '/../authentication.php');
     require_once(dirname(__FILE__) . '/../http.php');
+    require_once(dirname(__FILE__) . '/../encoding.php');
     Mock::generate('SimpleHttpRequest');
     Mock::generate('SimpleHttpResponse');
     Mock::generate('SimpleHttpHeaders');
@@ -152,13 +153,13 @@
             $agent->expectOnce('_createHttpRequest', array(
                     'GET',
                     new SimpleUrl('http://test:secret@this.com/page.html?a=A&b=B'),
-                    array()));
+                    new SimpleFormEncoding()));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'GET',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
-                    array('a' => 'A', 'b' => 'B'));
+                    new SimpleFormEncoding(array('a' => 'A', 'b' => 'B')));
             $agent->tally();
         }
         
@@ -183,13 +184,13 @@
             $agent->expectOnce('_createHttpRequest', array(
                     'HEAD',
                     new SimpleUrl('http://test:secret@this.com/page.html?a=A&b=B'),
-                    array()));
+                    new SimpleFormEncoding()));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'HEAD',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
-                    array('a' => 'A', 'b' => 'B'));
+                    new SimpleFormEncoding(array('a' => 'A', 'b' => 'B')));
             $agent->tally();
         }
         
@@ -211,13 +212,13 @@
             $agent->expectOnce('_createHttpRequest', array(
                     'POST',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
-                    array('a' => 'A', 'b' => 'B')));
+                    new SimpleFormEncoding(array('a' => 'A', 'b' => 'B'))));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'POST',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
-                    array('a' => 'A', 'b' => 'B'));
+                    new SimpleFormEncoding(array('a' => 'A', 'b' => 'B')));
             $agent->tally();
         }
     }

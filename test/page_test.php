@@ -466,7 +466,9 @@
                     new SimpleSubmitTag(array("type" => "submit", "name" => "s")));
             $page->acceptFormEnd();
             $form = &$page->getFormBySubmitLabel("Submit");
-            $this->assertEqual($form->submitButtonByLabel("Submit"), array("s" => "Submit"));
+            $this->assertEqual(
+                    $form->submitButtonByLabel("Submit"),
+                    new SimpleFormEncoding(array("s" => "Submit")));
         }
     }
 

@@ -11,6 +11,7 @@
      */
     require_once(dirname(__FILE__) . '/options.php');
     require_once(dirname(__FILE__) . '/http.php');
+    require_once(dirname(__FILE__) . '/encoding.php');
     require_once(dirname(__FILE__) . '/page.php');
     require_once(dirname(__FILE__) . '/frames.php');
     require_once(dirname(__FILE__) . '/user_agent.php');
@@ -65,9 +66,9 @@
         
         /**
          *    Adds a successfully fetched page to the history.
-         *    @param string $method    GET or POST.
-         *    @param SimpleUrl $url    URL of fetch.
-         *    @param array $parameters Any post data with the fetch.
+         *    @param string $method                 GET or POST.
+         *    @param SimpleUrl $url                 URL of fetch.
+         *    @param SimpleFormEncoding $parameters Any post data with the fetch.
          *    @access public
          */
         function recordEntry($method, $url, $parameters) {
@@ -108,7 +109,7 @@
         /**
          *    Parameters of last fetch from current history
          *    position.
-         *    @return array        Hash of post parameters.
+         *    @return SimpleFormEncoding    Post parameters.
          *    @access public
          */
         function getParameters() {
@@ -254,11 +255,11 @@
         
         /**
          *    Fetches a page.
-         *    @param string $method           GET or POST.
-         *    @param string/SimpleUrl $url    Target to fetch as string.
-         *    @param hash $parameters         POST parameters.
-         *    @param integer $depth           Nested frameset depth.
-         *    @return SimplePage              Parsed page.
+         *    @param string $method                   GET or POST.
+         *    @param string/SimpleUrl $url            Target to fetch as string.
+         *    @param SimpleFormEncoding $parameters   POST parameters.
+         *    @param integer $depth                   Nested frameset depth protection.
+         *    @return SimplePage                      Parsed page.
          *    @access private
          */
         function &_fetch($method, $url, $parameters, $depth = 0) {
@@ -272,10 +273,10 @@
         /**
          *    Fetches a page or a single frame if that is the current
          *    focus.
-         *    @param string $method           GET or POST.
-         *    @param string/SimpleUrl $url    Target to fetch as string.
-         *    @param hash $parameters         POST parameters.
-         *    @return string                  Raw content of page.
+         *    @param string $method                   GET or POST.
+         *    @param string/SimpleUrl $url            Target to fetch as string.
+         *    @param SimpleFormEncoding $parameters   POST parameters.
+         *    @return string                          Raw content of page.
          *    @access private
          */
         function _load($method, $url, $parameters = false) {
@@ -288,10 +289,10 @@
         
         /**
          *    Fetches a page and makes it the current page/frame.
-         *    @param string $method           GET or POST.
-         *    @param string/SimpleUrl $url    Target to fetch as string.
-         *    @param hash $parameters         POST parameters.
-         *    @return string                  Raw content of page.
+         *    @param string $method                   GET or POST.
+         *    @param string/SimpleUrl $url            Target to fetch as string.
+         *    @param SimpleFormEncoding $parameters   POST parameters.
+         *    @return string                          Raw content of page.
          *    @access private
          */
         function _loadPage($method, $url, $parameters = false) {
@@ -306,11 +307,11 @@
         /**
          *    Fetches a frame into the existing frameset replacing the
          *    original.
-         *    @param array $frames            List of names to drill down.
-         *    @param string $method           GET or POST.
-         *    @param string/SimpleUrl $url    Target to fetch as string.
-         *    @param hash $parameters         POST parameters.
-         *    @return string                  Raw content of page.
+         *    @param array $frames                    List of names to drill down.
+         *    @param string $method                   GET or POST.
+         *    @param string/SimpleUrl $url            Target to fetch as string.
+         *    @param SimpleFormEncoding $parameters   POST parameters.
+         *    @return string                          Raw content of page.
          *    @access private
          */
         function _loadFrame($frames, $method, $url, $parameters = false) {
@@ -433,14 +434,18 @@
         /**
          *    Fetches the page content with a HEAD request.
          *    Will affect cookies, but will not change the base URL.
-         *    @param string/SimpleUrl $url  Target to fetch as string.
-         *    @param hash $parameters       Additional parameters for GET request.
-         *    @return boolean               True if successful.
+         *    @param string/SimpleUrl $url                Target to fetch as string.
+         *    @param hash/SimpleFormEncoding $parameters  Additional parameters for
+         *                                                HEAD request.
+         *    @return boolean                             True if successful.
          *    @access public
          */
         function head($url, $parameters = false) {
             if (! is_object($url)) {
                 $url = new SimpleUrl($url);
+            }
+            if (is_array($parameters)) {
+                $parameters = new SimpleFormEncoding($parameters);
             }
             if ($this->getUrl()) {
                 $url = $url->makeAbsolute($this->getUrl());
@@ -454,14 +459,18 @@
         
         /**
          *    Fetches the page content with a simple GET request.
-         *    @param string/SimpleUrl $url  Target to fetch.
-         *    @param hash $parameters       Additional parameters for GET request.
-         *    @return string                Content of page or false.
+         *    @param string/SimpleUrl $url                Target to fetch.
+         *    @param hash/SimpleFormEncoding $parameters  Additional parameters for
+         *                                                GET request.
+         *    @return string                              Content of page or false.
          *    @access public
          */
         function get($url, $parameters = false) {
             if (! is_object($url)) {
                 $url = new SimpleUrl($url);
+            }
+            if (is_array($parameters)) {
+                $parameters = new SimpleFormEncoding($parameters);
             }
             if ($this->getUrl()) {
                 $url = $url->makeAbsolute($this->getUrl());
@@ -471,14 +480,17 @@
         
         /**
          *    Fetches the page content with a POST request.
-         *    @param string/SimpleUrl $url  Target to fetch as string.
-         *    @param hash $parameters       POST parameters.
-         *    @return string                Content of page.
+         *    @param string/SimpleUrl $url                Target to fetch as string.
+         *    @param hash/SimpleFormEncoding $parameters  POST parameters.
+         *    @return string                              Content of page.
          *    @access public
          */
         function post($url, $parameters = false) {
             if (! is_object($url)) {
                 $url = new SimpleUrl($url);
+            }
+            if (is_array($parameters)) {
+                $parameters = new SimpleFormEncoding($parameters);
             }
             if ($this->getUrl()) {
                 $url = $url->makeAbsolute($this->getUrl());

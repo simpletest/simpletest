@@ -398,22 +398,23 @@
     class SimpleHttpRequest {
         var $_route;
         var $_method;
-        var $_content;
+        var $_encoding;
         var $_headers;
         var $_cookies;
         
         /**
          *    Saves the URL ready for fetching.
          *    @param SimpleRoute $route   Request route.
-         *    @param string $method       HTTP request method,
-         *                                usually GET.
-         *    @param string $content      Content to send with request.
+         *    @param string $method                  HTTP request method,
+         *                                           usually GET.
+         *    @param SimpleFormEncoding $encoding    Content to send with
+         *                                           request or false.
          *    @access public
          */
-        function SimpleHttpRequest(&$route, $method, $content = '') {
+        function SimpleHttpRequest(&$route, $method, $encoding = false) {
             $this->_route = &$route;
             $this->_method = $method;
-            $this->_content = $content;
+            $this->_encoding = $encoding;
             $this->_headers = array();
             $this->_cookies = array();
         }
@@ -430,24 +431,21 @@
             if ($socket->isError()) {
                 return $this->_createResponse($socket);
             }
-            $this->_dispatchRequest($socket, $this->_method, $this->_content);
+            $this->_dispatchRequest($socket, $this->_method, $this->_encoding);
             return $this->_createResponse($socket);
         }
         
         /**
          *    Sends the headers.
-         *    @param SimpleSocket $socket   Open socket.
-         *    @param string $method         HTTP request method,
-         *                                  usually GET.
-         *    @param string $content        Content to send with request.
+         *    @param SimpleSocket $socket           Open socket.
+         *    @param string $method                 HTTP request method,
+         *                                          usually GET.
+         *    @param SimpleFormEncoding $encoding   Content to send with request.
          *    @access private
          */
-        function _dispatchRequest(&$socket, $method, $content) {
-            if (is_array($content) && ($method == 'POST')) {
-                $content = SimpleUrl::encodeRequest($content);
-            }
-            if ($content || ($method == 'POST')) {
-                $socket->write("Content-Length: " . (integer)strlen($content) . "\r\n");
+        function _dispatchRequest(&$socket, $method, $encoding) {
+            if ($encoding || ($method == 'POST')) {
+                $socket->write("Content-Length: " . $this->_getContentLength($encoding) . "\r\n");
                 $socket->write("Content-Type: application/x-www-form-urlencoded\r\n");
             }
             foreach ($this->_headers as $header_line) {
@@ -457,9 +455,21 @@
                 $socket->write("Cookie: " . $this->_marshallCookies($this->_cookies) . "\r\n");
             }
             $socket->write("\r\n");
-            if ($content) {
-                $socket->write($content);
+            if ($encoding) {
+                $socket->write($encoding->asString());
             }
+        }
+        
+        /**
+         *    Calculates the length of the encoded content.
+         *    @param SimpleFormEncoding $encoding   Content to send with
+         *                                          request or false.
+         */
+        function _getContentLength($encoding) {
+            if (! $encoding) {
+                return 0;
+            }
+            return (integer)strlen($encoding->asString());
         }
         
         /**
@@ -506,7 +516,7 @@
                     $socket,
                     $this->_method,
                     $this->_route->getUrl(),
-                    $this->_content);
+                    $this->_encoding);
         }
     }
     

@@ -79,7 +79,7 @@
             $form = &new SimpleForm(
                     new SimpleFormTag(array()),
                     new SimpleUrl('htp://host'));
-            $this->assertIdentical($form->submit(), array());
+            $this->assertIdentical($form->submit(), new SimpleFormEncoding());
         }
         
         function testSubmitButton() {
@@ -91,9 +91,15 @@
             $this->assertTrue($form->hasSubmitName('go'));
             $this->assertEqual($form->getValue('go'), 'Go!');
             $this->assertEqual($form->getValueById(9), 'Go!');
-            $this->assertEqual($form->submitButtonByName('go'), array('go' => 'Go!'));            
-            $this->assertEqual($form->submitButtonByLabel('Go!'), array('go' => 'Go!'));            
-            $this->assertEqual($form->submitButtonById(9), array('go' => 'Go!'));            
+            $this->assertEqual(
+                    $form->submitButtonByName('go'),
+                    new SimpleFormEncoding(array('go' => 'Go!')));            
+            $this->assertEqual(
+                    $form->submitButtonByLabel('Go!'),
+                    new SimpleFormEncoding(array('go' => 'Go!')));            
+            $this->assertEqual(
+                    $form->submitButtonById(9),
+                    new SimpleFormEncoding(array('go' => 'Go!')));            
         }
         
         function testSubmitButtonWithLabelOfSubmit() {
@@ -105,9 +111,15 @@
             $this->assertTrue($form->hasSubmitName('test'));
             $this->assertEqual($form->getValue('test'), 'Submit');
             $this->assertEqual($form->getValueById(9), 'Submit');
-            $this->assertEqual($form->submitButtonByName('test'), array('test' => 'Submit'));            
-            $this->assertEqual($form->submitButtonByLabel('Submit'), array('test' => 'Submit'));            
-            $this->assertEqual($form->submitButtonById(9), array('test' => 'Submit'));            
+            $this->assertEqual(
+                    $form->submitButtonByName('test'),
+                    new SimpleFormEncoding(array('test' => 'Submit')));            
+            $this->assertEqual(
+                    $form->submitButtonByLabel('Submit'),
+                    new SimpleFormEncoding(array('test' => 'Submit')));            
+            $this->assertEqual(
+                    $form->submitButtonById(9),
+                    new SimpleFormEncoding(array('test' => 'Submit')));            
         }
         
         function testImageSubmitButton() {
@@ -123,15 +135,15 @@
             $this->assertTrue($form->hasImageLabel('Go!'));
             $this->assertEqual(
                     $form->submitImageByLabel('Go!', 100, 101),
-                    array('go.x' => 100, 'go.y' => 101));
+                    new SimpleFormEncoding(array('go.x' => 100, 'go.y' => 101)));
             $this->assertTrue($form->hasImageName('go'));
             $this->assertEqual(
                     $form->submitImageByName('go', 100, 101),
-                    array('go.x' => 100, 'go.y' => 101));
+                    new SimpleFormEncoding(array('go.x' => 100, 'go.y' => 101)));
             $this->assertTrue($form->hasImageId(9));
             $this->assertEqual(
                     $form->submitImageById(9, 100, 101),
-                    array('go.x' => 100, 'go.y' => 101));
+                    new SimpleFormEncoding(array('go.x' => 100, 'go.y' => 101)));
         }
         
         function testButtonTag() {
@@ -144,9 +156,15 @@
             $form->addWidget($widget);
             $this->assertTrue($form->hasSubmitName('go'));
             $this->assertTrue($form->hasSubmitLabel('Go!'));
-            $this->assertEqual($form->submitButtonByName('go'), array('go' => 'Go'));            
-            $this->assertEqual($form->submitButtonByLabel('Go!'), array('go' => 'Go'));            
-            $this->assertEqual($form->submitButtonById(9), array('go' => 'Go'));            
+            $this->assertEqual(
+                    $form->submitButtonByName('go'),
+                    new SimpleFormEncoding(array('go' => 'Go')));
+            $this->assertEqual(
+                    $form->submitButtonByLabel('Go!'),
+                    new SimpleFormEncoding(array('go' => 'Go')));
+            $this->assertEqual(
+                    $form->submitButtonById(9),
+                    new SimpleFormEncoding(array('go' => 'Go')));
         }
         
         function testSingleSelectFieldSubmitted() {
@@ -157,7 +175,9 @@
             $select->addTag(new SimpleOptionTag(
                     array('value' => 'aaa', 'selected' => '')));
             $form->addWidget($select);
-            $this->assertIdentical($form->submit(), array('a' => 'aaa'));
+            $this->assertIdentical(
+                    $form->submit(),
+                    new SimpleFormEncoding(array('a' => 'aaa')));
         }
         
         function testUnchecked() {

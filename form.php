@@ -467,7 +467,7 @@
                 if ($selector->isMatch($button)) {
                     $encoding = $this->_getEncoding();
                     $encoding->merge($button->getSubmitValues());
-                    return $encoding->getAll();           
+                    return $encoding;           
                 }
             }
             return false;
@@ -524,7 +524,7 @@
                 if ($selector->isMatch($image)) {
                     $encoding = $this->_getEncoding();
                     $encoding->merge($image->getSubmitValues($x, $y));
-                    return $encoding->getAll();           
+                    return $encoding;           
                 }
             }
             return false;
@@ -581,8 +581,7 @@
          *    @access public
          */
         function submit() {
-            $encoding = $this->_getEncoding();
-            return $encoding->getAll();
+            return $this->_getEncoding();
         }
     }
 ?>

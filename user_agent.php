@@ -10,6 +10,7 @@
      *	include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/http.php');
+    require_once(dirname(__FILE__) . '/encoding.php');
     require_once(dirname(__FILE__) . '/authentication.php');
     /**#@-*/
    
@@ -337,10 +338,10 @@
         /**
          *    Fetches a URL as a response object. Will keep trying if redirected.
          *    It will also collect authentication realm information.
-         *    @param string $method         GET, POST, etc.
-         *    @param string/SimpleUrl $url  Target to fetch.
-         *    @param hash $parameters       Additional parameters for request.
-         *    @return SimpleHttpResponse    Hopefully the target page.
+         *    @param string $method                   GET, POST, etc.
+         *    @param string/SimpleUrl $url            Target to fetch.
+         *    @param SimpleFormEncoding $parameters   Additional parameters for request.
+         *    @return SimpleHttpResponse              Hopefully the target page.
          *    @access public
          */
         function &fetchResponse($method, $url, $parameters = false) {
@@ -363,10 +364,10 @@
         /**
          *    Fetches the page until no longer redirected or
          *    until the redirect limit runs out.
-         *    @param string $method         GET, POST, etc.
-         *    @param SimpleUrl $url         Target to fetch.
-         *    @param hash $parameters       Additional parameters for request.
-         *    @return SimpleHttpResponse    Hopefully the target page.
+         *    @param string $method                  GET, POST, etc.
+         *    @param SimpleUrl $url                  Target to fetch.
+         *    @param SimpelFormEncoding $parameters  Additional parameters for request.
+         *    @return SimpleHttpResponse             Hopefully the target page.
          *    @access private
          */
         function &_fetchWhileRedirected($method, $url, $parameters) {
@@ -391,15 +392,15 @@
         
         /**
          *    Actually make the web request.
-         *    @param string $method       GET, POST, etc.
-         *    @param SimpleUrl $url       Target to fetch.
-         *    @param hash $parameters     Additional parameters for request.
-         *    @return SimpleHttpResponse  Headers and hopefully content.
+         *    @param string $method                   GET, POST, etc.
+         *    @param SimpleUrl $url                   Target to fetch.
+         *    @param SimpleFormEncoding $parameters   Additional parameters for request.
+         *    @return SimpleHttpResponse              Headers and hopefully content.
          *    @access protected
          */
         function &_fetch($method, $url, $parameters) {
             if (! $parameters) {
-                $parameters = array();
+                $parameters = new SimpleFormEncoding();
             }
             $request = &$this->_createRequest($method, $url, $parameters);
             return $request->fetch($this->_connection_timeout);
@@ -407,10 +408,10 @@
         
         /**
          *    Creates a full page request.
-         *    @param string $method       Fetching method.
-         *    @param SimpleUrl $url       Target to fetch as url object.
-         *    @param hash $parameters     POST/GET parameters.
-         *    @return SimpleHttpRequest   New request.
+         *    @param string $method                   Fetching method.
+         *    @param SimpleUrl $url                   Target to fetch as url object.
+         *    @param SimpleFormEncoding $parameters   POST/GET parameters.
+         *    @return SimpleHttpRequest               New request.
          *    @access private
          */
         function &_createRequest($method, $url, $parameters) {
@@ -423,10 +424,10 @@
         
         /**
          *    Builds the appropriate HTTP request object.
-         *    @param string $method       Fetching method.
-         *    @param SimpleUrl $url       Target to fetch as url object.
-         *    @param hash $parameters     POST/GET parameters.
-         *    @return SimpleHttpRequest   New request object.
+         *    @param string $method                  Fetching method.
+         *    @param SimpleUrl $url                  Target to fetch as url object.
+         *    @param SimpleFormEncoding $parameters  POST/GET parameters.
+         *    @return SimpleHttpRequest              New request object.
          *    @access protected
          */
         function &_createHttpRequest($method, $url, $parameters) {
