@@ -330,7 +330,7 @@
     }
         
     /**
-     *    Accepts an array of tokens and uses it to
+     *    Accepts incoming tokens and uses it to
      *    build a web page model.
      */
     class HtmlParser {
@@ -365,6 +365,7 @@
         
         /**
          *    Parses a page ready to access it's contents.
+         *    @public
          */
         function HtmlPage() {
             $this->_absolute_links = array();
