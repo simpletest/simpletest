@@ -10,7 +10,7 @@
      *    Sample minimal test displayer. Generates only
      *    failure messages and a pass count.
      */
-    class HtmlReporter extends TestDisplay {
+    class HtmlReporter extends SimplePageReporter {
         
         /**
          *    Does nothing yet. The first output will
@@ -19,7 +19,7 @@
          *    @access public
          */
         function HtmlReporter() {
-            $this->TestDisplay();
+            $this->SimplePageReporter();
         }
         
         /**

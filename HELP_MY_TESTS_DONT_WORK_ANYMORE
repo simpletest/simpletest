@@ -5,14 +5,22 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems.
 
+No class TestDisplay
+====================
+This has been renamed SimplePageReporter in Beta3 and is now deprecated.
+
+No class CommandLineReporter
+============================
+This has been renamed TextReporter in Beta3 and is now deprecated.
+
 No method fetch()
 =================
-This was renamed get() in Alpha8. It will be removed in Beta3.
+This was renamed get() in Alpha8. It is removed in Beta3.
 
 No method submit()
 ==================
-This has been renamed clickSubmit() in Beta1. The old method will
-be removed after Beta1.
+This has been renamed clickSubmit() in Beta1. The old method were
+be removed in Beta2.
 
 No method clearHistory()
 ========================
@@ -33,7 +41,7 @@ simple_mock.php --> mock_objects.php
 simple_unit.php --> unit_tester.php
 simple_web.php --> web_tester.php
 
-The old names are deprecated in Alpha8 and are removed in Beta1.
+The old names were deprecated in Alpha8 and removed in Beta1.
 
 No method attachObserver()
 ==========================
@@ -60,9 +68,9 @@ removed in Beta1.
 No class TestHtmlDisplay
 ========================
 This class has been renamed to HtmlReporter in Alpha8. It is supported,
-but deprecated and will be removed in Beta1. If you have subclassed
+but deprecated in Beta1 and removed in Beta2. If you have subclassed
 the display for your own design, then you will have to extend this
-class instead.
+class (HtmlReporter) instead.
 
 If you have accessed the event queue by overriding the notify() method
 then I am afraid you are in big trouble :(. The reporter is now
@@ -72,7 +80,8 @@ simplest is to write your own runner class and invoke the tests with...
 
 $test->accept(new MyRunner(new MyReporter()));
 
-...rather than the run method.
+...rather than the run method. This should be easier to extend
+anyway and gives much more control.
 
 Missing set options method
 ==========================

@@ -258,7 +258,7 @@
      *    test nesting. This is the main base class on which
      *    to build the finished test (page based) displays.
      */
-    class TestDisplay extends TestReporter {
+    class SimplePageReporter extends TestReporter {
         var $_test_stack;
         var $_passes;
         var $_fails;
@@ -270,7 +270,7 @@
          *    Starts the display with no results in.
          *    @access public
          */
-        function TestDisplay() {
+        function SimplePageReporter() {
             $this->TestReporter();
             $this->_test_stack = array();
             $this->_passes = 0;
@@ -419,6 +419,15 @@
          */
         function getTestCaseProgress() {
             return $this->_progress;
+        }
+    }
+    
+    /**
+     *    @deprecated
+     */
+    class TestDisplay extends SimplePageReporter {
+        function TestDisplay() {
+            $this->SimplePageReporter();
         }
     }
 ?>
