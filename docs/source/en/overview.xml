@@ -22,6 +22,10 @@
             <p>
                 A <a local="unit_test_documentation">test case</a> looks like this...
 <php><![CDATA[
+<?php
+require_once('simpletest/unit_tester.php');
+require_once('simpletest/reporter.php');
+
 class <strong>MyTestCase</strong> extends UnitTestCase {
     <strong>
     function testLog() {
@@ -30,6 +34,7 @@ class <strong>MyTestCase</strong> extends UnitTestCase {
         $this->assertTrue(file_exists('my.log'));
     }</strong>
 }
+?>
 ]]></php>
             </p>
             <p>
@@ -44,7 +49,7 @@ class <strong>MyTestCase</strong> extends UnitTestCase {
             </p>
             <p>
                 The simplest type of test case is the
-                <code>UnitTestCase</code>.
+                <a local="unit_tester_documentation">UnitTestCase</a>.
                 This class of test case includes standard tests for equality,
                 references and pattern matching.
                 All these test the typical expectations of what you would
@@ -56,7 +61,7 @@ class <strong>MyTestCase</strong> extends UnitTestCase {
                 The top level task of a web application though is not to
                 produce correct output from its methods and objects, but
                 to generate web pages.
-                The <code>WebTestCase</code> class tests web
+                The <a local="web_tester_documentation">WebTestCase</a> class tests web
                 pages.
                 It simulates a web browser requesting a page, complete with
                 cookies, proxies, secure connections, authentication, forms, frames and most
@@ -66,8 +71,12 @@ class <strong>MyTestCase</strong> extends UnitTestCase {
                 sessions are handled correctly.
             </p>
             <p>
-                A <a local="web_tester_documentation">web test case</a> looks like this...
+                A <a local="web_tester_documentation">WebTestCase</a> looks like this...
 <php><![CDATA[
+<?php
+require_once('simpletest/web_tester.php');
+require_once('simpletest/reporter.php');
+
 class <strong>MySiteTest</strong> extends WebTestCase {
     <strong>
     function testHomePage() {
@@ -78,6 +87,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
         $this->assertWantedPattern('/Email me at/');
     }</strong>
 }
+?>
 ]]></php>
             </p>
         </section>
@@ -243,6 +253,11 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td style="color: red;">1.1</td>
                     </tr>
                     <tr>
+                        <td>File upload testing</td>
+                        <td>Can simulate the input type file tag</td>
+                        <td style="color: red;">1.1</td>
+                    </tr>
+                    <tr>
                         <td>Mocking interfaces</td>
                         <td>Can generate mock objects to interfaces as well as classes</td>
                         <td style="color: red;">2.0</td>
@@ -257,13 +272,8 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td>Can make use of HTML tidy for faster and more flexible content matching</td>
                         <td style="color: red;">2.0</td>
                     </tr>
-                    <tr>
-                        <td>File upload testing</td>
-                        <td>Can simulate the input type file tag</td>
-                        <td style="color: red;">2.0</td>
-                    </tr>
                 </tbody></table>
-                PHP5 migraton will start straight after the version 1.0 series,
+                PHP5 migraton will start straight after the version 1.1 series,
                 whereupon PHP4 will no longer be supported.
                 SimpleTest is currently compatible with PHP5, but will not
                 make use of all of the new features until version 2.
@@ -337,6 +347,9 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 or <a href="http://jwebunit.sourceforge.net/">JWebUnit</a> and hope for clues.
                 There are some XML driven test frameworks, but again most
                 require Java to run.
+                As SimpleTest does not support JavaScript you would probably
+                have to look at these tools anyway if you have highly dynamic
+                pages.
             </p>
         </section>
     </content>
