@@ -508,30 +508,31 @@
         function &_createHttpRequest($method, $url, $parameters) {
             if ($method == 'POST') {
                 $request = &new SimpleHttpPostRequest(
-                        $this->_createDestination($url),
+                        $this->_createRoute($url),
                         $parameters);
                 return $request;
             }
             if ($parameters) {
                 $url->addRequestParameters($parameters);
             }
-            return new SimpleHttpRequest($this->_createDestination($url), $method);
+            return new SimpleHttpRequest($this->_createRoute($url), $method);
         }
         
         /**
          *    Sets up either a direct route or via a proxy.
-         *    @param SimpleUrl $url     Target to fetch as url object.
+         *    @param SimpleUrl $url   Target to fetch as url object.
+         *    @return SimpleRoute     Route to take to fetch URL.
          *    @access protected
          */
-        function &_createDestination($url) {
+        function &_createRoute($url) {
             if ($this->_proxy) {
-                return new SimpleProxyDestination(
+                return new SimpleProxyRoute(
                         $url,
                         $this->_proxy,
                         $this->_proxy_username,
                         $this->_proxy_password);
             }
-            return new SimpleDestination($url);
+            return new SimpleRoute($url);
         }
         
         /**

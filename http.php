@@ -586,7 +586,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleDestination {
+    class SimpleRoute {
         var $_url;
         
         /**
@@ -594,16 +594,16 @@
          *    @param SimpleUrl $url   URL as object.
          *    @access public
          */
-        function SimpleDestination($url) {
+        function SimpleRoute($url) {
             $this->_url = $url;
         }
         
         /**
-         *    Internal accessor.
+         *    Resource name.
          *    @return SimpleUrl        Current url.
          *    @access protected
          */
-        function _getUrl() {
+        function getUrl() {
             return $this->_url;
         }
         
@@ -676,7 +676,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleProxyDestination extends SimpleDestination {
+    class SimpleProxyRoute extends SimpleRoute {
         var $_proxy;
         var $_username;
         var $_password;
@@ -689,8 +689,8 @@
          *    @param string $password   Password for autentication.
          *    @access public
          */
-        function SimpleProxyDestination($url, $proxy, $username = false, $password = false) {
-            $this->SimpleDestination($url);
+        function SimpleProxyRoute($url, $proxy, $username = false, $password = false) {
+            $this->SimpleRoute($url);
             $this->_proxy = $proxy;
             $this->_username = $username;
             $this->_password = $password;
@@ -704,7 +704,7 @@
          *    @access protected
          */
         function _getRequestLine($method) {
-            $url = $this->_getUrl();
+            $url = $this->getUrl();
             $scheme = $url->getScheme() ? $url->getScheme() : 'http';
             $port = $url->getPort() ? ':' . $url->getPort() : '';
             return $method . ' ' . $scheme . '://' . $url->getHost() . $port .
@@ -757,14 +757,15 @@
 	 *    @subpackage WebTester
      */
     class SimpleHttpRequest {
+        var $_route;
+        var $_method;
         var $_headers;
         var $_cookies;
-        var $_method;
-        var $_route;
         
         /**
          *    Saves the URL ready for fetching.
-         *    @param SimpleDestination $route   Request target.
+         *    @param SimpleRoute $route   Request route.
+         *    @param SimpleUrl $url       Requested resource.
          *    @param string $method       HTTP request method,
          *                                usually GET.
          *    @access public
@@ -786,10 +787,10 @@
         function &fetch($timeout) {
             $socket = &$this->_route->createConnection($this->_method, $timeout);
             if ($socket->isError()) {
-                return $this->_createResponse($socket);
+                return $this->_createResponse($socket, $this->_route->getUrl());
             }
             $this->_dispatchRequest($socket, $this->_method);
-            return $this->_createResponse($socket);
+            return $this->_createResponse($socket, $this->_route->getUrl());
         }
         
         /**
@@ -845,11 +846,12 @@
         /**
          *    Wraps the socket in a response parser.
          *    @param SimpleSocket $socket   Responding socket.
+         *    @param SimpleUrl $url         Resource name.
          *    @return SimpleHttpResponse    Parsed response object.
          *    @access protected
          */
-        function &_createResponse(&$socket) {
-            return new SimpleHttpResponse($socket);
+        function &_createResponse(&$socket, $url) {
+            return new SimpleHttpResponse($socket, $url);
         }
     }
     
@@ -863,7 +865,7 @@
         
         /**
          *    Saves the URL ready for fetching.
-         *    @param SimpleDestination $route   Request target.
+         *    @param SimpleRoute $route   Request target.
          *    @param array $parameters    Content to send.
          *    @access public
          */
@@ -1070,6 +1072,7 @@
 	 *    @subpackage WebTester
      */
     class SimpleHttpResponse extends StickyError {
+        var $_url;
         var $_content;
         var $_headers;
         
@@ -1078,16 +1081,27 @@
          *    content and headers.
          *    @param SimpleSocket $socket   Network connection to fetch
          *                                  response text from.
+         *    @param SimpleUrl $url         Resource name.
          *    @access public
          */
-        function SimpleHttpResponse(&$socket) {
+        function SimpleHttpResponse(&$socket, $url) {
             $this->StickyError();
+            $this->_url = $url;
             $this->_content = false;
             $raw = $this->_readAll($socket);
             if ($socket->isError()) {
                 $this->_setError("Error reading socket [" . $socket->getError() . "]");
                 return;
             }
+            $this->_parse($raw);
+        }
+        
+        /**
+         *    Splits up the headers and the rest of the content.
+         *    @param string $raw    Content to parse.
+         *    @access private
+         */
+        function _parse($raw) {
             if (! strstr($raw, "\r\n\r\n")) {
                 $this->_setError('Could not parse headers');
                 $this->_headers = &new SimpleHttpHeaders('');
@@ -1095,6 +1109,15 @@
                 list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);
                 $this->_headers = &new SimpleHttpHeaders($headers);
             }
+        }
+        
+        /**
+         *    Resource name.
+         *    @return SimpleUrl        Current url.
+         *    @access protected
+         */
+        function getUrl() {
+            return $this->_url;
         }
         
         /**

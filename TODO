@@ -9,14 +9,14 @@ Unit tester
 Show line number of failed assertion (3/2) - done.
 Remove SIMPLE_TEST constant (1/1) - done.
 
-Interface
----------
+Reporter
+--------
 
 Mock objects
 ------------
 
-Html parser
------------
+Parser
+------
 Add framset tag (2/3) - done.
 Add frame tag (1/2) - done.
 Simplify builder callbacks (1/2) - done.
@@ -24,6 +24,8 @@ Add image submit parsing (3).
 Add image map parsing (2).
 Make multivalue widgets PHP compatible (2).
 Add simple button tag parsing (1).
+Confirm nested directory parsing with base URL (2).
+Fix bug with URL arguments missing with no "=" (1).
 
 Browser
 -------

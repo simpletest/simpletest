@@ -47,6 +47,21 @@
         }
         
         /**
+         *    Accessor for current frame focus. Will be
+         *    false if no frame has focus.
+         *    @return integer/string/boolean    Label if any, otherwise
+         *                                      the position in the frameset
+         *                                      or false if none.
+         *    @access public
+         */
+        function getFocus() {
+            if ($this->_focus === false) {
+                return false;
+            }
+            return $this->_focus + 1;
+        }
+        
+        /**
          *    Sets the focus by index. The integer index starts from 1.
          *    @param integer $choice    Chosen frame.
          *    @return boolean           True if frame exists.

@@ -72,6 +72,12 @@
         function TestOfFrameNavigation() {
             $this->UnitTestCase();
         }
+        function testStartsWithoutFrameFocus() {
+            $page = &new MockSimplePage($this);
+            $frameset = &new SimpleFrameset($page);
+            $frameset->addParsedFrame($frame);
+            $this->assertFalse($frameset->getFocus());
+        }
         function testCanFocusOnSingleFrame() {
             $page = &new MockSimplePage($this);
             $page->expectNever('getRaw');
@@ -86,6 +92,7 @@
             $this->assertTrue($frameset->setFocusByIndex(1));
             $this->assertFalse($frameset->setFocusByIndex(2));
             $this->assertEqual($frameset->getRaw(), 'Stuff');
+            $this->assertIdentical($frameset->getFocus(), 1);
         }
         function testContentComesFromFrameInFocus() {
             $page = &new MockSimplePage($this);
