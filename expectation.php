@@ -74,10 +74,10 @@
          *    @static
          */
         function describeDifference($first, $second, $expectation_class) {
-            if (gettype($first) != gettype($second)) {
-                return "by type";
-            }
-            if (is_bool($first)) {
+            if (!isset($first)) {
+                return "as [" . Expectation::describeValue($first) .
+                        "] does not match [" . Expectation::describeValue($second) . "]";
+            } elseif (is_bool($first)) {
                 return "as [" . Expectation::describeValue($first) .
                         "] does not match [" . Expectation::describeValue($second) . "]";
             } elseif (is_string($first)) {
@@ -371,6 +371,23 @@
                         $this->describeValue($compare) . "] " .
                         $this->describeDifference($this->_value, $compare, get_class($this));
             }
+        }
+        
+        /**
+         *    Creates a human readable description of the
+         *    difference between two variables.
+         *    @param $first             First variable.
+         *    @param $second            Value to compare with.
+         *    @param $expectation_class Test class to apply.
+         *    @return                   Descriptive string.
+         *    @public
+         *    @static
+         */
+        function describeDifference($first, $second, $expectation_class) {
+            if (gettype($first) != gettype($second)) {
+                return "by type";
+            }
+            return parent::describeDifference($first, $second, $expectation_class);
         }
     }
     

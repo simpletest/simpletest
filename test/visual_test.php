@@ -51,11 +51,17 @@
             $this->assertIsA($this, "TestOfUnitTestCaseOutput", "#%s#");
             $this->assertIsA($this, "UnitTestCase", "#%s#");
             $this->assertIsA(14, "TestOfUnitTestCaseOutput", "#%s#");        // Fail.
-            $this->assertIsA($this, "TestHTMLDisplay", "#%s#");        // Fail.
+            $this->assertIsA($this, "TestReporter", "#%s#");        // Fail.
         }
         function testTypeEquality() {
             $this->assertEqual("0", 0, "#%s#");
             $this->assertNotEqual("0", 0, "#%s#");        // Fail.
+        }
+        function testNullEquality() {
+            $this->assertEqual(null, 1, "#%s#");        // Fail.
+            $this->assertNotEqual(null, 1, "#%s#");
+            $this->assertEqual(1, null, "#%s#");        // Fail.
+            $this->assertNotEqual(1, null, "#%s#");
         }
         function testIntegerEquality() {
             $this->assertEqual(1, 2, "#%s#");        // Fail.
@@ -66,6 +72,9 @@
             $this->assertNotEqual("a", "a", "#%s#");    // Fail.
             $this->assertEqual("aa", "ab", "#%s#");        // Fail.
             $this->assertNotEqual("aa", "ab", "#%s#");
+        }
+        function testHashEquality() {
+            $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "#%s#");
         }
         function testStringIdentity() {
             $a = "fred";
@@ -79,8 +88,11 @@
             $this->assertIdentical($a, $b, "#%s#");        // Fail.
             $this->assertNotIdentical($a, $b, "#%s#");
         }
-        function testHashEquality() {
-            $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "#%s#");
+        function testNullIdentity() {
+            $this->assertIdentical(null, 1, "#%s#");        // Fail.
+            $this->assertNotIdentical(null, 1, "#%s#");
+            $this->assertIdentical(1, null, "#%s#");        // Fail.
+            $this->assertNotIdentical(1, null, "#%s#");
         }
         function testHashIdentity() {
             $this->assertIdentical(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "#%s#");        // Fail.
@@ -238,7 +250,7 @@
         }
     }
     
-    $test = new GroupTest("Unit test case test with 34 fails, 34 passes and 4 exceptions");
+    $test = new GroupTest("Unit test case test with 36 fails, 36 passes and 4 exceptions");
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->run(new AllOutputReporter());
