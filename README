@@ -16,7 +16,7 @@ You are not tied to SimpleTest, though. The mocks and stubs will work
 with other test frameworks and SimpleTest can use other framework's
 (PHPUnit, PEAR::PhpUnit) test cases as it's own.
 
-The current release is PHP only and does not yet include much of the web
+The current release is PHP only and does not yet include all of the web
 testing tool. You can see a release schedule at
 http://www.lastcraft.com/overview.php which is also copied to the
 documentation folder with this release. The user interface is minimal
@@ -31,6 +31,7 @@ web testing side have not yet stabilised. The unit tester and mock
 object generator are tested and have already been used to test several
 systems. And of course they are being used to assist creation of
 SimpleTest itself.
+
 The unit tests for SimpleTest itself can be run here...
 
 simpletest/test/unit_tests.php
@@ -45,11 +46,21 @@ spurious errors. A normal unit test failure on the other hand would be
 very serious. As far as I know I haven't yet managed to check in any
 test failures so please correct me if you find one.
 
+Even if all of the tests run please verify that your existing test suites
+also function as expected. If they don't see the file...
+
+HELP_MY_TESTS_DONT_WORK_ANYMORE
+
+This contains information on interface changes. It also points out
+deprecated interfaces so you should read this even if all of
+your current tests appear to run.
+
 As an early release it doesn't have much in the way of documentation.
 You can find a tutorial on http://www.lastcraft.com/first_test_tutorial.php to
 get you started and hopefully this material will eventually become included
 with the project documentation. There is a documentation folder, but it is
-just a subset of the material on LastCraft and some always out of date diagrams.
+just a subset of the material on the LastCraft web site. I am working on
+a PHPDocumentor version using the code comments for a mid Beta release.
 
 If you download and use and possibly even extend this tool, please let me
 know. Any feedback, even bad, is always welcome and I will work to get
@@ -77,9 +88,9 @@ Thanks to Harry Fuecks for much feedback, packaging and suggestions and also
 for a great website (http://www.phppatterns.com/). :-)
 
 Thanks to Mathieu Kooiman for comments and suggestions.
-Thanks to Jason Sweat for bug reports.
+Thanks to Jason Sweat for bug reports and encouragement.
 
-Thanks to everyone else who has sent comments and suggestions, but I
+Thanks to everyone else who has sent comments and suggestions. I
 cannot credit you here without your name!
 -- 
 marcus@lastcraft.com

@@ -17,7 +17,7 @@ Rename files (2/1) - done.
 Interface
 ---------
 Add flush() after painting page header (1/0) - done.
-Rename test display class to reporter name (1/1) - done.
+Rename test display class to reporter (1/1) - done.
 
 Mock objects
 ------------
@@ -54,4 +54,4 @@ Fix filenames in tutorial (1/1) - done.
 Fix reporter name in documentation (1/1) - done.
 Fix reporter name in tutorial (1/0) - done.
 Fix tutorial text to include ignore option (1/0) - done.
-Add upgrade warning (1).
+Add upgrade warning (1/1) - done.
