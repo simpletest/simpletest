@@ -27,6 +27,9 @@
             $this->assertTrue($this->get('http://sourceforge.net/projects/simpletest/'));
             $this->clickLink('statistics');
             $this->assertWantedPattern('/Statistics for the past 7 days/');
+            $this->setField('report', 'Monthly');
+            $this->clickSubmit('Change Stats View');
+            $this->assertWantedPattern('/Statistics for the past \d+ months/');
         }
     }
 ?>
