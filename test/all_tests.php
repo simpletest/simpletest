@@ -6,7 +6,6 @@
     require_once('../reporter.php');
     require_once('../mock_objects.php');
     require_once('unit_tests.php');
-    require_once('boundary_tests.php');
         
     class AllTests extends GroupTest {
         function AllTests() {

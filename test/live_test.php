@@ -14,7 +14,6 @@
         }
         function testBadSocket() {
             @$socket = &new SimpleSocket('bad_url', 111, 5);
-            $this->swallowErrors();
             $this->assertTrue($socket->isError(), "Error [" . $socket->getError(). "]");
             $this->assertFalse($socket->isOpen());
             $this->assertFalse($socket->write("A message"));
