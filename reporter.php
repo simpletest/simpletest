@@ -182,6 +182,7 @@
             }
             print "Test cases run: " . $this->getTestCaseProgress() .
                     "/" . $this->getTestCaseCount() .
+                    ", Passes: " . $this->getPassCount() .
                     ", Failures: " . $this->getFailCount() .
                     ", Exceptions: " . $this->getExceptionCount() . "\n";
                     
@@ -220,6 +221,7 @@
          */
         function paintFormattedMessage($message) {
             print "$message\n";
+            flush();
         }
     }
     
