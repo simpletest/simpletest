@@ -450,6 +450,12 @@
             $this->assertWantedPattern('/go=\[Go!\]/');
         }
         
+        function testFormSubmissionBySubmitButtonLabeledSubmit() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertTrue($this->clickSubmitByName('test'));
+            $this->assertWantedPattern('/test=\[Submit\]/');
+        }
+        
         function testFormSubmissionWithIds() {
             $this->get('http://www.lastcraft.com/test/form.html');
             $this->assertFieldById(1, '');
