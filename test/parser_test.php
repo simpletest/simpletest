@@ -436,15 +436,4 @@
             $this->assertTrue($this->_parser->ignore("stuff", LEXER_UNMATCHED));
         }
     }
-    
-    class TestOfAbstractListener extends UnitTestCase {
-        function TestOfAbstractListener() {
-            $this->UnitTestCase();
-        }
-        function testParserAccessor() {
-            $parser = &new MockSimpleSaxParser($this);
-            $listener = &new SimpleSaxListener($parser);
-            $this->assertReference($parser, $listener->getParser());
-        }
-    }
 ?>

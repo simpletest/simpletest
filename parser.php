@@ -523,22 +523,9 @@
         
         /**
          *    Sets the document to write to.
-         *    @param $parser  Parser used to generate the
-         *                    SAX events.
          *    @public
          */
-        function SimpleSaxListener(&$parser) {
-            $this->_parser = &$parser;
-        }
-        
-        /**
-         *    Accessor for held parser.
-         *    @return        SAX parser class passed in
-         *                   constructor.
-         *    @public
-         */
-        function &getParser() {
-            return $this->_parser;
+        function SimpleSaxListener() {
         }
         
         /**

@@ -17,12 +17,11 @@
         
         /**
          *    Sets the document to write to.
-         *    @param $parser     Event generator.
          *    @param $page       Target of the events.
          *    @public
          */
-        function SimplePageBuilder(&$parser, &$page) {
-            $this->SimpleSaxListener($parser);
+        function SimplePageBuilder(&$page) {
+            $this->SimpleSaxListener();
             $this->_page = &$page;
             $this->_tags = array();
         }
@@ -31,10 +30,10 @@
          *    Reads the raw content and send events
          *    into the page to be built.
          *    @param $raw        Unparsed text.
+         *    @param $parser     Event generator.
          *    @public
          */
-        function parse($raw) {
-            $parser = &$this->getParser();
+        function parse($raw, &$parser) {
             return $parser->parse($raw);
         }
         
@@ -107,10 +106,33 @@
         }
         
         /**
-         *    Sets up the parser ready to parse itself.
+         *    Sets up the parser and parses itself.
+         *    @param $raw            Raw unparsed text.
          *    @protected
          */
-        function _createParser() {
+        function &_parse($raw) {
+            $builder = &$this->_createBuilder();
+            $builder->parse($raw, $this->_createParser());
+        }
+        
+        /**
+         *    Creates the parser used with the builder.
+         *    @return        Parser to generate events for
+         *                   the builder.
+         *    @protected
+         */
+        function &_createParser(&$builder) {
+            return new SimpleSaxParser($builder);
+        }
+        
+        /**
+         *    Creates the parser used with the builder.
+         *    @return        Builder to feed events to this
+         *                   page.
+         *    @protected
+         */
+        function &_createBuilder() {
+            return new SimplePageBuilder($this);
         }
         
         /**
