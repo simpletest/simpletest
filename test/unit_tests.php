@@ -24,6 +24,7 @@
             $this->addTestFile("socket_test.php");
             $this->addTestFile("query_string_test.php");
             $this->addTestFile("http_test.php");
+            $this->addTestFile("fetcher_test.php");
             $this->addTestFile("browser_test.php");
             $this->addTestFile("parser_test.php");
             $this->addTestFile("tag_test.php");
