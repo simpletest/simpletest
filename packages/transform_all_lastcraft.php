@@ -11,7 +11,6 @@
         $destination = $destination_path .
                 preg_replace('/\.xml$/', '.php', basename($source));
         $command = "Xalan -o $destination $source $transform\n";
-        print $command;
         `$command`;
     }
     closedir($dir);

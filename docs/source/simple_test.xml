@@ -5,51 +5,50 @@
         Unit tests and mock objects for PHP
     </long_title>
     <content>
-        <p style="margin-right: 10%; margin-left: 10%;">
-            <span style="color: red;">News:</span>
+        <news>
             Beta6 released.
             Mostly improvements to the web testing interface.
-        </p>
-        <p>
-            The following assumes that you are familiar with the concept
-            of unit testing as well as the PHP web development language.
-            It is a guide for the impatient new user of
-            <a href="https://sourceforge.net/project/showfiles.php?group_id=76550">SimpleTest</a>.
-            For fuller documentation, especially if you are new
-            to unit testing see the ongoing
-            <a local="unit_test_documentation">documentation</a>, and for
-            example test cases see the
-            <a href="http://www.lastcraft.com/first_test_tutorial.php">unit testing tutorial</a>.
-        </p>
-        <p>
-            <a class="target" name="unit"><h2>Using the tester quickly</h2></a>
-        </p>
-        <p>
-            Amongst software testing tools, a unit tester is the one
-            closest to the developer.
-            In the context of agile development the test code sits right
-            next to the source code as both are written simultaneously.
-            In this context SimpleTest aims to be a complete PHP developer
-            test solution and is called &quot;Simple&quot; because it
-            should be easy to use and extend.
-            It wasn&apos;t a good choice of name really.
-            It includes all of the typical functions you would expect from
-            <a href="http://www.junit.org/">JUnit</a> and the
-            <a href="http://sourceforge.net/projects/phpunit/">PHPUnit</a>
-            ports, but also adds
-            <a href="http://www.mockobjects.com">mock objects</a>.
-            It has some <a href="http://sourceforge.net/projects/jwebunit/">JWebUnit</a>
-            functionality as well.
-            This includes web page navigation, cookie testing and form submission.
-        </p>
-        <p>
-            The quickest way to demonstrate is with an example.
-        </p>
-        <p>
-            Let us suppose we are testing a simple file logging class called
-            <code>Log</code> in <em>classes/log.php</em>.
-            We start by creating a test script which we will call
-            <em>tests/log_test.php</em> and populate it as follows...
+        </news>
+        <introduction>
+            <p>
+                The following assumes that you are familiar with the concept
+                of unit testing as well as the PHP web development language.
+                It is a guide for the impatient new user of
+                <a href="https://sourceforge.net/project/showfiles.php?group_id=76550">SimpleTest</a>.
+                For fuller documentation, especially if you are new
+                to unit testing see the ongoing
+                <a local="unit_test_documentation">documentation</a>, and for
+                example test cases see the
+                <a href="http://www.lastcraft.com/first_test_tutorial.php">unit testing tutorial</a>.
+            </p>
+        </introduction>
+        <section name="unit" title="Using the tester quickly">
+            <p>
+                Amongst software testing tools, a unit tester is the one
+                closest to the developer.
+                In the context of agile development the test code sits right
+                next to the source code as both are written simultaneously.
+                In this context SimpleTest aims to be a complete PHP developer
+                test solution and is called &quot;Simple&quot; because it
+                should be easy to use and extend.
+                It wasn&apos;t a good choice of name really.
+                It includes all of the typical functions you would expect from
+                <a href="http://www.junit.org/">JUnit</a> and the
+                <a href="http://sourceforge.net/projects/phpunit/">PHPUnit</a>
+                ports, but also adds
+                <a href="http://www.mockobjects.com">mock objects</a>.
+                It has some <a href="http://sourceforge.net/projects/jwebunit/">JWebUnit</a>
+                functionality as well.
+                This includes web page navigation, cookie testing and form submission.
+            </p>
+            <p>
+                The quickest way to demonstrate is with an example.
+            </p>
+            <p>
+                Let us suppose we are testing a simple file logging class called
+                <code>Log</code> in <em>classes/log.php</em>.
+                We start by creating a test script which we will call
+                <em>tests/log_test.php</em> and populate it as follows...
 <php><![CDATA[
 <strong><?php
 require_once('simpletest/unit_tester.php');
@@ -57,10 +56,10 @@ require_once('simpletest/reporter.php');
 require_once('../classes/log.php');
 ?></strong>
 ]]></php>
-            Here the <em>simpletest</em> folder is either local or in the path.
-            You would have to edit these locations depending on where you
-            placed the toolset.
-            Next we create a test case...
+                Here the <em>simpletest</em> folder is either local or in the path.
+                You would have to edit these locations depending on where you
+                placed the toolset.
+                Next we create a test case...
 <php><![CDATA[
 <?php
 require_once('simpletest/unit_tester.php');
@@ -74,11 +73,11 @@ class TestOfLogging extends UnitTestCase {
 }</strong>
 ?>
 ]]></php>
-            Now we have eight lines of scaffolding code and still no tests.
-            However from this part on we get return on our investment very quickly.
-            We&apos;ll assume that the <code>Log</code> class
-            takes the file name to write to in the constructor and we have
-            a temporary folder in which to place this file...
+                Now we have eight lines of scaffolding code and still no tests.
+                However from this part on we get return on our investment very quickly.
+                We&apos;ll assume that the <code>Log</code> class
+                takes the file name to write to in the constructor and we have
+                a temporary folder in which to place this file...
 <php><![CDATA[
 <?php
 require_once('simpletest/unit_tester.php');
@@ -99,21 +98,21 @@ class TestOfLogging extends UnitTestCase {
 }
 ?>
 ]]></php>
-            When a test case runs it will search for any method that
-            starts with the string <code>test</code>
-            and execute that method.
-            We would normally have more than one test method of course.
-            Assertions within the test methods trigger messages to the
-            test framework which displays the result immediately.
-            This immediate response is important, not just in the event
-            of the code causing a crash, but also so that
-            <code>print</code> statements can display
-            their content right next to the test case concerned.
-        </p>
-        <p>
-            To see these results we have to actually run the tests.
-            If this is the only test case we wish to run we can achieve
-            it with...
+                When a test case runs it will search for any method that
+                starts with the string <code>test</code>
+                and execute that method.
+                We would normally have more than one test method of course.
+                Assertions within the test methods trigger messages to the
+                test framework which displays the result immediately.
+                This immediate response is important, not just in the event
+                of the code causing a crash, but also so that
+                <code>print</code> statements can display
+                their content right next to the test case concerned.
+            </p>
+            <p>
+                To see these results we have to actually run the tests.
+                If this is the only test case we wish to run we can achieve
+                it with...
 <php><![CDATA[
 <?php
 require_once('simpletest/unit_tester.php');
@@ -137,34 +136,33 @@ $test = &new TestOfLogging();
 $test->run(new HtmlReporter());</strong>
 ?>;
 ]]></php>
-        </p>
-        <p>
-            On failure the display looks like this...
-            <div class="demo">
-                <h1>testoflogging</h1>
-                <span class="fail">Fail</span>: testcreatingnewfile-&gt;True assertion failed.<br />
-                <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
-                <strong>0</strong> passes and <strong>1</strong> fails.</div>
-            </div>
-            ...and if it passes like this...
-            <div class="demo">
-                <h1>testoflogging</h1>
-                <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
-                <strong>1</strong> passes and <strong>0</strong> fails.</div>
-            </div>
-        </p>
-        <p>
-            <a class="target" name="group"><h2>Building group tests</h2></a>
-        </p>
-        <p>
-            It is unlikely in a real application that we will only ever run
-            one test case.
-            This means that we need a way of grouping cases into a test
-            script that can, if need be, run every test in the application.
-        </p>
-        <p>
-            Our first step is to strip the includes and to undo our
-            previous hack...
+            </p>
+            <p>
+                On failure the display looks like this...
+                <div class="demo">
+                    <h1>testoflogging</h1>
+                    <span class="fail">Fail</span>: testcreatingnewfile-&gt;True assertion failed.<br />
+                    <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
+                    <strong>0</strong> passes and <strong>1</strong> fails.</div>
+                </div>
+                ...and if it passes like this...
+                <div class="demo">
+                    <h1>testoflogging</h1>
+                    <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
+                    <strong>1</strong> passes and <strong>0</strong> fails.</div>
+                </div>
+            </p>
+        </section>
+        <section name="group" title="Building group tests">
+            <p>
+                It is unlikely in a real application that we will only ever run
+                one test case.
+                This means that we need a way of grouping cases into a test
+                script that can, if need be, run every test in the application.
+            </p>
+            <p>
+                Our first step is to strip the includes and to undo our
+                previous hack...
 <php><![CDATA[
 <?php<strong>
 require_once('../classes/log.php');</strong>
@@ -183,8 +181,8 @@ class TestOfLogging extends UnitTestCase {
 }
 ?></strong>
 ]]></php>
-            Next we create a new file called <em>tests/all_tests.php</em>
-            and insert the following code...
+                Next we create a new file called <em>tests/all_tests.php</em>
+                and insert the following code...
 <php><![CDATA[
 <strong><?php
 require_once('simpletest/unit_tester.php');
@@ -195,41 +193,40 @@ $test->addTestFile('log_test.php');
 $test->run(new HtmlReporter());
 ?></strong>
 ]]></php>
-            The method <code>GroupTest::addTestFile()</code>
-            will include the test case file and load any new classes created
-            that are descended from <code>TestCase</code>.
-        </p>
-        <p>
-            For this to work properly the test case file should not blindly include
-            any other test case extensions that do not actually run tests.
-            This could result in extra test cases being counted during the test
-            run.
-            Hardly a major problem, but to avoid this inconvenience simply add
-            a <code>SimpleTestOptions::ignore()</code> directive
-            somewhere in the test case file.
-            Also the test case file should not have been included
-            elsewhere or no cases will be added to this group test.
-            This would be a more serious error as if the test case classes are
-            already loaded by PHP the <code>GroupTest::addTestFile()</code>
-            method will not detect them.
-        </p>
-        <p>
-            To display the results it is necessary only to invoke
-            <em>tests/all_tests.php</em> from the web server.
-        </p>
-        <p>
-            <a class="target" name="mock"><h2>Using mock objects</h2></a>
-        <p>
-        </p>
-            Let&apos;s move further into the future.
-        </p>
-        <p>
-            Assume that our logging class is tested and completed.
-            Assume also that we are testing another class that is
-            required to write log messages, say a
-            <code>SessionPool</code>.
-            We want to test a method that will probably end up looking
-            like this...
+                The method <code>GroupTest::addTestFile()</code>
+                will include the test case file and load any new classes created
+                that are descended from <code>TestCase</code>.
+            </p>
+            <p>
+                For this to work properly the test case file should not blindly include
+                any other test case extensions that do not actually run tests.
+                This could result in extra test cases being counted during the test
+                run.
+                Hardly a major problem, but to avoid this inconvenience simply add
+                a <code>SimpleTestOptions::ignore()</code> directive
+                somewhere in the test case file.
+                Also the test case file should not have been included
+                elsewhere or no cases will be added to this group test.
+                This would be a more serious error as if the test case classes are
+                already loaded by PHP the <code>GroupTest::addTestFile()</code>
+                method will not detect them.
+            </p>
+            <p>
+                To display the results it is necessary only to invoke
+                <em>tests/all_tests.php</em> from the web server.
+            </p>
+        </section>
+        <section name="mock" title="Using mock objects">
+            <p>
+                Let&apos;s move further into the future.
+            </p>
+            <p>
+                Assume that our logging class is tested and completed.
+                Assume also that we are testing another class that is
+                required to write log messages, say a
+                <code>SessionPool</code>.
+                We want to test a method that will probably end up looking
+                like this...
 <php><![CDATA[<strong>
 class SessionPool {
     ...
@@ -242,9 +239,9 @@ class SessionPool {
 }
 </strong>
 ]]></php>
-            In the spirit of reuse we are using our
-            <code>Log</code> class.
-            A conventional test case might look like this...
+                In the spirit of reuse we are using our
+                <code>Log</code> class.
+                A conventional test case might look like this...
 <php><![CDATA[<strong>
 <?php
 require_once('../classes/log.php');
@@ -270,31 +267,31 @@ class TestOfSessionLogging extends UnitTestCase {
 }
 ?></strong>
 ]]></php>
-            This test case design is not all bad, but it could be improved.
-            We are spending time fiddling with log files which are
-            not part of our test. Worse, we have created close ties
-            with the <code>Log</code> class and
-            this test.
-            What if we don&apos;t use files any more, but use ths
-            <em>syslog</em> library instead?
-            Did you notice the extra carriage return in the message?
-            Was that added by the logger?
-            What if it also added a time stamp or other data?
-        </p>
-        <p>
-            The only part that we really want to test is that a particular
-            message was sent to the logger.
-            We reduce coupling if we can pass in a fake logging class
-            that simply records the message calls for testing, but
-            takes no action.
-            It would have to look exactly like our original though.
-            If the fake doesn&apos;t write to a file then we save on deleting
-            the file before and after each test. We could save even more
-            test code if the fake object could run the assertion for us.
-        <p>
-        </p>
-            Too good to be true?
-            Luckily we can create such an object easily...
+                This test case design is not all bad, but it could be improved.
+                We are spending time fiddling with log files which are
+                not part of our test. Worse, we have created close ties
+                with the <code>Log</code> class and
+                this test.
+                What if we don&apos;t use files any more, but use ths
+                <em>syslog</em> library instead?
+                Did you notice the extra carriage return in the message?
+                Was that added by the logger?
+                What if it also added a time stamp or other data?
+            </p>
+            <p>
+                The only part that we really want to test is that a particular
+                message was sent to the logger.
+                We reduce coupling if we can pass in a fake logging class
+                that simply records the message calls for testing, but
+                takes no action.
+                It would have to look exactly like our original though.
+                If the fake doesn&apos;t write to a file then we save on deleting
+                the file before and after each test. We could save even more
+                test code if the fake object could run the assertion for us.
+            <p>
+            </p>
+                Too good to be true?
+                Luckily we can create such an object easily...
 <php><![CDATA[
 <?php
 require_once('../classes/log.php');
@@ -315,47 +312,46 @@ class TestOfSessionLogging extends UnitTestCase {
 }
 ?>
 ]]></php>
-            The <code>tally()</code> call is needed to
-            tell the mock object that time is up for the expected call
-            count.
-            Without it the mock would wait forever for the method
-            call to come in without ever actually notifying the test case.
-            The other test will be triggered when the call to
-            <code>message()</code> is invoked on the
-            <code>MockLog</code> object.
-            The mock call will trigger a parameter comparison and then send the
-            resulting pass or fail event to the test display.
-            Wildcards can be included here too so as to prevent tests
-            becoming too specific.
-        </p>
-        <p>
-            The mock objects in the SimpleTest suite can have arbitrary
-            return values set, sequences of returns, return values
-            selected according to the incoming arguments, sequences of
-            parameter expectations and limits on the number of times
-            a method is to be invoked.
-        </p>
-        <p>
-            For this test to run the mock objects library must have been
-            included in the test suite, say in <em>all_tests.php</em>.
-        </p>
-        <p>
-            <a class="target" name="web"><h2>Web page testing</h2></a>
-        </p>
-        <p>
-            One of the requirements of web sites is that they produce web
-            pages.
-            If you are building a project top-down and you want to fully
-            integrate testing along the way then you will want a way of
-            automatically navigating a site and examining output for
-            correctness.
-            This is the job of a web tester.
-        </p>
-        <p>
-            The web testing in SimpleTest is still very much at the early
-            stages, but to give an idea here is an example where a home
-            page is fetched, from which we navigate to an &quot;about&quot;
-            page and then test some expected content.
+                The <code>tally()</code> call is needed to
+                tell the mock object that time is up for the expected call
+                count.
+                Without it the mock would wait forever for the method
+                call to come in without ever actually notifying the test case.
+                The other test will be triggered when the call to
+                <code>message()</code> is invoked on the
+                <code>MockLog</code> object.
+                The mock call will trigger a parameter comparison and then send the
+                resulting pass or fail event to the test display.
+                Wildcards can be included here too so as to prevent tests
+                becoming too specific.
+            </p>
+            <p>
+                The mock objects in the SimpleTest suite can have arbitrary
+                return values set, sequences of returns, return values
+                selected according to the incoming arguments, sequences of
+                parameter expectations and limits on the number of times
+                a method is to be invoked.
+            </p>
+            <p>
+                For this test to run the mock objects library must have been
+                included in the test suite, say in <em>all_tests.php</em>.
+            </p>
+        </section>
+        <section name="web" title="Web page testing">
+            <p>
+                One of the requirements of web sites is that they produce web
+                pages.
+                If you are building a project top-down and you want to fully
+                integrate testing along the way then you will want a way of
+                automatically navigating a site and examining output for
+                correctness.
+                This is the job of a web tester.
+            </p>
+            <p>
+                The web testing in SimpleTest is still very much at the early
+                stages, but to give an idea here is an example where a home
+                page is fetched, from which we navigate to an &quot;about&quot;
+                page and then test some expected content.
 <php><![CDATA[
 <?php<strong>
 require_once('simpletest/web_tester.php');</strong>
@@ -378,13 +374,14 @@ $test = &new TestOfAbout();
 $test->run(new HtmlReporter());
 ?>
 ]]></php>
-            With this code as an acceptance test you can ensure that
-            the content always meets the specifications of both the
-            developers and the project stakeholders.
-        </p>
-        <p>
-            <a href="http://sourceforge.net/projects/simpletest/"><img src="http://sourceforge.net/sflogo.php?group_id=76550&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo"/></a>
-        </p>
+                With this code as an acceptance test you can ensure that
+                the content always meets the specifications of both the
+                developers and the project stakeholders.
+            </p>
+            <p>
+                <a href="http://sourceforge.net/projects/simpletest/"><img src="http://sourceforge.net/sflogo.php?group_id=76550&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo"/></a>
+            </p>
+        </section>
     </content>
     <internal>
         <link>
@@ -404,7 +401,6 @@ $test->run(new HtmlReporter());
             at the HTML level.
         </link>
     </internal>
-
     <external>
         <link>
             <a href="https://sourceforge.net/project/showfiles.php?group_id=76550&amp;release_id=153280">Download PHP Simple Test</a>

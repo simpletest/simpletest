@@ -222,6 +222,27 @@
         </span>
     </xsl:template>
     
+    <xsl:template match="section">
+        <p>
+            <a class="target">
+                <xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
+                <h2><xsl:value-of select="@title"/></h2>
+            </a>
+        </p>
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    <xsl:template match="introduction">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    <xsl:template match="news">
+        <p style="margin-right: 10%; margin-left: 10%;">
+            <span style="color: red;">News:</span>
+            <xsl:apply-templates/>
+        </p>
+    </xsl:template>
+    
     <xsl:template match="a">
         <xsl:copy>
             <xsl:for-each select="@class|@name|@href">

@@ -6,19 +6,21 @@
     <xsl:preserve-space elements="*"/>
     
     <xsl:template match="/">
-        <xsl:call-template name="head"/>
-        <![CDATA[{@doc}]]>
-        <xsl:call-template name="body"/>
+        <refentry>
+            <xsl:attribute name="id"><![CDATA[{@id}]]></xsl:attribute>
+            <xsl:call-template name="head"/>
+            <![CDATA[{@doc}]]>
+            <xsl:call-template name="body"/>
+        </refentry>
     </xsl:template>
     
     <xsl:template name="head">
-        <refentry>
-            <xsl:attribute name="id"><![CDATA[{@id}]]></xsl:attribute>
-            <refnamediv>
-                <refname><xsl:value-of select="/page/@here"/></refname>
-                <refpurpose></refpurpose>
-            </refnamediv>
-        </refentry>
+        <refnamediv>
+            <refname><xsl:value-of select="/page/@here"/></refname>
+            <refpurpose>
+                <xsl:apply-templates select="//introduction/p/node()"/>
+            </refpurpose>
+        </refnamediv>
     </xsl:template>
     
     <xsl:template name="body">
@@ -43,6 +45,20 @@
         <span class="new_code">
             <xsl:apply-templates/>
         </span>
+    </xsl:template>
+    
+    <xsl:template match="section">
+        <refsect1>
+            <xsl:attribute name="id">{@id <xsl:value-of select="@name"/>}</xsl:attribute>
+            <title><xsl:value-of select="@title"/></title>
+            <xsl:apply-templates/>
+        </refsect1>
+    </xsl:template>
+    
+    <xsl:template match="introduction">
+    </xsl:template>
+    
+    <xsl:template match="news">
     </xsl:template>
     
     <xsl:template match="a[@class = 'target']">
