@@ -19,6 +19,7 @@
 	 *	  @subpackage UnitTester
      */
     class HtmlReporter extends SimpleReporter {
+        var $_character_set;
         
         /**
          *    Does nothing yet. The first output will
@@ -26,8 +27,9 @@
          *    by a web browser.
          *    @access public
          */
-        function HtmlReporter() {
+        function HtmlReporter($character_set = 'ISO-8859-1') {
             $this->SimpleReporter();
+            $this->_character_set = $character_set;
         }
         
         /**
@@ -39,6 +41,8 @@
         function paintHeader($test_name) {
             $this->sendNoCacheHeaders();
             print "<html>\n<head>\n<title>$test_name</title>\n";
+            print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" .
+                    $this->_character_set . "\">\n";
             print "<style type=\"text/css\">\n";
             print $this->_getCss() . "\n";
             print "</style>\n";
@@ -107,7 +111,7 @@
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
             print implode(" -&gt; ", $breadcrumb);
-            print " -&gt; " . htmlentities($message) . "<br />\n";
+            print " -&gt; " . $this->_htmlEntities($message) . "<br />\n";
         }
         
         /**
@@ -122,7 +126,7 @@
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
             print implode(" -&gt; ", $breadcrumb);
-            print " -&gt; <strong>" . htmlentities($message) . "</strong><br />\n";
+            print " -&gt; <strong>" . $this->_htmlEntities($message) . "</strong><br />\n";
         }
         
         /**
@@ -131,7 +135,17 @@
          *    @access public
          */
         function paintFormattedMessage($message) {
-            echo '<pre>', htmlentities($message), '</pre>';
+            print '<pre>' . $this->_htmlEntities($message) . '</pre>';
+        }
+        
+        /**
+         *    Character set adjusted entity conversion.
+         *    @param string $message    Plain text or Unicode message.
+         *    @return string            Browser readable message.
+         *    @access protected
+         */
+        function _htmlEntities($message) {
+            return htmlentities($message, ENT_COMPAT, $this->_character_set);
         }
     }
     
