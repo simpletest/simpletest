@@ -113,20 +113,22 @@
             $this->assertEqual(count($jar->getValidCookies(false, "/")), 0);
         }
     }
-
-    class TestOfBrowser extends UnitTestCase {
-        function TestOfBrowser() {
+    
+    class TestOfExpandomaticUrl extends UnitTestCase {
+        function TestOfExpandomaticUrl() {
             $this->UnitTestCase();
         }
-        function testAssertionChaining() {
-            $test = &new MockUnitTestCase($this);
-            $test->expectArgumentsAt(0, "assertTrue", array(true, "Good"));
-            $test->expectArgumentsAt(1, "assertTrue", array(false, "Bad"));
-            $test->expectCallCount("assertTrue", 2);
-            $browser = &new TestBrowser($test);
-            $browser->_assertTrue(true, "Good");
-            $browser->_assertTrue(false, "Bad");
-            $test->tally();
+        function testSetBase() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue("isError", false);
+            $response->setReturnValue("getNewCookies", array());
+            $request = &new MockSimpleHttpRequest($this);
+            $request->setReturnReference("fetch", $response);
+            $browser = &new SimpleBrowser();
+            $browser->fetchResponse("http://this.host/this/path/page.html", &$request);
+            $this->assertEqual(
+                    $browser->getBaseUrl(),
+                    "http://this.host/this/path/");
         }
     }
 
@@ -191,6 +193,22 @@
         }
     }
     
+    class TestOfBrowserAssertions extends UnitTestCase {
+        function TestOfBrowserAssertions() {
+            $this->UnitTestCase();
+        }
+        function testAssertionChaining() {
+            $test = &new MockUnitTestCase($this);
+            $test->expectArgumentsAt(0, "assertTrue", array(true, "Good"));
+            $test->expectArgumentsAt(1, "assertTrue", array(false, "Bad"));
+            $test->expectCallCount("assertTrue", 2);
+            $browser = &new TestBrowser($test);
+            $browser->_assertTrue(true, "Good");
+            $browser->_assertTrue(false, "Bad");
+            $test->tally();
+        }
+    }
+
     class TestOfBadHosts extends UnitTestCase {
         function TestOfBadHosts() {
             $this->UnitTestCase();

@@ -68,7 +68,7 @@
         function SimpleSocket($url, $port = 80) {
             $this->StickyError();
             $this->_is_open = false;
-            if (!($this->_handle = fsockopen($url, $port, $errorNumber, $error, 15))) {
+            if (!($this->_handle = @fsockopen($url, $port, $errorNumber, $error, 15))) {
                 $this->_setError("Cannot open [$url] with [$error]");
             } else {
                 $this->_is_open = true;

@@ -67,6 +67,26 @@
             $request = $url->getRequest();
             $this->assertEqual($request["a"], '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-=');
         }
+        function testPageSplitting() {
+            $url = new SimpleUrl("./here/../there/somewhere.php");
+            $this->assertEqual($url->getPath(), "./here/../there/somewhere.php");
+            $this->assertEqual($url->getPage(), "somewhere.php");
+            $this->assertEqual($url->getBasePath(), "./here/../there/");
+        }
+        function testAbsolutePathPageSplitting() {
+            $url = new SimpleUrl("http://host.com/here/there/somewhere.php");
+            $this->assertEqual($url->getPath(), "/here/there/somewhere.php");
+            $this->assertEqual($url->getPage(), "somewhere.php");
+            $this->assertEqual($url->getBasePath(), "/here/there/");
+        }
+        function testMakingAbsolute() {
+            $url = new SimpleUrl("../there/somewhere.php");
+            $this->assertEqual($url->getPath(), "../there/somewhere.php");
+            $url->makeAbsolute("https://host.com/here/");
+            $this->assertEqual($url->getScheme(), "https");
+            $this->assertEqual($url->getHost(), "host.com");
+            $this->assertEqual($url->getPath(), "/here/../there/somewhere.php");
+        }
         function testBlitz() {
             $this->assertUrl(
                     "https://username:password@www.somewhere.com:243/this/that/here.php?a=1&b=2#anchor",
@@ -200,13 +220,14 @@
             $this->UnitTestCase();
         }
         function testReadingBadConnection() {
-            $request = new SimpleHttpRequest("http://a.bad.page/");
+            $request = new SimpleHttpRequest(new SimpleUrl("http://a.bad.page/"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", true);
-            $this->assertFalse($request->fetch(&$socket));
+            $reponse = &$request->fetch(&$socket);
+            $this->assertTrue($reponse->isError());
         }
         function testReadingGoodConnection() {
-            $request = new SimpleHttpRequest("http://a.valid.host/and/path");
+            $request = new SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
             $socket->expectArgumentsAt(0, "write", array("GET /and/path HTTP/1.0\r\n"));
@@ -218,7 +239,7 @@
             $socket->tally();
         }
         function testWritingGetRequest() {
-            $request = new SimpleHttpRequest("http://a.valid.host/and/path?a=A&b=B");
+            $request = new SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path?a=A&b=B"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
             $socket->expectArgumentsAt(0, "write", array("GET /and/path?a=A&b=B HTTP/1.0\r\n"));
@@ -226,7 +247,7 @@
             $socket->tally();
         }
         function testWritingAdditionalHeaders() {
-            $request = new SimpleHttpRequest("http://a.valid.host/and/path");
+            $request = new SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path"));
             $request->addHeaderLine("My: stuff");
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
@@ -240,7 +261,7 @@
             $socket->tally();
         }
         function testCookieWriting() {
-            $request = new SimpleHttpRequest("http://a.valid.host/and/path");
+            $request = new SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path"));
             $request->setCookie(new SimpleCookie("a", "A"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
@@ -254,7 +275,7 @@
             $socket->tally();
         }
         function testMultipleCookieWriting() {
-            $request = new SimpleHttpRequest("a.valid.host/and/path");
+            $request = new SimpleHttpRequest(new SimpleUrl("a.valid.host/and/path"));
             $request->setCookie(new SimpleCookie("a", "A"));
             $request->setCookie(new SimpleCookie("b", "B"));
             $socket = &new MockSimpleSocket($this);

@@ -122,6 +122,7 @@
     class SimpleBrowser {
         var $_cookie_jar;
         var $_response;
+        var $_base_url;
         
         /**
          *    Starts with a fresh browser with no
@@ -131,6 +132,7 @@
         function SimpleBrowser() {
             $this->_cookie_jar = new CookieJar();
             $this->_response = false;
+            $this->_base_url = false;
         }
         
         /**
@@ -184,12 +186,13 @@
         
         /**
          *    Fetches a URL as a response object.
-         *    @param $url        Target to fetch as string.
+         *    @param $raw_url    Target to fetch as string.
          *    @param $request    Test override of SimpleHttpRequest.
          *    @return            Reponse object.
          *    @public
          */
-        function &fetchResponse($url, $request = false) {
+        function &fetchResponse($raw_url, $request = false) {
+            $url = $this->_createAbsoluteUrl($raw_url);
             if (!is_object($request)) {
                 $request = new SimpleHttpRequest($url);
             }
@@ -197,13 +200,11 @@
                 $request->setCookie($cookie);
             }
             $response = &$request->fetch();
-            foreach ($response->getNewCookies() as $cookie) {
-                $parsed_url = new SimpleUrl($url);
-                if ($parsed_url->getHost()) {
-                    $cookie->setHost($parsed_url->getHost());
-                }
-                $this->_cookie_jar->setCookie($cookie);
+            if ($response->isError()) {
+                return $response;
             }
+            $this->_extractBaseUrl($url);
+            $this->_addCookies($url, $response->getNewCookies());
             return $response;
         }
         
@@ -217,6 +218,55 @@
         function fetchContent($url, $request = false) {
             $response = &$this->fetchResponse($url, $request);
             return $response->getContent();
+        }
+        
+        /**
+         *    Extracts new cookies into the cookie jar.
+         *    @param $url        Target to fetch as url object.
+         *    @param $cookies    New cookies.
+         *    @private
+         */
+        function _addCookies($url, $cookies) {
+            foreach ($cookies as $cookie) {
+                if ($url->getHost()) {
+                    $cookie->setHost($url->getHost());
+                }
+                $this->_cookie_jar->setCookie($cookie);
+            }
+        }
+        
+        /**
+         *    Turns an incoming URL string into a
+         *    URL object, filling the relative URL if
+         *    a base URL is present.
+         *    @param $raw_url        URL as string.
+         *    @return                Absolute URL as object.
+         *    @private
+         */
+        function _createAbsoluteUrl($raw_url) {
+            $url = new SimpleUrl($raw_url);
+            $url->makeAbsolute($this->_base_url);
+            return $url;
+        }
+        
+        /**
+         *    Extracts the host and directory path so
+         *    as to set the base URL.
+         *    @param $url        URL object to read.
+         *    @private
+         */
+        function _extractBaseUrl($url) {
+            $this->_base_url = $url->getScheme("http") . "://" .
+                    $url->getHost() . $url->getBasePath();
+        }
+        
+        /**
+         *    Accessor for base URL.
+         *    @return        Base URL as string.
+         *    @public
+         */
+        function getBaseUrl() {
+            return $this->_base_url;
         }
     }
     

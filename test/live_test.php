@@ -31,7 +31,8 @@
             $this->assertEqual($socket->read(8), "");
         }
         function testHttp() {
-            $http = new SimpleHttpRequest("www.lastcraft.com/test/network_confirm.php?gkey=gvalue");
+            $http = new SimpleHttpRequest(new SimpleUrl(
+                    "www.lastcraft.com/test/network_confirm.php?gkey=gvalue"));
             $http->setCookie(new SimpleCookie("ckey", "cvalue"));
             $this->assertIsA($reponse = &$http->fetch(), "SimpleHttpResponse");
             $this->assertEqual($reponse->getResponseCode(), 200);
@@ -39,10 +40,10 @@
             $this->assertWantedPattern(
                     '/A target for the SimpleTest test suite/',
                     $reponse->getContent());
-             $this->assertWantedPattern(
+            $this->assertWantedPattern(
                     '/gkey=gvalue/',
                     $reponse->getContent());
-             $this->assertWantedPattern(
+            $this->assertWantedPattern(
                     '/ckey=cvalue/',
                     $reponse->getContent());
         }
@@ -54,6 +55,11 @@
         }
         function testFetch() {
             $this->fetch('http://www.lastcraft.com/test/network_confirm.php');
+            $this->assertWantedPattern('/target for the SimpleTest/');
+        }
+        function testRelativeFetch() {
+            $this->fetch('http://www.lastcraft.com/test/');
+            $this->fetch('./network_confirm.php');
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
     }

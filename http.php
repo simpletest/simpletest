@@ -200,6 +200,31 @@
         }
         
         /**
+         *    Accessor for page if any. This may be a
+         *    directory name if ambiguious.
+         *    @return            Page name.
+         *    @public
+         */
+        function getPage() {
+            if (!preg_match('/([^\/]*?)$/', $this->getPath(), $matches)) {
+                return false;
+            }
+            return $matches[1];
+        }
+        
+        /**
+         *    Gets the path to the page.
+         *    @return        Path less the page.
+         *    @public
+         */
+        function getBasePath() {
+            if (!preg_match('/(.*\/)[^\/]*?$/', $this->getPath(), $matches)) {
+                return false;
+            }
+            return $matches[1];
+        }
+        
+        /**
          *    Accessor for fragment at end of URL
          *    after the "#".
          *    @return     Part after "#".
@@ -241,6 +266,25 @@
          */
         function addRequestParameter($key, $value) {
             $this->_request[$key] = $value;
+        }
+        
+        /**
+         *    Replaces unknown sections to turn a relative
+         *    URL into an absolute one.
+         *    @param $base            Base URL as string.
+         *    @public
+         */
+        function makeAbsolute($base) {
+            $base_url = new SimpleUrl($base);
+            if (!$this->getScheme()) {
+                $this->_scheme = $base_url->getScheme();
+            }
+            if (!$this->getHost()) {
+                $this->_host = $base_url->getHost();
+            }
+            if (substr($this->getPath(), 0, 1) != "/") {
+                $this->_path = $base_url->getBasePath() . $this->getPath();
+            }
         }
     }
 
@@ -441,11 +485,11 @@
         
         /**
          *    Saves the URL ready for fetching.
-         *    @param $url        URL as string.
+         *    @param $url        URL as object.
          *    @public
          */
         function SimpleHttpRequest($url) {
-            $this->_url = new SimpleUrl($url);
+            $this->_url = $url;
             $this->_user_headers = array();
             $this->_cookies = array();
         }
@@ -461,7 +505,7 @@
                 $socket = new SimpleSocket($this->_url->getHost());
             }
             if ($socket->isError()) {
-                return false;
+                return $this->_createResponse($socket);
             }
             $socket->write("GET " . $this->_url->getPath() . $this->_url->getEncodedRequest() . " HTTP/1.0\r\n");
             $socket->write("Host: " . $this->_url->getHost() . "\r\n");
