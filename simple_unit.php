@@ -60,6 +60,25 @@
         }
         
         /**
+         *    Type and class test. Will pass if class
+         *    matches the type name or is a subclass or
+         *    is not an object, but the type is corect.
+         *    @param $object        Object to test.
+         *    @param $type          Type name as string.
+         */
+        function assertIsA($object, $type, $message = "") {
+            if (is_object($object)) {
+                $this->assertTrue(
+                        is_a($object, $type),
+                        "[" . get_class($object) . ": $object] should be type [$type]");
+            } else {
+                $this->assertTrue(
+                        gettype($object) == $type,
+                        "[" . gettype($object) . ": $object] should be type [$type]");
+            }
+        }
+        
+        /**
          *    Will trigger a pass if the two parameters have
          *    the same value only. Otherwise a fail.
          *    @param $first          Value to compare.

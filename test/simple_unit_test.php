@@ -21,6 +21,14 @@
             $this->assertNotNull(null);        // Fail.
             $this->assertNotNull(false);
         }
+        function testOfType() {
+            $this->assertIsA("hello", "string");
+            $this->assertIsA(14, "string");
+            $this->assertIsA($this, "TestOfUnitTestCase");
+            $this->assertIsA($this, "UnitTestCase");
+            $this->assertIsA(14, "TestOfUnitTestCase");
+            $this->assertIsA(14, "TestHTMLDisplay");
+        }
         function testOfEquality() {
             $this->assertEqual("0", 0);
             $this->assertEqual(1, 2);        // Fail.
@@ -54,7 +62,7 @@
         }
     }
     
-    $test = new GroupTest("Unit test case test, 11 fails and 11 passes");
+    $test = new GroupTest("Unit test case test, 14 fails and 14 passes");
     $display = new TestHTMLDisplay();
     $test->attachObserver($display);
     $test->addTestCase(new TestOfUnitTestCase());
