@@ -31,8 +31,7 @@
         var $_label;
         
         /**
-         *    Sets up the test name and starts with no attached
-         *    displays.
+         *    Sets up the test name.
          *    @param string $label        Name of test.
          *    @access public
          */

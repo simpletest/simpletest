@@ -190,7 +190,7 @@
     }
     
     class ExpectedMethodTarget {
-        function HasThisMethod() {}
+        function hasThisMethod() {}
     }
 
     class TestOfMethodExistence extends UnitTestCase {
@@ -198,10 +198,11 @@
             $this->UnitTestCase();
         }
        function testHasMethod() {
-            $test_instance = &new ExpectedMethodTarget;
-            $expectation = &new MethodExistenceExpectation($test_instance);
-            $this->assertTrue($expectation->test('HasThisMethod'));
-            $this->assertFalse($expectation->test('DoesNotHaveThisMethod'));
+            $instance = &new ExpectedMethodTarget();
+            $expectation = &new MethodExistsExpectation('hasThisMethod');
+            $this->assertTrue($expectation->test($instance));
+            $expectation = &new MethodExistsExpectation('doesNotHaveThisMethod');
+            $this->assertFalse($expectation->test($instance));
         }
     }
     

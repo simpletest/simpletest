@@ -451,17 +451,17 @@
 	 *	  @package SimpleTest
 	 *	  @subpackage UnitTester
      */
-    class MethodExistenceExpectation extends SimpleExpectation {
-        var $_obj;
+    class MethodExistsExpectation extends SimpleExpectation {
+        var $_method;
         
         /**
          *    Sets the value to compare against.
          *    @param object $obj        Object to check.
          *    @access public
          */
-        function MethodExistenceExpectation(&$obj) {
+        function MethodExistsExpectation($method) {
             $this->SimpleExpectation();
-            $this->_obj = &$obj;
+            $this->_method = &$method;
         }
         
         /**
@@ -471,7 +471,7 @@
          *    @access public
          */
         function test($compare) {
-            return (boolean)(is_object($this->_obj) && method_exists($this->_obj, $compare));
+            return (boolean)(is_object($compare) && method_exists($compare, $this->_method));
         }
         
         /**
@@ -483,9 +483,11 @@
          */
         function testMessage($compare) {
 			$dumper = &$this->_getDumper();
-			return "Object [" . get_class($this->_obj) .
-					"] does not contain method [" .
-					$dumper->describeValue($compare) . "]";
+			if (! is_object($compare)) {
+			    return 'No method on non-object [' . $dumper->describeValue($compare) . ']';
+			}
+			return "Object [" . $dumper->describeValue($compare) .
+					"] should contain method [$method]";
         }
     }
 ?>
