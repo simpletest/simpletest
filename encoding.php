@@ -14,6 +14,8 @@
      */
     class SimpleQueryString {
         var $_request;
+        var $_x;
+        var $_y;
         
         /**
          *    Starts empty.
@@ -27,6 +29,7 @@
                 $query = array();
             }
             $this->_request = array();
+            $this->setCoordinates();
             $this->merge($query);
         }
         
@@ -66,6 +69,40 @@
                     $this->add($key, $value);
                 }
             }
+        }
+        
+        /**
+         *    Sets image coordinates. Set to false to clear
+         *    them.
+         *    @param integer $x    Horizontal position.
+         *    @param integer $y    Vertical position.
+         *    @access public
+         */
+        function setCoordinates($x = false, $y = false) {
+            if (($x === false) || ($y === false)) {
+                $this->_x = $this->_y = false;
+                return;
+            }
+            $this->_x = (integer)$x;
+            $this->_y = (integer)$y;
+        }
+        
+        /**
+         *    Accessor for horizontal image coordinate.
+         *    @return integer        X value.
+         *    @access public
+         */
+        function getX() {
+            return $this->_x;
+        }
+         
+        /**
+         *    Accessor for vertical image coordinate.
+         *    @return integer        Y value.
+         *    @access public
+         */
+        function getY() {
+            return $this->_y;
         }
         
         /**
@@ -123,14 +160,5 @@
             }
             return implode('&', $statements);
         }
-    }
-    
-    /**
-     *    Bundle of GET/POST parameters. Can include
-     *    repeated parameters.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
-     */
-    class SimpleFormEncoding {
     }
 ?>
