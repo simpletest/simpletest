@@ -67,6 +67,36 @@
          *    @public
          */
         function testMessage($comparison) {
+            return "Expected arguments [" . $this->_renderArguments($this->_expected) .
+                    "] got [" . $this->_renderArguments($comparison) . "]";
+        }
+        
+        /**
+         *    Renders the argument list as a string for
+         *    messages.
+         *    @param $args            Array of arguments.
+         *    @private
+         */
+        function _renderArguments($args) {
+            $arg_strings = array();
+            foreach ($args as $arg) {
+                if (is_bool($arg)) {
+                    $arg_strings[] = "Boolean: " . ($arg ? "true" : "false");
+                } elseif (is_string($arg)) {
+                    $arg_strings[] = "String: $arg";
+                } elseif (is_integer($arg)) {
+                    $arg_strings[] = "Integer: $arg";
+                } elseif (is_float($arg)) {
+                    $arg_strings[] = "Float: $arg";
+                } elseif (is_array($arg)) {
+                    $arg_strings[] = "Array: " . count($arg) . " items";
+                } elseif (is_resource($arg)) {
+                    $arg_strings[] = "Resource: $arg";
+                } elseif (is_object($arg)) {
+                    $arg_strings[] = "Object: of " . get_class($arg);
+                }
+            }
+            return implode(", ", $arg_strings);
         }
     }
     
@@ -613,12 +643,12 @@
             if (isset($this->_sequence_args[$timing][$method])) {
                 $this->_assertTrue(
                         $this->_sequence_args[$timing][$method]->test($args),
-                        "Arguments for [$method] at [$timing] were [" . $this->_renderArguments($args) . "]",
+                        "Mock method [$method] at [$timing]->" . $this->_sequence_args[$timing][$method]->testMessage($args),
                         $this->_test);
             } elseif (isset($this->_expected_args[$method])) {
                 $this->_assertTrue(
                         $this->_expected_args[$method]->test($args),
-                        "Arguments for [$method] were [" . $this->_renderArguments($args) . "]",
+                        "Mock method [$method]->" . $this->_expected_args[$method]->testMessage($args),
                         $this->_test);
             }
         }
@@ -637,34 +667,6 @@
          */
         function _assertTrue($assertion, $message , &$test) {
             $test->assertTrue($assertion, $message);
-        }
-        
-        /**
-         *    Renders the argument list as a string for
-         *    messages.
-         *    @param $args            Array of arguments.
-         *    @private
-         */
-        function _renderArguments($args) {
-            $arg_strings = array();
-            foreach ($args as $arg) {
-                if (is_bool($arg)) {
-                    $arg_strings[] = "Boolean: " . ($arg ? "true" : "false");
-                } elseif (is_string($arg)) {
-                    $arg_strings[] = "String: $arg";
-                } elseif (is_integer($arg)) {
-                    $arg_strings[] = "Integer: $arg";
-                } elseif (is_float($arg)) {
-                    $arg_strings[] = "Float: $arg";
-                } elseif (is_array($arg)) {
-                    $arg_strings[] = "Array: " . count($arg) . " items";
-                } elseif (is_resource($arg)) {
-                    $arg_strings[] = "Resource: $arg";
-                } elseif (is_object($arg)) {
-                    $arg_strings[] = "Object: of " . get_class($arg);
-                }
-            }
-            return implode(", ", $arg_strings);
         }
     }
     
