@@ -432,12 +432,11 @@
         /**
          *    Sets up a browser for the start of each
          *    test method.
-         *    @param string $method    Name of test method.
-         *    @access protected
+         *    @access public
          */
-        function invoke($method) {
+        function before() {
             $this->_browser = &$this->createBrowser();
-            parent::invoke($method);
+            parent::before();
         }
         
         /**

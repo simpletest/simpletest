@@ -44,13 +44,13 @@
          *    Invokes a single test method on the test case.
          *    This call back allows the reporter to decide if
          *    it actually wants to run the test.
-         *    @param SimpleTestCase $test_case    Test case to run test on.
-         *    @param string $method               Name of test method.
+         *    @param SimpleRunner $runner    Test case to run test on.
+         *    @param string $method          Name of test method.
          *    @access public
          */
-        function invoke(&$test_case, $method) {
+        function invoke(&$runner, $method) {
             if (! $this->_is_dry_run) {
-                $test_case->invoke($method);
+                $runner->invoke($method);
             }
         }
 
@@ -209,105 +209,7 @@
         function paintSignal($type, &$payload) {
         }
     }
-    
-    /**
-     *    Modifies the test running behaviour of the standard
-     *    runner by wrapping it. This is a do nothing version.
-     *    Subclass this for soak testers and statistical
-     *    testers.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
-     */
-    class SimpleRunnerDecorator {
-        var $_runner;
-        
-        /**
-         *    Takes in the reporter to wrap.
-         *    @param SimpleRunner $runner
-         */
-        function SimpleRunnerDecorator(&$runner) {
-            $this->_runner = &$runner;
-        }
-        
-        /**
-         *    Runs the method once on the test case.
-         *    @param SimpleTest $test_case    Test case to run test on.
-         *    @param string $method           Name of test method.
-         *    @access public
-         */
-        function invoke(&$test_case, $method) {
-            $test_case->invoke($method);
-        }
-        
-        /**
-         *    Chains to the wrapped runner.
-         *    @param string $message        Message is ignored.
-         *    @access public
-         */
-        function paintPass($message) {
-            $this->_runner->paintPass($message);
-        }
-        
-        /**
-         *    Chains to the wrapped runner.
-         *    @param string $message        Message is ignored.
-         *    @access public
-         */
-        function paintFail($message) {
-            $this->_runner->paintFail($message);
-        }
-        
-        /**
-         *    Chains to the wrapped runner.
-         *    @param string $message    Text of error formatted by
-         *                              the test case.
-         *    @access public
-         */
-        function paintError($message) {
-            $this->_runner->paintError($message);
-        }
-        
-        /**
-         *    Chains to the wrapped runner.
-         *    @param Exception $exception     Object thrown.
-         *    @access public
-         */
-        function paintException($exception) {
-            $this->_runner->paintException($exception);
-        }
-        
-        /**
-         *    Chains to the wrapped runner.
-         *    @param string $message        Text to display.
-         *    @access public
-         */
-        function paintMessage($message) {
-            $this->_runner->paintMessage($message);
-        }
-        
-        /**
-         *    Chains to the wrapped runner.
-         *    @param string $message        Text to display.
-         *    @access public
-         */
-        function paintFormattedMessage($message) {
-            $this->_runner->paintFormattedMessage($message);
-        }
-        
-        /**
-         *    Chains to the wrapped runner.
-         *    @param string $type        Event type as text.
-         *    @param mixed $payload      Message or object.
-         *    @return boolean            Should return false if this
-         *                               type of signal should fail the
-         *                               test suite.
-         *    @access public
-         */
-        function paintSignal($type, &$payload) {
-            $this->_runner->paintSignal($type, $payload);
-        }
-    }
-    
+
     /**
      *    Recipient of generated test messages that can display
      *    page footers and headers. Also keeps track of the

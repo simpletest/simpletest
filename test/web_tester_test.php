@@ -1,8 +1,6 @@
 <?php
     // $Id$
     
-    require_once(dirname(__FILE__) . '/../web_tester.php');
-    
     class TestOfFieldExpectation extends UnitTestCase {
         function TestOfFieldExpectation() {
             $this->UnitTestCase();

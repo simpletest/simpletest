@@ -19,6 +19,219 @@
         define('SIMPLE_TEST', dirname(__FILE__) . '/');
     }
     /**#@-*/
+
+    /**
+     *    The standard runner. Will run every method starting
+     *    with test as well as the setUp() and tearDown()
+     *    before and after each test method. Basically the
+     *    Mediator pattern.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class SimpleRunner {
+        var $_test_case;
+        var $_scorer;
+        
+        /**
+         *    Takes in the test case and reporter to mediate between.
+         *    @param SimpleTestCase $test_case  Test case to run.
+         *    @param SimpleScorer $scorer       Reporter to receive events.
+         */
+        function SimpleRunner(&$test_case, &$scorer) {
+            $this->_test_case = &$test_case;
+            $this->_scorer = &$scorer;
+        }
+        
+        /**
+         *    Accessor for test case being run.
+         *    @return SimpleTestCase    Test case.
+         *    @access protected
+         */
+        function &_getTestCase() {
+            return $this->_test_case;
+        }
+        
+        /**
+         *    Runs the test methods in the test case.
+         *    @param SimpleTest $test_case    Test case to run test on.
+         *    @param string $method           Name of test method.
+         *    @access public
+         */
+        function run() {
+            $methods = get_class_methods(get_class($this->_test_case));
+            foreach ($methods as $method) {
+                if (! $this->_isTest($method)) {
+                    continue;
+                }
+                if ($this->_isConstructor($method)) {
+                    continue;
+                }
+                $this->_scorer->paintMethodStart($method);
+                $this->_scorer->invoke($this, $method);
+                $this->_scorer->paintMethodEnd($method);
+            }
+        }
+        
+        /**
+         *    Tests to see if the method is the constructor and
+         *    so should be ignored.
+         *    @param string $method        Method name to try.
+         *    @return boolean              True if constructor.
+         *    @access protected
+         */
+        function _isConstructor($method) {
+            return SimpleTestCompatibility::isA(
+                    $this->_test_case,
+                    strtolower($method));
+        }
+        
+        /**
+         *    Tests to see if the method is a test that should
+         *    be run. Currently any method that starts with 'test'
+         *    is a candidate.
+         *    @param string $method        Method name to try.
+         *    @return boolean              True if test method.
+         *    @access protected
+         */
+        function _isTest($method) {
+            return strtolower(substr($method, 0, 4)) == 'test';
+        }
+        
+        /**
+         *    Invokes a test method and buffered with setUp()
+         *    and tearDown() calls.
+         *    @param string $method    Test method to call.
+         *    @access public
+         */
+        function invoke($method) {
+            $this->_test_case->before();
+            $this->_test_case->setUp();
+            $this->_test_case->$method();
+            $this->_test_case->tearDown();
+            $this->_test_case->after();
+        }
+
+        /**
+         *    Paints the start of a test method.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintMethodStart($test_name) {
+            $this->_scorer->paintMethodStart($test_name);
+        }
+        
+        /**
+         *    Paints the end of a test method.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintMethodEnd($test_name) {
+            $this->_scorer->paintMethodEnd($test_name);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message        Message is ignored.
+         *    @access public
+         */
+        function paintPass($message) {
+            $this->_scorer->paintPass($message);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message        Message is ignored.
+         *    @access public
+         */
+        function paintFail($message) {
+            $this->_scorer->paintFail($message);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message    Text of error formatted by
+         *                              the test case.
+         *    @access public
+         */
+        function paintError($message) {
+            $this->_scorer->paintError($message);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param Exception $exception     Object thrown.
+         *    @access public
+         */
+        function paintException($exception) {
+            $this->_scorer->paintException($exception);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message        Text to display.
+         *    @access public
+         */
+        function paintMessage($message) {
+            $this->_scorer->paintMessage($message);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message        Text to display.
+         *    @access public
+         */
+        function paintFormattedMessage($message) {
+            $this->_scorer->paintFormattedMessage($message);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $type        Event type as text.
+         *    @param mixed $payload      Message or object.
+         *    @return boolean            Should return false if this
+         *                               type of signal should fail the
+         *                               test suite.
+         *    @access public
+         */
+        function paintSignal($type, &$payload) {
+            $this->_scorer->paintSignal($type, $payload);
+        }
+    }
+
+    /**
+     *    Extension that traps errors into an error queue.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class SimpleErrorTrappingRunner extends SimpleRunner {
+        
+        /**
+         *    Takes in the test case and reporter to mediate between.
+         *    @param SimpleTestCase $test_case  Test case to run.
+         *    @param SimpleScorer $scorer       Reporter to receive events.
+         */
+        function SimpleErrorTrappingRunner(&$test_case, &$scorer) {
+            $this->SimpleRunner($test_case, $scorer);
+        }
+        
+        /**
+         *    Invokes a test method and dispatches any
+         *    untrapped errors. Called back from
+         *    the visiting runner.
+         *    @param string $method    Test method to call.
+         *    @access public
+         */
+        function invoke($method) {
+            set_error_handler('simpleTestErrorHandler');
+            parent::invoke($method);
+            $queue = &SimpleErrorQueue::instance();
+            while (list($severity, $message, $file, $line, $globals) = $queue->extract()) {
+                $test_case = &$this->_getTestCase();
+                $test_case->error($severity, $message, $file, $line, $globals);
+            }
+            restore_error_handler();
+        }
+    }
     
     /**
      *    Basic test case. This is the smallest unit of a test
@@ -30,7 +243,7 @@
      */
     class SimpleTestCase {
         var $_label;
-        var $_reporter;
+        var $_runner;
         
         /**
          *    Sets up the test with no display.
@@ -40,7 +253,7 @@
          */
         function SimpleTestCase($label = false) {
             $this->_label = $label ? $label : get_class($this);
-            $this->_reporter = false;
+            $this->_runner = false;
         }
         
         /**
@@ -61,7 +274,7 @@
          *    @access protected
          */
         function &_createRunner(&$reporter) {
-            return $reporter;
+            return new SimpleErrorTrappingRunner($this, $reporter);
         }
         
         /**
@@ -72,65 +285,26 @@
          */
         function run(&$reporter) {
             $reporter->paintCaseStart($this->getLabel());
-            $methods = get_class_methods(get_class($this));
-            foreach ($methods as $method) {
-                if (! $this->_isTest($method)) {
-                    continue;
-                }
-                if ($this->_isConstructor($method)) {
-                    continue;
-                }
-                $reporter->paintMethodStart($method);
-                $this->_reporter = &$this->_createRunner($reporter);
-                $this->_reporter->invoke($this, $method);
-                $reporter->paintMethodEnd($method);
-            }
+            $this->_runner = &$this->_createRunner($reporter);
+            $this->_runner->run();
             $reporter->paintCaseEnd($this->getLabel());
             return $reporter->getStatus();
         }
         
         /**
-         *    Tests to see if the method is the constructor and
-         *    so should be ignored.
-         *    @param string $method        Method name to try.
-         *    @return boolean              True if constructor.
+         *    Runs test case specific code before the user setUp().
          *    @access protected
          */
-        function _isConstructor($method) {
-            return SimpleTestCompatibility::isA($this, strtolower($method));
+        function before() {
         }
-        
+          
         /**
-         *    Tests to see if the method is a test that should
-         *    be run. Currently any method that starts with 'test'
-         *    is a candidate.
-         *    @param string $method        Method name to try.
-         *    @return boolean              True if test method.
+         *    Runs test case specific code after the user tearDown().
          *    @access protected
          */
-        function _isTest($method) {
-            return strtolower(substr($method, 0, 4)) == 'test';
+        function after() {
         }
-        
-        /**
-         *    Invokes a test method and dispatches any
-         *    untrapped errors. Called back from
-         *    the visiting runner.
-         *    @param string $method    Test method to call.
-         *    @access public
-         */
-        function invoke($method) {
-            set_error_handler('simpleTestErrorHandler');
-            $this->setUp();
-            $this->$method();
-            $this->tearDown();
-            $queue = &SimpleErrorQueue::instance();
-            while (list($severity, $message, $file, $line, $globals) = $queue->extract()) {
-                $this->error($severity, $message, $file, $line, $globals);
-            }
-            restore_error_handler();
-        }
-        
+      
         /**
          *    Sets up unit test wide variables at the start
          *    of each test method. To be overridden in
@@ -154,7 +328,7 @@
          *    @access public
          */
         function pass($message = "Pass") {
-            $this->_reporter->paintPass($message . $this->getAssertionLine(' at line [%d]'));
+            $this->_runner->paintPass($message . $this->getAssertionLine(' at line [%d]'));
         }
         
         /**
@@ -163,7 +337,7 @@
          *    @access public
          */
         function fail($message = "Fail") {
-            $this->_reporter->paintFail($message . $this->getAssertionLine(' at line [%d]'));
+            $this->_runner->paintFail($message . $this->getAssertionLine(' at line [%d]'));
         }
         
         /**
@@ -178,7 +352,7 @@
          */
         function error($severity, $message, $file, $line, $globals) {
             $severity = SimpleErrorQueue::getSeverityAsString($severity);
-            $this->_reporter->paintError(
+            $this->_runner->paintError(
                     "Unexpected PHP error [$message] severity [$severity] in [$file] line [$line]");
         }
         
@@ -192,7 +366,7 @@
          *    @access public
          */
         function signal($type, &$payload) {
-            $this->_reporter->paintSignal($type, $payload);
+            $this->_runner->paintSignal($type, $payload);
         }
         
         /**
@@ -289,7 +463,7 @@
             if ($message) {
                 $formatted = $message . "\n" . $formatted;
             }
-            $this->_reporter->paintFormattedMessage($formatted);
+            $this->_runner->paintFormattedMessage($formatted);
             return $variable;
         }
         
@@ -300,7 +474,7 @@
          *    @access public
          */
         function sendMessage($message) {
-            $this->_reporter->PaintMessage($message);
+            $this->_runner->PaintMessage($message);
         }
         
         /**
