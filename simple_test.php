@@ -38,6 +38,15 @@
          */
         function run() {
         }
+        
+        /**
+         *    Accessor for the number of subtests.
+         *    @return            Number of test cases.
+         *    @public
+         */
+        function getSize() {
+            return 1;
+        }
     }
 
     /**
@@ -67,7 +76,7 @@
          *    @public
          */
         function run() {
-            $this->notify(new TestStart($this->getLabel(), "case"));
+            $this->notify(new TestStart($this->getLabel(), $this->getSize()));
             $methods = get_class_methods(get_class($this));
             sort($methods);
             foreach ($methods as $method) {
@@ -77,13 +86,13 @@
                 if (is_a($this, strtolower($method))) {
                     continue;
                 }
-                $this->notify(new TestStart($method, "method"));
+                $this->notify(new TestStart($method));
                 $this->setUp();
                 $this->$method();
                 $this->tearDown();
-                $this->notify(new TestEnd($method, "method"));
+                $this->notify(new TestEnd($method));
             }
-            $this->notify(new TestEnd($this->getLabel(), "case"));
+            $this->notify(new TestEnd($this->getLabel(), $this->getSize()));
         }
         
         /**
@@ -188,11 +197,20 @@
          *    @public
          */
         function run() {
-            $this->notify(new TestStart($this->getLabel(), "group"));
+            $this->notify(new TestStart($this->getLabel(), $this->getSize()));
             for ($i = 0; $i < count($this->_test_cases); $i++) {
                 $this->_test_cases[$i]->run();
             }
-            $this->notify(new TestEnd($this->getLabel(), "group"));
+            $this->notify(new TestEnd($this->getLabel(), $this->getSize()));
+        }
+        
+        /**
+         *    Number of contained test cases including itself.
+         *    @return         Total count of cases in the group.
+         *    @public
+         */
+        function getSize() {
+            return count($this->_test_cases) + 1;
         }
     }
     
@@ -223,11 +241,10 @@
          *    the page header and footer if this is the
          *    first test.
          *    @param $test_name   Name of test that is starting.
-         *    @param $type        Type of sender, normally
-         *                        "method", "case" or "group".
+         *    @param $size        Number of test cases starting.
          *    @public
          */
-        function paintStart($test_name, $type = "") {
+        function paintStart($test_name, $size) {
             if (count($this->_test_stack) == 0) {
                 $this->paintHeader($test_name);
             }
@@ -238,10 +255,10 @@
          *    Paints the end of a test. Will paint the page
          *    footer if the stack of tests has unwound.
          *    @param $test_name   Name of test that is ending.
-         *    @param $type        Type of sender.
+         *    @param $size        Number of test cases ending.
          *    @public
          */
-        function paintEnd($test_name, $type = "") {
+        function paintEnd($test_name, $size) {
             array_pop($this->_test_stack);
             if (count($this->_test_stack) == 0) {
                 $this->paintFooter($test_name);
