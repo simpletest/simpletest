@@ -1,66 +1,39 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 72 hours.
+This is immediate stuff only for this iteration (1.01) of 30 hours.
 
 $Id$
 
 Unit tester
 -----------
-Fix of syntax errors in test scripts reporting green (3/3) - done.
-Workaround of mocks getting recursion error on comparisons (2/4) - done.
-Rename StickyError because of name clash (1/1) - done.
-Fix parsing check on test file loading to work with PHP4 only (3/4) - done.
-Add Jeff's performance fixes (2/3) - done.
-Fix error handler to not send messages on E_STRICT (2/1) - done.
-Fix assertSame() for PEAR::PhpUnit compatibility (1/2) - done.
-Fix running machinery to allow decorators (3/3) - done.
-Fix __autoload() exception with class_exists() flag (2/1) - done.
+Keep original raw URL for as long as possible (3).
+Allow expectation to be passed to assertError() method (2).
 
 Reporter
 --------
 
 Mock objects
 ------------
-Bug fix of fatal error with overload functions (2/2) - done.
-Expectation expectNever() should register a pass if not called (2/1) - done.
+Change semantics of expectAtLeastOnce() for Jason (2).
+Add expectOrder() for loose order checking (3).
+Add expectSequence() or strict order checking (3).
 
 Parser
 ------
-Should tolerate missing form tag (2/2) - done.
-Fix Savant compatibility (3/8) - done.
-Form should pass form encoding rather than hash (2/1) - done.
 
 Browser
 -------
-Fix socket error with stream_get_timeout() missing (1/1) - done.
-Lose authentication on browser restart (1/1) - done.
-Make links such as ?a=b return to the same page (2/3) - done.
-Fix clickLink() trying to load non-existent frame (2/1) - done.
-Make sure content length is sent with POST requests (1/1) - done.
-Patch to make submit types case insensitive (1/1) - done.
-Patch to fix new TLDs in Url class (1/1) - done.
-Make opton label names trimmed (1/1) - done.
+Allow listing of all URLs (4).
+Add file uploading (8).
+Simple click() method for links, buttons or images (2).
 
 Web tester
 ----------
-Add htmlentities() international fix (1/1) - done.
-Add WebTestCase::getCookie() method (1/1) - done.
-Make labels HTML entity and tag blind (3/4) - done.
-Add assertWantedText() for string matching (3/2) - done.
-Fix getLabel() crashing bug (2/0) - done.
+Allow expectations to be used for comparisons (2).
+Add assertSubmit() test (1).
 
 Documentation
 -------------
-Add authentication documentation (3/3) - done.
-Add browser scripting documentation (2/5) - done.
-Tidy up sundry doc. files (2/1) - done.
-Fix reported typos (1/1) - done.
-Document the character encoding fix (1/1) - done.
-Remove unnecessary test constructors (2/2) - done.
-Add doc. note about running tests through a proxy server (2/1) - done.
 
 Build
 -----
-Finish Doc generation so that PHPDoc tutorial is rendered correctly (2/1) - done.
-Move tarball build over to a bash script (2/1) - done.
-Move documentation into a language specific folder (2/1) - done.
 
