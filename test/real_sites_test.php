@@ -15,7 +15,11 @@
             $this->assertTitle('About Last Craft');
         }
         function testSourceforge() {
-            $this->assertTrue($this->get('http://sourceforge.net/projects/simpletest/'));
+            $this->assertTrue($this->get('http://sourceforge.net/'));
+            $this->setField('words', 'simpletest');
+            $this->assertTrue($this->clickImageByName('imageField'));
+            $this->assertTitle('SourceForge.net: Search');
+            $this->assertTrue($this->clickLink('<span style="background-color:pink">SimpleTest</span>'));
             $this->clickLink('statistics');
             $this->assertWantedPattern('/Statistics for the past 7 days/');
             $this->assertTrue($this->setField('report', 'Monthly'));

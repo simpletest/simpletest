@@ -977,6 +977,7 @@
                 return false;
             }
             if (class_exists($mock_class)) {
+                trigger_error("Partial mock class [$mock_class] already exists");
                 return false;
             }
             return eval(Mock::_extendClassCode($class, $mock_class, $methods));
