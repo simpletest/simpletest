@@ -111,14 +111,14 @@
         }
         function testSinglePattern() {
             $handler = &new MockTestParser($this);
-            $handler->expectArgumentsSequence(0, "accept", array("aaa", true));
-            $handler->expectArgumentsSequence(1, "accept", array("x", false));
-            $handler->expectArgumentsSequence(2, "accept", array("a", true));
-            $handler->expectArgumentsSequence(3, "accept", array("yyy", false));
-            $handler->expectArgumentsSequence(4, "accept", array("a", true));
-            $handler->expectArgumentsSequence(5, "accept", array("x", false));
-            $handler->expectArgumentsSequence(6, "accept", array("aaa", true));
-            $handler->expectArgumentsSequence(7, "accept", array("z", false));
+            $handler->expectArgumentsSequence(0, "accept", array("aaa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(1, "accept", array("x", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(2, "accept", array("a", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(3, "accept", array("yyy", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(4, "accept", array("a", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(5, "accept", array("x", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(6, "accept", array("aaa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(7, "accept", array("z", LEXER_UNMATCHED));
             $handler->expectCallCount("accept", 8);
             $handler->setReturnValue("accept", true);
             $lexer = &new SimpleLexer($handler);
@@ -148,14 +148,14 @@
         }
         function testIsolatedPattern() {
             $handler = &new MockTestParser($this);
-            $handler->expectArgumentsSequence(0, "a", array("a", true));
-            $handler->expectArgumentsSequence(1, "a", array("b", false));
-            $handler->expectArgumentsSequence(2, "a", array("aa", true));
-            $handler->expectArgumentsSequence(3, "a", array("bxb", false));
-            $handler->expectArgumentsSequence(4, "a", array("aaa", true));
-            $handler->expectArgumentsSequence(5, "a", array("x", false));
-            $handler->expectArgumentsSequence(6, "a", array("aaaa", true));
-            $handler->expectArgumentsSequence(7, "a", array("x", false));
+            $handler->expectArgumentsSequence(0, "a", array("a", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(1, "a", array("b", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(2, "a", array("aa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(3, "a", array("bxb", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(4, "a", array("aaa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(5, "a", array("x", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(6, "a", array("aaaa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(7, "a", array("x", LEXER_UNMATCHED));
             $handler->expectCallCount("a", 8);
             $handler->setReturnValue("a", true);
             $lexer = &new SimpleLexer($handler, "a");
@@ -166,19 +166,19 @@
         }
         function testModeChange() {
             $handler = &new MockTestParser($this);
-            $handler->expectArgumentsSequence(0, "a", array("a", true));
-            $handler->expectArgumentsSequence(1, "a", array("b", false));
-            $handler->expectArgumentsSequence(2, "a", array("aa", true));
-            $handler->expectArgumentsSequence(3, "a", array("b", false));
-            $handler->expectArgumentsSequence(4, "a", array("aaa", true));
-            $handler->expectArgumentsSequence(0, "b", array(":", true));
-            $handler->expectArgumentsSequence(1, "b", array("a", false));
-            $handler->expectArgumentsSequence(2, "b", array("b", true));
-            $handler->expectArgumentsSequence(3, "b", array("a", false));
-            $handler->expectArgumentsSequence(4, "b", array("bb", true));
-            $handler->expectArgumentsSequence(5, "b", array("a", false));
-            $handler->expectArgumentsSequence(6, "b", array("bbb", true));
-            $handler->expectArgumentsSequence(7, "b", array("a", false));
+            $handler->expectArgumentsSequence(0, "a", array("a", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(1, "a", array("b", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(2, "a", array("aa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(3, "a", array("b", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(4, "a", array("aaa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(0, "b", array(":", LEXER_ENTER));
+            $handler->expectArgumentsSequence(1, "b", array("a", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(2, "b", array("b", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(3, "b", array("a", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(4, "b", array("bb", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(5, "b", array("a", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(6, "b", array("bbb", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(7, "b", array("a", LEXER_UNMATCHED));
             $handler->expectCallCount("a", 5);
             $handler->expectCallCount("b", 8);
             $handler->setReturnValue("a", true);
@@ -194,17 +194,17 @@
             $handler = &new MockTestParser($this);
             $handler->setReturnValue("a", true);
             $handler->setReturnValue("b", true);
-            $handler->expectArgumentsSequence(0, "a", array("aa", true));
-            $handler->expectArgumentsSequence(1, "a", array("b", false));
-            $handler->expectArgumentsSequence(2, "a", array("aa", true));
-            $handler->expectArgumentsSequence(3, "a", array("b", false));
-            $handler->expectArgumentsSequence(0, "b", array("(", true));
-            $handler->expectArgumentsSequence(1, "b", array("bb", true));
-            $handler->expectArgumentsSequence(2, "b", array("a", false));
-            $handler->expectArgumentsSequence(3, "b", array("bb", true));
-            $handler->expectArgumentsSequence(4, "b", array(")", true));
-            $handler->expectArgumentsSequence(4, "a", array("aa", true));
-            $handler->expectArgumentsSequence(5, "a", array("b", false));
+            $handler->expectArgumentsSequence(0, "a", array("aa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(1, "a", array("b", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(2, "a", array("aa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(3, "a", array("b", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(0, "b", array("(", LEXER_ENTER));
+            $handler->expectArgumentsSequence(1, "b", array("bb", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(2, "b", array("a", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(3, "b", array("bb", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(4, "b", array(")", LEXER_EXIT));
+            $handler->expectArgumentsSequence(4, "a", array("aa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(5, "a", array("b", LEXER_UNMATCHED));
             $handler->expectCallCount("a", 6);
             $handler->expectCallCount("b", 5);
             $lexer = &new SimpleLexer($handler, "a");
@@ -218,20 +218,14 @@
         function testUnwindTooFar() {
             $handler = &new MockTestParser($this);
             $handler->setReturnValue("a", true);
-            $handler->expectArgumentsSequence(0, "a", array("aa", true));
-            $handler->expectArgumentsSequence(1, "a", array(")", true));
+            $handler->expectArgumentsSequence(0, "a", array("aa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(1, "a", array(")", LEXER_EXIT));
             $handler->expectCallCount("a", 2);
             $lexer = &new SimpleLexer($handler, "a");
             $lexer->addPattern("a+", "a");
             $lexer->addExitPattern(")", "a");
             $this->assertFalse($lexer->parse("aa)aa"));
             $handler->tally();
-        }
-    }
-    
-    class TestOfHtmlLexer extends UnitTestCase {
-        function TestOfHtmlLexer() {
-            $this->UnitTestCase();
         }
     }
 ?>

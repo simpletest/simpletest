@@ -4,6 +4,10 @@
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "./");
     }
+    define("LEXER_ENTER", 1);
+    define("LEXER_MATCHED", 2);
+    define("LEXER_UNMATCHED", 3);
+    define("LEXER_EXIT", 4);
     
     /**
      *    Compounded regular expression. Any of
@@ -239,7 +243,7 @@
             if (!$parsed) {
                 return false;
             }
-            return $this->_invokeParser($raw, false);
+            return $this->_invokeParser($raw, LEXER_UNMATCHED);
         }
         
         /**
@@ -256,19 +260,20 @@
          *    @private
          */
         function _dispatchTokens($unmatched, $matched, $mode = false) {
-            if (!$this->_invokeParser($unmatched, false)) {
+            if (!$this->_invokeParser($unmatched, LEXER_UNMATCHED)) {
                 return false;
             }
             if ($mode === "_exit") {
-                if (!$this->_invokeParser($matched, true)) {
+                if (!$this->_invokeParser($matched, LEXER_EXIT)) {
                     return false;
                 }
                 return $this->_mode->leave();
             }
             if (is_string($mode)) {
                 $this->_mode->enter($mode);
+                return $this->_invokeParser($matched, LEXER_ENTER);
             }
-            return $this->_invokeParser($matched, true);
+            return $this->_invokeParser($matched, LEXER_MATCHED);
         }
         
         /**
@@ -314,32 +319,25 @@
     }
     
     /**
-     *    Accepts HTML and breaks it into tokens for the
-     *    (usually SAX) parser.
-     */
-    class SimpleHtmlLexer extends SimpleLexer {
-        
-        /**
-         *    Sets up the lexer.
-         *    @param $parser   Downstream parse event generator.
-         *    @public
-         */
-        function SimpleHtmlLexer(&$parser) {
-        }
-    }
-    
-    /**
      *    Converts HTML tokens into selected SAX events.
      */
     class HtmlSaxParser {
         
         /**
          *    Sets the listener and lexer.
-         *    @param $lexer    Selective lexer to use.
          *    @param $listener SAX event handler.
          *    @public
          */
-        function HtmlSaxParser(&$lexer, &$listener) {
+        function HtmlSaxParser(&$listener) {
+        }
+        
+        /**
+         *    Sets up the matching lexer.
+         *    @param $parser    Event generator, usually $self.
+         *    @return           Lexer suitable for this parser.
+         *    @protected
+         */
+        function _createLexer(&$parser) {
         }
         
         /**
