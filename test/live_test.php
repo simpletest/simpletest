@@ -192,10 +192,25 @@
         }
         function testTimedCookieExpiry() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
-            $this->restartSession(time() + 115);
+            $this->restartSession(time() + 3600 + 60);    // Includes a 60 sec. clock drift margin.
             $this->assertNoCookie("session_cookie");
-            $this->assertNoCookie("short_cookie");
+            $this->assertNoCookie("hour_cookie");
             $this->assertCookie("day_cookie", "C");
+        }
+        function testOfClockOverDrift() {
+            $this->get('http://www.lastcraft.com/test/set_cookies.php');
+            $this->restartSession(time() + 110);        // Allows ten second wire time.
+            $this->assertNoCookie(
+                    "short_cookie",
+                    "%s->Please check you computer clock setting if you are not using NTP");
+        }
+        function testOfClockUnderDrift() {
+            $this->get('http://www.lastcraft.com/test/set_cookies.php');
+            $this->restartSession(time() + 90);         // Allows ten second wire time.
+            $this->assertCookie(
+                    "short_cookie",
+                    "B",
+                    "%s->Please check you computer clock setting if you are not using NTP");
         }
         function testCookiePath() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
