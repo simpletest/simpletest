@@ -103,6 +103,12 @@
                     The original
                     <a href="http://www.mockobjects.com/">Mock objects</a> paper.
                 </li>
+                <li>
+                    SimpleTest project page on <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
+                </li>
+                <li>
+                    SimpleTest download page on <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
+                </li>
             </ul>        </div>
         <div class="content">
                         <p>
@@ -216,15 +222,15 @@ class MyTestCase extends UnitTestCase {
             <p>
                 The mock version of a class has all the methods of the original
                 so that operations like
-                <span class="new_code">$connection->query()</span> are still
+                <span class="new_code">$connection-&gt;query()</span> are still
                 legal.
                 The return value will be <span class="new_code">null</span>,
                 but we can change that...
 <pre><strong>
-$connection->setReturnValue(&apos;query&apos;, 37)</strong>
+$connection-&gt;setReturnValue(&apos;query&apos;, 37)</strong>
 </pre>
                 Now every time we call
-                <span class="new_code">$connection->query()</span> we get
+                <span class="new_code">$connection-&gt;query()</span> we get
                 the result of 37.
                 We can set the return value to anything, say a hash of
                 imaginary database results or a list of persistent objects.
@@ -258,13 +264,13 @@ Mock::generate(&apos;Iterator&apos;);
 
 class IteratorTest extends UnitTestCase() {
     function IteratorTest() {
-        $this->UnitTestCase();
+        $this-&gt;UnitTestCase();
     }
     function testASequence() {<strong>
         $iterator = &new MockIterator($this);
-        $iterator->setReturnValue(&apos;next&apos;, false);
-        $iterator->setReturnValueSequence(0, &apos;next&apos;, &apos;First string&apos;);
-        $iterator->setReturnValueSequence(1, &apos;next&apos;, &apos;Second string&apos;);</strong>
+        $iterator-&gt;setReturnValue(&apos;next&apos;, false);
+        $iterator-&gt;setReturnValueSequence(0, &apos;next&apos;, &apos;First string&apos;);
+        $iterator-&gt;setReturnValueSequence(1, &apos;next&apos;, &apos;Second string&apos;);</strong>
         ...
     }
 }
@@ -301,9 +307,9 @@ class Configuration {
                 Luckily the mocks have a filter system...
 <pre><strong>
 $config = &new MockConfiguration($this);
-$config->setReturnValue(&apos;getValue&apos;, &apos;primary&apos;, array(&apos;db_host&apos;));
-$config->setReturnValue(&apos;getValue&apos;, &apos;admin&apos;, array(&apos;db_user&apos;));
-$config->setReturnValue(&apos;getValue&apos;, &apos;secret&apos;, array(&apos;db_password&apos;));</strong>
+$config-&gt;setReturnValue(&apos;getValue&apos;, &apos;primary&apos;, array(&apos;db_host&apos;));
+$config-&gt;setReturnValue(&apos;getValue&apos;, &apos;admin&apos;, array(&apos;db_user&apos;));
+$config-&gt;setReturnValue(&apos;getValue&apos;, &apos;secret&apos;, array(&apos;db_password&apos;));</strong>
 </pre>
                 The extra parameter is a list of arguments to attempt
                 to match.
@@ -313,7 +319,7 @@ $config->setReturnValue(&apos;getValue&apos;, &apos;secret&apos;, array(&apos;db
                 <span class="new_code">getValue()</span> method invoked
                 like this...
 <pre>
-$config->getValue(&apos;db_user&apos;)
+$config-&gt;getValue(&apos;db_user&apos;)
 </pre>
                 ...it will return &quot;admin&quot;.
                 It finds this by attempting to match the calling arguments
@@ -323,12 +329,12 @@ $config->getValue(&apos;db_user&apos;)
             <p>
                 You can set a default argument argument like so...
 <pre><strong>
-$config->setReturnValue(&apos;getValue&apos;, false, array(&apos;*&apos;));</strong>
+$config-&gt;setReturnValue(&apos;getValue&apos;, false, array(&apos;*&apos;));</strong>
 </pre>
                 This is not the same as setting the return value without
                 any argument requirements like this...
 <pre><strong>
-$config->setReturnValue(&apos;getValue&apos;, false);</strong>
+$config-&gt;setReturnValue(&apos;getValue&apos;, false);</strong>
 </pre>
                 In the first case it will accept any single argument,
                 but exactly one is required.
@@ -362,10 +368,10 @@ class Vector {
 <pre>
 $thing = new Thing();<strong>
 $vector = &new MockVector($this);
-$vector->setReturnReference(&apos;get&apos;, $thing, array(12));</strong>
+$vector-&gt;setReturnReference(&apos;get&apos;, $thing, array(12));</strong>
 </pre>
                 With this arrangement you know that every time
-                <span class="new_code">$vector->get(12)</span> is
+                <span class="new_code">$vector-&gt;get(12)</span> is
                 called it will return the same
                 <span class="new_code">$thing</span> each time.
             </p>
@@ -376,7 +382,7 @@ $vector->setReturnReference(&apos;get&apos;, $thing, array(12));</strong>
 <pre>
 $complex = &new MockComplexThing($this);
 $stuff = new Stuff();<strong>
-$complex->setReturnReferenceSequence(3, &apos;get&apos;, $stuff, array(&apos;*&apos;, 1));</strong>
+$complex-&gt;setReturnReferenceSequence(3, &apos;get&apos;, $stuff, array(&apos;*&apos;, 1));</strong>
 </pre>
                 This will return the <span class="new_code">$stuff</span> only on the third
                 call and only if two parameters were set the second of
@@ -403,23 +409,23 @@ Mock::generate(&apos;ResultIterator&apos;);
 
 class DatabaseTest extends UnitTestCase {
     function DatabaseTest() {
-        $this->UnitTestCase();
+        $this-&gt;UnitTestCase();
     }
     function testUserFinder() {<strong>
         $result = &new MockResultIterator($this);
-        $result->setReturnValue(&apos;next&apos;, false);
-        $result->setReturnValueSequence(0, &apos;next&apos;, array(1, &apos;tom&apos;));
-        $result->setReturnValueSequence(1, &apos;next&apos;, array(3, &apos;dick&apos;));
-        $result->setReturnValueSequence(2, &apos;next&apos;, array(6, &apos;harry&apos;));
+        $result-&gt;setReturnValue(&apos;next&apos;, false);
+        $result-&gt;setReturnValueSequence(0, &apos;next&apos;, array(1, &apos;tom&apos;));
+        $result-&gt;setReturnValueSequence(1, &apos;next&apos;, array(3, &apos;dick&apos;));
+        $result-&gt;setReturnValueSequence(2, &apos;next&apos;, array(6, &apos;harry&apos;));
         $connection = &new MockDatabaseConnection($this);
-        $connection->setReturnValue(&apos;query&apos;, false);
-        $connection->setReturnReference(
+        $connection-&gt;setReturnValue(&apos;query&apos;, false);
+        $connection-&gt;setReturnReference(
                 &apos;query&apos;,
                 $result,
                 array(&apos;select id, name from users&apos;));</strong>
         $finder = &new UserFinder($connection);
-        $this->assertIdentical(
-                $finder->findNames(),
+        $this-&gt;assertIdentical(
+                $finder-&gt;findNames(),
                 array(&apos;tom&apos;, &apos;dick&apos;, &apos;harry&apos;));
     }
 }
@@ -534,16 +540,16 @@ class LoggingSessionPoolTest extends UnitTestCase {
     function testFindSessionLogging() {<strong>
         $session = &new MockSession($this);
         $pool = &new MockSessionPool($this);
-        $pool->setReturnReference(&apos;findSession&apos;, $session);
-        $pool->expectArguments(&apos;findSession&apos;, array(&apos;abc&apos;));
-        $pool->expectCallCount(&apos;findSession&apos;, 1);
+        $pool-&gt;setReturnReference(&apos;findSession&apos;, $session);
+        $pool-&gt;expectArguments(&apos;findSession&apos;, array(&apos;abc&apos;));
+        $pool-&gt;expectCallCount(&apos;findSession&apos;, 1);
         $log = &new MockLog($this);
-        $log->expectArguments(&apos;message&apos;, array(&apos;Starting session abc&apos;));
-        $log->expectCallCount(&apos;message&apos;, 1);
+        $log-&gt;expectArguments(&apos;message&apos;, array(&apos;Starting session abc&apos;));
+        $log-&gt;expectCallCount(&apos;message&apos;, 1);
         $logging_pool = &new LoggingSessionPool($pool, $log);
-        $this->assertReference($logging_pool->findSession(&apos;abc&apos;), $session);
-        $pool->tally();
-        $log->tally();</strong>
+        $this-&gt;assertReference($logging_pool-&gt;findSession(&apos;abc&apos;), $session);
+        $pool-&gt;tally();
+        $log-&gt;tally();</strong>
     }
 }
 </pre>
@@ -701,8 +707,8 @@ class LoggingSessionPoolTest extends UnitTestCase {
     Mock::generate(&apos;Connection&apos;, &apos;BasicMockConnection&apos;);
     class MockConnection extends BasicMockConnection {
         function MockConnection(&$test, $wildcard = &apos;*&apos;) {
-            $this->BasicMockConnection($test, $wildcard);
-            $this->setReturn(&apos;query&apos;, false);
+            $this-&gt;BasicMockConnection($test, $wildcard);
+            $this-&gt;setReturn(&apos;query&apos;, false);
         }
     }</strong>
 ?&gt;
@@ -759,7 +765,7 @@ class PHPUnit {
                 Let&apos;s say that it is used like this...
 <pre>
 $unit_test = new PHPUnit();
-$unit_test->assertion(&apos;I hope this file exists&apos;, file_exists(&apos;my_file&apos;));
+$unit_test-&gt;assertion(&apos;I hope this file exists&apos;, file_exists(&apos;my_file&apos;));
 </pre>
                 How do you use mocks with this?
             </p>
