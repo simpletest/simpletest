@@ -39,6 +39,7 @@
          *    @access public
          */
         function execute($command) {
+            $this->_output = false;
             exec($command, $this->_output, $ret);
             return $ret;
         }
@@ -93,6 +94,15 @@
         }
         
         /**
+         *    Dumps the output of the last command.
+         *    @access public
+         */
+        function dumpOutput() {
+            $shell = &$this->_getShell();
+            $this->dump($shell->getOutput());
+        }
+        
+        /**
          *    Tests the last status code from the shell.
          *    @param integer $status   Expected status of last
          *                             command.
@@ -101,8 +111,8 @@
          */
         function assertExitCode($status, $message = "%s") {
             $message = sprintf($message, "Expected status code of [$status] from [" .
-                            $this->_last_command . "], but got [" .
-                            $this->_last_status . "]");
+                    $this->_last_command . "], but got [" .
+                    $this->_last_status . "]");
             $this->assertTrue($status === $this->_last_status, $message);
         }
         

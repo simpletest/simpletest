@@ -16,6 +16,7 @@
         define("SIMPLE_TEST", "../");
     }
     require_once(SIMPLE_TEST . 'unit_tester.php');
+    require_once(SIMPLE_TEST . 'shell_tester.php');
     require_once(SIMPLE_TEST . 'mock_objects.php');
     require_once(SIMPLE_TEST . 'reporter.php');
     require_once(SIMPLE_TEST . 'xml.php');
@@ -255,6 +256,18 @@
         }
     }
     
+    class TestOfVisualShell extends ShellTestCase {
+        function TestOfVisualShell() {
+            $this->ShellTestCase();
+        }
+        function testDump() {
+            $this->execute('ls');
+            $this->dumpOutput();
+            $this->execute('dir');
+            $this->dumpOutput();
+        }
+    }
+    
     class AllOutputReporter extends HtmlReporter {
         function AllOutputReporter() {
             $this->HtmlReporter();
@@ -283,6 +296,7 @@
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());
+    $test->addTestCase(new TestOfVisualShell());
     
     if (isset($_GET['xml']) || in_array('xml', (isset($argv) ? $argv : array()))) {
         $reporter = &new XmlReporter();
