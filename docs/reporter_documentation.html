@@ -68,6 +68,18 @@
             td {
                 font-size: 80%;
             }
+            .shell {
+                color: white;
+            }
+            pre.shell {
+                border: 4px ridge;
+                border-color: gray;
+                padding: 10px;
+                margin: 5px;
+                margin-left: 20px;
+                margin-right: 40px;
+                background-color: black;
+            }
         </style>
         <link rel="Shortcut icon" href="images/lc.ico" />
         <meta name="author" content="Marcus Baker" />
@@ -81,10 +93,10 @@
                 <li><a href="overview.html">Project overview</a></li>
                 <li><a href="unit_test_documentation.html">About test cases</a></li>
                 <li><a href="group_test_documentation.html">About group tests</a></li>
-                <li><a href="reporter_documentation.html">Displaying results</a></li>
                 <li><a href="server_stubs_documentation.html">Using server stubs</a></li>
                 <li><a href="mock_objects_documentation.html">Using mock objects</a></li>
                 <li><a href="partial_mocks_documentation.html">Partial mocks</a></li>
+                <li><a href="reporter_documentation.html">Displaying results</a></li>
             </ol>
         </div>
         <div class="in">
@@ -96,6 +108,9 @@
                 <li>
                     Displaying and <a href="#other">reporting results</a>
                     in other formats
+                </li>
+                <li>
+                    Using <a href="#cli">SimpleTest from the command line</a>
                 </li>
             </ul>        </div>
         <div>
@@ -116,13 +131,13 @@
                     <h1>File test</h1>
                     <span class="fail">Fail</span>: createnewfile-&gt;True assertion failed.<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
-                    <strong>0</strong> passes and <strong>1</strong> fails.</div>
+                    <strong>0</strong> passes, <strong>1</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
                 And here all tests passed...
                 <div class="demo">
                     <h1>File test</h1>
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
-                    <strong>1</strong> passes and <strong>0</strong> fails.</div>
+                    <strong>1</strong> passes, <strong>0</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
                 The good news is that there are several points in the display
                 hiearchy for subclassing.
@@ -253,7 +268,7 @@ class HtmlReporter extends TestDisplay {
                 </ul>
             </p>
             <p>
-                <a class="target" name="other"><h2>Other reporters</h2></a>
+                <a class="target" name="other"><h2>Extending the reporter</h2></a>
             </p>
             <p>
                 Rather than simply modifying the existing display, you might want to
@@ -308,8 +323,97 @@ class MyDisplay extends TestDisplay {<strong>
 }
 </pre>
                 No output would come from this class until you add it.
+            </p>
+            <p>
+                <a class="target" name="cli"><h2>The command line reporter</h2></a>
+            </p>
+            <p>
+                SimpleTest also ships with a minimal command line reporter.
+                The interface mimics JUnit to some extent, but paints the
+                failure messages as they arrive.
+                To use the command line reporter simply substitute it
+                for the HTML version...
+<pre>
+&lt;?php
+    if (!defined(&apos;SIMPLE_TEST&apos;)) {
+        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
+    }
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+
+    $test = &new GroupTest(&apos;File test&apos;);
+    $test-&gt;addTestFile(&apos;tests/file_test.php&apos;);
+    $test-&gt;run(<strong>new CommandLineReporter()</strong>);
+?&gt;
+</pre>
+                Then invoke the test suite from the command line...
+<pre class="shell">
+php file_test.php
+</pre>
+                You will need the command line version of PHP installed
+                of course.
+                A passing test suite looks like this...
+<pre class="shell">
+File test
+OK
+Test cases run: 1/1, Failures: 0, Exceptions: 0
+</pre>
+                A failure triggers a display like this...
+<pre class="shell">
+File test
+1) True assertion failed.
+	in createnewfile
+FAILURES!!!
+Test cases run: 1/1, Failures: 1, Exceptions: 0
+</pre>
+            </p>
+            <p>
+                One of the main reasons for using a command line driven
+                test suite is of using the tester as part of some automated
+                process.
+                To function properly in shell scripts the test script should
+                return a non-zero exit code on failure.
+                If a test suite fails the value <span class="new_code">false</span>
+                is returned from the <span class="new_code">SimpleTest::run()</span>
+                method.
+                We can use that result to exit the script with the desired return
+                code...
+<pre>
+&lt;?php
+    if (!defined(&apos;SIMPLE_TEST&apos;)) {
+        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
+    }
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+
+    $test = &new GroupTest(&apos;File test&apos;);
+    $test-&gt;addTestFile(&apos;tests/file_test.php&apos;);
+    <strong>exit ($test-&gt;run(new CommandLineReporter()) ? 0 : 1);</strong>
+?&gt;
+</pre>
+                Of course we don&apos;t really want to create two test scripts,
+                a command line one and a web browser one, for each test suite.
+                The command line reporter includes a method to sniff out the
+                run time environment...
+<pre>
+&lt;?php
+    if (!defined(&apos;SIMPLE_TEST&apos;)) {
+        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
+    }
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+
+    $test = &new GroupTest(&apos;File test&apos;);
+    $test-&gt;addTestFile(&apos;tests/file_test.php&apos;);
+    <strong>if (CommandLineReporter::inCli()) {</strong>
+        exit ($test-&gt;run(new CommandLineReporter()) ? 0 : 1);
+    <strong>}</strong>
+    $test-&gt;run(new HtmlReporter());
+?&gt;
+</pre>
+                This is the form used within SimpleTest itself.
             </p>        </div>
-        <div class="out">
+        <div class="out" style="margin-top: 2em;">
             Related resources...
                         <ul>
                 <li>

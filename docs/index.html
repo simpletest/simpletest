@@ -68,6 +68,18 @@
             td {
                 font-size: 80%;
             }
+            .shell {
+                color: white;
+            }
+            pre.shell {
+                border: 4px ridge;
+                border-color: gray;
+                padding: 10px;
+                margin: 5px;
+                margin-left: 20px;
+                margin-right: 40px;
+                background-color: black;
+            }
         </style>
         <link rel="Shortcut icon" href="images/lc.ico" />
         <meta name="author" content="Marcus Baker" />
@@ -76,13 +88,16 @@
         <h1>Simple Test for PHP</h1>
         <div>
             The different sections of the documentation are...
-            <ul>
-                <li><a href="unit_test_documentation.html">Test cases</a></li>
-                <li><a href="group_test_documentation.html">Group tests</a></li>
+            <ol>
+                <li><a href="index.html">Quickstart guide</a></li>
+                <li><a href="overview.html">Project overview</a></li>
+                <li><a href="unit_test_documentation.html">About test cases</a></li>
+                <li><a href="group_test_documentation.html">About group tests</a></li>
+                <li><a href="server_stubs_documentation.html">Using server stubs</a></li>
+                <li><a href="mock_objects_documentation.html">Using mock objects</a></li>
+                <li><a href="partial_mocks_documentation.html">Partial mocks</a></li>
                 <li><a href="reporter_documentation.html">Displaying results</a></li>
-                <li><a href="server_stubs_documentation.html">Server stubs</a></li>
-                <li><a href="mock_objects_documentation.html">Mock objects</a></li>
-            </ul>
+            </ol>
         </div>
         <div class="in">
             This page...
@@ -111,9 +126,9 @@
         <div class="content">
                         <p style="margin-right: 10%; margin-left: 10%;">
                 <span style="color: red;">News:</span>
-                Beta 1 released on sourceforge.
-                The core of the web tester is now complete, although the HTML
-                parsing is still rather limited.
+                Beta 2 released on sourceforge.
+                This is a recommended upgrade as the interfaces are now
+                settled and internal refactoring has removed some bugs.
             </p>
             <p>
                 The following assumes that you are familiar with the concept
@@ -508,7 +523,7 @@
             <p>
                 <a href="http://sourceforge.net/projects/simpletest/"><IMG src="http://sourceforge.net/sflogo.php?group_id=76550&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo"></A>
             </p>        </div>
-        <div class="out">
+        <div class="out" style="margin-top: 2em;">
             Related resources...
                         <ul>
                 <li>

@@ -68,6 +68,18 @@
             td {
                 font-size: 80%;
             }
+            .shell {
+                color: white;
+            }
+            pre.shell {
+                border: 4px ridge;
+                border-color: gray;
+                padding: 10px;
+                margin: 5px;
+                margin-left: 20px;
+                margin-right: 40px;
+                background-color: black;
+            }
         </style>
         <link rel="Shortcut icon" href="images/lc.ico" />
         <meta name="author" content="Marcus Baker" />
@@ -81,10 +93,10 @@
                 <li><a href="overview.html">Project overview</a></li>
                 <li><a href="unit_test_documentation.html">About test cases</a></li>
                 <li><a href="group_test_documentation.html">About group tests</a></li>
-                <li><a href="reporter_documentation.html">Displaying results</a></li>
                 <li><a href="server_stubs_documentation.html">Using server stubs</a></li>
                 <li><a href="mock_objects_documentation.html">Using mock objects</a></li>
                 <li><a href="partial_mocks_documentation.html">Partial mocks</a></li>
+                <li><a href="reporter_documentation.html">Displaying results</a></li>
             </ol>
         </div>
         <div class="in">
@@ -467,7 +479,7 @@ class TelnetTest extends UnitTestCase {
                 forcing object granularity may be better for the code quality.
                 I am still undecided.
             </p>        </div>
-        <div class="out">
+        <div class="out" style="margin-top: 2em;">
             Related resources...
                         <ul>
                 <li>

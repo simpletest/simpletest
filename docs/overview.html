@@ -68,6 +68,18 @@
             td {
                 font-size: 80%;
             }
+            .shell {
+                color: white;
+            }
+            pre.shell {
+                border: 4px ridge;
+                border-color: gray;
+                padding: 10px;
+                margin: 5px;
+                margin-left: 20px;
+                margin-right: 40px;
+                background-color: black;
+            }
         </style>
         <link rel="Shortcut icon" href="images/lc.ico" />
         <meta name="author" content="Marcus Baker" />
@@ -76,13 +88,16 @@
         <h1>Overview of SimpleTest</h1>
         <div>
             The different sections of the documentation are...
-            <ul>
-                <li><a href="unit_test_documentation.html">Test cases</a></li>
-                <li><a href="group_test_documentation.html">Group tests</a></li>
+            <ol>
+                <li><a href="index.html">Quickstart guide</a></li>
+                <li><a href="overview.html">Project overview</a></li>
+                <li><a href="unit_test_documentation.html">About test cases</a></li>
+                <li><a href="group_test_documentation.html">About group tests</a></li>
+                <li><a href="server_stubs_documentation.html">Using server stubs</a></li>
+                <li><a href="mock_objects_documentation.html">Using mock objects</a></li>
+                <li><a href="partial_mocks_documentation.html">Partial mocks</a></li>
                 <li><a href="reporter_documentation.html">Displaying results</a></li>
-                <li><a href="server_stubs_documentation.html">Server stubs</a></li>
-                <li><a href="mock_objects_documentation.html">Mock objects</a></li>
-            </ul>
+            </ol>
         </div>
         <div class="in">
             This page...
@@ -276,14 +291,9 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td style="color: green;">Done</td>
                     </tr>
                     <tr>
-                        <td>Robust HTML handling</td>
-                        <td>Stronger testing with real world web pages</td>
-                        <td style="color: red;">Beta2</td>
-                    </tr>
-                    <tr>
                         <td>Command line interface</td>
                         <td>Test display without the need of a web browser</td>
-                        <td style="color: red;">Beta2</td>
+                        <td style="color: green;">Beta2</td>
                     </tr>
                     <tr>
                         <td>HTTP authentication</td>
@@ -500,7 +510,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
             <p>
                 Oh yes, and thanks for reading this far.
             </p>        </div>
-        <div class="out">
+        <div class="out" style="margin-top: 2em;">
             Related resources...
                         <ul>
                 <li>
