@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for the next iteration (Beta1) of 30 hours.
+This is immediate stuff only for the next iteration (Beta1) of 25 hours.
 Figures are estimated hours work versus actual (for XP velocity).
 Stuff will get added or dropped as the cycle progresses.
 
@@ -7,40 +7,37 @@ $Id$
 
 Unit tester
 -----------
-Add Simple monicker to exception class (1/0) - done.
+Include types with error reports (1).
 
 Interface
 ---------
-Improve object difference message (1/2) - done.
+Add command line reporter (4).
 
 Mock objects
 ------------
-Add parameter expectation (2/2) - done.
-Improve failure messages (1/1) - done.
-Remove pass by reference dependency in the tests (2/2) - done.
-Add no return check (2/2) - done.
+Allow adding of expectation classes to expected arguments (2).
+Fix wildcard reporting bug (1).
 
 Html parser
 -----------
-Test with some realistic pages (5/3) - done.
-Add form parsing (2/1) - done.
-Add input tag parsing (2/1) - done.
-Add text area tag parsing (2/1) - done.
+Test with some realistic pages (3).
+Get check boxes parsing (2).
+Parse drop down lists (4).
+Add wrapping behaviour to text areas (1).
+Add HTTP basic authentication (2).
 
 Browser
 -------
-Add submit by form (2/4) - done.
-Add submit by form ID (1/1) - done.
 
 Web tester
 ----------
-Add default form submission (3/0) - done.
-Add setting of form values by name (2/1) - done.
+Add header accessor (1).
 
 Documentation
 -------------
+Start a web tester documentation page (2).
+Add a cookie reading page (2).
 
 Build
 -----
-Change path constant to match PEAR install (1/1) - done.
-
+Move build process into CVS (2).
