@@ -288,12 +288,19 @@
          *                          including wildcards.
          *    @public
          */
-        function setExpectedArguments($method, $args = "") {
+        function expectArguments($method, $args = "") {
             $this->_dieOnNoMethod($method, "set expected arguments");
             $args = (is_array($args) ? $args : array());
             $this->_expected_args[strtolower($method)] = new ParameterList(
                     $args,
                     $this->_wildcard);
+        }
+        
+        /**
+         *    @deprecated
+         */
+        function setExpectedArguments($method, $args = "") {
+            $this->expectArguments($method, $args);
         }
         
         /**
@@ -308,7 +315,7 @@
          *                          including wildcards.
          *    @public
          */
-        function setExpectedArgumentsSequence($timing, $method, $args = "") {
+        function expectArgumentsSequence($timing, $method, $args = "") {
             $this->_dieOnNoMethod($method, "set expected arguments sequence");
             $args = (is_array($args) ? $args : array());
             if (!isset($this->_sequence_args[$timing])) {
@@ -321,6 +328,13 @@
         }
         
         /**
+         *    @deprecated
+         */
+        function setExpectedArgumentsSequence($timing, $method, $args = "") {
+            $this->expectArgumentsSequence($timing, $method, $args);
+        }
+        
+        /**
          *    Sets an expectation for the number of times
          *    a method will be called. The tally method
          *    is used to check this.
@@ -329,9 +343,16 @@
          *                          have been called at tally.
          *    @public
          */
-        function setExpectedCallCount($method, $count) {
+        function expectCallCount($method, $count) {
             $this->_dieOnNoMethod($method, "set expected call count");
             $this->_expected_counts[strtolower($method)] = $count;
+        }
+        
+        /**
+         *    @deprecated
+         */
+        function setExpectedCallCount($method, $count) {
+            $this->expectCallCount($method, $count);
         }
         
         /**
@@ -342,9 +363,16 @@
          *                          have been called.
          *    @public
          */
-        function setMaximumCallCount($method, $count) {
+        function expectMaximumCallCount($method, $count) {
             $this->_dieOnNoMethod($method, "set maximum call count");
             $this->_max_counts[strtolower($method)] = $count;
+        }
+        
+        /**
+         *    @deprecated
+         */
+        function setMaximumCallCount($method, $count) {
+            $this->expectMaximumCallCount($method, $count);
         }
         
         /**

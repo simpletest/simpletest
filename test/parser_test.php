@@ -42,8 +42,8 @@
         }
         function testEmptyPage() {
             $page = &new MockHtmlPage($this);
-            $page->setExpectedCallCount("addLink", 0);
-            $page->setExpectedCallCount("addFormElement", 0);
+            $page->expectCallCount("addLink", 0);
+            $page->expectCallCount("addFormElement", 0);
             $parser = &new HtmlParser();
             $this->assertTrue($parser->parse("", $page));
             $page->tally();

@@ -92,9 +92,9 @@
         }
         function testAssertionChaining() {
             $test = &new MockUnitTestCase($this);
-            $test->setExpectedArgumentsSequence(0, "assertTrue", array(true, "Good"));
-            $test->setExpectedArgumentsSequence(1, "assertTrue", array(false, "Bad"));
-            $test->setExpectedCallCount("assertTrue", 2);
+            $test->expectArgumentsSequence(0, "assertTrue", array(true, "Good"));
+            $test->expectArgumentsSequence(1, "assertTrue", array(false, "Bad"));
+            $test->expectCallCount("assertTrue", 2);
             $browser = &new TestBrowser($test);
             $browser->_assertTrue(true, "Good");
             $browser->_assertTrue(false, "Bad");
@@ -118,7 +118,7 @@
         }
         function testUntestedHost() {
             $test = &new MockUnitTestCase($this);
-            $test->setExpectedCallCount("assertTrue", 0);
+            $test->expectCallCount("assertTrue", 0);
             $browser = &new TestBrowser($test);
             $request = &$this->_createSimulatedBadHost();
             $this->assertIdentical(
@@ -128,8 +128,8 @@
         }
         function testFailingBadHost() {
             $test = &new MockUnitTestCase($this);
-            $test->setExpectedArgumentsSequence(0, "assertTrue", array(false, '*'));
-            $test->setExpectedCallCount("assertTrue", 1);
+            $test->expectArgumentsSequence(0, "assertTrue", array(false, '*'));
+            $test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
             $browser->expectConnection();
             $request = &$this->_createSimulatedBadHost();
@@ -140,8 +140,8 @@
         }
         function testExpectingBadHost() {
             $test = &new MockUnitTestCase($this);
-            $test->setExpectedArgumentsSequence(0, "assertTrue", array(true, '*'));
-            $test->setExpectedCallCount("assertTrue", 1);
+            $test->expectArgumentsSequence(0, "assertTrue", array(true, '*'));
+            $test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
             $browser->expectConnection(false);
             $request = &$this->_createSimulatedBadHost();
@@ -167,8 +167,8 @@
         }
         function testExpectedResponseCodes() {
             $this->_response->setReturnValue("getResponseCode", 404);
-            $this->_test->setExpectedArguments("assertTrue", array(true, "*"));
-            $this->_test->setExpectedCallCount("assertTrue", 1);
+            $this->_test->expectArguments("assertTrue", array(true, "*"));
+            $this->_test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($this->_test);
             $browser->expectResponseCodes(array(404));
             $browser->fetchUrl("http://this.host/this/path/page.html", &$this->_request);
@@ -176,8 +176,8 @@
         }
         function testUnwantedResponseCode() {
             $this->_response->setReturnValue("getResponseCode", 404);
-            $this->_test->setExpectedArguments("assertTrue", array(false, "*"));
-            $this->_test->setExpectedCallCount("assertTrue", 1);
+            $this->_test->expectArguments("assertTrue", array(false, "*"));
+            $this->_test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($this->_test);
             $browser->expectResponseCodes(array(100, 200));
             $browser->fetchUrl("http://this.host/this/path/page.html", &$this->_request);
@@ -185,8 +185,8 @@
         }
         function testExpectedMimeTypes() {
             $this->_response->setReturnValue("getMimeType", "text/xml");
-            $this->_test->setExpectedArguments("assertTrue", array(true, "*"));
-            $this->_test->setExpectedCallCount("assertTrue", 1);
+            $this->_test->expectArguments("assertTrue", array(true, "*"));
+            $this->_test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($this->_test);
             $browser->expectMimeTypes(array("text/plain", "text/xml"));
             $browser->fetchUrl("http://this.host/this/path/page.xml", &$this->_request);
@@ -194,7 +194,7 @@
         }
         function testClearExpectations() {
             $this->_response->setReturnValue("getResponseCode", 404);
-            $this->_test->setExpectedCallCount("assertTrue", 0);
+            $this->_test->expectCallCount("assertTrue", 0);
             $browser = &new TestBrowser($this->_test);
             $browser->expectResponseCodes(array(100, 200));
             $browser->expectConnection();
@@ -227,8 +227,8 @@
         function testSendCookie() {
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $this->_createStandardResponse());
-            $request->setExpectedArguments("setCookie", array(new SimpleCookie("a", "A")));
-            $request->setExpectedCallCount("setCookie", 1);
+            $request->expectArguments("setCookie", array(new SimpleCookie("a", "A")));
+            $request->expectCallCount("setCookie", 1);
             $browser = &new TestBrowser(new MockUnitTestCase($this));
             $browser->setCookie("a", "A");
             $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
@@ -238,8 +238,8 @@
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $this->_createStandardResponse());
             $test = &new MockUnitTestCase($this);
-            $test->setExpectedArguments("assertTrue", array(false, "*"));
-            $test->setExpectedCallCount("assertTrue", 1);
+            $test->expectArguments("assertTrue", array(false, "*"));
+            $test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
             $browser->expectCookie("a", "A");
             $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
@@ -249,8 +249,8 @@
         function testNewCookie() {
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "A", "this/path/")));
             $test = &new MockUnitTestCase($this);
-            $test->setExpectedArguments("assertTrue", array(true, "*"));
-            $test->setExpectedCallCount("assertTrue", 1);
+            $test->expectArguments("assertTrue", array(true, "*"));
+            $test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
             $browser->expectCookie("a", "A");
             $browser->fetchUrl("http://this.host/this/path/page.html", &$request);

@@ -122,11 +122,11 @@
             $request = new SimpleHttpRequest("http://a.valid.host/and/path");
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->setExpectedArgumentsSequence(0, "write", array("GET /and/path HTTP/1.0\r\n"));
-            $socket->setExpectedArgumentsSequence(1, "write", array("Host: a.valid.host\r\n"));
-            $socket->setExpectedArgumentsSequence(2, "write", array("Connection: close\r\n"));
-            $socket->setExpectedArgumentsSequence(3, "write", array("\r\n"));
-            $socket->setExpectedCallCount("write", 4);
+            $socket->expectArgumentsSequence(0, "write", array("GET /and/path HTTP/1.0\r\n"));
+            $socket->expectArgumentsSequence(1, "write", array("Host: a.valid.host\r\n"));
+            $socket->expectArgumentsSequence(2, "write", array("Connection: close\r\n"));
+            $socket->expectArgumentsSequence(3, "write", array("\r\n"));
+            $socket->expectCallCount("write", 4);
             $this->assertIsA($request->fetch(&$socket), "SimpleHttpResponse");
             $socket->tally();
         }
@@ -134,7 +134,7 @@
             $request = new SimpleHttpRequest("http://a.valid.host/and/path?a=A&b=B");
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->setExpectedArgumentsSequence(0, "write", array("GET /and/path?a=A&b=B HTTP/1.0\r\n"));
+            $socket->expectArgumentsSequence(0, "write", array("GET /and/path?a=A&b=B HTTP/1.0\r\n"));
             $request->fetch(&$socket);
             $socket->tally();
         }
@@ -143,12 +143,12 @@
             $request->addHeaderLine("My: stuff");
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->setExpectedArgumentsSequence(0, "write", array("GET /and/path HTTP/1.0\r\n"));
-            $socket->setExpectedArgumentsSequence(1, "write", array("Host: a.valid.host\r\n"));
-            $socket->setExpectedArgumentsSequence(2, "write", array("My: stuff\r\n"));
-            $socket->setExpectedArgumentsSequence(3, "write", array("Connection: close\r\n"));
-            $socket->setExpectedArgumentsSequence(4, "write", array("\r\n"));
-            $socket->setExpectedCallCount("write", 5);
+            $socket->expectArgumentsSequence(0, "write", array("GET /and/path HTTP/1.0\r\n"));
+            $socket->expectArgumentsSequence(1, "write", array("Host: a.valid.host\r\n"));
+            $socket->expectArgumentsSequence(2, "write", array("My: stuff\r\n"));
+            $socket->expectArgumentsSequence(3, "write", array("Connection: close\r\n"));
+            $socket->expectArgumentsSequence(4, "write", array("\r\n"));
+            $socket->expectCallCount("write", 5);
             $request->fetch(&$socket);
             $socket->tally();
         }
@@ -157,12 +157,12 @@
             $request->setCookie(new SimpleCookie("a", "A"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->setExpectedArgumentsSequence(0, "write", array("GET /and/path HTTP/1.0\r\n"));
-            $socket->setExpectedArgumentsSequence(1, "write", array("Host: a.valid.host\r\n"));
-            $socket->setExpectedArgumentsSequence(2, "write", array("Cookie: a=A\r\n"));
-            $socket->setExpectedArgumentsSequence(3, "write", array("Connection: close\r\n"));
-            $socket->setExpectedArgumentsSequence(4, "write", array("\r\n"));
-            $socket->setExpectedCallCount("write", 5);
+            $socket->expectArgumentsSequence(0, "write", array("GET /and/path HTTP/1.0\r\n"));
+            $socket->expectArgumentsSequence(1, "write", array("Host: a.valid.host\r\n"));
+            $socket->expectArgumentsSequence(2, "write", array("Cookie: a=A\r\n"));
+            $socket->expectArgumentsSequence(3, "write", array("Connection: close\r\n"));
+            $socket->expectArgumentsSequence(4, "write", array("\r\n"));
+            $socket->expectCallCount("write", 5);
             $this->assertIsA($request->fetch(&$socket), "SimpleHttpResponse");
             $socket->tally();
         }
@@ -172,7 +172,7 @@
             $request->setCookie(new SimpleCookie("b", "B"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->setExpectedArgumentsSequence(2, "write", array("Cookie: a=A;b=B\r\n"));
+            $socket->expectArgumentsSequence(2, "write", array("Cookie: a=A;b=B\r\n"));
             $request->fetch(&$socket);
             $socket->tally();
         }
