@@ -40,7 +40,8 @@
          *    @param $date        Date to test expiries against,
          *                        either a timestamp or as a
          *                        cookie formatted date string.
-         *    @return             Array of valid cookie objects.
+         *    @return             Hash of valid cookie objects keyed
+         *                        on the cookie name.
          *    @public
          */
         function getValidCookies($host = false, $path = "/", $date = false) {
@@ -88,6 +89,7 @@
         var $_response;
         var $_expect_connection;
         var $_expected_response_codes;
+        var $_expected_cookies;
         var $_cookie_jar;
         
         /**
@@ -110,6 +112,7 @@
             $this->_expect_connection = null;
             $this->_expected_response_codes = null;
             $this->_expected_mime_types = null;
+            $this->_expected_cookies = array();
         }
         
         /**
@@ -123,18 +126,14 @@
             if (!is_object($request)) {
                 $request = new SimpleHttpRequest($url);
             }
-            if (isset($this->_expected_mime_types)) {
-                if (count($this->_expected_mime_types) == 1) {
-                    $request->addHeaderLine("Accept: " . $this->_expected_mime_types[0]);
-                } else {
-                    $request->addHeaderLine("Accept: */*");
-                }
-            }
             foreach ($this->_cookie_jar->getValidCookies() as $cookie) {
                 $request->setCookie($cookie);
             }
             $this->_response = &$request->fetch();
             $this->_checkExpectations($url, $this->_response);
+            foreach ($this->_response->getNewCookies() as $cookie) {
+                $this->setCookie($cookie);
+            }
             return $this->_response->getContent();
         }
         
@@ -153,7 +152,7 @@
          *    @param $codes        Array of allowed codes.
          *    @public
          */
-        function expectResponseCodes($codes) {
+        function setExpectedResponseCodes($codes) {
             $this->_expected_response_codes = $codes;
         }
         
@@ -163,7 +162,7 @@
          *    @param $types        Array of allowed types.
          *    @public
          */
-        function expectMimeTypes($types) {
+        function setExpectedMimeTypes($types) {
             $this->_expected_mime_types = $types;
         }
         
@@ -175,6 +174,30 @@
          */
         function setCookie($cookie) {
             $this->_cookie_jar->setCookie($cookie);
+        }
+        
+        /**
+         *    Sets an expectation for a cookie.
+         *    @param $name        Cookie key.
+         *    @param $value       Expected value of incoming cookie.
+         *    @public
+         */
+        function expectCookie($name, $value = false) {
+            $this->_expected_cookies[] = array("name" => $name, "value" => $value);
+        }
+        
+        /**
+         *    Reads a cookie value from the browser cookies.
+         *    @param $host        Host to search.
+         *    @param $path        Applicable path.
+         *    @param $name        Name of cookie to read.
+         *    @return             Null if not present, else the
+         *                        value as a string.
+         *    @public
+         */
+        function getCookieValue($host, $path, $name) {
+            $cookies = $this->_cookie_jar->getValidCookies();
+            return $cookies[$name]->getValue();
         }
         
         /**
@@ -199,6 +222,26 @@
                 $this->_assertTrue(
                         in_array($response->getMimeType(), $this->_expected_mime_types),
                         "Fetching $url with mime type [" . $response->getMimeType() . "]");
+            }
+            $cookies = $response->getNewCookies();
+            foreach($this->_expected_cookies as $expectation) {
+                $this->_checkExpectedCookie($expectation, $cookies);
+            }
+        }
+        
+        /**
+         *    Checks that an expected cookie was present
+         *    in the incoming cookie list.
+         *    @param $expected    Expected cookie.
+         *    @param $cookies     Incoming.
+         *    @return             True if expectation met.
+         */
+        function _checkExpectedCookie($expected, $cookies) {
+            foreach ($cookies as $cookie) {
+                if ($cookie->getName() == $expected["name"]) {
+                    $message = "Expected cookie " . $expected["name"] . " value " . $expected["value"] . " should be [" . $cookie->getValue() . "]";
+                    $this->_assertTrue($cookie->getValue() == $expected["value"], $message);
+                }
             }
         }
         
