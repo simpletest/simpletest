@@ -36,7 +36,7 @@
         
         /**
          *    Make the keys lower case for case insensitive look-ups.
-         *    @param hash $map   Has to convert.
+         *    @param hash $map   Hash to convert.
          *    @return hash       Unchanged values, but keys lower case.
          *    @access private
          */
@@ -276,8 +276,8 @@
         }
         
         /**
-         *    Sets the current form element value. cannot
-         *    change teh value of a hidden field.
+         *    Sets the current form element value. Cannot
+         *    change the value of a hidden field.
          *    @param string $value       New value.
          *    @return boolean            True if allowed.
          *    @access public
@@ -323,7 +323,7 @@
         
         /**
          *    Disables the setting of the button value.
-         *    @param string $value        Ignored.
+         *    @param string $value       Ignored.
          *    @return boolean            True if allowed.
          *    @access public
          */
@@ -425,7 +425,8 @@
         
         /**
          *    The only allowed value in the one in the
-         *    "value" attribute.
+         *    "value" attribute. The default for this
+         *    attribute is "on".
          *    @param string $value      New value.
          *    @return boolean           True if allowed.
          *    @access public
@@ -441,7 +442,8 @@
         }
         
         /**
-         *    Accessor for starting value.
+         *    Accessor for starting value. The default
+         *    value is "on".
          *    @return string        Parsed value.
          *    @access public
          */
@@ -518,7 +520,7 @@
          */
         function setValue($value) {
             for ($i = 0; $i < count($this->_options); $i++) {
-                if ($this->_options[$i]->getContent() == $value) {
+                if ($this->_options[$i]->getContent() === $value) {
                     $this->_choice = $i;
                     return true;
                 }
@@ -656,15 +658,16 @@
         }
         
         /**
-         *    Accessor for starting value.
+         *    Accessor for starting value. Will be set to
+         *    the option label if no value exists.
          *    @return string        Parsed value.
          *    @access public
          */
         function getDefault() {
-            if ($this->getAttribute('value')) {
-                return $this->getAttribute('value');
+            if ($this->getAttribute('value') === false) {
+                return $this->getContent();
             }
-            return $this->getContent();
+            return $this->getAttribute('value');
         }
     }
     
@@ -1038,7 +1041,7 @@
          *    @access public
          */
         function addWidget($tag) {
-            if (strtolower($tag->getAttribute("type")) == "submit") {
+            if (strtolower($tag->getAttribute('type')) == 'submit') {
                 $this->_buttons[$tag->getName()] = &$tag;
             } else {
                 if ($tag->getName()) {
@@ -1054,9 +1057,9 @@
          *    @access private
          */
         function _setWidget($tag) {
-            if (strtolower($tag->getAttribute("type")) == "radio") {
+            if (strtolower($tag->getAttribute('type')) == 'radio') {
                 $this->_addRadioButton($tag);
-            } elseif (strtolower($tag->getAttribute("type")) == "checkbox") {
+            } elseif (strtolower($tag->getAttribute('type')) == 'checkbox') {
                 $this->_addCheckbox($tag);
             } else {
                 $this->_widgets[$tag->getName()] = &$tag;

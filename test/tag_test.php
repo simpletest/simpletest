@@ -121,7 +121,7 @@
             $tag->addTag($option);
             $this->assertEqual($tag->getValue(), 'aaa');
         }
-        function testDefault() {
+        function testStartsWithDefault() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
             $a = &new SimpleOptionTag(array());
             $a->addContent('AAA');
@@ -157,6 +157,7 @@
             $tag->addTag($b);
             $c = &new SimpleOptionTag(array('value' => 'ccc'));
             $c->addContent('CCC');
+            $tag->addTag($c);
             $tag->setValue('AAA');
             $this->assertEqual($tag->getValue(), 'aaa');
         }
@@ -173,6 +174,18 @@
             $tag->addTag($c);
             $this->assertFalse($tag->setValue('Not present'));
             $this->assertEqual($tag->getValue(), 'BBB');
+        }
+        function testNastyOptionValuesThatLookLikeFalse() {
+            $tag = &new SimpleSelectionTag(array('name' => 'a'));
+            $a = &new SimpleOptionTag(array('value' => '1'));
+            $a->addContent('One');
+            $tag->addTag($a);
+            $b = &new SimpleOptionTag(array('value' => '0'));
+            $b->addContent('Zero');
+            $tag->addTag($b);
+            $this->assertIdentical($tag->getValue(), '1');
+            $tag->setValue('Zero');
+            $this->assertIdentical($tag->getValue(), '0');
         }
         function testMultipleDefaultWithNoSelections() {
             $tag = &new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
