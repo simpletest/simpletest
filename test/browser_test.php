@@ -124,6 +124,15 @@
             $browser->get('http://this.com/page.html');
             return $browser;
         }
+        function testAccessorsWhenNoPage() {
+            $agent = &new MockSimpleUserAgent($this);
+            
+            $browser = &new MockParseSimpleBrowser($this);
+            $browser->setReturnReference('_createUserAgent', $agent);
+            $browser->SimpleBrowser();
+            
+            $this->assertEqual($browser->getContent(), '');
+        }
         function testParse() {
             $page = &new MockSimplePage($this);
             $page->setReturnValue('getRaw', 'Raw HTML');
@@ -132,6 +141,7 @@
             $page->setReturnValue('getResponseCode', 200);
             $page->setReturnValue('getAuthentication', 'Basic');
             $page->setReturnValue('getRealm', 'Somewhere');
+            $page->setReturnValue('getTransportError', 'Ouch!');
             
             $browser = &$this->loadPage($page);
 
@@ -141,6 +151,7 @@
             $this->assertEqual($browser->getMimeType(), 'text/html');
             $this->assertEqual($browser->getAuthentication(), 'Basic');
             $this->assertEqual($browser->getRealm(), 'Somewhere');
+            $this->assertEqual($browser->getTransportError(), 'Ouch!');
         }
         function testLinkAffirmationWhenPresent() {
             $page = &new MockSimplePage($this);

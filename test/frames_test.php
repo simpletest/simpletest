@@ -1,8 +1,8 @@
 <?php
     // $Id$
     
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../page.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../frames.php');
+    require_once(dirname(__FILE__) . '/../page.php');
+    require_once(dirname(__FILE__) . '/../frames.php');
     
     Mock::generate('SimplePage');
     
@@ -16,13 +16,31 @@
             $frameset = &new SimpleFrameset($page);
             $this->assertEqual($frameset->getTitle(), 'This page');
         }
+        function TestHeadersReadFromFramesetByDefault() {
+            $page = &new MockSimplePage($this);
+            $page->setReturnValue('getHeaders', 'Header: content');
+            $page->setReturnValue('getMimeType', 'text/xml');
+            $page->setReturnValue('getResponseCode', 401);
+            $page->setReturnValue('getTransportError', 'Could not parse headers');
+            $page->setReturnValue('getAuthentication', 'Basic');
+            $page->setReturnValue('getRealm', 'Safe place');
+            
+            $frameset = &new SimpleFrameset($page);
+            
+            $this->assertIdentical($frameset->getHeaders(), 'Header: content');
+            $this->assertIdentical($frameset->getMimeType(), 'text/xml');
+            $this->assertIdentical($frameset->getResponseCode(), 401);
+            $this->assertIdentical($frameset->getTransportError(), 'Could not parse headers');
+            $this->assertIdentical($frameset->getAuthentication(), 'Basic');
+            $this->assertIdentical($frameset->getRealm(), 'Safe place');
+        }
         function testEmptyFramesetHasNoContent() {
             $page = &new MockSimplePage($this);
             $page->setReturnValue('getRaw', 'This content');
             $frameset = &new SimpleFrameset($page);
             $this->assertEqual($frameset->getRaw(), '');
         }
-        function testRawContentIsFromFrame() {
+        function testRawContentIsFromOnlyFrame() {
             $page = &new MockSimplePage($this);
             $page->expectNever('getRaw');
             
@@ -32,6 +50,65 @@
             $frameset = &new SimpleFrameset($page);
             $frameset->addFrame($frame);
             $this->assertEqual($frameset->getRaw(), 'Stuff');
+        }
+        function testRawContentIsFromAllFrames() {
+            $page = &new MockSimplePage($this);
+            $page->expectNever('getRaw');
+            
+            $frame1 = &new MockSimplePage($this);
+            $frame1->setReturnValue('getRaw', 'Stuff1');
+            
+            $frame2 = &new MockSimplePage($this);
+            $frame2->setReturnValue('getRaw', 'Stuff2');
+            
+            $frameset = &new SimpleFrameset($page);
+            $frameset->addFrame($frame1);
+            $frameset->addFrame($frame2);
+            $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
+        }
+    }
+    
+    class TestOfFrameNavigation extends UnitTestCase {
+        function TestOfFrameNavigation() {
+            $this->UnitTestCase();
+        }
+        function testCanFocusOnSingleFrame() {
+            $page = &new MockSimplePage($this);
+            $page->expectNever('getRaw');
+            
+            $frame = &new MockSimplePage($this);
+            $frame->setReturnValue('getRaw', 'Stuff');
+            
+            $frameset = &new SimpleFrameset($page);
+            $frameset->addFrame($frame);
+            
+            $this->assertFalse($frameset->setFocusByIndex(0));
+            $this->assertTrue($frameset->setFocusByIndex(1));
+            $this->assertFalse($frameset->setFocusByIndex(2));
+            $this->assertEqual($frameset->getRaw(), 'Stuff');
+        }
+        function testContentComesFromFrameInFocus() {
+            $page = &new MockSimplePage($this);
+            $page->expectNever('getRaw');
+            
+            $frame1 = &new MockSimplePage($this);
+            $frame1->setReturnValue('getRaw', 'Stuff1');
+            
+            $frame2 = &new MockSimplePage($this);
+            $frame2->setReturnValue('getRaw', 'Stuff2');
+            
+            $frameset = &new SimpleFrameset($page);
+            $frameset->addFrame($frame1);
+            $frameset->addFrame($frame2);
+            
+            $frameset->setFocusByIndex(1);
+            $this->assertEqual($frameset->getRaw(), 'Stuff1');
+            
+            $frameset->setFocusByIndex(2);
+            $this->assertEqual($frameset->getRaw(), 'Stuff2');
+            
+            $frameset->clearFocus();
+            $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
         }
     }
 ?>

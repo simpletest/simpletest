@@ -226,6 +226,172 @@
     }
     
     /**
+     *    An empty page. Basically no content was fetched.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleErrorPage {
+        var $_error;
+        
+        /**
+         *    Sets up the transport error and nothing else.
+         *    @param string $error     Error that stopped the fetch.
+         *    @access public
+         */
+        function SimpleErrorPage($error) {
+            $this->_error = $error;
+        }
+        
+        /**
+         *    Accessor for raw text of page which doesn't exist.
+         *    @return boolean    Always false.
+         *    @access public
+         */
+        function getRaw() {
+            return false;
+        }
+        
+        /**
+         *    Missing page headers.
+         *    @return boolean    Always false.
+         *    @access public
+         */
+        function getHeaders() {
+            return false;
+        }
+        
+        /**
+         *    Accessor for last error.
+         *    @return string        Error from last response.
+         *    @access public
+         */
+        function getTransportError() {
+            return $this->_error;
+        }
+        
+        /**
+         *    Accessor for current MIME type.
+         *    @return boolean    Always false.
+         *    @access public
+         */
+        function getMimeType() {
+            return false;
+        }
+        
+        /**
+         *    Accessor for HTTP response code.
+         *    @return boolean    Always false.
+         *    @access public
+         */
+        function getResponseCode() {
+            return false;
+        }
+        
+        /**
+         *    Accessor for last Authentication type. Only valid
+         *    straight after a challenge (401).
+         *    @return boolean    Always false.
+         *    @access public
+         */
+        function getAuthentication() {
+            return false;
+        }
+        
+        /**
+         *    Accessor for last Authentication realm. Only valid
+         *    straight after a challenge (401).
+         *    @return boolean    Always false.
+         *    @access public
+         */
+        function getRealm() {
+            return false;
+        }
+        
+        /**
+         *    Test for the presence of a frameset. As the page
+         *    doesn't even have any content it pretty obviously
+         *    doesn't have any frames either.
+         *    @return boolean        False.
+         *    @access public
+         */
+        function hasFrames() {
+            return false;
+        }
+        
+        /**
+         *    Accessor for a list of all fixed links.
+         *    @return array   List of urls with scheme of
+         *                    http or https and hostname.
+         *    @access public
+         */
+        function getAbsoluteLinks() {
+            return array();
+        }
+        
+        /**
+         *    Accessor for a list of all relative links.
+         *    @return array      List of urls without hostname.
+         *    @access public
+         */
+        function getRelativeLinks() {
+            return array();
+        }
+        
+        /**
+         *    Accessor for URLs by the link label. Label will match
+         *    regardess of whitespace issues and case.
+         *    @param string $label    Text of link.
+         *    @return array           Empty list.
+         *    @access public
+         */
+        function getUrls($label) {
+            return array();
+        }
+        
+        /**
+         *    Accessor for a URL by the id attribute.
+         *    @param string $id       Id attribute of link.
+         *    @return boolean         Always false.
+         *    @access public
+         */
+        function getUrlById($id) {
+            return false;
+        }
+        
+        /**
+         *    Accessor for title.
+         *    @return string     Untitled so false.
+         *    @access public
+         */
+        function getTitle() {
+            return false;
+        }
+        
+        /**
+         *    Accessor for a form element value within a page.
+         *    Finds the first match.
+         *    @param string $name        Field name.
+         *    @return boolean            Always null.
+         *    @access public
+         */
+        function getField($name) {
+            return null;
+        }
+        
+        /**
+         *    Would set a field on each form in which the field is
+         *    available if there were any.
+         *    @param string $name        Field name.
+         *    @param string $value       Value to set field to.
+         *    @return boolean            False.
+         *    @access public
+         */
+        function setField($name, $value) {
+            return false;
+        }
+    }
+    
+    /**
      *    A wrapper for a web page.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
@@ -237,6 +403,7 @@
         var $_complete_forms;
         var $_frameset;
         var $_frameset_is_complete;
+        var $_transport_error;
         var $_raw;
         var $_headers;
         
@@ -248,6 +415,7 @@
         function SimplePage($response) {
             $this->_links = array();
             $this->_title = false;
+            $this->_transport_error = $response->getError();
             $this->_raw = $response->getContent();
             $this->_headers = $response->getHeaders();
             $this->_open_forms = array();
@@ -267,11 +435,20 @@
         
         /**
          *    Accessor for raw headers of page.
-         *    @return SimpleHttpHeaders       Header object.
+         *    @return string       Header block as text.
          *    @access public
          */
         function getHeaders() {
             return $this->_headers->getRaw();
+        }
+        
+        /**
+         *    Accessor for last error.
+         *    @return string        Error from last response.
+         *    @access public
+         */
+        function getTransportError() {
+            return $this->_transport_error;
         }
         
         /**

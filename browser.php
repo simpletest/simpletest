@@ -168,7 +168,6 @@
      */
     class SimpleBrowser {
         var $_user_agent;
-        var $_transport_error;
         var $_page;
         var $_history;
         var $_ignore_frames;
@@ -186,8 +185,7 @@
                     SimpleTestOptions::getDefaultProxy(),
                     SimpleTestOptions::getDefaultProxyUsername(),
                     SimpleTestOptions::getDefaultProxyPassword());
-            $this->_transport_error = false;
-            $this->_page = false;
+            $this->_page = &new SimpleErrorPage('No page fetched yet');
             $this->_history = &$this->_createHistory();
             $this->_ignore_frames = false;
         }
@@ -409,11 +407,9 @@
          *    @access private
          */
         function _fetch($method, $url, $parameters, $add_to_history) {
-            $this->_transport_error = false;
             $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
             if ($response->isError()) {
-                $this->_page = &$this->_parse($response);
-                $this->_transport_error = $response->getError();
+                $this->_page = &new SimpleErrorPage($response->getError());
                 return false;
             }
             if ($add_to_history) {
@@ -515,7 +511,7 @@
          *    @access public
          */
         function getTransportError() {
-            return $this->_transport_error;
+            return $this->_page->getTransportError();
         }
         
         /**

@@ -176,10 +176,37 @@
             $parser->tally();
         }
     }
+    
+    class TestOfErrorPage extends UnitTestCase {
+        function TestOfErrorPage() {
+            $this->UnitTestCase();
+        }
+        function testInterface() {
+            $page = &new SimpleErrorPage('An error');
+            $this->assertEqual($page->getTransportError(), 'An error');
+            $this->assertIdentical($page->getRaw(), false);
+            $this->assertIdentical($page->getHeaders(), false);
+            $this->assertIdentical($page->getMimeType(), false);
+            $this->assertIdentical($page->getResponseCode(), false);
+            $this->assertIdentical($page->getAuthentication(), false);
+            $this->assertIdentical($page->getRealm(), false);
+            $this->assertFalse($page->hasFrames());
+            $this->assertIdentical($page->getAbsoluteLinks(), array());
+            $this->assertIdentical($page->getRelativeLinks(), array());
+            $this->assertIdentical($page->getTitle(), false);
+        }
+    }
 
     class TestOfPageHeaders extends UnitTestCase {
         function TestOfPageHeaders() {
             $this->UnitTestCase();
+        }
+        function testTransportError() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getError', 'Ouch');
+
+            $page = &new SimplePage($response);
+            $this->assertEqual($page->getTransportError(), 'Ouch');
         }
         function testHeadersAccessor() {
             $headers = &new MockSimpleHttpHeaders($this);

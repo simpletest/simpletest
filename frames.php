@@ -9,8 +9,8 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'page.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'user_agent.php');
+    require_once(dirname(__FILE__) . '/page.php');
+    require_once(dirname(__FILE__) . '/user_agent.php');
     /**#@-*/
     
     /**
@@ -55,6 +55,7 @@
     class SimpleFrameset {
         var $_frameset;
         var $_frames;
+        var $_focus;
         
         /**
          *    Stashes the frameset page. Will make use of the
@@ -64,6 +65,7 @@
         function SimpleFrameset(&$page) {
             $this->_frameset = &$page;
             $this->_frames = array();
+            $this->_focus = false;
         }
         
         /**
@@ -76,17 +78,107 @@
         }
         
         /**
+         *    Sets the focus by index. The integer index starts from 1.
+         *    @param integer $choice    Chosen frame.
+         *    @return boolean           True if frame exists.
+         *    @access public
+         */
+        function setFocusByIndex($choice) {
+            if (($choice < 1) || ($choice > count($this->_frames))) {
+                return false;
+            }
+            $this->_focus = $choice - 1;
+            return true;
+        }
+        
+        /**
+         *    Clears the frame focus.
+         *    @access public
+         */
+        function clearFocus() {
+            $this->_focus = false;
+        }
+        
+        /**
          *    Accessor for raw text of either all the pages or
          *    the frame in focus.
          *    @return string        Raw unparsed content.
          *    @access public
          */
         function getRaw() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getRaw();
+            }
             $raw = '';
             for ($i = 0; $i < count($this->_frames); $i++) {
                 $raw .= $this->_frames[$i]->getRaw();
             }
             return $raw;
+        }
+        
+        /**
+         *    Accessor for last error.
+         *    @return string        Error from last response.
+         *    @access public
+         */
+        function getTransportError() {
+            return $this->_frameset->getTransportError();
+        }
+        
+        /**
+         *    Accessor for current MIME type.
+         *    @return string    MIME type as string; e.g. 'text/html'
+         *    @access public
+         */
+        function getMimeType() {
+            return $this->_frameset->getMimeType();
+        }
+        
+        /**
+         *    Accessor for last response code.
+         *    @return integer    Last HTTP response code received.
+         *    @access public
+         */
+        function getResponseCode() {
+            return $this->_frameset->getResponseCode();
+        }
+        
+        /**
+         *    Accessor for last Authentication type. Only valid
+         *    straight after a challenge (401).
+         *    @return string    Description of challenge type.
+         *    @access public
+         */
+        function getAuthentication() {
+            return $this->_frameset->getAuthentication();
+        }
+        
+        /**
+         *    Accessor for last Authentication realm. Only valid
+         *    straight after a challenge (401).
+         *    @return string    Name of security realm.
+         *    @access public
+         */
+        function getRealm() {
+            return $this->_frameset->getRealm();
+        }
+        
+        /**
+         *    Accessor for raw page information.
+         *    @return string      Original text content of web page.
+         *    @access public
+         */
+        function getContent() {
+            return $this->_frameset->getRaw();
+        }
+        
+        /**
+         *    Accessor for raw header information.
+         *    @return string      Header block.
+         *    @access public
+         */
+        function getHeaders() {
+            return $this->_frameset->getHeaders();
         }
         
         /**
