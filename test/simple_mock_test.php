@@ -1,4 +1,6 @@
 <?php
+    // $Id$
+    
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "../");
     }

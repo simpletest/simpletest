@@ -1,4 +1,6 @@
 <?php
+    // $Id$
+    
     define('MOCK_WILDCARD', '*');
     
     /**
