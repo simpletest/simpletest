@@ -14,7 +14,7 @@ Move dumper creation to factory in options (1).
 
 Interface
 ---------
-Add command line reporter (4).
+Add command line reporter (4/1).
 Force page reload at start of test (1/1) - done.
 
 Mock objects
