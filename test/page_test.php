@@ -108,7 +108,7 @@
         }
         function testForm() {
             $page = &new MockSimplePage($this);
-            $page->expectArguments("acceptBlockStart", array(new SimpleTag("form", array())));
+            $page->expectArguments("acceptBlockStart", array(new SimpleFormTag("form", array())));
             $page->expectCallCount("acceptBlockStart", 1);
             $page->expectArguments("acceptBlockEnd", array("form"));
             $page->expectCallCount("acceptBlockEnd", 1);

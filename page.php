@@ -124,6 +124,8 @@
                 }
             } elseif ($name == 'textarea') {
                 return new SimpleTextAreaTag($name, $attributes);
+            } elseif ($name == 'form') {
+                return new SimpleFormTag($name, $attributes);
             }
             return new SimpleTag($name, $attributes);
         }

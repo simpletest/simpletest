@@ -11,9 +11,9 @@
         
         /**
          *    Starts with a named tag with attributes only.
-         *    @param $name        Tag name.
-         *    @param $attributes  Hash of attribute names and
-         *                        string values.
+         *    @param string $name        Tag name.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
          */
         function SimpleTag($name, $attributes) {
             $this->_name = $name;
@@ -69,6 +69,13 @@
      *    Page title.
      */
     class SimpleTitleTag extends SimpleTag {
+        
+        /**
+         *    Starts with a named tag with attributes only.
+         *    @param string $name        Tag name.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
         function SimpleTitleTag($name, $attributes) {
             $this->SimpleTag($name, $attributes);
         }
@@ -78,6 +85,13 @@
      *    Link.
      */
     class SimpleAnchorTag extends SimpleTag {
+        
+        /**
+         *    Starts with a named tag with attributes only.
+         *    @param string $name        Tag name.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
         function SimpleAnchorTag($name, $attributes) {
             $this->SimpleTag($name, $attributes);
         }
@@ -87,6 +101,13 @@
      *    Text, password and hidden field.
      */
     class SimpleTextTag extends SimpleTag {
+        
+        /**
+         *    Starts with a named tag with attributes only.
+         *    @param string $name        Tag name.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
         function SimpleTextTag($name, $attributes) {
             $this->SimpleTag($name, $attributes);
         }
@@ -96,6 +117,13 @@
      *    Text, password and hidden field.
      */
     class SimpleSubmitTag extends SimpleTag {
+        
+        /**
+         *    Starts with a named tag with attributes only.
+         *    @param string $name        Tag name.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
         function SimpleSubmitTag($name, $attributes) {
             $this->SimpleTag($name, $attributes);
         }
@@ -105,7 +133,30 @@
      *    Content tag for text area.
      */
     class SimpleTextAreaTag extends SimpleTag {
+        
+        /**
+         *    Starts with a named tag with attributes only.
+         *    @param string $name        Tag name.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
         function SimpleTextAreaTag($name, $attributes) {
+            $this->SimpleTag($name, $attributes);
+        }
+    }
+    
+    /**
+     *    Content tag for text area.
+     */
+    class SimpleFormTag extends SimpleTag {
+        
+        /**
+         *    Starts with a named tag with attributes only.
+         *    @param string $name        Tag name.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
+        function SimpleFormTag($name, $attributes) {
             $this->SimpleTag($name, $attributes);
         }
     }
