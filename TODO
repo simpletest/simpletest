@@ -34,8 +34,8 @@ Skip script tags (1/1) - done.
 Browser
 -------
 Allow automatic redirects (3/5) - done.
-Add clock drift allowance to cookie tests (1).
-Add clock drift test for users (1).
+Add clock drift allowance to cookie tests (1/0) - done.
+Add clock drift test for users (1/2) - done.
 
 Web tester
 ----------

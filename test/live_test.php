@@ -199,14 +199,14 @@
         }
         function testOfClockOverDrift() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
-            $this->restartSession(time() + 110);        // Allows ten second wire time.
+            $this->restartSession(time() + 160);        // Allows sixty second wire time.
             $this->assertNoCookie(
                     "short_cookie",
                     "%s->Please check you computer clock setting if you are not using NTP");
         }
         function testOfClockUnderDrift() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
-            $this->restartSession(time() + 90);         // Allows ten second wire time.
+            $this->restartSession(time() + 40);         // Allows sixty second wire time.
             $this->assertCookie(
                     "short_cookie",
                     "B",
