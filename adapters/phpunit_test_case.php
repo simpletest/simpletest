@@ -1,15 +1,29 @@
 <?php
-    // $Id$
+    /**
+     *	adapter for SimpleTest to use PHPUnit test cases
+     *	@package	SimpleTest
+     *	@subpackage	Adapter
+     *	@version	$Id$
+     */
     
+	/**
+	 * @ignore	originally defined in simple_test.php
+	 */
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
     }
+    /**#@+
+     * include SimpleTest files
+     */
     require_once(SIMPLE_TEST . 'unit_tester.php');
     require_once(SIMPLE_TEST . 'expectation.php');
+    /**#@-*/
     
     /**
      *    Adapter for sourceforge PHPUnit test case to allow
      *    legacy test cases to be used with SimpleTest.
+     *    @package		SimpleTest
+     *    @subpackage	Adapter
      */
     class TestCase extends SimpleTestCase {
         

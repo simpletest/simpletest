@@ -12,9 +12,13 @@
     if (! defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
     }
+    /**#@+
+     * include SimpleTest files
+     */
     require_once(SIMPLE_TEST . 'expectation.php');
     require_once(SIMPLE_TEST . 'options.php');
     require_once(SIMPLE_TEST . 'dumper.php');
+    /**#@-*/
     
     /**
      * character simpletest will substitute for any value

@@ -1,12 +1,24 @@
 <?php
-    // $Id$
+    /**
+     *	adapter for SimpleTest to use PEAR PHPUnit test cases
+     *	@package	SimpleTest
+     *	@subpackage	Adapter
+     *	@version	$Id$
+     */
     
+	/**
+	 * @ignore	originally defined in simple_test.php
+	 */
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
     }
+    /**#@+
+     * include SimpleTest files
+     */
     require_once(SIMPLE_TEST . 'unit_tester.php');
     require_once(SIMPLE_TEST . 'expectation.php');
-    
+	/**#@-*/
+   
     /**
      *    Adapter for PEAR PHPUnit test case to allow
      *    legacy PEAR test cases to be used with SimpleTest.

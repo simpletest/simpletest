@@ -12,11 +12,15 @@
     if (!defined('SIMPLE_TEST')) {
         define("SIMPLE_TEST", "simpletest/");
     }
+    /**#@+
+     * include SimpleTest files
+     */
     require_once(SIMPLE_TEST . 'errors.php');
     require_once(SIMPLE_TEST . 'options.php');
     require_once(SIMPLE_TEST . 'runner.php');
     require_once(SIMPLE_TEST . 'expectation.php');
     require_once(SIMPLE_TEST . 'dumper.php');
+    /**#@-*/
     
     /**
      *	Interface used by the test displays and group tests.
