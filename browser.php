@@ -316,7 +316,7 @@
          *    Fetches the page content with a simple GET request.
          *    @param string $raw_url    Target to fetch.
          *    @param hash $parameters   Additional parameters for GET request.
-         *    @return string            Content of page.
+         *    @return string            Content of page or false.
          *    @access public
          */
         function get($raw_url, $parameters = false) {

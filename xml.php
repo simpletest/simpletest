@@ -220,8 +220,12 @@
          *    @abstract
          */
         function paintHeader($test_name) {
-            print "<?xml version=\"1.0\" xmlns:" . $this->_namespace .
-                    "=\"www.lastcraft.com/SimpleTest/Beta3/Report\"?>\n";
+            print "<?xml version=\"1.0\"";
+            if ($this->_namespace) {
+                print " xmlns:" . $this->_namespace .
+                        "=\"www.lastcraft.com/SimpleTest/Beta3/Report\"";
+            }
+            print "?>\n";
             print "<" . $this->_namespace . "run>\n";
         }
         
@@ -446,7 +450,8 @@
          */
         function parse($chunk) {
             if (! xml_parse($this->_expat, $chunk)) {
-                trigger_error(xml_error_string(xml_get_error_code($this->_expat)));
+                trigger_error('XML parse error with ' .
+                        xml_error_string(xml_get_error_code($this->_expat)));
                 return false;
             }
             return true;

@@ -35,8 +35,7 @@
         }
         
         /**
-         *    Runs the top level test for this class. The
-         *    parameter will soon cease to be optional.
+         *    Runs the top level test for this class.
          *    @param SimpleReporter $reporter    Target of test results.
          *    @returns boolean                   True if no failures.
          *    @access public

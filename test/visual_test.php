@@ -284,8 +284,8 @@
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());
     
-    if (TextReporter::inCli()) {
-        exit ($test->run(new XmlReporter('SimpleTest')) ? 0 : 1);
+    if (TextReporter::inCli() || isset($_GET['xml'])) {
+        exit ($test->run(new XmlReporter()) ? 0 : 1);
     }
     $test->run(new AllOutputReporter());
 ?>

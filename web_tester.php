@@ -62,7 +62,7 @@
          *    Gets a current browser reference for setting
          *    special expectations or for detailed
          *    examination of page fetches.
-         *    @param $browser        Test browser object.
+         *    @param TestBrowser $browser    Test browser object.
          *    @access public
          */
         function &getBrowser() {
