@@ -422,7 +422,7 @@
          *    @return string    Type or class name.
          *    @access protected
          */
-        function getType() {
+        function _getType() {
             return $this->_type;
         }
         
