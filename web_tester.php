@@ -238,6 +238,17 @@
         }
         
         /**
+         *    Sets all form fields with that name.
+         *    @param $name    Name of field in forms.
+         *    @param $value   New value of field.
+         *    @return         True if field exists, otherwise false.
+         *    @public
+         */
+        function setField($name, $value) {
+            $page = &$this->_getHtml();
+        }
+        
+        /**
          *    Checks the response code against a list
          *    of possible values.
          *    @param $responses    Possible responses for a pass.

@@ -178,4 +178,52 @@
             $this->assertTitle('Done');
         }
     }
+    
+    class TestOfFormFilling extends MockBrowserWebTestCase {
+        function TestOfFormFilling() {
+            $this->WebTestCase();
+        }
+        function prepareForm(&$browser, $widgets) {
+            $browser->setReturnValue("post", '<html><title>Done</title></html>');
+            $form_code = '<html><head><form method="post" action="there.php">';
+            $form_code .= implode('', $widgets);
+            $form_code .= '<input type="text" name="a" value="aaa"/>';
+            $form_code .= '<input type="text" name="b" value="bbb"/>';
+            $form_code .= '<input type="submit" name="wibble" value="wobble"/>';
+            $form_code .= '</form></head></html>';
+            $browser->setReturnValue("get", $form_code);
+        }
+        function tearDown() {
+            $browser = &$this->getBrowser();
+            $browser->tally();
+            $this->assertTitle('Done');
+        }
+        function testDefaults() {
+            $widgets = array(
+                    '<input type="text" name="a" value="aaa"/>',
+                    '<input type="text" name="b" value="bbb"/>');
+            $browser = &$this->getBrowser();
+            $this->prepareForm($browser, $widgets);
+            $browser->expectOnce("post", array("there.php", array(
+                    "wibble" => "wobble",
+                    "a" => "aaa",
+                    "b" => "bbb")));
+            $this->get("http://my-site.com/");
+            $this->assertTrue($this->clickSubmit("wobble"));
+        }
+        function testSettingTextField() {
+            $widgets = array(
+                    '<input type="text" name="a" value="aaa"/>',
+                    '<input type="text" name="b" value="bbb"/>');
+            $browser = &$this->getBrowser();
+            $this->prepareForm($browser, $widgets);
+//            $browser->expectOnce("post", array("there.php", array(
+//                    "wibble" => "wobble",
+//                    "a" => "AAA",
+//                    "b" => "bbb")));
+            $this->get("http://my-site.com/");
+            $this->setField("a", "AAA");
+            $this->assertTrue($this->clickSubmit("wobble"));
+        }
+    }
 ?>

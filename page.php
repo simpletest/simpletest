@@ -352,7 +352,7 @@
         }
         
         /**
-         *    Gets a copy of the list of all of the held forms.
+         *    Gets a list of all of the held forms.
          *    @return        Array of SimpleForm objects.
          *    @public
          */
