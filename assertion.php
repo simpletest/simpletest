@@ -54,31 +54,33 @@
         /**
          *    Creates a human readable description of the
          *    difference between two variables.
-         *    @param $first        First variable.
-         *    @param $second       Value to compare with.
-         *    @param $test_class   Test class to apply.
-         *    @return              Descriptive string.
+         *    @param $first             First variable.
+         *    @param $second            Value to compare with.
+         *    @param $assertion_class   Test class to apply.
+         *    @return                   Descriptive string.
          *    @public
          *    @static
          */
-        function describeDifference($first, $second, $test_class) {
+        function describeDifference($first, $second, $assertion_class) {
             if (gettype($first) != gettype($second)) {
-                return " by type";
+                return "by type";
             }
             if (is_string($first)) {
                 $position = Assertion::_stringDiffersAt($first, $second);
-                return " at character $position with [" .
+                return "at character $position with [" .
                         Assertion::clipString($first, 40, $position) . "] and [" .
                         Assertion::clipString($second, 40, $position) . "]";
             } elseif (is_integer($first)) {
-                return " by " . abs($first - $second);
+                return "by " . abs($first - $second);
             } elseif (is_array($first)) {
-                return " key " .
-                        Assertion::_describeArrayDifference($first, $second, $test_class);
+                return Assertion::_describeArrayDifference(
+                        $first,
+                        $second,
+                        $assertion_class);
             } elseif (is_object($first)) {
                 return "";
             }
-            return "";
+            return "by value";
         }
         
         /**
@@ -134,29 +136,26 @@
         /**
          *    Creates a human readable description of the
          *    difference between two arrays.
-         *    @param $first        First array.
-         *    @param $second       Array to compare with.
-         *    @param $test_class   Test to apply.
-         *    @return              Descriptive string.
+         *    @param $first             First array.
+         *    @param $second            Array to compare with.
+         *    @param $assertion_class   Test to apply.
+         *    @return                   Descriptive string.
          *    @private
          *    @static
          */
-        function _describeArrayDifference($first, $second, $test_class) {
-            $keys = array_merge(array_keys($first), array_keys($second));
-            sort($keys);
-            foreach ($keys as $key) {
-                if (!isset($first[$key])) {
-                    return "$key does not exist in first array";
-                }
-                if (!isset($second[$key])) {
-                    return "$key does not exist in second array";
-                }
-                $test = &new $test_class($first[$key]);
+        function _describeArrayDifference($first, $second, $assertion_class) {
+            if (array_keys($first) != array_keys($second)) {
+                return "keys [" .
+                        implode(", ", array_keys($first)) . "] do not match  [" .
+                        implode(", ", array_keys($second)) . "]";
+            }
+            foreach (array_keys($first) as $key) {
+                $test = &new $assertion_class($first[$key]);
                 if (!$test->test($second[$key])) {
-                    return "$key" . Assertion::describeDifference(
+                    return "key [$key] " . Assertion::describeDifference(
                             $first[$key],
                             $second[$key],
-                            $test_class);
+                            $assertion_class);
                 }
             }
             return "";
@@ -203,7 +202,7 @@
             } else {
                 return "Equal assertion [" . $this->describeValue($this->_value) .
                         "] fails with [" .
-                        $this->describeValue($compare) . "]" .
+                        $this->describeValue($compare) . "] " .
                         $this->describeDifference($this->_value, $compare, get_class($this));
             }
         }
@@ -252,7 +251,7 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return "Not equal assertion differs" .
+                return "Not equal assertion differs " .
                         $this->describeDifference($this->_get_value(), $compare, get_class($this));
             } else {
                 return "Not equal assertion [" . $this->describeValue($this->_get_value()) . "] matches";
@@ -298,7 +297,7 @@
             } else {
                 return "Identical assertion [" . $this->describeValue($this->_value) .
                         "] fails with [" .
-                        $this->describeValue($compare) . "]" .
+                        $this->describeValue($compare) . "] " .
                         $this->describeDifference($this->_value, $compare, get_class($this));
             }
         }
@@ -338,7 +337,7 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return "Not identical assertion differs" .
+                return "Not identical assertion differs " .
                         $this->describeDifference($this->_get_value(), $compare, get_class($this));
             } else {
                 return "Not identical assertion [" . $this->describeValue($this->_get_value()) . "] matches";

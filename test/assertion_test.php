@@ -53,7 +53,7 @@
             $this->assertEqual($is_true->testMessage(true), "Equal assertion [Boolean: true]");
             $this->assertEqual(
                     $is_true->testMessage(false),
-                    "Equal assertion [Boolean: true] fails with [Boolean: false]");
+                    "Equal assertion [Boolean: true] fails with [Boolean: false] by value");
         }
         function testStringMatch() {
             $hello = &new EqualAssertion("Hello");
@@ -101,7 +101,7 @@
             $this->assertEqual($pi->testMessage(3.14), "Equal assertion [Float: 3.14]");
             $this->assertEqual(
                     $pi->testMessage(3.15),
-                    "Equal assertion [Float: 3.14] fails with [Float: 3.15]");
+                    "Equal assertion [Float: 3.14] fails with [Float: 3.15] by value");
         }
         function testArray() {
             $colours = &new EqualAssertion(array("r", "g", "b"));
@@ -112,13 +112,13 @@
                     "Equal assertion [Array: 3 items]");
             $this->assertWantedPattern('/fails/', $colours->testMessage(array("r", "g", "z")));
             $this->assertWantedPattern(
-                    '/key 2 at character 0/',
+                    '/key \[2\] at character 0/',
                     $colours->testMessage(array("r", "g", "z")));
             $this->assertWantedPattern(
-                    '/key 2 does not exist in second array/',
+                    '/keys .*? do not match/',
                     $colours->testMessage(array("r", "g")));
             $this->assertWantedPattern(
-                    '/key 3 does not exist in first array/',
+                    '/keys .*? do not match/',
                     $colours->testMessage(array("r", "g", "b", "z")));
         }
         function testHash() {
@@ -130,7 +130,7 @@
                     "Equal assertion [Array: 3 items]");
             $this->assertEqual(
                     $blue->testMessage(array("r" => 0, "g" => 0, "b" => 254)),
-                    "Equal assertion [Array: 3 items] fails with [Array: 3 items] key b by 1");
+                    "Equal assertion [Array: 3 items] fails with [Array: 3 items] key [b] by 1");
         }
         function testNestedHash() {
             $tree = &new EqualAssertion(array(
@@ -139,7 +139,7 @@
                             "c" => 2,
                             "d" => "Three")));
             $this->assertWantedPattern(
-                    '/key b key d at character 5/',
+                    '/key \[b\] key \[d\] at character 5/',
                     $tree->testMessage(array(
                         "a" => 1,
                         "b" => array(

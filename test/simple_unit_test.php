@@ -57,8 +57,10 @@
             $this->assertNotIdentical($a, $b, "#%s#");
         }
         function testOfHashEquality() {
-            $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"));
-            $this->assertIdentical(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"));        // Fail.
+            $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "#%s#");
+        }
+        function testOfHashIdentity() {
+            $this->assertIdentical(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "#%s#");        // Fail.
         }
         function testOfReference() {
             $a = "fred";
