@@ -306,7 +306,7 @@
             $this->assertTrue($group->setValue('A'));
             $this->assertIdentical($group->getValue(), 'A');
         }
-        function testSettingMultipleValue() {
+        function testSettingMultipleValues() {
             $group = &new SimpleTagGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));
@@ -442,8 +442,8 @@
             $form->addWidget(new SimpleCheckboxTag(
                     array('name' => 'a', 'type' => 'checkbox', 'value' => 'you')));
             $this->assertIdentical($form->getValue('a'), false);
-//            $this->assertTrue($form->setField('a', 'me'));
-//            $this->assertIdentical($form->getValue('a'), 'me');
+            $this->assertTrue($form->setField('a', 'me'));
+            $this->assertIdentical($form->getValue('a'), 'me');
         }
     }
 ?>

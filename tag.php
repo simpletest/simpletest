@@ -827,19 +827,9 @@
             }
             $index = false;
             for ($i = 0; $i < count($this->_widgets); $i++) {
-                if ($this->_widgets[$i]->setValue($value)) {
-                    $index = $i;
-                    break;
+                if (! $this->_widgets[$i]->setValue($value)) {
+                    $this->_widgets[$i]->setValue(false);
                 }
-            }
-            if ($index === false) {
-                return false;
-            }
-            for ($i = 0; $i < count($this->_widgets); $i++) {
-                if ($index == $i) {
-                    continue;
-                }
-                $this->_widgets[$i]->setValue(false);
             }
             return true;
         }
