@@ -50,7 +50,7 @@
         
         /**
          *    Accessor for tag name.
-         *    @return        Name as string.
+         *    @return string       Name of tag.
          *    @access public
          */
         function getTagName() {
@@ -68,8 +68,8 @@
         
         /**
          *    Accessor for an attribute.
-         *    @param $label      Attribute name.
-         *    @return            Attribute value as string.
+         *    @param string $label    Attribute name.
+         *    @return string          Attribute value.
          *    @access public
          */
         function getAttribute($label) {
@@ -84,7 +84,7 @@
         
         /**
          *    Accessor for the whole content so far.
-         *    @return        Content as big string.
+         *    @return string       Content as big string.
          *    @access public
          */
         function getContent() {
@@ -483,7 +483,7 @@
         
         /**
          *    Starts with no held controls/widgets.
-         *    @param $tag        Form tag to read.
+         *    @param SimpleTag $tag        Form tag to read.
          */
         function SimpleForm($tag) {
             $this->_method = $tag->getAttribute("method");
@@ -495,7 +495,7 @@
         
         /**
          *    Accessor for form action.
-         *    @return            Either get or post.
+         *    @return string           Either get or post.
          *    @access public
          */
         function getMethod() {
@@ -504,7 +504,7 @@
         
         /**
          *    Relative URL of the target.
-         *    @return            URL as string.
+         *    @return string           URL target.
          *    @access public
          */
         function getAction() {
@@ -513,7 +513,7 @@
         
         /**
          *    ID field of form for unique identification.
-         *    @return            ID as integer.
+         *    @return string           Unique tag ID.
          *    @access public
          */
         function getId() {
@@ -522,7 +522,7 @@
         
         /**
          *    Adds a tag contents to the form.
-         *    @param $tag        Input tag to add.
+         *    @param SimpleWidget $tag        Input tag to add.
          *    @access public
          */
         function addWidget($tag) {
@@ -537,9 +537,9 @@
         
         /**
          *    Extracts current value from form.
-         *    @param $name        Keyed by widget name.
-         *    @return             Value as string or null
-         *                        if not set.
+         *    @param string $name        Keyed by widget name.
+         *    @return string             Value as string or null
+         *                              if not set.
          *    @access public
          */
         function getValue($name) {
@@ -551,11 +551,11 @@
         
         /**
          *    Sets a widget value within the form.
-         *    @param $name     Name of widget tag.
-         *    @param $value    Value to input into the widget.
-         *    @return          True if value is legal, false
-         *                     otherwise. f the field is not
-         *                     present, nothing will be set.
+         *    @param string $name     Name of widget tag.
+         *    @param string $value    Value to input into the widget.
+         *    @return boolean         True if value is legal, false
+         *                            otherwise. If the field is not
+         *                            present, nothing will be set.
          *    @access public
          */
         function setField($name, $value) {
@@ -568,7 +568,7 @@
         /**
          *    Reads the current form values as a hash
          *    of submitted parameters.
-         *    @return          Hash of submitted values.
+         *    @return hash         Submitted values.
          *    @access public
          */
         function getValues() {
@@ -582,8 +582,8 @@
         
         /**
          *    Gets a button name from the label.
-         *    @param $label    Button label to search for.
-         *    @return          Name of button.
+         *    @param string $label    Button label to search for.
+         *    @return string          Name of button.
          *    @access public
          */
         function getSubmitName($label) {
@@ -596,10 +596,10 @@
         
         /**
          *    Gets the submit values for a named button.
-         *    @param $name     Button label to search for.
-         *    @return          Hash of submitted values or false
-         *                     if there is no such button in the
-         *                     form.
+         *    @param string $name    Button label to search for.
+         *    @return hash           Submitted values or false
+         *                           if there is no such button in the
+         *                           form.
          *    @access public
          */
         function submitButton($name) {
@@ -614,10 +614,10 @@
         /**
          *    Gets the submit values for a button with a particular
          *    label.
-         *    @param $label    Button label to search for.
-         *    @return          Hash of submitted values or false
-         *                     if there is no such button in the
-         *                     form.
+         *    @param string $label    Button label to search for.
+         *    @return hash            Submitted values or false
+         *                            if there is no such button in the
+         *                            form.
          *    @access public
          */
         function submitButtonByLabel($label) {
@@ -631,7 +631,7 @@
          *    Simply submits the form without the submit button
          *    value. Used when there is only one button or it
          *    is unimportant.
-         *    @return            Hash of submitted values.
+         *    @return hash           Submitted values.
          *    @access public
          */
         function submit() {

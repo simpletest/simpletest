@@ -72,7 +72,7 @@
         /**
          *    Creates a new default web browser object.
          *    Will be cleared at the end of the test method.
-         *    @return            New TestBrowser object.
+         *    @return TestBrowser           New browser.
          *    @access public
          */
         function &createBrowser() {
@@ -83,7 +83,7 @@
          *    Creates a new default page builder object and
          *    uses it to parse the current content. Caches
          *    the page content once it is parsed.
-         *    @return            New web page object.
+         *    @return SimplePage           New web page object.
          *    @access private
          */
         function &_getHtml() {
@@ -104,7 +104,7 @@
         /**
          *    Sets up a browser for the start of each
          *    test method.
-         *    @param $method    Name of test method.
+         *    @param string $method    Name of test method.
          *    @access protected
          */
         function invoke($method) {
@@ -116,11 +116,11 @@
         
         /**
          *    Sets a cookie in the current browser.
-         *    @param $name          Name of cookie.
-         *    @param $value         Cookie value as string.
-         *    @param $host          Host upon which the cookie is valid.
-         *    @param $path          Cookie path if not host wide.
-         *    @param $expiry        Expiry date as string.
+         *    @param string $name          Name of cookie.
+         *    @param string $value         Cookie value.
+         *    @param string $host          Host upon which the cookie is valid.
+         *    @param string $path          Cookie path if not host wide.
+         *    @param string $expiry        Expiry date.
          *    @access public
          */
         function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
@@ -130,7 +130,7 @@
         /**
          *    Sets the maximum number of redirects before
          *    the web page is loaded regardless.
-         *    @param $max        Maximum hops.
+         *    @param integer $max        Maximum hops.
          *    @access public
          */
         function setMaximumRedirects($max) {
@@ -146,9 +146,9 @@
          *    there is no base for the URL then the
          *    current base URL is used. After the fetch
          *    the base URL reflects the new location.
-         *    @param $url          URL to fetch.
-         *    @param $parameters   Optional additional GET data.
-         *    @return              True on success.
+         *    @param string $url          URL to fetch.
+         *    @param hash $parameters     Optional additional GET data.
+         *    @return boolean             True on success.
          *    @access public
          */
         function get($url, $parameters = false) {
@@ -162,9 +162,9 @@
          *    If there is no base for the URL then the
          *    current base URL is used. After the fetch
          *    the base URL reflects the new location.
-         *    @param $url          URL to fetch.
-         *    @param $parameters   Optional additional GET data.
-         *    @return              True on success.
+         *    @param string $url          URL to fetch.
+         *    @param hash $parameters     Optional additional GET data.
+         *    @return boolean             True on success.
          *    @access public
          */
         function post($url, $parameters = false) {
@@ -176,9 +176,9 @@
         /**
          *    Clicks the submit button by label. The owning
          *    form will be submitted by this.
-         *    @param $label    Button label. An unlabeled
-         *                     button can be triggered by 'Submit'.
-         *    @return          true on success.
+         *    @param string $label    Button label. An unlabeled
+         *                            button can be triggered by 'Submit'.
+         *    @return boolean         true on success.
          *    @access public
          */
         function clickSubmit($label = "Submit") {
@@ -197,9 +197,9 @@
         /**
          *    Clicks the submit button by label. The owning
          *    form will be submitted by this.
-         *    @param $label    Button label. An unlabeled
-         *                     button can be triggered by 'Submit'.
-         *    @return          true on success.
+         *    @param string $label    Button label. An unlabeled
+         *                            button can be triggered by 'Submit'.
+         *    @return boolean         true on success.
          *    @access public
          */
         function clickSubmitByFormId($id) {
@@ -226,9 +226,9 @@
          *    Follows a link by name. Will click the first link
          *    found with this link text by default, or a later
          *    one if an index is given.
-         *    @param $label     Text between the anchor tags.
-         *    @param $index     Link position counting from zero.
-         *    @return           True if link present.
+         *    @param string $label     Text between the anchor tags.
+         *    @param integer $index    Link position counting from zero.
+         *    @return boolean          True if link present.
          *    @access public
          */
         function clickLink($label, $index = 0) {
@@ -248,8 +248,8 @@
          *    Follows a link by name. Will click the first link
          *    found with this link text by default, or a later
          *    one if an index is given.
-         *    @param $id        ID attribute value.
-         *    @return           True if link present.
+         *    @param string $id        ID attribute value.
+         *    @return boolean          True if link present.
          *    @access public
          */
         function clickLinkById($id) {
@@ -270,9 +270,9 @@
         
         /**
          *    Sets all form fields with that name.
-         *    @param $name    Name of field in forms.
-         *    @param $value   New value of field.
-         *    @return         True if field exists, otherwise false.
+         *    @param string $name    Name of field in forms.
+         *    @param string $value   New value of field.
+         *    @return boolean        True if field exists, otherwise false.
          *    @access public
          */
         function setField($name, $value) {
@@ -283,7 +283,7 @@
         /**
          *    Checks the response code against a list
          *    of possible values.
-         *    @param $responses    Possible responses for a pass.
+         *    @param array $responses    Possible responses for a pass.
          *    @access public
          */
         function assertResponse($responses, $message = "%s") {
@@ -293,7 +293,7 @@
         /**
          *    Checks the mime type against a list
          *    of possible values.
-         *    @param $types    Possible mime types for a pass.
+         *    @param array $types    Possible mime types for a pass.
          *    @access public
          */
         function assertMime($types, $message = "%s") {
@@ -302,9 +302,9 @@
         
         /**
          *    Tests the text between the title tags.
-         *    @param $title          Expected title or empty
-         *                           if expecting no title.
-         *    @param $message        Message to display.
+         *    @param string $title     Expected title or empty
+         *                             if expecting no title.
+         *    @param string $message   Message to display.
          *    @access public
          */
         function assertTitle($title = false, $message = "%s") {
@@ -317,9 +317,9 @@
         /**
          *    Will trigger a pass if the Perl regex pattern
          *    is found in the raw content.
-         *    @param $pattern        Perl regex to look for including
-         *                           the regex delimiters.
-         *    @param $message        Message to display.
+         *    @param string $pattern    Perl regex to look for including
+         *                              the regex delimiters.
+         *    @param string $message    Message to display.
          *    @access public
          */
         function assertWantedPattern($pattern, $message = "%s") {
@@ -332,9 +332,9 @@
         /**
          *    Will trigger a pass if the perl regex pattern
          *    is not present in raw content.
-         *    @param $pattern        Perl regex to look for including
-         *                           the regex delimiters.
-         *    @param $message        Message to display.
+         *    @param string $pattern    Perl regex to look for including
+         *                              the regex delimiters.
+         *    @param string $message    Message to display.
          *    @access public
          */
         function assertNoUnwantedPattern($pattern, $message = "%s") {
@@ -347,10 +347,10 @@
         /**
          *    Checks that a cookie is set for the current page
          *    and optionally checks the value.
-         *    @param $name        Name of cookie to test.
-         *    @param $expect      Expected value as a string or
-         *                        false if any value will do.
-         *    @param $message     Message to display.
+         *    @param string $name        Name of cookie to test.
+         *    @param string $expect      Expected value as a string or
+         *                               false if any value will do.
+         *    @param string $message     Message to display.
          *    @access public
          */
         function assertCookie($name, $expect = false, $message = "%s") {
@@ -369,8 +369,8 @@
         /**
          *    Checks that no cookie is present or that it has
          *    been successfully cleared.
-         *    @param $name        Name of cookie to test.
-         *    @param $message     Message to display.
+         *    @param string $name        Name of cookie to test.
+         *    @param string $message     Message to display.
          *    @access public
          */
         function assertNoCookie($name, $message = "%s") {
@@ -382,12 +382,12 @@
         /**
          *    Sets an expectation of a cookie being set on the
          *    next fetching operation.
-         *    @param $name        Name of cookie to expect.
-         *    @param $expect      Expected value as a string or
-         *                        false if any value will do.
-         *                        An empty string for cookie
-         *                        clearing.
-         *    @param $message     Message to display.
+         *    @param string $name        Name of cookie to expect.
+         *    @param string $expect      Expected value as a string or
+         *                               false if any value will do.
+         *                               An empty string for cookie
+         *                               clearing.
+         *    @param string $message     Message to display.
          *    @access public
          */
         function expectCookie($name, $expect = false, $message = "%s") {

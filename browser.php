@@ -65,7 +65,7 @@
         /**
          *    Adds a cookie to the jar. This will overwrite
          *    cookies with matching host, paths and keys.
-         *    @param $cookie        New cookie.
+         *    @param SimpleCookie $cookie        New cookie.
          *    @access public
          */
         function setCookie($cookie) {
@@ -89,10 +89,10 @@
          *    Any cookies with missing categories will not
          *    be filtered out by that category. Expired
          *    cookies must be cleared by restarting the session.
-         *    @param $host        Host name requirement.
-         *    @param $path        Path encompassing cookies.
-         *    @return             Hash of valid cookie objects keyed
-         *                        on the cookie name.
+         *    @param string $host   Host name requirement.
+         *    @param string $path   Path encompassing cookies.
+         *    @return hash          Valid cookie objects keyed
+         *                          on the cookie name.
          *    @access public
          */
         function getValidCookies($host = false, $path = "/") {
@@ -108,12 +108,12 @@
         /**
          *    Tests cookie for matching against search
          *    criteria.
-         *    @param $cookie        Cookie to test.
-         *    @param $host          Host must match.
-         *    @param $path          Cookie path must be shorter than
-         *                          this path.
-         *    @param $name          Name must match.
-         *    @return               True if matched.
+         *    @param SimpleTest $cookie    Cookie to test.
+         *    @param string $host          Host must match.
+         *    @param string $path          Cookie path must be shorter than
+         *                                 this path.
+         *    @param string $name          Name must match.
+         *    @return boolean              True if matched.
          *    @access private
          */
         function _isMatch($cookie, $host, $path, $name) {
@@ -153,7 +153,7 @@
         
         /**
          *    Accessor for base URL worked out from the current URL.
-         *    @return        Base URL as string.
+         *    @return string       Base URL.
          *    @access public
          */
         function getBaseUrl() {
@@ -166,7 +166,7 @@
         
         /**
          *    Accessor for the current browser location.
-         *    @return        Current URL as string.
+         *    @return string       Current URL.
          *    @access public
          */
         function getCurrentUrl() {
@@ -201,11 +201,11 @@
         /**
          *    Sets an additional cookie. If a cookie has
          *    the same name and path it is replaced.
-         *    @param $name            Cookie key.
-         *    @param $value           Value of cookie.
-         *    @param $host            Host upon which the cookie is valid.
-         *    @param $path            Cookie path if not host wide.
-         *    @param $expiry          Expiry date as string.
+         *    @param string $name            Cookie key.
+         *    @param string $value           Value of cookie.
+         *    @param string $host            Host upon which the cookie is valid.
+         *    @param string $path            Cookie path if not host wide.
+         *    @param string $expiry          Expiry date.
          *    @access public
          */
         function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
@@ -219,11 +219,11 @@
         /**
          *    Reads the most specific cookie value from the
          *    browser cookies.
-         *    @param $host        Host to search.
-         *    @param $path        Applicable path.
-         *    @param $name        Name of cookie to read.
-         *    @return             False if not present, else the
-         *                        value as a string.
+         *    @param string $host        Host to search.
+         *    @param string $path        Applicable path.
+         *    @param string $name        Name of cookie to read.
+         *    @return string             False if not present, else the
+         *                               value as a string.
          *    @access public
          */
         function getCookieValue($host, $path, $name) {
@@ -241,9 +241,9 @@
         
         /**
          *    Reads the current cookies for the base URL.
-         *    @param $name   Key of cookie to find.
-         *    @return        Null if there is no base URL, false
-         *                   if the cookie is not set.
+         *    @param string $name   Key of cookie to find.
+         *    @return string        Null if there is no base URL, false
+         *                          if the cookie is not set.
          *    @access public
          */
         function getBaseCookieValue($name) {
@@ -257,7 +257,7 @@
         /**
          *    Sets the maximum number of redirects before
          *    a page will be loaded anyway.
-         *    @param $max        Most hops allowed.
+         *    @param integer $max        Most hops allowed.
          *    @access public
          */
         function setMaximumRedirects($max) {
@@ -266,8 +266,8 @@
         
         /**
          *    Test to see if the redirect limit is passed.
-         *    @param $redirects        Count so far.
-         *    @return                  True if over.
+         *    @param integer $redirects        Count so far.
+         *    @return boolean                  True if over.
          *    @access private
          */
         function _isTooManyRedirects($redirects) {
@@ -277,9 +277,9 @@
         /**
          *    Fetches a URL as a response object. Will
          *    keep trying if redirected.
-         *    @param $method       GET, POST, etc.
-         *    @param $url          Target to fetch as Url object.
-         *    @param $parameters   Additional parameters for request.
+         *    @param string $method       GET, POST, etc.
+         *    @param SimpleUrl $url       Target to fetch as Url object.
+         *    @param hash $parameters     Additional parameters for request.
          *    @return              Response object.
          *    @access protected
          */
@@ -304,7 +304,8 @@
         
         /**
          *    Accessor for last response.
-         *    @return      Response object or false if none.
+         *    @return SimpleHttpResponse     Response object or
+         *                                   false if none.
          *    @access protected
          */
         function &_getLastResponse() {
@@ -313,9 +314,9 @@
         
         /**
          *    Fetches the page content with a simple GET request.
-         *    @param $raw_url      Target to fetch as string.
-         *    @param $parameters   Additional parameters for GET request.
-         *    @return              Content of page.
+         *    @param string $raw_url    Target to fetch.
+         *    @param hash $parameters   Additional parameters for GET request.
+         *    @return string            Content of page.
          *    @access public
          */
         function get($raw_url, $parameters = false) {
@@ -331,9 +332,9 @@
         /**
          *    Fetches the page content with a HEAD request.
          *    Will affect cookies, but will not change the base URL.
-         *    @param $raw_url      Target to fetch as string.
-         *    @param $parameters   Additional parameters for GET request.
-         *    @return              Content of page.
+         *    @param string $raw_url    Target to fetch as string.
+         *    @param hash $parameters   Additional parameters for GET request.
+         *    @return string            Content of page.
          *    @access public
          */
         function head($raw_url, $parameters = false) {
@@ -344,9 +345,9 @@
         
         /**
          *    Fetches the page content with a POST request.
-         *    @param $raw_url      Target to fetch as string.
-         *    @param $parameters   POST parameters.
-         *    @return              Content of page.
+         *    @param string $raw_url    Target to fetch as string.
+         *    @param hash $parameters   POST parameters.
+         *    @return string            Content of page.
          *    @access public
          */
         function post($raw_url, $parameters = false) {
@@ -362,10 +363,10 @@
         /**
          *    Creates a page request with the browser cookies
          *    added.
-         *    @param $method       Fetching method.
-         *    @param $url          Target to fetch as url object.
-         *    @param $parameters   POST/GET parameters.
-         *    @return              New request object.
+         *    @param string $method       Fetching method.
+         *    @param SimpleUrl $url       Target to fetch as url object.
+         *    @param hash $parameters     POST/GET parameters.
+         *    @return SimpleHttpRequest   New request.
          *    @access private
          */
         function &_createCookieRequest($method, $url, $parameters = false) {
@@ -382,10 +383,10 @@
         
         /**
          *    Builds the appropriate HTTP request object.
-         *    @param $method       Fetching method.
-         *    @param $url          Target to fetch as url object.
-         *    @param $parameters   POST/GET parameters.
-         *    @return              New request object.
+         *    @param string $method       Fetching method.
+         *    @param SimpleUrl $url       Target to fetch as url object.
+         *    @param hash $parameters     POST/GET parameters.
+         *    @return SimpleHttpRequest   New request object.
          *    @access protected
          */
         function &_createRequest($method, $url, $parameters) {
@@ -402,8 +403,8 @@
         
         /**
          *    Extracts new cookies into the cookie jar.
-         *    @param $url        Target to fetch as url object.
-         *    @param $cookies    New cookies.
+         *    @param SimpleUrl $url     Target to fetch as url object.
+         *    @param array $cookies     New cookies.
          *    @access private
          */
         function _addCookies($url, $cookies) {
@@ -419,10 +420,10 @@
          *    Turns an incoming URL string into a
          *    URL object, filling the relative URL if
          *    a base URL is present.
-         *    @param $base_url       Browser current URL as string.
-         *    @param $raw_url        URL as string.
-         *    @param $parameters     Additional request, parameters.
-         *    @return                Absolute URL as object.
+         *    @param string $base_url       Browser current URL.
+         *    @param string $raw_url        Incoming URL.
+         *    @param hash $parameters       Additional request, parameters.
+         *    @return SimpleUrl             Absolute URL.
          *    @access public
          *    @static
          */
@@ -464,10 +465,10 @@
         /**
          *    Fetches a URL as a response object performing
          *    tests set in expectations.
-         *    @param $method     GET, POST, etc.
-         *    @param $url        Target to fetch as SimpleUrl.
-         *    @param $parameters Additional parameters for request.
-         *    @return            Reponse object.
+         *    @param string $method       GET, POST, etc.
+         *    @param SimpleUrl $url       Target to fetch.
+         *    @param hash $parameters     Additional parameters for request.
+         *    @return SimpleHttpResponse  Reponse object.
          *    @access public
          */
         function &fetchResponse($method, $url, $parameters) {
@@ -479,11 +480,11 @@
         
         /**
          *    Sets an expectation for a cookie.
-         *    @param $name        Cookie key.
-         *    @param $value       Expected value of incoming cookie.
-         *                        An empty string corresponds to a
-         *                        cleared cookie.
-         *    @param $message     Message to display.
+         *    @param string $name      Cookie key.
+         *    @param string $value     Expected value of incoming cookie.
+         *                             An empty string corresponds to a
+         *                             cleared cookie.
+         *    @param string $message   Message to display.
          *    @access public
          */
         function expectCookie($name, $value = false, $message = "%s") {
@@ -496,8 +497,8 @@
         /**
          *    Checks that the headers are as expected.
          *    Each expectation sends a test event.
-         *    @param $url         Target URL.
-         *    @param $reponse     HTTP response from the fetch.
+         *    @param SimpleUrl $url               Target URL.
+         *    @param SimpleHttpResponse $reponse  HTTP response from the fetch.
          *    @access private
          */
         function _checkExpectations($url, &$response) {
@@ -506,7 +507,7 @@
         
         /**
          *    Checks all incoming cookies against expectations.
-         *    @param $reponse     HTTP response from the fetch.
+         *    @param SimpleHttpResponse $reponse  HTTP response from the fetch.
          *    @access private
          */
         function _checkAllExpectedCookies(&$response) {
@@ -524,11 +525,9 @@
          *    Checks that an expected cookie was present
          *    in the incoming cookie list. The cookie
          *    should appear only once.
-         *    @param $expected    Expected cookie values as
-         *                        simple hash with the message
-         *                        to show on failure.
-         *    @param $cookies     Incoming cookies.
-         *    @return             True if expectation met.
+         *    @param hash $expected    Expected cookie values as
+         *                             with the message to show on failure.
+         *    @param array $cookies    Incoming cookies.
          *    @access private
          */
         function _checkExpectedCookie($expected, $cookies) {
@@ -546,11 +545,10 @@
          *    Checks that an expected cookie was present
          *    in the incoming cookie list and has the
          *    expected value. The cookie should appear once.
-         *    @param $expected    Expected cookie values as
-         *                        simple hash with the message
-         *                        to show on failure.
-         *    @param $cookies     Incoming cookies.
-         *    @return             True if expectation met.
+         *    @param hash $expected    Expected cookie values as
+         *                             simple hash with the message
+         *                             to show on failure.
+         *    @param array $cookies    Incoming cookies.
          *    @access private
          */
         function _checkExpectedCookieValue($expected, $cookies) {
@@ -572,7 +570,7 @@
         /**
          *    Checks the response code against a list
          *    of possible values.
-         *    @param $responses    Possible responses for a pass.
+         *    @param array $responses    Possible responses for a pass.
          *    @access public
          */
         function assertResponse($responses, $message = "%s") {
@@ -587,7 +585,7 @@
         /**
          *    Checks the mime type against a list
          *    of possible values.
-         *    @param $types    Possible mime types for a pass.
+         *    @param array $types    Possible mime types for a pass.
          *    @access public
          */
         function assertMime($types, $message = "%s") {
@@ -601,8 +599,8 @@
         
         /**
          *    Sends an assertion to the held test case.
-         *    @param $result        True on success.
-         *    @param $message       Message to send to test.
+         *    @param boolean $result       True on success.
+         *    @param string $message       Message to send to test.
          *    @access protected
          */
         function _assertTrue($result, $message) {

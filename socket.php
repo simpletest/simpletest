@@ -18,7 +18,7 @@
         
         /**
          *    Test for an outstanding error.
-         *    @return            True if there is an error.
+         *    @return boolean           True if there is an error.
          *    @access public
          */
         function isError() {
@@ -27,7 +27,7 @@
         
         /**
          *    Accessor for an outstanding error.
-         *    @return            Empty string if no error otherwise
+         *    @return string     Empty string if no error otherwise
          *                       the error message.
          *    @access public
          */
@@ -37,7 +37,7 @@
         
         /**
          *    Sets the internal error.
-         *    @param        Error message to stash.
+         *    @param string       Error message to stash.
          *    @access protected
          */
         function _setError($error) {
@@ -62,7 +62,7 @@
         
         /**
          *    Opens a socket for reading and writing.
-         *    @param $url        URL as string.
+         *    @param string $url        URL to open.
          *    @access public
          */
         function SimpleSocket($url, $port = 80) {
@@ -77,8 +77,8 @@
         
         /**
          *    Writes some data to the socket.
-         *    @param $message       String to send to socket.
-         *    @return               True if successful.
+         *    @param string $message       String to send to socket.
+         *    @return boolean              True if successful.
          *    @access public
          */
         function write($message) {
@@ -94,9 +94,9 @@
         
         /**
          *    Reads data from the socket.
-         *    @param $block_size        Size of chunk to read.
-         *    @return                   Incoming bytes. False
-         *                              on error.
+         *    @param integer $block_size       Size of chunk to read.
+         *    @return integer                  Incoming bytes. False
+         *                                     on error.
          *    @access public
          */
         function read($block_size = 255) {
@@ -108,7 +108,7 @@
         
         /**
          *    Accessor for socket open state.
-         *    @return            True if open.
+         *    @return boolean           True if open.
          *    @access public
          */
         function isOpen() {
