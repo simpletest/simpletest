@@ -164,5 +164,18 @@
             $this->assertTrue($this->clickSubmit("wobble"));
             $this->assertTitle('Done');
         }
+        function testFormPost() {
+            $browser = &$this->getBrowser();
+            $form_code = '<html><head><form method="post" action="there.php">';
+            $form_code .= '<input type="submit" name="wibble" value="wobble"/>';
+            $form_code .= '</form></head></html>';
+            $browser->setReturnValue("get", $form_code);
+            $browser->expectOnce("get", array("http://my-site.com/", false));
+            $browser->setReturnValue("post", '<html><title>Done</title></html>');
+            $browser->expectOnce("post", array("there.php", array("wibble" => "wobble")));
+            $this->get("http://my-site.com/");
+            $this->assertTrue($this->clickSubmit("wobble"));
+            $this->assertTitle('Done');
+        }
     }
 ?>

@@ -149,6 +149,20 @@
                     $browser->getCurrentUrl(),
                     "http://this.com/this/path/page.html");
         }
+        function testSetCurrentWithPost() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue("isError", false);
+            $response->setReturnValue("getNewCookies", array());
+            $request = &new MockSimpleHttpRequest($this);
+            $request->setReturnReference("fetch", $response);
+            $browser = &new MockRequestSimpleBrowser($this);
+            $browser->setReturnReference('_createRequest', $request);
+            $browser->SimpleBrowser();
+            $browser->post("http://this.com/this/path/page.html", false);
+            $this->assertEqual(
+                    $browser->getCurrentUrl(),
+                    "http://this.com/this/path/page.html");
+        }
     }
     
     class TestOfBrowserCookies extends UnitTestCase {

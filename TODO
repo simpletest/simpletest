@@ -24,18 +24,18 @@ Add no return check (2).
 Html parser
 -----------
 Test with realistic pages (5).
-Add form parsing (2).
+Add form parsing (2/1) - done.
 Add input tag parsing (2).
 Add text area tag parsing (2).
 Add Simple monicker to sundry classes (1).
 
 Browser
 -------
-Add submit by form (2).
+Add submit by form (2/4) - done.
 
 Web tester
 ----------
-Add default form submission (3).
+Add default form submission (3/0) - done.
 Add setting of form values by name (2).
 
 Documentation

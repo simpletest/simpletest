@@ -238,5 +238,15 @@
             $this->assertWantedPattern('/a=\[\]/');
             $this->assertWantedPattern('/b=\[Default text\]/');
         }
+        function testSelfSubmit() {
+            $this->get('http://www.lastcraft.com/test/self_form.php');
+            $this->assertNoUnwantedPattern('/<p>submitted<\/p>/i');
+            $this->assertNoUnwantedPattern('/<p>wrong form<\/p>/i');
+            $this->assertTitle('Test of form self submission');
+            $this->assertTrue($this->clickSubmit());
+            $this->assertWantedPattern('/<p>submitted<\/p>/i');
+            $this->assertNoUnwantedPattern('/<p>wrong form<\/p>/i');
+            $this->assertTitle('Test of form self submission');
+        }
     }
 ?>
