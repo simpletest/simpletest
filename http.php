@@ -2,6 +2,100 @@
     // $Id$
 
     /**
+     *    URL parser to replace parse_url() PHP function.
+     */
+    class SimpleUrl {
+        var $_scheme;
+        var $_host;
+        var $_path;
+        
+        /**
+         *    Constructor. Parses URL into sections.
+         *    @param $url            URL as string.
+         *    @public
+         */
+        function SimpleUrl($url) {
+            $this->_scheme = "http";
+            $this->_host = "localhost";
+            $this->_path = "/";
+            if (preg_match('/(.*?):\/\/(.*)/', $url, $matches)) {
+                $this->_scheme = $matches[1];
+                $url = $matches[2];
+            }
+            if (preg_match('/(.*?)(\/|\?)(.*)/', $url, $matches)) {
+                $this->_host = $matches[1];
+                $this->_path = ($matches[2] == "/" ? "/" : "/?") . $matches[3];
+            }
+            if (preg_match('/(.*?)\?(.*)/', $this->_path, $matches)) {
+                $this->_path = $matches[1];
+                $this->_request = $this->_parseRequest($matches[2]);
+            }
+        }
+        
+        /**
+         *    Breaks the request down into a hash.
+         *    @param $raw        Raw request string.
+         *    @return            Hash of GET data.
+         *    @private
+         */
+        function _parseRequest($raw) {
+            $request = array();
+            foreach (split("&", $raw) as $pair) {
+                if (preg_match('/(.*?)=(.*)/', $pair, $matches)) {
+                    $request[$matches[1]] = $matches[2];
+                }
+            }
+            return $request;
+        }
+        
+        /**
+         *    Accessor for protocol part.
+         *    @return        Scheme name, e.g "http".
+         *    @public
+         */
+        function getScheme() {
+            return $this->_scheme;
+        }
+        
+        /**
+         *    Accessor for hostname and port.
+         *    @return        Hostname only.
+         *    @public
+         */
+        function getHost() {
+            return $this->_host;
+        }
+        
+        /**
+         *    Accessor for path.
+         *    @return     Full path including leading slash.
+         *    @public
+         */
+        function getPath() {
+            return $this->_path;
+        }
+        
+        /**
+         *    Accessor for current request parameters
+         *    in URL string form
+         *    @return    Form is string "a=1&b=2", etc.
+         *    @public
+         */
+        function getEncodedRequest() {
+        }
+        
+        /**
+         *    Accessor for current request parameters
+         *    as a hash.
+         *    @return    Hash of name value pairs.
+         *    @public
+         */
+        function getRequest() {
+            return $this->_request;
+        }
+    }
+
+    /**
      *    Cookie data holder. A passive class.
      */
     class SimpleCookie {

@@ -7,6 +7,37 @@
     require_once(SIMPLE_TEST . 'http.php');
     Mock::generate("SimpleSocket");
 
+    class TestOfUrl extends UnitTestCase {
+        function TestOfUrl() {
+            $this->UnitTestCase();
+        }
+        function testDefaultUrl() {
+            $url = new SimpleUrl("");
+            $this->assertEqual($url->getScheme(), "http");
+            $this->assertEqual($url->getHost(), "localhost");
+            $this->assertEqual($url->getPath(), "/");
+        }
+        function testBasicParsing() {
+            $url = new SimpleUrl("http://www.lastcraft.com/test/");
+            $this->assertEqual($url->getScheme(), "http");
+            $this->assertEqual($url->getHost(), "www.lastcraft.com");
+            $this->assertEqual($url->getPath(), "/test/");
+        }
+        function testParseGetValue() {
+            $url = new SimpleUrl("?a=A");
+            $this->assertEqual($url->getPath(), "/");
+            $this->assertEqual(count($request = $url->getRequest()), 1);
+            $this->assertEqual($request["a"], "A");
+        }
+        function testParseMultipleGetValues() {
+            $url = new SimpleUrl("/?a=A&b=B");
+            $this->assertEqual($url->getPath(), "/");
+            $this->assertEqual(count($request = $url->getRequest()), 2);
+            $this->assertEqual($request["a"], "A");
+            $this->assertEqual($request["b"], "B");
+        }
+    }
+
     class TestOfCookie extends UnitTestCase {
         function TestOfCookie() {
             $this->UnitTestCase();
@@ -179,7 +210,6 @@
             $socket->setReturnValueSequence(5, "read", "Set-Cookie: b=bbb\r\n");
             $socket->setReturnValueSequence(6, "read", "Connection: close\r\n");
             $socket->setReturnValueSequence(7, "read", "\r\n");
-            $socket->setReturnValueSequence(8, "read", "this is a test file\n");
             $socket->setReturnValue("read", "");
             $response = &new SimpleHttpResponse($socket);
             $this->assertFalse($response->isError());
