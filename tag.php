@@ -22,6 +22,16 @@
         }
         
         /**
+         *    Check to see if the tag can have both start and
+         *    end tags with content in between.
+         *    @return boolean        True if content allowed.
+         *    @public
+         */
+        function expectEndTag() {
+            return true;
+        }
+        
+        /**
          *    Appends string content to the current content.
          *    @param $content        Additional text.
          *    @public
@@ -37,6 +47,15 @@
          */
         function getName() {
             return $this->_name;
+        }
+        
+        /**
+         *    Form element indicator.
+         *    @return boolean        False.
+         *    @public
+         */
+        function isWidget() {
+            return false;
         }
         
         /**
@@ -72,12 +91,11 @@
         
         /**
          *    Starts with a named tag with attributes only.
-         *    @param string $name        Tag name.
          *    @param hash $attributes    Attribute names and
          *                               string values.
          */
-        function SimpleTitleTag($name, $attributes) {
-            $this->SimpleTag($name, $attributes);
+        function SimpleTitleTag($attributes) {
+            $this->SimpleTag('title', $attributes);
         }
     }
     
@@ -88,19 +106,18 @@
         
         /**
          *    Starts with a named tag with attributes only.
-         *    @param string $name        Tag name.
          *    @param hash $attributes    Attribute names and
          *                               string values.
          */
-        function SimpleAnchorTag($name, $attributes) {
-            $this->SimpleTag($name, $attributes);
+        function SimpleAnchorTag($attributes) {
+            $this->SimpleTag('a', $attributes);
         }
     }
     
     /**
-     *    Text, password and hidden field.
+     *    Form element.
      */
-    class SimpleTextTag extends SimpleTag {
+    class SimpleWidget extends SimpleTag {
         
         /**
          *    Starts with a named tag with attributes only.
@@ -108,40 +125,80 @@
          *    @param hash $attributes    Attribute names and
          *                               string values.
          */
-        function SimpleTextTag($name, $attributes) {
+        function SimpleWidget($name, $attributes) {
             $this->SimpleTag($name, $attributes);
+        }
+        
+        /**
+         *    Form element indicator.
+         *    @return boolean        True.
+         *    @public
+         */
+        function isWidget() {
+            return true;
         }
     }
     
     /**
      *    Text, password and hidden field.
      */
-    class SimpleSubmitTag extends SimpleTag {
+    class SimpleTextTag extends SimpleWidget {
         
         /**
          *    Starts with a named tag with attributes only.
-         *    @param string $name        Tag name.
          *    @param hash $attributes    Attribute names and
          *                               string values.
          */
-        function SimpleSubmitTag($name, $attributes) {
-            $this->SimpleTag($name, $attributes);
+        function SimpleTextTag($attributes) {
+            $this->SimpleTag('input', $attributes);
+        }
+        
+        /**
+         *    Tag contains no content.
+         *    @return boolean        False.
+         *    @public
+         */
+        function expectEndTag() {
+            return false;
+        }
+    }
+    
+    /**
+     *    Text, password and hidden field.
+     */
+    class SimpleSubmitTag extends SimpleWidget {
+        
+        /**
+         *    Starts with a named tag with attributes only.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
+        function SimpleSubmitTag($attributes) {
+            $this->SimpleTag('input', $attributes);
+        }
+        
+        /**
+         *    Tag contains no content.
+         *    @return boolean        False.
+         *    @public
+         */
+        function expectEndTag() {
+            return false;
         }
     }
     
     /**
      *    Content tag for text area.
      */
-    class SimpleTextAreaTag extends SimpleTag {
+    class SimpleTextAreaTag extends SimpleWidget {
         
         /**
          *    Starts with a named tag with attributes only.
-         *    @param string $name        Tag name.
          *    @param hash $attributes    Attribute names and
          *                               string values.
          */
-        function SimpleTextAreaTag($name, $attributes) {
-            $this->SimpleTag($name, $attributes);
+        function SimpleTextAreaTag($attributes) {
+            $this->SimpleTag('textarea', $attributes);
         }
     }
     
@@ -152,12 +209,11 @@
         
         /**
          *    Starts with a named tag with attributes only.
-         *    @param string $name        Tag name.
          *    @param hash $attributes    Attribute names and
          *                               string values.
          */
-        function SimpleFormTag($name, $attributes) {
-            $this->SimpleTag($name, $attributes);
+        function SimpleFormTag($attributes) {
+            $this->SimpleTag('form', $attributes);
         }
     }
     

@@ -52,7 +52,7 @@
                 $this->_page->acceptBlockStart($tag);
                 return true;
             }            
-            if (in_array($name, $this->_getContentTags())) {
+            if ($tag->expectEndTag()) {
                 if (!in_array($name, array_keys($this->_tags))) {
                     $this->_tags[$name] = array();
                 }
@@ -71,16 +71,14 @@
          *    @public
          */
         function endElement($name) {
-            if (in_array($name, $this->_getContentTags())) {
-                if (!isset($this->_tags[$name]) || (count($this->_tags[$name]) == 0)) {
-                    return false;
-                }
-                $tag = array_pop($this->_tags[$name]);
-                $this->_page->acceptTag($tag);
-            }
             if (in_array($name, $this->_getBlockTags())) {
                 $this->_page->acceptBlockEnd($name);
             }            
+            if (isset($this->_tags[$name]) && (count($this->_tags[$name]) > 0)) {
+                $tag = array_pop($this->_tags[$name]);
+                $this->_page->acceptTag($tag);
+                return true;
+            }
             return true;
         }
         
@@ -92,10 +90,7 @@
          *    @public
          */
         function addContent($text) {
-            foreach ($this->_getContentTags() as $name) {
-                if (!isset($this->_tags[$name])) {
-                    continue;
-                }
+            foreach (array_keys($this->_tags) as $name) {
                 for ($i = 0; $i < count($this->_tags[$name]); $i++) {
                     $this->_tags[$name][$i]->addContent($text);
                 }
@@ -113,31 +108,21 @@
          */
         function &_createTag($name, $attributes) {
             if ($name == 'a') {
-                return new SimpleAnchorTag($name, $attributes);
+                return new SimpleAnchorTag($attributes);
             } elseif ($name == 'title') {
-                return new SimpleTitleTag($name, $attributes);
+                return new SimpleTitleTag($attributes);
             } elseif ($name == 'input') {
                 if (isset($attributes['type']) && ($attributes['type'] == 'submit')) {
-                    return new SimpleSubmitTag($name, $attributes);
+                    return new SimpleSubmitTag($attributes);
                 } else {
-                    return new SimpleTextTag($name, $attributes);
+                    return new SimpleTextTag($attributes);
                 }
             } elseif ($name == 'textarea') {
-                return new SimpleTextAreaTag($name, $attributes);
+                return new SimpleTextAreaTag($attributes);
             } elseif ($name == 'form') {
-                return new SimpleFormTag($name, $attributes);
+                return new SimpleFormTag( $attributes);
             }
-            return new SimpleTag($name, $attributes);
-        }
-        
-        /**
-         *    Accessor for list of tags where the content
-         *    between the start and end is important.
-         *    @return array       List of content tags.
-         *    @protected
-         */
-        function _getContentTags() {
-            return array("a", "title", "textarea");
+            return new SimpleTag($attributes);
         }
         
         /**
@@ -205,19 +190,15 @@
          *    @param $tag        Tag to accept.
          *    @public
          */
-        function acceptTag($tag) {
+        function acceptTag(&$tag) {
             if ($tag->getName() == "a") {
                 $this->_addLink(
                         $tag->getAttribute("href"),
                         $tag->getContent(),
                         $tag->getAttribute("id"));
             } elseif ($tag->getName() == "title") {
-                $this->_setTitle($tag->getContent());
-            } elseif ($tag->getName() == "input") {
-                for ($i = 0; $i < count($this->_open_forms); $i++) {
-                    $this->_open_forms[$i]->addWidget($tag);
-                }
-            } elseif ($tag->getName() == "textarea") {
+                $this->_setTitle($tag);
+            } elseif ($tag->isWidget()) {
                 for ($i = 0; $i < count($this->_open_forms); $i++) {
                     $this->_open_forms[$i]->addWidget($tag);
                 }
@@ -364,11 +345,11 @@
         
         /**
          *    Sets the title tag contents.
-         *    @param $title        Title of page.
+         *    @param SimpleTitleTag $tag    Title of page.
          *    @protected
          */
-        function _setTitle($title) {
-            $this->_title = $title;
+        function _setTitle(&$tag) {
+            $this->_title = &$tag;
         }
         
         /**
@@ -378,7 +359,10 @@
          *    @public
          */
         function getTitle() {
-            return $this->_title;
+            if ($this->_title) {
+                return $this->_title->getContent();
+            }
+            return false;
         }
         
         /**

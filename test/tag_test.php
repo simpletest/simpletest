@@ -9,18 +9,29 @@
             $this->UnitTestCase();
         }
         function testStartValues() {
-            $tag = new SimpleTag("hello", array("a" => 1, "b" => true));
-            $this->assertEqual($tag->getname(), "hello");
+            $tag = new SimpleTitleTag(array("a" => 1, "b" => true));
+            $this->assertEqual($tag->getName(), "title");
             $this->assertIdentical($tag->getAttribute("a"), "1");
             $this->assertIdentical($tag->getAttribute("b"), true);
             $this->assertIdentical($tag->getAttribute("c"), false);
             $this->assertIdentical($tag->getContent(), "");
         }
-        function testContent() {
-            $tag = new SimpleTag("a", array());
+        function testTitleContent() {
+            $tag = &new SimpleTitleTag(array());
+            $this->assertTrue($tag->expectEndTag());
             $tag->addContent("Hello");
             $tag->addContent("World");
             $this->assertEqual($tag->getContent(), "HelloWorld");
+        }
+        function testTagWithNoEnd() {
+            $tag = &new SimpleTextTag(array());
+            $this->assertFalse($tag->expectEndTag());
+        }
+        function testWidgetCheck() {
+            $tag = &new SimpleTitleTag(array());
+            $this->assertFalse($tag->isWidget());
+            $tag = &new SimpleTextTag(array());
+            $this->assertTrue($tag->isWidget());
         }
     }
     
