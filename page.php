@@ -129,6 +129,8 @@
         var $_relative_links;
         var $_link_ids;
         var $_title;
+        var $_open_forms;
+        var $_closed_forms;
         
         /**
          *    Parses a page ready to access it's contents.
@@ -140,6 +142,8 @@
             $this->_relative_links = array();
             $this->_link_ids = array();
             $this->_title = false;
+            $this->_open_forms = array();
+            $this->_closed_forms = array();
             $builder = &$this->_createBuilder($this);
             $builder->parse($raw, $this->_createParser($builder));
         }
@@ -187,6 +191,9 @@
          *    @public
          */
         function acceptBlockStart($tag) {
+            if ($tag->getName() == "form") {
+                $this->_open_forms[] = new SimpleForm($tag);
+            }
         }
         
         /**
@@ -195,6 +202,9 @@
          *    @public
          */
         function acceptBlockEnd($tag) {
+            if ($tag->getName() == "form") {
+                $this->_closed_forms[] = array_pop($this->_open_forms);
+            }
         }
         
         /**
@@ -338,6 +348,22 @@
          */
         function getTitle() {
             return $this->_title;
+        }
+        
+        /**
+         *    Gets a list of possible form action URLs.
+         *    @return        Array of URLs as strings.
+         *    @public
+         */
+        function getActions() {
+            $actions = array();
+            foreach ($this->_open_forms as $form) {
+                $actions[] = $form->getAction();
+            }
+            foreach ($this->_closed_forms as $form) {
+                $actions[] = $form->getAction();
+            }
+            return $actions;
         }
     }
 ?>

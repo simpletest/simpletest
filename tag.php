@@ -68,7 +68,7 @@
     /**
      *    Form tag class to hold widget values.
      */
-    class SimpleHtmlForm {
+    class SimpleForm {
         var $_method;
         var $_action;
         var $_defaults;
@@ -79,7 +79,7 @@
          *    Starts with no held controls/widgets.
          *    @param $tag        Form tag to read.
          */
-        function SimpleHtmlForm($tag) {
+        function SimpleForm($tag) {
             $this->_method = strtoupper($tag->getAttribute("method"));
             $this->_action = $tag->getAttribute("action");
             $this->_defaults = array();

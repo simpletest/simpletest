@@ -209,6 +209,41 @@
         }
     }
     
+    class TestOfForms extends UnitTestCase {
+        function TestOfForms() {
+            $this->UnitTestCase();
+        }
+        function testEmptyForm() {
+            $form = new SimpleTag("form", array());
+            $page = new SimplePage("");
+            $page->acceptBlockStart($form);
+            $this->assertIdentical($page->getActions(), array(false));
+            $page->acceptBlockEnd($form);
+            $this->assertIdentical($page->getActions(), array(false));
+        }
+        function testCompleteForm() {
+            $form = new SimpleTag("form", array("method" => "GET", "action" => "here.php"));
+            $page = new SimplePage("");
+            $page->acceptBlockStart($form);
+            $this->assertIdentical($page->getActions(), array("here.php"));
+            $page->acceptBlockEnd($form);
+            $this->assertIdentical($page->getActions(), array("here.php"));
+        }
+        function testNestedForm() {
+            $outer = new SimpleTag("form", array("method" => "GET", "action" => "outer.php"));
+            $inner = new SimpleTag("form", array("method" => "GET", "action" => "inner.php"));
+            $page = new SimplePage("");
+            $page->acceptBlockStart($outer);
+            $page->acceptBlockStart($inner);
+            $this->assertIdentical($page->getActions(), array("outer.php", "inner.php"));
+            $page->acceptBlockEnd($inner);
+            $page->acceptBlockEnd($outer);
+            $actions = $page->getActions();
+            sort($actions);
+            $this->assertIdentical($actions, array("inner.php", "outer.php"));
+        }
+    }
+    
     class TestOfPageScraping extends UnitTestCase {
         function TestOfPageScraping() {
             $this->UnitTestCase();

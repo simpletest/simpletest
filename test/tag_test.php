@@ -30,14 +30,14 @@
         }
         function testFormActions() {
             $tag = new SimpleTag("form", array("method" => "get", "action" => "here.php"));
-            $form = new SimpleHtmlForm($tag);
+            $form = new SimpleForm($tag);
             $this->assertEqual($form->getMethod(), "GET");
             $this->assertEqual($form->getAction(), "here.php");
             $this->assertIdentical($form->getValue("a"), false);
             $this->assertEqual($form->submit("go", "Go!"), array("go" => "Go!"));
         }
         function testTextWidget() {
-            $form = new SimpleHtmlForm(new SimpleTag("form", array()));
+            $form = new SimpleForm(new SimpleTag("form", array()));
             $form->addWidget(new SimpleTag(
                     "input",
                     array("name" => "me", "type" => "text", "value" => "Myself")));
@@ -49,7 +49,7 @@
                     array("go" => "Go!", "me" => "Not me"));
         }
         function testSubmitButton() {
-            $form = new SimpleHtmlForm(new SimpleTag("form", array()));
+            $form = new SimpleForm(new SimpleTag("form", array()));
             $this->assertIdentical($form->submitButton("Go!"), false);
             $form->addWidget(new SimpleTag(
                     "input",
