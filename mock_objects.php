@@ -119,7 +119,7 @@
             if (SimpleTestCompatibility::isA($expected, 'SimpleExpectation')) {
                 return $expected->test($parameter);
             }
-            return ($expected === $parameter);
+            return SimpleTestCompatibility::isIdentical($expected, $parameter);
         }
         
         /**
