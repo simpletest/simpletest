@@ -113,6 +113,7 @@
          */
         function pass($message = "Pass") {
             $this->_runner->paintPass($message . $this->getAssertionLine(' at line [%d]'));
+            return true;
         }
 
         /**
@@ -122,6 +123,7 @@
          */
         function fail($message = "Fail") {
             $this->_runner->paintFail($message . $this->getAssertionLine(' at line [%d]'));
+            return false;
         }
 
         /**
@@ -191,11 +193,9 @@
                 $message = 'True assertion got ' . ($result ? 'True' : 'False');
             }
             if ($result) {
-                $this->pass($message);
-                return true;
+                return $this->pass($message);
             } else {
-                $this->fail($message);
-                return false;
+                return $this->fail($message);
             }
         }
 

@@ -1,17 +1,17 @@
 TODO
-This is immediate stuff only for this iteration (1.01) of 48 hours.
+This is immediate stuff only for this iteration (1.1alpha1) of 48 hours.
 
 $Id$
 
 Unit tester
 -----------
 Keep original raw URL for as long as possible (3).
-Allow expectation to be passed to assertError() method (2).
+Allow expectation to be passed to assertError() method (2/2).
 Switch to a run_me_if_no_runner script (2).
 Fix GroupTest test case count being wrong after addTestFile() (3).
 If "." is not in the path then local files aren't found (1).
 Add floating point equality (2).
-Add donated fix for assertreference() from Knak-Nielsen (1/1) - done.
+Add donated fix for assertReference() from Knak-Nielsen (1/1) - done.
 
 Reporter
 --------

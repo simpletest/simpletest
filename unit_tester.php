@@ -272,32 +272,37 @@
             }
             list($severity, $content, $file, $line, $globals) = $queue->extract();
             $severity = SimpleErrorQueue::getSeverityAsString($severity);
-            return $this->assertTrue(
-                    ! $expected || ($expected == $content),
-                    "Expected [$expected] in PHP error [$content] severity [$severity] in [$file] line [$line]");
+            if (! $expected) {
+                return $this->pass(
+                        "Captured a PHP error of [$content] severity [$severity] in [$file] line [$line] -> %s");
+            }
+            $expected = $this->_coerceToExpectation($expected);
+            return $this->assertExpectation(
+                    $expected,
+                    $content,
+                    "Expected PHP error [$content] severity [$severity] in [$file] line [$line] -> %s");
         }
         
         /**
-         *    Confirms that an error has occoured and
-         *    that the error text matches a Perl regular
-         *    expression.
-         *    @param string $pattern   Perl regular expresion to
-         *                              match against.
-         *    @param string $message    Message to display.
-         *    @return boolean           True on pass
-         *    @access public
+         *    Creates an equality expectation if the
+         *    object/value is not already some type
+         *    of expectation.
+         *    @param mixed $expected      Expected value.
+         *    @return SimpleExpectation   Expectation object.
+         *    @access private
+         */
+        function _coerceToExpectation($expected) {
+            if (SimpleTestCompatibility::isA($expected, 'SimpleExpectation')) {
+                return $expected;
+            }
+            return new EqualExpectation($expected);
+        }
+        
+        /**
+         *    @deprecated
          */
         function assertErrorPattern($pattern, $message = "%s") {
-            $queue = &SimpleErrorQueue::instance();
-            if ($queue->isEmpty()) {
-                $this->fail(sprintf($message, "Expected error not found"));
-                return;
-            }
-            list($severity, $content, $file, $line, $globals) = $queue->extract();
-            $severity = SimpleErrorQueue::getSeverityAsString($severity);
-            return $this->assertTrue(
-                    (boolean)preg_match($pattern, $content),
-                    "Expected pattern match [$pattern] in PHP error [$content] severity [$severity] in [$file] line [$line]");
+            return $this->assertError(new WantedPatternExpectation($pattern), $message);
         }
     }
 ?>
