@@ -33,7 +33,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE \
           simpletest/test/all_tests.php \
           simpletest/test/unit_tests.php \
-          simpletest/test/acceptace_test.php \
+          simpletest/test/acceptance_test.php \
           simpletest/test/errors_test.php \
           simpletest/test/options_test.php \
           simpletest/test/dumper_test.php \

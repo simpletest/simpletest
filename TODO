@@ -1,59 +1,43 @@
 TODO
-This is immediate stuff only for this iteration (Beta6) of 53 hours
-predicted versus 63 actual.
+This is immediate stuff only for this iteration (RC1) of 40 hours.
 First figure is expected hours, second is the time it actually took.
 
 $Id$
 
 Unit tester
 -----------
-Show line number of failed assertion (3/3) - done.
-Remove SIMPLE_TEST constant (1/1) - done.
-Add a NotAExpectation (1/1) - done.
 
 Reporter
 --------
 
 Mock objects
 ------------
-Meaningful error if no unit tester attached (1/1) - done.
 
 Parser
 ------
-Add framset tag (2/3) - done.
-Add frame tag (1/2) - done.
-Simplify builder callbacks (1/2) - done.
-Add image submit parsing (3/6) - done.
-Make multivalue widgets PHP compatible (2/1) - done.
-Confirm nested directory parsing with base URL (2/4) - done.
-Fix bug with URL arguments with no "=" (1/2) - done.
-Fix link parsing to handle links with a missing page name (2/1) - done.
-Fix URL decoding bug on attributes (2/1) - done.
+Add image map parsing (2).
+Add simple button tag parsing (1).
+Add file upload (7).
 
 Browser
 -------
-Add frame loading support (6/9) - done.
-Make framset mirror the page interface (4/6) - done.
-Add frame focus and defocus (2/4) - done.
-Allow nested frameset tags (3/1) - done.
-Add setFieldById() method (1/1) - done.
-Add assertFieldById() method (1/1) - done.
-Add clickSubmitByName() method (1/2) - done.
-Add clickSubmitById() method (1/2) - done.
-Username and password should allow encoded characters (1/0) - done.
-Add support for proxy fetching (3/9) - done.
-Add User-Agent identifier for tracking tests (1/0) - done.
-Allow adding of arbitrary headers (1/1) - done.
-Add accessors for link sets (1/1) - done.
-Add showRequest() to dump the last raw request (2/1) - done.
-Remove getCurrentUrl() method (2/1) - done.
+Allow nested framed pages (4).
+Add named frame reloads (2).
+Add frame loads from links (6).
+Allow images to be head fetched to set cookies (2).
+Allow stylesheet loading to affect cookies (2).
+Refactor authentication to cope with framed pages (2).
 
 Web tester
 ----------
-Expose head() method (1/1) - done.
 
 Documentation
 -------------
+Add cookie handling docs (3).
+Add browser scripting docs (3).
+Add frames handling docs (3).
+Add proxy support to docs (1).
 
 Build
 -----
+Move makefile over to bash script (2).
