@@ -22,7 +22,7 @@ Html parser
 Build form class as widget repository (3).
 Add widget class (2).
 Add form tag parsing to build a form in a page (3).
-Read the title tag and add an assertion for it (2/2) - done.
+Read the title tag and add an assertion for it (2/4) - done.
 
 Browser
 -------

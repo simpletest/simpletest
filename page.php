@@ -72,6 +72,77 @@
     }
     
     /**
+     *    Form tag class to hold widgets.
+     */
+    class SimpleHtmlForm {
+        
+        /**
+         *    Starts with no held controls/widgets.
+         *    @param $tag        Form tag to read.
+         */
+        function SimpleHtmlForm($tag) {
+        }
+        
+        /**
+         *    Accessor for form action.
+         *    @return            Either get or post.
+         *    @public
+         */
+        function getMethod() {
+        }
+        
+        /**
+         *    Relative URL of the target.
+         *    @return            URL as string.
+         *    @public
+         */
+        function getAction() {
+        }
+        
+        /**
+         *    Adds a tag internally to the form.
+         *    @param $tag        Input tag to add.
+         *    @public
+         */
+        function addWidget($tag) {
+        }
+        
+        /**
+         *    Sets a widget value within the form.
+         *    @param $name     Name of widget tag.
+         *    @param $value    Value to input into the widget.
+         *    @return          True if value is legal, false
+         *                     otherwise. The value will still
+         *                     be set.
+         *    @public
+         */
+        function setValue($name, $value) {
+        }
+        
+        /**
+         *    Reads the current form values as a hash
+         *    of submitted parameters.
+         *    @param $name     Name of submit button.
+         *    @param $value    Value of simulated submit.
+         *    @return          Hash of submitted values.
+         *    @public
+         */
+        function submit($name, $value) {
+        }
+        
+        /**
+         *    Submits a button with a particular label.
+         *    @param $label    Button label to search for.
+         *    @return          Hash of submitted values or false
+         *                     if there is no such button in the
+         *                     form.
+         *    @public
+         */
+        function submitButton($label) {
+        }
+    }
+    
+    /**
      *    SAX event handler. Maintains a list of
      *    open tags and dispatches them as they close.
      */
@@ -202,12 +273,12 @@
          */
         function acceptTag($tag) {
             if ($tag->getName() == "a") {
-                $this->addLink(
+                $this->_addLink(
                         $tag->getAttribute("href"),
                         $tag->getContent(),
                         $tag->getAttribute("id"));
             } elseif ($tag->getName() == "title") {
-                $this->setTitle($tag->getContent());
+                $this->_setTitle($tag->getContent());
             }
         }
         
@@ -217,9 +288,9 @@
          *    @param $url        Address.
          *    @param $label      Text label of link.
          *    @param $id         Id attribute of link.
-         *    @public
+         *    @protected
          */
-        function addLink($url, $label, $id) {
+        function _addLink($url, $label, $id) {
             $parsed_url = new SimpleUrl($url);
             if ($parsed_url->getScheme() && $parsed_url->getHost()) {
                 $this->_addAbsoluteLink($url, $label, $id);
@@ -338,9 +409,9 @@
         /**
          *    Sets the title tag contents.
          *    @param $title        Title of page.
-         *    @public
+         *    @protected
          */
-        function setTitle($title) {
+        function _setTitle($title) {
             $this->_title = $title;
         }
         
