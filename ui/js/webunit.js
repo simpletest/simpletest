@@ -12,8 +12,12 @@
 // Variables:
 min_x=500;
 min_y=400;
-groupCnt=1;
-groupHash = {
+groups = new Array();
+cases = new Array();
+current_group=0;
+current_case=0;
+
+Hash = {
 	Set : function(foo,bar) {this[foo] = bar;},
 	Get : function(foo) {return this[foo];}
 }
@@ -36,7 +40,7 @@ function layout() {
 	xLeft('tabs', 5);
 	xShow('webunit');
 	xShow('tabs');
-	activate_tab('fail');
+	activate_tab('tree');
 	xShow('visible_tab');
 	xZIndex('visible_tab', 2)
 	xResizeTo('msg', xWidth('webunit')-17, xHeight('webunit')/3-20);
@@ -71,8 +75,16 @@ function activate_tab(tab) {
 }
 
 function add_group(group_name) {
-  groupHash.Set(groupCnt, Array(group_name, groupCnt, Array()));
-  groupCnt++;
+  groups[groups.length] = group_name;
+  current_group = groups.length - 1;
+  cases[current_group] = new Array();
+}
+
+function add_case(case_name) {
+  var curgroup;
+  curgroup = cases[current_group];
+  cases[current_group][curgroup.length] = case_name;
+  current_case = curgroup.length - 1;
 }
 
 function make_fail(fails) {
@@ -81,11 +93,16 @@ function make_fail(fails) {
 function make_tree() {
 	var content;
 	content = '<ul>';
-	for (x in groupHash) {
-		content += '<li>'+x[0]+' ('+x[1]+')</li';
+	for (x in groups) {
+		content += '<li>'+groups[x]+'<ul>';
+		for (y in cases[x]) {
+			content += '<li>'+cases[x][y]+'</li>';
+		}
+		content += '</ul></li>';
 	}
 	content += '</ul>';
 	xGetElementById('tree').innerHTML = content;
+	if (xGetElementById('treetab').className == 'activetab') { activate_tab('tree'); }
 }
 
 function make_output(data) { 

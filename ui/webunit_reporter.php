@@ -214,10 +214,24 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    @access public
          */
         function paintGroupStart($test_name, $size) {
-            Parent::paintGroupStart($test_name, $size);
-            echo "add_group('$test_name');\n";
+             Parent::paintGroupStart($test_name, $size);
+             echo "add_group('$test_name');\n";
         }
-        
+ 
+         /**
+          *    Paints the start of a test case. Will also paint
+          *    the page header and footer if this is the
+          *    first test. Will stash the size if the first
+          *    start.
+          *    @param string $test_name   Name of test that is starting.
+          *    @access public
+          */
+         function paintCaseStart($test_name) {
+             Parent::paintCaseStart($test_name);
+             echo "add_case('$test_name');\n";
+         }
+
+ 
         /**
 		 * Returns the script passed in wrapped in script tags.
 		 *
