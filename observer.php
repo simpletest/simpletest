@@ -79,25 +79,31 @@
      *    Issued at the start of a test. This allows the
      *    test painter to keep internal records of which
      *    tests are currently running, etc.
+     *    The test name and type are sent.
      */
     class TestStart extends TestEvent {
+        var $_type;
 
         /**
          *    Stashes the starting message, usually a test name.
          *    @param $label     Message to be carried by the event.
+         *    @param $type      Normally either "group", "method"
+         *                      or "case".
          *    @public
          */
-        function TestStart($label) {
+        function TestStart($label, $type = "") {
             $this->TestEvent($label);
+            $this->_type = $type;
         }
         
         /**
          *    Paints itself into the visiting painter.
          *    @param $painter    TestReporter class to write to.
+         *    @param $type       Type of object sending the event.
          *    @public
          */
         function paint(&$painter) {
-            $painter->paintStart($this->getLabel());
+            $painter->paintStart($this->getLabel(), $this->_type);
         }
     }
 
@@ -107,23 +113,28 @@
      *    tests are currently running, etc.
      */
     class TestEnd extends TestEvent {
+        var $_type;
         
         /**
          *    Stashes the ending message, usually a test name.
          *    @param $label     Message to be carried by the event.
+         *    @param $type      Normally either "group", "method"
+         *                      or "case".
          *    @public
          */
-        function TestEnd($label) {
+        function TestEnd($label, $type = "") {
             $this->TestEvent($label);
+            $this->_type = $type;
         }
         
         /**
          *    Paints itself into the visiting painter.
          *    @param $painter    TestReporter class to write to.
+         *    @param $type       Type of object sending the event.
          *    @public
          */
         function paint(&$painter) {
-            $painter->paintEnd($this->getLabel());
+            $painter->paintEnd($this->getLabel(), $this->_type);
         }
     }
 
@@ -172,6 +183,7 @@
         
         /**
          *    Do nothing constructor.
+         *    @abstract
          */
         function TestObserver() {
         }
@@ -216,17 +228,19 @@
         /**
          *    Paints the start of a test.
          *    @param $test_name        Name of test or other label.
+         *    @param $type             Type of event sender as string.
          *    @public
          */
-        function paintStart($test_name) {
+        function paintStart($test_name, $type) {
         }
         
         /**
          *    Paints the end of a test.
          *    @param $test_name        Name of test or other label.
+         *    @param $type             Type of event sender as string.
          *    @public
          */
-        function paintEnd($test_name) {
+        function paintEnd($test_name, $type) {
         }
         
         /**

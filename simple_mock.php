@@ -377,7 +377,8 @@
                 $is_correct = ($expected == ($count = $this->getCallCount($method)));
                 $this->_assertTrue(
                         $is_correct,
-                        "Expected call count for [$method] was [$expected], but got [$count]");
+                        "Expected call count for [$method] was [$expected], but got [$count]",
+                        $this->_test);
                 $all_correct = $is_correct && $all_correct;
             }
             return $all_correct;
@@ -425,17 +426,19 @@
         function _checkExpectations($method, $args, $timing) {
             if (isset($this->_max_counts[$method])) {
                 if ($timing >= $this->_max_counts[$method]) {
-                    $this->_assertTrue(false, "Call count for [$method] is [$timing]");
+                    $this->_assertTrue(false, "Call count for [$method] is [$timing]", $this->_test);
                 }
             }
             if (isset($this->_sequence_args[$timing][$method])) {
                 $this->_assertTrue(
                         $this->_sequence_args[$timing][$method]->isMatch($args),
-                        "Arguments for [$method] at [$timing] were [" . $this->_renderArguments($args) . "]");
+                        "Arguments for [$method] at [$timing] were [" . $this->_renderArguments($args) . "]",
+                        $this->_test);
             } elseif (isset($this->_expected_args[$method])) {
                 $this->_assertTrue(
                         $this->_expected_args[$method]->isMatch($args),
-                        "Arguments for [$method] were [" . $this->_renderArguments($args) . "]");
+                        "Arguments for [$method] were [" . $this->_renderArguments($args) . "]",
+                        $this->_test);
             }
         }
         
@@ -469,10 +472,12 @@
          *    @param $assertion      True will pass.
          *    @param $message        Message that will go with
          *                           the test event.
+         *    @param $test           Unit test case to send
+         *                           assertion to.
          *    @protected
          */
-        function _assertTrue($assertion, $message) {
-            $this->_test->assertTrue($assertion, $message);
+        function _assertTrue($assertion, $message , &$test) {
+            $test->assertTrue($assertion, $message);
         }
         
         /**
@@ -485,7 +490,7 @@
         function _dieOnNoMethod($method, $task) {
             if (!method_exists($this, $method)) {
                 trigger_error(
-                        "Cannot $task as no $method in class " . get_class($this),
+                        "Cannot $task as no ${method}() in class " . get_class($this),
                         E_USER_ERROR);
             }
         }
