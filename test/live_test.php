@@ -7,6 +7,7 @@
     require_once(SIMPLE_TEST . 'unit_tester.php');
     require_once(SIMPLE_TEST . 'socket.php');
     require_once(SIMPLE_TEST . 'http.php');
+    require_once(SIMPLE_TEST . 'browser.php');
     require_once(SIMPLE_TEST . 'web_tester.php');
 
     class LiveHttpTestCase extends UnitTestCase {
@@ -85,6 +86,59 @@
             $this->assertWantedPattern(
                     '/pkey=\[pvalue\]/',
                     $response->getContent());
+        }
+    }
+    
+    class TestOfLiveBrowser extends UnitTestCase {
+        function TestOfLiveBrowser() {
+            $this->UnitTestCase();
+        }
+        function testGet() {
+            $browser = &new SimpleBrowser();
+            $this->assertTrue($browser->get('http://www.lastcraft.com/test/network_confirm.php'));
+            $this->assertWantedPattern('/target for the SimpleTest/', $browser->getContent());
+            $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/', $browser->getContent());
+            $this->assertEqual($browser->getTitle(), 'Simple test target file');
+            $this->assertEqual($browser->getResponseCode(), 200);
+            $this->assertEqual($browser->getMimeType(), "text/html");
+        }
+        function testPost() {
+            $browser = &new SimpleBrowser();
+            $this->assertTrue($browser->post('http://www.lastcraft.com/test/network_confirm.php'));
+            $this->assertWantedPattern('/target for the SimpleTest/', $browser->getContent());
+            $this->assertWantedPattern('/Request method.*?<dd>POST<\/dd>/', $browser->getContent());
+        }
+        function testAbsoluteLinkFollowing() {
+            $browser = &new SimpleBrowser();
+            $browser->get('http://www.lastcraft.com/test/link_confirm.php');
+            $this->assertTrue($browser->clickLink('Absolute'));
+            $this->assertWantedPattern('/target for the SimpleTest/', $browser->getContent());
+        }
+        function testRelativeLinkFollowing() {
+            $browser = &new SimpleBrowser();
+            $browser->get('http://www.lastcraft.com/test/link_confirm.php');
+            $this->assertTrue($browser->clickLink('Relative'));
+            $this->assertWantedPattern('/target for the SimpleTest/', $browser->getContent());
+        }
+        function testIdFollowing() {
+            $browser = &new SimpleBrowser();
+            $browser->get('http://www.lastcraft.com/test/link_confirm.php');
+            $this->assertTrue($browser->clickLinkById(1));
+            $this->assertWantedPattern('/target for the SimpleTest/', $browser->getContent());
+        }
+        function testCookieReading() {
+            $browser = &new SimpleBrowser();
+            $browser->get('http://www.lastcraft.com/test/set_cookies.php');
+            $this->assertEqual($browser->getBaseCookieValue("session_cookie"), "A");
+            $this->assertEqual($browser->getBaseCookieValue("short_cookie"), "B");
+            $this->assertEqual($browser->getBaseCookieValue("day_cookie"), "C");
+        }
+        function testSimpleSubmit() {
+            $browser = &new SimpleBrowser();
+            $browser->get('http://www.lastcraft.com/test/form.html');
+            $this->assertTrue($browser->clickSubmit('Go!'));
+            $this->assertWantedPattern('/Request method.*?<dd>POST<\/dd>/', $browser->getContent());
+            $this->assertWantedPattern('/go=\[Go!\]/', $browser->getContent());
         }
     }
     
