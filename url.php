@@ -324,34 +324,6 @@
         }
         
         /**
-         *    Encodes parameters as HTTP request parameters.
-         *    @param hash $parameters    Request as hash.
-         *    @return string             Encoded request.
-         *    @access public
-         *    @static
-         */
-        function encodeRequest($parameters) {
-            if (! is_array($parameters)) {
-                return '';
-            }
-            $query = &new SimpleFormEncoding();
-            foreach ($parameters as $key => $value) {
-                $query->add($key, $value);
-            }
-            return $query->asString();
-        }
-        
-        /**
-         *    Accessor for current request parameters
-         *    as an object.
-         *    @return array   Encoding object with data.
-         *    @access public
-         */
-        function _getRequest() {
-            return $this->_request->getAll();
-        }
-        
-        /**
          *    Adds an additional parameter to the request.
          *    @param string $key            Name of parameter.
          *    @param string $value          Value as string.
