@@ -47,15 +47,17 @@ Chain frames support from browser (1).
 Make redirect test independent of LastCraft (1/0) - done.
 Add assertLink() method (1/2) - done.
 Add showHeaders() for debugging (1/1) - done.
+Add getTransportError() for debugging (0/0) - done.
 Chain getCurrentUrl() into WebTestCase (1/0) - done.
 
 Documentation
 -------------
-Add cookie documentation (3).
+Add cookie and authentication documentation (3).
 Add frames documentation (3).
 Add detached browser documentation (4).
 Add shell tester documentation (2).
 Formalise extensions (1).
+Add forward and back behaviour to docs (2).
 
 Build
 -----
