@@ -201,6 +201,17 @@
          *    @public
          */
         function paintFormattedMessage($message) {
+            print "$message\n";
+        }
+        
+        /**
+         *    Static check for running in the comand line.
+         *    @return Boolean        True if CLI.
+         *    @public
+         *    @static
+         */
+        function inCli() {
+            return array_key_exists('_', $_SERVER);
         }
     }
 ?>

@@ -33,6 +33,9 @@
     if (!defined("TEST_RUNNING")) {
         define("TEST_RUNNING", true);
         $test = &new UnitTests();
+        if (CommandLineReporter::inCli()) {
+            exit ($test->run(new CommandLineReporter()) ? 0 : 1);
+        }
         $test->run(new HtmlReporter());
     }
 ?>

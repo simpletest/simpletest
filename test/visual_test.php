@@ -259,6 +259,8 @@
     $test = new GroupTest("Visual test with 39 fails, 39 passes and 4 exceptions");
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
-    //$test->run(new AllOutputReporter());
-    exit ($test->run(new CommandLineReporter()) ? 0 : 1);
+    if (CommandLineReporter::inCli()) {
+        exit ($test->run(new CommandLineReporter()) ? 0 : 1);
+    }
+    $test->run(new AllOutputReporter());
 ?>
