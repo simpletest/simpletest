@@ -50,6 +50,12 @@ WebTestCase::assertField() should work with submit type (1/1) - done.
 
 Documentation
 -------------
+Add cookie handling docs (3).
+Add browser scripting docs (3).
+Add frames handling docs (3).
+Add proxy support to docs (1).
 
 Build
 -----
+Move makefile over to bash script (2).
+Move doc generation to XSLT (9/7).

@@ -127,36 +127,12 @@
     </xsl:template>
      
     <xsl:template name="masthead">
-        <div class="card_back">
-            <div class="card">
-                <h1><xsl:value-of select="//page/@title"/></h1>
-                <div class="in">
-                    <xsl:call-template name="internal_links"/>
-                </div>
-                <div class="out">
-                    <xsl:call-template name="external_links"/>
-                </div>
-            </div>
-        </div>
+        <h1><xsl:value-of select="//page/@title"/></h1>
     </xsl:template>
     
-    <xsl:template name="internal_links">
-        This page...
-        <ul>
-            <xsl:apply-templates select="//internal/link" mode="links"/>
-        </ul>
-    </xsl:template>
-   
-    <xsl:template name="external_links">
-        Related...
-        <ul>
-            <xsl:apply-templates select="//external/link" mode="links"/>
-        </ul>
-    </xsl:template>
-   
     <xsl:template name="copyright">
         <div class="copyright">
-            Copyright<br/><a href="mailto:marcus@lastcraft.com">Marcus Baker</a> 2003
+            Copyright<br/>Marcus Baker, Jason Sweat 2004
         </div>
     </xsl:template>
     
