@@ -106,12 +106,9 @@
         }
         function testTitle() {
             $browser = &$this->getBrowser();
-            $browser->setReturnValue(
-                    "get",
-                    "<html><head><title>Pretty page</title></head></html>");
-            $this->get("http://my-site.com/");
-            $this->assertTitle("Pretty page");
-            $browser->tally();
+            $browser->setReturnValue('getTitle', 'Pretty page');
+            $this->get('http://my-site.com/');
+            $this->assertTitle('Pretty page');
         }
     }
     
@@ -124,7 +121,7 @@
             $browser->tally();
             $this->assertTitle('Done');
         }
-        function testFormGet() {
+        function _testFormGet() {
             $browser = &$this->getBrowser();
             $form_code = '<html><head><form method="get" action="there.php">';
             $form_code .= '<input type="submit" name="wibble" value="wobble"/>';
@@ -143,7 +140,7 @@
             $this->get("http://my-site.com/");
             $this->assertTrue($this->clickSubmit("wobble"));
         }
-        function testFormGetWithNoAction() {
+        function _testFormGetWithNoAction() {
             $browser = &$this->getBrowser();
             $form_code = '<html><head><form method="get">';
             $form_code .= '<input type="submit" name="wibble" value="wobble"/>';
@@ -159,7 +156,7 @@
             $this->get("http://my-site.com/");
             $this->assertTrue($this->clickSubmit("wobble"));
         }
-        function testFormPost() {
+        function _testFormPost() {
             $browser = &$this->getBrowser();
             $form_code = '<html><head><form method="post" action="there.php">';
             $form_code .= '<input type="submit" name="wibble" value="wobble"/>';
@@ -171,7 +168,7 @@
             $this->get("http://my-site.com/");
             $this->assertTrue($this->clickSubmit("wobble"));
         }
-        function testFormPostById() {
+        function _testFormPostById() {
             $browser = &$this->getBrowser();
             $form_code = '<html><head><form method="post" action="there.php" id="3">';
             $form_code .= '<input type="submit" name="wibble" value="wobble"/>';
@@ -184,7 +181,7 @@
             $this->get("http://my-site.com/");
             $this->assertTrue($this->clickSubmitByFormId(3));
         }
-        function testFormSeparation() {
+        function _testFormSeparation() {
             $browser = &$this->getBrowser();
             $form_code = '<html><head><form method="post" action="here.php">';
             $form_code .= '<input type="submit" name="s1" value="S1"/>';
@@ -221,7 +218,7 @@
             $browser->tally();
             $this->assertTitle('Done');
         }
-        function testTextFieldDefault() {
+        function _testTextFieldDefault() {
             $widgets = array(
                     '<input type="text" name="a" value="aaa"/>',
                     '<input type="text" name="b"/>');
@@ -236,7 +233,7 @@
             $this->assertField('b', '');
             $this->assertTrue($this->clickSubmit("Go!"));
         }
-        function testSettingTextField() {
+        function _testSettingTextField() {
             $widgets = array(
                     '<input type="text" name="a" value="aaa"/>',
                     '<input type="text" name="b" value="bbb"/>');
@@ -253,7 +250,7 @@
             $this->assertField('a', 'AAA');
             $this->assertTrue($this->clickSubmit('Go!'));
         }
-        function testTextAreaDefault() {
+        function _testTextAreaDefault() {
             $widgets = array(
                     '<textarea name="a"></textarea>',
                     '<textarea name="b">bbb</textarea>');

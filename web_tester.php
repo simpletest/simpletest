@@ -25,7 +25,6 @@
      */
     class WebTestCase extends SimpleTestCase {
         var $_current_browser;
-        var $_page;
         
         /**
          *    Creates an empty test case. Should be subclassed
@@ -36,7 +35,6 @@
          */
         function WebTestCase($label = false) {
             $this->SimpleTestCase($label);
-            $this->_page = false;
         }
         
         /**
@@ -44,7 +42,7 @@
          *    @access public
          */
         function showSource() {
-            $this->dump(htmlentities($this->_page->getRaw()));
+            $this->dump(htmlentities($this->_current_browser->getContent()));
         }
         
         /**
@@ -103,7 +101,6 @@
          *    @access protected
          */
         function invoke($method) {
-            $this->_page = false;
             $this->_current_browser = &$this->createBrowser();
             parent::invoke($method);
         }
@@ -158,7 +155,6 @@
             if ($content === false) {
                 return false;
             }
-            $this->_page = &new SimplePage($content);
             return true;
         }
         
@@ -177,7 +173,6 @@
             if ($content === false) {
                 return false;
             }
-            $this->_page = &new SimplePage($content);
             return true;
         }
         
@@ -190,15 +185,7 @@
          *    @access public
          */
         function clickSubmit($label = "Submit") {
-            if (! ($form = &$this->_page->getFormBySubmitLabel($label))) {
-                return false;
-            }
-            $action = $form->getAction();
-            if (! $action) {
-                $action = $this->_current_browser->getCurrentUrl();
-            }
-            $method = $form->getMethod();
-            return $this->$method($action, $form->submitButtonByLabel($label));
+            return $this->_current_browser->clickSubmit($label);
         }
         
         /**
@@ -209,15 +196,7 @@
          *    @access public
          */
         function submitFormById($id) {
-            if (! ($form = &$this->_page->getFormById($id))) {
-                return false;
-            }
-            $action = $form->getAction();
-            if (! $action) {
-                $action = $this->_current_browser->getCurrentUrl();
-            }
-            $method = $form->getMethod();
-            return $this->$method($action, $form->submit());
+            return $this->_current_browser->submitFormById($id);
         }
         
         /**
@@ -230,7 +209,7 @@
         /**
          *    @deprecated
          */
-        function submit($label = "Submit") {
+        function submit($label = 'Submit') {
             $this->clickSubmit($label);
         }
         
@@ -244,15 +223,7 @@
          *    @access public
          */
         function clickLink($label, $index = 0) {
-            $urls = $this->_page->getUrls($label);
-            if (count($urls) == 0) {
-                return false;
-            }
-            if (count($urls) < $index + 1) {
-                return false;
-            }
-            $this->get($urls[$index]);
-            return true;
+            return $this->_current_browser->clickLink($label, $index);
         }
         
         /**
@@ -262,11 +233,7 @@
          *    @access public
          */
         function clickLinkById($id) {
-            if (! ($url = $this->_page->getUrlById($id))) {
-                return false;
-            }
-            $this->get($url);
-            return true;
+            return $this->_current_browser->clickLinkById($id);
         }
         
         /**
@@ -284,7 +251,7 @@
          *    @access public
          */
         function setField($name, $value) {
-            return $this->_page->setField($name, $value);
+            return $this->_current_browser->setField($name, $value);
         }
         
         /**
@@ -298,7 +265,7 @@
          *    @access public
          */
         function assertField($name, $expected = true) {
-            $value = $this->_page->getField($name);
+            $value = $this->_current_browser->getField($name);
             if ($expected === true) {
                 $this->assertTrue(isset($value), "Field [$name] should exist");
             } else {
@@ -346,8 +313,10 @@
          */
         function assertTitle($title = false, $message = "%s") {
             $this->assertTrue(
-                    $title === $this->_page->getTitle(),
-                    sprintf($message, "Expecting title [$title] got [" . $this->_page->getTitle() . "]"));
+                    $title === $this->_current_browser->getTitle(),
+                    sprintf(
+                            $message,
+                            "Expecting title [$title] got [" . $this->_current_browser->getTitle() . "]"));
         }
         
         /**

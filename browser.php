@@ -345,6 +345,16 @@
         }
         
         /**
+         *    Parses the raw content into a page.
+         *    @param string $raw    Text of fetch.
+         *    @return SimplePage    Parsed HTML.
+         *    @access protected
+         */
+        function &_parse($raw) {
+            return new SimplePage($raw);
+        }
+        
+        /**
          *    Fetches the page content with a simple GET request.
          *    @param string $raw_url    Target to fetch.
          *    @param hash $parameters   Additional parameters for GET request.
@@ -359,7 +369,7 @@
                 return false;
             }
             $this->_current_url = $url;
-            $this->_page = &new SimplePage($response->getContent());
+            $this->_page = &$this->_parse($response->getContent());
             return $response->getContent();
         }
         
@@ -392,7 +402,7 @@
                 return false;
             }
             $this->_current_url = $url;
-            $this->_page = &new SimplePage($response->getContent());
+            $this->_page = &$this->_parse($response->getContent());
             return $response->getContent();
         }
         
@@ -507,6 +517,112 @@
          */
         function getContent() {
             return $this->_page->getRaw();
+        }
+        
+        /**
+         *    Accessor for parsed title.
+         *    @return string     Title or false if no title is present.
+         *    @access public
+         */
+        function getTitle() {
+            return $this->_page->getTitle();
+        }
+        
+        /**
+         *    Sets all form fields with that name.
+         *    @param string $name    Name of field in forms.
+         *    @param string $value   New value of field.
+         *    @return boolean        True if field exists, otherwise false.
+         *    @access public
+         */
+        function setField($name, $value) {
+            return $this->_page->setField($name, $value);
+        }
+        /**
+         *    Accessor for a form element value within the page.
+         *    Finds the first match.
+         *    @param string $name        Field name.
+         *    @return string/boolean     A string if the field is
+         *                               present, false if unchecked
+         *                               and null if missing.
+         *    @access public
+         */
+        function getField($name) {
+            return $this->_page->getField($name);
+        }
+        
+        /**
+         *    Clicks the submit button by label. The owning
+         *    form will be submitted by this.
+         *    @param string $label    Button label. An unlabeled
+         *                            button can be triggered by 'Submit'.
+         *    @return boolean         true on success.
+         *    @access public
+         */
+        function clickSubmit($label = "Submit") {
+            if (! ($form = &$this->_page->getFormBySubmitLabel($label))) {
+                return false;
+            }
+            $action = $form->getAction();
+            if (! $action) {
+                $action = $this->getCurrentUrl();
+            }
+            $method = $form->getMethod();
+            return $this->$method($action, $form->submitButtonByLabel($label));
+        }
+        
+        /**
+         *    Submits a form by the ID.
+         *    @param string $label    Button label. An unlabeled
+         *                            button can be triggered by 'Submit'.
+         *    @return boolean         true on success.
+         *    @access public
+         */
+        function submitFormById($id) {
+            if (! ($form = &$this->_page->getFormById($id))) {
+                return false;
+            }
+            $action = $form->getAction();
+            if (! $action) {
+                $action = $this->getCurrentUrl();
+            }
+            $method = $form->getMethod();
+            return $this->$method($action, $form->submit());
+        }
+        
+        /**
+         *    Follows a link by name. Will click the first link
+         *    found with this link text by default, or a later
+         *    one if an index is given.
+         *    @param string $label     Text between the anchor tags.
+         *    @param integer $index    Link position counting from zero.
+         *    @return boolean          True if link present.
+         *    @access public
+         */
+        function clickLink($label, $index = 0) {
+            $urls = $this->_page->getUrls($label);
+            if (count($urls) == 0) {
+                return false;
+            }
+            if (count($urls) < $index + 1) {
+                return false;
+            }
+            $this->get($urls[$index]);
+            return true;
+        }
+        
+        /**
+         *    Follows a link by id attribute.
+         *    @param string $id        ID attribute value.
+         *    @return boolean          True if link present.
+         *    @access public
+         */
+        function clickLinkById($id) {
+            if (! ($url = $this->_page->getUrlById($id))) {
+                return false;
+            }
+            $this->get($url);
+            return true;
         }
     }
 ?>
