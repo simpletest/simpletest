@@ -20,6 +20,30 @@
                 to sort out, again breaking our flow.
             </p>
             <p>
+                The most obvious solution is to run just the tests for the code
+                we are working on, and then run the full test suite once the
+                immediate work is complete.
+                Here is a test script that reads just a single test file
+                when it is entered into the URL...
+<php><![CDATA[
+<?php
+    require_once('simpletest/unit_tester.php');
+    require_once('simpletest/reporter.php');
+    
+    $test = &new GroupTest('My tests);<strong>
+    if (isset($_GET['f'])) {
+        $test->addTestFile($_GET['f']);    
+    } else {
+        $test->addTestFile('test_a.php');    
+        $test->addTestFile('test_b.php');    
+    }</strong>
+    
+    $test->run(HtmlReporter());
+?>
+]]></php>
+                A brute force approach, but effective never the less.
+            </p>
+            <p>
                 The simplest approach to running just a single test case is
                 to load only that test case in the top level test script...
 <php><![CDATA[
@@ -27,13 +51,17 @@
     require_once('simpletest/unit_tester.php');
     require_once('simpletest/reporter.php');
     
-    $test = &new GroupTest('My tests);<strong>
-    if (isset($_GET['c'])) {
-        $test->addTestFile($_GET['c']);    
+    $test = &new GroupTest('My tests);
+    if (isset($_GET['f'])) {<strong>
+        if (isset($_GET['c'])) {
+            $test->addTestFile($_GET['f'], array($_GET['c']));
+        } else {
+            $test->addTestFile($_GET['f']);    
+        }</strong>
     } else {
         $test->addTestFile('test_a.php');    
         $test->addTestFile('test_b.php');    
-    }</strong>
+    }
     
     $test->run(HtmlReporter());
 ?>
@@ -69,8 +97,12 @@ class OneTestReporter extends HtmlReporter {
     require_once('one_test_reporter.php');
     
     $test = &new GroupTest('My tests);
-    if (isset($_GET['c'])) {
-        $test->addTestFile($_GET['c']);    
+    if (isset($_GET['f'])) {
+        if (isset($_GET['c'])) {
+            $test->addTestFile($_GET['f'], array($_GET['c']));
+        } else {
+            $test->addTestFile($_GET['f']);    
+        }
     } else {
         $test->addTestFile('test_a.php');    
         $test->addTestFile('test_b.php');    
@@ -84,6 +116,11 @@ class OneTestReporter extends HtmlReporter {
     $test->run($reporter);</strong>
 ?>
 ]]></php>
+                Our script is now rather messy, so it's probably time to
+                think about building some kind of test UI class just to tidy
+                things up.
+            </p>
+            <p>
                 You shouldn't need these tricks too often though.
                 If you have slow tests your priority should be to find
                 ways of speeding them up.
