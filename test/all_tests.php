@@ -1,6 +1,6 @@
 <?php
     // $Id$
-    define('TEST', 'all');
+    define('TEST', __FILE__);
     require_once('../unit_tester.php');
     require_once('../shell_tester.php');
     require_once('../reporter.php');
@@ -10,7 +10,7 @@
     class AllTests extends GroupTest {
         function AllTests() {
             $this->GroupTest('All tests for SimpleTest ' . SimpleTestOptions::getVersion());
-            $this->AddTestCase(new UnitTests());
+            $this->addTestCase(new UnitTests());
             $this->addTestFile('shell_test.php');
             $this->addTestFile('live_test.php');
             $this->addTestFile('acceptance_test.php');

@@ -285,9 +285,10 @@
         
         function testHeadersReadFromFrameIfInFocus() {
             $frame = &new MockSimplePage($this);
+            $frame->setReturnValue('getUrl', new SimpleUrl('http://localhost/stuff'));
+            
             $frame->setReturnValue('getRequest', 'POST stuff');
             $frame->setReturnValue('getMethod', 'POST');
-            $frame->setReturnValue('getUrl', 'http://localhost/stuff');
             $frame->setReturnValue('getRequestData', array('a' => 'A'));
             $frame->setReturnValue('getHeaders', 'Header: content');
             $frame->setReturnValue('getMimeType', 'text/xml');
@@ -300,9 +301,12 @@
             $frameset->addFrame($frame);
             $frameset->setFrameFocusByIndex(1);
             
+            $url = new SimpleUrl('http://localhost/stuff');
+            $url->setTarget(1);
+            $this->assertIdentical($frameset->getUrl(), $url);
+            
             $this->assertIdentical($frameset->getRequest(), 'POST stuff');
             $this->assertIdentical($frameset->getMethod(), 'POST');
-            $this->assertIdentical($frameset->getUrl(), 'http://localhost/stuff');
             $this->assertIdentical($frameset->getRequestData(), array('a' => 'A'));
             $this->assertIdentical($frameset->getHeaders(), 'Header: content');
             $this->assertIdentical($frameset->getMimeType(), 'text/xml');
@@ -431,7 +435,7 @@
             $this->assertIdentical($frameset->getUrlById(99), $expected);
         }
         
-        function testFindingForms() {
+        function testFindingFormsByAllFinders() {
             $finders = array(
                     'getFormBySubmitLabel', 'getFormBySubmitName',
                     'getFormBySubmitId', 'getFormByImageLabel',

@@ -15,6 +15,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/browser.php \
           simpletest/parser.php \
           simpletest/tag.php \
+          simpletest/form.php \
           simpletest/frames.php \
           simpletest/page.php \
           simpletest/remote.php \
@@ -47,6 +48,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/test/browser_test.php \
           simpletest/test/parser_test.php \
           simpletest/test/tag_test.php \
+          simpletest/test/form_test.php \
           simpletest/test/frames_test.php \
           simpletest/test/page_test.php \
           simpletest/test/remote_test.php \

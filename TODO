@@ -30,7 +30,8 @@ Browser
 -------
 Allow nested framed pages (4).
 Add focused frame reloads (2/3) - done.
-Add frame loads from links (6/3).
+Add frame loads from links (4/4) - done.
+Add frame loads from forms (2/1).
 Add target frame loading from link (2).
 Add _top target from frame link (1).
 Refactor authentication to cope with framed pages (2).

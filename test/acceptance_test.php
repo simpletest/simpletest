@@ -163,14 +163,14 @@
         function testJumpToNamedPage() {
             $this->get('http://www.lastcraft.com/test/front_controller_style/');
             $this->assertWantedPattern('/Simple test front controller/');
-            $this->assertTrue($this->clickLink('Index'));
+            $this->clickLink('Index');
             $this->assertResponse(200);
             $this->assertWantedPattern('/\[action=index\]/');
         }
         
         function testJumpToUnnamedPage() {
             $this->get('http://www.lastcraft.com/test/front_controller_style/');
-            $this->assertTrue($this->clickLink('No page'));
+            $this->clickLink('No page');
             $this->assertResponse(200);
             $this->assertWantedPattern('/Simple test front controller/');
             $this->assertWantedPattern('/\[action=no_page\]/');
@@ -178,7 +178,7 @@
         
         function testJumpToUnnamedPageWithBareParameter() {
             $this->get('http://www.lastcraft.com/test/front_controller_style/');
-            $this->assertTrue($this->clickLink('Bare action'));
+            $this->clickLink('Bare action');
             $this->assertResponse(200);
             $this->assertWantedPattern('/Simple test front controller/');
             $this->assertWantedPattern('/\[action=\]/');
@@ -186,7 +186,7 @@
         
         function testJumpToUnnamedPageWithEmptyQuery() {
             $this->get('http://www.lastcraft.com/test/front_controller_style/');
-            $this->assertTrue($this->clickLink('Empty query'));
+            $this->clickLink('Empty query');
             $this->assertResponse(200);
             $this->assertWantedPattern('/Simple test front controller/');
             $this->assertWantedPattern('/raw get data.*?\[\].*?get data/si');
@@ -194,7 +194,7 @@
         
         function testJumpToUnnamedPageWithEmptyLink() {
             $this->get('http://www.lastcraft.com/test/front_controller_style/');
-            $this->assertTrue($this->clickLink('Empty link'));
+            $this->clickLink('Empty link');
             $this->assertResponse(200);
             $this->assertWantedPattern('/Simple test front controller/');
             $this->assertWantedPattern('/raw get data.*?\[\].*?get data/si');
@@ -202,42 +202,42 @@
         
         function testJumpBackADirectoryLevel() {
             $this->get('http://www.lastcraft.com/test/front_controller_style/');
-            $this->assertTrue($this->clickLink('Down one'));
+            $this->clickLink('Down one');
             $this->assertWantedPattern('/index of \/test/i');
         }
         
         function testSubmitToNamedPage() {
             $this->get('http://www.lastcraft.com/test/front_controller_style/');
             $this->assertWantedPattern('/Simple test front controller/');
-            $this->assertTrue($this->clickSubmit('Index'));
+            $this->clickSubmit('Index');
             $this->assertResponse(200);
             $this->assertWantedPattern('/\[action=Index\]/');
         }
         
         function testSubmitToSameDirectory() {
             $this->get('http://www.lastcraft.com/test/front_controller_style/index.php');
-            $this->assertTrue($this->clickSubmit('Same directory'));
+            $this->clickSubmit('Same directory');
             $this->assertResponse(200);
             $this->assertWantedPattern('/\[action=Same\+directory\]/');
         }
         
         function testSubmitToEmptyAction() {
             $this->get('http://www.lastcraft.com/test/front_controller_style/index.php');
-            $this->assertTrue($this->clickSubmit('Empty action'));
+            $this->clickSubmit('Empty action');
             $this->assertResponse(200);
             $this->assertWantedPattern('/\[action=Empty\+action\]/');
         }
         
         function testSubmitToNoAction() {
             $this->get('http://www.lastcraft.com/test/front_controller_style/index.php');
-            $this->assertTrue($this->clickSubmit('No action'));
+            $this->clickSubmit('No action');
             $this->assertResponse(200);
             $this->assertWantedPattern('/\[action=No\+action\]/');
         }
         
         function testSubmitBackADirectoryLevel() {
             $this->get('http://www.lastcraft.com/test/front_controller_style/');
-            $this->assertTrue($this->clickSubmit('Down one'));
+            $this->clickSubmit('Down one');
             $this->assertWantedPattern('/index of \/test/i');
         }
     }
@@ -621,8 +621,8 @@
         }
     }
     
-    class TestOfLiveFrames extends WebTestCase {
-        function TestOfLiveFrames() {
+    class TestOfLoadingFrames extends WebTestCase {
+        function TestOfLoadingFrames() {
             $this->WebTestCase();
         }
         
@@ -697,8 +697,7 @@
         }
         
         function testMessyFramesetResponsesByIndex() {
-            $this->assertTrue($this->get(
-                    'http://www.lastcraft.com/test/messy_frameset.html'));
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
             $this->assertTrue($this->setFrameFocusByIndex(1));
             $this->assertResponse(200);
             $this->assertWantedPattern('/Simple test front controller/');
@@ -727,8 +726,7 @@
         }
         
         function testReloadingFramesetPage() {
-            $this->assertTrue($this->get(
-                    'http://www.lastcraft.com/test/messy_frameset.html'));
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
             $this->assertWantedPattern('/Count: 1/');
             $this->retry();
             $this->assertWantedPattern('/Count: 2/');
@@ -737,8 +735,7 @@
         }
         
         function testReloadingSingleFrameWithCookieCounter() {
-            $this->assertTrue($this->get(
-                    'http://www.lastcraft.com/test/counting_frameset.html'));
+            $this->get('http://www.lastcraft.com/test/counting_frameset.html');
             $this->setFrameFocus('a');
             $this->assertWantedPattern('/Count: 1/');
             $this->setFrameFocus('b');
@@ -754,8 +751,7 @@
         }
         
         function testReloadingFrameWhenUnfocusedReloadsWholeFrameset() {
-            $this->assertTrue($this->get(
-                    'http://www.lastcraft.com/test/counting_frameset.html'));
+            $this->get('http://www.lastcraft.com/test/counting_frameset.html');
             $this->setFrameFocus('a');
             $this->assertWantedPattern('/Count: 1/');
             $this->setFrameFocus('b');
@@ -771,11 +767,107 @@
         }
         
         function testClickingNormalLinkReplacesJustThatFrame() {
-            $this->assertTrue($this->get(
-                    'http://www.lastcraft.com/test/messy_frameset.html'));
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
             $this->clickLink('2');
             $this->assertLink('3');
             $this->assertWantedPattern('/Simple test front controller/');
+        }
+        
+        function testJumpToNamedPageReplacesJustThatFrame() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->clickLink('Index');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/\[action=index\]/');
+            $this->assertWantedPattern('/Count: 1/');
+        }
+        
+        function testJumpToUnnamedPageReplacesJustThatFrame() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->clickLink('No page');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->assertWantedPattern('/\[action=no_page\]/');
+            $this->assertWantedPattern('/Count: 1/');
+        }
+        
+        function testJumpToUnnamedPageWithBareParameterReplacesJustThatFrame() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->clickLink('Bare action');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->assertWantedPattern('/\[action=\]/');
+            $this->assertWantedPattern('/Count: 1/');
+        }
+        
+        function testJumpToUnnamedPageWithEmptyQueryReplacesJustThatFrame() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->clickLink('Empty query');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->assertWantedPattern('/raw get data.*?\[\].*?get data/si');
+            $this->assertWantedPattern('/Count: 1/');
+        }
+        
+        function testJumpToUnnamedPageWithEmptyLinkReplacesJustThatFrame() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->clickLink('Empty link');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->assertWantedPattern('/raw get data.*?\[\].*?get data/si');
+            $this->assertWantedPattern('/Count: 1/');
+        }
+        
+        function testJumpBackADirectoryLevelReplacesJustThatFrame() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->clickLink('Down one');
+            $this->assertWantedPattern('/index of \/test/i');
+            $this->assertWantedPattern('/Count: 1/');
+        }
+        
+        function testSubmitToNamedPageReplacesJustThatFrame() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->clickSubmit('Index');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/\[action=Index\]/');
+            $this->assertWantedPattern('/Count: 1/');
+        }
+        
+        function testSubmitToSameDirectoryReplacesJustThatFrame() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->clickSubmit('Same directory');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/\[action=Same\+directory\]/');
+            $this->assertWantedPattern('/Count: 1/');
+        }
+        
+        function testSubmitToEmptyActionReplacesJustThatFrame() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->clickSubmit('Empty action');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/\[action=Empty\+action\]/');
+            $this->assertWantedPattern('/Count: 1/');
+        }
+        
+        function testSubmitToNoActionReplacesJustThatFrame() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->clickSubmit('No action');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/\[action=No\+action\]/');
+            $this->assertWantedPattern('/Count: 1/');
+        }
+        
+        function testSubmitBackADirectoryLevelReplacesJustThatFrame() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->clickSubmit('Down one');
+            $this->assertWantedPattern('/index of \/test/i');
+            $this->assertWantedPattern('/Count: 1/');
+        }
+        
+        function TODO_testLinkInOnePageCanLoadAnother() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->clickSubmit('Down one');
         }
     }
 ?>

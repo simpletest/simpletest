@@ -1,7 +1,7 @@
 <?php
     // $Id$
     if (! defined('TEST')) {
-        define('TEST', 'unit');
+        define('TEST', __FILE__);
     }
     require_once('../unit_tester.php');
     require_once('../web_tester.php');
@@ -27,6 +27,7 @@
             $this->addTestFile('user_agent_test.php');
             $this->addTestFile('parser_test.php');
             $this->addTestFile('tag_test.php');
+            $this->addTestFile('form_test.php');
             $this->addTestFile('page_test.php');
             $this->addTestFile('frames_test.php');
             $this->addTestFile('browser_test.php');
@@ -36,7 +37,7 @@
         }
     }
     
-    if (TEST == 'unit') {
+    if (TEST == __FILE__) {
         $test = &new UnitTests();
         if (SimpleReporter::inCli()) {
             exit ($test->run(new TextReporter()) ? 0 : 1);

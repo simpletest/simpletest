@@ -207,9 +207,12 @@
          */
         function getUrl() {
             if (is_integer($this->_focus)) {
-                return $this->_frames[$this->_focus]->getUrl();
+                $url = $this->_frames[$this->_focus]->getUrl();
+                $url->setTarget($this->_getPublicNameFromIndex($this->_focus));
+            } else {
+                $url = $this->_frameset->getUrl();
             }
-            return $this->_frameset->getUrl();
+            return $url;
         }
         
         /**
@@ -492,7 +495,7 @@
         }
         
         /**
-         *    General form finder. Will serach all the frames or
+         *    General form finder. Will search all the frames or
          *    just the one in focus.
          *    @param string $method    Method to use to find in a page.
          *    @param string $attribute Label, name or ID.
@@ -501,11 +504,16 @@
          */
         function &_findForm($method, $attribute) {
             if (is_integer($this->_focus)) {
-                return $this->_frames[$this->_focus]->$method($attribute);
+                $form = &$this->_frames[$this->_focus]->$method($attribute);
+                if ($form) {
+                    $form->setDefaultTarget($this->_getPublicNameFromIndex($this->_focus));
+                }
+                return $form;
             }
             for ($i = 0; $i < count($this->_frames); $i++) {
                 $form = &$this->_frames[$i]->$method($attribute);
                 if (isset($form)) {
+                    $form->setDefaultTarget($this->_getPublicNameFromIndex($i));
                     return $form;
                 }
             }

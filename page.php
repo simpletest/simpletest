@@ -448,7 +448,7 @@
         }
         
         /**
-         *    Clears the frame focus. Does nothing.
+         *    Clears the frame focus. Does nothing for a leaf page.
          *    @access public
          */
         function clearFrameFocus() {
