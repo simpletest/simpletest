@@ -385,10 +385,25 @@
             if (is_object($compare)) {
                 return is_a($compare, $this->_type);
             } else {
-                return (strtolower(gettype($compare)) == strtolower($this->_type));
+                return (strtolower(gettype($compare)) == $this->_canonicalType($this->_type));
             }
         }
-        
+
+        /**
+         *    Coerces type name into a gettype() match.
+         *    @param string $type        User type.
+         *    @return string             Simpler type.
+         *    @access private
+         */
+        function _canonicalType($type) {
+            $type = strtolower($type);
+            $map = array('float' => 'double', 'int' => 'integer');
+            if (isset($map[$type])) {
+                $type = $map[$type];
+            }
+            return $type;
+        }
+
         /**
          *    Returns a human readable test message.
          *    @param mixed $compare      Comparison value.
