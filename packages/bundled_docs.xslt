@@ -33,7 +33,7 @@
     <xsl:template name="menu">
         <div class="menu_back">
             <div class="menu">
-                <xsl:variable name="map" select="document('site_map.xml')/page"/>
+                <xsl:variable name="map" select="document('bundled_map.xml')/page"/>
                 <h2>
                     <xsl:call-template name="menu_item">
                         <xsl:with-param name="here" select="/page/@here"/>
@@ -157,7 +157,7 @@
             </xsl:for-each>
             <xsl:for-each select="@local">
                 <xsl:attribute name="href">
-                    <xsl:value-of select="."/><xsl:text>.php</xsl:text>
+                    <xsl:value-of select="."/><xsl:text>.html</xsl:text>
                 </xsl:attribute>
             </xsl:for-each>
             <xsl:apply-templates/>

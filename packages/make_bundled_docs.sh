@@ -1,5 +1,5 @@
 #!/bin/sh
-Xalan -o ../docs/quick_start.html ../docs/source/simple_test.xml bundled_docs.xslt
+Xalan -o ../docs/index.html ../docs/source/simple_test.xml bundled_docs.xslt
 Xalan -o ../docs/overview.html ../docs/source/overview.xml bundled_docs.xslt
 Xalan -o ../docs/unit_test_documentation.html ../docs/source/unit_test_documentation.xml bundled_docs.xslt
 Xalan -o ../docs/group_test_documentation.html ../docs/source/group_test_documentation.xml bundled_docs.xslt

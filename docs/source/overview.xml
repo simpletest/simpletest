@@ -22,7 +22,7 @@
             and a description of the mismatch.
         </p>
         <p>
-            A <a href="{{unit_test_documentation}}">test case</a> looks like this...
+            A <a local="unit_test_documentation">test case</a> looks like this...
 <php><![CDATA[
 class <strong>MyTestCase</strong> extends UnitTestCase {
     function MyTestCase() {
