@@ -16,7 +16,13 @@
             $frameset = &new SimpleFrameset($page);
             $this->assertEqual($frameset->getTitle(), 'This page');
         }
-        function TODO_testRawContentIsFromFrame() {
+        function testEmptyFramesetHasNoContent() {
+            $page = &new MockSimplePage($this);
+            $page->setReturnValue('getRaw', 'This content');
+            $frameset = &new SimpleFrameset($page);
+            $this->assertEqual($frameset->getRaw(), '');
+        }
+        function testRawContentIsFromFrame() {
             $page = &new MockSimplePage($this);
             $page->expectNever('getRaw');
             
@@ -24,7 +30,7 @@
             $frame->setReturnValue('getRaw', 'Stuff');
             
             $frameset = &new SimpleFrameset($page);
-            //$frameset->addFrame($frame);
+            $frameset->addFrame($frame);
             $this->assertEqual($frameset->getRaw(), 'Stuff');
         }
     }

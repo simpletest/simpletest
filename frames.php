@@ -58,12 +58,21 @@
         
         /**
          *    Stashes the frameset page. Will make use of the
-         *    browser to fetch the sub frames recusively.
+         *    browser to fetch the sub frames recursively.
          *    @param SimplePage $page        Frameset page.
          */
         function SimpleFrameset(&$page) {
             $this->_frameset = &$page;
             $this->_frames = array();
+        }
+        
+        /**
+         *    Adds a parsed page to the frameset.
+         *    @param SimplePage $page        Frame page.
+         *    @access public
+         */
+        function addFrame(&$page) {
+            $this->_frames[] = &$page;
         }
         
         /**
@@ -74,6 +83,9 @@
          */
         function getRaw() {
             $raw = '';
+            for ($i = 0; $i < count($this->_frames); $i++) {
+                $raw .= $this->_frames[$i]->getRaw();
+            }
             return $raw;
         }
         
