@@ -883,4 +883,37 @@
             $this->assertTitle('Frameset for testing of SimpleTest');
         }
     }
+    
+    class TestOfFrameAuthentication extends WebTestCase {
+        function TestOfFrameAuthentication() {
+            $this->WebTestCase();
+        }
+        
+        function testUnauthenticatedFrameSendsChallenge() {
+            $this->get('http://www.lastcraft.com/test/protected/');
+            $this->setFrameFocus('Protected');
+            $this->assertAuthentication('Basic');
+            $this->assertRealm('SimpleTest basic authentication');
+            $this->assertResponse(401);
+        }
+        
+        function testCanReadFrameFromAlreadyAuthenticatedRealm() {
+            $this->get('http://www.lastcraft.com/test/protected/');
+            $this->authenticate('test', 'secret');
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->setFrameFocus('Protected');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/A target for the SimpleTest test suite/');
+        }
+        
+        function testCanAuthenticateFrame() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->setFrameFocus('Protected');
+            $this->authenticate('test', 'secret');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/A target for the SimpleTest test suite/');
+            $this->clearFrameFocus();
+            $this->assertWantedPattern('/Count: 1/');
+        }
+    }
 ?>
