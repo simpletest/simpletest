@@ -264,7 +264,8 @@
         }
         
         /**
-         *    Fetches a page and makes it the current page/frame.
+         *    Fetches a page or a single frame if that is the current
+         *    focus.
          *    @param string $method           GET or POST.
          *    @param string/SimpleUrl $url    Target to fetch as string.
          *    @param hash $parameters         POST parameters.
@@ -272,6 +273,21 @@
          *    @access private
          */
         function _load($method, $url, $parameters = false) {
+            if ($frame = $url->getTarget()) {
+                return $this->_loadFrame($frame, $method, $url, $parameters);
+            }
+            return $this->_loadPage($method, $url, $parameters);
+        }
+        
+        /**
+         *    Fetches a page and makes it the current page/frame.
+         *    @param string $method           GET or POST.
+         *    @param string/SimpleUrl $url    Target to fetch as string.
+         *    @param hash $parameters         POST parameters.
+         *    @return string                  Raw content of page.
+         *    @access private
+         */
+        function _loadPage($method, $url, $parameters = false) {
             $this->_page = &$this->_fetch(strtoupper($method), $url, $parameters);
             $this->_history->recordEntry(
                     $this->_page->getMethod(),

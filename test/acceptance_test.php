@@ -770,7 +770,7 @@
             $this->assertWantedPattern('/Count: 4/');
         }
         
-        function TODO_testClickingNormalLinkReplacesJustThatFrame() {
+        function testClickingNormalLinkReplacesJustThatFrame() {
             $this->assertTrue($this->get(
                     'http://www.lastcraft.com/test/messy_frameset.html'));
             $this->clickLink('2');
