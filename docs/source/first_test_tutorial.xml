@@ -187,7 +187,7 @@
             We can have a variety of different assertions and even more
             if we extend our base test cases.
             Here is the base list...
-            <table>
+            <table><tbody>
                 <tr><td><code>assertTrue(\$x)</code></td><td>Fail if \$x is false</td></tr>
                 <tr><td><code>assertFalse(\$x)</code></td><td>Fail if \$x is true</td></tr>
                 <tr><td><code>assertNull(\$x)</code></td><td>Fail if \$x is set</td></tr>
@@ -203,7 +203,7 @@
                 <tr><td><code>assertNoUnwantedPattern(\$p, \$x)</code></td><td>Fail if the regex \$p matches \$x</td></tr>
                 <tr><td><code>assertNoErrors()</code></td><td>Fail if any PHP error occoured</td></tr>
                 <tr><td><code>assertError(\$x)</code></td><td>Fail if no PHP error or incorrect message</td></tr>
-            </table>
+            </tbody></table>
         </p>
         <p>
             We are now ready to execute our test script by pointing the

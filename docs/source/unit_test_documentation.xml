@@ -82,7 +82,7 @@ class FileTestCase extends UnitTestCase {
                 methods.
                 Here is the full list for the <code>UnitTestCase</code>
                 class, the default for SimpleTest...
-                <table>
+                <table><tbody>
                     <tr><td><code>assertTrue($x)</code></td><td>Fail if $x is false</td></tr>
                     <tr><td><code>assertFalse($x)</code></td><td>Fail if $x is true</td></tr>
                     <tr><td><code>assertNull($x)</code></td><td>Fail if $x is set</td></tr>
@@ -100,7 +100,7 @@ class FileTestCase extends UnitTestCase {
                     <tr><td><code>assertNoErrors()</code></td><td>Fail if any PHP error occoured</td></tr>
                     <tr><td><code>assertError($x)</code></td><td>Fail if no PHP error or incorrect message</td></tr>
                     <tr><td><code>assertErrorPattern($p)</code></td><td>Fail unless the error matches the regex $p</td></tr>
-                </table>
+                </tbody></table>
                 All assertion methods can take an optional description to
                 label the displayed result with.
                 If omitted a default message is sent instead which is usually
@@ -163,7 +163,7 @@ $this->assertNoErrors();</strong>
             <p>
                 The test cases also have some convenience methods for debugging
                 code or extending the suite...
-                <table>
+                <table><tbody>
                     <tr><td><code>setUp()</code></td><td>Runs this before each test method</td></tr>
                     <tr><td><code>tearDown()</code></td><td>Runs this after each test method</td></tr>
                     <tr><td><code>before()</code></td><td>Runs this before each test without affecting setUp()</td></tr>
@@ -175,7 +175,7 @@ $this->assertNoErrors();</strong>
                     <tr><td><code>signal($type, $payload)</code></td><td>Sends a user defined message to the test reporter</td></tr>
                     <tr><td><code>dump($var)</code></td><td>Does a formatted <code>print_r()</code> for quick and dirty debugging</td></tr>
                     <tr><td><code>swallowErrors()</code></td><td>Clears the error queue</td></tr>
-                </table>
+                </tbody></table>
             </p>
         </section>
         <section name="extending_unit" title="Extending test cases">

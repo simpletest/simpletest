@@ -411,9 +411,9 @@ class LoggingSessionPoolTest extends UnitTestCase {
             <p>
                 Here is the full list of expectations you can set on a mock object
                 in <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a>...
-                <table>
+                <table><thead>
                     <tr><th>Expectation</th><th>Needs <code>tally()</code></th></tr>
-                    <tr>
+                    </thead><tbody><tr>
                         <td><code>expectArguments($method, $args)</code></td>
                         <td style="text-align: center">No</td>
                     </tr>
@@ -445,7 +445,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
                         <td><code>expectAtLeastOnce($method, $args)</code></td>
                         <td style="text-align: center">Yes</td>
                     </tr>
-                </table>
+                </tbody></table>
                 Where the parameters are...
                 <dl>
                     <dt class="new_code">$method</dt>

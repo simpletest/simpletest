@@ -97,9 +97,9 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 If you have a pressing need for a green but unreleased feature
                 then you should check-out the code from sourceforge CVS directly.
                 A released feature is marked as &quot;Done&quot;.
-                <table>
+                <table><thead>
                     <tr><th>Feature</th><th>Description</th><th>Release</th></tr>
-                    <tr>
+                    </thead><tbody><tr>
                         <td>Unit test case</td>
                         <td>Core test case class and assertions</td>
                         <td style="color: green;">Done</td>
@@ -268,7 +268,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td>Can simulate the input type file tag</td>
                         <td style="color: red;">2.0</td>
                     </tr>
-                </table>
+                </tbody></table>
                 PHP5 migraton will start straight after the version 1.0 series,
                 whereupon PHP4 will no longer be supported.
                 SimpleTest is currently compatible with PHP5, but will not

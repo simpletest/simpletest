@@ -110,7 +110,7 @@ class TestOfNewsService extends UnitTestCase {
             </p>
             <p>
                 The possible expectation classes are...
-                <table>
+                <table><tbody>
                     <tr><td><code>EqualExpectation</code></td><td>An equality, rather than the stronger identity comparison</td></tr>
                     <tr><td><code>NotEqualExpectation</code></td><td>An inequality comparison</td></tr>
                     <tr><td><code>IndenticalExpectation</code></td><td>The default mock object check which must match exactly</td></tr>
@@ -120,7 +120,7 @@ class TestOfNewsService extends UnitTestCase {
                     <tr><td><code>IsAExpectation</code></td><td>Checks the type or class name only</td></tr>
                     <tr><td><code>NotAExpectation</code></td><td>Opposite of the <code>IsAExpectation</code></td></tr>
                     <tr><td><code>MethodExistsExpectation</code></td><td>Checks a method is available on an object</td></tr>
-                </table>
+                </tbody></table>
                 Most take the expected value in the constructor.
                 The exceptions are the pattern matchers, which take a regular expression,
                 and the <code>IsAExpectation</code> and <code>NotAExpectation</code> which takes a type

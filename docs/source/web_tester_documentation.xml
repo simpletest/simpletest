@@ -111,7 +111,7 @@ class TestOfLastcraft extends WebTestCase {
             </p>
             <p>
                 Here is the list of possible content assertions...
-                <table>
+                <table><tbody>
                     <tr><td><code>assertWantedPattern($pattern)</code></td><td>A Perl pattern match against the page content</td></tr>
                     <tr><td><code>assertNoUnwantedPattern($pattern)</code></td><td>A Perl pattern match to not find content</td></tr>
                     <tr><td><code>assertTitle($title)</code></td><td>Pass if title is an exact match</td></tr>
@@ -130,7 +130,7 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>assertHeaderPattern($header, $pattern)</code></td><td>Pass if a header was fetched matching this Perl regex</td></tr>
                     <tr><td><code>assertCookie($name, $value)</code></td><td>Pass if there is currently a matching cookie</td></tr>
                     <tr><td><code>assertNoCookie($name)</code></td><td>Pass if there is currently no cookie of this name</td></tr>
-                </table>
+                </tbody></table>
                 As usual with the SimpleTest assertions, they all return
                 false on failure and true on pass.
                 They also allow an optional test message and you can embed
@@ -234,7 +234,7 @@ class TestOfLastcraft extends WebTestCase {
             </p>
             <p>
                 The list of navigation methods is...
-                <table>
+                <table><tbody>
                     <tr><td><code>get($url, $parameters)</code></td><td>Send a GET request with these parameters</td></tr>
                     <tr><td><code>post($url, $parameters)</code></td><td>Send a POST request with these parameters</td></tr>
                     <tr><td><code>head($url, $parameters)</code></td><td>Send a HEAD request without replacing the page content</td></tr>
@@ -255,7 +255,7 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>submitFormById($id)</code></td><td>Submit a form without the submit value</td></tr>
                     <tr><td><code>clickLink($label, $index)</code></td><td>Click an anchor by the visible label text</td></tr>
                     <tr><td><code>clickLinkById($id)</code></td><td>Click an anchor by the ID attribute</td></tr>
-                </table>
+                </tbody></table>
             </p>
             <p>
                 The parameters in the <code>get()</code>, <code>post()</code> or
@@ -304,7 +304,7 @@ class TestOfLastcraft extends WebTestCase {
                 problems, it does include some methods to modify and debug
                 the requests it makes.
                 Here is another method list...
-                <table>
+                <table><tbody>
                     <tr><td><code>getTransportError()</code></td><td>The last socket error</td></tr>
                     <tr><td><code>getUrl()</code></td><td>The current location</td></tr>
                     <tr><td><code>showRequest()</code></td><td>Dump the outgoing request</td></tr>
@@ -316,7 +316,7 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>setMaximumRedirects($max)</code></td><td>Stop after this many redirects</td></tr>
                     <tr><td><code>setConnectionTimeout($timeout)</code></td><td>Kill the connection after this time between bytes</td></tr>
                     <tr><td><code>useProxy($proxy, $name, $password)</code></td><td>Make requests via this proxy URL</td></tr>
-                </table>
+                </tbody></table>
             </p>
         </section>
     </content>
