@@ -247,7 +247,7 @@
          *    @param string $message                 Message to display.
          *    @access public
          */
-        function assertExpectation(&$expectation, $test_value, $message) {
+        function assertExpectation(&$expectation, $test_value, $message = '%s') {
             $this->assertTrue(
                     $expectation->test($test_value),
                     sprintf($message, $expectation->testMessage($test_value)));
@@ -263,7 +263,8 @@
          */
         function assertTrue($result, $message = false) {
             if (! $message) {
-                $message = 'True assertion got ' . ($result ? 'True' : 'False');
+                $message = 'True assertion got ' . ($result ? 'True' : 'False') .
+                        $this->getAssertionLine(' at line %d');
             }
             if ($result) {
                 $this->pass($message);
@@ -283,9 +284,27 @@
          */
         function assertFalse($result, $message = false) {
             if (! $message) {
-                $message = 'False assertion got ' . ($result ? 'True' : 'False');
+                $message = 'False assertion got ' . ($result ? 'True' : 'False') .
+                        $this->getAssertionLine(' at line %d');
             }
             $this->assertTrue(! $result, $message);
+        }
+        
+        /**
+         *    Uses a stack trace to find the line of an assertion.
+         *    @param string $format    String formatting.
+         *    @return string           Line number of first assert* method.
+         *    @access public
+         */
+        function getAssertionLine($format = '%d') {
+            if (function_exists('debug_backtrace')) {
+                foreach (debug_backtrace() as $frame) {
+                    if (strncmp($frame['function'], 'assert', 6) == 0) {
+                        return sprintf($format, $frame['line']);
+                    }
+                }
+            }
+            return '';
         }
         
         /**

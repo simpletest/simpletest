@@ -6,8 +6,7 @@ $Id$
 
 Unit tester
 -----------
-Show line number of failed assertion (3).
-Split off options into packages (1).
+Show line number of failed assertion (3/2) - done.
 Remove SIMPLE_TEST constant (1/1) - done.
 
 Interface
@@ -41,6 +40,7 @@ Username and password should allow encoded characters (1/0) - done.
 Add support for proxy fetching (3/9) - done.
 Add User-Agent identifier for tracking tests (1/0) - done.
 Allow adding of arbitrary headers (1/1) - done.
+Add head fetch (1).
 
 Web tester
 ----------

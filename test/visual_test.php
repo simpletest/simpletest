@@ -33,9 +33,13 @@
             $this->pass("Pass");
             $this->fail("Fail");        // Fail.
         }
+        function testTrue() {
+            $this->assertTrue(true);
+            $this->assertTrue(false);        // Fail.
+        }
         function testFalse() {
-            $this->assertFalse(true, "Fail");        // Fail.
-            $this->assertFalse(false, "Pass");
+            $this->assertFalse(true);        // Fail.
+            $this->assertFalse(false);
         }
         function testNull() {
             $this->assertNull(null, "%s->Pass");
