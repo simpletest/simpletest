@@ -161,6 +161,45 @@
             $this->assertTrue($lexer->parse("abaabxbaaaxaaaax"));
             $handler->tally();
         }
+        function testModeChange() {
+            $handler = &new MockTokenHandler($this);
+            $handler->expectArgumentsSequence(0, "acceptToken", array("a"));
+            $handler->expectArgumentsSequence(1, "acceptToken", array("aa"));
+            $handler->expectArgumentsSequence(2, "acceptToken", array("aaa"));
+            $handler->expectArgumentsSequence(3, "acceptToken", array(":"));
+            $handler->expectArgumentsSequence(4, "acceptToken", array("b"));
+            $handler->expectArgumentsSequence(5, "acceptToken", array("bb"));
+            $handler->expectArgumentsSequence(6, "acceptToken", array("bbb"));
+            $handler->expectCallCount("acceptToken", 7);
+            $handler->setReturnValue("acceptToken", true);
+            $handler->setReturnValue("acceptUnparsed", true);
+            $lexer = &new SimpleLexer($handler, "a");
+            $lexer->addPattern("a+", "a");
+            $lexer->addEntryPattern(":", "a", "b");
+            $lexer->addPattern("b+", "b");
+            $this->assertTrue($lexer->parse("abaabaaa:ababbabbba"));
+            $handler->tally();
+        }
+        function testNesting() {
+            $handler = &new MockTokenHandler($this);
+            $handler->setReturnValue("acceptToken", true);
+            $handler->setReturnValue("acceptUnparsed", true);
+            $handler->expectArgumentsSequence(0, "acceptToken", array("aa"));
+            $handler->expectArgumentsSequence(1, "acceptToken", array("aa"));
+            $handler->expectArgumentsSequence(2, "acceptToken", array("("));
+            $handler->expectArgumentsSequence(3, "acceptToken", array("bb"));
+            $handler->expectArgumentsSequence(4, "acceptToken", array("bb"));
+            $handler->expectArgumentsSequence(5, "acceptToken", array(")"));
+            $handler->expectArgumentsSequence(6, "acceptToken", array("aa"));
+            $handler->expectCallCount("acceptToken", 7);
+            $lexer = &new SimpleLexer($handler, "a");
+            $lexer->addPattern("a+", "a");
+            $lexer->addEntryPattern("(", "a", "b");
+            $lexer->addPattern("b+", "b");
+            $lexer->addExitPattern(")", "b");
+            $this->assertTrue($lexer->parse("aabaab(bbabb)aab"));
+            $handler->tally();
+        }
     }
     
     class TestOfParser extends UnitTestCase {

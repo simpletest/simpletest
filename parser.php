@@ -138,26 +138,32 @@
     
     /**
      *    Accepts text and breaks it into tokens.
+     *    Some optimisation to make the sure the
+     *    content is only scanned by the PHP regex
+     *    parser once.
      */
     class SimpleLexer {
         var $_regexes;
         var $_handler;
-        var $_mode_stack;
+        var $_mode;
         
         /**
          *    Sets up the lexer.
          *    @param $handler    Handling strategy by
          *                       reference.
+         *    @param $start      Starting mode.
          *    @public
          */
-        function SimpleLexer(&$handler, $starting_mode = "_default") {
+        function SimpleLexer(&$handler, $start = "_default") {
             $this->_regexes = array();
             $this->_handler = &$handler;
-            $this->_mode_stack = array($starting_mode);
+            $this->_mode = new StateStack($start);
         }
         
         /**
-         *    Adds a splitting pattern.
+         *    Adds a token search pattern for a particular
+         *    parsing mode. The pattern does not change the
+         *    current mode.
          *    @param $pattern      Perl style regex, but ( and )
          *                         lose the usual meaning.
          *    @param $mode         Should only apply this
@@ -170,6 +176,41 @@
                 $this->_regexes[$mode] = new ParallelRegex();
             }
             $this->_regexes[$mode]->addPattern($pattern);
+        }
+        
+        /**
+         *    Adds a pattern that will enter a new parsing
+         *    mode. Useful for entering parenthesis, strings,
+         *    tags, etc.
+         *    @param $pattern      Perl style regex, but ( and )
+         *                         lose the usual meaning.
+         *    @param $mode         Should only apply this
+         *                         pattern when dealing with
+         *                         this type of input.
+         *    @param $new_mode     Change parsing to this new
+         *                         nested mode.
+         *    @public
+         */
+        function addEntryPattern($pattern, $mode, $new_mode) {
+            if (!isset($this->_regexes[$mode])) {
+                $this->_regexes[$mode] = new ParallelRegex();
+            }
+            $this->_regexes[$mode]->addPattern($pattern, $new_mode);
+        }
+        
+        /**
+         *    Adds a pattern that will exit the current mode
+         *    and re-enter the previous one.
+         *    @param $pattern      Perl style regex, but ( and )
+         *                         lose the usual meaning.
+         *    @param $mode         Mode to leave.
+         *    @public
+         */
+        function addExitPattern($pattern, $mode) {
+            if (!isset($this->_regexes[$mode])) {
+                $this->_regexes[$mode] = new ParallelRegex();
+            }
+            $this->_regexes[$mode]->addPattern($pattern, "_exit");
         }
         
         /**
@@ -215,25 +256,23 @@
          *    @private
          */
         function _reduce(&$raw) {
-            if (!isset($this->_regexes[$this->getCurrentMode()])) {
+            if (!isset($this->_regexes[$this->_mode->getCurrent()])) {
                 return false;
             }
-            if (!$this->_regexes[$this->getCurrentMode()]->match($raw, $match)) {
-                return false;
+            if ($mode = $this->_regexes[$this->_mode->getCurrent()]->match($raw, $match)) {
+                $count = strpos($raw, $match);
+                $unparsed = substr($raw, 0, $count);
+                $raw = substr($raw, $count + strlen($match));
+                if ($mode === "_exit") {
+                    if (!$this->_mode->leave()) {
+                        return false;
+                    }
+                } elseif (is_string($mode)) {
+                    $this->_mode->enter($mode);
+                }
+                return array($unparsed, $match);
             }
-            $count = strpos($raw, $match);
-            $unparsed = substr($raw, 0, $count);
-            $raw = substr($raw, $count + strlen($match));
-            return array($unparsed, $match);
-        }
-        
-        /**
-         *    Accessor for the current parsing mode.
-         *    @return        Mode label currntly in use.
-         *    @public
-         */
-        function getCurrentMode() {
-            return $this->_mode_stack[count($this->_mode_stack) - 1];
+            return false;
         }
     }
     
