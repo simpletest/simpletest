@@ -1,8 +1,8 @@
 <?php
     /**
-     *	base include file for SimpleTest
+     *	Base include file for SimpleTest
      *	@package	SimpleTest
-     *	@subpackage	MockObjects
+     *	@subpackage	WebTester
      *	@version	$Id$
      */
     

@@ -24,7 +24,7 @@
 	 *    @subpackage WebTester
      */
     class WebTestCase extends SimpleTestCase {
-        var $_current_browser;
+        var $_browser;
         
         /**
          *    Creates an empty test case. Should be subclassed
@@ -42,7 +42,7 @@
          *    @access public
          */
         function showSource() {
-            $this->dump(htmlentities($this->_current_browser->getContent()));
+            $this->dump(htmlentities($this->_browser->getContent()));
         }
         
         /**
@@ -60,7 +60,7 @@
             if ($date === false) {
                 $date = time();
             }
-            $this->_current_browser->restartSession($date);
+            $this->_browser->restartSession($date);
         }
         
         /**
@@ -70,7 +70,7 @@
          *    @access public
          */
         function ageCookies($interval) {
-            $this->_current_browser->ageCookies($interval);
+            $this->_browser->ageCookies($interval);
         }
         
         /**
@@ -81,7 +81,7 @@
          *    @access public
          */
         function &getBrowser() {
-            return $this->_current_browser;
+            return $this->_browser;
         }
         
         /**
@@ -101,7 +101,7 @@
          *    @access protected
          */
         function invoke($method) {
-            $this->_current_browser = &$this->createBrowser();
+            $this->_browser = &$this->createBrowser();
             parent::invoke($method);
         }
         
@@ -123,7 +123,7 @@
          *    @access public
          */
         function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
-            $this->_current_browser->setCookie($name, $value, $host, $path, $expiry);
+            $this->_browser->setCookie($name, $value, $host, $path, $expiry);
         }
         
         /**
@@ -133,11 +133,11 @@
          *    @access public
          */
         function setMaximumRedirects($max) {
-            if (! $this->_current_browser) {
+            if (! $this->_browser) {
                 trigger_error(
                         'Can only set maximum redirects in a test method, setUp() or tearDown()');
             }
-            $this->_current_browser->setMaximumRedirects($max);
+            $this->_browser->setMaximumRedirects($max);
         }
         
         /**
@@ -151,7 +151,7 @@
          *    @access public
          */
         function get($url, $parameters = false) {
-            $content = $this->_current_browser->get($url, $parameters);
+            $content = $this->_browser->get($url, $parameters);
             if ($content === false) {
                 return false;
             }
@@ -169,7 +169,7 @@
          *    @access public
          */
         function post($url, $parameters = false) {
-            $content = $this->_current_browser->post($url, $parameters);
+            $content = $this->_browser->post($url, $parameters);
             if ($content === false) {
                 return false;
             }
@@ -185,7 +185,7 @@
          *    @access public
          */
         function clickSubmit($label = "Submit") {
-            return $this->_current_browser->clickSubmit($label);
+            return $this->_browser->clickSubmit($label);
         }
         
         /**
@@ -196,7 +196,7 @@
          *    @access public
          */
         function submitFormById($id) {
-            return $this->_current_browser->submitFormById($id);
+            return $this->_browser->submitFormById($id);
         }
         
         /**
@@ -223,7 +223,7 @@
          *    @access public
          */
         function clickLink($label, $index = 0) {
-            return $this->_current_browser->clickLink($label, $index);
+            return $this->_browser->clickLink($label, $index);
         }
         
         /**
@@ -233,7 +233,7 @@
          *    @access public
          */
         function clickLinkById($id) {
-            return $this->_current_browser->clickLinkById($id);
+            return $this->_browser->clickLinkById($id);
         }
         
         /**
@@ -251,7 +251,7 @@
          *    @access public
          */
         function setField($name, $value) {
-            return $this->_current_browser->setField($name, $value);
+            return $this->_browser->setField($name, $value);
         }
         
         /**
@@ -265,7 +265,7 @@
          *    @access public
          */
         function assertField($name, $expected = true) {
-            $value = $this->_current_browser->getField($name);
+            $value = $this->_browser->getField($name);
             if ($expected === true) {
                 $this->assertTrue(isset($value), "Field [$name] should exist");
             } else {
@@ -284,7 +284,7 @@
          */
         function assertResponse($responses, $message = "%s") {
             $responses = (is_array($responses) ? $responses : array($responses));
-            $code = $this->_current_browser->getResponseCode();
+            $code = $this->_browser->getResponseCode();
             $message = sprintf($message, "Expecting response in [" .
                     implode(", ", $responses) . "] got [$code]");
             $this->assertTrue(in_array($code, $responses), $message);
@@ -298,7 +298,7 @@
          */
         function assertMime($types, $message = "%s") {
             $types = (is_array($types) ? $types : array($types));
-            $type = $this->_current_browser->getMimeType();
+            $type = $this->_browser->getMimeType();
             $message = sprintf($message, "Expecting mime type in [" .
                     implode(", ", $types) . "] got [$type]");
             $this->assertTrue(in_array($type, $types), $message);
@@ -313,10 +313,10 @@
          */
         function assertTitle($title = false, $message = "%s") {
             $this->assertTrue(
-                    $title === $this->_current_browser->getTitle(),
+                    $title === $this->_browser->getTitle(),
                     sprintf(
                             $message,
-                            "Expecting title [$title] got [" . $this->_current_browser->getTitle() . "]"));
+                            "Expecting title [$title] got [" . $this->_browser->getTitle() . "]"));
         }
         
         /**
@@ -330,7 +330,7 @@
         function assertWantedPattern($pattern, $message = "%s") {
             $this->assertExpectation(
                     new WantedPatternExpectation($pattern),
-                    $this->_current_browser->getContent(),
+                    $this->_browser->getContent(),
                     $message);
         }
         
@@ -345,7 +345,7 @@
         function assertNoUnwantedPattern($pattern, $message = "%s") {
             $this->assertExpectation(
                     new UnwantedPatternExpectation($pattern),
-                    $this->_current_browser->getContent(),
+                    $this->_browser->getContent(),
                     $message);
         }
         
@@ -359,7 +359,7 @@
          *    @access public
          */
         function assertCookie($name, $expected = false, $message = "%s") {
-            $value = $this->_current_browser->getBaseCookieValue($name);
+            $value = $this->_browser->getBaseCookieValue($name);
             if ($expected) {
                 $this->assertTrue($value === $expected, sprintf(
                         $message,
@@ -380,7 +380,7 @@
          */
         function assertNoCookie($name, $message = "%s") {
             $this->assertTrue(
-                    $this->_current_browser->getBaseCookieValue($name) === false,
+                    $this->_browser->getBaseCookieValue($name) === false,
                     sprintf($message, "Not expecting cookie [$name]"));
         }
     }
