@@ -407,7 +407,7 @@
             $lexer->addSpecialPattern('</a>', 'text', 'acceptEndToken');
             $lexer->addEntryPattern('<a', 'text', 'tag');
             $lexer->addSpecialPattern('\s+', 'tag', 'ignore');
-            $lexer->addPattern('=', 'tag');
+            $lexer->addSpecialPattern('=', 'tag', 'ignore');
             $lexer->addEntryPattern("'", 'tag', 'single_quoted');
             $lexer->addEntryPattern('"', 'tag', 'double_quoted');
             $lexer->addExitPattern('>', 'tag');
@@ -439,11 +439,14 @@
         function acceptStartToken($token, $event) {
             if ($event == LEXER_ENTER) {
                 $this->_tag = substr($token, 1);
-            } elseif ($event == LEXER_EXIT) {
-                $this->_listener->startElement(
+                return true;
+            }
+            if ($event == LEXER_EXIT) {
+                return $this->_listener->startElement(
                         $this->_tag,
                         $this->_attributes);
-            } elseif ($token != "=") {
+            }
+            if ($token != "=") {
                 $this->_attributes[$token] = "";
                 $this->_current_attribute = $token;
             }
@@ -461,8 +464,7 @@
             if (!preg_match('/<\/(.*)>/', $token, $matches)) {
                 return false;
             }
-            $this->_listener->endElement($matches[1]);
-            return true;
+            return $this->_listener->endElement($matches[1]);
         }
         
         /**
@@ -498,6 +500,7 @@
          *    @public
          */
         function acceptTextToken($token, $event) {
+            return $this->_listener->addContent($token);
         }
         
         /**
@@ -508,6 +511,7 @@
          *    @public
          */
         function ignore($token, $event) {
+            return true;
         }
     }
     
@@ -552,7 +556,7 @@
          *    @return             False on parse error.
          *    @public
          */
-        function unparsedData($text) {
+        function addContent($text) {
         }
     }
 ?>
