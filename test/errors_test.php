@@ -42,16 +42,19 @@
     }
     
     class TestOfErrorTrap extends UnitTestCase {
+        var $_old;
         
         function setUp() {
+            $this->_old = error_reporting(E_ALL);
             set_error_handler('simpleTestErrorHandler');
         }
         
         function tearDown() {
             restore_error_handler();
+            error_reporting($this->_old);
         }
         
-        function testTrappedErrorPLacedInQueue() {
+        function testTrappedErrorPlacedInQueue() {
             $queue = &SimpleErrorQueue::instance();
             $this->assertFalse($queue->extract());
             trigger_error('Ouch!');

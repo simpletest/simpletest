@@ -211,7 +211,7 @@
     class SimpleTestCompatibility {
         
         /**
-         *    Identity test. Drops back to equality for PHP5
+         *    Identity test. Drops back to equality + types for PHP5
          *    objects as the === operator counts as the
          *    stronger reference constraint.
          *    @param mixed $first    Test subject.
@@ -220,29 +220,40 @@
          *    @static
          */
         function isIdentical($first, $second) {
+            if ($first != $second) {
+                return false;
+            }
             if (version_compare(phpversion(), '5') >= 0) {
-                if (gettype($first) != gettype($second)) {
-                    return false;
-                }
-                if ($first != $second) {
-                    return false;
-                }
-                if (is_object($first) && is_object($second)) {
-                    return (get_class($first) == get_class($second));
-                }
-                if (is_array($first) && is_array($second)) {
-                    if (array_keys($first) != array_keys($second)) {
-                        return false;
-                    }
-                    foreach (array_keys($first) as $key) {
-                        if (! SimpleTestCompatibility::isIdentical($first[$key], $second[$key])) {
-                            return false;
-                        }
-                    }
-                }
-                return true;
+                return SimpleTestCompatibility::_isIdenticalType($first, $second);
             }
             return ($first === $second);
+        }
+        
+        /**
+         *    Recursive type test.
+         *    @param mixed $first    Test subject.
+         *    @param mixed $second   Comparison object.
+         *    @access public
+         *    @static
+         */
+        function _isIdenticalType($first, $second) {
+            if (gettype($first) != gettype($second)) {
+                return false;
+            }
+            if (is_object($first) && is_object($second)) {
+                return (get_class($first) == get_class($second));
+            }
+            if (is_array($first) && is_array($second)) {
+                foreach (array_keys($first) as $key) {
+                    $is_identical = SimpleTestCompatibility::_isIdenticalType(
+                            $first[$key],
+                            $second[$key]);
+                    if (! $is_identical) {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
         
         /**

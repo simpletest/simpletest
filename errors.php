@@ -127,15 +127,15 @@
      *    @access public
      */
     function simpleTestErrorHandler($severity, $message, $filename, $line, $super_globals) {
-        restore_error_handler();
-        if (ini_get('log_errors')) {
-            $label = SimpleErrorQueue::getSeverityAsString($severity);
-            error_log("$label: $message in $filename on line $line");
-        }
         if ($severity = $severity & error_reporting()) {
+            restore_error_handler();
+            if (ini_get('log_errors')) {
+                $label = SimpleErrorQueue::getSeverityAsString($severity);
+                error_log("$label: $message in $filename on line $line");
+            }
             $queue = &SimpleErrorQueue::instance();
             $queue->add($severity, $message, $filename, $line, $super_globals);
+            set_error_handler('simpleTestErrorHandler');
         }
-        set_error_handler('simpleTestErrorHandler');
     }
 ?>

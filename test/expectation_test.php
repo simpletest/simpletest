@@ -138,6 +138,14 @@
         }
     }
     
+    class RecursiveTestingNasty {
+        var $_me;
+        
+        function RecursiveTestingNasty() {
+            $this->_me = $this;
+        }
+    }
+    
     class TestOfIdentity extends UnitTestCase {
         
         function testType() {
@@ -154,6 +162,15 @@
             $this->assertWantedPattern(
                     '/at character 1/',
                     $string->testMessage("38"));
+        }
+        
+        function _testNastyPhp5Bug() {
+            $this->assertFalse(new RecursiveTestingNasty() != new RecursiveTestingNasty());
+        }
+        
+        function _testReallyHorribleRecursiveStructure() {
+            $hopeful = &new IdenticalExpectation(new RecursiveTestingNasty());
+            $this->assertTrue($hopeful->test(new RecursiveTestingNasty()));
         }
     }
     

@@ -166,23 +166,23 @@
     class TestOfStubGeneration extends UnitTestCase {
         
         function testCloning() {
-            $stub = &new StubDummy($this);
+            $stub = &new StubDummy();
             $this->assertTrue(method_exists($stub, "aMethod"));
             $this->assertNull($stub->aMethod());
         }
         
         function testCloningWithExtraMethod() {
-            $stub = &new StubDummyWithExtraMethods($this);
+            $stub = &new StubDummyWithExtraMethods();
             $this->assertTrue(method_exists($stub, "extraMethod"));
         }
         
         function testCloningWithChosenClassName() {
-            $stub = &new AnotherStubDummy($this);
+            $stub = &new AnotherStubDummy();
             $this->assertTrue(method_exists($stub, "aMethod"));
         }
         
         function testCloningWithDifferentBaseClass() {
-            $stub = &new SpecialStubDummy($this);
+            $stub = &new SpecialStubDummy();
             $this->assertIsA($stub, "SpecialSimpleStub");
             $this->assertTrue(method_exists($stub, "aMethod"));
         }
