@@ -300,7 +300,8 @@
         /**
          *    Follows a link by name. Will click the first link
          *    found with this link text by default, or a later
-         *    one if an index is given.
+         *    one if an index is given. The match ignores case and
+         *    space issues.
          *    @param string $label     Text between the anchor tags.
          *    @param integer $index    Link position counting from zero.
          *    @return boolean          True if link present.
@@ -316,6 +317,16 @@
             }
             $this->get($urls[$index]);
             return true;
+        }
+        
+        /**
+         *    Tests to see if a link is present by label.
+         *    @param string $label     Text between the anchor tags.
+         *    @return boolean          True if link present.
+         *    @access public
+         */
+        function isLink($label) {
+            return (count($this->_page->getUrls($label)) > 0);
         }
         
         /**

@@ -181,6 +181,7 @@
         }
         function testAbsoluteLinkFollowing() {
             $this->get('http://www.lastcraft.com/test/link_confirm.php');
+            $this->assertLink('Absolute');
             $this->assertTrue($this->clickLink('Absolute'));
             $this->assertWantedPattern('/target for the SimpleTest/');
         }

@@ -537,7 +537,7 @@
         var $_max_counts;
         var $_min_counts;
         var $_expected_args;
-        var $_args_sequence;
+        var $_expected_args_at;
         var $_require_return;
         
         /**
@@ -556,7 +556,7 @@
             $this->_max_counts = array();
             $this->_min_counts = array();
             $this->_expected_args = array();
-            $this->_args_sequence = array();
+            $this->_expected_args_at = array();
             $this->_require_return = false;
         }
         
@@ -626,11 +626,11 @@
             $this->_dieOnNoMethod($method, "set expected arguments at time");
             $this->_CheckArgumentsArray($args, "set expected arguments");
             $args = $this->_replaceWildcards($args);
-            if (!isset($this->_sequence_args[$timing])) {
-                $this->_sequence_args[$timing] = array();
+            if (!isset($this->_expected_args_at[$timing])) {
+                $this->_expected_args_at[$timing] = array();
             }
             $method = strtolower($method);
-            $this->_sequence_args[$timing][$method] =
+            $this->_expected_args_at[$timing][$method] =
                     new ParametersExpectation($args);
         }
         
@@ -788,10 +788,10 @@
                             $this->_test);
                 }
             }
-            if (isset($this->_sequence_args[$timing][$method])) {
+            if (isset($this->_expected_args_at[$timing][$method])) {
                 $this->_assertTrue(
-                        $this->_sequence_args[$timing][$method]->test($args),
-                        "Mock method [$method] at [$timing]->" . $this->_sequence_args[$timing][$method]->testMessage($args),
+                        $this->_expected_args_at[$timing][$method]->test($args),
+                        "Mock method [$method] at [$timing]->" . $this->_expected_args_at[$timing][$method]->testMessage($args),
                         $this->_test);
             } elseif (isset($this->_expected_args[$method])) {
                 $this->_assertTrue(

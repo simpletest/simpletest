@@ -312,8 +312,7 @@
         }
         
         /**
-         *    Adds a link to the page. Partially fixes
-         *    expandomatic links.
+         *    Adds a link to the page.
          *    @param SimpleAnchorTag $tag      Link to accept.
          *    @access protected
          */
@@ -353,7 +352,31 @@
         }
         
         /**
-         *    Accessor for a URLs by the link label.
+         *    Space at the ends will be stripped and space in
+         *    between is reduced to one space.
+         *    @param string $html  Typical HTML code.
+         *    @return string       Content as big string.
+         *    @access private
+         */
+        function _normalise($html) {
+            return preg_replace('/\S\s+\S/', ' ', strtolower(trim($html)));
+        }
+        
+        /**
+         *    Matches strings regardles of varying whitespace.
+         *    @param string $first    First to match with.
+         *    @param string $second   Second to match against.
+         *    @return boolean         True is matches even with
+         *                            whitespace differences.
+         *    @access private
+         */
+        function _isNormalMatch($first, $second) {
+            return ($this->_normalise($first) == $this->_normalise($second));
+        }
+        
+        /**
+         *    Accessor for URLs by the link label. Label will match
+         *    regardess of whitespace issues and case.
          *    @param string $label    Text of link.
          *    @return array           List of links with that label.
          *    @access public
@@ -361,7 +384,7 @@
         function getUrls($label) {
             $all = array();
             foreach ($this->_links as $link) {
-                if ($link->getContent() == $label) {
+                if ($this->_isNormalmatch($link->getContent(), $label)) {
                     $all[] = $link->getAttribute('href');
                 }
             }

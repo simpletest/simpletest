@@ -1,13 +1,13 @@
 TODO
 This is immediate stuff only for the next iteration (1.0rc1) of 53(!) hours.
-This equates to about 6 weeks work giving a release date of first week
+This equates to about 6 weeks work giving a release date of second week
 of April.
 
 $Id$
 
 Unit tester
 -----------
-Add message override to expectation classes (2).
+Move message override to expectation classes (2).
 
 Interface
 ---------
@@ -21,7 +21,6 @@ Html parser
 Add framset tag (2).
 Add frame tag (1).
 Simplify builder callbacks (1).
-Make HTML parser pluggable (2).
 Add image submit parsing (3).
 Add image map parsing (2).
 Make multivalue widgets PHP compatible (2).
@@ -35,16 +34,15 @@ Add setFieldById() method (1).
 Add assertFieldById() method (1).
 Add simple HTTP authentication challenge/response (5).
 Allow image links to be head fetched to set cookies (2).
-Allow stylesheet loading to affect cookies (1).
-Make link clicking more tolerant with normalisation (1).
-Add clickLinkByPattern() method (1).
+Allow stylesheet loading to affect cookies (2).
+Make link clicking more tolerant with normalisation (2/1) - done.
 Redirects should become GET if they were POST (1).
 
 Web tester
 ----------
 Chain frames support from browser (1).
 Make redirect test independent of LastCraft (1).
-Add assertLink() method (1).
+Add assertLink() method (1/2) - done.
 
 Documentation
 -------------
@@ -56,5 +54,5 @@ Formalise extensions (1).
 Build
 -----
 Formalise tarball build (2).
-Make the test suite run under PHP5 without anything too bad happening (3).
-Add compatibility for insstanceof operator (1).
+Make the test suite run under PHP5 without anything too bad happening (2).
+Add compatibility for PHP5 instanceof operator (2/1).

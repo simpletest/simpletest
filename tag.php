@@ -31,7 +31,7 @@
         /**
          *    Make the keys lower case for case insensitive look-ups.
          *    @param hash $map   Has to convert.
-         *    @return hash       Unchanged values, but keys lower case
+         *    @return hash       Unchanged values, but keys lower case.
          *    @access private
          */
         function _keysToLowerCase($map) {

@@ -1,6 +1,6 @@
 <?php
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "../");
+    if (!defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', '../');
     }
     require_once(SIMPLE_TEST . 'tag.php');
     
@@ -19,9 +19,9 @@
         function testTitleContent() {
             $tag = &new SimpleTitleTag(array());
             $this->assertTrue($tag->expectEndTag());
-            $tag->addContent("Hello");
-            $tag->addContent("World");
-            $this->assertEqual($tag->getContent(), "HelloWorld");
+            $tag->addContent('Hello');
+            $tag->addContent('World');
+            $this->assertEqual($tag->getContent(), 'HelloWorld');
         }
         function testTagWithNoEnd() {
             $tag = &new SimpleTextTag(array());

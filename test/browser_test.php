@@ -55,6 +55,16 @@
             $this->assertEqual($browser->getMimeType(), 'text/html');
             $browser->tally();
         }
+        function testLinkAffirmationWhenPresent() {
+            $page = &new MockSimplePage($this);
+            $page->setReturnValue('getUrls', array('http://www.nowhere.com'));
+            $page->expectOnce('getUrls', array('a link label'));
+            
+            $browser = &$this->loadPage($page);
+            $this->assertTrue($browser->isLink('a link label'));
+            
+            $page->tally();
+        }
         function testFormHandling() {
             $page = &new MockSimplePage($this);
             $page->setReturnValue('getField', 'Value');

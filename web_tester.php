@@ -200,23 +200,10 @@
         }
         
         /**
-         *    @deprecated
-         */
-        function clickSubmitByFormId($id) {
-            return $this->submitFormById($id);
-        }
-        
-        /**
-         *    @deprecated
-         */
-        function submit($label = 'Submit') {
-            $this->clickSubmit($label);
-        }
-        
-        /**
          *    Follows a link by name. Will click the first link
          *    found with this link text by default, or a later
-         *    one if an index is given.
+         *    one if an index is given. Match is case insensitive
+         *    with normalised space.
          *    @param string $label     Text between the anchor tags.
          *    @param integer $index    Link position counting from zero.
          *    @return boolean          True if link present.
@@ -229,7 +216,7 @@
         /**
          *    Follows a link by id attribute.
          *    @param string $id        ID attribute value.
-         *    @return boolean          True if link present.
+         *    @return boolean          True if successful.
          *    @access public
          */
         function clickLinkById($id) {
@@ -237,10 +224,18 @@
         }
         
         /**
-         *    @deprecated
+         *    Tests fo rth epresence of a link label. Match is
+         *    case insensitive with normalised space.
+         *    @param string $label     Text between the anchor tags.
+         *    @param string $message   Message to display. Default
+         *                             can be embedded with %s.
+         *    @return boolean          True if link present.
+         *    @access public
          */
-        function clickLinkId($id) {
-            return clickLinkById($id);
+        function assertLink($label, $message = "%s") {
+            $this->assertTrue(
+                    $this->_browser->isLink($label),
+                    sprintf($message, "Link [$label] should exist"));
         }
         
         /**
@@ -262,17 +257,21 @@
          *    @param string $name       Name of field in forms.
          *    @param mixed $expected    Expected string/aray value or
          *                              false for unset fields.
+         *    @param string $message    Message to display. Default
+         *                              can be embedded with %s.
          *    @access public
          */
-        function assertField($name, $expected = true) {
+        function assertField($name, $expected = true, $message = "%s") {
             $value = $this->_browser->getField($name);
             if ($expected === true) {
-                $this->assertTrue(isset($value), "Field [$name] should exist");
+                $this->assertTrue(
+                        isset($value),
+                        sprintf($message, "Field [$name] should exist"));
             } else {
                 $this->assertExpectation(
                         new IdenticalExpectation($expected),
                         $value,
-                        "Field [$name] should match with [%s]");
+                        sprintf($message, "Field [$name] should match with [%s]"));
             }
         }
         
@@ -280,6 +279,8 @@
          *    Checks the response code against a list
          *    of possible values.
          *    @param array $responses    Possible responses for a pass.
+         *    @param string $message     Message to display. Default
+         *                               can be embedded with %s.
          *    @access public
          */
         function assertResponse($responses, $message = "%s") {

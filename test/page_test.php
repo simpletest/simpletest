@@ -196,6 +196,13 @@
             $this->assertFalse($page->getUrlById(0));
             $this->assertEqual($page->getUrlById(33), "./somewhere.php");
         }
+        function testFindLinkWithNormalisation() {
+            $link = &new SimpleAnchorTag(array("href" => "./somewhere.php", "id" => 33));
+            $link->addContent(" long  label ");
+            $page = &new SimplePage("");
+            $page->AcceptTag($link);
+            $this->assertEqual($page->getUrls("Long label"), array("./somewhere.php"));
+        }
         function testTitleSetting() {
             $title = &new SimpleTitleTag(array());
             $title->addContent("Title");
