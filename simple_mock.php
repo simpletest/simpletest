@@ -12,7 +12,7 @@
     /**
      *    A list of parameters that can include wild cards.
      *    The parameters can be compared with wildcards
-     *    being counted as matches.
+     *    always being counted as matches.
      */
     class ParameterList {
         var $_parameters;

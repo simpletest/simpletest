@@ -9,7 +9,7 @@
     
     Mock::generate("TestBrowser");
     
-    GroupTest::ignore("MockBrowserWebTestCase");
+    SimpleTestOptions::ignore("MockBrowserWebTestCase");
 
     class MockBrowserWebTestCase extends WebTestCase {
         function MockBrowserWebTestCase($label = false) {
