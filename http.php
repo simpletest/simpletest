@@ -908,24 +908,6 @@
         }
         
         /**
-         *    Accessor for parsed HTTP error code.
-         *    @return integer           HTTP error code.
-         *    @access public
-         */
-        function getResponseCode() {
-            return $this->_headers->getResponseCode();
-        }
-        
-        /**
-         *    Accessor for MIME type header information.
-         *    @return string           MIME type.
-         *    @access public
-         */
-        function getMimeType() {
-            return $this->_headers->getMimeType();            
-        }
-        
-        /**
          *    Accessor for any new cookies.
          *    @return array       List of new cookies.
          *    @access public

@@ -94,7 +94,7 @@
          *    @access public
          */
         function &createBrowser() {
-            return new TestBrowser($this);
+            return new SimpleBrowser();
         }
         
         /**

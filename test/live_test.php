@@ -36,8 +36,9 @@
                     "www.lastcraft.com/test/network_confirm.php?gkey=gvalue"));
             $http->setCookie(new SimpleCookie("ckey", "cvalue"));
             $this->assertIsA($response = &$http->fetch(), "SimpleHttpResponse");
-            $this->assertEqual($response->getResponseCode(), 200);
-            $this->assertEqual($response->getMimeType(), "text/html");
+            $headers = &$response->getHeaders();
+            $this->assertEqual($headers->getResponseCode(), 200);
+            $this->assertEqual($headers->getMimeType(), "text/html");
             $this->assertWantedPattern(
                     '/A target for the SimpleTest test suite/',
                     $response->getContent());
@@ -56,7 +57,8 @@
                     new SimpleUrl("www.lastcraft.com/test/network_confirm.php"),
                     "HEAD");
             $this->assertIsA($response = &$http->fetch(), "SimpleHttpResponse");
-            $this->assertEqual($response->getResponseCode(), 200);
+            $headers = &$response->getHeaders();
+            $this->assertEqual($headers->getResponseCode(), 200);
             $this->assertIdentical($response->getContent(), "");
         }
         function testHttpPost() {
@@ -174,14 +176,6 @@
             $this->assertCookie("session_cookie", "A");
             $this->assertCookie("short_cookie", "B");
             $this->assertCookie("day_cookie", "C");
-        }
-        function testCookieExpectation() {
-            $this->expectCookie("session_cookie");
-            $this->get('http://www.lastcraft.com/test/set_cookies.php');
-        }
-        function testCookieValueExpectation() {
-            $this->expectCookie("session_cookie", "A");
-            $this->get('http://www.lastcraft.com/test/set_cookies.php');
         }
         function testTemporaryCookieExpiry() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
