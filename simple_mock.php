@@ -174,7 +174,7 @@
         
         /**
          *    Sets a return for a parameter list that will
-         *    be passed by value.
+         *    be passed by value for all calls to this method.
          *    @param $method        Method name.
          *    @param $value         Result of call passed by value.
          *    @param $args          List of parameters to match
@@ -187,7 +187,7 @@
                 
         /**
          *    Sets a return for a parameter list that will
-         *    be passed by value when the required call count
+         *    be passed by value only when the required call count
          *    is reached.
          *    @param $timing        Number of calls in the future
          *                          to which the result applies. If
@@ -211,7 +211,7 @@
          
         /**
          *    Sets a return for a parameter list that will
-         *    be passed by reference.
+         *    be passed by reference for all calls.
          *    @param $method        Method name.
          *    @param $reference     Result of the call will be this object.
          *    @param $args          List of parameters to match
@@ -224,7 +224,7 @@
         
         /**
          *    Sets a return for a parameter list that will
-         *    be passed by value when the required call count
+         *    be passed by value only when the required call count
          *    is reached.
          *    @param $timing        Number of calls in the future
          *                          to which the result applies. If
@@ -329,6 +329,8 @@
          *    Totals up the call counts and triggers a test
          *    assertion if a test is present for expected
          *    call counts.
+         *    This method must be called explicitely for the call
+         *    count assertions to be triggered.
          *    @return                True if tallies are correct.
          *    @public
          */
@@ -357,6 +359,7 @@
             $method = strtolower($method);
             $step = $this->getCallCount($method);
             $this->_addCall($method, $args);
+            $this->_checkExpectations($method, $args, $step);
             if (isset($this->_return_sequence[$step])) {
                 return $this->_return_sequence[$step]->findFirstMatch($method, $args);
             }
@@ -365,9 +368,6 @@
         
         /**
          *    Adds one to the call count of a method.
-         *    Will also validate the arguments against the
-         *    previously set expectations passing the
-         *    events to the held test case.
          *    @param $method        Method called.
          *    @param $args          Arguments as an array.
          *    @private
@@ -376,7 +376,6 @@
             if (!isset($this->_call_counts[$method])) {
                 $this->_call_counts[$method] = 0;
             }
-            $this->_checkExpectations($method, $args, $this->_call_counts[$method]);
             $this->_call_counts[$method]++;
         }
         
