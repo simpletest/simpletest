@@ -585,7 +585,7 @@
 	 *    @subpackage WebTester
      */
     class SimpleHttpRequest {
-        var $_user_headers;
+        var $_headers;
         var $_url;
         var $_cookies;
         var $_method;
@@ -599,14 +599,36 @@
         function SimpleHttpRequest($url, $method = 'GET') {
             $this->_url = $url;
             $this->_method = $method;
-            $this->_user_headers = array();
+            $this->_headers = array();
             $this->_cookies = array();
+        }
+        
+        /**
+         *    Creates the first line which is the actual request.
+         *    @param string $method   HTTP request method, usually GET.
+         *    @param SimpleUrl $url   URL as object.
+         *    @return string          Request line content.
+         *    @access protected
+         */
+        function _createRequestLine($method, $url) {
+            return $method . ' ' . $this->_url->getPath() .
+                    $this->_url->getEncodedRequest() . ' HTTP/1.0';
+        }
+        
+        /**
+         *    Creates the host part of the request.
+         *    @param SimpleUrl $url   URL as object.
+         *    @return string          Host line content.
+         *    @access protected
+         */
+        function _createHostLine($url) {
+            return 'Host: ' . $this->_url->getHost();
         }
         
         /**
          *    Fetches the content and parses the headers.
          *    @param integer $timeout      Connection timeout.
-         *    @return SimpleHttpResponse   A response which may have
+         *    @return SimpleHttpResponse   A response which may only have
          *                                 an error.
          *    @access public
          */
@@ -619,7 +641,7 @@
             if ($socket->isError()) {
                 return $this->_createResponse($socket);
             }
-            $this->_request($socket, $this->_method);
+            $this->_dispatch_request($socket, $this->_method);
             return $this->_createResponse($socket);
         }
         
@@ -630,10 +652,10 @@
          *                                  usually GET.
          *    @access protected
          */
-        function _request(&$socket, $method) {
-            $socket->write($method . " " . $this->_url->getPath() . $this->_url->getEncodedRequest() . " HTTP/1.0\r\n");
-            $socket->write("Host: " . $this->_url->getHost() . "\r\n");
-            foreach ($this->_user_headers as $header_line) {
+        function _dispatch_request(&$socket, $method) {
+            $socket->write($this->_createRequestLine($this->_method, $this->_url) . "\r\n");
+            $socket->write($this->_createHostLine($this->_url) . "\r\n");
+            foreach ($this->_headers as $header_line) {
                 $socket->write($header_line . "\r\n");
             }
             if (count($this->_cookies) > 0) {
@@ -649,7 +671,7 @@
          *    @access public
          */
         function addHeaderLine($header_line) {
-            $this->_user_headers[] = $header_line;
+            $this->_headers[] = $header_line;
         }
         
         /**
@@ -728,10 +750,10 @@
          *    @param string $method        HTTP request method, usually GET.
          *    @access protected
          */
-        function _request(&$socket, $method) {
+        function _dispatch_request(&$socket, $method) {
             $this->addHeaderLine('Content-Length: ' . strlen($this->_pushed_content));
             $this->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
-            parent::_request($socket, $method);
+            parent::_dispatch_request($socket, $method);
             $socket->write($this->_pushed_content);
         }
     }
