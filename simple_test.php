@@ -13,7 +13,6 @@
      *    Interface used by the test displays and group tests.
      */
     class RunnableTest {
-        var $_reporter;
         var $_label;
         
         /**
@@ -24,7 +23,6 @@
          */
         function RunnableTest($label) {
             $this->_label = $label;
-            $this->_reporter = false;
         }
         
         /**
@@ -43,11 +41,8 @@
          *    @returns Boolean        True if no failures.
          *    @access public
          */
-        function run($reporter = false) {
-            if (!$reporter) {
-                $reporter = &$this->_reporter;
-            }
-            return $this->accept(new TestRunner($reporter));
+        function run(&$reporter) {
+            return $this->accept($reporter);
         }
         
         /**
@@ -85,7 +80,7 @@
          *    @access public
          */
         function SimpleTestCase($label = false) {
-            if (!$label) {
+            if (! $label) {
                 $label = get_class($this);
             }
             $this->RunnableTest($label);
@@ -99,7 +94,7 @@
          *    @access public
          */
         function accept(&$runner) {
-            $runner->handleCaseStart($this->getLabel());
+            $runner->paintCaseStart($this->getLabel());
             $methods = get_class_methods(get_class($this));
             foreach ($methods as $method) {
                 if (strtolower(substr($method, 0, 4)) != "test") {
@@ -108,11 +103,11 @@
                 if (is_a($this, strtolower($method))) {
                     continue;
                 }
-                $runner->handleMethodStart($method);
+                $runner->paintMethodStart($method);
                 $runner->invoke($this, $method);
-                $runner->handleMethodEnd($method);
+                $runner->paintMethodEnd($method);
             }
-            $runner->handleCaseEnd($this->getLabel());
+            $runner->paintCaseEnd($this->getLabel());
             return $runner->getStatus();
         }
         
@@ -160,7 +155,7 @@
          *    @access public
          */
         function pass($message = "Pass") {
-            $this->_current_runner->handlePass($message);
+            $this->_current_runner->paintPass($message);
         }
         
         /**
@@ -169,7 +164,7 @@
          *    @access public
          */
         function fail($message = "Fail") {
-            $this->_current_runner->handleFail($message);
+            $this->_current_runner->paintFail($message);
         }
         
         /**
@@ -184,7 +179,7 @@
          */
         function error($severity, $message, $file, $line, $globals) {
             $severity = SimpleErrorQueue::getSeverityAsString($severity);
-            $this->_current_runner->handleError(
+            $this->_current_runner->paintError(
                     "Unexpected PHP error [$message] severity [$severity] in [$file] line [$line]");
         }
         
@@ -198,7 +193,7 @@
          *    @access public
          */
         function signal($type, &$payload) {
-            $this->_current_runner->handleSignal($type, $payload);
+            $this->_current_runner->paintSignal($type, $payload);
         }
         
         /**
@@ -269,7 +264,7 @@
             if ($message) {
                 $formatted = $message . "\n" . $formatted;
             }
-            $this->_current_runner->handleFormattedMessage($formatted);
+            $this->_current_runner->paintFormattedMessage($formatted);
         }
         
         /**
@@ -279,7 +274,7 @@
          *    @access public
          */
         function sendMessage($message) {
-            $this->_current_runner->handleMessage($message);
+            $this->_current_runner->PaintMessage($message);
         }
     }
     
@@ -360,11 +355,11 @@
          *    @access public
          */
         function accept(&$runner) {
-            $runner->handleGroupStart($this->getLabel(), $this->getSize());
+            $runner->paintGroupStart($this->getLabel(), $this->getSize());
             for ($i = 0; $i < count($this->_test_cases); $i++) {
                 $this->_test_cases[$i]->accept($runner);
             }
-            $runner->handleGroupEnd($this->getLabel());
+            $runner->paintGroupEnd($this->getLabel());
             return $runner->getStatus();
         }
         
