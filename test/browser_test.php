@@ -125,7 +125,7 @@
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
             $browser = &new SimpleBrowser();
-            $browser->fetchResponse("http://this.host/this/path/page.html", &$request);
+            $browser->fetchContent("http://this.host/this/path/page.html", &$request);
             $this->assertEqual(
                     $browser->getBaseUrl(),
                     "http://this.host/this/path/");
@@ -160,7 +160,7 @@
             $browser = &new SimpleBrowser();
             $browser->setCookie("a", "A");
             $response = $browser->fetchResponse(
-                    "http://this.host/this/path/page.html",
+                    new SimpleUrl("http://this.host/this/path/page.html"),
                     &$request);
             $this->assertEqual($response->getContent(), "stuff");
             $request->tally();
@@ -169,7 +169,9 @@
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAAA", "this/path/")));
             $browser = &new SimpleBrowser();
             $browser->setCookie("a", "A");
-            $browser->fetchResponse("http://this.host/this/path/page.html", &$request);
+            $browser->fetchResponse(
+                    new SimpleUrl("http://this.host/this/path/page.html"),
+                    &$request);
             $this->assertEqual($browser->getCookieValue("this.host", "this/path/", "a"), "AAAA");
         }
         function testClearCookie() {
@@ -196,7 +198,7 @@
             $this->assertNull($browser->getBaseCookieValue("a"));
             $browser->setCookie("b", "BBB", "this.host", "this/path/");
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAA", "this/path/")));
-            $browser->fetchResponse("http://this.host/this/path/page.html", &$request);
+            $browser->fetchContent("http://this.host/this/path/page.html", &$request);
             $this->assertEqual($browser->getBaseCookieValue("a"), "AAA");
             $this->assertEqual($browser->getBaseCookieValue("b"), "BBB");
         }

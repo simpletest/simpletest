@@ -206,13 +206,12 @@
         
         /**
          *    Fetches a URL as a response object.
-         *    @param $raw_url    Target to fetch as string.
+         *    @param $url        Target to fetch as Url object.
          *    @param $request    Test override of SimpleHttpRequest.
          *    @return            Reponse object.
          *    @public
          */
-        function &fetchResponse($raw_url, $request = false) {
-            $url = $this->_createAbsoluteUrl($raw_url);
+        function &fetchResponse($url, $request = false) {
             if (!is_object($request)) {
                 $request = new SimpleHttpRequest($url);
             }
@@ -224,21 +223,25 @@
             if ($response->isError()) {
                 return $response;
             }
-            $this->_extractBaseUrl($url);
             $this->_addCookies($url, $response->getNewCookies());
             return $response;
         }
         
         /**
          *    Fetches just the page content.
-         *    @param $url        Target to fetch as string.
+         *    @param $raw_url    Target to fetch as string.
          *    @param $request    Test version of SimpleHttpRequest.
          *    @return            Content of page.
          *    @public
          */
-        function fetchContent($url, $request = false) {
+        function fetchContent($raw_url, $request = false) {
+            $url = $this->_createAbsoluteUrl($raw_url);
             $response = &$this->fetchResponse($url, $request);
-            return $response->getContent();
+            if (!$response->isError()) {
+                $this->_extractBaseUrl($url);
+                return $response->getContent();
+            }
+            return false;
         }
         
         /**
