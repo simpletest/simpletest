@@ -178,16 +178,13 @@
      */
     class CallMap {
         var $_map;
-        var $_wildcard;
         
         /**
          *    Creates an empty call map.
-         *    @param $wildcard        Wildcard value for matching.
          *    @public
          */
-        function CallMap($wildcard) {
+        function CallMap() {
             $this->_map = array();
-            $this->_wildcard = $wildcard;
         }
         
         /**
@@ -209,9 +206,7 @@
         function addReference($parameters, &$reference) {
             $place = count($this->_map);
             $this->_map[$place] = array();
-            $this->_map[$place]["params"] = new ParametersExpectation(
-                    $parameters,
-                    $this->_wildcard);
+            $this->_map[$place]["params"] = new ParametersExpectation($parameters);
             $this->_map[$place]["content"] = &$reference;
         }
         
@@ -314,15 +309,6 @@
         }
         
         /**
-         *    Accessor for wildcard.
-         *    @return        Wildcard object or string.
-         *    @protected
-         */
-        function _getWildcard() {
-            return $this->_wildcard;
-        }
-        
-        /**
          *    Returns the expected value for the method name.
          *    @param $method        Name of method to simulate.
          *    @param $args          Arguments as an array.
@@ -393,7 +379,7 @@
             $args = $this->_replaceWildcards($args);
             $method = strtolower($method);
             if (!isset($this->_returns[$method])) {
-                $this->_returns[$method] = new CallMap($this->_getWildcard());
+                $this->_returns[$method] = new CallMap();
             }
             $this->_returns[$method]->addValue($args, $value);
         }
@@ -420,7 +406,7 @@
                 $this->_return_sequence[$method] = array();
             }
             if (!isset($this->_return_sequence[$method][$timing])) {
-                $this->_return_sequence[$method][$timing] = new CallMap($this->_getWildcard());
+                $this->_return_sequence[$method][$timing] = new CallMap();
             }
             $this->_return_sequence[$method][$timing]->addValue($args, $value);
         }
@@ -439,7 +425,7 @@
             $args = $this->_replaceWildcards($args);
             $method = strtolower($method);
             if (!isset($this->_returns[$method])) {
-                $this->_returns[$method] = new CallMap($this->_getWildcard());
+                $this->_returns[$method] = new CallMap();
             }
             $this->_returns[$method]->addReference($args, $reference);
         }
@@ -466,7 +452,7 @@
                 $this->_return_sequence[$method] = array();
             }
             if (!isset($this->_return_sequence[$method][$timing])) {
-                $this->_return_sequence[$method][$timing] = new CallMap($this->_getWildcard());
+                $this->_return_sequence[$method][$timing] = new CallMap();
             }
             $this->_return_sequence[$method][$timing]->addReference($args, $reference);
         }
