@@ -724,7 +724,7 @@
          *    Follows a link by label. Will click the first link
          *    found with this link text by default, or a later
          *    one if an index is given. The match ignores case and
-         *    space issues.
+         *    white space issues.
          *    @param string $label     Text between the anchor tags.
          *    @param integer $index    Link position counting from zero.
          *    @return boolean          True if link present.

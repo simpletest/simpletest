@@ -26,6 +26,18 @@
             $tag = &new SimpleTextTag(array());
             $this->assertFalse($tag->expectEndTag());
         }
+        function testAnchorHref() {
+            $tag = &new SimpleAnchorTag(array('href' => 'http://here/'));
+            $this->assertEqual($tag->getHref(), 'http://here/');
+            
+            $tag = &new SimpleAnchorTag(array('href' => ''));
+            $this->assertIdentical($tag->getAttribute('href'), true);
+            $this->assertIdentical($tag->getHref(), '');
+            
+            $tag = &new SimpleAnchorTag(array());
+            $this->assertIdentical($tag->getAttribute('href'), false);
+            $this->assertIdentical($tag->getHref(), '');
+        }
     }
     
     class TestOfWidget extends UnitTestCase {

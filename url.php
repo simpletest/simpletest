@@ -279,7 +279,8 @@
          */
         function getEncodedRequest() {
             $query = $this->_request;
-            if ($encoded = $query->asString()) {
+            $encoded = $query->asString();
+            if ($encoded) {
                 return "?$encoded";
             }
             return '';

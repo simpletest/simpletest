@@ -131,8 +131,8 @@
         }
     }
     
-    class TestOfLiveFrontControllerPage extends WebTestCase {
-        function TestOfLiveFrontControllerPage() {
+    class TestOfLiveFrontControllerEmulation extends WebTestCase {
+        function TestOfLiveFrontControllerEmulation() {
             $this->WebTestCase();
         }
         function setUp() {
@@ -158,6 +158,25 @@
             $this->assertResponse(200);
             $this->assertWantedPattern('/Simple test front controller/');
             $this->assertWantedPattern('/\[action=\]/');
+        }
+        function testJumpToUnnamedPageWithEmptyQuery() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/');
+            $this->assertTrue($this->clickLink('Empty query'));
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->assertWantedPattern('/raw get data.*?\[\].*?get data/si');
+        }
+        function testJumpToUnnamedPageWithEmptyLink() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/');
+            $this->assertTrue($this->clickLink('Empty link'));
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->assertWantedPattern('/raw get data.*?\[\].*?get data/si');
+        }
+        function testJumpBackADirectoryLevel() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/');
+            $this->assertTrue($this->clickLink('Down one'));
+            $this->assertWantedPattern('/index of \/test/i');
         }
     }
     

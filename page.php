@@ -807,8 +807,8 @@
         function getAbsoluteLinks() {
             $all = array();
             foreach ($this->_links as $link) {
-                if ($this->_linkIsAbsolute($link->getAttribute('href'))) {
-                    $all[] = $link->getAttribute('href');
+                if ($this->_linkIsAbsolute($link->getHref())) {
+                    $all[] = $link->getHref();
                 }
             }
             return $all;
@@ -822,8 +822,8 @@
         function getRelativeLinks() {
             $all = array();
             foreach ($this->_links as $link) {
-                if (! $this->_linkIsAbsolute($link->getAttribute('href'))) {
-                    $all[] = $link->getAttribute('href');
+                if (! $this->_linkIsAbsolute($link->getHref())) {
+                    $all[] = $link->getHref();
                 }
             }
             return $all;
@@ -863,7 +863,7 @@
             $matches = array();
             foreach ($this->_links as $link) {
                 if ($this->_isNormalmatch($link->getContent(), $label)) {
-                    $matches[] = $link->getAttribute('href');
+                    $matches[] = $link->getHref();
                 }
             }
             return $matches;
@@ -878,7 +878,7 @@
         function getUrlById($id) {
             foreach ($this->_links as $link) {
                 if ($link->getAttribute('id') === (string)$id) {
-                    return $link->getAttribute('href');
+                    return $link->getHref();
                 }
             }
             return false;

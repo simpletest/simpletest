@@ -31,7 +31,7 @@
         function SimpleTag($name, $attributes) {
             $this->_name = $name;
             $this->_attributes = $this->_keysToLowerCase($attributes);
-            $this->_content = "";
+            $this->_content = '';
         }
         
         /**
@@ -161,6 +161,19 @@
          */
         function SimpleAnchorTag($attributes) {
             $this->SimpleTag('a', $attributes);
+        }
+        
+        /**
+         *    Accessor for URL as string.
+         *    @return string    Coerced as string.
+         *    @access public
+         */
+        function getHref() {
+            $url = $this->getAttribute('href');
+            if (is_bool($url)) {
+                $url = '';
+            }
+            return $url;
         }
     }
     
