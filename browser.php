@@ -277,7 +277,7 @@
             if (! $frame || (strtolower($frame) == '_top')) {
                 return $this->_loadPage($method, $url, $parameters);
             }
-            return $this->_loadFrame($frame, $method, $url, $parameters);
+            return $this->_loadFrame(array($frame), $method, $url, $parameters);
         }
         
         /**
@@ -300,16 +300,16 @@
         /**
          *    Fetches a frame into the existing frameset replacing the
          *    original.
-         *    @param string/integer $frame    Name or index of frame.
+         *    @param array $frames            List of names to drill down.
          *    @param string $method           GET or POST.
          *    @param string/SimpleUrl $url    Target to fetch as string.
          *    @param hash $parameters         POST parameters.
          *    @return string                  Raw content of page.
          *    @access private
          */
-        function _loadFrame($frame, $method, $url, $parameters = false) {
+        function _loadFrame($frames, $method, $url, $parameters = false) {
             $page = &$this->_fetch(strtoupper($method), $url, $parameters);
-            $this->_page->setFrame($frame, $page);
+            $this->_page->setFrame($frames, $page);
         }
         
         /**
@@ -479,9 +479,10 @@
          *    @access public
          */
         function retry() {
-            if ($frame = $this->_page->getFrameFocus()) {
+            $frames = $this->_page->getFrameFocus();
+            if (count($frames) > 0) {
                 $this->_loadFrame(
-                        $frame,
+                        $frames,
                         $this->_page->getMethod(),
                         $this->_page->getUrl(),
                         $this->_page->getRequestData());

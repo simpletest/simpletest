@@ -53,37 +53,41 @@
         }
         
         /**
-         *    Replaces existing frame with another.
-         *    @param string/integer $name  Name of frame in frameset.
-         *    @param SimplePage $page      Frame page.
+         *    Replaces existing frame with another. If the
+         *    frame is nested, then the call is passed down
+         *    one level.
+         *    @param array $path        Path of frame in frameset.
+         *    @param SimplePage $page   Frame source.
          *    @access public
          */
-        function setFrame($name, &$page) {
+        function setFrame($path, &$page) {
+            $name = array_shift($path);
             if (isset($this->_names[$name])) {
                 $index = $this->_names[$name];
             } else {
                 $index = $name - 1;
             }
-            $this->_frames[$index] = &$page;
+            if (count($path) == 0) {
+                $this->_frames[$index] = &$page;
+                return;
+            }
+            $this->_frames[$index]->setFrame($path, $page);
         }
         
         /**
          *    Accessor for current frame focus. Will be
          *    false if no frame has focus. Will have the nested
          *    frame focus if any.
-         *    @return integer/string/boolean    Label if any, otherwise
-         *                                      the position in the frameset
-         *                                      or false if none.
+         *    @return array     Labels or indexes of nested frames.
          *    @access public
          */
         function getFrameFocus() {
             if ($this->_focus === false) {
-                return false;
+                return array();
             }
-            if ($focus = $this->_frames[$this->_focus]->getFrameFocus()) {
-                return $focus;
-            }
-            return $this->_getPublicNameFromIndex($this->_focus);
+            return array_merge(
+                    array($this->_getPublicNameFromIndex($this->_focus)),
+                    $this->_frames[$this->_focus]->getFrameFocus());
         }
         
         /**

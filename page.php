@@ -425,11 +425,11 @@
         /**
          *    Accessor for current frame focus. Will be
          *    false as no frames.
-         *    @return boolean    Always false.
+         *    @return array    Always empty.
          *    @access public
          */
         function getFrameFocus() {
-            return false;
+            return array();
         }
         
         /**

@@ -735,18 +735,18 @@
             $this->assertEqual($browser->getContent(), 'Page onePage twoPage three');
             
             $this->assertTrue($browser->setFrameFocus('inner'));
-            $this->assertEqual($browser->getFrameFocus(), 'inner');
+            $this->assertEqual($browser->getFrameFocus(), array('inner'));
             $this->assertTrue($browser->setFrameFocus('one'));
-            $this->assertEqual($browser->getFrameFocus(), 'one');
+            $this->assertEqual($browser->getFrameFocus(), array('inner', 'one'));
             $this->assertEqual($browser->getContent(), 'Page one');
             
             $this->assertTrue($browser->setFrameFocus('two'));
-            $this->assertEqual($browser->getFrameFocus(), 'two');
+            $this->assertEqual($browser->getFrameFocus(), array('inner', 'two'));
             $this->assertEqual($browser->getContent(), 'Page two');
             
             $browser->clearFrameFocus();
             $this->assertTrue($browser->setFrameFocus('three'));
-            $this->assertEqual($browser->getFrameFocus(), 'three');
+            $this->assertEqual($browser->getFrameFocus(), array('three'));
             $this->assertEqual($browser->getContent(), 'Page three');
             
             $this->assertTrue($browser->setFrameFocus('inner'));
@@ -773,18 +773,18 @@
             $this->assertEqual($browser->getContent(), 'Page onePage twoPage three');
             
             $this->assertTrue($browser->setFrameFocusByIndex(1));
-            $this->assertEqual($browser->getFrameFocus(), 1);
+            $this->assertEqual($browser->getFrameFocus(), array(1));
             $this->assertTrue($browser->setFrameFocusByIndex(1));
-            $this->assertEqual($browser->getFrameFocus(), 1);
+            $this->assertEqual($browser->getFrameFocus(), array(1, 1));
             $this->assertEqual($browser->getContent(), 'Page one');
             
             $this->assertTrue($browser->setFrameFocusByIndex(2));
-            $this->assertEqual($browser->getFrameFocus(), 2);
+            $this->assertEqual($browser->getFrameFocus(), array(1, 2));
             $this->assertEqual($browser->getContent(), 'Page two');
             
             $browser->clearFrameFocus();
             $this->assertTrue($browser->setFrameFocusByIndex(2));
-            $this->assertEqual($browser->getFrameFocus(), 2);
+            $this->assertEqual($browser->getFrameFocus(), array(2));
             $this->assertEqual($browser->getContent(), 'Page three');
             
             $this->assertTrue($browser->setFrameFocusByIndex(1));

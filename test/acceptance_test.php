@@ -932,4 +932,70 @@
             $this->assertWantedPattern('/Count: 1/');
         }
     }
+    
+    class TestOfNestedFrames extends WebTestCase {
+        function TestOfNestedFrames() {
+            $this->WebTestCase();
+        }
+        
+        function testCanNavigateToSpecificContent() {
+            $this->get('http://www.lastcraft.com/test/nested_frameset.html');
+            $this->assertTitle('Nested frameset for testing of SimpleTest');
+            
+            $this->assertWantedPattern('/This is frame A/');
+            $this->assertWantedPattern('/This is frame B/');
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->assertLink('2');
+            $this->assertLink('Set one to 2');
+            $this->assertWantedPattern('/Count: 1/');
+            $this->assertWantedPattern('/r=rrr/');
+            
+            $this->setFrameFocus('pair');
+            $this->assertWantedPattern('/This is frame A/');
+            $this->assertWantedPattern('/This is frame B/');
+            $this->assertNoUnwantedPattern('/Simple test front controller/');
+            $this->assertNoLink('2');
+            
+            $this->setFrameFocus('aaa');
+            $this->assertWantedPattern('/This is frame A/');
+            $this->assertNoUnwantedPattern('/This is frame B/');
+            
+            $this->clearFrameFocus();
+            $this->assertResponse(200);
+            $this->setFrameFocus('messy');
+            $this->assertResponse(200);
+            $this->setFrameFocus('Front controller');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->assertNoLink('2');
+        }
+        
+        function testReloadingFramesetPage() {
+            $this->get('http://www.lastcraft.com/test/nested_frameset.html');
+            $this->assertWantedPattern('/Count: 1/');
+            $this->retry();
+            $this->assertWantedPattern('/Count: 2/');
+            $this->retry();
+            $this->assertWantedPattern('/Count: 3/');
+        }
+        
+        function testRetryingNestedPageOnlyRetriesThatSet() {
+            $this->get('http://www.lastcraft.com/test/nested_frameset.html');
+            $this->assertWantedPattern('/Count: 1/');
+            $this->setFrameFocus('messy');
+            $this->retry();
+            $this->assertWantedPattern('/Count: 2/');
+            $this->setFrameFocus('Counter');
+            $this->retry();
+            $this->assertWantedPattern('/Count: 3/');
+            
+            $this->clearFrameFocus();
+            $this->setFrameFocus('messy');
+            $this->setFrameFocus('Front controller');
+            $this->retry();
+            
+            $this->clearFrameFocus();
+            $this->assertWantedPattern('/Count: 3/');
+        }
+    }
 ?>

@@ -109,7 +109,7 @@
             
             $frameset = &new SimpleFrameset($page);
             $frameset->addFrame($frame1);
-            $frameset->setFrame(1, $frame2);
+            $frameset->setFrame(array(1), $frame2);
             $this->assertEqual($frameset->getRaw(), 'Stuff2');
         }
         
@@ -125,7 +125,7 @@
             
             $frameset = &new SimpleFrameset($page);
             $frameset->addFrame($frame1, 'a');
-            $frameset->setFrame('a', $frame2);
+            $frameset->setFrame(array('a'), $frame2);
             $this->assertEqual($frameset->getRaw(), 'Stuff2');
         }
     }
@@ -156,7 +156,7 @@
             $this->assertTrue($frameset->setFrameFocusByIndex(1));
             $this->assertFalse($frameset->setFrameFocusByIndex(2));
             $this->assertEqual($frameset->getRaw(), 'Stuff');
-            $this->assertIdentical($frameset->getFrameFocus(), 1);
+            $this->assertIdentical($frameset->getFrameFocus(), array(1));
         }
         
         function testContentComesFromFrameInFocus() {
@@ -173,15 +173,15 @@
             $frameset->addFrame($frame2);
             
             $this->assertTrue($frameset->setFrameFocusByIndex(1));
-            $this->assertEqual($frameset->getFrameFocus(), 1);
+            $this->assertEqual($frameset->getFrameFocus(), array(1));
             $this->assertEqual($frameset->getRaw(), 'Stuff1');
             
             $this->assertTrue($frameset->setFrameFocusByIndex(2));
-            $this->assertEqual($frameset->getFrameFocus(), 2);
+            $this->assertEqual($frameset->getFrameFocus(), array(2));
             $this->assertEqual($frameset->getRaw(), 'Stuff2');
             
             $this->assertFalse($frameset->setFrameFocusByIndex(3));
-            $this->assertEqual($frameset->getFrameFocus(), 2);
+            $this->assertEqual($frameset->getFrameFocus(), array(2));
             
             $frameset->clearFrameFocus();
             $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
@@ -200,11 +200,11 @@
             $frameset->addFrame($frame2, 'B');
             
             $this->assertTrue($frameset->setFrameFocus('A'));
-            $this->assertEqual($frameset->getFrameFocus(), 'A');
+            $this->assertEqual($frameset->getFrameFocus(), array('A'));
             $this->assertEqual($frameset->getRaw(), 'Stuff1');
             
             $this->assertTrue($frameset->setFrameFocusByIndex(2));
-            $this->assertEqual($frameset->getFrameFocus(), 'B');
+            $this->assertEqual($frameset->getFrameFocus(), array('B'));
             $this->assertEqual($frameset->getRaw(), 'Stuff2');
             
             $this->assertFalse($frameset->setFrameFocus('z'));

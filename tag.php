@@ -431,17 +431,12 @@
         
         /**
          *    Starts with a named tag with attributes only.
+         *    Defaults are very browser dependent.
          *    @param hash $attributes    Attribute names and
          *                               string values.
          */
         function SimpleButtonTag($attributes) {
             $this->SimpleWidget('button', $attributes);
-            if ($this->getAttribute('name') === false) {
-                $this->_setAttribute('name', 'submit');
-            }
-            if ($this->getAttribute('value') === false) {
-                $this->_setAttribute('value', 'Submit');
-            }
         }
         
         /**
@@ -474,11 +469,18 @@
         }
         
         /**
-         *    Gets the values submitted as a form.
+         *    Gets the values submitted as a form. Gone
+         *    for the Mozilla defaults values.
          *    @return array    Hash of name and values.
          *    @access public
          */
         function getSubmitValues() {
+            if ($this->getAttribute('name') === false) {
+                return array();
+            }
+            if ($this->getAttribute('value') === false) {
+                return array($this->getName() => '');
+            }
             return array($this->getName() => $this->getValue());
         }
     }
