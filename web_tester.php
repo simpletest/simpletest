@@ -234,6 +234,18 @@
         }
         
         /**
+         *    Does a HTTP HEAD fetch, fetching only the page
+         *    headers. The current base URL is unchanged by this.
+         *    @param string $url          URL to fetch.
+         *    @param hash $parameters     Optional additional GET data.
+         *    @return boolean             True on success.
+         *    @access public
+         */
+        function head($url, $parameters = false) {
+            return $this->_browser->head($url, $parameters);
+        }
+        
+        /**
          *    Equivalent to hitting the retry button on the
          *    browser. Will attempt to repeat the page fetch.
          *    @return boolean     True if fetch succeeded.

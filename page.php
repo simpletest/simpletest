@@ -804,7 +804,7 @@
          *                    http or https and hostname.
          *    @access public
          */
-        function getAbsoluteLinks() {
+        function getAbsoluteUrls() {
             $all = array();
             foreach ($this->_links as $link) {
                 if ($this->_linkIsAbsolute($link->getHref())) {
@@ -819,7 +819,7 @@
          *    @return array      List of urls without hostname.
          *    @access public
          */
-        function getRelativeLinks() {
+        function getRelativeUrls() {
             $all = array();
             foreach ($this->_links as $link) {
                 if (! $this->_linkIsAbsolute($link->getHref())) {
