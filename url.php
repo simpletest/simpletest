@@ -446,7 +446,7 @@
          *    @static
          */
         function encodeRequest($parameters) {
-            if (! $parameters) {
+            if (! is_array($parameters)) {
                 return '';
             }
             $query = &new SimpleQueryString();

@@ -5,7 +5,6 @@
     require_once(dirname(__FILE__) . '/../authentication.php');
     require_once(dirname(__FILE__) . '/../http.php');
     Mock::generate('SimpleHttpRequest');
-    Mock::generate('SimpleHttpPostRequest');
     Mock::generate('SimpleHttpResponse');
     Mock::generate('SimpleHttpHeaders');
     Mock::generatePartial('SimpleUserAgent', 'MockRequestUserAgent', array('_createHttpRequest'));
@@ -204,7 +203,7 @@
             $response->setReturnValue('getContent', 'stuff');
             $response->setReturnReference('getHeaders', $headers);
             
-            $request = &new MockSimpleHttpPostRequest($this);
+            $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference('fetch', $response);
             
             $agent = &new MockRequestUserAgent($this);

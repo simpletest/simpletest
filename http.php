@@ -440,11 +440,14 @@
          *    @param string $method         HTTP request method,
          *                                  usually GET.
          *    @param string $content        Content to send with request.
-         *    @access protected
+         *    @access private
          */
         function _dispatchRequest(&$socket, $method, $content) {
-            if ($content) {
-                $socket->write("Content-Length: " . strlen($content) . "\r\n");
+            if (is_array($content) && ($method == 'POST')) {
+                $content = SimpleUrl::encodeRequest($content);
+            }
+            if ($content || ($method == 'POST')) {
+                $socket->write("Content-Length: " . (integer)strlen($content) . "\r\n");
                 $socket->write("Content-Type: application/x-www-form-urlencoded\r\n");
             }
             foreach ($this->_headers as $header_line) {
@@ -504,39 +507,6 @@
                     $this->_method,
                     $this->_route->getUrl(),
                     $this->_content);
-        }
-    }
-    
-    /**
-     *    Request with data to send. Usually PUT or POST.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
-     */
-    class SimpleHttpPostRequest extends SimpleHttpRequest {
-        
-        /**
-         *    Cretaes an HTML form request.
-         *    @param SimpleRoute $route   Request target.
-         *    @param array $parameters    Content to send.
-         *    @access public
-         */
-        function SimpleHttpPostRequest($route, $parameters) {
-            $this->SimpleHttpRequest($route, 'POST', $parameters);
-        }
-        
-        /**
-         *    Sends the headers.
-         *    @param SimpleSocket $socket   Open socket.
-         *    @param string $method         HTTP request method,
-         *                                  usually GET.
-         *    @param string $content        Content to send with request.
-         *    @access protected
-         */
-        function _dispatchRequest(&$socket, $method, $content) {
-            parent::_dispatchRequest(
-                    $socket,
-                    $method,
-                    SimpleUrl::encodeRequest($content));
         }
     }
     

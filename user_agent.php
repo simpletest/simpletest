@@ -430,8 +430,9 @@
          */
         function &_createHttpRequest($method, $url, $parameters) {
             if ($method == 'POST') {
-                $request = &new SimpleHttpPostRequest(
+                $request = &new SimpleHttpRequest(
                         $this->_createRoute($url),
+                        'POST',
                         $parameters);
                 return $request;
             }

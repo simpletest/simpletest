@@ -175,7 +175,7 @@
     
     class TestOfProxyRoute extends UnitTestCase {
         
-        function testDefaultGetRequest() {
+        function testDefaultGet() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectArgumentsAt(0, 'write', array("GET http://a.valid.host/here.html HTTP/1.0\r\n"));
             $socket->expectArgumentsAt(1, 'write', array("Host: my-proxy:8080\r\n"));
@@ -192,7 +192,7 @@
             $socket->tally();
         }
         
-        function testDefaultPostRequest() {
+        function testDefaultPost() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectArgumentsAt(0, 'write', array("POST http://a.valid.host/here.html HTTP/1.0\r\n"));
             $socket->expectArgumentsAt(1, 'write', array("Host: my-proxy:8080\r\n"));
@@ -343,6 +343,57 @@
         }
     }
     
+    class TestOfHttpPostRequest extends UnitTestCase {
+        
+        function testReadingBadConnection() {
+            $socket = &new MockSimpleSocket($this);
+            
+            $route = &new MockSimpleRoute($this);
+            $route->setReturnReference('createConnection', $socket);
+            
+            $request = &new SimpleHttpRequest($route, 'POST', '');
+            
+            $reponse = &$request->fetch(15);
+            $this->assertTrue($reponse->isError());
+        }
+        
+        function testReadingGoodConnection() {
+            $socket = &new MockSimpleSocket($this);
+            $socket->expectArgumentsAt(0, 'write', array("Content-Length: 0\r\n"));
+            $socket->expectArgumentsAt(1, 'write', array("Content-Type: application/x-www-form-urlencoded\r\n"));
+            $socket->expectArgumentsAt(2, 'write', array("\r\n"));
+            $socket->expectArgumentsAt(3, 'write', array(""));
+            
+            $route = &new MockSimpleRoute($this);
+            $route->setReturnReference('createConnection', $socket);
+            $route->expectArguments('createConnection', array('POST', 15));
+            
+            $request = &new SimpleHttpRequest($route, 'POST', array());
+            
+            $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
+            $socket->tally();
+            $route->tally();
+        }
+        
+        function testContentHeadersCalculated() {
+            $socket = &new MockSimpleSocket($this);
+            $socket->expectArgumentsAt(0, 'write', array("Content-Length: 3\r\n"));
+            $socket->expectArgumentsAt(1, 'write', array("Content-Type: application/x-www-form-urlencoded\r\n"));
+            $socket->expectArgumentsAt(2, 'write', array("\r\n"));
+            $socket->expectArgumentsAt(3, 'write', array("a=A"));
+            
+            $route = &new MockSimpleRoute($this);
+            $route->setReturnReference('createConnection', $socket);
+            $route->expectArguments('createConnection', array('POST', 15));
+            
+            $request = &new SimpleHttpRequest($route, 'POST', array('a' => 'A'));
+            
+            $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
+            $socket->tally();
+            $route->tally();
+        }
+    }
+        
     class TestOfHttpHeaders extends UnitTestCase {
         
         function testParseBasicHeaders() {
