@@ -467,6 +467,22 @@
         }
         
         /**
+         *    Finds a held form by button id. Will only
+         *    search correctly built forms.
+         *    @param string $id          Button ID attribute.
+         *    @return SimpleForm         Form object containing the button.
+         *    @access public
+         */
+        function &getFormBySubmitId($id) {
+            for ($i = 0; $i < count($this->_complete_forms); $i++) {
+                if ($this->_complete_forms[$i]->getSubmitNameFromId($id)) {
+                    return $this->_complete_forms[$i];
+                }
+            }
+            return null;
+        }
+        
+        /**
          *    Finds a held form by the form ID. A way of
          *    identifying a specific form when we have control
          *    of the HTML code.

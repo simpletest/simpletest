@@ -308,6 +308,11 @@
             $this->assertTrue($this->clickSubmitByName('go'));
             $this->assertWantedPattern('/go=\[Go!\]/');
         }
+        function testFormSubmissionById() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertTrue($this->clickSubmitById(99));
+            $this->assertWantedPattern('/go=\[Go!\]/');
+        }
         function testSelfSubmit() {
             $this->get('http://www.lastcraft.com/test/self_form.php');
             $this->assertNoUnwantedPattern('/<p>submitted<\/p>/i');

@@ -376,6 +376,31 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', 'handler.html');
             $form->setReturnValue('getMethod', 'post');
+            $form->setReturnvalue('submitButtonById', array('a' => 'A'));
+            
+            $page = &new MockSimplePage($this);
+            $page->setReturnReference('getFormBySubmitId', $form);
+            $page->expectOnce('getFormBySubmitId', array(99));
+            
+            $browser = &$this->createBrowser($agent, $page);
+            $browser->get('http://this.com/page.html');
+            $this->assertTrue($browser->clickSubmitById(99), 'Submitting');
+            
+            $agent->tally();
+            $page->tally();
+        }
+        function testSubmitFormByFormId() {
+            $agent = &new MockSimpleUserAgent($this);
+            $agent->setReturnReference('fetchResponse', $this->getSuccessfulFetch());
+            $agent->expectArgumentsAt(
+                    1,
+                    'fetchResponse',
+                    array('POST', 'handler.html', array('a' => 'A')));
+            $agent->expectCallCount('fetchResponse', 2);
+            
+            $form = &new MockSimpleForm($this);
+            $form->setReturnValue('getAction', 'handler.html');
+            $form->setReturnValue('getMethod', 'post');
             $form->setReturnvalue('submit', array('a' => 'A'));
             
             $page = &new MockSimplePage($this);

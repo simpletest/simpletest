@@ -284,7 +284,7 @@
          *    form will be submitted by this.
          *    @param string $label    Button label. An unlabeled
          *                            button can be triggered by 'Submit'.
-         *    @return boolean         true on success.
+         *    @return boolean         True on success.
          *    @access public
          */
         function clickSubmit($label = 'Submit') {
@@ -295,7 +295,7 @@
          *    Clicks the submit button by name attribute. The owning
          *    form will be submitted by this.
          *    @param string $name    Name attribute of button.
-         *    @return boolean        true on success.
+         *    @return boolean        True on success.
          *    @access public
          */
         function clickSubmitByName($name) {
@@ -303,10 +303,21 @@
         }
         
         /**
+         *    Clicks the submit button by ID attribute. The owning
+         *    form will be submitted by this.
+         *    @param string $id      ID attribute of button.
+         *    @return boolean        True on successful submit.
+         *    @access public
+         */
+        function clickSubmitById($id) {
+            return $this->_browser->clickSubmitById($id);
+        }
+        
+        /**
          *    Submits a form by the ID.
-         *    @param string $label    Button label. An unlabeled
-         *                            button can be triggered by 'Submit'.
-         *    @return boolean         true on success.
+         *    @param string $id    Form ID. No button information
+         *                         is submitted this way.
+         *    @return boolean      True on success.
          *    @access public
          */
         function submitFormById($id) {

@@ -1153,6 +1153,21 @@
         }
         
         /**
+         *    Gets a button name from the ID attribute.
+         *    @param string $id       Button ID attribute to search for.
+         *    @return string          Name of button.
+         *    @access public
+         */
+        function getSubmitNameFromId($id) {
+            foreach (array_keys($this->_buttons) as $name) {
+                if ($this->_buttons[$name]->getAttribute('id') == $id) {
+                    return $name;
+                }
+            }
+            return false;
+        }
+        
+        /**
          *    Gets the submit values for a named button.
          *    @param string $name    Button label to search for.
          *    @return hash           Submitted values or false
@@ -1180,6 +1195,22 @@
          */
         function submitButtonByLabel($label) {
             if ($name = $this->getSubmitNameFromLabel($label)) {
+                return $this->submitButton($name);
+            }
+            return false;
+        }
+        
+        /**
+         *    Gets the submit values for a button with a particular
+         *    ID attribute.
+         *    @param string $id       Button ID attribute to search for.
+         *    @return hash            Submitted values or false
+         *                            if there is no such button in the
+         *                            form.
+         *    @access public
+         */
+        function submitButtonById($id) {
+            if ($name = $this->getSubmitNameFromId($id)) {
                 return $this->submitButton($name);
             }
             return false;

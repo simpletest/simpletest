@@ -639,6 +639,25 @@
         }
         
         /**
+         *    Clicks the submit button by ID attribute of the button
+         *    itself. The owning form will be submitted by this.
+         *    @param string $id       Button ID.
+         *    @return boolean         True on success.
+         *    @access public
+         */
+        function clickSubmitById($id) {
+            if (! ($form = &$this->_page->getFormBySubmitId($id))) {
+                return false;
+            }
+            $action = $form->getAction();
+            if (! $action) {
+                $action = $this->getCurrentUrl();
+            }
+            $method = $form->getMethod();
+            return $this->$method($action, $form->submitButtonById($id));
+        }
+        
+        /**
          *    Submits a form by the ID.
          *    @param string $id    The form ID. No submit button value
          *                         will be sent.
