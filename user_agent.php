@@ -357,8 +357,8 @@
         }
         
         /**
-         *    Fetches a URL as a response object. Will
-         *    keep trying if redirected.
+         *    Fetches a URL as a response object. Will keep trying if redirected.
+         *    It will also collect authentication realm information.
          *    @param string $method         GET, POST, etc.
          *    @param string/SimpleUrl $url  Target to fetch.
          *    @param hash $parameters       Additional parameters for request.
@@ -384,6 +384,18 @@
         }
         
         /**
+         *    Fetches a response whilst preserving the base URL.
+         *    Useful for HEAD fetches and images and frames.
+         *    @param string $method         GET, POST, etc.
+         *    @param string/SimpleUrl $url  Target to fetch.
+         *    @param hash $parameters       Additional parameters for request.
+         *    @return SimpleHttpResponse    Hopefully the target page.
+         *    @access public
+         */
+        function &fetchResponsePreservingBase($method, $url, $parameters = false) {
+        }
+        
+        /**
          *    Fetches the page until no longer redirected or
          *    until the redirect limit runs out.
          *    @param string $method         GET, POST, etc.
@@ -399,6 +411,7 @@
                 if ($response->isError()) {
                     return $response;
                 }
+                $this->_setBaseUrl($url);
                 $headers = $response->getHeaders();
                 $this->_addCookiesToJar($url, $headers->getNewCookies());
                 if (! $headers->isRedirect()) {
@@ -408,9 +421,6 @@
                 $method = 'GET';
                 $parameters = false;
             } while (! $this->_isTooManyRedirects(++$redirects));
-            if ($method != 'HEAD') {
-                $this->_setBaseUrl($url);
-            }
             return $response;
         }
         

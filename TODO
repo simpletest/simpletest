@@ -25,7 +25,7 @@ Add image submit parsing (3).
 Add image map parsing (2).
 Make multivalue widgets PHP compatible (2).
 Add simple button tag parsing (1).
-Confirm nested directory parsing with base URL (2).
+Confirm nested directory parsing with base URL (2/4) - done.
 Fix bug with URL arguments missing with no "=" (1).
 
 Browser

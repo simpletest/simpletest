@@ -129,13 +129,19 @@
         function TestOfExpandomaticUrl() {
             $this->UnitTestCase();
         }
-        function testFetchSetsBaseUrl() {
+        function &createEmptyHeaders() {
             $headers = &new MockSimpleHttpHeaders($this);
             $headers->setReturnValue("getNewCookies", array());
-            
+            return $headers;
+        }
+        function &createEmptyResponse($headers) {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("isError", false);
             $response->setReturnReference("getHeaders", $headers);
+            return $response;
+        }
+        function testFetchSetsBaseUrl() {
+            $response = &$this->createEmptyResponse($this->createEmptyHeaders());
             
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
@@ -153,12 +159,7 @@
                     'http://this.com/this/path/');
         }
         function testSetBaseUrlWithPost() {
-            $headers = &new MockSimpleHttpHeaders($this);
-            $headers->setReturnValue('getNewCookies', array());
-            
-            $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue('isError', false);
-            $response->setReturnReference('getHeaders', $headers);
+            $response = &$this->createEmptyResponse($this->createEmptyHeaders());
             
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference('fetch', $response);
@@ -174,6 +175,69 @@
             $this->assertEqual(
                     $agent->getBaseUrl(),
                     'http://this.com/this/path/');
+        }
+        function testBaseUrlChangesUpwardOnRedirect() {
+            $headers = &$this->createEmptyHeaders();
+            $headers->setReturnValue('isRedirect', true);
+            $headers->setReturnValue('getLocation', 'path/page.html');
+            $redirect = &$this->createEmptyResponse($headers);
+            
+            $first = &new MockSimpleHttpRequest($this);
+            $first->setReturnReference('fetch', $redirect);
+            
+            $target = &$this->createEmptyResponse($this->createEmptyHeaders());
+            
+            $second = &new MockSimpleHttpRequest($this);
+            $second->setReturnReference('fetch', $target);
+            
+            $agent = &new MockRequestUserAgent($this);
+            $agent->setReturnReferenceAt(0, '_createHttpRequest', $first);
+            $agent->setReturnReferenceAt(1, '_createHttpRequest', $second);
+            $agent->expectCallCount('_createHttpRequest', 2);
+            $agent->SimpleUserAgent();
+            
+            $agent->fetchResponse(
+                    'GET',
+                    'http://this.com/this/page.html',
+                    false);
+            $this->assertEqual(
+                    $agent->getBaseUrl(),
+                    'http://this.com/this/path/');
+        }
+        function testBaseUrlChangesDownwardOnRedirect() {
+            $headers = &$this->createEmptyHeaders();
+            $headers->setReturnValue('isRedirect', true);
+            $headers->setReturnValue('getLocation', '../page.html');
+            $redirect = &$this->createEmptyResponse($headers);
+            
+            $first = &new MockSimpleHttpRequest($this);
+            $first->setReturnReference('fetch', $redirect);
+            
+            $target = &$this->createEmptyResponse($this->createEmptyHeaders());
+            
+            $second = &new MockSimpleHttpRequest($this);
+            $second->setReturnReference('fetch', $target);
+            
+            $agent = &new MockRequestUserAgent($this);
+            $agent->setReturnReferenceAt(0, '_createHttpRequest', $first);
+            $agent->setReturnReferenceAt(1, '_createHttpRequest', $second);
+            $agent->expectCallCount('_createHttpRequest', 2);
+            $agent->SimpleUserAgent();
+            
+            $agent->fetchResponse(
+                    'GET',
+                    'http://this.com/this/here/path/page.html',
+                    false);
+            $this->assertEqual(
+                    $agent->getBaseUrl(),
+                    'http://this.com/this/here/');
+        }
+        function testBaseUrlChangesPageName() {
+            $agent = &new SimpleUserAgent();
+            $base = $agent->createAbsoluteUrl(
+                    new SimpleUrl('http://this.com/this/here/path/page.html'),
+                    new SimpleUrl('../page.html'));
+            $this->assertEqual($base, new SimpleUrl('http://this.com/this/here/page.html'));
         }
     }
     

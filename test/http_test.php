@@ -86,19 +86,24 @@
             $this->assertEqual($url->getPage(), "somewhere.php");
             $this->assertEqual($url->getBasePath(), "/here/there/");
         }
+        function testPathNormalisation() {
+            $this->assertEqual(
+                    SimpleUrl::normalisePath('https://host.com/I/am/here/../there/somewhere.php'),
+                    'https://host.com/I/am/there/somewhere.php');
+        }
         function testMakingAbsolute() {
             $url = new SimpleUrl("../there/somewhere.php");
             $this->assertEqual($url->getPath(), "../there/somewhere.php");
-            $url->makeAbsolute("https://host.com/here/");
+            $url->makeAbsolute("https://host.com/I/am/here/");
             $this->assertEqual($url->getScheme(), "https");
             $this->assertEqual($url->getHost(), "host.com");
-            $this->assertEqual($url->getPath(), "/there/somewhere.php");
+            $this->assertEqual($url->getPath(), "/I/am/there/somewhere.php");
         }
         function testMakingAbsoluteAppendedPath() {
             $url = new SimpleUrl("./there/somewhere.php");
-            $url->makeAbsolute("http://host.com/here/");
+            $url->makeAbsolute("https://host.com/here/");
             $this->assertEqual($url->getPath(), "/here/there/somewhere.php");
-            $base = new SimpleUrl("http://host.com/here/");
+            $base = new SimpleUrl("https://host.com/here/");
         }
         function testMakingAbsolutehasNoEffectWhenAlreadyAbsolute() {
             $url = new SimpleUrl('https://test:secret@www.lastcraft.com/stuff/');

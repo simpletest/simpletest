@@ -356,8 +356,8 @@
             if (! $this->getHost()) {
                 $this->_host = $base->getHost();
             }
-            if (substr($this->getPath(), 0, 1) != "/") {
-                $this->_path = $base->getBasePath() . $this->getPath();
+            if (substr($this->_path, 0, 1) != "/") {
+                $this->_path = $base->getBasePath() . $this->_path;
             }
             $this->_path = $this->normalisePath($this->_path);
         }
@@ -369,8 +369,8 @@
          *    @access public
          */
         function normalisePath($path) {
-            $path = preg_replace('/\/.*?\/\.\.\//', '/', $path);
-            return preg_replace('/\/\.\//', '/', $path);
+            $path = preg_replace('|/[^/]+/\.\./|', '/', $path);
+            return preg_replace('|/\./|', '/', $path);
         }
     }
 
@@ -800,7 +800,7 @@
          *    @param SimpleSocket $socket   Open socket.
          *    @param string $method         HTTP request method,
          *                                  usually GET.
-         *    @param string $content      Content to send with request.
+         *    @param string $content        Content to send with request.
          *    @access protected
          */
         function _dispatchRequest(&$socket, $method, $content) {

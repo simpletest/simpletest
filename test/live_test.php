@@ -191,6 +191,16 @@
             $this->assertTitle('Simple test target file');
             $this->assertNoUnwantedPattern('/a=\[aaa\]/');
         }
+        function testRedirectWithBaseUrlChange() {
+            $this->get('http://www.lastcraft.com/test/base_change_redirect.php');
+            $this->assertTitle('Simple test target file in folder');
+            $this->get('http://www.lastcraft.com/test/path/base_change_redirect.php');
+            $this->assertTitle('Simple test target file');
+        }
+        function testRedirectWithDoubleBaseUrlChange() {
+            $this->get('http://www.lastcraft.com/test/double_base_change_redirect.php');
+            $this->assertTitle('Simple test target file');
+        }
     }
     
     class TestOfLiveCookies extends WebTestCase {
