@@ -236,6 +236,15 @@
         }
         
         /**
+         *    Accessor for raw header information.
+         *    @return string      Header block.
+         *    @access public
+         */
+        function getHeaders() {
+            return $this->_headers->getRaw();
+        }
+        
+        /**
          *    Accessor for parsed title.
          *    @return string     Title or false if no title is present.
          *    @access public

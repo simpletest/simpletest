@@ -46,6 +46,23 @@
         }
         
         /**
+         *    Dumps the current HTTP headers for debugging.
+         *    @access public
+         */
+        function showHeaders() {
+            $this->dump($this->_browser->getHeaders());
+        }
+        
+        /**
+         *    Accessor for current URL.
+         *    @return string    Current browser URL including frame.
+         *    @access public
+         */
+        function getCurrentUrl() {
+            return $this->_browser->getCurrentUrl();
+        }
+        
+        /**
          *    Simulates the closing and reopening of the browser.
          *    Temporary cookies will be discarded and timed
          *    cookies will be expired if later than the

@@ -725,6 +725,7 @@
 	 *    @subpackage WebTester
      */
     class SimpleHttpHeaders {
+        var $_raw_headers;
         var $_response_code;
         var $_http_version;
         var $_mime_type;
@@ -737,6 +738,7 @@
          *    @access public
          */
         function SimpleHttpHeaders($headers) {
+            $this->_raw_headers = $headers;
             $this->_response_code = 0;
             $this->_http_version = 0;
             $this->_mime_type = "";
@@ -754,6 +756,15 @@
          */
         function getHttpVersion() {
             return $this->_http_version;
+        }
+        
+        /**
+         *    Accessor for raw header block.
+         *    @return string        All headers as raw string.
+         *    @access public
+         */
+        function getRaw() {
+            return $this->_raw_headers;
         }
         
         /**

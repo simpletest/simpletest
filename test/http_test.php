@@ -1,13 +1,13 @@
 <?php
     // $Id$
     
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "../");
+    if (! defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', '../');
     }
     require_once(SIMPLE_TEST . 'query_string.php');
     require_once(SIMPLE_TEST . 'http.php');
     require_once(SIMPLE_TEST . 'socket.php');
-    Mock::generate("SimpleSocket");
+    Mock::generate('SimpleSocket');
 
     class TestOfUrl extends UnitTestCase {
         function TestOfUrl() {

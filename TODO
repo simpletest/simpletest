@@ -14,7 +14,6 @@ Interface
 
 Mock objects
 ------------
-Add error messages to mocks (2).
 
 Html parser
 -----------
@@ -24,13 +23,13 @@ Simplify builder callbacks (1).
 Add image submit parsing (3).
 Add image map parsing (2).
 Make multivalue widgets PHP compatible (2).
-Make link clicking more tolerant with normalisation (2/1) - done.
+Make link clicking more tolerant with space normalisation (2/1) - done.
 
 Browser
 -------
 Add frame loading support (4).
 Add frame focus and defocus (3).
-Make widget handling reflect form focus (2).
+Make widget handling reflect frame focus (2).
 Add setFieldById() method (1).
 Add assertFieldById() method (1).
 Add simple HTTP authentication challenge/response (5).
@@ -45,12 +44,15 @@ Web tester
 Chain frames support from browser (1).
 Make redirect test independent of LastCraft (1).
 Add assertLink() method (1/2) - done.
+Add showHeaders() for debugging (1/1) - done.
+Chain getCurrentUrl() into WebTestCase (1/0) - done.
 
 Documentation
 -------------
 Add cookie documentation (3).
 Add frames documentation (3).
 Add detached browser documentation (4).
+Add shell tester documentation (2).
 Formalise extensions (1).
 
 Build
