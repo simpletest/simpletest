@@ -97,7 +97,7 @@
                         "] should be equal to [" .
                         $this->_renderVariable($second) . "]";
             }
-            $this->assertTrue($first == $second, $message);
+            $this->assertTrue(($first == $second) && ($second == $first), $message);
         }
         
         /**

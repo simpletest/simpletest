@@ -8,26 +8,45 @@
     Mock::generate("HtmlPage");
     Mock::generate("TokenHandler");
 
-    class TestOfCompoundRegex extends UnitTestCase {
-        function TestOfCompoundRegex() {
+    class TestOfParallelRegex extends UnitTestCase {
+        function TestOfParallelRegex() {
             $this->UnitTestCase();
         }
         function testNoPatterns() {
-            $regex = &new CompoundRegex();
+            $regex = &new ParallelRegex();
             $this->assertFalse($regex->match("Hello", $match));
             $this->assertEqual($match, "");
         }
         function testNoSubject() {
-            $regex = &new CompoundRegex();
+            $regex = &new ParallelRegex();
             $regex->addPattern(".*");
             $this->assertTrue($regex->match("", $match));
             $this->assertEqual($match, "");
         }
         function testMatchAll() {
-            $regex = &new CompoundRegex();
+            $regex = &new ParallelRegex();
             $regex->addPattern(".*");
             $this->assertTrue($regex->match("Hello", $match));
             $this->assertEqual($match, "Hello");
+        }
+        function testMatchMultiple() {
+            $regex = &new ParallelRegex();
+            $regex->addPattern("abc");
+            $regex->addPattern("ABC");
+            $this->assertTrue($regex->match("abcdef", $match));
+            $this->assertEqual($match, "abc");
+            $this->assertTrue($regex->match("AAABCabcdef", $match));
+            $this->assertEqual($match, "ABC");
+            $this->assertFalse($regex->match("Hello", $match));
+        }
+        function testPatternLabels() {
+            $regex = &new ParallelRegex();
+            $regex->addPattern("abc", "letter");
+            $regex->addPattern("123", "number");
+            $this->assertIdentical($regex->match("abcdef", $match), "letter");
+            $this->assertEqual($match, "abc");
+            $this->assertIdentical($regex->match("0123456789", $match), "number");
+            $this->assertEqual($match, "123");
         }
     }
 

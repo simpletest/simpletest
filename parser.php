@@ -7,28 +7,35 @@
     
     /**
      *    Compounded regular expression. Any of
-     *    the contained patterns could match.
+     *    the contained patterns could match and
+     *    when one does it's label is returned.
      */
-    class CompoundRegex {
+    class ParallelRegex {
         var $_patterns;
+        var $_labels;
         var $_regex;
         
         /**
          *    Constructor. Starts with no patterns.
          */
-        function CompoundRegex() {
+        function ParallelRegex() {
             $this->_patterns = array();
+            $this->_labels = array();
             $this->_regex = null;
         }
         
         /**
-         *    Adds a pattern.
+         *    Adds a pattern with an optional label.
          *    @param $pattern      Perl style regex, but ( and )
          *                         lose the usual meaning.
+         *    @param $label        Label of regex to be returned
+         *                         on a match.
          *    @public
          */
-        function addPattern($pattern) {
-            $this->_patterns[] = $pattern;
+        function addPattern($pattern, $label = true) {
+            $count = count($this->_patterns);
+            $this->_patterns[$count] = $pattern;
+            $this->_labels[$count] = $label;
             $this->_regex = null;
         }
         
@@ -45,11 +52,16 @@
             if (count($this->_patterns) == 0) {
                 return false;
             }
-            if (!preg_match($this->_getCompoundedRegex(),$subject, $matches)) {
+            if (!preg_match($this->_getCompoundedRegex(), $subject, $matches)) {
                 $match = "";
                 return false;
             }
             $match = $matches[0];
+            for ($i = 1; $i < count($matches); $i++) {
+                if ($matches[$i]) {
+                    return $this->_labels[$i - 1];
+                }
+            }
             return true;
         }
         
@@ -105,7 +117,7 @@
          */
         function addPattern($pattern, $mode = "_default") {
             if (!isset($this->_regexes[$mode])) {
-                $this->_regexes[$mode] = new CompoundRegex();
+                $this->_regexes[$mode] = new ParallelRegex();
             }
             $this->_regexes[$mode]->addPattern($pattern);
         }
