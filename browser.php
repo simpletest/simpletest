@@ -86,6 +86,7 @@
         var $_test;
         var $_response;
         var $_expect_error;
+        var $_expected_response_codes;
         var $_cookie_jar;
         
         /**
@@ -96,7 +97,8 @@
         function TestBrowser(&$test) {
             $this->_test = &$test;
             $this->_response = false;
-            $this->_expect_error = false;
+            $this->_expect_error = null;
+            $this->_expected_response_codes = null;
             $this->_cookie_jar = new CookieJar();
         }
         
@@ -115,17 +117,27 @@
                 $request->setCookie($cookie);
             }
             $this->_response = &$request->fetch();
-            $this->_checkConnection($url, $this->_response);
+            $this->_checkExpectations($url, $this->_response);
             return $this->_response->getContent();
         }
         
         /**
          *    Set the next fetch to expect a connection
          *    failure.
+         *    @param $is_expected        True if failure wanted.
          *    @public
          */
-        function expectBadConnection() {
-            $this->_expect_error = true;
+        function expectBadConnection($is_expected = true) {
+            $this->_expect_error = $is_expected;
+        }
+        
+        /**
+         *    Sets the allowed response codes.
+         *    @param $codes        Array of allowed codes.
+         *    @public
+         */
+        function expectResponseCodes($codes) {
+            $this->_expected_response_codes = $codes;
         }
         
         /**
@@ -139,16 +151,23 @@
         }
         
         /**
-         *    Checks that the connection is as expected.
-         *    If correct then a test event is sent.
+         *    Checks that the headers are as expected.
+         *    Each expectation sends a test event.
          *    @param $url         Target URL.
          *    @param $reponse     HTTP response from the fetch.
          *    @private
          */
-        function _checkConnection($url, &$response) {
-            $this->_assertTrue(
-                    $response->isError() == $this->_expect_error,
-                    "Fetching $url with error [" . $response->getError() . "]");
+        function _checkExpectations($url, &$response) {
+            if (isset($this->_expect_error)) {
+                $this->_assertTrue(
+                        $response->isError() == $this->_expect_error,
+                        "Fetching $url with error [" . $response->getError() . "]");
+            }
+            if (isset($this->_expected_response_codes)) {
+                $this->_assertTrue(
+                        in_array($response->getResponseCode(), $this->_expected_response_codes),
+                        "Fetching $url with response code [" . $response->getResponseCode() . "]");
+            }
         }
         
         /**

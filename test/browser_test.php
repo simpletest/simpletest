@@ -109,11 +109,22 @@
             $request->setReturnReference("fetch", $response);
             return $request;
         }
+        function testUntestedHost() {
+            $test = &new MockUnitTestCase($this);
+            $test->setExpectedCallCount("assertTrue", 0);
+            $browser = &new TestBrowser($test);
+            $request = &$this->_createSimulatedBadHost();
+            $this->assertIdentical(
+                    $browser->fetchUrl("http://this.host/this/path/page.html", &$request),
+                    false);
+            $test->tally();
+        }
         function testFailingBadHost() {
             $test = &new MockUnitTestCase($this);
             $test->setExpectedArgumentsSequence(0, "assertTrue", array(false, '*'));
             $test->setExpectedCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
+            $browser->expectBadConnection(false);
             $request = &$this->_createSimulatedBadHost();
             $this->assertIdentical(
                     $browser->fetchUrl("http://this.host/this/path/page.html", &$request),
@@ -131,6 +142,38 @@
                     $browser->fetchUrl("http://this.host/this/path/page.html", &$request),
                     false);
             $test->tally();
+        }
+    }
+
+    class TestOfHeaders extends UnitTestCase {
+        function TestOfHeaders() {
+            $this->UnitTestCase();
+        }
+        function setUp() {
+            $this->_response = &new MockSimpleHttpResponse($this);
+            $this->_response->setReturnValue("isError", false);
+            $this->_response->setReturnValue("getContent", false);
+            $this->_request = &new MockSimpleHttpRequest($this);
+            $this->_request->setReturnReference("fetch", $this->_response);
+            $this->_test = &new MockUnitTestCase($this);
+        }
+        function testExpectedResponseCodes() {
+            $this->_response->setReturnValue("getResponseCode", 404);
+            $this->_test->setExpectedArguments("assertTrue", array(true, "*"));
+            $this->_test->setExpectedCallCount("assertTrue", 1);
+            $browser = &new TestBrowser($this->_test);
+            $browser->expectResponseCodes(array(404));
+            $browser->fetchUrl("http://this.host/this/path/page.html", &$this->_request);
+            $this->_test->tally();
+        }
+        function testUnwantedResponseCode() {
+            $this->_response->setReturnValue("getResponseCode", 404);
+            $this->_test->setExpectedArguments("assertTrue", array(false, "*"));
+            $this->_test->setExpectedCallCount("assertTrue", 1);
+            $browser = &new TestBrowser($this->_test);
+            $browser->expectResponseCodes(array(100, 200));
+            $browser->fetchUrl("http://this.host/this/path/page.html", &$this->_request);
+            $this->_test->tally();
         }
     }
     
