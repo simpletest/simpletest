@@ -325,7 +325,7 @@
                 if (!$this->_isTestCase($class)) {
                     continue;
                 }
-                if (in_array($class, GroupTest::ignore())) {
+                if (SimpleTestOptions::isIgnored($class)) {
                     continue;
                 }
                 $group->addTestCase(new $class());
@@ -375,23 +375,10 @@
         }
         
         /**
-         *    Maintains a static ignore list so that a
-         *    directive can be sent to the group test
-         *    that a test class should not be included
-         *    during a file scan. Used for hiding test
-         *    generic case extensions from tests.
-         *    @param $class        Add a class to ignore.
-         *    @static
+         *    @deprecated
          */
         function ignore($class = false) {
-            static $_classes;
-            if (!isset($_classes)) {
-                $_classes = array();
-            }
-            if ($class) {
-                $_classes[] = strtolower($class);
-            }
-            return $_classes;
+            SimpleTestOptions::ignore($class);
         }
     }
 ?>

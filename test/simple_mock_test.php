@@ -128,9 +128,9 @@
             $this->SimpleStub($wildcard);
         }
     }
-    Stub::setStubBaseClass("SpecialSimpleStub");
+    SimpleTestOptions::setStubBaseClass("SpecialSimpleStub");
     Stub::generate("Dummy", "SpecialStubDummy");
-    Stub::setStubBaseClass("SimpleStub");
+    SimpleTestOptions::setStubBaseClass("SimpleStub");
     
     class TestOfStubGeneration extends UnitTestCase {
         function TestOfStubGeneration() {
@@ -278,9 +278,9 @@
             $this->SimpleMock($test, $wildcard);
         }
     }
-    Mock::setMockBaseClass("SpecialSimpleMock");
+    SimpleTestOptions::setMockBaseClass("SpecialSimpleMock");
     Mock::generate("Dummy", "SpecialMockDummy");
-    Mock::setMockBaseClass("SimpleMock");
+    SimpleTestOptions::setMockBaseClass("SimpleMock");
     
     class TestOfMockGeneration extends UnitTestCase {
         function TestOfMockGeneration() {
