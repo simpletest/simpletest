@@ -9,9 +9,9 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'browser.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'xml.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'simple_test.php');
+    require_once(dirname(__FILE__) . '/browser.php');
+    require_once(dirname(__FILE__) . '/xml.php');
+    require_once(dirname(__FILE__) . '/simple_test.php');
     /**#@-*/
 
     /**

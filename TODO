@@ -41,7 +41,7 @@ Username and password should allow encoded characters (1/0) - done.
 Add support for proxy fetching (3/9) - done.
 Add User-Agent identifier for tracking tests (1/0) - done.
 Allow adding of arbitrary headers (1/1) - done.
-Add accessors for link sets (1).
+Add accessors for link sets (1/1) - done.
 Add showRequest() to dump the last raw request (2/1) - done.
 Remove getCurrentUrl() method (2/1) - done.
 
