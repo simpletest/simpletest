@@ -315,7 +315,36 @@
             return (boolean)preg_match($expected, trim($value));
         }
     }
-  
+    
+    /**
+     *    Extension that builds a web browser at the start of each
+     *    test.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class WebTestCaseRunner extends SimpleErrorTrappingRunner {
+        
+        /**
+         *    Takes in the test case and reporter to mediate between.
+         *    @param SimpleTestCase $test_case  Test case to run.
+         *    @param SimpleScorer $scorer       Reporter to receive events.
+         */
+        function WebTestCaseRunner(&$test_case, &$scorer) {
+            $this->SimpleErrorTrappingRunner($test_case, $scorer);
+        }
+        
+        /**
+         *    Builds the browser and runs the test.
+         *    @param string $method    Test method to call.
+         *    @access public
+         */
+        function invoke($method) {
+            $test = &$this->getTestCase();
+            $test->setBrowser($test->createBrowser());
+            parent::invoke($method);
+        }
+    }
+    
     /**
      *    Test case for testing of web pages. Allows
      *    fetching of pages, parsing of HTML and
@@ -335,6 +364,46 @@
          */
         function WebTestCase($label = false) {
             $this->SimpleTestCase($label);
+        }
+        
+        /**
+         *    Sets the runner to one that restarts the browser on
+         *    each request.
+         */
+        function &_createRunner(&$reporter) {
+            return new WebTestCaseRunner($this, $reporter);
+        }
+        
+        /**
+         *    Gets a current browser reference for setting
+         *    special expectations or for detailed
+         *    examination of page fetches.
+         *    @return SimpleBrowser     Current test browser object.
+         *    @access public
+         */
+        function &getBrowser() {
+            return $this->_browser;
+        }
+        
+        /**
+         *    Gets a current browser reference for setting
+         *    special expectations or for detailed
+         *    examination of page fetches.
+         *    @param SimpleBrowser $browser    New test browser object.
+         *    @access public
+         */
+        function setBrowser(&$browser) {
+            return $this->_browser = &$browser;
+        }
+        
+        /**
+         *    Creates a new default web browser object.
+         *    Will be cleared at the end of the test method.
+         *    @return TestBrowser           New browser.
+         *    @access public
+         */
+        function &createBrowser() {
+            return new SimpleBrowser();
         }
         
         /**
@@ -406,37 +475,6 @@
          */
         function ageCookies($interval) {
             $this->_browser->ageCookies($interval);
-        }
-        
-        /**
-         *    Gets a current browser reference for setting
-         *    special expectations or for detailed
-         *    examination of page fetches.
-         *    @param SimpleBrowser $browser    Test browser object.
-         *    @access public
-         */
-        function &getBrowser() {
-            return $this->_browser;
-        }
-        
-        /**
-         *    Creates a new default web browser object.
-         *    Will be cleared at the end of the test method.
-         *    @return TestBrowser           New browser.
-         *    @access public
-         */
-        function &createBrowser() {
-            return new SimpleBrowser();
-        }
-        
-        /**
-         *    Sets up a browser for the start of each
-         *    test method.
-         *    @access public
-         */
-        function before() {
-            $this->_browser = &$this->createBrowser();
-            parent::before();
         }
         
         /**

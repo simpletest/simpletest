@@ -30,7 +30,7 @@
     require_once('simpletest/unit_tester.php');
     require_once('simpletest/reporter.php');
     
-    $test = &new GroupTest('My tests);<strong>
+    $test = &new GroupTest('My tests');<strong>
     if (isset($_GET['f'])) {
         $test->addTestFile($_GET['f']);    
     } else {
@@ -41,7 +41,7 @@
     $test->run(HtmlReporter());
 ?>
 ]]></php>
-                A brute force approach, but effective never the less.
+                A brute force approach, but effective nevertheless.
             </p>
             <p>
                 The simplest approach to running just a single test case is
@@ -51,7 +51,7 @@
     require_once('simpletest/unit_tester.php');
     require_once('simpletest/reporter.php');
     
-    $test = &new GroupTest('My tests);
+    $test = &new GroupTest('My tests');
     if (isset($_GET['f'])) {<strong>
         if (isset($_GET['c'])) {
             $test->addTestFile($_GET['f'], array($_GET['c']));
@@ -83,7 +83,7 @@ class OneTestReporter extends HtmlReporter {
     }
     
     function invoke(&$runner, $method) {
-        if ($method == $this->_just_this) {
+        if (strtolower($method) == strtolower($this->_just_this)) {
             parent::invoke($runner, $method);
         }
     }
@@ -96,12 +96,12 @@ class OneTestReporter extends HtmlReporter {
     require_once('simpletest/unit_tester.php');
     require_once('one_test_reporter.php');
     
-    $test = &new GroupTest('My tests);
+    $test = &new GroupTest('My tests');
     if (isset($_GET['f'])) {
         if (isset($_GET['c'])) {
             $test->addTestFile($_GET['f'], array($_GET['c']));
         } else {
-            $test->addTestFile($_GET['f']);    
+            $test->addTestFile($_GET['f']);
         }
     } else {
         $test->addTestFile('test_a.php');    
@@ -132,11 +132,104 @@ class OneTestReporter extends HtmlReporter {
             <p>
                 It may also mean that a full test run can only be run on a separate
                 server.
-                This technque is known as &quot;nightly builds&quot; when run overnight
+                This technique is known as &quot;nightly builds&quot; when run overnight
                 and &quot;continuous integration&quot; when done after every check-in.
             </p>
         </section>
-        <section name="runner" title="The test cases run themselves">
+        <section name="runner" title="How the test cases run themselves">
+            <p>
+                The test cases do not actually call methods on themselves
+                Instead they spawn a runner object to do it for them and
+                the factory for this runner can be overridden for various
+                effects.
+            </p>
+            <p>
+                First, here is the signature for the runner...
+<php><![CDATA[
+class SimpleRunner {
+    function SimpleRunner(&$test_case, &$scorer) { }
+    function &getTestCase() { }
+    function run() { }<strong>
+    function _isTest($method) { }
+    function invoke($method) { }</strong>
+    function paintMethodStart($test_name) { }
+    function paintMethodEnd($test_name) { }
+    function paintPass($message) { }
+    function paintFail($message) { }
+    function paintError($message) { }
+    function paintException($exception) { }
+    function paintMessage($message) { }
+    function paintFormattedMessage($message) { }
+    function paintSignal($type, &$payload) { }
+}
+]]></php>
+                The key flex point is the <code>invoke()</code> method.
+                You can use this to change or embellish the run time behaviour
+                of the test case.
+                The paint methods are intercepts of the messages on their way
+                to the reporter and the <code>_isTest()</code> method is
+                used to decide which methods are test methods.
+            </p>
+            <p>
+                The default runner for <code>UnitTestCase</code> is not
+                <code>SimpleRunner</code>, but <code>SimpleErrorTrappingRunner</code>.
+                This subclass adds the SimpleTest error trap so that
+                the <code>UnitTestCase::assertError()</code> methods work
+                correctly.
+                This means that if you want to turn the error trapping behaviour
+                off, perhaps it interferes with your debugger, you can do
+                so by having the test case create the more primitive
+                <code>SimpleRunner</code>...
+<php><![CDATA[
+class MyTest extends UnitTestCase {
+    
+    function &_createRunner(&$reporter) {
+        return new SimpleRunner($this, $reporter);
+    }
+}
+]]></php>
+                This means that errors will now halt the test suite if encountered
+                in this test case.
+            </p>
+            <p>
+                For a more interesting example we can take a leaf out of
+                <a href="http://jbehave.codehaus.org/">JBehave</a>'s
+                book by making our test methods start with the prefix
+                "should" rather than "test".
+                Although less usual, this makes the test names more
+                readable.
+<php><![CDATA[
+class JBehaveStyleRunner extends SimpleRunner {
+    function JBehaveStyleRunner(&$test_case, &$scorer) {
+        $this->SimpleRunner($test_case, $scorer);
+    }
+    
+    function _isTest($method) {
+        return strtolower(substr($method, 0, 6)) == 'should';
+    }
+}
+]]></php>
+                All we have done is to override the name check so that
+                it returns true if the method name starts with "should".
+                We can test that it works with the following test case...
+<php><![CDATA[
+class TestOfJBehaveStyleRunner extends UnitTestCase {
+    
+    function &_createRunner(&$reporter) {
+        return new JBehaveStyleRunner($this, $reporter);
+    }
+    
+    function testShouldNotBeRun() {
+        $this->fail('Starts with test');
+    }
+    
+    function shouldBeRun() {
+        $this->pass('Starts with should');
+    }
+}
+]]></php>
+                It's a matter of taste which you prefer.
+            </p>
         </section>
     </content>
     <internal>

@@ -45,9 +45,9 @@
         /**
          *    Accessor for test case being run.
          *    @return SimpleTestCase    Test case.
-         *    @access protected
+         *    @access public
          */
-        function &_getTestCase() {
+        function &getTestCase() {
             return $this->_test_case;
         }
         
@@ -104,11 +104,9 @@
          *    @access public
          */
         function invoke($method) {
-            $this->_test_case->before();
             $this->_test_case->setUp();
             $this->_test_case->$method();
             $this->_test_case->tearDown();
-            $this->_test_case->after();
         }
 
         /**
@@ -226,7 +224,7 @@
             parent::invoke($method);
             $queue = &SimpleErrorQueue::instance();
             while (list($severity, $message, $file, $line, $globals) = $queue->extract()) {
-                $test_case = &$this->_getTestCase();
+                $test_case = &$this->getTestCase();
                 $test_case->error($severity, $message, $file, $line, $globals);
             }
             restore_error_handler();
@@ -290,22 +288,6 @@
             $this->_runner->run();
             $reporter->paintCaseEnd($this->getLabel());
             return $reporter->getStatus();
-        }
-        
-        /**
-         *    Runs test case specific code before the user setUp().
-         *    For extension writers not wanting to interfere with setUp().
-         *    @access protected
-         */
-        function before() {
-        }
-          
-        /**
-         *    Runs test case specific code after the user tearDown().
-         *    For extension writers not wanting to interfere with user tests.
-         *    @access protected
-         */
-        function after() {
         }
       
         /**

@@ -211,6 +211,7 @@
             $this->assertTrue($expectation->test(true));
             $this->assertFalse($expectation->test(1));
         }
+        
         function testBool() {
             $expectation = &new IsAExpectation('bool');
             $this->assertTrue($expectation->test(true));

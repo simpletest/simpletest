@@ -167,8 +167,6 @@ $this->assertNoErrors();</strong>
                 <table><tbody>
                     <tr><td><code>setUp()</code></td><td>Runs this before each test method</td></tr>
                     <tr><td><code>tearDown()</code></td><td>Runs this after each test method</td></tr>
-                    <tr><td><code>before()</code></td><td>Runs this before each test without affecting setUp()</td></tr>
-                    <tr><td><code>after()</code></td><td>Runs this after each test without affecting tearDown()</td></tr>
                     <tr><td><code>pass()</code></td><td>Sends a test pass</td></tr>
                     <tr><td><code>fail()</code></td><td>Sends a test failure</td></tr>
                     <tr><td><code>error()</code></td><td>Sends an exception event</td></tr>

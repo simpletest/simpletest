@@ -5,6 +5,10 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+No method SimpleRunner::_getTestCase()
+--------------------------------------
+This was made public as getTestCase() in 1.0RC2.
+
 No method restartSession()
 --------------------------
 This was renamed to restart() in the WebTestCase, SimpleBrowser
