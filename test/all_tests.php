@@ -12,6 +12,7 @@
     $test = new GroupTest("All tests");
     $test->addTestFile("simple_mock_test.php");
     $test->addTestFile("web_test_test.php");
+    $test->addTestFile("socket_test.php");
     $test->attachObserver(new TestHtmlDisplay());
     $test->run();
 ?>
