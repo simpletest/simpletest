@@ -345,6 +345,15 @@
             $this->assertEqual($cookies[1]->getPath(), "/");
             $this->assertEqual($cookies[1]->getExpiry(), "");
         }
+        function testRedirect() {
+            $headers = new SimpleHttpHeaders("HTTP/1.1 301 OK\r\n" .
+                    "Content-Type: text/plain\r\n" .
+                    "Content-Length: 0\r\n" .
+                    "Location: http://www.somewhere-else.com/\r\n" .
+                    "Connection: close");
+            $this->assertIdentical($headers->getResponseCode(), 301);
+            $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com/");
+        }
     }
     
     class TestOfHttpResponse extends UnitTestCase {
@@ -428,6 +437,18 @@
             $this->assertEqual($cookies[0]->getValue(), "aaa");
             $this->assertEqual($cookies[0]->getPath(), "/here/");
             $this->assertEqual($cookies[0]->getExpiry(), "Wed, 25 Dec 2002 04:24:20 GMT");
+        }
+        function testRedirect() {
+            $socket = &new MockSimpleSocket($this);
+            $socket->setReturnValue("isError", false);
+            $socket->setReturnValueAt(0, "read", "HTTP/1.1 301 OK\r\n");
+            $socket->setReturnValueAt(1, "read", "Content-Type: text/plain\r\n");
+            $socket->setReturnValueAt(2, "read", "Location: http://www.somewhere-else.com/\r\n");
+            $socket->setReturnValueAt(3, "read", "Connection: close\r\n");
+            $socket->setReturnValueAt(4, "read", "\r\n");
+            $socket->setReturnValue("read", "");
+            $response = &new SimpleHttpResponse($socket);
+            $this->assertEqual($response->getRedirect(), "http://www.somewhere-else.com/");
         }
     }
 ?>

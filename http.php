@@ -679,6 +679,7 @@
         var $_response_code;
         var $_http_version;
         var $_mime_type;
+        var $_location;
         var $_cookies;
         
         /**
@@ -690,6 +691,7 @@
             $this->_response_code = 0;
             $this->_http_version = 0;
             $this->_mime_type = "";
+            $this->_location = false;
             $this->_cookies = array();
             foreach (split("\r\n", $headers) as $header_line) {
                 $this->_parseHeaderLine($header_line);
@@ -712,7 +714,7 @@
          *    @public
          */
         function getHttpVersion() {
-            return $this->_http_version;            
+            return $this->_http_version;
         }
         
         /**
@@ -721,7 +723,17 @@
          *    @public
          */
         function getResponseCode() {
-            return (integer)$this->_response_code;            
+            return (integer)$this->_response_code;
+        }
+        
+        /**
+         *    Returns the redirected URL or false if
+         *    no redirection.
+         *    @return       URL as string of false for none.
+         *    @public
+         */
+        function getLocation() {
+            return $this->_location;
         }
         
         /**
@@ -730,7 +742,7 @@
          *    @public
          */
         function getMimeType() {
-            return $this->_mime_type;            
+            return $this->_mime_type;
         }
         
         /**
@@ -755,6 +767,9 @@
             }
             if (preg_match('/Content-type:\s*(.*)/i', $header_line, $matches)) {
                 $this->_mime_type = trim($matches[1]);
+            }
+            if (preg_match('/Location:\s*(.*)/i', $header_line, $matches)) {
+                $this->_location = trim($matches[1]);
             }
             if (preg_match('/Set-cookie:(.*)/i', $header_line, $matches)) {
                 $this->_cookies[] = $this->_parseCookie($matches[1]);
@@ -849,6 +864,19 @@
          */
         function getMimeType() {
             return $this->_headers->getMimeType();            
+        }
+        
+        /**
+         *    Get redirected URL or false if none.
+         *    @return     The URL as a string or false
+         *                if the response was not a redirect.
+         *    @public
+         */
+        function getRedirect() {
+            if (in_array($this->_headers->getResponseCode(), array(301, 302, 303, 307))) {
+                return $this->_headers->getLocation();
+            }
+            return false;
         }
         
         /**
