@@ -403,6 +403,7 @@
             $lexer->mapHandler('double_quoted', 'acceptAttributeToken');
             SimpleSaxParser::_addTag($lexer, "a");
             SimpleSaxParser::_addTag($lexer, "title");
+            SimpleSaxParser::_addTag($lexer, "form");
             SimpleSaxParser::_addInTagTokens($lexer);
             return $lexer;
         }

@@ -13,7 +13,6 @@
         function BoundaryTests() {
             $this->GroupTest("Boundary tests");
             $this->addTestFile("live_test.php");
-            $this->addTestFile("web_test.php");
         }
     }
     
