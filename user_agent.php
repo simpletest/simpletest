@@ -215,27 +215,6 @@
         }
         
         /**
-         *    Accessor for the current location.
-         *    @return string       Current URL.
-         *    @access public
-         */
-        function _getCurrentUrl() {
-            if (! $this->_current_request) {
-                return false;
-            }
-            $authorisation = '';
-            if ($this->_current_request['url']->getUsername()) {
-                $authorisation = $this->_current_request['url']->getUsername() . ':' .
-                        $this->_current_request['url']->getPassword() . '@';
-            }
-            return $this->_current_request['url']->getScheme('http') . '://' .
-                    $authorisation .
-                    $this->_current_request['url']->getHost() .
-                    $this->_current_request['url']->getPath() .
-                    $this->_current_request['url']->getEncodedRequest();
-        }
-        
-        /**
          *    Accessor for method of last request.
          *    @return string       POST or GET.
          *    @access public

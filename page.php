@@ -227,6 +227,7 @@
     
     /**
      *    An empty page. Basically no content was fetched.
+     *    NullValue pattern.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
@@ -248,6 +249,15 @@
          *    @access public
          */
         function getRaw() {
+            return false;
+        }
+        
+        /**
+         *    Accessor for the original resource name.
+         *    @return SimpleUrl      No URL as no page yet.
+         *    @access public
+         */
+        function getUrl() {
             return false;
         }
         

@@ -494,13 +494,13 @@
          *    @access public
          */
         function authenticate($username, $password) {
-            if (! $this->_history->getUrl()) {
+            if (! $this->_page->getUrl()) {
                 return false;
             }
             if (! $this->_page->getRealm()) {
                 return false;
             }
-            $url = $this->_history->getUrl();
+            $url = $this->_page->getUrl();
             $this->_user_agent->setIdentity(
                     $url->getHost(),
                     $this->_page->getRealm(),
