@@ -10,59 +10,6 @@
     define('MOCK_WILDCARD', '*');
     
     /**
-     *    A list of parameters that can include wild cards.
-     *    The parameters can be compared with wildcards
-     *    always being counted as matches.
-     */
-    class ParameterList {
-        var $_parameters;
-        var $_wildcard;
-        
-        /**
-         *    Creates a parameter list with a possible wildcard.
-         *    @param $parameters        Array of parameters including
-         *                              those that are wildcarded.
-         *                              If the value is not an array
-         *                              then it is considered to match any.
-         *    @param $wildcard          Any parameter matching this
-         *                              will always match.
-         *    @public
-         */
-        function ParameterList($parameters, $wildcard = MOCK_WILDCARD) {
-            $this->_parameters = $parameters;
-            $this->_wildcard = $wildcard;
-        }
-        
-        /**
-         *    Tests the internal parameters and wildcards against
-         *    the test list of parameters.
-         *    @param $parameters        Parameter list to test against.
-         *    @return                   False if a parameter fails to match.
-         *    @public
-         */
-        function isMatch($parameters) {
-            if (!is_array($this->_parameters)) {
-                return true;
-            }
-            if (count($this->_parameters) != count($parameters)) {
-                return false;
-            }
-            for ($i = 0; $i < count($this->_parameters); $i++) {
-                if ($this->_parameters[$i] === $this->_wildcard) {
-                    continue;
-                }
-                if (count($parameters) <= $i) {
-                    return false;
-                }
-                if (!($this->_parameters[$i] === $parameters[$i])) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-    
-    /**
      *    Parameter comparison assertion.
      */
     class ParametersExpectation extends Expectation {
@@ -160,7 +107,7 @@
         function addReference($parameters, &$reference) {
             $place = count($this->_map);
             $this->_map[$place] = array();
-            $this->_map[$place]["params"] = new ParameterList(
+            $this->_map[$place]["params"] = new ParametersExpectation(
                     $parameters,
                     $this->_wildcard);
             $this->_map[$place]["content"] = &$reference;
@@ -204,7 +151,7 @@
          */
         function &_findFirstSlot($parameters) {
             for ($i = 0; $i < count($this->_map); $i++) {
-                if ($this->_map[$i]["params"]->isMatch($parameters)) {
+                if ($this->_map[$i]["params"]->test($parameters)) {
                     return $this->_map[$i];
                 }
             }
@@ -480,7 +427,7 @@
         function expectArguments($method, $args = false) {
             $this->_dieOnNoMethod($method, "set expected arguments");
             $args = (is_array($args) ? $args : array());
-            $this->_expected_args[strtolower($method)] = new ParameterList(
+            $this->_expected_args[strtolower($method)] = new ParametersExpectation(
                     $args,
                     $this->_getWildcard());
         }
@@ -504,7 +451,7 @@
                 $this->_sequence_args[$timing] = array();
             }
             $method = strtolower($method);
-            $this->_sequence_args[$timing][$method] = new ParameterList(
+            $this->_sequence_args[$timing][$method] = new ParametersExpectation(
                     $args,
                     $this->_getWildcard());
         }
@@ -665,12 +612,12 @@
             }
             if (isset($this->_sequence_args[$timing][$method])) {
                 $this->_assertTrue(
-                        $this->_sequence_args[$timing][$method]->isMatch($args),
+                        $this->_sequence_args[$timing][$method]->test($args),
                         "Arguments for [$method] at [$timing] were [" . $this->_renderArguments($args) . "]",
                         $this->_test);
             } elseif (isset($this->_expected_args[$method])) {
                 $this->_assertTrue(
-                        $this->_expected_args[$method]->isMatch($args),
+                        $this->_expected_args[$method]->test($args),
                         "Arguments for [$method] were [" . $this->_renderArguments($args) . "]",
                         $this->_test);
             }

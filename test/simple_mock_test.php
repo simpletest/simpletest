@@ -1,53 +1,6 @@
 <?php
     // $Id$
     
-    class TestOfParameterList extends UnitTestCase {
-        function TestOfParameterList() {
-            $this->UnitTestCase();
-        }
-        function testEmptyMatch() {
-            $list = new ParameterList(array());
-            $this->assertTrue($list->isMatch(array()));
-            $this->assertFalse($list->isMatch(array(33)));
-        }
-        function testSingleMatch() {
-            $list = new ParameterList(array(0));
-            $this->assertFalse($list->isMatch(array(1)));
-            $this->assertTrue($list->isMatch(array(0)));
-        }
-        function testAnyMatch() {
-            $list = new ParameterList(false);
-            $this->assertTrue($list->isMatch(array()));
-            $this->assertTrue($list->isMatch(array(1, 2)));
-        }
-        function testMissingParameter() {
-            $list = new ParameterList(array(0));
-            $this->assertFalse($list->isMatch(array()));
-        }
-        function testNullParameter() {
-            $list = new ParameterList(array(null));
-            $this->assertTrue($list->isMatch(array(null)));
-            $this->assertFalse($list->isMatch(array()));
-        }
-        function testWildcardParameter() {
-            $list = new ParameterList(array("wild"), "wild");
-            $this->assertFalse($list->isMatch(array()), "Empty->%s");
-            $this->assertTrue($list->isMatch(array(null)), "Null->%s");
-            $this->assertTrue($list->isMatch(array(13)), "Integer->%s");
-        }
-        function testIdentityOnly() {
-            $list = new ParameterList(array("0"));
-            $this->assertFalse($list->isMatch(array(0)));
-            $this->assertTrue($list->isMatch(array("0")));
-        }
-        function testLongList() {
-            $list = new ParameterList(array("0", 0, "wild", false), "wild");
-            $this->assertTrue($list->isMatch(array("0", 0, 37, false)));
-            $this->assertFalse($list->isMatch(array("0", 0, 37, true)));
-            $this->assertFalse($list->isMatch(array("0", 0, 37)));
-        }
-    }
-    
     class TestOfParametersExpectation extends UnitTestCase {
         function TestOfParametersExpectation() {
             $this->UnitTestCase();
