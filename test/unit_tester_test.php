@@ -18,6 +18,11 @@
         function testAssertIdenticalReturnsAssertionAsBoolean() {
             $this->assertTrue($this->assertIdentical(5, 5));
         }
+        
+        function testCoreAssertionsDoNotThrowErrors() {
+            $this->assertIsA($this, 'UnitTestCase');
+            $this->assertNotA($this, 'WebTestCase');
+        }
     }
     
     class JBehaveStyleRunner extends SimpleRunner {
