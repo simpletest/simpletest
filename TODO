@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 58 hours.
+This is immediate stuff only for this iteration (RC2) of 57 hours.
 
 $Id$
 
@@ -35,7 +35,6 @@ Web tester
 Add htmlentities() international fix (1/1) - done.
 Add WebTestCase::getCookie() method (1/1) - done.
 Make labels HTML entity and tag blind (3/4) - done.
-Add setFieldOrFail() method (1/1) - done.
 Add assertWantedText() for string matching (3/2) - done.
 
 Documentation
