@@ -7,8 +7,8 @@
     require_once(SIMPLE_TEST . 'http.php');
     Mock::generate("SimpleSocket");
 
-    class CookieTestCase extends UnitTestCase {
-        function CookieTestCase() {
+    class TestOfCookie extends UnitTestCase {
+        function TestOfCookie() {
             $this->UnitTestCase();
         }
         function testCookieAccessors() {
@@ -36,8 +36,8 @@
         }
     }
 
-    class HttpRequestTestCase extends UnitTestCase {
-        function HttpRequestTestCase() {
+    class TestOfHttpRequest extends UnitTestCase {
+        function TestOfHttpRequest() {
             $this->UnitTestCase();
         }
         function testReadingBadConnection() {
@@ -84,8 +84,8 @@
         }
     }
     
-    class HttpResponseTestCase extends UnitTestCase {
-        function HttpResponseTestCase() {
+    class TestOfHttpResponse extends UnitTestCase {
+        function TestOfHttpResponse() {
             $this->UnitTestCase();
         }
         function testBadRequest() {
