@@ -69,15 +69,15 @@
             $this->UnitTestCase();
         }
         function testStartState() {
-            $stack = &new StateStack("one");
+            $stack = &new SimpleStateStack("one");
             $this->assertEqual($stack->getCurrent(), "one");
         }
         function testExhaustion() {
-            $stack = &new StateStack("one");
+            $stack = &new SimpleStateStack("one");
             $this->assertFalse($stack->leave());
         }
         function testStateMoves() {
-            $stack = &new StateStack("one");
+            $stack = &new SimpleStateStack("one");
             $stack->enter("two");
             $this->assertEqual($stack->getCurrent(), "two");
             $stack->enter("three");

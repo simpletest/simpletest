@@ -118,7 +118,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class StateStack {
+    class SimpleStateStack {
         var $_stack;
         
         /**
@@ -126,7 +126,7 @@
          *    @param string $start        Starting state name.
          *    @access public
          */
-        function StateStack($start) {
+        function SimpleStateStack($start) {
             $this->_stack = array($start);
         }
         
@@ -194,7 +194,7 @@
             $this->_case = $case;
             $this->_regexes = array();
             $this->_parser = &$parser;
-            $this->_mode = new StateStack($start);
+            $this->_mode = &new SimpleStateStack($start);
             $this->_mode_handlers = array();
         }
         
@@ -210,7 +210,7 @@
          *    @access public
          */
         function addPattern($pattern, $mode = "accept") {
-            if (!isset($this->_regexes[$mode])) {
+            if (! isset($this->_regexes[$mode])) {
                 $this->_regexes[$mode] = new ParallelRegex($this->_case);
             }
             $this->_regexes[$mode]->addPattern($pattern);
@@ -230,7 +230,7 @@
          *    @access public
          */
         function addEntryPattern($pattern, $mode, $new_mode) {
-            if (!isset($this->_regexes[$mode])) {
+            if (! isset($this->_regexes[$mode])) {
                 $this->_regexes[$mode] = new ParallelRegex($this->_case);
             }
             $this->_regexes[$mode]->addPattern($pattern, $new_mode);
@@ -245,15 +245,16 @@
          *    @access public
          */
         function addExitPattern($pattern, $mode) {
-            if (!isset($this->_regexes[$mode])) {
+            if (! isset($this->_regexes[$mode])) {
                 $this->_regexes[$mode] = new ParallelRegex($this->_case);
             }
             $this->_regexes[$mode]->addPattern($pattern, "__exit");
         }
         
         /**
-         *    Adds a pattern that has a special mode.
-         *    Acts as an entry and exit pattern in one go.
+         *    Adds a pattern that has a special mode. Acts as an entry
+         *    and exit pattern in one go, effectively calling a special
+         *    parser handler for this token only.
          *    @param string $pattern      Perl style regex, but ( and )
          *                                lose the usual meaning.
          *    @param string $mode         Should only apply this
@@ -263,7 +264,7 @@
          *    @access public
          */
         function addSpecialPattern($pattern, $mode, $special) {
-            if (!isset($this->_regexes[$mode])) {
+            if (! isset($this->_regexes[$mode])) {
                 $this->_regexes[$mode] = new ParallelRegex($this->_case);
             }
             $this->_regexes[$mode]->addPattern($pattern, "_$special");
@@ -290,13 +291,13 @@
          *    @access public
          */
         function parse($raw) {
-            if (!isset($this->_parser)) {
+            if (! isset($this->_parser)) {
                 return false;
             }
             $length = strlen($raw);
             while (is_array($parsed = $this->_reduce($raw))) {
                 list($unmatched, $matched, $mode) = $parsed;
-                if (!$this->_dispatchTokens($unmatched, $matched, $mode)) {
+                if (! $this->_dispatchTokens($unmatched, $matched, $mode)) {
                     return false;
                 }
                 if (strlen($raw) == $length) {
@@ -316,27 +317,25 @@
          *    mode if one is listed.
          *    @param string $unmatched    Unmatched leading portion.
          *    @param string $matched      Actual token match.
-         *    @param string $mode         Mode after match. The "_exit"
-         *                                mode causes a stack pop. An
+         *    @param string $mode         Mode after match. A boolean
          *                                false mode causes no change.
          *    @return boolean             False if there was any error
          *                                from the parser.
          *    @access private
          */
         function _dispatchTokens($unmatched, $matched, $mode = false) {
-            if (!$this->_invokeParser($unmatched, LEXER_UNMATCHED)) {
+            if (! $this->_invokeParser($unmatched, LEXER_UNMATCHED)) {
                 return false;
             }
-            if ($mode === "__exit") {
-                if (!$this->_invokeParser($matched, LEXER_EXIT)) {
+            if ($this->_isModeEnd($mode)) {
+                if (! $this->_invokeParser($matched, LEXER_EXIT)) {
                     return false;
                 }
                 return $this->_mode->leave();
             }
-            if (strncmp($mode, "_", 1) == 0) {
-                $mode = substr($mode, 1);
-                $this->_mode->enter($mode);
-                if (!$this->_invokeParser($matched, LEXER_SPECIAL)) {
+            if ($this->_isSpecialMode($mode)) {
+                $this->_mode->enter($this->_decodeSpecial($mode));
+                if (! $this->_invokeParser($matched, LEXER_SPECIAL)) {
                     return false;
                 }
                 return $this->_mode->leave();
@@ -349,8 +348,44 @@
         }
         
         /**
+         *    Tests to see if the new mode is actually to leave
+         *    the current mode and pop an item from the matching
+         *    mode stack.
+         *    @param string $mode    Mode to test.
+         *    @return boolean        True if this is the exit mode.
+         *    @access private
+         */
+        function _isModeEnd($mode) {
+            return ($mode === "__exit");
+        }
+        
+        /**
+         *    Test to see if the mode is one where this mode
+         *    is entered for this token only and automatically
+         *    leaves immediately afterwoods.
+         *    @param string $mode    Mode to test.
+         *    @return boolean        True if this is the exit mode.
+         *    @access private
+         */
+        function _isSpecialMode($mode) {
+            return (strncmp($mode, "_", 1) == 0);
+        }
+        
+        /**
+         *    Strips the magic underscore marking single token
+         *    modes.
+         *    @param string $mode    Mode to decode.
+         *    @return string         Underlying mode name.
+         *    @access private
+         */
+        function _decodeSpecial($mode) {
+            return substr($mode, 1);
+        }
+        
+        /**
          *    Calls the parser method named after the current
-         *    mode. Empty content will be ignored.
+         *    mode. Empty content will be ignored. The lexer
+         *    has a parser handler for each mode in the lexer.
          *    @param string $content        Text parsed.
          *    @param boolean $is_match      Token is recognised rather
          *                                  than unparsed data.
