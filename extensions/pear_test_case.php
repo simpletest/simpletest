@@ -6,17 +6,13 @@
      *	@version	$Id$
      */
     
-	/**
-	 * @ignore	originally defined in simple_test.php
-	 */
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "simpletest/");
-    }
     /**#@+
      * include SimpleTest files
      */
-    require_once(SIMPLE_TEST . 'unit_tester.php');
-    require_once(SIMPLE_TEST . 'expectation.php');
+    require_once dirname(__FILE__).DIRECTORY_SEPARATOR
+    	.'..'.DIRECTORY_SEPARATOR .'unit_tester.php';
+    require_once dirname(__FILE__).DIRECTORY_SEPARATOR
+            .'..'.DIRECTORY_SEPARATOR .'expectation.php';
 	/**#@-*/
    
     /**
