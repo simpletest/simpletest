@@ -127,13 +127,12 @@
         }
         
         /**
-         *    Adds cookies to the request overriding previous
-         *    cookies that have the same key.
-         *    @param $cookies     Hash of cookie names and values.
+         *    Adds a cookie to the request.
+         *    @param $cookie     New SimpleCookie object.
          *    @public
          */
-        function setCookies($cookies) {
-            $this->_cookies = array_merge($this->_cookies, $cookies);
+        function setCookie($cookie) {
+            $this->_cookies[] = $cookie;
         }
         
         /**
@@ -145,8 +144,8 @@
          */
         function _marshallCookies($cookies) {
             $cookie_pairs = array();
-            foreach ($cookies as $key => $value) {
-                $cookie_pairs[] = "$key=$value";
+            foreach ($cookies as $cookie) {
+                $cookie_pairs[] = $cookie->getName() . "=" . $cookie->getValue();
             }
             return implode(";", $cookie_pairs);
         }

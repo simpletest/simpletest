@@ -60,7 +60,7 @@
         }
         function testCookieWriting() {
             $request = new SimpleHttpRequest("http://a.valid.page/and/path");
-            $request->setCookies(array("a" => "A"));
+            $request->setCookie(new SimpleCookie("a", "A"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
             $socket->setExpectedArgumentsSequence(0, "write", array("GET a.valid.page/and/path HTTP/1.0\r\n"));
@@ -74,7 +74,8 @@
         }
         function testMultipleCookieWriting() {
             $request = new SimpleHttpRequest("http://a.valid.page/and/path");
-            $request->setCookies(array("a" => "A", "b" => "B"));
+            $request->setCookie(new SimpleCookie("a", "A"));
+            $request->setCookie(new SimpleCookie("b", "B"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
             $socket->setExpectedArgumentsSequence(2, "write", array("Cookie: a=A;b=B\r\n"));
