@@ -97,10 +97,25 @@
         }
         
         /**
+         *    Attempt to exactly match the combined STDERR and
+         *    STDOUT output.
+         *    @param string $expected  Expected output.
+         *    @param $message          Message to display.
+         *    @access public
+         */
+        function assertOutput($expected, $message = "%s") {
+            $shell = &$this->_getShell();
+            $this->assertExpectation(
+                    new EqualExpectation($expected),
+                    $shell->getOutput(),
+                    $message);
+        }
+        
+        /**
          *    Scans the output for a Perl regex. If found
          *    anywhere it passes, else it fails.
          *    @param string $pattern    Regex to search for.
-         *    @param $message        Message to display.
+         *    @param $message           Message to display.
          *    @access public
          */
         function assertWantedPattern($pattern, $message = "%s") {
@@ -115,7 +130,7 @@
          *    If a Perl regex is found anywhere in the current
          *    output then a failure is generated, else a pass.
          *    @param string $pattern    Regex to search for.
-         *    @param $message        Message to display.
+         *    @param $message           Message to display.
          *    @access public
          */
         function assertNoUnwantedPattern($pattern, $message = "%s") {
@@ -124,6 +139,28 @@
                     new UnwantedPatternExpectation($pattern),
                     $shell->getOutput(),
                     $message);
+        }
+        
+        /**
+         *    File existence check.
+         *    @param string $path    Full filename and path.
+         *    @param $message        Message to display.
+         *    @access public
+         */
+        function assertFileExists($path, $message = "%s") {
+            $message = sprintf($message, "File [$path] should exist");
+            $this->assertTrue(file_exists($path), $message);
+        }
+        
+        /**
+         *    File non-existence check.
+         *    @param string $path    Full filename and path.
+         *    @param $message        Message to display.
+         *    @access public
+         */
+        function assertFileNotExists($path, $message = "%s") {
+            $message = sprintf($message, "File [$path] should not exist");
+            $this->assertFalse(file_exists($path), $message);
         }
         
         /**

@@ -23,7 +23,11 @@
         function testEcho() {
             $this->assertTrue($this->execute('echo Hello'));
             $this->assertExitCode(0);
-            $this->assertWantedPattern('/hello/i');
+            $this->assertoutput('Hello');
+        }
+        function testFileExistence() {
+            $this->assertFileExists(SIMPLE_TEST . 'test/all_tests.php');
+            $this->assertFileNotExists('wibble');
         }
     }
 ?>
