@@ -54,6 +54,15 @@
         }
         
         /**
+         *    Gets the last response error.
+         *    @return string    Last low level HTTP error.
+         *    @access public
+         */
+        function getTransportError() {
+            return $this->_browser->getTransportError();
+        }
+        
+        /**
          *    Accessor for current URL.
          *    @return string    Current browser URL including frame.
          *    @access public

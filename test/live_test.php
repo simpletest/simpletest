@@ -447,6 +447,19 @@
             $this->get('http://test:secret@www.lastcraft.com/test/protected/');
             $this->assertResponse(200);
         }
+        function testRealmExtendsToWholeDirectory() {
+            $this->get('http://www.lastcraft.com/test/protected/1.html');
+            $this->authenticate('test', 'secret');
+            $this->clickLink('2');
+            $this->assertResponse(200);
+            $this->clickLink('3');
+            $this->assertResponse(200);
+        }
+        function testRedirectKeepsAuthentication() {
+            $this->get('http://www.lastcraft.com/test/protected/local_redirect.php');
+            $this->authenticate('test', 'secret');
+            $this->assertTitle('Simple test target file');
+        }
     }
     
     class TestOfFrames extends WebTestCase {

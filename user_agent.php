@@ -419,7 +419,7 @@
                 if (! $headers->isRedirect()) {
                     break;
                 }
-                $url = new SimpleUrl($headers->getLocation());
+                $url = $this->createAbsoluteUrl($url, new SimpleUrl($headers->getLocation()));
                 $method = 'GET';
                 $parameters = false;
             } while (! $this->_isTooManyRedirects(++$redirects));

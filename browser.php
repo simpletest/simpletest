@@ -169,6 +169,7 @@
     class SimpleBrowser {
         var $_user_agent;
         var $_headers;
+        var $_transport_error;
         var $_page;
         var $_history;
         
@@ -180,6 +181,7 @@
         function SimpleBrowser() {
             $this->_user_agent = &$this->_createUserAgent();
             $this->_headers = false;
+            $this->_transport_error = false;
             $this->_page = false;
             $this->_history = &$this->_createHistory();
         }
@@ -354,9 +356,12 @@
          *    @access private
          */
         function _fetch($method, $url, $parameters, $record) {
+            $this->_headers = false;
+            $this->_transport_error = false;
             $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
             if ($response->isError()) {
                 $this->_page = &new SimplePage(false);
+                $this->_transport_error = $response->getError();
                 return false;
             }
             if ($record) {
@@ -454,6 +459,15 @@
         }
         
         /**
+         *    Accessor for last error.
+         *    @return string        Error from last response.
+         *    @access public
+         */
+        function getTransportError() {
+            return $this->_transport_error;
+        }
+        
+        /**
          *    Accessor for current MIME type.
          *    @return string    MIME type as string; e.g. 'text/html'
          *    @access public
@@ -518,6 +532,9 @@
          *    @access public
          */
         function getHeaders() {
+            if (! $this->_headers) {
+                return false;
+            }
             return $this->_headers->getRaw();
         }
         
