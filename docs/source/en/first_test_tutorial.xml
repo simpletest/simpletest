@@ -274,7 +274,7 @@
                 <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
                 <strong>0</strong> passes and <strong>1</strong> fails.</div>
             </div>
-            And &quot;testo flogging&quot; has failed.
+            And &quot;testoflogging&quot; has failed.
             PHP has this really annoying effect of reducing class and method
             names to lower case internally.
             SimpleTest uses these names by default to describe the tests, but
