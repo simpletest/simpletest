@@ -41,6 +41,7 @@
          *    Will be true if the value is null.
          *    @param null $value       Supposedly null value.
          *    @param string $message   Message to display.
+         *    @return boolean                        True on pass
          *    @access public
          */
         function assertNull($value, $message = "%s") {
@@ -48,13 +49,14 @@
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($value) . "] should be null");
-            $this->assertTrue(!isset($value), $message);
+            return $this->assertTrue(! isset($value), $message);
         }
         
         /**
          *    Will be true if the value is set.
          *    @param mixed $value           Supposedly set value.
          *    @param string $message        Message to display.
+         *    @return boolean               True on pass
          *    @access public
          */
         function assertNotNull($value, $message = "%s") {
@@ -62,7 +64,7 @@
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($value) . "] should not be null");
-            $this->assertTrue(isset($value), $message);
+            return $this->assertTrue(isset($value), $message);
         }
         
         /**
@@ -72,10 +74,11 @@
          *    @param mixed $object         Object to test.
          *    @param string $type          Type name as string.
          *    @param string $message       Message to display.
+         *    @return boolean              True on pass
          *    @access public
          */
         function assertIsA($object, $type, $message = "%s") {
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new IsAExpectation($type),
                     $object,
                     $message);
@@ -87,10 +90,11 @@
          *    @param mixed $first          Value to compare.
          *    @param mixed $second         Value to compare.
          *    @param string $message       Message to display.
+         *    @return boolean              True on pass
          *    @access public
          */
         function assertEqual($first, $second, $message = "%s") {
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new EqualExpectation($first),
                     $second,
                     $message);
@@ -102,10 +106,11 @@
          *    @param mixed $first           Value to compare.
          *    @param mixed $second          Value to compare.
          *    @param string $message        Message to display.
+         *    @return boolean               True on pass
          *    @access public
          */
         function assertNotEqual($first, $second, $message = "%s") {
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new NotEqualExpectation($first),
                     $second,
                     $message);
@@ -117,10 +122,11 @@
          *    @param mixed $first           Value to compare.
          *    @param mixed $second          Value to compare.
          *    @param string $message        Message to display.
+         *    @return boolean               True on pass
          *    @access public
          */
         function assertIdentical($first, $second, $message = "%s") {
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new IdenticalExpectation($first),
                     $second,
                     $message);
@@ -132,10 +138,11 @@
          *    @param mixed $first           Value to compare.
          *    @param mixed $second          Value to compare.
          *    @param string $message        Message to display.
+         *    @return boolean               True on pass
          *    @access public
          */
         function assertNotIdentical($first, $second, $message = "%s") {
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new NotIdenticalExpectation($first),
                     $second,
                     $message);
@@ -147,6 +154,7 @@
          *    @param mixed $first           Object reference to check.
          *    @param mixed $second          Hopefully the same object.
          *    @param string $message        Message to display.
+         *    @return boolean               True on pass
          *    @access public
          */
         function assertReference(&$first, &$second, $message = "%s") {
@@ -160,7 +168,7 @@
             $first = uniqid("test");
             $is_ref = ($first === $second);
             $first = $temp;
-            $this->assertTrue($is_ref, $message);
+            return $this->assertTrue($is_ref, $message);
         }
         
         /**
@@ -169,6 +177,7 @@
          *    @param mixed $first           Object reference to check.
          *    @param mixed $second          Hopefully not the same object.
          *    @param string $message        Message to display.
+         *    @return boolean               True on pass
          *    @access public
          */
         function assertCopy(&$first, &$second, $message = "%s") {
@@ -182,20 +191,21 @@
             $first = uniqid("test");
             $is_ref = ($first === $second);
             $first = $temp;
-            $this->assertFalse($is_ref, $message);
+            return $this->assertFalse($is_ref, $message);
         }
         
         /**
          *    Will trigger a pass if the Perl regex pattern
          *    is found in the subject. Fail otherwise.
-         *    @param string $pattern Perl regex to look for including
-         *                           the regex delimiters.
-         *    @param string $subject String to search in.
-         *    @param string $message Message to display.
+         *    @param string $pattern    Perl regex to look for including
+         *                              the regex delimiters.
+         *    @param string $subject    String to search in.
+         *    @param string $message    Message to display.
+         *    @return boolean           True on pass
          *    @access public
          */
         function assertWantedPattern($pattern, $subject, $message = "%s") {
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new WantedPatternExpectation($pattern),
                     $subject,
                     $message);
@@ -204,14 +214,15 @@
         /**
          *    Will trigger a pass if the perl regex pattern
          *    is not present in subject. Fail if found.
-         *    @param string $pattern Perl regex to look for including
-         *                           the regex delimiters.
-         *    @param string $subject String to search in.
-         *    @param string $message Message to display.
+         *    @param string $pattern    Perl regex to look for including
+         *                              the regex delimiters.
+         *    @param string $subject    String to search in.
+         *    @param string $message    Message to display.
+         *    @return boolean           True on pass
          *    @access public
          */
         function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new UnwantedPatternExpectation($pattern),
                     $subject,
                     $message);
@@ -220,12 +231,13 @@
         /**
          *    Confirms that no errors have occoured so
          *    far in the test method.
-         *    @param string $message        Message to display.
+         *    @param string $message    Message to display.
+         *    @return boolean           True on pass
          *    @access public
          */
         function assertNoErrors($message = "%s") {
             $queue = &SimpleErrorQueue::instance();
-            $this->assertTrue(
+            return $this->assertTrue(
                     $queue->isEmpty(),
                     sprintf($message, "Should be no errors"));
         }
@@ -236,6 +248,7 @@
          *    @param string $expected   Expected error text or
          *                              false for no check.
          *    @param string $message    Message to display.
+         *    @return boolean           True on pass
          *    @access public
          */
         function assertError($expected = false, $message = "%s") {
@@ -246,7 +259,7 @@
             }
             list($severity, $content, $file, $line, $globals) = $queue->extract();
             $severity = SimpleErrorQueue::getSeverityAsString($severity);
-            $this->assertTrue(
+            return $this->assertTrue(
                     ! $expected || ($expected == $content),
                     "Expected [$expected] in PHP error [$content] severity [$severity] in [$file] line [$line]");
         }
@@ -258,6 +271,7 @@
          *    @param string $expected   Perl regular expresion to
          *                              match against.
          *    @param string $message    Message to display.
+         *    @return boolean           True on pass
          *    @access public
          */
         function assertErrorPattern($pattern, $message = "%s") {
@@ -268,7 +282,7 @@
             }
             list($severity, $content, $file, $line, $globals) = $queue->extract();
             $severity = SimpleErrorQueue::getSeverityAsString($severity);
-            $this->assertTrue(
+            return $this->assertTrue(
                     (boolean)preg_match($pattern, $content),
                     "Expected pattern match [$pattern] in PHP error [$content] severity [$severity] in [$file] line [$line]");
         }

@@ -105,13 +105,14 @@
          *    @param integer $status   Expected status of last
          *                             command.
          *    @param string $message   Message to display.
+         *    @return boolean          True if pass.
          *    @access public
          */
         function assertExitCode($status, $message = "%s") {
             $message = sprintf($message, "Expected status code of [$status] from [" .
                     $this->_last_command . "], but got [" .
                     $this->_last_status . "]");
-            $this->assertTrue($status === $this->_last_status, $message);
+            return $this->assertTrue($status === $this->_last_status, $message);
         }
         
         /**
@@ -119,11 +120,12 @@
          *    STDOUT output.
          *    @param string $expected  Expected output.
          *    @param string $message   Message to display.
+         *    @return boolean          True if pass.
          *    @access public
          */
         function assertOutput($expected, $message = "%s") {
             $shell = &$this->_getShell();
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new EqualExpectation($expected),
                     $shell->getOutput(),
                     $message);
@@ -134,11 +136,12 @@
          *    anywhere it passes, else it fails.
          *    @param string $pattern    Regex to search for.
          *    @param string $message    Message to display.
+         *    @return boolean           True if pass.
          *    @access public
          */
         function assertOutputPattern($pattern, $message = "%s") {
             $shell = &$this->_getShell();
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new WantedPatternExpectation($pattern),
                     $shell->getOutput(),
                     $message);
@@ -149,11 +152,12 @@
          *    output then a failure is generated, else a pass.
          *    @param string $pattern    Regex to search for.
          *    @param $message           Message to display.
+         *    @return boolean           True if pass.
          *    @access public
          */
         function assertNoOutputPattern($pattern, $message = "%s") {
             $shell = &$this->_getShell();
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new UnwantedPatternExpectation($pattern),
                     $shell->getOutput(),
                     $message);
@@ -161,24 +165,26 @@
         
         /**
          *    File existence check.
-         *    @param string $path    Full filename and path.
-         *    @param string $message Message to display.
+         *    @param string $path      Full filename and path.
+         *    @param string $message   Message to display.
+         *    @return boolean          True if pass.
          *    @access public
          */
         function assertFileExists($path, $message = "%s") {
             $message = sprintf($message, "File [$path] should exist");
-            $this->assertTrue(file_exists($path), $message);
+            return $this->assertTrue(file_exists($path), $message);
         }
         
         /**
          *    File non-existence check.
-         *    @param string $path    Full filename and path.
-         *    @param string $message Message to display.
+         *    @param string $path      Full filename and path.
+         *    @param string $message   Message to display.
+         *    @return boolean          True if pass.
          *    @access public
          */
         function assertFileNotExists($path, $message = "%s") {
             $message = sprintf($message, "File [$path] should not exist");
-            $this->assertFalse(file_exists($path), $message);
+            return $this->assertFalse(file_exists($path), $message);
         }
         
         /**
@@ -187,11 +193,12 @@
          *    @param string $pattern    Regex to search for.
          *    @param string $path       Full filename and path.
          *    @param string $message    Message to display.
+         *    @return boolean           True if pass.
          *    @access public
          */
         function assertFilePattern($pattern, $path, $message = "%s") {
             $shell = &$this->_getShell();
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new WantedPatternExpectation($pattern),
                     implode('', file($path)),
                     $message);
@@ -203,11 +210,12 @@
          *    @param string $pattern    Regex to search for.
          *    @param string $path       Full filename and path.
          *    @param string $message    Message to display.
+         *    @return boolean           True if pass.
          *    @access public
          */
         function assertNoFilePattern($pattern, $path, $message = "%s") {
             $shell = &$this->_getShell();
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new UnwantedPatternExpectation($pattern),
                     implode('', file($path)),
                     $message);

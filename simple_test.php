@@ -249,10 +249,11 @@
          *    @param SimpleExpectation $expectation  Expectation subclass.
          *    @param mixed $test_value               Value to compare.
          *    @param string $message                 Message to display.
+         *    @return boolean                        True on pass
          *    @access public
          */
         function assertExpectation(&$expectation, $test_value, $message = '%s') {
-            $this->assertTrue(
+            return $this->assertTrue(
                     $expectation->test($test_value),
                     sprintf($message, $expectation->testMessage($test_value)));
         }
@@ -263,6 +264,7 @@
          *    @param boolean $result    Pass on true.
          *    @param string $message    Message to display describing
          *                              the test state.
+         *    @return boolean           True on pass
          *    @access public
          */
         function assertTrue($result, $message = false) {
@@ -271,8 +273,10 @@
             }
             if ($result) {
                 $this->pass($message);
+                return true;
             } else {
                 $this->fail($message);
+                return false;
             }
         }
         
@@ -283,13 +287,14 @@
          *    as false.
          *    @param boolean $result    Pass on false.
          *    @param string $message    Message to display.
+         *    @return boolean           True on pass
          *    @access public
          */
         function assertFalse($result, $message = false) {
             if (! $message) {
                 $message = 'False assertion got ' . ($result ? 'True' : 'False');
             }
-            $this->assertTrue(! $result, $message);
+            return ! $this->assertTrue(! $result, $message);
         }
         
         /**

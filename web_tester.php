@@ -770,7 +770,7 @@
          *    @access public
          */
         function assertLink($label, $message = "%s") {
-            $this->assertTrue(
+            return $this->assertTrue(
                     $this->_browser->isLink($label),
                     sprintf($message, "Link [$label] should exist"));
         }
@@ -786,7 +786,7 @@
          *    @access public
          */
         function assertNoLink($label, $message = "%s") {
-            $this->assertFalse(
+            return $this->assertFalse(
                     $this->_browser->isLink($label) || $this->_browser->isLinkById($label),
                     sprintf($message, "Link [$label] should not exist"));
         }
@@ -800,7 +800,7 @@
          *    @access public
          */
         function assertLinkById($id, $message = "%s") {
-            $this->assertTrue(
+            return $this->assertTrue(
                     $this->_browser->isLinkById($id),
                     sprintf($message, "Link ID [$id] should exist"));
         }
@@ -837,16 +837,17 @@
          *                              false for unset fields.
          *    @param string $message    Message to display. Default
          *                              can be embedded with %s.
+         *    @return boolean           True if pass.
          *    @access public
          */
         function assertField($name, $expected = true, $message = "%s") {
             $value = $this->_browser->getField($name);
             if ($expected === true) {
-                $this->assertTrue(
+                return $this->assertTrue(
                         isset($value),
                         sprintf($message, "Field [$name] should exist"));
             } else {
-                $this->assertExpectation(
+                return $this->assertExpectation(
                         new FieldExpectation($expected),
                         $value,
                         sprintf($message, "Field [$name] should match with [%s]"));
@@ -863,16 +864,17 @@
          *                               false for unset fields.
          *    @param string $message     Message to display. Default
          *                               can be embedded with %s.
+         *    @return boolean            True if pass.
          *    @access public
          */
         function assertFieldById($id, $expected = true, $message = "%s") {
             $value = $this->_browser->getFieldById($id);
             if ($expected === true) {
-                $this->assertTrue(
+                return $this->assertTrue(
                         isset($value),
                         sprintf($message, "Field of ID [$id] should exist"));
             } else {
-                $this->assertExpectation(
+                return $this->assertExpectation(
                         new FieldExpectation($expected),
                         $value,
                         sprintf($message, "Field of ID [$id] should match with [%s]"));
@@ -885,6 +887,7 @@
          *    @param array $responses    Possible responses for a pass.
          *    @param string $message     Message to display. Default
          *                               can be embedded with %s.
+         *    @return boolean            True if pass.
          *    @access public
          */
         function assertResponse($responses, $message = '%s') {
@@ -892,7 +895,7 @@
             $code = $this->_browser->getResponseCode();
             $message = sprintf($message, "Expecting response in [" .
                     implode(", ", $responses) . "] got [$code]");
-            $this->assertTrue(in_array($code, $responses), $message);
+            return $this->assertTrue(in_array($code, $responses), $message);
         }
         
         /**
@@ -900,6 +903,7 @@
          *    of possible values.
          *    @param array $types      Possible mime types for a pass.
          *    @param string $message   Message to display.
+         *    @return boolean          True if pass.
          *    @access public
          */
         function assertMime($types, $message = '%s') {
@@ -907,7 +911,7 @@
             $type = $this->_browser->getMimeType();
             $message = sprintf($message, "Expecting mime type in [" .
                     implode(", ", $types) . "] got [$type]");
-            $this->assertTrue(in_array($type, $types), $message);
+            return $this->assertTrue(in_array($type, $types), $message);
         }
         
         /**
@@ -915,17 +919,20 @@
          *    the security realm we are currently matching.
          *    @param string $authentication   Usually basic.
          *    @param string $message          Message to display.
+         *    @return boolean                 True if pass.
          *    @access public
          */
         function assertAuthentication($authentication = false, $message = '%s') {
             if (! $authentication) {
                 $message = sprintf($message, "Expected any authentication type, got [" .
                         $this->_browser->getAuthentication() . "]");
-                $this->assertTrue($this->_browser->getAuthentication(), $message);
+                return $this->assertTrue(
+                        $this->_browser->getAuthentication(),
+                        $message);
             } else {
                 $message = sprintf($message, "Expected authentication [$authentication] got [" .
                         $this->_browser->getAuthentication() . "]");
-                $this->assertTrue(
+                return $this->assertTrue(
                         strtolower($this->_browser->getAuthentication()) == strtolower($authentication),
                         $message);
             }
@@ -934,25 +941,27 @@
         /**
          *    Checks that no authentication is necessary to view
          *    the desired page.
-         *    @param string $message   Message to display.
+         *    @param string $message     Message to display.
+         *    @return boolean            True if pass.
          *    @access public
          */
         function assertNoAuthentication($message = '%s') {
             $message = sprintf($message, "Expected no authentication type, got [" .
                     $this->_browser->getAuthentication() . "]");
-            $this->assertFalse($this->_browser->getAuthentication(), $message);
+            return $this->assertFalse($this->_browser->getAuthentication(), $message);
         }
         
         /**
          *    Attempts to match the current security realm.
          *    @param string $realm     Name of security realm.
          *    @param string $message   Message to display.
+         *    @return boolean          True if pass.
          *    @access public
          */
         function assertRealm($realm, $message = '%s') {
             $message = sprintf($message, "Expected realm [$realm] got [" .
                     $this->_browser->getRealm() . "]");
-            $this->assertTrue(
+            return $this->assertTrue(
                     strtolower($this->_browser->getRealm()) == strtolower($realm),
                     $message);
         }
@@ -963,10 +972,11 @@
          *    @param string $header    Case insensitive header name.
          *    @param string $value     Case sensitive trimmed string to
          *                             match against.
+         *    @return boolean          True if pass.
          *    @access public
          */
         function assertHeader($header, $value = false, $message = '%s') {
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new HttpHeaderExpectation($header, $value),
                     $this->_browser->getHeaders(),
                     $message);
@@ -976,10 +986,11 @@
          *    Checks each header line for the required pattern.
          *    @param string $header    Case insensitive header name.
          *    @param string $pattern   Pattern to match value against.
+         *    @return boolean          True if pass.
          *    @access public
          */
         function assertHeaderPattern($header, $pattern, $message = '%s') {
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new HttpHeaderPatternExpectation($header, $pattern),
                     $this->_browser->getHeaders(),
                     $message);
@@ -991,10 +1002,11 @@
          *    redirect pages, then you should limit redirects so
          *    as to capture the page you want.
          *    @param string $header    Case insensitive header name.
+         *    @return boolean          True if pass.
          *    @access public
          */
         function assertNoUnwantedHeader($header, $message = '%s') {
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new HttpUnwantedHeaderExpectation($header),
                     $this->_browser->getHeaders(),
                     $message);
@@ -1005,10 +1017,11 @@
          *    @param string $title     Expected title or empty
          *                             if expecting no title.
          *    @param string $message   Message to display.
+         *    @return boolean          True if pass.
          *    @access public
          */
         function assertTitle($title = false, $message = '%s') {
-            $this->assertTrue(
+            return $this->assertTrue(
                     $title === $this->_browser->getTitle(),
                     sprintf(
                             $message,
@@ -1021,10 +1034,11 @@
          *    @param string $pattern    Perl regex to look for including
          *                              the regex delimiters.
          *    @param string $message    Message to display.
+         *    @return boolean           True if pass.
          *    @access public
          */
         function assertWantedPattern($pattern, $message = '%s') {
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new WantedPatternExpectation($pattern),
                     $this->_browser->getContent(),
                     $message);
@@ -1036,10 +1050,11 @@
          *    @param string $pattern    Perl regex to look for including
          *                              the regex delimiters.
          *    @param string $message    Message to display.
+         *    @return boolean           True if pass.
          *    @access public
          */
         function assertNoUnwantedPattern($pattern, $message = "%s") {
-            $this->assertExpectation(
+            return $this->assertExpectation(
                     new UnwantedPatternExpectation($pattern),
                     $this->_browser->getContent(),
                     $message);
@@ -1052,16 +1067,17 @@
          *    @param string $expected    Expected value as a string or
          *                               false if any value will do.
          *    @param string $message     Message to display.
+         *    @return boolean            True if pass.
          *    @access public
          */
         function assertCookie($name, $expected = false, $message = "%s") {
             $value = $this->_browser->getCurrentCookieValue($name);
             if ($expected) {
-                $this->assertTrue($value === $expected, sprintf(
+                return $this->assertTrue($value === $expected, sprintf(
                         $message,
                         "Expecting cookie [$name] value [$expected], got [$value]"));
             } else {
-                $this->assertTrue(
+                return $this->assertTrue(
                         $value,
                         sprintf($message, "Expecting cookie [$name]"));
             }
@@ -1072,10 +1088,11 @@
          *    been successfully cleared.
          *    @param string $name        Name of cookie to test.
          *    @param string $message     Message to display.
+         *    @return boolean            True if pass.
          *    @access public
          */
         function assertNoCookie($name, $message = "%s") {
-            $this->assertTrue(
+            return $this->assertTrue(
                     $this->_browser->getCurrentCookieValue($name) === false,
                     sprintf($message, "Not expecting cookie [$name]"));
         }
