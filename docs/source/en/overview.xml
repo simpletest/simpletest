@@ -326,7 +326,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 As a new technology there are plenty of discussions and debate on how to use mocks,
                 often on Wikis such as
                 <a href="http://xpdeveloper.com/cgi-bin/oldwiki.cgi?MockObjects">Extreme Tuesday</a>
-                or <a href="http://www.mockobjects.com/wiki/MocksObjectsPaper">www.mockobjects.com</a>
+                or <a href="http://www.mockobjects.com/MocksObjectsPaper.html">www.mockobjects.com</a>
                 or <a href="http://c2.com/cgi/wiki?MockObject">the original C2 Wiki</a>.
                 Injecting mocks into a class is the main area of debate for which this
                 <a href="http://www-106.ibm.com/developerworks/java/library/j-mocktest.html">paper on IBM</a>
