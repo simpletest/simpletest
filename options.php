@@ -280,6 +280,13 @@
 	    	    && is_object($first)) {
 	    	    return ($first === $second);
 	        }
+	        if (is_object($first) && is_object($second)) {
+                $id = uniqid("test");
+                $first->$id = true;
+                $is_ref = isset($second->$id);
+                unset($first->$id);
+                return $is_ref;
+	        }
 	        $temp = $first;
             $first = uniqid("test");
             $is_ref = ($first === $second);

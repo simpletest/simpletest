@@ -1,6 +1,9 @@
 <?php
     // $Id$
     
+    class ReferenceForTesting {
+    }
+    
     class TestOfUnitTester extends UnitTestCase {
         
         function testAssertTrueReturnsAssertionAsBoolean() {
@@ -22,6 +25,30 @@
         function testCoreAssertionsDoNotThrowErrors() {
             $this->assertIsA($this, 'UnitTestCase');
             $this->assertNotA($this, 'WebTestCase');
+        }
+        
+        function testReferenceAssertionOnObjects() {
+            $a = &new ReferenceForTesting();
+            $b = &$a;
+            $this->assertReference($a, $b);
+        }
+        
+        function testReferenceAssertionOnScalars() {
+            $a = 25;
+            $b = &$a;
+            $this->assertReference($a, $b);
+        }
+        
+        function testCloneOnObjects() {
+            $a = &new ReferenceForTesting();
+            $b = &new ReferenceForTesting();
+            $this->assertCopy($a, $b);
+        }
+        
+        function testCloneOnScalars() {
+            $a = 25;
+            $b = 25;
+            $this->assertCopy($a, $b);
         }
     }
     
