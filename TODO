@@ -33,6 +33,7 @@ Refactor exsiting base url behaviour into SimplePage (3).
 
 Web tester
 ----------
+Remove ordering requirement asserting multivalue widgets (1).
 
 Documentation
 -------------
