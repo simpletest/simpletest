@@ -136,7 +136,7 @@
                 be placed in files without the runner code...
 <pre><strong>
 &lt;?php
-    require_once("../classes/io.php");
+    require_once(&apos;../classes/io.php&apos;);
 
     class FileTester extends UnitTestCase {
         ...
@@ -156,7 +156,7 @@
                 as well.
 <pre>
 &lt;?php
-    require_once("../classes/io.php");
+    require_once(&apos;../classes/io.php&apos;);
 <strong>
     class MyFileTestCase extends UnitTestCase {
         ...
@@ -188,11 +188,8 @@
                 We will add the test file using a safe method...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);<strong>
+    require_once(&apos;simpletest/unit_tester.php&apos;);
+    require_once(&apos;simpletest/reporter.php&apos;);<strong>
     require_once(&apos;file_test.php&apos;);
 
     $test = &new GroupTest(&apos;All file tests&apos;);
@@ -209,11 +206,8 @@
                 We can save a lot of typing with...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+    require_once(&apos;simpletest/unit_tester.php&apos;);
+    require_once(&apos;simpletest/reporter.php&apos;);
 
     $test = &new GroupTest(&apos;All file tests&apos;);<strong>
     $test-&gt;addTestFile(&apos;file_test.php&apos;);</strong>
@@ -259,11 +253,8 @@
                 <span>GroupTest</span> and then instantiate it as needed...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+    require_once(&apos;simpletest/unit_tester.php&apos;);
+    require_once(&apos;simpletest/reporter.php&apos;);
     <strong>
     class FileGroupTest extends GroupTest {
         function FileGroupTest() {
@@ -279,9 +270,6 @@
                 We can now invoke the tests from a separate runner file...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
     require_once(&apos;file_group_test.php&apos;);
     <strong>
     $test = &new FileGroupTest();
@@ -291,12 +279,9 @@
                 ...or we can group them into even larger group tests...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
     require_once(&apos;file_group_test.php&apos;);
     <strong>
-    $test = &new BigGroupTest("Big group");
+    $test = &new BigGroupTest(&apos;Big group&apos;);
     $test->addTestCase(new FileGroupTest());
     $test->addTestCase(...);
     $test->run(new HtmlReporter());</strong>
@@ -315,7 +300,7 @@
         }
     }
     <strong>
-    if (!defined(&apos;RUNNER&apos;)) {
+    if (! defined(&apos;RUNNER&apos;)) {
         define(&apos;RUNNER&apos;, true);</strong>
         $test = &new FileGroupTest();
         $test->run(new HtmlReporter());
@@ -330,14 +315,11 @@
                 from the top level script that has been invoked.
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
     define(&apos;RUNNER&apos;, true);</strong>
     <strong>
     require_once(&apos;file_group_test.php&apos;);
     </strong>
-    $test = &new BigGroupTest("Big group");
+    $test = &new BigGroupTest(&apos;Big group&apos;);
     $test->addTestCase(new FileGroupTest());
     $test->addTestCase(...);
     $test->run(new HtmlReporter());
@@ -374,12 +356,9 @@ class ConfigFileTest extends TestCase {
                 file...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);<strong>
-    require_once(SIMPLE_TEST . &apos;adapters/phpunit_test_case.php&apos;);</strong>
+    require_once(&apos;simpletest/unit_tester.php&apos;);
+    require_once(&apos;simpletest/reporter.php&apos;);<strong>
+    require_once(&apos;simpletest/adapters/phpunit_test_case.php&apos;);</strong>
 
     $test = &new GroupTest(&apos;All file tests&apos;);<strong>
     $test-&gt;addTestFile(&apos;config_test.php&apos;);</strong>
@@ -391,12 +370,9 @@ class ConfigFileTest extends TestCase {
                 unit tester...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);<strong>
-    require_once(SIMPLE_TEST . &apos;adapters/pear_test_case.php&apos;);</strong>
+    require_once(&apos;simpletest/unit_tester.php&apos;);
+    require_once(&apos;simpletest/reporter.php&apos;);<strong>
+    require_once(&apos;simpletest/adapters/pear_test_case.php&apos;);</strong>
 
     $test = &new GroupTest(&apos;All file tests&apos;);<strong>
     $test-&gt;addTestFile(&apos;some_pear_test_cases.php&apos;);</strong>

@@ -136,12 +136,8 @@
         <div class="content">
                         <p style="margin-right: 10%; margin-left: 10%;">
                 <span style="color: red;">News:</span>
-                <a href="http://simpletest.sourceforge.net/">SimpleTest API</a>
-                published on sourceforge.
-                Detailed documentation of all of the classes and methods that
-                make up the toolkit for those people that want to extend it
-                or are tired of waiting for the other documentation to catch up.
-                Generated with the phpdoc tool by Jason Sweat.
+                Beta6 released.
+                Mostly improvements to the web testing interface.
             </p>
             <p>
                 The following assumes that you are familiar with the concept
@@ -185,28 +181,20 @@
                 <em>tests/log_test.php</em> and populate it as follows...
 <pre><strong>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+    require_once(&apos;simpletest/unit_tester.php&apos;);
+    require_once(&apos;simpletest/reporter.php&apos;);
     require_once(&apos;../classes/log.php&apos;);
 ?&gt;</strong>
 </pre>
-                The <span class="new_code">SIMPLE_TEST</span> constant simply sets
-                the local path to the simple test classes
-                relative to the running script.
-                Here the <em>simpletest</em> folder has been placed in the
-                path, but the constant could be a relative or fixed directory.
+                Here the <em>simpletest</em> folder is either local or in the path.
+                You would have to edit these locations depending on where you
+                placed the toolset.
                 Next we create a test case...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
-    require_once("../classes/log.php");
+    require_once(&apos;simpletest/unit_tester.php&apos;);
+    require_once(&apos;simpletest/reporter.php&apos;);
+    require_once(&apos;../classes/log.php&apos;);
 <strong>
     class TestOfLogging extends UnitTestCase {
         function TestOfLogging() {
@@ -215,18 +203,15 @@
     }</strong>
 ?&gt;
 </pre>
-                Now we have a dozen lines of scaffolding code and still no tests.
+                Now we have eight lines of scaffolding code and still no tests.
                 However from this part on we get return on our investment very quickly.
                 We&apos;ll assume that the <span class="new_code">Log</span> class
                 takes the file name to write to in the constructor and we have
                 a temporary folder in which to place this file...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+    require_once(&apos;simpletest/unit_tester.php&apos;);
+    require_once(&apos;simpletest/reporter.php&apos;);
     require_once(&apos;../classes/log.php&apos;);
 
     class TestOfLogging extends UnitTestCase {
@@ -260,11 +245,8 @@
                 it with...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+    require_once(&apos;simpletest/unit_tester.php&apos;);
+    require_once(&apos;simpletest/reporter.php&apos;);
     require_once(&apos;../classes/log.php&apos;);
 
     class TestOfLogging extends UnitTestCase {
@@ -334,11 +316,8 @@
                 and insert the following code...
 <pre><strong>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+    require_once(&apos;simpletest/unit_tester.php&apos;);
+    require_once(&apos;simpletest/reporter.php&apos;);
 
     $test = &new GroupTest(&apos;All tests&apos;);
     $test-&gt;addTestFile(&apos;log_test.php&apos;);
@@ -507,12 +486,9 @@
                 page is fetched, from which we navigate to an &quot;about&quot;
                 page and then test some expected content.
 <pre>
-&lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }<strong>
-    require_once(SIMPLE_TEST . &apos;web_tester.php&apos;);</strong>
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+&lt;?php<strong>
+    require_once(&apos;simpletest/web_tester.php&apos;);</strong>
+    require_once(&apos;simpletest/reporter.php&apos;);
 <strong>
     class TestOfAbout extends WebTestCase {
         function TestOfAbout(&apos;Tests of about page&apos;) {

@@ -134,6 +134,12 @@
             <p>
                 Testing classes is all very well, but PHP is predominately
                 a language for creating functionality within web pages.
+                How do we test the front end presentation role of our PHP
+                applications?
+                Well the web pages are just text, so we should be able to
+                examine them just like any other test data.
+            </p>
+            <p>
                 This leads to a tricky issue.
                 If we test at too low a level, testing for matching tags
                 in the page with pattern matching for example, our tests will
@@ -166,16 +172,13 @@ class TestOfLastcraft extends WebTestCase {
                 If this test case is in a file called <em>lastcraft_test.php</em>
                 then it can be loaded in a runner script just like unit tests...
 <pre>
-&lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }<strong>
-    require_once(SIMPLE_TEST . &apos;web_tester.php&apos;);</strong>
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+&lt;?php<strong>
+    require_once(&apos;simpletest/web_tester.php&apos;);</strong>
+    require_once(&apos;simpletest/reporter.php&apos;);
     
     $test = &new GroupTest(&apos;Web site tests&apos;);<strong>
     $test-&gt;addTestFile(&apos;lastcraft_test.php&apos;);</strong>
-    exit ($test->run(new CommandLineReporter()) ? 0 : 1);
+    exit ($test-&gt;run(new CommandLineReporter()) ? 0 : 1);
 ?&gt;
 </pre>
                 Nothing is being tested yet.
@@ -187,7 +190,7 @@ class TestOfLastcraft extends WebTestCase {
         $this-&gt;WebTestCase();
     }
     function testHomepage() {
-        $this->assertTrue($this-&gt;get(&apos;http://www.lastcraft.com/&apos;));
+        $this-&gt;assertTrue($this-&gt;get(&apos;http://www.lastcraft.com/&apos;));
     }
 }</strong>
 </pre>
@@ -308,7 +311,7 @@ class TestOfLastcraft extends WebTestCase {
     function testContact() {
         $this-&gt;get(&apos;http://www.lastcraft.com/&apos;);<strong>
         $this-&gt;clickLink(&apos;About&apos;);
-        $this-assertTitle(&apos;About Last Craft&apos;);</strong>
+        $this-&gt;assertTitle(&apos;About Last Craft&apos;);</strong>
     }
 }
 </pre>
@@ -319,7 +322,7 @@ class TestOfLastcraft extends WebTestCase {
                 <span class="new_code">clickSubmit()</span> should be used
                 with the button title...
 <pre><strong>
-$this->clickSubmit(&apos;Go!&apos;);</strong>
+$this-&gt;clickSubmit(&apos;Go!&apos;);</strong>
 </pre>
                 Testing navigation on fixed pages only tells you when you
                 have broken an entire script.

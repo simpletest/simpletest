@@ -195,11 +195,8 @@ class DatabaseConnection {
                 To create a mock version of the class we need to include the
                 mock object library and run the generator...
 <pre><strong>
-if (!defined(&apos;SIMPLE_TEST&apos;)) {
-    define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-}
-require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-require_once(SIMPLE_TEST . &apos;mock_objects.php&apos;);
+require_once(&apos;simpletest/unit_tester.php&apos;);
+require_once(&apos;simpletest/mock_objects.php&apos;);
 require_once(&apos;database_connection.php&apos;);
 
 Mock::generate(&apos;DatabaseConnection&apos;);</strong>
@@ -209,11 +206,8 @@ Mock::generate(&apos;DatabaseConnection&apos;);</strong>
                 We can now create instances of the new class within
                 our test case...
 <pre>
-if (!defined(&apos;SIMPLE_TEST&apos;)) {
-    define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-}
-require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-require_once(SIMPLE_TEST . &apos;mock_objects.php&apos;);
+require_once(&apos;simpletest/unit_tester.php&apos;);
+require_once(&apos;simpletest/mock_objects.php&apos;);
 require_once(&apos;database_connection.php&apos;);
 
 Mock::generate(&apos;DatabaseConnection&apos;);
@@ -644,10 +638,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
                 special methods or add presets...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;../simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;mock_objects.php&apos;);
+    require_once(&apos;simpletest/mock_objects.php&apos;);
     require_once(&apos;../classes/connection.php&apos;);
 <strong>
     Mock::generate(&apos;Connection&apos;, &apos;BasicMockConnection&apos;);
@@ -723,7 +714,7 @@ $unit_test-&gt;assertion(&apos;I hope this file exists&apos;, file_exists(&apos;
                 We start with a subclass, in say <em>my_mock.php</em>...
 <pre><strong>
 &lt;?php
-    require_once(SIMPLE_TEST . &apos;mock_objects.php&apos;);
+    require_once(&apos;simpletest/mock_objects.php&apos;);
     
     class MyMock extends SimpleMock() {
         function MyMock(&$test, $wildcard) {
@@ -743,7 +734,7 @@ $unit_test-&gt;assertion(&apos;I hope this file exists&apos;, file_exists(&apos;
                 your mock instead...
 <pre>
 &lt;?php
-    require_once(SIMPLE_TEST . &apos;mock_objects.php&apos;);
+    require_once(&apos;simpletst/mock_objects.php&apos;);
     
     class MyMock extends SimpleMock() {
         function MyMock($test, $wildcard) {

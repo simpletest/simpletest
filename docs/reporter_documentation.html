@@ -308,7 +308,7 @@ class TestDisplay extends TestReporter {
                 A do nothing display, a blank canvas for your own creation, would
                 be...
 <pre><strong>
-require_once(SIMPLE_TEST . &apos;simple_test.php&apos;);</strong>
+require_once(&apos;simpletest/simple_test.php&apos;);</strong>
 
 class MyDisplay extends TestDisplay {<strong>
     function MyDisplay() {
@@ -345,11 +345,8 @@ class MyDisplay extends TestDisplay {<strong>
                 for the HTML version...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+    require_once(&apos;simpletest/unit_tester.php&apos;);
+    require_once(&apos;simpletest/reporter.php&apos;);
 
     $test = &new GroupTest(&apos;File test&apos;);
     $test-&gt;addTestFile(&apos;tests/file_test.php&apos;);
@@ -390,11 +387,8 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 code...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+    require_once(&apos;simpletest/unit_tester.php&apos;);
+    require_once(&apos;simpletest/reporter.php&apos;);
 
     $test = &new GroupTest(&apos;File test&apos;);
     $test-&gt;addTestFile(&apos;tests/file_test.php&apos;);
@@ -407,11 +401,8 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 run time environment...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
+    require_once(&apos;simpletest/unit_tester.php&apos;);
+    require_once(&apos;simpletest/reporter.php&apos;);
 
     $test = &new GroupTest(&apos;File test&apos;);
     $test-&gt;addTestFile(&apos;tests/file_test.php&apos;);

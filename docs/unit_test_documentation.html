@@ -293,10 +293,7 @@ $this->assertNoErrors();</strong>
                 Of course additional test methods can be added to create
                 specific types of test case too so as to extend framework...
 <pre>
-if (!defined(&apos;SIMPLE_TEST&apos;)) {
-    define(&apos;SIMPLE_TEST&apos;, &apos;path/to/simpletest/&apos;);
-}
-require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+require_once(&apos;simpletest/unit_tester.php&apos;);
 <strong>
 class FileTester extends UnitTestCase {
     function FileTester($name = false) {
@@ -309,10 +306,9 @@ class FileTester extends UnitTestCase {
     }</strong>
 }
 </pre>
-                The <span class="code">SIMPLE_TEST</span> constant is
-                the path to the SimpleTest libraries and should be set
-                before the first component is called.
-                It is usually set in the top level tests.
+                Here the SimpleTest library is held in a folder called
+                <em>simpletest</em> that is local.
+                Substitute your own path for this.
             </p>
             <p>
                 This new case can be now be inherited just like
@@ -358,12 +354,9 @@ class FileTestCase extends <strong>FileTester</strong> {
                 Here is the scaffolding needed to run the a lone test case...
 <pre>
 &lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;path/to/simpletest/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);<strong>
-    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);</strong>
-    require_once("../classes/writer.php");
+    require_once(&apos;simpletest/unit_tester.php&apos;);<strong>
+    require_once(&apos;simpletest/reporter.php&apos;);</strong>
+    require_once(&apos;../classes/writer.php&apos;);
 
     class FileTestCase extends UnitTestCase {
         function FileTestCase() {

@@ -165,10 +165,7 @@ class DatabaseConnection {
                 To create a stub version of the class we need to include the
                 server stub library and run the generator...
 <pre><strong>
-if (!defined(&apos;SIMPLE_TEST&apos;)) {
-    define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-}
-require_once(SIMPLE_TEST . &apos;mock_objects.php&apos;);
+require_once(&apos;simpletest/mock_objects.php&apos;);
 require_once(&apos;database_connection.php&apos;);
 Stub::generate(&apos;DatabaseConnection&apos;);</strong>
 </pre>
@@ -177,10 +174,7 @@ Stub::generate(&apos;DatabaseConnection&apos;);</strong>
                 We can now create instances of the new class within
                 our prototype script...
 <pre>
-if (!defined(&apos;SIMPLE_TEST&apos;)) {
-    define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
-}
-require_once(SIMPLE_TEST . &apos;mock_objects.php&apos;);
+require_once(&apos;simpletest/mock_objects.php&apos;);
 require_once(&apos;database_connection.php&apos;);
 Stub::generate(&apos;DatabaseConnection&apos;);
 <strong>

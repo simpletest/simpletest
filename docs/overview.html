@@ -338,12 +338,25 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>HTTP authentication</td>
-                        <td>Fetching protected web pages</td>
+                        <td>
+                            Fetching protected web pages with basic authentication
+                            only
+                        </td>
                         <td style="color: green;">Done</td>
                     </tr>
                     <tr>
                         <td>Browser navigation buttons</td>
                         <td>Back, forward and retry</td>
+                        <td style="color: green;">Done</td>
+                    </tr>
+                    <tr>
+                        <td>SSL support</td>
+                        <td>Can connect to https: pages</td>
+                        <td style="color: green;">Done</td>
+                    </tr>
+                    <tr>
+                        <td>Proxy support</td>
+                        <td>Can connect via. common proxies</td>
                         <td style="color: green;">Done</td>
                     </tr>
                     <tr>
@@ -356,13 +369,20 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td>Better web GUI with tree display of test cases</td>
                         <td style="color: red;">1.1</td>
                     </tr>
+                    <tr>
+                        <td>Localisation</td>
+                        <td>Messages abstracted and code generated from XML</td>
+                        <td style="color: red;">1.1</td>
+                    </tr>
                 </table>
                 A PHP5 version will be released once PHP5 is broadly
                 available.
+                Simpletest is currently compatible with PHP5, but does not
+                make use of all of the new features.
             </p>
             <p>
                 The wish list includes integration with other test systems
-                including JUnit and XsltUnit, SSL support, an Eclipse plug-in,
+                including JUnit and XsltUnit, an Eclipse plug-in,
                 SOAP testing and HTTP 1.1 support.
                 In reality I doubt these will ever happen.
             </p>
