@@ -11,7 +11,10 @@
      */
     class SimpleUrl {
         var $_scheme;
+        var $_username;
+        var $_password;
         var $_host;
+        var $_port;
         var $_path;
         var $_request;
         
@@ -22,16 +25,16 @@
          */
         function SimpleUrl($url) {
             $this->_scheme = $this->_extractScheme($url);
+            list($this->_username, $this->_password) = $this->_extractLogin($url);
             $this->_host = $this->_extractHost($url);
-            $this->_path = "/";
-            $this->_request = array();
-            if (preg_match('/(\/|\?)(.*)/', $url, $matches)) {
-                $this->_path = ($matches[1] == "/" ? "/" : "/?") . $matches[2];
+            $this->_port = false;
+            if (preg_match('/(.*?):(.*)/', $this->_host, $host_parts)) {
+                $this->_host = $host_parts[1];
+                $this->_port = (integer)$host_parts[2];
             }
-            if (preg_match('/(.*?)\?(.*)/', $this->_path, $matches)) {
-                $this->_path = $matches[1];
-                $this->_request = $this->_parseRequest($matches[2]);
-            }
+            $this->_path = $this->_extractPath($url);
+            $this->_request = $this->_parseRequest($this->_extractRequest($url));
+            $this->_fragment = (strncmp($url, "#", 1) == 0 ? substr($url, 1) : false);
         }
         
         /**
@@ -50,7 +53,26 @@
         }
         
         /**
+         *    Extracts the username and password from the
+         *    incoming URL.
+         *    @param $url    URL so far. The username and
+         *                   password are removed.
+         *    @return        Two item list of username and
+         *                   password.
+         *    @private
+         */
+        function _extractLogin(&$url) {
+            if (preg_match('/(.*?)@(.*)/', $url, $matches)) {
+                $url = $matches[2];
+                $parts = split(":", $matches[1]);
+                return array($parts[0], (isset($parts[1]) ? $parts[1] : false));
+            }
+            return array(false, false);
+        }
+        
+        /**
          *    Extracts the host part of an incoming URL.
+         *    Includes teh port number.
          *    @param $url        URL so far. The host will be
          *                       removed.
          *    @return            Host part.
@@ -62,6 +84,37 @@
                 return $matches[1];
             }
             return false;
+        }
+        
+        /**
+         *    Extracts the path information from the incoming
+         *    URL. Strips this path from the URL.
+         *    @param $url        URL so far. The host will be
+         *                       removed.
+         *    @return            Path part.
+         *    @private
+         */
+        function _extractPath(&$url) {
+            if (preg_match('/(.*?)(\?|#|$)(.*)/', $url, $matches)) {
+                $url = $matches[2] . $matches[3];
+                return ($matches[1] ? $matches[1] : "/");
+            }
+            return "/";
+        }
+        
+        /**
+         *    Strips off the request data.
+         *    @param $url        URL so far. The request will be
+         *                       removed.
+         *    @return            Raw request part.
+         *    @private
+         */
+        function _extractRequest(&$url) {
+            if (preg_match('/\?(.*?)(#|$)(.*)/', $url, $matches)) {
+                $url = $matches[2] . $matches[3];
+                return $matches[1];
+            }
+            return "";
         }
          
         /**
@@ -91,6 +144,24 @@
         }
         
         /**
+         *    Accessor for user name.
+         *    @return     Username preceding host.
+         *    @public
+         */
+        function getUsername() {
+            return $this->_username;
+        }
+        
+        /**
+         *    Accessor for password.
+         *    @return     Password preceding host.
+         *    @public
+         */
+        function getPassword() {
+            return $this->_password;
+        }
+        
+        /**
          *    Accessor for hostname and port.
          *    @param $default    Value to use if not present.
          *    @return            Hostname only.
@@ -101,12 +172,41 @@
         }
         
         /**
+         *    Accessor for top level domain.
+         *    @return        Last part of host.
+         *    @public
+         */
+        function getTld() {
+            $path_parts = pathinfo($this->getHost());
+            return (isset($path_parts["extension"]) ? $path_parts["extension"] : false);
+        }
+        
+        /**
+         *    Accessor for port number.
+         *    @return     TCP/IP port number.
+         *    @public
+         */
+        function getPort() {
+            return $this->_port;
+        }        
+        
+        /**
          *    Accessor for path.
          *    @return     Full path including leading slash.
          *    @public
          */
         function getPath() {
             return $this->_path;
+        }
+        
+        /**
+         *    Accessor for fragment at end of URL
+         *    after the "#".
+         *    @return     Part after "#".
+         *    @public
+         */
+        function getFragment() {
+            return $this->_fragment;
         }
         
         /**

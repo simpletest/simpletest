@@ -66,6 +66,49 @@
             $this->assertEqual($url->getScheme(), "http");
             $this->assertEqual($url->getHost(), "somewhere");
         }
+        function testBlitz() {
+            $this->assertUrl(
+                    "https://username:password@www.somewhere.com:243/this/that/here.php?a=1&b=2#anchor",
+                    array("https", "username", "password", "www.somewhere.com", 243, "/this/that/here.php", "com", "?a=1&b=2", "anchor"),
+                    array("a" => "1", "b" => "2"));
+            $this->assertUrl(
+                    "username:password@www.somewhere.com/this/that/here.php?a=1",
+                    array(false, "username", "password", "www.somewhere.com", false, "/this/that/here.php", "com", "?a=1", ""),
+                    array("a" => "1"));
+            $this->assertUrl(
+                    "username:password@somewhere.com:243",
+                    array(false, "username", "password", "somewhere.com", 243, "/", "com", "", ""));
+            $this->assertUrl(
+                    "https://www.somewhere.com",
+                    array("https", false, false, "www.somewhere.com", false, "/", "com", "", ""));
+            $this->assertUrl(
+                    "username@www.somewhere.com:243#anchor",
+                    array(false, "username", false, "www.somewhere.com", 243, "/", "com", "", "anchor"));
+            $this->assertUrl(
+                    "/this/that/here.php?a=1&b=2#anchor",
+                    array(false, false, false, false, false, "/this/that/here.php", false, "?a=1&b=2", "anchor"),
+                    array("a" => "1", "b" => "2"));
+            $this->assertUrl(
+                    "username@/here.php?a=1&b=2",
+                    array(false, "username", false, false, false, "/here.php", false, "?a=1&b=2", ""),
+                    array("a" => "1", "b" => "2"));
+        }
+        function assertUrl($raw, $parts, $params = "") {
+            if (!is_array($params)) {
+                $params = array();
+            }
+            $url = new SimpleUrl($raw);
+            $this->assertIdentical($url->getScheme(), $parts[0], "scheme->%s");
+            $this->assertIdentical($url->getUsername(), $parts[1], "username->%s");
+            $this->assertIdentical($url->getPassword(), $parts[2], "password->%s");
+            $this->assertIdentical($url->getHost(), $parts[3], "host->%s");
+            $this->assertIdentical($url->getPort(), $parts[4], "port->%s");
+            $this->assertIdentical($url->getPath(), $parts[5], "path->%s");
+            $this->assertEqual($url->getTld(), $parts[6], "tld->%s");
+            $this->assertEqual($url->getEncodedRequest(), $parts[7], "encoded->%s");
+            $this->assertIdentical($params, $url->getRequest(), "request->%s");
+            $this->assertEqual($url->getFragment(), $parts[8]);
+        }
     }
 
     class TestOfCookie extends UnitTestCase {
