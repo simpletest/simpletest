@@ -24,8 +24,33 @@
         }
         
         /**
+         *    Removes expired and temporary cookies as if
+         *    the browser was closed and re-opened.
+         *    @param $date        Time when session restarted.
+         *                        If ommitted then all persistent
+         *                        cookies are kept.
+         *    @public
+         */
+        function restartSession($date = false) {
+            $surviving = array();
+            for ($i = 0; $i < count($this->_cookies); $i++) {
+                if (!$this->_cookies[$i]->getValue()) {
+                    continue;
+                }
+                if (!$this->_cookies[$i]->getExpiry()) {
+                    continue;
+                }
+                if ($date && $this->_cookies[$i]->isExpired($date)) {
+                    continue;
+                }
+                $surviving[] = $this->_cookies[$i];
+            }
+            $this->_cookies = $surviving;
+        }
+        
+        /**
          *    Adds a cookie to the jar. This will overwrite
-         *    cookies with matching paths and keys.
+         *    cookies with matching host, paths and keys.
          *    @param $cookie        New cookie.
          *    @public
          */
@@ -35,8 +60,7 @@
                         $cookie,
                         $this->_cookies[$i]->getHost(),
                         $this->_cookies[$i]->getPath(),
-                        $this->_cookies[$i]->getName(),
-                        $this->_cookies[$i]->getExpiry());
+                        $this->_cookies[$i]->getName());
                 if ($is_match) {
                     $this->_cookies[$i] = $cookie;
                     return;
@@ -47,24 +71,20 @@
         
         /**
          *    Fetches a hash of all valid cookies filtered
-         *    by host, path and date and keyed by name
+         *    by host, path and keyed by name
          *    Any cookies with missing categories will not
-         *    be filtered out by that category. Empty cookies
-         *    not be filtered unless thay are also expired.
-         *    Don't blame ne, blame the cookie spec!
+         *    be filtered out by that category. Expired
+         *    cookies must be cleared by restarting the session.
          *    @param $host        Host name requirement.
          *    @param $path        Path encompassing cookies.
-         *    @param $date        Date to test expiries against,
-         *                        either a timestamp or as a
-         *                        cookie formatted date string.
          *    @return             Hash of valid cookie objects keyed
          *                        on the cookie name.
          *    @public
          */
-        function getValidCookies($host = false, $path = "/", $date = false) {
+        function getValidCookies($host = false, $path = "/") {
             $valid_cookies = array();
             foreach ($this->_cookies as $cookie) {
-                if ($this->_isMatch($cookie, $host, $path, $cookie->getName(), $date)) {
+                if ($this->_isMatch($cookie, $host, $path, $cookie->getName())) {
                     $valid_cookies[] = $cookie;
                 }
             }
@@ -79,12 +99,10 @@
          *    @param $path          Cookie path must be shorter than
          *                          this path.
          *    @param $name          Name must match.
-         *    @param $date          Cookie must not have expired at
-         *                          this time.
          *    @return               True if matched.
          *    @private
          */
-        function _isMatch($cookie, $host, $path, $name, $date) {
+        function _isMatch($cookie, $host, $path, $name) {
             if ($cookie->getName() != $name) {
                 return false;
             }
@@ -92,9 +110,6 @@
                 return false;
             }
             if (!$cookie->isValidPath($path)) {
-                return false;
-            }
-            if ($cookie->isExpired($date)) {
                 return false;
             }
             return true;
@@ -134,6 +149,18 @@
             $this->_expected_response_codes = null;
             $this->_expected_mime_types = null;
             $this->_expected_cookies = array();
+        }
+        
+        /**
+         *    Removes expired and temporary cookies as if
+         *    the browser was closed and re-opened.
+         *    @param $date        Time when session restarted.
+         *                        If ommitted then all persistent
+         *                        cookies are kept.
+         *    @public
+         */
+        function restartSession($date = false) {
+            $this->_cookie_jar->restartSession($date);
         }
         
         /**
@@ -224,14 +251,13 @@
          *    @param $host        Host to search.
          *    @param $path        Applicable path.
          *    @param $name        Name of cookie to read.
-         *    @param $date        Time when cookie is to be tested.
          *    @return             Null if not present, else the
          *                        value as a string.
          *    @public
          */
-        function getCookieValues($host, $path, $name, $date = false) {
+        function getCookieValues($host, $path, $name) {
             $values = array();
-            foreach ($this->_cookie_jar->getValidCookies($host, $path, $date) as $cookie) {
+            foreach ($this->_cookie_jar->getValidCookies($host, $path) as $cookie) {
                 if ($name == $cookie->getName()) {
                     $values[] = $cookie->getValue();
                 }

@@ -124,9 +124,9 @@
             $this->assertTrue($cookie->isValidPath("/path/"));
             $this->assertTrue($cookie->isValidPath("/path/more"));
         }
-        function testNonExpiring() {
+        function testSessionExpiring() {
             $cookie = new SimpleCookie("name", "value", "/path");
-            $this->assertFalse($cookie->isExpired(0));
+            $this->assertTrue($cookie->isExpired(0));
         }
         function testTimestampExpiry() {
             $cookie = new SimpleCookie("name", "value", "/path", 456);

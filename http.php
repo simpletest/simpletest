@@ -266,7 +266,7 @@
         /**
          *    Test to see if cookie is expired against
          *    the cookie format time or timestamp.
-         *    Will give true if no cookie expiry.
+         *    Will give true for a session cookie.
          *    @param $now     Time to test against. Result
          *                    will be false if this time
          *                    is later than the cookie expiry.
@@ -276,7 +276,7 @@
          */
         function isExpired($now) {
             if (!$this->_expiry) {
-                return false;
+                return true;
             }
             if (is_string($now)) {
                 $now = strtotime($now);

@@ -60,12 +60,6 @@
             $this->assertEqual(count($jar->getValidCookies(false, "/path/more_path/and_more")), 1);
             $this->assertEqual(count($jar->getValidCookies(false, "/path/not_here/")), 0);
         }
-        function testExpiryFilter() {
-            $jar = new CookieJar();
-            $jar->setCookie(new SimpleCookie("a", "A", "/", "Wed, 25-Dec-02 04:24:20 GMT"));
-            $this->assertEqual(count($jar->getValidCookies(false, "/", "Wed, 25-Dec-02 04:24:19 GMT")), 1);
-            $this->assertEqual(count($jar->getValidCookies(false, "/", "Wed, 25-Dec-02 04:24:21 GMT")), 0);
-        }
         function testMultipleCookieWithDifferentPaths() {
             $jar = new CookieJar();
             $jar->setCookie(new SimpleCookie("a", "abc", "/"));
@@ -88,12 +82,35 @@
             $cookies = $jar->getValidCookies();
             $this->assertIdentical($cookies[0]->getValue(), "cde");
         }
+        function testClearSessionCookies() {
+            $jar = new CookieJar();
+            $jar->setCookie(new SimpleCookie("a", "A", "/"));
+            $jar->restartSession();
+            $this->assertEqual(count($jar->getValidCookies(false, "/")), 0);
+        }
+        function testExpiryFilter() {
+            $jar = new CookieJar();
+            $jar->setCookie(new SimpleCookie("a", "A", "/", "Wed, 25-Dec-02 04:24:20 GMT"));
+            $jar->restartSession("Wed, 25-Dec-02 04:24:19 GMT");
+            $this->assertEqual(count($jar->getValidCookies(false, "/")), 1);
+            $jar->restartSession("Wed, 25-Dec-02 04:24:21 GMT");
+            $this->assertEqual(count($jar->getValidCookies(false, "/")), 0);
+        }
         function testCookieClearing() {
             $jar = new CookieJar();
             $jar->setCookie(new SimpleCookie("a", "abc", "/"));
             $jar->setCookie(new SimpleCookie("a", "", "/"));
             $this->assertEqual(count($cookies = $jar->getValidCookies(false, "/")), 1);
             $this->assertIdentical($cookies[0]->getValue(), "");
+        }
+        function testCookieClearByDate() {
+            $jar = new CookieJar();
+            $jar->setCookie(new SimpleCookie("a", "abc", "/", "Wed, 25-Dec-02 04:24:21 GMT"));
+            $jar->setCookie(new SimpleCookie("a", "def", "/", "Wed, 25-Dec-02 04:24:19 GMT"));
+            $cookies = $jar->getValidCookies(false, "/");
+            $this->assertIdentical($cookies[0]->getValue(), "def");
+            $jar->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
+            $this->assertEqual(count($jar->getValidCookies(false, "/")), 0);
         }
     }
 
@@ -278,11 +295,21 @@
             $this->assertEqual($browser->getCookieValues("this.host", "this/path/", "a"), array("AAAA"));
         }
         function testClearCookie() {
-            $request = &$this->_createCookieSite(array(new SimpleCookie("a", "", "this/path/", time() - 1)));
+            $request = &$this->_createCookieSite(array(new SimpleCookie(
+                    "a",
+                    "",
+                    "this/path/",
+                    "Wed, 25-Dec-02 04:24:19 GMT")));
             $browser = &new TestBrowser(new MockUnitTestCase($this));
-            $browser->setCookie("a", "A", "this/path/", time());
+            $browser->setCookie("a", "A", "this/path/", "Wed, 25-Dec-02 04:24:21 GMT");
             $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
-            $this->assertIdentical($browser->getCookieValues("this.host", "this/path/", "a"), array(""));
+            $this->assertIdentical(
+                    $browser->getCookieValues("this.host", "this/path/", "a"),
+                    array(""));
+            $browser->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
+            $this->assertIdentical(
+                    $browser->getCookieValues("this.host", "this/path/", "a"),
+                    array());
         }
     }
 ?>
