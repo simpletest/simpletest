@@ -7,9 +7,10 @@
     require_once(SIMPLE_TEST . 'simple_unit.php');
     require_once(SIMPLE_TEST . 'socket.php');
     require_once(SIMPLE_TEST . 'http.php');
+    require_once(SIMPLE_TEST . 'simple_web_test.php');
 
-    class LiveTestCase extends UnitTestCase {
-        function LiveTestCase() {
+    class LiveHttpTestCase extends UnitTestCase {
+        function LiveHttpTestCase() {
             $this->UnitTestCase();
         }
         function testBadSocket() {
@@ -47,4 +48,13 @@
         }
     }
     
+    class TestOfLiveFetch extends WebTestCase {
+        function TestOfLiveFetch() {
+            $this->WebTestCase();
+        }
+        function testFetch() {
+            $this->fetch('http://www.lastcraft.com/test/network_confirm.php');
+            $this->assertWantedPattern('/target for the SimpleTest/');
+        }
+    }
 ?>

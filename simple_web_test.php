@@ -5,6 +5,7 @@
         define("SIMPLE_TEST", "./");
     }
     require_once(SIMPLE_TEST . 'simple_test.php');
+    require_once(SIMPLE_TEST . 'browser.php');
     
     /**
      *    Test case for testing of web pages. Allows
