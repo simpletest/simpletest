@@ -452,7 +452,6 @@
             
             $route = &new MockSimpleRoute($this);
             $route->setReturnReference('createConnection', $socket);
-            $route->setReturnValue('getUrl', new SimpleUrl('here.com'));
             
             $request = &new SimpleHttpRequest($route, 'GET');
             
@@ -583,8 +582,8 @@
         }
         function testBadRequest() {
             $socket = &new MockSimpleSocket($this);
-            $socket->setReturnValue("isError", true);
-            $socket->setReturnValue("getError", "Socket error");
+            $socket->setReturnValue('isError', true);
+            $socket->setReturnValue('getError', 'Socket error');
 
             $response = &new SimpleHttpResponse($socket, 'GET', new SimpleUrl('here'));
             $this->assertTrue($response->isError());

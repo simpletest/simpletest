@@ -206,10 +206,14 @@
             
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue('getHeaders', $headers);
+            $response->setReturnValue('getMethod', 'POST');
             $response->setReturnValue('getUrl', new SimpleUrl('here'));
+            $response->setReturnValue('getRequestData', array('a' => 'A'));
 
             $page = &new SimplePage($response);
-            $this->assertEqual($page->getUrl(), new SimpleUrl('here'));
+            $this->assertEqual($page->getRequestMethod(), 'POST');
+            $this->assertEqual($page->getRequestUrl(), new SimpleUrl('here'));
+            $this->assertEqual($page->getRequestData(), array('a' => 'A'));
         }
         function testTransportError() {
             $response = &new MockSimpleHttpResponse($this);

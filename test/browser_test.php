@@ -333,7 +333,7 @@
             $page->setReturnReference('getFormBySubmitLabel', $form);
             $page->expectOnce('getFormBySubmitLabel', array('Submit'));
             $page->setReturnValue('getRaw', 'stuff');
-            $page->setReturnValue('getUrl', new SimpleUrl('http://this.com/page.html'));
+            $page->setReturnValue('getRequestUrl', new SimpleUrl('http://this.com/page.html'));
             
             $browser = &$this->createBrowser($agent, $page);
             $browser->get('http://this.com/page.html');

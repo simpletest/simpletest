@@ -253,11 +253,29 @@
         }
         
         /**
-         *    Accessor for the original resource name.
-         *    @return SimpleUrl      No URL as no page yet.
-         *    @access public
+         *    Original request method.
+         *    @return string        GET as default.
+         *    @access protected
          */
-        function getUrl() {
+        function getRequestMethod() {
+            return 'GET';
+        }
+        
+        /**
+         *    Original resource name.
+         *    @return SimpleUrl        No current url.
+         *    @access protected
+         */
+        function getRequestUrl() {
+            return false;
+        }
+        
+        /**
+         *    Original request data.
+         *    @return mixed              No content.
+         *    @access protected
+         */
+        function getRequestData() {
             return false;
         }
         
@@ -426,7 +444,9 @@
         var $_transport_error;
         var $_raw;
         var $_headers;
+        var $_method;
         var $_url;
+        var $_request_data;
         
         /**
          *    Parses a page ready to access it's contents.
@@ -444,7 +464,9 @@
             $this->_transport_error = $response->getError();
             $this->_raw = $response->getContent();
             $this->_headers = $response->getHeaders();
+            $this->_method = $response->getMethod();
             $this->_url = $response->getUrl();
+            $this->_request_data = $response->getRequestData();
         }
         
         /**
@@ -466,12 +488,30 @@
         }
         
         /**
-         *    Accessor for the original resource name.
-         *    @return SimpleUrl      Parsed URL of this resource.
-         *    @access public
+         *    Original request method.
+         *    @return string        GET, POST or HEAD.
+         *    @access protected
          */
-        function getUrl() {
+        function getRequestMethod() {
+            return $this->_method;
+        }
+        
+        /**
+         *    Original resource name.
+         *    @return SimpleUrl        Current url.
+         *    @access protected
+         */
+        function getRequestUrl() {
             return $this->_url;
+        }
+        
+        /**
+         *    Original request data.
+         *    @return mixed              Sent content.
+         *    @access protected
+         */
+        function getRequestData() {
+            return $this->_request_data;
         }
         
         /**

@@ -165,7 +165,7 @@
         var $_proxy_username;
         var $_proxy_password;
         var $_connection_timeout;
-        var $_current_request;
+        var $_base_url;
         var $_additional_headers;
         
         /**
@@ -180,24 +180,16 @@
             $this->_proxy_username = false;
             $this->_proxy_password = false;
             $this->setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
-            $this->_current_request = false;
+            $this->_base_url = false;
             $this->_additional_headers = array();
         }
         
         /**
-         *    Sets the current request information.
-         *    @param string $method      GET or POST only.
+         *    Sets the current location.
          *    @param SimpleUrl $url      Current URL.
-         *    @param array/string $post  POST data if any.
          */
-        function _setCurrentRequest($method, $url, $post) {
-            if ($method == 'HEAD') {
-                return;
-            }
-            $this->_current_request = array(
-                    'method' => $method,
-                    'url' => $url,
-                    'post' => $post);
+        function _setBaseUrl($url) {
+            $this->_base_url = $url;
         }
         
         /**
@@ -206,36 +198,12 @@
          *    @access public
          */
         function getBaseUrl() {
-            if (! $this->_current_request) {
+            if (! $this->_base_url) {
                 return false;
             }
-            return $this->_current_request['url']->getScheme('http') . '://' .
-                    $this->_current_request['url']->getHost() .
-                    $this->_current_request['url']->getBasePath();
-        }
-        
-        /**
-         *    Accessor for method of last request.
-         *    @return string       POST or GET.
-         *    @access public
-         */
-        function getCurrentMethod() {
-            if (! $this->_current_request) {
-                return false;
-            }
-            return $this->_current_request['method'];
-        }
-        
-        /**
-         *    Accessor for method of last request.
-         *    @return string       POST or GET.
-         *    @access public
-         */
-        function getCurrentPostData() {
-            if (! $this->_current_request) {
-                return false;
-            }
-            return $this->_current_request['post'];
+            return $this->_base_url->getScheme('http') . '://' .
+                    $this->_base_url->getHost() .
+                    $this->_base_url->getBasePath();
         }
         
         /**
@@ -440,7 +408,9 @@
                 $method = 'GET';
                 $parameters = false;
             } while (! $this->_isTooManyRedirects(++$redirects));
-            $this->_setCurrentRequest($method, $url, $parameters);
+            if ($method != 'HEAD') {
+                $this->_setBaseUrl($url);
+            }
             return $response;
         }
         

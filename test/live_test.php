@@ -1,11 +1,11 @@
 <?php
     // $Id$
-    require_once('../unit_tester.php');
-    require_once('../socket.php');
-    require_once('../http.php');
-    require_once('../options.php');
-    require_once('../browser.php');
-    require_once('../web_tester.php');
+    require_once(dirname(__FILE__) . '/../unit_tester.php');
+    require_once(dirname(__FILE__) . '/../socket.php');
+    require_once(dirname(__FILE__) . '/../http.php');
+    require_once(dirname(__FILE__) . '/../options.php');
+    require_once(dirname(__FILE__) . '/../browser.php');
+    require_once(dirname(__FILE__) . '/../web_tester.php');
 
     if (SimpleTestOptions::getDefaultProxy()) {
         SimpleTestOptions::ignore('LiveHttpTestCase');

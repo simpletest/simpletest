@@ -196,14 +196,16 @@
             
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
+            $agent->expectOnce('_createHttpRequest', array(
+                    'GET',
+                    new SimpleUrl('http://test:secret@this.com/page.html?a=A&b=B'),
+                    array()));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'GET',
                     'http://test:secret@this.com/page.html',
                     array('a' => 'A', 'b' => 'B'));
-            $this->assertEqual($agent->getCurrentMethod(), 'GET');
-            $this->assertEqual($agent->getCurrentPostData(), false);
             $agent->tally();
         }
         function testHead() {
@@ -224,14 +226,16 @@
             
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
+            $agent->expectOnce('_createHttpRequest', array(
+                    'HEAD',
+                    new SimpleUrl('http://test:secret@this.com/page.html?a=A&b=B'),
+                    array()));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'HEAD',
-                    'http://this.com/page.html',
+                    'http://test:secret@this.com/page.html',
                     array('a' => 'A', 'b' => 'B'));
-            $this->assertIdentical($agent->getCurrentMethod(), false);
-            $this->assertEqual($agent->getCurrentPostData(), false);
             $agent->tally();
         }
         function testPost() {
@@ -249,14 +253,16 @@
             
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
+            $agent->expectOnce('_createHttpRequest', array(
+                    'POST',
+                    new SimpleUrl('http://test:secret@this.com/page.html'),
+                    array('a' => 'A', 'b' => 'B')));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'POST',
-                    'http://this.com/page.html',
+                    'http://test:secret@this.com/page.html',
                     array('a' => 'A', 'b' => 'B'));
-            $this->assertEqual($agent->getCurrentMethod(), 'POST');
-            $this->assertEqual($agent->getCurrentPostData(), array('a' => 'A', 'b' => 'B'));
             $agent->tally();
         }
     }

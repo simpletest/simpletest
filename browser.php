@@ -263,7 +263,7 @@
                 $this->_history->recordEntry(
                         $response->getMethod(),
                         $response->getUrl(),
-                        $this->_user_agent->getCurrentPostData());
+                        $response->getRequestData());
             }
             return $this->_parse($response);
         }
@@ -283,7 +283,7 @@
          *    @access public
          */
         function getCurrentUrl() {
-            return $this->_page->getUrl();
+            return $this->_page->getRequestUrl();
         }
         
         /**
@@ -494,13 +494,13 @@
          *    @access public
          */
         function authenticate($username, $password) {
-            if (! $this->_page->getUrl()) {
-                return false;
-            }
             if (! $this->_page->getRealm()) {
                 return false;
             }
-            $url = $this->_page->getUrl();
+            $url = $this->_page->getRequestUrl();
+            if (! $url) {
+                return false;
+            }
             $this->_user_agent->setIdentity(
                     $url->getHost(),
                     $this->_page->getRealm(),

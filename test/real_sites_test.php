@@ -1,7 +1,7 @@
 <?php
     // $Id$
     
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../web_tester.php');
+    require_once(dirname(__FILE__) . '/../web_tester.php');
 
     class LiveSitesTestCase extends WebTestCase {
         function LiveSitesTestCase() {
@@ -21,6 +21,17 @@
             $this->assertTrue($this->setField('report', 'Monthly'));
             $this->clickSubmit('Change Stats View');
             $this->assertWantedPattern('/Statistics for the past \d+ months/');
+        }
+        function testPhpLondon() {
+            $this->get('http://www.phplondon.org/');
+            $this->clickLink('Wiki is here');
+            $this->clickLink('Members');
+            $this->clickLink('MarcusBaker');
+            $this->clickLink('SimpleTest');
+            $this->assertTitle('PhpLondonWiki : SimpleTest');
+            $this->back();
+            $this->back();
+            $this->assertTitle('PhpLondonWiki : Members');
         }
     }
 ?>
