@@ -160,7 +160,7 @@
          *    @access private
          */
         function _addContentTagToOpenTags(&$tag) {
-            if (! in_array($tag->getTagName(), array('option'))) {
+            if ($tag->getTagName() != 'option') {
                 return;
             }
             foreach (array_keys($this->_tags) as $name) {

@@ -1,4 +1,6 @@
 <?php
+    //xdebug_start_profiling();
+    
     // $Id$
     define('TEST', __FILE__);
     require_once('../unit_tester.php');
@@ -28,4 +30,7 @@
         exit ($test->run(new TextReporter()) ? 0 : 1);
     }
     $test->run(new HtmlReporter());
+    
+    //xdebug_stop_profiling();
+    //xdebug_dump_function_profile();
 ?>

@@ -1,4 +1,6 @@
 <?php
+    //xdebug_start_profiling();
+    
     // $Id$
     if (! defined('TEST')) {
         define('TEST', __FILE__);
@@ -46,4 +48,7 @@
         }
         $test->run(new HtmlReporter());
     }
+    
+    //xdebug_dump_function_profile(XDEBUG_PROFILER_CPU);
+    //xdebug_stop_profiling();
 ?>
