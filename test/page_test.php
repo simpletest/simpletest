@@ -142,4 +142,33 @@
             $this->assertEqual($page->getUrls("Label"), array("./somewhere.php"));
         }
     }
+    
+    class TestOfPageScraping extends UnitTestCase {
+        function TestOfPageScraping() {
+            $this->UnitTestCase();
+        }
+        function testEmptyPage() {
+            $page = &new SimplePage("");
+            $this->assertIdentical($page->getAbsoluteLinks(), array());
+            $this->assertIdentical($page->getRelativeLinks(), array());
+        }
+        function testUninterestingPage() {
+            $page = &new SimplePage("<html><body><p>Stuff</p></body></html>");
+            $this->assertIdentical($page->getAbsoluteLinks(), array());
+            $this->assertIdentical($page->getRelativeLinks(), array());
+        }
+        function testLinksPage() {
+            $raw = '<html>';
+            $raw .= '<a href="there.html">There</a>';
+            $raw .= '<a href="http://there.com/that.html">That page</a>';
+            $raw .= '</html>';
+            $page = &new SimplePage($raw);
+            $this->assertIdentical(
+                    $page->getAbsoluteLinks(),
+                    array("http://there.com/that.html"));
+            $this->assertIdentical(
+                    $page->getRelativeLinks(),
+                    array("./there.html"));
+        }
+    }
 ?>

@@ -153,7 +153,6 @@
         var $_parser;
         var $_mode;
         var $_mode_handlers;
-        var $_debug = false;
         
         /**
          *    Sets up the lexer.
@@ -329,9 +328,6 @@
             if (!$content) {
                 return true;
             }
-            if ($this->_debug) {
-                print "[" . htmlentities($content) . "]<br />";
-            }
             $handler = $this->_mode->getCurrent();
             if (isset($this->_mode_handlers[$handler])) {
                 $handler = $this->_mode_handlers[$handler];
@@ -475,7 +471,7 @@
          *    @public
          */
         function acceptAttributeToken($token, $event) {
-            if ($event == LEXER_MATCHED) {
+            if ($event == LEXER_UNMATCHED) {
                 $this->_attributes[$this->_current_attribute] .= $token;
             }
             return true;

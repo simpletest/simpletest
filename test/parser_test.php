@@ -337,14 +337,14 @@
             $this->assertTrue($this->_lexer->parse("<html><a href = 'here.html'>label</a></html>"));
         }
         function testComplexLink() {
-            $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<a", "*"));
+            $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<a", LEXER_ENTER));
             $this->_handler->expectArgumentsAt(1, "acceptStartToken", array("href", "*"));
             $this->_handler->expectArgumentsAt(2, "acceptStartToken", array("bool", "*"));
             $this->_handler->expectArgumentsAt(3, "acceptStartToken", array("style", "*"));
-            $this->_handler->expectArgumentsAt(4, "acceptStartToken", array(">", "*"));
+            $this->_handler->expectArgumentsAt(4, "acceptStartToken", array(">", LEXER_EXIT));
             $this->_handler->expectCallCount("acceptStartToken", 5);
             $this->_handler->expectArgumentsAt(0, "acceptAttributeToken", array("'", "*"));
-            $this->_handler->expectArgumentsAt(1, "acceptAttributeToken", array("here.html", "*"));
+            $this->_handler->expectArgumentsAt(1, "acceptAttributeToken", array("here.html", LEXER_UNMATCHED));
             $this->_handler->expectArgumentsAt(2, "acceptAttributeToken", array("'", "*"));
             $this->_handler->expectArgumentsAt(3, "acceptAttributeToken", array("\"", "*"));
             $this->_handler->expectArgumentsAt(4, "acceptAttributeToken", array("'coo", "*"));
@@ -412,7 +412,7 @@
             $this->assertTrue($this->_parser->acceptStartToken("href", LEXER_MATCHED));
             $this->assertTrue($this->_parser->acceptStartToken("=", LEXER_MATCHED));
             $this->assertTrue($this->_parser->acceptAttributeToken("\"", LEXER_ENTER));
-            $this->assertTrue($this->_parser->acceptAttributeToken("here.html", LEXER_MATCHED));
+            $this->assertTrue($this->_parser->acceptAttributeToken("here.html", LEXER_UNMATCHED));
             $this->assertTrue($this->_parser->acceptAttributeToken("\"", LEXER_EXIT));
             $this->assertTrue($this->_parser->acceptStartToken(">", LEXER_EXIT));
         }
