@@ -41,11 +41,8 @@ Here we are about to test the {@link http://www.lastcraft.com Last Craft} site i
       <programlisting role="php">
       <![CDATA[
 <?php
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', 'simpletest/');
-    }
-    require_once(SIMPLE_TEST . 'web_tester.php');
-    require_once(SIMPLE_TEST . 'reporter.php');
+    require_once('simpletest/web_tester.php');
+    require_once('simpletest/reporter.php');
     
     $test = &new GroupTest('Web site tests');
     $test->addTestFile('lastcraft_test.php');
