@@ -40,12 +40,7 @@ If you are extending the toolkit or wish to bundle parts of the toolkit
 with your own software, you can see a full PHPDoc API on sourceforge
 as http://simpletest.sourceforge.net/.
 
-You are looking at a Beta release.
-
-The unit tester and mock object generator are tested and have already
-been used to test several systems. The web tester portion still lacks
-frames support, but is mostly stable. Documentaion is currently lacking,
-but should be improved for a version 1.0 release.
+You are looking at a pre-release.
 
 The unit tests for SimpleTest itself can be run here...
 
@@ -71,7 +66,7 @@ deprecated interfaces so you should read this even if all of
 your current tests appear to run.
 
 You can find a tutorial on http://www.lastcraft.com/first_test_tutorial.php to
-get you started and hopefully this material will eventually become included
+get you started and this material will eventually become included
 with the project documentation. There is a documentation folder, but it is
 just a subset of the material on Sourceforge.
 
@@ -102,8 +97,8 @@ really are invaluable.
 Thanks to the advanced PHP forum on SitePoint. It is the place to be right
 now.
 
-Authors are Marcus Baker, Jason Sweat and Harry Feucks.
+Authors are Marcus Baker and Jason Sweat.
 
-yours, Marcus Baker
+yours, Marcus
 -- 
 marcus@lastcraft.com

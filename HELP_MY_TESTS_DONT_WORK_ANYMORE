@@ -9,11 +9,11 @@ My custom test case ignored by tally()
 --------------------------------------
 The _assertTrue method has had it's signature changed due to a bug
 in the PHP 5.0.1 release. You must now use getTest() from within
-that method to get teh test case.
+that method to get the test case.
 
 Broken code extending SimpleRunner
 ----------------------------------
-This was replaced with SimpleScorer so taht I could use the runner
+This was replaced with SimpleScorer so that I could use the runner
 name in another class. This happened in RC1 development and there
 is no easy backward compatibility fix.
 
@@ -35,23 +35,17 @@ No method SimpleBrowser::getCurrentUrl()
 This is replaced with the more versatile showRequest() for
 debugging. It only existed in this context for version Beta5.
 Later versions will have SimpleBrowser::getHistory() for tracking
-paths through pages. It is currently deprecated but will reappera in
-RC1 as getUrl().
-
-No method WebTestCase::getCurrentUrl()
---------------------------------------
-This has been replaced with the more versatile showRequest() for
-debugging. It only existed in this context for version Beta5.
+paths through pages. It is renamed as getUrl() since 1.0RC1.
 
 No method Stub::setStubBaseClass()
 ----------------------------------
-This method has finally been removed in 1.0RC1. Use...
-
-SimpleTestOptions::setStubBaseClass()
+This method has finally been removed in 1.0RC1. Use
+SimpleTestOptions::setStubBaseClass() instead.
 
 No class CommandLineReporter
 ----------------------------
-This was renamed to TextReporter in Beta3 and was removed in 1.0RC1.
+This was renamed to TextReporter in Beta3 and the deprecated version
+was removed in 1.0RC1.
 
 No method requireReturn()
 -------------------------
@@ -67,7 +61,8 @@ fetch and then assert the desired value.
 No method clickSubmitByFormId()
 -------------------------------
 This method had an incorrect name as no button was involved. It was
-renamed to submitByFormId() in Beta4 and deprecated. Now removed.
+renamed to submitByFormId() in Beta4 and the old version deprecated.
+Now removed.
 
 No method paintStart() or paintEnd()
 ------------------------------------
@@ -88,18 +83,14 @@ No class TestDisplay
 This has been folded into SimpleReporter in Beta3 and is now deprecated.
 It was removed in RC1.
 
-No class CommandLineReporter
-----------------------------
-This has been renamed TextReporter in Beta3 and is now deprecated.
-
-No method fetch()
------------------
+No method WebTestCase::fetch()
+------------------------------
 This was renamed get() in Alpha8. It is removed in Beta3.
 
 No method submit()
 ------------------
 This has been renamed clickSubmit() in Beta1. The old method was
-be removed in Beta2.
+removed in Beta2.
 
 No method clearHistory()
 ------------------------

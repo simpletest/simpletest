@@ -44,7 +44,7 @@
                 signature...
 <php><![CDATA[
 class HtmlReporter extends SimpleReporter {
-    public HtmlReporter() { ... }
+    public HtmlReporter($encoding) { ... }
     public makeDry(boolean $is_dry) { ... }
     public void paintHeader(string $test_name) { ... }
     public void sendNoCacheHeaders() { ... }
@@ -74,13 +74,21 @@ class HtmlReporter extends SimpleReporter {
                 that you will probably want to override...
                 <ul class="api">
                     <li>
-                        <code>HtmlReporter()</code><br />
+                        <code>HtmlReporter(string $encoding)</code><br />
                         is the constructor.
                         Note that the unit test sets up the link to the display
                         rather than the other way around.
-                        The display is a passive receiver of test events.
+                        The display is a mostly passive receiver of test events.
                         This allows easy adaption of the display for other test
                         systems beside unit tests, such as monitoring servers.
+                        The encoding is the character encoding you wish to
+                        display the test output in.
+                        In order to correctly render debug output when
+                        using the web tester, this should match the encoding
+                        of the site you are trying to test.
+                        The available character set strings are described in
+                        the PHP <a href="http://www.php.net/manual/en/function.htmlentities.php">html_entities()</a>
+                        function.
                     </li>
                     <li>
                         <code>void paintHeader(string $test_name)</code><br />
@@ -447,6 +455,10 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
         </link>
         <link>
             SimpleTest download page on <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
+        </link>
+        <link>
+            The <a href="http://simpletest.sourceforge.net/">developer&apos;s API for SimpleTest</a>
+            gives full detail on the classes and assertions available.
         </link>
     </external>
     <meta>
