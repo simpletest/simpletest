@@ -69,6 +69,7 @@ FILES=(simpletest/errors.php \
           simpletest/test/real_sites_test.php \
           simpletest/test/parse_error_test.php
           simpletest/test/test_with_parse_error.php
+          simpletest/docs/en/docs.css \
           simpletest/docs/en/index.html \
           simpletest/docs/en/overview.html \
           simpletest/docs/en/unit_test_documentation.html \
@@ -77,10 +78,10 @@ FILES=(simpletest/errors.php \
           simpletest/docs/en/mock_objects_documentation.html \
           simpletest/docs/en/partial_mocks_documentation.html \
           simpletest/docs/en/reporter_documentation.html \
-          simpletest/docs/en/runner_documentation.html \
           simpletest/docs/en/expectation_documentation.html \
           simpletest/docs/en/web_tester_documentation.html \
           simpletest/docs/en/form_testing_documentation.html \
-          simpletest/docs/en/authentication_documentation.html)
+          simpletest/docs/en/authentication_documentation.html \
+          simpletest/docs/en/browser_documentation.html)
 
 tar -zcf $NAME ${FILES[*]}
