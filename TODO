@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for the next iteration (1.0rc1) of 50(!) hours.
+This is immediate stuff only for the next iteration (1.0rc1) of 40(!) hours.
 This equates to about 6 weeks work giving a release date of first week
 of April.
 
@@ -8,9 +8,6 @@ $Id$
 Unit tester
 -----------
 Error level override for error trapping (2).
-Optionally add statistical test case (3).
-Optionally add soak test case (3).
-Optionally add parallel process test case via. shell (4).
 
 Interface
 ---------
