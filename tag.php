@@ -444,7 +444,7 @@
         
         /**
          *    Can only set allowed values.
-         *    @param string $value        New choice.
+         *    @param string $value       New choice.
          *    @return boolean            True if allowed.
          *    @access public
          */
@@ -516,6 +516,9 @@
          *    Stashes the attributes.
          */
         function SimpleRadioButtonTag($attributes) {
+            if (! isset($attributes['value'])) {
+                $attributes['value'] = 'on';
+            }
             $this->SimpleWidget('input', $attributes);
         }
         
@@ -559,7 +562,91 @@
     }
     
     /**
-     *    Content tag for text area.
+     *    A group of tags with the same name within a form.
+     *    Used for radio buttons.
+     */
+    class SimpleTagGroup {
+        var $_widgets;
+        
+        /**
+         *    Starts empty.
+         *    @access public
+         */
+        function SimpleTagGroup() {
+            $this->_widgets = array();
+        }
+        
+        /**
+         *    Adds a tag to the group.
+         *    @param SimpleWidget $widget
+         *    @access public
+         */
+        function addWidget(&$widget) {
+            $this->_widgets[] = &$widget;
+        }
+        
+        /**
+         *    Each tag is tried in turn until one is
+         *    successfully set. The others will be
+         *    unchecked if successful.
+         *    @param string $value      New value.
+         *    @return boolean           True if any allowed.
+         *    @access public
+         */
+        function setValue($value) {
+            $index = false;
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                if ($this->_widgets[$i]->setValue($value)) {
+                    $index = $i;
+                    break;
+                }
+            }
+            if ($index === false) {
+                return false;
+            }
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                if ($index == $i) {
+                    continue;
+                }
+                $this->_widgets[$i]->setValue(false);
+            }
+            return true;
+        }
+        
+        /**
+         *    Accessor for current selected widget or false
+         *    if none.
+         *    @return string/boolean   Value attribute or
+         *                             content of opton.
+         *    @access public
+         */
+        function getValue() {
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                if ($this->_widgets[$i]->getValue()) {
+                    return $this->_widgets[$i]->getValue();
+                }
+            }
+            return false;
+        }
+        
+        /**
+         *    Accessor for starting value that is active.
+         *    @return string/boolean      Value of first checked
+         *                                widget or false if none.
+         *    @access public
+         */
+        function getDefault() {
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                if ($this->_widgets[$i]->getDefault()) {
+                    return $this->_widgets[$i]->getDefault();
+                }
+            }
+            return false;
+        }
+    }
+    
+    /**
+     *    Tag to aid parsing the form.
      */
     class SimpleFormTag extends SimpleTag {
         
@@ -632,8 +719,24 @@
                 $this->_buttons[$tag->getName()] = &$tag;
             } else {
                 if ($tag->getName()) {
-                    $this->_widgets[$tag->getName()] = &$tag;
+                    $this->_setWidget($tag);
                 }
+            }
+        }
+        
+        /**
+         *    Sets the widget into the form, grouping radio
+         *    buttons if any.
+         *    @access private
+         */
+        function _setWidget($tag) {
+            if ($tag->getAttribute("type") == "radio") {
+                if (! isset($this->_widgets[$tag->getName()])) {
+                    $this->_widgets[$tag->getName()] = &new SimpleTagGroup();
+                }
+                $this->_widgets[$tag->getName()]->addWidget($tag);
+            } else {
+                $this->_widgets[$tag->getName()] = &$tag;
             }
         }
         

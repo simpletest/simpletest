@@ -234,6 +234,13 @@
         }
         function testDefaultFormValues() {
             $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertField('a', '');
+            $this->assertField('b', 'Default text');
+            $this->assertField('c', '');
+            $this->assertField('d', 'd1');
+            $this->assertField('e', false);
+            $this->assertField('f', 'on');
+            $this->assertField('g', 'g3');
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedPattern('/go=\[Go!\]/');
             $this->assertWantedPattern('/a=\[\]/');
@@ -242,6 +249,7 @@
             $this->assertWantedPattern('/d=\[d1\]/');
             $this->assertNoUnwantedPattern('/e=\[/');
             $this->assertWantedPattern('/f=\[on\]/');
+            $this->assertWantedPattern('/g=\[g3\]/');
         }
         function testFormSubmission() {
             $this->get('http://www.lastcraft.com/test/form.html');

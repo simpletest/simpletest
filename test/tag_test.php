@@ -4,6 +4,8 @@
     }
     require_once(SIMPLE_TEST . 'tag.php');
     
+    Mock::generate('SimpleRadioButtonTag');
+    
     class TestOfTag extends UnitTestCase {
         function TestOfTag() {
             $this->UnitTestCase();
@@ -156,7 +158,7 @@
             $tag->setValue('AAA');
             $this->assertEqual($tag->getValue(), 'aaa');
         }
-        function testSettingIllegalOption() {
+        function testFailToSetIllegalOption() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
             $a = &new SimpleOptionTag(array());
             $a->addContent('AAA');
@@ -168,6 +170,69 @@
             $c->addContent('CCC');
             $this->assertFalse($tag->setValue('Not present'));
             $this->assertEqual($tag->getValue(), 'BBB');
+        }
+    }
+    
+    class TestOfRadioGroup extends UnitTestCase {
+        function TestOfRadioGroup() {
+            $this->UnitTestCase();
+        }
+        function testEmptyGroup() {
+            $group = &new SimpleTagGroup();
+            $this->assertIdentical($group->getDefault(), false);
+            $this->assertIdentical($group->getValue(), false);
+            $this->assertFalse($group->setValue('a'));
+        }
+        function testReadingSingleButtonGroup() {
+            $radio = &new MockSimpleRadioButtonTag($this);
+            $radio->setReturnValue('getDefault', 'A');
+            $radio->setReturnValue('getValue', 'AA');
+            $group = &new SimpleTagGroup();
+            $group->addWidget($radio);
+            $this->assertIdentical($group->getDefault(), 'A');
+            $this->assertIdentical($group->getValue(), 'AA');
+        }
+        function testReadingMultipleButtonGroup() {
+            $radio_a = &new MockSimpleRadioButtonTag($this);
+            $radio_a->setReturnValue('getDefault', 'A');
+            $radio_a->setReturnValue('getValue', false);
+            $radio_b = &new MockSimpleRadioButtonTag($this);
+            $radio_b->setReturnValue('getDefault', false);
+            $radio_b->setReturnValue('getValue', 'B');
+            
+            $group = &new SimpleTagGroup();
+            $group->addWidget($radio_a);
+            $group->addWidget($radio_b);
+            
+            $this->assertIdentical($group->getDefault(), 'A');
+            $this->assertIdentical($group->getValue(), 'B');
+        }
+        function testFailToSetUnlistedValue() {
+            $radio = &new MockSimpleRadioButtonTag($this);
+            $radio->setReturnValue('setValue', false);
+            $radio->expectOnce('setValue', array('aaa'));
+            $group = &new SimpleTagGroup();
+            $group->addWidget($radio);
+            $this->assertFalse($group->setValue('aaa'));
+            $radio->tally();
+        }
+        function testSettingNewValueClearsTheOldOne() {
+            $radio_a = &new MockSimpleRadioButtonTag($this);
+            $radio_a->setReturnValue('getValue', false);
+            $radio_a->setReturnValue('setValue', true);
+            $radio_a->expectOnce('setValue', array('A'));
+            $radio_b = &new MockSimpleRadioButtonTag($this);
+            $radio_b->setReturnValue('getValue', 'B');
+            $radio_b->setReturnValue('setValue', true);
+            $radio_b->expectOnce('setValue', array(false));
+            
+            $group = &new SimpleTagGroup();
+            $group->addWidget($radio_a);
+            $group->addWidget($radio_b);
+            $this->assertTrue($group->setValue('A'));
+            
+            $radio_a->tally();
+            $radio_b->tally();
         }
     }
     
@@ -217,7 +282,7 @@
                     $form->submitButtonByLabel("Go!"),
                     array("go" => "Go!"));            
         }
-        function testSelect() {
+        function testSelectFieldSubmitted() {
             $form = &new SimpleForm(new SimpleFormTag(array()));
             $select = &new SimpleSelectionTag(array('name' => 'a'));
             $select->addTag(new SimpleOptionTag(
@@ -259,6 +324,30 @@
                     array('name' => 'me', 'value' => 'a', 'type' => 'radio', 'checked' => '')));
             $this->assertIdentical($form->getValue('me'), 'a');
             $this->assertFalse($form->setField('me', 'other'));
+        }
+        function testUncheckedRadioButtons() {
+            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form->addWidget(new SimpleRadioButtonTag(
+                    array('name' => 'me', 'value' => 'a', 'type' => 'radio')));
+            $form->addWidget(new SimpleRadioButtonTag(
+                    array('name' => 'me', 'value' => 'b', 'type' => 'radio')));
+            $this->assertIdentical($form->getValue('me'), false);
+            $this->assertTrue($form->setField('me', 'a'));
+            $this->assertIdentical($form->getValue('me'), 'a');
+            $this->assertTrue($form->setField('me', 'b'));
+            $this->assertIdentical($form->getValue('me'), 'b');
+            $this->assertFalse($form->setField('me', 'c'));
+            $this->assertIdentical($form->getValue('me'), 'b');
+        }
+        function testCheckedRadioButtons() {
+            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form->addWidget(new SimpleRadioButtonTag(
+                    array('name' => 'me', 'value' => 'a', 'type' => 'radio')));
+            $form->addWidget(new SimpleRadioButtonTag(
+                    array('name' => 'me', 'value' => 'b', 'type' => 'radio', 'checked' => '')));
+            $this->assertIdentical($form->getValue('me'), 'b');
+            $this->assertTrue($form->setField('me', 'a'));
+            $this->assertIdentical($form->getValue('me'), 'a');
         }
     }
 ?>

@@ -167,6 +167,8 @@
                 return new SimpleSubmitTag($attributes);
             } elseif ($attributes['type'] == 'checkbox') {
                 return new SimpleCheckboxTag($attributes);
+            } elseif ($attributes['type'] == 'radio') {
+                return new SimpleRadioButtonTag($attributes);
             } else {
                 return new SimpleTextTag($attributes);
             }
