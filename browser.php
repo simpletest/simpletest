@@ -241,8 +241,8 @@
             }
             $frameset = &new SimpleFrameset($page);
             foreach ($frameset->getFrames() as $key => $url) {
-                $frame = $this->_fetch('GET', $url, array(), false);
-                $frameset->addParsedFrame($frame);
+                $frame = &$this->_fetch('GET', $url, array(), false);
+                $frameset->addParsedFrame($frame, $key);
             }
             return $frameset;
         }
@@ -509,6 +509,47 @@
                     $username,
                     $password);
             return $this->retry();
+        }
+        
+        /**
+         *    Accessor for current frame focus. Will be
+         *    false if no frame has focus.
+         *    @return integer/string/boolean    Label if any, otherwise
+         *                                      the position in the frameset
+         *                                      or false if none.
+         *    @access public
+         */
+        function getFrameFocus() {
+            return $this->_page->getFrameFocus();
+        }
+        
+        /**
+         *    Sets the focus by index. The integer index starts from 1.
+         *    @param integer $choice    Chosen frame.
+         *    @return boolean           True if frame exists.
+         *    @access public
+         */
+        function setFrameFocusByIndex($choice) {
+            return $this->_page->setFrameFocusByIndex($choice);
+        }
+        
+        /**
+         *    Sets the focus by name.
+         *    @param string $name    Chosen frame.
+         *    @return boolean        True if frame exists.
+         *    @access public
+         */
+        function setFrameFocus($name) {
+            return $this->_page->setFrameFocus($name);
+        }
+        
+        /**
+         *    Clears the frame focus. All frames will be searched
+         *    for content.
+         *    @access public
+         */
+        function clearFrameFocus() {
+            return $this->_page->clearFrameFocus();
         }
         
         /**

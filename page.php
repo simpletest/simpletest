@@ -362,6 +362,43 @@
         }
         
         /**
+         *    Accessor for current frame focus. Will be
+         *    false as no frames.
+         *    @return boolean    Always false.
+         *    @access public
+         */
+        function getFrameFocus() {
+            return false;
+        }
+        
+        /**
+         *    Sets the focus by index. The integer index starts from 1.
+         *    @param integer $choice    Chosen frame.
+         *    @return boolean           Always false.
+         *    @access public
+         */
+        function setFrameFocusByIndex($choice) {
+            return false;
+        }
+        
+        /**
+         *    Sets the focus by name.
+         *    @param string $name    Chosen frame.
+         *    @return boolean        False as no frames.
+         *    @access public
+         */
+        function setFrameFocus($name) {
+            return false;
+        }
+        
+        /**
+         *    Clears the frame focus.
+         *    @access public
+         */
+        function clearFrameFocus() {
+        }
+        
+        /**
          *    Accessor for a list of all fixed links.
          *    @return array   List of urls with scheme of
          *                    http or https and hostname.
@@ -565,6 +602,43 @@
          */
         function getRealm() {
             return $this->_headers->getRealm();
+        }
+        
+        /**
+         *    Accessor for current frame focus. Will be
+         *    false as no frames.
+         *    @return boolean    Always false.
+         *    @access public
+         */
+        function getFrameFocus() {
+            return false;
+        }
+        
+        /**
+         *    Sets the focus by index. The integer index starts from 1.
+         *    @param integer $choice    Chosen frame.
+         *    @return boolean           Always false.
+         *    @access public
+         */
+        function setFrameFocusByIndex($choice) {
+            return false;
+        }
+        
+        /**
+         *    Sets the focus by name.
+         *    @param string $name    Chosen frame.
+         *    @return boolean        False as no frames.
+         *    @access public
+         */
+        function setFrameFocus($name) {
+            return false;
+        }
+        
+        /**
+         *    Clears the frame focus.
+         *    @access public
+         */
+        function clearFrameFocus() {
         }
         
         /**

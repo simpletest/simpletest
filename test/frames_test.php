@@ -76,7 +76,7 @@
             $page = &new MockSimplePage($this);
             $frameset = &new SimpleFrameset($page);
             $frameset->addParsedFrame($frame);
-            $this->assertFalse($frameset->getFocus());
+            $this->assertFalse($frameset->getFrameFocus());
         }
         function testCanFocusOnSingleFrame() {
             $page = &new MockSimplePage($this);
@@ -88,11 +88,11 @@
             $frameset = &new SimpleFrameset($page);
             $frameset->addParsedFrame($frame);
             
-            $this->assertFalse($frameset->setFocusByIndex(0));
-            $this->assertTrue($frameset->setFocusByIndex(1));
-            $this->assertFalse($frameset->setFocusByIndex(2));
+            $this->assertFalse($frameset->setFrameFocusByIndex(0));
+            $this->assertTrue($frameset->setFrameFocusByIndex(1));
+            $this->assertFalse($frameset->setFrameFocusByIndex(2));
             $this->assertEqual($frameset->getRaw(), 'Stuff');
-            $this->assertIdentical($frameset->getFocus(), 1);
+            $this->assertIdentical($frameset->getFrameFocus(), 1);
         }
         function testContentComesFromFrameInFocus() {
             $page = &new MockSimplePage($this);
@@ -107,18 +107,18 @@
             $frameset->addParsedFrame($frame1);
             $frameset->addParsedFrame($frame2);
             
-            $this->assertTrue($frameset->setFocusByIndex(1));
-            $this->assertEqual($frameset->getFocus(), 1);
+            $this->assertTrue($frameset->setFrameFocusByIndex(1));
+            $this->assertEqual($frameset->getFrameFocus(), 1);
             $this->assertEqual($frameset->getRaw(), 'Stuff1');
             
-            $this->assertTrue($frameset->setFocusByIndex(2));
-            $this->assertEqual($frameset->getFocus(), 2);
+            $this->assertTrue($frameset->setFrameFocusByIndex(2));
+            $this->assertEqual($frameset->getFrameFocus(), 2);
             $this->assertEqual($frameset->getRaw(), 'Stuff2');
             
-            $this->assertFalse($frameset->setFocusByIndex(3));
-            $this->assertEqual($frameset->getFocus(), 2);
+            $this->assertFalse($frameset->setFrameFocusByIndex(3));
+            $this->assertEqual($frameset->getFrameFocus(), 2);
             
-            $frameset->clearFocus();
+            $frameset->clearFrameFocus();
             $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
         }
         function testCanFocusByName() {
@@ -134,17 +134,17 @@
             $frameset->addParsedFrame($frame1, 'A');
             $frameset->addParsedFrame($frame2, 'B');
             
-            $this->assertTrue($frameset->setFocus('A'));
-            $this->assertEqual($frameset->getFocus(), 'A');
+            $this->assertTrue($frameset->setFrameFocus('A'));
+            $this->assertEqual($frameset->getFrameFocus(), 'A');
             $this->assertEqual($frameset->getRaw(), 'Stuff1');
             
-            $this->assertTrue($frameset->setFocusByIndex(2));
-            $this->assertEqual($frameset->getFocus(), 'B');
+            $this->assertTrue($frameset->setFrameFocusByIndex(2));
+            $this->assertEqual($frameset->getFrameFocus(), 'B');
             $this->assertEqual($frameset->getRaw(), 'Stuff2');
             
-            $this->assertFalse($frameset->setFocus('z'));
+            $this->assertFalse($frameset->setFrameFocus('z'));
             
-            $frameset->clearFocus();
+            $frameset->clearFrameFocus();
             $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
         }
         function TestHeadersReadFromFrameIfInFocus() {
@@ -158,7 +158,7 @@
             
             $frameset = &new SimpleFrameset(new MockSimplePage($this));
             $frameset->addParsedFrame($frame);
-            $frameset->setFocusByIndex(1);
+            $frameset->setFrameFocusByIndex(1);
             
             $this->assertIdentical($frameset->getHeaders(), 'Header: content');
             $this->assertIdentical($frameset->getMimeType(), 'text/xml');

@@ -60,7 +60,7 @@
          *                                      or false if none.
          *    @access public
          */
-        function getFocus() {
+        function getFrameFocus() {
             if ($this->_focus === false) {
                 return false;
             }
@@ -78,7 +78,7 @@
          *    @return boolean           True if frame exists.
          *    @access public
          */
-        function setFocusByIndex($choice) {
+        function setFrameFocusByIndex($choice) {
             if (($choice < 1) || ($choice > count($this->_frames))) {
                 return false;
             }
@@ -92,7 +92,7 @@
          *    @return boolean        True if frame exists.
          *    @access public
          */
-        function setFocus($name) {
+        function setFrameFocus($name) {
             if (in_array($name, array_keys($this->_names))) {
                 $this->_focus = $this->_names[$name];
                 return true;
@@ -104,7 +104,7 @@
          *    Clears the frame focus.
          *    @access public
          */
-        function clearFocus() {
+        function clearFrameFocus() {
             $this->_focus = false;
         }
         

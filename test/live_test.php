@@ -485,5 +485,22 @@
             $this->assertWantedPattern('/A target for the SimpleTest test suite/');
             $this->assertNoUnwantedPattern('/This content is for no frames only/');
         }
+        function testReadingContentFromFocusedFrames() {
+            $this->get('http://www.lastcraft.com/test/frameset.html');
+            $this->assertWantedPattern('/This is frame A/i');
+            $this->assertWantedPattern('/This is frame B/i');
+            
+            $this->setFrameFocus('aaa');
+            $this->assertWantedPattern('/This is frame A/i');
+            $this->assertNoUnwantedPattern('/This is frame B/i');
+            
+            $this->setFrameFocus('bbb');
+            $this->assertNoUnwantedPattern('/This is frame A/i');
+            $this->assertWantedPattern('/This is frame B/i');
+            
+            $this->clearFrameFocus();
+            $this->assertWantedPattern('/This is frame A/i');
+            $this->assertWantedPattern('/This is frame B/i');
+        }
     }
 ?>

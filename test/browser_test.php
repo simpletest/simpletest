@@ -137,6 +137,7 @@
             $page = &new MockSimplePage($this);
             $page->setReturnValue('getRaw', 'Raw HTML');
             $page->setReturnValue('getTitle', 'Here');
+            $page->setReturnValue('getFrameFocus', 'Frame');
             $page->setReturnValue('getMimeType', 'text/html');
             $page->setReturnValue('getResponseCode', 200);
             $page->setReturnValue('getAuthentication', 'Basic');
@@ -147,6 +148,7 @@
 
             $this->assertEqual($browser->getContent(), 'Raw HTML');
             $this->assertEqual($browser->getTitle(), 'Here');
+            $this->assertEqual($browser->getFrameFocus(), 'Frame');
             $this->assertIdentical($browser->getResponseCode(), 200);
             $this->assertEqual($browser->getMimeType(), 'text/html');
             $this->assertEqual($browser->getAuthentication(), 'Basic');
