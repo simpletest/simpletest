@@ -308,7 +308,6 @@
          *    @public
          */
         function addTestCase(&$test_case) {
-            $test_case->attachObserver($this);
             $this->_test_cases[] = &$test_case;
         }
         
