@@ -13,7 +13,7 @@
             $this->UnitTestCase();
         }
         function testGroupSize() {
-            $nesting = new NestingXmlTag('GROUP', array('SIZE' => 2));
+            $nesting = new NestingGroupTag(array('SIZE' => 2));
             $this->assertEqual($nesting->getSize(), 2);
         }
     }
@@ -41,8 +41,39 @@
             $parser->parse("<?xml version=\"1.0\"?>\n");
             $parser->parse("<run>\n");
             $this->assertTrue($parser->parse("<group size=\"7\">\n"));
-            $this->assertTrue($parser->parse("<name><![CDATA[a_group]]></name>\n"));
+            $this->assertTrue($parser->parse("<name>a_group</name>\n"));
             $this->assertTrue($parser->parse("</group>\n"));
+            $parser->parse("</run>\n");
+            $listener->tally();
+        }
+        function testEmptyCase() {
+            $listener = &new MockSimpleRunner($this);
+            $listener->expectOnce('paintCaseStart', array('a_case'));
+            $listener->expectOnce('paintCaseEnd', array('a_case'));
+            $parser = &new SimpleXmlImporter($listener);
+            $parser->parse("<?xml version=\"1.0\"?>\n");
+            $parser->parse("<run>\n");
+            $this->assertTrue($parser->parse("<case>\n"));
+            $this->assertTrue($parser->parse("<name>a_case</name>\n"));
+            $this->assertTrue($parser->parse("</case>\n"));
+            $parser->parse("</run>\n");
+            $listener->tally();
+        }
+        function testEmptyMethod() {
+            $listener = &new MockSimpleRunner($this);
+            $listener->expectOnce('paintCaseStart', array('a_case'));
+            $listener->expectOnce('paintCaseEnd', array('a_case'));
+            $listener->expectOnce('paintMethodStart', array('a_method'));
+            $listener->expectOnce('paintMethodEnd', array('a_method'));
+            $parser = &new SimpleXmlImporter($listener);
+            $parser->parse("<?xml version=\"1.0\"?>\n");
+            $parser->parse("<run>\n");
+            $parser->parse("<case>\n");
+            $parser->parse("<name>a_case</name>\n");
+            $this->assertTrue($parser->parse("<test>\n"));
+            $this->assertTrue($parser->parse("<name>a_method</name>\n"));
+            $this->assertTrue($parser->parse("</test>\n"));
+            $parser->parse("</case>\n");
             $parser->parse("</run>\n");
             $listener->tally();
         }

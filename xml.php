@@ -201,18 +201,16 @@
      *    later dispatch to the reporter.
      */
     class NestingXmlTag {
-        var $_tag;
         var $_name;
         var $_attributes;
         
         /**
          *    Sets the basic test information except
          *    the name.
-         *    @param string $tag    XML tag name.
+         *    @param hash $attributes   Name value pairs.
          *    @access public
          */
-        function NestingXmlTag($tag, $attributes) {
-            $this->_tag = $tag;
+        function NestingXmlTag($attributes) {
             $this->_name = false;
             $this->_attributes = $attributes;
         }
@@ -236,13 +234,137 @@
         }
         
         /**
+         *    Accessor for attributes.
+         *    @return hash        All attributes.
+         *    @access protected
+         */
+        function _getAttributes() {
+            return $this->_attributes;
+        }
+    }
+    
+    /**
+     *    Accumulator for incoming method tag. Holds the
+     *    incoming test structure information for
+     *    later dispatch to the reporter.
+     */
+    class NestingMethodTag extends NestingXmlTag {
+        
+        /**
+         *    Sets the basic test information except
+         *    the name.
+         *    @param hash $attributes   Name value pairs.
+         *    @access public
+         */
+        function NestingMethodTag($attributes) {
+            $this->NestingXmlTag($attributes);
+        }
+        
+        /**
+         *    Signals the appropriate start event on the
+         *    listener.
+         *    @param SimpleReporter $listener    Target for events.
+         *    @access public
+         */
+        function paintStart(&$listener) {
+            $listener->paintMethodStart($this->getName());
+        }    
+        
+        /**
+         *    Signals the appropriate end event on the
+         *    listener.
+         *    @param SimpleReporter $listener    Target for events.
+         *    @access public
+         */
+        function paintEnd(&$listener) {
+            $listener->paintMethodEnd($this->getName());
+        }
+    }
+    
+    /**
+     *    Accumulator for incoming case tag. Holds the
+     *    incoming test structure information for
+     *    later dispatch to the reporter.
+     */
+    class NestingCaseTag extends NestingXmlTag {
+        
+        /**
+         *    Sets the basic test information except
+         *    the name.
+         *    @param hash $attributes   Name value pairs.
+         *    @access public
+         */
+        function NestingCaseTag($attributes) {
+            $this->NestingXmlTag($attributes);
+        }
+        
+        /**
+         *    Signals the appropriate start event on the
+         *    listener.
+         *    @param SimpleReporter $listener    Target for events.
+         *    @access public
+         */
+        function paintStart(&$listener) {
+            $listener->paintCaseStart($this->getName());
+        }    
+        
+        /**
+         *    Signals the appropriate end event on the
+         *    listener.
+         *    @param SimpleReporter $listener    Target for events.
+         *    @access public
+         */
+        function paintEnd(&$listener) {
+            $listener->paintCaseEnd($this->getName());
+        }
+    }
+    
+    /**
+     *    Accumulator for incoming group tag. Holds the
+     *    incoming test structure information for
+     *    later dispatch to the reporter.
+     */
+    class NestingGroupTag extends NestingXmlTag {
+        
+        /**
+         *    Sets the basic test information except
+         *    the name.
+         *    @param hash $attributes   Name value pairs.
+         *    @access public
+         */
+        function NestingGroupTag($attributes) {
+            $this->NestingXmlTag($attributes);
+        }
+
+        /**
+         *    Signals the appropriate start event on the
+         *    listener.
+         *    @param SimpleReporter $listener    Target for events.
+         *    @access public
+         */
+        function paintStart(&$listener) {
+            $listener->paintGroupStart($this->getName(), $this->getSize());
+        }
+        
+        /**
+         *    Signals the appropriate end event on the
+         *    listener.
+         *    @param SimpleReporter $listener    Target for events.
+         *    @access public
+         */
+        function paintEnd(&$listener) {
+            $listener->paintGroupEnd($this->getName());
+        }
+        
+        /**
          *    The size in the attributes.
          *    @return integer     Value of size attribute or zero.
          *    @access public
          */
         function getSize() {
-            if (isset($this->_attributes['SIZE'])) {
-                return (integer)$this->_attributes['SIZE'];
+            $attributes = $this->_getAttributes();
+            if (isset($attributes['SIZE'])) {
+                return (integer)$attributes['SIZE'];
             }
             return 0;
         }
@@ -340,7 +462,11 @@
          */
         function _startElement($expat, $tag, $attributes) {
             if ($tag == 'GROUP') {
-                $this->_pushNestingTag(new NestingXmlTag($tag, $attributes));
+                $this->_pushNestingTag(new NestingGroupTag($attributes));
+            } elseif ($tag == 'CASE') {
+                $this->_pushNestingTag(new NestingCaseTag($attributes));
+            } elseif ($tag == 'TEST') {
+                $this->_pushNestingTag(new NestingMethodTag($attributes));
             } elseif ($tag == 'NAME') {
                 $this->_in_name = true;
                 $this->_name = '';
@@ -354,16 +480,14 @@
          *    @access protected
          */
         function _endElement($expat, $tag) {
-            if ($tag == "GROUP") {
+            if (in_array($tag, array('GROUP', 'CASE', 'TEST'))) {
                 $nesting_tag = $this->_popNestingTag();
-                $this->_listener->paintGroupEnd($nesting_tag->getName());
+                $nesting_tag->paintEnd($this->_listener);
             } elseif ($tag == 'NAME') {
                 $this->_in_name = false;
                 $nesting_tag = &$this->_getCurrentNestingTag();
                 $nesting_tag->setName($this->_name);
-                $this->_listener->paintGroupStart(
-                        $nesting_tag->getName(),
-                        $nesting_tag->getSize());
+                $nesting_tag->paintStart($this->_listener);
             }
         }
         
@@ -381,7 +505,7 @@
         }
         
         /**
-         *    XML and Doctype handler.
+         *    XML and Doctype handler. Discards all such content.
          *    @param resource $expat     Parser handle.
          *    @param string $default     Text of default content.
          *    @access protected

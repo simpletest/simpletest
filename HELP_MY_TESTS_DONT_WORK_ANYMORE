@@ -3,7 +3,21 @@ Simple Test interface changes
 Because the SimpleTest tool set is still evolving it is likely that tests
 written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
-problems.
+problems...
+
+No method paintStart() or paintEnd()
+====================================
+You should only get this error if you have subclassed the lower level
+reporting and test runner machinery. These methods have been broken
+down into events for test methods, events for test cases and events
+for group tests. The new methods are...
+
+paintStart() --> paintMethodStart(), paintCaseStart(), paintGroupStart()
+paintEnd() --> paintMethodEnd(), paintCaseEnd(), paintGroupEnd()
+
+This change was made in Beta3, ironically to make it easier to subclass
+the inner machinery. Simply duplicating the code you had in the previous
+methods should provide a temporary fix.
 
 No class TestDisplay
 ====================
@@ -81,7 +95,10 @@ simplest is to write your own runner class and invoke the tests with...
 $test->accept(new MyRunner(new MyReporter()));
 
 ...rather than the run method. This should be easier to extend
-anyway and gives much more control.
+anyway and gives much more control. Even this method is overhauled
+in Beta3 where the runner cass can be set within the test case. Really
+the best thing to do is to upgrade to this version as whatever you were
+trying to achieve before should now be very much easier.
 
 Missing set options method
 ==========================

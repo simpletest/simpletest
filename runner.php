@@ -4,7 +4,7 @@
     /**
      *    Can recieve test events and display them. Display
      *    is achieved by making display methods available
-     *    and visiting the incoming event. Abstract.
+     *    and visiting the incoming event.
      *    @abstract
      */
     class SimpleRunner {

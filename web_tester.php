@@ -348,17 +348,17 @@
          *    Checks that a cookie is set for the current page
          *    and optionally checks the value.
          *    @param string $name        Name of cookie to test.
-         *    @param string $expect      Expected value as a string or
+         *    @param string $expected    Expected value as a string or
          *                               false if any value will do.
          *    @param string $message     Message to display.
          *    @access public
          */
-        function assertCookie($name, $expect = false, $message = "%s") {
+        function assertCookie($name, $expected = false, $message = "%s") {
             $value = $this->_current_browser->getBaseCookieValue($name);
-            if ($expect) {
-                $this->assertTrue($value === $expect, sprintf(
+            if ($expected) {
+                $this->assertTrue($value === $expected, sprintf(
                         $message,
-                        "Expecting cookie [$name] value [$expect], got [$value]"));
+                        "Expecting cookie [$name] value [$expected], got [$value]"));
             } else {
                 $this->assertTrue(
                         $value,
