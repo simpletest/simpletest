@@ -28,7 +28,7 @@
          *    @return               Either false or a HttpResponse.
          *    @public
          */
-        function fetch($socket = "") {
+        function &fetch($socket = "") {
             if (!is_object($socket)) {
                 $socket = new SimpleSocket($this->_host);
             }
@@ -42,7 +42,7 @@
             }
             $socket->write("Connection: close\r\n");
             $socket->write("\r\n");
-            return new SimpleHttpResponse($socket);
+            return $this->_createResponse($socket);
         }
         
         /**
@@ -69,6 +69,16 @@
             }
             return implode(";", $cookie_pairs);
         }
+        
+        /**
+         *    Wraps the socket in a response parser.
+         *    @param $socket        Responding socket.
+         *    @return               Parsed response object.
+         *    @protected
+         */
+        function &_createResponse(&$socket) {
+            return new SimpleHttpResponse($socket);
+        }
     }
     
     /**
@@ -78,6 +88,7 @@
         var $_content;
         var $_mime_type;
         var $_response_code;
+        var $_cookies;
         
         /**
          *    Constructor. Reads and parses the incoming
@@ -88,6 +99,10 @@
          */
         function SimpleHttpResponse(&$socket) {
             $this->StickyError();
+            $this->_content = "";
+            $this->_mime_type = "";
+            $this->_response_code = 0;
+            $this->_cookies = array();
             if ($socket->isError()) {
                 $this->_setError("Bad socket [" . $socket->getError() . "]");
                 return;
@@ -136,6 +151,15 @@
         }
         
         /**
+         *    Accessor for any new cookies.
+         *    @return        Hash of cookie names and values.
+         *    @public
+         */
+        function getNewCookies() {
+            return $this->_cookies;
+        }
+        
+        /**
          *    Called on each header line. Subclasses should
          *    add behaviour to this method for their
          *    particular header types.
@@ -143,17 +167,22 @@
          *    @protected
          */
         function _parseHeaderLine($header_line) {
-            if (preg_match('/HTTP\/\d+\.\d+\s+(.*)\s+OK/i', $header_line, $matches)) {
+            if (preg_match('/HTTP\/\d+\.\d+\s+(.*)\s/i', $header_line, $matches)) {
                 $this->_response_code = $matches[1];
             }
             if (preg_match('/Content-type: (.*)/i', $header_line, $matches)) {
                 $this->_mime_type = $matches[1];
             }
+            if (preg_match('/Set-cookie: (.*?)(;|$)/i', $header_line, $matches)) {
+                if (preg_match('/(.*?)=(.*)/', $matches[1], $parts)) {
+                    $this->_cookies[$parts[1]] = $parts[2];
+                }
+            }
         }
         
         /**
-         *    Reads the whole of the socket into a single
-         *    string.
+         *    Reads the whole of the socket output into a
+         *    single string.
          *    @param $socket        Unread socket.
          *    @return               String if successful else
          *                          false.

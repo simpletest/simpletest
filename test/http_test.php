@@ -75,6 +75,28 @@
             $socket->setReturnValueSequence(3, "read", "");
             $this->assertEqual(SimpleHttpResponse::_readAll($socket), "aaabbbccc");
         }
+        function testBadSocketDuringResponse() {
+            $socket = &new MockSimpleSocket($this);
+            $socket->setReturnValueSequence(0, "isError", false);
+            $socket->setReturnValueSequence(1, "isError", false);
+            $socket->setReturnValue("isError", true);
+            $socket->setReturnValueSequence(0, "read", "HTTP/1.1 200 OK\r\n");
+            $socket->setReturnValueSequence(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+            $socket->setReturnValue("read", "");
+            $response = &new SimpleHttpResponse($socket);
+            $this->assertTrue($response->isError());
+            $this->assertEqual($response->getContent(), "");
+        }
+        function testIncompleteHeader() {
+            $socket = &new MockSimpleSocket($this);
+            $socket->setReturnValue("isError", false);
+            $socket->setReturnValueSequence(0, "read", "HTTP/1.1 200 OK\r\n");
+            $socket->setReturnValueSequence(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+            $socket->setReturnValueSequence(2, "read", "Content-Type: text/plain\r\n");
+            $response = &new SimpleHttpResponse($socket);
+            $this->assertTrue($response->isError());
+            $this->assertEqual($response->getContent(), "");
+        }
         function testParseResponse() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
@@ -91,6 +113,25 @@
                     "this is a test file\nwith two lines in it\n");
             $this->assertEqual($response->getMimeType(), "text/plain");
             $this->assertIdentical($response->getResponseCode(), 200);
+        }
+        function testParseCookies() {
+            $socket = &new MockSimpleSocket($this);
+            $socket->setReturnValue("isError", false);
+            $socket->setReturnValueSequence(0, "read", "HTTP/1.1 200 OK\r\n");
+            $socket->setReturnValueSequence(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+            $socket->setReturnValueSequence(2, "read", "Content-Type: text/plain\r\n");
+            $socket->setReturnValueSequence(3, "read", "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n");
+            $socket->setReturnValueSequence(4, "read", "Set-Cookie: a=aaa; expires=Wed, 25-Dec-02 04:24:20 GMT; path=/\r\n");
+            $socket->setReturnValueSequence(5, "read", "Set-Cookie: b=bbb\r\n");
+            $socket->setReturnValueSequence(6, "read", "Connection: close\r\n");
+            $socket->setReturnValueSequence(7, "read", "\r\n");
+            $socket->setReturnValueSequence(8, "read", "this is a test file\n");
+            $socket->setReturnValueSequence(9, "read", "");
+            $response = &new SimpleHttpResponse($socket);
+            $this->assertFalse($response->isError());
+            $this->assertEqual(
+                    $response->getNewCookies(),
+                    array("a" => "aaa", "b" => "bbb"));
         }
     }
     
