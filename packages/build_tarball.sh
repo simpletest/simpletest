@@ -7,7 +7,6 @@ cd ../..
 NAME=php_simpletest_`cat simpletest/VERSION`.tar.gz
 FILES=(simpletest/errors.php \
           simpletest/options.php \
-          simpletest/scorer.php \
           simpletest/dumper.php \
           simpletest/expectation.php \
           simpletest/socket.php \
@@ -23,6 +22,8 @@ FILES=(simpletest/errors.php \
           simpletest/frames.php \
           simpletest/page.php \
           simpletest/remote.php \
+          simpletest/runner.php \
+          simpletest/scorer.php \
           simpletest/reporter.php \
           simpletest/mock_objects.php \
           simpletest/simple_test.php \
