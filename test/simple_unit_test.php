@@ -41,14 +41,14 @@
             $this->assertReference($a, $c);        // Fail.
         }
         function testOfPatterns() {
-            $this->assertWantedPattern("Hello there", '/hello/i');
-            $this->assertNoUnwantedPattern("Hello there", '/hello/');
-            $this->assertWantedPattern("Hello there", '/hello/');            // Fail.
-            $this->assertNoUnwantedPattern("Hello there", '/hello/i');      // Fail.
+            $this->assertWantedPattern('/hello/i', "Hello there");
+            $this->assertNoUnwantedPattern('/hello/', "Hello there");
+            $this->assertWantedPattern('/hello/', "Hello there");            // Fail.
+            $this->assertNoUnwantedPattern('/hello/i', "Hello there");      // Fail.
         }
     }
     
-    $test = new SimpleTest("Unit test case test, 8 fails and 8 passes");
+    $test = new GroupTest("Unit test case test, 8 fails and 8 passes");
     $display = new TestHTMLDisplay();
     $test->attachObserver($display);
     $test->addTestCase(new TestOfUnitTestCase());
