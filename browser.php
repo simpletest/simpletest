@@ -731,6 +731,27 @@
                     $action,
                     $form->submitImageByLabel($label, $x, $y));
         }
+        
+        /**
+         *    Clicks the submit image by the name. Usually
+         *    the alt tag or the nearest equivalent. The owning
+         *    form will be submitted by this. Clicking outside of
+         *    the boundary of the coordinates will result in
+         *    a failure.
+         *    @param string $name    Name attribute of button.
+         *    @param integer $x      X-coordinate of imaginary click.
+         *    @param integer $y      Y-coordinate of imaginary click.
+         *    @return boolean        True on successful submit.
+         *    @access public
+         */
+        function clickImageByName($name, $x = 1, $y = 1) {
+            if (! ($form = &$this->_page->getFormByImageName($name))) {
+                return false;
+            }
+            $action = $this->_getAction($form);
+            $method = $form->getMethod();
+            return $this->$method($action, $form->submitImageByName($name, $x, $y));
+        }
          
         /**
          *    Clicks the submit image by ID attribute. The owning

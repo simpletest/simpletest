@@ -408,6 +408,28 @@
             $page->tally();
             $form->tally();
         }
+        function testSubmitFormByImageName() {
+            $agent = &new MockSimpleUserAgent($this);
+            $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
+            
+            $form = &new MockSimpleForm($this);
+            $form->setReturnValue('getAction', 'handler.html');
+            $form->setReturnValue('getMethod', 'post');
+            $form->setReturnValue('submitImageByName', array('a' => 'A'));
+            $form->expectOnce('submitImageByName', array('a', 10, 11));
+            
+            $page = &new MockSimplePage($this);
+            $page->setReturnReference('getFormByImageName', $form);
+            $page->expectOnce('getFormByImageName', array('a'));
+            $page->setReturnValue('getRaw', 'stuff');
+            
+            $browser = &$this->createBrowser($agent, $page);
+            $browser->get('http://this.com/page.html');
+            $this->assertTrue($browser->clickImageByName('a', 10, 11));
+            
+            $page->tally();
+            $form->tally();
+        }
         function testSubmitFormByImageId() {
             $agent = &new MockSimpleUserAgent($this);
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));

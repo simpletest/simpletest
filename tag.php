@@ -1246,6 +1246,22 @@
         
         /**
          *    Test to see if a form has a submittable image with this
+         *    field name.
+         *    @param string $name    Image name to search for.
+         *    @return boolean        True if present.
+         *    @access public
+         */
+        function hasImageName($name) {
+            foreach ($this->_images as $image) {
+                if ($image->getName() == $name) {
+                    return true;
+                }
+            }
+            return false;
+        }
+         
+        /**
+         *    Test to see if a form has a submittable image with this
          *    ID attribute.
          *    @param string $id      Button ID attribute to search for.
          *    @return boolean        True if present.
@@ -1259,7 +1275,7 @@
             }
             return false;
         }
-        
+       
         /**
          *    Gets the submit values for a named button.
          *    @param string $name    Button label to search for.
@@ -1343,6 +1359,29 @@
          
         /**
          *    Gets the submit values for an image identified by the ID.
+         *    @param string $name   Image name to search for.
+         *    @param integer $x     X-coordinate of click.
+         *    @param integer $y     Y-coordinate of click.
+         *    @return hash          Submitted values or false
+         *                          if there is no such button in the
+         *                          form.
+         *    @access public
+         */
+        function submitImageByName($name, $x, $y) {
+            foreach ($this->_images as $image) {
+                if ($image->getName() == $name) {
+                    return array_merge(
+                            array(
+                                    $image->getName() . '.x' => $x,
+                                    $image->getName() . '.y' => $y),
+                            $this->getValues());            
+                }
+            }
+            return false;
+        }
+          
+        /**
+         *    Gets the submit values for an image identified by the ID.
          *    @param string/integer $id  Button ID attribute to search for.
          *    @param integer $x          X-coordinate of click.
          *    @param integer $y          Y-coordinate of click.
@@ -1363,7 +1402,7 @@
             }
             return false;
         }
-       
+      
         /**
          *    Simply submits the form without the submit button
          *    value. Used when there is only one button or it

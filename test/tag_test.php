@@ -394,9 +394,12 @@
                     'alt' => 'Go!',
                     'id' => '9')));
             $this->assertTrue($form->hasImageLabel('Go!'));
-            //$this->assertEqual($form->submitButtonByName('go'), array('go' => 'Go!'));
             $this->assertEqual(
                     $form->submitImageByLabel('Go!', 100, 101),
+                    array('go.x' => 100, 'go.y' => 101));
+            $this->assertTrue($form->hasImageName('go'));
+            $this->assertEqual(
+                    $form->submitImageByName('go', 100, 101),
                     array('go.x' => 100, 'go.y' => 101));
             $this->assertTrue($form->hasImageId(9));
             $this->assertEqual(

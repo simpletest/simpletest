@@ -537,11 +537,12 @@
             $response->setReturnValue(
                     'getContent',
                     '<html><head><form>' .
-                    '<input type="image" id=100 alt="Label">' .
+                    '<input type="image" id=100 alt="Label" name="me">' .
                     '</form></head></html>');
             
             $page = &$this->parse($response);
             $this->assertIsA($page->getFormByImageLabel('Label'), 'SimpleForm');
+            $this->assertIsA($page->getFormByImageName('me'), 'SimpleForm');
             $this->assertIsA($page->getFormByImageId(100), 'SimpleForm');
         }
         function testFindFormById() {
