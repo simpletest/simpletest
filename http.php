@@ -42,7 +42,7 @@
             $request = array();
             foreach (split("&", $raw) as $pair) {
                 if (preg_match('/(.*?)=(.*)/', $pair, $matches)) {
-                    $request[$matches[1]] = $matches[2];
+                    $request[$matches[1]] = urldecode($matches[2]);
                 }
             }
             return $request;
@@ -82,6 +82,11 @@
          *    @public
          */
         function getEncodedRequest() {
+            $parameters = array();
+            foreach ($this->getRequest() as $key => $value) {
+                $parameters[] = $key . "=" . urlencode($value);
+            }
+            return implode("&", $parameters);
         }
         
         /**
@@ -92,6 +97,16 @@
          */
         function getRequest() {
             return $this->_request;
+        }
+        
+        /**
+         *    Adds an additional parameter to the request.
+         *    @param $key            Name of parameter.
+         *    @param $value          Value as string.
+         *    @public
+         */
+        function addRequestParameter($key, $value) {
+            $this->_request[$key] = $value;
         }
     }
 

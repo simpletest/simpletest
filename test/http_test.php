@@ -23,18 +23,40 @@
             $this->assertEqual($url->getHost(), "www.lastcraft.com");
             $this->assertEqual($url->getPath(), "/test/");
         }
-        function testParseGetValue() {
+        function testParseParameter() {
             $url = new SimpleUrl("?a=A");
             $this->assertEqual($url->getPath(), "/");
             $this->assertEqual(count($request = $url->getRequest()), 1);
             $this->assertEqual($request["a"], "A");
         }
-        function testParseMultipleGetValues() {
+        function testParseMultipleParameters() {
             $url = new SimpleUrl("/?a=A&b=B");
             $this->assertEqual($url->getPath(), "/");
             $this->assertEqual(count($request = $url->getRequest()), 2);
             $this->assertEqual($request["a"], "A");
             $this->assertEqual($request["b"], "B");
+        }
+        function testAddParameters() {
+            $url = new SimpleUrl("");
+            $url->addRequestParameter("a", "A");
+            $this->assertEqual(count($request = $url->getRequest()), 1);
+            $this->assertEqual($request["a"], "A");
+            $url->addRequestParameter("b", "B");
+            $this->assertEqual(count($request = $url->getRequest()), 2);
+            $this->assertEqual($request["b"], "B");
+            $url->addRequestParameter("a", "aaa");
+            $this->assertEqual(count($request = $url->getRequest()), 2);
+            $this->assertEqual($request["a"], "aaa");
+        }
+        function testEncodedParameters() {
+            $url = new SimpleUrl("");
+            $url->addRequestParameter("a", '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-=');
+            $this->assertIdentical(
+                    $request = $url->getEncodedRequest(),
+                    "a=%3F%21%22%27%23%7E%40%5B%5D%7B%7D%3A%3B%3C%3E%2C.%2F%7C%A3%24%25%5E%26%2A%28%29_%2B-%3D");
+            $url = new SimpleUrl("?a=%3F%21%22%27%23%7E%40%5B%5D%7B%7D%3A%3B%3C%3E%2C.%2F%7C%A3%24%25%5E%26%2A%28%29_%2B-%3D");
+            $request = $url->getRequest();
+            $this->assertEqual($request["a"], '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-=');
         }
     }
 
