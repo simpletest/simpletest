@@ -8,13 +8,21 @@
     require_once(SIMPLE_TEST . 'simple_html_test.php');
     require_once(SIMPLE_TEST . 'simple_mock.php');
     
-    $test = new GroupTest("All unit tests");
-    $test->addTestFile("simple_mock_test.php");
-    $test->addTestFile("web_test_test.php");
-    $test->addTestFile("socket_test.php");
-    $test->addTestFile("http_test.php");
-    $test->addTestFile("browser_test.php");
-    $test->addTestFile("parser_test.php");
-    $test->attachObserver(new TestHtmlDisplay());
-    $test->run();
+    class UnitTests extends GroupTest {
+        function UnitTests() {
+            $this->GroupTest("All unit tests");
+            $this->addTestFile("simple_mock_test.php");
+            $this->addTestFile("web_test_test.php");
+            $this->addTestFile("socket_test.php");
+            $this->addTestFile("http_test.php");
+            $this->addTestFile("browser_test.php");
+            $this->addTestFile("parser_test.php");
+        }
+    }
+    if (!defined("TEST_RUNNING")) {
+        define("TEST_RUNNING", true);
+        $test = &new UnitTests();
+        $test->attachObserver(new TestHtmlDisplay());
+        $test->run();
+    }
 ?>

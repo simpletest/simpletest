@@ -8,8 +8,16 @@
     require_once(SIMPLE_TEST . 'simple_html_test.php');
     require_once(SIMPLE_TEST . 'simple_mock.php');
     
-    $test = new GroupTest("Boundary tests");
-    $test->addTestFile("live_test.php");
-    $test->attachObserver(new TestHtmlDisplay());
-    $test->run();
+    class BoundaryTests extends GroupTest {
+        function BoundaryTests() {
+            $this->GroupTest("Boundary tests");
+            $this->addTestFile("live_test.php");
+        }
+    }
+    if (!defined("TEST_RUNNING")) {
+        define("TEST_RUNNING", true);
+        $test = &new BoundaryTests("Boundary tests");
+        $test->attachObserver(new TestHtmlDisplay());
+        $test->run();
+    }
 ?>
