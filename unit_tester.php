@@ -181,7 +181,11 @@
                     "[" . $dumper->describeValue($first) .
                             "] and [" . $dumper->describeValue($second) .
                             "] should reference the same object");
-            $temp = $first;
+            if (version_compare(phpversion(), '5', '>=')
+	    	    && is_object($first)) {
+	    	    return $this->assertTrue($first === $second, $message);
+	        }
+	        $temp = $first;
             $first = uniqid("test");
             $is_ref = ($first === $second);
             $first = $temp;
