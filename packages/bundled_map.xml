@@ -11,5 +11,5 @@
     <page title="Web tester" file="web_tester_documentation.html"/>
     <page title="Testing forms" file="form_testing_documentation.html"/>
     <page title="Authentication" file="authentication_documentation.html"/>
-    <page title="Scriptable Browser" file="browser_documentation.html"/>
+    <page title="Scriptable browser" file="browser_documentation.html"/>
 </page>

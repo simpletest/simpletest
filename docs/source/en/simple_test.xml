@@ -6,11 +6,9 @@
     </long_title>
     <content>
         <news>
-            RC1 released on Sourceforge.
-            With most of the functionality now fixed, this release is
-            mostly across the board improvements.
-            Features are frozen now until version 1.0 except
-            for those changes involving tool integration.
+            RC2 released on Sourceforge.
+            A purely bug fix release while the documentation is translated
+            into French.
         </news>
         <introduction>
             <p>
@@ -383,20 +381,20 @@ $test->run(new HtmlReporter());
     </content>
     <internal>
         <link>
-            <a href="#unit">Using Simple Unit</a>
+            <a href="#unit">Using unit tester</a>
             with an example.
         </link>
         <link>
-            <a href="#group">Group tests</a>
+            <a href="#group">Grouping tests</a>
             for testing with one click.
         </link>
         <link>
             <a href="#mock">Using mock objects</a>
-            to ease testing and gain control.
+            to ease testing and gain tighter control.
         </link>
         <link>
             <a href="#web">Testing web pages</a>
-            at the HTML level.
+            at the browser level.
         </link>
     </internal>
     <external>

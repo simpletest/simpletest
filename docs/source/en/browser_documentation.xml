@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<page title="Browser documentation" here="Scriptable Browser">
+<page title="PHP Scriptable Web Browser" here="Scriptable browser">
     <long_title>SimpleTest documentation for the scriptable web browser component</long_title>
     <content>
         <introduction>
@@ -17,7 +17,7 @@
                 For example, here is a small script to extract the current number of
                 open PHP 5 bugs from the <a href="http://www.php.net/">PHP web site</a>...
 <php><![CDATA[
-<?php
+<strong><?php
     require_once('simpletest/browser.php');
     
     $browser = &new SimpleBrowser();
@@ -28,7 +28,7 @@
     $page = $browser->getContent();
     preg_match('/status=Open.*?by=Any.*?(\d+)<\/a>/', $page, $matches);
     print $matches[1];
-?>
+?></strong>
 ]]></php>
                 There are simpler methods to do this particular example in PHP
                 of course.
@@ -155,20 +155,20 @@
                 now be done in a <a local="unit_tester_documentation">UnitTestCase</a>.
                 This means that we can freely mix domain object testing with the
                 web interface...
-<php><![CDATA[
+<php><![CDATA[<strong>
 class TestOfRegistration extends UnitTestCase {
-    function testNewUserAddedToAuthenticator() {
+    function testNewUserAddedToAuthenticator() {</strong>
         $browser = &new SimpleBrowser();
         $browser->get('http://my-site.com/register.php');
         $browser->setField('email', 'me@here');
         $browser->setField('password', 'Secret');
         $browser->clickSubmit('Register');
-        
+        <strong>
         $authenticator = &new Authenticator();
         $member = &$authenticator->findByEmail('me@here');
         $this->assertEqual($member->getPassword(), 'Secret');
     }
-}
+}</strong>
 ]]></php>
                 While this may be a useful temporary expediency, I am not a fan
                 of this type of testing.
@@ -186,7 +186,7 @@ class TestOfRegistration extends UnitTestCase {
                 This test case will do the job...
 <php><![CDATA[
 class TestOfSecurity extends UnitTestCase {
-    function testNoMultipleLoginsFromSameUser() {
+    function testNoMultipleLoginsFromSameUser() {<strong>
         $first = &new SimpleBrowser();
         $first->get('http://my-site.com/login.php');
         $first->setField('name', 'Me');
@@ -199,7 +199,7 @@ class TestOfSecurity extends UnitTestCase {
         $second->setField('name', 'Me');
         $second->setField('password', 'Secret');
         $second->clickSubmit('Enter');
-        $this->assertEqual($second->getTitle(), 'Access Denied');
+        $this->assertEqual($second->getTitle(), 'Access Denied');</strong>
     }
 }
 ]]></php>
@@ -234,6 +234,10 @@ class TestOfSecurity extends UnitTestCase {
     </external>
     <meta>
         <keywords>
+            user agent,
+            web browser php,
+            fetching pages,
+            spider scripts,
             software development,
             php programming for clients,
             customer focused php,

@@ -26,6 +26,8 @@
                 <a href="http://www.sitepoint.com/forums/showthread.php?t=193797">Sitepoint thread</a>,
                 but basically think of it as a document driven FIT for small
                 web projects only.
+                The project is currently stalled while I finish the first version
+                of SimpleTest, but should resume shortly.
             </p>
             <p>
                 Along with Jon Ramsey, Matt Jones and Demian Turner, I am involved in
@@ -35,11 +37,15 @@
                 Given the large number of PHP developers and
                 businesses in the London area it should have every chance of success.
                 The networking meetings take place on the first Thursday of every month.
+                In addition the group organises various visits and also a
+                <a href="http://www.phplondon.org/wiki/CodeFest2005January29">code fest</a>.
+                A spin off from the code fest is a
+                <a href="http://souceforge.net/projects/spamproofwiki/">spam proof wiki</a>
             </p>
             <p>
-                The first release candidate of the
+                The second and hopefully final release candidate of the
                 <a local="simple_test">SimpleTest PHP unit tester</a>
-                has been finished, RC1.
+                has been finished, RC2.
                 It is a PHP unit test and web test framework that has been built
                 to be extensible in various ways.
                 Users of <a href="http://www.junit.org/">JUnit</a> will be
@@ -49,13 +55,41 @@
                 testers.
                 <a href="http://jwebunit.sourceforge.net/">JWebUnit</a>
                 style functionality is more complete now.
-                It has support for frames, proxies, basic authentication and a wider
+                It has support for SSL, frames, proxies, basic authentication and a wider
                 range of HTML controls.
                 The idea is that common but fiddly PHP tasks, such as logging into a site,
                 can be tested easily.
             </p>
             <p>
-                Another sourceforge project I am contributing to is
+                Also on the subject of open source, <a href="http://www.wordtracker.com/">Wordtracker</a>
+                have kindly agreed to publish some of their in house tools.
+                The first of these was a lightweight persistence library.
+                Written in PHP, it is built around the <em>UnitOfWork</em> pattern
+                rather than the notion of persistence.
+                The idea is that being short lived, PHP scripts affect a change on
+                an object model rather handle in memeory objects that happen to know
+                how to survive requests.
+                So far it has only been published in
+                <a href="http://www.sitepoint.com/forums/showthread.php?t=214183">this SitePoint thread</a>.
+            </p>
+            <p>
+                Another Wordtracker spin off is
+                <a href="http://sourceforge.net/projects/fakemail/">FakeMail</a>.
+                Testing applications that send e-mails can be a right royal pain because
+                of all of the infrastructure involved.
+                You will likely need an SMPT gateway that talks to a POP client that
+                you can read the queue from.
+                That's a lot of set up.
+                Fakemail acts as an SMTP gateway on any port you define.
+                When you send it a mail it simply copies that mail to the local file
+                system in whatever directory you want.
+                You then just have to look at the local file.
+                It means that you must be able to configure your application to use
+                a port other than 25, but that's not usualy difficult.
+                Documentation is lacking, but it's just a simple Perl script.
+            </p>
+            <p>
+                Yet another sourceforge project I am contributing to is
                 <a href="http://www.buennagel.com/">Jochen Buennagel&apos;s</a>
                 <a href="http://sourceforge.net/projects/phpduploc/">PHP::Duploc</a>.
                 It is a tool for visualising repetition in code so as to
@@ -70,10 +104,10 @@
                 It could even be useful.
             </p>
             <p>
-                Finally I now have a blog!
-                Gives me a chance to hehash old
+                I now have a blog of course!
+                Gives me a chance to rehash old
                 <a href="http://www.sitepoint.com/forums/forumdisplay.php?f=147">Sitepoint</a>
-                postings where I feel I had something to say.
+                postings where I feel I had something to say, and to rant occasionally.
             </p>
         </section>
         <section name="why" title="Why the Last Craft?">
