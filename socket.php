@@ -195,7 +195,7 @@
          *    @access protected
          */
         function _openSocket($host, $port, &$error_number, &$error, $timeout) {
-            return parent::_openSocket("tls:$host", $port, $error_number, $error, $timeout);
+            return parent::_openSocket("tls://$host", $port, $error_number, $error, $timeout);
         }
     }
 ?>

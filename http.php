@@ -221,8 +221,8 @@
         function getPort() {
             return $this->_port;
         }        
-        
-        /**
+                
+       /**
          *    Accessor for path.
          *    @return string    Full path including leading slash.
          *    @access public
@@ -633,10 +633,11 @@
          *    @access public
          */
         function &fetch($timeout) {
-            $socket = &$this->_createSocket(
+           $default_port = ('https' == $this->_url->getScheme()) ? 443 : 80;
+           $socket = &$this->_createSocket(
                     $this->_url->getScheme() ? $this->_url->getScheme() : 'http',
                     $this->_url->getHost(),
-                    $this->_url->getPort() ? $this->_url->getPort() : 80,
+                    $this->_url->getPort() ? $this->_url->getPort() : $default_port,
                     $timeout);
             if ($socket->isError()) {
                 return $this->_createResponse($socket);
