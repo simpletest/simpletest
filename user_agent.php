@@ -535,8 +535,7 @@
             if (! is_object($url)) {
                 $url = new SimpleUrl($url);
             }
-            $url->makeAbsolute($base);
-            return $url;
+            return $url->makeAbsolute($base);
         }
     }
 ?>

@@ -1,8 +1,8 @@
 <?php
     // $Id$
     
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../query_string.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../url.php');
+    require_once(dirname(__FILE__) . '/../query_string.php');
+    require_once(dirname(__FILE__) . '/../url.php');
 
     class TestOfUrl extends UnitTestCase {
         function TestOfUrl() {
@@ -37,6 +37,7 @@
             $url = new SimpleUrl('/?a=A&b=B');
             $this->assertEqual($url->getPath(), '/');
             $this->assertEqual($url->getRequest(), array('a' => 'A', 'b' => 'B'));
+            $this->assertEqual($url->getEncodedRequest(), '?a=A&b=B');
         }
         function testAddParameters() {
             $url = new SimpleUrl('');
@@ -54,12 +55,14 @@
             $request = $url->getRequest();
             $this->assertIdentical($request, array());
         }
-        function testEncodedParameters() {
+        function testEncodingParameters() {
             $url = new SimpleUrl('');
             $url->addRequestParameter('a', '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-=');
             $this->assertIdentical(
                     $request = $url->getEncodedRequest(),
                     '?a=%3F%21%22%27%23%7E%40%5B%5D%7B%7D%3A%3B%3C%3E%2C.%2F%7C%A3%24%25%5E%26%2A%28%29_%2B-%3D');
+        }
+        function testDecodingParameters() {            
             $url = new SimpleUrl('?a=%3F%21%22%27%23%7E%40%5B%5D%7B%7D%3A%3B%3C%3E%2C.%2F%7C%A3%24%25%5E%26%2A%28%29_%2B-%3D');
             $this->assertEqual(
                     $url->getRequest(),
@@ -85,25 +88,26 @@
         function testMakingAbsolute() {
             $url = new SimpleUrl("../there/somewhere.php");
             $this->assertEqual($url->getPath(), "../there/somewhere.php");
-            $url->makeAbsolute("https://host.com/I/am/here/");
-            $this->assertEqual($url->getScheme(), "https");
-            $this->assertEqual($url->getHost(), "host.com");
-            $this->assertEqual($url->getPath(), "/I/am/there/somewhere.php");
+            $absolute = $url->makeAbsolute("https://host.com/I/am/here/");
+            $this->assertEqual($absolute->getScheme(), "https");
+            $this->assertEqual($absolute->getHost(), "host.com");
+            $this->assertEqual($absolute->getPath(), "/I/am/there/somewhere.php");
         }
         function testMakingAbsoluteAppendedPath() {
             $url = new SimpleUrl("./there/somewhere.php");
-            $url->makeAbsolute("https://host.com/here/");
-            $this->assertEqual($url->getPath(), "/here/there/somewhere.php");
-            $base = new SimpleUrl("https://host.com/here/");
+            $absolute = $url->makeAbsolute("https://host.com/here/");
+            $this->assertEqual($absolute->getPath(), "/here/there/somewhere.php");
         }
         function testMakingAbsolutehasNoEffectWhenAlreadyAbsolute() {
-            $url = new SimpleUrl('https://test:secret@www.lastcraft.com/stuff/');
-            $url->makeAbsolute('http://host.com/here/');
-            $this->assertEqual($url->getScheme(), 'https');
-            $this->assertEqual($url->getUsername(), 'test');
-            $this->assertEqual($url->getPassword(), 'secret');
-            $this->assertEqual($url->getHost(), 'www.lastcraft.com');
-            $this->assertEqual($url->getPath(), '/stuff/');
+            $url = new SimpleUrl('https://test:secret@www.lastcraft.com/stuff/?a=1#f');
+            $absolute = $url->makeAbsolute('http://host.com/here/');
+            $this->assertEqual($absolute->getScheme(), 'https');
+            $this->assertEqual($absolute->getUsername(), 'test');
+            $this->assertEqual($absolute->getPassword(), 'secret');
+            $this->assertEqual($absolute->getHost(), 'www.lastcraft.com');
+            $this->assertEqual($absolute->getPath(), '/stuff/');
+            $this->assertEqual($absolute->getEncodedRequest(), '?a=1');
+            $this->assertEqual($absolute->getFragment(), 'f');
         }
         function testUsernameAndPasswordAreUrlDecoded() {
             $url = new SimpleUrl('http://' . urlencode('test@test') .

@@ -1,8 +1,8 @@
 <?php
     // $Id$
     
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../http.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../socket.php');
+    require_once(dirname(__FILE__) . '/../http.php');
+    require_once(dirname(__FILE__) . '/../socket.php');
     Mock::generate('SimpleSocket');
     Mock::generate('SimpleRoute');
     Mock::generatePartial('SimpleRoute', 'PartialSimpleRoute', array('_createSocket'));

@@ -9,7 +9,7 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'query_string.php');
+    require_once(dirname(__FILE__) . '/query_string.php');
     /**#@-*/
     
     /**
@@ -349,16 +349,20 @@
             if (! is_object($base)) {
                 $base = new SimpleUrl($base);
             }
-            if (! $this->getScheme()) {
-                $this->_scheme = $base->getScheme();
+            $scheme = $this->getScheme() ? $this->getScheme() : $base->getScheme();
+            $host = $this->getHost() ? $this->getHost() : $base->getHost();
+            if (substr($this->_path, 0, 1) == "/") {
+                $path = $this->normalisePath($this->_path);
+            } else {
+                $path = $this->normalisePath($base->getBasePath() . $this->_path);
             }
-            if (! $this->getHost()) {
-                $this->_host = $base->getHost();
+            $identity = '';
+            if ($this->_username && $this->_password) {
+                $identity = $this->_username . ':' . $this->_password . '@';
             }
-            if (substr($this->_path, 0, 1) != "/") {
-                $this->_path = $base->getBasePath() . $this->_path;
-            }
-            $this->_path = $this->normalisePath($this->_path);
+            $encoded = $this->getEncodedRequest();
+            $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
+            return new SimpleUrl("$scheme://$identity$host$path$encoded$fragment");
         }
         
         /**
