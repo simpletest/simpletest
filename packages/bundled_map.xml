@@ -7,6 +7,7 @@
     <page title="Mock objects" file="mock_objects_documentation.html"/>
     <page title="Partial mocks" file="partial_mocks_documentation.html"/>
     <page title="Reporting" file="reporter_documentation.html"/>
+    <page title="Test runner" file="runner_documentation.html"/>
     <page title="Expectations" file="expectation_documentation.html"/>
     <page title="Web tester" file="web_tester_documentation.html"/>
     <page title="Testing forms" file="form_testing_documentation.html"/>
