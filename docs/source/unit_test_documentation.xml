@@ -107,6 +107,7 @@ class FileTestCase extends UnitTestCase {
                 sufficient.
                 This default message can still be embedded in your own message
                 if you include &quot;%s&quot; within the string.
+                All the assertions return true on a pass or false on failure.
             </p>
             <p>
                 Some examples...

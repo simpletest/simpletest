@@ -22,8 +22,10 @@
 <strong>class DatabaseConnection {
     function DatabaseConnection() {
     }
+    
     function query() {
     }
+    
     function selectQuery() {
     }
 }</strong>
@@ -81,6 +83,7 @@ $connection = new StubDatabaseConnection();
 class Iterator {
     function Iterator() {
     }
+    
     function next() {
     }
 }
@@ -115,6 +118,7 @@ $iterator->setReturnValueAt(1, 'next', 'Second string');</strong>
 class Configuration {
     function Configuration() {
     }
+    
     function getValue($key) {
     }
 }
@@ -185,6 +189,7 @@ class Thing {
 class Vector {
     function Vector() {
     }
+    
     function get($index) {
     }
 }
@@ -237,6 +242,7 @@ class DatabaseTest extends UnitTestCase {
     function DatabaseTest() {
         $this->UnitTestCase();
     }
+    
     function testUserFinder() {<strong>
         $result = &new StubResultIterator();
         $result->setReturnValue('next', false);

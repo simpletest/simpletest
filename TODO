@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC1) of 74 hours.
+This is immediate stuff only for this iteration (RC1) of 71 hours.
 
 $Id$
 
@@ -50,11 +50,10 @@ WebTestCase::assertField() should work with submit type (1/1) - done.
 
 Documentation
 -------------
-Add cookie handling docs (3).
-Add browser scripting docs (3).
-Add frames handling docs (3).
-Add proxy support to docs (1).
+Add cookie handling docs (3/1) - done.
+Add frames handling docs (3/2) - done.
+Add proxy support to docs (1/1) - done.
 
 Build
 -----
-Move doc generation to XSLT (9/12) - done.
+Move doc generation to XSLT (9/14) - done.
