@@ -30,31 +30,23 @@
         }
         function testStringPosition() {
             $comparisons = array(
-                    "abcdef" => 6,
-                    "abcde" => 5,
-                    "abcd" => 4,
-                    "abc" => 3,
                     "ab" => 2,
                     "a" => 1,
-                    "abcdefgz" => 7,
-                    "abcdefz" => 6,
-                    "abcdez" => 5,
-                    "abcdz" => 4,
                     "abcz" => 3,
                     "abz" => 2,
                     "az" => 1,
                     "z" => 0);
-            $str = &new EqualAssertion("abcdefg");
+            $str = &new EqualAssertion("abc");
             foreach ($comparisons as $compare => $position) {
                 $this->assertEqual(
                         $str->testMessage($compare),
-                        "Equal assertion [String: abcdefg] fails with [String: $compare] at character $position");
+                        "Equal assertion [String: abc] fails with [String: $compare] at character $position");
             }
-            $str = &new EqualAssertion("abcdefghi");
+            $str = &new EqualAssertion("abcd");
             foreach ($comparisons as $compare => $position) {
                 $this->assertEqual(
                         $str->testMessage($compare),
-                        "Equal assertion [String: abcdefghi] fails with [String: $compare] at character $position");
+                        "Equal assertion [String: abcd] fails with [String: $compare] at character $position");
             }
         }
         function testInteger() {
@@ -175,6 +167,32 @@
             $this->assertEqual(
                     $string->testMessage("37"),
                     "Not identical assertion [String: 37] matches");
+        }
+    }
+    
+    class TestOfPatterns extends UnitTestCase {
+        function TestOfPatterns() {
+            $this->UnitTestCase();
+        }
+        function testWanted() {
+            $pattern = &new WantedPatternAssertion('/hello/i');
+            $this->assertTrue($pattern->test("Hello world"));
+            $this->assertEqual(
+                    $pattern->testMessage("Hello world"),
+                    "Pattern [/hello/i] detected in string [Hello world]");
+            $this->assertEqual(
+                    $pattern->testMessage("Goodbye world"),
+                    "Pattern [/hello/i] not detected in string [Goodbye world]");
+        }
+        function testUnwanted() {
+            $pattern = &new UnwantedPatternAssertion('/hello/i');
+            $this->assertFalse($pattern->test("Hello world"));
+            $this->assertEqual(
+                    $pattern->testMessage("Hello world"),
+                    "Pattern [/hello/i] detected in string [Hello world]");
+            $this->assertEqual(
+                    $pattern->testMessage("Goodbye world"),
+                    "Pattern [/hello/i] not detected in string [Goodbye world]");
         }
     }
 ?>

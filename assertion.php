@@ -318,4 +318,98 @@
             }
         }
     }
+    
+    /**
+     *    Test for a pattern using Perl regex rules.
+     */
+    class WantedPatternAssertion extends Assertion {
+        var $_pattern;
+        
+        /**
+         *    Sets the value to compare against.
+         *    @param $pattern        Pattern to search for.
+         *    @public
+         */
+        function WantedPatternAssertion($pattern) {
+            $this->Assertion();
+            $this->_pattern = $pattern;
+        }
+        
+        /**
+         *    Accessor for the pattern.
+         *    @return        Perl regex as string.
+         *    @protected
+         */
+        function _get_pattern() {
+            return $this->_pattern;
+        }
+        
+        /**
+         *    Tests the assertion. True if the Perl regex
+         *    matches the comparison value.
+         *    @param $compare        Comparison value.
+         *    @return                True if correct.
+         *    @public
+         */
+        function test($compare) {
+            return (boolean)preg_match($this->_get_pattern(), $compare);
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param $compare      Comparison value.
+         *    @return              String description of success
+         *                         or failure.
+         *    @public
+         */
+        function testMessage($compare) {
+            if ($this->test($compare)) {
+                return "Pattern [" . $this->_get_pattern() . "] detected in string [$compare]";
+            } else {
+                return "Pattern [" . $this->_get_pattern() . "] not detected in string [$compare]";
+            }
+        }
+    }
+    
+    /**
+     *    Fail if a pattern is detected within the
+     *    comparison.
+     */
+    class UnwantedPatternAssertion extends WantedPatternAssertion {
+        
+        /**
+         *    Sets the reject pattern
+         *    @param $pattern        Pattern to search for.
+         *    @public
+         */
+        function UnwantedPatternAssertion($pattern) {
+            $this->WantedPatternAssertion($pattern);
+        }
+        
+        /**
+         *    Tests the assertion. False if the Perl regex
+         *    matches the comparison value.
+         *    @param $compare        Comparison value.
+         *    @return                True if correct.
+         *    @public
+         */
+        function test($compare) {
+            return !parent::test($compare);
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param $compare      Comparison value.
+         *    @return              String description of success
+         *                         or failure.
+         *    @public
+         */
+        function testMessage($compare) {
+            if ($this->test($compare)) {
+                return "Pattern [" . $this->_get_pattern() . "] not detected in string [$compare]";
+            } else {
+                return "Pattern [" . $this->_get_pattern() . "] detected in string [$compare]";
+            }
+         }
+    }
 ?>
