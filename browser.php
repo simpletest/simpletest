@@ -7,9 +7,9 @@
      */
     
     /**
-     * @ignore    originally defined in simple_test.php
+     * @ignore    Originally defined in simple_test.php
      */
-    if (!defined('SIMPLE_TEST')) {
+    if (! defined('SIMPLE_TEST')) {
         define('SIMPLE_TEST', 'simpletest/');
     }
     require_once(SIMPLE_TEST . 'http.php');
@@ -23,11 +23,8 @@
      */
     class SimpleBrowser {
         var $_user_agent;
-        var $_cookie_jar;
-        var $_response;
+        var $_headers;
         var $_page;
-        var $_current_url;
-        var $_max_redirects;
         
         /**
          *    Starts with a fresh browser with no
@@ -36,11 +33,8 @@
          */
         function SimpleBrowser() {
             $this->_user_agent = &$this->_createUserAgent();
-            $this->_cookie_jar = new CookieJar();
-            $this->_response = false;
+            $this->_headers = false;
             $this->_page = false;
-            $this->_current_url = false;
-            $this->setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
         }
         
         /**
@@ -141,33 +135,6 @@
         }
         
         /**
-         *    Clears the current response.
-         *    @access protected
-         */
-        function _clearResponse() {
-            $this->_response = false;
-        }
-        
-        /**
-         *    Preserves the current response.
-         *    @param SimpleHttpResponse $response    Latest fetch.
-         *    @access protected
-         */
-        function _setResponse(&$response) {
-            $this->_response = &$response;
-        }
-        
-        /**
-         *    Accessor for last response.
-         *    @return SimpleHttpResponse     Response object or
-         *                                   false if none.
-         *    @access protected
-         */
-        function &_getResponse() {
-            return $this->_response;
-        }
-        
-        /**
          *    Parses the raw content into a page.
          *    @param string $raw    Text of fetch.
          *    @return SimplePage    Parsed HTML.
@@ -190,7 +157,7 @@
                 $this->_page = &new SimplePage(false);
                 return false;
             }
-            $this->_setResponse($response);
+            $this->_headers = $response->getHeaders();
             $this->_page = &$this->_parse($response->getContent());
             return $response->getContent();
         }
@@ -221,7 +188,7 @@
                 $this->_page = &new SimplePage(false);
                 return false;
             }
-            $this->_setResponse($response);
+            $this->_headers = $response->getHeaders();
             $this->_page = &$this->_parse($response->getContent());
             return $response->getContent();
         }
@@ -232,12 +199,10 @@
          *    @access public
          */
         function getMimeType() {
-            $response = &$this->_getResponse();
-            if (! $response) {
+            if (! $this->_headers) {
                 return false;
             }
-            $headers = &$response->getHeaders();
-            return $headers->getMimeType();
+            return $this->_headers->getMimeType();
         }
         
         /**
@@ -246,12 +211,10 @@
          *    @access public
          */
         function getResponseCode() {
-            $response = &$this->_getResponse();
-            if (! $response) {
+            if (! $this->_headers) {
                 return false;
             }
-            $headers = &$response->getHeaders();
-            return $headers->getResponseCode();
+            return $this->_headers->getResponseCode();
         }
         
         /**
