@@ -10,6 +10,7 @@ Fix of assertIdentical() getting stuck in a loop (3).
 Rename StickyError because of name clash (1/1) - done.
 Make sure error handling runner is loaded by default (2).
 Fix parsing check on test file loadingto work with PHP5 (3).
+Add Jeff's performance fixes (2).
 
 Reporter
 --------
