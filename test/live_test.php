@@ -175,7 +175,7 @@
         }
         function testTimedCookieExpiry() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
-            $this->restartSession(time() + 101);
+            $this->restartSession(time() + 115);
             $this->assertNoCookie("session_cookie");
             $this->assertNoCookie("short_cookie");
             $this->assertCookie("day_cookie", "C");
