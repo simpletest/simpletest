@@ -40,3 +40,8 @@ Add setting of form values by name (2).
 
 Documentation
 -------------
+
+Build
+-----
+Change path constant to match PEAR install (1).
+
