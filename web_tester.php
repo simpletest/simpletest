@@ -42,7 +42,17 @@
         function showRequest() {
             $this->dump($this->_browser->getRequest());
         }
-        
+          
+        /**
+         *    Accessor for the currently selected URL.
+         *    @return string        Current location or false if
+         *                          no page yet fetched.
+         *    @access public
+         */
+        function getUrl() {
+            $this->_browser->getUrl();
+        }
+      
         /**
          *    Dumps the current HTML source for debugging.
          *    @access public
