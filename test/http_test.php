@@ -170,6 +170,7 @@
             $response = &new SimpleHttpResponse($socket);
             $this->assertTrue($response->isError());
             $this->assertWantedPattern('/Socket error/', $response->getError());
+            $this->assertIdentical($response->getContent(), false);
         }
         function testReadAll() {
             $socket = &new MockSimpleSocket($this);

@@ -302,7 +302,7 @@
          */
         function SimpleHttpResponse(&$socket) {
             $this->StickyError();
-            $this->_content = "";
+            $this->_content = false;
             $this->_response_code = 0;
             $this->_http_version = 0;
             $this->_mime_type = "";
