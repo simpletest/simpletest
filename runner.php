@@ -29,8 +29,8 @@
          *    run. That is, the structure events will be
          *    recorded, but no tests will be run.
          */
-        function makeDry() {
-            $this->_is_dry_run = true;
+        function makeDry($is_dry = true) {
+            $this->_is_dry_run = $is_dry;
         }
         
         /**
