@@ -38,6 +38,7 @@
         /**
          *    Sets the internal error.
          *    @param        Error message to stash.
+         *    @protected
          */
         function _setError($error) {
             $this->_error = $error;
@@ -45,6 +46,7 @@
         
         /**
          *    Resets the error state to no error.
+         *    @protected
          */
         function _clearError() {
             $this->_setError("");
@@ -62,11 +64,28 @@
          *    @param $url        URL as string.
          *    @public
          */
-        function Socket($url) {
+        function Socket($url, $port = 80) {
             $this->StickyError();
-            if (!($this->_handle = fsockopen($url, 80, $errorNumber, $error, 15))) {
+            if (!($this->_handle = fsockopen($url, $port, $errorNumber, $error, 15))) {
                 $this->_setError("Cannot open [$url] with [$error]");
             }
+        }
+        
+        /**
+         *    Writes some data to the socket.
+         *    @param $message       String to send to socket.
+         *    @return               True if successful.
+         *    @public
+         */
+        function write($message) {
+            if ($this->isError()) {
+                return false;
+            }
+            if (!fwrite($this->_handle, $message)) {
+                return false;
+            }
+            fflush($this->_handle);
+            return true;
         }
     }
 ?>

@@ -30,13 +30,17 @@
         function TestOfSocket() {
             $this->UnitTestCase();
         }
-        function testOpenBadSocket() {
-            $socket = new Socket("bad_url");
+        function testBadSocket() {
+            $socket = new Socket("bad_url", 111);
             $this->assertTrue($socket->isError(), "Error [" . $socket->getError(). "]");
+            $this->assertFalse($socket->write("A message"));
         }
-        function testOpenGoodSocket() {
-            $socket = new Socket("localhost");
+        function testWriteAndRead() {
+            $socket = new Socket("www.lastcraft.com", 80);
             $this->assertFalse($socket->isError(), "Error [" . $socket->getError(). "]");
+            $this->assertTrue($socket->write("GET www.lastcraft.com HTTP/1.0\r\n"));
+            $socket->write("Host: localhost\r\n");
+            $socket->write("Connection: close\r\n\r\n");
         }
     }
 ?>
