@@ -1,5 +1,5 @@
-Simple Test
-===========
+SimpleTest
+==========
 You probably got this package from...
 http://sourceforge.net/projects/simpletest/
 
@@ -27,22 +27,20 @@ framework's (PHPUnit, PEAR::PhpUnit) test cases as it's own. The
 web browser part of the web tester can also be used independently either
 in other testers or as part of a scripting solution.
 
-You can see a release schedule at
-http://www.lastcraft.com/overview.php which is also copied to the
-documentation folder with this release. The user interface is minimal
+You can see a release schedule at http://www.lastcraft.com/overview.php
+which is also copied to the documentation folder with this release.
+A full PHPDocumenter API documentation exists at
+http://simpletest.sourceforge.net/.
+
+The user interface is minimal
 in the extreme, but a lot of information flows from the test suite.
 After version 1.0 we will release a better web UI, but we are leaving XUL
 and GTk versions to volunteers as everybody has their own opinion
 on a good GUI, and we don't want to discourage development by shipping
 one with the toolkit.
 
-If you are extending the toolkit or wish to bundle parts of the toolkit
-with your own software, you can see a full PHPDoc API on sourceforge
-as http://simpletest.sourceforge.net/.
-
-You are looking at a pre-release.
-
-The unit tests for SimpleTest itself can be run here...
+You are looking at a first full release. The unit tests for SimpleTest
+itself can be run here...
 
 simpletest/test/unit_tests.php
 
@@ -50,10 +48,14 @@ And tests involving live network connections as well are here...
 
 simpletest/test/all_tests.php
 
-You will have to edit this file if you are accesssing the internet
-through a proxy server. See the comments in all_tests.php for
-instructions. You will likely need the memory limit in the php.ini
-to be set higher than the default 8MB to run all of these tests.
+The full tests will typically overrun the 8Mb limit usually allowed
+to a PHP process. A workaround is to run the tests on the command
+with a custom php.ini file if you do not have access to your server
+version.
+
+You will have to edit the all_tests.php file if you are accesssing
+the internet through a proxy server. See the comments in all_tests.php
+for instructions.
 
 The full tests read some test data from the LastCraft site. If the site
 is down or has been modified for a later version then you will get
@@ -70,10 +72,12 @@ This contains information on interface changes. It also points out
 deprecated interfaces so you should read this even if all of
 your current tests appear to run.
 
-You can find a tutorial on http://www.lastcraft.com/first_test_tutorial.php to
-get you started and this material will eventually become included
-with the project documentation. There is a documentation folder, but it is
-just a subset of the material on the Sourceforge and Lastcraft sites.
+There is a documentation folder which contains the core reference information
+in English and French, although this information is fairly basic.
+You can find a tutorial on http://www.lastcraft.com/first_test_tutorial.php
+to get you started and this material will eventually become included
+with the project documentation. A French translation exists at
+http://www.onpk.net/index.php/2005/01/12/254-tutoriel-simpletest-decouvrir-les-tests-unitaires.
 
 If you download and use and possibly even extend this tool, please let us
 know. Any feedback, even bad, is always welcome and we will work to get
@@ -85,7 +89,7 @@ simpletest-support@lists.sourceforge.net
 ...so that others can read them too. We usually try to respond within 48
 hours.
 
-There is no change log as yet except at sourceforge. You can visit the
+There is no change log as yet except at Sourceforge. You can visit the
 release notes to see the completed TODO list after each cycle and also the
 status of any bugs, but if the bug is recent then it will be fixed in CVS only.
 The CVS check-ins always have all the tests passing and so CVS snapshots should
@@ -98,9 +102,8 @@ mean "Lite" in this context.
 
 Thanks to everyone who has sent comments and offered suggestions. They
 really are invaluable, but sadly you are too many to mention in full.
-
-Thanks to the advanced PHP forum on SitePoint. It is the place to be right
-now.
+Thanks to all on the advanced PHP forum on SitePoint, especially Harry
+Feucks. Early adopters are always an inspiration.
 
 yours Marcus Baker, Jason Sweat and Perrick Penet.
 -- 
