@@ -327,7 +327,7 @@
          *    @access public
          */
         function test($compare) {
-            return !parent::test($compare);
+            return ! parent::test($compare);
         }
         
         /**

@@ -8,7 +8,7 @@ $Id$
 Unit tester
 -----------
 Add shell test case (3/4) - done.
-Pattern expectations need type check on message (1).
+Pattern expectations need type check on message (1/1) - done.
 
 Interface
 ---------
