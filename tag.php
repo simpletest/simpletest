@@ -473,6 +473,84 @@
     }
     
     /**
+     *    Drop down widget.
+     */
+    class MultipleSelectionTag extends SimpleWidget {
+        var $_options;
+        var $_values;
+        
+        /**
+         *    Starts with attributes only.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
+        function MultipleSelectionTag($attributes) {
+            $this->SimpleWidget('select', $attributes);
+            $this->_options = array();
+            $this->_values = false;
+        }
+        
+        /**
+         *    Adds an option tag to a selection field.
+         *    @param SimpleOptionTag $tag     New option.
+         *    @access public
+         */
+        function addTag(&$tag) {
+            if ($tag->getTagName() == 'option') {
+                $this->_options[] = &$tag;
+            }
+        }
+        
+        /**
+         *    Text within the selection element is ignored.
+         *    @param string $content        Ignored.
+         *    @access public
+         */
+        function addContent($content) {
+        }
+        
+        /**
+         *    Scans options for defaults to populate the
+         *    value array().
+         *    @return string        Selected field.
+         *    @access public
+         */
+        function getDefault() {
+            $default = array();
+            for ($i = 0; $i < count($this->_options); $i++) {
+                if ($this->_options[$i]->getAttribute('selected')) {
+                    $default[] = $this->_options[$i]->getDefault();
+                }
+            }
+            return $default;
+        }
+        
+        /**
+         *    Can only set allowed values.
+         *    @param array $values       New choices.
+         *    @return boolean            True if allowed.
+         *    @access public
+         */
+        function setValue($values) {
+            $this->_values = $values;
+            return true;
+        }
+        
+        /**
+         *    Accessor for current selection value.
+         *    @return string      Value attribute or
+         *                        content of opton.
+         *    @access public
+         */
+        function getValue() {
+            if ($this->_values === false) {
+                return $this->getDefault();
+            }
+            return $this->_values;
+        }
+    }
+    
+    /**
      *    Option for selection field.
      */
     class SimpleOptionTag extends SimpleWidget {

@@ -280,4 +280,14 @@
             $this->assertTitle('Test of form self submission');
         }
     }
+    
+    class TestOfMultivalueWidgets extends WebTestCase {
+        function TestOfMultivalueWidgets() {
+            $this->WebTestCase();
+        }
+        function testDefaultFormValues() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            //$this->assertField('a', array('a2', 'a3'));
+        }
+    }
 ?>

@@ -168,8 +168,48 @@
             $tag->addTag($b);
             $c = &new SimpleOptionTag(array());
             $c->addContent('CCC');
+            $tag->addTag($c);
             $this->assertFalse($tag->setValue('Not present'));
             $this->assertEqual($tag->getValue(), 'BBB');
+        }
+        function testMultipleDefaultWithNoSelections() {
+            $tag = &new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
+            $a = &new SimpleOptionTag(array());
+            $a->addContent('AAA');
+            $tag->addTag($a);
+            $b = &new SimpleOptionTag(array());
+            $b->addContent('BBB');
+            $tag->addTag($b);
+            $this->assertIdentical($tag->getDefault(), array());
+            $this->assertIdentical($tag->getValue(), array());
+        }
+        function testMultipleDefaultWithSelections() {
+            $tag = &new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
+            $a = &new SimpleOptionTag(array('selected' => ''));
+            $a->addContent('AAA');
+            $tag->addTag($a);
+            $b = &new SimpleOptionTag(array('selected' => ''));
+            $b->addContent('BBB');
+            $tag->addTag($b);
+            $this->assertIdentical($tag->getDefault(), array('AAA', 'BBB'));
+            $this->assertIdentical($tag->getValue(), array('AAA', 'BBB'));
+        }
+        function testSettingMultiple() {
+            $tag = &new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
+            $a = &new SimpleOptionTag(array('selected' => ''));
+            $a->addContent('AAA');
+            $tag->addTag($a);
+            $b = &new SimpleOptionTag(array());
+            $b->addContent('BBB');
+            $tag->addTag($b);
+            $c = &new SimpleOptionTag(array('selected' => ''));
+            $c->addContent('CCC');
+            $tag->addTag($c);
+            $this->assertIdentical($tag->getDefault(), array('AAA', 'CCC'));
+            $this->assertTrue($tag->setValue(array('BBB', 'CCC')));
+            $this->assertIdentical($tag->getValue(), array('BBB', 'CCC'));
+            $this->assertTrue($tag->setValue(array()));
+            $this->assertIdentical($tag->getValue(), array());
         }
     }
     
@@ -282,7 +322,7 @@
                     $form->submitButtonByLabel("Go!"),
                     array("go" => "Go!"));            
         }
-        function testSelectFieldSubmitted() {
+        function testSingleSelectFieldSubmitted() {
             $form = &new SimpleForm(new SimpleFormTag(array()));
             $select = &new SimpleSelectionTag(array('name' => 'a'));
             $select->addTag(new SimpleOptionTag(
