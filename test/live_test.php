@@ -130,9 +130,9 @@
         function testCookieReading() {
             $browser = &new SimpleBrowser();
             $browser->get('http://www.lastcraft.com/test/set_cookies.php');
-            $this->assertEqual($browser->getBaseCookieValue("session_cookie"), "A");
-            $this->assertEqual($browser->getBaseCookieValue("short_cookie"), "B");
-            $this->assertEqual($browser->getBaseCookieValue("day_cookie"), "C");
+            $this->assertEqual($browser->getBaseCookieValue('session_cookie'), 'A');
+            $this->assertEqual($browser->getBaseCookieValue('short_cookie'), 'B');
+            $this->assertEqual($browser->getBaseCookieValue('day_cookie'), 'C');
         }
         function testSimpleSubmit() {
             $browser = &new SimpleBrowser();
@@ -153,7 +153,7 @@
             $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/');
             $this->assertTitle('Simple test target file');
             $this->assertResponse(200);
-            $this->assertMime("text/html");
+            $this->assertMime('text/html');
         }
         function testSlowGet() {
             $this->assertTrue($this->get('http://www.lastcraft.com/test/slow_page.php'));
