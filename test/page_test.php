@@ -172,36 +172,46 @@
             $this->assertIdentical($page->getUrls("Label"), array());
         }
         function testAddAbsoluteLink() {
+            $link = new SimpleTag("a", array("href" => "http://somewhere"));
+            $link->addContent("Label");
             $page = new SimplePage("");
-            $page->addLink("http://somewhere", "Label", false);
+            $page->AcceptTag($link);
             $this->assertEqual($page->getAbsoluteLinks(), array("http://somewhere"), "abs->%s");
             $this->assertIdentical($page->getRelativeLinks(), array(), "rel->%s");
             $this->assertEqual($page->getUrls("Label"), array("http://somewhere"));
         }
         function testAddStrictRelativeLink() {
+            $link = new SimpleTag("a", array("href" => "./somewhere.php"));
+            $link->addContent("Label");
             $page = new SimplePage("");
-            $page->addLink("./somewhere.php", "Label", false, true);
+            $page->AcceptTag($link);
             $this->assertEqual($page->getAbsoluteLinks(), array(), "abs->%s");
             $this->assertIdentical($page->getRelativeLinks(), array("./somewhere.php"), "rel->%s");
             $this->assertEqual($page->getUrls("Label"), array("./somewhere.php"));
         }
         function testAddRelativeLink() {
+            $link = new SimpleTag("a", array("href" => "somewhere.php"));
+            $link->addContent("Label");
             $page = new SimplePage("");
-            $page->addLink("somewhere.php", "Label", false);
+            $page->AcceptTag($link);
             $this->assertEqual($page->getAbsoluteLinks(), array(), "abs->%s");
             $this->assertIdentical($page->getRelativeLinks(), array("./somewhere.php"), "rel->%s");
             $this->assertEqual($page->getUrls("Label"), array("./somewhere.php"));
         }
         function testLinkIds() {
+            $link = new SimpleTag("a", array("href" => "./somewhere.php", "id" => 33));
+            $link->addContent("Label");
             $page = new SimplePage("");
-            $page->addLink("somewhere.php", "Label", 33);
+            $page->AcceptTag($link);
             $this->assertEqual($page->getUrls("Label"), array("./somewhere.php"));
             $this->assertFalse($page->getUrlById(0));
             $this->assertEqual($page->getUrlById(33), "./somewhere.php");
         }
         function testTitleSetting() {
+            $title = new SimpleTag("title", array());
+            $title->addContent("Title");
             $page = new SimplePage("");
-            $page->setTitle("Title");
+            $page->AcceptTag($title);
             $this->assertEqual($page->getTitle(), "Title");
         }
     }

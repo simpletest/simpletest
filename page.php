@@ -130,7 +130,7 @@
                 return false;
             }
             $tag = array_pop($this->_tags[$name]);
-            $this->_dispatchTag($tag);
+            $this->_page->acceptTag($tag);
             return true;
         }
         
@@ -148,16 +148,6 @@
                 }
             }
             return true;
-        }
-        
-        /**
-         *    Dispatches the tag content to the page once
-         *    it has been closed.
-         *    @param $tag        Newly completed tag.
-         *    @protected
-         */
-        function _dispatchTag($tag) {
-            $this->_page->acceptTag($tag);
         }
     }
     
@@ -222,23 +212,20 @@
         }
         
         /**
-         *    Adds a link to the page.
+         *    Adds a link to the page. Partially fixes
+         *    expandomatic links.
          *    @param $url        Address.
          *    @param $label      Text label of link.
          *    @param $id         Id attribute of link.
-         *    @param $is_strict  Will accept only correct
-         *                       relative URLs: must start
-         *                       "/", "./" or "../" or have
-         *                       a scheme.
          *    @public
          */
-        function addLink($url, $label, $id, $is_strict = false) {
+        function addLink($url, $label, $id) {
             $parsed_url = new SimpleUrl($url);
             if ($parsed_url->getScheme() && $parsed_url->getHost()) {
                 $this->_addAbsoluteLink($url, $label, $id);
                 return;
             }
-            if (!$is_strict && !$parsed_url->getScheme()) {
+            if (!$parsed_url->getScheme()) {
                 if (!preg_match('/^(\/|\.\/|\.\.\/)/', $url)) {
                     $url = "./" . $url;
                     $parsed_url = new SimpleUrl($url);
