@@ -5,6 +5,11 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+No method clickSubmitByFormId()
+===============================
+This method had an incorrect name as no button was involved. It was
+renamed to submitByFormId() in Beta4 and deprecated.
+
 No method paintStart() or paintEnd()
 ====================================
 You should only get this error if you have subclassed the lower level

@@ -203,14 +203,13 @@
         }
         
         /**
-         *    Clicks the submit button by label. The owning
-         *    form will be submitted by this.
+         *    Submits a form by the ID.
          *    @param string $label    Button label. An unlabeled
          *                            button can be triggered by 'Submit'.
          *    @return boolean         true on success.
          *    @access public
          */
-        function clickSubmitByFormId($id) {
+        function submitFormById($id) {
             $page = &$this->_getHtml();
             if (! ($form = &$page->getFormById($id))) {
                 return false;
@@ -221,6 +220,13 @@
             }
             $method = $form->getMethod();
             return $this->$method($action, $form->submit());
+        }
+        
+        /**
+         *    @deprecated
+         */
+        function clickSubmitByFormId($id) {
+            return $this->submitFormById($id);
         }
         
         /**
@@ -253,9 +259,7 @@
         }
         
         /**
-         *    Follows a link by name. Will click the first link
-         *    found with this link text by default, or a later
-         *    one if an index is given.
+         *    Follows a link by id attribute.
          *    @param string $id        ID attribute value.
          *    @return boolean          True if link present.
          *    @access public
@@ -286,6 +290,28 @@
         function setField($name, $value) {
             $page = &$this->_getHtml();
             $page->setField($name, $value);
+        }
+        
+        /**
+         *    Confirms that the form element is currently set
+         *    to the expected value. A missing form will always
+         *    fail. If no value is given then only the existence
+         *    of the field is checked.
+         *    @param string $name       Name of field in forms.
+         *    @param mixed $expected    Expected string value or false
+         *                              for unset fields.
+         *    @access public
+         */
+        function assertField($name, $expected = true) {
+            $page = &$this->_getHtml();
+            $value = $page->getField($name);
+            if ($expected === true) {
+                $this->assertTrue(isset($value), "Field [$name] should exist");
+            } else {
+                $this->assertTrue(
+                        $value === $expected,
+                        "Field [$name] should match [$expected] and is actually [$value]");
+            }
         }
         
         /**

@@ -182,7 +182,7 @@
         var $_link_ids;
         var $_title;
         var $_open_forms;
-        var $_closed_forms;
+        var $_complete_forms;
         
         /**
          *    Parses a page ready to access it's contents.
@@ -195,7 +195,7 @@
             $this->_link_ids = array();
             $this->_title = false;
             $this->_open_forms = array();
-            $this->_closed_forms = array();
+            $this->_complete_forms = array();
             $builder = &$this->_createBuilder($this);
             $builder->parse($raw, $this->_createParser($builder));
         }
@@ -266,7 +266,7 @@
          *    @access public
          */
         function acceptFormEnd() {
-            $this->_closed_forms[] = array_pop($this->_open_forms);
+            $this->_complete_forms[] = array_pop($this->_open_forms);
         }
         
         /**
@@ -412,7 +412,7 @@
          *    @access public
          */
         function getForms() {
-            return array_merge($this->_open_forms, $this->_closed_forms);
+            return array_merge($this->_open_forms, $this->_complete_forms);
         }
         
         /**
@@ -423,9 +423,9 @@
          *    @access public
          */
         function &getFormBySubmitLabel($label) {
-            for ($i = 0; $i < count($this->_closed_forms); $i++) {
-                if ($this->_closed_forms[$i]->getSubmitName($label)) {
-                    return $this->_closed_forms[$i];
+            for ($i = 0; $i < count($this->_complete_forms); $i++) {
+                if ($this->_complete_forms[$i]->getSubmitName($label)) {
+                    return $this->_complete_forms[$i];
                 }
             }
             return null;
@@ -440,9 +440,28 @@
          *    @access public
          */
         function &getFormById($id) {
-            for ($i = 0; $i < count($this->_closed_forms); $i++) {
-                if ($this->_closed_forms[$i]->getId() == $id) {
-                    return $this->_closed_forms[$i];
+            for ($i = 0; $i < count($this->_complete_forms); $i++) {
+                if ($this->_complete_forms[$i]->getId() == $id) {
+                    return $this->_complete_forms[$i];
+                }
+            }
+            return null;
+        }
+        
+        /**
+         *    Accessor for a form element value within a page.
+         *    Finds the first match.
+         *    @param string $name        Field name.
+         *    @return string/boolean     A string if the field is
+         *                               present, false if unchecked
+         *                               and null if missing.
+         *    @access public
+         */
+        function getField($name) {
+            for ($i = 0; $i < count($this->_complete_forms); $i++) {
+                $value = $this->_complete_forms[$i]->getValue($name);
+                if (isset($value)) {
+                    return $value;
                 }
             }
             return null;
@@ -458,8 +477,8 @@
          */
         function setField($name, $value) {
             $is_set = false;
-            for ($i = 0; $i < count($this->_closed_forms); $i++) {
-                if ($this->_closed_forms[$i]->setField($name, $value)) {
+            for ($i = 0; $i < count($this->_complete_forms); $i++) {
+                if ($this->_complete_forms[$i]->setField($name, $value)) {
                     $is_set = true;
                 }
             }

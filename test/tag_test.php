@@ -33,6 +33,11 @@
         function TestOfWidget() {
             $this->UnitTestCase();
         }
+        function testTextEmptyDefault() {
+            $tag = &new SimpleTextTag(array('' => 'text'));
+            $this->assertIdentical($tag->getDefault(), '');
+            $this->assertIdentical($tag->getValue(), '');
+        }
         function testTextDefault() {
             $tag = &new SimpleTextTag(array('value' => 'aaa'));
             $this->assertEqual($tag->getDefault(), 'aaa');

@@ -301,24 +301,31 @@
             $this->assertNull($page->getFormById(54));
             $this->assertIsA($form = &$page->getFormById(55), "SimpleForm");
         }
+        function testReadingTextField() {
+            $page = &new SimplePage('<html><head><form>' .
+                    '<input type="text" name="a">' .
+                    '<input type="text" name="b" value="bbb">' .
+                    '</form></head></html>');
+            $this->assertNull($page->getField('missing'));
+            $this->assertIdentical($page->getField('a'), '');
+            $this->assertIdentical($page->getField('b'), 'bbb');
+        }
         function testSettingTextField() {
             $page = &new SimplePage('<html><head><form>' .
                     '<input type="text" name="a">' .
                     '<input type="submit">' .
                     '</form></head></html>');
             $this->assertTrue($page->setField("a", "aaa"));
+            $this->assertEqual($page->getField("a"), "aaa");
             $this->assertFalse($page->setField("b", "bbb"));
-            $form = &$page->getFormBySubmitLabel("Submit");
-            $this->assertEqual($form->getValue("a"), "aaa");
-            $this->assertNull($form->getValue("b"));
+            $this->assertNull($page->getField("b"));
         }
         function testReadingTextArea() {
             $page = &new SimplePage('<html><head><form>' .
                     '<textarea name="a">aaa</textarea>' .
                     '<input type="submit">' .
                     '</form></head></html>');
-            $form = &$page->getFormBySubmitLabel("Submit");
-            $this->assertEqual($form->getValue("a"), "aaa");
+            $this->assertEqual($page->getField("a"), "aaa");
         }
         function testSettingTextArea() {
             $page = &new SimplePage('<html><head><form>' .
@@ -326,8 +333,7 @@
                     '<input type="submit">' .
                     '</form></head></html>');
             $this->assertTrue($page->setField("a", "AAA"));
-            $form = &$page->getFormBySubmitLabel("Submit");
-            $this->assertEqual($form->getValue("a"), "AAA");
+            $this->assertEqual($page->getField("a"), "AAA");
         }
         function testSettingSelectionField() {
             $page = &new SimplePage('<html><head><form>' .
@@ -337,11 +343,10 @@
                     '</select>' .
                     '<input type="submit">' .
                     '</form></head></html>');
-            $form = &$page->getFormBySubmitLabel("Submit");
-            $this->assertEqual($form->getValue("a"), "bbb");
+            $this->assertEqual($page->getField("a"), "bbb");
             $this->assertFalse($page->setField("a", "ccc"));
             $this->assertTrue($page->setField("a", "aaa"));
-            $this->assertEqual($form->getValue("a"), "aaa");
+            $this->assertEqual($page->getField("a"), "aaa");
         }
     }
 ?>

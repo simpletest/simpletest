@@ -233,6 +233,8 @@
                     "a" => "aaa",
                     "b" => "")));
             $this->get("http://my-site.com/");
+            $this->assertField('a', 'aaa');
+            $this->assertField('b', '');
             $this->assertTrue($this->clickSubmit("Go!"));
         }
         function testSettingTextField() {
@@ -241,13 +243,16 @@
                     '<input type="text" name="b" value="bbb"/>');
             $browser = &$this->getBrowser();
             $this->prepareForm($browser, $widgets);
-            $browser->expectOnce("post", array("there.php", array(
-                    "go" => "Go!",
-                    "a" => "AAA",
-                    "b" => "bbb")));
-            $this->get("http://my-site.com/");
-            $this->setField("a", "AAA");
-            $this->assertTrue($this->clickSubmit("Go!"));
+            $browser->expectOnce('post', array('there.php', array(
+                    'go' => 'Go!',
+                    'a' => 'AAA',
+                    'b' => 'bbb')));
+            $this->get('http://my-site.com/');
+            $this->assertField('a', 'aaa');
+            $this->assertField('b', 'bbb');
+            $this->setField('a', 'AAA');
+            $this->assertField('a', 'AAA');
+            $this->assertTrue($this->clickSubmit('Go!'));
         }
         function testTextAreaDefault() {
             $widgets = array(

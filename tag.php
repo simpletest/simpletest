@@ -157,7 +157,14 @@
          *    @access public
          */
         function getDefault() {
-            return '';
+            $default = $this->getAttribute('value');
+            if ($default === true) {
+                $default = '';
+            }
+            if ($default === false) {
+                $default = '';
+            }
+            return $default;
         }
         
         /**
@@ -221,15 +228,6 @@
         function expectEndTag() {
             return false;
         }
-        
-        /**
-         *    Accessor for starting value.
-         *    @return string        Parsed value.
-         *    @access public
-         */
-        function getDefault() {
-            return $this->getAttribute('value');
-        }
     }
     
     /**
@@ -259,15 +257,6 @@
          */
         function expectEndTag() {
             return false;
-        }
-        
-        /**
-         *    Accessor for starting value.
-         *    @return string        Parsed value.
-         *    @access public
-         */
-        function getDefault() {
-            return $this->getAttribute('value');
         }
         
         /**
@@ -652,7 +641,7 @@
          *    Extracts current value from form.
          *    @param string $name        Keyed by widget name.
          *    @return string             Value as string or null
-         *                              if not set.
+         *                               if not set.
          *    @access public
          */
         function getValue($name) {
