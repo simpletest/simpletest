@@ -1,17 +1,23 @@
 <?php
     // $Id$
     
+    if (!defined("SIMPLE_TEST")) {
+        define("SIMPLE_TEST", "simpletest/");
+    }
+    require_once(SIMPLE_TEST . 'dumper.php');
+    
     /**
      *    Assertion that can display failure information.
-     *    Also includes various static helper methods.
+     *    Also includes various helper methods.
      *    @abstract
      */
-    class SimpleExpectation {
+    class SimpleExpectation extends SimpleDumper {
         
         /**
          *    Does nothing.
          */
         function SimpleExpectation() {
+            $this->SimpleDumper();
         }
         
         /**
@@ -48,7 +54,7 @@
             } elseif (is_bool($value)) {
                 return "Boolean: " . ($value ? "true" : "false");
             } elseif (is_string($value)) {
-                return "String: " . SimpleExpectation::clipString($value, 40);
+                return "String: " . $this->clipString($value, 40);
             } elseif (is_integer($value)) {
                 return "Integer: $value";
             } elseif (is_float($value)) {
@@ -142,29 +148,6 @@
         }
         
         /**
-         *    Clips a string to a maximum length.
-         *    @param $value        String to truncate.
-         *    @param $size         Minimum string size to show.
-         *    @param $position     Centre of string section.
-         *    @return              Shortened version.
-         *    @public
-         *    @static
-         */
-        function clipString($value, $size, $position = 0) {
-            $length = strlen($value);
-            if ($length <= $size) {
-                return $value;
-            }
-            $position = min($position, $length);
-            $start = ($size/2 > $position ? 0 : $position - $size/2);
-            if ($start + $size > $length) {
-                $start = $length - $size;
-            }
-            $value = substr($value, $start, $size);
-            return ($start > 0 ? "..." : "") . $value . ($start + $size < $length ? "..." : "");
-        }
-        
-        /**
          *    Creates a human readable description of the
          *    difference between two integers.
          *    @param $first             First string.
@@ -209,7 +192,7 @@
          *    @static
          */
         function _describeFloatDifference($first, $second, $expectation_class) {
-            return "because [" . SimpleExpectation::describeValue($first) .
+            return "because [Float: " . SimpleExpectation::describeValue($first) .
                     "] differs from [" .
                     SimpleExpectation::describeValue($second) . "]";
         }

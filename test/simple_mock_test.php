@@ -73,7 +73,9 @@
             $ref = "Fred";
             $map->addReference(array(0), $ref);
             $this->assertEqual($map->findFirstMatch(array(0)), "Fred");
-            $this->assertReference($map->findFirstMatch(array(0)), $ref);
+            $ref2 = &$map->findFirstMatch(array(0));
+            //$this->assertReference($map->findFirstMatch(array(0)), $ref);
+            $this->assertReference($ref2, $ref);
         }
         function testWildcard() {
             $map = new CallMap("wild");

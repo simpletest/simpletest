@@ -35,9 +35,10 @@
          *    @public
          */
         function assertNull($value, $message = "%s") {
+            $dumper = new SimpleExpectation();
             $message = sprintf(
                     $message,
-                    "[" . SimpleExpectation::describeValue($value) . "] should be null");
+                    "[" . $dumper->describeValue($value) . "] should be null");
             $this->assertTrue(!isset($value), $message);
         }
         
@@ -48,9 +49,10 @@
          *    @public
          */
         function assertNotNull($value, $message = "%s") {
+            $dumper = new SimpleExpectation();
             $message = sprintf(
                     $message,
-                    "[" . SimpleExpectation::describeValue($value) . "] should not be null");
+                    "[" . $dumper->describeValue($value) . "] should not be null");
             $this->assertTrue(isset($value), $message);
         }
         
@@ -63,9 +65,10 @@
          *    @public
          */
         function assertIsA($object, $type, $message = "%s") {
+            $dumper = new SimpleExpectation();
             $message = sprintf(
                     $message,
-                    "[" . SimpleExpectation::describeValue($object) . "] should be type [$type]");
+                    "[" . $dumper->describeValue($object) . "] should be type [$type]");
             if (is_object($object)) {
                 $this->assertTrue(is_a($object, $type), $message);
             } else {
@@ -144,10 +147,11 @@
          *    @public
          */
         function assertReference(&$first, &$second, $message = "%s") {
+            $dumper = new SimpleExpectation();
             $message = sprintf(
                     $message,
-                    "[" . SimpleExpectation::describeValue($first) .
-                            "] and [" . SimpleExpectation::describeValue($second) .
+                    "[" . $dumper->describeValue($first) .
+                            "] and [" . $dumper->describeValue($second) .
                             "] should reference the same object");
             $temp = $first;
             $first = uniqid("test");
@@ -165,10 +169,11 @@
          *    @public
          */
         function assertCopy(&$first, &$second, $message = "%s") {
+            $dumper = new SimpleExpectation();
             $message = sprintf(
                     $message,
-                    "[" . SimpleExpectation::describeValue($first) .
-                            "] and [" . SimpleExpectation::describeValue($second) .
+                    "[" . $dumper->describeValue($first) .
+                            "] and [" . $dumper->describeValue($second) .
                             "] should not be the same object");
             $temp = $first;
             $first = uniqid("test");
