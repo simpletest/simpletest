@@ -589,11 +589,13 @@
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue('isError', true);
             $socket->setReturnValue('getError', 'Socket error');
+            $socket->setReturnValue('getSent', '');
 
             $response = &new SimpleHttpResponse($socket, 'GET', new SimpleUrl('here'));
             $this->assertTrue($response->isError());
             $this->assertWantedPattern('/Socket error/', $response->getError());
             $this->assertIdentical($response->getContent(), false);
+            $this->assertIdentical($response->getSent(), '');
         }
         function testBadSocketDuringResponse() {
             $socket = &new MockSimpleSocket($this);
@@ -603,10 +605,12 @@
             $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\n");
             $socket->setReturnValueAt(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
             $socket->setReturnValue("read", "");
+            $socket->setReturnValue('getSent', 'HTTP/1.1 ...');
 
             $response = &new SimpleHttpResponse($socket, 'GET', new SimpleUrl('here'));
             $this->assertTrue($response->isError());
             $this->assertEqual($response->getContent(), "");
+            $this->assertEqual($response->getSent(), 'HTTP/1.1 ...');
         }
         function testIncompleteHeader() {
             $socket = &new MockSimpleSocket($this);

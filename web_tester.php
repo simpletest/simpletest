@@ -9,9 +9,9 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'simple_test.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'browser.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'page.php');
+    require_once(dirname(__FILE__) . '/simple_test.php');
+    require_once(dirname(__FILE__) . '/browser.php');
+    require_once(dirname(__FILE__) . '/page.php');
     /**#@-*/
     
     /**
@@ -33,6 +33,14 @@
          */
         function WebTestCase($label = false) {
             $this->SimpleTestCase($label);
+        }
+        
+        /**
+         *    Dumps the current request for debugging.
+         *    @access public
+         */
+        function showRequest() {
+            $this->dump($this->_browser->getRequest());
         }
         
         /**

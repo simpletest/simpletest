@@ -51,7 +51,7 @@ Allow adding of arbitrary headers (1/1) - done.
 Add accessor for link set (1).
 Add accessor for URL in focus (2).
 Refactor authentication to cope with framed pages (2/1).
-Add showRequest() to dump the last raw request (2).
+Add showRequest() to dump the last raw request (2/1) - done.
 Fix getCurrentUrl() to return string (1).
 
 Web tester

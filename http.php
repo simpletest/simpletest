@@ -1088,6 +1088,7 @@
         var $_method;
         var $_url;
         var $_request_data;
+        var $_sent;
         var $_content;
         var $_headers;
         
@@ -1106,6 +1107,7 @@
             $this->_method = $method;
             $this->_url = $url;
             $this->_request_data = $request_data;
+            $this->_sent = $socket->getSent();
             $this->_content = false;
             $raw = $this->_readAll($socket);
             if ($socket->isError()) {
@@ -1133,7 +1135,7 @@
         /**
          *    Original request method.
          *    @return string        GET, POST or HEAD.
-         *    @access protected
+         *    @access public
          */
         function getMethod() {
             return $this->_method;
@@ -1142,7 +1144,7 @@
         /**
          *    Resource name.
          *    @return SimpleUrl        Current url.
-         *    @access protected
+         *    @access public
          */
         function getUrl() {
             return $this->_url;
@@ -1151,10 +1153,19 @@
         /**
          *    Original request data.
          *    @return mixed              Sent content.
-         *    @access protected
+         *    @access public
          */
         function getRequestData() {
             return $this->_request_data;
+        }
+        
+        /**
+         *    Raw request that was sent down the wire.
+         *    @return string        Bytes actually sent.
+         *    @access public
+         */
+        function getSent() {
+            return $this->_sent;
         }
         
         /**

@@ -486,6 +486,7 @@
         var $_frameset_is_complete;
         var $_transport_error;
         var $_raw;
+        var $_sent;
         var $_headers;
         var $_method;
         var $_url;
@@ -506,10 +507,20 @@
             $this->_frameset_is_complete = false;
             $this->_transport_error = $response->getError();
             $this->_raw = $response->getContent();
+            $this->_sent = $response->getSent();
             $this->_headers = $response->getHeaders();
             $this->_method = $response->getMethod();
             $this->_url = $response->getUrl();
             $this->_request_data = $response->getRequestData();
+        }
+        
+        /**
+         *    Original request as bytes sent down the wire.
+         *    @return mixed              Sent content.
+         *    @access public
+         */
+        function getRequest() {
+            return $this->_sent;
         }
         
         /**
@@ -533,7 +544,7 @@
         /**
          *    Original request method.
          *    @return string        GET, POST or HEAD.
-         *    @access protected
+         *    @access public
          */
         function getRequestMethod() {
             return $this->_method;
@@ -542,7 +553,7 @@
         /**
          *    Original resource name.
          *    @return SimpleUrl        Current url.
-         *    @access protected
+         *    @access public
          */
         function getRequestUrl() {
             return $this->_url;
@@ -551,7 +562,7 @@
         /**
          *    Original request data.
          *    @return mixed              Sent content.
-         *    @access protected
+         *    @access public
          */
         function getRequestData() {
             return $this->_request_data;

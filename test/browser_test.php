@@ -135,6 +135,7 @@
         }
         function testParse() {
             $page = &new MockSimplePage($this);
+            $page->setReturnValue('getRequest', "GET here.html\r\n\r\n");
             $page->setReturnValue('getRaw', 'Raw HTML');
             $page->setReturnValue('getTitle', 'Here');
             $page->setReturnValue('getFrameFocus', 'Frame');
@@ -146,6 +147,7 @@
             
             $browser = &$this->loadPage($page);
 
+            $this->assertEqual($browser->getRequest(), "GET here.html\r\n\r\n");
             $this->assertEqual($browser->getContent(), 'Raw HTML');
             $this->assertEqual($browser->getTitle(), 'Here');
             $this->assertEqual($browser->getFrameFocus(), 'Frame');

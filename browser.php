@@ -600,6 +600,15 @@
         }
         
         /**
+         *    Accessor for raw bytes sent down the wire.
+         *    @return string      Original text sent.
+         *    @access public
+         */
+        function getRequest() {
+            return $this->_page->getRequest();
+        }
+        
+        /**
          *    Accessor for raw page information.
          *    @return string      Original text content of web page.
          *    @access public
