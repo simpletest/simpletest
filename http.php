@@ -72,14 +72,14 @@
         
         /**
          *    Extracts the host part of an incoming URL.
-         *    Includes teh port number.
-         *    @param $url        URL so far. The host will be
-         *                       removed.
-         *    @return            Host part.
+         *    Includes the port number.
+         *    @param $url    URL so far. The host will be
+         *                   removed.
+         *    @return        Host part.
          *    @private
          */
         function _extractHost(&$url) {
-            if (preg_match('/(.*?)(\/|\?|#|$)(.*)/', $url, $matches)) {
+            if (preg_match('/(.*?)(\.\.\/|\.\/|\/|\?|#|$)(.*)/', $url, $matches)) {
                 $url = $matches[2] . $matches[3];
                 return $matches[1];
             }
@@ -89,9 +89,9 @@
         /**
          *    Extracts the path information from the incoming
          *    URL. Strips this path from the URL.
-         *    @param $url        URL so far. The host will be
-         *                       removed.
-         *    @return            Path part.
+         *    @param $url     URL so far. The host will be
+         *                    removed.
+         *    @return         Path part.
          *    @private
          */
         function _extractPath(&$url) {

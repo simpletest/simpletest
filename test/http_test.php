@@ -26,6 +26,12 @@
             $this->assertEqual($url->getHost(), "www.lastcraft.com");
             $this->assertEqual($url->getPath(), "/test/");
         }
+        function testRelativeUrls() {
+            $url = new SimpleUrl("../somewhere.php");
+            $this->assertEqual($url->getScheme(), false);
+            $this->assertEqual($url->getHost(), false);
+            $this->assertEqual($url->getPath(), "../somewhere.php");
+        }
         function testParseParameter() {
             $url = new SimpleUrl("?a=A");
             $this->assertEqual($url->getPath(), "/");
@@ -61,11 +67,6 @@
             $request = $url->getRequest();
             $this->assertEqual($request["a"], '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-=');
         }
-        function testPartUrls() {
-            $url = new SimpleUrl("http://somewhere");
-            $this->assertEqual($url->getScheme(), "http");
-            $this->assertEqual($url->getHost(), "somewhere");
-        }
         function testBlitz() {
             $this->assertUrl(
                     "https://username:password@www.somewhere.com:243/this/that/here.php?a=1&b=2#anchor",
@@ -73,14 +74,14 @@
                     array("a" => "1", "b" => "2"));
             $this->assertUrl(
                     "username:password@www.somewhere.com/this/that/here.php?a=1",
-                    array(false, "username", "password", "www.somewhere.com", false, "/this/that/here.php", "com", "?a=1", ""),
+                    array(false, "username", "password", "www.somewhere.com", false, "/this/that/here.php", "com", "?a=1", false),
                     array("a" => "1"));
             $this->assertUrl(
                     "username:password@somewhere.com:243",
-                    array(false, "username", "password", "somewhere.com", 243, "/", "com", "", ""));
+                    array(false, "username", "password", "somewhere.com", 243, "/", "com", "", false));
             $this->assertUrl(
                     "https://www.somewhere.com",
-                    array("https", false, false, "www.somewhere.com", false, "/", "com", "", ""));
+                    array("https", false, false, "www.somewhere.com", false, "/", "com", "", false));
             $this->assertUrl(
                     "username@www.somewhere.com:243#anchor",
                     array(false, "username", false, "www.somewhere.com", 243, "/", "com", "", "anchor"));
@@ -90,7 +91,7 @@
                     array("a" => "1", "b" => "2"));
             $this->assertUrl(
                     "username@/here.php?a=1&b=2",
-                    array(false, "username", false, false, false, "/here.php", false, "?a=1&b=2", ""),
+                    array(false, "username", false, false, false, "/here.php", false, "?a=1&b=2", false),
                     array("a" => "1", "b" => "2"));
         }
         function assertUrl($raw, $parts, $params = "") {
@@ -104,10 +105,10 @@
             $this->assertIdentical($url->getHost(), $parts[3], "host->%s");
             $this->assertIdentical($url->getPort(), $parts[4], "port->%s");
             $this->assertIdentical($url->getPath(), $parts[5], "path->%s");
-            $this->assertEqual($url->getTld(), $parts[6], "tld->%s");
-            $this->assertEqual($url->getEncodedRequest(), $parts[7], "encoded->%s");
+            $this->assertIdentical($url->getTld(), $parts[6], "tld->%s");
+            $this->assertIdentical($url->getEncodedRequest(), $parts[7], "encoded->%s");
             $this->assertIdentical($params, $url->getRequest(), "request->%s");
-            $this->assertEqual($url->getFragment(), $parts[8]);
+            $this->assertIdentical($url->getFragment(), $parts[8], "fragment->%s");
         }
     }
 

@@ -387,7 +387,7 @@
          *                  http or https and hostname.
          *    @public
          */
-        function getExternalLinks() {
+        function getAbsoluteLinks() {
             $external = array();
             foreach ($this->_getLinks() as $link) {
                 $url = new SimpleUrl($link);
@@ -400,12 +400,18 @@
         
         /**
          *    Accessor for a list of all fixed links.
-         *    @return       List of links without scheme or
-         *                  hostname.
+         *    @return       List of links without hostname.
          *    @public
          */
-        function getInternalLinks() {
-            return array();
+        function getRelativeLinks() {
+            $internal = array();
+            foreach ($this->_getLinks() as $link) {
+                $url = new SimpleUrl($link);
+                if (!$url->getHost()) {
+                    array_push($internal, $link);
+                }
+            }
+            return $internal;
         }
         
         /**

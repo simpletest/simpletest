@@ -256,16 +256,23 @@
         }
         function testNoLinks() {
             $page = new HtmlPage();
-            $this->assertIdentical($page->getExternalLinks(), array(), "Fixed %s");
-            $this->assertIdentical($page->getInternalLinks(), array(), "Relative %s");
+            $this->assertIdentical($page->getAbsoluteLinks(), array(), "abs->%s");
+            $this->assertIdentical($page->getRelativeLinks(), array(), "rel->%s");
             $this->assertIdentical($page->getUrls("Label"), array());
         }
         function testAddExternalLink() {
             $page = new HtmlPage();
             $page->addLink("http://somewhere", "Label");
-            $this->assertEqual($page->getExternalLinks(), array("http://somewhere"), "Fixed %s");
-            $this->assertIdentical($page->getInternalLinks(), array(), "Relative %s");
+            $this->assertEqual($page->getAbsoluteLinks(), array("http://somewhere"), "abs->%s");
+            $this->assertIdentical($page->getRelativeLinks(), array(), "rel->%s");
             $this->assertEqual($page->getUrls("Label"), array("http://somewhere"));
+        }
+        function testAddInternalLink() {
+            $page = new HtmlPage();
+            $page->addLink("../somewhere.php", "Label");
+            $this->assertEqual($page->getAbsoluteLinks(), array(), "abs->%s");
+            $this->assertIdentical($page->getRelativeLinks(), array("../somewhere.php"), "rel->%s");
+            $this->assertEqual($page->getUrls("Label"), array("../somewhere.php"));
         }
     }
 ?>
