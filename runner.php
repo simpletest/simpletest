@@ -39,6 +39,29 @@
         }
         
         /**
+         *    Deals with PHP throwing an error.
+         *    @param $severity        PHP error code.
+         *    @param $message         Text of error.
+         *    @param $filename        File error occoured in.
+         *    @param $line            Line number of error.
+         *    @param $supr_globals    Hash of PHP super global arrays.
+         */
+        function handleError($severity, $message, $filename, $line, $super_globals) {
+            $this->_reporter->paintException(
+                    "Unexpected PHP error [$message] severity [$severity] in [$filename] line [$line]");
+        }
+        
+        /**
+         *    Deals with PHP 5 throwing an exception
+         *    This isn't really implemented yet.
+         *    @param $exception     Exception object thrown.
+         *    @public
+         */
+        function handleException($exception) {
+            $this->_reporter->paintException("Unexpected exception");
+        }
+        
+        /**
          *    Sends a simple message to the reporter.
          *    @param $message        Message to display.
          *    @public
@@ -256,6 +279,15 @@
          */
         function paintFail($message) {
             $this->_fails++;
+        }
+        
+        /**
+         *    Paints a PHP error or exception.
+         *    @param $message        Message is ignored.
+         *    @public
+         *    @abstract
+         */
+        function paintException($message) {
         }
         
         /**

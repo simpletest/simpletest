@@ -8,12 +8,13 @@ $Id$
 Unit tester
 -----------
 Swapping observer pattern for direct calls (3/5) - done.
-Add an error trap (3).
+Add an error trap (3/2).
+Add options class (3).
 
 Interface
 ---------
 Add better object mismatch message (1).
-Add flush() after painting page header (0/0) - done.
+Add flush() after painting page header (1/0) - done.
 
 Mock objects
 ------------

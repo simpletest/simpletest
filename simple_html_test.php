@@ -83,6 +83,20 @@
         }
         
         /**
+         *    Paints a PHP error or exception.
+         *    @param $message        Message is ignored.
+         *    @public
+         *    @abstract
+         */
+        function paintException($message) {
+            print "<span class=\"fail\">Exception</span>: ";
+            $breadcrumb = $this->getTestList();
+            array_shift($breadcrumb);
+            print implode("-&gt;", $breadcrumb);
+            print "-&gt;<strong>" . htmlentities($message) . "</strong><br />\n";
+        }
+        
+        /**
          *    Paints formatted text such as dumped variables.
          *    @param $message        Text to show.
          *    @public
