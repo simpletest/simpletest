@@ -1,29 +1,34 @@
 <?php
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../errors.php');
+    require_once(dirname(__FILE__) . '/../errors.php');
     
     class TestOfErrorQueue extends UnitTestCase {
         function TestOfErrorQueue() {
             $this->UnitTestCase();
         }
+        
         function setUp() {
             $queue = &SimpleErrorQueue::instance();
             $queue->clear();
         }
+        
         function tearDown() {
             $queue = &SimpleErrorQueue::instance();
             $queue->clear();
         }
+        
         function testSingleton() {
             $this->assertReference(
                     SimpleErrorQueue::instance(),
                     SimpleErrorQueue::instance());
             $this->assertIsA(SimpleErrorQueue::instance(), 'SimpleErrorQueue');
         }
+        
         function testEmpty() {
             $queue = &SimpleErrorQueue::instance();
             $this->assertTrue($queue->isEmpty());
             $this->assertFalse($queue->extract());
         }
+        
         function testOrder() {
             $queue = &SimpleErrorQueue::instance();
             $queue->add(1024, 'Ouch', 'here.php', 100, array());
@@ -43,12 +48,15 @@
         function TestOfErrorTrap() {
             $this->UnitTestCase();
         }
+        
         function setUp() {
             set_error_handler('simpleTestErrorHandler');
         }
+        
         function tearDown() {
             restore_error_handler();
         }
+        
         function testTrappedErrorPLacedInQueue() {
             $queue = &SimpleErrorQueue::instance();
             $this->assertFalse($queue->extract());
@@ -66,57 +74,69 @@
         function TestOfErrors() {
             $this->UnitTestCase();
         }
+        
         function setUp() {
             $this->_old = error_reporting(E_ALL);
         }
+        
         function tearDown() {
             error_reporting($this->_old);
         }
+        
         function testDefaultWhenAllReported() {
             error_reporting(E_ALL);
             trigger_error('Ouch!');
             $this->assertError('Ouch!');
         }
+        
         function testNoticeWhenReported() {
             error_reporting(E_ALL);
             trigger_error('Ouch!', E_USER_NOTICE);
             $this->assertError('Ouch!');
         }
+        
         function testWarningWhenReported() {
             error_reporting(E_ALL);
             trigger_error('Ouch!', E_USER_WARNING);
             $this->assertError('Ouch!');
         }
+        
         function testErrorWhenReported() {
             error_reporting(E_ALL);
             trigger_error('Ouch!', E_USER_ERROR);
             $this->assertError('Ouch!');
         }
+        
         function testNoNoticeWhenNotReported() {
             error_reporting(0);
             trigger_error('Ouch!', E_USER_NOTICE);
             $this->assertNoErrors();
         }
+        
         function testNoWarningWhenNotReported() {
             error_reporting(0);
             trigger_error('Ouch!', E_USER_WARNING);
             $this->assertNoErrors();
         }
+        
         function testNoErrorWhenNotReported() {
             error_reporting(0);
             trigger_error('Ouch!', E_USER_ERROR);
             $this->assertNoErrors();
         }
+        
         function testNoticeSuppressedWhenReported() {
             error_reporting(E_ALL);
             @trigger_error('Ouch!', E_USER_NOTICE);
             $this->assertNoErrors();
         }
+        
         function testWarningSuppressedWhenReported() {
             error_reporting(E_ALL);
             @trigger_error('Ouch!', E_USER_WARNING);
             $this->assertNoErrors();
         }
+        
         function testErrorSuppressedWhenReported() {
             error_reporting(E_ALL);
             @trigger_error('Ouch!', E_USER_ERROR);

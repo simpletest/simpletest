@@ -8,6 +8,7 @@
     if (SimpleTestOptions::getDefaultProxy()) {
         SimpleTestOptions::ignore('LiveHttpTestCase');
     }
+    
     class LiveHttpTestCase extends UnitTestCase {
         function LiveHttpTestCase() {
             $this->UnitTestCase();
