@@ -396,7 +396,7 @@
             $response->setReturnValue('getUrl', $url);
             $page = &new SimplePage($response);
             $this->assertFalse($page->hasFrames());
-            $this->assertIdentical($page->getFrames(), $url);
+            $this->assertIdentical($page->getFrameset(), false);
         }
         
         function testHasEmptyFrameset() {
@@ -404,7 +404,7 @@
             $page->acceptFramesetStart(new SimpleTag('frameset', array()));
             $page->acceptFramesetEnd();
             $this->assertTrue($page->hasFrames());
-            $this->assertIdentical($page->getFrames(), array());
+            $this->assertIdentical($page->getFrameset(), array());
         }
         
         function testFramesInPage() {
@@ -420,7 +420,7 @@
             $page->acceptFrame(new SimpleFrameTag(array('src' => '4.html')));
             
             $this->assertTrue($page->hasFrames());
-            $this->assertIdentical($page->getFrames(), array(
+            $this->assertIdentical($page->getFrameset(), array(
                     1 => new SimpleUrl('http://here/2.html'),
                     2 => new SimpleUrl('http://here/3.html')));
         }
@@ -438,7 +438,7 @@
             $page->acceptFramesetEnd();
             
             $this->assertTrue($page->hasFrames());
-            $this->assertIdentical($page->getFrames(), array(
+            $this->assertIdentical($page->getFrameset(), array(
                     1 => new SimpleUrl('http://here/1.html'),
                     'A' => new SimpleUrl('http://here/2.html'),
                     'B' => new SimpleUrl('http://here/3.html'),
@@ -539,7 +539,7 @@
             
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
-            $this->assertIdentical($page->getFrames(), array());
+            $this->assertIdentical($page->getFrameset(), array());
         }
         
         function testSingleFrame() {
@@ -552,7 +552,7 @@
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
             $this->assertIdentical(
-                    $page->getFrames(),
+                    $page->getFrameset(),
                     array(1 => new SimpleUrl('http://host/a.html')));
         }
         
@@ -567,7 +567,7 @@
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
             $this->assertIdentical(
-                    $page->getFrames(),
+                    $page->getFrameset(),
                     array(1 => new SimpleUrl('http://host/a.html')));
         }
         
@@ -579,7 +579,7 @@
             
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
-            $this->assertIdentical($page->getFrames(), array());
+            $this->assertIdentical($page->getFrameset(), array());
         }
         
         function testFramesCollectedWithNestedFramesetTags() {
@@ -594,7 +594,7 @@
             
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
-            $this->assertIdentical($page->getFrames(), array(
+            $this->assertIdentical($page->getFrameset(), array(
                     1 => new SimpleUrl('http://host/a.html'),
                     2 => new SimpleUrl('http://host/b.html'),
                     3 => new SimpleUrl('http://host/c.html')));
@@ -612,7 +612,7 @@
             
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
-            $this->assertIdentical($page->getFrames(), array(
+            $this->assertIdentical($page->getFrameset(), array(
                     1 => new SimpleUrl('http://host/a.html'),
                     '_one' => new SimpleUrl('http://host/b.html'),
                     3 => new SimpleUrl('http://host/c.html'),

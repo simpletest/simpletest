@@ -149,14 +149,18 @@
         
         /**
          *    Accessor for frames information.
-         *    @return boolean/array     False if no frameset or
-         *                              otherwise a hash of frame URLs.
+         *    @return array/string      Recursive hash of frame URL strings.
          *                              The key is either a numerical
          *                              index or the name attribute.
          *    @access public
          */
         function getFrames() {
-            return $this->_frameset->getFrames();
+            $report = array();
+            for ($i = 0; $i < count($this->_frames); $i++) {
+                $report[$this->_getPublicNameFromIndex($i)] =
+                        $this->_frames[$i]->getFrames();
+            }
+            return $report;
         }
         
         /**

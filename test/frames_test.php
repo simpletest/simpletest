@@ -244,6 +244,9 @@
                 if (strtolower($method) == strtolower('SimplePage')) {
                     continue;
                 }
+                if (strtolower($method) == strtolower('getFrameset')) {
+                    continue;
+                }
                 if (strncmp($method, '_', 1) == 0) {
                     continue;
                 }

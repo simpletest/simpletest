@@ -636,7 +636,7 @@
                     4 => 'http://site.with.frames/frame_d.html'));
         }
         
-        function TODO_testNestedFrameset() {
+        function testNestedFrameset() {
             $inner = '<frameset>' .
                     '<frame name="page" src="page.html">' .
                     '</frameset>';

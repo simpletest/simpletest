@@ -240,7 +240,7 @@
                 return $page;
             }
             $frameset = &new SimpleFrameset($page);
-            foreach ($frameset->getFrames() as $key => $url) {
+            foreach ($page->getFrameset() as $key => $url) {
                 $frame = &$this->_fetch('GET', $url, array());
                 $frameset->addFrame($frame, $key);
             }
@@ -568,27 +568,7 @@
          *    @access public
          */
         function getFrames() {
-            return $this->_urlsToStrings($this->_page->getFrames());
-        }
-        
-        /**
-         *    Helper method for reporting on available frames.
-         *    All SimpleUrl objects are converted to URLs in
-         *    string form.
-         *    @param array $report    Hash of frame names with
-         *                            SimpleUrls for each.
-         *    @return array           Same report with strings.
-         *    @access private
-         */
-        function _urlsToStrings($report) {
-            if (is_object($report)) {
-                return $report->asString();
-            }
-            $string_report = array();
-            foreach ($report as $name => $url) {
-                $string_report[$name] = $this->_urlsToStrings($url);
-            }
-            return $string_report;
+            return $this->_page->getFrames();
         }
         
         /**

@@ -586,16 +586,17 @@
         }
         
         /**
-         *    Accessor for frame name and source URL.
+         *    Accessor for frame name and source URL for every frame that
+         *    will need to be loaded. Immediate children only.
          *    @return boolean/array     False if no frameset or
          *                              otherwise a hash of frame URLs.
          *                              The key is either a numerical
          *                              base one index or the name attribute.
          *    @access public
          */
-        function getFrames() {
+        function getFrameset() {
             if (! $this->_frameset) {
-                return $this->getUrl();
+                return false;
             }
             $urls = array();
             for ($i = 0; $i < count($this->_frames); $i++) {
@@ -604,6 +605,17 @@
                 $urls[$name ? $name : $i + 1] = $url->makeAbsolute($this->getUrl());
             }
             return $urls;
+        }
+        
+        /**
+         *    Fetches a list of loaded frames.
+         *    @return array/string    Just the URL for a single
+         *                            page.
+         *    @access public
+         */
+        function getFrames() {
+            $url = $this->getUrl();
+            return $url->asString();
         }
         
         /**
