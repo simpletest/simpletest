@@ -276,8 +276,9 @@
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());
-    if (CommandLineReporter::inCli()) {
-        exit ($test->run(new CommandLineReporter()) ? 0 : 1);
+    
+    if (TextReporter::inCli()) {
+        exit ($test->run(new TextReporter()) ? 0 : 1);
     }
     $test->run(new AllOutputReporter());
 ?>
