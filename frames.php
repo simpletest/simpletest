@@ -200,18 +200,6 @@
         }
         
         /**
-         *    Accessor for raw page information.
-         *    @return string      Original text content of web page.
-         *    @access public
-         */
-        function getContent() {
-            if (is_integer($this->_focus)) {
-                return $this->_frames[$this->_focus]->getRaw();
-            }
-            return $this->_frameset->getRaw();
-        }
-        
-        /**
          *    Accessor for raw header information.
          *    @return string      Header block.
          *    @access public
@@ -263,6 +251,25 @@
                 $urls = array_merge($urls, $frame->getRelativeUrls());
             }
             return array_values(array_unique($urls));
+        }
+       
+        /**
+         *    Accessor for a form element value within a frameset.
+         *    Finds the first match amongst the frames.
+         *    @param string $name        Field name.
+         *    @return string/boolean     A string if the field is
+         *                               present, false if unchecked
+         *                               and null if missing.
+         *    @access public
+         */
+        function getField($name) {
+            for ($i = 0; $i < count($this->_frames); $i++) {
+                $value = $this->_frames[$i]->getField($name);
+                if (isset($value)) {
+                    return $value;
+                }
+            }
+            return null;
         }
     }
 ?>
