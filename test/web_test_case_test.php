@@ -10,45 +10,40 @@
     Mock::generate("TestObserver");
     Mock::generate("TestBrowser");
     
-    class TestOfBrowserAccess extends UnitTestCase {
-        function TestOfBrowserAccess() {
-            $this->UnitTestCase();
+    GroupTest::ignore("MockBrowserWebTestCase");
+
+    class MockBrowserWebTestCase extends WebTestCase {
+        function MockBrowserWebTestCase($label = false) {
+            $this->WebTestCase($label);
         }
-        function testBrowserOverride() {
-            $browser = &new MockTestBrowser($this);
-            $test = &new WebTestCase();
-            $test->setBrowser($browser);
-            $this->assertReference($browser, $test->getBrowser());
+        function &createBrowser() {
+            return new MockTestBrowser($this);
         }
     }
     
-    class TestOfWebEvents extends UnitTestCase {
-        var $_observer;
-        
-        function TestOfWebEvents() {
-            $this->UnitTestCase();
+    class TestOfWebFetching extends MockBrowserWebTestCase {
+        function TestOfWebFetching() {
+            $this->MockBrowserWebTestCase();
         }
         function setUp() {
-            $this->_observer = &new MockTestObserver($this);
-            $this->_observer = &new MockTestObserver($this);
-            $this->_observer->expectArgumentsAt(0, "notify", array(new TestResult(true, "1")));
-            $this->_observer->expectArgumentsAt(1, "notify", array(new TestResult(false, "2")));
-            $this->_observer->expectCallCount("notify", 2);
+            $browser = &$this->getBrowser();
+            $browser->setReturnValue("fetchContent", "Hello world");
+            $browser->expectArguments("fetchContent", array("http://my-site.com/"));
+            $browser->expectCallCount("fetchContent", 1);
         }
         function tearDown() {
-            $this->_observer->tally();
+            $browser = &$this->getBrowser();
+            $browser->_assertTrue(true, "Hello", $this);
+            $browser->tally();
         }
-        function testWantedPatterns() {
-            $test = &new WebTestCase();
-            $test->attachObserver($this->_observer);
-            $test->assertWantedPattern('/hello/i', 'Hello world', '1');
-            $test->assertWantedPattern('/hello/i', 'Goodbye world', '2');
+        function testContentAccess() {
+            $this->assertTrue(is_a($this->getBrowser(), "MockTestBrowser"));
+            $this->fetch("http://my-site.com/");
         }
-        function testUnwantedPatterns() {
-            $test = &new WebTestCase();
-            $test->attachObserver($this->_observer);
-            $test->assertNoUnwantedPattern('/goodbye/i', 'Hello world', '1');
-            $test->assertNoUnwantedPattern('/goodbye/i', 'Goodbye world', '2');
+        function testRawPatternMatching() {
+            $this->fetch("http://my-site.com/");
+            $this->assertWantedPattern('/hello/i');
+            $this->assertNoUnwantedPattern('/goodbye/i');
         }
     }
 ?>

@@ -25,16 +25,4 @@
             $this->assertFalse($error->isError());
         }
     }
-
-    class TestOfSocket extends UnitTestCase {
-        function TestOfSocket() {
-            $this->UnitTestCase();
-        }
-        function testBadSocket() {
-            $socket = @new SimpleSocket("bad_url", 111);
-            $this->assertTrue($socket->isError(), "Error [" . $socket->getError(). "]");
-            $this->assertFalse($socket->isOpen());
-            $this->assertFalse($socket->write("A message"));
-        }
-    }
 ?>

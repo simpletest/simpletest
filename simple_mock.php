@@ -650,7 +650,7 @@
             $code .= "    function $stub_class(\$wildcard = MOCK_WILDCARD) {\n";
             $code .= "        \$this->$stub_base(\$wildcard);\n";
             $code .= "    }\n";
-            $code .= Stub::_createHandlerCode($class);
+            $code .= Stub::_createHandlerCode($class, $stub_base);
             $code .= "}\n";
             return $code;
         }
@@ -660,12 +660,17 @@
          *    methods. All methods call the _invoke() handler
          *    with the method name and the arguments in an
          *    array.
-         *    @param $class            Class to clone.
+         *    @param $class     Class to clone.
+         *    @param $base      Base class with methods that
+         *                      cannot be cloned.
          *    @private
          */
-        function _createHandlerCode($class) {
+        function _createHandlerCode($class, $base) {
             $code = "";
             foreach (get_class_methods($class) as $method) {
+                if (in_array($method, get_class_methods($base))) {
+                    continue;
+                }
                 $code .= "    function &$method() {\n";
                 $code .= "        \$args = func_get_args();\n";
                 $code .= "        return \$this->_invoke(\"$method\", \$args);\n";
@@ -743,7 +748,7 @@
             $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_WILDCARD) {\n";
             $code .= "        \$this->$mock_base(\$test, \$wildcard);\n";
             $code .= "    }\n";
-            $code .= Stub::_createHandlerCode($class);
+            $code .= Stub::_createHandlerCode($class, $mock_base);
             $code .= "}\n";
             return $code;
         }

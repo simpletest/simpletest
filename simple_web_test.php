@@ -13,6 +13,7 @@
      */
     class WebTestCase extends SimpleTestCase {
         var $_current_browser;
+        var $_current_content;
         
         /**
          *    Creates an empty test case. Should be subclassed
@@ -23,17 +24,6 @@
          */
         function WebTestCase($label = false) {
             $this->SimpleTestCase($label);
-        }
-        
-        /**
-         *    Sets the browser object to use for fetching
-         *    allowing replacement during a test case.
-         *    Will be cleared at the end of the test case.
-         *    @param $browser        Test browser object.
-         *    @public
-         */
-        function setBrowser(&$browser) {
-            $this->_current_browser = &$browser;
         }
         
         /**
@@ -53,16 +43,18 @@
          *    @return            New TestBrowser object.
          *    @public
          */
-        function &createDefaultBrowser() {
+        function &createBrowser() {
             return new TestBrowser($this);
         }
         
         /**
-         *
+         *    Sets up a browser for the start of the
+         *    test method.
          */
         function _testMethodStart($method) {
             parent::_testMethodStart($method);
-            $this->setBrowser($this->createBrowser());
+            $this->_current_content = false;
+            $this->_current_browser = &$this->createBrowser();
         }
         
         /**
@@ -74,37 +66,36 @@
          *    @public
          */
         function fetch($url) {
+            $this->_current_content = $this->_current_browser->fetchContent($url);
         }
         
         /**
          *    Will trigger a pass if the Perl regex pattern
-         *    is found in the subject. Fail otherwise.
+         *    is found in the raw content.
          *    @param $pattern        Perl regex to look for including
          *                           the regex delimiters.
-         *    @param $subject        String to search in.
          *    @param $message        Message to display.
          *    @public
          */
-        function assertWantedPattern($pattern, $subject, $message = "%s") {
+        function assertWantedPattern($pattern, $message = "%s") {
             $this->assertAssertion(
                     new WantedPatternAssertion($pattern),
-                    $subject,
+                    $this->_current_content,
                     $message);
         }
         
         /**
          *    Will trigger a pass if the perl regex pattern
-         *    is not present in subject. Fail if found.
+         *    is not present in raw content.
          *    @param $pattern        Perl regex to look for including
          *                           the regex delimiters.
-         *    @param $subject        String to search in.
          *    @param $message        Message to display.
          *    @public
          */
-        function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
+        function assertNoUnwantedPattern($pattern, $message = "%s") {
             $this->assertAssertion(
                     new UnwantedPatternAssertion($pattern),
-                    $subject,
+                    $this->_current_content,
                     $message);
         }
     }
