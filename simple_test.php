@@ -2,7 +2,7 @@
 /**
  *	base include file for SimpleTest
  *	@package	SimpleTest
- *	@subpackage	Unit Tester
+ *	@subpackage	UnitTester
  *	@version	$Id$
  */
     
@@ -21,7 +21,7 @@
     /**
      *	Interface used by the test displays and group tests.
 	 *	@package	SimpleTest
-	 *	@subpackage	Unit Tester
+	 *	@subpackage	UnitTester
      */
     class RunnableTest {
         var $_label;
@@ -71,7 +71,7 @@
      *    all methods that start with the the string "test" and
      *    runs them. Working test cases extend this class.
 	 *    @package		SimpleTest
-	 *    @subpackage	Unit Tester
+	 *    @subpackage	UnitTester
      */
     class SimpleTestCase extends RunnableTest {
         var $_reporter;
@@ -294,7 +294,7 @@
      *    test cases and other RunnableTest classes into
      *    a group test.
 	 *    @package		SimpleTest
-	 *    @subpackage	Unit Tester
+	 *    @subpackage	UnitTester
      */
     class GroupTest extends RunnableTest {
         var $_test_cases;
@@ -396,4 +396,4 @@
             SimpleTestOptions::ignore($class);
         }
     }
-?>
+#?>

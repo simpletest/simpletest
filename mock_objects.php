@@ -2,7 +2,7 @@
 /**
  *	base include file for SimpleTest
  *	@package	SimpleTest
- *	@subpackage	Mock Objects
+ *	@subpackage	MockObjects
  *	@version	$Id$
  */
 
@@ -24,7 +24,7 @@
     /**
      *    A wildcard expectation always matches.
 	 *    @package		SimpleTest
-	 *    @subpackage	Mock Objects
+	 *    @subpackage	MockObjects
      */
     class WildcardExpectation extends SimpleExpectation {
         
@@ -62,7 +62,7 @@
     /**
      *    Parameter comparison assertion.
 	 *    @package		SimpleTest
-	 *    @subpackage	Mock Objects
+	 *    @subpackage	MockObjects
      */
     class ParametersExpectation extends SimpleExpectation {
         var $_expected;
@@ -197,7 +197,7 @@
      *    Retrieves values and references by searching the
      *    parameter lists until a match is found.
 	 *    @package		SimpleTest
-	 *    @subpackage	Mock Objects
+	 *    @subpackage	MockObjects
      */
     class CallMap {
         var $_map;
@@ -283,7 +283,7 @@
      *    An empty collection of methods that can have their
      *    return values set. Used for prototyping.
 	 *    @package		SimpleTest
-	 *    @subpackage	Mock Objects
+	 *    @subpackage	MockObjects
      */
     class SimpleStub {
         var $_wildcard;
@@ -523,7 +523,7 @@
      *    expectations against it's attached test case in
      *    addition to the server stub behaviour.
 	 *    @package		SimpleTest
-	 *    @subpackage	Mock Objects
+	 *    @subpackage	MockObjects
      */
     class SimpleMock extends SimpleStub {
         var $_test;
@@ -810,7 +810,7 @@
      *    Static methods only class for code generation of
      *    server stubs.
 	 *    @package		SimpleTest
-	 *    @subpackage	Mock Objects
+	 *    @subpackage	MockObjects
      */
     class Stub {
         
@@ -910,7 +910,7 @@
      *    Static methods only class for code generation of
      *    mock objects.
 	 *    @package		SimpleTest
-	 *    @subpackage	Mock Objects
+	 *    @subpackage	MockObjects
      */
     class Mock {
         
