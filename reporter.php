@@ -131,7 +131,7 @@
          *    @access public
          */
         function paintFormattedMessage($message) {
-            print "<pre>$message</pre>";
+            echo '<pre>', htmlentities($message), '</pre>';
         }
     }
     

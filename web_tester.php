@@ -42,7 +42,7 @@
          *    @access public
          */
         function showSource() {
-            $this->dump(htmlentities($this->_browser->getContent()));
+            $this->dump($this->_browser->getContent());
         }
         
         /**
