@@ -10,7 +10,7 @@
      * @ignore    originally defined in simple_test.php
      */
     if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', 'simpletest/');
+        define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
     }
     /**#@+
      * include SimpleTest files

@@ -10,7 +10,7 @@
 	 * @ignore	originally defined in simple_test.php
 	 */
     if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', 'simpletest/');
+        define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
     }
     require_once(SIMPLE_TEST . 'dumper.php');
     require_once(SIMPLE_TEST . 'options.php');
