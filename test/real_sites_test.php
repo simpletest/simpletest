@@ -25,17 +25,5 @@
             $this->clickSubmit('Change Stats View');
             $this->assertWantedPattern('/Statistics for the past \d+ months/');
         }
-        
-        function testPhpLondon() {
-            $this->get('http://www.phplondon.org/');
-            $this->clickLink('Wiki is here');
-            $this->clickLink('Members');
-            $this->clickLink('MarcusBaker');
-            $this->clickLink('SimpleTest');
-            $this->assertTitle('PhpLondonWiki : SimpleTest');
-            $this->back();
-            $this->back();
-            $this->assertTitle('PhpLondonWiki : Members');
-        }
     }
 ?>
