@@ -133,7 +133,7 @@
             $this->tearDown();
             $queue = &SimpleErrorQueue::instance();
             while (list($severity, $message, $file, $line, $globals) = $queue->extract()) {
-                $runner->handleError($severity, $message, $file, $line, $globals);
+                $this->error($severity, $message, $file, $line, $globals);
             }
             restore_error_handler();
         }
@@ -171,6 +171,34 @@
          */
         function fail($message = "Fail") {
             $this->_current_runner->handleFail($message);
+        }
+        
+        /**
+         *    Formats a PHP error and dispatches it to the
+         *    runner.
+         *    @param $severity   PHP error code.
+         *    @param $message    Text of error.
+         *    @param $file       File error occoured in.
+         *    @param $line       Line number of error.
+         *    @param $globals    Hash of PHP super global arrays.
+         *    @public
+         */
+        function error($severity, $message, $file, $line, $globals) {
+            $map = array(
+                    E_ERROR => 'E_ERROR',
+                    E_WARNING => 'E_WARNING',
+                    E_PARSE => 'E_PARSE',
+                    E_NOTICE => 'E_NOTICE',
+                    E_CORE_ERROR => 'E_CORE_ERROR',
+                    E_CORE_WARNING => 'E_CORE_WARNING',
+                    E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+                    E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+                    E_USER_ERROR => 'E_USER_ERROR',
+                    E_USER_WARNING => 'E_USER_WARNING',
+                    E_USER_NOTICE => 'E_USER_NOTICE');
+            $severity = $map[$severity];
+            $this->_current_runner->handleError(
+                    "Unexpected PHP error [$message] severity [$severity] in [$file] line [$line]");
         }
         
         /**

@@ -40,15 +40,12 @@
         
         /**
          *    Deals with PHP throwing an error.
-         *    @param $severity        PHP error code.
-         *    @param $message         Text of error.
-         *    @param $filename        File error occoured in.
-         *    @param $line            Line number of error.
-         *    @param $supr_globals    Hash of PHP super global arrays.
+         *    @param $message    Text of error formatted by
+         *                       the test case.
+         *    @public
          */
-        function handleError($severity, $message, $filename, $line, $super_globals) {
-            $this->_reporter->paintException(
-                    "Unexpected PHP error [$message] severity [$severity] in [$filename] line [$line]");
+        function handleError($message) {
+            $this->_reporter->paintException($message);
         }
         
         /**

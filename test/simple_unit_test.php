@@ -90,14 +90,17 @@
             $this->assertEqual($text . $text, $text . "a" . $text);        // Fail.
         }
         function testError() {
-            trigger_error('Deliberate');        // Exception.
+            trigger_error('Default');        // Exception.
+            trigger_error('Error', E_USER_ERROR);        // Exception.
+            trigger_error('Warning', E_USER_WARNING);        // Exception.
+            trigger_error('Notice', E_USER_NOTICE);        // Exception.
         }
         function testOfDumping() {
             $this->dump(array("Hello"), "Displaying a variable");
         }
     }
     
-    $test = new GroupTest("Unit test case test, 17 fails and 17 passes");
+    $test = new GroupTest("Unit test case test with 17 fails, 17 passes and 4 exceptions");
     $display = new TestHTMLDisplay();
     $test->addTestCase(new TestOfUnitTestCase());
     
