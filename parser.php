@@ -471,29 +471,28 @@
         function _addInTagTokens(&$lexer) {
             $lexer->mapHandler('tag', 'acceptStartToken');
             $lexer->addSpecialPattern('\s+', 'tag', 'ignore');
-            $lexer->addSpecialPattern('=', 'tag', 'ignore');
-            SimpleSaxParser::_addStringNesting($lexer, 'tag', 'acceptAttributeToken');
+            SimpleSaxParser::_addAttributeTokens($lexer);
             $lexer->addExitPattern('>', 'tag');
         }
         
         /**
-         *    Nesting in strings disables normal parsing.
-         *    @param $lexer    Lexer to add patterns to.
-         *    @param $mode     Mode within which strings will nest.
-         *    @param $handler  The callback that will recieve the
-         *                     string tokens.
+         *    Matches attributes that are either single quoted,
+         *    double quoted or unquoted.
+         *    @param $lexer        Lexer to add patterns to.
          *    @private
          *    @static
          */
-        function _addStringNesting(&$lexer, $mode, $handler) {
-            $lexer->addEntryPattern('"', $mode, 'double_quoted_' . $mode);
-            $lexer->mapHandler('double_quoted_' . $mode, $handler);
-            $lexer->addPattern("\\\\\"", 'double_quoted_' . $mode);
-            $lexer->addExitPattern('"', 'double_quoted_' . $mode);
-            $lexer->addEntryPattern("'", $mode, 'single_quoted_' . $mode);
-            $lexer->mapHandler('single_quoted_' . $mode, $handler);
-            $lexer->addPattern("\\\\'", 'single_quoted_' . $mode);
-            $lexer->addExitPattern("'", 'single_quoted_' . $mode);
+        function _addAttributeTokens(&$lexer) {
+            $lexer->mapHandler('dq_attribute', 'acceptAttributeToken');
+            $lexer->addEntryPattern('=\s*"', 'tag', 'dq_attribute');
+            $lexer->addPattern("\\\\\"", 'dq_attribute');
+            $lexer->addExitPattern('"', 'dq_attribute');
+            $lexer->mapHandler('sq_attribute', 'acceptAttributeToken');
+            $lexer->addEntryPattern("=\s*'", 'tag', 'sq_attribute');
+            $lexer->addPattern("\\\\'", 'sq_attribute');
+            $lexer->addExitPattern("'", 'sq_attribute');
+            $lexer->mapHandler('uq_attribute', 'acceptAttributeToken');
+            $lexer->addSpecialPattern('=\s*[^>\s]*', 'tag', 'uq_attribute');
         }
         
         /**
@@ -563,6 +562,10 @@
         function acceptAttributeToken($token, $event) {
             if ($event == LEXER_UNMATCHED) {
                 $this->_attributes[$this->_current_attribute] .= $token;
+            }
+            if ($event == LEXER_SPECIAL) {
+                $this->_attributes[$this->_current_attribute] .=
+                        preg_replace('/^=\s*/' , '', $token);
             }
             return true;
         }

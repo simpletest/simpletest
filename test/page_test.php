@@ -327,5 +327,14 @@
             $form = &$page->getFormBySubmitLabel("Submit");
             $this->assertEqual($form->getValue("a"), "aaa");
         }
-    }
+         function testSettingTextArea() {
+            $page = &new SimplePage('<html><head><form>' .
+                    '<textarea name="a">aaa</textarea>' .
+                    '<input type="submit">' .
+                    '</form></head></html>');
+            $this->assertTrue($page->setField("a", "AAA"));
+            $form = &$page->getFormBySubmitLabel("Submit");
+            $this->assertEqual($form->getValue("a"), "AAA");
+        }
+   }
 ?>

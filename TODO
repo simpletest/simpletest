@@ -22,10 +22,10 @@ Add no return check (2/2) - done.
 
 Html parser
 -----------
-Test with realistic pages (5).
+Test with realistic pages (5/2).
 Add form parsing (2/1) - done.
 Add input tag parsing (2/1) - done.
-Add text area tag parsing (2).
+Add text area tag parsing (2/1) - done.
 
 Browser
 -------
