@@ -49,11 +49,10 @@ wait_start();
 	<div id="run"></div>
 	<div id="tabs">
 		<div id="visible_tab">visible tab content</div>
-		<span id="failtab" class="activetab">&nbsp;&nbsp;<a href="javascript:activate_tab('fail');">Fail</a>&nbsp;&nbsp;</span>
+		&nbsp;&nbsp;<span id="failtab" class="activetab">&nbsp;&nbsp;<a href="javascript:activate_tab('fail');">Fail</a>&nbsp;&nbsp;</span>
 		<span id="treetab" class="inactivetab">&nbsp;&nbsp;<a href="javascript:activate_tab('tree');">Tree</a>&nbsp;&nbsp;</span>
 	</div>
-	<div id="msg">
-	</div>
+	<div id="msg">msg div content</div>
 </div>
 <div id="fail">fail div content</div>
 <div id="tree">tree div content</div>

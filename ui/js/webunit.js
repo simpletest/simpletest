@@ -38,6 +38,11 @@ function layout() {
 	xShow('tabs');
 	activate_tab('fail');
 	xShow('visible_tab');
+	xZIndex('visible_tab', 2)
+	xResizeTo('msg', xWidth('webunit')-17, xHeight('webunit')/3-20);
+	xLeft('msg', 2);
+	xTop('msg',2*xHeight('webunit')/3);
+	xShow('msg');
 }
 
 function set_div_content(div, content) {
@@ -51,9 +56,17 @@ function copy_div_content(divsrc, divtrgt) {
 function activate_tab(tab) {
 	if (tab == 'fail') {
 		copy_div_content('fail', 'visible_tab');
+		xGetElementById('failtab').className = 'activetab';
+		xZIndex('failtab', 3)
+		xGetElementById('treetab').className = 'inactivetab';
+		xZIndex('treetab', 1)
 	}
 	if (tab == 'tree') {
 		copy_div_content('tree', 'visible_tab');
+		xGetElementById('failtab').className = 'inactivetab';
+		xZIndex('failtab', 1)
+		xGetElementById('treetab').className = 'activetab';
+		xZIndex('treetab', 3)
 	}
 }
 

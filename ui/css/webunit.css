@@ -5,6 +5,28 @@ html {
 	}	
 
 .fail { color: red; } 
+.activetab {
+	position: relative;
+	background: white;
+	border-color: black;
+	border-style: solid;
+	border-weight: 1;
+	border-top-color: white;
+	border-style: solid;
+	border-weight: 1;
+}
+.inactivetab{
+	position: relative;
+	background: silver;
+	border-color: black;
+	border-style: solid;
+	border-weight: 1;
+}
+span.inactivetab a:link ,
+span.activetab a:link {
+	text-decoration: none;
+	color: black;
+}
 pre { background-color: lightgray; }
 #wait {
 	background: #B7B8DD;
@@ -30,6 +52,15 @@ pre { background-color: lightgray; }
 	background: white;
 	width: 100%;
 	height: 100%;
+	border-color: black;
+	border-style: solid;
+	border-weight: 1;
+	}
+#msg {
+	position: absolute;
+	visibility: hidden;
+	overflow: auto;
+	background: white;
 	border-color: black;
 	border-style: solid;
 	border-weight: 1;
