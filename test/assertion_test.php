@@ -59,10 +59,10 @@
             $hello = &new EqualAssertion("Hello");
             $this->assertTrue($hello->test("Hello"));
             $this->assertFalse($hello->test("Goodbye"));
-            $this->assertEqual($hello->testMessage("Hello"), "Equal assertion [String: Hello]");
-            $this->assertEqual(
-                    $hello->testMessage("Goodbye"),
-                    "Equal assertion [String: Hello] fails with [String: Goodbye] at character 0");
+            $this->assertWantedPattern('/Equal assertion.*?Hello/', $hello->testMessage("Hello"));
+            $this->assertWantedPattern('/fails/', $hello->testMessage("Goodbye"));
+            $this->assertWantedPattern('/String: Hello/', $hello->testMessage("Goodbye"));
+            $this->assertWantedPattern('/String: Goodbye/', $hello->testMessage("Goodbye"));
         }
         function testStringPosition() {
             $comparisons = array(
@@ -74,15 +74,15 @@
                     "z" => 0);
             $str = &new EqualAssertion("abc");
             foreach ($comparisons as $compare => $position) {
-                $this->assertEqual(
-                        $str->testMessage($compare),
-                        "Equal assertion [String: abc] fails with [String: $compare] at character $position");
+                $this->assertWantedPattern(
+                        "/at character $position/",
+                        $str->testMessage($compare));
             }
             $str = &new EqualAssertion("abcd");
             foreach ($comparisons as $compare => $position) {
-                $this->assertEqual(
-                        $str->testMessage($compare),
-                        "Equal assertion [String: abcd] fails with [String: $compare] at character $position");
+                $this->assertWantedPattern(
+                        "/at character $position/",
+                        $str->testMessage($compare));
             }
         }
         function testInteger() {
@@ -110,15 +110,16 @@
             $this->assertEqual(
                     $colours->testMessage(array("r", "g", "b")),
                     "Equal assertion [Array: 3 items]");
-            $this->assertEqual(
-                    $colours->testMessage(array("r", "g", "z")),
-                    "Equal assertion [Array: 3 items] fails with [Array: 3 items] key 2 at character 0");
-            $this->assertEqual(
-                    $colours->testMessage(array("r", "g")),
-                    "Equal assertion [Array: 3 items] fails with [Array: 2 items] key 2 does not exist in second array");
-            $this->assertEqual(
-                    $colours->testMessage(array("r", "g", "b", "z")),
-                    "Equal assertion [Array: 3 items] fails with [Array: 4 items] key 3 does not exist in first array");
+            $this->assertWantedPattern('/fails/', $colours->testMessage(array("r", "g", "z")));
+            $this->assertWantedPattern(
+                    '/key 2 at character 0/',
+                    $colours->testMessage(array("r", "g", "z")));
+            $this->assertWantedPattern(
+                    '/key 2 does not exist in second array/',
+                    $colours->testMessage(array("r", "g")));
+            $this->assertWantedPattern(
+                    '/key 3 does not exist in first array/',
+                    $colours->testMessage(array("r", "g", "b", "z")));
         }
         function testHash() {
             $blue = &new EqualAssertion(array("r" => 0, "g" => 0, "b" => 255));
@@ -137,13 +138,13 @@
                     "b" => array(
                             "c" => 2,
                             "d" => "Three")));
-            $this->assertEqual(
+            $this->assertWantedPattern(
+                    '/key b key d at character 5/',
                     $tree->testMessage(array(
                         "a" => 1,
                         "b" => array(
                                 "c" => 2,
-                                "d" => "Threeish"))),
-                    "Equal assertion [Array: 2 items] fails with [Array: 2 items] key b key d at character 5");
+                                "d" => "Threeish"))));
         }
     }
     
@@ -155,12 +156,12 @@
             $not_hello = &new NotEqualAssertion("Hello");
             $this->assertTrue($not_hello->test("Goodbye"));
             $this->assertFalse($not_hello->test("Hello"));
-            $this->assertEqual(
-                    $not_hello->testMessage("Goodbye"),
-                    "Not equal assertion differs at character 0");
-            $this->assertEqual(
-                    $not_hello->testMessage("Hello"),
-                    "Not equal assertion [String: Hello] matches");
+            $this->assertWantedPattern(
+                    '/differs at character 0/',
+                    $not_hello->testMessage("Goodbye"));
+            $this->assertWantedPattern(
+                    '/matches/',
+                    $not_hello->testMessage("Hello"));
         }
     }
     
@@ -176,12 +177,12 @@
             $this->assertEqual(
                     $string->testMessage("37"),
                     "Identical assertion [String: 37]");
-            $this->assertEqual(
-                    $string->testMessage(37),
-                    "Identical assertion [String: 37] fails with [Integer: 37] by type");
-            $this->assertEqual(
-                    $string->testMessage("38"),
-                    "Identical assertion [String: 37] fails with [String: 38] at character 1");
+            $this->assertWantedPattern(
+                    '/fails with \[Integer: 37\] by type/',
+                    $string->testMessage(37));
+            $this->assertWantedPattern(
+                    '/at character 1/',
+                    $string->testMessage("38"));
         }
     }
     
@@ -194,15 +195,12 @@
             $this->assertTrue($string->test("38"));
             $this->assertTrue($string->test(37));
             $this->assertFalse($string->test("37"));
-            $this->assertEqual(
-                    $string->testMessage("38"),
-                    "Not identical assertion differs at character 1");
-            $this->assertEqual(
-                    $string->testMessage(37),
-                    "Not identical assertion differs by type");
-            $this->assertEqual(
-                    $string->testMessage("37"),
-                    "Not identical assertion [String: 37] matches");
+            $this->assertWantedPattern(
+                    '/differs at character 1/',
+                    $string->testMessage("38"));
+            $this->assertWantedPattern(
+                    '/differs by type/',
+                    $string->testMessage(37));
         }
     }
     

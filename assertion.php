@@ -36,7 +36,7 @@
             } elseif (is_bool($value)) {
                 return "Boolean: " . ($value ? "true" : "false");
             } elseif (is_string($value)) {
-                return "String: $value";
+                return "String: " . Assertion::clipString($value, 40);
             } elseif (is_integer($value)) {
                 return "Integer: $value";
             } elseif (is_float($value)) {
@@ -66,7 +66,10 @@
                 return " by type";
             }
             if (is_string($first)) {
-                return " at character " . Assertion::_stringDiffersAt($first, $second);
+                $position = Assertion::_stringDiffersAt($first, $second);
+                return " at character $position with [" .
+                        Assertion::clipString($first, 40, $position) . "] and [" .
+                        Assertion::clipString($second, 40, $position) . "]";
             } elseif (is_integer($first)) {
                 return " by " . abs($first - $second);
             } elseif (is_array($first)) {
@@ -119,6 +122,7 @@
             if ($length <= $size) {
                 return $value;
             }
+            $position = min($position, $length);
             $start = ($size/2 > $position ? 0 : $position - $size/2);
             if ($start + $size > $length) {
                 $start = $length - $size;

@@ -75,12 +75,20 @@
             $this->assertWantedPattern('/hello/', "Hello there", "#%s#");            // Fail.
             $this->assertNoUnwantedPattern('/hello/i', "Hello there", "#%s#");      // Fail.
         }
+        function testOfLongStrings() {
+            $text = "";
+            for ($i = 0; $i < 10; $i++) {
+                $text .= "0123456789";
+            }
+            $this->assertEqual($text, $text);
+            $this->assertEqual($text . $text, $text . "a" . $text);        // Fail.
+        }
         function testOfDumping() {
             $this->dump(array("Hello"), "Displaying a variable");
         }
     }
     
-    $test = new GroupTest("Unit test case test, 15 fails and 15 passes");
+    $test = new GroupTest("Unit test case test, 16 fails and 16 passes");
     $display = new TestHTMLDisplay();
     $test->attachObserver($display);
     $test->addTestCase(new TestOfUnitTestCase());
