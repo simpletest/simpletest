@@ -209,10 +209,10 @@
             $request = new SimpleHttpRequest("http://a.valid.host/and/path");
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->expectArgumentsSequence(0, "write", array("GET /and/path HTTP/1.0\r\n"));
-            $socket->expectArgumentsSequence(1, "write", array("Host: a.valid.host\r\n"));
-            $socket->expectArgumentsSequence(2, "write", array("Connection: close\r\n"));
-            $socket->expectArgumentsSequence(3, "write", array("\r\n"));
+            $socket->expectArgumentsAt(0, "write", array("GET /and/path HTTP/1.0\r\n"));
+            $socket->expectArgumentsAt(1, "write", array("Host: a.valid.host\r\n"));
+            $socket->expectArgumentsAt(2, "write", array("Connection: close\r\n"));
+            $socket->expectArgumentsAt(3, "write", array("\r\n"));
             $socket->expectCallCount("write", 4);
             $this->assertIsA($request->fetch(&$socket), "SimpleHttpResponse");
             $socket->tally();
@@ -221,7 +221,7 @@
             $request = new SimpleHttpRequest("http://a.valid.host/and/path?a=A&b=B");
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->expectArgumentsSequence(0, "write", array("GET /and/path?a=A&b=B HTTP/1.0\r\n"));
+            $socket->expectArgumentsAt(0, "write", array("GET /and/path?a=A&b=B HTTP/1.0\r\n"));
             $request->fetch(&$socket);
             $socket->tally();
         }
@@ -230,11 +230,11 @@
             $request->addHeaderLine("My: stuff");
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->expectArgumentsSequence(0, "write", array("GET /and/path HTTP/1.0\r\n"));
-            $socket->expectArgumentsSequence(1, "write", array("Host: a.valid.host\r\n"));
-            $socket->expectArgumentsSequence(2, "write", array("My: stuff\r\n"));
-            $socket->expectArgumentsSequence(3, "write", array("Connection: close\r\n"));
-            $socket->expectArgumentsSequence(4, "write", array("\r\n"));
+            $socket->expectArgumentsAt(0, "write", array("GET /and/path HTTP/1.0\r\n"));
+            $socket->expectArgumentsAt(1, "write", array("Host: a.valid.host\r\n"));
+            $socket->expectArgumentsAt(2, "write", array("My: stuff\r\n"));
+            $socket->expectArgumentsAt(3, "write", array("Connection: close\r\n"));
+            $socket->expectArgumentsAt(4, "write", array("\r\n"));
             $socket->expectCallCount("write", 5);
             $request->fetch(&$socket);
             $socket->tally();
@@ -244,11 +244,11 @@
             $request->setCookie(new SimpleCookie("a", "A"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->expectArgumentsSequence(0, "write", array("GET /and/path HTTP/1.0\r\n"));
-            $socket->expectArgumentsSequence(1, "write", array("Host: a.valid.host\r\n"));
-            $socket->expectArgumentsSequence(2, "write", array("Cookie: a=A\r\n"));
-            $socket->expectArgumentsSequence(3, "write", array("Connection: close\r\n"));
-            $socket->expectArgumentsSequence(4, "write", array("\r\n"));
+            $socket->expectArgumentsAt(0, "write", array("GET /and/path HTTP/1.0\r\n"));
+            $socket->expectArgumentsAt(1, "write", array("Host: a.valid.host\r\n"));
+            $socket->expectArgumentsAt(2, "write", array("Cookie: a=A\r\n"));
+            $socket->expectArgumentsAt(3, "write", array("Connection: close\r\n"));
+            $socket->expectArgumentsAt(4, "write", array("\r\n"));
             $socket->expectCallCount("write", 5);
             $this->assertIsA($request->fetch(&$socket), "SimpleHttpResponse");
             $socket->tally();
@@ -259,7 +259,7 @@
             $request->setCookie(new SimpleCookie("b", "B"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->expectArgumentsSequence(2, "write", array("Cookie: a=A;b=B\r\n"));
+            $socket->expectArgumentsAt(2, "write", array("Cookie: a=A;b=B\r\n"));
             $request->fetch(&$socket);
             $socket->tally();
         }
@@ -281,19 +281,19 @@
         function testReadAll() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->setReturnValueSequence(0, "read", "aaa");
-            $socket->setReturnValueSequence(1, "read", "bbb");
-            $socket->setReturnValueSequence(2, "read", "ccc");
+            $socket->setReturnValueAt(0, "read", "aaa");
+            $socket->setReturnValueAt(1, "read", "bbb");
+            $socket->setReturnValueAt(2, "read", "ccc");
             $socket->setReturnValue("read", "");
             $this->assertEqual(SimpleHttpResponse::_readAll($socket), "aaabbbccc");
         }
         function testBadSocketDuringResponse() {
             $socket = &new MockSimpleSocket($this);
-            $socket->setReturnValueSequence(0, "isError", false);
-            $socket->setReturnValueSequence(1, "isError", false);
+            $socket->setReturnValueAt(0, "isError", false);
+            $socket->setReturnValueAt(1, "isError", false);
             $socket->setReturnValue("isError", true);
-            $socket->setReturnValueSequence(0, "read", "HTTP/1.1 200 OK\r\n");
-            $socket->setReturnValueSequence(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+            $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\n");
+            $socket->setReturnValueAt(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
             $socket->setReturnValue("read", "");
             $response = &new SimpleHttpResponse($socket);
             $this->assertTrue($response->isError());
@@ -302,9 +302,9 @@
         function testIncompleteHeader() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->setReturnValueSequence(0, "read", "HTTP/1.1 200 OK\r\n");
-            $socket->setReturnValueSequence(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
-            $socket->setReturnValueSequence(2, "read", "Content-Type: text/plain\r\n");
+            $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\n");
+            $socket->setReturnValueAt(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+            $socket->setReturnValueAt(2, "read", "Content-Type: text/plain\r\n");
             $socket->setReturnValue("read", "");
             $response = &new SimpleHttpResponse($socket);
             $this->assertTrue($response->isError());
@@ -313,11 +313,11 @@
         function testParseOfResponse() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->setReturnValueSequence(0, "read", "HTTP/1.1 200 OK\r\nDate: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
-            $socket->setReturnValueSequence(1, "read", "Content-Type: text/plain\r\n");
-            $socket->setReturnValueSequence(2, "read", "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\nConne");
-            $socket->setReturnValueSequence(3, "read", "ction: close\r\n\r\nthis is a test file\n");
-            $socket->setReturnValueSequence(4, "read", "with two lines in it\n");
+            $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\nDate: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+            $socket->setReturnValueAt(1, "read", "Content-Type: text/plain\r\n");
+            $socket->setReturnValueAt(2, "read", "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\nConne");
+            $socket->setReturnValueAt(3, "read", "ction: close\r\n\r\nthis is a test file\n");
+            $socket->setReturnValueAt(4, "read", "with two lines in it\n");
             $socket->setReturnValue("read", "");
             $response = &new SimpleHttpResponse($socket);
             $this->assertFalse($response->isError());
@@ -331,14 +331,14 @@
         function testParseOfCookies() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->setReturnValueSequence(0, "read", "HTTP/1.1 200 OK\r\n");
-            $socket->setReturnValueSequence(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
-            $socket->setReturnValueSequence(2, "read", "Content-Type: text/plain\r\n");
-            $socket->setReturnValueSequence(3, "read", "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n");
-            $socket->setReturnValueSequence(4, "read", "Set-Cookie: a=aaa; expires=Wed, 25-Dec-02 04:24:20 GMT; path=/here/\r\n");
-            $socket->setReturnValueSequence(5, "read", "Set-Cookie: b=bbb\r\n");
-            $socket->setReturnValueSequence(6, "read", "Connection: close\r\n");
-            $socket->setReturnValueSequence(7, "read", "\r\n");
+            $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\n");
+            $socket->setReturnValueAt(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+            $socket->setReturnValueAt(2, "read", "Content-Type: text/plain\r\n");
+            $socket->setReturnValueAt(3, "read", "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n");
+            $socket->setReturnValueAt(4, "read", "Set-Cookie: a=aaa; expires=Wed, 25-Dec-02 04:24:20 GMT; path=/here/\r\n");
+            $socket->setReturnValueAt(5, "read", "Set-Cookie: b=bbb\r\n");
+            $socket->setReturnValueAt(6, "read", "Connection: close\r\n");
+            $socket->setReturnValueAt(7, "read", "\r\n");
             $socket->setReturnValue("read", "");
             $response = &new SimpleHttpResponse($socket);
             $this->assertFalse($response->isError());

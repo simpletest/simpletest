@@ -204,9 +204,9 @@
         }
         function testReturnSequence() {
             $mock = &new MockDummy($this);
-            $mock->setReturnValueSequence(0, "aMethod", "aaa");
-            $mock->setReturnValueSequence(1, "aMethod", "bbb");
-            $mock->setReturnValueSequence(3, "aMethod", "ddd");
+            $mock->setReturnValueAt(0, "aMethod", "aaa");
+            $mock->setReturnValueAt(1, "aMethod", "bbb");
+            $mock->setReturnValueAt(3, "aMethod", "ddd");
             $this->assertIdentical($mock->aMethod(), "aaa");
             $this->assertIdentical($mock->aMethod(), "bbb");
             $this->assertNull($mock->aMethod());
@@ -215,7 +215,7 @@
         function testReturnReferenceSequence() {
             $mock = &new MockDummy($this);
             $object = new Dummy();
-            $mock->setReturnReferenceSequence(1, "aMethod", $object);
+            $mock->setReturnReferenceAt(1, "aMethod", $object);
             $this->assertNull($mock->aMethod());
             $this->assertReference($mock->aMethod(), $object);
             $this->assertNull($mock->aMethod());
@@ -223,10 +223,10 @@
         function testComplicatedReturnSequence() {
             $mock = &new MockDummy($this, "wild");
             $object = new Dummy();
-            $mock->setReturnValueSequence(1, "aMethod", "aaa", array("a"));
-            $mock->setReturnValueSequence(1, "aMethod", "bbb");
-            $mock->setReturnReferenceSequence(2, "aMethod", $object, array("wild", 2));
-            $mock->setReturnValueSequence(2, "aMethod", "value", array("wild", 3));
+            $mock->setReturnValueAt(1, "aMethod", "aaa", array("a"));
+            $mock->setReturnValueAt(1, "aMethod", "bbb");
+            $mock->setReturnReferenceAt(2, "aMethod", $object, array("wild", 2));
+            $mock->setReturnValueAt(2, "aMethod", "value", array("wild", 3));
             $mock->setReturnValue("aMethod", 3, array(3));
             $this->assertNull($mock->aMethod());
             $this->assertEqual($mock->aMethod("a"), "aaa");
@@ -236,10 +236,10 @@
         }
         function testMultipleMethodSequences() {
             $mock = &new MockDummy($this);
-            $mock->setReturnValueSequence(0, "aMethod", "aaa");
-            $mock->setReturnValueSequence(1, "aMethod", "bbb");
-            $mock->setReturnValueSequence(0, "anotherMethod", "ccc");
-            $mock->setReturnValueSequence(1, "anotherMethod", "ddd");
+            $mock->setReturnValueAt(0, "aMethod", "aaa");
+            $mock->setReturnValueAt(1, "aMethod", "bbb");
+            $mock->setReturnValueAt(0, "anotherMethod", "ccc");
+            $mock->setReturnValueAt(1, "anotherMethod", "ddd");
             $this->assertIdentical($mock->aMethod(), "aaa");
             $this->assertIdentical($mock->anotherMethod(), "ccc");
             $this->assertIdentical($mock->aMethod(), "bbb");
@@ -247,15 +247,15 @@
         }
         function testSequenceFallback() {
             $mock = &new MockDummy($this);
-            $mock->setReturnValueSequence(0, "aMethod", "aaa", array('a'));
-            $mock->setReturnValueSequence(1, "aMethod", "bbb", array('a'));
+            $mock->setReturnValueAt(0, "aMethod", "aaa", array('a'));
+            $mock->setReturnValueAt(1, "aMethod", "bbb", array('a'));
             $mock->setReturnValue("aMethod", "AAA");
             $this->assertIdentical($mock->aMethod('a'), "aaa");
             $this->assertIdentical($mock->aMethod('b'), "AAA");
         }
         function testMethodInterference() {
             $mock = &new MockDummy($this);
-            $mock->setReturnValueSequence(0, "anotherMethod", "aaa");
+            $mock->setReturnValueAt(0, "anotherMethod", "aaa");
             $mock->setReturnValue("aMethod", "AAA");
             $this->assertIdentical($mock->aMethod(), "AAA");
             $this->assertIdentical($mock->anotherMethod(), "aaa");
@@ -341,8 +341,8 @@
         }
         function testSpecificSequence() {
             $mock = &new MockDummy($this);
-            $mock->expectArgumentsSequence(1, "aMethod", array(1, 2, 3));
-            $mock->expectArgumentsSequence(2, "aMethod", array("Hello"));
+            $mock->expectArgumentsAt(1, "aMethod", array(1, 2, 3));
+            $mock->expectArgumentsAt(2, "aMethod", array("Hello"));
             $mock->aMethod();
             $mock->aMethod(1, 2, 3);
             $mock->aMethod("Hello");
@@ -353,8 +353,8 @@
             $test->expectArguments("assertTrue", array(false, "*"));
             $test->expectCallCount("assertTrue", 2);
             $mock = &new MockDummy($test);
-            $mock->expectArgumentsSequence(0, "aMethod", array(1, 2, 3));
-            $mock->expectArgumentsSequence(1, "aMethod", array("Hello"));
+            $mock->expectArgumentsAt(0, "aMethod", array(1, 2, 3));
+            $mock->expectArgumentsAt(1, "aMethod", array("Hello"));
             $mock->aMethod(1, 2);
             $mock->aMethod("Goodbye");
             $test->tally();

@@ -120,8 +120,8 @@
         }
         function testAssertionChaining() {
             $test = &new MockUnitTestCase($this);
-            $test->expectArgumentsSequence(0, "assertTrue", array(true, "Good"));
-            $test->expectArgumentsSequence(1, "assertTrue", array(false, "Bad"));
+            $test->expectArgumentsAt(0, "assertTrue", array(true, "Good"));
+            $test->expectArgumentsAt(1, "assertTrue", array(false, "Bad"));
             $test->expectCallCount("assertTrue", 2);
             $browser = &new TestBrowser($test);
             $browser->_assertTrue(true, "Good");
@@ -156,7 +156,7 @@
         }
         function testFailingBadHost() {
             $test = &new MockUnitTestCase($this);
-            $test->expectArgumentsSequence(0, "assertTrue", array(false, '*'));
+            $test->expectArgumentsAt(0, "assertTrue", array(false, '*'));
             $test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
             $browser->expectConnection();
@@ -168,7 +168,7 @@
         }
         function testExpectingBadHost() {
             $test = &new MockUnitTestCase($this);
-            $test->expectArgumentsSequence(0, "assertTrue", array(true, '*'));
+            $test->expectArgumentsAt(0, "assertTrue", array(true, '*'));
             $test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
             $browser->expectConnection(false);

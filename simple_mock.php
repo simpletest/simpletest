@@ -222,7 +222,7 @@
          *                          including wildcards.
          *    @public
          */
-        function setReturnValueSequence($timing, $method, $value, $args = "") {
+        function setReturnValueAt($timing, $method, $value, $args = "") {
             $this->_dieOnNoMethod($method, "set return value sequence");
             $method = strtolower($method);
             if (!isset($this->_return_sequence[$method])) {
@@ -232,6 +232,13 @@
                 $this->_return_sequence[$method][$timing] = new CallMap($this->_wildcard);
             }
             $this->_return_sequence[$method][$timing]->addValue($args, $value);
+        }
+        
+        /**
+         *    @deprecated
+         */
+        function setReturnValueSequence($timing, $method, $value, $args = "") {
+            return $this->setReturnValueAt($timing, $method, $value, $args);
         }
          
         /**
@@ -266,7 +273,7 @@
          *                          including wildcards.
          *    @public
          */
-        function setReturnReferenceSequence($timing, $method, &$reference, $args = "") {
+        function setReturnReferenceAt($timing, $method, &$reference, $args = "") {
             $this->_dieOnNoMethod($method, "set return reference sequence");
             $method = strtolower($method);
             if (!isset($this->_return_sequence[$method])) {
@@ -276,6 +283,13 @@
                 $this->_return_sequence[$method][$timing] = new CallMap($this->_wildcard);
             }
             $this->_return_sequence[$method][$timing]->addReference($args, $reference);
+        }
+         
+        /**
+         *    @deprecated
+         */
+        function setReturnReferenceSequence($timing, $method, &$reference, $args = "") {
+            return $this->setReturnReferenceAt($timing, $method, $reference, $args);
         }
          
         /**
@@ -297,13 +311,6 @@
         }
         
         /**
-         *    @deprecated
-         */
-        function setExpectedArguments($method, $args = "") {
-            $this->expectArguments($method, $args);
-        }
-        
-        /**
          *    Sets up an expected call with a set of
          *    expected parameters in that call. The
          *    expected call count will be adjusted if it
@@ -315,8 +322,8 @@
          *                          including wildcards.
          *    @public
          */
-        function expectArgumentsSequence($timing, $method, $args = "") {
-            $this->_dieOnNoMethod($method, "set expected arguments sequence");
+        function expectArgumentsAt($timing, $method, $args = "") {
+            $this->_dieOnNoMethod($method, "set expected arguments at time");
             $args = (is_array($args) ? $args : array());
             if (!isset($this->_sequence_args[$timing])) {
                 $this->_sequence_args[$timing] = array();
@@ -330,8 +337,8 @@
         /**
          *    @deprecated
          */
-        function setExpectedArgumentsSequence($timing, $method, $args = "") {
-            $this->expectArgumentsSequence($timing, $method, $args);
+        function expectArgumentsSequence($timing, $method, $args = "") {
+            $this->expectArgumentsAt($timing, $method, $args);
         }
         
         /**
