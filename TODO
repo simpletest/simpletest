@@ -17,12 +17,10 @@ Add a dump() method with a print_r() trap (2/1) - done.
 
 Mock objects
 ------------
-Create parameter list assertion for improved output (1).
 Partial mocks (4/3) - done.
 
 Html parser
 -----------
-Add input tag parsing (2).
 Parse submit buttons into form (1/1) - done.
 Fix attributes to accept value of "0" (0/1) - done.
 Add case insensitivity (0/1) - done.
@@ -42,5 +40,7 @@ Fix base path bug where path is lost (1/1) - done.
 
 Documentation
 -------------
+Clean up the documentation links (1/1) - done.
+Add server stubs docs (2/2) - done.
 Add adapter documentation (2/1) - done.
 Add early web test case to introduction (2/1) - done.
