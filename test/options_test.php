@@ -14,6 +14,12 @@
             $this->assertEqual(SimpleTestOptions::getMockBaseClass(), 'Fred');
             SimpleTestOptions::setMockBaseClass($old_class);
         }
+        function testStubBase() {
+            $old_class = SimpleTestOptions::getStubBaseClass();
+            SimpleTestOptions::setStubBaseClass('Fred');
+            $this->assertEqual(SimpleTestOptions::getStubBaseClass(), 'Fred');
+            SimpleTestOptions::setStubBaseClass($old_class);
+        }
         function testIgnoreList() {
             $this->assertFalse(SimpleTestOptions::isIgnored('ImaginaryTestCase'));
             SimpleTestOptions::ignore('ImaginaryTestCase');

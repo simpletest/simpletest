@@ -673,7 +673,7 @@
          *    @private
          */
         function _createClassCode($class, $stub_class, $methods) {
-            $stub_base = Stub::setStubBaseClass();
+            $stub_base = SimpletestOptions::getStubBaseClass();
             $code = "class $stub_class extends $stub_base {\n";
             $code .= "    function $stub_class(\$wildcard = MOCK_WILDCARD) {\n";
             $code .= "        \$this->$stub_base(\$wildcard);\n";
@@ -711,23 +711,10 @@
         }
         
         /**
-         *    The base class name is settable here. This is the
-         *    class that the new server stub will inherited from.
-         *    To modify the generated stubs simply extend the
-         *    SimpleStub class above and set it's name
-         *    with this method before any stubs are generated.
-         *    @param $mock_base        Stub base class to use.
-         *                             If empty then the existing
-         *                             class will be unchanged.
-         *    @return                  Current or new base class.
-         *    @static
+         *    @deprecated
          */
         function setStubBaseClass($stub_base = false) {
-            static $_stub_base = "SimpleStub";
-            if ($stub_base) {
-                $_stub_base = $stub_base;
-            }
-            return $_stub_base;
+            SimpleTestOptions::setStubBaseClass($stub_base);
         }
     }
     
@@ -807,7 +794,7 @@
          *    @private
          */
         function _createClassCode($class, $mock_class, $methods) {
-            $mock_base = Mock::setMockBaseClass();
+            $mock_base = SimpleTestOptions::getMockBaseClass();
             $code = "class $mock_class extends $mock_base {\n";
             $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_WILDCARD) {\n";
             $code .= "        \$this->$mock_base(\$test, \$wildcard);\n";
@@ -827,7 +814,7 @@
          *    @private
          */
         function _extendClassCode($class, $mock_class, $methods) {
-            $mock_base = Mock::setMockBaseClass();
+            $mock_base = SimpleTestOptions::getMockBaseClass();
             $code  = "class $mock_class extends $class {\n";
             $code .= "    var \$_mock;\n";
             $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_WILDCARD) {\n";
@@ -913,24 +900,10 @@
         }
         
         /**
-         *    The base class name is settable here. This is the
-         *    class that the new mock will inherited from.
-         *    To modify the generated mocks simply extend the
-         *    SimpleMock class above and set it's name
-         *    with this method before any mocks are generated.
-         *    @param $mock_base        Mock base class to use.
-         *                             If empty then the existing
-         *                             class will be unchanged.
-         *    @return                  Current or new base class.
-         *    @static
-         *    @public
+         *    @deprecated
          */
         function setMockBaseClass($mock_base = false) {
-            static $_mock_base = "SimpleMock";
-            if ($mock_base) {
-                $_mock_base = $mock_base;
-            }
-            return $_mock_base;
+            SimpleTestOptions::setMockBaseClass($mock_base);
         }
     }
 ?>

@@ -44,6 +44,32 @@
         
         /**
          *    The base class name is settable here. This is the
+         *    class that a new stub will inherited from.
+         *    To modify the generated stubs simply extend the
+         *    SimpleStub class and set it's name
+         *    with this method before any stubs are generated.
+         *    @param $stub_base        Server stub class to use.
+         *    @static
+         *    @public
+         */
+        function setStubBaseClass($stub_base) {
+            $registry = &SimpleTestOptions::_getRegistry();
+            $registry['StubBaseClass'] = $stub_base;
+        }
+        
+        /**
+         *    Accessor for the currently set stub base class.
+         *    @return            Class name to inherit from.
+         *    @static
+         *    @public
+         */
+        function getStubBaseClass() {
+            $registry = &SimpleTestOptions::_getRegistry();
+            return $registry['StubBaseClass'];
+        }
+        
+        /**
+         *    The base class name is settable here. This is the
          *    class that a new mock will inherited from.
          *    To modify the generated mocks simply extend the
          *    SimpleMock class and set it's name
@@ -90,6 +116,7 @@
          */
         function getDefaults() {
             return array(
+                    'StubBaseClass' => 'SimpleStub',
                     'MockBaseClass' => 'SimpleMock',
                     'IgnoreList' => array());
         }
