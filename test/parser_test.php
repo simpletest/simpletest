@@ -6,9 +6,6 @@
     Mock::generate('SimpleSaxParser');
 
     class TestOfParallelRegex extends UnitTestCase {
-        function TestOfParallelRegex() {
-            $this->UnitTestCase();
-        }
         
         function testNoPatterns() {
             $regex = &new ParallelRegex(false);
@@ -71,9 +68,6 @@
     }
     
     class TestOfStateStack extends UnitTestCase {
-        function TestOfStateStack() {
-            $this->UnitTestCase();
-        }
         
         function testStartState() {
             $stack = &new SimpleStateStack("one");
@@ -102,8 +96,6 @@
     }
     
     class TestParser {
-        function TestParser() {
-        }
         
         function accept() {
         }
@@ -117,9 +109,6 @@
     Mock::generate('TestParser');
 
     class TestOfLexer extends UnitTestCase {
-        function TestOfLexer() {
-            $this->UnitTestCase();
-        }
         
         function testEmptyPage() {
             $handler = &new MockTestParser($this);
@@ -167,9 +156,6 @@
     }
 
     class TestOfLexerModes extends UnitTestCase {
-        function TestOfLexerModes() {
-            $this->UnitTestCase();
-        }
         
         function testIsolatedPattern() {
             $handler = &new MockTestParser($this);
@@ -277,9 +263,6 @@
     }
 
     class TestOfLexerHandlers extends UnitTestCase {
-        function TestOfLexerHandlers() {
-            $this->UnitTestCase();
-        }
         
         function testModeMapping() {
             $handler = &new MockTestParser($this);
@@ -309,10 +292,6 @@
     class TestOfHtmlLexer extends UnitTestCase {
         var $_handler;
         var $_lexer;
-        
-        function TestOfHtmlLexer() {
-            $this->UnitTestCase();
-        }
         
         function setUp() {
             $this->_handler = &new MockSimpleSaxParser($this);
@@ -505,10 +484,6 @@
     class TestOfSaxGeneration extends UnitTestCase {
         var $_listener;
         var $_lexer;
-        
-        function TestOfSaxGeneration() {
-            $this->UnitTestCase();
-        }
         
         function setUp() {
             $this->_listener = &new MockSimpleSaxListener($this);

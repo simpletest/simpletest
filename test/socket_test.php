@@ -6,9 +6,6 @@
     Mock::generate('SimpleSocket');
 
     class TestOfSimpleStickyError extends UnitTestCase {
-        function TestOfSimpleStickyError() {
-            $this->UnitTestCase();
-        }
         
         function testSettingError() {
             $error = new SimpleStickyError();

@@ -5,9 +5,6 @@
     }
 
     class TestOfTextFormatting extends UnitTestCase {
-        function TestOfTextFormatting() {
-            $this->UnitTestCase();
-        }
         
         function testClipping() {
             $dumper = new SimpleDumper();

@@ -12,9 +12,7 @@
             array('_createSocket'));
 
     class TestOfCookie extends UnitTestCase {
-        function TestOfCookie() {
-            $this->UnitTestCase();
-        }
+        
         function testCookieDefaults() {
             $cookie = new SimpleCookie("name");
             $this->assertFalse($cookie->getValue());
@@ -23,6 +21,7 @@
             $this->assertFalse($cookie->getExpiry());
             $this->assertFalse($cookie->isSecure());
         }
+        
         function testCookieAccessors() {
             $cookie = new SimpleCookie(
                     "name",
@@ -36,6 +35,7 @@
             $this->assertEqual($cookie->getExpiry(), "Mon, 18 Nov 2002 15:50:29 GMT");
             $this->assertTrue($cookie->isSecure());
         }
+        
         function testFullHostname() {
             $cookie = new SimpleCookie("name");
             $this->assertTrue($cookie->setHost("host.name.here"));
@@ -43,6 +43,7 @@
             $this->assertTrue($cookie->setHost("host.com"));
             $this->assertEqual($cookie->getHost(), "host.com");
         }
+        
         function testHostTruncation() {
             $cookie = new SimpleCookie("name");
             $cookie->setHost("this.host.name.here");
@@ -52,6 +53,7 @@
             $this->assertTrue($cookie->setHost("dashes.in-host.com"));
             $this->assertEqual($cookie->getHost(), "in-host.com");
         }
+        
         function testBadHosts() {
             $cookie = new SimpleCookie("name");
             $this->assertFalse($cookie->setHost("gibberish"));
@@ -60,6 +62,7 @@
             $this->assertFalse($cookie->setHost("..."));
             $this->assertFalse($cookie->setHost("host.com."));
         }
+        
         function testHostValidity() {
             $cookie = new SimpleCookie("name");
             $cookie->setHost("this.host.name.here");
@@ -68,22 +71,26 @@
             $this->assertFalse($cookie->isValidHost("bad.host"));
             $this->assertFalse($cookie->isValidHost("nearly.name.here"));
         }
+        
         function testPathValidity() {
             $cookie = new SimpleCookie("name", "value", "/path");
             $this->assertFalse($cookie->isValidPath("/"));
             $this->assertTrue($cookie->isValidPath("/path/"));
             $this->assertTrue($cookie->isValidPath("/path/more"));
         }
+        
         function testSessionExpiring() {
             $cookie = new SimpleCookie("name", "value", "/path");
             $this->assertTrue($cookie->isExpired(0));
         }
+        
         function testTimestampExpiry() {
             $cookie = new SimpleCookie("name", "value", "/path", 456);
             $this->assertFalse($cookie->isExpired(0));
             $this->assertTrue($cookie->isExpired(457));
             $this->assertFalse($cookie->isExpired(455));
         }
+        
         function testDateExpiry() {
             $cookie = new SimpleCookie(
                     "name",
@@ -93,6 +100,7 @@
             $this->assertTrue($cookie->isExpired("Mon, 18 Nov 2002 15:50:30 GMT"));
             $this->assertFalse($cookie->isExpired("Mon, 18 Nov 2002 15:50:28 GMT"));
         }
+        
         function testAging() {
             $cookie = new SimpleCookie("name", "value", "/path", 200);
             $cookie->agePrematurely(199);
@@ -103,9 +111,7 @@
     }
     
     class TestOfDirectRoute extends UnitTestCase {
-        function TestOfDirectRoute() {
-            $this->UnitTestCase();
-        }
+        
         function testDefaultGetRequest() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectArgumentsAt(0, 'write', array("GET /here.html HTTP/1.0\r\n"));
@@ -120,6 +126,7 @@
             $this->assertReference($route->createConnection('GET', 15), $socket);
             $socket->tally();
         }
+        
         function testDefaultPostRequest() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectArgumentsAt(0, 'write', array("POST /here.html HTTP/1.0\r\n"));
@@ -134,6 +141,7 @@
             $route->createConnection('POST', 15);
             $socket->tally();
         }
+        
         function testGetWithPort() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectArgumentsAt(0, 'write', array("GET /here.html HTTP/1.0\r\n"));
@@ -148,6 +156,7 @@
             $route->createConnection('GET', 15);
             $socket->tally();
         }
+        
         function testGetWithParameters() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectArgumentsAt(0, 'write', array("GET /here.html?a=1&b=2 HTTP/1.0\r\n"));
@@ -165,9 +174,7 @@
     }
     
     class TestOfProxyRoute extends UnitTestCase {
-        function TestOfProxyRoute() {
-            $this->UnitTestCase();
-        }
+        
         function testDefaultGetRequest() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectArgumentsAt(0, 'write', array("GET http://a.valid.host/here.html HTTP/1.0\r\n"));
@@ -184,6 +191,7 @@
             $route->createConnection('GET', 15);
             $socket->tally();
         }
+        
         function testDefaultPostRequest() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectArgumentsAt(0, 'write', array("POST http://a.valid.host/here.html HTTP/1.0\r\n"));
@@ -200,6 +208,7 @@
             $route->createConnection('POST', 15);
             $socket->tally();
         }
+        
         function testGetWithPort() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectArgumentsAt(0, 'write', array("GET http://a.valid.host:81/here.html HTTP/1.0\r\n"));
@@ -216,6 +225,7 @@
             $route->createConnection('GET', 15);
             $socket->tally();
         }
+        
         function testGetWithParameters() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectArgumentsAt(0, 'write', array("GET http://a.valid.host/here.html?a=1&b=2 HTTP/1.0\r\n"));
@@ -232,6 +242,7 @@
             $route->createConnection('GET', 15);
             $socket->tally();
         }
+        
         function testGetWithAuthentication() {
             $encoded = base64_encode('Me:Secret');
 
@@ -256,9 +267,7 @@
     }
 
     class TestOfHttpRequest extends UnitTestCase {
-        function TestOfHttpRequest() {
-            $this->UnitTestCase();
-        }
+        
         function testReadingBadConnection() {
             $socket = &new MockSimpleSocket($this);
             
@@ -270,6 +279,7 @@
             $reponse = &$request->fetch(15);
             $this->assertTrue($reponse->isError());
         }
+        
         function testReadingGoodConnection() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectOnce('write', array("\r\n"));
@@ -284,6 +294,7 @@
             $socket->tally();
             $route->tally();
         }
+        
         function testWritingAdditionalHeaders() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectArgumentsAt(0, 'write', array("My: stuff\r\n"));
@@ -299,6 +310,7 @@
             
             $socket->tally();
         }
+        
         function testCookieWriting() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectArgumentsAt(0, 'write', array("Cookie: a=A\r\n"));
@@ -314,6 +326,7 @@
             $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
             $socket->tally();
         }
+        
         function testMultipleCookieWriting() {
             $socket = &new MockSimpleSocket($this);
             $socket->expectArgumentsAt(0, 'write', array("Cookie: a=A;b=B\r\n"));
@@ -331,9 +344,7 @@
     }
     
     class TestOfHttpHeaders extends UnitTestCase {
-        function TestOfHttpHeaders() {
-            $this->UnitTestCase();
-        }
+        
         function testParseBasicHeaders() {
             $headers = new SimpleHttpHeaders("HTTP/1.1 200 OK\r\n" .
                     "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n" .
@@ -344,6 +355,7 @@
             $this->assertIdentical($headers->getResponseCode(), 200);
             $this->assertEqual($headers->getMimeType(), "text/plain");
         }
+        
         function testParseOfCookies() {
             $headers = new SimpleHttpHeaders("HTTP/1.1 200 OK\r\n" .
                     "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n" .
@@ -363,6 +375,7 @@
             $this->assertEqual($cookies[1]->getPath(), "/");
             $this->assertEqual($cookies[1]->getExpiry(), "");
         }
+        
         function testRedirect() {
             $headers = new SimpleHttpHeaders("HTTP/1.1 301 OK\r\n" .
                     "Content-Type: text/plain\r\n" .
@@ -373,6 +386,7 @@
             $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com/");
             $this->assertTrue($headers->isRedirect());
         }
+        
         function testParseChallenge() {
             $headers = new SimpleHttpHeaders("HTTP/1.1 401 Authorization required\r\n" .
                     "Content-Type: text/plain\r\n" .
@@ -385,9 +399,7 @@
     }
 
     class TestOfHttpResponse extends UnitTestCase {
-        function TestOfHttpResponse() {
-            $this->UnitTestCase();
-        }
+        
         function testBadRequest() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue('getSent', '');
@@ -398,6 +410,7 @@
             $this->assertIdentical($response->getContent(), false);
             $this->assertIdentical($response->getSent(), '');
         }
+        
         function testBadSocketDuringResponse() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\n");
@@ -410,6 +423,7 @@
             $this->assertEqual($response->getContent(), '');
             $this->assertEqual($response->getSent(), 'HTTP/1.1 ...');
         }
+        
         function testIncompleteHeader() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\n");
@@ -421,6 +435,7 @@
             $this->assertTrue($response->isError());
             $this->assertEqual($response->getContent(), "");
         }
+        
         function testParseOfResponseHeaders() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\nDate: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
@@ -442,6 +457,7 @@
             $this->assertFalse($headers->isRedirect());
             $this->assertFalse($headers->getLocation());
         }
+        
         function testParseOfCookies() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\n");
@@ -462,6 +478,7 @@
             $this->assertEqual($cookies[0]->getPath(), "/here/");
             $this->assertEqual($cookies[0]->getExpiry(), "Wed, 25 Dec 2002 04:24:20 GMT");
         }
+        
         function testRedirect() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValueAt(0, "read", "HTTP/1.1 301 OK\r\n");
@@ -476,6 +493,7 @@
             $this->assertTrue($headers->isRedirect());
             $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com/");
         }
+        
         function testRedirectWithPort() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValueAt(0, "read", "HTTP/1.1 301 OK\r\n");

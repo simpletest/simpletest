@@ -5,9 +5,6 @@
     Mock::generate('SimpleHttpRequest');
 
     class TestOfRealm extends UnitTestCase {
-        function TestOfRealm() {
-            $this->UnitTestCase();
-        }
         
         function testWithinSameUrl() {
             $realm = &new SimpleRealm(
@@ -81,9 +78,6 @@
     }
 
     class TestOfAuthenticator extends UnitTestCase {
-        function TestOfAuthenticator() {
-            $this->UnitTestCase();
-        }
         
         function testNoRealms() {
             $request = &new MockSimpleHttpRequest($this);

@@ -4,9 +4,6 @@
     require_once(dirname(__FILE__) . '/../shell_tester.php');
     
     class TestOfShell extends UnitTestCase {
-        function TestOfShell() {
-            $this->UnitTestCase();
-        }
         
         function testEcho() {
             $shell = &new SimpleShell();
@@ -21,9 +18,6 @@
     }
     
     class TestOfShellTesterAndShell extends ShellTestCase {
-        function TestOfShellTesterAndShell() {
-            $this->ShellTestCase();
-        }
         
         function testEcho() {
             $this->assertTrue($this->execute('echo Hello'));

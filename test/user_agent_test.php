@@ -11,9 +11,6 @@
     Mock::generatePartial('SimpleUserAgent', 'MockRequestUserAgent', array('_createHttpRequest'));
 
     class TestOfSimpleCookieJar extends UnitTestCase {
-        function TestOfSimpleCookieJar() {
-            $this->UnitTestCase();
-        }
         
         function testAddCookie() {
             $jar = new SimpleCookieJar();
@@ -137,9 +134,6 @@
     }
     
     class TestOfFetchingUrlParameters extends UnitTestCase {
-        function TestOfFetchingUrlParameters() {
-            $this->UnitTestCase();
-        }
         
         function testGet() {
             $headers = &new MockSimpleHttpHeaders($this);
@@ -230,9 +224,6 @@
     }
 
     class TestOfAdditionalHeaders extends UnitTestCase {
-        function TestOfAdditionalHeaders() {
-            $this->UnitTestCase();
-        }
         
         function testAdditionalHeaderAddedToRequest() {
             $headers = &new MockSimpleHttpHeaders($this);
@@ -258,9 +249,7 @@
     }
 
     class TestOfBrowserCookies extends UnitTestCase {
-        function TestOfBrowserCookies() {
-            $this->UnitTestCase();
-        }
+
         function &_createStandardResponse() {
             $headers = &new MockSimpleHttpHeaders($this);
             $headers->setReturnValue("getNewCookies", array());
@@ -380,9 +369,6 @@
     }
 
     class TestOfHttpRedirects extends UnitTestCase {
-        function TestOfHttpRedirects() {
-            $this->UnitTestCase();
-        }
         
         function &createRedirect($content, $redirect) {
             $headers = &new MockSimpleHttpHeaders($this);
@@ -506,9 +492,6 @@
     }
     
     class TestOfBadHosts extends UnitTestCase {
-        function TestOfBadHosts() {
-            $this->UnitTestCase();
-        }
         
         function &_createSimulatedBadHost() {
             $response = &new MockSimpleHttpResponse($this);
@@ -536,9 +519,6 @@
     }
     
     class TestOfAuthorisation extends UnitTestCase {
-        function TestOfAuthorisation() {
-            $this->UnitTestCase();
-        }
         
         function testAuthenticateHeaderAdded() {
             $headers = &new MockSimpleHttpHeaders($this);

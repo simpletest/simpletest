@@ -2,9 +2,6 @@
     // $Id$
     
     class TestOfWildcardExpectation extends UnitTestCase {
-        function TestOfWildcardExpectation() {
-            $this->UnitTestCase();
-        }
         
         function testSimpleInteger() {
             $expectation = new WildcardExpectation();
@@ -16,9 +13,6 @@
     }
     
     class TestOfParametersExpectation extends UnitTestCase {
-        function TestOfParametersExpectation() {
-            $this->UnitTestCase();
-        }
         
         function testEmptyMatch() {
             $expectation = new ParametersExpectation(array());
@@ -80,9 +74,6 @@
     }
     
     class TestOfCallMap extends UnitTestCase {
-        function TestOfCallMap() {
-            $this->UnitTestCase();
-        }
         
         function testEmpty() {
             $map = new CallMap();
@@ -173,9 +164,6 @@
     SimpleTestOptions::setStubBaseClass("SimpleStub");
     
     class TestOfStubGeneration extends UnitTestCase {
-        function TestOfStubGeneration() {
-            $this->UnitTestCase();
-        }
         
         function testCloning() {
             $stub = &new StubDummy($this);
@@ -201,9 +189,6 @@
     }
     
     class TestOfServerStubReturns extends UnitTestCase {
-        function TestOfServerStubReturns() {
-            $this->UnitTestCase();
-        }
         
         function testDefaultReturn() {
             $stub = &new StubDummy();
@@ -340,9 +325,6 @@
     SimpleTestOptions::setMockBaseClass("SimpleMock");
     
     class TestOfMockGeneration extends UnitTestCase {
-        function TestOfMockGeneration() {
-            $this->UnitTestCase();
-        }
         
         function testCloning() {
             $mock = &new MockDummy($this);
@@ -368,9 +350,6 @@
     }
     
     class TestOfMockReturns extends UnitTestCase {
-        function TestOfMockReturns() {
-            $this->UnitTestCase();
-        }
         
         function testNoUnitTesterSetThrowsError() {
             $mock = &new MockDummy();
@@ -432,9 +411,6 @@
     Mock::generate("SimpleTestCase");
     
     class TestOfMockTally extends UnitTestCase {
-        function TestOfMockTally() {
-            $this->UnitTestCase();
-        }
         
         function testZeroCallCount() {
             $mock = &new MockDummy($this);
@@ -580,9 +556,6 @@
     SimpleTestOptions::addPartialMockCode();
     
     class TestOfPartialMocks extends UnitTestCase {
-        function TestOfPartialMocks() {
-            $this->UnitTestCase();
-        }
         
         function testMethodReplacement() {
             $mock = &new TestDummy($this);

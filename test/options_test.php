@@ -4,10 +4,7 @@
     require_once(dirname(__FILE__) . '/../options.php');
     
     class TestOfOptions extends UnitTestCase {
-        function TestOfOptions() {
-            $this->UnitTestCase();
-        }
-        
+
         function testMockBase() {
             $old_class = SimpleTestOptions::getMockBaseClass();
             SimpleTestOptions::setMockBaseClass('Fred');
@@ -36,9 +33,6 @@
     }
     
     class TestOfCompatibility extends UnitTestCase {
-        function TestOfCompatibility() {
-            $this->UnitTestCase();
-        }
         
         function testIsA() {
             $this->assertTrue(SimpleTestCompatibility::isA(

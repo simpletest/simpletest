@@ -9,9 +9,6 @@
     Mock::generate('SimpleForm');
     
     class TestOfFrameset extends UnitTestCase {
-        function TestOfFrameset() {
-            $this->UnitTestCase();
-        }
         
         function testTitleReadFromFramesetPage() {
             $page = &new MockSimplePage($this);
@@ -131,9 +128,6 @@
     }
     
     class TestOfFrameNavigation extends UnitTestCase {
-        function TestOfFrameNavigation() {
-            $this->UnitTestCase();
-        }
         
         function testStartsWithoutFrameFocus() {
             $page = &new MockSimplePage($this);

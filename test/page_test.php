@@ -16,9 +16,6 @@
             array('_createPage', '_createParser'));
     
     class TestOfPageBuilder extends UnitTestCase {
-        function TestOfPageBuilder() {
-            $this->UnitTestCase();
-        }
         
         function testLink() {
             $tag = &new SimpleAnchorTag(array('href' => 'http://somewhere'));
@@ -163,9 +160,6 @@
     }
     
     class TestOfPageParsing extends UnitTestCase {
-        function TestOfPageParsing() {
-            $this->UnitTestCase();
-        }
         
         function testParse() {
             $parser = &new MockSimpleSaxParser($this);
@@ -185,9 +179,6 @@
     }
     
     class TestOfErrorPage extends UnitTestCase {
-        function TestOfErrorPage() {
-            $this->UnitTestCase();
-        }
         
         function testInterface() {
             $page = &new SimplePage();
@@ -206,9 +197,6 @@
     }
 
     class TestOfPageHeaders extends UnitTestCase {
-        function TestOfPageHeaders() {
-            $this->UnitTestCase();
-        }
         
         function testUrlAccessor() {
             $headers = &new MockSimpleHttpHeaders($this);
@@ -281,9 +269,6 @@
     }
     
     class TestOfHtmlPage extends UnitTestCase {
-        function TestOfHtmlPage() {
-            $this->UnitTestCase();
-        }
         
         function testRawAccessor() {
             $response = &new MockSimpleHttpResponse($this);
@@ -447,9 +432,6 @@
     }
 
     class TestOfForms extends UnitTestCase {
-        function TestOfForms() {
-            $this->UnitTestCase();
-        }
         
         function testButtons() {
             $page = &new SimplePage(new MockSimpleHttpResponse($this));
@@ -464,9 +446,6 @@
     }
 
     class TestOfPageScraping extends UnitTestCase {
-        function TestOfPageScraping() {
-            $this->UnitTestCase();
-        }
         
         function &parse($response) {
             $builder = &new SimplePageBuilder();

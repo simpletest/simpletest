@@ -4,9 +4,6 @@
     require_once(dirname(__FILE__) . '/../tag.php');
     
     class TestOfTag extends UnitTestCase {
-        function TestOfTag() {
-            $this->UnitTestCase();
-        }
         
         function testStartValues() {
             $tag = new SimpleTitleTag(array('a' => '1', 'b' => ''));
@@ -45,9 +42,6 @@
     }
     
     class TestOfWidget extends UnitTestCase {
-        function TestOfWidget() {
-            $this->UnitTestCase();
-        }
         
         function testTextEmptyDefault() {
             $tag = &new SimpleTextTag(array('' => 'text'));
@@ -122,9 +116,6 @@
     }
     
     class TestOfTextArea extends UnitTestCase {
-        function TestOfTextArea() {
-            $this->UnitTestCase();
-        }
         
         function testDefault() {
             $tag = &new SimpleTextAreaTag(array('name' => 'a'));
@@ -147,9 +138,6 @@
     }
     
     class TestOfSelection extends UnitTestCase {
-        function TestOfSelection() {
-            $this->UnitTestCase();
-        }
         
         function testEmpty() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
@@ -308,9 +296,6 @@
     }
     
     class TestOfRadioGroup extends UnitTestCase {
-        function TestOfRadioGroup() {
-            $this->UnitTestCase();
-        }
         
         function testEmptyGroup() {
             $group = &new SimpleRadioGroup();
@@ -356,9 +341,6 @@
     }
     
     class TestOfTagGroup extends UnitTestCase {
-        function TestOfTagGroup() {
-            $this->UnitTestCase();
-        }
         
         function testReadingMultipleCheckboxGroup() {
             $group = &new SimpleCheckboxGroup();

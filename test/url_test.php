@@ -4,9 +4,6 @@
     require_once(dirname(__FILE__) . '/../url.php');
     
     class QueryStringTestCase extends UnitTestCase {
-        function QueryStringTestCase() {
-            $this->UnitTestCase();
-        }
         
         function testEmpty() {
             $query = &new SimpleQueryString();
@@ -96,9 +93,6 @@
     }
 
     class TestOfUrl extends UnitTestCase {
-        function TestOfUrl() {
-            $this->UnitTestCase();
-        }
         
         function testDefaultUrl() {
             $url = new SimpleUrl('');
@@ -356,9 +350,6 @@
     }
     
     class TestOfAbsoluteUrls extends UnitTestCase {
-        function TestOfAbsoluteUrls() {
-            $this->UnitTestCase();
-        }
         
         function testMakingAbsolute() {
             $url = new SimpleUrl('../there/somewhere.php');
@@ -446,9 +437,6 @@
     }
     
     class TestOfFrameUrl extends UnitTestCase {
-        function TestOfFrameUrl() {
-            $this->UnitTestCase();
-        }
         
         function testTargetAttachment() {
             $url = new SimpleUrl('http://www.site.com/home.html');

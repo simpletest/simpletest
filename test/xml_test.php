@@ -11,9 +11,6 @@
     }
     
     class TestOfNestingTags extends UnitTestCase {
-        function TestOfNestingTags() {
-            $this->UnitTestCase();
-        }
         
         function testGroupSize() {
             $nesting = new NestingGroupTag(array('SIZE' => 2));
@@ -22,9 +19,6 @@
     }
     
     class TestOfXmlStructureParsing extends UnitTestCase {
-        function TestOfXmlStructureParsing() {
-            $this->UnitTestCase();
-        }
         
         function testValidXml() {
             $listener = &new MockSimpleScorer($this);
@@ -112,9 +106,6 @@
     }
     
     class TestOfXmlResultsParsing extends UnitTestCase {
-        function TestOfXmlResultsParsing() {
-            $this->UnitTestCase();
-        }
         
         function sendValidStart(&$parser) {
             $parser->parse("<?xml version=\"1.0\"?>\n");

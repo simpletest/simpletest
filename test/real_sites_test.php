@@ -4,9 +4,6 @@
     require_once(dirname(__FILE__) . '/../web_tester.php');
 
     class LiveSitesTestCase extends WebTestCase {
-        function LiveSitesTestCase() {
-            $this->WebTestCase();
-        }
         
         function testLastCraft() {
             $this->assertTrue($this->get('http://www.lastcraft.com'));

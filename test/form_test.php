@@ -4,9 +4,6 @@
     require_once(dirname(__FILE__) . '/../form.php');
     
     class TestOfForm extends UnitTestCase {
-        function TestOfForm() {
-            $this->UnitTestCase();
-        }
         
         function testFormAttributes() {
             $tag = &new SimpleFormTag(array('Method' => 'GET', 'action' => 'here.php', 'id' => '33'));

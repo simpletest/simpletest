@@ -2,9 +2,6 @@
     require_once(dirname(__FILE__) . '/../errors.php');
     
     class TestOfErrorQueue extends UnitTestCase {
-        function TestOfErrorQueue() {
-            $this->UnitTestCase();
-        }
         
         function setUp() {
             $queue = &SimpleErrorQueue::instance();
@@ -45,9 +42,6 @@
     }
     
     class TestOfErrorTrap extends UnitTestCase {
-        function TestOfErrorTrap() {
-            $this->UnitTestCase();
-        }
         
         function setUp() {
             set_error_handler('simpleTestErrorHandler');
@@ -70,10 +64,6 @@
     
     class TestOfErrors extends UnitTestCase {
         var $_old;
-        
-        function TestOfErrors() {
-            $this->UnitTestCase();
-        }
         
         function setUp() {
             $this->_old = error_reporting(E_ALL);

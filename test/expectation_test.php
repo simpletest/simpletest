@@ -3,9 +3,6 @@
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../expectation.php');
 
     class TestOfEquality extends UnitTestCase {
-        function TestOfEquality() {
-            $this->UnitTestCase();
-        }
         
         function testBoolean() {
             $is_true = &new EqualExpectation(true);
@@ -122,9 +119,6 @@
     }
     
     class TestOfInequality extends UnitTestCase {
-        function TestOfInequality() {
-            $this->UnitTestCase();
-        }
         
         function testStringMismatch() {
             $not_hello = &new NotEqualExpectation("Hello");
@@ -140,9 +134,6 @@
     }
     
     class TestOfIdentity extends UnitTestCase {
-        function TestOfIdentity() {
-            $this->UnitTestCase();
-        }
         
         function testType() {
             $string = &new IdenticalExpectation("37");
@@ -162,9 +153,6 @@
     }
     
     class TestOfNonIdentity extends UnitTestCase {
-        function TestOfNonIdentity() {
-            $this->UnitTestCase();
-        }
         
         function testType() {
             $string = &new NotIdenticalExpectation("37");
@@ -181,9 +169,6 @@
     }
     
     class TestOfPatterns extends UnitTestCase {
-        function TestOfPatterns() {
-            $this->UnitTestCase();
-        }
         
         function testWanted() {
             $pattern = &new WantedPatternExpectation('/hello/i');
@@ -203,9 +188,6 @@
     }
 
     class TestOfMethodExistence extends UnitTestCase {
-        function TestOfMethodExistence() {
-            $this->UnitTestCase();
-        }
         
         function testHasMethod() {
             $instance = &new ExpectedMethodTarget();
@@ -217,9 +199,6 @@
     }
     
     class TestOfIsA extends UnitTestCase {
-        function TestOfIsA() {
-            $this->UnitTestCase();
-        }
         
         function testString() {
             $expectation = &new IsAExpectation('string');
@@ -270,9 +249,6 @@
     }
     
     class TestOfNotA extends UnitTestCase {
-        function TestOfNotA() {
-            $this->UnitTestCase();
-        }
         
         function testString() {
             $expectation = &new NotAExpectation('string');

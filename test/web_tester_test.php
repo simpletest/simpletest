@@ -2,9 +2,6 @@
     // $Id$
     
     class TestOfFieldExpectation extends UnitTestCase {
-        function TestOfFieldExpectation() {
-            $this->UnitTestCase();
-        }
         
         function testStringMatchingIsCaseSensitive() {
             $expectation = new FieldExpectation('a');
@@ -47,9 +44,6 @@
     }
     
     class TestOfHeaderExpectations extends UnitTestCase {
-        function TestOfHeaderExpectations() {
-            $this->UnitTestCase();
-        }
         
         function testExpectingOnlyTheHeaderName() {
             $expectation = new HttpHeaderExpectation('a');

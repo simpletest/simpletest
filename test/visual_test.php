@@ -26,9 +26,6 @@
     }
 
     class TestOfUnitTestCaseOutput extends UnitTestCase {
-        function TestOfUnitTestCaseOutput() {
-            $this->UnitTestCase();
-        }
 
         function testOfResults() {
             $this->pass('Pass');
@@ -209,9 +206,6 @@
     Mock::generate('Dummy');
 
     class TestOfMockObjectsOutput extends UnitTestCase {
-        function TestOfMockObjectsOutput() {
-            $this->UnitTestCase();
-        }
 
         function testCallCounts() {
             $dummy = &new MockDummy($this);
@@ -317,9 +311,6 @@
     }
 
     class TestOfPastBugs extends UnitTestCase {
-        function TestOfPastBugs() {
-            $this->UnitTestCase();
-        }
 
         function testMixedTypes() {
             $this->assertEqual(array(), null, "%s -> Pass");
@@ -335,9 +326,6 @@
     }
 
     class TestOfVisualShell extends ShellTestCase {
-        function TestOfVisualShell() {
-            $this->ShellTestCase();
-        }
 
         function testDump() {
             $this->execute('ls');
@@ -353,9 +341,6 @@
     }
 
     class AllOutputReporter extends HtmlReporter {
-        function AllOutputReporter() {
-            $this->HtmlReporter();
-        }
 
         function _getCss() {
             return parent::_getCss() . ' .pass { color: darkgreen; }';

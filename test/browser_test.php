@@ -20,9 +20,6 @@
             array('_createUserAgent'));
     
     class TestOfHistory extends UnitTestCase {
-        function TestOfHistory() {
-            $this->UnitTestCase();
-        }
         
         function testEmptyHistoryHasFalseContents() {
             $history = &new SimpleBrowserHistory();
@@ -121,9 +118,6 @@
     }
     
     class TestOfParsedPageAccess extends UnitTestCase {
-        function TestOfParsedPageAccess() {
-            $this->UnitTestCase();
-        }
         
         function &loadPage(&$page) {
             $response = &new MockSimpleHttpResponse($this);
@@ -218,9 +212,6 @@
     }
     
     class TestOfBrowserNavigation extends UnitTestCase {
-        function TestOfBrowserNavigation() {
-            $this->UnitTestCase();
-        }
         
         function &createBrowser(&$agent, &$page) {
             $browser = &new MockParseSimpleBrowser($this);
@@ -522,9 +513,6 @@
     }
     
     class TestOfBrowserFrames extends UnitTestCase {
-        function TestOfBrowserFrames() {
-            $this->UnitTestCase();
-        }
         
         function &createBrowser(&$agent) {
             $browser = &new MockUserAgentSimpleBrowser($this);

@@ -10,10 +10,7 @@
     }
     
     class LiveHttpTestCase extends UnitTestCase {
-        function LiveHttpTestCase() {
-            $this->UnitTestCase();
-        }
-        
+
         function testBadSocket() {
             $socket = &new SimpleSocket('bad_url', 111, 5);
             $this->assertTrue($socket->isError());
