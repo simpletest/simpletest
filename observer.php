@@ -73,6 +73,16 @@
                 $painter->paintFail($this->getLabel());
             }
         }
+        
+        /**
+         *    Bolean test for failure taht is sufficient
+         *    to fail the test suite.
+         *    @return        True if failure, excetion, etc.
+         *    @param
+         */
+        function isFail() {
+            return !$this->_result;
+        }
     }
 
     /**
@@ -90,7 +100,7 @@
          *    @param $size      The number of test cases in this test.
          *    @public
          */
-        function TestStart($label, $size = 0) {
+        function TestStart($label, $size) {
             $this->TestEvent($label);
             $this->_size = $size;
         }
@@ -111,17 +121,17 @@
      *    tests are currently running, etc.
      */
     class TestEnd extends TestEvent {
-        var $_size;
+        var $_progress;
         
         /**
          *    Stashes the ending message, usually a test name.
          *    @param $label     Message to be carried by the event.
-         *    @param $size      The number of test cases in this test.
+         *    @param $progress  The number of test cases completed.
          *    @public
          */
-        function TestEnd($label, $size = 0) {
+        function TestEnd($label, $progress) {
             $this->TestEvent($label);
-            $this->_size = $size;
+            $this->_progress = $progress;
         }
         
         /**
@@ -131,7 +141,99 @@
          *    @public
          */
         function paint(&$painter) {
-            $painter->paintEnd($this->getLabel(), $this->_size);
+            $painter->paintEnd($this->getLabel(), $this->_progress);
+        }
+    }
+
+    /**
+     *    Start of a test method.
+     */
+    class TestMethodStart extends TestStart {
+
+        /**
+         *    Stashes the starting message, usually a test name.
+         *    @param $label     Message to be carried by the event.
+         *    @public
+         */
+        function TestMethodStart($label) {
+            $this->TestStart($label, 0);
+        }
+    }
+
+    /**
+     *    End of a test method.
+     */
+    class TestMethodEnd extends TestEnd {
+        
+        /**
+         *    Stashes the ending message, usually a test name.
+         *    @param $label     Message to be carried by the event.
+         *    @public
+         */
+        function TestMethodEnd($label) {
+            $this->TestEnd($label, 0);
+        }
+    }
+
+    /**
+     *    Start of a test case.
+     */
+    class TestCaseStart extends TestStart {
+
+        /**
+         *    Stashes the starting message, usually a test name.
+         *    @param $label     Message to be carried by the event.
+         *    @public
+         */
+        function TestCaseStart($label) {
+            $this->TestStart($label, 1);
+        }
+    }
+
+    /**
+     *    End of a test case.
+     */
+    class TestCaseEnd extends TestEnd {
+        
+        /**
+         *    Stashes the ending message, usually a test name.
+         *    @param $label     Message to be carried by the event.
+         *    @public
+         */
+        function TestCaseEnd($label) {
+            $this->TestEnd($label, 1);
+        }
+    }
+
+    /**
+     *    Start of a test case.
+     */
+    class GroupTestStart extends TestStart {
+
+        /**
+         *    Stashes the starting message, usually a test name.
+         *    @param $label     Message to be carried by the event.
+         *    @param $size      The number of test cases in this test.
+         *    @public
+         */
+        function GroupTestStart($label, $size) {
+            $this->TestStart($label, $size);
+        }
+    }
+
+    /**
+     *    End of a test case.
+     */
+    class GroupTestEnd extends TestEnd {
+        
+        /**
+         *    Stashes the ending message, usually a test name, and
+         *    also the number of tests completed in this transition.
+         *    @param $label     Message to be carried by the event.
+         *    @public
+         */
+        function GroupTestEnd($label) {
+            $this->TestEnd($label, 0);
         }
     }
 

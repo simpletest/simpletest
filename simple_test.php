@@ -77,7 +77,7 @@
          *    @public
          */
         function run() {
-            $this->notify(new TestStart($this->getLabel(), $this->getSize()));
+            $this->notify(new TestCaseStart($this->getLabel()));
             $methods = get_class_methods(get_class($this));
             foreach ($methods as $method) {
                 if (strtolower(substr($method, 0, 4)) != "test") {
@@ -92,7 +92,7 @@
                 $this->tearDown();
                 $this->_testMethodEnd($method);
             }
-            $this->notify(new TestEnd($this->getLabel(), $this->getSize()));
+            $this->notify(new TestCaseEnd($this->getLabel()));
         }
         
         /**
@@ -104,7 +104,7 @@
          *    @protected
          */
         function _testMethodStart($method) {
-            $this->notify(new TestStart($method));
+            $this->notify(new TestMethodStart($method));
         }
         
         /**
@@ -116,7 +116,7 @@
          *    @protected
          */
         function _testMethodEnd($method) {
-            $this->notify(new TestEnd($method));
+            $this->notify(new TestMethodEnd($method));
         }
         
         /**
@@ -222,7 +222,7 @@
                 if (in_array($class, $existing_classes)) {
                     continue;
                 }
-                if (!$this->_is_test_case($class)) {
+                if (!$this->_isTestCase($class)) {
                     continue;
                 }
                 if (in_array($class, GroupTest::ignore())) {
@@ -239,7 +239,7 @@
          *    @param $class            Class name.
          *    @private
          */
-        function _is_test_case($class) {
+        function _isTestCase($class) {
             while ($class = get_parent_class($class)) {
                 if (strtolower($class) == "simpletestcase") {
                     return true;
@@ -253,20 +253,20 @@
          *    @public
          */
         function run() {
-            $this->notify(new TestStart($this->getLabel(), $this->getSize()));
+            $this->notify(new GroupTestStart($this->getLabel(), $this->getSize()));
             for ($i = 0; $i < count($this->_test_cases); $i++) {
                 $this->_test_cases[$i]->run();
             }
-            $this->notify(new TestEnd($this->getLabel(), $this->getSize()));
+            $this->notify(new GroupTestEnd($this->getLabel()));
         }
         
         /**
-         *    Number of contained test cases including itself.
+         *    Number of contained test cases.
          *    @return         Total count of cases in the group.
          *    @public
          */
         function getSize() {
-            $count = 1;
+            $count = 0;
             foreach ($this->_test_cases as $case) {
                 $count += $case->getSize();
             }
@@ -343,13 +343,11 @@
          *    Paints the end of a test. Will paint the page
          *    footer if the stack of tests has unwound.
          *    @param $test_name   Name of test that is ending.
-         *    @param $size        Number of test cases ending.
+         *    @param $progress    Number of test cases ending.
          *    @public
          */
-        function paintEnd($test_name, $size) {
-            if ($size > 0) {
-                $this->_progress++;
-            }
+        function paintEnd($test_name, $progress) {
+            $this->_progress += $progress;
             array_pop($this->_test_stack);
             if (count($this->_test_stack) == 0) {
                 $this->paintFooter($test_name);
