@@ -54,8 +54,8 @@ wait_start();
 	</div>
 	<div id="msg">msg div content</div>
 </div>
-<div id="fail">fail div content</div>
-<div id="tree">tree div content</div>
+<div id="fail"></div>
+<div id="tree"></div>
 <!-- open a new script to capture js vars as the tests run -->
 <script type="text/javascript">
 layout();
@@ -164,23 +164,6 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
         }
         
         /**
-         *    Paints the test failure with a breadcrumbs
-         *    trail of the nesting test suites below the
-         *    top level test.
-         *    @param string $message    Failure message displayed in
-         *                              the context of the other tests.
-         *    @access public
-         */
-        function paintFail($message) {
-            parent::paintFail($message);
-            print "<span class=\"fail\">Fail</span>: ";
-            $breadcrumb = $this->getTestList();
-            array_shift($breadcrumb);
-            print implode("-&gt;", $breadcrumb);
-            print "-&gt;" . htmlentities($message) . "<br />\n";
-        }
-        
-        /**
          *    Paints a PHP error or exception.
          *    @param string $message        Message is ignored.
          *    @access public
@@ -192,7 +175,7 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
             print implode("-&gt;", $breadcrumb);
-            print "-&gt;<strong>" . htmlentities($message) . "</strong><br />\n";
+            print "-&gt;<strong>" . htmlentities($message) . "</strong><br />";
         }
         
         /**
@@ -229,6 +212,44 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          function paintCaseStart($test_name) {
              Parent::paintCaseStart($test_name);
              echo "add_case('$test_name');\n";
+         }
+
+
+         /**
+          *    Paints the start of a test method.
+          *    @param string $test_name   Name of test that is starting.
+          *    @access public
+          */
+         function paintMethodStart($test_name) {
+             Parent::paintMethodStart($test_name);
+             echo "add_method('$test_name');\n";
+         }
+
+         /**
+          *    Paints the end of a test method.
+          *    @param string $test_name   Name of test that is ending.
+          *    @access public
+          */
+         function paintMethodEnd($test_name) {
+             Parent::paintMethodEnd($test_name);
+         }
+
+         /**
+          *    Paints the test failure with a breadcrumbs
+          *    trail of the nesting test suites below the
+          *    top level test.
+          *    @param string $message    Failure message displayed in
+          *                               the context of the other tests.
+          *    @access public
+          */
+         function paintFail($message) {
+             parent::paintFail($message);
+             $msg = "<span class=\"fail\">Fail</span>: ";
+             $breadcrumb = $this->getTestList();
+             array_shift($breadcrumb);
+             $msg .= implode("-&gt;", $breadcrumb);
+             $msg .= "-&gt;" . htmlentities($message) . "<br />";
+             echo "add_fail('$msg');\n";
          }
 
  

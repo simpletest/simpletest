@@ -14,8 +14,10 @@ min_x=500;
 min_y=400;
 groups = new Array();
 cases = new Array();
+methods = new Array();
 current_group=0;
 current_case=0;
+current_method=0;
 
 Hash = {
 	Set : function(foo,bar) {this[foo] = bar;},
@@ -40,7 +42,7 @@ function layout() {
 	xLeft('tabs', 5);
 	xShow('webunit');
 	xShow('tabs');
-	activate_tab('tree');
+	activate_tab('fail');
 	xShow('visible_tab');
 	xZIndex('visible_tab', 2)
 	xResizeTo('msg', xWidth('webunit')-17, xHeight('webunit')/3-20);
@@ -75,16 +77,59 @@ function activate_tab(tab) {
 }
 
 function add_group(group_name) {
-  groups[groups.length] = group_name;
+  var add;
+  
+  add = {
+		Set : function(foo,bar) {this[foo] = bar;},
+		Get : function(foo) {return this[foo];}
+  }
+  add.Set('desc', group_name);
+  add.Set('pass', true);
+  groups[groups.length] = add;
   current_group = groups.length - 1;
   cases[current_group] = new Array();
+  methods[current_group] = new Array();
 }
 
 function add_case(case_name) {
   var curgroup;
+  var add;
+  
+  add = {
+		Set : function(foo,bar) {this[foo] = bar;},
+		Get : function(foo) {return this[foo];}
+  }
+  add.Set('desc', case_name);
+  add.Set('pass', true);
   curgroup = cases[current_group];
-  cases[current_group][curgroup.length] = case_name;
+  cases[current_group][curgroup.length] = add;
   current_case = curgroup.length - 1;
+  methods[current_group][current_case] = new Array();
+}
+
+function add_method(method_name) {
+	var curcase;
+  var add;
+  
+  add = {
+		Set : function(foo,bar) {this[foo] = bar;},
+		Get : function(foo) {return this[foo];}
+  }
+  add.Set('desc', method_name);
+  add.Set('pass', true);
+  add.Set('msg','');
+	curcase = methods[current_group][current_case];
+	methods[current_group][current_case][curcase.length] = add;
+	current_method = curcase.length - 1;
+}
+
+function add_fail(msg) {
+  var faildiv;
+  faildiv = xGetElementById('fail');
+  faildiv.innerHTML = faildiv.innerHTML + msg;
+  groups[current_group].Set('pass', false);
+  cases[current_group][current_case].Set('pass', false);
+  methods[current_group][current_case][current_method].Set('pass', false);
 }
 
 function make_fail(fails) {
@@ -92,17 +137,29 @@ function make_fail(fails) {
 
 function make_tree() {
 	var content;
+	var passfail;
 	content = '<ul>';
 	for (x in groups) {
-		content += '<li>'+groups[x]+'<ul>';
+	  passfail = (groups[x].Get('pass')) ? 'pass' : 'fail';	
+		content += '<li class="'+passfail+'">'+groups[x].Get('desc')+'<ul>';
 		for (y in cases[x]) {
-			content += '<li>'+cases[x][y]+'</li>';
+	    passfail = (cases[x][y].Get('pass')) ? 'pass' : 'fail';	
+			content += '<li class="'+passfail+'">'+cases[x][y].Get('desc')+'<ul>';
+			for (z in methods[x][y]) {
+	      passfail = (methods[x][y][z].Get('pass')) ? 'pass' : 'fail';	
+			  content += '<li class="'+passfail+'">'+methods[x][y][z].Get('desc')+'</li>';
+			}
+			content += '</ul></li>';
 		}
 		content += '</ul></li>';
 	}
 	content += '</ul>';
 	xGetElementById('tree').innerHTML = content;
-	if (xGetElementById('treetab').className == 'activetab') { activate_tab('tree'); }
+	if (xGetElementById('treetab').className == 'activetab') { 
+	  activate_tab('tree'); 
+	} else {
+	  activate_tab('fail'); 
+	}
 }
 
 function make_output(data) { 

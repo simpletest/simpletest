@@ -4,6 +4,7 @@ html {
 	color: black;
 	}	
 
+.pass { color: green; } 
 .fail { color: red; } 
 .activetab {
 	position: relative;
