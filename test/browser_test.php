@@ -210,7 +210,7 @@
         function TestOfFetchingMethods() {
             $this->UnitTestCase();
         }
-        function testSimpleGet() {
+        function testGet() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("getContent", "stuff");
             $url = new SimpleUrl("http://this.host/page.html");
@@ -221,9 +221,25 @@
                     "fetchResponse",
                     array($url, "*"));
             $browser->SimpleBrowser();
-            $this->assertEqual(
+            $this->assertIdentical(
                     $browser->get("http://this.host/page.html", array("a" => "A", "b" => "B"), &$this->_request),
                     "stuff");
+        }
+        function testHead() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue("getContent", "stuff");
+            $url = new SimpleUrl("http://this.host/page.html");
+            $url->addRequestParameters(array("a" => "A", "b" => "B"));
+            $browser = &new MockFetchSimpleBrowser($this);
+            $browser->setReturnReference("fetchResponse", $response);
+            $browser->expectArguments(
+                    "fetchResponse",
+                    array($url, "*"));
+            $browser->expectCallCount("fetchResponse", 1);
+            $browser->SimpleBrowser();
+            $this->assertIdentical(
+                    $browser->head("http://this.host/page.html", array("a" => "A", "b" => "B"), &$this->_request),
+                    true);
         }
     }
 

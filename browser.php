@@ -246,6 +246,24 @@
         }
         
         /**
+         *    Fetches the page content with a HEAD request.
+         *    Will affect cookies, but will not change the base URL.
+         *    @param $raw_url      Target to fetch as string.
+         *    @param $parameters   Additional parameters for GET request.
+         *    @param $request      Test version of SimpleHttpRequest.
+         *    @return              Content of page.
+         *    @public
+         */
+        function head($raw_url, $parameters = false, $request = false) {
+            $url = $this->_createAbsoluteUrl($raw_url, $parameters);
+            if (!is_object($request)) {
+                $request = &new SimpleHttpRequest($url);
+            }
+            $response = &$this->fetchResponse($url, $request);
+            return !$response->isError();
+        }
+        
+        /**
          *    Extracts new cookies into the cookie jar.
          *    @param $url        Target to fetch as url object.
          *    @param $cookies    New cookies.

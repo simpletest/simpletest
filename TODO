@@ -28,7 +28,7 @@ Add selection field to form parser (4).
 
 Browser
 -------
-Add headers only fetch (4/1).
+Add headers only fetch (4/3) - done.
 Move unecessary expectations into accessors (2).
 
 Web tester
