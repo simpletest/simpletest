@@ -9,8 +9,8 @@
     require_once(SIMPLE_TEST . 'shell_tester.php');
     require_once(SIMPLE_TEST . 'reporter.php');
     require_once(SIMPLE_TEST . 'mock_objects.php');
-    require_once(SIMPLE_TEST . 'adapters/pear_test_case.php');
-    require_once(SIMPLE_TEST . 'adapters/phpunit_test_case.php');
+    require_once(SIMPLE_TEST . 'extensions/pear_test_case.php');
+    require_once(SIMPLE_TEST . 'extensions/phpunit_test_case.php');
     
     class UnitTests extends GroupTest {
         function UnitTests() {
