@@ -365,11 +365,11 @@
         function tally() {
             $all_correct = true;
             foreach ($this->_expected_counts as $method => $expected) {
-                $is_same = ($expected == ($count = $this->getCallCount($method)));
+                $is_correct = ($expected == ($count = $this->getCallCount($method)));
                 $this->_assertTrue(
-                        $is_same,
+                        $is_correct,
                         "Expected call count for [$method] was [$expected], but got [$count]");
-                $all_correct = $is_same && $all_correct;
+                $all_correct = $is_correct && $all_correct;
             }
             return $all_correct;
         }
@@ -381,7 +381,7 @@
          *    if there is a test present.
          *    @param $method        Name of method to simulate.
          *    @param $args          Arguments as an array.
-         *    @returns              Stored return.
+         *    @return               Stored return.
          *    @private
          */
         function &_mockMethod($method, $args) {
@@ -416,7 +416,7 @@
         function _checkExpectations($method, $args, $timing) {
             if (isset($this->_max_counts[$method])) {
                 if ($timing >= $this->_max_counts[$method]) {
-                    $this->_test->assertTrue(false, "Call count for [$method] is [$timing]");
+                    $this->_assertTrue(false, "Call count for [$method] is [$timing]");
                 }
             }
             if (isset($this->_sequence_args[$timing][$method])) {
