@@ -25,7 +25,7 @@
         
         /**
          *    Adds a cookie to the jar. This will overwrite
-         *    cookies with more specific paths.
+         *    cookies with matching paths and keys.
          *    @param $cookie        New cookie.
          *    @public
          */
@@ -64,7 +64,7 @@
             foreach ($this->_cookies as $cookie) {
                 if ($this->_isMatch($cookie, $host, $path, $cookie->getName(), $date)) {
                     if ($cookie->getValue()) {
-                        $valid_cookies[$cookie->getName()] = $cookie;
+                        $valid_cookies[] = $cookie;
                     }
                 }
             }
@@ -91,26 +91,13 @@
             if ($host && $cookie->getHost() && ($cookie->getHost() != $host)) {
                 return false;
             }
-            if (!$this->_isSubpath($cookie->getPath(), $path)) {
+            if (!$cookie->isValidPath($path)) {
                 return false;
             }
             if ($cookie->isExpired($date)) {
                 return false;
             }
             return true;
-        }
-        
-        /**
-         *    Tests to see if one path contains another.
-         *    @param $subpath     Path nearer to the root.
-         *    @param $path        Precise path.
-         *    @private
-         */
-        function _isSubpath($subpath, $path) {
-            if (substr($path, -1) != '/') {
-                $path .= '/';
-            }
-            return (strncmp($path, $subpath, strlen($subpath)) == 0);
         }
     }
     
@@ -242,12 +229,14 @@
          *                        value as a string.
          *    @public
          */
-        function getCookieValue($host, $path, $name, $date = false) {
-            $cookies = $this->_cookie_jar->getValidCookies($host, $path, $date);
-            if (!isset($cookies[$name])) {
-                return null;
+        function getCookieValues($host, $path, $name, $date = false) {
+            $values = array();
+            foreach ($this->_cookie_jar->getValidCookies($host, $path, $date) as $cookie) {
+                if ($name == $cookie->getName()) {
+                    $values[] = $cookie->getValue();
+                }
             }
-            return $cookies[$name]->getValue();
+            return $values;
         }
         
         /**

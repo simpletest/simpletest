@@ -19,7 +19,7 @@
             $jar->setCookie(new SimpleCookie("a", "A"));
             $cookies = $jar->getValidCookies();
             $this->assertEqual(count($cookies), 1);
-            $this->assertEqual($cookies["a"]->getValue(), "A");
+            $this->assertEqual($cookies[0]->getValue(), "A");
         }
         function testHostFilter() {
             $jar = new CookieJar();
@@ -33,8 +33,8 @@
             $jar->setCookie($cookie);
             $cookies = $jar->getValidCookies("my-host.com");
             $this->assertEqual(count($cookies), 2);
-            $this->assertEqual($cookies["a"]->getValue(), "A");
-            $this->assertEqual($cookies["c"]->getValue(), "C");
+            $this->assertEqual($cookies[0]->getValue(), "A");
+            $this->assertEqual($cookies[1]->getValue(), "C");
             $this->assertEqual(count($jar->getValidCookies("new-host.org")), 1);
             $this->assertEqual(count($jar->getValidCookies()), 3);
         }
@@ -64,19 +64,20 @@
             $this->assertEqual(count($jar->getValidCookies(false, "/", "Wed, 25-Dec-02 04:24:19 GMT")), 1);
             $this->assertEqual(count($jar->getValidCookies(false, "/", "Wed, 25-Dec-02 04:24:21 GMT")), 0);
         }
-        function testCookieMasking() {
+        function testMultipleCookieWithDifferentPaths() {
             $jar = new CookieJar();
             $jar->setCookie(new SimpleCookie("a", "abc", "/"));
             $jar->setCookie(new SimpleCookie("a", "123", "/path/here/"));
             $cookies = $jar->getValidCookies("my-host.com", "/");
-            $this->assertEqual($cookies["a"]->getPath(), "/");
+            $this->assertEqual($cookies[0]->getPath(), "/");
             $cookies = $jar->getValidCookies("my-host.com", "/path/");
-            $this->assertEqual($cookies["a"]->getPath(), "/");
+            $this->assertEqual($cookies[0]->getPath(), "/");
             $cookies = $jar->getValidCookies("my-host.com", "/path/here");
-            $this->assertEqual($cookies["a"]->getPath(), "/path/here/");
+            $this->assertEqual($cookies[0]->getPath(), "/");
+            $this->assertEqual($cookies[1]->getPath(), "/path/here/");
             $cookies = $jar->getValidCookies("my-host.com", "/path/here/there");
-            $this->assertEqual($cookies["a"]->getPath(), "/path/here/");
-            $this->assertEqual($cookies["a"]->getValue(), "123");
+            $this->assertEqual($cookies[0]->getPath(), "/");
+            $this->assertEqual($cookies[1]->getPath(), "/path/here/");
         }
         function testCookieClearing() {
             $jar = new CookieJar();
@@ -244,7 +245,7 @@
             $browser->expectCookie("a", "A");
             $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
             $test->tally();
-            $this->assertNull($browser->getCookieValue("this.host", "this/page/", "a"));
+            $this->assertIdentical($browser->getCookieValues("this.host", "this/page/", "a"), array());
         }
         function testNewCookie() {
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "A", "this/path/")));
@@ -255,23 +256,23 @@
             $browser->expectCookie("a", "A");
             $browser->fetchUrl("http://this-host.com/this/path/page.html", &$request);
             $test->tally();
-            $this->assertEqual($browser->getCookieValue("this-host.com", "this/path/", "a"), "A");
-            $this->assertNull($browser->getCookieValue("this-host.com", "this/", "a"));
-            $this->assertNull($browser->getCookieValue("another.com", "this/path/", "a"));
+            $this->assertEqual($browser->getCookieValues("this-host.com", "this/path/", "a"), array("A"));
+            $this->assertIdentical($browser->getCookieValues("this-host.com", "this/", "a"), array());
+            $this->assertIdentical($browser->getCookieValues("another.com", "this/path/", "a"), array());
         }
         function testReceiveExistingCookie() {
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAAA", "this/path/")));
             $browser = &new TestBrowser(new MockUnitTestCase($this));
             $browser->setCookie("a", "A");
             $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
-            $this->assertEqual($browser->getCookieValue("this.host", "this/path/", "a"), "AAAA");
+            $this->assertEqual($browser->getCookieValues("this.host", "this/path/", "a"), array("AAAA"));
         }
         function testClearCookie() {
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "", "this/path/")));
             $browser = &new TestBrowser(new MockUnitTestCase($this));
             $browser->setCookie("a", "A");
             $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
-            $this->assertNull($browser->getCookieValue("this.host", "this/path/", "a"));
+            $this->assertIdentical($browser->getCookieValues("this.host", "this/path/", "a"), array());
         }
     }
 ?>
