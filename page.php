@@ -18,7 +18,7 @@
         
         /**
          *    Sets the document to write to.
-         *    @param $page       Target of the events.
+         *    @param SimplePage $page       Target of the events.
          *    @public
          */
         function SimplePageBuilder(&$page) {
@@ -30,8 +30,8 @@
         /**
          *    Reads the raw content and send events
          *    into the page to be built.
-         *    @param $raw        Unparsed text.
-         *    @param $parser     Event generator.
+         *    @param string $raw                 Unparsed text.
+         *    @param SimpleSaxParser $parser     Event generator.
          *    @public
          */
         function parse($raw, &$parser) {
@@ -40,15 +40,14 @@
         
         /**
          *    Start of element event. Opens a new tag.
-         *    @param $name        Element name.
-         *    @param $attributes  Hash of name value pairs.
-         *                        Attributes without content
-         *                        are marked as true.
-         *    @return             False on parse error.
+         *    @param string $name         Element name.
+         *    @param hash $attributes     Attributes without content
+         *                                are marked as true.
+         *    @return boolean             False on parse error.
          *    @public
          */
         function startElement($name, $attributes) {
-            $tag = new SimpleTag($name, $attributes);
+            $tag = &$this->_createTag($name, $attributes);
             if (in_array($name, $this->_getBlockTags())) {
                 $this->_page->acceptBlockStart($tag);
                 return true;
@@ -67,8 +66,8 @@
         /**
          *    End of element event. An unexpected event
          *    triggers a parsing error.
-         *    @param $name        Element name.
-         *    @return             False on parse error.
+         *    @param string $name        Element name.
+         *    @return boolean            False on parse error.
          *    @public
          */
         function endElement($name) {
@@ -88,8 +87,8 @@
         /**
          *    Unparsed, but relevant data. The data is added
          *    to every open tag.
-         *    @param $text        May include unparsed tags.
-         *    @return             False on parse error.
+         *    @param string $text        May include unparsed tags.
+         *    @return boolean            False on parse error.
          *    @public
          */
         function addContent($text) {
@@ -105,9 +104,34 @@
         }
         
         /**
+         *    Factory for the tag objects. Creates the
+         *    appropriate tag object for the incoming tag name.
+         *    @param string $name        HTML tag name.
+         *    @param hash $attributes    Element attributes.
+         *    @return SimpleTag          Tag object.
+         *    @protected
+         */
+        function &_createTag($name, $attributes) {
+            if ($name == 'a') {
+                return new SimpleAnchorTag($name, $attributes);
+            } elseif ($name == 'title') {
+                return new SimpleTitleTag($name, $attributes);
+            } elseif ($name == 'input') {
+                if (isset($attributes['type']) && ($attributes['type'] == 'submit')) {
+                    return new SimpleSubmitTag($name, $attributes);
+                } else {
+                    return new SimpleTextTag($name, $attributes);
+                }
+            } elseif ($name == 'textarea') {
+                return new SimpleTextAreaTag($name, $attributes);
+            }
+            return new SimpleTag($name, $attributes);
+        }
+        
+        /**
          *    Accessor for list of tags where the content
          *    between the start and end is important.
-         *    @return        List of content tags.
+         *    @return array       List of content tags.
          *    @protected
          */
         function _getContentTags() {
@@ -118,7 +142,7 @@
          *    Accessor for list of tags where the content
          *    between the start and end is not important,
          *    but both the start and end must be sent.
-         *    @return        List of content tags.
+         *    @return array       List of content tags.
          *    @protected
          */
         function _getBlockTags() {

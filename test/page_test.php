@@ -31,7 +31,7 @@
             $page->tally();
         }
         function testLink() {
-            $tag = new SimpleTag("a", array("href" => "http://somewhere"));
+            $tag = new SimpleAnchorTag("a", array("href" => "http://somewhere"));
             $tag->addContent("Label");
             $page = &new MockSimplePage($this);
             $page->expectArguments("acceptTag", array($tag));
@@ -45,7 +45,7 @@
             $page->tally();
         }
         function testLinkWithId() {
-            $tag = new SimpleTag("a", array("href" => "http://somewhere", "id" => "44"));
+            $tag = new SimpleAnchorTag("a", array("href" => "http://somewhere", "id" => "44"));
             $tag->addContent("Label");
             $page = &new MockSimplePage($this);
             $page->expectArguments("acceptTag", array($tag));
@@ -59,7 +59,7 @@
             $page->tally();
         }
         function testLinkExtraction() {
-            $tag = new SimpleTag("a", array("href" => "http://somewhere"));
+            $tag = new SimpleAnchorTag("a", array("href" => "http://somewhere"));
             $tag->addContent("Label");
             $page = &new MockSimplePage($this);
             $page->expectArguments("acceptTag", array($tag));
@@ -75,9 +75,9 @@
             $page->tally();
         }
         function testMultipleLinks() {
-            $a1 = new SimpleTag("a", array("href" => "http://somewhere"));
+            $a1 = new SimpleAnchorTag("a", array("href" => "http://somewhere"));
             $a1->addContent("1");
-            $a2 = new SimpleTag("a", array("href" => "http://elsewhere"));
+            $a2 = new SimpleAnchorTag("a", array("href" => "http://elsewhere"));
             $a2->addContent("2");
             $page = &new MockSimplePage($this);
             $page->expectArgumentsAt(0, "acceptTag", array($a1));
@@ -94,7 +94,7 @@
             $page->tally();
         }
         function testTitle() {
-            $tag = new SimpleTag("title", array());
+            $tag = new SimpleTitleTag("title", array());
             $tag->addContent("HereThere");
             $page = &new MockSimplePage($this);
             $page->expectArguments("acceptTag", array($tag));

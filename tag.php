@@ -66,6 +66,51 @@
     }
     
     /**
+     *    Page title.
+     */
+    class SimpleTitleTag extends SimpleTag {
+        function SimpleTitleTag($name, $attributes) {
+            $this->SimpleTag($name, $attributes);
+        }
+    }
+    
+    /**
+     *    Link.
+     */
+    class SimpleAnchorTag extends SimpleTag {
+        function SimpleAnchorTag($name, $attributes) {
+            $this->SimpleTag($name, $attributes);
+        }
+    }
+    
+    /**
+     *    Text, password and hidden field.
+     */
+    class SimpleTextTag extends SimpleTag {
+        function SimpleTextTag($name, $attributes) {
+            $this->SimpleTag($name, $attributes);
+        }
+    }
+    
+    /**
+     *    Text, password and hidden field.
+     */
+    class SimpleSubmitTag extends SimpleTag {
+        function SimpleSubmitTag($name, $attributes) {
+            $this->SimpleTag($name, $attributes);
+        }
+    }
+    
+    /**
+     *    Content tag for text area.
+     */
+    class SimpleTextAreaTag extends SimpleTag {
+        function SimpleTextAreaTag($name, $attributes) {
+            $this->SimpleTag($name, $attributes);
+        }
+    }
+    
+    /**
      *    Form tag class to hold widget values.
      */
     class SimpleForm {
