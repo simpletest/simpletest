@@ -23,8 +23,8 @@ SCRIPTS = simpletest/errors.php \
           simpletest/web_tester.php \
           simpletest/shell_tester.php \
           simpletest/xml.php \
-          simpletest/adapters/pear_test_case.php \
-          simpletest/adapters/phpunit_test_case.php \
+          simpletest/extensions/pear_test_case.php \
+          simpletest/extensions/phpunit_test_case.php \
           simpletest/README \
           simpletest/VERSION \
           simpletest/LICENSE \

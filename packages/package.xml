@@ -83,8 +83,8 @@ version or two.
       <file role="php" baseinstalldir="simpletest" name="web_tester.php"/>
       <file role="php" baseinstalldir="simpletest" name="xml.php"/>
       <!-- Adapters -->
-      <file role="php" baseinstalldir="simpletest" name="adapters/pear_test_case.php"/>
-      <file role="php" baseinstalldir="simpletest" name="adapters/phpunit_test_case.php"/>
+      <file role="php" baseinstalldir="simpletest" name="extensions/pear_test_case.php"/>
+      <file role="php" baseinstalldir="simpletest" name="extensions/phpunit_test_case.php"/>
       <!-- Docs -->
       <file role="doc" baseinstalldir="simpletest" name="docs/group_test_documentation.html"/>
       <file role="doc" baseinstalldir="simpletest" name="docs/index.html"/>
