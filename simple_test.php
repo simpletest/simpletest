@@ -40,18 +40,9 @@
          *    @param $reporter        Target of test results.
          *    @returns Boolean        True if no failures.
          *    @access public
-         */
-        function run(&$reporter) {
-            return $this->accept($reporter);
-        }
-        
-        /**
-         *    Accepts a runner, either a dummy or a real one.
-         *    @param $runner        Test runner.
-         *    @access public
          *    @abstract
          */
-        function accept(&$runner) {
+        function run(&$reporter) {
         }
         
         /**
@@ -90,11 +81,11 @@
         /**
          *    Uses reflection to run every method within itself
          *    starting with the string "test".
-         *    @param $runner    Current test runner.
+         *    @param $reporter    Current test reporter.
          *    @access public
          */
-        function accept(&$runner) {
-            $runner->paintCaseStart($this->getLabel());
+        function run(&$reporter) {
+            $reporter->paintCaseStart($this->getLabel());
             $methods = get_class_methods(get_class($this));
             foreach ($methods as $method) {
                 if (strtolower(substr($method, 0, 4)) != "test") {
@@ -103,25 +94,25 @@
                 if (is_a($this, strtolower($method))) {
                     continue;
                 }
-                $runner->paintMethodStart($method);
-                $runner->invoke($this, $method);
-                $runner->paintMethodEnd($method);
+                $reporter->paintMethodStart($method);
+                $reporter->invoke($this, $method);
+                $reporter->paintMethodEnd($method);
             }
-            $runner->paintCaseEnd($this->getLabel());
-            return $runner->getStatus();
+            $reporter->paintCaseEnd($this->getLabel());
+            return $reporter->getStatus();
         }
         
         /**
          *    Invokes a test method and dispatches any
          *    untrapped errors. Called back from
          *    the visiting runner.
-         *    @param $runner    Current test runner.
+         *    @param $reporter    Current test reporter.
          *    @param $method    Test method to call.
          *    @access public
          */
-        function invoke(&$runner, $method) {
+        function invoke(&$reporter, $method) {
             set_error_handler('simpleTestErrorHandler');
-            $this->_current_runner = &$runner;
+            $this->_current_runner = &$reporter;
             $this->setUp();
             $this->$method();
             $this->tearDown();
@@ -245,7 +236,7 @@
          *    @access public
          */
         function assertFalse($boolean, $message = "False expectation") {
-            $this->assertTrue(!$boolean, $message);
+            $this->assertTrue(! $boolean, $message);
         }
         
         /**
@@ -350,17 +341,17 @@
         }
         
         /**
-         *    Invokes accept() on all of the held test cases.
-         *    @param $runner    Current test runner.
+         *    Invokes run() on all of the held test cases.
+         *    @param $reporter    Current test reporter.
          *    @access public
          */
-        function accept(&$runner) {
-            $runner->paintGroupStart($this->getLabel(), $this->getSize());
+        function run(&$reporter) {
+            $reporter->paintGroupStart($this->getLabel(), $this->getSize());
             for ($i = 0; $i < count($this->_test_cases); $i++) {
-                $this->_test_cases[$i]->accept($runner);
+                $this->_test_cases[$i]->run($reporter);
             }
-            $runner->paintGroupEnd($this->getLabel());
-            return $runner->getStatus();
+            $reporter->paintGroupEnd($this->getLabel());
+            return $reporter->getStatus();
         }
         
         /**
