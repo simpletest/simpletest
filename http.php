@@ -118,7 +118,10 @@
     }
 
     /**
-     *    Cookie data holder. A passive class.
+     *    Cookie data holder. Cookie rules are full of pretty
+     *    arbitary stuff. I have used...
+     *    http://wp.netscape.com/newsref/std/cookie_spec.html
+     *    http://www.cookiecentral.com/faq/
      */
     class SimpleCookie {
         var $_host;
@@ -148,21 +151,58 @@
         }
         
         /**
-         *    Sets the hostname and optional port.
-         *    @param $host            New hostname.
+         *    Sets the host. The cookie rules determine
+         *    that the first two parts are taken for
+         *    certain TLDs and three for others. If the
+         *    new host does not match these rules then the
+         *    call will fail.
+         *    @param $host       New hostname.
+         *    @return            True if hostname is valid.
          *    @public
          */
         function setHost($host) {
-            $this->_host = $host;
+            if ($host = $this->_truncateHost($host)) {
+                $this->_host = $host;
+                return true;
+            }
+            return false;
         }
         
         /**
-         *    Accessor for the host to which this cookie applies.
-         *    @return        Hostname[:port] formatted string.
+         *    Accessor for the truncated host to which this
+         *    cookie applies.
+         *    @return        Truncated hostname as string.
          *    @public
          */
         function getHost() {
             return $this->_host;
+        }
+        
+        /**
+         *    Test for a cookie being valid for a host name.
+         *    @param $host    Host to test against.
+         *    @return         True if the cookie would be valid
+         *                    here.
+         */
+        function isValidHost($host) {
+            return $this->_truncateHost($host) === $this->getHost();
+        }
+        
+        /**
+         *    Extracts just the domain part that determines a
+         *    cookie's host validity.
+         *    @param $host    Host name to truncate.
+         *    @return         Domain as string or false on a
+         *                    bad host.
+         *    @private
+         */
+        function _truncateHost($host) {
+            if (preg_match('/[a-z\-]+\.(com|org|net)$/i', $host, $matches)) {
+                return $matches[0];
+            } elseif (preg_match('/[a-z\-]+\.[a-z\-]+\.[a-z\-]+$/i', $host, $matches)) {
+                return $matches[0];
+            }
+            return false;
         }
         
         /**

@@ -83,10 +83,37 @@
             $this->assertIdentical($cookie->getHost(), false);
             $this->assertFalse($cookie->getExpiry());
         }
-        function testHostname() {
+        function testFullHostname() {
             $cookie = new SimpleCookie("name");
-            $cookie->setHost("hostname.here");
-            $this->assertEqual($cookie->getHost(), "hostname.here");
+            $this->assertTrue($cookie->setHost("host.name.here"));
+            $this->assertEqual($cookie->getHost(), "host.name.here");
+            $this->assertTrue($cookie->setHost("host.com"));
+            $this->assertEqual($cookie->getHost(), "host.com");
+        }
+        function testHostTruncation() {
+            $cookie = new SimpleCookie("name");
+            $cookie->setHost("this.host.name.here");
+            $this->assertEqual($cookie->getHost(), "host.name.here");
+            $cookie->setHost("this.host.com");
+            $this->assertEqual($cookie->getHost(), "host.com");
+            $this->assertTrue($cookie->setHost("dashes.in-host.com"));
+            $this->assertEqual($cookie->getHost(), "in-host.com");
+        }
+        function testBadHosts() {
+            $cookie = new SimpleCookie("name");
+            $this->assertFalse($cookie->setHost("gibberish"));
+            $this->assertFalse($cookie->setHost("host.here"));
+            $this->assertFalse($cookie->setHost("host..com"));
+            $this->assertFalse($cookie->setHost("..."));
+            $this->assertFalse($cookie->setHost("host.com."));
+        }
+        function testHostValidity() {
+            $cookie = new SimpleCookie("name");
+            $cookie->setHost("this.host.name.here");
+            $this->assertTrue($cookie->isValidHost("host.name.here"));
+            $this->assertTrue($cookie->isValidHost("that.host.name.here"));
+            $this->assertFalse($cookie->isValidHost("bad.host"));
+            $this->assertFalse($cookie->isValidHost("nearly.name.here"));
         }
         function testNonExpiring() {
             $cookie = new SimpleCookie("name", "value", "/path");

@@ -253,11 +253,11 @@
             $test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
             $browser->expectCookie("a", "A");
-            $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
+            $browser->fetchUrl("http://this-host.com/this/path/page.html", &$request);
             $test->tally();
-            $this->assertEqual($browser->getCookieValue("this.host", "this/path/", "a"), "A");
-            $this->assertNull($browser->getCookieValue("this.host", "this/", "a"));
-            $this->assertNull($browser->getCookieValue("another.host", "this/path/", "a"));
+            $this->assertEqual($browser->getCookieValue("this-host.com", "this/path/", "a"), "A");
+            $this->assertNull($browser->getCookieValue("this-host.com", "this/", "a"));
+            $this->assertNull($browser->getCookieValue("another.com", "this/path/", "a"));
         }
         function testReceiveExistingCookie() {
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAAA", "this/path/")));
