@@ -48,6 +48,13 @@
             $this->assertIdentical($expectation->test(array(null)), true);
             $this->assertIdentical($expectation->test(array(13)), true);
         }
+        function testOtherExpectations() {
+            $expectation = new ParametersExpectation(
+                    array(new WantedPatternExpectation('/hello/i')));
+            $this->assertFalse($expectation->test(array('Goodbye')));
+            $this->assertTrue($expectation->test(array('hello')));
+            $this->assertTrue($expectation->test(array('Hello')));
+        }
         function testIdentityOnly() {
             $expectation = new ParametersExpectation(array("0"));
             $this->assertFalse($expectation->test(array(0)));
@@ -349,6 +356,15 @@
             $mock->setReturnValue("aMethod", "aaa", array(1, "wild", 3));
             $this->assertIdentical($mock->aMethod(1, "something", 3), "aaa");
             $this->assertIdentical($mock->aMethod(1, "anything", 3), "aaa");
+        }
+        function testPatternMatchReturn() {
+            $mock = &new MockDummy($this);
+            $mock->setReturnValue(
+                    "aMethod",
+                    "aaa",
+                    array(new wantedPatternExpectation('/hello/i')));
+            $this->assertIdentical($mock->aMethod('Hello'), "aaa");
+            $this->assertNull($mock->aMethod('Goodbye'));
         }
         function testCallCount() {
             $mock = &new MockDummy($this);
