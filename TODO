@@ -7,7 +7,7 @@ $Id$
 
 Unit tester
 -----------
-Swapping observer pattern for visitor (3).
+Swapping observer pattern for direct calls (3/5) - done.
 Add an error trap (3).
 
 Interface
