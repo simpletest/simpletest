@@ -18,9 +18,9 @@
          *    Does nothing yet.
          *    @access public
          */
-        function XmlReporter($namespace = 'st', $indent = '  ') {
+        function XmlReporter($namespace = false, $indent = '  ') {
             $this->SimpleReporter();
-            $this->_namespace = $namespace;
+            $this->_namespace = ($namespace ? $namespace . ':' : '');
             $this->_indent = $indent;
         }
         
@@ -60,11 +60,11 @@
         function paintGroupStart($test_name, $size) {
             parent::paintGroupStart($test_name, $size);
             print $this->_getIndent();
-            print "<" . $this->_namespace . ":group size=\"$size\">\n";
+            print "<" . $this->_namespace . "group size=\"$size\">\n";
             print $this->_getIndent(1);
-            print "<" . $this->_namespace . ":name>" .
+            print "<" . $this->_namespace . "name>" .
                     $this->toParsedXml($test_name) .
-                    "</" . $this->_namespace . ":name>\n";
+                    "</" . $this->_namespace . "name>\n";
         }
         
         /**
@@ -74,7 +74,7 @@
          */
         function paintGroupEnd($test_name) {
             print $this->_getIndent();
-            print "</" . $this->_namespace . ":group>\n";
+            print "</" . $this->_namespace . "group>\n";
             parent::paintGroupEnd($test_name);
         }
         
@@ -86,11 +86,11 @@
         function paintCaseStart($test_name) {
             parent::paintCaseStart($test_name);
             print $this->_getIndent();
-            print "<" . $this->_namespace . ":case>\n";
+            print "<" . $this->_namespace . "case>\n";
             print $this->_getIndent(1);
-            print "<" . $this->_namespace . ":name>" .
+            print "<" . $this->_namespace . "name>" .
                     $this->toParsedXml($test_name) .
-                    "</" . $this->_namespace . ":name>\n";
+                    "</" . $this->_namespace . "name>\n";
         }
         
         /**
@@ -100,7 +100,7 @@
          */
         function paintCaseEnd($test_name) {
             print $this->_getIndent();
-            print "</" . $this->_namespace . ":case>\n";
+            print "</" . $this->_namespace . "case>\n";
             parent::paintCaseEnd($test_name);
         }
         
@@ -112,11 +112,11 @@
         function paintMethodStart($test_name) {
             parent::paintMethodStart($test_name);
             print $this->_getIndent();
-            print "<" . $this->_namespace . ":test>\n";
+            print "<" . $this->_namespace . "test>\n";
             print $this->_getIndent(1);
-            print "<" . $this->_namespace . ":name>" .
+            print "<" . $this->_namespace . "name>" .
                     $this->toParsedXml($test_name) .
-                    "</" . $this->_namespace . ":name>\n";
+                    "</" . $this->_namespace . "name>\n";
         }
         
         /**
@@ -127,7 +127,7 @@
          */
         function paintMethodEnd($test_name) {
             print $this->_getIndent();
-            print "</" . $this->_namespace . ":test>\n";
+            print "</" . $this->_namespace . "test>\n";
             parent::paintMethodEnd($test_name);
         }
         
@@ -139,9 +139,9 @@
         function paintPass($message) {
             parent::paintPass($message);
             print $this->_getIndent(1);
-            print "<" . $this->_namespace . ":pass>";
+            print "<" . $this->_namespace . "pass>";
             print $this->toParsedXml($message);
-            print "</" . $this->_namespace . ":pass>\n";
+            print "</" . $this->_namespace . "pass>\n";
         }
         
         /**
@@ -152,9 +152,9 @@
         function paintFail($message) {
             parent::paintFail($message);
             print $this->_getIndent(1);
-            print "<" . $this->_namespace . ":fail>";
+            print "<" . $this->_namespace . "fail>";
             print $this->toParsedXml($message);
-            print "</" . $this->_namespace . ":fail>\n";
+            print "</" . $this->_namespace . "fail>\n";
         }
         
         /**
@@ -166,9 +166,9 @@
         function paintException($message) {
             parent::paintException($message);
             print $this->_getIndent(1);
-            print "<" . $this->_namespace . ":exception>";
+            print "<" . $this->_namespace . "exception>";
             print $this->toParsedXml($message);
-            print "</" . $this->_namespace . ":exception>\n";
+            print "</" . $this->_namespace . "exception>\n";
         }
         
         /**
@@ -181,7 +181,7 @@
         function paintHeader($test_name) {
             print "<?xml version=\"1.0\" xmlns:" . $this->_namespace .
                     "=\"www.lastcraft.com/SimpleTest/Beta3/Report\"?>\n";
-            print "<" . $this->_namespace . ":run>\n";
+            print "<" . $this->_namespace . "run>\n";
         }
         
         /**
@@ -191,7 +191,60 @@
          *    @abstract
          */
         function paintFooter($test_name) {
-            print "</" . $this->_namespace . ":run>\n";
+            print "</" . $this->_namespace . "run>\n";
+        }
+    }
+    
+    /**
+     *    Accumulator for incoming tag. Holds the
+     *    incoming test structure information for
+     *    later dispatch to the reporter.
+     */
+    class NestingXmlTag {
+        var $_tag;
+        var $_name;
+        var $_attributes;
+        
+        /**
+         *    Sets the basic test information except
+         *    the name.
+         *    @param string $tag    XML tag name.
+         *    @access public
+         */
+        function NestingXmlTag($tag, $attributes) {
+            $this->_tag = $tag;
+            $this->_name = false;
+            $this->_attributes = $attributes;
+        }
+        
+        /**
+         *    Sets the test case/method name.
+         *    @param string $name        Name of test.
+         *    @access public
+         */
+        function setName($name) {
+            $this->_name = $name;
+        }
+        
+        /**
+         *    Accessor for name.
+         *    @return string        Name of test.
+         *    @access public
+         */
+        function getName() {
+            return $this->_name;
+        }
+        
+        /**
+         *    The size in the attributes.
+         *    @return integer     Value of size attribute or zero.
+         *    @access public
+         */
+        function getSize() {
+            if (isset($this->_attributes['SIZE'])) {
+                return (integer)$this->_attributes['SIZE'];
+            }
+            return 0;
         }
     }
     
@@ -201,16 +254,20 @@
     class SimpleXmlImporter {
         var $_listener;
         var $_expat;
+        var $_tag_stack;
+        var $_in_name;
         
         /**
          *    Loads a listener with the SimpleReporter
          *    interface.
-         *    @param SimpleReporter        Listener of tag events.
+         *    @param SimpleReporter $listener   Listener of tag events.
          *    @acces public
          */
         function SimpleXmlImporter(&$listener) {
             $this->_listener = &$listener;
             $this->_expat = &$this->_createParser();
+            $this->_tag_stack = array();
+            $this->_in_name = false;
         }
         
         /**
@@ -238,14 +295,42 @@
             xml_set_object($expat, $this);
             xml_set_element_handler($expat, '_startElement', '_endElement');
             xml_set_character_data_handler($expat, '_addContent');
-            xml_set_processing_instruction_handler($expat, "_processingInstruction");
-            xml_set_default_handler($expat, "_default");
-            xml_set_external_entity_ref_handler($expat, "_externalEntityReference");
+            xml_set_default_handler($expat, '_default');
             return $expat;
+        }
+        
+        /**
+         *    Opens a new test nesting level.
+         *    @return NestedXmlTag     The group, case or method tag
+         *                             to start.
+         *    @access private
+         */
+        function _pushNestingTag($nested) {
+            array_unshift($this->_tag_stack, $nested);
+        }
+        
+        /**
+         *    Accessor for current test structure tag.
+         *    @return NestedXmlTag     The group, case or method tag
+         *                             being parsed.
+         *    @access private
+         */
+        function &_getCurrentNestingTag() {
+            return $this->_tag_stack[0];
+        }
+        
+        /**
+         *    Ends a nesting tag.
+         *    @return NestedXmlTag     The group, case or method tag
+         *                             just finished.
+         *    @access private
+         */
+        function _popNestingTag() {
+            return array_shift($this->_tag_stack);
         }
 
         /**
-         *    Start of element event.
+         *    Handler for start of event element.
          *    @param resource $expat     Parser handle.
          *    @param string $tag         Element name.
          *    @param hash $attributes    Name value pairs.
@@ -254,8 +339,11 @@
          *    @access protected
          */
         function _startElement($expat, $tag, $attributes) {
-            if ($tag == "GROUP") {
-                $this->_listener->paintGroupStart();
+            if ($tag == 'GROUP') {
+                $this->_pushNestingTag(new NestingXmlTag($tag, $attributes));
+            } elseif ($tag == 'NAME') {
+                $this->_in_name = true;
+                $this->_name = '';
             }
         }
         
@@ -267,7 +355,15 @@
          */
         function _endElement($expat, $tag) {
             if ($tag == "GROUP") {
-                $this->_listener->paintGroupEnd();
+                $nesting_tag = $this->_popNestingTag();
+                $this->_listener->paintGroupEnd($nesting_tag->getName());
+            } elseif ($tag == 'NAME') {
+                $this->_in_name = false;
+                $nesting_tag = &$this->_getCurrentNestingTag();
+                $nesting_tag->setName($this->_name);
+                $this->_listener->paintGroupStart(
+                        $nesting_tag->getName(),
+                        $nesting_tag->getSize());
             }
         }
         
@@ -278,6 +374,9 @@
          *    @access protected
          */
         function _addContent($expat, $text) {
+            if ($this->_in_name) {
+                $this->_name .= $text;
+            }
             return true;
         }
         

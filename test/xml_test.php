@@ -8,6 +8,16 @@
     
     Mock::generate('SimpleRunner');
     
+    class TestOfNestingTags extends UnitTestCase {
+        function TestOfNestingTags() {
+            $this->UnitTestCase();
+        }
+        function testGroupSize() {
+            $nesting = new NestingXmlTag('GROUP', array('SIZE' => 2));
+            $this->assertEqual($nesting->getSize(), 2);
+        }
+    }
+    
     class TestOfXmlParsing extends UnitTestCase {
         function TestOfXmlParsing() {
             $this->UnitTestCase();
@@ -25,12 +35,13 @@
         }
         function testEmptyGroup() {
             $listener = &new MockSimpleRunner($this);
-            $listener->expectOnce('paintGroupStart');
-            $listener->expectOnce('paintGroupEnd');
+            $listener->expectOnce('paintGroupStart', array('a_group', 7));
+            $listener->expectOnce('paintGroupEnd', array('a_group'));
             $parser = &new SimpleXmlImporter($listener);
             $parser->parse("<?xml version=\"1.0\"?>\n");
             $parser->parse("<run>\n");
-            $this->assertTrue($parser->parse("<group>\n"));
+            $this->assertTrue($parser->parse("<group size=\"7\">\n"));
+            $this->assertTrue($parser->parse("<name><![CDATA[a_group]]></name>\n"));
             $this->assertTrue($parser->parse("</group>\n"));
             $parser->parse("</run>\n");
             $listener->tally();
