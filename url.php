@@ -497,6 +497,22 @@
         }
         
         /**
+         *    Sets image coordinates. Set to flase to clear
+         *    them.
+         *    @param integer $x    Horizontal position.
+         *    @param integer $y    Vertical position.
+         *    @access public
+         */
+        function setCoordinates($x = false, $y = false) {
+            if (($x === false) || ($y === false)) {
+                $this->_x = $this->_y = false;
+                return;
+            }
+            $this->_x = (integer)$x;
+            $this->_y = (integer)$y;
+        }
+        
+        /**
          *    Gets the frame target if present. Although
          *    not strictly part of the URL specification it
          *    acts as similarily to the browser.
@@ -535,7 +551,8 @@
             }
             $encoded = $this->getEncodedRequest();
             $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
-            return "$scheme://$identity$host$path$encoded$fragment";
+            $coords = ($this->_x !== false) ? '?' . $this->_x . ',' . $this->_y : '';
+            return "$scheme://$identity$host$path$encoded$fragment$coords";
         }
         
         /**
