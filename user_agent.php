@@ -215,11 +215,11 @@
         }
         
         /**
-         *    Accessor for the current browser location.
+         *    Accessor for the current location.
          *    @return string       Current URL.
          *    @access public
          */
-        function getCurrentUrl() {
+        function _getCurrentUrl() {
             if (! $this->_current_request) {
                 return false;
             }

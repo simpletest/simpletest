@@ -29,7 +29,7 @@ Fix bug with URL arguments missing with no "=" (1).
 
 Browser
 -------
-Add frame loading support (6/7).
+Add frame loading support (6/8).
 Add frame focus and defocus (2/3).
 Make widget handling reflect frame focus (2).
 Add setFieldById() method (1).

@@ -129,7 +129,7 @@
         function TestOfExpandomaticUrl() {
             $this->UnitTestCase();
         }
-        function testFetchSetsLastUrl() {
+        function testFetchSetsBaseUrl() {
             $headers = &new MockSimpleHttpHeaders($this);
             $headers->setReturnValue("getNewCookies", array());
             
@@ -149,13 +149,10 @@
                     'http://this.com/this/path/page.html',
                     false);
             $this->assertEqual(
-                    $agent->getCurrentUrl(),
-                    "http://this.com/this/path/page.html");
-            $this->assertEqual(
                     $agent->getBaseUrl(),
                     'http://this.com/this/path/');
         }
-        function testSetLastUrlWithPost() {
+        function testSetBaseUrlWithPost() {
             $headers = &new MockSimpleHttpHeaders($this);
             $headers->setReturnValue('getNewCookies', array());
             
@@ -174,9 +171,6 @@
                     'POST',
                     'http://this.com/this/path/page.html',
                     false);
-            $this->assertEqual(
-                    $agent->getCurrentUrl(),
-                    'http://this.com/this/path/page.html');
             $this->assertEqual(
                     $agent->getBaseUrl(),
                     'http://this.com/this/path/');
@@ -208,7 +202,6 @@
                     'GET',
                     'http://test:secret@this.com/page.html',
                     array('a' => 'A', 'b' => 'B'));
-            $this->assertEqual($agent->getCurrentUrl(), 'http://test:secret@this.com/page.html?a=A&b=B');
             $this->assertEqual($agent->getCurrentMethod(), 'GET');
             $this->assertEqual($agent->getCurrentPostData(), false);
             $agent->tally();
@@ -237,7 +230,6 @@
                     'HEAD',
                     'http://this.com/page.html',
                     array('a' => 'A', 'b' => 'B'));
-            $this->assertIdentical($agent->getCurrentUrl(), false);
             $this->assertIdentical($agent->getCurrentMethod(), false);
             $this->assertEqual($agent->getCurrentPostData(), false);
             $agent->tally();
@@ -263,7 +255,6 @@
                     'POST',
                     'http://this.com/page.html',
                     array('a' => 'A', 'b' => 'B'));
-            $this->assertEqual($agent->getCurrentUrl(), 'http://this.com/page.html');
             $this->assertEqual($agent->getCurrentMethod(), 'POST');
             $this->assertEqual($agent->getCurrentPostData(), array('a' => 'A', 'b' => 'B'));
             $agent->tally();

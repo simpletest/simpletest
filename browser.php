@@ -262,7 +262,7 @@
             if ($add_to_history) {
                 $this->_history->recordEntry(
                         $this->_user_agent->getCurrentMethod(),
-                        $this->_user_agent->getCurrentUrl(),
+                        $response->getUrl(),
                         $this->_user_agent->getCurrentPostData());
             }
             return $this->_parse($response);
@@ -283,7 +283,7 @@
          *    @access public
          */
         function getCurrentUrl() {
-            return $this->_user_agent->getCurrentUrl();
+            return $this->_page->getUrl();
         }
         
         /**
@@ -500,7 +500,7 @@
             if (! $this->_page->getRealm()) {
                 return false;
             }
-            $url = new SimpleUrl($this->_history->getUrl());
+            $url = $this->_history->getUrl();
             $this->_user_agent->setIdentity(
                     $url->getHost(),
                     $this->_page->getRealm(),

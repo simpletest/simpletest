@@ -201,6 +201,16 @@
         function TestOfPageHeaders() {
             $this->UnitTestCase();
         }
+        function testUrlAccessor() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getHeaders', $headers);
+            $response->setReturnValue('getUrl', new SimpleUrl('here'));
+
+            $page = &new SimplePage($response);
+            $this->assertEqual($page->getUrl(), new SimpleUrl('here'));
+        }
         function testTransportError() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue('getError', 'Ouch');

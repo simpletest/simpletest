@@ -320,9 +320,8 @@
             $agent->expectArgumentsAt(
                     1,
                     'fetchResponse',
-                    array('GET', 'http://this.com/page.html', array('a' => 'A')));
+                    array('GET', new SimpleUrl('http://this.com/page.html'), array('a' => 'A')));
             $agent->expectCallCount('fetchResponse', 2);
-            $agent->setReturnValue('getCurrentUrl', 'http://this.com/page.html');
             
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', false);
@@ -334,6 +333,7 @@
             $page->setReturnReference('getFormBySubmitLabel', $form);
             $page->expectOnce('getFormBySubmitLabel', array('Submit'));
             $page->setReturnValue('getRaw', 'stuff');
+            $page->setReturnValue('getUrl', new SimpleUrl('http://this.com/page.html'));
             
             $browser = &$this->createBrowser($agent, $page);
             $browser->get('http://this.com/page.html');

@@ -416,6 +416,7 @@
         var $_transport_error;
         var $_raw;
         var $_headers;
+        var $_url;
         
         /**
          *    Parses a page ready to access it's contents.
@@ -433,6 +434,7 @@
             $this->_transport_error = $response->getError();
             $this->_raw = $response->getContent();
             $this->_headers = $response->getHeaders();
+            $this->_url = $response->getUrl();
         }
         
         /**
@@ -451,6 +453,15 @@
          */
         function getHeaders() {
             return $this->_headers->getRaw();
+        }
+        
+        /**
+         *    Accessor for the original resource name.
+         *    @return SimpleUrl      Parsed URL of this resource.
+         *    @access public
+         */
+        function getUrl() {
+            return $this->_url;
         }
         
         /**
