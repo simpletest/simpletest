@@ -22,7 +22,7 @@
             $form = &new SimpleForm($tag, new SimpleUrl('http://host/a/index.html'));
             $this->assertEqual(
                     $form->getAction(),
-                    new SimpleUrl('http://host/a/'));
+                    new SimpleUrl('http://host/a/index.html'));
         }
         
         function testMissingAction() {

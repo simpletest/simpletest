@@ -235,6 +235,13 @@
             $this->assertEqual($url->getBasePath(), "/here/there/");
         }
         
+        function testSplittingUrlWithNoPageGivesEmptyPage() {
+            $url = new SimpleUrl('/here/there/');
+            $this->assertEqual($url->getPath(), '/here/there/');
+            $this->assertEqual($url->getPage(), '');
+            $this->assertEqual($url->getBasePath(), '/here/there/');
+        }
+        
         function testPathNormalisation() {
             $this->assertEqual(
                     SimpleUrl::normalisePath('https://host.com/I/am/here/../there/somewhere.php'),
@@ -364,6 +371,15 @@
         function testMakingAnEmptyUrlAbsolute() {
             $url = new SimpleUrl('');
             $this->assertEqual($url->getPath(), '');
+            $absolute = $url->makeAbsolute('http://host.com/I/am/here/page.html');
+            $this->assertEqual($absolute->getScheme(), 'http');
+            $this->assertEqual($absolute->getHost(), 'host.com');
+            $this->assertEqual($absolute->getPath(), '/I/am/here/page.html');
+        }
+        
+        function testMakingAnEmptyUrlAbsoluteWithMissingPageName() {
+            $url = new SimpleUrl('');
+            $this->assertEqual($url->getPath(), '');
             $absolute = $url->makeAbsolute('http://host.com/I/am/here/');
             $this->assertEqual($absolute->getScheme(), 'http');
             $this->assertEqual($absolute->getHost(), 'host.com');
@@ -381,13 +397,26 @@
             $this->assertEqual($absolute->getFragment(), 'b');
         }
         
+        function testMakingADirectoryUrlAbsolute() {
+            $url = new SimpleUrl('hello/');
+            $this->assertEqual($url->getPath(), 'hello/');
+            $this->assertEqual($url->getBasePath(), 'hello/');
+            $this->assertEqual($url->getPage(), '');
+            $absolute = $url->makeAbsolute('http://host.com/I/am/here/page.html');
+            $this->assertEqual($absolute->getPath(), '/I/am/here/hello/');
+        }
+        
         function testMakingARootUrlAbsolute() {
             $url = new SimpleUrl('/');
             $this->assertEqual($url->getPath(), '/');
-            $absolute = $url->makeAbsolute('http://host.com/I/am/here/');
-            $this->assertEqual($absolute->getScheme(), 'http');
-            $this->assertEqual($absolute->getHost(), 'host.com');
+            $absolute = $url->makeAbsolute('http://host.com/I/am/here/page.html');
             $this->assertEqual($absolute->getPath(), '/');
+        }
+        
+        function testMakingARootPageUrlAbsolute() {
+            $url = new SimpleUrl('/here.html');
+            $absolute = $url->makeAbsolute('http://host.com/I/am/here/page.html');
+            $this->assertEqual($absolute->getPath(), '/here.html');
         }
         
         function testMakingCoordinateUrlAbsolute() {

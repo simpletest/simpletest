@@ -6,9 +6,6 @@
     require_once(dirname(__FILE__) . '/../unit_tester.php');
 
     class TestOfLiveBrowser extends UnitTestCase {
-        function TestOfLiveBrowser() {
-            $this->UnitTestCase();
-        }
         
         function testGet() {
             $browser = &new SimpleBrowser();
@@ -74,9 +71,6 @@
     }
     
     class TestOfLiveFetching extends WebTestCase {
-        function TestOfLiveFetching() {
-            $this->WebTestCase();
-        }
         
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
@@ -84,6 +78,7 @@
         
         function testGet() {
             $this->assertTrue($this->get('http://www.lastcraft.com/test/network_confirm.php'));
+            $this->assertTrue($this->getUrl() == 'http://www.lastcraft.com/test/network_confirm.php');
             $this->assertWantedPattern('/target for the SimpleTest/');
             $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/');
             $this->assertTitle('Simple test target file');
@@ -157,10 +152,60 @@
         }
     }
     
-    class TestOfLiveFrontControllerEmulation extends WebTestCase {
-        function TestOfLiveFrontControllerEmulation() {
-            $this->WebTestCase();
+    class TestOfLivePageLinkingWithMinimalLinks extends WebTestCase {
+        
+        function setUp() {
+            $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
         }
+        
+        function testClickToExplicitelyNamedSelfReturns() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/a_page.php');
+            $this->assertTrue($this->getUrl() == 'http://www.lastcraft.com/test/front_controller_style/a_page.php');
+            $this->assertTitle('Simple test page with links');
+            $this->clickLink('Self');
+            $this->assertTitle('Simple test page with links');
+        }
+        
+        function testClickToMissingPageReturnsToSamePage() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/a_page.php');
+            $this->clickLink('No page');
+            $this->assertTitle('Simple test page with links');
+            $this->assertWantedText('[action=no_page]');
+        }
+        
+        function testClickToBareActionReturnsToSamePage() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/a_page.php');
+            $this->clickLink('Bare action');
+            $this->assertTitle('Simple test page with links');
+            $this->assertWantedText('[action=]');
+        }
+        
+        function testClickToSingleQuestionMarkReturnsToSamePage() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/a_page.php');
+            $this->clickLink('Empty query');
+            $this->assertTitle('Simple test page with links');
+        }
+        
+        function testClickToEmptyStringReturnsToSamePage() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/a_page.php');
+            $this->clickLink('Empty link');
+            $this->assertTitle('Simple test page with links');
+        }
+        
+        function testClickToSingleDotGoesToCurrentDirectory() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/a_page.php');
+            $this->clickLink('Current directory');
+            $this->assertTitle('Simple test front controller');
+        }
+        
+        function testClickBackADirectoryLevel() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/');
+            $this->clickLink('Down one');
+            $this->assertWantedText('Index of /test');
+        }
+    }
+    
+    class TestOfLiveFrontControllerEmulation extends WebTestCase {
         
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
@@ -249,9 +294,6 @@
     }
     
     class TestOfLiveHeaders extends WebTestCase {
-        function TestOfLiveHeaders() {
-            $this->WebTestCase();
-        }
        
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
@@ -267,9 +309,6 @@
     }
      
     class TestOfLiveRedirects extends WebTestCase {
-        function TestOfLiveRedirects() {
-            $this->WebTestCase();
-        }
        
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
@@ -317,9 +356,6 @@
     }
     
     class TestOfLiveCookies extends WebTestCase {
-        function TestOfLiveCookies() {
-            $this->WebTestCase();
-        }
         
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
@@ -387,9 +423,6 @@
     }
     
     class TestOfLiveForm extends WebTestCase {
-        function TestOfLiveForm() {
-            $this->WebTestCase();
-        }
         
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
@@ -514,9 +547,6 @@
     }
     
     class TestOfLiveMultiValueWidgets extends WebTestCase {
-        function TestOfLiveMultiValueWidgets() {
-            $this->WebTestCase();
-        }
         
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
@@ -550,9 +580,6 @@
     }
     
     class TestOfLiveHistoryNavigation extends WebTestCase {
-        function TestOfLiveHistoryNavigation() {
-            $this->WebTestCase();
-        }
         
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
@@ -622,9 +649,6 @@
     }
     
     class TestOfLiveAuthentication extends WebTestCase {
-        function TestOfLiveAuthentication() {
-            $this->WebTestCase();
-        }
         
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
@@ -672,9 +696,6 @@
     }
     
     class TestOfLoadingFrames extends WebTestCase {
-        function TestOfLoadingFrames() {
-            $this->WebTestCase();
-        }
         
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
@@ -908,9 +929,6 @@
     }
     
     class TestOfFrameAuthentication extends WebTestCase {
-        function TestOfFrameAuthentication() {
-            $this->WebTestCase();
-        }
         
         function testUnauthenticatedFrameSendsChallenge() {
             $this->get('http://www.lastcraft.com/test/protected/');
@@ -952,9 +970,6 @@
     }
     
     class TestOfNestedFrames extends WebTestCase {
-        function TestOfNestedFrames() {
-            $this->WebTestCase();
-        }
         
         function testCanNavigateToSpecificContent() {
             $this->get('http://www.lastcraft.com/test/nested_frameset.html');

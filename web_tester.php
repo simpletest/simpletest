@@ -543,7 +543,7 @@
          *    @access public
          */
         function getUrl() {
-            $this->_browser->getUrl();
+            return $this->_browser->getUrl();
         }
         
         /**

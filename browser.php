@@ -16,6 +16,8 @@
     require_once(dirname(__FILE__) . '/user_agent.php');
     /**#@-*/
     
+    define('DEFAULT_MAX_NESTED_FRAMES', 3);
+    
     /**
      *    Browser history list.
 	 *    @package SimpleTest
@@ -171,6 +173,7 @@
         var $_page;
         var $_history;
         var $_ignore_frames;
+        var $_maximum_nested_frames;
         
         /**
          *    Starts with a fresh browser with no
@@ -188,6 +191,7 @@
             $this->_page = &new SimplePage();
             $this->_history = &$this->_createHistory();
             $this->_ignore_frames = false;
+            $this->_maximum_nested_frames = DEFAULT_MAX_NESTED_FRAMES;
         }
         
         /**
@@ -230,18 +234,19 @@
          *    Parses the raw content into a page. Will load further
          *    frame pages unless frames are disabled.
          *    @param SimpleHttpResponse $response    Response from fetch.
+         *    @param integer $depth                  Nested frameset depth.
          *    @return SimplePage                     Parsed HTML.
          *    @access protected
          */
-        function &_parse($response) {
+        function &_parse($response, $depth = 0) {
             $builder = &new SimplePageBuilder();
             $page = &$builder->parse($response);
-            if ($this->_ignore_frames || ! $page->hasFrames()) {
+            if ($this->_ignore_frames || ! $page->hasFrames() || ($depth > $this->_maximum_nested_frames)) {
                 return $page;
             }
             $frameset = &new SimpleFrameset($page);
             foreach ($page->getFrameset() as $key => $url) {
-                $frame = &$this->_fetch('GET', $url, array());
+                $frame = &$this->_fetch('GET', $url, array(), $depth + 1);
                 $frameset->addFrame($frame, $key);
             }
             return $frameset;
@@ -252,15 +257,16 @@
          *    @param string $method           GET or POST.
          *    @param string/SimpleUrl $url    Target to fetch as string.
          *    @param hash $parameters         POST parameters.
+         *    @param integer $depth           Nested frameset depth.
          *    @return SimplePage              Parsed page.
          *    @access private
          */
-        function &_fetch($method, $url, $parameters) {
+        function &_fetch($method, $url, $parameters, $depth = 0) {
             $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
             if ($response->isError()) {
                 return new SimplePage($response);
             }
-            return $this->_parse($response);
+            return $this->_parse($response, $depth);
         }
         
         /**
@@ -390,6 +396,16 @@
          */
         function setMaximumRedirects($max) {
             $this->_user_agent->setMaximumRedirects($max);
+        }
+        
+        /**
+         *    Sets the maximum number of nesting of framed pages
+         *    within a framed page to prevent loops.
+         *    @param integer $max        Highest depth allowed.
+         *    @access public
+         */
+        function setMaximumNestedFrames($max) {
+            $this->_maximum_nested_frames = $max;
         }
         
         /**

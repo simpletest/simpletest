@@ -574,7 +574,11 @@
                 $host = $base->getHost();
                 $port = $base->getPort() ? ':' . $base->getPort() : '';
                 if ($this->_isRelativePath($this->_path)) {
-                    $path = $this->normalisePath($base->getBasePath() . $this->_path);
+                    if ($this->_path) {
+                        $path = $this->normalisePath($base->getBasePath() . $this->_path);
+                    } else {
+                        $path = $this->normalisePath($base->getPath());
+                    }
                 }
             }
             $identity = $this->_getIdentity() ? $this->_getIdentity() . '@' : '';
