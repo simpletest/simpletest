@@ -328,9 +328,11 @@
         function testFailedArguments() {
             $test = &new MockTestCase($this, "*");
             $test->setExpectedArguments("assertTrue", array(false, "*"));
+            $test->setExpectedCallCount("assertTrue", 1);
             $mock = &new MockDummy($test);
             $mock->setExpectedArguments("aMethod", array("this"));
             $mock->aMethod("that");
+            $test->tally();
         }
         function testWildcardArguments() {
             $mock = &new MockDummy($this, "wild");
@@ -349,11 +351,13 @@
         function testFailedSequence() {
             $test = &new MockTestCase($this);
             $test->setExpectedArguments("assertTrue", array(false, "*"));
+            $test->setExpectedCallCount("assertTrue", 2);
             $mock = &new MockDummy($test);
             $mock->setExpectedArgumentsSequence(0, "aMethod", array(1, 2, 3));
             $mock->setExpectedArgumentsSequence(1, "aMethod", array("Hello"));
             $mock->aMethod(1, 2);
             $mock->aMethod("Goodbye");
+            $test->tally();
         }
     }
 ?>
