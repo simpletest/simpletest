@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 65 hours.
+This is immediate stuff only for this iteration (RC2) of 67 hours.
 
 $Id$
 
@@ -21,6 +21,7 @@ Mock objects
 ------------
 Bug fix of fatal error with overload functions (2/2) - done.
 Create ReferenceExpectation (1).
+Expectation expectNever() should register a pass if not called (2/1) - done.
 
 Parser
 ------

@@ -448,13 +448,36 @@
             $this->assertError();
         }
         
-        function testMaxCalls() {
+        function testMaxCallsDetectsOverrun() {
             $this->_test->expectOnce("assertTrue", array(false, '*'));
             $mock = &new MockDummy($this->_test);
             $mock->expectMaximumCallCount("aMethod", 2);
             $mock->aMethod();
             $mock->aMethod();
             $mock->aMethod();
+        }
+        
+        function testTallyOnMaxCallsSendsPassOnUnderrun() {
+            $this->_test->expectOnce("assertTrue", array(true, '*'));
+            $mock = &new MockDummy($this->_test);
+            $mock->expectMaximumCallCount("aMethod", 2);
+            $mock->aMethod();
+            $mock->aMethod();
+            $mock->tally();
+        }
+        
+        function testExpectNeverDetectsOverrun() {
+            $this->_test->expectOnce("assertTrue", array(false, '*'));
+            $mock = &new MockDummy($this->_test);
+            $mock->expectNever("aMethod");
+            $mock->aMethod();
+        }
+        
+        function testTallyOnExpectNeverSendsPassOnUnderrun() {
+            $this->_test->expectOnce("assertTrue", array(true, '*'));
+            $mock = &new MockDummy($this->_test);
+            $mock->expectNever("aMethod");
+            $mock->tally();
         }
         
         function testMinCalls() {

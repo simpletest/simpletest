@@ -661,6 +661,7 @@
             }
             $this->_test = &$test;
             $this->_expected_counts = array();
+            $this->_expected_maximum_counts = array();
             $this->_max_counts = array();
             $this->_expected_args = array();
             $this->_expected_args_at = array();
@@ -842,6 +843,13 @@
                 $this->_assertTrue(
                         $expectation->test($this->getCallCount($method)),
                         $expectation->overlayMessage($this->getCallCount($method)));
+            }
+            foreach ($this->_max_counts as $method => $expectation) {
+                if ($expectation->test($this->getCallCount($method))) {
+                    $this->_assertTrue(
+                            true,
+                            $expectation->overlayMessage($this->getCallCount($method)));
+                }
             }
         }
 
