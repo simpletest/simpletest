@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for the next iteration (Beta1) of 25 hours.
+This is immediate stuff only for the next iteration (Beta3) of 30 hours.
 Figures are estimated hours work versus actual (for XP velocity).
 Stuff will get added or dropped as the cycle progresses.
 
@@ -7,36 +7,33 @@ $Id$
 
 Unit tester
 -----------
-Refactor value formatting into separate Dumper class (2/3) - done.
-Add is_a() patch to allow earlier PHP versions (1/1) - done.
+Add shell test case (3).
 
 Interface
 ---------
-Add command line reporter (4/2) - done.
-Force page reload at start of test (1/1) - done.
+XML reporter (3).
 
 Mock objects
 ------------
-Fix wildcard reporting bug in arguments comparison (2/3) - done.
-Allow expectations to be passed into argument lists (1/0) - done.
 
 Html parser
 -----------
-Test with some realistic pages (2/2) - done.
-Parse drop down lists (4/5) - done.
-Add wrapping behaviour to text areas (1/5) - done.
 
 Browser
 -------
+Frames support (6).
 
 Web tester
 ----------
+Remote XML test case reading (5).
+Add a header test (2).
 
 Documentation
 -------------
-Reorder docs to place the reporters mods last (1).
-Add CLI docs (1/1) - done.
+Split tutorial into two (5).
+Add simple web testing page to docs (2).
 
 Build
 -----
-
+Make files PHP documentor compatible (3).
+Update package.xml file (1).
