@@ -172,6 +172,33 @@
         }
 
         /**
+         *    Paints a simple supplementary message.
+         *    @param string $message        Text to display.
+         *    @access public
+         */
+        function paintMessage($message) {
+            parent::paintMessage($message);
+            print $this->_getIndent(1);
+            print "<" . $this->_namespace . "message>";
+            print $this->toParsedXml($message);
+            print "</" . $this->_namespace . "message>\n";
+        }
+        
+        /**
+         *    Paints a formatted ASCII message such as a
+         *    variable dump.
+         *    @param string $message        Text to display.
+         *    @access public
+         */
+        function paintFormattedMessage($message) {
+            parent::paintFormattedMessage($message);
+            print $this->_getIndent(1);
+            print "<" . $this->_namespace . "formatted>";
+            print "<![CDATA[$message]]>";
+            print "</" . $this->_namespace . "formatted>\n";
+        }
+
+        /**
          *    Serialises the event object.
          *    @param string $type        Event type as text.
          *    @param mixed $payload      Message or object.
@@ -468,6 +495,18 @@
         function _popNestingTag() {
             return array_shift($this->_tag_stack);
         }
+        
+        /**
+         *    Test if tag is a leaf node with only text content.
+         *    @param string $tag        XML tag name.
+         *    @return @boolean          True if leaf, false if nesting.
+         *    @private
+         */
+        function _isLeaf($tag) {
+            return in_array(
+                    $tag,
+                    array('NAME', 'PASS', 'FAIL', 'EXCEPTION', 'MESSAGE', 'FORMATTED', 'SIGNAL'));
+        }
 
         /**
          *    Handler for start of event element.
@@ -486,7 +525,7 @@
                 $this->_pushNestingTag(new NestingCaseTag($attributes));
             } elseif ($tag == 'TEST') {
                 $this->_pushNestingTag(new NestingMethodTag($attributes));
-            } elseif (in_array($tag, array('NAME', 'PASS', 'FAIL', 'EXCEPTION', 'SIGNAL'))) {
+            } elseif ($this->_isLeaf($tag)) {
                 $this->_in_content_tag = true;
                 $this->_content = '';
             }
@@ -499,28 +538,28 @@
          *    @access protected
          */
         function _endElement($expat, $tag) {
+            $this->_in_content_tag = false;
             if (in_array($tag, array('GROUP', 'CASE', 'TEST'))) {
                 $nesting_tag = $this->_popNestingTag();
                 $nesting_tag->paintEnd($this->_listener);
             } elseif ($tag == 'NAME') {
-                $this->_in_content_tag = false;
                 $nesting_tag = &$this->_getCurrentNestingTag();
                 $nesting_tag->setName($this->_content);
                 $nesting_tag->paintStart($this->_listener);
             } elseif ($tag == 'PASS') {
-                $this->_in_content_tag = false;
                 $this->_listener->paintPass($this->_content);
             } elseif ($tag == 'FAIL') {
-                $this->_in_content_tag = false;
                 $this->_listener->paintFail($this->_content);
             } elseif ($tag == 'EXCEPTION') {
-                $this->_in_content_tag = false;
                 $this->_listener->paintException($this->_content);
             } elseif ($tag == 'SIGNAL') {
-                $this->_in_content_tag = false;
                 $this->_listener->paintSignal(
                         $this->_attributes['TYPE'],
                         unserialize($this->_content));
+            } elseif ($tag == 'MESSAGE') {
+                $this->_listener->paintMessage($this->_content);
+            } elseif ($tag == 'FORMATTED') {
+                $this->_listener->paintFormattedMessage($this->_content);
             }
         }
         

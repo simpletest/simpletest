@@ -155,7 +155,26 @@
             $parser = &new SimpleXmlImporter($listener);
             $this->sendValidStart($parser);
             $this->assertTrue($parser->parse(
-                    "<signal type=\"a_signal\">" . serialize($signal) . "</signal>\n"));
+                    "<signal type=\"a_signal\"><![CDATA[" .
+                    serialize($signal) . "]]></signal>\n"));
+            $this->sendValidEnd($parser);
+            $listener->tally();
+        }
+        function testMessage() {
+            $listener = &new MockSimpleRunner($this);
+            $listener->expectOnce('paintMessage', array('a_message'));
+            $parser = &new SimpleXmlImporter($listener);
+            $this->sendValidStart($parser);
+            $this->assertTrue($parser->parse("<message>a_message</message>\n"));
+            $this->sendValidEnd($parser);
+            $listener->tally();
+        }
+        function testFormattedMessage() {
+            $listener = &new MockSimpleRunner($this);
+            $listener->expectOnce('paintFormattedMessage', array("\na\tmessage\n"));
+            $parser = &new SimpleXmlImporter($listener);
+            $this->sendValidStart($parser);
+            $this->assertTrue($parser->parse("<formatted><![CDATA[\na\tmessage\n]]></formatted>\n"));
             $this->sendValidEnd($parser);
             $listener->tally();
         }
