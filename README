@@ -22,14 +22,10 @@ your suggestions into the version one release.
 You are looking at an Alpha release because the interfaces for the
 web testing side have not yet stabilised. The unit tester and mock
 object generator are tested and have already been used to test several
-systems. And of course they are being used to assist creation
-of SimpleTest itself.
+systems, although some of the method names are still settling down.
+And of course they are being used to assist creation of SimpleTest itself.
 
-There is no change log as yet. It would slow down development at
-this stage and duplicate a lot of what can be found in the CVS
-repostory in sourceforge. Once a version 1.0 is reached and the
-interfaces are stable, I will document any subsequent interface
-changes as best I can.
+There is no change log as yet except in CVS.
 
 Oh, yes. It is called "Simple" because it should be simple to
 use. I intend to add a complete set of tools for a test first

@@ -6,11 +6,10 @@ $Id$
 
 Unit tester
 -----------
-Create Comparitor class for better failure display (6).
+Create Comparitor class for better failure display (6/8) - done.
 
 Mock objects
 ------------
-Move argument checks over to Comparitors (2).
 Change expectArgumentsSequence() to expectArgumentsAt() (1/1) - done.
 Change setReturnValueSequence() to setReturnValueAt() (1/0) - done.
 Change setReturnReferenceSequence() to setReturnReferenceAt() (1/0) - done.
