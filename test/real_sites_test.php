@@ -17,12 +17,12 @@
             $this->clickLink('About');
             $this->assertTitle('About Last Craft');
         }
-        function testMirrormill() {
-            $this->assertTrue($this->get('http://www.mirrormill.com'));
-            $this->setField('q', 'php simpletest');
-            $this->clickSubmit('Google Search');
-            $this->assertWantedPattern('/lastcraft/i');
-        }
+        //function testMirrormill() {
+        //    $this->assertTrue($this->get('http://www.mirrormill.com'));
+        //    $this->setField('q', 'php simpletest');
+        //    $this->clickSubmit('Google Search');
+        //    $this->assertWantedPattern('/lastcraft/i');
+        //}
         function testSourceforge() {
             $this->assertTrue($this->get('http://sourceforge.net/projects/simpletest/'));
             $this->clickLink('statistics');

@@ -6,6 +6,7 @@
     }
     require_once(SIMPLE_TEST . 'unit_tester.php');
     require_once(SIMPLE_TEST . 'web_tester.php');
+    require_once(SIMPLE_TEST . 'shell_tester.php');
     require_once(SIMPLE_TEST . 'reporter.php');
     require_once(SIMPLE_TEST . 'mock_objects.php');
     require_once(SIMPLE_TEST . 'adapters/pear_test_case.php');
@@ -27,6 +28,7 @@
             $this->addTestFile("tag_test.php");
             $this->addTestFile("page_test.php");
             $this->addTestFile("web_test_case_test.php");
+            $this->addTestFile("shell_tester_test.php");
         }
     }
     
