@@ -199,5 +199,56 @@
             $agent->tally();
             $page->tally();
         }
+        function testDefaultSubmitFormByLabel() {
+            $agent = &new MockSimpleUserAgent($this);
+            $agent->setReturnReference('fetchResponse', $this->getSuccessfulFetch());
+            $agent->expectArgumentsAt(
+                    1,
+                    'fetchResponse',
+                    array('GET', 'http://this.com/page.html', array('a' => 'A')));
+            $agent->expectCallCount('fetchResponse', 2);
+            $agent->setReturnValue('getCurrentUrl', 'http://this.com/page.html');
+            
+            $form = &new MockSimpleForm($this);
+            $form->setReturnValue('getAction', false);
+            $form->setReturnValue('getMethod', 'get');
+            $form->setReturnvalue('submitButtonByLabel', array('a' => 'A'));
+            
+            $page = &new MockSimplePage($this);
+            $page->setReturnReference('getFormBySubmitLabel', $form);
+            $page->expectOnce('getFormBySubmitLabel', array('Submit'));
+            
+            $browser = &$this->createBrowser($agent, $page);
+            $browser->get('http://this.com/page.html');
+            $this->assertTrue($browser->clickSubmit());
+            
+            $agent->tally();
+            $page->tally();
+        }
+        function testSubmitFormById() {
+            $agent = &new MockSimpleUserAgent($this);
+            $agent->setReturnReference('fetchResponse', $this->getSuccessfulFetch());
+            $agent->expectArgumentsAt(
+                    1,
+                    'fetchResponse',
+                    array('POST', 'handler.html', array('a' => 'A')));
+            $agent->expectCallCount('fetchResponse', 2);
+            
+            $form = &new MockSimpleForm($this);
+            $form->setReturnValue('getAction', 'handler.html');
+            $form->setReturnValue('getMethod', 'post');
+            $form->setReturnvalue('submit', array('a' => 'A'));
+            
+            $page = &new MockSimplePage($this);
+            $page->setReturnReference('getFormById', $form);
+            $page->expectOnce('getFormById', array(33));
+            
+            $browser = &$this->createBrowser($agent, $page);
+            $browser->get('http://this.com/page.html');
+            $this->assertTrue($browser->submitFormById(33));
+            
+            $agent->tally();
+            $page->tally();
+        }
     }
 ?>
