@@ -291,6 +291,8 @@
          *    @access private
          */
         function _loadFrame($frame, $method, $url, $parameters = false) {
+            $page = &$this->_fetch(strtoupper($method), $url, $parameters);
+            $this->_page->setFrame($frame, $page);
         }
         
         /**
@@ -460,6 +462,14 @@
          *    @access public
          */
         function retry() {
+            if ($frame = $this->_page->getFrameFocus()) {
+                $this->_loadFrame(
+                        $frame,
+                        $this->_page->getMethod(),
+                        $this->_page->getUrl(),
+                        $this->_page->getRequestData());
+                return $this->_page->getRaw();
+            }
             if ($method = $this->_history->getMethod()) {
                 $this->_page = &$this->_fetch(
                         $method,

@@ -726,15 +726,48 @@
             $this->assertResponse(401);
         }
         
-        function TODO_testReloadingFrameWithCookieCounter() {
+        function testReloadingFramesetPage() {
             $this->assertTrue($this->get(
                     'http://www.lastcraft.com/test/messy_frameset.html'));
-            $this->setFrameFocus('Counter');
             $this->assertWantedPattern('/Count: 1/');
             $this->retry();
             $this->assertWantedPattern('/Count: 2/');
             $this->retry();
             $this->assertWantedPattern('/Count: 3/');
+        }
+        
+        function testReloadingSingleFrameWithCookieCounter() {
+            $this->assertTrue($this->get(
+                    'http://www.lastcraft.com/test/counting_frameset.html'));
+            $this->setFrameFocus('a');
+            $this->assertWantedPattern('/Count: 1/');
+            $this->setFrameFocus('b');
+            $this->assertWantedPattern('/Count: 2/');
+            
+            $this->setFrameFocus('a');
+            $this->retry();
+            $this->assertWantedPattern('/Count: 3/');
+            $this->retry();
+            $this->assertWantedPattern('/Count: 4/');
+            $this->setFrameFocus('b');
+            $this->assertWantedPattern('/Count: 2/');
+        }
+        
+        function testReloadingFrameWhenUnfocusedReloadsWholeFrameset() {
+            $this->assertTrue($this->get(
+                    'http://www.lastcraft.com/test/counting_frameset.html'));
+            $this->setFrameFocus('a');
+            $this->assertWantedPattern('/Count: 1/');
+            $this->setFrameFocus('b');
+            $this->assertWantedPattern('/Count: 2/');
+            
+            $this->clearFrameFocus('a');
+            $this->retry();
+            
+            $this->setFrameFocus('a');
+            $this->assertWantedPattern('/Count: 3/');
+            $this->setFrameFocus('b');
+            $this->assertWantedPattern('/Count: 4/');
         }
         
         function TODO_testClickingNormalLinkReplacesJustThatFrame() {

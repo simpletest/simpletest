@@ -105,7 +105,7 @@
                 return "Field expectation [" . $dumper->describeValue($this->_value) .
                         "] fails with [" .
                         $this->_dumper->describeValue($compare) . "] " .
-                        $this->_dumper->describeDifference($this->_getValue(), $compare);
+                        $this->_dumper->describeDifference($this->_value, $compare);
             }
         }
     }

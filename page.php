@@ -438,7 +438,7 @@
         }
         
         /**
-         *    Sets the focus by name.
+         *    Sets the focus by name. Always fails for a leaf page.
          *    @param string $name    Chosen frame.
          *    @return boolean        False as no frames.
          *    @access public
@@ -448,7 +448,7 @@
         }
         
         /**
-         *    Clears the frame focus.
+         *    Clears the frame focus. Does nothing.
          *    @access public
          */
         function clearFrameFocus() {

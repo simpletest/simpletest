@@ -29,8 +29,10 @@ Add simple button tag parsing (1).
 Browser
 -------
 Allow nested framed pages (4).
-Add named frame reloads (2/1).
+Add focused frame reloads (2/3) - done.
 Add frame loads from links (6/3).
+Add target frame loading from link (2).
+Add _top target from frame link (1).
 Refactor authentication to cope with framed pages (2).
 Refactor existing base url behaviour into SimplePage (3/8) - done.
 Add getFrames() to SimpleBrowser (1).
