@@ -976,8 +976,10 @@
          *    with the method name and the arguments in an
          *    array.
          *    @param string $class     Class to clone.
-         *    @param string $base      Base class with methods that
-         *                             cannot be cloned.
+         *    @param string $base      Base mock/stub class with methods that
+         *                             cannot be cloned. Otherwise you
+         *                             would be stubbing the accessors used
+         *                             to set the stubs.
          *    @param array $methods    Additional methods.
          *    @static
          *    @access private
@@ -986,7 +988,7 @@
             $code = "";
             $methods = array_merge($methods, get_class_methods($class));
             foreach ($methods as $method) {
-                if (($method == '__construct') || ($method == '__clone')) {
+                if (Stub::_isSpecialMethod($method)) {
                     continue;
                 }
                 if (in_array($method, get_class_methods($base))) {
@@ -998,6 +1000,20 @@
                 $code .= "    }\n";
             }
             return $code;
+        }
+        
+        /**
+         *    Tests to see if a special PHP method is about to
+         *    be stubbed by mistake.
+         *    @param string $method    Method name.
+         *    @return boolean          True if special.
+         *    @access private
+         *    @static
+         */
+        function _isSpecialMethod($method) {
+            return in_array(
+                    strtolower($method),
+                    array('__construct', '__clone', '__get', '__set', '__call'));
         }
     }
     
@@ -1126,8 +1142,7 @@
          *    @access private
          */
         function _addMethodList($methods) {
-            return "    var \$_mocked_methods = array('" .
-                    implode("', '", $methods) . "');\n";
+            return "    var \$_mocked_methods = array('" . implode("', '", $methods) . "');\n";
         }
         
         /**

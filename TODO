@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 22 hours.
+This is immediate stuff only for this iteration (RC2) of 25 hours.
 
 $Id$
 
@@ -12,13 +12,15 @@ Reporter
 
 Mock objects
 ------------
-Bug fix of fatal error with overload functions (2).
+Bug fix of fatal error with overload functions (2/2).
 
 Parser
 ------
 
 Browser
 -------
+Fix socket error with stream_get_timeout() missing (1).
+Fix frames error in unit tests with PHP 4.2.2 (2).
 
 Web tester
 ----------
