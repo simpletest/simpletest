@@ -16,10 +16,10 @@ Remove runner as separate layer (1/1) - done.
 
 Interface
 ---------
-XML reporter (3/2) - done.
+XML reporter (3/3) - done.
 Make Runner invoke different start and end methods on reporters (2/1) - done.
 Add runner decorator (2/2) - done.
-Add dry run option to reporter (1).
+Add dry run option to reporter (1/1) - done.
 
 Mock objects
 ------------
@@ -37,6 +37,7 @@ Move session restarting to cookie ageing (1/1) - done.
 Web tester
 ----------
 Remote XML test case reading (5/7) - done.
+Remote test case reading of size (1).
 Create REST runner (1).
 Add a header test (2).
 

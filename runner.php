@@ -463,8 +463,7 @@
          *    @static
          */
         function inCli() {
-            global $argv;
-            return isset($argv[0]);
+            return php_sapi_name() == 'cli';
         }
     }
     

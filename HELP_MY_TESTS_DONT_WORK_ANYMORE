@@ -33,7 +33,7 @@ This was renamed get() in Alpha8. It is removed in Beta3.
 
 No method submit()
 ==================
-This has been renamed clickSubmit() in Beta1. The old method were
+This has been renamed clickSubmit() in Beta1. The old method was
 be removed in Beta2.
 
 No method clearHistory()
@@ -89,8 +89,9 @@ class (HtmlReporter) instead.
 If you have accessed the event queue by overriding the notify() method
 then I am afraid you are in big trouble :(. The reporter is now
 carried around the test suite by the runner classes and the methods
-called directly. In the unlikely event that this is a problem then
-simplest is to write your own runner class and invoke the tests with...
+called directly. In the unlikely event that this is a problem and
+you don't want to upgrade the test tool then simplest is to write your
+own runner class and invoke the tests with...
 
 $test->accept(new MyRunner(new MyReporter()));
 
