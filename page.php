@@ -483,7 +483,7 @@
         var $_complete_forms;
         var $_frameset;
         var $_frames;
-        var $_frameset_is_complete;
+        var $_frameset_nesting_level;
         var $_transport_error;
         var $_raw;
         var $_sent;
@@ -504,7 +504,7 @@
             $this->_complete_forms = array();
             $this->_frameset = false;
             $this->_frames = array();
-            $this->_frameset_is_complete = false;
+            $this->_frameset_nesting_level = 0;
             $this->_transport_error = $response->getError();
             $this->_raw = $response->getContent();
             $this->_sent = $response->getSent();
@@ -700,14 +700,16 @@
         }
         
         /**
-         *    Opens a frameset.
+         *    Opens a frameset. A frameset may contain nested
+         *    frameset tags.
          *    @param SimpleFramesetTag $tag      Tag to accept.
          *    @access public
          */
         function acceptFramesetStart(&$tag) {
-            if (! $this->_frameset_is_complete) {
+            if (! $this->_isLoadingFrames()) {
                 $this->_frameset = &$tag;
             }
+            $this->_frameset_nesting_level++;
         }
         
         /**
@@ -716,18 +718,19 @@
          */
         function acceptFramesetEnd() {
             if ($this->_isLoadingFrames()) {
-                $this->_frameset_is_complete = true;
+                $this->_frameset_nesting_level--;
             }
         }
         
         /**
          *    Takes a single frame tag and stashes it in
          *    the current frame set.
+         *    @param SimpleFrameTag $tag      Tag to accept.
          *    @access public
          */
         function acceptFrame(&$tag) {
-            if ($tag->getAttribute('src')) {
-                if ($this->_isLoadingFrames()) {
+            if ($this->_isLoadingFrames()) {
+                if ($tag->getAttribute('src')) {
                     $this->_frames[] = &$tag;
                 }
             }
@@ -743,7 +746,7 @@
             if (! $this->_frameset) {
                 return false;
             }
-            return ! $this->_frameset_is_complete;
+            return ($this->_frameset_nesting_level > 0);
         }
         
         /**
@@ -772,7 +775,7 @@
          *    @access public
          */
         function hasFrames() {
-            return $this->_frameset_is_complete;
+            return (boolean)$this->_frameset;
         }
         
         /**
@@ -784,7 +787,7 @@
          *    @access public
          */
         function getFrames() {
-            if (! $this->_frameset_is_complete) {
+            if (! $this->_frameset) {
                 return false;
             }
             $urls = array();

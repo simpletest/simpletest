@@ -469,6 +469,17 @@
             $this->assertTrue($page->hasFrames());
             $this->assertIdentical($page->getFrames(), array(0 => 'a.html'));
         }
+        function testSingleFrameInNestedFrameset() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent',
+                    '<html><frameset><frameset>' .
+                    '<frame src="a.html">' .
+                    '</frameset></frameset></html>');
+            
+            $page = &$this->parse($response);
+            $this->assertTrue($page->hasFrames());
+            $this->assertIdentical($page->getFrames(), array(0 => 'a.html'));
+        }
         function testFrameWithNoSource() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue(
@@ -478,6 +489,21 @@
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
             $this->assertIdentical($page->getFrames(), array());
+        }
+        function testFramesCollectedWithNestedFramesetTags() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent',
+                    '<html><frameset>' .
+                    '<frame src="a.html">' .
+                    '<frameset><frame src="b.html"></frameset>' .
+                    '<frame src="c.html">' .
+                    '</frameset></html>');
+            
+            $page = &$this->parse($response);
+            $this->assertTrue($page->hasFrames());
+            $this->assertIdentical(
+                    $page->getFrames(),
+                    array(0 => 'a.html', 1 => 'b.html', 2 => 'c.html'));
         }
         function testNamedFrames() {
             $response = &new MockSimpleHttpResponse($this);
