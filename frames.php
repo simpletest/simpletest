@@ -25,6 +25,7 @@
         var $_frameset;
         var $_frames;
         var $_focus;
+        var $_names;
         
         /**
          *    Stashes the frameset page. Will make use of the
@@ -35,15 +36,20 @@
             $this->_frameset = &$page;
             $this->_frames = array();
             $this->_focus = false;
+            $this->_names = array();
         }
         
         /**
          *    Adds a parsed page to the frameset.
-         *    @param SimplePage $page        Frame page.
+         *    @param SimplePage $page    Frame page.
+         *    @param string name         Name of frame in frameset.
          *    @access public
          */
-        function addParsedFrame(&$page) {
+        function addParsedFrame(&$page, $name = false) {
             $this->_frames[] = &$page;
+            if ($name) {
+                $this->_names[$name] = count($this->_frames) - 1;
+            }
         }
         
         /**
@@ -57,6 +63,11 @@
         function getFocus() {
             if ($this->_focus === false) {
                 return false;
+            }
+            foreach ($this->_names as $name => $index) {
+                if ($this->_focus == $index) {
+                    return $name;
+                }
             }
             return $this->_focus + 1;
         }
@@ -73,6 +84,20 @@
             }
             $this->_focus = $choice - 1;
             return true;
+        }
+        
+        /**
+         *    Sets the focus by name.
+         *    @param string $name    Chosen frame.
+         *    @return boolean        True if frame exists.
+         *    @access public
+         */
+        function setFocus($name) {
+            if (in_array($name, array_keys($this->_names))) {
+                $this->_focus = $this->_names[$name];
+                return true;
+            }
+            return false;
         }
         
         /**

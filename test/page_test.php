@@ -496,7 +496,17 @@
             $page = &$this->parse($response);
             $this->assertEqual($page->getTitle(), "Me&amp;Me");
         }
-        function testFrameset() {
+        function testEmptyFrameset() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue(
+                    'getContent',
+                    '<html><frameset></frameset></html>');
+            
+            $page = &$this->parse($response);
+            $this->assertTrue($page->hasFrames());
+            $this->assertIdentical($page->getFrames(), array());
+        }
+        function testSingleFrame() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue(
                     'getContent',
@@ -505,6 +515,33 @@
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
             $this->assertIdentical($page->getFrames(), array(0 => 'a.html'));
+        }
+        function testFrameWithNoSource() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue(
+                    'getContent',
+                    '<html><frameset><frame></frameset></html>');
+            
+            $page = &$this->parse($response);
+            $this->assertTrue($page->hasFrames());
+            $this->assertIdentical($page->getFrames(), array());
+        }
+        function testNamedFrames() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent', '<html><frameset>' .
+                    '<frame src="a.html">' .
+                    '<frame name="_one" src="b.html">' .
+                    '<frame src="c.html">' .
+                    '<frame src="d.html" name="_two">' .
+                    '</frameset></html>');
+            
+            $page = &$this->parse($response);
+            $this->assertTrue($page->hasFrames());
+            $this->assertIdentical($page->getFrames(), array(
+                    0 => 'a.html',
+                    '_one' => 'b.html',
+                    2 => 'c.html',
+                    '_two' => 'd.html'));
         }
         function testFormByLabel() {
             $response = &new MockSimpleHttpResponse($this);

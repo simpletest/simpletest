@@ -641,8 +641,10 @@
          *    @access public
          */
         function acceptFrame(&$tag) {
-            if ($this->_isLoadingFrames()) {
-                $this->_frames[] = &$tag;
+            if ($tag->getAttribute('src')) {
+                if ($this->_isLoadingFrames()) {
+                    $this->_frames[] = &$tag;
+                }
             }
         }
         

@@ -31,7 +31,8 @@ Fix bug with URL arguments missing with no "=" (1).
 Browser
 -------
 Add frame loading support (6/9).
-Add frame focus and defocus (2/3).
+Add frame focus and defocus (2/4) - done.
+Allow nested frames (4).
 Make widget handling reflect frame focus (2).
 Add setFieldById() method (1).
 Add assertFieldById() method (1).
