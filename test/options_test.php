@@ -48,5 +48,10 @@
                     new RandomCompatibilitySubclass(),
                     'RandomCompatibilityClass'));
         }
+        function testIdentityOfObjects() {
+            $object1 = new RandomCompatibilityClass();
+            $object2 = new RandomCompatibilityClass();
+            $this->assertIdentical($object1, $object2);
+        }
     }
 ?>
