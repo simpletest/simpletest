@@ -85,7 +85,13 @@
             $url->makeAbsolute("https://host.com/here/");
             $this->assertEqual($url->getScheme(), "https");
             $this->assertEqual($url->getHost(), "host.com");
-            $this->assertEqual($url->getPath(), "/here/../there/somewhere.php");
+            $this->assertEqual($url->getPath(), "/there/somewhere.php");
+        }
+        function testMakingAbsoluteAppendedPath() {
+            $url = new SimpleUrl("./there/somewhere.php");
+            $url->makeAbsolute("http://host.com/here/");
+            $this->assertEqual($url->getPath(), "/here/there/somewhere.php");
+            $base = new SimpleUrl("http://host.com/here/");
         }
         function testBlitz() {
             $this->assertUrl(

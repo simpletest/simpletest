@@ -285,6 +285,18 @@
             if (substr($this->getPath(), 0, 1) != "/") {
                 $this->_path = $base_url->getBasePath() . $this->getPath();
             }
+            $this->_path = $this->normalisePath($this->_path);
+        }
+        
+        /**
+         *    Replaces . and .. sections of the path.
+         *    @param $path    Unoptimised path.
+         *    @return         Path with dots removed if possible.
+         *    @public
+         */
+        function normalisePath($path) {
+            $path = preg_replace('/\/.*?\/\.\.\//', '/', $path);
+            return preg_replace('/\/\.\//', '/', $path);
         }
     }
 
