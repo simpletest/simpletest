@@ -128,7 +128,8 @@
                 return $matches[2];
             }
             if (preg_match('/(.*?)(\.\.\/|\.\/|\/|\?|#|$)(.*)/', $url, $matches)) {
-                if (preg_match('/[a-z0-9\-]+\.(com|edu|net|org|gov|mil|int)/i', $matches[1])) {
+                $tlds = SimpleUrl::getAllTopLevelDomains();
+                if (preg_match('/[a-z0-9\-]+\.(' . $tlds . ')/i', $matches[1])) {
                     $url = $matches[2] . $matches[3];
                     return $matches[1];
                 } elseif (preg_match('/[a-z0-9\-]+\.[a-z0-9\-]+\.[a-z0-9\-]+/i', $matches[1])) {
@@ -491,6 +492,17 @@
         function normalisePath($path) {
             $path = preg_replace('|/[^/]+/\.\./|', '/', $path);
             return preg_replace('|/\./|', '/', $path);
+        }
+        
+        /**
+         *    A pipe seperated list of all TLDs that result in two part
+         *    domain names.
+         *    @return string        Pipe separated list.
+         *    @access public
+         *    @static
+         */
+        function getAllTopLevelDomains() {
+            return 'com|edu|net|org|gov|mil|int|biz|info|name|pro|aero|coop|museum';
         }
     }
 ?>

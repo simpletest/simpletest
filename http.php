@@ -97,7 +97,8 @@
          *    @access private
          */
         function _truncateHost($host) {
-            if (preg_match('/[a-z\-]+\.(com|edu|net|org|gov|mil|int)$/i', $host, $matches)) {
+            $tlds = SimpleUrl::getAllTopLevelDomains();
+            if (preg_match('/[a-z\-]+\.(' . $tlds . ')$/i', $host, $matches)) {
                 return $matches[0];
             } elseif (preg_match('/[a-z\-]+\.[a-z\-]+\.[a-z\-]+$/i', $host, $matches)) {
                 return $matches[0];
