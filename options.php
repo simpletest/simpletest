@@ -186,7 +186,7 @@
                 }
                 if (is_array($first) && is_array($second)) {
                     foreach (array_keys($first) as $key) {
-                        if (! SimpleTestCompatibility::isIdentical()) {
+                        if (! SimpleTestCompatibility::isIdentical($first[$key], $second[$key])) {
                             return false;
                         }
                     }

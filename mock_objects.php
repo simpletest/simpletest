@@ -116,10 +116,8 @@
          *    @access private
          */
         function _testParameter($parameter, $expected) {
-            if (SimpleTestCompatibility::isA($expected, 'SimpleExpectation')) {
-                return $expected->test($parameter);
-            }
-            return SimpleTestCompatibility::isIdentical($expected, $parameter);
+            $comparison = $this->_coerceToExpectation($expected);
+            return $comparison->test($parameter);
         }
         
         /**
