@@ -479,11 +479,11 @@
         function testTitleTakenFromFramesetPage() {
             $this->get('http://www.lastcraft.com/test/one_page_frameset.html');
             $this->assertTitle('Frameset for testing of SimpleTest');
-            $this->assertNoUnwantedPattern('/This content is for no frames only/');
         }
-        function TODO_testPatternMatchCanReadWholeFrameset() {
+        function testPatternMatchCanReadTheOnlyFrame() {
             $this->get('http://www.lastcraft.com/test/one_page_frameset.html');
-            $this->assertWantedPattern('/This is frame A/');
+            $this->assertWantedPattern('/A target for the SimpleTest test suite/');
+            $this->assertNoUnwantedPattern('/This content is for no frames only/');
         }
     }
 ?>

@@ -241,6 +241,8 @@
             }
             $frameset = &new SimpleFrameset($page);
             foreach ($frameset->getFrames() as $key => $url) {
+                $frame = $this->_fetch('GET', $url, array(), false);
+                $frameset->addParsedFrame($frame);
             }
             return $frameset;
         }

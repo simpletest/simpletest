@@ -500,10 +500,11 @@
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue(
                     'getContent',
-                    '<html><frameset><frame src="a"></frameset></html>');
+                    '<html><frameset><frame src="a.html"></frameset></html>');
             
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
+            $this->assertIdentical($page->getFrames(), array(0 => 'a.html'));
         }
         function testFormByLabel() {
             $response = &new MockSimpleHttpResponse($this);

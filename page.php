@@ -84,6 +84,10 @@
                 $this->_page->acceptFramesetStart($tag);
                 return true;
             }            
+            if ($name == 'frame') {
+                $this->_page->acceptFrame($tag);
+                return true;
+            }            
             if ($tag->expectEndTag()) {
                 $this->_openTag($tag);
                 return true;
@@ -186,6 +190,8 @@
                 return new SimpleOptionTag($attributes);
             } elseif ($name == 'form') {
                 return new SimpleFormTag($attributes);
+            } elseif ($name == 'frame') {
+                return new SimpleFrameTag($attributes);
             }
             return new SimpleTag($name, $attributes);
         }
