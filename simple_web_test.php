@@ -215,5 +215,17 @@
                         sprintf($message, "Expecting cookie [$name]"));
             }
         }
+        
+        /**
+         *    Sets an expectation of a cookie being set on the
+         *    next fetching operation.
+         *    @param $name        Name of cookie to expect.
+         *    @param $expect      Expected value as a string or
+         *                        false if any value will do.
+         *    @param $message     Message to display.
+         *    @public
+         */
+        function expectCookie($name, $expect = false, $message = "%s") {
+        }
     }
 ?>

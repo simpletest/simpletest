@@ -369,10 +369,16 @@
          *    Sets an expectation for a cookie.
          *    @param $name        Cookie key.
          *    @param $value       Expected value of incoming cookie.
+         *                        An empty string corresponds to a
+         *                        cleared cookie.
+         *    @param $message     Message to display.
          *    @public
          */
-        function expectCookie($name, $value = false) {
-            $this->_expected_cookies[] = array("name" => $name, "value" => $value);
+        function expectCookie($name, $value = false, $message = "%s") {
+            $this->_expected_cookies[] = array(
+                    "name" => $name,
+                    "value" => $value,
+                    "message" => $message);
         }
         
         /**
@@ -398,9 +404,18 @@
                         in_array($response->getMimeType(), $this->_expected_mime_types),
                         "Fetching $url with mime type [" . $response->getMimeType() . "]");
             }
+            $this->_checkAllExpectedCookies($response);
+        }
+        
+        /**
+         *    Checks all incoming cookies against expectations.
+         *    @param $reponse     HTTP response from the fetch.
+         *    @private
+         */
+        function _checkAllExpectedCookies(&$response) {
             $cookies = $response->getNewCookies();
-            foreach($this->_expected_cookies as $expectation) {
-                $this->_checkExpectedCookie($expectation, $cookies);
+            foreach($this->_expected_cookies as $expected) {
+                $this->_checkExpectedCookie($expected, $cookies);
             }
         }
         
@@ -408,8 +423,10 @@
          *    Checks that an expected cookie was present
          *    in the incoming cookie list. The cookie
          *    should appear only once.
-         *    @param $expected    Expected cookie.
-         *    @param $cookies     Incoming.
+         *    @param $expected    Expected cookie values as
+         *                        simple hash with the message
+         *                        to show on failure.
+         *    @param $cookies     Incoming cookies.
          *    @return             True if expectation met.
          *    @private
          */
@@ -422,9 +439,12 @@
                     $message = "Expected cookie " . $expected["name"] .
                             " value " . $expected["value"] .
                             " should be [" . $cookie->getValue() . "]";
+                    if (!$is_match) {
+                        break;
+                    }
                 }
             }
-            $this->_assertTrue($is_match, $message);
+            $this->_assertTrue($is_match, sprintf($expected["message"], $message));
         }
         
         /**

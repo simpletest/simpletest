@@ -93,5 +93,9 @@
             $this->assertCookie("a");
             $this->assertCookie("b", "Test cookie b");
         }
+        function testCookieReading() {
+            $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
+            $this->assertCookie("session_cookie", "A");
+        }
     }
 ?>
