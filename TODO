@@ -25,6 +25,8 @@ Browser
 Allow listing of all URLs (4).
 Add file uploading (8).
 Simple click() method for links, buttons or images (2).
+setCookie() should be able to create a new one (1).
+Simultaneous POST and GET parameters (3).
 
 Web tester
 ----------
