@@ -438,7 +438,16 @@
          *    @access public
          */
         function authenticate($username, $password) {
-            $this->_user_agent->setIdentity($username, $password);
+            if (! $this->_headers) {
+                return false;
+            }
+            if (! $this->_headers->getRealm()) {
+                return false;
+            }
+            $this->_user_agent->setIdentity(
+                    $this->_headers->getRealm(),
+                    $username,
+                    $password);
             return $this->retry();
         }
         

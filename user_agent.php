@@ -24,14 +24,14 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class CookieJar {
+    class SimpleCookieJar {
         var $_cookies;
         
         /**
          *    Constructor. Jar starts empty.
          *    @access public
          */
-        function CookieJar() {
+        function SimpleCookieJar() {
             $this->_cookies = array();
         }
         
@@ -145,7 +145,7 @@
          *    @param SimpleUrl $url                Cookie selector.
          *    @access private
          */
-        function addCookieHeaders(&$request, $url) {
+        function addHeaders(&$request, $url) {
             $cookies = $this->getValidCookies($url->getHost(), $url->getPath());
             foreach ($cookies as $cookie) {
                 $request->setCookie($cookie);
@@ -238,16 +238,16 @@
          *    @access public
          */
         function addHeaders(&$request, $url) {
-            $realm = $this->_findRealmFromUrl($url);
-            if (! $realm) {
+            if ($url->getUsername() && $url->getPassword()) {
+                $username = $url->getUsername();
+                $password = $url->getPassword();
+            } elseif ($realm = $this->_findRealmFromUrl($url)) {
+                $username = $this->_realms[$realm]['username'];
+                $password = $this->_realms[$realm]['password'];
+            } else {
                 return;
             }
-            if ($this->_realms[$realm]['type'] == 'Basic') {
-                $this->addBasicHeaders(
-                        $request,
-                        $this->_realms[$realm]['username'],
-                        $this->_realms[$realm]['password']);
-            }
+            $this->addBasicHeaders($request, $username, $password);
         }
         
         /**
@@ -275,6 +275,7 @@
      */
     class SimpleUserAgent {
         var $_cookie_jar;
+        var $_authenticator;
         var $_max_redirects;
         var $_connection_timeout;
         var $_current_request;
@@ -284,7 +285,8 @@
          *    @access public
          */
         function SimpleUserAgent() {
-            $this->_cookie_jar = new CookieJar();
+            $this->_cookie_jar = &new SimpleCookieJar();
+            $this->_authenticator = &new SimpleAuthenticator();
             $this->setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
             $this->setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
             $this->_current_request = false;
@@ -473,11 +475,13 @@
         
         /**
          *    Sets the identity for the current realm.
+         *    @param string $realm       Full name of realm.
          *    @param string $username    Username for realm.
          *    @param string $password    Password for realm.
          *    @access public
          */
-        function setIdentity($username, $password) {
+        function setIdentity($realm, $username, $password) {
+            $this->_authenticator->setIdentityForRealm($realm, $username, $password);
         }
         
         /**
@@ -495,7 +499,16 @@
                 $url->addRequestParameters($parameters);
                 $parameters = false;
             }
-            return $this->_fetchWhileRedirected($method, $url, $parameters);
+            $response = &$this->_fetchWhileRedirected($method, $url, $parameters);
+            if ($headers = $response->getHeaders()) {
+                if ($headers->isChallenge()) {
+                    $this->_authenticator->addRealm(
+                            $url,
+                            $headers->getAuthentication(),
+                            $headers->getRealm());
+                }
+            }
+            return $response;
         }
         
         /**
@@ -553,24 +566,9 @@
          */
         function &_createRequest($method, $url, $parameters) {
             $request = &$this->_createHttpRequest($method, $url, $parameters);
-            $this->_cookie_jar->addCookieHeaders($request, $url);
-            $this->_addAuthentication($request, $url);
+            $this->_cookie_jar->addHeaders($request, $url);
+            $this->_authenticator->addHeaders($request, $url);
             return $request;
-        }
-        
-        /**
-         *    Adds basic authentication header.
-         *    @param SimpleHttpRequest $request    Request to modify.
-         *    @param SimpleUrl $url                Cookie selector.
-         *    @access private
-         */
-        function _addAuthentication(&$request, $url) {
-            if ($url->getUsername()) {
-                SimpleAuthenticator::addBasicHeaders(
-                        $request,
-                        $url->getUsername(),
-                        $url->getPassword());
-            }
         }
         
         /**

@@ -439,6 +439,9 @@
             $this->assertAuthentication('Basic');
             $this->assertRealm('SimpleTest basic authentication');
             $this->authenticate('test', 'secret');
+            $this->assertResponse(200);
+            $this->retry();
+            $this->assertResponse(200);
         }
         function testEncodedAuthenticationFetchesPage() {
             $this->get('http://test:secret@www.lastcraft.com/test/protected/');

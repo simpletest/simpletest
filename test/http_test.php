@@ -426,12 +426,13 @@
             $this->assertTrue($headers->isRedirect());
         }
         function testParseChallenge() {
-            $headers = new SimpleHttpHeaders("HTTP/1.1 301 OK\r\n" .
+            $headers = new SimpleHttpHeaders("HTTP/1.1 401 Authorization required\r\n" .
                     "Content-Type: text/plain\r\n" .
                     "Connection: close\r\n" .
                     "WWW-Authenticate: Basic realm=\"Somewhere\"");
             $this->assertEqual($headers->getAuthentication(), 'Basic');
             $this->assertEqual($headers->getRealm(), 'Somewhere');
+            $this->assertTrue($headers->isChallenge());
         }
     }
     

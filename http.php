@@ -803,14 +803,25 @@
         }
         
         /**
-         *    Test to see if the response is a valid
-         *    redirect.
+         *    Test to see if the response is a valid redirect.
          *    @return boolean       True if valid redirect.
          *    @access public
          */
         function isRedirect() {
             return in_array($this->_response_code, array(301, 302, 303, 307)) &&
                     (boolean)$this->getLocation();
+        }
+        
+        /**
+         *    Test to see if the response is an authentication
+         *    challenge.
+         *    @return boolean       True if challenge.
+         *    @access public
+         */
+        function isChallenge() {
+            return ($this->_response_code == 401) &&
+                    (boolean)$this->_authentication &&
+                    (boolean)$this->_realm;
         }
         
         /**
