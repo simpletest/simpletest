@@ -71,9 +71,6 @@
             $this->assertWantedPattern(
                     '/Request method.*?<dd>POST<\/dd>/',
                     $response->getContent());
-            $this->assertWantedPattern(
-                    '/Raw POST data.*?\s+\[Some post data\]/',
-                    $response->getContent());
         }
         function testHttpFormPost() {
             $http = &new SimpleHttpPushRequest(
@@ -358,6 +355,22 @@
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedPattern('/a=\[a1, a4\]/');
             $this->assertWantedPattern('/b=\[b1, b4\]/');
+        }
+    }
+    
+    class TestOfHistoryNavigation extends WebTestCase {
+        function TestOfHistoryNavigation() {
+            $this->WebTestCase();
+        }
+        function testOfBackButton() {
+            $this->get('http://www.lastcraft.com/test/1.html');
+            $this->clickLink('2');
+            $this->assertTitle('2');
+            $this->assertTrue($this->back());
+            $this->assertTitle('1');
+            $this->assertTrue($this->forward());
+            $this->assertTitle('2');
+            $this->assertFalse($this->forward());
         }
     }
     

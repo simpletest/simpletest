@@ -204,6 +204,38 @@
         }
         
         /**
+         *    Equivalent to hitting the retry button on the
+         *    browser. Will attempt to repeat the page fetch.
+         *    @return boolean     True if fetch succeeded
+         *    @access public
+         */
+        function retry() {
+            return $this->_browser->retry();
+        }
+        
+        /**
+         *    Equivalent to hitting the back button on the
+         *    browser.
+         *    @return boolean     True if history entry and
+         *                        fetch succeeded
+         *    @access public
+         */
+        function back() {
+            return $this->_browser->back();
+        }
+        
+        /**
+         *    Equivalent to hitting the forward button on the
+         *    browser.
+         *    @return boolean     True if history entry and
+         *                        fetch succeeded
+         *    @access public
+         */
+        function forward() {
+            return $this->_browser->forward();
+        }
+        
+        /**
          *    Clicks the submit button by label. The owning
          *    form will be submitted by this.
          *    @param string $label    Button label. An unlabeled

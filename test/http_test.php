@@ -446,8 +446,8 @@
         function testUrlAccessor() {
             $url = new SimpleUrl('http://www.lastcraft.com');
             $response = &new SimpleHttpResponse('HEAD', $url, new MockSimpleSocket($this));
-            $this->assertEqual($url, $response->getUrl());
-            $this->assertEqual('HEAD', $response->getMethod());
+            $this->assertEqual($response->getUrl(), $url);
+            $this->assertEqual($response->getMethod(), 'HEAD');
         }
         function testBadRequest() {
             $socket = &new MockSimpleSocket($this);

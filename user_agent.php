@@ -298,14 +298,14 @@
         /**
          *    Fetches a URL as a response object. Will
          *    keep trying if redirected.
-         *    @param string $method     GET, POST, etc.
-         *    @param string $raw_url    Target to fetch.
-         *    @param hash $parameters   Additional parameters for request.
-         *    @return                   Response object.
+         *    @param string $method         GET, POST, etc.
+         *    @param string/SimpleUrl $url  Target to fetch.
+         *    @param hash $parameters       Additional parameters for request.
+         *    @return                       Response object.
          *    @access public
          */
-        function &fetchResponse($method, $raw_url, $parameters = false) {
-            $url = $this->createAbsoluteUrl($this->getBaseUrl(), $raw_url, $parameters);
+        function &fetchResponse($method, $url, $parameters = false) {
+            $url = $this->createAbsoluteUrl($this->getBaseUrl(), $url, $parameters);
             $redirects = 0;
             do {
                 $response = &$this->_fetch($method, $url, $parameters);
@@ -415,22 +415,24 @@
         }
         
         /**
-         *    Turns an incoming URL string into a
+         *    Turns an incoming URL string or object into a
          *    URL object, filling the relative URL if
          *    a base URL is present.
-         *    @param string $base_url       Browser current URL.
-         *    @param string $raw_url        Incoming URL.
+         *    @param string/SimpleUrl $base Browser current URL.
+         *    @param string/SimpleUrl $url  Incoming URL.
          *    @param hash $parameters       Additional request, parameters.
          *    @return SimpleUrl             Absolute URL.
          *    @access public
          *    @static
          */
-        function createAbsoluteUrl($base_url, $raw_url, $parameters = false) {
-            $url = new SimpleUrl($raw_url);
+        function createAbsoluteUrl($base, $url, $parameters = false) {
+            if (! is_object($url)) {
+                $url = new SimpleUrl($url);
+            }
             if ($parameters) {
                 $url->addRequestParameters($parameters);
             }
-            $url->makeAbsolute($base_url);
+            $url->makeAbsolute($base);
             return $url;
         }
     }

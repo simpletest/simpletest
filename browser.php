@@ -64,11 +64,11 @@
         /**
          *    Adds a successfully fetched page to the history.
          *    @param string $method    GET or POST.
-         *    @param string $url       Full URL of fetch.
+         *    @param SimpleUrl $url    URL of fetch.
          *    @param array $parameters Any post data with the fetch.
          *    @access public
          */
-        function addFetch($method, $url, $parameters) {
+        function recordEntry($method, $url, $parameters) {
             $this->_dropFuture();
             array_push(
                     $this->_sequence,
@@ -79,7 +79,8 @@
         /**
          *    Last fetching method for current history
          *    position.
-         *    @return string        GET or POST.
+         *    @return string      GET or POST for this point in
+         *                        the history.
          *    @access public
          */
         function getMethod() {
@@ -92,7 +93,7 @@
         /**
          *    Last fully qualified URL for current history
          *    position.
-         *    @return string        Full URL.
+         *    @return SimpleUrl        URL for this position.
          *    @access public
          */
         function getUrl() {
@@ -106,6 +107,7 @@
          *    Parameters of last fetch from current history
          *    position.
          *    @return array        Hash of post parameters.
+         *    @access public
          */
         function getParameters() {
             if ($this->_isEmpty()) {
@@ -195,6 +197,7 @@
          *    @access protected
          */
         function &_createHistory() {
+            return new SimpleBrowserHistory();
         }
         
         /**
@@ -305,48 +308,57 @@
         }
         
         /**
-         *    Fetches the page content with a simple GET request.
-         *    @param string $raw_url    Target to fetch.
-         *    @param hash $parameters   Additional parameters for GET request.
-         *    @return string            Content of page or false.
-         *    @access public
-         */
-        function get($raw_url, $parameters = false) {
-            $response = &$this->_user_agent->fetchResponse('GET', $raw_url, $parameters);
-            if ($response->isError()) {
-                $this->_page = &new SimplePage(false);
-                return false;
-            }
-            $this->_headers = $response->getHeaders();
-            $this->_page = &$this->_parse($response->getContent());
-            return $response->getContent();
-        }
-        
-        /**
          *    Fetches the page content with a HEAD request.
          *    Will affect cookies, but will not change the base URL.
-         *    @param string $raw_url    Target to fetch as string.
-         *    @param hash $parameters   Additional parameters for GET request.
-         *    @return boolean           True if successful.
+         *    @param string/SimpleUrl $url  Target to fetch as string.
+         *    @param hash $parameters       Additional parameters for GET request.
+         *    @return boolean               True if successful.
          *    @access public
          */
-        function head($raw_url, $parameters = false) {
-            $response = &$this->_user_agent->fetchResponse('HEAD', $raw_url, $parameters);
+        function head($url, $parameters = false) {
+            $response = &$this->_user_agent->fetchResponse('HEAD', $url, $parameters);
             return ! $response->isError();
         }
         
         /**
-         *    Fetches the page content with a POST request.
-         *    @param string $raw_url    Target to fetch as string.
-         *    @param hash $parameters   POST parameters.
-         *    @return string            Content of page.
+         *    Fetches the page content with a simple GET request.
+         *    @param string/SimpleUrl $url  Target to fetch.
+         *    @param hash $parameters       Additional parameters for GET request.
+         *    @return string                Content of page or false.
          *    @access public
          */
-        function post($raw_url, $parameters = false) {
-            $response = &$this->_user_agent->fetchResponse('POST', $raw_url, $parameters);
+        function get($url, $parameters = false) {
+            return $this->_fetch('GET', $url, $parameters, true);
+        }
+        
+        /**
+         *    Fetches the page content with a POST request.
+         *    @param string/SimpleUrl $url  Target to fetch as string.
+         *    @param hash $parameters       POST parameters.
+         *    @return string                Content of page.
+         *    @access public
+         */
+        function post($url, $parameters = false) {
+            return $this->_fetch('POST', $url, $parameters, true);
+        }
+        
+        /**
+         *    Fetches a page.
+         *    @param string $method         GET or POST.
+         *    @param string/SimpleUrl $url  Target to fetch as string.
+         *    @param hash $parameters       POST parameters.
+         *    @param boolean $record        Whether to record in the history.
+         *    @return string                Content of page.
+         *    @access private
+         */
+        function _fetch($method, $url, $parameters, $record) {
+            $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
             if ($response->isError()) {
                 $this->_page = &new SimplePage(false);
                 return false;
+            }
+            if ($record) {
+                $this->_addToHistory($response, $parameters);
             }
             $this->_headers = $response->getHeaders();
             $this->_page = &$this->_parse($response->getContent());
@@ -354,16 +366,35 @@
         }
         
         /**
+         *    Adds the successful page to the history.
+         *    @param SimpleHttpResponse $response    Successful fetch.
+         *    @param array $parameters               Post data.
+         *    @access private
+         */
+        function _addToHistory(&$response, $parameters) {
+            $this->_history->recordEntry(
+                    $response->getMethod(),
+                    $response->getUrl(),
+                    $parameters);
+        }
+        
+        /**
          *    Equivalent to hitting the retry button on the
-         *    browser. Will attempt to repeat the page fetch.
-         *    @return boolean     True if fetch succeeded
+         *    browser. Will attempt to repeat the page fetch. If
+         *    there is no history to repeat it will  give false.
+         *    @return string/boolean   Content if fetch succeeded
+         *                             else false.
          *    @access public
          */
         function retry() {
-            $method = strtolower($this->_history->getMethod());
-            return $this->$method(
-                    $this->_history->getUrl(),
-                    $this->_history->getParameters());
+            if ($method = $this->_history->getMethod()) {
+                return $this->_fetch(
+                        $method,
+                        $this->_history->getUrl(),
+                        $this->_history->getParameters(),
+                        false);
+            }
+            return false;
         }
         
         /**
@@ -374,6 +405,10 @@
          *    @access public
          */
         function back() {
+            if (! $this->_history->back()) {
+                return false;
+            }
+            return $this->retry();
         }
         
         /**
@@ -384,6 +419,10 @@
          *    @access public
          */
         function forward() {
+            if (! $this->_history->forward()) {
+                return false;
+            }
+            return $this->retry();
         }
         
         /**

@@ -238,7 +238,7 @@
          *    @access public
          */
         function getPage() {
-            if (!preg_match('/([^\/]*?)$/', $this->getPath(), $matches)) {
+            if (! preg_match('/([^\/]*?)$/', $this->getPath(), $matches)) {
                 return false;
             }
             return $matches[1];
@@ -250,7 +250,7 @@
          *    @access public
          */
         function getBasePath() {
-            if (!preg_match('/(.*\/)[^\/]*?$/', $this->getPath(), $matches)) {
+            if (! preg_match('/(.*\/)[^\/]*?$/', $this->getPath(), $matches)) {
                 return false;
             }
             return $matches[1];
@@ -330,20 +330,23 @@
         
         /**
          *    Replaces unknown sections to turn a relative
-         *    URL into an absolute one.
-         *    @param string $base            Base URL.
+         *    URL into an absolute one. The base URL can
+         *    be either a string or a SimpleUrl object.
+         *    @param string/SimpleUrl $base       Base URL.
          *    @access public
          */
         function makeAbsolute($base) {
-            $base_url = new SimpleUrl($base);
+            if (! is_object($base)) {
+                $base = new SimpleUrl($base);
+            }
             if (! $this->getScheme()) {
-                $this->_scheme = $base_url->getScheme();
+                $this->_scheme = $base->getScheme();
             }
             if (! $this->getHost()) {
-                $this->_host = $base_url->getHost();
+                $this->_host = $base->getHost();
             }
             if (substr($this->getPath(), 0, 1) != "/") {
-                $this->_path = $base_url->getBasePath() . $this->getPath();
+                $this->_path = $base->getBasePath() . $this->getPath();
             }
             $this->_path = $this->normalisePath($this->_path);
         }
