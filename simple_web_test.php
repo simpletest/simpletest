@@ -100,6 +100,13 @@
         }
         
         /**
+         *    @deprecated
+         */
+        function fetch($url, $parameters) {
+            return $this->get($url, $parameters);
+        }
+        
+        /**
          *    Sets a cookie in the current browser.
          *    @param $name          Name of cookie.
          *    @param $value         Cookie value as string.
