@@ -1138,7 +1138,7 @@
          */
         function _bailOutIfNotMocked($alias) {
             $code  = "        if (! in_array($alias, \$this->_mocked_methods)) {\n";
-            $code .= "            trigger_error('Method [$alias] is not mocked');\n";
+            $code .= "            trigger_error(\"Method [$alias] is not mocked\");\n";
             $code .= "            return;\n";
             $code .= "        }\n";
             return $code;
