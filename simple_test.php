@@ -224,6 +224,8 @@
         var $_test_stack;
         var $_passes;
         var $_fails;
+        var $_size;
+        var $_progress;
         
         /**
          *    Starts the display with no results in.
@@ -234,17 +236,23 @@
             $this->_test_stack = array();
             $this->_passes = 0;
             $this->_fails = 0;
+            $this->_size = null;
+            $this->_progress = 0;
         }
         
         /**
          *    Paints the start of a test. Will also paint
          *    the page header and footer if this is the
-         *    first test.
+         *    first test. Will stash the size if the first
+         *    start.
          *    @param $test_name   Name of test that is starting.
          *    @param $size        Number of test cases starting.
          *    @public
          */
         function paintStart($test_name, $size) {
+            if (!isset($this->_size)) {
+                $this->_size = $size;
+            }
             if (count($this->_test_stack) == 0) {
                 $this->paintHeader($test_name);
             }
@@ -259,6 +267,9 @@
          *    @public
          */
         function paintEnd($test_name, $size) {
+            if ($size > 0) {
+                $this->_progress++;
+            }
             array_pop($this->_test_stack);
             if (count($this->_test_stack) == 0) {
                 $this->paintFooter($test_name);
@@ -284,18 +295,20 @@
         }
         
         /**
-         *    Paints the test document header. Abstract.
+         *    Paints the test document header.
          *    @param $test_name        First test top level
          *                             to start.
          *    @public
+         *    @abstract
          */
         function paintHeader($test_name) {
         }
         
         /**
-         *    Paints the test document footer. Abstract.
+         *    Paints the test document footer.
          *    @param $test_name        The top level test.
          *    @public
+         *    @abstract
          */
         function paintFooter($test_name) {
         }
@@ -327,6 +340,27 @@
          */
         function getFailCount() {
             return $this->_fails;
+        }
+        
+        /**
+         *    Accessor for total test size in number
+         *    of test cases. Null until the first
+         *    test is started.
+         *    @return    Total number of cases at start.
+         *    @public
+         */
+        function getTestCaseCount() {
+            return $this->_size;
+        }
+        
+        /**
+         *    Accessor for the number of test cases
+         *    completed so far.
+         *    @return    Number of ended cases.
+         *    @public
+         */
+        function getTestCaseProgress() {
+            return $this->_progress;
         }
     }
 ?>
