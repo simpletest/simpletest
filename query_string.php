@@ -27,7 +27,16 @@
          *    @access public
          */
         function add($key, $value) {
-            $this->_request[$key] = $value;
+            if (! isset($this->_request[$key])) {
+                $this->_request[$key] = array();
+            }
+            if (is_array($value)) {
+                foreach ($value as $item) {
+                    $this->_request[$key][] = $item;
+                }
+            } else {
+                $this->_request[$key][] = $value;
+            }
         }
         
         /**
@@ -38,8 +47,10 @@
          */
         function asString() {
             $statements = array();
-            foreach ($this->_request as $key => $value) {
-                $statements[] = "$key=$value";
+            foreach ($this->_request as $key => $values) {
+                foreach ($values as $value) {
+                    $statements[] = "$key=" . urlencode($value);
+                }
             }
             return implode('&', $statements);
         }
