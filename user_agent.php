@@ -187,8 +187,9 @@
         /**
          *    Sets the current location.
          *    @param SimpleUrl $url      Current URL.
+         *    @access public
          */
-        function _setBaseUrl($url) {
+        function setBaseUrl($url) {
             $this->_base_url = $url;
         }
         
@@ -411,7 +412,7 @@
                 if ($response->isError()) {
                     return $response;
                 }
-                $this->_setBaseUrl($url);
+                $this->setBaseUrl($url);
                 $headers = $response->getHeaders();
                 $this->_addCookiesToJar($url, $headers->getNewCookies());
                 if (! $headers->isRedirect()) {
