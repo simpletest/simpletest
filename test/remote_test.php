@@ -7,8 +7,13 @@
     require_once(SIMPLE_TEST . 'remote.php');
     require_once(SIMPLE_TEST . 'reporter.php');
     
-    $test = &new RemoteTestCase('http://uno/simple/test/visual_test.php?xml=1');
-    if (TextReporter::inCli() || isset($_GET['xml'])) {
+    // The following URL will depend on your own installation.
+    $base_url = 'http://uno/simple/';
+    
+    $test = &new RemoteTestCase(
+            $base_url . 'test/visual_test.php?xml=yes',
+            $base_url . 'test/visual_test.php?xml=yes&dry=yes');
+    if (SimpleReporter::inCli()) {
         exit ($test->run(new XmlReporter()) ? 0 : 1);
     }
     $test->run(new HtmlReporter());

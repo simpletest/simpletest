@@ -12,7 +12,7 @@
         }
         function testBadCommand() {
             $shell = &new SimpleShell();
-            $this->assertNotEqual($ret = $shell->execute('blurgh!'), 0);
+            $this->assertNotEqual($ret = $shell->execute('blurgh! 2>&1'), 0);
         }
     }
     

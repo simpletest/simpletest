@@ -220,6 +220,9 @@
          *    @abstract
          */
         function paintHeader($test_name) {
+            if (! SimpleReporter::inCli()) {
+                header('Content-type: text/xml');
+            }
             print "<?xml version=\"1.0\"";
             if ($this->_namespace) {
                 print " xmlns:" . $this->_namespace .
@@ -417,8 +420,9 @@
     
     /**
      *    Parser for importing the output of the XmlReporter.
+     *    Dispatches that output to another reporter.
      */
-    class SimpleXmlImporter {
+    class SimpleTestXmlParser {
         var $_listener;
         var $_expat;
         var $_tag_stack;
@@ -432,7 +436,7 @@
          *    @param SimpleReporter $listener   Listener of tag events.
          *    @acces public
          */
-        function SimpleXmlImporter(&$listener) {
+        function SimpleTestXmlParser(&$listener) {
             $this->_listener = &$listener;
             $this->_expat = &$this->_createParser();
             $this->_tag_stack = array();

@@ -36,7 +36,7 @@
     if (!defined("TEST_RUNNING")) {
         define("TEST_RUNNING", true);
         $test = &new UnitTests();
-        if (TextReporter::inCli()) {
+        if (SimpleReporter::inCli()) {
             exit ($test->run(new TextReporter()) ? 0 : 1);
         }
         $test->run(new HtmlReporter());

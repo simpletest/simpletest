@@ -149,6 +149,9 @@
          *    @access public
          */
         function paintHeader($test_name) {
+            if (!SimpleReporter::inCli()) {
+                header('Content-type: text/plain');
+            }
             print "$test_name\n";
             flush();
         }
@@ -204,16 +207,6 @@
          */
         function paintFormattedMessage($message) {
             print "$message\n";
-        }
-        
-        /**
-         *    Static check for running in the comand line.
-         *    @return boolean        True if CLI.
-         *    @access public
-         *    @static
-         */
-        function inCli() {
-            return array_key_exists('_', $_SERVER);
         }
     }
     

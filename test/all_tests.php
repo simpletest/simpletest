@@ -7,6 +7,7 @@
     define("TEST_RUNNING", true);
     
     require_once(SIMPLE_TEST . 'unit_tester.php');
+    require_once(SIMPLE_TEST . 'shell_tester.php');
     require_once(SIMPLE_TEST . 'reporter.php');
     require_once(SIMPLE_TEST . 'mock_objects.php');
     require_once('unit_tests.php');
@@ -21,7 +22,7 @@
     }
 
     $test = &new AllTests();
-    if (TextReporter::inCli()) {
+    if (SimpleReporter::inCli()) {
         exit ($test->run(new TextReporter()) ? 0 : 1);
     }
     $test->run(new HtmlReporter());

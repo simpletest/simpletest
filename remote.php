@@ -13,21 +13,26 @@
      */
     class RemoteTestCase extends RunnableTest {
         var $_url;
+        var $_dry_url;
+        var $_size;
         
         /**
          *    Sets the location of the remote test.
-         *    @param string $url        Test location.
-         *    @param string $label      Name of test. Will default
-         *                              to the URL if omitted.
+         *    @param string $url       Test location.
+         *    @param string $dry_url   Location for dry run.
          *    @access public
          */
-        function RemoteTestCase($url, $label = false) {
-            $this->RunnableTest($label ? $label : $url);
+        function RemoteTestCase($url, $dry_url = false) {
+            $this->RunnableTest($url);
             $this->_url = $url;
+            $this->_dry_url = $dry_url ? $dry_url : $url;
+            $this->_size = false;
         }
 
         /**
-         *    Runs the top level test for this class.
+         *    Runs the top level test for this class. Currently
+         *    reads the data as a single chunk. I'll fix this
+         *    once I have added iteration to the browser.
          *    @param SimpleReporter $reporter    Target of test results.
          *    @returns boolean                   True if no failures.
          *    @access public
@@ -60,10 +65,22 @@
         /**
          *    Creates the XML parser.
          *    @param SimpleReporter $reporter    Target of test results.
+         *    @return SimpleTestXmlListener      XML reader.
          *    @access protected
          */
         function &_createParser(&$reporter) {
-            return new SimpleXmlImporter($reporter);
+            return new SimpleTestXmlParser($reporter);
+        }
+        
+        /**
+         *    Accessor for the number of subtests.
+         *    @return integer           Number of test cases.
+         *    @access public
+         */
+        function getSize() {
+            if ($this->_size === false) {
+            }
+            return $this->_size;
         }
     }
 ?>

@@ -11,6 +11,7 @@
         var $_passes;
         var $_fails;
         var $_exceptions;
+        var $_is_dry_run;
         
         /**
          *    Starts the test run with no results.
@@ -20,6 +21,16 @@
             $this->_passes = 0;
             $this->_fails = 0;
             $this->_exceptions = 0;
+            $this->_is_dry_run = false;
+        }
+        
+        /**
+         *    Signals that the next evaluation will be a dry
+         *    run. That is, the structure events will be
+         *    recorded, but no tests will be run.
+         */
+        function makeDry() {
+            $this->_is_dry_run = true;
         }
         
         /**
@@ -31,7 +42,9 @@
          *    @access public
          */
         function invoke(&$test_case, $method) {
-            $test_case->invoke($method);
+            if (! $this->_is_dry_run) {
+                $test_case->invoke($method);
+            }
         }
 
         /**
@@ -441,6 +454,17 @@
          */
         function getTestCaseProgress() {
             return $this->_progress;
+        }
+        
+        /**
+         *    Static check for running in the comand line.
+         *    @return boolean        True if CLI.
+         *    @access public
+         *    @static
+         */
+        function inCli() {
+            global $argv;
+            return isset($argv[0]);
         }
     }
     

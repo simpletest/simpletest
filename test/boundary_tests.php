@@ -5,6 +5,7 @@
         define("SIMPLE_TEST", "../");
     }
     require_once(SIMPLE_TEST . 'unit_tester.php');
+    require_once(SIMPLE_TEST . 'shell_tester.php');
     require_once(SIMPLE_TEST . 'web_tester.php');
     require_once(SIMPLE_TEST . 'reporter.php');
     require_once(SIMPLE_TEST . 'mock_objects.php');
@@ -21,7 +22,7 @@
     if (!defined("TEST_RUNNING")) {
         define("TEST_RUNNING", true);
         $test = &new BoundaryTests("Boundary tests");
-        if (TextReporter::inCli()) {
+        if (SimpleReporter::inCli()) {
             exit ($test->run(new TextReporter()) ? 0 : 1);
         }
         $test->run(new HtmlReporter());

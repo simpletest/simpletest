@@ -284,8 +284,15 @@
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());
     
-    if (TextReporter::inCli() || isset($_GET['xml'])) {
-        exit ($test->run(new XmlReporter()) ? 0 : 1);
+    if (isset($_GET['xml']) || in_array('xml', (isset($argv) ? $argv : array()))) {
+        $reporter = &new XmlReporter();
+    } elseif(SimpleReporter::inCli()) {
+        $reporter = &new TextReporter();
+    } else {
+        $reporter = &new AllOutputReporter();
     }
-    $test->run(new AllOutputReporter());
+    if (isset($_GET['dry']) || in_array('dry', (isset($argv) ? $argv : array()))) {
+        $reporter->makeDry();
+    }
+    exit ($test->run($reporter) ? 0 : 1);
 ?>
