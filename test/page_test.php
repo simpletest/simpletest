@@ -82,9 +82,9 @@
         var $_builder;
         
         function TestSimplePage($raw, &$parser, &$builder) {
-            $this->SimplePage($raw);
             $this->_parser = &$parser;
             $this->_builder = &$builder;
+            $this->SimplePage($raw);
         }
         function &_createParser() {
             return $this->_parser;
@@ -103,7 +103,10 @@
         function testParse() {
             $parser = &new MockSimpleSaxParser($this);
             $builder = &new MockSimplePageBuilder($this);
+            $builder->expectArguments("parse", array("stuff", "*"));
+            $builder->expectCallCount("parse", 1);
             $page = &new TestSimplePage("stuff", $parser, $builder);
+            $builder->tally();
         }
     }
 

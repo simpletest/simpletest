@@ -103,22 +103,15 @@
         function SimplePage($raw) {
             $this->_absolute_links = array();
             $this->_relative_links = array();
-        }
-        
-        /**
-         *    Sets up the parser and parses itself.
-         *    @param $raw            Raw unparsed text.
-         *    @protected
-         */
-        function &_parse($raw) {
-            $builder = &$this->_createBuilder();
-            $builder->parse($raw, $this->_createParser());
+            $builder = &$this->_createBuilder($this);
+            $builder->parse($raw, $this->_createParser($builder));
         }
         
         /**
          *    Creates the parser used with the builder.
-         *    @return        Parser to generate events for
-         *                   the builder.
+         *    @param $builder    Parser listener.
+         *    @return            Parser to generate events for
+         *                       the builder.
          *    @protected
          */
         function &_createParser(&$builder) {
@@ -127,12 +120,12 @@
         
         /**
          *    Creates the parser used with the builder.
-         *    @return        Builder to feed events to this
-         *                   page.
+         *    @param $page   Target of incoming tag information.
+         *    @return        Builder to feed events to this page.
          *    @protected
          */
-        function &_createBuilder() {
-            return new SimplePageBuilder($this);
+        function &_createBuilder(&$page) {
+            return new SimplePageBuilder($page);
         }
         
         /**
