@@ -22,6 +22,7 @@ Add image submit parsing (3).
 Add image map parsing (2).
 Make multivalue widgets PHP compatible (2).
 Make link clicking more tolerant with space normalisation (2/1) - done.
+Add simple button tag parsing (1).
 
 Browser
 -------
@@ -38,12 +39,12 @@ Fix bug when remote port not port 80 (2/2) - done.
 Add timeouts to page fetches (2/2) - done.
 Add forward and back button simulation (4/3) - done.
 Retry on redirected page does not resubmit (1/1) - done.
-Retry submits POST data (1).
+Retry submits POST data (1/1).
 
 Web tester
 ----------
 Chain frames support from browser (1).
-Make redirect test independent of LastCraft (1).
+Make redirect test independent of LastCraft (1/0) - done.
 Add assertLink() method (1/2) - done.
 Add showHeaders() for debugging (1/1) - done.
 Chain getCurrentUrl() into WebTestCase (1/0) - done.
