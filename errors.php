@@ -115,8 +115,9 @@
     }
     
     /**
-     *    Error handler that simply stashes any
-     *    errors into the global error queue.
+     *    Error handler that simply stashes any errors into the global
+     *    error queue. Simulates the existing behaviour with respect to
+     *    logging errors, but this feature may be removed in future.
      *    @param $severity        PHP error code.
      *    @param $message         Text of error.
      *    @param $filename        File error occoured in.
@@ -127,10 +128,10 @@
      */
     function simpleTestErrorHandler($severity, $message, $filename, $line, $super_globals) {
         restore_error_handler();
-        //if (ini_get('log_errors')) {
-        //    $label = SimpleErrorQueue::getSeverityAsString($severity);
-        //    error_log("$label: $message in $filename on line $line");
-        //}
+        if (ini_get('log_errors')) {
+            $label = SimpleErrorQueue::getSeverityAsString($severity);
+            error_log("$label: $message in $filename on line $line");
+        }
         if ($severity = $severity & error_reporting()) {
             $queue = &SimpleErrorQueue::instance();
             $queue->add($severity, $message, $filename, $line, $super_globals);
