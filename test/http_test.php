@@ -5,6 +5,7 @@
         define("SIMPLE_TEST", "../");
     }
     require_once(SIMPLE_TEST . 'http.php');
+    require_once(SIMPLE_TEST . 'socket.php');
     Mock::generate("SimpleSocket");
 
     class TestOfUrl extends UnitTestCase {

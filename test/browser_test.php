@@ -40,7 +40,7 @@
             return $request;
         }
         function testFailingBadHost() {
-            $test = &new MockTestCase($this);
+            $test = &new MockUnitTestCase($this);
             $test->setExpectedArgumentsSequence(0, "assertTrue", array(false, '*'));
             $test->setExpectedCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
@@ -51,7 +51,7 @@
             $test->tally();
         }
         function testExpectingBadHost() {
-            $test = &new MockTestCase($this);
+            $test = &new MockUnitTestCase($this);
             $test->setExpectedArgumentsSequence(0, "assertTrue", array(true, '*'));
             $test->setExpectedCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
@@ -61,6 +61,24 @@
                     $browser->fetchUrl("http://this.host/this/path/page.html", &$request),
                     false);
             $test->tally();
+        }
+    }
+    
+    class testOfBrowserCookies extends UnitTestCase {
+        function TestOfBrowserCookies() {
+            $this->UnitTestCase();
+        }
+        function testSend() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue("isError", false);
+            $response->setReturnValue("getContent", "stuff");
+            $request = &new MockSimpleHttpRequest($this);
+            $request->setReturnReference("fetch", $response);
+            $browser = &new TestBrowser(new MockUnitTestCase($this));
+            $browser->setCookie(new SimpleCookie("a", "A"));
+            $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
+        }
+        function testReceive() {
         }
     }
 ?>
