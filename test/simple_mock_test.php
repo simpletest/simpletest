@@ -67,12 +67,12 @@
             $this->UnitTestCase();
         }
         function testEmpty() {
-            $map = new CallMap("wild");
+            $map = new CallMap();
             $this->assertFalse($map->isMatch("any", array()));
             $this->assertNull($map->findFirstMatch("any", array()));
         }
         function testExactValue() {
-            $map = new CallMap("wild");
+            $map = new CallMap();
             $map->addValue(array(0), "Fred");
             $map->addValue(array(1), "Jim");
             $map->addValue(array("1"), "Tom");
@@ -83,7 +83,7 @@
             $this->assertEqual($map->findFirstMatch(array("1")), "Tom");
         }
         function testExactReference() {
-            $map = new CallMap("wild");
+            $map = new CallMap();
             $ref = "Fred";
             $map->addReference(array(0), $ref);
             $this->assertEqual($map->findFirstMatch(array(0)), "Fred");
@@ -92,20 +92,20 @@
             $this->assertReference($ref2, $ref);
         }
         function testWildcard() {
-            $map = new CallMap("wild");
+            $map = new CallMap();
             $map->addValue(array(new WildcardExpectation(), 1, 3), "Fred");
             $this->assertTrue($map->isMatch(array(2, 1, 3)));
             $this->assertEqual($map->findFirstMatch(array(2, 1, 3)), "Fred");
         }
         function testAllWildcard() {
-            $map = new CallMap("wild");
+            $map = new CallMap();
             $this->assertFalse($map->isMatch(array(2, 1, 3)));
             $map->addValue("", "Fred");
             $this->assertTrue($map->isMatch(array(2, 1, 3)));
             $this->assertEqual($map->findFirstMatch(array(2, 1, 3)), "Fred");
         }
         function testOrdering() {
-            $map = new CallMap("wild");
+            $map = new CallMap();
             $map->addValue(array(1, 2), "1, 2");
             $map->addValue(array(1, 3), "1, 3");
             $map->addValue(array(1), "1");

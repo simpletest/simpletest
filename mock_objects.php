@@ -50,7 +50,6 @@
      */
     class ParametersExpectation extends SimpleExpectation {
         var $_expected;
-        var $_wildcard;
         
         /**
          *    Sets the expected parameter list.
@@ -62,10 +61,9 @@
          *                              will always match.
          *    @public
          */
-        function ParametersExpectation($expected = false, $wildcard = MOCK_WILDCARD) {
+        function ParametersExpectation($expected = false) {
             $this->SimpleExpectation();
             $this->_expected = $expected;
-            $this->_wildcard = $wildcard;
         }
         
         /**
@@ -82,13 +80,7 @@
                 return false;
             }
             for ($i = 0; $i < count($this->_expected); $i++) {
-                if (is_a($this->_expected[$i], 'SimpleExpectation')) {
-                    if (! $this->_expected[$i]->test($parameters[$i])) {
-                        return false;
-                    }
-                    continue;
-                }
-                if (!($this->_expected[$i] === $parameters[$i])) {
+                if (! $this->_testParameter($parameters[$i], $this->_expected[$i])) {
                     return false;
                 }
             }
@@ -104,10 +96,10 @@
          *    @private
          */
         function _testParameter($parameter, $expected) {
-            if (is_a($this->_expected[$i], 'SimpleExpectation')) {
-                return $this->_expected[$i]->test($parameters[$i]);
+            if (is_a($expected, 'SimpleExpectation')) {
+                return $expected->test($parameter);
             }
-            return ($this->_expected[$i] === $parameters[$i]);
+            return ($expected === $parameter);
         }
         
         /**
