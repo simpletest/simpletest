@@ -24,7 +24,7 @@
             $parser->tally();
         }
         function testLink() {
-            $tag = new SimpleAnchorTag(array("href" => "http://somewhere"));
+            $tag = &new SimpleAnchorTag(array("href" => "http://somewhere"));
             $tag->addContent("Label");
             $page = &new MockSimplePage($this);
             $page->expectArguments("acceptTag", array($tag));
@@ -38,7 +38,7 @@
             $page->tally();
         }
         function testLinkWithId() {
-            $tag = new SimpleAnchorTag(array("href" => "http://somewhere", "id" => "44"));
+            $tag = &new SimpleAnchorTag(array("href" => "http://somewhere", "id" => "44"));
             $tag->addContent("Label");
             $page = &new MockSimplePage($this);
             $page->expectArguments("acceptTag", array($tag));
@@ -52,7 +52,7 @@
             $page->tally();
         }
         function testLinkExtraction() {
-            $tag = new SimpleAnchorTag(array("href" => "http://somewhere"));
+            $tag = &new SimpleAnchorTag(array("href" => "http://somewhere"));
             $tag->addContent("Label");
             $page = &new MockSimplePage($this);
             $page->expectArguments("acceptTag", array($tag));
@@ -87,7 +87,7 @@
             $page->tally();
         }
         function testTitle() {
-            $tag = new SimpleTitleTag(array());
+            $tag = &new SimpleTitleTag(array());
             $tag->addContent("HereThere");
             $page = &new MockSimplePage($this);
             $page->expectArguments("acceptTag", array($tag));
@@ -151,51 +151,51 @@
             $this->UnitTestCase();
         }
         function testNoLinks() {
-            $page = new SimplePage("");
+            $page = &new SimplePage("");
             $this->assertIdentical($page->getAbsoluteLinks(), array(), "abs->%s");
             $this->assertIdentical($page->getRelativeLinks(), array(), "rel->%s");
             $this->assertIdentical($page->getUrls("Label"), array());
         }
         function testAddAbsoluteLink() {
-            $link = new SimpleAnchorTag(array("href" => "http://somewhere.com"));
+            $link = &new SimpleAnchorTag(array("href" => "http://somewhere.com"));
             $link->addContent("Label");
-            $page = new SimplePage("");
+            $page = &new SimplePage("");
             $page->AcceptTag($link);
             $this->assertEqual($page->getAbsoluteLinks(), array("http://somewhere.com"), "abs->%s");
             $this->assertIdentical($page->getRelativeLinks(), array(), "rel->%s");
             $this->assertEqual($page->getUrls("Label"), array("http://somewhere.com"));
         }
         function testAddStrictRelativeLink() {
-            $link = new SimpleAnchorTag(array("href" => "./somewhere.php"));
+            $link = &new SimpleAnchorTag(array("href" => "./somewhere.php"));
             $link->addContent("Label");
-            $page = new SimplePage("");
+            $page = &new SimplePage("");
             $page->AcceptTag($link);
             $this->assertEqual($page->getAbsoluteLinks(), array(), "abs->%s");
             $this->assertIdentical($page->getRelativeLinks(), array("./somewhere.php"), "rel->%s");
             $this->assertEqual($page->getUrls("Label"), array("./somewhere.php"));
         }
         function testAddRelativeLink() {
-            $link = new SimpleAnchorTag(array("href" => "somewhere.php"));
+            $link = &new SimpleAnchorTag(array("href" => "somewhere.php"));
             $link->addContent("Label");
-            $page = new SimplePage("");
+            $page = &new SimplePage("");
             $page->AcceptTag($link);
             $this->assertEqual($page->getAbsoluteLinks(), array(), "abs->%s");
             $this->assertIdentical($page->getRelativeLinks(), array("somewhere.php"), "rel->%s");
             $this->assertEqual($page->getUrls("Label"), array("somewhere.php"));
         }
         function testLinkIds() {
-            $link = new SimpleAnchorTag(array("href" => "./somewhere.php", "id" => 33));
+            $link = &new SimpleAnchorTag(array("href" => "./somewhere.php", "id" => 33));
             $link->addContent("Label");
-            $page = new SimplePage("");
+            $page = &new SimplePage("");
             $page->AcceptTag($link);
             $this->assertEqual($page->getUrls("Label"), array("./somewhere.php"));
             $this->assertFalse($page->getUrlById(0));
             $this->assertEqual($page->getUrlById(33), "./somewhere.php");
         }
         function testTitleSetting() {
-            $title = new SimpleTitleTag(array());
+            $title = &new SimpleTitleTag(array());
             $title->addContent("Title");
-            $page = new SimplePage("");
+            $page = &new SimplePage("");
             $page->AcceptTag($title);
             $this->assertEqual($page->getTitle(), "Title");
         }
@@ -206,7 +206,7 @@
             $this->UnitTestCase();
         }
         function testEmptyForm() {
-            $page = new SimplePage("");
+            $page = &new SimplePage("");
             $page->acceptFormStart(new SimpleFormTag(array()));
             $forms = $page->getForms();
             $this->assertIdentical($forms[0]->getAction(), false);
@@ -216,7 +216,7 @@
             $this->assertIdentical($forms[0]->getAction(), false);
         }
         function testCompleteForm() {
-            $page = new SimplePage("");
+            $page = &new SimplePage("");
             $page->acceptFormStart(
                     new SimpleFormTag(array("method" => "GET", "action" => "here.php")));
             $forms = $page->getForms();
@@ -227,7 +227,7 @@
             $this->assertIdentical($forms[0]->getAction(), 'here.php');
         }
         function testNestedForm() {
-            $page = new SimplePage("");
+            $page = &new SimplePage("");
             $page->acceptFormStart(new SimpleFormTag(array("method" => "GET", "action" => "outer.php")));
             $page->acceptFormStart(new SimpleFormTag(array("method" => "POST", "action" => "inner.php")));
             $forms = $page->getForms();
@@ -240,7 +240,7 @@
             $this->assertEqual($forms[1]->getAction(), "outer.php");
         }
         function testButtons() {
-            $page = new SimplePage("");
+            $page = &new SimplePage("");
             $page->acceptFormStart(
                     new SimpleFormTag(array("method" => "GET", "action" => "here.php")));
             $page->AcceptTag(
@@ -320,7 +320,7 @@
             $form = &$page->getFormBySubmitLabel("Submit");
             $this->assertEqual($form->getValue("a"), "aaa");
         }
-         function testSettingTextArea() {
+        function testSettingTextArea() {
             $page = &new SimplePage('<html><head><form>' .
                     '<textarea name="a">aaa</textarea>' .
                     '<input type="submit">' .
@@ -329,5 +329,18 @@
             $form = &$page->getFormBySubmitLabel("Submit");
             $this->assertEqual($form->getValue("a"), "AAA");
         }
-   }
+        function testSettingSelectionField() {
+            $page = &new SimplePage('<html><head><form>' .
+                    '<select name="a">' .
+                    '<option value="aaa" selected><option value="bbb">' .
+                    '</select>' .
+                    '<input type="submit">' .
+                    '</form></head></html>');
+            $form = &$page->getFormBySubmitLabel("Submit");
+            $this->assertEqual($form->getValue("a"), "aaa");
+            $this->assertFalse($page->setField("a", "ccc"));
+            $this->assertTrue($page->setField("a", "bbb"));
+            $this->assertEqual($form->getValue("a"), "bbb");
+        }
+    }
 ?>

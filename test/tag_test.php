@@ -9,7 +9,7 @@
             $this->UnitTestCase();
         }
         function testStartValues() {
-            $tag = new SimpleTitleTag(array("a" => 1, "b" => true));
+            $tag = new SimpleTitleTag(array("a" => "1", "b" => ""));
             $this->assertEqual($tag->getTagName(), "title");
             $this->assertIdentical($tag->getAttribute("a"), "1");
             $this->assertIdentical($tag->getAttribute("b"), true);
@@ -49,7 +49,7 @@
             $tag = &new SimpleSubmitTag(array('type' => 'submit'));
             $this->assertEqual($tag->getName(), 'submit');
             $this->assertEqual($tag->getValue(), 'Submit');
-            $tag->setValue('Cannot set this');
+            $this->assertFalse($tag->setValue('Cannot set this'));
             $this->assertEqual($tag->getValue(), 'Submit');
         }
         function testPopulatedSubmit() {
@@ -93,34 +93,34 @@
         }
         function testSingleDefault() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
-            $tag->addOption(
-                    new SimpleOptionTag(array('value' => 'AAA', 'selected' => true)));
+            $tag->addTag(
+                    new SimpleOptionTag(array('value' => 'AAA', 'selected' => '')));
             $this->assertEqual($tag->getValue(), 'AAA');
         }
         function testDefault() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
-            $tag->addOption(new SimpleOptionTag(array('value' => 'AAA')));
-            $tag->addOption(
-                    new SimpleOptionTag(array('value' => 'BBB', 'selected' => true)));
-            $tag->addOption(new SimpleOptionTag(array('value' => 'CCC')));
+            $tag->addTag(new SimpleOptionTag(array('value' => 'AAA')));
+            $tag->addTag(
+                    new SimpleOptionTag(array('value' => 'BBB', 'selected' => '')));
+            $tag->addTag(new SimpleOptionTag(array('value' => 'CCC')));
             $this->assertEqual($tag->getValue(), 'BBB');
         }
         function testSettingOption() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
-            $tag->addOption(new SimpleOptionTag(array('value' => 'AAA')));
-            $tag->addOption(
-                    new SimpleOptionTag(array('value' => 'BBB', 'selected' => true)));
-            $tag->addOption(new SimpleOptionTag(array('value' => 'CCC')));
+            $tag->addTag(new SimpleOptionTag(array('value' => 'AAA')));
+            $tag->addTag(
+                    new SimpleOptionTag(array('value' => 'BBB', 'selected' => '')));
+            $tag->addTag(new SimpleOptionTag(array('value' => 'CCC')));
             $tag->setValue('AAA');
             $this->assertEqual($tag->getValue(), 'AAA');
         }
         function testSettingIllegalOption() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
-            $tag->addOption(new SimpleOptionTag(array('value' => 'AAA')));
-            $tag->addOption(
-                    new SimpleOptionTag(array('value' => 'BBB', 'selected' => true)));
-            $tag->addOption(new SimpleOptionTag(array('value' => 'CCC')));
-            $tag->setValue('Not present');
+            $tag->addTag(new SimpleOptionTag(array('value' => 'AAA')));
+            $tag->addTag(
+                    new SimpleOptionTag(array('value' => 'BBB', 'selected' => '')));
+            $tag->addTag(new SimpleOptionTag(array('value' => 'CCC')));
+            $this->assertFalse($tag->setValue('Not present'));
             $this->assertEqual($tag->getValue(), 'BBB');
         }
     }
@@ -170,6 +170,14 @@
             $this->assertEqual(
                     $form->submitButtonByLabel("Go!"),
                     array("go" => "Go!"));            
+        }
+        function testSelectWidget() {
+            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $select = &new SimpleSelectionTag(array('name' => 'a'));
+            $select->addTag(new SimpleOptionTag(
+                    array('value' => 'aaa', 'selected' => '')));
+            $form->addWidget($select);
+            $this->assertIdentical($form->submit(), array('a' => 'aaa'));
         }
     }
 ?>

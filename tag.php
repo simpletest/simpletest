@@ -33,11 +33,19 @@
         
         /**
          *    Appends string content to the current content.
-         *    @param $content        Additional text.
+         *    @param string $content        Additional text.
          *    @public
          */
         function addContent($content) {
             $this->_content .= (string)$content;
+        }
+        
+        /**
+         *    Adds an enclosed tag to the content.
+         *    @param SimpleTag $tag    New tag.
+         *    @public
+         */
+        function addTag(&$tag) {
         }
         
         /**
@@ -65,10 +73,10 @@
          *    @public
          */
         function getAttribute($label) {
-            if (!isset($this->_attributes[$label])) {
+            if (! isset($this->_attributes[$label])) {
                 return false;
             }
-            if ($this->_attributes[$label] === true) {
+            if ($this->_attributes[$label] === '') {
                 return true;
             }
             return (string)$this->_attributes[$label];
@@ -166,11 +174,13 @@
         
         /**
          *    Sets the current form element value.
-         *    @param string $value        New value.
+         *    @param string $value       New value.
+         *    @return boolean            True if allowed.
          *    @public
          */
         function setValue($value) {
             $this->_value = $value;
+            return true;
         }
         
         /**
@@ -257,9 +267,11 @@
         /**
          *    Disables the setting of the button value.
          *    @param string $value        Ignored.
+         *    @return boolean            True if allowed.
          *    @public
          */
         function setValue($value) {
+            return false;
         }
     }
     
@@ -295,6 +307,7 @@
         /**
          *    Applies word wrapping if needed.
          *    @param string $value      New value.
+         *    @return boolean            True if allowed.
          *    @public
          */
         function setValue($value) {
@@ -304,7 +317,7 @@
                         (integer)$this->getAttribute('cols'),
                         "\n");
             }
-            parent::setValue($value);
+            return parent::setValue($value);
         }
         
         /**
@@ -344,8 +357,18 @@
          *    @param SimpleOptionTag $tag     New option.
          *    @public
          */
-        function addOption(&$tag) {
-            $this->_options[] = &$tag;
+        function addTag(&$tag) {
+            if ($tag->getTagName() == 'option') {
+                $this->_options[] = &$tag;
+            }
+        }
+        
+        /**
+         *    Text within the selection element is ignored.
+         *    @param string $content        Ignored.
+         *    @public
+         */
+        function addContent($content) {
         }
         
         /**
@@ -365,14 +388,16 @@
         /**
          *    Can only set allowed values.
          *    @param string $value        New choice.
+         *    @return boolean            True if allowed.
          *    @public
          */
         function setValue($value) {
             for ($i = 0; $i < count($this->_options); $i++) {
                 if ($this->_options[$i]->getAttribute('value') == $value) {
-                    parent::setValue($value);
+                    return parent::setValue($value);
                 }
             }
+            return false;
         }
     }
     
@@ -386,6 +411,15 @@
          */
         function SimpleOptionTag($attributes) {
             $this->SimpleTag('option', $attributes);
+        }
+        
+        /**
+         *    Tag contains no end element.
+         *    @return boolean        False.
+         *    @public
+         */
+        function expectEndTag() {
+            return false;
         }
     }
     
@@ -493,8 +527,7 @@
          */
         function setField($name, $value) {
             if (isset($this->_widgets[$name])) {
-                $this->_widgets[$name]->setValue($value);
-                return true;
+                return $this->_widgets[$name]->setValue($value);
             }
             return false;
         }

@@ -62,7 +62,7 @@
             if (count($this->_patterns) == 0) {
                 return false;
             }
-            if (!preg_match($this->_getCompoundedRegex(), $subject, $matches)) {
+            if (! preg_match($this->_getCompoundedRegex(), $subject, $matches)) {
                 $match = "";
                 return false;
             }
@@ -421,11 +421,10 @@
             $lexer = &new SimpleLexer($parser, 'text');
             $lexer->mapHandler('text', 'acceptTextToken');
             SimpleSaxParser::_addSkipping($lexer);
-            SimpleSaxParser::_addTag($lexer, "a");
-            SimpleSaxParser::_addTag($lexer, "title");
-            SimpleSaxParser::_addTag($lexer, "form");
-            SimpleSaxParser::_addTag($lexer, "input");
-            SimpleSaxParser::_addTag($lexer, "textarea");
+            $tags = array("a", "title", "form", "input", "textarea", "select", "option");
+            foreach ($tags as $tag) {
+                SimpleSaxParser::_addTag($lexer, $tag);
+            }
             SimpleSaxParser::_addInTagTokens($lexer);
             return $lexer;
         }

@@ -7,10 +7,8 @@ $Id$
 
 Unit tester
 -----------
-Include types with error reports (1).
 Refactor value formatting into separate Dumper class (2/3) - done.
 Add is_a() patch to allow earlier PHP versions (1/1) - done.
-Move dumper creation to factory in options (1).
 
 Interface
 ---------
@@ -23,8 +21,8 @@ Fix wildcard reporting bug in arguments comparison (1).
 
 Html parser
 -----------
-Test with some realistic pages (3/1).
-Parse drop down lists (4).
+Test with some realistic pages (2/1).
+Parse drop down lists (4/3).
 Add wrapping behaviour to text areas (1/5) - done.
 Add HTTP basic authentication (2).
 
@@ -37,7 +35,6 @@ Add header accessor (1).
 
 Documentation
 -------------
-Start a web tester documentation page (2).
 Reorder docs to place the reporters mods last (1).
 
 Build

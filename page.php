@@ -53,12 +53,10 @@
                 return true;
             }            
             if ($tag->expectEndTag()) {
-                if (!in_array($name, array_keys($this->_tags))) {
-                    $this->_tags[$name] = array();
-                }
-                array_push($this->_tags[$name], $tag);
+                $this->_openTag($tag);
                 return true;
             }
+            $this->_addTag($tag);
             $this->_page->acceptTag($tag);
             return true;
         }
@@ -73,6 +71,7 @@
         function endElement($name) {
             if ($name == 'form') {
                 $this->_page->acceptFormEnd();
+                return true;
             }            
             if (isset($this->_tags[$name]) && (count($this->_tags[$name]) > 0)) {
                 $tag = array_pop($this->_tags[$name]);
@@ -99,6 +98,33 @@
         }
         
         /**
+         *    Parsed relevant data. The parsed tag is added
+         *    to every open tag.
+         *    @param SimpleTag $tag        May include unparsed tags.
+         *    @private
+         */
+        function _addTag(&$tag) {
+            foreach (array_keys($this->_tags) as $name) {
+                for ($i = 0; $i < count($this->_tags[$name]); $i++) {
+                    $this->_tags[$name][$i]->addTag($tag);
+                }
+            }
+        }
+        
+        /**
+         *    Opens a tag for receiving content.
+         *    @param SimpleTag $tag        New content tag.
+         *    @private
+         */
+        function _openTag(&$tag) {
+            $name = $tag->getTagName();
+            if (! in_array($name, array_keys($this->_tags))) {
+                $this->_tags[$name] = array();
+            }
+            array_push($this->_tags[$name], $tag);
+        }
+        
+        /**
          *    Factory for the tag objects. Creates the
          *    appropriate tag object for the incoming tag name.
          *    @param string $name        HTML tag name.
@@ -119,6 +145,10 @@
                 }
             } elseif ($name == 'textarea') {
                 return new SimpleTextAreaTag($attributes);
+            } elseif ($name == 'select') {
+                return new SimpleSelectionTag($attributes);
+            } elseif ($name == 'option') {
+                return new SimpleOptionTag($attributes);
             } elseif ($name == 'form') {
                 return new SimpleFormTag($attributes);
             }
@@ -202,7 +232,7 @@
          *    @private
          */
         function _isFormElement($name) {
-            return in_array($name, array('input', 'textarea'));
+            return in_array($name, array('input', 'textarea', 'select'));
         }
         
         /**
