@@ -183,7 +183,10 @@
          */
         function SimpleBrowser() {
             $this->_user_agent = &$this->_createUserAgent();
-            $this->_user_agent->useProxy(SimpleTestOptions::getDefaultProxy());
+            $this->_user_agent->useProxy(
+                    SimpleTestOptions::getDefaultProxy(),
+                    SimpleTestOptions::getDefaultProxyUsername(),
+                    SimpleTestOptions::getDefaultProxyPassword());
             $this->_headers = false;
             $this->_transport_error = false;
             $this->_page = false;
@@ -307,15 +310,15 @@
         
         /**
          *    Sets proxy to use on all requests for when
-         *    testing from behind a firewall. Set host
+         *    testing from behind a firewall. Set URL
          *    to false to disable.
-         *    @param string $host        Proxy host.
-         *    @param integer $port       Proxy port.
-         *    @param boolean $is_secure  True if secure port.
+         *    @param string $proxy        Proxy URL.
+         *    @param string $username     Proxy username for autentication.
+         *    @param string $password     Proxy password for autentication.
          *    @access public
          */
-        function useProxy($host, $port = 8080, $is_secure = false) {
-            $this->_user_agent->useProxy($host, $port, $is_secure);
+        function useProxy($proxy, $username = false, $password = false) {
+            $this->_user_agent->useProxy($proxy, $username, $password);
         }
         
         /**

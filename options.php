@@ -136,12 +136,16 @@
          *    testing from behind a firewall. Set host
          *    to false to disable. This will take effect
          *    if there are no other proxy settings.
-         *    @param string $proxy        Proxy host as URL.
+         *    @param string $proxy     Proxy host as URL.
+         *    @param string $username  Proxy username for authentication.
+         *    @param string $password  Proxy password for authentication.
          *    @access public
          */
-        function useProxy($proxy) {
+        function useProxy($proxy, $username = false, $password = false) {
             $registry = &SimpleTestOptions::_getRegistry();
             $registry['DefaultProxy'] = $proxy;
+            $registry['DefaultProxyUsername'] = $proxy;
+            $registry['DefaultProxyPassword'] = $proxy;
         }
         
         /**
@@ -152,6 +156,26 @@
         function getDefaultProxy() {
             $registry = &SimpleTestOptions::_getRegistry();
             return $registry['DefaultProxy'];
+        }
+        
+        /**
+         *    Accessor for default proxy username.
+         *    @return string    Proxy username for authentication.
+         *    @access public
+         */
+        function getDefaultProxyUsername() {
+            $registry = &SimpleTestOptions::_getRegistry();
+            return $registry['DefaultProxyUsername'];
+        }
+        
+        /**
+         *    Accessor for default proxy password.
+         *    @return string    Proxy password for authentication.
+         *    @access public
+         */
+        function getDefaultProxyPassword() {
+            $registry = &SimpleTestOptions::_getRegistry();
+            return $registry['DefaultProxyPassword'];
         }
         
         /**
@@ -180,7 +204,9 @@
                     'MockBaseClass' => 'SimpleMock',
                     'IgnoreList' => array(),
                     'AdditionalPartialMockCode' => '',
-                    'DefaultProxy' => false);
+                    'DefaultProxy' => false,
+                    'DefaultProxyUsername' => false,
+                    'DefaultProxyPassword' => false);
         }
     }
     

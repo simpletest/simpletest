@@ -7,9 +7,13 @@
     require_once(SIMPLE_TEST . 'unit_tester.php');
     require_once(SIMPLE_TEST . 'socket.php');
     require_once(SIMPLE_TEST . 'http.php');
+    require_once(SIMPLE_TEST . 'options.php');
     require_once(SIMPLE_TEST . 'browser.php');
     require_once(SIMPLE_TEST . 'web_tester.php');
 
+    if (SimpleTestOptions::getDefaultProxy()) {
+        SimpleTestOptions::ignore('LiveHttpTestCase');
+    }
     class LiveHttpTestCase extends UnitTestCase {
         function LiveHttpTestCase() {
             $this->UnitTestCase();
@@ -31,62 +35,6 @@
             $this->assertEqual($socket->read(8), "HTTP/1.1");
             $socket->close();
             $this->assertIdentical($socket->read(8), false);
-        }
-        function testHttpGet() {
-            $http = &new SimpleHttpRequest(new SimpleRoute(new SimpleUrl(
-                    "www.lastcraft.com/test/network_confirm.php?gkey=gvalue")));
-            $http->setCookie(new SimpleCookie("ckey", "cvalue"));
-            $this->assertIsA($response = &$http->fetch(15), "SimpleHttpResponse");
-
-            $headers = &$response->getHeaders();
-            $this->assertEqual($headers->getResponseCode(), 200);
-            $this->assertEqual($headers->getMimeType(), "text/html");
-            $this->assertWantedPattern(
-                    '/A target for the SimpleTest test suite/',
-                    $response->getContent());
-            $this->assertWantedPattern(
-                    '/Request method.*?<dd>GET<\/dd>/',
-                    $response->getContent());
-            $this->assertWantedPattern(
-                    '/gkey=\[gvalue\]/',
-                    $response->getContent());
-            $this->assertWantedPattern(
-                    '/ckey=\[cvalue\]/',
-                    $response->getContent());
-        }
-        function testHttpHead() {
-            $http = &new SimpleHttpRequest(
-                    new SimpleRoute(
-                            new SimpleUrl('www.lastcraft.com/test/network_confirm.php')),
-                    'HEAD');
-            $this->assertIsA($response = &$http->fetch(15), "SimpleHttpResponse");
-            $headers = &$response->getHeaders();
-            $this->assertEqual($headers->getResponseCode(), 200);
-            $this->assertIdentical($response->getContent(), "");
-        }
-        function testHttpPost() {
-            $http = &new SimpleHttpPostRequest(
-                    new SimpleRoute(
-                            new SimpleUrl('www.lastcraft.com/test/network_confirm.php')),
-                    array());
-            $this->assertIsA($response = &$http->fetch(15), 'SimpleHttpResponse');
-            $this->assertWantedPattern(
-                    '/Request method.*?<dd>POST<\/dd>/',
-                    $response->getContent());
-        }
-        function testHttpFormPost() {
-            $http = &new SimpleHttpPostRequest(
-                    new SimpleRoute(
-                            new SimpleUrl('www.lastcraft.com/test/network_confirm.php')),
-                    array('pkey' => 'pvalue'));
-            $http->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
-            $response = &$http->fetch(15);
-            $this->assertWantedPattern(
-                    '/Request method.*?<dd>POST<\/dd>/',
-                    $response->getContent());
-            $this->assertWantedPattern(
-                    '/pkey=\[pvalue\]/',
-                    $response->getContent());
         }
     }
     

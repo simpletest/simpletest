@@ -584,7 +584,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleRoute {
+    class SimpleDestination {
         var $_url;
         
         /**
@@ -592,7 +592,7 @@
          *    @param SimpleUrl $url   URL as object.
          *    @access public
          */
-        function SimpleRoute($url) {
+        function SimpleDestination($url) {
             $this->_url = $url;
         }
         
@@ -674,18 +674,24 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleProxyRoute extends SimpleRoute {
+    class SimpleProxyDestination extends SimpleDestination {
         var $_proxy;
+        var $_username;
+        var $_password;
         
         /**
          *    Stashes the proxy address.
          *    @param SimpleUrl $url     URL as object.
-         *    @param SimpleUrl $proxy   Proxy host as object.
+         *    @param string $proxy      Proxy URL.
+         *    @param string $username   Username for autentication.
+         *    @param string $password   Password for autentication.
          *    @access public
          */
-        function SimpleProxyRoute($url, $proxy) {
-            $this->SimpleRoute($url);
+        function SimpleProxyDestination($url, $proxy, $username = false, $password = false) {
+            $this->SimpleDestination($url);
             $this->_proxy = $proxy;
+            $this->_username = $username;
+            $this->_password = $password;
         }
         
         /**
@@ -731,6 +737,11 @@
             if (! $socket->isError()) {
                 $socket->write($this->_getRequestLine($method) . "\r\n");
                 $socket->write($this->_getHostLine() . "\r\n");
+                if ($this->_username && $this->_password) {
+                    $socket->write('Proxy-Authorization: Basic ' .
+                            base64_encode($this->_username . ':' . $this->_password) .
+                            "\r\n");
+                }
                 $socket->write("Connection: close\r\n");
             }
             return $socket;
@@ -751,7 +762,7 @@
         
         /**
          *    Saves the URL ready for fetching.
-         *    @param SimpleRoute $route   Request target.
+         *    @param SimpleDestination $route   Request target.
          *    @param string $method       HTTP request method,
          *                                usually GET.
          *    @access public
@@ -850,7 +861,7 @@
         
         /**
          *    Saves the URL ready for fetching.
-         *    @param SimpleRoute $route   Request target.
+         *    @param SimpleDestination $route   Request target.
          *    @param array $parameters    Content to send.
          *    @access public
          */

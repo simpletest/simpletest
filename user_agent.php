@@ -164,6 +164,8 @@
         var $_authenticator;
         var $_max_redirects;
         var $_proxy;
+        var $_proxy_username;
+        var $_proxy_password;
         var $_connection_timeout;
         var $_current_request;
         
@@ -176,6 +178,8 @@
             $this->_authenticator = &new SimpleAuthenticator();
             $this->setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
             $this->_proxy = false;
+            $this->_proxy_username = false;
+            $this->_proxy_password = false;
             $this->setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
             $this->_current_request = false;
         }
@@ -259,7 +263,7 @@
          *    Removes expired and temporary cookies as if
          *    the browser was closed and re-opened.
          *    @param string/integer $date   Time when session restarted.
-         *                                  If ommitted then all persistent
+         *                                  If omitted then all persistent
          *                                  cookies are kept.
          *    @access public
          */
@@ -353,12 +357,14 @@
         
         /**
          *    Sets proxy to use on all requests for when
-         *    testing from behind a firewall. Set host
+         *    testing from behind a firewall. Set URL
          *    to false to disable.
-         *    @param string $proxy       Proxy host as URL.
+         *    @param string $proxy        Proxy URL.
+         *    @param string $username     Proxy username for autentication.
+         *    @param string $password     Proxy password for autentication.
          *    @access public
          */
-        function useProxy($proxy) {
+        function useProxy($proxy, $username, $password) {
             if (! $proxy) {
                 $this->_proxy = false;
                 return;
@@ -367,6 +373,8 @@
                 $proxy = 'http://'. $proxy;
             }
             $this->_proxy = &new SimpleUrl($proxy);
+            $this->_proxy_username = $username;
+            $this->_proxy_password = $password;
         }
         
         /**
@@ -489,26 +497,30 @@
         function &_createHttpRequest($method, $url, $parameters) {
             if ($method == 'POST') {
                 $request = &new SimpleHttpPostRequest(
-                        $this->_createRoute($url),
+                        $this->_createDestination($url),
                         $parameters);
                 return $request;
             }
             if ($parameters) {
                 $url->addRequestParameters($parameters);
             }
-            return new SimpleHttpRequest($this->_createRoute($url), $method);
+            return new SimpleHttpRequest($this->_createDestination($url), $method);
         }
         
         /**
          *    Sets up either a direct route or via a proxy.
-         *    @param SimpleUrl $url       Target to fetch as url object.
+         *    @param SimpleUrl $url     Target to fetch as url object.
          *    @access protected
          */
-        function &_createRoute($url) {
+        function &_createDestination($url) {
             if ($this->_proxy) {
-                return new SimpleProxyRoute($url, $this->_proxy);
+                return new SimpleProxyDestination(
+                        $url,
+                        $this->_proxy,
+                        $this->_proxy_username,
+                        $this->_proxy_password);
             }
-            return new SimpleRoute($url);
+            return new SimpleDestination($url);
         }
         
         /**
