@@ -16,6 +16,12 @@ If you download and use and possibly even extend this tool, please let me
 know. Any feedback, even bad, is always welcome and I will work to get
 your suggestions into the version one release.
 
+You are looking at an Alpha release because the interfaces for the
+web testing side have not yet stabilised. The unit tester and mock
+object generator are tested and have been used to test several
+systems. And of course they are being used to assist creation
+of SimpleTest itself.
+
 yours, Marcus.
 -- 
 marcus@lastcraft.com

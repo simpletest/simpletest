@@ -11,7 +11,7 @@
         var $_cookies;
         
         /**
-         *    Reads a URL.
+         *    Saves the URL ready for fetching.
          *    @param $url        URL as string.
          *    @public
          */
