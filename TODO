@@ -20,7 +20,7 @@ Html parser
 Parsing of image submits (2).
 Parsing of radio buttons (3/4) - done.
 Support multiple selections (3/4) - done.
-Support multiple checkboxes (2).
+Support multiple checkboxes (2/3) - done.
 Make hidden fields unsettable (1/0) - done.
 Add support for reset buttons (2).
 

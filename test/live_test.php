@@ -288,9 +288,20 @@
         function testDefaultFormValueSubmission() {
             $this->get('http://www.lastcraft.com/test/multiple_widget_form.html');
             $this->assertField('a', array('a2', 'a3'));
-            //$this->assertField('b', array('b2', 'b3'));
+            $this->assertField('b', array('b2', 'b3'));
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedPattern('/a=\[a2, a3\]/');
+            $this->assertWantedPattern('/b=\[b2, b3\]/');
+        }
+        function testSubmittingMultipleValues() {
+            $this->get('http://www.lastcraft.com/test/multiple_widget_form.html');
+            $this->setField('a', array('a1', 'a4'));
+            $this->assertField('a', array('a1', 'a4'));
+            $this->setField('b', array('b1', 'b4'));
+            $this->assertField('b', array('b1', 'b4'));
+            $this->assertTrue($this->clickSubmit('Go!'));
+            $this->assertWantedPattern('/a=\[a1, a4\]/');
+            $this->assertWantedPattern('/b=\[b1, b4\]/');
         }
     }
 ?>

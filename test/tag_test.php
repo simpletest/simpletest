@@ -276,7 +276,7 @@
             $this->UnitTestCase();
         }
         function testReadingMultipleCheckboxGroup() {
-            $group = &new SimpleTagGroup();
+            $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
             $group->addWidget(new SimpleCheckboxTag(
                     array('value' => 'B', 'checked' => '')));
@@ -284,14 +284,14 @@
             $this->assertIdentical($group->getValue(), 'B');
         }
         function testReadingMultipleUncheckedItems() {
-            $group = &new SimpleTagGroup();
+            $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));            
             $this->assertIdentical($group->getDefault(), false);
             $this->assertIdentical($group->getValue(), false);
         }
         function testReadingMultipleCheckedItems() {
-            $group = &new SimpleTagGroup();
+            $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(
                     array('value' => 'A', 'checked' => '')));
             $group->addWidget(new SimpleCheckboxTag(
@@ -300,21 +300,23 @@
             $this->assertIdentical($group->getValue(), array('A', 'B'));
         }
         function testSettingSingleValue() {
-            $group = &new SimpleTagGroup();
+            $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));
             $this->assertTrue($group->setValue('A'));
             $this->assertIdentical($group->getValue(), 'A');
+            $this->assertTrue($group->setValue('B'));
+            $this->assertIdentical($group->getValue(), 'B');
         }
         function testSettingMultipleValues() {
-            $group = &new SimpleTagGroup();
+            $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));
             $this->assertTrue($group->setValue(array('A', 'B')));
             $this->assertIdentical($group->getValue(), array('A', 'B'));
         }
         function testSettingNoValue() {
-            $group = &new SimpleTagGroup();
+            $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));
             $this->assertTrue($group->setValue(false));

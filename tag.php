@@ -667,14 +667,14 @@
     /**
      *    A group of tags with the same name within a form.
      */
-    class SimpleTagGroup {
+    class SimpleCheckboxGroup {
         var $_widgets;
         
         /**
          *    Starts empty.
          *    @access public
          */
-        function SimpleTagGroup() {
+        function SimpleCheckboxGroup() {
             $this->_widgets = array();
         }
         
@@ -734,6 +734,8 @@
                 $possible = $this->_widgets[$i]->getAttribute('value');
                 if (in_array($this->_widgets[$i]->getAttribute('value'), $values)) {
                     $this->_widgets[$i]->setValue($possible);
+                } else {
+                    $this->_widgets[$i]->setValue(false);
                 }
             }
             return true;
@@ -963,27 +965,46 @@
         /**
          *    Sets the widget into the form, grouping radio
          *    buttons if any.
+         *    @param SimpleWidget $tag   Incoming form control.
          *    @access private
          */
         function _setWidget($tag) {
             if ($tag->getAttribute("type") == "radio") {
-                if (! isset($this->_widgets[$tag->getName()])) {
-                    $this->_widgets[$tag->getName()] = &new SimpleRadioGroup();
-                }
-                $this->_widgets[$tag->getName()]->addWidget($tag);
+                $this->_addRadioButton($tag);
             } elseif ($tag->getAttribute("type") == "checkbox") {
-                if (! isset($this->_widgets[$tag->getName()])) {
-                    $this->_widgets[$tag->getName()] = &$tag;
-                } elseif ($this->_widgets[$tag->getName()]->getAttribute("type") == "checkbox") {
-                    $previous = &$this->_widgets[$tag->getName()];
-                    $this->_widgets[$tag->getName()] = &new SimpleTagGroup();
-                    $this->_widgets[$tag->getName()]->addWidget($previous);
-                    $this->_widgets[$tag->getName()]->addWidget($tag);
-                } else {
-                    $this->_widgets[$tag->getName()]->addWidget($tag);
-                }
+                $this->_addCheckbox($tag);
             } else {
                 $this->_widgets[$tag->getName()] = &$tag;
+            }
+        }
+        
+        /**
+         *    Adds a radio button, building a group if necessary.
+         *    @param SimpleRadioButtonTag $tag   Incoming form control.
+         *    @access private
+         */
+        function _addRadioButton($tag) {
+            if (! isset($this->_widgets[$tag->getName()])) {
+                $this->_widgets[$tag->getName()] = &new SimpleRadioGroup();
+            }
+            $this->_widgets[$tag->getName()]->addWidget($tag);
+        }
+        
+        /**
+         *    Adds a checkbox, making it a group on a repeated name.
+         *    @param SimpleCheckboxTag $tag   Incoming form control.
+         *    @access private
+         */
+        function _addCheckbox($tag) {
+            if (! isset($this->_widgets[$tag->getName()])) {
+                $this->_widgets[$tag->getName()] = &$tag;
+            } elseif (! is_a($this->_widgets[$tag->getName()], 'SimpleCheckboxGroup')) {
+                $previous = &$this->_widgets[$tag->getName()];
+                $this->_widgets[$tag->getName()] = &new SimpleCheckboxGroup();
+                $this->_widgets[$tag->getName()]->addWidget($previous);
+                $this->_widgets[$tag->getName()]->addWidget($tag);
+            } else {
+                $this->_widgets[$tag->getName()]->addWidget($tag);
             }
         }
         
