@@ -43,9 +43,9 @@
                 <a href="http://souceforge.net/projects/spamproofwiki/">spam proof wiki</a>
             </p>
             <p>
-                The second and hopefully final release candidate of the
-                <a local="simple_test">SimpleTest PHP unit tester</a>
-                has been finished, RC2.
+                The <a local="simple_test">SimpleTest PHP unit tester</a> has finally hit the
+				1.0 mark and is available for download from your nearest <a 
+				href="http://souceforge.net/projects/simpletest/">SourceForge</a>.
                 It is a PHP unit test and web test framework that has been built
                 to be extensible in various ways.
                 Users of <a href="http://www.junit.org/">JUnit</a> will be

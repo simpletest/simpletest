@@ -6,9 +6,8 @@
     </long_title>
     <content>
         <news>
-            RC2 released on Sourceforge.
-            A purely bug fix release while the documentation is translated
-            into French.
+            The first stable release of is finally out. It only took 22 months... And it means SimpleTest
+			v1.0 has been released on Sourceforge.
         </news>
         <introduction>
             <p>
