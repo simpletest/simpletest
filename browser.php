@@ -241,7 +241,7 @@
             }
             $frameset = &new SimpleFrameset($page);
             foreach ($frameset->getFrames() as $key => $url) {
-                $frame = &$this->_fetch('GET', $url, array(), false);
+                $frame = &$this->_fetch('GET', $url, array());
                 $frameset->addParsedFrame($frame, $key);
             }
             return $frameset;
@@ -252,22 +252,32 @@
          *    @param string $method           GET or POST.
          *    @param string/SimpleUrl $url    Target to fetch as string.
          *    @param hash $parameters         POST parameters.
-         *    @param boolean $add_to_history  Whether to record in the history.
          *    @return SimplePage              Parsed page.
          *    @access private
          */
-        function &_fetch($method, $url, $parameters, $add_to_history) {
+        function &_fetch($method, $url, $parameters) {
             $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
             if ($response->isError()) {
                 return new SimplePage($response);
             }
-            if ($add_to_history) {
-                $this->_history->recordEntry(
-                        $response->getMethod(),
-                        $response->getUrl(),
-                        $response->getRequestData());
-            }
             return $this->_parse($response);
+        }
+        
+        /**
+         *    Fetches a page and makes it the current page/frame.
+         *    @param string $method           GET or POST.
+         *    @param string/SimpleUrl $url    Target to fetch as string.
+         *    @param hash $parameters         POST parameters.
+         *    @return string                  Raw content of page.
+         *    @access private
+         */
+        function _load($method, $url, $parameters) {
+            $this->_page = &$this->_fetch(strtoupper($method), $url, $parameters);
+            $this->_history->recordEntry(
+                    $this->_page->getRequestMethod(),
+                    $this->_page->getRequestUrl(),
+                    $this->_page->getRequestData());
+            return $this->_page->getRaw();
         }
         
         /**
@@ -393,8 +403,7 @@
          *    @access public
          */
         function get($url, $parameters = false) {
-            $this->_page = &$this->_fetch('GET', $url, $parameters, true);
-            return $this->_page->getRaw();
+            return $this->_load('GET', $url, $parameters);
         }
         
         /**
@@ -405,8 +414,7 @@
          *    @access public
          */
         function post($url, $parameters = false) {
-            $this->_page = &$this->_fetch('POST', $url, $parameters, true);
-            return $this->_page->getRaw();
+            return $this->_load('POST', $url, $parameters);
         }
         
         /**
@@ -422,8 +430,7 @@
                 $this->_page = &$this->_fetch(
                         $method,
                         $this->_history->getUrl(),
-                        $this->_history->getParameters(),
-                        false);
+                        $this->_history->getParameters());
                 return $this->_page->getRaw();
             }
             return false;
@@ -697,7 +704,10 @@
             }
             $action = $this->_getAction($form);
             $method = $form->getMethod();
-            return $this->$method($action, $form->submitButtonByLabel($label));
+            return $this->_load(
+                    $method,
+                    $action,
+                    $form->submitButtonByLabel($label));
         }
         
         /**
@@ -713,7 +723,10 @@
             }
             $action = $this->_getAction($form);
             $method = $form->getMethod();
-            return $this->$method($action, $form->submitButtonByName($name));
+            return $this->_load(
+                    $method,
+                    $action,
+                    $form->submitButtonByName($name));
         }
         
         /**
@@ -729,7 +742,10 @@
             }
             $action = $this->_getAction($form);
             $method = $form->getMethod();
-            return $this->$method($action, $form->submitButtonById($id));
+            return $this->_load(
+                    $method,
+                    $action,
+                    $form->submitButtonById($id));
         }
         
         /**
@@ -750,7 +766,8 @@
             }
             $action = $this->_getAction($form);
             $method = $form->getMethod();
-            return $this->$method(
+            return $this->_load(
+                    $method,
                     $action,
                     $form->submitImageByLabel($label, $x, $y));
         }
@@ -773,7 +790,10 @@
             }
             $action = $this->_getAction($form);
             $method = $form->getMethod();
-            return $this->$method($action, $form->submitImageByName($name, $x, $y));
+            return $this->_load(
+                    $method,
+                    $action,
+                    $form->submitImageByName($name, $x, $y));
         }
          
         /**
@@ -793,7 +813,10 @@
             }
             $action = $this->_getAction($form);
             $method = $form->getMethod();
-            return $this->$method($action, $form->submitImageById($id, $x, $y));
+            return $this->_load(
+                    $method,
+                    $action,
+                    $form->submitImageById($id, $x, $y));
         }
        
         /**
@@ -828,7 +851,7 @@
                 $action = $this->_page->getRequestUrl();
             }
             $method = $form->getMethod();
-            return $this->$method($action, $form->submit());
+            return $this->_load($method, $action, $form->submit());
         }
         
         /**

@@ -10,10 +10,13 @@ Set the SIMPLE_TEST constant if not set for add in libraries (1).
 
 Reporter
 --------
+Add spaces around the breadcrumb's arrows (1).
 
 Mock objects
 ------------
 Add fix for PHP5 __construct() call (1/1) - done.
+Partial should throw error setting expectation on non-mocked method (1).
+Line numbers on failed expectations (3).
 
 Parser
 ------
@@ -29,7 +32,8 @@ Add frame loads from links (6).
 Allow images to be head fetched to set cookies (2).
 Allow stylesheet loading to affect cookies (2).
 Refactor authentication to cope with framed pages (2).
-Refactor exsiting base url behaviour into SimplePage (3).
+Refactor existing base url behaviour into SimplePage (3).
+Bad socket shoudl simply throw an error (1).
 
 Web tester
 ----------
