@@ -21,8 +21,8 @@
         /**
          *    Creates an empty test case. Should be subclassed
          *    with test methods for a functional test case.
-         *    @param $label      Name of test case. Will use
-         *                       the class name if none specified.
+         *    @param string $label     Name of test case. Will use
+         *                             the class name if none specified.
          *    @access public
          */
         function WebTestCase($label = false) {
@@ -35,14 +35,27 @@
          *    Temporary cookies will be discarded and timed
          *    cookies will be expired if later than the
          *    specified time.
-         *    @param $date        Time when session restarted.
-         *                        If ommitted then all persistent
-         *                        cookies are kept. Time is either
-         *                        Cookie format string or timestamp.
+         *    @param string/integer $date Time when session restarted.
+         *                                If ommitted then all persistent
+         *                                cookies are kept. Time is either
+         *                                Cookie format string or timestamp.
          *    @access public
          */
         function restartSession($date = false) {
+            if ($date === false) {
+                $date = time();
+            }
             $this->_current_browser->restartSession($date);
+        }
+        
+        /**
+         *    Moves cookie expiry times back into the past.
+         *    Useful for testing timeouts and expiries.
+         *    @param integer $interval    Amount to age in seconds.
+         *    @access public
+         */
+        function ageCookies($interval) {
+            $this->_current_browser->ageCookies($interval);
         }
         
         /**

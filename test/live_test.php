@@ -192,7 +192,8 @@
         }
         function testTimedCookieExpiry() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
-            $this->restartSession(time() + 3600 + 60);    // Includes a 60 sec. clock drift margin.
+            $this->ageCookies(3600);
+            $this->restartSession(time() + 60);    // Includes a 60 sec. clock drift margin.
             $this->assertNoCookie("session_cookie");
             $this->assertNoCookie("hour_cookie");
             $this->assertCookie("day_cookie", "C");
