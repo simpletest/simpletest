@@ -50,6 +50,14 @@
                     '/ckey=\[cvalue\]/',
                     $response->getContent());
         }
+        function testHttpHead() {
+            $http = &new SimpleHttpRequest(
+                    new SimpleUrl("www.lastcraft.com/test/network_confirm.php"),
+                    "HEAD");
+            $this->assertIsA($response = &$http->fetch(), "SimpleHttpResponse");
+            $this->assertEqual($response->getResponseCode(), 200);
+            $this->assertIdentical($response->getContent(), "");
+        }
         function testHttpPost() {
             $http = &new SimpleHttpPushRequest(
                     new SimpleUrl("www.lastcraft.com/test/network_confirm.php"),

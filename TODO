@@ -28,14 +28,14 @@ Add selection field to form parser (4).
 
 Browser
 -------
-Add headers only fetch (4).
+Add headers only fetch (4/1).
 Move unecessary expectations into accessors (2).
 
 Web tester
 ----------
 Connect up page failure expectations (3).
 Connect cookie expectations (2/6) - done.
-Add form submission to navigation (2).
+Add form submission to navigation (2/3) - done.
 Connect up session start method on browser (1/1) - done.
 Fix base path bug where path is lost (1/1) - done.
 
