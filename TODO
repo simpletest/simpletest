@@ -37,6 +37,7 @@ Allow image links to be head fetched to set cookies (2).
 Allow stylesheet loading to affect cookies (1).
 Make link clicking more tolerant with trim (1).
 Add clickLinkByPattern() method (1).
+Redirects should become GET if they were POST (1).
 
 Web tester
 ----------
