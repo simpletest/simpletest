@@ -15,15 +15,17 @@ similar. Also included is a mock objects and server stubs generator.
 The stubs can have return values set for different arguments, can have
 sequences set also by arguments and can return items by reference.
 The mocks inherit all of this functionality and can also have
-expectations set, again in sequences and for different arguments. A
-web tester similar in concept to JWebUnit is also included. There is no
+expectations set, again in sequences and for different arguments.
+
+A web tester similar in concept to JWebUnit is also included. There is no
 JavaScript or tables support, but forms, authentication and cookies are
-handled. Frames will be suported soon.
+handled. Frames will be supported soon.
 
 You are not tied to just using SimpleTest, though. The mocks and stubs
 will work with other test frameworks and SimpleTest can use other
 framework's (PHPUnit, PEAR::PhpUnit) test cases as it's own. The
-web browser part of the web tester can also be used independently.
+web browser part of the web tester can also be used independently either
+in other testers or as part of a scripting solution.
 
 You can see a release schedule at
 http://www.lastcraft.com/overview.php which is also copied to the
@@ -31,7 +33,7 @@ documentation folder with this release. The user interface is minimal
 in the extreme, but a lot of information flows from the test suite.
 After version 1.0 we will release a better web UI, but we are leaving XUL
 and GTk versions to volunteers as everybody has their own opinion
-on a good GUI and we don't want to discourage development by shipping
+on a good GUI, and we don't want to discourage development by shipping
 one with the toolkit.
 
 If you are extending the toolkit or wish to bundle parts of the toolkit
@@ -94,13 +96,14 @@ use. We intend to add a complete set of tools for a test first
 and "test as you code" type of development. "Simple" does not
 mean "Lite" in this context.
 
-yours, Marcus Baker, Jason Sweat and Harry Feucks.
-
-Thanks to everyone who has sent comments. If I have
-failed to credit and you want you or your site listed here, please
-let us know.
+Thanks to everyone who has sent comments and offered suggestions, they
+really are invaluable.
 
 Thanks to the advanced PHP forum on SitePoint. It is the place to be right
 now.
+
+Authors are Marcus Baker, Jason Sweat and Harry Feucks.
+
+yours, Marcus Baker
 -- 
 marcus@lastcraft.com
