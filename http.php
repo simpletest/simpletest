@@ -9,12 +9,14 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'socket.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'query_string.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'socket.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'query_string.php');
     /**#@-*/
     
     /**
-     *    URL parser to replace parse_url() PHP function.
+     *    URL parser to replace parse_url() PHP function which
+     *    got broken in PHP 4.3.0. Adds some browser specific
+     *    functionality such as expandomatic expansion.
      *    Guesses a bit trying to separate the host from
      *    the path.
 	 *    @package SimpleTest
@@ -66,15 +68,15 @@
         /**
          *    Extracts the username and password from the
          *    incoming URL. The // prefix will be reattached
-         *    to the URL after the doublet are extracted.
+         *    to the URL after the doublet is extracted.
          *    @param string $url    URL so far. The username and
          *                          password are removed.
          *    @return array         Two item list of username and
-         *                          password.
+         *                          password. Will urldecode() them.
          *    @access private
          */
         function _chompLogin(&$url) {
-            $prefix = "";
+            $prefix = '';
             if (preg_match('/(\/\/)(.*)/', $url, $matches)) {
                 $prefix = $matches[1];
                 $url = $matches[2];
@@ -82,7 +84,9 @@
             if (preg_match('/(.*?)@(.*)/', $url, $matches)) {
                 $url = $prefix . $matches[2];
                 $parts = split(":", $matches[1]);
-                return array($parts[0], (isset($parts[1]) ? $parts[1] : false));
+                return array(
+                        urldecode($parts[0]),
+                        isset($parts[1]) ? urldecode($parts[1]) : false);
             }
             $url = $prefix . $url;
             return array(false, false);

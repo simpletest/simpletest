@@ -1,9 +1,9 @@
 <?php
     // $Id$
     
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../query_string.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../http.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../socket.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../query_string.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../http.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../socket.php');
     Mock::generate('SimpleUrl');
     Mock::generate('SimpleSocket');
     Mock::generate('SimpleDestination');
@@ -108,6 +108,12 @@
             $this->assertEqual($url->getPassword(), 'secret');
             $this->assertEqual($url->getHost(), 'www.lastcraft.com');
             $this->assertEqual($url->getPath(), '/stuff/');
+        }
+        function testUsernameAndPasswordAreUrlDecoded() {
+            $url = new SimpleUrl('http://' . urlencode('test@test') .
+                    ':' . urlencode('$!£@*&%') . '@www.lastcraft.com');
+            $this->assertEqual($url->getUsername(), 'test@test');
+            $this->assertEqual($url->getPassword(), '$!£@*&%');
         }
         function testRequestEncoding() {
             $this->assertEqual(

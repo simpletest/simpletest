@@ -1,5 +1,6 @@
 TODO
 This is immediate stuff only for this iteration (RC1) of 41 hours.
+First figure is expected hours, second is the time it actually took.
 
 $Id$
 
@@ -34,7 +35,7 @@ Add setFieldById() method (1).
 Add assertFieldById() method (1).
 Allow image links/buttons to be head fetched to set cookies (2).
 Allow stylesheet loading to affect cookies (2).
-Username and password should allow encoded characters (1).
+Username and password should allow encoded characters (1/0) - done.
 Add support for proxy fetching (3/9) - done.
 Add User-Agent identifier for tracking tests (1/0) - done.
 Allow adding of arbitrary headers (1/1) - done.

@@ -9,8 +9,8 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'http.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'authentication.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'http.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'authentication.php');
     /**#@-*/
    
     define('DEFAULT_MAX_REDIRECTS', 3);

@@ -9,10 +9,10 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'options.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'http.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'page.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'user_agent.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'options.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'http.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'page.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'user_agent.php');
     /**#@-*/
     
     /**
@@ -174,7 +174,7 @@
         
         /**
          *    Starts with a fresh browser with no
-         *    cookie or any other state information. the
+         *    cookie or any other state information. The
          *    exception is that a default proxy will be
          *    set up if specified in the options.
          *    @access public
@@ -231,7 +231,7 @@
          *    Removes expired and temporary cookies as if
          *    the browser was closed and re-opened.
          *    @param string/integer $date   Time when session restarted.
-         *                                  If ommitted then all persistent
+         *                                  If omitted then all persistent
          *                                  cookies are kept.
          *    @access public
          */
