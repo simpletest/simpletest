@@ -443,6 +443,9 @@
             $lexer->mapHandler('js', 'ignore');
             $lexer->addEntryPattern('<script', 'text', 'js');
             $lexer->addExitPattern('</script>', 'js');
+            $lexer->mapHandler('comment', 'ignore');
+            $lexer->addEntryPattern('<!--', 'text', 'comment');
+            $lexer->addExitPattern('-->', 'comment');
         }
         
         /**

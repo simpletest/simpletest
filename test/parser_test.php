@@ -327,6 +327,11 @@
             $this->_handler->expectMinimumCallCount("ignore", 1);
             $this->assertTrue($this->_lexer->parse("<SCRIPT>Javascript code {';:^%^%£$'@\"*(}</SCRIPT>"));
         }
+        function testSkipComments() {
+            $this->_handler->expectMaximumCallCount("acceptTextToken", 0);
+            $this->_handler->expectMinimumCallCount("ignore", 1);
+            $this->assertTrue($this->_lexer->parse("<!-- <style>Lot's of styles</style> -->"));
+        }
         function testTitle() {
             $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<title", "*"));
             $this->_handler->expectArgumentsAt(1, "acceptStartToken", array(">", "*"));
