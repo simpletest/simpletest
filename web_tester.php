@@ -206,7 +206,7 @@
         /**
          *    Equivalent to hitting the retry button on the
          *    browser. Will attempt to repeat the page fetch.
-         *    @return boolean     True if fetch succeeded
+         *    @return boolean     True if fetch succeeded.
          *    @access public
          */
         function retry() {
@@ -217,7 +217,7 @@
          *    Equivalent to hitting the back button on the
          *    browser.
          *    @return boolean     True if history entry and
-         *                        fetch succeeded
+         *                        fetch succeeded.
          *    @access public
          */
         function back() {
@@ -228,11 +228,25 @@
          *    Equivalent to hitting the forward button on the
          *    browser.
          *    @return boolean     True if history entry and
-         *                        fetch succeeded
+         *                        fetch succeeded.
          *    @access public
          */
         function forward() {
             return $this->_browser->forward();
+        }
+        
+        /**
+         *    Retries a request after setting the authentication
+         *    for the current realm.
+         *    @param string $username    Username for realm.
+         *    @param string $password    Password for realm.
+         *    @return boolean            True if successful fetch. Note
+         *                               that authentication may still have
+         *                               failed.
+         *    @access public
+         */
+        function authenticate($username, $password) {
+            return $this->_browser->authenticate($username, $password);
         }
         
         /**

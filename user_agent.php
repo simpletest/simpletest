@@ -141,6 +141,83 @@
     }
     
     /**
+     *    Manages security realms.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleAuthenticator {
+        
+        /**
+         *    Starts with no realms set up.
+         *    @access public
+         */
+        function SimpleAuthenticator() {
+        }
+        
+        /**
+         *    Adds a new realm centered the current URL.
+         *    Browsers vary wildly on their behaviour in this
+         *    regard. Mozilla ignores the realm and presents
+         *    only when challenged, wasting bandwidth. IE
+         *    just carries on presenting until a new challenge
+         *    occours. SimpleTest tries to follow the spirit of
+         *    the original standards committee and treats the
+         *    base URL as the root of a file tree shaped realm.
+         *    @param SimpleUrl $url    Base of realm.
+         *    @param string $type      Authentication type for this
+         *                             realm. Only Basic authentication
+         *                             is currently supported.
+         *    @param string $realm     Name of realm.
+         *    @access public
+         */
+        function addRealm($url, $type, $realm) {
+        }
+        
+        /**
+         *    Sets the current identity to be presented
+         *    against that realm.
+         *    @param string $realm       Name of realm.
+         *    @param string $username    Username for realm.
+         *    @param string $password    Password for realm.
+         *    @access public
+         */
+        function setIdentityForRealm($realm, $username, $password) {
+        }
+        
+        /**
+         *    Finds the name of the realm by comparing URLs.
+         *    @param SimpleUrl $url        URL to test.
+         *    @access private
+         */
+        function _findRealmFromUrl($url) {
+        }
+        
+        /**
+         *    Presents the appropriate headers for this
+         *    location.
+         *    @param SimpleHttpRequest $request  Request to modify.
+         *    @param SimpleUrl $url              Base of realm.
+         *    @access public
+         */
+        function addHeaders(&$request, $url) {
+        }
+        
+        /**
+         *    Presents the appropriate headers for this
+         *    location for basic authentication.
+         *    @param SimpleHttpRequest $request  Request to modify.
+         *    @param string $username            Username for realm.
+         *    @param string $password            Password for realm.
+         *    @access public
+         *    @static
+         */
+        function addBasicHeaders(&$request, $username, $password) {
+            $request->addHeaderLine(
+                    'Authorization: Basic ' . base64_encode("$username:$password"));
+        }
+    }
+    
+    /**
      *    Fetches web pages whilst keeping track of
      *    cookies.
 	 *    @package SimpleTest
@@ -190,8 +267,7 @@
             }
             return $this->_current_request['url']->getScheme('http') . '://' .
                     $this->_current_request['url']->getHost() .
-                    $this->_current_request['url']->getBasePath() .
-                    $this->_current_request['url']->getEncodedRequest();
+                    $this->_current_request['url']->getBasePath();
         }
         
         /**
@@ -203,7 +279,13 @@
             if (! $this->_current_request) {
                 return false;
             }
+            $authorisation = '';
+            if ($this->_current_request['url']->getUsername()) {
+                $authorisation = $this->_current_request['url']->getUsername() . ':' .
+                        $this->_current_request['url']->getPassword() . '@';
+            }
             return $this->_current_request['url']->getScheme('http') . '://' .
+                    $authorisation .
                     $this->_current_request['url']->getHost() .
                     $this->_current_request['url']->getPath() .
                     $this->_current_request['url']->getEncodedRequest();
@@ -340,6 +422,15 @@
         }
         
         /**
+         *    Sets the identity for the current realm.
+         *    @param string $username    Username for realm.
+         *    @param string $password    Password for realm.
+         *    @access public
+         */
+        function setIdentity($username, $password) {
+        }
+        
+        /**
          *    Fetches a URL as a response object. Will
          *    keep trying if redirected.
          *    @param string $method         GET, POST, etc.
@@ -413,6 +504,7 @@
         function &_createRequest($method, $url, $parameters) {
             $request = &$this->_createHttpRequest($method, $url, $parameters);
             $this->_addCookiesToRequest($request, $url);
+            $this->_addAuthentication($request, $url);
             return $request;
         }
         
@@ -427,7 +519,6 @@
             foreach ($cookies as $cookie) {
                 $request->setCookie($cookie);
             }
-            $this->_addAuthentication($request, $url);
         }
         
         /**
@@ -437,8 +528,12 @@
          *    @access private
          */
         function _addAuthentication(&$request, $url) {
-            $request->addHeaderLine('Authorization: Basic ' . base64_encode(
-                    $url->getUsername() . ':' . $url->getPassword()));
+            if ($url->getUsername()) {
+                SimpleAuthenticator::addBasicHeaders(
+                        $request,
+                        $url->getUsername(),
+                        $url->getPassword());
+            }
         }
         
         /**

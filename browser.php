@@ -428,6 +428,21 @@
         }
         
         /**
+         *    Retries a request after setting the authentication
+         *    for the current realm.
+         *    @param string $username    Username for realm.
+         *    @param string $password    Password for realm.
+         *    @return boolean            True if successful fetch. Note
+         *                               that authentication may still have
+         *                               failed.
+         *    @access public
+         */
+        function authenticate($username, $password) {
+            $this->_user_agent->setIdentity($username, $password);
+            return $this->retry();
+        }
+        
+        /**
          *    Accessor for current MIME type.
          *    @return string    MIME type as string; e.g. 'text/html'
          *    @access public

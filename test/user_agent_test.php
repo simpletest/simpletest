@@ -208,9 +208,9 @@
             
             $agent->fetchResponse(
                     'GET',
-                    'http://this.com/page.html',
+                    'http://test:secret@this.com/page.html',
                     array('a' => 'A', 'b' => 'B'));
-            $this->assertEqual($agent->getCurrentUrl(), 'http://this.com/page.html?a=A&b=B');
+            $this->assertEqual($agent->getCurrentUrl(), 'http://test:secret@this.com/page.html?a=A&b=B');
             $this->assertEqual($agent->getCurrentMethod(), 'GET');
             $this->assertEqual($agent->getCurrentPostData(), false);
             $agent->tally();
