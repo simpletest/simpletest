@@ -382,7 +382,7 @@
         function getCallCount($method) {
             $this->_dieOnNoMethod($method, "get call count");
             $method = strtolower($method);
-            if (!isset($this->_call_counts[$method])) {
+            if (! isset($this->_call_counts[$method])) {
                 return 0;
             }
             return $this->_call_counts[$method];
@@ -401,7 +401,7 @@
             $this->_dieOnNoMethod($method, "set return value");
             $args = $this->_replaceWildcards($args);
             $method = strtolower($method);
-            if (!isset($this->_returns[$method])) {
+            if (! isset($this->_returns[$method])) {
                 $this->_returns[$method] = new CallMap();
             }
             $this->_returns[$method]->addValue($args, $value);
@@ -425,10 +425,10 @@
             $this->_dieOnNoMethod($method, "set return value sequence");
             $args = $this->_replaceWildcards($args);
             $method = strtolower($method);
-            if (!isset($this->_return_sequence[$method])) {
+            if (! isset($this->_return_sequence[$method])) {
                 $this->_return_sequence[$method] = array();
             }
-            if (!isset($this->_return_sequence[$method][$timing])) {
+            if (! isset($this->_return_sequence[$method][$timing])) {
                 $this->_return_sequence[$method][$timing] = new CallMap();
             }
             $this->_return_sequence[$method][$timing]->addValue($args, $value);
@@ -447,7 +447,7 @@
             $this->_dieOnNoMethod($method, "set return reference");
             $args = $this->_replaceWildcards($args);
             $method = strtolower($method);
-            if (!isset($this->_returns[$method])) {
+            if (! isset($this->_returns[$method])) {
                 $this->_returns[$method] = new CallMap();
             }
             $this->_returns[$method]->addReference($args, $reference);
@@ -471,10 +471,10 @@
             $this->_dieOnNoMethod($method, "set return reference sequence");
             $args = $this->_replaceWildcards($args);
             $method = strtolower($method);
-            if (!isset($this->_return_sequence[$method])) {
+            if (! isset($this->_return_sequence[$method])) {
                 $this->_return_sequence[$method] = array();
             }
-            if (!isset($this->_return_sequence[$method][$timing])) {
+            if (! isset($this->_return_sequence[$method][$timing])) {
                 $this->_return_sequence[$method][$timing] = new CallMap();
             }
             $this->_return_sequence[$method][$timing]->addReference($args, $reference);

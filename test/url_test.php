@@ -315,9 +315,10 @@
         function testMakingAbsolute() {
             $url = new SimpleUrl('../there/somewhere.php');
             $this->assertEqual($url->getPath(), '../there/somewhere.php');
-            $absolute = $url->makeAbsolute('https://host.com/I/am/here/');
+            $absolute = $url->makeAbsolute('https://host.com:1234/I/am/here/');
             $this->assertEqual($absolute->getScheme(), 'https');
             $this->assertEqual($absolute->getHost(), 'host.com');
+            $this->assertEqual($absolute->getPort(), 1234);
             $this->assertEqual($absolute->getPath(), '/I/am/there/somewhere.php');
         }
         
@@ -363,12 +364,13 @@
         }
         
         function testMakingAbsoluteHasNoEffectWhenAlreadyAbsolute() {
-            $url = new SimpleUrl('https://test:secret@www.lastcraft.com/stuff/?a=1#f');
+            $url = new SimpleUrl('https://test:secret@www.lastcraft.com:321/stuff/?a=1#f');
             $absolute = $url->makeAbsolute('http://host.com/here/');
             $this->assertEqual($absolute->getScheme(), 'https');
             $this->assertEqual($absolute->getUsername(), 'test');
             $this->assertEqual($absolute->getPassword(), 'secret');
             $this->assertEqual($absolute->getHost(), 'www.lastcraft.com');
+            $this->assertEqual($absolute->getPort(), 321);
             $this->assertEqual($absolute->getPath(), '/stuff/');
             $this->assertEqual($absolute->getEncodedRequest(), '?a=1');
             $this->assertEqual($absolute->getFragment(), 'f');
@@ -376,9 +378,10 @@
         
         function testMakingHostOnlyAbsoluteDoesNotCarryAnyOtherInformation() {
             $url = new SimpleUrl('http://www.lastcraft.com');
-            $absolute = $url->makeAbsolute('https://host.com/here/');
+            $absolute = $url->makeAbsolute('https://host.com:81/here/');
             $this->assertEqual($absolute->getScheme(), 'http');
             $this->assertEqual($absolute->getHost(), 'www.lastcraft.com');
+            $this->assertIdentical($absolute->getPort(), false);
             $this->assertEqual($absolute->getPath(), '/');
         }
     }

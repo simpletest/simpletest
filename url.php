@@ -515,9 +515,11 @@
             }
             $scheme = $this->getScheme() ? $this->getScheme() : $base->getScheme();
             $host = $this->getHost();
+            $port = $this->getPort() ? ':' . $this->getPort() : '';
             $path = $this->normalisePath($this->_path);
             if (! $host) {
                 $host = $base->getHost();
+                $port = $base->getPort() ? ':' . $base->getPort() : '';
                 if ($this->_isRelativePath($this->_path)) {
                     $path = $this->normalisePath($base->getBasePath() . $this->_path);
                 }
@@ -525,7 +527,7 @@
             $identity = $this->_getIdentity() ? $this->_getIdentity() . '@' : '';
             $encoded = $this->getEncodedRequest();
             $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
-            return new SimpleUrl("$scheme://$identity$host$path$encoded$fragment");
+            return new SimpleUrl("$scheme://$identity$host$port$path$encoded$fragment");
         }
         
         /**
