@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for the next iteration (1.0rc1) of 40(!) hours.
+This is immediate stuff only for the next iteration (1.0rc1) of 45(!) hours.
 This equates to about 6 weeks work giving a release date of first week
 of April.
 
@@ -35,15 +35,19 @@ Add assertFieldById() method (1).
 Add simple HTTP authentication challenge/response (5).
 Allow image links to be head fetched to set cookies (2).
 Allow stylesheet loading to affect cookies (1).
+Make link clicking more tolerant with trim (1).
+Add clickLinkByPattern() method (1).
 
 Web tester
 ----------
 Chain frames support from browser (1).
 Make redirect test independent of LastCraft (1).
+Add assertLink() method (1).
 
 Documentation
 -------------
 Add cookie documentation (3).
+Add frames documentation (3).
 Add detached browser documentation (4).
 Formalise extensions (1).
 
