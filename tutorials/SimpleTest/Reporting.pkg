@@ -15,7 +15,7 @@
                 and there are other places to control the test run.
             </refpurpose>
 </refnamediv>
-            {@doc}
+            {@toc}
             
         
         <refsect1 id="{@id html}">
@@ -45,9 +45,9 @@
                 For web page based displays there is the
                 <span class="new_code">HtmlReporter</span> class with the following
                 signature...
-<program-listing role="php"><![CDATA[
+<programlisting role="php">
 class HtmlReporter extends SimpleReporter {
-    public HtmlReporter() { ... }
+    public HtmlReporter($encoding) { ... }
     public makeDry(boolean $is_dry) { ... }
     public void paintHeader(string $test_name) { ... }
     public void sendNoCacheHeaders() { ... }
@@ -72,19 +72,27 @@ class HtmlReporter extends SimpleReporter {
     public integer getTestCaseCount() { ... }
     public integer getTestCaseProgress() { ... }
 }
-]]></program-listing>
+</programlisting>
                 Here is what some of these methods mean. First the display methods
                 that you will probably want to override...
                 <ul class="api">
                     <li>
-                        <span class="new_code">HtmlReporter()</span>
+                        <span class="new_code">HtmlReporter(string $encoding)</span>
 <br/>
                         is the constructor.
                         Note that the unit test sets up the link to the display
                         rather than the other way around.
-                        The display is a passive receiver of test events.
+                        The display is a mostly passive receiver of test events.
                         This allows easy adaption of the display for other test
                         systems beside unit tests, such as monitoring servers.
+                        The encoding is the character encoding you wish to
+                        display the test output in.
+                        In order to correctly render debug output when
+                        using the web tester, this should match the encoding
+                        of the site you are trying to test.
+                        The available character set strings are described in
+                        the PHP {@link http://www.php.net/manual/en/function.htmlentities.php html_entities()}
+                        function.
                     </li>
                     <li>
                         <span class="new_code">void paintHeader(string $test_name)</span>
@@ -193,26 +201,23 @@ class HtmlReporter extends SimpleReporter {
                 </ul>
                 One simple modification is to get the HtmlReporter to display
                 the passes as well as the failures and errors...
-<program-listing role="php"><![CDATA[
-]]><![CDATA[class ShowPasses extends HtmlReporter {
-    function ShowPasses() {
-        $this->HtmlReporter();
-    }
+<programlisting role="php">
+class ShowPasses extends HtmlReporter {
     
     function paintPass($message) {
         parent::paintPass($message);
-        print "&<span class=\"pass\">Pass</span>: ";
-        $breadcrumb = $this->getTestList();
+        print "&amp;&lt;span class=\"pass\"&gt;Pass&lt;/span&gt;: ";
+        $breadcrumb = $this-&gt;getTestList();
         array_shift($breadcrumb);
-        print implode("-&gt;", $breadcrumb);
-        print "-&gt;$message<br />\n";
+        print implode("-&amp;gt;", $breadcrumb);
+        print "-&amp;gt;$message&lt;br /&gt;\n";
     }
     
     function _getCss() {
         return parent::_getCss() . ' .pass { color: green; }';
     }
-}]]><![CDATA[
-]]></program-listing>
+}
+</programlisting>
             </para>
             <para>
                 One method that was glossed over was the <span class="new_code">makeDry()</span>
@@ -248,13 +253,10 @@ class HtmlReporter extends SimpleReporter {
             <para>
                 A do nothing display, a blank canvas for your own creation, would
                 be...
-<program-listing role="php"><![CDATA[
-]]><![CDATA[require_once('simpletest/simple_test.php');]]><![CDATA[
+<programlisting role="php">
+require_once('simpletest/simple_test.php');
 
-class MyDisplay extends SimpleReporter {]]><![CDATA[
-    function MyDisplay() {
-        $this->SimpleReporter();
-    }]]><![CDATA[
+class MyDisplay extends SimpleReporter {
     
     function paintHeader($test_name) {
     }
@@ -262,23 +264,23 @@ class MyDisplay extends SimpleReporter {]]><![CDATA[
     function paintFooter($test_name) {
     }
     
-    function paintStart($test_name, $size) {]]><![CDATA[
-        parent::paintStart($test_name, $size);]]><![CDATA[
+    function paintStart($test_name, $size) {
+        parent::paintStart($test_name, $size);
     }
     
-    function paintEnd($test_name, $size) {]]><![CDATA[
-        parent::paintEnd($test_name, $size);]]><![CDATA[
+    function paintEnd($test_name, $size) {
+        parent::paintEnd($test_name, $size);
     }
     
-    function paintPass($message) {]]><![CDATA[
-        parent::paintPass($message);]]><![CDATA[
+    function paintPass($message) {
+        parent::paintPass($message);
     }
     
-    function paintFail($message) {]]><![CDATA[
-        parent::paintFail($message);]]><![CDATA[
+    function paintFail($message) {
+        parent::paintFail($message);
     }
 }
-]]></program-listing>
+</programlisting>
                 No output would come from this class until you add it.
             </para>
         </refsect1>
@@ -290,16 +292,16 @@ class MyDisplay extends SimpleReporter {]]><![CDATA[
                 failure messages as they arrive.
                 To use the command line reporter simply substitute it
                 for the HTML version...
-<program-listing role="php"><![CDATA[
-<?php
+<programlisting role="php">
+&lt;?php
     require_once('simpletest/unit_tester.php');
     require_once('simpletest/reporter.php');
 
-    $test = &new GroupTest('File test');
-    $test->addTestFile('tests/file_test.php');
-    $test->run(]]><![CDATA[new TextReporter()]]><![CDATA[);
-?>
-]]></program-listing>
+    $test = &amp;new GroupTest('File test');
+    $test-&gt;addTestFile('tests/file_test.php');
+    $test-&gt;run(new TextReporter());
+?&gt;
+</programlisting>
                 Then invoke the test suite from the command line...
 <pre class="shell">
 php file_test.php
@@ -332,33 +334,33 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 method.
                 We can use that result to exit the script with the desired return
                 code...
-<program-listing role="php"><![CDATA[
-<?php
+<programlisting role="php">
+&lt;?php
     require_once('simpletest/unit_tester.php');
     require_once('simpletest/reporter.php');
 
-    $test = &new GroupTest('File test');
-    $test->addTestFile('tests/file_test.php');
-    ]]><![CDATA[exit ($test->run(new TextReporter()) ? 0 : 1);]]><![CDATA[
-?>
-]]></program-listing>
+    $test = &amp;new GroupTest('File test');
+    $test-&gt;addTestFile('tests/file_test.php');
+    exit ($test-&gt;run(new TextReporter()) ? 0 : 1);
+?&gt;
+</programlisting>
                 Of course we don't really want to create two test scripts,
                 a command line one and a web browser one, for each test suite.
                 The command line reporter includes a method to sniff out the
                 run time environment...
-<program-listing role="php"><![CDATA[
-<?php
+<programlisting role="php">
+&lt;?php
     require_once('simpletest/unit_tester.php');
     require_once('simpletest/reporter.php');
 
-    $test = &new GroupTest('File test');
-    $test->addTestFile('tests/file_test.php');
-    ]]><![CDATA[if (TextReporter::inCli()) {]]><![CDATA[
-        exit ($test->run(new TextReporter()) ? 0 : 1);
-    ]]><![CDATA[}]]><![CDATA[
-    $test->run(new HtmlReporter());
-?>
-]]></program-listing>
+    $test = &amp;new GroupTest('File test');
+    $test-&gt;addTestFile('tests/file_test.php');
+    if (TextReporter::inCli()) {
+        exit ($test-&gt;run(new TextReporter()) ? 0 : 1);
+    }
+    $test-&gt;run(new HtmlReporter());
+?&gt;
+</programlisting>
                 This is the form used within SimpleTest itself.
             </para>
         </refsect1>
@@ -394,15 +396,15 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 supplied as part of SimpleTest itself.
                 This is called <span class="new_code">SimpleTestXmlParser</span> and
                 resides in <em>xml.php</em> within the SimpleTest package...
-<program-listing role="php"><![CDATA[
-<?php
+<programlisting role="php">
+&lt;?php
     require_once('simpletest/xml.php');
     
     ...
-    $parser = &new SimpleTestXmlParser(new HtmlReporter());
-    $parser->parse($test_output);
-?>
-]]></program-listing>
+    $parser = &amp;new SimpleTestXmlParser(new HtmlReporter());
+    $parser-&gt;parse($test_output);
+?&gt;
+</programlisting>
                 The <span class="new_code">$test_output</span> should be the XML format
                 from the XML reporter, and could come from say a command
                 line run of a test case.
@@ -424,19 +426,19 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 servers.
                 A test case already exists to do this within the SimpleTest
                 framework, but it is currently experimental...
-<program-listing role="php"><![CDATA[
-<?php
-    ]]><![CDATA[require_once('../remote.php');]]><![CDATA[
+<programlisting role="php">
+&lt;?php
+    require_once('../remote.php');
     require_once('../reporter.php');
     
     $test_url = ...;
     $dry_url = ...;
     
-    $test = &new GroupTest('Remote tests');
-    $test->addTestCase(]]><![CDATA[new RemoteTestCase($test_url, $dry_url)]]><![CDATA[);
-    $test->run(new HtmlReporter());
-?>
-]]></program-listing>
+    $test = &amp;new GroupTest('Remote tests');
+    $test-&gt;addTestCase(new RemoteTestCase($test_url, $dry_url));
+    $test-&gt;run(new HtmlReporter());
+?&gt;
+</programlisting>
                 The <span class="new_code">RemoteTestCase</span> takes the actual location
                 of the test runner, basically a web page in XML format.
                 It also takes the URL of a reporter set to do a dry run.

@@ -4,7 +4,7 @@
 <refname>Testing forms</refname>
 <refpurpose/>
 </refnamediv>
-            {@doc}
+            {@toc}
             
         <refsect1 id="{@id submit}">
 <title>Submitting a simple form</title>
@@ -32,20 +32,17 @@
             </para>
             <para>
                 We can navigate to this code, via the
-                <a href="http://www.lastcraft.com/form_testing_documentation.php">LastCraft</a>
+                {@link http://www.lastcraft.com/form_testing_documentation.php LastCraft}
                 site, with the following test...
-<program-listing role="php"><![CDATA[
+<programlisting role="php">
 class SimpleFormTests extends WebTestCase {
-    function SimpleFormTests() {
-        $this->WebTestCase();
-    }]]><![CDATA[
     
     function testDefaultValue() {
-        $this->get('http://www.lastcraft.com/form_testing_documentation.php');
-        $this->assertField('a', 'A default');
-    }]]><![CDATA[
+        $this-&gt;get('http://www.lastcraft.com/form_testing_documentation.php');
+        $this-&gt;assertField('a', 'A default');
+    }
 }
-]]></program-listing>
+</programlisting>
                 Immediately after loading the page all of the HTML controls are set at
                 their default values just as they would appear in the web browser.
                 The assertion tests that a HTML widget exists in the page with the
@@ -55,20 +52,17 @@ class SimpleFormTests extends WebTestCase {
             <para>
                 We could submit the form straight away, but first we'll change
                 the value of the text field and only then submit it...
-<program-listing role="php"><![CDATA[
+<programlisting role="php">
 class SimpleFormTests extends WebTestCase {
-    function SimpleFormTests() {
-        $this->WebTestCase();
-    }
-    
+
     function testDefaultValue() {
-        $this->get('http://www.my-site.com/');
-        $this->assertField('a', 'A default');]]><![CDATA[
-        $this->setField('a', 'New value');
-        $this->clickSubmit('Go');]]><![CDATA[
+        $this-&gt;get('http://www.my-site.com/');
+        $this-&gt;assertField('a', 'A default');
+        $this-&gt;setField('a', 'New value');
+        $this-&gt;clickSubmit('Go');
     }
 }
-]]></program-listing>
+</programlisting>
                 Because we didn't specify a method attribute on the form tag, and
                 didn't specify an action either, the test case will follow
                 the usual browser behaviour of submitting the form data as a <em>GET</em>
@@ -78,7 +72,7 @@ class SimpleFormTests extends WebTestCase {
                 This is because the target of the testing framework is the PHP application
                 logic, not syntax or other errors in the HTML code.
                 For HTML errors, other tools such as
-                <a href="http://www.w3.org/People/Raggett/tidy/">HTMLTidy</a> should be used.
+                {@link http://www.w3.org/People/Raggett/tidy/ HTMLTidy} should be used.
             </para>
             <para>
                 If a field is not present in any form, or if an option is unavailable,
@@ -108,18 +102,15 @@ class SimpleFormTests extends WebTestCase {
             </para>
             <para>
                 The following test will confirm it...
-<program-listing role="php"><![CDATA[
+<programlisting role="php">
 class SimpleFormTests extends WebTestCase {
-    function SimpleFormTests() {
-        $this->WebTestCase();
-    }
-    
-    function testNoSuperuserChoiceAvailable() {]]><![CDATA[
-        $this->get('http://www.lastcraft.com/form_testing_documentation.php');
-        $this->assertFalse($this->setField('type', 'Superuser'));]]><![CDATA[
+    ...
+    function testNoSuperuserChoiceAvailable() {
+        $this-&gt;get('http://www.lastcraft.com/form_testing_documentation.php');
+        $this-&gt;assertFalse($this-&gt;setField('type', 'Superuser'));
     }
 }
-]]></program-listing>
+</programlisting>
                 The selection will not be changed on a failure to set
                 a widget value.
             </para>
@@ -185,20 +176,17 @@ class SimpleFormTests extends WebTestCase {
             <para>
                 If we wish to disable all but the retrieval privileges and
                 submit this information we can do it like this...
-<program-listing role="php"><![CDATA[
+<programlisting role="php">
 class SimpleFormTests extends WebTestCase {
-    function SimpleFormTests() {
-        $this->WebTestCase();
-    }]]><![CDATA[
-    
+    ...
     function testDisableNastyPrivileges() {
-        $this->get('http://www.lastcraft.com/form_testing_documentation.php');
-        $this->assertField('crud', array('c', 'r', 'u', 'd'));
-        $this->setField('crud', array('r'));
-        $this->clickSubmit('Enable Privileges');
-    }]]><![CDATA[
+        $this-&gt;get('http://www.lastcraft.com/form_testing_documentation.php');
+        $this-&gt;assertField('crud', array('c', 'r', 'u', 'd'));
+        $this-&gt;setField('crud', array('r'));
+        $this-&gt;clickSubmit('Enable Privileges');
+    }
 }
-]]></program-listing>
+</programlisting>
                 Instead of setting the field to a single value, we give it a list
                 of values.
                 We do the same when testing expected values.
@@ -212,20 +200,17 @@ class SimpleFormTests extends WebTestCase {
                 If you want to test a form handler, but have not yet written
                 or do not have access to the form itself, you can create a
                 form submission by hand.
-<program-listing role="php"><![CDATA[
+<programlisting role="php">
 class SimpleFormTests extends WebTestCase {
-    function SimpleFormTests() {
-        $this->WebTestCase();
-    }]]><![CDATA[
-    
+    ...    
     function testAttemptedHack() {
-        $this->post(
+        $this-&gt;post(
                 'http://www.my-site.com/add_user.php',
-                array('type' => 'superuser'));
-        $this->assertNoUnwantedPattern('/user created/i');
-    }]]><![CDATA[
+                array('type' =&gt; 'superuser'));
+        $this-&gt;assertNoUnwantedPattern('/user created/i');
+    }
 }
-]]></program-listing>
+</programlisting>
                 By adding data to the <span class="new_code">WebTestCase::post()</span>
                 method, we are attempting to fetch the page as a form submission.
             </para>
