@@ -101,13 +101,7 @@
         }
         
         /**
-         *    Adds additional mock code.
-         *    @param string $code    Extra code that can be added
-         *                           to the partial mocks for
-         *                           extra functionality. Useful
-         *                           when a test tool has overridden
-         *                           the mock base classes.
-         *    @access public
+         *    @deprecated
          */
         function addPartialMockCode($code = '') {
             $registry = &SimpleTestOptions::_getRegistry();
@@ -115,9 +109,7 @@
         }
         
         /**
-         *    Accessor for additional partial mock code.
-         *    @return string       Extra code.
-         *    @access public
+         *    @deprecated
          */
         function getPartialMockCode() {
             $registry = &SimpleTestOptions::_getRegistry();

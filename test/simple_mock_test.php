@@ -412,6 +412,9 @@
             $this->assertNull($mock->aMethod());
             $this->swallowErrors();
         }
+    }
+    
+    class TestOfSpecialMethods extends UnitTestCase {
         
         function testReturnFromSpecialMethod() {
             $mock = &new MockDummy($this);
