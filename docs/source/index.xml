@@ -18,6 +18,16 @@
         </introduction>
         <section name="what" title="Ongoing projects">
             <p>
+                My wife is going to kill me, but I've just started another
+                Sourceforge project.
+                It's a requirents testing and sign-off tool called
+                <a href="http://sourceforge.net/projects/arbiter">Arbiter</a>.
+                It's actually best described in this
+                <a href="http://www.sitepoint.com/forums/showthread.php?t=193797">Sitepoint thread</a>,
+                but basically think of it as a document driven FIT for small
+                web projects only.
+            </p>
+            <p>
                 Along with Jon Ramsey, Matt Jones and Demian Turner, I am involved in
                 <a href="http://www.phplondon.org/wiki/">PHP London</a>, a PHP user
                 group not surprisingly based in London.
@@ -58,34 +68,6 @@
                 produced can be read to spot areas of suspect design.
                 A bit like reading tealeaves and a lot of fun.
                 It could even be useful.
-            </p>
-            <p>
-                Also on the PHP front I am slowly packaging up some general
-                purpose small classes I have had lying around for a while.
-                They are in <a href="http://sourceforge.net/projects/lamplib/">LampLib on sourceforge</a>,
-                but not yet released except as a CVS &quot;pserver&quot; check out.
-                I am dribbling general purpose classes in until there is enough content
-                to fasion into a general purpose library.
-            </p>
-            <p>
-                I am finally getting around to writing some articles at last.
-                The first is on
-                <a href="http://www.phppatterns.com/index.php/article/articleview/75/1/1/">the Registry pattern</a>.
-                A useful pattern if you not sure what to do with global variables,
-                Singletons and the like.
-                There is another on mock objects in the January issue of
-                <a href="http://www.phparch.com">PHP Architect</a>.
-                The thrust of this is on using mock objects for easier testing of database code.
-            </p>
-            <p>
-                Unit testing is something I am trying to spread the word on right now.
-                This means writing some stuff for sites not necessarily known for
-                development communities.
-                One of these is an
-                <a href="http://www.developerspot.com/tutorials/php/test-driven-development/page1.html">article on Test Driven Development</a>
-                for a mainly SEO site.
-                I've also written some testing articles in <a href="http://www.phparch.com">PHP Architect</a>
-                and <a href="http://www.php-mag.net/">PHP Magazine</a>.
             </p>
             <p>
                 Finally I now have a blog!
