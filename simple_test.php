@@ -78,7 +78,6 @@
         function run() {
             $this->notify(new TestStart($this->getLabel(), $this->getSize()));
             $methods = get_class_methods(get_class($this));
-            sort($methods);
             foreach ($methods as $method) {
                 if (strtolower(substr($method, 0, 4)) != "test") {
                     continue;

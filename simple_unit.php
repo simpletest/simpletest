@@ -43,10 +43,10 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertNull($value, $message = "") {
-            if ($message == "") {
-                $message = "[" . $this->_renderVariable($value) . "] should be null";
-            }
+        function assertNull($value, $message = "%s") {
+            $message = sprintf(
+                    $message,
+                    "[" . $this->_renderVariable($value) . "] should be null");
             $this->assertTrue(!isset($value), $message);
         }
         
@@ -56,10 +56,10 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertNotNull($value, $message = "") {
-            if ($message == "") {
-                $message = "[" . $this->_renderVariable($value) . "] should be not be null";
-            }
+        function assertNotNull($value, $message = "%s") {
+            $message = sprintf(
+                    $message,
+                    "[" . $this->_renderVariable($value) . "] should not be null");
             $this->assertTrue(isset($value), $message);
         }
         
@@ -71,10 +71,10 @@
          *    @param $type          Type name as string.
          *    @public
          */
-        function assertIsA($object, $type, $message = "") {
-            if ($message == "") {
-                $message = "[" . $this->_renderVariable($object) . "] should be type [$type]";
-            }
+        function assertIsA($object, $type, $message = "%s") {
+            $message = sprintf(
+                    $message,
+                    "[" . $this->_renderVariable($object) . "] should be type [$type]");
             if (is_object($object)) {
                 $this->assertTrue(is_a($object, $type), $message);
             } else {
@@ -90,13 +90,12 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertEqual($first, $second, $message = "") {
-            if ($message == "") {
-                $message =
-                        "[" . $this->_renderVariable($first) .
-                        "] should be equal to [" .
-                        $this->_renderVariable($second) . "]";
-            }
+        function assertEqual($first, $second, $message = "%s") {
+            $message = sprintf(
+                    $message,
+                    "[" . $this->_renderVariable($first) .
+                            "] should be equal to [" .
+                            $this->_renderVariable($second) . "]");
             $this->assertTrue(($first == $second) && ($second == $first), $message);
         }
         
@@ -108,13 +107,12 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertNotEqual($first, $second, $message = "") {
-            if ($message == "") {
-                $message =
-                        "[" . $this->_renderVariable($first) .
-                        "] should not be equal to [" .
-                        $this->_renderVariable($second) . "]";
-            }
+        function assertNotEqual($first, $second, $message = "%s") {
+            $message = sprintf(
+                    $message,
+                    "[" . $this->_renderVariable($first) .
+                            "] should not be equal to [" .
+                            $this->_renderVariable($second) . "]");
             $this->assertTrue($first != $second, $message);
         }
         
@@ -126,13 +124,12 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertIdentical($first, $second, $message = "") {
-            if ($message == "") {
-                $message =
-                        "[" . $this->_renderVariable($first) .
-                        "] should be identical to [" .
-                        $this->_renderVariable($second) . "]";
-            }
+        function assertIdentical($first, $second, $message = "%s") {
+            $message = sprintf(
+                    $message,
+                    "[" . $this->_renderVariable($first) .
+                            "] should be identical to [" .
+                            $this->_renderVariable($second) . "]");
             $this->assertTrue($first === $second, $message);
         }
         
@@ -144,13 +141,12 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertNotIdentical($first, $second, $message = "") {
-            if ($message == "") {
-                $message =
-                        "[" . $this->_renderVariable($first) .
-                        "] should not be identical to [" .
-                        $this->_renderVariable($second) . "]";
-            }
+        function assertNotIdentical($first, $second, $message = "%s") {
+            $message = sprintf(
+                    $message,
+                    "[" . $this->_renderVariable($first) .
+                            "] should not be identical to [" .
+                            $this->_renderVariable($second) . "]");
             $this->assertTrue($first !== $second, $message);
         }
         
@@ -162,13 +158,12 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertReference(&$first, &$second, $message = "") {
-            if ($message == "") {
-                $message =
-                        "[" . $this->_renderVariable($first) .
-                        "] and [" . $this->_renderVariable($second) .
-                        "] should reference the same object";
-            }
+        function assertReference(&$first, &$second, $message = "%s") {
+            $message = sprintf(
+                    $message,
+                    "[" . $this->_renderVariable($first) .
+                            "] and [" . $this->_renderVariable($second) .
+                            "] should reference the same object");
             $temp = $first;
             $first = uniqid("test");
             $is_ref = ($first === $second);
@@ -184,13 +179,12 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertCopy(&$first, &$second, $message = "") {
-            if ($message == "") {
-                $message =
-                        "[" . $this->_renderVariable($first) .
-                        "] and [" . $this->_renderVariable($second) .
-                        "] should not be the same object";
-            }
+        function assertCopy(&$first, &$second, $message = "%s") {
+            $message = sprintf(
+                    $message,
+                    "[" . $this->_renderVariable($first) .
+                            "] and [" . $this->_renderVariable($second) .
+                            "] should not be the same object");
             $temp = $first;
             $first = uniqid("test");
             $is_ref = ($first === $second);
@@ -207,10 +201,8 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertWantedPattern($pattern, $subject, $message = "") {
-            if ($message == "") {
-                $message = "Expecting [$pattern] in [$subject]";
-            }
+        function assertWantedPattern($pattern, $subject, $message = "%s") {
+            $message = sprintf($message, "Expecting [$pattern] in [$subject]");
             $this->assertTrue((boolean)preg_match($pattern, $subject), $message);
         }
         
@@ -223,10 +215,8 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertNoUnwantedPattern($pattern, $subject, $message = "") {
-            if ($message == "") {
-                $message = "Not expecting [$pattern] in [$subject]";
-            }
+        function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
+            $message = sprintf($message, "Not expecting [$pattern] in [$subject]");
             $this->assertTrue(!preg_match($pattern, $subject), $message);
         }
         

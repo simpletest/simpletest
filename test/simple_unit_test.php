@@ -27,49 +27,49 @@
             $this->assertFalse(false, "False is false");
         }
         function testOfNull() {
-            $this->assertNull(null);
-            $this->assertNull(false);        // Fail.
-            $this->assertNotNull(null);        // Fail.
-            $this->assertNotNull(false);
+            $this->assertNull(null, "#%s#");
+            $this->assertNull(false, "#%s#");        // Fail.
+            $this->assertNotNull(null, "#%s#");        // Fail.
+            $this->assertNotNull(false, "#%s#");
         }
         function testOfType() {
-            $this->assertIsA("hello", "string");
-            $this->assertIsA(14, "string");        // Fail.
-            $this->assertIsA($this, "TestOfUnitTestCase");
-            $this->assertIsA($this, "UnitTestCase");
-            $this->assertIsA(14, "TestOfUnitTestCase");        // Fail.
-            $this->assertIsA($this, "TestHTMLDisplay");        // Fail.
+            $this->assertIsA("hello", "string", "#%s#");
+            $this->assertIsA(14, "string", "#%s#");        // Fail.
+            $this->assertIsA($this, "TestOfUnitTestCase", "#%s#");
+            $this->assertIsA($this, "UnitTestCase", "#%s#");
+            $this->assertIsA(14, "TestOfUnitTestCase", "#%s#");        // Fail.
+            $this->assertIsA($this, "TestHTMLDisplay", "#%s#");        // Fail.
         }
         function testOfEquality() {
-            $this->assertEqual("0", 0);
-            $this->assertEqual(1, 2);        // Fail.
-            $this->assertNotEqual("0", 0);        // Fail.
-            $this->assertNotEqual(1, 2);
+            $this->assertEqual("0", 0, "#%s#");
+            $this->assertEqual(1, 2, "#%s#");        // Fail.
+            $this->assertNotEqual("0", 0, "#%s#");        // Fail.
+            $this->assertNotEqual(1, 2, "#%s#");
         }
         function testOfIdentity() {
             $a = "fred";
             $b = $a;
-            $this->assertIdentical($a, $b);
-            $this->assertNotIdentical($a, $b);       // Fail.
+            $this->assertIdentical($a, $b, "#%s#");
+            $this->assertNotIdentical($a, $b, "#%s#");       // Fail.
             $a = "0";
             $b = 0;
-            $this->assertIdentical($a, $b);        // Fail.
-            $this->assertNotIdentical($a, $b);
+            $this->assertIdentical($a, $b, "#%s#");        // Fail.
+            $this->assertNotIdentical($a, $b, "#%s#");
         }
         function testOfReference() {
             $a = "fred";
             $b = &$a;
-            $this->assertReference($a, $b);
-            $this->assertCopy($a, $b);        // Fail.
+            $this->assertReference($a, $b, "#%s#");
+            $this->assertCopy($a, $b, "#%s#");        // Fail.
             $c = "Hello";
-            $this->assertReference($a, $c);        // Fail.
-            $this->assertCopy($a, $c);
+            $this->assertReference($a, $c, "#%s#");        // Fail.
+            $this->assertCopy($a, $c, "#%s#");
         }
         function testOfPatterns() {
-            $this->assertWantedPattern('/hello/i', "Hello there");
-            $this->assertNoUnwantedPattern('/hello/', "Hello there");
-            $this->assertWantedPattern('/hello/', "Hello there");            // Fail.
-            $this->assertNoUnwantedPattern('/hello/i', "Hello there");      // Fail.
+            $this->assertWantedPattern('/hello/i', "Hello there", "#%s#");
+            $this->assertNoUnwantedPattern('/hello/', "Hello there", "#%s#");
+            $this->assertWantedPattern('/hello/', "Hello there", "#%s#");            // Fail.
+            $this->assertNoUnwantedPattern('/hello/i', "Hello there", "#%s#");      // Fail.
         }
     }
     
