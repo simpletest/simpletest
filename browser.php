@@ -185,7 +185,7 @@
                     SimpleTestOptions::getDefaultProxy(),
                     SimpleTestOptions::getDefaultProxyUsername(),
                     SimpleTestOptions::getDefaultProxyPassword());
-            $this->_page = &new SimpleErrorPage('No page fetched yet');
+            $this->_page = &new SimplePage();
             $this->_history = &$this->_createHistory();
             $this->_ignore_frames = false;
         }
@@ -259,7 +259,7 @@
         function &_fetch($method, $url, $parameters, $add_to_history) {
             $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
             if ($response->isError()) {
-                return new SimpleErrorPage($response->getError());
+                return new SimplePage($response);
             }
             if ($add_to_history) {
                 $this->_history->recordEntry(

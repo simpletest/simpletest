@@ -182,8 +182,8 @@
             $this->UnitTestCase();
         }
         function testInterface() {
-            $page = &new SimpleErrorPage('An error');
-            $this->assertEqual($page->getTransportError(), 'An error');
+            $page = &new SimplePage();
+            $this->assertEqual($page->getTransportError(), 'No page fetched yet');
             $this->assertIdentical($page->getRaw(), false);
             $this->assertIdentical($page->getHeaders(), false);
             $this->assertIdentical($page->getMimeType(), false);
@@ -191,8 +191,8 @@
             $this->assertIdentical($page->getAuthentication(), false);
             $this->assertIdentical($page->getRealm(), false);
             $this->assertFalse($page->hasFrames());
-            $this->assertIdentical($page->getAbsoluteLinks(), array());
-            $this->assertIdentical($page->getRelativeLinks(), array());
+            $this->assertIdentical($page->getAbsoluteUrls(), array());
+            $this->assertIdentical($page->getRelativeUrls(), array());
             $this->assertIdentical($page->getTitle(), false);
         }
     }

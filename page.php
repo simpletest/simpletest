@@ -232,246 +232,6 @@
     }
     
     /**
-     *    An empty page. Basically no content was fetched.
-     *    NullValue pattern.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
-     */
-    class SimpleErrorPage {
-        var $_error;
-        
-        /**
-         *    Sets up the transport error and nothing else.
-         *    @param string $error     Error that stopped the fetch.
-         *    @access public
-         */
-        function SimpleErrorPage($error) {
-            $this->_error = $error;
-        }
-        
-        /**
-         *    Accessor for raw text of page which doesn't exist.
-         *    @return boolean    Always false.
-         *    @access public
-         */
-        function getRaw() {
-            return false;
-        }
-        
-        /**
-         *    Original request method.
-         *    @return string        GET as default.
-         *    @access protected
-         */
-        function getRequestMethod() {
-            return 'GET';
-        }
-        
-        /**
-         *    Original resource name.
-         *    @return SimpleUrl        No current url.
-         *    @access protected
-         */
-        function getRequestUrl() {
-            return false;
-        }
-        
-        /**
-         *    Original request data.
-         *    @return mixed              No content.
-         *    @access protected
-         */
-        function getRequestData() {
-            return false;
-        }
-        
-        /**
-         *    Missing page headers.
-         *    @return boolean    Always false.
-         *    @access public
-         */
-        function getHeaders() {
-            return false;
-        }
-        
-        /**
-         *    Accessor for last error.
-         *    @return string        Error from last response.
-         *    @access public
-         */
-        function getTransportError() {
-            return $this->_error;
-        }
-        
-        /**
-         *    Accessor for current MIME type.
-         *    @return boolean    Always false.
-         *    @access public
-         */
-        function getMimeType() {
-            return false;
-        }
-        
-        /**
-         *    Accessor for HTTP response code.
-         *    @return boolean    Always false.
-         *    @access public
-         */
-        function getResponseCode() {
-            return false;
-        }
-        
-        /**
-         *    Accessor for last Authentication type. Only valid
-         *    straight after a challenge (401).
-         *    @return boolean    Always false.
-         *    @access public
-         */
-        function getAuthentication() {
-            return false;
-        }
-        
-        /**
-         *    Accessor for last Authentication realm. Only valid
-         *    straight after a challenge (401).
-         *    @return boolean    Always false.
-         *    @access public
-         */
-        function getRealm() {
-            return false;
-        }
-        
-        /**
-         *    Test for the presence of a frameset. As the page
-         *    doesn't even have any content it pretty obviously
-         *    doesn't have any frames either.
-         *    @return boolean        False.
-         *    @access public
-         */
-        function hasFrames() {
-            return false;
-        }
-        
-        /**
-         *    Accessor frames. No frameset in an empty page.
-         *    @return boolean        False.
-         *    @access public
-         */
-        function getFrames() {
-            return false;
-        }
-        
-        /**
-         *    Accessor for current frame focus. Will be
-         *    false as no frames.
-         *    @return boolean    Always false.
-         *    @access public
-         */
-        function getFrameFocus() {
-            return false;
-        }
-        
-        /**
-         *    Sets the focus by index. The integer index starts from 1.
-         *    @param integer $choice    Chosen frame.
-         *    @return boolean           Always false.
-         *    @access public
-         */
-        function setFrameFocusByIndex($choice) {
-            return false;
-        }
-        
-        /**
-         *    Sets the focus by name.
-         *    @param string $name    Chosen frame.
-         *    @return boolean        False as no frames.
-         *    @access public
-         */
-        function setFrameFocus($name) {
-            return false;
-        }
-        
-        /**
-         *    Clears the frame focus.
-         *    @access public
-         */
-        function clearFrameFocus() {
-        }
-        
-        /**
-         *    Accessor for a list of all fixed links.
-         *    @return array   List of urls with scheme of
-         *                    http or https and hostname.
-         *    @access public
-         */
-        function getAbsoluteLinks() {
-            return array();
-        }
-        
-        /**
-         *    Accessor for a list of all relative links.
-         *    @return array      List of urls without hostname.
-         *    @access public
-         */
-        function getRelativeLinks() {
-            return array();
-        }
-        
-        /**
-         *    Accessor for URLs by the link label. Label will match
-         *    regardess of whitespace issues and case.
-         *    @param string $label    Text of link.
-         *    @return array           Empty list.
-         *    @access public
-         */
-        function getUrls($label) {
-            return array();
-        }
-        
-        /**
-         *    Accessor for a URL by the id attribute.
-         *    @param string $id       Id attribute of link.
-         *    @return boolean         Always false.
-         *    @access public
-         */
-        function getUrlById($id) {
-            return false;
-        }
-        
-        /**
-         *    Accessor for title.
-         *    @return string     Untitled so false.
-         *    @access public
-         */
-        function getTitle() {
-            return false;
-        }
-        
-        /**
-         *    Accessor for a form element value within a page.
-         *    Finds the first match.
-         *    @param string $name        Field name.
-         *    @return boolean            Always null.
-         *    @access public
-         */
-        function getField($name) {
-            return null;
-        }
-        
-        /**
-         *    Would set a field on each form in which the field is
-         *    available if there were any.
-         *    @param string $name        Field name.
-         *    @param string $value       Value to set field to.
-         *    @return boolean            False.
-         *    @access public
-         */
-        function setField($name, $value) {
-            return false;
-        }
-    }
-    
-    /**
      *    A wrapper for a web page.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
@@ -497,7 +257,7 @@
          *    @param SimpleHttpResponse $response     Result of HTTP fetch.
          *    @access public
          */
-        function SimplePage($response) {
+        function SimplePage($response = false) {
             $this->_links = array();
             $this->_title = false;
             $this->_open_forms = array();
@@ -505,6 +265,19 @@
             $this->_frameset = false;
             $this->_frames = array();
             $this->_frameset_nesting_level = 0;
+            if ($response) {
+                $this->_extractResponse($response);
+            } else {
+                $this->_noResponse();
+            }
+        }
+        
+        /**
+         *    Extracts all of the response information.
+         *    @param SimpleHttpResponse $response    Response being parsed.
+         *    @access private
+         */
+        function _extractResponse($response) {
             $this->_transport_error = $response->getError();
             $this->_raw = $response->getContent();
             $this->_sent = $response->getSent();
@@ -512,6 +285,20 @@
             $this->_method = $response->getMethod();
             $this->_url = $response->getUrl();
             $this->_request_data = $response->getRequestData();
+        }
+        
+        /**
+         *    Sets up a missng response.
+         *    @access private
+         */
+        function _noResponse() {
+            $this->_transport_error = 'No page fetched yet';
+            $this->_raw = false;
+            $this->_sent = false;
+            $this->_headers = false;
+            $this->_method = 'GET';
+            $this->_url = false;
+            $this->_request_data = false;
         }
         
         /**
@@ -538,7 +325,10 @@
          *    @access public
          */
         function getHeaders() {
-            return $this->_headers->getRaw();
+            if ($this->_headers) {
+                return $this->_headers->getRaw();
+            }
+            return false;
         }
         
         /**
@@ -583,7 +373,10 @@
          *    @access public
          */
         function getMimeType() {
-            return $this->_headers->getMimeType();
+            if ($this->_headers) {
+                return $this->_headers->getMimeType();
+            }
+            return false;
         }
         
         /**
@@ -592,7 +385,10 @@
          *    @access public
          */
         function getResponseCode() {
-            return $this->_headers->getResponseCode();
+            if ($this->_headers) {
+                return $this->_headers->getResponseCode();
+            }
+            return false;
         }
         
         /**
@@ -602,7 +398,10 @@
          *    @access public
          */
         function getAuthentication() {
-            return $this->_headers->getAuthentication();
+            if ($this->_headers) {
+                return $this->_headers->getAuthentication();
+            }
+            return false;
         }
         
         /**
@@ -612,7 +411,10 @@
          *    @access public
          */
         function getRealm() {
-            return $this->_headers->getRealm();
+            if ($this->_headers) {
+                return $this->_headers->getRealm();
+            }
+            return false;
         }
         
         /**
