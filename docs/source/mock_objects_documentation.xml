@@ -78,9 +78,6 @@ require_once('database_connection.php');
 Mock::generate('DatabaseConnection');
 <strong>
 class MyTestCase extends UnitTestCase {
-    function MyTestCase() {
-        $this->UnitTestCase('My test');
-    }
     
     function testSomething() {
         $connection = &new MockDatabaseConnection($this);
@@ -141,9 +138,6 @@ class Iterator {
 Mock::generate('Iterator');
 
 class IteratorTest extends UnitTestCase() {
-    function IteratorTest() {
-        $this->UnitTestCase();
-    }
     
     function testASequence() {<strong>
         $iterator = &new MockIterator($this);

@@ -180,9 +180,6 @@ $authorisation->setReturnValue('isAllowed', false);</strong>
                 <code>SimpleExpectation</code>...
 <php><![CDATA[
 <strong>class ValidIp extends SimpleExpectation {
-    function ValidIp() {
-        $this->SimpleExpectation();
-    }
     
     function test($ip) {
         return (ip2long($ip) != -1);

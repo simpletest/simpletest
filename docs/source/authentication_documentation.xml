@@ -81,8 +81,7 @@ class AuthenticationTest extends WebTestCase {
 <php><![CDATA[
 class AuthenticationTest extends WebTestCase {
     function testCanReadAuthenticatedPages() {
-        $this->get('http://Me:Secret@www.lastcraft.com/protected/');<strong>
-        $this->authenticate('Me', 'Secret');</strong>
+        $this->get('http://<strong>Me:Secret@</strong>www.lastcraft.com/protected/');
         $this->assertTitle(...);
     }
 }
@@ -90,6 +89,10 @@ class AuthenticationTest extends WebTestCase {
                 If your username or password has special characters, then you
                 will have to URL encode them or the request will not be parsed
                 correctly.
+                Also this header will not be sent on subsequent requests if
+                you request a page with a fully qualified URL.
+                If you navigate with relative URLs though, the authentication
+                information will be preserved.
             </p>
             <p>
                 Only basic authentication is currently supported and this is

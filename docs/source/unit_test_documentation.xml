@@ -9,9 +9,6 @@
                 A sample test case looks like this...
 <php><![CDATA[
 <strong>class FileTestCase extends UnitTestCase {
-    function FileTestCase() {
-        $this->UnitTestCase('File test');
-    }
 }</strong>
 ]]></php>
                 If no test name is supplied when chaining the constructor then
@@ -48,6 +45,10 @@ class FileTestCase extends UnitTestCase {
     }</strong>
 }
 ]]></php>
+                The constructor is optional and usually omitted.
+                Without a name, the class name is taken as the name of the test case.
+            </p>
+            <p>
                 Our only test method at the moment is <code>testCreation()</code>
                 where we check that a file has been created by our
                 <code>Writer</code> object.
@@ -206,9 +207,6 @@ class FileTester extends UnitTestCase {
                 a normal test case...
 <php><![CDATA[
 class FileTestCase extends <strong>FileTester</strong> {
-    function FileTestCase() {<strong>
-        $this->FileTester('File test');</strong>
-    }
     
     function setUp() {
         @unlink('../temp/test.txt');

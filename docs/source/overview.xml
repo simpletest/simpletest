@@ -23,10 +23,7 @@
                 A <a local="unit_test_documentation">test case</a> looks like this...
 <php><![CDATA[
 class <strong>MyTestCase</strong> extends UnitTestCase {
-    function MyTestCase() {
-        $this->UnitTestCase();
-    }<strong>
-    
+    <strong>
     function testLog() {
         $log = &new Log('my.log');
         $log->message('Hello');
@@ -72,10 +69,7 @@ class <strong>MyTestCase</strong> extends UnitTestCase {
                 A <a local="web_tester_documentation">web test case</a> looks like this...
 <php><![CDATA[
 class <strong>MySiteTest</strong> extends WebTestCase {
-    function MySiteTest() {
-        $this->WebTestCase();
-    }<strong>
-    
+    <strong>
     function testHomePage() {
         $this->get('http://www.my-site.com/index.php');
         $this->assertTitle('My Home Page');

@@ -34,9 +34,6 @@
                 <code>UnitTestCase</code>...
 <php><![CDATA[
 <strong>class TestOfLastcraft extends WebTestCase {
-    function TestOfLastcraft() {
-        $this->WebTestCase();
-    }
 }</strong>
 ]]></php>
                 Here we are about to test the
@@ -61,15 +58,12 @@
                 We can fetch the home page by using the
                 <code>get()</code> method...
 <php><![CDATA[
-<strong>class TestOfLastcraft extends WebTestCase {
-    function TestOfLastcraft() {
-        $this->WebTestCase();
-    }
-    
+class TestOfLastcraft extends WebTestCase {
+    <strong>
     function testHomepage() {
         $this->assertTrue($this->get('http://www.lastcraft.com/'));
-    }
-}</strong>
+    }</strong>
+}
 ]]></php>
                 The <code>get()</code> method will
                 return true only if page content was successfully
@@ -98,7 +92,7 @@ Test cases run: 1/1, Failures: 0, Exceptions: 0
                 page we are on, we need to verify the page content.
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
-    ...
+    
     function testHomepage() {<strong>
         $this->get('http://www.lastcraft.com/');
         $this->assertWantedPattern('/why the last craft/i');</strong>
@@ -152,7 +146,7 @@ class TestOfLastcraft extends WebTestCase {
                 is in a list of allowed values...
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
-    ...
+    
     function testHomepage() {
         $this->get('http://simpletest.sourceforge.net/');<strong>
         $this->assertResponse(200);</strong>
@@ -174,7 +168,7 @@ class TestOfLastcraft extends WebTestCase {
                 be disabled...
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
-    ...
+    
     function testHomepage() {<strong>
         $this->setMaximumRedirects(0);</strong>
         $this->get('http://simpletest.sourceforge.net/');
@@ -195,7 +189,7 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 We can modify the test to correctly assert redirects with...
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
-    ...
+    
     function testHomepage() {
         $this->setMaximumRedirects(0);
         $this->get('http://simpletest.sourceforge.net/');

@@ -239,9 +239,6 @@ Stub::generate('DatabaseConnection');
 Stub::generate('ResultIterator');
 
 class DatabaseTest extends UnitTestCase {
-    function DatabaseTest() {
-        $this->UnitTestCase();
-    }
     
     function testUserFinder() {<strong>
         $result = &new StubResultIterator();

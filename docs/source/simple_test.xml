@@ -70,13 +70,10 @@ require_once('simpletest/reporter.php');
 require_once('../classes/log.php');
 <strong>
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase();
-    }
 }</strong>
 ?>
 ]]></php>
-                Now we have eight lines of scaffolding code and still no tests.
+                Now we have five lines of scaffolding code and still no tests.
                 However from this part on we get return on our investment very quickly.
                 We&apos;ll assume that the <code>Log</code> class
                 takes the file name to write to in the constructor and we have
@@ -88,10 +85,7 @@ require_once('simpletest/reporter.php');
 require_once('../classes/log.php');
 
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase();
-    }<strong>
-    
+    <strong>
     function testCreatingNewFile() {
         @unlink('/temp/test.log');
         $log = new Log('/temp/test.log');
@@ -124,9 +118,6 @@ require_once('simpletest/reporter.php');
 require_once('../classes/log.php');
 
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase();
-    }
     
     function testCreatingNewFile() {
         @unlink('/temp/test.log');
@@ -173,9 +164,6 @@ $test->run(new HtmlReporter());</strong>
 require_once('../classes/log.php');</strong>
 
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase();
-    }
     
     function testCreatingNewFile() {
         @unlink('/temp/test.log');
@@ -257,9 +245,6 @@ require_once('../classes/log.php');
 require_once('../classes/session_pool.php');
 
 class TestOfSessionLogging extends UnitTestCase {
-    function TestOfSessionLogging() {
-        $this->UnitTestCase();
-    }
     
     function setUp() {
         @unlink('/temp/test.log');
@@ -313,9 +298,6 @@ require_once('../classes/session_pool.php');<strong>
 Mock::generate('Log');</strong>
 
 class TestOfSessionLogging extends UnitTestCase {
-    function TestOfSessionLogging() {
-        $this->UnitTestCase();
-    }
     
     function testLogInIsLogged() {<strong>
         $log = &new MockLog($this);
@@ -374,9 +356,6 @@ require_once('simpletest/web_tester.php');</strong>
 require_once('simpletest/reporter.php');
 <strong>
 class TestOfAbout extends WebTestCase {
-    function TestOfAbout('Tests of about page') {
-        $this->WebTestCase();
-    }
     
     function setUp() {
         $this->get('http://test-server/index.php');
