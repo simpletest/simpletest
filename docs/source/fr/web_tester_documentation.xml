@@ -184,7 +184,7 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>clickImageByName($name, $x, $y)</code></td><td>Clique sur une balise input de type image avec ce nom</td></tr>
                     <tr><td><code>clickImageById($id, $x, $y)</code></td><td>Clique sur une balise input de type image avec cet attribut d'identification</td></tr>
                     <tr><td><code>submitFormById($id)</code></td><td>Soumet un formulaire sans valeur de soumission</td></tr>
-                    <tr><td><code>clickLink($label, $index)</code></td><td>Clique sur un ancre avec ce texte d'étiquette visible</td></tr>
+                    <tr><td><code>clickLink($label, $index)</code></td><td>Clique sur une ancre avec ce texte d'étiquette visible</td></tr>
                     <tr><td><code>clickLinkById($id)</code></td><td>Clique sur une ancre avec cet attribut d'identification</td></tr>
                 </tbody></table>
             </p>
