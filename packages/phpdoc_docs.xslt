@@ -9,7 +9,7 @@
         <refentry>
             <xsl:attribute name="id"><![CDATA[{@id}]]></xsl:attribute>
             <xsl:call-template name="head"/>
-            <![CDATA[{@doc}]]>
+            <![CDATA[{@toc}]]>
             <xsl:call-template name="body"/>
         </refentry>
     </xsl:template>
@@ -31,6 +31,25 @@
         <para>
             <xsl:apply-templates/>
         </para>
+    </xsl:template>
+    
+    <xsl:template match="table">
+        <table frame="all">
+            <xsl:attribute name="id"><![CDATA[{@id features}}]]></xsl:attribute>
+            <xsl:apply-templates/>
+        </table>
+    </xsl:template>
+    
+    <xsl:template match="tr">
+        <row>
+            <xsl:apply-templates/>
+        </row>
+    </xsl:template>
+    
+    <xsl:template match="td">
+        <entry>
+            <xsl:apply-templates/>
+        </entry>
     </xsl:template>
     
     <xsl:template match="php">
@@ -66,17 +85,16 @@
     </xsl:template>
     
     <xsl:template match="a">
-        <xsl:copy>
-            <xsl:for-each select="@class|@name|@href">
-                <xsl:attribute name="{local-name(.)}"><xsl:value-of select="."/></xsl:attribute>
-            </xsl:for-each>
-            <xsl:for-each select="@local">
-                <xsl:attribute name="href">
-                    <xsl:value-of select="."/><xsl:text>.html</xsl:text>
-                </xsl:attribute>
-            </xsl:for-each>
-            <xsl:apply-templates/>
-        </xsl:copy>
+        <xsl:text><![CDATA[{@link ]]></xsl:text>
+        <xsl:if test="@href">
+            <xsl:value-of select="@href"/>
+        </xsl:if>
+        <xsl:if test="@local">
+            <xsl:value-of select="."/><xsl:text>.html</xsl:text>
+        </xsl:if>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates/>
+        <xsl:text>}</xsl:text>
     </xsl:template>
     
     <xsl:template match="*">

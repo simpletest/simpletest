@@ -1,0 +1,221 @@
+<?xml version="1.0"?>
+<page title="The Last Craft?" here="Last Craft">
+    <long_title>
+        The Last Craft? Web developer tutorials on PHP, Extreme programming
+        and Object Oriented development
+    </long_title>
+    <content>
+        <introduction>
+            <p>
+                This site focuses mostly on developing with lightweight web technologies such as
+                <a href="http://www.php.net/">PHP</a>,
+                especially when applied with agile methodologies such as
+                <a href="http://www.extremeprogramming.org/">XP</a>.
+                No guarantee of quality is given or even intended.
+                It is hoped only that what you find gives you ideas and enthusiasm
+                from a fellow computer programmer.
+            </p>
+        </introduction>
+        <section name="what" title="Ongoing projects">
+            <p>
+                Along with Jon Ramsey, Matt Jones and Demian Turner, I am involved in
+                <a href="http://www.phplondon.org/wiki/">PHP London</a>, a PHP user
+                group not surprisingly based in London.
+                It is early days, but going well.
+                Given the large number of PHP developers and
+                businesses in the London area it should have every chance of success.
+                The networking meetings take place on the first Thursday of every month.
+            </p>
+            <p>
+                The first release candidate of the
+                <a local="simple_test">SimpleTest PHP unit tester</a>
+                has been finished, RC1.
+                It is a PHP unit test and web test framework that has been built
+                to be extensible in various ways.
+                Users of <a href="http://www.junit.org/">JUnit</a> will be
+                familiar with most of the interface.
+                The test display is customisable as well as the base test
+                case and in addition the mock objects can be used with other unit
+                testers.
+                <a href="http://jwebunit.sourceforge.net/">JWebUnit</a>
+                style functionality is more complete now.
+                It has support for frames, proxies, basic authentication and a wider
+                range of HTML controls.
+                The idea is that common but fiddly PHP tasks, such as logging into a site,
+                can be tested easily.
+            </p>
+            <p>
+                Another sourceforge project I am contributing to is
+                <a href="http://www.buennagel.com/">Jochen Buennagel&apos;s</a>
+                <a href="http://sourceforge.net/projects/phpduploc/">PHP::Duploc</a>.
+                It is a tool for visualising repetition in code so as to
+                identify targets for refactoring.
+                One file goes on the X-axis and another on the Y-axis...
+                <br />
+                <img src="images/dotplot.png"/>
+                <br />
+                Any similar lines are marked with a dot and the patterns
+                produced can be read to spot areas of suspect design.
+                A bit like reading tealeaves and a lot of fun.
+                It could even be useful.
+            </p>
+            <p>
+                Also on the PHP front I am slowly packaging up some general
+                purpose small classes I have had lying around for a while.
+                They are in <a href="http://sourceforge.net/projects/lamplib/">LampLib on sourceforge</a>,
+                but not yet released except as a CVS &quot;pserver&quot; check out.
+                I am dribbling general purpose classes in until there is enough content
+                to fasion into a general purpose library.
+            </p>
+            <p>
+                I am finally getting around to writing some articles at last.
+                The first is on
+                <a href="http://www.phppatterns.com/index.php/article/articleview/75/1/1/">the Registry pattern</a>.
+                A useful pattern if you not sure what to do with global variables,
+                Singletons and the like.
+                There is another on mock objects in the January issue of
+                <a href="http://www.phparch.com">PHP Architect</a>.
+                The thrust of this is on using mock objects for easier testing of database code.
+            </p>
+            <p>
+                Unit testing is something I am trying to spread the word on right now.
+                This means writing some stuff for sites not necessarily known for
+                development communities.
+                One of these is an
+                <a href="http://www.developerspot.com/tutorials/php/test-driven-development/page1.html">article on Test Driven Development</a>
+                for a mainly SEO site.
+                I've also written some testing articles in <a href="http://www.phparch.com">PHP Architect</a>
+                and <a href="http://www.php-mag.net/">PHP Magazine</a>.
+            </p>
+            <p>
+                Finally I now have a blog!
+                Gives me a chance to hehash old
+                <a href="http://www.sitepoint.com/forums/forumdisplay.php?f=147">Sitepoint</a>
+                postings where I feel I had something to say.
+            </p>
+        </section>
+        <section name="why" title="Why the Last Craft?">
+            <p>
+                A craft is defined as...
+                <div class="quotation">
+                    Art or skill; dexterity in particular manual employment;
+                    hence, the occupation or employment itself; manual art; a
+                    trade.
+                </div>
+            </p>
+            <p>
+                If you lose a screw or clasp from a hand made jewellery box it is hopeless to
+                try to find a replacement. Nothing else is quite the same and the mechanism will
+                fail to work. It may even cause more damage when applied. You need to find the original maker
+                or someone of the same skill to make you another.
+                Sound like software?
+                Yet mechanical parts today are interchangeable.
+            </p>
+            <p>
+                Writing software has resisted mass production.
+                As soon as a part of it becomes
+                routine it can be automated.
+                Once it is you don&apos;t need a programmer any more.
+                Routine programming jobs no longer exist.
+                All that is left is the unsolved problems that require
+                a higher level of skill in constructing their solutions.
+            </p>
+            <p>
+                This dependency on the ability of the artisan, combined with nothing quite fitting
+                together properly, is what gives software the pre-industrial feel.
+            </p>
+        </section>
+        <section name="rrc" title="The cards?">
+            <p>
+                The panel at the top is supposed to resemble a standard office index card.
+                The way it is marked out is called an
+                <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0201379430/ref=lib_dp_TFCV/102-1207283-8247304?v=glance&amp;s=books&amp;vi=reader#reader-link">RRC card</a>.
+                It stands for Roles, Responsibilities and
+                Collaborations and is the cheapest software development tool you
+                can find.
+                You really do buy a pack of cards.
+            <p>
+            </p>
+                The role is written at the top and would often be just a class
+                name (they are usually called
+                <a href="http://www.c2.com/doc/crc/draw.html">CRC cards</a>
+                in this case).
+                The left side is the object&apos;s responsibilities and on the
+                right collaborations (within the page I have treated these as
+                internal links and external links repectively).
+                A group of developers can point at, discuss and discard cards
+                in the heat of design session.
+                It makes it especially difficult for only one person to take charge
+                of a discussion in the way you can with a UML tool or notepad.
+                Try scribbling out five cards before someone gets a look in.
+            </p>
+            <p>
+                Now nothing beats a whiteboard for collaboration, but if the level
+                of detail is getting too high and you want a temporary record,
+                give the RRC cards a try.
+            </p>
+        </section>
+    </content>
+    <internal>
+        <link>
+            <a href="#what">Projects</a> under development.
+            All free and open source software.
+        </link>
+        <link>
+            <a href="#why">Why Last Craft?</a>
+            Odd name isn&apos;t it?
+        </link>
+        <link>
+            <a href="#rrc">Why this index card</a> at the top?
+        </link>
+    </internal>
+    <external>
+        <link>
+            <a local="simple_test">SimpleTest</a> is a PHP unit test framework.
+        </link>
+        <link>
+            My article on <a href="http://www.developerspot.com/tutorials/php/test-driven-development/page1.html">TDD</a>
+        </link>
+        <link>
+            My article on the
+            <a href="http://www.phppatterns.com/index.php/article/articleview/75/1/1/">Registry Pattern</a>.
+        </link>
+        <link>
+            Site E-mail is
+            <a href="http://spamcop.net">SpamCop</a>
+            filtered which I cannot recommend enough.
+        </link>
+    </external>
+    <meta>
+        <keywords>
+            software development,
+            computer programmer,
+            php programming,
+            programming php,
+            software development tools,
+            software development company,
+            php tutorial,
+            free php scripts,
+            bespoke software development uk,
+            corporate web development,
+            architecture,
+            php resources,
+            wordtracker,
+            xslt,
+            java,
+            bug tracker,
+            bug reporting,
+            unit test,
+            php testing,
+            test cases tutorial,
+            explain unit test case,
+            unit test example,
+            xml
+        </keywords>
+        <description>
+            A web site of software development tutorials and examples with an
+            emphasis on web programming, testing, agile methodology and PHP
+            development
+        </description>
+    </meta>
+</page>
