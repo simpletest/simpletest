@@ -16,6 +16,7 @@
     class UnitTests extends GroupTest {
         function UnitTests() {
             $this->GroupTest("Unit tests");
+            $this->addTestFile("errors_test.php");
             $this->addTestFile("assertion_test.php");
             $this->addTestFile("simple_mock_test.php");
             $this->addTestFile("adapter_test.php");

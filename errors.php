@@ -5,17 +5,33 @@
         define('SIMPLE_TEST', './');
     }
     
-    /**
-     *    Accessor for global error queue.
-     *    @return        List of errors as hashes.
-     *    @static
-     */
-    function &getSimpleTestErrorQueue() {
-        $queue = false;
-        if (!$queue) {
-            $queue = array();
+    class SimpleErrorQueue {
+        var $_queue;
+        
+        function SimpleErrorQueue() {
+            $this->clear();
         }
-        return $queue;
+        function add($severity, $message, $filename, $line, $super_globals) {
+            array_push(
+                    $this->_queue,
+                    array($severity, $message, $filename, $line, $super_globals));
+        }
+        function extract() {
+            if (count($this->_queue)) {
+                return array_shift($this->_queue);
+            }
+            return false;
+        }
+        function clear() {
+            $this->_queue = array();
+        }
+        function &instance() {
+            static $queue = false;
+            if (!$queue) {
+                $queue = new SimpleErrorQueue();
+            }
+            return $queue;
+        }
     }
     
     /**
@@ -29,7 +45,7 @@
      *    @static
      */
     function simpleTestErrorHandler($severity, $message, $filename, $line, $super_globals) {
-        $queue = &getSimpleTestErrorQueue();
-        $queue[] = array($severity, $message, $filename, $line, $super_globals);
+        $queue = &SimpleErrorQueue::instance();
+        $queue->add($severity, $message, $filename, $line, $super_globals);
     }
 ?>
