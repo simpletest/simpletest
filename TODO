@@ -27,14 +27,16 @@ Add image map parsing (2).
 Make multivalue widgets PHP compatible (2).
 Add simple button tag parsing (1).
 Confirm nested directory parsing with base URL (2/4) - done.
-Fix bug with URL arguments missing with no "=" (1).
+Fix bug with URL arguments with no "=" (1).
+Fix link parsing to handle links with a missing page name (2).
 
 Browser
 -------
-Add frame loading support (6/9).
+Add frame loading support (6/9) - done.
 Add frame focus and defocus (2/4) - done.
 Allow nested frames (4).
-Add named frame reloads (4).
+Add named frame reloads (2).
+Add frame loads from links (2).
 Make widget handling reflect frame focus (2).
 Add setFieldById() method (1).
 Add assertFieldById() method (1).
@@ -49,6 +51,8 @@ Allow adding of arbitrary headers (1/1) - done.
 Add accessor for link set (1).
 Add accessor for URL in focus (2).
 Refactor authentication to cope with framed pages (2/1).
+Add showRequest() to dump the last raw request (2).
+Fix getCurrentUrl() to return string (1).
 
 Web tester
 ----------
@@ -56,12 +60,6 @@ Chain frames support from browser (1).
 
 Documentation
 -------------
-Add cookie and authentication documentation (3).
-Add frames documentation (3).
-Add detached browser documentation (4).
-Add shell tester documentation (2).
-Formalise extensions (1).
-Add forward and back behaviour to docs (2).
 
 Build
 -----

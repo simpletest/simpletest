@@ -12,7 +12,10 @@
         function AllTests() {
             $this->GroupTest('All tests for SimpleTest ' . SimpleTestOptions::getVersion());
             $this->AddTestCase(new UnitTests());
-            $this->AddTestCase(new BoundaryTests());
+            $this->addTestFile('shell_test.php');
+            $this->addTestFile('live_test.php');
+            $this->addTestFile('acceptance_test.php');
+            $this->addTestFile('real_sites_test.php');
         }
     }
 
