@@ -1,0 +1,33 @@
+TODO
+This is immediate stuff only for the next iteration (Alpha5).
+Figures are estimated hours work versus actual (for XP velocity).
+
+$Id
+
+Unit tester
+-----------
+Create Comparitor class for better failure display (6).
+
+Mock objects
+------------
+Move argument checks over to Comparitors (2).
+
+Html parser
+-----------
+Make lexer call different methods for different modes (4/3).
+Build SAX handler for links (3).
+Build SAX event generator (8/1).
+Decouple lexer modes from SAX handler methods (2).
+Build link scanner functionality from end to end (3/1).
+Build HTML document with links (3/5).
+
+Browser
+-------
+Add base URL persistence (2).
+
+Web tester
+----------
+
+Documentation
+-------------
+Add index page with top level overview (4).
