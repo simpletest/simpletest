@@ -8,19 +8,24 @@
     <xsl:template match="/">
         <refentry>
             <xsl:attribute name="id"><![CDATA[{@id}]]></xsl:attribute>
-            <xsl:call-template name="head"/>
+            <xsl:call-template name="named"/>
+            <xsl:call-template name="synopsis"/>
             <![CDATA[{@toc}]]>
             <xsl:call-template name="body"/>
         </refentry>
     </xsl:template>
     
-    <xsl:template name="head">
+    <xsl:template name="named">
         <refnamediv>
             <refname><xsl:value-of select="/page/@here"/></refname>
             <refpurpose>
                 <xsl:apply-templates select="//introduction/p/node()"/>
             </refpurpose>
         </refnamediv>
+    </xsl:template>
+    
+    <xsl:template name="synopsis">
+        <xsl:apply-templates select="//refsynopsisdiv"/>
     </xsl:template>
     
     <xsl:template name="body">
