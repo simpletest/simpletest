@@ -47,7 +47,7 @@
         function assertNull($value, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . $this->_renderVariable($value) . "] should be null");
+                    "[" . Assertion::describeValue($value) . "] should be null");
             $this->assertTrue(!isset($value), $message);
         }
         
@@ -60,7 +60,7 @@
         function assertNotNull($value, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . $this->_renderVariable($value) . "] should not be null");
+                    "[" . Assertion::describeValue($value) . "] should not be null");
             $this->assertTrue(isset($value), $message);
         }
         
@@ -75,7 +75,7 @@
         function assertIsA($object, $type, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . $this->_renderVariable($object) . "] should be type [$type]");
+                    "[" . Assertion::describeValue($object) . "] should be type [$type]");
             if (is_object($object)) {
                 $this->assertTrue(is_a($object, $type), $message);
             } else {
@@ -92,12 +92,10 @@
          *    @public
          */
         function assertEqual($first, $second, $message = "%s") {
-            $message = sprintf(
-                    $message,
-                    "[" . $this->_renderVariable($first) .
-                            "] should be equal to [" .
-                            $this->_renderVariable($second) . "]");
-            $this->assertTrue(($first == $second) && ($second == $first), $message);
+            $assertion = &new EqualAssertion($first);
+            $this->assertTrue(
+                    $assertion->test($second),
+                    sprintf($message, $assertion->testMessage($second)));
         }
         
         /**
@@ -109,12 +107,10 @@
          *    @public
          */
         function assertNotEqual($first, $second, $message = "%s") {
-            $message = sprintf(
-                    $message,
-                    "[" . $this->_renderVariable($first) .
-                            "] should not be equal to [" .
-                            $this->_renderVariable($second) . "]");
-            $this->assertTrue($first != $second, $message);
+            $assertion = &new NotEqualAssertion($first);
+            $this->assertTrue(
+                    $assertion->test($second),
+                    sprintf($message, $assertion->testMessage($second)));
         }
         
         /**
@@ -126,12 +122,10 @@
          *    @public
          */
         function assertIdentical($first, $second, $message = "%s") {
-            $message = sprintf(
-                    $message,
-                    "[" . $this->_renderVariable($first) .
-                            "] should be identical to [" .
-                            $this->_renderVariable($second) . "]");
-            $this->assertTrue($first === $second, $message);
+            $assertion = &new IdenticalAssertion($first);
+            $this->assertTrue(
+                    $assertion->test($second),
+                    sprintf($message, $assertion->testMessage($second)));
         }
         
         /**
@@ -145,9 +139,9 @@
         function assertNotIdentical($first, $second, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . $this->_renderVariable($first) .
+                    "[" . Assertion::describeValue($first) .
                             "] should not be identical to [" .
-                            $this->_renderVariable($second) . "]");
+                            Assertion::describeValue($second) . "]");
             $this->assertTrue($first !== $second, $message);
         }
         
@@ -162,8 +156,8 @@
         function assertReference(&$first, &$second, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . $this->_renderVariable($first) .
-                            "] and [" . $this->_renderVariable($second) .
+                    "[" . Assertion::describeValue($first) .
+                            "] and [" . Assertion::describeValue($second) .
                             "] should reference the same object");
             $temp = $first;
             $first = uniqid("test");
@@ -183,8 +177,8 @@
         function assertCopy(&$first, &$second, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . $this->_renderVariable($first) .
-                            "] and [" . $this->_renderVariable($second) .
+                    "[" . Assertion::describeValue($first) .
+                            "] and [" . Assertion::describeValue($second) .
                             "] should not be the same object");
             $temp = $first;
             $first = uniqid("test");
@@ -219,16 +213,6 @@
         function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
             $message = sprintf($message, "Not expecting [$pattern] in [$subject]");
             $this->assertTrue(!preg_match($pattern, $subject), $message);
-        }
-        
-        /**
-         *    Renders a variable in a shorter for than print_r().
-         *    @param $value      Variable to render as a string.
-         *    @return            Human readable string form.
-         *    @protected
-         */
-        function _renderVariable($value) {
-            return Assertion::describeValue($value);
         }
     }
 ?>

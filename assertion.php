@@ -10,7 +10,7 @@
         /**
          *    Does nothing.
          */
-        function SimpleAssertion() {
+        function Assertion() {
         }
         
         /**
@@ -23,48 +23,29 @@
         }
         
         /**
-         *    Returns a human readable test message.
-         *    @param $compare      Comparison value.
-         *    @param $test_class   Test class to apply.
-         *    @return              String description of success
-         *                         or failure.
-         *    @public
-         */
-        function testMessage($compare, $test_class = "equalityassertion") {
-            if ($this->test($compare)) {
-                return "$test_class [" . $this->describeValue($this->_value) . "]";
-            } else {
-                return "$test_class [" . $this->describeValue($this->_value) .
-                        "] fails with [" .
-                        $this->describeValue($compare) . "]" .
-                        $this->describeDifference($this->_value, $compare);
-            }
-        }
-
-        /**
-         *    Renders a variable in a shorter for than print_r().
-         *    @param $var        Variable to render as a string.
+         *    Renders a variable in a shorter form than print_r().
+         *    @param $value      Variable to render as a string.
          *    @return            Human readable string form.
          *    @public
          *    @static
          */
-        function describeValue($var) {
-            if (!isset($var)) {
+        function describeValue($value) {
+            if (!isset($value)) {
                 return "NULL";
-            } elseif (is_bool($var)) {
-                return "Boolean: " . ($var ? "true" : "false");
-            } elseif (is_string($var)) {
-                return "String: $var";
-            } elseif (is_integer($var)) {
-                return "Integer: $var";
-            } elseif (is_float($var)) {
-                return "Float: $var";
-            } elseif (is_array($var)) {
-                return "Array: " . count($var) . " items";
-            } elseif (is_resource($var)) {
-                return "Resource: $var";
-            } elseif (is_object($var)) {
-                return "Object: of " . get_class($var);
+            } elseif (is_bool($value)) {
+                return "Boolean: " . ($value ? "true" : "false");
+            } elseif (is_string($value)) {
+                return "String: $value";
+            } elseif (is_integer($value)) {
+                return "Integer: $value";
+            } elseif (is_float($value)) {
+                return "Float: $value";
+            } elseif (is_array($value)) {
+                return "Array: " . count($value) . " items";
+            } elseif (is_resource($value)) {
+                return "Resource: $value";
+            } elseif (is_object($value)) {
+                return "Object: of " . get_class($value);
             }
             return "Unknown";
         }
@@ -79,7 +60,10 @@
          *    @public
          *    @static
          */
-        function describeDifference($first, $second, $test_class = "equalityassertion") {
+        function describeDifference($first, $second, $test_class) {
+            if (gettype($first) != gettype($second)) {
+                return " by type";
+            }
             if (is_string($first)) {
                 return " at character " . Assertion::_stringDiffersAt($first, $second);
             } elseif (is_integer($first)) {
@@ -155,7 +139,7 @@
     /**
      *    Test for equality.
      */
-    class EqualityAssertion extends Assertion {
+    class EqualAssertion extends Assertion {
         var $_value;
         
         /**
@@ -163,7 +147,8 @@
          *    @param $value        Test value to match.
          *    @public
          */
-        function EqualityAssertion($value) {
+        function EqualAssertion($value) {
+            $this->Assertion();
             $this->_value = $value;
         }
         
@@ -175,7 +160,120 @@
          *    @public
          */
         function test($compare) {
-            return ($this->_value == $compare);
+            return (($this->_value == $compare) && ($compare == $this->_value));
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param $compare      Comparison value.
+         *    @return              String description of success
+         *                         or failure.
+         *    @public
+         */
+        function testMessage($compare) {
+            if ($this->test($compare)) {
+                return "Equal assertion [" . $this->describeValue($this->_value) . "]";
+            } else {
+                return "Equal assertion [" . $this->describeValue($this->_value) .
+                        "] fails with [" .
+                        $this->describeValue($compare) . "]" .
+                        $this->describeDifference($this->_value, $compare, get_class($this));
+            }
+        }
+        
+        /**
+         *    Accessor for comparison value.
+         *    @return        Held value to compare with.
+         *    @protected
+         */
+        function _get_value() {
+            return $this->_value;
+        }
+    }
+    
+    /**
+     *    Test for inequality.
+     */
+    class NotEqualAssertion extends EqualAssertion {
+        
+        /**
+         *    Sets the value to compare against.
+         *    @param $value        Test value to match.
+         *    @public
+         */
+        function NotEqualAssertion($value) {
+            $this->EqualAssertion($value);
+        }
+        
+        /**
+         *    Tests the assertion. True if it matches the
+         *    held value.
+         *    @param $compare        Comparison value.
+         *    @return                True if correct.
+         *    @public
+         */
+        function test($compare) {
+            return !parent::test($compare);
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param $compare      Comparison value.
+         *    @return              String description of success
+         *                         or failure.
+         *    @public
+         */
+        function testMessage($compare) {
+            if ($this->test($compare)) {
+                return "Not equal assertion differs" .
+                        $this->describeDifference($this->_get_value(), $compare, get_class($this));
+            } else {
+                return "Not equal assertion [" . $this->describeValue($this->_get_value()) . "] matches";
+            }
+        }
+    }
+    
+    /**
+     *    Test for identity.
+     */
+    class IdenticalAssertion extends EqualAssertion {
+        
+        /**
+         *    Sets the value to compare against.
+         *    @param $value        Test value to match.
+         *    @public
+         */
+        function IdenticalAssertion($value) {
+            $this->EqualAssertion($value);
+        }
+        
+        /**
+         *    Tests the assertion. True if it exactly
+         *    matches the held value.
+         *    @param $compare        Comparison value.
+         *    @return                True if correct.
+         *    @public
+         */
+        function test($compare) {
+            return ($this->_get_value() === $compare);
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param $compare      Comparison value.
+         *    @return              String description of success
+         *                         or failure.
+         *    @public
+         */
+        function testMessage($compare) {
+            if ($this->test($compare)) {
+                return "Identical assertion [" . $this->describeValue($this->_value) . "]";
+            } else {
+                return "Identical assertion [" . $this->describeValue($this->_value) .
+                        "] fails with [" .
+                        $this->describeValue($compare) . "]" .
+                        $this->describeDifference($this->_value, $compare, get_class($this));
+            }
         }
     }
 ?>
