@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for the next iteration (Alpha6) of 40 hours.
+This is immediate stuff only for the next iteration (Alpha7) of 36 hours.
 Figures are estimated hours work versus actual (for XP velocity).
 Stuff will get added or dropped as the cycle progresses.
 
@@ -7,35 +7,35 @@ $Id$
 
 Unit tester
 -----------
-Create assertion test (1/1) - done.
 Improve difference output messages when nested in arrays (1).
-Add adapters for other testers (3/4) - done.
-Allow test case skipping in group tests (1/1) - done.
 
 Mock objects
 ------------
 Create parameter list assertion for improved output (1).
-Split off server stubs (3/2) - done.
+Partial mocks (4).
 
 Html parser
 -----------
-Build form class as widget repository (3/3) - done.
-Add widget class (2/0) - done.
-Add form tag parsing to build a form in a page (3/1) - done.
-Read the title tag and add an assertion for it (2/4) - done.
+Add input tag parsing (2).
+Parse submit buttons into form (1).
+Add checkbox to parsing (2).
+Add selection field to form parser (4).
 
 Browser
 -------
-Add base URL (2/2) - done.
+Add headers only fetch (4).
+Move unecessary expectations into accessors (2).
 
 Web tester
 ----------
-Create a web test case class (2/4) - done.
-Create a page fetch case end to end (3/1) - done.
-Create a relative page fetch case end to end (1/1) - done.
-Create a link following case from end to end (4/7) - done.
+Connect up page failure expectations (3).
+Connect cookie expectations (2).
+Add form submission to navigation (2).
 
 Documentation
 -------------
 Clean up the documentation links (1).
-Add a top level overview (1/3) - done.
+Add server stubs docs (2).
+Add adapter documentation (2).
+Modify tutorial for GroupTest::ignore (1).
+Add early web test case to introduction (2).
