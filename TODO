@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 67 hours.
+This is immediate stuff only for this iteration (RC2) of 70 hours.
 
 $Id$
 
@@ -8,7 +8,7 @@ Unit tester
 Fix of syntax errors in test scripts reporting green (3/3) - done.
 Workaround of mocks getting recursion error on comparisons (2/4) - done.
 Rename StickyError because of name clash (1/1) - done.
-Fix parsing check on test file loading to work with PHP5 (3/3).
+Fix parsing check on test file loading to work with PHP4 only (3/4) - done.
 Add Jeff's performance fixes (2/1).
 Fix error handler to not send messages on E_STRICT (2/1) - done.
 Fix assertSame() for PEAR::PhpUnit compatibility (1/2) - done.
@@ -27,6 +27,7 @@ Parser
 Should tolerate missing form tag (2/2) - done.
 Fix Savant compatibility (3/8) - done.
 Form should pass form encoding rather than hash (2/1) - done.
+Performance check on text only parsing (3).
 
 Browser
 -------
