@@ -269,8 +269,8 @@ class IteratorTest extends UnitTestCase() {
     function testASequence() {<strong>
         $iterator = &new MockIterator($this);
         $iterator-&gt;setReturnValue(&apos;next&apos;, false);
-        $iterator-&gt;setReturnValueSequence(0, &apos;next&apos;, &apos;First string&apos;);
-        $iterator-&gt;setReturnValueSequence(1, &apos;next&apos;, &apos;Second string&apos;);</strong>
+        $iterator-&gt;setReturnValueAt(0, &apos;next&apos;, &apos;First string&apos;);
+        $iterator-&gt;setReturnValueAt(1, &apos;next&apos;, &apos;Second string&apos;);</strong>
         ...
     }
 }
@@ -382,7 +382,7 @@ $vector-&gt;setReturnReference(&apos;get&apos;, $thing, array(12));</strong>
 <pre>
 $complex = &new MockComplexThing($this);
 $stuff = new Stuff();<strong>
-$complex-&gt;setReturnReferenceSequence(3, &apos;get&apos;, $stuff, array(&apos;*&apos;, 1));</strong>
+$complex-&gt;setReturnReferenceAt(3, &apos;get&apos;, $stuff, array(&apos;*&apos;, 1));</strong>
 </pre>
                 This will return the <span class="new_code">$stuff</span> only on the third
                 call and only if two parameters were set the second of
@@ -414,9 +414,9 @@ class DatabaseTest extends UnitTestCase {
     function testUserFinder() {<strong>
         $result = &new MockResultIterator($this);
         $result-&gt;setReturnValue(&apos;next&apos;, false);
-        $result-&gt;setReturnValueSequence(0, &apos;next&apos;, array(1, &apos;tom&apos;));
-        $result-&gt;setReturnValueSequence(1, &apos;next&apos;, array(3, &apos;dick&apos;));
-        $result-&gt;setReturnValueSequence(2, &apos;next&apos;, array(6, &apos;harry&apos;));
+        $result-&gt;setReturnValueAt(0, &apos;next&apos;, array(1, &apos;tom&apos;));
+        $result-&gt;setReturnValueAt(1, &apos;next&apos;, array(3, &apos;dick&apos;));
+        $result-&gt;setReturnValueAt(2, &apos;next&apos;, array(6, &apos;harry&apos;));
         $connection = &new MockDatabaseConnection($this);
         $connection-&gt;setReturnValue(&apos;query&apos;, false);
         $connection-&gt;setReturnReference(
@@ -627,7 +627,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
                         <td style="text-align: center">No</td>
                     </tr>
                     <tr>
-                        <td><span class="new_code">expectArgumentsSequence($timing, $method, $args)</span></td>
+                        <td><span class="new_code">expectArgumentsAt($timing, $method, $args)</span></td>
                         <td style="text-align: center">No</td>
                     </tr>
                     <tr>
