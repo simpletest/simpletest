@@ -36,16 +36,5 @@
             $this->assertFalse($socket->isOpen());
             $this->assertFalse($socket->write("A message"));
         }
-        function testWriteAndRead() {
-            $socket = new SimpleSocket("www.lastcraft.com", 80);
-            $this->assertFalse($socket->isError(), "Error [" . $socket->getError(). "]");
-            $this->assertTrue($socket->isOpen());
-            $this->assertTrue($socket->write("GET www.lastcraft.com/test/network_confirm.php HTTP/1.0\r\n"));
-            $socket->write("Host: localhost\r\n");
-            $socket->write("Connection: close\r\n\r\n");
-            $this->assertEqual($socket->read(8), "HTTP/1.1");
-            $socket->close();
-            $this->assertEqual($socket->read(8), "");
-        }
     }
 ?>

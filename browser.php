@@ -1,6 +1,11 @@
 <?php
     // $Id$
     
+    if (!defined("SIMPLE_TEST")) {
+        define("SIMPLE_TEST", "./");
+    }
+    require_once(SIMPLE_TEST . 'http.php');
+    
     /**
      *    Fake web browser.
      */
@@ -43,6 +48,15 @@
          */
         function expectFail() {
             $this->_expect_error = true;
+        }
+        
+        /**
+         *    Sets an additional cookie. If a cookie has
+         *    the same name and path it is replaced.
+         *    @param $cookie        Cookie object.
+         *    @public
+         */
+        function setCookie($cookie) {
         }
         
         /**

@@ -249,26 +249,4 @@
             $this->assertEqual($cookies[1]->getExpiry(), "");
         }
     }
-    
-    class LiveHttpTestCase extends UnitTestCase {
-        function LiveHttpTestCase() {
-            $this->UnitTestCase();
-        }
-        function testRealPageFetch() {
-            $http = new SimpleHttpRequest("www.lastcraft.com/test/network_confirm.php?gkey=gvalue");
-            $http->setCookie(new SimpleCookie("ckey", "cvalue"));
-            $this->assertIsA($reponse = &$http->fetch(), "SimpleHttpResponse");
-            $this->assertEqual($reponse->getResponseCode(), 200);
-            $this->assertEqual($reponse->getMimeType(), "text/html");
-            $this->assertWantedPattern(
-                    '/A target for the SimpleTest test suite/',
-                    $reponse->getContent());
-             $this->assertWantedPattern(
-                    '/gkey=gvalue/',
-                    $reponse->getContent());
-             $this->assertWantedPattern(
-                    '/ckey=cvalue/',
-                    $reponse->getContent());
-       }
-    }
 ?>

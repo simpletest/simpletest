@@ -1,6 +1,11 @@
 <?php
     // $Id$
 
+    if (!defined("SIMPLE_TEST")) {
+        define("SIMPLE_TEST", "./");
+    }
+    require_once(SIMPLE_TEST . 'socket.php');
+    
     /**
      *    URL parser to replace parse_url() PHP function.
      */

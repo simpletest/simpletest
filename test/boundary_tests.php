@@ -9,6 +9,7 @@
     require_once(SIMPLE_TEST . 'simple_mock.php');
     
     $test = new GroupTest("Boundary tests");
+    $test->addTestFile("live_test.php");
     $test->attachObserver(new TestHtmlDisplay());
     $test->run();
 ?>

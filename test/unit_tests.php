@@ -8,7 +8,7 @@
     require_once(SIMPLE_TEST . 'simple_html_test.php');
     require_once(SIMPLE_TEST . 'simple_mock.php');
     
-    $test = new GroupTest("All tests");
+    $test = new GroupTest("All unit tests");
     $test->addTestFile("simple_mock_test.php");
     $test->addTestFile("web_test_test.php");
     $test->addTestFile("socket_test.php");
