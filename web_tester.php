@@ -463,6 +463,7 @@
             $test = &$this->getTestCase();
             $test->setBrowser($test->createBrowser());
             parent::invoke($method);
+            $test->unsetBrowser();
         }
     }
     
@@ -518,7 +519,16 @@
         function setBrowser(&$browser) {
             return $this->_browser = &$browser;
         }
-        
+          
+        /**
+         *    Clears the current browser reference to help the
+         *    PHP garbage collector.
+         *    @access public
+         */
+        function unsetBrowser() {
+            unset($this->_browser);
+        }
+      
         /**
          *    Creates a new default web browser object.
          *    Will be cleared at the end of the test method.
