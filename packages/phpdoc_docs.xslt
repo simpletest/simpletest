@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <!-- $Id$ -->
 
-    <xsl:output method="xml" indent="yes" />
+    <xsl:output method="xml" indent="yes" cdata-section-elements="program-listing"/>
     <xsl:preserve-space elements="*"/>
     
     <xsl:template match="/">
@@ -16,6 +16,7 @@
             <xsl:attribute name="id"><![CDATA[{@id}]]></xsl:attribute>
             <refnamediv>
                 <refname><xsl:value-of select="/page/@here"/></refname>
+                <refpurpose></refpurpose>
             </refnamediv>
         </refentry>
     </xsl:template>
@@ -31,11 +32,11 @@
     </xsl:template>
     
     <xsl:template match="php">
-        <pre>
+        <program-listing role="php">
             <xsl:call-template name="strip_strong">
                 <xsl:with-param name="raw" select="."/>
             </xsl:call-template>
-        </pre>
+        </program-listing>
     </xsl:template>
     
     <xsl:template match="code">
