@@ -577,6 +577,24 @@
             $this->assertWantedText('b=[b1, b4]');
             $this->assertWantedText('c=[c1, c4]');
         }
+        
+        function testSavantStyleHiddenFieldDefaults() {
+            $this->get('http://www.lastcraft.com/test/savant_style_form.html');
+            $this->assertField('a', array('a0'));
+            $this->assertField('b', array('b0'));
+            $this->assertTrue($this->clickSubmit('Go!'));
+            $this->assertWantedText('a=[a0]');
+            $this->assertWantedText('b=[b0]');
+        }
+        
+        function testSavantStyleHiddenDefaultsAreOverridden() {
+            $this->get('http://www.lastcraft.com/test/savant_style_form.html');
+            $this->assertTrue($this->setField('a', array('a1')));
+            $this->assertTrue($this->setField('b', 'b1'));
+            $this->assertTrue($this->clickSubmit('Go!'));
+            $this->assertWantedText('a=[a1]');
+            $this->assertWantedText('b=[b1]');
+        }
     }
     
     class TestOfLiveHistoryNavigation extends WebTestCase {

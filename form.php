@@ -69,7 +69,7 @@
     }
     
     /**
-     *    Used to extract form eleemnts for testing against.
+     *    Used to extract form elements for testing against.
      *    Searches dy id attribute.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
@@ -304,12 +304,15 @@
          *    @access public
          */
         function _setFieldBySelector($selector, $value) {
+            $success = false;
             for ($i = 0; $i < count($this->_widgets); $i++) {
                 if ($selector->isMatch($this->_widgets[$i])) {
-                    return $this->_widgets[$i]->setValue($value);
+                    if ($this->_widgets[$i]->setValue($value)) {
+                        $success = true;
+                    }
                 }
             }
-            return false;
+            return $success;
         }
         
         /**

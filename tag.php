@@ -907,7 +907,17 @@
         function SimpleCheckboxGroup() {
             $this->_widgets = array();
         }
-        
+
+        /**
+         *    Accessor for an attribute.
+         *    @param string $label    Attribute name.
+         *    @return boolean         Always false.
+         *    @access public
+         */
+        function getAttribute($label) {
+            return false;
+        }
+
         /**
          *    Adds a tag to the group.
          *    @param SimpleWidget $widget
@@ -1055,6 +1065,16 @@
          */
         function SimpleRadioGroup() {
             $this->_widgets = array();
+        }
+        
+        /**
+         *    Accessor for an attribute.
+         *    @param string $label    Attribute name.
+         *    @return boolean         Always false.
+         *    @access public
+         */
+        function getAttribute($label) {
+            return false;
         }
         
         /**
