@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 57 hours.
+This is immediate stuff only for this iteration (RC2) of 52 hours.
 
 $Id$
 
@@ -22,13 +22,12 @@ Bug fix of fatal error with overload functions (2/2) - done.
 Parser
 ------
 Should tolerate missing form tag (2/2) - done.
-Add image maps (5).
 
 Browser
 -------
 Fix socket error with stream_get_timeout() missing (1/1) - done.
 Lose authentication on browser restart (1/1) - done.
-Make links such as ?a=b return to the same page (2).
+Make links such as ?a=b return to the same page (2/3) - done.
 Fix clickLink() trying to load non-existent frame (2/1) - done.
 
 Web tester

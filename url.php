@@ -567,25 +567,48 @@
                 $base = new SimpleUrl($base);
             }
             $scheme = $this->getScheme() ? $this->getScheme() : $base->getScheme();
-            $host = $this->getHost();
-            $port = $this->getPort() ? ':' . $this->getPort() : '';
-            $path = $this->normalisePath($this->_path);
-            if (! $host) {
-                $host = $base->getHost();
-                $port = $base->getPort() ? ':' . $base->getPort() : '';
-                if ($this->_isRelativePath($this->_path)) {
-                    if ($this->_path) {
-                        $path = $this->normalisePath($base->getBasePath() . $this->_path);
-                    } else {
-                        $path = $this->normalisePath($base->getPath());
-                    }
-                }
-            }
+            $host = $this->getHost() ? $this->getHost() : $base->getHost();
+            $port = $this->_extractAbsolutePort($base);
+            $path = $this->normalisePath($this->_extractAbsolutePath($base));
             $identity = $this->_getIdentity() ? $this->_getIdentity() . '@' : '';
             $encoded = $this->getEncodedRequest();
             $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
             $coords = ($this->_x !== false) ? '?' . $this->_x . ',' . $this->_y : '';
             return new SimpleUrl("$scheme://$identity$host$port$path$encoded$fragment$coords");
+        }
+        
+        /**
+         *    Extracts the port from the base URL if it's needed, but
+         *    not present, in the current URL.
+         *    @param string/SimpleUrl $base       Base URL.
+         *    @param string                       Absolute port number.
+         *    @access private
+         */
+        function _extractAbsolutePort($base) {
+            if ($this->getHost()) {
+                return ($this->getPort() ? ':' . $this->getPort() : '');
+            }
+            return ($base->getPort() ? ':' . $base->getPort() : '');
+        }
+        
+        /**
+         *    Replaces unknown sections of the path with base parts
+         *    to return a complete absolute one.
+         *    @param string/SimpleUrl $base       Base URL.
+         *    @param string                       Absolute path.
+         *    @access private
+         */
+        function _extractAbsolutePath($base) {
+            if ($this->getHost()) {
+                return $this->_path;
+            }
+            if (! $this->_isRelativePath($this->_path)) {
+                return $this->_path;
+            }
+            if ($this->_path) {
+                return $base->getBasePath() . $this->_path;
+            }
+            return $base->getPath();
         }
         
         /**
