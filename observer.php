@@ -167,7 +167,7 @@
          */
         function notify(&$event) {
             for ($i = 0; $i < count($this->_observers); $i++) {
-                $this->_observers[$i]->notify(&$event);
+                $this->_observers[$i]->notify($event);
             }
         }
     }
@@ -219,7 +219,7 @@
          *    @public
          */
         function notify(&$event) {
-            $event->paint(&$this);
+            $event->paint($this);
         }
         
         /**

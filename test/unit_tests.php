@@ -10,6 +10,8 @@
     require_once(SIMPLE_TEST . 'simple_web_test.php');
     require_once(SIMPLE_TEST . 'adapters/pear_test_case.php');
     require_once(SIMPLE_TEST . 'adapters/phpunit_test_case.php');
+    
+    ini_set("allow_call_time_pass_reference", "1");
    
     class UnitTests extends GroupTest {
         function UnitTests() {
