@@ -231,7 +231,7 @@
             $browser->expectOnce("post", array("there.php", array(
                     "go" => "Go!",
                     "a" => "aaa",
-                    "b" => false)));
+                    "b" => "")));
             $this->get("http://my-site.com/");
             $this->assertTrue($this->clickSubmit("Go!"));
         }

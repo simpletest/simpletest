@@ -541,7 +541,8 @@
         function getValues() {
             $values = array();
             foreach (array_keys($this->_widgets) as $name) {
-                $values[$name] = $this->_widgets[$name]->getValue();
+                $value = $this->_widgets[$name]->getValue();
+                $values[$name] = is_string($value) ? $value : '';
             }
             return $values;
         }

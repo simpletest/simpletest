@@ -23,6 +23,6 @@
         if (CommandLineReporter::inCli()) {
             exit ($test->run(new CommandLineReporter()) ? 0 : 1);
         }
-        $test->run(new TestHtmlDisplay());
+        $test->run(new HtmlReporter());
     }
 ?>
