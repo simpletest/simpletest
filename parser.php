@@ -196,7 +196,7 @@
             $this->_regexes = array();
             $this->_parser = &$parser;
             $this->_mode = &new SimpleStateStack($start);
-            $this->_mode_handlers = array();
+            $this->_mode_handlers = array($start => $start);
         }
         
         /**
@@ -215,6 +215,9 @@
                 $this->_regexes[$mode] = new ParallelRegex($this->_case);
             }
             $this->_regexes[$mode]->addPattern($pattern);
+            if (! isset($this->_mode_handlers[$mode])) {
+                $this->_mode_handlers[$mode] = $mode;
+            }
         }
         
         /**
@@ -235,6 +238,9 @@
                 $this->_regexes[$mode] = new ParallelRegex($this->_case);
             }
             $this->_regexes[$mode]->addPattern($pattern, $new_mode);
+            if (! isset($this->_mode_handlers[$new_mode])) {
+                $this->_mode_handlers[$new_mode] = $new_mode;
+            }
         }
         
         /**
@@ -250,6 +256,9 @@
                 $this->_regexes[$mode] = new ParallelRegex($this->_case);
             }
             $this->_regexes[$mode]->addPattern($pattern, "__exit");
+            if (! isset($this->_mode_handlers[$mode])) {
+                $this->_mode_handlers[$mode] = $mode;
+            }
         }
         
         /**
@@ -269,6 +278,9 @@
                 $this->_regexes[$mode] = new ParallelRegex($this->_case);
             }
             $this->_regexes[$mode]->addPattern($pattern, "_$special");
+            if (! isset($this->_mode_handlers[$special])) {
+                $this->_mode_handlers[$special] = $special;
+            }
         }
         
         /**
@@ -297,9 +309,12 @@
             }
             $length = strlen($raw);
             while (is_array($parsed = $this->_reduce($raw))) {
-                list($unmatched, $matched, $mode) = $parsed;
+                list($raw, $unmatched, $matched, $mode) = $parsed;
                 if (! $this->_dispatchTokens($unmatched, $matched, $mode)) {
                     return false;
+                }
+                if ($raw === '') {
+                    return true;
                 }
                 if (strlen($raw) == $length) {
                     return false;
@@ -328,6 +343,9 @@
             if (! $this->_invokeParser($unmatched, LEXER_UNMATCHED)) {
                 return false;
             }
+            if (is_bool($mode)) {
+                return $this->_invokeParser($matched, LEXER_MATCHED);
+            }
             if ($this->_isModeEnd($mode)) {
                 if (! $this->_invokeParser($matched, LEXER_EXIT)) {
                     return false;
@@ -341,11 +359,8 @@
                 }
                 return $this->_mode->leave();
             }
-            if (is_string($mode)) {
-                $this->_mode->enter($mode);
-                return $this->_invokeParser($matched, LEXER_ENTER);
-            }
-            return $this->_invokeParser($matched, LEXER_MATCHED);
+            $this->_mode->enter($mode);
+            return $this->_invokeParser($matched, LEXER_ENTER);
         }
         
         /**
@@ -396,10 +411,7 @@
             if (($content === '') || ($content === false)) {
                 return true;
             }
-            $handler = $this->_mode->getCurrent();
-            if (isset($this->_mode_handlers[$handler])) {
-                $handler = $this->_mode_handlers[$handler];
-            }
+            $handler = $this->_mode_handlers[$this->_mode->getCurrent()];
             return $this->_parser->$handler($content, $is_match);
         }
         
@@ -417,18 +429,12 @@
          *                               is a parsing error.
          *    @access private
          */
-        function _reduce(&$raw) {
-            if (! isset($this->_regexes[$this->_mode->getCurrent()])) {
-                return false;
-            }
-            if ($raw === '') {
-                return true;
-            }
+        function _reduce($raw) {
             if ($action = $this->_regexes[$this->_mode->getCurrent()]->match($raw, $match)) {
                 $unparsed_character_count = strpos($raw, $match);
                 $unparsed = substr($raw, 0, $unparsed_character_count);
                 $raw = substr($raw, $unparsed_character_count + strlen($match));
-                return array($unparsed, $match, $action);
+                return array($raw, $unparsed, $match, $action);
             }
             return true;
         }
