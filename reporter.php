@@ -9,7 +9,7 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'runner.php');
+    require_once(dirname(__FILE__) . '/runner.php');
     /**#@-*/
     
     /**

@@ -9,9 +9,9 @@
     /**#@+
      * include SimpleTest files
      */
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'expectation.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'options.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'dumper.php');
+    require_once(dirname(__FILE__) . '/expectation.php');
+    require_once(dirname(__FILE__) . '/options.php');
+    require_once(dirname(__FILE__) . '/dumper.php');
     /**#@-*/
     
     /**

@@ -9,8 +9,8 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'socket.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'url.php');
+    require_once(dirname(__FILE__) . '/socket.php');
+    require_once(dirname(__FILE__) . '/url.php');
     /**#@-*/
     
     /**
@@ -284,11 +284,9 @@
                     $this->_url->getHost(),
                     $this->_url->getPort() ? $this->_url->getPort() : $default_port,
                     $timeout);
-            if (! $socket->isError()) {
-                $socket->write($this->_getRequestLine($method) . "\r\n");
-                $socket->write($this->_getHostLine() . "\r\n");
-                $socket->write("Connection: close\r\n");
-            }
+            $socket->write($this->_getRequestLine($method) . "\r\n");
+            $socket->write($this->_getHostLine() . "\r\n");
+            $socket->write("Connection: close\r\n");
             return $socket;
         }
         
@@ -375,16 +373,14 @@
                     $this->_proxy->getHost(),
                     $this->_proxy->getPort() ? $this->_proxy->getPort() : 8080,
                     $timeout);
-            if (! $socket->isError()) {
-                $socket->write($this->_getRequestLine($method) . "\r\n");
-                $socket->write($this->_getHostLine() . "\r\n");
-                if ($this->_username && $this->_password) {
-                    $socket->write('Proxy-Authorization: Basic ' .
-                            base64_encode($this->_username . ':' . $this->_password) .
-                            "\r\n");
-                }
-                $socket->write("Connection: close\r\n");
+            $socket->write($this->_getRequestLine($method) . "\r\n");
+            $socket->write($this->_getHostLine() . "\r\n");
+            if ($this->_username && $this->_password) {
+                $socket->write('Proxy-Authorization: Basic ' .
+                        base64_encode($this->_username . ':' . $this->_password) .
+                        "\r\n");
             }
+            $socket->write("Connection: close\r\n");
             return $socket;
         }
     }
@@ -427,9 +423,6 @@
          */
         function &fetch($timeout) {
             $socket = &$this->_route->createConnection($this->_method, $timeout);
-            if ($socket->isError()) {
-                return $this->_createResponse($socket);
-            }
             $this->_dispatchRequest($socket, $this->_method, $this->_content);
             return $this->_createResponse($socket);
         }
@@ -748,12 +741,7 @@
             $this->_request_data = $request_data;
             $this->_sent = $socket->getSent();
             $this->_content = false;
-            $raw = $this->_readAll($socket);
-            if ($socket->isError()) {
-                $this->_setError("Error reading socket [" . $socket->getError() . "]");
-                return;
-            }
-            $this->_parse($raw);
+            $this->_parse($this->_readAll($socket));
         }
         
         /**
@@ -762,9 +750,12 @@
          *    @access private
          */
         function _parse($raw) {
-            if (! strstr($raw, "\r\n\r\n")) {
-                $this->_setError('Could not parse headers');
+            if (! $raw) {
+                $this->_setError('Nothing fetched');
                 $this->_headers = &new SimpleHttpHeaders('');
+            } elseif (! strstr($raw, "\r\n\r\n")) {
+                $this->_setError('Could not parse headers');
+                $this->_headers = &new SimpleHttpHeaders($raw);
             } else {
                 list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);
                 $this->_headers = &new SimpleHttpHeaders($headers);
@@ -845,7 +836,7 @@
          *    @access private
          */
         function _readAll(&$socket) {
-            $all = "";
+            $all = '';
             while (! $this->_isLastPacket($next = $socket->read())) {
                 $all .= $next;
             }

@@ -9,7 +9,7 @@
     /**#@+
      * include SimpleTest files
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'options.php');
+    require_once(dirname(__FILE__) . '/options.php');
     /**#@-*/
     
     /**
@@ -71,7 +71,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleSocket extends StickyError {
+    class SimpleSocket {
         var $_handle;
         var $_is_open;
         var $_sent;
@@ -84,15 +84,14 @@
          *    @access public
          */
         function SimpleSocket($host, $port, $timeout) {
-            $this->StickyError();
             $this->_is_open = false;
             $this->_sent = '';
             if (! ($this->_handle = $this->_openSocket($host, $port, $error_number, $error, $timeout))) {
-                $this->_setError("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
-            } else {
-                $this->_is_open = true;
-                SimpleTestCompatibility::setTimeout($this->_handle, $timeout);
+                trigger_error("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
+                return;
             }
+            $this->_is_open = true;
+            SimpleTestCompatibility::setTimeout($this->_handle, $timeout);
         }
         
         /**
@@ -102,13 +101,14 @@
          *    @access public
          */
         function write($message) {
-            if ($this->isError() || ! $this->isOpen()) {
+            if (! $this->isOpen()) {
                 return false;
             }
             $count = fwrite($this->_handle, $message);
             if (! $count) {
                 if ($count === false) {
-                    $this->_setError("Cannot write to socket");
+                    trigger_error('Cannot write to socket');
+                    $this->close();
                 }
                 return false;
             }
@@ -125,10 +125,15 @@
          *    @access public
          */
         function read($block_size = 255) {
-            if ($this->isError() || !$this->isOpen()) {
+            if (! $this->isOpen()) {
                 return false;
             }
-            return fread($this->_handle, $block_size);
+            $raw = fread($this->_handle, $block_size);
+            if ($raw === false) {
+                trigger_error('Cannot write to socket');
+                $this->close();
+            }
+            return $raw;
         }
         
         /**

@@ -13,14 +13,13 @@
             $this->UnitTestCase();
         }
         function testBadSocket() {
-            @$socket = &new SimpleSocket('bad_url', 111, 5);
-            $this->assertTrue($socket->isError(), "Error [" . $socket->getError(). "]");
+            $socket = &new SimpleSocket('bad_url', 111, 5);
+            $this->assertErrorPattern('/Cannot open \\[bad_url:111\\] with \\[.*?\\] within \\[5\\] seconds/');
             $this->assertFalse($socket->isOpen());
-            $this->assertFalse($socket->write("A message"));
+            $this->assertFalse($socket->write('A message'));
         }
         function testSocketClosure() {
             $socket = &new SimpleSocket('www.lastcraft.com', 80, 15);
-            $this->assertFalse($socket->isError(), "Error [" . $socket->getError(). "]");
             $this->assertTrue($socket->isOpen());
             $this->assertTrue($socket->write("GET /test/network_confirm.php HTTP/1.0\r\n"));
             $socket->write("Host: www.lastcraft.com\r\n");
