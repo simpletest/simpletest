@@ -23,6 +23,15 @@
             $this->assertTrue($builder->parse("<html></html>"));
             $parser->tally();
         }
+        function testBadLink() {
+            $parser = &new MockSimpleSaxParser($this);
+            $parser->setReturnValue("parse", true);
+            $page = &new MockSimplePage($this);
+            $page->expectCallCount("addLink", 0);
+            $builder = &new SimplePageBuilder($parser, $page);
+            $this->assertFalse($builder->endElement("a"));
+            $page->tally();
+        }
         function testLink() {
             $parser = &new MockSimpleSaxParser($this);
             $parser->setReturnValue("parse", true);
@@ -34,6 +43,43 @@
                     "a",
                     array("href" => "http://somewhere")));
             $this->assertTrue($builder->addContent("Label"));
+            $this->assertTrue($builder->endElement("a"));
+            $page->tally();
+        }
+        function testLinkExtraction() {
+            $parser = &new MockSimpleSaxParser($this);
+            $parser->setReturnValue("parse", true);
+            $page = &new MockSimplePage($this);
+            $page->expectArguments("addLink", array("http://somewhere", "Label"));
+            $page->expectCallCount("addLink", 1);
+            $builder = &new SimplePageBuilder($parser, $page);
+            $this->assertTrue($builder->addContent("Starting stuff"));
+            $this->assertTrue($builder->startElement(
+                    "a",
+                    array("href" => "http://somewhere")));
+            $this->assertTrue($builder->addContent("Label"));
+            $this->assertTrue($builder->endElement("a"));
+            $this->assertTrue($builder->addContent("Trailing stuff"));
+            $page->tally();
+        }
+        function testMultipleLinks() {
+            $parser = &new MockSimpleSaxParser($this);
+            $parser->setReturnValue("parse", true);
+            $page = &new MockSimplePage($this);
+            $page->expectArgumentsAt(0, "addLink", array("http://somewhere", "1"));
+            $page->expectArgumentsAt(1, "addLink", array("http://elsewhere", "2"));
+            $page->expectCallCount("addLink", 2);
+            $builder = &new SimplePageBuilder($parser, $page);
+            $this->assertTrue($builder->startElement(
+                    "a",
+                    array("href" => "http://somewhere")));
+            $this->assertTrue($builder->addContent("1"));
+            $this->assertTrue($builder->endElement("a"));
+            $this->assertTrue($builder->addContent("Padding"));
+            $this->assertTrue($builder->startElement(
+                    "a",
+                    array("href" => "http://elsewhere")));
+            $this->assertTrue($builder->addContent("2"));
             $this->assertTrue($builder->endElement("a"));
             $page->tally();
         }

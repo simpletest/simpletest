@@ -19,7 +19,7 @@ Update documentation to reflect deprecated methods (2/1) - done.
 Html parser
 -----------
 Make lexer call different methods for different modes (4/3) - done.
-Build SAX handler for links (2/3).
+Build SAX handler for links (2/4).
 Build SAX event generator for links (8/8) - done.
 Decouple lexer modes from SAX handler methods (2/2) - done.
 Build link scanner functionality from end to end (3/1).

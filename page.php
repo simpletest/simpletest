@@ -58,12 +58,16 @@
         }
         
         /**
-         *    End of element event.
+         *    End of element event. An unexpected event
+         *    triggers a parsing error.
          *    @param $name        Element name.
          *    @return             False on parse error.
          *    @public
          */
         function endElement($name) {
+            if (!isset($this->_tags[$name]) || (count($this->_tags[$name]) == 0)) {
+                return false;
+            }
             $tag = array_pop($this->_tags[$name]);
             $this->_page->addLink($tag["attributes"]["href"], $tag["content"]);
             return true;
