@@ -24,18 +24,19 @@
         
         /**
          *    Returns a human readable test message.
-         *    @param $compare    Comparison value.
-         *    @return            String description of success
-         *                       or failure.
+         *    @param $compare      Comparison value.
+         *    @param $test_class   Test class to apply.
+         *    @return              String description of success
+         *                         or failure.
          *    @public
          */
-        function testMessage($compare) {
+        function testMessage($compare, $test_class = "equalityassertion") {
             if ($this->test($compare)) {
-                return "Equal [" . $this->describeValue($this->_value) . "]";
+                return "$test_class [" . $this->describeValue($this->_value) . "]";
             } else {
-                return "[" . $this->describeValue($this->_value) .
-                        "] differs from [" .
-                        $this->describeValue($compare) . "] at " .
+                return "$test_class [" . $this->describeValue($this->_value) .
+                        "] fails with [" .
+                        $this->describeValue($compare) . "]" .
                         $this->describeDifference($this->_value, $compare);
             }
         }
@@ -57,7 +58,7 @@
             } elseif (is_integer($var)) {
                 return "Integer: $var";
             } elseif (is_float($var)) {
-                return "Float: $arg";
+                return "Float: $var";
             } elseif (is_array($var)) {
                 return "Array: " . count($var) . " items";
             } elseif (is_resource($var)) {
@@ -71,31 +72,25 @@
         /**
          *    Creates a human readable description of the
          *    difference between two variables.
-         *    @param $first    First variable.
-         *    @param $second   Value to compare with.
-         *    @return          Descriptive string.
+         *    @param $first        First variable.
+         *    @param $second       Value to compare with.
+         *    @param $test_class   Test class to apply.
+         *    @return              Descriptive string.
          *    @public
          *    @static
          */
-        function describeDifference($first, $second) {
-            if (!isset($first)) {
-                return "null value";
-            } elseif (is_bool($first)) {
-                return "Boolean: " . ($var ? "true" : "false");
-            } elseif (is_string($first)) {
-                return "character " . $this->_stringDiffersAt($first, $second);
+        function describeDifference($first, $second, $test_class = "equalityassertion") {
+            if (is_string($first)) {
+                return " at character " . Assertion::_stringDiffersAt($first, $second);
             } elseif (is_integer($first)) {
-                return "Integer: $var";
-            } elseif (is_float($first)) {
-                return "Float: $arg";
+                return " by " . abs($first - $second);
             } elseif (is_array($first)) {
-                return "Array: " . count($var) . " items";
-            } elseif (is_resource($first)) {
-                return "Resource: $var";
+                return " key " .
+                        Assertion::_describeArrayDifference($first, $second, $test_class);
             } elseif (is_object($first)) {
-                return "Object: of " . get_class($var);
+                return "";
             }
-            return "no value difference";
+            return "";
         }
         
         /**
@@ -105,6 +100,7 @@
          *    @param $second       String to compare with.
          *    @return              Integer position.
          *    @private
+         *    @static
          */
         function _stringDiffersAt($first, $second) {
             if (!$first || !$second) {
@@ -116,7 +112,7 @@
             $position = 0;
             $step = strlen($first);
             while ($step > 1) {
-                $step = $this->_halve($step);
+                $step = (integer)(($step + 1)/2);
                 if (strncmp($first, $second, $position + $step) == 0) {
                     $position += $step;
                 }
@@ -125,13 +121,34 @@
         }
         
         /**
-         *    Halves a number rounding up.
-         *    @param $value    Item to halve.
-         *    @return          Half size integer rounded up.
+         *    Creates a human readable description of the
+         *    difference between two arrays.
+         *    @param $first        First array.
+         *    @param $second       Array to compare with.
+         *    @param $test_class   Test to apply.
+         *    @return              Descriptive string.
          *    @private
+         *    @static
          */
-        function _halve($value) {
-            return (integer)(($value + 1)/2);
+        function _describeArrayDifference($first, $second, $test_class) {
+            $keys = array_merge(array_keys($first), array_keys($second));
+            sort($keys);
+            foreach ($keys as $key) {
+                if (!isset($first[$key])) {
+                    return "$key does not exist in first array";
+                }
+                if (!isset($second[$key])) {
+                    return "$key does not exist in second array";
+                }
+                $test = &new $test_class($first[$key]);
+                if (!$test->test($second[$key])) {
+                    return "$key" . Assertion::describeDifference(
+                            $first[$key],
+                            $second[$key],
+                            $test_class);
+                }
+            }
+            return "";
         }
     }
     
