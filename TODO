@@ -21,7 +21,7 @@ Add spaces around the breadcrumb's arrows (1/1) - done.
 Mock objects
 ------------
 Add fix for PHP5 __construct() call (1/1) - done.
-Should throw error when setting expectation on non-mocked method (3).
+Should throw error when setting expectation on non-mocked method (3/2) - done.
 Line numbers on failed expectations (3).
 
 Parser

@@ -1012,7 +1012,7 @@
          *    to it.
          *    @param string $class         Class to extend.
          *    @param string $mock_class    New class name.
-         *    @param array  $methods       Additional methods.
+         *    @param array  $methods       Mocked methods.
          *    @return string               Code for a new class.
          *    @static
          *    @access private
@@ -1021,6 +1021,8 @@
             $mock_base = SimpleTestOptions::getMockBaseClass();
             $code  = "class $mock_class extends $class {\n";
             $code .= "    var \$_mock;\n";
+            $code .= Mock::_addMethodList($methods);
+            $code .= "\n";
             $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_WILDCARD) {\n";
             $code .= "        \$this->_mock = &new $mock_base(\$test, \$wildcard, false);\n";
             $code .= "    }\n";
@@ -1033,29 +1035,52 @@
         }
         
         /**
+         *    Creates a list of mocked methods for error checking.
+         *    @param array $methods       Mocked methods.
+         *    @return string              Code for a method list.
+         *    @access private
+         */
+        function _addMethodList($methods) {
+            return "    var \$_mocked_methods = array('" .
+                    implode("', '", $methods) . "');\n";
+        }
+        
+        /**
+         *    Creates code to abandon the expectation if not mocked.
+         *    @param string $alias       Parameter name of method name.
+         *    @return string             Code for bail out.
+         *    @access private
+         */
+        function _bailOutIfNotMocked($alias) {
+            $code  = "        if (! in_array($alias, \$this->_mocked_methods)) {\n";
+            $code .= "            trigger_error('Method [$alias] is not mocked');\n";
+            $code .= "            return;\n";
+            $code .= "        }\n";
+            return $code;
+        }
+        
+        /**
          *    Creates source code for chaining to the composited
          *    mock object.
          *    @return string           Code for mock set up.
          *    @access private
          */
         function _chainMockReturns() {
-            $code = "    function setReturnValue(\$method, \$value, \$args = false) {\n";
+            $code  = "    function setReturnValue(\$method, \$value, \$args = false) {\n";
+            $code .= Mock::_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->setReturnValue(\$method, \$value, \$args);\n";
             $code .= "    }\n";
             $code .= "    function setReturnValueAt(\$timing, \$method, \$value, \$args = false) {\n";
+            $code .= Mock::_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->setReturnValueAt(\$timing, \$method, \$value, \$args);\n";
             $code .= "    }\n";
             $code .= "    function setReturnReference(\$method, &\$ref, \$args = false) {\n";
+            $code .= Mock::_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->setReturnReference(\$method, \$ref, \$args);\n";
             $code .= "    }\n";
             $code .= "    function setReturnReferenceAt(\$timing, \$method, &\$ref, \$args = false) {\n";
+            $code .= Mock::_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->setReturnReferenceAt(\$timing, \$method, \$ref, \$args);\n";
-            $code .= "    }\n";
-            $code .= "    function getCallCount(\$method) {\n";
-            $code .= "        \$this->_mock->getCallCount(\$method);\n";
-            $code .= "    }\n";
-            $code .= "    function clearHistory() {\n";
-            $code .= "        \$this->_mock->clearHistory();\n";
             $code .= "    }\n";
             return $code;
         }
@@ -1068,27 +1093,35 @@
          */
         function _chainMockExpectations() {
             $code = "    function expectArguments(\$method, \$args = false) {\n";
+            $code .= Mock::_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectArguments(\$method, \$args);\n";
             $code .= "    }\n";
             $code .= "    function expectArgumentsAt(\$timing, \$method, \$args = false) {\n";
+            $code .= Mock::_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectArgumentsAt(\$timing, \$method, \$args);\n";
             $code .= "    }\n";
             $code .= "    function expectCallCount(\$method, \$count) {\n";
+            $code .= Mock::_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectCallCount(\$method, \$count);\n";
             $code .= "    }\n";
             $code .= "    function expectMaximumCallCount(\$method, \$count) {\n";
+            $code .= Mock::_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectMaximumCallCount(\$method, \$count);\n";
             $code .= "    }\n";
             $code .= "    function expectMinimumCallCount(\$method, \$count) {\n";
+            $code .= Mock::_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectMinimumCallCount(\$method, \$count);\n";
             $code .= "    }\n";
             $code .= "    function expectNever(\$method) {\n";
+            $code .= Mock::_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectNever(\$method);\n";
             $code .= "    }\n";
             $code .= "    function expectOnce(\$method, \$args = false) {\n";
+            $code .= Mock::_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectOnce(\$method, \$args);\n";
             $code .= "    }\n";
             $code .= "    function expectAtLeastOnce(\$method, \$args = false) {\n";
+            $code .= Mock::_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectAtLeastOnce(\$method, \$args);\n";
             $code .= "    }\n";
             $code .= "    function tally() {\n";
