@@ -87,5 +87,20 @@
             fflush($this->_handle);
             return true;
         }
+        
+        
+        /**
+         *    Reads data from the socket.
+         *    @param $block_size        Size of chunk to read.
+         *    @return                   Incoming bytes. False
+         *                              on error.
+         *    @public
+         */
+        function read($block_size = 255) {
+            if ($this->isError()) {
+                return false;
+            }
+            return fread($this->_handle, $block_size);
+        }
     }
 ?>

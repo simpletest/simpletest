@@ -41,6 +41,7 @@
             $this->assertTrue($socket->write("GET www.lastcraft.com HTTP/1.0\r\n"));
             $socket->write("Host: localhost\r\n");
             $socket->write("Connection: close\r\n\r\n");
+            $this->assertEqual($socket->read(8), "HTTP/1.1");
         }
     }
 ?>
