@@ -192,6 +192,7 @@
          */
         function restart($date = false) {
             $this->_cookie_jar->restartSession($date);
+            $this->_authenticator->restartSession();
         }
         
         /**

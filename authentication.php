@@ -113,10 +113,18 @@
         var $_realms;
         
         /**
-         *    Starts with no realms set up.
+         *    Clears the realms.
          *    @access public
          */
         function SimpleAuthenticator() {
+            $this->restartSession();
+        }
+        
+        /**
+         *    Starts with no realms set up.
+         *    @access public
+         */
+        function restartSession() {
             $this->_realms = array();
         }
         

@@ -233,7 +233,7 @@ class LogInTest extends WebTestCase {
         $this->clickSubmit('Log in');
         $this->assertWantedPattern('/Welcome Me/');
         <strong>
-        $this->agePrematurely(3600);</strong>
+        $this->ageCookies(3600);</strong>
         $this->restart();
         $this->get('http://www.my-site.com/restricted.php');
         $this->assertWantedPattern('/Access denied/');

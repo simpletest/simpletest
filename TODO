@@ -1,11 +1,12 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 32 hours.
+This is immediate stuff only for this iteration (RC2) of 37 hours.
 
 $Id$
 
 Unit tester
 -----------
 Fix of syntax errors in test scripts reporting green (3/3) - done.
+Fix of assertIdentical() getting stuck in a loop (3).
 
 Reporter
 --------
@@ -21,7 +22,7 @@ Browser
 -------
 Fix socket error with stream_get_timeout() missing (1/1) - done.
 Fix frames error in unit tests with PHP 4.2.2 (2).
-Lose authentication on browser restart (1).
+Lose authentication on browser restart (1/1) - done.
 
 Web tester
 ----------
@@ -38,6 +39,7 @@ Add browser scripting documentation(2).
 Tidy up sundry doc. files (2/1) - done.
 Fix reported typos (1).
 Document the character encoding fix (1/1) - done.
+Remove unnecessary test constructors (2).
 
 Build
 -----

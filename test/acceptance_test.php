@@ -654,6 +654,15 @@
             $this->authenticate('test', 'secret');
             $this->assertTitle('Simple test target file');
         }
+        
+        function testSessionRestartLosesAuthentication() {
+            $this->get('http://www.lastcraft.com/test/protected/');
+            $this->authenticate('test', 'secret');
+            $this->assertResponse(200);
+            $this->restart();
+            $this->get('http://www.lastcraft.com/test/protected/');
+            $this->assertResponse(401);
+        }
     }
     
     class TestOfLoadingFrames extends WebTestCase {

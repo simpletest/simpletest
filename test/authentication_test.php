@@ -123,6 +123,17 @@
             $request->tally();
         }
         
+        function testRestartingClearsRealm() {
+            $request = &new MockSimpleHttpRequest($this);
+            $request->expectNever('addHeaderLine');
+            $authenticator = &$this->createSingleRealm();
+            $authenticator->restartSession();
+            $authenticator->addHeaders(
+                    $request,
+                    new SimpleUrl('http://www.here.com/hello.html'));
+            $request->tally();
+        }
+        
         function testDifferentHostIsOutsideRealm() {
             $request = &new MockSimpleHttpRequest($this);
             $request->expectNever('addHeaderLine');
