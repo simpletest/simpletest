@@ -8,6 +8,7 @@ Unit tester
 -----------
 Set the SIMPLE_TEST constant if not set for add in libraries (1/0) - done.
 Fix bug with dumper failing with second parameters of odd types (2/1) - done.
+Expectations should carry message overrides (3).
 
 Reporter
 --------
@@ -28,8 +29,7 @@ Browser
 -------
 Allow nested framed pages (4).
 Add named frame reloads (2).
-Add frame loads from links (6).
-Allow images to be head fetched to set cookies (2).
+Add frame loads from links (6/3).
 Refactor authentication to cope with framed pages (2).
 Refactor existing base url behaviour into SimplePage (3/8) - done.
 Add getFrames() to SimpleBrowser (1).

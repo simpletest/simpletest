@@ -368,4 +368,17 @@
             $this->assertEqual($url->asString(), $string);
         }
     }
+    
+    class TestOfFrameUrl extends UnitTestCase {
+        function TestOfFrameUrl() {
+            $this->UnitTestCase();
+        }
+        
+        function testTargetAttachment() {
+            $url = new SimpleUrl('http://www.site.com/home.html');
+            $this->assertIdentical($url->getTarget(), false);
+            $url->setTarget('A frame');
+            $this->assertIdentical($url->getTarget(), 'A frame');
+        }
+    }
 ?>

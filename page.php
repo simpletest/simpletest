@@ -665,7 +665,7 @@
         function getUrlsByLabel($label) {
             $matches = array();
             foreach ($this->_links as $link) {
-                if ($this->_isNormalmatch($link->getContent(), $label)) {
+                if ($this->_isNormalMatch($link->getContent(), $label)) {
                     $matches[] = $this->_makeAbsolute($link->getHref());
                 }
             }
@@ -675,7 +675,7 @@
         /**
          *    Accessor for a URL by the id attribute.
          *    @param string $id       Id attribute of link.
-         *    @return string          URL with that id.
+         *    @return SimpleUrl       URL with that id of false if none.
          *    @access public
          */
         function getUrlById($id) {

@@ -9,6 +9,7 @@
         function TestOfStickyError() {
             $this->UnitTestCase();
         }
+        
         function testSettingError() {
             $error = new StickyError();
             $this->assertFalse($error->isError());
@@ -16,6 +17,7 @@
             $this->assertTrue($error->isError());
             $this->assertEqual($error->getError(), 'Ouch');
         }
+        
         function testClearingError() {
             $error = new StickyError();
             $error->_setError('Ouch');

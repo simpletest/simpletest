@@ -142,6 +142,8 @@
         var $_port;
         var $_path;
         var $_request;
+        var $_fragment;
+        var $_target;
         
         /**
          *    Constructor. Parses URL into sections.
@@ -160,6 +162,7 @@
             $this->_path = $this->_chompPath($url);
             $this->_request = $this->_parseRequest($this->_chompRequest($url));
             $this->_fragment = (strncmp($url, "#", 1) == 0 ? substr($url, 1) : false);
+            $this->_target = false;
         }
         
         /**
@@ -457,6 +460,31 @@
             $this->_request = &new SimpleQueryString();
         }
         
+        /**
+         *    Gets the frame target if present. Although
+         *    not strictly part of the URL specification it
+         *    acts as similarily to the browser.
+         *    @return boolean/string    Frame name or false if none.
+         *    @access public
+         */
+        function getTarget() {
+            return $this->_target;
+        }
+        
+        /**
+         *    Attaches a frame target.
+         *    @param string $frame        Name of frame.
+         *    @access public
+         */
+        function setTarget($frame) {
+            $this->_target = $frame;
+        }
+        
+        /**
+         *    Renders the URL back into a string.
+         *    @return string        URL in canonical form.
+         *    @access public
+         */
         function asString() {
             $scheme = $identity = $host = $path = $encoded = $fragment = '';
             if ($this->_username && $this->_password) {
@@ -466,7 +494,7 @@
                 $scheme = $this->getScheme() ? $this->getScheme() : 'http';
                 $host = $this->getHost();
             }
-            if (substr($this->_path, 0, 1) == "/") {
+            if (substr($this->_path, 0, 1) == '/') {
                 $path = $this->normalisePath($this->_path);
             }
             $encoded = $this->getEncodedRequest();
@@ -487,7 +515,7 @@
             }
             $scheme = $this->getScheme() ? $this->getScheme() : $base->getScheme();
             $host = $this->getHost() ? $this->getHost() : $base->getHost();
-            if (substr($this->_path, 0, 1) == "/") {
+            if (substr($this->_path, 0, 1) == '/') {
                 $path = $this->normalisePath($this->_path);
             } else {
                 $path = $this->normalisePath($base->getBasePath() . $this->_path);

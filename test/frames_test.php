@@ -326,41 +326,57 @@
         
         function testLabelledUrlsComeFromBothFrames() {
             $frame1 = &new MockSimplePage($this);
-            $frame1->setReturnValue('getUrlsByLabel', array('goodbye.php'), array('a'));
+            $frame1->setReturnValue(
+                    'getUrlsByLabel',
+                    array(new SimpleUrl('goodbye.php')),
+                    array('a'));
             
             $frame2 = &new MockSimplePage($this);
-            $frame2->setReturnValue('getUrlsByLabel', array('hello.php'), array('a'));
+            $frame2->setReturnValue(
+                    'getUrlsByLabel',
+                    array(new SimpleUrl('hello.php')),
+                    array('a'));
             
             $frameset = &new SimpleFrameset(new MockSimplePage($this));
             $frameset->addParsedFrame($frame1);
-            $frameset->addParsedFrame($frame2);
+            $frameset->addParsedFrame($frame2, 'Two');
+            
+            $expected1 = new SimpleUrl('goodbye.php');
+            $expected1->setTarget(1);
+            $expected2 = new SimpleUrl('hello.php');
+            $expected2->setTarget('Two');
             $this->assertEqual(
                     $frameset->getUrlsByLabel('a'),
-                    array('goodbye.php', 'hello.php'));
+                    array($expected1, $expected2));
         }
         
         function testUrlByIdComesFromFirstFrameToRespond() {
             $frame1 = &new MockSimplePage($this);
-            $frame1->setReturnValue('getUrlById', 'four.php', array(4));
+            $frame1->setReturnValue('getUrlById', new SimpleUrl('four.php'), array(4));
             $frame1->setReturnValue('getUrlById', false, array(5));
             
             $frame2 = &new MockSimplePage($this);
             $frame2->setReturnValue('getUrlById', false, array(4));
-            $frame2->setReturnValue('getUrlById', 'five.php', array(5));
+            $frame2->setReturnValue('getUrlById', new SimpleUrl('five.php'), array(5));
             
             $frameset = &new SimpleFrameset(new MockSimplePage($this));
             $frameset->addParsedFrame($frame1);
             $frameset->addParsedFrame($frame2);
-            $this->assertEqual($frameset->getUrlById(4), 'four.php');
-            $this->assertEqual($frameset->getUrlById(5), 'five.php');
+            
+            $four = new SimpleUrl('four.php');
+            $four->setTarget(1);
+            $this->assertEqual($frameset->getUrlById(4), $four);
+            $five = new SimpleUrl('five.php');
+            $five->setTarget(2);
+            $this->assertEqual($frameset->getUrlById(5), $five);
         }
         
         function testReadUrlsFromFrameInFocus() {
             $frame1 = &new MockSimplePage($this);
             $frame1->setReturnValue('getAbsoluteUrls', array('a'));
             $frame1->setReturnValue('getRelativeUrls', array('r'));
-            $frame1->setReturnValue('getUrlsByLabel', array('l'));
-            $frame1->setReturnValue('getUrlById', array('i'));
+            $frame1->setReturnValue('getUrlsByLabel', array(new SimpleUrl('l')));
+            $frame1->setReturnValue('getUrlById', new SimpleUrl('i'));
             
             $frame2 = &new MockSimplePage($this);
             $frame2->expectNever('getAbsoluteUrls');
@@ -373,10 +389,14 @@
             $frameset->addParsedFrame($frame2, 'B');
             $frameset->setFrameFocus('A');
             
-            $this->assertEqual($frameset->getAbsoluteUrls(), array('a'));
-            $this->assertEqual($frameset->getRelativeUrls(), array('r'));
-            $this->assertEqual($frameset->getUrlsByLabel('label'), array('l'));
-            $this->assertEqual($frameset->getUrlById(99), array('i'));
+            $this->assertIdentical($frameset->getAbsoluteUrls(), array('a'));
+            $this->assertIdentical($frameset->getRelativeUrls(), array('r'));
+            $expected = new SimpleUrl('l');
+            $expected->setTarget('A');
+            $this->assertIdentical($frameset->getUrlsByLabel('label'), array($expected));
+            $expected = new SimpleUrl('i');
+            $expected->setTarget('A');
+            $this->assertIdentical($frameset->getUrlById(99), $expected);
         }
         
         function testFindingForms() {

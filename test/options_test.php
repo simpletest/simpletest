@@ -1,24 +1,27 @@
 <?php
     // $Id$
     
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../options.php');
+    require_once(dirname(__FILE__) . '/../options.php');
     
     class TestOfOptions extends UnitTestCase {
         function TestOfOptions() {
             $this->UnitTestCase();
         }
+        
         function testMockBase() {
             $old_class = SimpleTestOptions::getMockBaseClass();
             SimpleTestOptions::setMockBaseClass('Fred');
             $this->assertEqual(SimpleTestOptions::getMockBaseClass(), 'Fred');
             SimpleTestOptions::setMockBaseClass($old_class);
         }
+        
         function testStubBase() {
             $old_class = SimpleTestOptions::getStubBaseClass();
             SimpleTestOptions::setStubBaseClass('Fred');
             $this->assertEqual(SimpleTestOptions::getStubBaseClass(), 'Fred');
             SimpleTestOptions::setStubBaseClass($old_class);
         }
+        
         function testIgnoreList() {
             $this->assertFalse(SimpleTestOptions::isIgnored('ImaginaryTestCase'));
             SimpleTestOptions::ignore('ImaginaryTestCase');
@@ -36,6 +39,7 @@
         function TestOfCompatibility() {
             $this->UnitTestCase();
         }
+        
         function testIsA() {
             $this->assertTrue(SimpleTestCompatibility::isA(
                     new RandomCompatibilityClass(),
@@ -47,6 +51,7 @@
                     new RandomCompatibilitySubclass(),
                     'RandomCompatibilityClass'));
         }
+        
         function testIdentityOfObjects() {
             $object1 = new RandomCompatibilityClass();
             $object2 = new RandomCompatibilityClass();

@@ -12,6 +12,7 @@
         function LiveHttpTestCase() {
             $this->UnitTestCase();
         }
+        
         function testBadSocket() {
             $socket = &new SimpleSocket('bad_url', 111, 5);
             $this->assertTrue($socket->isError());
@@ -21,6 +22,7 @@
             $this->assertFalse($socket->isOpen());
             $this->assertFalse($socket->write('A message'));
         }
+        
         function testSocketClosure() {
             $socket = &new SimpleSocket('www.lastcraft.com', 80, 15);
             $this->assertTrue($socket->isOpen());
@@ -31,6 +33,7 @@
             $socket->close();
             $this->assertIdentical($socket->read(8), false);
         }
+        
         function testRecordOfSentCharacters() {
             $socket = &new SimpleSocket('www.lastcraft.com', 80, 15);
             $this->assertTrue($socket->write("GET /test/network_confirm.php HTTP/1.0\r\n"));

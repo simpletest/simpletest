@@ -64,12 +64,24 @@
             if ($this->_focus === false) {
                 return false;
             }
+            return $this->_getPublicNameFromIndex($this->_focus);
+        }
+        
+        /**
+         *    Turns an internal array index into the frames list
+         *    into a public name, or if none, then a one offset
+         *    index.
+         *    @param integer $subject    Internal index.
+         *    @return integer/string     Public name.
+         *    @access private
+         */
+        function _getPublicNameFromIndex($subject) {
             foreach ($this->_names as $name => $index) {
-                if ($this->_focus == $index) {
+                if ($subject == $index) {
                     return $name;
                 }
             }
-            return $this->_focus + 1;
+            return $subject + 1;
         }
         
         /**
@@ -117,7 +129,7 @@
             if (is_integer($this->_focus)) {
                 return $this->_frames[$this->_focus]->hasFrames();
             }
-            return true;;
+            return true;
         }
         
         /**
@@ -322,18 +334,24 @@
          */
         function getUrlsByLabel($label) {
             if (is_integer($this->_focus)) {
-                return $this->_frames[$this->_focus]->getUrlsByLabel($label);
+                return $this->_tagUrlsWithFrame(
+                        $this->_frames[$this->_focus]->getUrlsByLabel($label),
+                        $this->_focus);
             }
             $urls = array();
-            foreach ($this->_frames as $frame) {
-                $urls = array_merge($urls, $frame->getUrlsByLabel($label));
+            foreach ($this->_frames as $index => $frame) {
+                $urls = array_merge(
+                        $urls,
+                        $this->_tagUrlsWithFrame(
+                                    $frame->getUrlsByLabel($label),
+                                    $index));
             }
-            return array_values(array_unique($urls));
+            return $urls;
         }
         
         /**
          *    Accessor for a URL by the id attribute. If in a frameset
-         *    then the first link found with taht ID attribute is
+         *    then the first link found with that ID attribute is
          *    returned only. Focus on a frame if you want one from
          *    a specific part of the frameset.
          *    @param string $id       Id attribute of link.
@@ -341,12 +359,29 @@
          *    @access public
          */
         function getUrlById($id) {
-            foreach ($this->_frames as $frame) {
+            foreach ($this->_frames as $index => $frame) {
                 if ($url = $frame->getUrlById($id)) {
+                    $url->setTarget($this->_getPublicNameFromIndex($index));
                     return $url;
                 }
             }
             return false;
+        }
+        
+        /**
+         *    Attaches the intended frame index to a list of URLs.
+         *    @param array $urls        List of SimpleUrls.
+         *    @param string $frame      Name of frame or index.
+         *    @return array             List of tagged URLs.
+         *    @access private
+         */
+        function _tagUrlsWithFrame($urls, $frame) {
+            $tagged = array();
+            foreach ($urls as $url) {
+                $url->setTarget($this->_getPublicNameFromIndex($frame));
+                $tagged[] = $url;
+            }
+            return $tagged;
         }
         
         /**
