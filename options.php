@@ -2,7 +2,6 @@
     /**
      *	base include file for SimpleTest
      *	@package	SimpleTest
-     *	@subpackage	UnitTester
      *	@version	$Id$
      */
     
@@ -15,8 +14,7 @@
     
     /**
      *    Static global directives and options.
-	 *	@package	SimpleTest
-	 *	@subpackage	UnitTester
+     *	@package	SimpleTest
      */
     class SimpleTestOptions {
         
