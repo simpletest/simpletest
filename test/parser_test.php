@@ -358,4 +358,41 @@
             $this->assertTrue($this->_lexer->parse("<html><a href = 'here.html' bool style=\"'coo\\\"l'\">label</a></html>"));
         }
     }
+    
+    class TestHtmlSaxParser extends HtmlSaxParser {
+        var $_lexer;
+        
+        function TestHtmlSaxParser(&$listener, &$lexer) {
+            $this->HtmlSaxParser(&$listener);
+            $this->_lexer = &$lexer;
+        }
+        function &createLexer() {
+            return $this->_lexer;
+        }
+    }
+    
+    Mock::generate("HtmlSaxListener");
+    Mock::generate("SimpleLexer");
+    
+    class TestOfHtmlSaxParser extends UnitTestCase {
+        var $_listener;
+        var $_lexer;
+        
+        function TestOfHtmlSaxParser() {
+            $this->UnitTestCase();
+        }
+        function setUp() {
+            $this->_listener = &new MockHtmlSaxListener($this);
+            $this->_lexer = &new MockSimpleLexer($this);
+            $this->_parser = &new TestHtmlSaxParser($this->_listener, $this->_lexer);
+        }
+        function tearDown() {
+            $this->_listener->tally();
+            $this->_lexer->tally();
+        }
+        function testLexerFailure() {
+            $this->_lexer->setReturnValue("parse", false);
+            $this->assertFalse($this->_parser->parse("<html></html>"));
+        }
+    }
 ?>

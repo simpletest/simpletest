@@ -11,14 +11,14 @@
      *    SAX event handler. Maintains a list of
      *    open tags and dispatches them as they close.
      */
-    class HtmlSaxListener {
+    class SimplePageBuilder extends HtmlSaxListener {
         
         /**
          *    Sets the document to write to.
          *    @param $page    Page to add information to.
          *    @public
          */
-        function HtmlSaxListener(&$page) {
+        function SimplePageBuilder(&$page) {
         }
         
         /**

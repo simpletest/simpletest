@@ -474,4 +474,49 @@
         function ignore($token) {
         }
     }
+    
+    /**
+     *    SAX event handler.
+     *    @abstract
+     */
+    class HtmlSaxListener {
+        
+        /**
+         *    Sets the document to write to.
+         *    @param $page    Page to add information to.
+         *    @public
+         */
+        function HtmlSaxListener(&$page) {
+        }
+        
+        /**
+         *    Start of element event.
+         *    @param $name        Element name.
+         *    @param $attributes  Hash of name value pairs.
+         *                        Attributes without content
+         *                        are marked as true.
+         *    @return             False on parse error.
+         *    @public
+         */
+        function startElement($name, $attributes) {
+        }
+        
+        /**
+         *    End of element event.
+         *    @param $name        Element name.
+         *    @return             False on parse error.
+         *    @public
+         */
+        function endElement($name) {
+        }
+        
+        /**
+         *    Unparsed, but relevant data.
+         *    @param $text        May include unparsed tags.
+         *    @return             False on parse error.
+         *    @public
+         */
+        function unparsedData($text) {
+        }
+    }
 ?>
