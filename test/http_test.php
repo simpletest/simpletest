@@ -73,7 +73,7 @@
                     "Mon, 18 Nov 2002 15:50:29 GMT");
             $this->assertEqual($cookie->getName(), "name");
             $this->assertEqual($cookie->getValue(), "value");
-            $this->assertEqual($cookie->getPath(), "/path");
+            $this->assertEqual($cookie->getPath(), "/path/");
             $this->assertEqual($cookie->getExpiry(), "Mon, 18 Nov 2002 15:50:29 GMT");
         }
         function testCookieDefaults() {

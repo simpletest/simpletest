@@ -47,9 +47,25 @@
                 if ($host && $cookie->getHost() && ($cookie->getHost() != $host)) {
                     continue;
                 }
+                if (!$this->_isSubpath($cookie->getPath(), $path)) {
+                    continue;
+                }
                 $valid_cookies[] = $cookie;
             }
             return $valid_cookies;
+        }
+        
+       /**
+         *    Tests to see if one path contains another.
+         *    @param $path        Precise path.
+         *    @param $subpath     Path nearer to the root.
+         *    @private
+         */
+        function _isSubpath($path, $subpath) {
+            if (substr($subpath, -1) != '/') {
+                $subpath .= '/';
+            }
+            return (strncmp($path, $subpath, strlen($subpath)) == 0);
         }
     }
     
@@ -98,7 +114,7 @@
          *    failure.
          *    @public
          */
-        function expectFail() {
+        function expectBadConnection() {
             $this->_expect_error = true;
         }
         

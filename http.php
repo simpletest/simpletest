@@ -134,11 +134,11 @@
          *    @param $path            Cookie path if not host wide.
          *    @param $expiry          Expiry date as string.
          */
-        function SimpleCookie($name, $value = "", $path = "", $expiry = "") {
+        function SimpleCookie($name, $value = false, $path = false, $expiry = false) {
             $this->_host = false;
             $this->_name = $name;
             $this->_value = $value;
-            $this->_path = ($path ? $path : "/");
+            $this->_path = ($path ? $this->_fixPath($path) : "/");
             $this->_expiry = ($expiry ? $expiry : "");
         }
         
@@ -195,6 +195,15 @@
          */
         function getExpiry() {
             return $this->_expiry;
+        }
+        
+        /**
+         *    Adds a trailing slash to the path if missing.
+         *    @param $path            Path to fix.
+         *    @private
+         */
+        function _fixPath($path) {
+            return (substr($path, -1) == '/' ? $path : $path . '/');
         }
     }
 

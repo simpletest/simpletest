@@ -33,6 +33,20 @@
             $jar->setCookie($cookie);
             $cookies = $jar->getValidCookies("my-host.com");
             $this->assertEqual(count($cookies), 2);
+            $this->assertEqual($cookies[0]->getValue(), "A");
+            $this->assertEqual($cookies[1]->getValue(), "C");
+            $this->assertEqual(count($jar->getValidCookies("new-host.org")), 1);
+            $this->assertEqual(count($jar->getValidCookies()), 3);
+        }
+        function testPathFilter() {
+            $jar = new CookieJar();
+            $jar->setCookie(new SimpleCookie("a", "A", "/path/more_path/"));
+            $this->assertEqual(count($jar->getValidCookies("", "/")), 1);
+            $this->assertEqual(count($jar->getValidCookies("", "/elsewhere")), 0);
+            $this->assertEqual(count($jar->getValidCookies("", "/path/")), 1);
+            $this->assertEqual(count($jar->getValidCookies("", "/path")), 1);
+            $this->assertEqual(count($jar->getValidCookies("", "/pa")), 0);
+            $this->assertEqual(count($jar->getValidCookies("", "/path/not_here/")), 0);
         }
     }
 
@@ -81,7 +95,7 @@
             $test->setExpectedArgumentsSequence(0, "assertTrue", array(true, '*'));
             $test->setExpectedCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
-            $browser->expectFail();
+            $browser->expectBadConnection();
             $request = &$this->_createSimulatedBadHost();
             $this->assertIdentical(
                     $browser->fetchUrl("http://this.host/this/path/page.html", &$request),
