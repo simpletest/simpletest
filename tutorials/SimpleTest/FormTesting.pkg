@@ -35,12 +35,14 @@ Which looks like this...
 </para>
 
 <screen class="webpage" linenumbering="unnumbered">
+<programlisting role="html">
 <![CDATA[
 <form>
     <input type="text" name="a" value="A default" />
     <input type="submit" value="Go" />
 </form>
 ]]>
+</programlisting>
 </screen>
       
 
@@ -101,7 +103,7 @@ If a field is not present in any form, or if an option is unavailable, then <com
 </para>
 
     <para>
-      <programlisting role="html">
+      <programlisting role="php">
       <![CDATA[
 <strong>Select type of user to add:</strong>
 <select name="type">
@@ -119,12 +121,14 @@ Which looks like...
 </para>
 
 <screen class="webpage" linenumbering="unnumbered">
+<programlisting role="html">
 <![CDATA[
 <form>
     <strong>Select type of user to add:</strong>
     <select name="type"><option>Subscriber</option><option>Author</option><option>Administrator</option></select>
 </form>
 ]]>
+</programlisting>
 </screen>
    
 <para>
@@ -205,7 +209,7 @@ Although most standard HTML widgets are catered for by SimpleTest's built in par
 Which renders as...
 </para>
 
-<screen class="webpage" linenumbering="unnumbered">
+<programlisting role="html">
 <![CDATA[
 <form>
     <strong>Create privileges allowed:</strong>
@@ -219,7 +223,7 @@ Which renders as...
     <input type="submit" value="Enable Privileges"/>
 </form>
 ]]>
-</screen>
+</programlisting>
 
 <para>
 If we wish to disable all but the retrieval privileges and submit this information we can do it like this...
