@@ -24,8 +24,22 @@
          */
         function SimpleTag($name, $attributes) {
             $this->_name = $name;
-            $this->_attributes = $attributes;
+            $this->_attributes = $this->_keysToLowerCase($attributes);
             $this->_content = "";
+        }
+        
+        /**
+         *    Make the keys lower case for case insensitive look-ups.
+         *    @param hash $map   Has to convert.
+         *    @return hash       Unchanged values, but keys lower case
+         *    @access private
+         */
+        function _keysToLowerCase($map) {
+            $lower = array();
+            foreach ($map as $key => $value) {
+                $lower[strtolower($key)] = $value;
+            }
+            return $lower;
         }
         
         /**
@@ -80,6 +94,7 @@
          *    @access public
          */
         function getAttribute($label) {
+            $label = strtolower($label);
             if (! isset($this->_attributes[$label])) {
                 return false;
             }
@@ -87,6 +102,16 @@
                 return true;
             }
             return (string)$this->_attributes[$label];
+        }
+        
+        /**
+         *    Sets an attribute.
+         *    @param string $label    Attribute name.
+         *    @return string $value   New attribute value.
+         *    @access protected
+         */
+        function _setAttribute($label, $value) {
+            $this->_attributes[strtolower($label)] = $value;
         }
         
         /**
@@ -229,10 +254,10 @@
          *                               string values.
          */
         function SimpleTextTag($attributes) {
-            if (! isset($attributes['value'])) {
-                $attributes['value'] = '';
-            }
             $this->SimpleWidget('input', $attributes);
+            if ($this->getAttribute('value') === false) {
+                $this->_setAttribute('value', '');
+            }
         }
         
         /**
@@ -272,13 +297,13 @@
          *                               string values.
          */
         function SimpleSubmitTag($attributes) {
-            if (! isset($attributes['name'])) {
-                $attributes['name'] = 'submit';
-            }
-            if (! isset($attributes['value'])) {
-                $attributes['value'] = 'Submit';
-            }
             $this->SimpleWidget('input', $attributes);
+            if ($this->getAttribute('name') === false) {
+                $this->_setAttribute('name', 'submit');
+            }
+            if ($this->getAttribute('value') === false) {
+                $this->_setAttribute('value', 'Submit');
+            }
         }
         
         /**
@@ -377,10 +402,10 @@
          *                               string values.
          */
         function SimpleCheckboxTag($attributes) {
-            if (! isset($attributes['value'])) {
-                $attributes['value'] = 'on';
-            }
             $this->SimpleWidget('input', $attributes);
+            if ($this->getAttribute('value') === false) {
+                $this->_setAttribute('value', 'on');
+            }
         }
         
         /**
@@ -648,10 +673,10 @@
          *    Stashes the attributes.
          */
         function SimpleRadioButtonTag($attributes) {
-            if (! isset($attributes['value'])) {
-                $attributes['value'] = 'on';
-            }
             $this->SimpleWidget('input', $attributes);
+            if ($this->getAttribute('value') === false) {
+                $this->_setAttribute('value', 'on');
+            }
         }
         
         /**
@@ -990,7 +1015,7 @@
          *    @access public
          */
         function addWidget($tag) {
-            if ($tag->getAttribute("type") == "submit") {
+            if (strtolower($tag->getAttribute("type")) == "submit") {
                 $this->_buttons[$tag->getName()] = &$tag;
             } else {
                 if ($tag->getName()) {
@@ -1006,9 +1031,9 @@
          *    @access private
          */
         function _setWidget($tag) {
-            if ($tag->getAttribute("type") == "radio") {
+            if (strtolower($tag->getAttribute("type")) == "radio") {
                 $this->_addRadioButton($tag);
-            } elseif ($tag->getAttribute("type") == "checkbox") {
+            } elseif (strtolower($tag->getAttribute("type")) == "checkbox") {
                 $this->_addCheckbox($tag);
             } else {
                 $this->_widgets[$tag->getName()] = &$tag;

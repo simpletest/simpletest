@@ -281,7 +281,7 @@
          *    @access public
          */
         function setField($name, $value) {
-            $this->_page->setField($name, $value);
+            return $this->_page->setField($name, $value);
         }
         
         /**

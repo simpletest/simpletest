@@ -295,14 +295,14 @@
             $group->addWidget(new SimpleCheckboxTag(
                     array('value' => 'A', 'checked' => '')));
             $group->addWidget(new SimpleCheckboxTag(
-                    array('value' => 'B', 'checked' => '')));
+                    array('Value' => 'B', 'Checked' => '')));
             $this->assertIdentical($group->getDefault(), array('A', 'B'));
             $this->assertIdentical($group->getValue(), array('A', 'B'));
         }
         function testSettingSingleValue() {
             $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
-            $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));
+            $group->addWidget(new SimpleCheckboxTag(array('Value' => 'B')));
             $this->assertTrue($group->setValue('A'));
             $this->assertIdentical($group->getValue(), 'A');
             $this->assertTrue($group->setValue('B'));
@@ -311,7 +311,7 @@
         function testSettingMultipleValues() {
             $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
-            $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));
+            $group->addWidget(new SimpleCheckboxTag(array('Value' => 'B')));
             $this->assertTrue($group->setValue(array('A', 'B')));
             $this->assertIdentical($group->getValue(), array('A', 'B'));
         }
@@ -329,7 +329,7 @@
             $this->UnitTestCase();
         }
         function testFormAttributes() {
-            $tag = &new SimpleFormTag(array("method" => "GET", "action" => "here.php", "id" => "33"));
+            $tag = &new SimpleFormTag(array("Method" => "GET", "action" => "here.php", "id" => "33"));
             $form = &new SimpleForm($tag);
             $this->assertEqual($form->getMethod(), "get");
             $this->assertEqual($form->getAction(), "here.php");
@@ -340,7 +340,7 @@
         function testTextWidget() {
             $form = &new SimpleForm(new SimpleFormTag(array()));
             $form->addWidget(new SimpleTextTag(
-                    array("name" => "me", "type" => "text", "value" => "Myself")));
+                    array("Name" => "me", "Type" => "text", "Value" => "Myself")));
             $this->assertIdentical($form->getValue("me"), "Myself");
             $this->assertTrue($form->setField("me", "Not me"));
             $this->assertFalse($form->setField("not_present", "Not me"));
@@ -365,7 +365,7 @@
             $form = &new SimpleForm(new SimpleFormTag(array()));
             $this->assertIdentical($form->submitButtonByLabel("Go!"), false);
             $form->addWidget(new SimpleSubmitTag(
-                    array("type" => "submit", "name" => "go", "value" => "Go!")));
+                    array("type" => "Submit", "name" => "go", "value" => "Go!")));
             $this->assertEqual(
                     $form->submitButtonByLabel("Go!"),
                     array("go" => "Go!"));            
