@@ -137,8 +137,8 @@
         function useProxy($proxy, $username = false, $password = false) {
             $registry = &SimpleTestOptions::_getRegistry();
             $registry['DefaultProxy'] = $proxy;
-            $registry['DefaultProxyUsername'] = $proxy;
-            $registry['DefaultProxyPassword'] = $proxy;
+            $registry['DefaultProxyUsername'] = $username;
+            $registry['DefaultProxyPassword'] = $password;
         }
         
         /**

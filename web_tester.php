@@ -170,6 +170,19 @@
         }
         
         /**
+         *    Sets proxy to use on all requests for when
+         *    testing from behind a firewall. Set URL
+         *    to false to disable.
+         *    @param string $proxy        Proxy URL.
+         *    @param string $username     Proxy username for authentication.
+         *    @param string $password     Proxy password for autentication.
+         *    @access public
+         */
+        function useProxy($proxy, $username = false, $password = false) {
+            $this->_browser->useProxy($proxy, $username, $password);
+        }
+        
+        /**
          *    Fetches a page into the page buffer. If
          *    there is no base for the URL then the
          *    current base URL is used. After the fetch

@@ -723,9 +723,9 @@
          */
         function &createConnection($method, $timeout) {
             $socket = &$this->_createSocket(
-                    $this->_proxy->getScheme() ? $this->_url->getScheme() : 'http',
+                    $this->_proxy->getScheme() ? $this->_proxy->getScheme() : 'http',
                     $this->_proxy->getHost(),
-                    $this->_proxy->getPort() ? $this->_url->getPort() : 8080,
+                    $this->_proxy->getPort() ? $this->_proxy->getPort() : 8080,
                     $timeout);
             if (! $socket->isError()) {
                 $socket->write($this->_getRequestLine($method) . "\r\n");
