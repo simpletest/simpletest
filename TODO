@@ -17,6 +17,7 @@ Mock objects
 Add parameter expectation (2/2) - done.
 Improve failure messages (1).
 Allow expectation classes to be given as expectations (1).
+Remove pass by reference dependency in the tests (2).
 
 Html parser
 -----------
