@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (Beta5) of 40 hours.
+This is immediate stuff only for this iteration (RC1) of 40 hours.
 
 $Id$
 
@@ -14,31 +14,37 @@ Mock objects
 
 Html parser
 -----------
-Make link clicking more tolerant with space normalisation (2/1) - done.
+Add framset tag (2).
+Add frame tag (1).
+Simplify builder callbacks (1).
+Add image submit parsing (3).
+Add image map parsing (2).
+Make multivalue widgets PHP compatible (2).
+Add simple button tag parsing (1).
 
 Browser
 -------
-Add HTTP basic authentication challenge/response (5/15) - done.
-Redirects should become GET if they were POST (1/1) - done.
-Fix bug when remote port not port 80 (2/2) - done.
-Add timeouts to page fetches (2/2) - done.
-Add forward and back button simulation (4/3) - done.
-Retry on redirected page does not resubmit (1/1) - done.
-Retry submits POST data (1/6) - done.
-Add undocumented secure socket (1/1) - done.
+Add frame loading support (4).
+Add frame focus and defocus (3).
+Make widget handling reflect frame focus (2).
+Add setFieldById() method (1).
+Add assertFieldById() method (1).
+Allow image links/buttons to be head fetched to set cookies (2).
+Allow stylesheet loading to affect cookies (2).
 
 Web tester
 ----------
-Make redirect test independent of LastCraft (1/0) - done.
-Add assertLink() method (1/2) - done.
-Add showHeaders() for debugging (1/1) - done.
-Add getTransportError() for debugging (0/0) - done.
-Chain getCurrentUrl() into WebTestCase (1/0) - done.
+Chain frames support from browser (1).
 
 Documentation
 -------------
+Add cookie and authentication documentation (3).
+Add frames documentation (3).
+Add detached browser documentation (4).
+Add shell tester documentation (2).
+Formalise extensions (1).
+Add forward and back behaviour to docs (2).
 
 Build
 -----
-Make the test suite run under PHP5 without anything too bad happening (2/3) - done.
-Add compatibility for PHP5 instanceof operator (2/2) - done.
+Formalise tarball build (2).
