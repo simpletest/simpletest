@@ -298,8 +298,8 @@
          *    fail. If no value is given then only the existence
          *    of the field is checked.
          *    @param string $name       Name of field in forms.
-         *    @param mixed $expected    Expected string value or false
-         *                              for unset fields.
+         *    @param mixed $expected    Expected string/aray value or
+         *                              false for unset fields.
          *    @access public
          */
         function assertField($name, $expected = true) {
