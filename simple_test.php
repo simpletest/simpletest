@@ -360,7 +360,7 @@
             $this->_enableErrorReporting();
             require($file);
             $error = isset($php_errormsg) ? $php_errormsg : false;
-            $this->_disableErorReporting();
+            $this->_disableErrorReporting();
             $self_inflicted = array(
                     'Assigning the return value of new by reference is deprecated',
                     'var: Deprecated. Please use the public/private/protected modifiers');
@@ -390,7 +390,7 @@
          *    from unattended scripts.
          *    @access private
          */
-        function _disableErorReporting() {
+        function _disableErrorReporting() {
             ini_set('track_errors', $this->_old_track_errors);
             if ($this->_xdebug_is_enabled) {
                 xdebug_enable();
