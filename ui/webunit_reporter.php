@@ -163,20 +163,6 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
             echo "\n</body>\n</html>\n";
         }
         
-        /**
-         *    Paints a PHP error or exception.
-         *    @param string $message        Message is ignored.
-         *    @access public
-         *    @abstract
-         */
-        function paintException($message) {
-            parent::paintException($message);
-            print "<span class=\"fail\">Exception</span>: ";
-            $breadcrumb = $this->getTestList();
-            array_shift($breadcrumb);
-            print implode("-&gt;", $breadcrumb);
-            print "-&gt;<strong>" . htmlentities($message) . "</strong><br />";
-        }
         
         /**
          *    Paints formatted text such as dumped variables.
@@ -252,6 +238,21 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
              echo "add_fail('$msg');\n";
          }
 
+        /**
+         *    Paints a PHP error or exception.
+         *    @param string $message        Message is ignored.
+         *    @access public
+         *    @abstract
+         */
+        function paintException($message) {
+            parent::paintException($message);
+            $msg = "<span class=\"fail\">Exception</span>: ";
+            $breadcrumb = $this->getTestList();
+            array_shift($breadcrumb);
+            $msg .= implode("-&gt;", $breadcrumb);
+            $msg .= "-&gt;<strong>" . htmlentities($message) . "</strong><br />";
+            echo "add_fail('$msg');\n";
+        }
  
         /**
 		 * Returns the script passed in wrapped in script tags.
