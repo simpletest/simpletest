@@ -134,7 +134,7 @@
     }
     
     $test = &new TestOfLogging();
-    $test->run(new HtmlReporter());</strong>
+    $test->run(new HtmlReporter());
 ?>
 ]]></php>
         </p>
