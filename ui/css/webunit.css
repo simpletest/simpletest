@@ -1,14 +1,24 @@
-.fail { color: red; } 
-pre { background-color: lightgray; }
-#wait {
-	position: absolute;
-	visibility: hidden;
+html {
 	font-face: Verdana, Arial, Helvetica, sans-serif;
 	font-weight: bold;
 	color: black;
+	}	
+
+.fail { color: red; } 
+pre { background-color: lightgray; }
+#wait {
 	background: #B7B8DD;
+	position: absolute;
+	visibility: hidden;
 	text-align: center;
 	border-color: blue;
+	border-style: solid;
+	border-weight: 2;
+	}
+#webunit {
+	position: absolute;
+	background: silver;
+	border-color: black;
 	border-style: solid;
 	border-weight: 2;
 	}

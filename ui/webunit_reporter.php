@@ -51,13 +51,14 @@ wait_start();
 		<div id="fail"></div>
 		<div id="tree"></div>
 		<span id="failtab" class="activetab">&nbsp;&nbsp;<a href="javascript:activate_tab('fail');">Fail</a>&nbsp;&nbsp;</span>
-		<span id="treetab" class="activetab">&nbsp;&nbsp;<a href="javascript:activate_tab('tree');">Tree</a>&nbsp;&nbsp;</span>
+		<span id="treetab" class="inactivetab">&nbsp;&nbsp;<a href="javascript:activate_tab('tree');">Tree</a>&nbsp;&nbsp;</span>
 	</div>
 	<div id="msg">
 	</div>
 </div>
 <!-- open a new script to capture js vars as the tests run -->
 <script type="text/javascript">
+layout();
 
 EOS
 );

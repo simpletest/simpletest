@@ -12,6 +12,8 @@
 // Variables:
 wu_min_x=500;
 wu_min_y=400;
+wu_fail_content="";
+wu_tree_content="";
 
 // Functions:
 function wait_start() {
@@ -25,12 +27,21 @@ function wait_start() {
 }
 
 function layout() {
+/*	var new_x;
+	var new_y;
+	
+	new_x = max(xClientWidth()-6,wu_min_x);
+	new_y */
+	xResizeTo('webunit', max(xClientWidth()-20,wu_min_x), max(xClientHeight()-20,wu_min_y));
+	xMoveTo('webunit', 5, 5);
 }
 
 function set_div_content(div, content) {
-	var ele;
-	ele = xGetElementById(div);
-	ele.innerHTML = content;
+	xGetElementById(div).innerHTML = content;
+}
+
+function copy_div_content(divsrc, divtrgt) {
+	xGetElementById(divtrgt).innerHTML = xGetElementById(divsrc).innerHTML;
 }
 
 function activate_tab(tab) {
@@ -49,3 +60,10 @@ function make_output(data) {
 function make_fail_msg(id, msg) {
 }
 
+function max(n1, n2) {
+  if (n1 > n2) {
+  	return n1;
+  } else {
+  	return n2;
+  }
+}
