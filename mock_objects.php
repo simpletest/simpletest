@@ -571,9 +571,8 @@
         function expectArguments($method, $args) {
             $this->_dieOnNoMethod($method, "set expected arguments");
             $args = $this->_replaceWildcards($args);
-            $this->_expected_args[strtolower($method)] = new ParametersExpectation(
-                    $args,
-                    $this->_getWildcard());
+            $this->_expected_args[strtolower($method)] =
+                    new ParametersExpectation($args);
         }
         
         /**
@@ -595,9 +594,8 @@
                 $this->_sequence_args[$timing] = array();
             }
             $method = strtolower($method);
-            $this->_sequence_args[$timing][$method] = new ParametersExpectation(
-                    $args,
-                    $this->_getWildcard());
+            $this->_sequence_args[$timing][$method] =
+                    new ParametersExpectation($args);
         }
         
         /**
