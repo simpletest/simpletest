@@ -227,11 +227,7 @@
          *    @protected
          */
         function &fetchResponse($method, $url, $parameters) {
-            $request = &$this->createRequest($method, $url, $parameters);
-            $cookies = $this->_cookie_jar->getValidCookies($url->getHost(), $url->getPath());
-            foreach ($cookies as $cookie) {
-                $request->setCookie($cookie);
-            }
+            $request = &$this->_createCookieRequest($method, $url, $parameters);
             $response = &$request->fetch();
             if ($response->isError()) {
                 $this->_response = false;
@@ -300,18 +296,35 @@
         }
         
         /**
+         *    Creates a page request with the browser cookies
+         *    added.
+         *    @param $method       Fetching method.
+         *    @param $url          Target to fetch as url object.
+         *    @param $parameters   POST/GET parameters.
+         *    @return              New request object.
+         *    @private
+         */
+        function &_createCookieRequest($method, $url, $parameters = false) {
+            if (!$parameters) {
+                $parameters = array();
+            }
+            $request = &$this->_createRequest($method, $url, $parameters);
+            $cookies = $this->_cookie_jar->getValidCookies($url->getHost(), $url->getPath());
+            foreach ($cookies as $cookie) {
+                $request->setCookie($cookie);
+            }
+            return $request;
+        }
+        
+        /**
          *    Builds the appropriate HTTP request object.
          *    @param $method       Fetching method.
          *    @param $url          Target to fetch as url object.
          *    @param $parameters   POST/GET parameters.
          *    @return              New request object.
-         *    @public
-         *    @static
+         *    @protected
          */
-        function &createRequest($method, $url, $parameters = false) {
-            if (!$parameters) {
-                $parameters = array();
-            }
+        function &_createRequest($method, $url, $parameters) {
             if ($method == 'POST') {
                 $request = &new SimpleHttpPushRequest(
                         $url,
