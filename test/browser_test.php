@@ -10,6 +10,7 @@
     Mock::generate('SimpleHttpResponse');
     Mock::generate('SimpleHttpHeaders');
     Mock::generate('SimplePage');
+    Mock::generate('SimpleForm');
     Mock::generate('SimpleUserAgent');
     Mock::generatePartial(
             'SimpleBrowser',
@@ -172,6 +173,31 @@
             $browser = &$this->createBrowser($agent, $page);
             $browser->get('http://this.com/page.html');
             $this->assertFalse($browser->clickLink(0));
+        }
+        function testSubmitFormByLabel() {
+            $agent = &new MockSimpleUserAgent($this);
+            $agent->setReturnReference('fetchResponse', $this->getSuccessfulFetch());
+            $agent->expectArgumentsAt(
+                    1,
+                    'fetchResponse',
+                    array('POST', 'handler.html', array('a' => 'A')));
+            $agent->expectCallCount('fetchResponse', 2);
+            
+            $form = &new MockSimpleForm($this);
+            $form->setReturnValue('getAction', 'handler.html');
+            $form->setReturnValue('getMethod', 'post');
+            $form->setReturnvalue('submitButtonByLabel', array('a' => 'A'));
+            
+            $page = &new MockSimplePage($this);
+            $page->setReturnReference('getFormBySubmitLabel', $form);
+            $page->expectOnce('getFormBySubmitLabel', array('Go'));
+            
+            $browser = &$this->createBrowser($agent, $page);
+            $browser->get('http://this.com/page.html');
+            $this->assertTrue($browser->clickSubmit('Go'));
+            
+            $agent->tally();
+            $page->tally();
         }
     }
 ?>

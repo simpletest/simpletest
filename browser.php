@@ -263,7 +263,7 @@
          *    form will be submitted by this.
          *    @param string $label    Button label. An unlabeled
          *                            button can be triggered by 'Submit'.
-         *    @return boolean         true on success.
+         *    @return boolean         True on success.
          *    @access public
          */
         function clickSubmit($label = "Submit") {
@@ -282,7 +282,7 @@
          *    Submits a form by the ID.
          *    @param string $label    Button label. An unlabeled
          *                            button can be triggered by 'Submit'.
-         *    @return boolean         true on success.
+         *    @return boolean         True on success.
          *    @access public
          */
         function submitFormById($id) {
