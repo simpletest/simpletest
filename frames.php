@@ -122,6 +122,9 @@
          *    @access public
          */
         function getTransportError() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getTransportError();
+            }
             return $this->_frameset->getTransportError();
         }
         
@@ -131,6 +134,9 @@
          *    @access public
          */
         function getMimeType() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getMimeType();
+            }
             return $this->_frameset->getMimeType();
         }
         
@@ -140,6 +146,9 @@
          *    @access public
          */
         function getResponseCode() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getResponseCode();
+            }
             return $this->_frameset->getResponseCode();
         }
         
@@ -150,6 +159,9 @@
          *    @access public
          */
         function getAuthentication() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getAuthentication();
+            }
             return $this->_frameset->getAuthentication();
         }
         
@@ -160,6 +172,9 @@
          *    @access public
          */
         function getRealm() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getRealm();
+            }
             return $this->_frameset->getRealm();
         }
         
@@ -169,6 +184,9 @@
          *    @access public
          */
         function getContent() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getRaw();
+            }
             return $this->_frameset->getRaw();
         }
         
@@ -178,6 +196,9 @@
          *    @access public
          */
         function getHeaders() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getHeaders();
+            }
             return $this->_frameset->getHeaders();
         }
         

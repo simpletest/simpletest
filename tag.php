@@ -979,15 +979,24 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleFramesetTag extends SimpleTag {
+    class SimpleFrameTag extends SimpleTag {
         
         /**
          *    Starts with a named tag with attributes only.
          *    @param hash $attributes    Attribute names and
          *                               string values.
          */
-        function SimpleFramesetTag($attributes) {
-            $this->SimpleTag('frameset', $attributes);
+        function SimpleFrameTag($attributes) {
+            $this->SimpleTag('frame', $attributes);
+        }
+        
+        /**
+         *    Tag contains no content.
+         *    @return boolean        False.
+         *    @access public
+         */
+        function expectEndTag() {
+            return false;
         }
     }
     

@@ -110,5 +110,25 @@
             $frameset->clearFocus();
             $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
         }
+        function TestHeadersReadFromFrameIfInFocus() {
+            $frame = &new MockSimplePage($this);
+            $frame->setReturnValue('getHeaders', 'Header: content');
+            $frame->setReturnValue('getMimeType', 'text/xml');
+            $frame->setReturnValue('getResponseCode', 401);
+            $frame->setReturnValue('getTransportError', 'Could not parse headers');
+            $frame->setReturnValue('getAuthentication', 'Basic');
+            $frame->setReturnValue('getRealm', 'Safe place');
+            
+            $frameset = &new SimpleFrameset(new MockSimplePage($this));
+            $frameset->addFrame($frame);
+            $frameset->setFocusByIndex(1);
+            
+            $this->assertIdentical($frameset->getHeaders(), 'Header: content');
+            $this->assertIdentical($frameset->getMimeType(), 'text/xml');
+            $this->assertIdentical($frameset->getResponseCode(), 401);
+            $this->assertIdentical($frameset->getTransportError(), 'Could not parse headers');
+            $this->assertIdentical($frameset->getAuthentication(), 'Basic');
+            $this->assertIdentical($frameset->getRealm(), 'Safe place');
+        }
     }
 ?>

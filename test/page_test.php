@@ -324,12 +324,42 @@
         function testFramesetAbsence() {
             $page = &new SimplePage(new MockSimpleHttpResponse($this));
             $this->assertFalse($page->hasFrames());
+            $this->assertIdentical($page->getFrames(), false);
         }
-        function testHasFrameset() {
+        function testHasEmptyFrameset() {
             $page = &new SimplePage(new MockSimpleHttpResponse($this));
-            $page->acceptFramesetStart(new SimpleFramesetTag(array()));
+            $page->acceptFramesetStart(new SimpleTag('frameset', array()));
             $page->acceptFramesetEnd();
             $this->assertTrue($page->hasFrames());
+            $this->assertIdentical($page->getFrames(), array());
+        }
+        function testFramesInPage() {
+            $page = &new SimplePage(new MockSimpleHttpResponse($this));
+            $page->acceptFrame(new SimpleFrameTag(array('src' => '1.html')));
+            $page->acceptFramesetStart(new SimpleTag('frameset', array()));
+            $page->acceptFrame(new SimpleFrameTag(array('src' => '2.html')));
+            $page->acceptFrame(new SimpleFrameTag(array('src' => '3.html')));
+            $page->acceptFramesetEnd();
+            $page->acceptFrame(new SimpleFrameTag(array('src' => '4.html')));
+            
+            $this->assertTrue($page->hasFrames());
+            $this->assertIdentical(
+                    $page->getFrames(),
+                    array(0 => '2.html', 1 => '3.html'));
+        }
+        function testNamedFramesInPage() {
+            $page = &new SimplePage(new MockSimpleHttpResponse($this));
+            $page->acceptFramesetStart(new SimpleTag('frameset', array()));
+            $page->acceptFrame(new SimpleFrameTag(array('src' => '1.html')));
+            $page->acceptFrame(new SimpleFrameTag(array('src' => '2.html', 'name' => 'A')));
+            $page->acceptFrame(new SimpleFrameTag(array('src' => '3.html', 'name' => 'B')));
+            $page->acceptFrame(new SimpleFrameTag(array('src' => '4.html')));
+            $page->acceptFramesetEnd();
+            
+            $this->assertTrue($page->hasFrames());
+            $this->assertIdentical(
+                    $page->getFrames(),
+                    array(0 => '1.html', 'A' => '2.html', 'B' => '3.html', 3 => '4.html'));
         }
     }
     

@@ -28,7 +28,7 @@ Add simple button tag parsing (1).
 Browser
 -------
 Add frame loading support (9/2).
-Add frame focus and defocus (3).
+Add frame focus and defocus (2/3).
 Make widget handling reflect frame focus (2).
 Add setFieldById() method (1).
 Add assertFieldById() method (1).

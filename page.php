@@ -319,6 +319,15 @@
         }
         
         /**
+         *    Accessor frames. No frameset in an empty page.
+         *    @return boolean        False.
+         *    @access public
+         */
+        function getFrames() {
+            return false;
+        }
+        
+        /**
          *    Accessor for a list of all fixed links.
          *    @return array   List of urls with scheme of
          *                    http or https and hostname.
@@ -402,6 +411,7 @@
         var $_open_forms;
         var $_complete_forms;
         var $_frameset;
+        var $_frames;
         var $_frameset_is_complete;
         var $_transport_error;
         var $_raw;
@@ -415,13 +425,14 @@
         function SimplePage($response) {
             $this->_links = array();
             $this->_title = false;
-            $this->_transport_error = $response->getError();
-            $this->_raw = $response->getContent();
-            $this->_headers = $response->getHeaders();
             $this->_open_forms = array();
             $this->_complete_forms = array();
             $this->_frameset = false;
+            $this->_frames = array();
             $this->_frameset_is_complete = false;
+            $this->_transport_error = $response->getError();
+            $this->_raw = $response->getContent();
+            $this->_headers = $response->getHeaders();
         }
         
         /**
@@ -552,7 +563,33 @@
          *    @access public
          */
         function acceptFramesetEnd() {
-            $this->_frameset_is_complete = true;
+            if ($this->_isLoadingFrames()) {
+                $this->_frameset_is_complete = true;
+            }
+        }
+        
+        /**
+         *    Takes a single frame tag and stashes it in
+         *    the current frame set.
+         *    @access public
+         */
+        function acceptFrame(&$tag) {
+            if ($this->_isLoadingFrames()) {
+                $this->_frames[] = &$tag;
+            }
+        }
+        
+        /**
+         *    Test to see if in the middle of reading
+         *    a frameset.
+         *    @return boolean        True if inframeset.
+         *    @access private
+         */
+        function _isLoadingFrames() {
+            if (! $this->_frameset) {
+                return false;
+            }
+            return ! $this->_frameset_is_complete;
         }
         
         /**
@@ -582,6 +619,26 @@
          */
         function hasFrames() {
             return $this->_frameset_is_complete;
+        }
+        
+        /**
+         *    Accessor for frame name and source URL.
+         *    @return boolean/array     False if no frameset or
+         *                              otherwise a hash of frame URLs.
+         *                              The key is either a numerical
+         *                              index or the name attribute.
+         *    @access public
+         */
+        function getFrames() {
+            if (! $this->_frameset_is_complete) {
+                return false;
+            }
+            $urls = array();
+            for ($i = 0; $i < count($this->_frames); $i++) {
+                $name = $this->_frames[$i]->getAttribute('name');
+                $urls[$name ? $name : $i] = $this->_frames[$i]->getAttribute('src');
+            }
+            return $urls;
         }
         
         /**
