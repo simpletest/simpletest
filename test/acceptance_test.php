@@ -131,6 +131,27 @@
         }
     }
     
+    class TestOfLiveFrontControllerPage extends WebTestCase {
+        function TestOfLiveFrontControllerPage() {
+            $this->WebTestCase();
+        }
+        function setUp() {
+            $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
+        }
+        function testJumpToNamedPage() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/');
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->clickLink('Index');
+            $this->assertWantedPattern('/action=index/');
+        }
+        function testJumpToUnnamedPage() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/');
+            $this->clickLink('No page');
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->assertWantedPattern('/action=no_page/');
+        }
+    }
+    
     class TestOfLiveRedirects extends WebTestCase {
         function TestOfLiveRedirects() {
             $this->WebTestCase();

@@ -8,6 +8,7 @@ Unit tester
 -----------
 Show line number of failed assertion (3/2) - done.
 Remove SIMPLE_TEST constant (1/1) - done.
+Add a notA assertion and expectation (1).
 
 Reporter
 --------
@@ -33,8 +34,8 @@ Browser
 -------
 Add frame loading support (6/9) - done.
 Add frame focus and defocus (2/4) - done.
-Allow nested frameset tags (3).
-Allow nested frames (4).
+Allow nested frameset tags (3/1) - done.
+Allow nested framed pages (4).
 Add named frame reloads (2).
 Add frame loads from links (2).
 Make widget handling reflect frame focus (2).

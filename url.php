@@ -130,9 +130,9 @@
         function _chompPath(&$url) {
             if (preg_match('/(.*?)(\?|#|$)(.*)/', $url, $matches)) {
                 $url = $matches[2] . $matches[3];
-                return ($matches[1] ? $matches[1] : '/');
+                return ($matches[1] ? $matches[1] : '');
             }
-            return '/';
+            return '';
         }
         
         /**
@@ -211,7 +211,7 @@
          */
         function getTld() {
             $path_parts = pathinfo($this->getHost());
-            return (isset($path_parts["extension"]) ? $path_parts["extension"] : false);
+            return (isset($path_parts['extension']) ? $path_parts['extension'] : false);
         }
         
         /**
@@ -225,10 +225,13 @@
                 
        /**
          *    Accessor for path.
-         *    @return string    Full path including leading slash.
+         *    @return string    Full path including leading slash if implied.
          *    @access public
          */
         function getPath() {
+            if (! $this->_path && $this->_host) {
+                return '/';
+            }
             return $this->_path;
         }
         

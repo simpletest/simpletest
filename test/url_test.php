@@ -14,7 +14,7 @@
             $this->assertEqual($url->getHost(), '');
             $this->assertEqual($url->getScheme('http'), 'http');
             $this->assertEqual($url->getHost('localhost'), 'localhost');
-            $this->assertEqual($url->getPath(), '/');
+            $this->assertEqual($url->getPath(), '');
         }
         function testBasicParsing() {
             $url = new SimpleUrl('https://www.lastcraft.com/test/');
@@ -30,7 +30,7 @@
         }
         function testParseParameter() {
             $url = new SimpleUrl('?a=A');
-            $this->assertEqual($url->getPath(), '/');
+            $this->assertEqual($url->getPath(), '');
             $this->assertEqual($url->getRequest(), array('a' => 'A'));
         }
         function testParseMultipleParameters() {
@@ -92,6 +92,14 @@
             $this->assertEqual($absolute->getScheme(), "https");
             $this->assertEqual($absolute->getHost(), "host.com");
             $this->assertEqual($absolute->getPath(), "/I/am/there/somewhere.php");
+        }
+        function testMakingAnEmptyUrlAbsolute() {
+            $url = new SimpleUrl('');
+            $this->assertEqual($url->getPath(), '');
+            $absolute = $url->makeAbsolute('http://host.com/I/am/here/');
+            $this->assertEqual($absolute->getScheme(), 'http');
+            $this->assertEqual($absolute->getHost(), 'host.com');
+            $this->assertEqual($absolute->getPath(), '/I/am/here/');
         }
         function testMakingAbsoluteAppendedPath() {
             $url = new SimpleUrl("./there/somewhere.php");
