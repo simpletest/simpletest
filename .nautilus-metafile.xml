@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<directory>
+  <file name="simple_test.php" icon_position="282,62">
+    <keyword name="certified"/>
+  </file>
+  <file name="simple_web_test.php" icon_position="325,36"/>
+  <file name="observer.php" icon_position="406,59">
+    <keyword name="certified"/>
+  </file>
+  <file name="simple_unit.php" icon_position="437,139">
+    <keyword name="certified"/>
+  </file>
+  <file name="test" window_geometry="485x275+121+639"/>
+  <file name="simple.dia" icon_position="212,138"/>
+  <file name="simple_html_test.php">
+    <keyword name="certified"/>
+  </file>
+  <file name="simple_mock.php">
+    <keyword name="certified"/>
+  </file>
+  <file name="docs" window_geometry="489x342+7+554"/>
+</directory>

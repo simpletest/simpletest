@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<directory>
+  <file name="simple_test_test.php" icon_position="207,56">
+    <keyword name="OK"/>
+  </file>
+  <file name="display_test.php">
+    <keyword name="OK"/>
+  </file>
+  <file name="observer_test.php">
+    <keyword name="OK"/>
+  </file>
+  <file name="simple_unit_test.php">
+    <keyword name="OK"/>
+  </file>
+  <file name="simple_mock_test.php">
+    <keyword name="OK"/>
+  </file>
+  <file name="support" window_geometry="489x200+7+554"/>
+</directory>
