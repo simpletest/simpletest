@@ -10,8 +10,9 @@
 	 *	path for simpletest files
 	 */
     if (!defined('SIMPLE_TEST')) {
-        define("SIMPLE_TEST", "simpletest/");
+        define('SIMPLE_TEST', 'simpletest/');
     }
+    
     /**#@+
      * include SimpleTest files
      */

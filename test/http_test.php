@@ -289,12 +289,25 @@
             $socket->expectArgumentsAt(2, "write", array("Connection: close\r\n"));
             $socket->expectArgumentsAt(3, "write", array("\r\n"));
             $socket->expectCallCount("write", 4);
+            
             $request = &new PartialSimpleHttpRequest($this);
             $request->setReturnReference('_createSocket', $socket);
-            $request->expectArguments('_createSocket', array('a.valid.host'));
+            $request->expectArguments('_createSocket', array('a.valid.host', 80));
             $request->SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path"));
+            
             $this->assertIsA($request->fetch(), "SimpleHttpResponse");
             $socket->tally();
+        }
+        function testConnectionToAlternatePort() {
+            $socket = &new MockSimpleSocket($this);
+            $socket->setReturnValue("isError", false);
+            
+            $request = &new PartialSimpleHttpRequest($this);
+            $request->setReturnReference('_createSocket', $socket);
+            $request->expectArguments('_createSocket', array('a.valid.host', 81));
+            $request->SimpleHttpRequest(new SimpleUrl("http://a.valid.host:81/and/path"));
+            
+            $this->assertIsA($request->fetch(), "SimpleHttpResponse");
         }
         function testWritingGetRequest() {
             $socket = &new MockSimpleSocket($this);

@@ -71,14 +71,15 @@
         
         /**
          *    Opens a socket for reading and writing.
-         *    @param string $url        URL to open.
+         *    @param string $host   Hostname to send request to.
+         *    @param inetger $port  Port on remote machine to open.
          *    @access public
          */
-        function SimpleSocket($url, $port = 80) {
+        function SimpleSocket($host, $port) {
             $this->StickyError();
             $this->_is_open = false;
-            if (!($this->_handle = @fsockopen($url, $port, $errorNumber, $error, 15))) {
-                $this->_setError("Cannot open [$url] with [$error]");
+            if (! ($this->_handle = @fsockopen($host, $port, $errorNumber, $error, 15))) {
+                $this->_setError("Cannot open [$host:$port] with [$error]");
             } else {
                 $this->_is_open = true;
             }

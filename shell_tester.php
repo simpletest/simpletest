@@ -9,8 +9,8 @@
     /**
      * @ignore    originally defined in simple_test.php
      */
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "simpletest/");
+    if (!defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', 'simpletest/');
     }
     require_once(SIMPLE_TEST . 'simple_test.php');
     

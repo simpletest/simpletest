@@ -584,7 +584,7 @@
          *    @param string $method   HTTP request method, usually GET.
          *    @access public
          */
-        function SimpleHttpRequest($url, $method = "GET") {
+        function SimpleHttpRequest($url, $method = 'GET') {
             $this->_url = $url;
             $this->_method = $method;
             $this->_user_headers = array();
@@ -598,7 +598,9 @@
          *    @access public
          */
         function &fetch() {
-            $socket = &$this->_createSocket($this->_url->getHost());
+            $socket = &$this->_createSocket(
+                    $this->_url->getHost(),
+                    $this->_url->getPort() ? $this->_url->getPort() : 80);
             if ($socket->isError()) {
                 return $this->_createResponse($socket);
             }
@@ -661,12 +663,13 @@
         
         /**
          *    Factory for socket. Separate method for mocking.
-         *    @param $host          Hostname as string.
-         *    @return SimpleSocket  New socket.
+         *    @param string $host     Hostname to connect to.
+         *    @param integer $port    Remote port.
+         *    @return SimpleSocket    New socket.
          *    @access protected
          */
-        function &_createSocket($host) {
-            return new SimpleSocket($host);
+        function &_createSocket($host, $port) {
+            return new SimpleSocket($host, $port);
         }
         
         /**

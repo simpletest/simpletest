@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for the next iteration (1.0rc1) of 53(!) hours.
+This is immediate stuff only for the next iteration (1.0rc1) of 57(!) hours.
 This equates to about 6 weeks work giving a release date of second week
 of April.
 
@@ -37,6 +37,8 @@ Allow image links to be head fetched to set cookies (2).
 Allow stylesheet loading to affect cookies (2).
 Make link clicking more tolerant with normalisation (2/1) - done.
 Redirects should become GET if they were POST (1).
+Fix bug when remote port not port 80 (2/2) - done.
+Add timeouts to page fetches in options (2).
 
 Web tester
 ----------
