@@ -66,6 +66,31 @@
             $this->assertTrue($response->isError());
             $this->assertWantedPattern('/Socket error/', $response->getError());
         }
+        function testReadAll() {
+            $socket = &new MockSimpleSocket($this);
+            $socket->setReturnValue("isError", false);
+            $socket->setReturnValueSequence(0, "read", "aaa");
+            $socket->setReturnValueSequence(1, "read", "bbb");
+            $socket->setReturnValueSequence(2, "read", "ccc");
+            $socket->setReturnValueSequence(3, "read", "");
+            $this->assertEqual(SimpleHttpResponse::_readAll($socket), "aaabbbccc");
+        }
+        function testParseResponse() {
+            $socket = &new MockSimpleSocket($this);
+            $socket->setReturnValue("isError", false);
+            $socket->setReturnValueSequence(0, "read", "HTTP/1.1 200 OK\r\nDate: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+            $socket->setReturnValueSequence(1, "read", "Content-Type: text/plain\r\n");
+            $socket->setReturnValueSequence(2, "read", "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\nConne");
+            $socket->setReturnValueSequence(3, "read", "ction: close\r\n\r\nthis is a test file\n");
+            $socket->setReturnValueSequence(4, "read", "with two lines in it\n");
+            $socket->setReturnValueSequence(5, "read", "");
+            $response = &new SimpleHttpResponse($socket);
+            $this->assertFalse($response->isError());
+            $this->assertEqual(
+                    $response->getContent(),
+                    "this is a test file\nwith two lines in it\n");
+            $this->assertEqual($response->getMimeType(), "text/plain");
+        }
     }
     
     class LiveHttpTestCase extends UnitTestCase {

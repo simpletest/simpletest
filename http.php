@@ -75,20 +75,83 @@
      *    Basic HTTP response.
      */
     class SimpleHttpResponse extends StickyError {
+        var $_content;
+        var $_mime_type;
         
         /**
-         *    Constructor.
+         *    Constructor. Reads and parses the incoming
+         *    content and headers.
          *    @param $socket        Network connection to fetch
          *                          response text from.
          *    @public
          */
         function SimpleHttpResponse(&$socket) {
-            
             $this->StickyError();
-            $this->_socket = &$socket;
-            if ($this->_socket->isError()) {
-                $this->_setError($this->_socket->getError());
+            if ($socket->isError()) {
+                $this->_setError("Bad socket [" . $socket->getError() . "]");
+                return;
             }
+            $raw = $this->_readAll($socket);
+            if ($socket->isError()) {
+                $this->_setError("Error reading socket [" . $socket->getError() . "]");
+                return;
+            }
+            if (!strstr($raw, "\r\n\r\n")) {
+                $this->_setError("Could not parse headers");
+                return;
+            }
+            list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);
+            foreach (split("\r\n", $headers) as $header_line) {
+                $this->_parseHeaderLine($header_line);
+            }
+        }
+        
+        /**
+         *    Accessor for the content after the last
+         *    header line.
+         *    @return            All content as string.
+         *    @public
+         */
+        function getContent() {
+            return $this->_content;
+        }
+        
+        /**
+         *    Accessor for MIME type header information.
+         *    @return            MIME type as string.
+         *    @public
+         */
+        function getMimeType() {
+            return $this->_mime_type;            
+        }
+        
+        /**
+         *    Called on each header line. Subclasses should
+         *    add behaviour to this method for their
+         *    particular header types.
+         *    @param $header_line        One line of header.
+         *    @protected
+         */
+        function _parseHeaderLine($header_line) {
+            if (preg_match('/Content-type: (.*)/i', $header_line, $matches)) {
+                $this->_mime_type = $matches[1];
+            }
+        }
+        
+        /**
+         *    Reads the whole of the socket into a single
+         *    string.
+         *    @param $socket        Unread socket.
+         *    @return               String if successful else
+         *                          false.
+         *    @private
+         */
+        function _readAll(&$socket) {
+            $all = "";
+            while ($next = $socket->read()) {
+                $all .= $next;
+            }
+            return $all;
         }
     }
 ?>
