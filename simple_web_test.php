@@ -76,7 +76,7 @@
          *    Sets up a browser for the start of the
          *    test method.
          *    @param $method        Name of test method.
-         *    @private
+         *    @protected
          */
         function _testMethodStart($method) {
             parent::_testMethodStart($method);
@@ -96,6 +96,19 @@
         function fetch($url) {
             $this->_current_content = $this->_current_browser->fetchContent($url);
             $this->_clearHtmlCache();
+        }
+        
+        /**
+         *    Sets a cookie in the current browser.
+         *    @param $name          Name of cookie.
+         *    @param $value         Cookie value as string.
+         *    @param $host          Host upon which the cookie is valid.
+         *    @param $path          Cookie path if not host wide.
+         *    @param $expiry        Expiry date as string.
+         *    @public
+         */
+        function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
+            $this->_current_browser->setCookie($name, $value, $host, $path, $expiry);
         }
         
         /**
@@ -179,6 +192,28 @@
                     new UnwantedPatternAssertion($pattern),
                     $this->_current_content,
                     $message);
+        }
+        
+        /**
+         *    Checks that a cookie is set for the current page
+         *    and optionally checks the value.
+         *    @param $name        Name of cookie to test.
+         *    @param $expect      Expected value as a string or
+         *                        false if any value will do.
+         *    @param $message     Message to display.
+         *    @public
+         */
+        function assertCookie($name, $expect = false, $message = "%s") {
+            $value = $this->_current_browser->getBaseCookieValue($name);
+            if ($expect) {
+                $this->assertTrue($value === $expect, sprintf(
+                        $message,
+                        "Expecting cookie [$name] value [$expect], got [$value]"));
+            } else {
+                $this->assertTrue(
+                        $value,
+                        sprintf($message, "Expecting cookie [$name]"));
+            }
         }
     }
 ?>

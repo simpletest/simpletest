@@ -359,7 +359,7 @@
          *                    here.
          */
         function isValidHost($host) {
-            return $this->_truncateHost($host) === $this->getHost();
+            return ($this->_truncateHost($host) === $this->getHost());
         }
         
         /**
@@ -416,10 +416,10 @@
          *    @public
          */
         function isValidPath($path) {
-            if (substr($path, -1) != '/') {
-                $path .= '/';
-            }
-            return (strncmp($path, $this->getPath(), strlen($this->getPath())) == 0);
+            return (strncmp(
+                    $this->_fixPath($path),
+                    $this->getPath(),
+                    strlen($this->getPath())) == 0);
         }
         
         /**
@@ -465,12 +465,19 @@
         }
         
         /**
-         *    Adds a trailing slash to the path if missing.
+         *    Adds a trailing and leading slash to the path
+         *    if missing.
          *    @param $path            Path to fix.
          *    @private
          */
         function _fixPath($path) {
-            return (substr($path, -1) == '/' ? $path : $path . '/');
+            if (substr($path, 0, 1) != '/') {
+                $path = '/' . $path;
+            }
+            if (substr($path, -1, 1) != '/') {
+                $path .= '/';
+            }
+            return $path;
         }
     }
 

@@ -170,7 +170,7 @@
             $browser = &new SimpleBrowser();
             $browser->setCookie("a", "A");
             $browser->fetchResponse("http://this.host/this/path/page.html", &$request);
-            $this->assertEqual($browser->getCookieValues("this.host", "this/path/", "a"), array("AAAA"));
+            $this->assertEqual($browser->getCookieValue("this.host", "this/path/", "a"), "AAAA");
         }
         function testClearCookie() {
             $request = &$this->_createCookieSite(array(new SimpleCookie(
@@ -184,12 +184,21 @@
                     $browser->fetchContent("http://this.host/this/path/page.html", &$request),
                     "stuff");
             $this->assertIdentical(
-                    $browser->getCookieValues("this.host", "this/path/", "a"),
-                    array(""));
+                    $browser->getCookieValue("this.host", "this/path/", "a"),
+                    "");
             $browser->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
             $this->assertIdentical(
-                    $browser->getCookieValues("this.host", "this/path/", "a"),
-                    array());
+                    $browser->getCookieValue("this.host", "this/path/", "a"),
+                    false);
+        }
+        function testReadingCookies() {
+            $browser = &new SimpleBrowser();
+            $this->assertIdentical($browser->getBaseCookieValue("a"), false);
+            $browser->setCookie("b", "BBB", "this.host", "this/path/");
+            $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAA", "this/path/")));
+            $browser->fetchResponse("http://this.host/this/path/page.html", &$request);
+            $this->assertEqual($browser->getBaseCookieValue("a"), "AAA");
+            $this->assertEqual($browser->getBaseCookieValue("b"), "BBB");
         }
     }
     
@@ -341,7 +350,7 @@
             $browser->expectCookie("a", "A");
             $browser->fetchContent("http://this.host/this/path/page.html", &$request);
             $test->tally();
-            $this->assertIdentical($browser->getCookieValues("this.host", "this/page/", "a"), array());
+            $this->assertIdentical($browser->getCookieValue("this.host", "this/page/", "a"), false);
         }
         function testNewCookie() {
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "A", "this/path/")));
@@ -352,9 +361,9 @@
             $browser->expectCookie("a", "A");
             $browser->fetchContent("http://this-host.com/this/path/page.html", &$request);
             $test->tally();
-            $this->assertEqual($browser->getCookieValues("this-host.com", "this/path/", "a"), array("A"));
-            $this->assertIdentical($browser->getCookieValues("this-host.com", "this/", "a"), array());
-            $this->assertIdentical($browser->getCookieValues("another.com", "this/path/", "a"), array());
+            $this->assertEqual($browser->getCookieValue("this-host.com", "this/path/", "a"), "A");
+            $this->assertIdentical($browser->getCookieValue("this-host.com", "this/", "a"), false);
+            $this->assertIdentical($browser->getCookieValue("another.com", "this/path/", "a"), false);
         }
     }
 ?>

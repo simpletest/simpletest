@@ -28,7 +28,8 @@
          *    the browser was closed and re-opened.
          *    @param $date        Time when session restarted.
          *                        If ommitted then all persistent
-         *                        cookies are kept.
+         *                        cookies are kept. Time is either
+         *                        Cookie format string or timestamp.
          *    @public
          */
         function restartSession($date = false) {
@@ -166,22 +167,40 @@
         }
         
         /**
-         *    Reads a cookie value from the browser cookies.
+         *    Reads the most specific cookie value from the
+         *    browser cookies.
          *    @param $host        Host to search.
          *    @param $path        Applicable path.
          *    @param $name        Name of cookie to read.
-         *    @return             Null if not present, else the
+         *    @return             False if not present, else the
          *                        value as a string.
          *    @public
          */
-        function getCookieValues($host, $path, $name) {
-            $values = array();
+        function getCookieValue($host, $path, $name) {
+            $longest_path = "";
             foreach ($this->_cookie_jar->getValidCookies($host, $path) as $cookie) {
                 if ($name == $cookie->getName()) {
-                    $values[] = $cookie->getValue();
+                    if (strlen($cookie->getPath()) > strlen($longest_path)) {
+                        $value = $cookie->getValue();
+                        $longest_path = $cookie->getPath();
+                    }
                 }
             }
-            return $values;
+            return (isset($value) ? $value : false);
+        }
+        
+        /**
+         *    Reads the current cookies for the base URL
+         *    or false if there is no base URL.
+         *    @param $name        Key of cookie to find.
+         *    @public
+         */
+        function getBaseCookieValue($name) {
+            if (!$this->_base_url) {
+                return false;
+            }
+            $url = new SimpleUrl($this->_base_url);
+            return $this->getCookieValue($url->getHost(), $url->getPath(), $name);
         }
         
         /**
@@ -196,7 +215,8 @@
             if (!is_object($request)) {
                 $request = new SimpleHttpRequest($url);
             }
-            foreach ($this->_cookie_jar->getValidCookies() as $cookie) {
+            $cookies = $this->_cookie_jar->getValidCookies($url->getHost(), $url->getPath());
+            foreach ($cookies as $cookie) {
                 $request->setCookie($cookie);
             }
             $response = &$request->fetch();

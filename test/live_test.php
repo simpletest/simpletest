@@ -49,8 +49,8 @@
         }
     }
     
-    class TestOfLiveFetch extends WebTestCase {
-        function TestOfLiveFetch() {
+    class TestOfLiveFetching extends WebTestCase {
+        function TestOfLiveFetching() {
             $this->WebTestCase();
         }
         function testFetch() {
@@ -77,6 +77,21 @@
             $this->fetch('http://www.lastcraft.com/test/link_confirm.php');
             $this->assertTrue($this->clickLinkId(1));
             $this->assertWantedPattern('/target for the SimpleTest/');
+        }
+    }
+    
+    class TestOfLiveCookies extends WebTestCase {
+        function TestOfLiveCookies() {
+            $this->WebTestCase();
+        }
+        function testCookieSetting() {
+            $this->setCookie("a", "Test cookie a", "www.lastcraft.com");
+            $this->setCookie("b", "Test cookie b", "www.lastcraft.com", "test");
+            $this->fetch('http://www.lastcraft.com/test/network_confirm.php');
+            $this->assertWantedPattern('/Test cookie a/');
+            $this->assertWantedPattern('/Test cookie b/');
+            $this->assertCookie("a");
+            $this->assertCookie("b", "Test cookie b");
         }
     }
 ?>
