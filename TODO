@@ -8,6 +8,7 @@ $Id$
 Unit tester
 -----------
 Move dump() method to use the dumper class (1/1) - done.
+Add error level filtering to error handler (1).
 
 Interface
 ---------
@@ -17,7 +18,6 @@ Mock objects
 
 Html parser
 -----------
-Parsing of image submits (2).
 Parsing of radio buttons (3/4) - done.
 Support multiple selections (3/4) - done.
 Support multiple checkboxes (2/3) - done.
@@ -26,15 +26,13 @@ Refactoring link parsing (2/1) - done.
 
 Browser
 -------
-Frames support (8/6).
 Need repeated parameters in query strings (0/3) - done.
 Duplicate value submissions should be PHP compatible (1).
+Make browser a separate component of the framework (8/4).
 
 Web tester
 ----------
 Add assertField() method (1/1) - done.
-Add assertFieldById() method (1).
-Add setFieldById() method (1).
 
 Documentation
 -------------
@@ -43,5 +41,4 @@ Add package headers to structure files (1/1) - done.
 
 Build
 -----
-Move makefile over to shell script (2).
 Add version number to options (1/1) - done.

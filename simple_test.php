@@ -239,12 +239,15 @@
         /**
          *    Called from within the test methods to register
          *    passes and failures.
-         *    @param boolean $result    True on pass.
+         *    @param boolean $result    Pass on true.
          *    @param string $message    Message to display describing
          *                              the test state.
          *    @access public
          */
-        function assertTrue($result, $message = "True expectation failed.") {
+        function assertTrue($result, $message = '%s') {
+            $message = sprintf(
+                    $message,
+                    'True asserion got ' . ($result ? 'True' : 'False'))
             if ($result) {
                 $this->pass($message);
             } else {
@@ -257,12 +260,15 @@
          *    is the PHP definition of false, so that null,
          *    empty strings, zero and an empty array all count
          *    as false.
-         *    @param boolean $boolean     Supposedly false value.
-         *    @param string $message      Message to display.
+         *    @param boolean $result    Pass on false.
+         *    @param string $message    Message to display.
          *    @access public
          */
-        function assertFalse($boolean, $message = "False expectation") {
-            $this->assertTrue(! $boolean, $message);
+        function assertFalse($result, $message = '%s') {
+            $message = sprintf(
+                    $message,
+                    'False asserion got ' . ($result ? 'True' : 'False'))
+            $this->assertTrue(! $result, $message);
         }
         
         /**
