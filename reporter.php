@@ -4,20 +4,20 @@
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "./");
     }
-    require_once(SIMPLE_TEST . 'simple_test.php');
+    require_once(SIMPLE_TEST . 'runner.php');
     
     /**
      *    Sample minimal test displayer. Generates only
      *    failure messages and a pass count.
      */
-    class TestHtmlDisplay extends TestDisplay {
+    class HtmlReporter extends TestDisplay {
         
         /**
          *    Does nothing yet. The first output will
          *    be sent on the first test start.
          *    @public
          */
-        function TestHtmlDisplay() {
+        function HtmlReporter() {
             $this->TestDisplay();
         }
         
@@ -105,6 +105,15 @@
          */
         function paintFormattedMessage($message) {
             print "<pre>$message</pre>";
+        }
+    }
+    
+    /**
+     *    @deprecated
+     */
+    class TestHtmlDisplay extends HtmlReporter {
+        function TestHtmlDisplay() {
+            $this->HtmlReporter();
         }
     }
 ?>

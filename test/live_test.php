@@ -4,10 +4,10 @@
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "../");
     }
-    require_once(SIMPLE_TEST . 'simple_unit.php');
+    require_once(SIMPLE_TEST . 'unit_tester.php');
     require_once(SIMPLE_TEST . 'socket.php');
     require_once(SIMPLE_TEST . 'http.php');
-    require_once(SIMPLE_TEST . 'simple_web_test.php');
+    require_once(SIMPLE_TEST . 'web_tester.php');
 
     class LiveHttpTestCase extends UnitTestCase {
         function LiveHttpTestCase() {

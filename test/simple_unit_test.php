@@ -15,8 +15,8 @@
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "../");
     }
-    require_once(SIMPLE_TEST . 'simple_unit.php');
-    require_once(SIMPLE_TEST . 'simple_html_test.php');
+    require_once(SIMPLE_TEST . 'unit_tester.php');
+    require_once(SIMPLE_TEST . 'reporter.php');
     
     class TestOfUnitTestCase extends UnitTestCase {
         function TestOfUnitTestCase() {
@@ -113,13 +113,13 @@
         }
         function testOfSignal() {
             $fred = "fred";
-            $this->signal("Ouch", $fred);
+            $this->signal("Ouch", $fred);        // Signal.
         }
     }
     
-    class AllOutputReporter extends TestHtmlDisplay {
+    class AllOutputReporter extends HtmlReporter {
         function AllOutputReporter() {
-            $this->TestHtmlDisplay();
+            $this->HtmlReporter();
         }
         function paintSignal($type, &$payload) {
             print "<span class=\"fail\">$type</span>: ";

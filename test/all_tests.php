@@ -6,9 +6,9 @@
     }
     define("TEST_RUNNING", true);
     
-    require_once(SIMPLE_TEST . 'simple_unit.php');
-    require_once(SIMPLE_TEST . 'simple_html_test.php');
-    require_once(SIMPLE_TEST . 'simple_mock.php');
+    require_once(SIMPLE_TEST . 'unit_tester.php');
+    require_once(SIMPLE_TEST . 'reporter.php');
+    require_once(SIMPLE_TEST . 'mock_objects.php');
     require_once('unit_tests.php');
     require_once('boundary_tests.php');
         
@@ -21,5 +21,5 @@
     }
 
     $test = &new AllTests();
-    $test->run(new TestHtmlDisplay());
+    $test->run(new HtmlReporter());
 ?>

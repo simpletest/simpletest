@@ -4,10 +4,10 @@
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "../");
     }
-    require_once(SIMPLE_TEST . 'simple_unit.php');
-    require_once(SIMPLE_TEST . 'simple_web_test.php');
-    require_once(SIMPLE_TEST . 'simple_html_test.php');
-    require_once(SIMPLE_TEST . 'simple_mock.php');
+    require_once(SIMPLE_TEST . 'unit_tester.php');
+    require_once(SIMPLE_TEST . 'web_tester.php');
+    require_once(SIMPLE_TEST . 'reporter.php');
+    require_once(SIMPLE_TEST . 'mock_objects.php');
     
     class BoundaryTests extends GroupTest {
         function BoundaryTests() {

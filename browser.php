@@ -5,7 +5,7 @@
         define("SIMPLE_TEST", "./");
     }
     require_once(SIMPLE_TEST . 'http.php');
-    require_once(SIMPLE_TEST . 'simple_unit.php');
+    require_once(SIMPLE_TEST . 'unit_tester.php');
     
     define('DEFAULT_MAX_REDIRECTS', 3);
     

@@ -6,8 +6,8 @@
     }
     require_once(SIMPLE_TEST . 'unit_tester.php');
     require_once(SIMPLE_TEST . 'web_tester.php');
-    require_once(SIMPLE_TEST . 'simple_html_test.php');
-    require_once(SIMPLE_TEST . 'simple_mock.php');
+    require_once(SIMPLE_TEST . 'reporter.php');
+    require_once(SIMPLE_TEST . 'mock_objects.php');
     require_once(SIMPLE_TEST . 'adapters/pear_test_case.php');
     require_once(SIMPLE_TEST . 'adapters/phpunit_test_case.php');
     
@@ -34,6 +34,6 @@
     if (!defined("TEST_RUNNING")) {
         define("TEST_RUNNING", true);
         $test = &new UnitTests();
-        $test->run(new TestHtmlDisplay());
+        $test->run(new HtmlReporter());
     }
 ?>
