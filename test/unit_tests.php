@@ -12,12 +12,13 @@
         function UnitTests() {
             $this->GroupTest("Unit tests");
             $this->addTestFile("simple_mock_test.php");
-            $this->addTestFile("web_test_test.php");
+            $this->addTestFile("assertion_test.php");
             $this->addTestFile("socket_test.php");
             $this->addTestFile("http_test.php");
             $this->addTestFile("browser_test.php");
             $this->addTestFile("parser_test.php");
             $this->addTestFile("page_test.php");
+            $this->addTestFile("web_test_test.php");
         }
     }
     

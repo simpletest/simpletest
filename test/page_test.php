@@ -169,6 +169,7 @@
             $this->assertIdentical(
                     $page->getRelativeLinks(),
                     array("./there.html"));
+            $this->assertIdentical($page->getUrls("There"), array("./there.html"));
         }
     }
 ?>
