@@ -28,7 +28,6 @@ Parser
 Should tolerate missing form tag (2/2) - done.
 Fix Savant compatibility (3/8) - done.
 Form should pass form encoding rather than hash (2/1) - done.
-Performance check on text only parsing (3).
 
 Browser
 -------
@@ -52,7 +51,7 @@ Fix getLabel() crashing bug (2/0) - done.
 Documentation
 -------------
 Add authentication documentation (3/3) - done.
-Add browser scripting documentation (2).
+Add browser scripting documentation (2/2).
 Tidy up sundry doc. files (2/1) - done.
 Fix reported typos (1).
 Document the character encoding fix (1/1) - done.

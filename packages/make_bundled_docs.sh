@@ -11,3 +11,4 @@ Xalan -o ../docs/en/expectation_documentation.html ../docs/source/en/expectation
 Xalan -o ../docs/en/web_tester_documentation.html ../docs/source/en/web_tester_documentation.xml bundled_docs.xslt
 Xalan -o ../docs/en/form_testing_documentation.html ../docs/source/en/form_testing_documentation.xml bundled_docs.xslt
 Xalan -o ../docs/en/authentication_documentation.html ../docs/source/en/authentication_documentation.xml bundled_docs.xslt
+Xalan -o ../docs/en/browser_documentation.html ../docs/source/en/browser_documentation.xml bundled_docs.xslt

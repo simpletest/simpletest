@@ -684,7 +684,7 @@
         
         /**
          *    Turns HTML into text browser visible text. Images
-         *    are converted to thier alt text and tags are supressed.
+         *    are converted to their alt text and tags are supressed.
          *    Entities are converted to their visible representation.
          *    @param string $html        HTML to convert.
          *    @return string             Plain text.

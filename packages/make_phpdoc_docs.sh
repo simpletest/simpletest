@@ -11,3 +11,4 @@ Xalan -o ../docs/pkg/Expectations.pkg ../docs/source/en/expectation_documentatio
 Xalan -o ../docs/pkg/WebTester.pkg ../docs/source/en/web_tester_documentation.xml phpdoc_docs.xslt
 Xalan -o ../docs/pkg/FormTesting.pkg ../docs/source/en/form_testing_documentation.xml phpdoc_docs.xslt
 Xalan -o ../docs/pkg/Authentication.pkg ../docs/source/en/authentication_documentation.xml phpdoc_docs.xslt
+Xalan -o ../docs/pkg/Browser.pkg ../docs/source/en/browser_documentation.xml phpdoc_docs.xslt

@@ -58,7 +58,7 @@
         }
         
         /**
-         *    Tests for valid field comparisons.
+         *    Tests for valid field comparisons with a single option.
          *    @param mixed $value       Value to type check.
          *    @return boolean           True if integer, string or float.
          *    @access private
@@ -68,7 +68,7 @@
         }
         
         /**
-         *    String comparison for simple field.
+         *    String comparison for simple field with a single option.
          *    @param mixed $compare    String to test against.
          *    @returns boolean         True if matching.
          *    @access private

@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<page title="Browser documentation" here="Browser">
+    <long_title>SimpleTest documentation for the scriptable web browser component</long_title>
+    <content>
+        <introduction>
+            <p>
+                SimpleTest's web browser component can be used not just
+                outside of the <code>WebTestCase</code> class, but also
+                independently of the SimpleTest framework itself.
+            </p>
+        </introduction>
+        <section name="scripting" title="The Scriptable Browser">
+            <p>
+                You can use the web browser in PHP scripts to confirm
+                services are up and running, or to extract information
+                from them at a regular basis.
+                For example, here is a small script to extract the current number of
+                open PHP 5 bugs from the <a href="http://www.php.net/">PHP web site</a>...
+<php><![CDATA[
+<?php
+    require_once('simpletest/browser.php');
+    
+    $browser = &new SimpleBrowser();
+    $browser->get('http://php.net/');
+    $browser->clickLink('reporting bugs');
+    $browser->clickLink('statistics');
+    $browser->clickLink('PHP 5 bugs only');
+    $page = $browser->getContent();
+    preg_match('/status=Open.*?by=Any.*?(\d+)<\/a>/', $page, $matches);
+    print $matches[1];
+?>
+]]></php>
+                There are simpler methods to do this particular example in PHP
+                of course.
+                For example you can just use the PHP <code>file()</code>
+                command against what here is a pretty fixed page.
+                However, using the web browser for scripts allows authentication,
+                correct handling of cookies, automatic loading of frames, redirects,
+                form submission and the ability to examine the page headers.
+                Such methods are fragile against a site that is constantly
+                evolving and you would want a more direct way of accessing
+                data in a permanent set up, but for simple tasks this can provide
+                a very rapid solution.
+            </p>
+            <p>
+                All of the navigation methods used in the <code>WebTestCase</code>
+                are present in the <code>SimpleBrowser</code> class, but
+                the assertions are replaced with simpler accessors.
+                Here is a full list of the navigation methods...
+            </p>
+        </section>
+        <section name="unit" title="Using the browser in unit tests">
+            <p>
+                
+            </p>
+        </section>
+        <section name="multiple" title="Complex tests with multiple browsers">
+            <p>
+                
+            </p>
+        </section>
+    </content>
+    <internal>
+        <link>
+            Using the bundled <a href="#scripting">web browser in scripts</a>
+        </link>
+        <link>
+            Using the <a href="#unit">browser in unit tests</a>
+        </link>
+        <link>
+            Complex <a href="#multiple">tests with multiple web browsers</a>
+        </link>
+    </internal>
+    <external>
+        <link>
+            SimpleTest project page on <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
+        </link>
+        <link>
+            SimpleTest download page on <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
+        </link>
+        <link>
+            The <a href="http://simpletest.sourceforge.net/">developer&apos;s API for SimpleTest</a>
+            gives full detail on the classes and assertions available.
+        </link>
+    </external>
+    <meta>
+        <keywords>
+            software development,
+            php programming for clients,
+            customer focused php,
+            software development tools,
+            acceptance testing framework,
+            free php scripts,
+            log in boxes,
+            unit testing authentication systems,
+            php resources,
+            HTMLUnit,
+            JWebUnit,
+            php testing,
+            unit test resource,
+            web testing,
+            HTTP authentication,
+            testing log in,
+            authentication testing,
+            security tests
+        </keywords>
+    </meta>
+</page>
