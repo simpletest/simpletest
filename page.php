@@ -665,7 +665,7 @@
             $matches = array();
             foreach ($this->_links as $link) {
                 if ($this->_isNormalmatch($link->getContent(), $label)) {
-                    $matches[] = new SimpleUrl($link->getHref());
+                    $matches[] = $this->_makeAbsolute($link->getHref());
                 }
             }
             return $matches;
@@ -680,10 +680,24 @@
         function getUrlById($id) {
             foreach ($this->_links as $link) {
                 if ($link->getAttribute('id') === (string)$id) {
-                    return new SimpleUrl($link->getHref());
+                    return $this->_makeAbsolute($link->getHref());
                 }
             }
             return false;
+        }
+        
+        /**
+         *    Expands expandomatic URLs into fully qualified
+         *    URLs.
+         *    @param SimpleUrl $url        Relative URL.
+         *    @return SimpleUrl            Absolute URL.
+         *    @access protected
+         */
+        function _makeAbsolute($url) {
+            if (! is_object($url)) {
+                $url = new SimpleUrl($url);
+            }
+            return $url->makeAbsolute($this->getUrl());
         }
         
         /**

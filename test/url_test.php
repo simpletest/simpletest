@@ -251,6 +251,12 @@
             $this->assertEqual($absolute->getPath(), '/here/there/somewhere.php');
         }
         
+        function testMakingAbsoluteBadlyFormedAppendedPath() {
+            $url = new SimpleUrl('there/somewhere.php');
+            $absolute = $url->makeAbsolute('https://host.com/here/');
+            $this->assertEqual($absolute->getPath(), '/here/there/somewhere.php');
+        }
+        
         function testMakingAbsolutehasNoEffectWhenAlreadyAbsolute() {
             $url = new SimpleUrl('https://test:secret@www.lastcraft.com/stuff/?a=1#f');
             $absolute = $url->makeAbsolute('http://host.com/here/');
