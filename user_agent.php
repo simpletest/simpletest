@@ -361,13 +361,14 @@
         
         /**
          *    Sets the identity for the current realm.
+         *    @param string $host        Host to which realm applies.
          *    @param string $realm       Full name of realm.
          *    @param string $username    Username for realm.
          *    @param string $password    Password for realm.
          *    @access public
          */
-        function setIdentity($realm, $username, $password) {
-            $this->_authenticator->setIdentityForRealm($realm, $username, $password);
+        function setIdentity($host, $realm, $username, $password) {
+            $this->_authenticator->setIdentityForRealm($host, $realm, $username, $password);
         }
         
         /**

@@ -26,13 +26,6 @@
             $this->assertTrue($realm->isWithin(
                     new SimpleUrl('http://www.here.com/path/hello.html')));
         }
-        function testOutsideOfDifferentHost() {
-            $realm = &new SimpleRealm(
-                    'Basic',
-                    new SimpleUrl('http://www.here.com/path/'));
-            $this->assertFalse($realm->isWithin(
-                    new SimpleUrl('http://here.com/path/hello.html')));
-        }
         function testBelowRootIsOutside() {
             $realm = &new SimpleRealm(
                     'Basic',
@@ -58,11 +51,13 @@
             $realm = &new SimpleRealm(
                     'Basic',
                     new SimpleUrl('http://www.here.com/path/hello.html'));
-            $realm->mergeUrl(new SimpleUrl('http://www.here.com/path/goodbye.html'));
+            $realm->stretch(new SimpleUrl('http://www.here.com/path/goodbye.html'));
             $this->assertTrue($realm->isWithin(
                     new SimpleUrl('http://www.here.com/path/index.html')));
             $this->assertFalse($realm->isWithin(
                     new SimpleUrl('http://www.here.com/index.html')));
+        }
+        function testNewUrlMakesRealmTheCommonPath() {
         }
     }
 
@@ -83,7 +78,7 @@
                     new SimpleUrl('http://www.here.com/path/hello.html'),
                     'Basic',
                     'Sanctuary');
-            $authenticator->setIdentityForRealm('Sanctuary', 'test', 'secret');
+            $authenticator->setIdentityForRealm('www.here.com', 'Sanctuary', 'test', 'secret');
             return $authenticator;
         }
         function testOutsideRealm() {

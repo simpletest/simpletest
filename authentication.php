@@ -45,7 +45,7 @@
          *    @param SimpleUrl $url    Somewhere in realm.
          *    @access public
          */
-        function mergeUrl($url) {
+        function stretch($url) {
         }
         
         /**
@@ -97,7 +97,7 @@
          *    @access private
          */
         function _getSignificant($url) {
-            return $url->getHost() . $url->getBasePath();
+            return $url->getBasePath();
         }
     }
     
@@ -134,32 +134,37 @@
          *    @access public
          */
         function addRealm($url, $type, $realm) {
-            $this->_realms[$realm] = new SimpleRealm($type, $url);
+            $this->_realms[$url->getHost()][$realm] = new SimpleRealm($type, $url);
         }
         
         /**
          *    Sets the current identity to be presented
          *    against that realm.
+         *    @param string $host        Server hosting realm.
          *    @param string $realm       Name of realm.
          *    @param string $username    Username for realm.
          *    @param string $password    Password for realm.
          *    @access public
          */
-        function setIdentityForRealm($realm, $username, $password) {
-            if (isset($this->_realms[$realm])) {
-                $this->_realms[$realm]->setIdentity($username, $password);
+        function setIdentityForRealm($host, $realm, $username, $password) {
+            if (isset($this->_realms[$host][$realm])) {
+                $this->_realms[$host][$realm]->setIdentity($username, $password);
             }
         }
         
         /**
          *    Finds the name of the realm by comparing URLs.
          *    @param SimpleUrl $url        URL to test.
+         *    @return SimpleRealm          Name of realm.
          *    @access private
          */
         function _findRealmFromUrl($url) {
-            foreach ($this->_realms as $name => $realm) {
+            if (! isset($this->_realms[$url->getHost()])) {
+                return false;
+            }
+            foreach ($this->_realms[$url->getHost()] as $name => $realm) {
                 if ($realm->isWithin($url)) {
-                    return $name;
+                    return $realm;
                 }
             }
             return false;
@@ -176,8 +181,8 @@
                 $username = $url->getUsername();
                 $password = $url->getPassword();
             } elseif ($realm = $this->_findRealmFromUrl($url)) {
-                $username = $this->_realms[$realm]->getUsername();
-                $password = $this->_realms[$realm]->getPassword();
+                $username = $realm->getUsername();
+                $password = $realm->getPassword();
             } else {
                 return;
             }

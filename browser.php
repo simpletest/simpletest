@@ -438,13 +438,15 @@
          *    @access public
          */
         function authenticate($username, $password) {
-            if (! $this->_headers) {
+            if (! $this->_history->getUrl()) {
                 return false;
             }
-            if (! $this->_headers->getRealm()) {
+            if (! $this->_headers || ! $this->_headers->getRealm()) {
                 return false;
             }
+            $url = new SimpleUrl($this->_history->getUrl());
             $this->_user_agent->setIdentity(
+                    $url->getHost(),
                     $this->_headers->getRealm(),
                     $username,
                     $password);
