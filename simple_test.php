@@ -9,11 +9,11 @@
     /**#@+
      * include SimpleTest files
      */
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'errors.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'options.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'runner.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'expectation.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'dumper.php');
+    require_once(dirname(__FILE__) . '/errors.php');
+    require_once(dirname(__FILE__) . '/options.php');
+    require_once(dirname(__FILE__) . '/runner.php');
+    require_once(dirname(__FILE__) . '/expectation.php');
+    require_once(dirname(__FILE__) . '/dumper.php');
     /**#@-*/
     
     /**
@@ -302,12 +302,7 @@
             if ($stack === false) {
                 $stack = SimpleTestCompatibility::getStackTrace();
             }
-            foreach ($stack as $frame) {
-                if (strncmp($frame['function'], 'assert', 6) == 0) {
-                    return sprintf($format, $frame['line']);
-                }
-            }
-            return '';
+            return SimpleDumper::getFormattedAssertionLine($stack, $format);
         }
         
         /**

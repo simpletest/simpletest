@@ -315,6 +315,7 @@
          *    @param mixed $variable    Variable to display.
          *    @return string            Output from print_r().
          *    @access public
+         *    @static
          */
         function dump($variable) {
             ob_start();
@@ -322,6 +323,26 @@
             $formatted = ob_get_contents();
             ob_end_clean();
             return $formatted;
+        }
+        
+        /**
+         *    Extracts the last assertion that was not within
+         *    Simpletest itself.
+         *    @param array $stack      List of stack frames.
+         *    @param string $format    String formatting.
+         *    @access public
+         *    @static
+         */
+        function getFormattedAssertionLine($stack, $format = '%d') {
+            foreach ($stack as $frame) {
+                if (substr(@dirname($frame['file']), -10) == 'simpletest') {
+                    continue;
+                }
+                if (strncmp($frame['function'], 'assert', 6) == 0) {
+                    return sprintf($format, $frame['line']);
+                }
+            }
+            return '';
         }
     }
 ?>
