@@ -1,7 +1,7 @@
 <?php
     // $Id$
     
-    if (!defined('SIMPLE_TEST')) {
+    if (! defined('SIMPLE_TEST')) {
         define('SIMPLE_TEST', '../');
     }
     require_once(SIMPLE_TEST . 'user_agent.php');
@@ -309,8 +309,7 @@
         function testSendingExistingCookie() {
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $this->_createStandardResponse());
-            $request->expectArguments("setCookie", array(new SimpleCookie("a", "A")));
-            $request->expectCallCount("setCookie", 1);
+            $request->expectOnce("setCookie", array(new SimpleCookie("a", "A")));
             
             $agent = &$this->_createPartialFetcher($request);
             $agent->setCookie("a", "A");
