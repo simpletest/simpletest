@@ -8,6 +8,7 @@
     Mock::generate('SimpleSaxParser');
     Mock::generate('SimplePage');
     Mock::generate('SimpleHttpResponse');
+    Mock::generate('SimpleHttpHeaders');
     Mock::generate('SimplePageBuilder');
     
     class TestOfPageBuilder extends UnitTestCase {
@@ -141,8 +142,8 @@
             $parser = &new MockSimpleSaxParser($this);
 
             $builder = &new MockSimplePageBuilder($this);
-            $builder->expectArguments("parse", array("stuff", "*"));
-            $builder->expectCallCount("parse", 1);
+            $builder->expectArguments('parse', array('stuff', '*'));
+            $builder->expectCallCount('parse', 1);
             
             $page = &new TestVersionOfSimplePage($response, $parser, $builder);
             $builder->tally();
@@ -159,6 +160,16 @@
 
             $page = &new SimplePage($response);
             $this->assertEqual($page->getRaw(), 'Raw HTML');
+        }
+        function testHeadersAccessor() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue('getRaw', 'My: Headers');
+            
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getHeaders', $headers);
+
+            $page = &new SimplePage($response);
+            $this->assertEqual($page->getHeaders(), 'My: Headers');
         }
         function testNoLinks() {
             $page = &new SimplePage(new MockSimpleHttpResponse($this));

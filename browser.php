@@ -388,7 +388,7 @@
             $this->_transport_error = false;
             $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
             if ($response->isError()) {
-                $this->_page = &new SimplePage($response);
+                $this->_page = &$this->_parse($response);
                 $this->_transport_error = $response->getError();
                 return false;
             }

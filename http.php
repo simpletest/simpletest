@@ -908,9 +908,9 @@
          */
         function SimpleHttpHeaders($headers) {
             $this->_raw_headers = $headers;
-            $this->_response_code = 0;
-            $this->_http_version = 0;
-            $this->_mime_type = "";
+            $this->_response_code = false;
+            $this->_http_version = false;
+            $this->_mime_type = '';
             $this->_location = false;
             $this->_cookies = array();
             $this->_authentication = false;
@@ -1089,11 +1089,12 @@
                 return;
             }
             if (! strstr($raw, "\r\n\r\n")) {
-                $this->_setError("Could not parse headers");
-                return;
+                $this->_setError('Could not parse headers');
+                $this->_headers = &new SimpleHttpHeaders('');
+            } else {
+                list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);
+                $this->_headers = &new SimpleHttpHeaders($headers);
             }
-            list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);
-            $this->_headers = &new SimpleHttpHeaders($headers);
         }
         
         /**

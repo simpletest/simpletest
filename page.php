@@ -217,6 +217,7 @@
         var $_frameset;
         var $_frameset_is_complete;
         var $_raw;
+        var $_headers;
         
         /**
          *    Parses a page ready to access it's contents.
@@ -227,6 +228,7 @@
             $this->_links = array();
             $this->_title = false;
             $this->_raw = $response->getContent();
+            $this->_headers = $response->getHeaders();
             $this->_open_forms = array();
             $this->_complete_forms = array();
             $this->_frameset = false;
@@ -242,6 +244,15 @@
          */
         function getRaw() {
             return $this->_raw;
+        }
+        
+        /**
+         *    Accessor for raw headers of page.
+         *    @return SimpleHttpHeaders       Header object.
+         *    @access public
+         */
+        function getHeaders() {
+            return $this->_headers->getRaw();
         }
         
         /**
