@@ -169,7 +169,8 @@
         }
         
         /**
-         *    Accessor for name.
+         *    Accessor for name, normally just the class
+         *    name.
          *    @public
          */
         function getName() {

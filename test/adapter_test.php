@@ -8,12 +8,12 @@
         function TestOfPearAdapter() {
             $this->PHPUnit_TestCase();
         }
-        function testName() {
-            $this->assertTrue($this->getName() == get_class($this));
-        }
         function testBoolean() {
             $this->assertTrue(true, "PEAR true");
             $this->assertFalse(false, "PEAR false");
+        }
+        function testName() {
+            $this->assertTrue($this->getName() == get_class($this));
         }
         function testPass() {
             $this->pass("PEAR pass");
@@ -38,6 +38,24 @@
         }
         function testRegExp() {
             $this->assertRegExp('/hello/', "A big hello from me", "PEAR regex");
+        }
+    }
+    
+    class TestOfPhpUnitAdapter extends TestCase {
+        function TestOfPhpUnitAdapter() {
+            $this->TestCase("TestOfPhpUnitAdapter");
+        }
+        function testBoolean() {
+            $this->assert(true, "PHP Unit true");
+        }
+        function testName() {
+            $this->assertTrue($this->name() == "TestOfPhpUnitAdapter");
+        }
+        function testEquals() {
+            $this->assertEquals(12, 12, "PHP Unit equality");
+        }
+        function testMultilineEquals() {
+            $this->assertEquals("a\nb\n", "a\nb\n", "PHP Unit equality");
         }
     }
 ?>

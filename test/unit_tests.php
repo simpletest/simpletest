@@ -8,6 +8,7 @@
     require_once(SIMPLE_TEST . 'simple_html_test.php');
     require_once(SIMPLE_TEST . 'simple_mock.php');
     require_once(SIMPLE_TEST . 'adapters/pear_test_case.php');
+    require_once(SIMPLE_TEST . 'adapters/phpunit_test_case.php');
    
     class UnitTests extends GroupTest {
         function UnitTests() {
