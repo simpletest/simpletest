@@ -61,6 +61,7 @@ version or two.
       <file role="php" baseinstalldir="simpletest" name="dumper.php"/>
       <file role="php" baseinstalldir="simpletest" name="errors.php"/>
       <file role="php" baseinstalldir="simpletest" name="expectations.php"/>
+      <file role="php" baseinstalldir="simpletest" name="frames.php"/>
       <file role="doc" baseinstalldir="simpletest" name="HELP_MY_TESTS_DONT_WORK_ANYMORE"/>
       <file role="php" baseinstalldir="simpletest" name="http.php"/>
       <file role="doc" baseinstalldir="simpletest" name="LICENSE"/>
@@ -105,6 +106,7 @@ version or two.
       <file role="test" baseinstalldir="simpletest" name="test/dumper_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/errors_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/expectation_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/frames_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/http_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/live_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/options_test.php"/>

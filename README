@@ -8,37 +8,43 @@ the version above. You must read and accept that licence to use this
 software. The file is titled simply LICENSE.
 
 What is it? It's a framework for unit testing, web site testing and
-mock objects for PHP 4.2.3+ (not yet PHP 5).
+mock objects for PHP 4.3+ (not yet PHP 5).
 
 If you have used JUnit you will find this PHP unit testing version very
 similar. Also included is a mock objects and server stubs generator.
 The stubs can have return values set for different arguments, can have
 sequences set also by arguments and can return items by reference.
 The mocks inherit all of this functionality and can also have
-expectations set, again in sequences and for different arguments.
+expectations set, again in sequences and for different arguments. A
+web tester similar in concept to JWebUnit is also included. There is no
+JavaScript or tables support, but forms and cookies are handled.
+Frames will be suported soon.
 
-You are not tied to SimpleTest, though. The mocks and stubs will work
-with other test frameworks and SimpleTest can use other framework's
-(PHPUnit, PEAR::PhpUnit) test cases as it's own.
+You are not tied to just using SimpleTest, though. The mocks and stubs
+will work with other test frameworks and SimpleTest can use other
+framework's (PHPUnit, PEAR::PhpUnit) test cases as it's own. The
+web browser part of the web tester can also be used independently.
 
 You can see a release schedule at
 http://www.lastcraft.com/overview.php which is also copied to the
 documentation folder with this release. The user interface is minimal
 in the extreme, but a lot of information flows from the test suite.
-Before version 1.0 I will release a better web UI, but am leaving XUL
+After version 1.0 we will release a better web UI, but we are leaving XUL
 and GTk versions to volunteers as everybody has their own opinion
-on a good GUI and I don't want to discourage development by shipping
+on a good GUI and we don't want to discourage development by shipping
 one with the toolkit.
+
+If you are extending the toolkit or wish to bundle parts of the toolkit
+with your own software, you can see a full PHPDoc API on sourceforge
+as http://simpletest.sourceforge.net/api although that should soon become
+the home page.
 
 You are looking at a Beta release.
 
 The unit tester and mock object generator are tested and have already
-been used to test several systems. There are some minor message display
-bugs, but these components are otherwise stable. The web testing is
-definitely not stable and should be treated with caution. In
-particular, very few HTML widgets are recognised (input and textarea).
-Also this part has not been used much and so sugar needs to be
-sprinkled liberally on the interfaces.
+been used to test several systems. The web tester portion still lacks
+frames support, but is mostly stable. Documentaion is currently lacking,
+but should be improved for a version 1.0 release.
 
 The unit tests for SimpleTest itself can be run here...
 
@@ -51,8 +57,8 @@ simpletest/test/all_tests.php
 The full tests read some test data from the LastCraft site. If the site
 is down or has been modified for a later version then you will get
 spurious errors. A normal unit test failure on the other hand would be
-very serious. As far as I know I haven't yet managed to check in any
-test failures so please correct me if you find one.
+very serious. As far as we know we haven't yet managed to check in any
+test failures so please correct us if you find one.
 
 Even if all of the tests run please verify that your existing test suites
 also function as expected. If they don't see the file...
@@ -67,17 +73,17 @@ As an early release it doesn't have much in the way of documentation.
 You can find a tutorial on http://www.lastcraft.com/first_test_tutorial.php to
 get you started and hopefully this material will eventually become included
 with the project documentation. There is a documentation folder, but it is
-just a subset of the material on the LastCraft web site. I am working on
-a PHPDocumentor version using the code comments for a mid Beta release.
+just a subset of the material on Sourceforge.
 
 If you download and use and possibly even extend this tool, please let me
-know. Any feedback, even bad, is always welcome and I will work to get
+know. Any feedback, even bad, is always welcome and we will work to get
 your suggestions into the version one release. Ideally please send your
 comments to...
 
 simpletest-support@lists.sourceforge.net
 
-...so that others can read them too. I will try to respond within 24 hours.
+...so that others can read them too. We usually try to respond within 48
+hours.
 
 There is no change log as yet except at sourceforge. You can visit the
 trackers to see the completed TODO list after each cycle and also the
@@ -86,20 +92,18 @@ The CVS uploads always have all the tests passing and so CVS snapshots should
 be pretty usable, although the code may not look so good internally.
 
 Oh, yes. It is called "Simple" because it should be simple to
-use. I intend to add a complete set of tools for a test first
+use. We intend to add a complete set of tools for a test first
 and "test as you code" type of development. "Simple" does not
-mean "Lite" in this context; I wish I had given it a better name :(.
+mean "Lite" in this context.
 
-yours, Marcus.
+yours, Marcus Baker, Jason Sweat and Harry Feucks.
 
-Thanks to Harry Fuecks for much feedback, packaging and suggestions and also
-for a great website (http://www.phppatterns.com/). :-)
-
-Thanks to Mathieu Kooiman, Jon Ramsey, Jeff Moore, Jason Sweat, Chris Hubbard
-and others for bug reports and suggestions.
+Thanks to many many people for bug reports and suggestions. Especially
+for this release to Jeff Moore, Andreas Goetz and Culley Harrelson.
 
 Thanks to everyone else who has sent comments. If I have
-failed to credit you please let me know.
+failed to credit and you want you or your site listed here, please
+let us know.
 
 Thanks to the advanced PHP forum on SitePoint. It is the place to be right
 now.
