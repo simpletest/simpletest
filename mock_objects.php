@@ -913,17 +913,42 @@
             $test->assertTrue($assertion, $message);
         }
         
+        /**
+         *    Stashes the test case for later recovery.
+         *    @param SimpleTestCase $test    Test case.
+         *    @return string                 Key to find it again.
+         *    @access public
+         *    @static
+         */
         function registerTest(&$test) {
             $registry = &SimpleMock::_getRegistry();
             $registry[$class = get_class($test)] = &$test;
             return $class;
         }
         
-        function &injectTest($class) {
+        /**
+         *    Resolves the dependency on the test case.
+         *    @param string $class      Key to look up test case in.
+         *    @return SimpleTestCase    Test case to send results to.
+         *    @access public
+         *    @static
+         */
+        function &injectTest($key) {
             $registry = &SimpleMock::_getRegistry();
-            return $registry[$class];
+            return $registry[$key];
         }
         
+        /**
+         *    Registry for test cases. the reason for this is
+         *    to break the reference between the test cases and
+         *    the mocks. It was leading to a fatal error due to
+         *    recursive dependencies during comparisons. See
+         *    http://bugs.php.net/bug.php?id=31449 for the PHP
+         *    bug.
+         *    @return array        List of refernces.
+         *    @access private
+         *    @static
+         */
         function &_getRegistry() {
             static $registry;
             if (! isset($registry)) {
