@@ -424,7 +424,7 @@
         }
         
         /**
-         *    Sets up the matching lexer.
+         *    Sets up the matching lexer. Starts in 'text' mode.
          *    @param SimpleSaxParser $parser    Event generator, usually $self.
          *    @return SimpleLexer               Lexer suitable for this parser.
          *    @access public
@@ -434,12 +434,30 @@
             $lexer = &new SimpleLexer($parser, 'text');
             $lexer->mapHandler('text', 'acceptTextToken');
             SimpleSaxParser::_addSkipping($lexer);
-            $tags = array("a", "title", "form", "input", "textarea", "select", "option");
-            foreach ($tags as $tag) {
+            foreach (SimpleSaxParser::_getParsedTags() as $tag) {
                 SimpleSaxParser::_addTag($lexer, $tag);
             }
             SimpleSaxParser::_addInTagTokens($lexer);
             return $lexer;
+        }
+        
+        /**
+         *    List of parsed tags. Others are ignored.
+         *    @return array        List of searched for tags.
+         *    @access private
+         */
+        function _getParsedTags() {
+            return array(
+                    'a',
+                    'title',
+                    'form',
+                    'input',
+                    'textarea',
+                    'select',
+                    'option',
+                    'noframes',
+                    'frameset',
+                    'frame');
         }
         
         /**

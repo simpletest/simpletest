@@ -424,6 +424,12 @@
             $this->_handler->expectCallCount("acceptStartToken", 6);
             $this->assertTrue($this->_lexer->parse('<input type="submit" name="N" value="V" />'));
         }
+        function testFramesParsedWithoutError() {
+            $this->assertTrue($this->_lexer->parse(
+                    '<frameset><frame src="frame.html"></frameset>'));
+            $this->assertTrue($this->_lexer->parse(
+                    '<frameset><frame src="frame.html"><noframes>Hello</noframes></frameset>'));
+        }
     }
     
     class TestSimpleSaxParser extends SimpleSaxParser {
