@@ -88,7 +88,7 @@
                         array('\/', '\(', '\)'),
                         $this->_patterns[$i]) . ')';
             }
-            return ($this->_regex = "/" . implode("|", $this->_patterns) . "/msS");
+            return ($this->_regex = "/" . implode("|", $this->_patterns) . "/msiS");
         }
     }
     
@@ -460,7 +460,8 @@
          *    Accepts a token from the tag mode. If the
          *    starting element completes then the element
          *    is dispatched and the current attributes
-         *    set back to empty.
+         *    set back to empty. The element or attribute
+         *    name is converted to lower case.
          *    @param $token    Incoming characters.
          *    @param $event    Lexer event type.
          *    @return          False if parse error.
@@ -468,7 +469,7 @@
          */
         function acceptStartToken($token, $event) {
             if ($event == LEXER_ENTER) {
-                $this->_tag = substr($token, 1);
+                $this->_tag = strtolower(substr($token, 1));
                 return true;
             }
             if ($event == LEXER_EXIT) {
@@ -480,14 +481,15 @@
                 return $success;
             }
             if ($token != "=") {
-                $this->_attributes[$token] = "";
-                $this->_current_attribute = $token;
+                $this->_current_attribute = strtolower($token);
+                $this->_attributes[$this->_current_attribute] = "";
             }
             return true;
         }
         
         /**
          *    Accepts a token from the end tag mode.
+         *    The element name is converted to lower case.
          *    @param $token    Incoming characters.
          *    @param $event    Lexer event type.
          *    @return          False if parse error.
@@ -497,7 +499,7 @@
             if (!preg_match('/<\/(.*)>/', $token, $matches)) {
                 return false;
             }
-            return $this->_listener->endElement($matches[1]);
+            return $this->_listener->endElement(strtolower($matches[1]));
         }
         
         /**

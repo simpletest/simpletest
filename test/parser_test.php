@@ -363,9 +363,9 @@
         }
         function testComplexLink() {
             $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<a", LEXER_ENTER));
-            $this->_handler->expectArgumentsAt(1, "acceptStartToken", array("href", "*"));
+            $this->_handler->expectArgumentsAt(1, "acceptStartToken", array("HREF", "*"));
             $this->_handler->expectArgumentsAt(2, "acceptStartToken", array("bool", "*"));
-            $this->_handler->expectArgumentsAt(3, "acceptStartToken", array("style", "*"));
+            $this->_handler->expectArgumentsAt(3, "acceptStartToken", array("Style", "*"));
             $this->_handler->expectArgumentsAt(4, "acceptStartToken", array(">", LEXER_EXIT));
             $this->_handler->expectCallCount("acceptStartToken", 5);
             $this->_handler->expectArgumentsAt(0, "acceptAttributeToken", array("'", "*"));
@@ -377,7 +377,7 @@
             $this->_handler->expectArgumentsAt(6, "acceptAttributeToken", array("l'", "*"));
             $this->_handler->expectArgumentsAt(7, "acceptAttributeToken", array("\"", "*"));
             $this->_handler->expectCallCount("acceptAttributeToken", 8);
-            $this->assertTrue($this->_lexer->parse("<html><a href = 'here.html' bool style=\"'coo\\\"l'\">label</a></html>"));
+            $this->assertTrue($this->_lexer->parse("<HTML><a HREF = 'here.html' bool Style=\"'coo\\\"l'\">label</A></Html>"));
         }
     }
     

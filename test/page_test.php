@@ -278,5 +278,9 @@
             $page = &new SimplePage("<html><head><title>Me</title></head></html>");
             $this->assertEqual($page->getTitle(), "Me");
         }
+        function testNastyTitle() {
+            $page = &new SimplePage("<html><head><Title>Me&amp;Me</TITLE></head></html>");
+            $this->assertEqual($page->getTitle(), "Me&amp;Me");
+        }
     }
 ?>
