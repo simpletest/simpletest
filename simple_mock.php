@@ -484,8 +484,43 @@
          *    @public
          */
         function expectMinimumCallCount($method, $count) {
-            $this->_dieOnNoMethod($method, "set maximum call count");
+            $this->_dieOnNoMethod($method, "set minimum call count");
             $this->_min_counts[strtolower($method)] = $count;
+        }
+        
+        /**
+         *    Convenience method for barring a method
+         *    call.
+         *    @param $method        Method call to ban.
+         *    @public
+         */
+        function expectNever($method) {
+            $this->expectMaximumCallCount($method, 0);
+        }
+        
+        /**
+         *    Convenience method for a single method
+         *    call.
+         *    @param $method        Method call to track.
+         *    @param $args          Expected argument list or
+         *                          false for any arguments.
+         *    @public
+         */
+        function expectOnce($method, $args = false) {
+            $this->expectCallCount($method, 1);
+            if ($args !== false) {
+                $this->expectArguments($method, $args);
+            }
+        }
+        
+        /**
+         *    Convenience method for requiring a method
+         *    call.
+         *    @param $method        Method call to track.
+         *    @public
+         */
+        function expectAtLeastOnce($method) {
+            $this->expectMinimumCallCount($method, 1);
         }
         
         /**
@@ -873,6 +908,18 @@
             $code .= "    }\n";
             $code .= "    function expectMaximumCallCount(\$method, \$count) {\n";
             $code .= "        \$this->_mock->expectMaximumCallCount(\$method, \$count);\n";
+            $code .= "    }\n";
+            $code .= "    function expectMinimumCallCount(\$method, \$count) {\n";
+            $code .= "        \$this->_mock->expectMinimumCallCount(\$method, \$count);\n";
+            $code .= "    }\n";
+            $code .= "    function expectNever(\$method) {\n";
+            $code .= "        \$this->_mock->expectNever(\$method);\n";
+            $code .= "    }\n";
+            $code .= "    function expectOnce(\$method, \$args = false) {\n";
+            $code .= "        \$this->_mock->expectOnce(\$method, \$args);\n";
+            $code .= "    }\n";
+            $code .= "    function expectAtLeastOnce(\$method) {\n";
+            $code .= "        \$this->_mock->expectAtLeastOnce(\$method);\n";
             $code .= "    }\n";
             $code .= "    function tally() {\n";
             $code .= "        \$this->_mock->tally();\n";

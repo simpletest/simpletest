@@ -9,7 +9,7 @@ Unit tester
 -----------
 Swapping observer pattern for direct calls (3/5) - done.
 Add an error trap (3/6) - done.
-Add options class (3).
+Add options class (3/2) - done.
 
 Interface
 ---------
@@ -20,7 +20,7 @@ Mock objects
 ------------
 Add expectMinimumCallCount() expectation (2/1) - done.
 Add a parameter list assertion for better message display (2).
-Add some user friendly expectations (2).
+Add some user friendly expectations (2/1) - done.
 
 Html parser
 -----------

@@ -110,16 +110,16 @@
         }
         function testNoPatterns() {
             $handler = &new MockTestParser($this);
-            $handler->expectMaximumCallCount("accept", 0);
+            $handler->expectNever("accept");
             $handler->setReturnValue("accept", true);
             $lexer = &new SimpleLexer($handler);
             $this->assertFalse($lexer->parse("abcdef"));
         }
         function testEmptyPage() {
             $handler = &new MockTestParser($this);
-            $handler->expectMaximumCallCount("accept", 0);
+            $handler->expectNever("accept");
             $handler->setReturnValue("accept", true);
-            $handler->expectMaximumCallCount("accept", 0);
+            $handler->expectNever("accept");
             $handler->setReturnValue("accept", true);
             $lexer = &new SimpleLexer($handler);
             $lexer->addPattern("a+");
@@ -521,7 +521,7 @@
         }
         function testIgnore() {
             $this->_parser->parse("");
-            $this->_listener->expectCallCount("addContent", 0);
+            $this->_listener->expectNever("addContent");
             $this->assertTrue($this->_parser->ignore("stuff", LEXER_UNMATCHED));
         }
     }
