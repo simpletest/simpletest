@@ -17,7 +17,7 @@ Mock objects
 ------------
 Add parameter expectation (2/2) - done.
 Improve failure messages (1/1) - done.
-Remove pass by reference dependency in the tests (2).
+Remove pass by reference dependency in the tests (2/2) - done.
 Add no return check (2/2) - done.
 
 Html parser

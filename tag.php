@@ -131,6 +131,10 @@
                 if ($tag->getAttribute("name")) {
                     $this->_defaults[$tag->getAttribute("name")] = $tag->getAttribute("value");
                 }
+            } elseif ($tag->getName() == "textarea") {
+                if ($tag->getAttribute("name")) {
+                    $this->_defaults[$tag->getAttribute("name")] = $tag->getContent();
+                }
             }
         }
         

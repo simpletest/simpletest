@@ -27,8 +27,7 @@
         function setUp() {
             $browser = &$this->getBrowser();
             $browser->setReturnValue("get", "Hello world");
-            $browser->expectArguments("get", array("http://my-site.com/", false));
-            $browser->expectCallCount("get", 1);
+            $browser->expectOnce("get", array("http://my-site.com/", false));
         }
         function tearDown() {
             $browser = &$this->getBrowser();
@@ -46,15 +45,13 @@
         }
         function testResponseCodes() {
             $browser = &$this->getBrowser();
-            $browser->expectArguments("assertResponse", array(404, "%s"));
-            $browser->expectCallCount("assertResponse", 1);
+            $browser->expectOnce("assertResponse", array(404, "%s"));
             $this->get("http://my-site.com/");
             $this->assertResponse(404);
         }
         function testMimeTypes() {
             $browser = &$this->getBrowser();
-            $browser->expectArguments("assertMime", array("text/html", "%s"));
-            $browser->expectCallCount("assertMime", 1);
+            $browser->expectOnce("assertMime", array("text/html", "%s"));
             $this->get("http://my-site.com/");
             $this->assertMime("text/html");
         }
@@ -216,9 +213,7 @@
             $browser->setReturnValue("post", '<html><title>Done</title></html>');
             $form_code = '<html><head><form method="post" action="there.php">';
             $form_code .= implode('', $widgets);
-            $form_code .= '<input type="text" name="a" value="aaa"/>';
-            $form_code .= '<input type="text" name="b" value="bbb"/>';
-            $form_code .= '<input type="submit" name="wibble" value="wobble"/>';
+            $form_code .= '<input type="submit" name="go" value="Go!"/>';
             $form_code .= '</form></head></html>';
             $browser->setReturnValue("get", $form_code);
         }
@@ -227,18 +222,18 @@
             $browser->tally();
             $this->assertTitle('Done');
         }
-        function testDefaults() {
+        function testTextFieldDefault() {
             $widgets = array(
                     '<input type="text" name="a" value="aaa"/>',
-                    '<input type="text" name="b" value="bbb"/>');
+                    '<input type="text" name="b"/>');
             $browser = &$this->getBrowser();
             $this->prepareForm($browser, $widgets);
             $browser->expectOnce("post", array("there.php", array(
-                    "wibble" => "wobble",
+                    "go" => "Go!",
                     "a" => "aaa",
-                    "b" => "bbb")));
+                    "b" => false)));
             $this->get("http://my-site.com/");
-            $this->assertTrue($this->clickSubmit("wobble"));
+            $this->assertTrue($this->clickSubmit("Go!"));
         }
         function testSettingTextField() {
             $widgets = array(
@@ -247,12 +242,25 @@
             $browser = &$this->getBrowser();
             $this->prepareForm($browser, $widgets);
             $browser->expectOnce("post", array("there.php", array(
-                    "wibble" => "wobble",
+                    "go" => "Go!",
                     "a" => "AAA",
                     "b" => "bbb")));
             $this->get("http://my-site.com/");
             $this->setField("a", "AAA");
-            $this->assertTrue($this->clickSubmit("wobble"));
+            $this->assertTrue($this->clickSubmit("Go!"));
+        }
+        function testTextAreaDefault() {
+            $widgets = array(
+                    '<textarea name="a"></textarea>',
+                    '<textarea name="b">bbb</textarea>');
+            $browser = &$this->getBrowser();
+            $this->prepareForm($browser, $widgets);
+            $browser->expectOnce("post", array("there.php", array(
+                    "go" => "Go!",
+                    "a" => "",
+                    "b" => "bbb")));
+            $this->get("http://my-site.com/");
+            $this->assertTrue($this->clickSubmit("Go!"));
         }
     }
 ?>

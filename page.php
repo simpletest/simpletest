@@ -111,7 +111,7 @@
          *    @protected
          */
         function _getContentTags() {
-            return array("a", "title");
+            return array("a", "title", "textarea");
         }
         
         /**
@@ -188,6 +188,10 @@
             } elseif ($tag->getName() == "title") {
                 $this->_setTitle($tag->getContent());
             } elseif ($tag->getName() == "input") {
+                for ($i = 0; $i < count($this->_open_forms); $i++) {
+                    $this->_open_forms[$i]->addWidget($tag);
+                }
+            } elseif ($tag->getName() == "textarea") {
                 for ($i = 0; $i < count($this->_open_forms); $i++) {
                     $this->_open_forms[$i]->addWidget($tag);
                 }
