@@ -160,6 +160,18 @@
         function TestOfMockObjectsOutput() {
             $this->UnitTestCase();
         }
+        function testEmptyMatching() {
+            $dummy = &new MockDummy($this);
+            $dummy->expectArguments('a', array());
+            $dummy->a();
+            $dummy->a(null);        // Fail.
+        }
+        function testNullMatching() {
+            $dummy = &new MockDummy($this);
+            $dummy->expectArguments('a', array(null));
+            $dummy->a(null);
+            $dummy->a();        // Fail.
+        }
         function testBooleanMatching() {
             $dummy = &new MockDummy($this);
             $dummy->expectArguments('a', array(true, false));
@@ -226,7 +238,7 @@
         }
     }
     
-    $test = new GroupTest("Unit test case test with 32 fails, 32 passes and 4 exceptions");
+    $test = new GroupTest("Unit test case test with 34 fails, 34 passes and 4 exceptions");
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->run(new AllOutputReporter());

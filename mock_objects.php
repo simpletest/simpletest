@@ -49,9 +49,6 @@
                 if ($this->_expected[$i] === $this->_wildcard) {
                     continue;
                 }
-                if (count($parameters) <= $i) {
-                    return false;
-                }
                 if (!($this->_expected[$i] === $parameters[$i])) {
                     return false;
                 }
@@ -67,8 +64,8 @@
          *    @public
          */
         function testMessage($comparison) {
-            return "Expected arguments [" . $this->_renderArguments($this->_expected) .
-                    "] got [" . $this->_renderArguments($comparison) . "]";
+            return "Expected [" . count($this->_expected) . "] arguments of [" . $this->_renderArguments($this->_expected) .
+                    "] got [" . count($comparison) . "] arguments of [" . $this->_renderArguments($comparison) . "]";
         }
         
         /**
@@ -78,25 +75,30 @@
          *    @private
          */
         function _renderArguments($args) {
-            $arg_strings = array();
+            $description = "";
             foreach ($args as $arg) {
-                if (is_bool($arg)) {
-                    $arg_strings[] = "Boolean: " . ($arg ? "true" : "false");
+                if ($arg === null) {
+                    $description .= "NULL, ";
+                } elseif (is_bool($arg)) {
+                    $description .= "Boolean: " . ($arg ? "true" : "false") . ", ";
                 } elseif (is_string($arg)) {
-                    $arg_strings[] = "String: $arg";
+                    $description .= "String: $arg, ";
                 } elseif (is_integer($arg)) {
-                    $arg_strings[] = "Integer: $arg";
+                    $description .= "Integer: $arg, ";
                 } elseif (is_float($arg)) {
-                    $arg_strings[] = "Float: $arg";
+                    $description .= "Float: $arg, ";
                 } elseif (is_array($arg)) {
-                    $arg_strings[] = "Array: " . count($arg) . " items";
+                    $description .= "Array: " . count($arg) . " items, ";
                 } elseif (is_resource($arg)) {
-                    $arg_strings[] = "Resource: $arg";
+                    $description .= "Resource: $arg, ";
                 } elseif (is_object($arg)) {
-                    $arg_strings[] = "Object: of " . get_class($arg);
+                    $description .= "Object: of " . get_class($arg) . ", ";
                 }
             }
-            return implode(", ", $arg_strings);
+            if ($description) {
+                $description = substr($description, 0, (-2));
+            }
+            return $description;
         }
     }
     
