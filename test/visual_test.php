@@ -16,6 +16,7 @@
         define("SIMPLE_TEST", "../");
     }
     require_once(SIMPLE_TEST . 'unit_tester.php');
+    require_once(SIMPLE_TEST . 'mock_objects.php');
     require_once(SIMPLE_TEST . 'reporter.php');
     
     class TestDisplayClass {
@@ -26,8 +27,8 @@
         }
     }
     
-    class TestOfUnitTestCase extends UnitTestCase {
-        function TestOfUnitTestCase() {
+    class TestOfUnitTestCaseOutput extends UnitTestCase {
+        function TestOfUnitTestCaseOutput() {
             $this->UnitTestCase();
         }
         function testOfResults() {
@@ -47,9 +48,9 @@
         function testType() {
             $this->assertIsA("hello", "string", "#%s#");
             $this->assertIsA(14, "string", "#%s#");        // Fail.
-            $this->assertIsA($this, "TestOfUnitTestCase", "#%s#");
+            $this->assertIsA($this, "TestOfUnitTestCaseOutput", "#%s#");
             $this->assertIsA($this, "UnitTestCase", "#%s#");
-            $this->assertIsA(14, "TestOfUnitTestCase", "#%s#");        // Fail.
+            $this->assertIsA(14, "TestOfUnitTestCaseOutput", "#%s#");        // Fail.
             $this->assertIsA($this, "TestHTMLDisplay", "#%s#");        // Fail.
         }
         function testTypeEquality() {
@@ -142,8 +143,62 @@
             $this->dump(array("Hello"), "Displaying a variable");
         }
         function testSignal() {
-            $fred = "fred";
-            $this->signal("Ouch", $fred);        // Signal.
+            $fred = "signal as a string";
+            $this->signal("Signal", $fred);        // Signal.
+        }
+    }
+    
+    class Dummy {
+        function Dummy() {
+        }
+        function a() {
+        }
+    }
+    Mock::generate('Dummy');
+    
+    class TestOfMockObjectsOutput extends UnitTestCase {
+        function TestOfMockObjectsOutput() {
+            $this->UnitTestCase();
+        }
+        function testBooleanMatching() {
+            $dummy = &new MockDummy($this);
+            $dummy->expectArguments('a', array(true, false));
+            $dummy->a(true, false);
+            $dummy->a(true, true);        // Fail.
+        }
+        function testIntegerMatching() {
+            $dummy = &new MockDummy($this);
+            $dummy->expectArguments('a', array(32, 33));
+            $dummy->a(32, 33);
+            $dummy->a(32, 34);        // Fail.
+        }
+        function testFloatMatching() {
+            $dummy = &new MockDummy($this);
+            $dummy->expectArguments('a', array(3.2, 3.3));
+            $dummy->a(3.2, 3.3);
+            $dummy->a(3.2, 3.4);        // Fail.
+        }
+        function testStringMatching() {
+            $dummy = &new MockDummy($this);
+            $dummy->expectArguments('a', array('32', '33'));
+            $dummy->a('32', '33');
+            $dummy->a('32', '34');        // Fail.
+        }
+        function testArrayMatching() {
+            $dummy = &new MockDummy($this);
+            $dummy->expectArguments('a', array(array(32), array(33)));
+            $dummy->a(array(32), array(33));
+            $dummy->a(array(32), array('33'));        // Fail.
+        }
+        function testObjectMatching() {
+            $a = new Dummy();
+            $a->a = 'a';
+            $b = new Dummy();
+            $b->b = 'b';
+            $dummy = &new MockDummy($this);
+            $dummy->expectArguments('a', array($a, $b));
+            $dummy->a($a, $b);
+            $dummy->a($a, $a);        // Fail.
         }
     }
     
@@ -171,7 +226,8 @@
         }
     }
     
-    $test = new GroupTest("Unit test case test with 26 fails, 26 passes and 4 exceptions");
-    $test->addTestCase(new TestOfUnitTestCase());
+    $test = new GroupTest("Unit test case test with 32 fails, 32 passes and 4 exceptions");
+    $test->addTestCase(new TestOfUnitTestCaseOutput());
+    $test->addTestCase(new TestOfMockObjectsOutput());
     $test->run(new AllOutputReporter());
 ?>

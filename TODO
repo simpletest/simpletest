@@ -14,7 +14,9 @@ Improve object difference message (1/2) - done.
 
 Mock objects
 ------------
-Add parameter list assertion (2/2).
+Add parameter expectation (2/2) - done.
+Improve failure messages (1).
+Allow expectation classes to be given as expectations (1).
 
 Html parser
 -----------
@@ -36,5 +38,3 @@ Add setting of form values by name (2).
 Documentation
 -------------
 Add web test case example tutorial (5).
-Add web test case to documentation (2).
-Add web test case form handling to documentation (2).
