@@ -593,14 +593,16 @@
         
         /**
          *    Fetches the content and parses the headers.
+         *    @param integer $timeout      Connection timeout.
          *    @return SimpleHttpResponse   A response which may have
          *                                 an error.
          *    @access public
          */
-        function &fetch() {
+        function &fetch($timeout) {
             $socket = &$this->_createSocket(
                     $this->_url->getHost(),
-                    $this->_url->getPort() ? $this->_url->getPort() : 80);
+                    $this->_url->getPort() ? $this->_url->getPort() : 80,
+                    $timeout);
             if ($socket->isError()) {
                 return $this->_createResponse($socket);
             }
@@ -665,11 +667,12 @@
          *    Factory for socket. Separate method for mocking.
          *    @param string $host     Hostname to connect to.
          *    @param integer $port    Remote port.
+         *    @param integer $timeout Connection timeout.
          *    @return SimpleSocket    New socket.
          *    @access protected
          */
-        function &_createSocket($host, $port) {
-            return new SimpleSocket($host, $port);
+        function &_createSocket($host, $port, $timeout) {
+            return new SimpleSocket($host, $port, $timeout);
         }
         
         /**

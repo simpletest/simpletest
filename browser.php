@@ -135,6 +135,15 @@
         }
         
         /**
+         *    Sets the socket timeout for opening a connection.
+         *    @param integer $timeout      Maximum time in seconds.
+         *    @acces public
+         */
+        function setConnectionTimeout($timeout) {
+            $this->_user_agent->setConnectionTimeout($timeout);
+        }
+        
+        /**
          *    Parses the raw content into a page.
          *    @param string $raw    Text of fetch.
          *    @return SimplePage    Parsed HTML.

@@ -9,7 +9,7 @@
 	/**
 	 *	path for simpletest files
 	 */
-    if (!defined('SIMPLE_TEST')) {
+    if (! defined('SIMPLE_TEST')) {
         define('SIMPLE_TEST', 'simpletest/');
     }
     
@@ -247,7 +247,7 @@
          */
         function assertTrue($result, $message = false) {
             if (! $message) {
-                $message = 'True asserion got ' . ($result ? 'True' : 'False');
+                $message = 'True assertion got ' . ($result ? 'True' : 'False');
             }
             if ($result) {
                 $this->pass($message);
@@ -265,9 +265,9 @@
          *    @param string $message    Message to display.
          *    @access public
          */
-        function assertFalse($result, $message = '%s') {
+        function assertFalse($result, $message = false) {
             if (! $message) {
-                $message = 'False asserion got ' . ($result ? 'True' : 'False');
+                $message = 'False assertion got ' . ($result ? 'True' : 'False');
             }
             $this->assertTrue(! $result, $message);
         }

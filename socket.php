@@ -6,6 +6,18 @@
      *	@version	$Id$
      */
     
+	/**
+	 * @ignore	originally defined in simple_test.php
+	 */
+    if (!defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', '../');
+    }
+    
+    /**#@+
+     * include SimpleTest files
+     */
+    require_once(SIMPLE_TEST . 'options.php');
+    
     /**
      *    Stashes an error for later. Useful for constructors
      *    until PHP gets exceptions.
@@ -71,17 +83,19 @@
         
         /**
          *    Opens a socket for reading and writing.
-         *    @param string $host   Hostname to send request to.
-         *    @param inetger $port  Port on remote machine to open.
+         *    @param string $host      Hostname to send request to.
+         *    @param integer $port     Port on remote machine to open.
+         *    @param integer $timeout  Connection timeout in seconds.
          *    @access public
          */
-        function SimpleSocket($host, $port) {
+        function SimpleSocket($host, $port, $timeout) {
             $this->StickyError();
             $this->_is_open = false;
-            if (! ($this->_handle = @fsockopen($host, $port, $errorNumber, $error, 15))) {
-                $this->_setError("Cannot open [$host:$port] with [$error]");
+            if (! ($this->_handle = @fsockopen($host, $port, $errorNumber, $error, $timeout))) {
+                $this->_setError("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
             } else {
                 $this->_is_open = true;
+                SimpleTestCompatibility::setTimeout($this->_handle, $timeout);
             }
         }
         
@@ -95,7 +109,11 @@
             if ($this->isError() || !$this->isOpen()) {
                 return false;
             }
-            if (!fwrite($this->_handle, $message)) {
+            $count = fwrite($this->_handle, $message);
+            if (! $count) {
+                if ($count === false) {
+                    $this->_setError("Cannot write to socket");
+                }
                 return false;
             }
             fflush($this->_handle);

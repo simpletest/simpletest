@@ -15,14 +15,14 @@
             $this->UnitTestCase();
         }
         function testBadSocket() {
-            @$socket = &new SimpleSocket("bad_url", 111);
+            @$socket = &new SimpleSocket("bad_url", 111, 5);
             $this->swallowErrors();
             $this->assertTrue($socket->isError(), "Error [" . $socket->getError(). "]");
             $this->assertFalse($socket->isOpen());
             $this->assertFalse($socket->write("A message"));
         }
         function testSocket() {
-            $socket = &new SimpleSocket("www.lastcraft.com", 80);
+            $socket = &new SimpleSocket("www.lastcraft.com", 80, 15);
             $this->assertFalse($socket->isError(), "Error [" . $socket->getError(). "]");
             $this->assertTrue($socket->isOpen());
             $this->assertTrue($socket->write("GET www.lastcraft.com/test/network_confirm.php HTTP/1.0\r\n"));
@@ -36,7 +36,8 @@
             $http = &new SimpleHttpRequest(new SimpleUrl(
                     "www.lastcraft.com/test/network_confirm.php?gkey=gvalue"));
             $http->setCookie(new SimpleCookie("ckey", "cvalue"));
-            $this->assertIsA($response = &$http->fetch(), "SimpleHttpResponse");
+            $this->assertIsA($response = &$http->fetch(15), "SimpleHttpResponse");
+
             $headers = &$response->getHeaders();
             $this->assertEqual($headers->getResponseCode(), 200);
             $this->assertEqual($headers->getMimeType(), "text/html");
@@ -57,7 +58,7 @@
             $http = &new SimpleHttpRequest(
                     new SimpleUrl("www.lastcraft.com/test/network_confirm.php"),
                     "HEAD");
-            $this->assertIsA($response = &$http->fetch(), "SimpleHttpResponse");
+            $this->assertIsA($response = &$http->fetch(15), "SimpleHttpResponse");
             $headers = &$response->getHeaders();
             $this->assertEqual($headers->getResponseCode(), 200);
             $this->assertIdentical($response->getContent(), "");
@@ -66,7 +67,7 @@
             $http = &new SimpleHttpPushRequest(
                     new SimpleUrl("www.lastcraft.com/test/network_confirm.php"),
                     "Some post data");
-            $this->assertIsA($response = &$http->fetch(), "SimpleHttpResponse");
+            $this->assertIsA($response = &$http->fetch(15), "SimpleHttpResponse");
             $this->assertWantedPattern(
                     '/Request method.*?<dd>POST<\/dd>/',
                     $response->getContent());
@@ -79,7 +80,7 @@
                     new SimpleUrl("www.lastcraft.com/test/network_confirm.php"),
                     "pkey=pvalue");
             $http->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
-            $response = &$http->fetch();
+            $response = &$http->fetch(15);
             $this->assertWantedPattern(
                     '/Request method.*?<dd>POST<\/dd>/',
                     $response->getContent());
@@ -153,6 +154,13 @@
             $this->assertTitle('Simple test target file');
             $this->assertResponse(200);
             $this->assertMime("text/html");
+        }
+        function testSlowGet() {
+            $this->assertTrue($this->get('http://www.lastcraft.com/test/slow_page.php'));
+        }
+        function testTimedOutGet() {
+            $this->setConnectionTimeout(1);
+            $this->assertFalse($this->get('http://www.lastcraft.com/test/slow_page.php'));
         }
         function testPost() {
             $this->assertTrue($this->post('http://www.lastcraft.com/test/network_confirm.php'));

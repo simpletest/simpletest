@@ -141,6 +141,15 @@
         }
         
         /**
+         *    Sets the socket timeout for opening a connection.
+         *    @param integer $timeout      Maximum time in seconds.
+         *    @acces public
+         */
+        function setConnectionTimeout($timeout) {
+            $this->_browser->setConnectionTimeout($timeout);
+        }
+        
+        /**
          *    Fetches a page into the page buffer. If
          *    there is no base for the URL then the
          *    current base URL is used. After the fetch

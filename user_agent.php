@@ -16,6 +16,7 @@
     require_once(SIMPLE_TEST . 'page.php');
     
     define('DEFAULT_MAX_REDIRECTS', 3);
+    define('DEFAULT_CONNECTION_TIMEOUT', 15);
     
     /**
      *    Repository for cookies. This stuff is a
@@ -148,6 +149,7 @@
     class SimpleUserAgent {
         var $_cookie_jar;
         var $_max_redirects;
+        var $_connection_timeout;
         var $_current_url;
         
         /**
@@ -157,6 +159,7 @@
         function SimpleUserAgent() {
             $this->_cookie_jar = new CookieJar();
             $this->setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
+            $this->setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
             $this->_current_url = false;
         }
         
@@ -264,6 +267,15 @@
         }
         
         /**
+         *    Sets the socket timeout for opening a connection.
+         *    @param integer $timeout      Maximum time in seconds.
+         *    @acces public
+         */
+        function setConnectionTimeout($timeout) {
+            $this->_connection_timeout = $timeout;
+        }
+        
+        /**
          *    Sets the maximum number of redirects before
          *    a page will be loaded anyway.
          *    @param integer $max        Most hops allowed.
@@ -324,7 +336,7 @@
                 $parameters = array();
             }
             $request = &$this->_createCookieRequest($method, $url, $parameters);
-            return $request->fetch();
+            return $request->fetch($this->_connection_timeout);
         }
         
         /**

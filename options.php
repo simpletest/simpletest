@@ -8,8 +8,8 @@
 	/**
 	 * @ignore	originally defined in simple_test.php
 	 */
-    if (!defined('SIMPLE_TEST')) {
-        define("SIMPLE_TEST", "simpletest/");
+    if (! defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', 'simpletest/');
     }
     
     /**
@@ -178,6 +178,8 @@
          *    class hiearchy.
          *    @param object $object    Object to test.
          *    @param string $class     Root name of hiearchy.
+         *    @access public
+         *    @static
          */
         function isA($object, $class) {
             if (function_exists('is_a')) {
@@ -185,6 +187,17 @@
             }
             return ((strtolower($class) == get_class($object))
                     or (is_subclass_of($object, $class)));
+        }
+        
+        /**
+         *    Sets a socket timeout for each chunk.
+         *    @param resource $handle    Socket handle.
+         *    @param integer $timeout    Limit in seconds.
+         *    @access public
+         *    @static
+         */
+        function setTimeout($handle, $timeout) {
+            stream_set_timeout($handle, $timeout, 0);
         }
     }
 ?>

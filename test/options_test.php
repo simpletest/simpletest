@@ -4,12 +4,6 @@
     }
     require_once(SIMPLE_TEST . 'options.php');
     
-    class RandomCompatibilityClass {
-    }
-    
-    class RandomCompatibilitySubclass extends RandomCompatibilityClass {
-    }
-    
     class TestOfOptions extends UnitTestCase {
         function TestOfOptions() {
             $this->UnitTestCase();
@@ -31,6 +25,12 @@
             SimpleTestOptions::ignore('ImaginaryTestCase');
             $this->assertTrue(SimpleTestOptions::isIgnored('ImaginaryTestCase'));
         }
+    }
+    
+    class RandomCompatibilityClass {
+    }
+    
+    class RandomCompatibilitySubclass extends RandomCompatibilityClass {
     }
     
     class TestOfCompatibility extends UnitTestCase {
