@@ -4,7 +4,7 @@
     if (!defined('SIMPLE_TEST')) {
         define('SIMPLE_TEST', './');
     }
-    require_once(SIMPLE_TEST . 'observer.php');
+    require_once(SIMPLE_TEST . 'runner.php');
     require_once(SIMPLE_TEST . 'assertion.php');
     
     /**
