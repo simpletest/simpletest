@@ -10,7 +10,7 @@
         
         /**
          *    Sets the error to empty.
-         *    @public
+         *    @access public
          */
         function StickyError() {
             $this->_clearError();
@@ -19,7 +19,7 @@
         /**
          *    Test for an outstanding error.
          *    @return            True if there is an error.
-         *    @public
+         *    @access public
          */
         function isError() {
             return ($this->_error != "");
@@ -29,7 +29,7 @@
          *    Accessor for an outstanding error.
          *    @return            Empty string if no error otherwise
          *                       the error message.
-         *    @public
+         *    @access public
          */
         function getError() {
             return $this->_error;
@@ -38,7 +38,7 @@
         /**
          *    Sets the internal error.
          *    @param        Error message to stash.
-         *    @protected
+         *    @access protected
          */
         function _setError($error) {
             $this->_error = $error;
@@ -46,7 +46,7 @@
         
         /**
          *    Resets the error state to no error.
-         *    @protected
+         *    @access protected
          */
         function _clearError() {
             $this->_setError("");
@@ -63,7 +63,7 @@
         /**
          *    Opens a socket for reading and writing.
          *    @param $url        URL as string.
-         *    @public
+         *    @access public
          */
         function SimpleSocket($url, $port = 80) {
             $this->StickyError();
@@ -79,7 +79,7 @@
          *    Writes some data to the socket.
          *    @param $message       String to send to socket.
          *    @return               True if successful.
-         *    @public
+         *    @access public
          */
         function write($message) {
             if ($this->isError() || !$this->isOpen()) {
@@ -97,7 +97,7 @@
          *    @param $block_size        Size of chunk to read.
          *    @return                   Incoming bytes. False
          *                              on error.
-         *    @public
+         *    @access public
          */
         function read($block_size = 255) {
             if ($this->isError() || !$this->isOpen()) {
@@ -109,7 +109,7 @@
         /**
          *    Accessor for socket open state.
          *    @return            True if open.
-         *    @public
+         *    @access public
          */
         function isOpen() {
             return $this->_is_open;
@@ -118,7 +118,7 @@
         /**
          *    Closes the socket preventing further reads.
          *    Cannot be reopened once closed.
-         *    @public
+         *    @access public
          */
         function close() {
             $this->_is_open = false;

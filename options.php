@@ -22,7 +22,7 @@
          *    not be run.
          *    @param $class        Add a class to ignore.
          *    @static
-         *    @public
+         *    @access public
          */
         function ignore($class) {
             $registry = &SimpleTestOptions::_getRegistry();
@@ -34,7 +34,7 @@
          *    list.
          *    @param $class        Class name to test.
          *    @return              True if should not be run.
-         *    @public
+         *    @access public
          *    @static
          */
         function isIgnored($class) {
@@ -50,7 +50,7 @@
          *    with this method before any stubs are generated.
          *    @param $stub_base        Server stub class to use.
          *    @static
-         *    @public
+         *    @access public
          */
         function setStubBaseClass($stub_base) {
             $registry = &SimpleTestOptions::_getRegistry();
@@ -61,7 +61,7 @@
          *    Accessor for the currently set stub base class.
          *    @return            Class name to inherit from.
          *    @static
-         *    @public
+         *    @access public
          */
         function getStubBaseClass() {
             $registry = &SimpleTestOptions::_getRegistry();
@@ -76,7 +76,7 @@
          *    with this method before any mocks are generated.
          *    @param $mock_base        Mock base class to use.
          *    @static
-         *    @public
+         *    @access public
          */
         function setMockBaseClass($mock_base) {
             $registry = &SimpleTestOptions::_getRegistry();
@@ -87,7 +87,7 @@
          *    Accessor for the currently set mock base class.
          *    @return            Class name to inherit from.
          *    @static
-         *    @public
+         *    @access public
          */
         function getMockBaseClass() {
             $registry = &SimpleTestOptions::_getRegistry();
@@ -101,7 +101,7 @@
          *                    extra functionality. Useful
          *                    when a test tool has overridden
          *                    the mock base classes.
-         *    @public
+         *    @access public
          */
         function addPartialMockCode($code = '') {
             $registry = &SimpleTestOptions::_getRegistry();
@@ -111,7 +111,7 @@
         /**
          *    Accessor for additional partial mock code.
          *    @return        Code as a string.
-         *    @public
+         *    @access public
          */
         function getPartialMockCode() {
             $registry = &SimpleTestOptions::_getRegistry();
@@ -121,7 +121,7 @@
         /**
          *    Accessor for global registry of options.
          *    @return            Hash of stored values.
-         *    @private
+         *    @access private
          *    @static
          */
         function &_getRegistry() {
@@ -135,7 +135,7 @@
         /**
          *    Constant default values.
          *    @return        Hash of registry defaults.
-         *    @public
+         *    @access public
          *    @static
          */
         function getDefaults() {

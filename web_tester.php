@@ -23,7 +23,7 @@
          *    with test methods for a functional test case.
          *    @param $label      Name of test case. Will use
          *                       the class name if none specified.
-         *    @public
+         *    @access public
          */
         function WebTestCase($label = false) {
             $this->SimpleTestCase($label);
@@ -38,7 +38,7 @@
          *                        If ommitted then all persistent
          *                        cookies are kept. Time is either
          *                        Cookie format string or timestamp.
-         *    @public
+         *    @access public
          */
         function restartSession($date = false) {
             $this->_current_browser->restartSession($date);
@@ -49,7 +49,7 @@
          *    special expectations or for detailed
          *    examination of page fetches.
          *    @param $browser        Test browser object.
-         *    @public
+         *    @access public
          */
         function &getBrowser() {
             return $this->_current_browser;
@@ -59,7 +59,7 @@
          *    Creates a new default web browser object.
          *    Will be cleared at the end of the test method.
          *    @return            New TestBrowser object.
-         *    @public
+         *    @access public
          */
         function &createBrowser() {
             return new TestBrowser($this);
@@ -70,7 +70,7 @@
          *    uses it to parse the current content. Caches
          *    the page content once it is parsed.
          *    @return            New web page object.
-         *    @private
+         *    @access private
          */
         function &_getHtml() {
             if (!$this->_html_cache) {
@@ -81,7 +81,7 @@
         
         /**
          *    Resets the parsed HTML page cache.
-         *    @private
+         *    @access private
          */
         function _clearHtmlCache() {
             $this->_html_cache = false;
@@ -92,7 +92,7 @@
          *    test method.
          *    @param $runner    Current test runner.
          *    @param $method    Name of test method.
-         *    @protected
+         *    @access protected
          */
         function invoke(&$runner, $method) {
             $this->_current_content = false;
@@ -108,7 +108,7 @@
          *    @param $host          Host upon which the cookie is valid.
          *    @param $path          Cookie path if not host wide.
          *    @param $expiry        Expiry date as string.
-         *    @public
+         *    @access public
          */
         function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
             $this->_current_browser->setCookie($name, $value, $host, $path, $expiry);
@@ -118,7 +118,7 @@
          *    Sets the maximum number of redirects before
          *    the web page is loaded regardless.
          *    @param $max        Maximum hops.
-         *    @public
+         *    @access public
          */
         function setMaximumRedirects($max) {
             if (!$this->_current_browser) {
@@ -136,7 +136,7 @@
          *    @param $url          URL to fetch.
          *    @param $parameters   Optional additional GET data.
          *    @return              True on success.
-         *    @public
+         *    @access public
          */
         function get($url, $parameters = false) {
             $this->_current_content = $this->_current_browser->get($url, $parameters);
@@ -152,7 +152,7 @@
          *    @param $url          URL to fetch.
          *    @param $parameters   Optional additional GET data.
          *    @return              True on success.
-         *    @public
+         *    @access public
          */
         function post($url, $parameters = false) {
             $this->_current_content = $this->_current_browser->post($url, $parameters);
@@ -166,7 +166,7 @@
          *    @param $label    Button label. An unlabeled
          *                     button can be triggered by 'Submit'.
          *    @return          true on success.
-         *    @public
+         *    @access public
          */
         function clickSubmit($label = "Submit") {
             $page = &$this->_getHtml();
@@ -187,7 +187,7 @@
          *    @param $label    Button label. An unlabeled
          *                     button can be triggered by 'Submit'.
          *    @return          true on success.
-         *    @public
+         *    @access public
          */
         function clickSubmitByFormId($id) {
             $page = &$this->_getHtml();
@@ -216,7 +216,7 @@
          *    @param $label     Text between the anchor tags.
          *    @param $index     Link position counting from zero.
          *    @return           True if link present.
-         *    @public
+         *    @access public
          */
         function clickLink($label, $index = 0) {
             $page = &$this->_getHtml();
@@ -237,7 +237,7 @@
          *    one if an index is given.
          *    @param $id        ID attribute value.
          *    @return           True if link present.
-         *    @public
+         *    @access public
          */
         function clickLinkById($id) {
             $page = &$this->_getHtml();
@@ -253,7 +253,7 @@
          *    @param $name    Name of field in forms.
          *    @param $value   New value of field.
          *    @return         True if field exists, otherwise false.
-         *    @public
+         *    @access public
          */
         function setField($name, $value) {
             $page = &$this->_getHtml();
@@ -264,7 +264,7 @@
          *    Checks the response code against a list
          *    of possible values.
          *    @param $responses    Possible responses for a pass.
-         *    @public
+         *    @access public
          */
         function assertResponse($responses, $message = "%s") {
             $this->_current_browser->assertResponse($responses, $message);
@@ -274,7 +274,7 @@
          *    Checks the mime type against a list
          *    of possible values.
          *    @param $types    Possible mime types for a pass.
-         *    @public
+         *    @access public
          */
         function assertMime($types, $message = "%s") {
             $this->_current_browser->assertMime($types, $message);
@@ -285,7 +285,7 @@
          *    @param $title          Expected title or empty
          *                           if expecting no title.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertTitle($title = false, $message = "%s") {
             $page = &$this->_getHtml();
@@ -300,7 +300,7 @@
          *    @param $pattern        Perl regex to look for including
          *                           the regex delimiters.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertWantedPattern($pattern, $message = "%s") {
             $this->assertExpectation(
@@ -315,7 +315,7 @@
          *    @param $pattern        Perl regex to look for including
          *                           the regex delimiters.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertNoUnwantedPattern($pattern, $message = "%s") {
             $this->assertExpectation(
@@ -331,7 +331,7 @@
          *    @param $expect      Expected value as a string or
          *                        false if any value will do.
          *    @param $message     Message to display.
-         *    @public
+         *    @access public
          */
         function assertCookie($name, $expect = false, $message = "%s") {
             $value = $this->_current_browser->getBaseCookieValue($name);
@@ -351,7 +351,7 @@
          *    been successfully cleared.
          *    @param $name        Name of cookie to test.
          *    @param $message     Message to display.
-         *    @public
+         *    @access public
          */
         function assertNoCookie($name, $message = "%s") {
             $this->assertTrue(
@@ -368,7 +368,7 @@
          *                        An empty string for cookie
          *                        clearing.
          *    @param $message     Message to display.
-         *    @public
+         *    @access public
          */
         function expectCookie($name, $expect = false, $message = "%s") {
             $this->_current_browser->expectCookie($name, $expect, $message);

@@ -20,7 +20,7 @@
          *    Sets up the test name and starts with no attached
          *    displays.
          *    @param $label        Name of test.
-         *    @public
+         *    @access public
          */
         function RunnableTest($label) {
             $this->_label = $label;
@@ -30,7 +30,7 @@
         /**
          *    Accessor for the test name for subclasses.
          *    @return            Name of the test.
-         *    @public
+         *    @access public
          */
         function getLabel() {
             return $this->_label;
@@ -41,7 +41,7 @@
          *    parameter will soon cease to be optional.
          *    @param $reporter        Target of test results.
          *    @returns Boolean        True if no failures.
-         *    @public
+         *    @access public
          */
         function run($reporter = false) {
             if (!$reporter) {
@@ -53,7 +53,7 @@
         /**
          *    Accepts a runner, either a dummy or a real one.
          *    @param $runner        Test runner.
-         *    @public
+         *    @access public
          *    @abstract
          */
         function accept(&$runner) {
@@ -62,7 +62,7 @@
         /**
          *    Accessor for the number of subtests.
          *    @return            Number of test cases.
-         *    @public
+         *    @access public
          */
         function getSize() {
             return 1;
@@ -82,7 +82,7 @@
          *    Sets up the test with no display.
          *    @param $label        If no test name is given then
          *                         the class name is used.
-         *    @public
+         *    @access public
          */
         function SimpleTestCase($label = false) {
             if (!$label) {
@@ -96,7 +96,7 @@
          *    Uses reflection to run every method within itself
          *    starting with the string "test".
          *    @param $runner    Current test runner.
-         *    @public
+         *    @access public
          */
         function accept(&$runner) {
             $runner->handleCaseStart($this->getLabel());
@@ -122,7 +122,7 @@
          *    the visiting runner.
          *    @param $runner    Current test runner.
          *    @param $method    Test method to call.
-         *    @public
+         *    @access public
          */
         function invoke(&$runner, $method) {
             set_error_handler('simpleTestErrorHandler');
@@ -141,7 +141,7 @@
          *    Sets up unit test wide variables at the start
          *    of each test method. To be overridden in
          *    actual user test cases.
-         *    @public
+         *    @access public
          */
         function setUp() {
         }
@@ -149,7 +149,7 @@
         /**
          *    Clears the data set in the setUp() method call.
          *    To be overridden by the user in actual user test cases.
-         *    @public
+         *    @access public
          */
         function tearDown() {
         }
@@ -157,7 +157,7 @@
         /**
          *    Sends a pass event with a message.
          *    @param $message        Message to send.
-         *    @public
+         *    @access public
          */
         function pass($message = "Pass") {
             $this->_current_runner->handlePass($message);
@@ -166,7 +166,7 @@
         /**
          *    Sends a fail event with a message.
          *    @param $message        Message to send.
-         *    @public
+         *    @access public
          */
         function fail($message = "Fail") {
             $this->_current_runner->handleFail($message);
@@ -180,7 +180,7 @@
          *    @param $file       File error occoured in.
          *    @param $line       Line number of error.
          *    @param $globals    Hash of PHP super global arrays.
-         *    @public
+         *    @access public
          */
         function error($severity, $message, $file, $line, $globals) {
             $severity = SimpleErrorQueue::getSeverityAsString($severity);
@@ -195,7 +195,7 @@
          *    display are subclassed.
          *    @param $type        Type of event as string.
          *    @param $payload     Object or message to deliver.
-         *    @public
+         *    @access public
          */
         function signal($type, &$payload) {
             $this->_current_runner->handleSignal($type, $payload);
@@ -203,7 +203,7 @@
         
         /**
          *    Cancels any outstanding errors.
-         *    @public
+         *    @access public
          */
         function swallowErrors() {
             $queue = &SimpleErrorQueue::instance();
@@ -216,7 +216,7 @@
          *    @param $expectation  Expectation subclass.
          *    @param $test_value   Value to compare.
          *    @param $message      Message to display.
-         *    @public
+         *    @access public
          */
         function assertExpectation(&$expectation, $test_value, $message) {
             $this->assertTrue(
@@ -230,7 +230,7 @@
          *    @param $result            Boolean, true on pass.
          *    @param $message           Message to display describing
          *                              the test state.
-         *    @public
+         *    @access public
          */
         function assertTrue($result, $message = "True expectation failed.") {
             if ($result) {
@@ -247,7 +247,7 @@
          *    as false.
          *    @param $boolean        Supposedly false value.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertFalse($boolean, $message = "False expectation") {
             $this->assertTrue(!$boolean, $message);
@@ -259,7 +259,7 @@
          *    situations.
          *    @param $variable       Variable to display.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function dump($variable, $message = false) {
             ob_start();
@@ -276,7 +276,7 @@
          *    Dispatches a text message straight to the
          *    test suite. Useful for status bar displays.
          *    @param $message        Message to show.
-         *    @public
+         *    @access public
          */
         function sendMessage($message) {
             $this->_current_runner->handleMessage($message);
@@ -295,7 +295,7 @@
          *    Sets the name of the test suite.
          *    @param $label       Name sent at the start and end
          *                        of the test.
-         *    @public
+         *    @access public
          */
         function GroupTest($label) {
             $this->RunnableTest($label);
@@ -307,7 +307,7 @@
          *    @param $test_case        Suite or individual test
          *                             case implementing the
          *                             runnable test interface.
-         *    @public
+         *    @access public
          */
         function addTestCase(&$test_case) {
             $this->_test_cases[] = &$test_case;
@@ -318,7 +318,7 @@
          *    The new group is composed into this one.
          *    @param $test_file        File name of library with
          *                             test case classes.
-         *    @public
+         *    @access public
          */
         function addTestFile($test_file) {
             $existing_classes = get_declared_classes();
@@ -343,7 +343,7 @@
          *    Test to see if a class is derived from the
          *    TestCase class.
          *    @param $class            Class name.
-         *    @private
+         *    @access private
          */
         function _isTestCase($class) {
             while ($class = get_parent_class($class)) {
@@ -357,7 +357,7 @@
         /**
          *    Invokes accept() on all of the held test cases.
          *    @param $runner    Current test runner.
-         *    @public
+         *    @access public
          */
         function accept(&$runner) {
             $runner->handleGroupStart($this->getLabel(), $this->getSize());
@@ -371,7 +371,7 @@
         /**
          *    Number of contained test cases.
          *    @return         Total count of cases in the group.
-         *    @public
+         *    @access public
          */
         function getSize() {
             $count = 0;

@@ -10,7 +10,7 @@
         
         /**
          *    Starts with an empty queue.
-         *    @public
+         *    @access public
          */
         function SimpleErrorQueue() {
             $this->clear();
@@ -23,7 +23,7 @@
          *    @param $filename        File error occoured in.
          *    @param $line            Line number of error.
          *    @param $super_globals   Hash of PHP super global arrays.
-         *    @public
+         *    @access public
          */
         function add($severity, $message, $filename, $line, $super_globals) {
             array_push(
@@ -38,7 +38,7 @@
          *                as the PHP error code, the error message,
          *                the file with the error, the line number
          *                and a list of PHP super global arrays.
-         *    @public
+         *    @access public
          */
         function extract() {
             if (count($this->_queue)) {
@@ -49,7 +49,7 @@
         
         /**
          *    Discards the contents of the error queue.
-         *    @public
+         *    @access public
          */
         function clear() {
             $this->_queue = array();
@@ -66,7 +66,7 @@
         /**
          *    Global access to a single error queue.
          *    @return        Global error queue object.
-         *    @public
+         *    @access public
          *    @static
          */
         function &instance() {
@@ -82,7 +82,7 @@
          *    representation.
          *    @param $severity  PHP integer error code.
          *    @return           String version of error code.
-         *    @public
+         *    @access public
          *    @static
          */
         function getSeverityAsString($severity) {
@@ -111,6 +111,7 @@
      *    @param $line            Line number of error.
      *    @param $super_globals   Hash of PHP super global arrays.
      *    @static
+     *    @access public
      */
     function simpleTestErrorHandler($severity, $message, $filename, $line, $super_globals) {
         $queue = &SimpleErrorQueue::instance();

@@ -19,7 +19,7 @@
         /**
          *    Sets the document to write to.
          *    @param SimplePage $page       Target of the events.
-         *    @public
+         *    @access public
          */
         function SimplePageBuilder(&$page) {
             $this->SimpleSaxListener();
@@ -32,7 +32,7 @@
          *    into the page to be built.
          *    @param string $raw                 Unparsed text.
          *    @param SimpleSaxParser $parser     Event generator.
-         *    @public
+         *    @access public
          */
         function parse($raw, &$parser) {
             return $parser->parse($raw);
@@ -44,7 +44,7 @@
          *    @param hash $attributes     Attributes without content
          *                                are marked as true.
          *    @return boolean             False on parse error.
-         *    @public
+         *    @access public
          */
         function startElement($name, $attributes) {
             $tag = &$this->_createTag($name, $attributes);
@@ -64,7 +64,7 @@
          *    End of element event.
          *    @param string $name        Element name.
          *    @return boolean            False on parse error.
-         *    @public
+         *    @access public
          */
         function endElement($name) {
             if ($name == 'form') {
@@ -85,7 +85,7 @@
          *    to every open tag.
          *    @param string $text        May include unparsed tags.
          *    @return boolean            False on parse error.
-         *    @public
+         *    @access public
          */
         function addContent($text) {
             foreach (array_keys($this->_tags) as $name) {
@@ -100,7 +100,7 @@
          *    Parsed relevant data. The parsed tag is added
          *    to every open tag.
          *    @param SimpleTag $tag        May include unparsed tags.
-         *    @private
+         *    @access private
          */
         function _addContentTagToOpenTags(&$tag) {
             if (! in_array($tag->getTagName(), array('option'))) {
@@ -116,7 +116,7 @@
         /**
          *    Opens a tag for receiving content.
          *    @param SimpleTag $tag        New content tag.
-         *    @private
+         *    @access private
          */
         function _openTag(&$tag) {
             $name = $tag->getTagName();
@@ -132,7 +132,7 @@
          *    @param string $name        HTML tag name.
          *    @param hash $attributes    Element attributes.
          *    @return SimpleTag          Tag object.
-         *    @protected
+         *    @access protected
          */
         function &_createTag($name, $attributes) {
             if ($name == 'a') {
@@ -172,7 +172,7 @@
         /**
          *    Parses a page ready to access it's contents.
          *    @param $raw            Raw unparsed text.
-         *    @public
+         *    @access public
          */
         function SimplePage($raw) {
             $this->_absolute_links = array();
@@ -190,7 +190,7 @@
          *    @param $builder    Parser listener.
          *    @return            Parser to generate events for
          *                       the builder.
-         *    @protected
+         *    @access protected
          */
         function &_createParser(&$builder) {
             return new SimpleSaxParser($builder);
@@ -200,7 +200,7 @@
          *    Creates the parser used with the builder.
          *    @param SimplePage $page      Target of incoming tag information.
          *    @return SimplePageBuilder    Builder to feed events to this page.
-         *    @protected
+         *    @access protected
          */
         function &_createBuilder(&$page) {
             return new SimplePageBuilder($page);
@@ -209,7 +209,7 @@
         /**
          *    Adds a tag to the page.
          *    @param SimpleTag $tag        Tag to accept.
-         *    @public
+         *    @access public
          */
         function acceptTag(&$tag) {
             if ($tag->getTagName() == "a") {
@@ -231,7 +231,7 @@
          *    element.
          *    @param string $name     HTML element name.
          *    @return boolean         True if form element.
-         *    @private
+         *    @access private
          */
         function _isFormElement($name) {
             return in_array($name, array('input', 'textarea', 'select'));
@@ -240,7 +240,7 @@
         /**
          *    Opens a form.
          *    @param SimpleFormTag $tag      Tag to accept.
-         *    @public
+         *    @access public
          */
         function acceptFormStart(&$tag) {
             $this->_open_forms[] = &new SimpleForm($tag);
@@ -248,7 +248,7 @@
         
         /**
          *    Closes the most recently opened form.
-         *    @public
+         *    @access public
          */
         function acceptFormEnd() {
             $this->_closed_forms[] = array_pop($this->_open_forms);
@@ -260,7 +260,7 @@
          *    @param $url        Address.
          *    @param $label      Text label of link.
          *    @param $id         Id attribute of link.
-         *    @protected
+         *    @access protected
          */
         function _addLink($url, $label, $id) {
             $parsed_url = new SimpleUrl($url);
@@ -276,7 +276,7 @@
          *    @param $url        Address.
          *    @param $label      Text label of link.
          *    @param $id         Id attribute of link.
-         *    @private
+         *    @access private
          */
         function _addAbsoluteLink($url, $label, $id) {
             $this->_addLinkId($url, $id);
@@ -291,7 +291,7 @@
          *    @param $url        Address.
          *    @param $label      Text label of link.
          *    @param $id         Id attribute of link.
-         *    @private
+         *    @access private
          */
         function _addRelativeLink($url, $label, $id) {
             $this->_addLinkId($url, $id);
@@ -305,7 +305,7 @@
          *    Adds a URL by id attribute.
          *    @param $url        Address.
          *    @param $id         Id attribute of link.
-         *    @private
+         *    @access private
          */
         function _addLinkId($url, $id) {
             if ($id !== false) {
@@ -317,7 +317,7 @@
          *    Accessor for a list of all fixed links.
          *    @return       List of urls with scheme of
          *                  http or https and hostname.
-         *    @public
+         *    @access public
          */
         function getAbsoluteLinks() {
             $all = array();
@@ -330,7 +330,7 @@
         /**
          *    Accessor for a list of all relative links.
          *    @return       List of urls without hostname.
-         *    @public
+         *    @access public
          */
         function getRelativeLinks() {
             $all = array();
@@ -344,7 +344,7 @@
          *    Accessor for a URLs by the link label.
          *    @param $label    Text of link.
          *    @return          List of links with that label.
-         *    @public
+         *    @access public
          */
         function getUrls($label) {
             $all = array();
@@ -361,7 +361,7 @@
          *    Accessor for a URL by the id attribute.
          *    @param $id       Id attribute of link.
          *    @return          URL as string with that id.
-         *    @public
+         *    @access public
          */
         function getUrlById($id) {
             if (in_array((string)$id, array_keys($this->_link_ids))) {
@@ -373,7 +373,7 @@
         /**
          *    Sets the title tag contents.
          *    @param SimpleTitleTag $tag    Title of page.
-         *    @protected
+         *    @access protected
          */
         function _setTitle(&$tag) {
             $this->_title = &$tag;
@@ -383,7 +383,7 @@
          *    Accessor for parsed title.
          *    @return        Title as string or boolean
          *                   false if no title is present.
-         *    @public
+         *    @access public
          */
         function getTitle() {
             if ($this->_title) {
@@ -395,7 +395,7 @@
         /**
          *    Gets a list of all of the held forms.
          *    @return        Array of SimpleForm objects.
-         *    @public
+         *    @access public
          */
         function getForms() {
             return array_merge($this->_open_forms, $this->_closed_forms);
@@ -406,7 +406,7 @@
          *    search correctly built forms.
          *    @param $label    Button label, default 'Submit'.
          *    @return          Form object containing the button.
-         *    @public
+         *    @access public
          */
         function &getFormBySubmitLabel($label) {
             for ($i = 0; $i < count($this->_closed_forms); $i++) {
@@ -423,7 +423,7 @@
          *    of the HTML code.
          *    @param $id  Form label.
          *    @return     Form object containing the matching ID.
-         *    @public
+         *    @access public
          */
         function &getFormById($id) {
             for ($i = 0; $i < count($this->_closed_forms); $i++) {
@@ -439,7 +439,7 @@
          *    available.
          *    @param $name        Field name.
          *    @param $value       Value to set field to.
-         *    @public
+         *    @access public
          */
         function setField($name, $value) {
             $is_set = false;

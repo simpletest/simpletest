@@ -23,7 +23,7 @@
         /**
          *    Constructor. Parses URL into sections.
          *    @param $url            URL as string.
-         *    @public
+         *    @access public
          */
         function SimpleUrl($url) {
             $this->_scheme = $this->_extractScheme($url);
@@ -44,7 +44,7 @@
          *    @param $url        URL so far. The scheme will be
          *                       removed.
          *    @return            Scheme part.
-         *    @private
+         *    @access private
          */
         function _extractScheme(&$url) {
             if (preg_match('/(.*?):(\/\/)(.*)/', $url, $matches)) {
@@ -62,7 +62,7 @@
          *                   password are removed.
          *    @return        Two item list of username and
          *                   password.
-         *    @private
+         *    @access private
          */
         function _extractLogin(&$url) {
             $prefix = "";
@@ -88,7 +88,7 @@
          *    @param $url    URL so far. The host will be
          *                   removed.
          *    @return        Host part guess.
-         *    @private
+         *    @access private
          */
         function _extractHost(&$url) {
             if (preg_match('/(\/\/)(.*?)(\/.*|\?.*|#.*|$)/', $url, $matches)) {
@@ -113,7 +113,7 @@
          *    @param $url     URL so far. The host will be
          *                    removed.
          *    @return         Path part.
-         *    @private
+         *    @access private
          */
         function _extractPath(&$url) {
             if (preg_match('/(.*?)(\?|#|$)(.*)/', $url, $matches)) {
@@ -128,7 +128,7 @@
          *    @param $url        URL so far. The request will be
          *                       removed.
          *    @return            Raw request part.
-         *    @private
+         *    @access private
          */
         function _extractRequest(&$url) {
             if (preg_match('/\?(.*?)(#|$)(.*)/', $url, $matches)) {
@@ -142,7 +142,7 @@
          *    Breaks the request down into a hash.
          *    @param $raw        Raw request string.
          *    @return            Hash of GET data.
-         *    @private
+         *    @access private
          */
         function _parseRequest($raw) {
             $request = array();
@@ -158,7 +158,7 @@
          *    Accessor for protocol part.
          *    @param $default    Value to use if not present.
          *    @return            Scheme name, e.g "http".
-         *    @public
+         *    @access public
          */
         function getScheme($default = false) {
             return $this->_scheme ? $this->_scheme : $default;
@@ -167,7 +167,7 @@
         /**
          *    Accessor for user name.
          *    @return     Username preceding host.
-         *    @public
+         *    @access public
          */
         function getUsername() {
             return $this->_username;
@@ -176,7 +176,7 @@
         /**
          *    Accessor for password.
          *    @return     Password preceding host.
-         *    @public
+         *    @access public
          */
         function getPassword() {
             return $this->_password;
@@ -186,7 +186,7 @@
          *    Accessor for hostname and port.
          *    @param $default    Value to use if not present.
          *    @return            Hostname only.
-         *    @public
+         *    @access public
          */
         function getHost($default = false) {
             return $this->_host ? $this->_host : $default;
@@ -195,7 +195,7 @@
         /**
          *    Accessor for top level domain.
          *    @return        Last part of host.
-         *    @public
+         *    @access public
          */
         function getTld() {
             $path_parts = pathinfo($this->getHost());
@@ -205,7 +205,7 @@
         /**
          *    Accessor for port number.
          *    @return     TCP/IP port number.
-         *    @public
+         *    @access public
          */
         function getPort() {
             return $this->_port;
@@ -214,7 +214,7 @@
         /**
          *    Accessor for path.
          *    @return     Full path including leading slash.
-         *    @public
+         *    @access public
          */
         function getPath() {
             return $this->_path;
@@ -224,7 +224,7 @@
          *    Accessor for page if any. This may be a
          *    directory name if ambiguious.
          *    @return            Page name.
-         *    @public
+         *    @access public
          */
         function getPage() {
             if (!preg_match('/([^\/]*?)$/', $this->getPath(), $matches)) {
@@ -236,7 +236,7 @@
         /**
          *    Gets the path to the page.
          *    @return        Path less the page.
-         *    @public
+         *    @access public
          */
         function getBasePath() {
             if (!preg_match('/(.*\/)[^\/]*?$/', $this->getPath(), $matches)) {
@@ -249,7 +249,7 @@
          *    Accessor for fragment at end of URL
          *    after the "#".
          *    @return     Part after "#".
-         *    @public
+         *    @access public
          */
         function getFragment() {
             return $this->_fragment;
@@ -259,7 +259,7 @@
          *    Accessor for current request parameters
          *    in URL string form
          *    @return    Form is string "a=1&b=2", etc.
-         *    @public
+         *    @access public
          */
         function getEncodedRequest() {
             if (count($this->getRequest()) == 0) {
@@ -272,7 +272,7 @@
          *    Encodes parameters as HTTP request parameters.
          *    @param $parameters     Request as hash.
          *    @return                Encoded request.
-         *    @public
+         *    @access public
          *    @static
          */
         function encodeRequest($parameters) {
@@ -287,7 +287,7 @@
          *    Accessor for current request parameters
          *    as a hash.
          *    @return    Hash of name value pairs.
-         *    @public
+         *    @access public
          */
         function getRequest() {
             return $this->_request;
@@ -297,7 +297,7 @@
          *    Adds an additional parameter to the request.
          *    @param $key            Name of parameter.
          *    @param $value          Value as string.
-         *    @public
+         *    @access public
          */
         function addRequestParameter($key, $value) {
             $this->_request[$key] = $value;
@@ -306,7 +306,7 @@
         /**
          *    Adds an additional parameter to the request.
          *    @param $parameters   Hash of additional parameters.
-         *    @public
+         *    @access public
          */
         function addRequestParameters($parameters) {
             $this->_request = array_merge($this->_request, $parameters);
@@ -316,7 +316,7 @@
          *    Replaces unknown sections to turn a relative
          *    URL into an absolute one.
          *    @param $base            Base URL as string.
-         *    @public
+         *    @access public
          */
         function makeAbsolute($base) {
             $base_url = new SimpleUrl($base);
@@ -336,7 +336,7 @@
          *    Replaces . and .. sections of the path.
          *    @param $path    Unoptimised path.
          *    @return         Path with dots removed if possible.
-         *    @public
+         *    @access public
          */
         function normalisePath($path) {
             $path = preg_replace('/\/.*?\/\.\.\//', '/', $path);
@@ -388,7 +388,7 @@
          *    call will fail.
          *    @param $host       New hostname.
          *    @return            True if hostname is valid.
-         *    @public
+         *    @access public
          */
         function setHost($host) {
             if ($host = $this->_truncateHost($host)) {
@@ -402,7 +402,7 @@
          *    Accessor for the truncated host to which this
          *    cookie applies.
          *    @return        Truncated hostname as string.
-         *    @public
+         *    @access public
          */
         function getHost() {
             return $this->_host;
@@ -424,7 +424,7 @@
          *    @param $host    Host name to truncate.
          *    @return         Domain as string or false on a
          *                    bad host.
-         *    @private
+         *    @access private
          */
         function _truncateHost($host) {
             if (preg_match('/[a-z\-]+\.(com|edu|net|org|gov|mil|int)$/i', $host, $matches)) {
@@ -438,7 +438,7 @@
         /**
          *    Accessor for name.
          *    @return        Cookie key.
-         *    @public
+         *    @access public
          */
         function getName() {
             return $this->_name;
@@ -448,7 +448,7 @@
          *    Accessor for value. A deleted cookie will
          *    have an empty string for this.
          *    @return        Cookie value.
-         *    @public
+         *    @access public
          */
         function getValue() {
             return $this->_value;
@@ -457,7 +457,7 @@
         /**
          *    Accessor for path.
          *    @return        Valid cookie path.
-         *    @public
+         *    @access public
          */
         function getPath() {
             return $this->_path;
@@ -469,7 +469,7 @@
          *    equal to the cookie path.
          *    @param $path       Path to test against.
          *    @return            True if cookie valid here.
-         *    @public
+         *    @access public
          */
         function isValidPath($path) {
             return (strncmp(
@@ -481,7 +481,7 @@
         /**
          *    Accessor for expiry.
          *    @return        Expiry string.
-         *    @public
+         *    @access public
          */
         function getExpiry() {
             if (!$this->_expiry) {
@@ -499,7 +499,7 @@
          *                    is later than the cookie expiry.
          *                    Can be either a timestamp integer
          *                    or a cookie format date.
-         *    @public
+         *    @access public
          */
         function isExpired($now) {
             if (!$this->_expiry) {
@@ -514,7 +514,7 @@
         /**
          *    Accessor for the secure flag.
          *    @return        True if cookie needs SSL.
-         *    @public
+         *    @access public
          */
         function isSecure() {
             return $this->_is_secure;
@@ -524,7 +524,7 @@
          *    Adds a trailing and leading slash to the path
          *    if missing.
          *    @param $path            Path to fix.
-         *    @private
+         *    @access private
          */
         function _fixPath($path) {
             if (substr($path, 0, 1) != '/') {
@@ -551,7 +551,7 @@
          *    Saves the URL ready for fetching.
          *    @param $url      URL as object.
          *    @param $method   HTTP request method, usually GET.
-         *    @public
+         *    @access public
          */
         function SimpleHttpRequest($url, $method = "GET") {
             $this->_url = $url;
@@ -564,7 +564,7 @@
          *    Fetches the content and parses the headers.
          *    @return          A SimpleHttpResponse which may have
          *                     an error.
-         *    @public
+         *    @access public
          */
         function &fetch() {
             $socket = &$this->_createSocket($this->_url->getHost());
@@ -579,7 +579,7 @@
          *    Sends the headers.
          *    @param $socket    Open SimpleSocket object.
          *    @param $method    HTTP request method, usually GET.
-         *    @protected
+         *    @access protected
          */
         function _request(&$socket, $method) {
             $socket->write($method . " " . $this->_url->getPath() . $this->_url->getEncodedRequest() . " HTTP/1.0\r\n");
@@ -597,7 +597,7 @@
         /**
          *    Adds a header line to the request.
          *    @param $header_line        Text of header line.
-         *    @public
+         *    @access public
          */
         function addHeaderLine($header_line) {
             $this->_user_headers[] = $header_line;
@@ -606,7 +606,7 @@
         /**
          *    Adds a cookie to the request.
          *    @param $cookie     New SimpleCookie object.
-         *    @public
+         *    @access public
          */
         function setCookie($cookie) {
             $this->_cookies[] = $cookie;
@@ -617,7 +617,7 @@
          *    transmission.
          *    @param $cookies     Cookies as hash.
          *    @return             Cookies in header form.
-         *    @private
+         *    @access private
          */
         function _marshallCookies($cookies) {
             $cookie_pairs = array();
@@ -630,7 +630,7 @@
         /**
          *    Factory for socket. Separate method for mocking.
          *    @param $host        Hostname as string.
-         *    @protected
+         *    @access protected
          */
         function &_createSocket($host) {
             return new SimpleSocket($host);
@@ -640,7 +640,7 @@
          *    Wraps the socket in a response parser.
          *    @param $socket        Responding socket.
          *    @return               Parsed response object.
-         *    @protected
+         *    @access protected
          */
         function &_createResponse(&$socket) {
             return new SimpleHttpResponse($this->_url, $socket);
@@ -658,7 +658,7 @@
          *    @param $url      URL as object.
          *    @param $content  Content to send.
          *    @param $method   HTTP request method, usually POST.
-         *    @public
+         *    @access public
          */
         function SimpleHttpPushRequest($url, $content, $method = "POST") {
             $this->SimpleHttpRequest($url, $method);
@@ -669,7 +669,7 @@
          *    Sends the headers and request data.
          *    @param $socket    Open SimpleSocket object.
          *    @param $method    HTTP request method, usually GET.
-         *    @protected
+         *    @access protected
          */
         function _request(&$socket, $method) {
             $this->addHeaderLine('Content-Length: ' . strlen($this->_pushed_content));
@@ -691,7 +691,7 @@
         /**
          *    Parses the incoming header block.
          *    @param $headers     Header block as string.
-         *    @public
+         *    @access public
          */
         function SimpleHttpHeaders($headers) {
             $this->_response_code = 0;
@@ -707,7 +707,7 @@
         /**
          *    Accessor for parsed HTTP protocol version.
          *    @return            HTTP error code integer.
-         *    @public
+         *    @access public
          */
         function getHttpVersion() {
             return $this->_http_version;
@@ -716,7 +716,7 @@
         /**
          *    Accessor for parsed HTTP error code.
          *    @return            HTTP error code integer.
-         *    @public
+         *    @access public
          */
         function getResponseCode() {
             return (integer)$this->_response_code;
@@ -726,7 +726,7 @@
          *    Returns the redirected URL or false if
          *    no redirection.
          *    @return       URL as string of false for none.
-         *    @public
+         *    @access public
          */
         function getLocation() {
             return $this->_location;
@@ -735,7 +735,7 @@
         /**
          *    Accessor for MIME type header information.
          *    @return            MIME type as string.
-         *    @public
+         *    @access public
          */
         function getMimeType() {
             return $this->_mime_type;
@@ -744,7 +744,7 @@
         /**
          *    Accessor for any new cookies.
          *    @return        List of new cookies.
-         *    @public
+         *    @access public
          */
         function getNewCookies() {
             return $this->_cookies;
@@ -754,7 +754,7 @@
          *    Called on each header line to accumulate the held
          *    data within the class.
          *    @param $header_line        One line of header.
-         *    @protected
+         *    @access protected
          */
         function _parseHeaderLine($header_line) {
             if (preg_match('/HTTP\/(\d+\.\d+)\s+(.*?)\s/i', $header_line, $matches)) {
@@ -776,7 +776,7 @@
          *    Parse the Set-cookie content.
          *    @param $cookie_line    Text after "Set-cookie:"
          *    @return                New cookie object.
-         *    @private
+         *    @access private
          */
         function _parseCookie($cookie_line) {
             $parts = split(";", $cookie_line);
@@ -809,7 +809,7 @@
          *    @param $url      Url object used for the request.
          *    @param $socket   Network connection to fetch
          *                     response text from.
-         *    @public
+         *    @access public
          */
         function SimpleHttpResponse($url, &$socket) {
             $this->StickyError();
@@ -831,7 +831,7 @@
         /**
          *    Copy of Url object used for the fetch.
          *    @return         Url object passed in.
-         *    @public
+         *    @access public
          */
         function getUrl() {
             return $this->_url;
@@ -841,7 +841,7 @@
          *    Accessor for the content after the last
          *    header line.
          *    @return            All content as string.
-         *    @public
+         *    @access public
          */
         function getContent() {
             return $this->_content;
@@ -850,7 +850,7 @@
         /**
          *    Accessor for parsed HTTP protocol version.
          *    @return            HTTP error code integer.
-         *    @public
+         *    @access public
          */
         function getHttpVersion() {
             return $this->_headers->getHttpVersion();            
@@ -859,7 +859,7 @@
         /**
          *    Accessor for parsed HTTP error code.
          *    @return            HTTP error code integer.
-         *    @public
+         *    @access public
          */
         function getResponseCode() {
             return $this->_headers->getResponseCode();
@@ -868,7 +868,7 @@
         /**
          *    Accessor for MIME type header information.
          *    @return            MIME type as string.
-         *    @public
+         *    @access public
          */
         function getMimeType() {
             return $this->_headers->getMimeType();            
@@ -878,7 +878,7 @@
          *    Gets the redirected URL from the headers.
          *    @return     The URL as a string or false
          *                if there is no location specified.
-         *    @public
+         *    @access public
          */
         function getRedirect() {
             return $this->_headers->getLocation();
@@ -888,7 +888,7 @@
          *    Test to see if the response is a valid
          *    redirect.
          *    @return        True if valid redirect.
-         *    @public
+         *    @access public
          */
         function isRedirect() {
             return in_array($this->_headers->getResponseCode(), array(301, 302, 303, 307)) &&
@@ -898,7 +898,7 @@
         /**
          *    Accessor for any new cookies.
          *    @return        List of new cookies.
-         *    @public
+         *    @access public
          */
         function getNewCookies() {
             return $this->_headers->getNewCookies();
@@ -909,7 +909,7 @@
          *    single string.
          *    @param $socket    Unread socket.
          *    @return           String if successful else false.
-         *    @private
+         *    @access private
          */
         function _readAll(&$socket) {
             $all = "";

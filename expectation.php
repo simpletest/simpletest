@@ -25,7 +25,7 @@
          *    Tests the expectation. True if correct.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
-         *    @public
+         *    @access public
          *    @abstract
          */
         function test($compare) {
@@ -36,7 +36,7 @@
          *    @param $compare      Comparison value.
          *    @return              String description of success
          *                         or failure.
-         *    @public
+         *    @access public
          *    @abstract
          */
         function testMessage($compare) {
@@ -45,7 +45,7 @@
         /**
          *    Accessor for the dumper.
          *    @return SimpleDumper    Current value dumper.
-         *    @protected
+         *    @access protected
          */
         function &_getDumper() {
             return $this->_dumper;
@@ -61,7 +61,7 @@
         /**
          *    Sets the value to compare against.
          *    @param $value        Test value to match.
-         *    @public
+         *    @access public
          */
         function EqualExpectation($value) {
             $this->SimpleExpectation();
@@ -73,7 +73,7 @@
          *    held value.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
-         *    @public
+         *    @access public
          */
         function test($compare) {
             return (($this->_value == $compare) && ($compare == $this->_value));
@@ -84,7 +84,7 @@
          *    @param $compare      Comparison value.
          *    @return              String description of success
          *                         or failure.
-         *    @public
+         *    @access public
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
@@ -98,7 +98,7 @@
         /**
          *    Accessor for comparison value.
          *    @return        Held value to compare with.
-         *    @protected
+         *    @access protected
          */
         function _get_value() {
             return $this->_value;
@@ -113,7 +113,7 @@
         /**
          *    Sets the value to compare against.
          *    @param $value        Test value to match.
-         *    @public
+         *    @access public
          */
         function NotEqualExpectation($value) {
             $this->EqualExpectation($value);
@@ -124,7 +124,7 @@
          *    held value.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
-         *    @public
+         *    @access public
          */
         function test($compare) {
             return !parent::test($compare);
@@ -135,7 +135,7 @@
          *    @param $compare      Comparison value.
          *    @return              String description of success
          *                         or failure.
-         *    @public
+         *    @access public
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
@@ -157,7 +157,7 @@
         /**
          *    Sets the value to compare against.
          *    @param $value        Test value to match.
-         *    @public
+         *    @access public
          */
         function IdenticalExpectation($value) {
             $this->EqualExpectation($value);
@@ -168,7 +168,7 @@
          *    matches the held value.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
-         *    @public
+         *    @access public
          */
         function test($compare) {
             return ($this->_get_value() === $compare);
@@ -179,7 +179,7 @@
          *    @param $compare      Comparison value.
          *    @return              String description of success
          *                         or failure.
-         *    @public
+         *    @access public
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
@@ -201,7 +201,7 @@
         /**
          *    Sets the value to compare against.
          *    @param $value        Test value to match.
-         *    @public
+         *    @access public
          */
         function NotIdenticalExpectation($value) {
             $this->IdenticalExpectation($value);
@@ -212,7 +212,7 @@
          *    held value.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
-         *    @public
+         *    @access public
          */
         function test($compare) {
             return !parent::test($compare);
@@ -223,7 +223,7 @@
          *    @param $compare      Comparison value.
          *    @return              String description of success
          *                         or failure.
-         *    @public
+         *    @access public
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
@@ -244,7 +244,7 @@
         /**
          *    Sets the value to compare against.
          *    @param $pattern        Pattern to search for.
-         *    @public
+         *    @access public
          */
         function WantedPatternExpectation($pattern) {
             $this->SimpleExpectation();
@@ -254,7 +254,7 @@
         /**
          *    Accessor for the pattern.
          *    @return        Perl regex as string.
-         *    @protected
+         *    @access protected
          */
         function _getPattern() {
             return $this->_pattern;
@@ -265,7 +265,7 @@
          *    matches the comparison value.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
-         *    @public
+         *    @access public
          */
         function test($compare) {
             return (boolean)preg_match($this->_getPattern(), $compare);
@@ -276,7 +276,7 @@
          *    @param $compare      Comparison value.
          *    @return              String description of success
          *                         or failure.
-         *    @public
+         *    @access public
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
@@ -309,7 +309,7 @@
         /**
          *    Sets the reject pattern
          *    @param $pattern        Pattern to search for.
-         *    @public
+         *    @access public
          */
         function UnwantedPatternExpectation($pattern) {
             $this->WantedPatternExpectation($pattern);
@@ -320,7 +320,7 @@
          *    matches the comparison value.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
-         *    @public
+         *    @access public
          */
         function test($compare) {
             return !parent::test($compare);
@@ -331,7 +331,7 @@
          *    @param $compare      Comparison value.
          *    @return              String description of success
          *                         or failure.
-         *    @public
+         *    @access public
          */
         function testMessage($compare) {
             if ($this->test($compare)) {

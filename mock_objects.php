@@ -26,7 +26,7 @@
          *    Tests the expectation. Always true.
          *    @param mixed $compare  Ignored.
          *    @return boolean        True.
-         *    @public
+         *    @access public
          */
         function test($compare) {
             return true;
@@ -37,7 +37,7 @@
          *    @param $compare      Comparison value.
          *    @return              String description of success
          *                         or failure.
-         *    @public
+         *    @access public
          */
         function testMessage($compare) {
             $dumper = &$this->_getDumper();
@@ -59,7 +59,7 @@
          *                              then it is considered to match any.
          *    @param mixed $wildcard    Any parameter matching this
          *                              will always match.
-         *    @public
+         *    @access public
          */
         function ParametersExpectation($expected = false) {
             $this->SimpleExpectation();
@@ -70,7 +70,7 @@
          *    Tests the assertion. True if correct.
          *    @param $parameters     Comparison values.
          *    @return                True if correct.
-         *    @public
+         *    @access public
          */
         function test($parameters) {
             if (!is_array($this->_expected)) {
@@ -93,7 +93,7 @@
          *    @param mixed $expected     Comparison value.
          *    @return boolean            True if expectation
          *                               fulfilled.
-         *    @private
+         *    @access private
          */
         function _testParameter($parameter, $expected) {
             if (is_a($expected, 'SimpleExpectation')) {
@@ -107,7 +107,7 @@
          *    @param $comparison   Incoming parameter list.
          *    @return              String description of success
          *                         or failure.
-         *    @public
+         *    @access public
          */
         function testMessage($parameters) {
             if ($this->test($parameters)) {
@@ -125,7 +125,7 @@
          *    @param $expected      Expected parameters as list.
          *    @param $parameters    Actual parameters received.
          *    @return               String description of difference.
-         *    @private
+         *    @access private
          */
         function _describeDifference($expected, $parameters) {
             if (count($expected) != count($parameters)) {
@@ -151,7 +151,7 @@
          *    of expectation.
          *    @param mixed $expected      Expected value.
          *    @return SimpleExpectation   Expectation object.
-         *    @private
+         *    @access private
          */
         function _coerceToExpectation($expected) {
             if (is_a($expected, 'SimpleExpectation')) {
@@ -164,7 +164,7 @@
          *    Renders the argument list as a string for
          *    messages.
          *    @param $args            Array of arguments.
-         *    @private
+         *    @access private
          */
         function _renderArguments($args) {
             $descriptions = array();
@@ -185,7 +185,7 @@
         
         /**
          *    Creates an empty call map.
-         *    @public
+         *    @access public
          */
         function CallMap() {
             $this->_map = array();
@@ -195,7 +195,7 @@
          *    Stashes a value against a method call.
          *    @param $parameters    Array of arguments (including wildcards).
          *    @param $value         Value copied into the map.
-         *    @public
+         *    @access public
          */
         function addValue($parameters, $value) {
             $this->addReference($parameters, $value);
@@ -205,7 +205,7 @@
          *    Stashes a reference against a method call.
          *    @param $parameters    Array of arguments (including wildcards).
          *    @param $reference     Array reference placed in the map.
-         *    @public
+         *    @access public
          */
         function addReference($parameters, &$reference) {
             $place = count($this->_map);
@@ -221,7 +221,7 @@
          *                          without wildcards.
          *    @return               Object held in the first matching
          *                          slot, otherwise null.
-         *    @public
+         *    @access public
          */
         function &findFirstMatch($parameters) {
             $slot = $this->_findFirstSlot($parameters);
@@ -237,7 +237,7 @@
          *    @param $parameters    Array of parameters to search by
          *                          without wildcards.
          *    @return               True if a match is present.
-         *    @public
+         *    @access public
          */
         function isMatch($parameters) {
             return ($this->_findFirstSlot($parameters) != null);
@@ -248,7 +248,7 @@
          *    @param $parameters    Array of parameters to search by
          *                          without wildcards.
          *    @return               Reference to slot or null.
-         *    @private
+         *    @access private
          */
         function &_findFirstSlot($parameters) {
             for ($i = 0; $i < count($this->_map); $i++) {
@@ -275,7 +275,7 @@
          *    Sets up the wildcard and everything else empty.
          *    @param $wildcard    Parameter matching wildcard.
          *    @param $is_strict   Enables method name checks.
-         *    @public
+         *    @access public
          */
         function SimpleStub($wildcard, $is_strict = true) {
             $this->_wildcard = $wildcard;
@@ -291,7 +291,7 @@
          *    @param array $args      Raw argument list.
          *    @return array           Argument list with
          *                            expectations.
-         *    @private
+         *    @access private
          */
         function _replaceWildcards($args) {
             if ($args === false) {
@@ -317,7 +317,7 @@
          *    @param $method        Name of method to simulate.
          *    @param $args          Arguments as an array.
          *    @return               Stored return.
-         *    @private
+         *    @access private
          */
         function &_invoke($method, $args) {
             $method = strtolower($method);
@@ -331,7 +331,7 @@
          *    of this object.
          *    @param $method        Name of method.
          *    @param $task          Description of task attempt.
-         *    @protected
+         *    @access protected
          */
         function _dieOnNoMethod($method, $task) {
             if ($this->_is_strict && !method_exists($this, $method)) {
@@ -345,7 +345,7 @@
          *    Adds one to the call count of a method.
          *    @param $method        Method called.
          *    @param $args          Arguments as an array.
-         *    @protected
+         *    @access protected
          */
         function _addCall($method, $args) {
             if (!isset($this->_call_counts[$method])) {
@@ -358,7 +358,7 @@
          *    Fetches the call count of a method so far.
          *    @param $method        Method name called.
          *    @return               Number of calls so far.
-         *    @public
+         *    @access public
          */
         function getCallCount($method) {
             $this->_dieOnNoMethod($method, "get call count");
@@ -376,7 +376,7 @@
          *    @param $value         Result of call passed by value.
          *    @param $args          List of parameters to match
          *                          including wildcards.
-         *    @public
+         *    @access public
          */
         function setReturnValue($method, $value, $args = false) {
             $this->_dieOnNoMethod($method, "set return value");
@@ -400,7 +400,7 @@
          *    @param $value         Result of call passed by value.
          *    @param $args          List of parameters to match
          *                          including wildcards.
-         *    @public
+         *    @access public
          */
         function setReturnValueAt($timing, $method, $value, $args = false) {
             $this->_dieOnNoMethod($method, "set return value sequence");
@@ -422,7 +422,7 @@
          *    @param $reference     Result of the call will be this object.
          *    @param $args          List of parameters to match
          *                          including wildcards.
-         *    @public
+         *    @access public
          */
         function setReturnReference($method, &$reference, $args = false) {
             $this->_dieOnNoMethod($method, "set return reference");
@@ -446,7 +446,7 @@
          *    @param $reference     Result of the call will be this object.
          *    @param $args          List of parameters to match
          *                          including wildcards.
-         *    @public
+         *    @access public
          */
         function setReturnReferenceAt($timing, $method, &$reference, $args = false) {
             $this->_dieOnNoMethod($method, "set return reference sequence");
@@ -470,7 +470,7 @@
          *    @param $step        Current position in the
          *                        call history.
          *    @returns            Stored return.
-         *    @protected
+         *    @access protected
          */
         function &_getReturn($method, $args, $step) {
             if (isset($this->_return_sequence[$method][$step])) {
@@ -489,7 +489,7 @@
          *    What to do if there is no return value set. Does
          *    nothing for a stub.
          *    @param $method      Method name.
-         *    @protected
+         *    @access protected
          */
         function _warnOnNoReturn($method) {
         }
@@ -518,7 +518,7 @@
          *    @param $test        Test case to test expectations in.
          *    @param $is_strict   Enables method name checks on
          *                        expectations.
-         *    @public
+         *    @access public
          */
         function SimpleMock(&$test, $wildcard, $is_strict = true) {
             $this->SimpleStub($wildcard, $is_strict);
@@ -535,7 +535,7 @@
          *    Accessor for attached unit test so that when
          *    subclassed, new expectations can be added easily.
          *    @return          Unit test passed in constructor.
-         *    @public
+         *    @access public
          */
         function &getTest() {
             return $this->_test;
@@ -556,7 +556,7 @@
          *    @param $method        Method call to test.
          *    @param $args          Expected parameters for the call
          *                          including wildcards.
-         *    @public
+         *    @access public
          */
         function expectArguments($method, $args) {
             $this->_dieOnNoMethod($method, "set expected arguments");
@@ -575,7 +575,7 @@
          *    @param $method        Method call to test.
          *    @param $args          Expected parameters for the call
          *                          including wildcards.
-         *    @public
+         *    @access public
          */
         function expectArgumentsAt($timing, $method, $args) {
             $this->_dieOnNoMethod($method, "set expected arguments at time");
@@ -595,7 +595,7 @@
          *    @param $method        Method call to test.
          *    @param $count         Number of times it should
          *                          have been called at tally.
-         *    @public
+         *    @access public
          */
         function expectCallCount($method, $count) {
             $this->_dieOnNoMethod($method, "set expected call count");
@@ -608,7 +608,7 @@
          *    @param $method        Method call to test.
          *    @param $count         Most number of times it should
          *                          have been called.
-         *    @public
+         *    @access public
          */
         function expectMaximumCallCount($method, $count) {
             $this->_dieOnNoMethod($method, "set maximum call count");
@@ -621,7 +621,7 @@
          *    @param $method        Method call to test.
          *    @param $count         Least number of times it should
          *                          have been called.
-         *    @public
+         *    @access public
          */
         function expectMinimumCallCount($method, $count) {
             $this->_dieOnNoMethod($method, "set minimum call count");
@@ -632,7 +632,7 @@
          *    Convenience method for barring a method
          *    call.
          *    @param $method        Method call to ban.
-         *    @public
+         *    @access public
          */
         function expectNever($method) {
             $this->expectMaximumCallCount($method, 0);
@@ -644,7 +644,7 @@
          *    @param $method        Method call to track.
          *    @param $args          Expected argument list or
          *                          false for any arguments.
-         *    @public
+         *    @access public
          */
         function expectOnce($method, $args = false) {
             $this->expectCallCount($method, 1);
@@ -659,7 +659,7 @@
          *    @param $method        Method call to track.
          *    @param $args          Expected argument list or
          *                          false for any arguments.
-         *    @public
+         *    @access public
          */
         function expectAtLeastOnce($method, $args = false) {
             $this->expectMinimumCallCount($method, 1);
@@ -674,7 +674,7 @@
          *    call counts.
          *    This method must be called explicitly for the call
          *    count assertions to be triggered.
-         *    @public
+         *    @access public
          */
         function tally() {
             $this->_tally_call_counts();
@@ -683,7 +683,7 @@
         
         /**
          *    Checks that the exact call counts match up.
-         *    @private
+         *    @access private
          */
         function _tally_call_counts() {
             foreach ($this->_expected_counts as $method => $expected) {
@@ -696,7 +696,7 @@
         
         /**
          *    Checks that the minimum call counts match up.
-         *    @private
+         *    @access private
          */
         function _tally_minimum_call_counts() {
             foreach ($this->_min_counts as $method => $minimum) {
@@ -715,7 +715,7 @@
          *    @param $method        Name of method to simulate.
          *    @param $args          Arguments as an array.
          *    @return               Stored return.
-         *    @private
+         *    @access private
          */
         function &_invoke($method, $args) {
             $method = strtolower($method);
@@ -731,7 +731,7 @@
          *    @param $args              Argument list to match.
          *    @param $timing            The position of this call
          *                              in the call history.
-         *    @private
+         *    @access private
          */
         function _checkExpectations($method, $args, $timing) {
             if (isset($this->_max_counts[$method])) {
@@ -776,7 +776,7 @@
          *                           the test event.
          *    @param $test           Unit test case to send
          *                           assertion to.
-         *    @protected
+         *    @access protected
          */
         function _assertTrue($assertion, $message , &$test) {
             $test->assertTrue($assertion, $message);
@@ -809,7 +809,7 @@
          *                             methods in the cloned class or when
          *                             the class hasn't been written yet.
          *    @static
-         *    @public
+         *    @access public
          */
         function generate($class, $stub_class = false, $methods = false) {
             if (!class_exists($class)) {
@@ -833,7 +833,7 @@
          *    @param $mock_class       New class name.
          *    @param $methods          Additional methods.
          *    @static
-         *    @private
+         *    @access private
          */
         function _createClassCode($class, $stub_class, $methods) {
             $stub_base = SimpleTestOptions::getStubBaseClass();
@@ -856,7 +856,7 @@
          *                      cannot be cloned.
          *    @param $methods   Additional methods.
          *    @static
-         *    @private
+         *    @access private
          */
         function _createHandlerCode($class, $base, $methods) {
             $code = "";
@@ -907,7 +907,7 @@
          *                             methods in the cloned class or when
          *                             the class hasn't been written yet.
          *    @static
-         *    @public
+         *    @access public
          */
         function generate($class, $mock_class = false, $methods = false) {
             if (!class_exists($class)) {
@@ -935,7 +935,7 @@
          *    @param $methods          Methods to be overridden
          *                             with mock versions.
          *    @static
-         *    @public
+         *    @access public
          */
         function generatePartial($class, $mock_class, $methods) {
             if (!class_exists($class)) {
@@ -954,7 +954,7 @@
          *    @param $methods          Additional methods.
          *    @return                  Code as a string.
          *    @static
-         *    @private
+         *    @access private
          */
         function _createClassCode($class, $mock_class, $methods) {
             $mock_base = SimpleTestOptions::getMockBaseClass();
@@ -974,7 +974,7 @@
          *    @param $methods          Additional methods.
          *    @return                  Code as a string.
          *    @static
-         *    @private
+         *    @access private
          */
         function _extendClassCode($class, $mock_class, $methods) {
             $mock_base = SimpleTestOptions::getMockBaseClass();
@@ -995,7 +995,7 @@
          *    Creates source code for chaining to an aggregated
          *    mock object.
          *    @return                  Code as a string.
-         *    @private
+         *    @access private
          */
         function _chainMockReturns() {
             $code = "    function setReturnValue(\$method, \$value, \$args = false) {\n";
@@ -1023,7 +1023,7 @@
          *    Creates source code for chaining to an aggregated
          *    mock object.
          *    @return                  Code as a string.
-         *    @private
+         *    @access private
          */
         function _chainMockExpectations() {
             $code = "    function expectArguments(\$method, \$args = false) {\n";
@@ -1062,7 +1062,7 @@
          *    @param $methods          Methods to be overridden
          *                             with mock versions.
          *    @return                  Code as a string.
-         *    @private
+         *    @access private
          */
         function _overrideMethods($methods) {
             $code = "";

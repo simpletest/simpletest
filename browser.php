@@ -19,7 +19,7 @@
         
         /**
          *    Constructor. Jar starts empty.
-         *    @public
+         *    @access public
          */
         function CookieJar() {
             $this->_cookies = array();
@@ -32,7 +32,7 @@
          *                        If ommitted then all persistent
          *                        cookies are kept. Time is either
          *                        Cookie format string or timestamp.
-         *    @public
+         *    @access public
          */
         function restartSession($date = false) {
             $surviving = array();
@@ -55,7 +55,7 @@
          *    Adds a cookie to the jar. This will overwrite
          *    cookies with matching host, paths and keys.
          *    @param $cookie        New cookie.
-         *    @public
+         *    @access public
          */
         function setCookie($cookie) {
             for ($i = 0; $i < count($this->_cookies); $i++) {
@@ -82,7 +82,7 @@
          *    @param $path        Path encompassing cookies.
          *    @return             Hash of valid cookie objects keyed
          *                        on the cookie name.
-         *    @public
+         *    @access public
          */
         function getValidCookies($host = false, $path = "/") {
             $valid_cookies = array();
@@ -103,7 +103,7 @@
          *                          this path.
          *    @param $name          Name must match.
          *    @return               True if matched.
-         *    @private
+         *    @access private
          */
         function _isMatch($cookie, $host, $path, $name) {
             if ($cookie->getName() != $name) {
@@ -131,7 +131,7 @@
         /**
          *    Starts with a fresh browser with no
          *    cookie or any other state information.
-         *    @public
+         *    @access public
          */
         function SimpleBrowser() {
             $this->_cookie_jar = new CookieJar();
@@ -143,7 +143,7 @@
         /**
          *    Accessor for base URL worked out from the current URL.
          *    @return        Base URL as string.
-         *    @public
+         *    @access public
          */
         function getBaseUrl() {
             if (!$this->_current_url) {
@@ -156,7 +156,7 @@
         /**
          *    Accessor for the current browser location.
          *    @return        Current URL as string.
-         *    @public
+         *    @access public
          */
         function getCurrentUrl() {
             if (!$this->_current_url) {
@@ -172,7 +172,7 @@
          *    @param $date        Time when session restarted.
          *                        If ommitted then all persistent
          *                        cookies are kept.
-         *    @public
+         *    @access public
          */
         function restartSession($date = false) {
             $this->_cookie_jar->restartSession($date);
@@ -186,7 +186,7 @@
          *    @param $host            Host upon which the cookie is valid.
          *    @param $path            Cookie path if not host wide.
          *    @param $expiry          Expiry date as string.
-         *    @public
+         *    @access public
          */
         function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
             $cookie = new SimpleCookie($name, $value, $path, $expiry);
@@ -204,7 +204,7 @@
          *    @param $name        Name of cookie to read.
          *    @return             False if not present, else the
          *                        value as a string.
-         *    @public
+         *    @access public
          */
         function getCookieValue($host, $path, $name) {
             $longest_path = "";
@@ -224,7 +224,7 @@
          *    @param $name   Key of cookie to find.
          *    @return        Null if there is no base URL, false
          *                   if the cookie is not set.
-         *    @public
+         *    @access public
          */
         function getBaseCookieValue($name) {
             if (! $this->getBaseUrl()) {
@@ -238,7 +238,7 @@
          *    Sets the maximum number of redirects before
          *    a page will be loaded anyway.
          *    @param $max        Most hops allowed.
-         *    @public
+         *    @access public
          */
         function setMaximumRedirects($max) {
             $this->_max_redirects = $max;
@@ -248,7 +248,7 @@
          *    Test to see if the redirect limit is passed.
          *    @param $redirects        Count so far.
          *    @return                  True if over.
-         *    @private
+         *    @access private
          */
         function _isTooManyRedirects($redirects) {
             return ($redirects > $this->_max_redirects);
@@ -261,7 +261,7 @@
          *    @param $url          Target to fetch as Url object.
          *    @param $parameters   Additional parameters for request.
          *    @return              Response object.
-         *    @protected
+         *    @access protected
          */
         function &fetchResponse($method, $url, $parameters) {
             $redirects = 0;
@@ -285,7 +285,7 @@
         /**
          *    Accessor for last response.
          *    @return      Response object or false if none.
-         *    @protected
+         *    @access protected
          */
         function &_getLastResponse() {
             return $this->_response;
@@ -296,7 +296,7 @@
          *    @param $raw_url      Target to fetch as string.
          *    @param $parameters   Additional parameters for GET request.
          *    @return              Content of page.
-         *    @public
+         *    @access public
          */
         function get($raw_url, $parameters = false) {
             $url = $this->createAbsoluteUrl($this->getBaseUrl(), $raw_url, $parameters);
@@ -314,7 +314,7 @@
          *    @param $raw_url      Target to fetch as string.
          *    @param $parameters   Additional parameters for GET request.
          *    @return              Content of page.
-         *    @public
+         *    @access public
          */
         function head($raw_url, $parameters = false) {
             $url = $this->createAbsoluteUrl($this->getBaseUrl(), $raw_url, $parameters);
@@ -327,7 +327,7 @@
          *    @param $raw_url      Target to fetch as string.
          *    @param $parameters   POST parameters.
          *    @return              Content of page.
-         *    @public
+         *    @access public
          */
         function post($raw_url, $parameters = false) {
             $url = $this->createAbsoluteUrl($this->getBaseUrl(), $raw_url, array());
@@ -346,7 +346,7 @@
          *    @param $url          Target to fetch as url object.
          *    @param $parameters   POST/GET parameters.
          *    @return              New request object.
-         *    @private
+         *    @access private
          */
         function &_createCookieRequest($method, $url, $parameters = false) {
             if (!$parameters) {
@@ -366,7 +366,7 @@
          *    @param $url          Target to fetch as url object.
          *    @param $parameters   POST/GET parameters.
          *    @return              New request object.
-         *    @protected
+         *    @access protected
          */
         function &_createRequest($method, $url, $parameters) {
             if ($method == 'POST') {
@@ -384,7 +384,7 @@
          *    Extracts new cookies into the cookie jar.
          *    @param $url        Target to fetch as url object.
          *    @param $cookies    New cookies.
-         *    @private
+         *    @access private
          */
         function _addCookies($url, $cookies) {
             foreach ($cookies as $cookie) {
@@ -403,7 +403,7 @@
          *    @param $raw_url        URL as string.
          *    @param $parameters     Additional request, parameters.
          *    @return                Absolute URL as object.
-         *    @public
+         *    @access public
          *    @static
          */
         function createAbsoluteUrl($base_url, $raw_url, $parameters = false) {
@@ -425,7 +425,7 @@
         /**
          *    Starts the browser empty.
          *    @param $test     Test case with assertTrue().
-         *    @public
+         *    @access public
          */
         function TestBrowser(&$test) {
             $this->SimpleBrowser();
@@ -435,7 +435,7 @@
         
         /**
          *    Resets all expectations.
-         *    @protected
+         *    @access protected
          */
         function _clearExpectations() {
             $this->_expected_cookies = array();
@@ -448,7 +448,7 @@
          *    @param $url        Target to fetch as SimpleUrl.
          *    @param $parameters Additional parameters for request.
          *    @return            Reponse object.
-         *    @public
+         *    @access public
          */
         function &fetchResponse($method, $url, $parameters) {
             $response = &parent::fetchResponse($method, $url, $parameters);
@@ -464,7 +464,7 @@
          *                        An empty string corresponds to a
          *                        cleared cookie.
          *    @param $message     Message to display.
-         *    @public
+         *    @access public
          */
         function expectCookie($name, $value = false, $message = "%s") {
             $this->_expected_cookies[] = array(
@@ -478,7 +478,7 @@
          *    Each expectation sends a test event.
          *    @param $url         Target URL.
          *    @param $reponse     HTTP response from the fetch.
-         *    @private
+         *    @access private
          */
         function _checkExpectations($url, &$response) {
             $this->_checkAllExpectedCookies($response);
@@ -487,7 +487,7 @@
         /**
          *    Checks all incoming cookies against expectations.
          *    @param $reponse     HTTP response from the fetch.
-         *    @private
+         *    @access private
          */
         function _checkAllExpectedCookies(&$response) {
             $cookies = $response->getNewCookies();
@@ -509,7 +509,7 @@
          *                        to show on failure.
          *    @param $cookies     Incoming cookies.
          *    @return             True if expectation met.
-         *    @private
+         *    @access private
          */
         function _checkExpectedCookie($expected, $cookies) {
             $is_match = false;
@@ -531,7 +531,7 @@
          *                        to show on failure.
          *    @param $cookies     Incoming cookies.
          *    @return             True if expectation met.
-         *    @private
+         *    @access private
          */
         function _checkExpectedCookieValue($expected, $cookies) {
             $is_match = false;
@@ -553,7 +553,7 @@
          *    Checks the response code against a list
          *    of possible values.
          *    @param $responses    Possible responses for a pass.
-         *    @public
+         *    @access public
          */
         function assertResponse($responses, $message = "%s") {
             $responses = (is_array($responses) ? $responses : array($responses));
@@ -568,7 +568,7 @@
          *    Checks the mime type against a list
          *    of possible values.
          *    @param $types    Possible mime types for a pass.
-         *    @public
+         *    @access public
          */
         function assertMime($types, $message = "%s") {
             $types = (is_array($types) ? $types : array($types));
@@ -583,7 +583,7 @@
          *    Sends an assertion to the held test case.
          *    @param $result        True on success.
          *    @param $message       Message to send to test.
-         *    @protected
+         *    @access protected
          */
         function _assertTrue($result, $message) {
             $this->_test->assertTrue($result, $message);

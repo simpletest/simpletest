@@ -25,7 +25,7 @@
          *    Check to see if the tag can have both start and
          *    end tags with content in between.
          *    @return boolean        True if content allowed.
-         *    @public
+         *    @access public
          */
         function expectEndTag() {
             return true;
@@ -34,7 +34,7 @@
         /**
          *    Appends string content to the current content.
          *    @param string $content        Additional text.
-         *    @public
+         *    @access public
          */
         function addContent($content) {
             $this->_content .= (string)$content;
@@ -43,7 +43,7 @@
         /**
          *    Adds an enclosed tag to the content.
          *    @param SimpleTag $tag    New tag.
-         *    @public
+         *    @access public
          */
         function addTag(&$tag) {
         }
@@ -51,7 +51,7 @@
         /**
          *    Accessor for tag name.
          *    @return        Name as string.
-         *    @public
+         *    @access public
          */
         function getTagName() {
             return $this->_name;
@@ -60,7 +60,7 @@
         /**
          *    List oflegal child elements.
          *    @return array        List of element names.
-         *    @public
+         *    @access public
          */
         function getChildElements() {
             return array();
@@ -70,7 +70,7 @@
          *    Accessor for an attribute.
          *    @param $label      Attribute name.
          *    @return            Attribute value as string.
-         *    @public
+         *    @access public
          */
         function getAttribute($label) {
             if (! isset($this->_attributes[$label])) {
@@ -85,7 +85,7 @@
         /**
          *    Accessor for the whole content so far.
          *    @return        Content as big string.
-         *    @public
+         *    @access public
          */
         function getContent() {
             return $this->_content;
@@ -143,7 +143,7 @@
          *    Accessor for name submitted as the key in
          *    GET/POST varaibles haah.
          *    @return string        Parsed value.
-         *    @public
+         *    @access public
          */
         function getName() {
             return $this->getAttribute('name');
@@ -152,7 +152,7 @@
         /**
          *    Accessor for default value parsed with the tag.
          *    @return string        Parsed value.
-         *    @public
+         *    @access public
          */
         function getDefault() {
             return '';
@@ -163,7 +163,7 @@
          *    none.
          *    @return string      Value set by form or default
          *                        if none.
-         *    @public
+         *    @access public
          */
         function getValue() {
             if ($this->_value === false) {
@@ -176,7 +176,7 @@
          *    Sets the current form element value.
          *    @param string $value       New value.
          *    @return boolean            True if allowed.
-         *    @public
+         *    @access public
          */
         function setValue($value) {
             $this->_value = $value;
@@ -186,7 +186,7 @@
         /**
          *    Resets the form element value back to the
          *    default.
-         *    @public
+         *    @access public
          */
         function resetValue() {
             $this->_value = false;
@@ -210,7 +210,7 @@
         /**
          *    Tag contains no content.
          *    @return boolean        False.
-         *    @public
+         *    @access public
          */
         function expectEndTag() {
             return false;
@@ -219,7 +219,7 @@
         /**
          *    Accessor for starting value.
          *    @return string        Parsed value.
-         *    @public
+         *    @access public
          */
         function getDefault() {
             return $this->getAttribute('value');
@@ -249,7 +249,7 @@
         /**
          *    Tag contains no end element.
          *    @return boolean        False.
-         *    @public
+         *    @access public
          */
         function expectEndTag() {
             return false;
@@ -258,7 +258,7 @@
         /**
          *    Accessor for starting value.
          *    @return string        Parsed value.
-         *    @public
+         *    @access public
          */
         function getDefault() {
             return $this->getAttribute('value');
@@ -268,7 +268,7 @@
          *    Disables the setting of the button value.
          *    @param string $value        Ignored.
          *    @return boolean            True if allowed.
-         *    @public
+         *    @access public
          */
         function setValue($value) {
             return false;
@@ -292,7 +292,7 @@
         /**
          *    Accessor for starting value.
          *    @return string        Parsed value.
-         *    @public
+         *    @access public
          */
         function getDefault() {
             if ($this->_wrapIsEnabled()) {
@@ -308,7 +308,7 @@
          *    Applies word wrapping if needed.
          *    @param string $value      New value.
          *    @return boolean            True if allowed.
-         *    @public
+         *    @access public
          */
         function setValue($value) {
             if ($this->_wrapIsEnabled()) {
@@ -323,7 +323,7 @@
         /**
          *    Test to see if text should be wrapped.
          *    @return boolean        True if wrapping on.
-         *    @private
+         *    @access private
          */
         function _wrapIsEnabled() {
             if ($this->getAttribute('cols')) {
@@ -357,7 +357,7 @@
         /**
          *    Adds an option tag to a selection field.
          *    @param SimpleOptionTag $tag     New option.
-         *    @public
+         *    @access public
          */
         function addTag(&$tag) {
             if ($tag->getTagName() == 'option') {
@@ -368,7 +368,7 @@
         /**
          *    Text within the selection element is ignored.
          *    @param string $content        Ignored.
-         *    @public
+         *    @access public
          */
         function addContent($content) {
         }
@@ -377,7 +377,7 @@
          *    Scans options for defaults. If none, then
          *    the first option is selected.
          *    @return string        Selected field.
-         *    @public
+         *    @access public
          */
         function getDefault() {
             for ($i = 0; $i < count($this->_options); $i++) {
@@ -395,7 +395,7 @@
          *    Can only set allowed values.
          *    @param string $value        New choice.
          *    @return boolean            True if allowed.
-         *    @public
+         *    @access public
          */
         function setValue($value) {
             for ($i = 0; $i < count($this->_options); $i++) {
@@ -411,7 +411,7 @@
          *    Accessor for current selection value.
          *    @return string      Value attribute or
          *                        content of opton.
-         *    @public
+         *    @access public
          */
         function getValue() {
             if ($this->_choice === false) {
@@ -437,7 +437,7 @@
          *    Does nothing.
          *    @param string $value      Ignored.
          *    @return boolean           Not allowed.
-         *    @public
+         *    @access public
          */
         function setValue($value) {
             return false;
@@ -446,7 +446,7 @@
         /**
          *    Accessor for starting value.
          *    @return string        Parsed value.
-         *    @public
+         *    @access public
          */
         function getDefault() {
             if ($this->getAttribute('value')) {
@@ -496,7 +496,7 @@
         /**
          *    Accessor for form action.
          *    @return            Either get or post.
-         *    @public
+         *    @access public
          */
         function getMethod() {
             return ($this->_method ? strtolower($this->_method) : 'get');
@@ -505,7 +505,7 @@
         /**
          *    Relative URL of the target.
          *    @return            URL as string.
-         *    @public
+         *    @access public
          */
         function getAction() {
             return $this->_action;
@@ -514,7 +514,7 @@
         /**
          *    ID field of form for unique identification.
          *    @return            ID as integer.
-         *    @public
+         *    @access public
          */
         function getId() {
             return $this->_id;
@@ -523,7 +523,7 @@
         /**
          *    Adds a tag contents to the form.
          *    @param $tag        Input tag to add.
-         *    @public
+         *    @access public
          */
         function addWidget($tag) {
             if ($tag->getAttribute("type") == "submit") {
@@ -540,7 +540,7 @@
          *    @param $name        Keyed by widget name.
          *    @return             Value as string or null
          *                        if not set.
-         *    @public
+         *    @access public
          */
         function getValue($name) {
             if (isset($this->_widgets[$name])) {
@@ -556,7 +556,7 @@
          *    @return          True if value is legal, false
          *                     otherwise. f the field is not
          *                     present, nothing will be set.
-         *    @public
+         *    @access public
          */
         function setField($name, $value) {
             if (isset($this->_widgets[$name])) {
@@ -569,7 +569,7 @@
          *    Reads the current form values as a hash
          *    of submitted parameters.
          *    @return          Hash of submitted values.
-         *    @public
+         *    @access public
          */
         function getValues() {
             $values = array();
@@ -584,7 +584,7 @@
          *    Gets a button name from the label.
          *    @param $label    Button label to search for.
          *    @return          Name of button.
-         *    @public
+         *    @access public
          */
         function getSubmitName($label) {
             foreach (array_keys($this->_buttons) as $name) {
@@ -600,7 +600,7 @@
          *    @return          Hash of submitted values or false
          *                     if there is no such button in the
          *                     form.
-         *    @public
+         *    @access public
          */
         function submitButton($name) {
             if (!isset($this->_buttons[$name])) {
@@ -618,7 +618,7 @@
          *    @return          Hash of submitted values or false
          *                     if there is no such button in the
          *                     form.
-         *    @public
+         *    @access public
          */
         function submitButtonByLabel($label) {
             if ($name = $this->getSubmitName($label)) {
@@ -632,7 +632,7 @@
          *    value. Used when there is only one button or it
          *    is unimportant.
          *    @return            Hash of submitted values.
-         *    @public
+         *    @access public
          */
         function submit() {
             return $this->getValues();            

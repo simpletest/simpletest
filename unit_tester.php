@@ -27,7 +27,7 @@
          *    with test methods for a functional test case.
          *    @param $label            Name of test case. Will use
          *                             the class name if none specified.
-         *    @public
+         *    @access public
          */
         function UnitTestCase($label = false) {
             if (!$label) {
@@ -40,7 +40,7 @@
          *    Will be true if the value is null.
          *    @param $value          Supposedly null value.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertNull($value, $message = "%s") {
             $dumper = &new SimpleDumper();
@@ -54,7 +54,7 @@
          *    Will be true if the value is set.
          *    @param $value          Supposedly set value.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertNotNull($value, $message = "%s") {
             $dumper = &new SimpleDumper();
@@ -70,7 +70,7 @@
          *    if not an object, but the type is correct.
          *    @param $object        Object to test.
          *    @param $type          Type name as string.
-         *    @public
+         *    @access public
          */
         function assertIsA($object, $type, $message = "%s") {
             $dumper = &new SimpleDumper();
@@ -92,7 +92,7 @@
          *    @param $first          Value to compare.
          *    @param $second         Value to compare.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertEqual($first, $second, $message = "%s") {
             $this->assertExpectation(
@@ -107,7 +107,7 @@
          *    @param $first          Value to compare.
          *    @param $second         Value to compare.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertNotEqual($first, $second, $message = "%s") {
             $this->assertExpectation(
@@ -122,7 +122,7 @@
          *    @param $first          Value to compare.
          *    @param $second         Value to compare.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertIdentical($first, $second, $message = "%s") {
             $this->assertExpectation(
@@ -137,7 +137,7 @@
          *    @param $first          Value to compare.
          *    @param $second         Value to compare.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertNotIdentical($first, $second, $message = "%s") {
             $this->assertExpectation(
@@ -152,7 +152,7 @@
          *    @param $first          Object reference to check.
          *    @param $second         Hopefully the same object.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertReference(&$first, &$second, $message = "%s") {
             $dumper = &new SimpleDumper();
@@ -174,7 +174,7 @@
          *    @param $first          Object reference to check.
          *    @param $second         Hopefully not the same object.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertCopy(&$first, &$second, $message = "%s") {
             $dumper = &new SimpleDumper();
@@ -197,7 +197,7 @@
          *                           the regex delimiters.
          *    @param $subject        String to search in.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertWantedPattern($pattern, $subject, $message = "%s") {
             $this->assertExpectation(
@@ -213,7 +213,7 @@
          *                           the regex delimiters.
          *    @param $subject        String to search in.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
             $this->assertExpectation(
@@ -226,7 +226,7 @@
          *    Confirms that no errors have occoured so
          *    far in the test method.
          *    @param $message        Message to display.
-         *    @public
+         *    @access public
          */
         function assertNoErrors($message = "%s") {
             $queue = &SimpleErrorQueue::instance();
@@ -241,7 +241,7 @@
          *    @param $expected   Expected error text or
          *                       false for no check.
          *    @param $message    Message to display.
-         *    @public
+         *    @access public
          */
         function assertError($expected = false, $message = "%s") {
             $queue = &SimpleErrorQueue::instance();

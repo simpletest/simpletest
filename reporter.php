@@ -16,7 +16,7 @@
          *    Does nothing yet. The first output will
          *    be sent on the first test start. For use
          *    by a web browser.
-         *    @public
+         *    @access public
          */
         function HtmlReporter() {
             $this->TestDisplay();
@@ -26,7 +26,7 @@
          *    Paints the top of the web page setting the
          *    title to the name of the starting test.
          *    @param $test_name        Name class of test.
-         *    @public
+         *    @access public
          */
         function paintHeader($test_name) {
             $this->sendNoCacheHeaders();
@@ -55,7 +55,7 @@
         /**
          *    Paints the CSS. Add additional styles here.
          *    @return             CSS code as text.
-         *    @protected
+         *    @access protected
          */
         function _getCss() {
             return ".fail { color: red; } pre { background-color: lightgray; }";
@@ -65,7 +65,7 @@
          *    Paints the end of the test with a summary of
          *    the passes and failures.
          *    @param $test_name        Name class of test.
-         *    @public
+         *    @access public
          */
         function paintFooter($test_name) {
             $colour = ($this->getFailCount() + $this->getExceptionCount() > 0 ? "red" : "green");
@@ -87,7 +87,7 @@
          *    top level test.
          *    @param $message        Failure message displayed in
          *                           the context of the other tests.
-         *    @public
+         *    @access public
          */
         function paintFail($message) {
             parent::paintFail($message);
@@ -101,7 +101,7 @@
         /**
          *    Paints a PHP error or exception.
          *    @param $message        Message is ignored.
-         *    @public
+         *    @access public
          *    @abstract
          */
         function paintException($message) {
@@ -116,7 +116,7 @@
         /**
          *    Paints formatted text such as dumped variables.
          *    @param $message        Text to show.
-         *    @public
+         *    @access public
          */
         function paintFormattedMessage($message) {
             print "<pre>$message</pre>";
@@ -135,7 +135,7 @@
         /**
          *    Does nothing yet. The first output will
          *    be sent on the first test start.
-         *    @public
+         *    @access public
          */
         function CommandLineReporter() {
             $this->TestDisplay();
@@ -144,7 +144,7 @@
         /**
          *    Paints the title only.
          *    @param $test_name        Name class of test.
-         *    @public
+         *    @access public
          */
         function paintHeader($test_name) {
             print "$test_name\n";
@@ -155,7 +155,7 @@
          *    Paints the end of the test with a summary of
          *    the passes and failures.
          *    @param $test_name        Name class of test.
-         *    @public
+         *    @access public
          */
         function paintFooter($test_name) {
             if ($this->getFailCount() + $this->getExceptionCount() == 0) {
@@ -174,7 +174,7 @@
          *    Paints the test failure as a stack trace.
          *    @param $message        Failure message displayed in
          *                           the context of the other tests.
-         *    @public
+         *    @access public
          */
         function paintFail($message) {
             parent::paintFail($message);
@@ -188,7 +188,7 @@
         /**
          *    Paints a PHP error or exception.
          *    @param $message        Message is ignored.
-         *    @public
+         *    @access public
          *    @abstract
          */
         function paintException($message) {
@@ -198,7 +198,7 @@
         /**
          *    Paints formatted text such as dumped variables.
          *    @param $message        Text to show.
-         *    @public
+         *    @access public
          */
         function paintFormattedMessage($message) {
             print "$message\n";
@@ -207,7 +207,7 @@
         /**
          *    Static check for running in the comand line.
          *    @return Boolean        True if CLI.
-         *    @public
+         *    @access public
          *    @static
          */
         function inCli() {

@@ -18,6 +18,7 @@ Mock objects
 
 Html parser
 -----------
+Refactor the links into their own objects (3).
 
 Browser
 -------
@@ -30,10 +31,11 @@ Add a header test (2).
 
 Documentation
 -------------
-Split tutorial into two (5).
 Add simple web testing page to docs (2/3) - done.
+Add expectatiioons to docs (3).
 
 Build
 -----
-Make files PHP documentor compatible (3).
+Make files PHP documentor compatible (3/1).
 Update package.xml file (1).
+Move build script up a level (1).
