@@ -10,9 +10,10 @@
     // The following URL will depend on your own installation.
     $base_url = 'http://uno/simple/';
     
-    $test = &new RemoteTestCase(
+    $test = &new GroupTest('Remote tests');
+    $test->addTestCase(new RemoteTestCase(
             $base_url . 'test/visual_test.php?xml=yes',
-            $base_url . 'test/visual_test.php?xml=yes&dry=yes');
+            $base_url . 'test/visual_test.php?xml=yes&dry=yes'));
     if (SimpleReporter::inCli()) {
         exit ($test->run(new XmlReporter()) ? 0 : 1);
     }

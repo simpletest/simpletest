@@ -21,7 +21,7 @@ methods should provide a temporary fix.
 
 No class TestDisplay
 ====================
-This has been renamed SimplePageReporter in Beta3 and is now deprecated.
+This has been folded into SimpleReporter in Beta3 and is now deprecated.
 
 No class CommandLineReporter
 ============================

@@ -79,6 +79,19 @@
          */
         function getSize() {
             if ($this->_size === false) {
+                $browser = &$this->_createBrowser();
+                $xml = $browser->get($this->_dry_url);
+                if (! $xml) {
+                    trigger_error('Cannot read remote test URL [' . $this->_dry_url . ']');
+                    return false;
+                }
+                $reporter = &new SimpleReporter();
+                $parser = &$this->_createParser($reporter);
+                if (! $parser->parse($xml)) {
+                    trigger_error('Cannot parse incoming XML from [' . $this->_dry_url . ']');
+                    return false;
+                }
+                $this->_size = $reporter->getTestCaseCount();
             }
             return $this->_size;
         }
