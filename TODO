@@ -10,6 +10,7 @@ Unit tester
 Add shell test case (3/4) - done.
 Pattern expectations need type check on message (1/1) - done.
 Create an isA() expectation (1).
+Add pattern match for error queue (1).
 
 Interface
 ---------
@@ -18,7 +19,6 @@ Make Runner invoke different start and end methods on reporters (2/1) - done.
 
 Mock objects
 ------------
-Create package file for mocks only (1).
 
 Html parser
 -----------
@@ -46,3 +46,4 @@ Build
 Make files PHP documentor compatible (3/2).
 Update package.xml file (1/1) - done.
 Move build script up a level and make it into a shell script (1).
+Create package file for mocks only (1).

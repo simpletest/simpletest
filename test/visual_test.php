@@ -152,6 +152,12 @@
             trigger_error('Error 3');
             $this->assertError('Error 2', "%s->Fail");        // Fail.
         }
+        function testErrorPatterns() {
+            trigger_error('Error 2');
+            $this->assertErrorPattern('/Error 2/', "%s->Pass");
+            trigger_error('Error 3');
+            $this->assertErrorPattern('/Error 2/', "%s->Fail");        // Fail.
+        }
         function testDumping() {
             $this->dump(array("Hello"), "Displaying a variable");
         }
@@ -273,7 +279,7 @@
         }
     }
     
-    $test = new GroupTest("Visual test with 41 fails, 41 passes and 4 exceptions");
+    $test = new GroupTest("Visual test with 42 passes, 42 fails and 4 exceptions");
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());

@@ -237,7 +237,7 @@
         
         /**
          *    Confirms that an error has occoured and
-         *    optionally that the error text matches.
+         *    optionally that the error text matches exactly.
          *    @param $expected   Expected error text or
          *                       false for no check.
          *    @param $message    Message to display.
@@ -254,6 +254,28 @@
             $this->assertTrue(
                     !$expected || ($expected == $content),
                     "Expected [$expected] in PHP error [$content] severity [$severity] in [$file] line [$line]");
+        }
+        
+        /**
+         *    Confirms that an error has occoured and
+         *    that the error text matches a Perl regular
+         *    expression.
+         *    @param $expected   Expected error text or
+         *                       false for no check.
+         *    @param $message    Message to display.
+         *    @access public
+         */
+        function assertErrorPattern($pattern, $message = "%s") {
+            $queue = &SimpleErrorQueue::instance();
+            if ($queue->isEmpty()) {
+                $this->fail(sprintf($message, "Expected error not found"));
+                return;
+            }
+            list($severity, $content, $file, $line, $globals) = $queue->extract();
+            $severity = SimpleErrorQueue::getSeverityAsString($severity);
+            $this->assertTrue(
+                    (boolean)preg_match($pattern, $content),
+                    "Expected pattern match [$pattern] in PHP error [$content] severity [$severity] in [$file] line [$line]");
         }
     }
 ?>
