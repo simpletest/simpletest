@@ -344,15 +344,16 @@
          *    Simpletest itself. The name must start with "assert".
          *    @param array $stack      List of stack frames.
          *    @param string $format    String formatting.
+         *    @param string $prefix    Prefix of method to search for.
          *    @access public
          *    @static
          */
-        function getFormattedAssertionLine($stack, $format = '%d') {
+        function getFormattedAssertionLine($stack, $format = '%d', $prefix = 'assert') {
             foreach ($stack as $frame) {
                 if (substr(@dirname($frame['file']), -10) == 'simpletest') {
                     continue;
                 }
-                if (strncmp($frame['function'], 'assert', 6) == 0) {
+                if (strncmp($frame['function'], $prefix, strlen($prefix)) == 0) {
                     return sprintf($format, $frame['line']);
                 }
             }

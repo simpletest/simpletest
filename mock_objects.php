@@ -705,6 +705,7 @@
             $this->_dieOnNoMethod($method, 'set expected arguments');
             $this->_checkArgumentsIsArray($args, 'set expected arguments');
             $args = $this->_replaceWildcards($args);
+            $message .= Mock::getExpectationLine(' at line [%d]');
             $this->_expected_args[strtolower($method)] =
                     new ParametersExpectation($args, $message);
         }
@@ -730,6 +731,7 @@
                 $this->_expected_args_at[$timing] = array();
             }
             $method = strtolower($method);
+            $message .= Mock::getExpectationLine(' at line [%d]');
             $this->_expected_args_at[$timing][$method] =
                     new ParametersExpectation($args, $message);
         }
@@ -746,6 +748,7 @@
          */
         function expectCallCount($method, $count, $message = '%s') {
             $this->_dieOnNoMethod($method, "set expected call count");
+            $message .= Mock::getExpectationLine(' at line [%d]');
             $this->_expected_counts[strtolower($method)] =
                     new CallCountExpectation($method, $count, $message);
         }
@@ -761,6 +764,7 @@
          */
         function expectMaximumCallCount($method, $count, $message = '%s') {
             $this->_dieOnNoMethod($method, "set maximum call count");
+            $message .= Mock::getExpectationLine(' at line [%d]');
             $this->_max_counts[strtolower($method)] = 
                     new MaximumCallCountExpectation($method, $count, $message);
         }
@@ -776,6 +780,7 @@
          */
         function expectMinimumCallCount($method, $count, $message = '%s') {
             $this->_dieOnNoMethod($method, "set minimum call count");
+            $message .= Mock::getExpectationLine(' at line [%d]');
             $this->_expected_counts[strtolower($method)] =
                     new MinimumCallCountExpectation($method, $count, $message);
         }
@@ -1238,10 +1243,21 @@
         }
         
         /**
-         *    @deprecated
+         *    Uses a stack trace to find the line of an assertion.
+         *    @param string $format    String formatting.
+         *    @param array $stack      Stack frames top most first. Only
+         *                             needed if not using the PHP
+         *                             backtrace function.
+         *    @return string           Line number of first assert*
+         *                             method embedded in format string.
+         *    @access public
+         *    @static
          */
-        function setMockBaseClass($mock_base = false) {
-            SimpleTestOptions::setMockBaseClass($mock_base);
+        function getExpectationLine($format = '%d', $stack = false) {
+            if ($stack === false) {
+                $stack = SimpleTestCompatibility::getStackTrace();
+            }
+            return SimpleDumper::getFormattedAssertionLine($stack, $format, 'expect');
         }
     }
 ?>

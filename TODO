@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC1) of 71 hours!
+This is immediate stuff only for this iteration (RC1) of 73 hours!
 First figure is expected hours, second is the time it actually took.
 
 $Id$
@@ -20,7 +20,8 @@ Mock objects
 ------------
 Add fix for PHP5 __construct() call (1/1) - done.
 Should throw error when setting expectation on non-mocked method (3/2) - done.
-Line numbers on failed expectations (3).
+Line numbers on failed expectations (3/1) - done.
+Expectation methods should carry message overrides (2/2) - done.
 
 Parser
 ------
