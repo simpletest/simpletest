@@ -318,9 +318,8 @@
         var $_method;
         var $_action;
         var $_id;
-        var $_defaults;
-        var $_values;
         var $_buttons;
+        var $_widgets;
         
         /**
          *    Starts with no held controls/widgets.
@@ -330,9 +329,8 @@
             $this->_method = $tag->getAttribute("method");
             $this->_action = $tag->getAttribute("action");
             $this->_id = $tag->getAttribute("id");
-            $this->_defaults = array();
-            $this->_values = array();
             $this->_buttons = array();
+            $this->_widgets = array();
         }
         
         /**
@@ -368,19 +366,10 @@
          *    @public
          */
         function addWidget($tag) {
-            if ($tag->getTagName() == "input") {
-                if ($tag->getAttribute("type") == "submit") {
-                    $this->_buttons[$tag->getAttribute("name") ? $tag->getAttribute("name") : 'submit'] =
-                            $tag->getAttribute("value") ? $tag->getAttribute("value") : 'Submit';
-                    return;
-                }
-                if ($tag->getAttribute("name")) {
-                    $this->_defaults[$tag->getAttribute("name")] = $tag->getAttribute("value");
-                }
-            } elseif ($tag->getTagName() == "textarea") {
-                if ($tag->getAttribute("name")) {
-                    $this->_defaults[$tag->getAttribute("name")] = $tag->getContent();
-                }
+            if ($tag->getAttribute("type") == "submit") {
+                $this->_buttons[$tag->getName()] = &$tag;
+            } else {
+                $this->_widgets[$tag->getName()] = &$tag;
             }
         }
         
@@ -392,11 +381,8 @@
          *    @public
          */
         function getValue($name) {
-            if (isset($this->_values[$name])) {
-                return $this->_values[$name];
-            }
-            if (isset($this->_defaults[$name])) {
-                return $this->_defaults[$name];
+            if (isset($this->_widgets[$name])) {
+                return $this->_widgets[$name]->getValue();
             }
             return null;
         }
@@ -411,11 +397,11 @@
          *    @public
          */
         function setField($name, $value) {
-            if (! in_array($name, array_keys($this->_defaults))) {
-                return false;
+            if (isset($this->_widgets[$name])) {
+                $this->_widgets[$name]->setValue($value);
+                return true;
             }
-            $this->_values[$name] = $value;
-            return true;
+            return false;
         }
         
         /**
@@ -425,9 +411,11 @@
          *    @public
          */
         function getValues() {
-            return array_merge(
-                    $this->_defaults,
-                    $this->_values);
+            $values = array();
+            foreach (array_keys($this->_widgets) as $name) {
+                $values[$name] = $this->_widgets[$name]->getValue();
+            }
+            return $values;
         }
         
         /**
@@ -437,8 +425,8 @@
          *    @public
          */
         function getSubmitName($label) {
-            foreach ($this->_buttons as $name => $value) {
-                if ($value == $label) {
+            foreach (array_keys($this->_buttons) as $name) {
+                if ($this->_buttons[$name]->getValue() == $label) {
                     return $name;
                 }
             }
@@ -457,9 +445,8 @@
                 return false;
             }
             return array_merge(
-                    array($name => $this->_buttons[$name]),
-                    $this->_defaults,
-                    $this->_values);            
+                    array($name => $this->_buttons[$name]->getValue()),
+                    $this->getValues());            
         }
         
         /**
@@ -486,9 +473,7 @@
          *    @public
          */
         function submit() {
-            return array_merge(
-                    $this->_defaults,
-                    $this->_values);            
+            return $this->getValues();            
         }
     }
 ?>
