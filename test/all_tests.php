@@ -14,6 +14,7 @@
     $test->addTestFile("web_test_test.php");
     $test->addTestFile("socket_test.php");
     $test->addTestFile("http_test.php");
+    $test->addTestFile("browser_test.php");
     $test->attachObserver(new TestHtmlDisplay());
     $test->run();
 ?>
