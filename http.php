@@ -198,9 +198,6 @@
      *    HttpResponse object.
      */
     class SimpleHttpRequest {
-        var $_host;
-        var $_path;
-        var $_query;
         var $_user_headers;
         var $_url;
         var $_cookies;
