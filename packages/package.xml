@@ -48,7 +48,7 @@ stable release 1.0 version. It features many improvements to the HTML form
 parsing and exposure of the underlying web browser. There are also numerous
 minor improvements and bug fixes.</notes>
     <deps>
-      <dep type="php" rel="ge" version="4.1.0" optional="no"/>
+      <dep type="php" rel="ge" version="4.2.2" optional="no"/>
     </deps>
     <provides type="class" name="PHPUnit_TestCase" extends="SimpleTestCase" />
     <provides type="function" name="PHPUnit_TestCase::assertEquals" />

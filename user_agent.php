@@ -184,7 +184,8 @@
         
         /**
          *    Removes expired and temporary cookies as if
-         *    the browser was closed and re-opened.
+         *    the browser was closed and re-opened. Authorisation
+         *    has to be obtained again as well.
          *    @param string/integer $date   Time when session restarted.
          *                                  If omitted then all persistent
          *                                  cookies are kept.

@@ -11,6 +11,7 @@ FILES=(simpletest/errors.php \
           simpletest/dumper.php \
           simpletest/expectation.php \
           simpletest/socket.php \
+          simpletest/encoding.php \
           simpletest/url.php \
           simpletest/http.php \
           simpletest/authentication.php \
@@ -45,6 +46,7 @@ FILES=(simpletest/errors.php \
           simpletest/test/adapter_test.php \
           simpletest/test/socket_test.php \
           simpletest/test/url_test.php \
+          simpletest/test/encoding_test.php \
           simpletest/test/http_test.php \
           simpletest/test/authentication_test.php \
           simpletest/test/user_agent_test.php \
