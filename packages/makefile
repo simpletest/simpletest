@@ -10,6 +10,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/socket.php \
           simpletest/query_string.php \
           simpletest/http.php \
+          simpletest/authentication.php \
           simpletest/user_agent.php \
           simpletest/browser.php \
           simpletest/parser.php \
@@ -41,6 +42,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/test/socket_test.php \
           simpletest/test/query_string_test.php \
           simpletest/test/http_test.php \
+          simpletest/test/authentication_test.php \
           simpletest/test/user_agent_test.php \
           simpletest/test/browser_test.php \
           simpletest/test/parser_test.php \

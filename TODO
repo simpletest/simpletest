@@ -1,6 +1,6 @@
 TODO
-This is immediate stuff only for the next iteration.
-This is for a release date of second week of April.
+This is immediate stuff only for the next iteration (Beta5).
+This is also for a final release date of second week of April.
 
 $Id$
 
@@ -31,7 +31,7 @@ Add frame focus and defocus (3).
 Make widget handling reflect frame focus (2).
 Add setFieldById() method (1).
 Add assertFieldById() method (1).
-Add HTTP basic authentication challenge/response (5/9).
+Add HTTP basic authentication challenge/response (5/11).
 Allow image links/buttons to be head fetched to set cookies (2).
 Allow stylesheet loading to affect cookies (2).
 Redirects should become GET if they were POST (1/1) - done.

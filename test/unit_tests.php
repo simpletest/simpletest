@@ -1,7 +1,7 @@
 <?php
     // $Id$
     
-    if (!defined('SIMPLE_TEST')) {
+    if (! defined('SIMPLE_TEST')) {
         define('SIMPLE_TEST', '../');
     }
     require_once(SIMPLE_TEST . 'unit_tester.php');
@@ -24,6 +24,7 @@
             $this->addTestFile('socket_test.php');
             $this->addTestFile('query_string_test.php');
             $this->addTestFile('http_test.php');
+            $this->addTestFile('authentication_test.php');
             $this->addTestFile('user_agent_test.php');
             $this->addTestFile('browser_test.php');
             $this->addTestFile('parser_test.php');

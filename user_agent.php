@@ -9,12 +9,12 @@
     /**
      * @ignore    originally defined in simple_test.php
      */
-    if (!defined('SIMPLE_TEST')) {
+    if (! defined('SIMPLE_TEST')) {
         define('SIMPLE_TEST', 'simpletest/');
     }
     require_once(SIMPLE_TEST . 'http.php');
-    require_once(SIMPLE_TEST . 'page.php');
-    
+    require_once(SIMPLE_TEST . 'authentication.php');
+   
     define('DEFAULT_MAX_REDIRECTS', 3);
     define('DEFAULT_CONNECTION_TIMEOUT', 15);
     
@@ -152,121 +152,7 @@
             }
         }
     }
-    
-    /**
-     *    Manages security realms.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
-     */
-    class SimpleAuthenticator {
-        var $_realms;
-        
-        /**
-         *    Starts with no realms set up.
-         *    @access public
-         */
-        function SimpleAuthenticator() {
-            $this->_realms = array();
-        }
-        
-        /**
-         *    Adds a new realm centered the current URL.
-         *    Browsers vary wildly on their behaviour in this
-         *    regard. Mozilla ignores the realm and presents
-         *    only when challenged, wasting bandwidth. IE
-         *    just carries on presenting until a new challenge
-         *    occours. SimpleTest tries to follow the spirit of
-         *    the original standards committee and treats the
-         *    base URL as the root of a file tree shaped realm.
-         *    @param SimpleUrl $url    Base of realm.
-         *    @param string $type      Authentication type for this
-         *                             realm. Only Basic authentication
-         *                             is currently supported.
-         *    @param string $realm     Name of realm.
-         *    @access public
-         */
-        function addRealm($url, $type, $realm) {
-            $this->_realms[$realm]['root'] = $url->getHost() . $url->getBasePath();
-            $this->_realms[$realm]['type'] = $type;
-        }
-        
-        /**
-         *    Sets the current identity to be presented
-         *    against that realm.
-         *    @param string $realm       Name of realm.
-         *    @param string $username    Username for realm.
-         *    @param string $password    Password for realm.
-         *    @access public
-         */
-        function setIdentityForRealm($realm, $username, $password) {
-            if (isset($this->_realms[$realm])) {
-                $this->_realms[$realm]['username'] = $username;
-                $this->_realms[$realm]['password'] = $password;
-            }
-        }
-        
-        /**
-         *    Finds the name of the realm by comparing URLs.
-         *    @param SimpleUrl $url        URL to test.
-         *    @access private
-         */
-        function _findRealmFromUrl($url) {
-            foreach ($this->_realms as $realm => $authentication) {
-                if ($this->_isWithin($url, $authentication['root'])) {
-                    return $realm;
-                }
-            }
-            return false;
-        }
-        
-        /**
-         *    Compares two URLs to see if the first is within
-         *    the realm of the second.
-         *    @param SimpleUrl $url    URL to test.
-         *    @param string $root      Root of realm.
-         *    @access private
-         */
-        function _isWithin($url, $root) {
-            $stem = $url->getHost() . $url->getBasePath();
-            return (strpos($stem, $root) === 0);
-        }
-        
-        /**
-         *    Presents the appropriate headers for this location.
-         *    @param SimpleHttpRequest $request  Request to modify.
-         *    @param SimpleUrl $url              Base of realm.
-         *    @access public
-         */
-        function addHeaders(&$request, $url) {
-            if ($url->getUsername() && $url->getPassword()) {
-                $username = $url->getUsername();
-                $password = $url->getPassword();
-            } elseif ($realm = $this->_findRealmFromUrl($url)) {
-                $username = $this->_realms[$realm]['username'];
-                $password = $this->_realms[$realm]['password'];
-            } else {
-                return;
-            }
-            $this->addBasicHeaders($request, $username, $password);
-        }
-        
-        /**
-         *    Presents the appropriate headers for this
-         *    location for basic authentication.
-         *    @param SimpleHttpRequest $request  Request to modify.
-         *    @param string $username            Username for realm.
-         *    @param string $password            Password for realm.
-         *    @access public
-         *    @static
-         */
-        function addBasicHeaders(&$request, $username, $password) {
-            if ($username && $password) {
-                $request->addHeaderLine(
-                        'Authorization: Basic ' . base64_encode("$username:$password"));
-            }
-        }
-    }
-    
+
     /**
      *    Fetches web pages whilst keeping track of
      *    cookies.

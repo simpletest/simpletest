@@ -5,6 +5,7 @@
         define('SIMPLE_TEST', '../');
     }
     require_once(SIMPLE_TEST . 'user_agent.php');
+    require_once(SIMPLE_TEST . 'authentication.php');
     require_once(SIMPLE_TEST . 'http.php');
     Mock::generate('SimpleHttpRequest');
     Mock::generate('SimpleHttpPostRequest');
@@ -25,21 +26,21 @@
         }
         function testHostFilter() {
             $jar = new SimpleCookieJar();
-            $cookie = new SimpleCookie("a", "A");
-            $cookie->setHost("my-host.com");
+            $cookie = new SimpleCookie('a', 'A');
+            $cookie->setHost('my-host.com');
             $jar->setCookie($cookie);
-            $cookie = new SimpleCookie("b", "B");
-            $cookie->setHost("another-host.com");
+            $cookie = new SimpleCookie('b', 'B');
+            $cookie->setHost('another-host.com');
             $jar->setCookie($cookie);
-            $cookie = new SimpleCookie("c", "C");
+            $cookie = new SimpleCookie('c', 'C');
             $jar->setCookie($cookie);
-            $cookies = $jar->getValidCookies("my-host.com");
+            $cookies = $jar->getValidCookies('my-host.com');
             $this->assertEqual(count($cookies), 2);
-            $this->assertEqual($cookies[0]->getValue(), "A");
-            $this->assertEqual($cookies[1]->getValue(), "C");
-            $this->assertEqual(count($jar->getValidCookies("another-host.com")), 2);
-            $this->assertEqual(count($jar->getValidCookies("www.another-host.com")), 2);
-            $this->assertEqual(count($jar->getValidCookies("new-host.org")), 1);
+            $this->assertEqual($cookies[0]->getValue(), 'A');
+            $this->assertEqual($cookies[1]->getValue(), 'C');
+            $this->assertEqual(count($jar->getValidCookies('another-host.com')), 2);
+            $this->assertEqual(count($jar->getValidCookies('www.another-host.com')), 2);
+            $this->assertEqual(count($jar->getValidCookies('new-host.org')), 1);
             $this->assertEqual(count($jar->getValidCookies()), 3);
         }
         function testPathFilter() {
@@ -124,84 +125,6 @@
             $this->assertIdentical($cookies[0]->getValue(), "def");
             $jar->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
             $this->assertEqual(count($jar->getValidCookies(false, "/")), 0);
-        }
-    }
-    
-    class TestOfAuthenticator extends UnitTestCase {
-        function TestOfAuthenticator() {
-            $this->UnitTestCase();
-        }
-        function testNoRealms() {
-            $request = &new MockSimpleHttpRequest($this);
-            $request->expectNever('addHeaderLine');
-            $authenticator = &new SimpleAuthenticator();
-            $authenticator->addHeaders($request, new SimpleUrl('http://here.com/'));
-            $request->tally();
-        }
-        function &createSingleRealm() {
-            $authenticator = &new SimpleAuthenticator();
-            $authenticator->addRealm(
-                    new SimpleUrl('http://www.here.com/path/hello.html'),
-                    'Basic',
-                    'Sanctuary');
-            $authenticator->setIdentityForRealm('Sanctuary', 'test', 'secret');
-            return $authenticator;
-        }
-        function testWithSameUrl() {
-            $request = &new MockSimpleHttpRequest($this);
-            $request->expectOnce(
-                    'addHeaderLine',
-                    array('Authorization: Basic ' . base64_encode('test:secret')));
-            $authenticator = &$this->createSingleRealm();
-            $authenticator->addHeaders(
-                    $request,
-                    new SimpleUrl('http://www.here.com/path/hello.html'));
-            $request->tally();
-        }
-        function testWithDifferentHost() {
-            $request = &new MockSimpleHttpRequest($this);
-            $request->expectNever('addHeaderLine');
-            $authenticator = &$this->createSingleRealm();
-            $authenticator->addHeaders(
-                    $request,
-                    new SimpleUrl('http://here.com/path/hello.html'));
-            $request->tally();
-        }
-        function testBelowRealm() {
-            $request = &new MockSimpleHttpRequest($this);
-            $request->expectNever('addHeaderLine');
-            $authenticator = &$this->createSingleRealm();
-            $authenticator->addHeaders(
-                    $request,
-                    new SimpleUrl('http://www.here.com/hello.html'));
-            $request->tally();
-        }
-        function testWithinRealm() {
-            $request = &new MockSimpleHttpRequest($this);
-            $request->expectOnce('addHeaderLine');
-            $authenticator = &$this->createSingleRealm();
-            $authenticator->addHeaders(
-                    $request,
-                    new SimpleUrl('http://www.here.com/path/more/hello.html'));
-            $request->tally();
-        }
-        function testOldNetscapeDefinitionDoesNotPresent() {
-            $request = &new MockSimpleHttpRequest($this);
-            $request->expectNever('addHeaderLine');
-            $authenticator = &$this->createSingleRealm();
-            $authenticator->addHeaders(
-                    $request,
-                    new SimpleUrl('http://www.here.com/pathmore/hello.html'));
-            $request->tally();
-        }
-        function testWithDifferentPageName() {
-            $request = &new MockSimpleHttpRequest($this);
-            $request->expectOnce('addHeaderLine');
-            $authenticator = &$this->createSingleRealm();
-            $authenticator->addHeaders(
-                    $request,
-                    new SimpleUrl('http://www.here.com/path/goodbye.html'));
-            $request->tally();
         }
     }
     
