@@ -178,8 +178,18 @@
          */
         function isIdentical($first, $second) {
             if (version_compare(phpversion(), '5') >= 0) {
+                if ($first != $second) {
+                    return false;
+                }
                 if (is_object($first) && is_object($second)) {
-                    return ($first == $second);
+                    return true;
+                }
+                if (is_array($first) && is_array($second)) {
+                    foreach (array_keys($first) as $key) {
+                        if (! SimpleTestCompatibility::isIdentical()) {
+                            return false;
+                        }
+                    }
                 }
                 return ($first === $second);
             }
