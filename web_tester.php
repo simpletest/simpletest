@@ -177,7 +177,7 @@
          */
         function clickSubmit($label = "Submit") {
             $page = &$this->_getHtml();
-            if (! ($form = &$page->getFormByLabel($label))) {
+            if (! ($form = &$page->getFormBySubmitLabel($label))) {
                 return false;
             }
             $action = $form->getAction();
@@ -246,6 +246,7 @@
          */
         function setField($name, $value) {
             $page = &$this->_getHtml();
+            $page->setField($name, $value);
         }
         
         /**

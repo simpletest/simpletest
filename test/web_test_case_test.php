@@ -217,10 +217,10 @@
                     '<input type="text" name="b" value="bbb"/>');
             $browser = &$this->getBrowser();
             $this->prepareForm($browser, $widgets);
-//            $browser->expectOnce("post", array("there.php", array(
-//                    "wibble" => "wobble",
-//                    "a" => "AAA",
-//                    "b" => "bbb")));
+            $browser->expectOnce("post", array("there.php", array(
+                    "wibble" => "wobble",
+                    "a" => "AAA",
+                    "b" => "bbb")));
             $this->get("http://my-site.com/");
             $this->setField("a", "AAA");
             $this->assertTrue($this->clickSubmit("wobble"));

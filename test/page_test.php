@@ -253,7 +253,7 @@
             $page->AcceptTag(
                     new SimpleTag("input", array("type" => "submit", "name" => "s")));
             $page->acceptBlockEnd("form");
-            $form = &$page->getFormByLabel("Submit");
+            $form = &$page->getFormBySubmitLabel("Submit");
             $this->assertEqual($form->submitButton("s"), array("s" => "Submit"));
         }
     }
@@ -299,7 +299,7 @@
         function testForm() {
             $page = &new SimplePage(
                     "<html><head><form><input type=\"submit\"></form></head></html>");
-            $this->assertIsA($form = &$page->getFormByLabel("Submit"), "SimpleForm");
+            $this->assertIsA($form = &$page->getFormBySubmitLabel("Submit"), "SimpleForm");
         }
     }
 ?>

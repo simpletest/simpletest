@@ -367,11 +367,24 @@
          *    @return          Form object containing the button.
          *    @public
          */
-        function &getFormByLabel($label) {
+        function &getFormBySubmitLabel($label) {
             for ($i = 0; $i < count($this->_closed_forms); $i++) {
                 if ($this->_closed_forms[$i]->getSubmitName($label)) {
                     return $this->_closed_forms[$i];
                 }
+            }
+        }
+        
+        /**
+         *    Sets a field on each form in which the field is
+         *    available.
+         *    @param $name        Field name.
+         *    @param $value       Value to set field to.
+         *    @public
+         */
+        function setField($name, $value) {
+            for ($i = 0; $i < count($this->_closed_forms); $i++) {
+                $this->_closed_forms[$i]->setValue($name, $value);
             }
         }
     }
