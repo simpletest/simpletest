@@ -1,6 +1,7 @@
 TODO
 This is immediate stuff only for the next iteration (Alpha6) of 40 hours.
 Figures are estimated hours work versus actual (for XP velocity).
+Stuff will get added or dropped as the cycle progresses.
 
 $Id$
 
@@ -21,8 +22,7 @@ Html parser
 Build form class as widget repository (3).
 Add widget class (2).
 Add form tag parsing to build a form in a page (3).
-Add input tag parsing (4).
-Read a complete, but simple form (4).
+Read the title tag and add an assertion for it (2).
 
 Browser
 -------
@@ -38,4 +38,4 @@ Create a link following case from end to end (4/7) - done.
 Documentation
 -------------
 Clean up the documentation links (1).
-Add a top level overview (1/1).
+Add a top level overview (1/3) - done.
