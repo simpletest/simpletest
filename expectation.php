@@ -23,8 +23,8 @@
         
         /**
          *    Tests the expectation. True if correct.
-         *    @param $compare        Comparison value.
-         *    @return                True if correct.
+         *    @param mixed $compare        Comparison value.
+         *    @return boolean              True if correct.
          *    @access public
          *    @abstract
          */
@@ -33,9 +33,9 @@
         
         /**
          *    Returns a human readable test message.
-         *    @param $compare      Comparison value.
-         *    @return              String description of success
-         *                         or failure.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
          *    @access public
          *    @abstract
          */
@@ -60,7 +60,7 @@
         
         /**
          *    Sets the value to compare against.
-         *    @param $value        Test value to match.
+         *    @param mixed $value        Test value to match.
          *    @access public
          */
         function EqualExpectation($value) {
@@ -71,8 +71,8 @@
         /**
          *    Tests the expectation. True if it matches the
          *    held value.
-         *    @param $compare        Comparison value.
-         *    @return                True if correct.
+         *    @param mixed $compare        Comparison value.
+         *    @return boolean              True if correct.
          *    @access public
          */
         function test($compare) {
@@ -81,9 +81,9 @@
         
         /**
          *    Returns a human readable test message.
-         *    @param $compare      Comparison value.
-         *    @return              String description of success
-         *                         or failure.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
          *    @access public
          */
         function testMessage($compare) {
@@ -97,10 +97,10 @@
         
         /**
          *    Accessor for comparison value.
-         *    @return        Held value to compare with.
+         *    @return mixed       Held value to compare with.
          *    @access protected
          */
-        function _get_value() {
+        function _getValue() {
             return $this->_value;
         }
     }
@@ -112,7 +112,7 @@
         
         /**
          *    Sets the value to compare against.
-         *    @param $value        Test value to match.
+         *    @param mixed $value        Test value to match.
          *    @access public
          */
         function NotEqualExpectation($value) {
@@ -122,28 +122,29 @@
         /**
          *    Tests the expectation. True if it differs from the
          *    held value.
-         *    @param $compare        Comparison value.
-         *    @return                True if correct.
+         *    @param mixed $compare        Comparison value.
+         *    @return boolean              True if correct.
          *    @access public
          */
         function test($compare) {
-            return !parent::test($compare);
+            return ! parent::test($compare);
         }
         
         /**
          *    Returns a human readable test message.
-         *    @param $compare      Comparison value.
-         *    @return              String description of success
-         *                         or failure.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
          *    @access public
          */
         function testMessage($compare) {
+            $dumper = &$this->_getDumper();
             if ($this->test($compare)) {
                 return "Not equal expectation passes " .
-                        $this->_dumper->describeDifference($this->_get_value(), $compare);
+                        $dumper->describeDifference($this->_getValue(), $compare);
             } else {
                 return "Not equal expectation fails [" .
-                        $this->_dumper->describeValue($this->_get_value()) .
+                        $dumper->describeValue($this->_getValue()) .
                         "] matches";
             }
         }
@@ -156,7 +157,7 @@
         
         /**
          *    Sets the value to compare against.
-         *    @param $value        Test value to match.
+         *    @param mixed $value        Test value to match.
          *    @access public
          */
         function IdenticalExpectation($value) {
@@ -166,29 +167,33 @@
         /**
          *    Tests the expectation. True if it exactly
          *    matches the held value.
-         *    @param $compare        Comparison value.
-         *    @return                True if correct.
+         *    @param mixed $compare        Comparison value.
+         *    @return boolean              True if correct.
          *    @access public
          */
         function test($compare) {
-            return ($this->_get_value() === $compare);
+            return ($this->_getValue() === $compare);
         }
         
         /**
          *    Returns a human readable test message.
-         *    @param $compare      Comparison value.
-         *    @return              String description of success
-         *                         or failure.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
          *    @access public
          */
         function testMessage($compare) {
+            $dumper = &$this->_getDumper();
             if ($this->test($compare)) {
-                return "Identical expectation [" . $this->_dumper->describeValue($this->_value) . "]";
+                return "Identical expectation [" . $dumper->describeValue($this->_getValue()) . "]";
             } else {
-                return "Identical expectation [" . $this->_dumper->describeValue($this->_value) .
+                return "Identical expectation [" . $dumper->describeValue($this->_getValue()) .
                         "] fails with [" .
                         $this->_dumper->describeValue($compare) . "] " .
-                        $this->_dumper->describeDifference($this->_value, $compare, TYPE_MATTERS);
+                        $this->_dumper->describeDifference(
+                                $this->_getValue(),
+                                $compare,
+                                TYPE_MATTERS);
             }
         }
     }
@@ -200,7 +205,7 @@
         
         /**
          *    Sets the value to compare against.
-         *    @param $value        Test value to match.
+         *    @param mixed $value        Test value to match.
          *    @access public
          */
         function NotIdenticalExpectation($value) {
@@ -210,27 +215,28 @@
         /**
          *    Tests the expectation. True if it differs from the
          *    held value.
-         *    @param $compare        Comparison value.
-         *    @return                True if correct.
+         *    @param mixed $compare        Comparison value.
+         *    @return boolean              True if correct.
          *    @access public
          */
         function test($compare) {
-            return !parent::test($compare);
+            return ! parent::test($compare);
         }
         
         /**
          *    Returns a human readable test message.
-         *    @param $compare      Comparison value.
-         *    @return              String description of success
-         *                         or failure.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
          *    @access public
          */
         function testMessage($compare) {
+            $dumper = &$this->_getDumper();
             if ($this->test($compare)) {
                 return "Not identical expectation passes " .
-                        $this->_dumper->describeDifference($this->_get_value(), $compare, TYPE_MATTERS);
+                        $dumper->describeDifference($this->_getValue(), $compare, TYPE_MATTERS);
             } else {
-                return "Not identical expectation [" . $this->_dumper->describeValue($this->_get_value()) . "] matches";
+                return "Not identical expectation [" . $dumper->describeValue($this->_getValue()) . "] matches";
             }
         }
     }
@@ -243,7 +249,7 @@
         
         /**
          *    Sets the value to compare against.
-         *    @param $pattern        Pattern to search for.
+         *    @param string $pattern        Pattern to search for.
          *    @access public
          */
         function WantedPatternExpectation($pattern) {
@@ -253,7 +259,7 @@
         
         /**
          *    Accessor for the pattern.
-         *    @return        Perl regex as string.
+         *    @return string       Perl regex as string.
          *    @access protected
          */
         function _getPattern() {
@@ -263,8 +269,8 @@
         /**
          *    Tests the expectation. True if the Perl regex
          *    matches the comparison value.
-         *    @param $compare        Comparison value.
-         *    @return                True if correct.
+         *    @param string $compare        Comparison value.
+         *    @return boolean               True if correct.
          *    @access public
          */
         function test($compare) {
@@ -273,9 +279,9 @@
         
         /**
          *    Returns a human readable test message.
-         *    @param $compare      Comparison value.
-         *    @return              String description of success
-         *                         or failure.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
          *    @access public
          */
         function testMessage($compare) {
@@ -292,6 +298,9 @@
         /**
          *    Describes a pattern match including the string
          *    found and it's position.
+         *    @param string $pattern        Regex to match against.
+         *    @param string $subject        Subject to search.
+         *    @access protected
          */
         function _decribePatternMatch($pattern, $subject) {
             preg_match($pattern, $subject, $matches);
@@ -312,7 +321,7 @@
         
         /**
          *    Sets the reject pattern
-         *    @param $pattern        Pattern to search for.
+         *    @param string $pattern        Pattern to search for.
          *    @access public
          */
         function UnwantedPatternExpectation($pattern) {
@@ -322,8 +331,8 @@
         /**
          *    Tests the expectation. False if the Perl regex
          *    matches the comparison value.
-         *    @param $compare        Comparison value.
-         *    @return                True if correct.
+         *    @param string $compare        Comparison value.
+         *    @return boolean               True if correct.
          *    @access public
          */
         function test($compare) {
@@ -332,9 +341,9 @@
         
         /**
          *    Returns a human readable test message.
-         *    @param $compare      Comparison value.
-         *    @return              String description of success
-         *                         or failure.
+         *    @param string $compare      Comparison value.
+         *    @return string              Description of success
+         *                                or failure.
          *    @access public
          */
         function testMessage($compare) {
@@ -346,6 +355,6 @@
             } else {
                 return $this->_decribePatternMatch($this->_getPattern(), $compare);
             }
-         }
+        }
     }
 ?>

@@ -9,6 +9,7 @@ Unit tester
 -----------
 Add shell test case (3/4) - done.
 Pattern expectations need type check on message (1/1) - done.
+Create an isA() expectation (1).
 
 Interface
 ---------
@@ -20,6 +21,7 @@ Mock objects
 Html parser
 -----------
 Refactor the links into their own objects (3).
+Add checkbox parsing (1).
 
 Browser
 -------
