@@ -1,0 +1,336 @@
+<refentry id="{@id}">
+  <refnamediv>
+    <refname>Partial Mock</refname>
+    <refpurpose> A partial mock is simply a pattern to alleviate a specific problem in testing with mock objects, that of getting mock objects into tight corners. It's quite a limited tool and possibly not even a good idea. It is included with SimpleTest because I have found it useful on more than one occasion and has saved a lot of work at that point.</refpurpose>
+  </refnamediv>
+  {@toc}
+  
+  <refsect1 id="{@id inject}">
+    <title>The Mock Injection Problem</title>
+    <para>
+    When one object uses another it is very simple to just pass a mock version in already set up with it's expectations. Things are rather tricker if one object creates another and the creator is the one you want to test. This means that the created object should be mocked, but we can hardly tell our class under test to create a mock instead. The tested class doesn't even know it is running inside a test after all.
+    </para>
+    <para>
+    For example, suppose we are building a telnet client and it needs to create a network socket to pass it's messages. The connection method might look something like...
+    </para>
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+<?php
+    require_once('socket.php');
+
+    class Telnet {
+        ...
+        function &connect($ip, $port, $username, $password) {
+            $socket = &new Socket($ip, $port);
+            $socket->read( ... );
+            ...
+        }
+    }
+?>
+      ]]>
+      </programlisting>
+    </para>
+    <para>
+    We would really like to have a mock object version of the socket here, what can we do?
+    </para>
+    <para>
+    The first solution is to pass the socket in as a parameter, forcing the creation up a level. Having the client handle this is actually a very good approach if you can manage it and should lead to factoring the creation from the doing. In fact, this is one way in which testing with mock objects actually forces you to code more tightly focused solutions. They improve your programming.
+    </para>
+    <para>
+    Here this would be...
+    </para>
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+<?php
+    require_once('socket.php');
+
+    class Telnet {
+        ...
+        function &connect(&$socket, $username, $password) {
+            $socket->read( ... );
+            ...
+        }
+    }
+?>
+      ]]>
+      </programlisting>
+    </para>
+    <para>
+    This means that the test code is typical for a test involving mock objects.
+    </para>
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TelnetTest extends UnitTestCase {
+    ...
+    function testConnection() {
+        $socket = &new MockSocket($this);
+        ...
+        $telnet = &new Telnet();
+        $telnet->connect($socket, 'Me', 'Secret');
+        ...
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+    <para>
+    It is pretty obvious though that one level is all you can go. You would hardly want your top level application creating every low level file, socket and database connection ever needed. It wouldn't know the constructor parameters anyway.
+    </para>
+    <para>
+    The next simplest compromise is to have the created object passed in as an optional parameter...
+    </para>
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+<?php
+    require_once('socket.php');
+
+    class Telnet {
+        ...
+        function &connect($ip, $port, $username, $password, $socket = false) {
+            if (!$socket) {
+                $socket = &new Socket($ip, $port);
+            }
+            $socket->read( ... );
+            ...
+            return $socket;
+        }
+    }
+?>
+      ]]>
+      </programlisting>
+    </para>
+    <para>
+    For a quick solution this is usually good enough. The test now looks almost the same as if the parameter was formally passed...
+    </para>
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TelnetTest extends UnitTestCase {
+    ...
+    function testConnection() {
+        $socket = &new MockSocket($this);
+        ...
+        $telnet = &new Telnet();
+        $telnet->connect('127.0.0.1', 21, 'Me', 'Secret', &$socket);
+        ...
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+    <para>
+    The problem with this approach is it's untidiness. There is test code in the main class and parameters passed in the test case that are never used. This is a quick and dirty approach, but nevertheless effective in most situations.
+    </para>
+    <para>
+    The next method is to pass in a factory object to do the creation...
+    </para>
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+<?php
+    require_once('socket.php');
+
+    class Telnet {
+        function Telnet(&$network) {
+            $this->_network = &$network;
+        }
+        ...
+        function &connect($ip, $port, $username, $password) {
+            $socket = &$this->_network->createSocket($ip, $port);
+            $socket->read( ... );
+            ...
+            return $socket;
+        }
+    }
+?>
+      ]]>
+      </programlisting>
+    </para>
+    <para>
+    This is probably the most highly factored answer as creation is now moved into a small specialist class. The networking factory can now be tested separately, but mocked easily when we are testing the telnet class...
+    </para>
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TelnetTest extends UnitTestCase {
+    ...
+    function testConnection() {
+        $socket = &new MockSocket($this);
+        ...
+        $network = &new MockNetwork($this);
+        $network->setReturnReference('createSocket', $socket);
+        $telnet = &new Telnet($network);
+        $telnet->connect('127.0.0.1', 21, 'Me', 'Secret');
+        ...
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+    <para>
+    The downside is that we are adding a lot more classes to the library. Also we are passing a lot of factories around which will make the code a little less intuitive. The most flexible solution, but the most complex.
+    </para>
+    <para>
+    Is there a middle ground?
+    </para>
+  </refsect1>
+
+  <refsect1 id="{@id factory}">
+    <title>Protected Factory Method</title>
+    <para>
+    There is a way we can circumvent the problem without creating any new application classes, but it involves creating a subclass when we do the actual testing. Firstly we move the socket creation into it's own method...
+    </para>
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+<?php
+    require_once('socket.php');
+
+    class Telnet {
+        ...
+        function &connect($ip, $port, $username, $password) {
+            $socket = &$this->_createSocket($ip, $port);
+            $socket->read( ... );
+            ...
+        }
+        function &_createSocket($ip, $port) {
+            return new Socket($ip, $port);
+        }
+    }
+?>
+      ]]>
+      </programlisting>
+    </para>
+    <para>
+    This is the only change we make to the application code.
+    </para>
+    <para>
+    For the test case we have to create a subclass so that we can intercept the socket creation...
+    </para>
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TelnetTestVersion extends Telnet {
+    var $_mock;
+
+    function TelnetTestVersion(&$mock) {
+        $this->_mock = &$mock;
+        $this->Telnet();
+    }
+    function &_createSocket() {
+        return $this->_mock;
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+    <para>
+    Here I have passed the mock in the constructor, but a setter would have done just as well. Note that the mock was set into the object variable before the constructor was chained. This is necessary in case the constructor calls connect(). Otherwise it could get a null value from _createSocket().
+    </para>
+    <para>
+    After the completion of all of this extra work the actual test case is fairly easy. We just test our new class instead...
+    </para>
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TelnetTest extends UnitTestCase {
+    ...
+    function testConnection() {
+        $socket = &new MockSocket($this);
+        ...
+        $telnet = &new TelnetTestVersion($socket);
+        $telnet->connect('127.0.0.1', 21, 'Me', 'Secret');
+        ...
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+    <para>
+    The new class is very simple of course. It just sets up a return value, rather like a mock. It would be nice if it also checked the incoming parameters as well. Just like a mock. It seems we are likely to do this often, can we automate the subclass creation?
+    </para>
+  </refsect1>
+
+  <refsect1 id="{@id partial}">
+    <title>A Partial Mock</title>
+    <para>
+    Of course the answer is "yes" or I would have stopped writing this by now! The previous test case was a lot of work, but we can generate the subclass using a similar approach to the mock objects.
+    </para>
+    <para>
+    Here is the partial mock version of the test...
+    </para>
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+Mock::generatePartial(
+        'Telnet',
+        'TelnetTestVersion',
+        array('_createSocket'));
+
+class TelnetTest extends UnitTestCase {
+    ...
+    function testConnection() {
+        $socket = &new MockSocket($this);
+        ...
+        $telnet = &new TelnetTestVersion($this);
+        $telnet->setReturnReference('_createSocket', $socket);
+        $telnet->Telnet();
+        $telnet->connect('127.0.0.1', 21, 'Me', 'Secret');
+        ...
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+    <para>
+    The partial mock is a subclass of the original with selected methods "knocked out" with test versions. The <command>generatePartial()</command> call takes three parameters: the class to be subclassed, the new test class name and a list of methods to mock.
+    </para>
+    <para>
+    Instantiating the resulting objects is slightly tricky. The only constructor parameter of a partial mock is the unit tester reference. As with the normal mock objects this is needed for sending test results in response to checked expectations.
+    </para>
+    <para>
+    The original constructor is not run yet. This is necessary in case the constructor is going to make use of the as yet unset mocked methods. We set any return values at this point and then run the constructor with it's normal parameters. This three step construction of "new", followed by setting up the methods, followed by running the constructor proper is what distinguishes the partial mock code.
+    </para>
+    <para>
+    Apart from construction, all of the mocked methods have the same features as mock objects and all of the unmocked methods behave as before. We can set expectations very easily...
+    </para>
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TelnetTest extends UnitTestCase {
+    ...
+    function testConnection() {
+        $socket = &new MockSocket($this);
+        ...
+        $telnet = &new TelnetTestVersion($this);
+        $telnet->setReturnReference('_createSocket', $socket);
+        $telnet->expectOnce('_createSocket', array('127.0.0.1', 21));
+        $telnet->Telnet();
+        $telnet->connect('127.0.0.1', 21, 'Me', 'Secret');
+        ...
+        $telnet->tally();
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+  </refsect1>
+  
+  <refsect1 id="{@id less}">
+    <title>Testing Less Than a Class</title>
+    <para>
+    The mocked out methods don't have to be factory methods, they could be any sort of method. In this way partial mocks allow us to take control of any part of a class except the constructor. We could even go as far as to mock every method except one we actually want to test.
+    </para>
+    <para>
+    The converse of this is that we can also use them as part of more complex simulations during integration tests. In the event that a mock object would not be up to simulating a component in a test a partial version could be used instead. In this case the classes under test are left as is, 100% application code base. A partially mocked object, say one with a database connection disabled for safety, could be used in testing this ensemble. This would allow us to fake, say, complex failure modes that would be difficult to set up for real. Here we are testing more than a single class, again breaking down object granularity in our testing.
+    </para>
+    <para>
+    This last situation is all rather hypothetical, as I haven't tried it yet. I am open to the possibility, but a little worried that forcing object granularity may be better for the code quality. I am still undecided.
+    </para>
+  </refsect1>
+  
+</refentry>

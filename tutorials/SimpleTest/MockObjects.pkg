@@ -340,7 +340,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
     We start by creating a dummy session. We don't have to be too fussy about this as the check for which session we want is done elsewhere. We only need to check that it was the same one that came from the session pool.
     </para>
     <para>
-    <command>findSession()</command> is a factory method the simulation of which is described {@link #act above}. The point of departure comes with the first <command>expectOnce()</command> call. This line states that whenever <command>findSession()</command> is invoked on the mock, it will test the incoming arguments. If it receives the single argument of a string "abc" then a test pass in sent to the unit tester, otherwise a fail is generated. This was the part where we checked that the right session was asked for. The argument list follows the same format as the one for setting return values. You can have wildcards and sequences and the order of evaluation is the same.
+    <command>findSession()</command> is a factory method the simulation of which is described {@link tutorial_MockObjects.pkg.html#act above}. The point of departure comes with the first <command>expectOnce()</command> call. This line states that whenever <command>findSession()</command> is invoked on the mock, it will test the incoming arguments. If it receives the single argument of a string "abc" then a test pass in sent to the unit tester, otherwise a fail is generated. This was the part where we checked that the right session was asked for. The argument list follows the same format as the one for setting return values. You can have wildcards and sequences and the order of evaluation is the same.
     </para>
     <para>
     If the call is never made then neither a pass nor a failure will generated. To get around this we must tell the mock when the test is over so that the object can decide if the expectation has been met. The unit tester assertion for this is triggered by the <command>tally()</command> call at the end of the test.
@@ -371,7 +371,8 @@ class LoggingSessionPoolTest extends UnitTestCase {
         <entry>No</entry>
     </row>
     <row>
-        expectArgumentsAt($timing, $method, $args)  No
+        <entry>expectArgumentsAt($timing, $method, $args)</entry>
+        <entry>No</entry>
     </row>
     <row>
         <entry>expectCallCount($method, $count)</entry>
@@ -424,7 +425,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
     There are three approaches to creating mocks. Coding them by hand using a base class, generating them to a file and dynamically generating them on the fly.
     </para>
     <para>
-    Mock objects generated with {@line http://simpletest.sf.net/ SimpleTest} are dynamic. They are created at run time in memory, using <command>eval()</command>, rather than written out to a file. This makes the mocks easy to create, a one liner, especially compared with hand crafting them in a parallel class hierarchy. The problem is that the behaviour is usually set up in the tests themselves. If the original objects change the mock versions that the tests rely on can get out of sync. This can happen with the parallel hierarchy approach as well, but is far more quickly detected.
+    Mock objects generated with {@link http://simpletest.sf.net/ SimpleTest} are dynamic. They are created at run time in memory, using <command>eval()</command>, rather than written out to a file. This makes the mocks easy to create, a one liner, especially compared with hand crafting them in a parallel class hierarchy. The problem is that the behaviour is usually set up in the tests themselves. If the original objects change the mock versions that the tests rely on can get out of sync. This can happen with the parallel hierarchy approach as well, but is far more quickly detected.
     </para>
     <para>
     The solution, of course, is to add some real integration tests. You don't need very many and the convenience gained from the mocks more than outweighs the small amount of extra testing.
@@ -467,7 +468,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
     But at the time of writing it is the only one with mock objects, so are you stuck with it?
     </para>
     <para>
-    No, not at all. {@line http://simpletest.sf.net/ SimpleTest} is a toolkit and one of those tools is the mock objects which can be employed independently. Suppose you have your own favourite unit tester and all your current test cases are written using it. Pretend that you have called your unit tester PHPUnit (everyone else has) and the core test class looks like this...
+    No, not at all. {@link http://simpletest.sf.net/ SimpleTest} is a toolkit and one of those tools is the mock objects which can be employed independently. Suppose you have your own favourite unit tester and all your current test cases are written using it. Pretend that you have called your unit tester PHPUnit (everyone else has) and the core test class looks like this...
     </para>
     <para>
       <programlisting role="php">
