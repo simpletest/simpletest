@@ -35,7 +35,7 @@
          */
         function SimpleRealm($type, $url) {
             $this->_type = $type;
-            $this->_root = $url;
+            $this->_root = $url->getBasePath();
             $this->_username = false;
             $this->_password = false;
         }
@@ -46,6 +46,25 @@
          *    @access public
          */
         function stretch($url) {
+            $this->_root = $this->_getCommonPath($this->_root, $url->getPath());
+        }
+        
+        /**
+         *    Finds the common starting path.
+         *    @param string $first        Path to compare.
+         *    @param string $second       Path to compare.
+         *    @return string              Common directories.
+         *    @access private
+         */
+        function _getCommonPath($first, $second) {
+            $first = explode('/', $first);
+            $second = explode('/', $second);
+            for ($i = 0; $i < min(count($first), count($second)); $i++) {
+                if ($first[$i] != $second[$i]) {
+                    return implode('/', array_slice($first, 0, $i)) . '/';
+                }
+            }
+            return implode('/', $first) . '/';
         }
         
         /**
@@ -85,19 +104,7 @@
          *    @access public
          */
         function isWithin($url) {
-            $stem = $this->_getSignificant($url);
-            $root = $this->_getSignificant($this->_root);
-            return (strpos($stem, $root) === 0);
-        }
-        
-        /**
-         *    Gets significant part of URL.
-         *    @param SimpleUrl $url    Url to extract discrimitory path
-         *                             information from.
-         *    @access private
-         */
-        function _getSignificant($url) {
-            return $url->getBasePath();
+            return (strpos($url->getBasePath(), $this->_root) === 0);
         }
     }
     
