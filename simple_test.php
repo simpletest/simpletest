@@ -446,7 +446,7 @@
         /**
          *    Test to see if a class is derived from the
          *    TestCase class.
-         *    @param string $class            Class name.
+         *    @param string $class     Class name.
          *    @access private
          */
         function _isTestCase($class) {
@@ -457,6 +457,16 @@
                 }
             }
             return false;
+        }
+        
+        /**
+         *    Delegates to a visiting collector to add test
+         *    files.
+         *    @param SimpleCollector $collector    Directory scanner.
+         *    @access public
+         */
+        function collect(&$collector) {
+            $collector->collect($this);
         }
 
         /**
