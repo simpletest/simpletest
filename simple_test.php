@@ -12,7 +12,7 @@
      */
     require_once(dirname(__FILE__) . '/errors.php');
     require_once(dirname(__FILE__) . '/options.php');
-    require_once(dirname(__FILE__) . '/runner.php');
+    require_once(dirname(__FILE__) . '/scorer.php');
     require_once(dirname(__FILE__) . '/expectation.php');
     require_once(dirname(__FILE__) . '/dumper.php');
     if (! defined('SIMPLE_TEST')) {

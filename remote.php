@@ -19,7 +19,7 @@
 	 *	  @package SimpleTest
 	 *	  @subpackage UnitTester
      */
-    class RemoteTestCase extends RunnableTest {
+    class RemoteTestCase {
         var $_url;
         var $_dry_url;
         var $_size;
@@ -31,10 +31,18 @@
          *    @access public
          */
         function RemoteTestCase($url, $dry_url = false) {
-            $this->RunnableTest($url);
             $this->_url = $url;
             $this->_dry_url = $dry_url ? $dry_url : $url;
             $this->_size = false;
+        }
+        
+        /**
+         *    Accessor for the test name for subclasses.
+         *    @return string           Name of the test.
+         *    @access public
+         */
+        function getLabel() {
+            return $this->_url;
         }
 
         /**
