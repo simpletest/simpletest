@@ -139,7 +139,12 @@
             $this->_name = $name;
             $this->_value = $value;
             $this->_path = ($path ? $this->_fixPath($path) : "/");
-            $this->_expiry = ($expiry ? $expiry : "");
+            $this->_expiry = false;
+            if (is_string($expiry)) {
+                $this->_expiry = strtotime($expiry);
+            } elseif (is_integer($expiry)) {
+                $this->_expiry = $expiry;
+            }
         }
         
         /**
@@ -194,7 +199,31 @@
          *    @public
          */
         function getExpiry() {
-            return $this->_expiry;
+            if (!$this->_expiry) {
+                return false;
+            }
+            return gmdate("D, d M Y H:i:s", $this->_expiry) . " GMT";
+        }
+        
+        /**
+         *    Test to see if cookie is expired against
+         *    the cookie format time or timestamp.
+         *    Will give true if no cookie expiry.
+         *    @param $now     Time to test against. Result
+         *                    will be false if this time
+         *                    is later than the cookie expiry.
+         *                    Can be either a timestamp integer
+         *                    or a cookie format date.
+         *    @public
+         */
+        function isExpired($now) {
+            if (!$this->_expiry) {
+                return false;
+            }
+            if (is_string($now)) {
+                $now = strtotime($now);
+            }
+            return ($this->_expiry < $now);
         }
         
         /**
@@ -421,7 +450,7 @@
                     $cookie[1],
                     trim($cookie[2]),
                     isset($cookie["path"]) ? $cookie["path"] : "",
-                    isset($cookie["expires"]) ? $cookie["expires"] : "");
+                    isset($cookie["expires"]) ? $cookie["expires"] : false);
         }
         
         /**

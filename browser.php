@@ -37,7 +37,9 @@
          *    be filtered out by that category.         
          *    @param $host        Host name requirement.
          *    @param $path        Path encompasing cookies.
-         *    @param $date        Date to test expiries against.
+         *    @param $date        Date to test expiries against,
+         *                        either a timestamp or as a
+         *                        cookie formatted date string.
          *    @return             Array of valid cookie objects.
          *    @public
          */
@@ -48,6 +50,9 @@
                     continue;
                 }
                 if (!$this->_isSubpath($cookie->getPath(), $path)) {
+                    continue;
+                }
+                if ($cookie->isExpired($date)) {
                     continue;
                 }
                 $valid_cookies[] = $cookie;

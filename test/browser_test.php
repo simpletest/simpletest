@@ -46,7 +46,14 @@
             $this->assertEqual(count($jar->getValidCookies("", "/path/")), 1);
             $this->assertEqual(count($jar->getValidCookies("", "/path")), 1);
             $this->assertEqual(count($jar->getValidCookies("", "/pa")), 0);
+            $this->assertEqual(count($jar->getValidCookies("", "/path/more_path_here")), 0);
             $this->assertEqual(count($jar->getValidCookies("", "/path/not_here/")), 0);
+        }
+        function testExpiryFilter() {
+            $jar = new CookieJar();
+            $jar->setCookie(new SimpleCookie("a", "A", "/", "Wed, 25-Dec-02 04:24:20 GMT"));
+            $this->assertEqual(count($jar->getValidCookies("", "/", "Wed, 25-Dec-02 04:24:19 GMT")), 1);
+            $this->assertEqual(count($jar->getValidCookies("", "/", "Wed, 25-Dec-02 04:24:21 GMT")), 0);
         }
     }
 

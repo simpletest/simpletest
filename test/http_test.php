@@ -88,6 +88,24 @@
             $cookie->setHost("hostname.here");
             $this->assertEqual($cookie->getHost(), "hostname.here");
         }
+        function testNonExpiring() {
+            $cookie = new SimpleCookie("name", "value", "/path");
+            $this->assertFalse($cookie->isExpired(0));
+        }
+        function testTimestampExpiry() {
+            $cookie = new SimpleCookie("name", "value", "/path", 456);
+            $this->assertTrue($cookie->isExpired(457));
+            $this->assertFalse($cookie->isExpired(455));
+        }
+        function testDateExpiry() {
+            $cookie = new SimpleCookie(
+                    "name",
+                    "value",
+                    "/path",
+                    "Mon, 18 Nov 2002 15:50:29 GMT");
+            $this->assertTrue($cookie->isExpired("Mon, 18 Nov 2002 15:50:30 GMT"));
+            $this->assertFalse($cookie->isExpired("Mon, 18 Nov 2002 15:50:28 GMT"));
+        }
     }
 
     class TestOfHttpRequest extends UnitTestCase {
@@ -242,7 +260,7 @@
             $this->assertEqual($cookies[0]->getName(), "a");
             $this->assertEqual($cookies[0]->getValue(), "aaa");
             $this->assertEqual($cookies[0]->getPath(), "/here/");
-            $this->assertEqual($cookies[0]->getExpiry(), "Wed, 25-Dec-02 04:24:20 GMT");
+            $this->assertEqual($cookies[0]->getExpiry(), "Wed, 25 Dec 2002 04:24:20 GMT");
             $this->assertEqual($cookies[1]->getName(), "b");
             $this->assertEqual($cookies[1]->getValue(), "bbb");
             $this->assertEqual($cookies[1]->getPath(), "/");
