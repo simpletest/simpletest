@@ -369,11 +369,7 @@
          *    @access public
          */
         function &fetchResponse($method, $url, $parameters = false, $previous = false) {
-            if ($previous) {
-                $url = $this->createAbsoluteUrl($previous, $url);
-            } else {
-                $url = $this->createAbsoluteUrl($this->getBaseUrl(), $url);
-            }
+            $url = $this->createAbsoluteUrl($this->getBaseUrl(), $url);
             if ($method != 'POST') {
                 $url->addRequestParameters($parameters);
                 $parameters = false;

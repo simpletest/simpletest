@@ -665,7 +665,7 @@
             $matches = array();
             foreach ($this->_links as $link) {
                 if ($this->_isNormalmatch($link->getContent(), $label)) {
-                    $matches[] = $link->getHref();
+                    $matches[] = new SimpleUrl($link->getHref());
                 }
             }
             return $matches;
@@ -680,7 +680,7 @@
         function getUrlById($id) {
             foreach ($this->_links as $link) {
                 if ($link->getAttribute('id') === (string)$id) {
-                    return $link->getHref();
+                    return new SimpleUrl($link->getHref());
                 }
             }
             return false;

@@ -173,6 +173,11 @@
          *    @access private
          */
         function _describeStringDifference($first, $second, $identical) {
+            if (is_object($second) || is_array($second)) {
+                return "as [" . $this->describeValue($first) .
+                    "] does not match [" .
+                    $this->describeValue($second) . "]";
+            }
             $position = $this->_stringDiffersAt($first, $second);
             $message = "at character $position";
             $message .= " with [" .
