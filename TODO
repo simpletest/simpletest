@@ -32,7 +32,7 @@ Add text area parsing (3).
 
 Browser
 -------
-Allow automatic redirects (4/5).
+Allow automatic redirects (4/6).
 Add setting of form values (3).
 Add clock drift allowance to cookie tests (1).
 Add clock drift test for users (1).

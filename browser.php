@@ -239,7 +239,7 @@
          */
         function &fetchResponse($method, $url, $parameters) {
             $redirects = 0;
-            while (!$this->_isTooManyRedirects(++$redirects)) {
+            do {
                 $request = &$this->_createCookieRequest($method, $url, $parameters);
                 $response = &$request->fetch();
                 if ($response->isError()) {
@@ -251,7 +251,7 @@
                     break;
                 }
                 $url = new SimpleUrl($response->getRedirect());
-            }
+            } while (!$this->_isTooManyRedirects(++$redirects));
             $this->_response = &$response;
             return $response;
         }

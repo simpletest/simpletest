@@ -270,6 +270,89 @@
             $browser->tally();
         }
     }
+    
+    class TestOfBrowserRedirects extends UnitTestCase {
+        function TestOfBrowserRedirects() {
+            $this->UnitTestCase();
+        }
+        function &createRedirect($content, $redirect) {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue("getContent", $content);
+            $response->setReturnValue("getNewCookies", array());
+            $response->setReturnValue("isRedirect", (boolean)$redirect);
+            $response->setReturnValue("getRedirect", $redirect);
+            $request = &new MockSimpleHttpRequest($this);
+            $request->setReturnReference("fetch", $response);
+            return $request;
+        }
+        function testDisabledRedirects() {
+            $browser = &new MockRequestSimpleBrowser($this);
+            $browser->setReturnReference(
+                    "_createRequest",
+                    $this->createRedirect("stuff", "there.html"));
+            $browser->expectOnce("_createRequest");
+            $browser->SimpleBrowser();
+            $browser->setMaximumRedirects(0);
+            $this->assertEqual($browser->get("here.html"), "stuff");
+            $browser->tally();
+        }
+        function testSingleRedirect() {
+            $browser = &new MockRequestSimpleBrowser($this);
+            $browser->setReturnReferenceAt(
+                    0,
+                    "_createRequest",
+                    $this->createRedirect("first", "two.html"));
+            $browser->setReturnReferenceAt(
+                    1,
+                    "_createRequest",
+                    $this->createRedirect("second", "three.html"));
+            $browser->expectCallCount("_createRequest", 2);
+            $browser->SimpleBrowser();
+            $browser->setMaximumRedirects(1);
+            $this->assertEqual($browser->get("one.html"), "second");
+            $browser->tally();
+        }
+        function testDoubleRedirect() {
+            $browser = &new MockRequestSimpleBrowser($this);
+            $browser->setReturnReferenceAt(
+                    0,
+                    "_createRequest",
+                    $this->createRedirect("first", "two.html"));
+            $browser->setReturnReferenceAt(
+                    1,
+                    "_createRequest",
+                    $this->createRedirect("second", "three.html"));
+            $browser->setReturnReferenceAt(
+                    2,
+                    "_createRequest",
+                    $this->createRedirect("third", "four.html"));
+            $browser->expectCallCount("_createRequest", 3);
+            $browser->SimpleBrowser();
+            $browser->setMaximumRedirects(2);
+            $this->assertEqual($browser->get("one.html"), "third");
+            $browser->tally();
+        }
+        function testSuccessAfterRedirect() {
+            $browser = &new MockRequestSimpleBrowser($this);
+            $browser->setReturnReferenceAt(
+                    0,
+                    "_createRequest",
+                    $this->createRedirect("first", "two.html"));
+            $browser->setReturnReferenceAt(
+                    1,
+                    "_createRequest",
+                    $this->createRedirect("second", false));
+            $browser->setReturnReferenceAt(
+                    2,
+                    "_createRequest",
+                    $this->createRedirect("third", "four.html"));
+            $browser->expectCallCount("_createRequest", 2);
+            $browser->SimpleBrowser();
+            $browser->setMaximumRedirects(2);
+            $this->assertEqual($browser->get("one.html"), "second");
+            $browser->tally();
+        }
+    }
 
     class TestOfBrowserAssertions extends UnitTestCase {
         function TestOfBrowserAssertions() {
