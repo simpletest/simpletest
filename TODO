@@ -43,6 +43,7 @@ Web tester
 ----------
 Remove ordering requirement asserting multivalue widgets (1/1) - done.
 Add assertHeaderPattern(), assertHeader() and assertNoHeader() methods (3/1).
+WebTestCase::assertField() should work with submit type (1).
 
 Documentation
 -------------

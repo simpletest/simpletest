@@ -15,6 +15,14 @@
             $this->assertFalse($expectation->test('A'));
         }
         
+        function testMatchesInteger() {
+            $expectation = new FieldExpectation('1');
+            $this->assertTrue($expectation->test('1'));
+            $this->assertTrue($expectation->test(1));
+            $this->assertTrue($expectation->test(array('1')));
+            $this->assertTrue($expectation->test(array(1)));
+        }
+        
         function testNonStringFailsExpectation() {
             $expectation = new FieldExpectation('a');
             $this->assertFalse($expectation->test(null));

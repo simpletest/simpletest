@@ -385,6 +385,7 @@
             $this->assertField('e', false);
             $this->assertField('f', 'on');
             $this->assertField('g', 'g3');
+            $this->assertField('h', 2);
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedPattern('/go=\[Go!\]/');
             $this->assertWantedPattern('/a=\[\]/');
@@ -405,6 +406,7 @@
             $this->setField('e', 'on');
             $this->setField('f', false);
             $this->setField('g', 'g2');
+            $this->setField('h', 1);
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedPattern('/a=\[aaa\]/');
             $this->assertWantedPattern('/b=\[bbb\]/');

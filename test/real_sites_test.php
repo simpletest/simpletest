@@ -7,6 +7,7 @@
         function LiveSitesTestCase() {
             $this->WebTestCase();
         }
+        
         function testLastCraft() {
             $this->assertTrue($this->get('http://www.lastcraft.com'));
             $this->assertResponse(array(200));
@@ -14,6 +15,7 @@
             $this->clickLink('About');
             $this->assertTitle('About Last Craft');
         }
+        
         function testSourceforge() {
             $this->assertTrue($this->get('http://sourceforge.net/'));
             $this->setField('words', 'simpletest');
@@ -26,6 +28,7 @@
             $this->clickSubmit('Change Stats View');
             $this->assertWantedPattern('/Statistics for the past \d+ months/');
         }
+        
         function testPhpLondon() {
             $this->get('http://www.phplondon.org/');
             $this->clickLink('Wiki is here');

@@ -48,8 +48,8 @@
             if ($this->_value === false) {
                 return ($compare === false);
             }
-            if (is_string($this->_value)) {
-                return $this->_testString($compare);
+            if ($this->_isSingle($this->_value)) {
+                return $this->_testSingle($compare);
             }
             if (is_array($this->_value)) {
                 return $this->_testMultiple($compare);
@@ -58,16 +58,29 @@
         }
         
         /**
+         *    Tests for valid field comparisons.
+         *    @param mixed $value       Value to type check.
+         *    @return boolean           True if integer, string or float.
+         *    @access private
+         */
+        function _isSingle($value) {
+            return is_string($value) || is_integer($value) || is_float($value);
+        }
+        
+        /**
          *    String comparison for simple field.
          *    @param mixed $compare    String to test against.
          *    @returns boolean         True if matching.
          *    @access private
          */
-        function _testString($compare) {
+        function _testSingle($compare) {
             if (is_array($compare) && count($compare) == 1) {
                 $compare = $compare[0];
             }
-            return ($this->_value === $compare);
+            if (! $this->_isSingle($compare)) {
+                return false;
+            }
+            return ($this->_value == $compare);
         }
         
         /**
