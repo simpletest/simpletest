@@ -391,9 +391,12 @@
         }
         
         function testFramesetAbsence() {
-            $page = &new SimplePage(new MockSimpleHttpResponse($this));
+            $url = new SimpleUrl('here');
+            $response = new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getUrl', $url);
+            $page = &new SimplePage($response);
             $this->assertFalse($page->hasFrames());
-            $this->assertIdentical($page->getFrames(), false);
+            $this->assertIdentical($page->getFrames(), $url);
         }
         
         function testHasEmptyFrameset() {

@@ -568,11 +568,7 @@
          *    @access public
          */
         function getFrames() {
-            $frames = $this->_page->getFrames();
-            if ($frames === false) {
-                return false;
-            }
-            return $this->_urlsToStrings($frames);
+            return $this->_urlsToStrings($this->_page->getFrames());
         }
         
         /**
@@ -585,13 +581,12 @@
          *    @access private
          */
         function _urlsToStrings($report) {
+            if (is_object($report)) {
+                return $report->asString();
+            }
             $string_report = array();
             foreach ($report as $name => $url) {
-                if (is_object($url)) {
-                    $string_report[$name] = $url->asString();
-                } else {
-                    $string_report[$name] = $this->_urlsAsStrings($url);
-                }
+                $string_report[$name] = $this->_urlsToStrings($url);
             }
             return $string_report;
         }

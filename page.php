@@ -595,7 +595,7 @@
          */
         function getFrames() {
             if (! $this->_frameset) {
-                return false;
+                return $this->getUrl();
             }
             $urls = array();
             for ($i = 0; $i < count($this->_frames); $i++) {

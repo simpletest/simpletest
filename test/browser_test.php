@@ -547,15 +547,19 @@
         
         function testSimplePageHasNoFrames() {
             $browser = &$this->createBrowser($this->createUserAgent(
-                    array('http://site.with.no.frames/' => '')));
-            $browser->get('http://site.with.no.frames/');
-            $this->assertIdentical($browser->getFrames(), false);
+                    array('http://site.with.no.frames/' => 'A non-framed page')));
+            $this->assertEqual(
+                    $browser->get('http://site.with.no.frames/'),
+                    'A non-framed page');
+            $this->assertIdentical($browser->getFrames(), 'http://site.with.no.frames/');
         }
         
         function testFramesetWithNoFrames() {
             $browser = &$this->createBrowser($this->createUserAgent(
                     array('http://site.with.no.frames/' => '<frameset></frameset>')));
-            $browser->get('http://site.with.no.frames/');
+            $this->assertEqual(
+                    $browser->get('http://site.with.no.frames/'),
+                    '');
             $this->assertIdentical($browser->getFrames(), array());
         }
         
@@ -565,7 +569,9 @@
                     'http://site.with.one.frame/' => $frameset,
                     'http://site.with.one.frame/frame.html' => 'A frame')));
             
-            $browser->get('http://site.with.one.frame/');
+            $this->assertEqual(
+                    $browser->get('http://site.with.one.frame/'),
+                    'A frame');
             $this->assertIdentical(
                     $browser->getFrames(),
                     array('a' => 'http://site.with.one.frame/frame.html'));
@@ -577,7 +583,9 @@
                     'http://site.with.one.frame/' => $frameset,
                     'http://site.with.one.frame/frame.html' => 'One frame')));
             
-            $browser->get('http://site.with.one.frame/');
+            $this->assertEqual(
+                    $browser->get('http://site.with.one.frame/'),
+                    'One frame');
             $this->assertIdentical(
                     $browser->getFrames(),
                     array(1 => 'http://site.with.one.frame/frame.html'));
@@ -590,16 +598,18 @@
                     '<frame name="c" src="frame_c.html">' .
                     '</frameset>';
             $browser = &$this->createBrowser($this->createUserAgent(array(
-                    'http://site.with.one.frame/' => $frameset,
-                    'http://site.with.one.frame/frame_a.html' => 'A frame',
-                    'http://site.with.one.frame/frame_b.html' => 'B frame',
-                    'http://site.with.one.frame/frame_c.html' => 'C frame')));
+                    'http://site.with.frames/' => $frameset,
+                    'http://site.with.frames/frame_a.html' => 'A frame',
+                    'http://site.with.frames/frame_b.html' => 'B frame',
+                    'http://site.with.frames/frame_c.html' => 'C frame')));
             
-            $browser->get('http://site.with.one.frame/');
+            $this->assertEqual(
+                    $browser->get('http://site.with.frames/'),
+                    'A frameB frameC frame');
             $this->assertIdentical($browser->getFrames(), array(
-                    'a' => 'http://site.with.one.frame/frame_a.html',
-                    'b' => 'http://site.with.one.frame/frame_b.html',
-                    'c' => 'http://site.with.one.frame/frame_c.html'));
+                    'a' => 'http://site.with.frames/frame_a.html',
+                    'b' => 'http://site.with.frames/frame_b.html',
+                    'c' => 'http://site.with.frames/frame_c.html'));
         }
        
         function testFramesetWithSomeNamedFrames() {
@@ -610,18 +620,40 @@
                     '<frame src="frame_d.html">' .
                     '</frameset>';
             $browser = &$this->createBrowser($this->createUserAgent(array(
-                    'http://site.with.one.frame/' => $frameset,
-                    'http://site.with.one.frame/frame_a.html' => 'A frame',
-                    'http://site.with.one.frame/frame_b.html' => 'B frame',
-                    'http://site.with.one.frame/frame_c.html' => 'C frame',
-                    'http://site.with.one.frame/frame_d.html' => 'D frame')));
+                    'http://site.with.frames/' => $frameset,
+                    'http://site.with.frames/frame_a.html' => 'A frame',
+                    'http://site.with.frames/frame_b.html' => 'B frame',
+                    'http://site.with.frames/frame_c.html' => 'C frame',
+                    'http://site.with.frames/frame_d.html' => 'D frame')));
             
-            $browser->get('http://site.with.one.frame/');
+            $this->assertEqual(
+                    $browser->get('http://site.with.frames/'),
+                    'A frameB frameC frameD frame');
             $this->assertIdentical($browser->getFrames(), array(
-                    'a' => 'http://site.with.one.frame/frame_a.html',
-                    2 => 'http://site.with.one.frame/frame_b.html',
-                    'c' => 'http://site.with.one.frame/frame_c.html',
-                    4 => 'http://site.with.one.frame/frame_d.html'));
+                    'a' => 'http://site.with.frames/frame_a.html',
+                    2 => 'http://site.with.frames/frame_b.html',
+                    'c' => 'http://site.with.frames/frame_c.html',
+                    4 => 'http://site.with.frames/frame_d.html'));
+        }
+        
+        function TODO_testNestedFrameset() {
+            $inner = '<frameset>' .
+                    '<frame name="page" src="page.html">' .
+                    '</frameset>';
+            $outer = '<frameset>' .
+                    '<frame name="inner" src="inner.html">' .
+                    '</frameset>';
+            $browser = &$this->createBrowser($this->createUserAgent(array(
+                    'http://site.with.nested.frame/' => $outer,
+                    'http://site.with.nested.frame/inner.html' => $inner,
+                    'http://site.with.nested.frame/page.html' => 'The page')));
+            
+            $this->assertEqual(
+                    $browser->get('http://site.with.nested.frame/'),
+                    'The page');
+            $this->assertIdentical($browser->getFrames(), array(
+                    'inner' => array(
+                            'page' => 'http://site.with.nested.frame/page.html')));
         }
     }
 ?>
