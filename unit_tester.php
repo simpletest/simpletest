@@ -285,7 +285,7 @@
          *    Confirms that an error has occoured and
          *    that the error text matches a Perl regular
          *    expression.
-         *    @param string $expected   Perl regular expresion to
+         *    @param string $pattern   Perl regular expresion to
          *                              match against.
          *    @param string $message    Message to display.
          *    @return boolean           True on pass
