@@ -68,7 +68,7 @@ class HtmlReporter extends TestDisplay {
                 </li>
                 <li>
                     <code>string _getCss()</code><br />
-                    Returns the CSS styles as a string for the page header
+                    returns the CSS styles as a string for the page header
                     method.
                     Additional styles have to be appended here.
                 </li>
