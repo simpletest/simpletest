@@ -8,13 +8,32 @@
     Mock::generate("HtmlPage");
     Mock::generate("TokenHandler");
 
+    class TestOfCompoundRegex extends UnitTestCase {
+        function TestOfCompoundRegex() {
+            $this->UnitTestCase();
+        }
+        function testNoPatterns() {
+            $regex = &new CompoundRegex();
+            $this->assertFalse($regex->match("Hello", $match));
+            $this->assertEqual($match, "");
+        }
+        function testNoSubject() {
+            $regex = &new CompoundRegex();
+            $regex->addPattern(".*");
+            $this->assertTrue($regex->match("", $match));
+            $this->assertEqual($match, "");
+        }
+        function testMatchAll() {
+            $regex = &new CompoundRegex();
+            $regex->addPattern(".*");
+            $this->assertTrue($regex->match("Hello", $match));
+            $this->assertEqual($match, "Hello");
+        }
+    }
+
     class TestOfLexer extends UnitTestCase {
         function TestOfLexer() {
             $this->UnitTestCase();
-        }
-        function testNoHandlers() {
-            $lexer = &new SimpleLexer();
-            $this->assertFalse($lexer->parse("abcdef"));
         }
         function testEmptyPage() {
             $handler = &new MockTokenHandler($this);
@@ -22,8 +41,7 @@
             $handler->setReturnValue("acceptToken", true);
             $handler->expectMaximumCallCount("acceptUnparsed", 0);
             $handler->setReturnValue("acceptUnparsed", true);
-            $lexer = &new SimpleLexer();
-            $lexer->setHandler($handler);
+            $lexer = &new SimpleLexer($handler);
             $this->assertTrue($lexer->parse(""));
         }
         function testNoPatterns() {
@@ -33,8 +51,7 @@
             $handler->expectArgumentsSequence(0, "acceptUnparsed", array("abcdef"));
             $handler->expectCallCount("acceptUnparsed", 1);
             $handler->setReturnValue("acceptUnparsed", true);
-            $lexer = &new SimpleLexer();
-            $lexer->setHandler($handler);
+            $lexer = &new SimpleLexer($handler);
             $this->assertTrue($lexer->parse("abcdef"));
             $handler->tally();
         }
@@ -52,8 +69,7 @@
             $handler->expectArgumentsSequence(3, "acceptUnparsed", array("z"));
             $handler->expectCallCount("acceptUnparsed", 4);
             $handler->setReturnValue("acceptUnparsed", true);
-            $lexer = &new SimpleLexer();
-            $lexer->setHandler($handler);
+            $lexer = &new SimpleLexer($handler);
             $lexer->addPattern("a+");
             $this->assertTrue($lexer->parse("aaaxayyyaxaaaz"));
             $handler->tally();
@@ -71,8 +87,7 @@
             $handler->expectArgumentsSequence(2, "acceptUnparsed", array("x"));
             $handler->expectCallCount("acceptUnparsed", 3);
             $handler->setReturnValue("acceptUnparsed", true);
-            $lexer = &new SimpleLexer();
-            $lexer->setHandler($handler);
+            $lexer = &new SimpleLexer($handler);
             $lexer->addPattern("a+");
             $lexer->addPattern("b+");
             $this->assertTrue($lexer->parse("ababbxbaxxxxxxax"));
@@ -80,6 +95,27 @@
         }
     }
 
+    class TestOfLexerModes extends UnitTestCase {
+        function TestOfLexerModes() {
+            $this->UnitTestCase();
+        }
+        function testIsolatedPattern() {
+            $handler = &new MockTokenHandler($this);
+            $handler->expectArgumentsSequence(0, "acceptToken", array("a"));
+            $handler->expectArgumentsSequence(1, "acceptToken", array("aa"));
+            $handler->expectArgumentsSequence(2, "acceptToken", array("aaa"));
+            $handler->expectArgumentsSequence(3, "acceptToken", array("aaaa"));
+            $handler->expectCallCount("acceptToken", 4);
+            $handler->setReturnValue("acceptToken", true);
+            $handler->setReturnValue("acceptUnparsed", true);
+            $lexer = &new SimpleLexer($handler, "used");
+            $lexer->addPattern("a+", "used");
+            $lexer->addPattern("b+", "unused");
+            $this->assertTrue($lexer->parse("abaabxbaaaxaaaax"));
+            $handler->tally();
+        }
+    }
+    
     class TestOfParser extends UnitTestCase {
         function TestOfParser() {
             $this->UnitTestCase();

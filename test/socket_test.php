@@ -31,7 +31,7 @@
             $this->UnitTestCase();
         }
         function testBadSocket() {
-            $socket = new SimpleSocket("bad_url", 111);
+            $socket = @new SimpleSocket("bad_url", 111);
             $this->assertTrue($socket->isError(), "Error [" . $socket->getError(). "]");
             $this->assertFalse($socket->isOpen());
             $this->assertFalse($socket->write("A message"));
