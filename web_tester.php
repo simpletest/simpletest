@@ -198,7 +198,7 @@
          *    @access private
          */
         function _testHeaderLine($line) {
-            if (count($parsed = split(':', $line)) < 2) {
+            if (count($parsed = split(':', $line, 2)) < 2) {
                 return false;
             }
             list($header, $value) = $parsed;
