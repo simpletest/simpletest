@@ -71,7 +71,7 @@
                 return false;
             }
             if (! preg_match($this->_getCompoundedRegex(), $subject, $matches)) {
-                $match = "";
+                $match = '';
                 return false;
             }
             $match = $matches[0];
@@ -306,7 +306,7 @@
                 }
                 $length = strlen($raw);
             }
-            if (!$parsed) {
+            if (! $parsed) {
                 return false;
             }
             return $this->_invokeParser($raw, LEXER_UNMATCHED);
@@ -393,7 +393,7 @@
          *    @access private
          */
         function _invokeParser($content, $is_match) {
-            if (($content === "") || ($content === false)) {
+            if (($content === '') || ($content === false)) {
                 return true;
             }
             $handler = $this->_mode->getCurrent();
@@ -421,7 +421,7 @@
             if (! isset($this->_regexes[$this->_mode->getCurrent()])) {
                 return false;
             }
-            if ($raw === "") {
+            if ($raw === '') {
                 return true;
             }
             if ($action = $this->_regexes[$this->_mode->getCurrent()]->match($raw, $match)) {
