@@ -133,24 +133,6 @@
         }
         
         /**
-         *    Sends a fail event.
-         *    @param $message        Message to display.
-         *    @public
-         */
-        function fail($message) {
-            parent::assertTrue(false, $message);
-        }
-        
-        /**
-         *    Sends a pass event.
-         *    @param $message        Message to display.
-         *    @public
-         */
-        function pass($message) {
-            parent::assertTrue(true, $message);
-        }
-        
-        /**
          *    Sets equality operation to act as a simple equal
          *    comparison only, allowing a broader range of
          *    matches.

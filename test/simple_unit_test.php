@@ -22,6 +22,10 @@
         function TestOfUnitTestCase() {
             $this->UnitTestCase();
         }
+        function testOfResults() {
+            $this->pass();
+            $this->fail();        // Fail.
+        }
         function testOfFalse() {
             $this->assertFalse(true, "True is not false");        // Fail.
             $this->assertFalse(false, "False is false");
@@ -90,7 +94,7 @@
         }
     }
     
-    $test = new GroupTest("Unit test case test, 16 fails and 16 passes");
+    $test = new GroupTest("Unit test case test, 17 fails and 17 passes");
     $display = new TestHTMLDisplay();
     $test->attachObserver($display);
     $test->addTestCase(new TestOfUnitTestCase());

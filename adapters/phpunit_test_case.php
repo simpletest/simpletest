@@ -77,18 +77,6 @@
         }
         
         /**
-         *    Sends a fail event.
-         *    @param $message        Message to display.
-         *    @public
-         */
-        function fail($message = false) {
-            if (!$message) {
-                $message("Automatic failure triggered");
-            }
-            parent::assertTrue(false, $message);
-        }
-        
-        /**
          *    Sends an error which we interpret as a fail
          *    with a different message for compatibility.
          *    @param $message        Message to display.

@@ -146,6 +146,24 @@
         }
         
         /**
+         *    Sends a pass event with a message.
+         *    @param $message        Message to send.
+         *    @public
+         */
+        function pass($message = "Pass") {
+            $this->_current_runner->handlePass($message);
+        }
+        
+        /**
+         *    Sends a fail event with a message.
+         *    @param $message        Message to send.
+         *    @public
+         */
+        function fail($message = "Fail") {
+            $this->_current_runner->handleFail($message);
+        }
+        
+        /**
          *    Runs an assertion directly, for extending the
          *    tests with new assertion classes.
          *    @param $assertion    Assertion subclass.
@@ -169,9 +187,9 @@
          */
         function assertTrue($result, $message = "True assertion failed.") {
             if ($result) {
-                $this->_current_runner->handlePass($message);
+                $this->pass($message);
             } else {
-                $this->_current_runner->handleFail($message);
+                $this->fail($message);
             }
         }
         
