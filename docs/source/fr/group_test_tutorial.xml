@@ -82,7 +82,7 @@ class TestOfLogging extends UnitTestCase {
     }</strong>
 }
 ]]></php>
-            Le test reste vert. Nous pouvons continuer à ajouter des méthodes n'étant pas des tests au scénario, il suffit que leur nom ne commence pas par la chaîne &quot;test&quot;. Seules les méthodes commençant par &quot;test&quot; sont éxécutés. Nous pouvons donc continuer le remaniement...
+            Le test reste vert. Nous pouvons continuer à ajouter des méthodes sans tests au scénario, il suffit que leur nom ne commence pas par la chaîne &quot;test&quot;. Seules les méthodes commençant par &quot;test&quot; sont exécutés. Nous pouvons donc continuer le remaniement...
 <php><![CDATA[
 class TestOfLogging extends UnitTestCase {
     function TestOfLogging() {
@@ -123,7 +123,7 @@ class TestOfLogging extends UnitTestCase {
             Premièrement nous devons supprimer le code d'exécution des tests se trouvant dans notre scénario de test.
 <php><![CDATA[
 <?php<strong>
-    require_once('../classes/log.php');</strong>
+    require_once('../classes/log.php');
 
     class TestOfLogging extends UnitTestCase {
         ...

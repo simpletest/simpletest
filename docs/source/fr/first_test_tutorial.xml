@@ -6,13 +6,13 @@
             Si vous débutez avec les tests unitaires, il est recommendé d'essayer le code au fur et à mesure. Il n'y pas grand chose à taper et vous sentirez le rythme de la programmation pilotée par les tests.
         </p>
         <p>
-            Pour exécuter les exemples tels quels, vous aurez besoin de créer un nouveau répertoire et d'y installer trois dossiers : <em>classes</em>, <em>tests</em> et <em>temp</em>. Dézipper le framework <a href="simple_test.php">SimpleTest</a> dans le dossier <em>tests</em> et assurez vous que votre serveur web puisse atteindre ces endroits.
+            Pour exécuter les exemples tels quels, vous aurez besoin de créer un nouveau répertoire et d'y installer trois dossiers : <em>classes</em>, <em>tests</em> et <em>temp</em>. Dézippez le framework <a href="simple_test.php">SimpleTest</a> dans le dossier <em>tests</em> et assurez vous que votre serveur web puisse atteindre ces endroits.
         </p>
         <p>
             <a class="target" name="nouveau"><h2>Un nouveau scénario de test</h2></a>
         </p>
         <p>
-            L'exemple dans <a local="{{simple_test}}">l'introduction rapide</a> comprenait les tests unitaires d'une simple classe de log. Dans ce tutorial à propos de Simple Test, je vais essayer de raconter toute l'histoire du développement de cette classe. Cette classe PHP est courte et simple : au cours de cette introduction, elle recevra beaucoup plus d'attention que dans le cadre d'un développement de production. Nous verons que derrière son apparente simplicité, se cache des choix de conception étonnament difficiles.
+            L'exemple dans <a local="{{simple_test}}">l'introduction rapide</a> comprenait les tests unitaires d'une simple classe de log. Dans ce tutorial à propos de Simple Test, je vais essayer de raconter toute l'histoire du développement de cette classe. Cette classe PHP est courte et simple : au cours de cette introduction, elle recevra beaucoup plus d'attention que dans le cadre d'un développement de production. Nous verons que derrière son apparente simplicité se cachent des choix de conception étonnament difficiles.
         </p>
         <p>
             Peut-être que ces choix sont trop difficiles ? Plutôt que d'essayer de penser à tout en amont, je vais commencer par poser une exigence : nous voulons écrire des messages dans un fichier. Ces messages doivent être ajoutés en fin de fichier s'il existe. Plus tard nous aurons besoin de priorités, de filtres et d'autres choses encore, mais nous plaçons l'écriture dans un fichier au coeur de nos préoccupations. Nous ne penserons à rien d'autres par peur de confusion. OK, commençons par écrire un test...
@@ -91,7 +91,7 @@
             Le test en lui-même est minimal. Tout d'abord il élimine tout autre fichier de test qui serait encore présent. Les décisions de conception arrivent ensuite en rafale. Notre classe s'appelle <code>Log</code> : elle passe le chemin du fichier au constructeur. Nous créons le log et nous lui envoyons aussitôt un message en utilisant la méthode <code>message()</code>. L'originalité dans le nommage n'est pas une caractéristique désirable chez un développeur informatique : c'est triste mais c'est comme ça.
         </p>
         <p>
-            La plus petite unité d'un test mmm... heu... unitaire est l'assertion. Ici nous voulons nous assurer que le fichier log auquel nous venons d'envoyer un message a bel et bien été créé. <code>UnitTestCase::assertTrue()</code> enverra un évènement réussite si la condition évalué est vrai ou un échec dans le cas contaire. Nous pouvons avoir un ensemble de d'assertions différentes et encore plus si nous étendons nos scénarios de test classique. Voici la liste...
+            La plus petite unité d'un test mmm... heu... unitaire est l'assertion. Ici nous voulons nous assurer que le fichier log auquel nous venons d'envoyer un message a bel et bien été créé. <code>UnitTestCase::assertTrue()</code> enverra un évènement réussite si la condition évaluée est vraie ou un échec dans le cas contaire. Nous pouvons avoir un ensemble de d'assertions différentes et encore plus si nous étendons nos scénarios de test classique. Voici la liste...
             <table><tbody>
                 <tr><td><code>assertTrue(\$x)</code></td><td>Echoue si \$x est faux</td></tr>
                 <tr><td><code>assertFalse(\$x)</code></td><td>Echoue si \$x est vrai</td></tr>
@@ -128,7 +128,7 @@
             ou TDD et élève les tests unitaires à une position élevée de la conception. En quelques mots, vous écrivez d'abord un petit test et seulement ensuite le code qui passe ce test. N'importe quel bout de code. Juste pour qu'il passe.
         </p>
         <p>
-            Vous écrivez un autre test et puis de nouveau du code qui passe. Vous aurez alors un peu de duplication et généralement du code pas très propre. Vous re-arrangez (factorisez) ce code-là en vous assurant que les tests continuent à passer : vous ne pouvez rien casser. Une fois que le code est le plus propre possible vous êtes prêt à ajouter des nouvelles fonctionnalités. Il suffit juste de rajouter des nouveaux tests et de recommencer le cycle à nouveau.
+            Vous écrivez un autre test et puis de nouveau du code qui passe. Vous aurez alors un peu de duplication et généralement du code pas très propre. Vous remaniez (factorisez) ce code-là en vous assurant que les tests continuent à passer : vous ne pouvez rien casser. Une fois que le code est le plus propre possible vous êtes prêt à ajouter des nouvelles fonctionnalités. Il suffit juste de rajouter des nouveaux tests et de recommencer le cycle une nouvelle fois.
 
         </p>
         <p>
@@ -243,7 +243,7 @@ class TestOfLogging extends UnitTestCase {
             Devrions-nous supprimer le fichier temporaire à la fin du test ? Par habitude, je le fais une fois que j'en ai terminé avec la méthode de test et qu'elle marche. Je n'ai pas envie de valider du code qui laisse des restes de fichiers de test trainer après un test. Mais je ne le fais pas non plus pendant que j'écris le code. Peut-être devrais-je, mais parfois j'ai besoin de voir ce qui se passe : on retrouve cet aspect confort évoqué plus haut.
         </p>
         <p>
-            Dans un véritable projet, nous avons habituellement plus qu'un scénario de test : c'est pourquoi nous allons regarder comment <a local="group_test_tutorial">grouper des tests dans des suites de tests</a>.
+            Dans un véritable projet, nous avons habituellement plus qu'un unique scénario de test : c'est pourquoi nous allons regarder comment <a local="group_test_tutorial">grouper des tests dans des suites de tests</a>.
         </p>
     </content>
     <internal>

@@ -25,7 +25,7 @@ function testClockTellsTime() {
     $this->assertTrue($time1 == $time2) || ($time1 + 1 == $time2), 'Now is the right time');</strong>
 }
 ]]></php>
-            Sauf que la conception n'est pas plus clair et que nous devrons le répéter pour chaque test de chronométrage. Les répétitions sont un ennemi public n°1 et donc un très bon stimulant pour le remaniement de notre code de test.
+            Sauf que la conception n'est pas plus claire et que nous devrons le répéter pour chaque test de chronométrage. Les répétitions sont un ennemi public n°1 et donc un très bon stimulant pour le remaniement de notre code de test.
 <php><![CDATA[
 class TestOfClock extends UnitTestCase {
     function TestOfClock() {
@@ -111,10 +111,10 @@ function TestOfClock() {
             En fait nous avons raison, là n'est pas le problème.
         </p>
         <p>
-            Vous vous souvenez de quand nous avons construit le test de groupe <em>all_tests.php</em> en utilisant la méthode <code>addTestFile()</code>. Cette méthode recherche les classes de scénario de test, les instancie si elles sont nouvelles puis éxécute tous nos tests. Ce qui s'est passé ? Elle a aussi trouvé notre extension de scénario de test. C'est sans conséquence puisque qu'il n'y a pas de méthode de test à l'intérieur - comprendre pas de méthode commençant par &quot;test&quot;. Aucun test supplémentaire n'est éxécuté.
+            Vous vous souvenez de quand nous avons construit le test de groupe <em>all_tests.php</em> en utilisant la méthode <code>addTestFile()</code>. Cette méthode recherche les classes de scénario de test, les instancie si elles sont nouvelles puis exécute tous nos tests. Ce qui s'est passé ? Elle a aussi trouvé notre extension de scénario de test. C'est sans conséquence puisque qu'il n'y a pas de méthode de test à l'intérieur - comprendre pas de méthode commençant par &quot;test&quot;. Aucun test supplémentaire n'est exécuté.
         </p>
         <p>
-            Le problème vient du fait qu'il instancie la class et le fait sans le paramètre <code>$test_name</code> qui déclenche l'avertissement. Ce paramètre n'est généralement nécessaire ni pour un scénario de test, ni pour son assertion. Pour que notre scénario de test étendu corresponde à l'interface de <code>UnitTestCase</code>, nous avons besoin de le rendre optionnel...
+            Le problème vient du fait qu'il instancie la classe et le fait sans le paramètre <code>$test_name</code> qui déclenche l'avertissement. Ce paramètre n'est généralement nécessaire ni pour un scénario de test, ni pour son assertion. Pour que notre scénario de test étendu corresponde à l'interface de <code>UnitTestCase</code>, nous avons besoin de le rendre optionnel...
 <php><![CDATA[
 class TimeTestCase extends UnitTestCase {
     function TimeTestCase(<strong>$test_name = false</strong>) {
@@ -130,7 +130,7 @@ class TimeTestCase extends UnitTestCase {
     }
 }
 ]]></php>
-            Bien sûr, que cette classe soit instancier sans raison par la suite de test devrait continuer à vous ennuyer. Voici une modification pour l'empêcher de s'éxécuter...
+            Bien sûr, que cette classe soit instanciée sans raison par la suite de test devrait continuer à vous ennuyer. Voici une modification pour l'empêcher de s'exécuter...
 <php><![CDATA[
 <strong>SimpleTestOptions::ignore('TimeTestCase');</strong>
 class TimeTestCase extends UnitTestCase {

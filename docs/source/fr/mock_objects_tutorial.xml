@@ -139,7 +139,7 @@ require_once('simpletest/mock_objects.php');
 <php><![CDATA[
 Mock::generate('Clock');
 ]]></php>
-            C'est la ligne qui fait le travail. Le générateur de code scanne la class, en extrait toutes ses méthodes, crée le code pour générer une classe avec une interface identique, mais en ajoutant le nom &quot;Mock&quot; et ensuite <code>eval()</code> le nouveau code pour créer la nouvelle classe.
+            C'est la ligne qui fait le travail. Le générateur de code scanne la classe, en extrait toutes ses méthodes, crée le code pour générer une classe avec une interface identique, mais en ajoutant le nom &quot;Mock&quot; et ensuite <code>eval()</code> le nouveau code pour créer la nouvelle classe.
 <php><![CDATA[
 $clock = &new MockClock($this);
 ]]></php>
@@ -214,7 +214,7 @@ class Log {
             Est-ce que ce paramètre supplémentaire dans la classe <code>Log</code> vous gêne ? Nous n'avons changer l'interface que pour faciliter les tests après tout. Les interfaces ne sont-elles pas la chose la plus importante ? Avons nous souillé notre classe avec du code de test ?
         </p>
         <p>
-            Peut-être, mais réfléchisser à ce qui suit. A la prochaine occasion, regardez une carte avec des circuits imprimés, peut-être la carte mère de l'ordinateur que vous regardez actuellement. Sur la plupart d'entre elles vous trouverez un trou bizarre et vide ou alors un point de soudure sans rien de fixé ou même une épingle ou une prise sans aucune fonction évidente. Peut-être certains sont là en prévision d'une expansion ou d'une variation future, mais la plupart n'y est que pour les tests.
+            Peut-être, mais réfléchissez à ce qui suit. A la prochaine occasion, regardez une carte avec des circuits imprimés, peut-être la carte mère de l'ordinateur que vous regardez actuellement. Sur la plupart d'entre elles vous trouverez un trou bizarre et vide ou alors un point de soudure sans rien de fixé ou même une épingle ou une prise sans aucune fonction évidente. Peut-être certains sont là en prévision d'une expansion ou d'une variation future, mais la plupart n'y est que pour les tests.
         </p>
         <p>
             Pensez-y. Les usines qui fabriquent ces cartes imprimées par centaine de milliers gaspillent des matières premières sur des pièces qui n'ajoutent rien à la fonction finale. Si les ingénieurs matériel peuvent faire quelques sacrifices à l'élégance, je suis sûr que nous pouvons aussi le faire. Notre sacrifice ne gaspille pas de matériel après tout.

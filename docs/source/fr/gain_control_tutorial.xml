@@ -3,7 +3,7 @@
     <long_title>Tutorial de test unitaire en PHP  - Isoler les variables pendant le test</long_title>
     <content>
         <p>
-            Pour tester un module de code vous avez besoin d'avoir un contrôle très précis sur son environnement. Si quelque chose change dans les coulisses, par exemple dans un fichier de configuration, alors les tests peuvent échouer de façon inattendue. Il ne s'agirait plus d'un test de code sans équivoque et pourrait vous faire perdre des heures précieuses à la recherche d'erreurs dans un code qui fonctionne. Alors qu'il s'agit d'un problème de configuration qui plante le test en question. Au mieux vos scénarios de test deviennent de plus en plus compliqué afin de prendre en compte toutes les variations possibles.
+            Pour tester un module de code vous avez besoin d'avoir un contrôle très précis sur son environnement. Si quelque chose change dans les coulisses, par exemple dans un fichier de configuration, alors les tests peuvent échouer de façon inattendue. Il ne s'agirait plus d'un test de code sans équivoque et pourrait vous faire perdre des heures précieuses à la recherche d'erreurs dans un code qui fonctionne. Alors qu'il s'agit d'un problème de configuration qui plante le test en question. Au mieux vos scénarios de test deviennent de plus en plus compliqués afin de prendre en compte toutes les variations possibles.
         </p>
         <p>
             <a class="target" name="temps"><h2>Contrôler le temps</h2></a>
@@ -15,14 +15,14 @@
             Par contre un autre problème reste : nos machines de développement doivent aussi avoir tous les composants système d'installés avant l'éxécution de la suite de test. Et vos tests s'éxécuteront plus lentement.
         </p>
         <p>
-            Devant un tel dilemme, nous créerons souvent des versions ****englobantes**** des classes qui gérent ces ressources. Les vilains détails de ces ressources sont ensuite codés une seule fois. J'aime bien appeler ces classes des &quot;classes frontière&quot; étant donné qu'elles existent en bordure de l'application, l'interface entre votre application et le reste du système. Ces classes frontière sont - dans le meilleur des cas - simulées pendant les tests par des versions de simulacre. Elles s'éxécutent plus rapidement et sont souvent appelées &quot;bouchon serveur [Ndt : Server Stubs]&quot; ou dans leur forme plus générique &quot;objet fantaisie [Ndt : Mock Objects]&quot;. Englober et bouchonner chacune de ces ressouces permet d'économiser pas mal de temps.
+            Devant un tel dilemme, nous créerons souvent des versions enveloppantes des classes qui gèrent ces ressources. Les vilains détails de ces ressources sont ensuite codés une seule fois. J'aime bien appeler ces classes des &quot;classes frontière&quot; étant donné qu'elles existent en bordure de l'application, l'interface entre votre application et le reste du système. Ces classes frontière sont - dans le meilleur des cas - simulées pendant les tests par des versions de simulacre. Elles s'exécutent plus rapidement et sont souvent appelées &quot;bouchon serveur [Ndt : Server Stubs]&quot; ou dans leur forme plus générique &quot;objet fantaisie [Ndt : Mock Objects]&quot;. Envelopper et bouchonner chacune de ces ressouces permet d'économiser pas mal de temps.
         </p>
         <p>
-            Un des facteurs souvent négligés restent le temps. Par exemple, pour tester l'expiration d'une session des codeurs vont souvent temporairement en caler la durée à une valeur très courte, disons 2 secondes, et ensuite effectuer un <code>sleep(3)</code> : ils estiment alors que la session a expirée. Sauf que cette opération ajoute 3 secondes à la suite de test : il s'agit souvent de beaucoup de code en plus pour rendre la classe de session aussi malléable. Plus simple serait d'avoir un moyent d'avancer l'horloge arbitrairement. De contrôler le temps.
+            Un des facteurs souvent négligés reste le temps. Par exemple, pour tester l'expiration d'une session des codeurs vont souvent temporairement en caler la durée à une valeur très courte, disons 2 secondes, et ensuite effectuer un <code>sleep(3)</code> : ils estiment alors que la session a expirée. Sauf que cette opération ajoute 3 secondes à la suite de test : il s'agit souvent de beaucoup de code en plus pour rendre la classe de session aussi malléable. Plus simple serait d'avoir un moyen d'avancer l'horloge arbitrairement. De contrôler le temps.
         </p>
         <p>
             <a class="target" name="horloge"><h2>Une classe horloge</h2></a>
-            Une nouvelle fois, nous allons effectuer notre conception d'un ****wrapper**** d'horloge via l'écriture de tests. Premièrement nous ajoutons un scénario de test d'horloge dans notre suite de test <em>tests/all_tests.php</em>...
+            Une nouvelle fois, nous allons effectuer notre conception d'une enveloppe d'horloge via l'écriture de tests. Premièrement nous ajoutons un scénario de test d'horloge dans notre suite de test <em>tests/all_tests.php</em>...
 <php><![CDATA[
 <?php
     if (! defined('SIMPLE_TEST')) {
@@ -50,7 +50,7 @@
         }
         function testClockTellsTime() {
             $clock = new Clock();
-            \this->assertEqual($clock->now(), time(), 'Now is the right time');
+            $this->assertEqual($clock->now(), time(), 'Now is the right time');
         }
         function testClockAdvance() {
         }
@@ -135,7 +135,7 @@ class Clock {<strong>
         return time()<strong> + $this->_offset</strong>;
     }
     <strong>
-    function advance(\$offset) {
+    function advance($offset) {
         $this->_offset += $offset;
     }</strong>
 }
