@@ -225,14 +225,15 @@
         }
         
         /**
-         *    Fetches the page content with a GET request.
+         *    Fetches the page content with a simple GET request.
          *    @param $raw_url      Target to fetch as string.
+         *    @param $parameters   Additional parameters for GET request.
          *    @param $request      Test version of SimpleHttpRequest.
          *    @return              Content of page.
          *    @public
          */
-        function fetchContent($raw_url, $request = false) {
-            $url = $this->_createAbsoluteUrl($raw_url);
+        function get($raw_url, $parameters = false, $request = false) {
+            $url = $this->_createAbsoluteUrl($raw_url, $parameters);
             if (!is_object($request)) {
                 $request = &new SimpleHttpRequest($url);
             }
@@ -264,11 +265,15 @@
          *    URL object, filling the relative URL if
          *    a base URL is present.
          *    @param $raw_url        URL as string.
+         *    @param $parameters     Additional request, parameters.
          *    @return                Absolute URL as object.
          *    @private
          */
-        function _createAbsoluteUrl($raw_url) {
+        function _createAbsoluteUrl($raw_url, $parameters = false) {
             $url = new SimpleUrl($raw_url);
+            if ($parameters) {
+                $url->addRequestParameters($parameters);
+            }
             $url->makeAbsolute($this->_base_url);
             return $url;
         }
@@ -329,12 +334,12 @@
         /**
          *    Fetches a URL as a response object performing
          *    tests set in expectations.
-         *    @param $url        Target to fetch as string.
+         *    @param $url        Target to fetch as SimpleUrl.
          *    @param $request    Test override of SimpleHttpRequest.
          *    @return            Reponse object.
          *    @public
          */
-        function &fetchResponse($url, $request = false) {
+        function &fetchResponse($url, &$request) {
             $response = &parent::fetchResponse($url, $request);
             $this->_checkExpectations($url, $response);
             return $response;

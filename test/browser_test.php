@@ -125,14 +125,14 @@
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
             $browser = &new SimpleBrowser();
-            $browser->fetchContent("http://this.host/this/path/page.html", &$request);
+            $browser->get("http://this.host/this/path/page.html", false, &$request);
             $this->assertEqual(
                     $browser->getBaseUrl(),
                     "http://this.host/this/path/");
         }
     }
-
-    class testOfBrowserCookies extends UnitTestCase {
+    
+    class TestOfBrowserCookies extends UnitTestCase {
         function TestOfBrowserCookies() {
             $this->UnitTestCase();
         }
@@ -161,7 +161,7 @@
             $browser->setCookie("a", "A");
             $response = $browser->fetchResponse(
                     new SimpleUrl("http://this.host/this/path/page.html"),
-                    &$request);
+                    $request);
             $this->assertEqual($response->getContent(), "stuff");
             $request->tally();
         }
@@ -171,7 +171,7 @@
             $browser->setCookie("a", "A");
             $browser->fetchResponse(
                     new SimpleUrl("http://this.host/this/path/page.html"),
-                    &$request);
+                    $request);
             $this->assertEqual($browser->getCookieValue("this.host", "this/path/", "a"), "AAAA");
         }
         function testClearCookie() {
@@ -183,7 +183,7 @@
             $browser = &new SimpleBrowser();
             $browser->setCookie("a", "A", "this/path/", "Wed, 25-Dec-02 04:24:21 GMT");
             $this->assertEqual(
-                    $browser->fetchContent("http://this.host/this/path/page.html", &$request),
+                    $browser->get("http://this.host/this/path/page.html", false, &$request),
                     "stuff");
             $this->assertIdentical(
                     $browser->getCookieValue("this.host", "this/path/", "a"),
@@ -198,12 +198,35 @@
             $this->assertNull($browser->getBaseCookieValue("a"));
             $browser->setCookie("b", "BBB", "this.host", "this/path/");
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAA", "this/path/")));
-            $browser->fetchContent("http://this.host/this/path/page.html", &$request);
+            $browser->get("http://this.host/this/path/page.html", false, &$request);
             $this->assertEqual($browser->getBaseCookieValue("a"), "AAA");
             $this->assertEqual($browser->getBaseCookieValue("b"), "BBB");
         }
     }
     
+    Mock::generatePartial('SimpleBrowser', 'MockFetchSimpleBrowser', array('fetchResponse'));
+    
+    class TestOfFetchingMethods extends UnitTestCase {
+        function TestOfFetchingMethods() {
+            $this->UnitTestCase();
+        }
+        function testSimpleGet() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue("getContent", "stuff");
+            $url = new SimpleUrl("http://this.host/page.html");
+            $url->addRequestParameters(array("a" => "A", "b" => "B"));
+            $browser = &new MockFetchSimpleBrowser($this);
+            $browser->setReturnReference("fetchResponse", $response);
+            $browser->expectArguments(
+                    "fetchResponse",
+                    array($url, "*"));
+            $browser->SimpleBrowser();
+            $this->assertEqual(
+                    $browser->get("http://this.host/page.html", array("a" => "A", "b" => "B"), &$this->_request),
+                    "stuff");
+        }
+    }
+
     class TestOfBrowserAssertions extends UnitTestCase {
         function TestOfBrowserAssertions() {
             $this->UnitTestCase();
@@ -240,7 +263,7 @@
             $browser = &new TestBrowser($test);
             $request = &$this->_createSimulatedBadHost();
             $this->assertIdentical(
-                    $browser->fetchContent("http://this.host/this/path/page.html", &$request),
+                    $browser->get("http://this.host/this/path/page.html", false, &$request),
                     false);
             $test->tally();
         }
@@ -252,7 +275,7 @@
             $browser->expectConnection();
             $request = &$this->_createSimulatedBadHost();
             $this->assertIdentical(
-                    $browser->fetchContent("http://this.host/this/path/page.html", &$request),
+                    $browser->get("http://this.host/this/path/page.html", false, &$request),
                     false);
             $test->tally();
         }
@@ -264,7 +287,7 @@
             $browser->expectConnection(false);
             $request = &$this->_createSimulatedBadHost();
             $this->assertIdentical(
-                    $browser->fetchContent("http://this.host/this/path/page.html", &$request),
+                    $browser->get("http://this.host/this/path/page.html", false, &$request),
                     false);
             $test->tally();
         }
@@ -289,7 +312,7 @@
             $this->_test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($this->_test);
             $browser->expectResponseCodes(array(404));
-            $browser->fetchContent("http://this.host/this/path/page.html", &$this->_request);
+            $browser->get("http://this.host/this/path/page.html", false, &$this->_request);
             $this->_test->tally();
         }
         function testUnwantedResponseCode() {
@@ -298,7 +321,7 @@
             $this->_test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($this->_test);
             $browser->expectResponseCodes(array(100, 200));
-            $browser->fetchContent("http://this.host/this/path/page.html", &$this->_request);
+            $browser->get("http://this.host/this/path/page.html", false, &$this->_request);
             $this->_test->tally();
         }
         function testExpectedMimeTypes() {
@@ -307,7 +330,7 @@
             $this->_test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($this->_test);
             $browser->expectMimeTypes(array("text/plain", "text/xml"));
-            $browser->fetchContent("http://this.host/this/path/page.xml", &$this->_request);
+            $browser->get("http://this.host/this/path/page.xml", false, &$this->_request);
             $this->_test->tally();
         }
         function testClearExpectations() {
@@ -317,7 +340,7 @@
             $browser->expectResponseCodes(array(100, 200));
             $browser->expectConnection();
             $browser->_clearExpectations();
-            $browser->fetchContent("http://this.host/this/path/page.html", &$this->_request);
+            $browser->get("http://this.host/this/path/page.html", false, &$this->_request);
             $this->_test->tally();
         }
     }
@@ -350,7 +373,7 @@
             $test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
             $browser->expectCookie("a", "A");
-            $browser->fetchContent("http://this.host/this/path/page.html", &$request);
+            $browser->get("http://this.host/this/path/page.html", false, &$request);
             $test->tally();
             $this->assertIdentical($browser->getCookieValue("this.host", "this/page/", "a"), false);
         }
@@ -361,7 +384,7 @@
             $test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
             $browser->expectCookie("a", "A");
-            $browser->fetchContent("http://this-host.com/this/path/page.html", &$request);
+            $browser->get("http://this-host.com/this/path/page.html", false, &$request);
             $test->tally();
             $this->assertEqual($browser->getCookieValue("this-host.com", "this/path/", "a"), "A");
             $this->assertIdentical($browser->getCookieValue("this-host.com", "this/", "a"), false);

@@ -269,6 +269,15 @@
         }
         
         /**
+         *    Adds an additional parameter to the request.
+         *    @param $parameters   Hash of additional parameters.
+         *    @public
+         */
+        function addRequestParameters($parameters) {
+            $this->_request = array_merge($this->_request, $parameters);
+        }
+        
+        /**
          *    Replaces unknown sections to turn a relative
          *    URL into an absolute one.
          *    @param $base            Base URL as string.

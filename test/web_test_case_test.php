@@ -27,9 +27,9 @@
         }
         function setUp() {
             $browser = &$this->getBrowser();
-            $browser->setReturnValue("fetchContent", "Hello world");
-            $browser->expectArguments("fetchContent", array("http://my-site.com/"));
-            $browser->expectCallCount("fetchContent", 1);
+            $browser->setReturnValue("get", "Hello world");
+            $browser->expectArguments("get", array("http://my-site.com/"));
+            $browser->expectCallCount("get", 1);
         }
         function tearDown() {
             $browser = &$this->getBrowser();
@@ -55,10 +55,10 @@
             $browser = &$this->getBrowser();
             $browser->setReturnValueAt(
                     0,
-                    "fetchContent",
+                    "get",
                     "<a href=\"http://my-site.com/there\" id=\"2\">Me</a>, <a href=\"a\">Me</a>");
-            $browser->setReturnValueAt(1, "fetchContent", "Found it");
-            $browser->expectCallCount("fetchContent", 2);
+            $browser->setReturnValueAt(1, "get", "Found it");
+            $browser->expectCallCount("get", 2);
         }
         function tearDown() {
             $browser = &$this->getBrowser();
@@ -66,7 +66,7 @@
         }
         function testLinkClick() {
             $browser = &$this->getBrowser();
-            $browser->expectArgumentsAt(1, "fetchContent", array("http://my-site.com/there"));
+            $browser->expectArgumentsAt(1, "get", array("http://my-site.com/there"));
             $this->fetch("http://my-site.com/link");
             $this->assertFalse($this->clickLink('You'));
             $this->assertTrue($this->clickLink('Me'));
@@ -75,7 +75,7 @@
         }
         function testLinkIdClick() {
             $browser = &$this->getBrowser();
-            $browser->expectArgumentsAt(1, "fetchContent", array("http://my-site.com/there"));
+            $browser->expectArgumentsAt(1, "get", array("http://my-site.com/there"));
             $this->fetch("http://my-site.com/link");
             $this->assertFalse($this->clickLinkId(0));
             $this->_getHtml();
@@ -84,7 +84,7 @@
         }
         function testLinkIndexClick() {
             $browser = &$this->getBrowser();
-            $browser->expectArgumentsAt(1, "fetchContent", array("./a"));
+            $browser->expectArgumentsAt(1, "get", array("./a"));
             $this->fetch("http://my-site.com/link");
             $this->assertFalse($this->clickLink('Me', 2));
             $this->assertTrue($this->clickLink('Me', 1));
@@ -98,7 +98,7 @@
         function testTitle() {
             $browser = &$this->getBrowser();
             $browser->setReturnValue(
-                    "fetchContent",
+                    "get",
                     "<html><head><title>Pretty page</title></head></html>");
             $this->fetch("http://my-site.com/");
             $this->assertTitle("Pretty page");

@@ -95,7 +95,7 @@
          *    @public
          */
         function fetch($url, $parameters = false) {
-            $this->_current_content = $this->_current_browser->fetchContent($url);
+            $this->_current_content = $this->_current_browser->get($url);
             $this->_clearHtmlCache();
         }
         
