@@ -31,6 +31,8 @@
                     return "Array: " . count($value) . " items";
                 case "Object":
                     return "Object: of " . get_class($value);
+                case "String":
+                    return "String: " . $this->clipString($value, 100);
                 default:
                     return "$type: $value";
             }

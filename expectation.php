@@ -282,7 +282,10 @@
             if ($this->test($compare)) {
                 return $this->_decribePatternMatch($this->_getPattern(), $compare);
             } else {
-                return "Pattern [" . $this->_getPattern() . "] not detected in string [$compare]";
+                $dumper = &$this->_getDumper();
+                return "Pattern [" . $this->_getPattern() .
+                        "] not detected in [" .
+                        $dumper->describeValue($compare) . "]";
             }
         }
         
@@ -293,10 +296,11 @@
         function _decribePatternMatch($pattern, $subject) {
             preg_match($pattern, $subject, $matches);
             $position = strpos($subject, $matches[0]);
-            return "Pattern [$pattern] detected at [$position] in string [" .
-                    $this->_dumper->clipString($subject, 40) . "] as [" .
+            $dumper = &$this->_getDumper();
+            return "Pattern [$pattern] detected at [$position] in [" .
+                    $dumper->describeValue($subject) . "] as [" .
                     $matches[0] . "] in region [" .
-                    $this->_dumper->clipString($subject, 40, $position) . "]";
+                    $dumper->clipString($subject, 40, $position) . "]";
         }
     }
     
@@ -335,7 +339,10 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return "Pattern [" . $this->_getPattern() . "] not detected in string [$compare]";
+                $dumper = &$this->_getDumper();
+                return "Pattern [" . $this->_getPattern() .
+                        "] not detected in [" .
+                        $dumper->describeValue($compare) . "]";
             } else {
                 return $this->_decribePatternMatch($this->_getPattern(), $compare);
             }
