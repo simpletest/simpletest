@@ -509,16 +509,6 @@
         }
         
         /**
-         *    Refreshes a frame in the current frameset.
-         *    @param string/integer $frame    Name or index of frame.
-         *    @return boolean                 True if frame exists and was
-         *                                    successfully loaded.
-         *    @access public
-         */
-        function reloadFrame($frame) {
-        }
-        
-        /**
          *    Retries a request after setting the authentication
          *    for the current realm.
          *    @param string $username    Username for realm.

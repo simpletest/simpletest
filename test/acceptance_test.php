@@ -731,9 +731,9 @@
                     'http://www.lastcraft.com/test/messy_frameset.html'));
             $this->setFrameFocus('Counter');
             $this->assertWantedPattern('/Count: 1/');
-            $this->reloadFrame('Counter');
+            $this->retry();
             $this->assertWantedPattern('/Count: 2/');
-            $this->reloadFrame('Counter');
+            $this->retry();
             $this->assertWantedPattern('/Count: 3/');
         }
         
