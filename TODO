@@ -1,14 +1,16 @@
 TODO
-This is immediate stuff only for the next iteration (Beta4) of 35 hours.
-Figures are estimated hours work versus actual (for XP velocity).
-Stuff will get added or dropped as the cycle progresses.
+This is immediate stuff only for the next iteration (1.0rc1) of 49(!) hours.
+This equates to about 6 weeks work giving a release date of first week
+of April.
 
 $Id$
 
 Unit tester
 -----------
-Move dump() method to use the dumper class (1/1) - done.
-Add error level filtering to error handler (1/1) - done.
+Error level override for error trapping (2).
+Optionally add statistical test case (3).
+Optionally add soak test case (3).
+Optionally add parallel process test case via. shell (4).
 
 Interface
 ---------
@@ -18,26 +20,37 @@ Mock objects
 
 Html parser
 -----------
-Parsing of radio buttons (3/4) - done.
-Support multiple selections (3/4) - done.
-Support multiple checkboxes (2/3) - done.
-Make hidden fields unsettable (1/0) - done.
-Refactoring link parsing (2/1) - done.
+Add framset tag (2).
+Add frame tag (1).
+Simplify builder callbacks (1).
+Make HTML parser pluggable (2).
+Add image submit parsing (3).
+Add image map parsing (2).
+Make multivalue widgets PHP compatible (2).
 
 Browser
 -------
-Need repeated parameters in query strings (0/3) - done.
-Make browser a separate component of the framework (8/14) - done.
+Add frame loading support (4).
+Add frame focus and defocus (3).
+Make widget handling reflect form focus (2).
+Add setFieldById() method (1).
+Add assertFieldById() method (1).
+Add simple HTTP authentication challenge/response (5).
+Allow image links to be head fetched to set cookies (2).
+Allow stylesheet loading to affect cookies (1).
 
 Web tester
 ----------
-Add assertField() method (1/1) - done.
+Chain frames support from browser (1).
 
 Documentation
 -------------
-Form submission docs (3/4) - done.
-Add package headers to structure files (1/1) - done.
+Add cookie documentation (3).
+Add detached browser documentation (4).
+Formalise extensions (1).
 
 Build
 -----
-Add version number to options (1/1) - done.
+Formalise tarball build (2).
+Make the test suite run under PHP5 without anything too bad happening (4).
+

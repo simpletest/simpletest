@@ -87,13 +87,13 @@ $options = array(
 		'docs' => 'doc',
 		'test' => 'test',
 		'extensions' => 'php',
-		'tutorials' => 'doc',
-		'tutorials/SimpleTest' => 'doc',
-		'ui' => 'php',
-		'ui/css' => 'data',
-		'ui/img' => 'data',
-		'ui/js' => 'data',
-		'ui/js/tests' => 'test',
+		//'tutorials' => 'doc',
+		//'tutorials/SimpleTest' => 'doc',
+		//'ui' => 'php',
+		//'ui/css' => 'data',
+		//'ui/img' => 'data',
+		//'ui/js' => 'data',
+		//'ui/js/tests' => 'test',
 		),
 	'exceptions' =>
 		array(
@@ -124,8 +124,8 @@ foreach ( $maintainers as $maintainer ) {
 		$maintainer['email'] );
 }
 
-// Adds a dependency of PHP 4.1.0+
-$status = $PPFM->addDependency('php', '4.1.0', 'ge', 'php');
+// Adds a dependency of PHP 4.2.3+
+$status = $PPFM->addDependency('php', '4.2.3', 'ge', 'php');
 if (PEAR::isError($status)) {
     fwrite (STDERR,$status->getMessage());
     exit;
