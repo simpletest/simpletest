@@ -476,7 +476,7 @@
         }
     }
     
-    SimpleTestOptions::addPartialMockCode('function sayHello() { return "Hello"; } ');
+    SimpleTestOptions::addPartialMockCode('function sayHello() { return "Hello"; }');
     Mock::generatePartial("Dummy", "TestDummy", array("anotherMethod"));
     SimpleTestOptions::addPartialMockCode();
     
