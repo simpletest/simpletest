@@ -115,7 +115,6 @@
             
             $agent = &new MockSimpleUserAgent($this);
             $agent->setReturnReference('fetchResponse', $response);
-            $agent->setReturnValue('getBaseUrl', 'http://this.com/');
             
             $browser = &new MockParseSimpleBrowser($this);
             $browser->setReturnReference('_createUserAgent', $agent);
@@ -147,7 +146,6 @@
             $page->setReturnValue('getTransportError', 'Ouch!');
             
             $browser = &$this->loadPage($page);
-            $this->assertEqual($browser->getBaseUrl(), 'http://this.com/');
 
             $this->assertEqual($browser->getRequest(), "GET here.html\r\n\r\n");
             $this->assertEqual($browser->getContent(), 'Raw HTML');

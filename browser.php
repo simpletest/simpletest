@@ -271,24 +271,6 @@
         }
         
         /**
-         *    Accessor for base URL worked out from the current URL.
-         *    @return string       Base URL.
-         *    @access public
-         */
-        function getBaseUrl() {
-            return $this->_user_agent->getBaseUrl();
-        }
-        
-        /**
-         *    Accessor for the current browser location.
-         *    @return string       Current URL.
-         *    @access public
-         */
-        function getCurrentUrl() {
-            return $this->_page->getRequestUrl();
-        }
-        
-        /**
          *    Removes expired and temporary cookies as if
          *    the browser was closed and re-opened.
          *    @param string/integer $date   Time when session restarted.
@@ -714,7 +696,7 @@
         function _submitForm(&$form, $name) {
             $action = $form->getAction();
             if (! $action) {
-                $action = $this->getCurrentUrl();
+                $action = $this->_page->getRequestUrl();
             }
             $method = $form->getMethod();
             return $this->$method($action, $form->submitButton($name));
@@ -732,7 +714,7 @@
             }
             $action = $form->getAction();
             if (! $action) {
-                $action = $this->getCurrentUrl();
+                $action = $this->_page->getRequestUrl();
             }
             $method = $form->getMethod();
             return $this->$method($action, $form->submit());
