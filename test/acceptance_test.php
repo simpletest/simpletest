@@ -544,6 +544,13 @@
             $this->assertNoUnwantedPattern('/<p>wrong form<\/p>/i');
             $this->assertTitle('Test of form self submission');
         }
+        
+        function testSettingOfBlankOption() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertTrue($this->setField('d', ''));
+            $this->clickSubmit('Go!');
+            $this->assertWantedText('d=[]');
+        }
     }
     
     class TestOfLiveMultiValueWidgets extends WebTestCase {

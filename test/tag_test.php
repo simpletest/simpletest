@@ -270,7 +270,7 @@
         }
         
         function testBlankOption() {
-            $tag = &new SimpleSelectionTag(array('' => ''));
+            $tag = &new SimpleSelectionTag(array('name' => 'A'));
             $a = &new SimpleOptionTag(array());
             $tag->addTag($a);
             $b = &new SimpleOptionTag(array());
