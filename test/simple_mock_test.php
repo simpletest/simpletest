@@ -442,15 +442,6 @@
             $mock->tally();
         }
         
-        function testClearHistory() {
-            $mock = &new MockDummy($this);
-            $mock->expectCallCount("aMethod", 0);
-            $mock->aMethod();
-            $this->assertEqual($mock->getCallCount("aMethod"), 1);
-            $mock->clearHistory();
-            $mock->tally();
-        }
-        
         function testExpectedCallCount() {
             $mock = &new MockDummy($this);
             $mock->expectCallCount("aMethod", 2);
