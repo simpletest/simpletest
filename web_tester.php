@@ -106,7 +106,7 @@
          *    @access private
          */
         function &_getHtml() {
-            if (!$this->_html_cache) {
+            if (! $this->_html_cache) {
                 $this->_html_cache = &new SimplePage($this->_current_content);
             }
             return $this->_html_cache;
@@ -163,7 +163,7 @@
          *    @access public
          */
         function setMaximumRedirects($max) {
-            if (!$this->_current_browser) {
+            if (! $this->_current_browser) {
                 trigger_error(
                         'Can only set maximum redirects in a test method, setUp() or tearDown()');
             }
@@ -216,7 +216,7 @@
                 return false;
             }
             $action = $form->getAction();
-            if (!$action) {
+            if (! $action) {
                 $action = $this->_current_browser->getCurrentUrl();
             }
             $method = $form->getMethod();
@@ -236,7 +236,7 @@
                 return false;
             }
             $action = $form->getAction();
-            if (!$action) {
+            if (! $action) {
                 $action = $this->_current_browser->getCurrentUrl();
             }
             $method = $form->getMethod();

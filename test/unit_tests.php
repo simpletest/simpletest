@@ -28,6 +28,7 @@
             $this->addTestFile("parser_test.php");
             $this->addTestFile("tag_test.php");
             $this->addTestFile("page_test.php");
+            $this->addTestFile("frames_test.php");
             $this->addTestFile("web_test_case_test.php");
             $this->addTestFile("shell_tester_test.php");
             $this->addTestFile("xml_test.php");
