@@ -70,6 +70,10 @@
          *    @public
          */
         function assertRegexp($pattern, $subject, $message = false) {
+            $this->assertAssertion(
+                    new WantedPatternAssertion($pattern),
+                    $subject,
+                    $message);
         }
         
         /**

@@ -196,8 +196,10 @@
          *    @public
          */
         function assertWantedPattern($pattern, $subject, $message = "%s") {
-            $message = sprintf($message, "expecting [$pattern] in [$subject]");
-            $this->assertTrue((boolean)preg_match($pattern, $subject), $message);
+            $this->assertAssertion(
+                    new WantedPatternAssertion($pattern),
+                    $subject,
+                    $message);
         }
         
         /**
@@ -210,8 +212,10 @@
          *    @public
          */
         function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
-            $message = sprintf($message, "not expecting [$pattern] in [$subject]");
-            $this->assertTrue(!preg_match($pattern, $subject), $message);
+            $this->assertAssertion(
+                    new UnwantedPatternAssertion($pattern),
+                    $subject,
+                    $message);
         }
     }
 ?>

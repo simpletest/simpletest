@@ -115,7 +115,10 @@
          *    @public
          */
         function assertRegExp($pattern, $subject, $message = "%s") {
-            parent::assertTrue((boolean)preg_match($pattern, $subject), $message);
+            $this->assertAssertion(
+                    new WantedPatternAssertion($pattern),
+                    $subject,
+                    $message);
         }
         
         /**

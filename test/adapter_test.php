@@ -57,5 +57,8 @@
         function testMultilineEquals() {
             $this->assertEquals("a\nb\n", "a\nb\n", "PHP Unit equality");
         }
+        function testRegExp() {
+            $this->assertRegexp('/hello/', "A big hello from me", "PEAR regex");
+        }
     }
 ?>
