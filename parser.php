@@ -227,11 +227,18 @@
             }
             $length = strlen($raw);
             while (is_array($parsed = $this->_reduce($raw))) {
-                list($unmatched, $match) = $parsed;
-                if ($unmatched && !$this->_handler->acceptUnparsed($unmatched)) {
+                list($unmatched, $match, $mode) = $parsed;
+                if ($unmatched && !$this->_handler->accept($unmatched, false)) {
                     return false;
                 }
-                if ($match && !$this->_handler->acceptToken($match)) {
+                if ($mode === "_exit") {
+                    if (!$this->_mode->leave()) {
+                        return false;
+                    }
+                } elseif (is_string($mode)) {
+                    $this->_mode->enter($mode);
+                }
+                if ($match && !$this->_handler->accept($match, true)) {
                     return false;
                 }
                 if (strlen($raw) == $length) {
@@ -242,15 +249,16 @@
             if (!$parsed) {
                 return false;
             }
-            return ($raw == "") || $this->_handler->acceptUnparsed($raw);
+            return ($raw == "") || $this->_handler->accept($raw, false);
         }
         
         /**
          *    Tries to match a chunk of text and if successful
          *    removes the recognised chunk and any leading
          *    unparsed data.
-         *    @param $raw         The subject to parse.
-         *    @return             Two item list of unparsed
+         *    @param $raw         The subject to parse. This is the
+         *                        content that will be eaten.
+         *    @return             Three item list of unparsed
          *                        content followed by the
          *                        recognised token. True
          *                        if no match, false if there
@@ -261,57 +269,34 @@
             if (!isset($this->_regexes[$this->_mode->getCurrent()])) {
                 return false;
             }
-            if ($mode = $this->_regexes[$this->_mode->getCurrent()]->match($raw, $match)) {
+            if ($action = $this->_regexes[$this->_mode->getCurrent()]->match($raw, $match)) {
                 $count = strpos($raw, $match);
                 $unparsed = substr($raw, 0, $count);
                 $raw = substr($raw, $count + strlen($match));
-                if ($mode === "_exit") {
-                    if (!$this->_mode->leave()) {
-                        return false;
-                    }
-                } elseif (is_string($mode)) {
-                    $this->_mode->enter($mode);
-                }
-                return array($unparsed, $match);
+                return array($unparsed, $match, $action);
             }
             return true;
         }
     }
     
     /**
-     *    Strategy for dealing with a stream of lexer
-     *    tokens.
+     *    Accepts HTML and breaks it into tokens.
      */
-    class TokenHandler {
+    class SimpleHtmlLexer extends SimpleLexer {
         
         /**
-         *    Do nothing constructor.
-         */
-        function TokenHandler() {
-        }
-        
-        /**
-         *    Handler for unparsed text preceeding
-         *    the next token match.
-         *    @param $unparsed    Unparsed content.
-         *    @return             False if bad input, true
-         *                        if successfully handled.
+         *    Sets up the lexer.
+         *    @param $handler    Handling strategy by
+         *                       reference.
+         *    @param $start      Starting mode.
          *    @public
          */
-        function acceptUnparsed($unparsed) {
-        }
-        
-        /**
-         *    Handler for next matched token.
-         *    @param $token       Matched content.
-         *    @return             False if bad input, true
-         *                        if successfully handled.
-         *    @public
-         */
-        function acceptToken($token) {
+        function SimpleHtmlLexer(&$handler, $start = "unwanted") {
+            $this->SimpleLexer($handler, $start);
+            $this->addPattern('<a', 'html');
         }
     }
-    
+        
     /**
      *    Accepts an array of tokens and uses it to
      *    build a web page model.
