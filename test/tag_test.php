@@ -269,6 +269,20 @@
             $this->assertIdentical($tag->getValue(), '0');
         }
         
+        function testBlankOption() {
+            $tag = &new SimpleSelectionTag(array('' => ''));
+            $a = &new SimpleOptionTag(array());
+            $tag->addTag($a);
+            $b = &new SimpleOptionTag(array());
+            $b->addContent('b');
+            $tag->addTag($b);
+            $this->assertIdentical($tag->getValue(), '');
+            $tag->setValue('b');
+            $this->assertIdentical($tag->getValue(), 'b');
+            $tag->setValue('');
+            $this->assertIdentical($tag->getValue(), '');
+        }
+        
         function testMultipleDefaultWithNoSelections() {
             $tag = &new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
             $a = &new SimpleOptionTag(array());
