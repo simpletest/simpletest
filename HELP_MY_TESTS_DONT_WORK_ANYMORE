@@ -5,6 +5,11 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems.
 
+No method submit()
+==================
+This has been renamed clickSubmit() in Beta1. The old method will
+be removed after Beta1.
+
 Cannot find file *
 ==================
 The following public name changes have occoured...

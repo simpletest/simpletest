@@ -37,7 +37,7 @@
         function assertNull($value, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . Expectation::describeValue($value) . "] should be null");
+                    "[" . SimpleExpectation::describeValue($value) . "] should be null");
             $this->assertTrue(!isset($value), $message);
         }
         
@@ -50,7 +50,7 @@
         function assertNotNull($value, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . Expectation::describeValue($value) . "] should not be null");
+                    "[" . SimpleExpectation::describeValue($value) . "] should not be null");
             $this->assertTrue(isset($value), $message);
         }
         
@@ -65,7 +65,7 @@
         function assertIsA($object, $type, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . Expectation::describeValue($object) . "] should be type [$type]");
+                    "[" . SimpleExpectation::describeValue($object) . "] should be type [$type]");
             if (is_object($object)) {
                 $this->assertTrue(is_a($object, $type), $message);
             } else {
@@ -146,8 +146,8 @@
         function assertReference(&$first, &$second, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . Expectation::describeValue($first) .
-                            "] and [" . Expectation::describeValue($second) .
+                    "[" . SimpleExpectation::describeValue($first) .
+                            "] and [" . SimpleExpectation::describeValue($second) .
                             "] should reference the same object");
             $temp = $first;
             $first = uniqid("test");
@@ -167,8 +167,8 @@
         function assertCopy(&$first, &$second, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . Expectation::describeValue($first) .
-                            "] and [" . Expectation::describeValue($second) .
+                    "[" . SimpleExpectation::describeValue($first) .
+                            "] and [" . SimpleExpectation::describeValue($second) .
                             "] should not be the same object");
             $temp = $first;
             $first = uniqid("test");

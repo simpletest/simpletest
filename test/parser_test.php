@@ -313,49 +313,44 @@
             $this->_handler->tally();
         }
         function testUninteresting() {
-            $this->_handler->expectArguments("acceptTextToken", array("<html></html>", "*"));
-            $this->_handler->expectCallCount("acceptTextToken", 1);
+            $this->_handler->expectOnce("acceptTextToken", array("<html></html>", "*"));
             $this->assertTrue($this->_lexer->parse("<html></html>"));
         }
         function testSkipCss() {
             $this->_handler->expectMaximumCallCount("acceptTextToken", 0);
-            $this->_handler->expectMinimumCallCount("ignore", 1);
+            $this->_handler->expectAtLeastOnce("ignore");
             $this->assertTrue($this->_lexer->parse("<style>Lot's of styles</style>"));
         }
         function testSkipJavaScript() {
             $this->_handler->expectMaximumCallCount("acceptTextToken", 0);
-            $this->_handler->expectMinimumCallCount("ignore", 1);
+            $this->_handler->expectAtLeastOnce("ignore");
             $this->assertTrue($this->_lexer->parse("<SCRIPT>Javascript code {';:^%^%£$'@\"*(}</SCRIPT>"));
         }
         function testSkipComments() {
             $this->_handler->expectMaximumCallCount("acceptTextToken", 0);
-            $this->_handler->expectMinimumCallCount("ignore", 1);
+            $this->_handler->expectAtLeastOnce("ignore");
             $this->assertTrue($this->_lexer->parse("<!-- <style>Lot's of styles</style> -->"));
         }
         function testTitle() {
             $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<title", "*"));
             $this->_handler->expectArgumentsAt(1, "acceptStartToken", array(">", "*"));
             $this->_handler->expectCallCount("acceptStartToken", 2);
-            $this->_handler->expectArgumentsAt(0, "acceptTextToken", array("Hello", "*"));
-            $this->_handler->expectCallCount("acceptTextToken", 1);
-            $this->_handler->expectArgumentsAt(0, "acceptEndToken", array("</title>", "*"));
-            $this->_handler->expectCallCount("acceptEndToken", 1);
+            $this->_handler->expectOnce("acceptTextToken", array("Hello", "*"));
+            $this->_handler->expectOnce("acceptEndToken", array("</title>", "*"));
             $this->assertTrue($this->_lexer->parse("<title>Hello</title>"));
         }
         function testEmptyLink() {
             $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<a", "*"));
             $this->_handler->expectArgumentsAt(1, "acceptStartToken", array(">", "*"));
             $this->_handler->expectCallCount("acceptStartToken", 2);
-            $this->_handler->expectArgumentsAt(0, "acceptEndToken", array("</a>", "*"));
-            $this->_handler->expectCallCount("acceptEndToken", 1);
+            $this->_handler->expectOnce("acceptEndToken", array("</a>", "*"));
             $this->assertTrue($this->_lexer->parse("<html><a></a></html>"));
         }
         function testLabelledLink() {
             $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<a", "*"));
             $this->_handler->expectArgumentsAt(1, "acceptStartToken", array(">", "*"));
             $this->_handler->expectCallCount("acceptStartToken", 2);
-            $this->_handler->expectArgumentsAt(0, "acceptEndToken", array("</a>", "*"));
-            $this->_handler->expectCallCount("acceptEndToken", 1);
+            $this->_handler->expectOnce("acceptEndToken", array("</a>", "*"));
             $this->_handler->expectArgumentsAt(0, "acceptTextToken", array("<html>", "*"));
             $this->_handler->expectArgumentsAt(1, "acceptTextToken", array("label", "*"));
             $this->_handler->expectArgumentsAt(2, "acceptTextToken", array("</html>", "*"));
@@ -463,24 +458,21 @@
         }
         function testSimpleLinkStart() {
             $this->_parser->parse("");
-            $this->_listener->expectArguments("startElement", array("a", array()));
-            $this->_listener->expectCallCount("startElement", 1);
+            $this->_listener->expectOnce("startElement", array("a", array()));
             $this->_listener->setReturnValue("startElement", true);
             $this->assertTrue($this->_parser->acceptStartToken("<a", LEXER_ENTER));
             $this->assertTrue($this->_parser->acceptStartToken(">", LEXER_EXIT));
         }
         function testSimpleTitleStart() {
             $this->_parser->parse("");
-            $this->_listener->expectArguments("startElement", array("title", array()));
-            $this->_listener->expectCallCount("startElement", 1);
+            $this->_listener->expectOnce("startElement", array("title", array()));
             $this->_listener->setReturnValue("startElement", true);
             $this->assertTrue($this->_parser->acceptStartToken("<title", LEXER_ENTER));
             $this->assertTrue($this->_parser->acceptStartToken(">", LEXER_EXIT));
         }
         function testLinkStart() {
             $this->_parser->parse("");
-            $this->_listener->expectArguments("startElement", array("a", array("href" => "here.html")));
-            $this->_listener->expectCallCount("startElement", 1);
+            $this->_listener->expectOnce("startElement", array("a", array("href" => "here.html")));
             $this->_listener->setReturnValue("startElement", true);
             $this->assertTrue($this->_parser->acceptStartToken("<a", LEXER_ENTER));
             $this->assertTrue($this->_parser->acceptStartToken("href", LEXER_MATCHED));
@@ -492,10 +484,9 @@
         }
         function testLinkStartWithId() {
             $this->_parser->parse("");
-            $this->_listener->expectArguments(
+            $this->_listener->expectOnce(
                     "startElement",
                     array("a", array("id" => "0")));
-            $this->_listener->expectCallCount("startElement", 1);
             $this->_listener->setReturnValue("startElement", true);
             $this->assertTrue($this->_parser->acceptStartToken("<a", LEXER_ENTER));
             $this->assertTrue($this->_parser->acceptStartToken("id", LEXER_MATCHED));
@@ -507,15 +498,13 @@
         }
         function testLinkEnd() {
             $this->_parser->parse("");
-            $this->_listener->expectArguments("endElement", array("a"));
-            $this->_listener->expectCallCount("endElement", 1);
+            $this->_listener->expectOnce("endElement", array("a"));
             $this->_listener->setReturnValue("endElement", true);
             $this->assertTrue($this->_parser->acceptEndToken("</a>", LEXER_SPECIAL));
         }
         function testContent() {
             $this->_parser->parse("");
-            $this->_listener->expectArguments("addContent", array("stuff"));
-            $this->_listener->expectCallCount("addContent", 1);
+            $this->_listener->expectOnce("addContent", array("stuff"));
             $this->_listener->setReturnValue("addContent", true);
             $this->assertTrue($this->_parser->acceptTextToken("stuff", LEXER_UNMATCHED));
         }

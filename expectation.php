@@ -6,12 +6,12 @@
      *    Also includes various static helper methods.
      *    @abstract
      */
-    class Expectation {
+    class SimpleExpectation {
         
         /**
          *    Does nothing.
          */
-        function Expectation() {
+        function SimpleExpectation() {
         }
         
         /**
@@ -48,7 +48,7 @@
             } elseif (is_bool($value)) {
                 return "Boolean: " . ($value ? "true" : "false");
             } elseif (is_string($value)) {
-                return "String: " . Expectation::clipString($value, 40);
+                return "String: " . SimpleExpectation::clipString($value, 40);
             } elseif (is_integer($value)) {
                 return "Integer: $value";
             } elseif (is_float($value)) {
@@ -75,36 +75,38 @@
          */
         function describeDifference($first, $second, $expectation_class) {
             if (!isset($first)) {
-                return "as [" . Expectation::describeValue($first) .
-                        "] does not match [" . Expectation::describeValue($second) . "]";
+                return "as [" . SimpleExpectation::describeValue($first) .
+                        "] does not match [" .
+                        SimpleExpectation::describeValue($second) . "]";
             } elseif (is_bool($first)) {
-                return "as [" . Expectation::describeValue($first) .
-                        "] does not match [" . Expectation::describeValue($second) . "]";
+                return "as [" . SimpleExpectation::describeValue($first) .
+                        "] does not match [" .
+                        SimpleExpectation::describeValue($second) . "]";
             } elseif (is_string($first)) {
-                return Expectation::_describeStringDifference(
+                return SimpleExpectation::_describeStringDifference(
                         $first,
                         $second,
                         $expectation_class);
             } elseif (is_integer($first)) {
-                return Expectation::_describeIntegerDifference(
+                return SimpleExpectation::_describeIntegerDifference(
                         $first,
                         $second,
                         $expectation_class);
             } elseif (is_float($first)) {
-                return Expectation::_describeFloatDifference(
+                return SimpleExpectation::_describeFloatDifference(
                         $first,
                         $second,
                         $expectation_class);
             } elseif (is_array($first)) {
-                return Expectation::_describeArrayDifference(
+                return SimpleExpectation::_describeArrayDifference(
                         $first,
                         $second,
                         $expectation_class);
             } elseif (is_resource($first)) {
-                return "as [" . Expectation::describeValue($first) .
-                        "] does not match [" . Expectation::describeValue($second) . "]";
+                return "as [" . SimpleExpectation::describeValue($first) .
+                        "] does not match [" . SimpleExpectation::describeValue($second) . "]";
             } elseif (is_object($first)) {
-                return Expectation::_describeObjectDifference(
+                return SimpleExpectation::_describeObjectDifference(
                         $first,
                         $second,
                         $expectation_class);
@@ -173,10 +175,10 @@
          *    @static
          */
         function _describeStringDifference($first, $second, $expectation_class) {
-            $position = Expectation::_stringDiffersAt($first, $second);
+            $position = SimpleExpectation::_stringDiffersAt($first, $second);
             return "at character $position with [" .
-                    Expectation::clipString($first, 100, $position) . "] and [" .
-                    Expectation::clipString($second, 100, $position) . "]";
+                    SimpleExpectation::clipString($first, 100, $position) . "] and [" .
+                    SimpleExpectation::clipString($second, 100, $position) . "]";
         }
         
         /**
@@ -190,8 +192,10 @@
          *    @static
          */
         function _describeIntegerDifference($first, $second, $expectation_class) {
-            return "because [" . Expectation::describeValue($first) ."] differs from [" .
-                    Expectation::describeValue($second) . "] by " . abs($first - $second);
+            return "because [" . SimpleExpectation::describeValue($first) .
+                    "] differs from [" .
+                    SimpleExpectation::describeValue($second) . "] by " .
+                    abs($first - $second);
         }
         
         /**
@@ -205,8 +209,9 @@
          *    @static
          */
         function _describeFloatDifference($first, $second, $expectation_class) {
-            return "because [" . Expectation::describeValue($first) ."] differs from [" .
-                    Expectation::describeValue($second) . "]";
+            return "because [" . SimpleExpectation::describeValue($first) .
+                    "] differs from [" .
+                    SimpleExpectation::describeValue($second) . "]";
         }
         
         /**
@@ -228,7 +233,7 @@
             foreach (array_keys($first) as $key) {
                 $test = &new $expectation_class($first[$key]);
                 if (!$test->test($second[$key])) {
-                    return "with member [$key] " . Expectation::describeDifference(
+                    return "with member [$key] " . SimpleExpectation::describeDifference(
                             $first[$key],
                             $second[$key],
                             $expectation_class);
@@ -248,7 +253,7 @@
          *    @static
          */
         function _describeObjectDifference($first, $second, $expectation_class) {
-            return Expectation::_describeArrayDifference(
+            return SimpleExpectation::_describeArrayDifference(
                     get_object_vars($first),
                     get_object_vars($second),
                     $expectation_class);
@@ -258,7 +263,7 @@
     /**
      *    Test for equality.
      */
-    class EqualExpectation extends Expectation {
+    class EqualExpectation extends SimpleExpectation {
         var $_value;
         
         /**
@@ -267,7 +272,7 @@
          *    @public
          */
         function EqualExpectation($value) {
-            $this->Expectation();
+            $this->SimpleExpectation();
             $this->_value = $value;
         }
         
@@ -456,7 +461,7 @@
     /**
      *    Test for a pattern using Perl regex rules.
      */
-    class WantedPatternExpectation extends Expectation {
+    class WantedPatternExpectation extends SimpleExpectation {
         var $_pattern;
         
         /**
@@ -465,7 +470,7 @@
          *    @public
          */
         function WantedPatternExpectation($pattern) {
-            $this->Expectation();
+            $this->SimpleExpectation();
             $this->_pattern = $pattern;
         }
         
@@ -512,9 +517,9 @@
             preg_match($pattern, $subject, $matches);
             $position = strpos($subject, $matches[0]);
             return "Pattern [$pattern] detected at [$position] in string [" .
-                    Expectation::clipString($subject, 40) . "] as [" .
+                    SimpleExpectation::clipString($subject, 40) . "] as [" .
                     $matches[0] . "] in region [" .
-                    Expectation::clipString($subject, 40, $position) . "]";
+                    SimpleExpectation::clipString($subject, 40, $position) . "]";
         }
     }
     

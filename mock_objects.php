@@ -12,7 +12,7 @@
     /**
      *    Parameter comparison assertion.
      */
-    class ParametersExpectation extends Expectation {
+    class ParametersExpectation extends SimpleExpectation {
         var $_expected;
         var $_wildcard;
         
@@ -27,7 +27,7 @@
          *    @public
          */
         function ParametersExpectation($expected = false, $wildcard = MOCK_WILDCARD) {
-            $this->Expectation();
+            $this->SimpleExpectation();
             $this->_expected = $expected;
             $this->_wildcard = $wildcard;
         }
@@ -92,7 +92,7 @@
             for ($i = 0; $i < count($expected); $i++) {
                 $comparison = new IdenticalExpectation($expected[$i]);
                 if (! $comparison->test($parameters[$i])) {
-                    $messages[] = "parameter $i with [" .
+                    $messages[] = "parameter " . ($i + 1) . " with [" .
                             $comparison->testMessage($parameters[$i]) . "]";
                 }
             }
@@ -108,7 +108,7 @@
         function _renderArguments($args) {
             $descriptions = array();
             foreach ($args as $arg) {
-                $descriptions[] = Expectation::describeValue($arg);
+                $descriptions[] = SimpleExpectation::describeValue($arg);
             }
             return implode(', ', $descriptions);
         }

@@ -118,4 +118,34 @@
             $browser->tally();
         }
     }
+    
+    class TestOfWebFormParsing extends MockBrowserWebTestCase {
+        function TestOfWebFormParsing() {
+            $this->MockBrowserWebTestCase();
+        }
+        function tearDown() {
+            $browser = &$this->getBrowser();
+            $browser->tally();
+        }
+        function testFormGet() {
+            $browser = &$this->getBrowser();
+            $form_code = '<html><head><form method="get" action="there.php">';
+            $form_code .= '<input type="submit" name="wibble" value="wobble"/>';
+            $form_code .= '</form></head></html>';
+            $browser->setReturnValueAt(0, "get", $form_code);
+            $browser->expectArgumentsAt(
+                    0,
+                    "get",
+                    array("http://my-site.com/", false));
+            $browser->setReturnValueAt(1, "get", '<html><title>Done</title></html>');
+            $browser->expectArgumentsAt(
+                    1,
+                    "get",
+                    array("there.php", array("wibble" => "wobble")));
+            $browser->expectCallCount("get", 2);
+            $this->get("http://my-site.com/");
+            $this->assertTrue($this->clickSubmit("wobble"));
+            $this->assertTitle('Done');
+        }
+    }
 ?>

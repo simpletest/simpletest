@@ -227,9 +227,16 @@
         }
         function testSimpleSubmit() {
             $this->get('http://www.lastcraft.com/test/form.html');
-            $this->assertTrue($this->submit('Go!'));
+            $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedPattern('/Request method.*?<dd>POST<\/dd>/');
             $this->assertWantedPattern('/go=\[Go!\]/');
+        }
+        function testDefaultFormValues() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertTrue($this->clickSubmit('Go!'));
+            $this->assertWantedPattern('/go=\[Go!\]/');
+            $this->assertWantedPattern('/a=\[\]/');
+            $this->assertWantedPattern('/b=\[Default text\]/');
         }
     }
 ?>

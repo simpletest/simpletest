@@ -175,7 +175,7 @@
          *    @return          true on success.
          *    @public
          */
-        function submit($label = "Submit") {
+        function clickSubmit($label = "Submit") {
             $page = &$this->_getHtml();
             if (!($form = &$page->getFormByLabel($label))) {
                 return false;
@@ -186,6 +186,13 @@
             } else {
                 return $this->get($action, $form->submitButtonByLabel($label));
             }
+        }
+        
+        /**
+         *    @deprecated
+         */
+        function submit($label = "Submit") {
+            $this->clickSubmit($label);
         }
         
         /**

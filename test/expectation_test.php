@@ -12,31 +12,31 @@
         }
         function testClipping() {
             $this->assertEqual(
-                    Expectation::clipString("Hello", 6),
+                    SimpleExpectation::clipString("Hello", 6),
                     "Hello",
                     "Hello, 6->%s");
             $this->assertEqual(
-                    Expectation::clipString("Hello", 5),
+                    SimpleExpectation::clipString("Hello", 5),
                     "Hello",
                     "Hello, 5->%s");
             $this->assertEqual(
-                    Expectation::clipString("Hello world", 3),
+                    SimpleExpectation::clipString("Hello world", 3),
                     "Hel...",
                     "Hello world, 3->%s");
             $this->assertEqual(
-                    Expectation::clipString("Hello world", 6, 3),
+                    SimpleExpectation::clipString("Hello world", 6, 3),
                     "Hello ...",
                     "Hello world, 6, 3->%s");
             $this->assertEqual(
-                    Expectation::clipString("Hello world", 3, 6),
+                    SimpleExpectation::clipString("Hello world", 3, 6),
                     "...o w...",
                     "Hello world, 3, 6->%s");
             $this->assertEqual(
-                    Expectation::clipString("Hello world", 4, 11),
+                    SimpleExpectation::clipString("Hello world", 4, 11),
                     "...orld",
                     "Hello world, 4, 11->%s");
             $this->assertEqual(
-                    Expectation::clipString("Hello world", 4, 12),
+                    SimpleExpectation::clipString("Hello world", 4, 12),
                     "...orld",
                     "Hello world, 4, 12->%s");
         }
