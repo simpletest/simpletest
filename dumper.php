@@ -199,7 +199,7 @@
          *    @static
          */
         function _describeFloatDifference($first, $second, $identical) {
-            return "because [Float: " . $this->describeValue($first) .
+            return "because " . $this->describeValue($first) .
                     "] differs from [" .
                     $this->describeValue($second) . "]";
         }
@@ -215,6 +215,11 @@
          *    @static
          */
         function _describeArrayDifference($first, $second, $identical) {
+            if (! is_array($second)) {
+                return " as " . $this->describeValue($first) .
+                        "] differs from [" .
+                        $this->describeValue($second) . "]";
+            }
             if (array_keys($first) != array_keys($second)) {
                 return "as key list [" .
                         implode(", ", array_keys($first)) . "] does not match key list [" .
@@ -262,6 +267,11 @@
          *    @static
          */
         function _describeObjectDifference($first, $second, $identical) {
+            if (! is_object($second)) {
+                return " as " . $this->describeValue($first) .
+                        "] differs from [" .
+                        $this->describeValue($second) . "]";
+            }
             return $this->_describeArrayDifference(
                     get_object_vars($first),
                     get_object_vars($second));

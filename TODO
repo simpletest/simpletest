@@ -17,11 +17,11 @@ Force page reload at start of test (1/1) - done.
 
 Mock objects
 ------------
-Fix wildcard reporting bug in arguments comparison (1).
+Fix wildcard reporting bug in arguments comparison (2).
 
 Html parser
 -----------
-Test with some realistic pages (2/1).
+Test with some realistic pages (2/2) - done.
 Parse drop down lists (4/5) - done.
 Add wrapping behaviour to text areas (1/5) - done.
 Add HTTP basic authentication (2).
