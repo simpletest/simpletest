@@ -91,7 +91,7 @@
          *    @access public
          */
         function isMatch($widget) {
-            return ($widget->getAttribute('id') == $this->_id);
+            return $widget->isId($this->_id);
         }
     }
    

@@ -22,7 +22,8 @@ Bug fix of fatal error with overload functions (2/2) - done.
 Parser
 ------
 Should tolerate missing form tag (2/2) - done.
-Fix Savant compatibility (3/7).
+Fix Savant compatibility (3/8) - done.
+Refactor form data setting to use query directly (2).
 
 Browser
 -------
@@ -51,7 +52,7 @@ Tidy up sundry doc. files (2/1) - done.
 Fix reported typos (1).
 Document the character encoding fix (1/1) - done.
 Remove unnecessary test constructors (2/2) - done.
-Add note about running tests through a proxy server (2).
+Add doc. note about running tests through a proxy server (2).
 
 Build
 -----

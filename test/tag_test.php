@@ -47,6 +47,12 @@
             $this->assertIdentical($tag->getAttribute('href'), false);
             $this->assertIdentical($tag->getHref(), '');
         }
+        
+        function testIsIdMatchesIdAttribute() {
+            $tag = &new SimpleAnchorTag(array('href' => 'http://here/', 'id' => 7));
+            $this->assertIdentical($tag->getAttribute('id'), '7');
+            $this->assertTrue($tag->isId(7));
+        }
     }
     
     class TestOfWidget extends UnitTestCase {
@@ -346,6 +352,17 @@
             $this->assertTrue($group->setValue('A'));
             $this->assertIdentical($group->getValue(), 'A');
         }
+        
+        function testIsIdMatchesAnyWidgetInSet() {
+            $group = &new SimpleRadioGroup();
+            $group->addWidget(new SimpleRadioButtonTag(
+                    array('value' => 'A', 'id' => 'i1')));
+            $group->addWidget(new SimpleRadioButtonTag(
+                    array('value' => 'B', 'id' => 'i2')));
+            $this->assertFalse($group->isId('i0'));
+            $this->assertTrue($group->isId('i1'));
+            $this->assertTrue($group->isId('i2'));
+        }
     }
     
     class TestOfTagGroup extends UnitTestCase {
@@ -401,6 +418,15 @@
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));
             $this->assertTrue($group->setValue(false));
             $this->assertIdentical($group->getValue(), false);
+        }
+        
+        function testIsIdMatchesAnyIdInSet() {
+            $group = &new SimpleCheckboxGroup();
+            $group->addWidget(new SimpleCheckboxTag(array('id' => 1, 'value' => 'A')));
+            $group->addWidget(new SimpleCheckboxTag(array('id' => 2, 'value' => 'B')));
+            $this->assertFalse($group->isId(0));
+            $this->assertTrue($group->isId(1));
+            $this->assertTrue($group->isId(2));
         }
     }
 ?>

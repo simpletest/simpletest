@@ -595,6 +595,17 @@
             $this->assertWantedText('a=[a1]');
             $this->assertWantedText('b=[b1]');
         }
+        
+        function testSavantStyleFormSettingById() {
+            $this->get('http://www.lastcraft.com/test/savant_style_form.html');
+            $this->assertFieldById(1, array('a0'));
+            $this->assertFieldById(4, array('b0'));
+            $this->assertTrue($this->setFieldById(2, 'a1'));
+            $this->assertTrue($this->setFieldById(5, 'b1'));
+            $this->assertTrue($this->clickSubmitById(99));
+            $this->assertWantedText('a=[a1]');
+            $this->assertWantedText('b=[b1]');
+        }
     }
     
     class TestOfLiveHistoryNavigation extends WebTestCase {

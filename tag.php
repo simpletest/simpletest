@@ -139,6 +139,16 @@
         function getText() {
             return SimpleSaxParser::normalise($this->_content);
         }
+        
+        /**
+         *    Test to see if id attribute matches.
+         *    @param string $id        ID to test against.
+         *    @return boolean          True on match.
+         *    @access public
+         */
+        function isId($id) {
+            return ($this->getAttribute('id') == $id);
+        }
     }
     
     /**
@@ -891,7 +901,7 @@
             return false;
         }
     }
-    
+
     /**
      *    A group of tags with the same name within a form.
 	 *    @package SimpleTest
@@ -915,6 +925,22 @@
          *    @access public
          */
         function getAttribute($label) {
+            return false;
+        }
+        
+        /**
+         *    Scans the checkboxes for one with the appropriate
+         *    ID field.
+         *    @param string $id        ID value to try.
+         *    @return boolean          True if matched.
+         *    @access public
+         */
+        function isId($id) {
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                if ($this->_widgets[$i]->isId($id)) {
+                    return true;
+                }
+            }
             return false;
         }
 
@@ -1074,6 +1100,22 @@
          *    @access public
          */
         function getAttribute($label) {
+            return false;
+        }
+        
+        /**
+         *    Scans the checkboxes for one with the appropriate
+         *    ID field.
+         *    @param string $id        ID value to try.
+         *    @return boolean          True if matched.
+         *    @access public
+         */
+        function isId($id) {
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                if ($this->_widgets[$i]->isId($id)) {
+                    return true;
+                }
+            }
             return false;
         }
         
