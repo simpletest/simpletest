@@ -592,17 +592,41 @@
                     'http://www.lastcraft.com/test/messy_frameset.html'));
             $this->assertTrue($this->setFrameFocus('Front controller'));
             $this->assertResponse(200);
+            $this->assertWantedPattern('/Simple test front controller/');
             
             $this->assertTrue($this->setFrameFocus('One'));
             $this->assertResponse(200);
+            $this->assertLink('2');
             
             $this->assertTrue($this->setFrameFocus('Redirected'));
             $this->assertResponse(200);
+            $this->assertWantedPattern('/r=rrr/');
             
             $this->assertTrue($this->setFrameFocus('Protected'));
             $this->assertResponse(401);
             
             $this->assertTrue($this->setFrameFocus('Protected redirect'));
+            $this->assertResponse(401);
+        }
+        function testMessyFramesetResponsesByIndex() {
+            $this->assertTrue($this->get(
+                    'http://www.lastcraft.com/test/messy_frameset.html'));
+            $this->assertTrue($this->setFrameFocusByIndex(1));
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/Simple test front controller/');
+            
+            $this->assertTrue($this->setFrameFocusByIndex(2));
+            $this->assertResponse(200);
+            $this->assertLink('2');
+            
+            $this->assertTrue($this->setFrameFocusByIndex(3));
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/r=rrr/');
+            
+            $this->assertTrue($this->setFrameFocusByIndex(4));
+            $this->assertResponse(401);
+            
+            $this->assertTrue($this->setFrameFocusByIndex(5));
             $this->assertResponse(401);
         }
     }
