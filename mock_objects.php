@@ -1044,18 +1044,51 @@
                 if (Stub::_isConstructor($method)) {
                     continue;
                 }
-                if (Stub::_isOverride($method)) {
-                    $code .= Stub::_createOverrideCode($method);
-                    continue;
-                }
                 if (in_array($method, get_class_methods($base))) {
                     continue;
                 }
-                $code .= "    function &$method() {\n";
+
+                $code .= Stub::_createFunctionDeclaration($method);
                 $code .= "        \$args = func_get_args();\n";
                 $code .= "        return \$this->_invoke(\"$method\", \$args);\n";
                 $code .= "    }\n";
             }
+            return $code;
+        }
+        
+        /**
+         *    Creates the appropriate function declaration.
+         *    
+         *    @see _determineArguments(), _createHandlerCode()
+         *    @param string $method    Method name.
+         *    @return string           The proper function declaration
+         *    @access private
+         *    @static
+         */
+        function _createFunctionDeclaration($method) {
+            $arguments = Stub::_determineArguments($method);
+            return "    function &$method($arguments) {\n";
+        }
+        
+        /**
+         *    Returns the necessary arguments for a given method.
+         *    
+         *    @param string $method    Method name
+         *    @return string           The arguments string for a method, or
+         *                             blank if no arguments are required.
+         *    @access private
+         *    @static
+         */
+        function _determineArguments($method) {
+            $code = '';
+            if (Stub::_isSpecial($method)) {
+                $args = array(
+                    '__call' => '$method, $value',
+                    '__get' => '$key',
+                    '__set' => '$key, $value');
+                $code = $args[$method];
+            }
+            
             return $code;
         }
         
@@ -1074,38 +1107,16 @@
         }
         
         /**
-         *    Tests for an override method.
+         *    Tests for an special method.
          *    @param string $method    Method name.
          *    @return boolean          True if special.
          *    @access private
          *    @static
          */
-        function _isOverride($method) {
+        function _isSpecial($method) {
             return in_array(
                     strtolower($method),
                     array('__get', '__set', '__call'));
-        }
-        
-        /**
-         *    Creates code for the following special methods:
-         *        __call, __get, __set.
-         *
-         *    @see _createHandlerCode()
-         *    @param string $method    Method to generate
-         *    @static
-         *    @access private
-         */
-        function _createOverrideCode($method) {
-            $args = array(
-                '__call' => '$method, $value',
-                '__get' => '$key',
-                '__set' => '$key, $value');
-            $code = "";
-            $code .= "    function &$method($args[$method]) {\n";
-            $code .= "        \$args = func_get_args();\n";
-            $code .= "        return \$this->_invoke(\"$method\", \$args);\n";
-            $code .= "    }\n";
-            return $code;
         }
     }
     
