@@ -54,47 +54,57 @@
         }
         function testEmpty() {
             $map = new CallMap("wild");
+            $this->assertFalse($map->isMatch("any", array()));
             $this->assertNull($map->findFirstMatch("any", array()));
         }
         function testExactValue() {
             $map = new CallMap("wild");
-            $map->addValue("aMethod", array(0), "Fred");
-            $this->assertEqual($map->findFirstMatch("aMethod", array(0)), "Fred");
+            $map->addValue(array(0), "Fred");
+            $map->addValue(array(1), "Jim");
+            $map->addValue(array("1"), "Tom");
+            $this->assertTrue($map->isMatch(array(0)));
+            $this->assertEqual($map->findFirstMatch(array(0)), "Fred");
+            $this->assertTrue($map->isMatch(array(1)));
+            $this->assertEqual($map->findFirstMatch(array(1)), "Jim");
+            $this->assertEqual($map->findFirstMatch(array("1")), "Tom");
         }
         function testExactReference() {
             $map = new CallMap("wild");
             $ref = "Fred";
-            $map->addReference("aMethod", array(0), &$ref);
-            $this->assertEqual($map->findFirstMatch("aMethod", array(0)), "Fred");
-            $this->assertReference($map->findFirstMatch("aMethod", array(0)), $ref);
+            $map->addReference(array(0), &$ref);
+            $this->assertEqual($map->findFirstMatch(array(0)), "Fred");
+            $this->assertReference($map->findFirstMatch(array(0)), $ref);
         }
         function testWildcard() {
             $map = new CallMap("wild");
-            $map->addValue("aMethod", array("wild", 1, 3), "Fred");
-            $this->assertEqual($map->findFirstMatch("aMethod", array(2, 1, 3)), "Fred");
+            $map->addValue(array("wild", 1, 3), "Fred");
+            $this->assertTrue($map->isMatch(array(2, 1, 3)));
+            $this->assertEqual($map->findFirstMatch(array(2, 1, 3)), "Fred");
         }
         function testAllWildcard() {
             $map = new CallMap("wild");
-            $map->addValue("aMethod", "", "Fred");
-            $this->assertEqual($map->findFirstMatch("aMethod", array(2, 1, 3)), "Fred");
+            $this->assertFalse($map->isMatch(array(2, 1, 3)));
+            $map->addValue("", "Fred");
+            $this->assertTrue($map->isMatch(array(2, 1, 3)));
+            $this->assertEqual($map->findFirstMatch(array(2, 1, 3)), "Fred");
         }
         function testOrdering() {
             $map = new CallMap("wild");
-            $map->addValue("aMethod", array(1, 2), "1, 2");
-            $map->addValue("aMethod", array(1, 3), "1, 3");
-            $map->addValue("aMethod", array(1), "1");
-            $map->addValue("aMethod", array(1, 4), "1, 4");
-            $map->addValue("aMethod", array("wild"), "Any");
-            $map->addValue("aMethod", array(2), "2");
-            $map->addValue("aMethod", "", "Default");
-            $map->addValue("aMethod", array(), "None");
-            $this->assertEqual($map->findFirstMatch("aMethod", array(1, 2)), "1, 2");
-            $this->assertEqual($map->findFirstMatch("aMethod", array(1, 3)), "1, 3");
-            $this->assertEqual($map->findFirstMatch("aMethod", array(1, 4)), "1, 4");
-            $this->assertEqual($map->findFirstMatch("aMethod", array(1)), "1");
-            $this->assertEqual($map->findFirstMatch("aMethod", array(2)), "Any");
-            $this->assertEqual($map->findFirstMatch("aMethod", array(3)), "Any");
-            $this->assertEqual($map->findFirstMatch("aMethod", array()), "Default");
+            $map->addValue(array(1, 2), "1, 2");
+            $map->addValue(array(1, 3), "1, 3");
+            $map->addValue(array(1), "1");
+            $map->addValue(array(1, 4), "1, 4");
+            $map->addValue(array("wild"), "Any");
+            $map->addValue(array(2), "2");
+            $map->addValue("", "Default");
+            $map->addValue(array(), "None");
+            $this->assertEqual($map->findFirstMatch(array(1, 2)), "1, 2");
+            $this->assertEqual($map->findFirstMatch(array(1, 3)), "1, 3");
+            $this->assertEqual($map->findFirstMatch(array(1, 4)), "1, 4");
+            $this->assertEqual($map->findFirstMatch(array(1)), "1");
+            $this->assertEqual($map->findFirstMatch(array(2)), "Any");
+            $this->assertEqual($map->findFirstMatch(array(3)), "Any");
+            $this->assertEqual($map->findFirstMatch(array()), "Default");
         }
     }
     
@@ -102,6 +112,8 @@
         function Dummy() {
         }
         function aMethod() {
+        }
+        function anotherMethod() {
         }
     }
     Mock::generate("Dummy");
@@ -178,6 +190,17 @@
             $mock->aMethod();
             $this->assertEqual($mock->getCallCount("aMethod"), 2);
         }
+        function testMultipleMethods() {
+            $mock = &new MockDummy($this);
+            $mock->setReturnValue("aMethod", 100, array(1));
+            $mock->setReturnValue("aMethod", 200, array(2));
+            $mock->setReturnValue("anotherMethod", 10, array(1));
+            $mock->setReturnValue("anotherMethod", 20, array(2));
+            $this->assertIdentical($mock->aMethod(1), 100);
+            $this->assertIdentical($mock->anotherMethod(1), 10);
+            $this->assertIdentical($mock->aMethod(2), 200);
+            $this->assertIdentical($mock->anotherMethod(2), 20);
+        }
         function testReturnSequence() {
             $mock = &new MockDummy($this);
             $mock->setReturnValueSequence(0, "aMethod", "aaa");
@@ -209,6 +232,32 @@
             $this->assertReference($mock->aMethod(1, 2), $object);
             $this->assertEqual($mock->aMethod(3), 3);
             $this->assertNull($mock->aMethod());
+        }
+        function testMultipleMethodSequences() {
+            $mock = &new MockDummy($this);
+            $mock->setReturnValueSequence(0, "aMethod", "aaa");
+            $mock->setReturnValueSequence(1, "aMethod", "bbb");
+            $mock->setReturnValueSequence(0, "anotherMethod", "ccc");
+            $mock->setReturnValueSequence(1, "anotherMethod", "ddd");
+            $this->assertIdentical($mock->aMethod(), "aaa");
+            $this->assertIdentical($mock->anotherMethod(), "ccc");
+            $this->assertIdentical($mock->aMethod(), "bbb");
+            $this->assertIdentical($mock->anotherMethod(), "ddd");
+        }
+        function testSequenceFallback() {
+            $mock = &new MockDummy($this);
+            $mock->setReturnValueSequence(0, "aMethod", "aaa", array('a'));
+            $mock->setReturnValueSequence(1, "aMethod", "bbb", array('a'));
+            $mock->setReturnValue("aMethod", "AAA");
+            $this->assertIdentical($mock->aMethod('a'), "aaa");
+            $this->assertIdentical($mock->aMethod('b'), "AAA");
+        }
+        function testMethodInterference() {
+            $mock = &new MockDummy($this);
+            $mock->setReturnValueSequence(0, "anotherMethod", "aaa");
+            $mock->setReturnValue("aMethod", "AAA");
+            $this->assertIdentical($mock->aMethod(), "AAA");
+            $this->assertIdentical($mock->anotherMethod(), "aaa");
         }
     }
     

@@ -57,8 +57,8 @@
     }
     
     /**
-     *    Retrieves values and references by parameter lists
-     *    and method name.
+     *    Retrieves values and references by searching the
+     *    parameter lists until a match is found.
      */
     class CallMap {
         var $_map;
@@ -76,51 +76,69 @@
         
         /**
          *    Stashes a value against a method call.
-         *    @param $method        Method name (reduced to lowercase).
          *    @param $parameters    Array of arguments (including wildcards).
          *    @param $value         Value copied into the map.
          *    @public
          */
-        function addValue($method, $parameters, $value) {
-            $this->addReference($method, $parameters, $value);
+        function addValue($parameters, $value) {
+            $this->addReference($parameters, $value);
         }
         
         /**
          *    Stashes a reference against a method call.
-         *    @param $method        Method name (reduced to lowercase).
          *    @param $parameters    Array of arguments (including wildcards).
          *    @param $reference     Array reference placed in the map.
          *    @public
          */
-        function addReference($method, $parameters, &$reference) {
-            if (!in_array($method, array_keys($this->_map))) {
-                $this->_map[$method] = array();
-            }
-            $place = count($this->_map[$method]);
-            $this->_map[$method][$place] = array();
-            $this->_map[$method][$place]["params"] = new ParameterList(
+        function addReference($parameters, &$reference) {
+            $place = count($this->_map);
+            $this->_map[$place] = array();
+            $this->_map[$place]["params"] = new ParameterList(
                     $parameters,
                     $this->_wildcard);
-            $this->_map[$method][$place]["content"] = &$reference;
+            $this->_map[$place]["content"] = &$reference;
         }
         
         /**
          *    Searches the call list for a matching parameter
          *    set. Returned by reference.
-         *    @param $method        Method name (case insensitive).
          *    @param $parameters    Array of parameters to search by
          *                          without wildcards.
          *    @return               Object held in the first matching
          *                          slot, otherwise null.
          *    @public
          */
-        function &findFirstMatch($method, $parameters) {
-            if (!in_array($method, array_keys($this->_map))) {
+        function &findFirstMatch($parameters) {
+            $slot = $this->_findFirstSlot($parameters);
+            if (!isset($slot)) {
                 return null;
             }
-            for ($i = 0; $i < count($this->_map[$method]); $i++) {
-                if ($this->_map[$method][$i]["params"]->isMatch($parameters)) {
-                    return $this->_map[$method][$i]["content"];
+            return $slot["content"];
+        }
+        
+        /**
+         *    Searches the call list for a matching parameter
+         *    set. True if successful.
+         *    @param $parameters    Array of parameters to search by
+         *                          without wildcards.
+         *    @return               True if a match is present.
+         *    @public
+         */
+        function isMatch($parameters) {
+            return ($this->_findFirstSlot($parameters) != null);
+        }
+        
+        /**
+         *    Searches the map for a matching item.
+         *    @param $parameters    Array of parameters to search by
+         *                          without wildcards.
+         *    @return               Reference to slot or null.
+         *    @private
+         */
+        function &_findFirstSlot($parameters) {
+            for ($i = 0; $i < count($this->_map); $i++) {
+                if ($this->_map[$i]["params"]->isMatch($parameters)) {
+                    return $this->_map[$i];
                 }
             }
             return null;
@@ -155,7 +173,7 @@
             $this->_test = &$test;
             $this->_wildcard = $wildcard;
             $this->clearHistory();
-            $this->_returns = new CallMap($this->_wildcard);
+            $this->_returns = array();
             $this->_return_sequence = array();
             $this->_expected_counts = array();
             $this->_max_counts = array();
@@ -182,7 +200,11 @@
          *    @public
          */
         function setReturnValue($method, $value, $args = "") {
-            $this->_returns->addValue(strtolower($method), $args, $value);
+            $method = strtolower($method);
+            if (!isset($this->_returns[$method])) {
+                $this->_returns[$method] = new CallMap($this->_wildcard);
+            }
+            $this->_returns[$method]->addValue($args, $value);
         }
                 
         /**
@@ -200,13 +222,14 @@
          *    @public
          */
         function setReturnValueSequence($timing, $method, $value, $args = "") {
-            if (!isset($this->_return_sequence[$timing])) {
-                $this->_return_sequence[$timing] = new CallMap($this->_wildcard);
+            $method = strtolower($method);
+            if (!isset($this->_return_sequence[$method])) {
+                $this->_return_sequence[$method] = array();
             }
-            $this->_return_sequence[$timing]->addValue(
-                    strtolower($method),
-                    $args,
-                    $value);
+            if (!isset($this->_return_sequence[$method][$timing])) {
+                $this->_return_sequence[$method][$timing] = new CallMap($this->_wildcard);
+            }
+            $this->_return_sequence[$method][$timing]->addValue($args, $value);
         }
          
         /**
@@ -219,7 +242,11 @@
          *    @public
          */
         function setReturnReference($method, &$reference, $args = "") {
-            $this->_returns->addReference(strtolower($method), $args, $reference);
+            $method = strtolower($method);
+            if (!isset($this->_returns[$method])) {
+                $this->_returns[$method] = new CallMap($this->_wildcard);
+            }
+            $this->_returns[$method]->addReference($args, $reference);
         }
         
         /**
@@ -237,13 +264,14 @@
          *    @public
          */
         function setReturnReferenceSequence($timing, $method, &$reference, $args = "") {
-            if (!isset($this->_return_sequence[$timing])) {
-                $this->_return_sequence[$timing] = new CallMap($this->_wildcard);
+            $method = strtolower($method);
+            if (!isset($this->_return_sequence[$method])) {
+                $this->_return_sequence[$method] = array();
             }
-            $this->_return_sequence[$timing]->addReference(
-                    strtolower($method),
-                    $args,
-                    $reference);
+            if (!isset($this->_return_sequence[$method][$timing])) {
+                $this->_return_sequence[$method][$timing] = new CallMap($this->_wildcard);
+            }
+            $this->_return_sequence[$method][$timing]->addReference($args, $reference);
         }
          
         /**
@@ -353,6 +381,7 @@
          *    if there is a test present.
          *    @param $method        Name of method to simulate.
          *    @param $args          Arguments as an array.
+         *    @returns              Stored return.
          *    @private
          */
         function &_mockMethod($method, $args) {
@@ -360,10 +389,7 @@
             $step = $this->getCallCount($method);
             $this->_addCall($method, $args);
             $this->_checkExpectations($method, $args, $step);
-            if (isset($this->_return_sequence[$step])) {
-                return $this->_return_sequence[$step]->findFirstMatch($method, $args);
-            }
-            return $this->_returns->findFirstMatch($method, $args);
+            return $this->_getReturn($method, $args, $step);
         }
         
         /**
@@ -402,6 +428,28 @@
                         $this->_expected_args[$method]->isMatch($args),
                         "Arguments for [$method] were [" . implode(", ", $args) . "]");
             }
+        }
+        
+        /**
+         *    Finds the return value matching the incoming
+         *    arguments.
+         *    @param $method      Method name.
+         *    @param $args        Calling arguments.
+         *    @param $step        Current position in the
+         *                        call history.
+         *    @returns            Stored return.
+         *    @private
+         */
+        function &_getReturn($method, $args, $step) {
+            if (isset($this->_return_sequence[$method][$step])) {
+                if ($this->_return_sequence[$method][$step]->isMatch($args)) {
+                    return $this->_return_sequence[$method][$step]->findFirstMatch($args);
+                }
+            }
+            if (isset($this->_returns[$method])) {
+                return $this->_returns[$method]->findFirstMatch($args);
+            }
+            return null;
         }
         
         /**
