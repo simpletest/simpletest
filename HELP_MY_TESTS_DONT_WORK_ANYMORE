@@ -5,6 +5,12 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+My custom test case ignored by tally()
+--------------------------------------
+The _assertTrue method has had it's signature changed due to a bug
+in the PHP 5.0.1 release. You must now use getTest() from within
+that method to get teh test case.
+
 Broken code extending SimpleRunner
 ----------------------------------
 This was replaced with SimpleScorer so taht I could use the runner

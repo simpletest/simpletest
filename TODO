@@ -11,7 +11,8 @@ Fix bug with dumper failing with second parameters of odd types (2/1) - done.
 Expectations should carry message overrides (3/1) - done.
 Assertions should return booleans for test exits (2/1) - done.
 Refactor run behaviour into it's own object (2/3) - done.
-Fix IdenticalExpectation for PHP5 (2/1).
+Fix IdenticalExpectation for PHP5 (2/1) - done.
+Fix segfaults in PHP 5.01 (2/4) - done.
 
 Reporter
 --------

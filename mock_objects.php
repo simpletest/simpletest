@@ -840,8 +840,7 @@
             foreach ($this->_expected_counts as $method => $expectation) {
                 $this->_assertTrue(
                         $expectation->test($this->getCallCount($method)),
-                        $expectation->overlayMessage($this->getCallCount($method)),
-                        $this->_test);
+                        $expectation->overlayMessage($this->getCallCount($method)));
             }
         }
 
@@ -876,21 +875,18 @@
                 if (! $this->_max_counts[$method]->test($timing + 1)) {
                     $this->_assertTrue(
                             false,
-                            $this->_max_counts[$method]->overlayMessage($timing + 1),
-                            $this->_test);
+                            $this->_max_counts[$method]->overlayMessage($timing + 1));
                 }
             }
             if (isset($this->_expected_args_at[$timing][$method])) {
                 $this->_assertTrue(
                         $this->_expected_args_at[$timing][$method]->test($args),
                         "Mock method [$method] at [$timing] -> " .
-                                $this->_expected_args_at[$timing][$method]->overlayMessage($args),
-                        $this->_test);
+                                $this->_expected_args_at[$timing][$method]->overlayMessage($args));
             } elseif (isset($this->_expected_args[$method])) {
                 $this->_assertTrue(
                         $this->_expected_args[$method]->test($args),
-                        "Mock method [$method] -> " . $this->_expected_args[$method]->overlayMessage($args),
-                        $this->_test);
+                        "Mock method [$method] -> " . $this->_expected_args[$method]->overlayMessage($args));
             }
         }
         
@@ -902,12 +898,10 @@
          *    @param boolean $assertion     True will pass.
          *    @param string $message        Message that will go with
          *                                  the test event.
-         *    @param SimpleTestCase $test   Unit test case to send
-         *                                  assertion to.
          *    @access protected
          */
-        function _assertTrue($assertion, $message , $test) {
-            $test->assertTrue($assertion, $message);
+        function _assertTrue($assertion, $message) {
+            $this->_test->assertTrue($assertion, $message);
         }
     }
     
