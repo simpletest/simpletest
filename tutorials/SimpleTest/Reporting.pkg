@@ -1,0 +1,341 @@
+<refentry id="{@id}">
+  <refnamediv>
+    <refname>Reporting results</refname>
+    <refpurpose>How do your report sucess and failure with SimpleTest</refpurpose>
+  </refnamediv>
+  {@toc}
+  
+  <refsect1 id="{@id html}">
+    <title>Reporting results in HTML</title>
+  <para>
+  The default test display is minimal in the extreme. It reports success and failure with the conventional red and green bars and shows a breadcrumb trail of test groups for every failed assertion. Here's a fail...
+  </para>
+  <screen linenumbering="unnumbered" class="webpage">
+  <simpara>File test</simpara>
+  <para class="fail">Fail: createnewfile->True assertion failed.</para>
+  <para class="failbar">1/1 test cases complete. 0 passes, 1 fails and 0 exceptions.</para>
+  </screen>
+  <para>
+  And here all tests passed...
+  </para>
+  <screen linenumbering="unnumbered" class="webpage">
+  <simpara>File test</simpara>
+  <para class="passbar">
+  1/1 test cases complete. 1 passes, 0 fails and 0 exceptions.
+  </para>
+  </screen>
+  <para>
+  The good news is that there are several points in the display hiearchy for subclassing.
+  </para>
+  <para>
+  For web page based displays there is the HtmlReporter class with the following signature...
+  </para>
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class HtmlReporter extends TestDisplay {
+    public HtmlReporter() { ... }
+    public void paintHeader(string $test_name) { ... }
+    public void paintFooter(string $test_name) { ... }
+    public void paintStart(string $test_name, integer $size) { ... }
+    public void paintEnd(string $test_name, integer $size) { ... }
+    public void paintFail(string $message) { ... }
+    public void paintPass(string $message) { ... }
+    protected string _getCss() { ... }
+    public array getTestList() { ... }
+    public integer getPassCount() { ... }
+    public integer getFailCount() { ... }
+    public integer getTestCaseCount() { ... }
+    public integer getTestCaseProgress() { ... }
+}
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+Here is what all of these methods mean. First the display methods that you will probably want to override...
+</para>
+
+<itemizedlist>
+<listitem> <command>HtmlReporter()</command>
+      is the constructor. Note that the unit test sets up the link to the display rather than the other way around. The display is a passive receiver of test events. This allows easy adaption of the display for other test systems beside unit tests, such as monitoring servers.
+</listitem>
+<listitem>
+<command>void paintHeader(string $test_name)</command>
+      is called once at the very start of the test when the first start event arrives. The first start event is usually delivered by the top level group test and so this is where $test_name comes from. It paints the page titles, CSS, body tag, etc. It returns nothing (void).
+</listitem>
+<listitem>
+ <command>void paintFooter(string $test_name)</command>
+      Called at the very end of the test to close any tags opened by the page header. By default it also displays the red/green bar and the final count of results. Actually the end of the test happens when a test end event comes in with the same name as the one that started it all at the same level. The tests nest you see. Closing the last test finishes the display.
+
+</listitem>
+<listitem>
+<command>void paintStart(string $test_name, integer $size)</command>
+      is called at the start of each group test, test case and test method. The name normally comes from the class name or method name unless set in the test. The size is the number of cases about to start. This will be 0 for a test method, 1 for a test case and the number of nested test cases plus itself for a group test. By default this does not affect the display, but you could imagine a JavaScript or XUL display that displayed the results in a collapseable tree...(hint?).
+
+</listitem>
+<listitem>
+<command>void paintEnd(string $test_name, integer $size)</command>
+      backs out of the test started with the same name. The size will be the number of cases just completed.
+
+</listitem>
+<listitem>
+<command>void paintFail(string $message)</command>
+      paints a failure. By default it just displays the word fail, a breadcrumbs trail showing the current test nesting and the message issued by the assertion.
+
+</listitem>
+<listitem>
+  <command>void paintPass(string $message)</command>
+      by default does nothing.
+
+</listitem>
+<listitem>
+<command>string _getCss()</command>
+      Returns the CSS styles as a string for the page header method. Additional styles have to be appended here if you are not overriding the page header. You will want to use this method in an overriden page header if you want to include the original CSS.
+
+</listitem>
+</itemizedlist>
+ 
+<para>
+There are also some accessors to get information on the current state of the test suite. Use these to enrich the display...
+
+</para>
+
+<itemizedlist>
+<listitem>
+<command>array getTestList()</command>
+      is the first convenience method for subclasses. Lists the current nesting of the tests as a list of test names. The first, most deeply nested test, is first in the list and the current test method will be last.
+
+</listitem>
+<listitem>
+ <command>integer getPassCount()</command>
+      returns the number of passes chalked up so far. Needed for the display at the end.
+
+</listitem>
+ <listitem>
+         <command> integer getFailCount()</command>
+      is likewise the number of fails so far.
+
+</listitem>
+<listitem>
+  <command>integer getTestCaseCount()</command>
+      is the total number of test cases in the test run. This includes the grouping tests themselves.
+
+</listitem>
+<listitem>
+ <command>integer getTestCaseProgress()</command>
+      is the number of test cases completed so far.
+
+</listitem>
+</itemizedlist>
+
+  </refsect1>
+
+  <refsect1 id="{@id extend}">
+    <title>Extending the reporter</title>
+    
+    
+
+
+
+<para>
+Rather than simply modifying the existing display, you might want to produce a whole new HTML look, or even generate text or XML. Rather than override every method in TestHtmlDisplay we can take one step up the class hiearchy to TestDisplay in the simple_test.php source file. The public signature is almost the same, but the display methods start empty...
+
+</para>
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TestDisplay extends TestReporter {
+    public TestDisplay() { ... }
+    public void paintHeader(string $test_name) { ... }
+    public void paintFooter(string $test_name) { ... }
+    public void paintStart(string $test_name, integer $size) { ... }
+    public void paintEnd(string $test_name, integer $size) { ... }
+    public void paintFail(string $message) { ... }
+    public void paintPass(string $message) { ... }
+    public array getTestList() { ... }
+    public integer getPassCount() { ... }
+    public integer getFailCount() { ... }
+    public integer getTestCaseCount() { ... }
+    public integer getTestCaseProgress() { ... }
+}
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+A do nothing display, a blank canvas for your own creation, would be...
+
+</para>
+
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+require_once(SIMPLE_TEST . 'simple_test.php');
+
+class MyDisplay extends TestDisplay {
+    function MyDisplay() {
+        $this->TestDisplay();
+    }
+    function paintHeader($test_name) {
+    }
+    function paintFooter($test_name) {
+    }
+    function paintStart($test_name, $size) {
+        parent::paintStart($test_name, $size);
+    }
+    function paintEnd($test_name, $size) {
+        parent::paintEnd($test_name, $size);
+    }
+    function paintPass($message) {
+        parent::paintPass($message);
+    }
+    function paintFail($message) {
+        parent::paintFail($message);
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+No output would come from this class until you add it.
+
+</para>
+    
+    
+  </refsect1>
+
+  <refsect1 id="{@id cmd}">
+    <title>The command line reporter</title>
+
+
+
+<para>
+SimpleTest also ships with a minimal command line reporter. The interface mimics JUnit to some extent, but paints the failure messages as they arrive. To use the command line reporter simply substitute it for the HTML version...
+
+</para>
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+<?php
+    if (!defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', 'simpletest/');
+    }
+    require_once(SIMPLE_TEST . 'unit_tester.php');
+    require_once(SIMPLE_TEST . 'reporter.php');
+
+    $test = &new GroupTest('File test');
+    $test->addTestFile('tests/file_test.php');
+    $test->run(new TextReporter());
+?>
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+Then invoke the test suite from the command line...
+
+</para>
+
+<screen linenumbering="unnumbered">
+php file_test.php
+
+</screen>
+
+<para>
+You will need the command line version of PHP installed of course. A passing test suite looks like this...
+
+</para>
+
+<screen linenumbering="unnumbered">
+File test
+OK
+Test cases run: 1/1, Failures: 0, Exceptions: 0
+
+</screen>
+
+<para>
+A failure triggers a display like this...
+
+</para>
+
+<screen linenumbering="unnumbered">
+File test
+1) True assertion failed.
+    in createnewfile
+FAILURES!!!
+Test cases run: 1/1, Failures: 1, Exceptions: 0
+
+</screen>
+
+<para>
+One of the main reasons for using a command line driven test suite is of using the tester as part of some automated process. To function properly in shell scripts the test script should return a non-zero exit code on failure. If a test suite fails the value false is returned from the SimpleTest::run() method. We can use that result to exit the script with the desired return code...
+
+</para>
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+<?php
+    if (!defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', 'simpletest/');
+    }
+    require_once(SIMPLE_TEST . 'unit_tester.php');
+    require_once(SIMPLE_TEST . 'reporter.php');
+
+    $test = &new GroupTest('File test');
+    $test->addTestFile('tests/file_test.php');
+    exit ($test->run(new TextReporter()) ? 0 : 1);
+?>
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+Of course we don't really want to create two test scripts, a command line one and a web browser one, for each test suite. The command line reporter includes a method to sniff out the run time environment...
+
+</para>
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+<?php
+    if (!defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', 'simpletest/');
+    }
+    require_once(SIMPLE_TEST . 'unit_tester.php');
+    require_once(SIMPLE_TEST . 'reporter.php');
+
+    $test = &new GroupTest('File test');
+    $test->addTestFile('tests/file_test.php');
+    if (TextReporter::inCli()) {
+        exit ($test->run(new TextReporter()) ? 0 : 1);
+    }
+    $test->run(new HtmlReporter());
+?>
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+This is the form used within SimpleTest itself.
+
+</para>
+
+
+
+  </refsect1>
+
+
+  
+</refentry>
