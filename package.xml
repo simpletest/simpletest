@@ -8,7 +8,7 @@
 The heart of SimpleTest is a testing framework built around test case classes.
 These are written as extensions of base test case classes, each extended with methods
 that actually contain test code. Top level test scripts then invoke the run()
-methods on every one of these test cases in order.
+methods on test suite.
 
 Each test method is written to invoke various assertions that the developer
 expects to be true such as assertEqual(). If the expectation is correct,
@@ -44,11 +44,12 @@ Page fetching, form submission and cookie handling are included.
     <state>beta</state>
     <notes>
 <![CDATA[
-This is definitely the last Alpha. It is VERY important that when upgrading
+It is VERY important that when upgrading
 you read the HELP_MY_TESTS_DONT_WORK_ANYMORE file as it contains some
-important information on name changes. It should involve only some minor
-changes to test suites and the old names are still supported. This will change
-in Beta1.
+important information on name changes.
+It should involve only some minor
+changes to test suites and the old names are still supported for a
+version or two.
 ]]>
     </notes>
     <deps>
