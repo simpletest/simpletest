@@ -143,6 +143,8 @@
         var $_path;
         var $_request;
         var $_fragment;
+        var $_x;
+        var $_y;
         var $_target;
         
         /**
@@ -151,6 +153,7 @@
          *    @access public
          */
         function SimpleUrl($url) {
+            list($this->_x, $this->_y) = $this->_chompCoordinates($url);
             $this->_scheme = $this->_chompScheme($url);
             list($this->_username, $this->_password) = $this->_chompLogin($url);
             $this->_host = $this->_chompHost($url);
@@ -163,6 +166,21 @@
             $this->_request = $this->_parseRequest($this->_chompRequest($url));
             $this->_fragment = (strncmp($url, "#", 1) == 0 ? substr($url, 1) : false);
             $this->_target = false;
+        }
+        
+        /**
+         *    Extracts the X, Y coordinate pair from an image map.
+         *    @param string $url   URL so far. The coordinates will be
+         *                         removed.
+         *    @return array        X, Y as a pair of integers.
+         *    @access private
+         */
+        function _chompCoordinates(&$url) {
+            if (preg_match('/(.*)\?(\d+),(\d+)$/', $url, $matches)) {
+                $url = $matches[1];
+                return array((integer)$matches[2], (integer)$matches[3]);
+            }
+            return array(false, false);
         }
         
         /**
@@ -387,6 +405,24 @@
             return $this->_fragment;
         }
         
+        /**
+         *    Accessor for horizontal image coordinate.
+         *    @return integer        X value.
+         *    @access public
+         */
+        function getX() {
+            return $this->_x;
+        }
+         
+        /**
+         *    Accessor for vertical image coordinate.
+         *    @return integer        Y value.
+         *    @access public
+         */
+        function getY() {
+            return $this->_y;
+        }
+       
         /**
          *    Accessor for current request parameters
          *    in URL string form

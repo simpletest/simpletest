@@ -187,6 +187,13 @@
                     array('a' => '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-='));
         }
         
+        function testParseCordinates() {
+            $url = new SimpleUrl('?32,45');
+            $this->assertEqual($url->getRequest(), array());
+            $this->assertIdentical($url->getX(), 32);
+            $this->assertIdentical($url->getY(), 45);
+        }
+        
         function testPageSplitting() {
             $url = new SimpleUrl("./here/../there/somewhere.php");
             $this->assertEqual($url->getPath(), "./here/../there/somewhere.php");
@@ -284,21 +291,25 @@
             $this->assertPreserved('http://me:secret@www.here.com/a/b/c/here.html?a=A#1234');
         }
         
-        function assertUrl($raw, $parts, $params = false) {
+        function assertUrl($raw, $parts, $params = false, $coords = false) {
             if (! is_array($params)) {
                 $params = array();
             }
             $url = new SimpleUrl($raw);
-            $this->assertIdentical($url->getScheme(), $parts[0], "[$raw] scheme->%s");
-            $this->assertIdentical($url->getUsername(), $parts[1], "[$raw] username->%s");
-            $this->assertIdentical($url->getPassword(), $parts[2], "[$raw] password->%s");
-            $this->assertIdentical($url->getHost(), $parts[3], "[$raw] host->%s");
-            $this->assertIdentical($url->getPort(), $parts[4], "[$raw] port->%s");
-            $this->assertIdentical($url->getPath(), $parts[5], "[$raw] path->%s");
-            $this->assertIdentical($url->getTld(), $parts[6], "[$raw] tld->%s");
-            $this->assertIdentical($url->getEncodedRequest(), $parts[7], "[$raw] encoded->%s");
-            $this->assertIdentical($url->getRequest(), $params, "[$raw] request->%s");
-            $this->assertIdentical($url->getFragment(), $parts[8], "[$raw] fragment->%s");
+            $this->assertIdentical($url->getScheme(), $parts[0], "[$raw] scheme -> %s");
+            $this->assertIdentical($url->getUsername(), $parts[1], "[$raw] username -> %s");
+            $this->assertIdentical($url->getPassword(), $parts[2], "[$raw] password -> %s");
+            $this->assertIdentical($url->getHost(), $parts[3], "[$raw] host -> %s");
+            $this->assertIdentical($url->getPort(), $parts[4], "[$raw] port -> %s");
+            $this->assertIdentical($url->getPath(), $parts[5], "[$raw] path -> %s");
+            $this->assertIdentical($url->getTld(), $parts[6], "[$raw] tld -> %s");
+            $this->assertIdentical($url->getEncodedRequest(), $parts[7], "[$raw] encoded -> %s");
+            $this->assertIdentical($url->getRequest(), $params, "[$raw] request -> %s");
+            $this->assertIdentical($url->getFragment(), $parts[8], "[$raw] fragment -> %s");
+            if ($coords) {
+                $this->assertIdentical($url->getX(), $coords[0], "[$raw] x -> %s");
+                $this->assertIdentical($url->getY(), $coords[1], "[$raw] y -> %s");
+            }
         }
         
         function assertPreserved($string) {
