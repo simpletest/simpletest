@@ -12,7 +12,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleQueryString {
+    class SimpleFormEncoding {
         var $_request;
         var $_x;
         var $_y;
@@ -24,7 +24,7 @@
          *                                           as lists on a single key.
          *    @access public
          */
-        function SimpleQueryString($query = false) {
+        function SimpleFormEncoding($query = false) {
             if (! $query) {
                 $query = array();
             }

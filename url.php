@@ -173,11 +173,11 @@
         /**
          *    Breaks the request down into an object.
          *    @param string $raw           Raw request.
-         *    @return SimpleQueryString    Parsed data.
+         *    @return SimpleFormEncoding    Parsed data.
          *    @access private
          */
         function _parseRequest($raw) {
-            $request = new SimpleQueryString();
+            $request = new SimpleFormEncoding();
             foreach (split("&", $raw) as $pair) {
                 if (preg_match('/(.*?)=(.*)/', $pair, $matches)) {
                     $request->add($matches[1], urldecode($matches[2]));
@@ -334,7 +334,7 @@
             if (! is_array($parameters)) {
                 return '';
             }
-            $query = &new SimpleQueryString();
+            $query = &new SimpleFormEncoding();
             foreach ($parameters as $key => $value) {
                 $query->add($key, $value);
             }
@@ -364,7 +364,7 @@
         
         /**
          *    Adds additional parameters to the request.
-         *    @param hash/SimpleQueryString $parameters   Additional
+         *    @param hash/SimpleFormEncoding $parameters   Additional
          *                                                parameters.
          *    @access public
          */
@@ -377,7 +377,7 @@
          *    @access public
          */
         function clearRequest() {
-            $this->_request = &new SimpleQueryString();
+            $this->_request = &new SimpleFormEncoding();
         }
         
         /**
