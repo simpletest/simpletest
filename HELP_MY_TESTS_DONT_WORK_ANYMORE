@@ -5,6 +5,10 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+No method requireReturn()
+=========================
+This was deprecated in Beta3 and is now removed.
+
 No method expectCookie()
 ========================
 This method was abruptly removed in Beta4 so as to simplify the internals
@@ -15,7 +19,7 @@ fetch and then assert the desired value.
 No method clickSubmitByFormId()
 ===============================
 This method had an incorrect name as no button was involved. It was
-renamed to submitByFormId() in Beta4 and deprecated.
+renamed to submitByFormId() in Beta4 and deprecated. Now removed.
 
 No method paintStart() or paintEnd()
 ====================================

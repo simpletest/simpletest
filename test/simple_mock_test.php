@@ -313,13 +313,6 @@
             $this->assertTrue(method_exists($mock, "aMethod"));
             $this->assertNull($mock->aMethod());
         }
-        function testCloningWithForcedReturn() {
-            $mock = &new MockDummy($this);
-            $mock->requireReturn();
-            $this->assertTrue(method_exists($mock, "aMethod"));
-            $this->assertNull($mock->aMethod());
-            $this->assertError();
-        }
         function testCloningWithExtraMethod() {
             $mock = &new MockDummyWithExtraMethods($this);
             $this->assertTrue(method_exists($mock, "extraMethod"));

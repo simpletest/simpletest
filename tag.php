@@ -6,6 +6,19 @@
      *	@version	$Id$
      */
     
+	/**
+	 *	Path for simpletest files
+	 */
+    if (! defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', 'simpletest/');
+    }
+     
+    /**#@+
+     * include SimpleTest files
+     */
+    require_once(SIMPLE_TEST . 'options.php');
+    /**#@-*/
+   
     /**
      *    HTML or XML tag.
 	 *    @package SimpleTest
@@ -1060,7 +1073,7 @@
         function _addCheckbox($tag) {
             if (! isset($this->_widgets[$tag->getName()])) {
                 $this->_widgets[$tag->getName()] = &$tag;
-            } elseif (! is_a($this->_widgets[$tag->getName()], 'SimpleCheckboxGroup')) {
+            } elseif (! SimpleTestCompatibility::isA($this->_widgets[$tag->getName()], 'SimpleCheckboxGroup')) {
                 $previous = &$this->_widgets[$tag->getName()];
                 $this->_widgets[$tag->getName()] = &new SimpleCheckboxGroup();
                 $this->_widgets[$tag->getName()]->addWidget($previous);

@@ -9,8 +9,8 @@
     /**
      * @ignore    originally defined in simple_test.php
      */
-    if (! defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "simpletest/");
+    if (! defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', 'simpletest/');
     }
     /**#@+
      * include SimpleTest files
@@ -93,7 +93,7 @@
          *    @access public
          */
         function test($parameters) {
-            if (!is_array($this->_expected)) {
+            if (! is_array($this->_expected)) {
                 return true;
             }
             if (count($this->_expected) != count($parameters)) {
@@ -116,7 +116,7 @@
          *    @access private
          */
         function _testParameter($parameter, $expected) {
-            if (is_a($expected, 'SimpleExpectation')) {
+            if (SimpleTestCompatibility::isA($expected, 'SimpleExpectation')) {
                 return $expected->test($parameter);
             }
             return ($expected === $parameter);
@@ -174,7 +174,7 @@
          *    @access private
          */
         function _coerceToExpectation($expected) {
-            if (is_a($expected, 'SimpleExpectation')) {
+            if (SimpleTestCompatibility::isA($expected, 'SimpleExpectation')) {
                 return $expected;
             }
             return new IdenticalExpectation($expected);
@@ -571,13 +571,6 @@
         }
         
         /**
-         *    @deprecated
-         */
-        function requireReturn() {
-            $this->_require_return = true;
-        }
-        
-        /**
          *    Die if bad arguments array is passed
          *    @param	mixed    $args    The arguments value to be checked.
          *    @param 	string   $task    Description of task attempt.
@@ -585,7 +578,7 @@
          *    @access	private
          */
         function _CheckArgumentsArray($args, $task) {
-        	if (!is_array($args)) {
+        	if (! is_array($args)) {
         		trigger_error(
         			"Cannot $task as \$args parameter is not an array",
         			E_USER_ERROR);

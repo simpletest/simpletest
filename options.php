@@ -14,15 +14,9 @@
     
     /**
      *    Static global directives and options.
-     *	@package	SimpleTest
+     *	  @package	SimpleTest
      */
     class SimpleTestOptions {
-        
-        /**
-         *    Does nothing.
-         */
-        function SimpleTestOptions() {
-        }
         
         /**
          *    Reads the SimpleTest version from the release file.
@@ -182,6 +176,10 @@
          *    @static
          */
         function isA($object, $class) {
+            if (version_compare(phpversion(), '5') >= 0) {
+                eval("\$is_a = \$object instanceof $class;");
+                return $is_a;
+            }
             if (function_exists('is_a')) {
                 return is_a($object, $class);
             }

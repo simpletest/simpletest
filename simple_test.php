@@ -116,10 +116,10 @@
             $reporter->paintCaseStart($this->getLabel());
             $methods = get_class_methods(get_class($this));
             foreach ($methods as $method) {
-                if (strtolower(substr($method, 0, 4)) != "test") {
+                if (! $this->_isTest($method)) {
                     continue;
                 }
-                if (is_a($this, strtolower($method))) {
+                if ($this->_isConstructor($method)) {
                     continue;
                 }
                 $reporter->paintMethodStart($method);
@@ -129,6 +129,29 @@
             }
             $reporter->paintCaseEnd($this->getLabel());
             return $reporter->getStatus();
+        }
+        
+        /**
+         *    Tests to see if the method is the constructor and
+         *    so should be ignored.
+         *    @param string $method        Method name to try.
+         *    @return boolean              True if constructor.
+         *    @access protected
+         */
+        function _isConstructor($method) {
+            return SimpleTestCompatibility::isA($this, strtolower($method));
+        }
+        
+        /**
+         *    Tests to see if the method is a test that should
+         *    be run. Currently any method that starts with 'test'
+         *    is a candidate.
+         *    @param string $method        Method name to try.
+         *    @return boolean              True if test method.
+         *    @access protected
+         */
+        function _isTest($method) {
+            return strtolower(substr($method, 0, 4)) == 'test';
         }
         
         /**
