@@ -73,6 +73,7 @@
         var $_action;
         var $_defaults;
         var $_values;
+        var $_buttons;
         
         /**
          *    Starts with no held controls/widgets.
@@ -83,6 +84,7 @@
             $this->_action = $tag->getAttribute("action");
             $this->_defaults = array();
             $this->_values = array();
+            $this->_buttons = array();
         }
         
         /**
@@ -110,6 +112,10 @@
          */
         function addWidget($tag) {
             if ($tag->getName() == "input") {
+                if ($tag->getAttribute("type") == "submit") {
+                    $this->_buttons[$tag->getAttribute("value")] = $tag->getAttribute("name");
+                    return;
+                }
                 $this->_defaults[$tag->getAttribute("name")] = $tag->getAttribute("value");
             }
         }
@@ -168,6 +174,13 @@
          *    @public
          */
         function submitButton($label) {
+            if (!isset($this->_buttons[$label])) {
+                return false;
+            }
+            return array_merge(
+                    array($this->_buttons[$label] => $label),
+                    $this->_defaults,
+                    $this->_values);            
         }
     }
 ?>

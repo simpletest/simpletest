@@ -48,5 +48,15 @@
                     $form->submit("go", "Go!"),
                     array("go" => "Go!", "me" => "Not me"));
         }
+        function testSubmitButton() {
+            $form = new SimpleHtmlForm(new SimpleTag("form", array()));
+            $this->assertIdentical($form->submitButton("Go!"), false);
+            $form->addWidget(new SimpleTag(
+                    "input",
+                    array("type" => "submit", "name" => "go", "value" => "Go!")));
+            $this->assertEqual(
+                    $form->submitButton("Go!"),
+                    array("go" => "Go!"));            
+        }
     }
 ?>
