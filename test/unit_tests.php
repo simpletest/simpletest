@@ -36,6 +36,7 @@
             $this->addTestFile('web_tester_test.php');
             $this->addTestFile('shell_tester_test.php');
             $this->addTestFile('xml_test.php');
+            $this->addTestFile('collector_test.php');
         }
     }
     
