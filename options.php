@@ -95,6 +95,30 @@
         }
         
         /**
+         *    Adds additional mock code.
+         *    @param $code    Extra code that can be added
+         *                    to the partial mocks for
+         *                    extra functionality. Useful
+         *                    when a test tool has overridden
+         *                    the mock base classes.
+         *    @public
+         */
+        function addPartialMockCode($code = '') {
+            $registry = &SimpleTestOptions::_getRegistry();
+            $registry['AdditionalPartialMockCode'] = $code;
+        }
+        
+        /**
+         *    Accessor for additional partial mock code.
+         *    @return        Code as a string.
+         *    @public
+         */
+        function getPartialMockCode() {
+            $registry = &SimpleTestOptions::_getRegistry();
+            return $registry['AdditionalPartialMockCode'];
+        }
+        
+        /**
          *    Accessor for global registry of options.
          *    @return            Hash of stored values.
          *    @private
@@ -118,7 +142,8 @@
             return array(
                     'StubBaseClass' => 'SimpleStub',
                     'MockBaseClass' => 'SimpleMock',
-                    'IgnoreList' => array());
+                    'IgnoreList' => array(),
+                    'AdditionalPartialMockCode' => '');
         }
     }
 ?>

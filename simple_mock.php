@@ -863,6 +863,7 @@
             $code .= Mock::_chainMockReturns();
             $code .= Mock::_chainMockExpectations();
             $code .= Mock::_overrideMethods($methods);
+            $code .= SimpleTestOptions::getPartialMockCode();
             $code .= "}\n";
             return $code;
         }

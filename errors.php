@@ -82,14 +82,15 @@
         }
         
         /**
-         *    Constant list or error codes.
-         *    @return        Hash of error code to
-         *                   string representation.
+         *    Converst an error code into it's string
+         *    representation.
+         *    @param $severity  PHP integer error code.
+         *    @return           String version of error code.
          *    @public
          *    @static
          */
-        function getSeverityMap() {
-            return array(
+        function getSeverityAsString($severity) {
+            static $map =  array(
                     E_ERROR => 'E_ERROR',
                     E_WARNING => 'E_WARNING',
                     E_PARSE => 'E_PARSE',
@@ -101,6 +102,7 @@
                     E_USER_ERROR => 'E_USER_ERROR',
                     E_USER_WARNING => 'E_USER_WARNING',
                     E_USER_NOTICE => 'E_USER_NOTICE');
+            return $map[$severity];
         }
     }
     

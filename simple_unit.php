@@ -237,8 +237,7 @@
                 return;
             }
             list($severity, $content, $file, $line, $globals) = $queue->extract();
-            $map = SimpleErrorQueue::getSeverityMap();
-            $severity = $map[$severity];
+            $severity = SimpleErrorQueue::getSeverityAsString($severity);
             $this->assertTrue(
                     !$expected || ($expected == $content),
                     "Expected [$expected] in PHP error [$content] severity [$severity] in [$file] line [$line]");

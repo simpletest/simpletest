@@ -476,7 +476,9 @@
         }
     }
     
+    SimpleTestOptions::addPartialMockCode('function sayHello() { return "Hello"; } ');
     Mock::generatePartial("Dummy", "TestDummy", array("anotherMethod"));
+    SimpleTestOptions::addPartialMockCode();
     
     class TestOfPartialMocks extends UnitTestCase {
         function TestOfPartialMocks() {
@@ -510,6 +512,10 @@
             $mock->anotherMethod(77);
             $mock->anotherMethod(66);
             $mock->tally();
+        }
+        function testAdditionalCode() {
+            $dummy = &new TestDummy($this);
+            $this->assertEqual($dummy->sayHello(), 'Hello');
         }
     }
 ?>
