@@ -1,12 +1,35 @@
 <?php
+    // $Id$
+    
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "../");
     }
     require_once(SIMPLE_TEST . 'parser.php');
     Mock::generate("HtmlPage");
 
-    class TestOfLexer extends UnitTestCase {
+    class TestOfLexer extends UNitTestCase {
         function TestOfLexer() {
+            $this->UnitTestCase();
+        }
+        function testEmptyPage() {
+            $lexer = &new SimpleLexer();
+            $this->assertEqual(count($lexer->parse("")), 0);
+        }
+        function testNoPatterns() {
+            $lexer = &new SimpleLexer();
+            $this->assertEqual($lexer->parse("abcdef"), array("abcdef"));
+        }
+        function testSinglePattern() {
+            $lexer = &new SimpleLexer();
+            $lexer->addPattern("a+");
+            $this->assertEqual(
+                    $lexer->parse("aaaxayyyaxaaaz"),
+                    array("aaa", "x", "a", "yyy", "a", "x", "aaa", "z"));
+        }
+    }
+
+    class TestOfParser extends UnitTestCase {
+        function TestOfParser() {
             $this->UnitTestCase();
         }
         function testEmptyPage() {
