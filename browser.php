@@ -7,6 +7,7 @@
     class TestBrowser {
         var $_test;
         var $_response;
+        var $_expect_error;
         
         /**
          *    Starts the browser empty.
@@ -16,6 +17,7 @@
         function TestBrowser(&$test) {
             $this->_test = &$test;
             $this->_response = false;
+            $this->_expect_error = false;
         }
         
         /**
@@ -25,15 +27,35 @@
          *    @return            Content of page.
          *    @public
          */
-        function fetchUrl($url, $request = "") {
+        function fetchUrl($url, $request = false) {
             if (!is_object($request)) {
                 $request = new SimpleHttpRequest($url);
             }
             $this->_response = &$request->fetch();
-            $this->_assertTrue(
-                    !$this->_response->isError(),
-                    "Fetching [$url] error [" . $this->_response->getError() . "]");
+            $this->_checkConnection($url, $this->_response);
             return $this->_response->getContent();
+        }
+        
+        /**
+         *    Set the next fetch to expect a connection
+         *    failure.
+         *    @public
+         */
+        function expectFail() {
+            $this->_expect_error = true;
+        }
+        
+        /**
+         *    Checks that the connection is as expected.
+         *    If correct then a test event is sent.
+         *    @param $url         Target URL.
+         *    @param $reponse     HTTP response from the fetch.
+         *    @private
+         */
+        function _checkConnection($url, &$response) {
+            $this->_assertTrue(
+                    $response->isError() == $this->_expect_error,
+                    "Fetching $url with error [" . $response->getError() . "]");
         }
         
         /**

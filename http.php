@@ -219,7 +219,7 @@
          *    @return               Either false or a HttpResponse.
          *    @public
          */
-        function &fetch($socket = "") {
+        function &fetch($socket = false) {
             if (!is_object($socket)) {
                 $socket = new SimpleSocket($this->_url->getHost());
             }

@@ -24,17 +24,39 @@
             $browser->_assertTrue(false, "Bad");
             $test->tally();
         }
-        function testDetectingBadConnection() {
-            $test = &new MockTestCase($this);
-            $test->setExpectedArgumentsSequence(0, "assertTrue", array(false, '*'));
-            $test->setExpectedCallCount("assertTrue", 1);
-            $browser = &new TestBrowser($test);
+    }
+
+    class TestOfBadHosts extends UnitTestCase {
+        function TestOfBadHosts() {
+            $this->UnitTestCase();
+        }
+        function &_createSimulatedBadHost() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("isError", true);
             $response->setReturnValue("getError", "Bad socket");
             $response->setReturnValue("getContent", false);
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
+            return $request;
+        }
+        function testFailingBadHost() {
+            $test = &new MockTestCase($this);
+            $test->setExpectedArgumentsSequence(0, "assertTrue", array(false, '*'));
+            $test->setExpectedCallCount("assertTrue", 1);
+            $browser = &new TestBrowser($test);
+            $request = &$this->_createSimulatedBadHost();
+            $this->assertIdentical(
+                    $browser->fetchUrl("http://this.host/this/path/page.html", &$request),
+                    false);
+            $test->tally();
+        }
+        function testExpectingBadHost() {
+            $test = &new MockTestCase($this);
+            $test->setExpectedArgumentsSequence(0, "assertTrue", array(true, '*'));
+            $test->setExpectedCallCount("assertTrue", 1);
+            $browser = &new TestBrowser($test);
+            $browser->expectFail();
+            $request = &$this->_createSimulatedBadHost();
             $this->assertIdentical(
                     $browser->fetchUrl("http://this.host/this/path/page.html", &$request),
                     false);
