@@ -52,7 +52,7 @@
         function tearDown() {
             restore_error_handler();
         }
-        function testTrapping() {
+        function testTrappedErrorPLacedInQueue() {
             $queue = &SimpleErrorQueue::instance();
             $this->assertFalse($queue->extract());
             trigger_error('Ouch!');
@@ -60,6 +60,69 @@
             $this->assertEqual($message, 'Ouch!');
             $this->assertEqual($file, __FILE__);
             $this->assertFalse($queue->extract());
+        }
+    }
+    class TestOfErrors extends UnitTestCase {
+        var $_old;
+        
+        function TestOfErrors() {
+            $this->UnitTestCase();
+        }
+        function setUp() {
+            $this->_old = error_reporting(E_ALL);
+        }
+        function tearDown() {
+            error_reporting($this->_old);
+        }
+        function testDefaultWhenAllReported() {
+            error_reporting(E_ALL);
+            trigger_error('Ouch!');
+            $this->assertError('Ouch!');
+        }
+        function testNoticeWhenReported() {
+            error_reporting(E_ALL);
+            trigger_error('Ouch!', E_USER_NOTICE);
+            $this->assertError('Ouch!');
+        }
+        function testWarningWhenReported() {
+            error_reporting(E_ALL);
+            trigger_error('Ouch!', E_USER_WARNING);
+            $this->assertError('Ouch!');
+        }
+        function testErrorWhenReported() {
+            error_reporting(E_ALL);
+            trigger_error('Ouch!', E_USER_ERROR);
+            $this->assertError('Ouch!');
+        }
+        function testNoNoticeWhenNotReported() {
+            error_reporting(0);
+            trigger_error('Ouch!', E_USER_NOTICE);
+            $this->assertNoErrors();
+        }
+        function testNoWarningWhenNotReported() {
+            error_reporting(0);
+            trigger_error('Ouch!', E_USER_WARNING);
+            $this->assertNoErrors();
+        }
+        function testNoErrorWhenNotReported() {
+            error_reporting(0);
+            trigger_error('Ouch!', E_USER_ERROR);
+            $this->assertNoErrors();
+        }
+        function testNoticeSuppressedWhenReported() {
+            error_reporting(E_ALL);
+            @trigger_error('Ouch!', E_USER_NOTICE);
+            $this->assertNoErrors();
+        }
+        function testWarningSuppressedWhenReported() {
+            error_reporting(E_ALL);
+            @trigger_error('Ouch!', E_USER_WARNING);
+            $this->assertNoErrors();
+        }
+        function testErrorSuppressedWhenReported() {
+            error_reporting(E_ALL);
+            @trigger_error('Ouch!', E_USER_ERROR);
+            $this->assertNoErrors();
         }
     }
 ?>

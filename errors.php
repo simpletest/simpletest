@@ -5,6 +5,10 @@
      *	@subpackage	UnitTester
      *	@version	$Id$
      */
+    /** @ignore - PHP5 compatibility fix. */
+    if (! defined('E_STRICT')) {
+        define('E_STRICT', 2048);
+    }
     
     /**
      *    Singleton error queue used to record trapped
@@ -94,6 +98,7 @@
          */
         function getSeverityAsString($severity) {
             static $map = array(
+                    E_STRICT => 'E_STRICT',
                     E_ERROR => 'E_ERROR',
                     E_WARNING => 'E_WARNING',
                     E_PARSE => 'E_PARSE',
@@ -122,8 +127,10 @@
      */
     function simpleTestErrorHandler($severity, $message, $filename, $line, $super_globals) {
         restore_error_handler();
-        $queue = &SimpleErrorQueue::instance();
-        $queue->add($severity, $message, $filename, $line, $super_globals);
+        if ($severity = $severity & error_reporting()) {
+            $queue = &SimpleErrorQueue::instance();
+            $queue->add($severity, $message, $filename, $line, $super_globals);
+        }
         set_error_handler('simpleTestErrorHandler');
     }
 ?>

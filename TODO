@@ -8,7 +8,7 @@ $Id$
 Unit tester
 -----------
 Move dump() method to use the dumper class (1/1) - done.
-Add error level filtering to error handler (1).
+Add error level filtering to error handler (1/1) - done.
 
 Interface
 ---------
