@@ -5,6 +5,7 @@
         define("SIMPLE_TEST", "./");
     }
     require_once(SIMPLE_TEST . 'assertion.php');
+    require_once(SIMPLE_TEST . 'options.php');
     
     define('MOCK_WILDCARD', '*');
     

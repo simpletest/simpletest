@@ -5,6 +5,7 @@
         define('SIMPLE_TEST', './');
     }
     require_once(SIMPLE_TEST . 'errors.php');
+    require_once(SIMPLE_TEST . 'options.php');
     require_once(SIMPLE_TEST . 'runner.php');
     require_once(SIMPLE_TEST . 'assertion.php');
     
@@ -125,6 +126,7 @@
          *    untrapped errors. Called back from
          *    the visiting runner.
          *    @param $runner    Current test runner.
+         *    @param $method    Test method to call.
          *    @public
          */
         function invoke(&$runner, $method) {

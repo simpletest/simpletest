@@ -20,6 +20,9 @@
         
         /**
          *    Hook for invoking the actual test method.
+         *    @param $test_case    The test case method to call.
+         *    @param $method       Method name to invoke.
+         *    @public
          */
         function invoke(&$test_case, $method) {
             $test_case->invoke($this, $method);
