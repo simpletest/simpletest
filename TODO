@@ -14,10 +14,10 @@ Move argument checks over to Comparitors (2).
 
 Html parser
 -----------
-Make lexer call different methods for different modes (4/3).
+Make lexer call different methods for different modes (4/3) - done.
 Build SAX handler for links (3).
 Build SAX event generator (8/1).
-Decouple lexer modes from SAX handler methods (2).
+Decouple lexer modes from SAX handler methods (2/2) - done.
 Build link scanner functionality from end to end (3/1).
 Build HTML document with links (3/5) - done.
 

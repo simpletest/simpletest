@@ -228,4 +228,31 @@
             $handler->tally();
         }
     }
+
+    class TestOfLexerHandlers extends UnitTestCase {
+        function TestOfLexerHandlers() {
+            $this->UnitTestCase();
+        }
+        function testModeMapping() {
+            $handler = &new MockTestParser($this);
+            $handler->setReturnValue("a", true);
+            $handler->expectArgumentsSequence(0, "a", array("aa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(1, "a", array("(", LEXER_ENTER));
+            $handler->expectArgumentsSequence(2, "a", array("bb", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(3, "a", array("a", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(4, "a", array("bb", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(5, "a", array(")", LEXER_EXIT));
+            $handler->expectArgumentsSequence(6, "a", array("b", LEXER_UNMATCHED));
+            $handler->expectCallCount("a", 7);
+            $lexer = &new SimpleLexer($handler, "mode_a");
+            $lexer->addPattern("a+", "mode_a");
+            $lexer->addEntryPattern("(", "mode_a", "mode_b");
+            $lexer->addPattern("b+", "mode_b");
+            $lexer->addExitPattern(")", "mode_b");
+            $lexer->mapHandler("mode_a", "a");
+            $lexer->mapHandler("mode_b", "a");
+            $this->assertTrue($lexer->parse("aa(bbabb)b"));
+            $handler->tally();
+        }
+    }
 ?>

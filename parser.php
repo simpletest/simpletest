@@ -150,6 +150,7 @@
         var $_regexes;
         var $_parser;
         var $_mode;
+        var $_mode_handlers;
         
         /**
          *    Sets up the lexer.
@@ -162,6 +163,7 @@
             $this->_regexes = array();
             $this->_parser = &$parser;
             $this->_mode = new StateStack($start);
+            $this->_mode_handlers = array();
         }
         
         /**
@@ -215,6 +217,16 @@
                 $this->_regexes[$mode] = new ParallelRegex();
             }
             $this->_regexes[$mode]->addPattern($pattern, "_exit");
+        }
+        
+        /**
+         *    Adds a mapping from a mode to another handler.
+         *    @param $mode        Mode to be remapped.
+         *    @param $handler     New target handler.
+         *    @public
+         */
+        function mapHandler($mode, $handler) {
+            $this->_mode_handlers[$mode] = $handler;
         }
         
         /**
@@ -288,7 +300,11 @@
             if (!$content) {
                 return true;
             }
-            return $this->_parser->{$this->_mode->getCurrent()}($content, $is_match);
+            $handler = $this->_mode->getCurrent();
+            if (isset($this->_mode_handlers[$handler])) {
+                $handler = $this->_mode_handlers[$handler];
+            }
+            return $this->_parser->$handler($content, $is_match);
         }
         
         /**
