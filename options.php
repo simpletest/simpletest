@@ -18,7 +18,7 @@
          *    @access public
          */
         function getVersion() {
-            $content = file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'VERSION');
+            $content = file(dirname(__FILE__) . '/VERSION');
             return trim($content[0]);
         }
         
@@ -36,7 +36,7 @@
         }
         
         /**
-         *    Test to see iif a test case is in the ignore
+         *    Test to see if a test case is in the ignore
          *    list.
          *    @param string $class        Class name to test.
          *    @return boolean             True if should not be run.
@@ -213,7 +213,7 @@
         /**
          *    Identity test. Drops back to equality for PHP5
          *    objects as the === operator counts as the
-         *    stronger reference.
+         *    stronger reference constraint.
          *    @param mixed $first    Test subject.
          *    @param mixed $second   Comparison object.
          *    @access public
@@ -221,20 +221,26 @@
          */
         function isIdentical($first, $second) {
             if (version_compare(phpversion(), '5') >= 0) {
+                if (gettype($first) != gettype($second)) {
+                    return false;
+                }
                 if ($first != $second) {
                     return false;
                 }
                 if (is_object($first) && is_object($second)) {
-                    return true;
+                    return (get_class($first) == get_class($second));
                 }
                 if (is_array($first) && is_array($second)) {
+                    if (array_keys($first) != array_keys($second)) {
+                        return false;
+                    }
                     foreach (array_keys($first) as $key) {
                         if (! SimpleTestCompatibility::isIdentical($first[$key], $second[$key])) {
                             return false;
                         }
                     }
                 }
-                return ($first == $second) && (gettype($first) == gettype($second));
+                return true;
             }
             return ($first === $second);
         }

@@ -473,7 +473,7 @@
         /**
          *    Equivalent to hitting the retry button on the
          *    browser. Will attempt to repeat the page fetch. If
-         *    there is no history to repeat it will  give false.
+         *    there is no history to repeat it will give false.
          *    @return string/boolean   Content if fetch succeeded
          *                             else false.
          *    @access public

@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC1) of 70 hours!
+This is immediate stuff only for this iteration (RC1) of 72 hours!
 First figure is expected hours, second is the time it actually took.
 
 $Id$
@@ -11,6 +11,7 @@ Fix bug with dumper failing with second parameters of odd types (2/1) - done.
 Expectations should carry message overrides (3/1) - done.
 Assertions should return booleans for test exits (2/1) - done.
 Refactor run behaviour into it's own object (2/3) - done.
+Fix IdenticalExpectation for PHP5 (2/1).
 
 Reporter
 --------
@@ -25,7 +26,7 @@ Expectation methods should carry message overrides (2/2) - done.
 
 Parser
 ------
-Add simple button tag parsing (1/3) - done.
+Add simple button tag parsing (1/3).
 
 Browser
 -------
