@@ -262,7 +262,7 @@
         }
     }
     
-    Mock::generate("TestCase");
+    Mock::generate("SimpleTestCase");
     
     class TestOfMockTally extends UnitTestCase {
         function TestOfMockTally() {
@@ -289,7 +289,7 @@
             $this->assertTrue($mock->tally(), "Tally");
         }
         function testFailedCallCount() {
-            $mock = &new MockDummy(new MockTestCase($this));
+            $mock = &new MockDummy(new MockSimpleTestCase($this));
             $mock->expectCallCount("aMethod", 2);
             $this->assertFalse($mock->tally(), "Empty tally");
             $mock->aMethod();
@@ -306,7 +306,7 @@
             $this->UnitTestCase();
         }
         function testMaxCalls() {
-            $test = &new MockTestCase($this);
+            $test = &new MockSimpleTestCase($this);
             $test->expectCallCount("assertTrue", 1);
             $mock = &new MockDummy($test);
             $mock->expectMaximumCallCount("aMethod", 2);
@@ -326,7 +326,7 @@
             $mock->aMethod(1, 2, 3);
         }
         function testFailedArguments() {
-            $test = &new MockTestCase($this, "*");
+            $test = &new MockSimpleTestCase($this, "*");
             $test->expectArguments("assertTrue", array(false, "*"));
             $test->expectCallCount("assertTrue", 1);
             $mock = &new MockDummy($test);
@@ -349,7 +349,7 @@
             $mock->aMethod();
         }
         function testFailedSequence() {
-            $test = &new MockTestCase($this);
+            $test = &new MockSimpleTestCase($this);
             $test->expectArguments("assertTrue", array(false, "*"));
             $test->expectCallCount("assertTrue", 2);
             $mock = &new MockDummy($test);

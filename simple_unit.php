@@ -11,7 +11,7 @@
      *    of PHP code XP style. Adds some useful standard
      *    assertions.
      */
-    class UnitTestCase extends TestCase {
+    class UnitTestCase extends SimpleTestCase {
         
         /**
          *    Creates an empty test case. Should be subclassed
@@ -24,7 +24,7 @@
             if ($label == "") {
                 $label = get_class($this);
             }
-            $this->TestCase($label);
+            $this->SimpleTestCase($label);
         }
         
         /**

@@ -11,7 +11,7 @@
      *    Adapter for PEAR PHPUnit test case to allow
      *    legacy PEAR test cases to be used with SimpleTest.
      */
-    class PHPUnit_TestCase extends TestCase {
+    class PHPUnit_TestCase extends SimpleTestCase {
         var $_loosely_typed;
         
         /**
@@ -20,7 +20,7 @@
          *    @public
          */
         function PHPUnit_TestCase($label = false) {
-            $this->TestCase($label);
+            $this->SimpleTestCase($label);
             $this->_loosely_typed = false;
         }
         

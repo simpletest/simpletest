@@ -56,7 +56,7 @@
      *    all methods that start with the the string "test" and
      *    runs them. Working test cases extend this class.
      */
-    class TestCase extends RunnableTest {
+    class SimpleTestCase extends RunnableTest {
         
         /**
          *    Sets up the test with no display.
@@ -64,7 +64,7 @@
          *                         the class name is used.
          *    @public
          */
-        function TestCase($label = false) {
+        function SimpleTestCase($label = false) {
             if (!$label) {
                 $label = get_class($this);
             }
@@ -200,7 +200,7 @@
          */
         function _is_test_case($class) {
             while ($class = get_parent_class($class)) {
-                if (strtolower($class) == "testcase") {
+                if (strtolower($class) == "simpletestcase") {
                     return true;
                 }
             }

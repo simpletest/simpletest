@@ -80,14 +80,14 @@
                         "Me" == $runnable->getLabel(),
                         "Expected [Me] got [" . $runnable->getLabel() . "]");
                 
-                $test_case = new TestCase();
+                $test_case = new SimpleTestCase();
                 $test_case->attachObserver(new TestOfTestReporter(
                         array(null),
                         array(true),
                         array("stuff")));
                 $test_case->assertTrue(true, "stuff");
                 
-                $test_case = new TestCase();
+                $test_case = new SimpleTestCase();
                 $test_case->attachObserver(new TestOfTestReporter(
                         array(null),
                         array(false),
@@ -106,11 +106,11 @@
                 
                 // Build a test case.
                 //
-                class MyTestCase extends TestCase {
+                class MyTestCase extends SimpleTestCase {
                     var $test_variable;
                     
                     function MyTestCase() {
-                        $this->TestCase();
+                        $this->SimpleTestCase();
                     }
                     function test() {
                         $this->assertTrue(true, "True");

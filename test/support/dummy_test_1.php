@@ -3,18 +3,18 @@
         define("SIMPLE_TEST", "../../");
     }
 
-    class DummyTestOneA extends TestCase {
+    class DummyTestOneA extends SimpleTestCase {
         function DummyTestOneA() {
-            $this->TestCase();
+            $this->SimpleTestCase();
         }
         function testOneA() {
             $this->assertTrue(true, "True");
         }
     }
 
-    class DummyTestOneB extends TestCase {
+    class DummyTestOneB extends SimpleTestCase {
         function DummyTestOneB() {
-            $this->TestCase();
+            $this->SimpleTestCase();
         }
         function testOneB() {
             $this->assertTrue(true, "True");
