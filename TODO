@@ -7,40 +7,38 @@ $Id$
 
 Unit tester
 -----------
-Improve difference output messages when nested in arrays (1/3) - done.
-Improve difference output messages for pattern matching (2/1) - done.
+Swapping observer pattern for visitor (3).
+Add an error trap (3).
 
 Interface
 ---------
-Add message results and different test results (2/1) - done.
-Add a dump() method with a print_r() trap (2/1) - done.
+Add better object mismatch message (1).
 
 Mock objects
 ------------
-Partial mocks (4/3) - done.
+Add expectMinimumCallCount() expectation (2).
+Add a parameter list assertion for better message display (2).
 
 Html parser
 -----------
-Parse submit buttons into form (1/1) - done.
-Fix attributes to accept value of "0" (0/1) - done.
-Add case insensitivity (0/1) - done.
+Skip CSS (1).
+Skip processing instructions (1).
+Skip script tags (1).
+Add input tag parsing (2).
+Add checkbox parsing (2).
+Add text area parsing (3).
+Add image tag parsing (1).
+Test against some typical internet page samples (5).
 
 Browser
 -------
-Add headers only fetch (4/3) - done.
-Fix URL bug with local hostnames (2/2) - done.
+Allow automatic redirects (4).
+Add setting of form values (3).
 
 Web tester
 ----------
-Connect up page failure expectations (3/2) - done.
-Connect cookie expectations (2/6) - done.
-Add form submission to navigation (2/8) - done.
-Connect up session start method on browser (1/1) - done.
-Fix base path bug where path is lost (1/1) - done.
+Form submission (2).
 
 Documentation
 -------------
-Clean up the documentation links (1/1) - done.
-Add server stubs docs (2/2) - done.
-Add adapter documentation (2/1) - done.
-Add early web test case to introduction (2/1) - done.
+Add partial mocks documentation (3).
