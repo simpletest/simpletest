@@ -11,6 +11,88 @@
      */
     require_once(dirname(__FILE__) . '/tag.php');
     /**#@-*/
+    
+    /**
+     *    Used to extract form elements for testing against.
+     *    Searches by name attribute.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleNameSelector {
+        var $_name;
+        
+        /**
+         *    Stashes the name for later comparison.
+         *    @param string $name     Name attribute to match.
+         */
+        function SimpleNameSelector($name) {
+            $this->_name = $name;
+        }
+
+        /**
+         *    Comparison. Compares with name attribute of
+         *    widget.
+         *    @param SimpleWidget $widget    Control to compare.
+         *    @access public
+         */
+        function isMatch($widget) {
+            return ($widget->getName() == $this->_name);
+        }
+    }
+    
+    /**
+     *    Used to extract form elements for testing against.
+     *    Searches by visible label or alt text.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleLabelSelector {
+        var $_label;
+        
+        /**
+         *    Stashes the name for later comparison.
+         *    @param string $label     Visible text to match.
+         */
+        function SimpleLabelSelector($label) {
+            $this->_label = $label;
+        }
+
+        /**
+         *    Comparison. Compares visible text of widget.
+         *    @param SimpleWidget $widget    Control to compare.
+         *    @access public
+         */
+        function isMatch($widget) {
+            return ($widget->getLabel() == $this->_label);
+        }
+    }
+    
+    /**
+     *    Used to extract form eleemnts for testing against.
+     *    Searches dy id attribute.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleIdSelector {
+        var $_id;
+        
+        /**
+         *    Stashes the name for later comparison.
+         *    @param string $id     ID atribute to match.
+         */
+        function SimpleIdSelector($id) {
+            $this->_id = $id;
+        }
+
+        /**
+         *    Comparison. Compares id attribute of widget.
+         *    @param SimpleWidget $widget    Control to compare.
+         *    @access public
+         */
+        function isMatch($widget) {
+            return ($widget->getAttribute('id') == $this->_id);
+        }
+    }
    
     /**
      *    Form tag class to hold widget values.
@@ -257,6 +339,22 @@
             return $values;
         }
         
+        
+        /**
+         *    Test to see if a form has a submit button.
+         *    @param SimpleSelector $selector   Criteria to apply.
+         *    @return boolean                   True if present.
+         *    @access private
+         */
+        function _hasSubmit($selector) {
+            foreach ($this->_buttons as $button) {
+                if ($selector->isMatch($button)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
         /**
          *    Test to see if a form has a submit button with this
          *    name attribute.
@@ -265,12 +363,7 @@
          *    @access public
          */
         function hasSubmitName($name) {
-            foreach ($this->_buttons as $button) {
-                if ($button->getName() == $name) {
-                    return true;
-                }
-            }
-            return false;
+            return $this->_hasSubmit(new SimpleNameSelector($name));
         }
         
         /**
@@ -281,12 +374,7 @@
          *    @access public
          */
         function hasSubmitLabel($label) {
-            foreach ($this->_buttons as $button) {
-                if ($button->getLabel() == $label) {
-                    return true;
-                }
-            }
-            return false;
+            return $this->_hasSubmit(new SimpleLabelSelector($label));
         }
         
         /**
@@ -297,8 +385,18 @@
          *    @access public
          */
         function hasSubmitId($id) {
-            foreach ($this->_buttons as $button) {
-                if ($button->getAttribute('id') == $id) {
+            return $this->_hasSubmit(new SimpleIdSelector($id));
+        }
+        
+        /**
+         *    Test to see if a form has an image control.
+         *    @param SimpleSelector $selector   Criteria to apply.
+         *    @return boolean                   True if present.
+         *    @access public
+         */
+        function _hasImage($selector) {
+            foreach ($this->_images as $image) {
+                if ($selector->isMatch($image)) {
                     return true;
                 }
             }
@@ -314,12 +412,7 @@
          *    @access public
          */
         function hasImageLabel($label) {
-            foreach ($this->_images as $image) {
-                if ($image->getLabel() == $label) {
-                    return true;
-                }
-            }
-            return false;
+            return $this->_hasImage(new SimpleLabelSelector($label));
         }
         
         /**
@@ -330,12 +423,7 @@
          *    @access public
          */
         function hasImageName($name) {
-            foreach ($this->_images as $image) {
-                if ($image->getName() == $name) {
-                    return true;
-                }
-            }
-            return false;
+            return $this->_hasImage(new SimpleNameSelector($name));
         }
          
         /**
@@ -346,9 +434,23 @@
          *    @access public
          */
         function hasImageId($id) {
-            foreach ($this->_images as $image) {
-                if ($image->getAttribute('id') == $id) {
-                    return true;
+            return $this->_hasImage(new SimpleIdSelector($id));
+        }
+       
+        /**
+         *    Gets the submit values for a selected button.
+         *    @param SimpleSelector $selector   Criteria to apply.
+         *    @return hash                      Submitted values or false
+         *                                      if there is no such button
+         *                                      in the form.
+         *    @access public
+         */
+        function _submitButton($selector) {
+            foreach ($this->_buttons as $button) {
+                if ($selector->isMatch($button)) {
+                    return array_merge(
+                            $button->getSubmitValues(),
+                            $this->getValues());            
                 }
             }
             return false;
@@ -363,14 +465,7 @@
          *    @access public
          */
         function submitButtonByName($name) {
-            foreach ($this->_buttons as $button) {
-                if ($button->getName() == $name) {
-                    return array_merge(
-                            $button->getSubmitValues(),
-                            $this->getValues());            
-                }
-            }
-            return false;
+            return $this->_submitButton(new SimpleNameSelector($name));
         }
         
         /**
@@ -382,14 +477,7 @@
          *    @access public
          */
         function submitButtonByLabel($label) {
-            foreach ($this->_buttons as $button) {
-                if ($button->getLabel() == $label) {
-                    return array_merge(
-                            $button->getSubmitValues(),
-                            $this->getValues());            
-                }
-            }
-            return false;
+            return $this->_submitButton(new SimpleLabelSelector($label));
         }
         
         /**
@@ -401,10 +489,24 @@
          *    @access public
          */
         function submitButtonById($id) {
-            foreach ($this->_buttons as $button) {
-                if ($button->getAttribute('id') == $id) {
+            return $this->_submitButton(new SimpleIdSelector($id));
+        }
+         
+        /**
+         *    Gets the submit values for an image.
+         *    @param SimpleSelector $selector   Criteria to apply.
+         *    @param integer $x                 X-coordinate of click.
+         *    @param integer $y                 Y-coordinate of click.
+         *    @return hash                      Submitted values or false
+         *                                      if there is no such button in the
+         *                                      form.
+         *    @access public
+         */
+        function _submitImage($selector, $x, $y) {
+            foreach ($this->_images as $image) {
+                if ($selector->isMatch($image)) {
                     return array_merge(
-                            $button->getSubmitValues(),
+                            $image->getSubmitValues($x, $y),
                             $this->getValues());            
                 }
             }
@@ -423,14 +525,7 @@
          *    @access public
          */
         function submitImageByLabel($label, $x, $y) {
-            foreach ($this->_images as $image) {
-                if ($image->getAttribute('alt') == $label) {
-                    return array_merge(
-                            $image->getSubmitValues($x, $y),
-                            $this->getValues());            
-                }
-            }
-            return false;
+            return $this->_submitImage(new SimpleLabelSelector($label), $x, $y);
         }
          
         /**
@@ -444,14 +539,7 @@
          *    @access public
          */
         function submitImageByName($name, $x, $y) {
-            foreach ($this->_images as $image) {
-                if ($image->getName() == $name) {
-                    return array_merge(
-                            $image->getSubmitValues($x, $y),
-                            $this->getValues());            
-                }
-            }
-            return false;
+            return $this->_submitImage(new SimpleNameSelector($name), $x, $y);
         }
           
         /**
@@ -465,14 +553,7 @@
          *    @access public
          */
         function submitImageById($id, $x, $y) {
-            foreach ($this->_images as $image) {
-                if ($image->getAttribute('id') == $id) {
-                    return array_merge(
-                            $image->getSubmitValues($x, $y),
-                            $this->getValues());            
-                }
-            }
-            return false;
+            return $this->_submitImage(new SimpleIdSelector($id), $x, $y);
         }
       
         /**

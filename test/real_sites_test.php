@@ -26,7 +26,7 @@
             $this->assertWantedPattern('/Statistics for the past \d+ months/');
         }
         
-        function testPhpLondon() {
+        function SITE_DOWN_testPhpLondon() {
             $this->get('http://www.phplondon.org/');
             $this->clickLink('Wiki is here');
             $this->clickLink('Members');

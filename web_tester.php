@@ -862,6 +862,22 @@
         function setField($name, $value) {
             return $this->_browser->setField($name, $value);
         }
+        
+        /**
+         *    Sets all form fields with that name. Will issue a failure
+         *    if no field is found.
+         *    @param string $name    Name of field in forms.
+         *    @param string $value   New value of field.
+         *    @return boolean        True if field exists, otherwise false.
+         *    @access public
+         */
+        function setFieldOrFail($name, $value) {
+            $success = $this->setField($name, $value);
+            if (! $success) {
+                $this->fail("Field with name [$name] not found");
+            }
+            return $success;
+        }
           
         /**
          *    Sets all form fields with that name.
@@ -872,6 +888,22 @@
          */
         function setFieldById($id, $value) {
             return $this->_browser->setFieldById($id, $value);
+        }
+          
+        /**
+         *    Sets all form fields with that name. Will issue a failure
+         *    if no field is found.
+         *    @param string/integer $id   Id of field in forms.
+         *    @param string $value        New value of field.
+         *    @return boolean             True if field exists, otherwise false.
+         *    @access public
+         */
+        function setFieldByIdOrFail($id, $value) {
+            $success = $this->setFieldById($id, $value);
+            if (! $success) {
+                $this->fail("Field with ID [$id] not found");
+            }
+            return $success;
         }
         
         /**
