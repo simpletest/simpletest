@@ -238,7 +238,7 @@ class TestOfNewsService extends UnitTestCase {
                 The rest of the text does not matter.
             </p>
             <p>
-                The possible expectation classes are (as of Beta 3)...
+                The possible expectation classes are...
                 <table>
                     <tr><td><span class="code">EqualExpectation</span></td><td>An equality, rather than the stronger identity comparison</td></tr>
                     <tr><td><span class="code">NotEqualExpectation</span></td><td>An inequality comparison</td></tr>
@@ -247,6 +247,7 @@ class TestOfNewsService extends UnitTestCase {
                     <tr><td><span class="code">WantedPatternExpectation</span></td><td>Uses a Perl Regex to match a string</td></tr>
                     <tr><td><span class="code">NoUnwantedExpectation</span></td><td>Passes only if failing a Perl Regex</td></tr>
                     <tr><td><span class="code">IsAExpectation</span></td><td>Checks the type or class name only</td></tr>
+                    <tr><td><span class="code">MethodExistsExpectation</span></td><td>Checks a method is available on an object</td></tr>
                 </table>
                 Most take the expected value in the constructor.
                 The exceptions are the pattern matchers, which take a regular expression,

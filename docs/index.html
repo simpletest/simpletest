@@ -136,11 +136,12 @@
         <div class="content">
                         <p style="margin-right: 10%; margin-left: 10%;">
                 <span style="color: red;">News:</span>
-                Beta 4 released on sourceforge.
-                This is an end user release and a recommended upgrade.
-                It includes improvements in the HTML parsing and the ability
-                to use the embedded web browser directly.
-                This will be the final beta release before the 1.0 stable version.
+                <a href="http://simpletest.sourceforge.net/">SimpleTest API</a>
+                published on sourceforge.
+                Detailed documentation of all of the classes and methods that
+                make up the toolkit for those people that want to extend it
+                or are tired of waiting for the other documentation to catch up.
+                Generated with the phpdoc tool by Jason Sweat.
             </p>
             <p>
                 The following assumes that you are familiar with the concept
@@ -185,7 +186,7 @@
 <pre><strong>
 &lt;?php
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
+        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
     }
     require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
     require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
@@ -201,7 +202,7 @@
 <pre>
 &lt;?php
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
+        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
     }
     require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
     require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
@@ -222,7 +223,7 @@
 <pre>
 &lt;?php
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
+        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
     }
     require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
     require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
@@ -260,7 +261,7 @@
 <pre>
 &lt;?php
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
+        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
     }
     require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
     require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
@@ -334,7 +335,7 @@
 <pre><strong>
 &lt;?php
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
+        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
     }
     require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
     require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
@@ -508,7 +509,7 @@
 <pre>
 &lt;?php
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
+        define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
     }<strong>
     require_once(SIMPLE_TEST . &apos;web_tester.php&apos;);</strong>
     require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
@@ -545,10 +546,8 @@
                     from <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
                 </li>
                 <li>
-                    The open source <a href="http://www.php.net/">PHP</a> web development language.
-                </li>
-                <li>
-                    <a href="http://www.mockobjects.com/">Mock objects</a> papers.
+                    The <a href="http://simpletest.sourceforge.net/">developer&apos;s API for SimpleTest</a>
+                    gives full detail on the classes and assertions available.
                 </li>
             </ul>        </div>
         <div class="copyright">
