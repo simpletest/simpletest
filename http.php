@@ -501,22 +501,26 @@
         var $_user_headers;
         var $_url;
         var $_cookies;
+        var $_method;
         
         /**
          *    Saves the URL ready for fetching.
-         *    @param $url        URL as object.
+         *    @param $url      URL as object.
+         *    @param $method   HTTP request method, usually GET.
          *    @public
          */
-        function SimpleHttpRequest($url) {
+        function SimpleHttpRequest($url, $method = "GET") {
             $this->_url = $url;
+            $this->_method = $method;
             $this->_user_headers = array();
             $this->_cookies = array();
         }
         
         /**
          *    Fetches the content and parses the headers.
-         *    @param $socket        Test override.
-         *    @return               Either false or a HttpResponse.
+         *    @param $socket   Test override.
+         *    @return          A SimpleHttpResponse which may have
+         *                     an error.
          *    @public
          */
         function &fetch($socket = false) {
@@ -526,7 +530,18 @@
             if ($socket->isError()) {
                 return $this->_createResponse($socket);
             }
-            $socket->write("GET " . $this->_url->getPath() . $this->_url->getEncodedRequest() . " HTTP/1.0\r\n");
+            $this->_request($socket, $this->_method);
+            return $this->_createResponse($socket);
+        }
+        
+        /**
+         *    Sends the headers.
+         *    @param $socket    Open SimpleSocket object.
+         *    @param $method    HTTP request method, usually GET.
+         *    @protected
+         */
+        function _request(&$socket, $method) {
+            $socket->write($method . " " . $this->_url->getPath() . $this->_url->getEncodedRequest() . " HTTP/1.0\r\n");
             $socket->write("Host: " . $this->_url->getHost() . "\r\n");
             foreach ($this->_user_headers as $header_line) {
                 $socket->write($header_line . "\r\n");
@@ -536,7 +551,6 @@
             }
             $socket->write("Connection: close\r\n");
             $socket->write("\r\n");
-            return $this->_createResponse($socket);
         }
         
         /**
@@ -580,6 +594,37 @@
          */
         function &_createResponse(&$socket) {
             return new SimpleHttpResponse($socket);
+        }
+    }
+    
+    /**
+     *    Request with data to send.
+     */
+    class SimpleHttpPushRequest extends SimpleHttpRequest {
+        var $_pushed_content;
+        
+        /**
+         *    Saves the URL ready for fetching.
+         *    @param $url      URL as object.
+         *    @param $content  Content to send.
+         *    @param $method   HTTP request method, usually POST.
+         *    @public
+         */
+        function SimpleHttpPushRequest($url, $content, $method = "POST") {
+            $this->SimpleHttpRequest($url, $method);
+            $this->_pushed_content = $content;
+        }
+        
+        /**
+         *    Sends the headers and request data.
+         *    @param $socket    Open SimpleSocket object.
+         *    @param $method    HTTP request method, usually GET.
+         *    @protected
+         */
+        function _request(&$socket, $method) {
+            $this->addHeaderLine('Content-Length: ' . strlen($this->_pushed_content));
+            parent::_request($socket, $method);
+            $socket->write($this->_pushed_content);
         }
     }
     

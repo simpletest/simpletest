@@ -14,13 +14,13 @@
             $this->UnitTestCase();
         }
         function testBadSocket() {
-            $socket = @new SimpleSocket("bad_url", 111);
+            @$socket = &new SimpleSocket("bad_url", 111);
             $this->assertTrue($socket->isError(), "Error [" . $socket->getError(). "]");
             $this->assertFalse($socket->isOpen());
             $this->assertFalse($socket->write("A message"));
         }
         function testSocket() {
-            $socket = new SimpleSocket("www.lastcraft.com", 80);
+            $socket = &new SimpleSocket("www.lastcraft.com", 80);
             $this->assertFalse($socket->isError(), "Error [" . $socket->getError(). "]");
             $this->assertTrue($socket->isOpen());
             $this->assertTrue($socket->write("GET www.lastcraft.com/test/network_confirm.php HTTP/1.0\r\n"));
@@ -30,22 +30,37 @@
             $socket->close();
             $this->assertEqual($socket->read(8), "");
         }
-        function testHttp() {
-            $http = new SimpleHttpRequest(new SimpleUrl(
+        function testHttpGet() {
+            $http = &new SimpleHttpRequest(new SimpleUrl(
                     "www.lastcraft.com/test/network_confirm.php?gkey=gvalue"));
             $http->setCookie(new SimpleCookie("ckey", "cvalue"));
-            $this->assertIsA($reponse = &$http->fetch(), "SimpleHttpResponse");
-            $this->assertEqual($reponse->getResponseCode(), 200);
-            $this->assertEqual($reponse->getMimeType(), "text/html");
+            $this->assertIsA($response = &$http->fetch(), "SimpleHttpResponse");
+            $this->assertEqual($response->getResponseCode(), 200);
+            $this->assertEqual($response->getMimeType(), "text/html");
             $this->assertWantedPattern(
                     '/A target for the SimpleTest test suite/',
-                    $reponse->getContent());
+                    $response->getContent());
             $this->assertWantedPattern(
-                    '/gkey=gvalue/',
-                    $reponse->getContent());
+                    '/Request method.*?<dd>GET<\/dd>/',
+                    $response->getContent());
             $this->assertWantedPattern(
-                    '/ckey=cvalue/',
-                    $reponse->getContent());
+                    '/gkey=\[gvalue\]/',
+                    $response->getContent());
+            $this->assertWantedPattern(
+                    '/ckey=\[cvalue\]/',
+                    $response->getContent());
+        }
+        function testHttpPost() {
+            $http = &new SimpleHttpPushRequest(
+                    new SimpleUrl("www.lastcraft.com/test/network_confirm.php"),
+                    "Some post data");
+            $this->assertIsA($response = &$http->fetch(), "SimpleHttpResponse");
+            $this->assertWantedPattern(
+                    '/Request method.*?<dd>POST<\/dd>/',
+                    $response->getContent());
+            $this->assertWantedPattern(
+                    '/Raw POST data.*?\s+\[Some post data\]/',
+                    $response->getContent());
         }
     }
     
