@@ -63,7 +63,7 @@
          *    @param $method        Test method name.
          *    @public
          */
-        function handleTestMethodStart($method) {
+        function handleMethodStart($method) {
             $this->_reporter->paintStart($method, 0);
         }
         
@@ -72,7 +72,7 @@
          *    @param $method        Test method name.
          *    @public
          */
-        function handleTestMethodEnd($method) {
+        function handleMethodEnd($method) {
             $this->_reporter->paintStart($method, 0);
         }
         
@@ -82,7 +82,7 @@
          *    @param $label        Test case name.
          *    @public
          */
-        function handleTestCaseStart($label) {
+        function handleCaseStart($label) {
             $this->_reporter->paintStart($label, 1);
         }
         
@@ -92,7 +92,7 @@
          *    @param $label        Test case name.
          *    @public
          */
-        function handleTestCaseEnd($label) {
+        function handleCaseEnd($label) {
             $this->_reporter->paintStart($label, 1);
         }
         
@@ -102,7 +102,7 @@
          *    @param $size         Number of test cases held.
          *    @public
          */
-        function handleTestStart($label, $size) {
+        function handleGroupStart($label, $size) {
             $this->_reporter->paintStart($label, $size);
         }
         
@@ -111,8 +111,12 @@
          *    @param $label        Test case name.
          *    @public
          */
-        function handleTestEnd($label) {
+        function handleGroupEnd($label) {
             $this->_reporter->paintStart($label, 0);
+        }
+        
+        function notify($event) {
+            $this->_reporter->notify($event);
         }
     }
     
@@ -120,7 +124,7 @@
      *    Interface used by the test displays and group tests.
      */
     class RunnableTest {
-        var $_observer;
+        var $_reporter;
         var $_label;
         
         /**
@@ -131,7 +135,7 @@
          */
         function RunnableTest($label) {
             $this->_label = $label;
-            $this->_observer;
+            $this->_reporter = false;
         }
         
         /**
@@ -148,16 +152,16 @@
          *    @public
          */
         function run() {
-            $this->accept($this->_observer);
+            $this->accept(new TestRunner($this->_reporter));
         }
         
         /**
-         *    Accepts a runner.
+         *    Accepts a runner, either a dummy or a real one.
          *    @param $runner        Test runner.
          *    @public
          *    @abstract
          */
-        function accept(&$observer) {
+        function accept(&$runner) {
         }
         
         /**
@@ -171,11 +175,11 @@
         
         /**
          *    Adds an object with a notify() method.
-         *    @param $observer    Observer added to the internal list.
+         *    @param $repoter    Reporter stash for compatibility.
          *    @public
          */
-        function attachObserver(&$observer) {
-            $this->_observer = &$observer;
+        function attachObserver(&$reporter) {
+            $this->_reporter = &$reporter;
         }
     }
 
@@ -205,10 +209,11 @@
         /**
          *    Uses reflection to run every method within itself
          *    starting with the string "test".
+         *    @param $runner    Current test runner.
          *    @public
          */
-        function accept(&$observer) {
-            $observer->notify(new TestCaseStart($this->getLabel()));
+        function accept(&$runner) {
+            $runner->notify(new TestCaseStart($this->getLabel()));
             $methods = get_class_methods(get_class($this));
             foreach ($methods as $method) {
                 if (strtolower(substr($method, 0, 4)) != "test") {
@@ -217,18 +222,20 @@
                 if (is_a($this, strtolower($method))) {
                     continue;
                 }
-                $observer->notify(new TestMethodStart($method));
-                $this->invoke($observer, $method);
-                $observer->notify(new TestMethodEnd($method));
+                $runner->notify(new TestMethodStart($method));
+                $this->invoke($runner, $method);
+                $runner->notify(new TestMethodEnd($method));
             }
-            $observer->notify(new TestCaseEnd($this->getLabel()));
+            $runner->notify(new TestCaseEnd($this->getLabel()));
         }
         
         /**
          *    Invokes a test method.
+         *    @param $runner    Current test runner.
+         *    @public
          */
-        function invoke(&$observer, $method) {
-            $this->_current_runner = &$observer;
+        function invoke(&$runner, $method) {
+            $this->_current_runner = &$runner;
             $this->setUp();
             $this->$method();
             $this->tearDown();
@@ -393,15 +400,16 @@
         }
         
         /**
-         *    Invokes run() on all of the held tests.
+         *    Invokes accept() on all of the held test cases.
+         *    @param $runner    Current test runner.
          *    @public
          */
-        function accept(&$observer) {
-            $observer->notify(new GroupTestStart($this->getLabel(), $this->getSize()));
+        function accept(&$runner) {
+            $runner->notify(new GroupTestStart($this->getLabel(), $this->getSize()));
             for ($i = 0; $i < count($this->_test_cases); $i++) {
-                $this->_test_cases[$i]->accept($observer);
+                $this->_test_cases[$i]->accept($runner);
             }
-            $observer->notify(new GroupTestEnd($this->getLabel()));
+            $runner->notify(new GroupTestEnd($this->getLabel()));
         }
         
         /**
