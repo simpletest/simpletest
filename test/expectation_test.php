@@ -6,6 +6,7 @@
         function TestOfEquality() {
             $this->UnitTestCase();
         }
+        
         function testBoolean() {
             $is_true = &new EqualExpectation(true);
             $this->assertTrue($is_true->test(true));
@@ -17,6 +18,7 @@
                     '/fails.*?boolean.*?boolean/i',
                     $is_true->testMessage(false));
         }
+        
         function testStringMatch() {
             $hello = &new EqualExpectation("Hello");
             $this->assertTrue($hello->test("Hello"));
@@ -25,6 +27,7 @@
             $this->assertWantedPattern('/fails/', $hello->testMessage("Goodbye"));
             $this->assertWantedPattern('/fails.*?goodbye/i', $hello->testMessage("Goodbye"));
         }
+        
         function testStringPosition() {
             $comparisons = array(
                     "ab" => 2,
@@ -46,6 +49,7 @@
                         $str->testMessage($compare));
             }
         }
+        
         function testInteger() {
             $fifteen = &new EqualExpectation(15);
             $this->assertTrue($fifteen->test(15));
@@ -57,6 +61,7 @@
                     '/fails.*?15.*?14/i',
                     $fifteen->testMessage(14));
         }
+        
         function testFloat() {
             $pi = &new EqualExpectation(3.14);
             $this->assertTrue($pi->test(3.14));
@@ -68,6 +73,7 @@
                     '/fails.*?3\.14.*?3\.15/i',
                     $pi->testMessage(3.15));
         }
+        
         function testArray() {
             $colours = &new EqualExpectation(array("r", "g", "b"));
             $this->assertTrue($colours->test(array("r", "g", "b")));
@@ -86,6 +92,7 @@
                     '/key.*? does not match/',
                     $colours->testMessage(array("r", "g", "b", "z")));
         }
+        
         function testHash() {
             $blue = &new EqualExpectation(array("r" => 0, "g" => 0, "b" => 255));
             $this->assertTrue($blue->test(array("r" => 0, "g" => 0, "b" => 255)));
@@ -97,6 +104,7 @@
                     '/fails.*?\[b\]/',
                     $blue->testMessage(array("r" => 0, "g" => 0, "b" => 254)));
         }
+        
         function testNestedHash() {
             $tree = &new EqualExpectation(array(
                     "a" => 1,
@@ -117,6 +125,7 @@
         function TestOfInequality() {
             $this->UnitTestCase();
         }
+        
         function testStringMismatch() {
             $not_hello = &new NotEqualExpectation("Hello");
             $this->assertTrue($not_hello->test("Goodbye"));
@@ -134,6 +143,7 @@
         function TestOfIdentity() {
             $this->UnitTestCase();
         }
+        
         function testType() {
             $string = &new IdenticalExpectation("37");
             $this->assertTrue($string->test("37"));
@@ -155,6 +165,7 @@
         function TestOfNonIdentity() {
             $this->UnitTestCase();
         }
+        
         function testType() {
             $string = &new NotIdenticalExpectation("37");
             $this->assertTrue($string->test("38"));
@@ -173,11 +184,13 @@
         function TestOfPatterns() {
             $this->UnitTestCase();
         }
+        
         function testWanted() {
             $pattern = &new WantedPatternExpectation('/hello/i');
             $this->assertTrue($pattern->test("Hello world"));
             $this->assertFalse($pattern->test("Goodbye world"));
         }
+        
         function testUnwanted() {
             $pattern = &new UnwantedPatternExpectation('/hello/i');
             $this->assertFalse($pattern->test("Hello world"));
@@ -193,6 +206,7 @@
         function TestOfMethodExistence() {
             $this->UnitTestCase();
         }
+        
         function testHasMethod() {
             $instance = &new ExpectedMethodTarget();
             $expectation = &new MethodExistsExpectation('hasThisMethod');
@@ -206,11 +220,13 @@
         function TestOfIsA() {
             $this->UnitTestCase();
         }
+        
         function testString() {
             $expectation = &new IsAExpectation('string');
             $this->assertTrue($expectation->test('Hello'));
             $this->assertFalse($expectation->test(5));
         }
+        
         function testBoolean() {
             $expectation = &new IsAExpectation('boolean');
             $this->assertTrue($expectation->test(true));
@@ -221,26 +237,31 @@
             $this->assertTrue($expectation->test(true));
             $this->assertFalse($expectation->test(1));
         }
+        
         function testDouble() {
             $expectation = &new IsAExpectation('double');
             $this->assertTrue($expectation->test(5.0));
             $this->assertFalse($expectation->test(5));
         }
+        
         function testFloat() {
             $expectation = &new IsAExpectation('float');
             $this->assertTrue($expectation->test(5.0));
             $this->assertFalse($expectation->test(5));
         }
+        
         function testReal() {
             $expectation = &new IsAExpectation('real');
             $this->assertTrue($expectation->test(5.0));
             $this->assertFalse($expectation->test(5));
         }
+        
         function testInteger() {
             $expectation = &new IsAExpectation('integer');
             $this->assertTrue($expectation->test(5));
             $this->assertFalse($expectation->test(5.0));
         }
+        
         function testInt() {
             $expectation = &new IsAExpectation('int');
             $this->assertTrue($expectation->test(5));
@@ -252,6 +273,7 @@
         function TestOfNotA() {
             $this->UnitTestCase();
         }
+        
         function testString() {
             $expectation = &new NotAExpectation('string');
             $this->assertFalse($expectation->test('Hello'));

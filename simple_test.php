@@ -555,8 +555,29 @@
          */
         function addTestFile($test_file) {
             $existing_classes = get_declared_classes();
+            $old_setting = ini_get('track_errors');
+            ini_set('track_errors', true);
             require($test_file);
-            $group = new GroupTest($test_file);
+            ini_set('track_errors', $old_setting);
+            if (isset($php_errormsg)) {
+                $group = new BadGroupTest($test_file, $php_errormsg);
+            } else {
+                $group = $this->_createGroupFromNewTests($test_file, $existing_classes);
+            }
+            $this->addTestCase($group);
+        }
+        
+        /**
+         *    Builds a group test from any new classes hat have
+         *    been loaded since a previous benchmark listing.
+         *    @param string $title            Title of new group.
+         *    @param array $existing_classes  Previous class listing.
+         *    @return GroupTest               Grouploaded with the new
+         *                                    test cases.
+         *    @access private
+         */
+        function _createGroupFromNewTests($title, $existing_classes) {
+            $group = new GroupTest($title);
             foreach (get_declared_classes() as $class) {
                 if (in_array($class, $existing_classes)) {
                     continue;
@@ -569,7 +590,7 @@
                 }
                 $group->addTestClass($class);
             }
-            $this->addTestCase($group);
+            return $group;
         }
         
         /**
@@ -623,6 +644,59 @@
                 }
             }
             return $count;
+        }
+    }
+    
+    /**
+     *    This is a failing group test for when a test suite hasn't
+     *    loaded properly.
+	 *    @package		SimpleTest
+	 *    @subpackage	UnitTester
+     */
+    class BadGroupTest {
+        var $_label;
+        var $_error;
+        
+        /**
+         *    Sets the name of the test suite and error message.
+         *    @param string $label    Name sent at the start and end
+         *                            of the test.
+         *    @access public
+         */
+        function BadGroupTest($label, $error) {
+            $this->_label = $label;
+            $this->_error = $error;
+        }
+        
+        /**
+         *    Accessor for the test name for subclasses.
+         *    @return string           Name of the test.
+         *    @access public
+         */
+        function getLabel() {
+            return $this->_label;
+        }
+        
+        /**
+         *    Sends a single error to the reporter.
+         *    @param SimpleReporter $reporter    Current test reporter.
+         *    @access public
+         */
+        function run(&$reporter) {
+            $reporter->paintGroupStart($this->getLabel(), $this->getSize());
+            $reporter->paintFail('Bad GroupTest [' . $this->getLabel() .
+                    '] with error [' . $this->_error . ']');
+            $reporter->paintGroupEnd($this->getLabel());
+            return $reporter->getStatus();
+        }
+        
+        /**
+         *    Number of contained test cases. Always zero.
+         *    @return integer     Total count of cases in the group.
+         *    @access public
+         */
+        function getSize() {
+            return 0;
         }
     }
 ?>
