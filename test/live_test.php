@@ -389,6 +389,16 @@
             $this->retry();
             $this->assertWantedPattern('/count: 3/i');
         }
+        function testPostRetryResubmitsData() {
+            $this->assertTrue($this->post(
+                    'http://www.lastcraft.com/test/network_confirm.php',
+                    array('a' => 'aaa')));
+            $this->assertWantedPattern('/Request method.*?<dd>POST<\/dd>/');
+            $this->assertWantedPattern('/a=\[aaa\]/');
+            $this->retry();
+            $this->assertWantedPattern('/Request method.*?<dd>POST<\/dd>/');
+            $this->assertWantedPattern('/a=\[aaa\]/');
+        }
     }
     
     class TestOfAuthentication extends WebTestCase {
