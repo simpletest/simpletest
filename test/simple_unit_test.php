@@ -56,6 +56,10 @@
             $this->assertIdentical($a, $b, "#%s#");        // Fail.
             $this->assertNotIdentical($a, $b, "#%s#");
         }
+        function testOfHashEquality() {
+            $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"));
+            $this->assertIdentical(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"));        // Fail.
+        }
         function testOfReference() {
             $a = "fred";
             $b = &$a;
@@ -73,7 +77,7 @@
         }
     }
     
-    $test = new GroupTest("Unit test case test, 14 fails and 14 passes");
+    $test = new GroupTest("Unit test case test, 15 fails and 15 passes");
     $display = new TestHTMLDisplay();
     $test->attachObserver($display);
     $test->addTestCase(new TestOfUnitTestCase());
