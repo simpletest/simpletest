@@ -106,7 +106,10 @@
         var $_id;
         var $_buttons;
         var $_images;
+        var $_widget_hash;
         var $_widgets;
+        var $_radios;
+        var $_checkboxes;
         
         /**
          *    Starts with no held controls/widgets.
@@ -120,7 +123,10 @@
             $this->_id = $tag->getAttribute('id');
             $this->_buttons = array();
             $this->_images = array();
+            $this->_widget_hash = array();
             $this->_widgets = array();
+            $this->_radios = array();
+            $this->_checkboxes = array();
         }
         
         /**
@@ -209,7 +215,8 @@
             } elseif (strtolower($tag->getAttribute('type')) == 'checkbox') {
                 $this->_addCheckbox($tag);
             } else {
-                $this->_widgets[$tag->getName()] = &$tag;
+                $this->_widget_hash[$tag->getName()] = &$tag;
+                $this->_widgets[] = &$tag;
             }
         }
         
@@ -219,10 +226,16 @@
          *    @access private
          */
         function _addRadioButton($tag) {
-            if (! isset($this->_widgets[$tag->getName()])) {
-                $this->_widgets[$tag->getName()] = &new SimpleRadioGroup();
+            if (! isset($this->_widget_hash[$tag->getName()])) {
+                $this->_widget_hash[$tag->getName()] = &new SimpleRadioGroup();
             }
-            $this->_widgets[$tag->getName()]->addWidget($tag);
+            $this->_widget_hash[$tag->getName()]->addWidget($tag);
+            
+            if (! isset($this->_radios[$tag->getName()])) {
+                $this->_widgets[] = &new SimpleRadioGroup();
+                $this->_radios[$tag->getName()] = count($this->_widgets) - 1;
+            }
+            $this->_widgets[$this->_radios[$tag->getName()]]->addWidget($tag);
         }
         
         /**
@@ -231,15 +244,28 @@
          *    @access private
          */
         function _addCheckbox($tag) {
-            if (! isset($this->_widgets[$tag->getName()])) {
-                $this->_widgets[$tag->getName()] = &$tag;
-            } elseif (! SimpleTestCompatibility::isA($this->_widgets[$tag->getName()], 'SimpleCheckboxGroup')) {
-                $previous = &$this->_widgets[$tag->getName()];
-                $this->_widgets[$tag->getName()] = &new SimpleCheckboxGroup();
-                $this->_widgets[$tag->getName()]->addWidget($previous);
-                $this->_widgets[$tag->getName()]->addWidget($tag);
+            if (! isset($this->_widget_hash[$tag->getName()])) {
+                $this->_widget_hash[$tag->getName()] = &$tag;
+            } elseif (! SimpleTestCompatibility::isA($this->_widget_hash[$tag->getName()], 'SimpleCheckboxGroup')) {
+                $previous = &$this->_widget_hash[$tag->getName()];
+                $this->_widget_hash[$tag->getName()] = &new SimpleCheckboxGroup();
+                $this->_widget_hash[$tag->getName()]->addWidget($previous);
+                $this->_widget_hash[$tag->getName()]->addWidget($tag);
             } else {
-                $this->_widgets[$tag->getName()]->addWidget($tag);
+                $this->_widget_hash[$tag->getName()]->addWidget($tag);
+            }
+            
+            if (! isset($this->_checkboxes[$tag->getName()])) {
+                $this->_widgets[] = &$tag;
+                $this->_checkboxes[$tag->getName()] = count($this->_widgets) - 1;
+            } else {
+                $index = $this->_checkboxes[$tag->getName()];
+                if (! SimpleTestCompatibility::isA($this->_widgets[$index], 'SimpleCheckboxGroup')) {
+                    $previous = &$this->_widgets[$index];
+                    $this->_widgets[$index] = &new SimpleCheckboxGroup();
+                    $this->_widgets[$index]->addWidget($previous);
+                }
+                $this->_widgets[$index]->addWidget($tag);
             }
         }
         
@@ -251,9 +277,9 @@
          *    @access public
          */
         function _getValueBySelector($selector) {
-            foreach ($this->_widgets as $widget) {
-                if ($selector->isMatch($widget)) {
-                    return $widget->getValue();
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                if ($selector->isMatch($this->_widgets[$i])) {
+                    return $this->_widgets[$i]->getValue();
                 }
             }
             foreach ($this->_buttons as $button) {
@@ -296,9 +322,9 @@
          *    @access public
          */
         function _setFieldBySelector($selector, $value) {
-            foreach (array_keys($this->_widgets) as $name) {
-                if ($selector->ismatch($this->_widgets[$name])) {
-                    return $this->_widgets[$name]->setValue($value);
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                if ($selector->isMatch($this->_widgets[$i])) {
+                    return $this->_widgets[$i]->setValue($value);
                 }
             }
             return false;
@@ -339,8 +365,9 @@
          */
         function getValues() {
             $values = array();
-            foreach (array_keys($this->_widgets) as $name) {
-                $new = $this->_widgets[$name]->getValue();
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                $name = $this->_widgets[$i]->getName();
+                $new = $this->_widgets[$i]->getValue();
                 if (is_string($new)) {
                     $values[$name] = $new;
                 } elseif (is_array($new)) {
