@@ -291,9 +291,13 @@
         function testFailedCallCount() {
             $mock = &new MockDummy(new MockTestCase($this));
             $mock->setExpectedCallCount("aMethod", 2);
-            $this->assertFalse($mock->tally());
+            $this->assertFalse($mock->tally(), "Empty tally");
             $mock->aMethod();
-            $this->assertFalse($mock->tally(), "Tally");
+            $this->assertFalse($mock->tally(), "Bad tally");
+            $mock->aMethod();
+            $this->assertTrue($mock->tally(), "Good tally");
+            $mock->aMethod();
+            $this->assertFalse($mock->tally(), "Overrun tally");
         }
     }
     
