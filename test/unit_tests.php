@@ -21,6 +21,7 @@
             $this->addTestFile("http_test.php");
             $this->addTestFile("browser_test.php");
             $this->addTestFile("parser_test.php");
+            $this->addTestFile("tag_test.php");
             $this->addTestFile("page_test.php");
             $this->addTestFile("web_test_case_test.php");
         }
