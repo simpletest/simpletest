@@ -34,7 +34,7 @@ Move unecessary expectations into accessors (2).
 Web tester
 ----------
 Connect up page failure expectations (3).
-Connect cookie expectations (2/4).
+Connect cookie expectations (2/6) - done.
 Add form submission to navigation (2).
 Connect up session start method on browser (1).
 

@@ -96,6 +96,8 @@
         function testCookieReading() {
             $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
             $this->assertCookie("session_cookie", "A");
+            $this->assertCookie("short_cookie", "B");
+            $this->assertCookie("day_cookie", "C");
         }
         function testCookieExpectation() {
             $this->expectCookie("session_cookie");
@@ -108,7 +110,16 @@
         function testTemporaryCookieExpiry() {
             $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
             $this->restartSession();
-            $this->AssertNoCookie("session_cookie");
+            $this->assertNoCookie("session_cookie");
+            $this->assertCookie("short_cookie", "B");
+            $this->assertCookie("day_cookie", "C");
+        }
+        function testTimedCookieExpiry() {
+            $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
+            $this->restartSession(time() + 101);
+            $this->assertNoCookie("session_cookie");
+            $this->assertNoCookie("short_cookie");
+            $this->assertCookie("day_cookie", "C");
         }
     }
 ?>

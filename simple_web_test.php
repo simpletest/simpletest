@@ -201,7 +201,8 @@
          *    specified time.
          *    @param $date        Time when session restarted.
          *                        If ommitted then all persistent
-         *                        cookies are kept.
+         *                        cookies are kept. Time is either
+         *                        Cookie format string or timestamp.
          *    @public
          */
         function restartSession($date = false) {
