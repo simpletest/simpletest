@@ -562,15 +562,12 @@
         
         /**
          *    Fetches the content and parses the headers.
-         *    @param $socket   Test override.
          *    @return          A SimpleHttpResponse which may have
          *                     an error.
          *    @public
          */
-        function &fetch($socket = false) {
-            if (!is_object($socket)) {
-                $socket = new SimpleSocket($this->_url->getHost());
-            }
+        function &fetch() {
+            $socket = &$this->_createSocket($this->_url->getHost());
             if ($socket->isError()) {
                 return $this->_createResponse($socket);
             }
@@ -628,6 +625,15 @@
                 $cookie_pairs[] = $cookie->getName() . "=" . $cookie->getValue();
             }
             return implode(";", $cookie_pairs);
+        }
+        
+        /**
+         *    Factory for socket. Separate method for mocking.
+         *    @param $host        Hostname as string.
+         *    @protected
+         */
+        function &_createSocket($host) {
+            return new SimpleSocket($host);
         }
         
         /**

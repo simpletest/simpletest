@@ -201,7 +201,7 @@
             $response = $browser->fetchResponse(
                     "GET",
                     new SimpleUrl("http://this.com/this/path/page.html"),
-                    &$request);
+                    array());
             $this->assertEqual($response->getContent(), "stuff");
             $request->tally();
         }
@@ -212,7 +212,7 @@
             $browser->fetchResponse(
                     "GET",
                     new SimpleUrl("http://this.host/this/path/page.html"),
-                    $request);
+                    array());
             $this->assertEqual($browser->getCookieValue("this.com", "this/path/", "a"), "AAAA");
         }
         function testClearCookie() {
@@ -259,7 +259,7 @@
                     array("GET", $url, array("a" => "A", "b" => "B")));
             $browser->SimpleBrowser();
             $this->assertIdentical(
-                    $browser->get("http://this.com/page.html", array("a" => "A", "b" => "B"), &$this->_request),
+                    $browser->get("http://this.com/page.html", array("a" => "A", "b" => "B")),
                     "stuff");
             $browser->tally();
         }
@@ -276,7 +276,7 @@
             $browser->expectCallCount("fetchResponse", 1);
             $browser->SimpleBrowser();
             $this->assertIdentical(
-                    $browser->head("http://this.com/page.html", array("a" => "A", "b" => "B"), &$this->_request),
+                    $browser->head("http://this.com/page.html", array("a" => "A", "b" => "B")),
                     true);
             $browser->tally();
         }
@@ -293,7 +293,7 @@
                     array("POST", new SimpleUrl("http://this.com/page.html"), array("a" => "A", "b" => "B")));
             $browser->SimpleBrowser();
             $this->assertIdentical(
-                    $browser->post("http://this.com/page.html", array("a" => "A", "b" => "B"), &$this->_request),
+                    $browser->post("http://this.com/page.html", array("a" => "A", "b" => "B")),
                     "stuff");
             $browser->tally();
         }

@@ -422,7 +422,7 @@
         
         function TestSimpleSaxParser(&$listener, &$lexer) {
             $this->_lexer = &$lexer;
-            $this->SimpleSaxParser(&$listener);
+            $this->SimpleSaxParser($listener);
         }
         function &createLexer() {
             return $this->_lexer;

@@ -240,20 +240,26 @@
             $this->assertFalse($cookie->isExpired("Mon, 18 Nov 2002 15:50:28 GMT"));
         }
     }
+    
+    mock::generatePartial(
+            'SimpleHttpRequest',
+            'PartialSimpleHttpRequest',
+            array('_createSocket'));
 
     class TestOfHttpRequest extends UnitTestCase {
         function TestOfHttpRequest() {
             $this->UnitTestCase();
         }
         function testReadingBadConnection() {
-            $request = new SimpleHttpRequest(new SimpleUrl("http://a.bad.page/"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", true);
-            $reponse = &$request->fetch(&$socket);
+            $request = &new PartialSimpleHttpRequest($this);
+            $request->setReturnReference('_createSocket', $socket);
+            $request->SimpleHttpRequest(new SimpleUrl("http://a.bad.page/"));
+            $reponse = &$request->fetch();
             $this->assertTrue($reponse->isError());
         }
         function testReadingGoodConnection() {
-            $request = new SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
             $socket->expectArgumentsAt(0, "write", array("GET /and/path HTTP/1.0\r\n"));
@@ -261,20 +267,24 @@
             $socket->expectArgumentsAt(2, "write", array("Connection: close\r\n"));
             $socket->expectArgumentsAt(3, "write", array("\r\n"));
             $socket->expectCallCount("write", 4);
-            $this->assertIsA($request->fetch(&$socket), "SimpleHttpResponse");
+            $request = &new PartialSimpleHttpRequest($this);
+            $request->setReturnReference('_createSocket', $socket);
+            $request->expectArguments('_createSocket', array('a.valid.host'));
+            $request->SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path"));
+            $this->assertIsA($request->fetch(), "SimpleHttpResponse");
             $socket->tally();
         }
         function testWritingGetRequest() {
-            $request = new SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path?a=A&b=B"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
             $socket->expectArgumentsAt(0, "write", array("GET /and/path?a=A&b=B HTTP/1.0\r\n"));
-            $request->fetch(&$socket);
+            $request = &new PartialSimpleHttpRequest($this);
+            $request->setReturnReference('_createSocket', $socket);
+            $request->SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path?a=A&b=B"));
+            $request->fetch();
             $socket->tally();
         }
         function testWritingAdditionalHeaders() {
-            $request = new SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path"));
-            $request->addHeaderLine("My: stuff");
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
             $socket->expectArgumentsAt(0, "write", array("GET /and/path HTTP/1.0\r\n"));
@@ -283,12 +293,14 @@
             $socket->expectArgumentsAt(3, "write", array("Connection: close\r\n"));
             $socket->expectArgumentsAt(4, "write", array("\r\n"));
             $socket->expectCallCount("write", 5);
-            $request->fetch(&$socket);
+            $request = &new PartialSimpleHttpRequest($this);
+            $request->setReturnReference('_createSocket', $socket);
+            $request->SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path"));
+            $request->addHeaderLine("My: stuff");
+            $request->fetch();
             $socket->tally();
         }
         function testCookieWriting() {
-            $request = new SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path"));
-            $request->setCookie(new SimpleCookie("a", "A"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
             $socket->expectArgumentsAt(0, "write", array("GET /and/path HTTP/1.0\r\n"));
@@ -297,17 +309,23 @@
             $socket->expectArgumentsAt(3, "write", array("Connection: close\r\n"));
             $socket->expectArgumentsAt(4, "write", array("\r\n"));
             $socket->expectCallCount("write", 5);
-            $this->assertIsA($request->fetch(&$socket), "SimpleHttpResponse");
+            $request = &new PartialSimpleHttpRequest($this);
+            $request->setReturnReference('_createSocket', $socket);
+            $request->SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path"));
+            $request->setCookie(new SimpleCookie("a", "A"));
+            $this->assertIsA($request->fetch(), "SimpleHttpResponse");
             $socket->tally();
         }
         function testMultipleCookieWriting() {
-            $request = new SimpleHttpRequest(new SimpleUrl("a.valid.host/and/path"));
-            $request->setCookie(new SimpleCookie("a", "A"));
-            $request->setCookie(new SimpleCookie("b", "B"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
             $socket->expectArgumentsAt(2, "write", array("Cookie: a=A;b=B\r\n"));
-            $request->fetch(&$socket);
+            $request = &new PartialSimpleHttpRequest($this);
+            $request->setReturnReference('_createSocket', $socket);
+            $request->SimpleHttpRequest(new SimpleUrl("a.valid.host/and/path"));
+            $request->setCookie(new SimpleCookie("a", "A"));
+            $request->setCookie(new SimpleCookie("b", "B"));
+            $request->fetch();
             $socket->tally();
         }
     }

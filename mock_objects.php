@@ -917,7 +917,7 @@
             $code  = "class $mock_class extends $class {\n";
             $code .= "    var \$_mock;\n";
             $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_WILDCARD) {\n";
-            $code .= "        \$this->_mock = &new $mock_base(&\$test, \$wildcard, false);\n";
+            $code .= "        \$this->_mock = &new $mock_base(\$test, \$wildcard, false);\n";
             $code .= "    }\n";
             $code .= Mock::_chainMockReturns();
             $code .= Mock::_chainMockExpectations();

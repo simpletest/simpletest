@@ -71,7 +71,7 @@
         function testExactReference() {
             $map = new CallMap("wild");
             $ref = "Fred";
-            $map->addReference(array(0), &$ref);
+            $map->addReference(array(0), $ref);
             $this->assertEqual($map->findFirstMatch(array(0)), "Fred");
             $this->assertReference($map->findFirstMatch(array(0)), $ref);
         }
