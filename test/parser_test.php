@@ -235,21 +235,6 @@
         }
     }
     
-    Mock::generate("HtmlPage");
-    
-    class TestOfParser extends UnitTestCase {
-        function TestOfParser() {
-            $this->UnitTestCase();
-        }
-        function testEmptyPage() {
-            $page = &new MockHtmlPage($this);
-            $page->expectCallCount("addLink", 0);
-            $parser = &new HtmlParser();
-            $this->assertTrue($parser->parse("", $page));
-            $page->tally();
-        }
-    }
-    
     class TestOfHtmlPage extends UnitTestCase {
         function TestOfHtmlPage() {
             $this->UnitTestCase();

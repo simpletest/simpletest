@@ -314,45 +314,141 @@
     }
     
     /**
-     *    Accepts HTML and breaks it into tokens.
+     *    Accepts HTML and breaks it into tokens for the
+     *    (usually SAX) parser.
      */
     class SimpleHtmlLexer extends SimpleLexer {
         
         /**
          *    Sets up the lexer.
-         *    @param $parser     Handling strategy by
-         *                       reference.
-         *    @param $start      Starting mode.
+         *    @param $parser   Downstream parse event generator.
          *    @public
          */
-        function SimpleHtmlLexer(&$parser, $start = "ignore") {
+        function SimpleHtmlLexer(&$parser) {
         }
     }
-        
+    
     /**
-     *    Accepts incoming tokens and uses it to
-     *    build a web page model.
+     *    Converts HTML tokens into selected SAX events.
      */
-    class HtmlParser {
+    class HtmlSaxParser {
         
         /**
-         *    Sets up the parser to receive the input.
+         *    Sets the listener and lexer.
+         *    @param $lexer    Selective lexer to use.
+         *    @param $listener SAX event handler.
          *    @public
          */
-        function HtmlParser() {
+        function HtmlSaxParser(&$lexer, &$listener) {
         }
         
         /**
-         *    Parses the page text to create a new web
-         *    page document model.
-         *    @param $raw        Raw HTML text.
-         *    @param $page       Page to set information in
-         *                       for testing purposes.
-         *    @return            A page object or false on fail.
+         *    Runs the content through the held lexer.
+         *    @param $raw      Page text to parse.
+         *    @return          False if parse error.
          *    @public
          */
-        function parse($raw, $page = false) {
-            return $page;
+        function parse($raw) {
+        }
+        
+        /**
+         *    Accepts a token from the tag mode.
+         *    @param $token    Incoming characters.
+         *    @return          False if parse error.
+         *    @public
+         */
+        function acceptStartToken($token) {
+        }
+        
+        /**
+         *    Accepts a token from the end tag mode.
+         *    @param $token    Incoming characters.
+         *    @return          False if parse error.
+         *    @public
+         */
+        function acceptEndToken($token) {
+        }
+        
+        /**
+         *    Part of the tag data.
+         *    @param $token    Incoming characters.
+         *    @return          False if parse error.
+         *    @public
+         */
+        function acceptAttributeToken($token) {
+        }
+        
+        /**
+         *    A character entity.
+         *    @param $token    Incoming characters.
+         *    @return          False if parse error.
+         *    @public
+         */
+        function acceptEntity($token) {
+        }
+        
+        /**
+         *    Character data between tags regarded as
+         *    important.
+         *    @param $token    Incoming characters.
+         *    @return          False if parse error.
+         *    @public
+         */
+        function acceptText($token) {
+        }
+        
+        /**
+         *    Incoming data to be ignored.
+         *    @param $token    Incoming characters.
+         *    @return          False if parse error.
+         *    @public
+         */
+        function ignore($token) {
+        }
+    }
+    
+    /**
+     *    SAX event handler. Maintains a list of
+     *    open tags and dispatches them as they close.
+     */
+    class HtmlSaxListener {
+        
+        /**
+         *    Sets the document to write to.
+         *    @param $page    Page to add information to.
+         *    @public
+         */
+        function HtmlSaxListener(&$page) {
+        }
+        
+        /**
+         *    Start of element event.
+         *    @param $name        Element name.
+         *    @param $attributes  Hash of name value pairs.
+         *                        Attributes without content
+         *                        are marked as true.
+         *    @return             False on parse error.
+         *    @public
+         */
+        function startElement($name, $attributes) {
+        }
+        
+        /**
+         *    End of element event.
+         *    @param $name        Element name.
+         *    @return             False on parse error.
+         *    @public
+         */
+        function endElement($name) {
+        }
+        
+        /**
+         *    Unparsed, but relevant data.
+         *    @param $text        May include unparsed tags.
+         *    @return             False on parse error.
+         *    @public
+         */
+        function unparsedData($text) {
         }
     }
     
