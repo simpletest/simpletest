@@ -94,6 +94,8 @@
             $this->assertWantedPattern('/target for the SimpleTest/');
             $this->assertTitle('Simple test target file');
         }
+        function testFetchWithGetData() {
+        }
         function testRelativeFetch() {
             $this->fetch('http://www.lastcraft.com/test/link_confirm.php');
             $this->fetch('./network_confirm.php');

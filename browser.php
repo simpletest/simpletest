@@ -226,9 +226,9 @@
         
         /**
          *    Fetches the page content with a GET request.
-         *    @param $raw_url    Target to fetch as string.
-         *    @param $request    Test version of SimpleHttpRequest.
-         *    @return            Content of page.
+         *    @param $raw_url      Target to fetch as string.
+         *    @param $request      Test version of SimpleHttpRequest.
+         *    @return              Content of page.
          *    @public
          */
         function fetchContent($raw_url, $request = false) {

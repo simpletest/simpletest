@@ -90,10 +90,11 @@
          *    there is no base for the URL then the
          *    current base URL is used. All other context
          *    remains the same.
-         *    @param $url        URL to fetch.
+         *    @param $url          URL to fetch.
+         *    @param $parameters   Optional additional GET data.
          *    @public
          */
-        function fetch($url) {
+        function fetch($url, $parameters = false) {
             $this->_current_content = $this->_current_browser->fetchContent($url);
             $this->_clearHtmlCache();
         }
