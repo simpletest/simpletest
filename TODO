@@ -29,7 +29,7 @@ Browser
 Frames support (8).
 Simple authentication support (4).
 Image fetching (4).
-Need repeated parameters in query strings (0/3).
+Need repeated parameters in query strings (0/3) - done.
 
 Web tester
 ----------
