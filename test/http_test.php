@@ -58,6 +58,14 @@
             $this->assertIsA($request->fetch(&$socket), "SimpleHttpResponse");
             $socket->tally();
         }
+        function testWritingGetRequest() {
+            $request = new SimpleHttpRequest("http://a.valid.host/and/path?a=A&b=B");
+            $socket = &new MockSimpleSocket($this);
+            $socket->setReturnValue("isError", false);
+            $socket->setExpectedArgumentsSequence(0, "write", array("GET /and/path?a=A&b=B HTTP/1.0\r\n"));
+            $request->fetch(&$socket);
+            $socket->tally();
+        }
         function testWritingAdditionalHeaders() {
             $request = new SimpleHttpRequest("http://a.valid.host/and/path");
             $request->addHeaderLine("My: stuff");
@@ -193,11 +201,20 @@
             $this->UnitTestCase();
         }
         function testRealPageFetch() {
-            $http = new SimpleHttpRequest("www.lastcraft.com/test/network_confirm.php");
+            $http = new SimpleHttpRequest("www.lastcraft.com/test/network_confirm.php?gkey=gvalue");
+            $http->setCookie(new SimpleCookie("ckey", "cvalue"));
             $this->assertIsA($reponse = &$http->fetch(), "SimpleHttpResponse");
+            $this->assertEqual($reponse->getResponseCode(), 200);
+            $this->assertEqual($reponse->getMimeType(), "text/html");
             $this->assertWantedPattern(
                     '/A target for the SimpleTest test suite/',
                     $reponse->getContent());
-        }
+             $this->assertWantedPattern(
+                    '/gkey=gvalue/',
+                    $reponse->getContent());
+             $this->assertWantedPattern(
+                    '/ckey=cvalue/',
+                    $reponse->getContent());
+       }
     }
 ?>

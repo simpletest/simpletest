@@ -89,6 +89,7 @@
     class SimpleHttpRequest {
         var $_host;
         var $_path;
+        var $_query;
         var $_user_headers;
         var $_cookies;
         
@@ -104,6 +105,7 @@
             $url = parse_url($url);
             $this->_host = (isset($url["host"]) ? $url["host"] : "localhost");
             $this->_path = (isset($url["path"]) ? $url["path"] : "");
+            $this->_query = (isset($url["query"]) ? "?" . $url["query"] : "");
             $this->_user_headers = array();
             $this->_cookies = array();
         }
@@ -121,7 +123,7 @@
             if ($socket->isError()) {
                 return false;
             }
-            $socket->write("GET " . $this->_path . " HTTP/1.0\r\n");
+            $socket->write("GET " . $this->_path . $this->_query . " HTTP/1.0\r\n");
             $socket->write("Host: " . $this->_host . "\r\n");
             foreach ($this->_user_headers as $header_line) {
                 $socket->write($header_line . "\r\n");
