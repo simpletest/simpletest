@@ -212,7 +212,7 @@
                     $form->submitButtonByLabel("Go!"),
                     array("go" => "Go!"));            
         }
-        function testSelectWidget() {
+        function testSelect() {
             $form = &new SimpleForm(new SimpleFormTag(array()));
             $select = &new SimpleSelectionTag(array('name' => 'a'));
             $select->addTag(new SimpleOptionTag(
@@ -220,7 +220,7 @@
             $form->addWidget($select);
             $this->assertIdentical($form->submit(), array('a' => 'aaa'));
         }
-        function testUncheckedWidget() {
+        function testUnchecked() {
             $form = &new SimpleForm(new SimpleFormTag(array()));
             $form->addWidget(new SimpleCheckboxTag(
                     array('name' => 'me', 'type' => 'checkbox')));
@@ -230,7 +230,7 @@
             $this->assertFalse($form->setField('me', 'other'));
             $this->assertEqual($form->getValue('me'), 'on');
         }
-        function testCheckedWidget() {
+        function testChecked() {
             $form = &new SimpleForm(new SimpleFormTag(array()));
             $form->addWidget(new SimpleCheckboxTag(
                     array('name' => 'me', 'value' => 'a', 'type' => 'checkbox', 'checked' => '')));
@@ -239,6 +239,21 @@
             $this->assertEqual($form->getValue('me'), 'a');
             $this->assertTrue($form->setField('me', false));
             $this->assertEqual($form->getValue('me'), false);
+        }
+        function testSingleUncheckedRadioButton() {
+            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form->addWidget(new SimpleRadioButtonTag(
+                    array('name' => 'me', 'value' => 'a', 'type' => 'radio')));
+            $this->assertIdentical($form->getValue('me'), false);
+            $this->assertTrue($form->setField('me', 'a'));
+            $this->assertIdentical($form->getValue('me'), 'a');
+        }
+        function testSingleCheckedRadioButton() {
+            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form->addWidget(new SimpleRadioButtonTag(
+                    array('name' => 'me', 'value' => 'a', 'type' => 'radio', 'checked' => '')));
+            $this->assertIdentical($form->getValue('me'), 'a');
+            $this->assertFalse($form->setField('me', 'other'));
         }
     }
 ?>
