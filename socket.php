@@ -5,13 +5,13 @@
      *	@subpackage	MockObjects
      *	@version	$Id$
      */
-    
+
     /**#@+
      * include SimpleTest files
      */
     require_once(dirname(__FILE__) . '/options.php');
     /**#@-*/
-    
+
     /**
      *    Stashes an error for later. Useful for constructors
      *    until PHP gets exceptions.
@@ -20,7 +20,7 @@
      */
     class SimpleStickyError {
         var $_error = 'Constructor not chained';
-        
+
         /**
          *    Sets the error to empty.
          *    @access public
@@ -28,7 +28,7 @@
         function SimpleStickyError() {
             $this->_clearError();
         }
-        
+
         /**
          *    Test for an outstanding error.
          *    @return boolean           True if there is an error.
@@ -37,7 +37,7 @@
         function isError() {
             return ($this->_error != '');
         }
-        
+
         /**
          *    Accessor for an outstanding error.
          *    @return string     Empty string if no error otherwise
@@ -47,7 +47,7 @@
         function getError() {
             return $this->_error;
         }
-        
+
         /**
          *    Sets the internal error.
          *    @param string       Error message to stash.
@@ -56,7 +56,7 @@
         function _setError($error) {
             $this->_error = $error;
         }
-        
+
         /**
          *    Resets the error state to no error.
          *    @access protected
@@ -65,7 +65,7 @@
             $this->_setError('');
         }
     }
-    
+
     /**
      *    Wrapper for TCP/IP socket.
      *    @package SimpleTest
@@ -75,7 +75,7 @@
         var $_handle;
         var $_is_open;
         var $_sent;
-        
+
         /**
          *    Opens a socket for reading and writing.
          *    @param string $host      Hostname to send request to.
@@ -94,7 +94,7 @@
             $this->_is_open = true;
             SimpleTestCompatibility::setTimeout($this->_handle, $timeout);
         }
-        
+
         /**
          *    Writes some data to the socket and saves alocal copy.
          *    @param string $message       String to send to socket.
@@ -117,9 +117,11 @@
             $this->_sent .= $message;
             return true;
         }
-        
+
         /**
-         *    Reads data from the socket.
+         *    Reads data from the socket. The error suppresion
+         *    is a workaround for PHP4 always throwing a warning
+         *    with a secure socket.
          *    @param integer $block_size       Size of chunk to read.
          *    @return integer                  Incoming bytes. False
          *                                     on error.
@@ -129,14 +131,14 @@
             if ($this->isError() || ! $this->isOpen()) {
                 return false;
             }
-            $raw = fread($this->_handle, $block_size);
+            $raw = @fread($this->_handle, $block_size);
             if ($raw === false) {
                 $this->_setError('Cannot read from socket');
                 $this->close();
             }
             return $raw;
         }
-        
+
         /**
          *    Accessor for socket open state.
          *    @return boolean           True if open.
@@ -145,7 +147,7 @@
         function isOpen() {
             return $this->_is_open;
         }
-        
+
         /**
          *    Closes the socket preventing further reads.
          *    Cannot be reopened once closed.
@@ -156,7 +158,7 @@
             $this->_is_open = false;
             return fclose($this->_handle);
         }
-        
+
         /**
          *    Accessor for content so far.
          *    @return string        Bytes sent only.
@@ -165,7 +167,7 @@
         function getSent() {
             return $this->_sent;
         }
-        
+
         /**
          *    Actually opens the low level socket.
          *    @param string $host          Host to connect to.
@@ -179,14 +181,14 @@
             return @fsockopen($host, $port, $error_number, $error, $timeout);
         }
     }
-    
+
     /**
      *    Wrapper for TCP/IP socket over TLS.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
     class SimpleSecureSocket extends SimpleSocket {
-        
+
         /**
          *    Opens a secure socket for reading and writing.
          *    @param string $host      Hostname to send request to.
@@ -197,7 +199,7 @@
         function SimpleSecureSocket($host, $port, $timeout) {
             $this->SimpleSocket($host, $port, $timeout);
         }
-        
+
         /**
          *    Actually opens the low level socket.
          *    @param string $host          Host to connect to.
