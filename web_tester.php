@@ -443,15 +443,15 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class WebTestCaseRunner extends SimpleErrorTrappingRunner {
+    class WebTestCaseInvoker extends SimpleInvokerDecorator {
         
         /**
          *    Takes in the test case and reporter to mediate between.
          *    @param SimpleTestCase $test_case  Test case to run.
          *    @param SimpleScorer $scorer       Reporter to receive events.
          */
-        function WebTestCaseRunner(&$test_case, &$scorer) {
-            $this->SimpleErrorTrappingRunner($test_case, $scorer);
+        function WebTestCaseInvoker(&$invoker) {
+            $this->SimpleInvokerDecorator($invoker);
         }
         
         /**
@@ -488,11 +488,13 @@
         }
         
         /**
-         *    Sets the runner to one that restarts the browser on
+         *    Sets the invoker to one that restarts the browser on
          *    each request.
+         *    @return SimpleInvoker        Invoker for each method.
+         *    @access public
          */
-        function &_createRunner(&$reporter) {
-            return new WebTestCaseRunner($this, $reporter);
+        function &createInvoker() {
+            return new WebTestCaseInvoker(parent::createInvoker());
         }
         
         /**

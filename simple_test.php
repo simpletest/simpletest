@@ -19,11 +19,122 @@
         define('SIMPLE_TEST', dirname(__FILE__) . '/');
     }
     /**#@-*/
+    
+    /**
+     *    This is called by the class runner to run a
+     *    single test method. Will also run the setUp()
+     *    and tearDown() methods.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class SimpleInvoker {
+        var $_test_case;
+        
+        /**
+         *    Stashes the test case for later.
+         *    @param SimpleTestCase $test_case  Test case to run.
+         */
+        function SimpleInvoker(&$test_case) {
+            $this->_test_case = &$test_case;
+        }
+        
+        /**
+         *    Accessor for test case being run.
+         *    @return SimpleTestCase    Test case.
+         *    @access public
+         */
+        function &getTestCase() {
+            return $this->_test_case;
+        }
+        
+        /**
+         *    Invokes a test method and buffered with setUp()
+         *    and tearDown() calls.
+         *    @param string $method    Test method to call.
+         *    @access public
+         */
+        function invoke($method) {
+            $this->_test_case->setUp();
+            $this->_test_case->$method();
+            $this->_test_case->tearDown();
+        }
+    }
+    
+    /**
+     *    Do nothing decorator. Just passes the invocation
+     *    straight through.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class SimpleInvokerDecorator {
+        var $_invoker;
+        
+        /**
+         *    Stores the invoker to wrap.
+         *    @param SimpleInvoker $invoker  Test method runner.
+         */
+        function SimpleInvokerDecorator(&$invoker) {
+            $this->_invoker = &$invoker;
+        }
+        
+        /**
+         *    Accessor for test case being run.
+         *    @return SimpleTestCase    Test case.
+         *    @access public
+         */
+        function &getTestCase() {
+            return $this->_invoker->getTestCase();
+        }
+        
+        /**
+         *    Invokes a test method and buffered with setUp()
+         *    and tearDown() calls.
+         *    @param string $method    Test method to call.
+         *    @access public
+         */
+        function invoke($method) {
+            $this->_invoker->invoke($method);
+        }
+    }
+
+    /**
+     *    Extension that traps errors into an error queue.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
+        
+        /**
+        /**
+         *    Stores the invoker to wrap.
+         *    @param SimpleInvoker $invoker  Test method runner.
+         */
+        function SimpleErrorTrappingInvoker(&$invoker) {
+            $this->SimpleInvokerDecorator($invoker);
+        }
+        
+        /**
+         *    Invokes a test method and dispatches any
+         *    untrapped errors. Called back from
+         *    the visiting runner.
+         *    @param string $method    Test method to call.
+         *    @access public
+         */
+        function invoke($method) {
+            set_error_handler('simpleTestErrorHandler');
+            parent::invoke($method);
+            $queue = &SimpleErrorQueue::instance();
+            while (list($severity, $message, $file, $line, $globals) = $queue->extract()) {
+                $test_case = &$this->getTestCase();
+                $test_case->error($severity, $message, $file, $line, $globals);
+            }
+            restore_error_handler();
+        }
+    }
 
     /**
      *    The standard runner. Will run every method starting
-     *    with test as well as the setUp() and tearDown()
-     *    before and after each test method. Basically the
+     *    with test Basically the
      *    Mediator pattern.
 	 *	  @package SimpleTest
 	 *	  @subpackage UnitTester
@@ -59,6 +170,7 @@
          */
         function run() {
             $methods = get_class_methods(get_class($this->_test_case));
+            $invoker = &$this->_test_case->createInvoker();
             foreach ($methods as $method) {
                 if (! $this->_isTest($method)) {
                     continue;
@@ -67,7 +179,7 @@
                     continue;
                 }
                 $this->_scorer->paintMethodStart($method);
-                $this->_scorer->invoke($this, $method);
+                $this->_scorer->invoke($invoker, $method);
                 $this->_scorer->paintMethodEnd($method);
             }
         }
@@ -95,18 +207,6 @@
          */
         function _isTest($method) {
             return strtolower(substr($method, 0, 4)) == 'test';
-        }
-        
-        /**
-         *    Invokes a test method and buffered with setUp()
-         *    and tearDown() calls.
-         *    @param string $method    Test method to call.
-         *    @access public
-         */
-        function invoke($method) {
-            $this->_test_case->setUp();
-            $this->_test_case->$method();
-            $this->_test_case->tearDown();
         }
 
         /**
@@ -195,41 +295,6 @@
             $this->_scorer->paintSignal($type, $payload);
         }
     }
-
-    /**
-     *    Extension that traps errors into an error queue.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
-     */
-    class SimpleErrorTrappingRunner extends SimpleRunner {
-        
-        /**
-         *    Takes in the test case and reporter to mediate between.
-         *    @param SimpleTestCase $test_case  Test case to run.
-         *    @param SimpleScorer $scorer       Reporter to receive events.
-         */
-        function SimpleErrorTrappingRunner(&$test_case, &$scorer) {
-            $this->SimpleRunner($test_case, $scorer);
-        }
-        
-        /**
-         *    Invokes a test method and dispatches any
-         *    untrapped errors. Called back from
-         *    the visiting runner.
-         *    @param string $method    Test method to call.
-         *    @access public
-         */
-        function invoke($method) {
-            set_error_handler('simpleTestErrorHandler');
-            parent::invoke($method);
-            $queue = &SimpleErrorQueue::instance();
-            while (list($severity, $message, $file, $line, $globals) = $queue->extract()) {
-                $test_case = &$this->getTestCase();
-                $test_case->error($severity, $message, $file, $line, $globals);
-            }
-            restore_error_handler();
-        }
-    }
     
     /**
      *    Basic test case. This is the smallest unit of a test
@@ -265,6 +330,15 @@
         }
         
         /**
+         *    Used to invoke the single tests.
+         *    @return SimpleInvoker        Individual test runner.
+         *    @access public
+         */
+        function &createInvoker() {
+            return new SimpleErrorTrappingInvoker(new SimpleInvoker($this));
+        }
+        
+        /**
          *    Can modify the incoming reporter so as to run
          *    the tests differently. This version simply
          *    passes it straight through.
@@ -273,7 +347,7 @@
          *    @access protected
          */
         function &_createRunner(&$reporter) {
-            return new SimpleErrorTrappingRunner($this, $reporter);
+            return new SimpleRunner($this, $reporter);
         }
         
         /**

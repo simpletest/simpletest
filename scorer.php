@@ -44,13 +44,13 @@
          *    Invokes a single test method on the test case.
          *    This call back allows the reporter to decide if
          *    it actually wants to run the test.
-         *    @param SimpleRunner $runner    Test case to run test on.
+         *    @param SimpleInvoker $invoker  Method runner to run test on.
          *    @param string $method          Name of test method.
          *    @access public
          */
-        function invoke(&$runner, $method) {
+        function invoke(&$invoker, $method) {
             if (! $this->_is_dry_run) {
-                $runner->invoke($method);
+                $invoker->invoke($method);
             }
         }
 
