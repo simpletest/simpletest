@@ -1,10 +1,12 @@
 <?php
     // $Id$
     
+    require_once(dirname(__FILE__) . '/../tag.php');
     require_once(dirname(__FILE__) . '/../page.php');
     require_once(dirname(__FILE__) . '/../frames.php');
     
     Mock::generate('SimplePage');
+    Mock::generate('SimpleForm');
     
     class TestOfFrameset extends UnitTestCase {
         function TestOfFrameset() {
@@ -225,7 +227,7 @@
             }
             return $methods;
         }
-        function _testFramsetHasPageInterface() {
+        function testFramsetHasPageInterface() {
             $difference = array();
             foreach ($this->_page_interface as $method) {
                 if (! in_array($method, $this->_frameset_interface)) {
@@ -312,9 +314,7 @@
             $frame2 = &new MockSimplePage($this);
             $frame2->setReturnValue('getUrlsByLabel', array('hello.php'), array('a'));
             
-            $page = &new MockSimplePage($this);
-            
-            $frameset = &new SimpleFrameset($page);
+            $frameset = &new SimpleFrameset(new MockSimplePage($this));
             $frameset->addParsedFrame($frame1);
             $frameset->addParsedFrame($frame2);
             $this->assertEqual(
@@ -330,9 +330,7 @@
             $frame2->setReturnValue('getUrlById', false, array(4));
             $frame2->setReturnValue('getUrlById', 'five.php', array(5));
             
-            $page = &new MockSimplePage($this);
-            
-            $frameset = &new SimpleFrameset($page);
+            $frameset = &new SimpleFrameset(new MockSimplePage($this));
             $frameset->addParsedFrame($frame1);
             $frameset->addParsedFrame($frame2);
             $this->assertEqual($frameset->getUrlById(4), 'four.php');
@@ -351,9 +349,7 @@
             $frame2->expectNever('getUrlsByLabel');
             $frame2->expectNever('getUrlById');
 
-            $page = &new MockSimplePage($this);
-            
-            $frameset = &new SimpleFrameset($page);
+            $frameset = &new SimpleFrameset(new MockSimplePage($this));
             $frameset->addParsedFrame($frame1, 'A');
             $frameset->addParsedFrame($frame2, 'B');
             $frameset->setFrameFocus('A');
@@ -363,21 +359,91 @@
             $this->assertEqual($frameset->getUrlsByLabel('label'), array('l'));
             $this->assertEqual($frameset->getUrlById(99), array('i'));
         }
-        function testGettingFieldFromFocusedFrame() {
+        function testFindingForms() {
+            $finders = array(
+                    'getFormBySubmitLabel', 'getFormBySubmitName',
+                    'getFormBySubmitId', 'getFormByImageLabel',
+                    'getFormByImageName', 'getFormByImageId', 'getFormById');
+            $forms = array();
+            
+            $frame = &new MockSimplePage($this);
+            for ($i = 0; $i < count($finders); $i++) {
+                $forms[$i] = &new MockSimpleForm($this);
+                $frame->setReturnReference($finders[$i], $forms[$i], array('a'));
+            }
+
+            $frameset = &new SimpleFrameset(new MockSimplePage($this));
+            $frameset->addParsedFrame(new MockSimplePage($this), 'A');
+            $frameset->addParsedFrame($frame, 'B');
+            for ($i = 0; $i < count($finders); $i++) {
+                $method = $finders[$i];
+                $this->assertReference($frameset->$method('a'), $forms[$i]);
+            }
+           
+            $frameset->setFrameFocus('A');
+            for ($i = 0; $i < count($finders); $i++) {
+                $method = $finders[$i];
+                $this->assertNull($frameset->$method('a'));
+            }
+           
+            $frameset->setFrameFocus('B');
+            for ($i = 0; $i < count($finders); $i++) {
+                $method = $finders[$i];
+                $this->assertReference($frameset->$method('a'), $forms[$i]);
+            }
+        }
+        function testSettingAllFrameFieldsWhenNoFrameFocus() {
             $frame1 = &new MockSimplePage($this);
-            $frame1->setReturnValue('getField', 'A');
+            $frame1->expectOnce('setField', array('a', 'A'));
+            $frame1->expectOnce('setFieldById', array(22, 'A'));
             
             $frame2 = &new MockSimplePage($this);
-            $frame2->expectNever('getField');
+            $frame2->expectOnce('setField', array('a', 'A'));
+            $frame2->expectOnce('setFieldById', array(22, 'A'));
             
-            $page = &new MockSimplePage($this);
+            $frameset = &new SimpleFrameset(new MockSimplePage($this));
+            $frameset->addParsedFrame($frame1, 'A');
+            $frameset->addParsedFrame($frame2, 'B');
             
-            $frameset = &new SimpleFrameset($page);
+            $frameset->setField('a', 'A');
+            $frameset->setFieldById(22, 'A');
+            $frame1->tally();
+            $frame2->tally();
+        }
+        function testOnlySettingFieldFromFocusedFrame() {
+            $frame1 = &new MockSimplePage($this);
+            $frame1->expectOnce('setField', array('a', 'A'));
+            $frame1->expectOnce('setFieldById', array(22, 'A'));
+            
+            $frame2 = &new MockSimplePage($this);
+            $frame2->expectNever('setField');
+            $frame2->expectNever('setFieldById');
+            
+            $frameset = &new SimpleFrameset(new MockSimplePage($this));
             $frameset->addParsedFrame($frame1, 'A');
             $frameset->addParsedFrame($frame2, 'B');
             $frameset->setFrameFocus('A');
             
-            $this->assertIdentical($frameset->getField('a'), 'A');
+            $frameset->setField('a', 'A');
+            $frameset->setFieldById(22, 'A');
+            $frame1->tally();
+        }
+        function testOnlyGettingFieldFromFocusedFrame() {
+            $frame1 = &new MockSimplePage($this);
+            $frame1->setReturnValue('getField', 'f', array('a'));
+            $frame1->setReturnValue('getFieldById', 'i', array(7));
+            
+            $frame2 = &new MockSimplePage($this);
+            $frame2->expectNever('getField');
+            $frame2->expectNever('getFieldById');
+            
+            $frameset = &new SimpleFrameset(new MockSimplePage($this));
+            $frameset->addParsedFrame($frame1, 'A');
+            $frameset->addParsedFrame($frame2, 'B');
+            $frameset->setFrameFocus('A');
+            
+            $this->assertIdentical($frameset->getField('a'), 'f');
+            $this->assertIdentical($frameset->getFieldById(7), 'i');
         }
     }
 ?>
