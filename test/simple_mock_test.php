@@ -1,13 +1,6 @@
 <?php
     // $Id$
     
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "../");
-    }
-    require_once(SIMPLE_TEST . 'simple_mock.php');
-    require_once(SIMPLE_TEST . 'simple_unit.php');
-    require_once(SIMPLE_TEST . 'simple_html_test.php');
-
     class TestOfParameterList extends UnitTestCase {
         function TestOfParameterList() {
             $this->UnitTestCase();
@@ -309,14 +302,4 @@
             $mock->aMethod("Goodbye");
         }
     }
-    
-    $test = new SimpleTest("Mock components test");
-    $test->addTestCase(new TestOfParameterList());
-    $test->addTestCase(new TestOfCallMap());
-    $test->addTestCase(new TestOfCodeGeneration());
-    $test->addTestCase(new TestOfMockReturns());
-    $test->addTestCase(new TestOfMockTally());
-    $test->addTestCase(new TestOfMockExpectations());
-    $test->attachObserver(new TestHtmlDisplay());
-    $test->run();
 ?>
