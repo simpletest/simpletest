@@ -90,29 +90,29 @@
             $this->WebTestCase();
         }
         function testFetch() {
-            $this->fetch('http://www.lastcraft.com/test/network_confirm.php');
+            $this->get('http://www.lastcraft.com/test/network_confirm.php');
             $this->assertWantedPattern('/target for the SimpleTest/');
             $this->assertTitle('Simple test target file');
         }
         function testFetchWithGetData() {
         }
         function testRelativeFetch() {
-            $this->fetch('http://www.lastcraft.com/test/link_confirm.php');
-            $this->fetch('./network_confirm.php');
+            $this->get('http://www.lastcraft.com/test/link_confirm.php');
+            $this->get('./network_confirm.php');
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
         function testAbsoluteFollowing() {
-            $this->fetch('http://www.lastcraft.com/test/link_confirm.php');
+            $this->get('http://www.lastcraft.com/test/link_confirm.php');
             $this->assertTrue($this->clickLink('Absolute'));
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
         function testRelativeFollowing() {
-            $this->fetch('http://www.lastcraft.com/test/link_confirm.php');
+            $this->get('http://www.lastcraft.com/test/link_confirm.php');
             $this->assertTrue($this->clickLink('Relative'));
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
         function testIdFollowing() {
-            $this->fetch('http://www.lastcraft.com/test/link_confirm.php');
+            $this->get('http://www.lastcraft.com/test/link_confirm.php');
             $this->assertTrue($this->clickLinkId(1));
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
@@ -125,44 +125,44 @@
         function testCookieSetting() {
             $this->setCookie("a", "Test cookie a", "www.lastcraft.com");
             $this->setCookie("b", "Test cookie b", "www.lastcraft.com", "test");
-            $this->fetch('http://www.lastcraft.com/test/network_confirm.php');
+            $this->get('http://www.lastcraft.com/test/network_confirm.php');
             $this->assertWantedPattern('/Test cookie a/');
             $this->assertWantedPattern('/Test cookie b/');
             $this->assertCookie("a");
             $this->assertCookie("b", "Test cookie b");
         }
         function testCookieReading() {
-            $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
+            $this->get('http://www.lastcraft.com/test/set_cookies.php');
             $this->assertCookie("session_cookie", "A");
             $this->assertCookie("short_cookie", "B");
             $this->assertCookie("day_cookie", "C");
         }
         function testCookieExpectation() {
             $this->expectCookie("session_cookie");
-            $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
+            $this->get('http://www.lastcraft.com/test/set_cookies.php');
         }
         function testCookieValueExpectation() {
             $this->expectCookie("session_cookie", "A");
-            $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
+            $this->get('http://www.lastcraft.com/test/set_cookies.php');
         }
         function testTemporaryCookieExpiry() {
-            $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
+            $this->get('http://www.lastcraft.com/test/set_cookies.php');
             $this->restartSession();
             $this->assertNoCookie("session_cookie");
             $this->assertCookie("short_cookie", "B");
             $this->assertCookie("day_cookie", "C");
         }
         function testTimedCookieExpiry() {
-            $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
+            $this->get('http://www.lastcraft.com/test/set_cookies.php');
             $this->restartSession(time() + 101);
             $this->assertNoCookie("session_cookie");
             $this->assertNoCookie("short_cookie");
             $this->assertCookie("day_cookie", "C");
         }
         function testCookiePath() {
-            $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
+            $this->get('http://www.lastcraft.com/test/set_cookies.php');
             $this->assertNoCookie("path_cookie", "D");
-            $this->fetch('./path/show_cookies.php');
+            $this->get('./path/show_cookies.php');
             $this->assertWantedPattern('/path_cookie/');
             $this->assertCookie("path_cookie", "D");
         }

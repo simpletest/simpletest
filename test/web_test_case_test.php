@@ -28,7 +28,7 @@
         function setUp() {
             $browser = &$this->getBrowser();
             $browser->setReturnValue("get", "Hello world");
-            $browser->expectArguments("get", array("http://my-site.com/"));
+            $browser->expectArguments("get", array("http://my-site.com/", false));
             $browser->expectCallCount("get", 1);
         }
         function tearDown() {
@@ -38,10 +38,10 @@
         }
         function testContentAccess() {
             $this->assertTrue(is_a($this->getBrowser(), "MockTestBrowser"));
-            $this->fetch("http://my-site.com/");
+            $this->get("http://my-site.com/");
         }
         function testRawPatternMatching() {
-            $this->fetch("http://my-site.com/");
+            $this->get("http://my-site.com/");
             $this->assertWantedPattern('/hello/i');
             $this->assertNoUnwantedPattern('/goodbye/i');
         }
@@ -66,8 +66,8 @@
         }
         function testLinkClick() {
             $browser = &$this->getBrowser();
-            $browser->expectArgumentsAt(1, "get", array("http://my-site.com/there"));
-            $this->fetch("http://my-site.com/link");
+            $browser->expectArgumentsAt(1, "get", array("http://my-site.com/there", false));
+            $this->get("http://my-site.com/link");
             $this->assertFalse($this->clickLink('You'));
             $this->assertTrue($this->clickLink('Me'));
             $this->assertFalse($this->clickLink('Me'));
@@ -75,8 +75,8 @@
         }
         function testLinkIdClick() {
             $browser = &$this->getBrowser();
-            $browser->expectArgumentsAt(1, "get", array("http://my-site.com/there"));
-            $this->fetch("http://my-site.com/link");
+            $browser->expectArgumentsAt(1, "get", array("http://my-site.com/there", false));
+            $this->get("http://my-site.com/link");
             $this->assertFalse($this->clickLinkId(0));
             $this->_getHtml();
             $this->assertTrue($this->clickLinkId(2));
@@ -84,8 +84,8 @@
         }
         function testLinkIndexClick() {
             $browser = &$this->getBrowser();
-            $browser->expectArgumentsAt(1, "get", array("./a"));
-            $this->fetch("http://my-site.com/link");
+            $browser->expectArgumentsAt(1, "get", array("./a", false));
+            $this->get("http://my-site.com/link");
             $this->assertFalse($this->clickLink('Me', 2));
             $this->assertTrue($this->clickLink('Me', 1));
         }
@@ -100,7 +100,7 @@
             $browser->setReturnValue(
                     "get",
                     "<html><head><title>Pretty page</title></head></html>");
-            $this->fetch("http://my-site.com/");
+            $this->get("http://my-site.com/");
             $this->assertTitle("Pretty page");
             $browser->tally();
         }

@@ -94,8 +94,8 @@
          *    @param $parameters   Optional additional GET data.
          *    @public
          */
-        function fetch($url, $parameters = false) {
-            $this->_current_content = $this->_current_browser->get($url);
+        function get($url, $parameters = false) {
+            $this->_current_content = $this->_current_browser->get($url, $parameters);
             $this->_clearHtmlCache();
         }
         
@@ -130,7 +130,7 @@
             if (count($urls) < $index + 1) {
                 return false;
             }
-            $this->fetch($urls[$index]);
+            $this->get($urls[$index]);
             return true;
         }
         
@@ -147,7 +147,7 @@
             if (!($url = $page->getUrlById($id))) {
                 return false;
             }
-            $this->fetch($url);
+            $this->get($url);
             return true;
         }
         
