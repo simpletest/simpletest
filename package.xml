@@ -63,9 +63,10 @@ in Beta1.
     </deps>
     <filelist>
       <!-- Base dir -->
-      <file role="php" baseinstalldir="simpletest" name="assertion.php"/>
       <file role="php" baseinstalldir="simpletest" name="browser.php"/>
+      <file role="php" baseinstalldir="simpletest" name="dumper.php"/>
       <file role="php" baseinstalldir="simpletest" name="errors.php"/>
+      <file role="php" baseinstalldir="simpletest" name="expectations.php"/>
       <file role="doc" baseinstalldir="simpletest" name="HELP_MY_TESTS_DONT_WORK_ANYMORE"/>
       <file role="php" baseinstalldir="simpletest" name="http.php"/>
       <file role="doc" baseinstalldir="simpletest" name="LICENSE"/>
@@ -76,11 +77,8 @@ in Beta1.
       <file role="doc" baseinstalldir="simpletest" name="README"/>
       <file role="php" baseinstalldir="simpletest" name="reporter.php"/>
       <file role="php" baseinstalldir="simpletest" name="runner.php"/>
-      <file role="php" baseinstalldir="simpletest" name="simple_html_test.php"/>
-      <file role="php" baseinstalldir="simpletest" name="simple_mock.php"/>
       <file role="php" baseinstalldir="simpletest" name="simple_test.php"/>
-      <file role="php" baseinstalldir="simpletest" name="simple_unit.php"/>
-      <file role="php" baseinstalldir="simpletest" name="simple_web_test.php"/>
+      <file role="php" baseinstalldir="simpletest" name="socket.php"/>
       <file role="php" baseinstalldir="simpletest" name="tag.php"/>
       <file role="php" baseinstalldir="simpletest" name="unit_tester.php"/>
       <file role="php" baseinstalldir="simpletest" name="web_tester.php"/>
@@ -96,23 +94,26 @@ in Beta1.
       <file role="doc" baseinstalldir="simpletest" name="docs/reporter_documentation.html"/>
       <file role="doc" baseinstalldir="simpletest" name="docs/server_stubs_documentation.html"/>
       <file role="doc" baseinstalldir="simpletest" name="docs/unit_test_documentation.html"/>
+      <file role="doc" baseinstalldir="simpletest" name="docs/web_tester_documentation.html"/>
       <!-- Tests -->
       <file role="test" baseinstalldir="simpletest" name="test/adapter_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/all_tests.php"/>
-      <file role="test" baseinstalldir="simpletest" name="test/assertion_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/boundary_tests.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/browser_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/dumper_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/errors_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/expectation_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/http_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/live_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/options_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/page_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/parser_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/real_sites_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/simple_mock_test.php"/>
-      <file role="test" baseinstalldir="simpletest" name="test/simple_unit_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/socket_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/tag_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/unit_tests.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/visual_tests.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/web_test_case_test.php"/>
     </filelist>
   </release>

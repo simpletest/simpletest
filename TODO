@@ -23,8 +23,8 @@ Refactor the links into their own objects (3).
 Browser
 -------
 Frames support (6).
-Add cookie aging facility (2).
-Move session restarting to cookie aging (1).
+Add cookie aging facility (2/1) - done.
+Move session restarting to cookie aging (1/1) - done.
 
 Web tester
 ----------
