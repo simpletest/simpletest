@@ -9,11 +9,11 @@
     /**#@+
      * include SimpleTest files
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'errors.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'options.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'runner.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'expectation.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'dumper.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'errors.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'options.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'runner.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'expectation.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'dumper.php');
     /**#@-*/
     
     /**
@@ -93,7 +93,7 @@
          *    passes it straight through.
          *    @param SimpleReporter $reporter    Incoming observer.
          *    @return SimpleReporter
-         *    @access private
+         *    @access protected
          */
         function &_createRunner(&$reporter) {
             return $reporter;
