@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.01) of 47 hours.
+This is immediate stuff only for this iteration (1.01) of 48 hours.
 
 $Id$
 
@@ -11,6 +11,7 @@ Switch to a run_me_if_no_runner script (2).
 Fix GroupTest test case count being wrong after addTestFile() (3).
 If "." is not in the path then local files aren't found (1).
 Add floating point equality (2).
+Add donated fix for assertreference() from Knak-Nielsen (1).
 
 Reporter
 --------
