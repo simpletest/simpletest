@@ -255,6 +255,8 @@
             $this->get('http://www.lastcraft.com/');
             $this->assertHeader('content-type');
             $this->assertHeader('content-type', 'text/html');
+            $this->assertHeaderPattern('content-type', '/HTML/i');
+            $this->assertNoUnwantedHeader('WWW-Authenticate');
         }
     }
      

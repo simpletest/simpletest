@@ -8,7 +8,7 @@
     /**
      *	include http class
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'http.php');
+    require_once(dirname(__FILE__) . '/http.php');
     
     /**
      *    Represents a single security realm's identity.

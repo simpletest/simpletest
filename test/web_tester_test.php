@@ -75,8 +75,48 @@
         
         function testMultilineSearch() {
             $expectation = new HttpHeaderExpectation('a', 'A');
-            $this->assertIdentical($expectation->test("aa: AA\r\nb: B\r\nc: C"), false);
-            $this->assertIdentical($expectation->test("aa: AA\r\na: A\r\nb: B"), true);
+            $this->assertIdentical($expectation->test("aa: A\r\nb: B\r\nc: C"), false);
+            $this->assertIdentical($expectation->test("aa: A\r\na: A\r\nb: B"), true);
+        }
+        
+        function testMultilineSearchWithPadding() {
+            $expectation = new HttpHeaderExpectation('a', ' A ');
+            $this->assertIdentical($expectation->test("aa:A\r\nb:B\r\nc:C"), false);
+            $this->assertIdentical($expectation->test("aa:A\r\na:A\r\nb:B"), true);
+        }
+        
+        function testPatternMatching() {
+            $expectation = new HttpHeaderPatternExpectation('a', '/A/');
+            $this->assertIdentical($expectation->test('a: A'), true);
+            $this->assertIdentical($expectation->test('A: A'), true);
+            $this->assertIdentical($expectation->test('A: a'), false);
+            $this->assertIdentical($expectation->test('a: B'), false);
+            $this->assertIdentical($expectation->test(' a : A '), true);
+            $this->assertIdentical($expectation->test(' a : AB '), true);
+        }
+        
+        function testCaseInsensitivePatternMatching() {
+            $expectation = new HttpHeaderPatternExpectation('a', '/A/i');
+            $this->assertIdentical($expectation->test('a: a'), true);
+            $this->assertIdentical($expectation->test('a: B'), false);
+            $this->assertIdentical($expectation->test(' a : A '), true);
+            $this->assertIdentical($expectation->test(' a : BAB '), true);
+            $this->assertIdentical($expectation->test(' a : bab '), true);
+        }
+        
+        function testUnwantedHeader() {
+            $expectation = new HttpUnwantedHeaderExpectation('a');
+            $this->assertIdentical($expectation->test(''), true);
+            $this->assertIdentical($expectation->test('stuff'), true);
+            $this->assertIdentical($expectation->test('b: B'), true);
+            $this->assertIdentical($expectation->test('a: A'), false);
+            $this->assertIdentical($expectation->test('A: A'), false);
+        }
+        
+        function testMultilineUnwantedSearch() {
+            $expectation = new HttpUnwantedHeaderExpectation('a');
+            $this->assertIdentical($expectation->test("aa:A\r\nb:B\r\nc:C"), true);
+            $this->assertIdentical($expectation->test("aa:A\r\na:A\r\nb:B"), false);
         }
     }
 ?>

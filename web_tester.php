@@ -137,16 +137,28 @@
          *    @param string $header   Case insenstive trimmed header name.
          *    @param string $value    Optional value to compare. If not
          *                            given then any value will match.
-         *    @access public
          */
         function HttpHeaderExpectation($header, $value = false) {
             $this->_expected_header = $this->_normaliseHeader($header);
-            if (is_string($value)) {
-                $value = trim($value);
-            }
             $this->_expected_value = $value;
         }
         
+        /**
+         *    Accessor for subclases.
+         *    @return mixed        Expectation set in constructor.
+         *    @access protected
+         */
+        function _getExpectation() {
+            return $this->_expected_value;
+        }
+        
+        /**
+         *    Removes whitespace at ends and case variations.
+         *    @param string $header    Name of header.
+         *    @param string            Trimmed and lowecased header
+         *                             name.
+         *    @access private
+         */
         function _normaliseHeader($header) {
             return strtolower(trim($header));
         }
@@ -182,7 +194,8 @@
         /**
          *    Compares a single header line against the expectation.
          *    @param string $line      A single line to compare.
-         *    @access protected
+         *    @return boolean          True if matched.
+         *    @access private
          */
         function _testHeaderLine($line) {
             if (count($parsed = split(':', $line)) < 2) {
@@ -192,10 +205,21 @@
             if ($this->_normaliseHeader($header) != $this->_expected_header) {
                 return false;
             }
-            if ($this->_expected_value === false) {
+            return $this->_testHeaderValue($value, $this->_expected_value);
+        }
+        
+        /**
+         *    Tests the value part of the header.
+         *    @param string $value        Value to test.
+         *    @param mixed $expected      Value to test against.
+         *    @return boolean             True if matched.
+         *    @access protected
+         */
+        function _testHeaderValue($value, $expected) {
+            if ($expected === false) {
                 return true;
             }
-            return (trim($value) == $this->_expected_value);
+            return (trim($value) == trim($expected));
         }
         
         /**
@@ -208,7 +232,7 @@
         function testMessage($compare) {
             $expectation = $this->_expected_header;
             if ($this->_expected_value) {
-                $expectation .= ': '. $this->_expected_header;
+                $expectation .= ': ' . $this->_expected_header;
             }
             if (is_string($line = $this->_findHeader($compare))) {
                 return "Searching for header [$expectation] found [$line]";
@@ -219,11 +243,56 @@
     }
       
     /**
+     *    Test for a specific HTTP header within a header block that
+     *    should not be found.
+	 *	  @package SimpleTest
+	 *	  @subpackage WebTester
+     */
+    class HttpUnwantedHeaderExpectation extends HttpHeaderExpectation {
+        var $_expected_header;
+        var $_expected_value;
+        
+        /**
+         *    Sets the field and value to compare against.
+         *    @param string $unwanted   Case insenstive trimmed header name.
+         */
+        function HttpUnwantedHeaderExpectation($unwanted) {
+            $this->HttpHeaderExpectation($unwanted);
+        }
+        
+        /**
+         *    Tests that the unwanted header is not found.
+         *    @param mixed $compare   Raw header block to search.
+         *    @return boolean         True if header present.
+         *    @access public
+         */
+        function test($compare) {
+            return ($this->_findHeader($compare) === false);
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param mixed $compare      Raw header block to search.
+         *    @return string             Description of success
+         *                               or failure.
+         *    @access public
+         */
+        function testMessage($compare) {
+            $expectation = $this->_getExpectation();
+            if (is_string($line = $this->_findHeader($compare))) {
+                return "Found unwanted header [$expectation] with [$line]";
+            } else {
+                return "Did not find unwanted header [$expectation]";
+            }
+        }
+    }
+      
+    /**
      *    Test for a specific HTTP header within a header block.
 	 *	  @package SimpleTest
 	 *	  @subpackage WebTester
      */
-    class HttpHeaderPatternExpectation extends SimpleExpectation {
+    class HttpHeaderPatternExpectation extends HttpHeaderExpectation {
         
         /**
          *    Sets the field and value to compare against.
@@ -231,7 +300,19 @@
          *    @param string $pattern  Pattern to compare value against.
          *    @access public
          */
-        function HttpHeaderExpectation($header, $value = false) {
+        function HttpHeaderPatternExpectation($header, $pattern) {
+            $this->HttpHeaderExpectation($header, $pattern);
+        }
+        
+        /**
+         *    Tests the value part of the header.
+         *    @param string $value        Value to test.
+         *    @param mixed $pattern       Pattern to test against.
+         *    @return boolean             True if matched.
+         *    @access protected
+         */
+        function _testHeaderValue($value, $expected) {
+            return (boolean)preg_match($expected, trim($value));
         }
     }
   
@@ -897,7 +978,11 @@
          *    @param string $pattern   Pattern to match value against.
          *    @access public
          */
-        function assertHeaderPattern($header, $pattern) {
+        function assertHeaderPattern($header, $pattern, $message = '%s') {
+            $this->assertExpectation(
+                    new HttpHeaderPatternExpectation($header, $pattern),
+                    $this->_browser->getHeaders(),
+                    $message);
         }
 
         /**
@@ -908,7 +993,11 @@
          *    @param string $header    Case insensitive header name.
          *    @access public
          */
-        function assertNoHeader($header) {
+        function assertNoUnwantedHeader($header, $message = '%s') {
+            $this->assertExpectation(
+                    new HttpUnwantedHeaderExpectation($header),
+                    $this->_browser->getHeaders(),
+                    $message);
         }
         
         /**
