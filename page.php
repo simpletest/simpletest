@@ -48,14 +48,19 @@
          *    @public
          */
         function startElement($name, $attributes) {
-            if (!in_array($name, array_keys($this->_tags))) {
-                $this->_tags[$name] = array();
-            }
             $tag = new SimpleTag($name, $attributes);
             if (in_array($name, $this->_getBlockTags())) {
                 $this->_page->acceptBlockStart($tag);
+                return true;
             }            
-            array_push($this->_tags[$name], $tag);
+            if (in_array($name, $this->_getContentTags())) {
+                if (!in_array($name, array_keys($this->_tags))) {
+                    $this->_tags[$name] = array();
+                }
+                array_push($this->_tags[$name], $tag);
+                return true;
+            }
+            $this->_page->acceptTag($tag);
             return true;
         }
         
@@ -67,15 +72,15 @@
          *    @public
          */
         function endElement($name) {
-            if (!isset($this->_tags[$name]) || (count($this->_tags[$name]) == 0)) {
-                return false;
-            }
-            $tag = array_pop($this->_tags[$name]);
             if (in_array($name, $this->_getContentTags())) {
+                if (!isset($this->_tags[$name]) || (count($this->_tags[$name]) == 0)) {
+                    return false;
+                }
+                $tag = array_pop($this->_tags[$name]);
                 $this->_page->acceptTag($tag);
             }
             if (in_array($name, $this->_getBlockTags())) {
-                $this->_page->acceptBlockEnd($tag);
+                $this->_page->acceptBlockEnd($name);
             }            
             return true;
         }
@@ -202,11 +207,11 @@
         
         /**
          *    Closes a special enclosing block such as a form.
-         *    @param $tag        Tag to accept.
+         *    @param $name        Tag name to accept.
          *    @public
          */
-        function acceptBlockEnd($tag) {
-            if ($tag->getName() == "form") {
+        function acceptBlockEnd($name) {
+            if ($name == "form") {
                 $this->_closed_forms[] = array_pop($this->_open_forms);
             }
         }
@@ -225,15 +230,7 @@
                 $this->_addAbsoluteLink($url, $label, $id);
                 return;
             }
-            if (!$parsed_url->getScheme()) {
-                if (!preg_match('/^(\/|\.\/|\.\.\/)/', $url)) {
-                    $url = "./" . $url;
-                    $parsed_url = new SimpleUrl($url);
-                }
-            }
-            if (!$parsed_url->getHost()) {
-                $this->_addRelativeLink($url, $label, $id);
-            }
+            $this->_addRelativeLink($url, $label, $id);
         }
         
         /**
@@ -355,12 +352,27 @@
         }
         
         /**
-         *    Gets a list of all of the held forms.
+         *    Gets a copy of the list of all of the held forms.
          *    @return        Array of SimpleForm objects.
          *    @public
          */
         function getForms() {
             return array_merge($this->_open_forms, $this->_closed_forms);
+        }
+        
+        /**
+         *    Finds a held form by button label. Will only
+         *    search correctly built forms.
+         *    @param $label    Button label, default 'Submit'.
+         *    @return          Form object containing the button.
+         *    @public
+         */
+        function &getFormByLabel($label) {
+            for ($i = 0; $i < count($this->_closed_forms); $i++) {
+                if ($this->_closed_forms[$i]->getSubmitName($label)) {
+                    return $this->_closed_forms[$i];
+                }
+            }
         }
     }
 ?>

@@ -107,11 +107,10 @@
             $page->tally();
         }
         function testForm() {
-            $tag = new SimpleTag("form", array());
             $page = &new MockSimplePage($this);
-            $page->expectArguments("acceptBlockStart", array($tag));
+            $page->expectArguments("acceptBlockStart", array(new SimpleTag("form", array())));
             $page->expectCallCount("acceptBlockStart", 1);
-            $page->expectArguments("acceptBlockEnd", array($tag));
+            $page->expectArguments("acceptBlockEnd", array("form"));
             $page->expectCallCount("acceptBlockEnd", 1);
             $builder = &new SimplePageBuilder($page);
             $builder->startElement("form", array());
@@ -165,13 +164,13 @@
             $this->assertIdentical($page->getUrls("Label"), array());
         }
         function testAddAbsoluteLink() {
-            $link = new SimpleTag("a", array("href" => "http://somewhere"));
+            $link = new SimpleTag("a", array("href" => "http://somewhere.com"));
             $link->addContent("Label");
             $page = new SimplePage("");
             $page->AcceptTag($link);
-            $this->assertEqual($page->getAbsoluteLinks(), array("http://somewhere"), "abs->%s");
+            $this->assertEqual($page->getAbsoluteLinks(), array("http://somewhere.com"), "abs->%s");
             $this->assertIdentical($page->getRelativeLinks(), array(), "rel->%s");
-            $this->assertEqual($page->getUrls("Label"), array("http://somewhere"));
+            $this->assertEqual($page->getUrls("Label"), array("http://somewhere.com"));
         }
         function testAddStrictRelativeLink() {
             $link = new SimpleTag("a", array("href" => "./somewhere.php"));
@@ -188,8 +187,8 @@
             $page = new SimplePage("");
             $page->AcceptTag($link);
             $this->assertEqual($page->getAbsoluteLinks(), array(), "abs->%s");
-            $this->assertIdentical($page->getRelativeLinks(), array("./somewhere.php"), "rel->%s");
-            $this->assertEqual($page->getUrls("Label"), array("./somewhere.php"));
+            $this->assertIdentical($page->getRelativeLinks(), array("somewhere.php"), "rel->%s");
+            $this->assertEqual($page->getUrls("Label"), array("somewhere.php"));
         }
         function testLinkIds() {
             $link = new SimpleTag("a", array("href" => "./somewhere.php", "id" => 33));
@@ -214,38 +213,35 @@
             $this->UnitTestCase();
         }
         function testEmptyForm() {
-            $form = new SimpleTag("form", array());
             $page = new SimplePage("");
-            $page->acceptBlockStart($form);
+            $page->acceptBlockStart(new SimpleTag("form", array()));
             $forms = $page->getForms();
             $this->assertIdentical($forms[0]->getAction(), false);
             $this->assertIdentical($forms[0]->getMethod(), 'get');
-            $page->acceptBlockEnd($form);
+            $page->acceptBlockEnd("form");
             $forms = $page->getForms();
             $this->assertIdentical($forms[0]->getAction(), false);
         }
         function testCompleteForm() {
-            $form = new SimpleTag("form", array("method" => "GET", "action" => "here.php"));
             $page = new SimplePage("");
-            $page->acceptBlockStart($form);
+            $page->acceptBlockStart(
+                    new SimpleTag("form", array("method" => "GET", "action" => "here.php")));
             $forms = $page->getForms();
             $this->assertIdentical($forms[0]->getAction(), 'here.php');
             $this->assertIdentical($forms[0]->getMethod(), 'get');
-            $page->acceptBlockEnd($form);
+            $page->acceptBlockEnd("form");
             $forms = $page->getForms();
             $this->assertIdentical($forms[0]->getAction(), 'here.php');
         }
         function testNestedForm() {
-            $outer = new SimpleTag("form", array("method" => "GET", "action" => "outer.php"));
-            $inner = new SimpleTag("form", array("method" => "POST", "action" => "inner.php"));
             $page = new SimplePage("");
-            $page->acceptBlockStart($outer);
-            $page->acceptBlockStart($inner);
+            $page->acceptBlockStart(new SimpleTag("form", array("method" => "GET", "action" => "outer.php")));
+            $page->acceptBlockStart(new SimpleTag("form", array("method" => "POST", "action" => "inner.php")));
             $forms = $page->getForms();
             $this->assertEqual($forms[0]->getAction(), "outer.php");
             $this->assertEqual($forms[1]->getAction(), "inner.php");
-            $page->acceptBlockEnd($inner);
-            $page->acceptBlockEnd($outer);
+            $page->acceptBlockEnd("form");
+            $page->acceptBlockEnd("form");
             $forms = $page->getForms();
             $this->assertEqual($forms[0]->getAction(), "inner.php");
             $this->assertEqual($forms[1]->getAction(), "outer.php");
@@ -256,8 +252,9 @@
                     new SimpleTag("form", array("method" => "GET", "action" => "here.php")));
             $page->AcceptTag(
                     new SimpleTag("input", array("type" => "submit", "name" => "s")));
-            $forms = $page->getForms();
-            $this->assertEqual($forms[0]->submitButton("s"), array("s" => "Submit"));
+            $page->acceptBlockEnd("form");
+            $form = &$page->getFormByLabel("Submit");
+            $this->assertEqual($form->submitButton("s"), array("s" => "Submit"));
         }
     }
     
@@ -287,8 +284,8 @@
                     array("http://there.com/that.html"));
             $this->assertIdentical(
                     $page->getRelativeLinks(),
-                    array("./there.html"));
-            $this->assertIdentical($page->getUrls("There"), array("./there.html"));
+                    array("there.html"));
+            $this->assertIdentical($page->getUrls("There"), array("there.html"));
             $this->assertEqual($page->getUrlById("0"), "http://there.com/that.html");
         }
         function testTitle() {
@@ -298,6 +295,11 @@
         function testNastyTitle() {
             $page = &new SimplePage("<html><head><Title>Me&amp;Me</TITLE></head></html>");
             $this->assertEqual($page->getTitle(), "Me&amp;Me");
+        }
+        function testForm() {
+            $page = &new SimplePage(
+                    "<html><head><form><input type=\"submit\"></form></head></html>");
+            $this->assertIsA($form = &$page->getFormByLabel("Submit"), "SimpleForm");
         }
     }
 ?>

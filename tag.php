@@ -166,6 +166,20 @@
         }
         
         /**
+         *    Gets a button name from the label.
+         *    @param $label    Button label to search for.
+         *    @return          Name of button.
+         *    @public
+         */
+        function getSubmitName($label) {
+            foreach ($this->_buttons as $name => $value) {
+                if ($value == $label) {
+                    return $name;
+                }
+            }
+        }
+        
+        /**
          *    Gets the submit values for a named button.
          *    @param $name     Button label to search for.
          *    @return          Hash of submitted values or false
@@ -193,10 +207,8 @@
          *    @public
          */
         function submitButtonByLabel($label) {
-            foreach ($this->_buttons as $name => $value) {
-                if ($value == $label) {
-                    return $this->submitButton($name);
-                }
+            if ($name = $this->getSubmitName($label)) {
+                return $this->submitButton($name);
             }
             return false;
         }

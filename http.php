@@ -80,8 +80,13 @@
          */
         function _extractHost(&$url) {
             if (preg_match('/(.*?)(\.\.\/|\.\/|\/|\?|#|$)(.*)/', $url, $matches)) {
-                $url = $matches[2] . $matches[3];
-                return $matches[1];
+                if (preg_match('/[a-z\-]+\.(com|edu|net|org|gov|mil|int)/i', $matches[1])) {
+                    $url = $matches[2] . $matches[3];
+                    return $matches[1];
+                } elseif (preg_match('/[a-z\-]+\.[a-z\-]+\.[a-z\-]+/i', $matches[1])) {
+                    $url = $matches[2] . $matches[3];
+                    return $matches[1];
+                }
             }
             return false;
         }

@@ -86,6 +86,19 @@
         }
         
         /**
+         *    Sets a cookie in the current browser.
+         *    @param $name          Name of cookie.
+         *    @param $value         Cookie value as string.
+         *    @param $host          Host upon which the cookie is valid.
+         *    @param $path          Cookie path if not host wide.
+         *    @param $expiry        Expiry date as string.
+         *    @public
+         */
+        function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
+            $this->_current_browser->setCookie($name, $value, $host, $path, $expiry);
+        }
+        
+        /**
          *    Fetches a page into the page buffer. If
          *    there is no base for the URL then the
          *    current base URL is used. After the fetch
@@ -125,16 +138,24 @@
         }
         
         /**
-         *    Sets a cookie in the current browser.
-         *    @param $name          Name of cookie.
-         *    @param $value         Cookie value as string.
-         *    @param $host          Host upon which the cookie is valid.
-         *    @param $path          Cookie path if not host wide.
-         *    @param $expiry        Expiry date as string.
+         *    Clicks the submit button by label. The owning
+         *    form will be submitted by this.
+         *    @param $label    Button label. An unlabeled
+         *                     button can be triggered by 'Submit'.
+         *    @return          true on success.
          *    @public
          */
-        function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
-            $this->_current_browser->setCookie($name, $value, $host, $path, $expiry);
+        function submit($label = "Submit") {
+            $page = &$this->_getHtml();
+            if (!($form = &$page->getFormByLabel($label))) {
+                return false;
+            }
+            $action = $form->getAction();
+            if ($form->getMethod() == "post") {
+                return $this->post($action);
+            } else {
+                return $this->get($action);
+            }
         }
         
         /**

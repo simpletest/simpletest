@@ -112,12 +112,12 @@
         }
         function testRelativeGet() {
             $this->get('http://www.lastcraft.com/test/link_confirm.php');
-            $this->get('./network_confirm.php');
+            $this->assertTrue($this->get('network_confirm.php'));
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
         function testRelativePost() {
             $this->post('http://www.lastcraft.com/test/link_confirm.php');
-            $this->post('./network_confirm.php');
+            $this->assertTrue($this->post('network_confirm.php'));
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
         function testAbsoluteFollowing() {
@@ -184,6 +184,16 @@
             $this->get('./path/show_cookies.php');
             $this->assertWantedPattern('/path_cookie/');
             $this->assertCookie("path_cookie", "D");
+        }
+    }
+    
+    class TestOfLiveForm extends WebTestCase {
+        function TestOfLiveForm() {
+            $this->WebTestCase();
+        }
+        function testSimpleSubmit() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertTrue($this->submit('Go!'));
         }
     }
 ?>

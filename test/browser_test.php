@@ -125,10 +125,10 @@
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
             $browser = &new SimpleBrowser();
-            $browser->get("http://this.host/this/path/page.html", false, &$request);
+            $browser->get("http://this.com/this/path/page.html", false, &$request);
             $this->assertEqual(
                     $browser->getBaseUrl(),
-                    "http://this.host/this/path/");
+                    "http://this.com/this/path/");
         }
     }
     
@@ -160,7 +160,7 @@
             $browser = &new SimpleBrowser();
             $browser->setCookie("a", "A");
             $response = $browser->fetchResponse(
-                    new SimpleUrl("http://this.host/this/path/page.html"),
+                    new SimpleUrl("http://this.com/this/path/page.html"),
                     $request);
             $this->assertEqual($response->getContent(), "stuff");
             $request->tally();
@@ -172,7 +172,7 @@
             $browser->fetchResponse(
                     new SimpleUrl("http://this.host/this/path/page.html"),
                     $request);
-            $this->assertEqual($browser->getCookieValue("this.host", "this/path/", "a"), "AAAA");
+            $this->assertEqual($browser->getCookieValue("this.com", "this/path/", "a"), "AAAA");
         }
         function testClearCookie() {
             $request = &$this->_createCookieSite(array(new SimpleCookie(
@@ -183,22 +183,22 @@
             $browser = &new SimpleBrowser();
             $browser->setCookie("a", "A", "this/path/", "Wed, 25-Dec-02 04:24:21 GMT");
             $this->assertEqual(
-                    $browser->get("http://this.host/this/path/page.html", false, &$request),
+                    $browser->get("http://this.com/this/path/page.html", false, &$request),
                     "stuff");
             $this->assertIdentical(
-                    $browser->getCookieValue("this.host", "this/path/", "a"),
+                    $browser->getCookieValue("this.com", "this/path/", "a"),
                     "");
             $browser->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
             $this->assertIdentical(
-                    $browser->getCookieValue("this.host", "this/path/", "a"),
+                    $browser->getCookieValue("this.com", "this/path/", "a"),
                     false);
         }
         function testReadingCookies() {
             $browser = &new SimpleBrowser();
             $this->assertNull($browser->getBaseCookieValue("a"));
-            $browser->setCookie("b", "BBB", "this.host", "this/path/");
+            $browser->setCookie("b", "BBB", "this.com", "this/path/");
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAA", "this/path/")));
-            $browser->get("http://this.host/this/path/page.html", false, &$request);
+            $browser->get("http://this.com/this/path/page.html", false, &$request);
             $this->assertEqual($browser->getBaseCookieValue("a"), "AAA");
             $this->assertEqual($browser->getBaseCookieValue("b"), "BBB");
         }
@@ -213,7 +213,7 @@
         function testGet() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("getContent", "stuff");
-            $url = new SimpleUrl("http://this.host/page.html");
+            $url = new SimpleUrl("http://this.com/page.html");
             $url->addRequestParameters(array("a" => "A", "b" => "B"));
             $browser = &new MockFetchSimpleBrowser($this);
             $browser->setReturnReference("fetchResponse", $response);
@@ -222,14 +222,14 @@
                     array($url, "*"));
             $browser->SimpleBrowser();
             $this->assertIdentical(
-                    $browser->get("http://this.host/page.html", array("a" => "A", "b" => "B"), &$this->_request),
+                    $browser->get("http://this.com/page.html", array("a" => "A", "b" => "B"), &$this->_request),
                     "stuff");
             $browser->tally();
         }
         function testHead() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("getContent", "stuff");
-            $url = new SimpleUrl("http://this.host/page.html");
+            $url = new SimpleUrl("http://this.com/page.html");
             $url->addRequestParameters(array("a" => "A", "b" => "B"));
             $browser = &new MockFetchSimpleBrowser($this);
             $browser->setReturnReference("fetchResponse", $response);
@@ -239,24 +239,24 @@
             $browser->expectCallCount("fetchResponse", 1);
             $browser->SimpleBrowser();
             $this->assertIdentical(
-                    $browser->head("http://this.host/page.html", array("a" => "A", "b" => "B"), &$this->_request),
+                    $browser->head("http://this.com/page.html", array("a" => "A", "b" => "B"), &$this->_request),
                     true);
             $browser->tally();
         }
         function testPost() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("getContent", "stuff");
-            $expected_request = new SimpleHttpPushRequest(new SimpleUrl("http://this.host/page.html"), "a=A&b=B");
+            $expected_request = new SimpleHttpPushRequest(new SimpleUrl("http://this.com/page.html"), "a=A&b=B");
             $expected_request->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
             $browser = &new MockFetchSimpleBrowser($this);
             $browser->setReturnReference("fetchResponse", $response);
             $browser->expectCallCount("fetchResponse", 1);
             $browser->expectArguments(
                     "fetchResponse",
-                    array(new SimpleUrl("http://this.host/page.html"), $expected_request));
+                    array(new SimpleUrl("http://this.com/page.html"), $expected_request));
             $browser->SimpleBrowser();
             $this->assertIdentical(
-                    $browser->post("http://this.host/page.html", array("a" => "A", "b" => "B"), &$this->_request),
+                    $browser->post("http://this.com/page.html", array("a" => "A", "b" => "B"), &$this->_request),
                     "stuff");
             $browser->tally();
         }

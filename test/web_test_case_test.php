@@ -84,7 +84,7 @@
         }
         function testLinkIndexClick() {
             $browser = &$this->getBrowser();
-            $browser->expectArgumentsAt(1, "get", array("./a", false));
+            $browser->expectArgumentsAt(1, "get", array("a", false));
             $this->get("http://my-site.com/link");
             $this->assertFalse($this->clickLink('Me', 2));
             $this->assertTrue($this->clickLink('Me', 1));
