@@ -10,7 +10,39 @@
      *	include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'page.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'user_agent.php');
     /**#@-*/
+    
+    /**
+     *    Builds composite pages.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleFramesetBuilder {
+        var $_builder;
+        
+        /**
+         *    Sets the parser for HTML pages.
+         *    @param SimplePageBuilder $builder    Parser.
+         */
+        function SimpleFramesetBuilder(&$builder) {
+            $this->_builder = &$builder;
+        }
+        
+        /**
+         *    Parses the frames into pages and adds them
+         *    to a composite frame set.
+         *    @param SimplePage $page             Initial framset page.
+         *    @param SimpleUserAgent $user_agent  Current user agent to
+         *                                        fetch the pages with.
+         *    @return SimnpleFrameset             Composite page.
+         *    @access public
+         */
+        function &fetch(&$page, &$user_agent) {
+            $frameset = &new SimpleFrameset($page);
+            return $frameset;
+        }
+    }
     
     /**
      *    A composite page. Wraps a frameset page and
@@ -22,6 +54,7 @@
      */
     class SimpleFrameset {
         var $_frameset;
+        var $_frames;
         
         /**
          *    Stashes the frameset page. Will make use of the
@@ -30,6 +63,18 @@
          */
         function SimpleFrameset(&$page) {
             $this->_frameset = &$page;
+            $this->_frames = array();
+        }
+        
+        /**
+         *    Accessor for raw text of either all the pages or
+         *    the frame in focus.
+         *    @return string        Raw unparsed content.
+         *    @access public
+         */
+        function getRaw() {
+            $raw = '';
+            return $raw;
         }
         
         /**

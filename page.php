@@ -403,7 +403,7 @@
          *    @return boolean        True if frameset.
          *    @access public
          */
-        function hasFrameset() {
+        function hasFrames() {
             return $this->_frameset_is_complete;
         }
         

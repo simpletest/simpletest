@@ -296,13 +296,13 @@
         }
         function testFramesetAbsence() {
             $page = &new SimplePage(new MockSimpleHttpResponse($this));
-            $this->assertFalse($page->hasFrameset());
+            $this->assertFalse($page->hasFrames());
         }
         function testHasFrameset() {
             $page = &new SimplePage(new MockSimpleHttpResponse($this));
             $page->acceptFramesetStart(new SimpleFramesetTag(array()));
             $page->acceptFramesetEnd();
-            $this->assertTrue($page->hasFrameset());
+            $this->assertTrue($page->hasFrames());
         }
     }
     
@@ -432,7 +432,7 @@
                     '<html><frameset><frame src="a"></frameset></html>');
             
             $page = &$this->parse($response);
-            $this->assertTrue($page->hasFrameset());
+            $this->assertTrue($page->hasFrames());
         }
         function testFormByLabel() {
             $response = &new MockSimpleHttpResponse($this);

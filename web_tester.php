@@ -135,6 +135,7 @@
          *    @access public
          */
         function ignoreFrames() {
+            $this->_browser->ignoreFrames();
         }
         
         /**

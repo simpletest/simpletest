@@ -12,6 +12,7 @@
     require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'options.php');
     require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'http.php');
     require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'page.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'frames.php');
     require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'user_agent.php');
     /**#@-*/
     
@@ -170,6 +171,7 @@
         var $_transport_error;
         var $_page;
         var $_history;
+        var $_ignore_frames;
         
         /**
          *    Starts with a fresh browser with no
@@ -187,6 +189,7 @@
             $this->_transport_error = false;
             $this->_page = false;
             $this->_history = &$this->_createHistory();
+            $this->_ignore_frames = false;
         }
         
         /**
@@ -205,6 +208,40 @@
          */
         function &_createHistory() {
             return new SimpleBrowserHistory();
+        }
+        
+        /**
+         *    Disables frames support. Frames will not be fetched
+         *    and the frameset page will be used instead.
+         *    @access public
+         */
+        function ignoreFrames() {
+            $this->_ignore_frames = true;
+        }
+        
+        /**
+         *    Enables frames support. Frames will be fetched from
+         *    now on.
+         *    @access public
+         */
+        function useFrames() {
+            $this->_ignore_frames = false;
+        }
+        
+        /**
+         *    Parses the raw content into a page.
+         *    @param SimpleHttpResponse $response    Response from fetch.
+         *    @return SimplePage                     Parsed HTML.
+         *    @access protected
+         */
+        function &_parse($response) {
+            $builder = &new SimplePageBuilder();
+            $page = &$builder->parse($response);
+            if ($this->_ignore_frames || ! $page->hasFrames()) {
+                return $page;
+            }
+            $frameset_builder = &new SimpleFramesetBuilder($builder);
+            return $frameset_builder->fetch($page, $this->_user_agent);
         }
         
         /**
@@ -325,18 +362,6 @@
          */
         function useProxy($proxy, $username = false, $password = false) {
             $this->_user_agent->useProxy($proxy, $username, $password);
-        }
-        
-        /**
-         *    Parses the raw content into a page.
-         *    @param SimpleHttpResponse $response    Response from fetch.
-         *    @return SimplePage                     Parsed HTML.
-         *    @access protected
-         */
-        function &_parse($response) {
-            $builder = &new SimplePageBuilder();
-            $page = &$builder->parse($response);
-            return $page;
         }
         
         /**

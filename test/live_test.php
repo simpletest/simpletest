@@ -462,19 +462,18 @@
         }
         function testNoFramesContentWhenFramesDisabled() {
             $this->ignoreFrames();
-            $this->get('http://www.lastcraft.com/test/frameset.html');
+            $this->get('http://www.lastcraft.com/test/one_page_frameset.html');
             $this->assertTitle('Frameset for testing of SimpleTest');
             $this->assertWantedPattern('/This content is for no frames only/');
         }
-        function TODO_testTitleTakenFromFramesetPage() {
-            $this->get('http://www.lastcraft.com/test/frameset.html');
+        function testTitleTakenFromFramesetPage() {
+            $this->get('http://www.lastcraft.com/test/one_page_frameset.html');
             $this->assertTitle('Frameset for testing of SimpleTest');
             $this->assertNoUnwantedPattern('/This content is for no frames only/');
         }
         function TODO_testPatternMatchCanReadWholeFrameset() {
-            $this->get('http://www.lastcraft.com/test/frameset.html');
+            $this->get('http://www.lastcraft.com/test/one_page_frameset.html');
             $this->assertWantedPattern('/This is frame A/');
-            $this->assertWantedPattern('/This is frame B/');
         }
     }
 ?>
