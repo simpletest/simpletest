@@ -12,6 +12,7 @@
     if (! defined('SIMPLE_TEST')) {
         define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
     }
+    require_once(SIMPLE_TEST . 'options.php');
     require_once(SIMPLE_TEST . 'http.php');
     require_once(SIMPLE_TEST . 'page.php');
     require_once(SIMPLE_TEST . 'user_agent.php');
@@ -175,11 +176,19 @@
         
         /**
          *    Starts with a fresh browser with no
-         *    cookie or any other state information.
+         *    cookie or any other state information. the
+         *    exception is that a default proxy will be
+         *    set up if specified in the options.
          *    @access public
          */
         function SimpleBrowser() {
             $this->_user_agent = &$this->_createUserAgent();
+            if (SimpleTestOptions::getDefaultProxyHost()) {
+                $this->_user_agent->useProxy(
+                        SimpleTestOptions::getDefaultProxyHost(),
+                        SimpleTestOptions::getDefaultProxyPort(),
+                        SimpleTestOptions::defaultProxyIsSecure());
+            }
             $this->_headers = false;
             $this->_transport_error = false;
             $this->_page = false;

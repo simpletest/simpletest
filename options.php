@@ -132,6 +132,53 @@
         }
         
         /**
+         *    Sets proxy to use on all requests for when
+         *    testing from behind a firewall. Set host
+         *    to false to disable. This will take effect
+         *    if there are no other proxy settings.
+         *    @param string $host        Proxy host.
+         *    @param integer $port       Proxy port.
+         *    @param boolean $is_secure  True if secure port.
+         *    @access public
+         */
+        function useProxy($host, $port = 8080, $is_secure = false) {
+            $registry = &SimpleTestOptions::_getRegistry();
+            $registry['DefaultProxyHost'] = $host;
+            $registry['DefaultProxyPort'] = $port;
+            $registry['DefaultProxyIsSecure'] = $is_secure;
+        }
+        
+        /**
+         *    Accessor for default proxy host.
+         *    @return string       Host name.
+         *    @access public
+         */
+        function getDefaultProxyHost() {
+            $registry = &SimpleTestOptions::_getRegistry();
+            return $registry['DefaultProxyHost'];
+        }
+        
+        /**
+         *    Accessor for default proxy port.
+         *    @return integer       Host name.
+         *    @access public
+         */
+        function getDefaultProxyPort() {
+            $registry = &SimpleTestOptions::_getRegistry();
+            return $registry['DefaultProxyPort'];
+        }
+        
+        /**
+         *    Accessor for SSL setting on default proxy.
+         *    @return boolean       True if SSL link to proxy.
+         *    @access public
+         */
+        function defaultProxyIsSecure() {
+            $registry = &SimpleTestOptions::_getRegistry();
+            return $registry['DefaultProxyIsSecure'];
+        }
+        
+        /**
          *    Accessor for global registry of options.
          *    @return hash           All stored values.
          *    @access private
@@ -156,7 +203,10 @@
                     'StubBaseClass' => 'SimpleStub',
                     'MockBaseClass' => 'SimpleMock',
                     'IgnoreList' => array(),
-                    'AdditionalPartialMockCode' => '');
+                    'AdditionalPartialMockCode' => '',
+                    'DefaultProxyHost' => false,
+                    'DefaultProxyPort' => false,
+                    'DefaultProxyIsSecure' => false);
         }
     }
     
