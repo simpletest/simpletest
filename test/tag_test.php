@@ -220,5 +220,25 @@
             $form->addWidget($select);
             $this->assertIdentical($form->submit(), array('a' => 'aaa'));
         }
+        function testUncheckedWidget() {
+            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form->addWidget(new SimpleCheckboxTag(
+                    array('name' => 'me', 'type' => 'checkbox')));
+            $this->assertIdentical($form->getValue('me'), false);
+            $this->assertTrue($form->setField('me', 'on'));
+            $this->assertEqual($form->getValue('me'), 'on');
+            $this->assertFalse($form->setField('me', 'other'));
+            $this->assertEqual($form->getValue('me'), 'on');
+        }
+        function testCheckedWidget() {
+            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form->addWidget(new SimpleCheckboxTag(
+                    array('name' => 'me', 'value' => 'a', 'type' => 'checkbox', 'checked' => '')));
+            $this->assertIdentical($form->getValue('me'), 'a');
+            $this->assertFalse($form->setField('me', 'on'));
+            $this->assertEqual($form->getValue('me'), 'a');
+            $this->assertTrue($form->setField('me', false));
+            $this->assertEqual($form->getValue('me'), false);
+        }
     }
 ?>

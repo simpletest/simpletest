@@ -239,6 +239,9 @@
             $this->assertWantedPattern('/a=\[\]/');
             $this->assertWantedPattern('/b=\[Default text\]/');
             $this->assertWantedPattern('/c=\[\]/');
+            $this->assertWantedPattern('/d=\[d1\]/');
+            $this->assertNoUnwantedPattern('/e=\[/');
+            $this->assertWantedPattern('/f=\[on\]/');
         }
         function testFormSubmission() {
             $this->get('http://www.lastcraft.com/test/form.html');
@@ -246,11 +249,15 @@
             $this->setField('b', 'bbb');
             $this->setField('c', 'ccc');
             $this->setField('d', 'D2');
+            $this->setField('e', 'on');
+            $this->setField('f', false);
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedPattern('/a=\[aaa\]/');
             $this->assertWantedPattern('/b=\[bbb\]/');
             $this->assertWantedPattern('/c=\[ccc\]/');
             $this->assertWantedPattern('/d=\[d2\]/');
+            $this->assertWantedPattern('/e=\[on\]/');
+            $this->assertNoUnwantedPattern('/f=\[/');
         }
         function testSelfSubmit() {
             $this->get('http://www.lastcraft.com/test/self_form.php');

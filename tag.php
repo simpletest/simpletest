@@ -127,6 +127,7 @@
      */
     class SimpleWidget extends SimpleTag {
         var $_value;
+        var $_is_set;
         
         /**
          *    Starts with a named tag with attributes only.
@@ -137,6 +138,7 @@
         function SimpleWidget($name, $attributes) {
             $this->SimpleTag($name, $attributes);
             $this->_value = false;
+            $this->_is_set = false;
         }
         
         /**
@@ -166,7 +168,7 @@
          *    @access public
          */
         function getValue() {
-            if ($this->_value === false) {
+            if (! $this->_is_set) {
                 return $this->getDefault();
             }
             return $this->_value;
@@ -180,6 +182,7 @@
          */
         function setValue($value) {
             $this->_value = $value;
+            $this->_is_set = true;
             return true;
         }
         
@@ -189,7 +192,7 @@
          *    @access public
          */
         function resetValue() {
-            $this->_value = false;
+            $this->_is_set = false;
         }
     }
     
@@ -204,6 +207,9 @@
          *                               string values.
          */
         function SimpleTextTag($attributes) {
+            if (! isset($attributes['value'])) {
+                $attributes['value'] = '';
+            }
             $this->SimpleWidget('input', $attributes);
         }
         
@@ -331,6 +337,62 @@
                 if (($wrap == 'physical') || ($wrap == 'hard')) {
                     return true;
                 }
+            }
+            return false;
+        }
+    }
+    
+    /**
+     *    Checkbox widget.
+     */
+    class SimpleCheckboxTag extends SimpleWidget {
+        
+        /**
+         *    Starts with attributes only.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
+        function SimpleCheckboxTag($attributes) {
+            if (! isset($attributes['value'])) {
+                $attributes['value'] = 'on';
+            }
+            $this->SimpleWidget('input', $attributes);
+        }
+        
+        /**
+         *    Tag contains no content.
+         *    @return boolean        False.
+         *    @access public
+         */
+        function expectEndTag() {
+            return false;
+        }
+        
+        /**
+         *    The only allowed value in the one in the
+         *    "value" attribute.
+         *    @param string $value      New value.
+         *    @return boolean           True if allowed.
+         *    @access public
+         */
+        function setValue($value) {
+            if ($value === false) {
+                return parent::setValue($value);
+            }
+            if ($value != $this->getAttribute('value')) {
+                return false;
+            }
+            return parent::setValue($value);
+        }
+        
+        /**
+         *    Accessor for starting value.
+         *    @return string        Parsed value.
+         *    @access public
+         */
+        function getDefault() {
+            if ($this->getAttribute('checked')) {
+                return $this->getAttribute('value');
             }
             return false;
         }
@@ -575,7 +637,11 @@
             $values = array();
             foreach (array_keys($this->_widgets) as $name) {
                 $value = $this->_widgets[$name]->getValue();
-                $values[$name] = is_string($value) ? $value : '';
+                if (is_string($value)) {
+                    $values[$name] = $value;
+                } elseif ($value === true) {
+                    $values[$name] = '';
+                }
             }
             return $values;
         }

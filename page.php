@@ -48,7 +48,7 @@
          */
         function startElement($name, $attributes) {
             $tag = &$this->_createTag($name, $attributes);
-            if ($name =='form') {
+            if ($name == 'form') {
                 $this->_page->acceptFormStart($tag);
                 return true;
             }            
@@ -140,11 +140,7 @@
             } elseif ($name == 'title') {
                 return new SimpleTitleTag($attributes);
             } elseif ($name == 'input') {
-                if (isset($attributes['type']) && ($attributes['type'] == 'submit')) {
-                    return new SimpleSubmitTag($attributes);
-                } else {
-                    return new SimpleTextTag($attributes);
-                }
+                return $this->_createInputTag($attributes);
             } elseif ($name == 'textarea') {
                 return new SimpleTextAreaTag($attributes);
             } elseif ($name == 'select') {
@@ -155,6 +151,25 @@
                 return new SimpleFormTag($attributes);
             }
             return new SimpleTag($attributes);
+        }
+        
+        /**
+         *    Factory for input tags.
+         *    @param hash $attributes    Element attributes.
+         *    @return SimpleTag          Tag object.
+         *    @access protected
+         */
+        function &_createInputTag($attributes) {
+            if (! isset($attributes['type'])) {
+                return new SimpleTextTag($attributes);
+            }
+            if ($attributes['type'] == 'submit') {
+                return new SimpleSubmitTag($attributes);
+            } elseif ($attributes['type'] == 'checkbox') {
+                return new SimpleCheckboxTag($attributes);
+            } else {
+                return new SimpleTextTag($attributes);
+            }
         }
     }
     
@@ -438,6 +453,7 @@
          *    available.
          *    @param string $name        Field name.
          *    @param string $value       Value to set field to.
+         *    @return boolean            True if value is valid.
          *    @access public
          */
         function setField($name, $value) {

@@ -31,6 +31,14 @@
         }
         
         /**
+         *    Dumps the curent HTML source for debugging.
+         *    @access public
+         */
+        function showSource() {
+            $this->dump(htmlentities($this->_current_content));
+        }
+        
+        /**
          *    Simulates the closing and reopening of the browser.
          *    Temporary cookies will be discarded and timed
          *    cookies will be expired if later than the
