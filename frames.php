@@ -69,7 +69,8 @@
         
         /**
          *    Accessor for current frame focus. Will be
-         *    false if no frame has focus.
+         *    false if no frame has focus. Will have the nested
+         *    frame focus if any.
          *    @return integer/string/boolean    Label if any, otherwise
          *                                      the position in the frameset
          *                                      or false if none.
@@ -78,6 +79,9 @@
         function getFrameFocus() {
             if ($this->_focus === false) {
                 return false;
+            }
+            if ($focus = $this->_frames[$this->_focus]->getFrameFocus()) {
+                return $focus;
             }
             return $this->_getPublicNameFromIndex($this->_focus);
         }
@@ -101,11 +105,18 @@
         
         /**
          *    Sets the focus by index. The integer index starts from 1.
+         *    If already focused and the target frame also has frames,
+         *    then the nested frame will be focused.
          *    @param integer $choice    Chosen frame.
          *    @return boolean           True if frame exists.
          *    @access public
          */
         function setFrameFocusByIndex($choice) {
+            if (is_integer($this->_focus)) {
+                if ($this->_frames[$this->_focus]->hasFrames()) {
+                    return $this->_frames[$this->_focus]->setFrameFocusByIndex($choice);
+                }
+            }
             if (($choice < 1) || ($choice > count($this->_frames))) {
                 return false;
             }
@@ -114,12 +125,19 @@
         }
         
         /**
-         *    Sets the focus by name.
+         *    Sets the focus by name. If already focused and the
+         *    target frame also has frames, then the nested frame
+         *    will be focused.
          *    @param string $name    Chosen frame.
          *    @return boolean        True if frame exists.
          *    @access public
          */
         function setFrameFocus($name) {
+            if (is_integer($this->_focus)) {
+                if ($this->_frames[$this->_focus]->hasFrames()) {
+                    return $this->_frames[$this->_focus]->setFrameFocus($name);
+                }
+            }
             if (in_array($name, array_keys($this->_names))) {
                 $this->_focus = $this->_names[$name];
                 return true;
@@ -133,17 +151,25 @@
          */
         function clearFrameFocus() {
             $this->_focus = false;
+            $this->_clearNestedFramesFocus();
+        }
+        
+        /**
+         *    Clears the frame focus for any nested frames.
+         *    @access private
+         */
+        function _clearNestedFramesFocus() {
+            for ($i = 0; $i < count($this->_frames); $i++) {
+                $this->_frames[$i]->clearFrameFocus();
+            }
         }
         
         /**
          *    Test for the presence of a frameset.
-         *    @return boolean        True if frameset.
+         *    @return boolean        Always true.
          *    @access public
          */
         function hasFrames() {
-            if (is_integer($this->_focus)) {
-                return $this->_frames[$this->_focus]->hasFrames();
-            }
             return true;
         }
         

@@ -714,5 +714,43 @@
                     'inner' => array(
                             'page' => 'http://site.with.nested.frame/page.html')));
         }
+        
+        function testCanNavigateToNestedFrame() {
+            $inner = '<frameset>' .
+                    '<frame name="one" src="one.html">' .
+                    '<frame name="two" src="two.html">' .
+                    '</frameset>';
+            $outer = '<frameset>' .
+                    '<frame name="inner" src="inner.html">' .
+                    '<frame name="three" src="three.html">' .
+                    '</frameset>';
+            $browser = &$this->createBrowser($this->createUserAgent(array(
+                    'http://site.with.nested.frames/' => $outer,
+                    'http://site.with.nested.frames/inner.html' => $inner,
+                    'http://site.with.nested.frames/one.html' => 'Page one',
+                    'http://site.with.nested.frames/two.html' => 'Page two',
+                    'http://site.with.nested.frames/three.html' => 'Page three')));
+            
+            $browser->get('http://site.with.nested.frames/');
+            $this->assertEqual($browser->getContent(), 'Page onePage twoPage three');
+            
+            $this->assertTrue($browser->setFrameFocus('inner'));
+            $this->assertEqual($browser->getFrameFocus(), 'inner');
+            $this->assertTrue($browser->setFrameFocus('one'));
+            $this->assertEqual($browser->getFrameFocus(), 'one');
+            $this->assertEqual($browser->getContent(), 'Page one');
+            
+            $this->assertTrue($browser->setFrameFocus('two'));
+            $this->assertEqual($browser->getFrameFocus(), 'two');
+            $this->assertEqual($browser->getContent(), 'Page two');
+            
+            $browser->clearFrameFocus();
+            $this->assertTrue($browser->setFrameFocus('three'));
+            $this->assertEqual($browser->getFrameFocus(), 'three');
+            $this->assertEqual($browser->getContent(), 'Page three');
+            
+            $this->assertTrue($browser->setFrameFocus('inner'));
+            $this->assertEqual($browser->getContent(), 'Page onePage two');
+        }
     }
 ?>

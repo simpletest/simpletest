@@ -29,7 +29,7 @@ Add simple button tag parsing (1/3) - done.
 
 Browser
 -------
-Allow nested framed pages (4/1).
+Allow nested framed pages (4/3).
 Add focused frame reloads (2/3) - done.
 Add frame loads from links (4/4) - done.
 Add frame loads from forms (2/4) - done.

@@ -159,20 +159,6 @@
             $this->assertIdentical($frameset->getFrameFocus(), 1);
         }
         
-        function testCanReadFrameForFurtherFrames() {
-            $page = &new MockSimplePage($this);
-            
-            $frame = &new MockSimplePage($this);
-            $frame->setReturnValue('hasFrames', false);
-            
-            $frameset = &new SimpleFrameset($page);
-            $frameset->addFrame($frame);
-            
-            $this->assertTrue($frameset->hasFrames());
-            $this->assertTrue($frameset->setFrameFocusByIndex(1));
-            $this->assertIdentical($frameset->hasFrames(), false);
-        }
-        
         function testContentComesFromFrameInFocus() {
             $page = &new MockSimplePage($this);
             
