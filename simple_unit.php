@@ -40,7 +40,9 @@
          *    @param $value          Supposedly null value.
          */
         function assertNull($value) {
-            $this->assertTrue(!isset($value), "[" . gettype($value) . ": $value] should be null");
+            $this->assertTrue(
+                    !isset($value),
+                    "[" . gettype($value) . ": $value] should be null");
         }
         
         /**
@@ -48,7 +50,9 @@
          *    @param $value          Supposedly set value.
          */
         function assertNotNull($value) {
-            $this->assertTrue(isset($value), "[" . gettype($value) . ": $value] should be not be null");
+            $this->assertTrue(
+                    isset($value),
+                    "[" . gettype($value) . ": $value] should be not be null");
         }
         
         /**
@@ -77,7 +81,7 @@
         
         /**
          *    Will trigger a pass if both parameters refer
-         *    to the same object.
+         *    to the same object. Fail otherwise.
          *    @param $first            Object reference to check.
          *    @param $second           Hopefully the same object.
          */

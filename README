@@ -1,0 +1,16 @@
+Simple Test
+===========
+A framework for unit testing, web site testing and mock objects.
+
+The current release is PHP only and does not yet include the web testing tool.
+As an early release it doesn't have much in the way of documentation either!
+You can find a tutorial on http://www.lastcraft.com/simple_test.php to
+get you started. This material will eventually become included with the
+project documentation.
+
+If you download and use and possibly even extend this tool, please let me
+know. Any feedback, even bad, is always welcome.
+
+yours, Marcus.
+
+marcus@lastcraft.com

@@ -10,12 +10,12 @@
   <file name="simple_unit.php" icon_position="437,139">
     <keyword name="certified"/>
   </file>
-  <file name="test" window_geometry="485x275+121+639"/>
+  <file name="test" window_geometry="603x270+637+500"/>
   <file name="simple_html_test.php">
     <keyword name="certified"/>
   </file>
   <file name="simple_mock.php">
     <keyword name="certified"/>
   </file>
-  <file name="docs" window_geometry="489x342+7+554"/>
+  <file name="docs" window_geometry="668x286+7+554"/>
 </directory>
