@@ -1029,10 +1029,11 @@
         /**
          *    Starts with no held controls/widgets.
          *    @param SimpleTag $tag        Form tag to read.
+         *    @param SimpleUrl $url        Location of holding page.
          */
-        function SimpleForm($tag) {
+        function SimpleForm($tag, $url) {
             $this->_method = $tag->getAttribute('method');
-            $this->_action = $tag->getAttribute('action');
+            $this->_action = $this->_createAction($tag->getAttribute('action'), $url);
             $this->_id = $tag->getAttribute('id');
             $this->_buttons = array();
             $this->_images = array();
@@ -1049,8 +1050,27 @@
         }
         
         /**
-         *    Relative URL of the target.
-         *    @return string           URL target.
+         *    Combined action attribute with current location
+         *    to get an absolute form target.
+         *    @param string $action    Action attribute from form tag.
+         *    @param SimpleUrl $base   Page location.
+         *    @return SimpleUrl        Absolute form target.
+         */
+        function _createAction($action, $base) {
+            if ($action === false) {
+                return $base;
+            }
+            if ($action === true) {
+                $url = new SimpleUrl('');
+            } else {
+                $url = new SimpleUrl($action);
+            }
+            return $url->makeAbsolute($base);
+        }
+        
+        /**
+         *    Absolute URL of the target.
+         *    @return SimpleUrl           URL target.
          *    @access public
          */
         function getAction() {

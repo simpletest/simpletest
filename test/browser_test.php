@@ -357,7 +357,7 @@
             $agent->expectCallCount('fetchResponse', 2);
             
             $form = &new MockSimpleForm($this);
-            $form->setReturnValue('getAction', false);
+            $form->setReturnValue('getAction', new SimpleUrl('http://this.com/page.html'));
             $form->setReturnValue('getMethod', 'get');
             $form->setReturnValue('submitButtonByLabel', array('a' => 'A'));
             

@@ -488,7 +488,7 @@
          *    @access public
          */
         function acceptFormStart(&$tag) {
-            $this->_open_forms[] = &new SimpleForm($tag);
+            $this->_open_forms[] = &new SimpleForm($tag, $this->getUrl());
         }
         
         /**

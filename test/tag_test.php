@@ -1,12 +1,13 @@
 <?php
     // $Id$
     
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../tag.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../tag.php');
     
     class TestOfTag extends UnitTestCase {
         function TestOfTag() {
             $this->UnitTestCase();
         }
+        
         function testStartValues() {
             $tag = new SimpleTitleTag(array("a" => "1", "b" => ""));
             $this->assertEqual($tag->getTagName(), "title");
@@ -15,6 +16,7 @@
             $this->assertIdentical($tag->getAttribute("c"), false);
             $this->assertIdentical($tag->getContent(), "");
         }
+        
         function testTitleContent() {
             $tag = &new SimpleTitleTag(array());
             $this->assertTrue($tag->expectEndTag());
@@ -22,10 +24,12 @@
             $tag->addContent('World');
             $this->assertEqual($tag->getContent(), 'HelloWorld');
         }
+        
         function testTagWithNoEnd() {
             $tag = &new SimpleTextTag(array());
             $this->assertFalse($tag->expectEndTag());
         }
+        
         function testAnchorHref() {
             $tag = &new SimpleAnchorTag(array('href' => 'http://here/'));
             $this->assertEqual($tag->getHref(), 'http://here/');
@@ -44,16 +48,19 @@
         function TestOfWidget() {
             $this->UnitTestCase();
         }
+        
         function testTextEmptyDefault() {
             $tag = &new SimpleTextTag(array('' => 'text'));
             $this->assertIdentical($tag->getDefault(), '');
             $this->assertIdentical($tag->getValue(), '');
         }
+        
         function testTextDefault() {
             $tag = &new SimpleTextTag(array('value' => 'aaa'));
             $this->assertEqual($tag->getDefault(), 'aaa');
             $this->assertEqual($tag->getValue(), 'aaa');
         }
+        
         function testSettingTextValue() {
             $tag = &new SimpleTextTag(array('value' => 'aaa'));
             $tag->setValue('bbb');
@@ -61,11 +68,13 @@
             $tag->resetValue();
             $this->assertEqual($tag->getValue(), 'aaa');
         }
+        
         function testFailToSetHiddenValue() {
             $tag = &new SimpleTextTag(array('value' => 'aaa', 'type' => 'hidden'));
             $this->assertFalse($tag->setValue('bbb'));
             $this->assertEqual($tag->getValue(), 'aaa');
         }
+        
         function testSubmitDefaults() {
             $tag = &new SimpleSubmitTag(array('type' => 'submit'));
             $this->assertEqual($tag->getName(), 'submit');
@@ -73,6 +82,7 @@
             $this->assertFalse($tag->setValue('Cannot set this'));
             $this->assertEqual($tag->getValue(), 'Submit');
         }
+        
         function testPopulatedSubmit() {
             $tag = &new SimpleSubmitTag(
                     array('type' => 'submit', 'name' => 's', 'value' => 'Ok!'));
@@ -85,12 +95,14 @@
         function TestOfTextArea() {
             $this->UnitTestCase();
         }
+        
         function testDefault() {
             $tag = &new SimpleTextAreaTag(array('name' => 'a'));
             $tag->addContent('Some text');
             $this->assertEqual($tag->getName(), 'a');
             $this->assertEqual($tag->getDefault(), 'Some text');
         }
+        
         function testWrapping() {
             $tag = &new SimpleTextAreaTag(array('cols' => '10', 'wrap' => 'physical'));
             $tag->addContent("Lot's of text that should be wrapped");
@@ -108,10 +120,12 @@
         function TestOfSelection() {
             $this->UnitTestCase();
         }
+        
         function testEmpty() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
             $this->assertIdentical($tag->getValue(), '');
         }
+        
         function testSingle() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
             $option = &new SimpleOptionTag(array());
@@ -119,6 +133,7 @@
             $tag->addTag($option);
             $this->assertEqual($tag->getValue(), 'AAA');
         }
+        
         function testSingleDefault() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
             $option = &new SimpleOptionTag(array('selected' => ''));
@@ -126,6 +141,7 @@
             $tag->addTag($option);
             $this->assertEqual($tag->getValue(), 'AAA');
         }
+        
         function testSingleMappedDefault() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
             $option = &new SimpleOptionTag(array('selected' => '', 'value' => 'aaa'));
@@ -133,6 +149,7 @@
             $tag->addTag($option);
             $this->assertEqual($tag->getValue(), 'aaa');
         }
+        
         function testStartsWithDefault() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
             $a = &new SimpleOptionTag(array());
@@ -146,6 +163,7 @@
             $tag->addTag($c);
             $this->assertEqual($tag->getValue(), 'BBB');
         }
+        
         function testSettingOption() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
             $a = &new SimpleOptionTag(array());
@@ -159,6 +177,7 @@
             $tag->setValue('AAA');
             $this->assertEqual($tag->getValue(), 'AAA');
         }
+        
         function testSettingMappedOption() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
             $a = &new SimpleOptionTag(array('value' => 'aaa'));
@@ -173,6 +192,7 @@
             $tag->setValue('AAA');
             $this->assertEqual($tag->getValue(), 'aaa');
         }
+        
         function testFailToSetIllegalOption() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
             $a = &new SimpleOptionTag(array());
@@ -187,6 +207,7 @@
             $this->assertFalse($tag->setValue('Not present'));
             $this->assertEqual($tag->getValue(), 'BBB');
         }
+        
         function testNastyOptionValuesThatLookLikeFalse() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
             $a = &new SimpleOptionTag(array('value' => '1'));
@@ -199,6 +220,7 @@
             $tag->setValue('Zero');
             $this->assertIdentical($tag->getValue(), '0');
         }
+        
         function testMultipleDefaultWithNoSelections() {
             $tag = &new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
             $a = &new SimpleOptionTag(array());
@@ -210,6 +232,7 @@
             $this->assertIdentical($tag->getDefault(), array());
             $this->assertIdentical($tag->getValue(), array());
         }
+        
         function testMultipleDefaultWithSelections() {
             $tag = &new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
             $a = &new SimpleOptionTag(array('selected' => ''));
@@ -221,6 +244,7 @@
             $this->assertIdentical($tag->getDefault(), array('AAA', 'BBB'));
             $this->assertIdentical($tag->getValue(), array('AAA', 'BBB'));
         }
+        
         function testSettingMultiple() {
             $tag = &new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
             $a = &new SimpleOptionTag(array('selected' => ''));
@@ -238,6 +262,7 @@
             $this->assertTrue($tag->setValue(array()));
             $this->assertIdentical($tag->getValue(), array());
         }
+        
         function testFailToSetIllegalOptionsInMultiple() {
             $tag = &new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
             $a = &new SimpleOptionTag(array('selected' => ''));
@@ -256,12 +281,14 @@
         function TestOfRadioGroup() {
             $this->UnitTestCase();
         }
+        
         function testEmptyGroup() {
             $group = &new SimpleRadioGroup();
             $this->assertIdentical($group->getDefault(), false);
             $this->assertIdentical($group->getValue(), false);
             $this->assertFalse($group->setValue('a'));
         }
+        
         function testReadingSingleButtonGroup() {
             $group = &new SimpleRadioGroup();
             $group->addWidget(new SimpleRadioButtonTag(
@@ -269,6 +296,7 @@
             $this->assertIdentical($group->getDefault(), 'A');
             $this->assertIdentical($group->getValue(), 'A');
         }
+        
         function testReadingMultipleButtonGroup() {
             $group = &new SimpleRadioGroup();
             $group->addWidget(new SimpleRadioButtonTag(
@@ -278,12 +306,14 @@
             $this->assertIdentical($group->getDefault(), 'B');
             $this->assertIdentical($group->getValue(), 'B');
         }
+        
         function testFailToSetUnlistedValue() {
             $group = &new SimpleRadioGroup();
             $group->addWidget(new SimpleRadioButtonTag(array('value' => 'z')));
             $this->assertFalse($group->setValue('a'));
             $this->assertIdentical($group->getValue(), false);
         }
+        
         function testSettingNewValueClearsTheOldOne() {
             $group = &new SimpleRadioGroup();
             $group->addWidget(new SimpleRadioButtonTag(
@@ -299,6 +329,7 @@
         function TestOfTagGroup() {
             $this->UnitTestCase();
         }
+        
         function testReadingMultipleCheckboxGroup() {
             $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
@@ -307,6 +338,7 @@
             $this->assertIdentical($group->getDefault(), 'B');
             $this->assertIdentical($group->getValue(), 'B');
         }
+        
         function testReadingMultipleUncheckedItems() {
             $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
@@ -314,6 +346,7 @@
             $this->assertIdentical($group->getDefault(), false);
             $this->assertIdentical($group->getValue(), false);
         }
+        
         function testReadingMultipleCheckedItems() {
             $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(
@@ -323,6 +356,7 @@
             $this->assertIdentical($group->getDefault(), array('A', 'B'));
             $this->assertIdentical($group->getValue(), array('A', 'B'));
         }
+        
         function testSettingSingleValue() {
             $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
@@ -332,6 +366,7 @@
             $this->assertTrue($group->setValue('B'));
             $this->assertIdentical($group->getValue(), 'B');
         }
+        
         function testSettingMultipleValues() {
             $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
@@ -339,6 +374,7 @@
             $this->assertTrue($group->setValue(array('A', 'B')));
             $this->assertIdentical($group->getValue(), array('A', 'B'));
         }
+        
         function testSettingNoValue() {
             $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
@@ -352,17 +388,47 @@
         function TestOfForm() {
             $this->UnitTestCase();
         }
+        
         function testFormAttributes() {
             $tag = &new SimpleFormTag(array('Method' => 'GET', 'action' => 'here.php', 'id' => '33'));
-            $form = &new SimpleForm($tag);
+            $form = &new SimpleForm($tag, new SimpleUrl('http://host/a/index.html'));
             $this->assertEqual($form->getMethod(), 'get');
-            $this->assertEqual($form->getAction(), 'here.php');
+            $this->assertEqual(
+                    $form->getAction(),
+                    new SimpleUrl('http://host/a/here.php'));
             $this->assertIdentical($form->getId(), '33');
             $this->assertNull($form->getValue('a'));
             $this->assertEqual($form->getValues(), array());
         }
+        
+        function testEmptyAction() {
+            $tag = &new SimpleFormTag(array('Method' => 'GET', 'action' => '', 'id' => '33'));
+            $form = &new SimpleForm($tag, new SimpleUrl('http://host/a/index.html'));
+            $this->assertEqual(
+                    $form->getAction(),
+                    new SimpleUrl('http://host/a/'));
+        }
+        
+        function testMissingAction() {
+            $tag = &new SimpleFormTag(array('Method' => 'GET', 'id' => '33'));
+            $form = &new SimpleForm($tag, new SimpleUrl('http://host/a/index.html'));
+            $this->assertEqual(
+                    $form->getAction(),
+                    new SimpleUrl('http://host/a/index.html'));
+        }
+        
+        function testRootAction() {
+            $tag = &new SimpleFormTag(array('Method' => 'GET', 'action' => '/', 'id' => '33'));
+            $form = &new SimpleForm($tag, new SimpleUrl('http://host/a/index.html'));
+            $this->assertEqual(
+                    $form->getAction(),
+                    new SimpleUrl('http://host/'));
+        }
+        
         function testTextWidget() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleTextTag(
                     array('Name' => 'me', 'Type' => 'text', 'Value' => 'Myself')));
             $this->assertIdentical($form->getValue('me'), 'Myself');
@@ -372,8 +438,11 @@
             $this->assertNull($form->getValue('not_present'));
             $this->assertEqual($form->getValues(), array('me' => 'Not me'));
         }
+        
         function testTextWidgetById() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleTextTag(
                     array('Name' => 'me', 'Type' => 'text', 'Value' => 'Myself', 'id' => 50)));
             $this->assertIdentical($form->getValueById(50), 'Myself');
@@ -381,12 +450,18 @@
             $this->assertIdentical($form->getValueById(50), 'Not me');
             $this->assertEqual($form->getValues(), array('me' => 'Not me'));
         }
+        
         function testSubmitEmpty() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
             $this->assertIdentical($form->submit(), array());
         }
+        
         function testSubmitButton() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleSubmitTag(
                     array('type' => 'submit', 'name' => 'go', 'value' => 'Go!', 'id' => '9')));
             $this->assertTrue($form->hasSubmitName('go'));
@@ -394,8 +469,11 @@
             $this->assertEqual($form->submitButtonByLabel('Go!'), array('go' => 'Go!'));            
             $this->assertEqual($form->submitButtonById(9), array('go' => 'Go!'));            
         }
+        
         function testImageSubmitButton() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleSubmitTag(array(
                     'type' => 'image',
                     'src' => 'source.jpg',
@@ -415,16 +493,22 @@
                     $form->submitImageById(9, 100, 101),
                     array('go.x' => 100, 'go.y' => 101));
         }
+        
         function testSingleSelectFieldSubmitted() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
             $select = &new SimpleSelectionTag(array('name' => 'a'));
             $select->addTag(new SimpleOptionTag(
                     array('value' => 'aaa', 'selected' => '')));
             $form->addWidget($select);
             $this->assertIdentical($form->submit(), array('a' => 'aaa'));
         }
+        
         function testUnchecked() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleCheckboxTag(
                     array('name' => 'me', 'type' => 'checkbox')));
             $this->assertIdentical($form->getValue('me'), false);
@@ -433,8 +517,11 @@
             $this->assertFalse($form->setField('me', 'other'));
             $this->assertEqual($form->getValue('me'), 'on');
         }
+        
         function testChecked() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleCheckboxTag(
                     array('name' => 'me', 'value' => 'a', 'type' => 'checkbox', 'checked' => '')));
             $this->assertIdentical($form->getValue('me'), 'a');
@@ -443,23 +530,32 @@
             $this->assertTrue($form->setField('me', false));
             $this->assertEqual($form->getValue('me'), false);
         }
+        
         function testSingleUncheckedRadioButton() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleRadioButtonTag(
                     array('name' => 'me', 'value' => 'a', 'type' => 'radio')));
             $this->assertIdentical($form->getValue('me'), false);
             $this->assertTrue($form->setField('me', 'a'));
             $this->assertIdentical($form->getValue('me'), 'a');
         }
+        
         function testSingleCheckedRadioButton() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleRadioButtonTag(
                     array('name' => 'me', 'value' => 'a', 'type' => 'radio', 'checked' => '')));
             $this->assertIdentical($form->getValue('me'), 'a');
             $this->assertFalse($form->setField('me', 'other'));
         }
+        
         function testUncheckedRadioButtons() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleRadioButtonTag(
                     array('name' => 'me', 'value' => 'a', 'type' => 'radio')));
             $form->addWidget(new SimpleRadioButtonTag(
@@ -472,8 +568,11 @@
             $this->assertFalse($form->setField('me', 'c'));
             $this->assertIdentical($form->getValue('me'), 'b');
         }
+        
         function testCheckedRadioButtons() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleRadioButtonTag(
                     array('name' => 'me', 'value' => 'a', 'type' => 'radio')));
             $form->addWidget(new SimpleRadioButtonTag(
@@ -482,8 +581,11 @@
             $this->assertTrue($form->setField('me', 'a'));
             $this->assertIdentical($form->getValue('me'), 'a');
         }
+        
         function testMultipleFieldsWithSameKey() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleCheckboxTag(
                     array('name' => 'a', 'type' => 'checkbox', 'value' => 'me')));
             $form->addWidget(new SimpleCheckboxTag(

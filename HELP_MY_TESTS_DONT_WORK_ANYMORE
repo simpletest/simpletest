@@ -19,7 +19,8 @@ No method SimpleBrowser::getCurrentUrl()
 This is replaced with the more versatile showRequest() for
 debugging. It only existed in this context for version Beta5.
 Later versions will have SimpleBrowser::getHistory() for tracking
-paths through pages. It is currently deprecated.
+paths through pages. It is currently deprecated but will reappera in
+RC1 as getUrl().
 
 No method WebTestCase::getCurrentUrl()
 --------------------------------------

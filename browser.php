@@ -722,11 +722,9 @@
             if (! ($form = &$this->_page->getFormBySubmitLabel($label))) {
                 return false;
             }
-            $action = $this->_getAction($form);
-            $method = $form->getMethod();
             return $this->_load(
-                    $method,
-                    $action,
+                    $form->getMethod(),
+                    $form->getAction(),
                     $form->submitButtonByLabel($label));
         }
         
@@ -741,11 +739,9 @@
             if (! ($form = &$this->_page->getFormBySubmitName($name))) {
                 return false;
             }
-            $action = $this->_getAction($form);
-            $method = $form->getMethod();
             return $this->_load(
-                    $method,
-                    $action,
+                    $form->getMethod(),
+                    $form->getAction(),
                     $form->submitButtonByName($name));
         }
         
@@ -760,11 +756,9 @@
             if (! ($form = &$this->_page->getFormBySubmitId($id))) {
                 return false;
             }
-            $action = $this->_getAction($form);
-            $method = $form->getMethod();
             return $this->_load(
-                    $method,
-                    $action,
+                    $form->getMethod(),
+                    $form->getAction(),
                     $form->submitButtonById($id));
         }
         
@@ -784,11 +778,9 @@
             if (! ($form = &$this->_page->getFormByImageLabel($label))) {
                 return false;
             }
-            $action = $this->_getAction($form);
-            $method = $form->getMethod();
             return $this->_load(
-                    $method,
-                    $action,
+                    $form->getMethod(),
+                    $form->getAction(),
                     $form->submitImageByLabel($label, $x, $y));
         }
         
@@ -808,11 +800,9 @@
             if (! ($form = &$this->_page->getFormByImageName($name))) {
                 return false;
             }
-            $action = $this->_getAction($form);
-            $method = $form->getMethod();
             return $this->_load(
-                    $method,
-                    $action,
+                    $form->getMethod(),
+                    $form->getAction(),
                     $form->submitImageByName($name, $x, $y));
         }
          
@@ -831,28 +821,10 @@
             if (! ($form = &$this->_page->getFormByImageId($id))) {
                 return false;
             }
-            $action = $this->_getAction($form);
-            $method = $form->getMethod();
             return $this->_load(
-                    $method,
-                    $action,
+                    $form->getMethod(),
+                    $form->getAction(),
                     $form->submitImageById($id, $x, $y));
-        }
-       
-        /**
-         *    Replaces missing form action.
-         *    @param SimpleForm $form    Form object to submit.
-         *    @return string             URL to send results to.
-         *    @access private
-         */
-        function _getAction(&$form) {
-            $action = $form->getAction();
-            if ($action === false) {
-                return $this->_page->getUrl();
-            } elseif ($action === true) {
-                return '';
-            }
-            return $action;
         }
         
         /**
@@ -866,12 +838,10 @@
             if (! ($form = &$this->_page->getFormById($id))) {
                 return false;
             }
-            $action = $form->getAction();
-            if (! $action) {
-                $action = $this->_page->getRequestUrl();
-            }
-            $method = $form->getMethod();
-            return $this->_load($method, $action, $form->submit());
+            return $this->_load(
+                    $form->getMethod(),
+                    $form->getAction(),
+                    $form->submit());
         }
         
         /**
