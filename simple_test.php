@@ -40,13 +40,14 @@
          *    Runs the top level test for this class. The
          *    parameter will soon cease to be optional.
          *    @param $reporter        Target of test results.
+         *    @returns Boolean        True if no failures.
          *    @public
          */
         function run($reporter = false) {
             if (!$reporter) {
                 $reporter = &$this->_reporter;
             }
-            $this->accept(new TestRunner($reporter));
+            return $this->accept(new TestRunner($reporter));
         }
         
         /**
@@ -112,6 +113,7 @@
                 $runner->handleMethodEnd($method);
             }
             $runner->handleCaseEnd($this->getLabel());
+            return $runner->getStatus();
         }
         
         /**
@@ -363,6 +365,7 @@
                 $this->_test_cases[$i]->accept($runner);
             }
             $runner->handleGroupEnd($this->getLabel());
+            return $runner->getStatus();
         }
         
         /**

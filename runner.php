@@ -6,12 +6,14 @@
      */
     class TestRunner {
         var $_reporter;
+        var $_status;
         
         /**
          *    Sets up an reporter to receive events.
          */
         function TestRunner(&$reporter) {
             $this->_reporter = &$reporter;
+            $this->_status = true;
         }
         
         /**
@@ -42,6 +44,7 @@
          */
         function handleFail($message) {
             $this->_reporter->paintFail($message);
+            $this->_status = false;
         }
         
         /**
@@ -52,6 +55,7 @@
          */
         function handleError($message) {
             $this->_reporter->paintException($message);
+            $this->_status = false;
         }
         
         /**
@@ -62,6 +66,7 @@
          */
         function handleException($exception) {
             $this->_reporter->paintException("Unexpected exception");
+            $this->_status = false;
         }
         
         /**
@@ -148,7 +153,19 @@
          *    @public
          */
         function handleSignal($type, &$payload) {
-            $this->_reporter->paintSignal($type, $payload);
+            if (! $this->_reporter->paintSignal($type, $payload)) {
+                $this->_status = false;
+            }
+        }
+        
+        /**
+         *    Accessor for current status. Will be false
+         *    if there have been any failures or exceptions.
+         *    Used for command line tools.
+         *    @return boolean        True if no failures.
+         */
+        function getStatus() {
+            return $this->_status;
         }
     }
     
@@ -222,9 +239,13 @@
          *    events.
          *    @param $type        Event type as text.
          *    @param $payload     Message or object.
+         *    @return Boolean    Should return false if this
+         *                       type of signal should fail the
+         *                       test suite.
          *    @public
          */
         function paintSignal($type, &$payload) {
+            return true;
         }
     }
     

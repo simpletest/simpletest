@@ -260,5 +260,5 @@
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
     //$test->run(new AllOutputReporter());
-    $test->run(new CommandLineReporter());
+    exit ($test->run(new CommandLineReporter()) ? 0 : 1);
 ?>
