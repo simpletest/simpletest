@@ -177,6 +177,25 @@
             $this->assertTrue($this->clickSubmit("wobble"));
             $this->assertTitle('Done');
         }
+        function testFormSeperation() {
+            $browser = &$this->getBrowser();
+            $form_code = '<html><head><form method="post" action="here.php">';
+            $form_code .= '<input type="submit" name="s1" value="S1"/>';
+            $form_code .= '<input type="text" name="a" value="aaa"/>';
+            $form_code .= '</form><form method="post" action="there.php">';
+            $form_code .= '<input type="submit" name="s2" value="S2"/>';
+            $form_code .= '<input type="text" name="b" value="bbb"/>';
+            $form_code .= '</form></head></html>';
+            $browser->setReturnValue("get", $form_code);
+            $browser->expectOnce("get", array("http://my-site.com/", false));
+            $browser->setReturnValue("post", '<html><title>Done</title></html>');
+            $browser->expectOnce(
+                    "post",
+                    array("there.php", array("s2" => "S2", "b" => "bbb")));
+            $this->get("http://my-site.com/");
+            $this->assertTrue($this->clickSubmit("S2"));
+            $this->assertTitle('Done');
+        }
     }
     
     class TestOfFormFilling extends MockBrowserWebTestCase {

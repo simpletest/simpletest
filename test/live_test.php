@@ -29,7 +29,7 @@
             $socket->write("Connection: close\r\n\r\n");
             $this->assertEqual($socket->read(8), "HTTP/1.1");
             $socket->close();
-            $this->assertEqual($socket->read(8), "");
+            $this->assertIdentical($socket->read(8), false);
         }
         function testHttpGet() {
             $http = &new SimpleHttpRequest(new SimpleUrl(

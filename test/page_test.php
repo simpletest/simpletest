@@ -304,9 +304,11 @@
         function testSettingFormField() {
             $page = &new SimplePage(
                     '<html><head><form><input type="text" name="a"><input type="submit"></form></head></html>');
-            $page->setField("a", "aaa");
+            $this->assertTrue($page->setField("a", "aaa"));
+            $this->assertFalse($page->setField("b", "bbb"));
             $form = &$page->getFormBySubmitLabel("Submit");
             $this->assertEqual($form->getValue("a"), "aaa");
+            $this->assertNull($form->getValue("b"));
         }
     }
 ?>

@@ -149,7 +149,7 @@
          *                     present, nothing will be set.
          *    @public
          */
-        function setValue($name, $value) {
+        function setField($name, $value) {
             if (! in_array($name, array_keys($this->_defaults))) {
                 return false;
             }

@@ -383,9 +383,13 @@
          *    @public
          */
         function setField($name, $value) {
+            $is_set = false;
             for ($i = 0; $i < count($this->_closed_forms); $i++) {
-                $this->_closed_forms[$i]->setValue($name, $value);
+                if ($this->_closed_forms[$i]->setField($name, $value)) {
+                    $is_set = true;
+                }
             }
+            return $is_set;
         }
     }
 ?>

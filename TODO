@@ -24,7 +24,7 @@ Html parser
 -----------
 Test with realistic pages (5).
 Add form parsing (2/1) - done.
-Add input tag parsing (2).
+Add input tag parsing (2/1) - done.
 Add text area tag parsing (2).
 Add checkbox tag parsing (2).
 Add Simple monicker to sundry classes (1).
@@ -39,7 +39,7 @@ Add HTTP authentication (3).
 Web tester
 ----------
 Add default form submission (3/0) - done.
-Add setting of form values by name (2).
+Add setting of form values by name (2/1) - done.
 
 Documentation
 -------------
