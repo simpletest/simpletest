@@ -89,16 +89,35 @@
         function TestOfLiveFetching() {
             $this->WebTestCase();
         }
-        function testFetch() {
+        function testGet() {
             $this->get('http://www.lastcraft.com/test/network_confirm.php');
             $this->assertWantedPattern('/target for the SimpleTest/');
+            $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/');
             $this->assertTitle('Simple test target file');
         }
-        function testFetchWithGetData() {
+        function testPost() {
+            $this->post('http://www.lastcraft.com/test/network_confirm.php');
+            $this->assertWantedPattern('/target for the SimpleTest/');
+            $this->assertWantedPattern('/Request method.*?<dd>POST<\/dd>/');
         }
-        function testRelativeFetch() {
+        function testGetWithData() {
+            $this->get('http://www.lastcraft.com/test/network_confirm.php', array("a" => "aaa"));
+            $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/');
+            $this->assertWantedPattern('/a=\[aaa\]/');
+        }
+        function testPostWithData() {
+            $this->post('http://www.lastcraft.com/test/network_confirm.php', array("a" => "aaa"));
+            $this->assertWantedPattern('/Request method.*?<dd>POST<\/dd>/');
+            $this->assertWantedPattern('/a=\[aaa\]/');
+        }
+        function testRelativeGet() {
             $this->get('http://www.lastcraft.com/test/link_confirm.php');
             $this->get('./network_confirm.php');
+            $this->assertWantedPattern('/target for the SimpleTest/');
+        }
+        function testRelativePost() {
+            $this->post('http://www.lastcraft.com/test/link_confirm.php');
+            $this->post('./network_confirm.php');
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
         function testAbsoluteFollowing() {

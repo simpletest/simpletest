@@ -274,10 +274,7 @@
         function post($raw_url, $parameters = false, $request = false) {
             $url = $this->_createAbsoluteUrl($raw_url);
             if (!is_object($request)) {
-                $request = &new SimpleHttpPushRequest(
-                        $url,
-                        SimpleUrl::encodeRequest($parameters),
-                        "POST");
+                $request = &$this->createPostRequest($url, $parameters);
             }
             $response = &$this->fetchResponse($url, $request);
             if (!$response->isError()) {
@@ -285,6 +282,26 @@
                 return $response->getContent();
             }
             return false;
+        }
+        
+        /**
+         *    Builds a post request to simulate a HTML form.
+         *    @param $url          Target to fetch as url object.
+         *    @param $parameters   POST parameters.
+         *    @return              Push request object.
+         *    @public
+         *    @static
+         */
+        function &createPostRequest($url, $parameters) {
+            if (!$parameters) {
+                $parameters = array();
+            }
+            $request = &new SimpleHttpPushRequest(
+                    $url,
+                    SimpleUrl::encodeRequest($parameters),
+                    "POST");
+            $request->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
+            return $request;
         }
         
         /**

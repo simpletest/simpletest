@@ -246,12 +246,14 @@
         function testPost() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("getContent", "stuff");
+            $expected_request = new SimpleHttpPushRequest(new SimpleUrl("http://this.host/page.html"), "a=A&b=B");
+            $expected_request->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
             $browser = &new MockFetchSimpleBrowser($this);
             $browser->setReturnReference("fetchResponse", $response);
             $browser->expectCallCount("fetchResponse", 1);
-            $browser->expectArguments("fetchResponse", array(
-                    new SimpleUrl("http://this.host/page.html"),
-                    new SimpleHttpPushRequest(new SimpleUrl("http://this.host/page.html"), "a=A&b=B")));
+            $browser->expectArguments(
+                    "fetchResponse",
+                    array(new SimpleUrl("http://this.host/page.html"), $expected_request));
             $browser->SimpleBrowser();
             $this->assertIdentical(
                     $browser->post("http://this.host/page.html", array("a" => "A", "b" => "B"), &$this->_request),

@@ -36,7 +36,7 @@ Web tester
 ----------
 Connect up page failure expectations (3).
 Connect cookie expectations (2/6) - done.
-Add form submission to navigation (2/5).
+Add form submission to navigation (2/6).
 Connect up session start method on browser (1/1) - done.
 Fix base path bug where path is lost (1/1) - done.
 

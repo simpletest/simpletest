@@ -100,6 +100,20 @@
         }
         
         /**
+         *    Fetches a page by POST into the page buffer.
+         *    If there is no base for the URL then the
+         *    current base URL is used. All other context
+         *    remains the same.
+         *    @param $url          URL to fetch.
+         *    @param $parameters   Optional additional GET data.
+         *    @public
+         */
+        function post($url, $parameters = false) {
+            $this->_current_content = $this->_current_browser->post($url, $parameters);
+            $this->_clearHtmlCache();
+        }
+        
+        /**
          *    @deprecated
          */
         function fetch($url, $parameters) {
