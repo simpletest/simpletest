@@ -8,6 +8,7 @@
     define("LEXER_MATCHED", 2);
     define("LEXER_UNMATCHED", 3);
     define("LEXER_EXIT", 4);
+    define("LEXER_SPECIAL", 5);
     
     /**
      *    Compounded regular expression. Any of
@@ -86,7 +87,7 @@
                         array('\/', '\(', '\)'),
                         $this->_patterns[$i]) . ')';
             }
-            return ($this->_regex = "/" . implode("|", $this->_patterns) . "/ms");
+            return ($this->_regex = "/" . implode("|", $this->_patterns) . "/msS");
         }
     }
     
@@ -144,7 +145,8 @@
      *    Accepts text and breaks it into tokens.
      *    Some optimisation to make the sure the
      *    content is only scanned by the PHP regex
-     *    parser once.
+     *    parser once. Lexer modes must not start
+     *    with leading underscores.
      */
     class SimpleLexer {
         var $_regexes;
@@ -216,7 +218,25 @@
             if (!isset($this->_regexes[$mode])) {
                 $this->_regexes[$mode] = new ParallelRegex();
             }
-            $this->_regexes[$mode]->addPattern($pattern, "_exit");
+            $this->_regexes[$mode]->addPattern($pattern, "__exit");
+        }
+        
+        /**
+         *    Adds a pattern that has a special mode.
+         *    Acts as an entry and exit pattern in one go.
+         *    @param $pattern      Perl style regex, but ( and )
+         *                         lose the usual meaning.
+         *    @param $mode         Should only apply this
+         *                         pattern when dealing with
+         *                         this type of input.
+         *    @param $special      Use this mode for this one token.
+         *    @public
+         */
+        function addSpecialPattern($pattern, $mode, $special) {
+            if (!isset($this->_regexes[$mode])) {
+                $this->_regexes[$mode] = new ParallelRegex();
+            }
+            $this->_regexes[$mode]->addPattern($pattern, "_$special");
         }
         
         /**
@@ -275,8 +295,16 @@
             if (!$this->_invokeParser($unmatched, LEXER_UNMATCHED)) {
                 return false;
             }
-            if ($mode === "_exit") {
+            if ($mode === "__exit") {
                 if (!$this->_invokeParser($matched, LEXER_EXIT)) {
+                    return false;
+                }
+                return $this->_mode->leave();
+            }
+            if (strncmp($mode, "_", 1) == 0) {
+                $mode = substr($mode, 1);
+                $this->_mode->enter($mode);
+                if (!$this->_invokeParser($matched, LEXER_SPECIAL)) {
                     return false;
                 }
                 return $this->_mode->leave();
@@ -310,7 +338,7 @@
         /**
          *    Tries to match a chunk of text and if successful
          *    removes the recognised chunk and any leading
-         *    unparsed data.
+         *    unparsed data. Empty strings will not be matched.
          *    @param $raw         The subject to parse. This is the
          *                        content that will be eaten.
          *    @return             Three item list of unparsed
@@ -323,6 +351,9 @@
         function _reduce(&$raw) {
             if (!isset($this->_regexes[$this->_mode->getCurrent()])) {
                 return false;
+            }
+            if ($raw == "") {
+                return true;
             }
             if ($action = $this->_regexes[$this->_mode->getCurrent()]->match($raw, $match)) {
                 $count = strpos($raw, $match);
@@ -351,9 +382,16 @@
          *    Sets up the matching lexer.
          *    @param $parser    Event generator, usually $self.
          *    @return           Lexer suitable for this parser.
-         *    @protected
+         *    @public
          */
-        function _createLexer(&$parser) {
+        function &createLexer(&$parser) {
+            
+            $lexer = &new SimpleLexer($parser, "ignore");
+            $lexer->mapHandler("tag", "acceptStartToken");
+            $lexer->addSpecialPattern("</a>", "ignore", "acceptEndToken");
+            $lexer->addEntryPattern("<a", "ignore", "tag");
+            $lexer->addExitPattern(">", "tag");
+            return $lexer;
         }
         
         /**
@@ -398,7 +436,7 @@
          *    @return          False if parse error.
          *    @public
          */
-        function acceptEntity($token) {
+        function acceptEntityToken($token) {
         }
         
         /**
@@ -408,7 +446,7 @@
          *    @return          False if parse error.
          *    @public
          */
-        function acceptText($token) {
+        function acceptTextToken($token) {
         }
         
         /**

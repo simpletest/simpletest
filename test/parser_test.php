@@ -215,6 +215,24 @@
             $this->assertTrue($lexer->parse("aabaab(bbabb)aab"));
             $handler->tally();
         }
+        function testSingular() {
+            $handler = &new MockTestParser($this);
+            $handler->setReturnValue("a", true);
+            $handler->setReturnValue("b", true);
+            $handler->expectArgumentsSequence(0, "a", array("aa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(1, "a", array("aa", LEXER_MATCHED));
+            $handler->expectArgumentsSequence(2, "a", array("xx", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(3, "a", array("xx", LEXER_UNMATCHED));
+            $handler->expectArgumentsSequence(0, "b", array("b", LEXER_SPECIAL));
+            $handler->expectArgumentsSequence(1, "b", array("bbb", LEXER_SPECIAL));
+            $handler->expectCallCount("a", 4);
+            $handler->expectCallCount("b", 2);
+            $lexer = &new SimpleLexer($handler, "a");
+            $lexer->addPattern("a+", "a");
+            $lexer->addSpecialPattern("b+", "a", "b");
+            $this->assertTrue($lexer->parse("aabaaxxbbbxx"));
+            $handler->tally();
+        }
         function testUnwindTooFar() {
             $handler = &new MockTestParser($this);
             $handler->setReturnValue("a", true);
@@ -253,6 +271,43 @@
             $lexer->mapHandler("mode_b", "a");
             $this->assertTrue($lexer->parse("aa(bbabb)b"));
             $handler->tally();
+        }
+    }
+    
+    Mock::generate("HtmlSaxParser");
+    
+    class TestOfHtmlLexer extends UnitTestCase {
+        var $_handler;
+        var $_lexer;
+        
+        function TestOfHtmlLexer() {
+            $this->UnitTestCase();
+        }
+        function setUp() {
+            $this->_handler = &new MockHtmlSaxParser($this);
+            $this->_handler->setReturnValue("acceptStartToken", true);
+            $this->_handler->setReturnValue("acceptEndToken", true);
+            $this->_handler->setReturnValue("acceptAttributeToken", true);
+            $this->_handler->setReturnValue("acceptEntityToken", true);
+            $this->_handler->setReturnValue("acceptTextToken", true);
+            $this->_handler->setReturnValue("ignore", true);
+            $this->_lexer = &HtmlSaxParser::createLexer($this->_handler, "ignore");
+        }
+        function tearDown() {
+            $this->_handler->tally();
+        }
+        function testUninteresting() {
+            $this->_handler->expectArguments("ignore", array("<html></html>", "*"));
+            $this->_handler->expectCallCount("ignore", 1);
+            $this->assertTrue($this->_lexer->parse("<html></html>"));
+        }
+        function testEmptyLink() {
+            $this->_handler->expectArgumentsSequence(0, "acceptStartToken", array("<a", "*"));
+            $this->_handler->expectArgumentsSequence(1, "acceptStartToken", array(">", "*"));
+            $this->_handler->expectCallCount("acceptStartToken", 2);
+            $this->_handler->expectArgumentsSequence(0, "acceptEndToken", array("</a>", "*"));
+            $this->_handler->expectCallCount("acceptEndToken", 1);
+            $this->assertTrue($this->_lexer->parse("<html><a></a></html>"));
         }
     }
 ?>
