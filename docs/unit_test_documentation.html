@@ -271,7 +271,7 @@ $this->assertNoErrors();</strong>
 if (!defined(&apos;SIMPLE_TEST&apos;)) {
     define(&apos;SIMPLE_TEST&apos;, &apos;path/to/simpletest/&apos;);
 }
-require_once(SIMPLE_TEST . &apos;simple_unit&apos;);
+require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
 <strong>
 class FileTester extends UnitTestCase {
     function FileTester($name = false) {
@@ -318,7 +318,7 @@ class FileTestCase extends <strong>FileTester</strong> {
                 you need to extend the <span class="code">TestCase</span>
                 class instead.
                 It is found in <em>simple_test.php</em> rather than
-                <em>simple_unit.php</em>.
+                <em>unit_tester.php</em>.
                 See <a href="group_test_documentation.html">later</a> if you
                 want to incorporate other unit tester&apos;s
                 test cases in your test suites.
@@ -336,8 +336,8 @@ class FileTestCase extends <strong>FileTester</strong> {
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
         define(&apos;SIMPLE_TEST&apos;, &apos;path/to/simpletest/&apos;);
     }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);<strong>
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);</strong>
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);<strong>
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);</strong>
     require_once("../classes/writer.php");
 
     class FileTestCase extends UnitTestCase {
@@ -346,7 +346,7 @@ class FileTestCase extends <strong>FileTester</strong> {
         }
     }<strong>
     $test = &new FileTestCase();
-    $test-&gt;run(new TestHtmlDisplay());</strong>
+    $test-&gt;run(new HtmlReporter());</strong>
 ?&gt;
 </pre>
                 This script will run as is, but will output zero passes

@@ -129,11 +129,11 @@
             </p>
             <p>
                 For web page based displays there is the
-                <span class="code">TestHtmlDisplay</span> class with the following
+                <span class="code">HtmlReporter</span> class with the following
                 signature...
 <pre>
-class TestHtmlDisplay extends TestDisplay {
-    public TestHtmlDisplay() { ... }
+class HtmlReporter extends TestDisplay {
+    public HtmlReporter() { ... }
     public void paintHeader(string $test_name) { ... }
     public void paintFooter(string $test_name) { ... }
     public void paintStart(string $test_name, integer $size) { ... }
@@ -152,7 +152,7 @@ class TestHtmlDisplay extends TestDisplay {
                 that you will probably want to override...
                 <ul class="api">
                     <li>
-                        <span class="new_code">TestHtmlDisplay()</span><br />
+                        <span class="new_code">HtmlReporter()</span><br />
                         is the constructor.
                         Note that the unit test sets up the link to the display
                         rather than the other way around.

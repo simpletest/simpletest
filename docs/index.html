@@ -167,8 +167,8 @@
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
         define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
     }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
     require_once(&apos;../classes/log.php&apos;);
 ?&gt;</strong>
 </pre>
@@ -181,8 +181,8 @@
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
         define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
     }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
     require_once("../classes/log.php");
 <strong>
     class TestOfLogging extends UnitTestCase {
@@ -202,8 +202,8 @@
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
         define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
     }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
     require_once(&apos;../classes/log.php&apos;);
 
     class TestOfLogging extends UnitTestCase {
@@ -240,8 +240,8 @@
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
         define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
     }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
     require_once(&apos;../classes/log.php&apos;);
 
     class TestOfLogging extends UnitTestCase {
@@ -258,7 +258,7 @@
     }
 <strong>
     $test = &new TestOfLogging();
-    $test-&gt;run(new TestHtmlDisplay());</strong>
+    $test-&gt;run(new HtmlReporter());</strong>
 ?&gt;
 </pre>
             </p>
@@ -314,12 +314,12 @@
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
         define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
     }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
 
     $test = &new GroupTest(&apos;All tests&apos;);
     $test-&gt;addTestFile(&apos;log_test.php&apos;);
-    $test-&gt;run(new TestHtmlDisplay());</strong>
+    $test-&gt;run(new HtmlReporter());</strong>
 ?&gt;</strong>
 </pre>
                 The method <span class="new_code">GroupTest::addTestFile()</span>
@@ -434,8 +434,7 @@
         }
         function testLogInIsLogged() {<strong>
             $log = &new MockLog($this);
-            $log-&gt;expectArguments(&apos;message&apos;, array(&apos;User fred logged in.&apos;));
-            $log-&gt;expectCallCount(&apos;message&apos;, 1);</strong>
+            $log-&gt;expectOnce(&apos;message&apos;, array(&apos;User fred logged in.&apos;));</strong>
             $session_pool = &new SessionPool($log);
             $session_pool-&gt;logIn(&apos;fred&apos;);<strong>
             $log-&gt;tally();</strong>
@@ -489,8 +488,8 @@
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
         define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
     }<strong>
-    require_once(SIMPLE_TEST . &apos;simple_web_test.php&apos;);</strong>
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);
+    require_once(SIMPLE_TEST . &apos;web_tester.php&apos;);</strong>
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
 <strong>
     class TestOfAbout extends WebTestCase {
         function TestOfAbout(&apos;Tests of about page&apos;) {
@@ -506,7 +505,7 @@
         }
     }</strong>
     $test = &new TestOfAbout();
-    $test-&gt;run(new TestHtmlDisplay());</strong>
+    $test-&gt;run(new HtmlReporter());</strong>
 ?&gt;
 </pre>
                 With this code as an acceptance test you can ensure that

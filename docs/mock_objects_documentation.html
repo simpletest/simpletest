@@ -176,8 +176,8 @@ class DatabaseConnection {
 if (!defined(&apos;SIMPLE_TEST&apos;)) {
     define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
 }
-require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-require_once(SIMPLE_TEST . &apos;simple_mock.php&apos;);
+require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+require_once(SIMPLE_TEST . &apos;mock_objects.php&apos;);
 require_once(&apos;database_connection.php&apos;);
 
 Mock::generate(&apos;DatabaseConnection&apos;);</strong>
@@ -190,8 +190,8 @@ Mock::generate(&apos;DatabaseConnection&apos;);</strong>
 if (!defined(&apos;SIMPLE_TEST&apos;)) {
     define(&apos;SIMPLE_TEST&apos;, &apos;simpletest/&apos;);
 }
-require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-require_once(SIMPLE_TEST . &apos;simple_mock.php&apos;);
+require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+require_once(SIMPLE_TEST . &apos;mock_objects.php&apos;);
 require_once(&apos;database_connection.php&apos;);
 
 Mock::generate(&apos;DatabaseConnection&apos;);
@@ -448,12 +448,10 @@ class LoggingSessionPoolTest extends UnitTestCase {
         $session = &new MockSession($this);
         $pool = &new MockSessionPool($this);
         $pool-&gt;setReturnReference(&apos;findSession&apos;, $session);
-        $pool-&gt;expectArguments(&apos;findSession&apos;, array(&apos;abc&apos;));
-        $pool-&gt;expectCallCount(&apos;findSession&apos;, 1);
+        $pool-&gt;expectOnce(&apos;findSession&apos;, array(&apos;abc&apos;));
         
         $log = &new MockLog($this);
-        $log-&gt;expectArguments(&apos;message&apos;, array(&apos;Starting session abc&apos;));
-        $log-&gt;expectCallCount(&apos;message&apos;, 1);
+        $log-&gt;expectOnce(&apos;message&apos;, array(&apos;Starting session abc&apos;));
         
         $logging_pool = &new LoggingSessionPool($pool, $log);
         $this-&gt;assertReference($logging_pool-&gt;findSession(&apos;abc&apos;), $session);
@@ -472,7 +470,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
                 <span class="new_code">findSession()</span> is a factory
                 method the simulation of which is described <a href="#stub">above</a>.
                 The point of departure comes with the first
-                <span class="new_code">expectArguments()</span> call.
+                <span class="new_code">expectOnce()</span> call.
                 This line states that whenever
                 <span class="new_code">findSession()</span> is invoked on the
                 mock, it will test the incoming arguments.
@@ -486,11 +484,10 @@ class LoggingSessionPoolTest extends UnitTestCase {
                 evaluation is the same.
             </p>
             <p>
-                If the call is never made then niether a pass nor a failure will
+                If the call is never made then neither a pass nor a failure will
                 generated.
-                To get around this we add the additional requirement that
-                <span class="new_code">findSession()</span> must be called
-                exactly once.
+                To get around this we must tell the mock when the test is over
+                so that the object can decide if the expectation has been met.
                 The unit tester assertion for this is triggered by the
                 <span class="new_code">tally()</span> call at the end of
                 the test.
@@ -628,7 +625,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
         define(&apos;SIMPLE_TEST&apos;, &apos;../simpletest/&apos;);
     }
-    require_once(SIMPLE_TEST . &apos;simple_mock.php&apos;);
+    require_once(SIMPLE_TEST . &apos;mock_objects.php&apos;);
     require_once(&apos;../classes/connection.php&apos;);
 <strong>
     Mock::generate(&apos;Connection&apos;, &apos;BasicMockConnection&apos;);
@@ -704,7 +701,7 @@ $unit_test-&gt;assertion(&apos;I hope this file exists&apos;, file_exists(&apos;
                 We start with a subclass, in say <em>my_mock.php</em>...
 <pre><strong>
 &lt;?php
-    require_once(&apos;simple_mock.php&apos;);
+    require_once(SIMPLE_TEST . &apos;mock_objects.php&apos;);
     
     class MyMock extends SimpleMock() {
         function MyMock(&$test, $wildcard) {
@@ -724,7 +721,7 @@ $unit_test-&gt;assertion(&apos;I hope this file exists&apos;, file_exists(&apos;
                 your mock instead...
 <pre>
 &lt;?php
-    require_once(&apos;simple_mock.php&apos;);
+    require_once(SIMPLE_TEST . &apos;mock_objects.php&apos;);
     
     class MyMock extends SimpleMock() {
         function MyMock($test, $wildcard) {

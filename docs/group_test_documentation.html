@@ -154,7 +154,7 @@
                 no contain any actual tests, but is a base class for other
                 test cases.
                 For this reason we use the
-                <span class="new_code">GroupTest::ignore()</span> directive
+                <span class="new_code">SimpleTestOptions::ignore()</span> directive
                 to tell the upcoming group test to ignore it.
                 This directive can appear anywhere in the file and works
                 when a whole file of test cases is loaded (see below).
@@ -169,13 +169,13 @@
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
         define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
     }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);<strong>
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);<strong>
     require_once(&apos;file_test.php&apos;);
 
     $test = &new GroupTest(&apos;All file tests&apos;);
     $test-&gt;addTestCase(new FileTestCase());
-    $test-&gt;run(new TestHtmlDisplay());</strong>
+    $test-&gt;run(new HtmlReporter());</strong>
 ?&gt;
 </pre>
                 Actually we could have added this to our existing file
@@ -190,12 +190,12 @@
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
         define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
     }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
 
     $test = &new GroupTest(&apos;All file tests&apos;);<strong>
     $test-&gt;addTestFile(&apos;file_test.php&apos;);</strong>
-    $test-&gt;run(new TestHtmlDisplay());
+    $test-&gt;run(new HtmlReporter());
 ?&gt;
 </pre>
                 What happens here is that the <span class="new_code">GroupTest</span>
@@ -218,7 +218,7 @@
                     <li>
                         New test case extension classes thet get included will be
                         placed in the group test and run also.
-                        You will need to add a <span class="new_code">GroupTest::ignore()</span>
+                        You will need to add a <span class="new_code">SimpleTestOptions::ignore()</span>
                         directive for these classes or make sure that they are included
                         before the <span class="new_code">GroupTest::addTestFile()</span>
                         line.
@@ -240,8 +240,8 @@
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
         define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
     }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);
     <strong>
     class FileGroupTest extends GroupTest {
         function FileGroupTest() {
@@ -263,7 +263,7 @@
     require_once(&apos;file_group_test.php&apos;);
     <strong>
     $test = &new FileGroupTest();
-    $test->run(new TestHtmlDisplay());</strong>
+    $test->run(new HtmlReporter());</strong>
 ?&gt;
 </pre>
                 ...or we can group them into even larger group tests...
@@ -277,7 +277,7 @@
     $test = &new BigGroupTest("Big group");
     $test->addTestCase(new FileGroupTest());
     $test->addTestCase(...);
-    $test->run(new TestHtmlDisplay());</strong>
+    $test->run(new HtmlReporter());</strong>
 ?&gt;
 </pre>
                 If we still wish to run the original group test and we
@@ -296,8 +296,8 @@
     if (!defined(&apos;RUNNER&apos;)) {
         define(&apos;RUNNER&apos;, true);</strong>
         $test = &new FileGroupTest();
-        $test->run(new TestHtmlDisplay());<strong>
-    }</strong>
+        $test->run(new HtmlReporter());
+    }
 ?&gt;
 </pre>
                 This approach requires the guard to be set when including
@@ -318,7 +318,7 @@
     $test = &new BigGroupTest("Big group");
     $test->addTestCase(new FileGroupTest());
     $test->addTestCase(...);
-    $test->run(new TestHtmlDisplay());
+    $test->run(new HtmlReporter());
 ?&gt;
 </pre>
             </p>
@@ -355,13 +355,13 @@ class ConfigFileTest extends TestCase {
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
         define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
     }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);<strong>
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);<strong>
     require_once(SIMPLE_TEST . &apos;adapters/phpunit_test_case.php&apos;);</strong>
 
     $test = &new GroupTest(&apos;All file tests&apos;);<strong>
     $test-&gt;addTestFile(&apos;config_test.php&apos;);</strong>
-    $test-&gt;run(new TestHtmlDisplay());
+    $test-&gt;run(new HtmlReporter());
 ?&gt;
 </pre>
                 There are only two adapters, the other is for the
@@ -372,13 +372,13 @@ class ConfigFileTest extends TestCase {
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
         define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
     }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);<strong>
+    require_once(SIMPLE_TEST . &apos;unit_tester.php&apos;);
+    require_once(SIMPLE_TEST . &apos;reporter.php&apos;);<strong>
     require_once(SIMPLE_TEST . &apos;adapters/pear_test_case.php&apos;);</strong>
 
     $test = &new GroupTest(&apos;All file tests&apos;);<strong>
     $test-&gt;addTestFile(&apos;some_pear_test_cases.php&apos;);</strong>
-    $test-&gt;run(new TestHtmlDisplay());
+    $test-&gt;run(new HtmlReporter());
 ?&gt;
 </pre>
                 The PEAR test cases can be freely mixed with SimpleTest
