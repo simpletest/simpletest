@@ -7,6 +7,7 @@
     require_once(SIMPLE_TEST . 'user_agent.php');
     require_once(SIMPLE_TEST . 'http.php');
     Mock::generate('SimpleHttpRequest');
+    Mock::generate('SimpleHttpPostRequest');
     Mock::generate('SimpleHttpResponse');
     Mock::generate('SimpleHttpHeaders');
     Mock::generatePartial('SimpleUserAgent', 'MockRequestUserAgent', array('_createHttpRequest'));
@@ -203,72 +204,70 @@
             
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
-            $agent->expectOnce('_createHttpRequest', array(
-                    'GET',
-                    new SimpleUrl('http://this.com/page.html'),
-                    array('a' => 'A', 'b' => 'B')));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'GET',
                     'http://this.com/page.html',
                     array('a' => 'A', 'b' => 'B'));
+            $this->assertEqual($agent->getCurrentUrl(), 'http://this.com/page.html?a=A&b=B');
+            $this->assertEqual($agent->getCurrentMethod(), 'GET');
+            $this->assertEqual($agent->getCurrentPostData(), false);
             $agent->tally();
         }
-        function _testHead() {
+        function testHead() {
             $headers = &new MockSimpleHttpHeaders($this);
             $headers->setReturnValue('getMimeType', 'text/html');
             $headers->setReturnValue('getResponseCode', 200);
             $headers->setReturnValue('getNewCookies', array());
             
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue("getContent", "stuff");
+            $response->setReturnValue('getContent', 'stuff');
+            $response->setReturnReference('getHeaders', $headers);
             
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference('fetch', $response);
             
-            $url = new SimpleUrl("http://this.com/page.html");
-            $url->addRequestParameters(array("a" => "A", "b" => "B"));
+            $url = new SimpleUrl('http://this.com/page.html');
+            $url->addRequestParameters(array('a' => 'A', 'b' => 'B'));
             
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
-            $agent->expectOnce(
-                    '_createHttpRequest',
-                    array('HEAD', $url, array("a" => "A", "b" => "B")));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'HEAD',
                     'http://this.com/page.html',
-                    array("a" => "A", "b" => "B"));
+                    array('a' => 'A', 'b' => 'B'));
+            $this->assertIdentical($agent->getCurrentUrl(), false);
+            $this->assertIdentical($agent->getCurrentMethod(), false);
+            $this->assertEqual($agent->getCurrentPostData(), false);
             $agent->tally();
         }
-        function _testPost() {
+        function testPost() {
             $headers = &new MockSimpleHttpHeaders($this);
             $headers->setReturnValue('getMimeType', 'text/html');
             $headers->setReturnValue('getResponseCode', 200);
             $headers->setReturnValue('getNewCookies', array());
             
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue("getContent", "stuff");
+            $response->setReturnValue('getContent', 'stuff');
+            $response->setReturnReference('getHeaders', $headers);
             
-            $request = &new MockSimpleHttpRequest($this);
+            $request = &new MockSimpleHttpPostRequest($this);
             $request->setReturnReference('fetch', $response);
-            
-            $expected_request = new SimpleHttpPushRequest(new SimpleUrl('http://this.com/page.html'), 'a=A&b=B');
-            $expected_request->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
             
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
-            $agent->expectOnce(
-                    '_createHttpRequest',
-                    array('POST', new SimpleUrl('http://this.com/page.html'), array('a' => 'A', 'b' => 'B')));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'POST',
                     'http://this.com/page.html',
-                    array("a" => "A", "b" => "B"));
+                    array('a' => 'A', 'b' => 'B'));
+            $this->assertEqual($agent->getCurrentUrl(), 'http://this.com/page.html');
+            $this->assertEqual($agent->getCurrentMethod(), 'POST');
+            $this->assertEqual($agent->getCurrentPostData(), array('a' => 'A', 'b' => 'B'));
             $agent->tally();
         }
     }
@@ -385,8 +384,8 @@
         }
     }
 
-    class TestOfBrowserRedirects extends UnitTestCase {
-        function TestOfBrowserRedirects() {
+    class TestOfHttpRedirects extends UnitTestCase {
+        function TestOfHttpRedirects() {
             $this->UnitTestCase();
         }
         function &createRedirect($content, $redirect) {

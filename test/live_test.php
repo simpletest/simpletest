@@ -56,26 +56,26 @@
         }
         function testHttpHead() {
             $http = &new SimpleHttpRequest(
-                    new SimpleUrl("www.lastcraft.com/test/network_confirm.php"),
-                    "HEAD");
+                    new SimpleUrl('www.lastcraft.com/test/network_confirm.php'),
+                    'HEAD');
             $this->assertIsA($response = &$http->fetch(15), "SimpleHttpResponse");
             $headers = &$response->getHeaders();
             $this->assertEqual($headers->getResponseCode(), 200);
             $this->assertIdentical($response->getContent(), "");
         }
         function testHttpPost() {
-            $http = &new SimpleHttpPushRequest(
-                    new SimpleUrl("www.lastcraft.com/test/network_confirm.php"),
-                    "Some post data");
-            $this->assertIsA($response = &$http->fetch(15), "SimpleHttpResponse");
+            $http = &new SimpleHttpPostRequest(
+                    new SimpleUrl('www.lastcraft.com/test/network_confirm.php'),
+                    array());
+            $this->assertIsA($response = &$http->fetch(15), 'SimpleHttpResponse');
             $this->assertWantedPattern(
                     '/Request method.*?<dd>POST<\/dd>/',
                     $response->getContent());
         }
         function testHttpFormPost() {
-            $http = &new SimpleHttpPushRequest(
-                    new SimpleUrl("www.lastcraft.com/test/network_confirm.php"),
-                    "pkey=pvalue");
+            $http = &new SimpleHttpPostRequest(
+                    new SimpleUrl('www.lastcraft.com/test/network_confirm.php'),
+                    array('pkey' => 'pvalue'));
             $http->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
             $response = &$http->fetch(15);
             $this->assertWantedPattern(
@@ -371,6 +371,14 @@
         function TestOfHistoryNavigation() {
             $this->WebTestCase();
         }
+        function testRetry() {
+            $this->get('http://www.lastcraft.com/test/cookie_based_counter.php');
+            $this->assertWantedPattern('/count: 1/i');
+            $this->retry();
+            $this->assertWantedPattern('/count: 2/i');
+            $this->retry();
+            $this->assertWantedPattern('/count: 3/i');
+        }
         function testOfBackButton() {
             $this->get('http://www.lastcraft.com/test/1.html');
             $this->clickLink('2');
@@ -381,15 +389,16 @@
             $this->assertTitle('2');
             $this->assertFalse($this->forward());
         }
-        function testRetry() {
-            $this->get('http://www.lastcraft.com/test/cookie_based_counter.php');
-            $this->assertWantedPattern('/count: 1/i');
-            $this->retry();
-            $this->assertWantedPattern('/count: 2/i');
-            $this->retry();
-            $this->assertWantedPattern('/count: 3/i');
-        }
         function testGetRetryResubmitsData() {
+            $this->assertTrue($this->get(
+                    'http://www.lastcraft.com/test/network_confirm.php?a=aaa'));
+            $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/');
+            $this->assertWantedPattern('/a=\[aaa\]/');
+            $this->retry();
+            $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/');
+            $this->assertWantedPattern('/a=\[aaa\]/');
+        }
+        function testGetRetryResubmitsExtraData() {
             $this->assertTrue($this->get(
                     'http://www.lastcraft.com/test/network_confirm.php',
                     array('a' => 'aaa')));
@@ -408,6 +417,15 @@
             $this->retry();
             $this->assertWantedPattern('/Request method.*?<dd>POST<\/dd>/');
             $this->assertWantedPattern('/a=\[aaa\]/');
+        }
+        function testGetRetryResubmitsRepeatedData() {
+            $this->assertTrue($this->get(
+                    'http://www.lastcraft.com/test/network_confirm.php?a=1&a=2'));
+            $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/');
+            $this->assertWantedPattern('/a=\[1, 2\]/');
+            $this->retry();
+            $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/');
+            $this->assertWantedPattern('/a=\[1, 2\]/');
         }
     }
     

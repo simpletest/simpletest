@@ -13,7 +13,28 @@
         function testEmpty() {
             $query = &new SimpleQueryString();
             $this->assertIdentical($query->getValue('a'), false);
+            $this->assertIdentical($query->getKeys(), array());
             $this->assertIdentical($query->asString(), '');
+            $this->assertIdentical($query->getAll(), array());
+        }
+        function testPrefilled() {
+            $query = &new SimpleQueryString(array('a' => 'aaa'));
+            $this->assertIdentical($query->getValue('a'), 'aaa');
+            $this->assertIdentical($query->getKeys(), array('a'));
+            $this->assertIdentical($query->asString(), 'a=aaa');
+            $this->assertIdentical($query->getAll(), array('a' => 'aaa'));
+        }
+        function testPrefilledWithObject() {
+            $query = &new SimpleQueryString(new SimpleQueryString(array('a' => 'aaa')));
+            $this->assertIdentical($query->getValue('a'), 'aaa');
+            $this->assertIdentical($query->getKeys(), array('a'));
+            $this->assertIdentical($query->asString(), 'a=aaa');
+        }
+        function testMultiplePrefilled() {
+            $query = &new SimpleQueryString(array('a' => array('a1', 'a2')));
+            $this->assertIdentical($query->getValue('a'), array('a1', 'a2'));
+            $this->assertIdentical($query->asString(), 'a=a1&a=a2');
+            $this->assertIdentical($query->getAll(), array('a' => array('a1', 'a2')));
         }
         function testSingleParameter() {
             $query = &new SimpleQueryString();
@@ -50,6 +71,18 @@
             $query->add('a', array('Hello', 'Goodbye'));
             $this->assertIdentical($query->getValue('a'), array('Hello', 'Goodbye'));
             $this->assertIdentical($query->asString(), 'a=Hello&a=Goodbye');
+        }
+        function testMergeInHash() {
+            $query = &new SimpleQueryString(array('a' => 'A1', 'b' => 'B'));
+            $query->merge(array('a' => 'A2'));
+            $this->assertIdentical($query->getValue('a'), array('A1', 'A2'));
+            $this->assertIdentical($query->getValue('b'), 'B');
+        }
+        function testMergeInObject() {
+            $query = &new SimpleQueryString(array('a' => 'A1', 'b' => 'B'));
+            $query->merge(new SimpleQueryString(array('a' => 'A2')));
+            $this->assertIdentical($query->getValue('a'), array('A1', 'A2'));
+            $this->assertIdentical($query->getValue('b'), 'B');
         }
     }
 ?>

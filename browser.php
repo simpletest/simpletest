@@ -160,7 +160,9 @@
     }
     
     /**
-     *    Simulated web browser.
+     *    Simulated web browser. This is an aggregate of
+     *    the user agent, the HTML parsing, request history
+     *    and the last header set.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
@@ -358,26 +360,14 @@
                 return false;
             }
             if ($record) {
-                $this->_addToHistory($response, $parameters);
+                $this->_history->recordEntry(
+                        $this->_user_agent->getCurrentMethod(),
+                        $this->_user_agent->getCurrentUrl(),
+                        $this->_user_agent->getCurrentPostData());
             }
             $this->_headers = $response->getHeaders();
             $this->_page = &$this->_parse($response->getContent());
             return $response->getContent();
-        }
-        
-        /**
-         *    Adds the successful page to the history.
-         *    @param SimpleHttpResponse $response    Successful fetch.
-         *    @param array $parameters               Post data.
-         *    @access private
-         */
-        function _addToHistory(&$response, $parameters) {
-            $url = $response->getUrl();
-            $url->clearRequest();
-            $this->_history->recordEntry(
-                    $response->getMethod(),
-                    $url,
-                    $parameters);
         }
         
         /**
@@ -401,7 +391,8 @@
         
         /**
          *    Equivalent to hitting the back button on the
-         *    browser.
+         *    browser. The browser history is unchanged on
+         *    failure.
          *    @return boolean     True if history entry and
          *                        fetch succeeded
          *    @access public
@@ -410,12 +401,17 @@
             if (! $this->_history->back()) {
                 return false;
             }
-            return $this->retry();
+            $is_success = $this->retry();
+            if (! $is_success) {
+                $this->_history->forward();
+            }
+            return $is_success;
         }
         
         /**
          *    Equivalent to hitting the forward button on the
-         *    browser.
+         *    browser. The browser history is unchanged on
+         *    failure.
          *    @return boolean     True if history entry and
          *                        fetch succeeded
          *    @access public
@@ -424,7 +420,11 @@
             if (! $this->_history->forward()) {
                 return false;
             }
-            return $this->retry();
+            $is_success = $this->retry();
+            if (! $is_success) {
+                $this->_history->back();
+            }
+            return $is_success;
         }
         
         /**

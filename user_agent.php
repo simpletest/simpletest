@@ -150,7 +150,7 @@
         var $_cookie_jar;
         var $_max_redirects;
         var $_connection_timeout;
-        var $_current_url;
+        var $_current_request;
         
         /**
          *    Starts with no cookies.
@@ -160,7 +160,23 @@
             $this->_cookie_jar = new CookieJar();
             $this->setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
             $this->setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
-            $this->_current_url = false;
+            $this->_current_request = false;
+        }
+        
+        /**
+         *    Sets the current request information.
+         *    @param string $method      GET or POST only.
+         *    @param SimpleUrl $url      Current URL.
+         *    @param array/string $post  POST data if any.
+         */
+        function _setCurrentRequest($method, $url, $post) {
+            if ($method == 'HEAD') {
+                return;
+            }
+            $this->_current_request = array(
+                    'method' => $method,
+                    'url' => $url,
+                    'post' => $post);
         }
         
         /**
@@ -169,11 +185,13 @@
          *    @access public
          */
         function getBaseUrl() {
-            if (! $this->_current_url) {
+            if (! $this->_current_request) {
                 return false;
             }
-            return $this->_current_url->getScheme('http') . '://' .
-                    $this->_current_url->getHost() . $this->_current_url->getBasePath();
+            return $this->_current_request['url']->getScheme('http') . '://' .
+                    $this->_current_request['url']->getHost() .
+                    $this->_current_request['url']->getBasePath() .
+                    $this->_current_request['url']->getEncodedRequest();
         }
         
         /**
@@ -182,11 +200,37 @@
          *    @access public
          */
         function getCurrentUrl() {
-            if (! $this->_current_url) {
+            if (! $this->_current_request) {
                 return false;
             }
-            return $this->_current_url->getScheme('http') . '://' .
-                    $this->_current_url->getHost() . $this->_current_url->getPath();
+            return $this->_current_request['url']->getScheme('http') . '://' .
+                    $this->_current_request['url']->getHost() .
+                    $this->_current_request['url']->getPath() .
+                    $this->_current_request['url']->getEncodedRequest();
+        }
+        
+        /**
+         *    Accessor for method of last request.
+         *    @return string       POST or GET.
+         *    @access public
+         */
+        function getCurrentMethod() {
+            if (! $this->_current_request) {
+                return false;
+            }
+            return $this->_current_request['method'];
+        }
+        
+        /**
+         *    Accessor for method of last request.
+         *    @return string       POST or GET.
+         *    @access public
+         */
+        function getCurrentPostData() {
+            if (! $this->_current_request) {
+                return false;
+            }
+            return $this->_current_request['post'];
         }
         
         /**
@@ -306,6 +350,23 @@
          */
         function &fetchResponse($method, $url, $parameters = false) {
             $url = $this->createAbsoluteUrl($this->getBaseUrl(), $url);
+            if ($method != 'POST') {
+                $url->addRequestParameters($parameters);
+                $parameters = false;
+            }
+            return $this->_fetchWhileRedirected($method, $url, $parameters);
+        }
+        
+        /**
+         *    Fetches the page until no longer redirected or
+         *    until the redirect limit runs out.
+         *    @param string $method         GET, POST, etc.
+         *    @param string/SimpleUrl $url  Target to fetch.
+         *    @param hash $parameters       Additional parameters for request.
+         *    @return SimpleHttpResponse    Hopefully the target page.
+         *    @access private
+         */
+        function &_fetchWhileRedirected($method, $url, $parameters) {
             $redirects = 0;
             do {
                 $response = &$this->_fetch($method, $url, $parameters);
@@ -321,7 +382,7 @@
                 $method = 'GET';
                 $parameters = false;
             } while (! $this->_isTooManyRedirects(++$redirects));
-            $this->_current_url = $url;
+            $this->_setCurrentRequest($method, $url, $parameters);
             return $response;
         }
         
@@ -390,11 +451,7 @@
          */
         function &_createHttpRequest($method, $url, $parameters) {
             if ($method == 'POST') {
-                $request = &new SimpleHttpPushRequest(
-                        $url,
-                        SimpleUrl::encodeRequest($parameters),
-                        'POST');
-                $request->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
+                $request = &new SimpleHttpPostRequest($url, $parameters);
                 return $request;
             }
             if ($parameters) {

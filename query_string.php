@@ -2,15 +2,15 @@
     /**
      *	base include file for SimpleTest
      *	@package	SimpleTest
-     *	@subpackage	MockObjects
+     *	@subpackage	WebTester
      *	@version	$Id$
      */
     
     /**
-     * @ignore    originally defined in simple_test.php
+     * @ignore    Originally defined in simple_test.php
      */
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "simpletest/");
+    if (! defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', 'simpletest/');
     }
     
     /**
@@ -24,10 +24,17 @@
         
         /**
          *    Starts empty.
+         *    @param array $query/SimpleQueryString  Hash of parameters.
+         *                                           Multiple values are
+         *                                           as lists on a single key.
          *    @access public
          */
-        function SimpleQueryString() {
+        function SimpleQueryString($query = false) {
+            if (! $query) {
+                $query = array();
+            }
             $this->_request = array();
+            $this->merge($query);
         }
         
         /**
@@ -50,6 +57,25 @@
         }
         
         /**
+         *    Adds a set of parameters to this query.
+         *    @param array $query/SimpleQueryString  Hash of parameters.
+         *                                           Multiple values are
+         *                                           as lists on a single key.
+         *    @access public
+         */
+        function merge($query) {
+            if (is_object($query)) {
+                foreach ($query->getKeys() as $key) {
+                    $this->add($key, $query->getValue($key));
+                }
+            } else {
+                foreach ($query as $key => $value) {
+                    $this->add($key, $value);
+                }
+            }
+        }
+        
+        /**
          *    Accessor for single value.
          *    @return string/array    False if missing, string
          *                            if present and array if
@@ -64,6 +90,29 @@
             } else {
                 return $this->_request[$key];
             }
+        }
+        
+        /**
+         *    Accessor for key list.
+         *    @return array        List of keys present.
+         *    @access public
+         */
+        function getKeys() {
+            return array_keys($this->_request);
+        }
+        
+        /**
+         *    Gets all parameters as structured hash. Repeated
+         *    values are list values.
+         *    @return array        Hash of keys and value sets.
+         *    @access public
+         */
+        function getAll() {
+            $values = array();
+            foreach ($this->_request as $key => $value) {
+                $values[$key] = (count($value) == 1 ? $value[0] : $value);
+            }
+            return $values;
         }
         
         /**

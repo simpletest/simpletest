@@ -272,7 +272,7 @@
          *    @access public
          */
         function getEncodedRequest() {
-            $query = $this->getRequest();
+            $query = $this->_request;
             if ($encoded = $query->asString()) {
                 return "?$encoded";
             }
@@ -300,11 +300,12 @@
         /**
          *    Accessor for current request parameters
          *    as an object.
-         *    @return SimpleQueryString   Hash of name value pairs.
+         *    @return array   Hash of name and value pairs. The
+         *                    values will be lists for repeated items.
          *    @access public
          */
         function getRequest() {
-            return $this->_request;
+            return $this->_request->getAll();
         }
         
         /**
@@ -323,8 +324,8 @@
          *    @access public
          */
         function addRequestParameters($parameters) {
-            foreach ($parameters as $key => $value) {
-                $this->_request->add($key, $value);
+            if ($parameters) {
+                $this->_request->merge($parameters);
             }
         }
         
@@ -702,19 +703,18 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleHttpPushRequest extends SimpleHttpRequest {
+    class SimpleHttpPostRequest extends SimpleHttpRequest {
         var $_pushed_content;
         
         /**
          *    Saves the URL ready for fetching.
          *    @param SimpleUrl $url     URL as object.
-         *    @param string $content    Content to send.
-         *    @param string $method     HTTP request method, usually POST.
+         *    @param array $parameters  Content to send.
          *    @access public
          */
-        function SimpleHttpPushRequest($url, $content, $method = "POST") {
-            $this->SimpleHttpRequest($url, $method);
-            $this->_pushed_content = $content;
+        function SimpleHttpPostRequest($url, $parameters) {
+            $this->SimpleHttpRequest($url, 'POST');
+            $this->_pushed_content = SimpleUrl::encodeRequest($parameters);
         }
         
         /**
@@ -725,6 +725,7 @@
          */
         function _request(&$socket, $method) {
             $this->addHeaderLine('Content-Length: ' . strlen($this->_pushed_content));
+            $this->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
             parent::_request($socket, $method);
             $socket->write($this->_pushed_content);
         }
