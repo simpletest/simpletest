@@ -18,6 +18,9 @@
         }
     }
     
+    if (! function_exists('xml_parser_create')) {
+        SimpeTestOptions::ignore('TestOfXmlStructureParsing');
+    }
     class TestOfXmlStructureParsing extends UnitTestCase {
         function TestOfXmlStructureParsing() {
             $this->UnitTestCase();
