@@ -62,6 +62,7 @@
             $this->assertFalse($queue->extract());
         }
     }
+    
     class TestOfErrors extends UnitTestCase {
         var $_old;
         
