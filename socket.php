@@ -25,7 +25,7 @@
 	 *    @subpackage WebTester
      */
     class StickyError {
-        var $_error = "Constructor not chained";
+        var $_error = 'Constructor not chained';
         
         /**
          *    Sets the error to empty.
@@ -41,7 +41,7 @@
          *    @access public
          */
         function isError() {
-            return ($this->_error != "");
+            return ($this->_error != '');
         }
         
         /**
@@ -68,7 +68,7 @@
          *    @access protected
          */
         function _clearError() {
-            $this->_setError("");
+            $this->_setError('');
         }
     }
     

@@ -577,6 +577,122 @@
             return $path;
         }
     }
+    
+    /**
+     *    Creates HTTP headers for the end point of
+     *    a HTTP request.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleDestination {
+        var $_url;
+        
+        /**
+         *    Sets the target URL.
+         *    @param SimpleUrl $url   URL as object.
+         *    @access public
+         */
+        function SimpleDestination($url) {
+            $this->_url = $url;
+        }
+        
+        /**
+         *    Creates the first line which is the actual request.
+         *    @param string $method   HTTP request method, usually GET.
+         *    @return string          Request line content.
+         *    @access public
+         */
+        function getRequestLine($method) {
+            return $method . ' ' . $this->_url->getPath() .
+                    $this->_url->getEncodedRequest() . ' HTTP/1.0';
+        }
+        
+        /**
+         *    Creates the host part of the request.
+         *    @return string          Host line content.
+         *    @access public
+         */
+        function getHostLine() {
+            return 'Host: ' . $this->_url->getHost();
+        }
+        
+        /**
+         *    Opens a socket to the destination.
+         *    @param integer $timeout                 Connection timeout.
+         *    @return SimpleSocket/SimpleSecureSocket New socket.
+         *    @access public
+         */
+        function &createConnection($timeout) {
+            $default_port = ('https' == $this->_url->getScheme()) ? 443 : 80;
+            return $this->_createSocket(
+                    $this->_url->getScheme() ? $this->_url->getScheme() : 'http',
+                    $this->_url->getHost(),
+                    $this->_url->getPort() ? $this->_url->getPort() : $default_port,
+                    $timeout);
+        }
+        
+        /**
+         *    Factory for socket.
+         *    @param string $scheme                   Protocol to use.
+         *    @param string $host                     Hostname to connect to.
+         *    @param integer $port                    Remote port.
+         *    @param integer $timeout                 Connection timeout.
+         *    @return SimpleSocket/SimpleSecureSocket New socket.
+         *    @access protected
+         */
+        function &_createSocket($scheme, $host, $port, $timeout) {
+            if (in_array($scheme, array('https'))) {
+                return new SimpleSecureSocket($host, $port, $timeout);
+            }
+            return new SimpleSocket($host, $port, $timeout);
+        }
+    }
+    
+    /**
+     *    Creates HTTP headers for the end point of
+     *    a HTTP request via a proxy server.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleProxyDestination extends SimpleDestination {
+        
+        /**
+         *    Stashes the proxy address.
+         *    @param string $address        URL of proxy server.
+         *    @access public
+         */
+        function SimpleProxyDestination($address) {
+            $this->SimpleDirectDestination();
+        }
+        
+        /**
+         *    Creates the first line which is the actual request.
+         *    @param string $method   HTTP request method, usually GET.
+         *    @param SimpleUrl $url   URL as object.
+         *    @return string          Request line content.
+         *    @access protected
+         */
+        function getRequestLine($method, $url) {
+        }
+        
+        /**
+         *    Creates the host part of the request.
+         *    @param SimpleUrl $url   URL as object.
+         *    @return string          Host line content.
+         *    @access protected
+         */
+        function getHostLine($url) {
+        }
+        
+        /**
+         *    Opens a socket to the destination.
+         *    @param integer $timeout                 Connection timeout.
+         *    @return SimpleSocket/SimpleSecureSocket New socket.
+         *    @access public
+         */
+        function &createConnection($timeout) {
+        }
+    }
 
     /**
      *    HTTP request for a web page. Factory for
@@ -589,6 +705,7 @@
         var $_url;
         var $_cookies;
         var $_method;
+        var $_destination;
         
         /**
          *    Saves the URL ready for fetching.
@@ -598,31 +715,20 @@
          */
         function SimpleHttpRequest($url, $method = 'GET') {
             $this->_url = $url;
+            $this->_destination = $this->_createDestination($url);
             $this->_method = $method;
             $this->_headers = array();
             $this->_cookies = array();
         }
-        
+
         /**
-         *    Creates the first line which is the actual request.
-         *    @param string $method   HTTP request method, usually GET.
-         *    @param SimpleUrl $url   URL as object.
-         *    @return string          Request line content.
+         *    Creates header building strategy for destination.
+         *    @param SimpleUrl $url             Target URL as object.
+         *    @return SimpleDirectDestination   End point.
          *    @access protected
          */
-        function _createRequestLine($method, $url) {
-            return $method . ' ' . $this->_url->getPath() .
-                    $this->_url->getEncodedRequest() . ' HTTP/1.0';
-        }
-        
-        /**
-         *    Creates the host part of the request.
-         *    @param SimpleUrl $url   URL as object.
-         *    @return string          Host line content.
-         *    @access protected
-         */
-        function _createHostLine($url) {
-            return 'Host: ' . $this->_url->getHost();
+        function &_createDestination($url) {
+            return new SimpleDestination($url);
         }
         
         /**
@@ -633,16 +739,12 @@
          *    @access public
          */
         function &fetch($timeout) {
-           $default_port = ('https' == $this->_url->getScheme()) ? 443 : 80;
-           $socket = &$this->_createSocket(
-                    $this->_url->getScheme() ? $this->_url->getScheme() : 'http',
-                    $this->_url->getHost(),
-                    $this->_url->getPort() ? $this->_url->getPort() : $default_port,
-                    $timeout);
+            $default_port = ('https' == $this->_url->getScheme()) ? 443 : 80;
+            $socket = &$this->_destination->createConnection($timeout);
             if ($socket->isError()) {
                 return $this->_createResponse($socket);
             }
-            $this->_dispatch_request($socket, $this->_method);
+            $this->_dispatchRequest($socket, $this->_method);
             return $this->_createResponse($socket);
         }
         
@@ -653,9 +755,9 @@
          *                                  usually GET.
          *    @access protected
          */
-        function _dispatch_request(&$socket, $method) {
-            $socket->write($this->_createRequestLine($this->_method, $this->_url) . "\r\n");
-            $socket->write($this->_createHostLine($this->_url) . "\r\n");
+        function _dispatchRequest(&$socket, $method) {
+            $socket->write($this->_destination->getRequestLine($this->_method, $this->_url) . "\r\n");
+            $socket->write($this->_destination->getHostLine($this->_url) . "\r\n");
             foreach ($this->_headers as $header_line) {
                 $socket->write($header_line . "\r\n");
             }
@@ -700,22 +802,6 @@
         }
         
         /**
-         *    Factory for socket. Separate method for mocking.
-         *    @param string $scheme   Protocol to use.
-         *    @param string $host     Hostname to connect to.
-         *    @param integer $port    Remote port.
-         *    @param integer $timeout Connection timeout.
-         *    @return SimpleSocket    New socket.
-         *    @access protected
-         */
-        function &_createSocket($scheme, $host, $port, $timeout) {
-            if (in_array($scheme, array('https'))) {
-                return new SimpleSecureSocket($host, $port, $timeout);
-            }
-            return new SimpleSocket($host, $port, $timeout);
-        }
-        
-        /**
          *    Wraps the socket in a response parser.
          *    @param SimpleSocket $socket   Responding socket.
          *    @return SimpleHttpResponse    Parsed response object.
@@ -751,10 +837,10 @@
          *    @param string $method        HTTP request method, usually GET.
          *    @access protected
          */
-        function _dispatch_request(&$socket, $method) {
+        function _dispatchRequest(&$socket, $method) {
             $this->addHeaderLine('Content-Length: ' . strlen($this->_pushed_content));
             $this->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
-            parent::_dispatch_request($socket, $method);
+            parent::_dispatchRequest($socket, $method);
             $socket->write($this->_pushed_content);
         }
     }
