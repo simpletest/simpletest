@@ -232,14 +232,19 @@
                     return false;
                 }
                 if ($mode === "_exit") {
+                    if ($match && !$this->_parser->{$this->_mode->getCurrent()}($match, true)) {
+                        return false;
+                    }
                     if (!$this->_mode->leave()) {
                         return false;
                     }
-                } elseif (is_string($mode)) {
-                    $this->_mode->enter($mode);
-                }
-                if ($match && !$this->_parser->{$this->_mode->getCurrent()}($match, true)) {
-                    return false;
+                } else {
+                    if (is_string($mode)) {
+                        $this->_mode->enter($mode);
+                    }
+                    if ($match && !$this->_parser->{$this->_mode->getCurrent()}($match, true)) {
+                        return false;
+                    }
                 }
                 if (strlen($raw) == $length) {
                     return false;

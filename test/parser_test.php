@@ -204,11 +204,11 @@
             $handler->expectArgumentsSequence(1, "b", array("bb", true));
             $handler->expectArgumentsSequence(2, "b", array("a", false));
             $handler->expectArgumentsSequence(3, "b", array("bb", true));
-            $handler->expectArgumentsSequence(4, "a", array(")", true));
-            $handler->expectArgumentsSequence(5, "a", array("aa", true));
-            $handler->expectArgumentsSequence(6, "a", array("b", false));
-            $handler->expectCallCount("a", 7);
-            $handler->expectCallCount("b", 4);
+            $handler->expectArgumentsSequence(4, "b", array(")", true));
+            $handler->expectArgumentsSequence(4, "a", array("aa", true));
+            $handler->expectArgumentsSequence(5, "a", array("b", false));
+            $handler->expectCallCount("a", 6);
+            $handler->expectCallCount("b", 5);
             $lexer = &new SimpleLexer($handler, "a");
             $lexer->addPattern("a+", "a");
             $lexer->addEntryPattern("(", "a", "b");
@@ -221,7 +221,8 @@
             $handler = &new MockTestParser($this);
             $handler->setReturnValue("a", true);
             $handler->expectArgumentsSequence(0, "a", array("aa", true));
-            $handler->expectCallCount("a", 1);
+            $handler->expectArgumentsSequence(1, "a", array(")", true));
+            $handler->expectCallCount("a", 2);
             $lexer = &new SimpleLexer($handler, "a");
             $lexer->addPattern("a+", "a");
             $lexer->addExitPattern(")", "a");
