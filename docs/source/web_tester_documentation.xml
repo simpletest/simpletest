@@ -1,0 +1,249 @@
+<?xml version="1.0"?>
+<page title="Web tester documentation" here="Web tester">
+    <long_title>Simple Test for PHP web script testing documentation</long_title>
+    <content>
+        <p>
+            <a class="target" name="fetch"><h2>Fetching a page</h2></a>
+        </p>
+        <p>
+            Testing classes is all very well, but PHP is predominately
+            a language for creating functionality within web pages.
+            How do we test the front end presentation role of our PHP
+            applications?
+            Well the web pages are just text, so we should be able to
+            examine them just like any other test data.
+        </p>
+        <p>
+            This leads to a tricky issue.
+            If we test at too low a level, testing for matching tags
+            in the page with pattern matching for example, our tests will
+            be brittle.
+            The slightest change in layout could break a large number of
+            tests.
+            If we test at too high a level, say using mock versions of a
+            template engine, then we lose the ability to automate some classes
+            of test.
+            For example, the interaction of forms and navigation will
+            have to be tested manually.
+            These types of test are extremely repetitive and error prone.
+        </p>
+        <p>
+            SimpleTest includes a special form of test case for the testing
+            of web page actions.
+            The <code>WebTestCase</code> includes facilities
+            for navigation, cookie checks and form handling.
+            Usage of these test cases is similar to the
+            <code>UnitTestCase</code>...
+<php><![CDATA[
+<strong>class TestOfLastcraft extends WebTestCase {
+    function TestOfLastcraft() {
+        $this->WebTestCase();
+    }
+}</strong>
+]]></php>
+            Here we are about to test the
+            <a href="http://www/lastcraft.com/">Last Craft</a> site itself.
+            If this test case is in a file called <em>lastcraft_test.php</em>
+            then it can be loaded in a runner script just like unit tests...
+<php><![CDATA[
+<?php<strong>
+    require_once('simpletest/web_tester.php');</strong>
+    require_once('simpletest/reporter.php');
+    
+    $test = &new GroupTest('Web site tests');<strong>
+    $test->addTestFile('lastcraft_test.php');</strong>
+    exit ($test->run(new CommandLineReporter()) ? 0 : 1);
+?>
+]]></php>
+            Nothing is being tested yet.
+            We can fetch the home page by using the
+            <code>get()</code> method...
+<php><![CDATA[
+<strong>class TestOfLastcraft extends WebTestCase {
+    function TestOfLastcraft() {
+        $this->WebTestCase();
+    }
+    function testHomepage() {
+        $this->assertTrue($this->get('http://www.lastcraft.com/'));
+    }
+}</strong>
+]]></php>
+            The <code>get()</code> method will
+            return true only if page content was successfully
+            loaded.
+            It is a simple, but crude way to check that a web page
+            was actually delivered.
+        </p>
+        <p>
+            Assuming that the web server for the Last Craft site is up
+            (sadly not always the case), we should see...
+<pre class="shell">
+Web site tests
+OK
+Test cases run: 1/1, Failures: 0, Exceptions: 0
+</pre>
+                All we have really checked is that some kind of page was
+                returned.
+                We don&apos;t yet know if it was the right one.
+            </p>
+            <p>
+                <a class="target" name="content"><h2>Testing low level page content</h2></a>
+            </p>
+            <p>
+                To confirm that the page we think we are on is actually the
+                page we are on, we need to verify the page content.
+<php><![CDATA[
+class TestOfLastcraft extends WebTestCase {
+    ...
+    function testHomepage() {<strong>
+        $this->get('http://www.lastcraft.com/');
+        $this->assertWantedPattern('/why the last craft/i');</strong>
+    }
+}
+]]></php>
+            The page from the last fetch is held in a buffer in
+            the test case, so there is no need to refer to it directly.
+            The pattern match is always made against the buffer.
+            We could instead test against the title tag with...
+<php><![CDATA[
+<strong>$this->assertTitle('The Last Craft?');</strong>
+]]></php>
+            As well as the simple HTML content checks we can check
+            that the MIME type is in a list of allowed types with...
+<php><![CDATA[
+<strong>$this->assertMime(array('text/plain', 'text/html'));</strong>
+]]></php>
+            More interesting is checking the HTTP response code.
+            Like the MIME type, we can assert that the response code
+            is in a list of allowed values...
+<php><![CDATA[
+class TestOfLastcraft extends WebTestCase {
+    ...
+    function testHomepage() {
+        $this->get('http://simpletest.sourceforge.net/');<strong>
+        $this->assertResponse(array(200));</strong>
+    }
+}
+]]></php>
+            Here we are checking that the fetch is successful by
+            allowing only a 200 HTTP response.
+            This test will pass, but it is not actually correct to do so.
+            There is no page for <em>http://simpletest.sourceforge.net/</em>,
+            instead the server issues a redirect to
+            <em>http://www.lastcraft.com/simple_test.php</em>.
+            The <code>WebTestCase</code> will
+            automatically follow up to three such redirects.
+            The tests are more robust this way and we are usually
+            interested in the interaction with the pages rather
+            than their delivery.
+            If the redirects are of interest then this ability must
+            be disabled...
+<php><![CDATA[
+class TestOfLastcraft extends WebTestCase {
+    ...
+    function testHomepage() {<strong>
+        $this->setMaximumRedirects(0);</strong>
+        $this->get('http://simpletest.sourceforge.net/');
+        $this->assertResponse(array(200));
+    }
+}
+]]></php>
+                The assertion now fails as expected...
+<pre class="shell">
+Web site tests
+1) Expecting response in [200] got [302]
+	in testhomepage
+	in testoflastcraft
+	in lastcraft_test.php
+FAILURES!!!
+Test cases run: 1/1, Failures: 1, Exceptions: 0
+</pre>
+            We can modify the test to correctly assert redirects with...
+<php><![CDATA[
+class TestOfLastcraft extends WebTestCase {
+    ...
+    function testHomepage() {<strong>
+        $this->setMaximumRedirects(0);</strong>
+        $this->get('http://simpletest.sourceforge.net/');
+        $this->assertResponse(array(301, 302, 303, 307));
+    }
+}
+]]></php>
+            This now passes.
+        </p>
+        <p>
+            <a class="target" name="navigation"><h2>Navigating a web site</h2></a>
+        </p>
+        <p>
+            Users don&apos;t often navigate sites by typing in URLs, but by
+            clicking links and buttons.
+            Here we confirm that the contact details can be reached
+            from the home page...
+<php><![CDATA[
+class TestOfLastcraft extends WebTestCase {
+    ...
+    function testContact() {
+        $this->get('http://www.lastcraft.com/');<strong>
+        $this->clickLink('About');
+        $this->assertTitle('About Last Craft');</strong>
+    }
+}
+]]></php>
+            The parameter is the text of the link.
+        </p>
+        <p>
+            If the target is a button rather than an anchor tag, then
+            <code>clickSubmit()</code> should be used
+            with the button title...
+<php><![CDATA[
+<strong>$this->clickSubmit('Go!');</strong>
+]]></php>
+            Testing navigation on fixed pages only tells you when you
+            have broken an entire script.
+            For highly dynamic pages, such as for bulletin boards, this can
+            be crucial for verifying the correctness of the application.
+            For most applications though, the really tricky logic is usually in
+            the handling of forms and sessions.
+            Fortunately SimpleTest includes
+            <a local="form_testing_documentation">tools for testing web forms</a>
+            as well.
+        </p>
+    </content>
+    <internal>
+        <link>
+            Successfully <a href="#fetch">fetching a web page</a>
+        </link>
+        <link>
+            Testing the <a href="#content">page content</a>
+        </link>
+        <link>
+            <a href="#navigation">Navigating a web site</a>
+            while testing
+        </link>
+    </internal>
+    <external>
+        <link>
+            SimpleTest project page on <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
+        </link>
+        <link>
+            SimpleTest download page on <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
+        </link>
+    </external>
+    <meta>
+        <keywords>
+            software development,
+            php programming for clients,
+            customer focused php,
+            software development tools,
+            acceptance testing framework,
+            free php scripts,
+            architecture,
+            php resources,
+            HTMLUnit,
+            JWebUnit,
+            php testing,
+            unit test resource,
+            web testing
+        </keywords>
+    </meta>
+</page>
