@@ -365,9 +365,13 @@
         function TestOfAuthentication() {
             $this->WebTestCase();
         }
-        function testReportChallenge() {
+        function testChallengeFromProtectedPage() {
             $this->get('http://www.lastcraft.com/test/protected/');
             $this->assertResponse(401);
+        }
+        function testEncodedAuthenticationFetchesPage() {
+            $this->get('http://test:secret@www.lastcraft.com/test/protected/');
+            $this->assertResponse(200);
         }
     }
     

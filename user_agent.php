@@ -313,7 +313,7 @@
                     return $response;
                 }
                 $headers = $response->getHeaders();
-                $this->_addCookies($url, $headers->getNewCookies());
+                $this->_addCookiesToJar($url, $headers->getNewCookies());
                 if (! $headers->isRedirect()) {
                     break;
                 }
@@ -335,26 +335,47 @@
             if (! $parameters) {
                 $parameters = array();
             }
-            $request = &$this->_createCookieRequest($method, $url, $parameters);
+            $request = &$this->_createRequest($method, $url, $parameters);
             return $request->fetch($this->_connection_timeout);
         }
         
         /**
-         *    Creates a page request with the browser cookies
-         *    added.
+         *    Creates a full page request.
          *    @param string $method       Fetching method.
          *    @param SimpleUrl $url       Target to fetch as url object.
          *    @param hash $parameters     POST/GET parameters.
          *    @return SimpleHttpRequest   New request.
          *    @access private
          */
-        function &_createCookieRequest($method, $url, $parameters) {
-            $request = &$this->_createRequest($method, $url, $parameters);
+        function &_createRequest($method, $url, $parameters) {
+            $request = &$this->_createHttpRequest($method, $url, $parameters);
+            $this->_addCookiesToRequest($request, $url);
+            return $request;
+        }
+        
+        /**
+         *    Adds the current cookies to the request.
+         *    @param SimpleHttpRequest $request    Request to modify.
+         *    @param SimpleUrl $url                Cookie selector.
+         *    @access private
+         */
+        function _addCookiesToRequest(&$request, $url) {
             $cookies = $this->_cookie_jar->getValidCookies($url->getHost(), $url->getPath());
             foreach ($cookies as $cookie) {
                 $request->setCookie($cookie);
             }
-            return $request;
+            $this->_addAuthentication($request, $url);
+        }
+        
+        /**
+         *    Adds basic authentication header.
+         *    @param SimpleHttpRequest $request    Request to modify.
+         *    @param SimpleUrl $url                Cookie selector.
+         *    @access private
+         */
+        function _addAuthentication(&$request, $url) {
+            $request->addHeaderLine('Authorization: Basic ' . base64_encode(
+                    $url->getUsername() . ':' . $url->getPassword()));
         }
         
         /**
@@ -365,7 +386,7 @@
          *    @return SimpleHttpRequest   New request object.
          *    @access protected
          */
-        function &_createRequest($method, $url, $parameters) {
+        function &_createHttpRequest($method, $url, $parameters) {
             if ($method == 'POST') {
                 $request = &new SimpleHttpPushRequest(
                         $url,
@@ -383,7 +404,7 @@
          *    @param array $cookies     New cookies.
          *    @access private
          */
-        function _addCookies($url, $cookies) {
+        function _addCookiesToJar($url, $cookies) {
             foreach ($cookies as $cookie) {
                 if ($url->getHost()) {
                     $cookie->setHost($url->getHost());

@@ -32,7 +32,7 @@ Add frame focus and defocus (3).
 Make widget handling reflect frame focus (2).
 Add setFieldById() method (1).
 Add assertFieldById() method (1).
-Add simple HTTP authentication challenge/response (5/1).
+Add simple HTTP authentication challenge/response (5/4).
 Allow image links/buttons to be head fetched to set cookies (2).
 Allow stylesheet loading to affect cookies (2).
 Redirects should become GET if they were POST (1).

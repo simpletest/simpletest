@@ -336,10 +336,10 @@
          */
         function makeAbsolute($base) {
             $base_url = new SimpleUrl($base);
-            if (!$this->getScheme()) {
+            if (! $this->getScheme()) {
                 $this->_scheme = $base_url->getScheme();
             }
-            if (!$this->getHost()) {
+            if (! $this->getHost()) {
                 $this->_host = $base_url->getHost();
             }
             if (substr($this->getPath(), 0, 1) != "/") {

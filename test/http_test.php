@@ -94,6 +94,15 @@
             $this->assertEqual($url->getPath(), "/here/there/somewhere.php");
             $base = new SimpleUrl("http://host.com/here/");
         }
+        function testMakingAbsolutehasNoEffectWhenAlreadyAbsolute() {
+            $url = new SimpleUrl('https://test:secret@www.lastcraft.com/stuff/');
+            $url->makeAbsolute('http://host.com/here/');
+            $this->assertEqual($url->getScheme(), 'https');
+            $this->assertEqual($url->getUsername(), 'test');
+            $this->assertEqual($url->getPassword(), 'secret');
+            $this->assertEqual($url->getHost(), 'www.lastcraft.com');
+            $this->assertEqual($url->getPath(), '/stuff/');
+        }
         function testRequestEncoding() {
             $this->assertEqual(
                     SimpleUrl::encodeRequest(array('a' => '1')),
