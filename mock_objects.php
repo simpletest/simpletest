@@ -88,14 +88,26 @@
                     }
                     continue;
                 }
-                if ($this->_expected[$i] === $this->_wildcard) {
-                    continue;
-                }
                 if (!($this->_expected[$i] === $parameters[$i])) {
                     return false;
                 }
             }
             return true;
+        }
+        
+        /**
+         *    Tests an individual parameter.
+         *    @param mixed $parameter    Value to test.
+         *    @param mixed $expected     Comparison value.
+         *    @return boolean            True if expectation
+         *                               fulfilled.
+         *    @private
+         */
+        function _testParameter($parameter, $expected) {
+            if (is_a($this->_expected[$i], 'SimpleExpectation')) {
+                return $this->_expected[$i]->test($parameters[$i]);
+            }
+            return ($this->_expected[$i] === $parameters[$i]);
         }
         
         /**

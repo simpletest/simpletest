@@ -42,13 +42,7 @@
             $this->assertTrue($expectation->test(array(null)));
             $this->assertFalse($expectation->test(array()));
         }
-        function testWildcardParameter() {
-            $expectation = new ParametersExpectation(array("wild"), "wild");
-            $this->assertFalse($expectation->test(array()), "Empty->%s");
-            $this->assertTrue($expectation->test(array(null)), "Null->%s");
-            $this->assertTrue($expectation->test(array(13)), "Integer->%s");
-        }
-        function testEmbeddedWildcardExpectations() {
+        function testWildcardExpectations() {
             $expectation = new ParametersExpectation(array(new WildcardExpectation()));
             $this->assertFalse($expectation->test(array()));
             $this->assertIdentical($expectation->test(array(null)), true);
@@ -60,7 +54,8 @@
             $this->assertTrue($expectation->test(array("0")));
         }
         function testLongList() {
-            $expectation = new ParametersExpectation(array("0", 0, "wild", false), "wild");
+            $expectation = new ParametersExpectation(
+                    array("0", 0, new WildcardExpectation(), false));
             $this->assertTrue($expectation->test(array("0", 0, 37, false)));
             $this->assertFalse($expectation->test(array("0", 0, 37, true)));
             $this->assertFalse($expectation->test(array("0", 0, 37)));
