@@ -34,6 +34,8 @@ Browser
 -------
 Allow automatic redirects (4).
 Add setting of form values (3).
+Add clock drift allowance to cookie tests (0).
+Add clock drift test for users (0).
 
 Web tester
 ----------
