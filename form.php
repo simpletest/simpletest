@@ -106,7 +106,6 @@
         var $_id;
         var $_buttons;
         var $_images;
-        var $_widget_hash;
         var $_widgets;
         var $_radios;
         var $_checkboxes;
@@ -123,7 +122,6 @@
             $this->_id = $tag->getAttribute('id');
             $this->_buttons = array();
             $this->_images = array();
-            $this->_widget_hash = array();
             $this->_widgets = array();
             $this->_radios = array();
             $this->_checkboxes = array();
@@ -215,7 +213,6 @@
             } elseif (strtolower($tag->getAttribute('type')) == 'checkbox') {
                 $this->_addCheckbox($tag);
             } else {
-                $this->_widget_hash[$tag->getName()] = &$tag;
                 $this->_widgets[] = &$tag;
             }
         }
@@ -226,11 +223,6 @@
          *    @access private
          */
         function _addRadioButton($tag) {
-            if (! isset($this->_widget_hash[$tag->getName()])) {
-                $this->_widget_hash[$tag->getName()] = &new SimpleRadioGroup();
-            }
-            $this->_widget_hash[$tag->getName()]->addWidget($tag);
-            
             if (! isset($this->_radios[$tag->getName()])) {
                 $this->_widgets[] = &new SimpleRadioGroup();
                 $this->_radios[$tag->getName()] = count($this->_widgets) - 1;
@@ -244,17 +236,6 @@
          *    @access private
          */
         function _addCheckbox($tag) {
-            if (! isset($this->_widget_hash[$tag->getName()])) {
-                $this->_widget_hash[$tag->getName()] = &$tag;
-            } elseif (! SimpleTestCompatibility::isA($this->_widget_hash[$tag->getName()], 'SimpleCheckboxGroup')) {
-                $previous = &$this->_widget_hash[$tag->getName()];
-                $this->_widget_hash[$tag->getName()] = &new SimpleCheckboxGroup();
-                $this->_widget_hash[$tag->getName()]->addWidget($previous);
-                $this->_widget_hash[$tag->getName()]->addWidget($tag);
-            } else {
-                $this->_widget_hash[$tag->getName()]->addWidget($tag);
-            }
-            
             if (! isset($this->_checkboxes[$tag->getName()])) {
                 $this->_widgets[] = &$tag;
                 $this->_checkboxes[$tag->getName()] = count($this->_widgets) - 1;
