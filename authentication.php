@@ -5,6 +5,9 @@
      *	@subpackage	WebTester
      *	@version	$Id$
      */
+    /**
+     *	include http class
+     */
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'http.php');
     
     /**

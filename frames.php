@@ -5,7 +5,12 @@
      *	@subpackage	WebTester
      *	@version	$Id$
      */
+
+    /**#@+
+     *	include other SimpleTest class files
+     */
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'page.php');
+    /**#@-*/
     
     /**
      *    A composite page. Wraps a frameset page and

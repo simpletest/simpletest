@@ -5,9 +5,14 @@
      *	@subpackage	WebTester
      *	@version	$Id$
      */
+
+    /**#@+
+     *	include other SimpleTest class files
+     */
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'http.php');
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'parser.php');
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'tag.php');
+    /**#@-*/
     
     /**
      *    SAX event handler. Maintains a list of

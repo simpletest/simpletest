@@ -5,9 +5,14 @@
      *	@subpackage	UnitTester
      *	@version	$Id$
      */
+
+    /**#@+
+     *	include other SimpleTest class files
+     */
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'simple_test.php');
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'errors.php');
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'dumper.php');
+    /**#@-*/
     
     /**
      *    Standard unit test class for day to day testing

@@ -5,7 +5,12 @@
      *	@subpackage	UnitTester
      *	@version	$Id$
      */
+
+    /**#@+
+     *	include other SimpleTest class files
+     */
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'simple_test.php');
+    /**#@-*/
     
     /**
      *    Wrapper for exec() functionality.

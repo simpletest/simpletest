@@ -5,8 +5,13 @@
      *	@subpackage	MockObjects
      *	@version	$Id$
      */
+
+    /**#@+
+     *	include other SimpleTest class files
+     */
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'socket.php');
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'query_string.php');
+    /**#@-*/
     
     /**
      *    URL parser to replace parse_url() PHP function.
@@ -592,7 +597,7 @@
         /**
          *    Internal accessor.
          *    @return SimpleUrl        Current url.
-         *    @protected
+         *    @access protected
          */
         function _getUrl() {
             return $this->_url;

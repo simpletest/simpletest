@@ -10,6 +10,7 @@
      * include SimpleTest files
      */
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'options.php');
+    /**#@-*/
     
     /**
      *    Stashes an error for later. Useful for constructors

@@ -5,10 +5,15 @@
      *	@subpackage	WebTester
      *	@version	$Id$
      */
+    
+    /**#@+
+     *	include other SimpleTest class files
+     */
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'options.php');
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'http.php');
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'page.php');
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'user_agent.php');
+    /**#@-*/
     
     /**
      *    Browser history list.
@@ -305,7 +310,7 @@
         /**
          *    Sets the socket timeout for opening a connection.
          *    @param integer $timeout      Maximum time in seconds.
-         *    @acces public
+         *    @access public
          */
         function setConnectionTimeout($timeout) {
             $this->_user_agent->setConnectionTimeout($timeout);

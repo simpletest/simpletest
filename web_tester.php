@@ -5,9 +5,14 @@
      *	@subpackage	WebTester
      *	@version	$Id$
      */
+
+    /**#@+
+     *	include other SimpleTest class files
+     */
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'simple_test.php');
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'browser.php');
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'page.php');
+    /**#@-*/
     
     /**
      *    Test case for testing of web pages. Allows
@@ -173,7 +178,7 @@
          *    Sets the socket timeout for opening a connection and
          *    receiving at least one byte of information.
          *    @param integer $timeout      Maximum time in seconds.
-         *    @acces public
+         *    @access public
          */
         function setConnectionTimeout($timeout) {
             $this->_browser->setConnectionTimeout($timeout);

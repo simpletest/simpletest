@@ -5,9 +5,14 @@
      *	@subpackage	UnitTester
      *	@version	$Id$
      */
+
+    /**#@+
+     *	include other SimpleTest class files
+     */
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'browser.php');
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'xml.php');
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'simple_test.php');
+    /**#@-*/
 
     /**
      *    Runs an XML formated test on a remote server.

@@ -5,8 +5,13 @@
      *	@subpackage	UnitTester
      *	@version	$Id$
      */
+
+    /**#@+
+     *	include other SimpleTest class files
+     */
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'runner.php');
-    
+    /**#@-*/
+   
     /**
      *    Creates the XML needed for remote communication
      *    by SimpleTest.
