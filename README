@@ -30,9 +30,16 @@ web testing side have not yet stabilised. The unit tester and mock
 object generator are tested and have already been used to test several
 systems, although some of the method names are still settling down.
 And of course they are being used to assist creation of SimpleTest itself.
+The standard unit tests can be run here...
 
-As an early release it doesn't have much in the way of documentation either!
-You can find a tutorial on http://www.lastcraft.com/simple_test.php to
+simpletest/test/unit_tests.php
+
+And tests involving live network connections as well are here...
+
+simpletest/test/all_tests.php
+
+As an early release it doesn't have much in the way of documentation.
+You can find a tutorial on http://www.lastcraft.com/first_test_tutorial.php to
 get you started and hopefully this material will eventually become included
 with the project documentation. There is a documentation folder, but it is
 just a subset of the material on LastCraft and some always out of date diagrams.

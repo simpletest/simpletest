@@ -253,9 +253,11 @@
         /**
          *    Splits the page text into tokens. Will fail
          *    if the handlers report an error or if no
-         *    content is consumed.
+         *    content is consumed. If successful then each
+         *    unparsed and parsed token invokes a call to the
+         *    held listener.
          *    @param $raw        Raw HTML text.
-         *    @return            Array of tokens.
+         *    @return            True on success, else false.
          *    @public
          */
         function parse($raw) {
@@ -344,8 +346,9 @@
          *                        content that will be eaten.
          *    @return             Three item list of unparsed
          *                        content followed by the
-         *                        recognised token an dfinally True
-         *                        if no match, false if there
+         *                        recognised token and finally the
+         *                        action the parser is to take.
+         *                        True if no match, false if there
          *                        is a parsing error.
          *    @private
          */
