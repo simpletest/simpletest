@@ -82,6 +82,16 @@
         function TestOfLexer() {
             $this->UnitTestCase();
         }
+        function testNoPatterns() {
+            $handler = &new MockTokenHandler($this);
+            $handler->expectMaximumCallCount("acceptToken", 0);
+            $handler->setReturnValue("acceptToken", true);
+            $handler->expectCallCount("acceptUnparsed", 0);
+            $handler->setReturnValue("acceptUnparsed", true);
+            $lexer = &new SimpleLexer($handler);
+            $this->assertFalse($lexer->parse("abcdef"));
+            $handler->tally();
+        }
         function testEmptyPage() {
             $handler = &new MockTokenHandler($this);
             $handler->expectMaximumCallCount("acceptToken", 0);
@@ -89,18 +99,8 @@
             $handler->expectMaximumCallCount("acceptUnparsed", 0);
             $handler->setReturnValue("acceptUnparsed", true);
             $lexer = &new SimpleLexer($handler);
+            $lexer->addPattern("a+");
             $this->assertTrue($lexer->parse(""));
-        }
-        function testNoPatterns() {
-            $handler = &new MockTokenHandler($this);
-            $handler->expectMaximumCallCount("acceptToken", 0);
-            $handler->setReturnValue("acceptToken", true);
-            $handler->expectArgumentsSequence(0, "acceptUnparsed", array("abcdef"));
-            $handler->expectCallCount("acceptUnparsed", 1);
-            $handler->setReturnValue("acceptUnparsed", true);
-            $lexer = &new SimpleLexer($handler);
-            $this->assertTrue($lexer->parse("abcdef"));
-            $handler->tally();
         }
         function testSinglePattern() {
             $handler = &new MockTokenHandler($this);
@@ -198,6 +198,18 @@
             $lexer->addPattern("b+", "b");
             $lexer->addExitPattern(")", "b");
             $this->assertTrue($lexer->parse("aabaab(bbabb)aab"));
+            $handler->tally();
+        }
+        function testUnwindTooFar() {
+            $handler = &new MockTokenHandler($this);
+            $handler->setReturnValue("acceptToken", true);
+            $handler->setReturnValue("acceptUnparsed", true);
+            $handler->expectArgumentsSequence(0, "acceptToken", array("aa"));
+            $handler->expectCallCount("acceptToken", 1);
+            $lexer = &new SimpleLexer($handler, "a");
+            $lexer->addPattern("a+", "a");
+            $lexer->addExitPattern(")", "a");
+            $this->assertFalse($lexer->parse("aa)aa"));
             $handler->tally();
         }
     }

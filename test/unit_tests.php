@@ -10,7 +10,7 @@
     
     class UnitTests extends GroupTest {
         function UnitTests() {
-            $this->GroupTest("All unit tests");
+            $this->GroupTest("Unit tests");
             $this->addTestFile("simple_mock_test.php");
             $this->addTestFile("web_test_test.php");
             $this->addTestFile("socket_test.php");

@@ -226,8 +226,9 @@
                 return false;
             }
             $length = strlen($raw);
-            while (list($unparsed, $match) = $this->_reduce($raw)) {
-                if ($unparsed && !$this->_handler->acceptUnparsed($unparsed)) {
+            while (is_array($parsed = $this->_reduce($raw))) {
+                list($unmatched, $match) = $parsed;
+                if ($unmatched && !$this->_handler->acceptUnparsed($unmatched)) {
                     return false;
                 }
                 if ($match && !$this->_handler->acceptToken($match)) {
@@ -238,10 +239,10 @@
                 }
                 $length = strlen($raw);
             }
-            if ($raw && !$this->_handler->acceptUnparsed($raw)) {
+            if (!$parsed) {
                 return false;
             }
-            return true;
+            return ($raw == "") || $this->_handler->acceptUnparsed($raw);
         }
         
         /**
@@ -251,8 +252,9 @@
          *    @param $raw         The subject to parse.
          *    @return             Two item list of unparsed
          *                        content followed by the
-         *                        recognised token. False
-         *                        if no match.
+         *                        recognised token. True
+         *                        if no match, false if there
+         *                        is an parsing error.
          *    @private
          */
         function _reduce(&$raw) {
@@ -272,7 +274,7 @@
                 }
                 return array($unparsed, $match);
             }
-            return false;
+            return true;
         }
     }
     
