@@ -410,6 +410,7 @@
             $this->assertField('f', 'on');
             $this->assertField('g', 'g3');
             $this->assertField('h', 2);
+            $this->assertField('go', 'Go!');
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedPattern('/go=\[Go!\]/');
             $this->assertWantedPattern('/a=\[\]/');
@@ -996,6 +997,19 @@
             
             $this->clearFrameFocus();
             $this->assertWantedPattern('/Count: 3/');
+        }
+        
+        function testAuthenticatingNestedPage() {
+            $this->get('http://www.lastcraft.com/test/nested_frameset.html');
+            $this->setFrameFocus('messy');
+            $this->setFrameFocus('Protected');
+            $this->assertAuthentication('Basic');
+            $this->assertRealm('SimpleTest basic authentication');
+            $this->assertResponse(401);
+            
+            $this->authenticate('test', 'secret');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/A target for the SimpleTest test suite/');
         }
     }
 ?>

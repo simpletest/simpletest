@@ -174,6 +174,11 @@
             if (isset($this->_widgets[$name])) {
                 return $this->_widgets[$name]->getValue();
             }
+            foreach ($this->_buttons as $button) {
+                if ($button->getName() == $name) {
+                    return $button->getValue();
+                }
+            }
             return null;
         }
         
@@ -188,6 +193,11 @@
             foreach ($this->_widgets as $widget) {
                 if ($widget->getAttribute('id') == $id) {
                     return $widget->getValue();
+                }
+            }
+            foreach ($this->_buttons as $button) {
+                if ($button->getAttribute('id') == $id) {
+                    return $button->getValue();
                 }
             }
             return null;

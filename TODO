@@ -31,7 +31,7 @@ Add simple button tag parsing (1/4) - done.
 
 Browser
 -------
-Allow nested framed pages (4/5).
+Allow nested framed pages (4/6) - done.
 Add focused frame reloads (2/3) - done.
 Add frame loads from links (4/4) - done.
 Add frame loads from forms (2/4) - done.
@@ -46,7 +46,7 @@ Web tester
 ----------
 Remove ordering requirement asserting multivalue widgets (1/1) - done.
 Add assertHeaderPattern(), assertHeader() and assertNoHeader() methods (3/4) - done.
-WebTestCase::assertField() should work with submit type (1).
+WebTestCase::assertField() should work with submit type (1/1) - done.
 
 Documentation
 -------------

@@ -94,6 +94,8 @@
             $form->addWidget(new SimpleSubmitTag(
                     array('type' => 'submit', 'name' => 'go', 'value' => 'Go!', 'id' => '9')));
             $this->assertTrue($form->hasSubmitName('go'));
+            $this->assertEqual($form->getValue('go'), 'Go!');
+            $this->assertEqual($form->getValueById(9), 'Go!');
             $this->assertEqual($form->submitButtonByName('go'), array('go' => 'Go!'));            
             $this->assertEqual($form->submitButtonByLabel('Go!'), array('go' => 'Go!'));            
             $this->assertEqual($form->submitButtonById(9), array('go' => 'Go!'));            
