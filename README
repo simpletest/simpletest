@@ -1,6 +1,10 @@
 Simple Test
 ===========
-A framework for unit testing, web site testing and mock objects.
+A framework for unit testing, web site testing and mock objects. If you have
+used JUnit you will find this PHP version very similar. Also included
+is a mock objects generator. The mocks feature complete setting of
+expected parameters with wildcards, selecting return values by parameter
+again with wildcards and the setting of sequences of either.
 
 The current release is PHP only and does not yet include the web testing tool.
 As an early release it doesn't have much in the way of documentation either!
@@ -9,8 +13,9 @@ get you started. This material will eventually become included with the
 project documentation.
 
 If you download and use and possibly even extend this tool, please let me
-know. Any feedback, even bad, is always welcome.
+know. Any feedback, even bad, is always welcome and I will work to get
+your suggestions into the version one release.
 
 yours, Marcus.
-
+-- 
 marcus@lastcraft.com
