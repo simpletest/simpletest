@@ -66,13 +66,6 @@
         function getSize() {
             return 1;
         }
-        
-        /**
-         *    @deprecated
-         */
-        function attachObserver(&$reporter) {
-            $this->_reporter = &$reporter;
-        }
     }
 
     /**

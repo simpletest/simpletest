@@ -22,7 +22,7 @@ Add no return check (2/2) - done.
 
 Html parser
 -----------
-Test with realistic pages (5/2).
+Test with some realistic pages (5/3) - done.
 Add form parsing (2/1) - done.
 Add input tag parsing (2/1) - done.
 Add text area tag parsing (2/1) - done.
@@ -31,7 +31,6 @@ Browser
 -------
 Add submit by form (2/4) - done.
 Add submit by form ID (1/1) - done.
-Add HTTP authentication (3).
 
 Web tester
 ----------

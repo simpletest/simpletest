@@ -19,8 +19,7 @@ simple_mock.php --> mock_objects.php
 simple_unit.php --> unit_tester.php
 simple_web.php --> web_tester.php
 
-The old names are deprecated in Alpha8 and are scheduled for removal
-in Beta1.
+The old names are deprecated in Alpha8 and are removed in Beta1.
 
 No method attachObserver()
 ==========================
@@ -41,7 +40,7 @@ $test->run(new HtmlReporter());
 
 If you previously attached multiple observers then the workaround
 is to run the tests twice, once with each, until they can be combined.
-For one observer the old method is simulated in Alpha 8, but will be
+For one observer the old method is simulated in Alpha 8, but is
 removed in Beta1.
 
 No class TestHtmlDisplay
@@ -69,7 +68,7 @@ This means that options are set differently...
 GroupTest::ignore() --> SimpleTestOptions::ignore()
 Mock::setMockBaseClass() --> SimpleTestOptions::setMockBaseClass()
 
-These changed in Alpha8 and the old versions are now deprecated.
+These changed in Alpha8 and the old versions are now removed.
 
 No method setExpected*()
 ========================

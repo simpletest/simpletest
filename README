@@ -3,7 +3,12 @@ Simple Test
 You probably got this package from...
 http://sourceforge.net/projects/simpletest/
 
-It's a framework for unit testing, web site testing and mock objects.
+If there is no licence agreement with this package please download
+the version above. You must read and accept that licence to use this
+software. The file is titled simply LICENSE.
+
+What is it? It's a framework for unit testing, web site testing and
+mock objects.
 
 If you have used JUnit you will find this PHP unit testing version very
 similar. Also included is a mock objects and server stubs generator.
@@ -16,8 +21,7 @@ You are not tied to SimpleTest, though. The mocks and stubs will work
 with other test frameworks and SimpleTest can use other framework's
 (PHPUnit, PEAR::PhpUnit) test cases as it's own.
 
-The current release is PHP only and does not yet include all of the web
-testing tool. You can see a release schedule at
+You can see a release schedule at
 http://www.lastcraft.com/overview.php which is also copied to the
 documentation folder with this release. The user interface is minimal
 in the extreme, but a lot of information flows from the test suite.
@@ -26,11 +30,15 @@ and GTk versions to volunteers as everybody has their own opinion
 on a good GUI and I don't want to discourage development by shipping
 one with the toolkit.
 
-You are looking at an Alpha release because the interfaces for the
-web testing side have not yet stabilised. The unit tester and mock
-object generator are tested and have already been used to test several
-systems. And of course they are being used to assist creation of
-SimpleTest itself.
+You are looking at a Beta release.
+
+The unit tester and mock object generator are tested and have already
+been used to test several systems. There are some minor message display
+bugs, but these components are otherwise stable. The web testing is
+definitely not stable and should be treated with caution. In
+particular, very few HTML widgets are recognised (input and textarea).
+Also this part has not been used much and so sugar needs to be
+sprinkled liberally on the interfaces.
 
 The unit tests for SimpleTest itself can be run here...
 
@@ -71,8 +79,8 @@ simpletest-support@lists.sourceforge.net
 
 ...so that others can read them too. I will try to respond within 24 hours.
 
-There is no change log as yet except in CVS. You can visit the trackers
-in CVS to see the completed TODO list after each cycle and also the
+There is no change log as yet except at sourceforge. You can visit the
+trackers to see the completed TODO list after each cycle and also the
 status of any bugs, but if the bug is recent then it will be fixed in CVS only.
 The CVS uploads always have all the tests passing and so CVS snapshots should
 be pretty usable, although the code may not look so good internally.
@@ -87,10 +95,13 @@ yours, Marcus.
 Thanks to Harry Fuecks for much feedback, packaging and suggestions and also
 for a great website (http://www.phppatterns.com/). :-)
 
-Thanks to Mathieu Kooiman for comments and suggestions.
-Thanks to Jason Sweat for bug reports and encouragement.
+Thanks to Mathieu Kooiman, Jon Ramsey, Jeff Moore, Jason Sweat, Chris Hubbard
+and others for bug reports and suggestions.
 
-Thanks to everyone else who has sent comments and suggestions. I
-cannot credit you here without your name!
+Thanks to everyone else who has sent comments. If I have
+failed to credit you please let me know.
+
+Thanks to the advanced PHP forum on SitePoint. It is the place to be right
+now.
 -- 
 marcus@lastcraft.com
