@@ -584,7 +584,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleDestination {
+    class SimpleRoute {
         var $_url;
         
         /**
@@ -592,8 +592,17 @@
          *    @param SimpleUrl $url   URL as object.
          *    @access public
          */
-        function SimpleDestination($url) {
+        function SimpleRoute($url) {
             $this->_url = $url;
+        }
+        
+        /**
+         *    Internal accessor.
+         *    @return SimpleUrl        Current url.
+         *    @protected
+         */
+        function _getUrl() {
+            return $this->_url;
         }
         
         /**
@@ -621,7 +630,7 @@
         }
         
         /**
-         *    Opens a socket to the destination.
+         *    Opens a socket to the route.
          *    @param integer $timeout                 Connection timeout.
          *    @return SimpleSocket/SimpleSecureSocket New socket.
          *    @access public
@@ -658,15 +667,24 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleProxyDestination extends SimpleDestination {
+    class SimpleProxyRoute extends SimpleRoute {
+        var $_proxy_host;
+        var $_proxy_port;
+        var $_is_secure;
         
         /**
          *    Stashes the proxy address.
-         *    @param string $address        URL of proxy server.
+         *    @param SimpleUrl $url      URL as object.
+         *    @param string $host        Proxy host.
+         *    @param integer $port       Proxy port.
+         *    @param boolean $is_secure  True if secure port.
          *    @access public
          */
-        function SimpleProxyDestination($address) {
-            $this->SimpleDirectDestination();
+        function SimpleProxyRoute($url, $host, $port = 8080, $is_secure = false) {
+            $this->SimpleRoute($url);
+            $this->_proxy_host = $host;
+            $this->_proxy_port = $port;
+            $this->_is_secure = $is_secure;
         }
         
         /**
@@ -676,7 +694,11 @@
          *    @return string          Request line content.
          *    @access protected
          */
-        function getRequestLine($method, $url) {
+        function getRequestLine($method) {
+            $url = $this->_getUrl();
+            $scheme = $url->getScheme() ? $url->getScheme() : 'http';
+            return $method . ' ' . $scheme . '://' . $url->getHost() . $url->getPath() .
+                    $url->getEncodedRequest() . ' HTTP/1.0';
         }
         
         /**
@@ -685,16 +707,23 @@
          *    @return string          Host line content.
          *    @access protected
          */
-        function getHostLine($url) {
+        function getHostLine() {
+            return 'Host: ' . $this->_proxy_host . ':' . $this->_proxy_port;
         }
         
         /**
-         *    Opens a socket to the destination.
+         *    Opens a socket to the route.
          *    @param integer $timeout                 Connection timeout.
          *    @return SimpleSocket/SimpleSecureSocket New socket.
          *    @access public
          */
         function &createConnection($timeout) {
+            $url = $this->_getUrl();
+            return $this->_createSocket(
+                    $this->_is_secure ? 'https' : 'http',
+                    $this->_proxy_host,
+                    $this->_proxy_port,
+                    $timeout);
         }
     }
 
@@ -708,30 +737,20 @@
         var $_headers;
         var $_cookies;
         var $_method;
-        var $_destination;
+        var $_route;
         
         /**
          *    Saves the URL ready for fetching.
-         *    @param SimpleDestination $destination   Request target.
-         *    @param string $method                   HTTP request method,
-         *                                            usually GET.
+         *    @param SimpleRoute $route   Request target.
+         *    @param string $method       HTTP request method,
+         *                                usually GET.
          *    @access public
          */
-        function SimpleHttpRequest($destination, $method = 'GET') {
-            $this->_destination = $destination;
+        function SimpleHttpRequest($route, $method = 'GET') {
+            $this->_route = $route;
             $this->_method = $method;
             $this->_headers = array();
             $this->_cookies = array();
-        }
-
-        /**
-         *    Creates header building strategy for destination.
-         *    @param SimpleUrl $url             Target URL as object.
-         *    @return SimpleDestination   End point.
-         *    @access protected
-         */
-        function &_createDestination($url) {
-            return new SimpleDestination($url);
         }
         
         /**
@@ -742,7 +761,7 @@
          *    @access public
          */
         function &fetch($timeout) {
-            $socket = &$this->_destination->createConnection($timeout);
+            $socket = &$this->_route->createConnection($timeout);
             if ($socket->isError()) {
                 return $this->_createResponse($socket);
             }
@@ -758,8 +777,8 @@
          *    @access protected
          */
         function _dispatchRequest(&$socket, $method) {
-            $socket->write($this->_destination->getRequestLine($this->_method) . "\r\n");
-            $socket->write($this->_destination->getHostLine() . "\r\n");
+            $socket->write($this->_route->getRequestLine($this->_method) . "\r\n");
+            $socket->write($this->_route->getHostLine() . "\r\n");
             foreach ($this->_headers as $header_line) {
                 $socket->write($header_line . "\r\n");
             }
