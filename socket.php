@@ -56,7 +56,7 @@
     /**
      *    Wrapper for TCP/IP socket.
      */
-    class Socket extends StickyError {
+    class SimpleSocket extends StickyError {
         var $_handle;
         var $_is_open;
         
@@ -65,7 +65,7 @@
          *    @param $url        URL as string.
          *    @public
          */
-        function Socket($url, $port = 80) {
+        function SimpleSocket($url, $port = 80) {
             $this->StickyError();
             $this->_is_open = false;
             if (!($this->_handle = fsockopen($url, $port, $errorNumber, $error, 15))) {
