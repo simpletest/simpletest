@@ -16,7 +16,7 @@ Add better object mismatch message (1).
 
 Mock objects
 ------------
-Add expectMinimumCallCount() expectation (2).
+Add expectMinimumCallCount() expectation (2/1) - done.
 Add a parameter list assertion for better message display (2).
 
 Html parser

@@ -355,7 +355,7 @@
         function testZeroCallCount() {
             $mock = &new MockDummy($this);
             $mock->expectCallCount("aMethod", 0);
-            $this->assertTrue($mock->tally(), "Tally");
+            $mock->tally();
         }
         function testClearHistory() {
             $mock = &new MockDummy($this);
@@ -363,25 +363,14 @@
             $mock->aMethod();
             $this->assertEqual($mock->getCallCount("aMethod"), 1);
             $mock->clearHistory();
-            $this->assertTrue($mock->tally(), "Tally");
+            $mock->tally();
         }
         function testExpectedCallCount() {
             $mock = &new MockDummy($this);
             $mock->expectCallCount("aMethod", 2);
             $mock->aMethod();
             $mock->aMethod();
-            $this->assertTrue($mock->tally(), "Tally");
-        }
-        function testFailedCallCount() {
-            $mock = &new MockDummy(new MockSimpleTestCase($this));
-            $mock->expectCallCount("aMethod", 2);
-            $this->assertFalse($mock->tally(), "Empty tally");
-            $mock->aMethod();
-            $this->assertFalse($mock->tally(), "Bad tally");
-            $mock->aMethod();
-            $this->assertTrue($mock->tally(), "Good tally");
-            $mock->aMethod();
-            $this->assertFalse($mock->tally(), "Overrun tally");
+            $mock->tally();
         }
     }
     
@@ -392,11 +381,23 @@
         function testMaxCalls() {
             $test = &new MockSimpleTestCase($this);
             $test->expectCallCount("assertTrue", 1);
+            $test->expectArguments("assertTrue", array(false, '*'));
             $mock = &new MockDummy($test);
             $mock->expectMaximumCallCount("aMethod", 2);
             $mock->aMethod();
             $mock->aMethod();
             $mock->aMethod();
+            $test->tally();
+        }
+        function testMinCalls() {
+            $test = &new MockSimpleTestCase($this);
+            $test->expectCallCount("assertTrue", 1);
+            $test->expectArguments("assertTrue", array(true, '*'));
+            $mock = &new MockDummy($test);
+            $mock->expectMinimumCallCount("aMethod", 2);
+            $mock->aMethod();
+            $mock->aMethod();
+            $mock->tally();
             $test->tally();
         }
         function testZeroArguments() {

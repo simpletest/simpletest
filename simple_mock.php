@@ -367,6 +367,7 @@
         var $_test;
         var $_expected_counts;
         var $_max_counts;
+        var $_min_counts;
         var $_expected_args;
         var $_args_sequence;
         
@@ -384,22 +385,9 @@
             $this->_test = &$test;
             $this->_expected_counts = array();
             $this->_max_counts = array();
+            $this->_min_counts = array();
             $this->_expected_args = array();
             $this->_args_sequence = array();
-        }
-        
-        /**
-         *    @deprecated
-         */
-        function setReturnValueSequence($timing, $method, $value, $args = false) {
-            return $this->setReturnValueAt($timing, $method, $value, $args);
-        }
-        
-        /**
-         *    @deprecated
-         */
-        function setReturnReferenceSequence($timing, $method, &$reference, $args = false) {
-            return $this->setReturnReferenceAt($timing, $method, $reference, $args);
         }
          
         /**
@@ -445,13 +433,6 @@
         }
         
         /**
-         *    @deprecated
-         */
-        function expectArgumentsSequence($timing, $method, $args = false) {
-            $this->expectArgumentsAt($timing, $method, $args);
-        }
-        
-        /**
          *    Sets an expectation for the number of times
          *    a method will be called. The tally method
          *    is used to check this.
@@ -463,13 +444,6 @@
         function expectCallCount($method, $count) {
             $this->_dieOnNoMethod($method, "set expected call count");
             $this->_expected_counts[strtolower($method)] = $count;
-        }
-        
-        /**
-         *    @deprecated
-         */
-        function setExpectedCallCount($method, $count) {
-            $this->expectCallCount($method, $count);
         }
         
         /**
@@ -486,32 +460,55 @@
         }
         
         /**
-         *    @deprecated
+         *    Sets the number of times to call a method to prevent
+         *    a failure on the tally.
+         *    @param $method        Method call to test.
+         *    @param $count         Least number of times it should
+         *                          have been called.
+         *    @public
          */
-        function setMaximumCallCount($method, $count) {
-            $this->expectMaximumCallCount($method, $count);
+        function expectMinimumCallCount($method, $count) {
+            $this->_dieOnNoMethod($method, "set maximum call count");
+            $this->_min_counts[strtolower($method)] = $count;
         }
         
         /**
          *    Totals up the call counts and triggers a test
          *    assertion if a test is present for expected
          *    call counts.
-         *    This method must be called explicitely for the call
+         *    This method must be called explicitly for the call
          *    count assertions to be triggered.
-         *    @return                True if tallies are correct.
          *    @public
          */
         function tally() {
-            $all_correct = true;
+            $this->_tally_call_counts();
+            $this->_tally_minimum_call_counts();
+        }
+        
+        /**
+         *    Checks that the exact call counts match up.
+         *    @public
+         */
+        function _tally_call_counts() {
             foreach ($this->_expected_counts as $method => $expected) {
-                $is_correct = ($expected == ($count = $this->getCallCount($method)));
                 $this->_assertTrue(
-                        $is_correct,
-                        "Expected call count for [$method] was [$expected], but got [$count]",
+                        $expected == ($count = $this->getCallCount($method)),
+                        "Expected call count for [$method] was [$expected] got [$count]",
                         $this->_test);
-                $all_correct = $is_correct && $all_correct;
             }
-            return $all_correct;
+        }
+        
+        /**
+         *    Checks that the minimum call counts match up.
+         *    @public
+         */
+        function _tally_minimum_call_counts() {
+            foreach ($this->_min_counts as $method => $minimum) {
+                $this->_assertTrue(
+                        $minimum <= ($count = $this->getCallCount($method)),
+                        "Expected minimum call count for [$method] was [$minimum] got [$count]",
+                        $this->_test);
+            }
         }
         
         /**
