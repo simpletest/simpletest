@@ -504,20 +504,41 @@
          */
         function &_findForm($method, $attribute) {
             if (is_integer($this->_focus)) {
-                $form = &$this->_frames[$this->_focus]->$method($attribute);
-                if ($form) {
-                    $form->setDefaultTarget($this->_getPublicNameFromIndex($this->_focus));
-                }
-                return $form;
+                return $this->_findFormInFrame(
+                        $this->_frames[$this->_focus],
+                        $this->_focus,
+                        $method,
+                        $attribute);
             }
             for ($i = 0; $i < count($this->_frames); $i++) {
-                $form = &$this->_frames[$i]->$method($attribute);
-                if (isset($form)) {
-                    $form->setDefaultTarget($this->_getPublicNameFromIndex($i));
+                $form = &$this->_findFormInFrame(
+                        $this->_frames[$i],
+                        $i,
+                        $method,
+                        $attribute);
+                if ($form) {
                     return $form;
                 }
             }
             return null;
+        }
+        
+        /**
+         *    Finds a form in a page using a form finding method. Will
+         *    also tag the form with the frame name it belongs in.
+         *    @param SimplePage $page  Page content of frame.
+         *    @param integer $index    Internal frame representation.
+         *    @param string $method    Method to use to find in a page.
+         *    @param string $attribute Label, name or ID.
+         *    @return SimpleForm       Form object containing the matching ID.
+         *    @access private         
+         */
+        function &_findFormInFrame(&$page, $index, $method, $attribute) {
+            $form = &$this->_frames[$index]->$method($attribute);
+            if (isset($form)) {
+                $form->setDefaultTarget($this->_getPublicNameFromIndex($index));
+            }
+            return $form;
         }
         
         /**
