@@ -72,7 +72,7 @@
             $socket->setReturnValueSequence(0, "read", "aaa");
             $socket->setReturnValueSequence(1, "read", "bbb");
             $socket->setReturnValueSequence(2, "read", "ccc");
-            $socket->setReturnValueSequence(3, "read", "");
+            $socket->setReturnValue("read", "");
             $this->assertEqual(SimpleHttpResponse::_readAll($socket), "aaabbbccc");
         }
         function testBadSocketDuringResponse() {
@@ -93,6 +93,7 @@
             $socket->setReturnValueSequence(0, "read", "HTTP/1.1 200 OK\r\n");
             $socket->setReturnValueSequence(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
             $socket->setReturnValueSequence(2, "read", "Content-Type: text/plain\r\n");
+            $socket->setReturnValue("read", "");
             $response = &new SimpleHttpResponse($socket);
             $this->assertTrue($response->isError());
             $this->assertEqual($response->getContent(), "");
@@ -105,7 +106,7 @@
             $socket->setReturnValueSequence(2, "read", "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\nConne");
             $socket->setReturnValueSequence(3, "read", "ction: close\r\n\r\nthis is a test file\n");
             $socket->setReturnValueSequence(4, "read", "with two lines in it\n");
-            $socket->setReturnValueSequence(5, "read", "");
+            $socket->setReturnValue("read", "");
             $response = &new SimpleHttpResponse($socket);
             $this->assertFalse($response->isError());
             $this->assertEqual(
@@ -126,7 +127,7 @@
             $socket->setReturnValueSequence(6, "read", "Connection: close\r\n");
             $socket->setReturnValueSequence(7, "read", "\r\n");
             $socket->setReturnValueSequence(8, "read", "this is a test file\n");
-            $socket->setReturnValueSequence(9, "read", "");
+            $socket->setReturnValue("read", "");
             $response = &new SimpleHttpResponse($socket);
             $this->assertFalse($response->isError());
             $this->assertEqual(
