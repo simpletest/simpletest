@@ -45,13 +45,15 @@
         }
         function testResponseCodes() {
             $browser = &$this->getBrowser();
-            $browser->expectOnce("assertResponse", array(404, "%s"));
+            $browser->expectOnce("getResponseCode");
+            $browser->setReturnValue("getResponseCode", 404);
             $this->get("http://my-site.com/");
             $this->assertResponse(404);
         }
         function testMimeTypes() {
             $browser = &$this->getBrowser();
-            $browser->expectOnce("assertMime", array("text/html", "%s"));
+            $browser->expectOnce("getMimeType");
+            $browser->setReturnValue("getMimeType", "text/html");
             $this->get("http://my-site.com/");
             $this->assertMime("text/html");
         }

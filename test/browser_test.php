@@ -305,8 +305,13 @@
             $this->UnitTestCase();
         }
         function testGet() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue('getMimeType', 'text/html');
+            $headers->setReturnValue('getResponseCode', 200);
+            
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("getContent", "stuff");
+            $response->setReturnReference("getHeaders", $headers);
             
             $url = new SimpleUrl("http://this.com/page.html");
             $url->addRequestParameters(array("a" => "A", "b" => "B"));
@@ -321,6 +326,9 @@
             $this->assertIdentical(
                     $browser->get("http://this.com/page.html", array("a" => "A", "b" => "B")),
                     "stuff");
+            $browser->_setResponse($response);
+            $this->assertEqual($browser->getMimeType(), 'text/html');
+            $this->assertequal($browser->getResponseCode(), 200);
             $browser->tally();
         }
         function testHead() {
@@ -452,126 +460,32 @@
         }
     }
 
-    class TestOfBrowserAssertions extends UnitTestCase {
-        function TestOfBrowserAssertions() {
-            $this->UnitTestCase();
-        }
-        function testAssertionChaining() {
-            $test = &new MockUnitTestCase($this);
-            $test->expectArgumentsAt(0, "assertTrue", array(true, "Good"));
-            $test->expectArgumentsAt(1, "assertTrue", array(false, "Bad"));
-            $test->expectCallCount("assertTrue", 2);
-            $browser = &new TestBrowser($test);
-            $browser->_assertTrue(true, "Good");
-            $browser->_assertTrue(false, "Bad");
-            $test->tally();
-        }
-    }
-
     class TestOfBadHosts extends UnitTestCase {
         function TestOfBadHosts() {
             $this->UnitTestCase();
         }
         function &_createSimulatedBadHost() {
-            $headers = &new MockSimpleHttpHeaders($this);
-            $headers->setReturnValue("getNewCookies", array());
-            
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("isError", true);
             $response->setReturnValue("getError", "Bad socket");
             $response->setReturnValue("getContent", false);
-            $response->setReturnReference("getHeaders", $headers);
             
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
             return $request;
         }
         function testUntestedHost() {
-            $test = &new MockUnitTestCase($this);
-            $test->expectCallCount("assertTrue", 0);
             $request = &$this->_createSimulatedBadHost();
-            $browser = &new MockRequestTestBrowser($this);
+            
+            $browser = &new MockRequestSimpleBrowser($this);
             $browser->setReturnReference('_createRequest', $request);
-            $browser->TestBrowser($test);
+            $browser->SimpleBrowser();
+            
+            $this->assertIdentical($browser->getResponseCode(), false);
+            $this->assertIdentical($browser->getMimeType(), false);
             $this->assertIdentical(
                     $browser->get("http://this.host/this/path/page.html", false),
                     false);
-            $test->tally();
-        }
-        function testFailingBadHost() {
-            $test = &new MockUnitTestCase($this);
-            $request = &$this->_createSimulatedBadHost();
-            $browser = &new MockRequestTestBrowser($this);
-            $browser->setReturnReference('_createRequest', $request);
-            $browser->TestBrowser($test);
-            $this->assertIdentical(
-                    $browser->get("http://this.host/this/path/page.html", false),
-                    false);
-        }
-        function testExpectingBadHost() {
-            $test = &new MockUnitTestCase($this);
-            $request = &$this->_createSimulatedBadHost();
-            $browser = &new MockRequestTestBrowser($this);
-            $browser->setReturnReference('_createRequest', $request);
-            $browser->TestBrowser($test);
-            $this->assertIdentical(
-                    $browser->get("http://this.host/this/path/page.html", false),
-                    false);
-        }
-    }
-
-    class TestOfHeaderExpectations extends UnitTestCase {
-        function TestOfHeaderExpectations() {
-            $this->UnitTestCase();
-        }
-        function setUp() {
-            $headers = &new MockSimpleHttpHeaders($this);
-            $headers->setReturnValue("getNewCookies", array());
-            
-            $this->_response = &new MockSimpleHttpResponse($this);
-            $this->_response->setReturnValue("getContent", false);
-            $this->_response->setReturnReference("getHeaders", $headers);
-            
-            $this->_request = &new MockSimpleHttpRequest($this);
-            $this->_request->setReturnReference("fetch", $this->_response);
-            
-            $this->_test = &new MockUnitTestCase($this);
-        }
-        function testResponseCode() {
-            $this->_response->setReturnValue("getResponseCode", 404);
-            $this->_response->setReturnValue("isError", false);
-            $this->_test->expectArguments("assertTrue", array(true, "*"));
-            $this->_test->expectCallCount("assertTrue", 1);
-            $browser = &new MockRequestTestBrowser($this);
-            $browser->setReturnReference('_createRequest', $this->_request);
-            $browser->TestBrowser($this->_test);
-            $browser->get("http://this.host/this/path/page.html", false);
-            $browser->assertResponse(array(404));
-            $this->_test->tally();
-        }
-        function testBadResponse() {
-            $this->_response->setReturnValue("getResponseCode", false);
-            $this->_response->setReturnValue("isError", true);
-            $this->_test->expectArguments("assertTrue", array(false, "*"));
-            $this->_test->expectCallCount("assertTrue", 1);
-            $browser = &new MockRequestTestBrowser($this);
-            $browser->setReturnReference('_createRequest', $this->_request);
-            $browser->TestBrowser($this->_test);
-            $browser->get("http://this.host/this/path/page.html", false);
-            $browser->assertResponse(array(404));
-            $this->_test->tally();
-        }
-        function testMimeTypes() {
-            $this->_response->setReturnValue("isError", false);
-            $this->_response->setReturnValue("getMimeType", "text/plain");
-            $this->_test->expectArguments("assertTrue", array(true, "*"));
-            $this->_test->expectCallCount("assertTrue", 1);
-            $browser = &new MockRequestTestBrowser($this);
-            $browser->setReturnReference('_createRequest', $this->_request);
-            $browser->TestBrowser($this->_test);
-            $browser->get("http://this.host/this/path/page.html", false);
-            $browser->assertMime("text/plain");
-            $this->_test->tally();
         }
     }
 ?>

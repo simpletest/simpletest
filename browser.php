@@ -301,7 +301,7 @@
                 $request = &$this->_createCookieRequest($method, $url, $parameters);
                 $response = &$request->fetch();
                 if ($response->isError()) {
-                    $this->_response = false;
+                    $this->_clearResponse();
                     return $response;
                 }
                 $headers = $response->getHeaders();
@@ -311,8 +311,25 @@
                 }
                 $url = new SimpleUrl($headers->getLocation());
             } while (! $this->_isTooManyRedirects(++$redirects));
-            $this->_response = &$response;
+            $this->_setResponse($response);
             return $response;
+        }
+        
+        /**
+         *    Clears the current response.
+         *    @access protected
+         */
+        function _clearResponse() {
+            $this->_response = false;
+        }
+        
+        /**
+         *    Preserves the current response.
+         *    @param SimpleHttpResponse $response    Latest fetch.
+         *    @access protected
+         */
+        function _setResponse(&$response) {
+            $this->_response = &$response;
         }
         
         /**
@@ -321,7 +338,7 @@
          *                                   false if none.
          *    @access protected
          */
-        function &_getLastResponse() {
+        function &_getResponse() {
             return $this->_response;
         }
         
@@ -371,6 +388,34 @@
             }
             $this->_current_url = $url;
             return $response->getContent();
+        }
+        
+        /**
+         *    Accessor for current MIME type.
+         *    @return string    MIME type as string; e.g. 'text/html'
+         *    @access public
+         */
+        function getMimeType() {
+            $response = &$this->_getResponse();
+            if (! $response) {
+                return false;
+            }
+            $headers = &$response->getHeaders();
+            return $headers->getMimeType();
+        }
+        
+        /**
+         *    Accessor for last response code.
+         *    @return integer    Last HTTP response code received.
+         *    @access public
+         */
+        function getResponseCode() {
+            $response = &$this->_getResponse();
+            if (! $response) {
+                return false;
+            }
+            $headers = &$response->getHeaders();
+            return $headers->getResponseCode();
         }
         
         /**
@@ -496,13 +541,7 @@
         }
         
         /**
-         *    Sets an expectation for a cookie.
-         *    @param string $name      Cookie key.
-         *    @param string $value     Expected value of incoming cookie.
-         *                             An empty string corresponds to a
-         *                             cleared cookie.
-         *    @param string $message   Message to display.
-         *    @access public
+         *    @deprecated
          */
         function expectCookie($name, $value = false, $message = "%s") {
             $this->_expected_cookies[] = array(
@@ -582,36 +621,6 @@
                 }
             }
             $this->_assertTrue($is_match, sprintf($expected["message"], $message));
-        }
-        
-        /**
-         *    Checks the response code against a list
-         *    of possible values.
-         *    @param array $responses    Possible responses for a pass.
-         *    @access public
-         */
-        function assertResponse($responses, $message = "%s") {
-            $responses = (is_array($responses) ? $responses : array($responses));
-            $response = &$this->_getLastResponse();
-            $code = ($response ? $response->getResponseCode() : "None");
-            $message = sprintf($message, "Expecting response in [" .
-                    implode(", ", $responses) . "] got [$code]");
-            $this->_assertTrue(in_array($code, $responses), $message);
-        }
-        
-        /**
-         *    Checks the mime type against a list
-         *    of possible values.
-         *    @param array $types    Possible mime types for a pass.
-         *    @access public
-         */
-        function assertMime($types, $message = "%s") {
-            $types = (is_array($types) ? $types : array($types));
-            $response = &$this->_getLastResponse();
-            $type = ($response ? $response->getMimeType() : "None");
-            $message = sprintf($message, "Expecting mime type in [" .
-                    implode(", ", $types) . "] got [$type]");
-            $this->_assertTrue(in_array($type, $types), $message);
         }
         
         /**

@@ -313,7 +313,11 @@
          *    @access public
          */
         function assertResponse($responses, $message = "%s") {
-            $this->_current_browser->assertResponse($responses, $message);
+            $responses = (is_array($responses) ? $responses : array($responses));
+            $code = $this->_current_browser->getResponseCode();
+            $message = sprintf($message, "Expecting response in [" .
+                    implode(", ", $responses) . "] got [$code]");
+            $this->assertTrue(in_array($code, $responses), $message);
         }
         
         /**
@@ -323,7 +327,11 @@
          *    @access public
          */
         function assertMime($types, $message = "%s") {
-            $this->_current_browser->assertMime($types, $message);
+            $types = (is_array($types) ? $types : array($types));
+            $type = $this->_current_browser->getMimeType();
+            $message = sprintf($message, "Expecting mime type in [" .
+                    implode(", ", $types) . "] got [$type]");
+            $this->assertTrue(in_array($type, $types), $message);
         }
         
         /**
