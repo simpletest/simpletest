@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for the next iteration (Alpha7) of 36 hours.
+This is immediate stuff only for the next iteration (Alpha7) of 40 hours.
 Figures are estimated hours work versus actual (for XP velocity).
 Stuff will get added or dropped as the cycle progresses.
 
@@ -8,6 +8,11 @@ $Id$
 Unit tester
 -----------
 Improve difference output messages when nested in arrays (1).
+
+Interface
+---------
+Add message results and different test results (2/1) - done.
+Add a dump() method with a print_r() trap (2/1) - done.
 
 Mock objects
 ------------

@@ -61,7 +61,7 @@
         }
         
         /**
-         *    Paints the approppriate result to the visting
+         *    Paints the appropriate result to the visiting
          *    TestReporter.
          *    @param $painter    TestReporter class to write to.
          *    @public
@@ -82,6 +82,54 @@
          */
         function isFail() {
             return !$this->_result;
+        }
+    }
+    
+    /**
+     *    Sends a simple message to the reporter.
+     */
+    class TestMessage extends TestEvent {
+        
+        /**
+         *    Treats the label as a simple message.
+         *    @param $label     Message to be carried by the event.
+         *    @public
+         */
+        function TestMessage($label) {
+            $this->TestEvent($label);
+        }
+        
+        /**
+         *    Paints the message to the reporters message stream.
+         *    @param $painter    TestReporter class to write to.
+         *    @public
+         */
+        function paint(&$painter) {
+            $painter->paintMessage($this->getLabel());
+        }
+    }
+    
+    /**
+     *    Sends a formatted ASCII message to the reporter.
+     */
+    class TestFormattedMessage extends TestEvent {
+        
+        /**
+         *    Treats the label as a simple message.
+         *    @param $label     Message to be carried by the event.
+         *    @public
+         */
+        function TestFormattedMessage($label) {
+            $this->TestEvent($label);
+        }
+        
+        /**
+         *    Paints the message to the reporters ASCII stream.
+         *    @param $painter    TestReporter class to write to.
+         *    @public
+         */
+        function paint(&$painter) {
+            $painter->paintFormattedMessage($this->getLabel());
         }
     }
 
@@ -356,6 +404,23 @@
          *    @public
          */
         function paintFail($message) {
+        }
+        
+        /**
+         *    Paints a simple supplementary message.
+         *    @param $message        Text to display.
+         *    @public
+         */
+        function paintMessage($message) {
+        }
+        
+        /**
+         *    Paints a formatted ASCII message such as a
+         *    variable dump.
+         *    @param $message        Text to display.
+         *    @public
+         */
+        function paintFormattedMessage($message) {
         }
     }
 ?>

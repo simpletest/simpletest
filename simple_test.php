@@ -48,6 +48,16 @@
         function getSize() {
             return 1;
         }
+        
+        /**
+         *    Dispatches a text message straight to the
+         *    test suite. Useful for status bar displays.
+         *    @param $message        Message to show.
+         *    @public
+         */
+        function sendMessage($message) {
+            $this->notify(new TestMessage($message));
+        }
     }
 
     /**
@@ -171,8 +181,23 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertFalse($boolean, $message = "false assertion") {
+        function assertFalse($boolean, $message = "False assertion") {
             $this->assertTrue(!$boolean, $message);
+        }
+        
+        /**
+         *    Sends a formatted dump of a variable to the
+         *    test suite for those emergency debugging
+         *    situations.
+         *    @param $variable       Variable to display.
+         *    @public
+         */
+        function dump($variable) {
+            ob_start();
+            print_r($variable);
+            $message = ob_get_contents();
+            ob_end_clean();
+            $this->notify(new TestFormattedMessage($message));
         }
     }
     

@@ -75,6 +75,9 @@
             $this->assertWantedPattern('/hello/', "Hello there", "#%s#");            // Fail.
             $this->assertNoUnwantedPattern('/hello/i', "Hello there", "#%s#");      // Fail.
         }
+        function testOfDumping() {
+            $this->dump(array("Hello"));
+        }
     }
     
     $test = new GroupTest("Unit test case test, 15 fails and 15 passes");
