@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.01) of 36 hours.
+This is immediate stuff only for this iteration (1.01) of 41 hours.
 
 $Id$
 
@@ -8,6 +8,7 @@ Unit tester
 Keep original raw URL for as long as possible (3).
 Allow expectation to be passed to assertError() method (2).
 Switch to a run_me_if_no_runner script (2).
+Fix GroupTest test case count being wrong after addTestFile() (3).
 
 Reporter
 --------
@@ -37,6 +38,7 @@ Add assertSubmit() test (1).
 
 Documentation
 -------------
+Note that additional parameters can be added to get(), post(), etc (2).
 
 Build
 -----
