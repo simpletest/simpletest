@@ -122,11 +122,29 @@
         
         /**
          *    Accessor for the whole content so far.
-         *    @return string       Content as big string.
+         *    @return string       Content as big raw string.
          *    @access public
          */
         function getContent() {
             return $this->_content;
+        }
+        
+        /**
+         *    Accessor for content reduced to visible text. Acts
+         *    like a text mode browser, normalising space and
+         *    reducing images to their alt text.
+         *    @return string       Content as plain text.
+         *    @access public
+         */
+        function getText() {
+            $text = $this->getContent();
+            $text = preg_replace('|<img.*?alt\s*=\s*"(.*?)".*?>|', ' \1 ', $text);
+            $text = preg_replace('|<img.*?alt\s*=\s*\'(.*?)\'.*?>|', ' \1 ', $text);
+            $text = preg_replace('|<img.*?alt\s*=\s*([a-zA-Z_]+).*?>|', ' \1 ', $text);
+            $text = preg_replace('|<.*?>|', '', $text);
+            $text = SimpleTestCompatibility::decodeHtml($text);
+            $text = preg_replace('|\s+|', ' ', $text);
+            return trim($text);
         }
     }
     

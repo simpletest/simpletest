@@ -7,6 +7,12 @@
      */
 
     /**#@+
+     *	include other SimpleTest class files
+     */
+    require_once(dirname(__FILE__) . '/options.php');
+    /**#@-*/
+    
+    /**#@+
      * Lexer mode stack constants
      */
     define("LEXER_ENTER", 1);
@@ -674,9 +680,7 @@
          *    @access private
          */
         function _decodeHtml($html) {
-            return strtr(
-                    $html,
-                    array_flip(get_html_translation_table(HTML_ENTITIES)));
+            return SimpleTestCompatibility::decodeHtml($html);
         }
     }
     

@@ -35,8 +35,7 @@ Web tester
 ----------
 Add htmlentities() international fix (1/1) - done.
 Add WebTestCase::getCookie() method (1/1) - done.
-Add assertText() (3).
-Make labels HTML entity and tag blind (3/2).
+Make labels HTML entity and tag blind (3/4).
 Add setFieldOrFail() method (1/1) - done.
 
 Documentation
