@@ -1,0 +1,14 @@
+.fail { color: red; } 
+pre { background-color: lightgray; }
+#wait {
+	position: absolute;
+	visibility: hidden;
+	font-face: Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: black;
+	background: #B7B8DD;
+	text-align: center;
+	border-color: blue;
+	border-style: solid;
+	border-weight: 2;
+	}
