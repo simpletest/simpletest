@@ -224,19 +224,4 @@
             flush();
         }
     }
-    
-    /**
-     *    @deprecated
-     *    @ignore
- 	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
-     */
-    class CommandLineReporter extends TextReporter {
-        /**
-         *    @deprecated
-         */
-        function CommandLineReporter() {
-            $this->TextReporter();
-        }
-    }
 ?>

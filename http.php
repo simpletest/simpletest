@@ -659,6 +659,17 @@
             }
             return new SimpleSocket($host, $port, $timeout);
         }
+        
+        /**
+         *    Initiates the HTTP exchange.
+         *    @param SimpleSocket $socket    Open socket.
+         *    @param string $method          HTTP request method, usually GET.
+         *    @access public
+         */
+        function sendDestinationHeaders(&$socket, $method) {
+            $socket->write($this->getRequestLine($method) . "\r\n");
+            $socket->write($this->getHostLine() . "\r\n");
+        }
     }
     
     /**
@@ -697,8 +708,9 @@
         function getRequestLine($method) {
             $url = $this->_getUrl();
             $scheme = $url->getScheme() ? $url->getScheme() : 'http';
-            return $method . ' ' . $scheme . '://' . $url->getHost() . $url->getPath() .
-                    $url->getEncodedRequest() . ' HTTP/1.0';
+            $port = $url->getPort() ? ':' . $url->getPort() : '';
+            return $method . ' ' . $scheme . '://' . $url->getHost() . $port .
+                    $url->getPath() . $url->getEncodedRequest() . ' HTTP/1.0';
         }
         
         /**
@@ -713,8 +725,8 @@
         
         /**
          *    Opens a socket to the route.
-         *    @param integer $timeout                 Connection timeout.
-         *    @return SimpleSocket/SimpleSecureSocket New socket.
+         *    @param integer $timeout     Connection timeout.
+         *    @return SimpleSocket        New socket.
          *    @access public
          */
         function &createConnection($timeout) {
@@ -745,8 +757,8 @@
          *                                usually GET.
          *    @access public
          */
-        function SimpleHttpRequest($route, $method = 'GET') {
-            $this->_route = $route;
+        function SimpleHttpRequest(&$route, $method = 'GET') {
+            $this->_route = &$route;
             $this->_method = $method;
             $this->_headers = array();
             $this->_cookies = array();
@@ -776,8 +788,7 @@
          *    @access protected
          */
         function _dispatchRequest(&$socket, $method) {
-            $socket->write($this->_route->getRequestLine($this->_method) . "\r\n");
-            $socket->write($this->_route->getHostLine() . "\r\n");
+            $this->_route->sendDestinationHeaders($socket, $this->_method);
             foreach ($this->_headers as $header_line) {
                 $socket->write($header_line . "\r\n");
             }
@@ -842,12 +853,12 @@
         
         /**
          *    Saves the URL ready for fetching.
-         *    @param SimpleUrl $url     URL as object.
-         *    @param array $parameters  Content to send.
+         *    @param SimpleRoute $route   Request target.
+         *    @param array $parameters    Content to send.
          *    @access public
          */
-        function SimpleHttpPostRequest($url, $parameters) {
-            $this->SimpleHttpRequest($url, 'POST');
+        function SimpleHttpPostRequest($route, $parameters) {
+            $this->SimpleHttpRequest($route, 'POST');
             $this->_pushed_content = SimpleUrl::encodeRequest($parameters);
         }
         
