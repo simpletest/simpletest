@@ -84,6 +84,7 @@
                 <li><a href="reporter_documentation.html">Displaying results</a></li>
                 <li><a href="server_stubs_documentation.html">Using server stubs</a></li>
                 <li><a href="mock_objects_documentation.html">Using mock objects</a></li>
+                <li><a href="partial_mocks_documentation.html">Partial mocks</a></li>
             </ol>
         </div>
         <div class="in">
@@ -113,10 +114,10 @@
         <div class="content">
                         <p>
                 <span style="color: red;">News:</span>
-                I have added a
-                <a href="http://lists.sourceforge.net/lists/listinfo/simpletest-support">SourceForge Mailing list</a>.
-                This is part of my efforts to start a PHP unit testing FAQ on this
-                site (not restricted to SimpleTest).
+                Alpha 7 released on sourceforge.
+                Features include cookie and other assertions added
+                to the web tester and partial mocks added to the unit testing
+                framework.
             </p>
             <p>
                 The following assumes that you are familiar with the concept
@@ -496,7 +497,7 @@
             $this-&gt;WebTestCase();
         }
         function setUp() {
-            $this->fetch(&apos;http://test-server/index.php&apos;);
+            $this->get(&apos;http://test-server/index.php&apos;);
             $this->clickLink(&apos;About&apos;);
         }
         function testSearchEngineOptimisations() {
