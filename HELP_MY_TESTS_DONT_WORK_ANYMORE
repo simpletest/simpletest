@@ -74,6 +74,7 @@ methods should provide a temporary fix.
 No class TestDisplay
 --------------------
 This has been folded into SimpleReporter in Beta3 and is now deprecated.
+It was removed in RC1.
 
 No class CommandLineReporter
 ----------------------------
@@ -161,7 +162,7 @@ This means that options are set differently...
 GroupTest::ignore() --> SimpleTestOptions::ignore()
 Mock::setMockBaseClass() --> SimpleTestOptions::setMockBaseClass()
 
-These changed in Alpha8 and the old versions are now removed.
+These changed in Alpha8 and the old versions are now removed in RC1.
 
 No method setExpected*()
 ------------------------

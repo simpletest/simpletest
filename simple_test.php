@@ -21,52 +21,6 @@
     /**#@-*/
     
     /**
-     *	Interface used by the test displays and group tests.
-	 *	@package	SimpleTest
-	 *	@subpackage	UnitTester
-     */
-    class RunnableTest {
-        var $_label;
-        
-        /**
-         *    Sets up the test name.
-         *    @param string $label        Name of test.
-         *    @access public
-         */
-        function RunnableTest($label) {
-            $this->_label = $label;
-        }
-        
-        /**
-         *    Accessor for the test name for subclasses.
-         *    @return string           Name of the test.
-         *    @access public
-         */
-        function getLabel() {
-            return $this->_label;
-        }
-        
-        /**
-         *    Runs the top level test for this class.
-         *    @param SimpleReporter $reporter    Target of test results.
-         *    @returns boolean                   True if no failures.
-         *    @access public
-         *    @abstract
-         */
-        function run(&$reporter) {
-        }
-        
-        /**
-         *    Accessor for the number of subtests.
-         *    @return integer           Number of test cases.
-         *    @access public
-         */
-        function getSize() {
-            return 1;
-        }
-    }
-
-    /**
      *    Basic test case. This is the smallest unit of a test
      *    suite. It searches for
      *    all methods that start with the the string "test" and
@@ -74,7 +28,8 @@
 	 *    @package		SimpleTest
 	 *    @subpackage	UnitTester
      */
-    class SimpleTestCase extends RunnableTest {
+    class SimpleTestCase {
+        var $_label;
         var $_reporter;
         
         /**
@@ -84,11 +39,17 @@
          *    @access public
          */
         function SimpleTestCase($label = false) {
-            if (! $label) {
-                $label = get_class($this);
-            }
-            $this->RunnableTest($label);
+            $this->_label = $label ? $label : get_class($this);
             $this->_reporter = false;
+        }
+        
+        /**
+         *    Accessor for the test name for subclasses.
+         *    @return string           Name of the test.
+         *    @access public
+         */
+        function getLabel() {
+            return $this->_label;
         }
         
         /**
@@ -341,6 +302,15 @@
         function sendMessage($message) {
             $this->_reporter->PaintMessage($message);
         }
+        
+        /**
+         *    Accessor for the number of subtests.
+         *    @return integer           Number of test cases.
+         *    @access public
+         */
+        function getSize() {
+            return 1;
+        }
     }
     
     /**
@@ -350,7 +320,8 @@
 	 *    @package		SimpleTest
 	 *    @subpackage	UnitTester
      */
-    class GroupTest extends RunnableTest {
+    class GroupTest {
+        var $_label;
         var $_test_cases;
         
         /**
@@ -360,8 +331,17 @@
          *    @access public
          */
         function GroupTest($label) {
-            $this->RunnableTest($label);
+            $this->_label = $label;
             $this->_test_cases = array();
+        }
+        
+        /**
+         *    Accessor for the test name for subclasses.
+         *    @return string           Name of the test.
+         *    @access public
+         */
+        function getLabel() {
+            return $this->_label;
         }
         
         /**
@@ -390,7 +370,7 @@
                 if (in_array($class, $existing_classes)) {
                     continue;
                 }
-                if (!$this->_isTestCase($class)) {
+                if (! $this->_isTestCase($class)) {
                     continue;
                 }
                 if (SimpleTestOptions::isIgnored($class)) {
@@ -441,13 +421,6 @@
                 $count += $case->getSize();
             }
             return $count;
-        }
-        
-        /**
-         *    @deprecated
-         */
-        function ignore($class = false) {
-            SimpleTestOptions::ignore($class);
         }
     }
 ?>

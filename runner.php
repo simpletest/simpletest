@@ -14,7 +14,7 @@
 	 *	  @subpackage UnitTester
      *    @abstract
      */
-    class SimpleRunner {
+    class SimpleScorer {
         var $_passes;
         var $_fails;
         var $_exceptions;
@@ -24,7 +24,7 @@
          *    Starts the test run with no results.
          *    @access public
          */
-        function SimpleRunner() {
+        function SimpleScorer() {
             $this->_passes = 0;
             $this->_fails = 0;
             $this->_exceptions = 0;
@@ -316,7 +316,7 @@
 	 *	  @package SimpleTest
 	 *	  @subpackage UnitTester
      */
-    class SimpleReporter extends SimpleRunner {
+    class SimpleReporter extends SimpleScorer {
         var $_test_stack;
         var $_size;
         var $_progress;
@@ -326,7 +326,7 @@
          *    @access public
          */
         function SimpleReporter() {
-            $this->SimpleRunner();
+            $this->SimpleScorer();
             $this->_test_stack = array();
             $this->_size = null;
             $this->_progress = 0;
@@ -342,7 +342,7 @@
          *    @access public
          */
         function paintGroupStart($test_name, $size) {
-            if (!isset($this->_size)) {
+            if (! isset($this->_size)) {
                 $this->_size = $size;
             }
             if (count($this->_test_stack) == 0) {
@@ -475,21 +475,6 @@
          */
         function inCli() {
             return php_sapi_name() == 'cli';
-        }
-    }
-    
-    /**
-     *    @deprecated
-     *    @ignore
-     *    @package      SimpleTest
-     *    @subpackage   UnitTester
-     */
-    class TestDisplay extends SimpleReporter {
-        /**
-         *    @deprecated
-         */
-        function TestDisplay() {
-            $this->SimpleReporter();
         }
     }
 ?>

@@ -3,7 +3,7 @@
     
     require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../xml.php');
     
-    Mock::generate('SimpleRunner');
+    Mock::generate('SimpleScorer');
     
     if (! function_exists('xml_parser_create')) {
         SimpleTestOptions::ignore('TestOfXmlStructureParsing');
@@ -25,7 +25,7 @@
             $this->UnitTestCase();
         }
         function testValidXml() {
-            $listener = &new MockSimpleRunner($this);
+            $listener = &new MockSimpleScorer($this);
             $listener->expectNever('paintGroupStart');
             $listener->expectNever('paintGroupEnd');
             $listener->expectNever('paintCaseStart');
@@ -36,7 +36,7 @@
             $this->assertTrue($parser->parse("</run>\n"));
         }
         function testEmptyGroup() {
-            $listener = &new MockSimpleRunner($this);
+            $listener = &new MockSimpleScorer($this);
             $listener->expectOnce('paintGroupStart', array('a_group', 7));
             $listener->expectOnce('paintGroupEnd', array('a_group'));
             $parser = &new SimpleTestXmlParser($listener);
@@ -49,7 +49,7 @@
             $listener->tally();
         }
         function testEmptyCase() {
-            $listener = &new MockSimpleRunner($this);
+            $listener = &new MockSimpleScorer($this);
             $listener->expectOnce('paintCaseStart', array('a_case'));
             $listener->expectOnce('paintCaseEnd', array('a_case'));
             $parser = &new SimpleTestXmlParser($listener);
@@ -62,7 +62,7 @@
             $listener->tally();
         }
         function testEmptyMethod() {
-            $listener = &new MockSimpleRunner($this);
+            $listener = &new MockSimpleScorer($this);
             $listener->expectOnce('paintCaseStart', array('a_case'));
             $listener->expectOnce('paintCaseEnd', array('a_case'));
             $listener->expectOnce('paintMethodStart', array('a_method'));
@@ -80,7 +80,7 @@
             $listener->tally();
         }
         function testNestedGroup() {
-            $listener = &new MockSimpleRunner($this);
+            $listener = &new MockSimpleScorer($this);
             $listener->expectArgumentsAt(0, 'paintGroupStart', array('a_group', 7));
             $listener->expectArgumentsAt(1, 'paintGroupStart', array('b_group', 3));
             $listener->expectCallCount('paintGroupStart', 2);
@@ -123,7 +123,7 @@
             $parser->parse("</run>\n");
         }
         function testPass() {
-            $listener = &new MockSimpleRunner($this);
+            $listener = &new MockSimpleScorer($this);
             $listener->expectOnce('paintPass', array('a_message'));
             $parser = &new SimpleTestXmlParser($listener);
             $this->sendValidStart($parser);
@@ -132,7 +132,7 @@
             $listener->tally();
         }
         function testFail() {
-            $listener = &new MockSimpleRunner($this);
+            $listener = &new MockSimpleScorer($this);
             $listener->expectOnce('paintFail', array('a_message'));
             $parser = &new SimpleTestXmlParser($listener);
             $this->sendValidStart($parser);
@@ -141,7 +141,7 @@
             $listener->tally();
         }
         function testException() {
-            $listener = &new MockSimpleRunner($this);
+            $listener = &new MockSimpleScorer($this);
             $listener->expectOnce('paintException', array('a_message'));
             $parser = &new SimpleTestXmlParser($listener);
             $this->sendValidStart($parser);
@@ -152,7 +152,7 @@
         function testSignal() {
             $signal = new AnyOldSignal();
             $signal->stuff = "Hello";
-            $listener = &new MockSimpleRunner($this);
+            $listener = &new MockSimpleScorer($this);
             $listener->expectOnce('paintSignal', array('a_signal', $signal));
             $parser = &new SimpleTestXmlParser($listener);
             $this->sendValidStart($parser);
@@ -163,7 +163,7 @@
             $listener->tally();
         }
         function testMessage() {
-            $listener = &new MockSimpleRunner($this);
+            $listener = &new MockSimpleScorer($this);
             $listener->expectOnce('paintMessage', array('a_message'));
             $parser = &new SimpleTestXmlParser($listener);
             $this->sendValidStart($parser);
@@ -172,7 +172,7 @@
             $listener->tally();
         }
         function testFormattedMessage() {
-            $listener = &new MockSimpleRunner($this);
+            $listener = &new MockSimpleScorer($this);
             $listener->expectOnce('paintFormattedMessage', array("\na\tmessage\n"));
             $parser = &new SimpleTestXmlParser($listener);
             $this->sendValidStart($parser);
