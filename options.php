@@ -305,7 +305,7 @@
          */
         function isA($object, $class) {
             if (version_compare(phpversion(), '5') >= 0) {
-                if (! class_exists($class)) {
+                if (! class_exists($class, false)) {
                     return false;
                 }
                 eval("\$is_a = \$object instanceof $class;");
@@ -316,6 +316,21 @@
             }
             return ((strtolower($class) == get_class($object))
                     or (is_subclass_of($object, $class)));
+        }
+        
+        /**
+         *    Autoload safe version of class_exists().
+         *    @param string $class        Name of class to look for.
+         *    @return boolean             True if class is defined.
+         *    @access public
+         *    @static
+         */
+        function classExists($class) {
+            if (version_compare(phpversion(), '5') >= 0) {
+                return class_exists($class, false);
+            } else {
+                return class_exists($class);
+            }
         }
         
         /**

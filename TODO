@@ -13,7 +13,7 @@ Add Jeff's performance fixes (2/1).
 Fix error handler to not send messages on E_STRICT (2/1) - done.
 Fix assertSame() for PEAR::PhpUnit compatibility (1/2) - done.
 Fix running machinery to allow decorators (3/3) - done.
-Fix __autoload() exception with class_exists() flag (2).
+Fix __autoload() exception with class_exists() flag (2/1) - done.
 
 Reporter
 --------
