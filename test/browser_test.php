@@ -290,6 +290,7 @@
             $page = &new MockSimplePage($this);
             $page->setReturnValue('getUrlsByLabel', array(new SimpleUrl('http://this.com/new.html')));
             $page->expectOnce('getUrlsByLabel', array('New'));
+            $page->setReturnValue('getRaw', 'A page');
             
             $browser = &$this->createBrowser($agent, $page);
             $browser->get('http://this.com/page.html');
@@ -321,6 +322,7 @@
             $page->setReturnValue('getUrlsByLabel', array($parsed_url));
             $page->setReturnValue('hasFrames', false);
             $page->expectOnce('getUrlsByLabel', array('New'));
+            $page->setReturnValue('getRaw', 'A page');
             
             $browser = &$this->createBrowser($agent, $page);
             $browser->get('http://this.com/page.html');
@@ -356,6 +358,7 @@
             $page->setReturnValue(
                     'getUrlsByLabel',
                     array(new SimpleUrl('0.html'), new SimpleUrl('1.html')));
+            $page->setReturnValue('getRaw', 'A page');
             
             $browser = &$this->createBrowser($agent, $page);
             $browser->get('http://this.com/page.html');
@@ -376,6 +379,7 @@
             $page = &new MockSimplePage($this);
             $page->setReturnValue('getUrlById', new SimpleUrl('http://this.com/link.html'));
             $page->expectOnce('getUrlById', array(2));
+            $page->setReturnValue('getRaw', 'A page');
             
             $browser = &$this->createBrowser($agent, $page);
             $browser->get('http://this.com/page.html');
