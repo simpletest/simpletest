@@ -26,7 +26,7 @@ Expectation methods should carry message overrides (2/2) - done.
 Parser
 ------
 Add image map parsing (3).
-Add simple button tag parsing (1).
+Add simple button tag parsing (1/3) - done.
 
 Browser
 -------
