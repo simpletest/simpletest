@@ -112,14 +112,14 @@
     /**
      *    Sends a formatted ASCII message to the reporter.
      */
-    class TestFormattedMessage extends TestEvent {
+    class FormattedTestMessage extends TestEvent {
         
         /**
          *    Treats the label as a simple message.
          *    @param $label     Message to be carried by the event.
          *    @public
          */
-        function TestFormattedMessage($label) {
+        function FormattedTestMessage($label) {
             $this->TestEvent($label);
         }
         

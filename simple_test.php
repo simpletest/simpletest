@@ -197,7 +197,7 @@
             print_r($variable);
             $message = ob_get_contents();
             ob_end_clean();
-            $this->notify(new TestFormattedMessage($message));
+            $this->notify(new FormattedTestMessage($message));
         }
     }
     
