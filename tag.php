@@ -883,11 +883,12 @@
             $values = array();
             foreach (array_keys($this->_widgets) as $name) {
                 $value = $this->_widgets[$name]->getValue();
-                if (is_string($value)) {
-                    $values[$name] = $value;
-                } elseif ($value === true) {
+                if ($value === true) {
                     $values[$name] = '';
+                } elseif (is_string($value)) {
+                    $values[$name] = $value;
                 } elseif (is_array($value)) {
+                    $values[$name] = $value;
                 }
             }
             return $values;

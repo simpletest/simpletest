@@ -289,8 +289,7 @@
             $this->get('http://www.lastcraft.com/test/multiple_widget_form.html');
             $this->assertField('a', array('a2', 'a3'));
             $this->assertTrue($this->clickSubmit('Go!'));
-            //$this->assertWantedPattern('/\[a=a2, a3\]/');
-            //$this->showSource();
+            $this->assertWantedPattern('/a=\[a2, a3\]/');
         }
     }
 ?>
