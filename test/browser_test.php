@@ -300,10 +300,8 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', 'handler.html');
             $form->setReturnValue('getMethod', 'post');
-            $form->setReturnValue('getSubmitNameFromLabel', 'a_name');
-            $form->expectOnce('getSubmitNameFromLabel', array('Go'));
-            $form->setReturnValue('submitButton', array('a' => 'A'));
-            $form->expectOnce('submitButton', array('a_name'));
+            $form->setReturnValue('submitButtonByLabel', array('a' => 'A'));
+            $form->expectOnce('submitButtonByLabel', array('Go'));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormBySubmitLabel', $form);
@@ -330,8 +328,7 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', false);
             $form->setReturnValue('getMethod', 'get');
-            $form->setReturnValue('getSubmitNameFromLabel', 'a_name');
-            $form->setReturnValue('submitButton', array('a' => 'A'));
+            $form->setReturnValue('submitButtonByLabel', array('a' => 'A'));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormBySubmitLabel', $form);
@@ -354,7 +351,7 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', 'handler.html');
             $form->setReturnValue('getMethod', 'post');
-            $form->setReturnValue('submitButton', array('a' => 'A'));
+            $form->setReturnValue('submitButtonByName', array('a' => 'A'));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormBySubmitName', $form);
@@ -374,10 +371,8 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', 'handler.html');
             $form->setReturnValue('getMethod', 'post');
-            $form->setReturnValue('getSubmitNameFromId', 'a_name');
-            $form->expectOnce('getSubmitNameFromId', array(99));
-            $form->setReturnValue('submitButton', array('a' => 'A'));
-            $form->expectOnce('submitButton', array('a_name'));
+            $form->setReturnValue('submitButtonById', array('a' => 'A'));
+            $form->expectOnce('submitButtonById', array(99));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormBySubmitId', $form);

@@ -914,7 +914,7 @@
          */
         function &getFormBySubmitLabel($label) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->getSubmitNameFromLabel($label)) {
+                if ($this->_complete_forms[$i]->hasSubmitLabel($label)) {
                     return $this->_complete_forms[$i];
                 }
             }
@@ -946,7 +946,7 @@
          */
         function &getFormBySubmitId($id) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->getSubmitNameFromId($id)) {
+                if ($this->_complete_forms[$i]->hasSubmitId($id)) {
                     return $this->_complete_forms[$i];
                 }
             }

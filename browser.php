@@ -672,8 +672,9 @@
             if (! ($form = &$this->_page->getFormBySubmitLabel($label))) {
                 return false;
             }
-            $name = $form->getSubmitNameFromLabel($label);
-            return $this->_submitForm($form, $name);
+            $action = $this->_getAction($form);
+            $method = $form->getMethod();
+            return $this->$method($action, $form->submitButtonByLabel($label));
         }
         
         /**
@@ -687,7 +688,9 @@
             if (! ($form = &$this->_page->getFormBySubmitName($name))) {
                 return false;
             }
-            return $this->_submitForm($form, $name);
+            $action = $this->_getAction($form);
+            $method = $form->getMethod();
+            return $this->$method($action, $form->submitButtonByName($name));
         }
         
         /**
@@ -701,32 +704,32 @@
             if (! ($form = &$this->_page->getFormBySubmitId($id))) {
                 return false;
             }
-            $name = $form->getSubmitNameFromId($id);
-            return $this->_submitForm($form, $name);
+            $action = $this->_getAction($form);
+            $method = $form->getMethod();
+            return $this->$method($action, $form->submitButtonById($id));
         }
         
         /**
-         *    Dispatches form request by button name.
+         *    Replaces missing form action.
          *    @param SimpleForm $form    Form object to submit.
-         *    @param string $name        Submit button name attribute.
-         *    @return boolean            True on success.
+         *    @return string             URL to send results to.
          *    @access private
          */
-        function _submitForm(&$form, $name) {
+        function _getAction(&$form) {
             $action = $form->getAction();
             if ($action === false) {
-                $action = $this->_page->getRequestUrl();
+                return $this->_page->getRequestUrl();
             } elseif ($action === true) {
-                $action = '';
+                return '';
             }
-            $method = $form->getMethod();
-            return $this->$method($action, $form->submitButton($name));
+            return $action;
         }
         
         /**
          *    Submits a form by the ID.
          *    @param string $id    The form ID. No submit button value
          *                         will be sent.
+         *    @return boolean      True on success.
          *    @access public
          */
         function submitFormById($id) {

@@ -311,6 +311,7 @@
          *    situations.
          *    @param mixed $variable    Variable to display.
          *    @param string $message    Message to display.
+         *    @return mixed             The original variable.
          *    @access public
          */
         function dump($variable, $message = false) {
@@ -319,6 +320,7 @@
                 $formatted = $message . "\n" . $formatted;
             }
             $this->_reporter->paintFormattedMessage($formatted);
+            return $variable;
         }
         
         /**
