@@ -22,13 +22,12 @@ Parsing of radio buttons (3/4) - done.
 Support multiple selections (3/4) - done.
 Support multiple checkboxes (2/3) - done.
 Make hidden fields unsettable (1/0) - done.
-Add support for reset buttons (2).
 
 Browser
 -------
 Frames support (8).
 Simple authentication support (4).
-Image fetching (4).
+Image header fetching (4).
 Need repeated parameters in query strings (0/3) - done.
 
 Web tester
@@ -41,6 +40,7 @@ Documentation
 -------------
 Cookie testing docs (3).
 Form submission docs (3/2).
+Add package headers to structure files (1).
 
 Build
 -----
