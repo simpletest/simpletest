@@ -107,13 +107,16 @@
             $frameset->addParsedFrame($frame1);
             $frameset->addParsedFrame($frame2);
             
-            $frameset->setFocusByIndex(1);
+            $this->assertTrue($frameset->setFocusByIndex(1));
             $this->assertEqual($frameset->getFocus(), 1);
             $this->assertEqual($frameset->getRaw(), 'Stuff1');
             
-            $frameset->setFocusByIndex(2);
+            $this->assertTrue($frameset->setFocusByIndex(2));
             $this->assertEqual($frameset->getFocus(), 2);
             $this->assertEqual($frameset->getRaw(), 'Stuff2');
+            
+            $this->assertFalse($frameset->setFocusByIndex(3));
+            $this->assertEqual($frameset->getFocus(), 2);
             
             $frameset->clearFocus();
             $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
@@ -131,13 +134,15 @@
             $frameset->addParsedFrame($frame1, 'A');
             $frameset->addParsedFrame($frame2, 'B');
             
-            $frameset->setFocus('A');
+            $this->assertTrue($frameset->setFocus('A'));
             $this->assertEqual($frameset->getFocus(), 'A');
             $this->assertEqual($frameset->getRaw(), 'Stuff1');
             
-            $frameset->setFocusByIndex(2);
+            $this->assertTrue($frameset->setFocusByIndex(2));
             $this->assertEqual($frameset->getFocus(), 'B');
             $this->assertEqual($frameset->getRaw(), 'Stuff2');
+            
+            $this->assertFalse($frameset->setFocus('z'));
             
             $frameset->clearFocus();
             $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
