@@ -9,7 +9,7 @@ Fix of syntax errors in test scripts reporting green (3/3) - done.
 Fix of assertIdentical() getting stuck in a loop (3).
 Rename StickyError because of name clash (1/1) - done.
 Make sure error handling runner is loaded by default (2).
-Fix parsing check on test file loadingto work with PHP5 (3).
+Fix parsing check on test file loading to work with PHP5 (3).
 Add Jeff's performance fixes (2).
 
 Reporter
@@ -25,20 +25,20 @@ Parser
 Browser
 -------
 Fix socket error with stream_get_timeout() missing (1/1) - done.
-Fix frames error in unit tests with PHP 4.2.2 (2).
 Lose authentication on browser restart (1/1) - done.
 
 Web tester
 ----------
 Add htmlentities() international fix (1/1) - done.
 Add WebTestCase::getCookie() method (1/1) - done.
+Add assertText() (3).
+Make labels HTML entity blind (2).
 
 Documentation
 -------------
-Fix unit testing tutorial to fit with newer syntax (4).
 Add authentication documentation (3/3) - done.
 Add runner documentation (3/3).
-Add browser scripting documentation(2).
+Add browser scripting documentation (2).
 Tidy up sundry doc. files (2/1) - done.
 Fix reported typos (1).
 Document the character encoding fix (1/1) - done.
