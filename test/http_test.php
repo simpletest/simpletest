@@ -14,24 +14,24 @@
             $this->UnitTestCase();
         }
         function testDefaultUrl() {
-            $url = new SimpleUrl("");
-            $this->assertEqual($url->getScheme(), "");
-            $this->assertEqual($url->getHost(), "");
-            $this->assertEqual($url->getScheme("http"), "http");
-            $this->assertEqual($url->getHost("localhost"), "localhost");
-            $this->assertEqual($url->getPath(), "/");
+            $url = new SimpleUrl('');
+            $this->assertEqual($url->getScheme(), '');
+            $this->assertEqual($url->getHost(), '');
+            $this->assertEqual($url->getScheme('http'), 'http');
+            $this->assertEqual($url->getHost('localhost'), 'localhost');
+            $this->assertEqual($url->getPath(), '/');
         }
         function testBasicParsing() {
-            $url = new SimpleUrl("https://www.lastcraft.com/test/");
-            $this->assertEqual($url->getScheme(), "https");
-            $this->assertEqual($url->getHost(), "www.lastcraft.com");
-            $this->assertEqual($url->getPath(), "/test/");
+            $url = new SimpleUrl('https://www.lastcraft.com/test/');
+            $this->assertEqual($url->getScheme(), 'https');
+            $this->assertEqual($url->getHost(), 'www.lastcraft.com');
+            $this->assertEqual($url->getPath(), '/test/');
         }
         function testRelativeUrls() {
-            $url = new SimpleUrl("../somewhere.php");
+            $url = new SimpleUrl('../somewhere.php');
             $this->assertEqual($url->getScheme(), false);
             $this->assertEqual($url->getHost(), false);
-            $this->assertEqual($url->getPath(), "../somewhere.php");
+            $this->assertEqual($url->getPath(), '../somewhere.php');
         }
         function testParseParameter() {
             $url = new SimpleUrl('?a=A');
@@ -281,42 +281,42 @@
         }
         function testReadingBadConnection() {
             $socket = &new MockSimpleSocket($this);
-            $socket->setReturnValue("isError", true);
+            $socket->setReturnValue('isError', true);
             
             $request = &new PartialSimpleHttpRequest($this);
             $request->setReturnReference('_createSocket', $socket);
-            $request->SimpleHttpRequest(new SimpleUrl("http://a.bad.page/"));
+            $request->SimpleHttpRequest(new SimpleUrl('http://a.bad.page/'));
             
             $reponse = &$request->fetch(15);
             $this->assertTrue($reponse->isError());
         }
         function testReadingGoodConnection() {
             $socket = &new MockSimpleSocket($this);
-            $socket->setReturnValue("isError", false);
-            $socket->expectArgumentsAt(0, "write", array("GET /and/path HTTP/1.0\r\n"));
-            $socket->expectArgumentsAt(1, "write", array("Host: a.valid.host\r\n"));
-            $socket->expectArgumentsAt(2, "write", array("Connection: close\r\n"));
-            $socket->expectArgumentsAt(3, "write", array("\r\n"));
-            $socket->expectCallCount("write", 4);
+            $socket->setReturnValue('isError', false);
+            $socket->expectArgumentsAt(0, 'write', array("GET /and/path HTTP/1.0\r\n"));
+            $socket->expectArgumentsAt(1, 'write', array("Host: a.valid.host\r\n"));
+            $socket->expectArgumentsAt(2, 'write', array("Connection: close\r\n"));
+            $socket->expectArgumentsAt(3, 'write', array("\r\n"));
+            $socket->expectCallCount('write', 4);
             
             $request = &new PartialSimpleHttpRequest($this);
             $request->setReturnReference('_createSocket', $socket);
-            $request->expectArguments('_createSocket', array('a.valid.host', 80, 15));
-            $request->SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path"));
+            $request->expectArguments('_createSocket', array('http', 'a.valid.host', 80, 15));
+            $request->SimpleHttpRequest(new SimpleUrl('http://a.valid.host/and/path'));
             
-            $this->assertIsA($request->fetch(15), "SimpleHttpResponse");
+            $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
             $socket->tally();
         }
         function testConnectionToAlternatePort() {
             $socket = &new MockSimpleSocket($this);
-            $socket->setReturnValue("isError", false);
+            $socket->setReturnValue('isError', false);
             
             $request = &new PartialSimpleHttpRequest($this);
             $request->setReturnReference('_createSocket', $socket);
-            $request->expectArguments('_createSocket', array('a.valid.host', 81, 15));
-            $request->SimpleHttpRequest(new SimpleUrl("http://a.valid.host:81/and/path"));
+            $request->expectArguments('_createSocket', array('http', 'a.valid.host', 81, 15));
+            $request->SimpleHttpRequest(new SimpleUrl('http://a.valid.host:81/and/path'));
             
-            $this->assertIsA($request->fetch(15), "SimpleHttpResponse");
+            $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
         }
         function testWritingGetRequest() {
             $socket = &new MockSimpleSocket($this);

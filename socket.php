@@ -91,7 +91,7 @@
         function SimpleSocket($host, $port, $timeout) {
             $this->StickyError();
             $this->_is_open = false;
-            if (! ($this->_handle = @fsockopen($host, $port, $errorNumber, $error, $timeout))) {
+            if (! ($this->_handle = $this->_openSocket($host, $port, $error_number, $error, $timeout))) {
                 $this->_setError("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
             } else {
                 $this->_is_open = true;
@@ -151,6 +151,51 @@
         function close() {
             $this->_is_open = false;
             return fclose($this->_handle);
+        }
+        
+        /**
+         *    Actually opens the low level socket.
+         *    @param string $host          Host to connect to.
+         *    @param integer $port         Port on host.
+         *    @param integer $error_number Recipient of error code.
+         *    @param string $error         Recipoent of error message.
+         *    @param integer $timeout      Maximum time to wait for connection.
+         *    @access protected
+         */
+        function _openSocket($host, $port, &$error_number, &$error, $timeout) {
+            return @fsockopen($host, $port, $error_number, $error, $timeout);
+        }
+    }
+    
+    /**
+     *    Wrapper for TCP/IP socket over TLS.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleSecureSocket extends SimpleSocket {
+        
+        /**
+         *    Opens a secure socket for reading and writing.
+         *    @param string $host      Hostname to send request to.
+         *    @param integer $port     Port on remote machine to open.
+         *    @param integer $timeout  Connection timeout in seconds.
+         *    @access public
+         */
+        function SimpleSecureSocket($host, $port, $timeout) {
+            $this->SimpleSocket($host, $port, $timeout);
+        }
+        
+        /**
+         *    Actually opens the low level socket.
+         *    @param string $host          Host to connect to.
+         *    @param integer $port         Port on host.
+         *    @param integer $error_number Recipient of error code.
+         *    @param string $error         Recipoent of error message.
+         *    @param integer $timeout      Maximum time to wait for connection.
+         *    @access protected
+         */
+        function _openSocket($host, $port, &$error_number, &$error, $timeout) {
+            return parent::_openSocket("tls:$host", $port, $error_number, $error, $timeout);
         }
     }
 ?>

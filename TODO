@@ -40,6 +40,7 @@ Add timeouts to page fetches (2/2) - done.
 Add forward and back button simulation (4/3) - done.
 Retry on redirected page does not resubmit (1/1) - done.
 Retry submits POST data (1/6) - done.
+Add undocumented secure socket (1/1) - done.
 
 Web tester
 ----------

@@ -612,6 +612,7 @@
          */
         function &fetch($timeout) {
             $socket = &$this->_createSocket(
+                    $this->_url->getScheme() ? $this->_url->getScheme() : 'http',
                     $this->_url->getHost(),
                     $this->_url->getPort() ? $this->_url->getPort() : 80,
                     $timeout);
@@ -677,13 +678,17 @@
         
         /**
          *    Factory for socket. Separate method for mocking.
+         *    @param string $scheme   Protocol to use.
          *    @param string $host     Hostname to connect to.
          *    @param integer $port    Remote port.
          *    @param integer $timeout Connection timeout.
          *    @return SimpleSocket    New socket.
          *    @access protected
          */
-        function &_createSocket($host, $port, $timeout) {
+        function &_createSocket($scheme, $host, $port, $timeout) {
+            if (in_array($scheme, array('https'))) {
+                return new SimpleSecureSocket($host, $port, $timeout);
+            }
             return new SimpleSocket($host, $port, $timeout);
         }
         

@@ -954,10 +954,10 @@
          *    @access public
          */
         function generate($class, $mock_class = false, $methods = false) {
-            if (!class_exists($class)) {
+            if (! class_exists($class)) {
                 return false;
             }
-            if (!$mock_class) {
+            if (! $mock_class) {
                 $mock_class = "Mock" . $class;
             }
             if (class_exists($mock_class)) {
@@ -982,7 +982,7 @@
          *    @access public
          */
         function generatePartial($class, $mock_class, $methods) {
-            if (!class_exists($class)) {
+            if (! class_exists($class)) {
                 return false;
             }
             if (class_exists($mock_class)) {
