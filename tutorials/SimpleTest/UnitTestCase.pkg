@@ -1,0 +1,57 @@
+<refentry id="{@id}">
+  <refnamediv>
+    <refname>Simple Test - Unit Test Cases</refname>
+    <refpurpose>The core system is a regression testing framework built around test cases.</refpurpose>
+  </refnamediv>
+
+
+  <refsect1 id="{@id overview}">
+    <title>Unit Test Case</title>
+    <para> The core system is a regression testing framework built around test cases. A sample test case looks like this...</para>
+    <para>
+     <programlisting role="php">
+     <![CDATA[
+class FileTestCase extends UnitTestCase {
+    function FileTestCase() {
+        $this->UnitTestCase('File test');
+    }
+}     
+     ]]>
+     </programlisting>
+    </para>
+    <para>
+    If no test name is supplied whe chaining the constructor then the class name will be taken instead. This will be the name displayed in the test results.
+    </para>
+    <para>
+    Actual tests are added as methods in the test case whose names start with the string "test" and when the test case is invoked all such methods are run in the random order that PHP introspection finds them. As many test methods can be added as needed. For example...
+    </para>
+    <para>
+     <programlisting role="php">
+     <![CDATA[
+require_once('../classes/writer.php');
+
+class FileTestCase extends UnitTestCase {
+    function FileTestCase() {
+        $this->UnitTestCase('File test');
+    }
+    function setUp() {
+        @unlink('../temp/test.txt');
+    }
+    function tearDown() {
+        @unlink('../temp/test.txt');
+    }
+    function testCreation() {
+        $writer = &new FileWriter('../temp/test.txt');
+        $writer->write('Hello');
+        $this->assertTrue(file_exists('../temp/test.txt'), 'File created');
+    }
+}     
+     ]]>
+     </programlisting>
+    </para>
+  </refsect1>
+</refentry>
+ 
+
+
+

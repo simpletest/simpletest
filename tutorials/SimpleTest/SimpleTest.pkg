@@ -203,5 +203,11 @@ class MySiteTest extends WebTestCase {
       </tbody>
     </tgroup>
   </table>
+  <para>
+  A PHP5 version will be released once PHP5 is broadly available.
+  </para>
+  <para>
+  The wish list includes integration with other test systems including JUnit and XsltUnit, SSL support, an eclipse plug-in, SOAP testing and HTTP 1.1 support. In reality I doubt these will ever happen.
+  </para>
   </refsect1>
 </refentry>
