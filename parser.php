@@ -144,19 +144,19 @@
      */
     class SimpleLexer {
         var $_regexes;
-        var $_handler;
+        var $_parser;
         var $_mode;
         
         /**
          *    Sets up the lexer.
-         *    @param $handler    Handling strategy by
+         *    @param $parser     Handling strategy by
          *                       reference.
-         *    @param $start      Starting mode.
+         *    @param $start      Starting handler.
          *    @public
          */
-        function SimpleLexer(&$handler, $start = "_default") {
+        function SimpleLexer(&$parser, $start = "accept") {
             $this->_regexes = array();
-            $this->_handler = &$handler;
+            $this->_parser = &$parser;
             $this->_mode = new StateStack($start);
         }
         
@@ -171,7 +171,7 @@
          *                         this type of input.
          *    @public
          */
-        function addPattern($pattern, $mode = "_default") {
+        function addPattern($pattern, $mode = "accept") {
             if (!isset($this->_regexes[$mode])) {
                 $this->_regexes[$mode] = new ParallelRegex();
             }
@@ -222,13 +222,13 @@
          *    @public
          */
         function parse($raw) {
-            if (!isset($this->_handler)) {
+            if (!isset($this->_parser)) {
                 return false;
             }
             $length = strlen($raw);
             while (is_array($parsed = $this->_reduce($raw))) {
                 list($unmatched, $match, $mode) = $parsed;
-                if ($unmatched && !$this->_handler->accept($unmatched, false)) {
+                if ($unmatched && !$this->_parser->{$this->_mode->getCurrent()}($unmatched, false)) {
                     return false;
                 }
                 if ($mode === "_exit") {
@@ -238,7 +238,7 @@
                 } elseif (is_string($mode)) {
                     $this->_mode->enter($mode);
                 }
-                if ($match && !$this->_handler->accept($match, true)) {
+                if ($match && !$this->_parser->{$this->_mode->getCurrent()}($match, true)) {
                     return false;
                 }
                 if (strlen($raw) == $length) {
@@ -249,7 +249,7 @@
             if (!$parsed) {
                 return false;
             }
-            return ($raw == "") || $this->_handler->accept($raw, false);
+            return ($raw == "") || $this->_parser->{$this->_mode->getCurrent()}($raw, false);
         }
         
         /**
@@ -286,14 +286,12 @@
         
         /**
          *    Sets up the lexer.
-         *    @param $handler    Handling strategy by
+         *    @param $parser     Handling strategy by
          *                       reference.
          *    @param $start      Starting mode.
          *    @public
          */
-        function SimpleHtmlLexer(&$handler, $start = "unwanted") {
-            $this->SimpleLexer($handler, $start);
-            $this->addPattern('<a', 'html');
+        function SimpleHtmlLexer(&$parser, $start = "ignore") {
         }
     }
         

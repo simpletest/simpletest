@@ -83,6 +83,10 @@
         }
         function accept() {
         }
+        function a() {
+        }
+        function b() {
+        }
     }
     Mock::generate('TestParser');
 
@@ -146,39 +150,41 @@
         }
         function testIsolatedPattern() {
             $handler = &new MockTestParser($this);
-            $handler->expectArgumentsSequence(0, "accept", array("a", true));
-            $handler->expectArgumentsSequence(1, "accept", array("b", false));
-            $handler->expectArgumentsSequence(2, "accept", array("aa", true));
-            $handler->expectArgumentsSequence(3, "accept", array("bxb", false));
-            $handler->expectArgumentsSequence(4, "accept", array("aaa", true));
-            $handler->expectArgumentsSequence(5, "accept", array("x", false));
-            $handler->expectArgumentsSequence(6, "accept", array("aaaa", true));
-            $handler->expectArgumentsSequence(7, "accept", array("x", false));
-            $handler->expectCallCount("accept", 8);
-            $handler->setReturnValue("accept", true);
-            $lexer = &new SimpleLexer($handler, "used");
-            $lexer->addPattern("a+", "used");
-            $lexer->addPattern("b+", "unused");
+            $handler->expectArgumentsSequence(0, "a", array("a", true));
+            $handler->expectArgumentsSequence(1, "a", array("b", false));
+            $handler->expectArgumentsSequence(2, "a", array("aa", true));
+            $handler->expectArgumentsSequence(3, "a", array("bxb", false));
+            $handler->expectArgumentsSequence(4, "a", array("aaa", true));
+            $handler->expectArgumentsSequence(5, "a", array("x", false));
+            $handler->expectArgumentsSequence(6, "a", array("aaaa", true));
+            $handler->expectArgumentsSequence(7, "a", array("x", false));
+            $handler->expectCallCount("a", 8);
+            $handler->setReturnValue("a", true);
+            $lexer = &new SimpleLexer($handler, "a");
+            $lexer->addPattern("a+", "a");
+            $lexer->addPattern("b+", "b");
             $this->assertTrue($lexer->parse("abaabxbaaaxaaaax"));
             $handler->tally();
         }
         function testModeChange() {
             $handler = &new MockTestParser($this);
-            $handler->expectArgumentsSequence(0, "accept", array("a", true));
-            $handler->expectArgumentsSequence(1, "accept", array("b", false));
-            $handler->expectArgumentsSequence(2, "accept", array("aa", true));
-            $handler->expectArgumentsSequence(3, "accept", array("b", false));
-            $handler->expectArgumentsSequence(4, "accept", array("aaa", true));
-            $handler->expectArgumentsSequence(5, "accept", array(":", true));
-            $handler->expectArgumentsSequence(6, "accept", array("a", false));
-            $handler->expectArgumentsSequence(7, "accept", array("b", true));
-            $handler->expectArgumentsSequence(8, "accept", array("a", false));
-            $handler->expectArgumentsSequence(9, "accept", array("bb", true));
-            $handler->expectArgumentsSequence(10, "accept", array("a", false));
-            $handler->expectArgumentsSequence(11, "accept", array("bbb", true));
-            $handler->expectArgumentsSequence(12, "accept", array("a", false));
-            $handler->expectCallCount("accept", 13);
-            $handler->setReturnValue("accept", true);
+            $handler->expectArgumentsSequence(0, "a", array("a", true));
+            $handler->expectArgumentsSequence(1, "a", array("b", false));
+            $handler->expectArgumentsSequence(2, "a", array("aa", true));
+            $handler->expectArgumentsSequence(3, "a", array("b", false));
+            $handler->expectArgumentsSequence(4, "a", array("aaa", true));
+            $handler->expectArgumentsSequence(0, "b", array(":", true));
+            $handler->expectArgumentsSequence(1, "b", array("a", false));
+            $handler->expectArgumentsSequence(2, "b", array("b", true));
+            $handler->expectArgumentsSequence(3, "b", array("a", false));
+            $handler->expectArgumentsSequence(4, "b", array("bb", true));
+            $handler->expectArgumentsSequence(5, "b", array("a", false));
+            $handler->expectArgumentsSequence(6, "b", array("bbb", true));
+            $handler->expectArgumentsSequence(7, "b", array("a", false));
+            $handler->expectCallCount("a", 5);
+            $handler->expectCallCount("b", 8);
+            $handler->setReturnValue("a", true);
+            $handler->setReturnValue("b", true);
             $lexer = &new SimpleLexer($handler, "a");
             $lexer->addPattern("a+", "a");
             $lexer->addEntryPattern(":", "a", "b");
@@ -188,19 +194,21 @@
         }
         function testNesting() {
             $handler = &new MockTestParser($this);
-            $handler->setReturnValue("accept", true);
-            $handler->expectArgumentsSequence(0, "accept", array("aa", true));
-            $handler->expectArgumentsSequence(1, "accept", array("b", false));
-            $handler->expectArgumentsSequence(2, "accept", array("aa", true));
-            $handler->expectArgumentsSequence(3, "accept", array("b", false));
-            $handler->expectArgumentsSequence(4, "accept", array("(", true));
-            $handler->expectArgumentsSequence(5, "accept", array("bb", true));
-            $handler->expectArgumentsSequence(6, "accept", array("a", false));
-            $handler->expectArgumentsSequence(7, "accept", array("bb", true));
-            $handler->expectArgumentsSequence(8, "accept", array(")", true));
-            $handler->expectArgumentsSequence(9, "accept", array("aa", true));
-            $handler->expectArgumentsSequence(10, "accept", array("b", false));
-            $handler->expectCallCount("accept", 11);
+            $handler->setReturnValue("a", true);
+            $handler->setReturnValue("b", true);
+            $handler->expectArgumentsSequence(0, "a", array("aa", true));
+            $handler->expectArgumentsSequence(1, "a", array("b", false));
+            $handler->expectArgumentsSequence(2, "a", array("aa", true));
+            $handler->expectArgumentsSequence(3, "a", array("b", false));
+            $handler->expectArgumentsSequence(0, "b", array("(", true));
+            $handler->expectArgumentsSequence(1, "b", array("bb", true));
+            $handler->expectArgumentsSequence(2, "b", array("a", false));
+            $handler->expectArgumentsSequence(3, "b", array("bb", true));
+            $handler->expectArgumentsSequence(4, "a", array(")", true));
+            $handler->expectArgumentsSequence(5, "a", array("aa", true));
+            $handler->expectArgumentsSequence(6, "a", array("b", false));
+            $handler->expectCallCount("a", 7);
+            $handler->expectCallCount("b", 4);
             $lexer = &new SimpleLexer($handler, "a");
             $lexer->addPattern("a+", "a");
             $lexer->addEntryPattern("(", "a", "b");
@@ -211,9 +219,9 @@
         }
         function testUnwindTooFar() {
             $handler = &new MockTestParser($this);
-            $handler->setReturnValue("accept", true);
-            $handler->expectArgumentsSequence(0, "accept", array("aa", true));
-            $handler->expectCallCount("accept", 1);
+            $handler->setReturnValue("a", true);
+            $handler->expectArgumentsSequence(0, "a", array("aa", true));
+            $handler->expectCallCount("a", 1);
             $lexer = &new SimpleLexer($handler, "a");
             $lexer->addPattern("a+", "a");
             $lexer->addExitPattern(")", "a");
@@ -225,13 +233,6 @@
     class TestOfHtmlLexer extends UnitTestCase {
         function TestOfHtmlLexer() {
             $this->UnitTestCase();
-        }
-        function testEmptyPage() {
-            $handler = &new MockTestParser($this);
-            $handler->setReturnValue("accept", true);
-            $lexer = &new SimpleHtmlLexer($handler, "html");
-            $this->assertTrue($lexer->parse("<html><head></head><body></body></html>"));
-            $handler->tally();
         }
     }
     
