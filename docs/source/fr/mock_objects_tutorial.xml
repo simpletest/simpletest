@@ -6,7 +6,7 @@
             <a class="target" name="remaniement"><h2>Remanier les tests à nouveau</h2></a>
         </p>
         <p>
-            Avant d'ajouter de nouvelles fonctionnalités il y a du remaniement à faire. Nous allons effectuer des tests chronométrés et la classe <code>TimeTestCase</code> a définitivement besoin d'un fichier propre. Appellons le <em>tests/time_test_case.php</em>...
+            Avant d'ajouter de nouvelles fonctionnalités il y a du remaniement à faire. Nous allons effectuer des tests chronométrés et la classe <code>TimeTestCase</code> a définitivement besoin d'un fichier propre. Appelons le <em>tests/time_test_case.php</em>...
 <php><![CDATA[
 <strong><?php
     if (! defined('SIMPLE_TEST')) {
@@ -73,7 +73,7 @@
     }
 ?>
 ]]></php>
-            Ce scénario de test crée un nouvel objet <code>Log</code> et écrit un message. Nous recherchons un suite de chiffres et nous la comparons à l'horloge présente en utilisant notre objet <code>Clock</code>. Bien sûr ça ne marche pas avant d'avoir écrit le code.
+            Ce scénario de test crée un nouvel objet <code>Log</code> et écrit un message. Nous recherchons une suite de chiffres et nous la comparons à l'horloge présente en utilisant notre objet <code>Clock</code>. Bien sûr ça ne marche pas avant d'avoir écrit le code.
             <div class="demo">
                 <h1>All tests</h1>
                 <span class="pass">Pass</span>: log_test.php->Log class test->testappendingtofile->Expecting [/Test line 1/] in [Test line 1]<br />
@@ -116,7 +116,7 @@
             Les tests devraient passer.
         </p>
         <p>
-            Par contre notre nouveau test est plein de problèmes. Qu'est-ce qui se passe si notre format de temps change ? Les choses vont devenir largement plus compliquées si ça venait à se produire. Cela veut aussir dire que n'importe quel changement du format de notre classe horloge causera aussi un échec dans les tests de log. Bilan : nos tests de log sont tout mélangés avec les test d'horloge et par la même très fragiles. Tester à la fois des facettes de l'horloge et d'autres du log manque de cohésion, ou de focalisation étanche si vous préférez. Nos problèmes sont causés en partie parce que le résultat de l'horloge est imprévisible alors que l'unique chose à tester est la présence du résultat de <code>Clock::now()</code>. Peu importe le contenu de l'appel de cette méthode.
+            Par contre notre nouveau test est plein de problèmes. Qu'est-ce qui se passe si notre format de temps change ? Les choses vont devenir largement plus compliquées si ça venait à se produire. Cela veut aussi dire que n'importe quel changement du format de notre classe horloge causera aussi un échec dans les tests de log. Bilan : nos tests de log sont tout mélangés avec les test d'horloge et par la même très fragiles. Tester à la fois des facettes de l'horloge et d'autres du log manque de cohésion, ou de focalisation étanche si vous préférez. Nos problèmes sont causés en partie parce que le résultat de l'horloge est imprévisible alors que l'unique chose à tester est la présence du résultat de <code>Clock::now()</code>. Peu importe le contenu de l'appel de cette méthode.
         </p>
         <p>
             Pouvons-nous rendre cet appel prévisible ? Oui si nous pouvons forcer le loggueur à utiliser une version factice de l'horloge lors du test. Cette classe d'horloge factice devrait se comporter exactement comme la classe <code>Clock</code> à part une sortie fixée dans la méthode <code>now()</code>. Et au passage, ça nous affranchirait même de la classe <code>TimeTestCase</code> !
@@ -211,16 +211,16 @@ class Log {
             Maintenant tous les tests passent et ils ne testent que le code du loggueur. Nous pouvons à nouveau respirer.
         </p>
         <p>
-            Est-ce que ce paramètre supplémentaire dans la classe <code>Log</code> vous gêne ? Nous n'avons changer l'interface que pour faciliter les tests après tout. Les interfaces ne sont-elles pas la chose la plus importante ? Avons nous souillé notre classe avec du code de test ?
+            Est-ce que ce paramètre supplémentaire dans la classe <code>Log</code> vous gêne ? Nous n'avons changé l'interface que pour faciliter les tests après tout. Les interfaces ne sont-elles pas la chose la plus importante ? Avons nous souillé notre classe avec du code de test ?
         </p>
         <p>
-            Peut-être, mais réfléchissez à ce qui suit. A la prochaine occasion, regardez une carte avec des circuits imprimés, peut-être la carte mère de l'ordinateur que vous regardez actuellement. Sur la plupart d'entre elles vous trouverez un trou bizarre et vide ou alors un point de soudure sans rien de fixé ou même une épingle ou une prise sans aucune fonction évidente. Peut-être certains sont là en prévision d'une expansion ou d'une variation future, mais la plupart n'y est que pour les tests.
+            Peut-être, mais réfléchissez à ce qui suit. A la prochaine occasion, regardez une carte avec des circuits imprimés, peut-être la carte mère de l'ordinateur que vous regardez actuellement. Sur la plupart d'entre elles vous trouverez un trou bizarre et vide ou alors un point de soudure sans rien de fixé ou même une épingle ou une prise sans aucune fonction évidente. Peut-être certains sont là en prévision d'une expansion ou d'une variation future, mais la plupart n'y sont que pour les tests.
         </p>
         <p>
             Pensez-y. Les usines qui fabriquent ces cartes imprimées par centaine de milliers gaspillent des matières premières sur des pièces qui n'ajoutent rien à la fonction finale. Si les ingénieurs matériel peuvent faire quelques sacrifices à l'élégance, je suis sûr que nous pouvons aussi le faire. Notre sacrifice ne gaspille pas de matériel après tout.
         </p>
         <p>
-            Ça vous gêne encore ? En fait moi aussi, mais pas tellement ici. La priorité numéro 1 reste du code qui marche, pas un prix pour minimalisme. Si ça vous gêne vraiment alors déplacez la création de l'horloge dans une autre méthode mère protégée. Ensuite sous-classez l'horloge pour le test et écrasez la méthode mère avec une qui renvoie le leurre. Vos tests sont bancals mais votre interface est intacte.
+            Ça vous gêne encore ? En fait moi aussi, mais pas tellement ici. La priorité numéro 1 reste du code qui marche, pas un prix pour minimalisme. Si ça vous gêne vraiment alors déplacez la création de l'horloge dans une autre méthode mère protégée. Ensuite sous classez l'horloge pour le test et écrasez la méthode mère avec une qui renvoie le leurre. Vos tests sont bancals mais votre interface est intacte.
         </p>
         <p>
             Une nouvelle fois je vous laisse la décision finale.
@@ -235,7 +235,7 @@ class Log {
     </internal>
     <external>
         <link>
-            La section précédente : <a href="first_test_tutorial.php">tutoriel de test unitaire</a>.
+            La section précédente : <a href="first_test_tutorial.php">tutorial de test unitaire</a>.
         </link>
         <link>
             La section suivante : <a href="boundary_classes_tutorial.php">les frontières de l'application</a>.

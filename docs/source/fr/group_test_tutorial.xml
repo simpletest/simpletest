@@ -41,7 +41,7 @@ class TestOfLogging extends UnitTestCase {
             La méthode du scénario de test <code>assertWantedPattern()</code> utilise les expressions rationnelles Perl pour vérifier qu'une chaîne respecte un certain motif.
         </p>
         <p>
-            Tout ce que nous faisons dans ce nouveau test, c'est écrire une ligne dans un fichier, puis la lire, le tout deux fois de suite. Nous souhaitons  simplement vérifier que le loggueur ajoute le texte à la fin plutôt qu'écraser les données déjà existantes. Quelque peu pédant, mais après tout il s'agit d'un tutoriel !
+            Tout ce que nous faisons dans ce nouveau test, c'est écrire une ligne dans un fichier, puis la lire, le tout deux fois de suite. Nous souhaitons  simplement vérifier que le loggueur ajoute le texte à la fin plutôt qu'écraser les données déjà existantes. Quelque peu pédant, mais après tout il s'agit d'un tutorial !
         </p>
         <p>
             De toute façon ce test passe directement...

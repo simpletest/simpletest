@@ -25,7 +25,7 @@
     print $matches[1];
 ?>
 ]]></php>
-                Bien sûr Il y a des méhodes plus simple pour réaliser cet exemple en PHP. Par exemple, vous pourriez juste utiliser la commande PHP <code>file()</code> sur ce qui est ici une page fixe. Cependant, en utilisant des scripts avec le navigateur web vous vous autorisez l'authentification, la gestion des cookies, le chargement automatique des fenêtres, les redirections, la transmission de formulaire et la capacité d'examiner les entêtes. De tels méthodes sont fragiles dans un site en constante évolution et vous voudrez employer une méthode plus directe pour accéder aux données de façon permanente, mais pour des tâches simples cette technique peut s'avérer une solution très rapide.
+                Bien sûr Il y a des méthodes plus simple pour réaliser cet exemple en PHP. Par exemple, vous pourriez juste utiliser la commande PHP <code>file()</code> sur ce qui est ici une page fixe. Cependant, en utilisant des scripts avec le navigateur web vous vous autorisez l'authentification, la gestion des cookies, le chargement automatique des fenêtres, les redirections, la transmission de formulaire et la capacité d'examiner les entêtes. De telles méthodes sont fragiles dans un site en constante évolution et vous voudrez employer une méthode plus directe pour accéder aux données de façon permanente, mais pour des tâches simples cette technique peut s'avérer une solution très rapide.
             </p>
             <p>
                 Toutes les méthode de navigation utilisées dans <a local="web_tester_documentation">WebTestCase</a> sont présente dans la classe <code>SimpleBrowser</code>, mais les assertions sont remplacées par de simples accesseurs. Voici une liste complète des méthodes de navigation de page à page...
@@ -53,10 +53,10 @@
                     <tr><td><code>getCookieValue($host, $path, $name)</code></td><td>Lit le cookie le plus spécifique</td></tr>
                     <tr><td><code>getCurrentCookieValue($name)</code></td><td>Lit le contenue du cookie en cours</td></tr>
                 </tbody></table>
-                Les méthode <code>SimpleBrowser::useProxy()</code> et <code>SimpleBrowser::addHeader()</code> sont spéciales. Une fois appellés, elles continuent à s'appliquer sur les téléchargements suivants.
+                Les méthode <code>SimpleBrowser::useProxy()</code> et <code>SimpleBrowser::addHeader()</code> sont spéciales. Une fois appellées, elles continuent à s'appliquer sur les téléchargements suivants.
             </p>
             <p>
-                Naviguer dans les formulaires est simimaire à la <a local="form_testing_documentation">navigation des formulaires via WebTestCase</a>...
+                Naviguer dans les formulaires est similaire à la <a local="form_testing_documentation">navigation des formulaires via WebTestCase</a>...
                 <table><tbody>
                     <tr><td><code>setField($name, $value)</code></td><td>Modifie tous les champs avec ce nom</td></tr>
                     <tr><td><code>setFieldById($id, $value)</code></td><td>Modifie tous les champs avec cet identifiant</td></tr>
@@ -73,7 +73,7 @@
                 A aujourd'hui il n'existe aucune méthode pour lister les formulaires et les champs disponibles : ce sera probablement ajouté dans des versions successives de SimpleTest.
             </p>
             <p>
-                A l'intérieur d'une page, les fenêtres individuelles peuvent être sélectionnées. Si aucune sélection n'est réalisée alors toutes les fenêtres sont fusionnés ensemble dans un grande page-concept. Le contenu de la page en cours sera une concaténation des toutes les fenêtres dans l'ordre spécifié par les balises &quot;frameset&quot;.
+                A l'intérieur d'une page, les fenêtres individuelles peuvent être sélectionnées. Si aucune sélection n'est réalisée alors toutes les fenêtres sont fusionnées ensemble dans un unique et grande page. Le contenu de la page en cours sera une concaténation des toutes les fenêtres dans l'ordre spécifié par les balises &quot;frameset&quot;.
                 <table><tbody>
                     <tr><td><code>getFrames()</code></td><td>Un déchargement de la structure de la fenêtre courante</td></tr>
                     <tr><td><code>getFrameFocus()</code></td><td>L'index ou l'étiquette de la fenêtre en courante</td></tr>
@@ -81,15 +81,15 @@
                     <tr><td><code>setFrameFocus($name)</code></td><td>Sélectionne une fenêtre par son étiquette</td></tr>
                     <tr><td><code>clearFrameFocus()</code></td><td>Traite toutes les fenêtres comme une seule page</td></tr>
                 </tbody></table>
-                Lorsqu'on est focalisé sur une fenêtre unique, le contenu viendra de celle-ci uniquement. Cela comprend les liens à cliquer et les forumlaires à transmettre.
+                Lorsqu'on est focalisé sur une fenêtre unique, le contenu viendra de celle-ci uniquement. Cela comprend les liens à cliquer et les formulaires à transmettre.
             </p>
         </section>
-        <section name="deboguer" title="Ou sont les erreurs ?">
+        <section name="deboguer" title="Où sont les erreurs ?">
             <p>
-                Toute cette masse de fonctionnalités est géniale lorsqu'on arrive à bien télécharger les pages, mais ce n'est pas toujours évident. Pour aider à découvrir les erreurs, le navigateurs a aussi des méthodes pour aider au débogage.
+                Toute cette masse de fonctionnalités est géniale lorsqu'on arrive à bien télécharger les pages, mais ce n'est pas toujours évident. Pour aider à découvrir les erreurs, le navigateur a aussi des méthodes pour aider au débogage.
                 <table><tbody>
                     <tr><td><code>setConnectionTimeout($timeout)</code></td><td>Ferme la socket avec un délai trop long</td></tr>
-                    <tr><td><code>getRequest()</code></td><td>L'entête de la requête brute de la page our de la fenêtre</td></tr>
+                    <tr><td><code>getRequest()</code></td><td>L'entête de la requête brute de la page ou de la fenêtre</td></tr>
                     <tr><td><code>getHeaders()</code></td><td>L'entête de réponse de la page ou de la fenêtre</td></tr>
                     <tr><td><code>getTransportError()</code></td><td>N'importe quel erreur au niveau de la socket dans le dernier téléchargement</td></tr>
                     <tr><td><code>getResponseCode()</code></td><td>La réponse HTTP de la page ou de la fenêtre</td></tr>
@@ -157,7 +157,7 @@ class TestOfSecurity extends UnitTestCase {
             Utiliser le <a href="#scripting">navigateur web dans des scripts</a>
         </link>
         <link>
-            <a href="#deboguer">Deboguer</a> les erreurs sur les pages
+            <a href="#deboguer">Déboguer</a> les erreurs sur les pages
         </link>
         <link>
             <a href="#unit">Tests complexes avec des navigateurs web multiples</a>
@@ -168,7 +168,7 @@ class TestOfSecurity extends UnitTestCase {
             La page du projet SimpleTest sur <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
         </link>
         <link>
-            La page de téléchargment de SimpleTest sur <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
+            La page de téléchargement de SimpleTest sur <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
         </link>
         <link>
             <a href="http://simpletest.sourceforge.net/">L'API de développeur pour SimpleTest</a> donne tous les détails sur les classes et les assertions disponibles.

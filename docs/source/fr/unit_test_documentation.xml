@@ -2,7 +2,7 @@
 <page title="Documentation sur les tests unitaires en PHP" here="testeur unitaire">
     <long_title>Documenation SimpleTest pour les tests de régression en PHP</long_title>
     <content>
-        <section name="unitaire" title="scénarios de tests unitaires">
+        <section name="unitaire" title="Scénarios de tests unitaires">
             <p>
                 Le coeur du système est un framework de test de régression construit autour des scénarios de test. Un exemple de scénario de test ressemble à...
 <php><![CDATA[
@@ -79,7 +79,7 @@ $this->assertNull($variable, 'Should be cleared');</strong>
 <php><![CDATA[
 <strong>$this->assertIdentical(0, false, 'Zero is not false [%s]');</strong>
 ]]></php>
-                Ceci échouera étant donné qu'il effectue une vérification sur le type en plus d'une comparaison sur les deux valeurs. La partie &quot;%s&quot; est remplacé par le message d'erreur par défaut qui aurait été affiché si nous n'avions pas fourni le nôtre. Cela nous permet d'emboîter les message de test.
+                Ceci échouera étant donné qu'il effectue une vérification sur le type en plus d'une comparaison sur les deux valeurs. La partie &quot;%s&quot; est remplacée par le message d'erreur par défaut qui aurait été affiché si nous n'avions pas fourni le nôtre. Cela nous permet d'emboîter les messages de test.
 <php><![CDATA[
 <strong>$a = 1;
 $b = $a;
@@ -100,7 +100,7 @@ $this->assertNoErrors();</strong>
                 Ici, il y a besoin d'une petite explication : toutes passent !
             </p>
             <p>
-                Les erreurs PHP dans SimpleTest sont piégées et placées dans une queue. Ici la première vérification d'erreur attrape le message &quot;Disaster&quot; sans vérifier le texte et passe. Résultat : l'erreur est supprimée de la queue. La vérification suivante teste non seulement l'existence de l'erreur mais aussi le texte qui correspond : un autre succès. Désormais la queue est vide et le dernier test passe aussi. Si une autre erreur non-vérifiée est encore dans la queue à la fin de notre méthode de test alors une exception sera rapporté dans le test. Notez que SimpleTest ne peut pas attraper les erreurs PHP à la compilation.
+                Les erreurs PHP dans SimpleTest sont piégées et placées dans une queue. Ici la première vérification d'erreur attrape le message &quot;Disaster&quot; sans vérifier le texte et passe. Résultat : l'erreur est supprimée de la queue. La vérification suivante teste non seulement l'existence de l'erreur mais aussi le texte qui correspond : un autre succès. Désormais la queue est vide et le dernier test passe aussi. Si une autre erreur non vérifiée est encore dans la queue à la fin de notre méthode de test alors une exception sera rapportée dans le test. Notez que SimpleTest ne peut pas attraper les erreurs PHP à la compilation.
             </p>
             <p>
                 Les scénarios de test peuvent utiliser des méthodes bien pratiques pour déboguer le code ou pour étendre la suite...
@@ -135,7 +135,7 @@ class FileTester extends UnitTestCase {
     }</strong>
 }
 ]]></php>
-                Ici la bibliothèque SimpleTest est localisé dans un répertoire local appelé <em>simpletest</em>. Pensez à le modifier pour votre propre environnement.
+                Ici la bibliothèque SimpleTest est localisée dans un répertoire local appelé <em>simpletest</em>. Pensez à le modifier pour votre propre environnement.
             </p>
             <p>
                 Ce nouveau scénario peut être hérité exactement comme un scénario de test classique...
@@ -164,7 +164,7 @@ class FileTestCase extends <strong>FileTester</strong> {
         </section>
         <section name="lancement_unitaire" title="Lancer un unique scénario de test">
             <p>
-                Ce n'est pas souvent qu'il faille lancer des scénarios avec un unique test. Sauf lorsqu'il s'agit de s'arracher les cheveux sur un module à problème sans pour autant désorganiser la suite de test principale. Voici l'échaffaudage nécessaire pour lancer un scénario de test solitaire...
+                Ce n'est pas souvent qu'il faille lancer des scénarios avec un unique test. Sauf lorsqu'il s'agit de s'arracher les cheveux sur un module à problème sans pour autant désorganiser la suite de test principale. Voici l'échafaudage nécessaire pour lancer un scénario de test solitaire...
 <php><![CDATA[
 <?php
     require_once('simpletest/unit_tester.php');<strong>

@@ -13,7 +13,7 @@
                 Si les objets fantaisie ne se comportaient que comme des acteurs alors on les connaîtrait sous le nom de <a local="server_stubs_documentation">bouchons serveur</a>.
             </p>
             <p>
-                Cependant nons seulement les objets fantaisie jouent un rôle (en fournissant à la demande les valeurs requises) mais en plus ils sont aussi sensibles aux messages qui leur sont envoyés (par le biais d'attentes). En posant les paramètres attendus d'une méthode ils agissent comme des gardiens : un appel sur eux doit être réalisé correctement. Si les attentes ne sont pas atteintes ils nous épargnent l'effort de l'écriture d'une assertion de test avec échec en réalisant cette tâche à notre place. Dans le cas d'une connexion à une base de données imaginaire ils peuvent tester si la requête, disons SQL, a bien été formé par l'objet qui utilise cette connexion. Mettez-les sur pied avec des attentes assez précises et vous verrez que vous n'aurez presque plus d'assertion à écrire manuellement.
+                Cependant non seulement les objets fantaisie jouent un rôle (en fournissant à la demande les valeurs requises) mais en plus ils sont aussi sensibles aux messages qui leur sont envoyés (par le biais d'attentes). En posant les paramètres attendus d'une méthode ils agissent comme des gardiens : un appel sur eux doit être réalisé correctement. Si les attentes ne sont pas atteintes ils nous épargnent l'effort de l'écriture d'une assertion de test avec échec en réalisant cette tâche à notre place. Dans le cas d'une connexion à une base de données imaginaire ils peuvent tester si la requête, disons SQL, a bien été formé par l'objet qui utilise cette connexion. Mettez-les sur pied avec des attentes assez précises et vous verrez que vous n'aurez presque plus d'assertion à écrire manuellement.
             </p>
         </section>
         <section name="creation" title="Créer des objets fantaisie">
@@ -31,7 +31,7 @@
     }
 }</strong>
 ]]></php>
-                Cette classe n'a pas encore besoin d'être implémentée. Pour en créer sa version fantaisie nous devons juste inclure la librairie d'objet fantaise puis lancer le générateur...
+                Cette classe n'a pas encore besoin d'être implémentée. Pour en créer sa version fantaisie nous devons juste inclure la librairie d'objet fantaisie puis lancer le générateur...
 <php><![CDATA[
 <strong>require_once('simpletest/unit_tester.php');
 require_once('simpletest/mock_objects.php');
@@ -60,7 +60,7 @@ class MyTestCase extends UnitTestCase {
                 <a class="target" name="bouchon"><h2>Objets fantaisie en action</h2></a>
             </p>
             <p>
-                La version fantaisie d'une classe contient toutes les méthode de l'originale. De la sorte une opération comme <code><![CDATA[$connection->query()]]></code> est encore possible. Tout comme avec les bouchons, nous pouvons remplacer la valeur nulle renvoyée par défaut...
+                La version fantaisie d'une classe contient toutes les méthodes de l'originale. De la sorte une opération comme <code><![CDATA[$connection->query()]]></code> est encore possible. Tout comme avec les bouchons, nous pouvons remplacer la valeur nulle renvoyée par défaut...
 <php><![CDATA[
 <strong>$connection->setReturnValue('query', 37);</strong>
 ]]></php>
@@ -68,7 +68,7 @@ class MyTestCase extends UnitTestCase {
 <php><![CDATA[
 <strong>Mock::generate('DatabaseConnection', 'MyMockDatabaseConnection', array('setOptions'));</strong>
 ]]></php>
-                Ici l'objet fantaisie se comportera comme si <code>setOptions()</code> existait dans la classe originale. C'est pratique si une classe a utilisé le mécanisme <code>overload()</code> de PHP pour ajouter des méthodes dynamiques. Vous pouvez créer des fantaisie spéciales pour simuler cette situation.
+                Ici l'objet fantaisie se comportera comme si <code>setOptions()</code> existait dans la classe originale. C'est pratique si une classe a utilisé le mécanisme <code>overload()</code> de PHP pour ajouter des méthodes dynamiques. Vous pouvez créer des fantaisies spéciales pour simuler cette situation.
             </p>
             <p>
                 Tous les modèles disponibles avec les bouchons serveur le sont également avec les objets fantaisie...
@@ -81,7 +81,7 @@ class Iterator {
     }
 }
 ]]></php>
-                Une nouvelle fois, supposons que cet itérateur ne retourne que du texte jusqu'au moment où il atteint son terme, quand il renvoit <code>false</code>. Nous pouvons le simuler avec...
+                Une nouvelle fois, supposons que cet itérateur ne retourne que du texte jusqu'au moment où il atteint son terme, quand il renvoie <code>false</code>. Nous pouvons le simuler avec...
 <php><![CDATA[
 Mock::generate('Iterator');
 
@@ -116,7 +116,7 @@ $config->setReturnValue('getValue', 'primary', array('db_host'));
 $config->setReturnValue('getValue', 'admin', array('db_user'));
 $config->setReturnValue('getValue', 'secret', array('db_password'));</strong>
 ]]></php>
-                Le paramètre en plus est une liste d'arguments à faire correspondre. Dans ce cas nous essayons de faire correspondre un unique arguement : en l'occurence la clef recherchée. Maintenant que la méthode <code>getValue()</code> est invoquée sur l'objet fantaisie...
+                Le paramètre en plus est une liste d'arguments à faire correspondre. Dans ce cas nous essayons de faire correspondre un unique argument : en l'occurrence la clef recherchée. Maintenant que la méthode <code>getValue()</code> est invoquée sur l'objet fantaisie...
 <php><![CDATA[
 $config->getValue('db_user')
 ]]></php>
@@ -147,7 +147,7 @@ $vector->setReturnReference('get', $thing, array(12));</strong>
         </section>
         <section name="attentes" title="Objets fantaisie en critique">
             <p>
-                Même si les bouchons serveur vous isolent du désordre du monde réel, il ne s'agit là que de la moitié du bénéfice potentiel. Vous pouvez avoir une classe de test recevant les messages ad-hoc, mais est-ce que votre nouvelle classe renvoie bien les bons ? Le tester peut devenir cafouilli sans une librairie d'objets fantaisie.
+                Même si les bouchons serveur vous isolent du désordre du monde réel, il ne s'agit là que de la moitié du bénéfice potentiel. Vous pouvez avoir une classe de test recevant les messages ad hoc, mais est-ce que votre nouvelle classe renvoie bien les bons ? Le tester peut devenir cafouillis sans une librairie d'objets fantaisie.
             </p>
             <p>
                 Pour l'exemple, prenons une classe <code>SessionPool</code> à laquelle nous allons ajouter une fonction de log. Plutôt que de complexifier la classe originale, nous souhaitons ajouter ce comportement avec un décorateur (GOF). Pour l'instant le code de <code>SessionPool</code> ressemble à...
@@ -194,7 +194,7 @@ class LoggingSessionPool {
                 Dans tout ceci, la seule classe à tester est <code>LoggingSessionPool</code>. En particulier, nous voulons vérifier que la méthode <code>findSession()</code> est appelée avec le bon identifiant de session au sein du cookie et qu'elle renvoie bien le message &quot;Starting session $cookie&quot; au loggueur.
             </p>
             <p>
-                Bien que nous ne testions que quelques lignes de code de productino, voici la liste des choses à faire dans un scénario de test conventionnel :
+                Bien que nous ne testions que quelques lignes de code de production, voici la liste des choses à faire dans un scénario de test conventionnel :
                 <ol>
                     <li>Créer un objet de log.</li>
                     <li>Indiquer le répertoire d'écriture du fichier de log.</li>
@@ -202,7 +202,7 @@ class LoggingSessionPool {
                     <li>Créer un objet <code>SessionPool</code>.</li>
                     <li>Lancer une session, ce qui demande probablement pas mal de choses.</li>
                     <li>Invoquer <code>findSession()</code>.</li>
-                    <li>Lire le nouvel identifiant de sessino (en espérant qu'il existe un accesseur !).</li>
+                    <li>Lire le nouvel identifiant de sessions (en espérant qu'il existe un accesseur !).</li>
                     <li>Lever une assertion de test pour vérifier que cet identifiant correspond bien au cookie.</li>
                     <li>Lire la dernière ligne du fichier de log.</li>
                     <li>Supprimer avec une (ou plusieurs) expression rationnelle les timestamps de log en trop, etc.</li>
@@ -238,22 +238,22 @@ class LoggingSessionPoolTest extends UnitTestCase {
                 Commençons par écrire une session simulacre. Pas la peine d'être trop pointilleux avec celle-ci puisque la vérification de la session désirée est effectuée ailleurs. Nous avons juste besoin de vérifier qu'il s'agit de la même que celle qui vient du groupe commun des sessions.
             </p>
             <p>
-                <code>findSession()</code> est un méthode fabrique dont la simulation est décrite <a href="#stub">plus haut</a>. Le point de départ vient avec le premier appel <code>expectOnce()</code>. Cette ligne indique qu'à chaque fois que <code>findSession()</code> est invoqué sur l'objet fantaisie, il vérifiera les arguments entrant. S'il ne reçoit que la chaîne &quot;abc&quot; en tant qu'argument alors un succès est envoyé au testeur unitaire, sinon c'est un échec qui est généré. Il s'agit là de la partie qui teste si nous avons bien la bonne session. La liste des arguments suit une format identique à celui qui précise les valeurs renvoyés. Vous pouvez avoir des jokers et des séquences et l'ordre de l'évaluation restera le même.
+                <code>findSession()</code> est un méthode fabrique dont la simulation est décrite <a href="#stub">plus haut</a>. Le point de départ vient avec le premier appel <code>expectOnce()</code>. Cette ligne indique qu'à chaque fois que <code>findSession()</code> est invoqué sur l'objet fantaisie, il vérifiera les arguments entrant. S'il ne reçoit que la chaîne &quot;abc&quot; en tant qu'argument alors un succès est envoyé au testeur unitaire, sinon c'est un échec qui est généré. Il s'agit là de la partie qui teste si nous avons bien la bonne session. La liste des arguments suit une format identique à celui qui précise les valeurs renvoyées. Vous pouvez avoir des jokers et des séquences et l'ordre de l'évaluation restera le même.
             </p>
             <p>
                 Si l'appel n'est jamais effectué alors n'est généré ni le succès, ni l'échec. Pour contourner cette limitation, nous devons dire à l'objet fantaisie que le test est terminé : il pourra alors décider si les attentes ont été répondues. L'assertion du testeur unitaire de ceci est déclenchée par l'appel <code>tally()</code> à la fin du test.
             </p>
             <p>
-                Nous utilisons le même modèle pour mettre sur pied le loggueur fantaisie. Nous lui indiquons que <code>message()</code> devrait être invoqué une fois et une fois seulement avec l'argumenet &quot;Starting session abc&quot;. En testant les arguments d'appel, plutôt que ceux de sorite du loggueur, nous isolons le test de tout modification dans le loggueur.
+                Nous utilisons le même modèle pour mettre sur pied le loggueur fantaisie. Nous lui indiquons que <code>message()</code> devrait être invoqué une fois et une fois seulement avec l'argument &quot;Starting session abc&quot;. En testant les arguments d'appel, plutôt que ceux de sorite du loggueur, nous isolons le test de tout modification dans le loggueur.
             </p>
             <p>
-                Nous commençons le lancement nos tests We start to run our tests à la création du nouveau <code>LoggingSessionPool</code> et nous l'alimentons avec nos objets fantaisie juste créés. Désormais tout est sous contrôle. Au final nous confirmons que le <code>$session</code> donné au décorateur est bien celui reçu et prions les objets fantaisie de lancer leurs tests de comptage d'appel interne avec les appels <code>tally()</code>.
+                Nous commençons le lancement nos tests à la création du nouveau <code>LoggingSessionPool</code> et nous l'alimentons avec nos objets fantaisie juste créés. Désormais tout est sous contrôle. Au final nous confirmons que le <code>$session</code> donné au décorateur est bien celui reçu et prions les objets fantaisie de lancer leurs tests de comptage d'appel interne avec les appels <code>tally()</code>.
             </p>
             <p>
-                Il y a encore pas mal de code de test, mais ce code est très stricte. S'il vous semble encore terrifiant il l'est bien moins que si nous avions essayer sans les objets fantaisie et ce test en particulier, interactions plutôt que résultat, est toujours plus difficile à mettre en place. Le plus souvent vous aurez besoin de tester des situations plus complexes sans ce niveau ni cette précision. En outre une partie peut être remaniée avec la méthode de scénario de test <code>setUp()</code>.
+                Il y a encore pas mal de code de test, mais ce code est très strict. S'il vous semble encore terrifiant il l'est bien moins que si nous avions essayé sans les objets fantaisie et ce test en particulier, interactions plutôt que résultat, est toujours plus difficile à mettre en place. Le plus souvent vous aurez besoin de tester des situations plus complexes sans ce niveau ni cette précision. En outre une partie peut être remaniée avec la méthode de scénario de test <code>setUp()</code>.
             </p>
             <p>
-                Voici la liste complètes des attentes que vous pouvez placer sur un objet fantaisie avec <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a>...
+                Voici la liste complète des attentes que vous pouvez placer sur un objet fantaisie avec <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a>...
                 <table><thead>
                     <tr><th>Attente</th><th>Nécessite <code>tally()</code></th></tr>
                     </thead><tbody><tr>
@@ -295,7 +295,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
                     <dd>Le nom de la méthode, sous la forme d'une chaîne, à laquelle la condition doit être appliquée.</dd>
                     <dt class="new_code">$args</dt>
                     <dd>
-                        Les arguments sout la forme d'une liste. Les jokers peuvent être inclus de la même manière qu'avec <code>setReturn()</code>. Cet argument est optionel pour <code>expectOnce()</code> et <code>expectAtLeastOnce()</code>.
+                        Les arguments sous la forme d'une liste. Les jokers peuvent être inclus de la même manière qu'avec <code>setReturn()</code>. Cet argument est optionel pour <code>expectOnce()</code> et <code>expectAtLeastOnce()</code>.
                     </dd>
                     <dt class="new_code">$timing</dt>
                     <dd>
@@ -307,7 +307,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
                 La méthode <code>expectMaximumCallCount()</code> est légèrement différente dans le sens où elle ne pourra générer qu'un échec. Elle reste silencieuse si la limite n'est jamais atteinte.
             </p>
             <p>
-                Comme avec les assertions dans les scénarios de test, toutes ces attentes peuvent accepter une surchage de message sous la forme d'un paramètre supplémentaire. Par ailleurs le message d'échec original peut être inclus dans le résultat avec &quot;%s&quot;.
+                Comme avec les assertions dans les scénarios de test, toutes ces attentes peuvent accepter une surcharge de message sous la forme d'un paramètre supplémentaire. Par ailleurs le message d'échec original peut être inclus dans le résultat avec &quot;%s&quot;.
             </p>
         </section>
         <section name="approches" title="D'autres approches">
@@ -337,10 +337,10 @@ class LoggingSessionPoolTest extends UnitTestCase {
 ?>
 ]]></php>
                 L'appel <code>generate</code> dit au générateur de classe d'en créer une appelée <code>BasicMockConnection</code> plutôt que la plus courante <code>MockConnection</code>. Ensuite nous héritons à partir de celle-ci pour obtenir notre version de <code>MockConnection</code>. En interceptant de cette manière nous pouvons ajouter un comportement, ici transformer la valeur par défaut de <code>query()</code> en &quot;false&quot;.
-                En utilisant le nom par défaut nous garantissons que le générateur de classe fantaisie n'en recréera pas une autre différente si il est invoqué ailleurs dans les tests. Il ne créera jamais de classe si elle existe déjà. Aussi longtemps que le fichier ci-dessus est inclu avant alors tous les tests qui généraient <code>MockConnection</code> devraient utiliser notre version à présent. Par contre si nous avons une erreur dans l'ordre et que la librairie de fantaisie en crée une d'abord alors la création de la classe échouera tout simplement.
+                En utilisant le nom par défaut nous garantissons que le générateur de classe fantaisie n'en recréera pas une autre différente si il est invoqué ailleurs dans les tests. Il ne créera jamais de classe si elle existe déjà. Aussi longtemps que le fichier ci-dessus est inclus avant alors tous les tests qui généraient <code>MockConnection</code> devraient utiliser notre version à présent. Par contre si nous avons une erreur dans l'ordre et que la librairie de fantaisie en crée une d'abord alors la création de la classe échouera tout simplement.
             </p>
             <p>
-                Utiliser cet astuce si vous vous trouvez avec beaucoup de comportement en commun sur les objets fantaisie ou si vous avez de fréquents problèmes d'intégration plus tard dans les étapes de test.
+                Utiliser cette astuce si vous vous trouvez avec beaucoup de comportement en commun sur les objets fantaisie ou si vous avez de fréquents problèmes d'intégration plus tard dans les étapes de test.
             </p>
         </section>
         <section name="autres_testeurs" title="Je pense que SimpleTest pue !">
@@ -349,7 +349,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
             </p>
             <p>
                 Non, pas du tout.
-                <a local="simple_test">SimpleTest</a> est une boîte à outils et parmi ceux-ci on trouve les objets fantaisie qui peuvent être utilisés indépendemment. Supposons que vous avez votre propre testeur unitaire favori et que tous vos tests actuels l'utilisent. Prétendez que vous avez appelé votre tester unitaire PHPUnit (c'est ce que tout le monde a fait) et que la classe principale de test ressemble à...
+                <a local="simple_test">SimpleTest</a> est une boîte à outils et parmi ceux-ci on trouve les objets fantaisie qui peuvent être utilisés indépendamment. Supposons que vous avez votre propre testeur unitaire favori et que tous vos tests actuels l'utilisent. Prétendez que vous avez appelé votre tester unitaire PHPUnit (c'est ce que tout le monde a fait) et que la classe principale de test ressemble à...
 <php><![CDATA[
 class PHPUnit {
     function PHPUnit() {
@@ -360,12 +360,12 @@ class PHPUnit {
     ...
 }
 ]]></php>
-                La seule chose que la méthode <code>assertion()</code> réalise, c'est de préparer une sortie embellie alors le paramètre boolien de l'assertion sert à déteriner s'il s'agit d'une erreur ou d'un succès. Supposons qu'elle est utilisée de la manière suivante...
+                La seule chose que la méthode <code>assertion()</code> réalise, c'est de préparer une sortie embellie alors le paramètre boolien de l'assertion sert à déterminer s'il s'agit d'une erreur ou d'un succès. Supposons qu'elle est utilisée de la manière suivante...
 <php><![CDATA[
 $unit_test = new PHPUnit();
 $unit_test>assertion('I hope this file exists', file_exists('my_file'));
 ]]></php>
-                Comment utiliser les bojets fantaisie avec ceci ?
+                Comment utiliser les objets fantaisie avec ceci ?
             </p>
             <p>
                 Il y a une méthode protégée sur la classe de base des objets fantaisie : elle s'appelle <code>_assertTrue()</code>. En surchargeant cette méthode nous pouvons utiliser notre propre format d'assertion. Nous commençons avec une sous-classe, dans <em>my_mock.php</em>...

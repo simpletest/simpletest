@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<page title="Sous-classer un scénario de test unitaire" here="Ré-utiliser des scénarios">
-    <long_title>Tutorial de test unitaire en PHP - Sous-classer un scénario de test</long_title>
+<page title="Sous classer un scénario de test unitaire" here="Réutiliser des scénarios">
+    <long_title>Tutorial de test unitaire en PHP - Sous classer un scénario de test</long_title>
     <content>
         <p>
             <a class="target" name="temps"><h2>Une assertion insensible au chronomètre</h2></a>
@@ -50,13 +50,13 @@ class TestOfClock extends UnitTestCase {
             Bien entendu à chaque modification je relance les tests pour bien vérifier que nous sommes dans les clous. Remaniement au vert. C'est beaucoup plus sûr.
         </p>
         <p>
-            <a class="target" name="sous-classe"><h2>Ré-utiliser notre assertion</h2></a>
+            <a class="target" name="sous-classe"><h2>Réutiliser notre assertion</h2></a>
         </p>
         <p>
-            Peut-être voulons nous ajouter d'autres tests sensibles au temps. Peut-être lisons nous des timestamps - en provenance d'une entrée dans une base de données ou d'ailleurs - qui tiendraient compte d'une simple seconde pour basculer. Pour que ces nouvelles classes de test profitent de notre nouvelle assertion nous avons besoin de la placer dans une super-classe.
+            Peut-être voulons nous ajouter d'autres tests sensibles au temps. Peut-être lisons nous des timestamps - en provenance d'une entrée dans une base de données ou d'ailleurs - qui tiendraient compte d'une simple seconde pour basculer. Pour que ces nouvelles classes de test profitent de notre nouvelle assertion nous avons besoin de la placer dans une &quot;super classe&quot;.
         </p>
         <p>
-            Voici notre fichier <em>clock_test.php</em> au complet après la promotion de notre méthode <code>assertSameTime()</code> dans sa propre super-classe...
+            Voici notre fichier <em>clock_test.php</em> au complet après la promotion de notre méthode <code>assertSameTime()</code> dans sa propre &quot;super classe&quot;...
 <php><![CDATA[
 <?php
     require_once('../classes/clock.php');
@@ -158,7 +158,7 @@ class TimeTestCase extends UnitTestCase {
             Une <a href="#temps">assertion insensible au chronomètre</a> qui permet de gagner une seconde.
         </link>
         <link>
-            <a href="#sous-classe">Sous-classer un scénario de test</a> afin de ré-utiliser la méthode de test.
+            <a href="#sous-classe">Sous classer un scénario de test</a> afin de réutiliser la méthode de test.
         </link>
     </internal>
     <external>

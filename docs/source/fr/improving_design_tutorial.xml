@@ -64,16 +64,16 @@
             Créer un scripteur interne, plutôt qu'en le passant au constructeur, en choisissant un nom de classe, est possible, mais nous aurions moins de contrôle sur l'initialisation de l'objet fantaisie. Du point de vue de la conception il aurait été presque impossible de passer des paramètres au scripteur dans tous les formats possibles et envisageables. Vous auriez dû restreindre le scripteur à un hash ou à une chaîne compliquée décrivant tous les détails de la cible. Au mieux compliqué sans raison.
         </p>
         <p>
-            Utiliser une méthode fabrique pour créer le scripteur intérieurement serait possible, mais ça voudrait dire le sous-classer pour les tests de manière à remplacer la méthode fabrique par une autre méthode renvoyant un leurre. Plus de boulot du point de vue des tests, quoique toujours possible. Du point de vue de la conception, ça voudrait dire créer une nouvelle sous-classe de log pour chaque type de scripteur. C'est appellé une hiérarchie de classe parallèle et fait bien entendu à de la duplication. Beurk.
+            Utiliser une méthode fabrique pour créer le scripteur intérieurement serait possible, mais ça voudrait dire le sous classer pour les tests de manière à remplacer la méthode fabrique par une autre méthode renvoyant un leurre. Plus de boulot du point de vue des tests, quoique toujours possible. Du point de vue de la conception, ça voudrait dire créer une nouvelle sous-classe de log pour chaque type de scripteur. C'est appelé une hiérarchie de classe parallèle et fait bien entendu à de la duplication. Beurk.
         </p>
         <p>
-            A l'autre extrème, passer ou créer le scripteur à chaque message aurait été répétitif et aurait réduit le code de la classe <code>Log</code> à une unique méthode, un signe certain que toute la classe est devenue redondante.
+            A l'autre extrême, passer ou créer le scripteur à chaque message aurait été répétitif et aurait réduit le code de la classe <code>Log</code> à une unique méthode, un signe certain que toute la classe est devenue redondante.
         </p>
         <p>
-            Cette tension entre la facilité du test et le refus de la répétition nous a permis de trouver une conception à la fois flexible et propre. Vous vous souvenez de notre bref envie de l'héritage multiple ? Nous l'avons remplacé par du polymorphisme (plein de scripteurs) et séparé la hiérarchie du journal de celle de l'écriture. Nous relions les deux par aggrégation à travers le plus simple <code>Log</code>. Cette astuce est en fait un design pattern (motif de conception) appelé &quot;Pont&quot; ou &quot;Bridge&quot;.
+            Cette tension entre la facilité du test et le refus de la répétition nous a permis de trouver une conception à la fois flexible et propre. Vous vous souvenez de notre bref envie de l'héritage multiple ? Nous l'avons remplacé par du polymorphisme (plein de scripteurs) et séparé la hiérarchie du journal de celle de l'écriture. Nous relions les deux par agrégation à travers le plus simple <code>Log</code>. Cette astuce est en fait un design pattern (motif de conception) appelé &quot;Pont&quot; ou &quot;Bridge&quot;.
         </p>
         <p>
-            Donc nous avons été poussé par le code de test (nous n'avons presque rien écrit d'autre) vers un design pattern. Pensez-y une seconde. Les test améliorent la qualité du code, à coup sûr dans mon cas, mais il y a quelque chose de bien plus profond et plus puissant.
+            Donc nous avons été poussé par le code de test (nous n'avons presque rien écrit d'autre) vers un design pattern. Pensez-y une seconde. Les tests améliorent la qualité du code, à coup sûr dans mon cas, mais il y a quelque chose de bien plus profond et plus puissant.
         </p>
         <p>
             Les tests ont amélioré la conception.
@@ -104,7 +104,7 @@
     </internal>
     <external>
         <link>
-            Ce tutoriel suit <a href="boundary_classes_tutorial.php">les classes frontière</a>.
+            Ce tutorial suit <a href="boundary_classes_tutorial.php">les classes frontière</a>.
         </link>
         <link>
             Vous aurez besoin du <a href="simple_test.php">framework de test SimpleTest</a> pour essayer ces exemples.

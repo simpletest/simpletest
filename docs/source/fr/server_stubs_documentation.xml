@@ -9,7 +9,7 @@
         </section>
         <section name="creation" title="Créer des bouchons serveur">
             <p>
-                Nous avons juste besoin d'une classe pré-existante, par exemple une connexion vers une base de données qui ressemblerait à...
+                Nous avons juste besoin d'une classe préexistante, par exemple une connexion vers une base de données qui ressemblerait à...
 <php><![CDATA[
 <strong>class DatabaseConnection {
     function DatabaseConnection() {
@@ -41,12 +41,12 @@ $connection = new StubDatabaseConnection();
 <php><![CDATA[
 <strong>$connection->setReturnValue('query', 37)</strong>
 ]]></php>
-                Désormais à chaque appel de <code><![CDATA[$connection->query()]]></code> nous obtenons un résultat de 37. Nous pouvons choisir n'importe quelle valeur pour le résultat, par exemple un hash de résultats provenant d'un base de données imaginaire ou alors une liste d'objets persistents. Peu importe les paramètres, nous obtenons systématiquement les même valeurs chaque fois qu'ils ont été initialisés de la sorte : ça ne ressemble peut-être pas à une réponse convaincante venant d'une connexion vers une base de données. Mais pour la demi-douzaine de lignes d'une méthode de test c'est souvent largement suffisant.
+                Désormais à chaque appel de <code><![CDATA[$connection->query()]]></code> nous obtenons un résultat de 37. Nous pouvons choisir n'importe quelle valeur pour le résultat, par exemple un hash de résultats provenant d'un base de données imaginaire ou alors une liste d'objets persistants. Peu importe les paramètres, nous obtenons systématiquement les même valeurs chaque fois qu'ils ont été initialisés de la sorte : ça ne ressemble peut-être pas à une réponse convaincante venant d'une connexion vers une base de données. Mais pour la demi-douzaine de lignes d'une méthode de test c'est souvent largement suffisant.
             </p>
         </section>
         <section name="modèles" title="Modèles de simulation">
             <p>
-                Sauf que les choses ne sont que rarement aussi simples. Parmi les problèmes les plus courants on trouve les itérateurs : le renvoi d'une valeur constante peut causer une boucle infini dans l'objet testé. Pour ceux-ci nous avons besoin de mettre sur pied une suite de valeurs. Prenons par exemple une itérateur simple qui ressemble à...
+                Sauf que les choses ne sont que rarement aussi simples. Parmi les problèmes les plus courants on trouve les itérateurs : le renvoi d'une valeur constante peut causer une boucle infini dans l'objet testé. Pour ceux-ci nous avons besoin de mettre sur pied une suite de valeurs. Prenons par exemple un itérateur simple qui ressemble à...
 <php><![CDATA[
 class Iterator {
     function Iterator() {
@@ -102,7 +102,7 @@ $config->setReturnValue('getValue', false, array('*'));</strong>
 <php><![CDATA[<strong>
 $config->setReturnValue('getValue', false);</strong>
 ]]></php>
-                Dans le premier cas il acceptera n'importe quel argument, mais exactement un -- pas plus -- est nécessaire. Dans le second cas n'importe quel nombre d'arguments fera l'affaire : il agit comme un <cite>catchall</cite> après tous les correspondances. Prenez garde à l'ordre : si nous ajoutons un autre paramètre après le joker ('*') il sera ignoré puisque le joker aura été trouvé auparavant. Avec des listes de paramètres complexes l'ordre peut devenir crucial, au risque de perdre des correspondances souhaitées, masquées par un joker antérieur. Pensez à mettre d'abord les cas les plus spéfiques si vous n'êtes pas sûr.
+                Dans le premier cas il acceptera n'importe quel argument, mais exactement un -- pas plus -- est nécessaire. Dans le second cas n'importe quel nombre d'arguments fera l'affaire : il agit comme un <cite>catchall</cite> après tous les correspondances. Prenez garde à l'ordre : si nous ajoutons un autre paramètre après le joker ('*') il sera ignoré puisque le joker aura été trouvé auparavant. Avec des listes de paramètres complexes l'ordre peut devenir crucial, au risque de perdre des correspondances souhaitées, masquées par un joker antérieur. Pensez à mettre d'abord les cas les plus spécifiques si vous n'êtes pas sûr.
             </p>
             <p>
                 Il y a des fois où l'on souhaite qu'un objet spécifique soit servi par le bouchon plutôt qu'une simple copie. La sémantique de la copie en PHP nous force à utiliser une autre méthode pour cela. Vous êtes peut-être en train de simuler un conteneur par exemple...
@@ -118,7 +118,7 @@ class Vector {
     }
 }
 ]]></php>
-                Dans ce cas vous pouvez mettre une référence dans la liste renvoyé par le bouchon...
+                Dans ce cas vous pouvez mettre une référence dans la liste renvoyée par le bouchon...
 <php><![CDATA[
 Stub::generate('Vector');
 
@@ -139,7 +139,7 @@ $complex->setReturnReferenceAt(3, 'get', $stuff, array('*', 1));</strong>
             </p>
             <p>
                 Un dernier cas critique reste celle d'un objet en créant un autre, connu sous le nom du modèle factory - fabrique. Supposons qu'après une requête réussie à notre base de données imaginaire, un ensemble de résultats est retourné sous la forme d'un itérateur, chaque appel à <code>next()</code> donnant un ligne et à la fin un <code>false</code>.
-                Au premier abord, ça donne l'impression d'être cauchemardesque à simuler. Alors qu'en fait tout peut être bouchoné en utilisant les mécanismes ci-dessus.
+                Au premier abord, ça donne l'impression d'être cauchemardesque à simuler. Alors qu'en fait tout peut être bouchonné en utilisant les mécanismes ci-dessus.
             </p>
             <p>
                 Voici comment...
@@ -170,7 +170,7 @@ class DatabaseTest extends UnitTestCase {
     }
 }
 ]]></php>
-                Désormais ce n'est que si notre <code>$connection</code> est appelé avec la bonne <code>query()</code> que le <code>$result</code> sera renvoyé après le troisième appel à <code>next()</code>. Cela devrait être suffisant pour que notre classe <code>UserFinder</code>, la classe effectivement testée à ce niveau, puisse s'exécuter comme il faut. Un test très précis et pas une seul base de données à l'horizon.
+                Désormais ce n'est que si notre <code>$connection</code> est appelé avec la bonne <code>query()</code> que le <code>$result</code> sera renvoyé après le troisième appel à <code>next()</code>. Cela devrait être suffisant pour que notre classe <code>UserFinder</code>, la classe effectivement testée à ce niveau, puisse s'exécuter comme il faut. Un test très précis et pas une seule base de données à l'horizon.
             </p>
         </section>
         <section name="options" title="Options de création pour les bouchons">

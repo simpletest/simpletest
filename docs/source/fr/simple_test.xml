@@ -17,7 +17,7 @@
                 La démonstration la plus rapide : l'exemple
             </p>
             <p>
-                Supposons que nous sommes en train de tester une simple classe de log dans un fichier : elle s'appelle <code>Log</code> dans <em>classes/Log.php</em>. Commençons par créer un script de test, appelelé <em>tests/log_test.php</em>. Son contenu est le suivant...
+                Supposons que nous sommes en train de tester une simple classe de log dans un fichier : elle s'appelle <code>Log</code> dans <em>classes/Log.php</em>. Commençons par créer un script de test, appelé <em>tests/log_test.php</em>. Son contenu est le suivant...
 <php><![CDATA[
 <strong><?php
 require_once('simpletest/unit_tester.php');
@@ -36,7 +36,7 @@ class TestOfLogging extends UnitTestCase {
 }</strong>
 ?>
 ]]></php>
-                A présent il y a 5 lignes de code d'échaffaudage et toujours pas de test. Cependant à partir de cet instant le retour sur investissement arrive très rapidement. Supposons que la classe <code>Log</code> prenne le nom du fichier à écrire dans le constructeur et que nous ayons un répertoire temporaire dans lequel placer ce fichier...
+                A présent il y a 5 lignes de code d'échafaudage et toujours pas de test. Cependant à partir de cet instant le retour sur investissement arrive très rapidement. Supposons que la classe <code>Log</code> prenne le nom du fichier à écrire dans le constructeur et que nous ayons un répertoire temporaire dans lequel placer ce fichier...
 <php><![CDATA[
 <?php
 require_once('simpletest/unit_tester.php');
@@ -147,7 +147,7 @@ $test->run(new HtmlReporter());
                 Cette méthode <code>GroupTest::addTestFile()</code> va inclure le fichier de scénarios de test et lire parmi toutes les nouvelles classes créées celles qui sont issues de <code>TestCase</code>. Dans un premier temps, seuls les noms sont stockés, de la sorte le lanceur de test peut instancier la classe au fur et à mesure qu'il exécute votre suite de tests.
             </p>
             <p>
-                Pour que ça puisse marcher proprement le fichier de suite de tests ne devrait pas inclure aveuglement d'autres extensions de scénarios de test qui n'exécuteraient pas effectivement de test. Le résulat pourrait être que des tests supplémentaires soient alors être comptabilisés pendant l'exécution des tests. Ce n'est pas un problème grave mais pour éviter ce désagrément, il suffit d'ajouter la commande <code>SimpleTestOptions::ignore()</code> quelque part dans le fichier de scénario de test. Par ailleurs le scénario de test ne devrait pas avoir été inclus ailleurs ou alors aucun scénario ne sera ajouté aux groupes de test. Il s'agirait là d'une erreur autrement sérieuse : si tous les classes de scénario de test sont chargées par PHP, alors la méthode <code>GroupTest::addTestFile()</code> ne pourra pas les détecter.
+                Pour que ça puisse marcher proprement le fichier de suite de tests ne devrait pas inclure aveuglement d'autres extensions de scénarios de test qui n'exécuteraient pas effectivement de test. Le résultat pourrait être que des tests supplémentaires soient alors être comptabilisés pendant l'exécution des tests. Ce n'est pas un problème grave mais pour éviter ce désagrément, il suffit d'ajouter la commande <code>SimpleTestOptions::ignore()</code> quelque part dans le fichier de scénario de test. Par ailleurs le scénario de test ne devrait pas avoir été inclus ailleurs ou alors aucun scénario ne sera ajouté aux groupes de test. Il s'agirait là d'une erreur autrement sérieuse : si tous les classes de scénario de test sont chargées par PHP, alors la méthode <code>GroupTest::addTestFile()</code> ne pourra pas les détecter.
             </p>
             <p>
                 Pour afficher les résultats, il est seulement nécessaire d'invoquer <em>tests/all_tests.php</em> à partir du serveur web.

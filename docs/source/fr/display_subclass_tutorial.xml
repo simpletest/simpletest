@@ -9,7 +9,7 @@
             <a class="target" name="succès"><h2>Je veux voir les succès !</h2></a>
         </p>
         <p>
-            Bon d'acord, voici comment.
+            Bon d'accord, voici comment.
         </p>
         <p>
             Nous devons créer une sous-classe de l'affichage utilisée, dans notre cas il s'agit de <code>HtmlReporter</code>. La classe <code>HtmlReporter</code> est situé dans le fichier <em>simpletest/reporter.php</em> : pour l'instant elle a l'interface suivante...
@@ -178,7 +178,7 @@ class ShowPasses extends HtmlReporter {
             Comment changer l'affichage pour <a href="#succès">afficher les passages avec succès</a>.
         </link>
         <link>
-            <a href="#sous-classe">Sous-classer la classe <code>HtmlReporter</code></a>.
+            <a href="#sous-classe">Sous classer la classe <code>HtmlReporter</code></a>.
         </link>
     </internal>
     <external>
