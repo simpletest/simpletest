@@ -383,7 +383,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
             itc,
             php testing links,
             unit test advice and documentation,
-            extreme programming in php);
+            extreme programming in php
         </keywords>
     </meta>
     <refsynopsisdiv>
