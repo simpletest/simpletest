@@ -200,6 +200,7 @@
          *    @public
          */
         function setReturnValue($method, $value, $args = "") {
+            $this->_dieOnNoMethod($method, "set return value");
             $method = strtolower($method);
             if (!isset($this->_returns[$method])) {
                 $this->_returns[$method] = new CallMap($this->_wildcard);
@@ -222,6 +223,7 @@
          *    @public
          */
         function setReturnValueSequence($timing, $method, $value, $args = "") {
+            $this->_dieOnNoMethod($method, "set return value sequence");
             $method = strtolower($method);
             if (!isset($this->_return_sequence[$method])) {
                 $this->_return_sequence[$method] = array();
@@ -242,6 +244,7 @@
          *    @public
          */
         function setReturnReference($method, &$reference, $args = "") {
+            $this->_dieOnNoMethod($method, "set return reference");
             $method = strtolower($method);
             if (!isset($this->_returns[$method])) {
                 $this->_returns[$method] = new CallMap($this->_wildcard);
@@ -264,6 +267,7 @@
          *    @public
          */
         function setReturnReferenceSequence($timing, $method, &$reference, $args = "") {
+            $this->_dieOnNoMethod($method, "set return reference sequence");
             $method = strtolower($method);
             if (!isset($this->_return_sequence[$method])) {
                 $this->_return_sequence[$method] = array();
@@ -285,6 +289,7 @@
          *    @public
          */
         function setExpectedArguments($method, $args = "") {
+            $this->_dieOnNoMethod($method, "set expected arguments");
             $args = (is_array($args) ? $args : array());
             $this->_expected_args[strtolower($method)] = new ParameterList(
                     $args,
@@ -304,6 +309,7 @@
          *    @public
          */
         function setExpectedArgumentsSequence($timing, $method, $args = "") {
+            $this->_dieOnNoMethod($method, "set expected arguments sequence");
             $args = (is_array($args) ? $args : array());
             if (!isset($this->_sequence_args[$timing])) {
                 $this->_sequence_args[$timing] = array();
@@ -324,6 +330,7 @@
          *    @public
          */
         function setExpectedCallCount($method, $count) {
+            $this->_dieOnNoMethod($method, "set expected call count");
             $this->_expected_counts[strtolower($method)] = $count;
         }
         
@@ -336,6 +343,7 @@
          *    @public
          */
         function setMaximumCallCount($method, $count) {
+            $this->_dieOnNoMethod($method, "set maximum call count");
             $this->_max_counts[strtolower($method)] = $count;
         }
         
@@ -346,6 +354,7 @@
          *    @public
          */
         function getCallCount($method) {
+            $this->_dieOnNoMethod($method, "get call count");
             $method = strtolower($method);
             if (!isset($this->_call_counts[$method])) {
                 return 0;
@@ -464,6 +473,21 @@
          */
         function _assertTrue($assertion, $message) {
             $this->_test->assertTrue($assertion, $message);
+        }
+        
+        /**
+         *    Triggers a PHP error if the method is not part
+         *    of this object.
+         *    @param $method        Name of method.
+         *    @param $task          Description of task attempt.
+         *    @protected
+         */
+        function _dieOnNoMethod($method, $task) {
+            if (!method_exists($this, $method)) {
+                trigger_error(
+                        "Cannot $task as no $method in class " . get_class($this),
+                        E_USER_ERROR);
+            }
         }
     }
     

@@ -239,7 +239,7 @@
         
         /**
          *    Accessor for any new cookies.
-         *    @return        Hash of cookie names and values.
+         *    @return        List of new cookies.
          *    @public
          */
         function getNewCookies() {
