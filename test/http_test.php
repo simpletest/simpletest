@@ -90,6 +90,7 @@
                     $response->getContent(),
                     "this is a test file\nwith two lines in it\n");
             $this->assertEqual($response->getMimeType(), "text/plain");
+            $this->assertIdentical($response->getResponseCode(), 200);
         }
     }
     

@@ -77,6 +77,7 @@
     class SimpleHttpResponse extends StickyError {
         var $_content;
         var $_mime_type;
+        var $_response_code;
         
         /**
          *    Constructor. Reads and parses the incoming
@@ -117,6 +118,15 @@
         }
         
         /**
+         *    Accessor for parsed HTTP error code.
+         *    @return            HTTP error code integer.
+         *    @public
+         */
+        function getResponseCode() {
+            return (integer)$this->_response_code;            
+        }
+        
+        /**
          *    Accessor for MIME type header information.
          *    @return            MIME type as string.
          *    @public
@@ -133,6 +143,9 @@
          *    @protected
          */
         function _parseHeaderLine($header_line) {
+            if (preg_match('/HTTP\/\d+\.\d+\s+(.*)\s+OK/i', $header_line, $matches)) {
+                $this->_response_code = $matches[1];
+            }
             if (preg_match('/Content-type: (.*)/i', $header_line, $matches)) {
                 $this->_mime_type = $matches[1];
             }
