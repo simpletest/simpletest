@@ -8,9 +8,9 @@ problems...
 No HTML when matching page elements
 -----------------------------------
 This behaviour has been switched to using plain text as if it
-were seen by the user ofthe browser. This means that HTML tags
+were seen by the user of the browser. This means that HTML tags
 are suppressed, entities are converted and whitespace is
-normalised. This should makeit easier to match items in forms.
+normalised. This should make it easier to match items in forms.
 Also images are replaced with their "alt" text so that they
 can be matched as well.
 
@@ -35,7 +35,8 @@ Broken code extending SimpleRunner
 ----------------------------------
 This was replaced with SimpleScorer so that I could use the runner
 name in another class. This happened in RC1 development and there
-is no easy backward compatibility fix.
+is no easy backward compatibility fix. The solution is simply to
+extend SimpleScorer instead.
 
 Missing method getBaseCookieValue()
 -----------------------------------
@@ -173,7 +174,7 @@ $test->accept(new MyRunner(new MyReporter()));
 
 ...rather than the run method. This should be easier to extend
 anyway and gives much more control. Even this method is overhauled
-in Beta3 where the runner cass can be set within the test case. Really
+in Beta3 where the runner class can be set within the test case. Really
 the best thing to do is to upgrade to this version as whatever you were
 trying to achieve before should now be very much easier.
 

@@ -52,7 +52,8 @@ simpletest/test/all_tests.php
 
 You will have to edit this file if you are accesssing the internet
 through a proxy server. See the comments in all_tests.php for
-instructions.
+instructions. You will likely need the memory limit in the php.ini
+to be set higher than the default 8MB to run all of these tests.
 
 The full tests read some test data from the LastCraft site. If the site
 is down or has been modified for a later version then you will get
