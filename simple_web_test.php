@@ -152,9 +152,9 @@
             }
             $action = $form->getAction();
             if ($form->getMethod() == "post") {
-                return $this->post($action);
+                return $this->post($action, $form->submitButtonByLabel($label));
             } else {
-                return $this->get($action);
+                return $this->get($action, $form->submitButtonByLabel($label));
             }
         }
         

@@ -194,6 +194,8 @@
         function testSimpleSubmit() {
             $this->get('http://www.lastcraft.com/test/form.html');
             $this->assertTrue($this->submit('Go!'));
+            $this->assertWantedPattern('/Request method.*?<dd>POST<\/dd>/');
+            $this->assertWantedPattern('/go=\[Go!\]/');
         }
     }
 ?>
