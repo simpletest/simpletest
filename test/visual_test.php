@@ -213,6 +213,24 @@
             $this->UnitTestCase();
         }
         
+        function testCallCounts() {
+            $dummy = &new MockDummy($this);
+            $dummy->expectCallCount('a', 1, 'My message: %s');
+            $dummy->a();
+            $dummy->tally();
+            $dummy->a();
+            $dummy->tally();
+        }
+           
+        function testMinimumCallCounts() {
+            $dummy = &new MockDummy($this);
+            $dummy->expectMinimumCallCount('a', 2, 'My message: %s');
+            $dummy->a();
+            $dummy->tally();
+            $dummy->a();
+            $dummy->tally();
+        }
+     
         function testEmptyMatching() {
             $dummy = &new MockDummy($this);
             $dummy->expectArguments('a', array());
@@ -262,6 +280,16 @@
             $dummy->a('32', '34');        // Fail.
         }
         
+        function testEmptyMatchingWithCustomExpectationMessage() {
+            $dummy = &new MockDummy($this);
+            $dummy->expectArguments(
+                    'a',
+                    array(new EqualExpectation('A', 'My part expectation message: %s')),
+                    'My expectation message: %s');
+            $dummy->a('A');
+            $dummy->a('B');        // Fail.
+        }
+      
         function testArrayMatching() {
             $dummy = &new MockDummy($this);
             $dummy->expectArguments('a', array(array(32), array(33)));
@@ -346,7 +374,7 @@
         }
     }
     
-    $test = &new GroupTest("Visual test with 45 passes, 45 fails and 4 exceptions");
+    $test = &new GroupTest("Visual test with 48 passes, 48 fails and 4 exceptions");
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());

@@ -122,7 +122,7 @@
                         $this->_dumper->describeDifference($this->_value, $compare);
             }
         }
-        
+
         /**
          *    Accessor for comparison value.
          *    @return mixed       Held value to compare with.

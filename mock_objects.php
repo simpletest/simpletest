@@ -193,6 +193,135 @@
     }
     
     /**
+     *    Confirms that the number of calls on a method is as expected.
+     */
+    class CallCountExpectation extends SimpleExpectation {
+        var $_method;
+        var $_count;
+        
+        /**
+         *    Stashes the method and expected count for later
+         *    reporting.
+         *    @param string $method    Name of method to confirm against.
+         *    @param integer $count    Expected number of calls.
+         *    @param string $message   Custom error message.
+         */
+        function CallCountExpectation($method, $count, $message = '%s') {
+            $this->_method = $method;
+            $this->_count = $count;
+            $this->SimpleExpectation($message);
+        }
+        
+        /**
+         *    Tests the assertion. True if correct.
+         *    @param integer $compare     Measured call count.
+         *    @return boolean             True if expected.
+         *    @access public
+         */
+        function test($compare) {
+            return ($this->_count == $compare);
+        }
+        
+        /**
+         *    Reports the comparison.
+         *    @param integer $compare     Measured call count.
+         *    @return string              Message to show.
+         *    @access public
+         */
+        function testMessage($compare) {
+            return 'Expected call count for [' . $this->_method .
+                    '] was [' . $this->_count .
+                    '] got [' . $compare . ']';
+        }
+    }
+      
+    /**
+     *    Confirms that the number of calls on a method is as expected.
+     */
+    class MinimumCallCountExpectation extends SimpleExpectation {
+        var $_method;
+        var $_count;
+        
+        /**
+         *    Stashes the method and expected count for later
+         *    reporting.
+         *    @param string $method    Name of method to confirm against.
+         *    @param integer $count    Minimum number of calls.
+         *    @param string $message   Custom error message.
+         */
+        function MinimumCallCountExpectation($method, $count, $message = '%s') {
+            $this->_method = $method;
+            $this->_count = $count;
+            $this->SimpleExpectation($message);
+        }
+        
+        /**
+         *    Tests the assertion. True if correct.
+         *    @param integer $compare     Measured call count.
+         *    @return boolean             True if enough.
+         *    @access public
+         */
+        function test($compare) {
+            return ($this->_count <= $compare);
+        }
+        
+        /**
+         *    Reports the comparison.
+         *    @param integer $compare     Measured call count.
+         *    @return string              Message to show.
+         *    @access public
+         */
+        function testMessage($compare) {
+            return 'Minimum call count for [' . $this->_method .
+                    '] was [' . $this->_count .
+                    '] got [' . $compare . ']';
+        }
+    }
+        
+    /**
+     *    Confirms that the number of calls on a method is as expected.
+     */
+    class MaximumCallCountExpectation extends SimpleExpectation {
+        var $_method;
+        var $_count;
+        
+        /**
+         *    Stashes the method and expected count for later
+         *    reporting.
+         *    @param string $method    Name of method to confirm against.
+         *    @param integer $count    Minimum number of calls.
+         *    @param string $message   Custom error message.
+         */
+        function MaximumCallCountExpectation($method, $count, $message = '%s') {
+            $this->_method = $method;
+            $this->_count = $count;
+            $this->SimpleExpectation($message);
+        }
+        
+        /**
+         *    Tests the assertion. True if correct.
+         *    @param integer $compare     Measured call count.
+         *    @return boolean             True if not over.
+         *    @access public
+         */
+        function test($compare) {
+            return ($this->_count >= $compare);
+        }
+        
+        /**
+         *    Reports the comparison.
+         *    @param integer $compare     Measured call count.
+         *    @return string              Message to show.
+         *    @access public
+         */
+        function testMessage($compare) {
+            return 'Miximum call count for [' . $this->_method .
+                    '] was [' . $this->_count .
+                    '] got [' . $compare . ']';
+        }
+    }
+
+    /**
      *    Retrieves values and references by searching the
      *    parameter lists until a match is found.
 	 *    @package SimpleTest
@@ -494,17 +623,7 @@
             if (isset($this->_returns[$method])) {
                 return $this->_returns[$method]->findFirstMatch($args);
             }
-            $this->_warnOnNoReturn($method);
             return null;
-        }
-        
-        /**
-         *    What to do if there is no return value set. Does
-         *    nothing for a stub.
-         *    @param string $method      Method name.
-         *    @access protected
-         */
-        function _warnOnNoReturn($method) {
         }
     }
     
@@ -521,10 +640,8 @@
         var $_test;
         var $_expected_counts;
         var $_max_counts;
-        var $_min_counts;
         var $_expected_args;
         var $_expected_args_at;
-        var $_require_return;
         
         /**
          *    Creates an empty return list and expectation list.
@@ -544,10 +661,8 @@
             $this->_test = &$test;
             $this->_expected_counts = array();
             $this->_max_counts = array();
-            $this->_min_counts = array();
             $this->_expected_args = array();
             $this->_expected_args_at = array();
-            $this->_require_return = false;
         }
         
         /**
@@ -567,7 +682,7 @@
          *    @return boolean        Valid arguments
          *    @access private
          */
-        function _checkArgumentsArray($args, $task) {
+        function _checkArgumentsIsArray($args, $task) {
         	if (! is_array($args)) {
         		trigger_error(
         			"Cannot $task as \$args parameter is not an array",
@@ -588,7 +703,7 @@
          */
         function expectArguments($method, $args, $message = '%s') {
             $this->_dieOnNoMethod($method, 'set expected arguments');
-            $this->_checkArgumentsArray($args, 'set expected arguments');
+            $this->_checkArgumentsIsArray($args, 'set expected arguments');
             $args = $this->_replaceWildcards($args);
             $this->_expected_args[strtolower($method)] =
                     new ParametersExpectation($args, $message);
@@ -609,9 +724,9 @@
          */
         function expectArgumentsAt($timing, $method, $args, $message = '%s') {
             $this->_dieOnNoMethod($method, "set expected arguments at time");
-            $this->_checkArgumentsArray($args, "set expected arguments");
+            $this->_checkArgumentsIsArray($args, "set expected arguments");
             $args = $this->_replaceWildcards($args);
-            if (!isset($this->_expected_args_at[$timing])) {
+            if (! isset($this->_expected_args_at[$timing])) {
                 $this->_expected_args_at[$timing] = array();
             }
             $method = strtolower($method);
@@ -631,7 +746,8 @@
          */
         function expectCallCount($method, $count, $message = '%s') {
             $this->_dieOnNoMethod($method, "set expected call count");
-            $this->_expected_counts[strtolower($method)] = $count;
+            $this->_expected_counts[strtolower($method)] =
+                    new CallCountExpectation($method, $count, $message);
         }
         
         /**
@@ -645,7 +761,8 @@
          */
         function expectMaximumCallCount($method, $count, $message = '%s') {
             $this->_dieOnNoMethod($method, "set maximum call count");
-            $this->_max_counts[strtolower($method)] = $count;
+            $this->_max_counts[strtolower($method)] = 
+                    new MaximumCallCountExpectation($method, $count, $message);
         }
         
         /**
@@ -659,7 +776,8 @@
          */
         function expectMinimumCallCount($method, $count, $message = '%s') {
             $this->_dieOnNoMethod($method, "set minimum call count");
-            $this->_min_counts[strtolower($method)] = $count;
+            $this->_expected_counts[strtolower($method)] =
+                    new MinimumCallCountExpectation($method, $count, $message);
         }
         
         /**
@@ -714,36 +832,14 @@
          *    @access public
          */
         function tally() {
-            $this->_tally_call_counts();
-            $this->_tally_minimum_call_counts();
-        }
-        
-        /**
-         *    Checks that the exact call counts match up.
-         *    @access private
-         */
-        function _tally_call_counts() {
-            foreach ($this->_expected_counts as $method => $expected) {
+            foreach ($this->_expected_counts as $method => $expectation) {
                 $this->_assertTrue(
-                        $expected == ($count = $this->getCallCount($method)),
-                        "Expected call count for [$method] was [$expected] got [$count]",
+                        $expectation->test($this->getCallCount($method)),
+                        $expectation->overlayMessage($this->getCallCount($method)),
                         $this->_test);
             }
         }
-        
-        /**
-         *    Checks that the minimum call counts match up.
-         *    @access private
-         */
-        function _tally_minimum_call_counts() {
-            foreach ($this->_min_counts as $method => $minimum) {
-                $this->_assertTrue(
-                        $minimum <= ($count = $this->getCallCount($method)),
-                        "Expected minimum call count for [$method] was [$minimum] got [$count]",
-                        $this->_test);
-            }
-        }
-        
+
         /**
          *    Returns the expected value for the method name
          *    and checks expectations. Will generate any
@@ -772,34 +868,24 @@
          */
         function _checkExpectations($method, $args, $timing) {
             if (isset($this->_max_counts[$method])) {
-                if ($timing >= $this->_max_counts[$method]) {
+                if (! $this->_max_counts[$method]->test($timing + 1)) {
                     $this->_assertTrue(
                             false,
-                            "Call count for [$method] is [" . ($timing + 1) . "]",
+                            $this->_max_counts[$method]->overlayMessage($timing + 1),
                             $this->_test);
                 }
             }
             if (isset($this->_expected_args_at[$timing][$method])) {
                 $this->_assertTrue(
                         $this->_expected_args_at[$timing][$method]->test($args),
-                        "Mock method [$method] at [$timing]->" . $this->_expected_args_at[$timing][$method]->testMessage($args),
+                        "Mock method [$method] at [$timing]->" .
+                                $this->_expected_args_at[$timing][$method]->overlayMessage($args),
                         $this->_test);
             } elseif (isset($this->_expected_args[$method])) {
                 $this->_assertTrue(
                         $this->_expected_args[$method]->test($args),
                         "Mock method [$method]->" . $this->_expected_args[$method]->overlayMessage($args),
                         $this->_test);
-            }
-        }
-        
-        /**
-         *    @deprecated
-         */
-        function _warnOnNoReturn($method) {
-            if ($this->_require_return) {
-                trigger_error(
-                        "No value set in mock class [" . get_class($this) . "] for method [$method]",
-                        E_USER_NOTICE);
             }
         }
         
