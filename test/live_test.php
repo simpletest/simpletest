@@ -121,5 +121,12 @@
             $this->assertNoCookie("short_cookie");
             $this->assertCookie("day_cookie", "C");
         }
+        function testCookiePath() {
+            $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
+            $this->assertNoCookie("path_cookie", "D");
+            $this->fetch('http://www.lastcraft.com/test/path/show_cookies.php');
+            $this->assertWantedPattern('/path_cookie/');
+            $this->assertCookie("path_cookie", "D");
+        }
     }
 ?>
