@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for the next iteration (Beta3) of 40 hours.
+This is immediate stuff only for the next iteration (Beta4) of 35 hours.
 Figures are estimated hours work versus actual (for XP velocity).
 Stuff will get added or dropped as the cycle progresses.
 
@@ -7,43 +7,35 @@ $Id$
 
 Unit tester
 -----------
-Add shell test case (3/4) - done.
-Pattern expectations need type check on message (1/1) - done.
-Create an isA() expectation (1/1) - done.
-Add pattern match for error queue (1/1) - done.
-Sort out IsA to handle unusual type names like resource and float (1/1) - done.
-Remove runner as separate layer (1/1) - done.
+Simpler display for short strings (1).
+Tidy up object comparisons (1).
+Move dump() method to use the dumper class (1).
 
 Interface
 ---------
-XML reporter (3/3) - done.
-Make Runner invoke different start and end methods on reporters (2/1) - done.
-Add runner decorator (2/2) - done.
-Add dry run option to reporter (1/1) - done.
 
 Mock objects
 ------------
 
 Html parser
 -----------
-Add checkbox parsing (2/3) - done.
+Parsing of image submits (2).
+Parsing of radio buttons (3).
+Refactor link parsing to use tag classes (4).
 
 Browser
 -------
-Add cookie ageing facility (2/1) - done.
-Move session restarting to cookie ageing (1/1) - done.
+Frames support (10).
+Simple authentication support (4).
+Image fetching (4).
 
 Web tester
 ----------
-Remote XML test case reading (5/7) - done.
-Remote test case reading of size (1/1) - done.
 
 Documentation
 -------------
-Add simple web testing page to docs (2/3) - done.
-Add expectations to docs (3/3) - done.
+Cookie testing docs (3).
 
 Build
 -----
-Make files PHP documentor compatible (3/5) - done.
-Update package.xml file (1/1) - done.
+Move makefile over to shell script (2).
