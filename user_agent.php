@@ -138,6 +138,19 @@
             }
             return true;
         }
+        
+        /**
+         *    Adds the current cookies to a request.
+         *    @param SimpleHttpRequest $request    Request to modify.
+         *    @param SimpleUrl $url                Cookie selector.
+         *    @access private
+         */
+        function addCookieHeaders(&$request, $url) {
+            $cookies = $this->getValidCookies($url->getHost(), $url->getPath());
+            foreach ($cookies as $cookie) {
+                $request->setCookie($cookie);
+            }
+        }
     }
     
     /**
@@ -146,12 +159,14 @@
 	 *    @subpackage WebTester
      */
     class SimpleAuthenticator {
+        var $_realms;
         
         /**
          *    Starts with no realms set up.
          *    @access public
          */
         function SimpleAuthenticator() {
+            $this->_realms = array();
         }
         
         /**
@@ -171,6 +186,8 @@
          *    @access public
          */
         function addRealm($url, $type, $realm) {
+            $this->_realms[$realm]['root'] = $url->getHost() . $url->getBasePath();
+            $this->_realms[$realm]['type'] = $type;
         }
         
         /**
@@ -182,6 +199,10 @@
          *    @access public
          */
         function setIdentityForRealm($realm, $username, $password) {
+            if (isset($this->_realms[$realm])) {
+                $this->_realms[$realm]['username'] = $username;
+                $this->_realms[$realm]['password'] = $password;
+            }
         }
         
         /**
@@ -190,16 +211,43 @@
          *    @access private
          */
         function _findRealmFromUrl($url) {
+            foreach ($this->_realms as $realm => $authentication) {
+                if ($this->_isWithin($url, $authentication['root'])) {
+                    return $realm;
+                }
+            }
+            return false;
         }
         
         /**
-         *    Presents the appropriate headers for this
-         *    location.
+         *    Compares two URLs to see if the first is within
+         *    the realm of the second.
+         *    @param SimpleUrl $url    URL to test.
+         *    @param string $root      Root of realm.
+         *    @access private
+         */
+        function _isWithin($url, $root) {
+            $stem = $url->getHost() . $url->getBasePath();
+            return (strpos($stem, $root) === 0);
+        }
+        
+        /**
+         *    Presents the appropriate headers for this location.
          *    @param SimpleHttpRequest $request  Request to modify.
          *    @param SimpleUrl $url              Base of realm.
          *    @access public
          */
         function addHeaders(&$request, $url) {
+            $realm = $this->_findRealmFromUrl($url);
+            if (! $realm) {
+                return;
+            }
+            if ($this->_realms[$realm]['type'] == 'Basic') {
+                $this->addBasicHeaders(
+                        $request,
+                        $this->_realms[$realm]['username'],
+                        $this->_realms[$realm]['password']);
+            }
         }
         
         /**
@@ -212,8 +260,10 @@
          *    @static
          */
         function addBasicHeaders(&$request, $username, $password) {
-            $request->addHeaderLine(
-                    'Authorization: Basic ' . base64_encode("$username:$password"));
+            if ($username && $password) {
+                $request->addHeaderLine(
+                        'Authorization: Basic ' . base64_encode("$username:$password"));
+            }
         }
     }
     
@@ -503,22 +553,9 @@
          */
         function &_createRequest($method, $url, $parameters) {
             $request = &$this->_createHttpRequest($method, $url, $parameters);
-            $this->_addCookiesToRequest($request, $url);
+            $this->_cookie_jar->addCookieHeaders($request, $url);
             $this->_addAuthentication($request, $url);
             return $request;
-        }
-        
-        /**
-         *    Adds the current cookies to the request.
-         *    @param SimpleHttpRequest $request    Request to modify.
-         *    @param SimpleUrl $url                Cookie selector.
-         *    @access private
-         */
-        function _addCookiesToRequest(&$request, $url) {
-            $cookies = $this->_cookie_jar->getValidCookies($url->getHost(), $url->getPath());
-            foreach ($cookies as $cookie) {
-                $request->setCookie($cookie);
-            }
         }
         
         /**

@@ -127,6 +127,84 @@
         }
     }
     
+    class TestOfAuthenticator extends UnitTestCase {
+        function TestOfAuthenticator() {
+            $this->UnitTestCase();
+        }
+        function testNoRealms() {
+            $request = &new MockSimpleHttpRequest($this);
+            $request->expectNever('addHeaderLine');
+            $authenticator = &new SimpleAuthenticator();
+            $authenticator->addHeaders($request, new SimpleUrl('http://here.com/'));
+            $request->tally();
+        }
+        function &createSingleRealm() {
+            $authenticator = &new SimpleAuthenticator();
+            $authenticator->addRealm(
+                    new SimpleUrl('http://www.here.com/path/hello.html'),
+                    'Basic',
+                    'Sanctuary');
+            $authenticator->setIdentityForRealm('Sanctuary', 'test', 'secret');
+            return $authenticator;
+        }
+        function testWithSameUrl() {
+            $request = &new MockSimpleHttpRequest($this);
+            $request->expectOnce(
+                    'addHeaderLine',
+                    array('Authorization: Basic ' . base64_encode('test:secret')));
+            $authenticator = &$this->createSingleRealm();
+            $authenticator->addHeaders(
+                    $request,
+                    new SimpleUrl('http://www.here.com/path/hello.html'));
+            $request->tally();
+        }
+        function testWithDifferentHost() {
+            $request = &new MockSimpleHttpRequest($this);
+            $request->expectNever('addHeaderLine');
+            $authenticator = &$this->createSingleRealm();
+            $authenticator->addHeaders(
+                    $request,
+                    new SimpleUrl('http://here.com/path/hello.html'));
+            $request->tally();
+        }
+        function testBelowRealm() {
+            $request = &new MockSimpleHttpRequest($this);
+            $request->expectNever('addHeaderLine');
+            $authenticator = &$this->createSingleRealm();
+            $authenticator->addHeaders(
+                    $request,
+                    new SimpleUrl('http://www.here.com/hello.html'));
+            $request->tally();
+        }
+        function testWithinRealm() {
+            $request = &new MockSimpleHttpRequest($this);
+            $request->expectOnce('addHeaderLine');
+            $authenticator = &$this->createSingleRealm();
+            $authenticator->addHeaders(
+                    $request,
+                    new SimpleUrl('http://www.here.com/path/more/hello.html'));
+            $request->tally();
+        }
+        function testOldNetscapeDefinitionDoesNotPresent() {
+            $request = &new MockSimpleHttpRequest($this);
+            $request->expectNever('addHeaderLine');
+            $authenticator = &$this->createSingleRealm();
+            $authenticator->addHeaders(
+                    $request,
+                    new SimpleUrl('http://www.here.com/pathmore/hello.html'));
+            $request->tally();
+        }
+        function testWithDifferentPageName() {
+            $request = &new MockSimpleHttpRequest($this);
+            $request->expectOnce('addHeaderLine');
+            $authenticator = &$this->createSingleRealm();
+            $authenticator->addHeaders(
+                    $request,
+                    new SimpleUrl('http://www.here.com/path/goodbye.html'));
+            $request->tally();
+        }
+    }
+    
     class TestOfExpandomaticUrl extends UnitTestCase {
         function TestOfExpandomaticUrl() {
             $this->UnitTestCase();
