@@ -5,6 +5,7 @@
         define("SIMPLE_TEST", "./");
     }
     require_once(SIMPLE_TEST . 'observer.php');
+    require_once(SIMPLE_TEST . 'assertion.php');
     
     /**
      *    Interface used by the test displays and group tests.
@@ -63,8 +64,8 @@
          *                         the class name is used.
          *    @public
          */
-        function TestCase($label = "") {
-            if ($label == "") {
+        function TestCase($label = false) {
+            if (!$label) {
                 $label = get_class($this);
             }
             $this->RunnableTest($label);
@@ -121,6 +122,20 @@
          */
         function tearDown() {
         }
+        
+        /**
+         *    Runs an assertion directly, for extending the
+         *    tests with new assertion classes.
+         *    @param $assertion    Assertion subclass.
+         *    @param $test_value   Value to compare.
+         *    @param $message      Message to display.
+         *    @public
+         */
+        function assertAssertion(&$assertion, $test_value, $message) {
+            $this->assertTrue(
+                    $assertion->test($test_value),
+                    sprintf($message, $assertion->testMessage($test_value)));
+        }
     }
     
     /**
@@ -139,6 +154,7 @@
          */
         function GroupTest($label) {
             $this->RunnableTest($label);
+            $this->_test_cases = array();
         }
         
         /**

@@ -7,13 +7,14 @@
     require_once(SIMPLE_TEST . 'simple_unit.php');
     require_once(SIMPLE_TEST . 'simple_html_test.php');
     require_once(SIMPLE_TEST . 'simple_mock.php');
-    
+    require_once(SIMPLE_TEST . 'adapters/pear_test_case.php');
+   
     class UnitTests extends GroupTest {
         function UnitTests() {
             $this->GroupTest("Unit tests");
             $this->addTestFile("assertion_test.php");
-            $this->addTestFile("adapter_test.php");
             $this->addTestFile("simple_mock_test.php");
+            $this->addTestFile("adapter_test.php");
             $this->addTestFile("socket_test.php");
             $this->addTestFile("http_test.php");
             $this->addTestFile("browser_test.php");

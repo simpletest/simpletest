@@ -5,7 +5,6 @@
         define("SIMPLE_TEST", "./");
     }
     require_once(SIMPLE_TEST . 'simple_test.php');
-    require_once(SIMPLE_TEST . 'assertion.php');
     
     /**
      *    Standard unit test class for day to day testing
@@ -79,7 +78,9 @@
             if (is_object($object)) {
                 $this->assertTrue(is_a($object, $type), $message);
             } else {
-                $this->assertTrue(gettype($object) == $type, $message);
+                $this->assertTrue(
+                        strtolower(gettype($object)) == strtolower($type),
+                        $message);
             }
         }
         
@@ -211,20 +212,6 @@
         function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
             $message = sprintf($message, "not expecting [$pattern] in [$subject]");
             $this->assertTrue(!preg_match($pattern, $subject), $message);
-        }
-        
-        /**
-         *    Runs an assertion directly, for extending the
-         *    tests with assertion classes.
-         *    @param $assertion    Assertion subclass.
-         *    @param $test_value   Value to compare.
-         *    @param $message      Message to display.
-         *    @public
-         */
-        function assertAssertion(&$assertion, $test_value, $message) {
-            $this->assertTrue(
-                    $assertion->test($test_value),
-                    sprintf($message, $assertion->testMessage($test_value)));
         }
     }
 ?>
