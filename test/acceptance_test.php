@@ -669,6 +669,8 @@
         function testMessyFramesetResponsesByName() {
             $this->assertTrue($this->get(
                     'http://www.lastcraft.com/test/messy_frameset.html'));
+            $this->assertTitle('Frameset for testing of SimpleTest');
+            
             $this->assertTrue($this->setFrameFocus('Front controller'));
             $this->assertResponse(200);
             $this->assertWantedPattern('/Simple test front controller/');
@@ -760,6 +762,7 @@
             $this->clearFrameFocus('a');
             $this->retry();
             
+            $this->assertTitle('Frameset for testing of SimpleTest');
             $this->setFrameFocus('a');
             $this->assertWantedPattern('/Count: 3/');
             $this->setFrameFocus('b');
@@ -871,9 +874,13 @@
             $this->assertTitle('Simple test target file');
         }
         
-        function TODO_testLinkInOnePageCanLoadAnother() {
+        function testLinkInOnePageCanLoadAnother() {
             $this->get('http://www.lastcraft.com/test/messy_frameset.html');
-            $this->clickSubmit('Down one');
+            $this->assertNoLink('3');
+            $this->clickLink('Set one to 2');
+            $this->assertLink('3');
+            $this->assertNoLink('2');
+            $this->assertTitle('Frameset for testing of SimpleTest');
         }
     }
 ?>
