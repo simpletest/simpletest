@@ -103,7 +103,7 @@
             $form = &new SimpleForm(
                     new SimpleFormTag(array()),
                     new SimpleUrl('htp://host'));
-            $form->addWidget(new SimpleSubmitTag(array(
+            $form->addWidget(new SimpleImageSubmitTag(array(
                     'type' => 'image',
                     'src' => 'source.jpg',
                     'name' => 'go',

@@ -224,6 +224,8 @@
             }
             if ($attributes['type'] == 'submit') {
                 return new SimpleSubmitTag($attributes);
+            } elseif ($attributes['type'] == 'image') {
+                return new SimpleImageSubmitTag($attributes);
             } elseif ($attributes['type'] == 'checkbox') {
                 return new SimpleCheckboxTag($attributes);
             } elseif ($attributes['type'] == 'radio') {

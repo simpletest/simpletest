@@ -82,6 +82,7 @@
             $this->assertFalse($tag->setValue('Cannot set this'));
             $this->assertEqual($tag->getValue(), 'Submit');
             $this->assertEqual($tag->getLabel(), 'Submit');
+            $this->assertEqual($tag->getSubmitValues(), array('submit' => 'Submit'));
         }
         
         function testPopulatedSubmit() {
@@ -90,6 +91,23 @@
             $this->assertEqual($tag->getName(), 's');
             $this->assertEqual($tag->getValue(), 'Ok!');
             $this->assertEqual($tag->getLabel(), 'Ok!');
+            $this->assertEqual($tag->getSubmitValues(), array('s' => 'Ok!'));
+        }
+        
+        function testImageSubmit() {
+            $tag = &new SimpleImageSubmitTag(
+                    array('type' => 'image', 'name' => 's', 'alt' => 'Label'));
+            $this->assertEqual($tag->getName(), 's');
+            $this->assertEqual($tag->getLabel(), 'Label');
+            $this->assertEqual(
+                    $tag->getSubmitValues(20, 30),
+                    array('s.x' => 20, 's.y' => 30));
+        }
+        
+        function testImageSubmitTitlePreferredOverAltForLabel() {
+            $tag = &new SimpleImageSubmitTag(
+                    array('type' => 'image', 'name' => 's', 'alt' => 'Label', 'title' => 'Title'));
+            $this->assertEqual($tag->getLabel(), 'Title');
         }
         
         function testButton() {
@@ -99,6 +117,7 @@
             $this->assertEqual($tag->getName(), 's');
             $this->assertEqual($tag->getValue(), 'do');
             $this->assertEqual($tag->getLabel(), 'I am a button');
+            $this->assertEqual($tag->getSubmitValues(), array('s' => 'do'));
         }
     }
     

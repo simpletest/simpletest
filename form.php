@@ -305,7 +305,7 @@
          */
         function hasImageLabel($label) {
             foreach ($this->_images as $image) {
-                if ($image->getAttribute('alt') == $label) {
+                if ($image->getLabel() == $label) {
                     return true;
                 }
             }
@@ -356,7 +356,7 @@
             foreach ($this->_buttons as $button) {
                 if ($button->getName() == $name) {
                     return array_merge(
-                            array($button->getName() => $button->getValue()),
+                            $button->getSubmitValues(),
                             $this->getValues());            
                 }
             }
@@ -375,7 +375,7 @@
             foreach ($this->_buttons as $button) {
                 if ($button->getLabel() == $label) {
                     return array_merge(
-                            array($button->getName() => $button->getValue()),
+                            $button->getSubmitValues(),
                             $this->getValues());            
                 }
             }
@@ -394,7 +394,7 @@
             foreach ($this->_buttons as $button) {
                 if ($button->getAttribute('id') == $id) {
                     return array_merge(
-                            array($button->getName() => $button->getValue()),
+                            $button->getSubmitValues(),
                             $this->getValues());            
                 }
             }
@@ -416,9 +416,7 @@
             foreach ($this->_images as $image) {
                 if ($image->getAttribute('alt') == $label) {
                     return array_merge(
-                            array(
-                                    $image->getName() . '.x' => $x,
-                                    $image->getName() . '.y' => $y),
+                            $image->getSubmitValues($x, $y),
                             $this->getValues());            
                 }
             }
@@ -439,9 +437,7 @@
             foreach ($this->_images as $image) {
                 if ($image->getName() == $name) {
                     return array_merge(
-                            array(
-                                    $image->getName() . '.x' => $x,
-                                    $image->getName() . '.y' => $y),
+                            $image->getSubmitValues($x, $y),
                             $this->getValues());            
                 }
             }
@@ -462,9 +458,7 @@
             foreach ($this->_images as $image) {
                 if ($image->getAttribute('id') == $id) {
                     return array_merge(
-                            array(
-                                    $image->getName() . '.x' => $x,
-                                    $image->getName() . '.y' => $y),
+                            $image->getSubmitValues($x, $y),
                             $this->getValues());            
                 }
             }

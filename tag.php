@@ -352,6 +352,74 @@
         function getLabel() {
             return $this->getValue();
         }
+        
+        /**
+         *    Gets the values submitted as a form.
+         *    @return array    Hash of name and values.
+         *    @access public
+         */
+        function getSubmitValues() {
+            return array($this->getName() => $this->getValue());
+        }
+    }
+      
+    /**
+     *    Image button as input tag.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleImageSubmitTag extends SimpleWidget {
+        
+        /**
+         *    Starts with a named tag with attributes only.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
+        function SimpleImageSubmitTag($attributes) {
+            $this->SimpleWidget('input', $attributes);
+        }
+        
+        /**
+         *    Tag contains no end element.
+         *    @return boolean        False.
+         *    @access public
+         */
+        function expectEndTag() {
+            return false;
+        }
+        
+        /**
+         *    Disables the setting of the button value.
+         *    @param string $value       Ignored.
+         *    @return boolean            True if allowed.
+         *    @access public
+         */
+        function setValue($value) {
+            return false;
+        }
+        
+        /**
+         *    Value of browser visible text.
+         *    @return string        Visible label.
+         *    @access public
+         */
+        function getLabel() {
+            if ($this->getAttribute('title')) {
+                return $this->getAttribute('title');
+            }
+            return $this->getAttribute('alt');
+        }
+        
+        /**
+         *    Gets the values submitted as a form.
+         *    @return array    Hash of name and values.
+         *    @access public
+         */
+        function getSubmitValues($x, $y) {
+            return array(
+                    $this->getName() . '.x' => $x,
+                    $this->getName() . '.y' => $y);
+        }
     }
       
     /**
@@ -403,6 +471,15 @@
          */
         function getLabel() {
             return $this->getContent();
+        }
+        
+        /**
+         *    Gets the values submitted as a form.
+         *    @return array    Hash of name and values.
+         *    @access public
+         */
+        function getSubmitValues() {
+            return array($this->getName() => $this->getValue());
         }
     }
   
