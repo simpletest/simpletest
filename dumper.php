@@ -165,9 +165,11 @@
          */
         function _describeStringDifference($first, $second, $identical) {
             $position = $this->_stringDiffersAt($first, $second);
-            return "at character $position with [" .
+            $message = "at character $position";
+            $message .= " with [" .
                     $this->clipString($first, 100, $position) . "] and [" .
                     $this->clipString($second, 100, $position) . "]";
+            return $message;
         }
         
         /**
@@ -225,7 +227,7 @@
                 if ($identical && ($first[$key] === $second[$key])) {
                     continue;
                 }
-                if (!$identical && ($first[$key] == $second[$key])) {
+                if (! $identical && ($first[$key] == $second[$key])) {
                     continue;
                 }
                 return "with member [$key] " . $this->describeDifference(
@@ -297,6 +299,20 @@
                 }
             }
             return $position;
+        }
+        
+        /**
+         *    Sends a formatted dump of a variable to a string.
+         *    @param mixed $variable    Variable to display.
+         *    @return string            Output from print_r().
+         *    @access public
+         */
+        function dump($variable) {
+            ob_start();
+            print_r($variable);
+            $formatted = ob_get_contents();
+            ob_end_clean();
+            return $formatted;
         }
     }
 ?>

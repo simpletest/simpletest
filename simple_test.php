@@ -8,6 +8,7 @@
     require_once(SIMPLE_TEST . 'options.php');
     require_once(SIMPLE_TEST . 'runner.php');
     require_once(SIMPLE_TEST . 'expectation.php');
+    require_once(SIMPLE_TEST . 'dumper.php');
     
     /**
      *    Interface used by the test displays and group tests.
@@ -258,10 +259,7 @@
          *    @access public
          */
         function dump($variable, $message = false) {
-            ob_start();
-            print_r($variable);
-            $formatted = ob_get_contents();
-            ob_end_clean();
+            $formatted = SimpleDumper::dump($variable);
             if ($message) {
                 $formatted = $message . "\n" . $formatted;
             }
