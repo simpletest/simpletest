@@ -561,7 +561,10 @@
             ini_set('track_errors', true);
             require($file);
             ini_set('track_errors', $old_setting);
-            return isset($php_errormsg) ? $php_errormsg : false;
+	    return (isset($php_errormsg)
+		&& $php_errormsg != 'Assigning the return value of new by reference is deprecated'
+		&& $php_errormsg != 'var: Deprecated. Please use the public/private/protected modifiers')
+		? $php_errormsg : false;
         }
         
         /**
