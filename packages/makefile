@@ -1,6 +1,6 @@
 # Builds project release.
 #
-VERSION = 1.0rc1wt1
+VERSION = 1.0beta5
 NAME = php_simple_test_$(VERSION).tar.gz
 SCRIPTS = simpletest/errors.php \
           simpletest/options.php \
