@@ -37,11 +37,12 @@ Add _top target from frame link (1/2) - done.
 Refactor authentication to cope with framed pages (2/1) - done.
 Refactor existing base url behaviour into SimplePage (3/8) - done.
 Add getFrames() to SimpleBrowser (1).
+Fix bug with click link of just domain uses current folder for request (2).
 
 Web tester
 ----------
 Remove ordering requirement asserting multivalue widgets (1/1) - done.
-Add assertHeaderPattern(), assertHeader() and assertNoHeader() methods (3).
+Add assertHeaderPattern(), assertHeader() and assertNoHeader() methods (3/1).
 
 Documentation
 -------------

@@ -111,6 +111,40 @@
     }
     
     /**
+     *    Test for a specific HTTP header within a header block.
+	 *	  @package SimpleTest
+	 *	  @subpackage WebTester
+     */
+    class HttpHeaderExpectation extends SimpleExpectation {
+        
+        /**
+         *    Sets the field and value to compare against.
+         *    @param string $header   Case insenstive header name.
+         *    @param string $value    Optional value to compare.
+         *    @access public
+         */
+        function HttpHeaderExpectation($header, $value = false) {
+        }
+    }
+      
+    /**
+     *    Test for a specific HTTP header within a header block.
+	 *	  @package SimpleTest
+	 *	  @subpackage WebTester
+     */
+    class HttpHeaderPatternExpectation extends SimpleExpectation {
+        
+        /**
+         *    Sets the field and value to compare against.
+         *    @param string $header   Case insenstive header name.
+         *    @param string $pattern  Pattern to compare value against.
+         *    @access public
+         */
+        function HttpHeaderExpectation($header, $value = false) {
+        }
+    }
+  
+    /**
      *    Test case for testing of web pages. Allows
      *    fetching of pages, parsing of HTML and
      *    submitting forms.
@@ -749,6 +783,37 @@
             $this->assertTrue(
                     strtolower($this->_browser->getRealm()) == strtolower($realm),
                     $message);
+        }
+        
+        /**
+         *    Checks each header line for the required value. If no
+         *    value is given then only an existence check is made.
+         *    @param string $header    Case insensitive header name.
+         *    @param string $value     Case sensitive trimmed string to
+         *                             match against.
+         *    @access public
+         */
+        function assertHeader($header, $value = false) {
+        }
+          
+        /**
+         *    Checks each header line for the required pattern.
+         *    @param string $header    Case insensitive header name.
+         *    @param string $pattern   Pattern to match value against.
+         *    @access public
+         */
+        function assertHeaderPattern($header, $pattern) {
+        }
+
+        /**
+         *    Confirms that the header type has not been received.
+         *    Only the landing page is checked. If you want to check
+         *    redirect pages, then you should limit redirects so
+         *    as to capture the page you want.
+         *    @param string $header    Case insensitive header name.
+         *    @access public
+         */
+        function assertNoHeader($header) {
         }
         
         /**

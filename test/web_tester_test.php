@@ -7,31 +7,42 @@
         function TestOfFieldExpectation() {
             $this->UnitTestCase();
         }
-        function testString() {
+        
+        function testStringMatchingIsCaseSensitive() {
             $expectation = new FieldExpectation('a');
             $this->assertTrue($expectation->test('a'));
             $this->assertTrue($expectation->test(array('a')));
             $this->assertFalse($expectation->test('A'));
         }
-        function testNonString() {
+        
+        function testNonStringFailsExpectation() {
             $expectation = new FieldExpectation('a');
             $this->assertFalse($expectation->test(null));
         }
-        function testUnsetField() {
+        
+        function testUnsetFieldCanBeTestedFor() {
             $expectation = new FieldExpectation(false);
             $this->assertTrue($expectation->test(false));
         }
-        function testMultipleValues() {
+        
+        function testMultipleValuesCanBeInAnyOrder() {
             $expectation = new FieldExpectation(array('a', 'b'));
             $this->assertTrue($expectation->test(array('a', 'b')));
             $this->assertTrue($expectation->test(array('b', 'a')));
             $this->assertFalse($expectation->test(array('a', 'a')));            
             $this->assertFalse($expectation->test('a'));            
         }
-        function testSingleItem() {
+        
+        function testSingleItemCanBeArrayOrString() {
             $expectation = new FieldExpectation(array('a'));
             $this->assertTrue($expectation->test(array('a')));
             $this->assertTrue($expectation->test('a'));
+        }
+    }
+    
+    class TestOfHeaderAssertions extends UnitTestCase {
+        function TestOfHeaderAssertions() {
+            $this->UnitTestCase();
         }
     }
 ?>
