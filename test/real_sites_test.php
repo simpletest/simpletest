@@ -18,7 +18,7 @@
             $this->setField('words', 'simpletest');
             $this->assertTrue($this->clickImageByName('imageField'));
             $this->assertTitle('SourceForge.net: Search');
-            $this->assertTrue($this->clickLink('<span style="background-color:pink">SimpleTest</span>'));
+            $this->assertTrue($this->clickLink('SimpleTest'));
             $this->clickLink('statistics');
             $this->assertWantedPattern('/Statistics for the past 7 days/');
             $this->assertTrue($this->setField('report', 'Monthly'));
