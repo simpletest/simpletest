@@ -13,6 +13,7 @@ Add an error trap (3).
 Interface
 ---------
 Add better object mismatch message (1).
+Add flush() after painting page header (0).
 
 Mock objects
 ------------

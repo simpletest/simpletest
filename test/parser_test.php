@@ -307,7 +307,7 @@
             $this->_handler->setReturnValue("acceptEntityToken", true);
             $this->_handler->setReturnValue("acceptTextToken", true);
             $this->_handler->setReturnValue("ignore", true);
-            $this->_lexer = &SimpleSaxParser::createLexer($this->_handler, "ignore");
+            $this->_lexer = &SimpleSaxParser::createLexer($this->_handler);
         }
         function tearDown() {
             $this->_handler->tally();
@@ -316,6 +316,16 @@
             $this->_handler->expectArguments("acceptTextToken", array("<html></html>", "*"));
             $this->_handler->expectCallCount("acceptTextToken", 1);
             $this->assertTrue($this->_lexer->parse("<html></html>"));
+        }
+        function testSkipCss() {
+            $this->_handler->expectMaximumCallCount("acceptTextToken", 0);
+            $this->_handler->expectMinimumCallCount("ignore", 1);
+            $this->assertTrue($this->_lexer->parse("<style>Lot's of styles</style>"));
+        }
+        function testSkipJavaScript() {
+            $this->_handler->expectMaximumCallCount("acceptTextToken", 0);
+            $this->_handler->expectMinimumCallCount("ignore", 1);
+            $this->assertTrue($this->_lexer->parse("<SCRIPT>Javascript code {';:^%^%£$'@\"*(}</SCRIPT>"));
         }
         function testTitle() {
             $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<title", "*"));

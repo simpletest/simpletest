@@ -420,9 +420,7 @@
         function &createLexer(&$parser) {
             $lexer = &new SimpleLexer($parser, 'text');
             $lexer->mapHandler('text', 'acceptTextToken');
-            $lexer->mapHandler('tag', 'acceptStartToken');
-            $lexer->mapHandler('single_quoted', 'acceptAttributeToken');
-            $lexer->mapHandler('double_quoted', 'acceptAttributeToken');
+            SimpleSaxParser::_addSkipping($lexer);
             SimpleSaxParser::_addTag($lexer, "a");
             SimpleSaxParser::_addTag($lexer, "title");
             SimpleSaxParser::_addTag($lexer, "form");
@@ -432,24 +430,19 @@
         }
         
         /**
-         *    Pattern matches to parse the inside of a tag
-         *    including the attributes and their quoting.
-         *    The tag mode has two modes below matching the
-         *    two possible quoting options.
+         *    The lexer has to skip certain sections such
+         *    as server code, client code and styles.
          *    @param $lexer        Lexer to add patterns to.
          *    @private
          *    @static
          */
-        function _addInTagTokens(&$lexer) {
-            $lexer->addSpecialPattern('\s+', 'tag', 'ignore');
-            $lexer->addSpecialPattern('=', 'tag', 'ignore');
-            $lexer->addEntryPattern("'", 'tag', 'single_quoted');
-            $lexer->addEntryPattern('"', 'tag', 'double_quoted');
-            $lexer->addExitPattern('>', 'tag');
-            $lexer->addPattern("\\\\'", 'single_quoted');
-            $lexer->addExitPattern("'", 'single_quoted');
-            $lexer->addPattern("\\\\\"", 'double_quoted');
-            $lexer->addExitPattern('"', 'double_quoted');
+        function _addSkipping(&$lexer) {
+            $lexer->mapHandler('css', 'ignore');
+            $lexer->addEntryPattern('<style', 'text', 'css');
+            $lexer->addExitPattern('</style>', 'css');
+            $lexer->mapHandler('js', 'ignore');
+            $lexer->addEntryPattern('<script', 'text', 'js');
+            $lexer->addExitPattern('</script>', 'js');
         }
         
         /**
@@ -462,6 +455,41 @@
         function _addTag(&$lexer, $tag) {
             $lexer->addSpecialPattern("</$tag>", 'text', 'acceptEndToken');
             $lexer->addEntryPattern("<$tag", 'text', 'tag');
+        }
+        
+        /**
+         *    Pattern matches to parse the inside of a tag
+         *    including the attributes and their quoting.
+         *    @param $lexer        Lexer to add patterns to.
+         *    @private
+         *    @static
+         */
+        function _addInTagTokens(&$lexer) {
+            $lexer->mapHandler('tag', 'acceptStartToken');
+            $lexer->addSpecialPattern('\s+', 'tag', 'ignore');
+            $lexer->addSpecialPattern('=', 'tag', 'ignore');
+            SimpleSaxParser::_addStringNesting($lexer, 'tag', 'acceptAttributeToken');
+            $lexer->addExitPattern('>', 'tag');
+        }
+        
+        /**
+         *    Nesting in strings disables normal parsing.
+         *    @param $lexer    Lexer to add patterns to.
+         *    @param $mode     Mode within which strings will nest.
+         *    @param $handler  The callback that will recieve the
+         *                     string tokens.
+         *    @private
+         *    @static
+         */
+        function _addStringNesting(&$lexer, $mode, $handler) {
+            $lexer->addEntryPattern('"', $mode, 'double_quoted_' . $mode);
+            $lexer->mapHandler('double_quoted_' . $mode, $handler);
+            $lexer->addPattern("\\\\\"", 'double_quoted_' . $mode);
+            $lexer->addExitPattern('"', 'double_quoted_' . $mode);
+            $lexer->addEntryPattern("'", $mode, 'single_quoted_' . $mode);
+            $lexer->mapHandler('single_quoted_' . $mode, $handler);
+            $lexer->addPattern("\\\\'", 'single_quoted_' . $mode);
+            $lexer->addExitPattern("'", 'single_quoted_' . $mode);
         }
         
         /**
