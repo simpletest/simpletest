@@ -8,6 +8,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/dumper.php \
           simpletest/expectation.php \
           simpletest/socket.php \
+          simpletest/query_string.php \
           simpletest/http.php \
           simpletest/browser.php \
           simpletest/parser.php \
@@ -24,6 +25,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/adapters/pear_test_case.php \
           simpletest/adapters/phpunit_test_case.php \
           simpletest/README \
+          simpletest/VERSION \
           simpletest/LICENSE \
           simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE \
           simpletest/test/all_tests.php \
@@ -35,6 +37,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/test/expectation_test.php \
           simpletest/test/adapter_test.php \
           simpletest/test/socket_test.php \
+          simpletest/test/query_string_test.php \
           simpletest/test/http_test.php \
           simpletest/test/browser_test.php \
           simpletest/test/parser_test.php \

@@ -38,8 +38,8 @@ Page fetching, form submission and cookie handling are included.
     </maintainer>
   </maintainers>
   <release>
-    <version>0.9.2</version>
-    <date>2003-09-28</date>
+    <version>0.9.4</version>
+    <date>2004-01-19</date>
     <license>PHP</license>
     <state>beta</state>
     <notes>
@@ -48,7 +48,7 @@ It is VERY important that when upgrading
 you read the HELP_MY_TESTS_DONT_WORK_ANYMORE file as it contains some
 important information on name changes.
 It should involve only some minor
-changes to test suites and the old names are still supported for a
+changes to test suites and the old names are usually supported for a
 version or two.
 ]]>
     </notes>
@@ -68,6 +68,7 @@ version or two.
       <file role="php" baseinstalldir="simpletest" name="options.php"/>
       <file role="php" baseinstalldir="simpletest" name="page.php"/>
       <file role="php" baseinstalldir="simpletest" name="parser.php"/>
+      <file role="php" baseinstalldir="simpletest" name="query_string.php"/>
       <file role="doc" baseinstalldir="simpletest" name="README"/>
       <file role="php" baseinstalldir="simpletest" name="remote.php"/>
       <file role="php" baseinstalldir="simpletest" name="reporter.php"/>
@@ -77,6 +78,7 @@ version or two.
       <file role="php" baseinstalldir="simpletest" name="socket.php"/>
       <file role="php" baseinstalldir="simpletest" name="tag.php"/>
       <file role="php" baseinstalldir="simpletest" name="unit_tester.php"/>
+      <file role="doc" baseinstalldir="simpletest" name="VERSION"/>
       <file role="php" baseinstalldir="simpletest" name="web_tester.php"/>
       <file role="php" baseinstalldir="simpletest" name="xml.php"/>
       <!-- Adapters -->
@@ -106,6 +108,7 @@ version or two.
       <file role="test" baseinstalldir="simpletest" name="test/options_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/page_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/parser_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/query_string_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/real_sites_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/remote_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/shell_test.php"/>
