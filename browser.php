@@ -334,7 +334,9 @@
          *    @access protected
          */
         function &_parse($response) {
-            return new SimplePage($response);
+            $builder = &new SimplePageBuilder();
+            $page = &$builder->parse($response);
+            return $page;
         }
         
         /**

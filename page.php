@@ -21,29 +21,49 @@
 	 *    @subpackage WebTester
      */
     class SimplePageBuilder extends SimpleSaxListener {
-        var $_page;
         var $_tags;
+        var $_page;
         
         /**
-         *    Sets the document to write to.
-         *    @param SimplePage $page       Target of the events.
+         *    Sets the builder up empty.
          *    @access public
          */
-        function SimplePageBuilder(&$page) {
+        function SimplePageBuilder() {
             $this->SimpleSaxListener();
-            $this->_page = &$page;
-            $this->_tags = array();
         }
         
         /**
          *    Reads the raw content and send events
          *    into the page to be built.
-         *    @param string $raw                 Unparsed text.
-         *    @param SimpleSaxParser $parser     Event generator.
+         *    @param $response SimpleHttpResponse  Fetched response.
+         *    @return SimplePage                   Newly parsed page.
          *    @access public
          */
-        function parse($raw, &$parser) {
-            return $parser->parse($raw);
+        function parse($response) {
+            $this->_tags = array();
+            $this->_page = &$this->_createPage($response);
+            $parser = &$this->_createParser();
+            $parser->parse($response->getContent());
+            return $this->_page;
+        }
+        
+        /**
+         *    Creates an empty page.
+         *    @return SimplePage        New unparsed page.
+         *    @access protected
+         */
+        function &_createPage($response) {
+            return new SimplePage($response);
+        }
+        
+        /**
+         *    Creates the parser used with the builder.
+         *    @return SimpleSaxParser   Parser to generate events for
+         *                              the builder.
+         *    @access protected
+         */
+        function &_createParser() {
+            return new SimpleSaxParser($this);
         }
         
         /**
@@ -234,8 +254,6 @@
             $this->_complete_forms = array();
             $this->_frameset = false;
             $this->_frameset_is_complete = false;
-            $builder = &$this->_createBuilder($this);
-            $builder->parse($this->_raw, $this->_createParser($builder));
         }
         
         /**
@@ -292,27 +310,6 @@
          */
         function getRealm() {
             return $this->_headers->getRealm();
-        }
-        
-        /**
-         *    Creates the parser used with the builder.
-         *    @param SimplePageBuilder $builder    Parser listener.
-         *    @return SimpleSaxParser              Parser to generate events for
-         *                                         the builder.
-         *    @access protected
-         */
-        function &_createParser(&$builder) {
-            return new SimpleSaxParser($builder);
-        }
-        
-        /**
-         *    Creates the parser used with the builder.
-         *    @param SimplePage $page      Target of incoming tag information.
-         *    @return SimplePageBuilder    Builder to feed events to this page.
-         *    @access protected
-         */
-        function &_createBuilder(&$page) {
-            return new SimplePageBuilder($page);
         }
         
         /**

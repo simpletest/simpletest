@@ -1,9 +1,9 @@
 <?php
     // $Id$
     
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../user_agent.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../authentication.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../http.php');
+    require_once(dirname(__FILE__) . '/../user_agent.php');
+    require_once(dirname(__FILE__) . '/../authentication.php');
+    require_once(dirname(__FILE__) . '/../http.php');
     Mock::generate('SimpleHttpRequest');
     Mock::generate('SimpleHttpPostRequest');
     Mock::generate('SimpleHttpResponse');

@@ -454,9 +454,20 @@
         function SimpleSaxParser(&$listener) {
             $this->_listener = &$listener;
             $this->_lexer = &$this->createLexer($this);
-            $this->_tag = "";
+            $this->_tag = '';
             $this->_attributes = array();
-            $this->_current_attribute = "";
+            $this->_current_attribute = '';
+        }
+        
+        /**
+         *    Runs the content through the lexer which
+         *    should call back to the acceptors.
+         *    @param string $raw      Page text to parse.
+         *    @return boolean         False if parse error.
+         *    @access public
+         */
+        function parse($raw) {
+            return $this->_lexer->parse($raw);
         }
         
         /**
@@ -553,17 +564,6 @@
         }
         
         /**
-         *    Runs the content through the lexer which
-         *    should call back to the acceptors.
-         *    @param string $raw      Page text to parse.
-         *    @return boolean         False if parse error.
-         *    @access public
-         */
-        function parse($raw) {
-            return $this->_lexer->parse($raw);
-        }
-        
-        /**
          *    Accepts a token from the tag mode. If the
          *    starting element completes then the element
          *    is dispatched and the current attributes
@@ -603,7 +603,7 @@
          *    @access public
          */
         function acceptEndToken($token, $event) {
-            if (!preg_match('/<\/(.*)>/', $token, $matches)) {
+            if (! preg_match('/<\/(.*)>/', $token, $matches)) {
                 return false;
             }
             return $this->_listener->endElement(strtolower($matches[1]));

@@ -1,10 +1,12 @@
 <?php
     // $Id$
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../browser.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../user_agent.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../http.php');
+    
+    require_once(dirname(__FILE__) . '/../browser.php');
+    require_once(dirname(__FILE__) . '/../user_agent.php');
+    require_once(dirname(__FILE__) . '/../http.php');
+    require_once(dirname(__FILE__) . '/../page.php');
+    
     Mock::generate('SimpleHttpResponse');
-    Mock::generate('SimpleHttpHeaders');
     Mock::generate('SimplePage');
     Mock::generate('SimpleForm');
     Mock::generate('SimpleUserAgent');

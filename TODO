@@ -19,7 +19,7 @@ Html parser
 -----------
 Add framset tag (2/3) - done.
 Add frame tag (1).
-Simplify builder callbacks (1).
+Simplify builder callbacks (1/2) - done.
 Add image submit parsing (3).
 Add image map parsing (2).
 Make multivalue widgets PHP compatible (2).
@@ -27,7 +27,7 @@ Add simple button tag parsing (1).
 
 Browser
 -------
-Add frame loading support (4/2).
+Add frame loading support (6/2).
 Add frame focus and defocus (3).
 Make widget handling reflect frame focus (2).
 Add setFieldById() method (1).
