@@ -363,8 +363,8 @@
         var $_lexer;
         
         function TestHtmlSaxParser(&$listener, &$lexer) {
-            $this->HtmlSaxParser(&$listener);
             $this->_lexer = &$lexer;
+            $this->HtmlSaxParser(&$listener);
         }
         function &createLexer() {
             return $this->_lexer;
@@ -393,6 +393,35 @@
         function testLexerFailure() {
             $this->_lexer->setReturnValue("parse", false);
             $this->assertFalse($this->_parser->parse("<html></html>"));
+        }
+        function testLexerSuccess() {
+            $this->_lexer->setReturnValue("parse", true);
+            $this->assertTrue($this->_parser->parse("<html></html>"));
+        }
+        function testSimpleLinkStart() {
+            $this->_parser->parse("");
+            $this->_listener->expectArguments("startElement", array("a", array()));
+            $this->_listener->expectCallCount("startElement", 1);
+            $this->assertTrue($this->_parser->acceptStartToken("<a", LEXER_ENTER));
+            $this->assertTrue($this->_parser->acceptStartToken(">", LEXER_EXIT));
+        }
+        function testLinkStart() {
+            $this->_parser->parse("");
+            $this->_listener->expectArguments("startElement", array("a", array("href" => "here.html")));
+            $this->_listener->expectCallCount("startElement", 1);
+            $this->_parser->acceptStartToken("<a", LEXER_ENTER);
+            $this->assertTrue($this->_parser->acceptStartToken("href", LEXER_MATCHED));
+            $this->assertTrue($this->_parser->acceptStartToken("=", LEXER_MATCHED));
+            $this->assertTrue($this->_parser->acceptAttributeToken("\"", LEXER_ENTER));
+            $this->assertTrue($this->_parser->acceptAttributeToken("here.html", LEXER_MATCHED));
+            $this->assertTrue($this->_parser->acceptAttributeToken("\"", LEXER_EXIT));
+            $this->_parser->acceptStartToken(">", LEXER_EXIT);
+        }
+        function testLinkEnd() {
+            $this->_parser->parse("");
+            $this->_listener->expectArguments("endElement", array("a"));
+            $this->_listener->expectCallCount("endElement", 1);
+            $this->assertTrue($this->_parser->acceptEndToken("</a>", LEXER_SPECIAL));
         }
     }
 ?>

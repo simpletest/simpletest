@@ -373,6 +373,11 @@
      *    Converts HTML tokens into selected SAX events.
      */
     class HtmlSaxParser {
+        var $_lexer;
+        var $_listener;
+        var $_tag;
+        var $_attributes;
+        var $_current_attribute;
         
         /**
          *    Sets the listener.
@@ -380,6 +385,11 @@
          *    @public
          */
         function HtmlSaxParser(&$listener) {
+            $this->_listener = &$listener;
+            $this->_lexer = &$this->createLexer($this);
+            $this->_tag = "";
+            $this->_attributes = array();
+            $this->_current_attribute = "";
         }
         
         /**
@@ -389,7 +399,6 @@
          *    @public
          */
         function &createLexer(&$parser) {
-            
             $lexer = &new SimpleLexer($parser, 'text');
             $lexer->mapHandler('text', 'acceptTextToken');
             $lexer->mapHandler('tag', 'acceptStartToken');
@@ -417,61 +426,88 @@
          *    @public
          */
         function parse($raw) {
+            return $this->_lexer->parse($raw);
         }
         
         /**
          *    Accepts a token from the tag mode.
          *    @param $token    Incoming characters.
+         *    @param $event    Lexer event type.
          *    @return          False if parse error.
          *    @public
          */
-        function acceptStartToken($token) {
+        function acceptStartToken($token, $event) {
+            if ($event == LEXER_ENTER) {
+                $this->_tag = substr($token, 1);
+            } elseif ($event == LEXER_EXIT) {
+                $this->_listener->startElement(
+                        $this->_tag,
+                        $this->_attributes);
+            } elseif ($token != "=") {
+                $this->_attributes[$token] = "";
+                $this->_current_attribute = $token;
+            }
+            return true;
         }
         
         /**
          *    Accepts a token from the end tag mode.
          *    @param $token    Incoming characters.
+         *    @param $event    Lexer event type.
          *    @return          False if parse error.
          *    @public
          */
-        function acceptEndToken($token) {
+        function acceptEndToken($token, $event) {
+            if (!preg_match('/<\/(.*)>/', $token, $matches)) {
+                return false;
+            }
+            $this->_listener->endElement($matches[1]);
+            return true;
         }
         
         /**
          *    Part of the tag data.
          *    @param $token    Incoming characters.
+         *    @param $event    Lexer event type.
          *    @return          False if parse error.
          *    @public
          */
-        function acceptAttributeToken($token) {
+        function acceptAttributeToken($token, $event) {
+            if ($event == LEXER_MATCHED) {
+                $this->_attributes[$this->_current_attribute] .= $token;
+            }
+            return true;
         }
         
         /**
          *    A character entity.
          *    @param $token    Incoming characters.
+         *    @param $event    Lexer event type.
          *    @return          False if parse error.
          *    @public
          */
-        function acceptEntityToken($token) {
+        function acceptEntityToken($token, $event) {
         }
         
         /**
          *    Character data between tags regarded as
          *    important.
          *    @param $token    Incoming characters.
+         *    @param $event    Lexer event type.
          *    @return          False if parse error.
          *    @public
          */
-        function acceptTextToken($token) {
+        function acceptTextToken($token, $event) {
         }
         
         /**
          *    Incoming data to be ignored.
          *    @param $token    Incoming characters.
+         *    @param $event    Lexer event type.
          *    @return          False if parse error.
          *    @public
          */
-        function ignore($token) {
+        function ignore($token, $event) {
         }
     }
     
