@@ -107,17 +107,31 @@
          *    @private
          */
         function _stringDiffersAt($first, $second) {
+            if (!$first || !$second) {
+                return 0;
+            }
+            if (strlen($first) < strlen($second)) {
+                list($first, $second) = array($second, $first);
+            }
             $position = 0;
-            for ($step = (integer)(strlen($first)/2); abs($step) > 0; $step = (integer)($step/2)) {
-                $position += $step;
-                if (strncmp($first, $second, $position) != 0) {
-                    $step = -$step;
+            $step = strlen($first);
+            while ($step > 1) {
+                $step = $this->_halve($step);
+                if (strncmp($first, $second, $position + $step) == 0) {
+                    $position += $step;
                 }
             }
-            if (strncmp($first, $second, $position) == 0) {
-                return $position;
-            }
-            return $position - 1;
+            return $position;
+        }
+        
+        /**
+         *    Halves a number rounding up.
+         *    @param $value    Item to halve.
+         *    @return          Half size integer rounded up.
+         *    @private
+         */
+        function _halve($value) {
+            return (integer)(($value + 1)/2);
         }
     }
     
