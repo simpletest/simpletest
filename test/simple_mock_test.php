@@ -119,6 +119,7 @@
     
     Stub::generate("Dummy");
     Stub::generate("Dummy", "AnotherStubDummy");
+    Stub::generate("Dummy", "StubDummyWithExtraMethods", array("extraMethod"));
     
     class SpecialSimpleStub extends SimpleStub {
         function SpecialSimpleStub($wildcard) {
@@ -137,6 +138,10 @@
             $stub = &new StubDummy($this);
             $this->assertTrue(method_exists($stub, "aMethod"));
             $this->assertNull($stub->aMethod());
+        }
+        function testCloningWithExtraMethod() {
+            $stub = &new StubDummyWithExtraMethods($this);
+            $this->assertTrue(method_exists($stub, "extraMethod"));
         }
         function testCloningWithChosenClassName() {
             $stub = &new AnotherStubDummy($this);
@@ -264,6 +269,7 @@
     
     Mock::generate("Dummy");
     Mock::generate("Dummy", "AnotherMockDummy");
+    Mock::generate("Dummy", "MockDummyWithExtraMethods", array("extraMethod"));
     
     class SpecialSimpleMock extends SimpleMock {
         function SpecialSimpleMock(&$test, $wildcard) {
@@ -282,6 +288,10 @@
             $mock = &new MockDummy($this);
             $this->assertTrue(method_exists($mock, "aMethod"));
             $this->assertNull($mock->aMethod());
+        }
+        function testCloningWithExtraMethod() {
+            $mock = &new MockDummyWithExtraMethods($this);
+            $this->assertTrue(method_exists($mock, "extraMethod"));
         }
         function testCloningWithChosenClassName() {
             $mock = &new AnotherMockDummy($this);

@@ -156,7 +156,7 @@
         var $_call_counts;
         
         /**
-         *    Clears history.
+         *    Sets up the wildcard and everything else empty.
          *    @param $wildcard    Parameter matching wildcard.
          *    @public
          */
@@ -622,9 +622,15 @@
          *    @param $stub_class       New class name. Default is
          *                             the old name with "Stub"
          *                             prepended.
+         *    @param $methods          Additional methods to add beyond
+         *                             those in th cloned class. Use this
+         *                             to emulate the dynamic addition of
+         *                             methods in the cloned class or when
+         *                             the class hasn't been written yet.
          *    @static
+         *    @public
          */
-        function generate($class, $stub_class = "") {
+        function generate($class, $stub_class = false, $methods = false) {
             if (!class_exists($class)) {
                 return false;
             }
@@ -634,23 +640,27 @@
             if (class_exists($stub_class)) {
                 return false;
             }
-            return eval(Stub::_createClassCode($class, $stub_class) . " return true;");
+            return eval(Stub::_createClassCode(
+                    $class,
+                    $stub_class,
+                    $methods ? $methods : array()) . " return true;");
         }
         
         /**
          *    The new server stub class code in string form.
          *    @param $class            Class to clone.
          *    @param $mock_class       New class name.
+         *    @param $methods          Additional methods.
          *    @static
          *    @private
          */
-        function _createClassCode($class, $stub_class) {
+        function _createClassCode($class, $stub_class, $methods) {
             $stub_base = Stub::setStubBaseClass();
             $code = "class $stub_class extends $stub_base {\n";
             $code .= "    function $stub_class(\$wildcard = MOCK_WILDCARD) {\n";
             $code .= "        \$this->$stub_base(\$wildcard);\n";
             $code .= "    }\n";
-            $code .= Stub::_createHandlerCode($class, $stub_base);
+            $code .= Stub::_createHandlerCode($class, $stub_base, $methods);
             $code .= "}\n";
             return $code;
         }
@@ -663,11 +673,14 @@
          *    @param $class     Class to clone.
          *    @param $base      Base class with methods that
          *                      cannot be cloned.
+         *    @param $methods   Additional methods.
+         *    @static
          *    @private
          */
-        function _createHandlerCode($class, $base) {
+        function _createHandlerCode($class, $base, $methods) {
             $code = "";
-            foreach (get_class_methods($class) as $method) {
+            $methods = array_merge($methods, get_class_methods($class));
+            foreach ($methods as $method) {
                 if (in_array($method, get_class_methods($base))) {
                     continue;
                 }
@@ -720,9 +733,15 @@
          *    @param $mock_class       New class name. Default is
          *                             the old name with "Mock"
          *                             prepended.
+         *    @param $methods          Additional methods to add beyond
+         *                             those in th cloned class. Use this
+         *                             to emulate the dynamic addition of
+         *                             methods in the cloned class or when
+         *                             the class hasn't been written yet.
          *    @static
+         *    @public
          */
-        function generate($class, $mock_class = false) {
+        function generate($class, $mock_class = false, $methods = false) {
             if (!class_exists($class)) {
                 return false;
             }
@@ -732,25 +751,44 @@
             if (class_exists($mock_class)) {
                 return false;
             }
-            return eval(Mock::_createClassCode($class, $mock_class) . " return true;");
+            return eval(Mock::_createClassCode(
+                    $class,
+                    $mock_class,
+                    $methods ? $methods : array()) . " return true;");
         }
         
         /**
          *    The new mock class code in string form.
          *    @param $class            Class to clone.
          *    @param $mock_class       New class name.
+         *    @param $methods          Additional methods.
          *    @static
          *    @private
          */
-        function _createClassCode($class, $mock_class) {
+        function _createClassCode($class, $mock_class, $methods) {
             $mock_base = Mock::setMockBaseClass();
             $code = "class $mock_class extends $mock_base {\n";
             $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_WILDCARD) {\n";
             $code .= "        \$this->$mock_base(\$test, \$wildcard);\n";
             $code .= "    }\n";
-            $code .= Stub::_createHandlerCode($class, $mock_base);
+            $code .= Stub::_createHandlerCode($class, $mock_base, $methods);
             $code .= "}\n";
             return $code;
+        }
+        
+        /**
+         *    Generates a version of a class with selected
+         *    methods mocked only. Inherits the old class
+         *    and chains the mock methods of an aggregated
+         *    mock object.
+         *    @param $class            Class to clone.
+         *    @param $mock_class       New class name.
+         *    @param $methods          Methods to be overridden
+         *                             with mock versions.
+         *    @static
+         *    @public
+         */
+        function generatePartial($class, $mock_class, $methods) {
         }
         
         /**
@@ -764,6 +802,7 @@
          *                             class will be unchanged.
          *    @return                  Current or new base class.
          *    @static
+         *    @public
          */
         function setMockBaseClass($mock_base = false) {
             static $_mock_base = "SimpleMock";
