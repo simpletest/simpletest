@@ -389,6 +389,16 @@
             $this->retry();
             $this->assertWantedPattern('/count: 3/i');
         }
+        function testGetRetryResubmitsData() {
+            $this->assertTrue($this->get(
+                    'http://www.lastcraft.com/test/network_confirm.php',
+                    array('a' => 'aaa')));
+            $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/');
+            $this->assertWantedPattern('/a=\[aaa\]/');
+            $this->retry();
+            $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/');
+            $this->assertWantedPattern('/a=\[aaa\]/');
+        }
         function testPostRetryResubmitsData() {
             $this->assertTrue($this->post(
                     'http://www.lastcraft.com/test/network_confirm.php',

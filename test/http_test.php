@@ -58,6 +58,13 @@
             $request = $url->getRequest();
             $this->assertEqual($request->getValue('a'), array('A', 'aaa'));
         }
+        function testClearingParameters() {
+            $url = new SimpleUrl("");
+            $url->addRequestParameter("a", "A");
+            $url->clearRequest();
+            $request = $url->getRequest();
+            $this->assertIdentical($request, new SimpleQueryString());
+        }
         function testEncodedParameters() {
             $url = new SimpleUrl("");
             $url->addRequestParameter('a', '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-=');

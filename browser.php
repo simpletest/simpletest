@@ -372,9 +372,11 @@
          *    @access private
          */
         function _addToHistory(&$response, $parameters) {
+            $url = $response->getUrl();
+            $url->clearRequest();
             $this->_history->recordEntry(
                     $response->getMethod(),
-                    $response->getUrl(),
+                    $url,
                     $parameters);
         }
         

@@ -299,7 +299,7 @@
         
         /**
          *    Accessor for current request parameters
-         *    as a hash.
+         *    as an object.
          *    @return SimpleQueryString   Hash of name value pairs.
          *    @access public
          */
@@ -326,6 +326,14 @@
             foreach ($parameters as $key => $value) {
                 $this->_request->add($key, $value);
             }
+        }
+        
+        /**
+         *    Clears down all parameters.
+         *    @access public
+         */
+        function clearRequest() {
+            $this->_request = &new SimpleQueryString();
         }
         
         /**
