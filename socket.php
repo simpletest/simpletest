@@ -140,6 +140,7 @@
         /**
          *    Closes the socket preventing further reads.
          *    Cannot be reopened once closed.
+         *    @return boolean           True if successful.
          *    @access public
          */
         function close() {
@@ -184,12 +185,104 @@
          *    @param string $host          Host to connect to.
          *    @param integer $port         Port on host.
          *    @param integer $error_number Recipient of error code.
-         *    @param string $error         Recipoent of error message.
+         *    @param string $error         Recipient of error message.
          *    @param integer $timeout      Maximum time to wait for connection.
          *    @access protected
          */
         function _openSocket($host, $port, &$error_number, &$error, $timeout) {
             return parent::_openSocket("tls://$host", $port, $error_number, $error, $timeout);
+        }
+    }
+    
+    /**
+     *    Decorator for socket that captures the output stream.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleSocketScribe {
+        var $_socket;
+        var $_sent;
+        
+        /**
+         *    Wraps the socket.
+         *    @param SimpleSocket $socket    Socket to monitor.
+         *    @access public
+         */
+        function SimpleSocketScribe(&$socket) {
+            $this->_socket = &$socket;
+            $this->_sent = '';
+        }
+        
+        /**
+         *    Test for an outstanding error.
+         *    @return boolean           True if there is an error.
+         *    @access public
+         */
+        function isError() {
+            return $this->_socket->isError();
+        }
+        
+        /**
+         *    Accessor for an outstanding error.
+         *    @return string     Empty string if no error otherwise
+         *                       the error message.
+         *    @access public
+         */
+        function getError() {
+            return $this->_socket->isError();
+        }
+        
+        /**
+         *    Writes some data to the socket.
+         *    @param string $message       String to send to socket.
+         *    @return boolean              True if successful.
+         *    @access public
+         */
+        function write($message) {
+            if ($this->_socket->write($message)) {
+                $this->_sent .= $message;
+                return true;
+            }
+            return false;
+        }
+        
+        /**
+         *    Reads data from the socket.
+         *    @param integer $block_size       Size of chunk to read.
+         *    @return integer                  Incoming bytes. False
+         *                                     on error.
+         *    @access public
+         */
+        function read($block_size = 255) {
+            return $this->_socket->read($block_size);
+        }
+        
+        /**
+         *    Accessor for socket open state.
+         *    @return boolean           True if open.
+         *    @access public
+         */
+        function isOpen() {
+            return $this->_socket->isOpen();
+        }
+        
+        /**
+         *    Closes the socket preventing further reads.
+         *    Cannot be reopened once closed.
+         *    @return boolean           True if successful.
+         *    @access public
+         */
+        function close() {
+            return $this->_socket->close();
+        }
+        
+        /**
+         *    Captured bytes sent so far.
+         *    @return string       Output so far.
+         *    @access public
+         */
+        function getSent() {
+            return $this->_sent;
         }
     }
 ?>
