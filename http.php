@@ -631,17 +631,24 @@
         
         /**
          *    Opens a socket to the route.
-         *    @param integer $timeout                 Connection timeout.
+         *    @param string $method          HTTP request method, usually GET.
+         *    @param integer $timeout        Connection timeout.
          *    @return SimpleSocket/SimpleSecureSocket New socket.
          *    @access public
          */
-        function &createConnection($timeout) {
+        function &createConnection($method, $timeout) {
             $default_port = ('https' == $this->_url->getScheme()) ? 443 : 80;
-            return $this->_createSocket(
+            $socket = &$this->_createSocket(
                     $this->_url->getScheme() ? $this->_url->getScheme() : 'http',
                     $this->_url->getHost(),
                     $this->_url->getPort() ? $this->_url->getPort() : $default_port,
                     $timeout);
+            if (! $socket->isError()) {
+                $socket->write($this->getRequestLine($method) . "\r\n");
+                $socket->write($this->getHostLine() . "\r\n");
+                $socket->write("Connection: close\r\n");
+            }
+            return $socket;
         }
         
         /**
@@ -658,17 +665,6 @@
                 return new SimpleSecureSocket($host, $port, $timeout);
             }
             return new SimpleSocket($host, $port, $timeout);
-        }
-        
-        /**
-         *    Initiates the HTTP exchange.
-         *    @param SimpleSocket $socket    Open socket.
-         *    @param string $method          HTTP request method, usually GET.
-         *    @access public
-         */
-        function sendDestinationHeaders(&$socket, $method) {
-            $socket->write($this->getRequestLine($method) . "\r\n");
-            $socket->write($this->getHostLine() . "\r\n");
         }
     }
     
@@ -725,16 +721,23 @@
         
         /**
          *    Opens a socket to the route.
+         *    @param string $method       HTTP request method, usually GET.
          *    @param integer $timeout     Connection timeout.
          *    @return SimpleSocket        New socket.
          *    @access public
          */
-        function &createConnection($timeout) {
-            return $this->_createSocket(
+        function &createConnection($method, $timeout) {
+            $socket = &$this->_createSocket(
                     $this->_is_secure ? 'https' : 'http',
                     $this->_proxy_host,
                     $this->_proxy_port,
                     $timeout);
+            if (! $socket->isError()) {
+                $socket->write($this->getRequestLine($method) . "\r\n");
+                $socket->write($this->getHostLine() . "\r\n");
+                $socket->write("Connection: close\r\n");
+            }
+            return $socket;
         }
     }
 
@@ -772,7 +775,7 @@
          *    @access public
          */
         function &fetch($timeout) {
-            $socket = &$this->_route->createConnection($timeout);
+            $socket = &$this->_route->createConnection($this->_method, $timeout);
             if ($socket->isError()) {
                 return $this->_createResponse($socket);
             }
@@ -788,14 +791,12 @@
          *    @access protected
          */
         function _dispatchRequest(&$socket, $method) {
-            $this->_route->sendDestinationHeaders($socket, $this->_method);
             foreach ($this->_headers as $header_line) {
                 $socket->write($header_line . "\r\n");
             }
             if (count($this->_cookies) > 0) {
                 $socket->write("Cookie: " . $this->_marshallCookies($this->_cookies) . "\r\n");
             }
-            $socket->write("Connection: close\r\n");
             $socket->write("\r\n");
         }
         
