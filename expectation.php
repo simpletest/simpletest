@@ -9,10 +9,11 @@
 	/**
 	 * @ignore	originally defined in simple_test.php
 	 */
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "simpletest/");
+    if (!defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', 'simpletest/');
     }
     require_once(SIMPLE_TEST . 'dumper.php');
+    require_once(SIMPLE_TEST . 'options.php');
     
     /**
      *    Assertion that can display failure information.
@@ -407,7 +408,7 @@
          */
         function test($compare) {
             if (is_object($compare)) {
-                return is_a($compare, $this->_type);
+                return SimpleTestCompatibility::isA($compare, $this->_type);
             } else {
                 return (strtolower(gettype($compare)) == $this->_canonicalType($this->_type));
             }

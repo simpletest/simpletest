@@ -56,5 +56,5 @@ Formalise extensions (1).
 Build
 -----
 Formalise tarball build (2).
-Make the test suite run under PHP5 without anything too bad happening (4).
-
+Make the test suite run under PHP5 without anything too bad happening (3).
+Add compatibility for insstanceof operator (1).

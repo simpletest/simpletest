@@ -16,13 +16,6 @@
     require_once(SIMPLE_TEST . 'errors.php');
     require_once(SIMPLE_TEST . 'dumper.php');
     
-    if (! function_exists('is_a')) {
-        function is_a( $object, $className ) {
-            return ((strtolower($className) == get_class($object))
-                    or (is_subclass_of($object, $className)));
-        }
-    }
-
     /**
      *    Standard unit test class for day to day testing
      *    of PHP code XP style. Adds some useful standard
