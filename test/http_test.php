@@ -454,7 +454,7 @@
             $route->setReturnReference('createConnection', $socket);
             $route->setReturnValue('getUrl', new SimpleUrl('here.com'));
             
-            $request = &new SimpleHttpRequest($route);
+            $request = &new SimpleHttpRequest($route, 'GET');
             
             $reponse = &$request->fetch(15);
             $this->assertTrue($reponse->isError());
@@ -468,7 +468,7 @@
             $route->setReturnReference('createConnection', $socket);
             $route->expectArguments('createConnection', array('GET', 15));
             
-            $request = &new SimpleHttpRequest($route);
+            $request = &new SimpleHttpRequest($route, 'GET');
             
             $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
             $socket->tally();
@@ -484,7 +484,7 @@
             $route = &new MockSimpleRoute($this);
             $route->setReturnReference('createConnection', $socket);
             
-            $request = &new SimpleHttpRequest($route);
+            $request = &new SimpleHttpRequest($route, 'GET');
             $request->addHeaderLine('My: stuff');
             $request->fetch(15);
             
@@ -500,7 +500,7 @@
             $route = &new MockSimpleRoute($this);
             $route->setReturnReference('createConnection', $socket);
             
-            $request = &new SimpleHttpRequest($route);
+            $request = &new SimpleHttpRequest($route, 'GET');
             $request->setCookie(new SimpleCookie('a', 'A'));
             
             $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
@@ -514,7 +514,7 @@
             $route = &new MockSimpleRoute($this);
             $route->setReturnReference('createConnection', $socket);
             
-            $request = &new SimpleHttpRequest($route);
+            $request = &new SimpleHttpRequest($route, 'GET');
             $request->setCookie(new SimpleCookie('a', 'A'));
             $request->setCookie(new SimpleCookie('b', 'B'));
             
@@ -586,7 +586,7 @@
             $socket->setReturnValue("isError", true);
             $socket->setReturnValue("getError", "Socket error");
 
-            $response = &new SimpleHttpResponse($socket, new SimpleUrl('here'));
+            $response = &new SimpleHttpResponse($socket, 'GET', new SimpleUrl('here'));
             $this->assertTrue($response->isError());
             $this->assertWantedPattern('/Socket error/', $response->getError());
             $this->assertIdentical($response->getContent(), false);
@@ -600,7 +600,7 @@
             $socket->setReturnValueAt(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
             $socket->setReturnValue("read", "");
 
-            $response = &new SimpleHttpResponse($socket, new SimpleUrl('here'));
+            $response = &new SimpleHttpResponse($socket, 'GET', new SimpleUrl('here'));
             $this->assertTrue($response->isError());
             $this->assertEqual($response->getContent(), "");
         }
@@ -612,7 +612,7 @@
             $socket->setReturnValueAt(2, "read", "Content-Type: text/plain\r\n");
             $socket->setReturnValue("read", "");
             
-            $response = &new SimpleHttpResponse($socket, new SimpleUrl('here'));
+            $response = &new SimpleHttpResponse($socket, 'GET', new SimpleUrl('here'));
             $this->assertTrue($response->isError());
             $this->assertEqual($response->getContent(), "");
         }
@@ -626,7 +626,7 @@
             $socket->setReturnValueAt(4, "read", "with two lines in it\n");
             $socket->setReturnValue("read", "");
             
-            $response = &new SimpleHttpResponse($socket, new SimpleUrl('here'));
+            $response = &new SimpleHttpResponse($socket, 'GET', new SimpleUrl('here'));
             $this->assertFalse($response->isError());
             $this->assertEqual(
                     $response->getContent(),
@@ -650,7 +650,7 @@
             $socket->setReturnValueAt(6, "read", "\r\n");
             $socket->setReturnValue("read", "");
             
-            $response = &new SimpleHttpResponse($socket, new SimpleUrl('here'));
+            $response = &new SimpleHttpResponse($socket, 'GET', new SimpleUrl('here'));
             $this->assertFalse($response->isError());
             $headers = $response->getHeaders();
             $cookies = $headers->getNewCookies();
@@ -669,7 +669,7 @@
             $socket->setReturnValueAt(4, "read", "\r\n");
             $socket->setReturnValue("read", "");
             
-            $response = &new SimpleHttpResponse($socket, new SimpleUrl('here'));
+            $response = &new SimpleHttpResponse($socket, 'GET', new SimpleUrl('here'));
             $headers = $response->getHeaders();
             $this->assertTrue($headers->isRedirect());
             $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com/");
@@ -684,7 +684,7 @@
             $socket->setReturnValueAt(4, "read", "\r\n");
             $socket->setReturnValue("read", "");
             
-            $response = &new SimpleHttpResponse($socket, new SimpleUrl('here'));
+            $response = &new SimpleHttpResponse($socket, 'GET', new SimpleUrl('here'));
             $headers = $response->getHeaders();
             $this->assertTrue($headers->isRedirect());
             $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com:80/");

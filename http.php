@@ -759,20 +759,22 @@
     class SimpleHttpRequest {
         var $_route;
         var $_method;
+        var $_content;
         var $_headers;
         var $_cookies;
         
         /**
          *    Saves the URL ready for fetching.
          *    @param SimpleRoute $route   Request route.
-         *    @param SimpleUrl $url       Requested resource.
          *    @param string $method       HTTP request method,
          *                                usually GET.
+         *    @param string $content      Content to send with request.
          *    @access public
          */
-        function SimpleHttpRequest(&$route, $method = 'GET') {
+        function SimpleHttpRequest(&$route, $method, $content = '') {
             $this->_route = &$route;
             $this->_method = $method;
+            $this->_content = $content;
             $this->_headers = array();
             $this->_cookies = array();
         }
@@ -787,10 +789,10 @@
         function &fetch($timeout) {
             $socket = &$this->_route->createConnection($this->_method, $timeout);
             if ($socket->isError()) {
-                return $this->_createResponse($socket, $this->_route->getUrl());
+                return $this->_createResponse($socket);
             }
-            $this->_dispatchRequest($socket, $this->_method);
-            return $this->_createResponse($socket, $this->_route->getUrl());
+            $this->_dispatchRequest($socket, $this->_method, $this->_content);
+            return $this->_createResponse($socket);
         }
         
         /**
@@ -798,9 +800,14 @@
          *    @param SimpleSocket $socket   Open socket.
          *    @param string $method         HTTP request method,
          *                                  usually GET.
+         *    @param string $content      Content to send with request.
          *    @access protected
          */
-        function _dispatchRequest(&$socket, $method) {
+        function _dispatchRequest(&$socket, $method, $content) {
+            if ($content) {
+                $socket->write("Content-Length: " . strlen($content) . "\r\n");
+                $socket->write("Content-Type: application/x-www-form-urlencoded\r\n");
+            }
             foreach ($this->_headers as $header_line) {
                 $socket->write($header_line . "\r\n");
             }
@@ -808,6 +815,9 @@
                 $socket->write("Cookie: " . $this->_marshallCookies($this->_cookies) . "\r\n");
             }
             $socket->write("\r\n");
+            if ($content) {
+                $socket->write($content);
+            }
         }
         
         /**
@@ -846,12 +856,14 @@
         /**
          *    Wraps the socket in a response parser.
          *    @param SimpleSocket $socket   Responding socket.
-         *    @param SimpleUrl $url         Resource name.
          *    @return SimpleHttpResponse    Parsed response object.
          *    @access protected
          */
-        function &_createResponse(&$socket, $url) {
-            return new SimpleHttpResponse($socket, $url);
+        function &_createResponse(&$socket) {
+            return new SimpleHttpResponse(
+                    $socket,
+                    $this->_method,
+                    $this->_route->getUrl());
         }
     }
     
@@ -861,30 +873,30 @@
 	 *    @subpackage WebTester
      */
     class SimpleHttpPostRequest extends SimpleHttpRequest {
-        var $_pushed_content;
         
         /**
-         *    Saves the URL ready for fetching.
+         *    Cretaes an HTML form request.
          *    @param SimpleRoute $route   Request target.
          *    @param array $parameters    Content to send.
          *    @access public
          */
         function SimpleHttpPostRequest($route, $parameters) {
-            $this->SimpleHttpRequest($route, 'POST');
-            $this->_pushed_content = SimpleUrl::encodeRequest($parameters);
+            $this->SimpleHttpRequest($route, 'POST', $parameters);
         }
         
         /**
-         *    Sends the headers and request data.
-         *    @param SimpleSocket $socket  Open socket.
-         *    @param string $method        HTTP request method, usually GET.
+         *    Sends the headers.
+         *    @param SimpleSocket $socket   Open socket.
+         *    @param string $method         HTTP request method,
+         *                                  usually GET.
+         *    @param string $content        Content to send with request.
          *    @access protected
          */
-        function _dispatchRequest(&$socket, $method) {
-            $socket->write("Content-Length: " . strlen($this->_pushed_content) . "\r\n");
-            $socket->write("Content-Type: application/x-www-form-urlencoded\r\n");
-            parent::_dispatchRequest($socket, $method);
-            $socket->write($this->_pushed_content);
+        function _dispatchRequest(&$socket, $method, $content) {
+            parent::_dispatchRequest(
+                    $socket,
+                    $method,
+                    SimpleUrl::encodeRequest($content));
         }
     }
     
@@ -1072,6 +1084,7 @@
 	 *    @subpackage WebTester
      */
     class SimpleHttpResponse extends StickyError {
+        var $_method;
         var $_url;
         var $_content;
         var $_headers;
@@ -1081,11 +1094,14 @@
          *    content and headers.
          *    @param SimpleSocket $socket   Network connection to fetch
          *                                  response text from.
+         *    @param string $method         HTTP request method.
          *    @param SimpleUrl $url         Resource name.
+         *    @param mixed $content         Record of content sent.
          *    @access public
          */
-        function SimpleHttpResponse(&$socket, $url) {
+        function SimpleHttpResponse(&$socket, $method, $url) {
             $this->StickyError();
+            $this->_method = $method;
             $this->_url = $url;
             $this->_content = false;
             $raw = $this->_readAll($socket);
@@ -1109,6 +1125,15 @@
                 list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);
                 $this->_headers = &new SimpleHttpHeaders($headers);
             }
+        }
+        
+        /**
+         *    Original request method.
+         *    @return string        GET, POST or HEAD.
+         *    @access protected
+         */
+        function getMethod() {
+            return $this->_method;
         }
         
         /**

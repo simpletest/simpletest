@@ -261,7 +261,7 @@
             }
             if ($add_to_history) {
                 $this->_history->recordEntry(
-                        $this->_user_agent->getCurrentMethod(),
+                        $response->getMethod(),
                         $response->getUrl(),
                         $this->_user_agent->getCurrentPostData());
             }
