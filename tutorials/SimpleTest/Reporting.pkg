@@ -1,6 +1,6 @@
 <refentry id="{@id}">
   <refnamediv>
-    <refname>Reporting results</refname>
+    <refname>Reporting Results</refname>
     <refpurpose>How do your report sucess and failure with SimpleTest</refpurpose>
   </refnamediv>
   {@toc}
@@ -10,19 +10,19 @@
   <para>
   The default test display is minimal in the extreme. It reports success and failure with the conventional red and green bars and shows a breadcrumb trail of test groups for every failed assertion. Here's a fail...
   </para>
-  <screen linenumbering="unnumbered" class="webpage">
+  <screen class="webpage" linenumbering="unnumbered">
   <simpara>File test</simpara>
   <para class="fail">Fail: createnewfile->True assertion failed.</para>
-  <para class="failbar">1/1 test cases complete. 0 passes, 1 fails and 0 exceptions.</para>
+  <informalexample class="failbar">1/1 test cases complete. 0 passes, 1 fails and 0 exceptions.</informalexample>
   </screen>
   <para>
   And here all tests passed...
   </para>
-  <screen linenumbering="unnumbered" class="webpage">
+  <screen class="webpage" linenumbering="unnumbered">
   <simpara>File test</simpara>
-  <para class="passbar">
+  <informalexample class="passbar">
   1/1 test cases complete. 1 passes, 0 fails and 0 exceptions.
-  </para>
+  </informalexample>
   </screen>
   <para>
   The good news is that there are several points in the display hiearchy for subclassing.
@@ -245,7 +245,7 @@ Then invoke the test suite from the command line...
 
 </para>
 
-<screen linenumbering="unnumbered">
+<screen class="shell" linenumbering="unnumbered">
 php file_test.php
 
 </screen>
@@ -255,7 +255,7 @@ You will need the command line version of PHP installed of course. A passing tes
 
 </para>
 
-<screen linenumbering="unnumbered">
+<screen class="shell" linenumbering="unnumbered">
 File test
 OK
 Test cases run: 1/1, Failures: 0, Exceptions: 0
@@ -267,7 +267,7 @@ A failure triggers a display like this...
 
 </para>
 
-<screen linenumbering="unnumbered">
+<screen class="shell" linenumbering="unnumbered">
 File test
 1) True assertion failed.
     in createnewfile

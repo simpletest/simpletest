@@ -1,0 +1,287 @@
+<refentry id="{@id}">
+  <refnamediv>
+    <refname>Web Tester</refname>
+    <refpurpose>Successfully fetching a web page, 
+        Testing the page content,
+        Navigating a web site while testing
+    </refpurpose>
+  </refnamediv>
+  {@toc}
+
+  <refsect1 id="{@id page}">
+    <title>Fetching a page</title>
+  
+<para>
+ Testing classes is all very well, but PHP is predominately a language for creating functionality within web pages. This leads to a tricky issue. If we test at too low a level, testing for matching tags in the page with pattern matching for example, our tests will be brittle. The slightest change in layout could break a large number of tests. If we test at too high a level, say using mock versions of a template engine, then we lose the ability to automate some classes of test. For example, the interaction of forms and navigation will have to be tested manually. These types of test are extremely repetitive and error prone.
+</para>
+
+<para>
+SimpleTest includes a special form of test case for the testing of web page actions. The <command>WebTestCase</command> includes facilities for navigation, cookie checks and form handling. Usage of these test cases is similar to the <command>UnitTestCase</command>...
+</para>
+
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TestOfLastcraft extends WebTestCase {
+    function TestOfLastcraft() {
+        $this->WebTestCase();
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+Here we are about to test the {@link http://www.lastcraft.com Last Craft} site itself. If this test case is in a file called lastcraft_test.php then it can be loaded in a runner script just like unit tests...
+</para>
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+<?php
+    if (!defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', 'simpletest/');
+    }
+    require_once(SIMPLE_TEST . 'web_tester.php');
+    require_once(SIMPLE_TEST . 'reporter.php');
+    
+    $test = &new GroupTest('Web site tests');
+    $test->addTestFile('lastcraft_test.php');
+    exit ($test->run(new CommandLineReporter()) ? 0 : 1);
+?>
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+Nothing is being tested yet. We can fetch the home page by using the <command>get()</command> method...
+</para>
+
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TestOfLastcraft extends WebTestCase {
+    function TestOfLastcraft() {
+        $this->WebTestCase();
+    }
+    function testHomepage() {
+        $this->assertTrue($this->get('http://www.lastcraft.com/'));
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+The <command>get()</command> method will return true only if page content was successfully loaded. It is a simple, but crude way to check that a web page was actually delivered.
+</para>
+
+<para>
+Assuming that the web server for the Last Craft site is up (sadly not always the case), we should see...
+</para>
+
+<screen class="shell" linenumbering="unnumbered">
+Web site tests
+OK
+Test cases run: 1/1, Failures: 0, Exceptions: 0
+</screen>
+
+<para>
+All we have really checked is that some kind of page was returned. We don't yet know if it was the right one.
+</para>
+
+  
+  
+  
+  </refsect1>
+
+
+  <refsect1 id="{@id content}">
+    <title>Testing low level page content</title>
+  
+<para>
+ To confirm that the page we think we are on is actually the page we are on, we need to verify the page content.
+</para>
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TestOfLastcraft extends WebTestCase {
+    ...
+    function testHomepage() {
+        $this->get('http://www.lastcraft.com/');
+        $this->assertWantedPattern('/why the last craft/i');
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+The page from the last fetch is held in a buffer in the test case, so there is no need to refer to it directly. The pattern match is always made against the buffer. We could instead test against the title tag with...
+</para>
+
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+$this->assertTitle('The Last Craft?');
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+As well as the simple HTML content checks we can check that the MIME type is in a list of allowed types with...
+</para>
+
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+$this->assertMime(array('text/plain', 'text/html'));
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+More interesting is checking the HTTP response code. Like the MIME type, we can assert that the response code is in a list of allowed values...
+</para>
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TestOfLastcraft extends WebTestCase {
+    ...
+    function testHomepage() {
+        $this->get('http://simpletest.sourceforge.net/');
+        $this->assertResponse(array(200));
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+Here we are checking that the fetch is successful by allowing only a 200 HTTP response. This test will pass, but it is not actually correct to do so. There is no page for http://simpletest.sourceforge.net/, instead the server issues a redirect to http://www.lastcraft.com/simple_test.php. The <command>WebTestCase</command> will automatically follow up to three such redirects. The tests are more robust this way and we are usually interested in the interaction with the pages rather than their delivery. If the redirects are of interest then this ability must be disabled...
+</para>
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TestOfLastcraft extends WebTestCase {
+    ...
+    function testHomepage() {
+        $this->setMaximumRedirects(0);
+        $this->get('http://simpletest.sourceforge.net/');
+        $this->assertResponse(array(200));
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+The assertion now fails as expected...
+</para>
+
+<screen class="shell" linenumbering="unnumbered">
+Web site tests
+1) Expecting response in [200] got [302]
+    in testhomepage
+    in testoflastcraft
+    in lastcraft_test.php
+FAILURES!!!
+Test cases run: 1/1, Failures: 1, Exceptions: 0
+</screen>
+
+<para>
+We can modify the test to correctly assert redirects with...
+</para>
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TestOfLastcraft extends WebTestCase {
+    ...
+    function testHomepage() {
+        $this->setMaximumRedirects(0);
+        $this->get('http://simpletest.sourceforge.net/');
+        $this->assertResponse(array(301, 302, 303, 307));
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+This now passes.
+</para>
+
+  
+  
+  
+  </refsect1>
+
+  <refsect1 id="{@id nav}">
+    <title>Navigating a web site</title>
+  
+<para>
+ Users don't often navigate sites by typing in URLs, but by clicking links and buttons. Here we confirm that the contact details can be reached from the home page...
+</para>
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+class TestOfLastcraft extends WebTestCase {
+    ...
+    function testContact() {
+        $this->get('http://www.lastcraft.com/');
+        $this->clickLink('About');
+        $this-assertTitle('About Last Craft');
+    }
+}
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+The parameter is the text of the link.
+</para>
+
+<para>
+If the target is a button rather than an anchor tag, then <command>clickSubmit()</command> should be used with the button title...
+</para>
+
+
+    <para>
+      <programlisting role="php">
+      <![CDATA[
+$this->clickSubmit('Go!');
+      ]]>
+      </programlisting>
+    </para>
+
+
+<para>
+Testing navigation on fixed pages only tells you when you have broken an entire script. For highly dynamic pages, such as for bulletin boards, this can be crucial for verifying the correctness of the application. For most applications though, the really tricky logic is usually in the handling of forms and sessions. Fortunately SimpleTest includes {@tutorial SimpleTest/FormTesting.pkg tools for testing web forms} as well.
+</para>
+  
+  
+  
+  </refsect1>
+
+  
+  
+</refentry>
