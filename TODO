@@ -12,11 +12,13 @@ Pattern expectations need type check on message (1/1) - done.
 Create an isA() expectation (1/1) - done.
 Add pattern match for error queue (1/1) - done.
 Sort out IsA to handle unusual type names like resource and float (1).
+Remove runner as separate layer (1/1) - done.
 
 Interface
 ---------
 XML reporter (3/2) - done.
 Make Runner invoke different start and end methods on reporters (2/1) - done.
+Add runner decorator (2/2) - done.
 
 Mock objects
 ------------
@@ -41,7 +43,7 @@ Documentation
 -------------
 Add simple web testing page to docs (2/3) - done.
 Add expectations to docs (3/3) - done.
-UPdate reporter docs with new method names (1).
+Update reporter docs with new method names (1).
 
 Build
 -----

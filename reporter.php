@@ -10,7 +10,7 @@
      *    Sample minimal test displayer. Generates only
      *    failure messages and a pass count.
      */
-    class HtmlReporter extends SimplePageReporter {
+    class HtmlReporter extends SimpleReporter {
         
         /**
          *    Does nothing yet. The first output will
@@ -19,7 +19,7 @@
          *    @access public
          */
         function HtmlReporter() {
-            $this->SimplePageReporter();
+            $this->SimpleReporter();
         }
         
         /**
@@ -130,7 +130,7 @@
      *    but I wanted to output the errors as they arrived
      *    which meant dropping the dots.
      */
-    class TextReporter extends SimplePageReporter {
+    class TextReporter extends SimpleReporter {
         
         /**
          *    Does nothing yet. The first output will
@@ -138,7 +138,7 @@
          *    @access public
          */
         function TextReporter() {
-            $this->SimplePageReporter();
+            $this->SimpleReporter();
         }
         
         /**

@@ -7,34 +7,45 @@
      *    and visiting the incoming event. Abstract.
      *    @abstract
      */
-    class TestReporter {
+    class SimpleRunner {
+        var $_passes;
+        var $_fails;
+        var $_exceptions;
         
         /**
-         *    Does nothing.
+         *    Starts the test run with no results.
          *    @access public
          */
-        function TestReporter() {
+        function SimpleRunner() {
+            $this->_passes = 0;
+            $this->_fails = 0;
+            $this->_exceptions = 0;
         }
         
         /**
-         *    Hook for invoking the actual test method.
-         *    @param SimpleTest $test_case    The test case method to call.
-         *    @param string $method           Method name to invoke.
+         *    Invokes a single test method on the test case.
+         *    This call back allows the reporter to decide if
+         *    it actually wants to run the test.
+         *    @param SimpleTest $test_case    Test case to run test on.
+         *    @param string $method           Name of test method.
          *    @access public
          */
         function invoke(&$test_case, $method) {
-            $test_case->invoke($this, $method);
+            $test_case->invoke($method);
         }
-        
+
         /**
          *    Accessor for current status. Will be false
          *    if there have been any failures or exceptions.
          *    Used for command line tools.
          *    @return boolean        True if no failures.
          *    @access public
-         *    @abstract
          */
         function getStatus() {
+            if ($this->_exceptions + $this->_fails > 0) {
+                return false;
+            }
+            return true;
         }
         
         /**
@@ -87,19 +98,21 @@
         }
         
         /**
-         *    Paints a pass. This will often output nothing.
-         *    @param string $message        Passing message.
+         *    Increments the pass count.
+         *    @param string $message        Message is ignored.
          *    @access public
          */
         function paintPass($message) {
+            $this->_passes++;
         }
         
         /**
-         *    Paints a failure.
-         *    @param string $message        Failure message from test.
+         *    Increments the fail count.
+         *    @param string $message        Message is ignored.
          *    @access public
          */
         function paintFail($message) {
+            $this->_fails++;
         }
         
         /**
@@ -119,7 +132,35 @@
          *    @access public
          */
         function paintException($exception) {
-            $this->_status = false;
+            $this->_exceptions++;
+        }
+        
+        /**
+         *    Accessor for the number of passes so far.
+         *    @return integer       Number of passes.
+         *    @access public
+         */
+        function getPassCount() {
+            return $this->_passes;
+        }
+        
+        /**
+         *    Accessor for the number of fails so far.
+         *    @return integer       Number of fails.
+         *    @access public
+         */
+        function getFailCount() {
+            return $this->_fails;
+        }
+        
+        /**
+         *    Accessor for the number of untrapped errors
+         *    so far.
+         *    @return integer       Number of exceptions.
+         *    @access public
+         */
+        function getExceptionCount() {
+            return $this->_exceptions;
         }
         
         /**
@@ -140,8 +181,99 @@
         }
         
         /**
-         *    By default just ignores user generated
-         *    events.
+         *    By default just ignores user generated events.
+         *    @param string $type        Event type as text.
+         *    @param mixed $payload      Message or object.
+         *    @access public
+         */
+        function paintSignal($type, &$payload) {
+        }
+    }
+    
+    /**
+     *    Modifies the test running behaviour of the standard
+     *    runner by wrapping it. This is a do nothing version.
+     *    Subclass this for soak testers and statistical
+     *    testers.
+     */
+    class SimpleRunnerDecorator {
+        var $_runner;
+        
+        /**
+         *    Takes in the reporter to wrap.
+         *    @param SimpleRunner $runner
+         */
+        function SimpleRunnerDecorator(&$runner) {
+            $this->_runner = &$runner;
+        }
+        
+        /**
+         *    Runs the method once on the test case.
+         *    @param SimpleTest $test_case    Test case to run test on.
+         *    @param string $method           Name of test method.
+         *    @access public
+         */
+        function invoke(&$test_case, $method) {
+            $test_case->invoke($method);
+        }
+        
+        /**
+         *    Chains to the wrapped runner.
+         *    @param string $message        Message is ignored.
+         *    @access public
+         */
+        function paintPass($message) {
+            $this->_runner->paintPass($message);
+        }
+        
+        /**
+         *    Chains to the wrapped runner.
+         *    @param string $message        Message is ignored.
+         *    @access public
+         */
+        function paintFail($message) {
+            $this->_runner->paintFail($message);
+        }
+        
+        /**
+         *    Chains to the wrapped runner.
+         *    @param string $message    Text of error formatted by
+         *                              the test case.
+         *    @access public
+         */
+        function paintError($message) {
+            $this->_runner->paintError($message);
+        }
+        
+        /**
+         *    Chains to the wrapped runner.
+         *    @param Exception $exception     Object thrown.
+         *    @access public
+         */
+        function paintException($exception) {
+            $this->_runner->paintException($exception);
+        }
+        
+        /**
+         *    Chains to the wrapped runner.
+         *    @param string $message        Text to display.
+         *    @access public
+         */
+        function paintMessage($message) {
+            $this->_runner->paintMessage($message);
+        }
+        
+        /**
+         *    Chains to the wrapped runner.
+         *    @param string $message        Text to display.
+         *    @access public
+         */
+        function paintFormattedMessage($message) {
+            $this->_runner->paintFormattedMessage($message);
+        }
+        
+        /**
+         *    Chains to the wrapped runner.
          *    @param string $type        Event type as text.
          *    @param mixed $payload      Message or object.
          *    @return boolean            Should return false if this
@@ -150,7 +282,7 @@
          *    @access public
          */
         function paintSignal($type, &$payload) {
-            return true;
+            $this->_runner->paintSignal($type, $payload);
         }
     }
     
@@ -160,11 +292,8 @@
      *    test nesting. This is the main base class on which
      *    to build the finished test (page based) displays.
      */
-    class SimplePageReporter extends TestReporter {
+    class SimpleReporter extends SimpleRunner {
         var $_test_stack;
-        var $_passes;
-        var $_fails;
-        var $_exceptions;
         var $_size;
         var $_progress;
         
@@ -172,12 +301,9 @@
          *    Starts the display with no results in.
          *    @access public
          */
-        function SimplePageReporter() {
-            $this->TestReporter();
+        function SimpleReporter() {
+            $this->SimpleRunner();
             $this->_test_stack = array();
-            $this->_passes = 0;
-            $this->_fails = 0;
-            $this->_exceptions = 0;
             $this->_size = null;
             $this->_progress = 0;
         }
@@ -267,34 +393,6 @@
         }
         
         /**
-         *    Increments the pass count.
-         *    @param string $message        Message is ignored.
-         *    @access public
-         */
-        function paintPass($message) {
-            $this->_passes++;
-        }
-        
-        /**
-         *    Increments the fail count.
-         *    @param string $message        Message is ignored.
-         *    @access public
-         */
-        function paintFail($message) {
-            $this->_fails++;
-        }
-        
-        /**
-         *    Paints a PHP error or exception.
-         *    @param string $message        Message is ignored.
-         *    @access public
-         *    @abstract
-         */
-        function paintException($message) {
-            $this->_exceptions++;
-        }
-        
-        /**
          *    Paints the test document header.
          *    @param string $test_name     First test top level
          *                                 to start.
@@ -325,48 +423,6 @@
         }
         
         /**
-         *    Accessor for the number of passes so far.
-         *    @return integer       Number of passes.
-         *    @access public
-         */
-        function getPassCount() {
-            return $this->_passes;
-        }
-        
-        /**
-         *    Accessor for the number of fails so far.
-         *    @return integer       Number of fails.
-         *    @access public
-         */
-        function getFailCount() {
-            return $this->_fails;
-        }
-        
-        /**
-         *    Accessor for the number of untrapped errors
-         *    so far.
-         *    @return integer       Number of exceptions.
-         *    @access public
-         */
-        function getExceptionCount() {
-            return $this->_exceptions;
-        }
-        
-        /**
-         *    Accessor for current status. Will be false
-         *    if there have been any failures or exceptions.
-         *    Used for command line tools.
-         *    @return boolean        True if no failures.
-         *    @access public
-         */
-        function getStatus() {
-            if ($this->_exceptions + $this->_fails > 0) {
-                return false;
-            }
-            return true;
-        }
-        
-        /**
          *    Accessor for total test size in number
          *    of test cases. Null until the first
          *    test is started.
@@ -391,9 +447,9 @@
     /**
      *    @deprecated
      */
-    class TestDisplay extends SimplePageReporter {
+    class TestDisplay extends SimpleReporter {
         function TestDisplay() {
-            $this->SimplePageReporter();
+            $this->SimpleReporter();
         }
     }
 ?>

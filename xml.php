@@ -10,7 +10,7 @@
      *    Creates the XML needed for remote communication
      *    by SimpleTest.
      */
-    class XmlReporter extends SimplePageReporter {
+    class XmlReporter extends SimpleReporter {
         var $_indent;
         
         /**
@@ -18,7 +18,7 @@
          *    @access public
          */
         function XmlReporter($indent = '  ') {
-            $this->SimplePageReporter();
+            $this->SimpleReporter();
             $this->_indent = $indent;
         }
         

@@ -104,15 +104,14 @@
         /**
          *    Sets up a browser for the start of each
          *    test method.
-         *    @param $runner    Current test runner.
          *    @param $method    Name of test method.
          *    @access protected
          */
-        function invoke(&$runner, $method) {
+        function invoke($method) {
             $this->_current_content = false;
             $this->_clearHtmlCache();
             $this->_current_browser = &$this->createBrowser();
-            parent::invoke($runner, $method);
+            parent::invoke($method);
         }
         
         /**

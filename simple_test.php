@@ -62,7 +62,7 @@
      *    runs them. Working test cases extend this class.
      */
     class SimpleTestCase extends RunnableTest {
-        var $_current_runner;
+        var $_reporter;
         
         /**
          *    Sets up the test with no display.
@@ -75,7 +75,19 @@
                 $label = get_class($this);
             }
             $this->RunnableTest($label);
-            $this->_current_runner = false;
+            $this->_reporter = false;
+        }
+        
+        /**
+         *    Can modify the incoming reporter so as to run
+         *    the tests differently. This version simply
+         *    passes it straight through.
+         *    @param SimpleReporter $reporter    Incoming observer.
+         *    @return 
+         *    @access private
+         */
+        function &_createRunner(&$reporter) {
+            return $reporter;
         }
         
         /**
@@ -95,7 +107,8 @@
                     continue;
                 }
                 $reporter->paintMethodStart($method);
-                $reporter->invoke($this, $method);
+                $this->_reporter = &$this->_createRunner($reporter);
+                $this->_reporter->invoke($this, $method);
                 $reporter->paintMethodEnd($method);
             }
             $reporter->paintCaseEnd($this->getLabel());
@@ -106,13 +119,11 @@
          *    Invokes a test method and dispatches any
          *    untrapped errors. Called back from
          *    the visiting runner.
-         *    @param $reporter    Current test reporter.
          *    @param $method    Test method to call.
          *    @access public
          */
-        function invoke(&$reporter, $method) {
+        function invoke($method) {
             set_error_handler('simpleTestErrorHandler');
-            $this->_current_runner = &$reporter;
             $this->setUp();
             $this->$method();
             $this->tearDown();
@@ -146,7 +157,7 @@
          *    @access public
          */
         function pass($message = "Pass") {
-            $this->_current_runner->paintPass($message);
+            $this->_reporter->paintPass($message);
         }
         
         /**
@@ -155,7 +166,7 @@
          *    @access public
          */
         function fail($message = "Fail") {
-            $this->_current_runner->paintFail($message);
+            $this->_reporter->paintFail($message);
         }
         
         /**
@@ -170,7 +181,7 @@
          */
         function error($severity, $message, $file, $line, $globals) {
             $severity = SimpleErrorQueue::getSeverityAsString($severity);
-            $this->_current_runner->paintError(
+            $this->_reporter->paintError(
                     "Unexpected PHP error [$message] severity [$severity] in [$file] line [$line]");
         }
         
@@ -184,7 +195,7 @@
          *    @access public
          */
         function signal($type, &$payload) {
-            $this->_current_runner->paintSignal($type, $payload);
+            $this->_reporter->paintSignal($type, $payload);
         }
         
         /**
@@ -255,7 +266,7 @@
             if ($message) {
                 $formatted = $message . "\n" . $formatted;
             }
-            $this->_current_runner->paintFormattedMessage($formatted);
+            $this->_reporter->paintFormattedMessage($formatted);
         }
         
         /**
@@ -265,7 +276,7 @@
          *    @access public
          */
         function sendMessage($message) {
-            $this->_current_runner->PaintMessage($message);
+            $this->_reporter->PaintMessage($message);
         }
     }
     
