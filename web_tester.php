@@ -25,7 +25,6 @@
      */
     class WebTestCase extends SimpleTestCase {
         var $_current_browser;
-        var $_frames_supported;
         var $_page;
         
         /**
@@ -41,7 +40,7 @@
         }
         
         /**
-         *    Dumps the curent HTML source for debugging.
+         *    Dumps the current HTML source for debugging.
          *    @access public
          */
         function showSource() {
@@ -106,7 +105,6 @@
         function invoke($method) {
             $this->_page = false;
             $this->_current_browser = &$this->createBrowser();
-            $this->_frames_supported = true;
             parent::invoke($method);
         }
         
@@ -116,7 +114,6 @@
          *    @access public
          */
         function ignoreFrames() {
-            $this->_frames_supported = false;
         }
         
         /**
@@ -158,8 +155,11 @@
          */
         function get($url, $parameters = false) {
             $content = $this->_current_browser->get($url, $parameters);
+            if ($content === false) {
+                return false;
+            }
             $this->_page = &new SimplePage($content);
-            return ($content !== false);
+            return true;
         }
         
         /**
@@ -174,8 +174,11 @@
          */
         function post($url, $parameters = false) {
             $content = $this->_current_browser->post($url, $parameters);
+            if ($content === false) {
+                return false;
+            }
             $this->_page = &new SimplePage($content);
-            return ($content !== false);
+            return true;
         }
         
         /**
@@ -358,7 +361,7 @@
         function assertWantedPattern($pattern, $message = "%s") {
             $this->assertExpectation(
                     new WantedPatternExpectation($pattern),
-                    $this->_page->getRaw(),
+                    $this->_current_browser->getContent(),
                     $message);
         }
         
@@ -373,7 +376,7 @@
         function assertNoUnwantedPattern($pattern, $message = "%s") {
             $this->assertExpectation(
                     new UnwantedPatternExpectation($pattern),
-                    $this->_page->getRaw(),
+                    $this->_current_browser->getContent(),
                     $message);
         }
         
@@ -410,13 +413,6 @@
             $this->assertTrue(
                     $this->_current_browser->getBaseCookieValue($name) === false,
                     sprintf($message, "Not expecting cookie [$name]"));
-        }
-        
-        /**
-         *    @deprecated
-         */
-        function expectCookie($name, $expect = false, $message = "%s") {
-            $this->_current_browser->expectCookie($name, $expect, $message);
         }
     }
 ?>

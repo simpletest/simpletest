@@ -27,6 +27,7 @@
         function setUp() {
             $browser = &$this->getBrowser();
             $browser->setReturnValue("get", "Hello world");
+            $browser->setReturnValue("getContent", "Hello world");
             $browser->expectOnce("get", array("http://my-site.com/", false));
         }
         function tearDown() {
@@ -66,6 +67,7 @@
                     "get",
                     "<a href=\"http://my-site.com/there\" id=\"2\">Me</a>, <a href=\"a\">Me</a>");
             $browser->setReturnValueAt(1, "get", "Found it");
+            $browser->setReturnValue("getContent", "Found it");
             $browser->expectCallCount("get", 2);
         }
         function tearDown() {

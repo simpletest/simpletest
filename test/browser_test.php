@@ -324,10 +324,11 @@
             
             $this->assertIdentical(
                     $browser->get("http://this.com/page.html", array("a" => "A", "b" => "B")),
-                    "stuff");
+                    'stuff');
             $browser->_setResponse($response);
             $this->assertEqual($browser->getMimeType(), 'text/html');
-            $this->assertequal($browser->getResponseCode(), 200);
+            $this->assertEqual($browser->getResponseCode(), 200);
+            $this->assertEqual($browser->getContent(), 'stuff');
             $browser->tally();
         }
         function testHead() {
@@ -368,6 +369,7 @@
             $this->assertIdentical(
                     $browser->post("http://this.com/page.html", array("a" => "A", "b" => "B")),
                     "stuff");
+            $this->assertEqual($browser->getContent(), 'stuff');
             $browser->tally();
         }
     }

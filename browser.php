@@ -9,11 +9,11 @@
     /**
      * @ignore    originally defined in simple_test.php
      */
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "simpletest/");
+    if (!defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', 'simpletest/');
     }
     require_once(SIMPLE_TEST . 'http.php');
-    require_once(SIMPLE_TEST . 'unit_tester.php');
+    require_once(SIMPLE_TEST . 'page.php');
     
     define('DEFAULT_MAX_REDIRECTS', 3);
     
@@ -133,7 +133,7 @@
             if ($host && $cookie->getHost() && !$cookie->isValidHost($host)) {
                 return false;
             }
-            if (!$cookie->isValidPath($path)) {
+            if (! $cookie->isValidPath($path)) {
                 return false;
             }
             return true;
@@ -148,6 +148,7 @@
     class SimpleBrowser {
         var $_cookie_jar;
         var $_response;
+        var $_page;
         var $_current_url;
         var $_max_redirects;
         
@@ -159,6 +160,7 @@
         function SimpleBrowser() {
             $this->_cookie_jar = new CookieJar();
             $this->_response = false;
+            $this->_page = false;
             $this->_current_url = false;
             $this->setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
         }
@@ -220,7 +222,7 @@
          *    @param string $expiry          Expiry date.
          *    @access public
          */
-        function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
+        function setCookie($name, $value, $host = false, $path = '/', $expiry = false) {
             $cookie = new SimpleCookie($name, $value, $path, $expiry);
             if ($host) {
                 $cookie->setHost($host);
@@ -239,7 +241,7 @@
          *    @access public
          */
         function getCookieValue($host, $path, $name) {
-            $longest_path = "";
+            $longest_path = '';
             foreach ($this->_cookie_jar->getValidCookies($host, $path) as $cookie) {
                 if ($name == $cookie->getName()) {
                     if (strlen($cookie->getPath()) > strlen($longest_path)) {
@@ -353,9 +355,11 @@
             $url = $this->createAbsoluteUrl($this->getBaseUrl(), $raw_url, $parameters);
             $response = &$this->fetchResponse('GET', $url, $parameters);
             if ($response->isError()) {
+                $this->_page = &new SimplePage(false);
                 return false;
             }
             $this->_current_url = $url;
+            $this->_page = &new SimplePage($response->getContent());
             return $response->getContent();
         }
         
@@ -370,7 +374,7 @@
         function head($raw_url, $parameters = false) {
             $url = $this->createAbsoluteUrl($this->getBaseUrl(), $raw_url, $parameters);
             $response = &$this->fetchResponse('HEAD', $url, $parameters);
-            return !$response->isError();
+            return ! $response->isError();
         }
         
         /**
@@ -384,9 +388,11 @@
             $url = $this->createAbsoluteUrl($this->getBaseUrl(), $raw_url, array());
             $response = &$this->fetchResponse('POST', $url, $parameters);
             if ($response->isError()) {
+                $this->_page = &new SimplePage(false);
                 return false;
             }
             $this->_current_url = $url;
+            $this->_page = &new SimplePage($response->getContent());
             return $response->getContent();
         }
         
@@ -492,6 +498,15 @@
             }
             $url->makeAbsolute($base_url);
             return $url;
+        }
+        
+        /**
+         *    Accessor for raw page information.
+         *    @return string      Original text content of web page.
+         *    @access public
+         */
+        function getContent() {
+            return $this->_page->getRaw();
         }
     }
 ?>

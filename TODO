@@ -28,7 +28,7 @@ Browser
 -------
 Need repeated parameters in query strings (0/3) - done.
 Duplicate value submissions should be PHP compatible (1).
-Make browser a separate component of the framework (8/4).
+Make browser a separate component of the framework (8/7).
 
 Web tester
 ----------
