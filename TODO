@@ -22,6 +22,7 @@ Parsing of radio buttons (3/4) - done.
 Support multiple selections (3/4) - done.
 Support multiple checkboxes (2/3) - done.
 Make hidden fields unsettable (1/0) - done.
+Refactoring link parsing (2/1) - done.
 
 Browser
 -------

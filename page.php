@@ -201,9 +201,7 @@
 	 *    @subpackage WebTester
      */
     class SimplePage {
-        var $_absolute_links;
-        var $_relative_links;
-        var $_link_ids;
+        var $_links;
         var $_title;
         var $_open_forms;
         var $_complete_forms;
@@ -214,9 +212,7 @@
          *    @access public
          */
         function SimplePage($raw) {
-            $this->_absolute_links = array();
-            $this->_relative_links = array();
-            $this->_link_ids = array();
+            $this->_links = array();
             $this->_title = false;
             $this->_open_forms = array();
             $this->_complete_forms = array();
@@ -291,59 +287,24 @@
         }
         
         /**
+         *    Test to see if link is an absolute one.
+         *    @param string $url     Url to test.
+         *    @return boolean           True if absolute.
+         *    @access protected
+         */
+        function _linkIsAbsolute($url) {
+            $parsed = new SimpleUrl($url);
+            return (boolean)($parsed->getScheme() && $parsed->getHost());
+        }
+        
+        /**
          *    Adds a link to the page. Partially fixes
          *    expandomatic links.
          *    @param SimpleAnchorTag $tag      Link to accept.
          *    @access protected
          */
         function _addLink($tag) {
-            $url = $tag->getAttribute("href");
-            $parsed_url = new SimpleUrl($tag->getAttribute("href"));
-            if ($parsed_url->getScheme() && $parsed_url->getHost()) {
-                $this->_addAbsoluteLink($tag);
-                return;
-            }
-            $this->_addRelativeLink($tag);
-        }
-        
-        /**
-         *    Adds an absolute link to the page.
-         *    @param SimpleAnchorTag $tag    Link to accept.
-         *    @access private
-         */
-        function _addAbsoluteLink($tag) {
-            $this->_addLinkId($tag->getAttribute("href"), $tag->getAttribute("id"));
-            $label = $tag->getContent();
-            if (! isset($this->_absolute_links[$label])) {
-                $this->_absolute_links[$label] = array();
-            }
-            array_push($this->_absolute_links[$label], $tag->getAttribute("href"));
-        }
-        
-        /**
-         *    Adds a relative link to the page.
-         *    @param SimpleAnchorTag $tag    Link to accept.
-         *    @access private
-         */
-        function _addRelativeLink($tag) {
-            $this->_addLinkId($tag->getAttribute("href"), $tag->getAttribute("id"));
-            $label = $tag->getContent();
-            if (! isset($this->_relative_links[$label])) {
-                $this->_relative_links[$label] = array();
-            }
-            array_push($this->_relative_links[$label], $tag->getAttribute("href"));
-        }
-        
-        /**
-         *    Adds a URL by id attribute.
-         *    @param string $url     Address.
-         *    @param string $id      Id attribute of link.
-         *    @access private
-         */
-        function _addLinkId($url, $id) {
-            if ($id !== false) {
-                $this->_link_ids[(string)$id] = $url;
-            }
+            $this->_links[] = $tag;
         }
         
         /**
@@ -354,8 +315,10 @@
          */
         function getAbsoluteLinks() {
             $all = array();
-            foreach ($this->_absolute_links as $label => $links) {
-                $all = array_merge($all, $links);
+            foreach ($this->_links as $link) {
+                if ($this->_linkIsAbsolute($link->getAttribute('href'))) {
+                    $all[] = $link->getAttribute('href');
+                }
             }
             return $all;
         }
@@ -367,8 +330,10 @@
          */
         function getRelativeLinks() {
             $all = array();
-            foreach ($this->_relative_links as $label => $links) {
-                $all = array_merge($all, $links);
+            foreach ($this->_links as $link) {
+                if (! $this->_linkIsAbsolute($link->getAttribute('href'))) {
+                    $all[] = $link->getAttribute('href');
+                }
             }
             return $all;
         }
@@ -381,11 +346,10 @@
          */
         function getUrls($label) {
             $all = array();
-            if (isset($this->_absolute_links[$label])) {
-                $all = $this->_absolute_links[$label];
-            }
-            if (isset($this->_relative_links[$label])) {
-                $all = array_merge($all, $this->_relative_links[$label]);
+            foreach ($this->_links as $link) {
+                if ($link->getContent() == $label) {
+                    $all[] = $link->getAttribute('href');
+                }
             }
             return $all;
         }
@@ -397,8 +361,10 @@
          *    @access public
          */
         function getUrlById($id) {
-            if (in_array((string)$id, array_keys($this->_link_ids))) {
-                return $this->_link_ids[(string)$id];
+            foreach ($this->_links as $link) {
+                if ($link->getAttribute('id') === (string)$id) {
+                    return $link->getAttribute('href');
+                }
             }
             return false;
         }
