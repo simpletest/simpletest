@@ -80,7 +80,7 @@
          *    @param $tag        Form tag to read.
          */
         function SimpleForm($tag) {
-            $this->_method = strtoupper($tag->getAttribute("method"));
+            $this->_method = $tag->getAttribute("method");
             $this->_action = $tag->getAttribute("action");
             $this->_defaults = array();
             $this->_values = array();
@@ -93,7 +93,7 @@
          *    @public
          */
         function getMethod() {
-            return $this->_method;
+            return ($this->_method ? strtolower($this->_method) : 'get');
         }
         
         /**
@@ -113,10 +113,13 @@
         function addWidget($tag) {
             if ($tag->getName() == "input") {
                 if ($tag->getAttribute("type") == "submit") {
-                    $this->_buttons[$tag->getAttribute("value")] = $tag->getAttribute("name");
+                    $this->_buttons[$tag->getAttribute("name") ? $tag->getAttribute("name") : 'submit'] =
+                            $tag->getAttribute("value") ? $tag->getAttribute("value") : 'Submit';
                     return;
                 }
-                $this->_defaults[$tag->getAttribute("name")] = $tag->getAttribute("value");
+                if ($tag->getAttribute("name")) {
+                    $this->_defaults[$tag->getAttribute("name")] = $tag->getAttribute("value");
+                }
             }
         }
         
@@ -153,34 +156,49 @@
         /**
          *    Reads the current form values as a hash
          *    of submitted parameters.
-         *    @param $name     Name of submit button.
-         *    @param $value    Value of simulated submit.
          *    @return          Hash of submitted values.
          *    @public
          */
-        function submit($name, $value) {
+        function getValues() {
             return array_merge(
-                    array($name => $value),
                     $this->_defaults,
                     $this->_values);
         }
         
         /**
-         *    Submits a button with a particular label.
+         *    Gets the submit values for a named button.
+         *    @param $name     Button label to search for.
+         *    @return          Hash of submitted values or false
+         *                     if there is no such button in the
+         *                     form.
+         *    @public
+         */
+        function submitButton($name) {
+            if (!isset($this->_buttons[$name])) {
+                return false;
+            }
+            return array_merge(
+                    array($name => $this->_buttons[$name]),
+                    $this->_defaults,
+                    $this->_values);            
+        }
+        
+        /**
+         *    Gets the submit values for a button with a particular
+         *    label.
          *    @param $label    Button label to search for.
          *    @return          Hash of submitted values or false
          *                     if there is no such button in the
          *                     form.
          *    @public
          */
-        function submitButton($label) {
-            if (!isset($this->_buttons[$label])) {
-                return false;
+        function submitButtonByLabel($label) {
+            foreach ($this->_buttons as $name => $value) {
+                if ($value == $label) {
+                    return $this->submitButton($name);
+                }
             }
-            return array_merge(
-                    array($this->_buttons[$label] => $label),
-                    $this->_defaults,
-                    $this->_values);            
+            return false;
         }
     }
 ?>

@@ -395,6 +395,16 @@
             $this->_handler->expectCallCount("acceptAttributeToken", 8);
             $this->assertTrue($this->_lexer->parse("<HTML><a HREF = 'here.html' bool Style=\"'coo\\\"l'\">label</A></Html>"));
         }
+        function testSubmit() {
+            $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<input", LEXER_ENTER));
+            $this->_handler->expectArgumentsAt(1, "acceptStartToken", array("type", "*"));
+            $this->_handler->expectArgumentsAt(2, "acceptStartToken", array("name", "*"));
+            $this->_handler->expectArgumentsAt(3, "acceptStartToken", array("value", "*"));
+            $this->_handler->expectArgumentsAt(4, "acceptStartToken", array("/", "*"));
+            $this->_handler->expectArgumentsAt(5, "acceptStartToken", array(">", LEXER_EXIT));
+            $this->_handler->expectCallCount("acceptStartToken", 6);
+            $this->assertTrue($this->_lexer->parse('<input type="submit" name="N" value="V" />'));
+        }
     }
     
     class TestSimpleSaxParser extends SimpleSaxParser {

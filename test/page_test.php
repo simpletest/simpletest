@@ -217,30 +217,47 @@
             $form = new SimpleTag("form", array());
             $page = new SimplePage("");
             $page->acceptBlockStart($form);
-            $this->assertIdentical($page->getActions(), array(false));
+            $forms = $page->getForms();
+            $this->assertIdentical($forms[0]->getAction(), false);
+            $this->assertIdentical($forms[0]->getMethod(), 'get');
             $page->acceptBlockEnd($form);
-            $this->assertIdentical($page->getActions(), array(false));
+            $forms = $page->getForms();
+            $this->assertIdentical($forms[0]->getAction(), false);
         }
         function testCompleteForm() {
             $form = new SimpleTag("form", array("method" => "GET", "action" => "here.php"));
             $page = new SimplePage("");
             $page->acceptBlockStart($form);
-            $this->assertIdentical($page->getActions(), array("here.php"));
+            $forms = $page->getForms();
+            $this->assertIdentical($forms[0]->getAction(), 'here.php');
+            $this->assertIdentical($forms[0]->getMethod(), 'get');
             $page->acceptBlockEnd($form);
-            $this->assertIdentical($page->getActions(), array("here.php"));
+            $forms = $page->getForms();
+            $this->assertIdentical($forms[0]->getAction(), 'here.php');
         }
         function testNestedForm() {
             $outer = new SimpleTag("form", array("method" => "GET", "action" => "outer.php"));
-            $inner = new SimpleTag("form", array("method" => "GET", "action" => "inner.php"));
+            $inner = new SimpleTag("form", array("method" => "POST", "action" => "inner.php"));
             $page = new SimplePage("");
             $page->acceptBlockStart($outer);
             $page->acceptBlockStart($inner);
-            $this->assertIdentical($page->getActions(), array("outer.php", "inner.php"));
+            $forms = $page->getForms();
+            $this->assertEqual($forms[0]->getAction(), "outer.php");
+            $this->assertEqual($forms[1]->getAction(), "inner.php");
             $page->acceptBlockEnd($inner);
             $page->acceptBlockEnd($outer);
-            $actions = $page->getActions();
-            sort($actions);
-            $this->assertIdentical($actions, array("inner.php", "outer.php"));
+            $forms = $page->getForms();
+            $this->assertEqual($forms[0]->getAction(), "inner.php");
+            $this->assertEqual($forms[1]->getAction(), "outer.php");
+        }
+        function testButtons() {
+            $page = new SimplePage("");
+            $page->acceptBlockStart(
+                    new SimpleTag("form", array("method" => "GET", "action" => "here.php")));
+            $page->AcceptTag(
+                    new SimpleTag("input", array("type" => "submit", "name" => "s")));
+            $forms = $page->getForms();
+            $this->assertEqual($forms[0]->submitButton("s"), array("s" => "Submit"));
         }
     }
     

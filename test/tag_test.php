@@ -29,12 +29,12 @@
             $this->UnitTestCase();
         }
         function testFormActions() {
-            $tag = new SimpleTag("form", array("method" => "get", "action" => "here.php"));
+            $tag = new SimpleTag("form", array("method" => "GET", "action" => "here.php"));
             $form = new SimpleForm($tag);
-            $this->assertEqual($form->getMethod(), "GET");
+            $this->assertEqual($form->getMethod(), "get");
             $this->assertEqual($form->getAction(), "here.php");
             $this->assertIdentical($form->getValue("a"), false);
-            $this->assertEqual($form->submit("go", "Go!"), array("go" => "Go!"));
+            $this->assertEqual($form->getValues(), array());
         }
         function testTextWidget() {
             $form = new SimpleForm(new SimpleTag("form", array()));
@@ -44,18 +44,26 @@
             $this->assertIdentical($form->getValue("me"), "Myself");
             $form->setValue("me", "Not me");
             $this->assertIdentical($form->getValue("me"), "Not me");
-            $this->assertEqual(
-                    $form->submit("go", "Go!"),
-                    array("go" => "Go!", "me" => "Not me"));
+            $this->assertEqual($form->getValues(), array("me" => "Not me"));
         }
         function testSubmitButton() {
             $form = new SimpleForm(new SimpleTag("form", array()));
-            $this->assertIdentical($form->submitButton("Go!"), false);
+            $this->assertIdentical($form->submitButton("go"), false);
             $form->addWidget(new SimpleTag(
                     "input",
                     array("type" => "submit", "name" => "go", "value" => "Go!")));
             $this->assertEqual(
-                    $form->submitButton("Go!"),
+                    $form->submitButton("go"),
+                    array("go" => "Go!"));            
+        }
+        function testSubmitButtonByLabel() {
+            $form = new SimpleForm(new SimpleTag("form", array()));
+            $this->assertIdentical($form->submitButtonByLabel("Go!"), false);
+            $form->addWidget(new SimpleTag(
+                    "input",
+                    array("type" => "submit", "name" => "go", "value" => "Go!")));
+            $this->assertEqual(
+                    $form->submitButtonByLabel("Go!"),
                     array("go" => "Go!"));            
         }
     }

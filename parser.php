@@ -426,8 +426,8 @@
             SimpleSaxParser::_addTag($lexer, "a");
             SimpleSaxParser::_addTag($lexer, "title");
             SimpleSaxParser::_addTag($lexer, "form");
-            SimpleSaxParser::_addInTagTokens($lexer);
             SimpleSaxParser::_addTag($lexer, "input");
+            SimpleSaxParser::_addInTagTokens($lexer);
             return $lexer;
         }
         

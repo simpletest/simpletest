@@ -182,6 +182,10 @@
                         $tag->getAttribute("id"));
             } elseif ($tag->getName() == "title") {
                 $this->_setTitle($tag->getContent());
+            } elseif ($tag->getName() == "input") {
+                for ($i = 0; $i < count($this->_open_forms); $i++) {
+                    $this->_open_forms[$i]->addWidget($tag);
+                }
             }
         }
         
@@ -351,19 +355,12 @@
         }
         
         /**
-         *    Gets a list of possible form action URLs.
-         *    @return        Array of URLs as strings.
+         *    Gets a list of all of the held forms.
+         *    @return        Array of SimpleForm objects.
          *    @public
          */
-        function getActions() {
-            $actions = array();
-            foreach ($this->_open_forms as $form) {
-                $actions[] = $form->getAction();
-            }
-            foreach ($this->_closed_forms as $form) {
-                $actions[] = $form->getAction();
-            }
-            return $actions;
+        function getForms() {
+            return array_merge($this->_open_forms, $this->_closed_forms);
         }
     }
 ?>
