@@ -277,7 +277,7 @@
                     break;
                 }
                 $url = new SimpleUrl($response->getRedirect());
-            } while (!$this->_isTooManyRedirects(++$redirects));
+            } while (! $this->_isTooManyRedirects(++$redirects));
             $this->_response = &$response;
             return $response;
         }

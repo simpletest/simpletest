@@ -135,7 +135,7 @@
         }
         function testIdFollowing() {
             $this->get('http://www.lastcraft.com/test/link_confirm.php');
-            $this->assertTrue($this->clickLinkId(1));
+            $this->assertTrue($this->clickLinkById(1));
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
     }

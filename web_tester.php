@@ -161,13 +161,6 @@
         }
         
         /**
-         *    @deprecated
-         */
-        function fetch($url, $parameters = false) {
-            return $this->get($url, $parameters);
-        }
-        
-        /**
          *    Clicks the submit button by label. The owning
          *    form will be submitted by this.
          *    @param $label    Button label. An unlabeled
@@ -246,7 +239,7 @@
          *    @return           True if link present.
          *    @public
          */
-        function clickLinkId($id) {
+        function clickLinkById($id) {
             $page = &$this->_getHtml();
             if (! ($url = $page->getUrlById($id))) {
                 return false;

@@ -87,9 +87,9 @@
             $browser = &$this->getBrowser();
             $browser->expectArgumentsAt(1, "get", array("http://my-site.com/there", false));
             $this->get("http://my-site.com/link");
-            $this->assertFalse($this->clickLinkId(0));
+            $this->assertFalse($this->clickLinkById(0));
             $this->_getHtml();
-            $this->assertTrue($this->clickLinkId(2));
+            $this->assertTrue($this->clickLinkById(2));
             $this->assertWantedPattern('/Found it/i');
         }
         function testLinkIndexClick() {

@@ -5,6 +5,10 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems.
 
+No method fetch()
+=================
+This was renamed get() in Alpha8. It will be removed in Beta3.
+
 No method submit()
 ==================
 This has been renamed clickSubmit() in Beta1. The old method will
