@@ -291,6 +291,13 @@
             $this->assertTrue(method_exists($mock, "aMethod"));
             $this->assertNull($mock->aMethod());
         }
+        function testCloningWithForcedReturn() {
+            $mock = &new MockDummy($this);
+            $mock->requireReturn();
+            $this->assertTrue(method_exists($mock, "aMethod"));
+            $this->assertNull($mock->aMethod());
+            $this->assertError();
+        }
         function testCloningWithExtraMethod() {
             $mock = &new MockDummyWithExtraMethods($this);
             $this->assertTrue(method_exists($mock, "extraMethod"));
@@ -343,6 +350,7 @@
             $this->assertNull($mock->aMethod());
             $this->assertReference($mock->aMethod(), $object);
             $this->assertNull($mock->aMethod());
+            $this->swallowErrors();
         }
     }
     
@@ -387,8 +395,7 @@
             $this->_test->tally();
         }
         function testMaxCalls() {
-            $this->_test->expectCallCount("assertTrue", 1);
-            $this->_test->expectArguments("assertTrue", array(false, '*'));
+            $this->_test->expectOnce("assertTrue", array(false, '*'));
             $mock = &new MockDummy($this->_test);
             $mock->expectMaximumCallCount("aMethod", 2);
             $mock->aMethod();
@@ -396,8 +403,7 @@
             $mock->aMethod();
         }
         function testMinCalls() {
-            $this->_test->expectCallCount("assertTrue", 1);
-            $this->_test->expectArguments("assertTrue", array(true, '*'));
+            $this->_test->expectOnce("assertTrue", array(true, '*'));
             $mock = &new MockDummy($this->_test);
             $mock->expectMinimumCallCount("aMethod", 2);
             $mock->aMethod();
@@ -405,31 +411,28 @@
             $mock->tally();
         }
         function testFailedNever() {
-            $this->_test->expectCallCount("assertTrue", 1);
-            $this->_test->expectArguments("assertTrue", array(false, '*'));
+            $this->_test->expectOnce("assertTrue", array(false, '*'));
             $mock = &new MockDummy($this->_test);
             $mock->expectNever("aMethod");
             $mock->aMethod();
         }
         function testUnderOnce() {
-            $this->_test->expectCallCount("assertTrue", 1);
-            $this->_test->expectArguments("assertTrue", array(false, '*'));
+            $this->_test->expectOnce("assertTrue", array(false, '*'));
             $mock = &new MockDummy($this->_test);
             $mock->expectOnce("aMethod");
             $mock->tally();
         }
         function testOverOnce() {
-            $this->_test->expectCallCount("assertTrue", 1);
-            $this->_test->expectArguments("assertTrue", array(false, '*'));
+            $this->_test->expectOnce("assertTrue", array(false, '*'));
             $mock = &new MockDummy($this->_test);
             $mock->expectOnce("aMethod");
             $mock->aMethod();
             $mock->aMethod();
             $mock->tally();
+            $this->swallowErrors();
         }
         function testUnderAtLeastOnce() {
-            $this->_test->expectCallCount("assertTrue", 1);
-            $this->_test->expectArguments("assertTrue", array(false, '*'));
+            $this->_test->expectOnce("assertTrue", array(false, '*'));
             $mock = &new MockDummy($this->_test);
             $mock->expectAtLeastOnce("aMethod");
             $mock->tally();
@@ -445,8 +448,7 @@
             $mock->aMethod(1, 2, 3);
         }
         function testFailedArguments() {
-            $this->_test->expectArguments("assertTrue", array(false, "*"));
-            $this->_test->expectCallCount("assertTrue", 1);
+            $this->_test->expectOnce("assertTrue", array(false, "*"));
             $mock = &new MockDummy($this->_test);
             $mock->expectArguments("aMethod", array("this"));
             $mock->aMethod("that");

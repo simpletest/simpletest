@@ -393,7 +393,8 @@
         
         /**
          *    Finds the return value matching the incoming
-         *    arguments.
+         *    arguments. If there is no matching value found
+         *    then an error is triggered.
          *    @param $method      Method name.
          *    @param $args        Calling arguments.
          *    @param $step        Current position in the
@@ -410,7 +411,17 @@
             if (isset($this->_returns[$method])) {
                 return $this->_returns[$method]->findFirstMatch($args);
             }
+            $this->_warnOnNoReturn($method);
             return null;
+        }
+        
+        /**
+         *    What to do if there is no return value set. Does
+         *    nothing for a stub.
+         *    @param $method      Method name.
+         *    @protected
+         */
+        function _warnOnNoReturn($method) {
         }
     }
     
@@ -428,6 +439,7 @@
         var $_min_counts;
         var $_expected_args;
         var $_args_sequence;
+        var $_require_return;
         
         /**
          *    Creates an empty return list and expectation list.
@@ -446,6 +458,7 @@
             $this->_min_counts = array();
             $this->_expected_args = array();
             $this->_args_sequence = array();
+            $this->_require_return = false;
         }
         
         /**
@@ -456,6 +469,15 @@
          */
         function &getTest() {
             return $this->_test;
+        }
+        
+        /**
+         *    Sets the mock to require a return value to be set or
+         *    it issues a warning.
+         *    @public
+         */
+        function requireReturn() {
+            $this->_require_return = true;
         }
          
         /**
@@ -664,6 +686,19 @@
                         $this->_expected_args[$method]->test($args),
                         "Mock method [$method]->" . $this->_expected_args[$method]->testMessage($args),
                         $this->_test);
+            }
+        }
+        
+        /**
+         *    What to do if there is no return value set.
+         *    @protected
+         *    @param $method      Method name.
+         */
+        function _warnOnNoReturn($method) {
+            if ($this->_require_return) {
+                trigger_error(
+                        "No value set in mock class [" . get_class($this) . "] for method [$method]",
+                        E_USER_NOTICE);
             }
         }
         
