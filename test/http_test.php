@@ -13,22 +13,26 @@
         }
         function testCookieAccessors() {
             $cookie = new SimpleCookie(
-                    "hostname.here",
                     "name",
                     "value",
                     "/path",
                     "Mon, 18 Nov 2002 15:50:29 GMT");
-            $this->assertEqual($cookie->getHost(), "hostname.here");
             $this->assertEqual($cookie->getName(), "name");
             $this->assertEqual($cookie->getValue(), "value");
             $this->assertEqual($cookie->getPath(), "/path");
             $this->assertEqual($cookie->getExpiry(), "Mon, 18 Nov 2002 15:50:29 GMT");
         }
         function testCookieDefaults() {
-            $cookie = new SimpleCookie("host", "name");
+            $cookie = new SimpleCookie("name");
             $this->assertFalse($cookie->getValue());
             $this->assertEqual($cookie->getPath(), "/");
+            $this->assertEqual($cookie->getHost(), "localhost");
             $this->assertFalse($cookie->getExpiry());
+        }
+        function testHostname() {
+            $cookie = new SimpleCookie("name");
+            $cookie->setHost("hostname.here");
+            $this->assertEqual($cookie->getHost(), "hostname.here");
         }
     }
 
@@ -141,14 +145,14 @@
             $this->assertIdentical($response->getResponseCode(), 200);
             $this->assertEqual($response->getMimeType(), "text/plain");
         }
-        function testParseCookies() {
+        function testParseOfCookies() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
             $socket->setReturnValueSequence(0, "read", "HTTP/1.1 200 OK\r\n");
             $socket->setReturnValueSequence(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
             $socket->setReturnValueSequence(2, "read", "Content-Type: text/plain\r\n");
             $socket->setReturnValueSequence(3, "read", "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n");
-            $socket->setReturnValueSequence(4, "read", "Set-Cookie: a=aaa; expires=Wed, 25-Dec-02 04:24:20 GMT; path=/\r\n");
+            $socket->setReturnValueSequence(4, "read", "Set-Cookie: a=aaa; expires=Wed, 25-Dec-02 04:24:20 GMT; path=/here/\r\n");
             $socket->setReturnValueSequence(5, "read", "Set-Cookie: b=bbb\r\n");
             $socket->setReturnValueSequence(6, "read", "Connection: close\r\n");
             $socket->setReturnValueSequence(7, "read", "\r\n");
@@ -156,9 +160,16 @@
             $socket->setReturnValue("read", "");
             $response = &new SimpleHttpResponse($socket);
             $this->assertFalse($response->isError());
-            $this->assertEqual(
-                    $response->getNewCookies(),
-                    array("a" => "aaa", "b" => "bbb"));
+            $cookies = $response->getNewCookies();
+            $this->assertEqual(count($cookies), 2);
+            $this->assertEqual($cookies[0]->getName(), "a");
+            $this->assertEqual($cookies[0]->getValue(), "aaa");
+            $this->assertEqual($cookies[0]->getPath(), "/here/");
+            $this->assertEqual($cookies[0]->getExpiry(), "Wed, 25-Dec-02 04:24:20 GMT");
+            $this->assertEqual($cookies[1]->getName(), "b");
+            $this->assertEqual($cookies[1]->getValue(), "bbb");
+            $this->assertEqual($cookies[1]->getPath(), "/");
+            $this->assertEqual($cookies[1]->getExpiry(), "");
         }
     }
     

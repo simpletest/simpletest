@@ -15,13 +15,24 @@
          *    Constructor. Sets the stored values.
          *    @param $name            Cookie key.
          *    @param $value           Value of cookie.
+         *    @param $path            Cookie path if not host wide.
+         *    @param $expiry          Expiry date as string.
          */
-        function SimpleCookie($host, $name, $value = "", $path = "/", $expiry = "") {
-            $this->_host = $host;
+        function SimpleCookie($name, $value = "", $path = "", $expiry = "") {
+            $this->_host = "localhost";
             $this->_name = $name;
             $this->_value = $value;
-            $this->_path = $path;
-            $this->_expiry = $expiry;
+            $this->_path = ($path ? $path : "/");
+            $this->_expiry = ($expiry ? $expiry : "");
+        }
+        
+        /**
+         *    Sets the hostname and optional port.
+         *    @param $host            New hostname.
+         *    @public
+         */
+        function setHost($host) {
+            $this->_host = $host;
         }
         
         /**
@@ -244,18 +255,38 @@
          *    @protected
          */
         function _parseHeaderLine($header_line) {
-            if (preg_match('/HTTP\/(\d+\.\d+)\s+(.*)\s/i', $header_line, $matches)) {
+            if (preg_match('/HTTP\/(\d+\.\d+)\s+(.*?)\s/i', $header_line, $matches)) {
                 $this->_http_version = $matches[1];
                 $this->_response_code = $matches[2];
             }
-            if (preg_match('/Content-type: (.*)/i', $header_line, $matches)) {
-                $this->_mime_type = $matches[1];
+            if (preg_match('/Content-type:\s*(.*)/i', $header_line, $matches)) {
+                $this->_mime_type = trim($matches[1]);
             }
-            if (preg_match('/Set-cookie: (.*?)(;|$)/i', $header_line, $matches)) {
-                if (preg_match('/(.*?)=(.*)/', $matches[1], $parts)) {
-                    $this->_cookies[$parts[1]] = $parts[2];
+            if (preg_match('/Set-cookie:(.*)/i', $header_line, $matches)) {
+                $this->_cookies[] = $this->_parseCookie($matches[1]);
+            }
+        }
+        
+        /**
+         *    Parse the Set-cookie content.
+         *    @param $cookie_line    Text after "Set-cookie:"
+         *    @return                New cookie object.
+         *    @private
+         */
+        function _parseCookie($cookie_line) {
+            $parts = split(";", $cookie_line);
+            $cookie = array();
+            preg_match('/\s*(.*?)\s*=(.*)/', array_shift($parts), $cookie);
+            foreach ($parts as $part) {
+                if (preg_match('/\s*(.*?)\s*=(.*)/', $part, $matches)) {
+                    $cookie[$matches[1]] = trim($matches[2]);
                 }
             }
+            return new SimpleCookie(
+                    $cookie[1],
+                    trim($cookie[2]),
+                    isset($cookie["path"]) ? $cookie["path"] : "",
+                    isset($cookie["expires"]) ? $cookie["expires"] : "");
         }
         
         /**
