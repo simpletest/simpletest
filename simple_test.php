@@ -549,36 +549,51 @@
         /**
          *    Builds a group test from a library of test cases.
          *    The new group is composed into this one.
-         *    @param string $test_file    File name of library with
-         *                                test case classes.
+         *    @param string $test_file        File name of library with
+         *                                    test case classes.
+         *    @param array/boolean $classes   Load only classes from this
+         *                                    list.
          *    @access public
          */
-        function addTestFile($test_file) {
+        function addTestFile($test_file, $classes = false) {
             $existing_classes = get_declared_classes();
-            $old_setting = ini_get('track_errors');
-            ini_set('track_errors', true);
-            require($test_file);
-            ini_set('track_errors', $old_setting);
-            if (isset($php_errormsg)) {
-                $group = new BadGroupTest($test_file, $php_errormsg);
-            } else {
-                $group = $this->_createGroupFromNewTests($test_file, $existing_classes);
+            if ($error = $this->_requireWithError($test_file)) {
+                $this->addTestCase(new BadGroupTest($test_file, $error));
+                return;
             }
-            $this->addTestCase($group);
+            if (! $classes) {
+                $classes = $this->_selectRunnableTests($existing_classes, get_declared_classes());
+            }
+            $this->addTestCase($this->_createGroupFromClasses($test_file, $classes));
         }
         
         /**
-         *    Builds a group test from any new classes hat have
-         *    been loaded since a previous benchmark listing.
-         *    @param string $title            Title of new group.
-         *    @param array $existing_classes  Previous class listing.
-         *    @return GroupTest               Grouploaded with the new
-         *                                    test cases.
+         *    Requires a source file recording any syntax errors.
+         *    @param string $file        File name to require in.
+         *    @return string/boolean     An error message on failure or false
+         *                               if no errors.
          *    @access private
          */
-        function _createGroupFromNewTests($title, $existing_classes) {
-            $group = new GroupTest($title);
-            foreach (get_declared_classes() as $class) {
+        function _requireWithError($file) {
+            $old_setting = ini_get('track_errors');
+            ini_set('track_errors', true);
+            require($file);
+            ini_set('track_errors', $old_setting);
+            return isset($php_errormsg) ? $php_errormsg : false;
+        }
+        
+        /**
+         *    Calculates the incoming test cases from a before
+         *    and after list of loaded classes.
+         *    @param array $existing_classes   Classes before require().
+         *    @param array $new_classes        Classes after require().
+         *    @return array                    New classes which are test
+         *                                     cases that shouldn't be ignored.
+         *    @access private
+         */
+        function _selectRunnableTests($existing_classes, $new_classes) {
+            $classes = array();
+            foreach ($new_classes as $class) {
                 if (in_array($class, $existing_classes)) {
                     continue;
                 }
@@ -588,6 +603,22 @@
                 if (SimpleTestOptions::isIgnored($class)) {
                     continue;
                 }
+                $classes[] = $class;
+            }
+            return $classes;
+        }
+        
+        /**
+         *    Builds a group test from a class list.
+         *    @param string $title       Title of new group.
+         *    @param array $classes      Test classes.
+         *    @return GroupTest          Group loaded with the new
+         *                               test cases.
+         *    @access private
+         */
+        function _createGroupFromClasses($title, $classes) {
+            $group = new GroupTest($title);
+            foreach ($classes as $class) {
                 $group->addTestClass($class);
             }
             return $group;

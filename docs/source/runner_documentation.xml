@@ -32,7 +32,7 @@
         $test->addTestFile($_GET['c']);    
     } else {
         $test->addTestFile('test_a.php');    
-        $test->addTestFile('test_a.php');    
+        $test->addTestFile('test_b.php');    
     }</strong>
     
     $test->run(HtmlReporter());
@@ -73,7 +73,7 @@ class OneTestReporter extends HtmlReporter {
         $test->addTestFile($_GET['c']);    
     } else {
         $test->addTestFile('test_a.php');    
-        $test->addTestFile('test_a.php');    
+        $test->addTestFile('test_b.php');    
     }
     <strong>
     if (isset($_GET['t'])) {
@@ -99,10 +99,15 @@ class OneTestReporter extends HtmlReporter {
                 and &quot;continuous integration&quot; when done after every check-in.
             </p>
         </section>
+        <section name="runner" title="The test cases run themselves">
+        </section>
     </content>
     <internal>
         <link>
             Selecting tests from <a href="#reporter">the reporter</a>
+        </link>
+        <link>
+            How the <a href="#runner">test cases run</a>
         </link>
     </internal>
     <external>

@@ -724,8 +724,8 @@
          *    @access public
          */
         function expectArgumentsAt($timing, $method, $args, $message = '%s') {
-            $this->_dieOnNoMethod($method, "set expected arguments at time");
-            $this->_checkArgumentsIsArray($args, "set expected arguments");
+            $this->_dieOnNoMethod($method, 'set expected arguments at time');
+            $this->_checkArgumentsIsArray($args, 'set expected arguments at time');
             $args = $this->_replaceWildcards($args);
             if (! isset($this->_expected_args_at[$timing])) {
                 $this->_expected_args_at[$timing] = array();
@@ -747,7 +747,7 @@
          *    @access public
          */
         function expectCallCount($method, $count, $message = '%s') {
-            $this->_dieOnNoMethod($method, "set expected call count");
+            $this->_dieOnNoMethod($method, 'set expected call count');
             $message .= Mock::getExpectationLine(' at line [%d]');
             $this->_expected_counts[strtolower($method)] =
                     new CallCountExpectation($method, $count, $message);
@@ -763,7 +763,7 @@
          *    @access public
          */
         function expectMaximumCallCount($method, $count, $message = '%s') {
-            $this->_dieOnNoMethod($method, "set maximum call count");
+            $this->_dieOnNoMethod($method, 'set maximum call count');
             $message .= Mock::getExpectationLine(' at line [%d]');
             $this->_max_counts[strtolower($method)] = 
                     new MaximumCallCountExpectation($method, $count, $message);
@@ -779,7 +779,7 @@
          *    @access public
          */
         function expectMinimumCallCount($method, $count, $message = '%s') {
-            $this->_dieOnNoMethod($method, "set minimum call count");
+            $this->_dieOnNoMethod($method, 'set minimum call count');
             $message .= Mock::getExpectationLine(' at line [%d]');
             $this->_expected_counts[strtolower($method)] =
                     new MinimumCallCountExpectation($method, $count, $message);
@@ -1255,7 +1255,7 @@
          *    @param array $stack      Stack frames top most first. Only
          *                             needed if not using the PHP
          *                             backtrace function.
-         *    @return string           Line number of first assert*
+         *    @return string           Line number of first expect*
          *                             method embedded in format string.
          *    @access public
          *    @static
