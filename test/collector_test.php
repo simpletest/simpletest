@@ -1,86 +1,48 @@
 <?php
 // $Id$
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../collector.php');
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../unit_tester.php');
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../reporter.php');
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . '../mock_objects.php');
+require_once(dirname(__FILE__) . '/../collector.php');
+Mock::generate('GroupTest');
 
-class TestOfSimpleCollector extends UnitTestCase
-{
-    var $_path = '/tmp/CollectorTests';
-    var $_files = array('1.php', '2.php', '3.html', '4.txt');
+class TestOfCollector extends UnitTestCase {
     
-    function setUp()
-    {
-        mkdir($this->_path);
-        foreach ($this->_files as $file) {
-            touch($this->_path . '/' . $file);
-        }
-    }
-    
-    
-    function tearDown()
-    {
-        foreach ($this->_files as $file) {
-            unlink($this->_path . '/' . $file);
-        }
+    function testCollectionIsAddedToGroup() {
+        $group = &new MockGroupTest($this);
+        $group->expectCallCount('addTestFile', 2);
+        $group->expectArguments(
+                'addTestFile',
+                array(new WantedPatternExpectation('/collectable\\.(1|2)$/')));
         
-        rmdir($this->_path);
-    }
-    
-    
-    function testCollector()
-    {
-        $groupTest = $this->_generateMockGroupTest();
-        $groupTest->expectCallCount('addTestFile', 4);
+        $collector = &new SimpleCollector(dirname(__FILE__) . '/support/');
+        $collector->collect($group);
         
-        foreach ($this->_files as $i => $file) {
-            $expected = array($this->_path . '/' . $file);
-            $groupTest->expectArgumentsAt($i, 'addTestFile', $expected);
-        }
-        
-        $collector = new SimpleCollector($groupTest, $this->_path);
-        $collector->collect();
-    }
-    
-    
-    function testPatternCollector()
-    {
-        $groupTest = $this->_generateMockGroupTest();
-        $groupTest->expectCallCount('addTestFile', 2);
-        $groupTest->expectArgumentsAt(0, 'addTestFile',
-            array($this->_path . '/' . $this->_files[0]));
-        $groupTest->expectArgumentsAt(1, 'addTestFile',
-            array($this->_path . '/' . $this->_files[1]));
-        
-        $collector = new SimplePatternCollector($groupTest, $this->_path);
-        $collector->collect();
-        
-        unset($groupTest);
-        unset($collector);
-        
-        // Try with a custom pattern now
-        $groupTest = $this->_generateMockGroupTest();
-        $groupTest->expectCallCount('addTestFile', 1);
-        $groupTest->expectArgumentsAt(0, 'addTestFile',
-            array($this->_path . '/' . $this->_files[2]));
-        
-        $collector = new SimplePatternCollector($groupTest, $this->_path,
-            '/html$/');
-        $collector->collect();
-        
-    }
-    
-    
-    function _generateMockGroupTest()
-    {
-        if (!class_exists('MockGroupTest')) {
-            Mock::generatePartial('GroupTest', 'MockGroupTest', 
-                array('addTestFile'));
-        }
-        
-        return new MockGroupTest($this);
+        $group->tally();
     }
 }
-
+    
+class TestOfPatternCollector extends UnitTestCase {
+    
+    function testAddingEverythingToGroup() {
+        $group = &new MockGroupTest($this);
+        $group->expectCallCount('addTestFile', 2);
+        $group->expectArguments(
+                'addTestFile',
+                array(new WantedPatternExpectation('/collectable\\.(1|2)$/')));
+        
+        $collector = &new SimplePatternCollector(dirname(__FILE__) . '/support/', '/.*/');
+        $collector->collect($group);
+        
+        $group->tally();
+    }
+        
+    function testOnlyMatchedFilesAreAddedToGroup() {
+        $group = &new MockGroupTest($this);
+        $group->expectOnce('addTestFile', array(dirname(__FILE__) . '/support/collectable.1'));
+        
+        $collector = &new SimplePatternCollector(dirname(__FILE__) . '/support/', '/1$/');
+        $collector->collect($group);
+        
+        $group->tally();
+    }
+}
+?>

@@ -67,8 +67,10 @@ FILES=(simpletest/errors.php \
           simpletest/test/xml_test.php \
           simpletest/test/live_test.php \
           simpletest/test/real_sites_test.php \
-          simpletest/test/parse_error_test.php
-          simpletest/test/test_with_parse_error.php
+          simpletest/test/parse_error_test.php \
+          simpletest/test/test_with_parse_error.php \
+          simpletest/test/support/collectable.1 \
+          simpletest/test/support/collectable.2 \
           simpletest/docs/en/docs.css \
           simpletest/docs/en/index.html \
           simpletest/docs/en/overview.html \
