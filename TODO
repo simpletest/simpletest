@@ -5,6 +5,7 @@ $Id$
 
 Unit tester
 -----------
+Show line number of failed assertion (3).
 
 Interface
 ---------
