@@ -195,6 +195,19 @@
         }
         
         /**
+         *    Sends a user defined event to the test runner.
+         *    This is for small scale extension where
+         *    both the test case and either the runner or
+         *    display are subclassed.
+         *    @param $type        Type of event as string.
+         *    @param $payload     Object or message to deliver.
+         *    @public
+         */
+        function signal($type, &$payload) {
+            $this->_current_runner->handleSignal($type, $payload);
+        }
+        
+        /**
          *    Cancels any outstanding errors.
          *    @public
          */

@@ -111,11 +111,26 @@
         function testOfDumping() {
             $this->dump(array("Hello"), "Displaying a variable");
         }
+        function testOfSignal() {
+            $fred = "fred";
+            $this->signal("Ouch", $fred);
+        }
+    }
+    
+    class AllOutputReporter extends TestHtmlDisplay {
+        function AllOutputReporter() {
+            $this->TestHtmlDisplay();
+        }
+        function paintSignal($type, &$payload) {
+            print "<span class=\"fail\">$type</span>: ";
+            $breadcrumb = $this->getTestList();
+            array_shift($breadcrumb);
+            print implode("-&gt;", $breadcrumb);
+            print "-&gt;" . htmlentities(serialize($payload)) . "<br />\n";
+        }
     }
     
     $test = new GroupTest("Unit test case test with 20 fails, 20 passes and 4 exceptions");
-    $display = new TestHTMLDisplay();
     $test->addTestCase(new TestOfUnitTestCase());
-    
-    $test->run($display);
+    $test->run(new AllOutputReporter());
 ?>

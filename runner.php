@@ -142,6 +142,18 @@
         function handleGroupEnd($label) {
             $this->_reporter->paintEnd($label, 0);
         }
+        
+        /**
+         *    A user event. Can be used for ad hoc
+         *    expansion of the toolkit. Default is
+         *    to just pass it through to the display.
+         *    @param $type      Event type as text.
+         *    @param $payload   Message or other data.
+         *    @public
+         */
+        function handleSignal($type, &$payload) {
+            $this->_reporter->paintSignal($type, $payload);
+        }
     }
     
     /**
@@ -207,6 +219,16 @@
          *    @public
          */
         function paintFormattedMessage($message) {
+        }
+        
+        /**
+         *    By default just ignores user generated
+         *    events.
+         *    @param $type        Event type as text.
+         *    @param $payload     Message or object.
+         *    @public
+         */
+        function paintSignal($type, &$payload) {
         }
     }
     
