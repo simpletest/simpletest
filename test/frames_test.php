@@ -147,6 +147,7 @@
             $page->expectNever('getRaw');
             
             $frame = &new MockSimplePage($this);
+            $frame->setReturnValue('getFrameFocus', array());
             $frame->setReturnValue('getRaw', 'Stuff');
             
             $frameset = &new SimpleFrameset($page);
@@ -154,8 +155,8 @@
             
             $this->assertFalse($frameset->setFrameFocusByIndex(0));
             $this->assertTrue($frameset->setFrameFocusByIndex(1));
-            $this->assertFalse($frameset->setFrameFocusByIndex(2));
             $this->assertEqual($frameset->getRaw(), 'Stuff');
+            $this->assertFalse($frameset->setFrameFocusByIndex(2));
             $this->assertIdentical($frameset->getFrameFocus(), array(1));
         }
         
@@ -164,9 +165,11 @@
             
             $frame1 = &new MockSimplePage($this);
             $frame1->setReturnValue('getRaw', 'Stuff1');
+            $frame1->setReturnValue('getFrameFocus', array());
             
             $frame2 = &new MockSimplePage($this);
             $frame2->setReturnValue('getRaw', 'Stuff2');
+            $frame2->setReturnValue('getFrameFocus', array());
             
             $frameset = &new SimpleFrameset($page);
             $frameset->addFrame($frame1);
@@ -191,9 +194,11 @@
             
             $frame1 = &new MockSimplePage($this);
             $frame1->setReturnValue('getRaw', 'Stuff1');
+            $frame1->setReturnValue('getFrameFocus', array());
             
             $frame2 = &new MockSimplePage($this);
             $frame2->setReturnValue('getRaw', 'Stuff2');
+            $frame2->setReturnValue('getFrameFocus', array());
             
             $frameset = &new SimpleFrameset($page);
             $frameset->addFrame($frame1, 'A');
