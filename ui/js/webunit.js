@@ -124,15 +124,19 @@ function add_method(method_name) {
 }
 
 function add_fail(msg) {
-  var faildiv;
   var oldmsg;
-  faildiv = xGetElementById('fail');
-  faildiv.innerHTML = faildiv.innerHTML + msg;
+  add_log(msg);
   groups[current_group].Set('pass', false);
   cases[current_group][current_case].Set('pass', false);
   methods[current_group][current_case][current_method].Set('pass', false);
   oldmsg = methods[current_group][current_case][current_method].Get('msg');
   methods[current_group][current_case][current_method].Set('msg', oldmsg+msg);
+}
+
+function add_log(msg) {
+  var faildiv;
+  faildiv = xGetElementById('fail');
+  faildiv.innerHTML = faildiv.innerHTML + msg;
 }
 
 function set_msg(gid, cid, mid) {

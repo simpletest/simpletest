@@ -170,7 +170,7 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    @access public
          */
         function paintFormattedMessage($message) {
-            print "<pre>$message</pre>";
+           echo "add_log(\"".$this->toJsString("<pre>$message</pre>", true)."\");\n";
         }
         
         /**
@@ -271,12 +271,13 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
 		 *  @param string $str	the string to transform
 		 *	@return	string
 		 */
-		function toJsString($str) {
+		function toJsString($str, $preserveCr=false) {
+			$cr = ($preserveCr) ? '\\n' : '';
 			return str_replace(
 				array('"'
 					,"\n")
 				,array('\"'
-					,"\"\n\t+\"")
+					,"$cr\"\n\t+\"")
 				,$str
 				);
 		}
