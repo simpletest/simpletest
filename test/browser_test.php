@@ -9,6 +9,9 @@
     Mock::generate("UnitTestCase");
     Mock::generate("SimpleHttpRequest");
     Mock::generate("SimpleHttpResponse");
+    Mock::generatePartial('SimpleBrowser', 'MockRequestSimpleBrowser', array('createRequest'));
+    Mock::generatePartial('SimpleBrowser', 'MockFetchSimpleBrowser', array('fetchResponse'));
+    Mock::generatePartial('TestBrowser', 'MockRequestTestBrowser', array('createRequest'));
 
     class TestOfCookieJar extends UnitTestCase {
         function TestOfCookieJar() {
@@ -114,11 +117,6 @@
         }
     }
     
-    Mock::generatePartial(
-            'SimpleBrowser',
-            'MockRequestSimpleBrowser',
-            array('createRequest'));
-    
     class TestOfExpandomaticUrl extends UnitTestCase {
         function TestOfExpandomaticUrl() {
             $this->UnitTestCase();
@@ -174,7 +172,7 @@
             $browser->setCookie("a", "A");
             $response = $browser->fetchResponse(
                     new SimpleUrl("http://this.com/this/path/page.html"),
-                    $request);
+                    &$request);
             $this->assertEqual($response->getContent(), "stuff");
             $request->tally();
         }
@@ -193,7 +191,7 @@
             $browser = &$this->_createPartialBrowser($request);
             $browser->setCookie("a", "A", "this/path/", "Wed, 25-Dec-02 04:24:21 GMT");
             $this->assertEqual(
-                    $browser->get("http://this.com/this/path/page.html", false, &$request),
+                    $browser->get("http://this.com/this/path/page.html", false),
                     "stuff");
             $this->assertIdentical(
                     $browser->getCookieValue("this.com", "this/path/", "a"),
@@ -204,20 +202,16 @@
                     false);
         }
         function testReadingCookies() {
-            $browser = &new SimpleBrowser();
+            $request = &$this->_createCookieSite(array(
+                    new SimpleCookie("a", "AAA", "this/path/")));
+            $browser = &$this->_createPartialBrowser($request);
             $this->assertNull($browser->getBaseCookieValue("a"));
             $browser->setCookie("b", "BBB", "this.com", "this/path/");
-            $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAA", "this/path/")));
-            $browser->get("http://this.com/this/path/page.html", false, &$request);
+            $browser->get("http://this.com/this/path/page.html", false);
             $this->assertEqual($browser->getBaseCookieValue("a"), "AAA");
             $this->assertEqual($browser->getBaseCookieValue("b"), "BBB");
         }
     }
-    
-    Mock::generatePartial(
-            'SimpleBrowser',
-            'MockFetchSimpleBrowser',
-            array('fetchResponse'));
     
     class TestOfFetchingMethods extends UnitTestCase {
         function TestOfFetchingMethods() {
@@ -308,27 +302,33 @@
         function testUntestedHost() {
             $test = &new MockUnitTestCase($this);
             $test->expectCallCount("assertTrue", 0);
-            $browser = &new TestBrowser($test);
             $request = &$this->_createSimulatedBadHost();
+            $browser = &new MockRequestTestBrowser($this);
+            $browser->setReturnReference('createRequest', $request);
+            $browser->TestBrowser($test);
             $this->assertIdentical(
-                    $browser->get("http://this.host/this/path/page.html", false, &$request),
+                    $browser->get("http://this.host/this/path/page.html", false),
                     false);
             $test->tally();
         }
         function testFailingBadHost() {
             $test = &new MockUnitTestCase($this);
-            $browser = &new TestBrowser($test);
             $request = &$this->_createSimulatedBadHost();
+            $browser = &new MockRequestTestBrowser($this);
+            $browser->setReturnReference('createRequest', $request);
+            $browser->TestBrowser($test);
             $this->assertIdentical(
-                    $browser->get("http://this.host/this/path/page.html", false, &$request),
+                    $browser->get("http://this.host/this/path/page.html", false),
                     false);
         }
         function testExpectingBadHost() {
             $test = &new MockUnitTestCase($this);
-            $browser = &new TestBrowser($test);
             $request = &$this->_createSimulatedBadHost();
+            $browser = &new MockRequestTestBrowser($this);
+            $browser->setReturnReference('createRequest', $request);
+            $browser->TestBrowser($test);
             $this->assertIdentical(
-                    $browser->get("http://this.host/this/path/page.html", false, &$request),
+                    $browser->get("http://this.host/this/path/page.html", false),
                     false);
         }
     }
@@ -350,8 +350,10 @@
             $this->_response->setReturnValue("getResponseCode", 404);
             $this->_test->expectArguments("assertTrue", array(true, "*"));
             $this->_test->expectCallCount("assertTrue", 1);
-            $browser = &new TestBrowser($this->_test);
-            $browser->get("http://this.host/this/path/page.html", false, &$this->_request);
+            $browser = &new MockRequestTestBrowser($this);
+            $browser->setReturnReference('createRequest', $this->_request);
+            $browser->TestBrowser($this->_test);
+            $browser->get("http://this.host/this/path/page.html", false);
             $browser->assertResponse(array(404));
             $this->_test->tally();
         }
@@ -360,8 +362,10 @@
             $this->_response->setReturnValue("isError", true);
             $this->_test->expectArguments("assertTrue", array(false, "*"));
             $this->_test->expectCallCount("assertTrue", 1);
-            $browser = &new TestBrowser($this->_test);
-            $browser->get("http://this.host/this/path/page.html", false, &$this->_request);
+            $browser = &new MockRequestTestBrowser($this);
+            $browser->setReturnReference('createRequest', $this->_request);
+            $browser->TestBrowser($this->_test);
+            $browser->get("http://this.host/this/path/page.html", false);
             $browser->assertResponse(array(404));
             $this->_test->tally();
         }
@@ -369,8 +373,10 @@
             $this->_response->setReturnValue("getMimeType", "text/plain");
             $this->_test->expectArguments("assertTrue", array(true, "*"));
             $this->_test->expectCallCount("assertTrue", 1);
-            $browser = &new TestBrowser($this->_test);
-            $browser->get("http://this.host/this/path/page.html", false, &$this->_request);
+            $browser = &new MockRequestTestBrowser($this);
+            $browser->setReturnReference('createRequest', $this->_request);
+            $browser->TestBrowser($this->_test);
+            $browser->get("http://this.host/this/path/page.html", false);
             $browser->assertMime("text/plain");
             $this->_test->tally();
         }
@@ -402,9 +408,11 @@
             $test = &new MockUnitTestCase($this);
             $test->expectArguments("assertTrue", array(false, "*"));
             $test->expectCallCount("assertTrue", 1);
-            $browser = &new TestBrowser($test);
+            $browser = &new MockRequestTestBrowser($this);
+            $browser->setReturnReference('createRequest', $request);
+            $browser->TestBrowser($test);
             $browser->expectCookie("a", "A");
-            $browser->get("http://this.host/this/path/page.html", false, &$request);
+            $browser->get("http://this.host/this/path/page.html", false);
             $test->tally();
             $this->assertIdentical($browser->getCookieValue("this.host", "this/page/", "a"), false);
         }
@@ -413,9 +421,11 @@
             $test = &new MockUnitTestCase($this);
             $test->expectArguments("assertTrue", array(true, "*"));
             $test->expectCallCount("assertTrue", 1);
-            $browser = &new TestBrowser($test);
+            $browser = &new MockRequestTestBrowser($this);
+            $browser->setReturnReference('createRequest', $request);
+            $browser->TestBrowser($test);
             $browser->expectCookie("a", "A");
-            $browser->get("http://this-host.com/this/path/page.html", false, &$request);
+            $browser->get("http://this-host.com/this/path/page.html", false);
             $test->tally();
             $this->assertEqual($browser->getCookieValue("this-host.com", "this/path/", "a"), "A");
             $this->assertIdentical($browser->getCookieValue("this-host.com", "this/", "a"), false);

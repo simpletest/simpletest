@@ -253,15 +253,12 @@
          *    Fetches the page content with a simple GET request.
          *    @param $raw_url      Target to fetch as string.
          *    @param $parameters   Additional parameters for GET request.
-         *    @param $request      Test version of SimpleHttpRequest.
          *    @return              Content of page.
          *    @public
          */
-        function get($raw_url, $parameters = false, $request = false) {
+        function get($raw_url, $parameters = false) {
             $url = $this->createAbsoluteUrl($this->_base_url, $raw_url, $parameters);
-            if (!is_object($request)) {
-                $request = &$this->createRequest('GET', $url);
-            }
+            $request = &$this->createRequest('GET', $url);
             $response = &$this->fetchResponse($url, $request);
             if ($response->isError()) {
                 return false;
@@ -275,15 +272,12 @@
          *    Will affect cookies, but will not change the base URL.
          *    @param $raw_url      Target to fetch as string.
          *    @param $parameters   Additional parameters for GET request.
-         *    @param $request      Test version of SimpleHttpRequest.
          *    @return              Content of page.
          *    @public
          */
-        function head($raw_url, $parameters = false, $request = false) {
+        function head($raw_url, $parameters = false) {
             $url = $this->createAbsoluteUrl($this->_base_url, $raw_url, $parameters);
-            if (!is_object($request)) {
-                $request = &$this->createRequest('HEAD', $url);
-            }
+            $request = &$this->createRequest('HEAD', $url);
             $response = &$this->fetchResponse($url, $request);
             return !$response->isError();
         }
@@ -292,15 +286,12 @@
          *    Fetches the page content with a POST request.
          *    @param $raw_url      Target to fetch as string.
          *    @param $parameters   POST parameters.
-         *    @param $request      Test version of SimpleHttpPushRequest.
          *    @return              Content of page.
          *    @public
          */
-        function post($raw_url, $parameters = false, $request = false) {
+        function post($raw_url, $parameters = false) {
             $url = $this->createAbsoluteUrl($this->_base_url, $raw_url, array());
-            if (!is_object($request)) {
-                $request = &$this->createRequest('POST', $url, $parameters);
-            }
+            $request = &$this->createRequest('POST', $url, $parameters);
             $response = &$this->fetchResponse($url, $request);
             if ($response->isError()) {
                 return false;
