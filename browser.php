@@ -49,7 +49,9 @@
          *    Fetches a hash of all valid cookies filtered
          *    by host, path and date and keyed by name
          *    Any cookies with missing categories will not
-         *    be filtered out by that category.         
+         *    be filtered out by that category. Empty cookies
+         *    not be filtered unless thay are also expired.
+         *    Don't blame ne, blame the cookie spec!
          *    @param $host        Host name requirement.
          *    @param $path        Path encompassing cookies.
          *    @param $date        Date to test expiries against,
@@ -63,9 +65,7 @@
             $valid_cookies = array();
             foreach ($this->_cookies as $cookie) {
                 if ($this->_isMatch($cookie, $host, $path, $cookie->getName(), $date)) {
-                    if ($cookie->getValue()) {
-                        $valid_cookies[] = $cookie;
-                    }
+                    $valid_cookies[] = $cookie;
                 }
             }
             return $valid_cookies;
@@ -88,7 +88,7 @@
             if ($cookie->getName() != $name) {
                 return false;
             }
-            if ($host && $cookie->getHost() && ($cookie->getHost() != $host)) {
+            if ($host && $cookie->getHost() && !$cookie->isValidHost($host)) {
                 return false;
             }
             if (!$cookie->isValidPath($path)) {
@@ -204,7 +204,7 @@
         function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
             $cookie = new SimpleCookie($name, $value, $path, $expiry);
             if ($host) {
-                $cookie->setHost();
+                $cookie->setHost($host);
             }
             $this->_cookie_jar->setCookie($cookie);
         }
