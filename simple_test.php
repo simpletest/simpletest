@@ -210,7 +210,11 @@
          *    @public
          */
         function getSize() {
-            return count($this->_test_cases) + 1;
+            $count = 1;
+            foreach ($this->_test_cases as $case) {
+                $count += $case->getSize();
+            }
+            return $count;
         }
     }
     

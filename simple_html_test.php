@@ -52,7 +52,8 @@
             print "<div style=\"";
             print "padding: 8px; margin-top: 1em; background-color: $colour; color: white;";
             print "\">";
-            print "Test complete.\n";
+            print $this->getTestCaseProgress() . "/" . $this->getTestCaseCount();
+            print " test cases complete:\n";
             print "<strong>" . $this->getPassCount() . "</strong> passes";
             print " and <strong>" . $this->getFailCount() . "</strong> fails.";
             print "</div>\n";

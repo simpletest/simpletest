@@ -17,10 +17,10 @@
     // To be inspected visually.
     //
     $reporter = new TestHTMLDisplay();
-    $reporter->notify(new TestStart("One"));
-    $reporter->notify(new TestStart("Two"));
+    $reporter->notify(new TestStart("One", 2));
+    $reporter->notify(new TestStart("Two", 1));
     $reporter->notify(new TestResult(true, "True"));
     $reporter->notify(new TestResult(false, "A big long failure message"));
-    $reporter->notify(new TestEnd("Two"));
-    $reporter->notify(new TestEnd("One"));
+    $reporter->notify(new TestEnd("Two", 1));
+    $reporter->notify(new TestEnd("One", 2));
 ?>
