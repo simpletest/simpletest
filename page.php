@@ -166,8 +166,8 @@
         
         /**
          *    Creates the parser used with the builder.
-         *    @param $page   Target of incoming tag information.
-         *    @return        Builder to feed events to this page.
+         *    @param SimplePage $page      Target of incoming tag information.
+         *    @return SimplePageBuilder    Builder to feed events to this page.
          *    @protected
          */
         function &_createBuilder(&$page) {
@@ -176,7 +176,7 @@
         
         /**
          *    Adds a tag to the page.
-         *    @param $tag        Tag to accept.
+         *    @param SimpleTag $tag        Tag to accept.
          *    @public
          */
         function acceptTag(&$tag) {
@@ -187,7 +187,7 @@
                         $tag->getAttribute("id"));
             } elseif ($tag->getTagName() == "title") {
                 $this->_setTitle($tag);
-            } elseif ($tag->isWidget()) {
+            } elseif ($this->_isFormElement($tag->getTagName())) {
                 for ($i = 0; $i < count($this->_open_forms); $i++) {
                     $this->_open_forms[$i]->addWidget($tag);
                 }
@@ -195,8 +195,19 @@
         }
         
         /**
+         *    Tests to see if a tag is a possible form
+         *    element.
+         *    @param string $name     HTML element name.
+         *    @return boolean         True if form element.
+         *    @private
+         */
+        function _isFormElement($name) {
+            return in_array($name, array('input', 'textarea'));
+        }
+        
+        /**
          *    Opens a form.
-         *    @param $tag        Tag to accept.
+         *    @param SimpleFormTag $tag      Tag to accept.
          *    @public
          */
         function acceptFormStart(&$tag) {

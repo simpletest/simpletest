@@ -27,19 +27,11 @@
             $tag = &new SimpleTextTag(array());
             $this->assertFalse($tag->expectEndTag());
         }
-        function testWidgetCheck() {
-            $tag = &new SimpleTitleTag(array());
-            $this->assertFalse($tag->isWidget());
-        }
     }
     
     class TestOfWidget extends UnitTestCase {
         function TestOfWidget() {
             $this->UnitTestCase();
-        }
-        function testWidgetCheck() {
-            $tag = &new SimpleTextTag(array());
-            $this->assertTrue($tag->isWidget());
         }
         function testTextDefault() {
             $tag = &new SimpleTextTag(array('value' => 'aaa'));
@@ -53,11 +45,6 @@
             $tag->resetValue();
             $this->assertEqual($tag->getValue(), 'aaa');
         }
-        function testTextAreaDefault() {
-            $tag = &new SimpleTextAreaTag(array());
-            $tag->addContent('Some text');
-            $this->assertEqual($tag->getDefault(), 'Some text');
-        }
         function testSubmitDefaults() {
             $tag = &new SimpleSubmitTag(array('type' => 'submit'));
             $this->assertEqual($tag->getName(), 'submit');
@@ -70,6 +57,25 @@
                     array('type' => 'submit', 'name' => 's', 'value' => 'Ok!'));
             $this->assertEqual($tag->getName(), 's');
             $this->assertEqual($tag->getValue(), 'Ok!');
+        }
+    }
+    
+    class TestOfTextArea extends UnitTestCase {
+        function TestOfTextArea() {
+            $this->UnitTestCase();
+        }
+        function testDefault() {
+            $tag = &new SimpleTextAreaTag(array('name' => 'a'));
+            $tag->addContent('Some text');
+            $this->assertEqual($tag->getName(), 'a');
+            $this->assertEqual($tag->getDefault(), 'Some text');
+        }
+        function testWrapping() {
+            $tag = &new SimpleTextAreaTag(array('cols' => '10', 'wrap' => 'physical'));
+            $tag->addContent("Lot's of text that should be wrapped");
+            $this->assertEqual(
+                    $tag->getDefault(),
+                    "Lot's of\ntext that\nshould be\nwrapped");
         }
     }
     

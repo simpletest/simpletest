@@ -50,12 +50,12 @@
         }
         
         /**
-         *    Form element indicator.
-         *    @return boolean        False.
+         *    List oflegal child elements.
+         *    @return array        List of element names.
          *    @public
          */
-        function isWidget() {
-            return false;
+        function getChildElements() {
+            return array();
         }
         
         /**
@@ -129,15 +129,6 @@
         function SimpleWidget($name, $attributes) {
             $this->SimpleTag($name, $attributes);
             $this->_value = false;
-        }
-        
-        /**
-         *    Form element indicator.
-         *    @return boolean        True.
-         *    @public
-         */
-        function isWidget() {
-            return true;
         }
         
         /**
@@ -292,7 +283,28 @@
          *    @public
          */
         function getDefault() {
+            if ($this->_wrapIsEnabled()) {
+                return wordwrap(
+                        $this->getContent(),
+                        (integer)$this->getAttribute('cols'),
+                        "\n");
+            }
             return $this->getContent();
+        }
+        
+        /**
+         *    Test to see if text should be wrapped.
+         *    @return boolean        True if wrapping on.
+         *    @private
+         */
+        function _wrapIsEnabled() {
+            if ($this->getAttribute('cols')) {
+                $wrap = $this->getAttribute('wrap');
+                if (($wrap == 'physical') || ($wrap == 'hard')) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
     
