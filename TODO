@@ -6,7 +6,7 @@ $Id$
 
 Unit tester
 -----------
-Show line number of failed assertion (3/2) - done.
+Show line number of failed assertion (3/3) - done.
 Remove SIMPLE_TEST constant (1/1) - done.
 Add a NotAExpectation (1/1) - done.
 
@@ -41,7 +41,7 @@ Username and password should allow encoded characters (1/0) - done.
 Add support for proxy fetching (3/9) - done.
 Add User-Agent identifier for tracking tests (1/0) - done.
 Allow adding of arbitrary headers (1/1) - done.
-Add accessor for link set (1).
+Add accessors for link sets (1).
 Add showRequest() to dump the last raw request (2/1) - done.
 Remove getCurrentUrl() method (2/1) - done.
 

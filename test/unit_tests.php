@@ -21,7 +21,6 @@
             $this->addTestFile('simple_mock_test.php');
             $this->addTestFile('adapter_test.php');
             $this->addTestFile('socket_test.php');
-            $this->addTestFile('query_string_test.php');
             $this->addTestFile('url_test.php');
             $this->addTestFile('http_test.php');
             $this->addTestFile('authentication_test.php');
