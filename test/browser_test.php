@@ -165,33 +165,4 @@
             $page->tally();
         }
     }
-    
-    class TestOfBadHosts extends UnitTestCase {
-        function TestOfBadHosts() {
-            $this->UnitTestCase();
-        }
-        function &_createSimulatedBadHost() {
-            $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue("isError", true);
-            $response->setReturnValue("getError", "Bad socket");
-            $response->setReturnValue("getContent", false);
-            
-            $request = &new MockSimpleHttpRequest($this);
-            $request->setReturnReference("fetch", $response);
-            return $request;
-        }
-        function testUntestedHost() {
-            $request = &$this->_createSimulatedBadHost();
-            
-            $browser = &new MockRequestSimpleBrowser($this);
-            $browser->setReturnReference('_createRequest', $request);
-            $browser->SimpleBrowser();
-            
-            $this->assertIdentical($browser->getResponseCode(), false);
-            $this->assertIdentical($browser->getMimeType(), false);
-            $this->assertIdentical(
-                    $browser->get("http://this.host/this/path/page.html", false),
-                    false);
-        }
-    }
 ?>

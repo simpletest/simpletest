@@ -374,4 +374,30 @@
             $fetcher->tally();
         }
     }
+    
+    class TestOfBadHosts extends UnitTestCase {
+        function TestOfBadHosts() {
+            $this->UnitTestCase();
+        }
+        function &_createSimulatedBadHost() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue("isError", true);
+            $response->setReturnValue("getError", "Bad socket");
+            $response->setReturnValue("getContent", false);
+            
+            $request = &new MockSimpleHttpRequest($this);
+            $request->setReturnReference("fetch", $response);
+            return $request;
+        }
+        function testUntestedHost() {
+            $request = &$this->_createSimulatedBadHost();
+            
+            $fetcher = &new MockRequestFetcher($this);
+            $fetcher->setReturnReference('_createRequest', $request);
+            $fetcher->SimpleFetcher();
+            
+            $response = &$fetcher->fetchResponse('GET', 'http://this.host/this/path/page.html');
+            $this->assertTrue($response->isError());
+        }
+    }
 ?>
