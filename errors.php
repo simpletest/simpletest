@@ -82,7 +82,7 @@
          */
         function &instance() {
             static $queue = false;
-            if (!$queue) {
+            if (! $queue) {
                 $queue = new SimpleErrorQueue();
             }
             return $queue;
@@ -127,6 +127,10 @@
      */
     function simpleTestErrorHandler($severity, $message, $filename, $line, $super_globals) {
         restore_error_handler();
+        //if (ini_get('log_errors')) {
+        //    $label = SimpleErrorQueue::getSeverityAsString($severity);
+        //    error_log("$label: $message in $filename on line $line");
+        //}
         if ($severity = $severity & error_reporting()) {
             $queue = &SimpleErrorQueue::instance();
             $queue->add($severity, $message, $filename, $line, $super_globals);
