@@ -707,7 +707,16 @@
         function getRequest() {
             return $this->_page->getRequest();
         }
-        
+
+        /**
+         *    Accessor for raw header information.
+         *    @return string      Header block.
+         *    @access public
+         */
+        function getHeaders() {
+            return $this->_page->getHeaders();
+        }
+
         /**
          *    Accessor for raw page information.
          *    @return string      Original text content of web page.
@@ -724,15 +733,6 @@
          */
         function getContentAsText() {
             return $this->_page->getText();
-        }
-        
-        /**
-         *    Accessor for raw header information.
-         *    @return string      Header block.
-         *    @access public
-         */
-        function getHeaders() {
-            return $this->_page->getHeaders();
         }
         
         /**
@@ -775,7 +775,7 @@
         }
           
         /**
-         *    Sets all form fields with that name.
+         *    Sets all form fields with that id attribute.
          *    @param string/integer $id   Id of field in forms.
          *    @param string $value        New value of field.
          *    @return boolean             True if field exists, otherwise false.

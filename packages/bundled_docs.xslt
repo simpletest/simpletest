@@ -132,7 +132,7 @@
     
     <xsl:template name="copyright">
         <div class="copyright">
-            Copyright<br/>Marcus Baker, Jason Sweat 2004
+            Copyright<br/>Marcus Baker, Jason Sweat, Perrick Penet 2004
         </div>
     </xsl:template>
     

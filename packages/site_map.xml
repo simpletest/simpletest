@@ -8,12 +8,11 @@
         <page title="Mock objects" file="mock_objects_documentation.php"/>
         <page title="Partial mocks" file="partial_mocks_documentation.php"/>
         <page title="Reporting" file="reporter_documentation.php"/>
-        <page title="Test runner" file="runner_documentation.php"/>
         <page title="Expectations" file="expectation_documentation.php"/>
         <page title="Web tester" file="web_tester_documentation.php"/>
         <page title="Testing forms" file="form_testing_documentation.php"/>
         <page title="Authentication" file="authentication_documentation.php"/>
-        <page title="Browser" file="browser_documentation.php"/>
+        <page title="Scriptable browser" file="browser_documentation.php"/>
     </page>
     <page title="PHP unit testing" file="first_test_tutorial.php">
         <page title="Grouping tests" file="group_test_tutorial.php"/>
