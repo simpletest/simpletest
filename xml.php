@@ -12,13 +12,15 @@
      */
     class XmlReporter extends SimpleReporter {
         var $_indent;
+        var $_namespace;
         
         /**
          *    Does nothing yet.
          *    @access public
          */
-        function XmlReporter($indent = '  ') {
+        function XmlReporter($namespace = 'st', $indent = '  ') {
             $this->SimpleReporter();
+            $this->_namespace = $namespace;
             $this->_indent = $indent;
         }
         
@@ -58,9 +60,11 @@
         function paintGroupStart($test_name, $size) {
             parent::paintGroupStart($test_name, $size);
             print $this->_getIndent();
-            print "<st:group size=\"$size\">\n";
+            print "<" . $this->_namespace . ":group size=\"$size\">\n";
             print $this->_getIndent(1);
-            print "<st:name>" . $this->toParsedXml($test_name) . "</st:name>\n";
+            print "<" . $this->_namespace . ":name>" .
+                    $this->toParsedXml($test_name) .
+                    "</" . $this->_namespace . ":name>\n";
         }
         
         /**
@@ -70,7 +74,7 @@
          */
         function paintGroupEnd($test_name) {
             print $this->_getIndent();
-            print "</st:group>\n";
+            print "</" . $this->_namespace . ":group>\n";
             parent::paintGroupEnd($test_name);
         }
         
@@ -82,9 +86,11 @@
         function paintCaseStart($test_name) {
             parent::paintCaseStart($test_name);
             print $this->_getIndent();
-            print "<st:case>\n";
+            print "<" . $this->_namespace . ":case>\n";
             print $this->_getIndent(1);
-            print "<st:name>" . $this->toParsedXml($test_name) . "</st:name>\n";
+            print "<" . $this->_namespace . ":name>" .
+                    $this->toParsedXml($test_name) .
+                    "</" . $this->_namespace . ":name>\n";
         }
         
         /**
@@ -94,7 +100,7 @@
          */
         function paintCaseEnd($test_name) {
             print $this->_getIndent();
-            print "</st:case>\n";
+            print "</" . $this->_namespace . ":case>\n";
             parent::paintCaseEnd($test_name);
         }
         
@@ -106,9 +112,11 @@
         function paintMethodStart($test_name) {
             parent::paintMethodStart($test_name);
             print $this->_getIndent();
-            print "<st:test>\n";
+            print "<" . $this->_namespace . ":test>\n";
             print $this->_getIndent(1);
-            print "<st:name>" . $this->toParsedXml($test_name) . "</st:name>\n";
+            print "<" . $this->_namespace . ":name>" .
+                    $this->toParsedXml($test_name) .
+                    "</" . $this->_namespace . ":name>\n";
         }
         
         /**
@@ -119,7 +127,7 @@
          */
         function paintMethodEnd($test_name) {
             print $this->_getIndent();
-            print "</st:test>\n";
+            print "</" . $this->_namespace . ":test>\n";
             parent::paintMethodEnd($test_name);
         }
         
@@ -131,9 +139,9 @@
         function paintPass($message) {
             parent::paintPass($message);
             print $this->_getIndent(1);
-            print "<st:pass>";
+            print "<" . $this->_namespace . ":pass>";
             print $this->toParsedXml($message);
-            print "</st:pass>\n";
+            print "</" . $this->_namespace . ":pass>\n";
         }
         
         /**
@@ -144,9 +152,9 @@
         function paintFail($message) {
             parent::paintFail($message);
             print $this->_getIndent(1);
-            print "<st:fail>";
+            print "<" . $this->_namespace . ":fail>";
             print $this->toParsedXml($message);
-            print "</st:fail>\n";
+            print "</" . $this->_namespace . ":fail>\n";
         }
         
         /**
@@ -158,9 +166,9 @@
         function paintException($message) {
             parent::paintException($message);
             print $this->_getIndent(1);
-            print "<st:exception>";
+            print "<" . $this->_namespace . ":exception>";
             print $this->toParsedXml($message);
-            print "</st:exception>\n";
+            print "</" . $this->_namespace . ":exception>\n";
         }
         
         /**
@@ -171,8 +179,9 @@
          *    @abstract
          */
         function paintHeader($test_name) {
-            print "<?xml version=\"1.0\" xmlns:st=\"www.lastcraft.com/SimpleTest/Beta3/Report\"?>\n";
-            print "<st:run>\n";
+            print "<?xml version=\"1.0\" xmlns:" . $this->_namespace .
+                    "=\"www.lastcraft.com/SimpleTest/Beta3/Report\"?>\n";
+            print "<" . $this->_namespace . ":run>\n";
         }
         
         /**
@@ -182,7 +191,7 @@
          *    @abstract
          */
         function paintFooter($test_name) {
-            print "</st:run>\n";
+            print "</" . $this->_namespace . ":run>\n";
         }
     }
 ?>
