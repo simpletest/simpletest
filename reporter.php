@@ -198,7 +198,7 @@
          */
         function paintException($message) {
             parent::paintException($message);
-            print "Exception " . $this->getExceptionCount. "!\n$message\n";
+            print "Exception " . $this->getExceptionCount() . "!\n$message\n";
         }
         
         /**
