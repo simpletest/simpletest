@@ -74,50 +74,37 @@
             </head>
     <body>
         <h1>Unit Test documentation</h1>
-        <div class="in">
-            This page...
-                        <ul>
-                <li>
-                    <a href="#unit">Test cases</a> and basic assertions.
-                </li>
-                <li>
-                    <a href="#extending_unit">Extending test cases</a>.
-                </li>
-                <li>
-                    <a href="#running_unit">Running a single case</a>.
-                </li>
-                <li>
-                    Different ways to <a href="#group">group tests</a>.
-                </li>
-                <li>
-                    Intergrating <a href="#legacy">legacy test cases</a>.
-                </li>
-            </ul>        </div>
         <div>
             The different sections of the documentation are...
             <ul>
                 <li><a href="unit_test_documentation.html">Test cases</a></li>
+                <li><a href="group_test_documentation.html">Group tests</a></li>
                 <li><a href="reporter_documentation.html">Displaying results</a></li>
                 <li><a href="server_stubs_documentation.html">Server stubs</a></li>
                 <li><a href="mock_objects_documentation.html">Mock objects</a></li>
             </ul>
         </div>
-        <div class="out">
-            Related resources...
+        <div class="in">
+            This page...
                         <ul>
                 <li>
-                    SimpleTest project page on <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
+                    <a href="#unit">Unit test cases</a> and basic assertions.
                 </li>
                 <li>
-                    SimpleTest download page on <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
+                    <a href="#extending_unit">Extending test cases</a> to
+                    customise them for your own project.
                 </li>
-           </ul>        </div>
+                <li>
+                    <a href="#running_unit">Running a single case</a> as
+                    a single script.
+                </li>
+            </ul>        </div>
+        <div>
+            This documentation is shipped with the
+            <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a> package.
+        </div>
         <div class="content">
                         <p>
-                This documentation is shipped with the
-                <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a> package.
-            </p>
-            <p>
                 <a class="target" name="unit"><h2>Unit test cases</h2></a>
             </p>
             <p>
@@ -129,18 +116,16 @@ class FileTestCase extends UnitTestCase {
     }
 }</strong>
 </pre>
-                If no test name is supplied whe chaing the constructor then
+                If no test name is supplied whe chaining the constructor then
                 the class name will be taken instead.
-                Tests are added as methods in the test case whose names
+                This will be the name displayed in the test results.
+            </p>
+            <p>
+                Actual tests are added as methods in the test case whose names
                 start with the string &quot;test&quot; and
                 when the test case is invoked all such methods are run in
                 the random order that PHP introspection finds them.
                 As many test methods can be added as needed.
-                Before each test method, the <span class="code">setUp()</span>
-                method is invoked and after each test method the
-                <span class="code">tearDown()</span> method is invoked.
-                Override these to add common test start up and test clean
-                up code when needed.
                 For example...
 <pre>
 require_once(&apos;../classes/writer.php&apos;);
@@ -162,7 +147,26 @@ class FileTestCase extends UnitTestCase {
     }</strong>
 }
 </pre>
-                The means of reporting test results are by attached observers
+                Our only test method at the moment is <span class="new_code">testCreation()</span>
+                where we check that a file has been created by our
+                <span class="new_code">Writer</span> object.
+                We could have put the <span class="new_code">unlink()</span>
+                code into this method as well, but by placing it in
+                <span class="new_code">setUp()</span> and
+                <span class="new_code">tearDown()</span> we can use it with
+                other test methods that we add.
+            </p>
+            <p>
+                The <span class="new_code">setUp()</span> method is run
+                just befor every test method.
+                <span class="new_code">tearDown()</span> is run just after
+                every test method.
+                You can place some test case set up into the constructor, but
+                you risk test inteference that way.
+                This way is slightly slower, but it is safer.
+            </p>
+            <p>
+                The means of reporting test results (see below) are by attached observers
                 that are notified by various <span class="code">assert...()</span>
                 methods.
                 Here is the full list for the <span class="code">UnitTestCase</span>
@@ -188,11 +192,42 @@ class FileTestCase extends UnitTestCase {
                 sufficient.
             </p>
             <p>
+                Some examples...
+<pre><strong>
+$variable = null;
+$this->assertNull($variable, &apos;Should be cleared&apos;);</strong>
+</pre>
+                ...will pass and normally show no message.
+                If you have
+                <a href="http://www.lastcraft.com/display_subclass_tutorial.php">set up the tester to display passes</a>
+                as well then the message will be displayed as is.
+<pre><strong>
+$this->assertIdentical(0, false, &apos;Zero is not false [%s]&apos;);</strong>
+</pre>
+                This will fail as it performs a PHP <span class="new_code">===</span>
+                check between the two values.
+                The &quot;%s&quot; part will be replaced by the default
+                error message that would have been shown if we had not
+                supplied our own.
+                This allows us to nest test messages.
+<pre><strong>
+$a = 1;
+$b = $a;
+$this->assertReference($a, $b);</strong>
+</pre>
+                Will fail as the variable &quot;$a&quot; is a copy of &quot;$b&quot;.
+<pre><strong>
+$this->assertWantedPattern(&apos;/hello/i&apos;, &apos;Hello world&apos;);</strong>
+</pre>
+                This will pass as using a case insensitive match the string
+                &quot;hello&quot; is contained in &quot;Hello world&quot.
+            </p>
+            <p>
                 <a class="target" name="extending_unit"><h2>Extending test cases</h2></a>
             </p>
             <p>
                 Of course additional test methods can be added to create
-                specific types of test case to so as to extend framework...
+                specific types of test case too so as to extend framework...
 <pre>
 if (!defined(&apos;SIMPLE_TEST&apos;)) {
     define(&apos;SIMPLE_TEST&apos;, &apos;path/to/simpletest/&apos;);
@@ -245,7 +280,8 @@ class FileTestCase extends <strong>FileTester</strong> {
                 class instead.
                 It is found in <em>simple_test.php</em> rather than
                 <em>simple_unit.php</em>.
-                See below if you want to incorporate other unit tester&apos;s
+                See <a href="group_test_documentation.html">later</a> if you
+                want to incorporate other unit tester&apos;s
                 test cases in your test suites.
             </p>
             <p>
@@ -269,264 +305,30 @@ class FileTestCase extends <strong>FileTester</strong> {
         function FileTestCase() {
             $this-&gt;UnitTestCase(&apos;File test&apos;);
         }
-        ...
     }<strong>
     $test = &new FileTestCase();
     $test-&gt;attachObserver(new TestHtmlDisplay());
     $test-&gt;run();</strong>
 ?&gt;
 </pre>
+                This script will run as is, but will output zero passes
+                and zero failures.
                 As many observers can be attached as needed and they should
                 subclass the <span class="code">TestReporter</span> interface
                 in the <em>observer.php</em> file in SimpleTest.
                 The minimal <span class="code">TestHtmlDisplay</span> already
                 does this.
-            </p>
-            <p>
-                <a class="target" name="group"><h2>Group tests</h2></a>
-            </p>
-            <p>
-                To run a case as part of a group the test cases should
-                be placed in files without the runner code...
-<pre>
-&lt;?php
-    require_once("../classes/writer.php");
-
-    class FileTester extends UnitTestCase {
-        ...
-    }<strong>
-    GroupTest::ignore(&apos;FileTester&apos;);</strong>
-
-    class FileTestCase extends FileTester {
-        ...
-    }
-?&gt;
-</pre>
-                As many cases as needed can appear in a single file.
-                The <span class="new_code">FileTester</span> class does
-                no contain any actual tests, but is a base class for other
-                test cases.
-                For this reason we use the
-                <span class="new_code">GroupTest::ignore()</span> directive
-                to tell the upcoming group test to ignore it.
-                This directive can appear anywhere in the file and works
-                when a whole file of test cases is loaded (see below).
-                We will call this sample <em>file_test.php</em>.
-            </p>
-            <p>
-                Next we create a group test file, called say <em>group_test.php</em>.
-                You will think of a better name I am sure.
-                We will add the test file using a safe method...
-<pre>
-&lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);<strong>
-    require_once(&apos;file_test.php&apos;);
-
-    $test = &new GroupTest(&apos;All file tests&apos;);
-    $test-&gt;addTestCase(new FileTestCase());
-    $test-&gt;attachObserver(new TestHtmlDisplay());
-    $test-&gt;run();</strong>
-?&gt;
-</pre>
-                With this method, for every test case that we add we will have
-                to <span class="new_code">require_once()</span> the test code
-                file and manually instantiate each and every test case.
-                We can save a lot of typing with...
-<pre>
-&lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);
-
-    $test = &new GroupTest(&apos;All file tests&apos;);<strong>
-    $test-&gt;addTestFile(&apos;file_test.php&apos;);</strong>
-    $test-&gt;attachObserver(new TestHtmlDisplay());
-    $test-&gt;run();
-?&gt;
-</pre>
-                What happens here is that the <span="code">GroupTest</span>
-                class has done the <span class="code">require_once()</span>
-                for us.
-                It then checks to see if any new test case classes
-                have been created by the new file and automatically adds
-                them to the group test.
-                Now all we have to do is add each new file.
-            </p>
-            <p>
-                There are two things that could go wrong and which require care...
-                <ol>
-                    <li>
-                        The file could already have been parsed by PHP and so no
-                        new classes will have been added. You should make
-                        sure that the test cases are only included in this file
-                        and no others.
-                    </li>
-                    <li>
-                        New test case extension classes thet get included will be
-                        placed in the group test and run also.
-                        You will need to add a <span class="new_code">GroupTest::ignore()</span>
-                        directive for these classes or make sure that they are included
-                        before the <span class="new_code">GroupTest::addTestFile()</span>
-                        line.
-                    </li>
-                </ol>
-                Group tests can be included in other group tests, but must be added
-                manually.
-                Adding them on a file basis will not work.
-            </p>
-            <p>
-                In the above examples the line...
-<pre><strong>
-$test-&gt;run();
-</strong></pre>
-                ...is included.
-                This effectively combines test running with grouping.
-                For small projects this is what you want, but for larger ones
-                you may want to group the tests in all sorts of ways.
-            </p>
-            <p>
-                To get a more flexible group test we can subclass
-                <span>GroupTest</span> and then instantiate it as needed...
-<pre>
-if (!defined(&apos;SIMPLE_TEST&apos;)) {
-    define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
-}
-require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);
-<strong>
-class FileGroupTest extends GroupTest {
-    function FileGroupTest() {
-        $this-&gt;GroupTest(&apos;All file tests&apos;);
-        $this-&gt;addTestFile(&apos;file_test.php&apos;);
-    }
-}</strong>
-</pre>
-                We can now invoke the tests from a separate runner file...
-<pre>
-if (!defined(&apos;SIMPLE_TEST&apos;)) {
-    define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
-}
-require_once(&apos;file_group_test.php&apos;);
-<strong>
-$test = &new FileGroupTest();
-$test->attachObserver(new TestHtmlDisplay());
-$test->run();</strong>
-</pre>
-                ...or we can group them into larger group tests...
-<pre>
-if (!defined(&apos;SIMPLE_TEST&apos;)) {
-    define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
-}
-require_once(&apos;file_group_test.php&apos;);
-<strong>
-$test = &new BigGroupTest("Big group");
-$test->addTestCase(new FileGroupTest());
-$test->addTestCase(...);
-$test->attachObserver(new TestHtmlDisplay());
-$test->run();</strong>
-</pre>
-                If we still wish to run the original group test and we
-                don&apos;t want all of these little runner files, we can
-                put the test runner code around guard bars when we create
-                the group.
-<pre>
-class FileGroupTest extends GroupTest {
-    function FileGroupTest() {
-        $this-&gt;GroupTest(&apos;All file tests&apos;);
-        $test-&gt;addTestFile(&apos;file_test.php&apos;);
-    }
-}
-<strong>
-if (!defined(&apos;RUNNER&apos;)) {
-    define(&apos;RUNNER&apos;, true);</strong>
-    $test = &new FileGroupTest();
-    $test->attachObserver(new TestHtmlDisplay());
-    $test->run();<strong>
-}</strong>
-</pre>
-                This approach requires the guard to be set when including
-                the group test file, but this is still less hassle than
-                lots of separate runner files.
-                You include the same guard on the top level tests to make sure
-                that <span class="new_code">run()</span> will run once only
-                from the top level script that has been invoked.
-            </p>
-            <p>
-                <a class="target" name="legacy"><h2>Integrating legacy test cases</h2></a>
-            </p>
-            <p>
-                If you already have unit tests for your code or are extending external
-                classes that have tests, it is unlikely that all of the test cases
-                are in SimpleTest format.
-                Fortunately it is possible to incorporate test cases from other
-                unit testers directly into SimpleTest group tests.
-            </p>
-            <p>
-                Say we have the following
-                <a href="http://sourceforge.net/projects/phpunit">PhpUnit</a>
-                test case in the file <em>config_test.php</em>...
-<pre><strong>
-class ConfigFileTest extends TestCase {
-    function ConfigFileTest() {
-        $this->TestCase(&apos;Config file test&apos;);
-    }
-    function testContents() {
-        $config = new ConfigFile(&apos;test.conf&apos;);
-        $this->assertRegexp(&apos;/me/&apos;, $config->getValue(&apos;username&apos;));
-    }
-}
-</strong></pre>
-                The group test can recognise this as long as we include
-                the appropriate adapter class before we add the test
-                file...
-<pre>
-&lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);<strong>
-    require_once(SIMPLE_TEST . &apos;adapters/phpunit_test_case.php&apos;);</strong>
-
-    $test = &new GroupTest(&apos;All file tests&apos;);<strong>
-    $test-&gt;addTestFile(&apos;config_test.php&apos;);</strong>
-    $test-&gt;attachObserver(new TestHtmlDisplay());
-    $test-&gt;run();
-?&gt;
-</pre>
-                There are only two adapters, the other is for the
-                <a href="http://pear.php.net/manual/en/package.php.phpunit.php">PEAR</a>
-                unit tester...
-<pre>
-&lt;?php
-    if (!defined(&apos;SIMPLE_TEST&apos;)) {
-        define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
-    }
-    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
-    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);<strong>
-    require_once(SIMPLE_TEST . &apos;adapters/pear_test_case.php&apos;);</strong>
-
-    $test = &new GroupTest(&apos;All file tests&apos;);<strong>
-    $test-&gt;addTestFile(&apos;some_pear_test_cases.php&apos;);</strong>
-    $test-&gt;attachObserver(new TestHtmlDisplay());
-    $test-&gt;run();
-?&gt;
-</pre>
-                The PEAR test cases can be freely mixed with SimpleTest ones,
-                but you cannot use SimpleTest assertions in the legacy
-                versions.
-                This is done as a check that you are not accidently making
-                your test cases completely dependent on SimpleTest.
-                You may want to do a PEAR release of your library for example
-                which would mean shipping it with valid PEAR::PhpUnit test
-                cases.
             </p>        </div>
+        <div class="out">
+            Related resources...
+                        <ul>
+                <li>
+                    SimpleTest project page on <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
+                </li>
+                <li>
+                    SimpleTest download page on <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
+                </li>
+           </ul>        </div>
         <div class="copyright">
             Copyright <a href="mailto:marcus@lastcraft.com">Marcus&nbsp;Baker</a>&nbsp;2003
         </div>

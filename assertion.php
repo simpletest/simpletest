@@ -390,10 +390,23 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return "Pattern [" . $this->_get_pattern() . "] detected in string [$compare]";
+                return $this->_decribePatternMatch($this->_get_pattern(), $compare);
             } else {
                 return "Pattern [" . $this->_get_pattern() . "] not detected in string [$compare]";
             }
+        }
+        
+        /**
+         *    Describes a pattern match including the string
+         *    found and it's position.
+         */
+        function _decribePatternMatch($pattern, $subject) {
+            preg_match($pattern, $subject, $matches);
+            $position = strpos($subject, $matches[0]);
+            return "Pattern [$pattern] detected at [$position] in string [" .
+                    Assertion::clipString($subject, 40) . "] as [" .
+                    $matches[0] . "] in region [" .
+                    Assertion::clipString($subject, 40, $position) . "]";
         }
     }
     
@@ -434,7 +447,7 @@
             if ($this->test($compare)) {
                 return "Pattern [" . $this->_get_pattern() . "] not detected in string [$compare]";
             } else {
-                return "Pattern [" . $this->_get_pattern() . "] detected in string [$compare]";
+                return $this->_decribePatternMatch($this->_get_pattern(), $compare);
             }
          }
     }

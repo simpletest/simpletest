@@ -74,6 +74,18 @@
             </head>
     <body>
         <h1>Overview of SimpleTest</h1>
+        <div>
+            The different sections of the documentation are...
+            <ol>
+                <li><a href="index.html">Quickstart guide</a></li>
+                <li><a href="overview.html">Project overview</a></li>
+                <li><a href="unit_test_documentation.html">About test cases</a></li>
+                <li><a href="group_test_documentation.html">About group tests</a></li>
+                <li><a href="reporter_documentation.html">Displaying results</a></li>
+                <li><a href="server_stubs_documentation.html">Using server stubs</a></li>
+                <li><a href="mock_objects_documentation.html">Using mock objects</a></li>
+            </ol>
+        </div>
         <div class="in">
             This page...
                         <ul>
@@ -91,25 +103,9 @@
                 </li>
             </ul>        </div>
         <div>
-            The different sections of the documentation are...
-            <ul>
-                <li><a href="unit_test_documentation.html">Test cases</a></li>
-                <li><a href="reporter_documentation.html">Displaying results</a></li>
-                <li><a href="server_stubs_documentation.html">Server stubs</a></li>
-                <li><a href="mock_objects_documentation.html">Mock objects</a></li>
-            </ul>
+            This documentation is shipped with the
+            <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a> package.
         </div>
-        <div class="out">
-            Related resources...
-                        <ul>
-                <li>
-                    <a href="unit_test_documentation.html">Documentation for SimpleTest</a>.
-                </li>
-                <li>
-                    <a href="http://www.lastcraft.com/first_test_tutorial.php">How to write PHP test cases</a>
-                    is a fairly advanced tutorial.
-                </li>
-            </ul>        </div>
         <div class="content">
                         <p>
                 <a class="target" name="summary"><h2>What is SimpleTest?</h2></a>
@@ -129,7 +125,7 @@
                 and a description of the mismatch.
             </p>
             <p>
-                A test case looks like this...
+                A <a href="unit_test_documentation.html">test case</a> looks like this...
 <pre>
 class <strong>MyTestCase</strong> extends UnitTestCase {
     function MyTestCase() {
@@ -271,12 +267,12 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                             Mocking parts of a class for testing less than a class
                             or for complex simulations
                         </td>
-                        <td style="color: green;">Alpha7</td>
+                        <td style="color: green;">Done</td>
                     </tr>
                     <tr>
                         <td>Web cookie handling</td>
                         <td>Correct handling of cookies when fetching pages</td>
-                        <td style="color: green;">Alpha7</td>
+                        <td style="color: green;">Done</td>
                     </tr>
                     <tr>
                         <td>Form parsing</td>
@@ -464,6 +460,17 @@ class <strong>MySiteTest</strong> extends WebTestCase {
             <p>
                 Oh yes, and thanks for reading this far.
             </p>        </div>
+        <div class="out">
+            Related resources...
+                        <ul>
+                <li>
+                    <a href="unit_test_documentation.html">Documentation for SimpleTest</a>.
+                </li>
+                <li>
+                    <a href="http://www.lastcraft.com/first_test_tutorial.php">How to write PHP test cases</a>
+                    is a fairly advanced tutorial.
+                </li>
+            </ul>        </div>
         <div class="copyright">
             Copyright <a href="mailto:marcus@lastcraft.com">Marcus&nbsp;Baker</a>&nbsp;2003
         </div>

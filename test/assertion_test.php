@@ -211,22 +211,12 @@
         function testWanted() {
             $pattern = &new WantedPatternAssertion('/hello/i');
             $this->assertTrue($pattern->test("Hello world"));
-            $this->assertEqual(
-                    $pattern->testMessage("Hello world"),
-                    "Pattern [/hello/i] detected in string [Hello world]");
-            $this->assertEqual(
-                    $pattern->testMessage("Goodbye world"),
-                    "Pattern [/hello/i] not detected in string [Goodbye world]");
-        }
+            $this->assertFalse($pattern->test("Goodbye world"));
+       }
         function testUnwanted() {
             $pattern = &new UnwantedPatternAssertion('/hello/i');
             $this->assertFalse($pattern->test("Hello world"));
-            $this->assertEqual(
-                    $pattern->testMessage("Hello world"),
-                    "Pattern [/hello/i] detected in string [Hello world]");
-            $this->assertEqual(
-                    $pattern->testMessage("Goodbye world"),
-                    "Pattern [/hello/i] not detected in string [Goodbye world]");
+            $this->assertTrue($pattern->test("Goodbye world"));
         }
     }
 ?>

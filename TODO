@@ -8,7 +8,7 @@ $Id$
 Unit tester
 -----------
 Improve difference output messages when nested in arrays (1/3) - done.
-Improve difference output messages for pattern matching (2).
+Improve difference output messages for pattern matching (2/1) - done.
 
 Interface
 ---------
