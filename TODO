@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for the next iteration (Beta4) of 40 hours.
+This is immediate stuff only for the next iteration (Beta4) of 35 hours.
 Figures are estimated hours work versus actual (for XP velocity).
 Stuff will get added or dropped as the cycle progresses.
 
@@ -26,8 +26,7 @@ Refactoring link parsing (2/1) - done.
 
 Browser
 -------
-Frames support (8/2).
-Simple authentication support (4).
+Frames support (8/4).
 Need repeated parameters in query strings (0/3) - done.
 Duplicate value submissions should be PHP compatible (1).
 
@@ -39,7 +38,6 @@ Add setFieldById() method (1).
 
 Documentation
 -------------
-Cookie testing docs (3).
 Form submission docs (3/2).
 Add package headers to structure files (1/1) - done.
 
