@@ -114,14 +114,16 @@
                     continue;
                 }
                 $runner->handleMethodStart($method);
-                $this->invoke($runner, $method);
+                $runner->invoke($this, $method);
                 $runner->handleMethodEnd($method);
             }
             $runner->handleCaseEnd($this->getLabel());
         }
         
         /**
-         *    Invokes a test method.
+         *    Invokes a test method and dispatches any
+         *    untrapped errors. Called back from
+         *    the visiting runner.
          *    @param $runner    Current test runner.
          *    @public
          */
@@ -188,6 +190,15 @@
             $severity = $map[$severity];
             $this->_current_runner->handleError(
                     "Unexpected PHP error [$message] severity [$severity] in [$file] line [$line]");
+        }
+        
+        /**
+         *    Cancels any outstanding errors.
+         *    @public
+         */
+        function swallowErrors() {
+            $queue = &SimpleErrorQueue::instance();
+            $queue->clear();
         }
         
         /**
