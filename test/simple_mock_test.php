@@ -150,6 +150,10 @@
         function anotherMethod() {
             return true;
         }
+        
+        function __get($key) {
+            return $key;
+        }
     }
     
     Stub::generate("Dummy");
@@ -407,6 +411,20 @@
             $this->assertReference($mock->aMethod(), $object);
             $this->assertNull($mock->aMethod());
             $this->swallowErrors();
+        }
+        
+        function testReturnFromSpecialMethod() {
+            $mock = &new MockDummy($this);
+            $mock->setReturnValue('__get', '1st Return', array('first'));
+            $mock->setReturnValue('__get', '2nd Return', array('second'));
+            
+            $this->assertEqual($mock->__get('first'), '1st Return');
+            $this->assertEqual($mock->__get('second'), '2nd Return');
+            
+            if (phpversion() >= 5) {
+                $this->assertEqual($mock->first, $mock->__get('first'));
+                $this->assertEqual($mock->second, $mock->__get('second'));
+            }
         }
     }
     

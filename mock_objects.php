@@ -1042,6 +1042,7 @@
             $methods = array_merge($methods, get_class_methods($class));
             foreach ($methods as $method) {
                 if (Stub::_isSpecialMethod($method)) {
+                    $code .= Stub::_createSpecialCode($method);
                     continue;
                 }
                 if (in_array($method, get_class_methods($base))) {
@@ -1052,6 +1053,38 @@
                 $code .= "        return \$this->_invoke(\"$method\", \$args);\n";
                 $code .= "    }\n";
             }
+            return $code;
+        }
+        
+        /**
+         *    Creates code for the following special methods:
+         *        __call, __get, __set, __clone.
+         *
+         *    Returns empty on __construct as that will have already been
+         *    generated.
+         *
+         *    @see _createHandlerCode()
+         *    @param string $method    Method to generate
+         *    @static
+         *    @access private
+         */
+        function _createSpecialCode($method) {
+            if ($method == '__construct') {
+                return;
+            }
+            
+            $args = array(
+                '__call' => '$method, $value',
+                '__get' => '$key',
+                '__set' => '$key, $value',
+                '__clone' => '');
+            
+            $code = "";
+            $code .= "    function &$method($args[$method]) {\n";
+            $code .= "        \$args = func_get_args();\n";
+            $code .= "        return \$this->_invoke(\"$method\", \$args);\n";
+            $code .= "    }\n";
+            
             return $code;
         }
         
