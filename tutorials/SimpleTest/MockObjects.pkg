@@ -46,11 +46,8 @@ class DatabaseConnection {
     <para>
       <programlisting role="php">
       <![CDATA[
-if (!defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}
-require_once(SIMPLE_TEST . 'unit_tester.php');
-require_once(SIMPLE_TEST . 'mock_objects.php');
+require_once('simpletest/unit_tester.php');
+require_once('simpletest/mock_objects.php');
 require_once('database_connection.php');
 
 Mock::generate('DatabaseConnection');
@@ -63,11 +60,8 @@ Mock::generate('DatabaseConnection');
     <para>
       <programlisting role="php">
       <![CDATA[
-if (!defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}
-require_once(SIMPLE_TEST . 'unit_tester.php');
-require_once(SIMPLE_TEST . 'mock_objects.php');
+require_once('simpletest/unit_tester.php');
+require_once('simpletest/mock_objects.php');
 require_once('database_connection.php');
 
 Mock::generate('DatabaseConnection');
@@ -437,10 +431,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
       <programlisting role="php">
       <![CDATA[
 <?php
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', '../simpletest/');
-    }
-    require_once(SIMPLE_TEST . 'mock_objects.php');
+    require_once('simpletest/mock_objects.php');
     require_once('../classes/connection.php');
 
     Mock::generate('Connection', 'BasicMockConnection');
@@ -504,7 +495,7 @@ $unit_test->assertion('I hope this file exists', file_exists('my_file'));
       <programlisting role="php">
       <![CDATA[
 <?php
-    require_once(SIMPLE_TEST . 'mock_objects.php');
+    require_once('simpletest/mock_objects.php');
 
     class MyMock extends SimpleMock() {
         function MyMock(&$test, $wildcard) {
@@ -525,7 +516,7 @@ $unit_test->assertion('I hope this file exists', file_exists('my_file'));
       <programlisting role="php">
       <![CDATA[
 <?php
-    require_once(SIMPLE_TEST . 'mock_objects.php');
+    require_once('simpletest/mock_objects.php');
 
     class MyMock extends SimpleMock() {
         function MyMock($test, $wildcard) {

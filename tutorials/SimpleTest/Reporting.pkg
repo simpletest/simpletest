@@ -175,7 +175,7 @@ A do nothing display, a blank canvas for your own creation, would be...
     <para>
       <programlisting role="php">
       <![CDATA[
-require_once(SIMPLE_TEST . 'simple_test.php');
+require_once('simpletest/simple_test.php');
 
 class MyDisplay extends TestDisplay {
     function MyDisplay() {
@@ -225,11 +225,8 @@ SimpleTest also ships with a minimal command line reporter. The interface mimics
       <programlisting role="php">
       <![CDATA[
 <?php
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', 'simpletest/');
-    }
-    require_once(SIMPLE_TEST . 'unit_tester.php');
-    require_once(SIMPLE_TEST . 'reporter.php');
+    require_once('simpletest/unit_tester.php');
+    require_once('simpletest/reporter.php');
 
     $test = &new GroupTest('File test');
     $test->addTestFile('tests/file_test.php');
@@ -285,11 +282,8 @@ One of the main reasons for using a command line driven test suite is of using t
       <programlisting role="php">
       <![CDATA[
 <?php
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', 'simpletest/');
-    }
-    require_once(SIMPLE_TEST . 'unit_tester.php');
-    require_once(SIMPLE_TEST . 'reporter.php');
+    require_once('simpletest/unit_tester.php');
+    require_once('simpletest/reporter.php');
 
     $test = &new GroupTest('File test');
     $test->addTestFile('tests/file_test.php');
@@ -309,11 +303,8 @@ Of course we don't really want to create two test scripts, a command line one an
       <programlisting role="php">
       <![CDATA[
 <?php
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', 'simpletest/');
-    }
-    require_once(SIMPLE_TEST . 'unit_tester.php');
-    require_once(SIMPLE_TEST . 'reporter.php');
+    require_once('simpletest/unit_tester.php');
+    require_once('simpletest/reporter.php');
 
     $test = &new GroupTest('File test');
     $test->addTestFile('tests/file_test.php');
