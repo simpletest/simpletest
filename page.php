@@ -662,29 +662,6 @@
         }
         
         /**
-         *    Space at the ends will be stripped and space in
-         *    between is reduced to one space.
-         *    @param string $html  Typical HTML code.
-         *    @return string       Content as big string.
-         *    @access private
-         */
-        function _normalise($html) {
-            return preg_replace('/\S\s+\S/', ' ', strtolower(trim($html)));
-        }
-        
-        /**
-         *    Matches strings regardles of varying whitespace.
-         *    @param string $first    First to match with.
-         *    @param string $second   Second to match against.
-         *    @return boolean         True if matches even with
-         *                            whitespace differences.
-         *    @access private
-         */
-        function _isNormalMatch($first, $second) {
-            return ($this->_normalise($first) == $this->_normalise($second));
-        }
-        
-        /**
          *    Accessor for URLs by the link label. Label will match
          *    regardess of whitespace issues and case.
          *    @param string $label    Text of link.
@@ -694,7 +671,7 @@
         function getUrlsByLabel($label) {
             $matches = array();
             foreach ($this->_links as $link) {
-                if ($this->_isNormalMatch($link->getContent(), $label)) {
+                if ($link->getText() == $label) {
                     $matches[] = $this->_getUrlFromLink($link);
                 }
             }
@@ -760,7 +737,7 @@
          */
         function getTitle() {
             if ($this->_title) {
-                return $this->_title->getContent();
+                return $this->_title->getText();
             }
             return false;
         }

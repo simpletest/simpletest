@@ -8,7 +8,6 @@ Unit tester
 Fix of syntax errors in test scripts reporting green (3/3) - done.
 Fix of assertIdentical() getting stuck in a loop (3).
 Rename StickyError because of name clash (1/1) - done.
-Make sure error handling runner is loaded by default (2).
 Fix parsing check on test file loading to work with PHP5 (3).
 Add Jeff's performance fixes (2).
 
@@ -35,7 +34,7 @@ Web tester
 ----------
 Add htmlentities() international fix (1/1) - done.
 Add WebTestCase::getCookie() method (1/1) - done.
-Make labels HTML entity and tag blind (3/4).
+Make labels HTML entity and tag blind (3/4) - done.
 Add setFieldOrFail() method (1/1) - done.
 
 Documentation

@@ -356,7 +356,7 @@
         
         function testFindLinkWithNormalisation() {
             $link = &new SimpleAnchorTag(array('href' => './somewhere.php', 'id' => 33));
-            $link->addContent(' long  label ');
+            $link->addContent(' <em>Long &amp; thin</em> ');
             
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
@@ -365,7 +365,7 @@
             $page->AcceptTag($link);
             
             $this->assertEqual(
-                    $page->getUrlsByLabel('Long label'),
+                    $page->getUrlsByLabel('Long & thin'),
                     array(new SimpleUrl('http://host/somewhere.php')));
         }
         
@@ -506,10 +506,10 @@
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue(
                     'getContent',
-                    '<html><head><Title>Me&amp;Me</TITLE></head></html>');
+                    '<html><head><Title> <b>Me&amp;Me </TITLE></b></head></html>');
             
             $page = &$this->parse($response);
-            $this->assertEqual($page->getTitle(), "Me&amp;Me");
+            $this->assertEqual($page->getTitle(), "Me&Me");
         }
         
         function testCompleteForm() {
