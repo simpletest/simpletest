@@ -275,6 +275,118 @@
         }
     }
 
+    class TestOfBrowserCookies extends UnitTestCase {
+        function TestOfBrowserCookies() {
+            $this->UnitTestCase();
+        }
+        function &_createStandardResponse() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue("getNewCookies", array());
+            
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue("isError", false);
+            $response->setReturnValue("getContent", "stuff");
+            $response->setReturnReference("getHeaders", $headers);
+            return $response;
+        }
+        function &_createCookieSite($cookies) {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue("getNewCookies", $cookies);
+            
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue("isError", false);
+            $response->setReturnReference("getHeaders", $headers);
+            $response->setReturnValue("getContent", "stuff");
+            
+            $request = &new MockSimpleHttpRequest($this);
+            $request->setReturnReference("fetch", $response);
+            return $request;
+        }
+        function &_createPartialFetcher(&$request) {
+            $fetcher = &new MockRequestFetcher($this);
+            $fetcher->setReturnReference('_createRequest', $request);
+            $fetcher->SimpleFetcher();
+            return $fetcher;
+        }
+        function testSendingExistingCookie() {
+            $request = &new MockSimpleHttpRequest($this);
+            $request->setReturnReference("fetch", $this->_createStandardResponse());
+            $request->expectArguments("setCookie", array(new SimpleCookie("a", "A")));
+            $request->expectCallCount("setCookie", 1);
+            
+            $fetcher = &$this->_createPartialFetcher($request);
+            $fetcher->setCookie("a", "A");
+            $response = $fetcher->fetchResponse(
+                    "GET",
+                    "http://this.com/this/path/page.html",
+                    array());
+            $this->assertEqual($response->getContent(), "stuff");
+            $request->tally();
+        }
+        function testOverwriteCookieThatAlreadyExists() {
+            $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAAA", "this/path/")));
+            $fetcher = &$this->_createPartialFetcher($request);
+            
+            $fetcher->setCookie("a", "A");
+            $fetcher->fetchResponse(
+                    "GET",
+                    "http://this.com/this/path/page.html",
+                    array());
+            $this->assertEqual($fetcher->getCookieValue("this.com", "this/path/", "a"), "AAAA");
+        }
+        function testClearCookieBySettingExpiry() {
+            $request = &$this->_createCookieSite(array(
+                    new SimpleCookie("a", "b", "this/path/", "Wed, 25-Dec-02 04:24:19 GMT")));
+            $fetcher = &$this->_createPartialFetcher($request);
+            
+            $fetcher->setCookie("a", "A", "this/path/", "Wed, 25-Dec-02 04:24:21 GMT");
+            $fetcher->fetchResponse(
+                    "GET",
+                    "http://this.com/this/path/page.html",
+                    array());
+            $this->assertIdentical(
+                    $fetcher->getCookieValue("this.com", "this/path/", "a"),
+                    "b");
+            $fetcher->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
+            $this->assertIdentical(
+                    $fetcher->getCookieValue("this.com", "this/path/", "a"),
+                    false);
+        }
+        function testAgeingAndClearing() {
+            $request = &$this->_createCookieSite(array(
+                    new SimpleCookie("a", "A", "this/path/", "Wed, 25-Dec-02 04:24:21 GMT")));
+            $fetcher = &$this->_createPartialFetcher($request);
+            
+            $fetcher->fetchResponse(
+                    "GET",
+                    "http://this.com/this/path/page.html",
+                    array());
+            $fetcher->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
+            $this->assertIdentical(
+                    $fetcher->getCookieValue("this.com", "this/path/", "a"),
+                    "A");
+            $fetcher->ageCookies(2);
+            $fetcher->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
+            $this->assertIdentical(
+                    $fetcher->getCookieValue("this.com", "this/path/", "a"),
+                    false);
+        }
+        function testReadingIncomingAndSetCookies() {
+            $request = &$this->_createCookieSite(array(
+                    new SimpleCookie("a", "AAA", "this/path/")));
+            $fetcher = &$this->_createPartialFetcher($request);
+            
+            $this->assertNull($fetcher->getBaseCookieValue("a"));
+            $fetcher->fetchResponse(
+                    "GET",
+                    "http://this.com/this/path/page.html",
+                    array());
+            $fetcher->setCookie("b", "BBB", "this.com", "this/path/");
+            $this->assertEqual($fetcher->getBaseCookieValue("a"), "AAA");
+            $this->assertEqual($fetcher->getBaseCookieValue("b"), "BBB");
+        }
+    }
+
     class TestOfBrowserRedirects extends UnitTestCase {
         function TestOfBrowserRedirects() {
             $this->UnitTestCase();
