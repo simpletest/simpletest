@@ -27,6 +27,7 @@
          */
         function WebTestCase($label = false) {
             $this->SimpleTestCase($label);
+            $this->_clearHtmlCache();
         }
         
         /**
@@ -246,6 +247,13 @@
             }
             $this->get($url);
             return true;
+        }
+        
+        /**
+         *    @deprecated
+         */
+        function clickLinkId($id) {
+            return clickLinkById($id);
         }
         
         /**
