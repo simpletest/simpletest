@@ -252,10 +252,7 @@
          */
         function acceptTag(&$tag) {
             if ($tag->getTagName() == "a") {
-                $this->_addLink(
-                        $tag->getAttribute("href"),
-                        $tag->getContent(),
-                        $tag->getAttribute("id"));
+                $this->_addLink($tag);
             } elseif ($tag->getTagName() == "title") {
                 $this->_setTitle($tag);
             } elseif ($this->_isFormElement($tag->getTagName())) {
@@ -296,54 +293,51 @@
         /**
          *    Adds a link to the page. Partially fixes
          *    expandomatic links.
-         *    @param string $url        Address.
-         *    @param string $label      Text label of link.
-         *    @param string $id         Id attribute of link.
+         *    @param SimpleAnchorTag $tag      Link to accept.
          *    @access protected
          */
-        function _addLink($url, $label, $id) {
-            $parsed_url = new SimpleUrl($url);
+        function _addLink($tag) {
+            $url = $tag->getAttribute("href");
+            $parsed_url = new SimpleUrl($tag->getAttribute("href"));
             if ($parsed_url->getScheme() && $parsed_url->getHost()) {
-                $this->_addAbsoluteLink($url, $label, $id);
+                $this->_addAbsoluteLink($tag);
                 return;
             }
-            $this->_addRelativeLink($url, $label, $id);
+            $this->_addRelativeLink($tag);
         }
         
         /**
          *    Adds an absolute link to the page.
-         *    @param SimpleUrl $url    Address.
-         *    @param string $label     Text label of link.
-         *    @param string $id        Id attribute of link.
+         *    @param SimpleAnchorTag $tag    Link to accept.
          *    @access private
          */
-        function _addAbsoluteLink($url, $label, $id) {
-            $this->_addLinkId($url, $id);
-            if (!isset($this->_absolute_links[$label])) {
+        function _addAbsoluteLink($tag) {
+            $this->_addLinkId($tag->getAttribute("href"), $tag->getAttribute("id"));
+            $label = $tag->getContent();
+            if (! isset($this->_absolute_links[$label])) {
                 $this->_absolute_links[$label] = array();
             }
-            array_push($this->_absolute_links[$label], $url);
+            array_push($this->_absolute_links[$label], $tag->getAttribute("href"));
         }
         
         /**
          *    Adds a relative link to the page.
-         *    @param SimpleUrl $url     Address.
-         *    @param string $label      Text label of link.
-         *    @param string $id         Id attribute of link.
+         *    @param SimpleAnchorTag $tag    Link to accept.
          *    @access private
          */
-        function _addRelativeLink($url, $label, $id) {
-            $this->_addLinkId($url, $id);
-            if (!isset($this->_relative_links[$label])) {
+        function _addRelativeLink($tag) {
+            $this->_addLinkId($tag->getAttribute("href"), $tag->getAttribute("id"));
+            $label = $tag->getContent();
+            if (! isset($this->_relative_links[$label])) {
                 $this->_relative_links[$label] = array();
             }
-            array_push($this->_relative_links[$label], $url);
+            array_push($this->_relative_links[$label], $tag->getAttribute("href"));
         }
         
         /**
          *    Adds a URL by id attribute.
-         *    @param SimpleUrl $url     Address.
-         *    @param string $id         Id attribute of link.
+         *    @param string $url     Address.
+         *    @param string $id      Id attribute of link.
          *    @access private
          */
         function _addLinkId($url, $id) {

@@ -25,10 +25,10 @@ Make hidden fields unsettable (1/0) - done.
 
 Browser
 -------
-Frames support (8).
+Frames support (8/2).
 Simple authentication support (4).
-Image header fetching (4).
 Need repeated parameters in query strings (0/3) - done.
+Duplicate value submissions should be PHP compatible (1).
 
 Web tester
 ----------
