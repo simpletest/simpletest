@@ -312,6 +312,41 @@
         }
     }
     
+    class TestOfHttpHeaders extends UnitTestCase {
+        function TestOfHttpHeaders() {
+            $this->UnitTestCase();
+        }
+        function testParseBasicHeaders() {
+            $headers = new SimpleHttpHeaders("HTTP/1.1 200 OK\r\n" .
+                    "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n" .
+                    "Content-Type: text/plain\r\n" .
+                    "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n" .
+                    "Connection: close");
+            $this->assertIdentical($headers->getHttpVersion(), "1.1");
+            $this->assertIdentical($headers->getResponseCode(), 200);
+            $this->assertEqual($headers->getMimeType(), "text/plain");
+        }
+        function testParseOfCookies() {
+            $headers = new SimpleHttpHeaders("HTTP/1.1 200 OK\r\n" .
+                    "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n" .
+                    "Content-Type: text/plain\r\n" .
+                    "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n" .
+                    "Set-Cookie: a=aaa; expires=Wed, 25-Dec-02 04:24:20 GMT; path=/here/\r\n" .
+                    "Set-Cookie: b=bbb\r\n" .
+                    "Connection: close");
+            $cookies = $headers->getNewCookies();
+            $this->assertEqual(count($cookies), 2);
+            $this->assertEqual($cookies[0]->getName(), "a");
+            $this->assertEqual($cookies[0]->getValue(), "aaa");
+            $this->assertEqual($cookies[0]->getPath(), "/here/");
+            $this->assertEqual($cookies[0]->getExpiry(), "Wed, 25 Dec 2002 04:24:20 GMT");
+            $this->assertEqual($cookies[1]->getName(), "b");
+            $this->assertEqual($cookies[1]->getValue(), "bbb");
+            $this->assertEqual($cookies[1]->getPath(), "/");
+            $this->assertEqual($cookies[1]->getExpiry(), "");
+        }
+    }
+    
     class TestOfHttpResponse extends UnitTestCase {
         function TestOfHttpResponse() {
             $this->UnitTestCase();
@@ -357,7 +392,7 @@
             $this->assertTrue($response->isError());
             $this->assertEqual($response->getContent(), "");
         }
-        function testParseOfResponse() {
+        function testParseOfResponseHeaders() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
             $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\nDate: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
@@ -383,22 +418,16 @@
             $socket->setReturnValueAt(2, "read", "Content-Type: text/plain\r\n");
             $socket->setReturnValueAt(3, "read", "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n");
             $socket->setReturnValueAt(4, "read", "Set-Cookie: a=aaa; expires=Wed, 25-Dec-02 04:24:20 GMT; path=/here/\r\n");
-            $socket->setReturnValueAt(5, "read", "Set-Cookie: b=bbb\r\n");
-            $socket->setReturnValueAt(6, "read", "Connection: close\r\n");
-            $socket->setReturnValueAt(7, "read", "\r\n");
+            $socket->setReturnValueAt(5, "read", "Connection: close\r\n");
+            $socket->setReturnValueAt(6, "read", "\r\n");
             $socket->setReturnValue("read", "");
             $response = &new SimpleHttpResponse($socket);
             $this->assertFalse($response->isError());
             $cookies = $response->getNewCookies();
-            $this->assertEqual(count($cookies), 2);
             $this->assertEqual($cookies[0]->getName(), "a");
             $this->assertEqual($cookies[0]->getValue(), "aaa");
             $this->assertEqual($cookies[0]->getPath(), "/here/");
             $this->assertEqual($cookies[0]->getExpiry(), "Wed, 25 Dec 2002 04:24:20 GMT");
-            $this->assertEqual($cookies[1]->getName(), "b");
-            $this->assertEqual($cookies[1]->getValue(), "bbb");
-            $this->assertEqual($cookies[1]->getPath(), "/");
-            $this->assertEqual($cookies[1]->getExpiry(), "");
         }
     }
 ?>

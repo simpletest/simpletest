@@ -7,6 +7,8 @@
     require_once(SIMPLE_TEST . 'http.php');
     require_once(SIMPLE_TEST . 'simple_unit.php');
     
+    define('MAX_REDIRECTS', 2);
+    
     /**
      *    Repository for cookies. The semantics are a bit
      *    ropy until I can go through the cookie spec with
@@ -124,6 +126,7 @@
         var $_cookie_jar;
         var $_response;
         var $_base_url;
+        var $_max_redirects;
         
         /**
          *    Starts with a fresh browser with no
@@ -134,6 +137,7 @@
             $this->_cookie_jar = new CookieJar();
             $this->_response = false;
             $this->_base_url = false;
+            $this->_max_redirects = MAX_REDIRECTS;
         }
         
         /**
@@ -371,7 +375,7 @@
     
     /**
      *    Testing version of web browser. Can be set up to
-     *    automatically test reponses.
+     *    automatically test cookies.
      */
     class TestBrowser extends SimpleBrowser {
         var $_test;

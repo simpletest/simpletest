@@ -7,7 +7,7 @@ $Id$
 
 Unit tester
 -----------
-Swapping observer pattern for direct calls (3/5) - done.
+Swapping observer pattern for visitor (3/5) - done.
 Add an error trap (3/6) - done.
 Add options class (3/2) - done.
 
@@ -28,7 +28,6 @@ Skip CSS (1/2) - done.
 Skip comments (1/0) - done.
 Skip script tags (1/1) - done.
 Add input tag parsing (2).
-Add checkbox parsing (2).
 Add text area parsing (3).
 
 Browser

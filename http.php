@@ -642,7 +642,7 @@
     }
     
     /**
-     *    Request with data to send.
+     *    Request with data to send. Usually PUT or POST.
      */
     class SimpleHttpPushRequest extends SimpleHttpRequest {
         var $_pushed_content;
@@ -673,39 +673,24 @@
     }
     
     /**
-     *    Basic HTTP response.
+     *    Collection of header lines.
      */
-    class SimpleHttpResponse extends StickyError {
-        var $_content;
+    class SimpleHttpHeaders {
         var $_response_code;
         var $_http_version;
         var $_mime_type;
         var $_cookies;
         
         /**
-         *    Constructor. Reads and parses the incoming
-         *    content and headers.
-         *    @param $socket        Network connection to fetch
-         *                          response text from.
+         *    Parses the incoming header block.
+         *    @param $headers     Header block as string.
          *    @public
          */
-        function SimpleHttpResponse(&$socket) {
-            $this->StickyError();
-            $this->_content = false;
+        function SimpleHttpHeaders($headers) {
             $this->_response_code = 0;
             $this->_http_version = 0;
             $this->_mime_type = "";
             $this->_cookies = array();
-            $raw = $this->_readAll($socket);
-            if ($socket->isError()) {
-                $this->_setError("Error reading socket [" . $socket->getError() . "]");
-                return;
-            }
-            if (!strstr($raw, "\r\n\r\n")) {
-                $this->_setError("Could not parse headers");
-                return;
-            }
-            list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);
             foreach (split("\r\n", $headers) as $header_line) {
                 $this->_parseHeaderLine($header_line);
             }
@@ -756,11 +741,10 @@
         function getNewCookies() {
             return $this->_cookies;
         }
-        
+
         /**
-         *    Called on each header line. Subclasses should
-         *    add behaviour to this method for their
-         *    particular header types.
+         *    Called on each header line to accumulate the held
+         *    data within the class.
          *    @param $header_line        One line of header.
          *    @protected
          */
@@ -797,6 +781,83 @@
                     trim($cookie[2]),
                     isset($cookie["path"]) ? $cookie["path"] : "",
                     isset($cookie["expires"]) ? $cookie["expires"] : false);
+        }
+    }
+    
+    /**
+     *    Basic HTTP response.
+     */
+    class SimpleHttpResponse extends StickyError {
+        var $_content;
+        var $_headers;
+        
+        /**
+         *    Constructor. Reads and parses the incoming
+         *    content and headers.
+         *    @param $socket        Network connection to fetch
+         *                          response text from.
+         *    @public
+         */
+        function SimpleHttpResponse(&$socket) {
+            $this->StickyError();
+            $this->_content = false;
+            $raw = $this->_readAll($socket);
+            if ($socket->isError()) {
+                $this->_setError("Error reading socket [" . $socket->getError() . "]");
+                return;
+            }
+            if (!strstr($raw, "\r\n\r\n")) {
+                $this->_setError("Could not parse headers");
+                return;
+            }
+            list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);
+            $this->_headers = &new SimpleHttpHeaders($headers);
+        }
+        
+        /**
+         *    Accessor for the content after the last
+         *    header line.
+         *    @return            All content as string.
+         *    @public
+         */
+        function getContent() {
+            return $this->_content;
+        }
+        
+        /**
+         *    Accessor for parsed HTTP protocol version.
+         *    @return            HTTP error code integer.
+         *    @public
+         */
+        function getHttpVersion() {
+            return $this->_headers->getHttpVersion();            
+        }
+        
+        /**
+         *    Accessor for parsed HTTP error code.
+         *    @return            HTTP error code integer.
+         *    @public
+         */
+        function getResponseCode() {
+            return $this->_headers->getResponseCode();
+        }
+        
+        /**
+         *    Accessor for MIME type header information.
+         *    @return            MIME type as string.
+         *    @public
+         */
+        function getMimeType() {
+            return $this->_headers->getMimeType();            
+        }
+        
+        /**
+         *    Accessor for any new cookies.
+         *    @return        List of new cookies.
+         *    @public
+         */
+        function getNewCookies() {
+            return $this->_headers->getNewCookies();
         }
         
         /**
