@@ -856,14 +856,14 @@
          *    @return array           List of links with that label.
          *    @access public
          */
-        function getUrls($label) {
-            $all = array();
+        function getUrlsByLabel($label) {
+            $matches = array();
             foreach ($this->_links as $link) {
                 if ($this->_isNormalmatch($link->getContent(), $label)) {
-                    $all[] = $link->getAttribute('href');
+                    $matches[] = $link->getAttribute('href');
                 }
             }
-            return $all;
+            return $matches;
         }
         
         /**

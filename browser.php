@@ -9,11 +9,11 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'options.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'http.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'page.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'frames.php');
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'user_agent.php');
+    require_once(dirname(__FILE__) . '/options.php');
+    require_once(dirname(__FILE__) . '/http.php');
+    require_once(dirname(__FILE__) . '/page.php');
+    require_once(dirname(__FILE__) . '/frames.php');
+    require_once(dirname(__FILE__) . '/user_agent.php');
     /**#@-*/
     
     /**
@@ -749,7 +749,7 @@
          *    @access public
          */
         function clickLink($label, $index = 0) {
-            $urls = $this->_page->getUrls($label);
+            $urls = $this->_page->getUrlsByLabel($label);
             if (count($urls) == 0) {
                 return false;
             }
@@ -767,7 +767,7 @@
          *    @access public
          */
         function isLink($label) {
-            return (count($this->_page->getUrls($label)) > 0);
+            return (count($this->_page->getUrlsByLabel($label)) > 0);
         }
         
         /**

@@ -159,8 +159,8 @@
         }
         function testLinkAffirmationWhenPresent() {
             $page = &new MockSimplePage($this);
-            $page->setReturnValue('getUrls', array('http://www.nowhere.com'));
-            $page->expectOnce('getUrls', array('a link label'));
+            $page->setReturnValue('getUrlsByLabel', array('http://www.nowhere.com'));
+            $page->expectOnce('getUrlsByLabel', array('a link label'));
             
             $browser = &$this->loadPage($page);
             $this->assertTrue($browser->isLink('a link label'));
@@ -217,8 +217,8 @@
             $agent->expectCallCount('fetchResponse', 2);
             
             $page = &new MockSimplePage($this);
-            $page->setReturnValue('getUrls', array('new.html'));
-            $page->expectOnce('getUrls', array('New'));
+            $page->setReturnValue('getUrlsByLabel', array('new.html'));
+            $page->expectOnce('getUrlsByLabel', array('New'));
             
             $browser = &$this->createBrowser($agent, $page);
             $browser->get('http://this.com/page.html');
@@ -232,7 +232,7 @@
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
             
             $page = &new MockSimplePage($this);
-            $page->setReturnValue('getUrls', array());
+            $page->setReturnValue('getUrlsByLabel', array());
             $page->setReturnValue('getRaw', 'stuff');
             
             $browser = &$this->createBrowser($agent, $page);
@@ -249,7 +249,7 @@
             $agent->expectCallCount('fetchResponse', 2);
             
             $page = &new MockSimplePage($this);
-            $page->setReturnValue('getUrls', array('0.html', '1.html'));
+            $page->setReturnValue('getUrlsByLabel', array('0.html', '1.html'));
             
             $browser = &$this->createBrowser($agent, $page);
             $browser->get('http://this.com/page.html');

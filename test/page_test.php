@@ -281,7 +281,7 @@
             $page = &new SimplePage(new MockSimpleHttpResponse($this));
             $this->assertIdentical($page->getAbsoluteLinks(), array(), 'abs->%s');
             $this->assertIdentical($page->getRelativeLinks(), array(), 'rel->%s');
-            $this->assertIdentical($page->getUrls('Label'), array());
+            $this->assertIdentical($page->getUrlsByLabel('Label'), array());
         }
         function testAddAbsoluteLink() {
             $link = &new SimpleAnchorTag(array('href' => 'http://somewhere.com'));
@@ -292,7 +292,7 @@
             
             $this->assertEqual($page->getAbsoluteLinks(), array('http://somewhere.com'), 'abs->%s');
             $this->assertIdentical($page->getRelativeLinks(), array(), 'rel->%s');
-            $this->assertEqual($page->getUrls('Label'), array('http://somewhere.com'));
+            $this->assertEqual($page->getUrlsByLabel('Label'), array('http://somewhere.com'));
         }
         function testAddStrictRelativeLink() {
             $link = &new SimpleAnchorTag(array('href' => './somewhere.php'));
@@ -301,7 +301,7 @@
             $page->AcceptTag($link);
             $this->assertEqual($page->getAbsoluteLinks(), array(), 'abs->%s');
             $this->assertIdentical($page->getRelativeLinks(), array('./somewhere.php'), 'rel->%s');
-            $this->assertEqual($page->getUrls('Label'), array('./somewhere.php'));
+            $this->assertEqual($page->getUrlsByLabel('Label'), array('./somewhere.php'));
         }
         function testAddRelativeLink() {
             $link = &new SimpleAnchorTag(array('href' => 'somewhere.php'));
@@ -310,14 +310,14 @@
             $page->AcceptTag($link);
             $this->assertEqual($page->getAbsoluteLinks(), array(), 'abs->%s');
             $this->assertIdentical($page->getRelativeLinks(), array('somewhere.php'), 'rel->%s');
-            $this->assertEqual($page->getUrls('Label'), array('somewhere.php'));
+            $this->assertEqual($page->getUrlsByLabel('Label'), array('somewhere.php'));
         }
         function testLinkIds() {
             $link = &new SimpleAnchorTag(array('href' => './somewhere.php', 'id' => 33));
             $link->addContent('Label');
             $page = &new SimplePage(new MockSimpleHttpResponse($this));
             $page->AcceptTag($link);
-            $this->assertEqual($page->getUrls('Label'), array('./somewhere.php'));
+            $this->assertEqual($page->getUrlsByLabel('Label'), array('./somewhere.php'));
             $this->assertFalse($page->getUrlById(0));
             $this->assertEqual($page->getUrlById(33), './somewhere.php');
         }
@@ -326,7 +326,7 @@
             $link->addContent(' long  label ');
             $page = &new SimplePage(new MockSimpleHttpResponse($this));
             $page->AcceptTag($link);
-            $this->assertEqual($page->getUrls('Long label'), array('./somewhere.php'));
+            $this->assertEqual($page->getUrlsByLabel('Long label'), array('./somewhere.php'));
         }
         function testTitleSetting() {
             $title = &new SimpleTitleTag(array());
@@ -477,7 +477,7 @@
             $this->assertIdentical(
                     $page->getRelativeLinks(),
                     array("there.html"));
-            $this->assertIdentical($page->getUrls("There"), array("there.html"));
+            $this->assertIdentical($page->getUrlsByLabel("There"), array("there.html"));
             $this->assertEqual($page->getUrlById("0"), "http://there.com/that.html");
         }
         function testTitle() {
@@ -606,8 +606,8 @@
                     '</form></head></html>');
             
             $page = &$this->parse($response);
-            $this->assertTrue($page->setField("a", "AAA"));
-            $this->assertEqual($page->getField("a"), "AAA");
+            $this->assertTrue($page->setField('a', 'AAA'));
+            $this->assertEqual($page->getField('a'), 'AAA');
         }
         function testSettingSelectionField() {
             $response = &new MockSimpleHttpResponse($this);
@@ -620,10 +620,10 @@
                     '</form></head></html>');
             
             $page = &$this->parse($response);
-            $this->assertEqual($page->getField("a"), "bbb");
-            $this->assertFalse($page->setField("a", "ccc"));
-            $this->assertTrue($page->setField("a", "aaa"));
-            $this->assertEqual($page->getField("a"), "aaa");
+            $this->assertEqual($page->getField('a'), 'bbb');
+            $this->assertFalse($page->setField('a', 'ccc'));
+            $this->assertTrue($page->setField('a', 'aaa'));
+            $this->assertEqual($page->getField('a'), 'aaa');
         }
     }
 ?>

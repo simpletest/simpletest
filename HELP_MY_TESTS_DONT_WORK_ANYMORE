@@ -5,34 +5,39 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+No method WebTestCase::getCurrentUrl()
+--------------------------------------
+This has been replaced with the more versatile showRequest() for
+debugging. It only existed in this context for version Beta5.
+
 No method Stub::setStubBaseClass()
-==================================
+----------------------------------
 This method has finally been removed in 1.0RC1. Use...
 
 SimpleTestOptions::setStubBaseClass()
 
 No class CommandLineReporter
-============================
+----------------------------
 This was renamed to TextReporter in Beta3 and was removed in 1.0RC1.
 
 No method requireReturn()
-=========================
+-------------------------
 This was deprecated in Beta3 and is now removed.
 
 No method expectCookie()
-========================
+------------------------
 This method was abruptly removed in Beta4 so as to simplify the internals
 until another mechanism can replace it. As a workaround it is necessary
 to assert that the cookie has changed by setting it before the page
 fetch and then assert the desired value.
 
 No method clickSubmitByFormId()
-===============================
+-------------------------------
 This method had an incorrect name as no button was involved. It was
 renamed to submitByFormId() in Beta4 and deprecated. Now removed.
 
 No method paintStart() or paintEnd()
-====================================
+------------------------------------
 You should only get this error if you have subclassed the lower level
 reporting and test runner machinery. These methods have been broken
 down into events for test methods, events for test cases and events
@@ -46,34 +51,34 @@ the inner machinery. Simply duplicating the code you had in the previous
 methods should provide a temporary fix.
 
 No class TestDisplay
-====================
+--------------------
 This has been folded into SimpleReporter in Beta3 and is now deprecated.
 
 No class CommandLineReporter
-============================
+----------------------------
 This has been renamed TextReporter in Beta3 and is now deprecated.
 
 No method fetch()
-=================
+-----------------
 This was renamed get() in Alpha8. It is removed in Beta3.
 
 No method submit()
-==================
+------------------
 This has been renamed clickSubmit() in Beta1. The old method was
 be removed in Beta2.
 
 No method clearHistory()
-========================
+------------------------
 This method is deprecated in Beta2.
 
 No method getCallCount()
-========================
+------------------------
 This method has been deprecated since Beta1 and has now been
 removed. There are now more ways to set expectations on counts
 and so this method should be unecessery.
 
 Cannot find file *
-==================
+------------------
 The following public name changes have occoured...
 
 simple_html_test.php --> reporter.php
@@ -84,7 +89,7 @@ simple_web.php --> web_tester.php
 The old names were deprecated in Alpha8 and removed in Beta1.
 
 No method attachObserver()
-==========================
+--------------------------
 Prior to the Alpha8 release the old internal observer pattern was
 gutted and replaced with a visitor. This is to trade flexibility of
 test case expansion against the ease of writing user interfaces.
@@ -106,7 +111,7 @@ For one observer the old method is simulated in Alpha 8, but is
 removed in Beta1.
 
 No class TestHtmlDisplay
-========================
+------------------------
 This class has been renamed to HtmlReporter in Alpha8. It is supported,
 but deprecated in Beta1 and removed in Beta2. If you have subclassed
 the display for your own design, then you will have to extend this
@@ -128,7 +133,7 @@ the best thing to do is to upgrade to this version as whatever you were
 trying to achieve before should now be very much easier.
 
 Missing set options method
-==========================
+--------------------------
 All test suite options are now in one class called SimpleTestOptions.
 This means that options are set differently...
 
@@ -138,7 +143,7 @@ Mock::setMockBaseClass() --> SimpleTestOptions::setMockBaseClass()
 These changed in Alpha8 and the old versions are now removed.
 
 No method setExpected*()
-========================
+------------------------
 The mock expectations changed their names in Alpha4 and the old names
 ceased to be supported in Alpha8. The changes are...
 
