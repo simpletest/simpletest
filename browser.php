@@ -225,8 +225,8 @@
                 $this->_response = false;
                 return $response;
             }
-            $this->_response = &$response;
             $this->_addCookies($url, $response->getNewCookies());
+            $this->_response = &$response;
             return $response;
         }
         

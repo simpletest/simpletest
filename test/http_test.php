@@ -418,6 +418,7 @@
             $this->assertIdentical($response->getHttpVersion(), "1.1");
             $this->assertIdentical($response->getResponseCode(), 200);
             $this->assertEqual($response->getMimeType(), "text/plain");
+            $this->assertFalse($response->getRedirect());
         }
         function testParseOfCookies() {
             $socket = &new MockSimpleSocket($this);

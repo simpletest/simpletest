@@ -891,9 +891,8 @@
         /**
          *    Reads the whole of the socket output into a
          *    single string.
-         *    @param $socket        Unread socket.
-         *    @return               String if successful else
-         *                          false.
+         *    @param $socket    Unread socket.
+         *    @return           String if successful else false.
          *    @private
          */
         function _readAll(&$socket) {
