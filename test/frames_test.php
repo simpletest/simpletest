@@ -24,6 +24,7 @@
                 }
                 $methods[] = $method;
             }
+            sort($methods);
             return $methods;
         }
         function getFramesetMethods() {
@@ -40,9 +41,10 @@
                 }
                 $methods[] = $method;
             }
+            sort($methods);
             return $methods;
         }
-        function _testFramsetHasPageInterface() {    //TODO
+        function _testFramsetHasPageInterface() {
             $this->assertEqual(
                     $this->dump($this->getPageMethods()),
                     $this->dump($this->getFramesetMethods()));
@@ -102,6 +104,48 @@
             $frameset->addParsedFrame($frame1);
             $frameset->addParsedFrame($frame2);
             $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
+        }
+        function testAbsoluteUrlsComeFromBothFrames() {
+            $page = &new MockSimplePage($this);
+            $page->expectNever('getAbsoluteUrls');
+            
+            $frame1 = &new MockSimplePage($this);
+            $frame1->setReturnValue(
+                    'getAbsoluteUrls',
+                    array('http://www.lastcraft.com/', 'http://myserver/'));
+            
+            $frame2 = &new MockSimplePage($this);
+            $frame2->setReturnValue(
+                    'getAbsoluteUrls',
+                    array('http://www.lastcraft.com/', 'http://test/'));
+            
+            $frameset = &new SimpleFrameset($page);
+            $frameset->addParsedFrame($frame1);
+            $frameset->addParsedFrame($frame2);
+            $this->assertEqual(
+                    $frameset->getAbsoluteUrls(),
+                    array('http://www.lastcraft.com/', 'http://myserver/', 'http://test/'));
+        }
+        function testRelativeUrlsComeFromBothFrames() {
+            $page = &new MockSimplePage($this);
+            $page->expectNever('getRelativeUrls');
+            
+            $frame1 = &new MockSimplePage($this);
+            $frame1->setReturnValue(
+                    'getRelativeUrls',
+                    array('/', '.', '/test/', 'goodbye.php'));
+            
+            $frame2 = &new MockSimplePage($this);
+            $frame2->setReturnValue(
+                    'getRelativeUrls',
+                    array('/', '..', '/test/', 'hello.php'));
+            
+            $frameset = &new SimpleFrameset($page);
+            $frameset->addParsedFrame($frame1);
+            $frameset->addParsedFrame($frame2);
+            $this->assertEqual(
+                    $frameset->getRelativeUrls(),
+                    array('/', '.', '/test/', 'goodbye.php', '..', 'hello.php'));
         }
     }
     
@@ -184,7 +228,7 @@
             $frameset->clearFrameFocus();
             $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
         }
-        function TestHeadersReadFromFrameIfInFocus() {
+        function testHeadersReadFromFrameIfInFocus() {
             $frame = &new MockSimplePage($this);
             $frame->setReturnValue('getHeaders', 'Header: content');
             $frame->setReturnValue('getMimeType', 'text/xml');
@@ -203,6 +247,25 @@
             $this->assertIdentical($frameset->getTransportError(), 'Could not parse headers');
             $this->assertIdentical($frameset->getAuthentication(), 'Basic');
             $this->assertIdentical($frameset->getRealm(), 'Safe place');
+        }
+        function testReadUrlsFromFrameInFocus() {
+            $page = &new MockSimplePage($this);
+            
+            $frame1 = &new MockSimplePage($this);
+            $frame1->setReturnValue('getAbsoluteUrls', array('a'));
+            $frame1->setReturnValue('getRelativeUrls', array('r'));
+            
+            $frame2 = &new MockSimplePage($this);
+            $frame2->expectNever('getAbsoluteUrls');
+            $frame2->expectNever('getRelativeUrls');
+            
+            $frameset = &new SimpleFrameset($page);
+            $frameset->addParsedFrame($frame1, 'A');
+            $frameset->addParsedFrame($frame2, 'B');
+            $frameset->setFrameFocus('A');
+            
+            $this->assertEqual($frameset->getAbsoluteUrls(), array('a'));
+            $this->assertEqual($frameset->getRelativeUrls(), array('r'));
         }
     }
 ?>

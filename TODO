@@ -32,6 +32,7 @@ Fix URL decoding bug on attributes (2/1) - done.
 Browser
 -------
 Add frame loading support (6/9) - done.
+Make framset mirror the page interface (4/2).
 Add frame focus and defocus (2/4) - done.
 Allow nested frameset tags (3/1) - done.
 Add setFieldById() method (1/1) - done.

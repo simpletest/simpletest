@@ -231,5 +231,38 @@
         function getTitle() {
             return $this->_frameset->getTitle();
         }
+        
+        /**
+         *    Accessor for a list of all fixed links.
+         *    @return array   List of urls with scheme of
+         *                    http or https and hostname.
+         *    @access public
+         */
+        function getAbsoluteUrls() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getAbsoluteUrls();
+            }
+            $urls = array();
+            foreach ($this->_frames as $frame) {
+                $urls = array_merge($urls, $frame->getAbsoluteUrls());
+            }
+            return array_values(array_unique($urls));
+        }
+        
+        /**
+         *    Accessor for a list of all relative links.
+         *    @return array      List of urls without hostname.
+         *    @access public
+         */
+        function getRelativeUrls() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getRelativeUrls();
+            }
+            $urls = array();
+            foreach ($this->_frames as $frame) {
+                $urls = array_merge($urls, $frame->getRelativeUrls());
+            }
+            return array_values(array_unique($urls));
+        }
     }
 ?>
