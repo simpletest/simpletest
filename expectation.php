@@ -343,10 +343,10 @@
             preg_match($pattern, $subject, $matches);
             $position = strpos($subject, $matches[0]);
             $dumper = &$this->_getDumper();
-            return "Pattern [$pattern] detected at [$position] in [" .
+            return "Pattern [$pattern] detected at character [$position] in [" .
                     $dumper->describeValue($subject) . "] as [" .
                     $matches[0] . "] in region [" .
-                    $dumper->clipString($subject, 40, $position) . "]";
+                    $dumper->clipString($subject, 100, $position) . "]";
         }
     }
     

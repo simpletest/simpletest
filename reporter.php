@@ -175,7 +175,7 @@
          *    @access public
          */
         function paintHeader($test_name) {
-            if (!SimpleReporter::inCli()) {
+            if (! SimpleReporter::inCli()) {
                 header('Content-type: text/plain');
             }
             print "$test_name\n";
