@@ -6,10 +6,9 @@ $Id$
 Unit tester
 -----------
 Fix of syntax errors in test scripts reporting green (3/3) - done.
-Fix of assertIdentical() getting stuck in a loop (3/2) - done.
 Workaround of mocks getting recursion error on comparisons (2/4) - done.
 Rename StickyError because of name clash (1/1) - done.
-Fix parsing check on test file loading to work with PHP5 (3/2).
+Fix parsing check on test file loading to work with PHP5 (3/3).
 Add Jeff's performance fixes (2/1).
 Fix error handler to not send messages on E_STRICT (2/1) - done.
 Fix assertSame() for PEAR::PhpUnit compatibility (1/2) - done.
