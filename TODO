@@ -16,7 +16,7 @@ Improve object difference message (1/2) - done.
 Mock objects
 ------------
 Add parameter expectation (2/2) - done.
-Improve failure messages (1).
+Improve failure messages (1/1) - done.
 Allow expectation classes to be given as expectations (1).
 Remove pass by reference dependency in the tests (2).
 Add no return check (2).

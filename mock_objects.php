@@ -106,14 +106,11 @@
          *    @private
          */
         function _renderArguments($args) {
-            $description = "";
+            $descriptions = array();
             foreach ($args as $arg) {
-                $description .= Expectation::describeValue($arg) . ', ';
+                $descriptions[] = Expectation::describeValue($arg);
             }
-            if ($description) {
-                $description = substr($description, 0, (-2));
-            }
-            return $description;
+            return implode(', ', $descriptions);
         }
     }
     
