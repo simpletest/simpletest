@@ -54,7 +54,7 @@
             $frame->setReturnValue('getRaw', 'Stuff');
             
             $frameset = &new SimpleFrameset($page);
-            $frameset->addParsedFrame($frame);
+            $frameset->addFrame($frame);
             $this->assertEqual($frameset->getRaw(), 'Stuff');
         }
         
@@ -69,8 +69,8 @@
             $frame2->setReturnValue('getRaw', 'Stuff2');
             
             $frameset = &new SimpleFrameset($page);
-            $frameset->addParsedFrame($frame1);
-            $frameset->addParsedFrame($frame2);
+            $frameset->addFrame($frame1);
+            $frameset->addFrame($frame2);
             $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
         }
         
@@ -88,13 +88,45 @@
             
             $page = &new MockSimplePage($this);
             $frameset = &new SimpleFrameset($page);
-            $frameset->addParsedFrame($frame1);
-            $frameset->addParsedFrame($frame2);
-            $frameset->addParsedFrame($frame3);
+            $frameset->addFrame($frame1);
+            $frameset->addFrame($frame2);
+            $frameset->addFrame($frame3);
             
             $this->assertIdentical($frameset->getField('a'), 'A');
             $frame1->tally();
             $frame2->tally();
+        }
+        
+        function testFrameReplacementByIndex() {
+            $page = &new MockSimplePage($this);
+            $page->expectNever('getRaw');
+            
+            $frame1 = &new MockSimplePage($this);
+            $frame1->setReturnValue('getRaw', 'Stuff1');
+            
+            $frame2 = &new MockSimplePage($this);
+            $frame2->setReturnValue('getRaw', 'Stuff2');
+            
+            $frameset = &new SimpleFrameset($page);
+            $frameset->addFrame($frame1);
+            $frameset->setFrame(1, $frame2);
+            $this->assertEqual($frameset->getRaw(), 'Stuff2');
+        }
+        
+        function testFrameReplacementByName() {
+            $page = &new MockSimplePage($this);
+            $page->expectNever('getRaw');
+            
+            $frame1 = &new MockSimplePage($this);
+            $frame1->setReturnValue('getRaw', 'Stuff1');
+            
+            $frame2 = &new MockSimplePage($this);
+            $frame2->setReturnValue('getRaw', 'Stuff2');
+            
+            $frameset = &new SimpleFrameset($page);
+            $frameset->addFrame($frame1, 'a');
+            $frameset->setFrame('a', $frame2);
+            $this->assertEqual($frameset->getRaw(), 'Stuff2');
         }
     }
     
@@ -106,7 +138,7 @@
         function testStartsWithoutFrameFocus() {
             $page = &new MockSimplePage($this);
             $frameset = &new SimpleFrameset($page);
-            $frameset->addParsedFrame($frame);
+            $frameset->addFrame($frame);
             $this->assertFalse($frameset->getFrameFocus());
         }
         
@@ -118,7 +150,7 @@
             $frame->setReturnValue('getRaw', 'Stuff');
             
             $frameset = &new SimpleFrameset($page);
-            $frameset->addParsedFrame($frame);
+            $frameset->addFrame($frame);
             
             $this->assertFalse($frameset->setFrameFocusByIndex(0));
             $this->assertTrue($frameset->setFrameFocusByIndex(1));
@@ -134,7 +166,7 @@
             $frame->setReturnValue('hasFrames', false);
             
             $frameset = &new SimpleFrameset($page);
-            $frameset->addParsedFrame($frame);
+            $frameset->addFrame($frame);
             
             $this->assertTrue($frameset->hasFrames());
             $this->assertTrue($frameset->setFrameFocusByIndex(1));
@@ -151,8 +183,8 @@
             $frame2->setReturnValue('getRaw', 'Stuff2');
             
             $frameset = &new SimpleFrameset($page);
-            $frameset->addParsedFrame($frame1);
-            $frameset->addParsedFrame($frame2);
+            $frameset->addFrame($frame1);
+            $frameset->addFrame($frame2);
             
             $this->assertTrue($frameset->setFrameFocusByIndex(1));
             $this->assertEqual($frameset->getFrameFocus(), 1);
@@ -178,8 +210,8 @@
             $frame2->setReturnValue('getRaw', 'Stuff2');
             
             $frameset = &new SimpleFrameset($page);
-            $frameset->addParsedFrame($frame1, 'A');
-            $frameset->addParsedFrame($frame2, 'B');
+            $frameset->addFrame($frame1, 'A');
+            $frameset->addFrame($frame2, 'B');
             
             $this->assertTrue($frameset->setFrameFocus('A'));
             $this->assertEqual($frameset->getFrameFocus(), 'A');
@@ -265,7 +297,7 @@
             $frame->setReturnValue('getRealm', 'Safe place');
             
             $frameset = &new SimpleFrameset(new MockSimplePage($this));
-            $frameset->addParsedFrame($frame);
+            $frameset->addFrame($frame);
             $frameset->setFrameFocusByIndex(1);
             
             $this->assertIdentical($frameset->getRequest(), 'POST stuff');
@@ -295,8 +327,8 @@
                     array('http://www.lastcraft.com/', 'http://test/'));
             
             $frameset = &new SimpleFrameset($page);
-            $frameset->addParsedFrame($frame1);
-            $frameset->addParsedFrame($frame2);
+            $frameset->addFrame($frame1);
+            $frameset->addFrame($frame2);
             $this->assertEqual(
                     $frameset->getAbsoluteUrls(),
                     array('http://www.lastcraft.com/', 'http://myserver/', 'http://test/'));
@@ -317,8 +349,8 @@
             $page->expectNever('getRelativeUrls');
             
             $frameset = &new SimpleFrameset($page);
-            $frameset->addParsedFrame($frame1);
-            $frameset->addParsedFrame($frame2);
+            $frameset->addFrame($frame1);
+            $frameset->addFrame($frame2);
             $this->assertEqual(
                     $frameset->getRelativeUrls(),
                     array('/', '.', '/test/', 'goodbye.php', '..', 'hello.php'));
@@ -338,8 +370,8 @@
                     array('a'));
             
             $frameset = &new SimpleFrameset(new MockSimplePage($this));
-            $frameset->addParsedFrame($frame1);
-            $frameset->addParsedFrame($frame2, 'Two');
+            $frameset->addFrame($frame1);
+            $frameset->addFrame($frame2, 'Two');
             
             $expected1 = new SimpleUrl('goodbye.php');
             $expected1->setTarget(1);
@@ -360,8 +392,8 @@
             $frame2->setReturnValue('getUrlById', new SimpleUrl('five.php'), array(5));
             
             $frameset = &new SimpleFrameset(new MockSimplePage($this));
-            $frameset->addParsedFrame($frame1);
-            $frameset->addParsedFrame($frame2);
+            $frameset->addFrame($frame1);
+            $frameset->addFrame($frame2);
             
             $four = new SimpleUrl('four.php');
             $four->setTarget(1);
@@ -385,8 +417,8 @@
             $frame2->expectNever('getUrlById');
 
             $frameset = &new SimpleFrameset(new MockSimplePage($this));
-            $frameset->addParsedFrame($frame1, 'A');
-            $frameset->addParsedFrame($frame2, 'B');
+            $frameset->addFrame($frame1, 'A');
+            $frameset->addFrame($frame2, 'B');
             $frameset->setFrameFocus('A');
             
             $this->assertIdentical($frameset->getAbsoluteUrls(), array('a'));
@@ -413,8 +445,8 @@
             }
 
             $frameset = &new SimpleFrameset(new MockSimplePage($this));
-            $frameset->addParsedFrame(new MockSimplePage($this), 'A');
-            $frameset->addParsedFrame($frame, 'B');
+            $frameset->addFrame(new MockSimplePage($this), 'A');
+            $frameset->addFrame($frame, 'B');
             for ($i = 0; $i < count($finders); $i++) {
                 $method = $finders[$i];
                 $this->assertReference($frameset->$method('a'), $forms[$i]);
@@ -443,8 +475,8 @@
             $frame2->expectOnce('setFieldById', array(22, 'A'));
             
             $frameset = &new SimpleFrameset(new MockSimplePage($this));
-            $frameset->addParsedFrame($frame1, 'A');
-            $frameset->addParsedFrame($frame2, 'B');
+            $frameset->addFrame($frame1, 'A');
+            $frameset->addFrame($frame2, 'B');
             
             $frameset->setField('a', 'A');
             $frameset->setFieldById(22, 'A');
@@ -462,8 +494,8 @@
             $frame2->expectNever('setFieldById');
             
             $frameset = &new SimpleFrameset(new MockSimplePage($this));
-            $frameset->addParsedFrame($frame1, 'A');
-            $frameset->addParsedFrame($frame2, 'B');
+            $frameset->addFrame($frame1, 'A');
+            $frameset->addFrame($frame2, 'B');
             $frameset->setFrameFocus('A');
             
             $frameset->setField('a', 'A');
@@ -481,8 +513,8 @@
             $frame2->expectNever('getFieldById');
             
             $frameset = &new SimpleFrameset(new MockSimplePage($this));
-            $frameset->addParsedFrame($frame1, 'A');
-            $frameset->addParsedFrame($frame2, 'B');
+            $frameset->addFrame($frame1, 'A');
+            $frameset->addFrame($frame2, 'B');
             $frameset->setFrameFocus('A');
             
             $this->assertIdentical($frameset->getField('a'), 'f');

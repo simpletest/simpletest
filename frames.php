@@ -42,14 +42,29 @@
         /**
          *    Adds a parsed page to the frameset.
          *    @param SimplePage $page    Frame page.
-         *    @param string name         Name of frame in frameset.
+         *    @param string $name        Name of frame in frameset.
          *    @access public
          */
-        function addParsedFrame(&$page, $name = false) {
+        function addFrame(&$page, $name = false) {
             $this->_frames[] = &$page;
             if ($name) {
                 $this->_names[$name] = count($this->_frames) - 1;
             }
+        }
+        
+        /**
+         *    Replaces existing frame with another.
+         *    @param string/integer $name  Name of frame in frameset.
+         *    @param SimplePage $page      Frame page.
+         *    @access public
+         */
+        function setFrame($name, &$page) {
+            if (isset($this->_names[$name])) {
+                $index = $this->_names[$name];
+            } else {
+                $index = $name - 1;
+            }
+            $this->_frames[$index] = &$page;
         }
         
         /**

@@ -681,6 +681,10 @@
             $this->assertResponse(200);
             $this->assertLink('Set one to 2');
             
+            $this->assertTrue($this->setFrameFocus('Counter'));
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/Count: 1/');
+            
             $this->assertTrue($this->setFrameFocus('Redirected'));
             $this->assertResponse(200);
             $this->assertWantedPattern('/r=rrr/');
@@ -709,13 +713,28 @@
             
             $this->assertTrue($this->setFrameFocusByIndex(4));
             $this->assertResponse(200);
-            $this->assertWantedPattern('/r=rrr/');
+            $this->assertWantedPattern('/Count: 1/');
             
             $this->assertTrue($this->setFrameFocusByIndex(5));
-            $this->assertResponse(401);
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/r=rrr/');
             
             $this->assertTrue($this->setFrameFocusByIndex(6));
             $this->assertResponse(401);
+            
+            $this->assertTrue($this->setFrameFocusByIndex(7));
+            $this->assertResponse(401);
+        }
+        
+        function TODO_testReloadingFrameWithCookieCounter() {
+            $this->assertTrue($this->get(
+                    'http://www.lastcraft.com/test/messy_frameset.html'));
+            $this->setFrameFocus('Counter');
+            $this->assertWantedPattern('/Count: 1/');
+            $this->reloadFrame('Counter');
+            $this->assertWantedPattern('/Count: 2/');
+            $this->reloadFrame('Counter');
+            $this->assertWantedPattern('/Count: 3/');
         }
         
         function TODO_testClickingNormalLinkReplacesJustThatFrame() {

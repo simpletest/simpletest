@@ -242,7 +242,7 @@
             $frameset = &new SimpleFrameset($page);
             foreach ($frameset->getFrames() as $key => $url) {
                 $frame = &$this->_fetch('GET', $url, array());
-                $frameset->addParsedFrame($frame, $key);
+                $frameset->addFrame($frame, $key);
             }
             return $frameset;
         }
@@ -278,6 +278,19 @@
                     $this->_page->getUrl(),
                     $this->_page->getRequestData());
             return $this->_page->getRaw();
+        }
+        
+        /**
+         *    Fetches a frame into the existing frameset replacing the
+         *    original.
+         *    @param string/integer $frame    Name or index of frame.
+         *    @param string $method           GET or POST.
+         *    @param string/SimpleUrl $url    Target to fetch as string.
+         *    @param hash $parameters         POST parameters.
+         *    @return string                  Raw content of page.
+         *    @access private
+         */
+        function _loadFrame($frame, $method, $url, $parameters = false) {
         }
         
         /**
@@ -493,6 +506,16 @@
                 $this->_history->back();
             }
             return $content;
+        }
+        
+        /**
+         *    Refreshes a frame in the current frameset.
+         *    @param string/integer $frame    Name or index of frame.
+         *    @return boolean                 True if frame exists and was
+         *                                    successfully loaded.
+         *    @access public
+         */
+        function reloadFrame($frame) {
         }
         
         /**

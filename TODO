@@ -9,6 +9,7 @@ Unit tester
 Set the SIMPLE_TEST constant if not set for add in libraries (1/0) - done.
 Fix bug with dumper failing with second parameters of odd types (2/1) - done.
 Expectations should carry message overrides (3).
+Expectations should not throw notices on missing array keys (2).
 
 Reporter
 --------
@@ -17,7 +18,7 @@ Add spaces around the breadcrumb's arrows (1/1) - done.
 Mock objects
 ------------
 Add fix for PHP5 __construct() call (1/1) - done.
-Should throw error setting expectation on non-mocked method (3).
+Should throw error when setting expectation on non-mocked method (3).
 Line numbers on failed expectations (3).
 
 Parser
@@ -28,7 +29,7 @@ Add simple button tag parsing (1).
 Browser
 -------
 Allow nested framed pages (4).
-Add named frame reloads (2).
+Add named frame reloads (2/1).
 Add frame loads from links (6/3).
 Refactor authentication to cope with framed pages (2).
 Refactor existing base url behaviour into SimplePage (3/8) - done.
