@@ -34,6 +34,7 @@
             print "</style>\n";
             print "</head>\n<body>\n";
             print "<h1>$test_name</h1>\n";
+            flush();
         }
         
         /**

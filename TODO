@@ -13,7 +13,7 @@ Add an error trap (3).
 Interface
 ---------
 Add better object mismatch message (1).
-Add flush() after painting page header (0).
+Add flush() after painting page header (0/0) - done.
 
 Mock objects
 ------------
@@ -22,9 +22,9 @@ Add a parameter list assertion for better message display (2).
 
 Html parser
 -----------
-Skip CSS (1).
-Skip processing instructions (1).
-Skip script tags (1).
+Skip CSS (1/2) - done.
+Skip comments (0/0) - done.
+Skip script tags (1/1) - done.
 Add input tag parsing (2).
 Add checkbox parsing (2).
 Add text area parsing (3).
