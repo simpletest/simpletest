@@ -90,11 +90,20 @@
                     on the web.
                 </li>
             </ul>        </div>
+        <div>
+            The different sections of the documentation are...
+            <ul>
+                <li><a href="unit_test_documentation.html">Test cases</a></li>
+                <li><a href="reporter_documentation.html">Displaying results</a></li>
+                <li><a href="server_stubs_documentation.html">Server stubs</a></li>
+                <li><a href="mock_objects_documentation.html">Mock objects</a></li>
+            </ul>
+        </div>
         <div class="out">
             Related resources...
                         <ul>
                 <li>
-                    <a href="unit_test_documentation.php">Documentation for SimpleTest</a>.
+                    <a href="unit_test_documentation.html">Documentation for SimpleTest</a>.
                 </li>
                 <li>
                     <a href="http://www.lastcraft.com/first_test_tutorial.php">How to write PHP test cases</a>
@@ -193,8 +202,8 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 I am afraid it is liable to change without warning as meeting the
                 milestones rather depends on time available.
                 Green stuff has been coded, but not necessarily released yet.
-                If you have a pressing need for this feature then you should check-out
-                the code from sourceforge CVS directly.
+                If you have a pressing need for a green but unreleased feature
+                then you should check-out the code from sourceforge CVS directly.
                 <table>
                     <tr><th>Feature</th><th>Description</th><th>Release</th></tr>
                     <tr>
@@ -267,11 +276,16 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     <tr>
                         <td>Web cookie handling</td>
                         <td>Correct handling of cookies when fetching pages</td>
-                        <td style="color: red;">Alpha7</td>
+                        <td style="color: green;">Alpha7</td>
                     </tr>
                     <tr>
                         <td>Form parsing</td>
                         <td>Ability to submit simple forms and read default form values</td>
+                        <td style="color: red;">Beta1</td>
+                    </tr>
+                    <tr>
+                        <td>Following redirects</td>
+                        <td>Page fetching automatically follows 300 redirects</td>
                         <td style="color: red;">Beta1</td>
                     </tr>
                     <tr>
@@ -396,7 +410,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 newcomers up to our self imposed coding standard -
                 the one that says the code must at least work.
                 I&apos;ll happily place any accumulated wisdom in
-                <a href="http://www.lastcraft.com">this site</a> manually until
+                <a href="http://www.lastcraft.com/">this site</a> manually until
                 I can start a Blog, and I will of course credit you with suggestions.
                 Even better, post suggestions on the popular PHP forums and
                 spread the test infection far and wide.

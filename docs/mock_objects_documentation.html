@@ -96,6 +96,15 @@
                     Using mocks with <a href="#other_testers">other unit testers</a>.
                 </li>
             </ul>        </div>
+        <div>
+            The different sections of the documentation are...
+            <ul>
+                <li><a href="unit_test_documentation.html">Test cases</a></li>
+                <li><a href="reporter_documentation.html">Displaying results</a></li>
+                <li><a href="server_stubs_documentation.html">Server stubs</a></li>
+                <li><a href="mock_objects_documentation.html">Mock objects</a></li>
+            </ul>
+        </div>
         <div class="out">
             Related resources...
                         <ul>
@@ -137,13 +146,10 @@
             </p>
             <p>
                 If mock objects only behaved as actors they would simply be
-                known as server stubs as this was 
-                a pattern named by Robert Binder (Testing object-oriented
-                systems: models, patterns, and tools, Addison-Wesley) in 1999.
-                Stubs are only half the story though.
+                known as <a href="server_stubs_documentation.html">server stubs</a>.
             </p>
             <p>
-                The mock objects not only play a part (by supplying chosen
+                However, the mock objects not only play a part (by supplying chosen
                 return values on demand) they are also sensitive to the
                 messages sent to them (via expectations).
                 By setting expected parameters for a method call they act
@@ -158,14 +164,11 @@
                 hardly need manual assertions at all.
             </p>
             <p>
-                A fierce critic indeed.
-            </p>
-            <p>
                 <a class="target" name="creation"><h2>Creating mock objects</h2></a>
             </p>
             <p>
-                All we need is an existing class, say a database connection
-                that looks like this...
+                In the same way that we create server stubs, all we need is an
+                existing class, say a database connection that looks like this...
 <pre><strong>
 class DatabaseConnection {
     function DatabaseConnection() {
@@ -212,9 +215,15 @@ class MyTestCase extends UnitTestCase {
     }
 }</strong>
 </pre>
-                The mock constructor needs a reference to the test
-                case so that it can dispatch passes and failures while
+                Unlike the generated stubs the mock constructor needs a reference
+                to the test case so that it can dispatch passes and failures while
                 checking it&apos;s expectations.
+                This means that mock objects can only be used within test cases.
+                Despite this their extra power means that stubs are hardly ever used
+                if mocks are available.
+                By always using mocks you gain greater uniformity and when
+                you need the simulation objects to perform tests for you there
+                is then no need to change the code.
             </p>
             <p>
                 <a class="target" name="stub"><h2>Mocks as actors</h2></a>
@@ -224,29 +233,29 @@ class MyTestCase extends UnitTestCase {
                 so that operations like
                 <span class="new_code">$connection-&gt;query()</span> are still
                 legal.
-                The return value will be <span class="new_code">null</span>,
-                but we can change that...
+                As with stubs we can replace the default null return values...
 <pre><strong>
-$connection-&gt;setReturnValue(&apos;query&apos;, 37)</strong>
+$connection-&gt;setReturnValue(&apos;query&apos;, 37);</strong>
 </pre>
                 Now every time we call
                 <span class="new_code">$connection-&gt;query()</span> we get
                 the result of 37.
-                We can set the return value to anything, say a hash of
-                imaginary database results or a list of persistent objects.
-                Parameters are irrelevant here, we always get the same
-                values back each time once they have been set up this way.
-                That may not sound like a convincing replica of a
-                database connection, but for the half a dozen lines of
-                a test method it is usually all you need.
+                As with the stubs we can set wildcards and we can overload the
+                wildcard parameter.
+                We can also add extra methods to the mock when generating it
+                and choose our own class name...
+<pre><strong>
+Mock::generate(&apos;DatabaseConnection&apos;, &apos;MyMockDatabaseConnection&apos;, array(&apos;setOptions&apos;));</strong>
+</pre>
+                Here the mock will behave as if the <span class="new_code">setOptions()</span>
+                existed in the original class.
+                This is handy if a class has used the PHP <span class="new_code">overload()</span>
+                mechanism to add dynamic methods.
+                You can create a special mock to simulate this situation.
             </p>
             <p>
-                Things aren&apos;t always that simple though.
-                One common problem is iterators, where constantly returning
-                the same value could cause an endless loop in the object
-                being tested.
-                For these we need to set up sequences of values.
-                Let&apos;s say we have a simple iterator that looks like this...
+                All of the patterns available with server stubs are available
+                to mock objects...
 <pre>
 class Iterator {
     function Iterator() {
@@ -255,8 +264,7 @@ class Iterator {
     }
 }
 </pre>
-                This is about the simplest iterator you could have.
-                Assuming that this iterator only returns text until it
+                Again, assuming that this iterator only returns text until it
                 reaches the end, when it returns false, we can simulate it
                 with...
 <pre>
@@ -285,10 +293,7 @@ class IteratorTest extends UnitTestCase() {
                 The constant one is a kind of default if you like.
             </p>
             <p>
-                Another tricky situation is an overloaded
-                <span class="new_code">get()</span> operation.
-                An example of this is an information holder with name/value pairs.
-                Say we have a configuration class like...
+                A repeat of the stubbed information holder with name/value pairs...
 <pre>
 class Configuration {
     function Configuration() {
@@ -327,31 +332,9 @@ $config-&gt;getValue(&apos;db_user&apos;)
                 a complete match is found.
             </p>
             <p>
-                You can set a default argument argument like so...
-<pre><strong>
-$config-&gt;setReturnValue(&apos;getValue&apos;, false, array(&apos;*&apos;));</strong>
-</pre>
-                This is not the same as setting the return value without
-                any argument requirements like this...
-<pre><strong>
-$config-&gt;setReturnValue(&apos;getValue&apos;, false);</strong>
-</pre>
-                In the first case it will accept any single argument,
-                but exactly one is required.
-                In the second case any number of arguments will do and
-                it acts as a catchall after all other matches.
-                Note that if we add further single parameter options after
-                the wildcard in the first case, they will be ignored as the wildcard
-                will match first.
-                With complex parameter lists the ordering could be important
-                or else desired matches could be masked by earlier wildcard
-                ones.
-                Declare the most specific matches first if you are not sure.
-            </p>
-            <p>
                 There are times when you want a specific object to be
                 dished out by the mock rather than a copy.
-                You might be simulating a container for example...
+                Again this is identical to the server stubs mechanism...
 <pre>
 class Thing {
 }
@@ -374,72 +357,6 @@ $vector-&gt;setReturnReference(&apos;get&apos;, $thing, array(12));</strong>
                 <span class="new_code">$vector-&gt;get(12)</span> is
                 called it will return the same
                 <span class="new_code">$thing</span> each time.
-            </p>
-            <p>
-                These three factors, timing, parameters and whether to copy,
-                can be combined othogonally.
-                For example...
-<pre>
-$complex = &new MockComplexThing($this);
-$stuff = new Stuff();<strong>
-$complex-&gt;setReturnReferenceAt(3, &apos;get&apos;, $stuff, array(&apos;*&apos;, 1));</strong>
-</pre>
-                This will return the <span class="new_code">$stuff</span> only on the third
-                call and only if two parameters were set the second of
-                which must be the integer 1.
-                I cannot imagine needing this level of complexity, and it would
-                probably be a sign that the design was a little askew, but you
-                never know.
-            </p>
-            <p>
-                A final tricky case is one object creating another, known
-                as a factory pattern.
-                Suppose that on a successful query to our imaginary
-                database, a result set is returned as an iterator with
-                each call to <span class="new_code">next()</span> giving
-                one row until false.
-                This sounds like a simulation nightmare, but in fact it can all
-                be mocked using the mechanics above.
-            </p>
-            <p>
-                Here&apos;s how...
-<pre>
-Mock::generate(&apos;DatabaseConnection&apos;);
-Mock::generate(&apos;ResultIterator&apos;);
-
-class DatabaseTest extends UnitTestCase {
-    function DatabaseTest() {
-        $this-&gt;UnitTestCase();
-    }
-    function testUserFinder() {<strong>
-        $result = &new MockResultIterator($this);
-        $result-&gt;setReturnValue(&apos;next&apos;, false);
-        $result-&gt;setReturnValueAt(0, &apos;next&apos;, array(1, &apos;tom&apos;));
-        $result-&gt;setReturnValueAt(1, &apos;next&apos;, array(3, &apos;dick&apos;));
-        $result-&gt;setReturnValueAt(2, &apos;next&apos;, array(6, &apos;harry&apos;));
-        $connection = &new MockDatabaseConnection($this);
-        $connection-&gt;setReturnValue(&apos;query&apos;, false);
-        $connection-&gt;setReturnReference(
-                &apos;query&apos;,
-                $result,
-                array(&apos;select id, name from users&apos;));</strong>
-        $finder = &new UserFinder($connection);
-        $this-&gt;assertIdentical(
-                $finder-&gt;findNames(),
-                array(&apos;tom&apos;, &apos;dick&apos;, &apos;harry&apos;));
-    }
-}
-</pre>
-                Now only if our
-                <span class="new_code">$connection</span> is called with the correct
-                <span class="new_code">query()</span> will the
-                <span class="new_code">$result</span> be returned that is
-                itself exhausted after the third call to <span class="new_code">next()</span>.
-                This should be enough
-                information for our <span class="new_code">UserFinder</span> class,
-                the class actually
-                being tested here, to come up with goods.
-                A very precise test and not a real database in sight.
             </p>
             <p>
                 <a class="target" name="expectations"><h2>Mocks as critics</h2></a>
@@ -543,9 +460,11 @@ class LoggingSessionPoolTest extends UnitTestCase {
         $pool-&gt;setReturnReference(&apos;findSession&apos;, $session);
         $pool-&gt;expectArguments(&apos;findSession&apos;, array(&apos;abc&apos;));
         $pool-&gt;expectCallCount(&apos;findSession&apos;, 1);
+        
         $log = &new MockLog($this);
         $log-&gt;expectArguments(&apos;message&apos;, array(&apos;Starting session abc&apos;));
         $log-&gt;expectCallCount(&apos;message&apos;, 1);
+        
         $logging_pool = &new LoggingSessionPool($pool, $log);
         $this-&gt;assertReference($logging_pool-&gt;findSession(&apos;abc&apos;), $session);
         $pool-&gt;tally();
@@ -619,7 +538,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
             </p>
             <p>
                 Here is the full list of expectations you can set on a mock object
-                in <a href="simple_test.php">SimpleTest</a>...
+                in <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a>...
                 <table>
                     <tr><th>Expectation</th><th>Needs <span class="new_code">tally()</span></th></tr>
                     <tr>
@@ -669,7 +588,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
                 a file and dynamically generating them on the fly.
             </p>
             <p>
-                Mock objects generated with <a href="simple_test.php">SimpleTest</a>
+                Mock objects generated with <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a>
                 are dynamic.
                 They are created at run time in memory, using
                 <span class="new_code">eval()</span>, rather than written
@@ -744,7 +663,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
             </p>
             <p>
                 No, not at all.
-                <a href="simple_test.php">SimpleTest</a> is a toolkit and one of those
+                <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a> is a toolkit and one of those
                 tools is the mock objects which can be employed independently.
                 Suppose you have your own favourite unit tester and all your current
                 test cases are written using it.

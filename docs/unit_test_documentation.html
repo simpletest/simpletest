@@ -93,6 +93,15 @@
                     Intergrating <a href="#legacy">legacy test cases</a>.
                 </li>
             </ul>        </div>
+        <div>
+            The different sections of the documentation are...
+            <ul>
+                <li><a href="unit_test_documentation.html">Test cases</a></li>
+                <li><a href="reporter_documentation.html">Displaying results</a></li>
+                <li><a href="server_stubs_documentation.html">Server stubs</a></li>
+                <li><a href="mock_objects_documentation.html">Mock objects</a></li>
+            </ul>
+        </div>
         <div class="out">
             Related resources...
                         <ul>
@@ -106,7 +115,7 @@
         <div class="content">
                         <p>
                 This documentation is shipped with the
-                <a href="simple_test.php">SimpleTest</a> package.
+                <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a> package.
             </p>
             <p>
                 <a class="target" name="unit"><h2>Unit test cases</h2></a>
@@ -301,7 +310,7 @@ class FileTestCase extends <strong>FileTester</strong> {
                 <span class="new_code">GroupTest::ignore()</span> directive
                 to tell the upcoming group test to ignore it.
                 This directive can appear anywhere in the file and works
-                when a whole file of test cases is loaded (see below)/
+                when a whole file of test cases is loaded (see below).
                 We will call this sample <em>file_test.php</em>.
             </p>
             <p>
@@ -394,7 +403,7 @@ require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);
 class FileGroupTest extends GroupTest {
     function FileGroupTest() {
         $this-&gt;GroupTest(&apos;All file tests&apos;);
-        $test-&gt;addTestFile(&apos;file_test.php&apos;);
+        $this-&gt;addTestFile(&apos;file_test.php&apos;);
     }
 }</strong>
 </pre>
@@ -445,7 +454,7 @@ if (!defined(&apos;RUNNER&apos;)) {
                 the group test file, but this is still less hassle than
                 lots of separate runner files.
                 You include the same guard on the top level tests to make sure
-                that <span class="new_code">run()</span> once only
+                that <span class="new_code">run()</span> will run once only
                 from the top level script that has been invoked.
             </p>
             <p>
@@ -509,6 +518,14 @@ class ConfigFileTest extends TestCase {
     $test-&gt;run();
 ?&gt;
 </pre>
+                The PEAR test cases can be freely mixed with SimpleTest ones,
+                but you cannot use SimpleTest assertions in the legacy
+                versions.
+                This is done as a check that you are not accidently making
+                your test cases completely dependent on SimpleTest.
+                You may want to do a PEAR release of your library for example
+                which would mean shipping it with valid PEAR::PhpUnit test
+                cases.
             </p>        </div>
         <div class="copyright">
             Copyright <a href="mailto:marcus@lastcraft.com">Marcus&nbsp;Baker</a>&nbsp;2003
