@@ -376,57 +376,10 @@
                     array(0 => '1.html', 'A' => '2.html', 'B' => '3.html', 3 => '4.html'));
         }
     }
-    
+
     class TestOfForms extends UnitTestCase {
         function TestOfForms() {
             $this->UnitTestCase();
-        }
-        function testEmptyForm() {
-            $page = &new SimplePage(new MockSimpleHttpResponse($this));
-            $page->acceptFormStart(new SimpleFormTag(array()));
-            $forms = $page->getForms();
-            $this->assertIdentical($forms[0]->getAction(), false);
-            $this->assertIdentical($forms[0]->getMethod(), 'get');
-            $page->acceptFormEnd();
-            $forms = $page->getForms();
-            $this->assertIdentical($forms[0]->getAction(), false);
-        }
-        function testCompleteForm() {
-            $page = &new SimplePage(new MockSimpleHttpResponse($this));
-            $page->acceptFormStart(
-                    new SimpleFormTag(array("method" => "GET", "action" => "here.php")));
-            $forms = $page->getForms();
-            $this->assertIdentical($forms[0]->getAction(), 'here.php');
-            $this->assertIdentical($forms[0]->getMethod(), 'get');
-            $page->acceptFormEnd();
-            $forms = $page->getForms();
-            $this->assertIdentical($forms[0]->getAction(), 'here.php');
-        }
-        function testExtraClosingFormTag() {
-            $page = &new SimplePage(new MockSimpleHttpResponse($this));
-            $page->acceptFormStart(
-                    new SimpleFormTag(array("method" => "GET", "action" => "here.php")));
-            $forms = $page->getForms();
-            $this->assertIdentical($forms[0]->getAction(), 'here.php');
-            $this->assertIdentical($forms[0]->getMethod(), 'get');
-            $page->acceptFormEnd();
-            $page->acceptFormEnd();
-            $forms = $page->getForms();
-            $this->assertEqual(count($forms), 1);
-            $this->assertIdentical($forms[0]->getAction(), 'here.php');
-        }
-        function testNestedForm() {
-            $page = &new SimplePage(new MockSimpleHttpResponse($this));
-            $page->acceptFormStart(new SimpleFormTag(array("method" => "GET", "action" => "outer.php")));
-            $page->acceptFormStart(new SimpleFormTag(array("method" => "POST", "action" => "inner.php")));
-            $forms = $page->getForms();
-            $this->assertEqual($forms[0]->getAction(), "outer.php");
-            $this->assertEqual($forms[1]->getAction(), "inner.php");
-            $page->acceptFormEnd();
-            $page->acceptFormEnd();
-            $forms = $page->getForms();
-            $this->assertEqual($forms[0]->getAction(), "inner.php");
-            $this->assertEqual($forms[1]->getAction(), "outer.php");
         }
         function testButtons() {
             $page = &new SimplePage(new MockSimpleHttpResponse($this));
@@ -439,7 +392,7 @@
             $this->assertEqual($form->submitButton("s"), array("s" => "Submit"));
         }
     }
-    
+
     class TestOfPageScraping extends UnitTestCase {
         function TestOfPageScraping() {
             $this->UnitTestCase();

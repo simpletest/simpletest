@@ -8,14 +8,13 @@ Unit tester
 -----------
 Show line number of failed assertion (3/2) - done.
 Remove SIMPLE_TEST constant (1/1) - done.
-Add option to disable error trap (1).
 
 Reporter
 --------
 
 Mock objects
 ------------
-Meaningful error if no unit tester attached (1).
+Meaningful error if no unit tester attached (1/1) - done.
 
 Parser
 ------
@@ -34,6 +33,7 @@ Browser
 -------
 Add frame loading support (6/9) - done.
 Add frame focus and defocus (2/4) - done.
+Allow nested frameset tags (3).
 Allow nested frames (4).
 Add named frame reloads (2).
 Add frame loads from links (2).
@@ -49,10 +49,9 @@ Add support for proxy fetching (3/9) - done.
 Add User-Agent identifier for tracking tests (1/0) - done.
 Allow adding of arbitrary headers (1/1) - done.
 Add accessor for link set (1).
-Add accessor for URL in focus (2).
 Refactor authentication to cope with framed pages (2/1).
 Add showRequest() to dump the last raw request (2/1) - done.
-Fix getCurrentUrl() to return string (1).
+Remove getCurrentUrl() and replace with getHistory (2).
 
 Web tester
 ----------
@@ -63,4 +62,3 @@ Documentation
 
 Build
 -----
-Formalise tarball build (2).

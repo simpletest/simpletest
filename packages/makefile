@@ -9,6 +9,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/expectation.php \
           simpletest/socket.php \
           simpletest/query_string.php \
+          simpletest/url.php \
           simpletest/http.php \
           simpletest/authentication.php \
           simpletest/user_agent.php \
@@ -33,7 +34,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE \
           simpletest/test/all_tests.php \
           simpletest/test/unit_tests.php \
-          simpletest/test/boundary_tests.php \
+          simpletest/test/acceptace_test.php \
           simpletest/test/errors_test.php \
           simpletest/test/options_test.php \
           simpletest/test/dumper_test.php \
@@ -41,6 +42,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/test/adapter_test.php \
           simpletest/test/socket_test.php \
           simpletest/test/query_string_test.php \
+          simpletest/test/url_test.php \
           simpletest/test/http_test.php \
           simpletest/test/authentication_test.php \
           simpletest/test/user_agent_test.php \

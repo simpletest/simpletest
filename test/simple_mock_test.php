@@ -332,6 +332,11 @@
         function TestOfMockReturns() {
             $this->UnitTestCase();
         }
+        function testNoUnitTesterSetThrowsError() {
+            $mock = &new MockDummy();
+            $this->assertErrorPattern('/missing argument/i');
+            $this->assertErrorPattern('/no unit tester/i');
+        }
         function testParameteredReturn() {
             $mock = &new MockDummy($this);
             $mock->setReturnValue("aMethod", "aaa", array(1, 2, 3));

@@ -9,9 +9,9 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'simple_test.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'errors.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'dumper.php');
+    require_once(dirname(__FILE__) . '/simple_test.php');
+    require_once(dirname(__FILE__) . '/errors.php');
+    require_once(dirname(__FILE__) . '/dumper.php');
     /**#@-*/
     
     /**
@@ -247,7 +247,7 @@
             list($severity, $content, $file, $line, $globals) = $queue->extract();
             $severity = SimpleErrorQueue::getSeverityAsString($severity);
             $this->assertTrue(
-                    !$expected || ($expected == $content),
+                    ! $expected || ($expected == $content),
                     "Expected [$expected] in PHP error [$content] severity [$severity] in [$file] line [$line]");
         }
         

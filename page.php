@@ -903,15 +903,6 @@
         }
         
         /**
-         *    Gets a list of all of the held forms.
-         *    @return array       Array of SimpleForm objects.
-         *    @access public
-         */
-        function getForms() {
-            return array_merge($this->_open_forms, $this->_complete_forms);
-        }
-        
-        /**
          *    Finds a held form by button label. Will only
          *    search correctly built forms.
          *    @param string $label       Button label, default 'Submit'.

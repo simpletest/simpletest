@@ -543,6 +543,10 @@
          */
         function SimpleMock(&$test, $wildcard, $is_strict = true) {
             $this->SimpleStub($wildcard, $is_strict);
+            if (! $test) {
+                trigger_error('No unit tester for mock object', E_USER_ERROR);
+                return;
+            }
             $this->_test = &$test;
             $this->_expected_counts = array();
             $this->_max_counts = array();
@@ -810,7 +814,9 @@
          *    @access protected
          */
         function _assertTrue($assertion, $message , &$test) {
-            $test->assertTrue($assertion, $message);
+            if ($test) {
+                $test->assertTrue($assertion, $message);
+            }
         }
     }
     
@@ -826,7 +832,7 @@
          *    Factory for server stub classes.
          */
         function Stub() {
-            trigger_error("Stub factory methods are class only.");
+            trigger_error('Stub factory methods are class only.');
         }
         
         /**
@@ -845,10 +851,10 @@
          *    @access public
          */
         function generate($class, $stub_class = false, $methods = false) {
-            if (!class_exists($class)) {
+            if (! class_exists($class)) {
                 return false;
             }
-            if (!$stub_class) {
+            if (! $stub_class) {
                 $stub_class = "Stub" . $class;
             }
             if (class_exists($stub_class)) {
