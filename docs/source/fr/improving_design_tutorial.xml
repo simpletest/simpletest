@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="ISO-8859-1" ?>
 <page title="Du haut vers le bas et piloté par les tests" here="Tester du haut vers le bas">
     <long_title>
         tutoriel de test unitaire en PHP - Conception du haut vers le bas, tester d'abord avec des objets fantaisie
