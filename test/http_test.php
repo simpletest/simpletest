@@ -58,6 +58,20 @@
             $this->assertIsA($request->fetch(&$socket), "SimpleHttpResponse");
             $socket->tally();
         }
+        function testWritingAdditionalHeaders() {
+            $request = new SimpleHttpRequest("http://a.valid.page/and/path");
+            $request->addHeaderLine("My: stuff");
+            $socket = &new MockSimpleSocket($this);
+            $socket->setReturnValue("isError", false);
+            $socket->setExpectedArgumentsSequence(0, "write", array("GET a.valid.page/and/path HTTP/1.0\r\n"));
+            $socket->setExpectedArgumentsSequence(1, "write", array("Host: localhost\r\n"));
+            $socket->setExpectedArgumentsSequence(2, "write", array("My: stuff\r\n"));
+            $socket->setExpectedArgumentsSequence(3, "write", array("Connection: close\r\n"));
+            $socket->setExpectedArgumentsSequence(4, "write", array("\r\n"));
+            $socket->setExpectedCallCount("write", 5);
+            $request->fetch(&$socket);
+            $socket->tally();
+        }
         function testCookieWriting() {
             $request = new SimpleHttpRequest("http://a.valid.page/and/path");
             $request->setCookie(new SimpleCookie("a", "A"));

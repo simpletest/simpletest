@@ -89,6 +89,7 @@
     class SimpleHttpRequest {
         var $_host;
         var $_path;
+        var $_user_headers;
         var $_cookies;
         
         /**
@@ -100,6 +101,7 @@
             $url = parse_url($url);
             $this->_host = (isset($url["host"]) ? $url["host"] : "localhost");
             $this->_path = (isset($url["path"]) ? $url["path"] : "");
+            $this->_user_headers = array();
             $this->_cookies = array();
         }
         
@@ -118,12 +120,24 @@
             }
             $socket->write("GET " . $this->_host . $this->_path . " HTTP/1.0\r\n");
             $socket->write("Host: localhost\r\n");
+            foreach ($this->_user_headers as $header_line) {
+                $socket->write($header_line . "\r\n");
+            }
             if (count($this->_cookies) > 0) {
                 $socket->write("Cookie: " . $this->_marshallCookies($this->_cookies) . "\r\n");
             }
             $socket->write("Connection: close\r\n");
             $socket->write("\r\n");
             return $this->_createResponse($socket);
+        }
+        
+        /**
+         *    Adds a header line to the request.
+         *    @param $header_line        Text of header line.
+         *    @public
+         */
+        function addHeaderLine($header_line) {
+            $this->_user_headers[] = $header_line;
         }
         
         /**

@@ -300,7 +300,7 @@
         <dia:point val="31.4703,0.0265899"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="22.8863,-0.716773;40.0543,0.283227"/>
+        <dia:rectangle val="22.8363,-0.716773;40.0543,0.283227"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -827,19 +827,19 @@
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O8">
       <dia:attribute name="obj_pos">
-        <dia:point val="-2.90972,27.0116"/>
+        <dia:point val="-2.85972,27.0116"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-2.95972,26.9616;8.24228,31.4616"/>
+        <dia:rectangle val="-2.90972,26.9616;8.29228,32.2616"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="-2.90972,27.0116"/>
+        <dia:point val="-2.85972,27.0116"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="11.102"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="4.4"/>
+        <dia:real val="5.2"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#SimpleHttpRequest#</dia:string>
@@ -891,6 +891,24 @@
         <dia:composite type="umloperation">
           <dia:attribute name="name">
             <dia:string>#fetch#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="type">
+            <dia:string/>
+          </dia:attribute>
+          <dia:attribute name="visibility">
+            <dia:enum val="0"/>
+          </dia:attribute>
+          <dia:attribute name="abstract">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="class_scope">
+            <dia:boolean val="false"/>
+          </dia:attribute>
+          <dia:attribute name="parameters"/>
+        </dia:composite>
+        <dia:composite type="umloperation">
+          <dia:attribute name="name">
+            <dia:string>#addHeaderLine#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
             <dia:string/>
@@ -1457,13 +1475,13 @@
         <dia:point val="17.4227,30.0758"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="8.14228,29.2758;17.4727,30.9116"/>
+        <dia:rectangle val="8.19228,29.2758;17.4727,30.9116"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="17.4227,30.0758"/>
         <dia:point val="13.3247,30.0758"/>
         <dia:point val="13.3247,30.1116"/>
-        <dia:point val="8.19228,30.1116"/>
+        <dia:point val="8.24228,30.1116"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
