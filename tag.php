@@ -181,7 +181,7 @@
         
         /**
          *    Accessor for name submitted as the key in
-         *    GET/POST varaibles haah.
+         *    GET/POST variables hash.
          *    @return string        Parsed value.
          *    @access public
          */

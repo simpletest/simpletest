@@ -93,7 +93,7 @@
          *    @static
          */
         function getSeverityAsString($severity) {
-            static $map =  array(
+            static $map = array(
                     E_ERROR => 'E_ERROR',
                     E_WARNING => 'E_WARNING',
                     E_PARSE => 'E_PARSE',
@@ -121,7 +121,9 @@
      *    @access public
      */
     function simpleTestErrorHandler($severity, $message, $filename, $line, $super_globals) {
+        restore_error_handler();
         $queue = &SimpleErrorQueue::instance();
         $queue->add($severity, $message, $filename, $line, $super_globals);
+        set_error_handler('simpleTestErrorHandler');
     }
 ?>
