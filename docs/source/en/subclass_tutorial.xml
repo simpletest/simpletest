@@ -75,7 +75,7 @@ class TestOfClock extends UnitTestCase {
         <p>
             Here is the complete <em>clock_test.php</em> file after
             promoting our <code>assertSameTime()</code>
-            method to it&apos;s own superclass...
+            method to its own superclass...
 <php><![CDATA[
 <?php
     require_once('../classes/clock.php');
@@ -160,7 +160,7 @@ function TestOfClock() {
             the <code>$test_name</code> parameter
             which is what causes our warning.
             This parameter is not normally required of a test
-            case and not normally of it&apos;s assertions either.
+            case and not normally of its assertions either.
             To make our extended test case match the
             <code>UnitTestCase</code> interface
             we must make these optional...
