@@ -1,5 +1,10 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	MockObjects
+     *	@version	$Id$
+     */
     
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
@@ -8,6 +13,8 @@
     /**
      *    Bundle of GET/POST parameters. Can include
      *    repeated parameters.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleQueryString {
         var $_request;

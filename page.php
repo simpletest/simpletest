@@ -1,5 +1,10 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	MockObjects
+     *	@version	$Id$
+     */
     
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
@@ -11,6 +16,8 @@
     /**
      *    SAX event handler. Maintains a list of
      *    open tags and dispatches them as they close.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimplePageBuilder extends SimpleSaxListener {
         var $_page;
@@ -190,6 +197,8 @@
     
     /**
      *    A wrapper for a web page.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimplePage {
         var $_absolute_links;

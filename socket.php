@@ -1,9 +1,16 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	MockObjects
+     *	@version	$Id$
+     */
     
     /**
      *    Stashes an error for later. Useful for constructors
      *    until PHP gets exceptions.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class StickyError {
         var $_error = "Constructor not chained";
@@ -55,6 +62,8 @@
     
     /**
      *    Wrapper for TCP/IP socket.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleSocket extends StickyError {
         var $_handle;

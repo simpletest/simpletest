@@ -1,9 +1,16 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	UnitTester
+     *	@version	$Id$
+     */
     
     /**
      *    Singleton error queue used to record trapped
      *    errors.
+	 *	  @package	SimpleTest
+	 *	  @subpackage	UnitTester
      */
     class SimpleErrorQueue {
         var $_queue;

@@ -1,10 +1,17 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	UnitTester
+     *	@version	$Id$
+     */
     
     /**
      *    Can recieve test events and display them. Display
      *    is achieved by making display methods available
      *    and visiting the incoming event.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      *    @abstract
      */
     class SimpleRunner {
@@ -208,6 +215,8 @@
      *    runner by wrapping it. This is a do nothing version.
      *    Subclass this for soak testers and statistical
      *    testers.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class SimpleRunnerDecorator {
         var $_runner;
@@ -304,6 +313,8 @@
      *    page footers and headers. Also keeps track of the
      *    test nesting. This is the main base class on which
      *    to build the finished test (page based) displays.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class SimpleReporter extends SimpleRunner {
         var $_test_stack;

@@ -1,5 +1,10 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	UnitTester
+     *	@version	$Id$
+     */
     
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
@@ -9,6 +14,8 @@
     /**
      *    Creates the XML needed for remote communication
      *    by SimpleTest.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class XmlReporter extends SimpleReporter {
         var $_indent;
@@ -247,6 +254,8 @@
      *    Accumulator for incoming tag. Holds the
      *    incoming test structure information for
      *    later dispatch to the reporter.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class NestingXmlTag {
         var $_name;
@@ -295,6 +304,8 @@
      *    Accumulator for incoming method tag. Holds the
      *    incoming test structure information for
      *    later dispatch to the reporter.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class NestingMethodTag extends NestingXmlTag {
         
@@ -333,6 +344,8 @@
      *    Accumulator for incoming case tag. Holds the
      *    incoming test structure information for
      *    later dispatch to the reporter.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class NestingCaseTag extends NestingXmlTag {
         
@@ -371,6 +384,8 @@
      *    Accumulator for incoming group tag. Holds the
      *    incoming test structure information for
      *    later dispatch to the reporter.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class NestingGroupTag extends NestingXmlTag {
         
@@ -421,6 +436,8 @@
     /**
      *    Parser for importing the output of the XmlReporter.
      *    Dispatches that output to another reporter.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class SimpleTestXmlParser {
         var $_listener;

@@ -1,5 +1,10 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	UnitTester
+     *	@version	$Id$
+     */
     
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
@@ -8,6 +13,8 @@
     
     /**
      *    Wrapper for exec() functionality.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class SimpleShell {
         var $_output;
@@ -47,6 +54,8 @@
      *    Test case for testing of command line scripts and
      *    utilities. Usually scripts taht are external to the
      *    PHP code, but support it in some way.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class ShellTestCase extends SimpleTestCase {
         var $_current_shell;

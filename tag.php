@@ -1,8 +1,15 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	MockObjects
+     *	@version	$Id$
+     */
     
     /**
      *    HTML or XML tag.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleTag {
         var $_name;
@@ -94,6 +101,8 @@
     
     /**
      *    Page title.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleTitleTag extends SimpleTag {
         
@@ -109,6 +118,8 @@
     
     /**
      *    Link.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleAnchorTag extends SimpleTag {
         
@@ -124,6 +135,8 @@
     
     /**
      *    Form element.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleWidget extends SimpleTag {
         var $_value;
@@ -205,6 +218,8 @@
     
     /**
      *    Text, password and hidden field.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleTextTag extends SimpleWidget {
         
@@ -246,6 +261,8 @@
     
     /**
      *    Submit button.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleSubmitTag extends SimpleWidget {
         
@@ -286,6 +303,8 @@
     
     /**
      *    Content tag for text area.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleTextAreaTag extends SimpleWidget {
         
@@ -347,6 +366,8 @@
     
     /**
      *    Checkbox widget.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleCheckboxTag extends SimpleWidget {
         
@@ -403,6 +424,8 @@
     
     /**
      *    Drop down widget.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleSelectionTag extends SimpleWidget {
         var $_options;
@@ -488,6 +511,8 @@
     
     /**
      *    Drop down widget.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class MultipleSelectionTag extends SimpleWidget {
         var $_options;
@@ -577,6 +602,8 @@
     
     /**
      *    Option for selection field.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleOptionTag extends SimpleWidget {
         
@@ -612,6 +639,8 @@
     
     /**
      *    Radio button.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleRadioButtonTag extends SimpleWidget {
         
@@ -666,6 +695,8 @@
     
     /**
      *    A group of tags with the same name within a form.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleCheckboxGroup {
         var $_widgets;
@@ -794,6 +825,8 @@
     /**
      *    A group of tags with the same name within a form.
      *    Used for radio buttons.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleRadioGroup {
         var $_widgets;
@@ -885,6 +918,8 @@
     
     /**
      *    Tag to aid parsing the form.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleFormTag extends SimpleTag {
         
@@ -900,6 +935,8 @@
     
     /**
      *    Form tag class to hold widget values.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleForm {
         var $_method;

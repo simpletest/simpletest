@@ -1,5 +1,10 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	MockObjects
+     *	@version	$Id$
+     */
     
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
@@ -13,6 +18,8 @@
      *    Repository for cookies. The semantics are a bit
      *    ropy until I can go through the cookie spec with
      *    a fine tooth combe.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class CookieJar {
         var $_cookies;
@@ -132,6 +139,8 @@
     
     /**
      *    Simulated web browser.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleBrowser {
         var $_cookie_jar;
@@ -440,6 +449,8 @@
     /**
      *    Testing version of web browser. Can be set up to
      *    automatically test cookies.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class TestBrowser extends SimpleBrowser {
         var $_test;

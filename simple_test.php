@@ -1,10 +1,10 @@
 <?php
-/**
- *	base include file for SimpleTest
- *	@package	SimpleTest
- *	@subpackage	UnitTester
- *	@version	$Id$
- */
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	UnitTester
+     *	@version	$Id$
+     */
     
 	/**
 	 *	path for simpletest files
@@ -396,4 +396,4 @@
             SimpleTestOptions::ignore($class);
         }
     }
-#?>
+?>

@@ -1,10 +1,17 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	UnitTester
+     *	@version	$Id$
+     */
     
     define('TYPE_MATTERS', true);
     
     /**
      *    Displays variables as text and does diffs.
+	 *	  @package	SimpleTest
+	 *	  @subpackage	UnitTester
      */
     class SimpleDumper {
         

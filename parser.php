@@ -1,5 +1,10 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	MockObjects
+     *	@version	$Id$
+     */
     
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
@@ -14,6 +19,8 @@
      *    Compounded regular expression. Any of
      *    the contained patterns could match and
      *    when one does it's label is returned.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class ParallelRegex {
         var $_patterns;
@@ -108,6 +115,8 @@
     
     /**
      *    States for a stack machine.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class StateStack {
         var $_stack;
@@ -162,6 +171,8 @@
      *    content is only scanned by the PHP regex
      *    parser once. Lexer modes must not start
      *    with leading underscores.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleLexer {
         var $_regexes;
@@ -389,6 +400,8 @@
     
     /**
      *    Converts HTML tokens into selected SAX events.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleSaxParser {
         var $_lexer;
@@ -605,6 +618,8 @@
     
     /**
      *    SAX event handler.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      *    @abstract
      */
     class SimpleSaxListener {

@@ -1,5 +1,10 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	MockObjects
+     *	@version	$Id$
+     */
 
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
@@ -11,6 +16,8 @@
      *    URL parser to replace parse_url() PHP function.
      *    Guesses a bit trying to separate the host from
      *    the path.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleUrl {
         var $_scheme;
@@ -355,6 +362,8 @@
      *    arbitary stuff. I have used...
      *    http://wp.netscape.com/newsref/std/cookie_spec.html
      *    http://www.cookiecentral.com/faq/
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleCookie {
         var $_host;
@@ -557,6 +566,8 @@
     /**
      *    HTTP request for a web page. Factory for
      *    HttpResponse object.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleHttpRequest {
         var $_user_headers;
@@ -668,6 +679,8 @@
     
     /**
      *    Request with data to send. Usually PUT or POST.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleHttpPushRequest extends SimpleHttpRequest {
         var $_pushed_content;
@@ -699,6 +712,8 @@
     
     /**
      *    Collection of header lines in the response.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleHttpHeaders {
         var $_response_code;
@@ -816,6 +831,8 @@
     
     /**
      *    Basic HTTP response.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
      */
     class SimpleHttpResponse extends StickyError {
         var $_content;

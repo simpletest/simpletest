@@ -1,15 +1,15 @@
 <?php
-/**
- *	base include file for SimpleTest
- *	@package	SimpleTest
- *	@subpackage	MockObjects
- *	@version	$Id$
- */
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	MockObjects
+     *	@version	$Id$
+     */
 
 	/**
 	 * @ignore	originally defined in simple_test.php
 	 */
-    if (!defined("SIMPLE_TEST")) {
+    if (! defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
     }
     require_once(SIMPLE_TEST . 'expectation.php');
@@ -23,8 +23,8 @@
     
     /**
      *    A wildcard expectation always matches.
-	 *    @package		SimpleTest
-	 *    @subpackage	MockObjects
+	 *    @package SimpleTest
+	 *    @subpackage MockObjects
      */
     class WildcardExpectation extends SimpleExpectation {
         
@@ -61,8 +61,8 @@
     
     /**
      *    Parameter comparison assertion.
-	 *    @package		SimpleTest
-	 *    @subpackage	MockObjects
+	 *    @package SimpleTest
+	 *    @subpackage MockObjects
      */
     class ParametersExpectation extends SimpleExpectation {
         var $_expected;
@@ -196,8 +196,8 @@
     /**
      *    Retrieves values and references by searching the
      *    parameter lists until a match is found.
-	 *    @package		SimpleTest
-	 *    @subpackage	MockObjects
+	 *    @package SimpleTest
+	 *    @subpackage MockObjects
      */
     class CallMap {
         var $_map;
@@ -282,8 +282,8 @@
     /**
      *    An empty collection of methods that can have their
      *    return values set. Used for prototyping.
-	 *    @package		SimpleTest
-	 *    @subpackage	MockObjects
+	 *    @package SimpleTest
+	 *    @subpackage MockObjects
      */
     class SimpleStub {
         var $_wildcard;
@@ -522,8 +522,8 @@
      *    calls upon them. The mock will assert the
      *    expectations against it's attached test case in
      *    addition to the server stub behaviour.
-	 *    @package		SimpleTest
-	 *    @subpackage	MockObjects
+	 *    @package SimpleTest
+	 *    @subpackage MockObjects
      */
     class SimpleMock extends SimpleStub {
         var $_test;
@@ -809,8 +809,8 @@
     /**
      *    Static methods only class for code generation of
      *    server stubs.
-	 *    @package		SimpleTest
-	 *    @subpackage	MockObjects
+	 *    @package SimpleTest
+	 *    @subpackage MockObjects
      */
     class Stub {
         
@@ -909,8 +909,8 @@
     /**
      *    Static methods only class for code generation of
      *    mock objects.
-	 *    @package		SimpleTest
-	 *    @subpackage	MockObjects
+	 *    @package SimpleTest
+	 *    @subpackage MockObjects
      */
     class Mock {
         

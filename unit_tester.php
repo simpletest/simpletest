@@ -1,5 +1,10 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	UnitTester
+     *	@version	$Id$
+     */
     
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
@@ -19,6 +24,8 @@
      *    Standard unit test class for day to day testing
      *    of PHP code XP style. Adds some useful standard
      *    assertions.
+	 *	  @package	SimpleTest
+	 *	  @subpackage	UnitTester
      */
     class UnitTestCase extends SimpleTestCase {
         
@@ -30,7 +37,7 @@
          *    @access public
          */
         function UnitTestCase($label = false) {
-            if (!$label) {
+            if (! $label) {
                 $label = get_class($this);
             }
             $this->SimpleTestCase($label);

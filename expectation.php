@@ -1,5 +1,10 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	UnitTester
+     *	@version	$Id$
+     */
     
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
@@ -9,6 +14,8 @@
     /**
      *    Assertion that can display failure information.
      *    Also includes various helper methods.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      *    @abstract
      */
     class SimpleExpectation {
@@ -54,6 +61,8 @@
     
     /**
      *    Test for equality.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class EqualExpectation extends SimpleExpectation {
         var $_value;
@@ -107,6 +116,8 @@
     
     /**
      *    Test for inequality.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class NotEqualExpectation extends EqualExpectation {
         
@@ -152,6 +163,8 @@
     
     /**
      *    Test for identity.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class IdenticalExpectation extends EqualExpectation {
         
@@ -200,6 +213,8 @@
     
     /**
      *    Test for non-identity.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class NotIdenticalExpectation extends IdenticalExpectation {
         
@@ -243,6 +258,8 @@
     
     /**
      *    Test for a pattern using Perl regex rules.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class WantedPatternExpectation extends SimpleExpectation {
         var $_pattern;
@@ -316,6 +333,8 @@
     /**
      *    Fail if a pattern is detected within the
      *    comparison.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class UnwantedPatternExpectation extends WantedPatternExpectation {
         
@@ -360,6 +379,8 @@
     
     /**
      *    Tests either type or class name if it's an object.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class IsAExpectation extends SimpleExpectation {
         var $_type;

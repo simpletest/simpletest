@@ -1,5 +1,10 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	UnitTester
+     *	@version	$Id$
+     */
     
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
@@ -10,6 +15,8 @@
 
     /**
      *    Runs an XML formated test on a remote server.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class RemoteTestCase extends RunnableTest {
         var $_url;

@@ -1,5 +1,10 @@
 <?php
-    // $Id$
+    /**
+     *	base include file for SimpleTest
+     *	@package	SimpleTest
+     *	@subpackage	UnitTester
+     *	@version	$Id$
+     */
     
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
@@ -9,6 +14,8 @@
     /**
      *    Sample minimal test displayer. Generates only
      *    failure messages and a pass count.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class HtmlReporter extends SimpleReporter {
         
@@ -131,6 +138,8 @@
      *    line use. I've tried to make it look like JUnit,
      *    but I wanted to output the errors as they arrived
      *    which meant dropping the dots.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class TextReporter extends SimpleReporter {
         
