@@ -105,5 +105,10 @@
             $this->expectCookie("session_cookie", "A");
             $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
         }
+        function testTemporaryCookieExpiry() {
+            $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
+            $this->restartSession();
+            $this->AssertNoCookie("session_cookie");
+        }
     }
 ?>

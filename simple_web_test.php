@@ -195,6 +195,20 @@
         }
         
         /**
+         *    Simulates the closing and reopening of the browser.
+         *    Temporary cookies will be discarded and timed
+         *    cookies will be expired if later than the
+         *    specified time.
+         *    @param $date        Time when session restarted.
+         *                        If ommitted then all persistent
+         *                        cookies are kept.
+         *    @public
+         */
+        function restartSession($date = false) {
+            $this->_current_browser->restartSession($date);
+        }
+        
+        /**
          *    Checks that a cookie is set for the current page
          *    and optionally checks the value.
          *    @param $name        Name of cookie to test.
@@ -214,6 +228,19 @@
                         $value,
                         sprintf($message, "Expecting cookie [$name]"));
             }
+        }
+        
+        /**
+         *    Checks that no cookie is present or that it has
+         *    been successfully cleared.
+         *    @param $name        Name of cookie to test.
+         *    @param $message     Message to display.
+         *    @public
+         */
+        function assertNoCookie($name, $message = "%s") {
+            $this->assertTrue(
+                    $this->_current_browser->getBaseCookieValue($name) === false,
+                    sprintf($message, "Not expecting cookie [$name]"));
         }
         
         /**

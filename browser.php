@@ -190,14 +190,15 @@
         }
         
         /**
-         *    Reads the current cookies for the base URL
-         *    or false if there is no base URL.
-         *    @param $name        Key of cookie to find.
+         *    Reads the current cookies for the base URL.
+         *    @param $name   Key of cookie to find.
+         *    @return        Null if there is no base URL, false
+         *                   if the cookie is not set.
          *    @public
          */
         function getBaseCookieValue($name) {
             if (!$this->_base_url) {
-                return false;
+                return null;
             }
             $url = new SimpleUrl($this->_base_url);
             return $this->getCookieValue($url->getHost(), $url->getPath(), $name);

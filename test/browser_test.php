@@ -193,7 +193,7 @@
         }
         function testReadingCookies() {
             $browser = &new SimpleBrowser();
-            $this->assertIdentical($browser->getBaseCookieValue("a"), false);
+            $this->assertNull($browser->getBaseCookieValue("a"));
             $browser->setCookie("b", "BBB", "this.host", "this/path/");
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAA", "this/path/")));
             $browser->fetchResponse("http://this.host/this/path/page.html", &$request);
