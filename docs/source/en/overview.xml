@@ -280,7 +280,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 which combine various practices to &quot;flatten the cost curve&quot; of software development.
                 More extreme still is <a href="http://www.testdriven.com/modules/news/">Test Driven Development</a>,
                 where you very strictly adhere to the rule of no coding until you have a test.
-                If your more of a planner or believe that experience trumps evolution,
+                If you're more of a planner or believe that experience trumps evolution,
                 you may prefer the
                 <a href="http://www.therationaledge.com/content/dec_01/f_spiritOfTheRUP_pk.html">RUP</a> approach.
                 I haven&apos;t tried it, but even I can see that you will need test tools (see figure 9).
