@@ -211,6 +211,18 @@
             $this->assertTrue($tag->setValue(array()));
             $this->assertIdentical($tag->getValue(), array());
         }
+        function testFailToSetIllegalOptionsInMultiple() {
+            $tag = &new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
+            $a = &new SimpleOptionTag(array('selected' => ''));
+            $a->addContent('AAA');
+            $tag->addTag($a);
+            $b = &new SimpleOptionTag(array());
+            $b->addContent('BBB');
+            $tag->addTag($b);
+            $this->assertFalse($tag->setValue(array('CCC')));
+            $this->assertTrue($tag->setValue(array('AAA', 'BBB')));
+            $this->assertFalse($tag->setValue(array('AAA', 'CCC')));
+        }
     }
     
     class TestOfRadioGroup extends UnitTestCase {

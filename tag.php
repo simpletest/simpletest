@@ -512,7 +512,7 @@
         /**
          *    Scans options for defaults to populate the
          *    value array().
-         *    @return string        Selected field.
+         *    @return array        Selected fields.
          *    @access public
          */
         function getDefault() {
@@ -532,14 +532,25 @@
          *    @access public
          */
         function setValue($values) {
+            foreach ($values as $value) {
+                $is_option = false;
+                for ($i = 0; $i < count($this->_options); $i++) {
+                    if ($this->_options[$i]->getContent() == $value) {
+                        $is_option = true;
+                        break;
+                    }
+                }
+                if (! $is_option) {
+                    return false;
+                }
+            }
             $this->_values = $values;
             return true;
         }
         
         /**
          *    Accessor for current selection value.
-         *    @return string      Value attribute or
-         *                        content of opton.
+         *    @return array      List of currently set options.
          *    @access public
          */
         function getValue() {

@@ -144,13 +144,26 @@
             } elseif ($name == 'textarea') {
                 return new SimpleTextAreaTag($attributes);
             } elseif ($name == 'select') {
-                return new SimpleSelectionTag($attributes);
+                return $this->_createSelectionTag($attributes);
             } elseif ($name == 'option') {
                 return new SimpleOptionTag($attributes);
             } elseif ($name == 'form') {
                 return new SimpleFormTag($attributes);
             }
             return new SimpleTag($attributes);
+        }
+        
+        /**
+         *    Factory for selection fields.
+         *    @param hash $attributes    Element attributes.
+         *    @return SimpleTag          Tag object.
+         *    @access protected
+         */
+        function &_createSelectionTag($attributes) {
+            if (isset($attributes['multiple'])) {
+                return new MultipleSelectionTag($attributes);
+            }
+            return new SimpleSelectionTag($attributes);
         }
         
         /**
