@@ -8,6 +8,7 @@ Unit tester
 -----------
 Show line number of failed assertion (3/2) - done.
 Remove SIMPLE_TEST constant (1/1) - done.
+Add option to disable error trap (1).
 
 Reporter
 --------
