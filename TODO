@@ -12,37 +12,41 @@ Add an error trap (3/6) - done.
 Add options class (3/2) - done.
 Clean out redundant tests (1/1) - done.
 Add user expansion message (1/2)- done.
+Rename files (2).
 
 Interface
 ---------
-Add better object mismatch message (1).
 Add flush() after painting page header (1/0) - done.
+Rename test display class to reporter name (1).
 
 Mock objects
 ------------
 Add expectMinimumCallCount() expectation (2/1) - done.
-Add a parameter list assertion for better message display (2).
 Add some user friendly expectations (2/1) - done.
-Make partial mocks accept an override (1).
+Make partial mocks accept an override (1/1) - done.
 
 Html parser
 -----------
 Skip CSS (1/2) - done.
 Skip comments (1/0) - done.
 Skip script tags (1/1) - done.
-Add input tag parsing (2).
 
 Browser
 -------
 Allow automatic redirects (4/6) - done.
-Add setting of form values (3).
 Add clock drift allowance to cookie tests (1).
 Add clock drift test for users (1).
 
 Web tester
 ----------
-Form submission (2).
 
 Documentation
 -------------
 Add partial mocks documentation (3/3) - done.
+Fix options syntax in all documentation (1).
+Fix options syntax in tutorial (1).
+Fix filenames in documentation (1).
+Fix filenames in tutorial (1).
+Fix reporter name in documentation (1).
+Fix reporter name in tutorial (1).
+Fix tutorial text to include ignore option (1).
