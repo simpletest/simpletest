@@ -869,17 +869,24 @@
         }
         
         /**
-         *    Gets a new request object corresponding to
-         *    a redirect.
+         *    Gets the redirected URL from the headers.
          *    @return     The URL as a string or false
-         *                if the response was not a redirect.
+         *                if there is no location specified.
          *    @public
          */
         function getRedirect() {
-            if (in_array($this->_headers->getResponseCode(), array(301, 302, 303, 307))) {
-                return $this->_headers->getLocation();
-            }
-            return false;
+            return $this->_headers->getLocation();
+        }
+        
+        /**
+         *    Test to see if the response is a valid
+         *    redirect.
+         *    @return        True if valid redirect.
+         *    @public
+         */
+        function isRedirect() {
+            return in_array($this->_headers->getResponseCode(), array(301, 302, 303, 307)) &&
+                    (boolean)$this->_headers->getLocation();
         }
         
         /**

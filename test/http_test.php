@@ -425,6 +425,7 @@
             $this->assertIdentical($response->getHttpVersion(), "1.1");
             $this->assertIdentical($response->getResponseCode(), 200);
             $this->assertEqual($response->getMimeType(), "text/plain");
+            $this->assertFalse($response->isRedirect());
             $this->assertFalse($response->getRedirect());
         }
         function testParseOfCookies() {
@@ -456,6 +457,7 @@
             $socket->setReturnValueAt(4, "read", "\r\n");
             $socket->setReturnValue("read", "");
             $response = &new SimpleHttpResponse(new MockSimpleUrl($this), $socket);
+            $this->assertTrue($response->isRedirect());
             $this->assertEqual($response->getRedirect(), "http://www.somewhere-else.com/");
         }
     }

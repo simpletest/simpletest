@@ -219,21 +219,39 @@
         }
         
         /**
-         *    Fetches a URL as a response object.
-         *    @param $method     GET, POST, etc.
-         *    @param $url        Target to fetch as Url object.
-         *    @param $parameters Additional parameters for request.
-         *    @return            Response object.
+         *    Test to see if the redirect limit is passed.
+         *    @param $redirects        Count so far.
+         *    @return                  True if over.
+         *    @private
+         */
+        function _isTooManyRedirects($redirects) {
+            return ($redirects > $this->_max_redirects);
+        }
+        
+        /**
+         *    Fetches a URL as a response object. Will
+         *    keep trying if redirected.
+         *    @param $method       GET, POST, etc.
+         *    @param $url          Target to fetch as Url object.
+         *    @param $parameters   Additional parameters for request.
+         *    @return              Response object.
          *    @protected
          */
         function &fetchResponse($method, $url, $parameters) {
-            $request = &$this->_createCookieRequest($method, $url, $parameters);
-            $response = &$request->fetch();
-            if ($response->isError()) {
-                $this->_response = false;
-                return $response;
+            $redirects = 0;
+            while (!$this->_isTooManyRedirects(++$redirects)) {
+                $request = &$this->_createCookieRequest($method, $url, $parameters);
+                $response = &$request->fetch();
+                if ($response->isError()) {
+                    $this->_response = false;
+                    return $response;
+                }
+                $this->_addCookies($url, $response->getNewCookies());
+                if (!$response->isRedirect()) {
+                    break;
+                }
+                $url = new SimpleUrl($response->getRedirect());
             }
-            $this->_addCookies($url, $response->getNewCookies());
             $this->_response = &$response;
             return $response;
         }
