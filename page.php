@@ -6,8 +6,8 @@
      *	@version	$Id$
      */
     
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "simpletest/");
+    if (! defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', 'simpletest/');
     }
     require_once(SIMPLE_TEST . 'http.php');
     require_once(SIMPLE_TEST . 'parser.php');
@@ -157,7 +157,7 @@
             } elseif ($name == 'form') {
                 return new SimpleFormTag($attributes);
             }
-            return new SimpleTag($attributes);
+            return new SimpleTag($name, $attributes);
         }
         
         /**

@@ -166,7 +166,7 @@
          *    @access public
          */
         function getBaseUrl() {
-            if (!$this->_current_url) {
+            if (! $this->_current_url) {
                 return false;
             }
             return $this->_current_url->getScheme('http') . '://' .

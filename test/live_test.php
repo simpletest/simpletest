@@ -304,4 +304,16 @@
             $this->assertWantedPattern('/b=\[b1, b4\]/');
         }
     }
+    
+    class TestOfFrames extends WebTestCase {
+        function TestOfFrames() {
+            $this->WebTestCase();
+        }
+        function testNoFramesContentWhenFramesDisabled() {
+            $this->ignoreFrames();
+            $this->get('http://www.lastcraft.com/test/frameset.html');
+            $this->assertTitle('Frameset for testing of SimpleTest');
+            $this->assertWantedPattern('/This content is for no frames only/');
+        }
+    }
 ?>

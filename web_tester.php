@@ -24,6 +24,7 @@
         var $_current_browser;
         var $_current_content;
         var $_html_cache;
+        var $_frames_supported;
         
         /**
          *    Creates an empty test case. Should be subclassed
@@ -126,7 +127,17 @@
             $this->_current_content = false;
             $this->_clearHtmlCache();
             $this->_current_browser = &$this->createBrowser();
+            $this->_frames_supported = true;
             parent::invoke($method);
+        }
+        
+        /**
+         *    Disables frames support. Frames will not be fetched
+         *    and the frameset page will be used instead.
+         *    @access public
+         */
+        function ignoreFrames() {
+            $this->_frames_supported = false;
         }
         
         /**
