@@ -5,6 +5,7 @@
         define("SIMPLE_TEST", "./");
     }
     require_once(SIMPLE_TEST . 'simple_test.php');
+    require_once(SIMPLE_TEST . 'errors.php');
     
     /**
      *    Standard unit test class for day to day testing
@@ -206,6 +207,41 @@
                     new UnwantedPatternAssertion($pattern),
                     $subject,
                     $message);
+        }
+        
+        /**
+         *    Confirms that no errors have occoured so
+         *    far in the test method.
+         *    @param $message        Message to display.
+         *    @public
+         */
+        function assertNoErrors($message = "%s") {
+            $queue = &SimpleErrorQueue::instance();
+            $this->assertTrue(
+                    $queue->isEmpty(),
+                    sprintf($message, "Should be no errors"));
+        }
+        
+        /**
+         *    Confirms that an error has occoured and
+         *    optionally that the error text matches.
+         *    @param $expected   Expected error text or
+         *                       false for no check.
+         *    @param $message    Message to display.
+         *    @public
+         */
+        function assertError($expected = false, $message = "%s") {
+            $queue = &SimpleErrorQueue::instance();
+            if ($queue->isEmpty()) {
+                $this->fail(sprintf($message, "Expected error not found"));
+                return;
+            }
+            list($severity, $content, $file, $line, $globals) = $queue->extract();
+            $map = SimpleErrorQueue::getSeverityMap();
+            $severity = $map[$severity];
+            $this->assertTrue(
+                    !$expected || ($expected == $content),
+                    "Expected [$expected] in PHP error [$content] severity [$severity] in [$file] line [$line]");
         }
     }
 ?>

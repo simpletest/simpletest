@@ -39,7 +39,7 @@
         }
         
         /**
-         *    Deals with PHP throwing an error.
+         *    Deals with PHP 4 throwing an error.
          *    @param $message    Text of error formatted by
          *                       the test case.
          *    @public

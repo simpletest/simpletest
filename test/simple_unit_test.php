@@ -89,18 +89,31 @@
             $this->assertEqual($text, $text);
             $this->assertEqual($text . $text, $text . "a" . $text);        // Fail.
         }
-        function testError() {
+        function testErrorDisplay() {
             trigger_error('Default');        // Exception.
             trigger_error('Error', E_USER_ERROR);        // Exception.
             trigger_error('Warning', E_USER_WARNING);        // Exception.
             trigger_error('Notice', E_USER_NOTICE);        // Exception.
+        }
+        function testErrorTrap() {
+            $this->assertNoErrors();
+            $this->assertError();        // Fail.
+            trigger_error('Error 1');
+            $this->assertNoErrors();        // Fail.
+            $this->assertError();
+        }
+        function testErrorText() {
+            trigger_error('Error 2');
+            $this->assertError('Error 2');
+            trigger_error('Error 3');
+            $this->assertError('Error 2');        // Fail.
         }
         function testOfDumping() {
             $this->dump(array("Hello"), "Displaying a variable");
         }
     }
     
-    $test = new GroupTest("Unit test case test with 17 fails, 17 passes and 4 exceptions");
+    $test = new GroupTest("Unit test case test with 20 fails, 20 passes and 4 exceptions");
     $display = new TestHTMLDisplay();
     $test->addTestCase(new TestOfUnitTestCase());
     

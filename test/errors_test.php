@@ -24,11 +24,13 @@
         }
         function testEmpty() {
             $queue = &SimpleErrorQueue::instance();
+            $this->assertTrue($queue->isEmpty());
             $this->assertFalse($queue->extract());
         }
         function testOrder() {
             $queue = &SimpleErrorQueue::instance();
             $queue->add(1024, 'Ouch', 'here.php', 100, array());
+            $this->assertFalse($queue->isEmpty());
             $queue->add(512, 'Yuk', 'there.php', 101, array());
             $this->assertEqual(
                     $queue->extract(),

@@ -184,18 +184,7 @@
          *    @public
          */
         function error($severity, $message, $file, $line, $globals) {
-            $map = array(
-                    E_ERROR => 'E_ERROR',
-                    E_WARNING => 'E_WARNING',
-                    E_PARSE => 'E_PARSE',
-                    E_NOTICE => 'E_NOTICE',
-                    E_CORE_ERROR => 'E_CORE_ERROR',
-                    E_CORE_WARNING => 'E_CORE_WARNING',
-                    E_COMPILE_ERROR => 'E_COMPILE_ERROR',
-                    E_COMPILE_WARNING => 'E_COMPILE_WARNING',
-                    E_USER_ERROR => 'E_USER_ERROR',
-                    E_USER_WARNING => 'E_USER_WARNING',
-                    E_USER_NOTICE => 'E_USER_NOTICE');
+            $map = SimpleErrorQueue::getSeverityMap();
             $severity = $map[$severity];
             $this->_current_runner->handleError(
                     "Unexpected PHP error [$message] severity [$severity] in [$file] line [$line]");

@@ -60,6 +60,14 @@
         }
         
         /**
+         *    Tests to see if the queue is empty.
+         *    @return        True if empty.
+         */
+        function isEmpty() {
+            return (count($this->_queue) == 0);
+        }
+        
+        /**
          *    Global access to a single error queue.
          *    @return        Global error queue object.
          *    @public
@@ -71,6 +79,28 @@
                 $queue = new SimpleErrorQueue();
             }
             return $queue;
+        }
+        
+        /**
+         *    Constant list or error codes.
+         *    @return        Hash of error code to
+         *                   string representation.
+         *    @public
+         *    @static
+         */
+        function getSeverityMap() {
+            return array(
+                    E_ERROR => 'E_ERROR',
+                    E_WARNING => 'E_WARNING',
+                    E_PARSE => 'E_PARSE',
+                    E_NOTICE => 'E_NOTICE',
+                    E_CORE_ERROR => 'E_CORE_ERROR',
+                    E_CORE_WARNING => 'E_CORE_WARNING',
+                    E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+                    E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+                    E_USER_ERROR => 'E_USER_ERROR',
+                    E_USER_WARNING => 'E_USER_WARNING',
+                    E_USER_NOTICE => 'E_USER_NOTICE');
         }
     }
     
