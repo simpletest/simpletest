@@ -670,7 +670,7 @@
          *    Factory for server stub classes.
          */
         function Stub() {
-            trigger_error("Mock factory methods are class only.");
+            trigger_error("Stub factory methods are class only.");
         }
         
         /**
