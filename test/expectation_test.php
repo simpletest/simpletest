@@ -197,7 +197,7 @@
         function TestOfMethodExistence() {
             $this->UnitTestCase();
         }
-       function testHasMethod() {
+        function testHasMethod() {
             $instance = &new ExpectedMethodTarget();
             $expectation = &new MethodExistsExpectation('hasThisMethod');
             $this->assertTrue($expectation->test($instance));
