@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 59 hours.
+This is immediate stuff only for this iteration (RC2) of 62 hours.
 
 $Id$
 
@@ -31,6 +31,7 @@ Lose authentication on browser restart (1/1) - done.
 Make links such as ?a=b return to the same page (2/3) - done.
 Fix clickLink() trying to load non-existent frame (2/1) - done.
 Populate HTTP_REFERER (2).
+Make sure content length is sent with POST requests (1).
 
 Web tester
 ----------
@@ -49,6 +50,7 @@ Tidy up sundry doc. files (2/1) - done.
 Fix reported typos (1).
 Document the character encoding fix (1/1) - done.
 Remove unnecessary test constructors (2/2) - done.
+Add note about running tests through a proxy server (2).
 
 Build
 -----
