@@ -189,7 +189,7 @@
          *    @access public
          */
         function test($compare) {
-            return ($this->_getValue() === $compare);
+            return SimpleTestCompatibility::isIdentical($this->_getValue(), $compare);
         }
         
         /**

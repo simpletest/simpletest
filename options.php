@@ -168,7 +168,26 @@
     class SimpleTestCompatibility {
         
         /**
-         *    Test to see if an object is a memebr of a
+         *    Identity test. Drops back to equality for PHP5
+         *    objects as the === operator counts as the
+         *    stronger reference.
+         *    @param mixed $first    Test subject.
+         *    @param mixed $second   Comparison object.
+         *    @access public
+         *    @static
+         */
+        function isIdentical($first, $second) {
+            if (version_compare(phpversion(), '5') >= 0) {
+                if (is_object($first) && is_object($second)) {
+                    return $first == $second;
+                }
+                return $first === $second;
+            }
+            return $first === $second;
+        }
+        
+        /**
+         *    Test to see if an object is a member of a
          *    class hiearchy.
          *    @param object $object    Object to test.
          *    @param string $class     Root name of hiearchy.
