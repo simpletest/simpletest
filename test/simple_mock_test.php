@@ -507,6 +507,13 @@
             $mock->aMethod(1, 2);
             $mock->aMethod("Goodbye");
         }
+        function testBadArgParametered() {
+            $mock = &new MockDummy($this);
+            $mock->expectArguments("aMethod", "foo");
+            $this->assertErrorPattern('/\$args.*not an array/i');
+            $mock->aMethod();
+            $mock->Tally();
+       }
     }
     
     SimpleTestOptions::addPartialMockCode('function sayHello() { return "Hello"; }');

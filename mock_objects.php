@@ -189,9 +189,11 @@
          */
         function _renderArguments($args) {
             $descriptions = array();
-            foreach ($args as $arg) {
-                $dumper = &new SimpleDumper();
-                $descriptions[] = $dumper->describeValue($arg);
+            if (is_array($args)) {
+                foreach ($args as $arg) {
+                    $dumper = &new SimpleDumper();
+                    $descriptions[] = $dumper->describeValue($arg);
+                }
             }
             return implode(', ', $descriptions);
         }
@@ -574,7 +576,22 @@
         function requireReturn() {
             $this->_require_return = true;
         }
-         
+        
+        /**
+         *    Die if bad arguments array is passed
+         *    @param	mixed    $args    The arguments value to be checked.
+         *    @param 	string   $task    Description of task attempt.
+         *    @return   boolean           Valid arguments
+         *    @access	private
+         */
+        function _CheckArgumentsArray($args, $task) {
+        	if (!is_array($args)) {
+        		trigger_error(
+        			"Cannot $task as \$args parameter is not an array",
+        			E_USER_ERROR);
+        	}
+        }
+        
         /**
          *    Sets up an expected call with a set of
          *    expected parameters in that call. All
@@ -587,6 +604,7 @@
          */
         function expectArguments($method, $args) {
             $this->_dieOnNoMethod($method, "set expected arguments");
+            $this->_CheckArgumentsArray($args, "set expected arguments");
             $args = $this->_replaceWildcards($args);
             $this->_expected_args[strtolower($method)] =
                     new ParametersExpectation($args);
@@ -606,6 +624,7 @@
          */
         function expectArgumentsAt($timing, $method, $args) {
             $this->_dieOnNoMethod($method, "set expected arguments at time");
+            $this->_CheckArgumentsArray($args, "set expected arguments");
             $args = $this->_replaceWildcards($args);
             if (!isset($this->_sequence_args[$timing])) {
                 $this->_sequence_args[$timing] = array();
