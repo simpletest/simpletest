@@ -244,10 +244,10 @@
          *                              the test state.
          *    @access public
          */
-        function assertTrue($result, $message = '%s') {
-            $message = sprintf(
-                    $message,
-                    'True asserion got ' . ($result ? 'True' : 'False'))
+        function assertTrue($result, $message = false) {
+            if (! $message) {
+                $message = 'True asserion got ' . ($result ? 'True' : 'False');
+            }
             if ($result) {
                 $this->pass($message);
             } else {
@@ -265,9 +265,9 @@
          *    @access public
          */
         function assertFalse($result, $message = '%s') {
-            $message = sprintf(
-                    $message,
-                    'False asserion got ' . ($result ? 'True' : 'False'))
+            if (! $message) {
+                $message = 'False asserion got ' . ($result ? 'True' : 'False');
+            }
             $this->assertTrue(! $result, $message);
         }
         
