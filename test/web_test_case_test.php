@@ -56,7 +56,7 @@
             $browser->setReturnValueAt(
                     0,
                     "fetchContent",
-                    "<a href=\"http://my-site.com/there\">Me</a>, <a href=\"a\">Me</a>");
+                    "<a href=\"http://my-site.com/there\" id=\"2\">Me</a>, <a href=\"a\">Me</a>");
             $browser->setReturnValueAt(1, "fetchContent", "Found it");
             $browser->expectCallCount("fetchContent", 2);
         }
@@ -71,6 +71,15 @@
             $this->assertFalse($this->clickLink('You'));
             $this->assertTrue($this->clickLink('Me'));
             $this->assertFalse($this->clickLink('Me'));
+            $this->assertWantedPattern('/Found it/i');
+        }
+        function testLinkIdClick() {
+            $browser = &$this->getBrowser();
+            $browser->expectArgumentsAt(1, "fetchContent", array("http://my-site.com/there"));
+            $this->fetch("http://my-site.com/link");
+            $this->assertFalse($this->clickLinkId(0));
+            $this->_getHtml();
+            $this->assertTrue($this->clickLinkId(2));
             $this->assertWantedPattern('/Found it/i');
         }
         function testLinkIndexClick() {

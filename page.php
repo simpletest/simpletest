@@ -68,12 +68,13 @@
                 return false;
             }
             $tag = array_pop($this->_tags[$name]);
-            $this->_page->addLink($tag["attributes"]["href"], $tag["content"]);
+            $this->_dispatchTag($name, $tag["attributes"], $tag["content"]);
             return true;
         }
         
         /**
-         *    Unparsed, but relevant data.
+         *    Unparsed, but relevant data. The data is added
+         *    to every open tag.
          *    @param $text        May include unparsed tags.
          *    @return             False on parse error.
          *    @public
@@ -86,6 +87,25 @@
             }
             return true;
         }
+        
+        /**
+         *    Dispatches the tag content to the page once
+         *    it has been closed.
+         *    @param $name        Name of element.
+         *    @param $attributes  Hash of attribute names
+         *                        and values. If no value is
+         *                        recorded then it will be set
+         *                        to true.
+         *    @protected
+         */
+        function _dispatchTag($name, $attributes, $content) {
+            if ($name == "a") {
+                $this->_page->addLink(
+                        $attributes["href"],
+                        $content,
+                        isset($attributes["id"]) ? $attributes["id"] : false);
+            }
+        }
     }
     
     /**
@@ -94,6 +114,7 @@
     class SimplePage {
         var $_absolute_links;
         var $_relative_links;
+        var $_link_ids;
         
         /**
          *    Parses a page ready to access it's contents.
@@ -103,6 +124,7 @@
         function SimplePage($raw) {
             $this->_absolute_links = array();
             $this->_relative_links = array();
+            $this->_link_ids = array();
             $builder = &$this->_createBuilder($this);
             $builder->parse($raw, $this->_createParser($builder));
         }
@@ -132,16 +154,17 @@
          *    Adds a link to the page.
          *    @param $url        Address.
          *    @param $label      Text label of link.
+         *    @param $id         Id attribute of link.
          *    @param $is_strict  Will accept only correct
          *                       relative URLs: must start
          *                       "/", "./" or "../" or have
          *                       a scheme.
          *    @public
          */
-        function addLink($url, $label, $is_strict = false) {
+        function addLink($url, $label, $id, $is_strict = false) {
             $parsed_url = new SimpleUrl($url);
             if ($parsed_url->getScheme() && $parsed_url->getHost()) {
-                $this->_addAbsoluteLink($url, $label);
+                $this->_addAbsoluteLink($url, $label, $id);
                 return;
             }
             if (!$is_strict && !$parsed_url->getScheme()) {
@@ -151,7 +174,7 @@
                 }
             }
             if (!$parsed_url->getHost()) {
-                $this->_addRelativeLink($url, $label);
+                $this->_addRelativeLink($url, $label, $id);
             }
         }
         
@@ -159,9 +182,11 @@
          *    Adds an absolute link to the page.
          *    @param $url        Address.
          *    @param $label      Text label of link.
+         *    @param $id         Id attribute of link.
          *    @private
          */
-        function _addAbsoluteLink($url, $label) {
+        function _addAbsoluteLink($url, $label, $id) {
+            $this->_addLinkId($url, $id);
             if (!isset($this->_absolute_links[$label])) {
                 $this->_absolute_links[$label] = array();
             }
@@ -172,9 +197,11 @@
          *    Adds a relative link to the page.
          *    @param $url        Address.
          *    @param $label      Text label of link.
+         *    @param $id         Id attribute of link.
          *    @private
          */
-        function _addRelativeLink($url, $label) {
+        function _addRelativeLink($url, $label, $id) {
+            $this->_addLinkId($url, $id);
             if (!isset($this->_relative_links[$label])) {
                 $this->_relative_links[$label] = array();
             }
@@ -182,8 +209,20 @@
         }
         
         /**
+         *    Adds a URL by id attribute.
+         *    @param $url        Address.
+         *    @param $id         Id attribute of link.
+         *    @private
+         */
+        function _addLinkId($url, $id) {
+            if (!($id === false)) {
+                $this->_link_ids[(integer)$id] = $url;
+            }
+        }
+        
+        /**
          *    Accessor for a list of all fixed links.
-         *    @return       List of links with scheme of
+         *    @return       List of urls with scheme of
          *                  http or https and hostname.
          *    @public
          */
@@ -197,7 +236,7 @@
         
         /**
          *    Accessor for a list of all relative links.
-         *    @return       List of links without hostname.
+         *    @return       List of urls without hostname.
          *    @public
          */
         function getRelativeLinks() {
@@ -211,8 +250,7 @@
         /**
          *    Accessor for a URLs by the link label.
          *    @param $label    Text of link.
-         *    @return          List of links with that
-         *                     label.
+         *    @return          List of links with that label.
          *    @public
          */
         function getUrls($label) {
@@ -224,6 +262,19 @@
                 $all = array_merge($all, $this->_relative_links[$label]);
             }
             return $all;
+        }
+        
+        /**
+         *    Accessor for a URL by the id attribute.
+         *    @param $id       Id attribute of link.
+         *    @return          URL as string with that id.
+         *    @public
+         */
+        function getUrlById($id) {
+            if (in_array($id, array_keys($this->_link_ids))) {
+                return $this->_link_ids[$id];
+            }
+            return false;
         }
     }
 ?>

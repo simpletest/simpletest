@@ -104,6 +104,7 @@
          *    one if an index is given.
          *    @param $label     Text between the anchor tags.
          *    @param $index     Link position counting from zero.
+         *    @return           True if link present.
          *    @public
          */
         function clickLink($label, $index = 0) {
@@ -116,6 +117,23 @@
                 return false;
             }
             $this->fetch($urls[$index]);
+            return true;
+        }
+        
+        /**
+         *    Follows a link by name. Will click the first link
+         *    found with this link text by default, or a later
+         *    one if an index is given.
+         *    @param $id        ID attribute value.
+         *    @return           True if link present.
+         *    @public
+         */
+        function clickLinkId($id) {
+            $page = &$this->_getHtml();
+            if (!($url = $page->getUrlById($id))) {
+                return false;
+            }
+            $this->fetch($url);
             return true;
         }
         

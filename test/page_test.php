@@ -32,7 +32,7 @@
         }
         function testLink() {
             $page = &new MockSimplePage($this);
-            $page->expectArguments("addLink", array("http://somewhere", "Label"));
+            $page->expectArguments("addLink", array("http://somewhere", "Label", "*"));
             $page->expectCallCount("addLink", 1);
             $builder = &new SimplePageBuilder($page);
             $this->assertTrue($builder->startElement(
@@ -42,9 +42,21 @@
             $this->assertTrue($builder->endElement("a"));
             $page->tally();
         }
+        function testLinkWithId() {
+            $page = &new MockSimplePage($this);
+            $page->expectArguments("addLink", array("http://somewhere", "Label", "44"));
+            $page->expectCallCount("addLink", 1);
+            $builder = &new SimplePageBuilder($page);
+            $this->assertTrue($builder->startElement(
+                    "a",
+                    array("href" => "http://somewhere", "id" => "44")));
+            $this->assertTrue($builder->addContent("Label"));
+            $this->assertTrue($builder->endElement("a"));
+            $page->tally();
+        }
         function testLinkExtraction() {
             $page = &new MockSimplePage($this);
-            $page->expectArguments("addLink", array("http://somewhere", "Label"));
+            $page->expectArguments("addLink", array("http://somewhere", "Label", "*"));
             $page->expectCallCount("addLink", 1);
             $builder = &new SimplePageBuilder($page);
             $this->assertTrue($builder->addContent("Starting stuff"));
@@ -58,8 +70,8 @@
         }
         function testMultipleLinks() {
             $page = &new MockSimplePage($this);
-            $page->expectArgumentsAt(0, "addLink", array("http://somewhere", "1"));
-            $page->expectArgumentsAt(1, "addLink", array("http://elsewhere", "2"));
+            $page->expectArgumentsAt(0, "addLink", array("http://somewhere", "1", "*"));
+            $page->expectArgumentsAt(1, "addLink", array("http://elsewhere", "2", "*"));
             $page->expectCallCount("addLink", 2);
             $builder = &new SimplePageBuilder($page);
             $this->assertTrue($builder->startElement(
@@ -120,26 +132,33 @@
             $this->assertIdentical($page->getRelativeLinks(), array(), "rel->%s");
             $this->assertIdentical($page->getUrls("Label"), array());
         }
-        function testAddExternalLink() {
+        function testAddAbsoluteLink() {
             $page = new SimplePage("");
-            $page->addLink("http://somewhere", "Label");
+            $page->addLink("http://somewhere", "Label", false);
             $this->assertEqual($page->getAbsoluteLinks(), array("http://somewhere"), "abs->%s");
             $this->assertIdentical($page->getRelativeLinks(), array(), "rel->%s");
             $this->assertEqual($page->getUrls("Label"), array("http://somewhere"));
         }
-        function testAddStrictInternalLink() {
+        function testAddStrictRelativeLink() {
             $page = new SimplePage("");
-            $page->addLink("./somewhere.php", "Label", true);
+            $page->addLink("./somewhere.php", "Label", false, true);
             $this->assertEqual($page->getAbsoluteLinks(), array(), "abs->%s");
             $this->assertIdentical($page->getRelativeLinks(), array("./somewhere.php"), "rel->%s");
             $this->assertEqual($page->getUrls("Label"), array("./somewhere.php"));
         }
-        function testAddInternalLink() {
+        function testAddRelativeLink() {
             $page = new SimplePage("");
-            $page->addLink("somewhere.php", "Label");
+            $page->addLink("somewhere.php", "Label", false);
             $this->assertEqual($page->getAbsoluteLinks(), array(), "abs->%s");
             $this->assertIdentical($page->getRelativeLinks(), array("./somewhere.php"), "rel->%s");
             $this->assertEqual($page->getUrls("Label"), array("./somewhere.php"));
+        }
+        function testLinkIds() {
+            $page = new SimplePage("");
+            $page->addLink("somewhere.php", "Label", 33);
+            $this->assertEqual($page->getUrls("Label"), array("./somewhere.php"));
+            $this->assertFalse($page->getUrlById(0));
+            $this->assertEqual($page->getUrlById(33), "./somewhere.php");
         }
     }
     
@@ -160,7 +179,7 @@
         function testLinksPage() {
             $raw = '<html>';
             $raw .= '<a href="there.html">There</a>';
-            $raw .= '<a href="http://there.com/that.html">That page</a>';
+            $raw .= '<a href="http://there.com/that.html" id="0">That page</a>';
             $raw .= '</html>';
             $page = &new SimplePage($raw);
             $this->assertIdentical(
@@ -170,6 +189,7 @@
                     $page->getRelativeLinks(),
                     array("./there.html"));
             $this->assertIdentical($page->getUrls("There"), array("./there.html"));
+            $this->assertEqual($page->getUrlById(0), "http://there.com/that.html");
         }
     }
 ?>

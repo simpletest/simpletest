@@ -72,5 +72,10 @@
             $this->assertTrue($this->clickLink('Relative'));
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
+        function testIdFollowing() {
+            $this->fetch('http://www.lastcraft.com/test/link_confirm.php');
+            $this->assertTrue($this->clickLinkId(1));
+            $this->assertWantedPattern('/target for the SimpleTest/');
+        }
     }
 ?>

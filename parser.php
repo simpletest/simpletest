@@ -426,7 +426,10 @@
         }
         
         /**
-         *    Accepts a token from the tag mode.
+         *    Accepts a token from the tag mode. If the
+         *    starting element completes then the element
+         *    is dispatched and the current attributes
+         *    set back to empty.
          *    @param $token    Incoming characters.
          *    @param $event    Lexer event type.
          *    @return          False if parse error.
@@ -438,9 +441,12 @@
                 return true;
             }
             if ($event == LEXER_EXIT) {
-                return $this->_listener->startElement(
+                $success = $this->_listener->startElement(
                         $this->_tag,
                         $this->_attributes);
+                $this->_tag = "";
+                $this->_attributes = array();
+                return $success;
             }
             if ($token != "=") {
                 $this->_attributes[$token] = "";
