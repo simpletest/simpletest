@@ -10,6 +10,7 @@ Unit tester
 Include types with error reports (1).
 Refactor value formatting into separate Dumper class (2/3) - done.
 Add is_a() patch to allow earlier PHP versions (1).
+Move dumper creation to factory in options (1).
 
 Interface
 ---------
