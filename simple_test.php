@@ -260,6 +260,7 @@
          *    Accessor for the test name for subclasses.
          *    @return string           Name of the test.
          *    @access public
+         *    @static
          */
         function getLabel() {
             return $this->_label;
@@ -293,6 +294,7 @@
         
         /**
          *    Runs test case specific code before the user setUp().
+         *    For extension writers not wanting to interfere with setUp().
          *    @access protected
          */
         function before() {
@@ -300,6 +302,7 @@
           
         /**
          *    Runs test case specific code after the user tearDown().
+         *    For extension writers not wanting to interfere with user tests.
          *    @access protected
          */
         function after() {
@@ -481,6 +484,7 @@
          *    Accessor for the number of subtests.
          *    @return integer           Number of test cases.
          *    @access public
+         *    @static
          */
         function getSize() {
             return 1;
@@ -519,7 +523,8 @@
         }
         
         /**
-         *    Adds a test into the suite.
+         *    Adds a test into the suite. Can be either a group
+         *    test or some other unit test.
          *    @param SimpleTestCase $test_case  Suite or individual test
          *                                      case implementing the
          *                                      runnable test interface.
@@ -528,7 +533,19 @@
         function addTestCase(&$test_case) {
             $this->_test_cases[] = &$test_case;
         }
-        
+         
+        /**
+         *    Adds a test into the suite by class name. The class will
+         *    be instantiated as needed.
+         *    @param SimpleTestCase $test_case  Suite or individual test
+         *                                      case implementing the
+         *                                      runnable test interface.
+         *    @access public
+         */
+        function addTestClass($class) {
+            $this->_test_cases[] = $class;
+        }
+       
         /**
          *    Builds a group test from a library of test cases.
          *    The new group is composed into this one.
@@ -550,7 +567,7 @@
                 if (SimpleTestOptions::isIgnored($class)) {
                     continue;
                 }
-                $group->addTestCase(new $class());
+                $group->addTestClass($class);
             }
             $this->addTestCase($group);
         }
@@ -571,14 +588,21 @@
         }
         
         /**
-         *    Invokes run() on all of the held test cases.
+         *    Invokes run() on all of the held test cases, instantiating
+         *    them if necessary.
          *    @param SimpleReporter $reporter    Current test reporter.
          *    @access public
          */
         function run(&$reporter) {
             $reporter->paintGroupStart($this->getLabel(), $this->getSize());
             for ($i = 0; $i < count($this->_test_cases); $i++) {
-                $this->_test_cases[$i]->run($reporter);
+                if (is_string($this->_test_cases[$i])) {
+                    $class = $this->_test_cases[$i];
+                    $test = &new $class();
+                    $test->run($reporter);
+                } else {
+                    $this->_test_cases[$i]->run($reporter);
+                }
             }
             $reporter->paintGroupEnd($this->getLabel());
             return $reporter->getStatus();
@@ -592,7 +616,11 @@
         function getSize() {
             $count = 0;
             foreach ($this->_test_cases as $case) {
-                $count += $case->getSize();
+                if (is_string($case)) {
+                    $count++;
+                } else {
+                    $count += $case->getSize();
+                }
             }
             return $count;
         }
