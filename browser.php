@@ -2,7 +2,7 @@
     // $Id$
     
     if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "./");
+        define("SIMPLE_TEST", "simpletest/");
     }
     require_once(SIMPLE_TEST . 'http.php');
     require_once(SIMPLE_TEST . 'unit_tester.php');

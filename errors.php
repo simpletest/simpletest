@@ -1,10 +1,6 @@
 <?php
     // $Id$
     
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', './');
-    }
-    
     /**
      *    Singleton error queue used to record trapped
      *    errors.

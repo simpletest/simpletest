@@ -2,7 +2,7 @@
     // $Id$
     
     if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "./");
+        define("SIMPLE_TEST", "simpletest/");
     }
     define("LEXER_ENTER", 1);
     define("LEXER_MATCHED", 2);

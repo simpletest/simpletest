@@ -1,10 +1,6 @@
 <?php
     // $Id$
     
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "./");
-    }
-
     /**
      *    Carries the reporter around the test suite.
      */
