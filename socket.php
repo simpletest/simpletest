@@ -58,6 +58,7 @@
      */
     class Socket extends StickyError {
         var $_handle;
+        var $_is_open;
         
         /**
          *    Opens a socket for reading and writing.
@@ -66,8 +67,11 @@
          */
         function Socket($url, $port = 80) {
             $this->StickyError();
+            $this->_is_open = false;
             if (!($this->_handle = fsockopen($url, $port, $errorNumber, $error, 15))) {
                 $this->_setError("Cannot open [$url] with [$error]");
+            } else {
+                $this->_is_open = true;
             }
         }
         
@@ -78,7 +82,7 @@
          *    @public
          */
         function write($message) {
-            if ($this->isError()) {
+            if ($this->isError() || !$this->isOpen()) {
                 return false;
             }
             if (!fwrite($this->_handle, $message)) {
@@ -88,7 +92,6 @@
             return true;
         }
         
-        
         /**
          *    Reads data from the socket.
          *    @param $block_size        Size of chunk to read.
@@ -97,10 +100,29 @@
          *    @public
          */
         function read($block_size = 255) {
-            if ($this->isError()) {
+            if ($this->isError() || !$this->isOpen()) {
                 return false;
             }
             return fread($this->_handle, $block_size);
+        }
+        
+        /**
+         *    Accessor for socket open state.
+         *    @return            True if open.
+         *    @public
+         */
+        function isOpen() {
+            return $this->_is_open;
+        }
+        
+        /**
+         *    Closes the socket preventing further reads.
+         *    Cannot be reopened once closed.
+         *    @public
+         */
+        function close() {
+            $this->_is_open = false;
+            return fclose($this->_handle);
         }
     }
 ?>
