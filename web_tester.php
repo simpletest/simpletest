@@ -36,11 +36,12 @@
         }
         
         /**
-         *    Dumps the current request for debugging.
+         *    Gets the last response error.
+         *    @return string    Last low level HTTP error.
          *    @access public
          */
-        function showRequest() {
-            $this->dump($this->_browser->getRequest());
+        function getTransportError() {
+            return $this->_browser->getTransportError();
         }
           
         /**
@@ -52,13 +53,13 @@
         function getUrl() {
             $this->_browser->getUrl();
         }
-      
+        
         /**
-         *    Dumps the current HTML source for debugging.
+         *    Dumps the current request for debugging.
          *    @access public
          */
-        function showSource() {
-            $this->dump($this->_browser->getContent());
+        function showRequest() {
+            $this->dump($this->_browser->getRequest());
         }
         
         /**
@@ -68,14 +69,13 @@
         function showHeaders() {
             $this->dump($this->_browser->getHeaders());
         }
-        
+      
         /**
-         *    Gets the last response error.
-         *    @return string    Last low level HTTP error.
+         *    Dumps the current HTML source for debugging.
          *    @access public
          */
-        function getTransportError() {
-            return $this->_browser->getTransportError();
+        function showSource() {
+            $this->dump($this->_browser->getContent());
         }
         
         /**
