@@ -187,7 +187,7 @@
                     array("a" => "1"));
             $this->assertUrl(
                     "username:password@somewhere.com:243?1,2",
-                    array(false, "username", "password", "somewhere.com", 243, "/", "com", "", false),
+                    array(false, "username", "password", "somewhere.com", 243, "/", "com", "?1,2", false),
                     array(),
                     array(1, 2));
             $this->assertUrl(
@@ -197,8 +197,8 @@
                     "username@www.somewhere.com:243#anchor",
                     array(false, "username", false, "www.somewhere.com", 243, "/", "com", "", "anchor"));
             $this->assertUrl(
-                    "/this/that/here.php?a=1&b=2#anchor?3,4",
-                    array(false, false, false, false, false, "/this/that/here.php", false, "?a=1&b=2", "anchor"),
+                    "/this/that/here.php?a=1&b=2?3,4",
+                    array(false, false, false, false, false, "/this/that/here.php", false, "?a=1&b=2?3,4", false),
                     array("a" => "1", "b" => "2"),
                     array(3, 4));
             $this->assertUrl(
@@ -237,7 +237,7 @@
             $this->assertPreserved('http://here/there?a=1&a=2?9,8');
             $this->assertPreserved('http://host?a=1&a=2');
             $this->assertPreserved('http://host#stuff');
-            $this->assertPreserved('http://me:secret@www.here.com/a/b/c/here.html?a=A#1234?7,6');
+            $this->assertPreserved('http://me:secret@www.here.com/a/b/c/here.html?a=A?7,6');
         }
         
         function assertUrl($raw, $parts, $params = false, $coords = false) {

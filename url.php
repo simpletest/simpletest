@@ -30,8 +30,6 @@
         var $_path;
         var $_request;
         var $_fragment;
-        var $_x;
-        var $_y;
         var $_target;
         
         /**
@@ -40,7 +38,7 @@
          *    @access public
          */
         function SimpleUrl($url) {
-            list($this->_x, $this->_y) = $this->_chompCoordinates($url);
+            list($x, $y) = $this->_chompCoordinates($url);
             $this->_scheme = $this->_chompScheme($url);
             list($this->_username, $this->_password) = $this->_chompLogin($url);
             $this->_host = $this->_chompHost($url);
@@ -51,6 +49,7 @@
             }
             $this->_path = $this->_chompPath($url);
             $this->_request = $this->_parseRequest($this->_chompRequest($url));
+            $this->_request->setCoordinates($x, $y);
             $this->_fragment = (strncmp($url, "#", 1) == 0 ? substr($url, 1) : false);
             $this->_target = false;
         }
@@ -298,7 +297,7 @@
          *    @access public
          */
         function getX() {
-            return $this->_x;
+            return $this->_request->getX();
         }
          
         /**
@@ -307,7 +306,7 @@
          *    @access public
          */
         function getY() {
-            return $this->_y;
+            return $this->_request->getY();
         }
        
         /**
@@ -317,10 +316,9 @@
          *    @access public
          */
         function getEncodedRequest() {
-            $query = $this->_request;
-            $encoded = $query->asString();
+            $encoded = $this->_request->asString();
             if ($encoded) {
-                return "?$encoded";
+                return '?' . preg_replace('/^\?/', '', $encoded);
             }
             return '';
         }
@@ -366,13 +364,12 @@
         
         /**
          *    Adds additional parameters to the request.
-         *    @param hash $parameters   Hash of additional parameters.
+         *    @param hash/SimpleQueryString $parameters   Additional
+         *                                                parameters.
          *    @access public
          */
         function addRequestParameters($parameters) {
-            if ($parameters) {
-                $this->_request->merge($parameters);
-            }
+            $this->_request->merge($parameters);
         }
         
         /**
@@ -391,12 +388,7 @@
          *    @access public
          */
         function setCoordinates($x = false, $y = false) {
-            if (($x === false) || ($y === false)) {
-                $this->_x = $this->_y = false;
-                return;
-            }
-            $this->_x = (integer)$x;
-            $this->_y = (integer)$y;
+            $this->_request->setCoordinates($x, $y);
         }
         
         /**
@@ -438,8 +430,7 @@
             }
             $encoded = $this->getEncodedRequest();
             $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
-            $coords = ($this->_x !== false) ? '?' . $this->_x . ',' . $this->_y : '';
-            return "$scheme://$identity$host$path$encoded$fragment$coords";
+            return "$scheme://$identity$host$path$encoded$fragment";
         }
         
         /**
@@ -460,8 +451,7 @@
             $identity = $this->_getIdentity() ? $this->_getIdentity() . '@' : '';
             $encoded = $this->getEncodedRequest();
             $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
-            $coords = ($this->_x !== false) ? '?' . $this->_x . ',' . $this->_y : '';
-            return new SimpleUrl("$scheme://$identity$host$port$path$encoded$fragment$coords");
+            return new SimpleUrl("$scheme://$identity$host$port$path$encoded$fragment");
         }
         
         /**
