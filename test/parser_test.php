@@ -26,6 +26,14 @@
                     $lexer->parse("aaaxayyyaxaaaz"),
                     array("aaa", "x", "a", "yyy", "a", "x", "aaa", "z"));
         }
+        function testMultiplePattern() {
+            $lexer = &new SimpleLexer();
+            $lexer->addPattern("a+");
+            $lexer->addPattern("b+");
+            $this->assertEqual(
+                    $lexer->parse("ababbxbaxxxxxxax"),
+                    array("a", "b", "a", "bb", "x", "b", "a", "xxxxxx", "a", "x"));
+        }
     }
 
     class TestOfParser extends UnitTestCase {

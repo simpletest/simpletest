@@ -50,11 +50,11 @@
         
         /**
          *    Parses unwanted preamble and a matched tag.
+         *    The default is to send both types as output.
          *    @param $tokens     Output buffer by reference.
          *    @param $unwanted   Unwanted text before match.
          *    @param $match      Matched item.
          *    @protected
-         *    @abstract
          */
         function _handleToken(&$tokens, $unwanted, $match) {
             if ($unwanted) {
