@@ -91,13 +91,24 @@
             $jar->restartSession();
             $this->assertEqual(count($jar->getValidCookies(false, "/")), 0);
         }
-        function testExpiryFilter() {
+        function testExpiryFilterByDate() {
+            $cookie = new SimpleCookie("a", "A", "/", "Wed, 25-Dec-02 04:24:20 GMT");
             $jar = new CookieJar();
-            $jar->setCookie(new SimpleCookie("a", "A", "/", "Wed, 25-Dec-02 04:24:20 GMT"));
+            $jar->setCookie($cookie);
             $jar->restartSession("Wed, 25-Dec-02 04:24:19 GMT");
-            $this->assertEqual(count($jar->getValidCookies(false, "/")), 1);
+            $this->assertIdentical($list = $jar->getValidCookies(false, "/"), array($cookie));
             $jar->restartSession("Wed, 25-Dec-02 04:24:21 GMT");
-            $this->assertEqual(count($jar->getValidCookies(false, "/")), 0);
+            $this->assertIdentical($list = $jar->getValidCookies(false, "/"), array());
+        }
+        function testExpiryFilterByAgeing() {
+            $cookie = new SimpleCookie("a", "A", "/", "Wed, 25-Dec-02 04:24:20 GMT");
+            $jar = new CookieJar();
+            $jar->setCookie($cookie);
+            $jar->restartSession("Wed, 25-Dec-02 04:24:19 GMT");
+            $this->assertIdentical($list = $jar->getValidCookies(false, "/"), array($cookie));
+            $jar->agePrematurely(2);
+            $jar->restartSession("Wed, 25-Dec-02 04:24:19 GMT");
+            $this->assertIdentical($list = $jar->getValidCookies(false, "/"), array());
         }
         function testCookieClearing() {
             $jar = new CookieJar();
@@ -191,7 +202,7 @@
             $browser->SimpleBrowser();
             return $browser;
         }
-        function testSendCookie() {
+        function testSend() {
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $this->_createStandardResponse());
             $request->expectArguments("setCookie", array(new SimpleCookie("a", "A")));
@@ -205,7 +216,7 @@
             $this->assertEqual($response->getContent(), "stuff");
             $request->tally();
         }
-        function testReceiveExistingCookie() {
+        function testReceiveExisting() {
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAAA", "this/path/")));
             $browser = &$this->_createPartialBrowser($request);
             $browser->setCookie("a", "A");
@@ -215,23 +226,45 @@
                     array());
             $this->assertEqual($browser->getCookieValue("this.com", "this/path/", "a"), "AAAA");
         }
-        function testClearCookie() {
+        function testClear() {
             $request = &$this->_createCookieSite(array(
-                    new SimpleCookie("a", "", "this/path/", "Wed, 25-Dec-02 04:24:19 GMT")));
+                    new SimpleCookie("a", "b", "this/path/", "Wed, 25-Dec-02 04:24:19 GMT")));
             $browser = &$this->_createPartialBrowser($request);
+            $browser->fetchResponse(
+                    "GET",
+                    new SimpleUrl("http://this.host/this/path/page.html"),
+                    array());
             $browser->setCookie("a", "A", "this/path/", "Wed, 25-Dec-02 04:24:21 GMT");
             $this->assertEqual(
                     $browser->get("http://this.com/this/path/page.html", false),
                     "stuff");
             $this->assertIdentical(
                     $browser->getCookieValue("this.com", "this/path/", "a"),
-                    "");
+                    "b");
             $browser->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
             $this->assertIdentical(
                     $browser->getCookieValue("this.com", "this/path/", "a"),
                     false);
         }
-        function testReadingCookies() {
+        function testAgeingAndClearing() {
+            $request = &$this->_createCookieSite(array(
+                    new SimpleCookie("a", "A", "this/path/", "Wed, 25-Dec-02 04:24:21 GMT")));
+            $browser = &$this->_createPartialBrowser($request);
+            $browser->fetchResponse(
+                    "GET",
+                    new SimpleUrl("http://this.host/this/path/page.html"),
+                    array());
+            $browser->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
+            $this->assertIdentical(
+                    $browser->getCookieValue("this.com", "this/path/", "a"),
+                    "A");
+            $browser->ageCookies(2);
+            $browser->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
+            $this->assertIdentical(
+                    $browser->getCookieValue("this.com", "this/path/", "a"),
+                    false);
+        }
+        function testReading() {
             $request = &$this->_createCookieSite(array(
                     new SimpleCookie("a", "AAA", "this/path/")));
             $browser = &$this->_createPartialBrowser($request);

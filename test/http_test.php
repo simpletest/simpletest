@@ -227,6 +227,7 @@
         }
         function testTimestampExpiry() {
             $cookie = new SimpleCookie("name", "value", "/path", 456);
+            $this->assertFalse($cookie->isExpired(0));
             $this->assertTrue($cookie->isExpired(457));
             $this->assertFalse($cookie->isExpired(455));
         }
@@ -238,6 +239,13 @@
                     "Mon, 18 Nov 2002 15:50:29 GMT");
             $this->assertTrue($cookie->isExpired("Mon, 18 Nov 2002 15:50:30 GMT"));
             $this->assertFalse($cookie->isExpired("Mon, 18 Nov 2002 15:50:28 GMT"));
+        }
+        function testAging() {
+            $cookie = new SimpleCookie("name", "value", "/path", 200);
+            $cookie->agePrematurely(199);
+            $this->assertFalse($cookie->isExpired(0));
+            $cookie->agePrematurely(2);
+            $this->assertTrue($cookie->isExpired(0));
         }
     }
     

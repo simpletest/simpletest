@@ -23,6 +23,8 @@ Refactor the links into their own objects (3).
 Browser
 -------
 Frames support (6).
+Add cookie aging facility (2).
+Move session restarting to cookie aging (1).
 
 Web tester
 ----------
@@ -32,7 +34,7 @@ Add a header test (2).
 Documentation
 -------------
 Add simple web testing page to docs (2/3) - done.
-Add expectatiioons to docs (3).
+Add expectations to docs (3).
 
 Build
 -----

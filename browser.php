@@ -28,27 +28,38 @@
         /**
          *    Removes expired and temporary cookies as if
          *    the browser was closed and re-opened.
-         *    @param $date        Time when session restarted.
-         *                        If ommitted then all persistent
-         *                        cookies are kept. Time is either
-         *                        Cookie format string or timestamp.
+         *    @param string/integer $now   Time to test expiry against.
          *    @access public
          */
         function restartSession($date = false) {
-            $surviving = array();
+            $surviving_cookies = array();
             for ($i = 0; $i < count($this->_cookies); $i++) {
-                if (!$this->_cookies[$i]->getValue()) {
+                if (! $this->_cookies[$i]->getValue()) {
                     continue;
                 }
-                if (!$this->_cookies[$i]->getExpiry()) {
+                if (! $this->_cookies[$i]->getExpiry()) {
                     continue;
                 }
                 if ($date && $this->_cookies[$i]->isExpired($date)) {
                     continue;
                 }
-                $surviving[] = $this->_cookies[$i];
+                $surviving_cookies[] = $this->_cookies[$i];
             }
-            $this->_cookies = $surviving;
+            $this->_cookies = $surviving_cookies;
+        }
+        
+        /**
+         *    Ages all cookies in the cookie jar.
+         *    @param integer $interval     The old session is moved
+         *                                 into the past by this number
+         *                                 of seconds. Cookies now over
+         *                                 age will be removed.
+         *    @access public
+         */
+        function agePrematurely($interval) {
+            for ($i = 0; $i < count($this->_cookies); $i++) {
+                $this->_cookies[$i]->agePrematurely($interval);
+            }
         }
         
         /**
@@ -169,13 +180,22 @@
         /**
          *    Removes expired and temporary cookies as if
          *    the browser was closed and re-opened.
-         *    @param $date        Time when session restarted.
-         *                        If ommitted then all persistent
-         *                        cookies are kept.
+         *    @param string/integer $date   Time when session restarted.
+         *                                  If ommitted then all persistent
+         *                                  cookies are kept.
          *    @access public
          */
         function restartSession($date = false) {
             $this->_cookie_jar->restartSession($date);
+        }
+        
+        /**
+         *    Ages the cookies by the specified time.
+         *    @param integer $interval    Amount in seconds.
+         *    @access public
+         */
+        function ageCookies($interval) {
+            $this->_cookie_jar->agePrematurely($interval);
         }
         
         /**

@@ -26,16 +26,16 @@
          *    @access public
          */
         function SimpleUrl($url) {
-            $this->_scheme = $this->_extractScheme($url);
-            list($this->_username, $this->_password) = $this->_extractLogin($url);
-            $this->_host = $this->_extractHost($url);
+            $this->_scheme = $this->_chompScheme($url);
+            list($this->_username, $this->_password) = $this->_chompLogin($url);
+            $this->_host = $this->_chompHost($url);
             $this->_port = false;
             if (preg_match('/(.*?):(.*)/', $this->_host, $host_parts)) {
                 $this->_host = $host_parts[1];
                 $this->_port = (integer)$host_parts[2];
             }
-            $this->_path = $this->_extractPath($url);
-            $this->_request = $this->_parseRequest($this->_extractRequest($url));
+            $this->_path = $this->_chompPath($url);
+            $this->_request = $this->_parseRequest($this->_chompRequest($url));
             $this->_fragment = (strncmp($url, "#", 1) == 0 ? substr($url, 1) : false);
         }
         
@@ -46,7 +46,7 @@
          *    @return            Scheme part.
          *    @access private
          */
-        function _extractScheme(&$url) {
+        function _chompScheme(&$url) {
             if (preg_match('/(.*?):(\/\/)(.*)/', $url, $matches)) {
                 $url = $matches[2] . $matches[3];
                 return $matches[1];
@@ -64,7 +64,7 @@
          *                   password.
          *    @access private
          */
-        function _extractLogin(&$url) {
+        function _chompLogin(&$url) {
             $prefix = "";
             if (preg_match('/(\/\/)(.*)/', $url, $matches)) {
                 $prefix = $matches[1];
@@ -90,7 +90,7 @@
          *    @return        Host part guess.
          *    @access private
          */
-        function _extractHost(&$url) {
+        function _chompHost(&$url) {
             if (preg_match('/(\/\/)(.*?)(\/.*|\?.*|#.*|$)/', $url, $matches)) {
                 $url = $matches[3];
                 return $matches[2];
@@ -115,7 +115,7 @@
          *    @return         Path part.
          *    @access private
          */
-        function _extractPath(&$url) {
+        function _chompPath(&$url) {
             if (preg_match('/(.*?)(\?|#|$)(.*)/', $url, $matches)) {
                 $url = $matches[2] . $matches[3];
                 return ($matches[1] ? $matches[1] : "/");
@@ -130,7 +130,7 @@
          *    @return            Raw request part.
          *    @access private
          */
-        function _extractRequest(&$url) {
+        function _chompRequest(&$url) {
             if (preg_match('/\?(.*?)(#|$)(.*)/', $url, $matches)) {
                 $url = $matches[2] . $matches[3];
                 return $matches[1];
@@ -484,7 +484,7 @@
          *    @access public
          */
         function getExpiry() {
-            if (!$this->_expiry) {
+            if (! $this->_expiry) {
                 return false;
             }
             return gmdate("D, d M Y H:i:s", $this->_expiry) . " GMT";
@@ -502,13 +502,25 @@
          *    @access public
          */
         function isExpired($now) {
-            if (!$this->_expiry) {
+            if (! $this->_expiry) {
                 return true;
             }
             if (is_string($now)) {
                 $now = strtotime($now);
             }
             return ($this->_expiry < $now);
+        }
+        
+        /**
+         *    Ages the cookie by the specified number of
+         *    seconds.
+         *    @param integer $interval   In seconds.
+         *    @public
+         */
+        function agePrematurely($interval) {
+            if ($this->_expiry) {
+                $this->_expiry -= $interval;
+            }
         }
         
         /**
