@@ -6,8 +6,11 @@
     </long_title>
     <content>
         <news>
-            Beta6 released.
-            Mostly improvements to the web testing interface.
+            RC1 released on Sourceforge.
+            With most of the functionality now fixed, this release is
+            mostly across the board improvements.
+            Features are frozen now until version 1.0 except
+            for those changes involving tool integration.
         </news>
         <introduction>
             <p>
@@ -88,6 +91,7 @@ class TestOfLogging extends UnitTestCase {
     function TestOfLogging() {
         $this->UnitTestCase();
     }<strong>
+    
     function testCreatingNewFile() {
         @unlink('/temp/test.log');
         $log = new Log('/temp/test.log');
@@ -123,6 +127,7 @@ class TestOfLogging extends UnitTestCase {
     function TestOfLogging() {
         $this->UnitTestCase();
     }
+    
     function testCreatingNewFile() {
         @unlink('/temp/test.log');
         $log = new Log('/temp/test.log');
@@ -171,6 +176,7 @@ class TestOfLogging extends UnitTestCase {
     function TestOfLogging() {
         $this->UnitTestCase();
     }
+    
     function testCreatingNewFile() {
         @unlink('/temp/test.log');
         $log = new Log('/temp/test.log');
@@ -194,8 +200,11 @@ $test->run(new HtmlReporter());
 ?></strong>
 ]]></php>
                 The method <code>GroupTest::addTestFile()</code>
-                will include the test case file and load any new classes created
+                will include the test case file and read any new classes created
                 that are descended from <code>TestCase</code>.
+                Just teh names are stored for now, so that the test runner
+                can instantiate the class when it works it&apos;s way
+                through your test suite.
             </p>
             <p>
                 For this to work properly the test case file should not blindly include
@@ -251,12 +260,15 @@ class TestOfSessionLogging extends UnitTestCase {
     function TestOfSessionLogging() {
         $this->UnitTestCase();
     }
+    
     function setUp() {
         @unlink('/temp/test.log');
     }
+    
     function tearDown() {
         @unlink('/temp/test.log');
     }
+    
     function testLogInIsLogged() {
         $log = new Log('/temp/test.log');
         $session_pool = &new SessionPool($log);
@@ -285,9 +297,11 @@ class TestOfSessionLogging extends UnitTestCase {
                 that simply records the message calls for testing, but
                 takes no action.
                 It would have to look exactly like our original though.
-                If the fake doesn&apos;t write to a file then we save on deleting
+            </p>
+            <p>
+                If the fake object doesn&apos;t write to a file then we save on deleting
                 the file before and after each test. We could save even more
-                test code if the fake object could run the assertion for us.
+                test code if the fake object would kindly run the assertion for us.
             <p>
             </p>
                 Too good to be true?
@@ -302,6 +316,7 @@ class TestOfSessionLogging extends UnitTestCase {
     function TestOfSessionLogging() {
         $this->UnitTestCase();
     }
+    
     function testLogInIsLogged() {<strong>
         $log = &new MockLog($this);
         $log->expectOnce('message', array('User fred logged in.'));</strong>
@@ -348,10 +363,11 @@ class TestOfSessionLogging extends UnitTestCase {
                 This is the job of a web tester.
             </p>
             <p>
-                The web testing in SimpleTest is still very much at the early
-                stages, but to give an idea here is an example where a home
+                The web testing in SimpleTest is fairly primitive, there is
+                no JavaScript for example.
+                To give an idea here is a trivial example where a home
                 page is fetched, from which we navigate to an &quot;about&quot;
-                page and then test some expected content.
+                page and then test some client determined content.
 <php><![CDATA[
 <?php<strong>
 require_once('simpletest/web_tester.php');</strong>
@@ -361,10 +377,12 @@ class TestOfAbout extends WebTestCase {
     function TestOfAbout('Tests of about page') {
         $this->WebTestCase();
     }
+    
     function setUp() {
         $this->get('http://test-server/index.php');
         $this->clickLink('About');
     }
+    
     function testSearchEngineOptimisations() {
         $this->assertTitle('A long title about us for search engines');
         $this->assertWantedPattern('/a popular keyphrase/i');
@@ -376,7 +394,7 @@ $test->run(new HtmlReporter());
 ]]></php>
                 With this code as an acceptance test you can ensure that
                 the content always meets the specifications of both the
-                developers and the project stakeholders.
+                developers and the other project stakeholders.
             </p>
             <p>
                 <a href="http://sourceforge.net/projects/simpletest/"><img src="http://sourceforge.net/sflogo.php?group_id=76550&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo"/></a>
@@ -429,7 +447,26 @@ $test->run(new HtmlReporter());
             test first,
             sourceforge,
             open source,
-            unit test
+            unit test,
+            web tester,
+            web testing,
+            html testing tools,
+            testing web pages,
+            php mock objects,
+            navigating websites automatically,
+            automated testing,
+            web scripting,
+            wget,
+            curl testing,
+            jmock for php,
+            jwebunit,
+            phpunit,
+            php unit testing,
+            php web testing,
+            jason sweat,
+            marcus baker,
+            topstyle plug in,
+            phpedit plug in
         </keywords>
     </meta>
 </page>
