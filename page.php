@@ -12,6 +12,7 @@
     require_once(dirname(__FILE__) . '/http.php');
     require_once(dirname(__FILE__) . '/parser.php');
     require_once(dirname(__FILE__) . '/tag.php');
+    require_once(dirname(__FILE__) . '/form.php');
     /**#@-*/
     
     /**
