@@ -945,7 +945,7 @@
          *    recursive dependencies during comparisons. See
          *    http://bugs.php.net/bug.php?id=31449 for the PHP
          *    bug.
-         *    @return array        List of refernces.
+         *    @return array        List of references.
          *    @access private
          *    @static
          */
