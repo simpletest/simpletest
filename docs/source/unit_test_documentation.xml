@@ -2,13 +2,11 @@
 <page title="PHP Unit Test documentation" here="Unit tester">
     <long_title>SimpleTest for PHP regression test documentation</long_title>
     <content>
-        <p>
-            <a class="target" name="unit"><h2>Unit test cases</h2></a>
-        </p>
-        <p>
-            The core system is a regression testing framework built around
-            test cases.
-            A sample test case looks like this...
+        <section name="unit" title="Unit test cases">
+            <p>
+                The core system is a regression testing framework built around
+                test cases.
+                A sample test case looks like this...
 <php><![CDATA[
 <strong>class FileTestCase extends UnitTestCase {
     function FileTestCase() {
@@ -16,17 +14,17 @@
     }
 }</strong>
 ]]></php>
-            If no test name is supplied whe chaining the constructor then
-            the class name will be taken instead.
-            This will be the name displayed in the test results.
-        </p>
-        <p>
-            Actual tests are added as methods in the test case whose names
-            start with the string &quot;test&quot; and
-            when the test case is invoked all such methods are run in
-            the random order that PHP introspection finds them.
-            As many test methods can be added as needed.
-            For example...
+                If no test name is supplied when chaining the constructor then
+                the class name will be taken instead.
+                This will be the name displayed in the test results.
+            </p>
+            <p>
+                Actual tests are added as methods in the test case whose names
+                by default start with the string &quot;test&quot; and
+                when the test case is invoked all such methods are run in
+                the order that PHP introspection finds them.
+                As many test methods can be added as needed.
+                For example...
 <php><![CDATA[
 require_once('../classes/writer.php');
 
@@ -34,12 +32,15 @@ class FileTestCase extends UnitTestCase {
     function FileTestCase() {
         $this->UnitTestCase('File test');
     }<strong>
+    
     function setUp() {
         @unlink('../temp/test.txt');
     }
+    
     function tearDown() {
         @unlink('../temp/test.txt');
     }
+    
     function testCreation() {
         $writer = &new FileWriter('../temp/test.txt');
         $writer->write('Hello');
@@ -47,84 +48,96 @@ class FileTestCase extends UnitTestCase {
     }</strong>
 }
 ]]></php>
-            Our only test method at the moment is <code>testCreation()</code>
-            where we check that a file has been created by our
-            <code>Writer</code> object.
-            We could have put the <code>unlink()</code>
-            code into this method as well, but by placing it in
-            <code>setUp()</code> and
-            <code>tearDown()</code> we can use it with
-            other test methods that we add.
-        </p>
-        <p>
-            The <code>setUp()</code> method is run
-            just before every test method.
-            <code>tearDown()</code> is run just after
-            every test method.
-            You can place some test case set up into the constructor to
-            be run once for all the cases in the test, but
-            you risk test inteference that way.
-            This way is slightly slower, but it is safer.
-        </p>
-        <p>
-            The means of reporting test results (see below) are by attached observers
-            that are notified by various <code>assert...()</code>
-            methods.
-            Here is the full list for the <code>UnitTestCase</code>
-            class, the default for SimpleTest...
-            <table>
-                <tr><td><code>assertTrue($x)</code></td><td>Fail if $x is false</td></tr>
-                <tr><td><code>assertFalse($x)</code></td><td>Fail if $x is true</td></tr>
-                <tr><td><code>assertNull($x)</code></td><td>Fail if $x is set</td></tr>
-                <tr><td><code>assertNotNull($x)</code></td><td>Fail if $x not set</td></tr>
-                <tr><td><code>assertIsA($x, $t)</code></td><td>Fail if $x is not the class or type $t</td></tr>
-                <tr><td><code>assertEqual($x, $y)</code></td><td>Fail if $x == $y is false</td></tr>
-                <tr><td><code>assertNotEqual($x, $y)</code></td><td>Fail if $x == $y is true</td></tr>
-                <tr><td><code>assertIdentical($x, $y)</code></td><td>Fail if $x === $y is false</td></tr>
-                <tr><td><code>assertNotIdentical($x, $y)</code></td><td>Fail if $x === $y is true</td></tr>
-                <tr><td><code>assertReference($x, $y)</code></td><td>Fail unless $x and $y are the same variable</td></tr>
-                <tr><td><code>assertCopy($x, $y)</code></td><td>Fail if $x and $y are the same variable</td></tr>
-                <tr><td><code>assertWantedPattern($p, $x)</code></td><td>Fail unless the regex $p matches $x</td></tr>
-                <tr><td><code>assertNoUnwantedPattern($p, $x)</code></td><td>Fail if the regex $p matches $x</td></tr>
-                <tr><td><code>assertNoErrors()</code></td><td>Fail if any PHP error occoured</td></tr>
-                <tr><td><code>assertError($x)</code></td><td>Fail if no PHP error or incorrect message</td></tr>
-                <tr><td><code>assertErrorPattern($p)</code></td><td>Fail unless the error matches the regex $p</td></tr>
-            </table>
-            All assertion methods can take an optional description to
-            label the displayed result with.
-            If omitted a default message is sent instead which is usually
-            sufficient.
-        </p>
-        <p>
-            Some examples...
+                Our only test method at the moment is <code>testCreation()</code>
+                where we check that a file has been created by our
+                <code>Writer</code> object.
+                We could have put the <code>unlink()</code>
+                code into this method as well, but by placing it in
+                <code>setUp()</code> and
+                <code>tearDown()</code> we can use it with
+                other test methods that we add.
+            </p>
+            <p>
+                The <code>setUp()</code> method is run
+                just before each and every test method.
+                <code>tearDown()</code> is run just after
+                each and every test method.
+            </p>
+            <p>
+                You can place some test case set up into the constructor to
+                be run once for all the methods in the test case, but
+                you risk test inteference that way.
+                This way is slightly slower, but it is safer.
+                Note that if you come from a JUnit background this will not
+                be the behaviour you are used to.
+                JUnit surprisingly reinstantiates the test case for each test
+                method to prevent such interference.
+                SimpleTest requires the end user to use <code>setUp()</code>, but
+                supplies additional hooks for library writers.
+            </p>
+            <p>
+                The means of reporting test results (see below) are by a
+                visiting display class
+                that is notified by various <code>assert...()</code>
+                methods.
+                Here is the full list for the <code>UnitTestCase</code>
+                class, the default for SimpleTest...
+                <table>
+                    <tr><td><code>assertTrue($x)</code></td><td>Fail if $x is false</td></tr>
+                    <tr><td><code>assertFalse($x)</code></td><td>Fail if $x is true</td></tr>
+                    <tr><td><code>assertNull($x)</code></td><td>Fail if $x is set</td></tr>
+                    <tr><td><code>assertNotNull($x)</code></td><td>Fail if $x not set</td></tr>
+                    <tr><td><code>assertIsA($x, $t)</code></td><td>Fail if $x is not the class or type $t</td></tr>
+                    <tr><td><code>assertNotA($x, $t)</code></td><td>Fail if $x is of the class or type $t</td></tr>
+                    <tr><td><code>assertEqual($x, $y)</code></td><td>Fail if $x == $y is false</td></tr>
+                    <tr><td><code>assertNotEqual($x, $y)</code></td><td>Fail if $x == $y is true</td></tr>
+                    <tr><td><code>assertIdentical($x, $y)</code></td><td>Fail if $x == $y is false or a type mismatch</td></tr>
+                    <tr><td><code>assertNotIdentical($x, $y)</code></td><td>Fail if $x == $y is true and types match</td></tr>
+                    <tr><td><code>assertReference($x, $y)</code></td><td>Fail unless $x and $y are the same variable</td></tr>
+                    <tr><td><code>assertCopy($x, $y)</code></td><td>Fail if $x and $y are the same variable</td></tr>
+                    <tr><td><code>assertWantedPattern($p, $x)</code></td><td>Fail unless the regex $p matches $x</td></tr>
+                    <tr><td><code>assertNoUnwantedPattern($p, $x)</code></td><td>Fail if the regex $p matches $x</td></tr>
+                    <tr><td><code>assertNoErrors()</code></td><td>Fail if any PHP error occoured</td></tr>
+                    <tr><td><code>assertError($x)</code></td><td>Fail if no PHP error or incorrect message</td></tr>
+                    <tr><td><code>assertErrorPattern($p)</code></td><td>Fail unless the error matches the regex $p</td></tr>
+                </table>
+                All assertion methods can take an optional description to
+                label the displayed result with.
+                If omitted a default message is sent instead which is usually
+                sufficient.
+                This default message can still be embedded in your own message
+                if you include &quot;%s&quot; within the string.
+            </p>
+            <p>
+                Some examples...
 <php><![CDATA[
 <strong>$variable = null;
 $this->assertNull($variable, 'Should be cleared');</strong>
 ]]></php>
-            ...will pass and normally show no message.
-            If you have
-            <a href="http://www.lastcraft.com/display_subclass_tutorial.php">set up the tester to display passes</a>
-            as well then the message will be displayed as is.
+                ...will pass and normally show no message.
+                If you have
+                <a href="http://www.lastcraft.com/display_subclass_tutorial.php">set up the tester to display passes</a>
+                as well then the message will be displayed as is.
 <php><![CDATA[
 <strong>$this->assertIdentical(0, false, 'Zero is not false [%s]');</strong>
 ]]></php>
-            This will fail as it performs a type
-            check as well as a comparison between the two values.
-            The &quot;%s&quot; part will be replaced by the default
-            error message that would have been shown if we had not
-            supplied our own.
-            This allows us to nest test messages.
+                This will fail as it performs a type
+                check as well as a comparison between the two values.
+                The &quot;%s&quot; part is replaced by the default
+                error message that would have been shown if we had not
+                supplied our own.
+                This also allows us to nest test messages.
 <php><![CDATA[
 <strong>$a = 1;
 $b = $a;
 $this->assertReference($a, $b);</strong>
 ]]></php>
-            Will fail as the variable <code>$a</code> is a copy of <code>$b</code>.
+                Will fail as the variable <code>$a</code> is a copy of <code>$b</code>.
 <php><![CDATA[
 <strong>$this->assertWantedPattern('/hello/i', 'Hello world');</strong>
 ]]></php>
-            This will pass as using a case insensitive match the string
-            <code>hello</code> is contained in <code>Hello world</code>.
+                This will pass as using a case insensitive match the string
+                <code>hello</code> is contained in <code>Hello world</code>.
 <php><![CDATA[
 <strong>trigger_error('Disaster');
 trigger_error('Catastrophe');
@@ -132,39 +145,42 @@ $this->assertError();
 $this->assertError('Catastrophe');
 $this->assertNoErrors();</strong>
 ]]></php>
-            This one takes some explanation as in fact they all pass!
-            PHP errors in SimpleTest are trapped and placed in a queue.
-            Here the first error check catches the &quot;Disaster&quot;
-            message without checking the text and passes.
-            This removes the error from the queue.
-            The next error check tests not only the existence of the error,
-            but also the text which here matches so another pass.
-            With the queue now empty the last test will pass as well.
-            If any unchecked errors are left at the end of a test method then
-            an exception will be reported in the test.
-            Note that SimpleTest cannot catch compile time PHP errors.
-        </p>
-        <p>
-            The test cases also have some convenience methods for debugging
-            code or extending the suite...
-            <table>
-                <tr><td><code>setUp()</code></td><td>Runs this before each test method</td></tr>
-                <tr><td><code>tearDown()</code></td><td>Runs this after each test method</td></tr>
-                <tr><td><code>pass()</code></td><td>Sends a test pass</td></tr>
-                <tr><td><code>fail()</code></td><td>Sends a test failure</td></tr>
-                <tr><td><code>error()</code></td><td>Sends an exception event</td></tr>
-                <tr><td><code>sendMessage()</code></td><td>Sends a status message to those displays that support it</td></tr>
-                <tr><td><code>signal($type, $payload)</code></td><td>Sends a user defined message to the test reporter</td></tr>
-                <tr><td><code>dump($var)</code></td><td>Does a formatted <code>print_r()</code> for quick and dirty debugging</td></tr>
-                <tr><td><code>swallowErrors()</code></td><td>Clears the error queue</td></tr>
-            </table>
-        </p>
-        <p>
-            <a class="target" name="extending_unit"><h2>Extending test cases</h2></a>
-        </p>
-        <p>
-            Of course additional test methods can be added to create
-            specific types of test case too so as to extend framework...
+                This one takes some explanation as in fact they all pass!
+            </p>
+            <p>
+                PHP errors in SimpleTest are trapped and placed in a queue.
+                Here the first error check catches the &quot;Disaster&quot;
+                message without checking the text and passes.
+                This removes the error from the queue.
+                The next error check tests not only the existence of the error,
+                but also the text which here matches so another pass.
+                With the queue now empty the last test will pass as well.
+                If any unchecked errors are left at the end of a test method then
+                an exception will be reported in the test.
+                Note that SimpleTest cannot catch compile time PHP errors.
+            </p>
+            <p>
+                The test cases also have some convenience methods for debugging
+                code or extending the suite...
+                <table>
+                    <tr><td><code>setUp()</code></td><td>Runs this before each test method</td></tr>
+                    <tr><td><code>tearDown()</code></td><td>Runs this after each test method</td></tr>
+                    <tr><td><code>before()</code></td><td>Runs this before each test without affecting setUp()</td></tr>
+                    <tr><td><code>after()</code></td><td>Runs this after each test without affecting tearDown()</td></tr>
+                    <tr><td><code>pass()</code></td><td>Sends a test pass</td></tr>
+                    <tr><td><code>fail()</code></td><td>Sends a test failure</td></tr>
+                    <tr><td><code>error()</code></td><td>Sends an exception event</td></tr>
+                    <tr><td><code>sendMessage()</code></td><td>Sends a status message to those displays that support it</td></tr>
+                    <tr><td><code>signal($type, $payload)</code></td><td>Sends a user defined message to the test reporter</td></tr>
+                    <tr><td><code>dump($var)</code></td><td>Does a formatted <code>print_r()</code> for quick and dirty debugging</td></tr>
+                    <tr><td><code>swallowErrors()</code></td><td>Clears the error queue</td></tr>
+                </table>
+            </p>
+        </section>
+        <section name="extending_unit" title="Extending test cases">
+            <p>
+                Of course additional test methods can be added to create
+                specific types of test case too so as to extend framework...
 <php><![CDATA[
 require_once('simpletest/unit_tester.php');
 <strong>
@@ -172,6 +188,7 @@ class FileTester extends UnitTestCase {
     function FileTester($name = false) {
         $this->UnitTestCase($name);
     }
+    
     function assertFileExists($filename, $message = '%s') {
         $this->assertTrue(
                 file_exists($filename),
@@ -179,25 +196,27 @@ class FileTester extends UnitTestCase {
     }</strong>
 }
 ]]></php>
-            Here the SimpleTest library is held in a folder called
-            <em>simpletest</em> that is local.
-            Substitute your own path for this.
-        </p>
-        <p>
-            This new case can be now be inherited just like
-            a normal test case...
-        </p>
+                Here the SimpleTest library is held in a folder called
+                <em>simpletest</em> that is local.
+                Substitute your own path for this.
+            </p>
+            <p>
+                This new case can be now be inherited just like
+                a normal test case...
 <php><![CDATA[
 class FileTestCase extends <strong>FileTester</strong> {
     function FileTestCase() {<strong>
         $this->FileTester('File test');</strong>
     }
+    
     function setUp() {
         @unlink('../temp/test.txt');
     }
+    
     function tearDown() {
         @unlink('../temp/test.txt');
     }
+    
     function testCreation() {
         $writer = &new FileWriter('../temp/test.txt');
         $writer->write('Hello');<strong>
@@ -205,26 +224,26 @@ class FileTestCase extends <strong>FileTester</strong> {
     }
 }
 ]]></php>
-        <p>
-            If you want a test case that does not have all of the
-            <code>UnitTestCase</code> assertions,
-            only your own and <code>assertTrue()</code>,
-            you need to extend the <code>TestCase</code>
-            class instead.
-            It is found in <em>simple_test.php</em> rather than
-            <em>unit_tester.php</em>.
-            See <a local="group_test_documentation">later</a> if you
-            want to incorporate other unit tester&apos;s
-            test cases in your test suites.
-        </p>
-        <p>
-            <a class="target" name="running_unit"><h2>Running a single test case</h2></a>
-        </p>
-        <p>
-            You won&apos;t often run single test cases except when bashing
-            away at a module that is having difficulty and you don&apos;t
-            want to upset the main test suite.
-            Here is the scaffolding needed to run the a lone test case...
+            </p>
+            <p>
+                If you want a test case that does not have all of the
+                <code>UnitTestCase</code> assertions,
+                only your own and <code>assertTrue()</code>,
+                you need to extend the <code>SimpleTestCase</code>
+                class instead.
+                It is found in <em>simple_test.php</em> rather than
+                <em>unit_tester.php</em>.
+                See <a local="group_test_documentation">later</a> if you
+                want to incorporate other unit tester&apos;s
+                test cases in your test suites.
+            </p>
+        </section>
+        <section name="running_unit" title="Running a single test case">
+            <p>
+                You won&apos;t often run single test cases except when bashing
+                away at a module that is having difficulty and you don&apos;t
+                want to upset the main test suite.
+                Here is the scaffolding needed to run the a lone test case...
 <php><![CDATA[
 <?php
     require_once('simpletest/unit_tester.php');<strong>
@@ -236,13 +255,15 @@ class FileTestCase extends <strong>FileTester</strong> {
             $this->UnitTestCase('File test');
         }
     }<strong>
+    
     $test = &new FileTestCase();
     $test->run(new HtmlReporter());</strong>
 ?>
 ]]></php>
-            This script will run as is, but will output zero passes
-            and zero failures until test methods are added.
-        </p>
+                This script will run as is, but will output zero passes
+                and zero failures until test methods are added.
+            </p>
+        </section>
     </content>
     <internal>
         <link>
@@ -274,7 +295,8 @@ class FileTestCase extends <strong>FileTester</strong> {
             simple test,
             simpletest documentation,
             phpunit,
-            pear
+            junit,
+            xunit
         </keywords>
     </meta>
 </page>

@@ -56,7 +56,7 @@
          *    Will be true if the value is set.
          *    @param mixed $value           Supposedly set value.
          *    @param string $message        Message to display.
-         *    @return boolean               True on pass
+         *    @return boolean               True on pass.
          *    @access public
          */
         function assertNotNull($value, $message = "%s") {
@@ -74,12 +74,29 @@
          *    @param mixed $object         Object to test.
          *    @param string $type          Type name as string.
          *    @param string $message       Message to display.
-         *    @return boolean              True on pass
+         *    @return boolean              True on pass.
          *    @access public
          */
         function assertIsA($object, $type, $message = "%s") {
             return $this->assertExpectation(
                     new IsAExpectation($type),
+                    $object,
+                    $message);
+        }
+        
+        /**
+         *    Type and class mismatch test. Will pass if class
+         *    name or underling type does not match the one
+         *    specified.
+         *    @param mixed $object         Object to test.
+         *    @param string $type          Type name as string.
+         *    @param string $message       Message to display.
+         *    @return boolean              True on pass.
+         *    @access public
+         */
+        function assertNotA($object, $type, $message = "%s") {
+            return $this->assertExpectation(
+                    new NotAExpectation($type),
                     $object,
                     $message);
         }

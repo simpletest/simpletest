@@ -87,10 +87,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
 ]]></php>
             </p>
         </section>
-        <section>
-            <p>
-                <a class="target" name="features"><h2>Feature list</h2></a>
-            </p>
+        <section name="features" title="Feature list">
             <p>
                 The following is a very rough outline of past and future features
                 and their expected point of release.
@@ -257,6 +254,11 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td style="color: red;">2.0</td>
                     </tr>
                     <tr>
+                        <td>Testing exceptions</td>
+                        <td>Similar to testing PHP errors</td>
+                        <td style="color: red;">2.0</td>
+                    </tr>
+                    <tr>
                         <td>XPath searching of elements</td>
                         <td>Can make use of HTML tidy for faster and more flexible content matching</td>
                         <td style="color: red;">2.0</td>
@@ -273,10 +275,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 make use of all of the new features until version 2.
             </p>
         </section>
-        <section>
-            <p>
-                <a class="target" name="resources"><h2>Web resources for testing</h2></a>
-            </p>
+        <section name="resources" title="Web resources for testing">
             <p>
                 Process is at least as important as tools.
                 The type of process that makes the heaviest use of a developer&apos;s
