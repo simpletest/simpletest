@@ -666,6 +666,77 @@
     
     /**
      *    A group of tags with the same name within a form.
+     */
+    class SimpleTagGroup {
+        var $_widgets;
+        
+        /**
+         *    Starts empty.
+         *    @access public
+         */
+        function SimpleTagGroup() {
+            $this->_widgets = array();
+        }
+        
+        /**
+         *    Adds a tag to the group.
+         *    @param SimpleWidget $widget
+         *    @access public
+         */
+        function addWidget(&$widget) {
+            $this->_widgets[] = &$widget;
+        }
+        
+        /**
+         *    Accessor for current selected widget or false
+         *    if none.
+         *    @return string/array     Widget values or false if none.
+         *    @access public
+         */
+        function getValue() {
+            $values = array();
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                if ($this->_widgets[$i]->getValue()) {
+                    $values[] = $this->_widgets[$i]->getValue();
+                }
+            }
+            return $this->_coerceValues($values);
+        }
+        
+        /**
+         *    Accessor for starting value that is active.
+         *    @return string/array      Widget values or false if none.
+         *    @access public
+         */
+        function getDefault() {
+            $values = array();
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                if ($this->_widgets[$i]->getDefault()) {
+                    $values[] = $this->_widgets[$i]->getDefault();
+                }
+            }
+            return $this->_coerceValues($values);
+        }
+        
+        /**
+         *    Converts the output to an appripriate format.
+         *    @param array $values          List of values of widgets.
+         *    @param string/array/boolean   Expected format for a tag.
+         */
+        function _coerceValues($values) {
+            if (count($values) == 0) {
+                return false;
+            } elseif (count($values) == 1) {
+                return $values[0];
+            } else {
+                return $values;
+            }
+        }
+    }
+        
+        
+    /**
+     *    A group of tags with the same name within a form.
      *    Used for radio buttons.
      */
     class SimpleRadioGroup {

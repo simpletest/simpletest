@@ -5,6 +5,7 @@
     require_once(SIMPLE_TEST . 'tag.php');
     
     Mock::generate('SimpleRadioButtonTag');
+    Mock::generate('SimpleCheckboxTag');
     
     class TestOfTag extends UnitTestCase {
         function TestOfTag() {
@@ -250,16 +251,16 @@
             $this->assertIdentical($group->getValue(), 'AA');
         }
         function testReadingMultipleButtonGroup() {
-            $radio_a = &new MockSimpleRadioButtonTag($this);
-            $radio_a->setReturnValue('getDefault', 'A');
-            $radio_a->setReturnValue('getValue', false);
-            $radio_b = &new MockSimpleRadioButtonTag($this);
-            $radio_b->setReturnValue('getDefault', false);
-            $radio_b->setReturnValue('getValue', 'B');
+            $a = &new MockSimpleRadioButtonTag($this);
+            $a->setReturnValue('getDefault', 'A');
+            $a->setReturnValue('getValue', false);
+            $b = &new MockSimpleRadioButtonTag($this);
+            $b->setReturnValue('getDefault', false);
+            $b->setReturnValue('getValue', 'B');
             
             $group = &new SimpleRadioGroup();
-            $group->addWidget($radio_a);
-            $group->addWidget($radio_b);
+            $group->addWidget($a);
+            $group->addWidget($b);
             
             $this->assertIdentical($group->getDefault(), 'A');
             $this->assertIdentical($group->getValue(), 'B');
@@ -274,22 +275,73 @@
             $radio->tally();
         }
         function testSettingNewValueClearsTheOldOne() {
-            $radio_a = &new MockSimpleRadioButtonTag($this);
-            $radio_a->setReturnValue('getValue', false);
-            $radio_a->setReturnValue('setValue', true);
-            $radio_a->expectOnce('setValue', array('A'));
-            $radio_b = &new MockSimpleRadioButtonTag($this);
-            $radio_b->setReturnValue('getValue', 'B');
-            $radio_b->setReturnValue('setValue', true);
-            $radio_b->expectOnce('setValue', array(false));
+            $a = &new MockSimpleRadioButtonTag($this);
+            $a->setReturnValue('getValue', false);
+            $a->setReturnValue('setValue', true);
+            $a->expectOnce('setValue', array('A'));
+            $b = &new MockSimpleRadioButtonTag($this);
+            $b->setReturnValue('getValue', 'B');
+            $b->setReturnValue('setValue', true);
+            $b->expectOnce('setValue', array(false));
             
             $group = &new SimpleRadioGroup();
-            $group->addWidget($radio_a);
-            $group->addWidget($radio_b);
+            $group->addWidget($a);
+            $group->addWidget($b);
             $this->assertTrue($group->setValue('A'));
             
-            $radio_a->tally();
-            $radio_b->tally();
+            $a->tally();
+            $b->tally();
+        }
+    }
+    
+    class TestOfTagGroup extends UnitTestCase {
+        function TestOfTagGroup() {
+            $this->UnitTestCase();
+        }
+        function testReadingMultipleCheckboxGroup() {
+            $a = &new MockSimpleCheckboxTag($this);
+            $a->setReturnValue('getDefault', 'A');
+            $a->setReturnValue('getValue', false);
+            $b = &new MockSimpleCheckboxTag($this);
+            $b->setReturnValue('getDefault', false);
+            $b->setReturnValue('getValue', 'B');
+            
+            $group = &new SimpleTagGroup();
+            $group->addWidget($a);
+            $group->addWidget($b);
+            
+            $this->assertIdentical($group->getDefault(), 'A');
+            $this->assertIdentical($group->getValue(), 'B');
+        }
+        function testReadingMultipleUncheckedItems() {
+            $a = &new MockSimpleCheckboxTag($this);
+            $a->setReturnValue('getDefault', false);
+            $a->setReturnValue('getValue', false);
+            $b = &new MockSimpleCheckboxTag($this);
+            $b->setReturnValue('getDefault', false);
+            $b->setReturnValue('getValue', false);
+            
+            $group = &new SimpleTagGroup();
+            $group->addWidget($a);
+            $group->addWidget($b);
+            
+            $this->assertIdentical($group->getDefault(), false);
+            $this->assertIdentical($group->getValue(), false);
+        }
+        function testReadingMultipleCheckedItems() {
+            $a = &new MockSimpleCheckboxTag($this);
+            $a->setReturnValue('getDefault', 'A');
+            $a->setReturnValue('getValue', 'A');
+            $b = &new MockSimpleCheckboxTag($this);
+            $b->setReturnValue('getDefault', 'B');
+            $b->setReturnValue('getValue', 'B');
+            
+            $group = &new SimpleTagGroup();
+            $group->addWidget($a);
+            $group->addWidget($b);
+            
+            $this->assertIdentical($group->getDefault(), array('A', 'B'));
+            $this->assertIdentical($group->getValue(), array('A', 'B'));
         }
     }
     
