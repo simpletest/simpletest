@@ -285,7 +285,7 @@
             $this->assertWantedPattern('/f=\[on\]/');
             $this->assertWantedPattern('/g=\[g3\]/');
         }
-        function testFormSubmission() {
+        function testFormSubmissionByLabel() {
             $this->get('http://www.lastcraft.com/test/form.html');
             $this->setField('a', 'aaa');
             $this->setField('b', 'bbb');
@@ -302,6 +302,11 @@
             $this->assertWantedPattern('/e=\[on\]/');
             $this->assertNoUnwantedPattern('/f=\[/');
             $this->assertWantedPattern('/g=\[g2\]/');
+        }
+        function testFormSubmissionByName() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertTrue($this->clickSubmitByName('go'));
+            $this->assertWantedPattern('/go=\[Go!\]/');
         }
         function testSelfSubmit() {
             $this->get('http://www.lastcraft.com/test/self_form.php');

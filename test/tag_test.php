@@ -328,24 +328,24 @@
             $this->UnitTestCase();
         }
         function testFormAttributes() {
-            $tag = &new SimpleFormTag(array("Method" => "GET", "action" => "here.php", "id" => "33"));
+            $tag = &new SimpleFormTag(array('Method' => 'GET', 'action' => 'here.php', 'id' => '33'));
             $form = &new SimpleForm($tag);
-            $this->assertEqual($form->getMethod(), "get");
-            $this->assertEqual($form->getAction(), "here.php");
-            $this->assertIdentical($form->getId(), "33");
-            $this->assertNull($form->getValue("a"));
+            $this->assertEqual($form->getMethod(), 'get');
+            $this->assertEqual($form->getAction(), 'here.php');
+            $this->assertIdentical($form->getId(), '33');
+            $this->assertNull($form->getValue('a'));
             $this->assertEqual($form->getValues(), array());
         }
         function testTextWidget() {
             $form = &new SimpleForm(new SimpleFormTag(array()));
             $form->addWidget(new SimpleTextTag(
-                    array("Name" => "me", "Type" => "text", "Value" => "Myself")));
-            $this->assertIdentical($form->getValue("me"), "Myself");
-            $this->assertTrue($form->setField("me", "Not me"));
-            $this->assertFalse($form->setField("not_present", "Not me"));
-            $this->assertIdentical($form->getValue("me"), "Not me");
-            $this->assertNull($form->getValue("not_present"));
-            $this->assertEqual($form->getValues(), array("me" => "Not me"));
+                    array('Name' => 'me', 'Type' => 'text', 'Value' => 'Myself')));
+            $this->assertIdentical($form->getValue('me'), 'Myself');
+            $this->assertTrue($form->setField('me', 'Not me'));
+            $this->assertFalse($form->setField('not_present', 'Not me'));
+            $this->assertIdentical($form->getValue('me'), 'Not me');
+            $this->assertNull($form->getValue('not_present'));
+            $this->assertEqual($form->getValues(), array('me' => 'Not me'));
         }
         function testSubmitEmpty() {
             $form = &new SimpleForm(new SimpleFormTag(array()));
@@ -353,21 +353,20 @@
         }
         function testSubmitButton() {
             $form = &new SimpleForm(new SimpleFormTag(array()));
-            $this->assertIdentical($form->submitButton("go"), false);
+            $this->assertIdentical($form->submitButton('go'), false);
             $form->addWidget(new SimpleTextTag(
-                    array("type" => "submit", "name" => "go", "value" => "Go!")));
-            $this->assertEqual(
-                    $form->submitButton("go"),
-                    array("go" => "Go!"));            
+                    array('type' => 'submit', 'name' => 'go', 'value' => 'Go!')));
+            $this->assertTrue($form->hasSubmitName('go'), 'Present');
+            $this->assertEqual($form->submitButton('go'), array('go' => 'Go!'));            
         }
         function testSubmitButtonByLabel() {
             $form = &new SimpleForm(new SimpleFormTag(array()));
-            $this->assertIdentical($form->submitButtonByLabel("Go!"), false);
+            $this->assertIdentical($form->submitButtonByLabel('Go!'), false);
             $form->addWidget(new SimpleSubmitTag(
-                    array("type" => "Submit", "name" => "go", "value" => "Go!")));
+                    array('type' => 'Submit', 'name' => 'go', 'value' => 'Go!')));
             $this->assertEqual(
-                    $form->submitButtonByLabel("Go!"),
-                    array("go" => "Go!"));            
+                    $form->submitButtonByLabel('Go!'),
+                    array('go' => 'Go!'));            
         }
         function testSingleSelectFieldSubmitted() {
             $form = &new SimpleForm(new SimpleFormTag(array()));

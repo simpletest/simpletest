@@ -287,8 +287,19 @@
          *    @return boolean         true on success.
          *    @access public
          */
-        function clickSubmit($label = "Submit") {
+        function clickSubmit($label = 'Submit') {
             return $this->_browser->clickSubmit($label);
+        }
+        
+        /**
+         *    Clicks the submit button by name attribute. The owning
+         *    form will be submitted by this.
+         *    @param string $name    Name attribute of button.
+         *    @return boolean        true on success.
+         *    @access public
+         */
+        function clickSubmitByName($name) {
+            return $this->_browser->clickSubmitByName($name);
         }
         
         /**

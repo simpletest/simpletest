@@ -9,7 +9,7 @@
     /**#@+
      * include SimpleTest files
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'options.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'options.php');
     /**#@-*/
    
     /**
@@ -981,9 +981,9 @@
          *    @param SimpleTag $tag        Form tag to read.
          */
         function SimpleForm($tag) {
-            $this->_method = $tag->getAttribute("method");
-            $this->_action = $tag->getAttribute("action");
-            $this->_id = $tag->getAttribute("id");
+            $this->_method = $tag->getAttribute('method');
+            $this->_action = $tag->getAttribute('action');
+            $this->_id = $tag->getAttribute('id');
             $this->_buttons = array();
             $this->_widgets = array();
         }
@@ -1127,17 +1127,29 @@
         }
         
         /**
+         *    Test to see if a form has a submit button with this
+         *    name attribute.
+         *    @param string $name        Name to look for.
+         *    @return boolean            True if present.
+         *    @access public
+         */
+        function hasSubmitName($name) {
+            return in_array($name, array_keys($this->_buttons));
+        }
+        
+        /**
          *    Gets a button name from the label.
          *    @param string $label    Button label to search for.
          *    @return string          Name of button.
          *    @access public
          */
-        function getSubmitName($label) {
+        function getSubmitNameFromLabel($label) {
             foreach (array_keys($this->_buttons) as $name) {
                 if ($this->_buttons[$name]->getValue() == $label) {
                     return $name;
                 }
             }
+            return false;
         }
         
         /**
@@ -1167,7 +1179,7 @@
          *    @access public
          */
         function submitButtonByLabel($label) {
-            if ($name = $this->getSubmitName($label)) {
+            if ($name = $this->getSubmitNameFromLabel($label)) {
                 return $this->submitButton($name);
             }
             return false;

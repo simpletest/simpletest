@@ -9,9 +9,9 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'http.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'parser.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'tag.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'http.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'parser.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'tag.php');
     /**#@-*/
     
     /**
@@ -443,7 +443,23 @@
          */
         function &getFormBySubmitLabel($label) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->getSubmitName($label)) {
+                if ($this->_complete_forms[$i]->getSubmitNameFromLabel($label)) {
+                    return $this->_complete_forms[$i];
+                }
+            }
+            return null;
+        }
+        
+        /**
+         *    Finds a held form by button label. Will only
+         *    search correctly built forms.
+         *    @param string $name        Button name attribute.
+         *    @return SimpleForm         Form object containing the button.
+         *    @access public
+         */
+        function &getFormBySubmitName($name) {
+            for ($i = 0; $i < count($this->_complete_forms); $i++) {
+                if ($this->_complete_forms[$i]->hasSubmitName($name)) {
                     return $this->_complete_forms[$i];
                 }
             }

@@ -620,10 +620,28 @@
         }
         
         /**
-         *    Submits a form by the ID.
-         *    @param string $label    Button label. An unlabeled
-         *                            button can be triggered by 'Submit'.
+         *    Clicks the submit button by name attribute. The owning
+         *    form will be submitted by this.
+         *    @param string $name     Button name.
          *    @return boolean         True on success.
+         *    @access public
+         */
+        function clickSubmitByName($name) {
+            if (! ($form = &$this->_page->getFormBySubmitName($name))) {
+                return false;
+            }
+            $action = $form->getAction();
+            if (! $action) {
+                $action = $this->getCurrentUrl();
+            }
+            $method = $form->getMethod();
+            return $this->$method($action, $form->submitButton($name));
+        }
+        
+        /**
+         *    Submits a form by the ID.
+         *    @param string $id    The form ID. No submit button value
+         *                         will be sent.
          *    @access public
          */
         function submitFormById($id) {
@@ -639,7 +657,7 @@
         }
         
         /**
-         *    Follows a link by name. Will click the first link
+         *    Follows a link by label. Will click the first link
          *    found with this link text by default, or a later
          *    one if an index is given. The match ignores case and
          *    space issues.
