@@ -428,7 +428,7 @@
          */
         function run(&$reporter) {
             $reporter->paintGroupStart($this->getLabel(), $this->getSize());
-            for ($i = 0; $i < count($this->_test_cases); $i++) {
+            for ($i = 0, $count = count($this->_test_cases); $i < $count; $i++) {
                 if (is_string($this->_test_cases[$i])) {
                     $class = $this->_test_cases[$i];
                     $test = &new $class();

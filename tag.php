@@ -663,12 +663,12 @@
          *    @access public
          */
         function getDefault() {
-            for ($i = 0; $i < count($this->_options); $i++) {
+            for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
                 if ($this->_options[$i]->getAttribute('selected')) {
                     return $this->_options[$i]->getDefault();
                 }
             }
-            if (count($this->_options) > 0) {
+            if ($count > 0) {
                 return $this->_options[0]->getDefault();
             }
             return '';
@@ -681,7 +681,7 @@
          *    @access public
          */
         function setValue($value) {
-            for ($i = 0; $i < count($this->_options); $i++) {
+            for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
                 if ($this->_options[$i]->getContent() === $value) {
                     $this->_choice = $i;
                     return true;
@@ -751,7 +751,7 @@
          */
         function getDefault() {
             $default = array();
-            for ($i = 0; $i < count($this->_options); $i++) {
+            for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
                 if ($this->_options[$i]->getAttribute('selected')) {
                     $default[] = $this->_options[$i]->getDefault();
                 }
@@ -768,7 +768,7 @@
         function setValue($values) {
             foreach ($values as $value) {
                 $is_option = false;
-                for ($i = 0; $i < count($this->_options); $i++) {
+                for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
                     if ($this->_options[$i]->getContent() == $value) {
                         $is_option = true;
                         break;
@@ -924,7 +924,7 @@
          *    @access public
          */
         function isId($id) {
-            for ($i = 0; $i < count($this->_widgets); $i++) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($this->_widgets[$i]->isId($id)) {
                     return true;
                 }
@@ -961,7 +961,7 @@
          */
         function getValue() {
             $values = array();
-            for ($i = 0; $i < count($this->_widgets); $i++) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($this->_widgets[$i]->getValue()) {
                     $values[] = $this->_widgets[$i]->getValue();
                 }
@@ -976,7 +976,7 @@
          */
         function getDefault() {
             $values = array();
-            for ($i = 0; $i < count($this->_widgets); $i++) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($this->_widgets[$i]->getDefault()) {
                     $values[] = $this->_widgets[$i]->getDefault();
                 }
@@ -996,7 +996,7 @@
             if (! $this->_valuesArePossible($values)) {
                 return false;
             }
-            for ($i = 0; $i < count($this->_widgets); $i++) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 $possible = $this->_widgets[$i]->getAttribute('value');
                 if (in_array($this->_widgets[$i]->getAttribute('value'), $values)) {
                     $this->_widgets[$i]->setValue($possible);
@@ -1017,7 +1017,7 @@
          */
         function _valuesArePossible($values) {
             $matches = array();
-            for ($i = 0; $i < count($this->_widgets); $i++) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 $possible = $this->_widgets[$i]->getAttribute('value');
                 if (in_array($possible, $values)) {
                     $matches[] = $possible;
@@ -1099,7 +1099,7 @@
          *    @access public
          */
         function isId($id) {
-            for ($i = 0; $i < count($this->_widgets); $i++) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($this->_widgets[$i]->isId($id)) {
                     return true;
                 }
@@ -1141,7 +1141,7 @@
                 return false;
             }
             $index = false;
-            for ($i = 0; $i < count($this->_widgets); $i++) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if (! $this->_widgets[$i]->setValue($value)) {
                     $this->_widgets[$i]->setValue(false);
                 }
@@ -1156,7 +1156,7 @@
          *    @access private
          */
         function _valueIsPossible($value) {
-            for ($i = 0; $i < count($this->_widgets); $i++) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($this->_widgets[$i]->getAttribute('value') == $value) {
                     return true;
                 }
@@ -1172,7 +1172,7 @@
          *    @access public
          */
         function getValue() {
-            for ($i = 0; $i < count($this->_widgets); $i++) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($this->_widgets[$i]->getValue()) {
                     return $this->_widgets[$i]->getValue();
                 }
@@ -1187,7 +1187,7 @@
          *    @access public
          */
         function getDefault() {
-            for ($i = 0; $i < count($this->_widgets); $i++) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($this->_widgets[$i]->getDefault()) {
                     return $this->_widgets[$i]->getDefault();
                 }

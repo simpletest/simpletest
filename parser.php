@@ -93,7 +93,7 @@
          */
         function _getCompoundedRegex() {
             if ($this->_regex == null) {
-                for ($i = 0; $i < count($this->_patterns); $i++) {
+                for ($i = 0, $count = count($this->_patterns); $i < $count; $i++) {
                     $this->_patterns[$i] = '(' . str_replace(
                             array('/', '(', ')'),
                             array('\/', '\(', '\)'),

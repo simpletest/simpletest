@@ -398,7 +398,8 @@
          *    @access private
          */
         function &_findFirstSlot($parameters) {
-            for ($i = 0; $i < count($this->_map); $i++) {
+            $count = count($this->_map);
+            for ($i = 0; $i < $count; $i++) {
                 if ($this->_map[$i]["params"]->test($parameters)) {
                     return $this->_map[$i];
                 }

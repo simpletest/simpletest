@@ -146,7 +146,7 @@
          */
         function addContent($text) {
             foreach (array_keys($this->_tags) as $name) {
-                for ($i = 0; $i < count($this->_tags[$name]); $i++) {
+                for ($i = 0, $count = count($this->_tags[$name]); $i < $count; $i++) {
                     $this->_tags[$name][$i]->addContent($text);
                 }
             }
@@ -164,7 +164,7 @@
                 return;
             }
             foreach (array_keys($this->_tags) as $name) {
-                for ($i = 0; $i < count($this->_tags[$name]); $i++) {
+                for ($i = 0, $count = count($this->_tags[$name]); $i < $count; $i++) {
                     $this->_tags[$name][$i]->addTag($tag);
                 }
             }

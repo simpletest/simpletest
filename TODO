@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 61 hours.
+This is immediate stuff only for this iteration (RC2) of 65 hours.
 
 $Id$
 
@@ -9,7 +9,7 @@ Fix of syntax errors in test scripts reporting green (3/3) - done.
 Fix of assertIdentical() getting stuck in a loop (3/2) - done.
 Rename StickyError because of name clash (1/1) - done.
 Fix parsing check on test file loading to work with PHP5 (3).
-Add Jeff's performance fixes (2).
+Add Jeff's performance fixes (2/1).
 Fix error handler to not send messages on E_STRICT (2/1) - done.
 Add assertSame() for PEAR::PhpUnit compatibility (1).
 Fix running machinery to allow decorators (3/3) - done.
@@ -20,6 +20,7 @@ Reporter
 Mock objects
 ------------
 Bug fix of fatal error with overload functions (2/2) - done.
+Create ReferenceExpectation (1).
 
 Parser
 ------

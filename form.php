@@ -259,7 +259,7 @@
          *    @access public
          */
         function _getValueBySelector($selector) {
-            for ($i = 0; $i < count($this->_widgets); $i++) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($selector->isMatch($this->_widgets[$i])) {
                     return $this->_widgets[$i]->getValue();
                 }
@@ -305,7 +305,7 @@
          */
         function _setFieldBySelector($selector, $value) {
             $success = false;
-            for ($i = 0; $i < count($this->_widgets); $i++) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($selector->isMatch($this->_widgets[$i])) {
                     if ($this->_widgets[$i]->setValue($value)) {
                         $success = true;
@@ -349,7 +349,7 @@
          */
         function _getEncoding() {
             $encoding = new SimpleFormEncoding();
-            for ($i = 0; $i < count($this->_widgets); $i++) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 $encoding->add(
                         $this->_widgets[$i]->getName(),
                         $this->_widgets[$i]->getValue());
