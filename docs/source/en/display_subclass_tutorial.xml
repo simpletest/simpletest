@@ -222,7 +222,7 @@ class ShowPasses extends HtmlReporter {
             as they are working on code; the feeling that you are getting
             work done is nice after all.
             Once you have to scroll up and down the page to find failures
-            though, you soon come to realise it&apos;s dark side.
+            though, you soon come to realise its dark side.
         </p>
         <p>
             Try it both ways and see which you prefer.

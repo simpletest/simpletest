@@ -102,7 +102,7 @@
             There is nothing in it yet.
         </p>
         <p>
-            Now the empty method definition on it&apos;s own does not do anything.
+            Now the empty method definition on its own does not do anything.
             We need to actually place some code inside it.
             The <code>UnitTestCase</code> class
             will typically generate test events when run and these events are

@@ -26,7 +26,7 @@
             </p>
             <p>
                 For example, suppose we have a news service that has failed
-                to connect to it&apos;s remote source.
+                to connect to its remote source.
 <php><![CDATA[
 <strong>class NewsService {
     ...
@@ -40,7 +40,7 @@
     }
 }</strong>
 ]]></php>
-                Here it is sending it&apos;s content to a
+                Here it is sending its content to a
                 <code>Writer</code> class.
                 We could test this behaviour with a
                 <code>MockWriter</code> like so...
@@ -99,7 +99,7 @@ class TestOfNewsService extends UnitTestCase {
             </p>
             <p>
                 The <code>WantedPatternExpectation</code> takes
-                the regular expression to match in it&apos;s constructor.
+                the regular expression to match in its constructor.
                 Whenever a comparison is made by the <code>MockWriter</code>
                 against this expectation class, it will do a
                 <code>preg_match()</code> with this pattern.

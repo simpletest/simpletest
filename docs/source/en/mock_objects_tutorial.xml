@@ -10,7 +10,7 @@
             to do.
             We are going to do some timing tests and so the
             <code>TimeTestCase</code> class definitely needs
-            it&apos;s own file.
+            its own file.
             Let&apos;s say <em>tests/time_test_case.php</em>...
 <php><![CDATA[
 <strong><?php
@@ -190,7 +190,7 @@ require_once('simpletest/mock_objects.php');
 Mock::generate('Clock');
 ]]></php>
             This is the line that does the work.
-            The code generator scans the class for all of it&apos;s
+            The code generator scans the class for all of its
             methods, creates code to generate an identically
             interfaced class, but with the name &quot;Mock&quot; added,
             and then <code>eval()</code>s the new code to

@@ -151,7 +151,7 @@ $config->getValue('db_user');
 ]]></php>
                 ...it will return &quot;admin&quot;.
                 It finds this by attempting to match the calling arguments
-                to it&apos;s list of returns one after another until
+                to its list of returns one after another until
                 a complete match is found.
             </p>
             <p>

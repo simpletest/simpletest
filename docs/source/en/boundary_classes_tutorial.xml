@@ -68,7 +68,7 @@
             The target of those messages can be chosen when setting
             up the log, but after that the
             logger should be left to combine and format the message
-            elements as that is it&apos;s real job.
+            elements as that is its real job.
             We restricted ourselves by assuming that target was a filename.
         </p>
         <p>
@@ -268,9 +268,9 @@
             compared with this and either a pass or a fail is sent
             to the unit test as a result.
             That is why a new mock object has a reference to
-            <code>\$this</code> in it&apos;s constructor,
+            <code>\$this</code> in its constructor,
             it needs <code>\$this</code> to send
-            it&apos;s test results to.
+            its test results to.
         </p>
         <p>
             The other expectation is that <code>write()</code>

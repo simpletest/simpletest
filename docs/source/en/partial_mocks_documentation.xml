@@ -15,7 +15,7 @@
         <section name="inject" title="The mock injection problem">
             <p>
                 When one object uses another it is very simple to just pass a mock
-                version in already set up with it&apos;s expectations.
+                version in already set up with its expectations.
                 Things are rather tricker if one object creates another and the
                 creator is the one you want to test.
                 This means that the created object should be mocked, but we can
@@ -25,7 +25,7 @@
             </p>
             <p>
                 For example, suppose we are building a telnet client and it
-                needs to create a network socket to pass it&apos;s messages.
+                needs to create a network socket to pass its messages.
                 The connection method might look something like...
 <php><![CDATA[
 <strong><?php
@@ -124,7 +124,7 @@ class TelnetTest extends UnitTestCase {
     }
 }
 ]]></php>
-                The problem with this approach is it&apos;s untidiness.
+                The problem with this approach is its untidiness.
                 There is test code in the main class and parameters passed
                 in the test case that are never used.
                 This is a quick and dirty approach, but nevertheless effective
@@ -183,7 +183,7 @@ class TelnetTest extends UnitTestCase {
                 There is a way we can circumvent the problem without creating
                 any new application classes, but it involves creating a subclass
                 when we do the actual testing.
-                Firstly we move the socket creation into it&apos;s own method...
+                Firstly we move the socket creation into its own method...
 <php><![CDATA[
 <?php
     require_once('socket.php');
@@ -302,7 +302,7 @@ class TelnetTest extends UnitTestCase {
                 This is necessary in case the constructor is going to
                 make use of the as yet unset mocked methods.
                 We set any return values at this point and then run the
-                constructor with it&apos;s normal parameters.
+                constructor with its normal parameters.
                 This three step construction of &quot;new&quot;, followed
                 by setting up the methods, followed by running the constructor
                 proper is what distinguishes the partial mock code.

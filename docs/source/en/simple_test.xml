@@ -192,7 +192,7 @@ $test->run(new HtmlReporter());
                 that are descended from <code>SimpleTestCase</code>, of which
                 <code>UnitTestCase</code> is one example.
                 Just the class names are stored for now, so that the test runner
-                can instantiate the class when it works it&apos;s way
+                can instantiate the class when it works its way
                 through your test suite.
             </p>
             <p>

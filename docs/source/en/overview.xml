@@ -54,7 +54,7 @@ class <strong>MyTestCase</strong> extends UnitTestCase {
             </p>
             <p>
                 The top level task of a web application though is not to
-                produce correct output from it&apos;s methods and objects, but
+                produce correct output from its methods and objects, but
                 to generate web pages.
                 The <code>WebTestCase</code> class tests web
                 pages.

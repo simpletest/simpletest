@@ -4,7 +4,7 @@
     <content>
         <p>
             In order to test a code module you need very tight control
-            of it&apos;s environment.
+            of its environment.
             If anything can vary behind the scenes, for example a
             configuration file, then this could cause the tests
             to fail unexpectedly.
@@ -163,7 +163,7 @@ class Clock {
             result to be out by one second.
             The chances are small, but if there were a lot of timing tests
             you would end up with a test suite that is erratic, severely
-            limiting it&apos;s usefulness.
+            limiting its usefulness.
             We will <a href="subclass_tutorial.php">tackle this shortly</a> and for now just jot it onto our
             &quot;to do&quot; list.
         </p>
