@@ -441,17 +441,11 @@
         function TestOfHttpResponse() {
             $this->UnitTestCase();
         }
-        function testUrlAccessor() {
-            $url = new SimpleUrl('http://www.lastcraft.com');
-            $response = &new SimpleHttpResponse('HEAD', $url, new MockSimpleSocket($this));
-            $this->assertEqual($response->getUrl(), $url);
-            $this->assertEqual($response->getMethod(), 'HEAD');
-        }
         function testBadRequest() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", true);
             $socket->setReturnValue("getError", "Socket error");
-            $response = &new SimpleHttpResponse('GET', new MockSimpleUrl($this), $socket);
+            $response = &new SimpleHttpResponse($socket);
             $this->assertTrue($response->isError());
             $this->assertWantedPattern('/Socket error/', $response->getError());
             $this->assertIdentical($response->getContent(), false);
@@ -464,7 +458,7 @@
             $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\n");
             $socket->setReturnValueAt(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
             $socket->setReturnValue("read", "");
-            $response = &new SimpleHttpResponse('GET', new MockSimpleUrl($this), $socket);
+            $response = &new SimpleHttpResponse($socket);
             $this->assertTrue($response->isError());
             $this->assertEqual($response->getContent(), "");
         }
@@ -475,7 +469,7 @@
             $socket->setReturnValueAt(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
             $socket->setReturnValueAt(2, "read", "Content-Type: text/plain\r\n");
             $socket->setReturnValue("read", "");
-            $response = &new SimpleHttpResponse('GET', new MockSimpleUrl($this), $socket);
+            $response = &new SimpleHttpResponse($socket);
             $this->assertTrue($response->isError());
             $this->assertEqual($response->getContent(), "");
         }
@@ -488,7 +482,7 @@
             $socket->setReturnValueAt(3, "read", "ction: close\r\n\r\nthis is a test file\n");
             $socket->setReturnValueAt(4, "read", "with two lines in it\n");
             $socket->setReturnValue("read", "");
-            $response = &new SimpleHttpResponse('GET', new MockSimpleUrl($this), $socket);
+            $response = &new SimpleHttpResponse($socket);
             $this->assertFalse($response->isError());
             $this->assertEqual(
                     $response->getContent(),
@@ -511,7 +505,7 @@
             $socket->setReturnValueAt(5, "read", "Connection: close\r\n");
             $socket->setReturnValueAt(6, "read", "\r\n");
             $socket->setReturnValue("read", "");
-            $response = &new SimpleHttpResponse('GET', new MockSimpleUrl($this), $socket);
+            $response = &new SimpleHttpResponse($socket);
             $this->assertFalse($response->isError());
             $headers = $response->getHeaders();
             $cookies = $headers->getNewCookies();
@@ -529,7 +523,7 @@
             $socket->setReturnValueAt(3, "read", "Connection: close\r\n");
             $socket->setReturnValueAt(4, "read", "\r\n");
             $socket->setReturnValue("read", "");
-            $response = &new SimpleHttpResponse('GET', new MockSimpleUrl($this), $socket);
+            $response = &new SimpleHttpResponse($socket);
             $headers = $response->getHeaders();
             $this->assertTrue($headers->isRedirect());
             $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com/");

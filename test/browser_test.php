@@ -121,7 +121,6 @@
             
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue('getContent', 'stuff');
-            $response->setReturnValue('getUrl', new SimpleUrl('http://this.com/page.html'));
             $response->setReturnReference('getHeaders', $headers);
             
             $agent = &new MockSimpleUserAgent($this);
@@ -188,7 +187,6 @@
             
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue('getContent', 'stuff');
-            $response->setReturnValue('getUrl', new SimpleUrl(''));
             $response->setReturnReference('getHeaders', $headers);
             return $response;
         }
