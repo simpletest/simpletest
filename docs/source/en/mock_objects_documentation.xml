@@ -623,7 +623,7 @@ $unit_test>assertion('I hope this file exists', file_exists('my_file'));
 ?>
 ]]></php>
                 From now on you just include <em>my_mock.php</em> instead of the
-                default <em>simple_mock.php</em> version and you can introduce
+                default <em>mock_objects.php</em> version and you can introduce
                 mock objects into your existing test suite.
             </p>
         </section>

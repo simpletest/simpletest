@@ -106,12 +106,15 @@ class TestOfLastcraft extends WebTestCase {
             <p>
                 Here is the list of possible content assertions...
                 <table><tbody>
+                    <tr><td><code>assertTitle($title)</code></td><td>Pass if title is an exact match</td></tr>
                     <tr><td><code>assertWantedPattern($pattern)</code></td><td>A Perl pattern match against the page content</td></tr>
                     <tr><td><code>assertNoUnwantedPattern($pattern)</code></td><td>A Perl pattern match to not find content</td></tr>
-                    <tr><td><code>assertTitle($title)</code></td><td>Pass if title is an exact match</td></tr>
+                    <tr><td><code>assertWantedText($text)</code></td><td>Pass if matches visible and &quot;alt&quot; text</td></tr>
+                    <tr><td><code>assertNoUnwantedText($text)</code></td><td>Pass if doesn&apos;t match visible and &quot;alt&quot; text</td></tr>
                     <tr><td><code>assertLink($label)</code></td><td>Pass if a link with this text is present</td></tr>
                     <tr><td><code>assertNoLink($label)</code></td><td>Pass if no link with this text is present</td></tr>
                     <tr><td><code>assertLinkById($id)</code></td><td>Pass if a link with this id attribute is present</td></tr>
+                    <tr><td><code>assertNoLinkById($id)</code></td><td>Pass if no link with this id attribute is present</td></tr>
                     <tr><td><code>assertField($name, $value)</code></td><td>Pass if an input tag with this name has this value</td></tr>
                     <tr><td><code>assertFieldById($id, $value)</code></td><td>Pass if an input tag with this id has this value</td></tr>
                     <tr><td><code>assertResponse($codes)</code></td><td>Pass if HTTP response matches this list</td></tr>
@@ -227,6 +230,7 @@ class TestOfLastcraft extends WebTestCase {
             <p>
                 The list of navigation methods is...
                 <table><tbody>
+                    <tr><td><code>getUrl()</code></td><td>The current location</td></tr>
                     <tr><td><code>get($url, $parameters)</code></td><td>Send a GET request with these parameters</td></tr>
                     <tr><td><code>post($url, $parameters)</code></td><td>Send a POST request with these parameters</td></tr>
                     <tr><td><code>head($url, $parameters)</code></td><td>Send a HEAD request without replacing the page content</td></tr>
@@ -234,9 +238,9 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>back()</code></td><td>Like the browser back button</td></tr>
                     <tr><td><code>forward()</code></td><td>Like the browser forward button</td></tr>
                     <tr><td><code>authenticate($name, $password)</code></td><td>Retry after a challenge</td></tr>
-                    <tr><td><code>getFrameFocus()</code></td><td>The name of the currently selected frame</td></tr>
-                    <tr><td><code>setFrameFocusByIndex($choice)</code></td><td>Focus on a frame counting from 1</td></tr>
-                    <tr><td><code>setFrameFocus($name)</code></td><td>Focus on a frame by name</td></tr>
+                    <tr><td><code>restart()</code></td><td>Restarts the browser as if a new session</td></tr>
+                    <tr><td><code>getCookie($name)</code></td><td>Gets the cookie value for the current context</td></tr>
+                    <tr><td><code>ageCookies($interval)</code></td><td>Ages current cookies prior to a restart</td></tr>
                     <tr><td><code>clearFrameFocus()</code></td><td>Go back to treating all frames as one page</td></tr>
                     <tr><td><code>clickSubmit($label)</code></td><td>Click the first button with this label</td></tr>
                     <tr><td><code>clickSubmitByName($name)</code></td><td>Click the button with this name attribute</td></tr>
@@ -247,6 +251,9 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>submitFormById($id)</code></td><td>Submit a form without the submit value</td></tr>
                     <tr><td><code>clickLink($label, $index)</code></td><td>Click an anchor by the visible label text</td></tr>
                     <tr><td><code>clickLinkById($id)</code></td><td>Click an anchor by the ID attribute</td></tr>
+                    <tr><td><code>getFrameFocus()</code></td><td>The name of the currently selected frame</td></tr>
+                    <tr><td><code>setFrameFocusByIndex($choice)</code></td><td>Focus on a frame counting from 1</td></tr>
+                    <tr><td><code>setFrameFocus($name)</code></td><td>Focus on a frame by name</td></tr>
                 </tbody></table>
             </p>
             <p>
@@ -298,7 +305,6 @@ class TestOfLastcraft extends WebTestCase {
                 Here is another method list...
                 <table><tbody>
                     <tr><td><code>getTransportError()</code></td><td>The last socket error</td></tr>
-                    <tr><td><code>getUrl()</code></td><td>The current location</td></tr>
                     <tr><td><code>showRequest()</code></td><td>Dump the outgoing request</td></tr>
                     <tr><td><code>showHeaders()</code></td><td>Dump the incoming headers</td></tr>
                     <tr><td><code>showSource()</code></td><td>Dump the raw HTML page content</td></tr>
@@ -309,6 +315,7 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>setConnectionTimeout($timeout)</code></td><td>Kill the connection after this time between bytes</td></tr>
                     <tr><td><code>useProxy($proxy, $name, $password)</code></td><td>Make requests via this proxy URL</td></tr>
                 </tbody></table>
+                These methods are principally for debugging.
             </p>
         </section>
     </content>

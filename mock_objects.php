@@ -981,7 +981,7 @@
          *                                the old name with "Stub"
          *                                prepended.
          *    @param array $methods       Additional methods to add beyond
-         *                                those in th cloned class. Use this
+         *                                those in the cloned class. Use this
          *                                to emulate the dynamic addition of
          *                                methods in the cloned class or when
          *                                the class hasn't been written yet.

@@ -967,7 +967,7 @@
          */
         function assertNoLink($label, $message = "%s") {
             return $this->assertFalse(
-                    $this->_browser->isLink($label) || $this->_browser->isLinkById($label),
+                    $this->_browser->isLink($label),
                     sprintf($message, "Link [$label] should not exist"));
         }
         
@@ -983,6 +983,21 @@
             return $this->assertTrue(
                     $this->_browser->isLinkById($id),
                     sprintf($message, "Link ID [$id] should exist"));
+        }
+
+        /**
+         *    Tests for the non-presence of a link label. Match is
+         *    case insensitive with normalised space.
+         *    @param string $id        Id attribute value.
+         *    @param string $message   Message to display. Default
+         *                             can be embedded with %s.
+         *    @return boolean          True if link missing.
+         *    @access public
+         */
+        function assertNoLinkById($id, $message = "%s") {
+            return $this->assertFalse(
+                    $this->_browser->isLinkById($id),
+                    sprintf($message, "Link ID [$id] should not exist"));
         }
         
         /**

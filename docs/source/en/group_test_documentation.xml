@@ -45,7 +45,7 @@
 ?>
 ]]></php>
                 The <code>FileTester</code> class does
-                no contain any actual tests, but is a base class for other
+                not contain any actual tests, but is a base class for other
                 test cases.
                 For this reason we use the
                 <code>SimpleTestOptions::ignore()</code> directive
@@ -200,14 +200,25 @@
                 that <code>run()</code> will run once only
                 from the top level script that has been invoked.
 <php><![CDATA[
-<?php
+<?php<strong>
     define('RUNNER', true);</strong>
-    <strong>
     require_once('file_group_test.php');
-    </strong>
+
     $test = &new BigGroupTest('Big group');
     $test->addTestCase(new FileGroupTest());
     $test->addTestCase(...);
+    $test->run(new HtmlReporter());
+?>
+]]></php>
+                As with the normal test cases, a <code>GroupTest</code> can
+                be loaded with the <code>GroupTest::addTestFile()</code> method.
+<php><![CDATA[
+<?php
+    define('RUNNER', true);
+
+    $test = &new BigGroupTest('Big group');<strong>
+    $test->addTestFile('file_group_test.php');
+    $test->addTestFile(...);</strong>
     $test->run(new HtmlReporter());
 ?>
 ]]></php>
@@ -253,7 +264,7 @@
 ]]></php>
                 There are only two adapters, the other is for the
                 <a href="http://pear.php.net/manual/en/package.php.phpunit.php">PEAR</a>
-                unit tester...
+                1.0 unit tester...
 <php><![CDATA[
 <?php
     require_once('simpletest/unit_tester.php');
