@@ -752,5 +752,43 @@
             $this->assertTrue($browser->setFrameFocus('inner'));
             $this->assertEqual($browser->getContent(), 'Page onePage two');
         }
+        
+        function testCanNavigateToNestedFrameByIndex() {
+            $inner = '<frameset>' .
+                    '<frame src="one.html">' .
+                    '<frame src="two.html">' .
+                    '</frameset>';
+            $outer = '<frameset>' .
+                    '<frame src="inner.html">' .
+                    '<frame src="three.html">' .
+                    '</frameset>';
+            $browser = &$this->createBrowser($this->createUserAgent(array(
+                    'http://site.with.nested.frames/' => $outer,
+                    'http://site.with.nested.frames/inner.html' => $inner,
+                    'http://site.with.nested.frames/one.html' => 'Page one',
+                    'http://site.with.nested.frames/two.html' => 'Page two',
+                    'http://site.with.nested.frames/three.html' => 'Page three')));
+            
+            $browser->get('http://site.with.nested.frames/');
+            $this->assertEqual($browser->getContent(), 'Page onePage twoPage three');
+            
+            $this->assertTrue($browser->setFrameFocusByIndex(1));
+            $this->assertEqual($browser->getFrameFocus(), 1);
+            $this->assertTrue($browser->setFrameFocusByIndex(1));
+            $this->assertEqual($browser->getFrameFocus(), 1);
+            $this->assertEqual($browser->getContent(), 'Page one');
+            
+            $this->assertTrue($browser->setFrameFocusByIndex(2));
+            $this->assertEqual($browser->getFrameFocus(), 2);
+            $this->assertEqual($browser->getContent(), 'Page two');
+            
+            $browser->clearFrameFocus();
+            $this->assertTrue($browser->setFrameFocusByIndex(2));
+            $this->assertEqual($browser->getFrameFocus(), 2);
+            $this->assertEqual($browser->getContent(), 'Page three');
+            
+            $this->assertTrue($browser->setFrameFocusByIndex(1));
+            $this->assertEqual($browser->getContent(), 'Page onePage two');
+        }
     }
 ?>
