@@ -1,13 +1,11 @@
 TODO
-This is immediate stuff only for the next iteration (1.0rc1) of 57(!) hours.
-This equates to about 6 weeks work giving a release date of second week
-of April.
+This is immediate stuff only for the next iteration.
+This is for a release date of second week of April.
 
 $Id$
 
 Unit tester
 -----------
-Move message override to expectation classes (2).
 
 Interface
 ---------
@@ -38,6 +36,7 @@ Allow stylesheet loading to affect cookies (2).
 Redirects should become GET if they were POST (1/1) - done.
 Fix bug when remote port not port 80 (2/2) - done.
 Add timeouts to page fetches (2/2) - done.
+Add forward and back button simulation (4).
 
 Web tester
 ----------

@@ -17,6 +17,147 @@
     require_once(SIMPLE_TEST . 'user_agent.php');
     
     /**
+     *    Browser history list.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleBrowserHistory {
+        var $_sequence;
+        var $_position;
+        
+        /**
+         *    Starts empty.
+         *    @access public
+         */
+        function SimpleBrowserHistory() {
+            $this->_sequence = array();
+            $this->_position = -1;
+        }
+        
+        /**
+         *    Test for no entries yet.
+         *    @return boolean        True if empty.
+         *    @access private
+         */
+        function _isEmpty() {
+            return ($this->_position == -1);
+        }
+        
+        /**
+         *    Test for being at the beginning.
+         *    @return boolean        True if first.
+         *    @access private
+         */
+        function _atBeginning() {
+            return ($this->_position == 0) && ! $this->_isEmpty();
+        }
+        
+        /**
+         *    Test for being at the last entry.
+         *    @return boolean        True if last.
+         *    @access private
+         */
+        function _atEnd() {
+            return ($this->_position + 1 >= count($this->_sequence)) && ! $this->_isEmpty();
+        }
+        
+        /**
+         *    Adds a successfully fetched page to the history.
+         *    @param string $method    GET or POST.
+         *    @param string $url       Full URL of fetch.
+         *    @param array $parameters Any post data with the fetch.
+         *    @access public
+         */
+        function addFetch($method, $url, $parameters) {
+            $this->_dropFuture();
+            array_push(
+                    $this->_sequence,
+                    array('method' => $method, 'url' => $url, 'parameters' => $parameters));
+            $this->_position++;
+        }
+        
+        /**
+         *    Last fetching method for current history
+         *    position.
+         *    @return string        GET or POST.
+         *    @access public
+         */
+        function getMethod() {
+            if ($this->_isEmpty()) {
+                return false;
+            }
+            return $this->_sequence[$this->_position]['method'];
+        }
+        
+        /**
+         *    Last fully qualified URL for current history
+         *    position.
+         *    @return string        Full URL.
+         *    @access public
+         */
+        function getUrl() {
+            if ($this->_isEmpty()) {
+                return false;
+            }
+            return $this->_sequence[$this->_position]['url'];
+        }
+        
+        /**
+         *    Parameters of last fetch from current history
+         *    position.
+         *    @return array        Hash of post parameters.
+         */
+        function getParameters() {
+            if ($this->_isEmpty()) {
+                return false;
+            }
+            return $this->_sequence[$this->_position]['parameters'];
+        }
+        
+        /**
+         *    Step back one place in the history. Stops at
+         *    the first page.
+         *    @return boolean     True if any previous entries.
+         *    @access public
+         */
+        function back() {
+            if ($this->_isEmpty() || $this->_atBeginning()) {
+                return false;
+            }
+            $this->_position--;
+            return true;
+        }
+        
+        /**
+         *    Step forward one place. If already at the
+         *    latest entry then nothing will happen.
+         *    @return boolean     True if any future entries.
+         *    @access public
+         */
+        function forward() {
+            if ($this->_isEmpty() || $this->_atEnd()) {
+                return false;
+            }
+            $this->_position++;
+            return true;
+        }
+        
+        /**
+         *    Ditches all future entries beyond the current
+         *    point.
+         *    @access private
+         */
+        function _dropFuture() {
+            if ($this->_isEmpty()) {
+                return;
+            }
+            while (! $this->_atEnd()) {
+                array_pop($this->_sequence);
+            }
+        }
+    }
+    
+    /**
      *    Simulated web browser.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
@@ -25,6 +166,7 @@
         var $_user_agent;
         var $_headers;
         var $_page;
+        var $_history;
         
         /**
          *    Starts with a fresh browser with no
@@ -35,6 +177,7 @@
             $this->_user_agent = &$this->_createUserAgent();
             $this->_headers = false;
             $this->_page = false;
+            $this->_history = &$this->_createHistory();
         }
         
         /**
@@ -44,6 +187,14 @@
          */
         function &_createUserAgent() {
             return new SimpleUserAgent();
+        }
+        
+        /**
+         *    Creates a new empty history list.
+         *    @return SimpleBrowserHistory    New list.
+         *    @access protected
+         */
+        function &_createHistory() {
         }
         
         /**
@@ -176,7 +327,7 @@
          *    Will affect cookies, but will not change the base URL.
          *    @param string $raw_url    Target to fetch as string.
          *    @param hash $parameters   Additional parameters for GET request.
-         *    @return string            Content of page.
+         *    @return boolean           True if successful.
          *    @access public
          */
         function head($raw_url, $parameters = false) {
@@ -200,6 +351,39 @@
             $this->_headers = $response->getHeaders();
             $this->_page = &$this->_parse($response->getContent());
             return $response->getContent();
+        }
+        
+        /**
+         *    Equivalent to hitting the retry button on the
+         *    browser. Will attempt to repeat the page fetch.
+         *    @return boolean     True if fetch succeeded
+         *    @access public
+         */
+        function retry() {
+            $method = strtolower($this->_history->getMethod());
+            return $this->$method(
+                    $this->_history->getUrl(),
+                    $this->_history->getParameters());
+        }
+        
+        /**
+         *    Equivalent to hitting the back button on the
+         *    browser.
+         *    @return boolean     True if history entry and
+         *                        fetch succeeded
+         *    @access public
+         */
+        function back() {
+        }
+        
+        /**
+         *    Equivalent to hitting the forward button on the
+         *    browser.
+         *    @return boolean     True if history entry and
+         *                        fetch succeeded
+         *    @access public
+         */
+        function forward() {
         }
         
         /**
