@@ -64,7 +64,10 @@
                 foreach ($query->getKeys() as $key) {
                     $this->add($key, $query->getValue($key));
                 }
-            } else {
+                if ($query->getX() !== false) {
+                    $this->setCoordinates($query->getX(), $query->getY());
+                }
+            } elseif (is_array($query)) {
                 foreach ($query as $key => $value) {
                     $this->add($key, $value);
                 }
@@ -158,7 +161,8 @@
                     $statements[] = "$key=" . urlencode($value);
                 }
             }
-            return implode('&', $statements);
+            $coords = ($this->_x !== false) ? '?' . $this->_x . ',' . $this->_y : '';
+            return implode('&', $statements) . $coords;
         }
     }
 ?>

@@ -70,11 +70,26 @@
             $this->assertIdentical($query->asString(), 'a=Hello&a=Goodbye');
         }
         
-        function testSettingCordinates() {
+        function testDefaultCoordinatesAreUnset() {
+            $query = &new SimpleQueryString();
+            $this->assertIdentical($query->getX(), false);
+            $this->assertIdentical($query->getY(), false);
+        }
+        
+        function testSettingCoordinates() {
             $query = &new SimpleQueryString();
             $query->setCoordinates('32', '45');
             $this->assertIdentical($query->getX(), 32);
             $this->assertIdentical($query->getY(), 45);
+            $this->assertIdentical($query->asString(), '?32,45');
+        }
+        
+        function testClearingCordinates() {
+            $query = &new SimpleQueryString();
+            $query->setCoordinates('32', '45');
+            $query->setCoordinates();
+            $this->assertIdentical($query->getX(), false);
+            $this->assertIdentical($query->getY(), false);
         }
         
         function testAddingLists() {
@@ -96,6 +111,20 @@
             $query->merge(new SimpleQueryString(array('a' => 'A2')));
             $this->assertIdentical($query->getValue('a'), array('A1', 'A2'));
             $this->assertIdentical($query->getValue('b'), 'B');
+        }
+        
+        function testMergeInObjectWithCordinates() {
+            $incoming = new SimpleQueryString(array('a' => 'A2'));
+            $incoming->setCoordinates(25, 24);
+            
+            $query = &new SimpleQueryString(array('a' => 'A1'));
+            $query->setCoordinates(1, 2);
+            $query->merge($incoming);
+            
+            $this->assertIdentical($query->getValue('a'), array('A1', 'A2'));
+            $this->assertIdentical($query->getX(), 25);
+            $this->assertIdentical($query->getY(), 24);
+            $this->assertIdentical($query->asString(), 'a=A1&a=A2?25,24');
         }
     }
 ?>
