@@ -139,8 +139,8 @@
          */
         function &_getRegistry() {
             static $registry = false;
-            if (!$registry) {
-                $registry = SimpletestOptions::getDefaults();
+            if (! $registry) {
+                $registry = SimpleTestOptions::_getDefaults();
             }
             return $registry;
         }
@@ -148,10 +148,10 @@
         /**
          *    Constant default values.
          *    @return hash       All registry defaults.
-         *    @access public
+         *    @access private
          *    @static
          */
-        function getDefaults() {
+        function _getDefaults() {
             return array(
                     'StubBaseClass' => 'SimpleStub',
                     'MockBaseClass' => 'SimpleMock',

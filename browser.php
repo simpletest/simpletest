@@ -302,6 +302,19 @@
         }
         
         /**
+         *    Sets proxy to use on all requests for when
+         *    testing from behind a firewall. Set host
+         *    to false to disable.
+         *    @param string $host        Proxy host.
+         *    @param integer $port       Proxy port.
+         *    @param boolean $is_secure  True if secure port.
+         *    @access public
+         */
+        function useProxy($host, $port = 8080, $is_secure = false) {
+            $this->_user_agent->useProxy($host, $port, $is_secure);
+        }
+        
+        /**
          *    Parses the raw content into a page.
          *    @param string $raw    Text of fetch.
          *    @return SimplePage    Parsed HTML.

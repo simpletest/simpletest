@@ -155,7 +155,7 @@
 
     /**
      *    Fetches web pages whilst keeping track of
-     *    cookies.
+     *    cookies and authentication.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
@@ -163,17 +163,23 @@
         var $_cookie_jar;
         var $_authenticator;
         var $_max_redirects;
+        var $_proxy_host;
+        var $_proxy_port;
+        var $_proxy_is_secure;
         var $_connection_timeout;
         var $_current_request;
         
         /**
-         *    Starts with no cookies.
+         *    Starts with no cookies, realms or proxies.
          *    @access public
          */
         function SimpleUserAgent() {
             $this->_cookie_jar = &new SimpleCookieJar();
             $this->_authenticator = &new SimpleAuthenticator();
             $this->setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
+            $this->_proxy_host = false;
+            $this->_proxy_port = false;
+            $this->_proxy_is_secure = false;
             $this->setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
             $this->_current_request = false;
         }
@@ -350,6 +356,21 @@
         }
         
         /**
+         *    Sets proxy to use on all requests for when
+         *    testing from behind a firewall. Set host
+         *    to false to disable.
+         *    @param string $host        Proxy host.
+         *    @param integer $port       Proxy port.
+         *    @param boolean $is_secure  True if secure port.
+         *    @access public
+         */
+        function useProxy($host, $port = 8080, $is_secure = false) {
+            $this->_proxy_host = $host;
+            $this->_proxy_port = $port;
+            $this->_proxy_is_secure = $is_secure;
+        }
+        
+        /**
          *    Test to see if the redirect limit is passed.
          *    @param integer $redirects        Count so far.
          *    @return boolean                  True if over.
@@ -469,14 +490,30 @@
         function &_createHttpRequest($method, $url, $parameters) {
             if ($method == 'POST') {
                 $request = &new SimpleHttpPostRequest(
-                        new SimpleRoute($url),
+                        $this->_createRoute($url),
                         $parameters);
                 return $request;
             }
             if ($parameters) {
                 $url->addRequestParameters($parameters);
             }
-            return new SimpleHttpRequest(new SimpleRoute($url), $method);
+            return new SimpleHttpRequest($this->_createRoute($url), $method);
+        }
+        
+        /**
+         *    Sets up either a direct route or via a proxy.
+         *    @param SimpleUrl $url       Target to fetch as url object.
+         *    @access protected
+         */
+        function &_createRoute($url) {
+            if ($this->_proxy_host) {
+                return new SimpleProxyRoute(
+                        $url,
+                        $this->_proxy_host,
+                        $this->_proxy_port,
+                        $this->_proxy_is_secure);
+            }
+            return new SimpleRoute($url);
         }
         
         /**

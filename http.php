@@ -692,7 +692,7 @@
          *    @param string $method   HTTP request method, usually GET.
          *    @param SimpleUrl $url   URL as object.
          *    @return string          Request line content.
-         *    @access protected
+         *    @access public
          */
         function getRequestLine($method) {
             $url = $this->_getUrl();
@@ -705,7 +705,7 @@
          *    Creates the host part of the request.
          *    @param SimpleUrl $url   URL as object.
          *    @return string          Host line content.
-         *    @access protected
+         *    @access public
          */
         function getHostLine() {
             return 'Host: ' . $this->_proxy_host . ':' . $this->_proxy_port;
@@ -718,7 +718,6 @@
          *    @access public
          */
         function &createConnection($timeout) {
-            $url = $this->_getUrl();
             return $this->_createSocket(
                     $this->_is_secure ? 'https' : 'http',
                     $this->_proxy_host,
