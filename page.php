@@ -48,8 +48,8 @@
          */
         function startElement($name, $attributes) {
             $tag = &$this->_createTag($name, $attributes);
-            if (in_array($name, $this->_getBlockTags())) {
-                $this->_page->acceptBlockStart($tag);
+            if ($name =='form') {
+                $this->_page->acceptFormStart($tag);
                 return true;
             }            
             if ($tag->expectEndTag()) {
@@ -71,8 +71,8 @@
          *    @public
          */
         function endElement($name) {
-            if (in_array($name, $this->_getBlockTags())) {
-                $this->_page->acceptBlockEnd($name);
+            if ($name == 'form') {
+                $this->_page->acceptFormEnd();
             }            
             if (isset($this->_tags[$name]) && (count($this->_tags[$name]) > 0)) {
                 $tag = array_pop($this->_tags[$name]);
@@ -120,20 +120,9 @@
             } elseif ($name == 'textarea') {
                 return new SimpleTextAreaTag($attributes);
             } elseif ($name == 'form') {
-                return new SimpleFormTag( $attributes);
+                return new SimpleFormTag($attributes);
             }
             return new SimpleTag($attributes);
-        }
-        
-        /**
-         *    Accessor for list of tags where the content
-         *    between the start and end is not important,
-         *    but both the start and end must be sent.
-         *    @return array       List of content tags.
-         *    @protected
-         */
-        function _getBlockTags() {
-            return array("form");
         }
     }
     
@@ -206,25 +195,20 @@
         }
         
         /**
-         *    Opens a special enclosing block such as a form.
+         *    Opens a form.
          *    @param $tag        Tag to accept.
          *    @public
          */
-        function acceptBlockStart($tag) {
-            if ($tag->getName() == "form") {
-                $this->_open_forms[] = new SimpleForm($tag);
-            }
+        function acceptFormStart(&$tag) {
+            $this->_open_forms[] = &new SimpleForm($tag);
         }
         
         /**
-         *    Closes a special enclosing block such as a form.
-         *    @param $name        Tag name to accept.
+         *    Closes the most recently opened form.
          *    @public
          */
-        function acceptBlockEnd($name) {
-            if ($name == "form") {
-                $this->_closed_forms[] = array_pop($this->_open_forms);
-            }
+        function acceptFormEnd() {
+            $this->_closed_forms[] = array_pop($this->_open_forms);
         }
         
         /**

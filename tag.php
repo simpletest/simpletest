@@ -118,6 +118,7 @@
      *    Form element.
      */
     class SimpleWidget extends SimpleTag {
+        var $_value;
         
         /**
          *    Starts with a named tag with attributes only.
@@ -127,6 +128,7 @@
          */
         function SimpleWidget($name, $attributes) {
             $this->SimpleTag($name, $attributes);
+            $this->_value = false;
         }
         
         /**
@@ -136,6 +138,47 @@
          */
         function isWidget() {
             return true;
+        }
+        
+        /**
+         *    Accessor for default value parsed with the tag.
+         *    @return string        Parsed value.
+         *    @public
+         */
+        function getDefault() {
+            return '';
+        }
+        
+        /**
+         *    Accessor for currently set value or default if
+         *    none.
+         *    @return string      Value set by form or default
+         *                        if none.
+         *    @public
+         */
+        function getValue() {
+            if ($this->_value === false) {
+                return $this->getDefault();
+            }
+            return $this->_value;
+        }
+        
+        /**
+         *    Sets the current form element value.
+         *    @param string $value        New value.
+         *    @public
+         */
+        function setValue($value) {
+            $this->_value = $value;
+        }
+        
+        /**
+         *    Resets the form element value back to the
+         *    default.
+         *    @public
+         */
+        function resetValue() {
+            $this->_value = false;
         }
     }
     
@@ -150,7 +193,7 @@
          *                               string values.
          */
         function SimpleTextTag($attributes) {
-            $this->SimpleTag('input', $attributes);
+            $this->SimpleWidget('input', $attributes);
         }
         
         /**
@@ -160,6 +203,15 @@
          */
         function expectEndTag() {
             return false;
+        }
+        
+        /**
+         *    Accessor for starting value.
+         *    @return string        Parsed value.
+         *    @public
+         */
+        function getDefault() {
+            return $this->getAttribute('value');
         }
     }
     
@@ -174,7 +226,7 @@
          *                               string values.
          */
         function SimpleSubmitTag($attributes) {
-            $this->SimpleTag('input', $attributes);
+            $this->SimpleWidget('input', $attributes);
         }
         
         /**
@@ -198,7 +250,7 @@
          *                               string values.
          */
         function SimpleTextAreaTag($attributes) {
-            $this->SimpleTag('textarea', $attributes);
+            $this->SimpleWidget('textarea', $attributes);
         }
     }
     

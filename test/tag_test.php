@@ -30,8 +30,28 @@
         function testWidgetCheck() {
             $tag = &new SimpleTitleTag(array());
             $this->assertFalse($tag->isWidget());
+        }
+    }
+    
+    class TestOfWidget extends UnitTestCase {
+        function TestOfWidget() {
+            $this->UnitTestCase();
+        }
+        function testWidgetCheck() {
             $tag = &new SimpleTextTag(array());
             $this->assertTrue($tag->isWidget());
+        }
+        function testTextDefault() {
+            $tag = &new SimpleTextTag(array('value' => 'aaa'));
+            $this->assertEqual($tag->getDefault(), 'aaa');
+            $this->assertEqual($tag->getValue(), 'aaa');
+        }
+        function testSettingValue() {
+            $tag = &new SimpleTextTag(array('value' => 'aaa'));
+            $tag->setValue('bbb');
+            $this->assertEqual($tag->getValue(), 'bbb');
+            $tag->resetValue();
+            $this->assertEqual($tag->getValue(), 'aaa');
         }
     }
     

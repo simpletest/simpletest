@@ -101,10 +101,10 @@
         }
         function testForm() {
             $page = &new MockSimplePage($this);
-            $page->expectArguments("acceptBlockStart", array(new SimpleFormTag(array())));
-            $page->expectCallCount("acceptBlockStart", 1);
-            $page->expectArguments("acceptBlockEnd", array("form"));
-            $page->expectCallCount("acceptBlockEnd", 1);
+            $page->expectArguments("acceptFormStart", array(new SimpleFormTag(array())));
+            $page->expectCallCount("acceptFormStart", 1);
+            $page->expectArguments("acceptFormEnd", array());
+            $page->expectCallCount("acceptFormEnd", 1);
             $builder = &new SimplePageBuilder($page);
             $builder->startElement("form", array());
             $builder->addContent("Stuff");
@@ -207,45 +207,45 @@
         }
         function testEmptyForm() {
             $page = new SimplePage("");
-            $page->acceptBlockStart(new SimpleFormTag(array()));
+            $page->acceptFormStart(new SimpleFormTag(array()));
             $forms = $page->getForms();
             $this->assertIdentical($forms[0]->getAction(), false);
             $this->assertIdentical($forms[0]->getMethod(), 'get');
-            $page->acceptBlockEnd("form");
+            $page->acceptFormEnd();
             $forms = $page->getForms();
             $this->assertIdentical($forms[0]->getAction(), false);
         }
         function testCompleteForm() {
             $page = new SimplePage("");
-            $page->acceptBlockStart(
+            $page->acceptFormStart(
                     new SimpleFormTag(array("method" => "GET", "action" => "here.php")));
             $forms = $page->getForms();
             $this->assertIdentical($forms[0]->getAction(), 'here.php');
             $this->assertIdentical($forms[0]->getMethod(), 'get');
-            $page->acceptBlockEnd("form");
+            $page->acceptFormEnd();
             $forms = $page->getForms();
             $this->assertIdentical($forms[0]->getAction(), 'here.php');
         }
         function testNestedForm() {
             $page = new SimplePage("");
-            $page->acceptBlockStart(new SimpleFormTag(array("method" => "GET", "action" => "outer.php")));
-            $page->acceptBlockStart(new SimpleFormTag(array("method" => "POST", "action" => "inner.php")));
+            $page->acceptFormStart(new SimpleFormTag(array("method" => "GET", "action" => "outer.php")));
+            $page->acceptFormStart(new SimpleFormTag(array("method" => "POST", "action" => "inner.php")));
             $forms = $page->getForms();
             $this->assertEqual($forms[0]->getAction(), "outer.php");
             $this->assertEqual($forms[1]->getAction(), "inner.php");
-            $page->acceptBlockEnd("form");
-            $page->acceptBlockEnd("form");
+            $page->acceptFormEnd();
+            $page->acceptFormEnd();
             $forms = $page->getForms();
             $this->assertEqual($forms[0]->getAction(), "inner.php");
             $this->assertEqual($forms[1]->getAction(), "outer.php");
         }
         function testButtons() {
             $page = new SimplePage("");
-            $page->acceptBlockStart(
+            $page->acceptFormStart(
                     new SimpleFormTag(array("method" => "GET", "action" => "here.php")));
             $page->AcceptTag(
                     new SimpleSubmitTag(array("type" => "submit", "name" => "s")));
-            $page->acceptBlockEnd("form");
+            $page->acceptFormEnd();
             $form = &$page->getFormBySubmitLabel("Submit");
             $this->assertEqual($form->submitButton("s"), array("s" => "Submit"));
         }
