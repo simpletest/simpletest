@@ -367,10 +367,6 @@
          *    @access public
          */
         function &fetchResponse($method, $url, $parameters = false) {
-            $url = $this->createAbsoluteUrl($this->getBaseUrl(), $url);
-            if (! is_object($url)) {
-                $url = new SimpleUrl($url);
-            }
             if ($method != 'POST') {
                 $url->addRequestParameters($parameters);
                 $parameters = false;
@@ -391,7 +387,7 @@
          *    Fetches the page until no longer redirected or
          *    until the redirect limit runs out.
          *    @param string $method         GET, POST, etc.
-         *    @param string/SimpleUrl $url  Target to fetch.
+         *    @param SimpleUrl $url         Target to fetch.
          *    @param hash $parameters       Additional parameters for request.
          *    @return SimpleHttpResponse    Hopefully the target page.
          *    @access private
@@ -409,7 +405,8 @@
                 if (! $headers->isRedirect()) {
                     break;
                 }
-                $url = $this->createAbsoluteUrl($url, new SimpleUrl($headers->getLocation()));
+                $location = new SimpleUrl($headers->getLocation());
+                $url = $location->makeAbsolute($url);
                 $method = 'GET';
                 $parameters = false;
             } while (! $this->_isTooManyRedirects(++$redirects));

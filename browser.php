@@ -400,8 +400,7 @@
             $response = &$this->_user_agent->fetchResponse(
                     'HEAD',
                     $url,
-                    $parameters,
-                    $this->getUrl());
+                    $parameters);
             return ! $response->isError();
         }
         
@@ -617,9 +616,8 @@
          *                      a string.
          */
         function getUrl() {
-            return false;
             $url = $this->_page->getUrl();
-            return $url ? $url->asString : false;
+            return $url ? $url->asString() : false;
         }
         
         /**
