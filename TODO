@@ -8,7 +8,7 @@ Unit tester
 -----------
 Create assertion test (1/1) - done.
 Improve difference output messages when nested in arrays (1).
-Add adapters for other testers (3/3).
+Add adapters for other testers (2/3).
 
 Mock objects
 ------------

@@ -61,7 +61,7 @@
         <dia:point val="-13.2123,27.5173"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-13.2623,27.4673;-5.57515,32.7673"/>
+        <dia:rectangle val="-13.2623,27.4673;-5.5751,32.7673"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-13.2123,27.5173"/>
@@ -1074,7 +1074,7 @@
         <dia:point val="-1.67007,14.3362"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-2.52007,14.3362;-0.820069,19.2958"/>
+        <dia:rectangle val="-2.52007,14.3362;-0.82007,19.2958"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="-1.67007,14.3362"/>
@@ -1132,7 +1132,7 @@
         <dia:point val="-13.8581,39.3664"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-13.9081,39.3164;-0.403295,40.8164"/>
+        <dia:rectangle val="-13.9081,39.3164;-0.4033,40.8164"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="-13.8581,39.3664"/>
@@ -1571,7 +1571,7 @@
         <dia:point val="68.2883,59.0753"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="58.8937,59.0328;68.3309,64.502"/>
+        <dia:rectangle val="58.8937,59.0327;68.3309,64.502"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="68.2883,59.0753"/>
@@ -3833,7 +3833,7 @@
         <dia:point val="14.988,40.0664"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.938,39.2664;30.6163,40.8664"/>
+        <dia:rectangle val="14.238,39.2664;30.6163,40.8664"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="14.988,40.0664"/>
@@ -3864,7 +3864,7 @@
             <dia:boolean val="false"/>
           </dia:attribute>
           <dia:attribute name="aggregate">
-            <dia:enum val="0"/>
+            <dia:enum val="1"/>
           </dia:attribute>
         </dia:composite>
         <dia:composite>
