@@ -15,15 +15,15 @@ You are not tied to SimpleTest, though. The mocks and stubs will work
 with other test frameworks and SimpleTest can use other framework's
 (PHPUnit, PEAR::PhpUnit) test cases as it's own.
 
-The current release is PHP only and does not yet include the web testing tool.
-As an early release it doesn't have much in the way of documentation either!
-You can find a tutorial on http://www.lastcraft.com/simple_test.php to
-get you started and hopefully this material will eventually become included
-with the project documentation.
-
-If you download and use and possibly even extend this tool, please let me
-know. Any feedback, even bad, is always welcome and I will work to get
-your suggestions into the version one release.
+The current release is PHP only and does not yet include much of the web
+testing tool. You can see a release schedule at
+http://www.lastcraft.com/overview.php which is also copied to the
+documentation folder with this release. The user interface is minimal
+in the extreme, but a lot of information flows from the test suite.
+Before version 1.0 I will release a better web UI, but am leaving XUL
+and GTk versions to volunteers as everybody has their own opinion
+on a good GUI and I don't want to discourage development by shipping
+one with the toolkit.
 
 You are looking at an Alpha release because the interfaces for the
 web testing side have not yet stabilised. The unit tester and mock
@@ -31,7 +31,21 @@ object generator are tested and have already been used to test several
 systems, although some of the method names are still settling down.
 And of course they are being used to assist creation of SimpleTest itself.
 
-There is no change log as yet except in CVS.
+As an early release it doesn't have much in the way of documentation either!
+You can find a tutorial on http://www.lastcraft.com/simple_test.php to
+get you started and hopefully this material will eventually become included
+with the project documentation. There is a documentation folder, but it is
+just a subset of the material on LastCraft and some always out of date diagrams.
+
+If you download and use and possibly even extend this tool, please let me
+know. Any feedback, even bad, is always welcome and I will work to get
+your suggestions into the version one release.
+
+There is no change log as yet except in CVS. You can visit the trackers
+in CVS to see the completed TODO list after each cycle and also the
+status of any bugs, but if the bug is recent then it will be fixed in CVS only.
+The CVS uploads always have all the tests passing and so CVS snapshots should
+be pretty usable, although the code may not look so good internally.
 
 Oh, yes. It is called "Simple" because it should be simple to
 use. I intend to add a complete set of tools for a test first
@@ -40,7 +54,12 @@ mean "Lite" in this context; I wish I had given it a better name. :-(
 
 yours, Marcus.
 
-Thanks to Harry Fuecks for feedback, packaging and suggestions and also
+Thanks to Harry Fuecks for much feedback, packaging and suggestions and also
 for a great website (http://www.phppatterns.com/). :-)
+
+Thanks to Mathieu Kooiman for comments and suggestions.
+
+Thanks to everyone else who has sent comments and suggestions, but I
+cannot credit you here without your name!
 -- 
 marcus@lastcraft.com

@@ -76,7 +76,7 @@
             $this->assertNoUnwantedPattern('/hello/i', "Hello there", "#%s#");      // Fail.
         }
         function testOfDumping() {
-            $this->dump(array("Hello"));
+            $this->dump(array("Hello"), "Displaying a variable");
         }
     }
     

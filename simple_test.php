@@ -190,14 +190,18 @@
          *    test suite for those emergency debugging
          *    situations.
          *    @param $variable       Variable to display.
+         *    @param $message        Message to display.
          *    @public
          */
-        function dump($variable) {
+        function dump($variable, $message = false) {
             ob_start();
             print_r($variable);
-            $message = ob_get_contents();
+            $formatted = ob_get_contents();
             ob_end_clean();
-            $this->notify(new FormattedTestMessage($message));
+            if ($message) {
+                $formatted = $message . "\n" . $formatted;
+            }
+            $this->notify(new FormattedTestMessage($formatted));
         }
     }
     
