@@ -417,16 +417,16 @@
          *    @access private
          */
         function _reduce(&$raw) {
-            if (!isset($this->_regexes[$this->_mode->getCurrent()])) {
+            if (! isset($this->_regexes[$this->_mode->getCurrent()])) {
                 return false;
             }
             if ($raw === "") {
                 return true;
             }
             if ($action = $this->_regexes[$this->_mode->getCurrent()]->match($raw, $match)) {
-                $count = strpos($raw, $match);
-                $unparsed = substr($raw, 0, $count);
-                $raw = substr($raw, $count + strlen($match));
+                $unparsed_character_count = strpos($raw, $match);
+                $unparsed = substr($raw, 0, $unparsed_character_count);
+                $raw = substr($raw, $unparsed_character_count + strlen($match));
                 return array($unparsed, $match, $action);
             }
             return true;
