@@ -235,7 +235,7 @@
         function get($raw_url, $parameters = false, $request = false) {
             $url = $this->_createAbsoluteUrl($raw_url, $parameters);
             if (!is_object($request)) {
-                $request = &new SimpleHttpRequest($url);
+                $request = &new SimpleHttpRequest($url, "GET");
             }
             $response = &$this->fetchResponse($url, $request);
             if (!$response->isError()) {
@@ -257,10 +257,34 @@
         function head($raw_url, $parameters = false, $request = false) {
             $url = $this->_createAbsoluteUrl($raw_url, $parameters);
             if (!is_object($request)) {
-                $request = &new SimpleHttpRequest($url);
+                $request = &new SimpleHttpRequest($url, "HEAD");
             }
             $response = &$this->fetchResponse($url, $request);
             return !$response->isError();
+        }
+        
+        /**
+         *    Fetches the page content with a POST request.
+         *    @param $raw_url      Target to fetch as string.
+         *    @param $parameters   POST parameters.
+         *    @param $request      Test version of SimpleHttpPushRequest.
+         *    @return              Content of page.
+         *    @public
+         */
+        function post($raw_url, $parameters = false, $request = false) {
+            $url = $this->_createAbsoluteUrl($raw_url);
+            if (!is_object($request)) {
+                $request = &new SimpleHttpPushRequest(
+                        $url,
+                        SimpleUrl::encodeRequest($parameters),
+                        "POST");
+            }
+            $response = &$this->fetchResponse($url, $request);
+            if (!$response->isError()) {
+                $this->_extractBaseUrl($url);
+                return $response->getContent();
+            }
+            return false;
         }
         
         /**

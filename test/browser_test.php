@@ -224,6 +224,7 @@
             $this->assertIdentical(
                     $browser->get("http://this.host/page.html", array("a" => "A", "b" => "B"), &$this->_request),
                     "stuff");
+            $browser->tally();
         }
         function testHead() {
             $response = &new MockSimpleHttpResponse($this);
@@ -240,6 +241,22 @@
             $this->assertIdentical(
                     $browser->head("http://this.host/page.html", array("a" => "A", "b" => "B"), &$this->_request),
                     true);
+            $browser->tally();
+        }
+        function testPost() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue("getContent", "stuff");
+            $browser = &new MockFetchSimpleBrowser($this);
+            $browser->setReturnReference("fetchResponse", $response);
+            $browser->expectCallCount("fetchResponse", 1);
+            $browser->expectArguments("fetchResponse", array(
+                    new SimpleUrl("http://this.host/page.html"),
+                    new SimpleHttpPushRequest(new SimpleUrl("http://this.host/page.html"), "a=A&b=B")));
+            $browser->SimpleBrowser();
+            $this->assertIdentical(
+                    $browser->post("http://this.host/page.html", array("a" => "A", "b" => "B"), &$this->_request),
+                    "stuff");
+            $browser->tally();
         }
     }
 

@@ -241,11 +241,25 @@
          *    @public
          */
         function getEncodedRequest() {
-            $parameters = array();
-            foreach ($this->getRequest() as $key => $value) {
-                $parameters[] = $key . "=" . urlencode($value);
+            if (count($this->getRequest()) == 0) {
+                return "";
             }
-            return (count($parameters) > 0 ? "?" : "") . implode("&", $parameters);
+            return "?" . $this->encodeRequest($this->getRequest());
+        }
+        
+        /**
+         *    Encodes parameters as HTTP request parameters.
+         *    @param $parameters     Request as hash.
+         *    @return                Encoded request.
+         *    @public
+         *    @static
+         */
+        function encodeRequest($parameters) {
+            $encoded = array();
+            foreach ($parameters as $key => $value) {
+                $encoded[] = $key . "=" . urlencode($value);
+            }
+            return implode("&", $encoded);
         }
         
         /**
