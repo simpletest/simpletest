@@ -30,14 +30,13 @@ Allow nested framed pages (4).
 Add named frame reloads (2).
 Add frame loads from links (6).
 Allow images to be head fetched to set cookies (2).
-Allow stylesheet loading to affect cookies (2).
 Refactor authentication to cope with framed pages (2).
 Refactor existing base url behaviour into SimplePage (3/8) - done.
-Add getFrames() to SimpleBrowser with string URLs (1).
+Add getFrames() to SimpleBrowser (1).
 
 Web tester
 ----------
-Remove ordering requirement asserting multivalue widgets (1).
+Remove ordering requirement asserting multivalue widgets (1/1) - done.
 Add assertHeaderPattern(), assertHeader() and assertNoHeader() methods (3).
 
 Documentation

@@ -436,6 +436,7 @@
             $this->get('http://www.lastcraft.com/test/multiple_widget_form.html');
             $this->setField('a', array('a1', 'a4'));
             $this->assertField('a', array('a1', 'a4'));
+            $this->assertField('a', array('a4', 'a1'));
             $this->setField('b', array('b1', 'b4'));
             $this->assertField('b', array('b1', 'b4'));
             $this->setField('c[]', array('c1', 'c4'));

@@ -30,6 +30,7 @@
             $this->addTestFile('page_test.php');
             $this->addTestFile('frames_test.php');
             $this->addTestFile('browser_test.php');
+            $this->addTestFile('web_tester_test.php');
             $this->addTestFile('shell_tester_test.php');
             $this->addTestFile('xml_test.php');
         }

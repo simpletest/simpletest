@@ -12,7 +12,103 @@
     require_once(dirname(__FILE__) . '/simple_test.php');
     require_once(dirname(__FILE__) . '/browser.php');
     require_once(dirname(__FILE__) . '/page.php');
+    require_once(dirname(__FILE__) . '/expectation.php');
     /**#@-*/
+    
+    /**
+     *    Test for an HTML widget value match.
+	 *	  @package SimpleTest
+	 *	  @subpackage WebTester
+     */
+    class FieldExpectation extends SimpleExpectation {
+        var $_value;
+        
+        /**
+         *    Sets the field value to compare against.
+         *    @param mixed $value        Test value to match.
+         *    @access public
+         */
+        function FieldExpectation($value) {
+            $this->SimpleExpectation();
+            if (is_array($value)) {
+                sort($value);
+            }
+            $this->_value = $value;
+        }
+        
+        /**
+         *    Tests the expectation. True if it matches
+         *    a string value or an array value in any order.
+         *    @param mixed $compare        Comparison value. False for
+         *                                 an unset field.
+         *    @return boolean              True if correct.
+         *    @access public
+         */
+        function test($compare) {
+            if ($this->_value === false) {
+                return ($compare === false);
+            }
+            if (is_string($this->_value)) {
+                return $this->_testString($compare);
+            }
+            if (is_array($this->_value)) {
+                return $this->_testMultiple($compare);
+            }
+            return false;
+        }
+        
+        /**
+         *    String comparison for simple field.
+         *    @param mixed $compare    String to test against.
+         *    @returns boolean         True if matching.
+         *    @access private
+         */
+        function _testString($compare) {
+            if (is_array($compare) && count($compare) == 1) {
+                $compare = $compare[0];
+            }
+            return ($this->_value === $compare);
+        }
+        
+        /**
+         *    List comparison for multivalue field.
+         *    @param mixed $compare    List in any order to test against.
+         *    @returns boolean         True if matching.
+         *    @access private
+         */
+        function _testMultiple($compare) {
+            if (is_string($compare)) {
+                $compare = array($compare);
+            }
+            if (! is_array($compare)) {
+                return false;
+            }
+            sort($compare);
+            return ($this->_value === $compare);
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
+         *    @access public
+         */
+        function testMessage($compare) {
+            $dumper = &$this->_getDumper();
+            if (is_array($compare)) {
+                sort($compare);
+            }
+            if ($this->test($compare)) {
+                return "Field expectation [" . $dumper->describeValue($this->_value) . "]";
+            } else {
+                return "Field expectation [" . $dumper->describeValue($this->_value) .
+                        "] fails with [" .
+                        $this->_dumper->describeValue($compare) . "] " .
+                        $this->_dumper->describeDifference($this->_getValue(), $compare);
+            }
+        }
+    }
     
     /**
      *    Test case for testing of web pages. Allows
@@ -515,7 +611,7 @@
          *    fail. If no value is given then only the existence
          *    of the field is checked.
          *    @param string $name       Name of field in forms.
-         *    @param mixed $expected    Expected string/aray value or
+         *    @param mixed $expected    Expected string/array value or
          *                              false for unset fields.
          *    @param string $message    Message to display. Default
          *                              can be embedded with %s.
@@ -529,7 +625,7 @@
                         sprintf($message, "Field [$name] should exist"));
             } else {
                 $this->assertExpectation(
-                        new IdenticalExpectation($expected),
+                        new FieldExpectation($expected),
                         $value,
                         sprintf($message, "Field [$name] should match with [%s]"));
             }
@@ -541,7 +637,7 @@
          *    fail. If no ID is given then only the existence
          *    of the field is checked.
          *    @param string/integer $id  Name of field in forms.
-         *    @param mixed $expected     Expected string/aray value or
+         *    @param mixed $expected     Expected string/array value or
          *                               false for unset fields.
          *    @param string $message     Message to display. Default
          *                               can be embedded with %s.
@@ -555,7 +651,7 @@
                         sprintf($message, "Field of ID [$id] should exist"));
             } else {
                 $this->assertExpectation(
-                        new IdenticalExpectation($expected),
+                        new FieldExpectation($expected),
                         $value,
                         sprintf($message, "Field of ID [$id] should match with [%s]"));
             }
