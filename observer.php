@@ -203,6 +203,9 @@
         /**
          *    Handles the incoming event by invoking it's paint()
          *    method passing itself in as a visitor.
+         *    This makes extending this class easier as the
+         *    interface is more natural from the display
+         *    point of view.
          *    @param $event        Event to show.
          *    @public
          */
