@@ -6,6 +6,7 @@
     }
     require_once(SIMPLE_TEST . 'expectation.php');
     require_once(SIMPLE_TEST . 'options.php');
+    require_once(SIMPLE_TEST . 'dumper.php');
     
     define('MOCK_WILDCARD', '*');
     
@@ -108,7 +109,8 @@
         function _renderArguments($args) {
             $descriptions = array();
             foreach ($args as $arg) {
-                $descriptions[] = SimpleExpectation::describeValue($arg);
+                $dumper = &new SimpleDumper();
+                $descriptions[] = $dumper->describeValue($arg);
             }
             return implode(', ', $descriptions);
         }

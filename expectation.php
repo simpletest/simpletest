@@ -11,13 +11,14 @@
      *    Also includes various helper methods.
      *    @abstract
      */
-    class SimpleExpectation extends SimpleDumper {
+    class SimpleExpectation {
+        var $_dumper;
         
         /**
          *    Does nothing.
          */
         function SimpleExpectation() {
-            $this->SimpleDumper();
+            $this->_dumper = &new SimpleDumper();
         }
         
         /**
@@ -78,10 +79,10 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return "Equal expectation [" . $this->describeValue($this->_value) . "]";
+                return "Equal expectation [" . $this->_dumper->describeValue($this->_value) . "]";
             } else {
                 return "Equal expectation fails " .
-                        $this->describeDifference($this->_value, $compare, get_class($this));
+                        $this->_dumper->describeDifference($this->_value, $compare);
             }
         }
         
@@ -130,9 +131,11 @@
         function testMessage($compare) {
             if ($this->test($compare)) {
                 return "Not equal expectation passes " .
-                        $this->describeDifference($this->_get_value(), $compare, get_class($this));
+                        $this->_dumper->describeDifference($this->_get_value(), $compare);
             } else {
-                return "Not equal expectation fails [" . $this->describeValue($this->_get_value()) . "] matches";
+                return "Not equal expectation fails [" .
+                        $this->_dumper->describeValue($this->_get_value()) .
+                        "] matches";
             }
         }
     }
@@ -171,29 +174,13 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return "Identical expectation [" . $this->describeValue($this->_value) . "]";
+                return "Identical expectation [" . $this->_dumper->describeValue($this->_value) . "]";
             } else {
-                return "Identical expectation [" . $this->describeValue($this->_value) .
+                return "Identical expectation [" . $this->_dumper->describeValue($this->_value) .
                         "] fails with [" .
-                        $this->describeValue($compare) . "] " .
-                        $this->describeDifference($this->_value, $compare, get_class($this));
+                        $this->_dumper->describeValue($compare) . "] " .
+                        $this->_dumper->describeDifference($this->_value, $compare, TYPE_MATTERS);
             }
-        }
-        
-        /**
-         *    Creates a human readable description of the
-         *    difference between two variables.
-         *    @param $first             First variable.
-         *    @param $second            Value to compare with.
-         *    @return                   Descriptive string.
-         *    @public
-         *    @static
-         */
-        function describeDifference($first, $second) {
-            if (gettype($first) != gettype($second)) {
-                return "by type";
-            }
-            return parent::describeDifference($first, $second);
         }
     }
     
@@ -232,9 +219,9 @@
         function testMessage($compare) {
             if ($this->test($compare)) {
                 return "Not identical expectation passes " .
-                        $this->describeDifference($this->_get_value(), $compare, get_class($this));
+                        $this->_dumper->describeDifference($this->_get_value(), $compare, TYPE_MATTERS);
             } else {
-                return "Not identical expectation [" . $this->describeValue($this->_get_value()) . "] matches";
+                return "Not identical expectation [" . $this->_dumper->describeValue($this->_get_value()) . "] matches";
             }
         }
     }
@@ -260,7 +247,7 @@
          *    @return        Perl regex as string.
          *    @protected
          */
-        function _get_pattern() {
+        function _getPattern() {
             return $this->_pattern;
         }
         
@@ -272,7 +259,7 @@
          *    @public
          */
         function test($compare) {
-            return (boolean)preg_match($this->_get_pattern(), $compare);
+            return (boolean)preg_match($this->_getPattern(), $compare);
         }
         
         /**
@@ -284,7 +271,7 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return $this->_decribePatternMatch($this->_get_pattern(), $compare);
+                return $this->_decribePatternMatch($this->_getPattern(), $compare);
             } else {
                 return "Pattern [" . $this->_get_pattern() . "] not detected in string [$compare]";
             }
@@ -298,9 +285,9 @@
             preg_match($pattern, $subject, $matches);
             $position = strpos($subject, $matches[0]);
             return "Pattern [$pattern] detected at [$position] in string [" .
-                    $this->clipString($subject, 40) . "] as [" .
+                    $this->_dumper->clipString($subject, 40) . "] as [" .
                     $matches[0] . "] in region [" .
-                    $this->clipString($subject, 40, $position) . "]";
+                    $this->_dumper->clipString($subject, 40, $position) . "]";
         }
     }
     
@@ -339,9 +326,9 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return "Pattern [" . $this->_get_pattern() . "] not detected in string [$compare]";
+                return "Pattern [" . $this->_getPattern() . "] not detected in string [$compare]";
             } else {
-                return $this->_decribePatternMatch($this->_get_pattern(), $compare);
+                return $this->_decribePatternMatch($this->_getPattern(), $compare);
             }
          }
     }

@@ -1,6 +1,8 @@
 <?php
     // $Id$
     
+    define('TYPE_MATTERS', true);
+    
     /**
      *    Displays variables as text and does diffs.
      */

@@ -6,6 +6,7 @@
     }
     require_once(SIMPLE_TEST . 'simple_test.php');
     require_once(SIMPLE_TEST . 'errors.php');
+    require_once(SIMPLE_TEST . 'dumper.php');
     
     /**
      *    Standard unit test class for day to day testing
@@ -35,7 +36,7 @@
          *    @public
          */
         function assertNull($value, $message = "%s") {
-            $dumper = new SimpleExpectation();
+            $dumper = &new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($value) . "] should be null");
@@ -49,7 +50,7 @@
          *    @public
          */
         function assertNotNull($value, $message = "%s") {
-            $dumper = new SimpleExpectation();
+            $dumper = &new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($value) . "] should not be null");
@@ -65,7 +66,7 @@
          *    @public
          */
         function assertIsA($object, $type, $message = "%s") {
-            $dumper = new SimpleExpectation();
+            $dumper = &new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($object) . "] should be type [$type]");
@@ -147,7 +148,7 @@
          *    @public
          */
         function assertReference(&$first, &$second, $message = "%s") {
-            $dumper = new SimpleExpectation();
+            $dumper = &new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($first) .
@@ -169,7 +170,7 @@
          *    @public
          */
         function assertCopy(&$first, &$second, $message = "%s") {
-            $dumper = new SimpleExpectation();
+            $dumper = &new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($first) .
