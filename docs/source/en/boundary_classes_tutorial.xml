@@ -177,7 +177,7 @@
             if (! is_object($clock)) {
                 $clock = new Clock();
             }<strong>
-            $this->_writer-&gt;write("[" . $clock->now() . "] $message");</strong>
+            $this->_writer->write("[" . $clock->now() . "] $message");</strong>
         }
     }
 ?>

@@ -97,7 +97,7 @@
         }
         function testClockTellsTime() {
             $clock = new Clock();
-            \this->assertEqual($clock->now(), time(), 'Now is the right time');
+            $this->assertEqual($clock->now(), time(), 'Now is the right time');
         }
         function testClockAdvance() {
         }
@@ -199,7 +199,7 @@ class Clock {<strong>
         return time()<strong> + $this->_offset</strong>;
     }
     <strong>
-    function advance(\$offset) {
+    function advance($offset) {
         $this->_offset += $offset;
     }</strong>
 }

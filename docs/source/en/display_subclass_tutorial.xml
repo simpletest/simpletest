@@ -141,7 +141,7 @@ class ShowPasses extends HtmlReporter {
     <strong>
     function paintPass($message) {
         parent::paintPass($message);
-        print "&<span class=\"pass\">Pass</span>: ";
+        print "<span class=\"pass\">Pass</span>: ";
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
         print implode("-&gt;", $breadcrumb);

@@ -149,7 +149,7 @@ class TestOfLogging extends UnitTestCase {
             our existing test case...
 <php><![CDATA[
 <?php<strong>
-    require_once('../classes/log.php');</strong>
+    require_once('../classes/log.php');
 
     class TestOfLogging extends UnitTestCase {
         ...
