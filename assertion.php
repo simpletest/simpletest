@@ -6,21 +6,33 @@
      *    Also includes various static helper methods.
      *    @abstract
      */
-    class Assertion {
+    class Expectation {
         
         /**
          *    Does nothing.
          */
-        function Assertion() {
+        function Expectation() {
         }
         
         /**
-         *    Tests the assertion. True if correct.
+         *    Tests the expectation. True if correct.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
          *    @public
+         *    @abstract
          */
         function test($compare) {
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param $compare      Comparison value.
+         *    @return              String description of success
+         *                         or failure.
+         *    @public
+         *    @abstract
+         */
+        function testMessage($compare) {
         }
         
         /**
@@ -36,7 +48,7 @@
             } elseif (is_bool($value)) {
                 return "Boolean: " . ($value ? "true" : "false");
             } elseif (is_string($value)) {
-                return "String: " . Assertion::clipString($value, 40);
+                return "String: " . Expectation::clipString($value, 40);
             } elseif (is_integer($value)) {
                 return "Integer: $value";
             } elseif (is_float($value)) {
@@ -56,43 +68,43 @@
          *    difference between two variables.
          *    @param $first             First variable.
          *    @param $second            Value to compare with.
-         *    @param $assertion_class   Test class to apply.
+         *    @param $expectation_class   Test class to apply.
          *    @return                   Descriptive string.
          *    @public
          *    @static
          */
-        function describeDifference($first, $second, $assertion_class) {
+        function describeDifference($first, $second, $expectation_class) {
             if (gettype($first) != gettype($second)) {
                 return "by type";
             }
             if (is_bool($first)) {
-                return "as [" . Assertion::describeValue($first) .
-                        "] does not match [" . Assertion::describeValue($second) . "]";
+                return "as [" . Expectation::describeValue($first) .
+                        "] does not match [" . Expectation::describeValue($second) . "]";
             } elseif (is_string($first)) {
-                $position = Assertion::_stringDiffersAt($first, $second);
+                $position = Expectation::_stringDiffersAt($first, $second);
                 return "at character $position with [" .
-                        Assertion::clipString($first, 100, $position) . "] and [" .
-                        Assertion::clipString($second, 100, $position) . "]";
+                        Expectation::clipString($first, 100, $position) . "] and [" .
+                        Expectation::clipString($second, 100, $position) . "]";
             } elseif (is_integer($first)) {
-                return Assertion::_describeIntegerDifference(
+                return Expectation::_describeIntegerDifference(
                         $first,
                         $second,
-                        $assertion_class);
+                        $expectation_class);
             } elseif (is_float($first)) {
-                return Assertion::_describeFloatDifference(
+                return Expectation::_describeFloatDifference(
                         $first,
                         $second,
-                        $assertion_class);
+                        $expectation_class);
             } elseif (is_array($first)) {
-                return Assertion::_describeArrayDifference(
+                return Expectation::_describeArrayDifference(
                         $first,
                         $second,
-                        $assertion_class);
+                        $expectation_class);
             } elseif (is_object($first)) {
-                return Assertion::_describeObjectDifference(
+                return Expectation::_describeObjectDifference(
                         $first,
                         $second,
-                        $assertion_class);
+                        $expectation_class);
             }
             return "by value";
         }
@@ -152,14 +164,14 @@
          *    difference between two integers.
          *    @param $first             First number.
          *    @param $second            Number to compare with.
-         *    @param $assertion_class   Test to apply.
+         *    @param $expectation_class   Test to apply.
          *    @return                   Descriptive string.
          *    @private
          *    @static
          */
-        function _describeIntegerDifference($first, $second, $assertion_class) {
-            return "because [" . Assertion::describeValue($first) ."] differs from [" .
-                    Assertion::describeValue($second) . "] by " . abs($first - $second);
+        function _describeIntegerDifference($first, $second, $expectation_class) {
+            return "because [" . Expectation::describeValue($first) ."] differs from [" .
+                    Expectation::describeValue($second) . "] by " . abs($first - $second);
         }
         
         /**
@@ -167,14 +179,14 @@
          *    difference between two floating point numbers.
          *    @param $first             First float.
          *    @param $second            Float to compare with.
-         *    @param $assertion_class   Test to apply.
+         *    @param $expectation_class   Test to apply.
          *    @return                   Descriptive string.
          *    @private
          *    @static
          */
-        function _describeFloatDifference($first, $second, $assertion_class) {
-            return "because [" . Assertion::describeValue($first) ."] differs from [" .
-                    Assertion::describeValue($second) . "]";
+        function _describeFloatDifference($first, $second, $expectation_class) {
+            return "because [" . Expectation::describeValue($first) ."] differs from [" .
+                    Expectation::describeValue($second) . "]";
         }
         
         /**
@@ -182,24 +194,24 @@
          *    difference between two arrays.
          *    @param $first             First array.
          *    @param $second            Array to compare with.
-         *    @param $assertion_class   Test to apply.
+         *    @param $expectation_class   Test to apply.
          *    @return                   Descriptive string.
          *    @private
          *    @static
          */
-        function _describeArrayDifference($first, $second, $assertion_class) {
+        function _describeArrayDifference($first, $second, $expectation_class) {
             if (array_keys($first) != array_keys($second)) {
                 return "as keys [" .
                         implode(", ", array_keys($first)) . "] do not match  [" .
                         implode(", ", array_keys($second)) . "]";
             }
             foreach (array_keys($first) as $key) {
-                $test = &new $assertion_class($first[$key]);
+                $test = &new $expectation_class($first[$key]);
                 if (!$test->test($second[$key])) {
-                    return "with member [$key] " . Assertion::describeDifference(
+                    return "with member [$key] " . Expectation::describeDifference(
                             $first[$key],
                             $second[$key],
-                            $assertion_class);
+                            $expectation_class);
                 }
             }
             return "";
@@ -210,23 +222,23 @@
          *    difference between two objects.
          *    @param $first             First object.
          *    @param $second            Object to compare with.
-         *    @param $assertion_class   Test to apply.
+         *    @param $expectation_class   Test to apply.
          *    @return                   Descriptive string.
          *    @private
          *    @static
          */
-        function _describeObjectDifference($first, $second, $assertion_class) {
-            return Assertion::_describeArrayDifference(
+        function _describeObjectDifference($first, $second, $expectation_class) {
+            return Expectation::_describeArrayDifference(
                     get_object_vars($first),
                     get_object_vars($second),
-                    $assertion_class);
+                    $expectation_class);
         }
     }
     
     /**
      *    Test for equality.
      */
-    class EqualAssertion extends Assertion {
+    class EqualExpectation extends Expectation {
         var $_value;
         
         /**
@@ -234,13 +246,13 @@
          *    @param $value        Test value to match.
          *    @public
          */
-        function EqualAssertion($value) {
-            $this->Assertion();
+        function EqualExpectation($value) {
+            $this->Expectation();
             $this->_value = $value;
         }
         
         /**
-         *    Tests the assertion. True if it matches the
+         *    Tests the expectation. True if it matches the
          *    held value.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
@@ -259,9 +271,9 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return "Equal assertion [" . $this->describeValue($this->_value) . "]";
+                return "Equal expectation [" . $this->describeValue($this->_value) . "]";
             } else {
-                return "Equal assertion fails " .
+                return "Equal expectation fails " .
                         $this->describeDifference($this->_value, $compare, get_class($this));
             }
         }
@@ -279,19 +291,19 @@
     /**
      *    Test for inequality.
      */
-    class NotEqualAssertion extends EqualAssertion {
+    class NotEqualExpectation extends EqualExpectation {
         
         /**
          *    Sets the value to compare against.
          *    @param $value        Test value to match.
          *    @public
          */
-        function NotEqualAssertion($value) {
-            $this->EqualAssertion($value);
+        function NotEqualExpectation($value) {
+            $this->EqualExpectation($value);
         }
         
         /**
-         *    Tests the assertion. True if it differs from the
+         *    Tests the expectation. True if it differs from the
          *    held value.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
@@ -310,10 +322,10 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return "Not equal assertion passes " .
+                return "Not equal expectation passes " .
                         $this->describeDifference($this->_get_value(), $compare, get_class($this));
             } else {
-                return "Not equal assertion fails [" . $this->describeValue($this->_get_value()) . "] matches";
+                return "Not equal expectation fails [" . $this->describeValue($this->_get_value()) . "] matches";
             }
         }
     }
@@ -321,19 +333,19 @@
     /**
      *    Test for identity.
      */
-    class IdenticalAssertion extends EqualAssertion {
+    class IdenticalExpectation extends EqualExpectation {
         
         /**
          *    Sets the value to compare against.
          *    @param $value        Test value to match.
          *    @public
          */
-        function IdenticalAssertion($value) {
-            $this->EqualAssertion($value);
+        function IdenticalExpectation($value) {
+            $this->EqualExpectation($value);
         }
         
         /**
-         *    Tests the assertion. True if it exactly
+         *    Tests the expectation. True if it exactly
          *    matches the held value.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
@@ -352,9 +364,9 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return "Identical assertion [" . $this->describeValue($this->_value) . "]";
+                return "Identical expectation [" . $this->describeValue($this->_value) . "]";
             } else {
-                return "Identical assertion [" . $this->describeValue($this->_value) .
+                return "Identical expectation [" . $this->describeValue($this->_value) .
                         "] fails with [" .
                         $this->describeValue($compare) . "] " .
                         $this->describeDifference($this->_value, $compare, get_class($this));
@@ -365,19 +377,19 @@
     /**
      *    Test for non-identity.
      */
-    class NotIdenticalAssertion extends IdenticalAssertion {
+    class NotIdenticalExpectation extends IdenticalExpectation {
         
         /**
          *    Sets the value to compare against.
          *    @param $value        Test value to match.
          *    @public
          */
-        function NotIdenticalAssertion($value) {
-            $this->IdenticalAssertion($value);
+        function NotIdenticalExpectation($value) {
+            $this->IdenticalExpectation($value);
         }
         
         /**
-         *    Tests the assertion. True if it differs from the
+         *    Tests the expectation. True if it differs from the
          *    held value.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
@@ -396,10 +408,10 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return "Not identical assertion fails " .
+                return "Not identical expectation fails " .
                         $this->describeDifference($this->_get_value(), $compare, get_class($this));
             } else {
-                return "Not identical assertion [" . $this->describeValue($this->_get_value()) . "] matches";
+                return "Not identical expectation [" . $this->describeValue($this->_get_value()) . "] matches";
             }
         }
     }
@@ -407,7 +419,7 @@
     /**
      *    Test for a pattern using Perl regex rules.
      */
-    class WantedPatternAssertion extends Assertion {
+    class WantedPatternExpectation extends Expectation {
         var $_pattern;
         
         /**
@@ -415,8 +427,8 @@
          *    @param $pattern        Pattern to search for.
          *    @public
          */
-        function WantedPatternAssertion($pattern) {
-            $this->Assertion();
+        function WantedPatternExpectation($pattern) {
+            $this->Expectation();
             $this->_pattern = $pattern;
         }
         
@@ -430,7 +442,7 @@
         }
         
         /**
-         *    Tests the assertion. True if the Perl regex
+         *    Tests the expectation. True if the Perl regex
          *    matches the comparison value.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
@@ -463,9 +475,9 @@
             preg_match($pattern, $subject, $matches);
             $position = strpos($subject, $matches[0]);
             return "Pattern [$pattern] detected at [$position] in string [" .
-                    Assertion::clipString($subject, 40) . "] as [" .
+                    Expectation::clipString($subject, 40) . "] as [" .
                     $matches[0] . "] in region [" .
-                    Assertion::clipString($subject, 40, $position) . "]";
+                    Expectation::clipString($subject, 40, $position) . "]";
         }
     }
     
@@ -473,19 +485,19 @@
      *    Fail if a pattern is detected within the
      *    comparison.
      */
-    class UnwantedPatternAssertion extends WantedPatternAssertion {
+    class UnwantedPatternExpectation extends WantedPatternExpectation {
         
         /**
          *    Sets the reject pattern
          *    @param $pattern        Pattern to search for.
          *    @public
          */
-        function UnwantedPatternAssertion($pattern) {
-            $this->WantedPatternAssertion($pattern);
+        function UnwantedPatternExpectation($pattern) {
+            $this->WantedPatternExpectation($pattern);
         }
         
         /**
-         *    Tests the assertion. False if the Perl regex
+         *    Tests the expectation. False if the Perl regex
          *    matches the comparison value.
          *    @param $compare        Comparison value.
          *    @return                True if correct.

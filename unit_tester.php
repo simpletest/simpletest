@@ -37,7 +37,7 @@
         function assertNull($value, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . Assertion::describeValue($value) . "] should be null");
+                    "[" . Expectation::describeValue($value) . "] should be null");
             $this->assertTrue(!isset($value), $message);
         }
         
@@ -50,7 +50,7 @@
         function assertNotNull($value, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . Assertion::describeValue($value) . "] should not be null");
+                    "[" . Expectation::describeValue($value) . "] should not be null");
             $this->assertTrue(isset($value), $message);
         }
         
@@ -65,7 +65,7 @@
         function assertIsA($object, $type, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . Assertion::describeValue($object) . "] should be type [$type]");
+                    "[" . Expectation::describeValue($object) . "] should be type [$type]");
             if (is_object($object)) {
                 $this->assertTrue(is_a($object, $type), $message);
             } else {
@@ -84,8 +84,8 @@
          *    @public
          */
         function assertEqual($first, $second, $message = "%s") {
-            $this->assertAssertion(
-                    new EqualAssertion($first),
+            $this->assertExpectation(
+                    new EqualExpectation($first),
                     $second,
                     $message);
         }
@@ -99,8 +99,8 @@
          *    @public
          */
         function assertNotEqual($first, $second, $message = "%s") {
-            $this->assertAssertion(
-                    new NotEqualAssertion($first),
+            $this->assertExpectation(
+                    new NotEqualExpectation($first),
                     $second,
                     $message);
         }
@@ -114,8 +114,8 @@
          *    @public
          */
         function assertIdentical($first, $second, $message = "%s") {
-            $this->assertAssertion(
-                    new IdenticalAssertion($first),
+            $this->assertExpectation(
+                    new IdenticalExpectation($first),
                     $second,
                     $message);
         }
@@ -129,8 +129,8 @@
          *    @public
          */
         function assertNotIdentical($first, $second, $message = "%s") {
-            $this->assertAssertion(
-                    new NotIdenticalAssertion($first),
+            $this->assertExpectation(
+                    new NotIdenticalExpectation($first),
                     $second,
                     $message);
         }
@@ -146,8 +146,8 @@
         function assertReference(&$first, &$second, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . Assertion::describeValue($first) .
-                            "] and [" . Assertion::describeValue($second) .
+                    "[" . Expectation::describeValue($first) .
+                            "] and [" . Expectation::describeValue($second) .
                             "] should reference the same object");
             $temp = $first;
             $first = uniqid("test");
@@ -167,8 +167,8 @@
         function assertCopy(&$first, &$second, $message = "%s") {
             $message = sprintf(
                     $message,
-                    "[" . Assertion::describeValue($first) .
-                            "] and [" . Assertion::describeValue($second) .
+                    "[" . Expectation::describeValue($first) .
+                            "] and [" . Expectation::describeValue($second) .
                             "] should not be the same object");
             $temp = $first;
             $first = uniqid("test");
@@ -187,8 +187,8 @@
          *    @public
          */
         function assertWantedPattern($pattern, $subject, $message = "%s") {
-            $this->assertAssertion(
-                    new WantedPatternAssertion($pattern),
+            $this->assertExpectation(
+                    new WantedPatternExpectation($pattern),
                     $subject,
                     $message);
         }
@@ -203,8 +203,8 @@
          *    @public
          */
         function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
-            $this->assertAssertion(
-                    new UnwantedPatternAssertion($pattern),
+            $this->assertExpectation(
+                    new UnwantedPatternExpectation($pattern),
                     $subject,
                     $message);
         }

@@ -63,6 +63,40 @@
     }
     
     /**
+     *    Parameter comparison assertion.
+     */
+    class IdenticalParametersExpectation extends Expectation {
+        
+        /**
+         *    Sets the expected parameter list.
+         *    @param $expected        List to compare with.
+         *    @public
+         */
+        function IdenticalParametersExpectation($expected) {
+            $this->Expectation();
+        }
+        
+        /**
+         *    Tests the assertion. True if correct.
+         *    @param $compare        Comparison value.
+         *    @return                True if correct.
+         *    @public
+         */
+        function test($compare) {
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param $compare      Incoming parameter list.
+         *    @return              String description of success
+         *                         or failure.
+         *    @public
+         */
+        function testMessage($compare) {
+        }
+    }
+    
+    /**
      *    Retrieves values and references by searching the
      *    parameter lists until a match is found.
      */

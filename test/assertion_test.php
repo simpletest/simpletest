@@ -6,37 +6,37 @@
     }
     require_once(SIMPLE_TEST . 'assertion.php');
 
-    class TestOfAssertionFormatting extends UnitTestCase {
-        function TestOfAssertionFormatting() {
+    class TestOfExpectationFormatting extends UnitTestCase {
+        function TestOfExpectationFormatting() {
             $this->UnitTestCase();
         }
         function testClipping() {
             $this->assertEqual(
-                    Assertion::clipString("Hello", 6),
+                    Expectation::clipString("Hello", 6),
                     "Hello",
                     "Hello, 6->%s");
             $this->assertEqual(
-                    Assertion::clipString("Hello", 5),
+                    Expectation::clipString("Hello", 5),
                     "Hello",
                     "Hello, 5->%s");
             $this->assertEqual(
-                    Assertion::clipString("Hello world", 3),
+                    Expectation::clipString("Hello world", 3),
                     "Hel...",
                     "Hello world, 3->%s");
             $this->assertEqual(
-                    Assertion::clipString("Hello world", 6, 3),
+                    Expectation::clipString("Hello world", 6, 3),
                     "Hello ...",
                     "Hello world, 6, 3->%s");
             $this->assertEqual(
-                    Assertion::clipString("Hello world", 3, 6),
+                    Expectation::clipString("Hello world", 3, 6),
                     "...o w...",
                     "Hello world, 3, 6->%s");
             $this->assertEqual(
-                    Assertion::clipString("Hello world", 4, 11),
+                    Expectation::clipString("Hello world", 4, 11),
                     "...orld",
                     "Hello world, 4, 11->%s");
             $this->assertEqual(
-                    Assertion::clipString("Hello world", 4, 12),
+                    Expectation::clipString("Hello world", 4, 12),
                     "...orld",
                     "Hello world, 4, 12->%s");
         }
@@ -47,21 +47,21 @@
             $this->UnitTestCase();
         }
         function testBoolean() {
-            $is_true = &new EqualAssertion(true);
+            $is_true = &new EqualExpectation(true);
             $this->assertTrue($is_true->test(true));
             $this->assertFalse($is_true->test(false));
             $this->assertWantedPattern(
-                    '/equal assertion.*?boolean: true/i',
+                    '/equal expectation.*?boolean: true/i',
                     $is_true->testMessage(true));
             $this->assertWantedPattern(
                     '/fails.*?boolean.*?boolean/i',
                     $is_true->testMessage(false));
         }
         function testStringMatch() {
-            $hello = &new EqualAssertion("Hello");
+            $hello = &new EqualExpectation("Hello");
             $this->assertTrue($hello->test("Hello"));
             $this->assertFalse($hello->test("Goodbye"));
-            $this->assertWantedPattern('/Equal assertion.*?Hello/', $hello->testMessage("Hello"));
+            $this->assertWantedPattern('/Equal expectation.*?Hello/', $hello->testMessage("Hello"));
             $this->assertWantedPattern('/fails/', $hello->testMessage("Goodbye"));
             $this->assertWantedPattern('/fails.*?goodbye/i', $hello->testMessage("Goodbye"));
         }
@@ -73,13 +73,13 @@
                     "abz" => 2,
                     "az" => 1,
                     "z" => 0);
-            $str = &new EqualAssertion("abc");
+            $str = &new EqualExpectation("abc");
             foreach ($comparisons as $compare => $position) {
                 $this->assertWantedPattern(
                         "/at character $position/",
                         $str->testMessage($compare));
             }
-            $str = &new EqualAssertion("abcd");
+            $str = &new EqualExpectation("abcd");
             foreach ($comparisons as $compare => $position) {
                 $this->assertWantedPattern(
                         "/at character $position/",
@@ -87,18 +87,18 @@
             }
         }
         function testInteger() {
-            $fifteen = &new EqualAssertion(15);
+            $fifteen = &new EqualExpectation(15);
             $this->assertTrue($fifteen->test(15));
             $this->assertFalse($fifteen->test(14));
             $this->assertWantedPattern(
-                    '/equal assertion.*?15/i',
+                    '/equal expectation.*?15/i',
                     $fifteen->testMessage(15));
             $this->assertWantedPattern(
                     '/fails.*?15.*?14/i',
                     $fifteen->testMessage(14));
         }
         function testFloat() {
-            $pi = &new EqualAssertion(3.14);
+            $pi = &new EqualExpectation(3.14);
             $this->assertTrue($pi->test(3.14));
             $this->assertFalse($pi->test(3.15));
             $this->assertWantedPattern(
@@ -109,12 +109,12 @@
                     $pi->testMessage(3.15));
         }
         function testArray() {
-            $colours = &new EqualAssertion(array("r", "g", "b"));
+            $colours = &new EqualExpectation(array("r", "g", "b"));
             $this->assertTrue($colours->test(array("r", "g", "b")));
             $this->assertFalse($colours->test(array("g", "b", "r")));
             $this->assertEqual(
                     $colours->testMessage(array("r", "g", "b")),
-                    "Equal assertion [Array: 3 items]");
+                    "Equal expectation [Array: 3 items]");
             $this->assertWantedPattern('/fails/', $colours->testMessage(array("r", "g", "z")));
             $this->assertWantedPattern(
                     '/\[2\] at character 0/',
@@ -127,7 +127,7 @@
                     $colours->testMessage(array("r", "g", "b", "z")));
         }
         function testHash() {
-            $blue = &new EqualAssertion(array("r" => 0, "g" => 0, "b" => 255));
+            $blue = &new EqualExpectation(array("r" => 0, "g" => 0, "b" => 255));
             $this->assertTrue($blue->test(array("r" => 0, "g" => 0, "b" => 255)));
             $this->assertFalse($blue->test(array("r" => 0, "g" => 255, "b" => 0)));
             $this->assertWantedPattern(
@@ -138,7 +138,7 @@
                     $blue->testMessage(array("r" => 0, "g" => 0, "b" => 254)));
         }
         function testNestedHash() {
-            $tree = &new EqualAssertion(array(
+            $tree = &new EqualExpectation(array(
                     "a" => 1,
                     "b" => array(
                             "c" => 2,
@@ -158,7 +158,7 @@
             $this->UnitTestCase();
         }
         function testStringMismatch() {
-            $not_hello = &new NotEqualAssertion("Hello");
+            $not_hello = &new NotEqualExpectation("Hello");
             $this->assertTrue($not_hello->test("Goodbye"));
             $this->assertFalse($not_hello->test("Hello"));
             $this->assertWantedPattern(
@@ -175,7 +175,7 @@
             $this->UnitTestCase();
         }
         function testType() {
-            $string = &new IdenticalAssertion("37");
+            $string = &new IdenticalExpectation("37");
             $this->assertTrue($string->test("37"));
             $this->assertFalse($string->test(37));
             $this->assertFalse($string->test("38"));
@@ -196,7 +196,7 @@
             $this->UnitTestCase();
         }
         function testType() {
-            $string = &new NotIdenticalAssertion("37");
+            $string = &new NotIdenticalExpectation("37");
             $this->assertTrue($string->test("38"));
             $this->assertTrue($string->test(37));
             $this->assertFalse($string->test("37"));
@@ -214,12 +214,12 @@
             $this->UnitTestCase();
         }
         function testWanted() {
-            $pattern = &new WantedPatternAssertion('/hello/i');
+            $pattern = &new WantedPatternExpectation('/hello/i');
             $this->assertTrue($pattern->test("Hello world"));
             $this->assertFalse($pattern->test("Goodbye world"));
        }
         function testUnwanted() {
-            $pattern = &new UnwantedPatternAssertion('/hello/i');
+            $pattern = &new UnwantedPatternExpectation('/hello/i');
             $this->assertFalse($pattern->test("Hello world"));
             $this->assertTrue($pattern->test("Goodbye world"));
         }

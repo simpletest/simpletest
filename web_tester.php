@@ -270,8 +270,8 @@
          *    @public
          */
         function assertWantedPattern($pattern, $message = "%s") {
-            $this->assertAssertion(
-                    new WantedPatternAssertion($pattern),
+            $this->assertExpectation(
+                    new WantedPatternExpectation($pattern),
                     $this->_current_content,
                     $message);
         }
@@ -285,8 +285,8 @@
          *    @public
          */
         function assertNoUnwantedPattern($pattern, $message = "%s") {
-            $this->assertAssertion(
-                    new UnwantedPatternAssertion($pattern),
+            $this->assertExpectation(
+                    new UnwantedPatternExpectation($pattern),
                     $this->_current_content,
                     $message);
         }

@@ -42,8 +42,8 @@
          *    @public
          */
         function assertEquals($first, $second, $message = false) {
-            $this->assertAssertion(
-                    new EqualAssertion($first),
+            $this->assertExpectation(
+                    new EqualExpectation($first),
                     $second,
                     $message);
         }
@@ -57,8 +57,8 @@
          *    @public
          */
         function assertEqualsMultilineStrings($first, $second, $message = false) {
-            $this->assertAssertion(
-                    new EqualAssertion($first),
+            $this->assertExpectation(
+                    new EqualExpectation($first),
                     $second,
                     $message);
         }                             
@@ -71,8 +71,8 @@
          *    @public
          */
         function assertRegexp($pattern, $subject, $message = false) {
-            $this->assertAssertion(
-                    new WantedPatternAssertion($pattern),
+            $this->assertExpectation(
+                    new WantedPatternExpectation($pattern),
                     $subject,
                     $message);
         }

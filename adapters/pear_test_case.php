@@ -34,11 +34,11 @@
          */
         function assertEquals($first, $second, $message = "%s", $delta = 0) {
             if ($this->_loosely_typed) {
-                $assertion = &new EqualAssertion($first);
+                $expectation = &new EqualExpectation($first);
             } else {
-                $assertion = &new IdenticalAssertion($first);
+                $expectation = &new IdenticalExpectation($first);
             }
-            $this->assertAssertion($assertion, $second, $message);
+            $this->assertExpectation($expectation, $second, $message);
         }
         
         /**
@@ -70,7 +70,7 @@
          *    @public
          */
         function assertSame($first, $second, $message = "%s") {
-            $this->assertAssertion(new IdenticalAssertion($first), $second, $message);
+            $this->assertExpectation(new IdenticalExpectation($first), $second, $message);
         }
         
         /**
@@ -82,7 +82,7 @@
          *    @public
          */
         function assertNotSame($first, $second, $message = "%s") {
-            $this->assertAssertion(new NotIdenticalAssertion($first), $second, $message);
+            $this->assertExpectation(new NotIdenticalExpectation($first), $second, $message);
         }
         
         /**
@@ -115,8 +115,8 @@
          *    @public
          */
         function assertRegExp($pattern, $subject, $message = "%s") {
-            $this->assertAssertion(
-                    new WantedPatternAssertion($pattern),
+            $this->assertExpectation(
+                    new WantedPatternExpectation($pattern),
                     $subject,
                     $message);
         }

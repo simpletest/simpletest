@@ -216,17 +216,17 @@
         }
         
         /**
-         *    Runs an assertion directly, for extending the
-         *    tests with new assertion classes.
-         *    @param $assertion    Assertion subclass.
+         *    Runs an expectation directly, for extending the
+         *    tests with new expectation classes.
+         *    @param $expectation  Expectation subclass.
          *    @param $test_value   Value to compare.
          *    @param $message      Message to display.
          *    @public
          */
-        function assertAssertion(&$assertion, $test_value, $message) {
+        function assertExpectation(&$expectation, $test_value, $message) {
             $this->assertTrue(
-                    $assertion->test($test_value),
-                    sprintf($message, $assertion->testMessage($test_value)));
+                    $expectation->test($test_value),
+                    sprintf($message, $expectation->testMessage($test_value)));
         }
         
         /**
@@ -237,7 +237,7 @@
          *                              the test state.
          *    @public
          */
-        function assertTrue($result, $message = "True assertion failed.") {
+        function assertTrue($result, $message = "True expectation failed.") {
             if ($result) {
                 $this->pass($message);
             } else {
@@ -254,7 +254,7 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertFalse($boolean, $message = "False assertion") {
+        function assertFalse($boolean, $message = "False expectation") {
             $this->assertTrue(!$boolean, $message);
         }
         
