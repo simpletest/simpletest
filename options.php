@@ -234,7 +234,7 @@
                         }
                     }
                 }
-                return ($first === $second);
+                return ($first == $second) && (gettype($first) == gettype($second));
             }
             return ($first === $second);
         }
