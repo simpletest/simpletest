@@ -659,7 +659,7 @@
                 trigger_error('No unit tester for mock object', E_USER_ERROR);
                 return;
             }
-            $this->_test = SimpleMock::registerTest(&$test);
+            $this->_test = SimpleMock::registerTest($test);
             $this->_expected_counts = array();
             $this->_max_counts = array();
             $this->_expected_args = array();
@@ -939,7 +939,7 @@
         }
         
         /**
-         *    Registry for test cases. the reason for this is
+         *    Registry for test cases. The reason for this is
          *    to break the reference between the test cases and
          *    the mocks. It was leading to a fatal error due to
          *    recursive dependencies during comparisons. See
