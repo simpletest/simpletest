@@ -7,12 +7,52 @@
     require_once(SIMPLE_TEST . 'http.php');
     
     /**
+     *    Repository for cookies.
+     */
+    class CookieJar {
+        var $_cookies;
+        
+        /**
+         *    Constructor. Jar starts empty.
+         *    @public
+         */
+        function CookieJar() {
+            $this->_cookies = array();
+        }
+        
+        /**
+         *    Adds a cookie to the jar.
+         *    @param $cookie        New cookie.
+         *    @public
+         */
+        function setCookie($cookie) {
+            $this->_cookies[] = $cookie;
+        }
+        
+        /**
+         *    Fetches an array of all valid cookies
+         *    filtered by host, path and date.
+         *    Any cookies with missing categories will not
+         *    be filtered out by that category.         
+         *    @param $host        Host name requirement.
+         *    @param $path        Path encompasing cookies.
+         *    @param $date        Date to test expiries against.
+         *    @return             Array of valid cookie objects.
+         *    @public
+         */
+        function getValidCookies($host = "", $path = "/", $date = "") {
+            return $this->_cookies;
+        }
+    }
+    
+    /**
      *    Fake web browser.
      */
     class TestBrowser {
         var $_test;
         var $_response;
         var $_expect_error;
+        var $_cookie_jar;
         
         /**
          *    Starts the browser empty.
@@ -23,6 +63,7 @@
             $this->_test = &$test;
             $this->_response = false;
             $this->_expect_error = false;
+            $this->_cookie_jar = new CookieJar();
         }
         
         /**
@@ -35,6 +76,9 @@
         function fetchUrl($url, $request = false) {
             if (!is_object($request)) {
                 $request = new SimpleHttpRequest($url);
+            }
+            foreach ($this->_cookie_jar->getValidCookies() as $cookie) {
+                $request->setCookie($cookie);
             }
             $this->_response = &$request->fetch();
             $this->_checkConnection($url, $this->_response);
@@ -57,6 +101,7 @@
          *    @public
          */
         function setCookie($cookie) {
+            $this->_cookie_jar->setCookie($cookie);
         }
         
         /**

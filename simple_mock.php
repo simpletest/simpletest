@@ -431,11 +431,11 @@
             if (isset($this->_sequence_args[$timing][$method])) {
                 $this->_assertTrue(
                         $this->_sequence_args[$timing][$method]->isMatch($args),
-                        "Arguments for [$method] at [$timing] were [" . implode(", ", $args) . "]");
+                        "Arguments for [$method] at [$timing] were [" . $this->_renderArguments($args) . "]");
             } elseif (isset($this->_expected_args[$method])) {
                 $this->_assertTrue(
                         $this->_expected_args[$method]->isMatch($args),
-                        "Arguments for [$method] were [" . implode(", ", $args) . "]");
+                        "Arguments for [$method] were [" . $this->_renderArguments($args) . "]");
             }
         }
         
@@ -488,6 +488,34 @@
                         "Cannot $task as no $method in class " . get_class($this),
                         E_USER_ERROR);
             }
+        }
+        
+        /**
+         *    Renders the argument list as a string for
+         *    messages.
+         *    @param $args            Array of arguments.
+         *    @private
+         */
+        function _renderArguments($args) {
+            $arg_strings = array();
+            foreach ($args as $arg) {
+                if (is_bool($arg)) {
+                    $arg_strings[] = "Boolean: " . ($arg ? "true" : "false");
+                } elseif (is_string($arg)) {
+                    $arg_strings[] = "String: $arg";
+                } elseif (is_integer($arg)) {
+                    $arg_strings[] = "Integer: $arg";
+                } elseif (is_integer($arg)) {
+                    $arg_strings[] = "Float: $arg";
+                } elseif (is_array($arg)) {
+                    $arg_strings[] = "Array: " . count($arg) . " items";
+                } elseif (is_array($arg)) {
+                    $arg_strings[] = "Resource: $arg";
+                } elseif (is_object($arg)) {
+                    $arg_strings[] = "Object: " . get_class($arg);
+                }
+            }
+            return implode(", ", $arg_strings);
         }
     }
     

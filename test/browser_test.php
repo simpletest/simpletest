@@ -10,6 +10,19 @@
     Mock::generate("SimpleHttpRequest");
     Mock::generate("SimpleHttpResponse");
 
+    class TestOfCookieJar extends UnitTestCase {
+        function TestOfCookieJar() {
+            $this->UnitTestCase();
+        }
+        function testAddCookie() {
+            $jar = new CookieJar();
+            $jar->setCookie(new SimpleCookie("a", "A", "/"));
+            $cookies = $jar->getValidCookies("/");
+            $this->assertEqual(count($cookies), 1);
+            $this->assertEqual($cookies[0]->getValue(), "A");
+        }
+    }
+
     class TestOfBrowser extends UnitTestCase {
         function TestOfBrowser() {
             $this->UnitTestCase();
@@ -74,9 +87,12 @@
             $response->setReturnValue("getContent", "stuff");
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
+            $request->setExpectedArguments("setCookie", array(new SimpleCookie("a", "A")));
+            $request->setExpectedCallCount("setCookie", 1);
             $browser = &new TestBrowser(new MockUnitTestCase($this));
             $browser->setCookie(new SimpleCookie("a", "A"));
             $browser->fetchUrl("http://this.host/this/path/page.html", &$request);
+            $request->tally();
         }
         function testReceive() {
         }
