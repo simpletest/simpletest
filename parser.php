@@ -11,12 +11,14 @@
      */
     class CompoundRegex {
         var $_patterns;
+        var $_regex;
         
         /**
          *    Constructor. Starts with no patterns.
          */
         function CompoundRegex() {
             $this->_patterns = array();
+            $this->_regex = null;
         }
         
         /**
@@ -27,6 +29,7 @@
          */
         function addPattern($pattern) {
             $this->_patterns[] = $pattern;
+            $this->_regex = null;
         }
         
         /**
@@ -42,26 +45,32 @@
             if (count($this->_patterns) == 0) {
                 return false;
             }
-            $result = preg_match($this->_getCompoundedRegex(),$subject, $matches);
+            if (!preg_match($this->_getCompoundedRegex(),$subject, $matches)) {
+                $match = "";
+                return false;
+            }
             $match = $matches[0];
-            return (boolean)$result;
+            return true;
         }
         
         /**
          *    Compounds the patterns into a single
          *    regular expression separated with the
-         *    "or" operator.
+         *    "or" operator. Caches the regex.
          *    @param $patterns    List of patterns in order.
          *    @private
          */
         function _getCompoundedRegex() {
+            if ($this->_regex != null) {
+                return $this->_regex;
+            }
             for ($i = 0; $i < count($this->_patterns); $i++) {
                 $this->_patterns[$i] = '(' . str_replace(
                         array('/', '(', ')'),
                         array('\/', '\(', '\)'),
                         $this->_patterns[$i]) . ')';
             }
-            return "/" . implode("|", $this->_patterns) . "/ms";
+            return ($this->_regex = "/" . implode("|", $this->_patterns) . "/ms");
         }
     }
     
@@ -69,7 +78,7 @@
      *    Accepts text and breaks it into tokens.
      */
     class SimpleLexer {
-        var $_pattern_groups;
+        var $_regexes;
         var $_handler;
         var $_mode_stack;
         
@@ -80,7 +89,7 @@
          *    @public
          */
         function SimpleLexer(&$handler, $starting_mode = "_default") {
-            $this->_pattern_groups = array();
+            $this->_regexes = array();
             $this->_handler = &$handler;
             $this->_mode_stack = array($starting_mode);
         }
@@ -95,7 +104,10 @@
          *    @public
          */
         function addPattern($pattern, $mode = "_default") {
-            $this->_pattern_groups[$mode][] = $pattern;
+            if (!isset($this->_regexes[$mode])) {
+                $this->_regexes[$mode] = new CompoundRegex();
+            }
+            $this->_regexes[$mode]->addPattern($pattern);
         }
         
         /**
@@ -110,18 +122,12 @@
             if (!isset($this->_handler)) {
                 return false;
             }
-            if (!isset($this->_pattern_groups[$this->getCurrentMode()]) || count($this->_pattern_groups[$this->getCurrentMode()]) == 0) {
-                return (!$raw || $this->_handler->acceptUnparsed($raw));
-            }
             $length = strlen($raw);
-            while ($raw && preg_match($this->_getRegex($this->getCurrentMode()), $raw, $matches)) {
-                $count = strpos($raw, $matches[0]);
-                $unparsed = substr($raw, 0, $count);
-                $raw = substr($raw, $count + strlen($matches[0]));
+            while (list($unparsed, $match) = $this->_reduce($raw)) {
                 if ($unparsed && !$this->_handler->acceptUnparsed($unparsed)) {
                     return false;
                 }
-                if ($matches[0] && !$this->_handler->acceptToken($matches[0])) {
+                if ($match && !$this->_handler->acceptToken($match)) {
                     return false;
                 }
                 if (strlen($raw) == $length) {
@@ -136,32 +142,27 @@
         }
         
         /**
-         *    Gets the compounded regex.
-         *    @param $mode   Patterns for this mode only.
-         *    @return        Regex of combined patterns.
+         *    Tries to match a chunk of text and if successful
+         *    removes the recognised chunk and any leading
+         *    unparsed data.
+         *    @param $raw         The subject to parse.
+         *    @return             Two item list of unparsed
+         *                        content followed by the
+         *                        recognised token. False
+         *                        if no match.
          *    @private
          */
-        function _getRegex($mode) {
-            if (!isset($this->_pattern_groups[$mode])) {
-                $this->_pattern_groups[$mode] = array();
+        function _reduce(&$raw) {
+            if (!isset($this->_regexes[$this->getCurrentMode()])) {
+                return false;
             }
-            return $this->_compoundRegex($this->_pattern_groups[$mode]);
-        }
-        
-        /**
-         *    Compounds the patterns into a single
-         *    regular expression.
-         *    @param $patterns    List of patterns in order.
-         *    @private
-         */
-        function _compoundRegex($patterns) {
-            for ($i = 0; $i < count($patterns); $i++) {
-                $patterns[$i] = '(' . str_replace(
-                        array('/', '(', ')'),
-                        array('\/', '\(', '\)'),
-                        $patterns[$i]) . ')';
+            if (!$this->_regexes[$this->getCurrentMode()]->match($raw, $match)) {
+                return false;
             }
-            return "/" . implode("|", $patterns) . "/ms";
+            $count = strpos($raw, $match);
+            $unparsed = substr($raw, 0, $count);
+            $raw = substr($raw, $count + strlen($match));
+            return array($unparsed, $match);
         }
         
         /**
