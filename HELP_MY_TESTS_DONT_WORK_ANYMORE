@@ -5,6 +5,12 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+Broken code extending SimpleRunner
+----------------------------------
+This was replaced with SimpleScorer so taht I could use the runner
+name in another class. This happened in RC1 development and there
+is no easy backward compatibility fix.
+
 Missing method getBaseCookieValue()
 -----------------------------------
 This was renamed getCurrentCookieValue() in RC1.
@@ -91,13 +97,13 @@ be removed in Beta2.
 
 No method clearHistory()
 ------------------------
-This method is deprecated in Beta2.
+This method is deprecated in Beta2 and removed in RC1.
 
 No method getCallCount()
 ------------------------
 This method has been deprecated since Beta1 and has now been
 removed. There are now more ways to set expectations on counts
-and so this method should be unecessery.
+and so this method should be unecessery. Removed in RC1.
 
 Cannot find file *
 ------------------

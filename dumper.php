@@ -32,8 +32,8 @@
         function describeValue($value) {
             $type = $this->getType($value);
             switch($type) {
-                case "NULL":
-                    return $type;
+                case "Null":
+                    return "NULL";
                 case "Boolean":
                     return "Boolean: " . ($value ? "true" : "false");
                 case "Array":
@@ -55,8 +55,8 @@
          *    @access public
          */
         function getType($value) {
-            if (!isset($value)) {
-                return "NULL";
+            if (! isset($value)) {
+                return "Null";
             } elseif (is_bool($value)) {
                 return "Boolean";
             } elseif (is_string($value)) {
@@ -135,6 +135,21 @@
         
         /**
          *    Creates a human readable description of the
+         *    difference between two variables. The minimal
+         *    version.
+         *    @param null $first          First value.
+         *    @param mixed $second        Value to compare with.
+         *    @return string              Human readable description.
+         *    @access private
+         */
+        function _describeGenericDifference($first, $second) {
+            return "as [" . $this->describeValue($first) .
+                    "] does not match [" .
+                    $this->describeValue($second) . "]";
+        }
+        
+        /**
+         *    Creates a human readable description of the
          *    difference between a null and another variable.
          *    @param null $first          First null.
          *    @param mixed $second        Null to compare with.
@@ -143,9 +158,7 @@
          *    @access private
          */
         function _describeNullDifference($first, $second, $identical) {
-            return "as [" . $this->describeValue($first) .
-                    "] does not match [" .
-                    $this->describeValue($second) . "]";
+            return $this->_describeGenericDifference($first, $second);
         }
         
         /**
@@ -158,9 +171,7 @@
          *    @access private
          */
         function _describeBooleanDifference($first, $second, $identical) {
-            return "as [" . $this->describeValue($first) .
-                    "] does not match [" .
-                    $this->describeValue($second) . "]";
+            return $this->_describeGenericDifference($first, $second);
         }
         
         /**
@@ -174,9 +185,7 @@
          */
         function _describeStringDifference($first, $second, $identical) {
             if (is_object($second) || is_array($second)) {
-                return "as [" . $this->describeValue($first) .
-                    "] does not match [" .
-                    $this->describeValue($second) . "]";
+                return $this->_describeGenericDifference($first, $second);
             }
             $position = $this->_stringDiffersAt($first, $second);
             $message = "at character $position";
@@ -197,9 +206,7 @@
          */
         function _describeIntegerDifference($first, $second, $identical) {
             if (is_object($second) || is_array($second)) {
-                return "as [" . $this->describeValue($first) .
-                    "] does not match [" .
-                    $this->describeValue($second) . "]";
+                return $this->_describeGenericDifference($first, $second);
             }
             return "because [" . $this->describeValue($first) .
                     "] differs from [" .
@@ -218,9 +225,7 @@
          */
         function _describeFloatDifference($first, $second, $identical) {
             if (is_object($second) || is_array($second)) {
-                return "as [" . $this->describeValue($first) .
-                    "] does not match [" .
-                    $this->describeValue($second) . "]";
+                return $this->_describeGenericDifference($first, $second);
             }
             return "because " . $this->describeValue($first) .
                     "] differs from [" .
@@ -238,9 +243,7 @@
          */
         function _describeArrayDifference($first, $second, $identical) {
             if (! is_array($second)) {
-                return " as " . $this->describeValue($first) .
-                        "] differs from [" .
-                        $this->describeValue($second) . "]";
+                return $this->_describeGenericDifference($first, $second);
             }
             if (array_keys($first) != array_keys($second)) {
                 return "as key list [" .
@@ -272,14 +275,7 @@
          *    @access private
          */
         function _describeResourceDifference($first, $second, $identical) {
-            if (is_object($second) || is_array($second)) {
-                return "as [" . $this->describeValue($first) .
-                    "] does not match [" .
-                    $this->describeValue($second) . "]";
-            }
-            return "as [" . $this->describeValue($first) .
-                    "] does not match [" .
-                    $this->describeValue($second) . "]";
+            return $this->_describeGenericDifference($first, $second);
         }
         
         /**
@@ -293,9 +289,7 @@
          */
         function _describeObjectDifference($first, $second, $identical) {
             if (! is_object($second)) {
-                return " as " . $this->describeValue($first) .
-                        "] differs from [" .
-                        $this->describeValue($second) . "]";
+                return $this->_describeGenericDifference($first, $second);
             }
             return $this->_describeArrayDifference(
                     get_object_vars($first),
@@ -347,7 +341,7 @@
         
         /**
          *    Extracts the last assertion that was not within
-         *    Simpletest itself.
+         *    Simpletest itself. The name must start with "assert".
          *    @param array $stack      List of stack frames.
          *    @param string $format    String formatting.
          *    @access public

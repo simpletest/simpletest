@@ -73,10 +73,11 @@
          *                              then it is considered to match any.
          *    @param mixed $wildcard    Any parameter matching this
          *                              will always match.
+         *    @param string $message    Customised message on failure.
          *    @access public
          */
-        function ParametersExpectation($expected = false) {
-            $this->SimpleExpectation();
+        function ParametersExpectation($expected = false, $message = '%s') {
+            $this->SimpleExpectation($message);
             $this->_expected = $expected;
         }
         
@@ -151,7 +152,7 @@
                 $comparison = $this->_coerceToExpectation($expected[$i]);
                 if (! $comparison->test($parameters[$i])) {
                     $messages[] = "parameter " . ($i + 1) . " with [" .
-                            $comparison->testMessage($parameters[$i]) . "]";
+                            $comparison->overlayMessage($parameters[$i]) . "]";
                 }
             }
             return "Parameter expectation differs at " . implode(" and ", $messages);
@@ -292,8 +293,8 @@
         
         /**
          *    Sets up the wildcard and everything else empty.
-         *    @param mixed $wildcard     Parameter matching wildcard.
-         *    @param boolean$is_strict   Enables method name checks.
+         *    @param mixed $wildcard      Parameter matching wildcard.
+         *    @param boolean $is_strict   Enables method name checks.
          *    @access public
          */
         function SimpleStub($wildcard, $is_strict = true) {
@@ -322,13 +323,6 @@
                 }
             }
             return $args;
-        }
-
-        /**
-         *    @deprecated
-         */
-        function clearHistory() {
-            $this->_call_counts = array();
         }
         
         /**
@@ -568,12 +562,12 @@
         
         /**
          *    Die if bad arguments array is passed
-         *    @param	mixed    $args    The arguments value to be checked.
-         *    @param 	string   $task    Description of task attempt.
-         *    @return   boolean           Valid arguments
-         *    @access	private
+         *    @param mixed $args     The arguments value to be checked.
+         *    @param string $task    Description of task attempt.
+         *    @return boolean        Valid arguments
+         *    @access private
          */
-        function _CheckArgumentsArray($args, $task) {
+        function _checkArgumentsArray($args, $task) {
         	if (! is_array($args)) {
         		trigger_error(
         			"Cannot $task as \$args parameter is not an array",
@@ -589,14 +583,15 @@
          *    @param string $method        Method call to test.
          *    @param array $args           Expected parameters for the call
          *                                 including wildcards.
+         *    @param string $message       Overridden message.
          *    @access public
          */
-        function expectArguments($method, $args) {
-            $this->_dieOnNoMethod($method, "set expected arguments");
-            $this->_CheckArgumentsArray($args, "set expected arguments");
+        function expectArguments($method, $args, $message = '%s') {
+            $this->_dieOnNoMethod($method, 'set expected arguments');
+            $this->_checkArgumentsArray($args, 'set expected arguments');
             $args = $this->_replaceWildcards($args);
             $this->_expected_args[strtolower($method)] =
-                    new ParametersExpectation($args);
+                    new ParametersExpectation($args, $message);
         }
         
         /**
@@ -609,18 +604,19 @@
          *    @param string $method     Method call to test.
          *    @param array $args        Expected parameters for the call
          *                              including wildcards.
+         *    @param string $message    Overridden message.
          *    @access public
          */
-        function expectArgumentsAt($timing, $method, $args) {
+        function expectArgumentsAt($timing, $method, $args, $message = '%s') {
             $this->_dieOnNoMethod($method, "set expected arguments at time");
-            $this->_CheckArgumentsArray($args, "set expected arguments");
+            $this->_checkArgumentsArray($args, "set expected arguments");
             $args = $this->_replaceWildcards($args);
             if (!isset($this->_expected_args_at[$timing])) {
                 $this->_expected_args_at[$timing] = array();
             }
             $method = strtolower($method);
             $this->_expected_args_at[$timing][$method] =
-                    new ParametersExpectation($args);
+                    new ParametersExpectation($args, $message);
         }
         
         /**
@@ -630,9 +626,10 @@
          *    @param string $method        Method call to test.
          *    @param integer $count        Number of times it should
          *                                 have been called at tally.
+         *    @param string $message       Overridden message.
          *    @access public
          */
-        function expectCallCount($method, $count) {
+        function expectCallCount($method, $count, $message = '%s') {
             $this->_dieOnNoMethod($method, "set expected call count");
             $this->_expected_counts[strtolower($method)] = $count;
         }
@@ -643,9 +640,10 @@
          *    @param string $method        Method call to test.
          *    @param integer $count        Most number of times it should
          *                                 have been called.
+         *    @param string $message       Overridden message.
          *    @access public
          */
-        function expectMaximumCallCount($method, $count) {
+        function expectMaximumCallCount($method, $count, $message = '%s') {
             $this->_dieOnNoMethod($method, "set maximum call count");
             $this->_max_counts[strtolower($method)] = $count;
         }
@@ -656,9 +654,10 @@
          *    @param string $method      Method call to test.
          *    @param integer $count      Least number of times it should
          *                               have been called.
+         *    @param string $message     Overridden message.
          *    @access public
          */
-        function expectMinimumCallCount($method, $count) {
+        function expectMinimumCallCount($method, $count, $message = '%s') {
             $this->_dieOnNoMethod($method, "set minimum call count");
             $this->_min_counts[strtolower($method)] = $count;
         }
@@ -667,10 +666,11 @@
          *    Convenience method for barring a method
          *    call.
          *    @param string $method        Method call to ban.
+         *    @param string $message       Overridden message.
          *    @access public
          */
-        function expectNever($method) {
-            $this->expectMaximumCallCount($method, 0);
+        function expectNever($method, $message = '%s') {
+            $this->expectMaximumCallCount($method, 0, $message);
         }
         
         /**
@@ -679,12 +679,13 @@
          *    @param string $method     Method call to track.
          *    @param array $args        Expected argument list or
          *                              false for any arguments.
+         *    @param string $message    Overridden message.
          *    @access public
          */
-        function expectOnce($method, $args = false) {
-            $this->expectCallCount($method, 1);
+        function expectOnce($method, $args = false, $message = '%s') {
+            $this->expectCallCount($method, 1, $message);
             if ($args !== false) {
-                $this->expectArguments($method, $args);
+                $this->expectArguments($method, $args, $message);
             }
         }
         
@@ -694,12 +695,13 @@
          *    @param string $method       Method call to track.
          *    @param array $args          Expected argument list or
          *                                false for any arguments.
+         *    @param string $message      Overridden message.
          *    @access public
          */
-        function expectAtLeastOnce($method, $args = false) {
-            $this->expectMinimumCallCount($method, 1);
+        function expectAtLeastOnce($method, $args = false, $message = '%s') {
+            $this->expectMinimumCallCount($method, 1, $message);
             if ($args !== false) {
-                $this->expectArguments($method, $args);
+                $this->expectArguments($method, $args, $message);
             }
         }
         
@@ -785,7 +787,7 @@
             } elseif (isset($this->_expected_args[$method])) {
                 $this->_assertTrue(
                         $this->_expected_args[$method]->test($args),
-                        "Mock method [$method]->" . $this->_expected_args[$method]->testMessage($args),
+                        "Mock method [$method]->" . $this->_expected_args[$method]->overlayMessage($args),
                         $this->_test);
             }
         }

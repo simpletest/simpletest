@@ -1,6 +1,6 @@
 <?php
     /**
-     *	base include file for SimpleTest
+     *	Base include file for SimpleTest
      *	@package	SimpleTest
      *	@subpackage	UnitTester
      *	@version	$Id$
@@ -390,7 +390,7 @@
         function assertExpectation(&$expectation, $test_value, $message = '%s') {
             return $this->assertTrue(
                     $expectation->test($test_value),
-                    sprintf($message, $expectation->testMessage($test_value)));
+                    sprintf($message, $expectation->overlayMessage($test_value)));
         }
         
         /**

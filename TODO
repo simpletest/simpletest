@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC1) of 76 hours!
+This is immediate stuff only for this iteration (RC1) of 71 hours!
 First figure is expected hours, second is the time it actually took.
 
 $Id$
@@ -8,11 +8,9 @@ Unit tester
 -----------
 Set the SIMPLE_TEST constant if not set for add in libraries (1/0) - done.
 Fix bug with dumper failing with second parameters of odd types (2/1) - done.
-Expectations should carry message overrides (3).
-Expectations should not throw notices on missing array keys (2).
+Expectations should carry message overrides (3/1) - done.
 Assertions should return booleans for test exits (2/1) - done.
 Refactor run behaviour into it's own object (2/3) - done.
-Create multi-run test case extension (3).
 
 Reporter
 --------

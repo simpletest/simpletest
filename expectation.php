@@ -22,12 +22,16 @@
      */
     class SimpleExpectation {
         var $_dumper;
+        var $_message;
         
         /**
-         *    Creates a dumper for displaying values.
+         *    Creates a dumper for displaying values and sets
+         *    the test message.
+         *    @param string $message    Customised message on failure.
          */
-        function SimpleExpectation() {
+        function SimpleExpectation($message = '%s') {
             $this->_dumper = &new SimpleDumper();
+            $this->_message = $message;
         }
         
         /**
@@ -52,6 +56,18 @@
         }
         
         /**
+         *    Overlays the generated message onto the stored user
+         *    message.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
+         *    @access public
+         */
+        function overlayMessage($compare) {
+            return sprintf($this->_message, $this->testMessage($compare));
+        }
+        
+        /**
          *    Accessor for the dumper.
          *    @return SimpleDumper    Current value dumper.
          *    @access protected
@@ -72,10 +88,11 @@
         /**
          *    Sets the value to compare against.
          *    @param mixed $value        Test value to match.
+         *    @param string $message     Customised message on failure.
          *    @access public
          */
-        function EqualExpectation($value) {
-            $this->SimpleExpectation();
+        function EqualExpectation($value, $message = '%s') {
+            $this->SimpleExpectation($message);
             $this->_value = $value;
         }
         
@@ -125,11 +142,12 @@
         
         /**
          *    Sets the value to compare against.
-         *    @param mixed $value        Test value to match.
+         *    @param mixed $value       Test value to match.
+         *    @param string $message    Customised message on failure.
          *    @access public
          */
-        function NotEqualExpectation($value) {
-            $this->EqualExpectation($value);
+        function NotEqualExpectation($value, $message = '%s') {
+            $this->EqualExpectation($value, $message);
         }
         
         /**
@@ -172,11 +190,12 @@
         
         /**
          *    Sets the value to compare against.
-         *    @param mixed $value        Test value to match.
+         *    @param mixed $value       Test value to match.
+         *    @param string $message    Customised message on failure.
          *    @access public
          */
-        function IdenticalExpectation($value) {
-            $this->EqualExpectation($value);
+        function IdenticalExpectation($value, $message = '%s') {
+            $this->EqualExpectation($value, $message);
         }
         
         /**
@@ -223,10 +242,11 @@
         /**
          *    Sets the value to compare against.
          *    @param mixed $value        Test value to match.
+         *    @param string $message     Customised message on failure.
          *    @access public
          */
-        function NotIdenticalExpectation($value) {
-            $this->IdenticalExpectation($value);
+        function NotIdenticalExpectation($value, $message = '%s') {
+            $this->IdenticalExpectation($value, $message);
         }
         
         /**
@@ -268,11 +288,12 @@
         
         /**
          *    Sets the value to compare against.
-         *    @param string $pattern        Pattern to search for.
+         *    @param string $pattern    Pattern to search for.
+         *    @param string $message    Customised message on failure.
          *    @access public
          */
-        function WantedPatternExpectation($pattern) {
-            $this->SimpleExpectation();
+        function WantedPatternExpectation($pattern, $message = '%s') {
+            $this->SimpleExpectation($message);
             $this->_pattern = $pattern;
         }
         
@@ -342,11 +363,12 @@
         
         /**
          *    Sets the reject pattern
-         *    @param string $pattern        Pattern to search for.
+         *    @param string $pattern    Pattern to search for.
+         *    @param string $message    Customised message on failure.
          *    @access public
          */
-        function UnwantedPatternExpectation($pattern) {
-            $this->WantedPatternExpectation($pattern);
+        function UnwantedPatternExpectation($pattern, $message = '%s') {
+            $this->WantedPatternExpectation($pattern, $message);
         }
         
         /**
@@ -389,11 +411,12 @@
         
         /**
          *    Sets the type to compare with.
-         *    @param string $type    Type or class name.
+         *    @param string $type       Type or class name.
+         *    @param string $message    Customised message on failure.
          *    @access public
          */
-        function IsAExpectation($type) {
-            $this->SimpleExpectation();
+        function IsAExpectation($type, $message = '%s') {
+            $this->SimpleExpectation($message);
             $this->_type = $type;
         }
         
@@ -465,11 +488,12 @@
         
         /**
          *    Sets the type to compare with.
-         *    @param string $type    Type or class name.
+         *    @param string $type       Type or class name.
+         *    @param string $message    Customised message on failure.
          *    @access public
          */
-        function NotAExpectation($type) {
-            $this->IsAExpectation($type);
+        function NotAExpectation($type, $message = '%s') {
+            $this->IsAExpectation($type, $message);
         }
         
         /**
@@ -507,12 +531,13 @@
         
         /**
          *    Sets the value to compare against.
-         *    @param string $method        Method to check.
+         *    @param string $method     Method to check.
+         *    @param string $message    Customised message on failure.
          *    @access public
          *    @return void
          */
-        function MethodExistsExpectation($method) {
-            $this->SimpleExpectation();
+        function MethodExistsExpectation($method, $message = '%s') {
+            $this->SimpleExpectation($message);
             $this->_method = &$method;
         }
         
