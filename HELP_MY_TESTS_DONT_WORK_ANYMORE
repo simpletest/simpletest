@@ -10,6 +10,18 @@ No method submit()
 This has been renamed clickSubmit() in Beta1. The old method will
 be removed after Beta1.
 
+No method clearHistory()
+========================
+This method was deprecated in Alpha7 and has now been removed. The
+only workaround is to break up test cases into smaller pieces. Once
+this is done, setting expectations should be enough.
+
+No method getCallCount()
+========================
+This method has been deprecated since Alpha7 and has now been
+removed. There are now more ways to set expectations on counts
+and so this method should be unecessery.
+
 Cannot find file *
 ==================
 The following public name changes have occoured...

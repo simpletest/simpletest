@@ -23,5 +23,10 @@
             $this->clickSubmit('Google Search');
             $this->assertWantedPattern('/lastcraft/i');
         }
+        function testSourceforge() {
+            $this->assertTrue($this->get('http://sourceforge.net/projects/simpletest/'));
+            $this->clickLink('statistics');
+            $this->assertWantedPattern('/Statistics for the past 7 days/');
+        }
     }
 ?>

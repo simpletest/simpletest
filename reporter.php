@@ -28,6 +28,7 @@
          *    @public
          */
         function paintHeader($test_name) {
+            $this->sendNoCacheHeaders();
             print "<html>\n<head>\n<title>$test_name</title>\n";
             print "<style type=\"text/css\">\n";
             print $this->_getCss() . "\n";
@@ -35,6 +36,14 @@
             print "</head>\n<body>\n";
             print "<h1>$test_name</h1>\n";
             flush();
+        }
+        
+        function sendNoCacheHeaders() {
+            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+            header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+            header("Cache-Control: no-store, no-cache, must-revalidate");
+            header("Cache-Control: post-check=0, pre-check=0", false);
+            header("Pragma: no-cache");
         }
         
         /**
@@ -105,15 +114,6 @@
          */
         function paintFormattedMessage($message) {
             print "<pre>$message</pre>";
-        }
-    }
-    
-    /**
-     *    @deprecated
-     */
-    class TestHtmlDisplay extends HtmlReporter {
-        function TestHtmlDisplay() {
-            $this->HtmlReporter();
         }
     }
 ?>

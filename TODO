@@ -9,23 +9,21 @@ Unit tester
 -----------
 Include types with error reports (1).
 Refactor value formatting into separate Dumper class (2/3) - done.
-Add is_a() patch to allow earlier PHP versions (1).
+Add is_a() patch to allow earlier PHP versions (1/1) - done.
 Move dumper creation to factory in options (1).
 
 Interface
 ---------
 Add command line reporter (4).
-Force page reload at start of test (1).
+Force page reload at start of test (1/1) - done.
 
 Mock objects
 ------------
-Allow adding of expectation classes to expected arguments (2).
-Fix wildcard reporting bug (1).
+Fix wildcard reporting bug in arguments comparison (1).
 
 Html parser
 -----------
-Test with some realistic pages (3).
-Get check boxes parsing (2).
+Test with some realistic pages (3/1).
 Parse drop down lists (4).
 Add wrapping behaviour to text areas (1).
 Add HTTP basic authentication (2).
@@ -41,6 +39,7 @@ Documentation
 -------------
 Start a web tester documentation page (2).
 Add a cookie reading page (2).
+Reorder docs to place the reporters mods last (1).
 
 Build
 -----

@@ -273,7 +273,7 @@
             if ($this->test($compare)) {
                 return $this->_decribePatternMatch($this->_getPattern(), $compare);
             } else {
-                return "Pattern [" . $this->_get_pattern() . "] not detected in string [$compare]";
+                return "Pattern [" . $this->_getPattern() . "] not detected in string [$compare]";
             }
         }
         
