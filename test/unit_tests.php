@@ -18,6 +18,7 @@
             $this->addTestFile('options_test.php');
             $this->addTestFile('dumper_test.php');
             $this->addTestFile('expectation_test.php');
+            $this->addTestFile('unit_tester_test.php');
             $this->addTestFile('simple_mock_test.php');
             $this->addTestFile('adapter_test.php');
             $this->addTestFile('socket_test.php');

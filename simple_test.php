@@ -432,7 +432,7 @@
             if (! $message) {
                 $message = 'False assertion got ' . ($result ? 'True' : 'False');
             }
-            return ! $this->assertTrue(! $result, $message);
+            return $this->assertTrue(! $result, $message);
         }
         
         /**

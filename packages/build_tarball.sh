@@ -59,6 +59,7 @@ FILES=(simpletest/errors.php \
           simpletest/test/visual_test.php \
           simpletest/test/shell_test.php \
           simpletest/test/web_tester_test.php \
+          simpletest/test/unit_tester_test.php \
           simpletest/test/shell_tester_test.php \
           simpletest/test/xml_test.php \
           simpletest/test/live_test.php \
