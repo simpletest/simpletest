@@ -171,6 +171,7 @@
             $browser = &$this->_createPartialBrowser($request);
             $browser->setCookie("a", "A");
             $response = $browser->fetchResponse(
+                    "GET",
                     new SimpleUrl("http://this.com/this/path/page.html"),
                     &$request);
             $this->assertEqual($response->getContent(), "stuff");
@@ -181,6 +182,7 @@
             $browser = &$this->_createPartialBrowser($request);
             $browser->setCookie("a", "A");
             $browser->fetchResponse(
+                    "GET",
                     new SimpleUrl("http://this.host/this/path/page.html"),
                     $request);
             $this->assertEqual($browser->getCookieValue("this.com", "this/path/", "a"), "AAAA");
@@ -226,7 +228,7 @@
             $browser->setReturnReference("fetchResponse", $response);
             $browser->expectArguments(
                     "fetchResponse",
-                    array($url, "*"));
+                    array("GET", $url, array("a" => "A", "b" => "B")));
             $browser->SimpleBrowser();
             $this->assertIdentical(
                     $browser->get("http://this.com/page.html", array("a" => "A", "b" => "B"), &$this->_request),
@@ -242,7 +244,7 @@
             $browser->setReturnReference("fetchResponse", $response);
             $browser->expectArguments(
                     "fetchResponse",
-                    array($url, "*"));
+                    array("HEAD", $url, array("a" => "A", "b" => "B")));
             $browser->expectCallCount("fetchResponse", 1);
             $browser->SimpleBrowser();
             $this->assertIdentical(
@@ -260,7 +262,7 @@
             $browser->expectCallCount("fetchResponse", 1);
             $browser->expectArguments(
                     "fetchResponse",
-                    array(new SimpleUrl("http://this.com/page.html"), $expected_request));
+                    array("POST", new SimpleUrl("http://this.com/page.html"), array("a" => "A", "b" => "B")));
             $browser->SimpleBrowser();
             $this->assertIdentical(
                     $browser->post("http://this.com/page.html", array("a" => "A", "b" => "B"), &$this->_request),
@@ -339,7 +341,6 @@
         }
         function setUp() {
             $this->_response = &new MockSimpleHttpResponse($this);
-            $this->_response->setReturnValue("isError", false);
             $this->_response->setReturnValue("getNewCookies", array());
             $this->_response->setReturnValue("getContent", false);
             $this->_request = &new MockSimpleHttpRequest($this);
@@ -348,6 +349,7 @@
         }
         function testResponseCode() {
             $this->_response->setReturnValue("getResponseCode", 404);
+            $this->_response->setReturnValue("isError", false);
             $this->_test->expectArguments("assertTrue", array(true, "*"));
             $this->_test->expectCallCount("assertTrue", 1);
             $browser = &new MockRequestTestBrowser($this);
@@ -370,6 +372,7 @@
             $this->_test->tally();
         }
         function testMimeTypes() {
+            $this->_response->setReturnValue("isError", false);
             $this->_response->setReturnValue("getMimeType", "text/plain");
             $this->_test->expectArguments("assertTrue", array(true, "*"));
             $this->_test->expectCallCount("assertTrue", 1);

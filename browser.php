@@ -220,12 +220,14 @@
         
         /**
          *    Fetches a URL as a response object.
+         *    @param $method     GET, POST, etc.
          *    @param $url        Target to fetch as Url object.
-         *    @param $request    SimpleHttpRequest to send.
+         *    @param $parameters Additional parameters for request.
          *    @return            Response object.
          *    @protected
          */
-        function &fetchResponse($url, &$request) {
+        function &fetchResponse($method, $url, $parameters) {
+            $request = &$this->createRequest($method, $url, $parameters);
             $cookies = $this->_cookie_jar->getValidCookies($url->getHost(), $url->getPath());
             foreach ($cookies as $cookie) {
                 $request->setCookie($cookie);
@@ -258,8 +260,7 @@
          */
         function get($raw_url, $parameters = false) {
             $url = $this->createAbsoluteUrl($this->_base_url, $raw_url, $parameters);
-            $request = &$this->createRequest('GET', $url);
-            $response = &$this->fetchResponse($url, $request);
+            $response = &$this->fetchResponse('GET', $url, $parameters);
             if ($response->isError()) {
                 return false;
             }
@@ -277,8 +278,7 @@
          */
         function head($raw_url, $parameters = false) {
             $url = $this->createAbsoluteUrl($this->_base_url, $raw_url, $parameters);
-            $request = &$this->createRequest('HEAD', $url);
-            $response = &$this->fetchResponse($url, $request);
+            $response = &$this->fetchResponse('HEAD', $url, $parameters);
             return !$response->isError();
         }
         
@@ -291,8 +291,7 @@
          */
         function post($raw_url, $parameters = false) {
             $url = $this->createAbsoluteUrl($this->_base_url, $raw_url, array());
-            $request = &$this->createRequest('POST', $url, $parameters);
-            $response = &$this->fetchResponse($url, $request);
+            $response = &$this->fetchResponse('POST', $url, $parameters);
             if ($response->isError()) {
                 return false;
             }
@@ -408,13 +407,14 @@
         /**
          *    Fetches a URL as a response object performing
          *    tests set in expectations.
+         *    @param $method     GET, POST, etc.
          *    @param $url        Target to fetch as SimpleUrl.
-         *    @param $request    Test override of SimpleHttpRequest.
+         *    @param $parameters Additional parameters for request.
          *    @return            Reponse object.
          *    @public
          */
-        function &fetchResponse($url, &$request) {
-            $response = &parent::fetchResponse($url, $request);
+        function &fetchResponse($method, $url, $parameters) {
+            $response = &parent::fetchResponse($method, $url, $parameters);
             $this->_checkExpectations($url, $response);
             $this->_clearExpectations();
             return $response;
