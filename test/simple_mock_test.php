@@ -16,7 +16,7 @@
             $this->assertTrue($list->isMatch(array(0)));
         }
         function testAnyMatch() {
-            $list = new ParameterList("");
+            $list = new ParameterList(false);
             $this->assertTrue($list->isMatch(array()));
             $this->assertTrue($list->isMatch(array(1, 2)));
         }
@@ -31,9 +31,9 @@
         }
         function testWildcardParameter() {
             $list = new ParameterList(array("wild"), "wild");
-            $this->assertFalse($list->isMatch(array()), "Empty");
-            $this->assertTrue($list->isMatch(array(null)), "Null");
-            $this->assertTrue($list->isMatch(array(13)), "Integer");
+            $this->assertFalse($list->isMatch(array()), "Empty->%s");
+            $this->assertTrue($list->isMatch(array(null)), "Null->%s");
+            $this->assertTrue($list->isMatch(array(13)), "Integer->%s");
         }
         function testIdentityOnly() {
             $list = new ParameterList(array("0"));
@@ -45,6 +45,53 @@
             $this->assertTrue($list->isMatch(array("0", 0, 37, false)));
             $this->assertFalse($list->isMatch(array("0", 0, 37, true)));
             $this->assertFalse($list->isMatch(array("0", 0, 37)));
+        }
+    }
+    
+    class TestOfParametersExpectation extends UnitTestCase {
+        function TestOfParametersExpectation() {
+            $this->UnitTestCase();
+        }
+        function testEmptyMatch() {
+            $expectation = new ParametersExpectation(array());
+            $this->assertTrue($expectation->test(array()));
+            $this->assertFalse($expectation->test(array(33)));
+        }
+        function testSingleMatch() {
+            $expectation = new ParametersExpectation(array(0));
+            $this->assertFalse($expectation->test(array(1)));
+            $this->assertTrue($expectation->test(array(0)));
+        }
+        function testAnyMatch() {
+            $expectation = new ParametersExpectation(false);
+            $this->assertTrue($expectation->test(array()));
+            $this->assertTrue($expectation->test(array(1, 2)));
+        }
+        function testMissingParameter() {
+            $expectation = new ParametersExpectation(array(0));
+            $this->assertFalse($expectation->test(array()));
+        }
+        function testNullParameter() {
+            $expectation = new ParametersExpectation(array(null));
+            $this->assertTrue($expectation->test(array(null)));
+            $this->assertFalse($expectation->test(array()));
+        }
+        function testWildcardParameter() {
+            $expectation = new ParametersExpectation(array("wild"), "wild");
+            $this->assertFalse($expectation->test(array()), "Empty->%s");
+            $this->assertTrue($expectation->test(array(null)), "Null->%s");
+            $this->assertTrue($expectation->test(array(13)), "Integer->%s");
+        }
+        function testIdentityOnly() {
+            $expectation = new ParametersExpectation(array("0"));
+            $this->assertFalse($expectation->test(array(0)));
+            $this->assertTrue($expectation->test(array("0")));
+        }
+        function testLongList() {
+            $expectation = new ParametersExpectation(array("0", 0, "wild", false), "wild");
+            $this->assertTrue($expectation->test(array("0", 0, 37, false)));
+            $this->assertFalse($expectation->test(array("0", 0, 37, true)));
+            $this->assertFalse($expectation->test(array("0", 0, 37)));
         }
     }
     

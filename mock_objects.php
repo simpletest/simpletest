@@ -65,34 +65,61 @@
     /**
      *    Parameter comparison assertion.
      */
-    class IdenticalParametersExpectation extends Expectation {
+    class ParametersExpectation extends Expectation {
+        var $_expected;
+        var $_wildcard;
         
         /**
          *    Sets the expected parameter list.
-         *    @param $expected        List to compare with.
+         *    @param $parameters        Array of parameters including
+         *                              those that are wildcarded.
+         *                              If the value is not an array
+         *                              then it is considered to match any.
+         *    @param $wildcard          Any parameter matching this
+         *                              will always match.
          *    @public
          */
-        function IdenticalParametersExpectation($expected) {
+        function ParametersExpectation($expected = false, $wildcard = MOCK_WILDCARD) {
             $this->Expectation();
+            $this->_expected = $expected;
+            $this->_wildcard = $wildcard;
         }
         
         /**
          *    Tests the assertion. True if correct.
-         *    @param $compare        Comparison value.
+         *    @param $parameters     Comparison values.
          *    @return                True if correct.
          *    @public
          */
-        function test($compare) {
+        function test($parameters) {
+            if (!is_array($this->_expected)) {
+                return true;
+            }
+            if (count($this->_expected) != count($parameters)) {
+                return false;
+            }
+            for ($i = 0; $i < count($this->_expected); $i++) {
+                if ($this->_expected[$i] === $this->_wildcard) {
+                    continue;
+                }
+                if (count($parameters) <= $i) {
+                    return false;
+                }
+                if (!($this->_expected[$i] === $parameters[$i])) {
+                    return false;
+                }
+            }
+            return true;
         }
         
         /**
          *    Returns a human readable test message.
-         *    @param $compare      Incoming parameter list.
+         *    @param $comparison   Incoming parameter list.
          *    @return              String description of success
          *                         or failure.
          *    @public
          */
-        function testMessage($compare) {
+        function testMessage($comparison) {
         }
     }
     
