@@ -196,7 +196,7 @@
         }
         
         /**
-         *    Accessor for a list of all fixed links.
+         *    Accessor for a list of all relative links.
          *    @return       List of links without hostname.
          *    @public
          */

@@ -58,8 +58,18 @@
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
         function testRelativeFetch() {
-            $this->fetch('http://www.lastcraft.com/test/');
+            $this->fetch('http://www.lastcraft.com/test/link_confirm.php');
             $this->fetch('./network_confirm.php');
+            $this->assertWantedPattern('/target for the SimpleTest/');
+        }
+        function testAbsoluteFollowing() {
+            $this->fetch('http://www.lastcraft.com/test/link_confirm.php');
+            $this->assertTrue($this->clickLink('Absolute'));
+            $this->assertWantedPattern('/target for the SimpleTest/');
+        }
+        function testRelativeFollowing() {
+            $this->fetch('http://www.lastcraft.com/test/link_confirm.php');
+            $this->assertTrue($this->clickLink('Relative'));
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
     }

@@ -96,18 +96,6 @@
         }
         
         /**
-         *    Called from within the test methods to register
-         *    passes and failures.
-         *    @param $result            Boolean, true on pass.
-         *    @param $message           Message to display describing
-         *                              the test state.
-         *    @public
-         */
-        function assertTrue($result, $message = "True assertion failed.") {
-            $this->notify(new TestResult($result, $message));
-        }
-        
-        /**
          *    Hook for different types of test case.
          *    Allows test case class specific actions to
          *    be performed before the user setUp() method.
@@ -160,6 +148,31 @@
             $this->assertTrue(
                     $assertion->test($test_value),
                     sprintf($message, $assertion->testMessage($test_value)));
+        }
+        
+        /**
+         *    Called from within the test methods to register
+         *    passes and failures.
+         *    @param $result            Boolean, true on pass.
+         *    @param $message           Message to display describing
+         *                              the test state.
+         *    @public
+         */
+        function assertTrue($result, $message = "True assertion failed.") {
+            $this->notify(new TestResult($result, $message));
+        }
+        
+        /**
+         *    Will be true on false and vice versa. False
+         *    is the PHP definition of false, so that null,
+         *    empty strings, zero and an empty array all count
+         *    as false.
+         *    @param $boolean        Supposedly false value.
+         *    @param $message        Message to display.
+         *    @public
+         */
+        function assertFalse($boolean, $message = "false assertion") {
+            $this->assertTrue(!$boolean, $message);
         }
     }
     

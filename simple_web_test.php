@@ -6,6 +6,7 @@
     }
     require_once(SIMPLE_TEST . 'simple_test.php');
     require_once(SIMPLE_TEST . 'browser.php');
+    require_once(SIMPLE_TEST . 'page.php');
     
     /**
      *    Test case for testing of web pages. Allows
@@ -15,6 +16,7 @@
     class WebTestCase extends SimpleTestCase {
         var $_current_browser;
         var $_current_content;
+        var $_html_cache;
         
         /**
          *    Creates an empty test case. Should be subclassed
@@ -49,12 +51,37 @@
         }
         
         /**
+         *    Creates a new default page builder object and
+         *    uses it to parse the current content. Caches
+         *    the page content once it is parsed.
+         *    @return            New SimplePage object.
+         *    @private
+         */
+        function &_getHtml() {
+            if (!$this->_html_cache) {
+                $this->_html_cache = &new SimplePage($this->_current_content);
+            }
+            return $this->_html_cache;
+        }
+        
+        /**
+         *    Resets the parsed HTML page cache.
+         *    @private
+         */
+        function _clearHtmlCache() {
+            $this->_html_cache = false;
+        }
+        
+        /**
          *    Sets up a browser for the start of the
          *    test method.
+         *    @param $method        Name of test method.
+         *    @private
          */
         function _testMethodStart($method) {
             parent::_testMethodStart($method);
             $this->_current_content = false;
+            $this->_clearHtmlCache();
             $this->_current_browser = &$this->createBrowser();
         }
         
@@ -68,6 +95,28 @@
          */
         function fetch($url) {
             $this->_current_content = $this->_current_browser->fetchContent($url);
+            $this->_clearHtmlCache();
+        }
+        
+        /**
+         *    Follows a link by name. Will click the first link
+         *    found with this link text by default, or a later
+         *    one if an index is given.
+         *    @param $label     Text between the anchor tags.
+         *    @param $index     Link position counting from zero.
+         *    @public
+         */
+        function clickLink($label, $index = 0) {
+            $page = &$this->_getHtml();
+            $urls = $page->getUrls($label);
+            if (count($urls) == 0) {
+                return false;
+            }
+            if (count($urls) < $index + 1) {
+                return false;
+            }
+            $this->fetch($urls[$index]);
+            return true;
         }
         
         /**

@@ -28,16 +28,6 @@
         }
         
         /**
-         *    Will be true on false and vice versa.
-         *    @param $boolean        Supposedly false value.
-         *    @param $message        Message to display.
-         *    @public
-         */
-        function assertFalse($boolean, $message = "false assertion") {
-            $this->assertTrue(!$boolean, $message);
-        }
-        
-        /**
          *    Will be true if the value is null.
          *    @param $value          Supposedly null value.
          *    @param $message        Message to display.
