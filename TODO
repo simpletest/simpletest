@@ -1,16 +1,18 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 19 hours.
+This is immediate stuff only for this iteration (RC2) of 22 hours.
 
 $Id$
 
 Unit tester
 -----------
+Bug fix of syntax errors in test scripts reporting green (3).
 
 Reporter
 --------
 
 Mock objects
 ------------
+Bug fix of fatal error with overload functions (2).
 
 Parser
 ------
@@ -23,13 +25,13 @@ Web tester
 
 Documentation
 -------------
-Tidy up tutorial source to use new tags (3).
 Fix unit testing tutorial to fit with newer syntax (4).
 Add authentication documentation (3).
 Add runner documentation (3).
 Add browser scripting documentation(2).
-Tidy up sundrey doc files (2).
+Tidy up sundry doc. files (2).
+Fix reported typos (1).
 
 Build
 -----
-Finish Doc generation so that PHPDoc tutorial is rendered correctly (2).
+Finish Doc generation so that PHPDoc tutorial is rendered correctly (2/1) - done.
