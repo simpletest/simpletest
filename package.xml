@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0">
+  <name>Simple Test</name>
+  <summary>Simple Test is a Unit Test Framework for PHP and Web Based Applications</summary>
+  <description>
+ The heart of SimpleTest is a testing framework built around test case classes. These are written as extensions of base test case classes, each extended with methods that actually contain test code. Top level test scripts then invoke the run()  methods on every one of these test cases in order. Each test method is written to invoke various assertions that the developer expects to be true such as assertEqual(). If the expectation is correct, then a successful result is dispatched to the observing test reporter, but any failure triggers an alert and a description of the mismatch.
+
+A test case looks like this...
+
+class MyTestCase extends UnitTestCase {
+    function MyTestCase() {
+        $this->UnitTestCase();
+    }
+    function testLog() {
+        $log = new Log("my.log");
+        $log->message("Hello");
+        $this->assertTrue(file_exists("my.log"));
+    }
+}
+
+These tools are designed for the developer. Tests are written in the PHP language itself more or less as the application itself is built. The advantage of using PHP itself as the testing language is that there are no new languages to learn, testing can start straight away, and the developer can test any part of the code. Basically, all parts that can be accessed by the application code can also be accessed by the test code if they are in the same language. 
+  </description>
+  <maintainers>
+    <maintainer>
+      <user>lastcraft</user>
+      <name>Marcus Baker</name>
+      <email>marcus@lastcraft.com</email>
+      <role>lead</role>
+    </maintainer>
+  </maintainers>
+  <release>
+    <version>1.0.8</version>
+    <date>2003-09-28</date>
+    <license>PHP</license>
+    <state>alpha</state>
+    <notes>
+      This is definitely the last Alpha. It is VERY important that when upgrading you read the HELP_MY_TESTS_DONT_WORK_ANYMORE file as it contains someimportant information on name changes. It should involve only some minor changes to test suites and the old names are still supported. This will change in Beta1.
+    </notes>
+    <deps>
+      <dep type="php" rel="ge" version="4.2.0"/>
+    </deps>
+    <filelist>
+      <!-- Base dir -->
+      <file role="php" baseinstalldir="simpletest" name="assertion.php"/>
+      <file role="php" baseinstalldir="simpletest" name="browser.php"/>
+      <file role="php" baseinstalldir="simpletest" name="errors.php"/>
+      <file role="doc" baseinstalldir="simpletest" name="HELP_MY_TESTS_DONT_WORK_ANYMORE"/>
+      <file role="php" baseinstalldir="simpletest" name="http.php"/>
+      <file role="doc" baseinstalldir="simpletest" name="LICENSE"/>
+      <file role="php" baseinstalldir="simpletest" name="mock_objects.php"/>
+      <file role="php" baseinstalldir="simpletest" name="options.php"/>
+      <file role="php" baseinstalldir="simpletest" name="page.php"/>
+      <file role="php" baseinstalldir="simpletest" name="parser.php"/>
+      <file role="doc" baseinstalldir="simpletest" name="README"/>
+      <file role="php" baseinstalldir="simpletest" name="reporter.php"/>
+      <file role="php" baseinstalldir="simpletest" name="runner.php"/>
+      <file role="php" baseinstalldir="simpletest" name="simple_html_test.php"/>
+      <file role="php" baseinstalldir="simpletest" name="simple_mock.php"/>
+      <file role="php" baseinstalldir="simpletest" name="simple_test.php"/>
+      <file role="php" baseinstalldir="simpletest" name="simple_unit.php"/>
+      <file role="php" baseinstalldir="simpletest" name="simple_web_test.php"/>
+      <file role="php" baseinstalldir="simpletest" name="tag.php"/>
+      <file role="php" baseinstalldir="simpletest" name="unit_tester.php"/>
+      <file role="php" baseinstalldir="simpletest" name="web_tester.php"/>
+      <!-- Adapters -->
+      <file role="php" baseinstalldir="simpletest" name="adapters/pear_test_case.php"/>
+      <file role="php" baseinstalldir="simpletest" name="adapters/phpunit_test_case.php"/>
+      <!-- Docs -->
+      <file role="doc" baseinstalldir="simpletest" name="docs/group_test_documentation.html"/>
+      <file role="doc" baseinstalldir="simpletest" name="docs/index.html"/>
+      <file role="doc" baseinstalldir="simpletest" name="docs/mock_objects_documentation.html"/>
+      <file role="doc" baseinstalldir="simpletest" name="docs/overview.html"/>
+      <file role="doc" baseinstalldir="simpletest" name="docs/partial_mocks_documentation.html"/>
+      <file role="doc" baseinstalldir="simpletest" name="docs/reporter_documentation.html"/>
+      <file role="doc" baseinstalldir="simpletest" name="docs/server_stubs_documentation.html"/>
+      <file role="doc" baseinstalldir="simpletest" name="docs/unit_test_documentation.html"/>
+      <!-- Tests -->
+      <file role="test" baseinstalldir="simpletest" name="test/adapter_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/all_tests.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/assertion_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/boundary_tests.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/browser_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/errors_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/http_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/live_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/options_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/page_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/parser_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/simple_mock_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/simple_unit_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/socket_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/tag_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/unit_tests.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/web_test_case_test.php"/>
+    </filelist>
+  </release>
+</package>
