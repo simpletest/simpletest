@@ -118,7 +118,7 @@
                         and no others.
                     </li>
                     <li>
-                        New test case extension classes thet get included will be
+                        New test case extension classes that get included will be
                         placed in the group test and run also.
                         You will need to add a <code>SimpleTestOptions::ignore()</code>
                         directive for these classes or make sure that they are included
