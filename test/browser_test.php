@@ -124,7 +124,7 @@
             $test->setExpectedArgumentsSequence(0, "assertTrue", array(false, '*'));
             $test->setExpectedCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
-            $browser->expectBadConnection(false);
+            $browser->expectConnection();
             $request = &$this->_createSimulatedBadHost();
             $this->assertIdentical(
                     $browser->fetchUrl("http://this.host/this/path/page.html", &$request),
@@ -136,7 +136,7 @@
             $test->setExpectedArgumentsSequence(0, "assertTrue", array(true, '*'));
             $test->setExpectedCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
-            $browser->expectBadConnection();
+            $browser->expectConnection(false);
             $request = &$this->_createSimulatedBadHost();
             $this->assertIdentical(
                     $browser->fetchUrl("http://this.host/this/path/page.html", &$request),
@@ -145,8 +145,8 @@
         }
     }
 
-    class TestOfHeaders extends UnitTestCase {
-        function TestOfHeaders() {
+    class TestOfHeaderExpectations extends UnitTestCase {
+        function TestOfHeaderExpectations() {
             $this->UnitTestCase();
         }
         function setUp() {
@@ -172,6 +172,28 @@
             $this->_test->setExpectedCallCount("assertTrue", 1);
             $browser = &new TestBrowser($this->_test);
             $browser->expectResponseCodes(array(100, 200));
+            $browser->fetchUrl("http://this.host/this/path/page.html", &$this->_request);
+            $this->_test->tally();
+        }
+        function testExpectedMimeTypes() {
+            $this->_request->setExpectedArguments("addHeaderLine", array("Accept: */*"));
+            $this->_request->setExpectedCallCount("addHeaderLine", 1);
+            $this->_response->setReturnValue("getMimeType", "text/xml");
+            $this->_test->setExpectedArguments("assertTrue", array(true, "*"));
+            $this->_test->setExpectedCallCount("assertTrue", 1);
+            $browser = &new TestBrowser($this->_test);
+            $browser->expectMimeTypes(array("text/plain", "text/xml"));
+            $browser->fetchUrl("http://this.host/this/path/page.xml", &$this->_request);
+            $this->_test->tally();
+            $this->_request->tally();
+        }
+        function testClearExpectations() {
+            $this->_response->setReturnValue("getResponseCode", 404);
+            $this->_test->setExpectedCallCount("assertTrue", 0);
+            $browser = &new TestBrowser($this->_test);
+            $browser->expectResponseCodes(array(100, 200));
+            $browser->expectConnection();
+            $browser->clearExpectations();
             $browser->fetchUrl("http://this.host/this/path/page.html", &$this->_request);
             $this->_test->tally();
         }

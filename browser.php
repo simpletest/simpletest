@@ -80,12 +80,13 @@
     }
     
     /**
-     *    Fake web browser.
+     *    Fake web browser. Can be set up to automatically
+     *    test reponses.
      */
     class TestBrowser {
         var $_test;
         var $_response;
-        var $_expect_error;
+        var $_expect_connection;
         var $_expected_response_codes;
         var $_cookie_jar;
         
@@ -97,14 +98,23 @@
         function TestBrowser(&$test) {
             $this->_test = &$test;
             $this->_response = false;
-            $this->_expect_error = null;
-            $this->_expected_response_codes = null;
+            $this->clearExpectations();
             $this->_cookie_jar = new CookieJar();
         }
         
         /**
+         *    Resets all expectations.
+         *    @public
+         */
+        function clearExpectations() {
+            $this->_expect_connection = null;
+            $this->_expected_response_codes = null;
+            $this->_expected_mime_types = null;
+        }
+        
+        /**
          *    Fetches a URL performing the standard tests.
-         *    @param $url        Target to fetch.
+         *    @param $url        Target to fetch as string.
          *    @param $request    Test version of SimpleHttpRequest.
          *    @return            Content of page.
          *    @public
@@ -112,6 +122,13 @@
         function fetchUrl($url, $request = false) {
             if (!is_object($request)) {
                 $request = new SimpleHttpRequest($url);
+            }
+            if (isset($this->_expected_mime_types)) {
+                if (count($this->_expected_mime_types) == 1) {
+                    $request->addHeaderLine("Accept: " . $this->_expected_mime_types[0]);
+                } else {
+                    $request->addHeaderLine("Accept: */*");
+                }
             }
             foreach ($this->_cookie_jar->getValidCookies() as $cookie) {
                 $request->setCookie($cookie);
@@ -127,8 +144,8 @@
          *    @param $is_expected        True if failure wanted.
          *    @public
          */
-        function expectBadConnection($is_expected = true) {
-            $this->_expect_error = $is_expected;
+        function expectConnection($is_expected = true) {
+            $this->_expect_connection = $is_expected;
         }
         
         /**
@@ -138,6 +155,16 @@
          */
         function expectResponseCodes($codes) {
             $this->_expected_response_codes = $codes;
+        }
+        
+        /**
+         *    Sets the allowed mime types and adds the
+         *    necessary request headers.
+         *    @param $types        Array of allowed types.
+         *    @public
+         */
+        function expectMimeTypes($types) {
+            $this->_expected_mime_types = $types;
         }
         
         /**
@@ -158,15 +185,20 @@
          *    @private
          */
         function _checkExpectations($url, &$response) {
-            if (isset($this->_expect_error)) {
+            if (isset($this->_expect_connection)) {
                 $this->_assertTrue(
-                        $response->isError() == $this->_expect_error,
+                        $response->isError() != $this->_expect_connection,
                         "Fetching $url with error [" . $response->getError() . "]");
             }
             if (isset($this->_expected_response_codes)) {
                 $this->_assertTrue(
                         in_array($response->getResponseCode(), $this->_expected_response_codes),
                         "Fetching $url with response code [" . $response->getResponseCode() . "]");
+            }
+            if (isset($this->_expected_mime_types)) {
+                $this->_assertTrue(
+                        in_array($response->getMimeType(), $this->_expected_mime_types),
+                        "Fetching $url with mime type [" . $response->getMimeType() . "]");
             }
         }
         
