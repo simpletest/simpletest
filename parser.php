@@ -23,8 +23,8 @@
         
         /**
          *    Constructor. Starts with no patterns.
-         *    @param $case    True for case sensitive, false
-         *                    for insensitive.
+         *    @param boolean $case    True for case sensitive, false
+         *                            for insensitive.
          *    @access public
          */
         function ParallelRegex($case) {
@@ -36,10 +36,10 @@
         
         /**
          *    Adds a pattern with an optional label.
-         *    @param $pattern      Perl style regex, but ( and )
-         *                         lose the usual meaning.
-         *    @param $label        Label of regex to be returned
-         *                         on a match.
+         *    @param string $pattern      Perl style regex, but ( and )
+         *                                lose the usual meaning.
+         *    @param string $label        Label of regex to be returned
+         *                                on a match.
          *    @access public
          */
         function addPattern($pattern, $label = true) {
@@ -52,10 +52,10 @@
         /**
          *    Attempts to match all patterns at once against
          *    a string.
-         *    @param $subject      String to match against.
-         *    @param $match        First matched portion of
-         *                         subject.
-         *    @return              True on success.
+         *    @param string $subject      String to match against.
+         *    @param string $match        First matched portion of
+         *                                subject.
+         *    @return boolean             True on success.
          *    @access public
          */
         function match($subject, &$match) {
@@ -80,7 +80,7 @@
          *    regular expression separated with the
          *    "or" operator. Caches the regex.
          *    Will automatically escape (, ) and / tokens.
-         *    @param $patterns    List of patterns in order.
+         *    @param array $patterns    List of patterns in order.
          *    @access private
          */
         function _getCompoundedRegex() {
@@ -98,7 +98,7 @@
         
         /**
          *    Accessor for perl regex mode flags to use.
-         *    @return        Flags as string.
+         *    @return string       Perl regex flags.
          *    @access private
          */
         function _getPerlMatchingFlags() {
@@ -114,7 +114,7 @@
         
         /**
          *    Constructor. Starts in named state.
-         *    @param $start        Starting state name.
+         *    @param string $start        Starting state name.
          *    @access public
          */
         function StateStack($start) {
@@ -123,7 +123,7 @@
         
         /**
          *    Accessor for current state.
-         *    @return        State as string.
+         *    @return string       State.
          *    @access public
          */
         function getCurrent() {
@@ -133,7 +133,7 @@
         /**
          *    Adds a state to the stack and sets it
          *    to be the current state.
-         *    @param $state        New state.
+         *    @param string $state        New state.
          *    @access public
          */
         function enter($state) {
@@ -143,8 +143,8 @@
         /**
          *    Leaves the current state and reverts
          *    to the previous one.
-         *    @return     False if we drop off
-         *                the bottom of the list.
+         *    @return boolean    False if we drop off
+         *                       the bottom of the list.
          *    @access public
          */
         function leave() {
@@ -173,10 +173,10 @@
         /**
          *    Sets up the lexer in case insensitive matching
          *    by default.
-         *    @param $parser     Handling strategy by
-         *                       reference.
-         *    @param $start      Starting handler.
-         *    @param $case       True for case sensitive.
+         *    @param SimpleSaxParser $parser  Handling strategy by
+         *                                    reference.
+         *    @param string $start            Starting handler.
+         *    @param boolean $case            True for case sensitive.
          *    @access public
          */
         function SimpleLexer(&$parser, $start = "accept", $case = false) {
@@ -191,11 +191,11 @@
          *    Adds a token search pattern for a particular
          *    parsing mode. The pattern does not change the
          *    current mode.
-         *    @param $pattern      Perl style regex, but ( and )
-         *                         lose the usual meaning.
-         *    @param $mode         Should only apply this
-         *                         pattern when dealing with
-         *                         this type of input.
+         *    @param string $pattern      Perl style regex, but ( and )
+         *                                lose the usual meaning.
+         *    @param string $mode         Should only apply this
+         *                                pattern when dealing with
+         *                                this type of input.
          *    @access public
          */
         function addPattern($pattern, $mode = "accept") {
@@ -209,13 +209,13 @@
          *    Adds a pattern that will enter a new parsing
          *    mode. Useful for entering parenthesis, strings,
          *    tags, etc.
-         *    @param $pattern      Perl style regex, but ( and )
-         *                         lose the usual meaning.
-         *    @param $mode         Should only apply this
-         *                         pattern when dealing with
-         *                         this type of input.
-         *    @param $new_mode     Change parsing to this new
-         *                         nested mode.
+         *    @param string $pattern      Perl style regex, but ( and )
+         *                                lose the usual meaning.
+         *    @param string $mode         Should only apply this
+         *                                pattern when dealing with
+         *                                this type of input.
+         *    @param string $new_mode     Change parsing to this new
+         *                                nested mode.
          *    @access public
          */
         function addEntryPattern($pattern, $mode, $new_mode) {
@@ -228,9 +228,9 @@
         /**
          *    Adds a pattern that will exit the current mode
          *    and re-enter the previous one.
-         *    @param $pattern      Perl style regex, but ( and )
-         *                         lose the usual meaning.
-         *    @param $mode         Mode to leave.
+         *    @param string $pattern      Perl style regex, but ( and )
+         *                                lose the usual meaning.
+         *    @param string $mode         Mode to leave.
          *    @access public
          */
         function addExitPattern($pattern, $mode) {
@@ -243,12 +243,12 @@
         /**
          *    Adds a pattern that has a special mode.
          *    Acts as an entry and exit pattern in one go.
-         *    @param $pattern      Perl style regex, but ( and )
-         *                         lose the usual meaning.
-         *    @param $mode         Should only apply this
-         *                         pattern when dealing with
-         *                         this type of input.
-         *    @param $special      Use this mode for this one token.
+         *    @param string $pattern      Perl style regex, but ( and )
+         *                                lose the usual meaning.
+         *    @param string $mode         Should only apply this
+         *                                pattern when dealing with
+         *                                this type of input.
+         *    @param string $special      Use this mode for this one token.
          *    @access public
          */
         function addSpecialPattern($pattern, $mode, $special) {
@@ -260,8 +260,8 @@
         
         /**
          *    Adds a mapping from a mode to another handler.
-         *    @param $mode        Mode to be remapped.
-         *    @param $handler     New target handler.
+         *    @param string $mode        Mode to be remapped.
+         *    @param string $handler     New target handler.
          *    @access public
          */
         function mapHandler($mode, $handler) {
@@ -274,8 +274,8 @@
          *    content is consumed. If successful then each
          *    unparsed and parsed token invokes a call to the
          *    held listener.
-         *    @param $raw        Raw HTML text.
-         *    @return            True on success, else false.
+         *    @param string $raw        Raw HTML text.
+         *    @return boolean           True on success, else false.
          *    @access public
          */
         function parse($raw) {
@@ -303,13 +303,13 @@
          *    Sends the matched token and any leading unmatched
          *    text to the parser changing the lexer to a new
          *    mode if one is listed.
-         *    @param $unmatched    Unmatched leading portion.
-         *    @param $matched      Actual token match.
-         *    @param $mode         Mode after match. The "_exit"
-         *                         mode causes a stack pop. An
-         *                         false mode causes no change.
-         *    @return              False if there was any error
-         *                         from the parser.
+         *    @param string $unmatched    Unmatched leading portion.
+         *    @param string $matched      Actual token match.
+         *    @param string $mode         Mode after match. The "_exit"
+         *                                mode causes a stack pop. An
+         *                                false mode causes no change.
+         *    @return boolean             False if there was any error
+         *                                from the parser.
          *    @access private
          */
         function _dispatchTokens($unmatched, $matched, $mode = false) {
@@ -340,9 +340,9 @@
         /**
          *    Calls the parser method named after the current
          *    mode. Empty content will be ignored.
-         *    @param $content        Text parsed.
-         *    @param $is_match       Token is recognised rather
-         *                           than unparsed data.
+         *    @param string $content        Text parsed.
+         *    @param boolean $is_match      Token is recognised rather
+         *                                  than unparsed data.
          *    @access private
          */
         function _invokeParser($content, $is_match) {
@@ -360,14 +360,14 @@
          *    Tries to match a chunk of text and if successful
          *    removes the recognised chunk and any leading
          *    unparsed data. Empty strings will not be matched.
-         *    @param $raw         The subject to parse. This is the
-         *                        content that will be eaten.
-         *    @return             Three item list of unparsed
-         *                        content followed by the
-         *                        recognised token and finally the
-         *                        action the parser is to take.
-         *                        True if no match, false if there
-         *                        is a parsing error.
+         *    @param string $raw         The subject to parse. This is the
+         *                               content that will be eaten.
+         *    @return array              Three item list of unparsed
+         *                               content followed by the
+         *                               recognised token and finally the
+         *                               action the parser is to take.
+         *                               True if no match, false if there
+         *                               is a parsing error.
          *    @access private
          */
         function _reduce(&$raw) {
@@ -399,7 +399,7 @@
         
         /**
          *    Sets the listener.
-         *    @param $listener SAX event handler.
+         *    @param SimpleSaxListener $listener    SAX event handler.
          *    @access public
          */
         function SimpleSaxParser(&$listener) {
@@ -412,8 +412,8 @@
         
         /**
          *    Sets up the matching lexer.
-         *    @param $parser    Event generator, usually $self.
-         *    @return           Lexer suitable for this parser.
+         *    @param SimpleSaxParser $parser    Event generator, usually $self.
+         *    @return SimpleLexer               Lexer suitable for this parser.
          *    @access public
          *    @static
          */
@@ -432,7 +432,7 @@
         /**
          *    The lexer has to skip certain sections such
          *    as server code, client code and styles.
-         *    @param $lexer        Lexer to add patterns to.
+         *    @param SimpleLexer $lexer        Lexer to add patterns to.
          *    @access private
          *    @static
          */
@@ -450,8 +450,8 @@
         
         /**
          *    Pattern matches to start and end a tag.
-         *    @param $lexer        Lexer to add patterns to.
-         *    @param $tag          Name of tag to scan for.
+         *    @param SimpleLexer $lexer   Lexer to add patterns to.
+         *    @param string $tag          Name of tag to scan for.
          *    @access private
          *    @static
          */
@@ -463,7 +463,7 @@
         /**
          *    Pattern matches to parse the inside of a tag
          *    including the attributes and their quoting.
-         *    @param $lexer        Lexer to add patterns to.
+         *    @param SimpleLexer $lexer    Lexer to add patterns to.
          *    @access private
          *    @static
          */
@@ -477,7 +477,7 @@
         /**
          *    Matches attributes that are either single quoted,
          *    double quoted or unquoted.
-         *    @param $lexer        Lexer to add patterns to.
+         *    @param SimpleLexer $lexer     Lexer to add patterns to.
          *    @access private
          *    @static
          */
@@ -497,8 +497,8 @@
         /**
          *    Runs the content through the lexer which
          *    should call back to the acceptors.
-         *    @param $raw      Page text to parse.
-         *    @return          False if parse error.
+         *    @param string $raw      Page text to parse.
+         *    @return boolean         False if parse error.
          *    @access public
          */
         function parse($raw) {
@@ -511,9 +511,9 @@
          *    is dispatched and the current attributes
          *    set back to empty. The element or attribute
          *    name is converted to lower case.
-         *    @param $token    Incoming characters.
-         *    @param $event    Lexer event type.
-         *    @return          False if parse error.
+         *    @param string $token     Incoming characters.
+         *    @param integer $event    Lexer event type.
+         *    @return boolean          False if parse error.
          *    @access public
          */
         function acceptStartToken($token, $event) {
@@ -539,9 +539,9 @@
         /**
          *    Accepts a token from the end tag mode.
          *    The element name is converted to lower case.
-         *    @param $token    Incoming characters.
-         *    @param $event    Lexer event type.
-         *    @return          False if parse error.
+         *    @param string $token     Incoming characters.
+         *    @param integer $event    Lexer event type.
+         *    @return boolean          False if parse error.
          *    @access public
          */
         function acceptEndToken($token, $event) {
@@ -553,9 +553,9 @@
         
         /**
          *    Part of the tag data.
-         *    @param $token    Incoming characters.
-         *    @param $event    Lexer event type.
-         *    @return          False if parse error.
+         *    @param string $token     Incoming characters.
+         *    @param integer $event    Lexer event type.
+         *    @return boolean          False if parse error.
          *    @access public
          */
         function acceptAttributeToken($token, $event) {
@@ -571,9 +571,9 @@
         
         /**
          *    A character entity.
-         *    @param $token    Incoming characters.
-         *    @param $event    Lexer event type.
-         *    @return          False if parse error.
+         *    @param string $token    Incoming characters.
+         *    @param integer $event   Lexer event type.
+         *    @return boolean         False if parse error.
          *    @access public
          */
         function acceptEntityToken($token, $event) {
@@ -582,9 +582,9 @@
         /**
          *    Character data between tags regarded as
          *    important.
-         *    @param $token    Incoming characters.
-         *    @param $event    Lexer event type.
-         *    @return          False if parse error.
+         *    @param string $token     Incoming characters.
+         *    @param integer $event    Lexer event type.
+         *    @return boolean          False if parse error.
          *    @access public
          */
         function acceptTextToken($token, $event) {
@@ -593,9 +593,9 @@
         
         /**
          *    Incoming data to be ignored.
-         *    @param $token    Incoming characters.
-         *    @param $event    Lexer event type.
-         *    @return          False if parse error.
+         *    @param string $token     Incoming characters.
+         *    @param integer $event    Lexer event type.
+         *    @return boolean          False if parse error.
          *    @access public
          */
         function ignore($token, $event) {
@@ -618,11 +618,11 @@
         
         /**
          *    Start of element event.
-         *    @param $name        Element name.
-         *    @param $attributes  Hash of name value pairs.
-         *                        Attributes without content
-         *                        are marked as true.
-         *    @return             False on parse error.
+         *    @param string $name        Element name.
+         *    @param hash $attributes    Name value pairs.
+         *                               Attributes without content
+         *                               are marked as true.
+         *    @return boolean            False on parse error.
          *    @access public
          */
         function startElement($name, $attributes) {
@@ -630,8 +630,8 @@
         
         /**
          *    End of element event.
-         *    @param $name        Element name.
-         *    @return             False on parse error.
+         *    @param string $name        Element name.
+         *    @return boolean            False on parse error.
          *    @access public
          */
         function endElement($name) {
@@ -639,8 +639,8 @@
         
         /**
          *    Unparsed, but relevant data.
-         *    @param $text        May include unparsed tags.
-         *    @return             False on parse error.
+         *    @param string $text        May include unparsed tags.
+         *    @return boolean            False on parse error.
          *    @access public
          */
         function addContent($text) {
