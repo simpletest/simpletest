@@ -34,7 +34,7 @@ Add assertFieldById() method (1).
 Allow image links/buttons to be head fetched to set cookies (2).
 Allow stylesheet loading to affect cookies (2).
 Username and password should allow encoded characters (1).
-Add support for proxy fetching (3/5) - done.
+Add support for proxy fetching (3/5).
 Add User-Agent identifierfor tracking tests (1).
 
 Web tester

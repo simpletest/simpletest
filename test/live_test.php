@@ -223,6 +223,10 @@
             $this->get('http://www.lastcraft.com/test/redirect.php', array('a' => 'aaa'));
             $this->assertNoUnwantedPattern('/a=\[aaa\]/');
         }
+        function testRedirectKeepsExtraRequestDataOfItsOwn() {
+            $this->get('http://www.lastcraft.com/test/redirect.php');
+            $this->assertWantedPattern('/r=\[rrr\]/');
+        }
         function testRedirectLosesPostData() {
             $this->post('http://www.lastcraft.com/test/redirect.php', array('a' => 'aaa'));
             $this->assertTitle('Simple test target file');

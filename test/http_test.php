@@ -607,5 +607,20 @@
             $this->assertTrue($headers->isRedirect());
             $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com/");
         }
+        function testRedirectWithPort() {
+            $socket = &new MockSimpleSocket($this);
+            $socket->setReturnValue("isError", false);
+            $socket->setReturnValueAt(0, "read", "HTTP/1.1 301 OK\r\n");
+            $socket->setReturnValueAt(1, "read", "Content-Type: text/plain\r\n");
+            $socket->setReturnValueAt(2, "read", "Location: http://www.somewhere-else.com:80/\r\n");
+            $socket->setReturnValueAt(3, "read", "Connection: close\r\n");
+            $socket->setReturnValueAt(4, "read", "\r\n");
+            $socket->setReturnValue("read", "");
+            
+            $response = &new SimpleHttpResponse($socket);
+            $headers = $response->getHeaders();
+            $this->assertTrue($headers->isRedirect());
+            $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com:80/");
+        }
     }
 ?>
