@@ -359,7 +359,7 @@
             $route->setReturnReference('_createSocket', $socket);
             $route->SimpleProxyRoute(
                     new SimpleUrl('http://a.valid.host/here.html'),
-                    'my-proxy');
+                    new SimpleUrl('http://my-proxy'));
             
             $route->createConnection('GET', 15);
             $socket->tally();
@@ -376,7 +376,7 @@
             $route->setReturnReference('_createSocket', $socket);
             $route->SimpleProxyRoute(
                     new SimpleUrl('http://a.valid.host/here.html'),
-                    'my-proxy');
+                    new SimpleUrl('http://my-proxy'));
             
             $route->createConnection('POST', 15);
             $socket->tally();
@@ -393,8 +393,7 @@
             $route->setReturnReference('_createSocket', $socket);
             $route->SimpleProxyRoute(
                     new SimpleUrl('http://a.valid.host:81/here.html'),
-                    'my-proxy',
-                    8081);
+                    new SimpleUrl('http://my-proxy:8081'));
             
             $route->createConnection('GET', 15);
             $socket->tally();
@@ -411,7 +410,7 @@
             $route->setReturnReference('_createSocket', $socket);
             $route->SimpleProxyRoute(
                     new SimpleUrl('http://a.valid.host/here.html?a=1&b=2'),
-                    'my-proxy');
+                    new SimpleUrl('http://my-proxy'));
             
             $route->createConnection('GET', 15);
             $socket->tally();

@@ -136,46 +136,22 @@
          *    testing from behind a firewall. Set host
          *    to false to disable. This will take effect
          *    if there are no other proxy settings.
-         *    @param string $host        Proxy host.
-         *    @param integer $port       Proxy port.
-         *    @param boolean $is_secure  True if secure port.
+         *    @param string $proxy        Proxy host as URL.
          *    @access public
          */
-        function useProxy($host, $port = 8080, $is_secure = false) {
+        function useProxy($proxy) {
             $registry = &SimpleTestOptions::_getRegistry();
-            $registry['DefaultProxyHost'] = $host;
-            $registry['DefaultProxyPort'] = $port;
-            $registry['DefaultProxyIsSecure'] = $is_secure;
+            $registry['DefaultProxy'] = $proxy;
         }
         
         /**
          *    Accessor for default proxy host.
-         *    @return string       Host name.
+         *    @return string       Proxy URL.
          *    @access public
          */
-        function getDefaultProxyHost() {
+        function getDefaultProxy() {
             $registry = &SimpleTestOptions::_getRegistry();
-            return $registry['DefaultProxyHost'];
-        }
-        
-        /**
-         *    Accessor for default proxy port.
-         *    @return integer       Host name.
-         *    @access public
-         */
-        function getDefaultProxyPort() {
-            $registry = &SimpleTestOptions::_getRegistry();
-            return $registry['DefaultProxyPort'];
-        }
-        
-        /**
-         *    Accessor for SSL setting on default proxy.
-         *    @return boolean       True if SSL link to proxy.
-         *    @access public
-         */
-        function defaultProxyIsSecure() {
-            $registry = &SimpleTestOptions::_getRegistry();
-            return $registry['DefaultProxyIsSecure'];
+            return $registry['DefaultProxy'];
         }
         
         /**
@@ -204,9 +180,7 @@
                     'MockBaseClass' => 'SimpleMock',
                     'IgnoreList' => array(),
                     'AdditionalPartialMockCode' => '',
-                    'DefaultProxyHost' => false,
-                    'DefaultProxyPort' => false,
-                    'DefaultProxyIsSecure' => false);
+                    'DefaultProxy' => false);
         }
     }
     

@@ -183,12 +183,7 @@
          */
         function SimpleBrowser() {
             $this->_user_agent = &$this->_createUserAgent();
-            if (SimpleTestOptions::getDefaultProxyHost()) {
-                $this->_user_agent->useProxy(
-                        SimpleTestOptions::getDefaultProxyHost(),
-                        SimpleTestOptions::getDefaultProxyPort(),
-                        SimpleTestOptions::defaultProxyIsSecure());
-            }
+            $this->_user_agent->useProxy(SimpleTestOptions::getDefaultProxy());
             $this->_headers = false;
             $this->_transport_error = false;
             $this->_page = false;

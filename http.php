@@ -609,9 +609,9 @@
          *    Creates the first line which is the actual request.
          *    @param string $method   HTTP request method, usually GET.
          *    @return string          Request line content.
-         *    @access public
+         *    @access protected
          */
-        function getRequestLine($method) {
+        function _getRequestLine($method) {
             return $method . ' ' . $this->_url->getPath() .
                     $this->_url->getEncodedRequest() . ' HTTP/1.0';
         }
@@ -619,9 +619,9 @@
         /**
          *    Creates the host part of the request.
          *    @return string          Host line content.
-         *    @access public
+         *    @access protected
          */
-        function getHostLine() {
+        function _getHostLine() {
             $line = 'Host: ' . $this->_url->getHost();
             if ($this->_url->getPort()) {
                 $line .= ':' . $this->_url->getPort();
@@ -631,9 +631,9 @@
         
         /**
          *    Opens a socket to the route.
-         *    @param string $method          HTTP request method, usually GET.
-         *    @param integer $timeout        Connection timeout.
-         *    @return SimpleSocket/SimpleSecureSocket New socket.
+         *    @param string $method      HTTP request method, usually GET.
+         *    @param integer $timeout    Connection timeout.
+         *    @return SimpleSocket       New socket.
          *    @access public
          */
         function &createConnection($method, $timeout) {
@@ -644,8 +644,8 @@
                     $this->_url->getPort() ? $this->_url->getPort() : $default_port,
                     $timeout);
             if (! $socket->isError()) {
-                $socket->write($this->getRequestLine($method) . "\r\n");
-                $socket->write($this->getHostLine() . "\r\n");
+                $socket->write($this->_getRequestLine($method) . "\r\n");
+                $socket->write($this->_getHostLine() . "\r\n");
                 $socket->write("Connection: close\r\n");
             }
             return $socket;
@@ -675,23 +675,17 @@
 	 *    @subpackage WebTester
      */
     class SimpleProxyRoute extends SimpleRoute {
-        var $_proxy_host;
-        var $_proxy_port;
-        var $_is_secure;
+        var $_proxy;
         
         /**
          *    Stashes the proxy address.
-         *    @param SimpleUrl $url      URL as object.
-         *    @param string $host        Proxy host.
-         *    @param integer $port       Proxy port.
-         *    @param boolean $is_secure  True if secure port.
+         *    @param SimpleUrl $url     URL as object.
+         *    @param SimpleUrl $proxy   Proxy host as object.
          *    @access public
          */
-        function SimpleProxyRoute($url, $host, $port = 8080, $is_secure = false) {
+        function SimpleProxyRoute($url, $proxy) {
             $this->SimpleRoute($url);
-            $this->_proxy_host = $host;
-            $this->_proxy_port = $port;
-            $this->_is_secure = $is_secure;
+            $this->_proxy = $proxy;
         }
         
         /**
@@ -699,9 +693,9 @@
          *    @param string $method   HTTP request method, usually GET.
          *    @param SimpleUrl $url   URL as object.
          *    @return string          Request line content.
-         *    @access public
+         *    @access protected
          */
-        function getRequestLine($method) {
+        function _getRequestLine($method) {
             $url = $this->_getUrl();
             $scheme = $url->getScheme() ? $url->getScheme() : 'http';
             $port = $url->getPort() ? ':' . $url->getPort() : '';
@@ -713,10 +707,12 @@
          *    Creates the host part of the request.
          *    @param SimpleUrl $url   URL as object.
          *    @return string          Host line content.
-         *    @access public
+         *    @access protected
          */
-        function getHostLine() {
-            return 'Host: ' . $this->_proxy_host . ':' . $this->_proxy_port;
+        function _getHostLine() {
+            $host = 'Host: ' . $this->_proxy->getHost();
+            $port = $this->_proxy->getPort() ? $this->_proxy->getPort() : 8080;
+            return "$host:$port";
         }
         
         /**
@@ -728,13 +724,13 @@
          */
         function &createConnection($method, $timeout) {
             $socket = &$this->_createSocket(
-                    $this->_is_secure ? 'https' : 'http',
-                    $this->_proxy_host,
-                    $this->_proxy_port,
+                    $this->_proxy->getScheme() ? $this->_url->getScheme() : 'http',
+                    $this->_proxy->getHost(),
+                    $this->_proxy->getPort() ? $this->_url->getPort() : 8080,
                     $timeout);
             if (! $socket->isError()) {
-                $socket->write($this->getRequestLine($method) . "\r\n");
-                $socket->write($this->getHostLine() . "\r\n");
+                $socket->write($this->_getRequestLine($method) . "\r\n");
+                $socket->write($this->_getHostLine() . "\r\n");
                 $socket->write("Connection: close\r\n");
             }
             return $socket;
@@ -870,8 +866,8 @@
          *    @access protected
          */
         function _dispatchRequest(&$socket, $method) {
-            $this->addHeaderLine('Content-Length: ' . strlen($this->_pushed_content));
-            $this->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
+            $socket->write("Content-Length: " . strlen($this->_pushed_content) . "\r\n");
+            $socket->write("Content-Type: application/x-www-form-urlencoded\r\n");
             parent::_dispatchRequest($socket, $method);
             $socket->write($this->_pushed_content);
         }

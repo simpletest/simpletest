@@ -163,9 +163,7 @@
         var $_cookie_jar;
         var $_authenticator;
         var $_max_redirects;
-        var $_proxy_host;
-        var $_proxy_port;
-        var $_proxy_is_secure;
+        var $_proxy;
         var $_connection_timeout;
         var $_current_request;
         
@@ -177,9 +175,7 @@
             $this->_cookie_jar = &new SimpleCookieJar();
             $this->_authenticator = &new SimpleAuthenticator();
             $this->setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
-            $this->_proxy_host = false;
-            $this->_proxy_port = false;
-            $this->_proxy_is_secure = false;
+            $this->_proxy = false;
             $this->setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
             $this->_current_request = false;
         }
@@ -359,15 +355,18 @@
          *    Sets proxy to use on all requests for when
          *    testing from behind a firewall. Set host
          *    to false to disable.
-         *    @param string $host        Proxy host.
-         *    @param integer $port       Proxy port.
-         *    @param boolean $is_secure  True if secure port.
+         *    @param string $proxy       Proxy host as URL.
          *    @access public
          */
-        function useProxy($host, $port = 8080, $is_secure = false) {
-            $this->_proxy_host = $host;
-            $this->_proxy_port = $port;
-            $this->_proxy_is_secure = $is_secure;
+        function useProxy($proxy) {
+            if (! $proxy) {
+                $this->_proxy = false;
+                return;
+            }
+            if (strncmp($proxy, 'http://', 7) != 0) {
+                $proxy = 'http://'. $proxy;
+            }
+            $this->_proxy = &new SimpleUrl($proxy);
         }
         
         /**
@@ -506,12 +505,8 @@
          *    @access protected
          */
         function &_createRoute($url) {
-            if ($this->_proxy_host) {
-                return new SimpleProxyRoute(
-                        $url,
-                        $this->_proxy_host,
-                        $this->_proxy_port,
-                        $this->_proxy_is_secure);
+            if ($this->_proxy) {
+                return new SimpleProxyRoute($url, $this->_proxy);
             }
             return new SimpleRoute($url);
         }
