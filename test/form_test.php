@@ -102,6 +102,23 @@
                     new SimpleFormEncoding(array('go' => 'Go!')));            
         }
         
+        function testSubmitWithAdditionalParameters() {
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('http://host'));
+            $form->addWidget(new SimpleSubmitTag(
+                    array('type' => 'submit', 'name' => 'go', 'value' => 'Go!', 'id' => '9')));
+            $this->assertEqual(
+                    $form->submitButtonByName('go', array('a' => 'A')),
+                    new SimpleFormEncoding(array('go' => 'Go!', 'a' => 'A')));            
+            $this->assertEqual(
+                    $form->submitButtonByLabel('Go!', array('a' => 'A')),
+                    new SimpleFormEncoding(array('go' => 'Go!', 'a' => 'A')));            
+            $this->assertEqual(
+                    $form->submitButtonById(9, array('a' => 'A')),
+                    new SimpleFormEncoding(array('go' => 'Go!', 'a' => 'A')));            
+        }
+        
         function testSubmitButtonWithLabelOfSubmit() {
             $form = &new SimpleForm(
                     new SimpleFormTag(array()),
@@ -157,6 +174,29 @@
             $this->assertEqual(
                     $form->submitImageById(9, 100, 101),
                     new SimpleFormEncoding(array('go.x' => 100, 'go.y' => 101)));
+        }
+        
+        function testImageSubmitButtonWithAdditionalData() {
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
+            $form->addWidget(new SimpleImageSubmitTag(array(
+                    'type' => 'image',
+                    'src' => 'source.jpg',
+                    'name' => 'go',
+                    'alt' => 'Go!',
+                    'id' => '9')));
+            $this->assertEqual(
+                    $form->submitImageByLabel('Go!', 100, 101, array('a' => 'A')),
+                    new SimpleFormEncoding(array('go.x' => 100, 'go.y' => 101, 'a' => 'A')));
+            $this->assertTrue($form->hasImageName('go'));
+            $this->assertEqual(
+                    $form->submitImageByName('go', 100, 101, array('a' => 'A')),
+                    new SimpleFormEncoding(array('go.x' => 100, 'go.y' => 101, 'a' => 'A')));
+            $this->assertTrue($form->hasImageId(9));
+            $this->assertEqual(
+                    $form->submitImageById(9, 100, 101, array('a' => 'A')),
+                    new SimpleFormEncoding(array('go.x' => 100, 'go.y' => 101, 'a' => 'A')));
         }
         
         function testButtonTag() {

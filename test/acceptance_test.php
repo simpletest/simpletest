@@ -422,7 +422,7 @@
         }
     }
     
-    class TestOfLiveForm extends WebTestCase {
+    class TestOfLiveForms extends WebTestCase {
         
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
@@ -477,10 +477,24 @@
             $this->assertWantedText('g=[g2]');
         }
         
+        function testAdditionalFormValues() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertTrue($this->clickSubmit('Go!', array('add' => 'A')));
+            $this->assertWantedText('go=[Go!]');
+            $this->assertWantedText('add=[A]');
+        }
+        
         function testFormSubmissionByName() {
             $this->get('http://www.lastcraft.com/test/form.html');
             $this->assertTrue($this->clickSubmitByName('go'));
             $this->assertWantedText('go=[Go!]');
+        }
+        
+        function testFormSubmissionByNameAndadditionalParameters() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertTrue($this->clickSubmitByName('go', array('add' => 'A')));
+            $this->assertWantedText('go=[Go!]');
+            $this->assertWantedText('add=[A]');
         }
         
         function testFormSubmissionBySubmitButtonLabeledSubmit() {
@@ -513,19 +527,28 @@
         function testImageSubmissionByLabel() {
             $this->get('http://www.lastcraft.com/test/form.html');
             $this->assertTrue($this->clickImage('Image go!', 10, 12));
-            $this->assertWantedPattern('/go.x=\[10\].*?go.y=\[12\]/s');
+            $this->assertWantedText('go_x=[10]');
+            $this->assertWantedText('go_y=[12]');
+        }
+        
+        function testImageSubmissionByLabelWithAdditionalParameters() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertTrue($this->clickImage('Image go!', 10, 12, array('add' => 'A')));
+            $this->assertWantedText('add=[A]');
         }
         
         function testImageSubmissionByName() {
             $this->get('http://www.lastcraft.com/test/form.html');
-            $this->assertTrue($this->clickImageByname('go', 10, 12));
-            $this->assertWantedPattern('/go.x=\[10\].*?go.y=\[12\]/s');
+            $this->assertTrue($this->clickImageByName('go', 10, 12));
+            $this->assertWantedText('go_x=[10]');
+            $this->assertWantedText('go_y=[12]');
         }
         
         function testImageSubmissionById() {
             $this->get('http://www.lastcraft.com/test/form.html');
             $this->assertTrue($this->clickImageById(97, 10, 12));
-            $this->assertWantedPattern('/go.x=\[10\].*?go.y=\[12\]/s');
+            $this->assertWantedText('go_x=[10]');
+            $this->assertWantedText('go_y=[12]');
         }
         
         function testButtonSubmissionByLabel() {

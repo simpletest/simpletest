@@ -815,51 +815,54 @@
          *    form will be submitted by this.
          *    @param string $label    Button label. An unlabeled
          *                            button can be triggered by 'Submit'.
+         *    @param hash $additional Additional form data.
          *    @return boolean         True on success.
          *    @access public
          */
-        function clickSubmit($label = 'Submit') {
+        function clickSubmit($label = 'Submit', $additional = false) {
             if (! ($form = &$this->_page->getFormBySubmitLabel($label))) {
                 return false;
             }
             return $this->_load(
                     $form->getMethod(),
                     $form->getAction(),
-                    $form->submitButtonByLabel($label));
+                    $form->submitButtonByLabel($label, $additional));
         }
         
         /**
          *    Clicks the submit button by name attribute. The owning
          *    form will be submitted by this.
          *    @param string $name     Button name.
+         *    @param hash $additional Additional form data.
          *    @return boolean         True on success.
          *    @access public
          */
-        function clickSubmitByName($name) {
+        function clickSubmitByName($name, $additional = false) {
             if (! ($form = &$this->_page->getFormBySubmitName($name))) {
                 return false;
             }
             return $this->_load(
                     $form->getMethod(),
                     $form->getAction(),
-                    $form->submitButtonByName($name));
+                    $form->submitButtonByName($name, $additional));
         }
         
         /**
          *    Clicks the submit button by ID attribute of the button
          *    itself. The owning form will be submitted by this.
          *    @param string $id       Button ID.
+         *    @param hash $additional Additional form data.
          *    @return boolean         True on success.
          *    @access public
          */
-        function clickSubmitById($id) {
+        function clickSubmitById($id, $additional = false) {
             if (! ($form = &$this->_page->getFormBySubmitId($id))) {
                 return false;
             }
             return $this->_load(
                     $form->getMethod(),
                     $form->getAction(),
-                    $form->submitButtonById($id));
+                    $form->submitButtonById($id, $additional));
         }
         
         /**
@@ -868,20 +871,21 @@
          *    form will be submitted by this. Clicking outside of
          *    the boundary of the coordinates will result in
          *    a failure.
-         *    @param string $label   ID attribute of button.
-         *    @param integer $x      X-coordinate of imaginary click.
-         *    @param integer $y      Y-coordinate of imaginary click.
-         *    @return boolean        True on successful submit.
+         *    @param string $label    ID attribute of button.
+         *    @param integer $x       X-coordinate of imaginary click.
+         *    @param integer $y       Y-coordinate of imaginary click.
+         *    @param hash $additional Additional form data.
+         *    @return boolean         True on successful submit.
          *    @access public
          */
-        function clickImage($label, $x = 1, $y = 1) {
+        function clickImage($label, $x = 1, $y = 1, $additional = false) {
             if (! ($form = &$this->_page->getFormByImageLabel($label))) {
                 return false;
             }
             return $this->_load(
                     $form->getMethod(),
                     $form->getAction(),
-                    $form->submitImageByLabel($label, $x, $y));
+                    $form->submitImageByLabel($label, $x, $y, $additional));
         }
         
         /**
@@ -890,20 +894,21 @@
          *    form will be submitted by this. Clicking outside of
          *    the boundary of the coordinates will result in
          *    a failure.
-         *    @param string $name    Name attribute of button.
-         *    @param integer $x      X-coordinate of imaginary click.
-         *    @param integer $y      Y-coordinate of imaginary click.
-         *    @return boolean        True on successful submit.
+         *    @param string $name     Name attribute of button.
+         *    @param integer $x       X-coordinate of imaginary click.
+         *    @param integer $y       Y-coordinate of imaginary click.
+         *    @param hash $additional Additional form data.
+         *    @return boolean         True on successful submit.
          *    @access public
          */
-        function clickImageByName($name, $x = 1, $y = 1) {
+        function clickImageByName($name, $x = 1, $y = 1, $additional = false) {
             if (! ($form = &$this->_page->getFormByImageName($name))) {
                 return false;
             }
             return $this->_load(
                     $form->getMethod(),
                     $form->getAction(),
-                    $form->submitImageByName($name, $x, $y));
+                    $form->submitImageByName($name, $x, $y, $additional));
         }
          
         /**
@@ -911,20 +916,21 @@
          *    form will be submitted by this. Clicking outside of
          *    the boundary of the coordinates will result in
          *    a failure.
-         *    @param integer/string $id   ID attribute of button.
-         *    @param integer $x           X-coordinate of imaginary click.
-         *    @param integer $y           Y-coordinate of imaginary click.
-         *    @return boolean             True on successful submit.
+         *    @param integer/string $id    ID attribute of button.
+         *    @param integer $x            X-coordinate of imaginary click.
+         *    @param integer $y            Y-coordinate of imaginary click.
+         *    @param hash $additional      Additional form data.
+         *    @return boolean              True on successful submit.
          *    @access public
          */
-        function clickImageById($id, $x = 1, $y = 1) {
+        function clickImageById($id, $x = 1, $y = 1, $additional = false) {
             if (! ($form = &$this->_page->getFormByImageId($id))) {
                 return false;
             }
             return $this->_load(
                     $form->getMethod(),
                     $form->getAction(),
-                    $form->submitImageById($id, $x, $y));
+                    $form->submitImageById($id, $x, $y, $additional));
         }
         
         /**

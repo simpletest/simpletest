@@ -457,16 +457,20 @@
         /**
          *    Gets the submit values for a selected button.
          *    @param SimpleSelector $selector   Criteria to apply.
-         *    @return hash                      Submitted values or false
+         *    @param hash $additional           Additional data for the form.
+         *    @return SimpleEncoding            Submitted values or false
          *                                      if there is no such button
          *                                      in the form.
          *    @access public
          */
-        function _submitButtonBySelector($selector) {
+        function _submitButtonBySelector($selector, $additional) {
             foreach ($this->_buttons as $button) {
                 if ($selector->isMatch($button)) {
                     $encoding = $this->_getEncoding();
                     $encoding->merge($button->getSubmitValues());
+                    if ($additional) {
+                        $encoding->merge($additional);
+                    }
                     return $encoding;           
                 }
             }
@@ -475,38 +479,47 @@
        
         /**
          *    Gets the submit values for a named button.
-         *    @param string $name    Button label to search for.
-         *    @return hash           Submitted values or false
-         *                           if there is no such button in the
-         *                           form.
+         *    @param string $name      Button label to search for.
+         *    @param hash $additional  Additional data for the form.
+         *    @return SimpleEncoding   Submitted values or false
+         *                             if there is no such button in the
+         *                             form.
          *    @access public
          */
-        function submitButtonByName($name) {
-            return $this->_submitButtonBySelector(new SimpleNameSelector($name));
+        function submitButtonByName($name, $additional = false) {
+            return $this->_submitButtonBySelector(
+                    new SimpleNameSelector($name),
+                    $additional);
         }
         
         /**
          *    Gets the submit values for a named button.
-         *    @param string $label   Button label to search for.
-         *    @return hash           Submitted values or false
-         *                           if there is no such button in the
-         *                           form.
+         *    @param string $label     Button label to search for.
+         *    @param hash $additional  Additional data for the form.
+         *    @return SimpleEncoding   Submitted values or false
+         *                             if there is no such button in the
+         *                             form.
          *    @access public
          */
-        function submitButtonByLabel($label) {
-            return $this->_submitButtonBySelector(new SimpleLabelSelector($label));
+        function submitButtonByLabel($label, $additional = false) {
+            return $this->_submitButtonBySelector(
+                    new SimpleLabelSelector($label),
+                    $additional);
         }
         
         /**
          *    Gets the submit values for a button identified by the ID.
-         *    @param string $id      Button ID attribute to search for.
-         *    @return hash           Submitted values or false
-         *                           if there is no such button in the
-         *                           form.
+         *    @param string $id        Button ID attribute to search for.
+         *    @param hash $additional  Additional data for the form.
+         *    @return SimpleEncoding   Submitted values or false
+         *                             if there is no such button in the
+         *                             form.
          *    @access public
          */
-        function submitButtonById($id) {
-            return $this->_submitButtonBySelector(new SimpleIdSelector($id));
+        function submitButtonById($id, $additional = false) {
+            return $this->_submitButtonBySelector(
+                    new SimpleIdSelector($id),
+                    $additional);
         }
          
         /**
@@ -514,16 +527,20 @@
          *    @param SimpleSelector $selector   Criteria to apply.
          *    @param integer $x                 X-coordinate of click.
          *    @param integer $y                 Y-coordinate of click.
-         *    @return hash                      Submitted values or false
+         *    @param hash $additional           Additional data for the form.
+         *    @return SimpleEncoding            Submitted values or false
          *                                      if there is no such button in the
          *                                      form.
          *    @access public
          */
-        function _submitImageBySelector($selector, $x, $y) {
+        function _submitImageBySelector($selector, $x, $y, $additional) {
             foreach ($this->_images as $image) {
                 if ($selector->isMatch($image)) {
                     $encoding = $this->_getEncoding();
                     $encoding->merge($image->getSubmitValues($x, $y));
+                    if ($additional) {
+                        $encoding->merge($additional);
+                    }
                     return $encoding;           
                 }
             }
@@ -533,30 +550,40 @@
         /**
          *    Gets the submit values for an image identified by the alt
          *    tag or nearest equivalent.
-         *    @param string $label  Button label to search for.
-         *    @param integer $x     X-coordinate of click.
-         *    @param integer $y     Y-coordinate of click.
-         *    @return hash          Submitted values or false
-         *                          if there is no such button in the
-         *                          form.
+         *    @param string $label     Button label to search for.
+         *    @param integer $x        X-coordinate of click.
+         *    @param integer $y        Y-coordinate of click.
+         *    @param hash $additional  Additional data for the form.
+         *    @return SimpleEncoding   Submitted values or false
+         *                             if there is no such button in the
+         *                             form.
          *    @access public
          */
-        function submitImageByLabel($label, $x, $y) {
-            return $this->_submitImageBySelector(new SimpleLabelSelector($label), $x, $y);
+        function submitImageByLabel($label, $x, $y, $additional = false) {
+            return $this->_submitImageBySelector(
+                    new SimpleLabelSelector($label),
+                    $x,
+                    $y,
+                    $additional);
         }
          
         /**
          *    Gets the submit values for an image identified by the ID.
-         *    @param string $name   Image name to search for.
-         *    @param integer $x     X-coordinate of click.
-         *    @param integer $y     Y-coordinate of click.
-         *    @return hash          Submitted values or false
-         *                          if there is no such button in the
-         *                          form.
+         *    @param string $name      Image name to search for.
+         *    @param integer $x        X-coordinate of click.
+         *    @param integer $y        Y-coordinate of click.
+         *    @param hash $additional  Additional data for the form.
+         *    @return SimpleEncoding   Submitted values or false
+         *                             if there is no such button in the
+         *                             form.
          *    @access public
          */
-        function submitImageByName($name, $x, $y) {
-            return $this->_submitImageBySelector(new SimpleNameSelector($name), $x, $y);
+        function submitImageByName($name, $x, $y, $additional = false) {
+            return $this->_submitImageBySelector(
+                    new SimpleNameSelector($name),
+                    $x,
+                    $y,
+                    $additional);
         }
           
         /**
@@ -564,13 +591,18 @@
          *    @param string/integer $id  Button ID attribute to search for.
          *    @param integer $x          X-coordinate of click.
          *    @param integer $y          Y-coordinate of click.
-         *    @return hash               Submitted values or false
+         *    @param hash $additional    Additional data for the form.
+         *    @return SimpleEncoding     Submitted values or false
          *                               if there is no such button in the
          *                               form.
          *    @access public
          */
-        function submitImageById($id, $x, $y) {
-            return $this->_submitImageBySelector(new SimpleIdSelector($id), $x, $y);
+        function submitImageById($id, $x, $y, $additional = false) {
+            return $this->_submitImageBySelector(
+                    new SimpleIdSelector($id),
+                    $x,
+                    $y,
+                    $additional);
         }
       
         /**

@@ -829,33 +829,36 @@
          *    form will be submitted by this.
          *    @param string $label    Button label. An unlabeled
          *                            button can be triggered by 'Submit'.
+         *    @param hash $additional Additional form values.
          *    @return boolean         True on success.
          *    @access public
          */
-        function clickSubmit($label = 'Submit') {
-            return $this->_browser->clickSubmit($label);
+        function clickSubmit($label = 'Submit', $additional = false) {
+            return $this->_browser->clickSubmit($label, $additional);
         }
         
         /**
          *    Clicks the submit button by name attribute. The owning
          *    form will be submitted by this.
-         *    @param string $name    Name attribute of button.
-         *    @return boolean        True on success.
+         *    @param string $name     Name attribute of button.
+         *    @param hash $additional Additional form values.
+         *    @return boolean         True on success.
          *    @access public
          */
-        function clickSubmitByName($name) {
-            return $this->_browser->clickSubmitByName($name);
+        function clickSubmitByName($name, $additional = false) {
+            return $this->_browser->clickSubmitByName($name, $additional);
         }
         
         /**
          *    Clicks the submit button by ID attribute. The owning
          *    form will be submitted by this.
-         *    @param string $id      ID attribute of button.
-         *    @return boolean        True on successful submit.
+         *    @param string $id       ID attribute of button.
+         *    @param hash $additional Additional form values.
+         *    @return boolean         True on successful submit.
          *    @access public
          */
-        function clickSubmitById($id) {
-            return $this->_browser->clickSubmitById($id);
+        function clickSubmitById($id, $additional = false) {
+            return $this->_browser->clickSubmitById($id, $additional);
         }
         
         /**
@@ -864,14 +867,15 @@
          *    form will be submitted by this. Clicking outside of
          *    the boundary of the coordinates will result in
          *    a failure.
-         *    @param string $label   Alt attribute of button.
-         *    @param integer $x      X-coordinate of imaginary click.
-         *    @param integer $y      Y-coordinate of imaginary click.
-         *    @return boolean        True on successful submit.
+         *    @param string $label    Alt attribute of button.
+         *    @param integer $x       X-coordinate of imaginary click.
+         *    @param integer $y       Y-coordinate of imaginary click.
+         *    @param hash $additional Additional form values.
+         *    @return boolean         True on successful submit.
          *    @access public
          */
-        function clickImage($label, $x = 1, $y = 1) {
-            return $this->_browser->clickImage($label, $x, $y);
+        function clickImage($label, $x = 1, $y = 1, $additional = false) {
+            return $this->_browser->clickImage($label, $x, $y, $additional);
         }
         
         /**
@@ -880,14 +884,15 @@
          *    form will be submitted by this. Clicking outside of
          *    the boundary of the coordinates will result in
          *    a failure.
-         *    @param string $name    Name attribute of button.
-         *    @param integer $x      X-coordinate of imaginary click.
-         *    @param integer $y      Y-coordinate of imaginary click.
-         *    @return boolean        True on successful submit.
+         *    @param string $name     Name attribute of button.
+         *    @param integer $x       X-coordinate of imaginary click.
+         *    @param integer $y       Y-coordinate of imaginary click.
+         *    @param hash $additional Additional form values.
+         *    @return boolean         True on successful submit.
          *    @access public
          */
-        function clickImageByName($name, $x = 1, $y = 1) {
-            return $this->_browser->clickImageByName($name, $x, $y);
+        function clickImageByName($name, $x = 1, $y = 1, $additional = false) {
+            return $this->_browser->clickImageByName($name, $x, $y, $additional);
         }
         
         /**
@@ -898,11 +903,12 @@
          *    @param integer/string $id   ID attribute of button.
          *    @param integer $x           X-coordinate of imaginary click.
          *    @param integer $y           Y-coordinate of imaginary click.
+         *    @param hash $additional     Additional form values.
          *    @return boolean             True on successful submit.
          *    @access public
          */
-        function clickImageById($id, $x = 1, $y = 1) {
-            return $this->_browser->clickImageById($id, $x, $y);
+        function clickImageById($id, $x = 1, $y = 1, $additional = false) {
+            return $this->_browser->clickImageById($id, $x, $y, $additional);
         }
         
         /**
