@@ -297,8 +297,8 @@
             $this->_handler->tally();
         }
         function testUninteresting() {
-            $this->_handler->expectArguments("ignore", array("<html></html>", "*"));
-            $this->_handler->expectCallCount("ignore", 1);
+            $this->_handler->expectArguments("acceptTextToken", array("<html></html>", "*"));
+            $this->_handler->expectCallCount("acceptTextToken", 1);
             $this->assertTrue($this->_lexer->parse("<html></html>"));
         }
         function testEmptyLink() {
@@ -308,6 +308,54 @@
             $this->_handler->expectArgumentsSequence(0, "acceptEndToken", array("</a>", "*"));
             $this->_handler->expectCallCount("acceptEndToken", 1);
             $this->assertTrue($this->_lexer->parse("<html><a></a></html>"));
+        }
+        function testLabelledLink() {
+            $this->_handler->expectArgumentsSequence(0, "acceptStartToken", array("<a", "*"));
+            $this->_handler->expectArgumentsSequence(1, "acceptStartToken", array(">", "*"));
+            $this->_handler->expectCallCount("acceptStartToken", 2);
+            $this->_handler->expectArgumentsSequence(0, "acceptEndToken", array("</a>", "*"));
+            $this->_handler->expectCallCount("acceptEndToken", 1);
+            $this->_handler->expectArgumentsSequence(0, "acceptTextToken", array("<html>", "*"));
+            $this->_handler->expectArgumentsSequence(1, "acceptTextToken", array("label", "*"));
+            $this->_handler->expectArgumentsSequence(2, "acceptTextToken", array("</html>", "*"));
+            $this->_handler->expectCallCount("acceptTextToken", 3);
+            $this->assertTrue($this->_lexer->parse("<html><a>label</a></html>"));
+        }
+        function testLinkAddress() {
+            $this->_handler->expectArgumentsSequence(0, "acceptTextToken", array("<html>", "*"));
+            $this->_handler->expectArgumentsSequence(1, "acceptTextToken", array("label", "*"));
+            $this->_handler->expectArgumentsSequence(2, "acceptTextToken", array("</html>", "*"));
+            $this->_handler->expectCallCount("acceptTextToken", 3);
+            $this->_handler->expectArgumentsSequence(0, "acceptStartToken", array("<a", "*"));
+            $this->_handler->expectArgumentsSequence(1, "acceptStartToken", array("href", "*"));
+            $this->_handler->expectArgumentsSequence(2, "acceptStartToken", array("=", "*"));
+            $this->_handler->expectArgumentsSequence(3, "acceptStartToken", array(">", "*"));
+            $this->_handler->expectCallCount("acceptStartToken", 4);
+            $this->_handler->expectArgumentsSequence(0, "acceptAttributeToken", array("'", "*"));
+            $this->_handler->expectArgumentsSequence(1, "acceptAttributeToken", array("here.html", "*"));
+            $this->_handler->expectArgumentsSequence(2, "acceptAttributeToken", array("'", "*"));
+            $this->_handler->expectCallCount("acceptAttributeToken", 3);
+            $this->assertTrue($this->_lexer->parse("<html><a href = 'here.html'>label</a></html>"));
+        }
+        function testComplexLink() {
+            $this->_handler->expectArgumentsSequence(0, "acceptStartToken", array("<a", "*"));
+            $this->_handler->expectArgumentsSequence(1, "acceptStartToken", array("href", "*"));
+            $this->_handler->expectArgumentsSequence(2, "acceptStartToken", array("=", "*"));
+            $this->_handler->expectArgumentsSequence(3, "acceptStartToken", array("bool", "*"));
+            $this->_handler->expectArgumentsSequence(4, "acceptStartToken", array("style", "*"));
+            $this->_handler->expectArgumentsSequence(5, "acceptStartToken", array("=", "*"));
+            $this->_handler->expectArgumentsSequence(6, "acceptStartToken", array(">", "*"));
+            $this->_handler->expectCallCount("acceptStartToken", 7);
+            $this->_handler->expectArgumentsSequence(0, "acceptAttributeToken", array("'", "*"));
+            $this->_handler->expectArgumentsSequence(1, "acceptAttributeToken", array("here.html", "*"));
+            $this->_handler->expectArgumentsSequence(2, "acceptAttributeToken", array("'", "*"));
+            $this->_handler->expectArgumentsSequence(3, "acceptAttributeToken", array("\"", "*"));
+            $this->_handler->expectArgumentsSequence(4, "acceptAttributeToken", array("'coo", "*"));
+            $this->_handler->expectArgumentsSequence(5, "acceptAttributeToken", array('\"', "*"));
+            $this->_handler->expectArgumentsSequence(6, "acceptAttributeToken", array("l'", "*"));
+            $this->_handler->expectArgumentsSequence(7, "acceptAttributeToken", array("\"", "*"));
+            $this->_handler->expectCallCount("acceptAttributeToken", 8);
+            $this->assertTrue($this->_lexer->parse("<html><a href = 'here.html' bool style=\"'coo\\\"l'\">label</a></html>"));
         }
     }
 ?>

@@ -153,6 +153,7 @@
         var $_parser;
         var $_mode;
         var $_mode_handlers;
+        var $_debug = false;
         
         /**
          *    Sets up the lexer.
@@ -328,6 +329,9 @@
             if (!$content) {
                 return true;
             }
+            if ($this->_debug) {
+                print "[" . htmlentities($content) . "]<br />";
+            }
             $handler = $this->_mode->getCurrent();
             if (isset($this->_mode_handlers[$handler])) {
                 $handler = $this->_mode_handlers[$handler];
@@ -371,7 +375,7 @@
     class HtmlSaxParser {
         
         /**
-         *    Sets the listener and lexer.
+         *    Sets the listener.
          *    @param $listener SAX event handler.
          *    @public
          */
@@ -386,16 +390,28 @@
          */
         function &createLexer(&$parser) {
             
-            $lexer = &new SimpleLexer($parser, "ignore");
-            $lexer->mapHandler("tag", "acceptStartToken");
-            $lexer->addSpecialPattern("</a>", "ignore", "acceptEndToken");
-            $lexer->addEntryPattern("<a", "ignore", "tag");
-            $lexer->addExitPattern(">", "tag");
+            $lexer = &new SimpleLexer($parser, 'text');
+            $lexer->mapHandler('text', 'acceptTextToken');
+            $lexer->mapHandler('tag', 'acceptStartToken');
+            $lexer->mapHandler('single_quoted', 'acceptAttributeToken');
+            $lexer->mapHandler('double_quoted', 'acceptAttributeToken');
+            $lexer->addSpecialPattern('</a>', 'text', 'acceptEndToken');
+            $lexer->addEntryPattern('<a', 'text', 'tag');
+            $lexer->addSpecialPattern('\s+', 'tag', 'ignore');
+            $lexer->addPattern('=', 'tag');
+            $lexer->addEntryPattern("'", 'tag', 'single_quoted');
+            $lexer->addEntryPattern('"', 'tag', 'double_quoted');
+            $lexer->addExitPattern('>', 'tag');
+            $lexer->addPattern("\\\\'", 'single_quoted');
+            $lexer->addExitPattern("'", 'single_quoted');
+            $lexer->addPattern("\\\\\"", 'double_quoted');
+            $lexer->addExitPattern('"', 'double_quoted');
             return $lexer;
         }
         
         /**
-         *    Runs the content through the held lexer.
+         *    Runs the content through the lexer which
+         *    should call back to the acceptors.
          *    @param $raw      Page text to parse.
          *    @return          False if parse error.
          *    @public

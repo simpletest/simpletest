@@ -11,19 +11,22 @@ Create Comparitor class for better failure display (6).
 Mock objects
 ------------
 Move argument checks over to Comparitors (2).
+Change expectArgumentsSequence() to expectArgumentsAt() (1).
+Change setReturnValueSequence() to setReturnValueAt() (1).
+Change setReturnReferenceSequence() to setReturnReferenceAt() (1).
+Update documentation to reflect deprecated methods (2).
 
 Html parser
 -----------
 Make lexer call different methods for different modes (4/3) - done.
 Build SAX handler for links (3).
-Build SAX event generator (8/1).
+Build SAX event generator for links (8/5).
 Decouple lexer modes from SAX handler methods (2/2) - done.
 Build link scanner functionality from end to end (3/1).
 Build HTML document with links (3/5) - done.
 
 Browser
 -------
-Add base URL persistence (2).
 Make URL class parsing fully correct (2/3) - done.
 
 Web tester
@@ -32,4 +35,3 @@ Web tester
 Documentation
 -------------
 Add mock objects docs (3/7) - done.
-Add index page with top level overview (4).
