@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<page title="Documentation : tests unitaires en PHP" here="testeur unitaire">
+<page title="Documentation sur les tests unitaires en PHP" here="testeur unitaire">
     <long_title>Documenation SimpleTest pour les tests de régression en PHP</long_title>
     <content>
         <section name="unitaire" title="scénarios de tests unitaires">
@@ -12,7 +12,7 @@
                 Si aucun nom de test n'est fourni au moment de la liaison avec le constructeur alors le nom de la classe sera utilisé. Il s'agit du nom qui sera affiché dans les résultats du test.
             </p>
             <p>
-                Les véritables tests sont ajoutés en tant que méthode dans le scénario de test dont le nom par défaut commence par la chaîne &quot;test&quot; et quand le scénario de test est appelé toutes les méthodes de ce type sont exécutées dans l'ordre utilisé par l'introspection de PHP pour les trouver. Peuvent être ajoutés autant de méthodes de test que nécessaires. Par exemple...
+                Les véritables tests sont ajoutés en tant que méthode dans le scénario de test dont le nom par défaut commence par la chaîne &quot;test&quot; et quand le scénario de test est appelé toutes les méthodes de ce type sont exécutées dans l'ordre utilisé par l'introspection de PHP pour les trouver. Peuvent être ajoutées autant de méthodes de test que nécessaires. Par exemple...
 <php><![CDATA[
 require_once('../classes/writer.php');
 
@@ -48,26 +48,26 @@ class FileTestCase extends UnitTestCase {
                 Vous pouvez placer une initialisation de scénario de test dans le constructeur afin qu'elle soit lancée pour toutes les méthodes dans le scénario de test mais dans un tel cas vous vous exposeriez à des interférences. Cette façon de faire est légèrement moins rapide, mais elle est plus sûre. Notez que si vous arrivez avec des notions de JUnit, il ne s'agit pas du comportement auquel vous êtes habitués. Bizarrement JUnit re-instancie le scénario de test pour chaque méthode de test pour se prévenir d'une telle interférence. SimpleTest demande à l'utilisateur final d'utiliser <code>setUp()</code>, mais fournit aux codeurs de bibliothèque d'autres crochets.
             </p>
             <p>
-                Pour rapporter les résultats de test, la visite une classe d'affichage - notifiée par les différentes méthodes de type <code>assert...()</code> - est utilisée. En voici la liste complète pour la classe <code>UnitTestCase</code>, celle par défaut dans SimpleTest...
+                Pour rapporter les résultats de test, le passage par une classe d'affichage - notifiée par les différentes méthodes de type <code>assert...()</code> - est utilisée. En voici la liste complète pour la classe <code>UnitTestCase</code>, celle par défaut dans SimpleTest...
             <table><tbody>
-                <tr><td><code>assertTrue(\$x)</code></td><td>Echoue si \$x est faux</td></tr>
-                <tr><td><code>assertFalse(\$x)</code></td><td>Echoue si \$x est vrai</td></tr>
-                <tr><td><code>assertNull(\$x)</code></td><td>Echoue si \$x est initialisé</td></tr>
-                <tr><td><code>assertNotNull(\$x)</code></td><td>Echoue si \$x n'est pas initialisé</td></tr>
-                <tr><td><code>assertIsA(\$x, \$t)</code></td><td>Echoue si \$x n'est pas de la classe ou du type \$t</td></tr>
-                <tr><td><code>assertEqual(\$x, \$y)</code></td><td>Echoue si \$x == \$y est faux</td></tr>
-                <tr><td><code>assertNotEqual(\$x, \$y)</code></td><td>Echoue si \$x == \$y est vrai</td></tr>
-                <tr><td><code>assertIdentical(\$x, \$y)</code></td><td>Echoue si \$x === \$y est faux</td></tr>
-                <tr><td><code>assertNotIdentical(\$x, \$y)</code></td><td>Echoue si \$x === \$y est vrai</td></tr>
-                <tr><td><code>assertReference(\$x, \$y)</code></td><td>Echoue sauf si \$x et \$y sont la même variable</td></tr>
-                <tr><td><code>assertCopy(\$x, \$y)</code></td><td>Echoue si \$x et \$y sont la même variable</td></tr>
-                <tr><td><code>assertWantedPattern(\$p, \$x)</code></td><td>Echoue sauf si l'expression rationnelle \$p capture \$x</td></tr>
-                <tr><td><code>assertNoUnwantedPattern(\$p, \$x)</code></td><td>Echoue si l'expression rationnelle \$p capture \$x</td></tr>
+                <tr><td><code>assertTrue($x)</code></td><td>Echoue si $x est faux</td></tr>
+                <tr><td><code>assertFalse($x)</code></td><td>Echoue si $x est vrai</td></tr>
+                <tr><td><code>assertNull($x)</code></td><td>Echoue si $x est initialisé</td></tr>
+                <tr><td><code>assertNotNull($x)</code></td><td>Echoue si $x n'est pas initialisé</td></tr>
+                <tr><td><code>assertIsA($x, $t)</code></td><td>Echoue si $x n'est pas de la classe ou du type $t</td></tr>
+                <tr><td><code>assertEqual($x, $y)</code></td><td>Echoue si $x == $y est faux</td></tr>
+                <tr><td><code>assertNotEqual($x, $y)</code></td><td>Echoue si $x == $y est vrai</td></tr>
+                <tr><td><code>assertIdentical($x, $y)</code></td><td>Echoue si $x === $y est faux</td></tr>
+                <tr><td><code>assertNotIdentical($x, $y)</code></td><td>Echoue si $x === $y est vrai</td></tr>
+                <tr><td><code>assertReference($x, $y)</code></td><td>Echoue sauf si $x et $y sont la même variable</td></tr>
+                <tr><td><code>assertCopy($x, $y)</code></td><td>Echoue si $x et $y sont la même variable</td></tr>
+                <tr><td><code>assertWantedPattern($p, $x)</code></td><td>Echoue sauf si l'expression rationnelle $p capture $x</td></tr>
+                <tr><td><code>assertNoUnwantedPattern($p, $x)</code></td><td>Echoue si l'expression rationnelle $p capture $x</td></tr>
                 <tr><td><code>assertNoErrors()</code></td><td>Echoue si une erreur PHP arrive</td></tr>
-                <tr><td><code>assertError(\$x)</code></td><td>Echoue si aucune erreur ou message incorrect de PHP n'arrive</td></tr>
+                <tr><td><code>assertError($x)</code></td><td>Echoue si aucune erreur ou message incorrect de PHP n'arrive</td></tr>
             </tbody></table>
-                Toutes les méthodes d'assertion peuvent recevoir une description optionnelle : cette description sert pour étiquetter le résultat.
-                Sans elle, une message par défaut est envoyée à la plcae : il est généralement suffisant. Ce message par défaut peut encore être encadré dans votre propre message si vous incluez &quot;%s&quot; dans la chaîne. Toutes les assertions renvoient vrai / true en cas de succès et faux / false en cas d'échec.
+                Toutes les méthodes d'assertion peuvent recevoir une description optionnelle : cette description sert pour étiqueter le résultat.
+                Sans elle, une message par défaut est envoyée à la place : il est généralement suffisant. Ce message par défaut peut encore être encadré dans votre propre message si vous incluez &quot;%s&quot; dans la chaîne. Toutes les assertions renvoient vrai / true en cas de succès et faux / false en cas d'échec.
             </p>
             <p>
                 D'autres exemples...
@@ -105,15 +105,15 @@ $this->assertNoErrors();</strong>
             <p>
                 Les scénarios de test peuvent utiliser des méthodes bien pratiques pour déboguer le code ou pour étendre la suite...
                 <table><tbody>
-                    <tr><td><code>setUp()</code></td><td>Est lancé avant chaque méthode de test.</td></tr>
-                    <tr><td><code>tearDown()</code></td><td>Est lancé après chaque méthode de test.</td></tr>
-                    <tr><td><code>pass()</code></td><td>Envoie un succès.</td></tr>
-                    <tr><td><code>fail()</code></td><td>Envoie un échec.</td></tr>
-                    <tr><td><code>error()</code></td><td>Envoi un évènement exception.</td></tr>
-                    <tr><td><code>sendMessage()</code></td><td>Envoie un message d'état aux systèmes d'affichage qui le supporte.</td></tr>
-                    <tr><td><code>signal($type, $payload)</code></td><td>Envoie un message défini par l'utilisateur au rapporteur du test.</td></tr>
-                    <tr><td><code>dump($var)</code></td><td>Effectue un <code>print_r()</code> formaté pour du déboguage rapide et grossier.</td></tr>
-                    <tr><td><code>swallowErrors()</code></td><td>Vide les erreurs de la queue.</td></tr>
+                    <tr><td><code>setUp()</code></td><td>Est lancée avant chaque méthode de test</td></tr>
+                    <tr><td><code>tearDown()</code></td><td>Est lancée après chaque méthode de test</td></tr>
+                    <tr><td><code>pass()</code></td><td>Envoie un succès</td></tr>
+                    <tr><td><code>fail()</code></td><td>Envoie un échec</td></tr>
+                    <tr><td><code>error()</code></td><td>Envoi un évènement exception</td></tr>
+                    <tr><td><code>sendMessage()</code></td><td>Envoie un message d'état aux systèmes d'affichage qui le supporte</td></tr>
+                    <tr><td><code>signal($type, $payload)</code></td><td>Envoie un message défini par l'utilisateur au rapporteur du test</td></tr>
+                    <tr><td><code>dump($var)</code></td><td>Effectue un <code>print_r()</code> formaté pour du déboguage rapide et grossier</td></tr>
+                    <tr><td><code>swallowErrors()</code></td><td>Vide les erreurs de la queue</td></tr>
                 </tbody></table>
             </p>
         </section>
@@ -159,7 +159,7 @@ class FileTestCase extends <strong>FileTester</strong> {
 ]]></php>
             </p>
             <p>
-                Si vous souhaitez un scénario de test sans toutes les assertions de <code>UnitTestCase</code> mais uniquement avec les vôtres propres, vous aurez besoin d'étendre la classe <code>SimpleTestCase</code> à la place. Elle se trouve dans <em>simple_test.php</em> en lieu et place de <em>unit_tester.php</em>. Consulter <a local="group_test_documentation">plus tard</a> si vous souhaitez incorporer les scénarios d'autres testeurs unitaires dans votre suite de test.
+                Si vous souhaitez un scénario de test sans toutes les assertions de <code>UnitTestCase</code> mais uniquement avec les vôtres propres, vous aurez besoin d'étendre la classe <code>SimpleTestCase</code> à la place. Elle se trouve dans <em>simple_test.php</em> en lieu et place de <em>unit_tester.php</em>. A consulter <a local="group_test_documentation">plus tard</a> si vous souhaitez incorporer les scénarios d'autres testeurs unitaires dans votre suite de test.
             </p>
         </section>
         <section name="lancement_unitaire" title="Lancer un unique scénario de test">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<page title="Documentation : grouper des tests" here="Grouper des tests">
+<page title="Documentation sur le groupement des tests" here="Grouper des tests">
     <long_title>Documentation SimpleTest : Grouper des tests</long_title>
     <content>
         <section name="grouper" title="Grouper des tests">

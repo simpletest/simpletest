@@ -7,18 +7,18 @@
                 Les objets fantaisie - ou &quot;mock objects&quot; en anglais - ont deux rôles pendant un scénario de test : acteur et critique.
             </p>
             <p>
-                Le comportement d'acteur est celui de simuler des objets difficiles à initialiser ou trop consommateurs en temps pendant un test. Le cas classique est celui de la connexion à une base de données. Mettre sur pied une base de données de test au lancement de chaque test ralentirait considérablement les tests et en plus exigerait l'installation d'un moteur de base de données ainsi que des données sur la machine de test. Si nous pouvons simuler la connexion et renvoyer des données à notre guise alors non seulement nous gagnons en pragmatisme sur les tests mais en sus nous pouvons nourrir notre de données falsifiées et voir comment il répond. Nous pouvons simuler une base de données en suspens ou d'autres cas extrèmes sans avoir à créer une véritable panne de base de données. En d'autres termes nous pouvons gagner en contrôle sur l'environnement de test.
+                Le comportement d'acteur est celui de simuler des objets difficiles à initialiser ou trop consommateurs en temps pendant un test. Le cas classique est celui de la connexion à une base de données. Mettre sur pied une base de données de test au lancement de chaque test ralentirait considérablement les tests et en plus exigerait l'installation d'un moteur de base de données ainsi que des données sur la machine de test. Si nous pouvons simuler la connexion et renvoyer des données à notre guise alors non seulement nous gagnons en pragmatisme sur les tests mais en sus nous pouvons nourrir notre base avec des données falsifiées et voir comment il répond. Nous pouvons simuler une base de données en suspens ou d'autres cas extrêmes sans avoir à créer une véritable panne de base de données. En d'autres termes nous pouvons gagner en contrôle sur l'environnement de test.
             </p>
             <p>
                 Si les objets fantaisie ne se comportaient que comme des acteurs alors on les connaîtrait sous le nom de <a local="server_stubs_documentation">bouchons serveur</a>.
             </p>
             <p>
-                Cependant nons seulement les objets fantaisie joue un rôle (en fournissant à la demande les valeurs requises) mais en plus ils sont aussi sensibles aux messages qui leur sont envoyés (par le biais d'attentes). En posant les paramètres attendus d'une méthode ils agissent comme des gardiens : un appel sur eux doit être réalisé correctement. Si les attentes ne sont pas atteintes ils nous épargnent l'effort de l'écriture d'une assertion de test avec échec en réalisant cette tâche à notre place. Dans le cas d'une connexion à une base de données imaginaire ils peuvent tester si la requête, disons SQL, a bien été formé par l'objet qui utilise cette connexion. Mettez-les sur pied avec des attentes assez précises et vous verrez que vous n'aurez presque plus d'assertion à écrire manuellement.
+                Cependant nons seulement les objets fantaisie jouent un rôle (en fournissant à la demande les valeurs requises) mais en plus ils sont aussi sensibles aux messages qui leur sont envoyés (par le biais d'attentes). En posant les paramètres attendus d'une méthode ils agissent comme des gardiens : un appel sur eux doit être réalisé correctement. Si les attentes ne sont pas atteintes ils nous épargnent l'effort de l'écriture d'une assertion de test avec échec en réalisant cette tâche à notre place. Dans le cas d'une connexion à une base de données imaginaire ils peuvent tester si la requête, disons SQL, a bien été formé par l'objet qui utilise cette connexion. Mettez-les sur pied avec des attentes assez précises et vous verrez que vous n'aurez presque plus d'assertion à écrire manuellement.
             </p>
         </section>
         <section name="creation" title="Créer des objets fantaisie">
             <p>
-                Comme nous créons des bouchons serveur, tout ce dont nous avons besoin c'est d'un classe existante. La fameuse connexion à une base de données qui ressemblerait à...
+                Comme pour la création des bouchons serveur, tout ce dont nous avons besoin c'est d'un classe existante. La fameuse connexion à une base de données qui ressemblerait à...
 <php><![CDATA[
 <strong>class DatabaseConnection {
     function DatabaseConnection() {
@@ -54,13 +54,13 @@ class MyTestCase extends UnitTestCase {
     }
 }</strong>
 ]]></php>
-                Contrairement aux bouchons, le constructeur d'une classe fantaisie a besoin d'une référence au scénario de test pour pouvoir transmettre les succés et les échecs pendant qu'il vérifie les attentes. Concrètement ça veut dire que les objets fantaisie ne peuvent être utilisés qu'au sein d'un scénario de test. Malgré tout, cette puissance supplémentaire implique que les bouchons ne sont que rarement utilisés si des objets fantaisie sont disponibles.
+                Contrairement aux bouchons, le constructeur d'une classe fantaisie a besoin d'une référence au scénario de test pour pouvoir transmettre les succès et les échecs pendant qu'il vérifie les attentes. Concrètement ça veut dire que les objets fantaisie ne peuvent être utilisés qu'au sein d'un scénario de test. Malgré tout, cette puissance supplémentaire implique que les bouchons ne sont que rarement utilisés si des objets fantaisie sont disponibles.
             </p>
             <p>
                 <a class="target" name="bouchon"><h2>Objets fantaisie en action</h2></a>
             </p>
             <p>
-                La version fantaisie d'une classe contient toutes les méthode de l'original. De la sorte une opération comme <code><![CDATA[$connection->query()]]></code> est encore possible. Tout comme avec les bouchons, nous pouvons remplacer la valeur nulle renvoyée par défaut...
+                La version fantaisie d'une classe contient toutes les méthode de l'originale. De la sorte une opération comme <code><![CDATA[$connection->query()]]></code> est encore possible. Tout comme avec les bouchons, nous pouvons remplacer la valeur nulle renvoyée par défaut...
 <php><![CDATA[
 <strong>$connection->setReturnValue('query', 37);</strong>
 ]]></php>
@@ -96,7 +96,7 @@ class IteratorTest extends UnitTestCase() {
     }
 }
 ]]></php>
-                Au moment du premier appel à <code>next()</code> sur l'itérateur fantaisie il renverra tout d'abord &quot;First string&quot;, puis ce sera au tour de &quot;Second string&quot; au deuxième appel et ensuite pour tout appel suivant <code>false</code> sera renvoyé. Ces valeurs renvoyés successivement sont prioritaires sur la valeur constante retournée. Cette dernière est un genre de valeur par défaut si vous voulez.
+                Au moment du premier appel à <code>next()</code> sur l'itérateur fantaisie il renverra tout d'abord &quot;First string&quot;, puis ce sera au tour de &quot;Second string&quot; au deuxième appel et ensuite pour tout appel suivant <code>false</code> sera renvoyé. Ces valeurs renvoyées successivement sont prioritaires sur la valeur constante retournée. Cette dernière est un genre de valeur par défaut si vous voulez.
             </p>
             <p>
                 Reprenons aussi le conteneur d'information bouchonné avec des pairs clef / valeur...
@@ -116,7 +116,7 @@ $config->setReturnValue('getValue', 'primary', array('db_host'));
 $config->setReturnValue('getValue', 'admin', array('db_user'));
 $config->setReturnValue('getValue', 'secret', array('db_password'));</strong>
 ]]></php>
-                Le paramètre en plus est une liste d'arguments à faire correspondre. Dans ce cas nous essayons de faire correspondre un unique arguement : en l'occurence la clef recherchée. Maintenant que la méthode <code>getValue()</code> est invoqué sur l'objet fantaisie...
+                Le paramètre en plus est une liste d'arguments à faire correspondre. Dans ce cas nous essayons de faire correspondre un unique arguement : en l'occurence la clef recherchée. Maintenant que la méthode <code>getValue()</code> est invoquée sur l'objet fantaisie...
 <php><![CDATA[
 $config->getValue('db_user')
 ]]></php>
@@ -147,7 +147,7 @@ $vector->setReturnReference('get', $thing, array(12));</strong>
         </section>
         <section name="attentes" title="Objets fantaisie en critique">
             <p>
-                Même si les bouchons serveur vous isolent du désordre du monde réelle, il ne s'agit là que de la moitié du bénéfice potentiel. Vous pouvez avoir une classe de test recevant les messages ad-hoc, mais est-ce que votre nouvelle classe renvoie bien les bons ? Le tester peut devenir cafouilli sans une librairie d'objets fantaisie.
+                Même si les bouchons serveur vous isolent du désordre du monde réel, il ne s'agit là que de la moitié du bénéfice potentiel. Vous pouvez avoir une classe de test recevant les messages ad-hoc, mais est-ce que votre nouvelle classe renvoie bien les bons ? Le tester peut devenir cafouilli sans une librairie d'objets fantaisie.
             </p>
             <p>
                 Pour l'exemple, prenons une classe <code>SessionPool</code> à laquelle nous allons ajouter une fonction de log. Plutôt que de complexifier la classe originale, nous souhaitons ajouter ce comportement avec un décorateur (GOF). Pour l'instant le code de <code>SessionPool</code> ressemble à...
@@ -166,9 +166,10 @@ $vector->setReturnReference('get', $thing, array(12));</strong>
 class Session {
     ...
 }</strong>
-</pre>
+]]>
+</php>
                 Alors que pour notre code de log, nous avons...
-<pre><strong>
+<php><![CDATA[<strong>
 class Log {
     function Log() {
         ...
@@ -190,7 +191,7 @@ class LoggingSessionPool {
     ...
 }</strong>
 ]]></php>
-                Dans tout ceci, la seule classe à tester est <code>LoggingSessionPool</code>. En particulier, nous voulons vérifier que la méthode <code>findSession()</code> est appelée avec le correct identifiant de session au sein du cookie et qu'elle renvoie bien le message &quot;Starting session $cookie&quot; au loggueur.
+                Dans tout ceci, la seule classe à tester est <code>LoggingSessionPool</code>. En particulier, nous voulons vérifier que la méthode <code>findSession()</code> est appelée avec le bon identifiant de session au sein du cookie et qu'elle renvoie bien le message &quot;Starting session $cookie&quot; au loggueur.
             </p>
             <p>
                 Bien que nous ne testions que quelques lignes de code de productino, voici la liste des choses à faire dans un scénario de test conventionnel :

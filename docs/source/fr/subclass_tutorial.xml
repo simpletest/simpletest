@@ -22,7 +22,7 @@ function testClockTellsTime() {
     $clock = new Clock();<strong>
     $time1 = $clock->now();
     $time2 = time();
-    $this->assertTrue($time1 == $time2) || ($time1 + 1 == $time2), 'Now is the right time');</strong>
+    $this->assertTrue(($time1 == $time2) || ($time1 + 1 == $time2), 'Now is the right time');</strong>
 }
 ]]></php>
             Sauf que la conception n'est pas plus claire et que nous devrons le répéter pour chaque test de chronométrage. Les répétitions sont un ennemi public n°1 et donc un très bon stimulant pour le remaniement de notre code de test.

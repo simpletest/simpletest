@@ -61,13 +61,13 @@ class HtmlReporter extends TestDisplay {
             <a class="target" name="sous-classe"><h2>Une sous-classe d'affichage</h2></a>
         </p>
         <p>
-            Premièrement nous allons créer une fichier <em>tests/show_passes.php</em> dans notre projet de log et y placer cette classe vide...
+            Premièrement nous allons créer un fichier <em>tests/show_passes.php</em> dans notre projet de log et y placer cette classe vide...
 <php><![CDATA[
 <strong><?php
     if (! defined('SIMPLE_TEST')) {
         define('SIMPLE_TEST', 'simpletest/');
     }
-    require_once(SIMPLE_TEST . 'reportert.php');
+    require_once(SIMPLE_TEST . 'reporter.php');
     
     class ShowPasses extends HtmlReporter {
         
@@ -88,7 +88,7 @@ function paintFail($message) {
     print "-&gt;$message<br />\n";
 }
 ]]></php>
-            Essentiellement elle s'enchaîne à la version du parent, que vous devons aussi réaliser pour garantir le ménage, et ensuite imprime une trace calculée à partir de la liste des tests courante. Par contre elle perd au passage le nom du test du premier niveau. Etant donné qu'il est identique pour chaque test, ce serait un peu trop d'information. En la transposant dans notre nouvelle classe...
+            Essentiellement elle s'enchaîne à la version du parent, que nous devons aussi réaliser pour garantir le ménage, et ensuite imprime une trace calculée à partir de la liste des tests courants. Par contre elle perd au passage le nom du test du premier niveau. Etant donné qu'il est identique pour chaque test, ce serait un peu trop d'information. En la transposant dans notre nouvelle classe...
 <php><![CDATA[
 class ShowPasses extends HtmlReporter {
     
@@ -98,7 +98,7 @@ class ShowPasses extends HtmlReporter {
     <strong>
     function paintPass($message) {
         parent::paintPass($message);
-        print "&<span class=\"pass\">Pass</span>: ";
+        print "<span class=\"pass\">Pass</span>: ";
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
         print implode("-&gt;", $breadcrumb);

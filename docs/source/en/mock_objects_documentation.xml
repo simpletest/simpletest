@@ -257,9 +257,9 @@ $vector->setReturnReference('get', $thing, array(12));</strong>
 class Session {
     ...
 }</strong>
-</pre>
+</php>
                 While our logging code looks like this...
-<pre><strong>
+<php><strong>
 class Log {
     function Log() {
         ...

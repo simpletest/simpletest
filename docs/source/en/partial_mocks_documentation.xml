@@ -345,7 +345,7 @@ class TelnetTest extends UnitTestCase {
                 I am open to the possibility, but a little worried that
                 forcing object granularity may be better for the code quality.
                 I personally use partial mocks as a way of overriding creation
-                or for occasional testing of teh TemplateMethod pattern.
+                or for occasional testing of the TemplateMethod pattern.
             </p>
             <p>
                 It&apos;s all going to come down to the coding standards of your

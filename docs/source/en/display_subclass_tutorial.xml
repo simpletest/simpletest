@@ -62,7 +62,7 @@ class HtmlReporter extends TestDisplay {
                     See below.
                 </li>
                 <li>
-                    <code>void paintPass(string \$message)</code><br />
+                    <code>void paintPass(string $message)</code><br />
                     by default does nothing.
                     This is the method we will modify.
                 </li>

@@ -2,12 +2,12 @@
 <page title="Documentation sur le testeur web" here="Testeur web">
     <long_title>Documentation SimpleTest : tester des scripts web</long_title>
     <content>
-        <section name="telechargement" title="Telecharger une page">
+        <section name="telecharger" title="Télécharger une page">
             <p>
                 Tester des classes c'es très bien. Reste que PHP est avant tout un langage pour créer des fonctionnalités à l'intérieur de pages web. Comment pouvons tester la partie de devant -- celle de l'interface -- dans nos applications en PHP ? Etant donné qu'une page web n'est constituée que de texte, nous devrions pouvoir les examiner exactement comme n'importe quelle autre donnée de test.
             </p>
             <p>
-                Cela nous amène à une situation délicate. Si nous testons dans un niveau trop bas, vérifier des balises avec un motif ad-hoc par exemple, nos tests seront trop fragiles. Le moindre changement dans la présentation pourrait casser un grand nombre de test. Si nos tests sont situés trop haut, en utilisant une version fantaisie du moteur de template pour donner un cas précis, alors nous perdons complètement la capacité à automatiser certaines classes de test. Par exemple, l'interaction entre des formulaires et la navigation devra être testé manuellement. Ces types de test sont extrèmement fastidieux et plutôt sensibles aux erreurs.
+                Cela nous amène à une situation délicate. Si nous testons dans un niveau trop bas, vérifier des balises avec un motif ad hoc par exemple, nos tests seront trop fragiles. Le moindre changement dans la présentation pourrait casser un grand nombre de test. Si nos tests sont situés trop haut, en utilisant une version fantaisie du moteur de template pour donner un cas précis, alors nous perdons complètement la capacité à automatiser certaines classes de test. Par exemple, l'interaction entre des formulaires et la navigation devra être testé manuellement. Ces types de test sont extrêmement fastidieux et plutôt sensibles aux erreurs.
             </p>
             <p>
                 SimpleTest comprend une forme spéciale de scénario de test pour tester les actions d'une page web. <code>WebTestCase</code> inclut des facilités pour la navigation, des vérifications sur le contenu et les cookies ainsi que la gestion des formulaires. Utiliser ces scénarios de test ressemble fortement à <code>UnitTestCase</code>...
@@ -62,7 +62,7 @@ class TestOfLastcraft extends WebTestCase {
     }
 }
 ]]></php>
-                La page obtenue par le dernier téléchargement est placée dans un buffer au sein même du scénario de test. Il n'est donc pas nécessaire de s'y référer directement. La correspondance du motif est toujours effectué par rapport à ce buffer.
+                La page obtenue par le dernier téléchargement est placée dans un buffer au sein même du scénario de test. Il n'est donc pas nécessaire de s'y référer directement. La correspondance du motif est toujours effectuée par rapport à ce buffer.
             </p>
             <p>
                 Voici une liste possible d'assertions sur le contenu...
@@ -77,8 +77,8 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>assertFieldById($id, $value)</code></td><td>Passe si une balise input avec cet identifiant contient cette valeur</td></tr>
                     <tr><td><code>assertResponse($codes)</code></td><td>Passe si la réponse HTTP trouve une correspondance dans la liste</td></tr>
                     <tr><td><code>assertMime($types)</code></td><td>Passe si le type MIME se retrouve dans cette liste</td></tr>
-                    <tr><td><code>assertAuthentication($protocol)</code></td><td>Passe si l'autentification provoquée est de ce type de protocole</td></tr>
-                    <tr><td><code>assertNoAuthentication()</code></td><td>Passe s'il n'y pas d'autentification provoquée en cours</td></tr>
+                    <tr><td><code>assertAuthentication($protocol)</code></td><td>Passe si l'authentification provoquée est de ce type de protocole</td></tr>
+                    <tr><td><code>assertNoAuthentication()</code></td><td>Passe s'il n'y pas d'authentification provoquée en cours</td></tr>
                     <tr><td><code>assertRealm($name)</code></td><td>Passe si le domaine provoqué correspond</td></tr>
                     <tr><td><code>assertHeader($header, $content)</code></td><td>Passe si une entête téléchargée correspond à cette valeur</td></tr>
                     <tr><td><code>assertNoUnwantedHeader($header)</code></td><td>Passe si une entête n'a pas été téléchargé</td></tr>
@@ -107,7 +107,7 @@ class TestOfLastcraft extends WebTestCase {
     }
 }
 ]]></php>
-                Ici nous vérifions que le téléchargement s'est bien terminé en ne permettant qu'une réponse HTTP 200.  Ce test passera, mais ce n'est pas la meilleur façon de procéder. Il n'existe aucune page sur <em>http://simpletest.sourceforge.net/</em>, à la place le serveur renverra une redirection vers <em>http://www.lastcraft.com/simple_test.php</em>. <code>WebTestCase</code> suit automatiquement trois de ces redirections. Les tests sont quelque peu plus robustes de la sorte. Surtout qu'on est souvent plus intéressé par l'intercation entre les pages que de leur simple livraison. Si les redirections se révèlent être digne d'intérêt, il reste possible de les surpprimer...
+                Ici nous vérifions que le téléchargement s'est bien terminé en ne permettant qu'une réponse HTTP 200.  Ce test passera, mais ce n'est pas la meilleure façon de procéder. Il n'existe aucune page sur <em>http://simpletest.sourceforge.net/</em>, à la place le serveur renverra une redirection vers <em>http://www.lastcraft.com/simple_test.php</em>. <code>WebTestCase</code> suit automatiquement trois de ces redirections. Les tests sont quelque peu plus robustes de la sorte. Surtout qu'on est souvent plus intéressé par l'interaction entre les pages que de leur simple livraison. Si les redirections se révèlent être digne d'intérêt, il reste possible de les supprimer...
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
     
@@ -179,7 +179,7 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>clearFrameFocus()</code></td><td>Revient à un traitement de toutes les fenêtres comme une seule</td></tr>
                     <tr><td><code>clickSubmit($label)</code></td><td>Clique sur le premier bouton avec cette étiquette</td></tr>
                     <tr><td><code>clickSubmitByName($name)</code></td><td>Clique sur le bouton avec cet attribut de nom</td></tr>
-                    <tr><td><code>clickSubmitById($id)</code></td><td>Clique sur le bouton avec cet attribant d'identification</td></tr>
+                    <tr><td><code>clickSubmitById($id)</code></td><td>Clique sur le bouton avec cet attribut d'identification</td></tr>
                     <tr><td><code>clickImage($label, $x, $y)</code></td><td>Clique sur une balise input de type image avec ce titre ou ce texte dans l'attribut alt</td></tr>
                     <tr><td><code>clickImageByName($name, $x, $y)</code></td><td>Clique sur une balise input de type image avec ce nom</td></tr>
                     <tr><td><code>clickImageById($id, $x, $y)</code></td><td>Clique sur une balise input de type image avec cet attribut d'identification</td></tr>
@@ -189,19 +189,19 @@ class TestOfLastcraft extends WebTestCase {
                 </tbody></table>
             </p>
             <p>
-                Les paramètres dans les méthodes <code>get()</code>, <code>post()</code> et <code>head()</code> sont optionnels. Le téléchargement via  HTTP HEAD ne modifie pas le contexte du navigateur, il se limite au chargement des cookies. Cela peut être utilise lorsqu'une image ou une feuille de style initie un cookie pour bloquer un robot trop entreuprenant.
+                Les paramètres dans les méthodes <code>get()</code>, <code>post()</code> et <code>head()</code> sont optionnels. Le téléchargement via  HTTP HEAD ne modifie pas le contexte du navigateur, il se limite au chargement des cookies. Cela peut être utilise lorsqu'une image ou une feuille de style initie un cookie pour bloquer un robot trop entreprenant.
             </p>
             <p>
-                Les commandes <code>retry()</code>, <code>back()</code> et <code>forward()</code> fonctionnent exactement comme dans un navigateur. Elles utilisent l'historiques pour relancer les pages. Une technique bien pratique pour vérifier les effets d'un bouton retour sur vos formulaires.
+                Les commandes <code>retry()</code>, <code>back()</code> et <code>forward()</code> fonctionnent exactement comme dans un navigateur. Elles utilisent l'historique pour relancer les pages. Une technique bien pratique pour vérifier les effets d'un bouton retour sur vos formulaires.
             </p>
             <p>
-                Les méthodes sur les fenêtre méritent une petite explication. Par défaut, une page avec des fenêtres est traitée comme toutes les autres. Le contenu sera vérifé à travers l'ensemble de la &quot;frameset&quot;, par conséquent un lien fonctionnera, peu importe la fenêtre qui contient la balise ancre. Vous pouvez outrepassé ce comportement en exigeant le focus sur une unique fenêtre. Si vous réalisez cela, toutes les recherches et toutes les actions se limiteront à cette unique fenêtre, y compris les demandes d'authentification. Si un lien ou un bouton n'est pas dans la fenêtre en focus alors il ne peut pas être cliqué.
+                Les méthodes sur les fenêtres méritent une petite explication. Par défaut, une page avec des fenêtres est traitée comme toutes les autres. Le contenu sera vérifié à travers l'ensemble de la &quot;frameset&quot;, par conséquent un lien fonctionnera, peu importe la fenêtre qui contient la balise ancre. Vous pouvez outrepassé ce comportement en exigeant le focus sur une unique fenêtre. Si vous réalisez cela, toutes les recherches et toutes les actions se limiteront à cette unique fenêtre, y compris les demandes d'authentification. Si un lien ou un bouton n'est pas dans la fenêtre en focus alors il ne peut pas être cliqué.
             </p>
             <p>
-                Tester la navigation sur des pages fixes ne vous alerte que quand vous avez cassé un script entier. Pour des pages fortement dynamiques, un forum de discussion par exemple, ça peut être crucial pour vérifier l'état de l'application. Pour la plupart des applications cependant, la logique vraiement délicate se situe dans la gestion des formulaires et des sessions. Heureusement SimpleTest aussi inclut <a local="form_testing_documentation">des outils pour tester des formulaires web</a>.
+                Tester la navigation sur des pages fixes ne vous alerte que quand vous avez cassé un script entier. Pour des pages fortement dynamiques, un forum de discussion par exemple, ça peut être crucial pour vérifier l'état de l'application. Pour la plupart des applications cependant, la logique vraiment délicate se situe dans la gestion des formulaires et des sessions. Heureusement SimpleTest aussi inclut <a local="form_testing_documentation">des outils pour tester des formulaires web</a>.
             </p>
         </section>
-        <section name="requete" title="Modifier la requete">
+        <section name="requete" title="Modifier la requête">
             <p>
                 Bien que SimpleTest n'ait pas comme objectif de contrôler des erreurs réseau, il contient quand même des méthodes pour modifier et déboguer les requêtes qu'il lance. Voici une autre liste de méthode...
                 <table><tbody>
@@ -214,7 +214,7 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>setCookie($name, $value)</code></td><td>Initie un cookie à partir de maintenant</td></tr>
                     <tr><td><code>addHeader($header)</code></td><td>Ajoute toujours cette entête à la requête</td></tr>
                     <tr><td><code>setMaximumRedirects($max)</code></td><td>S'arrête après autant de redirections</td></tr>
-                    <tr><td><code>setConnectionTimeout($timeout)</code></td><td>Termine la connection après autant de temps entre les bytes</td></tr>
+                    <tr><td><code>setConnectionTimeout($timeout)</code></td><td>Termine la connexion après autant de temps entre les bytes</td></tr>
                     <tr><td><code>useProxy($proxy, $name, $password)</code></td><td>Effectue les requêtes à travers ce proxy d'URL</td></tr>
                 </tbody></table>
             </p>

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <page title="Documentation sur les attentes" here="Attentes">
-    <long_title>
-        Documentation SimpleTest : étendre le testeur unitaire avec des classes d'attentes supplémentaires
-    </long_title>
+    <long_title>Documentation SimpleTest : étendre le testeur unitaire avec des classes d'attentes supplémentaires</long_title>
     <content>
         <section name="fantaisie" title="Plus de contrôle sur les objets fantaisie">
             <p>
                 Le comportement par défaut des <a local="mock_objects_documentation">objets fantaisie</a> dans <a href="http://sourceforge.net/projects/simpletest/">SimpleTest</a> est soit une correspondance identique sur l'argument, soit l'acceptation de n'importe quel argument. Pour la plupart des tests, c'est suffisant. Cependant il est parfois nécessaire de ramollir un scénario de test.
             </p>
             <p>
-                Un des endroits où un test peut être trop serré est la reconnaissance textuelle. Prenons l'exemple d'un composant qui produirait un message d'erreur utile lorsque quelque chose plante. Il serait utile de tester que l'erreur correcte est renvoyée, mais le texte proprement dit risque d'être plutôt long. Si vous testez le texte dans son ensemble alors à chaque modification de ce même message -- même un point ou une virguel -- vous aurez à revenir sur la suite de test pour la modifier.
+                Un des endroits où un test peut être trop serré est la reconnaissance textuelle. Prenons l'exemple d'un composant qui produirait un message d'erreur utile lorsque quelque chose plante. Il serait utile de tester que l'erreur correcte est renvoyée, mais le texte proprement dit risque d'être plutôt long. Si vous testez le texte dans son ensemble alors à chaque modification de ce même message -- même un point ou une virgule -- vous aurez à revenir sur la suite de test pour la modifier.
             </p>
             <p>
                 Voici un cas concret, nous avons un service d'actualités qui a échoué dans sa tentative de connexion à sa source distante.
@@ -44,7 +42,7 @@ class TestOfNewsService extends UnitTestCase {
     }
 }
 ]]></php>
-                C'est un bon exemple d'un test fragile. Si nous décidons d'ajouter des instructions complémentaires, par exemple proposer un source d'actualités alternative, nous casserons nos tests par la même occasion sans pourtant avoir modifié une seule fonctionnalitée.
+                C'est un bon exemple d'un test fragile. Si nous décidons d'ajouter des instructions complémentaires, par exemple proposer une source d'actualités alternative, nous casserons nos tests par la même occasion sans pourtant avoir modifié une seule fonctionnalité.
             </p>
             <p>
                 Pour contourner ce problème, nous voudrions utiliser un test avec une expression rationnelle plutôt qu'une correspondance exacte. Nous pouvons y parvenir avec...
@@ -72,8 +70,8 @@ class TestOfNewsService extends UnitTestCase {
             <p>
                 Les classes attente possibles sont...
                 <table><tbody>
-                    <tr><td><code>EqualExpectation</code></td><td>Une égualité, plutôt que la plus forte comparaison à l'identique</td></tr>
-                    <tr><td><code>NotEqualExpectation</code></td><td>Une comparaison sur la non-égualité</td></tr>
+                    <tr><td><code>EqualExpectation</code></td><td>Une égalité, plutôt que la plus forte comparaison à l'identique</td></tr>
+                    <tr><td><code>NotEqualExpectation</code></td><td>Une comparaison sur la non-égalité</td></tr>
                     <tr><td><code>IndenticalExpectation</code></td><td>La vérification par défaut de l'objet fantaisie qui doit correspondre exactement</td></tr>
                     <tr><td><code>NotIndenticalExpectation</code></td><td>Inverse la logique de l'objet fantaisie</td></tr>
                     <tr><td><code>WantedPatternExpectation</code></td><td>Utilise une expression rationnelle Perl pour comparer une chaîne</td></tr>
@@ -82,7 +80,7 @@ class TestOfNewsService extends UnitTestCase {
                     <tr><td><code>NotAExpectation</code></td><td>L'opposé de <code>IsAExpectation</code></td></tr>
                     <tr><td><code>MethodExistsExpectation</code></td><td>Vérifie si la méthode est disponible sur un objet</td></tr>
                 </tbody></table>
-                La plupart utilise la valeur attendue dans le constructeur. Les exceptions sont les vérifications sur motif, qui utilisent une expression rationnelle, ainsie que <code>IsAExpectation</code> et <code>NotAExpectation</code>, qui prennent un type ou un nom de classe comme chaîne.
+                La plupart utilisent la valeur attendue dans le constructeur. Les exceptions sont les vérifications sur motif, qui utilisent une expression rationnelle, ainsi que <code>IsAExpectation</code> et <code>NotAExpectation</code>, qui prennent un type ou un nom de classe comme chaîne.
             </p>
         </section>
         <section name="comportement" title="Utiliser les attentes pour contrôler les bouchons serveur">
@@ -101,7 +99,7 @@ $authorisation->setReturnValue(
         array(new IsAExpectation('Session', 'Must be a session')));
 $authorisation->setReturnValue('isAllowed', false);</strong>
 ]]></php>
-                Le comportement par défaut du bouchon serveur est définie pour renvoyer <code>false</code> quand <code>isAllowed</code> est appelé. Lorsque nous appelons cette méthode avec un unique paramètre qui est un objet <code>Session</code>, il renverra <code>true</code>. Nous avons aussi ajouté un deuxième paramètre comme message. Il sera affiché dans le message d'erreur de l'objet fantaisie si l'attente est la cause de l'échec.
+                Le comportement par défaut du bouchon serveur est défini pour renvoyer <code>false</code> quand <code>isAllowed</code> est appelé. Lorsque nous appelons cette méthode avec un unique paramètre qui est un objet <code>Session</code>, il renverra <code>true</code>. Nous avons aussi ajouté un deuxième paramètre comme message. Il sera affiché dans le message d'erreur de l'objet fantaisie si l'attente est la cause de l'échec.
             </p>
             <p>
                 Ce niveau de sophistication est rarement utile : il n'est inclut que pour être complet.
@@ -125,7 +123,7 @@ $authorisation->setReturnValue('isAllowed', false);</strong>
     }
 }</strong>
 ]]></php> 
-               Il n'y a vériablement que deux méthodes à mettre en place. La méthode <code>test()</code> devrait renvoyer un <code>true</code> si l'attente doit passer, et une erreur <code>false</code> dans le cas contraire. La méthode <code>testMessage()</code> ne devrait renvoyer que du texte utile à la compréhension du test en lui-même.
+               Il n'y a véritablement que deux méthodes à mettre en place. La méthode <code>test()</code> devrait renvoyer un <code>true</code> si l'attente doit passer, et une erreur <code>false</code> dans le cas contraire. La méthode <code>testMessage()</code> ne devrait renvoyer que du texte utile à la compréhension du test en lui-même.
             </p>
             <p>
                 Cette classe peut désormais être employée à la place des classes d'attente précédentes.
@@ -133,7 +131,7 @@ $authorisation->setReturnValue('isAllowed', false);</strong>
         </section>
         <section name="unitaire" title="Sous le capot du testeur unitaire">
             <p>
-                Le <a href="http://sourceforge.net/projects/simpletest/">frameworkd de test unitaire SimpleTest</a> utilise aussi dans son coeur des classes d'attente pour la <a local="unit_test_documentation">classe UnitTestCase</a>. Nous pouvons aussi tirer parti de ces mécanismes pour réutiliser nos propres classes attente à l'intérieur même des suitses de test.
+                Le <a href="http://sourceforge.net/projects/simpletest/">frameworkd de test unitaire SimpleTest</a> utilise aussi dans son coeur des classes d'attente pour la <a local="unit_test_documentation">classe UnitTestCase</a>. Nous pouvons aussi tirer parti de ces mécanismes pour réutiliser nos propres classes attente à l'intérieur même des suites de test.
             </p>
             <p>
                 La méthode la plus directe est d'utiliser la méthode <code>SimpleTest::assertExpectation()</code> pour effectuer le test...
@@ -168,7 +166,7 @@ class TestOfNetworking extends UnitTestCase {
     }
 }
 ]]></php>
-                Il est peu probable que nous ayons besoin de ce niveau de contrôle sur la machinerie de test. Il est assez rare que le besoin d'une attente dépasse le stade de la reconnaissance d'un motif. De plus, les classes d'attente complexes peuvent rendre les tests dificiles à lire et à déboguer. Ces mécanismes sont véritablement là pour les auteurs de système qui étendront le framework de test pour leurs propres outils de test.
+                Il est peu probable que nous ayons besoin de ce niveau de contrôle sur la machinerie de test. Il est assez rare que le besoin d'une attente dépasse le stade de la reconnaissance d'un motif. De plus, les classes d'attente complexes peuvent rendre les tests difficiles à lire et à déboguer. Ces mécanismes sont véritablement là pour les auteurs de système qui étendront le framework de test pour leurs propres outils de test.
             </p>
         </section>
     </content>
