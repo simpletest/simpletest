@@ -56,6 +56,16 @@ $test->accept(new MyRunner(new MyReporter()));
 
 ...rather than the run method.
 
+Missing set options method
+==========================
+All test suite options are now in one class called SimpleTestOptions.
+This means that options are set differently...
+
+GroupTest::ignore() --> SimpleTestOptions::ignore()
+Mock::setMockBaseClass() --> SimpleTestOptions::setMockBaseClass()
+
+These changed in Alpha8 and the old versions are now deprecated.
+
 No method setExpected*()
 ========================
 The mock expectations changed their names in Alpha4 and the old names

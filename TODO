@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for the next iteration (Alpha8) of 40 hours.
+This is immediate stuff only for the next iteration (Beta1) of 30 hours.
 Figures are estimated hours work versus actual (for XP velocity).
 Stuff will get added or dropped as the cycle progresses.
 
@@ -7,51 +7,33 @@ $Id$
 
 Unit tester
 -----------
-Swapping observer pattern for visitor (3/5) - done.
-Add an error trap (3/6) - done.
-Add options class (3/2) - done.
-Clean out redundant tests (1/1) - done.
-Add user expansion message (1/2)- done.
-Rename files (2/1) - done.
 
 Interface
 ---------
-Add flush() after painting page header (1/0) - done.
-Rename test display class to reporter (1/1) - done.
+Improve object difference message (1).
 
 Mock objects
 ------------
-Add expectMinimumCallCount() expectation (2/1) - done.
-Add some user friendly expectations (2/1) - done.
-Make partial mocks accept an override (1/1) - done.
+Add parameter list assertion (2).
 
 Html parser
 -----------
-Skip CSS (1/2) - done.
-Skip comments (1/0) - done.
-Skip script tags (1/1) - done.
+Test with realistic pages (5).
+Add form parsing (2).
+Add input tag parsing (2).
+Add text area tag parsing (2).
 
 Browser
 -------
-Allow automatic redirects (3/5) - done.
-Add clock drift allowance to cookie tests (1/0) - done.
-Add clock drift test for users (1/2) - done.
+Add submit by form (2).
 
 Web tester
 ----------
-Add redirect count option (1/1) - done.
+Add default form submission (3).
+Add setting of form values by name (2).
 
 Documentation
 -------------
-Add partial mocks documentation (3/3) - done.
-Fix runner syntax in all documentation (1/1) - done.
-Fix runner syntax in tutorials (1/1) - done.
-Fix options syntax in all documentation (1/1) - done.
-Fix options syntax in tutorial (1/1) - done.
-Fix mock object examples to use simpler expectations(1/0) - done.
-Fix filenames in documentation (1/0) - done.
-Fix filenames in tutorial (1/1) - done.
-Fix reporter name in documentation (1/1) - done.
-Fix reporter name in tutorial (1/0) - done.
-Fix tutorial text to include ignore option (1/0) - done.
-Add upgrade warning (1/1) - done.
+Add web test case example tutorial (5).
+Add web test case to documentation (2).
+Add web test case form handling to documentation (2).
