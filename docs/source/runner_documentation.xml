@@ -27,13 +27,13 @@
     require_once('simpletest/unit_tester.php');
     require_once('simpletest/reporter.php');
     
-    $test = &new GroupTest('My tests);
+    $test = &new GroupTest('My tests);<strong>
     if (isset($_GET['c'])) {
         $test->addTestFile($_GET['c']);    
     } else {
         $test->addTestFile('test_a.php');    
         $test->addTestFile('test_a.php');    
-    }
+    }</strong>
     
     $test->run(HtmlReporter());
 ?>
@@ -45,7 +45,7 @@
                 has the option to run only particular test methods.
                 Here is a Reporter subclass that only runs a single test
                 method...
-<php><![CDATA[
+<php><![CDATA[<strong>
 class OneTestReporter extends HtmlReporter {
     var $_just_this;
     
@@ -59,7 +59,7 @@ class OneTestReporter extends HtmlReporter {
             parent::invoke($runner, $method);
         }
     }
-}
+}</strong>
 ]]></php>
                 It's then pretty straight forward to adjust the top level
                 test script to select a single test...
@@ -75,13 +75,13 @@ class OneTestReporter extends HtmlReporter {
         $test->addTestFile('test_a.php');    
         $test->addTestFile('test_a.php');    
     }
-    
+    <strong>
     if (isset($_GET['t'])) {
         $reporter = &new OneTestReporter($_GET['t']);
     } else {
         $reporter = &new HtmlReporter();
     }
-    $test->run($reporter);
+    $test->run($reporter);</strong>
 ?>
 ]]></php>
                 You shouldn't need these tricks too often though.
