@@ -318,7 +318,7 @@
         }
         
         /**
-         *    Adds an additional parameter to the request.
+         *    Adds additional parameters to the request.
          *    @param hash $parameters   Hash of additional parameters.
          *    @access public
          */

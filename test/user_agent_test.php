@@ -201,20 +201,18 @@
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference('fetch', $response);
             
-            $url = new SimpleUrl('http://this.com/page.html');
-            $url->addRequestParameters(array("a" => "A", "b" => "B"));
-            
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
-            $agent->expectOnce(
-                    '_createHttpRequest',
-                    array('GET', $url, array("a" => "A", "b" => "B")));
+            $agent->expectOnce('_createHttpRequest', array(
+                    'GET',
+                    new SimpleUrl('http://this.com/page.html'),
+                    array('a' => 'A', 'b' => 'B')));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'GET',
                     'http://this.com/page.html',
-                    array("a" => "A", "b" => "B"));
+                    array('a' => 'A', 'b' => 'B'));
             $agent->tally();
         }
         function _testHead() {

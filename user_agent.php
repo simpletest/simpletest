@@ -301,11 +301,11 @@
          *    @param string $method         GET, POST, etc.
          *    @param string/SimpleUrl $url  Target to fetch.
          *    @param hash $parameters       Additional parameters for request.
-         *    @return                       Response object.
+         *    @return SimpleHttpResponse    Hopefully the target page.
          *    @access public
          */
         function &fetchResponse($method, $url, $parameters = false) {
-            $url = $this->createAbsoluteUrl($this->getBaseUrl(), $url, $parameters);
+            $url = $this->createAbsoluteUrl($this->getBaseUrl(), $url);
             $redirects = 0;
             do {
                 $response = &$this->_fetch($method, $url, $parameters);
@@ -319,6 +319,7 @@
                 }
                 $url = new SimpleUrl($headers->getLocation());
                 $method = 'GET';
+                $parameters = false;
             } while (! $this->_isTooManyRedirects(++$redirects));
             $this->_current_url = $url;
             return $response;
@@ -396,6 +397,9 @@
                 $request->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
                 return $request;
             }
+            if ($parameters) {
+                $url->addRequestParameters($parameters);
+            }
             return new SimpleHttpRequest($url, $method);
         }
         
@@ -420,17 +424,13 @@
          *    a base URL is present.
          *    @param string/SimpleUrl $base Browser current URL.
          *    @param string/SimpleUrl $url  Incoming URL.
-         *    @param hash $parameters       Additional request, parameters.
          *    @return SimpleUrl             Absolute URL.
          *    @access public
          *    @static
          */
-        function createAbsoluteUrl($base, $url, $parameters = false) {
+        function createAbsoluteUrl($base, $url) {
             if (! is_object($url)) {
                 $url = new SimpleUrl($url);
-            }
-            if ($parameters) {
-                $url->addRequestParameters($parameters);
             }
             $url->makeAbsolute($base);
             return $url;

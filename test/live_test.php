@@ -1,8 +1,8 @@
 <?php
     // $Id$
     
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "../");
+    if (! defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', '../');
     }
     require_once(SIMPLE_TEST . 'unit_tester.php');
     require_once(SIMPLE_TEST . 'socket.php');
@@ -215,6 +215,15 @@
             $this->setMaximumRedirects(1);
             $this->get('http://www.lastcraft.com/test/redirect.php');
             $this->assertTitle('Simple test target file');
+        }
+        function testRedirectLosesGetData() {
+            $this->get('http://www.lastcraft.com/test/redirect.php', array('a' => 'aaa'));
+            $this->assertNoUnwantedPattern('/a=\[aaa\]/');
+        }
+        function testRedirectLosesPostData() {
+            $this->post('http://www.lastcraft.com/test/redirect.php', array('a' => 'aaa'));
+            $this->assertTitle('Simple test target file');
+            $this->assertNoUnwantedPattern('/a=\[aaa\]/');
         }
     }
     

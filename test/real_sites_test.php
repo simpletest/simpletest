@@ -1,8 +1,8 @@
 <?php
     // $Id$
     
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "../");
+    if (! defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', '../');
     }
     require_once(SIMPLE_TEST . 'web_tester.php');
 
@@ -17,12 +17,6 @@
             $this->clickLink('About');
             $this->assertTitle('About Last Craft');
         }
-        //function testMirrormill() {
-        //    $this->assertTrue($this->get('http://www.mirrormill.com'));
-        //    $this->setField('q', 'php simpletest');
-        //    $this->clickSubmit('Google Search');
-        //    $this->assertWantedPattern('/lastcraft/i');
-        //}
         function testSourceforge() {
             $this->assertTrue($this->get('http://sourceforge.net/projects/simpletest/'));
             $this->clickLink('statistics');
