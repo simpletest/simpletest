@@ -10,7 +10,6 @@
             $this->assertIdentical($encoding->getValue('a'), false);
             $this->assertIdentical($encoding->getKeys(), array());
             $this->assertIdentical($encoding->asString(), '');
-            $this->assertIdentical($encoding->getAll(), array());
         }
         
         function testPrefilled() {
@@ -18,7 +17,6 @@
             $this->assertIdentical($encoding->getValue('a'), 'aaa');
             $this->assertIdentical($encoding->getKeys(), array('a'));
             $this->assertIdentical($encoding->asString(), 'a=aaa');
-            $this->assertIdentical($encoding->getAll(), array('a' => 'aaa'));
         }
         
         function testPrefilledWithObject() {
@@ -32,7 +30,6 @@
             $encoding = &new SimpleFormEncoding(array('a' => array('a1', 'a2')));
             $this->assertIdentical($encoding->getValue('a'), array('a1', 'a2'));
             $this->assertIdentical($encoding->asString(), 'a=a1&a=a2');
-            $this->assertIdentical($encoding->getAll(), array('a' => array('a1', 'a2')));
         }
         
         function testSingleParameter() {

@@ -344,11 +344,10 @@
         /**
          *    Accessor for current request parameters
          *    as an object.
-         *    @return array   Hash of name and value pairs. The
-         *                    values will be lists for repeated items.
+         *    @return array   Encoding object with data.
          *    @access public
          */
-        function getRequest() {
+        function _getRequest() {
             return $this->_request->getAll();
         }
         

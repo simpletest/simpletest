@@ -137,20 +137,6 @@
         }
         
         /**
-         *    Gets all parameters as structured hash. Repeated
-         *    values are list values.
-         *    @return array        Hash of keys and value sets.
-         *    @access public
-         */
-        function getAll() {
-            $values = array();
-            foreach ($this->_request as $key => $value) {
-                $values[$key] = (count($value) == 1 ? $value[0] : $value);
-            }
-            return $values;
-        }
-        
-        /**
          *    Renders the query string as a URL encoded
          *    request part.
          *    @return string        Part of URL.

@@ -31,50 +31,46 @@
         function testParseBareParameter() {
             $url = new SimpleUrl('?a');
             $this->assertEqual($url->getPath(), '');
-            $this->assertEqual($url->getRequest(), array('a' => ''));
+            $this->assertEqual($url->getEncodedRequest(), '?a=');
         }
         
         function testParseEmptyParameter() {
             $url = new SimpleUrl('?a=');
             $this->assertEqual($url->getPath(), '');
-            $this->assertEqual($url->getRequest(), array('a' => ''));
+            $this->assertEqual($url->getEncodedRequest(), '?a=');
         }
         
         function testParseParameterPair() {
             $url = new SimpleUrl('?a=A');
             $this->assertEqual($url->getPath(), '');
-            $this->assertEqual($url->getRequest(), array('a' => 'A'));
+            $this->assertEqual($url->getEncodedRequest(), '?a=A');
         }
         
         function testParseMultipleParameters() {
             $url = new SimpleUrl('?a=A&b=B');
-            $this->assertEqual($url->getRequest(), array('a' => 'A', 'b' => 'B'));
             $this->assertEqual($url->getEncodedRequest(), '?a=A&b=B');
         }
         
         function testParsingParameterMixture() {
             $url = new SimpleUrl('?a=A&b=&c');
-            $this->assertEqual(
-                    $url->getRequest(),
-                    array('a' => 'A', 'b' => '', 'c' => ''));
+            $this->assertEqual($url->getEncodedRequest(), '?a=A&b=&c=');
         }
         
         function testAddParameters() {
             $url = new SimpleUrl('');
             $url->addRequestParameter('a', 'A');
-            $this->assertEqual($url->getRequest(), array('a' => 'A'));
+            $this->assertEqual($url->getEncodedRequest(), '?a=A');
             $url->addRequestParameter('b', 'B');
-            $this->assertEqual($url->getRequest(), array('a' => 'A', 'b' => 'B'));
+            $this->assertEqual($url->getEncodedRequest(), '?a=A&b=B');
             $url->addRequestParameter('a', 'aaa');
-            $this->assertEqual($url->getRequest(), array('a' => array('A', 'aaa'), 'b' => 'B'));
+            $this->assertEqual($url->getEncodedRequest(), '?a=A&a=aaa&b=B');
         }
         
         function testClearingParameters() {
             $url = new SimpleUrl('');
             $url->addRequestParameter('a', 'A');
             $url->clearRequest();
-            $request = $url->getRequest();
-            $this->assertIdentical($request, array());
+            $this->assertIdentical($url->getEncodedRequest(), '');
         }
         
         function testEncodingParameters() {
@@ -88,23 +84,23 @@
         function testDecodingParameters() {            
             $url = new SimpleUrl('?a=%3F%21%22%27%23%7E%40%5B%5D%7B%7D%3A%3B%3C%3E%2C.%2F%7C%A3%24%25%5E%26%2A%28%29_%2B-%3D');
             $this->assertEqual(
-                    $url->getRequest(),
-                    array('a' => '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-='));
+                    $url->getEncodedRequest(),
+                    '?a=' . urlencode('?!"\'#~@[]{}:;<>,./|£$%^&*()_+-='));
         }
         
         function testSettingCordinates() {
             $url = new SimpleUrl('');
             $url->setCoordinates('32', '45');
-            $this->assertEqual($url->getRequest(), array());
             $this->assertIdentical($url->getX(), 32);
             $this->assertIdentical($url->getY(), 45);
+            $this->assertEqual($url->getEncodedRequest(), '?32,45');
         }
         
         function testParseCordinates() {
             $url = new SimpleUrl('?32,45');
-            $this->assertEqual($url->getRequest(), array());
             $this->assertIdentical($url->getX(), 32);
             $this->assertIdentical($url->getY(), 45);
+            $this->assertEqual($url->getEncodedRequest(), '?32,45');
         }
         
         function testClearingCordinates() {
@@ -116,20 +112,16 @@
         
         function testParsingParameterCordinateMixture() {
             $url = new SimpleUrl('?a=A&b=&c?32,45');
-            $this->assertEqual(
-                    $url->getRequest(),
-                    array('a' => 'A', 'b' => '', 'c' => ''));
             $this->assertIdentical($url->getX(), 32);
             $this->assertIdentical($url->getY(), 45);
+            $this->assertEqual($url->getEncodedRequest(), '?a=A&b=&c=?32,45');
         }
         
         function testParsingParameterWithBadCordinates() {
             $url = new SimpleUrl('?a=A&b=&c?32');
-            $this->assertEqual(
-                    $url->getRequest(),
-                    array('a' => 'A', 'b' => '', 'c?32' => ''));
             $this->assertIdentical($url->getX(), false);
             $this->assertIdentical($url->getY(), false);
+            $this->assertEqual($url->getEncodedRequest(), '?a=A&b=&c?32=');
         }
         
         function testPageSplitting() {
@@ -164,16 +156,6 @@
                     ':' . urlencode('$!£@*&%') . '@www.lastcraft.com');
             $this->assertEqual($url->getUsername(), 'test@test');
             $this->assertEqual($url->getPassword(), '$!£@*&%');
-        }
-        
-        function testRequestEncoding() {
-            $this->assertEqual(
-                    SimpleUrl::encodeRequest(array('a' => '1')),
-                    'a=1');
-            $this->assertEqual(SimpleUrl::encodeRequest(false), '');
-            $this->assertEqual(
-                    SimpleUrl::encodeRequest(array('a' => array('1', '2'))),
-                    'a=1&a=2');
         }
         
         function testBlitz() {
@@ -253,7 +235,6 @@
             $this->assertIdentical($url->getPath(), $parts[5], "[$raw] path -> %s");
             $this->assertIdentical($url->getTld(), $parts[6], "[$raw] tld -> %s");
             $this->assertIdentical($url->getEncodedRequest(), $parts[7], "[$raw] encoded -> %s");
-            $this->assertIdentical($url->getRequest(), $params, "[$raw] request -> %s");
             $this->assertIdentical($url->getFragment(), $parts[8], "[$raw] fragment -> %s");
             if ($coords) {
                 $this->assertIdentical($url->getX(), $coords[0], "[$raw] x -> %s");
