@@ -45,6 +45,20 @@
             $this->assertWantedPattern('/hello/i');
             $this->assertNoUnwantedPattern('/goodbye/i');
         }
+        function testResponseCodes() {
+            $browser = &$this->getBrowser();
+            $browser->expectArguments("assertResponse", array(404, "%s"));
+            $browser->expectCallCount("assertResponse", 1);
+            $this->get("http://my-site.com/");
+            $this->assertResponse(404);
+        }
+        function testMimeTypes() {
+            $browser = &$this->getBrowser();
+            $browser->expectArguments("assertMime", array("text/html", "%s"));
+            $browser->expectCallCount("assertMime", 1);
+            $this->get("http://my-site.com/");
+            $this->assertMime("text/html");
+        }
     }
     
     class TestOfWebPageLinkParsing extends MockBrowserWebTestCase {

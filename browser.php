@@ -218,10 +218,21 @@
             }
             $response = &$request->fetch();
             if ($response->isError()) {
+                $this->_response = false;
                 return $response;
             }
+            $this->_response = &$response;
             $this->_addCookies($url, $response->getNewCookies());
             return $response;
+        }
+        
+        /**
+         *    Accessor for last response.
+         *    @return      Response object or false if none.
+         *    @protected
+         */
+        function &_getLastResponse() {
+            return $this->_response;
         }
         
         /**
@@ -364,8 +375,6 @@
      */
     class TestBrowser extends SimpleBrowser {
         var $_test;
-        var $_expect_connection;
-        var $_expected_response_codes;
         var $_expected_cookies;
         
         /**
@@ -384,9 +393,6 @@
          *    @protected
          */
         function _clearExpectations() {
-            $this->_expect_connection = null;
-            $this->_expected_response_codes = null;
-            $this->_expected_mime_types = null;
             $this->_expected_cookies = array();
         }
         
@@ -401,36 +407,8 @@
         function &fetchResponse($url, &$request) {
             $response = &parent::fetchResponse($url, $request);
             $this->_checkExpectations($url, $response);
+            $this->_clearExpectations();
             return $response;
-        }
-        
-        /**
-         *    Set the next fetch to expect a connection
-         *    failure.
-         *    @param $is_expected        True if failure wanted.
-         *    @public
-         */
-        function expectConnection($is_expected = true) {
-            $this->_expect_connection = $is_expected;
-        }
-        
-        /**
-         *    Sets the allowed response codes.
-         *    @param $codes        Array of allowed codes.
-         *    @public
-         */
-        function expectResponseCodes($codes) {
-            $this->_expected_response_codes = $codes;
-        }
-        
-        /**
-         *    Sets the allowed mime types and adds the
-         *    necessary request headers.
-         *    @param $types        Array of allowed types.
-         *    @public
-         */
-        function expectMimeTypes($types) {
-            $this->_expected_mime_types = $types;
         }
         
         /**
@@ -457,21 +435,6 @@
          *    @private
          */
         function _checkExpectations($url, &$response) {
-            if (isset($this->_expect_connection)) {
-                $this->_assertTrue(
-                        $response->isError() != $this->_expect_connection,
-                        "Fetching $url with error [" . $response->getError() . "]");
-            }
-            if (isset($this->_expected_response_codes)) {
-                $this->_assertTrue(
-                        in_array($response->getResponseCode(), $this->_expected_response_codes),
-                        "Fetching $url with response code [" . $response->getResponseCode() . "]");
-            }
-            if (isset($this->_expected_mime_types)) {
-                $this->_assertTrue(
-                        in_array($response->getMimeType(), $this->_expected_mime_types),
-                        "Fetching $url with mime type [" . $response->getMimeType() . "]");
-            }
             $this->_checkAllExpectedCookies($response);
         }
         
@@ -538,6 +501,36 @@
                 }
             }
             $this->_assertTrue($is_match, sprintf($expected["message"], $message));
+        }
+        
+        /**
+         *    Checks the response code against a list
+         *    of possible values.
+         *    @param $responses    Possible responses for a pass.
+         *    @public
+         */
+        function assertResponse($responses, $message = "%s") {
+            $responses = (is_array($responses) ? $responses : array($responses));
+            $response = &$this->_getLastResponse();
+            $code = ($response ? $response->getResponseCode() : "None");
+            $message = sprintf($message, "Expecting response in [" .
+                    implode(", ", $responses) . "] got [$code]");
+            $this->_assertTrue(in_array($code, $responses), $message);
+        }
+        
+        /**
+         *    Checks the mime type against a list
+         *    of possible values.
+         *    @param $types    Possible mime types for a pass.
+         *    @public
+         */
+        function assertMime($types, $message = "%s") {
+            $types = (is_array($types) ? $types : array($types));
+            $response = &$this->_getLastResponse();
+            $type = ($response ? $response->getMimeType() : "None");
+            $message = sprintf($message, "Expecting mime type in [" .
+                    implode(", ", $types) . "] got [$type]");
+            $this->_assertTrue(in_array($type, $types), $message);
         }
         
         /**

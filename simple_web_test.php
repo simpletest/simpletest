@@ -30,6 +30,21 @@
         }
         
         /**
+         *    Simulates the closing and reopening of the browser.
+         *    Temporary cookies will be discarded and timed
+         *    cookies will be expired if later than the
+         *    specified time.
+         *    @param $date        Time when session restarted.
+         *                        If ommitted then all persistent
+         *                        cookies are kept. Time is either
+         *                        Cookie format string or timestamp.
+         *    @public
+         */
+        function restartSession($date = false) {
+            $this->_current_browser->restartSession($date);
+        }
+        
+        /**
          *    Gets a current browser reference for setting
          *    special expectations or for detailed
          *    examination of page fetches.
@@ -54,7 +69,7 @@
          *    Creates a new default page builder object and
          *    uses it to parse the current content. Caches
          *    the page content once it is parsed.
-         *    @return            New SimplePage object.
+         *    @return            New web page object.
          *    @private
          */
         function &_getHtml() {
@@ -198,6 +213,26 @@
         }
         
         /**
+         *    Checks the response code against a list
+         *    of possible values.
+         *    @param $responses    Possible responses for a pass.
+         *    @public
+         */
+        function assertResponse($responses, $message = "%s") {
+            $this->_current_browser->assertResponse($responses, $message);
+        }
+        
+        /**
+         *    Checks the mime type against a list
+         *    of possible values.
+         *    @param $types    Possible mime types for a pass.
+         *    @public
+         */
+        function assertMime($types, $message = "%s") {
+            $this->_current_browser->assertMime($types, $message);
+        }
+        
+        /**
          *    Tests the text between the title tags.
          *    @param $title          Expected title or empty
          *                           if expecting no title.
@@ -239,21 +274,6 @@
                     new UnwantedPatternAssertion($pattern),
                     $this->_current_content,
                     $message);
-        }
-        
-        /**
-         *    Simulates the closing and reopening of the browser.
-         *    Temporary cookies will be discarded and timed
-         *    cookies will be expired if later than the
-         *    specified time.
-         *    @param $date        Time when session restarted.
-         *                        If ommitted then all persistent
-         *                        cookies are kept. Time is either
-         *                        Cookie format string or timestamp.
-         *    @public
-         */
-        function restartSession($date = false) {
-            $this->_current_browser->restartSession($date);
         }
         
         /**

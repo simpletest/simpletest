@@ -33,7 +33,7 @@ Add headers only fetch (4/3) - done.
 
 Web tester
 ----------
-Connect up page failure expectations (3).
+Connect up page failure expectations (3/2) - done.
 Connect cookie expectations (2/6) - done.
 Add form submission to navigation (2/8) - done.
 Connect up session start method on browser (1/1) - done.

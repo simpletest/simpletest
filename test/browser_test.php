@@ -304,27 +304,19 @@
         }
         function testFailingBadHost() {
             $test = &new MockUnitTestCase($this);
-            $test->expectArgumentsAt(0, "assertTrue", array(false, '*'));
-            $test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
-            $browser->expectConnection();
             $request = &$this->_createSimulatedBadHost();
             $this->assertIdentical(
                     $browser->get("http://this.host/this/path/page.html", false, &$request),
                     false);
-            $test->tally();
         }
         function testExpectingBadHost() {
             $test = &new MockUnitTestCase($this);
-            $test->expectArgumentsAt(0, "assertTrue", array(true, '*'));
-            $test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($test);
-            $browser->expectConnection(false);
             $request = &$this->_createSimulatedBadHost();
             $this->assertIdentical(
                     $browser->get("http://this.host/this/path/page.html", false, &$request),
                     false);
-            $test->tally();
         }
     }
 
@@ -341,41 +333,32 @@
             $this->_request->setReturnReference("fetch", $this->_response);
             $this->_test = &new MockUnitTestCase($this);
         }
-        function testExpectedResponseCodes() {
+        function testResponseCode() {
             $this->_response->setReturnValue("getResponseCode", 404);
             $this->_test->expectArguments("assertTrue", array(true, "*"));
             $this->_test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($this->_test);
-            $browser->expectResponseCodes(array(404));
             $browser->get("http://this.host/this/path/page.html", false, &$this->_request);
+            $browser->assertResponse(array(404));
             $this->_test->tally();
         }
-        function testUnwantedResponseCode() {
-            $this->_response->setReturnValue("getResponseCode", 404);
+        function testBadResponse() {
+            $this->_response->setReturnValue("getResponseCode", false);
+            $this->_response->setReturnValue("isError", true);
             $this->_test->expectArguments("assertTrue", array(false, "*"));
             $this->_test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($this->_test);
-            $browser->expectResponseCodes(array(100, 200));
             $browser->get("http://this.host/this/path/page.html", false, &$this->_request);
+            $browser->assertResponse(array(404));
             $this->_test->tally();
         }
-        function testExpectedMimeTypes() {
-            $this->_response->setReturnValue("getMimeType", "text/xml");
+        function testMimeTypes() {
+            $this->_response->setReturnValue("getMimeType", "text/plain");
             $this->_test->expectArguments("assertTrue", array(true, "*"));
             $this->_test->expectCallCount("assertTrue", 1);
             $browser = &new TestBrowser($this->_test);
-            $browser->expectMimeTypes(array("text/plain", "text/xml"));
-            $browser->get("http://this.host/this/path/page.xml", false, &$this->_request);
-            $this->_test->tally();
-        }
-        function testClearExpectations() {
-            $this->_response->setReturnValue("getResponseCode", 404);
-            $this->_test->expectCallCount("assertTrue", 0);
-            $browser = &new TestBrowser($this->_test);
-            $browser->expectResponseCodes(array(100, 200));
-            $browser->expectConnection();
-            $browser->_clearExpectations();
             $browser->get("http://this.host/this/path/page.html", false, &$this->_request);
+            $browser->assertMime("text/plain");
             $this->_test->tally();
         }
     }

@@ -94,6 +94,8 @@
             $this->assertWantedPattern('/target for the SimpleTest/');
             $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/');
             $this->assertTitle('Simple test target file');
+            $this->assertResponse(200);
+            $this->assertMime("text/html");
         }
         function testPost() {
             $this->assertTrue($this->post('http://www.lastcraft.com/test/network_confirm.php'));
