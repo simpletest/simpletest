@@ -45,6 +45,17 @@ define('SIMPLETEST_WEBUNIT_HEAD', <<<EOS
 <script type="text/javascript">
 wait_start();
 </script>
+<div id="webunit">
+	<div id="run"></div>
+	<div id="tabs">
+		<div id="fail"></div>
+		<div id="tree"></div>
+		<span id="failtab" class="activetab">&nbsp;&nbsp;<a href="javascript:activate_tab('fail');">Fail</a>&nbsp;&nbsp;</span>
+		<span id="treetab" class="activetab">&nbsp;&nbsp;<a href="javascript:activate_tab('tree');">Tree</a>&nbsp;&nbsp;</span>
+	</div>
+	<div id="msg">
+	</div>
+</div>
 <!-- open a new script to capture js vars as the tests run -->
 <script type="text/javascript">
 
@@ -135,18 +146,20 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          */
         function paintFooter($test_name) {
             echo '</script><script type="text/javascript">xHide(\'wait\');</script>';
-            echo "<h1>$test_name</h1>\n";
             $colour = ($this->getFailCount() + $this->getExceptionCount() > 0 ? "red" : "green");
-            print "<div style=\"";
-            print "padding: 8px; margin-top: 1em; background-color: $colour; color: white;";
-            print "\">";
-            print $this->getTestCaseProgress() . "/" . $this->getTestCaseCount();
-            print " test cases complete:\n";
-            print "<strong>" . $this->getPassCount() . "</strong> passes, ";
-            print "<strong>" . $this->getFailCount() . "</strong> fails and ";
-            print "<strong>" . $this->getExceptionCount() . "</strong> exceptions.";
-            print "</div>\n";
-            print "</body>\n</html>\n";
+            $content = "<h1>$test_name</h1>\n";
+            $content .= "<div style=\"";
+            $content .= "padding: 8px; margin-top: 1em; background-color: $colour; color: white;";
+            $content .= "\">";
+            $content .= $this->getTestCaseProgress() . "/" . $this->getTestCaseCount();
+            $content .= " test cases complete:\n";
+            $content .= "<strong>" . $this->getPassCount() . "</strong> passes, ";
+            $content .= "<strong>" . $this->getFailCount() . "</strong> fails and ";
+            $content .= "<strong>" . $this->getExceptionCount() . "</strong> exceptions.";
+            $content .= "</div>\n";
+
+			echo '<script type="text/javascript">foo = "', $this->toJsString($content), '";', "\nset_div_content('run', foo);\n</script>";
+            echo "\n</body>\n</html>\n";
         }
         
         /**
@@ -189,6 +202,21 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
         function paintFormattedMessage($message) {
             print "<pre>$message</pre>";
         }
+        
+        /**
+		 *	Transform a string into a format acceptable to JavaScript
+		 *  @param string $str	the string to transform
+		 *	@return	string
+		 */
+		function toJsString($str) {
+			return str_replace(
+				array('"'
+					,"\n")
+				,array('\"'
+					,"\"\n\t+\"")
+				,$str
+				);
+		}
     }
     
 ?>

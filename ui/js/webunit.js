@@ -8,6 +8,11 @@
 // Copyright (c) 2003,2004 Marcus Baker (marcus@lastcraft.com)
 // $Id$
 
+
+// Variables:
+wu_min_x=500;
+wu_min_y=400;
+
 // Functions:
 function wait_start() {
   var wait_x;
@@ -22,7 +27,14 @@ function wait_start() {
 function layout() {
 }
 
+function set_div_content(div, content) {
+	var ele;
+	ele = xGetElementById(div);
+	ele.innerHTML = content;
+}
+
 function activate_tab(tab) {
+	alert('change to '+tab+'tab');
 }
 
 function make_fail(fails) {
@@ -37,4 +49,3 @@ function make_output(data) {
 function make_fail_msg(id, msg) {
 }
 
-// Variables:
