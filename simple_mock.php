@@ -505,14 +505,14 @@
                     $arg_strings[] = "String: $arg";
                 } elseif (is_integer($arg)) {
                     $arg_strings[] = "Integer: $arg";
-                } elseif (is_integer($arg)) {
+                } elseif (is_float($arg)) {
                     $arg_strings[] = "Float: $arg";
                 } elseif (is_array($arg)) {
                     $arg_strings[] = "Array: " . count($arg) . " items";
-                } elseif (is_array($arg)) {
+                } elseif (is_resource($arg)) {
                     $arg_strings[] = "Resource: $arg";
                 } elseif (is_object($arg)) {
-                    $arg_strings[] = "Object: " . get_class($arg);
+                    $arg_strings[] = "Object: of " . get_class($arg);
                 }
             }
             return implode(", ", $arg_strings);

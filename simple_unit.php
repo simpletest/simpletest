@@ -18,6 +18,7 @@
          *    with test methods for a functional test case.
          *    @param $label            Name of test case. Will use
          *                             the class name if none specified.
+         *    @public
          */
         function UnitTestCase($label = "") {
             if ($label == "") {
@@ -30,6 +31,7 @@
          *    Will be true on false and vice versa.
          *    @param $boolean        Supposedly false value.
          *    @param $message        Message to display.
+         *    @public
          */
         function assertFalse($boolean, $message = "False assertion") {
             $this->assertTrue(!$boolean, $message);
@@ -39,10 +41,11 @@
          *    Will be true if the value is null.
          *    @param $value          Supposedly null value.
          *    @param $message        Message to display.
+         *    @public
          */
         function assertNull($value, $message = "") {
             if ($message == "") {
-                $message = "[" . gettype($value) . ": $value] should be null";
+                $message = "[" . $this->_renderVariable($value) . "] should be null";
             }
             $this->assertTrue(!isset($value), $message);
         }
@@ -51,10 +54,11 @@
          *    Will be true if the value is set.
          *    @param $value          Supposedly set value.
          *    @param $message        Message to display.
+         *    @public
          */
         function assertNotNull($value, $message = "") {
             if ($message == "") {
-                $message = "[" . gettype($value) . ": $value] should be not be null";
+                $message = "[" . $this->_renderVariable($value) . "] should be not be null";
             }
             $this->assertTrue(isset($value), $message);
         }
@@ -65,16 +69,16 @@
          *    is not an object, but the type is corect.
          *    @param $object        Object to test.
          *    @param $type          Type name as string.
+         *    @public
          */
         function assertIsA($object, $type, $message = "") {
+            if ($message == "") {
+                $message = "[" . $this->_renderVariable($object) . "] should be type [$type]";
+            }
             if (is_object($object)) {
-                $this->assertTrue(
-                        is_a($object, $type),
-                        "[" . get_class($object) . ": $object] should be type [$type]");
+                $this->assertTrue(is_a($object, $type), $message);
             } else {
-                $this->assertTrue(
-                        gettype($object) == $type,
-                        "[" . gettype($object) . ": $object] should be type [$type]");
+                $this->assertTrue(gettype($object) == $type, $message);
             }
         }
         
@@ -84,10 +88,14 @@
          *    @param $first          Value to compare.
          *    @param $second         Value to compare.
          *    @param $message        Message to display.
+         *    @public
          */
         function assertEqual($first, $second, $message = "") {
             if ($message == "") {
-                $message = "[" . gettype($first) . ": $first] should be equal to [" . gettype($second) . ": $second]";
+                $message =
+                        "[" . $this->_renderVariable($first) .
+                        "] should be equal to [" .
+                        $this->_renderVariable($second) . "]";
             }
             $this->assertTrue($first == $second, $message);
         }
@@ -98,10 +106,14 @@
          *    @param $first          Value to compare.
          *    @param $second         Value to compare.
          *    @param $message        Message to display.
+         *    @public
          */
         function assertNotEqual($first, $second, $message = "") {
             if ($message == "") {
-                $message = "[" . gettype($first) . ": $first] should not be equal to [" . gettype($second) . ": $second]";
+                $message =
+                        "[" . $this->_renderVariable($first) .
+                        "] should not be equal to [" .
+                        $this->_renderVariable($second) . "]";
             }
             $this->assertTrue($first != $second, $message);
         }
@@ -112,10 +124,14 @@
          *    @param $first          Value to compare.
          *    @param $second         Value to compare.
          *    @param $message        Message to display.
+         *    @public
          */
         function assertIdentical($first, $second, $message = "") {
             if ($message == "") {
-                $message = "[" . gettype($first) . ": $first] should be identical to [" . gettype($second) . ": $second]";
+                $message =
+                        "[" . $this->_renderVariable($first) .
+                        "] should be identical to [" .
+                        $this->_renderVariable($second) . "]";
             }
             $this->assertTrue($first === $second, $message);
         }
@@ -126,10 +142,14 @@
          *    @param $first          Value to compare.
          *    @param $second         Value to compare.
          *    @param $message        Message to display.
+         *    @public
          */
         function assertNotIdentical($first, $second, $message = "") {
             if ($message == "") {
-                $message = "[" . gettype($first) . ": $first] should not be identical to [" . gettype($second) . ": $second]";
+                $message =
+                        "[" . $this->_renderVariable($first) .
+                        "] should not be identical to [" .
+                        $this->_renderVariable($second) . "]";
             }
             $this->assertTrue($first !== $second, $message);
         }
@@ -140,10 +160,14 @@
          *    @param $first          Object reference to check.
          *    @param $second         Hopefully the same object.
          *    @param $message        Message to display.
+         *    @public
          */
         function assertReference(&$first, &$second, $message = "") {
             if ($message == "") {
-                $message = "[$first] and [$second] should reference the same object";
+                $message =
+                        "[" . $this->_renderVariable($first) .
+                        "] and [" . $this->_renderVariable($second) .
+                        "] should reference the same object";
             }
             $temp = $first;
             $first = uniqid("test");
@@ -158,10 +182,14 @@
          *    @param $first          Object reference to check.
          *    @param $second         Hopefully not the same object.
          *    @param $message        Message to display.
+         *    @public
          */
         function assertCopy(&$first, &$second, $message = "") {
             if ($message == "") {
-                $message = "[$first] and [$second] should not be the same object";
+                $message =
+                        "[" . $this->_renderVariable($first) .
+                        "] and [" . $this->_renderVariable($second) .
+                        "] should not be the same object";
             }
             $temp = $first;
             $first = uniqid("test");
@@ -177,6 +205,7 @@
          *                           the regex delimiters.
          *    @param $subject        String to search in.
          *    @param $message        Message to display.
+         *    @public
          */
         function assertWantedPattern($pattern, $subject, $message = "") {
             if ($message == "") {
@@ -192,12 +221,39 @@
          *                           the regex delimiters.
          *    @param $subject        String to search in.
          *    @param $message        Message to display.
+         *    @public
          */
         function assertNoUnwantedPattern($pattern, $subject, $message = "") {
             if ($message == "") {
                 $message = "Not expecting [$pattern] in [$subject]";
             }
             $this->assertTrue(!preg_match($pattern, $subject), $message);
+        }
+        
+        /**
+         *    Renders a variable in a shorter for than print_r().
+         *    @param $var        Variable to render as a string.
+         *    @protected
+         */
+        function _renderVariable($var) {
+            if (!isset($var)) {
+                return "NULL";
+            } elseif (is_bool($var)) {
+                return "Boolean: " . ($var ? "true" : "false");
+            } elseif (is_string($var)) {
+                return "String: $var";
+            } elseif (is_integer($var)) {
+                return "Integer: $var";
+            } elseif (is_float($var)) {
+                return "Float: $arg";
+            } elseif (is_array($var)) {
+                return "Array: " . count($var) . " items";
+            } elseif (is_resource($var)) {
+                return "Resource: $var";
+            } elseif (is_object($var)) {
+                return "Object: of " . get_class($var);
+            }
+            return "Unknown";
         }
     }
 ?>

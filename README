@@ -1,10 +1,13 @@
 Simple Test
 ===========
-A framework for unit testing, web site testing and mock objects. If you have
+You probably got this package from...
+http://sourceforge.net/projects/simpletest/
+
+It's a framework for unit testing, web site testing and mock objects. If you have
 used JUnit you will find this PHP version very similar. Also included
-is a mock objects generator. The mocks feature complete setting of
-expected parameters with wildcards, selecting return values by parameter
-again with wildcards and the setting of sequences of either.
+is a mock objects generator. The mocks feature a complete setting of
+expected parameters with wildcards, selecting return values by parameter,
+again with wildcards, and the setting of sequences of either.
 
 The current release is PHP only and does not yet include the web testing tool.
 As an early release it doesn't have much in the way of documentation either!
@@ -18,9 +21,20 @@ your suggestions into the version one release.
 
 You are looking at an Alpha release because the interfaces for the
 web testing side have not yet stabilised. The unit tester and mock
-object generator are tested and have been used to test several
+object generator are tested and have already been used to test several
 systems. And of course they are being used to assist creation
 of SimpleTest itself.
+
+There is no change log as yet. It would slow down development at
+this stage and duplicate a lot of what can be found in the CVS
+repostory in sourceforge. Once a version 1.0 is reached and the
+interfaces are stable, I will document any subsequent interface
+changes as best I can.
+
+Oh, yes. It is called "Simple" because it should be simple to
+use. I intend to add a complete set of tools for a test first
+and "test as you code" type of development. "Simple" does not
+mean "Lite" in this context.
 
 yours, Marcus.
 -- 

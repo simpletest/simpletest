@@ -16,6 +16,7 @@
         /**
          *    Sets the event label.
          *    @param $label     Message to be carried by the event.
+         *    @public
          */
         function TestEvent($label) {
             $this->_label = $label;
@@ -24,14 +25,16 @@
         /**
          *    Accessor for the event message.
          *    @return     Event message.
+         *    @public
          */
         function getLabel() {
             return $this->_label;
         }
         
         /**
-         *    Abstract. Accepts visiting painter.
+         *    Accepts visiting painter.
          *    @param $painter    TestReporter class to write to.
+         *    @abstract
          */
         function paint(&$painter) {
         }
@@ -50,6 +53,7 @@
          *    label.
          *    @param $result    True if passed.
          *    @param $label     Message to be carried by the event.
+         *    @public
          */
         function TestResult($result, $label = "") {
             $this->TestEvent($label);
@@ -60,6 +64,7 @@
          *    Paints the approppriate result to the visting
          *    TestReporter.
          *    @param $painter    TestReporter class to write to.
+         *    @public
          */
         function paint(&$painter) {
             if ($this->_result) {
@@ -80,6 +85,7 @@
         /**
          *    Stashes the starting message, usually a test name.
          *    @param $label     Message to be carried by the event.
+         *    @public
          */
         function TestStart($label) {
             $this->TestEvent($label);
@@ -88,6 +94,7 @@
         /**
          *    Paints itself into the visiting painter.
          *    @param $painter    TestReporter class to write to.
+         *    @public
          */
         function paint(&$painter) {
             $painter->paintStart($this->getLabel());
@@ -104,6 +111,7 @@
         /**
          *    Stashes the ending message, usually a test name.
          *    @param $label     Message to be carried by the event.
+         *    @public
          */
         function TestEnd($label) {
             $this->TestEvent($label);
@@ -112,6 +120,7 @@
         /**
          *    Paints itself into the visiting painter.
          *    @param $painter    TestReporter class to write to.
+         *    @public
          */
         function paint(&$painter) {
             $painter->paintEnd($this->getLabel());
@@ -127,6 +136,7 @@
         
         /**
          *    Starts with an empty list of observers.
+         *    @public
          */
         function TestObservable() {
             $this->_observers = array();
@@ -135,6 +145,7 @@
         /**
          *    Adds an object with a notify() method.
          *    @param $observer    Observer added to the internal list.
+         *    @public
          */
         function attachObserver(&$observer) {
             $this->_observers[] = &$observer;
@@ -144,6 +155,7 @@
          *    Passes the event object down to the notify()
          *    method of all of it's observers.
          *    @param $event        Event to pass on.
+         *    @public
          */
         function notify(&$event) {
             for ($i = 0; $i < count($this->_observers); $i++) {
@@ -167,6 +179,7 @@
         /**
          *    Does nothing with the incoming event. Abstract.
          *    @param $event    Event to acted upon.
+         *    @public
          */
         function notify(&$event) {
         }
@@ -181,6 +194,7 @@
         
         /**
          *    Does nothing.
+         *    @public
          */
         function TestReporter() {
             $this->TestObserver();
@@ -190,6 +204,7 @@
          *    Handles the incoming event by invoking it's paint()
          *    method passing itself in as a visitor.
          *    @param $event        Event to show.
+         *    @public
          */
         function notify(&$event) {
             $event->paint(&$this);
@@ -198,6 +213,7 @@
         /**
          *    Paints the start of a test.
          *    @param $test_name        Name of test or other label.
+         *    @public
          */
         function paintStart($test_name) {
         }
@@ -205,6 +221,7 @@
         /**
          *    Paints the end of a test.
          *    @param $test_name        Name of test or other label.
+         *    @public
          */
         function paintEnd($test_name) {
         }
@@ -212,6 +229,7 @@
         /**
          *    Paints a pass. This will often output nothing.
          *    @param $message        Passing message.
+         *    @public
          */
         function paintPass($message) {
         }
@@ -219,6 +237,7 @@
         /**
          *    Paints a failure.
          *    @param $message        Failure message from test.
+         *    @public
          */
         function paintFail($message) {
         }
