@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<page title="Créer un nouveau de scénario de test" here="test unitaire en PHP">
+<page title="Créer un nouveau de scénario de test" here="Test unitaire en PHP">
     <long_title>Tutorial sur les tests unitaires en PHP - Créer un exemple de scénario de test en PHP</long_title>
     <content>
         <p>
@@ -48,7 +48,7 @@
             Les tests eux-même sont rassemblés dans une classe de scénario de test. Cette dernière est typiquement une extension de la classe <code>UnitTestCase</code>. Quand le test est exécuté, elle cherche les méthodes commençant par &quot;test&quot; et les lancent. Notre seule méthode de test pour l'instant est appellée <code>testCreatingNewFile()</code> mais elle est encore vide.
         </p>
         <p>
-            Une méthode vide ne fait rien. Nous avons besoin d'y placer du code. La classe <code>UnitTestCase</code> génére des évènements de test à son exécution : ces évènements sont envoyés vers un observeur. La méthode <code>UnitTestCase::run()</code> lancent tous les tests de la classe.
+            Une méthode vide ne fait rien. Nous avons besoin d'y placer du code. La classe <code>UnitTestCase</code> génère des évènements de test à son exécution : ces évènements sont envoyés vers un observeur. La méthode <code>UnitTestCase::run()</code> lancent tous les tests de la classe.
         </p>
         <p>
             Et pour ajouter du code de test...
@@ -82,7 +82,7 @@
             Vous pensez probablement que ça représente beaucoup de code pour un unique test et je suis d'accord avec vous. Ne vous inquiétez pas. Il s'agit d'un coût fixe et à partir de maintenant nous pouvons ajouter des tests  : une ligne ou presque à chaque fois. Parfois moins en utilisant des artefacts de test que nous découvrirons plus tard.
         </p>
         <p>
-            Nous devons maintenant prendre nos première décisions. Notre fichier de test s'appelle <em>log_test.php</em> (n'importe quel nom ferait l'affaire) : nous le plaçons dans un dossier appelé <em>tests</em> (partout ailleurs serait aussi bien). Notre fichier de code s'appelle <em>log.php</em> : c'est son contenu que nous allons tester. Je l'ai placé dans notre dossier <em>classes</em> : cela veut-il dire que nous construisons une classe ?
+            Nous devons maintenant prendre nos premières décisions. Notre fichier de test s'appelle <em>log_test.php</em> (n'importe quel nom ferait l'affaire) : nous le plaçons dans un dossier appelé <em>tests</em> (partout ailleurs serait aussi bien). Notre fichier de code s'appelle <em>log.php</em> : c'est son contenu que nous allons tester. Je l'ai placé dans notre dossier <em>classes</em> : cela veut-il dire que nous construisons une classe ?
         </p>
         <p>
             Pour cet exemple, la réponse est oui, mais le testeur unitaire n'est pas restreint aux tests de classe. C'est juste que le code orienté objet est plus facile à dépecer et à remodeler. Ce n'est pas par hasard si la conduite de tests fins via les tests unitaires est apparue au sein de la communauté OO.
@@ -91,7 +91,7 @@
             Le test en lui-même est minimal. Tout d'abord il élimine tout autre fichier de test qui serait encore présent. Les décisions de conception arrivent ensuite en rafale. Notre classe s'appelle <code>Log</code> : elle passe le chemin du fichier au constructeur. Nous créons le log et nous lui envoyons aussitôt un message en utilisant la méthode <code>message()</code>. L'originalité dans le nommage n'est pas une caractéristique désirable chez un développeur informatique : c'est triste mais c'est comme ça.
         </p>
         <p>
-            La plus petite unité d'un test mmm... heu... unitaire est l'assertion. Ici nous voulons nous assurer que le fichier log auquel nous venons d'envoyer un message a bel et bien été créé. <code>UnitTestCase::assertTrue()</code> enverra un évènement réussite si la condition évaluée est vraie ou un échec dans le cas contaire. Nous pouvons avoir un ensemble de d'assertions différentes et encore plus si nous étendons nos scénarios de test classique. Voici la liste...
+            La plus petite unité d'un test mmm... heu... unitaire est l'assertion. Ici nous voulons nous assurer que le fichier log auquel nous venons d'envoyer un message a bel et bien été créé. <code>UnitTestCase::assertTrue()</code> enverra un évènement réussite si la condition évaluée est vraie ou un échec dans le cas contaire. Nous pouvons avoir un ensemble d'assertions différentes et encore plus si nous étendons nos scénarios de test classique. Voici la liste...
             <table><tbody>
                 <tr><td><code>assertTrue(\$x)</code></td><td>Echoue si \$x est faux</td></tr>
                 <tr><td><code>assertFalse(\$x)</code></td><td>Echoue si \$x est vrai</td></tr>
@@ -198,7 +198,7 @@ class TestOfLogging extends UnitTestCase {
     }
 ?>
 ]]></php>
-            Au total, pas moins de 4 échecs ont été nécessaire pour passer à l'étape suivante. Je n'avais pas créé le répertoire temporaire, je ne lui avais pas donné les droits d'écriture, j'avais une coquille et je n'avais pas non plus ajouté ce nouveau répertoire dans CVS. N'importe laquelle de ces erreurs aurait pu m'occuper pendant plusieurs heures si elle était apparu plus tard mais c'est bien pour ces cas là qu'on teste. Avec les corrections adéquates, ça donne...
+            Au total, pas moins de 4 échecs ont été nécessaire pour passer à l'étape suivante. Je n'avais pas créé le répertoire temporaire, je ne lui avais pas donné les droits d'écriture, j'avais une coquille et je n'avais pas non plus ajouté ce nouveau répertoire dans CVS. N'importe laquelle de ces erreurs aurait pu m'occuper pendant plusieurs heures si elle était apparue plus tard mais c'est bien pour ces cas là qu'on teste. Avec les corrections adéquates, ça donne...
             <div class="demo">
                 <h1>Log class test</h1>
                 <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.

@@ -128,7 +128,7 @@ class TestOfLogging extends UnitTestCase {
 <strong>
 $test = &new TestOfLogging();
 $test->run(new HtmlReporter());</strong>
-?>;
+?>
 ]]></php>
             </p>
             <p>
@@ -137,14 +137,31 @@ $test->run(new HtmlReporter());</strong>
                     <h1>testoflogging</h1>
                     <span class="fail">Fail</span>: testcreatingnewfile-&gt;True assertion failed.<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
-                    <strong>0</strong> passes and <strong>1</strong> fails.</div>
+                    <strong>1</strong> passes and <strong>1</strong> fails.</div>
                 </div>
                 ...and if it passes like this...
                 <div class="demo">
                     <h1>testoflogging</h1>
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
-                    <strong>1</strong> passes and <strong>0</strong> fails.</div>
+                    <strong>2</strong> passes and <strong>0</strong> fails.</div>
                 </div>
+				And if you get this...
+                <div class="demo">
+                    <b>Fatal error</b>:  Failed opening required '../classes/log.php' (include_path='') in <b>/home/marcus/projects/lastcraft/tutorial_tests/Log/tests/log_test.php</b> on line <b>7</b>
+                </div>
+				it means you're missing the <em>classes/Log.php</em> file that could look like...
+<php><![CDATA[
+<?php
+class Log {
+    
+        function Log($file_path) {
+        }
+
+		function message() {
+		}
+}
+?>;
+]]></php>
             </p>
         </section>
         <section name="group" title="Building group tests">

@@ -50,7 +50,7 @@ class TestOfLogging extends UnitTestCase {
                 <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
                 <strong>4</strong> passes and <strong>0</strong> fails.</div>
             </div>
-            Notre code contiennent actuellement beaucoup de répétitions, nous devons effacer le fichier de test avant et après chaque test. De même que <a href="http://www.junit.org/">JUnit</a>, SimpleTest utilise les méthodes <code>setUp()</code> et <code>tearDown()</code> qui sont exécutées respectivement avant et après chaque test. La suppression du fichier est commune à tous les tests : nous devrions donc y mettre cette opération.
+            Notre code contient actuellement beaucoup de répétitions, nous devons effacer le fichier de test avant et après chaque test. De même que <a href="http://www.junit.org/">JUnit</a>, SimpleTest utilise les méthodes <code>setUp()</code> et <code>tearDown()</code> qui sont exécutées respectivement avant et après chaque test. La suppression du fichier est commune à tous les tests : nous devrions donc y mettre cette opération.
         </p>
         <p>
             Nos tests sont verts donc nous pouvons faire un peu de remaniement...
@@ -94,7 +94,7 @@ class TestOfLogging extends UnitTestCase {
     function tearDown() {
         @unlink('../temp/test.log');
     }<strong>
-    function getFileLine($filename, \$index) {
+    function getFileLine($filename, $index) {
         $messages = file($filename);
         return $messages[$index];
     }</strong>
@@ -148,7 +148,7 @@ class TestOfLogging extends UnitTestCase {
             Il n'y a presque de pas de différence tant que les choses marchent...
             <div class="demo">
                 <h1>All tests</h1>
-                <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">2/2 test cases complete.
+                <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
                 <strong>4</strong> passes and <strong>0</strong> fails.</div>
             </div>
             Les tests du groupe s'ajoutent au compteur des scénarios de test. Ajouter des nouveaux scénarios de test est très simple. Il suffit d'inclure le fichier d'un scénario et d'ajouter individuellement tous les scénarios autonomes. Vous pouvez aussi emboîter les groupes de test les uns dans les autres (tout en faisant bien attention d'éviter les boucles).

@@ -177,7 +177,7 @@ class TestOfLogging extends UnitTestCase {
             We hardly notice the difference when things work...
             <div class="demo">
                 <h1>All tests</h1>
-                <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">2/2 test cases complete.
+                <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
                 <strong>4</strong> passes and <strong>0</strong> fails.</div>
             </div>
             Group tests add to the test case count.
