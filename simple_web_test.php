@@ -93,11 +93,11 @@
          *    @param $method        Name of test method.
          *    @protected
          */
-        function _testMethodStart($method) {
-            parent::_testMethodStart($method);
+        function invoke(&$observer, $method) {
             $this->_current_content = false;
             $this->_clearHtmlCache();
             $this->_current_browser = &$this->createBrowser();
+            parent::invoke($observer, $method);
         }
         
         /**

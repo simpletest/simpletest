@@ -75,9 +75,9 @@
         }
         
         /**
-         *    Bolean test for failure taht is sufficient
+         *    Boolean test for failure that is sufficient
          *    to fail the test suite.
-         *    @return        True if failure, excetion, etc.
+         *    @return        True if failure, exception, etc.
          *    @param
          */
         function isFail() {
