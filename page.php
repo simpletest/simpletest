@@ -51,7 +51,11 @@
             if (!in_array($name, array_keys($this->_tags))) {
                 $this->_tags[$name] = array();
             }
-            array_push($this->_tags[$name], new SimpleTag($name, $attributes));
+            $tag = new SimpleTag($name, $attributes);
+            if (in_array($name, $this->_getBlockTags())) {
+                $this->_page->acceptBlockStart($tag);
+            }            
+            array_push($this->_tags[$name], $tag);
             return true;
         }
         
@@ -67,7 +71,12 @@
                 return false;
             }
             $tag = array_pop($this->_tags[$name]);
-            $this->_page->acceptTag($tag);
+            if (in_array($name, $this->_getContentTags())) {
+                $this->_page->acceptTag($tag);
+            }
+            if (in_array($name, $this->_getBlockTags())) {
+                $this->_page->acceptBlockEnd($tag);
+            }            
             return true;
         }
         
@@ -79,12 +88,36 @@
          *    @public
          */
         function addContent($text) {
-            foreach (array_keys($this->_tags) as $name) {
+            foreach ($this->_getContentTags() as $name) {
+                if (!isset($this->_tags[$name])) {
+                    continue;
+                }
                 for ($i = 0; $i < count($this->_tags[$name]); $i++) {
                     $this->_tags[$name][$i]->addContent($text);
                 }
             }
             return true;
+        }
+        
+        /**
+         *    Accessor for list of tags where the content
+         *    between the start and end is important.
+         *    @return        List of content tags.
+         *    @protected
+         */
+        function _getContentTags() {
+            return array("a", "title");
+        }
+        
+        /**
+         *    Accessor for list of tags where the content
+         *    between the start and end is not important,
+         *    but both teh start and end must be sent.
+         *    @return        List of content tags.
+         *    @protected
+         */
+        function _getBlockTags() {
+            return array("form");
         }
     }
     
@@ -146,6 +179,22 @@
             } elseif ($tag->getName() == "title") {
                 $this->_setTitle($tag->getContent());
             }
+        }
+        
+        /**
+         *    Opens a special enclosing block such as a form.
+         *    @param $tag        Tag to accept.
+         *    @public
+         */
+        function acceptBlockStart($tag) {
+        }
+        
+        /**
+         *    Closes a special enclosing block such as a form.
+         *    @param $tag        Tag to accept.
+         *    @public
+         */
+        function acceptBlockEnd($tag) {
         }
         
         /**

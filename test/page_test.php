@@ -106,6 +106,19 @@
             $builder->endElement("title");
             $page->tally();
         }
+        function testForm() {
+            $tag = new SimpleTag("form", array());
+            $page = &new MockSimplePage($this);
+            $page->expectArguments("acceptBlockStart", array($tag));
+            $page->expectCallCount("acceptBlockStart", 1);
+            $page->expectArguments("acceptBlockEnd", array($tag));
+            $page->expectCallCount("acceptBlockEnd", 1);
+            $builder = &new SimplePageBuilder($page);
+            $builder->startElement("form", array());
+            $builder->addContent("Stuff");
+            $builder->endElement("form");
+            $page->tally();
+        }
     }
     
     class TestSimplePage extends SimplePage {
