@@ -19,6 +19,7 @@ Mock objects
 ------------
 Add expectMinimumCallCount() expectation (2/1) - done.
 Add a parameter list assertion for better message display (2).
+Add some user friendly expectations (1).
 
 Html parser
 -----------
@@ -28,7 +29,6 @@ Skip script tags (1/1) - done.
 Add input tag parsing (2).
 Add checkbox parsing (2).
 Add text area parsing (3).
-Add image tag parsing (1).
 Test against some typical internet page samples (5).
 
 Browser
