@@ -1,7 +1,26 @@
 <?php
     // $Id$
     
+    if (!defined("SIMPLE_TEST")) {
+        define("SIMPLE_TEST", "../");
+    }
+    require_once(SIMPLE_TEST . 'observer.php');
+    require_once(SIMPLE_TEST . 'browser.php');
+    
     Mock::generate("TestObserver");
+    Mock::generate("TestBrowser");
+    
+    class TestOfBrowserAccess extends UnitTestCase {
+        function TestOfBrowserAccess() {
+            $this->UnitTestCase();
+        }
+        function testBrowserOverride() {
+            $browser = &new MockTestBrowser($this);
+            $test = &new WebTestCase();
+            $test->setBrowser($browser);
+            $this->assertReference($browser, $test->getBrowser());
+        }
+    }
     
     class TestOfWebEvents extends UnitTestCase {
         var $_observer;
@@ -18,12 +37,6 @@
         }
         function tearDown() {
             $this->_observer->tally();
-        }
-        function testSimpleEvents() {
-            $test = &new WebTestCase();
-            $test->attachObserver($this->_observer);
-            $test->assertTrue(true, "1");
-            $test->assertTrue(false, "2");
         }
         function testWantedPatterns() {
             $test = &new WebTestCase();

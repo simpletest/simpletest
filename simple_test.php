@@ -86,11 +86,11 @@
                 if (is_a($this, strtolower($method))) {
                     continue;
                 }
-                $this->notify(new TestStart($method));
+                $this->_testMethodStart($method);
                 $this->setUp();
                 $this->$method();
                 $this->tearDown();
-                $this->notify(new TestEnd($method));
+                $this->_testMethodEnd($method);
             }
             $this->notify(new TestEnd($this->getLabel(), $this->getSize()));
         }
@@ -108,9 +108,33 @@
         }
         
         /**
+         *    Hook for different types of test case.
+         *    Allows test case class specific actions to
+         *    be performed before the user setUp() method.
+         *    Should be chained if overridden.
+         *    @param $method        Name of test method.
+         *    @protected
+         */
+        function _testMethodStart($method) {
+            $this->notify(new TestStart($method));
+        }
+        
+        /**
+         *    Hook for different types of test case.
+         *    Allows test case class specific clean up to
+         *    be performed after the user tearDown() method.
+         *    Should be chained if overridden.
+         *    @param $method        Name of test method.
+         *    @protected
+         */
+        function _testMethodEnd($method) {
+            $this->notify(new TestEnd($method));
+        }
+        
+        /**
          *    Sets up unit test wide variables at the start
          *    of each test method. To be overridden in
-         *    actual test cases.
+         *    actual user test cases.
          *    @public
          */
         function setUp() {
@@ -118,6 +142,7 @@
         
         /**
          *    Clears the data set in the setUp() method call.
+         *    To be overridden by the user in actual user test cases.
          *    @public
          */
         function tearDown() {
@@ -187,6 +212,9 @@
                 if (!$this->_is_test_case($class)) {
                     continue;
                 }
+                if (in_array($class, GroupTest::ignore())) {
+                    continue;
+                }
                 $group->addTestCase(new $class());
             }
             $this->addTestCase($group);
@@ -230,6 +258,26 @@
                 $count += $case->getSize();
             }
             return $count;
+        }
+        
+        /**
+         *    Maintains a static ignore list so that a
+         *    directive can be sent to the group test
+         *    that a test class should not be included
+         *    during a file scan. Used for hiding test
+         *    generic case extensions from tests.
+         *    @param $class        Add a class to ignore.
+         *    @static
+         */
+        function ignore($class = false) {
+            static $_classes;
+            if (!isset($_classes)) {
+                $_classes = array();
+            }
+            if ($class) {
+                $_classes[] = strtolower($class);
+            }
+            return $_classes;
         }
     }
     

@@ -9,6 +9,7 @@ Unit tester
 Create assertion test (1/1) - done.
 Improve difference output messages when nested in arrays (1).
 Add adapters for other testers (3/4) - done.
+Allow test case skipping in group tests (1/1) - done.
 
 Mock objects
 ------------
@@ -29,11 +30,11 @@ Add base URL (2).
 
 Web tester
 ----------
-Create a web test case class (2).
+Create a web test case class (2/4).
 Create a page fetch case end to end (3).
 Create a link following case from end to end (4).
 
 Documentation
 -------------
-Add server stub documentation (3).
 Clean up the documentation links (1).
+Add a top level overview (1).
