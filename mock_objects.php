@@ -9,9 +9,9 @@
     /**#@+
      * include SimpleTest files
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'expectation.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'options.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'dumper.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'expectation.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'options.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'dumper.php');
     /**#@-*/
     
     /**
@@ -815,7 +815,7 @@
     }
     
     /**
-     *    Static methods only class for code generation of
+     *    Static methods only service class for code generation of
      *    server stubs.
 	 *    @package SimpleTest
 	 *    @subpackage MockObjects
@@ -905,17 +905,10 @@
             }
             return $code;
         }
-        
-        /**
-         *    @deprecated
-         */
-        function setStubBaseClass($stub_base = false) {
-            SimpleTestOptions::setStubBaseClass($stub_base);
-        }
     }
     
     /**
-     *    Static methods only class for code generation of
+     *    Static methods only service class for code generation of
      *    mock objects.
 	 *    @package SimpleTest
 	 *    @subpackage MockObjects

@@ -331,12 +331,12 @@
         
         /**
          *    Parses the raw content into a page.
-         *    @param string $raw    Text of fetch.
-         *    @return SimplePage    Parsed HTML.
+         *    @param SimpleHttpResponse $response    Response from fetch.
+         *    @return SimplePage                     Parsed HTML.
          *    @access protected
          */
-        function &_parse($raw) {
-            return new SimplePage($raw);
+        function &_parse($response) {
+            return new SimplePage($response);
         }
         
         /**
@@ -376,30 +376,30 @@
         
         /**
          *    Fetches a page.
-         *    @param string $method         GET or POST.
-         *    @param string/SimpleUrl $url  Target to fetch as string.
-         *    @param hash $parameters       POST parameters.
-         *    @param boolean $record        Whether to record in the history.
-         *    @return string                Content of page.
+         *    @param string $method           GET or POST.
+         *    @param string/SimpleUrl $url    Target to fetch as string.
+         *    @param hash $parameters         POST parameters.
+         *    @param boolean $add_to_history  Whether to record in the history.
+         *    @return string                  Content of page.
          *    @access private
          */
-        function _fetch($method, $url, $parameters, $record) {
+        function _fetch($method, $url, $parameters, $add_to_history) {
             $this->_headers = false;
             $this->_transport_error = false;
             $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
             if ($response->isError()) {
-                $this->_page = &new SimplePage(false);
+                $this->_page = &new SimplePage($response);
                 $this->_transport_error = $response->getError();
                 return false;
             }
-            if ($record) {
+            if ($add_to_history) {
                 $this->_history->recordEntry(
                         $this->_user_agent->getCurrentMethod(),
                         $this->_user_agent->getCurrentUrl(),
                         $this->_user_agent->getCurrentPostData());
             }
             $this->_headers = $response->getHeaders();
-            $this->_page = &$this->_parse($response->getContent());
+            $this->_page = &$this->_parse($response);
             return $response->getContent();
         }
         

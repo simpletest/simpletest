@@ -483,17 +483,8 @@
          *    @access private
          */
         function _getParsedTags() {
-            return array(
-                    'a',
-                    'title',
-                    'form',
-                    'input',
-                    'textarea',
-                    'select',
-                    'option',
-                    'noframes',
-                    'frameset',
-                    'frame');
+            return array('a', 'title', 'form', 'input', 'textarea', 'select',
+                    'option', 'noframes', 'frameset', 'frame');
         }
         
         /**

@@ -17,7 +17,7 @@ Mock objects
 
 Html parser
 -----------
-Add framset tag (2).
+Add framset tag (2/3) - done.
 Add frame tag (1).
 Simplify builder callbacks (1).
 Add image submit parsing (3).
@@ -27,7 +27,7 @@ Add simple button tag parsing (1).
 
 Browser
 -------
-Add frame loading support (4).
+Add frame loading support (4/2).
 Add frame focus and defocus (3).
 Make widget handling reflect frame focus (2).
 Add setFieldById() method (1).
@@ -40,7 +40,6 @@ Username and password should allow encoded characters (1/0) - done.
 Add support for proxy fetching (3/9) - done.
 Add User-Agent identifier for tracking tests (1/0) - done.
 Allow adding of arbitrary headers (1/1) - done.
-Add head fetch (1).
 
 Web tester
 ----------

@@ -5,10 +5,15 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+No method Stub::setStubBaseClass()
+==================================
+This method has finally been removed in 1.0RC1. Use...
+
+SimpleTestOptions::setStubBaseClass()
+
 No class CommandLineReporter
 ============================
-This was renamed to TextReporter in Beta3 and was removed in release
-candidate 1.
+This was renamed to TextReporter in Beta3 and was removed in 1.0RC1.
 
 No method requireReturn()
 =========================

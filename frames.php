@@ -14,7 +14,7 @@
     
     /**
      *    A composite page. Wraps a frameset page and
-     *    loads subframes. The original page will be
+     *    adds subframes. The original page will be
      *    mostly ignored. Implements the SimplePage
      *    interface so as to be interchangeable.
 	 *    @package SimpleTest

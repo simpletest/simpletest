@@ -125,7 +125,6 @@
             $browser = &new MockParseSimpleBrowser($this);
             $browser->setReturnReference('_createUserAgent', $agent);
             $browser->setReturnReference('_parse', $page);
-            $browser->expectOnce('_parse', array('stuff'));
             $browser->SimpleBrowser();
             
             $browser->get('http://this.com/page.html');

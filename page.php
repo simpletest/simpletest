@@ -60,6 +60,10 @@
                 $this->_page->acceptFormStart($tag);
                 return true;
             }            
+            if ($name == 'frameset') {
+                $this->_page->acceptFramesetStart($tag);
+                return true;
+            }            
             if ($tag->expectEndTag()) {
                 $this->_openTag($tag);
                 return true;
@@ -77,6 +81,10 @@
         function endElement($name) {
             if ($name == 'form') {
                 $this->_page->acceptFormEnd();
+                return true;
+            }            
+            if ($name == 'frameset') {
+                $this->_page->acceptFramesetEnd();
                 return true;
             }            
             if (isset($this->_tags[$name]) && (count($this->_tags[$name]) > 0)) {
@@ -212,13 +220,13 @@
         
         /**
          *    Parses a page ready to access it's contents.
-         *    @param string $raw            Raw unparsed text.
+         *    @param SimpleHttpResponse $response     Result of HTTP fetch.
          *    @access public
          */
-        function SimplePage($raw) {
+        function SimplePage($response) {
             $this->_links = array();
             $this->_title = false;
-            $this->_raw = $raw;
+            $this->_raw = $response->getContent();
             $this->_open_forms = array();
             $this->_complete_forms = array();
             $this->_frameset = false;

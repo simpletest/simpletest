@@ -328,13 +328,21 @@
             $this->_handler->expectAtLeastOnce("ignore");
             $this->assertTrue($this->_lexer->parse("<!-- <style>Lot's of styles</style> -->"));
         }
-        function testTitle() {
+        function testTitleTag() {
             $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<title", "*"));
             $this->_handler->expectArgumentsAt(1, "acceptStartToken", array(">", "*"));
             $this->_handler->expectCallCount("acceptStartToken", 2);
             $this->_handler->expectOnce("acceptTextToken", array("Hello", "*"));
             $this->_handler->expectOnce("acceptEndToken", array("</title>", "*"));
             $this->assertTrue($this->_lexer->parse("<title>Hello</title>"));
+        }
+        function testFramesetTag() {
+            $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<frameset", "*"));
+            $this->_handler->expectArgumentsAt(1, "acceptStartToken", array(">", "*"));
+            $this->_handler->expectCallCount("acceptStartToken", 2);
+            $this->_handler->expectOnce("acceptTextToken", array("Frames", "*"));
+            $this->_handler->expectOnce("acceptEndToken", array("</frameset>", "*"));
+            $this->assertTrue($this->_lexer->parse("<frameset>Frames</frameset>"));
         }
         function testInputTag() {
             $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<input", "*"));
