@@ -166,11 +166,11 @@
          *    @return string      GET, POST or HEAD.
          *    @access public
          */
-        function getRequestMethod() {
+        function getMethod() {
             if (is_integer($this->_focus)) {
-                return $this->_frames[$this->_focus]->getRequestMethod();
+                return $this->_frames[$this->_focus]->getMethod();
             }
-            return $this->_frameset->getRequestMethod();
+            return $this->_frameset->getMethod();
         }
         
         /**
@@ -178,11 +178,11 @@
          *    @return SimpleUrl        Current url.
          *    @access public
          */
-        function getRequestUrl() {
+        function getUrl() {
             if (is_integer($this->_focus)) {
-                return $this->_frames[$this->_focus]->getRequestUrl();
+                return $this->_frames[$this->_focus]->getUrl();
             }
-            return $this->_frameset->getRequestUrl();
+            return $this->_frameset->getUrl();
         }
         
         /**

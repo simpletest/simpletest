@@ -457,6 +457,23 @@
             $this->_request = &new SimpleQueryString();
         }
         
+        function asString() {
+            $scheme = $identity = $host = $path = $encoded = $fragment = '';
+            if ($this->_username && $this->_password) {
+                $identity = $this->_username . ':' . $this->_password . '@';
+            }
+            if ($this->getHost()) {
+                $scheme = $this->getScheme() ? $this->getScheme() : 'http';
+                $host = $this->getHost();
+            }
+            if (substr($this->_path, 0, 1) == "/") {
+                $path = $this->normalisePath($this->_path);
+            }
+            $encoded = $this->getEncodedRequest();
+            $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
+            return "$scheme://$identity$host$path$encoded$fragment";
+        }
+        
         /**
          *    Replaces unknown sections to turn a relative
          *    URL into an absolute one. The base URL can

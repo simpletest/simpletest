@@ -12,12 +12,14 @@
         function TestOfFrameset() {
             $this->UnitTestCase();
         }
+        
         function testTitleReadFromFramesetPage() {
             $page = &new MockSimplePage($this);
             $page->setReturnValue('getTitle', 'This page');
             $frameset = &new SimpleFrameset($page);
             $this->assertEqual($frameset->getTitle(), 'This page');
         }
+        
         function TestHeadersReadFromFramesetByDefault() {
             $page = &new MockSimplePage($this);
             $page->setReturnValue('getHeaders', 'Header: content');
@@ -36,12 +38,14 @@
             $this->assertIdentical($frameset->getAuthentication(), 'Basic');
             $this->assertIdentical($frameset->getRealm(), 'Safe place');
         }
+        
         function testEmptyFramesetHasNoContent() {
             $page = &new MockSimplePage($this);
             $page->setReturnValue('getRaw', 'This content');
             $frameset = &new SimpleFrameset($page);
             $this->assertEqual($frameset->getRaw(), '');
         }
+        
         function testRawContentIsFromOnlyFrame() {
             $page = &new MockSimplePage($this);
             $page->expectNever('getRaw');
@@ -53,6 +57,7 @@
             $frameset->addParsedFrame($frame);
             $this->assertEqual($frameset->getRaw(), 'Stuff');
         }
+        
         function testRawContentIsFromAllFrames() {
             $page = &new MockSimplePage($this);
             $page->expectNever('getRaw');
@@ -68,6 +73,7 @@
             $frameset->addParsedFrame($frame2);
             $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
         }
+        
         function testFieldIsFirstInFramelist() {
             $frame1 = &new MockSimplePage($this);
             $frame1->setReturnValue('getField', null);
@@ -96,12 +102,14 @@
         function TestOfFrameNavigation() {
             $this->UnitTestCase();
         }
+        
         function testStartsWithoutFrameFocus() {
             $page = &new MockSimplePage($this);
             $frameset = &new SimpleFrameset($page);
             $frameset->addParsedFrame($frame);
             $this->assertFalse($frameset->getFrameFocus());
         }
+        
         function testCanFocusOnSingleFrame() {
             $page = &new MockSimplePage($this);
             $page->expectNever('getRaw');
@@ -118,6 +126,7 @@
             $this->assertEqual($frameset->getRaw(), 'Stuff');
             $this->assertIdentical($frameset->getFrameFocus(), 1);
         }
+        
         function testCanReadFrameForFurtherFrames() {
             $page = &new MockSimplePage($this);
             
@@ -131,6 +140,7 @@
             $this->assertTrue($frameset->setFrameFocusByIndex(1));
             $this->assertIdentical($frameset->hasFrames(), false);
         }
+        
         function testContentComesFromFrameInFocus() {
             $page = &new MockSimplePage($this);
             
@@ -195,6 +205,7 @@
             $this->_page_interface = $this->_getPageMethods();
             $this->_frameset_interface = $this->_getFramesetMethods();
         }
+        
         function _getPageMethods() {
             $methods = array();
             foreach (get_class_methods('SimplePage') as $method) {
@@ -211,6 +222,7 @@
             }
             return $methods;
         }
+        
         function _getFramesetMethods() {
             $methods = array();
             foreach (get_class_methods('SimpleFrameset') as $method) {
@@ -227,6 +239,7 @@
             }
             return $methods;
         }
+        
         function testFramsetHasPageInterface() {
             $difference = array();
             foreach ($this->_page_interface as $method) {
@@ -237,11 +250,12 @@
             }
             $this->pass('Frameset covers Page interface');
         }
+        
         function testHeadersReadFromFrameIfInFocus() {
             $frame = &new MockSimplePage($this);
             $frame->setReturnValue('getRequest', 'POST stuff');
-            $frame->setReturnValue('getRequestMethod', 'POST');
-            $frame->setReturnValue('getRequestUrl', 'http://localhost/stuff');
+            $frame->setReturnValue('getMethod', 'POST');
+            $frame->setReturnValue('getUrl', 'http://localhost/stuff');
             $frame->setReturnValue('getRequestData', array('a' => 'A'));
             $frame->setReturnValue('getHeaders', 'Header: content');
             $frame->setReturnValue('getMimeType', 'text/xml');
@@ -255,8 +269,8 @@
             $frameset->setFrameFocusByIndex(1);
             
             $this->assertIdentical($frameset->getRequest(), 'POST stuff');
-            $this->assertIdentical($frameset->getRequestMethod(), 'POST');
-            $this->assertIdentical($frameset->getRequestUrl(), 'http://localhost/stuff');
+            $this->assertIdentical($frameset->getMethod(), 'POST');
+            $this->assertIdentical($frameset->getUrl(), 'http://localhost/stuff');
             $this->assertIdentical($frameset->getRequestData(), array('a' => 'A'));
             $this->assertIdentical($frameset->getHeaders(), 'Header: content');
             $this->assertIdentical($frameset->getMimeType(), 'text/xml');
@@ -265,6 +279,7 @@
             $this->assertIdentical($frameset->getAuthentication(), 'Basic');
             $this->assertIdentical($frameset->getRealm(), 'Safe place');
         }
+        
         function testAbsoluteUrlsComeFromBothFrames() {
             $page = &new MockSimplePage($this);
             $page->expectNever('getAbsoluteUrls');
@@ -286,6 +301,7 @@
                     $frameset->getAbsoluteUrls(),
                     array('http://www.lastcraft.com/', 'http://myserver/', 'http://test/'));
         }
+        
         function testRelativeUrlsComeFromBothFrames() {
             $frame1 = &new MockSimplePage($this);
             $frame1->setReturnValue(
@@ -307,6 +323,7 @@
                     $frameset->getRelativeUrls(),
                     array('/', '.', '/test/', 'goodbye.php', '..', 'hello.php'));
         }
+        
         function testLabelledUrlsComeFromBothFrames() {
             $frame1 = &new MockSimplePage($this);
             $frame1->setReturnValue('getUrlsByLabel', array('goodbye.php'), array('a'));
@@ -321,6 +338,7 @@
                     $frameset->getUrlsByLabel('a'),
                     array('goodbye.php', 'hello.php'));
         }
+        
         function testUrlByIdComesFromFirstFrameToRespond() {
             $frame1 = &new MockSimplePage($this);
             $frame1->setReturnValue('getUrlById', 'four.php', array(4));
@@ -336,6 +354,7 @@
             $this->assertEqual($frameset->getUrlById(4), 'four.php');
             $this->assertEqual($frameset->getUrlById(5), 'five.php');
         }
+        
         function testReadUrlsFromFrameInFocus() {
             $frame1 = &new MockSimplePage($this);
             $frame1->setReturnValue('getAbsoluteUrls', array('a'));
@@ -359,6 +378,7 @@
             $this->assertEqual($frameset->getUrlsByLabel('label'), array('l'));
             $this->assertEqual($frameset->getUrlById(99), array('i'));
         }
+        
         function testFindingForms() {
             $finders = array(
                     'getFormBySubmitLabel', 'getFormBySubmitName',
@@ -392,6 +412,7 @@
                 $this->assertReference($frameset->$method('a'), $forms[$i]);
             }
         }
+        
         function testSettingAllFrameFieldsWhenNoFrameFocus() {
             $frame1 = &new MockSimplePage($this);
             $frame1->expectOnce('setField', array('a', 'A'));
@@ -410,6 +431,7 @@
             $frame1->tally();
             $frame2->tally();
         }
+        
         function testOnlySettingFieldFromFocusedFrame() {
             $frame1 = &new MockSimplePage($this);
             $frame1->expectOnce('setField', array('a', 'A'));
@@ -428,6 +450,7 @@
             $frameset->setFieldById(22, 'A');
             $frame1->tally();
         }
+        
         function testOnlyGettingFieldFromFocusedFrame() {
             $frame1 = &new MockSimplePage($this);
             $frame1->setReturnValue('getField', 'f', array('a'));

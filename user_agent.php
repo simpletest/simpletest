@@ -363,11 +363,17 @@
          *    @param string $method         GET, POST, etc.
          *    @param string/SimpleUrl $url  Target to fetch.
          *    @param hash $parameters       Additional parameters for request.
+         *    @param SimpleUrl $previous    Previous location to use for base
+         *                                  URL.
          *    @return SimpleHttpResponse    Hopefully the target page.
          *    @access public
          */
-        function &fetchResponse($method, $url, $parameters = false) {
-            $url = $this->createAbsoluteUrl($this->getBaseUrl(), $url);
+        function &fetchResponse($method, $url, $parameters = false, $previous = false) {
+            if ($previous) {
+                $url = $this->createAbsoluteUrl($previous, $url);
+            } else {
+                $url = $this->createAbsoluteUrl($this->getBaseUrl(), $url);
+            }
             if ($method != 'POST') {
                 $url->addRequestParameters($parameters);
                 $parameters = false;
@@ -382,18 +388,6 @@
                 }
             }
             return $response;
-        }
-        
-        /**
-         *    Fetches a response whilst preserving the base URL.
-         *    Useful for HEAD fetches and images and frames.
-         *    @param string $method         GET, POST, etc.
-         *    @param string/SimpleUrl $url  Target to fetch.
-         *    @param hash $parameters       Additional parameters for request.
-         *    @return SimpleHttpResponse    Hopefully the target page.
-         *    @access public
-         */
-        function &fetchResponsePreservingBase($method, $url, $parameters = false) {
         }
         
         /**

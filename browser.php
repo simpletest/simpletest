@@ -256,7 +256,11 @@
          *    @access private
          */
         function &_fetch($method, $url, $parameters) {
-            $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
+            $response = &$this->_user_agent->fetchResponse(
+                    $method,
+                    $url,
+                    $parameters,
+                    $this->getUrl());
             if ($response->isError()) {
                 return new SimplePage($response);
             }
@@ -274,8 +278,8 @@
         function _load($method, $url, $parameters) {
             $this->_page = &$this->_fetch(strtoupper($method), $url, $parameters);
             $this->_history->recordEntry(
-                    $this->_page->getRequestMethod(),
-                    $this->_page->getRequestUrl(),
+                    $this->_page->getMethod(),
+                    $this->_page->getUrl(),
                     $this->_page->getRequestData());
             return $this->_page->getRaw();
         }
@@ -391,7 +395,11 @@
          *    @access public
          */
         function head($url, $parameters = false) {
-            $response = &$this->_user_agent->fetchResponse('HEAD', $url, $parameters);
+            $response = &$this->_user_agent->fetchResponse(
+                    'HEAD',
+                    $url,
+                    $parameters,
+                    $this->getUrl());
             return ! $response->isError();
         }
         
@@ -488,7 +496,7 @@
             if (! $this->_page->getRealm()) {
                 return false;
             }
-            $url = $this->_page->getRequestUrl();
+            $url = $this->_page->getUrl();
             if (! $url) {
                 return false;
             }
@@ -586,6 +594,18 @@
          */
         function getRealm() {
             return $this->_page->getRealm();
+        }
+        
+        /**
+         *    Accessor for current URL of page or frame if
+         *    focused.
+         *    @return string    Location of current page or frame as
+         *                      a string.
+         */
+        function getUrl() {
+            return false;
+            $url = $this->_page->getUrl();
+            return $url ? $url->asString : false;
         }
         
         /**
@@ -828,7 +848,7 @@
         function _getAction(&$form) {
             $action = $form->getAction();
             if ($action === false) {
-                return $this->_page->getRequestUrl();
+                return $this->_page->getUrl();
             } elseif ($action === true) {
                 return '';
             }

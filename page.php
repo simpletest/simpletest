@@ -336,7 +336,7 @@
          *    @return string        GET, POST or HEAD.
          *    @access public
          */
-        function getRequestMethod() {
+        function getMethod() {
             return $this->_method;
         }
         
@@ -345,7 +345,7 @@
          *    @return SimpleUrl        Current url.
          *    @access public
          */
-        function getRequestUrl() {
+        function getUrl() {
             return $this->_url;
         }
         
