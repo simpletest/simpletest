@@ -123,12 +123,12 @@
             $this->assertTrue($this->post('network_confirm.php'));
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
-        function testAbsoluteFollowing() {
+        function testAbsoluteLinkFollowing() {
             $this->get('http://www.lastcraft.com/test/link_confirm.php');
             $this->assertTrue($this->clickLink('Absolute'));
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
-        function testRelativeFollowing() {
+        function testRelativeLinkFollowing() {
             $this->get('http://www.lastcraft.com/test/link_confirm.php');
             $this->assertTrue($this->clickLink('Relative'));
             $this->assertWantedPattern('/target for the SimpleTest/');
@@ -137,6 +137,22 @@
             $this->get('http://www.lastcraft.com/test/link_confirm.php');
             $this->assertTrue($this->clickLinkId(1));
             $this->assertWantedPattern('/target for the SimpleTest/');
+        }
+    }
+    
+    class TestOfLiveRedirects extends WebTestCase {
+        function TestOfLiveRedirects() {
+            $this->WebTestCase();
+        }
+        function testNoRedirects() {
+            $this->setMaximumRedirects(0);
+            $this->get('http://www.lastcraft.com/test/redirect.php');
+            $this->assertTitle('Redirection test');
+        }
+        function testRedirects() {
+            $this->setMaximumRedirects(1);
+            $this->get('http://www.lastcraft.com/test/redirect.php');
+            // $this->assertTitle('Simple test target file');
         }
     }
     

@@ -114,6 +114,11 @@
         }
     }
     
+    Mock::generatePartial(
+            'SimpleBrowser',
+            'MockRequestSimpleBrowser',
+            array('createRequest'));
+    
     class TestOfExpandomaticUrl extends UnitTestCase {
         function TestOfExpandomaticUrl() {
             $this->UnitTestCase();
@@ -124,8 +129,10 @@
             $response->setReturnValue("getNewCookies", array());
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
-            $browser = &new SimpleBrowser();
-            $browser->get("http://this.com/this/path/page.html", false, &$request);
+            $browser = &new MockRequestSimpleBrowser($this);
+            $browser->setReturnReference('createRequest', $request);
+            $browser->SimpleBrowser();
+            $browser->get("http://this.com/this/path/page.html", false);
             $this->assertEqual(
                     $browser->getBaseUrl(),
                     "http://this.com/this/path/");
@@ -152,12 +159,18 @@
             $request->setReturnReference("fetch", $response);
             return $request;
         }
+        function &_createPartialBrowser(&$request) {
+            $browser = &new MockRequestSimpleBrowser($this);
+            $browser->setReturnReference('createRequest', $request);
+            $browser->SimpleBrowser();
+            return $browser;
+        }
         function testSendCookie() {
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $this->_createStandardResponse());
             $request->expectArguments("setCookie", array(new SimpleCookie("a", "A")));
             $request->expectCallCount("setCookie", 1);
-            $browser = &new SimpleBrowser();
+            $browser = &$this->_createPartialBrowser($request);
             $browser->setCookie("a", "A");
             $response = $browser->fetchResponse(
                     new SimpleUrl("http://this.com/this/path/page.html"),
@@ -167,7 +180,7 @@
         }
         function testReceiveExistingCookie() {
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAAA", "this/path/")));
-            $browser = &new SimpleBrowser();
+            $browser = &$this->_createPartialBrowser($request);
             $browser->setCookie("a", "A");
             $browser->fetchResponse(
                     new SimpleUrl("http://this.host/this/path/page.html"),
@@ -175,12 +188,9 @@
             $this->assertEqual($browser->getCookieValue("this.com", "this/path/", "a"), "AAAA");
         }
         function testClearCookie() {
-            $request = &$this->_createCookieSite(array(new SimpleCookie(
-                    "a",
-                    "",
-                    "this/path/",
-                    "Wed, 25-Dec-02 04:24:19 GMT")));
-            $browser = &new SimpleBrowser();
+            $request = &$this->_createCookieSite(array(
+                    new SimpleCookie("a", "", "this/path/", "Wed, 25-Dec-02 04:24:19 GMT")));
+            $browser = &$this->_createPartialBrowser($request);
             $browser->setCookie("a", "A", "this/path/", "Wed, 25-Dec-02 04:24:21 GMT");
             $this->assertEqual(
                     $browser->get("http://this.com/this/path/page.html", false, &$request),
@@ -204,7 +214,10 @@
         }
     }
     
-    Mock::generatePartial('SimpleBrowser', 'MockFetchSimpleBrowser', array('fetchResponse'));
+    Mock::generatePartial(
+            'SimpleBrowser',
+            'MockFetchSimpleBrowser',
+            array('fetchResponse'));
     
     class TestOfFetchingMethods extends UnitTestCase {
         function TestOfFetchingMethods() {

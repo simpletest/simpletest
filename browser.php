@@ -7,7 +7,7 @@
     require_once(SIMPLE_TEST . 'http.php');
     require_once(SIMPLE_TEST . 'simple_unit.php');
     
-    define('MAX_REDIRECTS', 2);
+    define('DEFAULT_MAX_REDIRECTS', 3);
     
     /**
      *    Repository for cookies. The semantics are a bit
@@ -137,7 +137,7 @@
             $this->_cookie_jar = new CookieJar();
             $this->_response = false;
             $this->_base_url = false;
-            $this->_max_redirects = MAX_REDIRECTS;
+            $this->setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
         }
         
         /**
@@ -209,11 +209,21 @@
         }
         
         /**
+         *    Sets the maximum number of redirects before
+         *    a page will be loaded anyway.
+         *    @param $max        Most hops allowed.
+         *    @public
+         */
+        function setMaximumRedirects($max) {
+            $this->_max_redirects = $max;
+        }
+        
+        /**
          *    Fetches a URL as a response object.
          *    @param $url        Target to fetch as Url object.
          *    @param $request    SimpleHttpRequest to send.
-         *    @return            Reponse object.
-         *    @public
+         *    @return            Response object.
+         *    @protected
          */
         function &fetchResponse($url, &$request) {
             $cookies = $this->_cookie_jar->getValidCookies($url->getHost(), $url->getPath());
@@ -248,16 +258,16 @@
          *    @public
          */
         function get($raw_url, $parameters = false, $request = false) {
-            $url = $this->_createAbsoluteUrl($raw_url, $parameters);
+            $url = $this->createAbsoluteUrl($this->_base_url, $raw_url, $parameters);
             if (!is_object($request)) {
-                $request = &new SimpleHttpRequest($url, "GET");
+                $request = &$this->createRequest('GET', $url);
             }
             $response = &$this->fetchResponse($url, $request);
-            if (!$response->isError()) {
-                $this->_extractBaseUrl($url);
-                return $response->getContent();
+            if ($response->isError()) {
+                return false;
             }
-            return false;
+            $this->_extractBaseUrl($url);
+            return $response->getContent();
         }
         
         /**
@@ -270,9 +280,9 @@
          *    @public
          */
         function head($raw_url, $parameters = false, $request = false) {
-            $url = $this->_createAbsoluteUrl($raw_url, $parameters);
+            $url = $this->createAbsoluteUrl($this->_base_url, $raw_url, $parameters);
             if (!is_object($request)) {
-                $request = &new SimpleHttpRequest($url, "HEAD");
+                $request = &$this->createRequest('HEAD', $url);
             }
             $response = &$this->fetchResponse($url, $request);
             return !$response->isError();
@@ -287,36 +297,40 @@
          *    @public
          */
         function post($raw_url, $parameters = false, $request = false) {
-            $url = $this->_createAbsoluteUrl($raw_url);
+            $url = $this->createAbsoluteUrl($this->_base_url, $raw_url, array());
             if (!is_object($request)) {
-                $request = &$this->createPostRequest($url, $parameters);
+                $request = &$this->createRequest('POST', $url, $parameters);
             }
             $response = &$this->fetchResponse($url, $request);
-            if (!$response->isError()) {
-                $this->_extractBaseUrl($url);
-                return $response->getContent();
+            if ($response->isError()) {
+                return false;
             }
-            return false;
+            $this->_extractBaseUrl($url);
+            return $response->getContent();
         }
         
         /**
-         *    Builds a post request to simulate a HTML form.
+         *    Builds the appropriate HTTP request object.
+         *    @param $method       Fetching method.
          *    @param $url          Target to fetch as url object.
-         *    @param $parameters   POST parameters.
-         *    @return              Push request object.
+         *    @param $parameters   POST/GET parameters.
+         *    @return              New request object.
          *    @public
          *    @static
          */
-        function &createPostRequest($url, $parameters) {
+        function &createRequest($method, $url, $parameters = false) {
             if (!$parameters) {
                 $parameters = array();
             }
-            $request = &new SimpleHttpPushRequest(
-                    $url,
-                    SimpleUrl::encodeRequest($parameters),
-                    "POST");
-            $request->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
-            return $request;
+            if ($method == 'POST') {
+                $request = &new SimpleHttpPushRequest(
+                        $url,
+                        SimpleUrl::encodeRequest($parameters),
+                        'POST');
+                $request->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
+                return $request;
+            }
+            return new SimpleHttpRequest($url, $method);
         }
         
         /**
@@ -338,17 +352,17 @@
          *    Turns an incoming URL string into a
          *    URL object, filling the relative URL if
          *    a base URL is present.
+         *    @param $base_url       Browser current URL as string.
          *    @param $raw_url        URL as string.
          *    @param $parameters     Additional request, parameters.
          *    @return                Absolute URL as object.
-         *    @private
+         *    @public
+         *    @static
          */
-        function _createAbsoluteUrl($raw_url, $parameters = false) {
+        function createAbsoluteUrl($base_url, $raw_url, $parameters = false) {
             $url = new SimpleUrl($raw_url);
-            if ($parameters) {
-                $url->addRequestParameters($parameters);
-            }
-            $url->makeAbsolute($this->_base_url);
+            $url->addRequestParameters($parameters);
+            $url->makeAbsolute($base_url);
             return $url;
         }
         

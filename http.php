@@ -637,7 +637,7 @@
          *    @protected
          */
         function &_createResponse(&$socket) {
-            return new SimpleHttpResponse($socket);
+            return new SimpleHttpResponse($this->_url, $socket);
         }
     }
     
@@ -673,7 +673,7 @@
     }
     
     /**
-     *    Collection of header lines.
+     *    Collection of header lines in the response.
      */
     class SimpleHttpHeaders {
         var $_response_code;
@@ -696,16 +696,6 @@
             foreach (split("\r\n", $headers) as $header_line) {
                 $this->_parseHeaderLine($header_line);
             }
-        }
-        
-        /**
-         *    Accessor for the content after the last
-         *    header line.
-         *    @return            All content as string.
-         *    @public
-         */
-        function getContent() {
-            return $this->_content;
         }
         
         /**
@@ -805,16 +795,19 @@
     class SimpleHttpResponse extends StickyError {
         var $_content;
         var $_headers;
+        var $_url;
         
         /**
          *    Constructor. Reads and parses the incoming
          *    content and headers.
-         *    @param $socket        Network connection to fetch
-         *                          response text from.
+         *    @param $url      Url object used for the request.
+         *    @param $socket   Network connection to fetch
+         *                     response text from.
          *    @public
          */
-        function SimpleHttpResponse(&$socket) {
+        function SimpleHttpResponse($url, &$socket) {
             $this->StickyError();
+            $this->_url = $url;
             $this->_content = false;
             $raw = $this->_readAll($socket);
             if ($socket->isError()) {
@@ -827,6 +820,15 @@
             }
             list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);
             $this->_headers = &new SimpleHttpHeaders($headers);
+        }
+        
+        /**
+         *    Copy of Url object used for the fetch.
+         *    @return         Url object passed in.
+         *    @public
+         */
+        function getUrl() {
+            return $this->_url;
         }
         
         /**
@@ -867,7 +869,8 @@
         }
         
         /**
-         *    Get redirected URL or false if none.
+         *    Gets a new request object corresponding to
+         *    a redirect.
          *    @return     The URL as a string or false
          *                if the response was not a redirect.
          *    @public

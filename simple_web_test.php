@@ -88,7 +88,7 @@
         }
         
         /**
-         *    Sets up a browser for the start of the
+         *    Sets up a browser for the start of each
          *    test method.
          *    @param $runner    Current test runner.
          *    @param $method    Name of test method.
@@ -112,6 +112,20 @@
          */
         function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
             $this->_current_browser->setCookie($name, $value, $host, $path, $expiry);
+        }
+        
+        /**
+         *    Sets the maximum number of redirects before
+         *    the web page is loaded regardless.
+         *    @param $max        Maximum hops.
+         *    @public
+         */
+        function setMaximumRedirects($max) {
+            if (!$this->_current_browser) {
+                trigger_error(
+                        'Can only set maximum redirects in a test method, setUp() or tearDown()');
+            }
+            $this->_current_browser->setMaximumRedirects($max);
         }
         
         /**
