@@ -210,6 +210,7 @@
         var $_test_stack;
         var $_passes;
         var $_fails;
+        var $_exceptions;
         var $_size;
         var $_progress;
         
@@ -222,6 +223,7 @@
             $this->_test_stack = array();
             $this->_passes = 0;
             $this->_fails = 0;
+            $this->_exceptions = 0;
             $this->_size = null;
             $this->_progress = 0;
         }
@@ -285,6 +287,7 @@
          *    @abstract
          */
         function paintException($message) {
+            $this->_exceptions++;
         }
         
         /**
@@ -333,6 +336,16 @@
          */
         function getFailCount() {
             return $this->_fails;
+        }
+        
+        /**
+         *    Accessor for the number of untrapped errors
+         *    so far.
+         *    @return        Number of exceptions.
+         *    @public
+         */
+        function getExceptionCount() {
+            return $this->_exceptions;
         }
         
         /**

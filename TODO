@@ -8,7 +8,7 @@ $Id$
 Unit tester
 -----------
 Swapping observer pattern for direct calls (3/5) - done.
-Add an error trap (3/2).
+Add an error trap (3/6) - done.
 Add options class (3).
 
 Interface

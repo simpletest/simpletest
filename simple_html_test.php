@@ -53,14 +53,15 @@
          *    @public
          */
         function paintFooter($test_name) {
-            $colour = ($this->_fails > 0 ? "red" : "green");
+            $colour = ($this->getFailCount() + $this->getExceptionCount() > 0 ? "red" : "green");
             print "<div style=\"";
             print "padding: 8px; margin-top: 1em; background-color: $colour; color: white;";
             print "\">";
             print $this->getTestCaseProgress() . "/" . $this->getTestCaseCount();
             print " test cases complete:\n";
-            print "<strong>" . $this->getPassCount() . "</strong> passes";
-            print " and <strong>" . $this->getFailCount() . "</strong> fails.";
+            print "<strong>" . $this->getPassCount() . "</strong> passes, ";
+            print "<strong>" . $this->getFailCount() . "</strong> fails and ";
+            print "<strong>" . $this->getExceptionCount() . "</strong> exceptions.";
             print "</div>\n";
             print "</body>\n</html>\n";
         }
@@ -89,6 +90,7 @@
          *    @abstract
          */
         function paintException($message) {
+            parent::paintException($message);
             print "<span class=\"fail\">Exception</span>: ";
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
