@@ -377,7 +377,8 @@
         var $_listener;
         var $_expat;
         var $_tag_stack;
-        var $_in_name;
+        var $_in_content_tag;
+        var $_content;
         
         /**
          *    Loads a listener with the SimpleReporter
@@ -389,7 +390,8 @@
             $this->_listener = &$listener;
             $this->_expat = &$this->_createParser();
             $this->_tag_stack = array();
-            $this->_in_name = false;
+            $this->_in_content_tag = false;
+            $this->_content = '';
         }
         
         /**
@@ -467,9 +469,9 @@
                 $this->_pushNestingTag(new NestingCaseTag($attributes));
             } elseif ($tag == 'TEST') {
                 $this->_pushNestingTag(new NestingMethodTag($attributes));
-            } elseif ($tag == 'NAME') {
-                $this->_in_name = true;
-                $this->_name = '';
+            } elseif (in_array($tag, array('NAME', 'PASS', 'FAIL'))) {
+                $this->_in_content_tag = true;
+                $this->_content = '';
             }
         }
         
@@ -484,10 +486,16 @@
                 $nesting_tag = $this->_popNestingTag();
                 $nesting_tag->paintEnd($this->_listener);
             } elseif ($tag == 'NAME') {
-                $this->_in_name = false;
+                $this->_in_content_tag = false;
                 $nesting_tag = &$this->_getCurrentNestingTag();
-                $nesting_tag->setName($this->_name);
+                $nesting_tag->setName($this->_content);
                 $nesting_tag->paintStart($this->_listener);
+            } elseif ($tag == 'PASS') {
+                $this->_in_content_tag = false;
+                $this->_listener->paintPass($this->_content);
+            } elseif ($tag == 'FAIL') {
+                $this->_in_content_tag = false;
+                $this->_listener->paintFail($this->_content);
             }
         }
         
@@ -498,8 +506,8 @@
          *    @access protected
          */
         function _addContent($expat, $text) {
-            if ($this->_in_name) {
-                $this->_name .= $text;
+            if ($this->_in_content_tag) {
+                $this->_content .= $text;
             }
             return true;
         }
