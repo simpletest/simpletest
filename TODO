@@ -32,7 +32,7 @@ Add button parsing (2).
 Browser
 -------
 Add cookie ageing facility (2/1) - done.
-Move session restarting to cookie aging (1/1) - done.
+Move session restarting to cookie ageing (1/1) - done.
 
 Web tester
 ----------
@@ -47,7 +47,7 @@ Update reporter docs with new method names (1).
 
 Build
 -----
-Make files PHP documentor compatible (3/4).
+Make files PHP documentor compatible (3/5).
 Update package.xml file (1/1) - done.
 Move build script up a level and make it into a shell script (1).
 Create package file for mocks only (1).

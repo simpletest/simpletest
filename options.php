@@ -20,7 +20,7 @@
          *    Sets the name of a test case to ignore, usually
          *    because the class is an abstract case that should
          *    not be run.
-         *    @param $class        Add a class to ignore.
+         *    @param string $class        Add a class to ignore.
          *    @static
          *    @access public
          */
@@ -32,8 +32,8 @@
         /**
          *    Test to see iif a test case is in the ignore
          *    list.
-         *    @param $class        Class name to test.
-         *    @return              True if should not be run.
+         *    @param string $class        Class name to test.
+         *    @return boolean             True if should not be run.
          *    @access public
          *    @static
          */
@@ -48,7 +48,7 @@
          *    To modify the generated stubs simply extend the
          *    SimpleStub class and set it's name
          *    with this method before any stubs are generated.
-         *    @param $stub_base        Server stub class to use.
+         *    @param string $stub_base     Server stub class to use.
          *    @static
          *    @access public
          */
@@ -59,7 +59,7 @@
         
         /**
          *    Accessor for the currently set stub base class.
-         *    @return            Class name to inherit from.
+         *    @return string        Class name to inherit from.
          *    @static
          *    @access public
          */
@@ -74,7 +74,7 @@
          *    To modify the generated mocks simply extend the
          *    SimpleMock class and set it's name
          *    with this method before any mocks are generated.
-         *    @param $mock_base        Mock base class to use.
+         *    @param string $mock_base        Mock base class to use.
          *    @static
          *    @access public
          */
@@ -85,7 +85,7 @@
         
         /**
          *    Accessor for the currently set mock base class.
-         *    @return            Class name to inherit from.
+         *    @return string           Class name to inherit from.
          *    @static
          *    @access public
          */
@@ -96,11 +96,11 @@
         
         /**
          *    Adds additional mock code.
-         *    @param $code    Extra code that can be added
-         *                    to the partial mocks for
-         *                    extra functionality. Useful
-         *                    when a test tool has overridden
-         *                    the mock base classes.
+         *    @param string $code    Extra code that can be added
+         *                           to the partial mocks for
+         *                           extra functionality. Useful
+         *                           when a test tool has overridden
+         *                           the mock base classes.
          *    @access public
          */
         function addPartialMockCode($code = '') {
@@ -110,7 +110,7 @@
         
         /**
          *    Accessor for additional partial mock code.
-         *    @return        Code as a string.
+         *    @return string       Extra code.
          *    @access public
          */
         function getPartialMockCode() {
@@ -120,7 +120,7 @@
         
         /**
          *    Accessor for global registry of options.
-         *    @return            Hash of stored values.
+         *    @return hash           All stored values.
          *    @access private
          *    @static
          */
@@ -134,7 +134,7 @@
         
         /**
          *    Constant default values.
-         *    @return        Hash of registry defaults.
+         *    @return hash       All registry defaults.
          *    @access public
          *    @static
          */

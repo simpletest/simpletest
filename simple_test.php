@@ -18,7 +18,7 @@
         /**
          *    Sets up the test name and starts with no attached
          *    displays.
-         *    @param $label        Name of test.
+         *    @param string $label        Name of test.
          *    @access public
          */
         function RunnableTest($label) {
@@ -27,7 +27,7 @@
         
         /**
          *    Accessor for the test name for subclasses.
-         *    @return            Name of the test.
+         *    @return string           Name of the test.
          *    @access public
          */
         function getLabel() {
@@ -37,8 +37,8 @@
         /**
          *    Runs the top level test for this class. The
          *    parameter will soon cease to be optional.
-         *    @param $reporter        Target of test results.
-         *    @returns Boolean        True if no failures.
+         *    @param SimpleReporter $reporter    Target of test results.
+         *    @returns boolean                   True if no failures.
          *    @access public
          *    @abstract
          */
@@ -47,7 +47,7 @@
         
         /**
          *    Accessor for the number of subtests.
-         *    @return            Number of test cases.
+         *    @return integer           Number of test cases.
          *    @access public
          */
         function getSize() {
@@ -66,8 +66,8 @@
         
         /**
          *    Sets up the test with no display.
-         *    @param $label        If no test name is given then
-         *                         the class name is used.
+         *    @param string $label    If no test name is given then
+         *                            the class name is used.
          *    @access public
          */
         function SimpleTestCase($label = false) {
@@ -93,7 +93,7 @@
         /**
          *    Uses reflection to run every method within itself
          *    starting with the string "test".
-         *    @param $reporter    Current test reporter.
+         *    @param SimpleReporter $reporter    Current test reporter.
          *    @access public
          */
         function run(&$reporter) {
@@ -119,7 +119,7 @@
          *    Invokes a test method and dispatches any
          *    untrapped errors. Called back from
          *    the visiting runner.
-         *    @param $method    Test method to call.
+         *    @param string $method    Test method to call.
          *    @access public
          */
         function invoke($method) {
@@ -153,7 +153,7 @@
         
         /**
          *    Sends a pass event with a message.
-         *    @param $message        Message to send.
+         *    @param string $message        Message to send.
          *    @access public
          */
         function pass($message = "Pass") {
@@ -162,7 +162,7 @@
         
         /**
          *    Sends a fail event with a message.
-         *    @param $message        Message to send.
+         *    @param string $message        Message to send.
          *    @access public
          */
         function fail($message = "Fail") {
@@ -172,11 +172,11 @@
         /**
          *    Formats a PHP error and dispatches it to the
          *    runner.
-         *    @param $severity   PHP error code.
-         *    @param $message    Text of error.
-         *    @param $file       File error occoured in.
-         *    @param $line       Line number of error.
-         *    @param $globals    Hash of PHP super global arrays.
+         *    @param integer $severity  PHP error code.
+         *    @param string $message    Text of error.
+         *    @param string $file       File error occoured in.
+         *    @param integer $line      Line number of error.
+         *    @param hash $globals      PHP super global arrays.
          *    @access public
          */
         function error($severity, $message, $file, $line, $globals) {
@@ -190,8 +190,8 @@
          *    This is for small scale extension where
          *    both the test case and either the runner or
          *    display are subclassed.
-         *    @param $type        Type of event as string.
-         *    @param $payload     Object or message to deliver.
+         *    @param string $type       Type of event.
+         *    @param mixed $payload     Object or message to deliver.
          *    @access public
          */
         function signal($type, &$payload) {
@@ -210,9 +210,9 @@
         /**
          *    Runs an expectation directly, for extending the
          *    tests with new expectation classes.
-         *    @param $expectation  Expectation subclass.
-         *    @param $test_value   Value to compare.
-         *    @param $message      Message to display.
+         *    @param SimpleExpectation $expectation  Expectation subclass.
+         *    @param mixed $test_value               Value to compare.
+         *    @param string $message                 Message to display.
          *    @access public
          */
         function assertExpectation(&$expectation, $test_value, $message) {
@@ -224,8 +224,8 @@
         /**
          *    Called from within the test methods to register
          *    passes and failures.
-         *    @param $result            Boolean, true on pass.
-         *    @param $message           Message to display describing
+         *    @param boolean $result    True on pass.
+         *    @param string $message    Message to display describing
          *                              the test state.
          *    @access public
          */
@@ -242,8 +242,8 @@
          *    is the PHP definition of false, so that null,
          *    empty strings, zero and an empty array all count
          *    as false.
-         *    @param $boolean        Supposedly false value.
-         *    @param $message        Message to display.
+         *    @param boolean $boolean     Supposedly false value.
+         *    @param string $message      Message to display.
          *    @access public
          */
         function assertFalse($boolean, $message = "False expectation") {
@@ -254,8 +254,8 @@
          *    Sends a formatted dump of a variable to the
          *    test suite for those emergency debugging
          *    situations.
-         *    @param $variable       Variable to display.
-         *    @param $message        Message to display.
+         *    @param mixed $variable    Variable to display.
+         *    @param string $message    Message to display.
          *    @access public
          */
         function dump($variable, $message = false) {
@@ -272,7 +272,7 @@
         /**
          *    Dispatches a text message straight to the
          *    test suite. Useful for status bar displays.
-         *    @param $message        Message to show.
+         *    @param string $message        Message to show.
          *    @access public
          */
         function sendMessage($message) {
@@ -290,8 +290,8 @@
         
         /**
          *    Sets the name of the test suite.
-         *    @param $label       Name sent at the start and end
-         *                        of the test.
+         *    @param string $label    Name sent at the start and end
+         *                            of the test.
          *    @access public
          */
         function GroupTest($label) {
@@ -301,9 +301,9 @@
         
         /**
          *    Adds a test into the suite.
-         *    @param $test_case        Suite or individual test
-         *                             case implementing the
-         *                             runnable test interface.
+         *    @param SimpleTestCase $test_case  Suite or individual test
+         *                                      case implementing the
+         *                                      runnable test interface.
          *    @access public
          */
         function addTestCase(&$test_case) {
@@ -313,8 +313,8 @@
         /**
          *    Builds a group test from a library of test cases.
          *    The new group is composed into this one.
-         *    @param $test_file        File name of library with
-         *                             test case classes.
+         *    @param string $test_file    File name of library with
+         *                                test case classes.
          *    @access public
          */
         function addTestFile($test_file) {
@@ -339,7 +339,7 @@
         /**
          *    Test to see if a class is derived from the
          *    TestCase class.
-         *    @param $class            Class name.
+         *    @param string $class            Class name.
          *    @access private
          */
         function _isTestCase($class) {
@@ -353,7 +353,7 @@
         
         /**
          *    Invokes run() on all of the held test cases.
-         *    @param $reporter    Current test reporter.
+         *    @param SimpleReporter $reporter    Current test reporter.
          *    @access public
          */
         function run(&$reporter) {
@@ -367,7 +367,7 @@
         
         /**
          *    Number of contained test cases.
-         *    @return         Total count of cases in the group.
+         *    @return integer     Total count of cases in the group.
          *    @access public
          */
         function getSize() {

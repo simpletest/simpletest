@@ -17,6 +17,7 @@
         
         /**
          *    Chains constructor only.
+         *    @access public
          */
         function WildcardExpectation() {
             $this->SimpleExpectation();
@@ -34,9 +35,9 @@
         
         /**
          *    Returns a human readable test message.
-         *    @param $compare      Comparison value.
-         *    @return              String description of success
-         *                         or failure.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
          *    @access public
          */
         function testMessage($compare) {
@@ -68,8 +69,8 @@
         
         /**
          *    Tests the assertion. True if correct.
-         *    @param $parameters     Comparison values.
-         *    @return                True if correct.
+         *    @param array $parameters     Comparison values.
+         *    @return boolean              True if correct.
          *    @access public
          */
         function test($parameters) {
@@ -104,9 +105,9 @@
         
         /**
          *    Returns a human readable test message.
-         *    @param $comparison   Incoming parameter list.
-         *    @return              String description of success
-         *                         or failure.
+         *    @param array $comparison   Incoming parameter list.
+         *    @return string             Description of success
+         *                               or failure.
          *    @access public
          */
         function testMessage($parameters) {
@@ -122,9 +123,9 @@
         /**
          *    Message to display if expectation differs from
          *    the parameters actually received.
-         *    @param $expected      Expected parameters as list.
-         *    @param $parameters    Actual parameters received.
-         *    @return               String description of difference.
+         *    @param array $expected      Expected parameters as list.
+         *    @param array $parameters    Actual parameters received.
+         *    @return string              Description of difference.
          *    @access private
          */
         function _describeDifference($expected, $parameters) {
@@ -163,7 +164,8 @@
         /**
          *    Renders the argument list as a string for
          *    messages.
-         *    @param $args            Array of arguments.
+         *    @param array $args    Incoming arguments.
+         *    @return string        Simple description of type and value.
          *    @access private
          */
         function _renderArguments($args) {
@@ -193,8 +195,8 @@
         
         /**
          *    Stashes a value against a method call.
-         *    @param $parameters    Array of arguments (including wildcards).
-         *    @param $value         Value copied into the map.
+         *    @param array $parameters    Arguments including wildcards.
+         *    @param mixed $value         Value copied into the map.
          *    @access public
          */
         function addValue($parameters, $value) {
@@ -203,8 +205,8 @@
         
         /**
          *    Stashes a reference against a method call.
-         *    @param $parameters    Array of arguments (including wildcards).
-         *    @param $reference     Array reference placed in the map.
+         *    @param array $parameters    Array of arguments (including wildcards).
+         *    @param mixed $reference     Array reference placed in the map.
          *    @access public
          */
         function addReference($parameters, &$reference) {
@@ -217,10 +219,10 @@
         /**
          *    Searches the call list for a matching parameter
          *    set. Returned by reference.
-         *    @param $parameters    Array of parameters to search by
-         *                          without wildcards.
-         *    @return               Object held in the first matching
-         *                          slot, otherwise null.
+         *    @param array $parameters    Parameters to search by
+         *                                without wildcards.
+         *    @return object              Object held in the first matching
+         *                                slot, otherwise null.
          *    @access public
          */
         function &findFirstMatch($parameters) {
@@ -234,9 +236,9 @@
         /**
          *    Searches the call list for a matching parameter
          *    set. True if successful.
-         *    @param $parameters    Array of parameters to search by
-         *                          without wildcards.
-         *    @return               True if a match is present.
+         *    @param array $parameters    Parameters to search by
+         *                                without wildcards.
+         *    @return boolean             True if a match is present.
          *    @access public
          */
         function isMatch($parameters) {
@@ -245,9 +247,9 @@
         
         /**
          *    Searches the map for a matching item.
-         *    @param $parameters    Array of parameters to search by
-         *                          without wildcards.
-         *    @return               Reference to slot or null.
+         *    @param array $parameters    Parameters to search by
+         *                                without wildcards.
+         *    @return array               Reference to slot or null.
          *    @access private
          */
         function &_findFirstSlot($parameters) {
@@ -273,8 +275,8 @@
         
         /**
          *    Sets up the wildcard and everything else empty.
-         *    @param $wildcard    Parameter matching wildcard.
-         *    @param $is_strict   Enables method name checks.
+         *    @param mixed $wildcard     Parameter matching wildcard.
+         *    @param boolean$is_strict   Enables method name checks.
          *    @access public
          */
         function SimpleStub($wildcard, $is_strict = true) {
@@ -314,9 +316,9 @@
         
         /**
          *    Returns the expected value for the method name.
-         *    @param $method        Name of method to simulate.
-         *    @param $args          Arguments as an array.
-         *    @return               Stored return.
+         *    @param string $method       Name of method to simulate.
+         *    @param array $args          Arguments as an array.
+         *    @return mixed               Stored return.
          *    @access private
          */
         function &_invoke($method, $args) {
@@ -329,8 +331,8 @@
         /**
          *    Triggers a PHP error if the method is not part
          *    of this object.
-         *    @param $method        Name of method.
-         *    @param $task          Description of task attempt.
+         *    @param string $method        Name of method.
+         *    @param string $task          Description of task attempt.
          *    @access protected
          */
         function _dieOnNoMethod($method, $task) {
@@ -343,8 +345,8 @@
         
         /**
          *    Adds one to the call count of a method.
-         *    @param $method        Method called.
-         *    @param $args          Arguments as an array.
+         *    @param string $method        Method called.
+         *    @param array $args           Arguments as an array.
          *    @access protected
          */
         function _addCall($method, $args) {
@@ -356,8 +358,8 @@
         
         /**
          *    Fetches the call count of a method so far.
-         *    @param $method        Method name called.
-         *    @return               Number of calls so far.
+         *    @param string $method        Method name called.
+         *    @return                      Number of calls so far.
          *    @access public
          */
         function getCallCount($method) {
@@ -372,10 +374,10 @@
         /**
          *    Sets a return for a parameter list that will
          *    be passed by value for all calls to this method.
-         *    @param $method        Method name.
-         *    @param $value         Result of call passed by value.
-         *    @param $args          List of parameters to match
-         *                          including wildcards.
+         *    @param string $method       Method name.
+         *    @param mixed $value         Result of call passed by value.
+         *    @param array $args          List of parameters to match
+         *                                including wildcards.
          *    @access public
          */
         function setReturnValue($method, $value, $args = false) {
@@ -392,14 +394,14 @@
          *    Sets a return for a parameter list that will
          *    be passed by value only when the required call count
          *    is reached.
-         *    @param $timing        Number of calls in the future
-         *                          to which the result applies. If
-         *                          not set then all calls will return
-         *                          the value.
-         *    @param $method        Method name.
-         *    @param $value         Result of call passed by value.
-         *    @param $args          List of parameters to match
-         *                          including wildcards.
+         *    @param integer $timing   Number of calls in the future
+         *                             to which the result applies. If
+         *                             not set then all calls will return
+         *                             the value.
+         *    @param string $method    Method name.
+         *    @param mixed $value      Result of call passed by value.
+         *    @param array $args       List of parameters to match
+         *                             including wildcards.
          *    @access public
          */
         function setReturnValueAt($timing, $method, $value, $args = false) {
@@ -418,10 +420,10 @@
         /**
          *    Sets a return for a parameter list that will
          *    be passed by reference for all calls.
-         *    @param $method        Method name.
-         *    @param $reference     Result of the call will be this object.
-         *    @param $args          List of parameters to match
-         *                          including wildcards.
+         *    @param string $method       Method name.
+         *    @param mixed $reference     Result of the call will be this object.
+         *    @param array $args          List of parameters to match
+         *                                including wildcards.
          *    @access public
          */
         function setReturnReference($method, &$reference, $args = false) {
@@ -438,14 +440,14 @@
          *    Sets a return for a parameter list that will
          *    be passed by value only when the required call count
          *    is reached.
-         *    @param $timing        Number of calls in the future
-         *                          to which the result applies. If
-         *                          not set then all calls will return
-         *                          the value.
-         *    @param $method        Method name.
-         *    @param $reference     Result of the call will be this object.
-         *    @param $args          List of parameters to match
-         *                          including wildcards.
+         *    @param integer $timing    Number of calls in the future
+         *                              to which the result applies. If
+         *                              not set then all calls will return
+         *                              the value.
+         *    @param string $method     Method name.
+         *    @param mixed $reference   Result of the call will be this object.
+         *    @param array $args        List of parameters to match
+         *                              including wildcards.
          *    @access public
          */
         function setReturnReferenceAt($timing, $method, &$reference, $args = false) {
@@ -465,11 +467,11 @@
          *    Finds the return value matching the incoming
          *    arguments. If there is no matching value found
          *    then an error is triggered.
-         *    @param $method      Method name.
-         *    @param $args        Calling arguments.
-         *    @param $step        Current position in the
-         *                        call history.
-         *    @returns            Stored return.
+         *    @param string $method      Method name.
+         *    @param array $args         Calling arguments.
+         *    @param integer $step       Current position in the
+         *                               call history.
+         *    @return mixed              Stored return.
          *    @access protected
          */
         function &_getReturn($method, $args, $step) {
@@ -488,7 +490,7 @@
         /**
          *    What to do if there is no return value set. Does
          *    nothing for a stub.
-         *    @param $method      Method name.
+         *    @param string $method      Method name.
          *    @access protected
          */
         function _warnOnNoReturn($method) {
@@ -514,10 +516,10 @@
         /**
          *    Creates an empty return list and expectation list.
          *    All call counts are set to zero.
-         *    @param $wildcard    Parameter matching wildcard.
-         *    @param $test        Test case to test expectations in.
-         *    @param $is_strict   Enables method name checks on
-         *                        expectations.
+         *    @param SimpleTestCase $test    Test case to test expectations in.
+         *    @param mixed $wildcard         Parameter matching wildcard.
+         *    @param boolean $is_strict      Enables method name checks on
+         *                                   expectations.
          *    @access public
          */
         function SimpleMock(&$test, $wildcard, $is_strict = true) {
@@ -534,7 +536,7 @@
         /**
          *    Accessor for attached unit test so that when
          *    subclassed, new expectations can be added easily.
-         *    @return          Unit test passed in constructor.
+         *    @return SimpleTestCase      Unit test passed in constructor.
          *    @access public
          */
         function &getTest() {
@@ -553,9 +555,9 @@
          *    expected parameters in that call. All
          *    calls will be compared to these expectations
          *    regardless of when the call is made.
-         *    @param $method        Method call to test.
-         *    @param $args          Expected parameters for the call
-         *                          including wildcards.
+         *    @param string $method        Method call to test.
+         *    @param array $args           Expected parameters for the call
+         *                                 including wildcards.
          *    @access public
          */
         function expectArguments($method, $args) {
@@ -570,11 +572,11 @@
          *    expected parameters in that call. The
          *    expected call count will be adjusted if it
          *    is set too low to reach this call.
-         *    @param $timing        Number of calls in the future at
-         *                          which to test. Next call is 0.
-         *    @param $method        Method call to test.
-         *    @param $args          Expected parameters for the call
-         *                          including wildcards.
+         *    @param integer $timing    Number of calls in the future at
+         *                              which to test. Next call is 0.
+         *    @param string $method     Method call to test.
+         *    @param array $args        Expected parameters for the call
+         *                              including wildcards.
          *    @access public
          */
         function expectArgumentsAt($timing, $method, $args) {
@@ -592,9 +594,9 @@
          *    Sets an expectation for the number of times
          *    a method will be called. The tally method
          *    is used to check this.
-         *    @param $method        Method call to test.
-         *    @param $count         Number of times it should
-         *                          have been called at tally.
+         *    @param string $method        Method call to test.
+         *    @param integer $count        Number of times it should
+         *                                 have been called at tally.
          *    @access public
          */
         function expectCallCount($method, $count) {
@@ -605,9 +607,9 @@
         /**
          *    Sets the number of times a method may be called
          *    before a test failure is triggered.
-         *    @param $method        Method call to test.
-         *    @param $count         Most number of times it should
-         *                          have been called.
+         *    @param string $method        Method call to test.
+         *    @param integer $count        Most number of times it should
+         *                                 have been called.
          *    @access public
          */
         function expectMaximumCallCount($method, $count) {
@@ -618,9 +620,9 @@
         /**
          *    Sets the number of times to call a method to prevent
          *    a failure on the tally.
-         *    @param $method        Method call to test.
-         *    @param $count         Least number of times it should
-         *                          have been called.
+         *    @param string $method      Method call to test.
+         *    @param integer $count      Least number of times it should
+         *                               have been called.
          *    @access public
          */
         function expectMinimumCallCount($method, $count) {
@@ -631,7 +633,7 @@
         /**
          *    Convenience method for barring a method
          *    call.
-         *    @param $method        Method call to ban.
+         *    @param string $method        Method call to ban.
          *    @access public
          */
         function expectNever($method) {
@@ -641,9 +643,9 @@
         /**
          *    Convenience method for a single method
          *    call.
-         *    @param $method        Method call to track.
-         *    @param $args          Expected argument list or
-         *                          false for any arguments.
+         *    @param string $method     Method call to track.
+         *    @param array $args        Expected argument list or
+         *                              false for any arguments.
          *    @access public
          */
         function expectOnce($method, $args = false) {
@@ -656,9 +658,9 @@
         /**
          *    Convenience method for requiring a method
          *    call.
-         *    @param $method        Method call to track.
-         *    @param $args          Expected argument list or
-         *                          false for any arguments.
+         *    @param string $method       Method call to track.
+         *    @param array $args          Expected argument list or
+         *                                false for any arguments.
          *    @access public
          */
         function expectAtLeastOnce($method, $args = false) {
@@ -712,9 +714,9 @@
          *    and checks expectations. Will generate any
          *    test assertions as a result of expectations
          *    if there is a test present.
-         *    @param $method        Name of method to simulate.
-         *    @param $args          Arguments as an array.
-         *    @return               Stored return.
+         *    @param string $method       Name of method to simulate.
+         *    @param array $args          Arguments as an array.
+         *    @return mixed               Stored return.
          *    @access private
          */
         function &_invoke($method, $args) {
@@ -727,10 +729,10 @@
         
         /**
          *    Tests the arguments against expectations.
-         *    @param $method            Method to check.
-         *    @param $args              Argument list to match.
-         *    @param $timing            The position of this call
-         *                              in the call history.
+         *    @param string $method        Method to check.
+         *    @param array $args           Argument list to match.
+         *    @param integer $timing       The position of this call
+         *                                 in the call history.
          *    @access private
          */
         function _checkExpectations($method, $args, $timing) {
@@ -771,11 +773,11 @@
          *    Should be overridden when using another test
          *    framework other than the SimpleTest one if the
          *    assertion method has a different name.
-         *    @param $assertion      True will pass.
-         *    @param $message        Message that will go with
-         *                           the test event.
-         *    @param $test           Unit test case to send
-         *                           assertion to.
+         *    @param boolean $assertion     True will pass.
+         *    @param string $message        Message that will go with
+         *                                  the test event.
+         *    @param SimpleTestCase $test   Unit test case to send
+         *                                  assertion to.
          *    @access protected
          */
         function _assertTrue($assertion, $message , &$test) {
@@ -799,15 +801,15 @@
         /**
          *    Clones a class' interface and creates a stub version
          *    that can have return values set.
-         *    @param $class            Class to clone.
-         *    @param $stub_class       New class name. Default is
-         *                             the old name with "Stub"
-         *                             prepended.
-         *    @param $methods          Additional methods to add beyond
-         *                             those in th cloned class. Use this
-         *                             to emulate the dynamic addition of
-         *                             methods in the cloned class or when
-         *                             the class hasn't been written yet.
+         *    @param string $class        Class to clone.
+         *    @param string $stub_class   New class name. Default is
+         *                                the old name with "Stub"
+         *                                prepended.
+         *    @param array $methods       Additional methods to add beyond
+         *                                those in th cloned class. Use this
+         *                                to emulate the dynamic addition of
+         *                                methods in the cloned class or when
+         *                                the class hasn't been written yet.
          *    @static
          *    @access public
          */
@@ -829,9 +831,9 @@
         
         /**
          *    The new server stub class code in string form.
-         *    @param $class            Class to clone.
-         *    @param $mock_class       New class name.
-         *    @param $methods          Additional methods.
+         *    @param string $class           Class to clone.
+         *    @param string $mock_class      New class name.
+         *    @param array $methods          Additional methods.
          *    @static
          *    @access private
          */
@@ -851,10 +853,10 @@
          *    methods. All methods call the _invoke() handler
          *    with the method name and the arguments in an
          *    array.
-         *    @param $class     Class to clone.
-         *    @param $base      Base class with methods that
-         *                      cannot be cloned.
-         *    @param $methods   Additional methods.
+         *    @param string $class     Class to clone.
+         *    @param string $base      Base class with methods that
+         *                             cannot be cloned.
+         *    @param array $methods    Additional methods.
          *    @static
          *    @access private
          */
@@ -889,6 +891,7 @@
         
         /**
          *    Factory for mock object classes.
+         *    @access public
          */
         function Mock() {
             trigger_error("Mock factory methods are class only.");
@@ -897,15 +900,15 @@
         /**
          *    Clones a class' interface and creates a mock version
          *    that can have return values and expectations set.
-         *    @param $class            Class to clone.
-         *    @param $mock_class       New class name. Default is
-         *                             the old name with "Mock"
-         *                             prepended.
-         *    @param $methods          Additional methods to add beyond
-         *                             those in th cloned class. Use this
-         *                             to emulate the dynamic addition of
-         *                             methods in the cloned class or when
-         *                             the class hasn't been written yet.
+         *    @param string $class         Class to clone.
+         *    @param string $mock_class    New class name. Default is
+         *                                 the old name with "Mock"
+         *                                 prepended.
+         *    @param array $methods        Additional methods to add beyond
+         *                                 those in th cloned class. Use this
+         *                                 to emulate the dynamic addition of
+         *                                 methods in the cloned class or when
+         *                                 the class hasn't been written yet.
          *    @static
          *    @access public
          */
@@ -930,10 +933,10 @@
          *    methods mocked only. Inherits the old class
          *    and chains the mock methods of an aggregated
          *    mock object.
-         *    @param $class            Class to clone.
-         *    @param $mock_class       New class name.
-         *    @param $methods          Methods to be overridden
-         *                             with mock versions.
+         *    @param string $class            Class to clone.
+         *    @param string $mock_class       New class name.
+         *    @param array $methods           Methods to be overridden
+         *                                    with mock versions.
          *    @static
          *    @access public
          */
@@ -949,10 +952,10 @@
 
         /**
          *    The new mock class code as a string.
-         *    @param $class            Class to clone.
-         *    @param $mock_class       New class name.
-         *    @param $methods          Additional methods.
-         *    @return                  Code as a string.
+         *    @param string $class           Class to clone.
+         *    @param string $mock_class      New class name.
+         *    @param array $methods          Additional methods.
+         *    @return string                 Code for new mock class.
          *    @static
          *    @access private
          */
@@ -968,11 +971,13 @@
         }
 
         /**
-         *    The extension class code as astring.
-         *    @param $class            Class to extends.
-         *    @param $mock_class       New class name.
-         *    @param $methods          Additional methods.
-         *    @return                  Code as a string.
+         *    The extension class code as a string. The class
+         *    composites a mock object and chains mocked methods
+         *    to it.
+         *    @param string $class         Class to extend.
+         *    @param string $mock_class    New class name.
+         *    @param array  $methods       Additional methods.
+         *    @return string               Code for a new class.
          *    @static
          *    @access private
          */
@@ -992,9 +997,9 @@
         }
         
         /**
-         *    Creates source code for chaining to an aggregated
+         *    Creates source code for chaining to the composited
          *    mock object.
-         *    @return                  Code as a string.
+         *    @return string           Code for mock set up.
          *    @access private
          */
         function _chainMockReturns() {
@@ -1022,7 +1027,7 @@
         /**
          *    Creates source code for chaining to an aggregated
          *    mock object.
-         *    @return                  Code as a string.
+         *    @return string                 Code for expectations.
          *    @access private
          */
         function _chainMockExpectations() {
@@ -1059,9 +1064,9 @@
         /**
          *    Creates source code to override a list of methods
          *    with mock versions.
-         *    @param $methods          Methods to be overridden
+         *    @param array $methods    Methods to be overridden
          *                             with mock versions.
-         *    @return                  Code as a string.
+         *    @return string           Code for overridden chains.
          *    @access private
          */
         function _overrideMethods($methods) {

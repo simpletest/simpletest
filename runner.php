@@ -26,8 +26,8 @@
          *    Invokes a single test method on the test case.
          *    This call back allows the reporter to decide if
          *    it actually wants to run the test.
-         *    @param SimpleTest $test_case    Test case to run test on.
-         *    @param string $method           Name of test method.
+         *    @param SimpleTestCase $test_case    Test case to run test on.
+         *    @param string $method               Name of test method.
          *    @access public
          */
         function invoke(&$test_case, $method) {

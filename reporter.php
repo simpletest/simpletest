@@ -25,7 +25,7 @@
         /**
          *    Paints the top of the web page setting the
          *    title to the name of the starting test.
-         *    @param $test_name        Name class of test.
+         *    @param string $test_name      Name class of test.
          *    @access public
          */
         function paintHeader($test_name) {
@@ -43,6 +43,8 @@
          *    Send the headers necessary to ensure the page is
          *    reloaded on every request. Otherwise you could be
          *    scratching your head over out of date test data.
+         *    @access public
+         *    @static
          */
         function sendNoCacheHeaders() {
             header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -54,7 +56,7 @@
         
         /**
          *    Paints the CSS. Add additional styles here.
-         *    @return             CSS code as text.
+         *    @return string            CSS code as text.
          *    @access protected
          */
         function _getCss() {
@@ -64,7 +66,7 @@
         /**
          *    Paints the end of the test with a summary of
          *    the passes and failures.
-         *    @param $test_name        Name class of test.
+         *    @param string $test_name        Name class of test.
          *    @access public
          */
         function paintFooter($test_name) {
@@ -85,8 +87,8 @@
          *    Paints the test failure with a breadcrumbs
          *    trail of the nesting test suites below the
          *    top level test.
-         *    @param $message        Failure message displayed in
-         *                           the context of the other tests.
+         *    @param string $message    Failure message displayed in
+         *                              the context of the other tests.
          *    @access public
          */
         function paintFail($message) {
@@ -100,7 +102,7 @@
         
         /**
          *    Paints a PHP error or exception.
-         *    @param $message        Message is ignored.
+         *    @param string $message        Message is ignored.
          *    @access public
          *    @abstract
          */
@@ -115,7 +117,7 @@
         
         /**
          *    Paints formatted text such as dumped variables.
-         *    @param $message        Text to show.
+         *    @param string $message        Text to show.
          *    @access public
          */
         function paintFormattedMessage($message) {
@@ -143,7 +145,7 @@
         
         /**
          *    Paints the title only.
-         *    @param $test_name        Name class of test.
+         *    @param string $test_name        Name class of test.
          *    @access public
          */
         function paintHeader($test_name) {
@@ -154,7 +156,7 @@
         /**
          *    Paints the end of the test with a summary of
          *    the passes and failures.
-         *    @param $test_name        Name class of test.
+         *    @param string $test_name        Name class of test.
          *    @access public
          */
         function paintFooter($test_name) {
@@ -172,7 +174,7 @@
         
         /**
          *    Paints the test failure as a stack trace.
-         *    @param $message        Failure message displayed in
+         *    @param string $message        Failure message displayed in
          *                           the context of the other tests.
          *    @access public
          */
@@ -187,7 +189,7 @@
         
         /**
          *    Paints a PHP error or exception.
-         *    @param $message        Message is ignored.
+         *    @param string $message        Message is ignored.
          *    @access public
          *    @abstract
          */
@@ -197,7 +199,7 @@
         
         /**
          *    Paints formatted text such as dumped variables.
-         *    @param $message        Text to show.
+         *    @param string $message        Text to show.
          *    @access public
          */
         function paintFormattedMessage($message) {
@@ -206,7 +208,7 @@
         
         /**
          *    Static check for running in the comand line.
-         *    @return Boolean        True if CLI.
+         *    @return boolean        True if CLI.
          *    @access public
          *    @static
          */

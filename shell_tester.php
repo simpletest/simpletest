@@ -21,16 +21,14 @@
         }
         
         /**
-         *    Actually runs the command.
+         *    Actually runs the command. Does not trap the
+         *    error stream output as this need PHP 4.3+.
          *    @param string $command    The actual command line
          *                              to run.
          *    @return integer           Exit code.
          *    @access public
          */
         function execute($command) {
-            if (! preg_match('/2>&1/', $command)) {
-                $command .= ' 2>&1';
-            }
             exec($command, $this->_output, $ret);
             return $ret;
         }

@@ -171,7 +171,7 @@
         
         /**
          *    Parses a page ready to access it's contents.
-         *    @param $raw            Raw unparsed text.
+         *    @param string $raw            Raw unparsed text.
          *    @access public
          */
         function SimplePage($raw) {
@@ -187,9 +187,9 @@
         
         /**
          *    Creates the parser used with the builder.
-         *    @param $builder    Parser listener.
-         *    @return            Parser to generate events for
-         *                       the builder.
+         *    @param SimplePageBuilder $builder    Parser listener.
+         *    @return SimpleSaxParser              Parser to generate events for
+         *                                         the builder.
          *    @access protected
          */
         function &_createParser(&$builder) {
@@ -257,9 +257,9 @@
         /**
          *    Adds a link to the page. Partially fixes
          *    expandomatic links.
-         *    @param $url        Address.
-         *    @param $label      Text label of link.
-         *    @param $id         Id attribute of link.
+         *    @param string $url        Address.
+         *    @param string $label      Text label of link.
+         *    @param string $id         Id attribute of link.
          *    @access protected
          */
         function _addLink($url, $label, $id) {
@@ -273,9 +273,9 @@
         
         /**
          *    Adds an absolute link to the page.
-         *    @param $url        Address.
-         *    @param $label      Text label of link.
-         *    @param $id         Id attribute of link.
+         *    @param SimpleUrl $url    Address.
+         *    @param string $label     Text label of link.
+         *    @param string $id        Id attribute of link.
          *    @access private
          */
         function _addAbsoluteLink($url, $label, $id) {
@@ -288,9 +288,9 @@
         
         /**
          *    Adds a relative link to the page.
-         *    @param $url        Address.
-         *    @param $label      Text label of link.
-         *    @param $id         Id attribute of link.
+         *    @param SimpleUrl $url     Address.
+         *    @param string $label      Text label of link.
+         *    @param string $id         Id attribute of link.
          *    @access private
          */
         function _addRelativeLink($url, $label, $id) {
@@ -303,8 +303,8 @@
         
         /**
          *    Adds a URL by id attribute.
-         *    @param $url        Address.
-         *    @param $id         Id attribute of link.
+         *    @param SimpleUrl $url     Address.
+         *    @param string $id         Id attribute of link.
          *    @access private
          */
         function _addLinkId($url, $id) {
@@ -315,8 +315,8 @@
         
         /**
          *    Accessor for a list of all fixed links.
-         *    @return       List of urls with scheme of
-         *                  http or https and hostname.
+         *    @return array   List of urls with scheme of
+         *                    http or https and hostname.
          *    @access public
          */
         function getAbsoluteLinks() {
@@ -329,7 +329,7 @@
         
         /**
          *    Accessor for a list of all relative links.
-         *    @return       List of urls without hostname.
+         *    @return array      List of urls without hostname.
          *    @access public
          */
         function getRelativeLinks() {
@@ -342,8 +342,8 @@
         
         /**
          *    Accessor for a URLs by the link label.
-         *    @param $label    Text of link.
-         *    @return          List of links with that label.
+         *    @param string $label    Text of link.
+         *    @return array           List of links with that label.
          *    @access public
          */
         function getUrls($label) {
@@ -359,8 +359,8 @@
         
         /**
          *    Accessor for a URL by the id attribute.
-         *    @param $id       Id attribute of link.
-         *    @return          URL as string with that id.
+         *    @param string $id       Id attribute of link.
+         *    @return string          URL with that id.
          *    @access public
          */
         function getUrlById($id) {
@@ -381,8 +381,7 @@
         
         /**
          *    Accessor for parsed title.
-         *    @return        Title as string or boolean
-         *                   false if no title is present.
+         *    @return string     Title or false if no title is present.
          *    @access public
          */
         function getTitle() {
@@ -394,7 +393,7 @@
         
         /**
          *    Gets a list of all of the held forms.
-         *    @return        Array of SimpleForm objects.
+         *    @return array       Array of SimpleForm objects.
          *    @access public
          */
         function getForms() {
@@ -404,8 +403,8 @@
         /**
          *    Finds a held form by button label. Will only
          *    search correctly built forms.
-         *    @param $label    Button label, default 'Submit'.
-         *    @return          Form object containing the button.
+         *    @param string $label       Button label, default 'Submit'.
+         *    @return SimpleForm         Form object containing the button.
          *    @access public
          */
         function &getFormBySubmitLabel($label) {
@@ -421,8 +420,8 @@
          *    Finds a held form by the form ID. A way of
          *    identifying a specific form when we have control
          *    of the HTML code.
-         *    @param $id  Form label.
-         *    @return     Form object containing the matching ID.
+         *    @param string $id     Form label.
+         *    @return SimpleForm    Form object containing the matching ID.
          *    @access public
          */
         function &getFormById($id) {
@@ -437,8 +436,8 @@
         /**
          *    Sets a field on each form in which the field is
          *    available.
-         *    @param $name        Field name.
-         *    @param $value       Value to set field to.
+         *    @param string $name        Field name.
+         *    @param string $value       Value to set field to.
          *    @access public
          */
         function setField($name, $value) {
