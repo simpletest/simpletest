@@ -830,7 +830,7 @@
          *    @param string $label    Button label. An unlabeled
          *                            button can be triggered by 'Submit'.
          *    @param hash $additional Additional form values.
-         *    @return boolean         True on success.
+         *    @return boolean/string  Page on success.
          *    @access public
          */
         function clickSubmit($label = 'Submit', $additional = false) {
@@ -842,7 +842,7 @@
          *    form will be submitted by this.
          *    @param string $name     Name attribute of button.
          *    @param hash $additional Additional form values.
-         *    @return boolean         True on success.
+         *    @return boolean/string  Page on success.
          *    @access public
          */
         function clickSubmitByName($name, $additional = false) {
@@ -854,7 +854,7 @@
          *    form will be submitted by this.
          *    @param string $id       ID attribute of button.
          *    @param hash $additional Additional form values.
-         *    @return boolean         True on successful submit.
+         *    @return boolean/string  Page on success.
          *    @access public
          */
         function clickSubmitById($id, $additional = false) {
@@ -871,7 +871,7 @@
          *    @param integer $x       X-coordinate of imaginary click.
          *    @param integer $y       Y-coordinate of imaginary click.
          *    @param hash $additional Additional form values.
-         *    @return boolean         True on successful submit.
+         *    @return boolean/string  Page on success.
          *    @access public
          */
         function clickImage($label, $x = 1, $y = 1, $additional = false) {
@@ -888,7 +888,7 @@
          *    @param integer $x       X-coordinate of imaginary click.
          *    @param integer $y       Y-coordinate of imaginary click.
          *    @param hash $additional Additional form values.
-         *    @return boolean         True on successful submit.
+         *    @return boolean/string  Page on success.
          *    @access public
          */
         function clickImageByName($name, $x = 1, $y = 1, $additional = false) {
@@ -904,7 +904,7 @@
          *    @param integer $x           X-coordinate of imaginary click.
          *    @param integer $y           Y-coordinate of imaginary click.
          *    @param hash $additional     Additional form values.
-         *    @return boolean             True on successful submit.
+         *    @return boolean/string      Page on success.
          *    @access public
          */
         function clickImageById($id, $x = 1, $y = 1, $additional = false) {
@@ -913,9 +913,9 @@
         
         /**
          *    Submits a form by the ID.
-         *    @param string $id    Form ID. No button information
-         *                         is submitted this way.
-         *    @return boolean      True on success.
+         *    @param string $id       Form ID. No button information
+         *                            is submitted this way.
+         *    @return boolean/string  Page on success.
          *    @access public
          */
         function submitFormById($id) {
@@ -929,7 +929,7 @@
          *    with normalised space.
          *    @param string $label     Text between the anchor tags.
          *    @param integer $index    Link position counting from zero.
-         *    @return boolean          True if link present.
+         *    @return boolean/string   Page on success.
          *    @access public
          */
         function clickLink($label, $index = 0) {
@@ -939,7 +939,7 @@
         /**
          *    Follows a link by id attribute.
          *    @param string $id        ID attribute value.
-         *    @return boolean          True if successful.
+         *    @return boolean/string   Page on success.
          *    @access public
          */
         function clickLinkById($id) {

@@ -24,8 +24,7 @@
     $browser->get('http://php.net/');
     $browser->clickLink('reporting bugs');
     $browser->clickLink('statistics');
-    $browser->clickLink('PHP 5 bugs only');
-    $page = $browser->getContent();
+    $page = $browser->clickLink('PHP 5 bugs only');
     preg_match('/status=Open.*?by=Any.*?(\d+)<\/a>/', $page, $matches);
     print $matches[1];
 ?></strong>

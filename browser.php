@@ -816,17 +816,18 @@
          *    @param string $label    Button label. An unlabeled
          *                            button can be triggered by 'Submit'.
          *    @param hash $additional Additional form data.
-         *    @return boolean         True on success.
+         *    @return string/boolean  Page on success.
          *    @access public
          */
         function clickSubmit($label = 'Submit', $additional = false) {
             if (! ($form = &$this->_page->getFormBySubmitLabel($label))) {
                 return false;
             }
-            return $this->_load(
+            $success = $this->_load(
                     $form->getMethod(),
                     $form->getAction(),
                     $form->submitButtonByLabel($label, $additional));
+            return ($success ? $this->getContent() : $success);
         }
         
         /**
@@ -834,17 +835,18 @@
          *    form will be submitted by this.
          *    @param string $name     Button name.
          *    @param hash $additional Additional form data.
-         *    @return boolean         True on success.
+         *    @return string/boolean  Page on success.
          *    @access public
          */
         function clickSubmitByName($name, $additional = false) {
             if (! ($form = &$this->_page->getFormBySubmitName($name))) {
                 return false;
             }
-            return $this->_load(
+            $success = $this->_load(
                     $form->getMethod(),
                     $form->getAction(),
                     $form->submitButtonByName($name, $additional));
+            return ($success ? $this->getContent() : $success);
         }
         
         /**
@@ -852,17 +854,18 @@
          *    itself. The owning form will be submitted by this.
          *    @param string $id       Button ID.
          *    @param hash $additional Additional form data.
-         *    @return boolean         True on success.
+         *    @return string/boolean  Page on success.
          *    @access public
          */
         function clickSubmitById($id, $additional = false) {
             if (! ($form = &$this->_page->getFormBySubmitId($id))) {
                 return false;
             }
-            return $this->_load(
+            $success = $this->_load(
                     $form->getMethod(),
                     $form->getAction(),
                     $form->submitButtonById($id, $additional));
+            return ($success ? $this->getContent() : $success);
         }
         
         /**
@@ -875,17 +878,18 @@
          *    @param integer $x       X-coordinate of imaginary click.
          *    @param integer $y       Y-coordinate of imaginary click.
          *    @param hash $additional Additional form data.
-         *    @return boolean         True on successful submit.
+         *    @return string/boolean  Page on success.
          *    @access public
          */
         function clickImage($label, $x = 1, $y = 1, $additional = false) {
             if (! ($form = &$this->_page->getFormByImageLabel($label))) {
                 return false;
             }
-            return $this->_load(
+            $success = $this->_load(
                     $form->getMethod(),
                     $form->getAction(),
                     $form->submitImageByLabel($label, $x, $y, $additional));
+            return ($success ? $this->getContent() : $success);
         }
         
         /**
@@ -898,17 +902,18 @@
          *    @param integer $x       X-coordinate of imaginary click.
          *    @param integer $y       Y-coordinate of imaginary click.
          *    @param hash $additional Additional form data.
-         *    @return boolean         True on successful submit.
+         *    @return string/boolean  Page on success.
          *    @access public
          */
         function clickImageByName($name, $x = 1, $y = 1, $additional = false) {
             if (! ($form = &$this->_page->getFormByImageName($name))) {
                 return false;
             }
-            return $this->_load(
+            $success = $this->_load(
                     $form->getMethod(),
                     $form->getAction(),
                     $form->submitImageByName($name, $x, $y, $additional));
+            return ($success ? $this->getContent() : $success);
         }
          
         /**
@@ -920,34 +925,36 @@
          *    @param integer $x            X-coordinate of imaginary click.
          *    @param integer $y            Y-coordinate of imaginary click.
          *    @param hash $additional      Additional form data.
-         *    @return boolean              True on successful submit.
+         *    @return string/boolean       Page on success.
          *    @access public
          */
         function clickImageById($id, $x = 1, $y = 1, $additional = false) {
             if (! ($form = &$this->_page->getFormByImageId($id))) {
                 return false;
             }
-            return $this->_load(
+            $success = $this->_load(
                     $form->getMethod(),
                     $form->getAction(),
                     $form->submitImageById($id, $x, $y, $additional));
+            return ($success ? $this->getContent() : $success);
         }
         
         /**
          *    Submits a form by the ID.
-         *    @param string $id    The form ID. No submit button value
-         *                         will be sent.
-         *    @return boolean      True on success.
+         *    @param string $id       The form ID. No submit button value
+         *                            will be sent.
+         *    @return string/boolean  Page on success.
          *    @access public
          */
         function submitFormById($id) {
             if (! ($form = &$this->_page->getFormById($id))) {
                 return false;
             }
-            return $this->_load(
+            $success = $this->_load(
                     $form->getMethod(),
                     $form->getAction(),
                     $form->submit());
+            return ($success ? $this->getContent() : $success);
         }
         
         /**
@@ -957,7 +964,7 @@
          *    white space issues.
          *    @param string $label     Text between the anchor tags.
          *    @param integer $index    Link position counting from zero.
-         *    @return boolean          True if link present.
+         *    @return string/boolean   Page on success.
          *    @access public
          */
         function clickLink($label, $index = 0) {
@@ -969,7 +976,7 @@
                 return false;
             }
             $this->_load('GET', $urls[$index]);
-            return true;
+            return $this->getContent();
         }
         
         /**
@@ -985,7 +992,7 @@
         /**
          *    Follows a link by id attribute.
          *    @param string $id        ID attribute value.
-         *    @return boolean          True if link present.
+         *    @return string/boolean   Page on success.
          *    @access public
          */
         function clickLinkById($id) {
@@ -993,7 +1000,7 @@
                 return false;
             }
             $this->_load('GET', $url);
-            return true;
+            return $this->getContent();
         }
         
         /**
