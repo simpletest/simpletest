@@ -77,7 +77,8 @@
         
         /**
          *    Uses reflection to run every method within itself
-         *    starting with the string "test".
+         *    starting with the string "test" unless a method
+         *    is specified.
          *    @param SimpleReporter $reporter    Current test reporter.
          *    @access public
          */
@@ -332,19 +333,15 @@
          *    The new group is composed into this one.
          *    @param string $test_file        File name of library with
          *                                    test case classes.
-         *    @param array/boolean $classes   Load only classes from this
-         *                                    list.
          *    @access public
          */
-        function addTestFile($test_file, $classes = false) {
+        function addTestFile($test_file) {
             $existing_classes = get_declared_classes();
             if ($error = $this->_requireWithError($test_file)) {
                 $this->addTestCase(new BadGroupTest($test_file, $error));
                 return;
             }
-            if (! $classes) {
-                $classes = $this->_selectRunnableTests($existing_classes, get_declared_classes());
-            }
+            $classes = $this->_selectRunnableTests($existing_classes, get_declared_classes());
             $this->addTestCase($this->_createGroupFromClasses($test_file, $classes));
         }
         

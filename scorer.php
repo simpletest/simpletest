@@ -41,17 +41,13 @@
         }
         
         /**
-         *    Invokes a single test method on the test case.
-         *    This call back allows the reporter to decide if
-         *    it actually wants to run the test.
-         *    @param SimpleInvoker $invoker  Method runner to run test on.
+         *    The reporter has a veto on what should be run.
+         *    @param string $test_case_name  name of test case.
          *    @param string $method          Name of test method.
          *    @access public
          */
-        function invoke(&$invoker, $method) {
-            if (! $this->_is_dry_run) {
-                $invoker->invoke($method);
-            }
+        function shouldInvoke($test_case_name, $method) {
+            return ! $this->_is_dry_run;
         }
 
         /**
