@@ -321,7 +321,8 @@
         /**
          *    Checks the mime type against a list
          *    of possible values.
-         *    @param array $types    Possible mime types for a pass.
+         *    @param array $types      Possible mime types for a pass.
+         *    @param string $message   Message to display.
          *    @access public
          */
         function assertMime($types, $message = '%s') {
@@ -335,7 +336,8 @@
         /**
          *    Attempt to match the authentication type within
          *    the security realm we are currently matching.
-         *    @param string $authentication        Usually basic.
+         *    @param string $authentication   Usually basic.
+         *    @param string $message          Message to display.
          *    @access public
          */
         function assertAuthentication($authentication = false, $message = '%s') {
@@ -353,8 +355,21 @@
         }
         
         /**
+         *    Checks that no authentication is necessary to view
+         *    the desired page.
+         *    @param string $message   Message to display.
+         *    @access public
+         */
+        function assertNoAuthentication($message = '%s') {
+            $message = sprintf($message, "Expected no authentication type, got [" .
+                    $this->_browser->getAuthentication() . "]");
+            $this->assertFalse($this->_browser->getAuthentication(), $message);
+        }
+        
+        /**
          *    Attempts to match the current security realm.
-         *    @param string $realm            
+         *    @param string $realm     Name of security realm.
+         *    @param string $message   Message to display.
          *    @access public
          */
         function assertRealm($realm, $message = '%s') {

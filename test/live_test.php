@@ -372,7 +372,7 @@
             $this->assertRealm('SimpleTest basic authentication');
         }
         function testEncodedAuthenticationFetchesPage() {
-            $this->get('http://test:secret@www.lastcraft.com/test/protected/');
+            $this->get('http://test:secret2@www.lastcraft.com/test/protected/');
             $this->assertResponse(200);
         }
     }
