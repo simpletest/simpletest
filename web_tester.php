@@ -125,6 +125,27 @@
          */
         function HttpHeaderExpectation($header, $value = false) {
         }
+        
+        /**
+         *    Tests the expectation. True if it matches
+         *    a string value or an array value in any order.
+         *    @param mixed $compare   Raw header block to search.
+         *    @return boolean         True if header present.
+         *    @access public
+         */
+        function test($compare) {
+            return false;
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param mixed $compare      Raw header block to search.
+         *    @return string             Description of success
+         *                               or failure.
+         *    @access public
+         */
+        function testMessage($compare) {
+        }
     }
       
     /**

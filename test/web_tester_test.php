@@ -44,5 +44,10 @@
         function TestOfHeaderAssertions() {
             $this->UnitTestCase();
         }
+        
+        function testNoHeaderFoundInEmptyHeaderSet() {
+            $expectation = new HttpHeaderExpectation('a');
+            $this->assertIdentical($expectation->test(false), false);
+        }
     }
 ?>
