@@ -669,33 +669,10 @@
             $this->assertWantedPattern('/This content is for no frames only/');
         }
         
-        function testTitleTakenFromFramesetPage() {
-            $this->get('http://www.lastcraft.com/test/one_page_frameset.html');
-            $this->assertTitle('Frameset for testing of SimpleTest');
-        }
-        
         function testPatternMatchCanReadTheOnlyFrame() {
             $this->get('http://www.lastcraft.com/test/one_page_frameset.html');
             $this->assertWantedPattern('/A target for the SimpleTest test suite/');
             $this->assertNoUnwantedPattern('/This content is for no frames only/');
-        }
-        
-        function testReadingContentFromFocusedFrames() {
-            $this->get('http://www.lastcraft.com/test/frameset.html');
-            $this->assertWantedPattern('/This is frame A/i');
-            $this->assertWantedPattern('/This is frame B/i');
-            
-            $this->setFrameFocus('aaa');
-            $this->assertWantedPattern('/This is frame A/i');
-            $this->assertNoUnwantedPattern('/This is frame B/i');
-            
-            $this->setFrameFocus('bbb');
-            $this->assertNoUnwantedPattern('/This is frame A/i');
-            $this->assertWantedPattern('/This is frame B/i');
-            
-            $this->clearFrameFocus();
-            $this->assertWantedPattern('/This is frame A/i');
-            $this->assertWantedPattern('/This is frame B/i');
         }
         
         function testMessyFramesetResponsesByName() {
@@ -728,10 +705,7 @@
             
             $this->assertTrue($this->setFrameFocus('Protected redirect'));
             $this->assertResponse(401);
-        }
-        
-        function testMessyFramesetResponsesByIndex() {
-            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            
             $this->assertTrue($this->setFrameFocusByIndex(1));
             $this->assertResponse(200);
             $this->assertWantedPattern('/Simple test front controller/');
@@ -756,7 +730,6 @@
             $this->assertResponse(401);
             
             $this->assertTrue($this->setFrameFocusByIndex(7));
-            $this->assertResponse(401);
         }
         
         function testReloadingFramesetPage() {

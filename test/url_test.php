@@ -399,6 +399,17 @@
             $this->assertEqual($absolute->getPath(), '/');
         }
         
+        function testMakingCoordinateUrlAbsolute() {
+            $url = new SimpleUrl('?1,2');
+            $this->assertEqual($url->getPath(), '');
+            $absolute = $url->makeAbsolute('http://host.com/I/am/here/');
+            $this->assertEqual($absolute->getScheme(), 'http');
+            $this->assertEqual($absolute->getHost(), 'host.com');
+            $this->assertEqual($absolute->getPath(), '/I/am/here/');
+            $this->assertEqual($absolute->getX(), 1);
+            $this->assertEqual($absolute->getY(), 2);
+        }
+        
         function testMakingAbsoluteAppendedPath() {
             $url = new SimpleUrl('./there/somewhere.php');
             $absolute = $url->makeAbsolute('https://host.com/here/');

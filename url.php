@@ -580,7 +580,8 @@
             $identity = $this->_getIdentity() ? $this->_getIdentity() . '@' : '';
             $encoded = $this->getEncodedRequest();
             $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
-            return new SimpleUrl("$scheme://$identity$host$port$path$encoded$fragment");
+            $coords = ($this->_x !== false) ? '?' . $this->_x . ',' . $this->_y : '';
+            return new SimpleUrl("$scheme://$identity$host$port$path$encoded$fragment$coords");
         }
         
         /**

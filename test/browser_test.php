@@ -576,6 +576,17 @@
                     $browser->getFrames(),
                     array('a' => 'http://site.with.one.frame/frame.html'));
         }
+        
+        function testTitleTakenFromFramesetPage() {
+            $frameset = '<title>Frameset title</title>' .
+                    '<frameset><frame name="a" src="frame.html"></frameset>';
+            $browser = &$this->createBrowser($this->createUserAgent(array(
+                    'http://site.with.one.frame/' => $frameset,
+                    'http://site.with.one.frame/frame.html' => '<title>Page title</title>')));
+            
+            $browser->get('http://site.with.one.frame/');
+            $this->assertEqual($browser->getTitle(), 'Frameset title');
+        }
          
         function testFramesetWithSingleUnnamedFrame() {
             $frameset = '<frameset><frame src="frame.html"></frameset>';
@@ -612,6 +623,27 @@
                     'c' => 'http://site.with.frames/frame_c.html'));
         }
        
+        function testFrameFocusByName() {
+            $frameset = '<frameset>' .
+                    '<frame name="a" src="frame_a.html">' .
+                    '<frame name="b" src="frame_b.html">' .
+                    '<frame name="c" src="frame_c.html">' .
+                    '</frameset>';
+            $browser = &$this->createBrowser($this->createUserAgent(array(
+                    'http://site.with.frames/' => $frameset,
+                    'http://site.with.frames/frame_a.html' => 'A frame',
+                    'http://site.with.frames/frame_b.html' => 'B frame',
+                    'http://site.with.frames/frame_c.html' => 'C frame')));
+            
+            $browser->get('http://site.with.frames/');
+            $browser->setFrameFocus('a');
+            $this->assertEqual($browser->getContent(), 'A frame');
+            $browser->setFrameFocus('b');
+            $this->assertEqual($browser->getContent(), 'B frame');
+            $browser->setFrameFocus('c');
+            $this->assertEqual($browser->getContent(), 'C frame');
+        }
+       
         function testFramesetWithSomeNamedFrames() {
             $frameset = '<frameset>' .
                     '<frame name="a" src="frame_a.html">' .
@@ -634,6 +666,33 @@
                     2 => 'http://site.with.frames/frame_b.html',
                     'c' => 'http://site.with.frames/frame_c.html',
                     4 => 'http://site.with.frames/frame_d.html'));
+        }
+       
+        function testFrameFocusWithMixedNamesAndIndexes() {
+            $frameset = '<frameset>' .
+                    '<frame name="a" src="frame_a.html">' .
+                    '<frame src="frame_b.html">' .
+                    '<frame name="c" src="frame_c.html">' .
+                    '<frame src="frame_d.html">' .
+                    '</frameset>';
+            $browser = &$this->createBrowser($this->createUserAgent(array(
+                    'http://site.with.frames/' => $frameset,
+                    'http://site.with.frames/frame_a.html' => 'A frame',
+                    'http://site.with.frames/frame_b.html' => 'B frame',
+                    'http://site.with.frames/frame_c.html' => 'C frame',
+                    'http://site.with.frames/frame_d.html' => 'D frame')));
+            
+            $browser->get('http://site.with.frames/');
+            $browser->setFrameFocus('a');
+            $this->assertEqual($browser->getContent(), 'A frame');
+            $browser->setFrameFocus(2);
+            $this->assertEqual($browser->getContent(), 'B frame');
+            $browser->setFrameFocus('c');
+            $this->assertEqual($browser->getContent(), 'C frame');
+            $browser->setFrameFocus(4);
+            $this->assertEqual($browser->getContent(), 'D frame');
+            $browser->clearFrameFocus();
+            $this->assertEqual($browser->getContent(), 'A frameB frameC frameD frame');
         }
         
         function testNestedFrameset() {
