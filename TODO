@@ -21,7 +21,7 @@ Bug fix of fatal error with overload functions (2/2) - done.
 
 Parser
 ------
-Should tolerate missing form tag (2).
+Should tolerate missing form tag (2/2) - done.
 
 Browser
 -------
@@ -35,7 +35,7 @@ Web tester
 Add htmlentities() international fix (1/1) - done.
 Add WebTestCase::getCookie() method (1/1) - done.
 Add assertText() (3).
-Make labels HTML entity blind (2).
+Make labels HTML entity and tag blind (3).
 
 Documentation
 -------------
