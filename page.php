@@ -11,31 +11,102 @@
      *    SAX event handler. Maintains a list of
      *    open tags and dispatches them as they close.
      */
-    class SimplePageBuilder extends HtmlSaxListener {
+    class SimplePageBuilder extends SimpleSaxListener {
+        var $_page;
+        var $_tags;
         
         /**
          *    Sets the document to write to.
-         *    @param $page    Page to add information to.
+         *    @param $parser     Event generator.
+         *    @param $page       Target of the events.
          *    @public
          */
-        function SimplePageBuilder(&$page) {
+        function SimplePageBuilder(&$parser, &$page) {
+            $this->SimpleSaxListener($parser);
+            $this->_page = &$page;
+            $this->_tags = array();
+        }
+        
+        /**
+         *    Reads the raw content and send events
+         *    into the page to be built.
+         *    @param $raw        Unparsed text.
+         *    @public
+         */
+        function parse($raw) {
+            $parser = &$this->getParser();
+            return $parser->parse($raw);
+        }
+        
+        /**
+         *    Start of element event.
+         *    @param $name        Element name.
+         *    @param $attributes  Hash of name value pairs.
+         *                        Attributes without content
+         *                        are marked as true.
+         *    @return             False on parse error.
+         *    @public
+         */
+        function startElement($name, $attributes) {
+            if (!in_array($name, array_keys($this->_tags))) {
+                $this->_tags[$name] = array();
+            }
+            array_push($this->_tags[$name], array(
+                    "attributes" => $attributes,
+                    "content" => ""));
+            return true;
+        }
+        
+        /**
+         *    End of element event.
+         *    @param $name        Element name.
+         *    @return             False on parse error.
+         *    @public
+         */
+        function endElement($name) {
+            $tag = array_pop($this->_tags[$name]);
+            $this->_page->addLink($tag["attributes"]["href"], $tag["content"]);
+            return true;
+        }
+        
+        /**
+         *    Unparsed, but relevant data.
+         *    @param $text        May include unparsed tags.
+         *    @return             False on parse error.
+         *    @public
+         */
+        function addContent($text) {
+            foreach (array_keys($this->_tags) as $name) {
+                for ($i = 0; $i < count($this->_tags[$name]); $i++) {
+                    $this->_tags[$name][$i]["content"] .= $text;
+                }
+            }
+            return true;
         }
     }
     
     /**
      *    A wrapper for a web page.
      */
-    class HtmlPage {
+    class SimplePage {
         var $_absolute_links;
         var $_relative_links;
         
         /**
          *    Parses a page ready to access it's contents.
+         *    @param $raw            Raw unparsed text.
          *    @public
          */
-        function HtmlPage() {
+        function SimplePage($raw) {
             $this->_absolute_links = array();
             $this->_relative_links = array();
+        }
+        
+        /**
+         *    Sets up the parser ready to parse itself.
+         *    @protected
+         */
+        function _createParser() {
         }
         
         /**

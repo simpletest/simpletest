@@ -372,7 +372,7 @@
     /**
      *    Converts HTML tokens into selected SAX events.
      */
-    class HtmlSaxParser {
+    class SimpleSaxParser {
         var $_lexer;
         var $_listener;
         var $_tag;
@@ -384,7 +384,7 @@
          *    @param $listener SAX event handler.
          *    @public
          */
-        function HtmlSaxParser(&$listener) {
+        function SimpleSaxParser(&$listener) {
             $this->_listener = &$listener;
             $this->_lexer = &$this->createLexer($this);
             $this->_tag = "";
@@ -519,14 +519,26 @@
      *    SAX event handler.
      *    @abstract
      */
-    class HtmlSaxListener {
+    class SimpleSaxListener {
         
         /**
          *    Sets the document to write to.
-         *    @param $page    Page to add information to.
+         *    @param $parser  Parser used to generate the
+         *                    SAX events.
          *    @public
          */
-        function HtmlSaxListener(&$page) {
+        function SimpleSaxListener(&$parser) {
+            $this->_parser = &$parser;
+        }
+        
+        /**
+         *    Accessor for held parser.
+         *    @return        SAX parser class passed in
+         *                   constructor.
+         *    @public
+         */
+        function &getParser() {
+            return $this->_parser;
         }
         
         /**

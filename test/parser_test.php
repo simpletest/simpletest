@@ -284,14 +284,14 @@
             $this->UnitTestCase();
         }
         function setUp() {
-            $this->_handler = &new MockHtmlSaxParser($this);
+            $this->_handler = &new MockSimpleSaxParser($this);
             $this->_handler->setReturnValue("acceptStartToken", true);
             $this->_handler->setReturnValue("acceptEndToken", true);
             $this->_handler->setReturnValue("acceptAttributeToken", true);
             $this->_handler->setReturnValue("acceptEntityToken", true);
             $this->_handler->setReturnValue("acceptTextToken", true);
             $this->_handler->setReturnValue("ignore", true);
-            $this->_lexer = &HtmlSaxParser::createLexer($this->_handler, "ignore");
+            $this->_lexer = &SimpleSaxParser::createLexer($this->_handler, "ignore");
         }
         function tearDown() {
             $this->_handler->tally();
@@ -356,19 +356,19 @@
         }
     }
     
-    class TestHtmlSaxParser extends HtmlSaxParser {
+    class TestSimpleSaxParser extends SimpleSaxParser {
         var $_lexer;
         
-        function TestHtmlSaxParser(&$listener, &$lexer) {
+        function TestSimpleSaxParser(&$listener, &$lexer) {
             $this->_lexer = &$lexer;
-            $this->HtmlSaxParser(&$listener);
+            $this->SimpleSaxParser(&$listener);
         }
         function &createLexer() {
             return $this->_lexer;
         }
     }
     
-    Mock::generate("HtmlSaxListener");
+    Mock::generate("SimpleSaxListener");
     Mock::generate("SimpleLexer");
     
     class TestOfSaxGeneration extends UnitTestCase {
@@ -379,9 +379,9 @@
             $this->UnitTestCase();
         }
         function setUp() {
-            $this->_listener = &new MockHtmlSaxListener($this);
+            $this->_listener = &new MockSimpleSaxListener($this);
             $this->_lexer = &new MockSimpleLexer($this);
-            $this->_parser = &new TestHtmlSaxParser($this->_listener, $this->_lexer);
+            $this->_parser = &new TestSimpleSaxParser($this->_listener, $this->_lexer);
         }
         function tearDown() {
             $this->_listener->tally();
@@ -434,6 +434,17 @@
             $this->_parser->parse("");
             $this->_listener->expectCallCount("addContent", 0);
             $this->assertTrue($this->_parser->ignore("stuff", LEXER_UNMATCHED));
+        }
+    }
+    
+    class TestOfAbstractListener extends UnitTestCase {
+        function TestOfAbstractListener() {
+            $this->UnitTestCase();
+        }
+        function testParserAccessor() {
+            $parser = &new MockSimpleSaxParser($this);
+            $listener = &new SimpleSaxListener($parser);
+            $this->assertReference($parser, $listener->getParser());
         }
     }
 ?>
