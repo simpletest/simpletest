@@ -695,8 +695,10 @@
          */
         function _submitForm(&$form, $name) {
             $action = $form->getAction();
-            if (! $action) {
+            if ($action === false) {
                 $action = $this->_page->getRequestUrl();
+            } elseif ($action === true) {
+                $action = '';
             }
             $method = $form->getMethod();
             return $this->$method($action, $form->submitButton($name));

@@ -178,6 +178,36 @@
             $this->assertTrue($this->clickLink('Down one'));
             $this->assertWantedPattern('/index of \/test/i');
         }
+        function testSubmitToNamedPage() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/');
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->assertTrue($this->clickSubmit('Index'));
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/\[action=Index\]/');
+        }
+        function testSubmitToSameDirectory() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/index.php');
+            $this->assertTrue($this->clickSubmit('Same directory'));
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/\[action=Same\+directory\]/');
+        }
+        function testSubmitToEmptyAction() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/index.php');
+            $this->assertTrue($this->clickSubmit('Empty action'));
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/\[action=Empty\+action\]/');
+        }
+        function testSubmitToNoAction() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/index.php');
+            $this->assertTrue($this->clickSubmit('No action'));
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/\[action=No\+action\]/');
+        }
+        function testSubmitBackADirectoryLevel() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/');
+            $this->assertTrue($this->clickSubmit('Down one'));
+            $this->assertWantedPattern('/index of \/test/i');
+        }
     }
     
     class TestOfLiveRedirects extends WebTestCase {
