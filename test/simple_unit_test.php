@@ -89,6 +89,9 @@
             $this->assertEqual($text, $text);
             $this->assertEqual($text . $text, $text . "a" . $text);        // Fail.
         }
+        function testError() {
+            trigger_error('Deliberate');        // Exception.
+        }
         function testOfDumping() {
             $this->dump(array("Hello"), "Displaying a variable");
         }
@@ -96,8 +99,7 @@
     
     $test = new GroupTest("Unit test case test, 17 fails and 17 passes");
     $display = new TestHTMLDisplay();
-    $test->attachObserver($display);
     $test->addTestCase(new TestOfUnitTestCase());
     
-    $test->run();
+    $test->run($display);
 ?>

@@ -126,10 +126,16 @@
          *    @public
          */
         function invoke(&$runner, $method) {
+            set_error_handler('simpleTestErrorHandler');
             $this->_current_runner = &$runner;
             $this->setUp();
             $this->$method();
             $this->tearDown();
+            $queue = &SimpleErrorQueue::instance();
+            while (list($severity, $message, $file, $line, $globals) = $queue->extract()) {
+                $runner->handleError($severity, $message, $file, $line, $globals);
+            }
+            restore_error_handler();
         }
         
         /**
