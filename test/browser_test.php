@@ -50,6 +50,8 @@
 
             $this->assertEqual($browser->getContent(), 'Raw HTML');
             $this->assertEqual($browser->getTitle(), 'Here');
+            $this->assertIdentical($browser->getResponseCode(), 200);
+            $this->assertEqual($browser->getMimeType(), 'text/html');
             $browser->tally();
         }
         function testFormHandling() {
@@ -63,6 +65,113 @@
             
             $browser->setField('key', 'Value');
             $page->tally();
+        }
+    }
+    
+    class TestOfBrowserNavigation extends UnitTestCase {
+        function TestOfBrowserNavigation() {
+            $this->UnitTestCase();
+        }
+        function &getSuccessfulFetch() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue('getMimeType', 'text/html');
+            $headers->setReturnValue('getResponseCode', 200);
+            
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent', 'stuff');
+            $response->setReturnReference('getHeaders', $headers);
+            return $response;
+        }
+        function &createBrowser(&$agent, &$page) {
+            $browser = &new MockParseSimpleBrowser($this);
+            $browser->setReturnReference('_createUserAgent', $agent);
+            $browser->setReturnReference('_parse', $page);
+            $browser->SimpleBrowser();
+            return $browser;
+        }
+        function testClickLinkRequestsPage() {
+            $agent = &new MockSimpleUserAgent($this);
+            $agent->setReturnReference('fetchResponse', $this->getSuccessfulFetch());
+            $agent->expectArgumentsAt(
+                    0,
+                    'fetchResponse',
+                    array('GET', 'http://this.com/page.html', false));
+            $agent->expectArgumentsAt(
+                    1,
+                    'fetchResponse',
+                    array('GET', 'new.html', false));
+            $agent->expectCallCount('fetchResponse', 2);
+            
+            $page = &new MockSimplePage($this);
+            $page->setReturnValue('getUrls', array('new.html'));
+            $page->expectOnce('getUrls', array('New'));
+            
+            $browser = &$this->createBrowser($agent, $page);
+            $browser->get('http://this.com/page.html');
+            $this->assertTrue($browser->clickLink('New'));
+            
+            $agent->tally();
+            $page->tally();
+        }
+        function testClickingMissingLinkFails() {
+            $agent = &new MockSimpleUserAgent($this);
+            $agent->setReturnReference('fetchResponse', $this->getSuccessfulFetch());
+            
+            $page = &new MockSimplePage($this);
+            $page->setReturnValue('getUrls', array());
+            
+            $browser = &$this->createBrowser($agent, $page);
+            $browser->get('http://this.com/page.html');
+            $this->assertFalse($browser->clickLink('New'));
+        }
+        function testClickIndexedLink() {
+            $agent = &new MockSimpleUserAgent($this);
+            $agent->setReturnReference('fetchResponse', $this->getSuccessfulFetch());
+            $agent->expectArgumentsAt(
+                    1,
+                    'fetchResponse',
+                    array('GET', '1.html', false));
+            $agent->expectCallCount('fetchResponse', 2);
+            
+            $page = &new MockSimplePage($this);
+            $page->setReturnValue('getUrls', array('0.html', '1.html'));
+            
+            $browser = &$this->createBrowser($agent, $page);
+            $browser->get('http://this.com/page.html');
+            $this->assertTrue($browser->clickLink('New', 1));
+            
+            $agent->tally();
+        }
+        function testClinkLinkById() {
+            $agent = &new MockSimpleUserAgent($this);
+            $agent->setReturnReference('fetchResponse', $this->getSuccessfulFetch());
+            $agent->expectArgumentsAt(
+                    1,
+                    'fetchResponse',
+                    array('GET', 'link.html', false));
+            $agent->expectCallCount('fetchResponse', 2);
+            
+            $page = &new MockSimplePage($this);
+            $page->setReturnValue('getUrlById', 'link.html');
+            $page->expectOnce('getUrlById', array(2));
+            
+            $browser = &$this->createBrowser($agent, $page);
+            $browser->get('http://this.com/page.html');
+            $this->assertTrue($browser->clickLinkById(2));
+            
+            $agent->tally();
+            $page->tally();
+        }
+        function testClickingMissingLinkIdFails() {
+            $agent = &new MockSimpleUserAgent($this);
+            $agent->setReturnReference('fetchResponse', $this->getSuccessfulFetch());
+            
+            $page = &new MockSimplePage($this);
+            $page->setReturnValue('getUrlById', false);
+            
+            $browser = &$this->createBrowser($agent, $page);
+            $browser->get('http://this.com/page.html');
+            $this->assertFalse($browser->clickLink(0));
         }
     }
 ?>

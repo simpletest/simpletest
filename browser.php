@@ -218,21 +218,6 @@
         }
         
         /**
-         *    Turns an incoming URL string into a
-         *    URL object, filling the relative URL if
-         *    a base URL is present.
-         *    @param string $base_url       Browser current URL.
-         *    @param string $raw_url        Incoming URL.
-         *    @param hash $parameters       Additional request, parameters.
-         *    @return SimpleUrl             Absolute URL.
-         *    @access public
-         *    @static
-         */
-        function createAbsoluteUrl($base_url, $raw_url, $parameters = false) {
-            return $this->_user_agent->createAbsoluteUrl($base_url, $raw_url, $parameters);
-        }
-        
-        /**
          *    Accessor for raw page information.
          *    @return string      Original text content of web page.
          *    @access public
