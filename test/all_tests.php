@@ -21,6 +21,5 @@
     }
 
     $test = &new AllTests();
-    $test->attachObserver(new TestHtmlDisplay());
-    $test->run();
+    $test->run(new TestHtmlDisplay());
 ?>

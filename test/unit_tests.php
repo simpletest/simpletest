@@ -33,7 +33,6 @@
     if (!defined("TEST_RUNNING")) {
         define("TEST_RUNNING", true);
         $test = &new UnitTests();
-        $test->attachObserver(new TestHtmlDisplay());
-        $test->run();
+        $test->run(new TestHtmlDisplay());
     }
 ?>

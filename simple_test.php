@@ -36,11 +36,16 @@
         }
         
         /**
-         *    Runs the top level test for this class.
+         *    Runs the top level test for this class. The
+         *    parameter will soon cease to be optional.
+         *    @param $reporter        Target of test results.
          *    @public
          */
-        function run() {
-            $this->accept(new TestRunner($this->_reporter));
+        function run($reporter = false) {
+            if (!$reporter) {
+                $reporter = &$this->_reporter;
+            }
+            $this->accept(new TestRunner($reporter));
         }
         
         /**
@@ -62,9 +67,7 @@
         }
         
         /**
-         *    Adds an object with a notify() method.
-         *    @param $repoter    Reporter stash for compatibility.
-         *    @public
+         *    @deprecated
          */
         function attachObserver(&$reporter) {
             $this->_reporter = &$reporter;

@@ -19,7 +19,6 @@
     if (!defined("TEST_RUNNING")) {
         define("TEST_RUNNING", true);
         $test = &new BoundaryTests("Boundary tests");
-        $test->attachObserver(new TestHtmlDisplay());
-        $test->run();
+        $test->run(new TestHtmlDisplay());
     }
 ?>
