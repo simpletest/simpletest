@@ -202,7 +202,7 @@
             we have somewhere to place our test code from <em>log_test.php</em>
             that we are going to shuffle around.
             I won&apos;t yet add it to the <em>all_tests.php</em> file
-            though as it is the logging aspect we are tacking right now.
+            though as it is the logging aspect we are tackling right now.
         </p>
         <p>
             Now I have done that (honest) we remove any
