@@ -1,36 +1,39 @@
 TODO
-This is immediate stuff only for the next iteration (Alpha5) of 40 hours.
+This is immediate stuff only for the next iteration (Alpha6) of 40 hours.
 Figures are estimated hours work versus actual (for XP velocity).
 
 $Id$
 
 Unit tester
 -----------
-Create Comparitor class for better failure display (6/8) - done.
+Create assertion test (1/1) - done.
+Improve difference output messages when nested in arrays (1).
 
 Mock objects
 ------------
-Change expectArgumentsSequence() to expectArgumentsAt() (1/1) - done.
-Change setReturnValueSequence() to setReturnValueAt() (1/0) - done.
-Change setReturnReferenceSequence() to setReturnReferenceAt() (1/0) - done.
-Update documentation to reflect deprecated methods (2/1) - done.
+Create parameter list assertion for improved output (2).
+Split off server stubs (3).
 
 Html parser
 -----------
-Make lexer call different methods for different modes (4/3) - done.
-Build SAX handler for links (2/5) - done.
-Build SAX event generator for links (8/8) - done.
-Decouple lexer modes from SAX handler methods (2/2) - done.
-Build link scanner functionality from end to end (3/2) - done.
-Build HTML document with links (3/5) - done.
+Build form class as widget repository (3).
+Add widget class (2).
+Add form tag parsing to build a form in a page (3).
+Add input tag parsing (4).
+Add textarea tag parsing (2).
+Read a complete, but simple form (4).
 
 Browser
 -------
-Make URL class parsing fully correct (2/3) - done.
+Add base URL (2).
 
 Web tester
 ----------
+Create a web test case class (2).
+Create a page fetch case end to end (3).
+Create a link following case from end to end (4).
 
 Documentation
 -------------
-Add mock objects docs (3/7) - done.
+Add server stub documentation (3).
+Clean up the documentation links (1).

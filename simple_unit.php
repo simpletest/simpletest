@@ -92,10 +92,10 @@
          *    @public
          */
         function assertEqual($first, $second, $message = "%s") {
-            $assertion = &new EqualAssertion($first);
-            $this->assertTrue(
-                    $assertion->test($second),
-                    sprintf($message, $assertion->testMessage($second)));
+            $this->assertAssertion(
+                    new EqualAssertion($first),
+                    $second,
+                    $message);
         }
         
         /**
@@ -107,10 +107,10 @@
          *    @public
          */
         function assertNotEqual($first, $second, $message = "%s") {
-            $assertion = &new NotEqualAssertion($first);
-            $this->assertTrue(
-                    $assertion->test($second),
-                    sprintf($message, $assertion->testMessage($second)));
+            $this->assertAssertion(
+                    new NotEqualAssertion($first),
+                    $second,
+                    $message);
         }
         
         /**
@@ -122,10 +122,10 @@
          *    @public
          */
         function assertIdentical($first, $second, $message = "%s") {
-            $assertion = &new IdenticalAssertion($first);
-            $this->assertTrue(
-                    $assertion->test($second),
-                    sprintf($message, $assertion->testMessage($second)));
+            $this->assertAssertion(
+                    new IdenticalAssertion($first),
+                    $second,
+                    $message);
         }
         
         /**
@@ -137,10 +137,10 @@
          *    @public
          */
         function assertNotIdentical($first, $second, $message = "%s") {
-            $assertion = &new NotIdenticalAssertion($first);
-            $this->assertTrue(
-                    $assertion->test($second),
-                    sprintf($message, $assertion->testMessage($second)));
+            $this->assertAssertion(
+                    new NotIdenticalAssertion($first),
+                    $second,
+                    $message);
         }
         
         /**
@@ -211,6 +211,20 @@
         function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
             $message = sprintf($message, "not expecting [$pattern] in [$subject]");
             $this->assertTrue(!preg_match($pattern, $subject), $message);
+        }
+        
+        /**
+         *    Runs an assertion directly, for extending the
+         *    tests with assertion classes.
+         *    @param $assertion    Assertion subclass.
+         *    @param $test_value   Value to compare.
+         *    @param $message      Message to display.
+         *    @public
+         */
+        function assertAssertion(&$assertion, $test_value, $message) {
+            $this->assertTrue(
+                    $assertion->test($test_value),
+                    sprintf($message, $assertion->testMessage($test_value)));
         }
     }
 ?>
