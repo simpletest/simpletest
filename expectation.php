@@ -223,11 +223,8 @@
             } else {
                 return "Identical expectation [" . $dumper->describeValue($this->_getValue()) .
                         "] fails with [" .
-                        $this->_dumper->describeValue($compare) . "] " .
-                        $this->_dumper->describeDifference(
-                                $this->_getValue(),
-                                $compare,
-                                TYPE_MATTERS);
+                        $dumper->describeValue($compare) . "] " .
+                        $dumper->describeDifference($this->_getValue(), $compare, TYPE_MATTERS);
             }
         }
     }
@@ -326,7 +323,7 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return $this->_decribePatternMatch($this->_getPattern(), $compare);
+                return $this->_describePatternMatch($this->_getPattern(), $compare);
             } else {
                 $dumper = &$this->_getDumper();
                 return "Pattern [" . $this->_getPattern() .
@@ -342,7 +339,7 @@
          *    @param string $subject        Subject to search.
          *    @access protected
          */
-        function _decribePatternMatch($pattern, $subject) {
+        function _describePatternMatch($pattern, $subject) {
             preg_match($pattern, $subject, $matches);
             $position = strpos($subject, $matches[0]);
             $dumper = &$this->_getDumper();
@@ -396,7 +393,7 @@
                         "] not detected in [" .
                         $dumper->describeValue($compare) . "]";
             } else {
-                return $this->_decribePatternMatch($this->_getPattern(), $compare);
+                return $this->_describePatternMatch($this->_getPattern(), $compare);
             }
         }
     }

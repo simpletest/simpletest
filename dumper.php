@@ -18,12 +18,6 @@
     class SimpleDumper {
         
         /**
-         *    Do nothing constructor.
-         */
-        function SimpleDumper() {
-        }
-        
-        /**
          *    Renders a variable in a shorter form than print_r().
          *    @param mixed $value      Variable to render as a string.
          *    @return string           Human readable string form.
@@ -245,7 +239,7 @@
             if (! is_array($second)) {
                 return $this->_describeGenericDifference($first, $second);
             }
-            if (array_keys($first) !== array_keys($second)) {
+            if (! $this->_isMatchingKeys($first, $second, $identical)) {
                 return "as key list [" .
                         implode(", ", array_keys($first)) . "] does not match key list [" .
                         implode(", ", array_keys($second)) . "]";
@@ -263,6 +257,27 @@
                         $identical);
             }
             return "";
+        }
+        
+        /**
+         *    Compares two arrays to see if their key lists match.
+         *    For an identical match, the ordering and types of the keys
+         *    is significant.
+         *    @param array $first         First array.
+         *    @param array $second        Array to compare with.
+         *    @param boolean $identical   If true then type anomolies count.
+         *    @return boolean             True if matching.
+         *    @access private
+         */
+        function _isMatchingKeys($first, $second, $identical) {
+            $first_keys = array_keys($first);
+            $second_keys = array_keys($second);
+            if ($identical) {
+                return ($first_keys === $second_keys);
+            }
+            sort($first_keys);
+            sort($second_keys);
+            return ($first_keys == $second_keys);
         }
         
         /**

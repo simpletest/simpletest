@@ -91,15 +91,15 @@
         }
         
         function testHash() {
-            $blue = &new EqualExpectation(array("r" => 0, "g" => 0, "b" => 255));
-            $this->assertTrue($blue->test(array("r" => 0, "g" => 0, "b" => 255)));
-            $this->assertFalse($blue->test(array("r" => 0, "g" => 255, "b" => 0)));
+            $is_blue = &new EqualExpectation(array("r" => 0, "g" => 0, "b" => 255));
+            $this->assertTrue($is_blue->test(array("r" => 0, "g" => 0, "b" => 255)));
+            $this->assertFalse($is_blue->test(array("r" => 0, "g" => 255, "b" => 0)));
             $this->assertWantedPattern(
                     '/array.*?3 items/i',
-                    $blue->testMessage(array("r" => 0, "g" => 0, "b" => 255)));
+                    $is_blue->testMessage(array("r" => 0, "g" => 0, "b" => 255)));
             $this->assertWantedPattern(
                     '/fails.*?\[b\]/',
-                    $blue->testMessage(array("r" => 0, "g" => 0, "b" => 254)));
+                    $is_blue->testMessage(array("r" => 0, "g" => 0, "b" => 254)));
         }
         
         function testNestedHash() {
@@ -115,6 +115,11 @@
                         "b" => array(
                                 "c" => 2,
                                 "d" => "Threeish"))));
+        }
+        
+        function testHashWithOutOfOrderKeysShouldStillMatch() {
+            $any_order = &new EqualExpectation(array('a' => 1, 'b' => 2));
+            $this->assertTrue($any_order->test(array('b' => 2, 'a' => 1)));
         }
     }
     

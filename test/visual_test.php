@@ -90,6 +90,7 @@
 
         function testHashEquality() {
             $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "%s -> Pass");
+            $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "Z"), "%s -> Pass");
         }
 
         function testStringIdentity() {
@@ -114,7 +115,7 @@
         }
 
         function testHashIdentity() {
-            $this->assertIdentical(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "#%s#");        // Fail.
+            $this->assertIdentical(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "%s -> fail");        // Fail.
         }
 
         function testObjectEquality() {
@@ -170,6 +171,7 @@
             trigger_error('Error 1');
             $this->assertNoErrors("%s -> Fail");        // Fail.
             $this->assertError();
+            $this->assertNoErrors("%s -> Pass at end");
         }
 
         function testErrorText() {
@@ -364,7 +366,7 @@
         }
     }
 
-    $test = &new GroupTest("Visual test with 48 passes, 48 fails and 4 exceptions");
+    $test = &new GroupTest("Visual test with 49 passes, 49 fails and 4 exceptions");
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());
