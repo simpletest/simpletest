@@ -26,6 +26,7 @@ Browser
 -------
 Fix socket error with stream_get_timeout() missing (1/1) - done.
 Lose authentication on browser restart (1/1) - done.
+Make links such as ?a=b return to the same page.
 
 Web tester
 ----------
