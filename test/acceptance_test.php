@@ -915,5 +915,16 @@
             $this->clearFrameFocus();
             $this->assertWantedPattern('/Count: 1/');
         }
+        
+        function testCanAuthenticateRedirectedFrame() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->setFrameFocus('Protected redirect');
+            $this->assertResponse(401);
+            $this->authenticate('test', 'secret');
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/A target for the SimpleTest test suite/');
+            $this->clearFrameFocus();
+            $this->assertWantedPattern('/Count: 1/');
+        }
     }
 ?>
