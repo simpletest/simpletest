@@ -275,6 +275,30 @@
         function TestOfDirectDestination() {
             $this->UnitTestCase();
         }
+        function testDefaultGetRequest() {
+            $destination = &new SimpleDestination(
+                    new SimpleUrl('http://a.valid.host/here.html'));
+            $this->assertEqual($destination->getRequestLine('GET'), 'GET /here.html HTTP/1.0');
+            $this->assertEqual($destination->getHostLine(), 'Host: a.valid.host');
+        }
+        function testDefaultPostRequest() {
+            $destination = &new SimpleDestination(
+                    new SimpleUrl('http://a.valid.host/here.html'));
+            $this->assertEqual($destination->getRequestLine('POST'), 'POST /here.html HTTP/1.0');
+            $this->assertEqual($destination->getHostLine(), 'Host: a.valid.host');
+        }
+        function testGetWithPort() {
+            $destination = &new SimpleDestination(
+                    new SimpleUrl('http://a.valid.host:81/here.html'));
+            $this->assertEqual($destination->getRequestLine('GET'), 'GET /here.html HTTP/1.0');
+            $this->assertEqual($destination->getHostLine(), 'Host: a.valid.host:81');
+        }
+        function testGetWithParameters() {
+            $destination = &new SimpleDestination(
+                    new SimpleUrl('http://a.valid.host/here.html?a=1&b=2'));
+            $this->assertEqual($destination->getRequestLine('GET'), 'GET /here.html?a=1&b=2 HTTP/1.0');
+            $this->assertEqual($destination->getHostLine(), 'Host: a.valid.host');
+        }
     }
     
     mock::generatePartial(
@@ -327,8 +351,6 @@
             $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
             $socket->tally();
             $destination->tally();
-        }
-        function testConnectionToAlternatePort() {
         }
         function testWritingGetRequest() {
             $socket = &new MockSimpleSocket($this);
@@ -478,6 +500,7 @@
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", true);
             $socket->setReturnValue("getError", "Socket error");
+
             $response = &new SimpleHttpResponse($socket);
             $this->assertTrue($response->isError());
             $this->assertWantedPattern('/Socket error/', $response->getError());
@@ -491,6 +514,7 @@
             $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\n");
             $socket->setReturnValueAt(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
             $socket->setReturnValue("read", "");
+
             $response = &new SimpleHttpResponse($socket);
             $this->assertTrue($response->isError());
             $this->assertEqual($response->getContent(), "");
@@ -502,6 +526,7 @@
             $socket->setReturnValueAt(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
             $socket->setReturnValueAt(2, "read", "Content-Type: text/plain\r\n");
             $socket->setReturnValue("read", "");
+            
             $response = &new SimpleHttpResponse($socket);
             $this->assertTrue($response->isError());
             $this->assertEqual($response->getContent(), "");
@@ -515,6 +540,7 @@
             $socket->setReturnValueAt(3, "read", "ction: close\r\n\r\nthis is a test file\n");
             $socket->setReturnValueAt(4, "read", "with two lines in it\n");
             $socket->setReturnValue("read", "");
+            
             $response = &new SimpleHttpResponse($socket);
             $this->assertFalse($response->isError());
             $this->assertEqual(
@@ -538,6 +564,7 @@
             $socket->setReturnValueAt(5, "read", "Connection: close\r\n");
             $socket->setReturnValueAt(6, "read", "\r\n");
             $socket->setReturnValue("read", "");
+            
             $response = &new SimpleHttpResponse($socket);
             $this->assertFalse($response->isError());
             $headers = $response->getHeaders();
@@ -556,6 +583,7 @@
             $socket->setReturnValueAt(3, "read", "Connection: close\r\n");
             $socket->setReturnValueAt(4, "read", "\r\n");
             $socket->setReturnValue("read", "");
+            
             $response = &new SimpleHttpResponse($socket);
             $headers = $response->getHeaders();
             $this->assertTrue($headers->isRedirect());

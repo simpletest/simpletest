@@ -613,7 +613,11 @@
          *    @access public
          */
         function getHostLine() {
-            return 'Host: ' . $this->_url->getHost();
+            $line = 'Host: ' . $this->_url->getHost();
+            if ($this->_url->getPort()) {
+                $line .= ':' . $this->_url->getPort();
+            }
+            return $line;
         }
         
         /**
@@ -702,7 +706,6 @@
      */
     class SimpleHttpRequest {
         var $_headers;
-        var $_url;
         var $_cookies;
         var $_method;
         var $_destination;
@@ -714,7 +717,6 @@
          *    @access public
          */
         function SimpleHttpRequest($url, $method = 'GET') {
-            $this->_url = $url;
             $this->_destination = $this->_createDestination($url);
             $this->_method = $method;
             $this->_headers = array();
@@ -739,7 +741,6 @@
          *    @access public
          */
         function &fetch($timeout) {
-            $default_port = ('https' == $this->_url->getScheme()) ? 443 : 80;
             $socket = &$this->_destination->createConnection($timeout);
             if ($socket->isError()) {
                 return $this->_createResponse($socket);
@@ -756,8 +757,8 @@
          *    @access protected
          */
         function _dispatchRequest(&$socket, $method) {
-            $socket->write($this->_destination->getRequestLine($this->_method, $this->_url) . "\r\n");
-            $socket->write($this->_destination->getHostLine($this->_url) . "\r\n");
+            $socket->write($this->_destination->getRequestLine($this->_method) . "\r\n");
+            $socket->write($this->_destination->getHostLine() . "\r\n");
             foreach ($this->_headers as $header_line) {
                 $socket->write($header_line . "\r\n");
             }
