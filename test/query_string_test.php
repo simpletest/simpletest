@@ -1,7 +1,7 @@
 <?php
     // $Id$
     
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../query_string.php');
+    require_once(dirname(__FILE__) . '/../query_string.php');
     
     class QueryStringTestCase extends UnitTestCase {
         function QueryStringTestCase() {

@@ -28,16 +28,31 @@
             $this->assertEqual($url->getHost(), false);
             $this->assertEqual($url->getPath(), '../somewhere.php');
         }
-        function testParseParameter() {
+        function testParseBareParameter() {
+            $url = new SimpleUrl('?a');
+            $this->assertEqual($url->getPath(), '');
+            $this->assertEqual($url->getRequest(), array('a' => ''));
+        }
+        function testParseEmptyParameter() {
+            $url = new SimpleUrl('?a=');
+            $this->assertEqual($url->getPath(), '');
+            $this->assertEqual($url->getRequest(), array('a' => ''));
+        }
+        function testParseParameterPair() {
             $url = new SimpleUrl('?a=A');
             $this->assertEqual($url->getPath(), '');
             $this->assertEqual($url->getRequest(), array('a' => 'A'));
         }
         function testParseMultipleParameters() {
-            $url = new SimpleUrl('/?a=A&b=B');
-            $this->assertEqual($url->getPath(), '/');
+            $url = new SimpleUrl('?a=A&b=B');
             $this->assertEqual($url->getRequest(), array('a' => 'A', 'b' => 'B'));
             $this->assertEqual($url->getEncodedRequest(), '?a=A&b=B');
+        }
+        function testParsingParameterMixture() {
+            $url = new SimpleUrl('?a=A&b=&c');
+            $this->assertEqual(
+                    $url->getRequest(),
+                    array('a' => 'A', 'b' => '', 'c' => ''));
         }
         function testAddParameters() {
             $url = new SimpleUrl('');

@@ -141,14 +141,23 @@
         function testJumpToNamedPage() {
             $this->get('http://www.lastcraft.com/test/front_controller_style/');
             $this->assertWantedPattern('/Simple test front controller/');
-            $this->clickLink('Index');
-            $this->assertWantedPattern('/action=index/');
+            $this->assertTrue($this->clickLink('Index'));
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/\[action=index\]/');
         }
         function testJumpToUnnamedPage() {
             $this->get('http://www.lastcraft.com/test/front_controller_style/');
-            $this->clickLink('No page');
+            $this->assertTrue($this->clickLink('No page'));
+            $this->assertResponse(200);
             $this->assertWantedPattern('/Simple test front controller/');
-            $this->assertWantedPattern('/action=no_page/');
+            $this->assertWantedPattern('/\[action=no_page\]/');
+        }
+        function testJumpToUnnamedPageWithBareParameter() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/');
+            $this->assertTrue($this->clickLink('Bare action'));
+            $this->assertResponse(200);
+            $this->assertWantedPattern('/Simple test front controller/');
+            $this->assertWantedPattern('/\[action=\]/');
         }
     }
     
