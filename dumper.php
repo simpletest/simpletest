@@ -353,7 +353,7 @@
             ob_end_clean();
             return $formatted;
         }
-        
+
         /**
          *    Extracts the last assertion that was not within
          *    Simpletest itself. The name must start with "assert".
@@ -365,8 +365,10 @@
          */
         function getFormattedAssertionLine($stack, $format = '%d', $prefix = 'assert') {
             foreach ($stack as $frame) {
-                if (substr(@dirname($frame['file']), -10) == 'simpletest') {
-                    continue;
+                if (isset($frame['file']) && strpos($frame['file'], 'simpletest') !== false) {     // dirname() is a bit slow.
+                    if (substr(dirname($frame['file']), -10) == 'simpletest') {
+                        continue;
+                    }
                 }
                 if (strncmp($frame['function'], $prefix, strlen($prefix)) == 0) {
                     return sprintf($format, $frame['line']);
