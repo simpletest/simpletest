@@ -601,5 +601,27 @@
                     'b' => 'http://site.with.one.frame/frame_b.html',
                     'c' => 'http://site.with.one.frame/frame_c.html'));
         }
+       
+        function testFramesetWithSomeNamedFrames() {
+            $frameset = '<frameset>' .
+                    '<frame name="a" src="frame_a.html">' .
+                    '<frame src="frame_b.html">' .
+                    '<frame name="c" src="frame_c.html">' .
+                    '<frame src="frame_d.html">' .
+                    '</frameset>';
+            $browser = &$this->createBrowser($this->createUserAgent(array(
+                    'http://site.with.one.frame/' => $frameset,
+                    'http://site.with.one.frame/frame_a.html' => 'A frame',
+                    'http://site.with.one.frame/frame_b.html' => 'B frame',
+                    'http://site.with.one.frame/frame_c.html' => 'C frame',
+                    'http://site.with.one.frame/frame_d.html' => 'D frame')));
+            
+            $browser->get('http://site.with.one.frame/');
+            $this->assertIdentical($browser->getFrames(), array(
+                    'a' => 'http://site.with.one.frame/frame_a.html',
+                    2 => 'http://site.with.one.frame/frame_b.html',
+                    'c' => 'http://site.with.one.frame/frame_c.html',
+                    4 => 'http://site.with.one.frame/frame_d.html'));
+        }
     }
 ?>
