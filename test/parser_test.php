@@ -49,6 +49,34 @@
             $this->assertEqual($match, "123");
         }
     }
+    
+    class TestOfStateStack extends UnitTestCase {
+        function TestOfStateStack() {
+            $this->UnitTestCase();
+        }
+        function testStartState() {
+            $stack = &new StateStack("one");
+            $this->assertEqual($stack->getCurrent(), "one");
+        }
+        function testExhaustion() {
+            $stack = &new StateStack("one");
+            $this->assertFalse($stack->leave());
+        }
+        function testStateMoves() {
+            $stack = &new StateStack("one");
+            $stack->enter("two");
+            $this->assertEqual($stack->getCurrent(), "two");
+            $stack->enter("three");
+            $this->assertEqual($stack->getCurrent(), "three");
+            $this->assertTrue($stack->leave());
+            $this->assertEqual($stack->getCurrent(), "two");
+            $stack->enter("third");
+            $this->assertEqual($stack->getCurrent(), "third");
+            $this->assertTrue($stack->leave());
+            $this->assertTrue($stack->leave());
+            $this->assertEqual($stack->getCurrent(), "one");
+        }
+    }
 
     class TestOfLexer extends UnitTestCase {
         function TestOfLexer() {

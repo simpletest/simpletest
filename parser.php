@@ -87,6 +87,56 @@
     }
     
     /**
+     *    States for a stack machine.
+     */
+    class StateStack {
+        var $_stack;
+        
+        /**
+         *    Constructor. Starts in named state.
+         *    @param $start        Starting state name.
+         *    @public
+         */
+        function StateStack($start) {
+            $this->_stack = array($start);
+        }
+        
+        /**
+         *    Accessor for current state.
+         *    @return        State as string.
+         *    @public
+         */
+        function getCurrent() {
+            return $this->_stack[count($this->_stack) - 1];
+        }
+        
+        /**
+         *    Adds a state to the stack and sets it
+         *    to be the current state.
+         *    @param $state        New state.
+         *    @public
+         */
+        function enter($state) {
+            array_push($this->_stack, $state);
+        }
+        
+        /**
+         *    Leaves the current state and reverts
+         *    to the previous one.
+         *    @return     False if we drop off
+         *                the bottom of the list.
+         *    @public
+         */
+        function leave() {
+            if (count($this->_stack) == 1) {
+                return false;
+            }
+            array_pop($this->_stack);
+            return true;
+        }
+    }
+    
+    /**
      *    Accepts text and breaks it into tokens.
      */
     class SimpleLexer {
