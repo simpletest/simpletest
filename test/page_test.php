@@ -332,15 +332,16 @@
         function testSettingSelectionField() {
             $page = &new SimplePage('<html><head><form>' .
                     '<select name="a">' .
-                    '<option value="aaa" selected><option value="bbb">' .
+                    '<option>aaa</option>' .
+                    '<option selected>bbb</option>' .
                     '</select>' .
                     '<input type="submit">' .
                     '</form></head></html>');
             $form = &$page->getFormBySubmitLabel("Submit");
-            $this->assertEqual($form->getValue("a"), "aaa");
-            $this->assertFalse($page->setField("a", "ccc"));
-            $this->assertTrue($page->setField("a", "bbb"));
             $this->assertEqual($form->getValue("a"), "bbb");
+            $this->assertFalse($page->setField("a", "ccc"));
+            $this->assertTrue($page->setField("a", "aaa"));
+            $this->assertEqual($form->getValue("a"), "aaa");
         }
     }
 ?>

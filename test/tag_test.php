@@ -91,35 +91,76 @@
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
             $this->assertIdentical($tag->getValue(), '');
         }
+        function testSingle() {
+            $tag = &new SimpleSelectionTag(array('name' => 'a'));
+            $option = &new SimpleOptionTag(array());
+            $option->addContent('AAA');
+            $tag->addTag($option);
+            $this->assertEqual($tag->getValue(), 'AAA');
+        }
         function testSingleDefault() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
-            $tag->addTag(
-                    new SimpleOptionTag(array('value' => 'AAA', 'selected' => '')));
+            $option = &new SimpleOptionTag(array('selected' => ''));
+            $option->addContent('AAA');
+            $tag->addTag($option);
             $this->assertEqual($tag->getValue(), 'AAA');
+        }
+        function testSingleMappedDefault() {
+            $tag = &new SimpleSelectionTag(array('name' => 'a'));
+            $option = &new SimpleOptionTag(array('selected' => '', 'value' => 'aaa'));
+            $option->addContent('AAA');
+            $tag->addTag($option);
+            $this->assertEqual($tag->getValue(), 'aaa');
         }
         function testDefault() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
-            $tag->addTag(new SimpleOptionTag(array('value' => 'AAA')));
-            $tag->addTag(
-                    new SimpleOptionTag(array('value' => 'BBB', 'selected' => '')));
-            $tag->addTag(new SimpleOptionTag(array('value' => 'CCC')));
+            $a = &new SimpleOptionTag(array());
+            $a->addContent('AAA');
+            $tag->addTag($a);
+            $b = &new SimpleOptionTag(array('selected' => ''));
+            $b->addContent('BBB');
+            $tag->addTag($b);
+            $c = &new SimpleOptionTag(array());
+            $c->addContent('CCC');
+            $tag->addTag($c);
             $this->assertEqual($tag->getValue(), 'BBB');
         }
         function testSettingOption() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
-            $tag->addTag(new SimpleOptionTag(array('value' => 'AAA')));
-            $tag->addTag(
-                    new SimpleOptionTag(array('value' => 'BBB', 'selected' => '')));
-            $tag->addTag(new SimpleOptionTag(array('value' => 'CCC')));
+            $a = &new SimpleOptionTag(array());
+            $a->addContent('AAA');
+            $tag->addTag($a);
+            $b = &new SimpleOptionTag(array('selected' => ''));
+            $b->addContent('BBB');
+            $tag->addTag($b);
+            $c = &new SimpleOptionTag(array());
+            $c->addContent('CCC');
             $tag->setValue('AAA');
             $this->assertEqual($tag->getValue(), 'AAA');
         }
+        function testSettingMappedOption() {
+            $tag = &new SimpleSelectionTag(array('name' => 'a'));
+            $a = &new SimpleOptionTag(array('value' => 'aaa'));
+            $a->addContent('AAA');
+            $tag->addTag($a);
+            $b = &new SimpleOptionTag(array('value' => 'bbb', 'selected' => ''));
+            $b->addContent('BBB');
+            $tag->addTag($b);
+            $c = &new SimpleOptionTag(array('value' => 'ccc'));
+            $c->addContent('CCC');
+            $tag->setValue('AAA');
+            $this->assertEqual($tag->getValue(), 'aaa');
+        }
         function testSettingIllegalOption() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
-            $tag->addTag(new SimpleOptionTag(array('value' => 'AAA')));
-            $tag->addTag(
-                    new SimpleOptionTag(array('value' => 'BBB', 'selected' => '')));
-            $tag->addTag(new SimpleOptionTag(array('value' => 'CCC')));
+            $a = &new SimpleOptionTag(array());
+            $a->addContent('AAA');
+            $tag->addTag($a);
+            $b = &new SimpleOptionTag(array('selected' => ''));
+            $b->addContent('BBB');
+            $tag->addTag($b);
+            $c = &new SimpleOptionTag(array());
+            $c->addContent('CCC');
             $this->assertFalse($tag->setValue('Not present'));
             $this->assertEqual($tag->getValue(), 'BBB');
         }

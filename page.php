@@ -56,14 +56,12 @@
                 $this->_openTag($tag);
                 return true;
             }
-            $this->_addTag($tag);
             $this->_page->acceptTag($tag);
             return true;
         }
         
         /**
-         *    End of element event. An unexpected event
-         *    triggers a parsing error.
+         *    End of element event.
          *    @param string $name        Element name.
          *    @return boolean            False on parse error.
          *    @public
@@ -75,6 +73,7 @@
             }            
             if (isset($this->_tags[$name]) && (count($this->_tags[$name]) > 0)) {
                 $tag = array_pop($this->_tags[$name]);
+                $this->_addContentTagToOpenTags($tag);
                 $this->_page->acceptTag($tag);
                 return true;
             }
@@ -103,7 +102,10 @@
          *    @param SimpleTag $tag        May include unparsed tags.
          *    @private
          */
-        function _addTag(&$tag) {
+        function _addContentTagToOpenTags(&$tag) {
+            if (! in_array($tag->getTagName(), array('option'))) {
+                return;
+            }
             foreach (array_keys($this->_tags) as $name) {
                 for ($i = 0; $i < count($this->_tags[$name]); $i++) {
                     $this->_tags[$name][$i]->addTag($tag);

@@ -341,6 +341,7 @@
      */
     class SimpleSelectionTag extends SimpleWidget {
         var $_options;
+        var $_choice;
         
         /**
          *    Starts with attributes only.
@@ -350,6 +351,7 @@
         function SimpleSelectionTag($attributes) {
             $this->SimpleWidget('select', $attributes);
             $this->_options = array();
+            $this->_choice = false;
         }
         
         /**
@@ -372,15 +374,19 @@
         }
         
         /**
-         *    Scans options for defaults.
+         *    Scans options for defaults. If none, then
+         *    the first option is selected.
          *    @return string        Selected field.
          *    @public
          */
         function getDefault() {
             for ($i = 0; $i < count($this->_options); $i++) {
                 if ($this->_options[$i]->getAttribute('selected')) {
-                    return $this->_options[$i]->getAttribute('value');
+                    return $this->_options[$i]->getDefault();
                 }
+            }
+            if (count($this->_options) > 0) {
+                return $this->_options[0]->getDefault();
             }
             return '';
         }
@@ -393,33 +399,60 @@
          */
         function setValue($value) {
             for ($i = 0; $i < count($this->_options); $i++) {
-                if ($this->_options[$i]->getAttribute('value') == $value) {
-                    return parent::setValue($value);
+                if ($this->_options[$i]->getContent() == $value) {
+                    $this->_choice = $i;
+                    return true;
                 }
             }
             return false;
+        }
+        
+        /**
+         *    Accessor for current selection value.
+         *    @return string      Value attribute or
+         *                        content of opton.
+         *    @public
+         */
+        function getValue() {
+            if ($this->_choice === false) {
+                return $this->getDefault();
+            }
+            return $this->_options[$this->_choice]->getValue();
         }
     }
     
     /**
      *    Option for selection field.
      */
-    class SimpleOptionTag extends SimpleTag {
+    class SimpleOptionTag extends SimpleWidget {
         
         /**
          *    Stashes the attributes.
          */
         function SimpleOptionTag($attributes) {
-            $this->SimpleTag('option', $attributes);
+            $this->SimpleWidget('option', $attributes);
         }
         
         /**
-         *    Tag contains no end element.
-         *    @return boolean        False.
+         *    Does nothing.
+         *    @param string $value      Ignored.
+         *    @return boolean           Not allowed.
          *    @public
          */
-        function expectEndTag() {
+        function setValue($value) {
             return false;
+        }
+        
+        /**
+         *    Accessor for starting value.
+         *    @return string        Parsed value.
+         *    @public
+         */
+        function getDefault() {
+            if ($this->getAttribute('value')) {
+                return $this->getAttribute('value');
+            }
+            return $this->getContent();
         }
     }
     

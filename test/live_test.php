@@ -244,10 +244,12 @@
             $this->setField('a', 'aaa');
             $this->setField('b', 'bbb');
             $this->setField('c', 'ccc');
+            $this->setField('d', 'D2');
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedPattern('/a=\[aaa\]/');
             $this->assertWantedPattern('/b=\[bbb\]/');
             $this->assertWantedPattern('/c=\[ccc\]/');
+            $this->assertWantedPattern('/d=\[d2\]/');
         }
         function testSelfSubmit() {
             $this->get('http://www.lastcraft.com/test/self_form.php');
