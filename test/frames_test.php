@@ -10,6 +10,43 @@
         function TestOfFrameset() {
             $this->UnitTestCase();
         }
+        function getPageMethods() {
+            $methods = array();
+            foreach (get_class_methods('SimplePage') as $method) {
+                if (strtolower($method) == strtolower('SimplePage')) {
+                    continue;
+                }
+                if (strncmp($method, '_', 1) == 0) {
+                    continue;
+                }
+                if (strncmp($method, 'accept', 6) == 0) {
+                    continue;
+                }
+                $methods[] = $method;
+            }
+            return $methods;
+        }
+        function getFramesetMethods() {
+            $methods = array();
+            foreach (get_class_methods('SimpleFrameset') as $method) {
+                if (strtolower($method) == strtolower('SimpleFrameset')) {
+                    continue;
+                }
+                if (strncmp($method, '_', 1) == 0) {
+                    continue;
+                }
+                if (strncmp($method, 'add', 3) == 0) {
+                    continue;
+                }
+                $methods[] = $method;
+            }
+            return $methods;
+        }
+        function _testFramsetHasPageInterface() {    //TODO
+            $this->assertEqual(
+                    $this->dump($this->getPageMethods()),
+                    $this->dump($this->getFramesetMethods()));
+        }
         function testTitleReadFromFramesetPage() {
             $page = &new MockSimplePage($this);
             $page->setReturnValue('getTitle', 'This page');
