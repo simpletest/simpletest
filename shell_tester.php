@@ -11,7 +11,7 @@
      */
     require_once(dirname(__FILE__) . '/simple_test.php');
     /**#@-*/
-    
+
     /**
      *    Wrapper for exec() functionality.
 	 *	  @package SimpleTest
@@ -19,7 +19,7 @@
      */
     class SimpleShell {
         var $_output;
-        
+
         /**
          *    Executes the shell comand and stashes the output.
          *    @access public
@@ -27,7 +27,7 @@
         function SimpleShell() {
             $this->_output = false;
         }
-        
+
         /**
          *    Actually runs the command. Does not trap the
          *    error stream output as this need PHP 4.3+.
@@ -41,7 +41,7 @@
             exec($command, $this->_output, $ret);
             return $ret;
         }
-        
+
         /**
          *    Accessor for the last output.
          *    @return string        Output as text.
@@ -50,8 +50,17 @@
         function getOutput() {
             return implode("\n", $this->_output);
         }
+
+        /**
+         *    Accessor for the last output.
+         *    @return array         Output as array of lines.
+         *    @access public
+         */
+		function getOutputAsList() {
+			return $this->_output;
+		}
     }
-    
+
     /**
      *    Test case for testing of command line scripts and
      *    utilities. Usually scripts taht are external to the
@@ -63,7 +72,7 @@
         var $_current_shell;
         var $_last_status;
         var $_last_command;
-        
+
         /**
          *    Creates an empty test case. Should be subclassed
          *    with test methods for a functional test case.
@@ -77,7 +86,7 @@
             $this->_last_status = false;
             $this->_last_command = '';
         }
-        
+
         /**
          *    Executes a command and buffers the results.
          *    @param string $command     Command to run.
@@ -90,16 +99,35 @@
             $this->_last_command = $command;
             return ($this->_last_status === 0);
         }
-        
+
         /**
          *    Dumps the output of the last command.
          *    @access public
          */
         function dumpOutput() {
-            $shell = &$this->_getShell();
-            $this->dump($shell->getOutput());
+            $this->dump($this->getOutput());
         }
-        
+
+        /**
+         *    Accessor for the last output.
+         *    @return string        Output as text.
+         *    @access public
+         */
+		function getOutput() {
+            $shell = &$this->_getShell();
+            return $shell->getOutput();
+		}
+
+        /**
+         *    Accessor for the last output.
+         *    @return array         Output as array of lines.
+         *    @access public
+         */
+		function getOutputAsList() {
+            $shell = &$this->_getShell();
+            return $shell->getOutputAsList();
+		}
+
         /**
          *    Tests the last status code from the shell.
          *    @param integer $status   Expected status of last
@@ -114,7 +142,7 @@
                     $this->_last_status . "]");
             return $this->assertTrue($status === $this->_last_status, $message);
         }
-        
+
         /**
          *    Attempt to exactly match the combined STDERR and
          *    STDOUT output.
@@ -130,7 +158,7 @@
                     $shell->getOutput(),
                     $message);
         }
-        
+
         /**
          *    Scans the output for a Perl regex. If found
          *    anywhere it passes, else it fails.
@@ -146,7 +174,7 @@
                     $shell->getOutput(),
                     $message);
         }
-        
+
         /**
          *    If a Perl regex is found anywhere in the current
          *    output then a failure is generated, else a pass.
@@ -162,7 +190,7 @@
                     $shell->getOutput(),
                     $message);
         }
-        
+
         /**
          *    File existence check.
          *    @param string $path      Full filename and path.
@@ -174,7 +202,7 @@
             $message = sprintf($message, "File [$path] should exist");
             return $this->assertTrue(file_exists($path), $message);
         }
-        
+
         /**
          *    File non-existence check.
          *    @param string $path      Full filename and path.
@@ -186,7 +214,7 @@
             $message = sprintf($message, "File [$path] should not exist");
             return $this->assertFalse(file_exists($path), $message);
         }
-        
+
         /**
          *    Scans a file for a Perl regex. If found
          *    anywhere it passes, else it fails.
@@ -203,7 +231,7 @@
                     implode('', file($path)),
                     $message);
         }
-        
+
         /**
          *    If a Perl regex is found anywhere in the named
          *    file then a failure is generated, else a pass.
@@ -220,7 +248,7 @@
                     implode('', file($path)),
                     $message);
         }
-        
+
         /**
          *    Accessor for current shell. Used for testing the
          *    the tester itself.
@@ -230,7 +258,7 @@
         function &_getShell() {
             return $this->_current_shell;
         }
-        
+
         /**
          *    Factory for the shell to run the command on.
          *    @return Shell        New shell object.
