@@ -80,6 +80,13 @@
                 margin-right: 40px;
                 background-color: black;
             }
+            form.demo {
+                background-color: lightgray;
+                border: 4px outset;
+                border-color: lightgray;
+                padding: 10px;
+                margin-right: 40%;
+            }
         </style>
         <link rel="Shortcut icon" href="images/lc.ico" />
         <meta name="author" content="Marcus Baker" />
@@ -99,6 +106,7 @@
                 <li><a href="expectation_documentation.html">Expectation classes</a></li>
                 <li><a href="reporter_documentation.html">Displaying results</a></li>
                 <li><a href="web_tester_documentation.html">Reading web page content</a></li>
+                <li><a href="form_testing_documentation.html">Testing of web forms</a></li>
             </ol>
         </div>
         <div class="in">
@@ -177,7 +185,7 @@ class FileTestCase extends UnitTestCase {
             </p>
             <p>
                 The <span class="new_code">setUp()</span> method is run
-                just befor every test method.
+                just before every test method.
                 <span class="new_code">tearDown()</span> is run just after
                 every test method.
                 You can place some test case set up into the constructor to

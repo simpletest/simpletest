@@ -80,6 +80,13 @@
                 margin-right: 40px;
                 background-color: black;
             }
+            form.demo {
+                background-color: lightgray;
+                border: 4px outset;
+                border-color: lightgray;
+                padding: 10px;
+                margin-right: 40%;
+            }
         </style>
         <link rel="Shortcut icon" href="images/lc.ico" />
         <meta name="author" content="Marcus Baker" />
@@ -99,6 +106,7 @@
                 <li><a href="expectation_documentation.html">Expectation classes</a></li>
                 <li><a href="reporter_documentation.html">Displaying results</a></li>
                 <li><a href="web_tester_documentation.html">Reading web page content</a></li>
+                <li><a href="form_testing_documentation.html">Testing of web forms</a></li>
             </ol>
         </div>
         <div class="in">
@@ -136,7 +144,7 @@
                 template engine, then we lose the ability to automate some classes
                 of test.
                 For example, the interaction of forms and navigation will
-                haved to be tested manually.
+                have to be tested manually.
                 These types of test are extremely repetitive and error prone.
             </p>
             <p>
@@ -156,7 +164,7 @@ class TestOfLastcraft extends WebTestCase {
                 Here we are about to test the
                 <a href="http://www/lastcraft.com/">Last Craft</a> site itself.
                 If this test case is in a file called <em>lastcraft_test.php</em>
-                then it can be loaded in a runner script just like any other...
+                then it can be loaded in a runner script just like unit tests...
 <pre>
 &lt;?php
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
@@ -190,8 +198,8 @@ class TestOfLastcraft extends WebTestCase {
                 was actually delivered.
             </p>
             <p>
-                Assuming that the web server for the Last Craft site is up,
-                we should see...
+                Assuming that the web server for the Last Craft site is up
+                (sadly not always the case), we should see...
 <pre class="shell">
 Web site tests
 OK
@@ -202,7 +210,7 @@ Test cases run: 1/1, Failures: 0, Exceptions: 0
                 We don&apos;t yet know if it was the right one.
             </p>
             <p>
-                <a class="target" name="content"><h2>Testing page content</h2></a>
+                <a class="target" name="content"><h2>Testing low level page content</h2></a>
             </p>
             <p>
                 To confirm that the page we think we are on is actually the
@@ -290,7 +298,7 @@ class TestOfLastcraft extends WebTestCase {
                 <a class="target" name="navigation"><h2>Navigating a web site</h2></a>
             </p>
             <p>
-                Users don&apos;t navigate sites by typing in URLs, but by
+                Users don&apos;t often navigate sites by typing in URLs, but by
                 clicking links and buttons.
                 Here we confirm that the contact details can be reached
                 from the home page...
@@ -315,8 +323,13 @@ $this->clickSubmit(&apos;Go!&apos;);</strong>
 </pre>
                 Testing navigation on fixed pages only tells you when you
                 have broken an entire script.
-                For highly dynamic pages, such as for bulletin boards, it can
+                For highly dynamic pages, such as for bulletin boards, this can
                 be crucial for verifying the correctness of the application.
+                For most applications though, the really tricky logic is usually in
+                the handling of forms and sessions.
+                Fortunately SimpleTest includes
+                <a href="form_testing_documentation.html">tools for testing web forms</a>
+                as well.
             </p>        </div>
         <div class="out" style="margin-top: 2em;">
             Related resources...

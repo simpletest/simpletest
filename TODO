@@ -27,7 +27,7 @@ Refactoring link parsing (2/1) - done.
 Browser
 -------
 Need repeated parameters in query strings (0/3) - done.
-Make browser a separate component of the framework (14/8) - done.
+Make browser a separate component of the framework (8/14) - done.
 
 Web tester
 ----------
@@ -35,7 +35,7 @@ Add assertField() method (1/1) - done.
 
 Documentation
 -------------
-Form submission docs (3/2).
+Form submission docs (3/4) - done.
 Add package headers to structure files (1/1) - done.
 
 Build

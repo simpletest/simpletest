@@ -80,6 +80,13 @@
                 margin-right: 40px;
                 background-color: black;
             }
+            form.demo {
+                background-color: lightgray;
+                border: 4px outset;
+                border-color: lightgray;
+                padding: 10px;
+                margin-right: 40%;
+            }
         </style>
         <link rel="Shortcut icon" href="images/lc.ico" />
         <meta name="author" content="Marcus Baker" />
@@ -99,6 +106,7 @@
                 <li><a href="expectation_documentation.html">Expectation classes</a></li>
                 <li><a href="reporter_documentation.html">Displaying results</a></li>
                 <li><a href="web_tester_documentation.html">Reading web page content</a></li>
+                <li><a href="form_testing_documentation.html">Testing of web forms</a></li>
             </ol>
         </div>
         <div class="in">
@@ -345,7 +353,7 @@ class MyDisplay extends TestDisplay {<strong>
 
     $test = &new GroupTest(&apos;File test&apos;);
     $test-&gt;addTestFile(&apos;tests/file_test.php&apos;);
-    $test-&gt;run(<strong>new CommandLineReporter()</strong>);
+    $test-&gt;run(<strong>new TextReporter()</strong>);
 ?&gt;
 </pre>
                 Then invoke the test suite from the command line...
@@ -390,7 +398,7 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
 
     $test = &new GroupTest(&apos;File test&apos;);
     $test-&gt;addTestFile(&apos;tests/file_test.php&apos;);
-    <strong>exit ($test-&gt;run(new CommandLineReporter()) ? 0 : 1);</strong>
+    <strong>exit ($test-&gt;run(new TextReporter()) ? 0 : 1);</strong>
 ?&gt;
 </pre>
                 Of course we don&apos;t really want to create two test scripts,
@@ -407,8 +415,8 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
 
     $test = &new GroupTest(&apos;File test&apos;);
     $test-&gt;addTestFile(&apos;tests/file_test.php&apos;);
-    <strong>if (CommandLineReporter::inCli()) {</strong>
-        exit ($test-&gt;run(new CommandLineReporter()) ? 0 : 1);
+    <strong>if (TextReporter::inCli()) {</strong>
+        exit ($test-&gt;run(new TextReporter()) ? 0 : 1);
     <strong>}</strong>
     $test-&gt;run(new HtmlReporter());
 ?&gt;

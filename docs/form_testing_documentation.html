@@ -1,0 +1,361 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<html>
+    <head>
+        <title>Form testing documentation</title>
+        <style type="text/css">
+            body {
+                padding-left: 3%;
+                padding-right: 3%;
+            }
+            pre {
+                font-family: courier;
+                font-size: 80%;
+                border: 1px solid;
+                background-color: #cccccc;
+                padding: 5px;
+                margin-left: 5%;
+                margin-right: 8%;
+            }
+            .code, .new_code, pre.new_code {
+                font-weight: bold;
+            }
+            div.copyright {
+                font-size: 80%;
+                color: gray;
+            }
+            div.copyright a {
+                color: gray;
+            }
+            ul.api {
+                padding-left: 0em;
+                padding-right: 25%;
+            }
+            ul.api li {
+                margin-top: 0.2em;
+                margin-bottom: 0.2em;
+                list-style: none;
+                text-indent: -3em;
+                padding-left: 3em;
+            }
+            div.demo {
+                border: 4px ridge;
+                border-color: gray;
+                padding: 10px;
+                margin: 5px;
+                margin-left: 20px;
+                margin-right: 40px;
+                background-color: white;
+            }
+            div.demo span.fail {
+                color: red;
+            }
+            div.demo span.pass {
+                color: green;
+            }
+            div.demo h1 {
+                font-size: 12pt;
+                text-align: left;
+                font-weight: bold;
+            }
+            table {
+                border: 2px outset;
+                border-color: gray;
+                background-color: white;
+                margin: 5px;
+                margin-left: 5%;
+                margin-right: 5%;
+            }
+            td {
+                font-size: 80%;
+            }
+            .shell {
+                color: white;
+            }
+            pre.shell {
+                border: 4px ridge;
+                border-color: gray;
+                padding: 10px;
+                margin: 5px;
+                margin-left: 20px;
+                margin-right: 40px;
+                background-color: black;
+            }
+            form.demo {
+                background-color: lightgray;
+                border: 4px outset;
+                border-color: lightgray;
+                padding: 10px;
+                margin-right: 40%;
+            }
+        </style>
+        <link rel="Shortcut icon" href="images/lc.ico" />
+        <meta name="author" content="Marcus Baker" />
+            </head>
+    <body>
+        <h1>Form testing documentation</h1>
+        <div>
+            The different sections of the documentation are...
+            <ol>
+                <li><a href="index.html">Quickstart guide</a></li>
+                <li><a href="overview.html">Project overview</a></li>
+                <li><a href="unit_test_documentation.html">About test cases</a></li>
+                <li><a href="group_test_documentation.html">About group tests</a></li>
+                <li><a href="server_stubs_documentation.html">Using server stubs to simlulate objects</a></li>
+                <li><a href="mock_objects_documentation.html">Using mock objects to test interactions</a></li>
+                <li><a href="partial_mocks_documentation.html">Partial mocks for superclass testing</a></li>
+                <li><a href="expectation_documentation.html">Expectation classes</a></li>
+                <li><a href="reporter_documentation.html">Displaying results</a></li>
+                <li><a href="web_tester_documentation.html">Reading web page content</a></li>
+                <li><a href="form_testing_documentation.html">Testing of web forms</a></li>
+            </ol>
+        </div>
+        <div class="in">
+            This page...
+                        <ul>
+                <li>
+                    Changing form values and successfully
+                    <a href="#submit">Submitting a simple form</a>
+                </li>
+                <li>
+                    Handling <a href="#multiple">widgets with multiple values</a>
+                    by setting lists.
+                </li>
+                <li>
+                    <a href="#raw">Raw posting</a> when you don&apos;t have a button
+                    to click.
+                </li>
+            </ul>        </div>
+        <div>
+            This documentation is shipped with the
+            <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a> package.
+        </div>
+        <div class="content">
+                        <p>
+                <a class="target" name="submit"><h2>Submitting a simple form</h2></a>
+            </p>
+            <p>
+                When a page is fetched by the <span class="new_code">WebTestCase</span>
+                using <span class="new_code">get()</span> or
+                <span class="new_code">post()</span> the page content is
+                automatically parsed.
+                This results in any form controls that are inside &lt;form&gt; tags
+                being available from within the test case.
+                For example, if we have this snippet of HTML...
+<pre>
+&lt;form&gt;
+    &lt;input type=&quot;text&quot; name=&quot;a&quot; value=&quot;A default&quot; /&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;Go&quot; /&gt;
+&lt;/form&gt;
+</pre>
+                Which looks like this...
+            </p>
+            <p>
+                <form class="demo">
+                    <input type="text" name="a" value="A default" />
+                    <input type="submit" value="Go" />
+                </form>
+            </p>
+            <p>
+                We can navigate to this code, via the
+                <a href="http://www.lastcraft.com/form_testing_documentation.php">LastCraft</a>
+                site, with the following test...
+<pre>
+class SimpleFormTests extends WebTestCase {
+    function SimpleFormTests() {
+        $this-&gt;WebTestCase();
+    }<strong>
+    function testDefaultValue() {
+        $this-&gt;get(&apos;http://www.lastcraft.com/form_testing_documentation.php&apos;);
+        $this-&gt;assertField(&apos;a&apos;, &apos;A default&apos;);
+    }</strong>
+}
+</pre>
+                Immediately after loading the page all of the HTML controls are set at
+                their default values just as they would appear in the web browser.
+                The assertion tests that a HTML widget exists in the page with the
+                name &quot;a&quot; and that it is currently set to the value
+                &quot;A default&quot;
+            </p>
+            <p>
+                We could submit the form straight away, but first we&apos;ll change
+                the value of the text field and only then submit it...
+<pre>
+class SimpleFormTests extends WebTestCase {
+    function SimpleFormTests() {
+        $this-&gt;WebTestCase();
+    }
+    function testDefaultValue() {
+        $this-&gt;get(&apos;http://www.my-site.com/&apos;);
+        $this-&gt;assertField(&apos;a&apos;, &apos;A default&apos;);<strong>
+        $this-&gt;setField(&apos;a&apos;, &apos;New value&apos;);
+        $this-&gt;clickSubmit(&apos;Go&apos;);</strong>
+    }
+}
+</pre>
+                Because we didn&apos;t specify a method attribute on the form tag, and
+                didn&apos;t specify an action either, the test case will follow
+                the usual browser behaviour of submitting the form data as a <em>GET</em>
+                request back to the same location.
+                SimpleTest tries to emulate typical browser behaviour as much as possible,
+                rather than attempting to catch missing attributes on tags.
+                This is because the target of the testing framework is the PHP application
+                logic, not syntax or other errors in the HTML code.
+                For HTML errors, other tools such as
+                <a href="http://www.w3.org/People/Raggett/tidy/">HTMLTidy</a> should be used.
+            </p>
+            <p>
+                If a field is not present in any form, or if an option is unavailable,
+                then <span class="new_code">WebTestCase::setField()</span> will return
+                <span class="new_code">false</span>.
+                For example, suppose we wish to verify that a &quot;Superuser&quot;
+                option is not present in this form...
+<pre>
+&lt;strong&gt;Select type of user to add:&lt;/strong&gt;
+&lt;select name=&quot;type&quot;&gt;
+    &lt;option&gt;Subscriber&lt;/option&gt;
+    &lt;option&gt;Author&lt;/option&gt;
+    &lt;option&gt;Administrator&lt;/option&gt;
+&lt;/select&gt;
+</pre>
+                Which looks like...
+            </p>
+            <p>
+                <form class="demo">
+                    <strong>Select type of user to add:</strong>
+                    <select name="type">
+                        <option>Subscriber</option>
+                        <option>Author</option>
+                        <option>Administrator</option>
+                    </select>
+                </form>
+            </p>
+            <p>
+                The following test will confirm it...
+<pre>
+class SimpleFormTests extends WebTestCase {
+    function SimpleFormTests() {
+        $this-&gt;WebTestCase();
+    }
+    function testNoSuperuserChoiceAvailable() {<strong>
+        $this-&gt;get(&apos;http://www.lastcraft.com/form_testing_documentation.php&apos;);
+        $this-&gt;assertFalse($this-&gt;setField(&apos;type&apos;, &apos;Superuser&apos;));</strong>
+    }
+}
+</pre>
+                The selection will not be changed on a failure to set
+                a widget value.
+            </p>
+            <p>
+                Here is the full list of widgets currently supported...
+                <ul>
+                    <li>Text fields, including hidden and password fields.</li>
+                    <li>Submit buttons, although not yet reset buttons or image buttons.</li>
+                    <li>Text area. This includes text wrapping behaviour.</li>
+                    <li>Checkboxes, including multiple checkboxes in the same form.</li>
+                    <li>Drop down selections, including multiple selects.</li>
+                    <li>Radio buttons.</li>
+                </ul>
+            </p>
+            <p>
+                Although most standard HTML widgets are catered for by <em>SimpleTest</em>&apos;s
+                built in parser, it is unlikely that JavaScript will be implemented
+                anytime soon.
+            </p>
+            <p>
+                <a class="target" name="multiple"><h2>Fields with multiple values</h2></a>
+            </p>
+            <p>
+                SimpleTest can cope with two types of multivalue controls: Multiple
+                selection drop downs, and multiple checkboxes with the same name
+                within a form.
+                The multivalue nature of these means that setting and testing
+                are slightly different.
+                Using checkboxes as an example...
+<pre>
+&lt;form&gt;
+    &lt;strong&gt;Create privileges allowed:&lt;/strong&gt;
+    &lt;input type=&quot;checkbox&quot; name=&quot;crud&quot; value=&quot;c&quot; checked&gt;&lt;br /&gt;
+    &lt;strong&gt;Retrieve privileges allowed:&lt;/strong&gt;
+    &lt;input type=&quot;checkbox&quot; name=&quot;crud&quot; value=&quot;r&quot; checked&gt;&lt;br /&gt;
+    &lt;strong&gt;Update privileges allowed:&lt;/strong&gt;
+    &lt;input type=&quot;checkbox&quot; name=&quot;crud&quot; value=&quot;u&quot; checked&gt;&lt;br /&gt;
+    &lt;strong&gt;Destroy privileges allowed:&lt;/strong&gt;
+    &lt;input type=&quot;checkbox&quot; name=&quot;crud&quot; value=&quot;d&quot; checked&gt;&lt;br /&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;Enable Privileges&quot;/&gt;
+&lt;/form&gt;
+</pre>
+                Which renders as...
+            </p>
+            <p>
+                <form class="demo">
+                    <strong>Create privileges allowed:</strong>
+                    <input type="checkbox" name="crud" value="c" checked><br />
+                    <strong>Retrieve privileges allowed:</strong>
+                    <input type="checkbox" name="crud" value="r" checked><br />
+                    <strong>Update privileges allowed:</strong>
+                    <input type="checkbox" name="crud" value="u" checked><br />
+                    <strong>Destroy privileges allowed:</strong>
+                    <input type="checkbox" name="crud" value="d" checked><br />
+                    <input type="submit" value="Enable Privileges"/>
+                </form>
+            </p>
+            <p>
+                If we wish to disable all but the retrieval privileges and
+                submit this information we can do it like this...
+<pre>
+class SimpleFormTests extends WebTestCase {
+    function SimpleFormTests() {
+        $this-&gt;WebTestCase();
+    }<strong>
+    function testDisableNastyPrivileges() {
+        $this-&gt;get(&apos;http://www.lastcraft.com/form_testing_documentation.php&apos;);
+        $this-&gt;assertField(&apos;crud&apos;, array(&apos;c&apos;, &apos;r&apos;, &apos;u&apos;, &apos;d&apos;));
+        $this-&gt;setField(&apos;crud&apos;, array(&apos;r&apos;));
+        $this->clickSubmit(&apos;Enable Privileges&apos;);
+    }</strong>
+}
+</pre>
+                Instead of setting the field to a single value, we give it a list
+                of values.
+                We do the same when testing expected values.
+                We can then write other test code to confirm the effect of this, perhaps
+                by logging in as that user and attempting an update.
+            </p>
+            <p>
+                <a class="target" name="raw"><h2>Raw posting</h2></a>
+            </p>
+            <p>
+                If you want to test a form handler, but have not yet written
+                or do not have access to the form itself, you can create a
+                form submission by hand.
+<pre>
+class SimpleFormTests extends WebTestCase {
+    function SimpleFormTests() {
+        $this-&gt;WebTestCase();
+    }<strong>
+    function testAttemptedHack() {
+        $this-&gt;post(
+                &apos;http://www.my-site.com/add_user.php&apos;,
+                array(&apos;type&apos; => &apos;superuser&apos;));
+        $this-&gt;assertNoUnwantedPattern(&apos;/user created/i&apos;);
+    }</strong>
+}
+</pre>
+                By adding data to the <span class="new_code">WebTestCase::post()</span>
+                method, we are attempting to fetch the page as a form submission.
+            </p>        </div>
+        <div class="out" style="margin-top: 2em;">
+            Related resources...
+                        <ul>
+                <li>
+                    SimpleTest project page on <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
+                </li>
+                <li>
+                    SimpleTest download page on <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
+                </li>
+            </ul>        </div>
+        <div class="copyright">
+            Copyright <a href="mailto:marcus@lastcraft.com">Marcus&nbsp;Baker</a>&nbsp;2003
+        </div>
+    </body>
+</html>

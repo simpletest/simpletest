@@ -80,6 +80,13 @@
                 margin-right: 40px;
                 background-color: black;
             }
+            form.demo {
+                background-color: lightgray;
+                border: 4px outset;
+                border-color: lightgray;
+                padding: 10px;
+                margin-right: 40%;
+            }
         </style>
         <link rel="Shortcut icon" href="images/lc.ico" />
         <meta name="author" content="Marcus Baker" />
@@ -99,6 +106,7 @@
                 <li><a href="expectation_documentation.html">Expectation classes</a></li>
                 <li><a href="reporter_documentation.html">Displaying results</a></li>
                 <li><a href="web_tester_documentation.html">Reading web page content</a></li>
+                <li><a href="form_testing_documentation.html">Testing of web forms</a></li>
             </ol>
         </div>
         <div class="in">
@@ -310,25 +318,15 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         </td>
                         <td style="color: green;">Done</td>
                     </tr>
-                     <tr>
+                    <tr>
                         <td>Command line test case</td>
                         <td>Allows testing of utilities and file handling</td>
                         <td style="color: green;">Done</td>
                     </tr>
-                   <tr>
+                    <tr>
                         <td>PHP Documentor compatibility</td>
-                        <td>Ability to generate class level documentation</td>
+                        <td>Fully generated class level documentation</td>
                         <td style="color: green;">Done</td>
-                    </tr>
-                    <tr>
-                        <td>HTTP authentication</td>
-                        <td>Fetching protected web pages</td>
-                        <td style="color: red;">Beta4</td>
-                    </tr>
-                    <tr>
-                        <td>Frames support</td>
-                        <td>Handling of frames and images in web test cases</td>
-                        <td style="color: red;">Beta4</td>
                     </tr>
                     <tr>
                         <td>Browser interface</td>
@@ -336,6 +334,16 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                             Exposure of lower level web browser interface for more
                             detailed test cases
                         </td>
+                        <td style="color: green;">Done</td>
+                    </tr>
+                    <tr>
+                        <td>Frames support</td>
+                        <td>Handling of frames in web test cases</td>
+                        <td style="color: red;">1.0</td>
+                    </tr>
+                    <tr>
+                        <td>HTTP authentication</td>
+                        <td>Fetching protected web pages</td>
                         <td style="color: red;">1.0</td>
                     </tr>
                     <tr>

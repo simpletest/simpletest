@@ -80,6 +80,13 @@
                 margin-right: 40px;
                 background-color: black;
             }
+            form.demo {
+                background-color: lightgray;
+                border: 4px outset;
+                border-color: lightgray;
+                padding: 10px;
+                margin-right: 40%;
+            }
         </style>
         <link rel="Shortcut icon" href="images/lc.ico" />
         <meta name="author" content="Marcus Baker" />
@@ -99,6 +106,7 @@
                 <li><a href="expectation_documentation.html">Expectation classes</a></li>
                 <li><a href="reporter_documentation.html">Displaying results</a></li>
                 <li><a href="web_tester_documentation.html">Reading web page content</a></li>
+                <li><a href="form_testing_documentation.html">Testing of web forms</a></li>
             </ol>
         </div>
         <div class="in">
@@ -489,7 +497,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
                 <span class="new_code">findSession()</span> is invoked on the
                 mock, it will test the incoming arguments.
                 If it receives the single argument of a string &quot;abc&quot;
-                then a test pass in sent to the unit tester, otherwise a fail is
+                then a test pass is sent to the unit tester, otherwise a fail is
                 generated.
                 This was the part where we checked that the right session was asked for.
                 The argument list follows the same format as the one for setting
