@@ -8,23 +8,24 @@
     <author>
     Marcus Baker
     <authorblurb>
-      Primary Developer {@link mailto:marcus@lastcraft.com marcus@lastcraft.com}
+      <para>Primary Developer</para><para>{@link mailto:marcus@lastcraft.com marcus@lastcraft.com}</para>
     </authorblurb>
     </author>
     <author>
     Harry Fuecks
     <authorblurb>
-      Packager {@link mailto:harryf@users.sourceforge.net harryf@users.sourceforge.net}
+      <para>Packager</para><para>{@link mailto:harryf@users.sourceforge.net harryf@users.sourceforge.net}</para>
     </authorblurb>
     </author>
     <author>
     Jason Sweat
     <authorblurb>
-      Documentation {@link mailto:jsweat_php@yahoo.com jsweat_php@yahoo.com}
+      <para>Documentation</para><para>{@link mailto:jsweat_php@yahoo.com jsweat_php@yahoo.com}</para>
     </authorblurb>
     </author>
     </authorgroup>
   </refsynopsisdiv>
+  {@toc}
   <refsect1 id="{@id usage}">
     <title>Simple Test</title>
     <para>The heart of SimpleTest is a testing framework built around test case classes. These are written as extensions of base test case classes, each extended with methods that actually contain test code. Top level test scripts then invoke the <command>run()</command>  methods on every one of these test cases in order. Each test method is written to invoke various assertions that the developer expects to be true such as <command>assertEqual()</command>. If the expectation is correct, then a successful result is dispatched to the observing test reporter, but any failure triggers an alert and a description of the mismatch.</para>
@@ -209,5 +210,49 @@ class MySiteTest extends WebTestCase {
   <para>
   The wish list includes integration with other test systems including JUnit and XsltUnit, SSL support, an eclipse plug-in, SOAP testing and HTTP 1.1 support. In reality I doubt these will ever happen.
   </para>
+  </refsect1>
+
+  <refsect1 id="{@id webresource}">
+    <title>Web resources for testing</title>
+    <para>
+    Process is at least as important as tools. The type of process that makes the heaviest use of a developer's testing tool is of course {@link http://www.extremeprogramming.org/ Extreme Programming}. This is one of the {@link http://www.agilealliance.com/articles/index Agile Methodologies} which combine various practices to "flatten the cost curve" of software development. More extreme still is {@link http://www.testdriven.com/modules/news/ Test Driven Development}, where you very strictly adhere to the rule of no coding until you have a test. If your more of a planner or believe that experience trumps evolution, you may prefer the {@link http://www.therationaledge.com/content/dec_01/f_spiritOfTheRUP_pk.html RUP} approach. I haven't tried it, but even I can see that you will need test tools (see figure 9). Better yet, combine them into {@link http://www.objectmentor.com/publications/RUPvsXP.pdf dX} and then turn your head upside down. 
+    </para>
+    <para>
+    Most unit testers clone {@link http://www.junit.org/ JUnit} to some degree, as far as the interface at least. There is a wealth of information on the JUnit site including the {@link http://junit.sourceforge.net/doc/faq/faq.htm FAQ}  which contains plenty of general advice on testing. Once you get bitten by the bug you will certainly appreciate the phrase {@link http://junit.sourceforge.net/doc/testinfected/testing.htm test infected} coined by Eric Gamma. If you are still reviewing which unit tester to use the main choices are {@link http://phpunit.sourceforge.net/ PHPUnit} and {@link http://pear.php.net/manual/en/package.php.phpunit.php Pear PHP::PHPUnit}. They currently lack a lot of features found in {@link http://simpletest.sourceforge.net/ SimpleTest}, but the PEAR version at least is due for a major upgrade for PHP5.
+    </para>
+    <para>
+    Library writers don't seem to ship tests with their code very often which is a shame. Library code that includes tests can be more safely refactored and the test code can act as additional documentation in a fairly standard form. This can save trawling the source code for clues when problems occour, especially when upgrading such a library. If you are hunting for testing examples in PHP libraries then there are a few exceptions. The {@link http://ismo.sourceforge.net/ ISMO library for PHP} uses the PEAR unit tester and also includes a clever trick for mocking PHP functions. Libraries using SimpleTest for their unit testing include {@link http://wact.sourceforge.net/ WACT} and {@link http://sourceforge.net/projects/htmlsax PEAR::XML_HTMLSax}.
+    </para>
+    <para>
+    There is currently a sad lack of material on mock objects, which is a shame as unit testing without them is a lot more work. The {@link http://www.sidewize.com/company/mockobjects.pdf original mock objects paper} is very Java focused, but still worth a read. As a new technology there are plenty of discussions and debate on how to use mocks, often on Wikis such as {@link http://xpdeveloper.com/cgi-bin/oldwiki.cgi?MockObjects Extreme Tuesday} or {@link http://www.mockobjects.com/wiki/MocksObjectsPaper www.mockobjects.com} or {@link http://c2.com/cgi/wiki?MockObject the original C2 Wiki}. Injecting mocks into a class is the main area of debate for which this {@link http://www-106.ibm.com/developerworks/java/library/j-mocktest.html paper on IBM} makes a good starting point.
+    </para>
+    <para>
+    There are plenty of web testing tools, but most are written in Java and tutorials and advice are rather thin on the ground. The only hope is to look at the documentation for {@link http://httpunit.sourceforge.net/ HTTPUnit}, {@link http://htmlunit.sourceforge.net/ HTMLUnit} or {@link http://jwebunit.sourceforge.net/ JWebUnit} and hope for clues. One interesting alternative is {@link http://www.incanica.com/itp.html ITP}. This framework uses XML to write the test cases, which is handy if your Java knowledge is limited (like mine). It still needs Java to run.
+    </para>
+  </refsect1>
+
+  <refsect1 id="{@id webresource}">
+    <title>Additional resources for testing</title>
+    <para>
+    For coarse benchmarking you can use <command>ab</command>, the Apache Benchmark, or a number of other {@link http://jakarta.apache.org/ Jakarta} testing tools. Apart from <command>ab</command>, you will probably have to have Java(tm) installed to use these alternatives. If you are not using Apache then you will have to read through your web server documentation or find a way to run your scripts from the command line to time them. End to end page timings are a very effective return on the time spent optimising. Once a page appears to be slow, breaking down the task timings to find bottlenecks can be a real challenge.
+    </para>
+    <para>
+    For fine profiling of the PHP code base itself there are two alternatives, although both have install issues. The first is {@link http://pear.php.net/package/apd apd} (advanced PHP debugger) from the PEAR stable. The profiler comes as part of this debugging tool, but can be very slow to process the gathered data. The alternative {@link http://www.xdebug.org/ XDebug} comes highly recommended, but I have not tried this tool.
+    </para>
+    <para>
+    One very useful source of information though is you.
+    </para>
+    <para>
+    Yes, that's right, you!
+    </para>
+    <para>
+    Almost everything you discover in the PHP testing field will be pretty new even if perhaps it was also recently disovered by somebody else. If you have an opinion on fine grain testing of web applications, I would {@link mailto:marcus@lastcraft.com love to hear from you} and so would everyone else. Together we can grope towards better practices and coach newcomers up to our self imposed coding standard - the one that says the code must at least work. I'll happily place any accumulated wisdom in {@link http://www.lastcraft.com/ lastcraft} manually until I can start a Blog, and I will of course credit you with suggestions. Even better, post suggestions on the popular PHP forums and spread the test infection far and wide. 
+    </para>
+    <para>
+    On the other hand if you want a particular feature added I can probably oblige or at least provide a work around. You just have to ask. If you are just having problems, feel free to contact me as well. I will usually answer support queries within a couple of days and I am building a FAQ, so all questions will be entertained. Even if you consider them silly, others will be eternally grateful.
+    </para>
+    <para>
+    Oh yes, and thanks for reading this far. 
+    </para>
   </refsect1>
 </refentry>
