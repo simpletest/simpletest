@@ -16,8 +16,8 @@
         
         /**
          *    Renders a variable in a shorter form than print_r().
-         *    @param $value      Variable to render as a string.
-         *    @return            Human readable string form.
+         *    @param mixed $value      Variable to render as a string.
+         *    @return string           Human readable string form.
          *    @access public
          */
         function describeValue($value) {
@@ -41,8 +41,8 @@
         
         /**
          *    Gets the string representation of a type.
-         *    @param $value    Variable to check against.
-         *    @return          Type as string.
+         *    @param mixed $value    Variable to check against.
+         *    @return string         Type.
          *    @access public
          */
         function getType($value) {
@@ -70,10 +70,10 @@
          *    Creates a human readable description of the
          *    difference between two variables. Uses a
          *    dynamic call.
-         *    @param $first        First variable.
-         *    @param $second       Value to compare with.
-         *    @param $identical    If true then type anomolies count.
-         *    @return              Descriptive string.
+         *    @param mixed $first        First variable.
+         *    @param mixed $second       Value to compare with.
+         *    @param boolean $identical  If true then type anomolies count.
+         *    @return string             Description of difference.
          *    @access public
          */
         function describeDifference($first, $second, $identical = false) {
@@ -93,9 +93,9 @@
         
         /**
          *    Tests to see if types match.
-         *    @param $first        First variable.
-         *    @param $second       Value to compare with.
-         *    @return              True if matches.
+         *    @param mixed $first        First variable.
+         *    @param mixed $second       Value to compare with.
+         *    @return boolean            True if matches.
          *    @access private
          */
         function _isTypeMatch($first, $second) {
@@ -104,12 +104,11 @@
 
         /**
          *    Clips a string to a maximum length.
-         *    @param $value        String to truncate.
-         *    @param $size         Minimum string size to show.
-         *    @param $position     Centre of string section.
-         *    @return              Shortened version.
+         *    @param string $value         String to truncate.
+         *    @param integer $size         Minimum string size to show.
+         *    @param integer $position     Centre of string section.
+         *    @return string               Shortened version.
          *    @access public
-         *    @static
          */
         function clipString($value, $size, $position = 0) {
             $length = strlen($value);
@@ -128,12 +127,11 @@
         /**
          *    Creates a human readable description of the
          *    difference between a null and another variable.
-         *    @param $first       First null.
-         *    @param $second      Null to compare with.
-         *    @param $identical   If true then type anomolies count.
-         *    @return             Descriptive string.
+         *    @param null $first          First null.
+         *    @param mixed $second        Null to compare with.
+         *    @param boolean $identical   If true then type anomolies count.
+         *    @return string              Human readable description.
          *    @access private
-         *    @static
          */
         function _describeNullDifference($first, $second, $identical) {
             return "as [" . $this->describeValue($first) .
@@ -144,12 +142,11 @@
         /**
          *    Creates a human readable description of the
          *    difference between a boolean and another variable.
-         *    @param $first       First boolean.
-         *    @param $second      Boolean to compare with.
-         *    @param $identical   If true then type anomolies count.
-         *    @return             Descriptive string.
+         *    @param boolean $first       First boolean.
+         *    @param mixed $second        Boolean to compare with.
+         *    @param boolean $identical   If true then type anomolies count.
+         *    @return string              Human readable description.
          *    @access private
-         *    @static
          */
         function _describeBooleanDifference($first, $second, $identical) {
             return "as [" . $this->describeValue($first) .
@@ -160,12 +157,11 @@
         /**
          *    Creates a human readable description of the
          *    difference between a string and another variable.
-         *    @param $first       First string.
-         *    @param $second      String to compare with.
-         *    @param $identical   If true then type anomolies count.
-         *    @return             Descriptive string.
+         *    @param string $first        First string.
+         *    @param mixed $second        String to compare with.
+         *    @param boolean $identical   If true then type anomolies count.
+         *    @return string              Human readable description.
          *    @access private
-         *    @static
          */
         function _describeStringDifference($first, $second, $identical) {
             $position = $this->_stringDiffersAt($first, $second);
@@ -177,12 +173,11 @@
         /**
          *    Creates a human readable description of the
          *    difference between an integer and another variable.
-         *    @param $first       First number.
-         *    @param $second      Number to compare with.
-         *    @param $identical   If true then type anomolies count.
-         *    @return             Descriptive string.
+         *    @param integer $first       First number.
+         *    @param mixed $second        Number to compare with.
+         *    @param boolean $identical   If true then type anomolies count.
+         *    @return string              Human readable description.
          *    @access private
-         *    @static
          */
         function _describeIntegerDifference($first, $second, $identical) {
             return "because [" . $this->describeValue($first) .
@@ -194,12 +189,11 @@
         /**
          *    Creates a human readable description of the
          *    difference between two floating point numbers.
-         *    @param $first       First float.
-         *    @param $second      Float to compare with.
-         *    @param $identical   If true then type anomolies count.
-         *    @return             Descriptive string.
+         *    @param float $first         First float.
+         *    @param mixed $second        Float to compare with.
+         *    @param boolean $identical   If true then type anomolies count.
+         *    @return string              Human readable description.
          *    @access private
-         *    @static
          */
         function _describeFloatDifference($first, $second, $identical) {
             return "because " . $this->describeValue($first) .
@@ -210,12 +204,11 @@
         /**
          *    Creates a human readable description of the
          *    difference between two arrays.
-         *    @param $first       First array.
-         *    @param $second      Array to compare with.
-         *    @param $identical   If true then type anomolies count.
-         *    @return             Descriptive string.
+         *    @param array $first         First array.
+         *    @param mixed $second        Array to compare with.
+         *    @param boolean $identical   If true then type anomolies count.
+         *    @return string              Human readable description.
          *    @access private
-         *    @static
          */
         function _describeArrayDifference($first, $second, $identical) {
             if (! is_array($second)) {
@@ -246,12 +239,11 @@
         /**
          *    Creates a human readable description of the
          *    difference between a resource and another variable.
-         *    @param $first       First resource.
-         *    @param $second      Resource to compare with.
-         *    @param $identical   If true then type anomolies count.
-         *    @return             Descriptive string.
+         *    @param resource $first       First resource.
+         *    @param mixed $second         Resource to compare with.
+         *    @param boolean $identical    If true then type anomolies count.
+         *    @return string              Human readable description.
          *    @access private
-         *    @static
          */
         function _describeResourceDifference($first, $second, $identical) {
             return "as [" . $this->describeValue($first) .
@@ -262,12 +254,11 @@
         /**
          *    Creates a human readable description of the
          *    difference between two objects.
-         *    @param $first       First object.
-         *    @param $second      Object to compare with.
-         *    @param $identical   If true then type anomolies count.
-         *    @return             Descriptive string.
+         *    @param object $first        First object.
+         *    @param mixed $second        Object to compare with.
+         *    @param boolean $identical   If true then type anomolies count.
+         *    @return string              Human readable description.
          *    @access private
-         *    @static
          */
         function _describeObjectDifference($first, $second, $identical) {
             if (! is_object($second)) {
@@ -284,11 +275,11 @@
         /**
          *    Find the first character position that differs
          *    in two strings by binary chop.
-         *    @param $first        First string.
-         *    @param $second       String to compare with.
-         *    @return              Integer position.
+         *    @param string $first        First string.
+         *    @param string $second       String to compare with.
+         *    @return integer             Position of first differing
+         *                                character.
          *    @access private
-         *    @static
          */
         function _stringDiffersAt($first, $second) {
             if (! $first || ! $second) {
