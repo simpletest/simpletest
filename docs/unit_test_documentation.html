@@ -93,10 +93,12 @@
                 <li><a href="overview.html">Project overview</a></li>
                 <li><a href="unit_test_documentation.html">About test cases</a></li>
                 <li><a href="group_test_documentation.html">About group tests</a></li>
-                <li><a href="server_stubs_documentation.html">Using server stubs</a></li>
-                <li><a href="mock_objects_documentation.html">Using mock objects</a></li>
-                <li><a href="partial_mocks_documentation.html">Partial mocks</a></li>
+                <li><a href="server_stubs_documentation.html">Using server stubs to simlulate objects</a></li>
+                <li><a href="mock_objects_documentation.html">Using mock objects to test interactions</a></li>
+                <li><a href="partial_mocks_documentation.html">Partial mocks for superclass testing</a></li>
+                <li><a href="expectation_documentation.html">Expectation classes</a></li>
                 <li><a href="reporter_documentation.html">Displaying results</a></li>
+                <li><a href="web_tester_documentation.html">Reading web page content</a></li>
             </ol>
         </div>
         <div class="in">
@@ -203,6 +205,7 @@ class FileTestCase extends UnitTestCase {
                     <tr><td><span class="code">assertNoUnwantedPattern($p,&nbsp;$x)</span></td><td>Fail if the regex $p matches $x</td></tr>
                     <tr><td><span class="code">assertNoErrors()</span></td><td>Fail if any PHP error occoured</td></tr>
                     <tr><td><span class="code">assertError($x)</span></td><td>Fail if no PHP error or incorrect message</td></tr>
+                    <tr><td><span class="code">assertErrorPattern($p)</span></td><td>Fail unless the error matches the regex $p</td></tr>
                 </table>
                 All assertion methods can take an optional description to
                 label the displayed result with.
@@ -268,7 +271,7 @@ $this->assertNoErrors();</strong>
                     <tr><td><span class="code">fail()</span></td><td>Sends a test failure</td></tr>
                     <tr><td><span class="code">error()</span></td><td>Sends an exception event</td></tr>
                     <tr><td><span class="code">sendMessage()</span></td><td>Sends a status message to those displays that support it</td></tr>
-                    <tr><td><span class="code">signal($type, $payload)</span></td><td>Sends a user defined mesage to the test reporter</td></tr>
+                    <tr><td><span class="code">signal($type, $payload)</span></td><td>Sends a user defined message to the test reporter</td></tr>
                     <tr><td><span class="code">dump($var)</span></td><td>Does a formatted <span class="code">print_r()</span> for quick and dirty debugging</td></tr>
                     <tr><td><span class="code">swallowErrors()</span></td><td>Clears the error queue</td></tr>
                 </table>

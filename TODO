@@ -39,11 +39,12 @@ Add a header test (2).
 Documentation
 -------------
 Add simple web testing page to docs (2/3) - done.
-Add expectations to docs (3).
+Add expectations to docs (3/3) - done.
+UPdate reporter docs with new method names (1).
 
 Build
 -----
-Make files PHP documentor compatible (3/2).
+Make files PHP documentor compatible (3/3).
 Update package.xml file (1/1) - done.
 Move build script up a level and make it into a shell script (1).
 Create package file for mocks only (1).
