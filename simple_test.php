@@ -99,7 +99,7 @@
          *    the tests differently. This version simply
          *    passes it straight through.
          *    @param SimpleReporter $reporter    Incoming observer.
-         *    @return 
+         *    @return SimpleReporter
          *    @access private
          */
         function &_createRunner(&$reporter) {

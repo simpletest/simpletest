@@ -6,6 +6,9 @@
      *	@version	$Id$
      */
     
+	/**
+	 * @ignore	originally defined in simple_test.php
+	 */
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
     }
@@ -451,7 +454,7 @@
          *    Loads a listener with the SimpleReporter
          *    interface.
          *    @param SimpleReporter $listener   Listener of tag events.
-         *    @acces public
+         *    @access public
          */
         function SimpleTestXmlParser(&$listener) {
             $this->_listener = &$listener;
