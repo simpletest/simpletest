@@ -227,24 +227,9 @@
             }
             $length = strlen($raw);
             while (is_array($parsed = $this->_reduce($raw))) {
-                list($unmatched, $match, $mode) = $parsed;
-                if ($unmatched && !$this->_parser->{$this->_mode->getCurrent()}($unmatched, false)) {
+                list($unmatched, $matched, $mode) = $parsed;
+                if (!$this->_dispatchTokens($unmatched, $matched, $mode)) {
                     return false;
-                }
-                if ($mode === "_exit") {
-                    if ($match && !$this->_parser->{$this->_mode->getCurrent()}($match, true)) {
-                        return false;
-                    }
-                    if (!$this->_mode->leave()) {
-                        return false;
-                    }
-                } else {
-                    if (is_string($mode)) {
-                        $this->_mode->enter($mode);
-                    }
-                    if ($match && !$this->_parser->{$this->_mode->getCurrent()}($match, true)) {
-                        return false;
-                    }
                 }
                 if (strlen($raw) == $length) {
                     return false;
@@ -254,7 +239,51 @@
             if (!$parsed) {
                 return false;
             }
-            return ($raw == "") || $this->_parser->{$this->_mode->getCurrent()}($raw, false);
+            return $this->_invokeParser($raw, false);
+        }
+        
+        /**
+         *    Sends the matched token and any leading unmatched
+         *    text to the parser changing the lexer to a new
+         *    mode if one is listed.
+         *    @param $unmatched    Unmatched leading portion.
+         *    @param $matched      Actual token match.
+         *    @param $mode         Mode after match. The "_exit"
+         *                         mode causes a stack pop. An
+         *                         false mode causes no change.
+         *    @return              False if there was any error
+         *                         from the parser.
+         *    @private
+         */
+        function _dispatchTokens($unmatched, $matched, $mode = false) {
+            if (!$this->_invokeParser($unmatched, false)) {
+                return false;
+            }
+            if ($mode === "_exit") {
+                if (!$this->_invokeParser($matched, true)) {
+                    return false;
+                }
+                return $this->_mode->leave();
+            }
+            if (is_string($mode)) {
+                $this->_mode->enter($mode);
+            }
+            return $this->_invokeParser($matched, true);
+        }
+        
+        /**
+         *    Calls the parser method named after the current
+         *    mode. Empty content will be ignored.
+         *    @param $content        Text parsed.
+         *    @param $is_match       Token is recognised rather
+         *                           than unparsed data.
+         *    @private
+         */
+        function _invokeParser($content, $is_match) {
+            if (!$content) {
+                return true;
+            }
+            return $this->_parser->{$this->_mode->getCurrent()}($content, $is_match);
         }
         
         /**
@@ -328,26 +357,81 @@
     }
     
     /**
-     *    A container for web page information.
+     *    A wrapper for a web page.
      */
     class HtmlPage {
+        var $_links;
         
         /**
-         *    Creates an empty model.
+         *    Parses a page ready to access it's contents.
          */
         function HtmlPage() {
+            $this->_links = array();
         }
         
         /**
-         *    Adds a link to the page.
+         *    Adds a tag to the page.
+         *    @param $url        Address.
+         *    @param $label      Text label of link.
          */
-        function addLink() {
+        function addLink($url, $label) {
+            if (!isset($this->_links[$label])) {
+                $this->_links[$label] = array();
+            }
+            array_push($this->_links[$label], $url);
         }
         
         /**
-         *    Adds a form element.
+         *    Accessor for a list of all fixed links.
+         *    @return       List of links with scheme of
+         *                  http or https and hostname.
+         *    @public
          */
-        function addFormElement() {
+        function getExternalLinks() {
+            $external = array();
+            foreach ($this->_getLinks() as $link) {
+                $url = new SimpleUrl($link);
+                if ($url->getScheme() && $url->getHost()) {
+                    array_push($external, $link);
+                }
+            }
+            return $external;
+        }
+        
+        /**
+         *    Accessor for a list of all fixed links.
+         *    @return       List of links without scheme or
+         *                  hostname.
+         *    @public
+         */
+        function getInternalLinks() {
+            return array();
+        }
+        
+        /**
+         *    Accessor for flat list of links.
+         *    @private
+         */
+        function _getLinks() {
+            $all = array();
+            foreach ($this->_links as $label => $links) {
+                $all = array_merge($all, $links);
+            }
+            return $all;
+        }
+        
+        /**
+         *    Accessor for a URLs by the link label.
+         *    @param $label    Text of link.
+         *    @return          List of links with that
+         *                     label.
+         *    @public
+         */
+        function getUrls($label) {
+            if (!isset($this->_links[$label])) {
+                return array();
+            }
+            return $this->_links[$label];
         }
     }
 ?>

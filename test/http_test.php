@@ -14,8 +14,10 @@
         }
         function testDefaultUrl() {
             $url = new SimpleUrl("");
-            $this->assertEqual($url->getScheme(), "http");
-            $this->assertEqual($url->getHost(), "localhost");
+            $this->assertEqual($url->getScheme(), "");
+            $this->assertEqual($url->getHost(), "");
+            $this->assertEqual($url->getScheme("http"), "http");
+            $this->assertEqual($url->getHost("localhost"), "localhost");
             $this->assertEqual($url->getPath(), "/");
         }
         function testBasicParsing() {
@@ -58,6 +60,11 @@
             $url = new SimpleUrl("?a=%3F%21%22%27%23%7E%40%5B%5D%7B%7D%3A%3B%3C%3E%2C.%2F%7C%A3%24%25%5E%26%2A%28%29_%2B-%3D");
             $request = $url->getRequest();
             $this->assertEqual($request["a"], '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-=');
+        }
+        function testPartUrls() {
+            $url = new SimpleUrl("http://somewhere");
+            $this->assertEqual($url->getScheme(), "http");
+            $this->assertEqual($url->getHost(), "somewhere");
         }
     }
 

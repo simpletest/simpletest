@@ -21,17 +21,12 @@
          *    @public
          */
         function SimpleUrl($url) {
-            $this->_scheme = "http";
-            $this->_host = "localhost";
+            $this->_scheme = $this->_extractScheme($url);
+            $this->_host = $this->_extractHost($url);
             $this->_path = "/";
             $this->_request = array();
-            if (preg_match('/(.*?):\/\/(.*)/', $url, $matches)) {
-                $this->_scheme = $matches[1];
-                $url = $matches[2];
-            }
-            if (preg_match('/(.*?)(\/|\?)(.*)/', $url, $matches)) {
-                $this->_host = $matches[1];
-                $this->_path = ($matches[2] == "/" ? "/" : "/?") . $matches[3];
+            if (preg_match('/(\/|\?)(.*)/', $url, $matches)) {
+                $this->_path = ($matches[1] == "/" ? "/" : "/?") . $matches[2];
             }
             if (preg_match('/(.*?)\?(.*)/', $this->_path, $matches)) {
                 $this->_path = $matches[1];
@@ -39,6 +34,36 @@
             }
         }
         
+        /**
+         *    Extracts the scheme part of an incoming URL.
+         *    @param $url        URL so far. The scheme will be
+         *                       removed.
+         *    @return            Scheme part.
+         *    @private
+         */
+        function _extractScheme(&$url) {
+            if (preg_match('/(.*?):\/\/(.*)/', $url, $matches)) {
+                $url = $matches[2];
+                return $matches[1];
+            }
+            return false;
+        }
+        
+        /**
+         *    Extracts the host part of an incoming URL.
+         *    @param $url        URL so far. The host will be
+         *                       removed.
+         *    @return            Host part.
+         *    @private
+         */
+        function _extractHost(&$url) {
+            if (preg_match('/(.*?)(\/|\?|#|$)(.*)/', $url, $matches)) {
+                $url = $matches[2] . $matches[3];
+                return $matches[1];
+            }
+            return false;
+        }
+         
         /**
          *    Breaks the request down into a hash.
          *    @param $raw        Raw request string.
@@ -57,20 +82,22 @@
         
         /**
          *    Accessor for protocol part.
-         *    @return        Scheme name, e.g "http".
+         *    @param $default    Value to use if not present.
+         *    @return            Scheme name, e.g "http".
          *    @public
          */
-        function getScheme() {
-            return $this->_scheme;
+        function getScheme($default = false) {
+            return $this->_scheme ? $this->_scheme : $default;
         }
         
         /**
          *    Accessor for hostname and port.
-         *    @return        Hostname only.
+         *    @param $default    Value to use if not present.
+         *    @return            Hostname only.
          *    @public
          */
-        function getHost() {
-            return $this->_host;
+        function getHost($default = false) {
+            return $this->_host ? $this->_host : $default;
         }
         
         /**

@@ -5,8 +5,6 @@
         define("SIMPLE_TEST", "../");
     }
     require_once(SIMPLE_TEST . 'parser.php');
-    Mock::generate("HtmlPage");
-    Mock::generate("TokenHandler");
 
     class TestOfParallelRegex extends UnitTestCase {
         function TestOfParallelRegex() {
@@ -237,6 +235,8 @@
         }
     }
     
+    Mock::generate("HtmlPage");
+    
     class TestOfParser extends UnitTestCase {
         function TestOfParser() {
             $this->UnitTestCase();
@@ -244,10 +244,28 @@
         function testEmptyPage() {
             $page = &new MockHtmlPage($this);
             $page->expectCallCount("addLink", 0);
-            $page->expectCallCount("addFormElement", 0);
             $parser = &new HtmlParser();
             $this->assertTrue($parser->parse("", $page));
             $page->tally();
+        }
+    }
+    
+    class TestOfHtmlPage extends UnitTestCase {
+        function TestOfHtmlPage() {
+            $this->UnitTestCase();
+        }
+        function testNoLinks() {
+            $page = new HtmlPage();
+            $this->assertIdentical($page->getExternalLinks(), array(), "Fixed %s");
+            $this->assertIdentical($page->getInternalLinks(), array(), "Relative %s");
+            $this->assertIdentical($page->getUrls("Label"), array());
+        }
+        function testAddExternalLink() {
+            $page = new HtmlPage();
+            $page->addLink("http://somewhere", "Label");
+            $this->assertEqual($page->getExternalLinks(), array("http://somewhere"), "Fixed %s");
+            $this->assertIdentical($page->getInternalLinks(), array(), "Relative %s");
+            $this->assertEqual($page->getUrls("Label"), array("http://somewhere"));
         }
     }
 ?>
