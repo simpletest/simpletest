@@ -42,6 +42,6 @@ Documentation
 -------------
 Clean up the documentation links (1).
 Add server stubs docs (2).
-Add adapter documentation (2).
+Add adapter documentation (2/1) - done.
 Modify tutorial for GroupTest::ignore (1).
 Add early web test case to introduction (2/1) - done.

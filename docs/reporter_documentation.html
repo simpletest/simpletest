@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<html>
+    <head>
+        <title>Test reporter documentation</title>
+        <style type="text/css">
+            body {
+                padding-left: 3%;
+                padding-right: 3%;
+            }
+            pre {
+                font-family: courier;
+                font-size: 80%;
+                border: 1px solid;
+                background-color: #cccccc;
+                padding: 5px;
+                margin-left: 5%;
+                margin-right: 8%;
+            }
+            .code, .new_code, pre.new_code {
+                font-weight: bold;
+            }
+            div.copyright {
+                font-size: 80%;
+                color: gray;
+            }
+            div.copyright a {
+                color: gray;
+            }
+            ul.api {
+                padding-left: 0em;
+                padding-right: 25%;
+            }
+            ul.api li {
+                margin-top: 0.2em;
+                margin-bottom: 0.2em;
+                list-style: none;
+                text-indent: -3em;
+                padding-left: 3em;
+            }
+            div.demo {
+                border: 4px ridge;
+                border-color: gray;
+                padding: 10px;
+                margin: 5px;
+                margin-left: 20px;
+                margin-right: 40px;
+                background-color: white;
+            }
+            div.demo span.fail {
+                color: red;
+            }
+            div.demo span.pass {
+                color: green;
+            }
+            div.demo h1 {
+                font-size: 12pt;
+                text-align: left;
+                font-weight: bold;
+            }
+            table {
+                border: 2px outset;
+                border-color: gray;
+                background-color: white;
+                margin: 5px;
+                margin-left: 5%;
+                margin-right: 5%;
+            }
+            td {
+                font-size: 80%;
+            }
+        </style>
+        <link rel="Shortcut icon" href="images/lc.ico" />
+        <meta name="author" content="Marcus Baker" />
+            </head>
+    <body>
+        <h1>Test reporter documentation</h1>
+        <div class="in">
+            This page...
+                        <ul>
+                <li>
+                    Displaying <a href="#html">results in HTML</a>
+                </li>
+                <li>
+                    Displaying and <a href="#other">reporting results</a>
+                    in other formats
+                </li>
+            </ul>        </div>
+        <div class="out">
+            Related resources...
+                        <ul>
+                <li>
+                    SimpleTest project page on <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
+                </li>
+                <li>
+                    SimpleTest download page on <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
+                </li>
+           </ul>        </div>
+        <div class="content">
+                        <p>
+                This documentation is shipped with the
+                <a href="simple_test.php">SimpleTest</a> package.
+            </p>
+            <p>
+                <a class="target" name="html"><h2>Reporting results in HTML</h2></a>
+            </p>
+            <p>
+                The default test display is minimal in the extreme.
+                It reports success and failure with the conventional red and
+                green bars and shows a breadcrumb trail of test groups
+                for every failed assertion.
+                Here&apos;s a fail...
+                <div class="demo">
+                    <h1>File test</h1>
+                    <span class="fail">Fail</span>: createnewfile-&gt;True assertion failed.<br />
+                    <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
+                    <strong>0</strong> passes and <strong>1</strong> fails.</div>
+                </div>
+                And here all tests passed...
+                <div class="demo">
+                    <h1>File test</h1>
+                    <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
+                    <strong>1</strong> passes and <strong>0</strong> fails.</div>
+                </div>
+                The good news is that there are several points in the display
+                hiearchy for subclassing.
+            </p>
+            <p>
+                For web page based displays there is the
+                <span class="code">TestHtmlDisplay</span> class with the following
+                signature...
+<pre>
+class TestHtmlDisplay extends TestDisplay {
+    public TestHtmlDisplay() { ... }
+    public void paintHeader(string $test_name) { ... }
+    public void paintFooter(string $test_name) { ... }
+    public void paintStart(string $test_name, integer $size) { ... }
+    public void paintEnd(string $test_name, integer $size) { ... }
+    public void paintFail(string $message) { ... }
+    public void paintPass(string $message) { ... }
+    protected string _getCss() { ... }
+    public array getTestList() { ... }
+    public integer getPassCount() { ... }
+    public integer getFailCount() { ... }
+    public integer getTestCaseCount() { ... }
+    public integer getTestCaseProgress() { ... }
+}
+</pre>
+                Here is what all of these methods mean. First the display methods
+                that you will probably want to override...
+                <ul class="api">
+                    <li>
+                        <span class="new_code">TestHtmlDisplay()</span><br />
+                        is the constructor.
+                        Note that the unit test sets up the link to the display
+                        rather than the other way around.
+                        The display is a passive receiver of test events.
+                        This allows easy adaption of the display for other test
+                        systems beside unit tests, such as monitoring servers.
+                        It also means that the unit test can write to more than
+                        one reporter at a time.
+                    </li>
+                    <li>
+                        <span class="new_code">void paintHeader(string $test_name)</span><br />
+                        is called once at the very start of the test when the first
+                        start event arrives.
+                        The first start event is usually delivered by the top level group
+                        test and so this is where <span class="new_code">$test_name</span>
+                        comes from.
+                        It paints the page titles, CSS, body tag, etc.
+                        It returns nothing (<span class="new_code">void</span>).
+                    </li>
+                    <li>
+                        <span class="new_code">void paintFooter(string $test_name)</span><br />
+                        Called at the very end of the test to close any tags opened
+                        by the page header.
+                        By default it also displays the red/green bar and the final
+                        count of results.
+                        Actually the end of the test happens when a test end event
+                        comes in with the same name as the one that started it all
+                        at the same level.
+                        The tests nest you see.
+                        Closing the last test finishes the display.
+                    </li>
+                    <li>
+                        <span class="new_code">void paintStart(string $test_name, integer $size)</span><br />
+                        is called at the start of each group test, test case and test method.
+                        The name normally comes from the class name or method name unless
+                        set in the test.
+                        The size is the number of cases about to start.
+                        This will be 0 for a test method, 1 for a test case and the
+                        number of nested test cases plus itself for a group test.
+                        By default this does not affect the display, but you
+                        could imagine a JavaScript or XUL display that displayed the
+                        results in a collapseable tree...(hint?).
+                    </li>
+                    <li>
+                        <span class="new_code">void paintEnd(string $test_name, integer $size)</span><br />
+                        backs out of the test started with the same name.
+                        The size will be the number of cases just completed.
+                    </li>
+                    <li>
+                        <span class="new_code">void paintFail(string $message)</span><br />
+                        paints a failure.
+                        By default it just displays the word fail, a breadcrumbs trail
+                        showing the current test nesting and the message issued by
+                        the assertion.
+                    </li>
+                    <li>
+                        <span class="new_code">void paintPass(string $message)</span><br />
+                        by default does nothing.
+                    </li>
+                    <li>
+                        <span class="new_code">string _getCss()</span><br />
+                        Returns the CSS styles as a string for the page header
+                        method.
+                        Additional styles have to be appended here if you are
+                        not overriding the page header.
+                        You will want to use this method in an overriden page header
+                        if you want to include the original CSS.
+                    </li>
+                </ul>
+                There are also some accessors to get information on the current
+                state of the test suite.
+                Use these to enrich the display...
+                <ul class="api">
+                    <li>
+                        <span class="new_code">array getTestList()</span><br />
+                        is the first convenience method for subclasses.
+                        Lists the current nesting of the tests as a list
+                        of test names.
+                        The first, most deeply nested test, is first in the
+                        list and the current test method will be last.
+                    </li>
+                    <li>
+                        <span class="new_code">integer getPassCount()</span><br />
+                        returns the number of passes chalked up so far.
+                        Needed for the display at the end.
+                    </li>
+                    <li>
+                        <span class="new_code">integer getFailCount()</span><br />
+                        is likewise the number of fails so far.
+                    </li>
+                    <li>
+                        <span class="new_code">integer getTestCaseCount()</span><br />
+                        is the total number of test cases in the test run.
+                        This includes the grouping tests themselves.
+                    </li>
+                    <li>
+                        <span class="new_code">integer getTestCaseProgress()</span><br />
+                        is the number of test cases completed so far.
+                    </li>
+                </ul>
+            </p>
+            <p>
+                <a class="target" name="other"><h2>Other reporters</h2></a>
+            </p>
+            <p>
+                Rather than simply modifying the existing display, you might want to
+                produce a whole new HTML look, or even generate text or XML.
+                Rather than override every method in
+                <span class="new_code">TestHtmlDisplay</span> we can take one
+                step up the class hiearchy to <span class="new_code">TestDisplay</span>
+                in the <em>simple_test.php</em> source file.
+                The public signature is almost the same, but the display methods
+                start empty...
+<pre>
+class TestDisplay extends TestReporter {
+    public TestDisplay() { ... }
+    public void paintHeader(string $test_name) { ... }
+    public void paintFooter(string $test_name) { ... }
+    public void paintStart(string $test_name, integer $size) { ... }
+    public void paintEnd(string $test_name, integer $size) { ... }
+    public void paintFail(string $message) { ... }
+    public void paintPass(string $message) { ... }
+    public array getTestList() { ... }
+    public integer getPassCount() { ... }
+    public integer getFailCount() { ... }
+    public integer getTestCaseCount() { ... }
+    public integer getTestCaseProgress() { ... }
+}
+</pre>
+                A do nothing display, a blank canvas for your own creation, would
+                be...
+<pre><strong>
+require_once(SIMPLE_TEST . &apos;simple_test.php&apos;);</strong>
+
+class MyDisplay extends TestDisplay {<strong>
+    function MyDisplay() {
+        $this->TestDisplay();
+    }</strong>
+    function paintHeader($test_name) {
+    }
+    function paintFooter($test_name) {
+    }
+    function paintStart($test_name, $size) {<strong>
+        parent::paintStart($test_name, $size);</strong>
+    }
+    function paintEnd($test_name, $size) {<strong>
+        parent::paintEnd($test_name, $size);</strong>
+    }
+    function paintPass($message) {<strong>
+        parent::paintPass($message);</strong>
+    }
+    function paintFail($message) {<strong>
+        parent::paintFail($message);</strong>
+    }
+}
+</pre>
+                No output would come from this class until you add it.
+            </p>        </div>
+        <div class="copyright">
+            Copyright <a href="mailto:marcus@lastcraft.com">Marcus&nbsp;Baker</a>&nbsp;2003
+        </div>
+    </body>
+</html>

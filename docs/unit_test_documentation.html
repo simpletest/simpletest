@@ -90,7 +90,7 @@
                     Different ways to <a href="#group">group tests</a>.
                 </li>
                 <li>
-                    Displaying and <a href="#reporter">reporting results</a>
+                    Intergrating <a href="#legacy">legacy test cases</a>.
                 </li>
             </ul>        </div>
         <div class="out">
@@ -120,8 +120,8 @@ class FileTestCase extends UnitTestCase {
     }
 }</strong>
 </pre>
-                If no test name is supplied than the class name will be
-                taken instead.
+                If no test name is supplied whe chaing the constructor then
+                the class name will be taken instead.
                 Tests are added as methods in the test case whose names
                 start with the string &quot;test&quot; and
                 when the test case is invoked all such methods are run in
@@ -157,7 +157,7 @@ class FileTestCase extends UnitTestCase {
                 that are notified by various <span class="code">assert...()</span>
                 methods.
                 Here is the full list for the <span class="code">UnitTestCase</span>
-                class...
+                class, the default for SimpleTest...
                 <table>
                     <tr><td><span class="code">assertTrue($x)</span></td><td>Fail if $x is false</td></tr>
                     <tr><td><span class="code">assertFalse($x)</span></td><td>Fail if $x is true</td></tr>
@@ -191,20 +191,37 @@ if (!defined(&apos;SIMPLE_TEST&apos;)) {
 require_once(SIMPLE_TEST . &apos;simple_unit&apos;);
 <strong>
 class FileTester extends UnitTestCase {
-    function FileTester($name = &apos;&apos;) {
+    function FileTester($name = false) {
         $this-&gt;UnitTestCase($name);
     }
-    function assertFileExists($filename, $message = &apos;&apos;) {
-        if (!$message) {
-            $message = &apos;File [$filename] existence&apos;;
-        }
-        $this-&gt;assertTrue(file_exists($filename), $message);
+    function assertFileExists($filename, $message = &apos;%s&apos;) {
+        $this-&gt;assertTrue(
+                file_exists($filename),
+                sprintf($message, &apos;File [$filename] existence check&apos;));
     }</strong>
 }
 </pre>
                 This new case can be now be inherited just like
-                a normal test case.
+                a normal test case...
             </p>
+<pre>
+class FileTestCase extends <strong>FileTester</strong> {
+    function FileTestCase() {<strong>
+        $this-&gt;FileTester(&apos;File test&apos;);</strong>
+    }
+    function setUp() {
+        @unlink(&apos;../temp/test.txt&apos;);
+    }
+    function tearDown() {
+        @unlink(&apos;../temp/test.txt&apos;);
+    }
+    function testCreation() {
+        $writer = &new FileWriter(&apos;../temp/test.txt&apos;);
+        $writer-&gt;write(&apos;Hello&apos;);<strong>
+        $this-&gt;assertFileExists(&apos;../temp/test.txt&apos;);</strong>
+    }
+}
+</pre>
             <p>
                 The <span class="code">SIMPLE_TEST</span> constant is
                 the path to the SimpleTest libraries and should be set
@@ -219,6 +236,8 @@ class FileTester extends UnitTestCase {
                 class instead.
                 It is found in <em>simple_test.php</em> rather than
                 <em>simple_unit.php</em>.
+                See below if you want to incorporate other unit tester&apos;s
+                test cases in your test suites.
             </p>
             <p>
                 <a class="target" name="running_unit"><h2>Running a single test case</h2></a>
@@ -264,15 +283,25 @@ class FileTester extends UnitTestCase {
 &lt;?php
     require_once("../classes/writer.php");
 
-    class FileTestCase extends UnitTestCase {
-        function FileTestCase() {
-            $this-&gt;UnitTestCase(&apos;File test&apos;);
-        }
+    class FileTester extends UnitTestCase {
+        ...
+    }<strong>
+    GroupTest::ignore(&apos;FileTester&apos;);</strong>
+
+    class FileTestCase extends FileTester {
         ...
     }
 ?&gt;
 </pre>
                 As many cases as needed can appear in a single file.
+                The <span class="new_code">FileTester</span> class does
+                no contain any actual tests, but is a base class for other
+                test cases.
+                For this reason we use the
+                <span class="new_code">GroupTest::ignore()</span> directive
+                to tell the upcoming group test to ignore it.
+                This directive can appear anywhere in the file and works
+                when a whole file of test cases is loaded (see below)/
                 We will call this sample <em>file_test.php</em>.
             </p>
             <p>
@@ -294,10 +323,10 @@ class FileTester extends UnitTestCase {
     $test-&gt;run();</strong>
 ?&gt;
 </pre>
-                For every test case that we add we will have to include the
-                test code file and manually instantiate each and every
-                test case.
-                We can save typing with...
+                With this method, for every test case that we add we will have
+                to <span class="new_code">require_once()</span> the test code
+                file and manually instantiate each and every test case.
+                We can save a lot of typing with...
 <pre>
 &lt;?php
     if (!defined(&apos;SIMPLE_TEST&apos;)) {
@@ -332,12 +361,10 @@ class FileTester extends UnitTestCase {
                     <li>
                         New test case extension classes thet get included will be
                         placed in the group test and run also.
-                        You should make sure that any such classes are included
-                        before the group test is created or that if run they do
-                        not cause any harm.
-                        The first is preferable as running an empty test case
-                        will cause spurious empty cases to be sent to the
-                        test reporters.
+                        You will need to add a <span class="new_code">GroupTest::ignore()</span>
+                        directive for these classes or make sure that they are included
+                        before the <span class="new_code">GroupTest::addTestFile()</span>
+                        line.
                     </li>
                 </ol>
                 Group tests can be included in other group tests, but must be added
@@ -346,9 +373,9 @@ class FileTester extends UnitTestCase {
             </p>
             <p>
                 In the above examples the line...
-<pre>
+<pre><strong>
 $test-&gt;run();
-</pre>
+</strong></pre>
                 ...is included.
                 This effectively combines test running with grouping.
                 For small projects this is what you want, but for larger ones
@@ -382,7 +409,7 @@ $test = &new FileGroupTest();
 $test->attachObserver(new TestHtmlDisplay());
 $test->run();</strong>
 </pre>
-                Or we can group them into larger tests...
+                ...or we can group them into larger group tests...
 <pre>
 if (!defined(&apos;SIMPLE_TEST&apos;)) {
     define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
@@ -417,209 +444,71 @@ if (!defined(&apos;RUNNER&apos;)) {
                 This approach requires the guard to be set when including
                 the group test file, but this is still less hassle than
                 lots of separate runner files.
+                You include the same guard on the top level tests to make sure
+                that <span class="new_code">run()</span> once only
+                from the top level script that has been invoked.
             </p>
             <p>
-                <a class="target" name="reporter"><h2>Reporting results</h2></a>
+                <a class="target" name="legacy"><h2>Integrating legacy test cases</h2></a>
             </p>
             <p>
-                The default test display is minimal in the extreme.
-                It reports success and failure with the conventional red and
-                green bars and shows a breadcrumb trail of test groups
-                for every failed assertion.
-                Here&apos;s a fail...
-                <div class="demo">
-                    <h1>File test</h1>
-                    <span class="fail">Fail</span>: createnewfile-&gt;True assertion failed.<br />
-                    <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
-                    <strong>0</strong> passes and <strong>1</strong> fails.</div>
-                </div>
-                And here all tests passed...
-                <div class="demo">
-                    <h1>File test</h1>
-                    <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
-                    <strong>1</strong> passes and <strong>0</strong> fails.</div>
-                </div>
-                The good news is that there are several points in the display
-                hiearchy for subclassing.
+                If you already have unit tests for your code or are extending external
+                classes that have tests, it is unlikely that all of the test cases
+                are in SimpleTest format.
+                Fortunately it is possible to incorporate test cases from other
+                unit testers directly into SimpleTest group tests.
             </p>
             <p>
-                For web page based displays there is the
-                <span class="code">TestHtmlDisplay</span> class with the following
-                signature...
-<pre>
-class TestHtmlDisplay extends TestDisplay {
-    public TestHtmlDisplay() { ... }
-    public void paintHeader(string $test_name) { ... }
-    public void paintFooter(string $test_name) { ... }
-    public void paintStart(string $test_name, integer $size) { ... }
-    public void paintEnd(string $test_name, integer $size) { ... }
-    public void paintFail(string $message) { ... }
-    public void paintPass(string $message) { ... }
-    protected string _getCss() { ... }
-    public array getTestList() { ... }
-    public integer getPassCount() { ... }
-    public integer getFailCount() { ... }
-    public integer getTestCaseCount() { ... }
-    public integer getTestCaseProgress() { ... }
-}
-</pre>
-                Here is what all of these methods mean. First the display methods
-                that you will probably want to override...
-                <ul class="api">
-                    <li>
-                        <span class="new_code">TestHtmlDisplay()</span><br />
-                        is the constructor.
-                        Note that the unit test sets up the link to the display
-                        rather than the other way around.
-                        The display is a passive receiver of test events.
-                        This allows easy adaption of the display for other test
-                        systems beside unit tests, such as monitoring servers.
-                        It also means that the unit test can write to more than
-                        one reporter at a time.
-                    </li>
-                    <li>
-                        <span class="new_code">void paintHeader(string $test_name)</span><br />
-                        is called once at the very start of the test when the first
-                        start event arrives.
-                        The first start event is usually delivered by the top level group
-                        test and so this is where <span class="new_code">$test_name</span>
-                        comes from.
-                        It paints the page titles, CSS, body tag, etc.
-                        It returns nothing (<span class="new_code">void</span>).
-                    </li>
-                    <li>
-                        <span class="new_code">void paintFooter(string $test_name)</span><br />
-                        Called at the very end of the test to close any tags opened
-                        by the page header.
-                        By default it also displays the red/green bar and the final
-                        count of results.
-                        Actually the end of the test happens when a test end event
-                        comes in with the same name as the one that started it all
-                        at the same level.
-                        The tests nest you see.
-                        Closing the last test finishes the display.
-                    </li>
-                    <li>
-                        <span class="new_code">void paintStart(string $test_name, integer $size)</span><br />
-                        is called at the start of each group test, test case and test method.
-                        The name normally comes from the class name or method name unless
-                        set in the test.
-                        The size is the number of cases about to start.
-                        This will be 0 for a test method, 1 for a test case and the
-                        number of nested test cases plus itself for a group test.
-                        By default this does not affect the display, but you
-                        could imagine a JavaScript or XUL display that displayed the
-                        results in a collapseable tree...(hint?).
-                    </li>
-                    <li>
-                        <span class="new_code">void paintEnd(string $test_name, integer $size)</span><br />
-                        backs out of the test started with the same name.
-                        The size will be the number of cases just completed.
-                    </li>
-                    <li>
-                        <span class="new_code">void paintFail(string $message)</span><br />
-                        paints a failure.
-                        By default it just displays the word fail, a breadcrumbs trail
-                        showing the current test nesting and the message issued by
-                        the assertion.
-                    </li>
-                    <li>
-                        <span class="new_code">void paintPass(string $message)</span><br />
-                        by default does nothing.
-                    </li>
-                    <li>
-                        <span class="new_code">string _getCss()</span><br />
-                        Returns the CSS styles as a string for the page header
-                        method.
-                        Additional styles have to be appended here if you are
-                        not overriding the page header.
-                        You will want to use this method in an overriden page header
-                        if you want to include the original CSS.
-                    </li>
-                </ul>
-                There are also some accessors to get information on the current
-                state of the test suite.
-                Use these to enrich the display...
-                <ul class="api">
-                    <li>
-                        <span class="new_code">array getTestList()</span><br />
-                        is the first convenience method for subclasses.
-                        Lists the current nesting of the tests as a list
-                        of test names.
-                        The first, most deeply nested test, is first in the
-                        list and the current test method will be last.
-                    </li>
-                    <li>
-                        <span class="new_code">integer getPassCount()</span><br />
-                        returns the number of passes chalked up so far.
-                        Needed for the display at the end.
-                    </li>
-                    <li>
-                        <span class="new_code">integer getFailCount()</span><br />
-                        is likewise the number of fails so far.
-                    </li>
-                    <li>
-                        <span class="new_code">integer getTestCaseCount()</span><br />
-                        is the total number of test cases in the test run.
-                        This includes the grouping tests themselves.
-                    </li>
-                    <li>
-                        <span class="new_code">integer getTestCaseProgress()</span><br />
-                        is the number of test cases completed so far.
-                    </li>
-                </ul>
-                Rather than simply modifying the existing display, you might want to
-                produce a whole new HTML look, or even generate text or XML.
-                Rather than override every method in
-                <span class="new_code">TestHtmlDisplay</span> we can take one
-                step up the class hiearchy to <span class="new_code">TestDisplay</span>
-                in the <em>simple_test.php</em> source file.
-                The public signature is almost the same, but the display methods
-                start empty...
-<pre>
-class TestDisplay extends TestReporter {
-    public TestDisplay() { ... }
-    public void paintHeader(string $test_name) { ... }
-    public void paintFooter(string $test_name) { ... }
-    public void paintStart(string $test_name, integer $size) { ... }
-    public void paintEnd(string $test_name, integer $size) { ... }
-    public void paintFail(string $message) { ... }
-    public void paintPass(string $message) { ... }
-    public array getTestList() { ... }
-    public integer getPassCount() { ... }
-    public integer getFailCount() { ... }
-    public integer getTestCaseCount() { ... }
-    public integer getTestCaseProgress() { ... }
-}
-</pre>
-                A do nothing display, a blank canvas for your own creation, would
-                be...
+                Say we have the following
+                <a href="http://sourceforge.net/projects/phpunit">PhpUnit</a>
+                test case in the file <em>config_test.php</em>...
 <pre><strong>
-require_once(SIMPLE_TEST . &apos;simple_test.php&apos;);</strong>
-
-class MyDisplay extends TestDisplay {<strong>
-    function MyDisplay() {
-        $this->TestDisplay();
-    }</strong>
-    function paintHeader($test_name) {
+class ConfigFileTest extends TestCase {
+    function ConfigFileTest() {
+        $this->TestCase(&apos;Config file test&apos;);
     }
-    function paintFooter($test_name) {
-    }
-    function paintStart($test_name, $size) {<strong>
-        parent::paintStart($test_name, $size);</strong>
-    }
-    function paintEnd($test_name, $size) {<strong>
-        parent::paintEnd($test_name, $size);</strong>
-    }
-    function paintPass($message) {<strong>
-        parent::paintPass($message);</strong>
-    }
-    function paintFail($message) {<strong>
-        parent::paintFail($message);</strong>
+    function testContents() {
+        $config = new ConfigFile(&apos;test.conf&apos;);
+        $this->assertRegexp(&apos;/me/&apos;, $config->getValue(&apos;username&apos;));
     }
 }
+</strong></pre>
+                The group test can recognise this as long as we include
+                the appropriate adapter class before we add the test
+                file...
+<pre>
+&lt;?php
+    if (!defined(&apos;SIMPLE_TEST&apos;)) {
+        define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
+    }
+    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
+    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);<strong>
+    require_once(SIMPLE_TEST . &apos;adapters/phpunit_test_case.php&apos;);</strong>
+
+    $test = &new GroupTest(&apos;All file tests&apos;);<strong>
+    $test-&gt;addTestFile(&apos;config_test.php&apos;);</strong>
+    $test-&gt;attachObserver(new TestHtmlDisplay());
+    $test-&gt;run();
+?&gt;
 </pre>
-                No output would come from this class until you add it.
+                There are only two adapters, the other is for the
+                <a href="http://pear.php.net/manual/en/package.php.phpunit.php">PEAR</a>
+                unit tester...
+<pre>
+&lt;?php
+    if (!defined(&apos;SIMPLE_TEST&apos;)) {
+        define(&apos;SIMPLE_TEST&apos;, &apos;simple_test/&apos;);
+    }
+    require_once(SIMPLE_TEST . &apos;simple_unit.php&apos;);
+    require_once(SIMPLE_TEST . &apos;simple_html_test.php&apos;);<strong>
+    require_once(SIMPLE_TEST . &apos;adapters/pear_test_case.php&apos;);</strong>
+
+    $test = &new GroupTest(&apos;All file tests&apos;);<strong>
+    $test-&gt;addTestFile(&apos;some_pear_test_cases.php&apos;);</strong>
+    $test-&gt;attachObserver(new TestHtmlDisplay());
+    $test-&gt;run();
+?&gt;
+</pre>
             </p>        </div>
         <div class="copyright">
             Copyright <a href="mailto:marcus@lastcraft.com">Marcus&nbsp;Baker</a>&nbsp;2003
