@@ -24,21 +24,27 @@
         function testOfEquality() {
             $this->assertEqual("0", 0);
             $this->assertEqual(1, 2);        // Fail.
+            $this->assertNotEqual("0", 0);        // Fail.
+            $this->assertNotEqual(1, 2);
         }
         function testOfIdentity() {
             $a = "fred";
             $b = $a;
             $this->assertIdentical($a, $b);
+            $this->assertNotIdentical($a, $b);       // Fail.
             $a = "0";
             $b = 0;
             $this->assertIdentical($a, $b);        // Fail.
+            $this->assertNotIdentical($a, $b);
         }
         function testOfReference() {
             $a = "fred";
             $b = &$a;
             $this->assertReference($a, $b);
+            $this->assertCopy($a, $b);        // Fail.
             $c = "Hello";
             $this->assertReference($a, $c);        // Fail.
+            $this->assertCopy($a, $c);
         }
         function testOfPatterns() {
             $this->assertWantedPattern('/hello/i', "Hello there");
@@ -48,7 +54,7 @@
         }
     }
     
-    $test = new GroupTest("Unit test case test, 8 fails and 8 passes");
+    $test = new GroupTest("Unit test case test, 11 fails and 11 passes");
     $display = new TestHTMLDisplay();
     $test->attachObserver($display);
     $test->addTestCase(new TestOfUnitTestCase());

@@ -75,6 +75,20 @@
         
         /**
          *    Will trigger a pass if the two parameters have
+         *    a different value. Otherwise a fail.
+         *    @param $first          Value to compare.
+         *    @param $second         Value to compare.
+         *    @param $message        Message to display.
+         */
+        function assertNotEqual($first, $second, $message = "") {
+            if ($message == "") {
+                $message = "[" . gettype($first) . ": $first] should not be equal to [" . gettype($second) . ": $second]";
+            }
+            $this->assertTrue($first != $second, $message);
+        }
+        
+        /**
+         *    Will trigger a pass if the two parameters have
          *    the same value and same type. Otherwise a fail.
          *    @param $first          Value to compare.
          *    @param $second         Value to compare.
@@ -88,6 +102,20 @@
         }
         
         /**
+         *    Will trigger a pass if the two parameters have
+         *    the different value or different type.
+         *    @param $first          Value to compare.
+         *    @param $second         Value to compare.
+         *    @param $message        Message to display.
+         */
+        function assertNotIdentical($first, $second, $message = "") {
+            if ($message == "") {
+                $message = "[" . gettype($first) . ": $first] should not be identical to [" . gettype($second) . ": $second]";
+            }
+            $this->assertTrue($first !== $second, $message);
+        }
+        
+        /**
          *    Will trigger a pass if both parameters refer
          *    to the same object. Fail otherwise.
          *    @param $first          Object reference to check.
@@ -96,13 +124,31 @@
          */
         function assertReference(&$first, &$second, $message = "") {
             if ($message == "") {
-                $message = "[$first] and [$second] reference the same object";
+                $message = "[$first] and [$second] should reference the same object";
             }
             $temp = $first;
             $first = uniqid("test");
             $is_ref = ($first === $second);
             $first = $temp;
             $this->assertTrue($is_ref, $message);
+        }
+        
+        /**
+         *    Will trigger a pass if both parameters refer
+         *    to different objects. Fail otherwise.
+         *    @param $first          Object reference to check.
+         *    @param $second         Hopefully not the same object.
+         *    @param $message        Message to display.
+         */
+        function assertCopy(&$first, &$second, $message = "") {
+            if ($message == "") {
+                $message = "[$first] and [$second] should not be the same object";
+            }
+            $temp = $first;
+            $first = uniqid("test");
+            $is_ref = ($first === $second);
+            $first = $temp;
+            $this->assertFalse($is_ref, $message);
         }
         
         /**
