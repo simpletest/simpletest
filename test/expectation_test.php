@@ -138,10 +138,10 @@
         }
     }
     
-    class RecursiveTestingNasty {
+    class RecursiveNasty {
         var $_me;
         
-        function RecursiveTestingNasty() {
+        function RecursiveNasty() {
             $this->_me = $this;
         }
     }
@@ -165,12 +165,12 @@
         }
         
         function _testNastyPhp5Bug() {
-            $this->assertFalse(new RecursiveTestingNasty() != new RecursiveTestingNasty());
+            $this->assertFalse(new RecursiveNasty() != new RecursiveNasty());
         }
         
         function _testReallyHorribleRecursiveStructure() {
-            $hopeful = &new IdenticalExpectation(new RecursiveTestingNasty());
-            $this->assertTrue($hopeful->test(new RecursiveTestingNasty()));
+            $hopeful = &new IdenticalExpectation(new RecursiveNasty());
+            $this->assertTrue($hopeful->test(new RecursiveNasty()));
         }
     }
     

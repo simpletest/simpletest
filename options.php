@@ -277,6 +277,25 @@
         }
         
         /**
+         *    Test for two variables being aliases.
+         *    @param mixed $first    Test subject.
+         *    @param mixed $second   Comparison object.
+         *    @access public
+         *    @static
+         */
+        function isReference(&$first, &$second) {
+            if (version_compare(phpversion(), '5', '>=')
+	    	    && is_object($first)) {
+	    	    return ($first === $second);
+	        }
+	        $temp = $first;
+            $first = uniqid("test");
+            $is_ref = ($first === $second);
+            $first = $temp;
+            return $is_ref;
+        }
+        
+        /**
          *    Test to see if an object is a member of a
          *    class hiearchy.
          *    @param object $object    Object to test.

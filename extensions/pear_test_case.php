@@ -9,10 +9,10 @@
     /**#@+
      * include SimpleTest files
      */
-    require_once dirname(__FILE__).DIRECTORY_SEPARATOR
-    	.'..'.DIRECTORY_SEPARATOR .'unit_tester.php';
-    require_once dirname(__FILE__).DIRECTORY_SEPARATOR
-            .'..'.DIRECTORY_SEPARATOR .'expectation.php';
+    require_once dirname(__FILE__) . '/../dumper.php';
+    require_once dirname(__FILE__) . '/../options.php';
+    require_once dirname(__FILE__) . '/../simple_test.php';
+    require_once dirname(__FILE__) . '/../expectation.php';
 	/**#@-*/
    
     /**
@@ -73,26 +73,42 @@
         
         /**
          *    In PHP5 the identity test tests for the same
-         *    object. THis is a reference test in PHP4.
+         *    object. This is a reference test in PHP4.
          *    @param $first          First object handle.
          *    @param $second         Hopefully the same handle.
          *    @param $message        Message to display.
          *    @public
          */
-        function assertSame($first, $second, $message = "%s") {
-            $this->assertExpectation(new IdenticalExpectation($first), $second, $message);
+        function assertSame(&$first, &$second, $message = "%s") {
+            $dumper = &new SimpleDumper();
+            $message = sprintf(
+                    $message,
+                    "[" . $dumper->describeValue($first) .
+                            "] and [" . $dumper->describeValue($second) .
+                            "] should reference the same object");
+            return $this->assertTrue(
+                    SimpleTestCompatibility::isReference($first, $second),
+                    $message);
         }
         
         /**
          *    In PHP5 the identity test tests for the same
-         *    object. THis is a reference test in PHP4.
+         *    object. This is a reference test in PHP4.
          *    @param $first          First object handle.
          *    @param $second         Hopefully a different handle.
          *    @param $message        Message to display.
          *    @public
          */
-        function assertNotSame($first, $second, $message = "%s") {
-            $this->assertExpectation(new NotIdenticalExpectation($first), $second, $message);
+        function assertNotSame(&$first, &$second, $message = "%s") {
+            $dumper = &new SimpleDumper();
+            $message = sprintf(
+                    $message,
+                    "[" . $dumper->describeValue($first) .
+                            "] and [" . $dumper->describeValue($second) .
+                            "] should not be the same object");
+            return $this->assertFalse(
+                    SimpleTestCompatibility::isReference($first, $second),
+                    $message);
         }
         
         /**
