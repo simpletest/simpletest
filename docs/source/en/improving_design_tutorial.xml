@@ -91,7 +91,7 @@
             Using a factory method to create the writer internally would be
             possible, but would mean subclassing it for testing so that the factory
             method could be replaced with one returning a mock.
-            More work from teh test point of view, although still possible.
+            More work from the test point of view, although still possible.
             From the design point of view it would mean a new logger subclass
             for every type of writer that we want to use.
             This is called a parallel class hiearchy and obviously involves
