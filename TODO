@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 38 hours.
+This is immediate stuff only for this iteration (RC2) of 41 hours.
 
 $Id$
 
@@ -9,6 +9,7 @@ Fix of syntax errors in test scripts reporting green (3/3) - done.
 Fix of assertIdentical() getting stuck in a loop (3).
 Rename StickyError because of name clash (1/1) - done.
 Make sure error handling runner is loaded by default (2).
+Fix parsing check on test file loadingto work with PHP5 (3).
 
 Reporter
 --------
@@ -29,7 +30,6 @@ Lose authentication on browser restart (1/1) - done.
 Web tester
 ----------
 Add htmlentities() international fix (1/1) - done.
-Add character set encoding sniffer to HtmlReporter (2).
 Add WebTestCase::getCookie() method (1/1) - done.
 
 Documentation
@@ -47,3 +47,5 @@ Build
 -----
 Finish Doc generation so that PHPDoc tutorial is rendered correctly (2/1) - done.
 Move tarball build over to a bash script (2/1) - done.
+Move documentation into a language specific folder (2/1) - done.
+

@@ -64,18 +64,18 @@ FILES=(simpletest/errors.php \
           simpletest/test/xml_test.php \
           simpletest/test/live_test.php \
           simpletest/test/real_sites_test.php \
-          simpletest/docs/index.html \
-          simpletest/docs/overview.html \
-          simpletest/docs/unit_test_documentation.html \
-          simpletest/docs/group_test_documentation.html \
-          simpletest/docs/server_stubs_documentation.html \
-          simpletest/docs/mock_objects_documentation.html \
-          simpletest/docs/partial_mocks_documentation.html \
-          simpletest/docs/reporter_documentation.html \
-          simpletest/docs/runner_documentation.html \
-          simpletest/docs/expectation_documentation.html \
-          simpletest/docs/web_tester_documentation.html \
-          simpletest/docs/form_testing_documentation.html \
-          simpletest/docs/authentication_documentation.html)
+          simpletest/docs/en/index.html \
+          simpletest/docs/en/overview.html \
+          simpletest/docs/en/unit_test_documentation.html \
+          simpletest/docs/en/group_test_documentation.html \
+          simpletest/docs/en/server_stubs_documentation.html \
+          simpletest/docs/en/mock_objects_documentation.html \
+          simpletest/docs/en/partial_mocks_documentation.html \
+          simpletest/docs/en/reporter_documentation.html \
+          simpletest/docs/en/runner_documentation.html \
+          simpletest/docs/en/expectation_documentation.html \
+          simpletest/docs/en/web_tester_documentation.html \
+          simpletest/docs/en/form_testing_documentation.html \
+          simpletest/docs/en/authentication_documentation.html)
 
 tar -zcf $NAME ${FILES[*]}

@@ -1,14 +1,14 @@
 #!/bin/sh
-Xalan -o ../docs/index.html ../docs/source/simple_test.xml bundled_docs.xslt
-Xalan -o ../docs/overview.html ../docs/source/overview.xml bundled_docs.xslt
-Xalan -o ../docs/unit_test_documentation.html ../docs/source/unit_test_documentation.xml bundled_docs.xslt
-Xalan -o ../docs/group_test_documentation.html ../docs/source/group_test_documentation.xml bundled_docs.xslt
-Xalan -o ../docs/server_stubs_documentation.html ../docs/source/server_stubs_documentation.xml bundled_docs.xslt
-Xalan -o ../docs/mock_objects_documentation.html ../docs/source/mock_objects_documentation.xml bundled_docs.xslt
-Xalan -o ../docs/partial_mocks_documentation.html ../docs/source/partial_mocks_documentation.xml bundled_docs.xslt
-Xalan -o ../docs/reporter_documentation.html ../docs/source/reporter_documentation.xml bundled_docs.xslt
-Xalan -o ../docs/runner_documentation.html ../docs/source/runner_documentation.xml bundled_docs.xslt
-Xalan -o ../docs/expectation_documentation.html ../docs/source/expectation_documentation.xml bundled_docs.xslt
-Xalan -o ../docs/web_tester_documentation.html ../docs/source/web_tester_documentation.xml bundled_docs.xslt
-Xalan -o ../docs/form_testing_documentation.html ../docs/source/form_testing_documentation.xml bundled_docs.xslt
-Xalan -o ../docs/authentication_documentation.html ../docs/source/authentication_documentation.xml bundled_docs.xslt
+Xalan -o ../docs/en/index.html ../docs/source/en/simple_test.xml bundled_docs.xslt
+Xalan -o ../docs/en/overview.html ../docs/source/en/overview.xml bundled_docs.xslt
+Xalan -o ../docs/en/unit_test_documentation.html ../docs/source/en/unit_test_documentation.xml bundled_docs.xslt
+Xalan -o ../docs/en/group_test_documentation.html ../docs/source/en/group_test_documentation.xml bundled_docs.xslt
+Xalan -o ../docs/en/server_stubs_documentation.html ../docs/source/en/server_stubs_documentation.xml bundled_docs.xslt
+Xalan -o ../docs/en/mock_objects_documentation.html ../docs/source/en/mock_objects_documentation.xml bundled_docs.xslt
+Xalan -o ../docs/en/partial_mocks_documentation.html ../docs/source/en/partial_mocks_documentation.xml bundled_docs.xslt
+Xalan -o ../docs/en/reporter_documentation.html ../docs/source/en/reporter_documentation.xml bundled_docs.xslt
+Xalan -o ../docs/en/runner_documentation.html ../docs/source/en/runner_documentation.xml bundled_docs.xslt
+Xalan -o ../docs/en/expectation_documentation.html ../docs/source/en/expectation_documentation.xml bundled_docs.xslt
+Xalan -o ../docs/en/web_tester_documentation.html ../docs/source/en/web_tester_documentation.xml bundled_docs.xslt
+Xalan -o ../docs/en/form_testing_documentation.html ../docs/source/en/form_testing_documentation.xml bundled_docs.xslt
+Xalan -o ../docs/en/authentication_documentation.html ../docs/source/en/authentication_documentation.xml bundled_docs.xslt
