@@ -274,7 +274,7 @@
          */
         function _load($method, $url, $parameters = false) {
             $frame = $url->getTarget();
-            if (! $frame || (strtolower($frame) == '_top')) {
+            if (! $frame || ! $this->_page->hasFrames() || (strtolower($frame) == '_top')) {
                 return $this->_loadPage($method, $url, $parameters);
             }
             return $this->_loadFrame(array($frame), $method, $url, $parameters);

@@ -21,12 +21,14 @@ Bug fix of fatal error with overload functions (2/2) - done.
 
 Parser
 ------
+Should tolerate missing form tag (2).
 
 Browser
 -------
 Fix socket error with stream_get_timeout() missing (1/1) - done.
 Lose authentication on browser restart (1/1) - done.
-Make links such as ?a=b return to the same page.
+Make links such as ?a=b return to the same page (2).
+Fix clickLink() trying to load non-existent frame (2/1) - done.
 
 Web tester
 ----------

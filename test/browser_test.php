@@ -246,6 +246,37 @@
             $page->tally();
         }
         
+        function testClickLinkWithUnknownFrameStillRequestsWholePage() {
+            $agent = &new MockSimpleUserAgent($this);
+            $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
+            $agent->expectArgumentsAt(
+                    0,
+                    'fetchResponse',
+                    array('GET', new SimpleUrl('http://this.com/page.html'), false));
+            $target = new SimpleUrl('http://this.com/new.html');
+            $target->setTarget('missing');
+            $agent->expectArgumentsAt(
+                    1,
+                    'fetchResponse',
+                    array('GET', $target, false));
+            $agent->expectCallCount('fetchResponse', 2);
+            
+            $parsed_url = new SimpleUrl('http://this.com/new.html');
+            $parsed_url->setTarget('missing');
+            
+            $page = &new MockSimplePage($this);
+            $page->setReturnValue('getUrlsByLabel', array($parsed_url));
+            $page->setReturnValue('hasFrames', false);
+            $page->expectOnce('getUrlsByLabel', array('New'));
+            
+            $browser = &$this->createBrowser($agent, $page);
+            $browser->get('http://this.com/page.html');
+            $this->assertTrue($browser->clickLink('New'));
+            
+            $agent->tally();
+            $page->tally();
+        }
+        
         function testClickingMissingLinkFails() {
             $agent = &new MockSimpleUserAgent($this);
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
