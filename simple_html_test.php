@@ -27,9 +27,19 @@
          */
         function paintHeader($test_name) {
             print "<html>\n<head>\n<title>$test_name</title>\n";
-            print "<style type=\"text/css\">\n.fail { color: red; }\n</style>\n";
+            print "<style type=\"text/css\">\n";
+            print $this->_getCss() . "\n";
+            print "</style>\n";
             print "</head>\n<body>\n";
             print "<h1>$test_name</h1>\n";
+        }
+        
+        /**
+         *    Paints the CSS. Add additional styles here.
+         *    @protected
+         */
+        function _getCss() {
+            return ".fail { color: red; }";
         }
         
         /**
@@ -57,10 +67,10 @@
          *                           the context of the other tests.
          */
         function paintFail($message) {
-            parent::paintfail($message);
+            parent::paintFail($message);
+            print "<span class=\"fail\">Fail</span>: ";
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
-            print "<span class=\"fail\">Fail</span>: ";
             print implode("-&gt;", $breadcrumb);
             print "-&gt;$message<br />\n";
         }

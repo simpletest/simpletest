@@ -18,8 +18,8 @@
             $this->assertEqual($url->getPath(), "/");
         }
         function testBasicParsing() {
-            $url = new SimpleUrl("http://www.lastcraft.com/test/");
-            $this->assertEqual($url->getScheme(), "http");
+            $url = new SimpleUrl("https://www.lastcraft.com/test/");
+            $this->assertEqual($url->getScheme(), "https");
             $this->assertEqual($url->getHost(), "www.lastcraft.com");
             $this->assertEqual($url->getPath(), "/test/");
         }
