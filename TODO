@@ -13,8 +13,8 @@ Create an isA() expectation (1).
 
 Interface
 ---------
-XML reporter (3/2).
-Make Runner invoke different start and end methods on reporters (2).
+XML reporter (3/2) - done.
+Make Runner invoke different start and end methods on reporters (2/1) - done.
 
 Mock objects
 ------------
