@@ -587,5 +587,23 @@
             $this->assertWantedPattern('/This is frame A/i');
             $this->assertWantedPattern('/This is frame B/i');
         }
+        function testMessyFramesetResponsesByName() {
+            $this->assertTrue($this->get(
+                    'http://www.lastcraft.com/test/messy_frameset.html'));
+            $this->assertTrue($this->setFrameFocus('Front controller'));
+            $this->assertResponse(200);
+            
+            $this->assertTrue($this->setFrameFocus('One'));
+            $this->assertResponse(200);
+            
+            $this->assertTrue($this->setFrameFocus('Redirected'));
+            $this->assertResponse(200);
+            
+            $this->assertTrue($this->setFrameFocus('Protected'));
+            $this->assertResponse(401);
+            
+            $this->assertTrue($this->setFrameFocus('Protected redirect'));
+            $this->assertResponse(401);
+        }
     }
 ?>
