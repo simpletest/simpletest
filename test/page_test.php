@@ -301,5 +301,12 @@
                     "<html><head><form><input type=\"submit\"></form></head></html>");
             $this->assertIsA($form = &$page->getFormBySubmitLabel("Submit"), "SimpleForm");
         }
+        function testSettingFormField() {
+            $page = &new SimplePage(
+                    '<html><head><form><input type="text" name="a"><input type="submit"></form></head></html>');
+            $page->setField("a", "aaa");
+            $form = &$page->getFormBySubmitLabel("Submit");
+            $this->assertEqual($form->getValue("a"), "aaa");
+        }
     }
 ?>

@@ -33,7 +33,7 @@
             $form = new SimpleForm($tag);
             $this->assertEqual($form->getMethod(), "get");
             $this->assertEqual($form->getAction(), "here.php");
-            $this->assertIdentical($form->getValue("a"), false);
+            $this->assertNull($form->getValue("a"));
             $this->assertEqual($form->getValues(), array());
         }
         function testTextWidget() {
@@ -42,8 +42,10 @@
                     "input",
                     array("name" => "me", "type" => "text", "value" => "Myself")));
             $this->assertIdentical($form->getValue("me"), "Myself");
-            $form->setValue("me", "Not me");
+            $this->assertTrue($form->setValue("me", "Not me"));
+            $this->assertFalse($form->setValue("not_present", "Not me"));
             $this->assertIdentical($form->getValue("me"), "Not me");
+            $this->assertNull($form->getValue("not_present"));
             $this->assertEqual($form->getValues(), array("me" => "Not me"));
         }
         function testSubmitButton() {

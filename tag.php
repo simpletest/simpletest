@@ -126,7 +126,7 @@
         /**
          *    Extracts current value from form.
          *    @param $name        Keyed by widget name.
-         *    @return             Value as string or false
+         *    @return             Value as string or null
          *                        if not set.
          *    @public
          */
@@ -137,7 +137,7 @@
             if (isset($this->_defaults[$name])) {
                 return $this->_defaults[$name];
             }
-            return false;
+            return null;
         }
         
         /**
@@ -145,12 +145,16 @@
          *    @param $name     Name of widget tag.
          *    @param $value    Value to input into the widget.
          *    @return          True if value is legal, false
-         *                     otherwise. The value will still
-         *                     be set.
+         *                     otherwise. f the field is not
+         *                     present, nothing will be set.
          *    @public
          */
         function setValue($name, $value) {
+            if (! in_array($name, array_keys($this->_defaults))) {
+                return false;
+            }
             $this->_values[$name] = $value;
+            return true;
         }
         
         /**
