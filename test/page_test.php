@@ -369,6 +369,21 @@
                     array(new SimpleUrl('http://host/somewhere.php')));
         }
         
+        function testFindLinkWithImage() {
+            $link = &new SimpleAnchorTag(array('href' => './somewhere.php', 'id' => 33));
+            $link->addContent('<img src="pic.jpg" alt="&lt;A picture&gt;">');
+            
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
+            
+            $page = &new SimplePage($response);
+            $page->AcceptTag($link);
+            
+            $this->assertEqual(
+                    $page->getUrlsByLabel('<A picture>'),
+                    array(new SimpleUrl('http://host/somewhere.php')));
+        }
+        
         function testTitleSetting() {
             $title = &new SimpleTitleTag(array());
             $title->addContent('Title');
