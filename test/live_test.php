@@ -70,6 +70,19 @@
                     '/Raw POST data.*?\s+\[Some post data\]/',
                     $response->getContent());
         }
+        function testHttpFormPost() {
+            $http = &new SimpleHttpPushRequest(
+                    new SimpleUrl("www.lastcraft.com/test/network_confirm.php"),
+                    "pkey=pvalue");
+            $http->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
+            $response = &$http->fetch();
+            $this->assertWantedPattern(
+                    '/Request method.*?<dd>POST<\/dd>/',
+                    $response->getContent());
+            $this->assertWantedPattern(
+                    '/pkey=\[pvalue\]/',
+                    $response->getContent());
+        }
     }
     
     class TestOfLiveFetching extends WebTestCase {
