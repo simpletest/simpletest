@@ -11,24 +11,40 @@
             $this->UnitTestCase();
         }
         function testNoPatterns() {
-            $regex = &new ParallelRegex();
+            $regex = &new ParallelRegex(false);
             $this->assertFalse($regex->match("Hello", $match));
             $this->assertEqual($match, "");
         }
         function testNoSubject() {
-            $regex = &new ParallelRegex();
+            $regex = &new ParallelRegex(false);
             $regex->addPattern(".*");
             $this->assertTrue($regex->match("", $match));
             $this->assertEqual($match, "");
         }
         function testMatchAll() {
-            $regex = &new ParallelRegex();
+            $regex = &new ParallelRegex(false);
             $regex->addPattern(".*");
             $this->assertTrue($regex->match("Hello", $match));
             $this->assertEqual($match, "Hello");
         }
+        function testCaseSensitive() {
+            $regex = &new ParallelRegex(true);
+            $regex->addPattern("abc");
+            $this->assertTrue($regex->match("abcdef", $match));
+            $this->assertEqual($match, "abc");
+            $this->assertTrue($regex->match("AAABCabcdef", $match));
+            $this->assertEqual($match, "abc");
+        }
+        function testCaseInsensitive() {
+            $regex = &new ParallelRegex(false);
+            $regex->addPattern("abc");
+            $this->assertTrue($regex->match("abcdef", $match));
+            $this->assertEqual($match, "abc");
+            $this->assertTrue($regex->match("AAABCabcdef", $match));
+            $this->assertEqual($match, "ABC");
+        }
         function testMatchMultiple() {
-            $regex = &new ParallelRegex();
+            $regex = &new ParallelRegex(true);
             $regex->addPattern("abc");
             $regex->addPattern("ABC");
             $this->assertTrue($regex->match("abcdef", $match));
@@ -38,7 +54,7 @@
             $this->assertFalse($regex->match("Hello", $match));
         }
         function testPatternLabels() {
-            $regex = &new ParallelRegex();
+            $regex = &new ParallelRegex(false);
             $regex->addPattern("abc", "letter");
             $regex->addPattern("123", "number");
             $this->assertIdentical($regex->match("abcdef", $match), "letter");

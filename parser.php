@@ -19,11 +19,16 @@
         var $_patterns;
         var $_labels;
         var $_regex;
+        var $_case;
         
         /**
          *    Constructor. Starts with no patterns.
+         *    @param $case    True for case sensitive, false
+         *                    for insensitive.
+         *    @public
          */
-        function ParallelRegex() {
+        function ParallelRegex($case) {
+            $this->_case = $case;
             $this->_patterns = array();
             $this->_labels = array();
             $this->_regex = null;
@@ -79,16 +84,25 @@
          *    @private
          */
         function _getCompoundedRegex() {
-            if ($this->_regex != null) {
-                return $this->_regex;
+            if ($this->_regex == null) {
+                for ($i = 0; $i < count($this->_patterns); $i++) {
+                    $this->_patterns[$i] = '(' . str_replace(
+                            array('/', '(', ')'),
+                            array('\/', '\(', '\)'),
+                            $this->_patterns[$i]) . ')';
+                }
+                $this->_regex = "/" . implode("|", $this->_patterns) . "/" . $this->_getPerlMatchingFlags();
             }
-            for ($i = 0; $i < count($this->_patterns); $i++) {
-                $this->_patterns[$i] = '(' . str_replace(
-                        array('/', '(', ')'),
-                        array('\/', '\(', '\)'),
-                        $this->_patterns[$i]) . ')';
-            }
-            return ($this->_regex = "/" . implode("|", $this->_patterns) . "/msiS");
+            return $this->_regex;
+        }
+        
+        /**
+         *    Accessor for perl regex mode flags to use.
+         *    @return        Flags as string.
+         *    @private
+         */
+        function _getPerlMatchingFlags() {
+            return ($this->_case ? "msS" : "msSi");
         }
     }
     
@@ -154,15 +168,19 @@
         var $_parser;
         var $_mode;
         var $_mode_handlers;
+        var $_case;
         
         /**
-         *    Sets up the lexer.
+         *    Sets up the lexer in case insensitive matching
+         *    by default.
          *    @param $parser     Handling strategy by
          *                       reference.
          *    @param $start      Starting handler.
+         *    @param $case       True for case sensitive.
          *    @public
          */
-        function SimpleLexer(&$parser, $start = "accept") {
+        function SimpleLexer(&$parser, $start = "accept", $case = false) {
+            $this->_case = $case;
             $this->_regexes = array();
             $this->_parser = &$parser;
             $this->_mode = new StateStack($start);
@@ -182,7 +200,7 @@
          */
         function addPattern($pattern, $mode = "accept") {
             if (!isset($this->_regexes[$mode])) {
-                $this->_regexes[$mode] = new ParallelRegex();
+                $this->_regexes[$mode] = new ParallelRegex($this->_case);
             }
             $this->_regexes[$mode]->addPattern($pattern);
         }
@@ -202,7 +220,7 @@
          */
         function addEntryPattern($pattern, $mode, $new_mode) {
             if (!isset($this->_regexes[$mode])) {
-                $this->_regexes[$mode] = new ParallelRegex();
+                $this->_regexes[$mode] = new ParallelRegex($this->_case);
             }
             $this->_regexes[$mode]->addPattern($pattern, $new_mode);
         }
@@ -217,7 +235,7 @@
          */
         function addExitPattern($pattern, $mode) {
             if (!isset($this->_regexes[$mode])) {
-                $this->_regexes[$mode] = new ParallelRegex();
+                $this->_regexes[$mode] = new ParallelRegex($this->_case);
             }
             $this->_regexes[$mode]->addPattern($pattern, "__exit");
         }
@@ -235,7 +253,7 @@
          */
         function addSpecialPattern($pattern, $mode, $special) {
             if (!isset($this->_regexes[$mode])) {
-                $this->_regexes[$mode] = new ParallelRegex();
+                $this->_regexes[$mode] = new ParallelRegex($this->_case);
             }
             $this->_regexes[$mode]->addPattern($pattern, "_$special");
         }
@@ -409,6 +427,7 @@
             SimpleSaxParser::_addTag($lexer, "title");
             SimpleSaxParser::_addTag($lexer, "form");
             SimpleSaxParser::_addInTagTokens($lexer);
+            SimpleSaxParser::_addTag($lexer, "input");
             return $lexer;
         }
         
