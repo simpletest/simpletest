@@ -1041,10 +1041,10 @@
             $code = "";
             $methods = array_merge($methods, get_class_methods($class));
             foreach ($methods as $method) {
-                if (Stub::_isSpecialMethod($method)) {
+                if (Stub::_isConstructor($method)) {
                     continue;
                 }
-                if (Stub::_isOverrideMethod($method)) {
+                if (Stub::_isOverride($method)) {
                     $code .= Stub::_createOverrideCode($method);
                     continue;
                 }
@@ -1067,7 +1067,7 @@
          *    @access private
          *    @static
          */
-        function _isSpecialMethod($method) {
+        function _isConstructor($method) {
             return in_array(
                     strtolower($method),
                     array('__construct', '__clone'));
@@ -1080,7 +1080,7 @@
          *    @access private
          *    @static
          */
-        function _isOverrideMethod($method) {
+        function _isOverride($method) {
             return in_array(
                     strtolower($method),
                     array('__get', '__set', '__call'));
