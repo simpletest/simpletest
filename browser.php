@@ -273,10 +273,11 @@
          *    @access private
          */
         function _load($method, $url, $parameters = false) {
-            if ($frame = $url->getTarget()) {
-                return $this->_loadFrame($frame, $method, $url, $parameters);
+            $frame = $url->getTarget();
+            if (! $frame || (strtolower($frame) == '_top')) {
+                return $this->_loadPage($method, $url, $parameters);
             }
-            return $this->_loadPage($method, $url, $parameters);
+            return $this->_loadFrame($frame, $method, $url, $parameters);
         }
         
         /**

@@ -434,7 +434,26 @@
             $expected->setTarget('A');
             $this->assertIdentical($frameset->getUrlById(99), $expected);
         }
-        
+          
+        function testReadFrameTaggedUrlsFromFrameInFocus() {
+            $frame = &new MockSimplePage($this);
+            
+            $by_label = new SimpleUrl('l');
+            $by_label->setTarget('L');
+            $frame->setReturnValue('getUrlsByLabel', array($by_label));
+            
+            $by_id = new SimpleUrl('i');
+            $by_id->setTarget('I');
+            $frame->setReturnValue('getUrlById', $by_id);
+            
+            $frameset = &new SimpleFrameset(new MockSimplePage($this));
+            $frameset->addFrame($frame, 'A');
+            $frameset->setFrameFocus('A');
+            
+            $this->assertIdentical($frameset->getUrlsByLabel('label'), array($by_label));
+            $this->assertIdentical($frameset->getUrlById(99), $by_id);
+        }
+      
         function testFindingFormsByAllFinders() {
             $finders = array(
                     'getFormBySubmitLabel', 'getFormBySubmitName',

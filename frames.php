@@ -379,7 +379,9 @@
         function getUrlById($id) {
             foreach ($this->_frames as $index => $frame) {
                 if ($url = $frame->getUrlById($id)) {
-                    $url->setTarget($this->_getPublicNameFromIndex($index));
+                    if (! $url->gettarget()) {
+                        $url->setTarget($this->_getPublicNameFromIndex($index));
+                    }
                     return $url;
                 }
             }
@@ -396,7 +398,9 @@
         function _tagUrlsWithFrame($urls, $frame) {
             $tagged = array();
             foreach ($urls as $url) {
-                $url->setTarget($this->_getPublicNameFromIndex($frame));
+                if (! $url->getTarget()) {
+                    $url->setTarget($this->_getPublicNameFromIndex($frame));
+                }
                 $tagged[] = $url;
             }
             return $tagged;

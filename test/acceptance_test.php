@@ -865,6 +865,12 @@
             $this->assertWantedPattern('/Count: 1/');
         }
         
+        function testTopLinkExitsFrameset() {
+            $this->get('http://www.lastcraft.com/test/messy_frameset.html');
+            $this->clickLink('Exit the frameset');
+            $this->assertTitle('Simple test target file');
+        }
+        
         function TODO_testLinkInOnePageCanLoadAnother() {
             $this->get('http://www.lastcraft.com/test/messy_frameset.html');
             $this->clickSubmit('Down one');

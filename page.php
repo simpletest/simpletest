@@ -666,7 +666,7 @@
             $matches = array();
             foreach ($this->_links as $link) {
                 if ($this->_isNormalMatch($link->getContent(), $label)) {
-                    $matches[] = $this->_makeAbsolute($link->getHref());
+                    $matches[] = $this->_getUrlFromLink($link);
                 }
             }
             return $matches;
@@ -681,10 +681,24 @@
         function getUrlById($id) {
             foreach ($this->_links as $link) {
                 if ($link->getAttribute('id') === (string)$id) {
-                    return $this->_makeAbsolute($link->getHref());
+                    return $this->_getUrlFromLink($link);
                 }
             }
             return false;
+        }
+        
+        /**
+         *    Converts a link into a target URL.
+         *    @param SimpleAnchor $link    Parsed link.
+         *    @return SimpleUrl            URL with frame target if any.
+         *    @access private
+         */
+        function _getUrlFromLink($link) {
+            $url = $this->_makeAbsolute($link->getHref());
+            if ($link->getAttribute('target')) {
+                $url->setTarget($link->getAttribute('target'));
+            }
+            return $url;
         }
         
         /**
