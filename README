@@ -4,8 +4,8 @@ You probably got this package from...
 http://sourceforge.net/projects/simpletest/
 
 If there is no licence agreement with this package please download
-the version above. You must read and accept that licence to use this
-software. The file is titled simply LICENSE.
+a version from the location above. You must read and accept that
+licence to use this software. The file is titled simply LICENSE.
 
 What is it? It's a framework for unit testing, web site testing and
 mock objects for PHP 4.3+.
@@ -73,7 +73,7 @@ get you started and hopefully this material will eventually become included
 with the project documentation. There is a documentation folder, but it is
 just a subset of the material on Sourceforge.
 
-If you download and use and possibly even extend this tool, please let me
+If you download and use and possibly even extend this tool, please let us
 know. Any feedback, even bad, is always welcome and we will work to get
 your suggestions into the version one release. Ideally please send your
 comments to...

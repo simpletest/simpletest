@@ -18,7 +18,7 @@
          *    @access public
          */
         function getVersion() {
-            $content = file(dirname(__FILE__).DIRECTORY_SEPARATOR . 'VERSION');
+            $content = file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'VERSION');
             return trim($content[0]);
         }
         

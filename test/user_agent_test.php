@@ -270,6 +270,33 @@
         }
     }
 
+    class TestOfAdditionalHeaders extends UnitTestCase {
+        function TestOfAdditionalHeaders() {
+            $this->UnitTestCase();
+        }
+        function testAdditionalHeaderAddedToRequest() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue('getNewCookies', array());
+            
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnReference('getHeaders', $headers);
+            
+            $request = &new MockSimpleHttpRequest($this);
+            $request->setReturnReference('fetch', $response);
+            $request->expectOnce(
+                    'addHeaderLine',
+                    array('User-Agent: SimpleTest'));
+            
+            $agent = &new MockRequestUserAgent($this);
+            $agent->setReturnReference('_createHttpRequest', $request);
+            $agent->SimpleUserAgent();
+            
+            $agent->addHeader('User-Agent: SimpleTest');
+            $response = &$agent->fetchResponse('GET', 'http://this.host/');
+            $request->tally();
+        }
+    }
+
     class TestOfBrowserCookies extends UnitTestCase {
         function TestOfBrowserCookies() {
             $this->UnitTestCase();

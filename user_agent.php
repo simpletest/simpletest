@@ -161,6 +161,7 @@
         var $_proxy_password;
         var $_connection_timeout;
         var $_current_request;
+        var $_additional_headers;
         
         /**
          *    Starts with no cookies, realms or proxies.
@@ -175,6 +176,7 @@
             $this->_proxy_password = false;
             $this->setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
             $this->_current_request = false;
+            $this->_additional_headers = array();
         }
         
         /**
@@ -262,6 +264,16 @@
          */
         function restartSession($date = false) {
             $this->_cookie_jar->restartSession($date);
+        }
+        
+        /**
+         *    Adds a header to every fetch.
+         *    @param string $header       Header line to add to every
+         *                                request until cleared.
+         *    @access public
+         */
+        function addHeader($header) {
+            $this->_additional_headers[] = $header;
         }
         
         /**
@@ -474,6 +486,7 @@
          */
         function &_createRequest($method, $url, $parameters) {
             $request = &$this->_createHttpRequest($method, $url, $parameters);
+            $this->_addAdditionalHeaders($request);
             $this->_cookie_jar->addHeaders($request, $url);
             $this->_authenticator->addHeaders($request, $url);
             return $request;
@@ -514,6 +527,17 @@
                         $this->_proxy_password);
             }
             return new SimpleDestination($url);
+        }
+        
+        /**
+         *    Adds additional manual headers.
+         *    @param SimpleHttpRequest $request    Outgoing request.
+         *    @access private
+         */
+        function _addAdditionalHeaders(&$request) {
+            foreach ($this->_additional_headers as $header) {
+                $request->addHeaderLine($header);
+            }
         }
         
         /**

@@ -36,8 +36,8 @@ Allow image links/buttons to be head fetched to set cookies (2).
 Allow stylesheet loading to affect cookies (2).
 Username and password should allow encoded characters (1).
 Add support for proxy fetching (3/9) - done.
-Add User-Agent identifier for tracking tests (1).
-Allow adding of arbitrary headers (1).
+Add User-Agent identifier for tracking tests (1/0) - done.
+Allow adding of arbitrary headers (1/1) - done.
 
 Web tester
 ----------

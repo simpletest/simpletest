@@ -144,6 +144,16 @@
         function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
             $this->_browser->setCookie($name, $value, $host, $path, $expiry);
         }
+
+        /**
+         *    Adds a header to every fetch.
+         *    @param string $header       Header line to add to every
+         *                                request until cleared.
+         *    @access public
+         */
+        function addHeader($header) {
+            $this->_browser->addHeader($header);
+        }
         
         /**
          *    Sets the maximum number of redirects before

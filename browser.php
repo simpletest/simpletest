@@ -235,6 +235,16 @@
         }
         
         /**
+         *    Adds a header to every fetch.
+         *    @param string $header       Header line to add to every
+         *                                request until cleared.
+         *    @access public
+         */
+        function addHeader($header) {
+            $this->_user_agent->addHeader($header);
+        }
+        
+        /**
          *    Ages the cookies by the specified time.
          *    @param integer $interval    Amount in seconds.
          *    @access public
@@ -246,11 +256,11 @@
         /**
          *    Sets an additional cookie. If a cookie has
          *    the same name and path it is replaced.
-         *    @param string $name            Cookie key.
-         *    @param string $value           Value of cookie.
-         *    @param string $host            Host upon which the cookie is valid.
-         *    @param string $path            Cookie path if not host wide.
-         *    @param string $expiry          Expiry date.
+         *    @param string $name       Cookie key.
+         *    @param string $value      Value of cookie.
+         *    @param string $host       Host upon which the cookie is valid.
+         *    @param string $path       Cookie path if not host wide.
+         *    @param string $expiry     Expiry date.
          *    @access public
          */
         function setCookie($name, $value, $host = false, $path = '/', $expiry = false) {
