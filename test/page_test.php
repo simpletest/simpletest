@@ -418,8 +418,8 @@
             
             $this->assertTrue($page->hasFrames());
             $this->assertIdentical($page->getFrames(), array(
-                    0 => new SimpleUrl('http://here/2.html'),
-                    1 => new SimpleUrl('http://here/3.html')));
+                    1 => new SimpleUrl('http://here/2.html'),
+                    2 => new SimpleUrl('http://here/3.html')));
         }
         
         function testNamedFramesInPage() {
@@ -436,10 +436,10 @@
             
             $this->assertTrue($page->hasFrames());
             $this->assertIdentical($page->getFrames(), array(
-                    0 => new SimpleUrl('http://here/1.html'),
+                    1 => new SimpleUrl('http://here/1.html'),
                     'A' => new SimpleUrl('http://here/2.html'),
                     'B' => new SimpleUrl('http://here/3.html'),
-                    3 => new SimpleUrl('http://here/4.html')));
+                    4 => new SimpleUrl('http://here/4.html')));
         }
     }
 
@@ -550,7 +550,7 @@
             $this->assertTrue($page->hasFrames());
             $this->assertIdentical(
                     $page->getFrames(),
-                    array(0 => new SimpleUrl('http://host/a.html')));
+                    array(1 => new SimpleUrl('http://host/a.html')));
         }
         
         function testSingleFrameInNestedFrameset() {
@@ -565,7 +565,7 @@
             $this->assertTrue($page->hasFrames());
             $this->assertIdentical(
                     $page->getFrames(),
-                    array(0 => new SimpleUrl('http://host/a.html')));
+                    array(1 => new SimpleUrl('http://host/a.html')));
         }
         
         function testFrameWithNoSource() {
@@ -592,9 +592,9 @@
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
             $this->assertIdentical($page->getFrames(), array(
-                    0 => new SimpleUrl('http://host/a.html'),
-                    1 => new SimpleUrl('http://host/b.html'),
-                    2 => new SimpleUrl('http://host/c.html')));
+                    1 => new SimpleUrl('http://host/a.html'),
+                    2 => new SimpleUrl('http://host/b.html'),
+                    3 => new SimpleUrl('http://host/c.html')));
         }
         
         function testNamedFrames() {
@@ -610,9 +610,9 @@
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
             $this->assertIdentical($page->getFrames(), array(
-                    0 => new SimpleUrl('http://host/a.html'),
+                    1 => new SimpleUrl('http://host/a.html'),
                     '_one' => new SimpleUrl('http://host/b.html'),
-                    2 => new SimpleUrl('http://host/c.html'),
+                    3 => new SimpleUrl('http://host/c.html'),
                     '_two' => new SimpleUrl('http://host/d.html')));
         }
         

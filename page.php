@@ -590,7 +590,7 @@
          *    @return boolean/array     False if no frameset or
          *                              otherwise a hash of frame URLs.
          *                              The key is either a numerical
-         *                              index or the name attribute.
+         *                              base one index or the name attribute.
          *    @access public
          */
         function getFrames() {
@@ -601,7 +601,7 @@
             for ($i = 0; $i < count($this->_frames); $i++) {
                 $name = $this->_frames[$i]->getAttribute('name');
                 $url = new SimpleUrl($this->_frames[$i]->getAttribute('src'));
-                $urls[$name ? $name : $i] = $url->makeAbsolute($this->getUrl());
+                $urls[$name ? $name : $i + 1] = $url->makeAbsolute($this->getUrl());
             }
             return $urls;
         }
