@@ -268,33 +268,77 @@
         }
         
         /**
-         *    Paints the start of a test. Will also paint
-         *    the document headerif this is the
-         *    first test. Will stash the size if the first
-         *    start.
+         *    Paints the start of a group test.
          *    @param string $test_name   Name of test that is starting.
          *    @param integer $size       Number of test cases starting.
          *    @access public
          */
-        function paintStart($test_name, $size) {
-            parent::paintStart($test_name, $size);
+        function paintGroupStart($test_name, $size) {
+            parent::paintGroupStart($test_name, $size);
             print $this->_getIndent();
-            print "<st:start>\n";
+            print "<st:group size=\"$size\">\n";
             print $this->_getIndent(1);
             print "<st:name>" . $this->toParsedXml($test_name) . "</st:name>\n";
         }
         
         /**
-         *    Paints the end of a test. Will paint the page
-         *    footer if the stack of tests has unwound.
+         *    Paints the end of a group test.
+         *    @param string $test_name   Name of test that is ending.
+         *    @access public
+         */
+        function paintGroupEnd($test_name) {
+            print $this->_getIndent();
+            print "</st:group>\n";
+            parent::paintGroupEnd($test_name);
+        }
+        
+        /**
+         *    Paints the start of a test case.
+         *    @param string $test_name   Name of test that is starting.
+         *    @access public
+         */
+        function paintCaseStart($test_name) {
+            parent::paintCaseStart($test_name);
+            print $this->_getIndent();
+            print "<st:case>\n";
+            print $this->_getIndent(1);
+            print "<st:name>" . $this->toParsedXml($test_name) . "</st:name>\n";
+        }
+        
+        /**
+         *    Paints the end of a test case.
+         *    @param string $test_name   Name of test that is ending.
+         *    @access public
+         */
+        function paintCaseEnd($test_name) {
+            print $this->_getIndent();
+            print "</st:case>\n";
+            parent::paintCaseEnd($test_name);
+        }
+        
+        /**
+         *    Paints the start of a test method.
+         *    @param string $test_name   Name of test that is starting.
+         *    @access public
+         */
+        function paintMethodStart($test_name) {
+            parent::paintMethodStart($test_name);
+            print $this->_getIndent();
+            print "<st:test>\n";
+            print $this->_getIndent(1);
+            print "<st:name>" . $this->toParsedXml($test_name) . "</st:name>\n";
+        }
+        
+        /**
+         *    Paints the end of a test method.
          *    @param string $test_name   Name of test that is ending.
          *    @param integer $progress   Number of test cases ending.
          *    @access public
          */
-        function paintEnd($test_name, $progress) {
+        function paintMethodEnd($test_name) {
             print $this->_getIndent();
-            print "</st:start>\n";
-            parent::paintEnd($test_name, $progress);
+            print "</st:test>\n";
+            parent::paintMethodEnd($test_name);
         }
         
         /**
@@ -304,7 +348,7 @@
          */
         function paintPass($message) {
             parent::paintPass($message);
-            print $this->_getIndent();
+            print $this->_getIndent(1);
             print "<st:pass>";
             print $this->toParsedXml($message);
             print "</st:pass>\n";
@@ -317,7 +361,7 @@
          */
         function paintFail($message) {
             parent::paintFail($message);
-            print $this->_getIndent();
+            print $this->_getIndent(1);
             print "<st:fail>";
             print $this->toParsedXml($message);
             print "</st:fail>\n";
@@ -331,7 +375,7 @@
          */
         function paintException($message) {
             parent::paintException($message);
-            print $this->_getIndent();
+            print $this->_getIndent(1);
             print "<st:exception>";
             print $this->toParsedXml($message);
             print "</st:exception>\n";

@@ -95,7 +95,7 @@
          *    @access public
          */
         function handleMethodStart($method) {
-            $this->_reporter->paintStart($method, 0);
+            $this->_reporter->paintMethodStart($method);
         }
         
         /**
@@ -104,7 +104,7 @@
          *    @access public
          */
         function handleMethodEnd($method) {
-            $this->_reporter->paintEnd($method, 0);
+            $this->_reporter->paintMethodEnd($method);
         }
         
         /**
@@ -114,7 +114,7 @@
          *    @access public
          */
         function handleCaseStart($label) {
-            $this->_reporter->paintStart($label, 1);
+            $this->_reporter->paintCaseStart($label);
         }
         
         /**
@@ -124,7 +124,7 @@
          *    @access public
          */
         function handleCaseEnd($label) {
-            $this->_reporter->paintEnd($label, 1);
+            $this->_reporter->paintCaseEnd($label);
         }
         
         /**
@@ -134,7 +134,7 @@
          *    @access public
          */
         function handleGroupStart($label, $size) {
-            $this->_reporter->paintStart($label, $size);
+            $this->_reporter->paintGroupStart($label, $size);
         }
         
         /**
@@ -143,7 +143,7 @@
          *    @access public
          */
         function handleGroupEnd($label) {
-            $this->_reporter->paintEnd($label, 0);
+            $this->_reporter->paintGroupEnd($label);
         }
         
         /**
@@ -187,21 +187,52 @@
         }
         
         /**
-         *    Paints the start of a test.
+         *    Paints the start of a test method.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintMethodStart($test_name) {
+        }
+        
+        /**
+         *    Paints the end of a test method.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintMethodEnd($test_name) {
+        }
+         
+        /**
+         *    Paints the start of a test case.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintCaseStart($test_name) {
+        }
+        
+        /**
+         *    Paints the end of a test case.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintCaseEnd($test_name) {
+        }
+       
+        /**
+         *    Paints the start of a group test.
          *    @param string $test_name     Name of test or other label.
          *    @param integer $size         Number of test cases starting.
          *    @access public
          */
-        function paintStart($test_name, $size) {
+        function paintGroupStart($test_name, $size) {
         }
         
         /**
-         *    Paints the end of a test.
+         *    Paints the end of a group test.
          *    @param string $test_name     Name of test or other label.
-         *    @param integer $progress     Number of cases just finished.
          *    @access public
          */
-        function paintEnd($test_name, $progress) {
+        function paintGroupEnd($test_name) {
         }
         
         /**
@@ -281,7 +312,7 @@
         }
         
         /**
-         *    Paints the start of a test. Will also paint
+         *    Paints the start of a group test. Will also paint
          *    the page header and footer if this is the
          *    first test. Will stash the size if the first
          *    start.
@@ -289,7 +320,7 @@
          *    @param integer $size       Number of test cases starting.
          *    @access public
          */
-        function paintStart($test_name, $size) {
+        function paintGroupStart($test_name, $size) {
             if (!isset($this->_size)) {
                 $this->_size = $size;
             }
@@ -300,18 +331,68 @@
         }
         
         /**
-         *    Paints the end of a test. Will paint the page
+         *    Paints the end of a group test. Will paint the page
          *    footer if the stack of tests has unwound.
          *    @param string $test_name   Name of test that is ending.
          *    @param integer $progress   Number of test cases ending.
          *    @access public
          */
-        function paintEnd($test_name, $progress) {
-            $this->_progress += $progress;
+        function paintGroupEnd($test_name) {
             array_pop($this->_test_stack);
             if (count($this->_test_stack) == 0) {
                 $this->paintFooter($test_name);
             }
+        }
+        
+        /**
+         *    Paints the start of a test case. Will also paint
+         *    the page header and footer if this is the
+         *    first test. Will stash the size if the first
+         *    start.
+         *    @param string $test_name   Name of test that is starting.
+         *    @access public
+         */
+        function paintCaseStart($test_name) {
+            if (! isset($this->_size)) {
+                $this->_size = 1;
+            }
+            if (count($this->_test_stack) == 0) {
+                $this->paintHeader($test_name);
+            }
+            $this->_test_stack[] = $test_name;
+        }
+        
+        /**
+         *    Paints the end of a test case. Will paint the page
+         *    footer if the stack of tests has unwound.
+         *    @param string $test_name   Name of test that is ending.
+         *    @access public
+         */
+        function paintCaseEnd($test_name) {
+            $this->_progress++;
+            array_pop($this->_test_stack);
+            if (count($this->_test_stack) == 0) {
+                $this->paintFooter($test_name);
+            }
+        }
+        
+        /**
+         *    Paints the start of a test method.
+         *    @param string $test_name   Name of test that is starting.
+         *    @access public
+         */
+        function paintMethodStart($test_name) {
+            $this->_test_stack[] = $test_name;
+        }
+        
+        /**
+         *    Paints the end of a test method. Will paint the page
+         *    footer if the stack of tests has unwound.
+         *    @param string $test_name   Name of test that is ending.
+         *    @access public
+         */
+        function paintMethodEnd($test_name) {
+            array_pop($this->_test_stack);
         }
         
         /**
