@@ -47,12 +47,22 @@
             $this->assertFalse($realm->isWithin(
                     new SimpleUrl('http://www.here.com/pathmore/hello.html')));
         }
-        function testDifferntPageNameStillInside() {
+        function testDifferentPageNameStillInside() {
             $realm = &new SimpleRealm(
                     'Basic',
                     new SimpleUrl('http://www.here.com/path/hello.html'));
             $this->assertTrue($realm->isWithin(
                     new SimpleUrl('http://www.here.com/path/goodbye.html')));
+        }
+        function testNewUrlInSameDirectoryDoesNotChangeRealm() {
+            $realm = &new SimpleRealm(
+                    'Basic',
+                    new SimpleUrl('http://www.here.com/path/hello.html'));
+            $realm->mergeUrl(new SimpleUrl('http://www.here.com/path/goodbye.html'));
+            $this->assertTrue($realm->isWithin(
+                    new SimpleUrl('http://www.here.com/path/index.html')));
+            $this->assertFalse($realm->isWithin(
+                    new SimpleUrl('http://www.here.com/index.html')));
         }
     }
 

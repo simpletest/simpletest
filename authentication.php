@@ -35,9 +35,17 @@
          */
         function SimpleRealm($type, $url) {
             $this->_type = $type;
-            $this->_root = $url->getHost() . $url->getBasePath();
+            $this->_root = $url;
             $this->_username = false;
             $this->_password = false;
+        }
+        
+        /**
+         *    Adds another location to the realm.
+         *    @param SimpleUrl $url    Somewhere in realm.
+         *    @access public
+         */
+        function mergeUrl($url) {
         }
         
         /**
@@ -77,8 +85,19 @@
          *    @access public
          */
         function isWithin($url) {
-            $stem = $url->getHost() . $url->getBasePath();
-            return (strpos($stem, $this->_root) === 0);
+            $stem = $this->_getSignificant($url);
+            $root = $this->_getSignificant($this->_root);
+            return (strpos($stem, $root) === 0);
+        }
+        
+        /**
+         *    Gets significant part of URL.
+         *    @param SimpleUrl $url    Url to extract discrimitory path
+         *                             information from.
+         *    @access private
+         */
+        function _getSignificant($url) {
+            return $url->getHost() . $url->getBasePath();
         }
     }
     
