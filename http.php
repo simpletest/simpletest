@@ -284,9 +284,11 @@
                     $this->_url->getHost(),
                     $this->_url->getPort() ? $this->_url->getPort() : $default_port,
                     $timeout);
-            $socket->write($this->_getRequestLine($method) . "\r\n");
-            $socket->write($this->_getHostLine() . "\r\n");
-            $socket->write("Connection: close\r\n");
+            if (! $socket->isError()) {
+                $socket->write($this->_getRequestLine($method) . "\r\n");
+                $socket->write($this->_getHostLine() . "\r\n");
+                $socket->write("Connection: close\r\n");
+            }
             return $socket;
         }
         
@@ -373,14 +375,16 @@
                     $this->_proxy->getHost(),
                     $this->_proxy->getPort() ? $this->_proxy->getPort() : 8080,
                     $timeout);
-            $socket->write($this->_getRequestLine($method) . "\r\n");
-            $socket->write($this->_getHostLine() . "\r\n");
-            if ($this->_username && $this->_password) {
-                $socket->write('Proxy-Authorization: Basic ' .
-                        base64_encode($this->_username . ':' . $this->_password) .
-                        "\r\n");
+            if (! $socket->isError()) {
+                $socket->write($this->_getRequestLine($method) . "\r\n");
+                $socket->write($this->_getHostLine() . "\r\n");
+                if ($this->_username && $this->_password) {
+                    $socket->write('Proxy-Authorization: Basic ' .
+                            base64_encode($this->_username . ':' . $this->_password) .
+                            "\r\n");
+                }
+                $socket->write("Connection: close\r\n");
             }
-            $socket->write("Connection: close\r\n");
             return $socket;
         }
     }
@@ -423,6 +427,9 @@
          */
         function &fetch($timeout) {
             $socket = &$this->_route->createConnection($this->_method, $timeout);
+            if ($socket->isError()) {
+                return $this->_createResponse($socket);
+            }
             $this->_dispatchRequest($socket, $this->_method, $this->_content);
             return $this->_createResponse($socket);
         }
@@ -741,7 +748,12 @@
             $this->_request_data = $request_data;
             $this->_sent = $socket->getSent();
             $this->_content = false;
-            $this->_parse($this->_readAll($socket));
+            $raw = $this->_readAll($socket);
+            if ($socket->isError()) {
+                $this->_setError('Error reading socket [' . $socket->getError() . ']');
+                return;
+            }
+            $this->_parse($raw);
         }
         
         /**

@@ -14,7 +14,10 @@
         }
         function testBadSocket() {
             $socket = &new SimpleSocket('bad_url', 111, 5);
-            $this->assertErrorPattern('/Cannot open \\[bad_url:111\\] with \\[.*?\\] within \\[5\\] seconds/');
+            $this->assertTrue($socket->isError());
+            $this->assertWantedPattern(
+                    '/Cannot open \\[bad_url:111\\] with \\[.*?\\] within \\[5\\] seconds/',
+                    $socket->getError());
             $this->assertFalse($socket->isOpen());
             $this->assertFalse($socket->write('A message'));
         }

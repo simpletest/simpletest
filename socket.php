@@ -68,10 +68,10 @@
     
     /**
      *    Wrapper for TCP/IP socket.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
-    class SimpleSocket {
+    class SimpleSocket extends StickyError {
         var $_handle;
         var $_is_open;
         var $_sent;
@@ -84,10 +84,11 @@
          *    @access public
          */
         function SimpleSocket($host, $port, $timeout) {
+            $this->StickyError();
             $this->_is_open = false;
             $this->_sent = '';
             if (! ($this->_handle = $this->_openSocket($host, $port, $error_number, $error, $timeout))) {
-                trigger_error("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
+                $this->_setError("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
                 return;
             }
             $this->_is_open = true;
@@ -101,13 +102,13 @@
          *    @access public
          */
         function write($message) {
-            if (! $this->isOpen()) {
+            if ($this->isError() || ! $this->isOpen()) {
                 return false;
             }
             $count = fwrite($this->_handle, $message);
             if (! $count) {
                 if ($count === false) {
-                    trigger_error('Cannot write to socket');
+                    $this->_setError('Cannot write to socket');
                     $this->close();
                 }
                 return false;
@@ -125,12 +126,12 @@
          *    @access public
          */
         function read($block_size = 255) {
-            if (! $this->isOpen()) {
+            if ($this->isError() || ! $this->isOpen()) {
                 return false;
             }
             $raw = fread($this->_handle, $block_size);
             if ($raw === false) {
-                trigger_error('Cannot write to socket');
+                $this->_setError('Cannot read from socket');
                 $this->close();
             }
             return $raw;
