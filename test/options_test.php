@@ -1,8 +1,14 @@
 <?php
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "../");
+    if (!defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', '../');
     }
     require_once(SIMPLE_TEST . 'options.php');
+    
+    class RandomCompatibilityClass {
+    }
+    
+    class RandomCompatibilitySubclass extends RandomCompatibilityClass {
+    }
     
     class TestOfOptions extends UnitTestCase {
         function TestOfOptions() {
@@ -24,6 +30,23 @@
             $this->assertFalse(SimpleTestOptions::isIgnored('ImaginaryTestCase'));
             SimpleTestOptions::ignore('ImaginaryTestCase');
             $this->assertTrue(SimpleTestOptions::isIgnored('ImaginaryTestCase'));
+        }
+    }
+    
+    class TestOfCompatibility extends UnitTestCase {
+        function TestOfCompatibility() {
+            $this->UnitTestCase();
+        }
+        function testIsA() {
+            $this->assertTrue(SimpleTestCompatibility::isA(
+                    new RandomCompatibilityClass(),
+                    'RandomCompatibilityClass'));
+            $this->assertFalse(SimpleTestCompatibility::isA(
+                    new RandomCompatibilityClass(),
+                    'RandomCompatibilitySubclass'));
+            $this->assertTrue(SimpleTestCompatibility::isA(
+                    new RandomCompatibilitySubclass(),
+                    'RandomCompatibilityClass'));
         }
     }
 ?>

@@ -12,16 +12,16 @@
     
     class BoundaryTests extends GroupTest {
         function BoundaryTests() {
-            $this->GroupTest("Boundary tests");
-            $this->addTestFile("shell_test.php");
-            $this->addTestFile("live_test.php");
-            $this->addTestFile("real_sites_test.php");
+            $this->GroupTest('Boundary tests');
+            $this->addTestFile('shell_test.php');
+            $this->addTestFile('live_test.php');
+            $this->addTestFile('real_sites_test.php');
         }
     }
     
-    if (!defined("TEST_RUNNING")) {
-        define("TEST_RUNNING", true);
-        $test = &new BoundaryTests("Boundary tests");
+    if (!defined('TEST_RUNNING')) {
+        define('TEST_RUNNING', true);
+        $test = &new BoundaryTests('Boundary tests');
         if (SimpleReporter::inCli()) {
             exit ($test->run(new TextReporter()) ? 0 : 1);
         }

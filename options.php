@@ -165,4 +165,26 @@
                     'AdditionalPartialMockCode' => '');
         }
     }
+    
+    /**
+     *  Static methods for compatibility between different
+     *  PHP versions.
+     *	@package	SimpleTest
+     */
+    class SimpleTestCompatibility {
+        
+        /**
+         *    Test to see if an object is a memebr of a
+         *    class hiearchy.
+         *    @param object $object    Object to test.
+         *    @param string $class     Root name of hiearchy.
+         */
+        function isA($object, $class) {
+            if (function_exists('is_a')) {
+                return is_a($object, $class);
+            }
+            return ((strtolower($class) == get_class($object))
+                    or (is_subclass_of($object, $class)));
+        }
+    }
 ?>
