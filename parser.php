@@ -10,6 +10,7 @@
      */
     class SimpleLexer {
         var $_patterns;
+        var $_handler;
         
         /**
          *    Sets up the lexer.
@@ -17,6 +18,16 @@
          */
         function SimpleLexer() {
             $this->_patterns = array();
+            $this->_handler = null;
+        }
+        
+        /**
+         *    Adds a token handler.
+         *    @param $handler    Handling strategy by
+         *                       reference.
+         */
+        function setHandler(&$handler) {
+            $this->_handler = &$handler;
         }
         
         /**
@@ -30,39 +41,41 @@
         }
         
         /**
-         *    Splits the page text into tokens.
+         *    Splits the page text into tokens. Will fail
+         *    if the handlers report an error or if no
+         *    content is consumed.
          *    @param $raw        Raw HTML text.
          *    @return            Array of tokens.
          *    @public
          */
         function parse($raw) {
-            $tokens = array();
+            if (!isset($this->_handler)) {
+                return false;
+            }
+            if (count($this->_patterns) == 0) {
+                return (!$raw || $this->_handler->acceptUnparsed($raw));
+            }
             $regex = $this->_compoundRegex($this->_patterns);
+            $length = strlen($raw);
             while ($raw && preg_match($regex, $raw, $matches)) {
                 $count = strpos($raw, $matches[0]);
-                $unwanted = substr($raw, 0, $count);
+                $unparsed = substr($raw, 0, $count);
                 $raw = substr($raw, $count + strlen($matches[0]));
-                $this->_handleToken($tokens, $unwanted, $matches[0]);
+                if ($unparsed && !$this->_handler->acceptUnparsed($unparsed)) {
+                    return false;
+                }
+                if ($matches[0] && !$this->_handler->acceptToken($matches[0])) {
+                    return false;
+                }
+                if (strlen($raw) == $length) {
+                    return false;
+                }
+                $length = strlen($raw);
             }
-            $this->_handleToken($tokens, $raw, "");
-            return $tokens;
-        }
-        
-        /**
-         *    Parses unwanted preamble and a matched tag.
-         *    The default is to send both types as output.
-         *    @param $tokens     Output buffer by reference.
-         *    @param $unwanted   Unwanted text before match.
-         *    @param $match      Matched item.
-         *    @protected
-         */
-        function _handleToken(&$tokens, $unwanted, $match) {
-            if ($unwanted) {
-                array_push($tokens, $unwanted);
+            if ($raw && !$this->_handler->acceptUnparsed($raw)) {
+                return false;
             }
-            if ($match) {
-                array_push($tokens, $match);
-            }
+            return true;
         }
         
         /**
@@ -72,9 +85,6 @@
          *    @private
          */
         function _compoundRegex($patterns) {
-            if (count($patterns) == 0) {
-                return '/(.*)/';
-            }
             for ($i = 0; $i < count($patterns); $i++) {
                 $patterns[$i] = '(' . str_replace(
                         array('/', '(', ')'),
@@ -82,6 +92,40 @@
                         $patterns[$i]) . ')';
             }
             return "/" . implode("|", $patterns) . "/ms";
+        }
+    }
+    
+    /**
+     *    Strategy for dealing with a stream of lexer
+     *    tokens.
+     */
+    class TokenHandler {
+        
+        /**
+         *    Do nothing constructor.
+         */
+        function TokenHandler() {
+        }
+        
+        /**
+         *    Handler for unparsed text preceeding
+         *    the next token match.
+         *    @param $unparsed    Unparsed content.
+         *    @return             False if bad input, true
+         *                        if successfully handled.
+         *    @public
+         */
+        function acceptUnparsed($unparsed) {
+        }
+        
+        /**
+         *    Handler for next matched token.
+         *    @param $token       Matched content.
+         *    @return             False if bad input, true
+         *                        if successfully handled.
+         *    @public
+         */
+        function acceptToken($token) {
         }
     }
     

@@ -454,7 +454,10 @@
         function _checkExpectations($method, $args, $timing) {
             if (isset($this->_max_counts[$method])) {
                 if ($timing >= $this->_max_counts[$method]) {
-                    $this->_assertTrue(false, "Call count for [$method] is [$timing]", $this->_test);
+                    $this->_assertTrue(
+                            false,
+                            "Call count for [$method] is [" . ($timing + 1) . "]",
+                            $this->_test);
                 }
             }
             if (isset($this->_sequence_args[$timing][$method])) {

@@ -6,33 +6,77 @@
     }
     require_once(SIMPLE_TEST . 'parser.php');
     Mock::generate("HtmlPage");
+    Mock::generate("TokenHandler");
 
-    class TestOfLexer extends UNitTestCase {
+    class TestOfLexer extends UnitTestCase {
         function TestOfLexer() {
             $this->UnitTestCase();
         }
-        function testEmptyPage() {
+        function testNoHandlers() {
             $lexer = &new SimpleLexer();
-            $this->assertEqual(count($lexer->parse("")), 0);
+            $this->assertFalse($lexer->parse("abcdef"));
+        }
+        function testEmptyPage() {
+            $handler = &new MockTokenHandler($this);
+            $handler->expectMaximumCallCount("acceptToken", 0);
+            $handler->setReturnValue("acceptToken", true);
+            $handler->expectMaximumCallCount("acceptUnparsed", 0);
+            $handler->setReturnValue("acceptUnparsed", true);
+            $lexer = &new SimpleLexer();
+            $lexer->setHandler($handler);
+            $this->assertTrue($lexer->parse(""));
         }
         function testNoPatterns() {
+            $handler = &new MockTokenHandler($this);
+            $handler->expectMaximumCallCount("acceptToken", 0);
+            $handler->setReturnValue("acceptToken", true);
+            $handler->expectArgumentsSequence(0, "acceptUnparsed", array("abcdef"));
+            $handler->expectCallCount("acceptUnparsed", 1);
+            $handler->setReturnValue("acceptUnparsed", true);
             $lexer = &new SimpleLexer();
-            $this->assertEqual($lexer->parse("abcdef"), array("abcdef"));
+            $lexer->setHandler($handler);
+            $this->assertTrue($lexer->parse("abcdef"));
+            $handler->tally();
         }
         function testSinglePattern() {
+            $handler = &new MockTokenHandler($this);
+            $handler->expectArgumentsSequence(0, "acceptToken", array("aaa"));
+            $handler->expectArgumentsSequence(1, "acceptToken", array("a"));
+            $handler->expectArgumentsSequence(2, "acceptToken", array("a"));
+            $handler->expectArgumentsSequence(3, "acceptToken", array("aaa"));
+            $handler->expectCallCount("acceptToken", 4);
+            $handler->setReturnValue("acceptToken", true);
+            $handler->expectArgumentsSequence(0, "acceptUnparsed", array("x"));
+            $handler->expectArgumentsSequence(1, "acceptUnparsed", array("yyy"));
+            $handler->expectArgumentsSequence(2, "acceptUnparsed", array("x"));
+            $handler->expectArgumentsSequence(3, "acceptUnparsed", array("z"));
+            $handler->expectCallCount("acceptUnparsed", 4);
+            $handler->setReturnValue("acceptUnparsed", true);
             $lexer = &new SimpleLexer();
+            $lexer->setHandler($handler);
             $lexer->addPattern("a+");
-            $this->assertEqual(
-                    $lexer->parse("aaaxayyyaxaaaz"),
-                    array("aaa", "x", "a", "yyy", "a", "x", "aaa", "z"));
+            $this->assertTrue($lexer->parse("aaaxayyyaxaaaz"));
+            $handler->tally();
         }
         function testMultiplePattern() {
+            $handler = &new MockTokenHandler($this);
+            $target = array("a", "b", "a", "bb", "b", "a", "a");
+            for ($i = 0; $i < count($target); $i++) {
+                $handler->expectArgumentsSequence($i, "acceptToken", array($target[$i]));
+            }
+            $handler->expectCallCount("acceptToken", count($target));
+            $handler->setReturnValue("acceptToken", true);
+            $handler->expectArgumentsSequence(0, "acceptUnparsed", array("x"));
+            $handler->expectArgumentsSequence(1, "acceptUnparsed", array("xxxxxx"));
+            $handler->expectArgumentsSequence(2, "acceptUnparsed", array("x"));
+            $handler->expectCallCount("acceptUnparsed", 3);
+            $handler->setReturnValue("acceptUnparsed", true);
             $lexer = &new SimpleLexer();
+            $lexer->setHandler($handler);
             $lexer->addPattern("a+");
             $lexer->addPattern("b+");
-            $this->assertEqual(
-                    $lexer->parse("ababbxbaxxxxxxax"),
-                    array("a", "b", "a", "bb", "x", "b", "a", "xxxxxx", "a", "x"));
+            $this->assertTrue($lexer->parse("ababbxbaxxxxxxax"));
+            $handler->tally();
         }
     }
 
