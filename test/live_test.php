@@ -237,6 +237,17 @@
             $this->assertWantedPattern('/go=\[Go!\]/');
             $this->assertWantedPattern('/a=\[\]/');
             $this->assertWantedPattern('/b=\[Default text\]/');
+            $this->assertWantedPattern('/c=\[\]/');
+        }
+        function testFormSubmission() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->setField('a', 'aaa');
+            $this->setField('b', 'bbb');
+            $this->setField('c', 'ccc');
+            $this->assertTrue($this->clickSubmit('Go!'));
+            $this->assertWantedPattern('/a=\[aaa\]/');
+            $this->assertWantedPattern('/b=\[bbb\]/');
+            $this->assertWantedPattern('/c=\[ccc\]/');
         }
         function testSelfSubmit() {
             $this->get('http://www.lastcraft.com/test/self_form.php');
