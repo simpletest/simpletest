@@ -274,7 +274,8 @@
             }
             return $this->_describeArrayDifference(
                     get_object_vars($first),
-                    get_object_vars($second));
+                    get_object_vars($second),
+                    $identical);
         }
         
         /**
@@ -287,7 +288,7 @@
          *    @static
          */
         function _stringDiffersAt($first, $second) {
-            if (!$first || !$second) {
+            if (! $first || ! $second) {
                 return 0;
             }
             if (strlen($first) < strlen($second)) {

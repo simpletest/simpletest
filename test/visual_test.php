@@ -74,7 +74,7 @@
             $this->assertNotEqual("aa", "ab", "%s->Pass");
         }
         function testHashEquality() {
-            $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "%s->Fail");
+            $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "%s->Pass");
         }
         function testStringIdentity() {
             $a = "fred";
@@ -232,6 +232,22 @@
         }
     }
     
+    class TestOfPastBugs extends UnitTestCase {
+        function TestOfPastBugs() {
+            $this->UnitTestCase();
+        }
+        function testMixedTypes() {
+            $this->assertEqual(array(), null, "%s->Pass");
+            $this->assertIdentical(array(), null, "%s->Fail");    // Fail.
+        }
+        function testMockWildcards() {
+            $dummy = &new MockDummy($this);
+            $dummy->expectArguments('a', array('*', array(33)));
+            $dummy->a(array(32), array(33));
+            $dummy->a(array(32), array('33'));        // Fail.
+        }
+    }
+    
     class AllOutputReporter extends HtmlReporter {
         function AllOutputReporter() {
             $this->HtmlReporter();
@@ -256,9 +272,10 @@
         }
     }
     
-    $test = new GroupTest("Visual test with 39 fails, 39 passes and 4 exceptions");
+    $test = new GroupTest("Visual test with 41 fails, 41 passes and 4 exceptions");
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
+    $test->addTestCase(new TestOfPastBugs());
     if (CommandLineReporter::inCli()) {
         exit ($test->run(new CommandLineReporter()) ? 0 : 1);
     }

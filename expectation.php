@@ -15,7 +15,7 @@
         var $_dumper;
         
         /**
-         *    Does nothing.
+         *    Creates a dumper for displaying values.
          */
         function SimpleExpectation() {
             $this->_dumper = &new SimpleDumper();
@@ -40,6 +40,15 @@
          *    @abstract
          */
         function testMessage($compare) {
+        }
+        
+        /**
+         *    Accessor for the dumper.
+         *    @return SimpleDumper    Current value dumper.
+         *    @protected
+         */
+        function &_getDumper() {
+            return $this->_dumper;
         }
     }
     

@@ -11,6 +11,41 @@
     define('MOCK_WILDCARD', '*');
     
     /**
+     *    A wildcard expectation always matches.
+     */
+    class WildcardExpectation extends SimpleExpectation {
+        
+        /**
+         *    Chains constructor only.
+         */
+        function WildcardExpectation() {
+            $this->SimpleExpectation();
+        }
+        
+        /**
+         *    Tests the expectation. Always true.
+         *    @param mixed $compare  Ignored.
+         *    @return boolean        True.
+         *    @public
+         */
+        function test($compare) {
+            return true;
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param $compare      Comparison value.
+         *    @return              String description of success
+         *                         or failure.
+         *    @public
+         */
+        function testMessage($compare) {
+            $dumper = &$this->_getDumper();
+            return 'Wildcard always matches [' . $dumper->describeValue($compare) . ']';
+        }
+    }
+    
+    /**
      *    Parameter comparison assertion.
      */
     class ParametersExpectation extends SimpleExpectation {
@@ -19,11 +54,11 @@
         
         /**
          *    Sets the expected parameter list.
-         *    @param $parameters        Array of parameters including
+         *    @param array $parameters  Array of parameters including
          *                              those that are wildcarded.
          *                              If the value is not an array
          *                              then it is considered to match any.
-         *    @param $wildcard          Any parameter matching this
+         *    @param mixed $wildcard    Any parameter matching this
          *                              will always match.
          *    @public
          */
@@ -47,6 +82,11 @@
                 return false;
             }
             for ($i = 0; $i < count($this->_expected); $i++) {
+                if (is_a($this->_expected[$i], 'SimpleExpectation')) {
+                    if (! $this->_expected[$i]->test($parameters[$i])) {
+                        return false;
+                    }
+                }
                 if ($this->_expected[$i] === $this->_wildcard) {
                     continue;
                 }
@@ -91,13 +131,28 @@
             }
             $messages = array();
             for ($i = 0; $i < count($expected); $i++) {
-                $comparison = new IdenticalExpectation($expected[$i]);
+                $comparison = $this->_coerceToExpectation($expected[$i]);
                 if (! $comparison->test($parameters[$i])) {
                     $messages[] = "parameter " . ($i + 1) . " with [" .
                             $comparison->testMessage($parameters[$i]) . "]";
                 }
             }
             return "Mock expectation differs at " . implode(" and ", $messages);
+        }
+        
+        /**
+         *    Creates an identical expectation if the
+         *    object/value is not already some type
+         *    of expectation.
+         *    @param mixed $expected      Expected value.
+         *    @return SimpleExpectation   Expectation object.
+         *    @private
+         */
+        function _coerceToExpectation($expected) {
+            if (is_a($expected, 'SimpleExpectation')) {
+                return $expected;
+            }
+            return new IdenticalExpectation($expected);
         }
         
         /**

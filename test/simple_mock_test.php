@@ -1,6 +1,19 @@
 <?php
     // $Id$
     
+    class TestOfWildcardExpectation extends UnitTestCase {
+        function TestOfWildcardExpectation() {
+            $this->UnitTestCase();
+        }
+        function testSimpleInteger() {
+            $expectation = new WildcardExpectation();
+            $this->assertTrue($expectation->test(33));
+            $this->assertWantedPattern(
+                    '/matches.*33/i',
+                    $expectation->testMessage(33));
+        }
+    }
+    
     class TestOfParametersExpectation extends UnitTestCase {
         function TestOfParametersExpectation() {
             $this->UnitTestCase();
