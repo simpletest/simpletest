@@ -5,7 +5,7 @@
         define("SIMPLE_TEST", "../");
     }
     require_once(SIMPLE_TEST . 'unit_tester.php');
-    require_once(SIMPLE_TEST . 'assertion.php');
+    require_once(SIMPLE_TEST . 'expectation.php');
     
     /**
      *    Adapter for sourceforge PHPUnit test case to allow

@@ -4,7 +4,7 @@
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "../");
     }
-    require_once(SIMPLE_TEST . 'assertion.php');
+    require_once(SIMPLE_TEST . 'expectation.php');
 
     class TestOfExpectationFormatting extends UnitTestCase {
         function TestOfExpectationFormatting() {

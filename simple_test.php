@@ -7,7 +7,7 @@
     require_once(SIMPLE_TEST . 'errors.php');
     require_once(SIMPLE_TEST . 'options.php');
     require_once(SIMPLE_TEST . 'runner.php');
-    require_once(SIMPLE_TEST . 'assertion.php');
+    require_once(SIMPLE_TEST . 'expectation.php');
     
     /**
      *    Interface used by the test displays and group tests.

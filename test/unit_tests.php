@@ -18,7 +18,7 @@
             $this->GroupTest("Unit tests");
             $this->addTestFile("errors_test.php");
             $this->addTestFile("options_test.php");
-            $this->addTestFile("assertion_test.php");
+            $this->addTestFile("expectation_test.php");
             $this->addTestFile("simple_mock_test.php");
             $this->addTestFile("adapter_test.php");
             $this->addTestFile("socket_test.php");
