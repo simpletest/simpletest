@@ -282,6 +282,8 @@
     class GroupTest {
         var $_label;
         var $_test_cases;
+        var $_old_track_errors;
+        var $_xdebug_is_enabled;
         
         /**
          *    Sets the name of the test suite.
@@ -292,6 +294,9 @@
         function GroupTest($label) {
             $this->_label = $label;
             $this->_test_cases = array();
+            $this->_old_track_errors = ini_get('track_errors');
+            $this->_xdebug_is_enabled = function_exists('xdebug_is_enabled') ?
+                    xdebug_is_enabled() : false;
         }
         
         /**
@@ -352,14 +357,44 @@
          *    @access private
          */
         function _requireWithError($file) {
-            $old_setting = ini_get('track_errors');
-            ini_set('track_errors', true);
+            $this->_enableErrorReporting();
             require($file);
-            ini_set('track_errors', $old_setting);
-            return (isset($php_errormsg)
-                    && $php_errormsg != 'Assigning the return value of new by reference is deprecated'
-                    && $php_errormsg != 'var: Deprecated. Please use the public/private/protected modifiers')
-                    ? $php_errormsg : false;
+            $error = isset($php_errormsg) ? $php_errormsg : false;
+            $this->_disableErorReporting();
+            $self_inflicted = array(
+                    'Assigning the return value of new by reference is deprecated',
+                    'var: Deprecated. Please use the public/private/protected modifiers');
+            if (in_array($error, $self_inflicted)) {
+                return false;
+            }
+            return $error;
+        }
+        
+        /**
+         *    Sets up detection of parse errors. Note that XDebug
+         *    interferes with this and has to be disabled. This is
+         *    to make sure the correct error code is returned
+         *    from unattended scripts.
+         *    @access private
+         */
+        function _enableErrorReporting() {
+            if ($this->_xdebug_is_enabled) {
+                xdebug_disable();
+            }
+            ini_set('track_errors', true);
+        }
+        
+        /**
+         *    Resets detection of parse errors to their old values.
+         *    This is to make sure the correct error code is returned
+         *    from unattended scripts.
+         *    @access private
+         */
+        function _disableErorReporting() {
+            ini_set('track_errors', $this->_old_track_errors);
+            if ($this->_xdebug_is_enabled) {
+                xdebug_enable();
+            }
         }
         
         /**
