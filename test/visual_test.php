@@ -278,7 +278,7 @@
     $test->addTestCase(new TestOfPastBugs());
     
     if (TextReporter::inCli()) {
-        exit ($test->run(new TextReporter()) ? 0 : 1);
+        exit ($test->run(new XmlReporter()) ? 0 : 1);
     }
     $test->run(new AllOutputReporter());
 ?>

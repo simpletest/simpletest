@@ -13,15 +13,17 @@ Create an isA() expectation (1).
 
 Interface
 ---------
-XML reporter (3).
+XML reporter (3/2).
+Make Runner invoke different start and end methods on reporters (2).
 
 Mock objects
 ------------
+Create package file for mocks only (1).
 
 Html parser
 -----------
 Refactor the links into their own objects (3).
-Add checkbox parsing (1).
+Add checkbox parsing (2).
 
 Browser
 -------
