@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <page title="Créer un nouveau de scénario de test" here="test unitaire en PHP">
     <long_title>Tutorial sur les tests unitaires en PHP - Créer un exemple de scénario de test en PHP</long_title>
     <content>
@@ -42,10 +42,10 @@
             La constante <code>SIMPLE_TEST</code> contient le chemin vers les classes de Simple Test à partir de ce fichier. Les classes pourraient être placées dans le path du fichier <em>php.ini</em> mais si vous êtes sur un serveur mutualisé, vous n'y aurez probablement pas accès. Pour que tout le monde soit content, le chemin est déclaré explicitement dans le script de test. Plus tard nous verrons comment tout finira au même endroit.
         </p>
         <p>
-            Demander la librairie <em>unit_tester.php</em> est assez évident mais qu'est-ce que ce fichier <em>reporter.php</em> ? Les librairies Simple Test sont une boîte à outils pour créer votre propre suite de tests standardisés. Elles peuvent être utilisées &laquo;telles quelles&raquo; sans problème, mais elles sont constituées de plusieurs éléments qui ont besoin d'être assemblés les uns aux autres. Le composant pour l'affichage est situé dans <em>reporter.php</em>. Probablement qu'un jour vous écrirez le vôtre : c'est pourquoi son inclusion est optionelle. Simple Test contient une classe d'affichage, fonctionnelle mais basique : elle s'appelle <code>HtmlReporter</code>. Elle peut enregistrer des informations sur les tests : début, fin, erreur, réussite ou échec. Elle affiche cette information le plus rapidement possible au cas où le code de test planterait et masquerait le lieu de l'échec.
+            Demander la librairie <em>unit_tester.php</em> est assez évident mais qu'est-ce que ce fichier <em>reporter.php</em> ? Les librairies Simple Test sont une boîte à outils pour créer votre propre suite de tests standardisés. Elles peuvent être utilisées &quot;telles quelles&quot; sans problème, mais elles sont constituées de plusieurs éléments qui ont besoin d'être assemblés les uns aux autres. Le composant pour l'affichage est situé dans <em>reporter.php</em>. Probablement qu'un jour vous écrirez le vôtre : c'est pourquoi son inclusion est optionelle. Simple Test contient une classe d'affichage, fonctionnelle mais basique : elle s'appelle <code>HtmlReporter</code>. Elle peut enregistrer des informations sur les tests : début, fin, erreur, réussite ou échec. Elle affiche cette information le plus rapidement possible au cas où le code de test planterait et masquerait le lieu de l'échec.
         </p>
         <p>
-            Les tests eux-même sont rassemblés dans une classe de scénario de test. Cette dernière est typiquement une extension de la classe <code>UnitTestCase</code>. Quand le test est exécuté, elle cherche les méthodes commençant par &laquo;test&raquo; et les lancent. Notre seule méthode de test pour l'instant est appellée <code>testCreatingNewFile()</code> mais elle est encore vide.
+            Les tests eux-même sont rassemblés dans une classe de scénario de test. Cette dernière est typiquement une extension de la classe <code>UnitTestCase</code>. Quand le test est exécuté, elle cherche les méthodes commençant par &quot;test&quot; et les lancent. Notre seule méthode de test pour l'instant est appellée <code>testCreatingNewFile()</code> mais elle est encore vide.
         </p>
         <p>
             Une méthode vide ne fait rien. Nous avons besoin d'y placer du code. La classe <code>UnitTestCase</code> génére des évènements de test à son exécution : ces évènements sont envoyés vers un observeur. La méthode <code>UnitTestCase::run()</code> lancent tous les tests de la classe.
@@ -153,7 +153,7 @@
                 <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
                 <strong>0</strong> passes and <strong>1</strong> fails.</div>
             </div>
-            &laquo;testoflogging&raquo; a échoué. Parmi les défauts de PHP on trouve cette facheuse tendance à transformer intérieurement les noms de classes et de méthodes en minuscules. SimpleTest utilise ces noms par défaut pour décrire les tests mais nous pouvons les remplacer par nos propres noms.
+            &quot;testoflogging&quot; a échoué. Parmi les défauts de PHP on trouve cette facheuse tendance à transformer intérieurement les noms de classes et de méthodes en minuscules. SimpleTest utilise ces noms par défaut pour décrire les tests mais nous pouvons les remplacer par nos propres noms.
 <php><![CDATA[
 class TestOfLogging extends UnitTestCase {
     function TestOfLogging() {<strong>
@@ -180,7 +180,7 @@ class TestOfLogging extends UnitTestCase {
             Les messages d'un test comme ceux-ci ressemblent à bien des égards à des commentaires de code. Certains ne jurent que par eux, d'autres au contraire les banissent purement et simplement en les considérant aussi encombrants qu'inutiles. Pour ma part, je me situe quelque part au milieu.
         </p>
         <p>
-            Pour que le test passe, nous pourrions nous contenter de créer le fichier dans le constructeur de <code>Log</code>. Cette technique &laquo;en faisant semblant&raquo; est très utile pour vérifier que le test fonctionne pendant les passages difficiles. Elle le devient encore plus si vous sortez d'un passage avec des tests ayant échoués et que vous voulez juste vérifier de ne pas avoir oublié un truc bête. Nous n'allons pas aussi lentement donc...
+            Pour que le test passe, nous pourrions nous contenter de créer le fichier dans le constructeur de <code>Log</code>. Cette technique &quot;en faisant semblant&quot; est très utile pour vérifier que le test fonctionne pendant les passages difficiles. Elle le devient encore plus si vous sortez d'un passage avec des tests ayant échoués et que vous voulez juste vérifier de ne pas avoir oublié un truc bête. Nous n'allons pas aussi lentement donc...
 <php><![CDATA[
 <?php   
     class Log {<strong>
@@ -256,7 +256,7 @@ class TestOfLogging extends UnitTestCase {
             La <a href="http://junit.sourceforge.net/doc/faq/faq.htm">FAQ de JUnit</a> contient plein de conseils judicieux sur les tests.
         </link>
         <link>
-            <a href="group_test_tutorial.php">Ensuite</a> vient &laquo;comment grouper des scénarios de tests ensemble&raquo;.
+            <a href="group_test_tutorial.php">Ensuite</a> vient &quot;comment grouper des scénarios de tests ensemble&quot;.
         </link>
         <link>
             Vous aurez besoin du <a href="simple_test.php">framework de test SimpleTest</a> pour ces exemples.

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <page title="Grouper des tests" here="Grouper des tests">
     <long_title>
         Tutorial de test unitaire PHP - Grouper des tests unitaires et exemples d'écriture de scénarios de tests
@@ -82,7 +82,7 @@ class TestOfLogging extends UnitTestCase {
     }</strong>
 }
 ]]></php>
-            Le test reste vert. Nous pouvons continuer à ajouter des méthodes n'étant pas des tests au scénario, il suffit que leur nom ne commence pas par la chaîne &laquo;test&raquo;. Seules les méthodes commençant par &laquo;test&raquo; sont éxécutés. Nous pouvons donc continuer le remaniement...
+            Le test reste vert. Nous pouvons continuer à ajouter des méthodes n'étant pas des tests au scénario, il suffit que leur nom ne commence pas par la chaîne &quot;test&quot;. Seules les méthodes commençant par &quot;test&quot; sont éxécutés. Nous pouvons donc continuer le remaniement...
 <php><![CDATA[
 class TestOfLogging extends UnitTestCase {
     function TestOfLogging() {
