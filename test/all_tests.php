@@ -6,6 +6,11 @@
     require_once('../reporter.php');
     require_once('../mock_objects.php');
     require_once('unit_tests.php');
+    
+    // Uncomment and modify the following line if you are accessing
+    // the net via a proxy server.
+    //
+    // SimpleTestOptions::useProxy('http://my-proxy', 'optional username', 'optional password');
         
     class AllTests extends GroupTest {
         function AllTests() {

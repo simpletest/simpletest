@@ -40,7 +40,7 @@ Add htmlentities() international fix (1/1) - done.
 Add WebTestCase::getCookie() method (1/1) - done.
 Make labels HTML entity and tag blind (3/4) - done.
 Add assertWantedText() for string matching (3/2) - done.
-Fix getLabel() crashing bug (2).
+Fix getLabel() crashing bug (2/0) - done.
 
 Documentation
 -------------
@@ -51,7 +51,7 @@ Tidy up sundry doc. files (2/1) - done.
 Fix reported typos (1).
 Document the character encoding fix (1/1) - done.
 Remove unnecessary test constructors (2/2) - done.
-Add doc. note about running tests through a proxy server (2).
+Add doc. note about running tests through a proxy server (2/1) - done.
 
 Build
 -----
