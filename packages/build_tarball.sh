@@ -1,8 +1,11 @@
+#!/bin/sh
+
 # Builds project release.
 #
-VERSION = 1.0RC1
-NAME = php_simple_test_$(VERSION).tar.gz
-SCRIPTS = simpletest/errors.php \
+cd ../..
+
+NAME=php_simpletest_`cat simpletest/VERSION`.tar.gz
+FILES=(simpletest/errors.php \
           simpletest/options.php \
           simpletest/scorer.php \
           simpletest/dumper.php \
@@ -70,10 +73,6 @@ SCRIPTS = simpletest/errors.php \
           simpletest/docs/partial_mocks_documentation.html \
           simpletest/docs/expectation_documentation.html \
           simpletest/docs/web_tester_documentation.html \
-          simpletest/docs/form_testing_documentation.html
+          simpletest/docs/form_testing_documentation.html)
 
-release: $(NAME)
-
-$(NAME): $(SCRIPTS)
-	tar -zcf $(NAME) $(SCRIPTS)
-
+tar -zcf $NAME ${FILES[*]}

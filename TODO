@@ -45,4 +45,4 @@ Remove unnecessary test constructors (2/2) - done.
 Build
 -----
 Finish Doc generation so that PHPDoc tutorial is rendered correctly (2/1) - done.
-Move tarball build over to a bash script (2).
+Move tarball build over to a bash script (2/1) - done.
