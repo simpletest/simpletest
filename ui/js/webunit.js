@@ -34,6 +34,7 @@ function layout() {
 	new_y */
 	xResizeTo('webunit', max(xClientWidth()-20,wu_min_x), max(xClientHeight()-20,wu_min_y));
 	xMoveTo('webunit', 5, 5);
+	xShow('webunit');
 }
 
 function set_div_content(div, content) {

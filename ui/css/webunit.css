@@ -17,6 +17,7 @@ pre { background-color: lightgray; }
 	}
 #webunit {
 	position: absolute;
+	visibility: hidden;
 	background: silver;
 	border-color: black;
 	border-style: solid;
