@@ -108,6 +108,7 @@ version or two.
       <file role="test" baseinstalldir="simpletest" name="test/parser_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/real_sites_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/remote_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/shell_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/shell_tester_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/simple_mock_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/socket_test.php"/>
