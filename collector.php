@@ -6,28 +6,30 @@
  * @version $Id$
  */
 class SimpleCollector {
-    var $_path;
     
     /**
-     * Handles initialization of SimpleCollector
-     * @param string $path      Directory to scan.
+     * Strips off any kind of slash at the end so as to
+     * normalise the path
+     * @param string $path    Path to normalise.
      */
-    function SimpleCollector($path) {
-        $this->_path = preg_replace('|[\\/]$|', '', $path);
+    function _removeTrailingSlash($path) {
+        return preg_replace('|[\\/]$|', '', $path);
     }
 
     /**
      * Scans the directory and adds what it can.
      * @param object $test    Group test with {@link GroupTest::addTestFile} method.
+     * @param string $path    Directory to scan.
      * @see _attemptToAdd()
      */
-    function collect(&$test) {
-        if ($handle = opendir($this->_path)) {
+    function collect(&$test, $path) {
+        $path = $this->_removeTrailingSlash($path);
+        if ($handle = opendir($path)) {
             while (($entry = readdir($handle)) !== false) {
                 if (is_dir($entry)) {
                     continue;
                 }
-                $this->_add($test, $this->_path . '/' . $entry);
+                $this->_add($test, $path . '/' . $entry);
             }
             closedir($handle);
         }
@@ -71,11 +73,9 @@ class SimplePatternCollector extends SimpleCollector {
      * developer to insure it is a proper pattern.
      * Defaults to files ending in ".php"
      *
-     * @param string $path      Directory to scan.
      * @param string $pattern   Perl compatible regex to test name against
      */
-    function SimplePatternCollector($path, $pattern = '/php$/i') {
-        $this->SimpleCollector($path);
+    function SimplePatternCollector($pattern = '/php$/i') {
         $this->_pattern = $pattern;
     }
     
@@ -84,6 +84,7 @@ class SimplePatternCollector extends SimpleCollector {
      *
      * @see SimpleCollector::_attemptToAdd()
      * @param object $test    Group test with {@link GroupTest::addTestFile} method.
+     * @param string $path    Directory to scan.
      * @access protected
      */
     function _add(&$test, $filename) {

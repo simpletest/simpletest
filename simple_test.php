@@ -462,11 +462,12 @@
         /**
          *    Delegates to a visiting collector to add test
          *    files.
+         *    @param string $path                  Path to scan from.
          *    @param SimpleCollector $collector    Directory scanner.
          *    @access public
          */
-        function collect(&$collector) {
-            $collector->collect($this);
+        function collect($path, &$collector) {
+            $collector->collect($this, $path);
         }
 
         /**
