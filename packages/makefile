@@ -19,6 +19,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/unit_tester.php \
           simpletest/web_tester.php \
           simpletest/shell_tester.php \
+          simpletest/xml.php \
           simpletest/adapters/pear_test_case.php \
           simpletest/adapters/phpunit_test_case.php \
           simpletest/README \
@@ -42,6 +43,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/test/visual_test.php \
           simpletest/test/web_test_case_test.php \
           simpletest/test/shell_tester_test.php \
+          simpletest/test/xml_test.php \
           simpletest/test/live_test.php \
           simpletest/test/real_sites_test.php \
           simpletest/docs/index.html \

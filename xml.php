@@ -194,4 +194,100 @@
             print "</" . $this->_namespace . ":run>\n";
         }
     }
+    
+    /**
+     *    Parser for importing the output of the XmlReporter.
+     */
+    class SimpleXmlImporter {
+        var $_listener;
+        var $_expat;
+        
+        /**
+         *    Loads a listener with the SimpleReporter
+         *    interface.
+         *    @param SimpleReporter        Listener of tag events.
+         *    @acces public
+         */
+        function SimpleXmlImporter(&$listener) {
+            $this->_listener = &$listener;
+            $this->_expat = &$this->_createParser();
+        }
+        
+        /**
+         *    Parses a block of XML sending the results to
+         *    the listener.
+         *    @param string $chunk        Block of text to read.
+         *    @return boolean             True if valid XML.
+         *    @access public
+         */
+        function parse($chunk) {
+            if (! xml_parse($this->_expat, $chunk)) {
+                trigger_error(xml_error_string(xml_get_error_code($this->_expat)));
+                return false;
+            }
+            return true;
+        }
+        
+        /**
+         *    Sets up expat as the XML parser.
+         *    @return resource        Expat handle.
+         *    @access protected
+         */
+        function &_createParser() {
+            $expat = xml_parser_create();
+            xml_set_object($expat, $this);
+            xml_set_element_handler($expat, '_startElement', '_endElement');
+            xml_set_character_data_handler($expat, '_addContent');
+            xml_set_processing_instruction_handler($expat, "_processingInstruction");
+            xml_set_default_handler($expat, "_default");
+            xml_set_external_entity_ref_handler($expat, "_externalEntityReference");
+            return $expat;
+        }
+
+        /**
+         *    Start of element event.
+         *    @param resource $expat     Parser handle.
+         *    @param string $tag         Element name.
+         *    @param hash $attributes    Name value pairs.
+         *                               Attributes without content
+         *                               are marked as true.
+         *    @access protected
+         */
+        function _startElement($expat, $tag, $attributes) {
+            if ($tag == "GROUP") {
+                $this->_listener->paintGroupStart();
+            }
+        }
+        
+        /**
+         *    End of element event.
+         *    @param resource $expat     Parser handle.
+         *    @param string $tag         Element name.
+         *    @access protected
+         */
+        function _endElement($expat, $tag) {
+            if ($tag == "GROUP") {
+                $this->_listener->paintGroupEnd();
+            }
+        }
+        
+        /**
+         *    Content between start and end elements.
+         *    @param resource $expat     Parser handle.
+         *    @param string $text        Usually output messages.
+         *    @access protected
+         */
+        function _addContent($expat, $text) {
+            return true;
+        }
+        
+        /**
+         *    XML and Doctype handler.
+         *    @param resource $expat     Parser handle.
+         *    @param string $default     Text of default content.
+         *    @access protected
+         */
+        function _default($expat, $default) {
+        }
+    }
 ?>

@@ -77,6 +77,7 @@ version or two.
       <file role="php" baseinstalldir="simpletest" name="tag.php"/>
       <file role="php" baseinstalldir="simpletest" name="unit_tester.php"/>
       <file role="php" baseinstalldir="simpletest" name="web_tester.php"/>
+      <file role="php" baseinstalldir="simpletest" name="xml.php"/>
       <!-- Adapters -->
       <file role="php" baseinstalldir="simpletest" name="adapters/pear_test_case.php"/>
       <file role="php" baseinstalldir="simpletest" name="adapters/phpunit_test_case.php"/>
@@ -111,6 +112,7 @@ version or two.
       <file role="test" baseinstalldir="simpletest" name="test/unit_tests.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/visual_tests.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/web_test_case_test.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/xml_test.php"/>
     </filelist>
   </release>
 </package>
