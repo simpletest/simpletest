@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for the next iteration (Alpha7) of 40 hours.
+This is immediate stuff only for the next iteration (Alpha8) of 40 hours.
 Figures are estimated hours work versus actual (for XP velocity).
 Stuff will get added or dropped as the cycle progresses.
 
@@ -10,6 +10,8 @@ Unit tester
 Swapping observer pattern for visitor (3/5) - done.
 Add an error trap (3/6) - done.
 Add options class (3/2) - done.
+Clean out redundant tests (1/1) - done.
+Add user expansion message (1).
 
 Interface
 ---------
@@ -21,6 +23,7 @@ Mock objects
 Add expectMinimumCallCount() expectation (2/1) - done.
 Add a parameter list assertion for better message display (2).
 Add some user friendly expectations (2/1) - done.
+Make partial mocks accept an override (1).
 
 Html parser
 -----------
@@ -28,7 +31,6 @@ Skip CSS (1/2) - done.
 Skip comments (1/0) - done.
 Skip script tags (1/1) - done.
 Add input tag parsing (2).
-Add text area parsing (3).
 
 Browser
 -------
