@@ -130,7 +130,7 @@
      *    but I wanted to output the errors as they arrived
      *    which meant dropping the dots.
      */
-    class TextReporter extends TestDisplay {
+    class TextReporter extends SimplePageReporter {
         
         /**
          *    Does nothing yet. The first output will
@@ -138,7 +138,7 @@
          *    @access public
          */
         function TextReporter() {
-            $this->TestDisplay();
+            $this->SimplePageReporter();
         }
         
         /**
@@ -222,85 +222,91 @@
         function CommandLineReporter() {
             $this->TextReporter();
         }
+        
+        /**
+         *    Paints the start of a test. Will also paint
+         *    the document headerif this is the
+         *    first test. Will stash the size if the first
+         *    start.
+         *    @param string $test_name   Name of test that is starting.
+         *    @param integer $size       Number of test cases starting.
+         *    @access public
+         */
+        function paintStart($test_name, $size) {
+            parent::paintStart($test_name, $size);
+        }
+        
+        /**
+         *    Paints the end of a test. Will paint the page
+         *    footer if the stack of tests has unwound.
+         *    @param string $test_name   Name of test that is ending.
+         *    @param integer $progress   Number of test cases ending.
+         *    @access public
+         */
+        function paintEnd($test_name, $progress) {
+            parent::paintEnd($test_name, $progress);
+        }
+        
+        /**
+         *    Increments the pass count.
+         *    @param string $message        Message is ignored.
+         *    @access public
+         */
+        function paintPass($message) {
+            parent::paintPass($message);
+        }
+        
+        /**
+         *    Increments the fail count.
+         *    @param string $message        Message is ignored.
+         *    @access public
+         */
+        function paintFail($message) {
+            parent::paintFail($message);
+        }
+        
+        /**
+         *    Paints a PHP error or exception.
+         *    @param string $message        Message is ignored.
+         *    @access public
+         *    @abstract
+         */
+        function paintException($message) {
+            parent::paintException($message);
+        }
+        
+        /**
+         *    Paints the test document header.
+         *    @param string $test_name     First test top level
+         *                                 to start.
+         *    @access public
+         *    @abstract
+         */
+        function paintHeader($test_name) {
+        }
+        
+        /**
+         *    Paints the test document footer.
+         *    @param string $test_name        The top level test.
+         *    @access public
+         *    @abstract
+         */
+        function paintFooter($test_name) {
+        }
     }
     
     /**
      *    Sample minimal test displayer. Creates the XML
      *    needed for remote communication by SimpleTest.
      */
-    class XmlReporter extends TestDisplay {
+    class XmlReporter extends SimplePageReporter {
         
         /**
          *    Does nothing yet.
          *    @access public
          */
         function XmlReporter() {
-            $this->TestDisplay();
-        }
-        
-        /**
-         *    Paints the start of a test.
-         *    @param $test_name     Name of test or other label.
-         *    @param $size          Number of test cases starting.
-         *    @access public
-         */
-        function paintStart($test_name, $size) {
-        }
-        
-        /**
-         *    Paints the end of a test.
-         *    @param $test_name     Name of test or other label.
-         *    @param $progress      Number of cases just finished.
-         *    @access public
-         */
-        function paintEnd($test_name, $progress) {
-        }
-        
-        /**
-         *    Paints a pass. This will often output nothing.
-         *    @param $message        Passing message.
-         *    @access public
-         */
-        function paintPass($message) {
-        }
-        
-        /**
-         *    Paints a failure.
-         *    @param $message        Failure message from test.
-         *    @access public
-         */
-        function paintFail($message) {
-        }
-        
-        /**
-         *    Paints a simple supplementary message.
-         *    @param $message        Text to display.
-         *    @access public
-         */
-        function paintMessage($message) {
-        }
-        
-        /**
-         *    Paints a formatted ASCII message such as a
-         *    variable dump.
-         *    @param $message        Text to display.
-         *    @access public
-         */
-        function paintFormattedMessage($message) {
-        }
-        
-        /**
-         *    By default just ignores user generated
-         *    events.
-         *    @param $type       Event type as text.
-         *    @param $payload    Message or object.
-         *    @return boolean    Should return false if this
-         *                       type of signal should fail the
-         *                       test suite.
-         *    @access public
-         */
-        function paintSignal($type, &$payload) {
-            return true;
+            $this->SimplePageReporter();
         }
     }
 ?>
