@@ -372,6 +372,14 @@
             $this->assertTitle('2');
             $this->assertFalse($this->forward());
         }
+        function testRetry() {
+            $this->get('http://www.lastcraft.com/test/cookie_based_counter.php');
+            $this->assertWantedPattern('/count: 1/i');
+            $this->retry();
+            $this->assertWantedPattern('/count: 2/i');
+            $this->retry();
+            $this->assertWantedPattern('/count: 3/i');
+        }
     }
     
     class TestOfAuthentication extends WebTestCase {
