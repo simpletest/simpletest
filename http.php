@@ -98,6 +98,9 @@
          *    @public
          */
         function SimpleHttpRequest($url) {
+            if (strncmp("http://", $url, 7) != 0) {        // Fix for broken parse_url().
+                $url = "http://" . $url;
+            }
             $url = parse_url($url);
             $this->_host = (isset($url["host"]) ? $url["host"] : "localhost");
             $this->_path = (isset($url["path"]) ? $url["path"] : "");
@@ -118,8 +121,8 @@
             if ($socket->isError()) {
                 return false;
             }
-            $socket->write("GET " . $this->_host . $this->_path . " HTTP/1.0\r\n");
-            $socket->write("Host: localhost\r\n");
+            $socket->write("GET " . $this->_path . " HTTP/1.0\r\n");
+            $socket->write("Host: " . $this->_host . "\r\n");
             foreach ($this->_user_headers as $header_line) {
                 $socket->write($header_line . "\r\n");
             }

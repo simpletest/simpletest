@@ -47,11 +47,11 @@
             $this->assertFalse($request->fetch(&$socket));
         }
         function testReadingGoodConnection() {
-            $request = new SimpleHttpRequest("http://a.valid.page/and/path");
+            $request = new SimpleHttpRequest("http://a.valid.host/and/path");
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->setExpectedArgumentsSequence(0, "write", array("GET a.valid.page/and/path HTTP/1.0\r\n"));
-            $socket->setExpectedArgumentsSequence(1, "write", array("Host: localhost\r\n"));
+            $socket->setExpectedArgumentsSequence(0, "write", array("GET /and/path HTTP/1.0\r\n"));
+            $socket->setExpectedArgumentsSequence(1, "write", array("Host: a.valid.host\r\n"));
             $socket->setExpectedArgumentsSequence(2, "write", array("Connection: close\r\n"));
             $socket->setExpectedArgumentsSequence(3, "write", array("\r\n"));
             $socket->setExpectedCallCount("write", 4);
@@ -59,12 +59,12 @@
             $socket->tally();
         }
         function testWritingAdditionalHeaders() {
-            $request = new SimpleHttpRequest("http://a.valid.page/and/path");
+            $request = new SimpleHttpRequest("http://a.valid.host/and/path");
             $request->addHeaderLine("My: stuff");
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->setExpectedArgumentsSequence(0, "write", array("GET a.valid.page/and/path HTTP/1.0\r\n"));
-            $socket->setExpectedArgumentsSequence(1, "write", array("Host: localhost\r\n"));
+            $socket->setExpectedArgumentsSequence(0, "write", array("GET /and/path HTTP/1.0\r\n"));
+            $socket->setExpectedArgumentsSequence(1, "write", array("Host: a.valid.host\r\n"));
             $socket->setExpectedArgumentsSequence(2, "write", array("My: stuff\r\n"));
             $socket->setExpectedArgumentsSequence(3, "write", array("Connection: close\r\n"));
             $socket->setExpectedArgumentsSequence(4, "write", array("\r\n"));
@@ -73,12 +73,12 @@
             $socket->tally();
         }
         function testCookieWriting() {
-            $request = new SimpleHttpRequest("http://a.valid.page/and/path");
+            $request = new SimpleHttpRequest("http://a.valid.host/and/path");
             $request->setCookie(new SimpleCookie("a", "A"));
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
-            $socket->setExpectedArgumentsSequence(0, "write", array("GET a.valid.page/and/path HTTP/1.0\r\n"));
-            $socket->setExpectedArgumentsSequence(1, "write", array("Host: localhost\r\n"));
+            $socket->setExpectedArgumentsSequence(0, "write", array("GET /and/path HTTP/1.0\r\n"));
+            $socket->setExpectedArgumentsSequence(1, "write", array("Host: a.valid.host\r\n"));
             $socket->setExpectedArgumentsSequence(2, "write", array("Cookie: a=A\r\n"));
             $socket->setExpectedArgumentsSequence(3, "write", array("Connection: close\r\n"));
             $socket->setExpectedArgumentsSequence(4, "write", array("\r\n"));
@@ -87,7 +87,7 @@
             $socket->tally();
         }
         function testMultipleCookieWriting() {
-            $request = new SimpleHttpRequest("http://a.valid.page/and/path");
+            $request = new SimpleHttpRequest("a.valid.host/and/path");
             $request->setCookie(new SimpleCookie("a", "A"));
             $request->setCookie(new SimpleCookie("b", "B"));
             $socket = &new MockSimpleSocket($this);
@@ -194,7 +194,10 @@
         }
         function testRealPageFetch() {
             $http = new SimpleHttpRequest("www.lastcraft.com/test/network_confirm.php");
-            $this->assertIsA($http->fetch(), "SimpleHttpResponse");
+            $this->assertIsA($reponse = &$http->fetch(), "SimpleHttpResponse");
+            $this->assertWantedPattern(
+                    '/A target for the SimpleTest test suite/',
+                    $reponse->getContent());
         }
     }
 ?>
