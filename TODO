@@ -6,6 +6,7 @@ $Id$
 
 Unit tester
 -----------
+Set the SIMPLE_TEST constant if not set for add in libraries (1).
 
 Reporter
 --------
@@ -43,4 +44,4 @@ Add proxy support to docs (1).
 Build
 -----
 Move makefile over to bash script (2).
-Move doc generation to XSLT (9/4).
+Move doc generation to XSLT (9/6).

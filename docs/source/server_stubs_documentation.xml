@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<page version="Server stubs documentation" here="Server stubs">
+<page title="Server stubs documentation" here="Server stubs">
     <long_title>SimpleTest for PHP server stubs documentation</long_title>
     <content>
         <p>
