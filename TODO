@@ -8,10 +8,11 @@ Unit tester
 -----------
 Create assertion test (1/1) - done.
 Improve difference output messages when nested in arrays (1).
+Add adapters for other testers (3/3).
 
 Mock objects
 ------------
-Create parameter list assertion for improved output (2).
+Create parameter list assertion for improved output (1).
 Split off server stubs (3).
 
 Html parser
@@ -20,7 +21,6 @@ Build form class as widget repository (3).
 Add widget class (2).
 Add form tag parsing to build a form in a page (3).
 Add input tag parsing (4).
-Add textarea tag parsing (2).
 Read a complete, but simple form (4).
 
 Browser
