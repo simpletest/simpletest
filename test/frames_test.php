@@ -48,7 +48,7 @@
             $frame->setReturnValue('getRaw', 'Stuff');
             
             $frameset = &new SimpleFrameset($page);
-            $frameset->addFrame($frame);
+            $frameset->addParsedFrame($frame);
             $this->assertEqual($frameset->getRaw(), 'Stuff');
         }
         function testRawContentIsFromAllFrames() {
@@ -62,8 +62,8 @@
             $frame2->setReturnValue('getRaw', 'Stuff2');
             
             $frameset = &new SimpleFrameset($page);
-            $frameset->addFrame($frame1);
-            $frameset->addFrame($frame2);
+            $frameset->addParsedFrame($frame1);
+            $frameset->addParsedFrame($frame2);
             $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
         }
     }
@@ -80,7 +80,7 @@
             $frame->setReturnValue('getRaw', 'Stuff');
             
             $frameset = &new SimpleFrameset($page);
-            $frameset->addFrame($frame);
+            $frameset->addParsedFrame($frame);
             
             $this->assertFalse($frameset->setFocusByIndex(0));
             $this->assertTrue($frameset->setFocusByIndex(1));
@@ -98,8 +98,8 @@
             $frame2->setReturnValue('getRaw', 'Stuff2');
             
             $frameset = &new SimpleFrameset($page);
-            $frameset->addFrame($frame1);
-            $frameset->addFrame($frame2);
+            $frameset->addParsedFrame($frame1);
+            $frameset->addParsedFrame($frame2);
             
             $frameset->setFocusByIndex(1);
             $this->assertEqual($frameset->getRaw(), 'Stuff1');
@@ -120,7 +120,7 @@
             $frame->setReturnValue('getRealm', 'Safe place');
             
             $frameset = &new SimpleFrameset(new MockSimplePage($this));
-            $frameset->addFrame($frame);
+            $frameset->addParsedFrame($frame);
             $frameset->setFocusByIndex(1);
             
             $this->assertIdentical($frameset->getHeaders(), 'Header: content');

@@ -14,37 +14,6 @@
     /**#@-*/
     
     /**
-     *    Builds composite pages.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
-     */
-    class SimpleFramesetBuilder {
-        var $_builder;
-        
-        /**
-         *    Sets the parser for HTML pages.
-         *    @param SimplePageBuilder $builder    Parser.
-         */
-        function SimpleFramesetBuilder(&$builder) {
-            $this->_builder = &$builder;
-        }
-        
-        /**
-         *    Parses the frames into pages and adds them
-         *    to a composite frame set.
-         *    @param SimplePage $page             Initial framset page.
-         *    @param SimpleUserAgent $user_agent  Current user agent to
-         *                                        fetch the pages with.
-         *    @return SimnpleFrameset             Composite page.
-         *    @access public
-         */
-        function &fetch(&$page, &$user_agent) {
-            $frameset = &new SimpleFrameset($page);
-            return $frameset;
-        }
-    }
-    
-    /**
      *    A composite page. Wraps a frameset page and
      *    adds subframes. The original page will be
      *    mostly ignored. Implements the SimplePage
@@ -73,7 +42,7 @@
          *    @param SimplePage $page        Frame page.
          *    @access public
          */
-        function addFrame(&$page) {
+        function addParsedFrame(&$page) {
             $this->_frames[] = &$page;
         }
         
@@ -97,6 +66,18 @@
          */
         function clearFocus() {
             $this->_focus = false;
+        }
+        
+        /**
+         *    Accessor for frames information.
+         *    @return boolean/array     False if no frameset or
+         *                              otherwise a hash of frame URLs.
+         *                              The key is either a numerical
+         *                              index or the name attribute.
+         *    @access public
+         */
+        function getFrames() {
+            return $this->_frameset->getFrames();
         }
         
         /**

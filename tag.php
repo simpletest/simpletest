@@ -9,7 +9,7 @@
     /**#@+
      * include SimpleTest files
      */
-    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'options.php');
+    require_once(dirname(__FILE__) . '/options.php');
     /**#@-*/
    
     /**

@@ -1,7 +1,7 @@
 <?php
     // $Id$
     
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../parser.php');
+    require_once(dirname(__FILE__) . '/../parser.php');
 
     class TestOfParallelRegex extends UnitTestCase {
         function TestOfParallelRegex() {

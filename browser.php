@@ -227,7 +227,8 @@
         }
         
         /**
-         *    Parses the raw content into a page.
+         *    Parses the raw content into a page. Will load further
+         *    frame pages unless frames are disabled.
          *    @param SimpleHttpResponse $response    Response from fetch.
          *    @return SimplePage                     Parsed HTML.
          *    @access protected
@@ -238,8 +239,33 @@
             if ($this->_ignore_frames || ! $page->hasFrames()) {
                 return $page;
             }
-            $frameset_builder = &new SimpleFramesetBuilder($builder);
-            return $frameset_builder->fetch($page, $this->_user_agent);
+            $frameset = &new SimpleFrameset($page);
+            foreach ($frameset->getFrames() as $key => $url) {
+            }
+            return $frameset;
+        }
+        
+        /**
+         *    Fetches a page.
+         *    @param string $method           GET or POST.
+         *    @param string/SimpleUrl $url    Target to fetch as string.
+         *    @param hash $parameters         POST parameters.
+         *    @param boolean $add_to_history  Whether to record in the history.
+         *    @return SimplePage              Parsed page.
+         *    @access private
+         */
+        function &_fetch($method, $url, $parameters, $add_to_history) {
+            $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
+            if ($response->isError()) {
+                return new SimpleErrorPage($response->getError());
+            }
+            if ($add_to_history) {
+                $this->_history->recordEntry(
+                        $this->_user_agent->getCurrentMethod(),
+                        $this->_user_agent->getCurrentUrl(),
+                        $this->_user_agent->getCurrentPostData());
+            }
+            return $this->_parse($response);
         }
         
         /**
@@ -383,7 +409,8 @@
          *    @access public
          */
         function get($url, $parameters = false) {
-            return $this->_fetch('GET', $url, $parameters, true);
+            $this->_page = &$this->_fetch('GET', $url, $parameters, true);
+            return $this->_page->getRaw();
         }
         
         /**
@@ -394,31 +421,7 @@
          *    @access public
          */
         function post($url, $parameters = false) {
-            return $this->_fetch('POST', $url, $parameters, true);
-        }
-        
-        /**
-         *    Fetches a page.
-         *    @param string $method           GET or POST.
-         *    @param string/SimpleUrl $url    Target to fetch as string.
-         *    @param hash $parameters         POST parameters.
-         *    @param boolean $add_to_history  Whether to record in the history.
-         *    @return string                  Content of page.
-         *    @access private
-         */
-        function _fetch($method, $url, $parameters, $add_to_history) {
-            $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
-            if ($response->isError()) {
-                $this->_page = &new SimpleErrorPage($response->getError());
-                return false;
-            }
-            if ($add_to_history) {
-                $this->_history->recordEntry(
-                        $this->_user_agent->getCurrentMethod(),
-                        $this->_user_agent->getCurrentUrl(),
-                        $this->_user_agent->getCurrentPostData());
-            }
-            $this->_page = &$this->_parse($response);
+            $this->_page = &$this->_fetch('POST', $url, $parameters, true);
             return $this->_page->getRaw();
         }
         
@@ -432,11 +435,12 @@
          */
         function retry() {
             if ($method = $this->_history->getMethod()) {
-                return $this->_fetch(
+                $this->_page = &$this->_fetch(
                         $method,
                         $this->_history->getUrl(),
                         $this->_history->getParameters(),
                         false);
+                return $this->_page->getRaw();
             }
             return false;
         }
@@ -453,11 +457,11 @@
             if (! $this->_history->back()) {
                 return false;
             }
-            $is_success = $this->retry();
-            if (! $is_success) {
+            $content = $this->retry();
+            if (! $content) {
                 $this->_history->forward();
             }
-            return $is_success;
+            return $content;
         }
         
         /**
@@ -472,11 +476,11 @@
             if (! $this->_history->forward()) {
                 return false;
             }
-            $is_success = $this->retry();
-            if (! $is_success) {
+            $content = $this->retry();
+            if (! $content) {
                 $this->_history->back();
             }
-            return $is_success;
+            return $content;
         }
         
         /**
