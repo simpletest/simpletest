@@ -28,11 +28,12 @@
         function TestOfForm() {
             $this->UnitTestCase();
         }
-        function testFormActions() {
-            $tag = new SimpleTag("form", array("method" => "GET", "action" => "here.php"));
+        function testFormAttributes() {
+            $tag = new SimpleTag("form", array("method" => "GET", "action" => "here.php", "id" => "33"));
             $form = new SimpleForm($tag);
             $this->assertEqual($form->getMethod(), "get");
             $this->assertEqual($form->getAction(), "here.php");
+            $this->assertIdentical($form->getId(), "33");
             $this->assertNull($form->getValue("a"));
             $this->assertEqual($form->getValues(), array());
         }
@@ -47,6 +48,10 @@
             $this->assertIdentical($form->getValue("me"), "Not me");
             $this->assertNull($form->getValue("not_present"));
             $this->assertEqual($form->getValues(), array("me" => "Not me"));
+        }
+        function testSubmitEmpty() {
+            $form = new SimpleForm(new SimpleTag("form", array()));
+            $this->assertIdentical($form->submit(), array());
         }
         function testSubmitButton() {
             $form = new SimpleForm(new SimpleTag("form", array()));

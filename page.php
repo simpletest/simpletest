@@ -373,6 +373,24 @@
                     return $this->_closed_forms[$i];
                 }
             }
+            return null;
+        }
+        
+        /**
+         *    Finds a held form by the form ID. A way of
+         *    identifying a specific form when we have control
+         *    of the HTML code.
+         *    @param $id  Form label.
+         *    @return     Form object containing the matching ID.
+         *    @public
+         */
+        function &getFormById($id) {
+            for ($i = 0; $i < count($this->_closed_forms); $i++) {
+                if ($this->_closed_forms[$i]->getId() == $id) {
+                    return $this->_closed_forms[$i];
+                }
+            }
+            return null;
         }
         
         /**

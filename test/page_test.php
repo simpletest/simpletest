@@ -296,10 +296,17 @@
             $page = &new SimplePage("<html><head><Title>Me&amp;Me</TITLE></head></html>");
             $this->assertEqual($page->getTitle(), "Me&amp;Me");
         }
-        function testForm() {
+        function testFormByLabel() {
             $page = &new SimplePage(
                     "<html><head><form><input type=\"submit\"></form></head></html>");
+            $this->assertNull($page->getFormBySubmitLabel("submit"));
             $this->assertIsA($form = &$page->getFormBySubmitLabel("Submit"), "SimpleForm");
+        }
+        function testFormById() {
+            $page = &new SimplePage(
+                    '<html><head><form id="55"><input type="submit"></form></head></html>');
+            $this->assertNull($page->getFormById(54));
+            $this->assertIsA($form = &$page->getFormById(55), "SimpleForm");
         }
         function testSettingFormField() {
             $page = &new SimplePage(

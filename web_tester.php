@@ -184,11 +184,29 @@
             if (!$action) {
                 $action = $this->_current_browser->getCurrentUrl();
             }
-            if ($form->getMethod() == "post") {
-                return $this->post($action, $form->submitButtonByLabel($label));
-            } else {
-                return $this->get($action, $form->submitButtonByLabel($label));
+            $method = $form->getMethod();
+            return $this->$method($action, $form->submitButtonByLabel($label));
+        }
+        
+        /**
+         *    Clicks the submit button by label. The owning
+         *    form will be submitted by this.
+         *    @param $label    Button label. An unlabeled
+         *                     button can be triggered by 'Submit'.
+         *    @return          true on success.
+         *    @public
+         */
+        function clickSubmitByFormId($id) {
+            $page = &$this->_getHtml();
+            if (! ($form = &$page->getFormById($id))) {
+                return false;
             }
+            $action = $form->getAction();
+            if (!$action) {
+                $action = $this->_current_browser->getCurrentUrl();
+            }
+            $method = $form->getMethod();
+            return $this->$method($action, $form->submit());
         }
         
         /**

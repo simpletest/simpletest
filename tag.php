@@ -71,6 +71,7 @@
     class SimpleForm {
         var $_method;
         var $_action;
+        var $_id;
         var $_defaults;
         var $_values;
         var $_buttons;
@@ -82,6 +83,7 @@
         function SimpleForm($tag) {
             $this->_method = $tag->getAttribute("method");
             $this->_action = $tag->getAttribute("action");
+            $this->_id = $tag->getAttribute("id");
             $this->_defaults = array();
             $this->_values = array();
             $this->_buttons = array();
@@ -103,6 +105,15 @@
          */
         function getAction() {
             return $this->_action;
+        }
+        
+        /**
+         *    ID field of form for unique identification.
+         *    @return            ID as integer.
+         *    @public
+         */
+        function getId() {
+            return $this->_id;
         }
         
         /**
@@ -215,6 +226,19 @@
                 return $this->submitButton($name);
             }
             return false;
+        }
+        
+        /**
+         *    Simply submits the form without the submit button
+         *    value. Used when there is only one button or it
+         *    is unimportant.
+         *    @return            Hash of submitted values.
+         *    @public
+         */
+        function submit() {
+            return array_merge(
+                    $this->_defaults,
+                    $this->_values);            
         }
     }
 ?>

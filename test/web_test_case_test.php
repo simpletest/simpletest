@@ -126,6 +126,7 @@
         function tearDown() {
             $browser = &$this->getBrowser();
             $browser->tally();
+            $this->assertTitle('Done');
         }
         function testFormGet() {
             $browser = &$this->getBrowser();
@@ -145,7 +146,6 @@
             $browser->expectCallCount("get", 2);
             $this->get("http://my-site.com/");
             $this->assertTrue($this->clickSubmit("wobble"));
-            $this->assertTitle('Done');
         }
         function testFormGetWithNoAction() {
             $browser = &$this->getBrowser();
@@ -162,7 +162,6 @@
             $browser->setReturnValue("getCurrentUrl", "http://my-site.com/index.html");
             $this->get("http://my-site.com/");
             $this->assertTrue($this->clickSubmit("wobble"));
-            $this->assertTitle('Done');
         }
         function testFormPost() {
             $browser = &$this->getBrowser();
@@ -175,9 +174,21 @@
             $browser->expectOnce("post", array("there.php", array("wibble" => "wobble")));
             $this->get("http://my-site.com/");
             $this->assertTrue($this->clickSubmit("wobble"));
-            $this->assertTitle('Done');
         }
-        function testFormSeperation() {
+        function testFormPostById() {
+            $browser = &$this->getBrowser();
+            $form_code = '<html><head><form method="post" action="there.php" id="3">';
+            $form_code .= '<input type="submit" name="wibble" value="wobble"/>';
+            $form_code .= '<input type="text" name="a" value="aaa"/>';
+            $form_code .= '</form></head></html>';
+            $browser->setReturnValue("get", $form_code);
+            $browser->expectOnce("get", array("http://my-site.com/", false));
+            $browser->setReturnValue("post", '<html><title>Done</title></html>');
+            $browser->expectOnce("post", array("there.php", array("a" => "aaa")));
+            $this->get("http://my-site.com/");
+            $this->assertTrue($this->clickSubmitByFormId(3));
+        }
+        function testFormSeparation() {
             $browser = &$this->getBrowser();
             $form_code = '<html><head><form method="post" action="here.php">';
             $form_code .= '<input type="submit" name="s1" value="S1"/>';
@@ -194,7 +205,6 @@
                     array("there.php", array("s2" => "S2", "b" => "bbb")));
             $this->get("http://my-site.com/");
             $this->assertTrue($this->clickSubmit("S2"));
-            $this->assertTitle('Done');
         }
     }
     
