@@ -43,7 +43,8 @@
                 a very rapid solution.
             </p>
             <p>
-                All of the navigation methods used in the <code>WebTestCase</code>
+                All of the navigation methods used in the
+                <a local="web_tester_documentation">WebTestCase</a>
                 are present in the <code>SimpleBrowser</code> class, but
                 the assertions are replaced with simpler accessors.
                 Here is a full list of the page navigation methods...
@@ -76,7 +77,8 @@
                 Once called they continue to apply to all subsequent fetches.
             </p>
             <p>
-                Navigating forms is similar to the <code>WebTestCase</code>...
+                Navigating forms is similar to the
+                <a local="form_testing_documentation">WebTestCase form navigation</a>...
                 <table><tbody>
                     <tr><td><code>setField($name, $value)</code></td><td>Sets all form fields with that name</td></tr>
                     <tr><td><code>setFieldById($id, $value)</code></td><td>Sets all form fields with that id</td></tr>
@@ -148,8 +150,9 @@
         </section>
         <section name="unit" title="Complex unit tests with multiple browsers">
             <p>
-                Anything that could be done in a <code>WebTestCase</code> can
-                now be done in a <code>UnitTestCase</code>.
+                Anything that could be done in a
+                <a local="web_tester_documentation">WebTestCase</a> can
+                now be done in a <a local="unit_tester_documentation">UnitTestCase</a>.
                 This means that we can freely mix domain object testing with the
                 web interface...
 <php><![CDATA[

@@ -51,7 +51,7 @@ Fix getLabel() crashing bug (2/0) - done.
 Documentation
 -------------
 Add authentication documentation (3/3) - done.
-Add browser scripting documentation (2/2).
+Add browser scripting documentation (2/5) - done.
 Tidy up sundry doc. files (2/1) - done.
 Fix reported typos (1).
 Document the character encoding fix (1/1) - done.
