@@ -256,7 +256,7 @@
          *    @access private
          */
         function &_fetch($method, $url, $parameters) {
-            $response = &$this->_user_agent->fetchResponse($method, $url,  $parameters);
+            $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
             if ($response->isError()) {
                 return new SimplePage($response);
             }
@@ -559,6 +559,16 @@
                     $username,
                     $password);
             return $this->retry();
+        }
+        
+        /**
+         *    Accessor for a breakdown of the frameset.
+         *    @return array   Hash tree of frames by name
+         *                    or index if no name.
+         *    @access public
+         */
+        function getFrames() {
+            return false;
         }
         
         /**

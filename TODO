@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC1) of 73 hours!
+This is immediate stuff only for this iteration (RC1) of 70 hours!
 First figure is expected hours, second is the time it actually took.
 
 $Id$
@@ -25,7 +25,6 @@ Expectation methods should carry message overrides (2/2) - done.
 
 Parser
 ------
-Add image map parsing (3/3).
 Add simple button tag parsing (1/3) - done.
 
 Browser

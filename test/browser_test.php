@@ -14,6 +14,10 @@
             'SimpleBrowser',
             'MockParseSimpleBrowser',
             array('_createUserAgent', '_parse'));
+    Mock::generatePartial(
+            'SimpleBrowser',
+            'MockUserAgentSimpleBrowser',
+            array('_createUserAgent'));
     
     class TestOfHistory extends UnitTestCase {
         function TestOfHistory() {
@@ -514,6 +518,38 @@
             
             $agent->tally();
             $page->tally();
+        }
+    }
+    
+    class TestOfBrowserFrames extends UnitTestCase {
+        function TestOfBrowserFrames() {
+            $this->UnitTestCase();
+        }
+        
+        function &createBrowser(&$agent) {
+            $browser = &new MockUserAgentSimpleBrowser($this);
+            $browser->setReturnReference('_createUserAgent', $agent);
+            $browser->SimpleBrowser();
+            return $browser;
+        }
+        
+        function &createUserAgent($pages) {
+            $agent = &new MockSimpleUserAgent($this);
+            foreach ($pages as $url => $raw) {
+                $response = &new MockSimpleHttpResponse($this);
+                $agent->setReturnReference(
+                        'fetchResponse',
+                        $response,
+                        array('*', new SimpleUrl($url), '*'));
+            }
+            return $agent;
+        }
+        
+        function testSimplePageHasNoFrames() {
+            $browser = &$this->createBrowser($this->createUserAgent(
+                    array('http://site.with.no.frames/' => '')));
+            $browser->get('http://site.with.no.frames/');
+            $this->assertIdentical($browser->getFrames(), false);
         }
     }
 ?>
