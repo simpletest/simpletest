@@ -74,7 +74,7 @@
     /**
      *    Basic HTTP response.
      */
-    class SimpleHttpResponse {
+    class SimpleHttpResponse extends StickyError {
         
         /**
          *    Constructor.
@@ -83,6 +83,12 @@
          *    @public
          */
         function SimpleHttpResponse(&$socket) {
+            
+            $this->StickyError();
+            $this->_socket = &$socket;
+            if ($this->_socket->isError()) {
+                $this->_setError($this->_socket->getError());
+            }
         }
     }
 ?>

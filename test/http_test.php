@@ -7,8 +7,8 @@
     require_once(SIMPLE_TEST . 'http.php');
     Mock::generate("SimpleSocket");
 
-    class HttpTestCase extends UnitTestCase {
-        function HttpTestCase() {
+    class HttpRequestTestCase extends UnitTestCase {
+        function HttpRequestTestCase() {
             $this->UnitTestCase();
         }
         function testReadingBadConnection() {
@@ -42,6 +42,29 @@
             $socket->setExpectedCallCount("write", 5);
             $this->assertIsA($request->fetch(&$socket), "SimpleHttpResponse");
             $socket->tally();
+        }
+        function testMultipleCookieWriting() {
+            $request = new SimpleHttpRequest("http://a.valid.page/and/path");
+            $request->setCookies(array("a" => "A", "b" => "B"));
+            $socket = &new MockSimpleSocket($this);
+            $socket->setReturnValue("isError", false);
+            $socket->setExpectedArgumentsSequence(2, "write", array("Cookie: a=A;b=B\r\n"));
+            $request->fetch(&$socket);
+            $socket->tally();
+        }
+    }
+    
+    class HttpResponseTestCase extends UnitTestCase {
+        function HttpResponseTestCase() {
+            $this->UnitTestCase();
+        }
+        function testBadRequest() {
+            $socket = &new MockSimpleSocket($this);
+            $socket->setReturnValue("isError", true);
+            $socket->setReturnValue("getError", "Socket error");
+            $response = &new SimpleHttpResponse($socket);
+            $this->assertTrue($response->isError());
+            $this->assertWantedPattern('/Socket error/', $response->getError());
         }
     }
     
