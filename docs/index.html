@@ -112,12 +112,15 @@
             <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a> package.
         </div>
         <div class="content">
-                        <p>
+                        <p style="margin-right: 10%; margin-left: 10%;">
                 <span style="color: red;">News:</span>
-                Alpha 7 released on sourceforge.
-                Features include cookie and other assertions added
-                to the web tester and partial mocks added to the unit testing
-                framework.
+                Alpha 8 released on sourceforge.
+                There has been a redesign of the internal structure and interface
+                prior to entering Beta.
+                If you have created your own extensions based on the old
+                observer interface then I am afraid that this code will have to be rewritten.
+                Enhancements include some PHP error trapping in unit test cases
+                and the following of redirects in the web tester.
             </p>
             <p>
                 The following assumes that you are familiar with the concept
@@ -149,8 +152,7 @@
                 <a href="http://www.mockobjects.com">mock objects</a>.
                 It should have some <a href="http://sourceforge.net/projects/jwebunit/">JWebUnit</a>
                 functionality fairly soon.
-                It remains in alpha status until the HTTP interfaces settle down,
-                although the other code is now stable.
+                It remains in alpha until the web testing functonality is complete.
             </p>
             <p>
                 The quickest way to demonstrate is with an example.
@@ -256,8 +258,7 @@
     }
 <strong>
     $test = &new TestOfLogging();
-    $test-&gt;attachObserver(new TestHtmlDisplay());
-    $test-&gt;run();</strong>
+    $test-&gt;run(new TestHtmlDisplay());</strong>
 ?&gt;
 </pre>
             </p>
@@ -318,8 +319,7 @@
 
     $test = &new GroupTest(&apos;All tests&apos;);
     $test-&gt;addTestFile(&apos;log_test.php&apos;);
-    $test-&gt;attachObserver(new TestHtmlDisplay());
-    $test-&gt;run();</strong>
+    $test-&gt;run(new TestHtmlDisplay());</strong>
 ?&gt;</strong>
 </pre>
                 The method <span class="new_code">GroupTest::addTestFile()</span>
@@ -332,7 +332,7 @@
                 This could result in extra test cases being counted during the test
                 run.
                 Hardly a major problem, but to avoid this inconvenience simply add
-                a <span class="new_code">GroupTest::ignore()</span> directive
+                a <span class="new_code">SimpleTestOptions::ignore()</span> directive
                 somewhere in the test case file.
                 Also the test case file should not have been included
                 elsewhere or no cases will be added to this group test.
@@ -506,8 +506,7 @@
         }
     }</strong>
     $test = &new TestOfAbout();
-    $test-&gt;attachObserver(new TestHtmlDisplay());
-    $test-&gt;run();</strong>
+    $test-&gt;run(new TestHtmlDisplay());</strong>
 ?&gt;
 </pre>
                 With this code as an acceptance test you can ensure that

@@ -33,16 +33,19 @@ Skip script tags (1/1) - done.
 
 Browser
 -------
-Allow automatic redirects (4/6) - done.
+Allow automatic redirects (3/5) - done.
 Add clock drift allowance to cookie tests (1).
 Add clock drift test for users (1).
 
 Web tester
 ----------
+Add redirect count option (1/1) - done.
 
 Documentation
 -------------
 Add partial mocks documentation (3/3) - done.
+Fix runner syntax in all documentation (1).
+Fix runner syntax in tutorials (1).
 Fix options syntax in all documentation (1).
 Fix options syntax in tutorial (1).
 Fix filenames in documentation (1).
@@ -50,3 +53,4 @@ Fix filenames in tutorial (1).
 Fix reporter name in documentation (1).
 Fix reporter name in tutorial (1).
 Fix tutorial text to include ignore option (1).
+Add upgrade warning (1).

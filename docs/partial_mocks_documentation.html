@@ -426,8 +426,7 @@ class TelnetTest extends UnitTestCase {
         ...
         $telnet = &new TelnetTestVersion($this);
         $telnet-&gt;setReturnReference(&apos;_createSocket&apos;, $socket);<strong>
-        $telnet-&gt;expectArguments(&apos;_createSocket&apos;, array(&apos;127.0.0.1&apos;, 21));
-        $telnet-&gt;expectCallCount(&apos;_createSocket&apos;, 1);</strong>
+        $telnet-&gt;expectOnce(&apos;_createSocket&apos;, array(&apos;127.0.0.1&apos;, 21));</strong>
         $telnet-&gt;Telnet();
         $telnet->connect(&apos;127.0.0.1&apos;, 21, &apos;Me&apos;, &apos;Secret&apos;);
         ...<strong>

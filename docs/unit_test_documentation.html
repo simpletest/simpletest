@@ -189,6 +189,8 @@ class FileTestCase extends UnitTestCase {
                     <tr><td><span class="code">assertCopy($x,&nbsp;$y)</span></td><td>Fail if $x and $y are the same variable</td></tr>
                     <tr><td><span class="code">assertWantedPattern($p,&nbsp;$x)</span></td><td>Fail unless the regex $p matches $x</td></tr>
                     <tr><td><span class="code">assertNoUnwantedPattern($p,&nbsp;$x)</span></td><td>Fail if the regex $p matches $x</td></tr>
+                    <tr><td><span class="code">assertNoErrors()</span></td><td>Fail if any PHP error occoured</td></tr>
+                    <tr><td><span class="code">assertError($x)</span></td><td>Fail if no PHP error or incorrect message</td></tr>
                 </table>
                 All assertion methods can take an optional description to
                 label the displayed result with.
@@ -225,6 +227,39 @@ $this->assertWantedPattern(&apos;/hello/i&apos;, &apos;Hello world&apos;);</stro
 </pre>
                 This will pass as using a case insensitive match the string
                 &quot;hello&quot; is contained in &quot;Hello world&quot.
+<pre><strong>
+trigger_error(&apos;Disaster&apos;);
+trigger_error(&apos;Catastrophe&apos;);
+$this->assertError();
+$this->assertError(&apos;Catastrophe&apos;);
+$this->assertNoErrors();</strong>
+</pre>
+                This one takes some explanation as in fact they all pass!
+                PHP errors in SimpleTest are trapped and placed in a queue.
+                Here the first error check catches the &quot;Disaster&quot;
+                message without checking the text and passes.
+                This removes the error from the queue.
+                The next error check tests not only the existence of the error,
+                but also the text which here matches so another pass.
+                With the queue now empty the last test will pass as well.
+                If any unchecked errors are left at the end of a test method then
+                an exception will be reported in the test.
+                Note that SimpleTest cannot catch compile time PHP errors.
+            </p>
+            <p>
+                The test cases also have some convenience methods for debugging
+                code or extending the suite...
+                <table>
+                    <tr><td><span class="code">setUp()</span></td><td>Runs this before each test method</td></tr>
+                    <tr><td><span class="code">tearDown()</span></td><td>Runs this after each test method</td></tr>
+                    <tr><td><span class="code">pass()</span></td><td>Sends a test pass</td></tr>
+                    <tr><td><span class="code">fail()</span></td><td>Sends a test failure</td></tr>
+                    <tr><td><span class="code">error()</span></td><td>Sends an exception event</td></tr>
+                    <tr><td><span class="code">sendMessage()</span></td><td>Sends a status message to those displays that support it</td></tr>
+                    <tr><td><span class="code">signal($type, $payload)</span></td><td>Sends a user defined mesage to the test reporter</td></tr>
+                    <tr><td><span class="code">dump($var)</span></td><td>Does a formatted <span class="code">print_r()</span> for quick and dirty debugging</td></tr>
+                    <tr><td><span class="code">swallowErrors()</span></td><td>Clears the error queue</td></tr>
+                </table>
             </p>
             <p>
                 <a class="target" name="extending_unit"><h2>Extending test cases</h2></a>
@@ -311,17 +346,11 @@ class FileTestCase extends <strong>FileTester</strong> {
         }
     }<strong>
     $test = &new FileTestCase();
-    $test-&gt;attachObserver(new TestHtmlDisplay());
-    $test-&gt;run();</strong>
+    $test-&gt;run(new TestHtmlDisplay());</strong>
 ?&gt;
 </pre>
                 This script will run as is, but will output zero passes
-                and zero failures.
-                As many observers can be attached as needed and they should
-                subclass the <span class="code">TestReporter</span> interface
-                in the <em>observer.php</em> file in SimpleTest.
-                The minimal <span class="code">TestHtmlDisplay</span> already
-                does this.
+                and zero failures until test methods are added.
             </p>        </div>
         <div class="out">
             Related resources...

@@ -547,6 +547,22 @@ class LoggingSessionPoolTest extends UnitTestCase {
                         <td><span class="new_code">expectMaximumCallCount($method, $count)</span></td>
                         <td style="text-align: center">No</td>
                     </tr>
+                    <tr>
+                        <td><span class="new_code">expectMinimumCallCount($method, $count)</span></td>
+                        <td style="text-align: center">Yes</td>
+                    </tr>
+                    <tr>
+                        <td><span class="new_code">expectNever($method)</span></td>
+                        <td style="text-align: center">No</td>
+                    </tr>
+                    <tr>
+                        <td><span class="new_code">expectOnce($method, $args)</span></td>
+                        <td style="text-align: center">Yes</td>
+                    </tr>
+                    <tr>
+                        <td><span class="new_code">expectAtLeastOnce($method, $args)</span></td>
+                        <td style="text-align: center">Yes</td>
+                    </tr>
                 </table>
                 Where the parameters are...
                 <dl>
@@ -556,6 +572,8 @@ class LoggingSessionPoolTest extends UnitTestCase {
                     <dd>
                         The arguments as a list. Wildcards can be included in the same
                         manner as for <span class="new_code">setReturn()</span>.
+                        This argument is optional for <span class="new_code">expectOnce()</span>
+                        and <span class="new_code">expectAtLeastOnce()</span>.
                     </dd>
                     <dt class="new_code">$timing</dt>
                     <dd>
@@ -657,7 +675,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
                 tools is the mock objects which can be employed independently.
                 Suppose you have your own favourite unit tester and all your current
                 test cases are written using it.
-                Pretend that you have called your unit tester PHPUnit (and why not, everyone else has)
+                Pretend that you have called your unit tester PHPUnit (everyone else has)
                 and the core test class looks like this...
 <pre>
 class PHPUnit {
@@ -716,7 +734,7 @@ $unit_test-&gt;assertion(&apos;I hope this file exists&apos;, file_exists(&apos;
             $test-&gt;assertion($message, $assertion);
         }
     }<strong>
-    Mock::setMockBaseClass(&apos;MyMock&apos;);</strong>
+    SimpleTestOptions::setMockBaseClass(&apos;MyMock&apos;);</strong>
 ?&gt;
 </pre>
                 From now on you just include <em>my_mock.php</em> instead of the

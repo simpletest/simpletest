@@ -269,27 +269,19 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td style="color: green;">Done</td>
                     </tr>
                     <tr>
-                        <td>Form parsing</td>
-                        <td>Ability to submit simple forms and read default form values</td>
-                        <td style="color: red;">Alpha8</td>
-                    </tr>
-                    <tr>
                         <td>Following redirects</td>
                         <td>Page fetching automatically follows 300 redirects</td>
-                        <td style="color: red;">Alpha8</td>
+                        <td style="color: green;">Alpha8</td>
                     </tr>
                     <tr>
-                        <td>Browser interface</td>
-                        <td>
-                            Exposure of lower level web browser interface for more
-                            detailed test cases
-                        </td>
+                        <td>Form parsing</td>
+                        <td>Ability to submit simple forms and read default form values</td>
                         <td style="color: red;">Beta1</td>
                     </tr>
                     <tr>
-                        <td>Frames support</td>
-                        <td>Handling of frames and images in web test cases</td>
-                        <td style="color: red;">Beta2</td>
+                        <td>Robust HTML handling</td>
+                        <td>Stronger testing with real world web pages</td>
+                        <td style="color: red;">Beta1</td>
                     </tr>
                     <tr>
                         <td>Command line interface</td>
@@ -299,7 +291,20 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     <tr>
                         <td>XML output and parsing</td>
                         <td>Allows multi host testing</td>
+                        <td style="color: red;">Beta2</td>
+                    </tr>
+                    <tr>
+                        <td>Frames support</td>
+                        <td>Handling of frames and images in web test cases</td>
                         <td style="color: red;">Beta3</td>
+                    </tr>
+                    <tr>
+                        <td>Browser interface</td>
+                        <td>
+                            Exposure of lower level web browser interface for more
+                            detailed test cases
+                        </td>
+                        <td style="color: red;">Beta4</td>
                     </tr>
                     <tr>
                         <td>Improved display</td>
@@ -351,10 +356,21 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 They currently lack a lot of features found in
                 <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a>, but the PEAR
                 version at least is due for a major upgrade for PHP5.
+            </p>
+            <p>
                 Library writers don&apos;t seem to ship tests with their code very often
                 which is a shame.
-                If you are hunting for testing examples in PHP then one exception is the
-                <a href="http://ismo.sourceforge.net/">ISMO library for PHP</a>.
+                Library code that includes tests can be more safely refactored and
+                the test code can act as additional documentation in a fairly standard
+                form.
+                This can save trawling the source code for clues when problems occour,
+                especially when upgrading such a library.
+                If you are hunting for testing examples in PHP libraries then there are a few exceptions.
+                The <a href="http://ismo.sourceforge.net/">ISMO library for PHP</a> uses the
+                PEAR unit tester and also includes a clever trick for mocking PHP functions.
+                Libraries using SimpleTest for their unit testing include
+                <a href="http://wact.sourceforge.net/">WACT</a> and
+                <a href="http://sourceforge.net/projects/htmlsax">PEAR::XML_HTMLSax</a>.
             </p>
             <p>
                 There is currently a sad lack of material on mock objects, which is a shame
@@ -385,14 +401,24 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 to use these alternatives.
             </p>
             <p>
+                For fine profiling of the PHP code base itself there are two
+                alternatives, although both have install isues.
+                The first is <a href="http://pear.php.net/package/apd">apd</a>
+                (advanced PHP debugger) from the PEAR stable.
+                The profiler comes as part of this debugging tool, but can
+                be very slow to process the gathered data.
+                The alternative <a href="http://www.xdebug.org/">XDebug</a>
+                comes highly recommended, but I have not tried this tool.
+            </p>
+            <p>
                 One very useful source of information though is you.
             </p>
             <p>
                 Yes, that&apos;s right, <strong>you</strong>!
             </p>
             <p>
-                Almost everything you discover in this field will be pretty new
-                even if it was recently disovered by somebody else first.
+                Almost everything you discover in the PHP testing field will be pretty new
+                even if perhaps it was also recently disovered by somebody else.
                 If you have an opinion on fine grain testing of web applications,
                 I would <a href="mailto:marcus@lastcraft.com">love to hear from you</a>
                 and so would everyone else.

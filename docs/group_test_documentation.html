@@ -139,7 +139,7 @@
     class MyFileTestCase extends UnitTestCase {
         ...
     }
-    GroupTest::ignore(&apos;MyFileTestCase&apos;);</strong>
+    SimpleTestOptions::ignore(&apos;MyFileTestCase&apos;);</strong>
 
     class FileTester extends MyFileTestCase {
         ...
@@ -175,8 +175,7 @@
 
     $test = &new GroupTest(&apos;All file tests&apos;);
     $test-&gt;addTestCase(new FileTestCase());
-    $test-&gt;attachObserver(new TestHtmlDisplay());
-    $test-&gt;run();</strong>
+    $test-&gt;run(new TestHtmlDisplay());</strong>
 ?&gt;
 </pre>
                 Actually we could have added this to our existing file
@@ -196,8 +195,7 @@
 
     $test = &new GroupTest(&apos;All file tests&apos;);<strong>
     $test-&gt;addTestFile(&apos;file_test.php&apos;);</strong>
-    $test-&gt;attachObserver(new TestHtmlDisplay());
-    $test-&gt;run();
+    $test-&gt;run(new TestHtmlDisplay());
 ?&gt;
 </pre>
                 What happens here is that the <span class="new_code">GroupTest</span>
@@ -265,8 +263,7 @@
     require_once(&apos;file_group_test.php&apos;);
     <strong>
     $test = &new FileGroupTest();
-    $test->attachObserver(new TestHtmlDisplay());
-    $test->run();</strong>
+    $test->run(new TestHtmlDisplay());</strong>
 ?&gt;
 </pre>
                 ...or we can group them into even larger group tests...
@@ -280,8 +277,7 @@
     $test = &new BigGroupTest("Big group");
     $test->addTestCase(new FileGroupTest());
     $test->addTestCase(...);
-    $test->attachObserver(new TestHtmlDisplay());
-    $test->run();</strong>
+    $test->run(new TestHtmlDisplay());</strong>
 ?&gt;
 </pre>
                 If we still wish to run the original group test and we
@@ -300,8 +296,7 @@
     if (!defined(&apos;RUNNER&apos;)) {
         define(&apos;RUNNER&apos;, true);</strong>
         $test = &new FileGroupTest();
-        $test->attachObserver(new TestHtmlDisplay());
-        $test->run();<strong>
+        $test->run(new TestHtmlDisplay());<strong>
     }</strong>
 ?&gt;
 </pre>
@@ -323,8 +318,7 @@
     $test = &new BigGroupTest("Big group");
     $test->addTestCase(new FileGroupTest());
     $test->addTestCase(...);
-    $test->attachObserver(new TestHtmlDisplay());
-    $test->run();
+    $test->run(new TestHtmlDisplay());
 ?&gt;
 </pre>
             </p>
@@ -367,8 +361,7 @@ class ConfigFileTest extends TestCase {
 
     $test = &new GroupTest(&apos;All file tests&apos;);<strong>
     $test-&gt;addTestFile(&apos;config_test.php&apos;);</strong>
-    $test-&gt;attachObserver(new TestHtmlDisplay());
-    $test-&gt;run();
+    $test-&gt;run(new TestHtmlDisplay());
 ?&gt;
 </pre>
                 There are only two adapters, the other is for the
@@ -385,8 +378,7 @@ class ConfigFileTest extends TestCase {
 
     $test = &new GroupTest(&apos;All file tests&apos;);<strong>
     $test-&gt;addTestFile(&apos;some_pear_test_cases.php&apos;);</strong>
-    $test-&gt;attachObserver(new TestHtmlDisplay());
-    $test-&gt;run();
+    $test-&gt;run(new TestHtmlDisplay());
 ?&gt;
 </pre>
                 The PEAR test cases can be freely mixed with SimpleTest
