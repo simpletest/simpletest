@@ -272,5 +272,18 @@
         function setTimeout($handle, $timeout) {
             stream_set_timeout($handle, $timeout, 0);
         }
+        
+        /**
+         *    Gets the current stack trace topmost first.
+         *    @return array        List of stack frames.
+         *    @access public
+         *    @static
+         */
+        function getStackTrace() {
+            if (function_exists('debug_backtrace')) {
+                return array_reverse(debug_backtrace());
+            }
+            return array();
+        }
     }
 ?>

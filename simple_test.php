@@ -291,15 +291,20 @@
         /**
          *    Uses a stack trace to find the line of an assertion.
          *    @param string $format    String formatting.
-         *    @return string           Line number of first assert* method.
+         *    @param array $stack      Stack frames top most first. Only
+         *                             needed if not using the PHP
+         *                             backtrace function.
+         *    @return string           Line number of first assert*
+         *                             method embedded in format string.
          *    @access public
          */
-        function getAssertionLine($format = '%d') {
-            if (function_exists('debug_backtrace')) {
-                foreach (debug_backtrace() as $frame) {
-                    if (strncmp($frame['function'], 'assert', 6) == 0) {
-                        return sprintf($format, $frame['line']);
-                    }
+        function getAssertionLine($format = '%d', $stack = false) {
+            if (! $stack) {
+                $stack = SimpleTestCompatibility::getStackTrace();
+            }
+            foreach ($stack as $frame) {
+                if (strncmp($frame['function'], 'assert', 6) == 0) {
+                    return sprintf($format, $frame['line']);
                 }
             }
             return '';
