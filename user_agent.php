@@ -468,13 +468,15 @@
          */
         function &_createHttpRequest($method, $url, $parameters) {
             if ($method == 'POST') {
-                $request = &new SimpleHttpPostRequest($url, $parameters);
+                $request = &new SimpleHttpPostRequest(
+                        new SimpleDestination($url),
+                        $parameters);
                 return $request;
             }
             if ($parameters) {
                 $url->addRequestParameters($parameters);
             }
-            return new SimpleHttpRequest($url, $method);
+            return new SimpleHttpRequest(new SimpleDestination($url), $method);
         }
         
         /**

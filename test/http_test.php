@@ -321,9 +321,7 @@
             $destination = &new MockSimpleDestination($this);
             $destination->setReturnReference('createConnection', $socket);
             
-            $request = &new PartialSimpleHttpRequest($this);
-            $request->setReturnReference('_createDestination', $destination);
-            $request->SimpleHttpRequest(new SimpleUrl('http://a.bad.page/'));
+            $request = &new SimpleHttpRequest($destination);
             
             $reponse = &$request->fetch(15);
             $this->assertTrue($reponse->isError());
@@ -343,10 +341,7 @@
             $destination->setReturnValue('getHostLine', 'Host: a.valid.host');
             $destination->expectArguments('createConnection', array(15));
             
-            $request = &new PartialSimpleHttpRequest($this);
-            $request->setReturnReference('_createDestination', $destination);
-            $request->expectArguments('_createDestination', array(new SimpleUrl('http://a.valid.host/and/path')));
-            $request->SimpleHttpRequest(new SimpleUrl('http://a.valid.host/and/path'));
+            $request = &new SimpleHttpRequest($destination);
             
             $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
             $socket->tally();
@@ -362,9 +357,7 @@
             $destination->setReturnValue('getHostLine', 'Host: a.valid.host');
             $destination->setReturnReference('createConnection', $socket);
             
-            $request = &new PartialSimpleHttpRequest($this);
-            $request->setReturnReference('_createDestination', $destination);
-            $request->SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path?a=A&b=B"));
+            $request = &new SimpleHttpRequest($destination);
             
             $request->fetch(15);            
             $socket->tally();
@@ -384,9 +377,7 @@
             $destination->setReturnValue('getHostLine', 'Host: a.valid.host');
             $destination->setReturnReference('createConnection', $socket);
             
-            $request = &new PartialSimpleHttpRequest($this);
-            $request->setReturnReference('_createDestination', $destination);
-            $request->SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path"));
+            $request = &new SimpleHttpRequest($destination);
             $request->addHeaderLine("My: stuff");
             $request->fetch(15);
             
@@ -407,9 +398,7 @@
             $destination->setReturnValue('getHostLine', 'Host: a.valid.host');
             $destination->setReturnReference('createConnection', $socket);
             
-            $request = &new PartialSimpleHttpRequest($this);
-            $request->setReturnReference('_createDestination', $destination);
-            $request->SimpleHttpRequest(new SimpleUrl("http://a.valid.host/and/path"));
+            $request = &new SimpleHttpRequest($destination);
             $request->setCookie(new SimpleCookie("a", "A"));
             
             $this->assertIsA($request->fetch(15), "SimpleHttpResponse");
@@ -425,9 +414,7 @@
             $destination->setReturnValue('getHostLine', 'Host: a.valid.host');
             $destination->setReturnReference('createConnection', $socket);
             
-            $request = &new PartialSimpleHttpRequest($this);
-            $request->setReturnReference('_createDestination', $destination);
-            $request->SimpleHttpRequest(new SimpleUrl("a.valid.host/and/path"));
+            $request = &new SimpleHttpRequest($destination);
             $request->setCookie(new SimpleCookie("a", "A"));
             $request->setCookie(new SimpleCookie("b", "B"));
             

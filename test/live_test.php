@@ -33,8 +33,8 @@
             $this->assertIdentical($socket->read(8), false);
         }
         function testHttpGet() {
-            $http = &new SimpleHttpRequest(new SimpleUrl(
-                    "www.lastcraft.com/test/network_confirm.php?gkey=gvalue"));
+            $http = &new SimpleHttpRequest(new SimpleDestination(new SimpleUrl(
+                    "www.lastcraft.com/test/network_confirm.php?gkey=gvalue")));
             $http->setCookie(new SimpleCookie("ckey", "cvalue"));
             $this->assertIsA($response = &$http->fetch(15), "SimpleHttpResponse");
 
@@ -56,7 +56,8 @@
         }
         function testHttpHead() {
             $http = &new SimpleHttpRequest(
-                    new SimpleUrl('www.lastcraft.com/test/network_confirm.php'),
+                    new SimpleDestination(
+                            new SimpleUrl('www.lastcraft.com/test/network_confirm.php')),
                     'HEAD');
             $this->assertIsA($response = &$http->fetch(15), "SimpleHttpResponse");
             $headers = &$response->getHeaders();
@@ -65,7 +66,8 @@
         }
         function testHttpPost() {
             $http = &new SimpleHttpPostRequest(
-                    new SimpleUrl('www.lastcraft.com/test/network_confirm.php'),
+                    new SimpleDestination(
+                            new SimpleUrl('www.lastcraft.com/test/network_confirm.php')),
                     array());
             $this->assertIsA($response = &$http->fetch(15), 'SimpleHttpResponse');
             $this->assertWantedPattern(
@@ -74,7 +76,8 @@
         }
         function testHttpFormPost() {
             $http = &new SimpleHttpPostRequest(
-                    new SimpleUrl('www.lastcraft.com/test/network_confirm.php'),
+                    new SimpleDestination(
+                            new SimpleUrl('www.lastcraft.com/test/network_confirm.php')),
                     array('pkey' => 'pvalue'));
             $http->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
             $response = &$http->fetch(15);

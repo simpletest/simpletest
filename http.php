@@ -712,12 +712,13 @@
         
         /**
          *    Saves the URL ready for fetching.
-         *    @param SimpleUrl $url   URL as object.
-         *    @param string $method   HTTP request method, usually GET.
+         *    @param SimpleDestination $destination   Request target.
+         *    @param string $method                   HTTP request method,
+         *                                            usually GET.
          *    @access public
          */
-        function SimpleHttpRequest($url, $method = 'GET') {
-            $this->_destination = $this->_createDestination($url);
+        function SimpleHttpRequest($destination, $method = 'GET') {
+            $this->_destination = $destination;
             $this->_method = $method;
             $this->_headers = array();
             $this->_cookies = array();
@@ -726,7 +727,7 @@
         /**
          *    Creates header building strategy for destination.
          *    @param SimpleUrl $url             Target URL as object.
-         *    @return SimpleDirectDestination   End point.
+         *    @return SimpleDestination   End point.
          *    @access protected
          */
         function &_createDestination($url) {
