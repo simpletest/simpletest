@@ -8,6 +8,7 @@ Unit tester
 Fix of syntax errors in test scripts reporting green (3/3) - done.
 Fix of assertIdentical() getting stuck in a loop (3).
 Rename StickyError because of name clash (1/1) - done.
+Make sure error handling runner is loaded by default (2).
 
 Reporter
 --------
