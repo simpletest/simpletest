@@ -74,6 +74,7 @@
          *    Compounds the patterns into a single
          *    regular expression separated with the
          *    "or" operator. Caches the regex.
+         *    Will automatically escape (, ) and / tokens.
          *    @param $patterns    List of patterns in order.
          *    @private
          */
@@ -343,9 +344,9 @@
          *                        content that will be eaten.
          *    @return             Three item list of unparsed
          *                        content followed by the
-         *                        recognised token. True
+         *                        recognised token an dfinally True
          *                        if no match, false if there
-         *                        is an parsing error.
+         *                        is a parsing error.
          *    @private
          */
         function _reduce(&$raw) {
