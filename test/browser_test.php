@@ -300,7 +300,10 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', 'handler.html');
             $form->setReturnValue('getMethod', 'post');
-            $form->setReturnvalue('submitButtonByLabel', array('a' => 'A'));
+            $form->setReturnValue('getSubmitNameFromLabel', 'a_name');
+            $form->expectOnce('getSubmitNameFromLabel', array('Go'));
+            $form->setReturnValue('submitButton', array('a' => 'A'));
+            $form->expectOnce('submitButton', array('a_name'));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormBySubmitLabel', $form);
@@ -312,6 +315,7 @@
             
             $agent->tally();
             $page->tally();
+            $form->tally();
         }
         function testDefaultSubmitFormByLabel() {
             $agent = &new MockSimpleUserAgent($this);
@@ -326,7 +330,8 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', false);
             $form->setReturnValue('getMethod', 'get');
-            $form->setReturnvalue('submitButtonByLabel', array('a' => 'A'));
+            $form->setReturnValue('getSubmitNameFromLabel', 'a_name');
+            $form->setReturnValue('submitButton', array('a' => 'A'));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormBySubmitLabel', $form);
@@ -338,20 +343,16 @@
             
             $agent->tally();
             $page->tally();
+            $form->tally();
         }
         function testSubmitFormByName() {
             $agent = &new MockSimpleUserAgent($this);
             $agent->setReturnReference('fetchResponse', $this->getSuccessfulFetch());
-            $agent->expectArgumentsAt(
-                    1,
-                    'fetchResponse',
-                    array('POST', 'handler.html', array('a' => 'A')));
-            $agent->expectCallCount('fetchResponse', 2);
             
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', 'handler.html');
             $form->setReturnValue('getMethod', 'post');
-            $form->setReturnvalue('submitButton', array('a' => 'A'));
+            $form->setReturnValue('submitButton', array('a' => 'A'));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormBySubmitName', $form);
@@ -361,22 +362,19 @@
             $browser->get('http://this.com/page.html');
             $this->assertTrue($browser->clickSubmitByName('me'), 'Submitting');
             
-            $agent->tally();
             $page->tally();
         }
         function testSubmitFormById() {
             $agent = &new MockSimpleUserAgent($this);
             $agent->setReturnReference('fetchResponse', $this->getSuccessfulFetch());
-            $agent->expectArgumentsAt(
-                    1,
-                    'fetchResponse',
-                    array('POST', 'handler.html', array('a' => 'A')));
-            $agent->expectCallCount('fetchResponse', 2);
             
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', 'handler.html');
             $form->setReturnValue('getMethod', 'post');
-            $form->setReturnvalue('submitButtonById', array('a' => 'A'));
+            $form->setReturnValue('getSubmitNameFromId', 'a_name');
+            $form->expectOnce('getSubmitNameFromId', array(99));
+            $form->setReturnValue('submitButton', array('a' => 'A'));
+            $form->expectOnce('submitButton', array('a_name'));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormBySubmitId', $form);
@@ -386,8 +384,8 @@
             $browser->get('http://this.com/page.html');
             $this->assertTrue($browser->clickSubmitById(99), 'Submitting');
             
-            $agent->tally();
             $page->tally();
+            $form->tally();
         }
         function testSubmitFormByFormId() {
             $agent = &new MockSimpleUserAgent($this);

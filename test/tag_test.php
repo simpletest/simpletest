@@ -359,15 +359,6 @@
             $this->assertTrue($form->hasSubmitName('go'), 'Present');
             $this->assertEqual($form->submitButton('go'), array('go' => 'Go!'));            
         }
-        function testSubmitButtonByLabel() {
-            $form = &new SimpleForm(new SimpleFormTag(array()));
-            $this->assertIdentical($form->submitButtonByLabel('Go!'), false);
-            $form->addWidget(new SimpleSubmitTag(
-                    array('type' => 'Submit', 'name' => 'go', 'value' => 'Go!')));
-            $this->assertEqual(
-                    $form->submitButtonByLabel('Go!'),
-                    array('go' => 'Go!'));            
-        }
         function testSingleSelectFieldSubmitted() {
             $form = &new SimpleForm(new SimpleFormTag(array()));
             $select = &new SimpleSelectionTag(array('name' => 'a'));

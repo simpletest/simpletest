@@ -611,12 +611,8 @@
             if (! ($form = &$this->_page->getFormBySubmitLabel($label))) {
                 return false;
             }
-            $action = $form->getAction();
-            if (! $action) {
-                $action = $this->getCurrentUrl();
-            }
-            $method = $form->getMethod();
-            return $this->$method($action, $form->submitButtonByLabel($label));
+            $name = $form->getSubmitNameFromLabel($label);
+            return $this->_submitForm($form, $name);
         }
         
         /**
@@ -630,12 +626,7 @@
             if (! ($form = &$this->_page->getFormBySubmitName($name))) {
                 return false;
             }
-            $action = $form->getAction();
-            if (! $action) {
-                $action = $this->getCurrentUrl();
-            }
-            $method = $form->getMethod();
-            return $this->$method($action, $form->submitButton($name));
+            return $this->_submitForm($form, $name);
         }
         
         /**
@@ -649,12 +640,24 @@
             if (! ($form = &$this->_page->getFormBySubmitId($id))) {
                 return false;
             }
+            $name = $form->getSubmitNameFromId($id);
+            return $this->_submitForm($form, $name);
+        }
+        
+        /**
+         *    Dispatches form request by button name.
+         *    @param SimpleForm $form    Form object to submit.
+         *    @param string $name        Submit button name attribute.
+         *    @return boolean            True on success.
+         *    @access private
+         */
+        function _submitForm(&$form, $name) {
             $action = $form->getAction();
             if (! $action) {
                 $action = $this->getCurrentUrl();
             }
             $method = $form->getMethod();
-            return $this->$method($action, $form->submitButtonById($id));
+            return $this->$method($action, $form->submitButton($name));
         }
         
         /**

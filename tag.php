@@ -1185,38 +1185,6 @@
         }
         
         /**
-         *    Gets the submit values for a button with a particular
-         *    label.
-         *    @param string $label    Button label to search for.
-         *    @return hash            Submitted values or false
-         *                            if there is no such button in the
-         *                            form.
-         *    @access public
-         */
-        function submitButtonByLabel($label) {
-            if ($name = $this->getSubmitNameFromLabel($label)) {
-                return $this->submitButton($name);
-            }
-            return false;
-        }
-        
-        /**
-         *    Gets the submit values for a button with a particular
-         *    ID attribute.
-         *    @param string $id       Button ID attribute to search for.
-         *    @return hash            Submitted values or false
-         *                            if there is no such button in the
-         *                            form.
-         *    @access public
-         */
-        function submitButtonById($id) {
-            if ($name = $this->getSubmitNameFromId($id)) {
-                return $this->submitButton($name);
-            }
-            return false;
-        }
-        
-        /**
          *    Simply submits the form without the submit button
          *    value. Used when there is only one button or it
          *    is unimportant.
