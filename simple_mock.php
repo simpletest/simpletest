@@ -146,66 +146,6 @@
     }
     
     /**
-     *    A simple registry of all added mocks. Includes
-     *    a singleton interface for global access to a
-     *    unique version of the list.
-     */
-    class MockQueue {
-        var $_queue;
-        var $_position;
-        
-        /**
-         *    Constructor accessable for testing.
-         *    @protected
-         */
-        function MockQueue() {
-            $this->clear();
-        }
-        
-        /**
-         *    Adds an item to the tail of the queue.
-         *    @param $object        Mock object to place in
-         *                          the queue.
-         *    @public
-         */
-        function add(&$object) {
-            $this->_queue[] = &$object;
-        }
-        
-        /**
-         *    Reads the next item from the queue.
-         *    @return              Earliest remaining object.
-         *    @public
-         */
-        function &next() {
-            return $this->_queue[$this->_position++];
-        }
-        
-        /**
-         *    Clears the queue and starts from the beginning.
-         *    @public
-         */
-        function clear() {
-            $this->_queue = array();
-            $this->_position = 0;
-        }
-        
-        /**
-         *    Singleton interface for a globally accessable
-         *    one time object.
-         *    @return            A global MockQueue.
-         *    @public
-         */
-        function &instance() {
-            static $queue;
-            if (!isset($queue)) {
-                $queue = new MockQueue();
-            }
-            return $queue;
-        }
-    }
-    
-    /**
      *    An empty collection of methods that can have their
      *    return values set and expectations made of the
      *    calls upon them. The mock will assert the
@@ -588,7 +528,7 @@
         }
         
         /**
-         *    The base class name is settable here. This is the
+         *    The base class name is setable here. This is the
          *    class that the new mock will inherited from.
          *    To modify the generated mocks simple extend the
          *    SimpleMock class above and set it's name

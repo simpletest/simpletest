@@ -352,47 +352,4 @@
             $mock->aMethod("Goodbye");
         }
     }
-    
-    class TestOfMockQueue extends UnitTestCase {
-        function TestOfMockQueue() {
-            $this->UnitTestCase();
-        }
-        function testEmptyQueue() {
-            $q = new MockQueue();
-            $this->assertNull($q->next());
-        }
-        function testAdding() {
-            $q = new MockQueue();
-            $ref = &new Dummy();
-            $q->add($ref);
-            $this->assertReference($q->next(), $ref);
-            $this->assertNull($q->next());
-        }
-        function testOrdering() {
-            $q = new MockQueue();
-            $ref1 = &new Dummy();
-            $ref2 = &new Dummy();
-            $q->add($ref1);
-            $q->add($ref2);
-            $this->assertReference($q->next(), $ref1);
-            $this->assertReference($q->next(), $ref2);
-        }
-        function testReset() {
-            $q = new MockQueue();
-            $ref1 = &new Dummy();
-            $q->add($ref1);
-            $q->add(new Dummy());
-            $this->assertReference($q->next(), $ref1);
-            $q->clear();
-            $this->assertNull($q->next());
-            $ref2 = &new Dummy();
-            $q->add($ref2);
-            $this->assertReference($q->next(), $ref2);
-            $this->assertNull($q->next());
-        }
-        function testSingleton() {
-            $this->assertIsA(MockQueue::instance(), "MockQueue");
-            $this->assertReference(MockQueue::instance(), MockQueue::instance());
-        }
-    }
 ?>
