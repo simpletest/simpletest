@@ -31,8 +31,8 @@
         }
         
         /**
-         *    Fetches an array of all valid cookies
-         *    filtered by host, path and date.
+         *    Fetches a hash of all valid cookies filtered
+         *    by host, path and date and keyed by name
          *    Any cookies with missing categories will not
          *    be filtered out by that category.         
          *    @param $host        Host name requirement.
@@ -55,20 +55,25 @@
                 if ($cookie->isExpired($date)) {
                     continue;
                 }
-                $valid_cookies[] = $cookie;
+                if (isset($valid_cookies[$cookie->getName()])) {
+                    if (strlen($cookie->getPath()) < strlen($valid_cookies[$cookie->getName()]->getPath())) {
+                        continue;
+                    }
+                }
+                $valid_cookies[$cookie->getName()] = $cookie;
             }
             return $valid_cookies;
         }
         
-       /**
+        /**
          *    Tests to see if one path contains another.
-         *    @param $path        Precise path.
          *    @param $subpath     Path nearer to the root.
+         *    @param $path        Precise path.
          *    @private
          */
-        function _isSubpath($path, $subpath) {
-            if (substr($subpath, -1) != '/') {
-                $subpath .= '/';
+        function _isSubpath($subpath, $path) {
+            if (substr($path, -1) != '/') {
+                $path .= '/';
             }
             return (strncmp($path, $subpath, strlen($subpath)) == 0);
         }

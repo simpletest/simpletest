@@ -19,7 +19,7 @@
             $jar->setCookie(new SimpleCookie("a", "A"));
             $cookies = $jar->getValidCookies();
             $this->assertEqual(count($cookies), 1);
-            $this->assertEqual($cookies[0]->getValue(), "A");
+            $this->assertEqual($cookies["a"]->getValue(), "A");
         }
         function testHostFilter() {
             $jar = new CookieJar();
@@ -33,27 +33,50 @@
             $jar->setCookie($cookie);
             $cookies = $jar->getValidCookies("my-host.com");
             $this->assertEqual(count($cookies), 2);
-            $this->assertEqual($cookies[0]->getValue(), "A");
-            $this->assertEqual($cookies[1]->getValue(), "C");
+            $this->assertEqual($cookies["a"]->getValue(), "A");
+            $this->assertEqual($cookies["c"]->getValue(), "C");
             $this->assertEqual(count($jar->getValidCookies("new-host.org")), 1);
             $this->assertEqual(count($jar->getValidCookies()), 3);
         }
         function testPathFilter() {
             $jar = new CookieJar();
+            $jar->setCookie(new SimpleCookie("a", "A", "/path/"));
+            $this->assertEqual(count($jar->getValidCookies(false, "/")), 0);
+            $this->assertEqual(count($jar->getValidCookies(false, "/elsewhere")), 0);
+            $this->assertEqual(count($jar->getValidCookies(false, "/path/")), 1);
+            $this->assertEqual(count($jar->getValidCookies(false, "/path")), 1);
+            $this->assertEqual(count($jar->getValidCookies(false, "/pa")), 0);
+            $this->assertEqual(count($jar->getValidCookies(false, "/path/here/")), 1);
+        }
+        function testPathFilterDeeply() {
+            $jar = new CookieJar();
             $jar->setCookie(new SimpleCookie("a", "A", "/path/more_path/"));
-            $this->assertEqual(count($jar->getValidCookies("", "/")), 1);
-            $this->assertEqual(count($jar->getValidCookies("", "/elsewhere")), 0);
-            $this->assertEqual(count($jar->getValidCookies("", "/path/")), 1);
-            $this->assertEqual(count($jar->getValidCookies("", "/path")), 1);
-            $this->assertEqual(count($jar->getValidCookies("", "/pa")), 0);
-            $this->assertEqual(count($jar->getValidCookies("", "/path/more_path_here")), 0);
-            $this->assertEqual(count($jar->getValidCookies("", "/path/not_here/")), 0);
+            $this->assertEqual(count($jar->getValidCookies(false, "/path/")), 0);
+            $this->assertEqual(count($jar->getValidCookies(false, "/path")), 0);
+            $this->assertEqual(count($jar->getValidCookies(false, "/pa")), 0);
+            $this->assertEqual(count($jar->getValidCookies(false, "/path/more_path/")), 1);
+            $this->assertEqual(count($jar->getValidCookies(false, "/path/more_path/and_more")), 1);
+            $this->assertEqual(count($jar->getValidCookies(false, "/path/not_here/")), 0);
         }
         function testExpiryFilter() {
             $jar = new CookieJar();
             $jar->setCookie(new SimpleCookie("a", "A", "/", "Wed, 25-Dec-02 04:24:20 GMT"));
-            $this->assertEqual(count($jar->getValidCookies("", "/", "Wed, 25-Dec-02 04:24:19 GMT")), 1);
-            $this->assertEqual(count($jar->getValidCookies("", "/", "Wed, 25-Dec-02 04:24:21 GMT")), 0);
+            $this->assertEqual(count($jar->getValidCookies(false, "/", "Wed, 25-Dec-02 04:24:19 GMT")), 1);
+            $this->assertEqual(count($jar->getValidCookies(false, "/", "Wed, 25-Dec-02 04:24:21 GMT")), 0);
+        }
+        function testCookieMasking() {
+            $jar = new CookieJar();
+            $jar->setCookie(new SimpleCookie("a", "abc", "/"));
+            $jar->setCookie(new SimpleCookie("a", "123", "/path/here/"));
+            $cookies = $jar->getValidCookies("my-host.com", "/");
+            $this->assertEqual($cookies["a"]->getPath(), "/");
+            $cookies = $jar->getValidCookies("my-host.com", "/path/");
+            $this->assertEqual($cookies["a"]->getPath(), "/");
+            $cookies = $jar->getValidCookies("my-host.com", "/path/here");
+            $this->assertEqual($cookies["a"]->getPath(), "/path/here/");
+            $cookies = $jar->getValidCookies("my-host.com", "/path/here/there");
+            $this->assertEqual($cookies["a"]->getPath(), "/path/here/");
+            $this->assertEqual($cookies["a"]->getValue(), "123");
         }
     }
 
