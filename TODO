@@ -1,6 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC1) of 55 hours which
-actually took 63 hours.
+This is immediate stuff only for this iteration (RC1) of 74 hours.
 
 $Id$
 
@@ -58,5 +57,4 @@ Add proxy support to docs (1).
 
 Build
 -----
-Move makefile over to bash script (2).
-Move doc generation to XSLT (9/7).
+Move doc generation to XSLT (9/8).
