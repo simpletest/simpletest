@@ -10,7 +10,7 @@
         }
         function testStartValues() {
             $tag = new SimpleTitleTag(array("a" => 1, "b" => true));
-            $this->assertEqual($tag->getName(), "title");
+            $this->assertEqual($tag->getTagName(), "title");
             $this->assertIdentical($tag->getAttribute("a"), "1");
             $this->assertIdentical($tag->getAttribute("b"), true);
             $this->assertIdentical($tag->getAttribute("c"), false);
@@ -46,12 +46,30 @@
             $this->assertEqual($tag->getDefault(), 'aaa');
             $this->assertEqual($tag->getValue(), 'aaa');
         }
-        function testSettingValue() {
+        function testSettingTextValue() {
             $tag = &new SimpleTextTag(array('value' => 'aaa'));
             $tag->setValue('bbb');
             $this->assertEqual($tag->getValue(), 'bbb');
             $tag->resetValue();
             $this->assertEqual($tag->getValue(), 'aaa');
+        }
+        function testTextAreaDefault() {
+            $tag = &new SimpleTextAreaTag(array());
+            $tag->addContent('Some text');
+            $this->assertEqual($tag->getDefault(), 'Some text');
+        }
+        function testSubmitDefaults() {
+            $tag = &new SimpleSubmitTag(array('type' => 'submit'));
+            $this->assertEqual($tag->getName(), 'submit');
+            $this->assertEqual($tag->getValue(), 'Submit');
+            $tag->setValue('Cannot set this');
+            $this->assertEqual($tag->getValue(), 'Submit');
+        }
+        function testPopulatedSubmit() {
+            $tag = &new SimpleSubmitTag(
+                    array('type' => 'submit', 'name' => 's', 'value' => 'Ok!'));
+            $this->assertEqual($tag->getName(), 's');
+            $this->assertEqual($tag->getValue(), 'Ok!');
         }
     }
     

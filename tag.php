@@ -45,7 +45,7 @@
          *    @return        Name as string.
          *    @public
          */
-        function getName() {
+        function getTagName() {
             return $this->_name;
         }
         
@@ -141,6 +141,16 @@
         }
         
         /**
+         *    Accessor for name submitted as the key in
+         *    GET/POST varaibles haah.
+         *    @return string        Parsed value.
+         *    @public
+         */
+        function getName() {
+            return $this->getAttribute('name');
+        }
+        
+        /**
          *    Accessor for default value parsed with the tag.
          *    @return string        Parsed value.
          *    @public
@@ -226,16 +236,39 @@
          *                               string values.
          */
         function SimpleSubmitTag($attributes) {
+            if (! isset($attributes['name'])) {
+                $attributes['name'] = 'submit';
+            }
+            if (! isset($attributes['value'])) {
+                $attributes['value'] = 'Submit';
+            }
             $this->SimpleWidget('input', $attributes);
         }
         
         /**
-         *    Tag contains no content.
+         *    Tag contains no end element.
          *    @return boolean        False.
          *    @public
          */
         function expectEndTag() {
             return false;
+        }
+        
+        /**
+         *    Accessor for starting value.
+         *    @return string        Parsed value.
+         *    @public
+         */
+        function getDefault() {
+            return $this->getAttribute('value');
+        }
+        
+        /**
+         *    Disables the setting of the button value.
+         *    @param string $value        Ignored.
+         *    @public
+         */
+        function setValue($value) {
         }
     }
     
@@ -251,6 +284,15 @@
          */
         function SimpleTextAreaTag($attributes) {
             $this->SimpleWidget('textarea', $attributes);
+        }
+        
+        /**
+         *    Accessor for starting value.
+         *    @return string        Parsed value.
+         *    @public
+         */
+        function getDefault() {
+            return $this->getContent();
         }
     }
     
@@ -326,7 +368,7 @@
          *    @public
          */
         function addWidget($tag) {
-            if ($tag->getName() == "input") {
+            if ($tag->getTagName() == "input") {
                 if ($tag->getAttribute("type") == "submit") {
                     $this->_buttons[$tag->getAttribute("name") ? $tag->getAttribute("name") : 'submit'] =
                             $tag->getAttribute("value") ? $tag->getAttribute("value") : 'Submit';
@@ -335,7 +377,7 @@
                 if ($tag->getAttribute("name")) {
                     $this->_defaults[$tag->getAttribute("name")] = $tag->getAttribute("value");
                 }
-            } elseif ($tag->getName() == "textarea") {
+            } elseif ($tag->getTagName() == "textarea") {
                 if ($tag->getAttribute("name")) {
                     $this->_defaults[$tag->getAttribute("name")] = $tag->getContent();
                 }

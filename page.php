@@ -180,12 +180,12 @@
          *    @public
          */
         function acceptTag(&$tag) {
-            if ($tag->getName() == "a") {
+            if ($tag->getTagName() == "a") {
                 $this->_addLink(
                         $tag->getAttribute("href"),
                         $tag->getContent(),
                         $tag->getAttribute("id"));
-            } elseif ($tag->getName() == "title") {
+            } elseif ($tag->getTagName() == "title") {
                 $this->_setTitle($tag);
             } elseif ($tag->isWidget()) {
                 for ($i = 0; $i < count($this->_open_forms); $i++) {

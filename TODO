@@ -25,7 +25,7 @@ Html parser
 -----------
 Test with some realistic pages (3/1).
 Parse drop down lists (4).
-Add wrapping behaviour to text areas (1/2).
+Add wrapping behaviour to text areas (1/3).
 Add HTTP basic authentication (2).
 
 Browser
@@ -38,10 +38,8 @@ Add header accessor (1).
 Documentation
 -------------
 Start a web tester documentation page (2).
-Add a cookie reading page (2).
 Reorder docs to place the reporters mods last (1).
 
 Build
 -----
-Test with PHP5 (3).
 
