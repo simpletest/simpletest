@@ -105,7 +105,8 @@ $options = array(
 		),
 	'ignore' => 
 		array(
-			"$packagedir/packages"
+			"$packagedir/packages",
+			"$packagedir/ui",
 			),
 	);
 
@@ -160,8 +161,8 @@ if ( $start != 0 ) {
 	foreach ( $errors as $error ) {
 		fwrite (STDERR,$error."\n");
 	}
-	fwrite(STDOUT,$output);
 }
+fwrite(STDOUT,$output);
 
 if (PEAR::isError($status)) {
 	fwrite (STDERR,$status->getMessage());
