@@ -232,15 +232,15 @@
             $agent->expectArgumentsAt(
                     0,
                     'fetchResponse',
-                    array('GET', 'http://this.com/page.html', false));
+                    array('GET', new SimpleUrl('http://this.com/page.html'), false));
             $agent->expectArgumentsAt(
                     1,
                     'fetchResponse',
-                    array('GET', 'new.html', false));
+                    array('GET', new SimpleUrl('http://this.com/new.html'), false));
             $agent->expectCallCount('fetchResponse', 2);
             
             $page = &new MockSimplePage($this);
-            $page->setReturnValue('getUrlsByLabel', array('new.html'));
+            $page->setReturnValue('getUrlsByLabel', array(new SimpleUrl('http://this.com/new.html')));
             $page->expectOnce('getUrlsByLabel', array('New'));
             
             $browser = &$this->createBrowser($agent, $page);
@@ -270,11 +270,13 @@
             $agent->expectArgumentsAt(
                     1,
                     'fetchResponse',
-                    array('GET', '1.html', false));
+                    array('GET', new SimpleUrl('1.html'), false));
             $agent->expectCallCount('fetchResponse', 2);
             
             $page = &new MockSimplePage($this);
-            $page->setReturnValue('getUrlsByLabel', array('0.html', '1.html'));
+            $page->setReturnValue(
+                    'getUrlsByLabel',
+                    array(new SimpleUrl('0.html'), new SimpleUrl('1.html')));
             
             $browser = &$this->createBrowser($agent, $page);
             $browser->get('http://this.com/page.html');
@@ -288,12 +290,12 @@
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
             $agent->expectArgumentsAt(1, 'fetchResponse', array(
                     'GET',
-                    'link.html',
+                    new SimpleUrl('http://this.com/link.html'),
                     false));
             $agent->expectCallCount('fetchResponse', 2);
             
             $page = &new MockSimplePage($this);
-            $page->setReturnValue('getUrlById', 'link.html');
+            $page->setReturnValue('getUrlById', new SimpleUrl('http://this.com/link.html'));
             $page->expectOnce('getUrlById', array(2));
             
             $browser = &$this->createBrowser($agent, $page);
@@ -322,11 +324,11 @@
             $agent->expectArgumentsAt(
                     1,
                     'fetchResponse',
-                    array('POST', 'handler.html', array('a' => 'A')));
+                    array('POST', new SimpleUrl('http://this.com/handler.html'), array('a' => 'A')));
             $agent->expectCallCount('fetchResponse', 2);
             
             $form = &new MockSimpleForm($this);
-            $form->setReturnValue('getAction', 'handler.html');
+            $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
             $form->setReturnValue('getMethod', 'post');
             $form->setReturnValue('submitButtonByLabel', array('a' => 'A'));
             $form->expectOnce('submitButtonByLabel', array('Go'));
@@ -379,7 +381,7 @@
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
             
             $form = &new MockSimpleForm($this);
-            $form->setReturnValue('getAction', 'handler.html');
+            $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
             $form->setReturnValue('getMethod', 'post');
             $form->setReturnValue('submitButtonByName', array('a' => 'A'));
             
@@ -400,7 +402,7 @@
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
             
             $form = &new MockSimpleForm($this);
-            $form->setReturnValue('getAction', 'handler.html');
+            $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
             $form->setReturnValue('getMethod', 'post');
             $form->setReturnValue('submitButtonById', array('a' => 'A'));
             $form->expectOnce('submitButtonById', array(99));
@@ -423,7 +425,7 @@
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
             
             $form = &new MockSimpleForm($this);
-            $form->setReturnValue('getAction', 'handler.html');
+            $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
             $form->setReturnValue('getMethod', 'post');
             $form->setReturnValue('submitImageByLabel', array('a' => 'A'));
             $form->expectOnce('submitImageByLabel', array('Go!', 10, 11));
@@ -446,7 +448,7 @@
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
             
             $form = &new MockSimpleForm($this);
-            $form->setReturnValue('getAction', 'handler.html');
+            $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
             $form->setReturnValue('getMethod', 'post');
             $form->setReturnValue('submitImageByName', array('a' => 'A'));
             $form->expectOnce('submitImageByName', array('a', 10, 11));
@@ -469,7 +471,7 @@
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
             
             $form = &new MockSimpleForm($this);
-            $form->setReturnValue('getAction', 'handler.html');
+            $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
             $form->setReturnValue('getMethod', 'post');
             $form->setReturnValue('submitImageById', array('a' => 'A'));
             $form->expectOnce('submitImageById', array(99, 10, 11));
@@ -492,12 +494,12 @@
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
             $agent->expectArgumentsAt(1, 'fetchResponse', array(
                     'POST',
-                    'handler.html',
+                    new SimpleUrl('http://this.com/handler.html'),
                     array('a' => 'A')));
             $agent->expectCallCount('fetchResponse', 2);
             
             $form = &new MockSimpleForm($this);
-            $form->setReturnValue('getAction', 'handler.html');
+            $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
             $form->setReturnValue('getMethod', 'post');
             $form->setReturnvalue('submit', array('a' => 'A'));
             

@@ -595,7 +595,8 @@
             $urls = array();
             for ($i = 0; $i < count($this->_frames); $i++) {
                 $name = $this->_frames[$i]->getAttribute('name');
-                $urls[$name ? $name : $i] = $this->_frames[$i]->getAttribute('src');
+                $url = new SimpleUrl($this->_frames[$i]->getAttribute('src'));
+                $urls[$name ? $name : $i] = $url->makeAbsolute($this->getUrl());
             }
             return $urls;
         }

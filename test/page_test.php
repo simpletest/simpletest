@@ -405,7 +405,10 @@
         }
         
         function testFramesInPage() {
-            $page = &new SimplePage(new MockSimpleHttpResponse($this));
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getUrl', new SimpleUrl('http://here'));
+            
+            $page = &new SimplePage($response);
             $page->acceptFrame(new SimpleFrameTag(array('src' => '1.html')));
             $page->acceptFramesetStart(new SimpleTag('frameset', array()));
             $page->acceptFrame(new SimpleFrameTag(array('src' => '2.html')));
@@ -414,13 +417,16 @@
             $page->acceptFrame(new SimpleFrameTag(array('src' => '4.html')));
             
             $this->assertTrue($page->hasFrames());
-            $this->assertIdentical(
-                    $page->getFrames(),
-                    array(0 => '2.html', 1 => '3.html'));
+            $this->assertIdentical($page->getFrames(), array(
+                    0 => new SimpleUrl('http://here/2.html'),
+                    1 => new SimpleUrl('http://here/3.html')));
         }
         
         function testNamedFramesInPage() {
-            $page = &new SimplePage(new MockSimpleHttpResponse($this));
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getUrl', new SimpleUrl('http://here'));
+            
+            $page = &new SimplePage($response);
             $page->acceptFramesetStart(new SimpleTag('frameset', array()));
             $page->acceptFrame(new SimpleFrameTag(array('src' => '1.html')));
             $page->acceptFrame(new SimpleFrameTag(array('src' => '2.html', 'name' => 'A')));
@@ -429,9 +435,11 @@
             $page->acceptFramesetEnd();
             
             $this->assertTrue($page->hasFrames());
-            $this->assertIdentical(
-                    $page->getFrames(),
-                    array(0 => '1.html', 'A' => '2.html', 'B' => '3.html', 3 => '4.html'));
+            $this->assertIdentical($page->getFrames(), array(
+                    0 => new SimpleUrl('http://here/1.html'),
+                    'A' => new SimpleUrl('http://here/2.html'),
+                    'B' => new SimpleUrl('http://here/3.html'),
+                    3 => new SimpleUrl('http://here/4.html')));
         }
     }
 
@@ -536,10 +544,13 @@
             $response->setReturnValue(
                     'getContent',
                     '<html><frameset><frame src="a.html"></frameset></html>');
+            $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
             
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
-            $this->assertIdentical($page->getFrames(), array(0 => 'a.html'));
+            $this->assertIdentical(
+                    $page->getFrames(),
+                    array(0 => new SimpleUrl('http://host/a.html')));
         }
         
         function testSingleFrameInNestedFrameset() {
@@ -548,10 +559,13 @@
                     '<html><frameset><frameset>' .
                     '<frame src="a.html">' .
                     '</frameset></frameset></html>');
+            $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
             
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
-            $this->assertIdentical($page->getFrames(), array(0 => 'a.html'));
+            $this->assertIdentical(
+                    $page->getFrames(),
+                    array(0 => new SimpleUrl('http://host/a.html')));
         }
         
         function testFrameWithNoSource() {
@@ -573,12 +587,14 @@
                     '<frameset><frame src="b.html"></frameset>' .
                     '<frame src="c.html">' .
                     '</frameset></html>');
+            $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
             
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
-            $this->assertIdentical(
-                    $page->getFrames(),
-                    array(0 => 'a.html', 1 => 'b.html', 2 => 'c.html'));
+            $this->assertIdentical($page->getFrames(), array(
+                    0 => new SimpleUrl('http://host/a.html'),
+                    1 => new SimpleUrl('http://host/b.html'),
+                    2 => new SimpleUrl('http://host/c.html')));
         }
         
         function testNamedFrames() {
@@ -589,14 +605,15 @@
                     '<frame src="c.html">' .
                     '<frame src="d.html" name="_two">' .
                     '</frameset></html>');
+            $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
             
             $page = &$this->parse($response);
             $this->assertTrue($page->hasFrames());
             $this->assertIdentical($page->getFrames(), array(
-                    0 => 'a.html',
-                    '_one' => 'b.html',
-                    2 => 'c.html',
-                    '_two' => 'd.html'));
+                    0 => new SimpleUrl('http://host/a.html'),
+                    '_one' => new SimpleUrl('http://host/b.html'),
+                    2 => new SimpleUrl('http://host/c.html'),
+                    '_two' => new SimpleUrl('http://host/d.html')));
         }
         
         function testFindFormByLabel() {

@@ -271,7 +271,7 @@
          *    @return string                  Raw content of page.
          *    @access private
          */
-        function _load($method, $url, $parameters) {
+        function _load($method, $url, $parameters = false) {
             $this->_page = &$this->_fetch(strtoupper($method), $url, $parameters);
             $this->_history->recordEntry(
                     $this->_page->getMethod(),
@@ -391,6 +391,12 @@
          *    @access public
          */
         function head($url, $parameters = false) {
+            if (! is_object($url)) {
+                $url = new SimpleUrl($url);
+            }
+            if ($this->getUrl()) {
+                $url = $url->makeAbsolute($this->getUrl());
+            }
             $response = &$this->_user_agent->fetchResponse(
                     'HEAD',
                     $url,
@@ -407,6 +413,12 @@
          *    @access public
          */
         function get($url, $parameters = false) {
+            if (! is_object($url)) {
+                $url = new SimpleUrl($url);
+            }
+            if ($this->getUrl()) {
+                $url = $url->makeAbsolute($this->getUrl());
+            }
             return $this->_load('GET', $url, $parameters);
         }
         
@@ -418,6 +430,12 @@
          *    @access public
          */
         function post($url, $parameters = false) {
+            if (! is_object($url)) {
+                $url = new SimpleUrl($url);
+            }
+            if ($this->getUrl()) {
+                $url = $url->makeAbsolute($this->getUrl());
+            }
             return $this->_load('POST', $url, $parameters);
         }
         
@@ -858,7 +876,7 @@
             if (count($urls) < $index + 1) {
                 return false;
             }
-            $this->get($urls[$index]);
+            $this->_load('GET', $urls[$index]);
             return true;
         }
         
@@ -882,7 +900,7 @@
             if (! ($url = $this->_page->getUrlById($id))) {
                 return false;
             }
-            $this->get($url);
+            $this->_load('GET', $url);
             return true;
         }
         
