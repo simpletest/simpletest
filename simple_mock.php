@@ -1,6 +1,11 @@
 <?php
     // $Id$
     
+    if (!defined("SIMPLE_TEST")) {
+        define("SIMPLE_TEST", "./");
+    }
+    require_once(SIMPLE_TEST . 'assertion.php');
+    
     define('MOCK_WILDCARD', '*');
     
     /**
@@ -388,6 +393,16 @@
             $this->_min_counts = array();
             $this->_expected_args = array();
             $this->_args_sequence = array();
+        }
+        
+        /**
+         *    Accessor for attached unit test so that when
+         *    subclassed, new expectations can be added easily.
+         *    @return          Unit test passed in constructor.
+         *    @public
+         */
+        function &getTest() {
+            return $this->_test;
         }
          
         /**
