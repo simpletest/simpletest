@@ -200,19 +200,19 @@ class MySiteTest extends WebTestCase {
           <entry class="done">Done</entry>
         </row>
         <row>
-          <entry>Frames support</entry>
-          <entry>Handling of frames in web test cases</entry>
-          <entry class="upnext">1.0</entry>
-        </row>
-        <row>
           <entry>SSL support</entry>
           <entry>Can connect to https: pages</entry>
-          <entry class="done">1.0</entry>
+          <entry class="done">Done</entry>
         </row>
         <row>
           <entry>Proxy support</entry>
           <entry>Can connect via. common proxies</entry>
-          <entry class="done">1.0</entry>
+          <entry class="done">Done</entry>
+        </row>
+        <row>
+          <entry>Frames support</entry>
+          <entry>Handling of frames in web test cases</entry>
+          <entry class="upnext">1.0</entry>
         </row>
         <row>
           <entry>Improved display</entry>

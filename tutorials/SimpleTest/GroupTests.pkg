@@ -37,7 +37,7 @@
       <programlisting role="php">
         <![CDATA[
 <?php
-    require_once("../classes/io.php");
+    require_once('../classes/io.php');
 
     class MyFileTestCase extends UnitTestCase {
         ...
@@ -65,11 +65,8 @@
     <programlisting role="php">
       <![CDATA[
 <?php
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', 'simple_test/');
-    }
-    require_once(SIMPLE_TEST . 'unit_tester.php');
-    require_once(SIMPLE_TEST . 'reporter.php');
+    require_once('simpletest/unit_tester.php');
+    require_once('simpletest/reporter.php');
     require_once('file_test.php');
 
     $test = &new GroupTest('All file tests');
@@ -86,11 +83,8 @@
   <programlisting role="php">
   <![CDATA[
 <?php
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', 'simple_test/');
-    }
-    require_once(SIMPLE_TEST . 'unit_tester.php');
-    require_once(SIMPLE_TEST . 'reporter.php');
+    require_once('simpletest/unit_tester.php');
+    require_once('simpletest/reporter.php');
 
     $test = &new GroupTest('All file tests');
     $test->addTestFile('file_test.php');
@@ -125,11 +119,8 @@
      <programlisting role="php">
       <![CDATA[
 <?php
-if (!defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simple_test/');
-}
-require_once(SIMPLE_TEST . 'unit_tester.php');
-require_once(SIMPLE_TEST . 'reporter.php');
+require_once('simpletest/unit_tester.php');
+require_once('simpletest/reporter.php');
 
 class FileGroupTest extends GroupTest {
     function FileGroupTest() {
@@ -150,9 +141,6 @@ class FileGroupTest extends GroupTest {
      <programlisting role="php">
       <![CDATA[
 <?php
-if (!defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simple_test/');
-}
 require_once('file_group_test.php');
 
 $test = &new FileGroupTest();
@@ -168,12 +156,9 @@ $test->run(new HtmlReporter());
      <programlisting role="php">
       <![CDATA[
 <?php
-if (!defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simple_test/');
-}
 require_once('file_group_test.php');
 
-$test = &new BigGroupTest("Big group");
+$test = &new BigGroupTest('Big group');
 $test->addTestCase(new FileGroupTest());
 $test->addTestCase(...);
 $test->run(new HtmlReporter());
@@ -211,14 +196,11 @@ if (!defined('RUNNER')) {
      <programlisting role="php">
       <![CDATA[
 <?php
-if (!defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simple_test/');
-}
 define('RUNNER', true);
 
 require_once('file_group_test.php');
 
-$test = &new BigGroupTest("Big group");
+$test = &new BigGroupTest('Big group');
 $test->addTestCase(new FileGroupTest());
 $test->addTestCase(...);
 $test->run(new HtmlReporter());
@@ -258,12 +240,9 @@ class ConfigFileTest extends TestCase {
      <programlisting role="php">
       <![CDATA[
 <?php
-if (!defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simple_test/');
-}
-require_once(SIMPLE_TEST . 'unit_tester.php');
-require_once(SIMPLE_TEST . 'reporter.php');
-require_once(SIMPLE_TEST . 'adapters/phpunit_test_case.php');
+require_once('simpletest/unit_tester.php');
+require_once('simpletest/reporter.php');
+require_once('simpletest/adapters/phpunit_test_case.php');
 
 $test = &new GroupTest('All file tests');
 $test->addTestFile('config_test.php');
@@ -279,12 +258,9 @@ $test->run(new HtmlReporter());
      <programlisting role="php">
       <![CDATA[
 <?php
-if (!defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simple_test/');
-}
-require_once(SIMPLE_TEST . 'unit_tester.php');
-require_once(SIMPLE_TEST . 'reporter.php');
-require_once(SIMPLE_TEST . 'adapters/pear_test_case.php');
+require_once('simpletest/unit_tester.php');
+require_once('simpletest/reporter.php');
+require_once('simpletest/adapters/pear_test_case.php');
 
 $test = &new GroupTest('All file tests');
 $test->addTestFile('some_pear_test_cases.php');

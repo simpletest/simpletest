@@ -248,10 +248,7 @@ $this->assertNoErrors();
     <para>
       <programlisting role="php">
       <![CDATA[
-if (!defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'path/to/simpletest/');
-}
-require_once(SIMPLE_TEST . 'unit_tester.php');
+require_once('simpletest/unit_tester.php');
 
 class FileTester extends UnitTestCase {
     function FileTester($name = false) {
