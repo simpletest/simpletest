@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 37 hours.
+This is immediate stuff only for this iteration (RC2) of 38 hours.
 
 $Id$
 
@@ -7,6 +7,7 @@ Unit tester
 -----------
 Fix of syntax errors in test scripts reporting green (3/3) - done.
 Fix of assertIdentical() getting stuck in a loop (3).
+Rename StickyError because of name clash (1/1) - done.
 
 Reporter
 --------

@@ -5,13 +5,13 @@
     
     Mock::generate('SimpleSocket');
 
-    class TestOfStickyError extends UnitTestCase {
-        function TestOfStickyError() {
+    class TestOfSimpleStickyError extends UnitTestCase {
+        function TestOfSimpleStickyError() {
             $this->UnitTestCase();
         }
         
         function testSettingError() {
-            $error = new StickyError();
+            $error = new SimpleStickyError();
             $this->assertFalse($error->isError());
             $error->_setError('Ouch');
             $this->assertTrue($error->isError());
@@ -19,7 +19,7 @@
         }
         
         function testClearingError() {
-            $error = new StickyError();
+            $error = new SimpleStickyError();
             $error->_setError('Ouch');
             $this->assertTrue($error->isError());
             $error->_clearError();

@@ -723,7 +723,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleHttpResponse extends StickyError {
+    class SimpleHttpResponse extends SimpleStickyError {
         var $_method;
         var $_url;
         var $_request_data;
@@ -742,7 +742,7 @@
          *    @access public
          */
         function SimpleHttpResponse(&$socket, $method, $url, $request_data = '') {
-            $this->StickyError();
+            $this->SimpleStickyError();
             $this->_method = $method;
             $this->_url = $url;
             $this->_request_data = $request_data;

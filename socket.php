@@ -18,14 +18,14 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class StickyError {
+    class SimpleStickyError {
         var $_error = 'Constructor not chained';
         
         /**
          *    Sets the error to empty.
          *    @access public
          */
-        function StickyError() {
+        function SimpleStickyError() {
             $this->_clearError();
         }
         
@@ -71,7 +71,7 @@
      *    @package SimpleTest
      *    @subpackage WebTester
      */
-    class SimpleSocket extends StickyError {
+    class SimpleSocket extends SimpleStickyError {
         var $_handle;
         var $_is_open;
         var $_sent;
@@ -84,7 +84,7 @@
          *    @access public
          */
         function SimpleSocket($host, $port, $timeout) {
-            $this->StickyError();
+            $this->SimpleStickyError();
             $this->_is_open = false;
             $this->_sent = '';
             if (! ($this->_handle = $this->_openSocket($host, $port, $error_number, $error, $timeout))) {
