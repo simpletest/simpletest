@@ -14,7 +14,7 @@
     }
     require_once(SIMPLE_TEST . 'http.php');
     require_once(SIMPLE_TEST . 'page.php');
-    require_once(SIMPLE_TEST . 'fetcher.php');
+    require_once(SIMPLE_TEST . 'user_agent.php');
     
     /**
      *    Simulated web browser.
@@ -43,7 +43,7 @@
          *    @access protected
          */
         function &_createUserAgent() {
-            return new SimpleFetcher();
+            return new SimpleUserAgent();
         }
         
         /**

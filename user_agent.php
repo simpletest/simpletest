@@ -145,7 +145,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleFetcher {
+    class SimpleUserAgent {
         var $_cookie_jar;
         var $_max_redirects;
         var $_current_url;
@@ -154,7 +154,7 @@
          *    Starts with no cookies.
          *    @access public
          */
-        function SimpleFetcher() {
+        function SimpleUserAgent() {
             $this->_cookie_jar = new CookieJar();
             $this->setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
             $this->_current_url = false;

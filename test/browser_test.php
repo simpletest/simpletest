@@ -5,12 +5,12 @@
         define('SIMPLE_TEST', '../');
     }
     require_once(SIMPLE_TEST . 'browser.php');
+    require_once(SIMPLE_TEST . 'user_agent.php');
     require_once(SIMPLE_TEST . 'http.php');
-    Mock::generate('SimpleHttpRequest');
     Mock::generate('SimpleHttpResponse');
     Mock::generate('SimpleHttpHeaders');
     Mock::generate('SimplePage');
-    Mock::generate('SimpleFetcher');
+    Mock::generate('SimpleUserAgent');
     Mock::generatePartial(
             'SimpleBrowser',
             'MockParseSimpleBrowser',
@@ -29,7 +29,7 @@
             $response->setReturnValue('getContent', 'stuff');
             $response->setReturnReference('getHeaders', $headers);
             
-            $agent = &new MockSimpleFetcher($this);
+            $agent = &new MockSimpleUserAgent($this);
             $agent->setReturnReference('fetchResponse', $response);
             
             $browser = &new MockParseSimpleBrowser($this);
