@@ -179,11 +179,11 @@
         function isIdentical($first, $second) {
             if (version_compare(phpversion(), '5') >= 0) {
                 if (is_object($first) && is_object($second)) {
-                    return $first == $second;
+                    return ($first == $second);
                 }
-                return $first === $second;
+                return ($first === $second);
             }
-            return $first === $second;
+            return ($first === $second);
         }
         
         /**
