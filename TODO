@@ -20,7 +20,9 @@ Html parser
 Parsing of image submits (2).
 Parsing of radio buttons (3/4) - done.
 Refactor link parsing to use tag classes (4).
-Support multiple selections (3).
+Support multiple selections (3/1).
+Add support for hidden fields (1).
+Add support for reset buttons (2).
 
 Browser
 -------
