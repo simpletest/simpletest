@@ -7,7 +7,7 @@ problems...
 
 No method expectCookie()
 ========================
-This method was deprecated in Beta4 so as to simplify the internals
+This method was abruptly removed in Beta4 so as to simplify the internals
 until another mechanism can replace it. As a workaround it is necessary
 to assert that the cookie has changed by setting it before the page
 fetch and then assert the desired value.

@@ -7,7 +7,7 @@
     require_once(SIMPLE_TEST . 'runner.php');
     require_once(SIMPLE_TEST . 'browser.php');
     
-    Mock::generate("TestBrowser");
+    Mock::generate("SimpleBrowser");
     
     SimpleTestOptions::ignore("MockBrowserWebTestCase");
 
@@ -16,7 +16,7 @@
             $this->WebTestCase($label);
         }
         function &createBrowser() {
-            return new MockTestBrowser($this);
+            return new MockSimpleBrowser($this);
         }
     }
     
@@ -33,10 +33,6 @@
             $browser = &$this->getBrowser();
             $browser->_assertTrue(true, "Hello", $this);
             $browser->tally();
-        }
-        function testContentAccess() {
-            $this->assertTrue(is_a($this->getBrowser(), "MockTestBrowser"));
-            $this->get("http://my-site.com/");
         }
         function testRawPatternMatching() {
             $this->get("http://my-site.com/");

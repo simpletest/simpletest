@@ -26,7 +26,7 @@ Refactoring link parsing (2/1) - done.
 
 Browser
 -------
-Frames support (8/4).
+Frames support (8/6).
 Need repeated parameters in query strings (0/3) - done.
 Duplicate value submissions should be PHP compatible (1).
 

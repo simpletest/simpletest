@@ -12,7 +12,6 @@
     Mock::generate("SimpleHttpHeaders");
     Mock::generatePartial('SimpleBrowser', 'MockRequestSimpleBrowser', array('_createRequest'));
     Mock::generatePartial('SimpleBrowser', 'MockFetchSimpleBrowser', array('fetchResponse'));
-    Mock::generatePartial('TestBrowser', 'MockRequestTestBrowser', array('_createRequest'));
 
     class TestOfCookieJar extends UnitTestCase {
         function TestOfCookieJar() {
