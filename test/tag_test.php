@@ -225,6 +225,22 @@
             $this->assertEqual($tag->getValue(), 'aaa');
         }
         
+        function testSelectionDespiteSpuriousWhitespace() {
+            $tag = &new SimpleSelectionTag(array('name' => 'a'));
+            $a = &new SimpleOptionTag(array());
+            $a->addContent(' AAA ');
+            $tag->addTag($a);
+            $b = &new SimpleOptionTag(array('selected' => ''));
+            $b->addContent(' BBB ');
+            $tag->addTag($b);
+            $c = &new SimpleOptionTag(array());
+            $c->addContent(' CCC ');
+            $tag->addTag($c);
+            $this->assertEqual($tag->getValue(), ' BBB ');
+            $tag->setValue('AAA');
+            $this->assertEqual($tag->getValue(), ' AAA ');
+        }
+        
         function testFailToSetIllegalOption() {
             $tag = &new SimpleSelectionTag(array('name' => 'a'));
             $a = &new SimpleOptionTag(array());

@@ -64,7 +64,7 @@
          *    @access public
          */
         function isMatch($widget) {
-            return ($widget->getLabel() == $this->_label);
+            return (trim($widget->getLabel()) == trim($this->_label));
         }
     }
     

@@ -122,6 +122,19 @@
                     new SimpleFormEncoding(array('test' => 'Submit')));            
         }
         
+        function testSubmitButtonWithWhitespacePaddedLabelOfSubmit() {
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('http://host'));
+            $form->addWidget(new SimpleSubmitTag(
+                    array('type' => 'submit', 'name' => 'test', 'value' => ' Submit ', 'id' => '9')));
+            $this->assertEqual($form->getValue('test'), ' Submit ');
+            $this->assertEqual($form->getValueById(9), ' Submit ');
+            $this->assertEqual(
+                    $form->submitButtonByLabel('Submit'),
+                    new SimpleFormEncoding(array('test' => ' Submit ')));            
+        }
+        
         function testImageSubmitButton() {
             $form = &new SimpleForm(
                     new SimpleFormTag(array()),

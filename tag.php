@@ -682,7 +682,7 @@
          */
         function setValue($value) {
             for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
-                if ($this->_options[$i]->getContent() === $value) {
+                if (trim($this->_options[$i]->getContent()) == trim($value)) {
                     $this->_choice = $i;
                     return true;
                 }
@@ -769,7 +769,7 @@
             foreach ($values as $value) {
                 $is_option = false;
                 for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
-                    if ($this->_options[$i]->getContent() == $value) {
+                    if (trim($this->_options[$i]->getContent()) == trim($value)) {
                         $is_option = true;
                         break;
                     }
