@@ -7,13 +7,17 @@
      */
     
     /**#@+
-     * include SimpleTest files
+     * Includes SimpleTest files and defined the root constant
+     * for dependent libraries.
      */
     require_once(dirname(__FILE__) . '/errors.php');
     require_once(dirname(__FILE__) . '/options.php');
     require_once(dirname(__FILE__) . '/runner.php');
     require_once(dirname(__FILE__) . '/expectation.php');
     require_once(dirname(__FILE__) . '/dumper.php');
+    if (! defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', dirname(__FILE__) . '/');
+    }
     /**#@-*/
     
     /**
@@ -189,7 +193,7 @@
          *    @access public
          */
         function pass($message = "Pass") {
-            $this->_reporter->paintPass($message . $this->getAssertionLine(' at line %d'));
+            $this->_reporter->paintPass($message . $this->getAssertionLine(' at line [%d]'));
         }
         
         /**
@@ -198,7 +202,7 @@
          *    @access public
          */
         function fail($message = "Fail") {
-            $this->_reporter->paintFail($message . $this->getAssertionLine(' at line %d'));
+            $this->_reporter->paintFail($message . $this->getAssertionLine(' at line [%d]'));
         }
         
         /**

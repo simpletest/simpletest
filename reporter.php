@@ -9,7 +9,7 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'runner.php');
+    require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'runner.php');
     /**#@-*/
     
     /**
@@ -104,8 +104,8 @@
             print "<span class=\"fail\">Fail</span>: ";
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
-            print implode("-&gt;", $breadcrumb);
-            print "-&gt;" . htmlentities($message) . "<br />\n";
+            print implode(" -&gt; ", $breadcrumb);
+            print " -&gt; " . htmlentities($message) . "<br />\n";
         }
         
         /**
@@ -119,8 +119,8 @@
             print "<span class=\"fail\">Exception</span>: ";
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
-            print implode("-&gt;", $breadcrumb);
-            print "-&gt;<strong>" . htmlentities($message) . "</strong><br />\n";
+            print implode(" -&gt; ", $breadcrumb);
+            print " -&gt; <strong>" . htmlentities($message) . "</strong><br />\n";
         }
         
         /**

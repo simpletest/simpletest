@@ -6,17 +6,17 @@ $Id$
 
 Unit tester
 -----------
-Set the SIMPLE_TEST constant if not set for add in libraries (1).
+Set the SIMPLE_TEST constant if not set for add in libraries (1/0) - done.
 Fix bug with dumper failing with second parameters of odd types (2/1) - done.
 
 Reporter
 --------
-Add spaces around the breadcrumb's arrows (1).
+Add spaces around the breadcrumb's arrows (1/1) - done.
 
 Mock objects
 ------------
 Add fix for PHP5 __construct() call (1/1) - done.
-Partial should throw error setting expectation on non-mocked method (1).
+Should throw error setting expectation on non-mocked method (1).
 Line numbers on failed expectations (3).
 
 Parser
@@ -36,6 +36,7 @@ Refactor authentication to cope with framed pages (2).
 Refactor existing base url behaviour into SimplePage (3/8) - done.
 Bad socket should simply throw an error (1).
 Add getFrames() to SimpleBrowser with string URLs (1).
+Remove getTransportError() method (1).
 
 Web tester
 ----------

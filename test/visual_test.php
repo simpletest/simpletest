@@ -42,89 +42,89 @@
             $this->assertFalse(false);
         }
         function testNull() {
-            $this->assertNull(null, "%s->Pass");
-            $this->assertNull(false, "%s->Fail");        // Fail.
-            $this->assertNotNull(null, "%s->Fail");        // Fail.
-            $this->assertNotNull(false, "%s->Pass");
+            $this->assertNull(null, "%s -> Pass");
+            $this->assertNull(false, "%s -> Fail");        // Fail.
+            $this->assertNotNull(null, "%s -> Fail");        // Fail.
+            $this->assertNotNull(false, "%s -> Pass");
         }
         function testType() {
-            $this->assertIsA("hello", "string", "%s->Pass");
-            $this->assertIsA(14, "string", "%s->Fail");        // Fail.
-            $this->assertIsA($this, "TestOfUnitTestCaseOutput", "%s->Pass");
-            $this->assertIsA($this, "UnitTestCase", "%s->Pass");
-            $this->assertIsA(14, "TestOfUnitTestCaseOutput", "%s->Fail");        // Fail.
-            $this->assertIsA($this, "TestReporter", "%s->Fail");        // Fail.
+            $this->assertIsA("hello", "string", "%s -> Pass");
+            $this->assertIsA(14, "string", "%s -> Fail");        // Fail.
+            $this->assertIsA($this, "TestOfUnitTestCaseOutput", "%s -> Pass");
+            $this->assertIsA($this, "UnitTestCase", "%s -> Pass");
+            $this->assertIsA(14, "TestOfUnitTestCaseOutput", "%s -> Fail");        // Fail.
+            $this->assertIsA($this, "TestReporter", "%s -> Fail");        // Fail.
         }
         function testTypeEquality() {
-            $this->assertEqual("0", 0, "%s->Pass");
-            $this->assertNotEqual("0", 0, "%s->Fail");        // Fail.
+            $this->assertEqual("0", 0, "%s -> Pass");
+            $this->assertNotEqual("0", 0, "%s -> Fail");        // Fail.
         }
         function testNullEquality() {
-            $this->assertEqual(null, 1, "%s->Fail");        // Fail.
-            $this->assertNotEqual(null, 1, "%s->Pass");
-            $this->assertEqual(1, null, "%s->Fail");        // Fail.
-            $this->assertNotEqual(1, null, "%s->Pass");
+            $this->assertEqual(null, 1, "%s -> Fail");        // Fail.
+            $this->assertNotEqual(null, 1, "%s -> Pass");
+            $this->assertEqual(1, null, "%s -> Fail");        // Fail.
+            $this->assertNotEqual(1, null, "%s -> Pass");
         }
         function testIntegerEquality() {
-            $this->assertEqual(1, 2, "%s->Fail");        // Fail.
-            $this->assertNotEqual(1, 2, "%s->Pass");
+            $this->assertEqual(1, 2, "%s -> Fail");        // Fail.
+            $this->assertNotEqual(1, 2, "%s -> Pass");
         }
         function testStringEquality() {
-            $this->assertEqual("a", "a", "%s->Pass");
-            $this->assertNotEqual("a", "a", "%s->Fail");    // Fail.
-            $this->assertEqual("aa", "ab", "%s->Fail");        // Fail.
-            $this->assertNotEqual("aa", "ab", "%s->Pass");
+            $this->assertEqual("a", "a", "%s -> Pass");
+            $this->assertNotEqual("a", "a", "%s -> Fail");    // Fail.
+            $this->assertEqual("aa", "ab", "%s -> Fail");        // Fail.
+            $this->assertNotEqual("aa", "ab", "%s -> Pass");
         }
         function testHashEquality() {
-            $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "%s->Pass");
+            $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "%s -> Pass");
         }
         function testStringIdentity() {
             $a = "fred";
             $b = $a;
-            $this->assertIdentical($a, $b, "%s->Pass");
-            $this->assertNotIdentical($a, $b, "%s->Fail");       // Fail.
+            $this->assertIdentical($a, $b, "%s -> Pass");
+            $this->assertNotIdentical($a, $b, "%s -> Fail");       // Fail.
         }
         function testTypeIdentity() {
             $a = "0";
             $b = 0;
-            $this->assertIdentical($a, $b, "%s->Fail");        // Fail.
-            $this->assertNotIdentical($a, $b, "%s->Pass");
+            $this->assertIdentical($a, $b, "%s -> Fail");        // Fail.
+            $this->assertNotIdentical($a, $b, "%s -> Pass");
         }
         function testNullIdentity() {
-            $this->assertIdentical(null, 1, "%s->Fail");        // Fail.
-            $this->assertNotIdentical(null, 1, "%s->Pass");
-            $this->assertIdentical(1, null, "%s->Fail");        // Fail.
-            $this->assertNotIdentical(1, null, "%s->Pass");
+            $this->assertIdentical(null, 1, "%s -> Fail");        // Fail.
+            $this->assertNotIdentical(null, 1, "%s -> Pass");
+            $this->assertIdentical(1, null, "%s -> Fail");        // Fail.
+            $this->assertNotIdentical(1, null, "%s -> Pass");
         }
         function testHashIdentity() {
             $this->assertIdentical(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "#%s#");        // Fail.
         }
         function testObjectEquality() {
-            $this->assertEqual(new TestDisplayClass(4), new TestDisplayClass(4), "%s->Pass");
-            $this->assertNotEqual(new TestDisplayClass(4), new TestDisplayClass(4), "%s->Fail");    // Fail.
-            $this->assertEqual(new TestDisplayClass(4), new TestDisplayClass(5), "%s->Fail");        // Fail.
-            $this->assertNotEqual(new TestDisplayClass(4), new TestDisplayClass(5), "%s->Pass");
+            $this->assertEqual(new TestDisplayClass(4), new TestDisplayClass(4), "%s -> Pass");
+            $this->assertNotEqual(new TestDisplayClass(4), new TestDisplayClass(4), "%s -> Fail");    // Fail.
+            $this->assertEqual(new TestDisplayClass(4), new TestDisplayClass(5), "%s -> Fail");        // Fail.
+            $this->assertNotEqual(new TestDisplayClass(4), new TestDisplayClass(5), "%s -> Pass");
         }
         function testObjectIndentity() {
-            $this->assertIdentical(new TestDisplayClass(false), new TestDisplayClass(false), "%s->Pass");
-            $this->assertNotIdentical(new TestDisplayClass(false), new TestDisplayClass(false), "%s->Fail");    // Fail.
-            $this->assertIdentical(new TestDisplayClass(false), new TestDisplayClass(0), "%s->Fail");        // Fail.
-            $this->assertNotIdentical(new TestDisplayClass(false), new TestDisplayClass(0), "%s->Pass");
+            $this->assertIdentical(new TestDisplayClass(false), new TestDisplayClass(false), "%s -> Pass");
+            $this->assertNotIdentical(new TestDisplayClass(false), new TestDisplayClass(false), "%s -> Fail");    // Fail.
+            $this->assertIdentical(new TestDisplayClass(false), new TestDisplayClass(0), "%s -> Fail");        // Fail.
+            $this->assertNotIdentical(new TestDisplayClass(false), new TestDisplayClass(0), "%s -> Pass");
         }
         function testReference() {
             $a = "fred";
             $b = &$a;
-            $this->assertReference($a, $b, "%s->Pass");
-            $this->assertCopy($a, $b, "%s->Fail");        // Fail.
+            $this->assertReference($a, $b, "%s -> Pass");
+            $this->assertCopy($a, $b, "%s -> Fail");        // Fail.
             $c = "Hello";
-            $this->assertReference($a, $c, "%s->Fail");        // Fail.
-            $this->assertCopy($a, $c, "%s->Pass");
+            $this->assertReference($a, $c, "%s -> Fail");        // Fail.
+            $this->assertCopy($a, $c, "%s -> Pass");
         }
         function testPatterns() {
-            $this->assertWantedPattern('/hello/i', "Hello there", "%s->Pass");
-            $this->assertNoUnwantedPattern('/hello/', "Hello there", "%s->Pass");
-            $this->assertWantedPattern('/hello/', "Hello there", "%s->Fail");            // Fail.
-            $this->assertNoUnwantedPattern('/hello/i', "Hello there", "%s->Fail");      // Fail.
+            $this->assertWantedPattern('/hello/i', "Hello there", "%s -> Pass");
+            $this->assertNoUnwantedPattern('/hello/', "Hello there", "%s -> Pass");
+            $this->assertWantedPattern('/hello/', "Hello there", "%s -> Fail");            // Fail.
+            $this->assertNoUnwantedPattern('/hello/i', "Hello there", "%s -> Fail");      // Fail.
         }
         function testLongStrings() {
             $text = "";
@@ -141,23 +141,23 @@
             trigger_error('Notice', E_USER_NOTICE);        // Exception.
         }
         function testErrorTrap() {
-            $this->assertNoErrors("%s->Pass");
+            $this->assertNoErrors("%s -> Pass");
             $this->assertError();        // Fail.
             trigger_error('Error 1');
-            $this->assertNoErrors("%s->Fail");        // Fail.
+            $this->assertNoErrors("%s -> Fail");        // Fail.
             $this->assertError();
         }
         function testErrorText() {
             trigger_error('Error 2');
-            $this->assertError('Error 2', "%s->Pass");
+            $this->assertError('Error 2', "%s -> Pass");
             trigger_error('Error 3');
-            $this->assertError('Error 2', "%s->Fail");        // Fail.
+            $this->assertError('Error 2', "%s -> Fail");        // Fail.
         }
         function testErrorPatterns() {
             trigger_error('Error 2');
-            $this->assertErrorPattern('/Error 2/', "%s->Pass");
+            $this->assertErrorPattern('/Error 2/', "%s -> Pass");
             trigger_error('Error 3');
-            $this->assertErrorPattern('/Error 2/', "%s->Fail");        // Fail.
+            $this->assertErrorPattern('/Error 2/', "%s -> Fail");        // Fail.
         }
         function testDumping() {
             $this->dump(array("Hello"), "Displaying a variable");
@@ -245,8 +245,8 @@
             $this->UnitTestCase();
         }
         function testMixedTypes() {
-            $this->assertEqual(array(), null, "%s->Pass");
-            $this->assertIdentical(array(), null, "%s->Fail");    // Fail.
+            $this->assertEqual(array(), null, "%s -> Pass");
+            $this->assertIdentical(array(), null, "%s -> Fail");    // Fail.
         }
         function testMockWildcards() {
             $dummy = &new MockDummy($this);
@@ -280,15 +280,15 @@
             print "<span class=\"pass\">Pass</span>: ";
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
-            print implode("-&gt;", $breadcrumb);
-            print "-&gt;" . htmlentities($message) . "<br />\n";
+            print implode(" -&gt; ", $breadcrumb);
+            print " -&gt; " . htmlentities($message) . "<br />\n";
         }
         function paintSignal($type, &$payload) {
             print "<span class=\"fail\">$type</span>: ";
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
-            print implode("-&gt;", $breadcrumb);
-            print "-&gt;" . htmlentities(serialize($payload)) . "<br />\n";
+            print implode(" -&gt; ", $breadcrumb);
+            print " -&gt; " . htmlentities(serialize($payload)) . "<br />\n";
         }
     }
     
