@@ -25,7 +25,7 @@ Partial mocks (4/3) - done.
 Html parser
 -----------
 Add input tag parsing (2).
-Parse submit buttons into form (1).
+Parse submit buttons into form (1/1) - done.
 Fix attributes to accept value of "0" (0/1) - done.
 Add case insensitivity (0/1) - done.
 
