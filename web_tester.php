@@ -134,17 +134,21 @@
         
         /**
          *    Sets the field and value to compare against.
-         *    @param string $header   Case insenstive header name.
+         *    @param string $header   Case insenstive trimmed header name.
          *    @param string $value    Optional value to compare. If not
          *                            given then any value will match.
          *    @access public
          */
         function HttpHeaderExpectation($header, $value = false) {
-            $this->_expected_header = trim($header);
+            $this->_expected_header = $this->_normaliseHeader($header);
             if (is_string($value)) {
                 $value = trim($value);
             }
             $this->_expected_value = $value;
+        }
+        
+        function _normaliseHeader($header) {
+            return strtolower(trim($header));
         }
         
         /**
@@ -185,7 +189,7 @@
                 return false;
             }
             list($header, $value) = $parsed;
-            if (trim($header) != $this->_expected_header) {
+            if ($this->_normaliseHeader($header) != $this->_expected_header) {
                 return false;
             }
             if ($this->_expected_value === false) {
@@ -207,9 +211,9 @@
                 $expectation .= ': '. $this->_expected_header;
             }
             if (is_string($line = $this->_findHeader($compare))) {
-                return "Searching for header [$expectation] found [$line]"
+                return "Searching for header [$expectation] found [$line]";
             } else {
-                return "Failed to find header [$expectation]"
+                return "Failed to find header [$expectation]";
             }
         }
     }
@@ -880,7 +884,11 @@
          *                             match against.
          *    @access public
          */
-        function assertHeader($header, $value = false) {
+        function assertHeader($header, $value = false, $message = '%s') {
+            $this->assertExpectation(
+                    new HttpHeaderExpectation($header, $value),
+                    $this->_browser->getHeaders(),
+                    $message);
         }
           
         /**

@@ -242,11 +242,27 @@
         }
     }
     
+    class TestOfLiveHeaders extends WebTestCase {
+        function TestOfLiveHeaders() {
+            $this->WebTestCase();
+        }
+       
+        function setUp() {
+            $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
+        }
+        
+        function testConfirmingHeaderExistence() {
+            $this->get('http://www.lastcraft.com/');
+            $this->assertHeader('content-type');
+            $this->assertHeader('content-type', 'text/html');
+        }
+    }
+     
     class TestOfLiveRedirects extends WebTestCase {
         function TestOfLiveRedirects() {
             $this->WebTestCase();
         }
-        
+       
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
         }

@@ -57,6 +57,7 @@
             $expectation = new HttpHeaderExpectation('a');
             $this->assertIdentical($expectation->test(false), false);
             $this->assertIdentical($expectation->test('a: A'), true);
+            $this->assertIdentical($expectation->test('A: A'), true);
             $this->assertIdentical($expectation->test('a: B'), true);
             $this->assertIdentical($expectation->test(' a : A '), true);
         }
@@ -65,9 +66,17 @@
             $expectation = new HttpHeaderExpectation('a', 'A');
             $this->assertIdentical($expectation->test(false), false);
             $this->assertIdentical($expectation->test('a: A'), true);
+            $this->assertIdentical($expectation->test('A: A'), true);
+            $this->assertIdentical($expectation->test('A: a'), false);
             $this->assertIdentical($expectation->test('a: B'), false);
             $this->assertIdentical($expectation->test(' a : A '), true);
             $this->assertIdentical($expectation->test(' a : AB '), false);
+        }
+        
+        function testMultilineSearch() {
+            $expectation = new HttpHeaderExpectation('a', 'A');
+            $this->assertIdentical($expectation->test("aa: AA\r\nb: B\r\nc: C"), false);
+            $this->assertIdentical($expectation->test("aa: AA\r\na: A\r\nb: B"), true);
         }
     }
 ?>

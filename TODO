@@ -42,7 +42,7 @@ Fix bug with click link of just domain uses current folder for request (2).
 Web tester
 ----------
 Remove ordering requirement asserting multivalue widgets (1/1) - done.
-Add assertHeaderPattern(), assertHeader() and assertNoHeader() methods (3/1).
+Add assertHeaderPattern(), assertHeader() and assertNoHeader() methods (3/3).
 WebTestCase::assertField() should work with submit type (1).
 
 Documentation
