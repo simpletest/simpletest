@@ -657,7 +657,7 @@
          *    @access protected
          */
         function _parseHeaderLine($header_line) {
-            if (preg_match('/HTTP\/(\d+\.\d+)\s+(.*?)\s/i', $header_line, $matches)) {
+            if (preg_match('/HTTP\/(\d+\.\d+)\s+(\S*)/i', $header_line, $matches)) {
                 $this->_http_version = $matches[1];
                 $this->_response_code = $matches[2];
             }
