@@ -256,11 +256,7 @@
          *    @access private
          */
         function &_fetch($method, $url, $parameters) {
-            $response = &$this->_user_agent->fetchResponse(
-                    $method,
-                    $url,
-                    $parameters,
-                    $this->getUrl());
+            $response = &$this->_user_agent->fetchResponse($method, $url,  $parameters);
             if ($response->isError()) {
                 return new SimplePage($response);
             }

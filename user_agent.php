@@ -361,14 +361,12 @@
          *    Fetches a URL as a response object. Will keep trying if redirected.
          *    It will also collect authentication realm information.
          *    @param string $method         GET, POST, etc.
-         *    @param string/SimpleUrl $url  Target to fetch.
+         *    @param SimpleUrl $url         Target to fetch.
          *    @param hash $parameters       Additional parameters for request.
-         *    @param SimpleUrl $previous    Previous location to use for base
-         *                                  URL.
          *    @return SimpleHttpResponse    Hopefully the target page.
          *    @access public
          */
-        function &fetchResponse($method, $url, $parameters = false, $previous = false) {
+        function &fetchResponse($method, $url, $parameters = false) {
             $url = $this->createAbsoluteUrl($this->getBaseUrl(), $url);
             if ($method != 'POST') {
                 $url->addRequestParameters($parameters);

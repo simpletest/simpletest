@@ -232,11 +232,11 @@
             $agent->expectArgumentsAt(
                     0,
                     'fetchResponse',
-                    array('GET', 'http://this.com/page.html', false, false));
+                    array('GET', 'http://this.com/page.html', false));
             $agent->expectArgumentsAt(
                     1,
                     'fetchResponse',
-                    array('GET', 'new.html', false, false));
+                    array('GET', 'new.html', false));
             $agent->expectCallCount('fetchResponse', 2);
             
             $page = &new MockSimplePage($this);
@@ -270,7 +270,7 @@
             $agent->expectArgumentsAt(
                     1,
                     'fetchResponse',
-                    array('GET', '1.html', false, false));
+                    array('GET', '1.html', false));
             $agent->expectCallCount('fetchResponse', 2);
             
             $page = &new MockSimplePage($this);
@@ -289,7 +289,6 @@
             $agent->expectArgumentsAt(1, 'fetchResponse', array(
                     'GET',
                     'link.html',
-                    false,
                     false));
             $agent->expectCallCount('fetchResponse', 2);
             
@@ -323,7 +322,7 @@
             $agent->expectArgumentsAt(
                     1,
                     'fetchResponse',
-                    array('POST', 'handler.html', array('a' => 'A'), false));
+                    array('POST', 'handler.html', array('a' => 'A')));
             $agent->expectCallCount('fetchResponse', 2);
             
             $form = &new MockSimpleForm($this);
@@ -352,8 +351,7 @@
             $agent->expectArgumentsAt(1,  'fetchResponse', array(
                     'GET',
                     new SimpleUrl('http://this.com/page.html'),
-                    array('a' => 'A'),
-                    false));
+                    array('a' => 'A')));
             $agent->expectCallCount('fetchResponse', 2);
             
             $form = &new MockSimpleForm($this);
@@ -495,8 +493,7 @@
             $agent->expectArgumentsAt(1, 'fetchResponse', array(
                     'POST',
                     'handler.html',
-                    array('a' => 'A'),
-                    false));
+                    array('a' => 'A')));
             $agent->expectCallCount('fetchResponse', 2);
             
             $form = &new MockSimpleForm($this);
