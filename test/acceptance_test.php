@@ -19,7 +19,7 @@
             $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/', $browser->getContent());
             $this->assertEqual($browser->getTitle(), 'Simple test target file');
             $this->assertEqual($browser->getResponseCode(), 200);
-            $this->assertEqual($browser->getMimeType(), "text/html");
+            $this->assertEqual($browser->getMimeType(), 'text/html');
         }
         
         function testPost() {
@@ -484,6 +484,12 @@
             $this->get('http://www.lastcraft.com/test/form.html');
             $this->assertTrue($this->clickImageById(97, 10, 12));
             $this->assertWantedPattern('/go.x=\[10\].*?go.y=\[12\]/s');
+        }
+        
+        function testButtonSubmissionByLabel() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertTrue($this->clickSubmit('Button go!', 10, 12));
+            $this->assertWantedPattern('/go=\[ButtonGo\]/s');
         }
         
         function testSelfSubmit() {

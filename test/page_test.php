@@ -624,14 +624,13 @@
             
             $page = &$this->parse($response);
             $this->assertNull($page->getFormBySubmitLabel('submit'));
+            $this->assertIsA($page->getFormBySubmitName('submit'), 'SimpleForm');
             $this->assertIsA($page->getFormBySubmitLabel('Submit'), 'SimpleForm');
         }
         
         function testFindFormByImage() {
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue(
-                    'getContent',
-                    '<html><head><form>' .
+            $response->setReturnValue('getContent', '<html><head><form>' .
                     '<input type="image" id=100 alt="Label" name="me">' .
                     '</form></head></html>');
             
@@ -639,6 +638,19 @@
             $this->assertIsA($page->getFormByImageLabel('Label'), 'SimpleForm');
             $this->assertIsA($page->getFormByImageName('me'), 'SimpleForm');
             $this->assertIsA($page->getFormByImageId(100), 'SimpleForm');
+        }
+        
+        function testFindFormByButtonTag() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent', '<html><head><form>' .
+                    '<button type="submit" name="b" value="B">BBB</button>' .
+                    '</form></head></html>');
+
+            $page = &$this->parse($response);
+            $this->assertNull($page->getFormBySubmitLabel('b'));
+            $this->assertNull($page->getFormBySubmitLabel('B'));
+            $this->assertIsA($page->getFormBySubmitName('b'), 'SimpleForm');
+            $this->assertIsA($page->getFormBySubmitLabel('BBB'), 'SimpleForm');
         }
         
         function testFindFormById() {

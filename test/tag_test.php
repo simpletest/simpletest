@@ -81,6 +81,7 @@
             $this->assertEqual($tag->getValue(), 'Submit');
             $this->assertFalse($tag->setValue('Cannot set this'));
             $this->assertEqual($tag->getValue(), 'Submit');
+            $this->assertEqual($tag->getLabel(), 'Submit');
         }
         
         function testPopulatedSubmit() {
@@ -88,6 +89,16 @@
                     array('type' => 'submit', 'name' => 's', 'value' => 'Ok!'));
             $this->assertEqual($tag->getName(), 's');
             $this->assertEqual($tag->getValue(), 'Ok!');
+            $this->assertEqual($tag->getLabel(), 'Ok!');
+        }
+        
+        function testButton() {
+            $tag = &new SimpleButtonTag(
+                    array('type' => 'submit', 'name' => 's', 'value' => 'do'));
+            $tag->addContent('I am a button');
+            $this->assertEqual($tag->getName(), 's');
+            $this->assertEqual($tag->getValue(), 'do');
+            $this->assertEqual($tag->getLabel(), 'I am a button');
         }
     }
     

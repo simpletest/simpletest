@@ -90,7 +90,7 @@
         function testSubmitButton() {
             $form = &new SimpleForm(
                     new SimpleFormTag(array()),
-                    new SimpleUrl('htp://host'));
+                    new SimpleUrl('http://host'));
             $form->addWidget(new SimpleSubmitTag(
                     array('type' => 'submit', 'name' => 'go', 'value' => 'Go!', 'id' => '9')));
             $this->assertTrue($form->hasSubmitName('go'));
@@ -121,6 +121,21 @@
             $this->assertEqual(
                     $form->submitImageById(9, 100, 101),
                     array('go.x' => 100, 'go.y' => 101));
+        }
+        
+        function testButtonTag() {
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('http://host'));
+            $widget = &new SimpleButtonTag(
+                    array('type' => 'submit', 'name' => 'go', 'value' => 'Go', 'id' => '9'));
+            $widget->addContent('Go!');
+            $form->addWidget($widget);
+            $this->assertTrue($form->hasSubmitName('go'));
+            $this->assertTrue($form->hasSubmitLabel('Go!'));
+            $this->assertEqual($form->submitButtonByName('go'), array('go' => 'Go'));            
+            $this->assertEqual($form->submitButtonByLabel('Go!'), array('go' => 'Go'));            
+            $this->assertEqual($form->submitButtonById(9), array('go' => 'Go'));            
         }
         
         function testSingleSelectFieldSubmitted() {

@@ -272,7 +272,7 @@
          */
         function hasSubmitLabel($label) {
             foreach ($this->_buttons as $button) {
-                if ($button->getValue() == $label) {
+                if ($button->getLabel() == $label) {
                     return true;
                 }
             }
@@ -373,7 +373,7 @@
          */
         function submitButtonByLabel($label) {
             foreach ($this->_buttons as $button) {
-                if ($button->getValue() == $label) {
+                if ($button->getLabel() == $label) {
                     return array_merge(
                             array($button->getName() => $button->getValue()),
                             $this->getValues());            

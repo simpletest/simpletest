@@ -183,6 +183,8 @@
                 return new SimpleTitleTag($attributes);
             } elseif ($name == 'input') {
                 return $this->_createInputTag($attributes);
+            } elseif ($name == 'button') {
+                return new SimpleButtonTag($attributes);
             } elseif ($name == 'textarea') {
                 return new SimpleTextAreaTag($attributes);
             } elseif ($name == 'select') {
@@ -480,7 +482,7 @@
          *    @access private
          */
         function _isFormElement($name) {
-            return in_array($name, array('input', 'textarea', 'select'));
+            return in_array($name, array('input', 'button', 'textarea', 'select'));
         }
         
         /**

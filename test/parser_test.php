@@ -603,7 +603,19 @@
             $this->assertTrue($this->_parser->acceptAttributeToken("= a", LEXER_SPECIAL));
             $this->assertTrue($this->_parser->acceptStartToken(">", LEXER_EXIT));
         }
-        
+         
+        function testButton() {
+            $this->_parser->parse("");
+            $this->_listener->expectOnce(
+                    "startElement",
+                    array("button", array("name" => "a")));
+            $this->_listener->setReturnValue("startElement", true);
+            $this->assertTrue($this->_parser->acceptStartToken("<button", LEXER_ENTER));
+            $this->assertTrue($this->_parser->acceptStartToken("name", LEXER_MATCHED));
+            $this->assertTrue($this->_parser->acceptAttributeToken("= a", LEXER_SPECIAL));
+            $this->assertTrue($this->_parser->acceptStartToken(">", LEXER_EXIT));
+        }
+       
         function testContent() {
             $this->_parser->parse("");
             $this->_listener->expectOnce("addContent", array("stuff"));

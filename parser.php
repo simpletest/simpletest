@@ -500,7 +500,7 @@
          *    @access private
          */
         function _getParsedTags() {
-            return array('a', 'title', 'form', 'input', 'textarea', 'select',
+            return array('a', 'title', 'form', 'input', 'button', 'textarea', 'select',
                     'option', 'frameset', 'frame');
         }
         

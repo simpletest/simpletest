@@ -304,7 +304,7 @@
     }
     
     /**
-     *    Submit button.
+     *    Submit button as input tag.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
@@ -343,8 +343,69 @@
         function setValue($value) {
             return false;
         }
+        
+        /**
+         *    Value of browser visible text.
+         *    @return string        Visible label.
+         *    @access public
+         */
+        function getLabel() {
+            return $this->getValue();
+        }
     }
-    
+      
+    /**
+     *    Submit button as button tag.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleButtonTag extends SimpleWidget {
+        
+        /**
+         *    Starts with a named tag with attributes only.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
+        function SimpleButtonTag($attributes) {
+            $this->SimpleWidget('button', $attributes);
+            if ($this->getAttribute('name') === false) {
+                $this->_setAttribute('name', 'submit');
+            }
+            if ($this->getAttribute('value') === false) {
+                $this->_setAttribute('value', 'Submit');
+            }
+        }
+        
+        /**
+         *    Check to see if the tag can have both start and
+         *    end tags with content in between.
+         *    @return boolean        True if content allowed.
+         *    @access public
+         */
+        function expectEndTag() {
+            return true;
+        }
+        
+        /**
+         *    Disables the setting of the button value.
+         *    @param string $value       Ignored.
+         *    @return boolean            True if allowed.
+         *    @access public
+         */
+        function setValue($value) {
+            return false;
+        }
+        
+        /**
+         *    Value of browser visible text.
+         *    @return string        Visible label.
+         *    @access public
+         */
+        function getLabel() {
+            return $this->getContent();
+        }
+    }
+  
     /**
      *    Content tag for text area.
 	 *    @package SimpleTest
