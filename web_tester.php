@@ -432,7 +432,7 @@
                         "] not detected in [" .
                         $dumper->describeValue($compare) . "]";
             } else {
-                return $this->_describePatternMatch($this->_getSubstring(), $compare);
+                return $this->_describeTextMatch($this->_getSubstring(), $compare);
             }
         }
     }

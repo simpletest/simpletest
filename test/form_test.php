@@ -2,6 +2,7 @@
     // $Id$
     
     require_once(dirname(__FILE__) . '/../form.php');
+    require_once(dirname(__FILE__) . '/../encoding.php');
     
     class TestOfForm extends UnitTestCase {
         
@@ -14,7 +15,6 @@
                     new SimpleUrl('http://host/a/here.php'));
             $this->assertIdentical($form->getId(), '33');
             $this->assertNull($form->getValue('a'));
-            $this->assertEqual($form->getValues(), array());
         }
         
         function testEmptyAction() {
@@ -62,7 +62,6 @@
             $this->assertFalse($form->setField('not_present', 'Not me'));
             $this->assertIdentical($form->getValue('me'), 'Not me');
             $this->assertNull($form->getValue('not_present'));
-            $this->assertEqual($form->getValues(), array('me' => 'Not me'));
         }
         
         function testTextWidgetById() {
@@ -74,7 +73,6 @@
             $this->assertIdentical($form->getValueById(50), 'Myself');
             $this->assertTrue($form->setFieldById(50, 'Not me'));
             $this->assertIdentical($form->getValueById(50), 'Not me');
-            $this->assertEqual($form->getValues(), array('me' => 'Not me'));
         }
         
         function testSubmitEmpty() {

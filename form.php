@@ -10,6 +10,7 @@
      * include SimpleTest files
      */
     require_once(dirname(__FILE__) . '/tag.php');
+    require_once(dirname(__FILE__) . '/encoding.php');
     /**#@-*/
     
     /**
@@ -338,26 +339,20 @@
         }
        
         /**
-         *    Reads the current form values as a hash
-         *    of submitted parameters. Repeated parameters
-         *    appear as a list.
-         *    @return hash         Submitted values.
-         *    @access public
+         *    Creates the encoding for the current values in the
+         *    form.
+         *    @return SimpleFormEncoding    Request to submit.
+         *    @access private
          */
-        function getValues() {
-            $values = array();
+        function _getEncoding() {
+            $encoding = new SimpleFormEncoding();
             for ($i = 0; $i < count($this->_widgets); $i++) {
-                $name = $this->_widgets[$i]->getName();
-                $new = $this->_widgets[$i]->getValue();
-                if (is_string($new)) {
-                    $values[$name] = $new;
-                } elseif (is_array($new)) {
-                    $values[$name] = $new;
-                }
+                $encoding->add(
+                        $this->_widgets[$i]->getName(),
+                        $this->_widgets[$i]->getValue());
             }
-            return $values;
+            return $encoding;
         }
-        
         
         /**
          *    Test to see if a form has a submit button.
@@ -467,9 +462,9 @@
         function _submitButtonBySelector($selector) {
             foreach ($this->_buttons as $button) {
                 if ($selector->isMatch($button)) {
-                    return array_merge(
-                            $button->getSubmitValues(),
-                            $this->getValues());            
+                    $encoding = $this->_getEncoding();
+                    $encoding->merge($button->getSubmitValues());
+                    return $encoding->getAll();           
                 }
             }
             return false;
@@ -524,9 +519,9 @@
         function _submitImageBySelector($selector, $x, $y) {
             foreach ($this->_images as $image) {
                 if ($selector->isMatch($image)) {
-                    return array_merge(
-                            $image->getSubmitValues($x, $y),
-                            $this->getValues());            
+                    $encoding = $this->_getEncoding();
+                    $encoding->merge($image->getSubmitValues($x, $y));
+                    return $encoding->getAll();           
                 }
             }
             return false;
@@ -583,7 +578,8 @@
          *    @access public
          */
         function submit() {
-            return $this->getValues();            
+            $encoding = $this->_getEncoding();
+            return $encoding->getAll();
         }
     }
 ?>

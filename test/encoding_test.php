@@ -42,6 +42,13 @@
             $this->assertIdentical($encoding->asString(), 'a=Hello');
         }
         
+        function testFalseParameter() {
+            $encoding = &new SimpleFormEncoding();
+            $encoding->add('a', false);
+            $this->assertEqual($encoding->getValue('a'), false);
+            $this->assertIdentical($encoding->asString(), '');
+        }
+        
         function testUrlEncoding() {
             $encoding = &new SimpleFormEncoding();
             $encoding->add('a', 'Hello there!');

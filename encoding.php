@@ -40,6 +40,9 @@
          *    @access public
          */
         function add($key, $value) {
+            if ($value === false) {
+                return;
+            }
             if (! isset($this->_request[$key])) {
                 $this->_request[$key] = array();
             }
@@ -54,8 +57,7 @@
         
         /**
          *    Adds a set of parameters to this query.
-         *    @param array $query/SimpleQueryString  Hash of parameters.
-         *                                           Multiple values are
+         *    @param array/SimpleQueryString $query  Multiple values are
          *                                           as lists on a single key.
          *    @access public
          */
