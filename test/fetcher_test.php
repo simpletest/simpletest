@@ -274,4 +274,104 @@
             $fetcher->tally();
         }
     }
+
+    class TestOfBrowserRedirects extends UnitTestCase {
+        function TestOfBrowserRedirects() {
+            $this->UnitTestCase();
+        }
+        function &createRedirect($content, $redirect) {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue('getNewCookies', array());
+            $headers->setReturnValue('isRedirect', (boolean)$redirect);
+            $headers->setReturnValue('getLocation', $redirect);
+            $headers->setReturnValue('getNewCookies', array());
+            
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent', $content);
+            $response->setReturnReference('getHeaders', $headers);
+            
+            $request = &new MockSimpleHttpRequest($this);
+            $request->setReturnReference('fetch', $response);
+            return $request;
+        }
+        function testDisabledRedirects() {
+            $fetcher = &new MockRequestFetcher($this);
+            $fetcher->setReturnReference(
+                    '_createRequest',
+                    $this->createRedirect('stuff', 'there.html'));
+            $fetcher->expectOnce('_createRequest');
+            $fetcher->SimpleFetcher();
+            
+            $fetcher->setMaximumRedirects(0);
+            $response = &$fetcher->fetchResponse('GET', 'here.html');
+            
+            $this->assertEqual($response->getContent(), 'stuff');
+            $fetcher->tally();
+        }
+        function testSingleRedirect() {
+            $fetcher = &new MockRequestFetcher($this);
+            $fetcher->setReturnReferenceAt(
+                    0,
+                    '_createRequest',
+                    $this->createRedirect('first', 'two.html'));
+            $fetcher->setReturnReferenceAt(
+                    1,
+                    '_createRequest',
+                    $this->createRedirect('second', 'three.html'));
+            $fetcher->expectCallCount('_createRequest', 2);
+            $fetcher->SimpleFetcher();
+            
+            $fetcher->setMaximumRedirects(1);
+            $response = &$fetcher->fetchResponse('GET', 'one.html');
+            
+            $this->assertEqual($response->getContent(), 'second');
+            $fetcher->tally();
+        }
+        function testDoubleRedirect() {
+            $fetcher = &new MockRequestFetcher($this);
+            $fetcher->setReturnReferenceAt(
+                    0,
+                    '_createRequest',
+                    $this->createRedirect('first', 'two.html'));
+            $fetcher->setReturnReferenceAt(
+                    1,
+                    '_createRequest',
+                    $this->createRedirect('second', 'three.html'));
+            $fetcher->setReturnReferenceAt(
+                    2,
+                    '_createRequest',
+                    $this->createRedirect('third', 'four.html'));
+            $fetcher->expectCallCount('_createRequest', 3);
+            $fetcher->SimpleFetcher();
+            
+            $fetcher->setMaximumRedirects(2);
+            $response = &$fetcher->fetchResponse('GET', 'one.html');
+            
+            $this->assertEqual($response->getContent(), 'third');
+            $fetcher->tally();
+        }
+        function testSuccessAfterRedirect() {
+            $fetcher = &new MockRequestFetcher($this);
+            $fetcher->setReturnReferenceAt(
+                    0,
+                    '_createRequest',
+                    $this->createRedirect('first', 'two.html'));
+            $fetcher->setReturnReferenceAt(
+                    1,
+                    '_createRequest',
+                    $this->createRedirect('second', false));
+            $fetcher->setReturnReferenceAt(
+                    2,
+                    '_createRequest',
+                    $this->createRedirect('third', 'four.html'));
+            $fetcher->expectCallCount('_createRequest', 2);
+            $fetcher->SimpleFetcher();
+            
+            $fetcher->setMaximumRedirects(2);
+            $response = &$fetcher->fetchResponse('GET', 'one.html');
+            
+            $this->assertEqual($response->getContent(), 'second');
+            $fetcher->tally();
+        }
+    }
 ?>
