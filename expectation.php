@@ -456,8 +456,9 @@
         
         /**
          *    Sets the value to compare against.
-         *    @param object $obj        Object to check.
+         *    @param string $method        Method to check.
          *    @access public
+         *    @return void
          */
         function MethodExistsExpectation($method) {
             $this->SimpleExpectation();
