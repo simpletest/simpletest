@@ -1,16 +1,16 @@
 <?php
     /**
-     *	base include file for SimpleTest
+     *	Base include file for SimpleTest.
      *	@package	SimpleTest
      *	@subpackage	MockObjects
      *	@version	$Id$
      */
     
     /**
-     * @ignore    originally defined in simple_test.php
+     * @ignore    Originally defined in simple_test.php file.
      */
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "simpletest/");
+    if (!defined('SIMPLE_TEST')) {
+        define('SIMPLE_TEST', 'simpletest/');
     }
     require_once(SIMPLE_TEST . 'simple_test.php');
     require_once(SIMPLE_TEST . 'browser.php');
@@ -26,8 +26,8 @@
     class WebTestCase extends SimpleTestCase {
         var $_current_browser;
         var $_current_content;
-        var $_html_cache;
         var $_frames_supported;
+        var $_page;
         
         /**
          *    Creates an empty test case. Should be subclassed
@@ -38,7 +38,7 @@
          */
         function WebTestCase($label = false) {
             $this->SimpleTestCase($label);
-            $this->_clearHtmlCache();
+            $this->_page = false;
         }
         
         /**
@@ -99,20 +99,6 @@
         }
         
         /**
-         *    Creates a new default page builder object and
-         *    uses it to parse the current content. Caches
-         *    the page content once it is parsed.
-         *    @return SimplePage           New web page object.
-         *    @access private
-         */
-        function &_getHtml() {
-            if (! $this->_html_cache) {
-                $this->_html_cache = &new SimplePage($this->_current_content);
-            }
-            return $this->_html_cache;
-        }
-        
-        /**
          *    Resets the parsed HTML page cache.
          *    @access private
          */
@@ -128,7 +114,7 @@
          */
         function invoke($method) {
             $this->_current_content = false;
-            $this->_clearHtmlCache();
+            $this->_page = false;
             $this->_current_browser = &$this->createBrowser();
             $this->_frames_supported = true;
             parent::invoke($method);
@@ -182,7 +168,7 @@
          */
         function get($url, $parameters = false) {
             $this->_current_content = $this->_current_browser->get($url, $parameters);
-            $this->_clearHtmlCache();
+            $this->_page = &new SimplePage($this->_current_content);
             return ($this->_current_content !== false);
         }
         
@@ -198,7 +184,7 @@
          */
         function post($url, $parameters = false) {
             $this->_current_content = $this->_current_browser->post($url, $parameters);
-            $this->_clearHtmlCache();
+            $this->_page = &new SimplePage($this->_current_content);
             return ($this->_current_content !== false);
         }
         
@@ -211,8 +197,7 @@
          *    @access public
          */
         function clickSubmit($label = "Submit") {
-            $page = &$this->_getHtml();
-            if (! ($form = &$page->getFormBySubmitLabel($label))) {
+            if (! ($form = &$this->_page->getFormBySubmitLabel($label))) {
                 return false;
             }
             $action = $form->getAction();
@@ -231,8 +216,7 @@
          *    @access public
          */
         function submitFormById($id) {
-            $page = &$this->_getHtml();
-            if (! ($form = &$page->getFormById($id))) {
+            if (! ($form = &$this->_page->getFormById($id))) {
                 return false;
             }
             $action = $form->getAction();
@@ -267,8 +251,7 @@
          *    @access public
          */
         function clickLink($label, $index = 0) {
-            $page = &$this->_getHtml();
-            $urls = $page->getUrls($label);
+            $urls = $this->_page->getUrls($label);
             if (count($urls) == 0) {
                 return false;
             }
@@ -286,8 +269,7 @@
          *    @access public
          */
         function clickLinkById($id) {
-            $page = &$this->_getHtml();
-            if (! ($url = $page->getUrlById($id))) {
+            if (! ($url = $this->_page->getUrlById($id))) {
                 return false;
             }
             $this->get($url);
@@ -309,8 +291,7 @@
          *    @access public
          */
         function setField($name, $value) {
-            $page = &$this->_getHtml();
-            $page->setField($name, $value);
+            $this->_page->setField($name, $value);
         }
         
         /**
@@ -324,8 +305,7 @@
          *    @access public
          */
         function assertField($name, $expected = true) {
-            $page = &$this->_getHtml();
-            $value = $page->getField($name);
+            $value = $this->_page->getField($name);
             if ($expected === true) {
                 $this->assertTrue(isset($value), "Field [$name] should exist");
             } else {
@@ -364,10 +344,9 @@
          *    @access public
          */
         function assertTitle($title = false, $message = "%s") {
-            $page = &$this->_getHtml();
             $this->assertTrue(
-                    $title === $page->getTitle(),
-                    sprintf($message, "Expecting title [$title] got [" . $page->getTitle() . "]"));
+                    $title === $this->_page->getTitle(),
+                    sprintf($message, "Expecting title [$title] got [" . $this->_page->getTitle() . "]"));
         }
         
         /**
@@ -436,15 +415,7 @@
         }
         
         /**
-         *    Sets an expectation of a cookie being set on the
-         *    next fetching operation.
-         *    @param string $name        Name of cookie to expect.
-         *    @param string $expect      Expected value as a string or
-         *                               false if any value will do.
-         *                               An empty string for cookie
-         *                               clearing.
-         *    @param string $message     Message to display.
-         *    @access public
+         *    @deprecated
          */
         function expectCookie($name, $expect = false, $message = "%s") {
             $this->_current_browser->expectCookie($name, $expect, $message);

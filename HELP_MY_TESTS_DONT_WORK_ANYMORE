@@ -5,6 +5,13 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+No method expectCookie()
+========================
+This method was deprecated in Beta4 so as to simplify the internals
+until another mechanism can replace it. As a workaround it is necessary
+to assert that the cookie has changed by setting it before the page
+fetch and then assert the desired value.
+
 No method clickSubmitByFormId()
 ===============================
 This method had an incorrect name as no button was involved. It was

@@ -29,7 +29,6 @@
          *    Stashes the frameset page. Will make use of the
          *    browser to fetch the sub frames recusively.
          *    @param SimplePage $page        Frameset page.
-         *    @param TestBrowser $browser    Page fetcher.
          */
         function SimpleFrameset(&$page) {
             $this->_frameset = &$page;
