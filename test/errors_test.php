@@ -39,4 +39,25 @@
             $this->assertFalse($queue->extract());
         }
     }
+    
+    class TestOfErrorTrap extends UnitTestCase {
+        function TestOfErrorTrap() {
+            $this->UnitTestCase();
+        }
+        function setUp() {
+            set_error_handler('simpleTestErrorHandler');
+        }
+        function tearDown() {
+            restore_error_handler();
+        }
+        function testTrapping() {
+            $queue = &SimpleErrorQueue::instance();
+            $this->assertFalse($queue->extract());
+            trigger_error('Ouch!');
+            list($severity, $message, $file, $line, $globals) = $queue->extract();
+            $this->assertEqual($message, 'Ouch!');
+            $this->assertEqual($file, __FILE__);
+            $this->assertFalse($queue->extract());
+        }
+    }
 ?>
