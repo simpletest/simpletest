@@ -206,6 +206,8 @@
         var $_title;
         var $_open_forms;
         var $_complete_forms;
+        var $_frameset;
+        var $_frameset_is_complete;
         var $_raw;
         
         /**
@@ -219,6 +221,8 @@
             $this->_raw = $raw;
             $this->_open_forms = array();
             $this->_complete_forms = array();
+            $this->_frameset = false;
+            $this->_frameset_is_complete = false;
             $builder = &$this->_createBuilder($this);
             $builder->parse($this->_raw, $this->_createParser($builder));
         }
@@ -299,6 +303,25 @@
         }
         
         /**
+         *    Opens a frameset.
+         *    @param SimpleFramesetTag $tag      Tag to accept.
+         *    @access public
+         */
+        function acceptFramesetStart(&$tag) {
+            if (! $this->_frameset_is_complete) {
+                $this->_frameset = &$tag;
+            }
+        }
+        
+        /**
+         *    Closes the most recently opened frameset.
+         *    @access public
+         */
+        function acceptFramesetEnd() {
+            $this->_frameset_is_complete = true;
+        }
+        
+        /**
          *    Test to see if link is an absolute one.
          *    @param string $url     Url to test.
          *    @return boolean           True if absolute.
@@ -316,6 +339,15 @@
          */
         function _addLink($tag) {
             $this->_links[] = $tag;
+        }
+        
+        /**
+         *    Test for the presence of a frameset.
+         *    @return boolean        True if frameset.
+         *    @access public
+         */
+        function hasFrameset() {
+            return $this->_frameset_is_complete;
         }
         
         /**

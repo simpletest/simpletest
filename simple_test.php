@@ -299,7 +299,7 @@
          *    @access public
          */
         function getAssertionLine($format = '%d', $stack = false) {
-            if (! $stack) {
+            if ($stack === false) {
                 $stack = SimpleTestCompatibility::getStackTrace();
             }
             foreach ($stack as $frame) {

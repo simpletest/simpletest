@@ -202,10 +202,20 @@
         }
         function testTitleSetting() {
             $title = &new SimpleTitleTag(array());
-            $title->addContent("Title");
-            $page = &new SimplePage("");
+            $title->addContent('Title');
+            $page = &new SimplePage('');
             $page->AcceptTag($title);
-            $this->assertEqual($page->getTitle(), "Title");
+            $this->assertEqual($page->getTitle(), 'Title');
+        }
+        function testFramesetAbsence() {
+            $page = &new SimplePage('');
+            $this->assertFalse($page->hasFrameset());
+        }
+        function testHasFrameset() {
+            $page = &new SimplePage('');
+            $page->acceptFramesetStart(new SimpleFramesetTag(array()));
+            $page->acceptFramesetEnd();
+            $this->assertTrue($page->hasFrameset());
         }
     }
     

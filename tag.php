@@ -965,6 +965,23 @@
     }
     
     /**
+     *    Tag to aid parsing the frames in a page.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleFramesetTag extends SimpleTag {
+        
+        /**
+         *    Starts with a named tag with attributes only.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
+        function SimpleFramesetTag($attributes) {
+            $this->SimpleTag('frameset', $attributes);
+        }
+    }
+    
+    /**
      *    Form tag class to hold widget values.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
