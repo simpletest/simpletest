@@ -19,6 +19,7 @@
             $this->addTestFile("parser_test.php");
         }
     }
+    
     if (!defined("TEST_RUNNING")) {
         define("TEST_RUNNING", true);
         $test = &new UnitTests();

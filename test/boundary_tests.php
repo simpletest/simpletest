@@ -14,6 +14,7 @@
             $this->addTestFile("live_test.php");
         }
     }
+    
     if (!defined("TEST_RUNNING")) {
         define("TEST_RUNNING", true);
         $test = &new BoundaryTests("Boundary tests");
