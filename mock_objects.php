@@ -162,7 +162,7 @@
                             $comparison->testMessage($parameters[$i]) . "]";
                 }
             }
-            return "Mock expectation differs at " . implode(" and ", $messages);
+            return "Parameter expectation differs at " . implode(" and ", $messages);
         }
         
         /**
