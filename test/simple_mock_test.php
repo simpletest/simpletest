@@ -48,6 +48,12 @@
             $this->assertTrue($expectation->test(array(null)), "Null->%s");
             $this->assertTrue($expectation->test(array(13)), "Integer->%s");
         }
+        function testEmbeddedWildcardExpectations() {
+            $expectation = new ParametersExpectation(array(new WildcardExpectation()));
+            $this->assertFalse($expectation->test(array()));
+            $this->assertIdentical($expectation->test(array(null)), true);
+            $this->assertIdentical($expectation->test(array(13)), true);
+        }
         function testIdentityOnly() {
             $expectation = new ParametersExpectation(array("0"));
             $this->assertFalse($expectation->test(array(0)));

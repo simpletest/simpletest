@@ -86,6 +86,7 @@
                     if (! $this->_expected[$i]->test($parameters[$i])) {
                         return false;
                     }
+                    continue;
                 }
                 if ($this->_expected[$i] === $this->_wildcard) {
                     continue;
@@ -282,13 +283,31 @@
             $this->_is_strict = $is_strict;
             $this->_returns = array();
             $this->_return_sequence = array();
-            $this->clearHistory();
+            $this->_call_counts = array();
         }
         
         /**
-         *    Resets the call count history for the stub.
-         *    Sequences of returns will start from 0 again.
-         *    @public
+         *    Replaces wildcard matches with wildcard
+         *    expectations in the argument list.
+         *    @param array $args      Raw argument list.
+         *    @return array           Argument list with
+         *                            expectations.
+         *    @private
+         */
+        function _replaceWildcards($args) {
+            if ($args === false) {
+                return false;
+            }
+            for ($i = 0; $i < count($args); $i++) {
+                if ($args[$i] === $this->_wildcard) {
+                    $args[$i] = new WildcardExpectation();
+                }
+            }
+            return $args;
+        }
+
+        /**
+         *    @deprecated
          */
         function clearHistory() {
             $this->_call_counts = array();
@@ -369,8 +388,9 @@
          *                          including wildcards.
          *    @public
          */
-        function setReturnValue($method, $value, $args = "") {
+        function setReturnValue($method, $value, $args = false) {
             $this->_dieOnNoMethod($method, "set return value");
+            $args = $this->_replaceWildcards($args);
             $method = strtolower($method);
             if (!isset($this->_returns[$method])) {
                 $this->_returns[$method] = new CallMap($this->_getWildcard());
@@ -394,6 +414,7 @@
          */
         function setReturnValueAt($timing, $method, $value, $args = false) {
             $this->_dieOnNoMethod($method, "set return value sequence");
+            $args = $this->_replaceWildcards($args);
             $method = strtolower($method);
             if (!isset($this->_return_sequence[$method])) {
                 $this->_return_sequence[$method] = array();
@@ -415,6 +436,7 @@
          */
         function setReturnReference($method, &$reference, $args = false) {
             $this->_dieOnNoMethod($method, "set return reference");
+            $args = $this->_replaceWildcards($args);
             $method = strtolower($method);
             if (!isset($this->_returns[$method])) {
                 $this->_returns[$method] = new CallMap($this->_getWildcard());
@@ -438,6 +460,7 @@
          */
         function setReturnReferenceAt($timing, $method, &$reference, $args = false) {
             $this->_dieOnNoMethod($method, "set return reference sequence");
+            $args = $this->_replaceWildcards($args);
             $method = strtolower($method);
             if (!isset($this->_return_sequence[$method])) {
                 $this->_return_sequence[$method] = array();
@@ -529,9 +552,7 @@
         }
         
         /**
-         *    Sets the mock to require a return value to be set or
-         *    it issues a warning.
-         *    @public
+         *    @deprecated
          */
         function requireReturn() {
             $this->_require_return = true;
@@ -547,9 +568,9 @@
          *                          including wildcards.
          *    @public
          */
-        function expectArguments($method, $args = false) {
+        function expectArguments($method, $args) {
             $this->_dieOnNoMethod($method, "set expected arguments");
-            $args = (is_array($args) ? $args : array());
+            $args = $this->_replaceWildcards($args);
             $this->_expected_args[strtolower($method)] = new ParametersExpectation(
                     $args,
                     $this->_getWildcard());
@@ -567,9 +588,9 @@
          *                          including wildcards.
          *    @public
          */
-        function expectArgumentsAt($timing, $method, $args = false) {
+        function expectArgumentsAt($timing, $method, $args) {
             $this->_dieOnNoMethod($method, "set expected arguments at time");
-            $args = (is_array($args) ? $args : array());
+            $args = $this->_replaceWildcards($args);
             if (!isset($this->_sequence_args[$timing])) {
                 $this->_sequence_args[$timing] = array();
             }
@@ -747,9 +768,7 @@
         }
         
         /**
-         *    What to do if there is no return value set.
-         *    @protected
-         *    @param $method      Method name.
+         *    @deprecated
          */
         function _warnOnNoReturn($method) {
             if ($this->_require_return) {

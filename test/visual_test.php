@@ -11,7 +11,7 @@
     // I have enough of a tester to procede more formally.
     //
     // The proper tests start in all_tests.php
-    
+
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "../");
     }
