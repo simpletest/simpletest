@@ -198,6 +198,16 @@
             $this->assertTrue($expectation->test('Hello'));
             $this->assertFalse($expectation->test(5));
         }
+        function testBoolean() {
+            $expectation = &new IsAExpectation('boolean');
+            $this->assertTrue($expectation->test(true));
+            $this->assertFalse($expectation->test(1));
+        }
+        function testBool() {
+            $expectation = &new IsAExpectation('bool');
+            $this->assertTrue($expectation->test(true));
+            $this->assertFalse($expectation->test(1));
+        }
         function testDouble() {
             $expectation = &new IsAExpectation('double');
             $this->assertTrue($expectation->test(5.0));
@@ -205,6 +215,11 @@
         }
         function testFloat() {
             $expectation = &new IsAExpectation('float');
+            $this->assertTrue($expectation->test(5.0));
+            $this->assertFalse($expectation->test(5));
+        }
+        function testReal() {
+            $expectation = &new IsAExpectation('real');
             $this->assertTrue($expectation->test(5.0));
             $this->assertFalse($expectation->test(5));
         }
