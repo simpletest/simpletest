@@ -538,6 +538,7 @@
 			if (! is_object($compare)) {
 			    return 'No method on non-object [' . $dumper->describeValue($compare) . ']';
 			}
+			$method = $this->_method;
 			return "Object [" . $dumper->describeValue($compare) .
 					"] should contain method [$method]";
         }
