@@ -485,6 +485,26 @@
             $this->assertEqual($response->getContent(), 'second');
             $agent->tally();
         }
+        function testRedirectChangesPostToGet() {
+            $agent = &new MockRequestUserAgent($this);
+            $agent->setReturnReferenceAt(
+                    0,
+                    '_createHttpRequest',
+                    $this->createRedirect('first', 'two.html'));
+            $agent->expectArgumentsAt(0, '_createHttpRequest', array('POST', '*', '*'));
+            $agent->setReturnReferenceAt(
+                    1,
+                    '_createHttpRequest',
+                    $this->createRedirect('second', 'three.html'));
+            $agent->expectArgumentsAt(1, '_createHttpRequest', array('GET', '*', '*'));
+            $agent->expectCallCount('_createHttpRequest', 2);
+            $agent->SimpleUserAgent();
+            
+            $agent->setMaximumRedirects(1);
+            $response = &$agent->fetchResponse('POST', 'one.html');
+            
+            $agent->tally();
+        }
     }
     
     class TestOfBadHosts extends UnitTestCase {

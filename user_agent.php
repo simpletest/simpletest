@@ -298,10 +298,10 @@
         /**
          *    Fetches a URL as a response object. Will
          *    keep trying if redirected.
-         *    @param string $method       GET, POST, etc.
-         *    @param string $raw_url      Target to fetch.
-         *    @param hash $parameters     Additional parameters for request.
-         *    @return              Response object.
+         *    @param string $method     GET, POST, etc.
+         *    @param string $raw_url    Target to fetch.
+         *    @param hash $parameters   Additional parameters for request.
+         *    @return                   Response object.
          *    @access public
          */
         function &fetchResponse($method, $raw_url, $parameters = false) {
@@ -318,6 +318,7 @@
                     break;
                 }
                 $url = new SimpleUrl($headers->getLocation());
+                $method = 'GET';
             } while (! $this->_isTooManyRedirects(++$redirects));
             $this->_current_url = $url;
             return $response;

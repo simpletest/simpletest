@@ -682,7 +682,7 @@
          *    @access protected
          */
         function &_createResponse(&$socket) {
-            return new SimpleHttpResponse($this->_url, $socket);
+            return new SimpleHttpResponse($this->_method, $this->_url, $socket);
         }
     }
     
@@ -894,6 +894,7 @@
     class SimpleHttpResponse extends StickyError {
         var $_content;
         var $_headers;
+        var $_method;
         var $_url;
         
         /**
@@ -904,8 +905,9 @@
          *                                  response text from.
          *    @access public
          */
-        function SimpleHttpResponse($url, &$socket) {
+        function SimpleHttpResponse($method, $url, &$socket) {
             $this->StickyError();
+            $this->_method = $method;
             $this->_url = $url;
             $this->_content = false;
             $raw = $this->_readAll($socket);
@@ -919,6 +921,15 @@
             }
             list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);
             $this->_headers = &new SimpleHttpHeaders($headers);
+        }
+        
+        /**
+         *    HTTP request method used for this resource.
+         *    @return string        Request method.
+         *    @access public
+         */
+        function getMethod() {
+            return $this->_method;
         }
         
         /**

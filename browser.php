@@ -287,6 +287,7 @@
         function setField($name, $value) {
             return $this->_page->setField($name, $value);
         }
+        
         /**
          *    Accessor for a form element value within the page.
          *    Finds the first match.
