@@ -86,7 +86,7 @@
          *    Tests the last status code from the shell.
          *    @param integer $status   Expected status of last
          *                             command.
-         *    @param $message          Message to display.
+         *    @param string $message   Message to display.
          *    @access public
          */
         function assertExitCode($status, $message = "%s") {
@@ -100,7 +100,7 @@
          *    Attempt to exactly match the combined STDERR and
          *    STDOUT output.
          *    @param string $expected  Expected output.
-         *    @param $message          Message to display.
+         *    @param string $message   Message to display.
          *    @access public
          */
         function assertOutput($expected, $message = "%s") {
@@ -115,10 +115,10 @@
          *    Scans the output for a Perl regex. If found
          *    anywhere it passes, else it fails.
          *    @param string $pattern    Regex to search for.
-         *    @param $message           Message to display.
+         *    @param string $message    Message to display.
          *    @access public
          */
-        function assertWantedPattern($pattern, $message = "%s") {
+        function assertOutputPattern($pattern, $message = "%s") {
             $shell = &$this->_getShell();
             $this->assertExpectation(
                     new WantedPatternExpectation($pattern),
@@ -133,7 +133,7 @@
          *    @param $message           Message to display.
          *    @access public
          */
-        function assertNoUnwantedPattern($pattern, $message = "%s") {
+        function assertNoOutputPattern($pattern, $message = "%s") {
             $shell = &$this->_getShell();
             $this->assertExpectation(
                     new UnwantedPatternExpectation($pattern),
@@ -144,7 +144,7 @@
         /**
          *    File existence check.
          *    @param string $path    Full filename and path.
-         *    @param $message        Message to display.
+         *    @param string $message Message to display.
          *    @access public
          */
         function assertFileExists($path, $message = "%s") {
@@ -155,12 +155,44 @@
         /**
          *    File non-existence check.
          *    @param string $path    Full filename and path.
-         *    @param $message        Message to display.
+         *    @param string $message Message to display.
          *    @access public
          */
         function assertFileNotExists($path, $message = "%s") {
             $message = sprintf($message, "File [$path] should not exist");
             $this->assertFalse(file_exists($path), $message);
+        }
+        
+        /**
+         *    Scans a file for a Perl regex. If found
+         *    anywhere it passes, else it fails.
+         *    @param string $pattern    Regex to search for.
+         *    @param string $path       Full filename and path.
+         *    @param string $message    Message to display.
+         *    @access public
+         */
+        function assertFilePattern($pattern, $path, $message = "%s") {
+            $shell = &$this->_getShell();
+            $this->assertExpectation(
+                    new WantedPatternExpectation($pattern),
+                    implode('', file($path)),
+                    $message);
+        }
+        
+        /**
+         *    If a Perl regex is found anywhere in the named
+         *    file then a failure is generated, else a pass.
+         *    @param string $pattern    Regex to search for.
+         *    @param string $path       Full filename and path.
+         *    @param string $message    Message to display.
+         *    @access public
+         */
+        function assertNoFilePattern($pattern, $path, $message = "%s") {
+            $shell = &$this->_getShell();
+            $this->assertExpectation(
+                    new UnwantedPatternExpectation($pattern),
+                    implode('', file($path)),
+                    $message);
         }
         
         /**

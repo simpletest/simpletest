@@ -31,8 +31,8 @@
             $this->_mock_shell = &new MockSimpleShell($this);
             $this->_mock_shell->setReturnValue('execute', 0);
             $this->_mock_shell->setReturnValue('getOutput', "Line 1\nLine 2\n");
-            $this->assertWantedPattern('/line/i');
-            $this->assertNoUnwantedPattern('/line 2/');
+            $this->assertOutputPattern('/line/i');
+            $this->assertNoOutputPattern('/line 2/');
         }
     }
 ?>

@@ -29,5 +29,13 @@
             $this->assertFileExists(SIMPLE_TEST . 'test/all_tests.php');
             $this->assertFileNotExists('wibble');
         }
+        function testFilePatterns() {
+            $this->assertFilePattern(
+                    '/simple_test/i',
+                    SIMPLE_TEST . 'test/all_tests.php');
+            $this->assertNoFilePattern(
+                    '/sputnik/i',
+                    SIMPLE_TEST . 'test/all_tests.php');
+        }
     }
 ?>

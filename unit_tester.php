@@ -25,7 +25,7 @@
         /**
          *    Creates an empty test case. Should be subclassed
          *    with test methods for a functional test case.
-         *    @param $label            Name of test case. Will use
+         *    @param string $label     Name of test case. Will use
          *                             the class name if none specified.
          *    @access public
          */
@@ -38,8 +38,8 @@
         
         /**
          *    Will be true if the value is null.
-         *    @param $value          Supposedly null value.
-         *    @param $message        Message to display.
+         *    @param null $value       Supposedly null value.
+         *    @param string $message   Message to display.
          *    @access public
          */
         function assertNull($value, $message = "%s") {
@@ -52,8 +52,8 @@
         
         /**
          *    Will be true if the value is set.
-         *    @param $value          Supposedly set value.
-         *    @param $message        Message to display.
+         *    @param mixed $value           Supposedly set value.
+         *    @param string $message        Message to display.
          *    @access public
          */
         function assertNotNull($value, $message = "%s") {
@@ -68,8 +68,9 @@
          *    Type and class test. Will pass if class
          *    matches the type name or is a subclass or
          *    if not an object, but the type is correct.
-         *    @param $object        Object to test.
-         *    @param $type          Type name as string.
+         *    @param mixed $object         Object to test.
+         *    @param string $type          Type name as string.
+         *    @param string $message       Message to display.
          *    @access public
          */
         function assertIsA($object, $type, $message = "%s") {
@@ -89,9 +90,9 @@
         /**
          *    Will trigger a pass if the two parameters have
          *    the same value only. Otherwise a fail.
-         *    @param $first          Value to compare.
-         *    @param $second         Value to compare.
-         *    @param $message        Message to display.
+         *    @param mixed $first          Value to compare.
+         *    @param mixed $second         Value to compare.
+         *    @param string $message       Message to display.
          *    @access public
          */
         function assertEqual($first, $second, $message = "%s") {
@@ -104,9 +105,9 @@
         /**
          *    Will trigger a pass if the two parameters have
          *    a different value. Otherwise a fail.
-         *    @param $first          Value to compare.
-         *    @param $second         Value to compare.
-         *    @param $message        Message to display.
+         *    @param mixed $first           Value to compare.
+         *    @param mixed $second          Value to compare.
+         *    @param string $message        Message to display.
          *    @access public
          */
         function assertNotEqual($first, $second, $message = "%s") {
@@ -119,9 +120,9 @@
         /**
          *    Will trigger a pass if the two parameters have
          *    the same value and same type. Otherwise a fail.
-         *    @param $first          Value to compare.
-         *    @param $second         Value to compare.
-         *    @param $message        Message to display.
+         *    @param mixed $first           Value to compare.
+         *    @param mixed $second          Value to compare.
+         *    @param string $message        Message to display.
          *    @access public
          */
         function assertIdentical($first, $second, $message = "%s") {
@@ -134,9 +135,9 @@
         /**
          *    Will trigger a pass if the two parameters have
          *    the different value or different type.
-         *    @param $first          Value to compare.
-         *    @param $second         Value to compare.
-         *    @param $message        Message to display.
+         *    @param mixed $first           Value to compare.
+         *    @param mixed $second          Value to compare.
+         *    @param string $message        Message to display.
          *    @access public
          */
         function assertNotIdentical($first, $second, $message = "%s") {
@@ -149,9 +150,9 @@
         /**
          *    Will trigger a pass if both parameters refer
          *    to the same object. Fail otherwise.
-         *    @param $first          Object reference to check.
-         *    @param $second         Hopefully the same object.
-         *    @param $message        Message to display.
+         *    @param mixed $first           Object reference to check.
+         *    @param mixed $second          Hopefully the same object.
+         *    @param string $message        Message to display.
          *    @access public
          */
         function assertReference(&$first, &$second, $message = "%s") {
@@ -171,9 +172,9 @@
         /**
          *    Will trigger a pass if both parameters refer
          *    to different objects. Fail otherwise.
-         *    @param $first          Object reference to check.
-         *    @param $second         Hopefully not the same object.
-         *    @param $message        Message to display.
+         *    @param mixed $first           Object reference to check.
+         *    @param mixed $second          Hopefully not the same object.
+         *    @param string $message        Message to display.
          *    @access public
          */
         function assertCopy(&$first, &$second, $message = "%s") {
@@ -193,10 +194,10 @@
         /**
          *    Will trigger a pass if the Perl regex pattern
          *    is found in the subject. Fail otherwise.
-         *    @param $pattern        Perl regex to look for including
+         *    @param string $pattern Perl regex to look for including
          *                           the regex delimiters.
-         *    @param $subject        String to search in.
-         *    @param $message        Message to display.
+         *    @param string $subject String to search in.
+         *    @param string $message Message to display.
          *    @access public
          */
         function assertWantedPattern($pattern, $subject, $message = "%s") {
@@ -209,10 +210,10 @@
         /**
          *    Will trigger a pass if the perl regex pattern
          *    is not present in subject. Fail if found.
-         *    @param $pattern        Perl regex to look for including
+         *    @param string $pattern Perl regex to look for including
          *                           the regex delimiters.
-         *    @param $subject        String to search in.
-         *    @param $message        Message to display.
+         *    @param string $subject String to search in.
+         *    @param string $message Message to display.
          *    @access public
          */
         function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
@@ -225,7 +226,7 @@
         /**
          *    Confirms that no errors have occoured so
          *    far in the test method.
-         *    @param $message        Message to display.
+         *    @param string $message        Message to display.
          *    @access public
          */
         function assertNoErrors($message = "%s") {
@@ -238,9 +239,9 @@
         /**
          *    Confirms that an error has occoured and
          *    optionally that the error text matches exactly.
-         *    @param $expected   Expected error text or
-         *                       false for no check.
-         *    @param $message    Message to display.
+         *    @param string $expected   Expected error text or
+         *                              false for no check.
+         *    @param string $message    Message to display.
          *    @access public
          */
         function assertError($expected = false, $message = "%s") {
@@ -260,9 +261,9 @@
          *    Confirms that an error has occoured and
          *    that the error text matches a Perl regular
          *    expression.
-         *    @param $expected   Expected error text or
-         *                       false for no check.
-         *    @param $message    Message to display.
+         *    @param string $expected   Perl regular expresion to
+         *                              match against.
+         *    @param string $message    Message to display.
          *    @access public
          */
         function assertErrorPattern($pattern, $message = "%s") {
