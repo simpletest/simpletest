@@ -421,7 +421,7 @@
          *    unparsed data. Empty strings will not be matched.
          *    @param string $raw         The subject to parse. This is the
          *                               content that will be eaten.
-         *    @return array              Three item list of unparsed
+         *    @return array/boolean      Three item list of unparsed
          *                               content followed by the
          *                               recognised token and finally the
          *                               action the parser is to take.

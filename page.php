@@ -43,8 +43,9 @@
         function parse($response) {
             $this->_tags = array();
             $this->_page = &$this->_createPage($response);
-            $parser = &$this->_createParser();
+            $parser = &$this->_createParser($this);
             $parser->parse($response->getContent());
+            $this->_page->acceptPageEnd();
             return $this->_page;
         }
         
@@ -59,12 +60,13 @@
         
         /**
          *    Creates the parser used with the builder.
-         *    @return SimpleSaxParser   Parser to generate events for
-         *                              the builder.
+         *    @param $listener SimpleSaxListener   Target of parser.
+         *    @return SimpleSaxParser              Parser to generate
+         *                                         events for the builder.
          *    @access protected
          */
-        function &_createParser() {
-            return new SimpleSaxParser($this);
+        function &_createParser(&$listener) {
+            return new SimpleSaxParser($listener);
         }
         
         /**
@@ -293,7 +295,7 @@
         }
         
         /**
-         *    Sets up a missng response.
+         *    Sets up a missing response.
          *    @access private
          */
         function _noResponse() {
@@ -577,6 +579,17 @@
         }
         
         /**
+         *    Marker for end of complete page. Any work in
+         *    progress can now be closed.
+         *    @access public
+         */
+        function acceptPageEnd() {
+            while (count($this->_open_forms)) {
+                $this->_complete_forms[] = array_pop($this->_open_forms);
+            }
+        }
+        
+        /**
          *    Test for the presence of a frameset.
          *    @return boolean        True if frameset.
          *    @access public
@@ -609,8 +622,7 @@
         
         /**
          *    Fetches a list of loaded frames.
-         *    @return array/string    Just the URL for a single
-         *                            page.
+         *    @return array/string    Just the URL for a single page.
          *    @access public
          */
         function getFrames() {

@@ -141,10 +141,8 @@
         
         function testForm() {
             $page = &new MockSimplePage($this);
-            $page->expectArguments("acceptFormStart", array(new SimpleFormTag(array())));
-            $page->expectCallCount("acceptFormStart", 1);
-            $page->expectArguments("acceptFormEnd", array());
-            $page->expectCallCount("acceptFormEnd", 1);
+            $page->expectOnce("acceptFormStart", array(new SimpleFormTag(array())));
+            $page->expectOnce("acceptFormEnd", array());
             
             $builder = &new PartialSimplePageBuilder($this);
             $builder->setReturnReference('_createPage', $page);
@@ -161,9 +159,12 @@
     
     class TestOfPageParsing extends UnitTestCase {
         
-        function testParse() {
+        function testParseMechanics() {
             $parser = &new MockSimpleSaxParser($this);
             $parser->expectOnce('parse', array('stuff'));
+            
+            $page = &new MockSimplePage($this);
+            $page->expectOnce('acceptPageEnd');
 
             $builder = &new PartialSimplePageBuilder($this);
             $builder->setReturnReference('_createPage', $page);
@@ -175,6 +176,7 @@
 
             $builder->parse($response);
             $parser->tally();
+            $page->tally();
         }
     }
     
@@ -508,6 +510,28 @@
             
             $page = &$this->parse($response);
             $this->assertEqual($page->getTitle(), "Me&amp;Me");
+        }
+        
+        function testCompleteForm() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
+                    '<input type="text" name="here" value="Hello">' .
+                    '</form></head></html>');
+            
+            $page = &$this->parse($response);
+            $this->assertEqual($page->getField('here'), "Hello");
+        }
+        
+        function testUnclosedForm() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
+                    '<input type="text" name="here" value="Hello">' .
+                    '</head></html>');
+            
+            $page = &$this->parse($response);
+            $this->assertEqual($page->getField('here'), "Hello");
         }
         
         function testEmptyFrameset() {
