@@ -8,7 +8,7 @@ the version above. You must read and accept that licence to use this
 software. The file is titled simply LICENSE.
 
 What is it? It's a framework for unit testing, web site testing and
-mock objects.
+mock objects for PHP 4.2.3+ (not yet PHP 5).
 
 If you have used JUnit you will find this PHP unit testing version very
 similar. Also included is a mock objects and server stubs generator.

@@ -228,10 +228,24 @@
         function expectEndTag() {
             return false;
         }
+        
+        /**
+         *    Sets the current form element value. cannot
+         *    change teh value of a hidden field.
+         *    @param string $value       New value.
+         *    @return boolean            True if allowed.
+         *    @access public
+         */
+        function setValue($value) {
+            if ($this->getAttribute('type') == 'hidden') {
+                return false;
+            }
+            return parent::setValue($value);
+        }
     }
     
     /**
-     *    Text, password and hidden field.
+     *    Submit button.
      */
     class SimpleSubmitTag extends SimpleWidget {
         

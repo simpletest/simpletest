@@ -15,7 +15,7 @@
         
     class AllTests extends GroupTest {
         function AllTests() {
-            $this->GroupTest("All tests");
+            $this->GroupTest("All tests for SimpleTest " . SimpleTestOptions::getVersion());
             $this->AddTestCase(new UnitTests());
             $this->AddTestCase(new BoundaryTests());
         }

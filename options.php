@@ -17,6 +17,17 @@
         }
         
         /**
+         *    Reads the SimpleTest version from the release file.
+         *    @return string        Version string.
+         *    @static
+         *    @access public
+         */
+        function getVersion() {
+            $content = file(SIMPLE_TEST . 'VERSION');
+            return trim($content[0]);
+        }
+        
+        /**
          *    Sets the name of a test case to ignore, usually
          *    because the class is an abstract case that should
          *    not be run.

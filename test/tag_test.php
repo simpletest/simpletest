@@ -52,6 +52,11 @@
             $tag->resetValue();
             $this->assertEqual($tag->getValue(), 'aaa');
         }
+        function testFailToSetHiddenValue() {
+            $tag = &new SimpleTextTag(array('value' => 'aaa', 'type' => 'hidden'));
+            $this->assertFalse($tag->setValue('bbb'));
+            $this->assertEqual($tag->getValue(), 'aaa');
+        }
         function testSubmitDefaults() {
             $tag = &new SimpleSubmitTag(array('type' => 'submit'));
             $this->assertEqual($tag->getName(), 'submit');

@@ -21,7 +21,7 @@ Parsing of image submits (2).
 Parsing of radio buttons (3/4) - done.
 Refactor link parsing to use tag classes (4).
 Support multiple selections (3/3).
-make hidden fields unsettable (1).
+Make hidden fields unsettable (1).
 Add support for reset buttons (2).
 
 Browser
@@ -44,3 +44,4 @@ Form submission docs (3).
 Build
 -----
 Move makefile over to shell script (2).
+Add version number to options (1/1) - done.
