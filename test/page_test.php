@@ -659,6 +659,17 @@
             $this->assertIsA($page->getFormBySubmitLabel('Submit'), 'SimpleForm');
         }
         
+        function testConfirmSubmitAttributesAreCaseInsensitive() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue(
+                    'getContent',
+                    '<html><head><FORM><INPUT TYPE="SUBMIT"></FORM></head></html>');
+            
+            $page = &$this->parse($response);
+            $this->assertIsA($page->getFormBySubmitName('submit'), 'SimpleForm');
+            $this->assertIsA($page->getFormBySubmitLabel('Submit'), 'SimpleForm');
+        }
+        
         function testFindFormByImage() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue('getContent', '<html><head><form>' .
@@ -701,6 +712,19 @@
                     '<input type="text" name="a">' .
                     '<input type="text" name="b" value="bbb" id=3>' .
                     '</form></head></html>');
+            
+            $page = &$this->parse($response);
+            $this->assertNull($page->getField('missing'));
+            $this->assertIdentical($page->getField('a'), '');
+            $this->assertIdentical($page->getField('b'), 'bbb');
+        }
+        
+        function testReadingTextFieldIsCaseInsensitive() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent', '<html><head><FORM>' .
+                    '<INPUT TYPE="TEXT" NAME="a">' .
+                    '<INPUT TYPE="TEXT" NAME="b" VALUE="bbb" id=3>' .
+                    '</FORM></head></html>');
             
             $page = &$this->parse($response);
             $this->assertNull($page->getField('missing'));

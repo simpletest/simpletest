@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 62 hours.
+This is immediate stuff only for this iteration (RC2) of 60 hours.
 
 $Id$
 
@@ -23,7 +23,7 @@ Parser
 ------
 Should tolerate missing form tag (2/2) - done.
 Fix Savant compatibility (3/8) - done.
-Form should pass form ecoding rahter than hash (2/1) - done.
+Form should pass form encoding rather than hash (2/1) - done.
 
 Browser
 -------
@@ -31,9 +31,8 @@ Fix socket error with stream_get_timeout() missing (1/1) - done.
 Lose authentication on browser restart (1/1) - done.
 Make links such as ?a=b return to the same page (2/3) - done.
 Fix clickLink() trying to load non-existent frame (2/1) - done.
-Populate HTTP_REFERER (2).
 Make sure content length is sent with POST requests (1/1) - done.
-Patch to make submit types case insensitive (1).
+Patch to make submit types case insensitive (1/1) - done.
 
 Web tester
 ----------

@@ -26,26 +26,14 @@
          *    Starts with a named tag with attributes only.
          *    @param string $name        Tag name.
          *    @param hash $attributes    Attribute names and
-         *                               string values.
+         *                               string values. Note that
+         *                               the keys must have been
+         *                               converted to lower case.
          */
         function SimpleTag($name, $attributes) {
             $this->_name = $name;
-            $this->_attributes = $this->_keysToLowerCase($attributes);
+            $this->_attributes = $attributes;
             $this->_content = '';
-        }
-        
-        /**
-         *    Make the keys lower case for case insensitive look-ups.
-         *    @param hash $map   Hash to convert.
-         *    @return hash       Unchanged values, but keys lower case.
-         *    @access private
-         */
-        function _keysToLowerCase($map) {
-            $lower = array();
-            foreach ($map as $key => $value) {
-                $lower[strtolower($key)] = $value;
-            }
-            return $lower;
         }
         
         /**

@@ -7,7 +7,7 @@
     class TestOfForm extends UnitTestCase {
         
         function testFormAttributes() {
-            $tag = &new SimpleFormTag(array('Method' => 'GET', 'action' => 'here.php', 'id' => '33'));
+            $tag = &new SimpleFormTag(array('method' => 'GET', 'action' => 'here.php', 'id' => '33'));
             $form = &new SimpleForm($tag, new SimpleUrl('http://host/a/index.html'));
             $this->assertEqual($form->getMethod(), 'get');
             $this->assertEqual(
@@ -18,7 +18,7 @@
         }
         
         function testEmptyAction() {
-            $tag = &new SimpleFormTag(array('Method' => 'GET', 'action' => '', 'id' => '33'));
+            $tag = &new SimpleFormTag(array('method' => 'GET', 'action' => '', 'id' => '33'));
             $form = &new SimpleForm($tag, new SimpleUrl('http://host/a/index.html'));
             $this->assertEqual(
                     $form->getAction(),
@@ -26,7 +26,7 @@
         }
         
         function testMissingAction() {
-            $tag = &new SimpleFormTag(array('Method' => 'GET', 'id' => '33'));
+            $tag = &new SimpleFormTag(array('method' => 'GET', 'id' => '33'));
             $form = &new SimpleForm($tag, new SimpleUrl('http://host/a/index.html'));
             $this->assertEqual(
                     $form->getAction(),
@@ -34,7 +34,7 @@
         }
         
         function testRootAction() {
-            $tag = &new SimpleFormTag(array('Method' => 'GET', 'action' => '/', 'id' => '33'));
+            $tag = &new SimpleFormTag(array('method' => 'GET', 'action' => '/', 'id' => '33'));
             $form = &new SimpleForm($tag, new SimpleUrl('http://host/a/index.html'));
             $this->assertEqual(
                     $form->getAction(),
@@ -42,7 +42,7 @@
         }
         
         function testDefaultFrameTargetOnForm() {
-            $tag = &new SimpleFormTag(array('Method' => 'GET', 'action' => 'here.php', 'id' => '33'));
+            $tag = &new SimpleFormTag(array('method' => 'GET', 'action' => 'here.php', 'id' => '33'));
             $form = &new SimpleForm($tag, new SimpleUrl('http://host/a/index.html'));
             $form->setDefaultTarget('frame');
             
@@ -56,7 +56,7 @@
                     new SimpleFormTag(array()),
                     new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleTextTag(
-                    array('Name' => 'me', 'Type' => 'text', 'Value' => 'Myself')));
+                    array('name' => 'me', 'type' => 'text', 'value' => 'Myself')));
             $this->assertIdentical($form->getValue('me'), 'Myself');
             $this->assertTrue($form->setField('me', 'Not me'));
             $this->assertFalse($form->setField('not_present', 'Not me'));
@@ -69,7 +69,7 @@
                     new SimpleFormTag(array()),
                     new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleTextTag(
-                    array('Name' => 'me', 'Type' => 'text', 'Value' => 'Myself', 'id' => 50)));
+                    array('name' => 'me', 'type' => 'text', 'value' => 'Myself', 'id' => 50)));
             $this->assertIdentical($form->getValueById(50), 'Myself');
             $this->assertTrue($form->setFieldById(50, 'Not me'));
             $this->assertIdentical($form->getValueById(50), 'Not me');

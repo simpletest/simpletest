@@ -389,7 +389,7 @@
             $group->addWidget(new SimpleCheckboxTag(
                     array('value' => 'A', 'checked' => '')));
             $group->addWidget(new SimpleCheckboxTag(
-                    array('Value' => 'B', 'Checked' => '')));
+                    array('value' => 'B', 'checked' => '')));
             $this->assertIdentical($group->getDefault(), array('A', 'B'));
             $this->assertIdentical($group->getValue(), array('A', 'B'));
         }
@@ -397,7 +397,7 @@
         function testSettingSingleValue() {
             $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
-            $group->addWidget(new SimpleCheckboxTag(array('Value' => 'B')));
+            $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));
             $this->assertTrue($group->setValue('A'));
             $this->assertIdentical($group->getValue(), 'A');
             $this->assertTrue($group->setValue('B'));
@@ -407,7 +407,7 @@
         function testSettingMultipleValues() {
             $group = &new SimpleCheckboxGroup();
             $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
-            $group->addWidget(new SimpleCheckboxTag(array('Value' => 'B')));
+            $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));
             $this->assertTrue($group->setValue(array('A', 'B')));
             $this->assertIdentical($group->getValue(), array('A', 'B'));
         }

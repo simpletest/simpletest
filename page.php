@@ -70,6 +70,20 @@
         }
         
         /**
+         *    Make the keys lower case for case insensitive look-ups.
+         *    @param hash $map   Hash to convert.
+         *    @return hash       Unchanged values, but keys lower case.
+         *    @access private
+         */
+        function _keysToLowerCase($map) {
+            $lower = array();
+            foreach ($map as $key => $value) {
+                $lower[strtolower($key)] = $value;
+            }
+            return $lower;
+        }
+        
+        /**
          *    Start of element event. Opens a new tag.
          *    @param string $name         Element name.
          *    @param hash $attributes     Attributes without content
@@ -78,7 +92,7 @@
          *    @access public
          */
         function startElement($name, $attributes) {
-            $tag = &$this->_createTag($name, $attributes);
+            $tag = &$this->_createTag($name, $this->_keysToLowerCase($attributes));
             if ($name == 'form') {
                 $this->_page->acceptFormStart($tag);
                 return true;
@@ -224,13 +238,14 @@
             if (! isset($attributes['type'])) {
                 return new SimpleTextTag($attributes);
             }
-            if ($attributes['type'] == 'submit') {
+            $type = strtolower($attributes['type']);
+            if ($type == 'submit') {
                 return new SimpleSubmitTag($attributes);
-            } elseif ($attributes['type'] == 'image') {
+            } elseif ($type == 'image') {
                 return new SimpleImageSubmitTag($attributes);
-            } elseif ($attributes['type'] == 'checkbox') {
+            } elseif ($type == 'checkbox') {
                 return new SimpleCheckboxTag($attributes);
-            } elseif ($attributes['type'] == 'radio') {
+            } elseif ($type == 'radio') {
                 return new SimpleRadioButtonTag($attributes);
             } else {
                 return new SimpleTextTag($attributes);
