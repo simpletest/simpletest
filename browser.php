@@ -568,7 +568,32 @@
          *    @access public
          */
         function getFrames() {
-            return $this->_page->getFrames();
+            $frames = $this->_page->getFrames();
+            if ($frames === false) {
+                return false;
+            }
+            return $this->_urlsToStrings($frames);
+        }
+        
+        /**
+         *    Helper method for reporting on available frames.
+         *    All SimpleUrl objects are converted to URLs in
+         *    string form.
+         *    @param array $report    Hash of frame names with
+         *                            SimpleUrls for each.
+         *    @return array           Same report with strings.
+         *    @access private
+         */
+        function _urlsToStrings($report) {
+            $string_report = array();
+            foreach ($report as $name => $url) {
+                if (is_object($url)) {
+                    $string_report[$name] = $url->asString();
+                } else {
+                    $string_report[$name] = $this->_urlsAsStrings($url);
+                }
+            }
+            return $string_report;
         }
         
         /**

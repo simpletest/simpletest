@@ -559,7 +559,7 @@
             $this->assertIdentical($browser->getFrames(), array());
         }
         
-        function TODO_testFramesetWithSingleFrame() {
+        function testFramesetWithSingleFrame() {
             $frameset = '<frameset><frame name="a" src="frame.html"></frameset>';
             $frame = 'A frame';
             $browser = &$this->createBrowser($this->createUserAgent(array(
