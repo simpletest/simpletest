@@ -8,6 +8,8 @@
     
     /**
      *    URL parser to replace parse_url() PHP function.
+     *    Guesses a bit trying to separate the host from
+     *    the path.
      */
     class SimpleUrl {
         var $_scheme;
@@ -45,8 +47,8 @@
          *    @private
          */
         function _extractScheme(&$url) {
-            if (preg_match('/(.*?):\/\/(.*)/', $url, $matches)) {
-                $url = $matches[2];
+            if (preg_match('/(.*?):(\/\/)(.*)/', $url, $matches)) {
+                $url = $matches[2] . $matches[3];
                 return $matches[1];
             }
             return false;
@@ -54,7 +56,8 @@
         
         /**
          *    Extracts the username and password from the
-         *    incoming URL.
+         *    incoming URL. The // prefix will be reattached
+         *    to the URL after the doublet are extracted.
          *    @param $url    URL so far. The username and
          *                   password are removed.
          *    @return        Two item list of username and
@@ -62,28 +65,41 @@
          *    @private
          */
         function _extractLogin(&$url) {
-            if (preg_match('/(.*?)@(.*)/', $url, $matches)) {
+            $prefix = "";
+            if (preg_match('/(\/\/)(.*)/', $url, $matches)) {
+                $prefix = $matches[1];
                 $url = $matches[2];
+            }
+            if (preg_match('/(.*?)@(.*)/', $url, $matches)) {
+                $url = $prefix . $matches[2];
                 $parts = split(":", $matches[1]);
                 return array($parts[0], (isset($parts[1]) ? $parts[1] : false));
             }
+            $url = $prefix . $url;
             return array(false, false);
         }
         
         /**
          *    Extracts the host part of an incoming URL.
-         *    Includes the port number.
+         *    Includes the port number part. Will extract
+         *    the host if it starts with // or it has
+         *    a top level domain or it has at least two
+         *    dots.
          *    @param $url    URL so far. The host will be
          *                   removed.
-         *    @return        Host part.
+         *    @return        Host part guess.
          *    @private
          */
         function _extractHost(&$url) {
+            if (preg_match('/(\/\/)(.*?)(\/.*|\?.*|#.*|$)/', $url, $matches)) {
+                $url = $matches[3];
+                return $matches[2];
+            }
             if (preg_match('/(.*?)(\.\.\/|\.\/|\/|\?|#|$)(.*)/', $url, $matches)) {
-                if (preg_match('/[a-z\-]+\.(com|edu|net|org|gov|mil|int)/i', $matches[1])) {
+                if (preg_match('/[a-z0-9\-]+\.(com|edu|net|org|gov|mil|int)/i', $matches[1])) {
                     $url = $matches[2] . $matches[3];
                     return $matches[1];
-                } elseif (preg_match('/[a-z\-]+\.[a-z\-]+\.[a-z\-]+/i', $matches[1])) {
+                } elseif (preg_match('/[a-z0-9\-]+\.[a-z0-9\-]+\.[a-z0-9\-]+/i', $matches[1])) {
                     $url = $matches[2] . $matches[3];
                     return $matches[1];
                 }

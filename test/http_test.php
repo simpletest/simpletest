@@ -120,21 +120,41 @@
                     array(false, "username", false, false, false, "/here.php", false, "?a=1&b=2", false),
                     array("a" => "1", "b" => "2"));
         }
-        function assertUrl($raw, $parts, $params = "") {
+        function testAmbiguousHosts() {
+            $this->assertUrl(
+                    "tigger",
+                    array(false, false, false, false, false, "tigger", false, "", false));
+            $this->assertUrl(
+                    "/tigger",
+                    array(false, false, false, false, false, "/tigger", false, "", false));
+            $this->assertUrl(
+                    "//tigger",
+                    array(false, false, false, "tigger", false, "/", false, "", false));
+            $this->assertUrl(
+                    "//tigger/",
+                    array(false, false, false, "tigger", false, "/", false, "", false));
+            $this->assertUrl(
+                    "tigger.com",
+                    array(false, false, false, "tigger.com", false, "/", "com", "", false));
+            $this->assertUrl(
+                    "me.net/tigger",
+                    array(false, false, false, "me.net", false, "/tigger", "net", "", false));
+        }
+        function assertUrl($raw, $parts, $params = false) {
             if (!is_array($params)) {
                 $params = array();
             }
             $url = new SimpleUrl($raw);
-            $this->assertIdentical($url->getScheme(), $parts[0], "scheme->%s");
-            $this->assertIdentical($url->getUsername(), $parts[1], "username->%s");
-            $this->assertIdentical($url->getPassword(), $parts[2], "password->%s");
-            $this->assertIdentical($url->getHost(), $parts[3], "host->%s");
-            $this->assertIdentical($url->getPort(), $parts[4], "port->%s");
-            $this->assertIdentical($url->getPath(), $parts[5], "path->%s");
-            $this->assertIdentical($url->getTld(), $parts[6], "tld->%s");
-            $this->assertIdentical($url->getEncodedRequest(), $parts[7], "encoded->%s");
-            $this->assertIdentical($params, $url->getRequest(), "request->%s");
-            $this->assertIdentical($url->getFragment(), $parts[8], "fragment->%s");
+            $this->assertIdentical($url->getScheme(), $parts[0], "[$raw] scheme->%s");
+            $this->assertIdentical($url->getUsername(), $parts[1], "[$raw] username->%s");
+            $this->assertIdentical($url->getPassword(), $parts[2], "[$raw] password->%s");
+            $this->assertIdentical($url->getHost(), $parts[3], "[$raw] host->%s");
+            $this->assertIdentical($url->getPort(), $parts[4], "[$raw] port->%s");
+            $this->assertIdentical($url->getPath(), $parts[5], "[$raw] path->%s");
+            $this->assertIdentical($url->getTld(), $parts[6], "[$raw] tld->%s");
+            $this->assertIdentical($url->getEncodedRequest(), $parts[7], "[$raw] encoded->%s");
+            $this->assertIdentical($params, $url->getRequest(), "[$raw] request->%s");
+            $this->assertIdentical($url->getFragment(), $parts[8], "[$raw] fragment->%s");
         }
     }
 
