@@ -138,6 +138,20 @@
         }
         
         /**
+         *    Tests the text between the title tags.
+         *    @param $title          Expected title or empty
+         *                           if expecting no title.
+         *    @param $message        Message to display.
+         *    @public
+         */
+        function assertTitle($title = false, $message = "%s") {
+            $page = &$this->_getHtml();
+            $this->assertTrue(
+                    $title === $page->getTitle(),
+                    sprintf($message, "Expecting title [$title] got [" . $page->getTitle() . "]"));
+        }
+        
+        /**
          *    Will trigger a pass if the Perl regex pattern
          *    is found in the raw content.
          *    @param $pattern        Perl regex to look for including

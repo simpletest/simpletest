@@ -301,6 +301,16 @@
             $this->_handler->expectCallCount("acceptTextToken", 1);
             $this->assertTrue($this->_lexer->parse("<html></html>"));
         }
+        function testTitle() {
+            $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<title", "*"));
+            $this->_handler->expectArgumentsAt(1, "acceptStartToken", array(">", "*"));
+            $this->_handler->expectCallCount("acceptStartToken", 2);
+            $this->_handler->expectArgumentsAt(0, "acceptTextToken", array("Hello", "*"));
+            $this->_handler->expectCallCount("acceptTextToken", 1);
+            $this->_handler->expectArgumentsAt(0, "acceptEndToken", array("</title>", "*"));
+            $this->_handler->expectCallCount("acceptEndToken", 1);
+            $this->assertTrue($this->_lexer->parse("<title>Hello</title>"));
+        }
         function testEmptyLink() {
             $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<a", "*"));
             $this->_handler->expectArgumentsAt(1, "acceptStartToken", array(">", "*"));
@@ -401,6 +411,14 @@
             $this->_listener->expectCallCount("startElement", 1);
             $this->_listener->setReturnValue("startElement", true);
             $this->assertTrue($this->_parser->acceptStartToken("<a", LEXER_ENTER));
+            $this->assertTrue($this->_parser->acceptStartToken(">", LEXER_EXIT));
+        }
+        function testSimpleTitleStart() {
+            $this->_parser->parse("");
+            $this->_listener->expectArguments("startElement", array("title", array()));
+            $this->_listener->expectCallCount("startElement", 1);
+            $this->_listener->setReturnValue("startElement", true);
+            $this->assertTrue($this->_parser->acceptStartToken("<title", LEXER_ENTER));
             $this->assertTrue($this->_parser->acceptStartToken(">", LEXER_EXIT));
         }
         function testLinkStart() {

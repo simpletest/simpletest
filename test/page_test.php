@@ -74,17 +74,24 @@
             $page->expectArgumentsAt(1, "addLink", array("http://elsewhere", "2", "*"));
             $page->expectCallCount("addLink", 2);
             $builder = &new SimplePageBuilder($page);
-            $this->assertTrue($builder->startElement(
-                    "a",
-                    array("href" => "http://somewhere")));
-            $this->assertTrue($builder->addContent("1"));
-            $this->assertTrue($builder->endElement("a"));
-            $this->assertTrue($builder->addContent("Padding"));
-            $this->assertTrue($builder->startElement(
-                    "a",
-                    array("href" => "http://elsewhere")));
-            $this->assertTrue($builder->addContent("2"));
-            $this->assertTrue($builder->endElement("a"));
+            $builder->startElement("a", array("href" => "http://somewhere"));
+            $builder->addContent("1");
+            $builder->endElement("a");
+            $builder->addContent("Padding");
+            $builder->startElement("a", array("href" => "http://elsewhere"));
+            $builder->addContent("2");
+            $builder->endElement("a");
+            $page->tally();
+        }
+        function testTitle() {
+            $page = &new MockSimplePage($this);
+            $page->expectArguments("setTitle", array("HereThere"));
+            $page->expectCallCount("setTitle", 1);
+            $builder = &new SimplePageBuilder($page);
+            $builder->startElement("title", array());
+            $builder->addContent("Here");
+            $builder->addContent("There");
+            $builder->endElement("title");
             $page->tally();
         }
     }
@@ -160,6 +167,11 @@
             $this->assertFalse($page->getUrlById(0));
             $this->assertEqual($page->getUrlById(33), "./somewhere.php");
         }
+        function testTitleSetting() {
+            $page = new SimplePage("");
+            $page->setTitle("Title");
+            $this->assertEqual($page->getTitle(), "Title");
+        }
     }
     
     class TestOfPageScraping extends UnitTestCase {
@@ -170,6 +182,7 @@
             $page = &new SimplePage("");
             $this->assertIdentical($page->getAbsoluteLinks(), array());
             $this->assertIdentical($page->getRelativeLinks(), array());
+            $this->assertIdentical($page->getTitle(), false);
         }
         function testUninterestingPage() {
             $page = &new SimplePage("<html><body><p>Stuff</p></body></html>");
@@ -190,6 +203,10 @@
                     array("./there.html"));
             $this->assertIdentical($page->getUrls("There"), array("./there.html"));
             $this->assertEqual($page->getUrlById(0), "http://there.com/that.html");
+        }
+        function testTitle() {
+            $page = &new SimplePage("<html><head><title>Me</title></head></html>");
+            $this->assertEqual($page->getTitle(), "Me");
         }
     }
 ?>

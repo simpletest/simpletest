@@ -104,6 +104,8 @@
                         $attributes["href"],
                         $content,
                         isset($attributes["id"]) ? $attributes["id"] : false);
+            } elseif ($name == "title") {
+                $this->_page->setTitle($content);
             }
         }
     }
@@ -115,6 +117,7 @@
         var $_absolute_links;
         var $_relative_links;
         var $_link_ids;
+        var $_title;
         
         /**
          *    Parses a page ready to access it's contents.
@@ -125,6 +128,7 @@
             $this->_absolute_links = array();
             $this->_relative_links = array();
             $this->_link_ids = array();
+            $this->_title = false;
             $builder = &$this->_createBuilder($this);
             $builder->parse($raw, $this->_createParser($builder));
         }
@@ -275,6 +279,25 @@
                 return $this->_link_ids[$id];
             }
             return false;
+        }
+        
+        /**
+         *    Sets the title tag contents.
+         *    @param $title        Title of page.
+         *    @public
+         */
+        function setTitle($title) {
+            $this->_title = $title;
+        }
+        
+        /**
+         *    Accessor for parsed title.
+         *    @return        Title as string or boolean
+         *                   false if no title is present.
+         *    @public
+         */
+        function getTitle() {
+            return $this->_title;
         }
     }
 ?>

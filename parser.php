@@ -402,6 +402,8 @@
             $lexer->mapHandler('double_quoted', 'acceptAttributeToken');
             $lexer->addSpecialPattern('</a>', 'text', 'acceptEndToken');
             $lexer->addEntryPattern('<a', 'text', 'tag');
+            $lexer->addSpecialPattern('</title>', 'text', 'acceptEndToken');
+            $lexer->addEntryPattern('<title', 'text', 'tag');
             $lexer->addSpecialPattern('\s+', 'tag', 'ignore');
             $lexer->addSpecialPattern('=', 'tag', 'ignore');
             $lexer->addEntryPattern("'", 'tag', 'single_quoted');

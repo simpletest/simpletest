@@ -47,8 +47,8 @@
         }
     }
     
-    class TestOfWebPageParsing extends MockBrowserWebTestCase {
-        function TestOfWebPageParsing() {
+    class TestOfWebPageLinkParsing extends MockBrowserWebTestCase {
+        function TestOfWebPageLinkParsing() {
             $this->MockBrowserWebTestCase();
         }
         function setUp() {
@@ -88,6 +88,21 @@
             $this->fetch("http://my-site.com/link");
             $this->assertFalse($this->clickLink('Me', 2));
             $this->assertTrue($this->clickLink('Me', 1));
+        }
+    }
+    
+    class TestOfWebPageTitleParsing extends MockBrowserWebTestCase {
+        function TestOfWebPageTitleParsing() {
+            $this->MockBrowserWebTestCase();
+        }
+        function testTitle() {
+            $browser = &$this->getBrowser();
+            $browser->setReturnValue(
+                    "fetchContent",
+                    "<html><head><title>Pretty page</title></head></html>");
+            $this->fetch("http://my-site.com/");
+            $this->assertTitle("Pretty page");
+            $browser->tally();
         }
     }
 ?>
