@@ -10,3 +10,4 @@ Xalan -o ../docs/reporter_documentation.html ../docs/source/reporter_documentati
 Xalan -o ../docs/expectation_documentation.html ../docs/source/expectation_documentation.xml bundled_docs.xslt
 Xalan -o ../docs/web_tester_documentation.html ../docs/source/web_tester_documentation.xml bundled_docs.xslt
 Xalan -o ../docs/form_testing_documentation.html ../docs/source/form_testing_documentation.xml bundled_docs.xslt
+Xalan -o ../docs/authentication_documentation.html ../docs/source/authentication_documentation.xml bundled_docs.xslt

@@ -10,3 +10,4 @@ Xalan -o ../docs/pkg/Reporting.pkg ../docs/source/reporter_documentation.xml php
 Xalan -o ../docs/pkg/Expectations.pkg ../docs/source/expectation_documentation.xml phpdoc_docs.xslt
 Xalan -o ../docs/pkg/WebTester.pkg ../docs/source/web_tester_documentation.xml phpdoc_docs.xslt
 Xalan -o ../docs/pkg/FormTesting.pkg ../docs/source/form_testing_documentation.xml phpdoc_docs.xslt
+Xalan -o ../docs/pkg/Authentication.pkg ../docs/source/authentication_documentation.xml phpdoc_docs.xslt

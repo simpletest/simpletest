@@ -11,6 +11,7 @@
         <page title="Expectations" file="expectation_documentation.php"/>
         <page title="Web tester" file="web_tester_documentation.php"/>
         <page title="Testing forms" file="form_testing_documentation.php"/>
+        <page title="Authentication" file="authentication_documentation.php"/>
     </page>
     <page title="PHP unit testing" file="first_test_tutorial.php">
         <page title="Grouping tests" file="group_test_tutorial.php"/>

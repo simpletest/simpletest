@@ -10,4 +10,5 @@
     <page title="Expectations" file="expectation_documentation.html"/>
     <page title="Web tester" file="web_tester_documentation.html"/>
     <page title="Testing forms" file="form_testing_documentation.html"/>
+    <page title="Authentication" file="authentication_documentation.html"/>
 </page>
