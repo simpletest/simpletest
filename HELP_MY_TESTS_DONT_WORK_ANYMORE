@@ -5,12 +5,21 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+Missing files from the SimpleTest suite
+---------------------------------------
+Versions of SimpleTest prior to Beta6 required a SIMPLE_TEST constant
+to point at the SimpleTest folder location before any of the toolset
+was loaded. This is no longer documented as it is now unnecessary
+for later versions. If you are using an earlier version you may
+need this constant. Consult the documentation that was bundled with
+the release that you are using or upgrade to Beta6 or later.
+
 No method SimpleBrowser::getCurrentUrl()
 --------------------------------------
-This will be replaced with the more versatile showRequest() for
+This is replaced with the more versatile showRequest() for
 debugging. It only existed in this context for version Beta5.
 Later versions will have SimpleBrowser::getHistory() for tracking
-paths through pages.
+paths through pages. It is currently deprecated.
 
 No method WebTestCase::getCurrentUrl()
 --------------------------------------
