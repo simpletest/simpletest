@@ -4,7 +4,7 @@ VERSION = 1.0beta6
 NAME = php_simple_test_$(VERSION).tar.gz
 SCRIPTS = simpletest/errors.php \
           simpletest/options.php \
-          simpletest/runner.php \
+          simpletest/scorer.php \
           simpletest/dumper.php \
           simpletest/expectation.php \
           simpletest/socket.php \
