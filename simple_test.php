@@ -1,6 +1,14 @@
 <?php
-    // $Id$
+/**
+ *	base include file for SimpleTest
+ *	@package	SimpleTest
+ *	@subpackage	Unit Tester
+ *	@version	$Id$
+ */
     
+	/**
+	 *	path for simpletest files
+	 */
     if (!defined('SIMPLE_TEST')) {
         define("SIMPLE_TEST", "simpletest/");
     }
@@ -11,7 +19,9 @@
     require_once(SIMPLE_TEST . 'dumper.php');
     
     /**
-     *    Interface used by the test displays and group tests.
+     *	Interface used by the test displays and group tests.
+	 *	@package	SimpleTest
+	 *	@subpackage	Unit Tester
      */
     class RunnableTest {
         var $_label;
@@ -60,6 +70,8 @@
      *    suite. It searches for
      *    all methods that start with the the string "test" and
      *    runs them. Working test cases extend this class.
+	 *    @package		SimpleTest
+	 *    @subpackage	Unit Tester
      */
     class SimpleTestCase extends RunnableTest {
         var $_reporter;
@@ -281,6 +293,8 @@
      *    This is a composite test class for combining
      *    test cases and other RunnableTest classes into
      *    a group test.
+	 *    @package		SimpleTest
+	 *    @subpackage	Unit Tester
      */
     class GroupTest extends RunnableTest {
         var $_test_cases;

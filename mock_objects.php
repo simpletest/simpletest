@@ -1,6 +1,14 @@
 <?php
-    // $Id$
-    
+/**
+ *	base include file for SimpleTest
+ *	@package	SimpleTest
+ *	@subpackage	Mock Objects
+ *	@version	$Id$
+ */
+
+	/**
+	 * @ignore	originally defined in simple_test.php
+	 */
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
     }
@@ -8,10 +16,15 @@
     require_once(SIMPLE_TEST . 'options.php');
     require_once(SIMPLE_TEST . 'dumper.php');
     
+    /**
+     * character simpletest will substitute for any value
+     */
     define('MOCK_WILDCARD', '*');
     
     /**
      *    A wildcard expectation always matches.
+	 *    @package		SimpleTest
+	 *    @subpackage	Mock Objects
      */
     class WildcardExpectation extends SimpleExpectation {
         
@@ -48,6 +61,8 @@
     
     /**
      *    Parameter comparison assertion.
+	 *    @package		SimpleTest
+	 *    @subpackage	Mock Objects
      */
     class ParametersExpectation extends SimpleExpectation {
         var $_expected;
@@ -181,6 +196,8 @@
     /**
      *    Retrieves values and references by searching the
      *    parameter lists until a match is found.
+	 *    @package		SimpleTest
+	 *    @subpackage	Mock Objects
      */
     class CallMap {
         var $_map;
@@ -265,6 +282,8 @@
     /**
      *    An empty collection of methods that can have their
      *    return values set. Used for prototyping.
+	 *    @package		SimpleTest
+	 *    @subpackage	Mock Objects
      */
     class SimpleStub {
         var $_wildcard;
@@ -503,6 +522,8 @@
      *    calls upon them. The mock will assert the
      *    expectations against it's attached test case in
      *    addition to the server stub behaviour.
+	 *    @package		SimpleTest
+	 *    @subpackage	Mock Objects
      */
     class SimpleMock extends SimpleStub {
         var $_test;
@@ -788,6 +809,8 @@
     /**
      *    Static methods only class for code generation of
      *    server stubs.
+	 *    @package		SimpleTest
+	 *    @subpackage	Mock Objects
      */
     class Stub {
         
@@ -886,6 +909,8 @@
     /**
      *    Static methods only class for code generation of
      *    mock objects.
+	 *    @package		SimpleTest
+	 *    @subpackage	Mock Objects
      */
     class Mock {
         
