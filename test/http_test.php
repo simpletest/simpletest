@@ -118,6 +118,12 @@
             $this->assertFalse($cookie->isValidHost("bad.host"));
             $this->assertFalse($cookie->isValidHost("nearly.name.here"));
         }
+        function testPathValidity() {
+            $cookie = new SimpleCookie("name", "value", "/path");
+            $this->assertFalse($cookie->isValidPath("/"));
+            $this->assertTrue($cookie->isValidPath("/path/"));
+            $this->assertTrue($cookie->isValidPath("/path/more"));
+        }
         function testNonExpiring() {
             $cookie = new SimpleCookie("name", "value", "/path");
             $this->assertFalse($cookie->isExpired(0));

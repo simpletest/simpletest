@@ -237,6 +237,21 @@
         }
         
         /**
+         *    Tests a path to see if the cookie applies
+         *    there. The test path must be longer or
+         *    equal to the cookie path.
+         *    @param $path       Path to test against.
+         *    @return            True if cookie valid here.
+         *    @public
+         */
+        function isValidPath($path) {
+            if (substr($path, -1) != '/') {
+                $path .= '/';
+            }
+            return (strncmp($path, $this->getPath(), strlen($this->getPath())) == 0);
+        }
+        
+        /**
          *    Accessor for expiry.
          *    @return        Expiry string.
          *    @public
