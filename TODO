@@ -7,6 +7,7 @@ $Id$
 Unit tester
 -----------
 Set the SIMPLE_TEST constant if not set for add in libraries (1).
+Fix bug with dumper failing with second parameters of odd types (2/1) - done.
 
 Reporter
 --------

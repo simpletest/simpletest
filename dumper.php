@@ -196,6 +196,11 @@
          *    @access private
          */
         function _describeIntegerDifference($first, $second, $identical) {
+            if (is_object($second) || is_array($second)) {
+                return "as [" . $this->describeValue($first) .
+                    "] does not match [" .
+                    $this->describeValue($second) . "]";
+            }
             return "because [" . $this->describeValue($first) .
                     "] differs from [" .
                     $this->describeValue($second) . "] by " .
@@ -212,6 +217,11 @@
          *    @access private
          */
         function _describeFloatDifference($first, $second, $identical) {
+            if (is_object($second) || is_array($second)) {
+                return "as [" . $this->describeValue($first) .
+                    "] does not match [" .
+                    $this->describeValue($second) . "]";
+            }
             return "because " . $this->describeValue($first) .
                     "] differs from [" .
                     $this->describeValue($second) . "]";
@@ -262,6 +272,11 @@
          *    @access private
          */
         function _describeResourceDifference($first, $second, $identical) {
+            if (is_object($second) || is_array($second)) {
+                return "as [" . $this->describeValue($first) .
+                    "] does not match [" .
+                    $this->describeValue($second) . "]";
+            }
             return "as [" . $this->describeValue($first) .
                     "] does not match [" .
                     $this->describeValue($second) . "]";
