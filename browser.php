@@ -710,6 +710,29 @@
         }
         
         /**
+         *    Clicks the submit image by some kind of label. Usually
+         *    the alt tag or the nearest equivalent. The owning
+         *    form will be submitted by this. Clicking outside of
+         *    the boundary of the coordinates will result in
+         *    a failure.
+         *    @param string $label   ID attribute of button.
+         *    @param integer $x      X-coordinate of imaginary click.
+         *    @param integer $y      Y-coordinate of imaginary click.
+         *    @return boolean        True on successful submit.
+         *    @access public
+         */
+        function clickImage($label, $x = 1, $y = 1) {
+            if (! ($form = &$this->_page->getFormByImageLabel($label))) {
+                return false;
+            }
+            $action = $this->_getAction($form);
+            $method = $form->getMethod();
+            return $this->$method(
+                    $action,
+                    $form->submitImageByLabel($label, $x, $y));
+        }
+         
+        /**
          *    Clicks the submit image by ID attribute. The owning
          *    form will be submitted by this. Clicking outside of
          *    the boundary of the coordinates will result in
@@ -728,7 +751,7 @@
             $method = $form->getMethod();
             return $this->$method($action, $form->submitImageById($id, $x, $y));
         }
-        
+       
         /**
          *    Replaces missing form action.
          *    @param SimpleForm $form    Form object to submit.

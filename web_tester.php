@@ -367,6 +367,22 @@
         }
         
         /**
+         *    Clicks the submit image by some kind of label. Usually
+         *    the alt tag or the nearest equivalent. The owning
+         *    form will be submitted by this. Clicking outside of
+         *    the boundary of the coordinates will result in
+         *    a failure.
+         *    @param string $label   ID attribute of button.
+         *    @param integer $x      X-coordinate of imaginary click.
+         *    @param integer $y      Y-coordinate of imaginary click.
+         *    @return boolean        True on successful submit.
+         *    @access public
+         */
+        function clickImage($label, $x = 1, $y = 1) {
+            return $this->_browser->clickImage($label, $x, $y);
+        }
+        
+        /**
          *    Clicks the submit image by ID attribute. The owning
          *    form will be submitted by this. Clicking outside of
          *    the boundary of the coordinates will result in

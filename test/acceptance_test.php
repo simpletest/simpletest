@@ -372,6 +372,11 @@
             $this->assertTrue($this->clickSubmitById(99));
             $this->assertWantedPattern('/go=\[Go!\]/');
         }
+        function testImageSubmissionByLabel() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertTrue($this->clickImage('Image go!', 10, 12));
+            $this->assertWantedPattern('/go.x=\[10\].*?go.y=\[12\]/s');
+        }
         function testImageSubmissionById() {
             $this->get('http://www.lastcraft.com/test/form.html');
             $this->assertTrue($this->clickImageById(97, 10, 12));

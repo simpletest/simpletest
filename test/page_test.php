@@ -536,9 +536,12 @@
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue(
                     'getContent',
-                    '<html><head><form><input type="image" id=100></form></head></html>');
+                    '<html><head><form>' .
+                    '<input type="image" id=100 alt="Label">' .
+                    '</form></head></html>');
             
             $page = &$this->parse($response);
+            $this->assertIsA($page->getFormByImageLabel('Label'), 'SimpleForm');
             $this->assertIsA($page->getFormByImageId(100), 'SimpleForm');
         }
         function testFindFormById() {

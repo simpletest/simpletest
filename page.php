@@ -954,6 +954,22 @@
         }
         
         /**
+         *    Finds a held form by image label. Will only
+         *    search correctly built forms.
+         *    @param string $label       Usually the alt attribute.
+         *    @return SimpleForm         Form object containing the button.
+         *    @access public
+         */
+        function &getFormByImageLabel($label) {
+            for ($i = 0; $i < count($this->_complete_forms); $i++) {
+                if ($this->_complete_forms[$i]->hasImageLabel($label)) {
+                    return $this->_complete_forms[$i];
+                }
+            }
+            return null;
+        }
+        
+        /**
          *    Finds a held form by image button id. Will only
          *    search correctly built forms.
          *    @param string $id          Button ID attribute.

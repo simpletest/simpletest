@@ -1197,7 +1197,7 @@
         
         /**
          *    Test to see if a form has a submit button with this
-         *    name attribute.
+         *    value attribute.
          *    @param string $label    Button label to search for.
          *    @return boolean         True if present.
          *    @access public
@@ -1213,7 +1213,7 @@
         
         /**
          *    Test to see if a form has a submit button with this
-         *    name attribute.
+         *    ID attribute.
          *    @param string $id      Button ID attribute to search for.
          *    @return boolean        True if present.
          *    @access public
@@ -1230,6 +1230,23 @@
         /**
          *    Test to see if a form has a submit button with this
          *    name attribute.
+         *    @param string $label   Button alt attribute to search for
+         *                           or nearest equivalent.
+         *    @return boolean        True if present.
+         *    @access public
+         */
+        function hasImageLabel($label) {
+            foreach ($this->_images as $image) {
+                if ($image->getAttribute('alt') == $label) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        /**
+         *    Test to see if a form has a submittable image with this
+         *    ID attribute.
          *    @param string $id      Button ID attribute to search for.
          *    @return boolean        True if present.
          *    @access public
@@ -1294,6 +1311,30 @@
                 if ($button->getAttribute('id') == $id) {
                     return array_merge(
                             array($button->getName() => $button->getValue()),
+                            $this->getValues());            
+                }
+            }
+            return false;
+        }
+         
+        /**
+         *    Gets the submit values for an image identified by the alt
+         *    tag or nearest equivalent.
+         *    @param string $label  Button label to search for.
+         *    @param integer $x     X-coordinate of click.
+         *    @param integer $y     Y-coordinate of click.
+         *    @return hash          Submitted values or false
+         *                          if there is no such button in the
+         *                          form.
+         *    @access public
+         */
+        function submitImageByLabel($label, $x, $y) {
+            foreach ($this->_images as $image) {
+                if ($image->getAttribute('alt') == $label) {
+                    return array_merge(
+                            array(
+                                    $image->getName() . '.x' => $x,
+                                    $image->getName() . '.y' => $y),
                             $this->getValues());            
                 }
             }
