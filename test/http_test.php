@@ -53,7 +53,7 @@
             $url->addRequestParameter("a", '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-=');
             $this->assertIdentical(
                     $request = $url->getEncodedRequest(),
-                    "a=%3F%21%22%27%23%7E%40%5B%5D%7B%7D%3A%3B%3C%3E%2C.%2F%7C%A3%24%25%5E%26%2A%28%29_%2B-%3D");
+                    "?a=%3F%21%22%27%23%7E%40%5B%5D%7B%7D%3A%3B%3C%3E%2C.%2F%7C%A3%24%25%5E%26%2A%28%29_%2B-%3D");
             $url = new SimpleUrl("?a=%3F%21%22%27%23%7E%40%5B%5D%7B%7D%3A%3B%3C%3E%2C.%2F%7C%A3%24%25%5E%26%2A%28%29_%2B-%3D");
             $request = $url->getRequest();
             $this->assertEqual($request["a"], '?!"\'#~@[]{}:;<>,./|£$%^&*()_+-=');

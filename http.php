@@ -8,6 +8,7 @@
         var $_scheme;
         var $_host;
         var $_path;
+        var $_request;
         
         /**
          *    Constructor. Parses URL into sections.
@@ -18,6 +19,7 @@
             $this->_scheme = "http";
             $this->_host = "localhost";
             $this->_path = "/";
+            $this->_request = array();
             if (preg_match('/(.*?):\/\/(.*)/', $url, $matches)) {
                 $this->_scheme = $matches[1];
                 $url = $matches[2];
@@ -86,7 +88,7 @@
             foreach ($this->getRequest() as $key => $value) {
                 $parameters[] = $key . "=" . urlencode($value);
             }
-            return implode("&", $parameters);
+            return (count($parameters) > 0 ? "?" : "") . implode("&", $parameters);
         }
         
         /**
@@ -200,6 +202,7 @@
         var $_path;
         var $_query;
         var $_user_headers;
+        var $_url;
         var $_cookies;
         
         /**
@@ -208,13 +211,7 @@
          *    @public
          */
         function SimpleHttpRequest($url) {
-            if (strncmp("http://", $url, 7) != 0) {        // Fix for broken parse_url().
-                $url = "http://" . $url;
-            }
-            $url = parse_url($url);
-            $this->_host = (isset($url["host"]) ? $url["host"] : "localhost");
-            $this->_path = (isset($url["path"]) ? $url["path"] : "");
-            $this->_query = (isset($url["query"]) ? "?" . $url["query"] : "");
+            $this->_url = new SimpleUrl($url);
             $this->_user_headers = array();
             $this->_cookies = array();
         }
@@ -227,13 +224,13 @@
          */
         function &fetch($socket = "") {
             if (!is_object($socket)) {
-                $socket = new SimpleSocket($this->_host);
+                $socket = new SimpleSocket($this->_url->getHost());
             }
             if ($socket->isError()) {
                 return false;
             }
-            $socket->write("GET " . $this->_path . $this->_query . " HTTP/1.0\r\n");
-            $socket->write("Host: " . $this->_host . "\r\n");
+            $socket->write("GET " . $this->_url->getPath() . $this->_url->getEncodedRequest() . " HTTP/1.0\r\n");
+            $socket->write("Host: " . $this->_url->getHost() . "\r\n");
             foreach ($this->_user_headers as $header_line) {
                 $socket->write($header_line . "\r\n");
             }
