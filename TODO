@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC1) of 40 hours.
+This is immediate stuff only for this iteration (RC1) of 50 hours.
 First figure is expected hours, second is the time it actually took.
 
 $Id$
@@ -12,6 +12,7 @@ Reporter
 
 Mock objects
 ------------
+Add fix for PHP5 __construct() call (1).
 
 Parser
 ------
@@ -27,6 +28,7 @@ Add frame loads from links (6).
 Allow images to be head fetched to set cookies (2).
 Allow stylesheet loading to affect cookies (2).
 Refactor authentication to cope with framed pages (2).
+Refactor exsiting base url behaviour into SimplePage (3).
 
 Web tester
 ----------
@@ -41,3 +43,4 @@ Add proxy support to docs (1).
 Build
 -----
 Move makefile over to bash script (2).
+Move doc generation to XSLT (9/4).
