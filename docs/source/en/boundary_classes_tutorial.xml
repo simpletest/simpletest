@@ -410,7 +410,7 @@ function testWriting() {
             php example code,
             mock objects,
             junit port,
-            text case examples,
+            test case examples,
             php testing,
             unit test tool,
             php test suite
