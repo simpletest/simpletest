@@ -68,7 +68,7 @@
          *    difference between two variables.
          *    @param $first             First variable.
          *    @param $second            Value to compare with.
-         *    @param $expectation_class   Test class to apply.
+         *    @param $expectation_class Test class to apply.
          *    @return                   Descriptive string.
          *    @public
          *    @static
@@ -81,10 +81,10 @@
                 return "as [" . Expectation::describeValue($first) .
                         "] does not match [" . Expectation::describeValue($second) . "]";
             } elseif (is_string($first)) {
-                $position = Expectation::_stringDiffersAt($first, $second);
-                return "at character $position with [" .
-                        Expectation::clipString($first, 100, $position) . "] and [" .
-                        Expectation::clipString($second, 100, $position) . "]";
+                return Expectation::_describeStringDifference(
+                        $first,
+                        $second,
+                        $expectation_class);
             } elseif (is_integer($first)) {
                 return Expectation::_describeIntegerDifference(
                         $first,
@@ -100,6 +100,9 @@
                         $first,
                         $second,
                         $expectation_class);
+            } elseif (is_resource($first)) {
+                return "as [" . Expectation::describeValue($first) .
+                        "] does not match [" . Expectation::describeValue($second) . "]";
             } elseif (is_object($first)) {
                 return Expectation::_describeObjectDifference(
                         $first,
@@ -162,9 +165,26 @@
         /**
          *    Creates a human readable description of the
          *    difference between two integers.
+         *    @param $first             First string.
+         *    @param $second            String to compare with.
+         *    @param $expectation_class Test to apply.
+         *    @return                   Descriptive string.
+         *    @private
+         *    @static
+         */
+        function _describeStringDifference($first, $second, $expectation_class) {
+            $position = Expectation::_stringDiffersAt($first, $second);
+            return "at character $position with [" .
+                    Expectation::clipString($first, 100, $position) . "] and [" .
+                    Expectation::clipString($second, 100, $position) . "]";
+        }
+        
+        /**
+         *    Creates a human readable description of the
+         *    difference between two integers.
          *    @param $first             First number.
          *    @param $second            Number to compare with.
-         *    @param $expectation_class   Test to apply.
+         *    @param $expectation_class Test to apply.
          *    @return                   Descriptive string.
          *    @private
          *    @static
@@ -179,7 +199,7 @@
          *    difference between two floating point numbers.
          *    @param $first             First float.
          *    @param $second            Float to compare with.
-         *    @param $expectation_class   Test to apply.
+         *    @param $expectation_class Test to apply.
          *    @return                   Descriptive string.
          *    @private
          *    @static
@@ -194,15 +214,15 @@
          *    difference between two arrays.
          *    @param $first             First array.
          *    @param $second            Array to compare with.
-         *    @param $expectation_class   Test to apply.
+         *    @param $expectation_class Test to apply.
          *    @return                   Descriptive string.
          *    @private
          *    @static
          */
         function _describeArrayDifference($first, $second, $expectation_class) {
             if (array_keys($first) != array_keys($second)) {
-                return "as keys [" .
-                        implode(", ", array_keys($first)) . "] do not match  [" .
+                return "as key list [" .
+                        implode(", ", array_keys($first)) . "] does not match key list [" .
                         implode(", ", array_keys($second)) . "]";
             }
             foreach (array_keys($first) as $key) {
@@ -222,7 +242,7 @@
          *    difference between two objects.
          *    @param $first             First object.
          *    @param $second            Object to compare with.
-         *    @param $expectation_class   Test to apply.
+         *    @param $expectation_class Test to apply.
          *    @return                   Descriptive string.
          *    @private
          *    @static

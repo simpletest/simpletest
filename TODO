@@ -7,6 +7,7 @@ $Id$
 
 Unit tester
 -----------
+Add Simple monicker to exception class (1).
 
 Interface
 ---------
@@ -18,6 +19,7 @@ Add parameter expectation (2/2) - done.
 Improve failure messages (1).
 Allow expectation classes to be given as expectations (1).
 Remove pass by reference dependency in the tests (2).
+Add no return check (2).
 
 Html parser
 -----------
@@ -25,7 +27,7 @@ Test with realistic pages (5).
 Add form parsing (2).
 Add input tag parsing (2).
 Add text area tag parsing (2).
-Add Simple monicker to sundrey classes (1).
+Add Simple monicker to sundry classes (1).
 
 Browser
 -------
@@ -38,4 +40,3 @@ Add setting of form values by name (2).
 
 Documentation
 -------------
-Add web test case example tutorial (5).

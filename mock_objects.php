@@ -63,9 +63,40 @@
          *                         or failure.
          *    @public
          */
-        function testMessage($comparison) {
-            return "Expected [" . count($this->_expected) . "] arguments of [" . $this->_renderArguments($this->_expected) .
-                    "] got [" . count($comparison) . "] arguments of [" . $this->_renderArguments($comparison) . "]";
+        function testMessage($parameters) {
+            if ($this->test($parameters)) {
+                return "Expectation of " . count($this->_expected) .
+                        " arguments of [" . $this->_renderArguments($this->_expected) .
+                        "] is correct";
+            } else {
+                return $this->_describeDifference($this->_expected, $parameters);
+            }
+        }
+        
+        /**
+         *    Message to display if expectation differs from
+         *    the parameters actually received.
+         *    @param $expected      Expected parameters as list.
+         *    @param $parameters    Actual parameters received.
+         *    @return               String description of difference.
+         *    @private
+         */
+        function _describeDifference($expected, $parameters) {
+            if (count($expected) != count($parameters)) {
+                return "Expected " . count($expected) .
+                        " arguments of [" . $this->_renderArguments($expected) .
+                        "] but got " . count($parameters) .
+                        " arguments of [" . $this->_renderArguments($parameters) . "]";
+            }
+            $messages = array();
+            for ($i = 0; $i < count($expected); $i++) {
+                $comparison = new IdenticalExpectation($expected[$i]);
+                if (! $comparison->test($parameters[$i])) {
+                    $messages[] = "parameter $i with [" .
+                            $comparison->testMessage($parameters[$i]) . "]";
+                }
+            }
+            return "Mock expectation differs at " . implode(" and ", $messages);
         }
         
         /**
@@ -77,23 +108,7 @@
         function _renderArguments($args) {
             $description = "";
             foreach ($args as $arg) {
-                if ($arg === null) {
-                    $description .= "NULL, ";
-                } elseif (is_bool($arg)) {
-                    $description .= "Boolean: " . ($arg ? "true" : "false") . ", ";
-                } elseif (is_string($arg)) {
-                    $description .= "String: $arg, ";
-                } elseif (is_integer($arg)) {
-                    $description .= "Integer: $arg, ";
-                } elseif (is_float($arg)) {
-                    $description .= "Float: $arg, ";
-                } elseif (is_array($arg)) {
-                    $description .= "Array: " . count($arg) . " items, ";
-                } elseif (is_resource($arg)) {
-                    $description .= "Resource: $arg, ";
-                } elseif (is_object($arg)) {
-                    $description .= "Object: of " . get_class($arg) . ", ";
-                }
+                $description .= Expectation::describeValue($arg) . ', ';
             }
             if ($description) {
                 $description = substr($description, 0, (-2));

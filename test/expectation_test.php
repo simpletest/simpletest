@@ -120,10 +120,10 @@
                     '/\[2\] at character 0/',
                     $colours->testMessage(array("r", "g", "z")));
             $this->assertWantedPattern(
-                    '/keys .*? do not match/',
+                    '/key.*? does not match/',
                     $colours->testMessage(array("r", "g")));
             $this->assertWantedPattern(
-                    '/keys .*? do not match/',
+                    '/key.*? does not match/',
                     $colours->testMessage(array("r", "g", "b", "z")));
         }
         function testHash() {
