@@ -19,22 +19,18 @@
          *    @public
          */
         function describeValue($value) {
-            if (!isset($value)) {
-                return "NULL";
-            } elseif (is_bool($value)) {
-                return "Boolean: " . ($value ? "true" : "false");
-            } elseif (is_string($value)) {
-                return "String: " . $this->clipString($value, 50);
-            } elseif (is_integer($value)) {
-                return "Integer: $value";
-            } elseif (is_float($value)) {
-                return "Float: $value";
-            } elseif (is_array($value)) {
-                return "Array: " . count($value) . " items";
-            } elseif (is_resource($value)) {
-                return "Resource: $value";
-            } elseif (is_object($value)) {
-                return "Object: of " . get_class($value);
+            $type = $this->getType($value);
+            switch($type) {
+                case "NULL":
+                    return $type;
+                case "Boolean":
+                    return "Boolean: " . ($value ? "true" : "false");
+                case "Array":
+                    return "Array: " . count($value) . " items";
+                case "Object":
+                    return "Object: of " . get_class($value);
+                default:
+                    return "$type: $value";
             }
             return "Unknown";
         }
@@ -71,34 +67,34 @@
          *    difference between two variables.
          *    @param $first        First variable.
          *    @param $second       Value to compare with.
-         *    @param $check_type   If true then type anomolies count.
+         *    @param $identical    If true then type anomolies count.
          *    @return              Descriptive string.
          *    @public
          */
-        function describeDifference($first, $second, $check_type = false) {
-            if ($check_type) {
+        function describeDifference($first, $second, $identical = false) {
+            if ($identical) {
                 if (! $this->_isTypeMatch($first, $second)) {
                     return "with type mismatch as [" . $this->describeValue($first) .
                         "] does not match [" . $this->describeValue($second) . "]";
                 }
             }
             if (!isset($first)) {
-                return $this->_describeNullDifference($first, $second);
+                return $this->_describeNullDifference($first, $second, $identical);
             } elseif (is_bool($first)) {
-                return $this->_describeBooleanDifference($first, $second);
+                return $this->_describeBooleanDifference($first, $second, $identical);
             } elseif (is_string($first)) {
-                return $this->_describeStringDifference($first, $second);
+                return $this->_describeStringDifference($first, $second, $identical);
             } elseif (is_integer($first)) {
-                return $this->_describeIntegerDifference($first, $second);
+                return $this->_describeIntegerDifference($first, $second, $identical);
             } elseif (is_float($first)) {
-                return $this->_describeFloatDifference($first, $second);
+                return $this->_describeFloatDifference($first, $second, $identical);
             } elseif (is_array($first)) {
-                return $this->_describeArrayDifference($first, $second);
+                return $this->_describeArrayDifference($first, $second, $identical);
             } elseif (is_resource($first)) {
                 return "as [" . $this->describeValue($first) .
                         "] does not match [" . $this->describeValue($second) . "]";
             } elseif (is_object($first)) {
-                return $this->_describeObjectDifference($first, $second);
+                return $this->_describeObjectDifference($first, $second, $identical);
             }
             return "by value";
         }
@@ -139,13 +135,14 @@
         /**
          *    Creates a human readable description of the
          *    difference between a null and another variable.
-         *    @param $first             First null.
-         *    @param $second            Null to compare with.
-         *    @return                   Descriptive string.
+         *    @param $first       First null.
+         *    @param $second      Null to compare with.
+         *    @param $identical   If true then type anomolies count.
+         *    @return             Descriptive string.
          *    @private
          *    @static
          */
-        function _describeNullDifference($first, $second) {
+        function _describeNullDifference($first, $second, $identical) {
             return "as [" . $this->describeValue($first) .
                     "] does not match [" .
                     $this->describeValue($second) . "]";
@@ -154,13 +151,14 @@
         /**
          *    Creates a human readable description of the
          *    difference between a boolean and another variable.
-         *    @param $first             First boolean.
-         *    @param $second            Boolean to compare with.
-         *    @return                   Descriptive string.
+         *    @param $first       First boolean.
+         *    @param $second      Boolean to compare with.
+         *    @param $identical   If true then type anomolies count.
+         *    @return             Descriptive string.
          *    @private
          *    @static
          */
-        function _describeBooleanDifference($first, $second) {
+        function _describeBooleanDifference($first, $second, $identical) {
             return "as [" . $this->describeValue($first) .
                     "] does not match [" .
                     $this->describeValue($second) . "]";
@@ -169,13 +167,14 @@
         /**
          *    Creates a human readable description of the
          *    difference between a string and another variable.
-         *    @param $first             First string.
-         *    @param $second            String to compare with.
-         *    @return                   Descriptive string.
+         *    @param $first       First string.
+         *    @param $second      String to compare with.
+         *    @param $identical   If true then type anomolies count.
+         *    @return             Descriptive string.
          *    @private
          *    @static
          */
-        function _describeStringDifference($first, $second) {
+        function _describeStringDifference($first, $second, $identical) {
             $position = $this->_stringDiffersAt($first, $second);
             return "at character $position with [" .
                     $this->clipString($first, 100, $position) . "] and [" .
@@ -185,13 +184,14 @@
         /**
          *    Creates a human readable description of the
          *    difference between an integer and another variable.
-         *    @param $first             First number.
-         *    @param $second            Number to compare with.
-         *    @return                   Descriptive string.
+         *    @param $first       First number.
+         *    @param $second      Number to compare with.
+         *    @param $identical   If true then type anomolies count.
+         *    @return             Descriptive string.
          *    @private
          *    @static
          */
-        function _describeIntegerDifference($first, $second) {
+        function _describeIntegerDifference($first, $second, $identical) {
             return "because [" . $this->describeValue($first) .
                     "] differs from [" .
                     $this->describeValue($second) . "] by " .
@@ -201,13 +201,14 @@
         /**
          *    Creates a human readable description of the
          *    difference between two floating point numbers.
-         *    @param $first             First float.
-         *    @param $second            Float to compare with.
-         *    @return                   Descriptive string.
+         *    @param $first       First float.
+         *    @param $second      Float to compare with.
+         *    @param $identical   If true then type anomolies count.
+         *    @return             Descriptive string.
          *    @private
          *    @static
          */
-        function _describeFloatDifference($first, $second) {
+        function _describeFloatDifference($first, $second, $identical) {
             return "because [Float: " . $this->describeValue($first) .
                     "] differs from [" .
                     $this->describeValue($second) . "]";
@@ -216,26 +217,30 @@
         /**
          *    Creates a human readable description of the
          *    difference between two arrays.
-         *    @param $first             First array.
-         *    @param $second            Array to compare with.
-         *    @return                   Descriptive string.
+         *    @param $first       First array.
+         *    @param $second      Array to compare with.
+         *    @param $identical   If true then type anomolies count.
+         *    @return             Descriptive string.
          *    @private
          *    @static
          */
-        function _describeArrayDifference($first, $second) {
+        function _describeArrayDifference($first, $second, $identical) {
             if (array_keys($first) != array_keys($second)) {
                 return "as key list [" .
                         implode(", ", array_keys($first)) . "] does not match key list [" .
                         implode(", ", array_keys($second)) . "]";
             }
             foreach (array_keys($first) as $key) {
-                $expectation_class = get_class($this);
-                $test = &new $expectation_class($first[$key]);
-                if (!$test->test($second[$key])) {
-                    return "with member [$key] " . $this->describeDifference(
-                            $first[$key],
-                            $second[$key]);
+                if ($identical && ($first[$key] === $second[$key])) {
+                    continue;
                 }
+                if (!$identical && ($first[$key] == $second[$key])) {
+                    continue;
+                }
+                return "with member [$key] " . $this->describeDifference(
+                        $first[$key],
+                        $second[$key],
+                        $identical);
             }
             return "";
         }
@@ -243,13 +248,14 @@
         /**
          *    Creates a human readable description of the
          *    difference between two objects.
-         *    @param $first             First object.
-         *    @param $second            Object to compare with.
-         *    @return                   Descriptive string.
+         *    @param $first       First object.
+         *    @param $second      Object to compare with.
+         *    @param $identical   If true then type anomolies count.
+         *    @return             Descriptive string.
          *    @private
          *    @static
          */
-        function _describeObjectDifference($first, $second) {
+        function _describeObjectDifference($first, $second, $identical) {
             return $this->_describeArrayDifference(
                     get_object_vars($first),
                     get_object_vars($second));
