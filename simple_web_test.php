@@ -222,10 +222,13 @@
          *    @param $name        Name of cookie to expect.
          *    @param $expect      Expected value as a string or
          *                        false if any value will do.
+         *                        An empty string for cookie
+         *                        clearing.
          *    @param $message     Message to display.
          *    @public
          */
         function expectCookie($name, $expect = false, $message = "%s") {
+            $this->_current_browser->expectCookie($name, $expect, $message);
         }
     }
 ?>

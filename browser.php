@@ -415,7 +415,11 @@
         function _checkAllExpectedCookies(&$response) {
             $cookies = $response->getNewCookies();
             foreach($this->_expected_cookies as $expected) {
-                $this->_checkExpectedCookie($expected, $cookies);
+                if ($expected["value"] === false) {
+                    $this->_checkExpectedCookie($expected, $cookies);
+                } else {
+                    $this->_checkExpectedCookieValue($expected, $cookies);
+                }
             }
         }
         
@@ -432,13 +436,34 @@
          */
         function _checkExpectedCookie($expected, $cookies) {
             $is_match = false;
-            $message = "Expected cookie " . $expected["name"] . " not found";
+            $message = "Expecting cookie [" . $expected["name"] . "]";
+            foreach ($cookies as $cookie) {
+                if ($is_match = ($cookie->getName() == $expected["name"])) {
+                    break;
+                }
+            }
+            $this->_assertTrue($is_match, sprintf($expected["message"], $message));
+        }
+        
+        /**
+         *    Checks that an expected cookie was present
+         *    in the incoming cookie list and has the
+         *    expected value. The cookie should appear once.
+         *    @param $expected    Expected cookie values as
+         *                        simple hash with the message
+         *                        to show on failure.
+         *    @param $cookies     Incoming cookies.
+         *    @return             True if expectation met.
+         *    @private
+         */
+        function _checkExpectedCookieValue($expected, $cookies) {
+            $is_match = false;
+            $message = "Expecting cookie " . $expected["name"] .
+                    " value [" . $expected["value"] . "]";
             foreach ($cookies as $cookie) {
                 if ($cookie->getName() == $expected["name"]) {
                     $is_match = ($cookie->getValue() == $expected["value"]);
-                    $message = "Expected cookie " . $expected["name"] .
-                            " value " . $expected["value"] .
-                            " should be [" . $cookie->getValue() . "]";
+                    $message .= " got [" . $cookie->getValue() . "]";
                     if (!$is_match) {
                         break;
                     }

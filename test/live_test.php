@@ -97,5 +97,13 @@
             $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
             $this->assertCookie("session_cookie", "A");
         }
+        function testCookieExpectation() {
+            $this->expectCookie("session_cookie");
+            $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
+        }
+        function testCookieValueExpectation() {
+            $this->expectCookie("session_cookie", "A");
+            $this->fetch('http://www.lastcraft.com/test/set_cookies.php');
+        }
     }
 ?>
