@@ -887,6 +887,7 @@
                     $values[$name] = $value;
                 } elseif ($value === true) {
                     $values[$name] = '';
+                } elseif (is_array($value)) {
                 }
             }
             return $values;
