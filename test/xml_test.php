@@ -134,5 +134,14 @@
             $this->sendValidEnd($parser);
             $listener->tally();
         }
+        function testException() {
+            $listener = &new MockSimpleRunner($this);
+            $listener->expectOnce('paintException', array('a_message'));
+            $parser = &new SimpleXmlImporter($listener);
+            $this->sendValidStart($parser);
+            $this->assertTrue($parser->parse("<exception>a_message</exception>\n"));
+            $this->sendValidEnd($parser);
+            $listener->tally();
+        }
     }
 ?>

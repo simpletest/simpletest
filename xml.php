@@ -469,7 +469,7 @@
                 $this->_pushNestingTag(new NestingCaseTag($attributes));
             } elseif ($tag == 'TEST') {
                 $this->_pushNestingTag(new NestingMethodTag($attributes));
-            } elseif (in_array($tag, array('NAME', 'PASS', 'FAIL'))) {
+            } elseif (in_array($tag, array('NAME', 'PASS', 'FAIL', 'EXCEPTION'))) {
                 $this->_in_content_tag = true;
                 $this->_content = '';
             }
@@ -496,6 +496,9 @@
             } elseif ($tag == 'FAIL') {
                 $this->_in_content_tag = false;
                 $this->_listener->paintFail($this->_content);
+            } elseif ($tag == 'EXCEPTION') {
+                $this->_in_content_tag = false;
+                $this->_listener->paintException($this->_content);
             }
         }
         
