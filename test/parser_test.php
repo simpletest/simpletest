@@ -2,6 +2,8 @@
     // $Id$
     
     require_once(dirname(__FILE__) . '/../parser.php');
+    
+    Mock::generate('SimpleSaxParser');
 
     class TestOfParallelRegex extends UnitTestCase {
         function TestOfParallelRegex() {

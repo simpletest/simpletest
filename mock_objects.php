@@ -883,13 +883,13 @@
             if (isset($this->_expected_args_at[$timing][$method])) {
                 $this->_assertTrue(
                         $this->_expected_args_at[$timing][$method]->test($args),
-                        "Mock method [$method] at [$timing]->" .
+                        "Mock method [$method] at [$timing] -> " .
                                 $this->_expected_args_at[$timing][$method]->overlayMessage($args),
                         $this->_test);
             } elseif (isset($this->_expected_args[$method])) {
                 $this->_assertTrue(
                         $this->_expected_args[$method]->test($args),
-                        "Mock method [$method]->" . $this->_expected_args[$method]->overlayMessage($args),
+                        "Mock method [$method] -> " . $this->_expected_args[$method]->overlayMessage($args),
                         $this->_test);
             }
         }
@@ -906,10 +906,8 @@
          *                                  assertion to.
          *    @access protected
          */
-        function _assertTrue($assertion, $message , &$test) {
-            if ($test) {
-                $test->assertTrue($assertion, $message);
-            }
+        function _assertTrue($assertion, $message , $test) {
+            $test->assertTrue($assertion, $message);
         }
     }
     
