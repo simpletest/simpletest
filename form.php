@@ -192,10 +192,8 @@
                 $this->_buttons[] = &$tag;
             } elseif (strtolower($tag->getAttribute('type')) == 'image') {
                 $this->_images[] = &$tag;
-            } else {
-                if ($tag->getName()) {
-                    $this->_setWidget($tag);
-                }
+            } elseif ($tag->getName()) {
+                $this->_setWidget($tag);
             }
         }
         
@@ -247,17 +245,19 @@
         
         /**
          *    Extracts current value from form.
-         *    @param string $name        Keyed by widget name.
-         *    @return string             Value as string or null
-         *                               if not set.
+         *    @param SimpleSelector $selector   Criteria to apply.
+         *    @return string/array              Value(s) as string or null
+         *                                      if not set.
          *    @access public
          */
-        function getValue($name) {
-            if (isset($this->_widgets[$name])) {
-                return $this->_widgets[$name]->getValue();
+        function _getValueBySelector($selector) {
+            foreach ($this->_widgets as $widget) {
+                if ($selector->isMatch($widget)) {
+                    return $widget->getValue();
+                }
             }
             foreach ($this->_buttons as $button) {
-                if ($button->getName() == $name) {
+                if ($selector->isMatch($button)) {
                     return $button->getValue();
                 }
             }
@@ -265,24 +265,25 @@
         }
         
         /**
+         *    Extracts current value from form.
+         *    @param string $name        Keyed by widget name.
+         *    @return string/array       Value(s) or null
+         *                               if not set.
+         *    @access public
+         */
+        function getValue($name) {
+            return $this->_getValueBySelector(new SimpleNameSelector($name));
+        }
+        
+        /**
          *    Extracts current value from form by the ID.
          *    @param string/integer $id  Keyed by widget ID attribute.
-         *    @return string             Value as string or null
+         *    @return string/array       Value(s) or null
          *                               if not set.
          *    @access public
          */
         function getValueById($id) {
-            foreach ($this->_widgets as $widget) {
-                if ($widget->getAttribute('id') == $id) {
-                    return $widget->getValue();
-                }
-            }
-            foreach ($this->_buttons as $button) {
-                if ($button->getAttribute('id') == $id) {
-                    return $button->getValue();
-                }
-            }
-            return null;
+            return $this->_getValueBySelector(new SimpleIdSelector($id));
         }
         
         /**

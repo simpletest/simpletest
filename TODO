@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 52 hours.
+This is immediate stuff only for this iteration (RC2) of 59 hours.
 
 $Id$
 
@@ -22,6 +22,7 @@ Bug fix of fatal error with overload functions (2/2) - done.
 Parser
 ------
 Should tolerate missing form tag (2/2) - done.
+Fix Savant compatibility (3/1).
 
 Browser
 -------
@@ -29,6 +30,7 @@ Fix socket error with stream_get_timeout() missing (1/1) - done.
 Lose authentication on browser restart (1/1) - done.
 Make links such as ?a=b return to the same page (2/3) - done.
 Fix clickLink() trying to load non-existent frame (2/1) - done.
+Populate HTTP_REFERER (2).
 
 Web tester
 ----------
@@ -36,6 +38,7 @@ Add htmlentities() international fix (1/1) - done.
 Add WebTestCase::getCookie() method (1/1) - done.
 Make labels HTML entity and tag blind (3/4) - done.
 Add assertWantedText() for string matching (3/2) - done.
+Fix getLabel() crashing bug (2).
 
 Documentation
 -------------

@@ -844,6 +844,7 @@
         
         /**
          *    Stashes the attributes.
+         *    @param array $attributes        Hash of attributes.
          */
         function SimpleRadioButtonTag($attributes) {
             $this->SimpleWidget('input', $attributes);
@@ -914,6 +915,18 @@
          */
         function addWidget(&$widget) {
             $this->_widgets[] = &$widget;
+        }
+        
+        /**
+         *    Fetches the name for the widget from the first
+         *    member.
+         *    @return string        Name of widget.
+         *    @access public
+         */
+        function getName() {
+            if (count($this->_widgets) > 0) {
+                return $this->_widgets[0]->getName();
+            }
         }
         
         /**
@@ -1051,6 +1064,18 @@
          */
         function addWidget(&$widget) {
             $this->_widgets[] = &$widget;
+        }
+        
+        /**
+         *    Fetches the name for the widget from the first
+         *    member.
+         *    @return string        Name of widget.
+         *    @access public
+         */
+        function getName() {
+            if (count($this->_widgets) > 0) {
+                return $this->_widgets[0]->getName();
+            }
         }
         
         /**
