@@ -9,8 +9,8 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'dumper.php');
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'options.php');
+    require_once(dirname(__FILE__) . '/dumper.php');
+    require_once(dirname(__FILE__) . '/options.php');
     /**#@-*/
     
     /**
@@ -398,6 +398,15 @@
         }
         
         /**
+         *    Accessor for type to check against.
+         *    @return string    Type or class name.
+         *    @access protected
+         */
+        function getType() {
+            return $this->_type;
+        }
+        
+        /**
          *    Tests the expectation. True if the type or
          *    class matches the string value.
          *    @param string $compare        Comparison value.
@@ -442,6 +451,49 @@
             $dumper = &$this->_getDumper();
             return "Value [" . $dumper->describeValue($compare) .
                     "] should be type [" . $this->_type . "]";
+        }
+    }
+    
+    /**
+     *    Tests either type or class name if it's an object.
+     *    Will succeed if the type does not match.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class NotAExpectation extends IsAExpectation {
+        var $_type;
+        
+        /**
+         *    Sets the type to compare with.
+         *    @param string $type    Type or class name.
+         *    @access public
+         */
+        function NotAExpectation($type) {
+            $this->IsAExpectation($type);
+        }
+        
+        /**
+         *    Tests the expectation. False if the type or
+         *    class matches the string value.
+         *    @param string $compare        Comparison value.
+         *    @return boolean               True if different.
+         *    @access public
+         */
+        function test($compare) {
+            return ! parent::test($compare);
+        }
+
+        /**
+         *    Returns a human readable test message.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
+         *    @access public
+         */
+        function testMessage($compare) {
+            $dumper = &$this->_getDumper();
+            return "Value [" . $dumper->describeValue($compare) .
+                    "] should not be type [" . $this->_getType() . "]";
         }
     }
 

@@ -247,4 +247,15 @@
             $this->assertFalse($expectation->test(5.0));
         }
     }
+    
+    class TestOfNotA extends UnitTestCase {
+        function TestOfNotA() {
+            $this->UnitTestCase();
+        }
+        function testString() {
+            $expectation = &new NotAExpectation('string');
+            $this->assertFalse($expectation->test('Hello'));
+            $this->assertTrue($expectation->test(5));
+        }
+    }
 ?>
