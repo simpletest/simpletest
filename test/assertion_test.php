@@ -156,4 +156,25 @@
                     "Identical assertion [String: 37] fails with [String: 38] at character 1");
         }
     }
+    
+    class TestOfNonIdentity extends UnitTestCase {
+        function TestOfNonIdentity() {
+            $this->UnitTestCase();
+        }
+        function testType() {
+            $string = &new NotIdenticalAssertion("37");
+            $this->assertTrue($string->test("38"));
+            $this->assertTrue($string->test(37));
+            $this->assertFalse($string->test("37"));
+            $this->assertEqual(
+                    $string->testMessage("38"),
+                    "Not identical assertion differs at character 1");
+            $this->assertEqual(
+                    $string->testMessage(37),
+                    "Not identical assertion differs by type");
+            $this->assertEqual(
+                    $string->testMessage("37"),
+                    "Not identical assertion [String: 37] matches");
+        }
+    }
 ?>

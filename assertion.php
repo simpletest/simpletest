@@ -206,7 +206,7 @@
         }
         
         /**
-         *    Tests the assertion. True if it matches the
+         *    Tests the assertion. True if it differs from the
          *    held value.
          *    @param $compare        Comparison value.
          *    @return                True if correct.
@@ -273,6 +273,48 @@
                         "] fails with [" .
                         $this->describeValue($compare) . "]" .
                         $this->describeDifference($this->_value, $compare, get_class($this));
+            }
+        }
+    }
+    
+    /**
+     *    Test for non-identity.
+     */
+    class NotIdenticalAssertion extends IdenticalAssertion {
+        
+        /**
+         *    Sets the value to compare against.
+         *    @param $value        Test value to match.
+         *    @public
+         */
+        function NotIdenticalAssertion($value) {
+            $this->IdenticalAssertion($value);
+        }
+        
+        /**
+         *    Tests the assertion. True if it differs from the
+         *    held value.
+         *    @param $compare        Comparison value.
+         *    @return                True if correct.
+         *    @public
+         */
+        function test($compare) {
+            return !parent::test($compare);
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param $compare      Comparison value.
+         *    @return              String description of success
+         *                         or failure.
+         *    @public
+         */
+        function testMessage($compare) {
+            if ($this->test($compare)) {
+                return "Not identical assertion differs" .
+                        $this->describeDifference($this->_get_value(), $compare, get_class($this));
+            } else {
+                return "Not identical assertion [" . $this->describeValue($this->_get_value()) . "] matches";
             }
         }
     }

@@ -34,7 +34,7 @@
          *    @param $message        Message to display.
          *    @public
          */
-        function assertFalse($boolean, $message = "False assertion") {
+        function assertFalse($boolean, $message = "false assertion") {
             $this->assertTrue(!$boolean, $message);
         }
         
@@ -137,12 +137,10 @@
          *    @public
          */
         function assertNotIdentical($first, $second, $message = "%s") {
-            $message = sprintf(
-                    $message,
-                    "[" . Assertion::describeValue($first) .
-                            "] should not be identical to [" .
-                            Assertion::describeValue($second) . "]");
-            $this->assertTrue($first !== $second, $message);
+            $assertion = &new NotIdenticalAssertion($first);
+            $this->assertTrue(
+                    $assertion->test($second),
+                    sprintf($message, $assertion->testMessage($second)));
         }
         
         /**
@@ -197,7 +195,7 @@
          *    @public
          */
         function assertWantedPattern($pattern, $subject, $message = "%s") {
-            $message = sprintf($message, "Expecting [$pattern] in [$subject]");
+            $message = sprintf($message, "expecting [$pattern] in [$subject]");
             $this->assertTrue((boolean)preg_match($pattern, $subject), $message);
         }
         
@@ -211,7 +209,7 @@
          *    @public
          */
         function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
-            $message = sprintf($message, "Not expecting [$pattern] in [$subject]");
+            $message = sprintf($message, "not expecting [$pattern] in [$subject]");
             $this->assertTrue(!preg_match($pattern, $subject), $message);
         }
     }
