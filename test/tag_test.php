@@ -4,9 +4,6 @@
     }
     require_once(SIMPLE_TEST . 'tag.php');
     
-    Mock::generate('SimpleRadioButtonTag');
-    Mock::generate('SimpleCheckboxTag');
-    
     class TestOfTag extends UnitTestCase {
         function TestOfTag() {
             $this->UnitTestCase();
@@ -242,55 +239,35 @@
             $this->assertFalse($group->setValue('a'));
         }
         function testReadingSingleButtonGroup() {
-            $radio = &new MockSimpleRadioButtonTag($this);
-            $radio->setReturnValue('getDefault', 'A');
-            $radio->setReturnValue('getValue', 'AA');
             $group = &new SimpleRadioGroup();
-            $group->addWidget($radio);
+            $group->addWidget(new SimpleRadioButtonTag(
+                    array('value' => 'A', 'checked' => '')));
             $this->assertIdentical($group->getDefault(), 'A');
-            $this->assertIdentical($group->getValue(), 'AA');
+            $this->assertIdentical($group->getValue(), 'A');
         }
         function testReadingMultipleButtonGroup() {
-            $a = &new MockSimpleRadioButtonTag($this);
-            $a->setReturnValue('getDefault', 'A');
-            $a->setReturnValue('getValue', false);
-            $b = &new MockSimpleRadioButtonTag($this);
-            $b->setReturnValue('getDefault', false);
-            $b->setReturnValue('getValue', 'B');
-            
             $group = &new SimpleRadioGroup();
-            $group->addWidget($a);
-            $group->addWidget($b);
-            
-            $this->assertIdentical($group->getDefault(), 'A');
+            $group->addWidget(new SimpleRadioButtonTag(
+                    array('value' => 'A')));
+            $group->addWidget(new SimpleRadioButtonTag(
+                    array('value' => 'B', 'checked' => '')));
+            $this->assertIdentical($group->getDefault(), 'B');
             $this->assertIdentical($group->getValue(), 'B');
         }
         function testFailToSetUnlistedValue() {
-            $radio = &new MockSimpleRadioButtonTag($this);
-            $radio->setReturnValue('setValue', false);
-            $radio->expectOnce('setValue', array('aaa'));
             $group = &new SimpleRadioGroup();
-            $group->addWidget($radio);
-            $this->assertFalse($group->setValue('aaa'));
-            $radio->tally();
+            $group->addWidget(new SimpleRadioButtonTag(array('value' => 'z')));
+            $this->assertFalse($group->setValue('a'));
+            $this->assertIdentical($group->getValue(), false);
         }
         function testSettingNewValueClearsTheOldOne() {
-            $a = &new MockSimpleRadioButtonTag($this);
-            $a->setReturnValue('getValue', false);
-            $a->setReturnValue('setValue', true);
-            $a->expectOnce('setValue', array('A'));
-            $b = &new MockSimpleRadioButtonTag($this);
-            $b->setReturnValue('getValue', 'B');
-            $b->setReturnValue('setValue', true);
-            $b->expectOnce('setValue', array(false));
-            
             $group = &new SimpleRadioGroup();
-            $group->addWidget($a);
-            $group->addWidget($b);
+            $group->addWidget(new SimpleRadioButtonTag(
+                    array('value' => 'A')));
+            $group->addWidget(new SimpleRadioButtonTag(
+                    array('value' => 'B', 'checked' => '')));
             $this->assertTrue($group->setValue('A'));
-            
-            $a->tally();
-            $b->tally();
+            $this->assertIdentical($group->getValue(), 'A');
         }
     }
     
@@ -299,49 +276,49 @@
             $this->UnitTestCase();
         }
         function testReadingMultipleCheckboxGroup() {
-            $a = &new MockSimpleCheckboxTag($this);
-            $a->setReturnValue('getDefault', 'A');
-            $a->setReturnValue('getValue', false);
-            $b = &new MockSimpleCheckboxTag($this);
-            $b->setReturnValue('getDefault', false);
-            $b->setReturnValue('getValue', 'B');
-            
             $group = &new SimpleTagGroup();
-            $group->addWidget($a);
-            $group->addWidget($b);
-            
-            $this->assertIdentical($group->getDefault(), 'A');
+            $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
+            $group->addWidget(new SimpleCheckboxTag(
+                    array('value' => 'B', 'checked' => '')));
+            $this->assertIdentical($group->getDefault(), 'B');
             $this->assertIdentical($group->getValue(), 'B');
         }
         function testReadingMultipleUncheckedItems() {
-            $a = &new MockSimpleCheckboxTag($this);
-            $a->setReturnValue('getDefault', false);
-            $a->setReturnValue('getValue', false);
-            $b = &new MockSimpleCheckboxTag($this);
-            $b->setReturnValue('getDefault', false);
-            $b->setReturnValue('getValue', false);
-            
             $group = &new SimpleTagGroup();
-            $group->addWidget($a);
-            $group->addWidget($b);
-            
+            $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
+            $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));            
             $this->assertIdentical($group->getDefault(), false);
             $this->assertIdentical($group->getValue(), false);
         }
         function testReadingMultipleCheckedItems() {
-            $a = &new MockSimpleCheckboxTag($this);
-            $a->setReturnValue('getDefault', 'A');
-            $a->setReturnValue('getValue', 'A');
-            $b = &new MockSimpleCheckboxTag($this);
-            $b->setReturnValue('getDefault', 'B');
-            $b->setReturnValue('getValue', 'B');
-            
             $group = &new SimpleTagGroup();
-            $group->addWidget($a);
-            $group->addWidget($b);
-            
+            $group->addWidget(new SimpleCheckboxTag(
+                    array('value' => 'A', 'checked' => '')));
+            $group->addWidget(new SimpleCheckboxTag(
+                    array('value' => 'B', 'checked' => '')));
             $this->assertIdentical($group->getDefault(), array('A', 'B'));
             $this->assertIdentical($group->getValue(), array('A', 'B'));
+        }
+        function testSettingSingleValue() {
+            $group = &new SimpleTagGroup();
+            $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
+            $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));
+            $this->assertTrue($group->setValue('A'));
+            $this->assertIdentical($group->getValue(), 'A');
+        }
+        function testSettingMultipleValue() {
+            $group = &new SimpleTagGroup();
+            $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
+            $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));
+            $this->assertTrue($group->setValue(array('A', 'B')));
+            $this->assertIdentical($group->getValue(), array('A', 'B'));
+        }
+        function testSettingNoValue() {
+            $group = &new SimpleTagGroup();
+            $group->addWidget(new SimpleCheckboxTag(array('value' => 'A')));
+            $group->addWidget(new SimpleCheckboxTag(array('value' => 'B')));
+            $this->assertTrue($group->setValue(false));
+            $this->assertIdentical($group->getValue(), false);
         }
     }
     
@@ -457,6 +434,16 @@
             $this->assertIdentical($form->getValue('me'), 'b');
             $this->assertTrue($form->setField('me', 'a'));
             $this->assertIdentical($form->getValue('me'), 'a');
+        }
+        function testMultipleFieldsWithSameKey() {
+            $form = &new SimpleForm(new SimpleFormTag(array()));
+            $form->addWidget(new SimpleCheckboxTag(
+                    array('name' => 'a', 'type' => 'checkbox', 'value' => 'me')));
+            $form->addWidget(new SimpleCheckboxTag(
+                    array('name' => 'a', 'type' => 'checkbox', 'value' => 'you')));
+            $this->assertIdentical($form->getValue('a'), false);
+//            $this->assertTrue($form->setField('a', 'me'));
+//            $this->assertIdentical($form->getValue('a'), 'me');
         }
     }
 ?>

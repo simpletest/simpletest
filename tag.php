@@ -719,9 +719,50 @@
         }
         
         /**
-         *    Converts the output to an appripriate format.
-         *    @param array $values          List of values of widgets.
-         *    @param string/array/boolean   Expected format for a tag.
+         *    Accessor for current set values.
+         *    @param string/array/boolean $values   Either a single string, a
+         *                                          hash or false for nothing set.
+         *    @return boolean                       True if all values can be set.
+         *    @access public
+         */
+        function setValue($values) {
+            $values = $this->_makeArray($values);
+            if (! $this->_valuesArePossible($values)) {
+                return false;
+            }
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                $possible = $this->_widgets[$i]->getAttribute('value');
+                if (in_array($this->_widgets[$i]->getAttribute('value'), $values)) {
+                    $this->_widgets[$i]->setValue($possible);
+                }
+            }
+            return true;
+        }
+        
+        /**
+         *    Tests to see if a possible value set is legal.
+         *    @param string/array/boolean $values   Either a single string, a
+         *                                          hash or false for nothing set.
+         *    @return boolean                       False if trying to set a
+         *                                          missing value.
+         *    @access private
+         */
+        function _valuesArePossible($values) {
+            $matches = array();
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                $possible = $this->_widgets[$i]->getAttribute('value');
+                if (in_array($possible, $values)) {
+                    $matches[] = $possible;
+                }
+            }
+            return ($values == $matches);
+        }
+        
+        /**
+         *    Converts the output to an appropriate format.
+         *    @param array $values           List of values of widgets.
+         *    @return string/array/boolean   Expected format for a tag.
+         *    @access private
          */
         function _coerceValues($values) {
             if (count($values) == 0) {
@@ -731,6 +772,19 @@
             } else {
                 return $values;
             }
+        }
+        
+        /**
+         *    Converts false or string into array.
+         */
+        function _makeArray($value) {
+            if ($value === false) {
+                return array();
+            }
+            if (is_string($value)) {
+                return array($value);
+            }
+            return $value;
         }
     }
         
@@ -768,6 +822,9 @@
          *    @access public
          */
         function setValue($value) {
+            if (! $this->_valueIsPossible($value)) {
+                return false;
+            }
             $index = false;
             for ($i = 0; $i < count($this->_widgets); $i++) {
                 if ($this->_widgets[$i]->setValue($value)) {
@@ -785,6 +842,21 @@
                 $this->_widgets[$i]->setValue(false);
             }
             return true;
+        }
+        
+        /**
+         *    Tests to see if a value is allowed.
+         *    @param string    Attempted value.
+         *    @return boolean  True if a valid value.
+         *    @access private
+         */
+        function _valueIsPossible($value) {
+            for ($i = 0; $i < count($this->_widgets); $i++) {
+                if ($this->_widgets[$i]->getAttribute('value') == $value) {
+                    return true;
+                }
+            }
+            return false;
         }
         
         /**
@@ -909,6 +981,17 @@
                     $this->_widgets[$tag->getName()] = &new SimpleRadioGroup();
                 }
                 $this->_widgets[$tag->getName()]->addWidget($tag);
+            } elseif ($tag->getAttribute("type") == "checkbox") {
+                if (! isset($this->_widgets[$tag->getName()])) {
+                    $this->_widgets[$tag->getName()] = &$tag;
+                } elseif ($this->_widgets[$tag->getName()]->getAttribute("type") == "checkbox") {
+                    $previous = &$this->_widgets[$tag->getName()];
+                    $this->_widgets[$tag->getName()] = &new SimpleTagGroup();
+                    $this->_widgets[$tag->getName()]->addWidget($previous);
+                    $this->_widgets[$tag->getName()]->addWidget($tag);
+                } else {
+                    $this->_widgets[$tag->getName()]->addWidget($tag);
+                }
             } else {
                 $this->_widgets[$tag->getName()] = &$tag;
             }
