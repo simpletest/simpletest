@@ -13,7 +13,7 @@ Add adapters for other testers (3/4) - done.
 Mock objects
 ------------
 Create parameter list assertion for improved output (1).
-Split off server stubs (3).
+Split off server stubs (3/2) - done.
 
 Html parser
 -----------

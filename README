@@ -5,15 +5,21 @@ http://sourceforge.net/projects/simpletest/
 
 It's a framework for unit testing, web site testing and mock objects. If you have
 used JUnit you will find this PHP version very similar. Also included
-is a mock objects generator. The mocks feature a complete setting of
-expected parameters with wildcards, selecting return values by parameter,
-again with wildcards, and the setting of sequences of either.
+is a mock objects and server stubs generator. The stubs can have return
+values set for different arguments, can have sequences set also by
+arguments and can return items by reference. The mocks inherit all of
+this functionality and can also have expectations set, again in sequences
+and for different arguments.
+
+You are not tied to SimpleTest, though. The mocks and stubs will work
+with other test frameworks and SimpleTest can use other framework's
+(PHPUnit, PEAR::PhpUnit) test cases as it's own.
 
 The current release is PHP only and does not yet include the web testing tool.
 As an early release it doesn't have much in the way of documentation either!
 You can find a tutorial on http://www.lastcraft.com/simple_test.php to
-get you started. This material will eventually become included with the
-project documentation.
+get you started and hopefully this material will eventually become included
+with the project documentation.
 
 If you download and use and possibly even extend this tool, please let me
 know. Any feedback, even bad, is always welcome and I will work to get
@@ -30,8 +36,11 @@ There is no change log as yet except in CVS.
 Oh, yes. It is called "Simple" because it should be simple to
 use. I intend to add a complete set of tools for a test first
 and "test as you code" type of development. "Simple" does not
-mean "Lite" in this context.
+mean "Lite" in this context; I wish I had given it a better name. :-(
 
 yours, Marcus.
+
+Thanks to Harry Fuecks for feedback, packaging and suggestions and also
+for a great website (http://www.phppatterns.com/). :-)
 -- 
 marcus@lastcraft.com

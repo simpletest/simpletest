@@ -117,6 +117,151 @@
         }
     }
     
+    Stub::generate("Dummy");
+    Stub::generate("Dummy", "AnotherStubDummy");
+    
+    class SpecialSimpleStub extends SimpleStub {
+        function SpecialSimpleStub($wildcard) {
+            $this->SimpleStub($wildcard);
+        }
+    }
+    Stub::setStubBaseClass("SpecialSimpleStub");
+    Stub::generate("Dummy", "SpecialStubDummy");
+    Stub::setStubBaseClass("SimpleStub");
+    
+    class TestOfStubGeneration extends UnitTestCase {
+        function TestOfStubGeneration() {
+            $this->UnitTestCase();
+        }
+        function testCloning() {
+            $stub = &new StubDummy($this);
+            $this->assertTrue(method_exists($stub, "aMethod"));
+            $this->assertNull($stub->aMethod());
+        }
+        function testCloningWithChosenClassName() {
+            $stub = &new AnotherStubDummy($this);
+            $this->assertTrue(method_exists($stub, "aMethod"));
+        }
+        function testCloningWithDifferentBaseClass() {
+            $stub = &new SpecialStubDummy($this);
+            $this->assertIsA($stub, "SpecialSimpleStub");
+            $this->assertTrue(method_exists($stub, "aMethod"));
+        }
+    }
+    
+    class TestOfServerStubReturns extends UnitTestCase {
+        function TestOfServerStubReturns() {
+            $this->UnitTestCase();
+        }
+        function testDefaultReturn() {
+            $stub = &new StubDummy();
+            $stub->setReturnValue("aMethod", "aaa");
+            $this->assertIdentical($stub->aMethod(), "aaa");
+            $this->assertIdentical($stub->aMethod(), "aaa");
+        }
+        function testParameteredReturn() {
+            $stub = &new StubDummy();
+            $stub->setReturnValue("aMethod", "aaa", array(1, 2, 3));
+            $this->assertNull($stub->aMethod());
+            $this->assertIdentical($stub->aMethod(1, 2, 3), "aaa");
+        }
+        function testReferenceReturned() {
+            $stub = &new StubDummy();
+            $object = new Dummy();
+            $stub->setReturnReference("aMethod", $object, array(1, 2, 3));
+            $this->assertReference($stub->aMethod(1, 2, 3), $object);
+        }
+        function testWildcardReturn() {
+            $stub = &new StubDummy("wild");
+            $stub->setReturnValue("aMethod", "aaa", array(1, "wild", 3));
+            $this->assertIdentical($stub->aMethod(1, "something", 3), "aaa");
+            $this->assertIdentical($stub->aMethod(1, "anything", 3), "aaa");
+        }
+        function testAllWildcardReturn() {
+            $stub = &new StubDummy("wild");
+            $stub->setReturnValue("aMethod", "aaa");
+            $this->assertIdentical($stub->aMethod(1, 2, 3), "aaa");
+            $this->assertIdentical($stub->aMethod(), "aaa");
+        }
+        function testCallCount() {
+            $stub = &new StubDummy();
+            $this->assertEqual($stub->getCallCount("aMethod"), 0);
+            $stub->aMethod();
+            $this->assertEqual($stub->getCallCount("aMethod"), 1);
+            $stub->aMethod();
+            $this->assertEqual($stub->getCallCount("aMethod"), 2);
+        }
+        function testMultipleMethods() {
+            $stub = &new StubDummy();
+            $stub->setReturnValue("aMethod", 100, array(1));
+            $stub->setReturnValue("aMethod", 200, array(2));
+            $stub->setReturnValue("anotherMethod", 10, array(1));
+            $stub->setReturnValue("anotherMethod", 20, array(2));
+            $this->assertIdentical($stub->aMethod(1), 100);
+            $this->assertIdentical($stub->anotherMethod(1), 10);
+            $this->assertIdentical($stub->aMethod(2), 200);
+            $this->assertIdentical($stub->anotherMethod(2), 20);
+        }
+        function testReturnSequence() {
+            $stub = &new StubDummy();
+            $stub->setReturnValueAt(0, "aMethod", "aaa");
+            $stub->setReturnValueAt(1, "aMethod", "bbb");
+            $stub->setReturnValueAt(3, "aMethod", "ddd");
+            $this->assertIdentical($stub->aMethod(), "aaa");
+            $this->assertIdentical($stub->aMethod(), "bbb");
+            $this->assertNull($stub->aMethod());
+            $this->assertIdentical($stub->aMethod(), "ddd");
+        }
+        function testReturnReferenceSequence() {
+            $stub = &new StubDummy();
+            $object = new Dummy();
+            $stub->setReturnReferenceAt(1, "aMethod", $object);
+            $this->assertNull($stub->aMethod());
+            $this->assertReference($stub->aMethod(), $object);
+            $this->assertNull($stub->aMethod());
+        }
+        function testComplicatedReturnSequence() {
+            $stub = &new StubDummy("wild");
+            $object = new Dummy();
+            $stub->setReturnValueAt(1, "aMethod", "aaa", array("a"));
+            $stub->setReturnValueAt(1, "aMethod", "bbb");
+            $stub->setReturnReferenceAt(2, "aMethod", $object, array("wild", 2));
+            $stub->setReturnValueAt(2, "aMethod", "value", array("wild", 3));
+            $stub->setReturnValue("aMethod", 3, array(3));
+            $this->assertNull($stub->aMethod());
+            $this->assertEqual($stub->aMethod("a"), "aaa");
+            $this->assertReference($stub->aMethod(1, 2), $object);
+            $this->assertEqual($stub->aMethod(3), 3);
+            $this->assertNull($stub->aMethod());
+        }
+        function testMultipleMethodSequences() {
+            $stub = &new StubDummy();
+            $stub->setReturnValueAt(0, "aMethod", "aaa");
+            $stub->setReturnValueAt(1, "aMethod", "bbb");
+            $stub->setReturnValueAt(0, "anotherMethod", "ccc");
+            $stub->setReturnValueAt(1, "anotherMethod", "ddd");
+            $this->assertIdentical($stub->aMethod(), "aaa");
+            $this->assertIdentical($stub->anotherMethod(), "ccc");
+            $this->assertIdentical($stub->aMethod(), "bbb");
+            $this->assertIdentical($stub->anotherMethod(), "ddd");
+        }
+        function testSequenceFallback() {
+            $stub = &new StubDummy();
+            $stub->setReturnValueAt(0, "aMethod", "aaa", array('a'));
+            $stub->setReturnValueAt(1, "aMethod", "bbb", array('a'));
+            $stub->setReturnValue("aMethod", "AAA");
+            $this->assertIdentical($stub->aMethod('a'), "aaa");
+            $this->assertIdentical($stub->aMethod('b'), "AAA");
+        }
+        function testMethodInterference() {
+            $stub = &new StubDummy();
+            $stub->setReturnValueAt(0, "anotherMethod", "aaa");
+            $stub->setReturnValue("aMethod", "AAA");
+            $this->assertIdentical($stub->aMethod(), "AAA");
+            $this->assertIdentical($stub->anotherMethod(), "aaa");
+        }
+    }
+    
     Mock::generate("Dummy");
     Mock::generate("Dummy", "AnotherMockDummy");
     
@@ -129,8 +274,8 @@
     Mock::generate("Dummy", "SpecialMockDummy");
     Mock::setMockBaseClass("SimpleMock");
     
-    class TestOfCodeGeneration extends UnitTestCase {
-        function TestOfCodeGeneration() {
+    class TestOfMockGeneration extends UnitTestCase {
+        function TestOfMockGeneration() {
             $this->UnitTestCase();
         }
         function testCloning() {
@@ -153,12 +298,6 @@
         function TestOfMockReturns() {
             $this->UnitTestCase();
         }
-        function testDefaultReturn() {
-            $mock = &new MockDummy($this);
-            $mock->setReturnValue("aMethod", "aaa");
-            $this->assertIdentical($mock->aMethod(), "aaa");
-            $this->assertIdentical($mock->aMethod(), "aaa");
-        }
         function testParameteredReturn() {
             $mock = &new MockDummy($this);
             $mock->setReturnValue("aMethod", "aaa", array(1, 2, 3));
@@ -177,12 +316,6 @@
             $this->assertIdentical($mock->aMethod(1, "something", 3), "aaa");
             $this->assertIdentical($mock->aMethod(1, "anything", 3), "aaa");
         }
-        function testAllWildcardReturn() {
-            $mock = &new MockDummy($this, "wild");
-            $mock->setReturnValue("aMethod", "aaa");
-            $this->assertIdentical($mock->aMethod(1, 2, 3), "aaa");
-            $this->assertIdentical($mock->aMethod(), "aaa");
-        }
         function testCallCount() {
             $mock = &new MockDummy($this);
             $this->assertEqual($mock->getCallCount("aMethod"), 0);
@@ -191,27 +324,6 @@
             $mock->aMethod();
             $this->assertEqual($mock->getCallCount("aMethod"), 2);
         }
-        function testMultipleMethods() {
-            $mock = &new MockDummy($this);
-            $mock->setReturnValue("aMethod", 100, array(1));
-            $mock->setReturnValue("aMethod", 200, array(2));
-            $mock->setReturnValue("anotherMethod", 10, array(1));
-            $mock->setReturnValue("anotherMethod", 20, array(2));
-            $this->assertIdentical($mock->aMethod(1), 100);
-            $this->assertIdentical($mock->anotherMethod(1), 10);
-            $this->assertIdentical($mock->aMethod(2), 200);
-            $this->assertIdentical($mock->anotherMethod(2), 20);
-        }
-        function testReturnSequence() {
-            $mock = &new MockDummy($this);
-            $mock->setReturnValueAt(0, "aMethod", "aaa");
-            $mock->setReturnValueAt(1, "aMethod", "bbb");
-            $mock->setReturnValueAt(3, "aMethod", "ddd");
-            $this->assertIdentical($mock->aMethod(), "aaa");
-            $this->assertIdentical($mock->aMethod(), "bbb");
-            $this->assertNull($mock->aMethod());
-            $this->assertIdentical($mock->aMethod(), "ddd");
-        }
         function testReturnReferenceSequence() {
             $mock = &new MockDummy($this);
             $object = new Dummy();
@@ -219,46 +331,6 @@
             $this->assertNull($mock->aMethod());
             $this->assertReference($mock->aMethod(), $object);
             $this->assertNull($mock->aMethod());
-        }
-        function testComplicatedReturnSequence() {
-            $mock = &new MockDummy($this, "wild");
-            $object = new Dummy();
-            $mock->setReturnValueAt(1, "aMethod", "aaa", array("a"));
-            $mock->setReturnValueAt(1, "aMethod", "bbb");
-            $mock->setReturnReferenceAt(2, "aMethod", $object, array("wild", 2));
-            $mock->setReturnValueAt(2, "aMethod", "value", array("wild", 3));
-            $mock->setReturnValue("aMethod", 3, array(3));
-            $this->assertNull($mock->aMethod());
-            $this->assertEqual($mock->aMethod("a"), "aaa");
-            $this->assertReference($mock->aMethod(1, 2), $object);
-            $this->assertEqual($mock->aMethod(3), 3);
-            $this->assertNull($mock->aMethod());
-        }
-        function testMultipleMethodSequences() {
-            $mock = &new MockDummy($this);
-            $mock->setReturnValueAt(0, "aMethod", "aaa");
-            $mock->setReturnValueAt(1, "aMethod", "bbb");
-            $mock->setReturnValueAt(0, "anotherMethod", "ccc");
-            $mock->setReturnValueAt(1, "anotherMethod", "ddd");
-            $this->assertIdentical($mock->aMethod(), "aaa");
-            $this->assertIdentical($mock->anotherMethod(), "ccc");
-            $this->assertIdentical($mock->aMethod(), "bbb");
-            $this->assertIdentical($mock->anotherMethod(), "ddd");
-        }
-        function testSequenceFallback() {
-            $mock = &new MockDummy($this);
-            $mock->setReturnValueAt(0, "aMethod", "aaa", array('a'));
-            $mock->setReturnValueAt(1, "aMethod", "bbb", array('a'));
-            $mock->setReturnValue("aMethod", "AAA");
-            $this->assertIdentical($mock->aMethod('a'), "aaa");
-            $this->assertIdentical($mock->aMethod('b'), "AAA");
-        }
-        function testMethodInterference() {
-            $mock = &new MockDummy($this);
-            $mock->setReturnValueAt(0, "anotherMethod", "aaa");
-            $mock->setReturnValue("aMethod", "AAA");
-            $this->assertIdentical($mock->aMethod(), "AAA");
-            $this->assertIdentical($mock->anotherMethod(), "aaa");
         }
     }
     

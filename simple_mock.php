@@ -147,47 +147,99 @@
     
     /**
      *    An empty collection of methods that can have their
-     *    return values set and expectations made of the
-     *    calls upon them. The mock will assert the
-     *    expectations against it's attached test case.
+     *    return values set. Used for prototyping.
      */
-    class SimpleMock {
-        var $_test;
+    class SimpleStub {
         var $_wildcard;
         var $_returns;
         var $_return_sequence;
         var $_call_counts;
-        var $_expected_counts;
-        var $_max_counts;
-        var $_expected_args;
-        var $_args_sequence;
         
         /**
-         *    Creates an empty return list and expectation list.
-         *    All call counts are set to zero.
+         *    Clears history.
          *    @param $wildcard    Parameter matching wildcard.
-         *    @param $test        Test case to test expectations in.
          *    @public
          */
-        function SimpleMock(&$test, $wildcard) {
-            $this->_test = &$test;
+        function SimpleStub($wildcard) {
             $this->_wildcard = $wildcard;
-            $this->clearHistory();
             $this->_returns = array();
             $this->_return_sequence = array();
-            $this->_expected_counts = array();
-            $this->_max_counts = array();
-            $this->_expected_args = array();
-            $this->_args_sequence = array();
+            $this->clearHistory();
         }
         
         /**
-         *    Resets the call history for the mock. The tally
-         *    will be counted from this point onwards.
+         *    Resets the call count history for the stub.
+         *    Sequences of returns will start from 0 again.
          *    @public
          */
         function clearHistory() {
             $this->_call_counts = array();
+        }
+        
+        /**
+         *    Accessor for wildcard.
+         *    @return        Wildcard object or string.
+         *    @protected
+         */
+        function _getWildcard() {
+            return $this->_wildcard;
+        }
+        
+        /**
+         *    Returns the expected value for the method name.
+         *    @param $method        Name of method to simulate.
+         *    @param $args          Arguments as an array.
+         *    @return               Stored return.
+         *    @private
+         */
+        function &_invoke($method, $args) {
+            $method = strtolower($method);
+            $step = $this->getCallCount($method);
+            $this->_addCall($method, $args);
+            return $this->_getReturn($method, $args, $step);
+        }
+        
+        /**
+         *    Triggers a PHP error if the method is not part
+         *    of this object.
+         *    @param $method        Name of method.
+         *    @param $task          Description of task attempt.
+         *    @protected
+         */
+        function _dieOnNoMethod($method, $task) {
+            if (!method_exists($this, $method)) {
+                trigger_error(
+                        "Cannot $task as no ${method}() in class " . get_class($this),
+                        E_USER_ERROR);
+            }
+        }
+        
+        /**
+         *    Adds one to the call count of a method.
+         *    @param $method        Method called.
+         *    @param $args          Arguments as an array.
+         *    @protected
+         */
+        function _addCall($method, $args) {
+            if (!isset($this->_call_counts[$method])) {
+                $this->_call_counts[$method] = 0;
+            }
+            $this->_call_counts[$method]++;
+        }
+        
+        /**
+         *    Fetches the call count of a method so far.
+         *    @param $method        Method name called.
+         *    @return               Number of calls so far.
+         *    @public
+         */
+        function getCallCount($method) {
+            $this->_dieOnNoMethod($method, "get call count");
+            $method = strtolower($method);
+            if (!isset($this->_call_counts[$method])) {
+                return 0;
+            }
+            return $this->_call_counts[$method];
         }
         
         /**
@@ -203,7 +255,7 @@
             $this->_dieOnNoMethod($method, "set return value");
             $method = strtolower($method);
             if (!isset($this->_returns[$method])) {
-                $this->_returns[$method] = new CallMap($this->_wildcard);
+                $this->_returns[$method] = new CallMap($this->_getWildcard());
             }
             $this->_returns[$method]->addValue($args, $value);
         }
@@ -229,16 +281,9 @@
                 $this->_return_sequence[$method] = array();
             }
             if (!isset($this->_return_sequence[$method][$timing])) {
-                $this->_return_sequence[$method][$timing] = new CallMap($this->_wildcard);
+                $this->_return_sequence[$method][$timing] = new CallMap($this->_getWildcard());
             }
             $this->_return_sequence[$method][$timing]->addValue($args, $value);
-        }
-        
-        /**
-         *    @deprecated
-         */
-        function setReturnValueSequence($timing, $method, $value, $args = "") {
-            return $this->setReturnValueAt($timing, $method, $value, $args);
         }
          
         /**
@@ -254,7 +299,7 @@
             $this->_dieOnNoMethod($method, "set return reference");
             $method = strtolower($method);
             if (!isset($this->_returns[$method])) {
-                $this->_returns[$method] = new CallMap($this->_wildcard);
+                $this->_returns[$method] = new CallMap($this->_getWildcard());
             }
             $this->_returns[$method]->addReference($args, $reference);
         }
@@ -280,11 +325,71 @@
                 $this->_return_sequence[$method] = array();
             }
             if (!isset($this->_return_sequence[$method][$timing])) {
-                $this->_return_sequence[$method][$timing] = new CallMap($this->_wildcard);
+                $this->_return_sequence[$method][$timing] = new CallMap($this->_getWildcard());
             }
             $this->_return_sequence[$method][$timing]->addReference($args, $reference);
         }
-         
+        
+        /**
+         *    Finds the return value matching the incoming
+         *    arguments.
+         *    @param $method      Method name.
+         *    @param $args        Calling arguments.
+         *    @param $step        Current position in the
+         *                        call history.
+         *    @returns            Stored return.
+         *    @protected
+         */
+        function &_getReturn($method, $args, $step) {
+            if (isset($this->_return_sequence[$method][$step])) {
+                if ($this->_return_sequence[$method][$step]->isMatch($args)) {
+                    return $this->_return_sequence[$method][$step]->findFirstMatch($args);
+                }
+            }
+            if (isset($this->_returns[$method])) {
+                return $this->_returns[$method]->findFirstMatch($args);
+            }
+            return null;
+        }
+    }
+    
+    /**
+     *    An empty collection of methods that can have their
+     *    return values set and expectations made of the
+     *    calls upon them. The mock will assert the
+     *    expectations against it's attached test case in
+     *    addition to the server stub behaviour.
+     */
+    class SimpleMock extends SimpleStub {
+        var $_test;
+        var $_expected_counts;
+        var $_max_counts;
+        var $_expected_args;
+        var $_args_sequence;
+        
+        /**
+         *    Creates an empty return list and expectation list.
+         *    All call counts are set to zero.
+         *    @param $wildcard    Parameter matching wildcard.
+         *    @param $test        Test case to test expectations in.
+         *    @public
+         */
+        function SimpleMock(&$test, $wildcard) {
+            $this->SimpleStub($wildcard);
+            $this->_test = &$test;
+            $this->_expected_counts = array();
+            $this->_max_counts = array();
+            $this->_expected_args = array();
+            $this->_args_sequence = array();
+        }
+        
+        /**
+         *    @deprecated
+         */
+        function setReturnValueSequence($timing, $method, $value, $args = "") {
+            return $this->setReturnValueAt($timing, $method, $value, $args);
+        }
+        
         /**
          *    @deprecated
          */
@@ -307,7 +412,7 @@
             $args = (is_array($args) ? $args : array());
             $this->_expected_args[strtolower($method)] = new ParameterList(
                     $args,
-                    $this->_wildcard);
+                    $this->_getWildcard());
         }
         
         /**
@@ -331,7 +436,7 @@
             $method = strtolower($method);
             $this->_sequence_args[$timing][$method] = new ParameterList(
                     $args,
-                    $this->_wildcard);
+                    $this->_getWildcard());
         }
         
         /**
@@ -383,21 +488,6 @@
         }
         
         /**
-         *    Fetches the call count of a method so far.
-         *    @param $method        Method name called.
-         *    @return               Number of calls so far.
-         *    @public
-         */
-        function getCallCount($method) {
-            $this->_dieOnNoMethod($method, "get call count");
-            $method = strtolower($method);
-            if (!isset($this->_call_counts[$method])) {
-                return 0;
-            }
-            return $this->_call_counts[$method];
-        }
-        
-        /**
          *    Totals up the call counts and triggers a test
          *    assertion if a test is present for expected
          *    call counts.
@@ -429,25 +519,12 @@
          *    @return               Stored return.
          *    @private
          */
-        function &_mockMethod($method, $args) {
+        function &_invoke($method, $args) {
             $method = strtolower($method);
             $step = $this->getCallCount($method);
             $this->_addCall($method, $args);
             $this->_checkExpectations($method, $args, $step);
             return $this->_getReturn($method, $args, $step);
-        }
-        
-        /**
-         *    Adds one to the call count of a method.
-         *    @param $method        Method called.
-         *    @param $args          Arguments as an array.
-         *    @private
-         */
-        function _addCall($method, $args) {
-            if (!isset($this->_call_counts[$method])) {
-                $this->_call_counts[$method] = 0;
-            }
-            $this->_call_counts[$method]++;
         }
         
         /**
@@ -481,28 +558,6 @@
         }
         
         /**
-         *    Finds the return value matching the incoming
-         *    arguments.
-         *    @param $method      Method name.
-         *    @param $args        Calling arguments.
-         *    @param $step        Current position in the
-         *                        call history.
-         *    @returns            Stored return.
-         *    @private
-         */
-        function &_getReturn($method, $args, $step) {
-            if (isset($this->_return_sequence[$method][$step])) {
-                if ($this->_return_sequence[$method][$step]->isMatch($args)) {
-                    return $this->_return_sequence[$method][$step]->findFirstMatch($args);
-                }
-            }
-            if (isset($this->_returns[$method])) {
-                return $this->_returns[$method]->findFirstMatch($args);
-            }
-            return null;
-        }
-        
-        /**
          *    Triggers an assertion on the held test case.
          *    Should be overridden when using another test
          *    framework other than the SimpleTest one if the
@@ -516,21 +571,6 @@
          */
         function _assertTrue($assertion, $message , &$test) {
             $test->assertTrue($assertion, $message);
-        }
-        
-        /**
-         *    Triggers a PHP error if the method is not part
-         *    of this object.
-         *    @param $method        Name of method.
-         *    @param $task          Description of task attempt.
-         *    @protected
-         */
-        function _dieOnNoMethod($method, $task) {
-            if (!method_exists($this, $method)) {
-                trigger_error(
-                        "Cannot $task as no ${method}() in class " . get_class($this),
-                        E_USER_ERROR);
-            }
         }
         
         /**
@@ -563,13 +603,106 @@
     }
     
     /**
-     *    Static methods only class for code generation.
+     *    Static methods only class for code generation of
+     *    server stubs.
+     */
+    class Stub {
+        
+        /**
+         *    Factory for server stub classes.
+         */
+        function Stub() {
+            trigger_error("Mock factory methods are class only.");
+        }
+        
+        /**
+         *    Clones a class' interface and creates a stub version
+         *    that can have return values set.
+         *    @param $class            Class to clone.
+         *    @param $stub_class       New class name. Default is
+         *                             the old name with "Stub"
+         *                             prepended.
+         *    @static
+         */
+        function generate($class, $stub_class = "") {
+            if (!class_exists($class)) {
+                return false;
+            }
+            if (!$stub_class) {
+                $stub_class = "Stub" . $class;
+            }
+            if (class_exists($stub_class)) {
+                return false;
+            }
+            return eval(Stub::_createClassCode($class, $stub_class) . " return true;");
+        }
+        
+        /**
+         *    The new server stub class code in string form.
+         *    @param $class            Class to clone.
+         *    @param $mock_class       New class name.
+         *    @static
+         *    @private
+         */
+        function _createClassCode($class, $stub_class) {
+            $stub_base = Stub::setStubBaseClass();
+            $code = "class $stub_class extends $stub_base {\n";
+            $code .= "    function $stub_class(\$wildcard = MOCK_WILDCARD) {\n";
+            $code .= "        \$this->$stub_base(\$wildcard);\n";
+            $code .= "    }\n";
+            $code .= Stub::_createHandlerCode($class);
+            $code .= "}\n";
+            return $code;
+        }
+        
+        /**
+         *    Creates code within a class to generate replaced
+         *    methods. All methods call the _invoke() handler
+         *    with the method name and the arguments in an
+         *    array.
+         *    @param $class            Class to clone.
+         *    @private
+         */
+        function _createHandlerCode($class) {
+            $code = "";
+            foreach (get_class_methods($class) as $method) {
+                $code .= "    function &$method() {\n";
+                $code .= "        \$args = func_get_args();\n";
+                $code .= "        return \$this->_invoke(\"$method\", \$args);\n";
+                $code .= "    }\n";
+            }
+            return $code;
+        }
+        
+        /**
+         *    The base class name is settable here. This is the
+         *    class that the new server stub will inherited from.
+         *    To modify the generated stubs simply extend the
+         *    SimpleStub class above and set it's name
+         *    with this method before any stubs are generated.
+         *    @param $mock_base        Stub base class to use.
+         *                             If empty then the existing
+         *                             class will be unchanged.
+         *    @return                  Current or new base class.
+         *    @static
+         */
+        function setStubBaseClass($stub_base = false) {
+            static $_stub_base = "SimpleStub";
+            if ($stub_base) {
+                $_stub_base = $stub_base;
+            }
+            return $_stub_base;
+        }
+    }
+    
+    /**
+     *    Static methods only class for code generation of
+     *    mock objects.
      */
     class Mock {
         
         /**
-         *    Factory for Mock classes.
-         *    @abstract
+         *    Factory for mock object classes.
          */
         function Mock() {
             trigger_error("Mock factory methods are class only.");
@@ -584,11 +717,11 @@
          *                             prepended.
          *    @static
          */
-        function generate($class, $mock_class = "") {
+        function generate($class, $mock_class = false) {
             if (!class_exists($class)) {
                 return false;
             }
-            if ($mock_class == "") {
+            if (!$mock_class) {
                 $mock_class = "Mock" . $class;
             }
             if (class_exists($mock_class)) {
@@ -609,23 +742,16 @@
             $code = "class $mock_class extends $mock_base {\n";
             $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_WILDCARD) {\n";
             $code .= "        \$this->$mock_base(\$test, \$wildcard);\n";
-            $code .= "        \$args = func_get_args();\n";
-            $code .= "        \$this->_mockMethod(\"$class\", \$args);\n";
             $code .= "    }\n";
-            foreach (get_class_methods($class) as $method) {
-                $code .= "    function &$method() {\n";
-                $code .= "        \$args = func_get_args();\n";
-                $code .= "        return \$this->_mockMethod(\"$method\", \$args);\n";
-                $code .= "    }\n";
-            }
+            $code .= Stub::_createHandlerCode($class);
             $code .= "}\n";
             return $code;
         }
         
         /**
-         *    The base class name is setable here. This is the
+         *    The base class name is settable here. This is the
          *    class that the new mock will inherited from.
-         *    To modify the generated mocks simple extend the
+         *    To modify the generated mocks simply extend the
          *    SimpleMock class above and set it's name
          *    with this method before any mocks are generated.
          *    @param $mock_base        Mock base class to use.
@@ -634,9 +760,9 @@
          *    @return                  Current or new base class.
          *    @static
          */
-        function setMockBaseClass($mock_base = "") {
+        function setMockBaseClass($mock_base = false) {
             static $_mock_base = "SimpleMock";
-            if ($mock_base != "") {
+            if ($mock_base) {
                 $_mock_base = $mock_base;
             }
             return $_mock_base;
