@@ -167,7 +167,6 @@
      */
     class SimpleBrowser {
         var $_user_agent;
-        var $_headers;
         var $_transport_error;
         var $_page;
         var $_history;
@@ -185,7 +184,6 @@
                     SimpleTestOptions::getDefaultProxy(),
                     SimpleTestOptions::getDefaultProxyUsername(),
                     SimpleTestOptions::getDefaultProxyPassword());
-            $this->_headers = false;
             $this->_transport_error = false;
             $this->_page = false;
             $this->_history = &$this->_createHistory();
@@ -384,7 +382,6 @@
          *    @access private
          */
         function _fetch($method, $url, $parameters, $add_to_history) {
-            $this->_headers = false;
             $this->_transport_error = false;
             $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
             if ($response->isError()) {
@@ -398,9 +395,8 @@
                         $this->_user_agent->getCurrentUrl(),
                         $this->_user_agent->getCurrentPostData());
             }
-            $this->_headers = $response->getHeaders();
             $this->_page = &$this->_parse($response);
-            return $response->getContent();
+            return $this->_page->getRaw();
         }
         
         /**
@@ -474,13 +470,13 @@
             if (! $this->_history->getUrl()) {
                 return false;
             }
-            if (! $this->_headers || ! $this->_headers->getRealm()) {
+            if (! $this->_page->getRealm()) {
                 return false;
             }
             $url = new SimpleUrl($this->_history->getUrl());
             $this->_user_agent->setIdentity(
                     $url->getHost(),
-                    $this->_headers->getRealm(),
+                    $this->_page->getRealm(),
                     $username,
                     $password);
             return $this->retry();
@@ -501,10 +497,7 @@
          *    @access public
          */
         function getMimeType() {
-            if (! $this->_headers) {
-                return false;
-            }
-            return $this->_headers->getMimeType();
+            return $this->_page->getMimeType();
         }
         
         /**
@@ -513,10 +506,7 @@
          *    @access public
          */
         function getResponseCode() {
-            if (! $this->_headers) {
-                return false;
-            }
-            return $this->_headers->getResponseCode();
+            return $this->_page->getResponseCode();
         }
         
         /**
@@ -526,10 +516,7 @@
          *    @access public
          */
         function getAuthentication() {
-            if (! $this->_headers) {
-                return false;
-            }
-            return $this->_headers->getAuthentication();
+            return $this->_page->getAuthentication();
         }
         
         /**
@@ -539,10 +526,7 @@
          *    @access public
          */
         function getRealm() {
-            if (! $this->_headers) {
-                return false;
-            }
-            return $this->_headers->getRealm();
+            return $this->_page->getRealm();
         }
         
         /**
@@ -560,10 +544,7 @@
          *    @access public
          */
         function getHeaders() {
-            if (! $this->_headers) {
-                return false;
-            }
-            return $this->_headers->getRaw();
+            return $this->_page->getHeaders();
         }
         
         /**
@@ -725,7 +706,7 @@
         }
         
         /**
-         *    Tests to see if a link is present by label.
+         *    Tests to see if a link is present by ID attribute.
          *    @param string $id     Text of id attribute.
          *    @return boolean       True if link present.
          *    @access public

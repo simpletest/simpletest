@@ -150,16 +150,9 @@
         }
     }
 
-    class TestOfHtmlPage extends UnitTestCase {
-        function TestOfHtmlPage() {
+    class TestOfPageHeaders extends UnitTestCase {
+        function TestOfPageHeaders() {
             $this->UnitTestCase();
-        }
-        function testRawAccessor() {
-            $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue('getContent', 'Raw HTML');
-
-            $page = &new SimplePage($response);
-            $this->assertEqual($page->getRaw(), 'Raw HTML');
         }
         function testHeadersAccessor() {
             $headers = &new MockSimpleHttpHeaders($this);
@@ -170,6 +163,51 @@
 
             $page = &new SimplePage($response);
             $this->assertEqual($page->getHeaders(), 'My: Headers');
+        }
+        function testMimeAccessor() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue('getMimeType', 'text/html');
+            
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getHeaders', $headers);
+
+            $page = &new SimplePage($response);
+            $this->assertEqual($page->getMimeType(), 'text/html');
+        }
+        function testResponseAccessor() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue('getResponseCode', 301);
+            
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getHeaders', $headers);
+
+            $page = &new SimplePage($response);
+            $this->assertIdentical($page->getResponseCode(), 301);
+        }
+        function testAuthenticationAccessors() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue('getAuthentication', 'Basic');
+            $headers->setReturnValue('getRealm', 'Secret stuff');
+            
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getHeaders', $headers);
+
+            $page = &new SimplePage($response);
+            $this->assertEqual($page->getAuthentication(), 'Basic');
+            $this->assertEqual($page->getRealm(), 'Secret stuff');
+        }
+    }
+    
+    class TestOfHtmlPage extends UnitTestCase {
+        function TestOfHtmlPage() {
+            $this->UnitTestCase();
+        }
+        function testRawAccessor() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent', 'Raw HTML');
+
+            $page = &new SimplePage($response);
+            $this->assertEqual($page->getRaw(), 'Raw HTML');
         }
         function testNoLinks() {
             $page = &new SimplePage(new MockSimpleHttpResponse($this));

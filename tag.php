@@ -826,7 +826,9 @@
         }
         
         /**
-         *    Converts the output to an appropriate format.
+         *    Converts the output to an appropriate format. This means
+         *    that no values is false, a single value is just that
+         *    value and only two or more are contained in an array.
          *    @param array $values           List of values of widgets.
          *    @return string/array/boolean   Expected format for a tag.
          *    @access private
@@ -842,7 +844,13 @@
         }
         
         /**
-         *    Converts false or string into array.
+         *    Converts false or string into array. The opposite of
+         *    the coercian method.
+         *    @param string/array/boolean $value  A single item is converted
+         *                                        to a one item list. False
+         *                                        gives an empty list.
+         *    @return array                       List of values, possibly empty.
+         *    @access private
          */
         function _makeArray($value) {
             if ($value === false) {
@@ -854,8 +862,7 @@
             return $value;
         }
     }
-        
-        
+
     /**
      *    A group of tags with the same name within a form.
      *    Used for radio buttons.

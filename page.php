@@ -257,6 +257,44 @@
         }
         
         /**
+         *    Accessor for current MIME type.
+         *    @return string    MIME type as string; e.g. 'text/html'
+         *    @access public
+         */
+        function getMimeType() {
+            return $this->_headers->getMimeType();
+        }
+        
+        /**
+         *    Accessor for HTTP response code.
+         *    @return integer    HTTP response code received.
+         *    @access public
+         */
+        function getResponseCode() {
+            return $this->_headers->getResponseCode();
+        }
+        
+        /**
+         *    Accessor for last Authentication type. Only valid
+         *    straight after a challenge (401).
+         *    @return string    Description of challenge type.
+         *    @access public
+         */
+        function getAuthentication() {
+            return $this->_headers->getAuthentication();
+        }
+        
+        /**
+         *    Accessor for last Authentication realm. Only valid
+         *    straight after a challenge (401).
+         *    @return string    Name of security realm.
+         *    @access public
+         */
+        function getRealm() {
+            return $this->_headers->getRealm();
+        }
+        
+        /**
          *    Creates the parser used with the builder.
          *    @param SimplePageBuilder $builder    Parser listener.
          *    @return SimpleSaxParser              Parser to generate events for
@@ -346,7 +384,7 @@
         /**
          *    Test to see if link is an absolute one.
          *    @param string $url     Url to test.
-         *    @return boolean           True if absolute.
+         *    @return boolean        True if absolute.
          *    @access protected
          */
         function _linkIsAbsolute($url) {
@@ -418,7 +456,7 @@
          *    Matches strings regardles of varying whitespace.
          *    @param string $first    First to match with.
          *    @param string $second   Second to match against.
-         *    @return boolean         True is matches even with
+         *    @return boolean         True if matches even with
          *                            whitespace differences.
          *    @access private
          */
