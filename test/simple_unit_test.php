@@ -23,11 +23,11 @@
         }
         function testOfType() {
             $this->assertIsA("hello", "string");
-            $this->assertIsA(14, "string");
+            $this->assertIsA(14, "string");        // Fail.
             $this->assertIsA($this, "TestOfUnitTestCase");
             $this->assertIsA($this, "UnitTestCase");
-            $this->assertIsA(14, "TestOfUnitTestCase");
-            $this->assertIsA(14, "TestHTMLDisplay");
+            $this->assertIsA(14, "TestOfUnitTestCase");        // Fail.
+            $this->assertIsA($this, "TestHTMLDisplay");        // Fail.
         }
         function testOfEquality() {
             $this->assertEqual("0", 0);
