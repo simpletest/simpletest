@@ -9,7 +9,7 @@ Unit tester
 -----------
 Add shell test case (3/4) - done.
 Pattern expectations need type check on message (1/1) - done.
-Create an isA() expectation (1).
+Create an isA() expectation (1/1) - done.
 Add pattern match for error queue (1/1) - done.
 
 Interface

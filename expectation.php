@@ -357,4 +357,49 @@
             }
         }
     }
+    
+    /**
+     *    Tests either type or class name if it's an object.
+     */
+    class IsAExpectation extends SimpleExpectation {
+        var $_type;
+        
+        /**
+         *    Sets the type to compare with.
+         *    @param string $type    Type or class name.
+         *    @access public
+         */
+        function IsAExpectation($type) {
+            $this->SimpleExpectation();
+            $this->_type = $type;
+        }
+        
+        /**
+         *    Tests the expectation. True if the type or
+         *    class matches the string value.
+         *    @param string $compare        Comparison value.
+         *    @return boolean               True if correct.
+         *    @access public
+         */
+        function test($compare) {
+            if (is_object($compare)) {
+                return is_a($compare, $this->_type);
+            } else {
+                return (strtolower(gettype($compare)) == strtolower($this->_type));
+            }
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
+         *    @access public
+         */
+        function testMessage($compare) {
+            $dumper = &$this->_getDumper();
+            return "Value [" . $dumper->describeValue($compare) .
+                    "] should be type [" . $this->_type . "]";
+        }
+    }
 ?>

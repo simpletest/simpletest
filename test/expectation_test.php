@@ -181,11 +181,22 @@
             $pattern = &new WantedPatternExpectation('/hello/i');
             $this->assertTrue($pattern->test("Hello world"));
             $this->assertFalse($pattern->test("Goodbye world"));
-       }
+        }
         function testUnwanted() {
             $pattern = &new UnwantedPatternExpectation('/hello/i');
             $this->assertFalse($pattern->test("Hello world"));
             $this->assertTrue($pattern->test("Goodbye world"));
+        }
+    }
+    
+    class TestOfIsA extends UnitTestCase {
+        function TestOfIsA() {
+            $this->UnitTestCase();
+        }
+        function testString() {
+            $expectation = &new IsAExpectation('string');
+            $this->assertTrue($expectation->test('Hello'));
+            $this->assertFalse($expectation->test(55));
         }
     }
 ?>

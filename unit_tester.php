@@ -74,17 +74,10 @@
          *    @access public
          */
         function assertIsA($object, $type, $message = "%s") {
-            $dumper = &new SimpleDumper();
-            $message = sprintf(
-                    $message,
-                    "[" . $dumper->describeValue($object) . "] should be type [$type]");
-            if (is_object($object)) {
-                $this->assertTrue(is_a($object, $type), $message);
-            } else {
-                $this->assertTrue(
-                        strtolower(gettype($object)) == strtolower($type),
-                        $message);
-            }
+            $this->assertExpectation(
+                    new IsAExpectation($type),
+                    $object,
+                    $message);
         }
         
         /**
