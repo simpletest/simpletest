@@ -514,19 +514,41 @@
                 $base = new SimpleUrl($base);
             }
             $scheme = $this->getScheme() ? $this->getScheme() : $base->getScheme();
-            $host = $this->getHost() ? $this->getHost() : $base->getHost();
-            if (substr($this->_path, 0, 1) == '/') {
-                $path = $this->normalisePath($this->_path);
-            } else {
-                $path = $this->normalisePath($base->getBasePath() . $this->_path);
+            $host = $this->getHost();
+            $path = $this->normalisePath($this->_path);
+            if (! $host) {
+                $host = $base->getHost();
+                if ($this->_isRelativePath($this->_path)) {
+                    $path = $this->normalisePath($base->getBasePath() . $this->_path);
+                }
             }
-            $identity = '';
-            if ($this->_username && $this->_password) {
-                $identity = $this->_username . ':' . $this->_password . '@';
-            }
+            $identity = $this->_getIdentity() ? $this->_getIdentity() . '@' : '';
             $encoded = $this->getEncodedRequest();
             $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
             return new SimpleUrl("$scheme://$identity$host$path$encoded$fragment");
+        }
+        
+        /**
+         *    Simple test to see if a path part is relative.
+         *    @param string $path        Path to test.
+         *    @return boolean            True if starts with a "/".
+         *    @access private
+         */
+        function _isRelativePath($path) {
+            return (substr($path, 0, 1) != '/');
+        }
+        
+        /**
+         *    Extracts the username and password for use in rendering
+         *    a URL.
+         *    @return string/boolean    Form of username:password@ or false.
+         *    @access private
+         */
+        function _getIdentity() {
+            if ($this->_username && $this->_password) {
+                return $this->_username . ':' . $this->_password;
+            }
+            return false;
         }
         
         /**

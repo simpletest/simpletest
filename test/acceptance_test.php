@@ -46,7 +46,7 @@
             $this->assertWantedPattern('/target for the SimpleTest/', $browser->getContent());
         }
         
-        function testIdFollowing() {
+        function testIdLinkFollowing() {
             $browser = &new SimpleBrowser();
             $browser->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
             $browser->get('http://www.lastcraft.com/test/link_confirm.php');
@@ -143,11 +143,17 @@
             $this->assertWantedPattern('/target for the SimpleTest/');
         }
         
-        function testIdFollowing() {
+        function testLinkIdFollowing() {
             $this->get('http://www.lastcraft.com/test/link_confirm.php');
             $this->assertLinkById(1);
             $this->assertTrue($this->clickLinkById(1));
             $this->assertWantedPattern('/target for the SimpleTest/');
+        }
+        
+        function testAbsoluteUrlBehavesAbsolutely() {
+            $this->get('http://www.lastcraft.com/test/link_confirm.php');
+            $this->get('http://www.lastcraft.com');
+            $this->assertWantedPattern('/No guarantee of quality is given or even intended/');
         }
     }
     
