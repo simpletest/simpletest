@@ -6,6 +6,9 @@
      *	@version	$Id$
      */
     
+	/**
+	 * @ignore	originally defined in simple_test.php
+	 */
     if (!defined("SIMPLE_TEST")) {
         define("SIMPLE_TEST", "simpletest/");
     }
@@ -440,6 +443,49 @@
             $dumper = &$this->_getDumper();
             return "Value [" . $dumper->describeValue($compare) .
                     "] should be type [" . $this->_type . "]";
+        }
+    }
+
+    /**
+     *    Tests for existance of a method in an object
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class MethodExistenceExpectation extends SimpleExpectation {
+        var $_obj;
+        
+        /**
+         *    Sets the value to compare against.
+         *    @param string $pattern        Pattern to search for.
+         *    @access public
+         */
+        function MethodExistenceExpectation(&$obj) {
+            $this->SimpleExpectation();
+            $this->_obj = &$obj;
+        }
+        
+        /**
+         *    Tests the expectation. True if the method exists in the test object.
+         *    @param string $compare        Comparison method name.
+         *    @return boolean               True if correct.
+         *    @access public
+         */
+        function test($compare) {
+            return (boolean)(is_object($this->_obj) && method_exists($this->_obj, $compare));
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
+         *    @access public
+         */
+        function testMessage($compare) {
+			$dumper = &$this->_getDumper();
+			return "Object [" . get_class($this->_obj) .
+					"] does not contain method [" .
+					$dumper->describeValue($compare) . "]";
         }
     }
 ?>

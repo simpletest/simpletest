@@ -189,6 +189,22 @@
         }
     }
     
+    class ExpectedMethodTarget {
+        function HasThisMethod() {}
+    }
+
+    class TestOfMethodExistence extends UnitTestCase {
+        function TestOfMethodExistence() {
+            $this->UnitTestCase();
+        }
+       function testHasMethod() {
+            $test_instance = &new ExpectedMethodTarget;
+            $expectation = &new MethodExistenceExpectation($test_instance);
+            $this->assertTrue($expectation->test('HasThisMethod'));
+            $this->assertFalse($expectation->test('DoesNotHaveThisMethod'));
+        }
+    }
+    
     class TestOfIsA extends UnitTestCase {
         function TestOfIsA() {
             $this->UnitTestCase();
