@@ -9,6 +9,7 @@
     Mock::generate("UnitTestCase");
     Mock::generate("SimpleHttpRequest");
     Mock::generate("SimpleHttpResponse");
+    Mock::generate("SimpleHttpHeaders");
     Mock::generatePartial('SimpleBrowser', 'MockRequestSimpleBrowser', array('_createRequest'));
     Mock::generatePartial('SimpleBrowser', 'MockFetchSimpleBrowser', array('fetchResponse'));
     Mock::generatePartial('TestBrowser', 'MockRequestTestBrowser', array('_createRequest'));
@@ -133,9 +134,12 @@
             $this->UnitTestCase();
         }
         function testSetBase() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue("getNewCookies", array());
+            
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("isError", false);
-            $response->setReturnValue("getNewCookies", array());
+            $response->setReturnReference("getHeaders", $headers);
             
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
@@ -150,9 +154,12 @@
                     "http://this.com/this/path/");
         }
         function testSetCurrent() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue("getNewCookies", array());
+            
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("isError", false);
-            $response->setReturnValue("getNewCookies", array());
+            $response->setReturnReference("getHeaders", $headers);
             
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
@@ -167,9 +174,12 @@
                     "http://this.com/this/path/page.html");
         }
         function testSetCurrentWithPost() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue("getNewCookies", array());
+            
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("isError", false);
-            $response->setReturnValue("getNewCookies", array());
+            $response->setReturnReference("getHeaders", $headers);
             
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
@@ -190,17 +200,21 @@
             $this->UnitTestCase();
         }
         function &_createStandardResponse() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue("getNewCookies", array());
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("isError", false);
-            $response->setReturnValue("getNewCookies", array());
             $response->setReturnValue("getContent", "stuff");
+            $response->setReturnReference("getHeaders", $headers);
             return $response;
         }
         function &_createCookieSite($cookies) {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue("getNewCookies", $cookies);
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("isError", false);
+            $response->setReturnReference("getHeaders", $headers);
             $response->setReturnValue("getContent", "stuff");
-            $response->setReturnValue("getNewCookies", $cookies);
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
             return $request;
@@ -216,6 +230,7 @@
             $request->setReturnReference("fetch", $this->_createStandardResponse());
             $request->expectArguments("setCookie", array(new SimpleCookie("a", "A")));
             $request->expectCallCount("setCookie", 1);
+            
             $browser = &$this->_createPartialBrowser($request);
             $browser->setCookie("a", "A");
             $response = $browser->fetchResponse(
@@ -292,14 +307,17 @@
         function testGet() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("getContent", "stuff");
+            
             $url = new SimpleUrl("http://this.com/page.html");
             $url->addRequestParameters(array("a" => "A", "b" => "B"));
+            
             $browser = &new MockFetchSimpleBrowser($this);
             $browser->setReturnReference("fetchResponse", $response);
             $browser->expectArguments(
                     "fetchResponse",
                     array("GET", $url, array("a" => "A", "b" => "B")));
             $browser->SimpleBrowser();
+            
             $this->assertIdentical(
                     $browser->get("http://this.com/page.html", array("a" => "A", "b" => "B")),
                     "stuff");
@@ -308,8 +326,10 @@
         function testHead() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("getContent", "stuff");
+            
             $url = new SimpleUrl("http://this.com/page.html");
             $url->addRequestParameters(array("a" => "A", "b" => "B"));
+            
             $browser = &new MockFetchSimpleBrowser($this);
             $browser->setReturnReference("fetchResponse", $response);
             $browser->expectArguments(
@@ -317,6 +337,7 @@
                     array("HEAD", $url, array("a" => "A", "b" => "B")));
             $browser->expectCallCount("fetchResponse", 1);
             $browser->SimpleBrowser();
+            
             $this->assertIdentical(
                     $browser->head("http://this.com/page.html", array("a" => "A", "b" => "B")),
                     true);
@@ -325,8 +346,10 @@
         function testPost() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("getContent", "stuff");
+            
             $expected_request = new SimpleHttpPushRequest(new SimpleUrl("http://this.com/page.html"), "a=A&b=B");
             $expected_request->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
+            
             $browser = &new MockFetchSimpleBrowser($this);
             $browser->setReturnReference("fetchResponse", $response);
             $browser->expectCallCount("fetchResponse", 1);
@@ -334,6 +357,7 @@
                     "fetchResponse",
                     array("POST", new SimpleUrl("http://this.com/page.html"), array("a" => "A", "b" => "B")));
             $browser->SimpleBrowser();
+            
             $this->assertIdentical(
                     $browser->post("http://this.com/page.html", array("a" => "A", "b" => "B")),
                     "stuff");
@@ -346,11 +370,15 @@
             $this->UnitTestCase();
         }
         function &createRedirect($content, $redirect) {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue("getNewCookies", array());
+            $headers->setReturnValue("isRedirect", (boolean)$redirect);
+            $headers->setReturnValue("getLocation", $redirect);
+            
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("getContent", $content);
-            $response->setReturnValue("getNewCookies", array());
-            $response->setReturnValue("isRedirect", (boolean)$redirect);
-            $response->setReturnValue("getRedirect", $redirect);
+            $response->setReturnReference("getHeaders", $headers);
+            
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
             return $request;
@@ -445,11 +473,15 @@
             $this->UnitTestCase();
         }
         function &_createSimulatedBadHost() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue("getNewCookies", array());
+            
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue("isError", true);
             $response->setReturnValue("getError", "Bad socket");
-            $response->setReturnValue("getNewCookies", array());
             $response->setReturnValue("getContent", false);
+            $response->setReturnReference("getHeaders", $headers);
+            
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference("fetch", $response);
             return $request;
@@ -493,11 +525,16 @@
             $this->UnitTestCase();
         }
         function setUp() {
+            $headers = &new MockSimpleHttpHeaders($this);
+            $headers->setReturnValue("getNewCookies", array());
+            
             $this->_response = &new MockSimpleHttpResponse($this);
-            $this->_response->setReturnValue("getNewCookies", array());
             $this->_response->setReturnValue("getContent", false);
+            $this->_response->setReturnReference("getHeaders", $headers);
+            
             $this->_request = &new MockSimpleHttpRequest($this);
             $this->_request->setReturnReference("fetch", $this->_response);
+            
             $this->_test = &new MockUnitTestCase($this);
         }
         function testResponseCode() {
@@ -535,57 +572,6 @@
             $browser->get("http://this.host/this/path/page.html", false);
             $browser->assertMime("text/plain");
             $this->_test->tally();
-        }
-    }
-    
-    class testOfExpectedCookies extends UnitTestCase {
-        function TestOfExpectedCookies() {
-            $this->UnitTestCase();
-        }
-        function &_createStandardResponse() {
-            $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue("isError", false);
-            $response->setReturnValue("getNewCookies", array());
-            $response->setReturnValue("getContent", "stuff");
-            return $response;
-        }
-        function &_createCookieSite($cookies) {
-            $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue("isError", false);
-            $response->setReturnValue("getContent", "stuff");
-            $response->setReturnValue("getNewCookies", $cookies);
-            $request = &new MockSimpleHttpRequest($this);
-            $request->setReturnReference("fetch", $response);
-            return $request;
-        }
-        function testMissingCookie() {
-            $request = &new MockSimpleHttpRequest($this);
-            $request->setReturnReference("fetch", $this->_createStandardResponse());
-            $test = &new MockUnitTestCase($this);
-            $test->expectArguments("assertTrue", array(false, "*"));
-            $test->expectCallCount("assertTrue", 1);
-            $browser = &new MockRequestTestBrowser($this);
-            $browser->setReturnReference('_createRequest', $request);
-            $browser->TestBrowser($test);
-            $browser->expectCookie("a", "A");
-            $browser->get("http://this.host/this/path/page.html", false);
-            $test->tally();
-            $this->assertIdentical($browser->getCookieValue("this.host", "this/page/", "a"), false);
-        }
-        function testNewCookie() {
-            $request = &$this->_createCookieSite(array(new SimpleCookie("a", "A", "this/path/")));
-            $test = &new MockUnitTestCase($this);
-            $test->expectArguments("assertTrue", array(true, "*"));
-            $test->expectCallCount("assertTrue", 1);
-            $browser = &new MockRequestTestBrowser($this);
-            $browser->setReturnReference('_createRequest', $request);
-            $browser->TestBrowser($test);
-            $browser->expectCookie("a", "A");
-            $browser->get("http://this-host.com/this/path/page.html", false);
-            $test->tally();
-            $this->assertEqual($browser->getCookieValue("this-host.com", "this/path/", "a"), "A");
-            $this->assertIdentical($browser->getCookieValue("this-host.com", "this/", "a"), false);
-            $this->assertIdentical($browser->getCookieValue("another.com", "this/path/", "a"), false);
         }
     }
 ?>

@@ -770,6 +770,17 @@
         }
         
         /**
+         *    Test to see if the response is a valid
+         *    redirect.
+         *    @return boolean       True if valid redirect.
+         *    @access public
+         */
+        function isRedirect() {
+            return in_array($this->_response_code, array(301, 302, 303, 307)) &&
+                    (boolean)$this->getLocation();
+        }
+        
+        /**
          *    Accessor for MIME type header information.
          *    @return string           MIME type.
          *    @access public
@@ -859,7 +870,7 @@
                 $this->_setError("Error reading socket [" . $socket->getError() . "]");
                 return;
             }
-            if (!strstr($raw, "\r\n\r\n")) {
+            if (! strstr($raw, "\r\n\r\n")) {
                 $this->_setError("Could not parse headers");
                 return;
             }
@@ -887,12 +898,13 @@
         }
         
         /**
-         *    Accessor for parsed HTTP protocol version.
-         *    @return integer           HTTP error code.
+         *    Accessor for header block. The response is the
+         *    combination of this and the content.
+         *    @return SimpleHeaders        Wrapped header block.
          *    @access public
          */
-        function getHttpVersion() {
-            return $this->_headers->getHttpVersion();            
+        function getHeaders() {
+            return $this->_headers;
         }
         
         /**
@@ -914,35 +926,11 @@
         }
         
         /**
-         *    Gets the redirected URL from the headers.
-         *    @return string    The URL or false if there is no
-         *                      location specified.
-         *    @access public
-         */
-        function getRedirect() {
-            return $this->_headers->getLocation();
-        }
-        
-        /**
-         *    Test to see if the response is a valid
-         *    redirect.
-         *    @return boolean       True if valid redirect.
-         *    @access public
-         */
-        function isRedirect() {
-            return in_array($this->_headers->getResponseCode(), array(301, 302, 303, 307)) &&
-                    (boolean)$this->_headers->getLocation();
-        }
-        
-        /**
          *    Accessor for any new cookies.
          *    @return array       List of new cookies.
          *    @access public
          */
         function getNewCookies() {
-            if (! $this->_headers) {
-                return array();
-            }
             return $this->_headers->getNewCookies();
         }
         

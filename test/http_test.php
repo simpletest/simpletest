@@ -393,6 +393,7 @@
                     "Connection: close");
             $this->assertIdentical($headers->getResponseCode(), 301);
             $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com/");
+            $this->assertTrue($headers->isRedirect());
         }
     }
     
@@ -415,15 +416,6 @@
             $this->assertTrue($response->isError());
             $this->assertWantedPattern('/Socket error/', $response->getError());
             $this->assertIdentical($response->getContent(), false);
-        }
-        function testReadAll() {
-            $socket = &new MockSimpleSocket($this);
-            $socket->setReturnValue("isError", false);
-            $socket->setReturnValueAt(0, "read", "aaa");
-            $socket->setReturnValueAt(1, "read", "bbb");
-            $socket->setReturnValueAt(2, "read", "ccc");
-            $socket->setReturnValue("read", "");
-            $this->assertEqual(SimpleHttpResponse::_readAll($socket), "aaabbbccc");
         }
         function testBadSocketDuringResponse() {
             $socket = &new MockSimpleSocket($this);
@@ -462,11 +454,12 @@
             $this->assertEqual(
                     $response->getContent(),
                     "this is a test file\nwith two lines in it\n");
-            $this->assertIdentical($response->getHttpVersion(), "1.1");
-            $this->assertIdentical($response->getResponseCode(), 200);
-            $this->assertEqual($response->getMimeType(), "text/plain");
-            $this->assertFalse($response->isRedirect());
-            $this->assertFalse($response->getRedirect());
+            $headers = $response->getHeaders();
+            $this->assertIdentical($headers->getHttpVersion(), "1.1");
+            $this->assertIdentical($headers->getResponseCode(), 200);
+            $this->assertEqual($headers->getMimeType(), "text/plain");
+            $this->assertFalse($headers->isRedirect());
+            $this->assertFalse($headers->getLocation());
         }
         function testParseOfCookies() {
             $socket = &new MockSimpleSocket($this);
@@ -481,7 +474,8 @@
             $socket->setReturnValue("read", "");
             $response = &new SimpleHttpResponse(new MockSimpleUrl($this), $socket);
             $this->assertFalse($response->isError());
-            $cookies = $response->getNewCookies();
+            $headers = $response->getHeaders();
+            $cookies = $headers->getNewCookies();
             $this->assertEqual($cookies[0]->getName(), "a");
             $this->assertEqual($cookies[0]->getValue(), "aaa");
             $this->assertEqual($cookies[0]->getPath(), "/here/");
@@ -497,8 +491,9 @@
             $socket->setReturnValueAt(4, "read", "\r\n");
             $socket->setReturnValue("read", "");
             $response = &new SimpleHttpResponse(new MockSimpleUrl($this), $socket);
-            $this->assertTrue($response->isRedirect());
-            $this->assertEqual($response->getRedirect(), "http://www.somewhere-else.com/");
+            $headers = $response->getHeaders();
+            $this->assertTrue($headers->isRedirect());
+            $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com/");
         }
     }
 ?>

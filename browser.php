@@ -182,7 +182,7 @@
          *    @access public
          */
         function getCurrentUrl() {
-            if (!$this->_current_url) {
+            if (! $this->_current_url) {
                 return false;
             }
             return $this->_current_url->getScheme('http') . '://' .
@@ -304,11 +304,12 @@
                     $this->_response = false;
                     return $response;
                 }
-                $this->_addCookies($url, $response->getNewCookies());
-                if (!$response->isRedirect()) {
+                $headers = $response->getHeaders();
+                $this->_addCookies($url, $headers->getNewCookies());
+                if (! $headers->isRedirect()) {
                     break;
                 }
-                $url = new SimpleUrl($response->getRedirect());
+                $url = new SimpleUrl($headers->getLocation());
             } while (! $this->_isTooManyRedirects(++$redirects));
             $this->_response = &$response;
             return $response;
