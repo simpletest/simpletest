@@ -20,8 +20,8 @@
          *                             the class name if none specified.
          *    @public
          */
-        function UnitTestCase($label = "") {
-            if ($label == "") {
+        function UnitTestCase($label = false) {
+            if (!$label) {
                 $label = get_class($this);
             }
             $this->SimpleTestCase($label);

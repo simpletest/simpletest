@@ -5,6 +5,7 @@
         define("SIMPLE_TEST", "../");
     }
     require_once(SIMPLE_TEST . 'simple_unit.php');
+    require_once(SIMPLE_TEST . 'simple_web_test.php');
     require_once(SIMPLE_TEST . 'simple_html_test.php');
     require_once(SIMPLE_TEST . 'simple_mock.php');
     
@@ -12,6 +13,7 @@
         function BoundaryTests() {
             $this->GroupTest("Boundary tests");
             $this->addTestFile("live_test.php");
+            $this->addTestFile("web_test.php");
         }
     }
     
