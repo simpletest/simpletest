@@ -346,6 +346,21 @@
             $this->_handler->expectCallCount("acceptAttributeToken", 3);
             $this->assertTrue($this->_lexer->parse("<html><a href = 'here.html'>label</a></html>"));
         }
+        function testEmptyLinkWithId() {
+            $this->_handler->expectArgumentsAt(0, "acceptTextToken", array("<html>", "*"));
+            $this->_handler->expectArgumentsAt(1, "acceptTextToken", array("label", "*"));
+            $this->_handler->expectArgumentsAt(2, "acceptTextToken", array("</html>", "*"));
+            $this->_handler->expectCallCount("acceptTextToken", 3);
+            $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<a", "*"));
+            $this->_handler->expectArgumentsAt(1, "acceptStartToken", array("id", "*"));
+            $this->_handler->expectArgumentsAt(2, "acceptStartToken", array(">", "*"));
+            $this->_handler->expectCallCount("acceptStartToken", 3);
+            $this->_handler->expectArgumentsAt(0, "acceptAttributeToken", array("\"", "*"));
+            $this->_handler->expectArgumentsAt(1, "acceptAttributeToken", array("0", "*"));
+            $this->_handler->expectArgumentsAt(2, "acceptAttributeToken", array("\"", "*"));
+            $this->_handler->expectCallCount("acceptAttributeToken", 3);
+            $this->assertTrue($this->_lexer->parse("<html><a id=\"0\">label</a></html>"));
+        }
         function testComplexLink() {
             $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<a", LEXER_ENTER));
             $this->_handler->expectArgumentsAt(1, "acceptStartToken", array("href", "*"));
@@ -431,6 +446,21 @@
             $this->assertTrue($this->_parser->acceptStartToken("=", LEXER_MATCHED));
             $this->assertTrue($this->_parser->acceptAttributeToken("\"", LEXER_ENTER));
             $this->assertTrue($this->_parser->acceptAttributeToken("here.html", LEXER_UNMATCHED));
+            $this->assertTrue($this->_parser->acceptAttributeToken("\"", LEXER_EXIT));
+            $this->assertTrue($this->_parser->acceptStartToken(">", LEXER_EXIT));
+        }
+        function testLinkStartWithId() {
+            $this->_parser->parse("");
+            $this->_listener->expectArguments(
+                    "startElement",
+                    array("a", array("id" => "0")));
+            $this->_listener->expectCallCount("startElement", 1);
+            $this->_listener->setReturnValue("startElement", true);
+            $this->assertTrue($this->_parser->acceptStartToken("<a", LEXER_ENTER));
+            $this->assertTrue($this->_parser->acceptStartToken("id", LEXER_MATCHED));
+            $this->assertTrue($this->_parser->acceptStartToken("=", LEXER_MATCHED));
+            $this->assertTrue($this->_parser->acceptAttributeToken("\"", LEXER_ENTER));
+            $this->assertTrue($this->_parser->acceptAttributeToken("0", LEXER_UNMATCHED));
             $this->assertTrue($this->_parser->acceptAttributeToken("\"", LEXER_EXIT));
             $this->assertTrue($this->_parser->acceptStartToken(">", LEXER_EXIT));
         }

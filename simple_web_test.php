@@ -88,35 +88,39 @@
         /**
          *    Fetches a page into the page buffer. If
          *    there is no base for the URL then the
-         *    current base URL is used. All other context
-         *    remains the same.
+         *    current base URL is used. After the fetch
+         *    the base URL reflects the new location.
          *    @param $url          URL to fetch.
          *    @param $parameters   Optional additional GET data.
+         *    @return              True on success.
          *    @public
          */
         function get($url, $parameters = false) {
             $this->_current_content = $this->_current_browser->get($url, $parameters);
             $this->_clearHtmlCache();
+            return ($this->_current_content !== false);
         }
         
         /**
          *    Fetches a page by POST into the page buffer.
          *    If there is no base for the URL then the
-         *    current base URL is used. All other context
-         *    remains the same.
+         *    current base URL is used. After the fetch
+         *    the base URL reflects the new location.
          *    @param $url          URL to fetch.
          *    @param $parameters   Optional additional GET data.
+         *    @return              True on success.
          *    @public
          */
         function post($url, $parameters = false) {
             $this->_current_content = $this->_current_browser->post($url, $parameters);
             $this->_clearHtmlCache();
+            return ($this->_current_content !== false);
         }
         
         /**
          *    @deprecated
          */
-        function fetch($url, $parameters) {
+        function fetch($url, $parameters = false) {
             return $this->get($url, $parameters);
         }
         

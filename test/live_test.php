@@ -90,13 +90,13 @@
             $this->WebTestCase();
         }
         function testGet() {
-            $this->get('http://www.lastcraft.com/test/network_confirm.php');
+            $this->assertTrue($this->get('http://www.lastcraft.com/test/network_confirm.php'));
             $this->assertWantedPattern('/target for the SimpleTest/');
             $this->assertWantedPattern('/Request method.*?<dd>GET<\/dd>/');
             $this->assertTitle('Simple test target file');
         }
         function testPost() {
-            $this->post('http://www.lastcraft.com/test/network_confirm.php');
+            $this->assertTrue($this->post('http://www.lastcraft.com/test/network_confirm.php'));
             $this->assertWantedPattern('/target for the SimpleTest/');
             $this->assertWantedPattern('/Request method.*?<dd>POST<\/dd>/');
         }

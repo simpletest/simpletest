@@ -112,7 +112,7 @@
         /**
          *    Accessor for list of tags where the content
          *    between the start and end is not important,
-         *    but both teh start and end must be sent.
+         *    but both the start and end must be sent.
          *    @return        List of content tags.
          *    @protected
          */
@@ -259,8 +259,8 @@
          *    @private
          */
         function _addLinkId($url, $id) {
-            if (!($id === false)) {
-                $this->_link_ids[(integer)$id] = $url;
+            if ($id !== false) {
+                $this->_link_ids[(string)$id] = $url;
             }
         }
         
@@ -315,8 +315,8 @@
          *    @public
          */
         function getUrlById($id) {
-            if (in_array($id, array_keys($this->_link_ids))) {
-                return $this->_link_ids[$id];
+            if (in_array((string)$id, array_keys($this->_link_ids))) {
+                return $this->_link_ids[(string)$id];
             }
             return false;
         }

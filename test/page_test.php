@@ -237,7 +237,7 @@
                     $page->getRelativeLinks(),
                     array("./there.html"));
             $this->assertIdentical($page->getUrls("There"), array("./there.html"));
-            $this->assertEqual($page->getUrlById(0), "http://there.com/that.html");
+            $this->assertEqual($page->getUrlById("0"), "http://there.com/that.html");
         }
         function testTitle() {
             $page = &new SimplePage("<html><head><title>Me</title></head></html>");

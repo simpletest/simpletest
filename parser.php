@@ -328,7 +328,7 @@
          *    @private
          */
         function _invokeParser($content, $is_match) {
-            if (!$content) {
+            if (($content === "") || ($content === false)) {
                 return true;
             }
             $handler = $this->_mode->getCurrent();
@@ -356,7 +356,7 @@
             if (!isset($this->_regexes[$this->_mode->getCurrent()])) {
                 return false;
             }
-            if ($raw == "") {
+            if ($raw === "") {
                 return true;
             }
             if ($action = $this->_regexes[$this->_mode->getCurrent()]->match($raw, $match)) {
