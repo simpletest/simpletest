@@ -690,6 +690,15 @@
         }
         
         /**
+         *    Accessor for plain text version of the page.
+         *    @return string      Normalised text representation.
+         *    @access public
+         */
+        function getContentAsText() {
+            return $this->_page->getText();
+        }
+        
+        /**
          *    Accessor for raw header information.
          *    @return string      Header block.
          *    @access public

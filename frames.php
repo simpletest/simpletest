@@ -211,6 +211,23 @@
         }
         
         /**
+         *    Accessor for plain text of either all the pages or
+         *    the frame in focus.
+         *    @return string        Plain text content.
+         *    @access public
+         */
+        function getText() {
+            if (is_integer($this->_focus)) {
+                return $this->_frames[$this->_focus]->getText();
+            }
+            $raw = '';
+            for ($i = 0; $i < count($this->_frames); $i++) {
+                $raw .= ' ' . $this->_frames[$i]->getText();
+            }
+            return trim($raw);
+        }
+        
+        /**
          *    Accessor for last error.
          *    @return string        Error from last response.
          *    @access public

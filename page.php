@@ -253,6 +253,7 @@
         var $_frameset_nesting_level;
         var $_transport_error;
         var $_raw;
+        var $_text;
         var $_sent;
         var $_headers;
         var $_method;
@@ -272,6 +273,7 @@
             $this->_frameset = false;
             $this->_frames = array();
             $this->_frameset_nesting_level = 0;
+            $this->_text = false;
             if ($response) {
                 $this->_extractResponse($response);
             } else {
@@ -324,6 +326,19 @@
          */
         function getRaw() {
             return $this->_raw;
+        }
+        
+        /**
+         *    Accessor for plain text of page as a text browser
+         *    would see it.
+         *    @return string        Plain text of page.
+         *    @access public
+         */
+        function getText() {
+            if (! $this->_text) {
+                $this->_text = SimpleSaxParser::normalise($this->_raw);
+            }
+            return $this->_text;
         }
         
         /**

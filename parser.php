@@ -7,12 +7,6 @@
      */
 
     /**#@+
-     *	include other SimpleTest class files
-     */
-    require_once(dirname(__FILE__) . '/options.php');
-    /**#@-*/
-    
-    /**#@+
      * Lexer mode stack constants
      */
     define("LEXER_ENTER", 1);
@@ -600,7 +594,7 @@
                 return $success;
             }
             if ($token != "=") {
-                $this->_current_attribute = strtolower($this->_decodeHtml($token));
+                $this->_current_attribute = strtolower(SimpleSaxParser::decodeHtml($token));
                 $this->_attributes[$this->_current_attribute] = "";
             }
             return true;
@@ -631,11 +625,11 @@
         function acceptAttributeToken($token, $event) {
             if ($event == LEXER_UNMATCHED) {
                 $this->_attributes[$this->_current_attribute] .=
-                        $this->_decodeHtml($token);
+                        SimpleSaxParser::decodeHtml($token);
             }
             if ($event == LEXER_SPECIAL) {
                 $this->_attributes[$this->_current_attribute] .=
-                        preg_replace('/^=\s*/' , '', $this->_decodeHtml($token));
+                        preg_replace('/^=\s*/' , '', SimpleSaxParser::decodeHtml($token));
             }
             return true;
         }
@@ -677,10 +671,34 @@
          *    Decodes any HTML entities.
          *    @param string $html    Incoming HTML.
          *    @return string         Outgoing plain text.
-         *    @access private
+         *    @access public
+         *    @static
          */
-        function _decodeHtml($html) {
-            return SimpleTestCompatibility::decodeHtml($html);
+        function decodeHtml($html) {
+            static $translations;
+            if (! isset($translations)) {
+                $translations = array_flip(get_html_translation_table(HTML_ENTITIES));
+            }
+            return strtr($html, $translations);
+        }
+        
+        /**
+         *    Turns HTML into text browser visible text. Images
+         *    are converted to thier alt text and tags are supressed.
+         *    Entities are converted to their visible representation.
+         *    @param string $html        HTML to convert.
+         *    @return string             Plain text.
+         *    @access public
+         *    @static
+         */
+        function normalise($html) {
+            $text = preg_replace('|<img.*?alt\s*=\s*"(.*?)".*?>|', ' \1 ', $html);
+            $text = preg_replace('|<img.*?alt\s*=\s*\'(.*?)\'.*?>|', ' \1 ', $text);
+            $text = preg_replace('|<img.*?alt\s*=\s*([a-zA-Z_]+).*?>|', ' \1 ', $text);
+            $text = preg_replace('|<.*?>|', '', $text);
+            $text = SimpleSaxParser::decodeHtml($text);
+            $text = preg_replace('|\s+|', ' ', $text);
+            return trim($text);
         }
     }
     

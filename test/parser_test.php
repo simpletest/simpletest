@@ -465,6 +465,45 @@
         }
     }
     
+    class TestOfTextExtraction extends UnitTestCase {
+        
+        function testSpaceNormalisation() {
+            $this->assertEqual(
+                    SimpleSaxParser::normalise("\nOne\tTwo   \nThree\t"),
+                    'One Two Three');            
+        }
+        
+        function testTagSuppression() {
+            $this->assertEqual(
+                    SimpleSaxParser::normalise('<b>Hello</b>'),
+                    'Hello');            
+        }
+        
+        function testAdjoiningTagSuppression() {
+            $this->assertEqual(
+                    SimpleSaxParser::normalise('<b>Hello</b><em>Goodbye</em>'),
+                    'HelloGoodbye');            
+        }
+        
+        function testExtractImageAltTextWithDifferentQuotes() {
+            $this->assertEqual(
+                    SimpleSaxParser::normalise('<img alt="One"><img alt=\'Two\'><img alt=Three>'),
+                    'One Two Three');
+        }
+        
+        function testExtractImageAltTextMultipleTimes() {
+            $this->assertEqual(
+                    SimpleSaxParser::normalise('<img alt="One"><img alt="Two"><img alt="Three">'),
+                    'One Two Three');
+        }
+        
+        function testHtmlEntityTranslation() {
+            $this->assertEqual(
+                    SimpleSaxParser::normalise('&lt;&gt;&quot;&amp;'),
+                    '<>"&');
+        }
+    }
+
     class TestSimpleSaxParser extends SimpleSaxParser {
         var $_lexer;
         

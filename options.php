@@ -297,20 +297,5 @@
             }
             return array();
         }
-        
-        /**
-         *    Decodes any HTML entities.
-         *    @param string $html    Incoming HTML.
-         *    @return string         Outgoing plain text.
-         *    @access public
-         *    @static
-         */
-        function decodeHtml($html) {
-            static $translations;
-            if (! isset($translations)) {
-                $translations = array_flip(get_html_translation_table(HTML_ENTITIES));
-            }
-            return strtr($html, $translations);
-        }
     }
 ?>

@@ -3,49 +3,6 @@
     
     require_once(dirname(__FILE__) . '/../tag.php');
     
-    class TestOfTextExtraction extends UnitTestCase {
-        
-        function testSpaceNormalisation() {
-            $tag = &new SimpleTag('tag', array());
-            $tag->addContent("\nOne\tTwo   \nThree\t");
-            $this->assertEqual($tag->getText(), 'One Two Three');            
-        }
-        
-        function testTagSuppression() {
-            $tag = &new SimpleTag('tag', array());
-            $tag->addContent('<b>Hello</b>');
-            $this->assertEqual($tag->getText(), 'Hello');            
-        }
-        
-        function testAdjoiningTagSuppression() {
-            $tag = &new SimpleTag('tag', array());
-            $tag->addContent('<b>Hello</b><em>Goodbye</em>');
-            $this->assertEqual($tag->getText(), 'HelloGoodbye');            
-        }
-        
-        function testExtractImageAltTextWithDifferentQuotes() {
-            $tag = &new SimpleTag('tag', array());
-            $tag->addContent('<img alt="One">');
-            $tag->addContent('<img alt=\'Two\'>');
-            $tag->addContent('<img alt=Three>');
-            $this->assertEqual($tag->getText(), 'One Two Three');
-        }
-        
-        function testExtractImageAltTextMultipleTimes() {
-            $tag = &new SimpleTag('tag', array());
-            $tag->addContent('<img alt="One">');
-            $tag->addContent('<img alt="Two">');
-            $tag->addContent('<img alt="Three">');
-            $this->assertEqual($tag->getText(), 'One Two Three');
-        }
-        
-        function testHtmlEntityTranslation() {
-            $tag = &new SimpleTag('tag', array());
-            $tag->addContent('&lt;&gt;&quot;&amp;');
-            $this->assertEqual($tag->getText(), '<>"&');
-        }
-    }
-
     class TestOfTag extends UnitTestCase {
         
         function testStartValuesWithoutAdditionalContent() {
@@ -62,7 +19,15 @@
             $this->assertTrue($tag->expectEndTag());
             $tag->addContent('Hello');
             $tag->addContent('World');
-            $this->assertEqual($tag->getContent(), 'HelloWorld');
+            $this->assertEqual($tag->getText(), 'HelloWorld');
+        }
+        
+        function testMessyTitleContent() {
+            $tag = &new SimpleTitleTag(array());
+            $this->assertTrue($tag->expectEndTag());
+            $tag->addContent('<b>Hello</b>');
+            $tag->addContent('<em>World</em>');
+            $this->assertEqual($tag->getText(), 'HelloWorld');
         }
         
         function testTagWithNoEnd() {

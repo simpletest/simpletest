@@ -9,7 +9,7 @@
     /**#@+
      * include SimpleTest files
      */
-    require_once(dirname(__FILE__) . '/options.php');
+    require_once(dirname(__FILE__) . '/parser.php');
     /**#@-*/
    
     /**
@@ -137,14 +137,7 @@
          *    @access public
          */
         function getText() {
-            $text = $this->getContent();
-            $text = preg_replace('|<img.*?alt\s*=\s*"(.*?)".*?>|', ' \1 ', $text);
-            $text = preg_replace('|<img.*?alt\s*=\s*\'(.*?)\'.*?>|', ' \1 ', $text);
-            $text = preg_replace('|<img.*?alt\s*=\s*([a-zA-Z_]+).*?>|', ' \1 ', $text);
-            $text = preg_replace('|<.*?>|', '', $text);
-            $text = SimpleTestCompatibility::decodeHtml($text);
-            $text = preg_replace('|\s+|', ' ', $text);
-            return trim($text);
+            return SimpleSaxParser::normalise($this->_content);
         }
     }
     

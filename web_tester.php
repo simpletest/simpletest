@@ -317,6 +317,127 @@
     }
     
     /**
+     *    Test for a text substring.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class WantedTextExpectation extends SimpleExpectation {
+        var $_substring;
+        
+        /**
+         *    Sets the value to compare against.
+         *    @param string $substring  Text to search for.
+         *    @param string $message    Customised message on failure.
+         *    @access public
+         */
+        function WantedTextExpectation($substring, $message = '%s') {
+            $this->SimpleExpectation($message);
+            $this->_substring = $substring;
+        }
+        
+        /**
+         *    Accessor for the substring.
+         *    @return string       Text to match.
+         *    @access protected
+         */
+        function _getSubstring() {
+            return $this->_substring;
+        }
+        
+        /**
+         *    Tests the expectation. True if the text contains the
+         *    substring.
+         *    @param string $compare        Comparison value.
+         *    @return boolean               True if correct.
+         *    @access public
+         */
+        function test($compare) {
+            return (strpos($compare, $this->_substring) !== false);
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
+         *    @access public
+         */
+        function testMessage($compare) {
+            if ($this->test($compare)) {
+                return $this->_describeTextMatch($this->_getSubstring(), $compare);
+            } else {
+                $dumper = &$this->_getDumper();
+                return "Text [" . $this->_getSubstring() .
+                        "] not detected in [" .
+                        $dumper->describeValue($compare) . "]";
+            }
+        }
+        
+        /**
+         *    Describes a pattern match including the string
+         *    found and it's position.
+         *    @param string $substring      Text to search for.
+         *    @param string $subject        Subject to search.
+         *    @access protected
+         */
+        function _describeTextMatch($substring, $subject) {
+            $position = strpos($subject, $substring);
+            $dumper = &$this->_getDumper();
+            return "Text [$substring] detected at character [$position] in [" .
+                    $dumper->describeValue($subject) . "] in region [" .
+                    $dumper->clipString($subject, 100, $position) . "]";
+        }
+    }
+    
+    /**
+     *    Fail if a substring is detected within the
+     *    comparison text.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class UnwantedTextExpectation extends WantedTextExpectation {
+        
+        /**
+         *    Sets the reject pattern
+         *    @param string $substring  Text to search for.
+         *    @param string $message    Customised message on failure.
+         *    @access public
+         */
+        function UnwantedTextExpectation($substring, $message = '%s') {
+            $this->WantedTextExpectation($substring, $message);
+        }
+        
+        /**
+         *    Tests the expectation. False if the substring appears
+         *    in the text.
+         *    @param string $compare        Comparison value.
+         *    @return boolean               True if correct.
+         *    @access public
+         */
+        function test($compare) {
+            return ! parent::test($compare);
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param string $compare      Comparison value.
+         *    @return string              Description of success
+         *                                or failure.
+         *    @access public
+         */
+        function testMessage($compare) {
+            if ($this->test($compare)) {
+                $dumper = &$this->_getDumper();
+                return "Text [" . $this->_getSubstring() .
+                        "] not detected in [" .
+                        $dumper->describeValue($compare) . "]";
+            } else {
+                return $this->_describePatternMatch($this->_getSubstring(), $compare);
+            }
+        }
+    }
+    
+    /**
      *    Extension that builds a web browser at the start of each
      *    test.
 	 *    @package SimpleTest
@@ -1102,9 +1223,38 @@
         function assertTitle($title = false, $message = '%s') {
             return $this->assertTrue(
                     $title === $this->_browser->getTitle(),
-                    sprintf(
-                            $message,
-                            "Expecting title [$title] got [" . $this->_browser->getTitle() . "]"));
+                    sprintf($message, "Expecting title [$title] got [" .
+                            $this->_browser->getTitle() . "]"));
+        }
+        
+        /**
+         *    Will trigger a pass if the text is found in the plain
+         *    text form of the page.
+         *    @param string $text       Text to look for.
+         *    @param string $message    Message to display.
+         *    @return boolean           True if pass.
+         *    @access public
+         */
+        function assertWantedText($text, $message = '%s') {
+            return $this->assertExpectation(
+                    new WantedTextExpectation($text),
+                    $this->_browser->getContentAsText(),
+                    $message);
+        }
+        
+        /**
+         *    Will trigger a pass if the text is not found in the plain
+         *    text form of the page.
+         *    @param string $text       Text to look for.
+         *    @param string $message    Message to display.
+         *    @return boolean           True if pass.
+         *    @access public
+         */
+        function assertNoUnwantedText($text, $message = '%s') {
+            return $this->assertExpectation(
+                    new UnwantedTextExpectation($text),
+                    $this->_browser->getContentAsText(),
+                    $message);
         }
         
         /**
@@ -1132,7 +1282,7 @@
          *    @return boolean           True if pass.
          *    @access public
          */
-        function assertNoUnwantedPattern($pattern, $message = "%s") {
+        function assertNoUnwantedPattern($pattern, $message = '%s') {
             return $this->assertExpectation(
                     new UnwantedPatternExpectation($pattern),
                     $this->_browser->getContent(),
@@ -1149,7 +1299,7 @@
          *    @return boolean            True if pass.
          *    @access public
          */
-        function assertCookie($name, $expected = false, $message = "%s") {
+        function assertCookie($name, $expected = false, $message = '%s') {
             $value = $this->getCookie($name);
             if ($expected) {
                 return $this->assertTrue($value === $expected, sprintf(
@@ -1170,7 +1320,7 @@
          *    @return boolean            True if pass.
          *    @access public
          */
-        function assertNoCookie($name, $message = "%s") {
+        function assertNoCookie($name, $message = '%s') {
             return $this->assertTrue(
                     $this->getCookie($name) === false,
                     sprintf($message, "Not expecting cookie [$name]"));

@@ -111,4 +111,23 @@
             $this->assertIdentical($expectation->test("aa:A\r\na:A\r\nb:B"), false);
         }
     }
+    
+    class TestOfTextExpectations extends UnitTestCase {
+        
+        function testMatchingSubString() {
+            $expectation = new WantedTextExpectation('wanted');
+            $this->assertIdentical($expectation->test(''), false);
+            $this->assertIdentical($expectation->test('Wanted'), false);
+            $this->assertIdentical($expectation->test('wanted'), true);
+            $this->assertIdentical($expectation->test('the wanted text is here'), true);
+        }
+        
+        function testNotMatchingSubString() {
+            $expectation = new UnwantedTextExpectation('wanted');
+            $this->assertIdentical($expectation->test(''), true);
+            $this->assertIdentical($expectation->test('Wanted'), true);
+            $this->assertIdentical($expectation->test('wanted'), false);
+            $this->assertIdentical($expectation->test('the wanted text is here'), false);
+        }
+    }
 ?>

@@ -315,7 +315,7 @@
          *    @access public
          */
         function testMessage($compare) {
-            return 'Miximum call count for [' . $this->_method .
+            return 'Maximum call count for [' . $this->_method .
                     '] was [' . $this->_count .
                     '] got [' . $compare . ']';
         }

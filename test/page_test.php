@@ -280,6 +280,14 @@
             $this->assertEqual($page->getRaw(), 'Raw HTML');
         }
         
+        function testTextAccessor() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent', '<b>Some</b> &quot;messy&quot; HTML');
+
+            $page = &new SimplePage($response);
+            $this->assertEqual($page->getText(), 'Some "messy" HTML');
+        }
+        
         function testNoLinks() {
             $page = &new SimplePage(new MockSimpleHttpResponse($this));
             $this->assertIdentical($page->getAbsoluteUrls(), array(), 'abs->%s');

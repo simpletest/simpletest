@@ -71,6 +71,34 @@
             $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
         }
         
+        function testTextContentIsFromOnlyFrame() {
+            $page = &new MockSimplePage($this);
+            $page->expectNever('getText');
+            
+            $frame = &new MockSimplePage($this);
+            $frame->setReturnValue('getText', 'Stuff');
+            
+            $frameset = &new SimpleFrameset($page);
+            $frameset->addFrame($frame);
+            $this->assertEqual($frameset->getText(), 'Stuff');
+        }
+        
+        function testTextContentIsFromAllFrames() {
+            $page = &new MockSimplePage($this);
+            $page->expectNever('getText');
+            
+            $frame1 = &new MockSimplePage($this);
+            $frame1->setReturnValue('getText', 'Stuff1');
+            
+            $frame2 = &new MockSimplePage($this);
+            $frame2->setReturnValue('getText', 'Stuff2');
+            
+            $frameset = &new SimpleFrameset($page);
+            $frameset->addFrame($frame1);
+            $frameset->addFrame($frame2);
+            $this->assertEqual($frameset->getText(), 'Stuff1 Stuff2');
+        }
+        
         function testFieldIsFirstInFramelist() {
             $frame1 = &new MockSimplePage($this);
             $frame1->setReturnValue('getField', null);

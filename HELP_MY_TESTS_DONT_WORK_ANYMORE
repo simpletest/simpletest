@@ -5,6 +5,15 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+No HTML when matching page elements
+-----------------------------------
+This behaviour has been switched to using plain text as if it
+were seen by the user ofthe browser. This means that HTML tags
+are suppressed, entities are converted and whitespace is
+normalised. This should makeit easier to match items in forms.
+Also images are replaced with their "alt" text so that they
+can be matched as well.
+
 No method SimpleRunner::_getTestCase()
 --------------------------------------
 This was made public as getTestCase() in 1.0RC2.
