@@ -8,6 +8,70 @@
     require_once(SIMPLE_TEST . 'parser.php');
     
     /**
+     *    HTML or XML tag.
+     */
+    class SimpleTag {
+        var $_name;
+        var $_attributes;
+        var $_content;
+        
+        /**
+         *    Starts with a named tag with attributes only.
+         *    @param $name        Tag name.
+         *    @param $attributes  Hash of attribute names and
+         *                        string values.
+         */
+        function SimpleTag($name, $attributes) {
+            $this->_name = $name;
+            $this->_attributes = $attributes;
+            $this->_content = "";
+        }
+        
+        /**
+         *    Appends string content to the current content.
+         *    @param $content        Additional text.
+         *    @public
+         */
+        function addContent($content) {
+            $this->_content .= (string)$content;
+        }
+        
+        /**
+         *    Accessor for tag name.
+         *    @return        Name as string.
+         *    @public
+         */
+        function getName() {
+            return $this->_name;
+        }
+        
+        /**
+         *    Accessor for an attribute.
+         *    @param $label      Attribute name.
+         *    @return            Attribute value as string.
+         *    @public
+         */
+        function getAttribute($label) {
+            if (!isset($this->_attributes[$label])) {
+                return false;
+            }
+            if ($this->_attributes[$label] === true) {
+                return true;
+            }
+            return (string)$this->_attributes[$label];
+        }
+        
+        /**
+         *    Accessor for the whole content so far.
+         *    @return        Content as big string.
+         *    @public
+         */
+        function getContent() {
+            return $this->_content;
+        }
+    }
+    
+    /**
      *    SAX event handler. Maintains a list of
      *    open tags and dispatches them as they close.
      */
