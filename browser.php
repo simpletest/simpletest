@@ -320,8 +320,8 @@
          *                                  cookies are kept.
          *    @access public
          */
-        function restartSession($date = false) {
-            $this->_user_agent->restartSession($date);
+        function restart($date = false) {
+            $this->_user_agent->restart($date);
         }
         
         /**

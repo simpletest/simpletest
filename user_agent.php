@@ -190,7 +190,7 @@
          *                                  cookies are kept.
          *    @access public
          */
-        function restartSession($date = false) {
+        function restart($date = false) {
             $this->_cookie_jar->restartSession($date);
         }
         

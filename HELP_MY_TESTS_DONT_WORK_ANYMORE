@@ -5,6 +5,13 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+No method restartSession()
+--------------------------
+This was renamed to restart() in the WebTestCase, SimpleBrowser
+and the underlying SimpleUserAgent in 1.0RC2. Because it was
+undocumented anyway, no attempt was made at backward
+compatibility.
+
 My custom test case ignored by tally()
 --------------------------------------
 The _assertTrue method has had it's signature changed due to a bug

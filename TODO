@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 31 hours.
+This is immediate stuff only for this iteration (RC2) of 32 hours.
 
 $Id$
 
@@ -21,21 +21,23 @@ Browser
 -------
 Fix socket error with stream_get_timeout() missing (1/1) - done.
 Fix frames error in unit tests with PHP 4.2.2 (2).
+Lose authentication on browser restart (1).
 
 Web tester
 ----------
 Add htmlentities() international fix (1/1) - done.
 Add character set encoding sniffer to HtmlReporter (2).
+Add WebTestCase::getCookie() method (1/1) - done.
 
 Documentation
 -------------
 Fix unit testing tutorial to fit with newer syntax (4).
-Add authentication documentation (3).
+Add authentication documentation (3/3) - done.
 Add runner documentation (3).
 Add browser scripting documentation(2).
 Tidy up sundry doc. files (2/1) - done.
 Fix reported typos (1).
-Document the chaarcter encoding fix (1).
+Document the character encoding fix (1/1) - done.
 
 Build
 -----

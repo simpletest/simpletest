@@ -326,53 +326,55 @@
         }
         
         function testCookieSetting() {
-            $this->setCookie("a", "Test cookie a", "www.lastcraft.com");
-            $this->setCookie("b", "Test cookie b", "www.lastcraft.com", "test");
+            $this->setCookie('a', 'Test cookie a', 'www.lastcraft.com');
+            $this->setCookie('b', 'Test cookie b', 'www.lastcraft.com', 'test');
             $this->get('http://www.lastcraft.com/test/network_confirm.php');
             $this->assertWantedPattern('/Test cookie a/');
             $this->assertWantedPattern('/Test cookie b/');
-            $this->assertCookie("a");
-            $this->assertCookie("b", "Test cookie b");
+            $this->assertCookie('a');
+            $this->assertCookie('b', 'Test cookie b');
+            $this->assertTrue($this->getCookie('a') == 'Test cookie a');
+            $this->assertTrue($this->getCookie('b') == 'Test cookie b');
         }
         
         function testCookieReading() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
-            $this->assertCookie("session_cookie", "A");
-            $this->assertCookie("short_cookie", "B");
-            $this->assertCookie("day_cookie", "C");
+            $this->assertCookie('session_cookie', 'A');
+            $this->assertCookie('short_cookie', 'B');
+            $this->assertCookie('day_cookie', 'C');
         }
         
         function testTemporaryCookieExpiry() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
-            $this->restartSession();
-            $this->assertNoCookie("session_cookie");
-            $this->assertCookie("day_cookie", "C");
+            $this->restart();
+            $this->assertNoCookie('session_cookie');
+            $this->assertCookie('day_cookie', 'C');
         }
         
         function testTimedCookieExpiry() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
             $this->ageCookies(3600);
-            $this->restartSession(time() + 60);    // Includes a 60 sec. clock drift margin.
-            $this->assertNoCookie("session_cookie");
-            $this->assertNoCookie("hour_cookie");
-            $this->assertCookie("day_cookie", "C");
+            $this->restart(time() + 60);    // Includes a 60 sec. clock drift margin.
+            $this->assertNoCookie('session_cookie');
+            $this->assertNoCookie('hour_cookie');
+            $this->assertCookie('day_cookie', 'C');
         }
         
         function testOfClockOverDrift() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
-            $this->restartSession(time() + 160);        // Allows sixty second drift.
+            $this->restart(time() + 160);        // Allows sixty second drift.
             $this->assertNoCookie(
-                    "short_cookie",
-                    "%s->Please check your computer clock setting if you are not using NTP");
+                    'short_cookie',
+                    '%s->Please check your computer clock setting if you are not using NTP');
         }
         
         function testOfClockUnderDrift() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
-            $this->restartSession(time() + 40);         // Allows sixty second drift.
+            $this->restart(time() + 40);         // Allows sixty second drift.
             $this->assertCookie(
-                    "short_cookie",
-                    "B",
-                    "%s->Please check your computer clock setting if you are not using NTP");
+                    'short_cookie',
+                    'B',
+                    '%s->Please check your computer clock setting if you are not using NTP');
         }
         
         function testCookiePath() {

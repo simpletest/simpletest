@@ -391,11 +391,11 @@
          *                                Cookie format string or timestamp.
          *    @access public
          */
-        function restartSession($date = false) {
+        function restart($date = false) {
             if ($date === false) {
                 $date = time();
             }
-            $this->_browser->restartSession($date);
+            $this->_browser->restart($date);
         }
         
         /**
@@ -446,19 +446,6 @@
          */
         function ignoreFrames() {
             $this->_browser->ignoreFrames();
-        }
-        
-        /**
-         *    Sets a cookie in the current browser.
-         *    @param string $name          Name of cookie.
-         *    @param string $value         Cookie value.
-         *    @param string $host          Host upon which the cookie is valid.
-         *    @param string $path          Cookie path if not host wide.
-         *    @param string $expiry        Expiry date.
-         *    @access public
-         */
-        function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
-            $this->_browser->setCookie($name, $value, $host, $path, $expiry);
         }
 
         /**
@@ -600,6 +587,29 @@
          */
         function authenticate($username, $password) {
             return $this->_browser->authenticate($username, $password);
+        }
+        
+        /**
+         *    Gets the cookie value for the current browser context.
+         *    @param string $name          Name of cookie.
+         *    @return string               Value of cookie or false if unset.
+         *    @access public
+         */
+        function getCookie($name) {
+            return $this->_browser->getCurrentCookieValue($name);
+        }
+        
+        /**
+         *    Sets a cookie in the current browser.
+         *    @param string $name          Name of cookie.
+         *    @param string $value         Cookie value.
+         *    @param string $host          Host upon which the cookie is valid.
+         *    @param string $path          Cookie path if not host wide.
+         *    @param string $expiry        Expiry date.
+         *    @access public
+         */
+        function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
+            $this->_browser->setCookie($name, $value, $host, $path, $expiry);
         }
         
         /**
@@ -1070,7 +1080,7 @@
          *    @access public
          */
         function assertCookie($name, $expected = false, $message = "%s") {
-            $value = $this->_browser->getCurrentCookieValue($name);
+            $value = $this->getCookie($name);
             if ($expected) {
                 return $this->assertTrue($value === $expected, sprintf(
                         $message,
@@ -1092,7 +1102,7 @@
          */
         function assertNoCookie($name, $message = "%s") {
             return $this->assertTrue(
-                    $this->_browser->getCurrentCookieValue($name) === false,
+                    $this->getCookie($name) === false,
                     sprintf($message, "Not expecting cookie [$name]"));
         }
     }

@@ -333,7 +333,7 @@
             $this->assertIdentical(
                     $agent->getCookieValue("this.com", "this/path/", "a"),
                     "b");
-            $agent->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
+            $agent->restart("Wed, 25-Dec-02 04:24:20 GMT");
             $this->assertIdentical(
                     $agent->getCookieValue("this.com", "this/path/", "a"),
                     false);
@@ -348,12 +348,12 @@
                     'GET',
                     new SimpleUrl('http://this.com/this/path/page.html'),
                     array());
-            $agent->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
+            $agent->restart("Wed, 25-Dec-02 04:24:20 GMT");
             $this->assertIdentical(
                     $agent->getCookieValue("this.com", "this/path/", "a"),
                     "A");
             $agent->ageCookies(2);
-            $agent->restartSession("Wed, 25-Dec-02 04:24:20 GMT");
+            $agent->restart("Wed, 25-Dec-02 04:24:20 GMT");
             $this->assertIdentical(
                     $agent->getCookieValue("this.com", "this/path/", "a"),
                     false);
