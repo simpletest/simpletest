@@ -168,7 +168,7 @@
                     '/at character 1/',
                     $string->testMessage("38"));
             $this->assertWantedPattern(
-                    '/fails.*?type/',
+                    '/passes.*?type/',
                     $string->testMessage(37));
         }
     }

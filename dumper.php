@@ -17,7 +17,6 @@
          *    @param $value      Variable to render as a string.
          *    @return            Human readable string form.
          *    @public
-         *    @static
          */
         function describeValue($value) {
             if (!isset($value)) {
@@ -25,7 +24,7 @@
             } elseif (is_bool($value)) {
                 return "Boolean: " . ($value ? "true" : "false");
             } elseif (is_string($value)) {
-                return "String: " . $this->clipString($value, 40);
+                return "String: " . $this->clipString($value, 50);
             } elseif (is_integer($value)) {
                 return "Integer: $value";
             } elseif (is_float($value)) {
@@ -39,25 +38,54 @@
             }
             return "Unknown";
         }
+        
+        /**
+         *    Gets the string representation of a type.
+         *    @param $value    Variable to check against.
+         *    @return          Type as string.
+         *    @public
+         */
+        function getType($value) {
+            if (!isset($value)) {
+                return "NULL";
+            } elseif (is_bool($value)) {
+                return "Boolean";
+            } elseif (is_string($value)) {
+                return "String";
+            } elseif (is_integer($value)) {
+                return "Integer";
+            } elseif (is_float($value)) {
+                return "Float";
+            } elseif (is_array($value)) {
+                return "Array";
+            } elseif (is_resource($value)) {
+                return "Resource";
+            } elseif (is_object($value)) {
+                return "Object";
+            }
+            return "Unknown";
+        }
 
         /**
          *    Creates a human readable description of the
          *    difference between two variables.
-         *    @param $first             First variable.
-         *    @param $second            Value to compare with.
-         *    @return                   Descriptive string.
+         *    @param $first        First variable.
+         *    @param $second       Value to compare with.
+         *    @param $check_type   If true then type anomolies count.
+         *    @return              Descriptive string.
          *    @public
-         *    @static
          */
-        function describeDifference($first, $second) {
+        function describeDifference($first, $second, $check_type = false) {
+            if ($check_type) {
+                if (! $this->_isTypeMatch($first, $second)) {
+                    return "with type mismatch as [" . $this->describeValue($first) .
+                        "] does not match [" . $this->describeValue($second) . "]";
+                }
+            }
             if (!isset($first)) {
-                return "as [" . $this->describeValue($first) .
-                        "] does not match [" .
-                        $this->describeValue($second) . "]";
+                return $this->_describeNullDifference($first, $second);
             } elseif (is_bool($first)) {
-                return "as [" . $this->describeValue($first) .
-                        "] does not match [" .
-                        $this->describeValue($second) . "]";
+                return $this->_describeBooleanDifference($first, $second);
             } elseif (is_string($first)) {
                 return $this->_describeStringDifference($first, $second);
             } elseif (is_integer($first)) {
@@ -73,6 +101,16 @@
                 return $this->_describeObjectDifference($first, $second);
             }
             return "by value";
+        }
+        
+        /**
+         *    Tests to see if types match.
+         *    @param $first        First variable.
+         *    @param $second       Value to compare with.
+         *    @return              True if matches.
+         */
+        function _isTypeMatch($first, $second) {
+            return ($this->getType($first) == $this->getType($second));
         }
 
         /**
@@ -100,7 +138,37 @@
         
         /**
          *    Creates a human readable description of the
-         *    difference between two integers.
+         *    difference between a null and another variable.
+         *    @param $first             First null.
+         *    @param $second            Null to compare with.
+         *    @return                   Descriptive string.
+         *    @private
+         *    @static
+         */
+        function _describeNullDifference($first, $second) {
+            return "as [" . $this->describeValue($first) .
+                    "] does not match [" .
+                    $this->describeValue($second) . "]";
+        }
+        
+        /**
+         *    Creates a human readable description of the
+         *    difference between a boolean and another variable.
+         *    @param $first             First boolean.
+         *    @param $second            Boolean to compare with.
+         *    @return                   Descriptive string.
+         *    @private
+         *    @static
+         */
+        function _describeBooleanDifference($first, $second) {
+            return "as [" . $this->describeValue($first) .
+                    "] does not match [" .
+                    $this->describeValue($second) . "]";
+        }
+        
+        /**
+         *    Creates a human readable description of the
+         *    difference between a string and another variable.
          *    @param $first             First string.
          *    @param $second            String to compare with.
          *    @return                   Descriptive string.
@@ -116,7 +184,7 @@
         
         /**
          *    Creates a human readable description of the
-         *    difference between two integers.
+         *    difference between an integer and another variable.
          *    @param $first             First number.
          *    @param $second            Number to compare with.
          *    @return                   Descriptive string.

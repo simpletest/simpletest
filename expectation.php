@@ -231,7 +231,7 @@
          */
         function testMessage($compare) {
             if ($this->test($compare)) {
-                return "Not identical expectation fails " .
+                return "Not identical expectation passes " .
                         $this->describeDifference($this->_get_value(), $compare, get_class($this));
             } else {
                 return "Not identical expectation [" . $this->describeValue($this->_get_value()) . "] matches";
