@@ -10,9 +10,11 @@
     Mock::generate('SimpleHttpResponse');
     Mock::generate('SimpleHttpHeaders');
     Mock::generate('SimplePage');
-    Mock::generatePartial('SimpleBrowser', 'MockRequestSimpleBrowser', array('_createRequest'));
-    Mock::generatePartial('SimpleBrowser', 'MockFetchSimpleBrowser', array('fetchResponse'));
-    Mock::generatePartial('SimpleBrowser', 'MockParseSimpleBrowser', array('fetchResponse', '_parse'));
+    Mock::generate('SimpleFetcher');
+    Mock::generatePartial(
+            'SimpleBrowser',
+            'MockParseSimpleBrowser',
+            array('_createUserAgent', '_parse'));
     
     class TestOfParsedPageAccess extends UnitTestCase {
         function TestOfParsedPageAccess() {
@@ -27,8 +29,11 @@
             $response->setReturnValue('getContent', 'stuff');
             $response->setReturnReference('getHeaders', $headers);
             
+            $agent = &new MockSimpleFetcher($this);
+            $agent->setReturnReference('fetchResponse', $response);
+            
             $browser = &new MockParseSimpleBrowser($this);
-            $browser->setReturnReference('fetchResponse', $response);
+            $browser->setReturnReference('_createUserAgent', $agent);
             $browser->setReturnReference('_parse', $page);
             $browser->expectOnce('_parse', array('stuff'));
             $browser->SimpleBrowser();

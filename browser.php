@@ -22,6 +22,7 @@
 	 *    @subpackage WebTester
      */
     class SimpleBrowser {
+        var $_user_agent;
         var $_cookie_jar;
         var $_response;
         var $_page;
@@ -34,6 +35,7 @@
          *    @access public
          */
         function SimpleBrowser() {
+            $this->_user_agent = &$this->_createUserAgent();
             $this->_cookie_jar = new CookieJar();
             $this->_response = false;
             $this->_page = false;
@@ -42,16 +44,21 @@
         }
         
         /**
+         *    Creates the underlying user agent.
+         *    @return SimpleFetcher    Content fetcher.
+         *    @access protected
+         */
+        function &_createUserAgent() {
+            return new SimpleFetcher();
+        }
+        
+        /**
          *    Accessor for base URL worked out from the current URL.
          *    @return string       Base URL.
          *    @access public
          */
         function getBaseUrl() {
-            if (! $this->_current_url) {
-                return false;
-            }
-            return $this->_current_url->getScheme('http') . '://' .
-                    $this->_current_url->getHost() . $this->_current_url->getBasePath();
+            return $this->_user_agent->getBaseUrl();
         }
         
         /**
@@ -60,11 +67,7 @@
          *    @access public
          */
         function getCurrentUrl() {
-            if (! $this->_current_url) {
-                return false;
-            }
-            return $this->_current_url->getScheme('http') . '://' .
-                    $this->_current_url->getHost() . $this->_current_url->getPath();
+            return $this->_user_agent->getCurrentUrl();
         }
         
         /**
@@ -76,7 +79,7 @@
          *    @access public
          */
         function restartSession($date = false) {
-            $this->_cookie_jar->restartSession($date);
+            $this->_user_agent->restartSession($date);
         }
         
         /**
@@ -85,7 +88,7 @@
          *    @access public
          */
         function ageCookies($interval) {
-            $this->_cookie_jar->agePrematurely($interval);
+            $this->_user_agent->ageCookies($interval);
         }
         
         /**
@@ -99,11 +102,7 @@
          *    @access public
          */
         function setCookie($name, $value, $host = false, $path = '/', $expiry = false) {
-            $cookie = new SimpleCookie($name, $value, $path, $expiry);
-            if ($host) {
-                $cookie->setHost($host);
-            }
-            $this->_cookie_jar->setCookie($cookie);
+            $this->_user_agent->setCookie($name, $value, $host, $path, $expiry);
         }
         
         /**
@@ -117,16 +116,7 @@
          *    @access public
          */
         function getCookieValue($host, $path, $name) {
-            $longest_path = '';
-            foreach ($this->_cookie_jar->getValidCookies($host, $path) as $cookie) {
-                if ($name == $cookie->getName()) {
-                    if (strlen($cookie->getPath()) > strlen($longest_path)) {
-                        $value = $cookie->getValue();
-                        $longest_path = $cookie->getPath();
-                    }
-                }
-            }
-            return (isset($value) ? $value : false);
+            return $this->_user_agent->getCookieValue($host, $path, $name);
         }
         
         /**
@@ -137,11 +127,7 @@
          *    @access public
          */
         function getBaseCookieValue($name) {
-            if (! $this->getBaseUrl()) {
-                return null;
-            }
-            $url = new SimpleUrl($this->getBaseUrl());
-            return $this->getCookieValue($url->getHost(), $url->getPath(), $name);
+            return $this->_user_agent->getBaseCookieValue($name);
         }
         
         /**
@@ -151,46 +137,7 @@
          *    @access public
          */
         function setMaximumRedirects($max) {
-            $this->_max_redirects = $max;
-        }
-        
-        /**
-         *    Test to see if the redirect limit is passed.
-         *    @param integer $redirects        Count so far.
-         *    @return boolean                  True if over.
-         *    @access private
-         */
-        function _isTooManyRedirects($redirects) {
-            return ($redirects > $this->_max_redirects);
-        }
-        
-        /**
-         *    Fetches a URL as a response object. Will
-         *    keep trying if redirected.
-         *    @param string $method       GET, POST, etc.
-         *    @param SimpleUrl $url       Target to fetch as Url object.
-         *    @param hash $parameters     Additional parameters for request.
-         *    @return              Response object.
-         *    @access protected
-         */
-        function &fetchResponse($method, $url, $parameters) {
-            $redirects = 0;
-            do {
-                $request = &$this->_createCookieRequest($method, $url, $parameters);
-                $response = &$request->fetch();
-                if ($response->isError()) {
-                    $this->_clearResponse();
-                    return $response;
-                }
-                $headers = $response->getHeaders();
-                $this->_addCookies($url, $headers->getNewCookies());
-                if (! $headers->isRedirect()) {
-                    break;
-                }
-                $url = new SimpleUrl($headers->getLocation());
-            } while (! $this->_isTooManyRedirects(++$redirects));
-            $this->_setResponse($response);
-            return $response;
+            $this->_user_agent->setMaximumRedirects($max);
         }
         
         /**
@@ -238,13 +185,12 @@
          *    @access public
          */
         function get($raw_url, $parameters = false) {
-            $url = $this->createAbsoluteUrl($this->getBaseUrl(), $raw_url, $parameters);
-            $response = &$this->fetchResponse('GET', $url, $parameters);
+            $response = &$this->_user_agent->fetchResponse('GET', $raw_url, $parameters);
             if ($response->isError()) {
                 $this->_page = &new SimplePage(false);
                 return false;
             }
-            $this->_current_url = $url;
+            $this->_setResponse($response);
             $this->_page = &$this->_parse($response->getContent());
             return $response->getContent();
         }
@@ -258,8 +204,7 @@
          *    @access public
          */
         function head($raw_url, $parameters = false) {
-            $url = $this->createAbsoluteUrl($this->getBaseUrl(), $raw_url, $parameters);
-            $response = &$this->fetchResponse('HEAD', $url, $parameters);
+            $response = &$this->_user_agent->fetchResponse('HEAD', $raw_url, $parameters);
             return ! $response->isError();
         }
         
@@ -271,13 +216,12 @@
          *    @access public
          */
         function post($raw_url, $parameters = false) {
-            $url = $this->createAbsoluteUrl($this->getBaseUrl(), $raw_url, array());
-            $response = &$this->fetchResponse('POST', $url, $parameters);
+            $response = &$this->_user_agent->fetchResponse('POST', $raw_url, $parameters);
             if ($response->isError()) {
                 $this->_page = &new SimplePage(false);
                 return false;
             }
-            $this->_current_url = $url;
+            $this->_setResponse($response);
             $this->_page = &$this->_parse($response->getContent());
             return $response->getContent();
         }
@@ -311,62 +255,6 @@
         }
         
         /**
-         *    Creates a page request with the browser cookies
-         *    added.
-         *    @param string $method       Fetching method.
-         *    @param SimpleUrl $url       Target to fetch as url object.
-         *    @param hash $parameters     POST/GET parameters.
-         *    @return SimpleHttpRequest   New request.
-         *    @access private
-         */
-        function &_createCookieRequest($method, $url, $parameters = false) {
-            if (! $parameters) {
-                $parameters = array();
-            }
-            $request = &$this->_createRequest($method, $url, $parameters);
-            $cookies = $this->_cookie_jar->getValidCookies($url->getHost(), $url->getPath());
-            foreach ($cookies as $cookie) {
-                $request->setCookie($cookie);
-            }
-            return $request;
-        }
-        
-        /**
-         *    Builds the appropriate HTTP request object.
-         *    @param string $method       Fetching method.
-         *    @param SimpleUrl $url       Target to fetch as url object.
-         *    @param hash $parameters     POST/GET parameters.
-         *    @return SimpleHttpRequest   New request object.
-         *    @access protected
-         */
-        function &_createRequest($method, $url, $parameters) {
-            if ($method == 'POST') {
-                $request = &new SimpleHttpPushRequest(
-                        $url,
-                        SimpleUrl::encodeRequest($parameters),
-                        'POST');
-                $request->addHeaderLine('Content-Type: application/x-www-form-urlencoded');
-                return $request;
-            }
-            return new SimpleHttpRequest($url, $method);
-        }
-        
-        /**
-         *    Extracts new cookies into the cookie jar.
-         *    @param SimpleUrl $url     Target to fetch as url object.
-         *    @param array $cookies     New cookies.
-         *    @access private
-         */
-        function _addCookies($url, $cookies) {
-            foreach ($cookies as $cookie) {
-                if ($url->getHost()) {
-                    $cookie->setHost($url->getHost());
-                }
-                $this->_cookie_jar->setCookie($cookie);
-            }
-        }
-        
-        /**
          *    Turns an incoming URL string into a
          *    URL object, filling the relative URL if
          *    a base URL is present.
@@ -378,12 +266,7 @@
          *    @static
          */
         function createAbsoluteUrl($base_url, $raw_url, $parameters = false) {
-            $url = new SimpleUrl($raw_url);
-            if ($parameters) {
-                $url->addRequestParameters($parameters);
-            }
-            $url->makeAbsolute($base_url);
-            return $url;
+            return $this->_user_agent->createAbsoluteUrl($base_url, $raw_url, $parameters);
         }
         
         /**
