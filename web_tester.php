@@ -367,6 +367,21 @@
         }
         
         /**
+         *    Clicks the submit image by ID attribute. The owning
+         *    form will be submitted by this. Clicking outside of
+         *    the boundary of the coordinates will result in
+         *    a failure.
+         *    @param integer/string $id   ID attribute of button.
+         *    @param integer $x           X-coordinate of imaginary click.
+         *    @param integer $y           Y-coordinate of imaginary click.
+         *    @return boolean             True on successful submit.
+         *    @access public
+         */
+        function clickImageById($id, $x = 1, $y = 1) {
+            return $this->_browser->clickImageById($id, $x, $y);
+        }
+        
+        /**
          *    Submits a form by the ID.
          *    @param string $id    Form ID. No button information
          *                         is submitted this way.

@@ -710,6 +710,26 @@
         }
         
         /**
+         *    Clicks the submit image by ID attribute. The owning
+         *    form will be submitted by this. Clicking outside of
+         *    the boundary of the coordinates will result in
+         *    a failure.
+         *    @param integer/string $id   ID attribute of button.
+         *    @param integer $x           X-coordinate of imaginary click.
+         *    @param integer $y           Y-coordinate of imaginary click.
+         *    @return boolean             True on successful submit.
+         *    @access public
+         */
+        function clickImageById($id, $x = 1, $y = 1) {
+            if (! ($form = &$this->_page->getFormByImageId($id))) {
+                return false;
+            }
+            $action = $this->_getAction($form);
+            $method = $form->getMethod();
+            return $this->$method($action, $form->submitImageById($id, $x, $y));
+        }
+        
+        /**
          *    Replaces missing form action.
          *    @param SimpleForm $form    Form object to submit.
          *    @return string             URL to send results to.

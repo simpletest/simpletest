@@ -360,7 +360,7 @@
             
             $browser = &$this->createBrowser($agent, $page);
             $browser->get('http://this.com/page.html');
-            $this->assertTrue($browser->clickSubmitByName('me'), 'Submitting');
+            $this->assertTrue($browser->clickSubmitByName('me'));
             
             $page->tally();
         }
@@ -381,7 +381,29 @@
             
             $browser = &$this->createBrowser($agent, $page);
             $browser->get('http://this.com/page.html');
-            $this->assertTrue($browser->clickSubmitById(99), 'Submitting');
+            $this->assertTrue($browser->clickSubmitById(99));
+            
+            $page->tally();
+            $form->tally();
+        }
+        function testSubmitFormByImageId() {
+            $agent = &new MockSimpleUserAgent($this);
+            $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
+            
+            $form = &new MockSimpleForm($this);
+            $form->setReturnValue('getAction', 'handler.html');
+            $form->setReturnValue('getMethod', 'post');
+            $form->setReturnValue('submitImageById', array('a' => 'A'));
+            $form->expectOnce('submitImageById', array(99, 10, 11));
+            
+            $page = &new MockSimplePage($this);
+            $page->setReturnReference('getFormByImageId', $form);
+            $page->expectOnce('getFormByImageId', array(99));
+            $page->setReturnValue('getRaw', 'stuff');
+            
+            $browser = &$this->createBrowser($agent, $page);
+            $browser->get('http://this.com/page.html');
+            $this->assertTrue($browser->clickImageById(99, 10, 11));
             
             $page->tally();
             $form->tally();

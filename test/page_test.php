@@ -522,7 +522,7 @@
                     2 => 'c.html',
                     '_two' => 'd.html'));
         }
-        function testFormByLabel() {
+        function testFindFormByLabel() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue(
                     'getContent',
@@ -532,7 +532,16 @@
             $this->assertNull($page->getFormBySubmitLabel('submit'));
             $this->assertIsA($page->getFormBySubmitLabel('Submit'), 'SimpleForm');
         }
-        function testFormById() {
+        function testFindFormByImage() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue(
+                    'getContent',
+                    '<html><head><form><input type="image" id=100></form></head></html>');
+            
+            $page = &$this->parse($response);
+            $this->assertIsA($page->getFormByImageId(100), 'SimpleForm');
+        }
+        function testFindFormById() {
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue(
                     'getContent',

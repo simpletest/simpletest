@@ -1023,6 +1023,7 @@
         var $_action;
         var $_id;
         var $_buttons;
+        var $_images;
         var $_widgets;
         
         /**
@@ -1034,6 +1035,7 @@
             $this->_action = $tag->getAttribute('action');
             $this->_id = $tag->getAttribute('id');
             $this->_buttons = array();
+            $this->_images = array();
             $this->_widgets = array();
         }
         
@@ -1073,7 +1075,7 @@
             if (strtolower($tag->getAttribute('type')) == 'submit') {
                 $this->_buttons[] = &$tag;
             } elseif (strtolower($tag->getAttribute('type')) == 'image') {
-                $this->_buttons[] = &$tag;
+                $this->_images[] = &$tag;
             } else {
                 if ($tag->getName()) {
                     $this->_setWidget($tag);
@@ -1226,6 +1228,22 @@
         }
         
         /**
+         *    Test to see if a form has a submit button with this
+         *    name attribute.
+         *    @param string $id      Button ID attribute to search for.
+         *    @return boolean        True if present.
+         *    @access public
+         */
+        function hasImageId($id) {
+            foreach ($this->_images as $image) {
+                if ($image->getAttribute('id') == $id) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        /**
          *    Gets the submit values for a named button.
          *    @param string $name    Button label to search for.
          *    @return hash           Submitted values or false
@@ -1281,7 +1299,30 @@
             }
             return false;
         }
-        
+         
+        /**
+         *    Gets the submit values for an image identified by the ID.
+         *    @param string/integer $id  Button ID attribute to search for.
+         *    @param integer $x          X-coordinate of click.
+         *    @param integer $y          Y-coordinate of click.
+         *    @return hash               Submitted values or false
+         *                               if there is no such button in the
+         *                               form.
+         *    @access public
+         */
+        function submitImageById($id, $x, $y) {
+            foreach ($this->_images as $image) {
+                if ($image->getAttribute('id') == $id) {
+                    return array_merge(
+                            array(
+                                    $image->getName() . '.x' => $x,
+                                    $image->getName() . '.y' => $y),
+                            $this->getValues());            
+                }
+            }
+            return false;
+        }
+       
         /**
          *    Simply submits the form without the submit button
          *    value. Used when there is only one button or it
