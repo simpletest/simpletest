@@ -5,6 +5,7 @@
         define("SIMPLE_TEST", "simpletest/");
     }
     require_once(SIMPLE_TEST . 'socket.php');
+    require_once(SIMPLE_TEST . 'query_string.php');
     
     /**
      *    URL parser to replace parse_url() PHP function.
@@ -22,7 +23,7 @@
         
         /**
          *    Constructor. Parses URL into sections.
-         *    @param $url            URL as string.
+         *    @param string $url        Incoming URL.
          *    @access public
          */
         function SimpleUrl($url) {
@@ -41,9 +42,9 @@
         
         /**
          *    Extracts the scheme part of an incoming URL.
-         *    @param $url        URL so far. The scheme will be
-         *                       removed.
-         *    @return            Scheme part.
+         *    @param string $url   URL so far. The scheme will be
+         *                         removed.
+         *    @return string       Scheme part or false.
          *    @access private
          */
         function _chompScheme(&$url) {
@@ -58,10 +59,10 @@
          *    Extracts the username and password from the
          *    incoming URL. The // prefix will be reattached
          *    to the URL after the doublet are extracted.
-         *    @param $url    URL so far. The username and
-         *                   password are removed.
-         *    @return        Two item list of username and
-         *                   password.
+         *    @param string $url    URL so far. The username and
+         *                          password are removed.
+         *    @return array         Two item list of username and
+         *                          password.
          *    @access private
          */
         function _chompLogin(&$url) {
@@ -85,9 +86,9 @@
          *    the host if it starts with // or it has
          *    a top level domain or it has at least two
          *    dots.
-         *    @param $url    URL so far. The host will be
-         *                   removed.
-         *    @return        Host part guess.
+         *    @param string $url    URL so far. The host will be
+         *                          removed.
+         *    @return string        Host part guess or false.
          *    @access private
          */
         function _chompHost(&$url) {
@@ -110,24 +111,24 @@
         /**
          *    Extracts the path information from the incoming
          *    URL. Strips this path from the URL.
-         *    @param $url     URL so far. The host will be
-         *                    removed.
-         *    @return         Path part.
+         *    @param string $url     URL so far. The host will be
+         *                           removed.
+         *    @return string         Path part or '/'.
          *    @access private
          */
         function _chompPath(&$url) {
             if (preg_match('/(.*?)(\?|#|$)(.*)/', $url, $matches)) {
                 $url = $matches[2] . $matches[3];
-                return ($matches[1] ? $matches[1] : "/");
+                return ($matches[1] ? $matches[1] : '/');
             }
-            return "/";
+            return '/';
         }
         
         /**
          *    Strips off the request data.
-         *    @param $url        URL so far. The request will be
-         *                       removed.
-         *    @return            Raw request part.
+         *    @param string $url  URL so far. The request will be
+         *                        removed.
+         *    @return string      Raw request part.
          *    @access private
          */
         function _chompRequest(&$url) {
@@ -135,13 +136,13 @@
                 $url = $matches[2] . $matches[3];
                 return $matches[1];
             }
-            return "";
+            return '';
         }
          
         /**
-         *    Breaks the request down into a hash.
-         *    @param $raw        Raw request string.
-         *    @return            Hash of GET data.
+         *    Breaks the request down into an object.
+         *    @param string $raw           Raw request.
+         *    @return SimpleQueryString    Parsed data.
          *    @access private
          */
         function _parseRequest($raw) {
@@ -156,8 +157,8 @@
         
         /**
          *    Accessor for protocol part.
-         *    @param $default    Value to use if not present.
-         *    @return            Scheme name, e.g "http".
+         *    @param string $default    Value to use if not present.
+         *    @return string            Scheme name, e.g "http".
          *    @access public
          */
         function getScheme($default = false) {
@@ -166,7 +167,7 @@
         
         /**
          *    Accessor for user name.
-         *    @return     Username preceding host.
+         *    @return string    Username preceding host.
          *    @access public
          */
         function getUsername() {
@@ -175,7 +176,7 @@
         
         /**
          *    Accessor for password.
-         *    @return     Password preceding host.
+         *    @return string    Password preceding host.
          *    @access public
          */
         function getPassword() {
@@ -184,8 +185,8 @@
         
         /**
          *    Accessor for hostname and port.
-         *    @param $default    Value to use if not present.
-         *    @return            Hostname only.
+         *    @param string $default    Value to use if not present.
+         *    @return string            Hostname only.
          *    @access public
          */
         function getHost($default = false) {
@@ -194,7 +195,7 @@
         
         /**
          *    Accessor for top level domain.
-         *    @return        Last part of host.
+         *    @return string       Last part of host.
          *    @access public
          */
         function getTld() {
@@ -204,7 +205,7 @@
         
         /**
          *    Accessor for port number.
-         *    @return     TCP/IP port number.
+         *    @return integer    TCP/IP port number.
          *    @access public
          */
         function getPort() {
@@ -213,7 +214,7 @@
         
         /**
          *    Accessor for path.
-         *    @return     Full path including leading slash.
+         *    @return string    Full path including leading slash.
          *    @access public
          */
         function getPath() {
@@ -235,7 +236,7 @@
         
         /**
          *    Gets the path to the page.
-         *    @return        Path less the page.
+         *    @return string       Path less the page.
          *    @access public
          */
         function getBasePath() {
@@ -246,9 +247,8 @@
         }
         
         /**
-         *    Accessor for fragment at end of URL
-         *    after the "#".
-         *    @return     Part after "#".
+         *    Accessor for fragment at end of URL after the "#".
+         *    @return string    Part after "#".
          *    @access public
          */
         function getFragment() {
@@ -258,7 +258,7 @@
         /**
          *    Accessor for current request parameters
          *    in URL string form
-         *    @return    Form is string "a=1&b=2", etc.
+         *    @return string   Form is string "?a=1&b=2", etc.
          *    @access public
          */
         function getEncodedRequest() {
@@ -270,8 +270,8 @@
         
         /**
          *    Encodes parameters as HTTP request parameters.
-         *    @param $parameters     Request as hash.
-         *    @return                Encoded request.
+         *    @param SimpleQueryString $parameters    Request.
+         *    @return string                          Encoded request.
          *    @access public
          *    @static
          */
@@ -286,7 +286,7 @@
         /**
          *    Accessor for current request parameters
          *    as a hash.
-         *    @return    Hash of name value pairs.
+         *    @return SimpleQueryString   Hash of name value pairs.
          *    @access public
          */
         function getRequest() {
@@ -295,8 +295,8 @@
         
         /**
          *    Adds an additional parameter to the request.
-         *    @param $key            Name of parameter.
-         *    @param $value          Value as string.
+         *    @param string $key            Name of parameter.
+         *    @param string $value          Value as string.
          *    @access public
          */
         function addRequestParameter($key, $value) {
@@ -305,7 +305,7 @@
         
         /**
          *    Adds an additional parameter to the request.
-         *    @param $parameters   Hash of additional parameters.
+         *    @param hash $parameters   Hash of additional parameters.
          *    @access public
          */
         function addRequestParameters($parameters) {
@@ -315,7 +315,7 @@
         /**
          *    Replaces unknown sections to turn a relative
          *    URL into an absolute one.
-         *    @param $base            Base URL as string.
+         *    @param string $base            Base URL.
          *    @access public
          */
         function makeAbsolute($base) {
@@ -334,8 +334,8 @@
         
         /**
          *    Replaces . and .. sections of the path.
-         *    @param $path    Unoptimised path.
-         *    @return         Path with dots removed if possible.
+         *    @param string $path    Unoptimised path.
+         *    @return string         Path with dots removed if possible.
          *    @access public
          */
         function normalisePath($path) {
@@ -360,11 +360,11 @@
         
         /**
          *    Constructor. Sets the stored values.
-         *    @param $name            Cookie key.
-         *    @param $value           Value of cookie.
-         *    @param $path            Cookie path if not host wide.
-         *    @param $expiry          Expiry date as string.
-         *    @param $is_secure       True if SSL is demanded.
+         *    @param string $name            Cookie key.
+         *    @param string $value           Value of cookie.
+         *    @param string $path            Cookie path if not host wide.
+         *    @param string $expiry          Expiry date as string.
+         *    @param boolean $is_secure      True if SSL is demanded.
          */
         function SimpleCookie($name, $value = false, $path = false, $expiry = false, $is_secure = false) {
             $this->_host = false;
@@ -386,8 +386,8 @@
          *    certain TLDs and three for others. If the
          *    new host does not match these rules then the
          *    call will fail.
-         *    @param $host       New hostname.
-         *    @return            True if hostname is valid.
+         *    @param string $host       New hostname.
+         *    @return boolean           True if hostname is valid.
          *    @access public
          */
         function setHost($host) {
@@ -401,7 +401,7 @@
         /**
          *    Accessor for the truncated host to which this
          *    cookie applies.
-         *    @return        Truncated hostname as string.
+         *    @return string       Truncated hostname.
          *    @access public
          */
         function getHost() {
@@ -410,9 +410,9 @@
         
         /**
          *    Test for a cookie being valid for a host name.
-         *    @param $host    Host to test against.
-         *    @return         True if the cookie would be valid
-         *                    here.
+         *    @param string $host    Host to test against.
+         *    @return boolean        True if the cookie would be valid
+         *                           here.
          */
         function isValidHost($host) {
             return ($this->_truncateHost($host) === $this->getHost());
@@ -421,9 +421,8 @@
         /**
          *    Extracts just the domain part that determines a
          *    cookie's host validity.
-         *    @param $host    Host name to truncate.
-         *    @return         Domain as string or false on a
-         *                    bad host.
+         *    @param string $host    Host name to truncate.
+         *    @return string        Domain or false on a bad host.
          *    @access private
          */
         function _truncateHost($host) {
@@ -437,7 +436,7 @@
         
         /**
          *    Accessor for name.
-         *    @return        Cookie key.
+         *    @return string       Cookie key.
          *    @access public
          */
         function getName() {
@@ -447,7 +446,7 @@
         /**
          *    Accessor for value. A deleted cookie will
          *    have an empty string for this.
-         *    @return        Cookie value.
+         *    @return string       Cookie value.
          *    @access public
          */
         function getValue() {
@@ -456,7 +455,7 @@
         
         /**
          *    Accessor for path.
-         *    @return        Valid cookie path.
+         *    @return string       Valid cookie path.
          *    @access public
          */
         function getPath() {
@@ -467,8 +466,8 @@
          *    Tests a path to see if the cookie applies
          *    there. The test path must be longer or
          *    equal to the cookie path.
-         *    @param $path       Path to test against.
-         *    @return            True if cookie valid here.
+         *    @param string $path       Path to test against.
+         *    @return boolean           True if cookie valid here.
          *    @access public
          */
         function isValidPath($path) {
@@ -480,7 +479,7 @@
         
         /**
          *    Accessor for expiry.
-         *    @return        Expiry string.
+         *    @return string       Expiry string.
          *    @access public
          */
         function getExpiry() {
@@ -494,11 +493,11 @@
          *    Test to see if cookie is expired against
          *    the cookie format time or timestamp.
          *    Will give true for a session cookie.
-         *    @param $now     Time to test against. Result
-         *                    will be false if this time
-         *                    is later than the cookie expiry.
-         *                    Can be either a timestamp integer
-         *                    or a cookie format date.
+         *    @param integer/string $now  Time to test against. Result
+         *                                will be false if this time
+         *                                is later than the cookie expiry.
+         *                                Can be either a timestamp integer
+         *                                or a cookie format date.
          *    @access public
          */
         function isExpired($now) {
@@ -525,7 +524,7 @@
         
         /**
          *    Accessor for the secure flag.
-         *    @return        True if cookie needs SSL.
+         *    @return boolean       True if cookie needs SSL.
          *    @access public
          */
         function isSecure() {
@@ -535,7 +534,7 @@
         /**
          *    Adds a trailing and leading slash to the path
          *    if missing.
-         *    @param $path            Path to fix.
+         *    @param string $path            Path to fix.
          *    @access private
          */
         function _fixPath($path) {
@@ -561,8 +560,8 @@
         
         /**
          *    Saves the URL ready for fetching.
-         *    @param $url      URL as object.
-         *    @param $method   HTTP request method, usually GET.
+         *    @param SimpleUrl $url   URL as object.
+         *    @param string $method   HTTP request method, usually GET.
          *    @access public
          */
         function SimpleHttpRequest($url, $method = "GET") {
@@ -574,8 +573,8 @@
         
         /**
          *    Fetches the content and parses the headers.
-         *    @return          A SimpleHttpResponse which may have
-         *                     an error.
+         *    @return SimpleHttpResponse   A response which may have
+         *                                 an error.
          *    @access public
          */
         function &fetch() {
@@ -589,8 +588,9 @@
         
         /**
          *    Sends the headers.
-         *    @param $socket    Open SimpleSocket object.
-         *    @param $method    HTTP request method, usually GET.
+         *    @param SimpleSocket $socket   Open socket.
+         *    @param string $method         HTTP request method,
+         *                                  usually GET.
          *    @access protected
          */
         function _request(&$socket, $method) {
@@ -608,7 +608,7 @@
         
         /**
          *    Adds a header line to the request.
-         *    @param $header_line        Text of header line.
+         *    @param string $header_line    Text of header line.
          *    @access public
          */
         function addHeaderLine($header_line) {
@@ -617,7 +617,7 @@
         
         /**
          *    Adds a cookie to the request.
-         *    @param $cookie     New SimpleCookie object.
+         *    @param SimpleCookie $cookie   Additional cookie.
          *    @access public
          */
         function setCookie($cookie) {
@@ -627,8 +627,8 @@
         /**
          *    Serialises the cookie hash ready for
          *    transmission.
-         *    @param $cookies     Cookies as hash.
-         *    @return             Cookies in header form.
+         *    @param hash $cookies     Parsed cookies.
+         *    @return array            Cookies in header form.
          *    @access private
          */
         function _marshallCookies($cookies) {
@@ -641,7 +641,8 @@
         
         /**
          *    Factory for socket. Separate method for mocking.
-         *    @param $host        Hostname as string.
+         *    @param $host          Hostname as string.
+         *    @return SimpleSocket  New socket.
          *    @access protected
          */
         function &_createSocket($host) {
@@ -650,8 +651,8 @@
         
         /**
          *    Wraps the socket in a response parser.
-         *    @param $socket        Responding socket.
-         *    @return               Parsed response object.
+         *    @param SimpleSocket $socket   Responding socket.
+         *    @return SimpleHttpResponse    Parsed response object.
          *    @access protected
          */
         function &_createResponse(&$socket) {
@@ -667,9 +668,9 @@
         
         /**
          *    Saves the URL ready for fetching.
-         *    @param $url      URL as object.
-         *    @param $content  Content to send.
-         *    @param $method   HTTP request method, usually POST.
+         *    @param SimpleUrl $url     URL as object.
+         *    @param string $content    Content to send.
+         *    @param string $method     HTTP request method, usually POST.
          *    @access public
          */
         function SimpleHttpPushRequest($url, $content, $method = "POST") {
@@ -679,8 +680,8 @@
         
         /**
          *    Sends the headers and request data.
-         *    @param $socket    Open SimpleSocket object.
-         *    @param $method    HTTP request method, usually GET.
+         *    @param SimpleSocket $socket  Open socket.
+         *    @param string $method        HTTP request method, usually GET.
          *    @access protected
          */
         function _request(&$socket, $method) {
@@ -702,7 +703,7 @@
         
         /**
          *    Parses the incoming header block.
-         *    @param $headers     Header block as string.
+         *    @param string $headers     Header block.
          *    @access public
          */
         function SimpleHttpHeaders($headers) {
@@ -718,7 +719,7 @@
         
         /**
          *    Accessor for parsed HTTP protocol version.
-         *    @return            HTTP error code integer.
+         *    @return integer           HTTP error code.
          *    @access public
          */
         function getHttpVersion() {
@@ -727,7 +728,7 @@
         
         /**
          *    Accessor for parsed HTTP error code.
-         *    @return            HTTP error code integer.
+         *    @return integer           HTTP error code.
          *    @access public
          */
         function getResponseCode() {
@@ -737,7 +738,7 @@
         /**
          *    Returns the redirected URL or false if
          *    no redirection.
-         *    @return       URL as string of false for none.
+         *    @return string      URL or false for none.
          *    @access public
          */
         function getLocation() {
@@ -746,7 +747,7 @@
         
         /**
          *    Accessor for MIME type header information.
-         *    @return            MIME type as string.
+         *    @return string           MIME type.
          *    @access public
          */
         function getMimeType() {
@@ -755,7 +756,7 @@
         
         /**
          *    Accessor for any new cookies.
-         *    @return        List of new cookies.
+         *    @return array       List of new cookies.
          *    @access public
          */
         function getNewCookies() {
@@ -765,7 +766,7 @@
         /**
          *    Called on each header line to accumulate the held
          *    data within the class.
-         *    @param $header_line        One line of header.
+         *    @param string $header_line        One line of header.
          *    @access protected
          */
         function _parseHeaderLine($header_line) {
@@ -786,8 +787,8 @@
         
         /**
          *    Parse the Set-cookie content.
-         *    @param $cookie_line    Text after "Set-cookie:"
-         *    @return                New cookie object.
+         *    @param string $cookie_line    Text after "Set-cookie:"
+         *    @return SimpleCookie          New cookie object.
          *    @access private
          */
         function _parseCookie($cookie_line) {
@@ -818,9 +819,9 @@
         /**
          *    Constructor. Reads and parses the incoming
          *    content and headers.
-         *    @param $url      Url object used for the request.
-         *    @param $socket   Network connection to fetch
-         *                     response text from.
+         *    @param SimpleUrl $url         Request.
+         *    @param SimpleSocket $socket   Network connection to fetch
+         *                                  response text from.
          *    @access public
          */
         function SimpleHttpResponse($url, &$socket) {
@@ -842,7 +843,7 @@
         
         /**
          *    Copy of Url object used for the fetch.
-         *    @return         Url object passed in.
+         *    @return SimpleUrl        Url object passed in.
          *    @access public
          */
         function getUrl() {
@@ -852,7 +853,7 @@
         /**
          *    Accessor for the content after the last
          *    header line.
-         *    @return            All content as string.
+         *    @return string           All content.
          *    @access public
          */
         function getContent() {
@@ -861,7 +862,7 @@
         
         /**
          *    Accessor for parsed HTTP protocol version.
-         *    @return            HTTP error code integer.
+         *    @return integer           HTTP error code.
          *    @access public
          */
         function getHttpVersion() {
@@ -870,7 +871,7 @@
         
         /**
          *    Accessor for parsed HTTP error code.
-         *    @return            HTTP error code integer.
+         *    @return integer           HTTP error code.
          *    @access public
          */
         function getResponseCode() {
@@ -879,7 +880,7 @@
         
         /**
          *    Accessor for MIME type header information.
-         *    @return            MIME type as string.
+         *    @return string           MIME type.
          *    @access public
          */
         function getMimeType() {
@@ -888,8 +889,8 @@
         
         /**
          *    Gets the redirected URL from the headers.
-         *    @return     The URL as a string or false
-         *                if there is no location specified.
+         *    @return string    The URL or false if there is no
+         *                      location specified.
          *    @access public
          */
         function getRedirect() {
@@ -899,7 +900,7 @@
         /**
          *    Test to see if the response is a valid
          *    redirect.
-         *    @return        True if valid redirect.
+         *    @return boolean       True if valid redirect.
          *    @access public
          */
         function isRedirect() {
@@ -909,7 +910,7 @@
         
         /**
          *    Accessor for any new cookies.
-         *    @return        List of new cookies.
+         *    @return array       List of new cookies.
          *    @access public
          */
         function getNewCookies() {
@@ -922,8 +923,9 @@
         /**
          *    Reads the whole of the socket output into a
          *    single string.
-         *    @param $socket    Unread socket.
-         *    @return           String if successful else false.
+         *    @param SimpleSocket $socket  Unread socket.
+         *    @return string               Raw output if successful
+         *                                 else false.
          *    @access private
          */
         function _readAll(&$socket) {
