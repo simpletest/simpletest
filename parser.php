@@ -393,6 +393,7 @@
          *    @param $parser    Event generator, usually $self.
          *    @return           Lexer suitable for this parser.
          *    @public
+         *    @static
          */
         function &createLexer(&$parser) {
             $lexer = &new SimpleLexer($parser, 'text');
@@ -400,10 +401,22 @@
             $lexer->mapHandler('tag', 'acceptStartToken');
             $lexer->mapHandler('single_quoted', 'acceptAttributeToken');
             $lexer->mapHandler('double_quoted', 'acceptAttributeToken');
-            $lexer->addSpecialPattern('</a>', 'text', 'acceptEndToken');
-            $lexer->addEntryPattern('<a', 'text', 'tag');
-            $lexer->addSpecialPattern('</title>', 'text', 'acceptEndToken');
-            $lexer->addEntryPattern('<title', 'text', 'tag');
+            SimpleSaxParser::_addTag($lexer, "a");
+            SimpleSaxParser::_addTag($lexer, "title");
+            SimpleSaxParser::_addInTagTokens($lexer);
+            return $lexer;
+        }
+        
+        /**
+         *    Pattern matches to parse the inside of a tag
+         *    including the attributes and their quoting.
+         *    The tag mode has two modes below matching the
+         *    two possible quoting options.
+         *    @param $lexer        Lexer to add patterns to.
+         *    @private
+         *    @static
+         */
+        function _addInTagTokens(&$lexer) {
             $lexer->addSpecialPattern('\s+', 'tag', 'ignore');
             $lexer->addSpecialPattern('=', 'tag', 'ignore');
             $lexer->addEntryPattern("'", 'tag', 'single_quoted');
@@ -413,7 +426,18 @@
             $lexer->addExitPattern("'", 'single_quoted');
             $lexer->addPattern("\\\\\"", 'double_quoted');
             $lexer->addExitPattern('"', 'double_quoted');
-            return $lexer;
+        }
+        
+        /**
+         *    Pattern matches to start and end a tag.
+         *    @param $lexer        Lexer to add patterns to.
+         *    @param $tag          Name of tag to scan for.
+         *    @private
+         *    @static
+         */
+        function _addTag(&$lexer, $tag) {
+            $lexer->addSpecialPattern("</$tag>", 'text', 'acceptEndToken');
+            $lexer->addEntryPattern("<$tag", 'text', 'tag');
         }
         
         /**
