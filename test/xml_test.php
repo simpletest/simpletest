@@ -99,6 +99,10 @@
         }
     }
     
+    class AnyOldSignal {
+        var $stuff = true;
+    }
+    
     class TestOfXmlResultsParsing extends UnitTestCase {
         function TestOfXmlResultsParsing() {
             $this->UnitTestCase();
@@ -140,6 +144,18 @@
             $parser = &new SimpleXmlImporter($listener);
             $this->sendValidStart($parser);
             $this->assertTrue($parser->parse("<exception>a_message</exception>\n"));
+            $this->sendValidEnd($parser);
+            $listener->tally();
+        }
+        function testSignal() {
+            $signal = new AnyOldSignal();
+            $signal->stuff = "Hello";
+            $listener = &new MockSimpleRunner($this);
+            $listener->expectOnce('paintSignal', array('a_signal', $signal));
+            $parser = &new SimpleXmlImporter($listener);
+            $this->sendValidStart($parser);
+            $this->assertTrue($parser->parse(
+                    "<signal type=\"a_signal\">" . serialize($signal) . "</signal>\n"));
             $this->sendValidEnd($parser);
             $listener->tally();
         }

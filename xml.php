@@ -170,7 +170,21 @@
             print $this->toParsedXml($message);
             print "</" . $this->_namespace . "exception>\n";
         }
-        
+
+        /**
+         *    Serialises the event object.
+         *    @param string $type        Event type as text.
+         *    @param mixed $payload      Message or object.
+         *    @access public
+         */
+        function paintSignal($type, &$payload) {
+            parent::paintSignal($type, $payload);
+            print $this->_getIndent(1);
+            print "<" . $this->_namespace . "signal type=\"$type\">";
+            print "<![CDATA[" . serialize($payload) . "]]>";
+            print "</" . $this->_namespace . "signal>\n";
+        }
+
         /**
          *    Paints the test document header.
          *    @param string $test_name     First test top level
@@ -379,6 +393,7 @@
         var $_tag_stack;
         var $_in_content_tag;
         var $_content;
+        var $_attributes;
         
         /**
          *    Loads a listener with the SimpleReporter
@@ -392,6 +407,7 @@
             $this->_tag_stack = array();
             $this->_in_content_tag = false;
             $this->_content = '';
+            $this->_attributes = array();
         }
         
         /**
@@ -463,13 +479,14 @@
          *    @access protected
          */
         function _startElement($expat, $tag, $attributes) {
+            $this->_attributes = $attributes;
             if ($tag == 'GROUP') {
                 $this->_pushNestingTag(new NestingGroupTag($attributes));
             } elseif ($tag == 'CASE') {
                 $this->_pushNestingTag(new NestingCaseTag($attributes));
             } elseif ($tag == 'TEST') {
                 $this->_pushNestingTag(new NestingMethodTag($attributes));
-            } elseif (in_array($tag, array('NAME', 'PASS', 'FAIL', 'EXCEPTION'))) {
+            } elseif (in_array($tag, array('NAME', 'PASS', 'FAIL', 'EXCEPTION', 'SIGNAL'))) {
                 $this->_in_content_tag = true;
                 $this->_content = '';
             }
@@ -499,6 +516,11 @@
             } elseif ($tag == 'EXCEPTION') {
                 $this->_in_content_tag = false;
                 $this->_listener->paintException($this->_content);
+            } elseif ($tag == 'SIGNAL') {
+                $this->_in_content_tag = false;
+                $this->_listener->paintSignal(
+                        $this->_attributes['TYPE'],
+                        unserialize($this->_content));
             }
         }
         
