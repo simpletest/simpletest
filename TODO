@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.01) of 42 hours.
+This is immediate stuff only for this iteration (1.01) of 47 hours.
 
 $Id$
 
@@ -10,6 +10,7 @@ Allow expectation to be passed to assertError() method (2).
 Switch to a run_me_if_no_runner script (2).
 Fix GroupTest test case count being wrong after addTestFile() (3).
 If "." is not in the path then local files aren't found (1).
+Add floating point equality (2).
 
 Reporter
 --------
@@ -31,6 +32,7 @@ Simple click() method for links, buttons or images (2).
 setCookie() should be able to create a new one (1).
 Simultaneous POST and GET parameters (3).
 Fix split bug with simple URLs not being parsed correctly (1/1) - done.
+Add referer header (3).
 
 Web tester
 ----------
