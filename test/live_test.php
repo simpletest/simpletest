@@ -368,6 +368,8 @@
         function testChallengeFromProtectedPage() {
             $this->get('http://www.lastcraft.com/test/protected/');
             $this->assertResponse(401);
+            $this->assertAuthentication('Basic');
+            $this->assertRealm('SimpleTest basic authentication');
         }
         function testEncodedAuthenticationFetchesPage() {
             $this->get('http://test:secret@www.lastcraft.com/test/protected/');

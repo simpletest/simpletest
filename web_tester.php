@@ -310,7 +310,7 @@
          *                               can be embedded with %s.
          *    @access public
          */
-        function assertResponse($responses, $message = "%s") {
+        function assertResponse($responses, $message = '%s') {
             $responses = (is_array($responses) ? $responses : array($responses));
             $code = $this->_browser->getResponseCode();
             $message = sprintf($message, "Expecting response in [" .
@@ -324,12 +324,45 @@
          *    @param array $types    Possible mime types for a pass.
          *    @access public
          */
-        function assertMime($types, $message = "%s") {
+        function assertMime($types, $message = '%s') {
             $types = (is_array($types) ? $types : array($types));
             $type = $this->_browser->getMimeType();
             $message = sprintf($message, "Expecting mime type in [" .
                     implode(", ", $types) . "] got [$type]");
             $this->assertTrue(in_array($type, $types), $message);
+        }
+        
+        /**
+         *    Attempt to match the authentication type within
+         *    the security realm we are currently matching.
+         *    @param string $authentication        Usually basic.
+         *    @access public
+         */
+        function assertAuthentication($authentication = false, $message = '%s') {
+            if (! $authentication) {
+                $message = sprintf($message, "Expected any authentication type, got [" .
+                        $this->_browser->getAuthentication() . "]");
+                $this->assertTrue($this->_browser->getAuthentication(), $message);
+            } else {
+                $message = sprintf($message, "Expected authentication [$authentication] got [" .
+                        $this->_browser->getAuthentication() . "]");
+                $this->assertTrue(
+                        strtolower($this->_browser->getAuthentication()) == strtolower($authentication),
+                        $message);
+            }
+        }
+        
+        /**
+         *    Attempts to match the current security realm.
+         *    @param string $realm            
+         *    @access public
+         */
+        function assertRealm($realm, $message = '%s') {
+            $message = sprintf($message, "Expected realm [$realm] got [" .
+                    $this->_browser->getRealm() . "]");
+            $this->assertTrue(
+                    strtolower($this->_browser->getRealm()) == strtolower($realm),
+                    $message);
         }
         
         /**
@@ -339,7 +372,7 @@
          *    @param string $message   Message to display.
          *    @access public
          */
-        function assertTitle($title = false, $message = "%s") {
+        function assertTitle($title = false, $message = '%s') {
             $this->assertTrue(
                     $title === $this->_browser->getTitle(),
                     sprintf(
@@ -355,7 +388,7 @@
          *    @param string $message    Message to display.
          *    @access public
          */
-        function assertWantedPattern($pattern, $message = "%s") {
+        function assertWantedPattern($pattern, $message = '%s') {
             $this->assertExpectation(
                     new WantedPatternExpectation($pattern),
                     $this->_browser->getContent(),
