@@ -64,7 +64,8 @@
 
         /**
          *    Creates a human readable description of the
-         *    difference between two variables.
+         *    difference between two variables. Uses a
+         *    dynamic call.
          *    @param $first        First variable.
          *    @param $second       Value to compare with.
          *    @param $identical    If true then type anomolies count.
@@ -78,25 +79,12 @@
                         "] does not match [" . $this->describeValue($second) . "]";
                 }
             }
-            if (!isset($first)) {
-                return $this->_describeNullDifference($first, $second, $identical);
-            } elseif (is_bool($first)) {
-                return $this->_describeBooleanDifference($first, $second, $identical);
-            } elseif (is_string($first)) {
-                return $this->_describeStringDifference($first, $second, $identical);
-            } elseif (is_integer($first)) {
-                return $this->_describeIntegerDifference($first, $second, $identical);
-            } elseif (is_float($first)) {
-                return $this->_describeFloatDifference($first, $second, $identical);
-            } elseif (is_array($first)) {
-                return $this->_describeArrayDifference($first, $second, $identical);
-            } elseif (is_resource($first)) {
-                return "as [" . $this->describeValue($first) .
-                        "] does not match [" . $this->describeValue($second) . "]";
-            } elseif (is_object($first)) {
-                return $this->_describeObjectDifference($first, $second, $identical);
+            $type = $this->getType($first);
+            if ($type == "Unknown") {
+                return "with unknown type";
             }
-            return "by value";
+            $method = '_describe' . $type . 'Difference';
+            return $this->$method($first, $second, $identical);
         }
         
         /**
@@ -243,6 +231,22 @@
                         $identical);
             }
             return "";
+        }
+        
+        /**
+         *    Creates a human readable description of the
+         *    difference between a resource and another variable.
+         *    @param $first       First resource.
+         *    @param $second      Resource to compare with.
+         *    @param $identical   If true then type anomolies count.
+         *    @return             Descriptive string.
+         *    @private
+         *    @static
+         */
+        function _describeResourceDifference($first, $second, $identical) {
+            return "as [" . $this->describeValue($first) .
+                    "] does not match [" .
+                    $this->describeValue($second) . "]";
         }
         
         /**
