@@ -58,11 +58,11 @@
     </xsl:template>
     
     <xsl:template match="php">
-        <program-listing role="php">
+        <programlisting role="php">
             <xsl:call-template name="strip_strong">
                 <xsl:with-param name="raw" select="."/>
             </xsl:call-template>
-        </program-listing>
+        </programlisting>
     </xsl:template>
     
     <xsl:template match="code">
