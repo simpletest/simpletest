@@ -113,11 +113,11 @@
         }
     }
     
-    class TestSimplePage extends SimplePage {
+    class TestVersionOfSimplePage extends SimplePage {
         var $_parser;
         var $_builder;
         
-        function TestSimplePage($raw, &$parser, &$builder) {
+        function TestVersionOfSimplePage($raw, &$parser, &$builder) {
             $this->_parser = &$parser;
             $this->_builder = &$builder;
             $this->SimplePage($raw);
@@ -141,7 +141,7 @@
             $builder = &new MockSimplePageBuilder($this);
             $builder->expectArguments("parse", array("stuff", "*"));
             $builder->expectCallCount("parse", 1);
-            $page = &new TestSimplePage("stuff", $parser, $builder);
+            $page = &new TestVersionOfSimplePage("stuff", $parser, $builder);
             $builder->tally();
         }
     }
@@ -150,11 +150,15 @@
         function TestOfHtmlPage() {
             $this->UnitTestCase();
         }
+        function testRawAccessor() {
+            $page = &new SimplePage('Raw HTML');
+            $this->assertEqual($page->getRaw(), 'Raw HTML');
+        }
         function testNoLinks() {
-            $page = &new SimplePage("");
-            $this->assertIdentical($page->getAbsoluteLinks(), array(), "abs->%s");
-            $this->assertIdentical($page->getRelativeLinks(), array(), "rel->%s");
-            $this->assertIdentical($page->getUrls("Label"), array());
+            $page = &new SimplePage('');
+            $this->assertIdentical($page->getAbsoluteLinks(), array(), 'abs->%s');
+            $this->assertIdentical($page->getRelativeLinks(), array(), 'rel->%s');
+            $this->assertIdentical($page->getUrls('Label'), array());
         }
         function testAddAbsoluteLink() {
             $link = &new SimpleAnchorTag(array("href" => "http://somewhere.com"));

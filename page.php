@@ -208,6 +208,7 @@
         var $_title;
         var $_open_forms;
         var $_complete_forms;
+        var $_raw;
         
         /**
          *    Parses a page ready to access it's contents.
@@ -217,10 +218,20 @@
         function SimplePage($raw) {
             $this->_links = array();
             $this->_title = false;
+            $this->_raw = $raw;
             $this->_open_forms = array();
             $this->_complete_forms = array();
             $builder = &$this->_createBuilder($this);
-            $builder->parse($raw, $this->_createParser($builder));
+            $builder->parse($this->_raw, $this->_createParser($builder));
+        }
+        
+        /**
+         *    Accessor for raw text of page.
+         *    @return string        Raw unparsed content.
+         *    @access public
+         */
+        function getRaw() {
+            return $this->_raw;
         }
         
         /**

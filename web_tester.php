@@ -25,7 +25,6 @@
      */
     class WebTestCase extends SimpleTestCase {
         var $_current_browser;
-        var $_current_content;
         var $_frames_supported;
         var $_page;
         
@@ -46,7 +45,7 @@
          *    @access public
          */
         function showSource() {
-            $this->dump(htmlentities($this->_current_content));
+            $this->dump(htmlentities($this->_page->getRaw()));
         }
         
         /**
@@ -167,9 +166,9 @@
          *    @access public
          */
         function get($url, $parameters = false) {
-            $this->_current_content = $this->_current_browser->get($url, $parameters);
-            $this->_page = &new SimplePage($this->_current_content);
-            return ($this->_current_content !== false);
+            $content = $this->_current_browser->get($url, $parameters);
+            $this->_page = &new SimplePage($content);
+            return ($content !== false);
         }
         
         /**
@@ -183,9 +182,9 @@
          *    @access public
          */
         function post($url, $parameters = false) {
-            $this->_current_content = $this->_current_browser->post($url, $parameters);
-            $this->_page = &new SimplePage($this->_current_content);
-            return ($this->_current_content !== false);
+            $content = $this->_current_browser->post($url, $parameters);
+            $this->_page = &new SimplePage($content);
+            return ($content !== false);
         }
         
         /**
@@ -360,7 +359,7 @@
         function assertWantedPattern($pattern, $message = "%s") {
             $this->assertExpectation(
                     new WantedPatternExpectation($pattern),
-                    $this->_current_content,
+                    $this->_page->getRaw(),
                     $message);
         }
         
@@ -375,7 +374,7 @@
         function assertNoUnwantedPattern($pattern, $message = "%s") {
             $this->assertExpectation(
                     new UnwantedPatternExpectation($pattern),
-                    $this->_current_content,
+                    $this->_page->getRaw(),
                     $message);
         }
         
