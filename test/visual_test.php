@@ -292,7 +292,7 @@
         }
     }
     
-    $test = &new GroupTest("Visual test with 42 passes, 42 fails and 4 exceptions");
+    $test = &new GroupTest("Visual test with 43 passes, 43 fails and 4 exceptions");
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());

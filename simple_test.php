@@ -189,7 +189,7 @@
          *    @access public
          */
         function pass($message = "Pass") {
-            $this->_reporter->paintPass($message);
+            $this->_reporter->paintPass($message . $this->getAssertionLine(' at line %d'));
         }
         
         /**
@@ -198,7 +198,7 @@
          *    @access public
          */
         function fail($message = "Fail") {
-            $this->_reporter->paintFail($message);
+            $this->_reporter->paintFail($message . $this->getAssertionLine(' at line %d'));
         }
         
         /**
@@ -263,8 +263,7 @@
          */
         function assertTrue($result, $message = false) {
             if (! $message) {
-                $message = 'True assertion got ' . ($result ? 'True' : 'False') .
-                        $this->getAssertionLine(' at line %d');
+                $message = 'True assertion got ' . ($result ? 'True' : 'False');
             }
             if ($result) {
                 $this->pass($message);
@@ -284,8 +283,7 @@
          */
         function assertFalse($result, $message = false) {
             if (! $message) {
-                $message = 'False assertion got ' . ($result ? 'True' : 'False') .
-                        $this->getAssertionLine(' at line %d');
+                $message = 'False assertion got ' . ($result ? 'True' : 'False');
             }
             $this->assertTrue(! $result, $message);
         }
