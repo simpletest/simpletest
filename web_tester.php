@@ -308,9 +308,10 @@
             if ($expected === true) {
                 $this->assertTrue(isset($value), "Field [$name] should exist");
             } else {
-                $this->assertTrue(
-                        $value === $expected,
-                        "Field [$name] should match [$expected] and is actually [$value]");
+                $this->assertExpectation(
+                        new IdenticalExpectation($expected),
+                        $value,
+                        "Field [$name] should match with [%s]");
             }
         }
         

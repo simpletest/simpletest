@@ -668,14 +668,14 @@
      *    A group of tags with the same name within a form.
      *    Used for radio buttons.
      */
-    class SimpleTagGroup {
+    class SimpleRadioGroup {
         var $_widgets;
         
         /**
          *    Starts empty.
          *    @access public
          */
-        function SimpleTagGroup() {
+        function SimpleRadioGroup() {
             $this->_widgets = array();
         }
         
@@ -835,7 +835,7 @@
         function _setWidget($tag) {
             if ($tag->getAttribute("type") == "radio") {
                 if (! isset($this->_widgets[$tag->getName()])) {
-                    $this->_widgets[$tag->getName()] = &new SimpleTagGroup();
+                    $this->_widgets[$tag->getName()] = &new SimpleRadioGroup();
                 }
                 $this->_widgets[$tag->getName()]->addWidget($tag);
             } else {
@@ -875,16 +875,19 @@
         
         /**
          *    Reads the current form values as a hash
-         *    of submitted parameters.
+         *    of submitted parameters. Repeated parameters
+         *    appear as a list.
          *    @return hash         Submitted values.
          *    @access public
          */
         function getValues() {
             $values = array();
             foreach (array_keys($this->_widgets) as $name) {
-                $value = $this->_widgets[$name]->getValue();
-                if (is_string($value) || is_array($value)) {
-                    $values[$name] = $value;
+                $new = $this->_widgets[$name]->getValue();
+                if (is_string($new)) {
+                    $values[$name] = $new;
+                } elseif (is_array($new)) {
+                    $values[$name] = $new;
                 }
             }
             return $values;

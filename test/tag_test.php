@@ -235,7 +235,7 @@
             $this->UnitTestCase();
         }
         function testEmptyGroup() {
-            $group = &new SimpleTagGroup();
+            $group = &new SimpleRadioGroup();
             $this->assertIdentical($group->getDefault(), false);
             $this->assertIdentical($group->getValue(), false);
             $this->assertFalse($group->setValue('a'));
@@ -244,7 +244,7 @@
             $radio = &new MockSimpleRadioButtonTag($this);
             $radio->setReturnValue('getDefault', 'A');
             $radio->setReturnValue('getValue', 'AA');
-            $group = &new SimpleTagGroup();
+            $group = &new SimpleRadioGroup();
             $group->addWidget($radio);
             $this->assertIdentical($group->getDefault(), 'A');
             $this->assertIdentical($group->getValue(), 'AA');
@@ -257,7 +257,7 @@
             $radio_b->setReturnValue('getDefault', false);
             $radio_b->setReturnValue('getValue', 'B');
             
-            $group = &new SimpleTagGroup();
+            $group = &new SimpleRadioGroup();
             $group->addWidget($radio_a);
             $group->addWidget($radio_b);
             
@@ -268,7 +268,7 @@
             $radio = &new MockSimpleRadioButtonTag($this);
             $radio->setReturnValue('setValue', false);
             $radio->expectOnce('setValue', array('aaa'));
-            $group = &new SimpleTagGroup();
+            $group = &new SimpleRadioGroup();
             $group->addWidget($radio);
             $this->assertFalse($group->setValue('aaa'));
             $radio->tally();
@@ -283,7 +283,7 @@
             $radio_b->setReturnValue('setValue', true);
             $radio_b->expectOnce('setValue', array(false));
             
-            $group = &new SimpleTagGroup();
+            $group = &new SimpleRadioGroup();
             $group->addWidget($radio_a);
             $group->addWidget($radio_b);
             $this->assertTrue($group->setValue('A'));
