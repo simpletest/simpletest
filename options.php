@@ -206,7 +206,7 @@
     /**
      *  Static methods for compatibility between different
      *  PHP versions.
-     *	@package	SimpleTest
+     *  @package	SimpleTest
      */
     class SimpleTestCompatibility {
         
@@ -233,7 +233,7 @@
          *    Recursive type test.
          *    @param mixed $first    Test subject.
          *    @param mixed $second   Comparison object.
-         *    @access public
+         *    @access private
          *    @static
          */
         function _isIdenticalType($first, $second) {
@@ -241,16 +241,36 @@
                 return false;
             }
             if (is_object($first) && is_object($second)) {
-                return (get_class($first) == get_class($second));
+                if (get_class($first) != get_class($second)) {
+                    return false;
+                }
+                return SimpleTestCompatibility::_isArrayOfIdenticalTypes(
+                        get_object_vars($first),
+                        get_object_vars($second));
             }
             if (is_array($first) && is_array($second)) {
-                foreach (array_keys($first) as $key) {
-                    $is_identical = SimpleTestCompatibility::_isIdenticalType(
-                            $first[$key],
-                            $second[$key]);
-                    if (! $is_identical) {
-                        return false;
-                    }
+                return SimpleTestCompatibility::_isArrayOfIdenticalTypes($first, $second);
+            }
+            return true;
+        }
+        
+        /**
+         *    Recursive type test for each element of an array.
+         *    @param mixed $first    Test subject.
+         *    @param mixed $second   Comparison object.
+         *    @access private
+         *    @static
+         */
+        function _isArrayOfIdenticalTypes($first, $second) {
+            if (array_keys($first) != array_keys($second)) {
+                return false;
+            }
+            foreach (array_keys($first) as $key) {
+                $is_identical = SimpleTestCompatibility::_isIdenticalType(
+                        $first[$key],
+                        $second[$key]);
+                if (! $is_identical) {
+                    return false;
                 }
             }
             return true;
