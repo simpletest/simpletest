@@ -27,8 +27,7 @@ Refactoring link parsing (2/1) - done.
 Browser
 -------
 Need repeated parameters in query strings (0/3) - done.
-Duplicate value submissions should be PHP compatible (1).
-Make browser a separate component of the framework (13/8).
+Make browser a separate component of the framework (14/8) - done.
 
 Web tester
 ----------
