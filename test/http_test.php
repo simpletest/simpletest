@@ -80,7 +80,7 @@
             $cookie = new SimpleCookie("name");
             $this->assertFalse($cookie->getValue());
             $this->assertEqual($cookie->getPath(), "/");
-            $this->assertEqual($cookie->getHost(), "localhost");
+            $this->assertIdentical($cookie->getHost(), false);
             $this->assertFalse($cookie->getExpiry());
         }
         function testHostname() {

@@ -5,6 +5,7 @@
         define("SIMPLE_TEST", "./");
     }
     require_once(SIMPLE_TEST . 'http.php');
+    require_once(SIMPLE_TEST . 'simple_unit.php');
     
     /**
      *    Repository for cookies.
@@ -40,8 +41,15 @@
          *    @return             Array of valid cookie objects.
          *    @public
          */
-        function getValidCookies($host = "", $path = "/", $date = "") {
-            return $this->_cookies;
+        function getValidCookies($host = false, $path = "/", $date = false) {
+            $valid_cookies = array();
+            foreach ($this->_cookies as $cookie) {
+                if ($host && $cookie->getHost() && ($cookie->getHost() != $host)) {
+                    continue;
+                }
+                $valid_cookies[] = $cookie;
+            }
+            return $valid_cookies;
         }
     }
     

@@ -135,7 +135,7 @@
          *    @param $expiry          Expiry date as string.
          */
         function SimpleCookie($name, $value = "", $path = "", $expiry = "") {
-            $this->_host = "localhost";
+            $this->_host = false;
             $this->_name = $name;
             $this->_value = $value;
             $this->_path = ($path ? $path : "/");

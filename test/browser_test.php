@@ -16,10 +16,23 @@
         }
         function testAddCookie() {
             $jar = new CookieJar();
-            $jar->setCookie(new SimpleCookie("a", "A", "/"));
-            $cookies = $jar->getValidCookies("/");
+            $jar->setCookie(new SimpleCookie("a", "A"));
+            $cookies = $jar->getValidCookies();
             $this->assertEqual(count($cookies), 1);
             $this->assertEqual($cookies[0]->getValue(), "A");
+        }
+        function testHostFilter() {
+            $jar = new CookieJar();
+            $cookie = new SimpleCookie("a", "A");
+            $cookie->setHost("my-host.com");
+            $jar->setCookie($cookie);
+            $cookie = new SimpleCookie("b", "B");
+            $cookie->setHost("another-host.com");
+            $jar->setCookie($cookie);
+            $cookie = new SimpleCookie("c", "C");
+            $jar->setCookie($cookie);
+            $cookies = $jar->getValidCookies("my-host.com");
+            $this->assertEqual(count($cookies), 2);
         }
     }
 
