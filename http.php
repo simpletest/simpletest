@@ -1136,10 +1136,24 @@
          */
         function _readAll(&$socket) {
             $all = "";
-            while ($next = $socket->read()) {
+            while (! $this->_isLastPacket($next = $socket->read())) {
                 $all .= $next;
             }
             return $all;
+        }
+        
+        /**
+         *    Test to see if the packet from the socket is the
+         *    last one.
+         *    @param string $packet    Chunk to interpret.
+         *    @return boolean          True if empty or EOF.
+         *    @access private
+         */
+        function _isLastPacket($packet) {
+            if (is_string($packet)) {
+                return $packet === '';
+            }
+            return ! $packet;
         }
     }
 ?>
