@@ -57,6 +57,10 @@ pre { background-color: lightgray; }
 	border-style: solid;
 	border-weight: 1;
 	}
+#visible_tab a:link {
+	text-decoration: none;
+	color: inherit;
+}
 #msg {
 	position: absolute;
 	visibility: hidden;

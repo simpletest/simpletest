@@ -125,14 +125,27 @@ function add_method(method_name) {
 
 function add_fail(msg) {
   var faildiv;
+  var oldmsg;
   faildiv = xGetElementById('fail');
   faildiv.innerHTML = faildiv.innerHTML + msg;
   groups[current_group].Set('pass', false);
   cases[current_group][current_case].Set('pass', false);
   methods[current_group][current_case][current_method].Set('pass', false);
+  oldmsg = methods[current_group][current_case][current_method].Get('msg');
+  methods[current_group][current_case][current_method].Set('msg', oldmsg+msg);
 }
 
-function make_fail(fails) {
+function set_msg(gid, cid, mid) {
+	var passfail;
+	var msg=methods[gid][cid][mid].Get('msg');
+	if ('' == msg) {
+		passfail = (methods[gid][cid][mid].Get('pass')) ? 'pass' : 'fail';
+	  msg = 'No output for <span class="' + passfail + '">'
+	  	+ groups[gid].Get('desc') + '-&gt;'
+	  	+ cases[gid][cid].Get('desc') + '-&gt;'
+	  	+ methods[gid][cid][mid].Get('desc') + '</span><br />';
+	}
+  xGetElementById('msg').innerHTML = msg;
 }
 
 function make_tree() {
@@ -147,7 +160,7 @@ function make_tree() {
 			content += '<li class="'+passfail+'">'+cases[x][y].Get('desc')+'<ul>';
 			for (z in methods[x][y]) {
 	      passfail = (methods[x][y][z].Get('pass')) ? 'pass' : 'fail';	
-			  content += '<li class="'+passfail+'">'+methods[x][y][z].Get('desc')+'</li>';
+			  content += '<li class="'+passfail+'"><a href="javascript:set_msg('+x+','+y+','+z+')">'+methods[x][y][z].Get('desc')+'</a></li>';
 			}
 			content += '</ul></li>';
 		}

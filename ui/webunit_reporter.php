@@ -46,13 +46,13 @@ define('SIMPLETEST_WEBUNIT_HEAD', <<<EOS
 wait_start();
 </script>
 <div id="webunit">
-	<div id="run"></div>
+	<div id="run"></div><br />
 	<div id="tabs">
 		<div id="visible_tab">visible tab content</div>
 		&nbsp;&nbsp;<span id="failtab" class="activetab">&nbsp;&nbsp;<a href="javascript:activate_tab('fail');">Fail</a>&nbsp;&nbsp;</span>
 		<span id="treetab" class="inactivetab">&nbsp;&nbsp;<a href="javascript:activate_tab('tree');">Tree</a>&nbsp;&nbsp;</span>
 	</div>
-	<div id="msg">msg div content</div>
+	<div id="msg">Click on a failed test case method in the tree tab to view output here.</div>
 </div>
 <div id="fail"></div>
 <div id="tree"></div>
