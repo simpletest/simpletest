@@ -25,6 +25,8 @@
             $headers = &new MockSimpleHttpHeaders($this);
             $headers->setReturnValue('getMimeType', 'text/html');
             $headers->setReturnValue('getResponseCode', 200);
+            $headers->setReturnValue('getAuthentication', 'Basic');
+            $headers->setReturnValue('getRealm', 'Somewhere');
             
             $response = &new MockSimpleHttpResponse($this);
             $response->setReturnValue('getContent', 'stuff');
@@ -40,6 +42,10 @@
             $browser->SimpleBrowser();
             
             $browser->get('http://this.com/page.html');
+            $this->assertEqual($browser->getResponseCode(), 200);
+            $this->assertEqual($browser->getMimeType(), 'text/html');
+            $this->assertEqual($browser->getAuthentication(), 'Basic');
+            $this->assertEqual($browser->getRealm(), 'Somewhere');
             return $browser;
         }
         function testParse() {

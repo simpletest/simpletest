@@ -227,6 +227,30 @@
         }
         
         /**
+         *    Accessor for last Authentication type.
+         *    @return string    Description of challenge type.
+         *    @access public
+         */
+        function getAuthentication() {
+            if (! $this->_headers) {
+                return false;
+            }
+            return $this->_headers->getAuthentication();
+        }
+        
+        /**
+         *    Accessor for last Authentication realm.
+         *    @return string    Name of security realm.
+         *    @access public
+         */
+        function getRealm() {
+            if (! $this->_headers) {
+                return false;
+            }
+            return $this->_headers->getRealm();
+        }
+        
+        /**
          *    Accessor for raw page information.
          *    @return string      Original text content of web page.
          *    @access public

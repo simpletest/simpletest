@@ -427,6 +427,14 @@
             $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com/");
             $this->assertTrue($headers->isRedirect());
         }
+        function testParseChallenge() {
+            $headers = new SimpleHttpHeaders("HTTP/1.1 301 OK\r\n" .
+                    "Content-Type: text/plain\r\n" .
+                    "Connection: close\r\n" .
+                    "WWW-Authenticate: Basic realm=\"Somewhere\"");
+            $this->assertEqual($headers->getAuthentication(), 'Basic');
+            $this->assertEqual($headers->getRealm(), 'Somewhere');
+        }
     }
     
     Mock::generate('SimpleUrl');

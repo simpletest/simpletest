@@ -731,6 +731,8 @@
         var $_mime_type;
         var $_location;
         var $_cookies;
+        var $_authentication;
+        var $_realm;
         
         /**
          *    Parses the incoming header block.
@@ -744,6 +746,8 @@
             $this->_mime_type = "";
             $this->_location = false;
             $this->_cookies = array();
+            $this->_authentication = false;
+            $this->_realm = false;
             foreach (split("\r\n", $headers) as $header_line) {
                 $this->_parseHeaderLine($header_line);
             }
@@ -807,6 +811,24 @@
         }
         
         /**
+         *    Accessor for authentication type.
+         *    @return string        Type.
+         *    @access public
+         */
+        function getAuthentication() {
+            return $this->_authentication;
+        }
+        
+        /**
+         *    Accessor for security realm.
+         *    @return string        Realm.
+         *    @access public
+         */
+        function getRealm() {
+            return $this->_realm;
+        }
+        
+        /**
          *    Accessor for any new cookies.
          *    @return array       List of new cookies.
          *    @access public
@@ -834,6 +856,10 @@
             }
             if (preg_match('/Set-cookie:(.*)/i', $header_line, $matches)) {
                 $this->_cookies[] = $this->_parseCookie($matches[1]);
+            }
+            if (preg_match('/WWW-Authenticate:\s+(\S+)\s+realm=\"(.*?)\"/i', $header_line, $matches)) {
+                $this->_authentication = $matches[1];
+                $this->_realm = trim($matches[2]);
             }
         }
         
