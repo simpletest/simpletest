@@ -76,6 +76,52 @@
             $this->assertEqual(
                     $tag->getDefault(),
                     "Lot's of\ntext that\nshould be\nwrapped");
+            $tag->setValue("New long text\nwith two lines");
+            $this->assertEqual(
+                    $tag->getValue(),
+                    "New long\ntext\nwith two\nlines");
+        }
+    }
+    
+    class TestOfSelection extends UnitTestCase {
+        function TestOfSelection() {
+            $this->UnitTestCase();
+        }
+        function testEmpty() {
+            $tag = &new SimpleSelectionTag(array('name' => 'a'));
+            $this->assertIdentical($tag->getValue(), '');
+        }
+        function testSingleDefault() {
+            $tag = &new SimpleSelectionTag(array('name' => 'a'));
+            $tag->addOption(
+                    new SimpleOptionTag(array('value' => 'AAA', 'selected' => true)));
+            $this->assertEqual($tag->getValue(), 'AAA');
+        }
+        function testDefault() {
+            $tag = &new SimpleSelectionTag(array('name' => 'a'));
+            $tag->addOption(new SimpleOptionTag(array('value' => 'AAA')));
+            $tag->addOption(
+                    new SimpleOptionTag(array('value' => 'BBB', 'selected' => true)));
+            $tag->addOption(new SimpleOptionTag(array('value' => 'CCC')));
+            $this->assertEqual($tag->getValue(), 'BBB');
+        }
+        function testSettingOption() {
+            $tag = &new SimpleSelectionTag(array('name' => 'a'));
+            $tag->addOption(new SimpleOptionTag(array('value' => 'AAA')));
+            $tag->addOption(
+                    new SimpleOptionTag(array('value' => 'BBB', 'selected' => true)));
+            $tag->addOption(new SimpleOptionTag(array('value' => 'CCC')));
+            $tag->setValue('AAA');
+            $this->assertEqual($tag->getValue(), 'AAA');
+        }
+        function testSettingIllegalOption() {
+            $tag = &new SimpleSelectionTag(array('name' => 'a'));
+            $tag->addOption(new SimpleOptionTag(array('value' => 'AAA')));
+            $tag->addOption(
+                    new SimpleOptionTag(array('value' => 'BBB', 'selected' => true)));
+            $tag->addOption(new SimpleOptionTag(array('value' => 'CCC')));
+            $tag->setValue('Not present');
+            $this->assertEqual($tag->getValue(), 'BBB');
         }
     }
     
@@ -84,8 +130,8 @@
             $this->UnitTestCase();
         }
         function testFormAttributes() {
-            $tag = new SimpleFormTag(array("method" => "GET", "action" => "here.php", "id" => "33"));
-            $form = new SimpleForm($tag);
+            $tag = &new SimpleFormTag(array("method" => "GET", "action" => "here.php", "id" => "33"));
+            $form = &new SimpleForm($tag);
             $this->assertEqual($form->getMethod(), "get");
             $this->assertEqual($form->getAction(), "here.php");
             $this->assertIdentical($form->getId(), "33");
@@ -93,7 +139,7 @@
             $this->assertEqual($form->getValues(), array());
         }
         function testTextWidget() {
-            $form = new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(new SimpleFormTag(array()));
             $form->addWidget(new SimpleTextTag(
                     array("name" => "me", "type" => "text", "value" => "Myself")));
             $this->assertIdentical($form->getValue("me"), "Myself");
@@ -104,11 +150,11 @@
             $this->assertEqual($form->getValues(), array("me" => "Not me"));
         }
         function testSubmitEmpty() {
-            $form = new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(new SimpleFormTag(array()));
             $this->assertIdentical($form->submit(), array());
         }
         function testSubmitButton() {
-            $form = new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(new SimpleFormTag(array()));
             $this->assertIdentical($form->submitButton("go"), false);
             $form->addWidget(new SimpleTextTag(
                     array("type" => "submit", "name" => "go", "value" => "Go!")));
@@ -117,7 +163,7 @@
                     array("go" => "Go!"));            
         }
         function testSubmitButtonByLabel() {
-            $form = new SimpleForm(new SimpleFormTag(array()));
+            $form = &new SimpleForm(new SimpleFormTag(array()));
             $this->assertIdentical($form->submitButtonByLabel("Go!"), false);
             $form->addWidget(new SimpleSubmitTag(
                     array("type" => "submit", "name" => "go", "value" => "Go!")));

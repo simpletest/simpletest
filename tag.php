@@ -293,6 +293,21 @@
         }
         
         /**
+         *    Applies word wrapping if needed.
+         *    @param string $value      New value.
+         *    @public
+         */
+        function setValue($value) {
+            if ($this->_wrapIsEnabled()) {
+                $value = wordwrap(
+                        $value,
+                        (integer)$this->getAttribute('cols'),
+                        "\n");
+            }
+            parent::setValue($value);
+        }
+        
+        /**
          *    Test to see if text should be wrapped.
          *    @return boolean        True if wrapping on.
          *    @private
@@ -305,6 +320,72 @@
                 }
             }
             return false;
+        }
+    }
+    
+    /**
+     *    Drop down widget.
+     */
+    class SimpleSelectionTag extends SimpleWidget {
+        var $_options;
+        
+        /**
+         *    Starts with attributes only.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
+        function SimpleSelectionTag($attributes) {
+            $this->SimpleWidget('select', $attributes);
+            $this->_options = array();
+        }
+        
+        /**
+         *    Adds an option tag to a selection field.
+         *    @param SimpleOptionTag $tag     New option.
+         *    @public
+         */
+        function addOption(&$tag) {
+            $this->_options[] = &$tag;
+        }
+        
+        /**
+         *    Scans options for defaults.
+         *    @return string        Selected field.
+         *    @public
+         */
+        function getDefault() {
+            for ($i = 0; $i < count($this->_options); $i++) {
+                if ($this->_options[$i]->getAttribute('selected')) {
+                    return $this->_options[$i]->getAttribute('value');
+                }
+            }
+            return '';
+        }
+        
+        /**
+         *    Can only set allowed values.
+         *    @param string $value        New choice.
+         *    @public
+         */
+        function setValue($value) {
+            for ($i = 0; $i < count($this->_options); $i++) {
+                if ($this->_options[$i]->getAttribute('value') == $value) {
+                    parent::setValue($value);
+                }
+            }
+        }
+    }
+    
+    /**
+     *    Option for selection field.
+     */
+    class SimpleOptionTag extends SimpleTag {
+        
+        /**
+         *    Stashes the attributes.
+         */
+        function SimpleOptionTag($attributes) {
+            $this->SimpleTag('option', $attributes);
         }
     }
     
@@ -381,7 +462,9 @@
             if ($tag->getAttribute("type") == "submit") {
                 $this->_buttons[$tag->getName()] = &$tag;
             } else {
-                $this->_widgets[$tag->getName()] = &$tag;
+                if ($tag->getName()) {
+                    $this->_widgets[$tag->getName()] = &$tag;
+                }
             }
         }
         
