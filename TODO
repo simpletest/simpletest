@@ -13,7 +13,7 @@ Reporter
 
 Mock objects
 ------------
-Add fix for PHP5 __construct() call (1).
+Add fix for PHP5 __construct() call (1/1) - done.
 
 Parser
 ------

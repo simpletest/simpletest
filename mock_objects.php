@@ -901,6 +901,9 @@
             $code = "";
             $methods = array_merge($methods, get_class_methods($class));
             foreach ($methods as $method) {
+                if (($method == '__construct') || ($method == '__clone')) {
+                    continue;
+                }
                 if (in_array($method, get_class_methods($base))) {
                     continue;
                 }
