@@ -223,6 +223,12 @@
             $this->_frameset_interface = $this->_getFramesetMethods();
         }
         
+        function assertListInAnyOrder($list, $expected) {
+            sort($list);
+            sort($expected);
+            $this->assertEqual($list, $expected);
+        }
+        
         function _getPageMethods() {
             $methods = array();
             foreach (get_class_methods('SimplePage') as $method) {
@@ -321,7 +327,7 @@
             $frameset = &new SimpleFrameset($page);
             $frameset->addFrame($frame1);
             $frameset->addFrame($frame2);
-            $this->assertEqual(
+            $this->assertListInAnyOrder(
                     $frameset->getAbsoluteUrls(),
                     array('http://www.lastcraft.com/', 'http://myserver/', 'http://test/'));
         }
@@ -343,7 +349,7 @@
             $frameset = &new SimpleFrameset($page);
             $frameset->addFrame($frame1);
             $frameset->addFrame($frame2);
-            $this->assertEqual(
+            $this->assertListInAnyOrder(
                     $frameset->getRelativeUrls(),
                     array('/', '.', '/test/', 'goodbye.php', '..', 'hello.php'));
         }
