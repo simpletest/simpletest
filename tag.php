@@ -66,15 +66,23 @@
     }
     
     /**
-     *    Form tag class to hold widgets.
+     *    Form tag class to hold widget values.
      */
     class SimpleHtmlForm {
+        var $_method;
+        var $_action;
+        var $_defaults;
+        var $_values;
         
         /**
          *    Starts with no held controls/widgets.
          *    @param $tag        Form tag to read.
          */
         function SimpleHtmlForm($tag) {
+            $this->_method = strtoupper($tag->getAttribute("method"));
+            $this->_action = $tag->getAttribute("action");
+            $this->_defaults = array();
+            $this->_values = array();
         }
         
         /**
@@ -83,6 +91,7 @@
          *    @public
          */
         function getMethod() {
+            return $this->_method;
         }
         
         /**
@@ -91,14 +100,35 @@
          *    @public
          */
         function getAction() {
+            return $this->_action;
         }
         
         /**
-         *    Adds a tag internally to the form.
+         *    Adds a tag contents to the form.
          *    @param $tag        Input tag to add.
          *    @public
          */
         function addWidget($tag) {
+            if ($tag->getName() == "input") {
+                $this->_defaults[$tag->getAttribute("name")] = $tag->getAttribute("value");
+            }
+        }
+        
+        /**
+         *    Extracts current value from form.
+         *    @param $name        Keyed by widget name.
+         *    @return             Value as string or false
+         *                        if not set.
+         *    @public
+         */
+        function getValue($name) {
+            if (isset($this->_values[$name])) {
+                return $this->_values[$name];
+            }
+            if (isset($this->_defaults[$name])) {
+                return $this->_defaults[$name];
+            }
+            return false;
         }
         
         /**
@@ -111,6 +141,7 @@
          *    @public
          */
         function setValue($name, $value) {
+            $this->_values[$name] = $value;
         }
         
         /**
@@ -122,6 +153,10 @@
          *    @public
          */
         function submit($name, $value) {
+            return array_merge(
+                    array($name => $value),
+                    $this->_defaults,
+                    $this->_values);
         }
         
         /**

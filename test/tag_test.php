@@ -23,4 +23,30 @@
             $this->assertEqual($tag->getContent(), "HelloWorld");
         }
     }
+    
+    class TestOfForm extends UnitTestCase {
+        function TestOfForm() {
+            $this->UnitTestCase();
+        }
+        function testFormActions() {
+            $tag = new SimpleTag("form", array("method" => "get", "action" => "here.php"));
+            $form = new SimpleHtmlForm($tag);
+            $this->assertEqual($form->getMethod(), "GET");
+            $this->assertEqual($form->getAction(), "here.php");
+            $this->assertIdentical($form->getValue("a"), false);
+            $this->assertEqual($form->submit("go", "Go!"), array("go" => "Go!"));
+        }
+        function testTextWidget() {
+            $form = new SimpleHtmlForm(new SimpleTag("form", array()));
+            $form->addWidget(new SimpleTag(
+                    "input",
+                    array("name" => "me", "type" => "text", "value" => "Myself")));
+            $this->assertIdentical($form->getValue("me"), "Myself");
+            $form->setValue("me", "Not me");
+            $this->assertIdentical($form->getValue("me"), "Not me");
+            $this->assertEqual(
+                    $form->submit("go", "Go!"),
+                    array("go" => "Go!", "me" => "Not me"));
+        }
+    }
 ?>
