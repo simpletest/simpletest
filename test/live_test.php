@@ -29,5 +29,16 @@
             $socket->close();
             $this->assertIdentical($socket->read(8), false);
         }
+        function testRecordOfSentCharacters() {
+            $socket = &new SimpleSocket("www.lastcraft.com", 80, 15);
+            $this->assertTrue($socket->write("GET /test/network_confirm.php HTTP/1.0\r\n"));
+            $socket->write("Host: www.lastcraft.com\r\n");
+            $socket->write("Connection: close\r\n\r\n");
+            $socket->close();
+            $this->assertEqual($socket->getSent(),
+                    "GET /test/network_confirm.php HTTP/1.0\r\n" .
+                    "Host: www.lastcraft.com\r\n" .
+                    "Connection: close\r\n\r\n");
+        }
     }
 ?>

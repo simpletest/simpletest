@@ -24,40 +24,4 @@
             $this->assertFalse($error->isError());
         }
     }
-
-    class TestOfSocketScribe extends UnitTestCase {
-        function TestOfSocketScribe() {
-            $this->UnitTestCase();
-        }
-        function testDecoration() {
-            $socket = &new MockSimpleSocket($this);
-            $socket->setReturnValue('isError', true);
-            $socket->setReturnValue('getError', 'Ouch');
-            $socket->setReturnValue('write', true);
-            $socket->expectOnce('write', array('Hello'));
-            $socket->setReturnValue('read', 'Stuff');
-            $socket->expectOnce('read', array(200));
-            $socket->setReturnValue('isOpen', true);
-            $socket->setReturnValue('close', true);
-            
-            $scribe = &new SimpleSocketScribe($socket);
-            $this->assertTrue($scribe->isError());
-            $this->assertEqual($scribe->getError(), 'Ouch');
-            $this->assertTrue($scribe->write('Hello'));
-            $this->assertEqual($scribe->read(200), 'Stuff');
-            $this->assertTrue($scribe->isOpen());
-            $this->assertTrue($scribe->close());
-            
-            $socket->tally();
-        }
-        function testCaptureOnWrite() {
-            $socket = &new MockSimpleSocket($this);
-            $socket->setReturnValue('write', true);
-            
-            $scribe = &new SimpleSocketScribe($socket);
-            $scribe->write('First');
-            $scribe->write('Second');
-            $this->assertEqual($scribe->getSent(), 'FirstSecond');
-        }
-    }
 ?>

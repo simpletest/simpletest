@@ -74,6 +74,7 @@
     class SimpleSocket extends StickyError {
         var $_handle;
         var $_is_open;
+        var $_sent;
         
         /**
          *    Opens a socket for reading and writing.
@@ -85,6 +86,7 @@
         function SimpleSocket($host, $port, $timeout) {
             $this->StickyError();
             $this->_is_open = false;
+            $this->_sent = '';
             if (! ($this->_handle = $this->_openSocket($host, $port, $error_number, $error, $timeout))) {
                 $this->_setError("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
             } else {
@@ -94,13 +96,13 @@
         }
         
         /**
-         *    Writes some data to the socket.
+         *    Writes some data to the socket and saves alocal copy.
          *    @param string $message       String to send to socket.
          *    @return boolean              True if successful.
          *    @access public
          */
         function write($message) {
-            if ($this->isError() || !$this->isOpen()) {
+            if ($this->isError() || ! $this->isOpen()) {
                 return false;
             }
             $count = fwrite($this->_handle, $message);
@@ -111,6 +113,7 @@
                 return false;
             }
             fflush($this->_handle);
+            $this->_sent .= $message;
             return true;
         }
         
@@ -146,6 +149,15 @@
         function close() {
             $this->_is_open = false;
             return fclose($this->_handle);
+        }
+        
+        /**
+         *    Accessor for content so far.
+         *    @return string        Bytes sent only.
+         *    @access public
+         */
+        function getSent() {
+            return $this->_sent;
         }
         
         /**
@@ -191,98 +203,6 @@
          */
         function _openSocket($host, $port, &$error_number, &$error, $timeout) {
             return parent::_openSocket("tls://$host", $port, $error_number, $error, $timeout);
-        }
-    }
-    
-    /**
-     *    Decorator for socket that captures the output stream.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
-     */
-    class SimpleSocketScribe {
-        var $_socket;
-        var $_sent;
-        
-        /**
-         *    Wraps the socket.
-         *    @param SimpleSocket $socket    Socket to monitor.
-         *    @access public
-         */
-        function SimpleSocketScribe(&$socket) {
-            $this->_socket = &$socket;
-            $this->_sent = '';
-        }
-        
-        /**
-         *    Test for an outstanding error.
-         *    @return boolean           True if there is an error.
-         *    @access public
-         */
-        function isError() {
-            return $this->_socket->isError();
-        }
-        
-        /**
-         *    Accessor for an outstanding error.
-         *    @return string     Empty string if no error otherwise
-         *                       the error message.
-         *    @access public
-         */
-        function getError() {
-            return $this->_socket->isError();
-        }
-        
-        /**
-         *    Writes some data to the socket.
-         *    @param string $message       String to send to socket.
-         *    @return boolean              True if successful.
-         *    @access public
-         */
-        function write($message) {
-            if ($this->_socket->write($message)) {
-                $this->_sent .= $message;
-                return true;
-            }
-            return false;
-        }
-        
-        /**
-         *    Reads data from the socket.
-         *    @param integer $block_size       Size of chunk to read.
-         *    @return integer                  Incoming bytes. False
-         *                                     on error.
-         *    @access public
-         */
-        function read($block_size = 255) {
-            return $this->_socket->read($block_size);
-        }
-        
-        /**
-         *    Accessor for socket open state.
-         *    @return boolean           True if open.
-         *    @access public
-         */
-        function isOpen() {
-            return $this->_socket->isOpen();
-        }
-        
-        /**
-         *    Closes the socket preventing further reads.
-         *    Cannot be reopened once closed.
-         *    @return boolean           True if successful.
-         *    @access public
-         */
-        function close() {
-            return $this->_socket->close();
-        }
-        
-        /**
-         *    Captured bytes sent so far.
-         *    @return string       Output so far.
-         *    @access public
-         */
-        function getSent() {
-            return $this->_sent;
         }
     }
 ?>
