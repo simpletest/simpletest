@@ -14,6 +14,7 @@ Reporter
 
 Mock objects
 ------------
+Meaningful error if no unit tester attached (1).
 
 Parser
 ------
@@ -44,7 +45,7 @@ Add User-Agent identifier for tracking tests (1/0) - done.
 Allow adding of arbitrary headers (1/1) - done.
 Add accessor for link set (1).
 Add accessor for URL in focus (2).
-Refactor authentication to cope with framed pages (2).
+Refactor authentication to cope with framed pages (2/1).
 
 Web tester
 ----------
