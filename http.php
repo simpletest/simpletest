@@ -129,6 +129,7 @@
         var $_value;
         var $_path;
         var $_expiry;
+        var $_is_secure;
         
         /**
          *    Constructor. Sets the stored values.
@@ -136,8 +137,9 @@
          *    @param $value           Value of cookie.
          *    @param $path            Cookie path if not host wide.
          *    @param $expiry          Expiry date as string.
+         *    @param $is_secure       True if SSL is demanded.
          */
-        function SimpleCookie($name, $value = false, $path = false, $expiry = false) {
+        function SimpleCookie($name, $value = false, $path = false, $expiry = false, $is_secure = false) {
             $this->_host = false;
             $this->_name = $name;
             $this->_value = $value;
@@ -148,6 +150,7 @@
             } elseif (is_integer($expiry)) {
                 $this->_expiry = $expiry;
             }
+            $this->_is_secure = $is_secure;
         }
         
         /**
@@ -197,7 +200,7 @@
          *    @private
          */
         function _truncateHost($host) {
-            if (preg_match('/[a-z\-]+\.(com|org|net)$/i', $host, $matches)) {
+            if (preg_match('/[a-z\-]+\.(com|edu|net|org|gov|mil|int)$/i', $host, $matches)) {
                 return $matches[0];
             } elseif (preg_match('/[a-z\-]+\.[a-z\-]+\.[a-z\-]+$/i', $host, $matches)) {
                 return $matches[0];
@@ -264,6 +267,15 @@
                 $now = strtotime($now);
             }
             return ($this->_expiry < $now);
+        }
+        
+        /**
+         *    Accessor for the secure flag.
+         *    @return        True if cookie needs SSL.
+         *    @public
+         */
+        function isSecure() {
+            return $this->_is_secure;
         }
         
         /**

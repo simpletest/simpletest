@@ -65,23 +65,26 @@
         function TestOfCookie() {
             $this->UnitTestCase();
         }
-        function testCookieAccessors() {
-            $cookie = new SimpleCookie(
-                    "name",
-                    "value",
-                    "/path",
-                    "Mon, 18 Nov 2002 15:50:29 GMT");
-            $this->assertEqual($cookie->getName(), "name");
-            $this->assertEqual($cookie->getValue(), "value");
-            $this->assertEqual($cookie->getPath(), "/path/");
-            $this->assertEqual($cookie->getExpiry(), "Mon, 18 Nov 2002 15:50:29 GMT");
-        }
         function testCookieDefaults() {
             $cookie = new SimpleCookie("name");
             $this->assertFalse($cookie->getValue());
             $this->assertEqual($cookie->getPath(), "/");
             $this->assertIdentical($cookie->getHost(), false);
             $this->assertFalse($cookie->getExpiry());
+            $this->assertFalse($cookie->isSecure());
+        }
+        function testCookieAccessors() {
+            $cookie = new SimpleCookie(
+                    "name",
+                    "value",
+                    "/path",
+                    "Mon, 18 Nov 2002 15:50:29 GMT",
+                    true);
+            $this->assertEqual($cookie->getName(), "name");
+            $this->assertEqual($cookie->getValue(), "value");
+            $this->assertEqual($cookie->getPath(), "/path/");
+            $this->assertEqual($cookie->getExpiry(), "Mon, 18 Nov 2002 15:50:29 GMT");
+            $this->assertTrue($cookie->isSecure());
         }
         function testFullHostname() {
             $cookie = new SimpleCookie("name");
