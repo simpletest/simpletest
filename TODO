@@ -27,7 +27,7 @@ Make multivalue widgets PHP compatible (2/1) - done.
 Confirm nested directory parsing with base URL (2/4) - done.
 Fix bug with URL arguments with no "=" (1/2) - done.
 Fix link parsing to handle links with a missing page name (2/1) - done.
-Fix URL decoding bug on attributes (2).
+Fix URL decoding bug on attributes (2/1) - done.
 
 Browser
 -------

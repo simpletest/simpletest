@@ -386,6 +386,21 @@
             $this->_handler->expectCallCount("acceptAttributeToken", 3);
             $this->assertTrue($this->_lexer->parse("<html><a href = 'here.html'>label</a></html>"));
         }
+        function testEncodedLinkAddress() {
+            $this->_handler->expectArgumentsAt(0, "acceptTextToken", array("<html>", "*"));
+            $this->_handler->expectArgumentsAt(1, "acceptTextToken", array("label", "*"));
+            $this->_handler->expectArgumentsAt(2, "acceptTextToken", array("</html>", "*"));
+            $this->_handler->expectCallCount("acceptTextToken", 3);
+            $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<a", "*"));
+            $this->_handler->expectArgumentsAt(1, "acceptStartToken", array("href", "*"));
+            $this->_handler->expectArgumentsAt(2, "acceptStartToken", array(">", "*"));
+            $this->_handler->expectCallCount("acceptStartToken", 3);
+            $this->_handler->expectArgumentsAt(0, "acceptAttributeToken", array("= '", "*"));
+            $this->_handler->expectArgumentsAt(1, "acceptAttributeToken", array("here&amp;there.html", "*"));
+            $this->_handler->expectArgumentsAt(2, "acceptAttributeToken", array("'", "*"));
+            $this->_handler->expectCallCount("acceptAttributeToken", 3);
+            $this->assertTrue($this->_lexer->parse("<html><a href = 'here&amp;there.html'>label</a></html>"));
+        }
         function testEmptyLinkWithId() {
             $this->_handler->expectArgumentsAt(0, "acceptTextToken", array("<html>", "*"));
             $this->_handler->expectArgumentsAt(1, "acceptTextToken", array("label", "*"));
@@ -498,6 +513,19 @@
             $this->assertTrue($this->_parser->acceptStartToken("href", LEXER_MATCHED));
             $this->assertTrue($this->_parser->acceptAttributeToken("=\"", LEXER_ENTER));
             $this->assertTrue($this->_parser->acceptAttributeToken("here.html", LEXER_UNMATCHED));
+            $this->assertTrue($this->_parser->acceptAttributeToken("\"", LEXER_EXIT));
+            $this->assertTrue($this->_parser->acceptStartToken(">", LEXER_EXIT));
+        }
+        function testLinkStartWithEncodedUrl() {
+            $this->_parser->parse("");
+            $this->_listener->expectOnce(
+                    "startElement",
+                    array("a", array("href" => "here&there.html")));
+            $this->_listener->setReturnValue("startElement", true);
+            $this->assertTrue($this->_parser->acceptStartToken("<a", LEXER_ENTER));
+            $this->assertTrue($this->_parser->acceptStartToken("href", LEXER_MATCHED));
+            $this->assertTrue($this->_parser->acceptAttributeToken("=\"", LEXER_ENTER));
+            $this->assertTrue($this->_parser->acceptAttributeToken("here&amp;there.html", LEXER_UNMATCHED));
             $this->assertTrue($this->_parser->acceptAttributeToken("\"", LEXER_EXIT));
             $this->assertTrue($this->_parser->acceptStartToken(">", LEXER_EXIT));
         }

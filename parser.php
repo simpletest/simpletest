@@ -588,7 +588,7 @@
                 return $success;
             }
             if ($token != "=") {
-                $this->_current_attribute = strtolower($token);
+                $this->_current_attribute = strtolower($this->_decodeHtml($token));
                 $this->_attributes[$this->_current_attribute] = "";
             }
             return true;
@@ -618,11 +618,12 @@
          */
         function acceptAttributeToken($token, $event) {
             if ($event == LEXER_UNMATCHED) {
-                $this->_attributes[$this->_current_attribute] .= $token;
+                $this->_attributes[$this->_current_attribute] .=
+                        $this->_decodeHtml($token);
             }
             if ($event == LEXER_SPECIAL) {
                 $this->_attributes[$this->_current_attribute] .=
-                        preg_replace('/^=\s*/' , '', $token);
+                        preg_replace('/^=\s*/' , '', $this->_decodeHtml($token));
             }
             return true;
         }
@@ -658,6 +659,18 @@
          */
         function ignore($token, $event) {
             return true;
+        }
+        
+        /**
+         *    Decodes any HTML entities.
+         *    @param string $html    Incoming HTML.
+         *    @return string         Outgoing plain text.
+         *    @access private
+         */
+        function _decodeHtml($html) {
+            return strtr(
+                    $html,
+                    array_flip(get_html_translation_table(HTML_ENTITIES)));
         }
     }
     
