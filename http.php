@@ -1,6 +1,76 @@
 <?php
     // $Id$
-    
+
+    /**
+     *    Cookie data holder. A passive class.
+     */
+    class SimpleCookie {
+        var $_host;
+        var $_name;
+        var $_value;
+        var $_path;
+        var $_expiry;
+        
+        /**
+         *    Constructor. Sets the stored values.
+         *    @param $name            Cookie key.
+         *    @param $value           Value of cookie.
+         */
+        function SimpleCookie($host, $name, $value = "", $path = "/", $expiry = "") {
+            $this->_host = $host;
+            $this->_name = $name;
+            $this->_value = $value;
+            $this->_path = $path;
+            $this->_expiry = $expiry;
+        }
+        
+        /**
+         *    Accessor for the host to which this cookie applies.
+         *    @return        Hostname[:port] formatted string.
+         *    @public
+         */
+        function getHost() {
+            return $this->_host;
+        }
+        
+        /**
+         *    Accessor for name.
+         *    @return        Cookie key.
+         *    @public
+         */
+        function getName() {
+            return $this->_name;
+        }
+        
+        /**
+         *    Accessor for value. A deleted cookie will
+         *    have an empty string for this.
+         *    @return        Cookie value.
+         *    @public
+         */
+        function getValue() {
+            return $this->_value;
+        }
+        
+        /**
+         *    Accessor for path.
+         *    @return        Valid cookie path.
+         *    @public
+         */
+        function getPath() {
+            return $this->_path;
+        }
+        
+        /**
+         *    Accessor for expiry.
+         *    @return        Expiry string.
+         *    @public
+         */
+        function getExpiry() {
+            return $this->_expiry;
+        }
+    }
+
     /**
      *    HTTP request for a web page. Factory for
      *    HttpResponse object.
@@ -86,8 +156,9 @@
      */
     class SimpleHttpResponse extends StickyError {
         var $_content;
-        var $_mime_type;
         var $_response_code;
+        var $_http_version;
+        var $_mime_type;
         var $_cookies;
         
         /**
@@ -100,13 +171,10 @@
         function SimpleHttpResponse(&$socket) {
             $this->StickyError();
             $this->_content = "";
-            $this->_mime_type = "";
             $this->_response_code = 0;
+            $this->_http_version = 0;
+            $this->_mime_type = "";
             $this->_cookies = array();
-            if ($socket->isError()) {
-                $this->_setError("Bad socket [" . $socket->getError() . "]");
-                return;
-            }
             $raw = $this->_readAll($socket);
             if ($socket->isError()) {
                 $this->_setError("Error reading socket [" . $socket->getError() . "]");
@@ -130,6 +198,15 @@
          */
         function getContent() {
             return $this->_content;
+        }
+        
+        /**
+         *    Accessor for parsed HTTP protocol version.
+         *    @return            HTTP error code integer.
+         *    @public
+         */
+        function getHttpVersion() {
+            return $this->_http_version;            
         }
         
         /**
@@ -167,8 +244,9 @@
          *    @protected
          */
         function _parseHeaderLine($header_line) {
-            if (preg_match('/HTTP\/\d+\.\d+\s+(.*)\s/i', $header_line, $matches)) {
-                $this->_response_code = $matches[1];
+            if (preg_match('/HTTP\/(\d+\.\d+)\s+(.*)\s/i', $header_line, $matches)) {
+                $this->_http_version = $matches[1];
+                $this->_response_code = $matches[2];
             }
             if (preg_match('/Content-type: (.*)/i', $header_line, $matches)) {
                 $this->_mime_type = $matches[1];

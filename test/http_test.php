@@ -7,6 +7,31 @@
     require_once(SIMPLE_TEST . 'http.php');
     Mock::generate("SimpleSocket");
 
+    class CookieTestCase extends UnitTestCase {
+        function CookieTestCase() {
+            $this->UnitTestCase();
+        }
+        function testCookieAccessors() {
+            $cookie = new SimpleCookie(
+                    "hostname.here",
+                    "name",
+                    "value",
+                    "/path",
+                    "Mon, 18 Nov 2002 15:50:29 GMT");
+            $this->assertEqual($cookie->getHost(), "hostname.here");
+            $this->assertEqual($cookie->getName(), "name");
+            $this->assertEqual($cookie->getValue(), "value");
+            $this->assertEqual($cookie->getPath(), "/path");
+            $this->assertEqual($cookie->getExpiry(), "Mon, 18 Nov 2002 15:50:29 GMT");
+        }
+        function testCookieDefaults() {
+            $cookie = new SimpleCookie("host", "name");
+            $this->assertFalse($cookie->getValue());
+            $this->assertEqual($cookie->getPath(), "/");
+            $this->assertFalse($cookie->getExpiry());
+        }
+    }
+
     class HttpRequestTestCase extends UnitTestCase {
         function HttpRequestTestCase() {
             $this->UnitTestCase();
@@ -98,7 +123,7 @@
             $this->assertTrue($response->isError());
             $this->assertEqual($response->getContent(), "");
         }
-        function testParseResponse() {
+        function testParseOfResponse() {
             $socket = &new MockSimpleSocket($this);
             $socket->setReturnValue("isError", false);
             $socket->setReturnValueSequence(0, "read", "HTTP/1.1 200 OK\r\nDate: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
@@ -112,8 +137,9 @@
             $this->assertEqual(
                     $response->getContent(),
                     "this is a test file\nwith two lines in it\n");
-            $this->assertEqual($response->getMimeType(), "text/plain");
+            $this->assertIdentical($response->getHttpVersion(), "1.1");
             $this->assertIdentical($response->getResponseCode(), 200);
+            $this->assertEqual($response->getMimeType(), "text/plain");
         }
         function testParseCookies() {
             $socket = &new MockSimpleSocket($this);
