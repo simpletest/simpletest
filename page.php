@@ -102,7 +102,7 @@
         }
         
         /**
-         *    Start of element event.
+         *    Start of element event. Opens a new tag.
          *    @param $name        Element name.
          *    @param $attributes  Hash of name value pairs.
          *                        Attributes without content
@@ -114,9 +114,7 @@
             if (!in_array($name, array_keys($this->_tags))) {
                 $this->_tags[$name] = array();
             }
-            array_push($this->_tags[$name], array(
-                    "attributes" => $attributes,
-                    "content" => ""));
+            array_push($this->_tags[$name], new SimpleTag($name, $attributes));
             return true;
         }
         
@@ -132,7 +130,7 @@
                 return false;
             }
             $tag = array_pop($this->_tags[$name]);
-            $this->_dispatchTag($name, $tag["attributes"], $tag["content"]);
+            $this->_dispatchTag($tag);
             return true;
         }
         
@@ -146,7 +144,7 @@
         function addContent($text) {
             foreach (array_keys($this->_tags) as $name) {
                 for ($i = 0; $i < count($this->_tags[$name]); $i++) {
-                    $this->_tags[$name][$i]["content"] .= $text;
+                    $this->_tags[$name][$i]->addContent($text);
                 }
             }
             return true;
@@ -155,22 +153,11 @@
         /**
          *    Dispatches the tag content to the page once
          *    it has been closed.
-         *    @param $name        Name of element.
-         *    @param $attributes  Hash of attribute names
-         *                        and values. If no value is
-         *                        recorded then it will be set
-         *                        to true.
+         *    @param $tag        Newly completed tag.
          *    @protected
          */
-        function _dispatchTag($name, $attributes, $content) {
-            if ($name == "a") {
-                $this->_page->addLink(
-                        $attributes["href"],
-                        $content,
-                        isset($attributes["id"]) ? $attributes["id"] : false);
-            } elseif ($name == "title") {
-                $this->_page->setTitle($content);
-            }
+        function _dispatchTag($tag) {
+            $this->_page->acceptTag($tag);
         }
     }
     
@@ -216,6 +203,22 @@
          */
         function &_createBuilder(&$page) {
             return new SimplePageBuilder($page);
+        }
+        
+        /**
+         *    Adds a tag to the page.
+         *    @param $tag        Tag to accept.
+         *    @public
+         */
+        function acceptTag($tag) {
+            if ($tag->getName() == "a") {
+                $this->addLink(
+                        $tag->getAttribute("href"),
+                        $tag->getContent(),
+                        $tag->getAttribute("id"));
+            } elseif ($tag->getName() == "title") {
+                $this->setTitle($tag->getContent());
+            }
         }
         
         /**

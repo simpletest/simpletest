@@ -45,15 +45,17 @@
         }
         function testBadLink() {
             $page = &new MockSimplePage($this);
-            $page->expectCallCount("addLink", 0);
+            $page->expectCallCount("acceptTag", 0);
             $builder = &new SimplePageBuilder($page);
             $this->assertFalse($builder->endElement("a"));
             $page->tally();
         }
         function testLink() {
+            $tag = new SimpleTag("a", array("href" => "http://somewhere"));
+            $tag->addContent("Label");
             $page = &new MockSimplePage($this);
-            $page->expectArguments("addLink", array("http://somewhere", "Label", "*"));
-            $page->expectCallCount("addLink", 1);
+            $page->expectArguments("acceptTag", array($tag));
+            $page->expectCallCount("acceptTag", 1);
             $builder = &new SimplePageBuilder($page);
             $this->assertTrue($builder->startElement(
                     "a",
@@ -63,9 +65,11 @@
             $page->tally();
         }
         function testLinkWithId() {
+            $tag = new SimpleTag("a", array("href" => "http://somewhere", "id" => "44"));
+            $tag->addContent("Label");
             $page = &new MockSimplePage($this);
-            $page->expectArguments("addLink", array("http://somewhere", "Label", "44"));
-            $page->expectCallCount("addLink", 1);
+            $page->expectArguments("acceptTag", array($tag));
+            $page->expectCallCount("acceptTag", 1);
             $builder = &new SimplePageBuilder($page);
             $this->assertTrue($builder->startElement(
                     "a",
@@ -75,9 +79,11 @@
             $page->tally();
         }
         function testLinkExtraction() {
+            $tag = new SimpleTag("a", array("href" => "http://somewhere"));
+            $tag->addContent("Label");
             $page = &new MockSimplePage($this);
-            $page->expectArguments("addLink", array("http://somewhere", "Label", "*"));
-            $page->expectCallCount("addLink", 1);
+            $page->expectArguments("acceptTag", array($tag));
+            $page->expectCallCount("acceptTag", 1);
             $builder = &new SimplePageBuilder($page);
             $this->assertTrue($builder->addContent("Starting stuff"));
             $this->assertTrue($builder->startElement(
@@ -89,10 +95,14 @@
             $page->tally();
         }
         function testMultipleLinks() {
+            $a1 = new SimpleTag("a", array("href" => "http://somewhere"));
+            $a1->addContent("1");
+            $a2 = new SimpleTag("a", array("href" => "http://elsewhere"));
+            $a2->addContent("2");
             $page = &new MockSimplePage($this);
-            $page->expectArgumentsAt(0, "addLink", array("http://somewhere", "1", "*"));
-            $page->expectArgumentsAt(1, "addLink", array("http://elsewhere", "2", "*"));
-            $page->expectCallCount("addLink", 2);
+            $page->expectArgumentsAt(0, "acceptTag", array($a1));
+            $page->expectArgumentsAt(1, "acceptTag", array($a2));
+            $page->expectCallCount("acceptTag", 2);
             $builder = &new SimplePageBuilder($page);
             $builder->startElement("a", array("href" => "http://somewhere"));
             $builder->addContent("1");
@@ -104,9 +114,11 @@
             $page->tally();
         }
         function testTitle() {
+            $tag = new SimpleTag("title", array());
+            $tag->addContent("HereThere");
             $page = &new MockSimplePage($this);
-            $page->expectArguments("setTitle", array("HereThere"));
-            $page->expectCallCount("setTitle", 1);
+            $page->expectArguments("acceptTag", array($tag));
+            $page->expectCallCount("acceptTag", 1);
             $builder = &new SimplePageBuilder($page);
             $builder->startElement("title", array());
             $builder->addContent("Here");
