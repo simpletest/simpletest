@@ -78,6 +78,7 @@ version or two.
       <file role="php" baseinstalldir="simpletest" name="socket.php"/>
       <file role="php" baseinstalldir="simpletest" name="tag.php"/>
       <file role="php" baseinstalldir="simpletest" name="unit_tester.php"/>
+      <file role="php" baseinstalldir="simpletest" name="user_agent.php"/>
       <file role="doc" baseinstalldir="simpletest" name="VERSION"/>
       <file role="php" baseinstalldir="simpletest" name="web_tester.php"/>
       <file role="php" baseinstalldir="simpletest" name="xml.php"/>
@@ -95,6 +96,7 @@ version or two.
       <file role="doc" baseinstalldir="simpletest" name="docs/server_stubs_documentation.html"/>
       <file role="doc" baseinstalldir="simpletest" name="docs/unit_test_documentation.html"/>
       <file role="doc" baseinstalldir="simpletest" name="docs/web_tester_documentation.html"/>
+      <file role="doc" baseinstalldir="simpletest" name="docs/form_testing_documentation.html"/>
       <!-- Tests -->
       <file role="test" baseinstalldir="simpletest" name="test/adapter_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/all_tests.php"/>
@@ -117,8 +119,8 @@ version or two.
       <file role="test" baseinstalldir="simpletest" name="test/socket_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/tag_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/unit_tests.php"/>
+      <file role="test" baseinstalldir="simpletest" name="test/user_agent_tests.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/visual_tests.php"/>
-      <file role="test" baseinstalldir="simpletest" name="test/web_test_case_test.php"/>
       <file role="test" baseinstalldir="simpletest" name="test/xml_test.php"/>
     </filelist>
   </release>

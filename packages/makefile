@@ -10,6 +10,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/socket.php \
           simpletest/query_string.php \
           simpletest/http.php \
+          simpletest/user_agent.php \
           simpletest/browser.php \
           simpletest/parser.php \
           simpletest/tag.php \
@@ -39,6 +40,7 @@ SCRIPTS = simpletest/errors.php \
           simpletest/test/socket_test.php \
           simpletest/test/query_string_test.php \
           simpletest/test/http_test.php \
+          simpletest/test/user_agent_test.php \
           simpletest/test/browser_test.php \
           simpletest/test/parser_test.php \
           simpletest/test/tag_test.php \
@@ -46,7 +48,6 @@ SCRIPTS = simpletest/errors.php \
           simpletest/test/remote_test.php \
           simpletest/test/simple_mock_test.php \
           simpletest/test/visual_test.php \
-          simpletest/test/web_test_case_test.php \
           simpletest/test/shell_test.php \
           simpletest/test/shell_tester_test.php \
           simpletest/test/xml_test.php \
@@ -61,7 +62,8 @@ SCRIPTS = simpletest/errors.php \
           simpletest/docs/mock_objects_documentation.html \
           simpletest/docs/partial_mocks_documentation.html \
           simpletest/docs/expectation_documentation.html \
-          simpletest/docs/web_tester_documentation.html
+          simpletest/docs/web_tester_documentation.html \
+          simpletest/docs/form_testing_documentation.html
 
 release: $(NAME)
 
