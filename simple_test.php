@@ -451,7 +451,8 @@
          */
         function _isTestCase($class) {
             while ($class = get_parent_class($class)) {
-                if (strtolower($class) == "simpletestcase") {
+                $class = strtolower($class);
+                if ($class == "simpletestcase" || $class == "grouptest") {
                     return true;
                 }
             }

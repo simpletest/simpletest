@@ -7,7 +7,6 @@ Xalan -o ../docs/pkg/ServerStubs.pkg ../docs/source/en/server_stubs_documentatio
 Xalan -o ../docs/pkg/MockObjects.pkg ../docs/source/en/mock_objects_documentation.xml phpdoc_docs.xslt
 Xalan -o ../docs/pkg/PartialMock.pkg ../docs/source/en/partial_mocks_documentation.xml phpdoc_docs.xslt
 Xalan -o ../docs/pkg/Reporting.pkg ../docs/source/en/reporter_documentation.xml phpdoc_docs.xslt
-Xalan -o ../docs/pkg/TestRunner.pkg ../docs/source/en/runner_documentation.xml phpdoc_docs.xslt
 Xalan -o ../docs/pkg/Expectations.pkg ../docs/source/en/expectation_documentation.xml phpdoc_docs.xslt
 Xalan -o ../docs/pkg/WebTester.pkg ../docs/source/en/web_tester_documentation.xml phpdoc_docs.xslt
 Xalan -o ../docs/pkg/FormTesting.pkg ../docs/source/en/form_testing_documentation.xml phpdoc_docs.xslt

@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 71 hours.
+This is immediate stuff only for this iteration (RC2) of 72 hours.
 
 $Id$
 
@@ -52,7 +52,6 @@ Fix getLabel() crashing bug (2/0) - done.
 Documentation
 -------------
 Add authentication documentation (3/3) - done.
-Add runner documentation (3/3).
 Add browser scripting documentation (2).
 Tidy up sundry doc. files (2/1) - done.
 Fix reported typos (1).
