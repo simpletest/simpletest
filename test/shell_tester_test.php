@@ -21,5 +21,12 @@
             $this->assertExitCode(0);
             $this->_mock_shell->tally();
         }
+        function testOutputPatterns() {
+            $this->_mock_shell = &new MockSimpleShell($this);
+            $this->_mock_shell->setReturnValue('execute', 0);
+            $this->_mock_shell->setReturnValue('getOutput', "Line 1\nLine 2\n");
+            $this->assertWantedPattern('/line/i');
+            $this->assertNoUnwantedPattern('/line 2/');
+        }
     }
 ?>

@@ -1,0 +1,148 @@
+<?php
+    // $Id$
+    
+    if (!defined("SIMPLE_TEST")) {
+        define("SIMPLE_TEST", "simpletest/");
+    }
+    require_once(SIMPLE_TEST . 'simple_test.php');
+    
+    /**
+     *    Wrapper for exec() functionality.
+     */
+    class SimpleShell {
+        var $_output;
+        
+        /**
+         *    Executes the shell comand and stashes the output.
+         *    @access public
+         */
+        function SimpleShell() {
+            $this->_output = false;
+        }
+        
+        /**
+         *    Actually runs the command.
+         *    @param string $command    The actual command line
+         *                              to run.
+         *    @return integer           Exit code.
+         *    @access public
+         */
+        function execute($command) {
+            if (! preg_match('/2>&1/', $command)) {
+                $command .= ' 2>&1';
+            }
+            exec($command, $this->_output, $ret);
+            return $ret;
+        }
+        
+        /**
+         *    Accessor for the last output.
+         *    @return string        Output as text.
+         *    @access public
+         */
+        function getOutput() {
+            return implode("\n", $this->_output);
+        }
+    }
+    
+    /**
+     *    Test case for testing of command line scripts and
+     *    utilities. Usually scripts taht are external to the
+     *    PHP code, but support it in some way.
+     */
+    class ShellTestCase extends SimpleTestCase {
+        var $_current_shell;
+        var $_last_status;
+        var $_last_command;
+        
+        /**
+         *    Creates an empty test case. Should be subclassed
+         *    with test methods for a functional test case.
+         *    @param string $label     Name of test case. Will use
+         *                             the class name if none specified.
+         *    @access public
+         */
+        function ShellTestCase($label = false) {
+            $this->SimpleTestCase($label);
+            $this->_current_shell = &$this->_createShell();
+            $this->_last_status = false;
+            $this->_last_command = '';
+        }
+        
+        /**
+         *    Executes a command and buffers the results.
+         *    @param string $command     Command to run.
+         *    @return boolean            True if zero exit code.
+         *    @access public
+         */
+        function execute($command) {
+            $shell = &$this->_getShell();
+            $this->_last_status = $shell->execute($command);
+            $this->_last_command = $command;
+            return ($this->_last_status === 0);
+        }
+        
+        /**
+         *    Tests the last status code from the shell.
+         *    @param integer $status   Expected status of last
+         *                             command.
+         *    @param $message          Message to display.
+         *    @access public
+         */
+        function assertExitCode($status, $message = "%s") {
+            $message = sprintf($message, "Expected status code of [$status] from [" .
+                            $this->_last_command . "], but got [" .
+                            $this->_last_status . "]");
+            $this->assertTrue($status === $this->_last_status, $message);
+        }
+        
+        /**
+         *    Scans the output for a Perl regex. If found
+         *    anywhere it passes, else it fails.
+         *    @param string $pattern    Regex to search for.
+         *    @param $message        Message to display.
+         *    @access public
+         */
+        function assertWantedPattern($pattern, $message = "%s") {
+            $shell = &$this->_getShell();
+            $this->assertExpectation(
+                    new WantedPatternExpectation($pattern),
+                    $shell->getOutput(),
+                    $message);
+        }
+        
+        /**
+         *    If a Perl regex is found anywhere in the current
+         *    output then a failure is generated, else a pass.
+         *    @param string $pattern    Regex to search for.
+         *    @param $message        Message to display.
+         *    @access public
+         */
+        function assertNoUnwantedPattern($pattern, $message = "%s") {
+            $shell = &$this->_getShell();
+            $this->assertExpectation(
+                    new UnwantedPatternExpectation($pattern),
+                    $shell->getOutput(),
+                    $message);
+        }
+        
+        /**
+         *    Accessor for current shell. Used for testing the
+         *    the tester itself.
+         *    @return Shell        Current shell.
+         *    @access protected
+         */
+        function &_getShell() {
+            return $this->_current_shell;
+        }
+        
+        /**
+         *    Factory for the shell to run the command on.
+         *    @return Shell        New shell object.
+         *    @access protected
+         */
+        function &_createShell() {
+            return new SimpleShell();
+        }
+    }
+?>

@@ -913,6 +913,9 @@
          *    @access public
          */
         function getNewCookies() {
+            if (! $this->_headers) {
+                return array();
+            }
             return $this->_headers->getNewCookies();
         }
         

@@ -12,6 +12,7 @@
     class BoundaryTests extends GroupTest {
         function BoundaryTests() {
             $this->GroupTest("Boundary tests");
+            $this->addTestFile("shell_test.php");
             $this->addTestFile("live_test.php");
             $this->addTestFile("real_sites_test.php");
         }
