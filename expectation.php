@@ -456,7 +456,7 @@
         
         /**
          *    Sets the value to compare against.
-         *    @param string $pattern        Pattern to search for.
+         *    @param object $obj        Object to check.
          *    @access public
          */
         function MethodExistenceExpectation(&$obj) {
