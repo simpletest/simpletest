@@ -659,9 +659,8 @@
                 trigger_error('No unit tester for mock object', E_USER_ERROR);
                 return;
             }
-            $this->_test = &$test;
+            $this->_test = SimpleMock::registerTest(&$test);
             $this->_expected_counts = array();
-            $this->_expected_maximum_counts = array();
             $this->_max_counts = array();
             $this->_expected_args = array();
             $this->_expected_args_at = array();
@@ -910,7 +909,27 @@
          *    @access protected
          */
         function _assertTrue($assertion, $message) {
-            $this->_test->assertTrue($assertion, $message);
+            $test = &SimpleMock::injectTest($this->_test);
+            $test->assertTrue($assertion, $message);
+        }
+        
+        function registerTest(&$test) {
+            $registry = &SimpleMock::_getRegistry();
+            $registry[$class = get_class($test)] = &$test;
+            return $class;
+        }
+        
+        function &injectTest($class) {
+            $registry = &SimpleMock::_getRegistry();
+            return $registry[$class];
+        }
+        
+        function &_getRegistry() {
+            static $registry;
+            if (! isset($registry)) {
+                $registry = array();
+            }
+            return $registry;
         }
     }
     

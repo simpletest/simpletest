@@ -103,7 +103,7 @@
          *    @return boolean              True if correct.
          *    @access public
          */
-        function test($compare) {
+        function test($compare, $nasty = false) {
             return (($this->_value == $compare) && ($compare == $this->_value));
         }
         

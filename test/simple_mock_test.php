@@ -1,6 +1,8 @@
 <?php
     // $Id$
     
+    require_once(dirname(__FILE__) . '/../expectation.php');
+    
     class TestOfWildcardExpectation extends UnitTestCase {
         
         function testSimpleInteger() {
@@ -572,6 +574,25 @@
             $mock->aMethod();
             $mock->tally();
        }
+    }
+    
+    class TestOfMockComparisons extends UnitTestCase {
+        
+        function testTestCaseRegistry() {
+            $test = &new MockSimpleTestCase($this);
+            $class = SimpleMock::registerTest($test);
+            $this->assertReference($test, SimpleMock::injectTest($class));
+        }
+        
+        function testEqualComparisonOfMocksDoesNotCrash() {
+            $expectation = &new EqualExpectation(new MockDummy($this));
+            $this->assertTrue($expectation->test(new MockDummy($this), true));
+        }
+        
+        function testIdenticalComparisonOfMocksDoesNotCrash() {
+            $expectation = &new IdenticalExpectation(new MockDummy($this));
+            $this->assertTrue($expectation->test(new MockDummy($this)));
+        }
     }
     
     SimpleTestOptions::addPartialMockCode('function sayHello() { return "Hello"; }');

@@ -48,7 +48,6 @@
          *    Accessor for the test name for subclasses.
          *    @return string           Name of the test.
          *    @access public
-         *    @static
          */
         function getLabel() {
             return $this->_label;
