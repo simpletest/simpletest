@@ -361,6 +361,16 @@
         }
     }
     
+    class TestOfAuthentication extends WebTestCase {
+        function TestOfAuthentication() {
+            $this->WebTestCase();
+        }
+        function testReportChallenge() {
+            $this->get('http://www.lastcraft.com/test/protected/');
+            $this->assertResponse(401);
+        }
+    }
+    
     class TestOfFrames extends WebTestCase {
         function TestOfFrames() {
             $this->WebTestCase();

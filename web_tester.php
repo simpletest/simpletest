@@ -158,7 +158,8 @@
         }
         
         /**
-         *    Sets the socket timeout for opening a connection.
+         *    Sets the socket timeout for opening a connection and
+         *    receiving at least one byte of information.
          *    @param integer $timeout      Maximum time in seconds.
          *    @acces public
          */
