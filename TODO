@@ -1,18 +1,18 @@
 TODO
-This is immediate stuff only for this iteration (RC2) of 26 hours.
+This is immediate stuff only for this iteration (RC2) of 28 hours.
 
 $Id$
 
 Unit tester
 -----------
-Bug fix of syntax errors in test scripts reporting green (3/3) - done.
+Fix of syntax errors in test scripts reporting green (3/3) - done.
 
 Reporter
 --------
 
 Mock objects
 ------------
-Bug fix of fatal error with overload functions (2/2).
+Bug fix of fatal error with overload functions (2/2) - done.
 
 Parser
 ------
@@ -25,6 +25,7 @@ Fix frames error in unit tests with PHP 4.2.2 (2).
 Web tester
 ----------
 Add htmlentities() international fix (1/1) - done.
+Add character set encoding sniffer to HtmlReporter (2).
 
 Documentation
 -------------
