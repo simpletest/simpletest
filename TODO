@@ -45,13 +45,13 @@ Documentation
 -------------
 Add partial mocks documentation (3/3) - done.
 Fix runner syntax in all documentation (1/1) - done.
-Fix runner syntax in tutorials (1/1).
+Fix runner syntax in tutorials (1/1) - done.
 Fix options syntax in all documentation (1/1) - done.
-Fix options syntax in tutorial (1/1).
-Fix mock object examples to use simpler expectations(1/0).
-Fix filenames in documentation (1/0).
-Fix filenames in tutorial (1/1).
-Fix reporter name in documentation (1/1).
-Fix reporter name in tutorial (1/0).
-Fix tutorial text to include ignore option (1/0).
+Fix options syntax in tutorial (1/1) - done.
+Fix mock object examples to use simpler expectations(1/0) - done.
+Fix filenames in documentation (1/0) - done.
+Fix filenames in tutorial (1/1) - done.
+Fix reporter name in documentation (1/1) - done.
+Fix reporter name in tutorial (1/0) - done.
+Fix tutorial text to include ignore option (1/0) - done.
 Add upgrade warning (1).
