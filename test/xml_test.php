@@ -8,6 +8,11 @@
     
     Mock::generate('SimpleRunner');
     
+    if (! function_exists('xml_parser_create')) {
+        SimpleTestOptions::ignore('TestOfXmlStructureParsing');
+        SimpleTestOptions::ignore('TestOfXmlResultsParsing');
+    }
+    
     class TestOfNestingTags extends UnitTestCase {
         function TestOfNestingTags() {
             $this->UnitTestCase();
@@ -18,9 +23,6 @@
         }
     }
     
-    if (! function_exists('xml_parser_create')) {
-        SimpleTestOptions::ignore('TestOfXmlStructureParsing');
-    }
     class TestOfXmlStructureParsing extends UnitTestCase {
         function TestOfXmlStructureParsing() {
             $this->UnitTestCase();
