@@ -17,7 +17,6 @@ Mock objects
 ------------
 Add parameter expectation (2/2) - done.
 Improve failure messages (1/1) - done.
-Allow expectation classes to be given as expectations (1).
 Remove pass by reference dependency in the tests (2).
 Add no return check (2).
 
@@ -27,11 +26,14 @@ Test with realistic pages (5).
 Add form parsing (2/1) - done.
 Add input tag parsing (2).
 Add text area tag parsing (2).
+Add checkbox tag parsing (2).
 Add Simple monicker to sundry classes (1).
 
 Browser
 -------
 Add submit by form (2/4) - done.
+Add submit by form ID (1) - done.
+Add HTTP authentication (3) - done.
 
 Web tester
 ----------
