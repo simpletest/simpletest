@@ -10,7 +10,7 @@ Unit tester
 
 Interface
 ---------
-Improve object difference message (1).
+Improve object difference message (1/2) - done.
 
 Mock objects
 ------------
