@@ -10,10 +10,13 @@
 
 
 // Variables:
-wu_min_x=500;
-wu_min_y=400;
-wu_fail_content="";
-wu_tree_content="";
+min_x=500;
+min_y=400;
+groupCnt=1;
+groupHash = {
+	Set : function(foo,bar) {this[foo] = bar;},
+	Get : function(foo) {return this[foo];}
+}
 
 // Functions:
 function wait_start() {
@@ -27,14 +30,14 @@ function wait_start() {
 }
 
 function layout() {
-/*	var new_x;
-	var new_y;
-	
-	new_x = max(xClientWidth()-6,wu_min_x);
-	new_y */
-	xResizeTo('webunit', max(xClientWidth()-20,wu_min_x), max(xClientHeight()-20,wu_min_y));
+	xResizeTo('webunit', max(xClientWidth()-30,min_x), max(xClientHeight()-20,min_y));
 	xMoveTo('webunit', 5, 5);
+	xResizeTo('tabs', xWidth('webunit')-10, xHeight('webunit')/3);
+	xLeft('tabs', 5);
 	xShow('webunit');
+	xShow('tabs');
+	activate_tab('fail');
+	xShow('visible_tab');
 }
 
 function set_div_content(div, content) {
@@ -46,13 +49,30 @@ function copy_div_content(divsrc, divtrgt) {
 }
 
 function activate_tab(tab) {
-	alert('change to '+tab+'tab');
+	if (tab == 'fail') {
+		copy_div_content('fail', 'visible_tab');
+	}
+	if (tab == 'tree') {
+		copy_div_content('tree', 'visible_tab');
+	}
+}
+
+function add_group(group_name) {
+  groupHash.Set(groupCnt, Array(group_name, groupCnt, Array()));
+  groupCnt++;
 }
 
 function make_fail(fails) {
 }
 
-function make_tree(groups, cases, methods) {
+function make_tree() {
+	var content;
+	content = '<ul>';
+	for (x in groupHash) {
+		content += '<li>'+x[0]+' ('+x[1]+')</li';
+	}
+	content += '</ul>';
+	xGetElementById('tree').innerHTML = content;
 }
 
 function make_output(data) { 

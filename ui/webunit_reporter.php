@@ -48,14 +48,15 @@ wait_start();
 <div id="webunit">
 	<div id="run"></div>
 	<div id="tabs">
-		<div id="fail"></div>
-		<div id="tree"></div>
+		<div id="visible_tab">visible tab content</div>
 		<span id="failtab" class="activetab">&nbsp;&nbsp;<a href="javascript:activate_tab('fail');">Fail</a>&nbsp;&nbsp;</span>
 		<span id="treetab" class="inactivetab">&nbsp;&nbsp;<a href="javascript:activate_tab('tree');">Tree</a>&nbsp;&nbsp;</span>
 	</div>
 	<div id="msg">
 	</div>
 </div>
+<div id="fail">fail div content</div>
+<div id="tree">tree div content</div>
 <!-- open a new script to capture js vars as the tests run -->
 <script type="text/javascript">
 layout();
@@ -146,7 +147,7 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    @access public
          */
         function paintFooter($test_name) {
-            echo '</script><script type="text/javascript">xHide(\'wait\');</script>';
+            echo 'make_tree();</script>'.$this->outputScript("xHide('wait');");
             $colour = ($this->getFailCount() + $this->getExceptionCount() > 0 ? "red" : "green");
             $content = "<h1>$test_name</h1>\n";
             $content .= "<div style=\"";
@@ -159,7 +160,7 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
             $content .= "<strong>" . $this->getExceptionCount() . "</strong> exceptions.";
             $content .= "</div>\n";
 
-			echo '<script type="text/javascript">foo = "', $this->toJsString($content), '";', "\nset_div_content('run', foo);\n</script>";
+			echo $this->outputScript('foo = "'.$this->toJsString($content).'";'."\nset_div_content('run', foo);");
             echo "\n</body>\n</html>\n";
         }
         
@@ -203,6 +204,32 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
         function paintFormattedMessage($message) {
             print "<pre>$message</pre>";
         }
+        
+        /**
+         *    Paints the start of a group test. Will also paint
+         *    the page header and footer if this is the
+         *    first test. Will stash the size if the first
+         *    start.
+         *    @param string $test_name   Name of test that is starting.
+         *    @param integer $size       Number of test cases starting.
+         *    @access public
+         */
+        function paintGroupStart($test_name, $size) {
+            Parent::paintGroupStart($test_name, $size);
+            echo "add_group('$test_name');\n";
+        }
+        
+        /**
+		 * Returns the script passed in wrapped in script tags.
+		 *
+		 * @param	string	$script		the script to output
+		 * @return	string	the script wrapped with script tags
+		 */
+		function outputScript($script)
+		{
+			return "<script type=\"text/javascript\">\n".$script."\n</script>\n";
+		}
+		
         
         /**
 		 *	Transform a string into a format acceptable to JavaScript

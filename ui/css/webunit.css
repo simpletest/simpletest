@@ -23,3 +23,20 @@ pre { background-color: lightgray; }
 	border-style: solid;
 	border-weight: 2;
 	}
+#visible_tab {
+	position: relative;
+	visibility: hidden;
+	overflow: auto;
+	background: white;
+	width: 100%;
+	height: 100%;
+	border-color: black;
+	border-style: solid;
+	border-weight: 1;
+	}
+#fail,
+#tree {
+	position: absolute;
+	visibility: hidden;
+}
+
