@@ -1,8 +1,5 @@
 <?php
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "../");
-    }
-    require_once(SIMPLE_TEST . 'errors.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../errors.php');
     
     class TestOfErrorQueue extends UnitTestCase {
         function TestOfErrorQueue() {

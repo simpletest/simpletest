@@ -1,10 +1,7 @@
 <?php
     // $Id$
     
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "../");
-    }
-    require_once(SIMPLE_TEST . 'socket.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../socket.php');
 
     class TestOfStickyError extends UnitTestCase {
         function TestOfStickyError() {

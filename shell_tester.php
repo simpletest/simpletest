@@ -5,14 +5,7 @@
      *	@subpackage	UnitTester
      *	@version	$Id$
      */
-    
-    /**
-     * @ignore    originally defined in simple_test.php
-     */
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
-    require_once(SIMPLE_TEST . 'simple_test.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'simple_test.php');
     
     /**
      *    Wrapper for exec() functionality.

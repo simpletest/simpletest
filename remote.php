@@ -5,16 +5,9 @@
      *	@subpackage	UnitTester
      *	@version	$Id$
      */
-    
-    /**
-     * @ignore    originally defined in simple_test.php
-     */
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
-    require_once(SIMPLE_TEST . 'browser.php');
-    require_once(SIMPLE_TEST . 'xml.php');
-    require_once(SIMPLE_TEST . 'simple_test.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'browser.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'xml.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'simple_test.php');
 
     /**
      *    Runs an XML formated test on a remote server.

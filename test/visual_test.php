@@ -11,15 +11,11 @@
     // I have enough of a tester to procede more formally.
     //
     // The proper tests start in all_tests.php
-
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "../");
-    }
-    require_once(SIMPLE_TEST . 'unit_tester.php');
-    require_once(SIMPLE_TEST . 'shell_tester.php');
-    require_once(SIMPLE_TEST . 'mock_objects.php');
-    require_once(SIMPLE_TEST . 'reporter.php');
-    require_once(SIMPLE_TEST . 'xml.php');
+    require_once('../unit_tester.php');
+    require_once('../shell_tester.php');
+    require_once('../mock_objects.php');
+    require_once('../reporter.php');
+    require_once('../xml.php');
     
     class TestDisplayClass {
         var $_a;

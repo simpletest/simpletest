@@ -1,12 +1,8 @@
 <?php
     // $Id$
-    
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', '../');
-    }
-    require_once(SIMPLE_TEST . 'browser.php');
-    require_once(SIMPLE_TEST . 'user_agent.php');
-    require_once(SIMPLE_TEST . 'http.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../browser.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../user_agent.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../http.php');
     Mock::generate('SimpleHttpResponse');
     Mock::generate('SimpleHttpHeaders');
     Mock::generate('SimplePage');
@@ -159,6 +155,17 @@
             
             $browser = &$this->loadPage($page);
             $this->assertTrue($browser->isLink('a link label'));
+            
+            $page->tally();
+        }
+        function testLinkAffirmationByIdWhenPresent() {
+            $page = &new MockSimplePage($this);
+            $page->setReturnValue('getUrlById', true, array(99));
+            $page->setReturnValue('getUrlById', false, array('*'));
+            
+            $browser = &$this->loadPage($page);
+            $this->assertTrue($browser->isLinkById(99));
+            $this->assertFalse($browser->isLinkById(98));
             
             $page->tally();
         }

@@ -5,14 +5,7 @@
      *	@subpackage	WebTester
      *	@version	$Id$
      */
-    
-    /**
-     * @ignore    Originally defined in simple_test.php file.
-     */
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
-    require_once(SIMPLE_TEST . 'page.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'page.php');
     
     /**
      *    A composite page. Wraps a frameset page and

@@ -7,7 +7,7 @@ Unit tester
 -----------
 Show line number of failed assertion (3).
 Split off options into packages (1).
-Remove SIMPLE_TEST constant (1).
+Remove SIMPLE_TEST constant (1/1) - done.
 
 Interface
 ---------
@@ -36,12 +36,12 @@ Allow image links/buttons to be head fetched to set cookies (2).
 Allow stylesheet loading to affect cookies (2).
 Username and password should allow encoded characters (1).
 Add support for proxy fetching (3/9) - done.
-Add User-Agent identifierfor tracking tests (1).
+Add User-Agent identifier for tracking tests (1).
+Allow adding of arbitrary headers (1).
 
 Web tester
 ----------
 Chain frames support from browser (1).
-Make browser class overrideable iin options (1).
 
 Documentation
 -------------

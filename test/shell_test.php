@@ -1,6 +1,8 @@
 <?php
     // $Id$
     
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../shell_tester.php');
+    
     class TestOfShell extends UnitTestCase {
         function TestOfShell() {
             $this->UnitTestCase();
@@ -26,16 +28,16 @@
             $this->assertoutput('Hello');
         }
         function testFileExistence() {
-            $this->assertFileExists(SIMPLE_TEST . 'test/all_tests.php');
+            $this->assertFileExists(dirname(__FILE__).DIRECTORY_SEPARATOR . 'all_tests.php');
             $this->assertFileNotExists('wibble');
         }
         function testFilePatterns() {
             $this->assertFilePattern(
-                    '/simple_test/i',
-                    SIMPLE_TEST . 'test/all_tests.php');
+                    '/all_tests/i',
+                    dirname(__FILE__).DIRECTORY_SEPARATOR . 'all_tests.php');
             $this->assertNoFilePattern(
                     '/sputnik/i',
-                    SIMPLE_TEST . 'test/all_tests.php');
+                    dirname(__FILE__).DIRECTORY_SEPARATOR . 'all_tests.php');
         }
     }
 ?>

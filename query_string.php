@@ -7,13 +7,6 @@
      */
     
     /**
-     * @ignore    Originally defined in simple_test.php
-     */
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
-    
-    /**
      *    Bundle of GET/POST parameters. Can include
      *    repeated parameters.
 	 *    @package SimpleTest

@@ -5,15 +5,9 @@
      *	@subpackage	MockObjects
      *	@version	$Id$
      */
-    
-    /**
-     * @ignore    originally defined in simple_test.php
-     */
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
+
     /**#@+
-     * lexer mode constant
+     * Lexer mode stack constants
      */
     define("LEXER_ENTER", 1);
     define("LEXER_MATCHED", 2);

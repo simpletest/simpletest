@@ -1,8 +1,7 @@
 <?php
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', '../');
-    }
-    require_once(SIMPLE_TEST . 'tag.php');
+    // $Id$
+    
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../tag.php');
     
     class TestOfTag extends UnitTestCase {
         function TestOfTag() {

@@ -1,15 +1,11 @@
 <?php
     // $Id$
-    
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', '../');
-    }
-    require_once(SIMPLE_TEST . 'unit_tester.php');
-    require_once(SIMPLE_TEST . 'socket.php');
-    require_once(SIMPLE_TEST . 'http.php');
-    require_once(SIMPLE_TEST . 'options.php');
-    require_once(SIMPLE_TEST . 'browser.php');
-    require_once(SIMPLE_TEST . 'web_tester.php');
+    require_once('../unit_tester.php');
+    require_once('../socket.php');
+    require_once('../http.php');
+    require_once('../options.php');
+    require_once('../browser.php');
+    require_once('../web_tester.php');
 
     if (SimpleTestOptions::getDefaultProxy()) {
         SimpleTestOptions::ignore('LiveHttpTestCase');
@@ -148,6 +144,7 @@
         }
         function testIdFollowing() {
             $this->get('http://www.lastcraft.com/test/link_confirm.php');
+            $this->assertLinkById(1);
             $this->assertTrue($this->clickLinkById(1));
             $this->assertWantedPattern('/target for the SimpleTest/');
         }

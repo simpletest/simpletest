@@ -1,12 +1,9 @@
 <?php
     // $Id$
     
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', '../');
-    }
-    require_once(SIMPLE_TEST . 'query_string.php');
-    require_once(SIMPLE_TEST . 'http.php');
-    require_once(SIMPLE_TEST . 'socket.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../query_string.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../http.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../socket.php');
     Mock::generate('SimpleUrl');
     Mock::generate('SimpleSocket');
     Mock::generate('SimpleDestination');

@@ -1,10 +1,7 @@
 <?php
     // $Id$
     
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', '../');
-    }
-    require_once(SIMPLE_TEST . 'web_tester.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../web_tester.php');
 
     class LiveSitesTestCase extends WebTestCase {
         function LiveSitesTestCase() {

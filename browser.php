@@ -5,17 +5,10 @@
      *	@subpackage	WebTester
      *	@version	$Id$
      */
-    
-    /**
-     * @ignore    Originally defined in simple_test.php
-     */
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
-    require_once(SIMPLE_TEST . 'options.php');
-    require_once(SIMPLE_TEST . 'http.php');
-    require_once(SIMPLE_TEST . 'page.php');
-    require_once(SIMPLE_TEST . 'user_agent.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'options.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'http.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'page.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'user_agent.php');
     
     /**
      *    Browser history list.
@@ -599,7 +592,7 @@
          *    @return boolean         True on success.
          *    @access public
          */
-        function clickSubmit($label = "Submit") {
+        function clickSubmit($label = 'Submit') {
             if (! ($form = &$this->_page->getFormBySubmitLabel($label))) {
                 return false;
             }
@@ -654,7 +647,7 @@
         
         /**
          *    Tests to see if a link is present by label.
-         *    @param string $label     Text between the anchor tags.
+         *    @param string $label     Text of value attribute.
          *    @return boolean          True if link present.
          *    @access public
          */
@@ -674,6 +667,16 @@
             }
             $this->get($url);
             return true;
+        }
+        
+        /**
+         *    Tests to see if a link is present by label.
+         *    @param string $id     Text of id attribute.
+         *    @return boolean       True if link present.
+         *    @access public
+         */
+        function isLinkById($id) {
+            return (boolean)$this->_page->getUrlById($id);
         }
     }
 ?>

@@ -6,17 +6,10 @@
      *	@version	$Id$
      */
     
-	/**
-	 * @ignore	originally defined in simple_test.php
-	 */
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
-    
     /**#@+
      * include SimpleTest files
      */
-    require_once(SIMPLE_TEST . 'options.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'options.php');
     
     /**
      *    Stashes an error for later. Useful for constructors

@@ -1,14 +1,14 @@
 <?php
     // $Id$
     
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "../");
+    if (! defined('TEST')) {
+        define('TEST', 'boundary');
     }
-    require_once(SIMPLE_TEST . 'unit_tester.php');
-    require_once(SIMPLE_TEST . 'shell_tester.php');
-    require_once(SIMPLE_TEST . 'web_tester.php');
-    require_once(SIMPLE_TEST . 'reporter.php');
-    require_once(SIMPLE_TEST . 'mock_objects.php');
+    require_once('../unit_tester.php');
+    require_once('../shell_tester.php');
+    require_once('../web_tester.php');
+    require_once('../reporter.php');
+    require_once('../mock_objects.php');
     
     class BoundaryTests extends GroupTest {
         function BoundaryTests() {
@@ -19,8 +19,7 @@
         }
     }
     
-    if (!defined('TEST_RUNNING')) {
-        define('TEST_RUNNING', true);
+    if (TEST == 'boundary') {
         $test = &new BoundaryTests('Boundary tests');
         if (SimpleReporter::inCli()) {
             exit ($test->run(new TextReporter()) ? 0 : 1);

@@ -5,18 +5,11 @@
      *	@subpackage	WebTester
      *	@version	$Id$
      */
-    
-	/**
-	 *	Path for simpletest files
-	 */
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
      
     /**#@+
      * include SimpleTest files
      */
-    require_once(SIMPLE_TEST . 'options.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'options.php');
     /**#@-*/
    
     /**

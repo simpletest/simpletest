@@ -5,14 +5,7 @@
      *	@subpackage	WebTester
      *	@version	$Id$
      */
-    
-    /**
-     * @ignore    Originally defined in simple_test.php
-     */
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
-    require_once(SIMPLE_TEST . 'http.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'http.php');
     
     /**
      *    Represents a single security realm's identity.

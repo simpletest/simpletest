@@ -5,15 +5,8 @@
      *	@subpackage	MockObjects
      *	@version	$Id$
      */
-
-    /**
-     * @ignore    originally defined in simple_test.php
-     */
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
-    require_once(SIMPLE_TEST . 'socket.php');
-    require_once(SIMPLE_TEST . 'query_string.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'socket.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'query_string.php');
     
     /**
      *    URL parser to replace parse_url() PHP function.

@@ -1,11 +1,8 @@
 <?php
     // $Id$
     
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', '../');
-    }
-    require_once(SIMPLE_TEST . 'page.php');
-    require_once(SIMPLE_TEST . 'frames.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../page.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../frames.php');
     
     Mock::generate('SimplePage');
     

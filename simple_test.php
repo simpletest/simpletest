@@ -6,21 +6,14 @@
      *	@version	$Id$
      */
     
-	/**
-	 *	path for simpletest files
-	 */
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
-    
     /**#@+
      * include SimpleTest files
      */
-    require_once(SIMPLE_TEST . 'errors.php');
-    require_once(SIMPLE_TEST . 'options.php');
-    require_once(SIMPLE_TEST . 'runner.php');
-    require_once(SIMPLE_TEST . 'expectation.php');
-    require_once(SIMPLE_TEST . 'dumper.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'errors.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'options.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'runner.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'expectation.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'dumper.php');
     /**#@-*/
     
     /**

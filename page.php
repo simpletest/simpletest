@@ -5,16 +5,9 @@
      *	@subpackage	WebTester
      *	@version	$Id$
      */
-    
-    /**
-     * @ignore    originally defined in simple_test.php
-     */
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
-    require_once(SIMPLE_TEST . 'http.php');
-    require_once(SIMPLE_TEST . 'parser.php');
-    require_once(SIMPLE_TEST . 'tag.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'http.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'parser.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'tag.php');
     
     /**
      *    SAX event handler. Maintains a list of

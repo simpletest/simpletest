@@ -1,8 +1,7 @@
 <?php
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', '../');
-    }
-    require_once(SIMPLE_TEST . 'options.php');
+    // $Id$
+    
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../options.php');
     
     class TestOfOptions extends UnitTestCase {
         function TestOfOptions() {

@@ -1,10 +1,6 @@
 <?php
     // $Id$
-    
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "../");
-    }
-    require_once(SIMPLE_TEST . 'expectation.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../expectation.php');
 
     class TestOfEquality extends UnitTestCase {
         function TestOfEquality() {

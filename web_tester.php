@@ -5,16 +5,9 @@
      *	@subpackage	WebTester
      *	@version	$Id$
      */
-    
-    /**
-     * @ignore    Originally defined in simple_test.php file.
-     */
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
-    require_once(SIMPLE_TEST . 'simple_test.php');
-    require_once(SIMPLE_TEST . 'browser.php');
-    require_once(SIMPLE_TEST . 'page.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'simple_test.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'browser.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . 'page.php');
     
     /**
      *    Test case for testing of web pages. Allows
@@ -306,7 +299,7 @@
         }
         
         /**
-         *    Tests fo rth epresence of a link label. Match is
+         *    Tests for the presence of a link label. Match is
          *    case insensitive with normalised space.
          *    @param string $label     Text between the anchor tags.
          *    @param string $message   Message to display. Default
@@ -318,6 +311,20 @@
             $this->assertTrue(
                     $this->_browser->isLink($label),
                     sprintf($message, "Link [$label] should exist"));
+        }
+        
+        /**
+         *    Tests for the presence of a link id attribute.
+         *    @param string $id        Id attribute value.
+         *    @param string $message   Message to display. Default
+         *                             can be embedded with %s.
+         *    @return boolean          True if link present.
+         *    @access public
+         */
+        function assertLinkById($id, $message = "%s") {
+            $this->assertTrue(
+                    $this->_browser->isLinkById($id),
+                    sprintf($message, "Link ID [$id] should exist"));
         }
         
         /**

@@ -1,11 +1,7 @@
 <?php
     // $Id$
-
-    if (!defined("SIMPLE_TEST")) {
-        define("SIMPLE_TEST", "../");
-    }
-    require_once(SIMPLE_TEST . 'remote.php');
-    require_once(SIMPLE_TEST . 'reporter.php');
+    require_once('../remote.php');
+    require_once('../reporter.php');
     
     // The following URL will depend on your own installation.
     $base_url = 'http://uno/simple/';

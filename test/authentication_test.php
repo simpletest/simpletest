@@ -1,11 +1,7 @@
 <?php
     // $Id$
-    
-    if (!defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', '../');
-    }
-    require_once(SIMPLE_TEST . 'authentication.php');
-    require_once(SIMPLE_TEST . 'http.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../authentication.php');
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR . '../http.php');
     Mock::generate('SimpleHttpRequest');
 
     class TestOfRealm extends UnitTestCase {

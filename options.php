@@ -5,13 +5,6 @@
      *	@version	$Id$
      */
     
-	/**
-	 * @ignore	originally defined in simple_test.php
-	 */
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', dirname(__FILE__).DIRECTORY_SEPARATOR);
-    }
-    
     /**
      *    Static global directives and options.
      *	  @package	SimpleTest
@@ -25,7 +18,7 @@
          *    @access public
          */
         function getVersion() {
-            $content = file(SIMPLE_TEST . 'VERSION');
+            $content = file(dirname(__FILE__).DIRECTORY_SEPARATOR . 'VERSION');
             return trim($content[0]);
         }
         

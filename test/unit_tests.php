@@ -1,16 +1,15 @@
 <?php
     // $Id$
-    
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', '../');
+    if (! defined('TEST')) {
+        define('TEST', 'unit');
     }
-    require_once(SIMPLE_TEST . 'unit_tester.php');
-    require_once(SIMPLE_TEST . 'web_tester.php');
-    require_once(SIMPLE_TEST . 'shell_tester.php');
-    require_once(SIMPLE_TEST . 'reporter.php');
-    require_once(SIMPLE_TEST . 'mock_objects.php');
-    require_once(SIMPLE_TEST . 'extensions/pear_test_case.php');
-    require_once(SIMPLE_TEST . 'extensions/phpunit_test_case.php');
+    require_once('../unit_tester.php');
+    require_once('../web_tester.php');
+    require_once('../shell_tester.php');
+    require_once('../reporter.php');
+    require_once('../mock_objects.php');
+    require_once('../extensions/pear_test_case.php');
+    require_once('../extensions/phpunit_test_case.php');
     
     class UnitTests extends GroupTest {
         function UnitTests() {
@@ -36,8 +35,7 @@
         }
     }
     
-    if (! defined('TEST_RUNNING')) {
-        define('TEST_RUNNING', true);
+    if (TEST == 'unit') {
         $test = &new UnitTests();
         if (SimpleReporter::inCli()) {
             exit ($test->run(new TextReporter()) ? 0 : 1);
