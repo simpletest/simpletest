@@ -288,6 +288,24 @@
         
         /**
          *    Sets a widget value within the form.
+         *    @param SimpleSelector $selector   Criteria to apply.
+         *    @param string $value              Value to input into the widget.
+         *    @return boolean                   True if value is legal, false
+         *                                      otherwise. If the field is not
+         *                                      present, nothing will be set.
+         *    @access public
+         */
+        function _setFieldBySelector($selector, $value) {
+            foreach (array_keys($this->_widgets) as $name) {
+                if ($selector->ismatch($this->_widgets[$name])) {
+                    return $this->_widgets[$name]->setValue($value);
+                }
+            }
+            return false;
+        }
+        
+        /**
+         *    Sets a widget value within the form.
          *    @param string $name     Name of widget tag.
          *    @param string $value    Value to input into the widget.
          *    @return boolean         True if value is legal, false
@@ -296,10 +314,7 @@
          *    @access public
          */
         function setField($name, $value) {
-            if (isset($this->_widgets[$name])) {
-                return $this->_widgets[$name]->setValue($value);
-            }
-            return false;
+            return $this->_setFieldBySelector(new SimpleNameSelector($name), $value);
         }
          
         /**
@@ -312,12 +327,7 @@
          *    @access public
          */
         function setFieldById($id, $value) {
-            foreach (array_keys($this->_widgets) as $name) {
-                if ($this->_widgets[$name]->getAttribute('id') == $id) {
-                    return $this->setField($name, $value);
-                }
-            }
-            return false;
+            return $this->_setFieldBySelector(new SimpleIdSelector($id), $value);
         }
        
         /**
@@ -347,7 +357,7 @@
          *    @return boolean                   True if present.
          *    @access private
          */
-        function _hasSubmit($selector) {
+        function _hasSubmitBySelector($selector) {
             foreach ($this->_buttons as $button) {
                 if ($selector->isMatch($button)) {
                     return true;
@@ -364,7 +374,7 @@
          *    @access public
          */
         function hasSubmitName($name) {
-            return $this->_hasSubmit(new SimpleNameSelector($name));
+            return $this->_hasSubmitBySelector(new SimpleNameSelector($name));
         }
         
         /**
@@ -375,7 +385,7 @@
          *    @access public
          */
         function hasSubmitLabel($label) {
-            return $this->_hasSubmit(new SimpleLabelSelector($label));
+            return $this->_hasSubmitBySelector(new SimpleLabelSelector($label));
         }
         
         /**
@@ -386,7 +396,7 @@
          *    @access public
          */
         function hasSubmitId($id) {
-            return $this->_hasSubmit(new SimpleIdSelector($id));
+            return $this->_hasSubmitBySelector(new SimpleIdSelector($id));
         }
         
         /**
@@ -395,7 +405,7 @@
          *    @return boolean                   True if present.
          *    @access public
          */
-        function _hasImage($selector) {
+        function _hasImageBySelector($selector) {
             foreach ($this->_images as $image) {
                 if ($selector->isMatch($image)) {
                     return true;
@@ -413,7 +423,7 @@
          *    @access public
          */
         function hasImageLabel($label) {
-            return $this->_hasImage(new SimpleLabelSelector($label));
+            return $this->_hasImageBySelector(new SimpleLabelSelector($label));
         }
         
         /**
@@ -424,7 +434,7 @@
          *    @access public
          */
         function hasImageName($name) {
-            return $this->_hasImage(new SimpleNameSelector($name));
+            return $this->_hasImageBySelector(new SimpleNameSelector($name));
         }
          
         /**
@@ -435,7 +445,7 @@
          *    @access public
          */
         function hasImageId($id) {
-            return $this->_hasImage(new SimpleIdSelector($id));
+            return $this->_hasImageBySelector(new SimpleIdSelector($id));
         }
        
         /**
@@ -446,7 +456,7 @@
          *                                      in the form.
          *    @access public
          */
-        function _submitButton($selector) {
+        function _submitButtonBySelector($selector) {
             foreach ($this->_buttons as $button) {
                 if ($selector->isMatch($button)) {
                     return array_merge(
@@ -466,7 +476,7 @@
          *    @access public
          */
         function submitButtonByName($name) {
-            return $this->_submitButton(new SimpleNameSelector($name));
+            return $this->_submitButtonBySelector(new SimpleNameSelector($name));
         }
         
         /**
@@ -478,7 +488,7 @@
          *    @access public
          */
         function submitButtonByLabel($label) {
-            return $this->_submitButton(new SimpleLabelSelector($label));
+            return $this->_submitButtonBySelector(new SimpleLabelSelector($label));
         }
         
         /**
@@ -490,7 +500,7 @@
          *    @access public
          */
         function submitButtonById($id) {
-            return $this->_submitButton(new SimpleIdSelector($id));
+            return $this->_submitButtonBySelector(new SimpleIdSelector($id));
         }
          
         /**
@@ -503,7 +513,7 @@
          *                                      form.
          *    @access public
          */
-        function _submitImage($selector, $x, $y) {
+        function _submitImageBySelector($selector, $x, $y) {
             foreach ($this->_images as $image) {
                 if ($selector->isMatch($image)) {
                     return array_merge(
@@ -526,7 +536,7 @@
          *    @access public
          */
         function submitImageByLabel($label, $x, $y) {
-            return $this->_submitImage(new SimpleLabelSelector($label), $x, $y);
+            return $this->_submitImageBySelector(new SimpleLabelSelector($label), $x, $y);
         }
          
         /**
@@ -540,7 +550,7 @@
          *    @access public
          */
         function submitImageByName($name, $x, $y) {
-            return $this->_submitImage(new SimpleNameSelector($name), $x, $y);
+            return $this->_submitImageBySelector(new SimpleNameSelector($name), $x, $y);
         }
           
         /**
@@ -554,7 +564,7 @@
          *    @access public
          */
         function submitImageById($id, $x, $y) {
-            return $this->_submitImage(new SimpleIdSelector($id), $x, $y);
+            return $this->_submitImageBySelector(new SimpleIdSelector($id), $x, $y);
         }
       
         /**

@@ -116,7 +116,7 @@ class TestOfNewsService extends UnitTestCase {
                     <tr><td><code>IndenticalExpectation</code></td><td>The default mock object check which must match exactly</td></tr>
                     <tr><td><code>NotIndenticalExpectation</code></td><td>Inverts the mock object logic</td></tr>
                     <tr><td><code>WantedPatternExpectation</code></td><td>Uses a Perl Regex to match a string</td></tr>
-                    <tr><td><code>NoUnwantedExpectation</code></td><td>Passes only if failing a Perl Regex</td></tr>
+                    <tr><td><code>NoUnwantedPatternExpectation</code></td><td>Passes only if failing a Perl Regex</td></tr>
                     <tr><td><code>IsAExpectation</code></td><td>Checks the type or class name only</td></tr>
                     <tr><td><code>NotAExpectation</code></td><td>Opposite of the <code>IsAExpectation</code></td></tr>
                     <tr><td><code>MethodExistsExpectation</code></td><td>Checks a method is available on an object</td></tr>

@@ -22,7 +22,7 @@ Bug fix of fatal error with overload functions (2/2) - done.
 Parser
 ------
 Should tolerate missing form tag (2/2) - done.
-Fix Savant compatibility (3/1).
+Fix Savant compatibility (3/2).
 
 Browser
 -------
