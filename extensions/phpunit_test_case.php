@@ -2,7 +2,7 @@
     /**
      *	adapter for SimpleTest to use PHPUnit test cases
      *	@package	SimpleTest
-     *	@subpackage	Adapters
+     *	@subpackage Extensions
      *	@version	$Id$
      */
     
@@ -23,7 +23,7 @@
      *    Adapter for sourceforge PHPUnit test case to allow
      *    legacy test cases to be used with SimpleTest.
      *    @package		SimpleTest
-     *    @subpackage	Adapters
+     *    @subpackage	 Extensions
      */
     class TestCase extends SimpleTestCase {
         
