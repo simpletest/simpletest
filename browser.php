@@ -568,7 +568,7 @@
          *    @access public
          */
         function getFrames() {
-            return false;
+            return $this->_page->getFrames();
         }
         
         /**

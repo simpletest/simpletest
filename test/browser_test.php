@@ -536,11 +536,11 @@
         function &createUserAgent($pages) {
             $agent = &new MockSimpleUserAgent($this);
             foreach ($pages as $url => $raw) {
+                $url = new SimpleUrl($url);
                 $response = &new MockSimpleHttpResponse($this);
-                $agent->setReturnReference(
-                        'fetchResponse',
-                        $response,
-                        array('*', new SimpleUrl($url), '*'));
+                $response->setReturnValue('getUrl', $url);
+                $response->setReturnValue('getContent', $raw);
+                $agent->setReturnReference('fetchResponse', $response, array('*', $url, '*'));
             }
             return $agent;
         }
@@ -550,6 +550,25 @@
                     array('http://site.with.no.frames/' => '')));
             $browser->get('http://site.with.no.frames/');
             $this->assertIdentical($browser->getFrames(), false);
+        }
+        
+        function testFramesetWithNoFrames() {
+            $browser = &$this->createBrowser($this->createUserAgent(
+                    array('http://site.with.no.frames/' => '<frameset></frameset>')));
+            $browser->get('http://site.with.no.frames/');
+            $this->assertIdentical($browser->getFrames(), array());
+        }
+        
+        function TODO_testFramesetWithSingleFrame() {
+            $frameset = '<frameset><frame name="a" src="frame.html"></frameset>';
+            $frame = 'A frame';
+            $browser = &$this->createBrowser($this->createUserAgent(array(
+                    'http://site.with.one.frame/' => $frameset,
+                    'http://site.with.one.frame/frame.html' => $frame)));
+            $browser->get('http://site.with.one.frame/');
+            $this->assertIdentical(
+                    $browser->getFrames(),
+                    array('a' => 'http://site.with.one.frame/frame.html'));
         }
     }
 ?>

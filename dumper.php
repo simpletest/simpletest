@@ -245,7 +245,7 @@
             if (! is_array($second)) {
                 return $this->_describeGenericDifference($first, $second);
             }
-            if (array_keys($first) != array_keys($second)) {
+            if (array_keys($first) !== array_keys($second)) {
                 return "as key list [" .
                         implode(", ", array_keys($first)) . "] does not match key list [" .
                         implode(", ", array_keys($second)) . "]";
