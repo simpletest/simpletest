@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for the next iteration (Beta4) of 35 hours.
+This is immediate stuff only for the next iteration (Beta4) of 40 hours.
 Figures are estimated hours work versus actual (for XP velocity).
 Stuff will get added or dropped as the cycle progresses.
 
@@ -22,10 +22,12 @@ Html parser
 Parsing of image submits (2).
 Parsing of radio buttons (3).
 Refactor link parsing to use tag classes (4).
+Support multiple selections (2).
+Support multiple check boxes (2).
 
 Browser
 -------
-Frames support (10).
+Frames support (8).
 Simple authentication support (4).
 Image fetching (4).
 
@@ -35,6 +37,7 @@ Web tester
 Documentation
 -------------
 Cookie testing docs (3).
+Form submission docs (3).
 
 Build
 -----
