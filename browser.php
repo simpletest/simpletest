@@ -17,7 +17,9 @@
     require_once(dirname(__FILE__) . '/user_agent.php');
     /**#@-*/
     
-    define('DEFAULT_MAX_NESTED_FRAMES', 3);
+    if (!defined('DEFAULT_MAX_NESTED_FRAMES')) {
+        define('DEFAULT_MAX_NESTED_FRAMES', 3);
+    }
     
     /**
      *    Browser history list.

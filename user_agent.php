@@ -14,8 +14,13 @@
     require_once(dirname(__FILE__) . '/authentication.php');
     /**#@-*/
    
-    define('DEFAULT_MAX_REDIRECTS', 3);
-    define('DEFAULT_CONNECTION_TIMEOUT', 15);
+    if (!defined('DEFAULT_MAX_REDIRECTS')) {
+        define('DEFAULT_MAX_REDIRECTS', 3);
+    }
+    
+    if (!defined('DEFAULT_CONNECTION_TIMEOUT')) {
+        define('DEFAULT_CONNECTION_TIMEOUT', 15);
+    }
     
     /**
      *    Repository for cookies. This stuff is a

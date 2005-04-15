@@ -17,7 +17,9 @@
     /**
      * Default character simpletest will substitute for any value
      */
-    define('MOCK_WILDCARD', '*');
+    if (!defined('MOCK_WILDCARD')) {
+        define('MOCK_WILDCARD', '*');
+    }
     
     /**
      *    A wildcard expectation always matches.

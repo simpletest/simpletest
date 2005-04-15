@@ -8,7 +8,9 @@
     /**
      * does type matter
      */
-    define('TYPE_MATTERS', true);
+    if (!defined('TYPE_MATTERS')) {
+        define('TYPE_MATTERS', true);
+    }
     
     /**
      *    Displays variables as text and does diffs.
