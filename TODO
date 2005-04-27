@@ -39,6 +39,7 @@ Web tester
 ----------
 Allow expectations to be used for comparisons (2).
 Add assertSubmit() test (1).
+Add click() method (1).
 
 Documentation
 -------------

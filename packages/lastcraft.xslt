@@ -222,6 +222,18 @@
         </span>
     </xsl:template>
     
+    <xsl:template match="sh">
+        <pre class="shell">
+            <xsl:apply-templates/>
+        </pre>
+    </xsl:template>
+    
+    <xsl:template match="file">
+        <pre class="file">
+            <xsl:apply-templates/>
+        </pre>
+    </xsl:template>
+    
     <xsl:template match="section">
         <p>
             <a class="target">
