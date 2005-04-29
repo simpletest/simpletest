@@ -5,6 +5,13 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+Missing UnitTestCase::assertErrorPattern()
+------------------------------------------
+This method is deprecated for version 1.01 onwards.
+This method has ben subsumed by assertError() that can now
+take an expectation. Simply pass a WantedPatternExpectation
+into assertError() to simulate the old behaviour.
+
 No HTML when matching page elements
 -----------------------------------
 This behaviour has been switched to using plain text as if it

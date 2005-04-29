@@ -237,6 +237,16 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td style="color: green;">Done</td>
                     </tr>
                     <tr>
+                        <td>File upload testing</td>
+                        <td>Can simulate the input type file tag</td>
+                        <td style="color: red;">1.01</td>
+                    </tr>
+                    <tr>
+                        <td>Reporting machinery enhancements</td>
+                        <td>Inmproved message passing for better cooperation with IDEs</td>
+                        <td style="color: red;">1.1</td>
+                    </tr>
+                    <tr>
                         <td>Improved display</td>
                         <td>Better web GUI with tree display of test cases</td>
                         <td style="color: red;">1.1</td>
@@ -244,11 +254,6 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     <tr>
                         <td>Localisation</td>
                         <td>Messages abstracted and code generated from XML</td>
-                        <td style="color: red;">1.1</td>
-                    </tr>
-                    <tr>
-                        <td>File upload testing</td>
-                        <td>Can simulate the input type file tag</td>
                         <td style="color: red;">1.1</td>
                     </tr>
                     <tr>

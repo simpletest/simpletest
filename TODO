@@ -6,7 +6,7 @@ $Id$
 Unit tester
 -----------
 Keep original raw URL for as long as possible (3).
-Allow expectation to be passed to assertError() method (2/2).
+Allow expectation to be passed to assertError() method (2/3) - done.
 Switch to a run_me_if_no_runner script (2).
 Fix GroupTest test case count being wrong after addTestFile() (3).
 If "." is not in the path then local files aren't found (1).
