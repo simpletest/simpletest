@@ -224,7 +224,9 @@
     
     <xsl:template match="sh">
         <pre class="shell">
-            <xsl:apply-templates/>
+            <xsl:call-template name="preserve_strong">
+                <xsl:with-param name="raw" select="."/>
+            </xsl:call-template>
         </pre>
     </xsl:template>
     

@@ -150,6 +150,20 @@
         </span>
     </xsl:template>
     
+    <xsl:template match="sh">
+        <pre class="shell">
+            <xsl:call-template name="preserve_strong">
+                <xsl:with-param name="raw" select="."/>
+            </xsl:call-template>
+        </pre>
+    </xsl:template>
+    
+    <xsl:template match="file">
+        <pre class="file">
+            <xsl:apply-templates/>
+        </pre>
+    </xsl:template>
+    
     <xsl:template match="section">
         <p>
             <a class="target">

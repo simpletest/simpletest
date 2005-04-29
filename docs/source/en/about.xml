@@ -4,6 +4,7 @@
     <content>
         <section name="me" title="People">
             <p>
+                <img src="../images/marcus.jpg" />
                 At the moment this site is maintained by myself,
                 <a href="mailto:marcus@lastcraft.com">Marcus Baker</a>
                 and I am an <a href="marcus_cv.html">Object Oriented web developer</a>.
