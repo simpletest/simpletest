@@ -1,0 +1,30 @@
+<html>
+    <head><title>Test of form submission</title></head>
+    <body>
+        <form action="network_confirm.php" method="get">
+            Multiple selection A
+            <select name="a" multiple>
+                <option>a1</option>
+                <option selected>a2</option>
+                <option selected>a3</option>
+                <option>a4</option>
+            </select>
+            <br />
+            Multiple checkboxes B
+            <input type="checkbox" name="b" value="b1">
+            <input type="checkbox" name="b" value="b2" checked>
+            <input type="checkbox" name="b" value="b3" checked>
+            <input type="checkbox" name="b" value="b4">
+            <br />
+            PHP compatible multiple selection C
+            <select name="c[]" multiple>
+                <option>c1</option>
+                <option selected>c2</option>
+                <option selected>c3</option>
+                <option>c4</option>
+            </select>
+            <br />
+            <input type="submit" name="go" value="Go!">
+        </form>
+    </body>
+</html>
