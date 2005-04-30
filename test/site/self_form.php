@@ -8,9 +8,11 @@
         <form>
             <input type="hidden" name="secret" value="Wrong form">
         </form>
-        <p><?php print $_GET['secret']; ?></p>
-        <p><?php print $_GET['again']; ?></p>
+        <p>[<?php print $_GET['visible']; ?>]</p>
+        <p>[<?php print $_GET['secret']; ?>]</p>
+        <p>[<?php print $_GET['again']; ?>]</p>
         <form>
+            <input type="text" name="visible">
             <input type="hidden" name="secret" value="Submitted">
             <input type="submit" name="again">
         </form>

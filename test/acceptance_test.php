@@ -486,11 +486,12 @@
         
         function testFormSubmissionByName() {
             $this->get('http://www.lastcraft.com/test/form.html');
+            $this->setField('a', 'A');
             $this->assertTrue($this->clickSubmitByName('go'));
-            $this->assertWantedText('go=[Go!]');
+            $this->assertWantedText('a=[A]');
         }
         
-        function testFormSubmissionByNameAndadditionalParameters() {
+        function testFormSubmissionByNameAndAdditionalParameters() {
             $this->get('http://www.lastcraft.com/test/form.html');
             $this->assertTrue($this->clickSubmitByName('go', array('add' => 'A')));
             $this->assertWantedText('go=[Go!]');
@@ -522,6 +523,15 @@
             $this->assertWantedText('d=[d2]');
             $this->assertWantedText('e=[on]');
             $this->assertWantedText('go=[Go!]');
+        }
+        
+        function testFormSubmissionWithMixedPostAndGet() {
+            $this->get('http://www.lastcraft.com/test/form_with_mixed_post_and_get.html');
+            $this->setField('a', 'A');
+            $this->assertTrue($this->clickSubmit('Go!'));
+            $this->assertWantedText('a=[A]');
+            $this->assertWantedText('x=[X]');
+            $this->assertWantedText('y=[Y]');
         }
         
         function testImageSubmissionByLabel() {
@@ -559,13 +569,19 @@
         
         function testSelfSubmit() {
             $this->get('http://www.lastcraft.com/test/self_form.php');
-            $this->assertNoUnwantedPattern('/<p>submitted<\/p>/i');
-            $this->assertNoUnwantedPattern('/<p>wrong form<\/p>/i');
-            $this->assertTitle('Test of form self submission');
+            $this->assertNoUnwantedText('[Submitted]');
+            $this->assertNoUnwantedText('[Wrong form]');
             $this->assertTrue($this->clickSubmit());
-            $this->assertWantedPattern('/<p>submitted<\/p>/i');
-            $this->assertNoUnwantedPattern('/<p>wrong form<\/p>/i');
+            $this->assertWantedText('[Submitted]');
+            $this->assertNoUnwantedText('[Wrong form]');
             $this->assertTitle('Test of form self submission');
+        }
+        
+        function testSelfSubmitWithParameters() {
+            $this->get('http://www.lastcraft.com/test/self_form.php');
+            $this->setField('visible', 'Resent');
+            $this->assertTrue($this->clickSubmit());
+            $this->assertWantedText('[Resent]');
         }
         
         function testSettingOfBlankOption() {
