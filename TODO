@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.1alpha1) of 48 hours.
+This is immediate stuff only for this iteration (1.1alpha1) of 45 hours.
 
 $Id$
 
@@ -11,6 +11,7 @@ Fix GroupTest test case count being wrong after addTestFile() (3).
 If "." is not in the path then local files aren't found (1).
 Add floating point equality (2/1) - done.
 Add donated fix for assertReference() from Knak-Nielsen (1/1) - done.
+Promote assertEqual() to other test cases (1).
 
 Reporter
 --------
@@ -26,19 +27,18 @@ Parser
 
 Browser
 -------
-Allow listing of all URLs (4).
 Add file uploading (8).
 Simple click() method for links, buttons or images (2).
 setCookie() should be able to create a new one (1).
 Simultaneous POST and GET parameters (3/1) - done.
 Fix split bug with simple URLs not being parsed correctly (1/1) - done.
+Fix double slash bug in URL (1).
 Add referer header (3).
 
 Web tester
 ----------
 Allow expectations to be used for comparisons (2).
 Add assertSubmit() test (1).
-Add click() method (1).
 
 Documentation
 -------------
