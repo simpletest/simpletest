@@ -92,6 +92,16 @@
             $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "%s -> Pass");
             $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "Z"), "%s -> Pass");
         }
+        
+        function testWithin() {
+            $this->assertWithinMargin(5, 5.4, 0.5, "%s -> Pass");
+            $this->assertWithinMargin(5, 5.6, 0.5, "%s -> Fail");   // Fail.
+        }
+        
+        function testOutside() {
+            $this->assertOutsideMargin(5, 5.4, 0.5, "%s -> Fail");   // Fail.
+            $this->assertOutsideMargin(5, 5.6, 0.5, "%s -> Pass");
+        }
 
         function testStringIdentity() {
             $a = "fred";
@@ -366,7 +376,7 @@
         }
     }
 
-    $test = &new GroupTest("Visual test with 49 passes, 49 fails and 4 exceptions");
+    $test = &new GroupTest("Visual test with 51 passes, 51 fails and 4 exceptions");
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());

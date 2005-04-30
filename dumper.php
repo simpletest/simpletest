@@ -223,9 +223,10 @@
             if (is_object($second) || is_array($second)) {
                 return $this->_describeGenericDifference($first, $second);
             }
-            return "because " . $this->describeValue($first) .
+            return "because [" . $this->describeValue($first) .
                     "] differs from [" .
-                    $this->describeValue($second) . "]";
+                    $this->describeValue($second) . "] by " .
+                    abs($first - $second);
         }
         
         /**

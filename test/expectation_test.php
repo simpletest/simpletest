@@ -123,6 +123,27 @@
         }
     }
     
+    class TestOfWithin extends UnitTestCase {
+        
+        function testWithinFloatingPointMargin() {
+            $within = new WithinMarginExpectation(1.0, 0.2);
+            $this->assertFalse($within->test(0.7));
+            $this->assertTrue($within->test(0.8));
+            $this->assertTrue($within->test(0.9));
+            $this->assertTrue($within->test(1.1));
+            $this->assertTrue($within->test(1.2));
+            $this->assertFalse($within->test(1.3));
+        }
+        
+        function testOutsideFloatingPointMargin() {
+            $within = new OutsideMarginExpectation(1.0, 0.2);
+            $this->assertTrue($within->test(0.7));
+            $this->assertFalse($within->test(0.8));
+            $this->assertFalse($within->test(1.2));
+            $this->assertTrue($within->test(1.3));
+        }
+    }
+    
     class TestOfInequality extends UnitTestCase {
         
         function testStringMismatch() {

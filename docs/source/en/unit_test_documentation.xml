@@ -92,6 +92,8 @@ class FileTestCase extends UnitTestCase {
                     <tr><td><code>assertNotA($x, $t)</code></td><td>Fail if $x is of the class or type $t</td></tr>
                     <tr><td><code>assertEqual($x, $y)</code></td><td>Fail if $x == $y is false</td></tr>
                     <tr><td><code>assertNotEqual($x, $y)</code></td><td>Fail if $x == $y is true</td></tr>
+                    <tr><td><code>assertWithinMargin($x, $y, $m)</code></td><td>Fail if abs($x - $y) &lt; $m is false</td></tr>
+                    <tr><td><code>assertOutsideMargin($x, $y, $m)</code></td><td>Fail if abs($x - $y) &lt; $m is true</td></tr>
                     <tr><td><code>assertIdentical($x, $y)</code></td><td>Fail if $x == $y is false or a type mismatch</td></tr>
                     <tr><td><code>assertNotIdentical($x, $y)</code></td><td>Fail if $x == $y is true and types match</td></tr>
                     <tr><td><code>assertReference($x, $y)</code></td><td>Fail unless $x and $y are the same variable</td></tr>

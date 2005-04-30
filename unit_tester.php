@@ -134,6 +134,40 @@
         }
         
         /**
+         *    Will trigger a pass if the if the first parameter
+         *    is near enough to the second by the margin.
+         *    @param mixed $first          Value to compare.
+         *    @param mixed $second         Value to compare.
+         *    @param mixed $margin         Fuzziness of match.
+         *    @param string $message       Message to display.
+         *    @return boolean              True on pass
+         *    @access public
+         */
+        function assertWithinMargin($first, $second, $margin, $message = "%s") {
+            return $this->assertExpectation(
+                    new WithinMarginExpectation($first, $margin),
+                    $second,
+                    $message);
+        }
+        
+        /**
+         *    Will trigger a pass if the two parameters differ
+         *    by more than the margin.
+         *    @param mixed $first          Value to compare.
+         *    @param mixed $second         Value to compare.
+         *    @param mixed $margin         Fuzziness of match.
+         *    @param string $message       Message to display.
+         *    @return boolean              True on pass
+         *    @access public
+         */
+        function assertOutsideMargin($first, $second, $margin, $message = "%s") {
+            return $this->assertExpectation(
+                    new OutsideMarginExpectation($first, $margin),
+                    $second,
+                    $message);
+        }
+        
+        /**
          *    Will trigger a pass if the two parameters have
          *    the same value and same type. Otherwise a fail.
          *    @param mixed $first           Value to compare.

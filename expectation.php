@@ -182,6 +182,127 @@
     }
     
     /**
+     *    Test for being within a range.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class WithinMarginExpectation extends SimpleExpectation {
+        var $_upper;
+        var $_lower;
+        
+        /**
+         *    Sets the value to compare against and the fuzziness of
+         *    the match. Used for comparing floating point values.
+         *    @param mixed $value        Test value to match.
+         *    @param mixed $margin       Fuzziness of match.
+         *    @param string $message     Customised message on failure.
+         *    @access public
+         */
+        function WithinMarginExpectation($value, $margin, $message = '%s') {
+            $this->SimpleExpectation($message);
+            $this->_upper = $value + $margin;
+            $this->_lower = $value - $margin;
+        }
+        
+        /**
+         *    Tests the expectation. True if it matches the
+         *    held value.
+         *    @param mixed $compare        Comparison value.
+         *    @return boolean              True if correct.
+         *    @access public
+         */
+        function test($compare) {
+            return (($compare <= $this->_upper) && ($compare >= $this->_lower));
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
+         *    @access public
+         */
+        function testMessage($compare) {
+            if ($this->test($compare)) {
+                return $this->_withinMessage($compare);
+            } else {
+                return $this->_outsideMessage($compare);
+            }
+        }
+        
+        /**
+         *    Creates a the message for being within the range.
+         *    @param mixed $compare        Value being tested.
+         *    @access private
+         */
+        function _withinMessage($compare) {
+            return "Within expectation [" . $this->_dumper->describeValue($this->_lower) . "] and [" .
+                    $this->_dumper->describeValue($this->_upper) . "]";
+        }
+        
+        /**
+         *    Creates a the message for being within the range.
+         *    @param mixed $compare        Value being tested.
+         *    @access private
+         */
+        function _outsideMessage($compare) {
+            if ($compare > $this->_upper) {
+                return "Outside expectation " .
+                        $this->_dumper->describeDifference($compare, $this->_upper);
+            } else {
+                return "Outside expectation " .
+                        $this->_dumper->describeDifference($compare, $this->_lower);
+            }
+        }
+    }
+    
+    /**
+     *    Test for being outside of a range.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class OutsideMarginExpectation extends WithinMarginExpectation {
+        
+        /**
+         *    Sets the value to compare against and the fuzziness of
+         *    the match. Used for comparing floating point values.
+         *    @param mixed $value        Test value to not match.
+         *    @param mixed $margin       Fuzziness of match.
+         *    @param string $message     Customised message on failure.
+         *    @access public
+         */
+        function OutsideMarginExpectation($value, $margin, $message = '%s') {
+            $this->WithinMarginExpectation($value, $margin, $message);
+        }
+        
+        /**
+         *    Tests the expectation. True if it matches the
+         *    held value.
+         *    @param mixed $compare        Comparison value.
+         *    @return boolean              True if correct.
+         *    @access public
+         */
+        function test($compare) {
+            return ! parent::test($compare);
+        }
+        
+        /**
+         *    Returns a human readable test message.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of success
+         *                               or failure.
+         *    @access public
+         */
+        function testMessage($compare) {
+            if (! $this->test($compare)) {
+                return $this->_withinMessage($compare);
+            } else {
+                return $this->_outsideMessage($compare);
+            }
+        }
+    }
+    
+    /**
      *    Test for identity.
 	 *	  @package SimpleTest
 	 *	  @subpackage UnitTester
