@@ -243,6 +243,11 @@
             }
         }
         
+        function testUrlWithTwoSlashesInPath() {
+            $url = new SimpleUrl('/article/categoryedit/insert//');
+            $this->assertEqual($url->getPath(), '/article/categoryedit/insert//');
+        }
+        
         function assertPreserved($string) {
             $url = new SimpleUrl($string);
             $this->assertEqual($url->asString(), $string);

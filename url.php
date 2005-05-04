@@ -98,7 +98,7 @@
          */
         function _chompLogin(&$url) {
             $prefix = '';
-            if (preg_match('/(\/\/)(.*)/', $url, $matches)) {
+            if (preg_match('/^(\/\/)(.*)/', $url, $matches)) {
                 $prefix = $matches[1];
                 $url = $matches[2];
             }
@@ -125,7 +125,7 @@
          *    @access private
          */
         function _chompHost(&$url) {
-            if (preg_match('/(\/\/)(.*?)(\/.*|\?.*|#.*|$)/', $url, $matches)) {
+            if (preg_match('/^(\/\/)(.*?)(\/.*|\?.*|#.*|$)/', $url, $matches)) {
                 $url = $matches[3];
                 return $matches[2];
             }

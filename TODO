@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.1alpha1) of 45 hours (12 done).
+This is immediate stuff only for this iteration (1.1alpha1) of 45 hours (13 done).
 
 $Id$
 
@@ -32,7 +32,7 @@ Simple click() method for links, buttons or images (2).
 setCookie() should be able to create a new one (1).
 Simultaneous POST and GET parameters (3/1) - done.
 Fix split bug with simple URLs not being parsed correctly (1/1) - done.
-Fix double slash bug in URL (1).
+Fix double slash bug in URL (1/1) - done.
 Add referer header (3).
 
 Web tester
