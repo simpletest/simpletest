@@ -220,6 +220,7 @@
             $this->assertPreserved('http://host?a=1&a=2');
             $this->assertPreserved('http://host#stuff');
             $this->assertPreserved('http://me:secret@www.here.com/a/b/c/here.html?a=A?7,6');
+            $this->assertPreserved('http://www.here.com/?a=A__b=B');
         }
         
         function assertUrl($raw, $parts, $params = false, $coords = false) {

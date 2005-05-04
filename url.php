@@ -31,6 +31,7 @@
         var $_request;
         var $_fragment;
         var $_target;
+        var $_raw;
         
         /**
          *    Constructor. Parses URL into sections.
@@ -38,6 +39,7 @@
          *    @access public
          */
         function SimpleUrl($url) {
+            $this->_raw = $url;
             list($x, $y) = $this->_chompCoordinates($url);
             $this->_scheme = $this->_chompScheme($url);
             list($this->_username, $this->_password) = $this->_chompLogin($url);
@@ -331,6 +333,7 @@
          *    @access public
          */
         function addRequestParameter($key, $value) {
+            $this->_raw = false;
             $this->_request->add($key, $value);
         }
         
@@ -341,6 +344,7 @@
          *    @access public
          */
         function addRequestParameters($parameters) {
+            $this->_raw = false;
             $this->_request->merge($parameters);
         }
         
@@ -349,6 +353,7 @@
          *    @access public
          */
         function clearRequest() {
+            $this->_raw = false;
             $this->_request = &new SimpleFormEncoding();
         }
         
@@ -360,6 +365,7 @@
          *    @access public
          */
         function setCoordinates($x = false, $y = false) {
+            $this->_raw = false;
             $this->_request->setCoordinates($x, $y);
         }
         
@@ -380,6 +386,7 @@
          *    @access public
          */
         function setTarget($frame) {
+            $this->_raw = false;
             $this->_target = $frame;
         }
         
@@ -389,6 +396,9 @@
          *    @access public
          */
         function asString() {
+            if ($this->_raw) {
+                return $this->_raw;
+            }
             $scheme = $identity = $host = $path = $encoded = $fragment = '';
             if ($this->_username && $this->_password) {
                 $identity = $this->_username . ':' . $this->_password . '@';

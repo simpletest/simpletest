@@ -9,27 +9,27 @@
     /**#@+
      * Lexer mode stack constants
      */
-    if (!defined('LEXER_ENTER')) {
-        define("LEXER_ENTER", 1);
+    if (! defined('LEXER_ENTER')) {
+        define('LEXER_ENTER', 1);
     }
-    if (!defined('LEXER_MATCHED')) {
-        define("LEXER_MATCHED", 2);
+    if (! defined('LEXER_MATCHED')) {
+        define('LEXER_MATCHED', 2);
     }
-    if (!defined('LEXER_UNMATCHED')) {
-        define("LEXER_UNMATCHED", 3);
+    if (! defined('LEXER_UNMATCHED')) {
+        define('LEXER_UNMATCHED', 3);
     }
-    if (!defined('LEXER_EXIT')) {
-        define("LEXER_EXIT", 4);
+    if (! defined('LEXER_EXIT')) {
+        define('LEXER_EXIT', 4);
     }
-    if (!defined('LEXER_SPECIAL')) {
-        define("LEXER_SPECIAL", 5);
+    if (! defined('LEXER_SPECIAL')) {
+        define('LEXER_SPECIAL', 5);
     }
     /**#@-*/
     
     /**
      *    Compounded regular expression. Any of
      *    the contained patterns could match and
-     *    when one does it's label is returned.
+     *    when one does, it's label is returned.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */

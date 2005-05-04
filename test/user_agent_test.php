@@ -148,12 +148,12 @@
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference('fetch', $response);
             
+            $url = new SimpleUrl('http://test:secret@this.com/page.html');
+            $url->addRequestParameters(array('a' => 'A', 'b' => 'B'));
+            
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
-            $agent->expectOnce('_createHttpRequest', array(
-                    'GET',
-                    new SimpleUrl('http://test:secret@this.com/page.html?a=A&b=B'),
-                    new SimpleFormEncoding()));
+            $agent->expectOnce('_createHttpRequest', array('GET', $url, new SimpleFormEncoding()));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
@@ -176,15 +176,12 @@
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference('fetch', $response);
             
-            $url = new SimpleUrl('http://this.com/page.html');
+            $url = new SimpleUrl('http://test:secret@this.com/page.html');
             $url->addRequestParameters(array('a' => 'A', 'b' => 'B'));
             
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
-            $agent->expectOnce('_createHttpRequest', array(
-                    'HEAD',
-                    new SimpleUrl('http://test:secret@this.com/page.html?a=A&b=B'),
-                    new SimpleFormEncoding()));
+            $agent->expectOnce('_createHttpRequest', array('HEAD', $url, new SimpleFormEncoding()));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
