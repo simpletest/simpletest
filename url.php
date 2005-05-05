@@ -30,8 +30,10 @@
         var $_path;
         var $_request;
         var $_fragment;
+        var $_x;
+        var $_y;
         var $_target;
-        var $_raw;
+        var $_raw = false;
         
         /**
          *    Constructor. Parses URL into sections.
@@ -39,8 +41,8 @@
          *    @access public
          */
         function SimpleUrl($url) {
-            $this->_raw = $url;
             list($x, $y) = $this->_chompCoordinates($url);
+            $this->setCoordinates($x, $y);
             $this->_scheme = $this->_chompScheme($url);
             list($this->_username, $this->_password) = $this->_chompLogin($url);
             $this->_host = $this->_chompHost($url);
@@ -51,7 +53,6 @@
             }
             $this->_path = $this->_chompPath($url);
             $this->_request = $this->_parseRequest($this->_chompRequest($url));
-            $this->_request->setCoordinates($x, $y);
             $this->_fragment = (strncmp($url, "#", 1) == 0 ? substr($url, 1) : false);
             $this->_target = false;
         }
@@ -180,6 +181,7 @@
          *    @access private
          */
         function _parseRequest($raw) {
+            $this->_raw = $raw;
             $request = new SimpleFormEncoding();
             foreach (split("&", $raw) as $pair) {
                 if (preg_match('/(.*?)=(.*)/', $pair, $matches)) {
@@ -295,12 +297,28 @@
         }
         
         /**
+         *    Sets image coordinates. Set to false to clear
+         *    them.
+         *    @param integer $x    Horizontal position.
+         *    @param integer $y    Vertical position.
+         *    @access public
+         */
+        function setCoordinates($x = false, $y = false) {
+            if (($x === false) || ($y === false)) {
+                $this->_x = $this->_y = false;
+                return;
+            }
+            $this->_x = (integer)$x;
+            $this->_y = (integer)$y;
+        }
+        
+        /**
          *    Accessor for horizontal image coordinate.
          *    @return integer        X value.
          *    @access public
          */
         function getX() {
-            return $this->_request->getX();
+            return $this->_x;
         }
          
         /**
@@ -309,17 +327,23 @@
          *    @access public
          */
         function getY() {
-            return $this->_request->getY();
+            return $this->_y;
         }
        
         /**
          *    Accessor for current request parameters
-         *    in URL string form
+         *    in URL string form. Will return teh original request
+         *    if at all possible even if it doesn't make much
+         *    sense.
          *    @return string   Form is string "?a=1&b=2", etc.
          *    @access public
          */
         function getEncodedRequest() {
-            $encoded = $this->_request->asString();
+            if ($this->_raw) {
+                $encoded = $this->_raw;
+            } else {
+                $encoded = $this->_request->asString();
+            }
             if ($encoded) {
                 return '?' . preg_replace('/^\?/', '', $encoded);
             }
@@ -358,18 +382,6 @@
         }
         
         /**
-         *    Sets image coordinates. Set to flase to clear
-         *    them.
-         *    @param integer $x    Horizontal position.
-         *    @param integer $y    Vertical position.
-         *    @access public
-         */
-        function setCoordinates($x = false, $y = false) {
-            $this->_raw = false;
-            $this->_request->setCoordinates($x, $y);
-        }
-        
-        /**
          *    Gets the frame target if present. Although
          *    not strictly part of the URL specification it
          *    acts as similarily to the browser.
@@ -396,9 +408,6 @@
          *    @access public
          */
         function asString() {
-            if ($this->_raw) {
-                return $this->_raw;
-            }
             $scheme = $identity = $host = $path = $encoded = $fragment = '';
             if ($this->_username && $this->_password) {
                 $identity = $this->_username . ':' . $this->_password . '@';
@@ -412,7 +421,8 @@
             }
             $encoded = $this->getEncodedRequest();
             $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
-            return "$scheme://$identity$host$path$encoded$fragment";
+            $coords = $this->getX() === false ? '' : '?' . $this->getX() . ',' . $this->getY();
+            return "$scheme://$identity$host$path$encoded$fragment$coords";
         }
         
         /**
@@ -433,7 +443,8 @@
             $identity = $this->_getIdentity() ? $this->_getIdentity() . '@' : '';
             $encoded = $this->getEncodedRequest();
             $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
-            return new SimpleUrl("$scheme://$identity$host$port$path$encoded$fragment");
+            $coords = $this->getX() === false ? '' : '?' . $this->getX() . ',' . $this->getY();
+            return new SimpleUrl("$scheme://$identity$host$port$path$encoded$fragment$coords");
         }
         
         /**

@@ -14,14 +14,12 @@
      */
     class SimpleFormEncoding {
         var $_request;
-        var $_x;
-        var $_y;
         
         /**
          *    Starts empty.
-         *    @param array $query/SimpleQueryString  Hash of parameters.
-         *                                           Multiple values are
-         *                                           as lists on a single key.
+         *    @param array $query       Hash of parameters.
+         *                              Multiple values are
+         *                              as lists on a single key.
          *    @access public
          */
         function SimpleFormEncoding($query = false) {
@@ -29,7 +27,6 @@
                 $query = array();
             }
             $this->_request = array();
-            $this->setCoordinates();
             $this->merge($query);
         }
         
@@ -66,48 +63,11 @@
                 foreach ($query->getKeys() as $key) {
                     $this->add($key, $query->getValue($key));
                 }
-                if ($query->getX() !== false) {
-                    $this->setCoordinates($query->getX(), $query->getY());
-                }
             } elseif (is_array($query)) {
                 foreach ($query as $key => $value) {
                     $this->add($key, $value);
                 }
             }
-        }
-        
-        /**
-         *    Sets image coordinates. Set to false to clear
-         *    them.
-         *    @param integer $x    Horizontal position.
-         *    @param integer $y    Vertical position.
-         *    @access public
-         */
-        function setCoordinates($x = false, $y = false) {
-            if (($x === false) || ($y === false)) {
-                $this->_x = $this->_y = false;
-                return;
-            }
-            $this->_x = (integer)$x;
-            $this->_y = (integer)$y;
-        }
-        
-        /**
-         *    Accessor for horizontal image coordinate.
-         *    @return integer        X value.
-         *    @access public
-         */
-        function getX() {
-            return $this->_x;
-        }
-         
-        /**
-         *    Accessor for vertical image coordinate.
-         *    @return integer        Y value.
-         *    @access public
-         */
-        function getY() {
-            return $this->_y;
         }
         
         /**
@@ -149,8 +109,7 @@
                     $statements[] = "$key=" . urlencode($value);
                 }
             }
-            $coords = ($this->_x !== false) ? '?' . $this->_x . ',' . $this->_y : '';
-            return implode('&', $statements) . $coords;
+            return implode('&', $statements);
         }
     }
 ?>

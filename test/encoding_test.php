@@ -74,28 +74,6 @@
             $this->assertIdentical($encoding->asString(), 'a=Hello&a=Goodbye');
         }
         
-        function testDefaultCoordinatesAreUnset() {
-            $encoding = &new SimpleFormEncoding();
-            $this->assertIdentical($encoding->getX(), false);
-            $this->assertIdentical($encoding->getY(), false);
-        }
-        
-        function testSettingCoordinates() {
-            $encoding = &new SimpleFormEncoding();
-            $encoding->setCoordinates('32', '45');
-            $this->assertIdentical($encoding->getX(), 32);
-            $this->assertIdentical($encoding->getY(), 45);
-            $this->assertIdentical($encoding->asString(), '?32,45');
-        }
-        
-        function testClearingCordinates() {
-            $encoding = &new SimpleFormEncoding();
-            $encoding->setCoordinates('32', '45');
-            $encoding->setCoordinates();
-            $this->assertIdentical($encoding->getX(), false);
-            $this->assertIdentical($encoding->getY(), false);
-        }
-        
         function testAddingLists() {
             $encoding = &new SimpleFormEncoding();
             $encoding->add('a', array('Hello', 'Goodbye'));
@@ -115,20 +93,6 @@
             $encoding->merge(new SimpleFormEncoding(array('a' => 'A2')));
             $this->assertIdentical($encoding->getValue('a'), array('A1', 'A2'));
             $this->assertIdentical($encoding->getValue('b'), 'B');
-        }
-        
-        function testMergeInObjectWithCordinates() {
-            $incoming = new SimpleFormEncoding(array('a' => 'A2'));
-            $incoming->setCoordinates(25, 24);
-            
-            $encoding = &new SimpleFormEncoding(array('a' => 'A1'));
-            $encoding->setCoordinates(1, 2);
-            $encoding->merge($incoming);
-            
-            $this->assertIdentical($encoding->getValue('a'), array('A1', 'A2'));
-            $this->assertIdentical($encoding->getX(), 25);
-            $this->assertIdentical($encoding->getY(), 24);
-            $this->assertIdentical($encoding->asString(), 'a=A1&a=A2?25,24');
         }
     }
 ?>
