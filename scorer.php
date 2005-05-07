@@ -202,7 +202,7 @@
          *    @param mixed $payload      Message or object.
          *    @access public
          */
-        function paintSignal($type, &$payload) {
+        function paintSignal($type, $payload) {
         }
     }
 
