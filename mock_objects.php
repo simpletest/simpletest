@@ -1069,7 +1069,11 @@
          */
         function _createFunctionDeclaration($method) {
             $arguments = Stub::_determineArguments($method);
-            return "    function &$method($arguments) {\n";
+            if (phpversion() < 5) {
+                $prefix = "&";
+            }
+            return sprintf("    function %s%s(%s) {\n",
+                $prefix, $method, $arguments);
         }
         
         /**
@@ -1346,7 +1350,7 @@
         function _overrideMethods($methods) {
             $code = "";
             foreach ($methods as $method) {
-                $code .= "    function &$method() {\n";
+                $code .= Stub::_createFunctionDeclaration($method);
                 $code .= "        \$args = func_get_args();\n";
                 $code .= "        return \$this->_mock->_invoke(\"$method\", \$args);\n";
                 $code .= "    }\n";
