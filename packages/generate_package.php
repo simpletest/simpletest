@@ -19,6 +19,30 @@ XML_RPC        1.1.0   stable
 set_time_limit(0);
 require_once 'PEAR/PackageFileManager.php';
 
+// Modify short description. Try to keep under 80 chars width
+$shortDesc = <<<EOD
+Unit testing, mock objects and web testing framework for PHP.
+EOD;
+
+// Modify long description. Try to keep under 80 chars width
+$longDesc = <<<EOD
+The heart of SimpleTest is a testing framework built around test case classes.
+These are written as extensions of base test case classes, each extended with
+methods that actually contain test code. Top level test scripts then invoke
+the run()  methods on every one of these test cases in order. Each test
+method is written to invoke various assertions that the developer expects to
+be true such as assertEqual(). If the expectation is correct, then a
+successful result is dispatched to the observing test reporter, but any
+failure triggers an alert and a description of the mismatch.
+
+These tools are designed for the developer. Tests are written in the PHP
+language itself more or less as the application itself is built. The advantage
+of using PHP itself as the testing language is that there are no new languages
+to learn, testing can start straight away, and the developer can test any part
+of the code. Basically, all parts that can be accessed by the application code
+can also be accessed by the test code if they are in the same language. 
+EOD;
+
 $packagexml = new PEAR_PackageFileManager;
 $e = $packagexml->setOptions(array(
     'baseinstalldir' => 'simpletest',
@@ -28,8 +52,8 @@ $e = $packagexml->setOptions(array(
     'state' => 'stable',
     'package' => 'simpletest',
     'simpleoutput' => true,
-    'summary' => 'PHP Simple Test',
-    'description' => 'A framework for unit testing, web site testing and mock objects for PHP 4.2.0+',
+    'summary' => $shortDesc,
+    'description' => $longDesc,
     'filelistgenerator' => 'file', // generate from cvs, use file for directory
     'notes' => 'See the CHANGELOG for full list of changes',
     'dir_roles' => array(
@@ -41,9 +65,7 @@ $e = $packagexml->setOptions(array(
         'ui' => 'php',
         ),
     'ignore' => array(
-        'generatePackage.php', 
-//        'packages/', 
-//        'tutorials/',
+        'packages/', 
 //        'ui/',
         '*CVS*',
         ), 
@@ -52,13 +74,13 @@ $e = $packagexml->setOptions(array(
         'html' => 'php',
         '*' => 'php',
          ),
-//    'exceptions' => array(
-//        'TODO' => 'doc',
-//        'VERSION' => 'doc',
-//        'HELP_MY_TESTS_DONT_WORK_ANYMORE' => 'doc',
-//        'LICENSE' => 'doc',
-//        'README' => 'data',
-//        ),
+    'exceptions' => array(
+        'TODO' => 'doc',
+        'VERSION' => 'doc',
+        'HELP_MY_TESTS_DONT_WORK_ANYMORE' => 'doc',
+        'LICENSE' => 'doc',
+        'README' => 'data',
+        ),
     )
 );
 if (is_a($e, 'PEAR_Error')) {
@@ -67,6 +89,12 @@ if (is_a($e, 'PEAR_Error')) {
 }
 
 $e = $packagexml->addMaintainer('lastcraft', 'lead', 'Marcus Baker', 'marcus@lastcraft.com');
+if (is_a($e, 'PEAR_Error')) {
+    echo $e->getMessage();
+    exit;
+}
+
+$e = $packagexml->addMaintainer('jsweat', 'helper', 'Jason Sweat', 'jsweat_php@yahoo.com');
 if (is_a($e, 'PEAR_Error')) {
     echo $e->getMessage();
     exit;
