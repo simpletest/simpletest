@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.1alpha1) of 45 hours (13 done).
+This is immediate stuff only for this iteration (1.1alpha1) of 46 hours (13 done).
 
 $Id$
 
@@ -34,6 +34,7 @@ Simultaneous POST and GET parameters (3/1) - done.
 Fix split bug with simple URLs not being parsed correctly (1/1) - done.
 Fix double slash bug in URL (1/1) - done.
 Add referer header (3).
+Add &nbsp; to space normalisation (1).
 
 Web tester
 ----------

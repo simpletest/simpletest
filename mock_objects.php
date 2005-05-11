@@ -1072,8 +1072,7 @@
             if (phpversion() < 5) {
                 $prefix = "&";
             }
-            return sprintf("    function %s%s(%s) {\n",
-                $prefix, $method, $arguments);
+            return sprintf("    function %s%s(%s) {\n", $prefix, $method, $arguments);
         }
         
         /**
