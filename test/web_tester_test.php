@@ -138,4 +138,12 @@
             $this->assertIdentical($expectation->test('the wanted text is here'), false);
         }
     }
+    
+    class TestOfGenericAssertionsInWebTester extends WebTestCase {
+        
+        function testEquality() {
+            $this->assertEqual('a', 'a');
+            $this->assertNotEqual('a', 'A');
+        }
+    }
 ?>

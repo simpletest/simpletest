@@ -947,6 +947,40 @@
         }
         
         /**
+         *    Will trigger a pass if the two parameters have
+         *    the same value only. Otherwise a fail. This
+         *    is for testing hand extracted text, etc.
+         *    @param mixed $first          Value to compare.
+         *    @param mixed $second         Value to compare.
+         *    @param string $message       Message to display.
+         *    @return boolean              True on pass
+         *    @access public
+         */
+        function assertEqual($first, $second, $message = "%s") {
+            return $this->assertExpectation(
+                    new EqualExpectation($first),
+                    $second,
+                    $message);
+        }
+        
+        /**
+         *    Will trigger a pass if the two parameters have
+         *    a different value. Otherwise a fail. This
+         *    is for testing hand extracted text, etc.
+         *    @param mixed $first           Value to compare.
+         *    @param mixed $second          Value to compare.
+         *    @param string $message        Message to display.
+         *    @return boolean               True on pass
+         *    @access public
+         */
+        function assertNotEqual($first, $second, $message = "%s") {
+            return $this->assertExpectation(
+                    new NotEqualExpectation($first),
+                    $second,
+                    $message);
+        }
+        
+        /**
          *    Tests for the presence of a link label. Match is
          *    case insensitive with normalised space.
          *    @param string $label     Text between the anchor tags.
