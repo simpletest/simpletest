@@ -11,7 +11,7 @@ Fix GroupTest test case count being wrong after addTestFile() (3).
 Add floating point equality (2/1) - done.
 Add donated fix for assertReference() from Knak-Nielsen (1/1) - done.
 Promote assertEqual() to other test cases (1/1) - done.
-Create separate group test files for unit and acceptance tests (1).
+Create separate group test files for unit and acceptance tests (1/1) - done.
 
 Reporter
 --------
