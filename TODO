@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.1alpha1) of 46 hours (13 done).
+This is immediate stuff only for this iteration (1.1alpha1) of 43 hours (15 done).
 
 $Id$
 
@@ -7,7 +7,6 @@ Unit tester
 -----------
 Keep original raw URL for as long as possible (3/2) - done.
 Allow expectation to be passed to assertError() method (2/3) - done.
-Fix GroupTest test case count being wrong after addTestFile() (3).
 Add floating point equality (2/1) - done.
 Add donated fix for assertReference() from Knak-Nielsen (1/1) - done.
 Promote assertEqual() to other test cases (1/1) - done.
