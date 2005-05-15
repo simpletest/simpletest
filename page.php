@@ -887,16 +887,35 @@
         
         /**
          *    Sets a field on each form in which the field is
-         *    available.
+         *    available. Sets by label, but for compatibility
+         *    drops back to a name.
+         *    @param string $label       Field label or name.
+         *    @param string $value       Value to set field to.
+         *    @return boolean            True if value is valid.
+         *    @access public
+         */
+        function setField($label, $value) {
+            $is_set = false;
+            for ($i = 0; $i < count($this->_complete_forms); $i++) {
+                if ($this->_complete_forms[$i]->setField($label, $value)) {
+                    $is_set = true;
+                }
+            }
+            return $is_set;
+        }
+        
+        /**
+         *    Sets a field on each form in which the field is
+         *    available by name.
          *    @param string $name        Field name.
          *    @param string $value       Value to set field to.
          *    @return boolean            True if value is valid.
          *    @access public
          */
-        function setField($name, $value) {
+        function setFieldByName($name, $value) {
             $is_set = false;
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->setField($name, $value)) {
+                if ($this->_complete_forms[$i]->setFieldByName($name, $value)) {
                     $is_set = true;
                 }
             }

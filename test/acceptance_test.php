@@ -459,14 +459,14 @@
         
         function testFormSubmissionByLabel() {
             $this->get('http://www.lastcraft.com/test/form.html');
-            $this->setField('a', 'aaa');
-            $this->setField('b', 'bbb');
-            $this->setField('c', 'ccc');
-            $this->setField('d', 'D2');
-            $this->setField('e', 'on');
-            $this->setField('f', false);
-            $this->setField('g', 'g2');
-            $this->setField('h', 1);
+            $this->setFieldByName('a', 'aaa');
+            $this->setFieldByName('b', 'bbb');
+            $this->setFieldByName('c', 'ccc');
+            $this->setFieldByName('d', 'D2');
+            $this->setFieldByName('e', 'on');
+            $this->setFieldByName('f', false);
+            $this->setFieldByName('g', 'g2');
+            $this->setFieldByName('h', 1);
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedText('a=[aaa]');
             $this->assertWantedText('b=[bbb]');
@@ -486,7 +486,7 @@
         
         function testFormSubmissionByName() {
             $this->get('http://www.lastcraft.com/test/form.html');
-            $this->setField('a', 'A');
+            $this->setFieldByName('a', 'A');
             $this->assertTrue($this->clickSubmitByName('go'));
             $this->assertWantedText('a=[A]');
         }
@@ -527,7 +527,7 @@
         
         function testFormSubmissionWithMixedPostAndGet() {
             $this->get('http://www.lastcraft.com/test/form_with_mixed_post_and_get.html');
-            $this->setField('a', 'A');
+            $this->setFieldByName('a', 'A');
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedText('a=[A]');
             $this->assertWantedText('x=[X]');
@@ -579,14 +579,14 @@
         
         function testSelfSubmitWithParameters() {
             $this->get('http://www.lastcraft.com/test/self_form.php');
-            $this->setField('visible', 'Resent');
+            $this->setFieldByName('visible', 'Resent');
             $this->assertTrue($this->clickSubmit());
             $this->assertWantedText('[Resent]');
         }
         
         function testSettingOfBlankOption() {
             $this->get('http://www.lastcraft.com/test/form.html');
-            $this->assertTrue($this->setField('d', ''));
+            $this->assertTrue($this->setFieldByName('d', ''));
             $this->clickSubmit('Go!');
             $this->assertWantedText('d=[]');
         }
@@ -611,12 +611,12 @@
         
         function testSubmittingMultipleValues() {
             $this->get('http://www.lastcraft.com/test/multiple_widget_form.html');
-            $this->setField('a', array('a1', 'a4'));
+            $this->setFieldByName('a', array('a1', 'a4'));
             $this->assertField('a', array('a1', 'a4'));
             $this->assertField('a', array('a4', 'a1'));
-            $this->setField('b', array('b1', 'b4'));
+            $this->setFieldByName('b', array('b1', 'b4'));
             $this->assertField('b', array('b1', 'b4'));
-            $this->setField('c[]', array('c1', 'c4'));
+            $this->setFieldByName('c[]', array('c1', 'c4'));
             $this->assertField('c[]', array('c1', 'c4'));
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedText('a=[a1, a4]');
@@ -635,8 +635,8 @@
         
         function testSavantStyleHiddenDefaultsAreOverridden() {
             $this->get('http://www.lastcraft.com/test/savant_style_form.html');
-            $this->assertTrue($this->setField('a', array('a1')));
-            $this->assertTrue($this->setField('b', 'b1'));
+            $this->assertTrue($this->setFieldByName('a', array('a1')));
+            $this->assertTrue($this->setFieldByName('b', 'b1'));
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedText('a=[a1]');
             $this->assertWantedText('b=[b1]');

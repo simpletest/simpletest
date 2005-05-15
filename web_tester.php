@@ -1041,14 +1041,26 @@
         }
         
         /**
+         *    Sets all form fields with that label, or name if there
+         *    is no label attached. Label not yet implemented.
+         *    @param string $name    Name of field in forms.
+         *    @param string $value   New value of field.
+         *    @return boolean        True if field exists, otherwise false.
+         *    @access public
+         */
+        function setField($label, $value) {
+            return $this->_browser->setField($label, $value);
+        }
+        
+        /**
          *    Sets all form fields with that name.
          *    @param string $name    Name of field in forms.
          *    @param string $value   New value of field.
          *    @return boolean        True if field exists, otherwise false.
          *    @access public
          */
-        function setField($name, $value) {
-            return $this->_browser->setField($name, $value);
+        function setFieldByName($name, $value) {
+            return $this->_browser->setFieldByName($name, $value);
         }
           
         /**

@@ -775,6 +775,18 @@
         function setField($name, $value) {
             return $this->_page->setField($name, $value);
         }
+        
+        /**
+         *    Sets all form fields with that name. Will use label if
+         *    one is available (not yet implemented).
+         *    @param string $name    Name of field in forms.
+         *    @param string $value   New value of field.
+         *    @return boolean        True if field exists, otherwise false.
+         *    @access public
+         */
+        function setFieldByName($name, $value) {
+            return $this->_page->setFieldByName($name, $value);
+        }
           
         /**
          *    Sets all form fields with that id attribute.

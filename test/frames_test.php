@@ -512,18 +512,18 @@
         
         function testSettingAllFrameFieldsWhenNoFrameFocus() {
             $frame1 = &new MockSimplePage($this);
-            $frame1->expectOnce('setField', array('a', 'A'));
+            $frame1->expectOnce('setFieldByName', array('a', 'A'));
             $frame1->expectOnce('setFieldById', array(22, 'A'));
             
             $frame2 = &new MockSimplePage($this);
-            $frame2->expectOnce('setField', array('a', 'A'));
+            $frame2->expectOnce('setFieldByName', array('a', 'A'));
             $frame2->expectOnce('setFieldById', array(22, 'A'));
             
             $frameset = &new SimpleFrameset(new MockSimplePage($this));
             $frameset->addFrame($frame1, 'A');
             $frameset->addFrame($frame2, 'B');
             
-            $frameset->setField('a', 'A');
+            $frameset->setFieldByName('a', 'A');
             $frameset->setFieldById(22, 'A');
             $frame1->tally();
             $frame2->tally();
