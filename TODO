@@ -34,7 +34,7 @@ Fix split bug with simple URLs not being parsed correctly (1/1) - done.
 Fix double slash bug in URL (1/1) - done.
 Add referer header (3).
 Add &nbsp; to space normalisation (1).
-Add label tag parsing (3).
+Add label tag parsing (3/3).
 
 Web tester
 ----------

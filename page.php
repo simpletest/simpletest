@@ -93,18 +93,23 @@
          */
         function startElement($name, $attributes) {
             $tag = &$this->_createTag($name, $this->_keysToLowerCase($attributes));
+            if ($name == 'label') {
+                $this->_page->acceptLabelStart($tag);
+                $this->_openTag($tag);
+                return true;
+            }
             if ($name == 'form') {
                 $this->_page->acceptFormStart($tag);
                 return true;
-            }            
+            }
             if ($name == 'frameset') {
                 $this->_page->acceptFramesetStart($tag);
                 return true;
-            }            
+            }
             if ($name == 'frame') {
                 $this->_page->acceptFrame($tag);
                 return true;
-            }            
+            }
             if ($tag->expectEndTag()) {
                 $this->_openTag($tag);
                 return true;
@@ -120,6 +125,10 @@
          *    @access public
          */
         function endElement($name) {
+            if ($name == 'label') {
+                $this->_page->acceptLabelEnd();
+                return true;
+            }            
             if ($name == 'form') {
                 $this->_page->acceptFormEnd();
                 return true;
@@ -155,7 +164,8 @@
         
         /**
          *    Parsed relevant data. The parsed tag is added
-         *    to every open tag.
+         *    to every open tag. Used for adding options to select
+         *    fields only.
          *    @param SimpleTag $tag        May include unparsed tags.
          *    @access private
          */
@@ -181,7 +191,7 @@
             if (! in_array($name, array_keys($this->_tags))) {
                 $this->_tags[$name] = array();
             }
-            array_push($this->_tags[$name], $tag);
+            $this->_tags[$name][] = &$tag;
         }
         
         /**
@@ -207,6 +217,8 @@
                 return $this->_createSelectionTag($attributes);
             } elseif ($name == 'option') {
                 return new SimpleOptionTag($attributes);
+            } elseif ($name == 'label') {
+                return new SimpleLabelTag($attributes);
             } elseif ($name == 'form') {
                 return new SimpleFormTag($attributes);
             } elseif ($name == 'frame') {
@@ -261,6 +273,8 @@
     class SimplePage {
         var $_links;
         var $_title;
+        var $_last_widget;
+        var $_label;
         var $_open_forms;
         var $_complete_forms;
         var $_frameset;
@@ -505,6 +519,31 @@
                 for ($i = 0; $i < count($this->_open_forms); $i++) {
                     $this->_open_forms[$i]->addWidget($tag);
                 }
+                $this->_last_widget = &$tag;
+            }
+        }
+        
+        /**
+         *    Opens a label for a described widget.
+         *    @param SimpleFormTag $tag      Tag to accept.
+         *    @access public
+         */
+        function acceptLabelStart(&$tag) {
+            $this->_label = &$tag;
+            unset($this->_last_widget);
+        }
+        
+        /**
+         *    Closes the most recently opened label.
+         *    @access public
+         */
+        function acceptLabelEnd() {
+            if (isset($this->_label)) {
+                if (isset($this->_last_widget)) {
+                    $this->_last_widget->setLabel($this->_label->getText());
+                    unset($this->_last_widget);
+                }
+                unset($this->_label);
             }
         }
         
@@ -941,7 +980,8 @@
        
         /**
          *    Accessor for a form element value within a page.
-         *    Finds the first match.
+         *    Finds the first match by label first. If none are found
+         *    then it does a search by name attribute instead.
          *    @param string $label       Field label.
          *    @return string/boolean     A string if the field is
          *                               present, false if unchecked
@@ -950,12 +990,12 @@
          */
         function getField($label) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                $value = $this->_complete_forms[$i]->getValue($label);
+                $value = $this->_complete_forms[$i]->getValueByLabel($label);
                 if (isset($value)) {
                     return $value;
                 }
             }
-            return null;
+            return $this->getFieldByName($label);
         }
        
         /**

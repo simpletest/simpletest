@@ -75,6 +75,16 @@
             $this->assertIdentical($form->getValueById(50), 'Not me');
         }
         
+        function testTextWidgetByLabel() {
+            $form = &new SimpleForm(
+                    new SimpleFormTag(array()),
+                    new SimpleUrl('htp://host'));
+            $widget = &new SimpleTextTag(array('name' => 'me', 'type' => 'text', 'value' => 'thung'));
+            $form->addWidget($widget);
+            $widget->setLabel('thing');
+            $this->assertIdentical($form->getValueByLabel('thing'), 'thung');
+        }
+        
         function testSubmitEmpty() {
             $form = &new SimpleForm(
                     new SimpleFormTag(array()),

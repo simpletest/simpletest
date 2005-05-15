@@ -192,7 +192,7 @@
          *    @param SimpleWidget $tag        Input tag to add.
          *    @access public
          */
-        function addWidget($tag) {
+        function addWidget(&$tag) {
             if (strtolower($tag->getAttribute('type')) == 'submit') {
                 $this->_buttons[] = &$tag;
             } elseif (strtolower($tag->getAttribute('type')) == 'image') {
@@ -208,7 +208,7 @@
          *    @param SimpleWidget $tag   Incoming form control.
          *    @access private
          */
-        function _setWidget($tag) {
+        function _setWidget(&$tag) {
             if (strtolower($tag->getAttribute('type')) == 'radio') {
                 $this->_addRadioButton($tag);
             } elseif (strtolower($tag->getAttribute('type')) == 'checkbox') {
@@ -223,7 +223,7 @@
          *    @param SimpleRadioButtonTag $tag   Incoming form control.
          *    @access private
          */
-        function _addRadioButton($tag) {
+        function _addRadioButton(&$tag) {
             if (! isset($this->_radios[$tag->getName()])) {
                 $this->_widgets[] = &new SimpleRadioGroup();
                 $this->_radios[$tag->getName()] = count($this->_widgets) - 1;
@@ -236,7 +236,7 @@
          *    @param SimpleCheckboxTag $tag   Incoming form control.
          *    @access private
          */
-        function _addCheckbox($tag) {
+        function _addCheckbox(&$tag) {
             if (! isset($this->_checkboxes[$tag->getName()])) {
                 $this->_widgets[] = &$tag;
                 $this->_checkboxes[$tag->getName()] = count($this->_widgets) - 1;
@@ -281,6 +281,17 @@
          */
         function getValue($name) {
             return $this->_getValueBySelector(new SimpleNameSelector($name));
+        }
+        
+        /**
+         *    Extracts current value from form by the label.
+         *    @param string $label       External label content.
+         *    @return string/array       Value(s) or null
+         *                               if not set.
+         *    @access public
+         */
+        function getValueByLabel($name) {
+            return $this->_getValueBySelector(new SimpleLabelSelector($name));
         }
         
         /**

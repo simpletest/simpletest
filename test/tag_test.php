@@ -58,9 +58,15 @@
     class TestOfWidget extends UnitTestCase {
         
         function testTextEmptyDefault() {
-            $tag = &new SimpleTextTag(array('' => 'text'));
+            $tag = &new SimpleTextTag(array('type' => 'text'));
             $this->assertIdentical($tag->getDefault(), '');
             $this->assertIdentical($tag->getValue(), '');
+        }
+        
+        function testSettingOfExternalLabel() {
+            $tag = &new SimpleTextTag(array('type' => 'text'));
+            $tag->setLabel('him');
+            $this->assertEqual($tag->getLabel(), 'him');
         }
         
         function testTextDefault() {
@@ -457,6 +463,20 @@
             $this->assertFalse($group->isId(0));
             $this->assertTrue($group->isId(1));
             $this->assertTrue($group->isId(2));
+        }
+    }
+    
+    class TestOfLabelTag extends UnitTestCase {
+        
+        function testLabelShouldHaveAnEndTag() {
+            $label = &new SimpleLabelTag(array());
+            $this->assertTrue($label->expectEndTag());
+        }
+        
+        function testContentIsTextOnly() {
+            $label = &new SimpleLabelTag(array());
+            $label->addContent('Here <tag>are</tag> words');
+            $this->assertEqual($label->getText(), 'Here are words');
         }
     }
 ?>

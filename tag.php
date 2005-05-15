@@ -193,6 +193,7 @@
      */
     class SimpleWidget extends SimpleTag {
         var $_value;
+        var $_label;
         var $_is_set;
         
         /**
@@ -204,6 +205,7 @@
         function SimpleWidget($name, $attributes) {
             $this->SimpleTag($name, $attributes);
             $this->_value = false;
+            $this->_label = false;
             $this->_is_set = false;
         }
         
@@ -266,6 +268,25 @@
          */
         function resetValue() {
             $this->_is_set = false;
+        }
+        
+        /**
+         *    Allows setting of a label externally, say by a
+         *    label tag.
+         *    @param string $label    Label to attach.
+         *    @access public
+         */
+        function setLabel($label) {
+            $this->_label = $label;
+        }
+        
+        /**
+         *    Reads external or internal label.
+         *    @return string        Last label set.
+         *    @access public
+         */
+        function getLabel() {
+            return $this->_label;
         }
     }
     
@@ -1193,6 +1214,23 @@
                 }
             }
             return false;
+        }
+    }
+    
+    /**
+     *    Tag to keep track of labels.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleLabelTag extends SimpleTag {
+        
+        /**
+         *    Starts with a named tag with attributes only.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
+        function SimpleLabelTag($attributes) {
+            $this->SimpleTag('label', $attributes);
         }
     }
     
