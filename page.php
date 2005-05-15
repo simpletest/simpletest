@@ -936,11 +936,14 @@
         function setField($label, $value) {
             $is_set = false;
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->setField($label, $value)) {
+                if ($this->_complete_forms[$i]->setFieldByLabel($label, $value)) {
                     $is_set = true;
                 }
             }
-            return $is_set;
+            if ($is_set) {
+                return true;
+            }
+            return $this->setFieldByName($label, $value);
         }
         
         /**

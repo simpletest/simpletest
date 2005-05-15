@@ -327,20 +327,6 @@
         }
         
         /**
-         *    Sets a widget value within the form by name currently, but
-         *    will switch to label when implemented.
-         *    @param string $label    label or name of widget tag.
-         *    @param string $value    Value to input into the widget.
-         *    @return boolean         True if value is legal, false
-         *                            otherwise. If the field is not
-         *                            present, nothing will be set.
-         *    @access public
-         */
-        function setField($label, $value) {
-            return $this->_setFieldBySelector(new SimpleNameSelector($label), $value);
-        }
-        
-        /**
          *    Sets a widget value within the form by name only.
          *    @param string $name     Name of widget tag.
          *    @param string $value    Value to input into the widget.
@@ -351,6 +337,19 @@
          */
         function setFieldByName($name, $value) {
             return $this->_setFieldBySelector(new SimpleNameSelector($name), $value);
+        }
+        
+        /**
+         *    Sets a widget value within the form by label tag.
+         *    @param string $label    label associated with widget tag.
+         *    @param string $value    Value to input into the widget.
+         *    @return boolean         True if value is legal, false
+         *                            otherwise. If the field is not
+         *                            present, nothing will be set.
+         *    @access public
+         */
+        function setFieldByLabel($label, $value) {
+            return $this->_setFieldBySelector(new SimpleLabelSelector($label), $value);
         }
          
         /**

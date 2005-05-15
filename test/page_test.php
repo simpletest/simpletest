@@ -773,6 +773,22 @@
             $page = &$this->parse($response);
             $this->assertEqual($page->getFieldByName('a'), 'A');
             $this->assertEqual($page->getField('Stuff'), 'A');
+            $this->assertTrue($page->setField('Stuff', 'aaa'));
+            $this->assertEqual($page->getField('Stuff'), 'aaa');
+        }
+        
+        function testGettingTextFieldByEnclosingLabelWithConflictingOtherFields() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent', '<html><head><form>' .
+                    '<label>Stuff' .
+                    '<input type="text" name="a" value="A">' .
+                    '</label>' .
+                    '<input type="text" name="b" value="B">' .
+                    '</form></head></html>');
+            $page = &$this->parse($response);
+            $this->assertEqual($page->getFieldByName('a'), 'A');
+            $this->assertEqual($page->getFieldByName('b'), 'B');
+            $this->assertEqual($page->getField('Stuff'), 'A');
         }
         
         function testReadingTextArea() {

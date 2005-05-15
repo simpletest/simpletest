@@ -58,8 +58,8 @@
             $form->addWidget(new SimpleTextTag(
                     array('name' => 'me', 'type' => 'text', 'value' => 'Myself')));
             $this->assertIdentical($form->getValue('me'), 'Myself');
-            $this->assertTrue($form->setField('me', 'Not me'));
-            $this->assertFalse($form->setField('not_present', 'Not me'));
+            $this->assertTrue($form->setFieldByName('me', 'Not me'));
+            $this->assertFalse($form->setFieldByName('not_present', 'Not me'));
             $this->assertIdentical($form->getValue('me'), 'Not me');
             $this->assertNull($form->getValue('not_present'));
         }
@@ -79,10 +79,12 @@
             $form = &new SimpleForm(
                     new SimpleFormTag(array()),
                     new SimpleUrl('htp://host'));
-            $widget = &new SimpleTextTag(array('name' => 'me', 'type' => 'text', 'value' => 'thung'));
+            $widget = &new SimpleTextTag(array('name' => 'me', 'type' => 'text', 'value' => 'a'));
             $form->addWidget($widget);
             $widget->setLabel('thing');
-            $this->assertIdentical($form->getValueByLabel('thing'), 'thung');
+            $this->assertIdentical($form->getValueByLabel('thing'), 'a');
+            $this->assertTrue($form->setFieldByLabel('thing', 'b'));
+            $this->assertIdentical($form->getValueByLabel('thing'), 'b');
         }
         
         function testSubmitEmpty() {
@@ -250,9 +252,9 @@
             $form->addWidget(new SimpleCheckboxTag(
                     array('name' => 'me', 'type' => 'checkbox')));
             $this->assertIdentical($form->getValue('me'), false);
-            $this->assertTrue($form->setField('me', 'on'));
+            $this->assertTrue($form->setFieldByName('me', 'on'));
             $this->assertEqual($form->getValue('me'), 'on');
-            $this->assertFalse($form->setField('me', 'other'));
+            $this->assertFalse($form->setFieldByName('me', 'other'));
             $this->assertEqual($form->getValue('me'), 'on');
         }
         
@@ -263,9 +265,9 @@
             $form->addWidget(new SimpleCheckboxTag(
                     array('name' => 'me', 'value' => 'a', 'type' => 'checkbox', 'checked' => '')));
             $this->assertIdentical($form->getValue('me'), 'a');
-            $this->assertFalse($form->setField('me', 'on'));
+            $this->assertFalse($form->setFieldByName('me', 'on'));
             $this->assertEqual($form->getValue('me'), 'a');
-            $this->assertTrue($form->setField('me', false));
+            $this->assertTrue($form->setFieldByName('me', false));
             $this->assertEqual($form->getValue('me'), false);
         }
         
@@ -276,7 +278,7 @@
             $form->addWidget(new SimpleRadioButtonTag(
                     array('name' => 'me', 'value' => 'a', 'type' => 'radio')));
             $this->assertIdentical($form->getValue('me'), false);
-            $this->assertTrue($form->setField('me', 'a'));
+            $this->assertTrue($form->setFieldByName('me', 'a'));
             $this->assertIdentical($form->getValue('me'), 'a');
         }
         
@@ -287,7 +289,7 @@
             $form->addWidget(new SimpleRadioButtonTag(
                     array('name' => 'me', 'value' => 'a', 'type' => 'radio', 'checked' => '')));
             $this->assertIdentical($form->getValue('me'), 'a');
-            $this->assertFalse($form->setField('me', 'other'));
+            $this->assertFalse($form->setFieldByName('me', 'other'));
         }
         
         function testUncheckedRadioButtons() {
@@ -299,11 +301,11 @@
             $form->addWidget(new SimpleRadioButtonTag(
                     array('name' => 'me', 'value' => 'b', 'type' => 'radio')));
             $this->assertIdentical($form->getValue('me'), false);
-            $this->assertTrue($form->setField('me', 'a'));
+            $this->assertTrue($form->setFieldByName('me', 'a'));
             $this->assertIdentical($form->getValue('me'), 'a');
-            $this->assertTrue($form->setField('me', 'b'));
+            $this->assertTrue($form->setFieldByName('me', 'b'));
             $this->assertIdentical($form->getValue('me'), 'b');
-            $this->assertFalse($form->setField('me', 'c'));
+            $this->assertFalse($form->setFieldByName('me', 'c'));
             $this->assertIdentical($form->getValue('me'), 'b');
         }
         
@@ -316,7 +318,7 @@
             $form->addWidget(new SimpleRadioButtonTag(
                     array('name' => 'me', 'value' => 'b', 'type' => 'radio', 'checked' => '')));
             $this->assertIdentical($form->getValue('me'), 'b');
-            $this->assertTrue($form->setField('me', 'a'));
+            $this->assertTrue($form->setFieldByName('me', 'a'));
             $this->assertIdentical($form->getValue('me'), 'a');
         }
         
@@ -329,7 +331,7 @@
             $form->addWidget(new SimpleCheckboxTag(
                     array('name' => 'a', 'type' => 'checkbox', 'value' => 'you')));
             $this->assertIdentical($form->getValue('a'), false);
-            $this->assertTrue($form->setField('a', 'me'));
+            $this->assertTrue($form->setFieldByName('a', 'me'));
             $this->assertIdentical($form->getValue('a'), 'me');
         }
     }
