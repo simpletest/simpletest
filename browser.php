@@ -802,14 +802,27 @@
         /**
          *    Accessor for a form element value within the page.
          *    Finds the first match.
+         *    @param string $label       Field label.
+         *    @return string/boolean     A value if the field is
+         *                               present, false if unchecked
+         *                               and null if missing.
+         *    @access public
+         */
+        function getField($label) {
+            return $this->_page->getField($label);
+        }
+      
+        /**
+         *    Accessor for a form element value within the page.
+         *    Finds the first match.
          *    @param string $name        Field name.
          *    @return string/boolean     A string if the field is
          *                               present, false if unchecked
          *                               and null if missing.
          *    @access public
          */
-        function getField($name) {
-            return $this->_page->getField($name);
+        function getFieldByName($name) {
+            return $this->_page->getFieldByName($name);
         }
         
         /**

@@ -1087,17 +1087,44 @@
          *    @return boolean           True if pass.
          *    @access public
          */
-        function assertField($name, $expected = true, $message = "%s") {
-            $value = $this->_browser->getField($name);
+        function assertField($label, $expected = true, $message = "%s") {
+            $value = $this->_browser->getField($label);
             if ($expected === true) {
                 return $this->assertTrue(
                         isset($value),
-                        sprintf($message, "Field [$name] should exist"));
+                        sprintf($message, "Field [$label] should exist"));
             } else {
                 return $this->assertExpectation(
                         new FieldExpectation($expected),
                         $value,
-                        sprintf($message, "Field [$name] should match with [%s]"));
+                        sprintf($message, "Field [$label] should match with [%s]"));
+            }
+        }
+        
+        /**
+         *    Confirms that the form element is currently set
+         *    to the expected value. A missing form element will always
+         *    fail. If no value is given then only the existence
+         *    of the field is checked.
+         *    @param string $name       Name of field in forms.
+         *    @param mixed $expected    Expected string/array value or
+         *                              false for unset fields.
+         *    @param string $message    Message to display. Default
+         *                              can be embedded with %s.
+         *    @return boolean           True if pass.
+         *    @access public
+         */
+        function assertFieldByName($name, $expected = true, $message = "%s") {
+            $value = $this->_browser->getFieldByName($name);
+            if ($expected === true) {
+                return $this->assertTrue(
+                        isset($value),
+                        sprintf($message, "Field name [$name] should exist"));
+            } else {
+                return $this->assertExpectation(
+                        new FieldExpectation($expected),
+                        $value,
+                        sprintf($message, "Field name [$name] should match with [%s]"));
             }
         }
          

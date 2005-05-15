@@ -99,17 +99,17 @@
             $this->assertEqual($frameset->getText(), 'Stuff1 Stuff2');
         }
         
-        function testFieldIsFirstInFramelist() {
+        function testFieldFoundIsFirstInFramelist() {
             $frame1 = &new MockSimplePage($this);
-            $frame1->setReturnValue('getField', null);
-            $frame1->expectOnce('getField', array('a'));
+            $frame1->setReturnValue('getFieldByName', null);
+            $frame1->expectOnce('getFieldByName', array('a'));
             
             $frame2 = &new MockSimplePage($this);
-            $frame2->setReturnValue('getField', 'A');
-            $frame2->expectOnce('getField', array('a'));
+            $frame2->setReturnValue('getFieldByName', 'A');
+            $frame2->expectOnce('getFieldByName', array('a'));
             
             $frame3 = &new MockSimplePage($this);
-            $frame3->expectNever('getField');
+            $frame3->expectNever('getFieldByName');
             
             $page = &new MockSimplePage($this);
             $frameset = &new SimpleFrameset($page);
@@ -117,7 +117,7 @@
             $frameset->addFrame($frame2);
             $frameset->addFrame($frame3);
             
-            $this->assertIdentical($frameset->getField('a'), 'A');
+            $this->assertIdentical($frameset->getFieldByName('a'), 'A');
             $frame1->tally();
             $frame2->tally();
         }

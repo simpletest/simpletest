@@ -654,15 +654,34 @@
         /**
          *    Accessor for a form element value within a frameset.
          *    Finds the first match amongst the frames.
+         *    @param string $label       Field label.
+         *    @return string/boolean     A string if the field is
+         *                               present, false if unchecked
+         *                               and null if missing.
+         *    @access public
+         */
+        function getField($label) {
+            for ($i = 0; $i < count($this->_frames); $i++) {
+                $value = $this->_frames[$i]->getField($label);
+                if (isset($value)) {
+                    return $value;
+                }
+            }
+            return null;
+        }
+       
+        /**
+         *    Accessor for a form element value within a frameset.
+         *    Finds the first match amongst the frames.
          *    @param string $name        Field name.
          *    @return string/boolean     A string if the field is
          *                               present, false if unchecked
          *                               and null if missing.
          *    @access public
          */
-        function getField($name) {
+        function getFieldByName($name) {
             for ($i = 0; $i < count($this->_frames); $i++) {
-                $value = $this->_frames[$i]->getField($name);
+                $value = $this->_frames[$i]->getFieldByName($name);
                 if (isset($value)) {
                     return $value;
                 }

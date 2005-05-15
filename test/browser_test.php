@@ -247,15 +247,15 @@
         
         function testFormHandling() {
             $page = &new MockSimplePage($this);
-            $page->setReturnValue('getField', 'Value');
-            $page->expectOnce('getField', array('key'));
+            $page->setReturnValue('getFieldByName', 'Value');
+            $page->expectOnce('getFieldByName', array('key'));
             $page->expectOnce('setFieldByName', array('key', 'Value'));
             $page->setReturnValue('getFieldById', 'Id value');
             $page->expectOnce('getFieldById', array(99));
             $page->expectOnce('setFieldById', array(99, 'Id value'));
 
             $browser = &$this->loadPage($page);
-            $this->assertEqual($browser->getField('key'), 'Value');            
+            $this->assertEqual($browser->getFieldByName('key'), 'Value');            
             $this->assertEqual($browser->getFieldById(99), 'Id value');            
             $browser->setFieldByName('key', 'Value');
             $browser->setFieldById(99, 'Id value');

@@ -437,15 +437,15 @@
         
         function testDefaultFormValues() {
             $this->get('http://www.lastcraft.com/test/form.html');
-            $this->assertField('a', '');
-            $this->assertField('b', 'Default text');
-            $this->assertField('c', '');
-            $this->assertField('d', 'd1');
-            $this->assertField('e', false);
-            $this->assertField('f', 'on');
-            $this->assertField('g', 'g3');
-            $this->assertField('h', 2);
-            $this->assertField('go', 'Go!');
+            $this->assertFieldByName('a', '');
+            $this->assertFieldByName('b', 'Default text');
+            $this->assertFieldByName('c', '');
+            $this->assertFieldByName('d', 'd1');
+            $this->assertFieldByName('e', false);
+            $this->assertFieldByName('f', 'on');
+            $this->assertFieldByName('g', 'g3');
+            $this->assertFieldByName('h', 2);
+            $this->assertFieldByName('go', 'Go!');
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedText('go=[Go!]');
             $this->assertWantedText('a=[]');

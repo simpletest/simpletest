@@ -511,7 +511,7 @@
          */
         function _getParsedTags() {
             return array('a', 'title', 'form', 'input', 'button', 'textarea', 'select',
-                    'option', 'frameset', 'frame');
+                    'option', 'frameset', 'frame', 'label');
         }
         
         /**

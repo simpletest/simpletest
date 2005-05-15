@@ -545,7 +545,7 @@
                     '</form></head></html>');
             
             $page = &$this->parse($response);
-            $this->assertEqual($page->getField('here'), "Hello");
+            $this->assertEqual($page->getFieldByName('here'), "Hello");
         }
         
         function testUnclosedForm() {
@@ -556,7 +556,7 @@
                     '</head></html>');
             
             $page = &$this->parse($response);
-            $this->assertEqual($page->getField('here'), "Hello");
+            $this->assertEqual($page->getFieldByName('here'), "Hello");
         }
         
         function testEmptyFrameset() {
@@ -714,9 +714,9 @@
                     '</form></head></html>');
             
             $page = &$this->parse($response);
-            $this->assertNull($page->getField('missing'));
-            $this->assertIdentical($page->getField('a'), '');
-            $this->assertIdentical($page->getField('b'), 'bbb');
+            $this->assertNull($page->getFieldByName('missing'));
+            $this->assertIdentical($page->getFieldByName('a'), '');
+            $this->assertIdentical($page->getFieldByName('b'), 'bbb');
         }
         
         function testReadingTextFieldIsCaseInsensitive() {
@@ -727,9 +727,9 @@
                     '</FORM></head></html>');
             
             $page = &$this->parse($response);
-            $this->assertNull($page->getField('missing'));
-            $this->assertIdentical($page->getField('a'), '');
-            $this->assertIdentical($page->getField('b'), 'bbb');
+            $this->assertNull($page->getFieldByName('missing'));
+            $this->assertIdentical($page->getFieldByName('a'), '');
+            $this->assertIdentical($page->getFieldByName('b'), 'bbb');
         }
         
         function testSettingTextField() {
@@ -741,12 +741,22 @@
                     '</form></head></html>');
             
             $page = &$this->parse($response);
-            $this->assertTrue($page->setField('a', 'aaa'));
-            $this->assertEqual($page->getField('a'), 'aaa');
+            $this->assertTrue($page->setFieldByName('a', 'aaa'));
+            $this->assertEqual($page->getFieldByName('a'), 'aaa');
             $this->assertTrue($page->setFieldById(3, 'bbb'));
             $this->assertEqual($page->getFieldById(3), 'bbb');
-            $this->assertFalse($page->setField('z', 'zzz'));
-            $this->assertNull($page->getField('z'));
+            $this->assertFalse($page->setFieldByName('z', 'zzz'));
+            $this->assertNull($page->getFieldByName('z'));
+        }
+        
+        function testSettingTextFieldByEnclosingLabel() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent', '<html><head><form>' .
+                    '<input type="text" name="a">' .
+                    '</form></head></html>');
+            
+            $page = &$this->parse($response);
+            $this->assertTrue($page->setFieldByName('a', 'a'));
         }
         
         function testReadingTextArea() {
@@ -757,7 +767,7 @@
                     '</form></head></html>');
             
             $page = &$this->parse($response);
-            $this->assertEqual($page->getField('a'), 'aaa');
+            $this->assertEqual($page->getFieldByName('a'), 'aaa');
         }
         
         function testSettingTextArea() {
@@ -768,8 +778,8 @@
                     '</form></head></html>');
             
             $page = &$this->parse($response);
-            $this->assertTrue($page->setField('a', 'AAA'));
-            $this->assertEqual($page->getField('a'), 'AAA');
+            $this->assertTrue($page->setFieldByName('a', 'AAA'));
+            $this->assertEqual($page->getFieldByName('a'), 'AAA');
         }
         
         function testSettingSelectionField() {
@@ -783,10 +793,10 @@
                     '</form></head></html>');
             
             $page = &$this->parse($response);
-            $this->assertEqual($page->getField('a'), 'bbb');
-            $this->assertFalse($page->setField('a', 'ccc'));
-            $this->assertTrue($page->setField('a', 'aaa'));
-            $this->assertEqual($page->getField('a'), 'aaa');
+            $this->assertEqual($page->getFieldByName('a'), 'bbb');
+            $this->assertFalse($page->setFieldByName('a', 'ccc'));
+            $this->assertTrue($page->setFieldByName('a', 'aaa'));
+            $this->assertEqual($page->getFieldByName('a'), 'aaa');
         }
     }
 ?>
