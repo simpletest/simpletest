@@ -5,6 +5,12 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems...
 
+No class WildcardExpectation
+----------------------------
+This was a mostly internal class for the mock objects. It was
+renamed AnythingExpectation to bring it in line with JMock and
+NMock.
+
 Missing UnitTestCase::assertErrorPattern()
 ------------------------------------------
 This method is deprecated for version 1.01 onwards.

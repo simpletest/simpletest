@@ -17,8 +17,8 @@
     /**
      * Default character simpletest will substitute for any value
      */
-    if (!defined('MOCK_WILDCARD')) {
-        define('MOCK_WILDCARD', '*');
+    if (! defined('MOCK_ANYTHING')) {
+        define('MOCK_ANYTHING', '*');
     }
     
     /**
@@ -26,15 +26,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage MockObjects
      */
-    class WildcardExpectation extends SimpleExpectation {
-        
-        /**
-         *    Chains constructor only.
-         *    @access public
-         */
-        function WildcardExpectation() {
-            $this->SimpleExpectation();
-        }
+    class AnythingExpectation extends SimpleExpectation {
         
         /**
          *    Tests the expectation. Always true.
@@ -451,7 +443,7 @@
             }
             for ($i = 0; $i < count($args); $i++) {
                 if ($args[$i] === $this->_wildcard) {
-                    $args[$i] = new WildcardExpectation();
+                    $args[$i] = new AnythingExpectation();
                 }
             }
             return $args;
@@ -1017,7 +1009,7 @@
         function _createClassCode($class, $stub_class, $methods) {
             $stub_base = SimpleTestOptions::getStubBaseClass();
             $code = "class $stub_class extends $stub_base {\n";
-            $code .= "    function $stub_class(\$wildcard = MOCK_WILDCARD) {\n";
+            $code .= "    function $stub_class(\$wildcard = MOCK_ANYTHING) {\n";
             $code .= "        \$this->$stub_base(\$wildcard);\n";
             $code .= "    }\n";
             $code .= Stub::_createHandlerCode($class, $stub_base, $methods);
@@ -1207,7 +1199,7 @@
         function _createClassCode($class, $mock_class, $methods) {
             $mock_base = SimpleTestOptions::getMockBaseClass();
             $code = "class $mock_class extends $mock_base {\n";
-            $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_WILDCARD) {\n";
+            $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_ANYTHING) {\n";
             $code .= "        \$this->$mock_base(\$test, \$wildcard);\n";
             $code .= "    }\n";
             $code .= Stub::_createHandlerCode($class, $mock_base, $methods);
@@ -1232,7 +1224,7 @@
             $code .= "    var \$_mock;\n";
             $code .= Mock::_addMethodList($methods);
             $code .= "\n";
-            $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_WILDCARD) {\n";
+            $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_ANYTHING) {\n";
             $code .= "        \$this->_mock = &new $mock_base(\$test, \$wildcard, false);\n";
             $code .= "    }\n";
             $code .= Mock::_chainMockReturns();

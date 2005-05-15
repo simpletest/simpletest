@@ -291,8 +291,8 @@
          *                            of the test.
          *    @access public
          */
-        function GroupTest($label) {
-            $this->_label = $label;
+        function GroupTest($label = false) {
+            $this->_label = $label ? $label : get_class($this);
             $this->_test_cases = array();
             $this->_old_track_errors = ini_get('track_errors');
             $this->_xdebug_is_enabled = function_exists('xdebug_is_enabled') ?
