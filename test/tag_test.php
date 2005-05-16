@@ -65,8 +65,8 @@
         
         function testSettingOfExternalLabel() {
             $tag = &new SimpleTextTag(array('type' => 'text'));
-            $tag->setLabel('him');
-            $this->assertEqual($tag->getLabel(), 'him');
+            $tag->setLabel('it');
+            $this->assertTrue($tag->isLabel('it'));
         }
         
         function testTextDefault() {
@@ -398,6 +398,19 @@
             $this->assertFalse($group->isId('i0'));
             $this->assertTrue($group->isId('i1'));
             $this->assertTrue($group->isId('i2'));
+        }
+        
+        function testIsLabelMatchesAnyWidgetInSet() {
+            $group = &new SimpleRadioGroup();
+            $button1 = &new SimpleRadioButtonTag(array('value' => 'A'));
+            $button1->setLabel('one');
+            $group->addWidget($button1);
+            $button2 = &new SimpleRadioButtonTag(array('value' => 'B'));
+            $button2->setLabel('two');
+            $group->addWidget($button2);
+            $this->assertFalse($group->isLabel('three'));
+            $this->assertTrue($group->isLabel('one'));
+            $this->assertTrue($group->isLabel('two'));
         }
     }
     

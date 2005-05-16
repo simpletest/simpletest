@@ -511,6 +511,9 @@
             $this->assertFieldById(3, '');
             $this->assertFieldById(4, 'd1');
             $this->assertFieldById(5, false);
+            $this->assertFieldById(6, 'on');
+            $this->assertFieldById(8, 'g3');
+            $this->assertFieldById(11, 2);
             $this->setFieldById(1, 'aaa');
             $this->setFieldById(2, 'bbb');
             $this->setFieldById(3, 'ccc');
@@ -539,6 +542,8 @@
             //$this->assertField('Selection D', 'd1');
             $this->assertField('Checkbox E', false);
             $this->assertField('Checkbox F', 'on');
+            //$this->assertField('Radio G', 'g3');
+            //$this->assertField('Selection H', 2);
             $this->setField('Text A', 'aaa');
             $this->setField('Text B', 'bbb');
             $this->setField('Text area C', 'ccc');

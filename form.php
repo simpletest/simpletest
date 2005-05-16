@@ -65,10 +65,10 @@
          *    @access public
          */
         function isMatch($widget) {
-            if (! method_exists($widget, 'getLabel')) {
+            if (! method_exists($widget, 'isLabel')) {
                 return false;
             }
-            return (trim($widget->getLabel()) == trim($this->_label));
+            return $widget->isLabel($this->_label);
         }
     }
     

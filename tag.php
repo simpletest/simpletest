@@ -277,16 +277,17 @@
          *    @access public
          */
         function setLabel($label) {
-            $this->_label = $label;
+            $this->_label = trim($label);
         }
         
         /**
          *    Reads external or internal label.
-         *    @return string        Last label set.
+         *    @param string $label    Label to test.
+         *    @return boolean         True is match.
          *    @access public
          */
-        function getLabel() {
-            return $this->_label;
+        function isLabel($label) {
+            return $this->_label == trim($label);
         }
     }
     
@@ -384,6 +385,16 @@
         }
         
         /**
+         *    Test for a label match when searching.
+         *    @param string $label     Label to test.
+         *    @return boolean          True on match.
+         *    @access public
+         */
+        function isLabel($label) {
+            return trim($label) == trim($this->getLabel());
+        }
+        
+        /**
          *    Gets the values submitted as a form.
          *    @return array    Hash of name and values.
          *    @access public
@@ -438,6 +449,16 @@
                 return $this->getAttribute('title');
             }
             return $this->getAttribute('alt');
+        }
+        
+        /**
+         *    Test for a label match when searching.
+         *    @param string $label     Label to test.
+         *    @return boolean          True on match.
+         *    @access public
+         */
+        function isLabel($label) {
+            return trim($label) == trim($this->getLabel());
         }
         
         /**
@@ -496,6 +517,16 @@
          */
         function getLabel() {
             return $this->getContent();
+        }
+        
+        /**
+         *    Test for a label match when searching.
+         *    @param string $label     Label to test.
+         *    @return boolean          True on match.
+         *    @access public
+         */
+        function isLabel($label) {
+            return trim($label) == trim($this->getLabel());
         }
         
         /**
@@ -910,21 +941,31 @@
             return false;
         }
     }
-
+    
     /**
-     *    A group of tags with the same name within a form.
+     *    A group of multiple widgets with some shared behaviour.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleCheckboxGroup {
-        var $_widgets;
-        
+    class SimpleTagGroup {
+        var $_widgets = array();
+
         /**
-         *    Starts empty.
+         *    Adds a tag to the group.
+         *    @param SimpleWidget $widget
          *    @access public
          */
-        function SimpleCheckboxGroup() {
-            $this->_widgets = array();
+        function addWidget(&$widget) {
+            $this->_widgets[] = &$widget;
+        }
+        
+        /**
+         *    Accessor to widget set.
+         *    @return array        All widgets.
+         *    @access protected
+         */
+        function &_getWidgets() {
+            return $this->_widgets;
         }
 
         /**
@@ -935,31 +976,6 @@
          */
         function getAttribute($label) {
             return false;
-        }
-        
-        /**
-         *    Scans the checkboxes for one with the appropriate
-         *    ID field.
-         *    @param string $id        ID value to try.
-         *    @return boolean          True if matched.
-         *    @access public
-         */
-        function isId($id) {
-            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-                if ($this->_widgets[$i]->isId($id)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /**
-         *    Adds a tag to the group.
-         *    @param SimpleWidget $widget
-         *    @access public
-         */
-        function addWidget(&$widget) {
-            $this->_widgets[] = &$widget;
         }
         
         /**
@@ -975,6 +991,46 @@
         }
         
         /**
+         *    Scans the widgets for one with the appropriate
+         *    ID field.
+         *    @param string $id        ID value to try.
+         *    @return boolean          True if matched.
+         *    @access public
+         */
+        function isId($id) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
+                if ($this->_widgets[$i]->isId($id)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        /**
+         *    Scans the widgets for one with the appropriate
+         *    attached label.
+         *    @param string $label     Attached label to try.
+         *    @return boolean          True if matched.
+         *    @access public
+         */
+        function isLabel($label) {
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
+                if ($this->_widgets[$i]->isLabel($label)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    /**
+     *    A group of tags with the same name within a form.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleCheckboxGroup extends SimpleTagGroup {
+        
+        /**
          *    Accessor for current selected widget or false
          *    if none.
          *    @return string/array     Widget values or false if none.
@@ -982,9 +1038,10 @@
          */
         function getValue() {
             $values = array();
-            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-                if ($this->_widgets[$i]->getValue()) {
-                    $values[] = $this->_widgets[$i]->getValue();
+            $widgets = &$this->_getWidgets();
+            for ($i = 0, $count = count($widgets); $i < $count; $i++) {
+                if ($widgets[$i]->getValue()) {
+                    $values[] = $widgets[$i]->getValue();
                 }
             }
             return $this->_coerceValues($values);
@@ -997,9 +1054,10 @@
          */
         function getDefault() {
             $values = array();
-            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-                if ($this->_widgets[$i]->getDefault()) {
-                    $values[] = $this->_widgets[$i]->getDefault();
+            $widgets = &$this->_getWidgets();
+            for ($i = 0, $count = count($widgets); $i < $count; $i++) {
+                if ($widgets[$i]->getDefault()) {
+                    $values[] = $widgets[$i]->getDefault();
                 }
             }
             return $this->_coerceValues($values);
@@ -1017,12 +1075,13 @@
             if (! $this->_valuesArePossible($values)) {
                 return false;
             }
-            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-                $possible = $this->_widgets[$i]->getAttribute('value');
-                if (in_array($this->_widgets[$i]->getAttribute('value'), $values)) {
-                    $this->_widgets[$i]->setValue($possible);
+            $widgets = &$this->_getWidgets();
+            for ($i = 0, $count = count($widgets); $i < $count; $i++) {
+                $possible = $widgets[$i]->getAttribute('value');
+                if (in_array($widgets[$i]->getAttribute('value'), $values)) {
+                    $widgets[$i]->setValue($possible);
                 } else {
-                    $this->_widgets[$i]->setValue(false);
+                    $widgets[$i]->setValue(false);
                 }
             }
             return true;
@@ -1038,8 +1097,9 @@
          */
         function _valuesArePossible($values) {
             $matches = array();
-            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-                $possible = $this->_widgets[$i]->getAttribute('value');
+            $widgets = &$this->_getWidgets();
+            for ($i = 0, $count = count($widgets); $i < $count; $i++) {
+                $possible = $widgets[$i]->getAttribute('value');
                 if (in_array($possible, $values)) {
                     $matches[] = $possible;
                 }
@@ -1091,63 +1151,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleRadioGroup {
-        var $_widgets;
-        
-        /**
-         *    Starts empty.
-         *    @access public
-         */
-        function SimpleRadioGroup() {
-            $this->_widgets = array();
-        }
-        
-        /**
-         *    Accessor for an attribute.
-         *    @param string $label    Attribute name.
-         *    @return boolean         Always false.
-         *    @access public
-         */
-        function getAttribute($label) {
-            return false;
-        }
-        
-        /**
-         *    Scans the checkboxes for one with the appropriate
-         *    ID field.
-         *    @param string $id        ID value to try.
-         *    @return boolean          True if matched.
-         *    @access public
-         */
-        function isId($id) {
-            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-                if ($this->_widgets[$i]->isId($id)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        
-        /**
-         *    Adds a tag to the group.
-         *    @param SimpleWidget $widget
-         *    @access public
-         */
-        function addWidget(&$widget) {
-            $this->_widgets[] = &$widget;
-        }
-        
-        /**
-         *    Fetches the name for the widget from the first
-         *    member.
-         *    @return string        Name of widget.
-         *    @access public
-         */
-        function getName() {
-            if (count($this->_widgets) > 0) {
-                return $this->_widgets[0]->getName();
-            }
-        }
+    class SimpleRadioGroup extends SimpleTagGroup {
         
         /**
          *    Each tag is tried in turn until one is
@@ -1162,9 +1166,10 @@
                 return false;
             }
             $index = false;
-            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-                if (! $this->_widgets[$i]->setValue($value)) {
-                    $this->_widgets[$i]->setValue(false);
+            $widgets = &$this->_getWidgets();
+            for ($i = 0, $count = count($widgets); $i < $count; $i++) {
+                if (! $widgets[$i]->setValue($value)) {
+                    $widgets[$i]->setValue(false);
                 }
             }
             return true;
@@ -1177,8 +1182,9 @@
          *    @access private
          */
         function _valueIsPossible($value) {
-            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-                if ($this->_widgets[$i]->getAttribute('value') == $value) {
+            $widgets = &$this->_getWidgets();
+            for ($i = 0, $count = count($widgets); $i < $count; $i++) {
+                if ($widgets[$i]->getAttribute('value') == $value) {
                     return true;
                 }
             }
@@ -1193,9 +1199,10 @@
          *    @access public
          */
         function getValue() {
-            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-                if ($this->_widgets[$i]->getValue()) {
-                    return $this->_widgets[$i]->getValue();
+            $widgets = &$this->_getWidgets();
+            for ($i = 0, $count = count($widgets); $i < $count; $i++) {
+                if ($widgets[$i]->getValue()) {
+                    return $widgets[$i]->getValue();
                 }
             }
             return false;
@@ -1208,9 +1215,10 @@
          *    @access public
          */
         function getDefault() {
-            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-                if ($this->_widgets[$i]->getDefault()) {
-                    return $this->_widgets[$i]->getDefault();
+            $widgets = &$this->_getWidgets();
+            for ($i = 0, $count = count($widgets); $i < $count; $i++) {
+                if ($widgets[$i]->getDefault()) {
+                    return $widgets[$i]->getDefault();
                 }
             }
             return false;
