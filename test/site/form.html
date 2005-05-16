@@ -2,34 +2,36 @@
     <head><title>Test of form submission</title></head>
     <body>
         <form id=200 action="network_confirm.php" method="post">
-            Text A <input id=1 type="text" name="a" value="">
+            <label>Text A <input id=1 type="text" name="a" value=""></label>
             <br />
-            Text B <input id=2 type="text" name="b" value="Default text">
+            <label>Text B <input id=2 type="text" name="b" value="Default text"></label>
             <br />
-            Text area C <textarea id=3 name="c"></textarea>
+            <label>Text area C <textarea id=3 name="c"></textarea></label>
             <br />
-            Selection D
-            <select id=4 name="d">
-                <option value="d1">D1</option>
-                <option value="d2">D2</option>
-                <option></option>
-            </select>
+            <label>Selection D
+                <select id=4 name="d">
+                    <option value="d1">D1</option>
+                    <option value="d2">D2</option>
+                    <option></option>
+                </select>
+            </label>
             <br />
-            Checkbox E <input id=5 type="checkbox" name="e">
+            <label>Checkbox E <input id=5 type="checkbox" name="e"></label>
             <br />
-            Checkbox F <input id=6 type="checkbox" name="f" checked>
+            <label>Checkbox F <input id=6 type="checkbox" name="f" checked></label>
             <br />
             Radio G
-            <input id=7 type="radio" name="g" value="g1">
-            <input id=8 type="radio" name="g" value="g2">
-            <input id=9 type="radio" name="g" value="g3" checked>
-            <input id=10 type="radio" name="g" value="g4">
+            <label>1<input id=7 type="radio" name="g" value="g1"></label>
+            <label>2<input id=8 type="radio" name="g" value="g2"></label>
+            <label>3<input id=9 type="radio" name="g" value="g3" checked></label>
+            <label>4<input id=10 type="radio" name="g" value="g4"></label>
             <br />
-            Selection H
-            <select id=11 name="h">
-                <option value="1">H1</option>
-                <option value="2" selected>H2</option>
-            </select>
+            <label>Selection H
+                <select id=11 name="h">
+                    <option value="1">H1</option>
+                    <option value="2" selected>H2</option>
+                </select>
+            </label>
             <br />
             <input id=99 type="submit" name="go" value="Go!">
             <br />

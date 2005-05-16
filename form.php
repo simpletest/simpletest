@@ -59,11 +59,15 @@
         }
 
         /**
-         *    Comparison. Compares visible text of widget.
+         *    Comparison. Compares visible text of widget or
+         *    related label.
          *    @param SimpleWidget $widget    Control to compare.
          *    @access public
          */
         function isMatch($widget) {
+            if (! method_exists($widget, 'getLabel')) {
+                return false;
+            }
             return (trim($widget->getLabel()) == trim($this->_label));
         }
     }
