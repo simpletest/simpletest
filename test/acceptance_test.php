@@ -457,7 +457,7 @@
             $this->assertWantedText('g=[g3]');
         }
         
-        function testFormSubmissionByLabel() {
+        function testFormSubmissionByButtonLabel() {
             $this->get('http://www.lastcraft.com/test/form.html');
             $this->setFieldByName('a', 'aaa');
             $this->setFieldByName('b', 'bbb');
@@ -516,12 +516,46 @@
             $this->setFieldById(3, 'ccc');
             $this->setFieldById(4, 'D2');
             $this->setFieldById(5, 'on');
+            $this->setFieldById(6, false);
+            $this->setFieldById(8, 'g2');
+            $this->setFieldById(11, 'H1');
             $this->assertTrue($this->clickSubmitById(99));
             $this->assertWantedText('a=[aaa]');
             $this->assertWantedText('b=[bbb]');
             $this->assertWantedText('c=[ccc]');
             $this->assertWantedText('d=[d2]');
             $this->assertWantedText('e=[on]');
+            $this->assertNoUnwantedText('f=[');
+            $this->assertWantedText('g=[g2]');
+            $this->assertWantedText('h=[1]');
+            $this->assertWantedText('go=[Go!]');
+        }
+        
+        function testFormSubmissionWithLabels() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->assertField('Text A', '');
+            $this->assertField('Text B', 'Default text');
+            $this->assertField('Text area C', '');
+            //$this->assertField('Selection D', 'd1');
+            $this->assertField('Checkbox E', false);
+            $this->assertField('Checkbox F', 'on');
+            $this->setField('Text A', 'aaa');
+            $this->setField('Text B', 'bbb');
+            $this->setField('Text area C', 'ccc');
+            $this->setField('Selection D', 'D2');
+            $this->setField('Checkbox E', 'on');
+            $this->setField('Checkbox F', false);
+            $this->setField('Radio G', 'g2');
+            $this->setField('Selection H', 'H1');
+            $this->assertTrue($this->clickSubmit('Go!'));
+            $this->assertWantedText('a=[aaa]');
+            $this->assertWantedText('b=[bbb]');
+            $this->assertWantedText('c=[ccc]');
+            //$this->assertWantedText('d=[d2]');
+            $this->assertWantedText('e=[on]');
+            $this->assertNoUnwantedText('f=[');
+            //$this->assertWantedText('g=[g2]');
+            //$this->assertWantedText('h=[1]');
             $this->assertWantedText('go=[Go!]');
         }
         
