@@ -24,6 +24,7 @@
     class SimplePageBuilder extends SimpleSaxListener {
         var $_tags;
         var $_page;
+        var $_in_option = false;
         
         /**
          *    Sets the builder up empty.
@@ -110,6 +111,9 @@
                 $this->_page->acceptFrame($tag);
                 return true;
             }
+            if ($name == 'option') {
+                $this->_in_option = true;
+            }
             if ($tag->expectEndTag()) {
                 $this->_openTag($tag);
                 return true;
@@ -137,6 +141,9 @@
                 $this->_page->acceptFramesetEnd();
                 return true;
             }            
+            if ($name == 'option') {
+                $this->_in_option = false;
+            }
             if (isset($this->_tags[$name]) && (count($this->_tags[$name]) > 0)) {
                 $tag = array_pop($this->_tags[$name]);
                 $this->_addContentTagToOpenTags($tag);
@@ -154,12 +161,37 @@
          *    @access public
          */
         function addContent($text) {
+            if ($this->_in_option) {
+                $this->_addContentToOptionTag($text);
+            } else {
+                $this->_addContentToAllOpenTags($text);
+            }
+            return true;
+        }
+        
+        /**
+         *    Option tags swallow content and so we want any
+         *    new content to go only to the most current option.
+         *    @param string $text        May include unparsed tags.
+         *    @access private
+         */
+        function _addContentToOptionTag($text) {
+            $current = count($this->_tags['option']) - 1;
+            $this->_tags['option'][$current]->addContent($text);
+        }
+        
+        /**
+         *    Any content fills all currently open tags unless it
+         *    is part of an option tag.
+         *    @param string $text        May include unparsed tags.
+         *    @access private
+         */
+        function _addContentToAllOpenTags($text) {
             foreach (array_keys($this->_tags) as $name) {
                 for ($i = 0, $count = count($this->_tags[$name]); $i < $count; $i++) {
                     $this->_tags[$name][$i]->addContent($text);
                 }
             }
-            return true;
         }
         
         /**

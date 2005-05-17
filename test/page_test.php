@@ -765,7 +765,8 @@
         
         function testSettingTextFieldByEnclosingLabel() {
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue('getContent', '<html><head><form>' .
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
                     '<label>Stuff' .
                     '<input type="text" name="a" value="A">' .
                     '</label>' .
@@ -779,7 +780,8 @@
         
         function testGettingTextFieldByEnclosingLabelWithConflictingOtherFields() {
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue('getContent', '<html><head><form>' .
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
                     '<label>Stuff' .
                     '<input type="text" name="a" value="A">' .
                     '</label>' .
@@ -789,6 +791,33 @@
             $this->assertEqual($page->getFieldByName('a'), 'A');
             $this->assertEqual($page->getFieldByName('b'), 'B');
             $this->assertEqual($page->getField('Stuff'), 'A');
+        }
+        
+        function testSettingSelectionFieldByEnclosingLabel() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
+                    '<label>Stuff' .
+                    '<select name="a"><option selected>A</option><option>B</option></select>' .
+                    '</label>' .
+                    '</form></head></html>');
+            $page = &$this->parse($response);
+            $this->assertEqual($page->getField('Stuff'), 'A');
+            $this->assertTrue($page->setField('Stuff', 'B'));
+            $this->assertEqual($page->getField('Stuff'), 'B');
+        }
+        
+        function testSettingRadioButonByEnclosingLabel() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
+                    '<label>A<input type="radio" name="r" value="a"></label>' .
+                    '<label>B<input type="radio" name="r" value="b"></label>' .
+                    '</form></head></html>');
+            $page = &$this->parse($response);
+            //$this->assertEqual($page->getField('Stuff'), 'A');
+            //$this->assertTrue($page->setField('Stuff', 'B'));
+            //$this->assertEqual($page->getField('Stuff'), 'B');
         }
         
         function testReadingTextArea() {

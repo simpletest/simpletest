@@ -539,11 +539,11 @@
             $this->assertField('Text A', '');
             $this->assertField('Text B', 'Default text');
             $this->assertField('Text area C', '');
-            //$this->assertField('Selection D', 'd1');
+            $this->assertField('Selection D', 'd1');
             $this->assertField('Checkbox E', false);
             $this->assertField('Checkbox F', 'on');
             //$this->assertField('Radio G', 'g3');
-            //$this->assertField('Selection H', 2);
+            $this->assertField('Selection H', 2);
             $this->setField('Text A', 'aaa');
             $this->setField('Text B', 'bbb');
             $this->setField('Text area C', 'ccc');
@@ -556,11 +556,11 @@
             $this->assertWantedText('a=[aaa]');
             $this->assertWantedText('b=[bbb]');
             $this->assertWantedText('c=[ccc]');
-            //$this->assertWantedText('d=[d2]');
+            $this->assertWantedText('d=[d2]');
             $this->assertWantedText('e=[on]');
             $this->assertNoUnwantedText('f=[');
             //$this->assertWantedText('g=[g2]');
-            //$this->assertWantedText('h=[1]');
+            $this->assertWantedText('h=[1]');
             $this->assertWantedText('go=[Go!]');
         }
         
