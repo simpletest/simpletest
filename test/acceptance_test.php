@@ -573,7 +573,15 @@
             $this->assertWantedText('y=[Y]');
         }
         
-        function testImageSubmissionByLabel() {
+        function testFormSubmissionWithoutAction() {
+            $this->get('http://www.lastcraft.com/test/form_without_action.php?test=test');
+            $this->assertWantedText('_GET : [test]');
+            $this->assertTrue($this->clickSubmit('Submit Post With Empty Action'));
+            $this->assertWantedText('_GET : [test]');
+            $this->assertWantedText('_POST : [test]');
+        }
+
+		function testImageSubmissionByLabel() {
             $this->get('http://www.lastcraft.com/test/form.html');
             $this->assertTrue($this->clickImage('Image go!', 10, 12));
             $this->assertWantedText('go_x=[10]');
