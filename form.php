@@ -365,6 +365,21 @@
         function setFieldById($id, $value) {
             return $this->_setFieldBySelector(new SimpleIdSelector($id), $value);
         }
+        
+        /**
+         *    Used by the page to set external labels.
+         *    @param string $label        Label to attach.
+         *    @access public
+         */
+        function setLabelById($id, $label) {
+            $selector = new SimpleIdSelector($id);
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
+                if ($selector->isMatch($this->_widgets[$i])) {
+                    $this->_widgets[$i]->setLabel($label);
+                    return;
+                }
+            }
+        }
        
         /**
          *    Creates the encoding for the current values in the

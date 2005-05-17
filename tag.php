@@ -1240,6 +1240,15 @@
         function SimpleLabelTag($attributes) {
             $this->SimpleTag('label', $attributes);
         }
+        
+        /**
+         *    Access for the ID to attach the label to.
+         *    @return string        For attribute.
+         *    @access public
+         */
+        function getFor() {
+            return $this->getAttribute('for');
+        }
     }
     
     /**

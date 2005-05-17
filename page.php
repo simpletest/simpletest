@@ -307,6 +307,7 @@
         var $_title;
         var $_last_widget;
         var $_label;
+        var $_left_over_labels;
         var $_open_forms;
         var $_complete_forms;
         var $_frameset;
@@ -329,6 +330,7 @@
         function SimplePage($response = false) {
             $this->_links = array();
             $this->_title = false;
+            $this->_left_over_labels = array();
             $this->_open_forms = array();
             $this->_complete_forms = array();
             $this->_frameset = false;
@@ -574,6 +576,8 @@
                 if (isset($this->_last_widget)) {
                     $this->_last_widget->setLabel($this->_label->getText());
                     unset($this->_last_widget);
+                } else {
+                    $this->_left_over_labels[] = $this->_label;
                 }
                 unset($this->_label);
             }
@@ -687,6 +691,11 @@
         function acceptPageEnd() {
             while (count($this->_open_forms)) {
                 $this->_complete_forms[] = array_pop($this->_open_forms);
+            }
+            foreach ($this->_left_over_labels as $label) {
+                for ($i = 0, $count = count($this->_complete_forms); $i < $count; $i++) {
+                    $this->_complete_forms[$i]->setLabelById($label->getFor(), $label->getText());
+                }
             }
         }
         

@@ -652,7 +652,8 @@
         
         function testNamedFrames() {
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue('getContent', '<html><frameset>' .
+            $response->setReturnValue('getContent',
+                    '<html><frameset>' .
                     '<frame src="a.html">' .
                     '<frame name="_one" src="b.html">' .
                     '<frame src="c.html">' .
@@ -692,7 +693,8 @@
         
         function testFindFormByImage() {
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue('getContent', '<html><head><form>' .
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
                     '<input type="image" id=100 alt="Label" name="me">' .
                     '</form></head></html>');
             $page = &$this->parse($response);
@@ -703,7 +705,8 @@
         
         function testFindFormByButtonTag() {
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue('getContent', '<html><head><form>' .
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
                     '<button type="submit" name="b" value="B">BBB</button>' .
                     '</form></head></html>');
             $page = &$this->parse($response);
@@ -725,7 +728,8 @@
         
         function testReadingTextField() {
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue('getContent', '<html><head><form>' .
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
                     '<input type="text" name="a">' .
                     '<input type="text" name="b" value="bbb" id=3>' .
                     '</form></head></html>');
@@ -737,7 +741,8 @@
         
         function testReadingTextFieldIsCaseInsensitive() {
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue('getContent', '<html><head><FORM>' .
+            $response->setReturnValue('getContent',
+                    '<html><head><FORM>' .
                     '<INPUT TYPE="TEXT" NAME="a">' .
                     '<INPUT TYPE="TEXT" NAME="b" VALUE="bbb" id=3>' .
                     '</FORM></head></html>');
@@ -749,7 +754,8 @@
         
         function testSettingTextField() {
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue('getContent', '<html><head><form>' .
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
                     '<input type="text" name="a">' .
                     '<input type="text" name="b" id=3>' .
                     '<input type="submit">' .
@@ -793,9 +799,23 @@
             $this->assertEqual($page->getField('Stuff'), 'A');
         }
         
+        function testSettingTextFieldByExternalLabel() {
+            $response = &new MockSimpleHttpResponse($this);
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
+                    '<label for="aaa">Stuff</label>' .
+                    '<input id="aaa" type="text" name="a" value="A">' .
+                    '</form></head></html>');
+            $page = &$this->parse($response);
+            $this->assertEqual($page->getField('Stuff'), 'A');
+            $this->assertTrue($page->setField('Stuff', 'aaa'));
+            $this->assertEqual($page->getField('Stuff'), 'aaa');
+        }
+        
         function testReadingTextArea() {
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue('getContent', '<html><head><form>' .
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
                     '<textarea name="a">aaa</textarea>' .
                     '<input type="submit">' .
                     '</form></head></html>');
@@ -805,7 +825,8 @@
         
         function testSettingTextArea() {
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue('getContent', '<html><head><form>' .
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
                     '<textarea name="a">aaa</textarea>' .
                     '<input type="submit">' .
                     '</form></head></html>');
@@ -816,7 +837,8 @@
         
         function testSettingSelectionField() {
             $response = &new MockSimpleHttpResponse($this);
-            $response->setReturnValue('getContent', '<html><head><form>' .
+            $response->setReturnValue('getContent',
+                    '<html><head><form>' .
                     '<select name="a">' .
                     '<option>aaa</option>' .
                     '<option selected>bbb</option>' .
