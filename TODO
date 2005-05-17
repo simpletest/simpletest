@@ -29,7 +29,7 @@ Browser
 Add file uploading (8).
 Simple click() method for links, buttons or images (2).
 setCookie() should be able to create a new one (1).
-Simultaneous POST and GET parameters (3/1) - done.
+Simultaneous POST and GET parameters (3/2) - done.
 Fix split bug with simple URLs not being parsed correctly (1/1) - done.
 Fix double slash bug in URL (1/1) - done.
 Add referer header (3).
