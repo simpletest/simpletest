@@ -647,9 +647,9 @@
         
         function testDefaultFormValueSubmission() {
             $this->get('http://www.lastcraft.com/test/multiple_widget_form.html');
-            $this->assertField('a', array('a2', 'a3'));
-            $this->assertField('b', array('b2', 'b3'));
-            $this->assertField('c[]', array('c2', 'c3'));
+            $this->assertFieldByName('a', array('a2', 'a3'));
+            $this->assertFieldByName('b', array('b2', 'b3'));
+            $this->assertFieldByName('c[]', array('c2', 'c3'));
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedText('a=[a2, a3]');
             $this->assertWantedText('b=[b2, b3]');
@@ -659,10 +659,10 @@
         function testSubmittingMultipleValues() {
             $this->get('http://www.lastcraft.com/test/multiple_widget_form.html');
             $this->setFieldByName('a', array('a1', 'a4'));
-            $this->assertField('a', array('a1', 'a4'));
-            $this->assertField('a', array('a4', 'a1'));
+            $this->assertFieldByName('a', array('a1', 'a4'));
+            $this->assertFieldByName('a', array('a4', 'a1'));
             $this->setFieldByName('b', array('b1', 'b4'));
-            $this->assertField('b', array('b1', 'b4'));
+            $this->assertFieldByName('b', array('b1', 'b4'));
             $this->setFieldByName('c[]', array('c1', 'c4'));
             $this->assertField('c[]', array('c1', 'c4'));
             $this->assertTrue($this->clickSubmit('Go!'));
@@ -670,11 +670,23 @@
             $this->assertWantedText('b=[b1, b4]');
             $this->assertWantedText('c=[c1, c4]');
         }
-        
+          
+        function testSubmittingMultipleValuesByLabel() {
+            $this->get('http://www.lastcraft.com/test/multiple_widget_form.html');
+            $this->setField('Multiple selection A', array('a1', 'a4'));
+            $this->assertField('Multiple selection A', array('a1', 'a4'));
+            $this->assertField('Multiple selection A', array('a4', 'a1'));
+            $this->setField('multiple selection C', array('c1', 'c4'));
+            $this->assertField('multiple selection C', array('c1', 'c4'));
+            $this->assertTrue($this->clickSubmit('Go!'));
+            $this->assertWantedText('a=[a1, a4]');
+            $this->assertWantedText('c=[c1, c4]');
+        }
+      
         function testSavantStyleHiddenFieldDefaults() {
             $this->get('http://www.lastcraft.com/test/savant_style_form.html');
-            $this->assertField('a', array('a0'));
-            $this->assertField('b', array('b0'));
+            $this->assertFieldByName('a', array('a0'));
+            $this->assertFieldByName('b', array('b0'));
             $this->assertTrue($this->clickSubmit('Go!'));
             $this->assertWantedText('a=[a0]');
             $this->assertWantedText('b=[b0]');

@@ -2,8 +2,8 @@
     <head><title>Test of form submission</title></head>
     <body>
         <form action="network_confirm.php" method="get">
-            Multiple selection A
-            <select name="a" multiple>
+            <label for="A">Multiple selection A</label>
+            <select name="a" id="A" multiple>
                 <option>a1</option>
                 <option selected>a2</option>
                 <option selected>a3</option>
@@ -16,8 +16,8 @@
             <input type="checkbox" name="b" value="b3" checked>
             <input type="checkbox" name="b" value="b4">
             <br />
-            PHP compatible multiple selection C
-            <select name="c[]" multiple>
+            PHP compatible <label for="C">multiple selection C</label>
+            <select name="c[]" id="C" multiple>
                 <option>c1</option>
                 <option selected>c2</option>
                 <option selected>c3</option>
