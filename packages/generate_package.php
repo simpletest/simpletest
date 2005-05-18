@@ -79,7 +79,7 @@ $e = $packagexml->setOptions(array(
         'VERSION' => 'doc',
         'HELP_MY_TESTS_DONT_WORK_ANYMORE' => 'doc',
         'LICENSE' => 'doc',
-        'README' => 'data',
+        'README' => 'doc',
         ),
     )
 );
@@ -94,7 +94,31 @@ if (is_a($e, 'PEAR_Error')) {
     exit;
 }
 
+$e = $packagexml->addMaintainer('tswicegood', 'developer', 'Travis Swicegood', 'tswicegood@users.sourceforge.net');
+if (is_a($e, 'PEAR_Error')) {
+    echo $e->getMessage();
+    exit;
+}
+
 $e = $packagexml->addMaintainer('jsweat', 'helper', 'Jason Sweat', 'jsweat_php@yahoo.com');
+if (is_a($e, 'PEAR_Error')) {
+    echo $e->getMessage();
+    exit;
+}
+
+$e = $packagexml->addMaintainer('pp11', 'helper', 'Perrick Penet', 'perrick@noparking.net');
+if (is_a($e, 'PEAR_Error')) {
+    echo $e->getMessage();
+    exit;
+}
+
+$e = $packagexml->addMaintainer('shpikat', 'helper', 'Constantine Shpikat', 'shpikat@users.sourceforge.net');
+if (is_a($e, 'PEAR_Error')) {
+    echo $e->getMessage();
+    exit;
+}
+
+$e = $packagexml->addMaintainer('demianturner', 'helper', 'Demian Turner', 'demian@phpkitchen.com');
 if (is_a($e, 'PEAR_Error')) {
     echo $e->getMessage();
     exit;
