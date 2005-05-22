@@ -43,6 +43,14 @@
             $this->assertWantedPattern('/target for the SimpleTest/', $browser->getContent());
         }
         
+        function testUnifiedClickLinkClicking() {
+            $browser = &new SimpleBrowser();
+            $browser->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
+            $browser->get('http://www.lastcraft.com/test/link_confirm.php');
+            $this->assertTrue($browser->click('Relative'));
+            $this->assertWantedPattern('/target for the SimpleTest/', $browser->getContent());
+        }
+        
         function testIdLinkFollowing() {
             $browser = &new SimpleBrowser();
             $browser->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
@@ -66,6 +74,14 @@
             $browser->get('http://www.lastcraft.com/test/form.html');
             $this->assertTrue($browser->clickSubmit('Go!'));
             $this->assertWantedPattern('/Request method.*?<dd>POST<\/dd>/', $browser->getContent());
+            $this->assertWantedPattern('/go=\[Go!\]/', $browser->getContent());
+        }
+        
+        function testUnifiedClickCanSubmit() {
+            $browser = &new SimpleBrowser();
+            $browser->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
+            $browser->get('http://www.lastcraft.com/test/form.html');
+            $this->assertTrue($browser->click('Go!'));
             $this->assertWantedPattern('/go=\[Go!\]/', $browser->getContent());
         }
     }

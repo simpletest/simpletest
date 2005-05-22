@@ -1039,5 +1039,23 @@
         function isLinkById($id) {
             return (boolean)$this->_page->getUrlById($id);
         }
+        
+        /**
+         *    Clicks a visible text item. Will first try buttons,
+         *    then links and then images.
+         *    @param string $label        Visible text or alt text.
+         *    @return string/boolean      Raw page or false.
+         *    @access public
+         */
+        function click($label) {
+            $raw = $this->clickSubmit($label);
+            if (! $raw) {
+                $raw = $this->clickLink($label);
+            }
+            if (! $raw) {
+                $raw = $this->clickImage($label);
+            }
+            return $raw;
+        }
     }
 ?>
