@@ -57,17 +57,16 @@ $e = $packagexml->setOptions(array(
     'filelistgenerator' => 'file', // generate from cvs, use file for directory
     'notes' => 'See the CHANGELOG for full list of changes',
     'dir_roles' => array(
-        'docs' => 'doc',
         'extensions' => 'php',
-        'packages' => 'data',
         'test' => 'test',
-        'tutorials' => 'doc',
-        'ui' => 'php',
         ),
     'ignore' => array(
-        'packages/', 
-//        'ui/',
+        'packages/',  
+        'tutorials/',
+        'ui/',
+        'docs/',        
         '*CVS*',
+        'TODO',        
         ), 
     'roles' => array(
         'php' => 'php',
@@ -75,7 +74,6 @@ $e = $packagexml->setOptions(array(
         '*' => 'php',
          ),
     'exceptions' => array(
-        'TODO' => 'doc',
         'VERSION' => 'doc',
         'HELP_MY_TESTS_DONT_WORK_ANYMORE' => 'doc',
         'LICENSE' => 'doc',
