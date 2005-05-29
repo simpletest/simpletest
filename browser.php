@@ -531,7 +531,8 @@
         /**
          *    Equivalent to hitting the back button on the
          *    browser. The browser history is unchanged on
-         *    failure.
+         *    failure. The page content is refetched as there
+         *    is no concept of content caching in SimpleTest.
          *    @return boolean     True if history entry and
          *                        fetch succeeded
          *    @access public
@@ -550,7 +551,8 @@
         /**
          *    Equivalent to hitting the forward button on the
          *    browser. The browser history is unchanged on
-         *    failure.
+         *    failure. The page content is refetched as there
+         *    is no concept of content caching in SimpleTest.
          *    @return boolean     True if history entry and
          *                        fetch succeeded
          *    @access public

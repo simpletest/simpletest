@@ -48,6 +48,7 @@
             $this->addTestFile(dirname(__FILE__) . '/shell_test.php');
             $this->addTestFile(dirname(__FILE__) . '/live_test.php');
             $this->addTestFile(dirname(__FILE__) . '/acceptance_test.php');
+            $this->addTestFile(dirname(__FILE__) . '/real_sites_test.php');
         }
     }
 ?>

@@ -581,6 +581,14 @@
         function showSource() {
             $this->dump($this->_browser->getContent());
         }
+      
+        /**
+         *    Dumps the visible text only for debugging.
+         *    @access public
+         */
+        function showText() {
+            $this->dump(wordwrap($this->_browser->getContentAsText(), 80));
+        }
         
         /**
          *    Simulates the closing and reopening of the browser.
