@@ -112,4 +112,44 @@
             return implode('&', $statements);
         }
     }
+
+    /**
+     *    Bundle of POST parameters in the multipart
+     *    format. Can include file uploads.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleMultipartFormEncoding extends SimpleFormEncoding {
+        var $_boundary;
+        
+        /**
+         *    Starts empty.
+         *    @param array $query       Hash of parameters.
+         *                              Multiple values are
+         *                              as lists on a single key.
+         *    @access public
+         */
+        function SimpleMultipartFormEncoding($query = false, $boundary = false) {
+            $this->SimpleFormEncoding($query);
+            $this->_boundary = '----' . ($boundary === false ? uniqid('st') : $boundary);
+        }
+        
+        /**
+         *    Renders the query string as a URL encoded
+         *    request part.
+         *    @return string        Part of URL.
+         *    @access public
+         */
+        function asString() {
+            $stream = $this->_boundary . "\r\n";
+            foreach ($this->_request as $key => $values) {
+                foreach ($values as $value) {
+                    $stream .= "Content-Disposition: form-data; name=\"$key\"\r\n";
+                    $stream .= "\r\n$value\r\n";
+                    $stream .= $this->_boundary . "\r\n";
+                }
+            }
+            return $stream;
+        }
+    }
 ?>

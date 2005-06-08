@@ -1041,7 +1041,6 @@
                 if (in_array($method, get_class_methods($base))) {
                     continue;
                 }
-
                 $code .= Stub::_createFunctionDeclaration($method);
                 $code .= "        \$args = func_get_args();\n";
                 $code .= "        return \$this->_invoke(\"$method\", \$args);\n";
@@ -1052,7 +1051,6 @@
         
         /**
          *    Creates the appropriate function declaration.
-         *    
          *    @see _determineArguments(), _createHandlerCode()
          *    @param string $method    Method name.
          *    @return string           The proper function declaration
@@ -1061,15 +1059,11 @@
          */
         function _createFunctionDeclaration($method) {
             $arguments = Stub::_determineArguments($method);
-            if (phpversion() < 5) {
-                $prefix = "&";
-            }
-            return sprintf("    function %s%s(%s) {\n", $prefix, $method, $arguments);
+            return sprintf("    function &%s(%s) {\n", $method, $arguments);
         }
         
         /**
          *    Returns the necessary arguments for a given method.
-         *    
          *    @param string $method    Method name
          *    @return string           The arguments string for a method, or
          *                             blank if no arguments are required.
@@ -1085,7 +1079,6 @@
                     '__set' => '$key, $value');
                 $code = $args[$method];
             }
-            
             return $code;
         }
         
@@ -1130,7 +1123,7 @@
          *    @access public
          */
         function Mock() {
-            trigger_error("Mock factory methods are class only.");
+            trigger_error('Mock factory methods are class only.');
         }
         
         /**

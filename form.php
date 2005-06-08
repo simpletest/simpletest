@@ -107,6 +107,7 @@
     class SimpleForm {
         var $_method;
         var $_action;
+        var $_encoding = false;
         var $_default_target;
         var $_id;
         var $_buttons;
@@ -123,6 +124,9 @@
         function SimpleForm($tag, $url) {
             $this->_method = $tag->getAttribute('method');
             $this->_action = $this->_createAction($tag->getAttribute('action'), $url);
+            if ($this->_method == 'post') {
+                $this->_encoding = $tag->getAttribute('enctype');
+            }
             $this->_default_target = false;
             $this->_id = $tag->getAttribute('id');
             $this->_buttons = array();
@@ -177,6 +181,35 @@
                 $url->setTarget($this->_default_target);
             }
             return $url;
+        }
+       
+        /**
+         *    Creates the encoding for the current values in the
+         *    form.
+         *    @return SimpleFormEncoding    Request to submit.
+         *    @access private
+         */
+        function _getEncoding() {
+            $encoding = new SimpleFormEncoding();
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
+                $encoding->add(
+                        $this->_widgets[$i]->getName(),
+                        $this->_widgets[$i]->getValue());
+            }
+            return $encoding;
+        }
+        
+        /**
+         *    Creates the appropriate form encoding for
+         *    delivery of the post data.
+         *    @return SimpleFormEncoding    Request to submit.
+         *    @access private
+         */
+        function _createEncoding() {
+            if ($this->_encoding == 'multipart/form-data') {
+                return new SimpleMultipartFormEncoding();
+            }
+            return new SimpleFormEncoding();
         }
         
         /**
@@ -379,22 +412,6 @@
                     return;
                 }
             }
-        }
-       
-        /**
-         *    Creates the encoding for the current values in the
-         *    form.
-         *    @return SimpleFormEncoding    Request to submit.
-         *    @access private
-         */
-        function _getEncoding() {
-            $encoding = new SimpleFormEncoding();
-            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-                $encoding->add(
-                        $this->_widgets[$i]->getName(),
-                        $this->_widgets[$i]->getValue());
-            }
-            return $encoding;
         }
         
         /**

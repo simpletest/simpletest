@@ -1,6 +1,5 @@
 <?php
-    // $Id$
-    
+    // $Id: real_sites_test.php,v 1.17 2005/05/29 18:37:26 lastcraft Exp 
     require_once(dirname(__FILE__) . '/../web_tester.php');
 
     class LiveSitesTestCase extends WebTestCase {

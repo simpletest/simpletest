@@ -95,4 +95,19 @@
             $this->assertIdentical($encoding->getValue('b'), 'B');
         }
     }
+    
+    class MultipartFormEncodingTestCase extends UnitTestCase {
+        
+        function testPrefilled() {
+            $encoding = &new SimpleMultipartFormEncoding(array('a' => 'aaa'), 'boundary');
+            $this->assertIdentical($encoding->getValue('a'), 'aaa');
+            $this->assertIdentical($encoding->getKeys(), array('a'));
+            $this->assertIdentical($encoding->asString(),
+                    "----boundary\r\n" .
+                    "Content-Disposition: form-data; name=\"a\"\r\n" .
+                    "\r\n" .
+                    "aaa\r\n" .
+                    "----boundary\r\n");
+        }
+    }
 ?>
