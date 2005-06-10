@@ -5,6 +5,12 @@
      *	@subpackage	WebTester
      *	@version	$Id$
      */
+     
+    /**#@+
+     *	include other SimpleTest class files
+     */
+    require_once(dirname(__FILE__) . '/socket.php');
+    /**#@-*/
 
     /**
      *    Bundle of GET/POST parameters. Can include
@@ -111,6 +117,25 @@
             }
             return implode('&', $statements);
         }
+        
+        /**
+         *    Dispatches the form headers down the socket.
+         *    @param SimpleSocket $socket        Socket to write to.
+         *    @access public
+         */
+        function writeHeadersTo(&$socket) {
+            $socket->write("Content-Length: " . (integer)strlen($this->asString()) . "\r\n");
+            $socket->write("Content-Type: application/x-www-form-urlencoded\r\n");
+        }
+        
+        /**
+         *    Dispatches the form data down the socket.
+         *    @param SimpleSocket $socket        Socket to write to.
+         *    @access public
+         */
+        function writeTo(&$socket) {
+            $socket->write($this->asString());
+        }
     }
 
     /**
@@ -131,7 +156,17 @@
          */
         function SimpleMultipartFormEncoding($query = false, $boundary = false) {
             $this->SimpleFormEncoding($query);
-            $this->_boundary = '----' . ($boundary === false ? uniqid('st') : $boundary);
+            $this->_boundary = ($boundary === false ? uniqid('st') : $boundary);
+        }
+        
+        /**
+         *    Dispatches the form headers down the socket.
+         *    @param SimpleSocket $socket        Socket to write to.
+         *    @access public
+         */
+        function writeHeadersTo(&$socket) {
+            $socket->write("Content-Length: " . (integer)strlen($this->asString()) . "\r\n");
+            $socket->write("Content-Type: multipart/form-data, boundary=" . $this->_boundary . "\r\n");
         }
         
         /**
@@ -141,14 +176,15 @@
          *    @access public
          */
         function asString() {
-            $stream = $this->_boundary . "\r\n";
+            $stream = '';
             foreach ($this->_request as $key => $values) {
                 foreach ($values as $value) {
+                    $stream .= "--" . $this->_boundary . "\r\n";
                     $stream .= "Content-Disposition: form-data; name=\"$key\"\r\n";
                     $stream .= "\r\n$value\r\n";
-                    $stream .= $this->_boundary . "\r\n";
                 }
             }
+            $stream .= "--" . $this->_boundary . "--\r\n";
             return $stream;
         }
     }

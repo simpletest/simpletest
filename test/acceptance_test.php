@@ -678,7 +678,6 @@
     }
     
     class TestOfLiveMultiValueWidgets extends WebTestCase {
-        
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
         }

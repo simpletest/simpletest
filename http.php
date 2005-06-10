@@ -445,32 +445,22 @@
          *    @access private
          */
         function _dispatchRequest(&$socket, $method, $encoding) {
-            if ($encoding || ($method == 'POST')) {
-                $socket->write("Content-Length: " . $this->_getContentLength($encoding) . "\r\n");
-                $socket->write("Content-Type: application/x-www-form-urlencoded\r\n");
-            }
             foreach ($this->_headers as $header_line) {
                 $socket->write($header_line . "\r\n");
             }
             if (count($this->_cookies) > 0) {
                 $socket->write("Cookie: " . $this->_marshallCookies($this->_cookies) . "\r\n");
             }
+            if ($encoding || ($method == 'POST')) {
+                if (! $encoding) {
+                    $encoding = new SimpleFormEncoding();
+                }
+                $encoding->writeHeadersTo(&$socket);
+            }
             $socket->write("\r\n");
             if ($encoding) {
-                $socket->write($encoding->asString());
+                $encoding->writeTo($socket);
             }
-        }
-        
-        /**
-         *    Calculates the length of the encoded content.
-         *    @param SimpleFormEncoding $encoding   Content to send with
-         *                                          request or false.
-         */
-        function _getContentLength($encoding) {
-            if (! $encoding) {
-                return 0;
-            }
-            return (integer)strlen($encoding->asString());
         }
         
         /**

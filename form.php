@@ -190,7 +190,7 @@
          *    @access private
          */
         function _getEncoding() {
-            $encoding = new SimpleFormEncoding();
+            $encoding = $this->_createEncoding();
             for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 $encoding->add(
                         $this->_widgets[$i]->getName(),
