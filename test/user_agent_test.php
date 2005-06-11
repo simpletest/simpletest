@@ -153,13 +153,13 @@
             
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
-            $agent->expectOnce('_createHttpRequest', array('GET', $url, new SimpleUrlEncoding()));
+            $agent->expectOnce('_createHttpRequest', array('GET', $url, new SimpleGetEncoding()));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'GET',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
-                    new SimpleUrlEncoding(array('a' => 'A', 'b' => 'B')));
+                    new SimpleGetEncoding(array('a' => 'A', 'b' => 'B')));
             $agent->tally();
         }
         
@@ -181,13 +181,13 @@
             
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
-            $agent->expectOnce('_createHttpRequest', array('HEAD', $url, new SimpleUrlEncoding()));
+            $agent->expectOnce('_createHttpRequest', array('HEAD', $url, new SimpleHeadEncoding()));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'HEAD',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
-                    new SimpleUrlEncoding(array('a' => 'A', 'b' => 'B')));
+                    new SimpleHeadEncoding(array('a' => 'A', 'b' => 'B')));
             $agent->tally();
         }
         

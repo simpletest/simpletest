@@ -352,7 +352,10 @@
         function &fetchResponse($method, $url, $parameters = false) {
             if ($method != 'POST') {
                 $url->addRequestParameters($parameters);
-                $parameters = false;
+                if ($parameters) {
+                    $type = get_class($parameters);
+                    $parameters = new $type();
+                }
             }
             $response = &$this->_fetchWhileRedirected($method, $url, $parameters);
             if ($headers = $response->getHeaders()) {
@@ -399,15 +402,15 @@
          *    Actually make the web request.
          *    @param string $method                   GET, POST, etc.
          *    @param SimpleUrl $url                   Target to fetch.
-         *    @param SimpleFormEncoding $parameters   Additional parameters for request.
+         *    @param SimpleFormEncoding $encoding     Additional parameters for request.
          *    @return SimpleHttpResponse              Headers and hopefully content.
          *    @access protected
          */
-        function &_fetch($method, $url, $parameters) {
-            if (! $parameters) {
-                $parameters = new SimpleUrlEncoding();
+        function &_fetch($method, $url, $encoding) {
+            if (! $encoding) {
+                $encoding = new SimpleGetEncoding();
             }
-            $request = &$this->_createRequest($method, $url, $parameters);
+            $request = &$this->_createRequest($method, $url, $encoding);
             return $request->fetch($this->_connection_timeout);
         }
         

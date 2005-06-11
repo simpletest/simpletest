@@ -472,7 +472,7 @@
                 $url = new SimpleUrl($url);
             }
             if (is_array($parameters)) {
-                $parameters = new SimpleUrlEncoding($parameters);
+                $parameters = new SimpleGetEncoding($parameters);
             }
             if ($this->getUrl()) {
                 $url = $url->makeAbsolute($this->getUrl());

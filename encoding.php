@@ -139,12 +139,11 @@
     }
     
     /**
-     *    Bundle of URL parameters. Can include
-     *    repeated parameters.
+     *    Bundle of URL parameters for a HEAD request.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleUrlEncoding extends SimpleEncoding {
+    class SimpleHeadEncoding extends SimpleEncoding {
         
         /**
          *    Starts empty.
@@ -153,7 +152,7 @@
          *                              as lists on a single key.
          *    @access public
          */
-        function SimpleUrlEncoding($query = false) {
+        function SimpleHeadEncoding($query = false) {
             $this->SimpleEncoding($query);
         }
     }
