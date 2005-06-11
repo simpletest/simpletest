@@ -153,13 +153,13 @@
             
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
-            $agent->expectOnce('_createHttpRequest', array('GET', $url, new SimpleFormEncoding()));
+            $agent->expectOnce('_createHttpRequest', array('GET', $url, new SimpleUrlEncoding()));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'GET',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
-                    new SimpleFormEncoding(array('a' => 'A', 'b' => 'B')));
+                    new SimpleUrlEncoding(array('a' => 'A', 'b' => 'B')));
             $agent->tally();
         }
         
@@ -181,13 +181,13 @@
             
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
-            $agent->expectOnce('_createHttpRequest', array('HEAD', $url, new SimpleFormEncoding()));
+            $agent->expectOnce('_createHttpRequest', array('HEAD', $url, new SimpleUrlEncoding()));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'HEAD',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
-                    new SimpleFormEncoding(array('a' => 'A', 'b' => 'B')));
+                    new SimpleUrlEncoding(array('a' => 'A', 'b' => 'B')));
             $agent->tally();
         }
         
@@ -204,18 +204,20 @@
             $request = &new MockSimpleHttpRequest($this);
             $request->setReturnReference('fetch', $response);
             
+            $encoding = new SimplePostEncoding(array('a' => 'A', 'b' => 'B'));
+            
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
             $agent->expectOnce('_createHttpRequest', array(
                     'POST',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
-                    new SimpleFormEncoding(array('a' => 'A', 'b' => 'B'))));
+                    $encoding));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
                     'POST',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
-                    new SimpleFormEncoding(array('a' => 'A', 'b' => 'B')));
+                    $encoding);
             $agent->tally();
         }
     }

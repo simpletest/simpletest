@@ -447,7 +447,7 @@
                 $url = new SimpleUrl($url);
             }
             if (is_array($parameters)) {
-                $parameters = new SimpleFormEncoding($parameters);
+                $parameters = new SimpleUrlEncoding($parameters);
             }
             if ($this->getUrl()) {
                 $url = $url->makeAbsolute($this->getUrl());
@@ -472,7 +472,7 @@
                 $url = new SimpleUrl($url);
             }
             if (is_array($parameters)) {
-                $parameters = new SimpleFormEncoding($parameters);
+                $parameters = new SimpleUrlEncoding($parameters);
             }
             if ($this->getUrl()) {
                 $url = $url->makeAbsolute($this->getUrl());
@@ -492,7 +492,7 @@
                 $url = new SimpleUrl($url);
             }
             if (is_array($parameters)) {
-                $parameters = new SimpleFormEncoding($parameters);
+                $parameters = new SimplePostEncoding($parameters);
             }
             if ($this->getUrl()) {
                 $url = $url->makeAbsolute($this->getUrl());

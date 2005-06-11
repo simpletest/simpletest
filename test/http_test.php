@@ -369,7 +369,7 @@
             $route->setReturnReference('createConnection', $socket);
             $route->expectArguments('createConnection', array('POST', 15));
             
-            $request = &new SimpleHttpRequest($route, 'POST', new SimpleFormEncoding());
+            $request = &new SimpleHttpRequest($route, 'POST', new SimplePostEncoding());
             
             $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
             $socket->tally();
@@ -390,7 +390,7 @@
             $request = &new SimpleHttpRequest(
                     $route,
                     'POST',
-                    new SimpleFormEncoding(array('a' => 'A')));
+                    new SimplePostEncoding(array('a' => 'A')));
             
             $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
             $socket->tally();

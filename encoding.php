@@ -18,7 +18,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleFormEncoding {
+    class SimpleEncoding {
         var $_request;
         
         /**
@@ -28,7 +28,7 @@
          *                              as lists on a single key.
          *    @access public
          */
-        function SimpleFormEncoding($query = false) {
+        function SimpleEncoding($query = false) {
             if (! $query) {
                 $query = array();
             }
@@ -137,6 +137,66 @@
             $socket->write($this->asString());
         }
     }
+    
+    /**
+     *    Bundle of URL parameters. Can include
+     *    repeated parameters.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleUrlEncoding extends SimpleEncoding {
+        
+        /**
+         *    Starts empty.
+         *    @param array $query       Hash of parameters.
+         *                              Multiple values are
+         *                              as lists on a single key.
+         *    @access public
+         */
+        function SimpleUrlEncoding($query = false) {
+            $this->SimpleEncoding($query);
+        }
+    }
+    
+    /**
+     *    Bundle of GET parameters. Can include
+     *    repeated parameters.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleGetEncoding extends SimpleEncoding {
+        
+        /**
+         *    Starts empty.
+         *    @param array $query       Hash of parameters.
+         *                              Multiple values are
+         *                              as lists on a single key.
+         *    @access public
+         */
+        function SimpleGetEncoding($query = false) {
+            $this->SimpleEncoding($query);
+        }
+    }
+    
+    /**
+     *    Bundle of POST parameters. Can include
+     *    repeated parameters.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimplePostEncoding extends SimpleEncoding {
+        
+        /**
+         *    Starts empty.
+         *    @param array $query       Hash of parameters.
+         *                              Multiple values are
+         *                              as lists on a single key.
+         *    @access public
+         */
+        function SimplePostEncoding($query = false) {
+            $this->SimpleEncoding($query);
+        }
+    }
 
     /**
      *    Bundle of POST parameters in the multipart
@@ -144,7 +204,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleMultipartFormEncoding extends SimpleFormEncoding {
+    class SimpleMultipartFormEncoding extends SimplePostEncoding {
         var $_boundary;
         
         /**
@@ -155,7 +215,7 @@
          *    @access public
          */
         function SimpleMultipartFormEncoding($query = false, $boundary = false) {
-            $this->SimpleFormEncoding($query);
+            $this->SimplePostEncoding($query);
             $this->_boundary = ($boundary === false ? uniqid('st') : $boundary);
         }
         

@@ -468,7 +468,7 @@
             $form = &$page->getFormBySubmitLabel("Submit");
             $this->assertEqual(
                     $form->submitButtonByLabel("Submit"),
-                    new SimpleFormEncoding(array("s" => "Submit")));
+                    new SimpleGetEncoding(array("s" => "Submit")));
         }
         
         function testInputFieldCanBeReadBack() {

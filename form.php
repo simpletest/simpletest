@@ -209,7 +209,10 @@
             if ($this->_encoding == 'multipart/form-data') {
                 return new SimpleMultipartFormEncoding();
             }
-            return new SimpleFormEncoding();
+            if ($this->_method == 'post') {
+                return new SimplePostEncoding();
+            }
+            return new SimpleGetEncoding();
         }
         
         /**

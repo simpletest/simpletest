@@ -182,7 +182,7 @@
          */
         function _parseRequest($raw) {
             $this->_raw = $raw;
-            $request = new SimpleFormEncoding();
+            $request = new SimpleEncoding();
             foreach (split("&", $raw) as $pair) {
                 if (preg_match('/(.*?)=(.*)/', $pair, $matches)) {
                     $request->add($matches[1], urldecode($matches[2]));
@@ -378,7 +378,7 @@
          */
         function clearRequest() {
             $this->_raw = false;
-            $this->_request = &new SimpleFormEncoding();
+            $this->_request = &new SimpleEncoding();
         }
         
         /**

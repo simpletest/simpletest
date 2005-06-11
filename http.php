@@ -453,7 +453,7 @@
             }
             if ($encoding || ($method == 'POST')) {
                 if (! $encoding) {
-                    $encoding = new SimpleFormEncoding();
+                    $encoding = new SimplePostEncoding();
                 }
                 $encoding->writeHeadersTo(&$socket);
             }

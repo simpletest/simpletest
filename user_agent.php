@@ -405,7 +405,7 @@
          */
         function &_fetch($method, $url, $parameters) {
             if (! $parameters) {
-                $parameters = new SimpleFormEncoding();
+                $parameters = new SimpleUrlEncoding();
             }
             $request = &$this->_createRequest($method, $url, $parameters);
             return $request->fetch($this->_connection_timeout);
