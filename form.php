@@ -107,7 +107,7 @@
     class SimpleForm {
         var $_method;
         var $_action;
-        var $_encoding = false;
+        var $_encoding;
         var $_default_target;
         var $_id;
         var $_buttons;
@@ -124,9 +124,7 @@
         function SimpleForm($tag, $url) {
             $this->_method = $tag->getAttribute('method');
             $this->_action = $this->_createAction($tag->getAttribute('action'), $url);
-            if ($this->_method == 'post') {
-                $this->_encoding = $tag->getAttribute('enctype');
-            }
+            $this->_encoding = $this->_createEmptyEncoding($tag);
             $this->_default_target = false;
             $this->_id = $tag->getAttribute('id');
             $this->_buttons = array();
@@ -134,6 +132,22 @@
             $this->_widgets = array();
             $this->_radios = array();
             $this->_checkboxes = array();
+        }
+        
+        /**
+         *    Creates the request packet to be sent by the form.
+         *    @param SimpleTag $tag        Form tag to read.
+         *    @return SimpleEncoding       Packet.
+         *    @access private
+         */
+        function _createEmptyEncoding($tag) {
+            if (strtolower($tag->getAttribute('method')) == 'post') {
+                if (strtolower($tag->getAttribute('enctype')) == 'multipart/form-data') {
+                    return new SimpleMultipartEncoding();
+                }
+                return new SimplePostEncoding();
+            }
+            return new SimpleGetEncoding();
         }
         
         /**
@@ -189,8 +203,8 @@
          *    @return SimpleFormEncoding    Request to submit.
          *    @access private
          */
-        function _getEncoding() {
-            $encoding = $this->_createEncoding();
+        function _encode() {
+            $encoding = $this->_encoding;
             for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 $encoding->add(
                         $this->_widgets[$i]->getName(),
@@ -198,23 +212,7 @@
             }
             return $encoding;
         }
-        
-        /**
-         *    Creates the appropriate form encoding for
-         *    delivery of the post data.
-         *    @return SimpleFormEncoding    Request to submit.
-         *    @access private
-         */
-        function _createEncoding() {
-            if ($this->_encoding == 'multipart/form-data') {
-                return new SimpleMultipartFormEncoding();
-            }
-            if ($this->_method == 'post') {
-                return new SimplePostEncoding();
-            }
-            return new SimpleGetEncoding();
-        }
-        
+                
         /**
          *    ID field of form for unique identification.
          *    @return string           Unique tag ID.
@@ -526,7 +524,7 @@
         function _submitButtonBySelector($selector, $additional) {
             foreach ($this->_buttons as $button) {
                 if ($selector->isMatch($button)) {
-                    $encoding = $this->_getEncoding();
+                    $encoding = $this->_encode();
                     $encoding->merge($button->getSubmitValues());
                     if ($additional) {
                         $encoding->merge($additional);
@@ -596,7 +594,7 @@
         function _submitImageBySelector($selector, $x, $y, $additional) {
             foreach ($this->_images as $image) {
                 if ($selector->isMatch($image)) {
-                    $encoding = $this->_getEncoding();
+                    $encoding = $this->_encode();
                     $encoding->merge($image->getSubmitValues($x, $y));
                     if ($additional) {
                         $encoding->merge($additional);
@@ -673,7 +671,7 @@
          *    @access public
          */
         function submit() {
-            return $this->_getEncoding();
+            return $this->_encode();
         }
     }
 ?>

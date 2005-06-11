@@ -117,44 +117,6 @@
             }
             return implode('&', $statements);
         }
-        
-        /**
-         *    Dispatches the form headers down the socket.
-         *    @param SimpleSocket $socket        Socket to write to.
-         *    @access public
-         */
-        function writeHeadersTo(&$socket) {
-            $socket->write("Content-Length: " . (integer)strlen($this->asString()) . "\r\n");
-            $socket->write("Content-Type: application/x-www-form-urlencoded\r\n");
-        }
-        
-        /**
-         *    Dispatches the form data down the socket.
-         *    @param SimpleSocket $socket        Socket to write to.
-         *    @access public
-         */
-        function writeTo(&$socket) {
-            $socket->write($this->asString());
-        }
-    }
-    
-    /**
-     *    Bundle of URL parameters for a HEAD request.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
-     */
-    class SimpleHeadEncoding extends SimpleEncoding {
-        
-        /**
-         *    Starts empty.
-         *    @param array $query       Hash of parameters.
-         *                              Multiple values are
-         *                              as lists on a single key.
-         *    @access public
-         */
-        function SimpleHeadEncoding($query = false) {
-            $this->SimpleEncoding($query);
-        }
     }
     
     /**
@@ -174,6 +136,60 @@
          */
         function SimpleGetEncoding($query = false) {
             $this->SimpleEncoding($query);
+        }
+        
+        /**
+         *    HTTP request method.
+         *    @return string        Always GET.
+         *    @access public
+         */
+        function getMethod() {
+            return 'GET';
+        }
+        
+        /**
+         *    Writes no extra headers.
+         *    @param SimpleSocket $socket        Socket to write to.
+         *    @access public
+         */
+        function writeHeadersTo(&$socket) {
+        }
+        
+        /**
+         *    No data is sent to teh socket as the data is encoded into
+         *    the URL.
+         *    @param SimpleSocket $socket        Socket to write to.
+         *    @access public
+         */
+        function writeTo(&$socket) {
+        }
+    }
+    
+    /**
+     *    Bundle of URL parameters for a HEAD request.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleHeadEncoding extends SimpleGetEncoding {
+        
+        /**
+         *    Starts empty.
+         *    @param array $query       Hash of parameters.
+         *                              Multiple values are
+         *                              as lists on a single key.
+         *    @access public
+         */
+        function SimpleHeadEncoding($query = false) {
+            $this->SimpleGetEncoding($query);
+        }
+        
+        /**
+         *    HTTP request method.
+         *    @return string        Always HEAD.
+         *    @access public
+         */
+        function getMethod() {
+            return 'HEAD';
         }
     }
     
@@ -195,6 +211,34 @@
         function SimplePostEncoding($query = false) {
             $this->SimpleEncoding($query);
         }
+        
+        /**
+         *    HTTP request method.
+         *    @return string        Always POST.
+         *    @access public
+         */
+        function getMethod() {
+            return 'POST';
+        }
+        
+        /**
+         *    Dispatches the form headers down the socket.
+         *    @param SimpleSocket $socket        Socket to write to.
+         *    @access public
+         */
+        function writeHeadersTo(&$socket) {
+            $socket->write("Content-Length: " . (integer)strlen($this->asString()) . "\r\n");
+            $socket->write("Content-Type: application/x-www-form-urlencoded\r\n");
+        }
+        
+        /**
+         *    Dispatches the form data down the socket.
+         *    @param SimpleSocket $socket        Socket to write to.
+         *    @access public
+         */
+        function writeTo(&$socket) {
+            $socket->write($this->asString());
+        }
     }
 
     /**
@@ -203,7 +247,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleMultipartFormEncoding extends SimplePostEncoding {
+    class SimpleMultipartEncoding extends SimplePostEncoding {
         var $_boundary;
         
         /**
@@ -213,7 +257,7 @@
          *                              as lists on a single key.
          *    @access public
          */
-        function SimpleMultipartFormEncoding($query = false, $boundary = false) {
+        function SimpleMultipartEncoding($query = false, $boundary = false) {
             $this->SimplePostEncoding($query);
             $this->_boundary = ($boundary === false ? uniqid('st') : $boundary);
         }
@@ -226,6 +270,15 @@
         function writeHeadersTo(&$socket) {
             $socket->write("Content-Length: " . (integer)strlen($this->asString()) . "\r\n");
             $socket->write("Content-Type: multipart/form-data, boundary=" . $this->_boundary . "\r\n");
+        }
+        
+        /**
+         *    Dispatches the form data down the socket.
+         *    @param SimpleSocket $socket        Socket to write to.
+         *    @access public
+         */
+        function writeTo(&$socket) {
+            $socket->write($this->asString());
         }
         
         /**

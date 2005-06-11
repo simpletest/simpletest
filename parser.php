@@ -702,7 +702,8 @@
          *    @static
          */
         function normalise($html) {
-            $text = preg_replace('|<img.*?alt\s*=\s*"(.*?)".*?>|', ' \1 ', $html);
+            $text = preg_replace('|<!--.*?-->|', '', $html);
+            $text = preg_replace('|<img.*?alt\s*=\s*"(.*?)".*?>|', ' \1 ', $text);
             $text = preg_replace('|<img.*?alt\s*=\s*\'(.*?)\'.*?>|', ' \1 ', $text);
             $text = preg_replace('|<img.*?alt\s*=\s*([a-zA-Z_]+).*?>|', ' \1 ', $text);
             $text = preg_replace('|<.*?>|', '', $text);
