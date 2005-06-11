@@ -343,21 +343,17 @@
         /**
          *    Fetches a URL as a response object. Will keep trying if redirected.
          *    It will also collect authentication realm information.
-         *    @param string $method                   GET, POST, etc.
-         *    @param string/SimpleUrl $url            Target to fetch.
-         *    @param SimpleFormEncoding $parameters   Additional parameters for request.
-         *    @return SimpleHttpResponse              Hopefully the target page.
+         *    @param string/SimpleUrl $url      Target to fetch.
+         *    @param SimpleEncoding $encoding   Additional parameters for request.
+         *    @return SimpleHttpResponse        Hopefully the target page.
          *    @access public
          */
-        function &fetchResponse($method, $url, $parameters = false) {
-            if ($method != 'POST') {
-                $url->addRequestParameters($parameters);
-                if ($parameters) {
-                    $type = get_class($parameters);
-                    $parameters = new $type();
-                }
+        function &fetchResponse($url, $encoding) {
+            if ($encoding->getMethod() != 'POST') {
+                $url->addRequestParameters($encoding);
+                $encoding->clear();
             }
-            $response = &$this->_fetchWhileRedirected($method, $url, $parameters);
+            $response = &$this->_fetchWhileRedirected($url, $encoding);
             if ($headers = $response->getHeaders()) {
                 if ($headers->isChallenge()) {
                     $this->_authenticator->addRealm(
@@ -372,16 +368,15 @@
         /**
          *    Fetches the page until no longer redirected or
          *    until the redirect limit runs out.
-         *    @param string $method                  GET, POST, etc.
          *    @param SimpleUrl $url                  Target to fetch.
-         *    @param SimpelFormEncoding $parameters  Additional parameters for request.
+         *    @param SimpelFormEncoding $encoding    Additional parameters for request.
          *    @return SimpleHttpResponse             Hopefully the target page.
          *    @access private
          */
-        function &_fetchWhileRedirected($method, $url, $parameters) {
+        function &_fetchWhileRedirected($url, $encoding) {
             $redirects = 0;
             do {
-                $response = &$this->_fetch($method, $url, $parameters);
+                $response = &$this->_fetch($url, $encoding);
                 if ($response->isError()) {
                     return $response;
                 }
@@ -392,38 +387,32 @@
                 if (! $headers->isRedirect()) {
                     break;
                 }
-                $method = 'GET';
-                $parameters = false;
+                $encoding = new SimpleGetEncoding();
             } while (! $this->_isTooManyRedirects(++$redirects));
             return $response;
         }
         
         /**
          *    Actually make the web request.
-         *    @param string $method                   GET, POST, etc.
          *    @param SimpleUrl $url                   Target to fetch.
          *    @param SimpleFormEncoding $encoding     Additional parameters for request.
          *    @return SimpleHttpResponse              Headers and hopefully content.
          *    @access protected
          */
-        function &_fetch($method, $url, $encoding) {
-            if (! $encoding) {
-                $encoding = new SimpleGetEncoding();
-            }
-            $request = &$this->_createRequest($method, $url, $encoding);
+        function &_fetch($url, $encoding) {
+            $request = &$this->_createRequest($url, $encoding);
             return $request->fetch($this->_connection_timeout);
         }
         
         /**
          *    Creates a full page request.
-         *    @param string $method                 Fetching method.
          *    @param SimpleUrl $url                 Target to fetch as url object.
          *    @param SimpleFormEncoding $encoding   POST/GET parameters.
          *    @return SimpleHttpRequest             New request.
          *    @access private
          */
-        function &_createRequest($method, $url, $encoding) {
-            $request = &$this->_createHttpRequest($method, $url, $encoding);
+        function &_createRequest($url, $encoding) {
+            $request = &$this->_createHttpRequest($url, $encoding);
             $this->_addAdditionalHeaders($request);
             $this->_cookie_jar->addHeaders($request, $url);
             $this->_authenticator->addHeaders($request, $url);
@@ -432,27 +421,13 @@
         
         /**
          *    Builds the appropriate HTTP request object.
-         *    @param string $method                  Fetching method.
          *    @param SimpleUrl $url                  Target to fetch as url object.
          *    @param SimpleFormEncoding $parameters  POST/GET parameters.
          *    @return SimpleHttpRequest              New request object.
          *    @access protected
          */
-        function &_createHttpRequest($method, $url, $encoding) {
-            if ($method == 'POST') {
-                $request = &new SimpleHttpRequest(
-                        $this->_createRoute($url),
-                        'POST',
-                        $encoding);
-                return $request;
-            }
-            if ($encoding) {
-                $url->addRequestParameters($encoding);
-            }
-            return new SimpleHttpRequest(
-                    $this->_createRoute($url),
-                    $method,
-                    new SimpleGetEncoding());
+        function &_createHttpRequest($url, $encoding) {
+            return new SimpleHttpRequest($this->_createRoute($url), $encoding);
         }
         
         /**

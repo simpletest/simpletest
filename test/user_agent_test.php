@@ -153,11 +153,10 @@
             
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
-            $agent->expectOnce('_createHttpRequest', array('GET', $url, new SimpleGetEncoding()));
+            $agent->expectOnce('_createHttpRequest', array($url, new SimpleGetEncoding()));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
-                    'GET',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
                     new SimpleGetEncoding(array('a' => 'A', 'b' => 'B')));
             $agent->tally();
@@ -181,11 +180,10 @@
             
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
-            $agent->expectOnce('_createHttpRequest', array('HEAD', $url, new SimpleHeadEncoding()));
+            $agent->expectOnce('_createHttpRequest', array($url, new SimpleHeadEncoding()));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
-                    'HEAD',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
                     new SimpleHeadEncoding(array('a' => 'A', 'b' => 'B')));
             $agent->tally();
@@ -209,13 +207,11 @@
             $agent = &new MockRequestUserAgent($this);
             $agent->setReturnReference('_createHttpRequest', $request);
             $agent->expectOnce('_createHttpRequest', array(
-                    'POST',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
                     $encoding));
             $agent->SimpleUserAgent();
             
             $agent->fetchResponse(
-                    'POST',
                     new SimpleUrl('http://test:secret@this.com/page.html'),
                     $encoding);
             $agent->tally();
@@ -242,7 +238,7 @@
             $agent->SimpleUserAgent();
             
             $agent->addHeader('User-Agent: SimpleTest');
-            $response = &$agent->fetchResponse('GET', new SimpleUrl('http://this.host/'));
+            $response = &$agent->fetchResponse(new SimpleUrl('http://this.host/'), new SimpleGetEncoding());
             $request->tally();
         }
     }
@@ -289,9 +285,8 @@
             $agent = &$this->_createPartialFetcher($request);
             $agent->setCookie('a', 'A');
             $response = $agent->fetchResponse(
-                    'GET',
                     new SimpleUrl('http://this.com/this/path/page.html'),
-                    array());
+                    new SimpleGetEncoding());
             $this->assertEqual($response->getContent(), "stuff");
             $request->tally();
         }
@@ -302,9 +297,8 @@
             
             $agent->setCookie("a", "A");
             $agent->fetchResponse(
-                    "GET",
                     new SimpleUrl('http://this.com/this/path/page.html'),
-                    array());
+                    new SimpleGetEncoding());
             $this->assertEqual($agent->getCookieValue("this.com", "this/path/", "a"), "AAAA");
         }
         
@@ -315,9 +309,8 @@
             
             $agent->setCookie("a", "A", "this/path/", "Wed, 25-Dec-02 04:24:21 GMT");
             $agent->fetchResponse(
-                    'GET',
                     new SimpleUrl('http://this.com/this/path/page.html'),
-                    array());
+                    new SimpleGetEncoding());
             $this->assertIdentical(
                     $agent->getCookieValue("this.com", "this/path/", "a"),
                     "b");
@@ -333,9 +326,8 @@
             $agent = &$this->_createPartialFetcher($request);
             
             $agent->fetchResponse(
-                    'GET',
                     new SimpleUrl('http://this.com/this/path/page.html'),
-                    array());
+                    new SimpleGetEncoding());
             $agent->restart("Wed, 25-Dec-02 04:24:20 GMT");
             $this->assertIdentical(
                     $agent->getCookieValue("this.com", "this/path/", "a"),
@@ -354,9 +346,8 @@
             
             $this->assertNull($agent->getBaseCookieValue("a", false));
             $agent->fetchResponse(
-                    'GET',
                     new SimpleUrl('http://this.com/this/path/page.html'),
-                    array());
+                    new SimpleGetEncoding());
             $agent->setCookie("b", "BBB", "this.com", "this/path/");
             $this->assertEqual(
                     $agent->getBaseCookieValue("a", new SimpleUrl('http://this.com/this/path/page.html')),
@@ -394,7 +385,7 @@
             $agent->SimpleUserAgent();
             
             $agent->setMaximumRedirects(0);
-            $response = &$agent->fetchResponse('GET', new SimpleUrl('here.html'));
+            $response = &$agent->fetchResponse(new SimpleUrl('here.html'), new SimpleGetEncoding());
             
             $this->assertEqual($response->getContent(), 'stuff');
             $agent->tally();
@@ -414,7 +405,7 @@
             $agent->SimpleUserAgent();
             
             $agent->setMaximumRedirects(1);
-            $response = &$agent->fetchResponse('GET', new SimpleUrl('one.html'));
+            $response = &$agent->fetchResponse(new SimpleUrl('one.html'), new SimpleGetEncoding());
             
             $this->assertEqual($response->getContent(), 'second');
             $agent->tally();
@@ -438,7 +429,7 @@
             $agent->SimpleUserAgent();
             
             $agent->setMaximumRedirects(2);
-            $response = &$agent->fetchResponse('GET', new SimpleUrl('one.html'));
+            $response = &$agent->fetchResponse(new SimpleUrl('one.html'), new SimpleGetEncoding());
             
             $this->assertEqual($response->getContent(), 'third');
             $agent->tally();
@@ -462,7 +453,7 @@
             $agent->SimpleUserAgent();
             
             $agent->setMaximumRedirects(2);
-            $response = &$agent->fetchResponse('GET', new SimpleUrl('one.html'));
+            $response = &$agent->fetchResponse(new SimpleUrl('one.html'), new SimpleGetEncoding());
             
             $this->assertEqual($response->getContent(), 'second');
             $agent->tally();
@@ -474,17 +465,17 @@
                     0,
                     '_createHttpRequest',
                     $this->createRedirect('first', 'two.html'));
-            $agent->expectArgumentsAt(0, '_createHttpRequest', array('POST', '*', '*'));
+            $agent->expectArgumentsAt(0, '_createHttpRequest', array('*', new IsAExpectation('SimplePostEncoding')));
             $agent->setReturnReferenceAt(
                     1,
                     '_createHttpRequest',
                     $this->createRedirect('second', 'three.html'));
-            $agent->expectArgumentsAt(1, '_createHttpRequest', array('GET', '*', '*'));
+            $agent->expectArgumentsAt(1, '_createHttpRequest', array('*', new IsAExpectation('SimpleGetEncoding')));
             $agent->expectCallCount('_createHttpRequest', 2);
             $agent->SimpleUserAgent();
             
             $agent->setMaximumRedirects(1);
-            $response = &$agent->fetchResponse('POST', new SimpleUrl('one.html'));
+            $response = &$agent->fetchResponse(new SimpleUrl('one.html'), new SimplePostEncoding());
             
             $agent->tally();
         }
@@ -511,8 +502,8 @@
             $agent->SimpleUserAgent();
             
             $response = &$agent->fetchResponse(
-                    'GET',
-                    new SimpleUrl('http://this.host/this/path/page.html'));
+                    new SimpleUrl('http://this.host/this/path/page.html'),
+                    new SimpleGetEncoding());
             $this->assertTrue($response->isError());
         }
     }
@@ -537,8 +528,8 @@
             $agent->SimpleUserAgent();
             
             $response = &$agent->fetchResponse(
-                    'GET',
-                    new SimpleUrl('http://test:secret@this.host'));
+                    new SimpleUrl('http://test:secret@this.host'),
+                    new SimpleGetEncoding());
             $request->tally();
         }
     }

@@ -32,8 +32,16 @@
             if (! $query) {
                 $query = array();
             }
-            $this->_request = array();
+            $this->clear();
             $this->merge($query);
+        }
+        
+        /**
+         *    Empties the request of parameters.
+         *    @access public
+         */
+        function clear() {
+            $this->_request = array();
         }
         
         /**
@@ -106,9 +114,9 @@
          *    Renders the query string as a URL encoded
          *    request part.
          *    @return string        Part of URL.
-         *    @access public
+         *    @access protected
          */
-        function asString() {
+        function _encode() {
             $statements = array();
             foreach ($this->_request as $key => $values) {
                 foreach ($values as $value) {
@@ -162,6 +170,16 @@
          *    @access public
          */
         function writeTo(&$socket) {
+        }
+        
+        /**
+         *    Renders the query string as a URL encoded
+         *    request part for attaching to a URL.
+         *    @return string        Part of URL.
+         *    @access public
+         */
+        function asUrlRequest() {
+            return $this->_encode();
         }
     }
     
@@ -227,7 +245,7 @@
          *    @access public
          */
         function writeHeadersTo(&$socket) {
-            $socket->write("Content-Length: " . (integer)strlen($this->asString()) . "\r\n");
+            $socket->write("Content-Length: " . (integer)strlen($this->_encode()) . "\r\n");
             $socket->write("Content-Type: application/x-www-form-urlencoded\r\n");
         }
         
@@ -237,7 +255,17 @@
          *    @access public
          */
         function writeTo(&$socket) {
-            $socket->write($this->asString());
+            $socket->write($this->_encode());
+        }
+        
+        /**
+         *    Renders the query string as a URL encoded
+         *    request part for attaching to a URL.
+         *    @return string        Part of URL.
+         *    @access public
+         */
+        function asUrlRequest() {
+            return '';
         }
     }
 
@@ -268,7 +296,7 @@
          *    @access public
          */
         function writeHeadersTo(&$socket) {
-            $socket->write("Content-Length: " . (integer)strlen($this->asString()) . "\r\n");
+            $socket->write("Content-Length: " . (integer)strlen($this->_encode()) . "\r\n");
             $socket->write("Content-Type: multipart/form-data, boundary=" . $this->_boundary . "\r\n");
         }
         
@@ -278,7 +306,7 @@
          *    @access public
          */
         function writeTo(&$socket) {
-            $socket->write($this->asString());
+            $socket->write($this->_encode());
         }
         
         /**
@@ -287,7 +315,7 @@
          *    @return string        Part of URL.
          *    @access public
          */
-        function asString() {
+        function _encode() {
             $stream = '';
             foreach ($this->_request as $key => $values) {
                 foreach ($values as $value) {

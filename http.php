@@ -398,7 +398,6 @@
      */
     class SimpleHttpRequest {
         var $_route;
-        var $_method;
         var $_encoding;
         var $_headers;
         var $_cookies;
@@ -408,15 +407,12 @@
          *    These include proxy information, URL, cookies, headers,
          *    request method and choice of encoding.
          *    @param SimpleRoute $route   Request route.
-         *    @param string $method                  HTTP request method,
-         *                                           usually GET.
          *    @param SimpleFormEncoding $encoding    Content to send with
          *                                           request.
          *    @access public
          */
-        function SimpleHttpRequest(&$route, $method, $encoding) {
+        function SimpleHttpRequest(&$route, $encoding) {
             $this->_route = &$route;
-            $this->_method = $method;
             $this->_encoding = $encoding;
             $this->_headers = array();
             $this->_cookies = array();
@@ -431,11 +427,11 @@
          *    @access public
          */
         function &fetch($timeout) {
-            $socket = &$this->_route->createConnection($this->_method, $timeout);
+            $socket = &$this->_route->createConnection($this->_encoding->getMethod(), $timeout);
             if ($socket->isError()) {
                 return $this->_createResponse($socket);
             }
-            $this->_dispatchRequest($socket, $this->_method, $this->_encoding);
+            $this->_dispatchRequest($socket, $this->_encoding);
             return $this->_createResponse($socket);
         }
         
@@ -447,20 +443,16 @@
          *    @param SimpleFormEncoding $encoding   Content to send with request.
          *    @access private
          */
-        function _dispatchRequest(&$socket, $method, $encoding) {
+        function _dispatchRequest(&$socket, $encoding) {
             foreach ($this->_headers as $header_line) {
                 $socket->write($header_line . "\r\n");
             }
             if (count($this->_cookies) > 0) {
                 $socket->write("Cookie: " . $this->_marshallCookies($this->_cookies) . "\r\n");
             }
-            if ($encoding || ($method == 'POST')) {
-                $encoding->writeHeadersTo(&$socket);
-            }
+            $encoding->writeHeadersTo(&$socket);
             $socket->write("\r\n");
-            if ($encoding) {
-                $encoding->writeTo($socket);
-            }
+            $encoding->writeTo($socket);
         }
         
         /**
@@ -505,7 +497,6 @@
         function &_createResponse(&$socket) {
             return new SimpleHttpResponse(
                     $socket,
-                    $this->_method,
                     $this->_route->getUrl(),
                     $this->_encoding);
         }
@@ -695,9 +686,8 @@
 	 *    @subpackage WebTester
      */
     class SimpleHttpResponse extends SimpleStickyError {
-        var $_method;
         var $_url;
-        var $_request_data;
+        var $_encoding;
         var $_sent;
         var $_content;
         var $_headers;
@@ -707,16 +697,14 @@
          *    content and headers.
          *    @param SimpleSocket $socket   Network connection to fetch
          *                                  response text from.
-         *    @param string $method         HTTP request method.
          *    @param SimpleUrl $url         Resource name.
-         *    @param mixed $request_data    Record of content sent.
+         *    @param mixed $encoding        Record of content sent.
          *    @access public
          */
-        function SimpleHttpResponse(&$socket, $method, $url, $request_data = '') {
+        function SimpleHttpResponse(&$socket, $url, $encoding) {
             $this->SimpleStickyError();
-            $this->_method = $method;
             $this->_url = $url;
-            $this->_request_data = $request_data;
+            $this->_encoding = $encoding;
             $this->_sent = $socket->getSent();
             $this->_content = false;
             $raw = $this->_readAll($socket);
@@ -751,7 +739,7 @@
          *    @access public
          */
         function getMethod() {
-            return $this->_method;
+            return $this->_encoding->getMethod();
         }
         
         /**
@@ -769,7 +757,7 @@
          *    @access public
          */
         function getRequestData() {
-            return $this->_request_data;
+            return $this->_encoding;
         }
         
         /**

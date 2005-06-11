@@ -249,7 +249,7 @@
             }
             $frameset = &new SimpleFrameset($page);
             foreach ($page->getFrameset() as $key => $url) {
-                $frame = &$this->_fetch('GET', $url, array(), $depth + 1);
+                $frame = &$this->_fetch($url, new SimpleGetEncoding(), $depth + 1);
                 $frameset->addFrame($frame, $key);
             }
             return $frameset;
@@ -257,15 +257,14 @@
         
         /**
          *    Fetches a page.
-         *    @param string $method                   GET or POST.
-         *    @param string/SimpleUrl $url            Target to fetch as string.
-         *    @param SimpleFormEncoding $parameters   POST parameters.
-         *    @param integer $depth                   Nested frameset depth protection.
-         *    @return SimplePage                      Parsed page.
+         *    @param string/SimpleUrl $url          Target to fetch.
+         *    @param SimpleEncoding $encoding       GET/POST parameters.
+         *    @param integer $depth                 Nested frameset depth protection.
+         *    @return SimplePage                    Parsed page.
          *    @access private
          */
-        function &_fetch($method, $url, $parameters, $depth = 0) {
-            $response = &$this->_user_agent->fetchResponse($method, $url, $parameters);
+        function &_fetch($url, $encoding, $depth = 0) {
+            $response = &$this->_user_agent->fetchResponse($url, $encoding);
             if ($response->isError()) {
                 return new SimplePage($response);
             }
@@ -275,30 +274,28 @@
         /**
          *    Fetches a page or a single frame if that is the current
          *    focus.
-         *    @param string $method                   GET or POST.
-         *    @param string/SimpleUrl $url            Target to fetch as string.
-         *    @param SimpleFormEncoding $parameters   POST parameters.
+         *    @param SimpleUrl $url                   Target to fetch.
+         *    @param SimpleEncoding $parameters       GET/POST parameters.
          *    @return string                          Raw content of page.
          *    @access private
          */
-        function _load($method, $url, $parameters = false) {
+        function _load($url, $parameters) {
             $frame = $url->getTarget();
             if (! $frame || ! $this->_page->hasFrames() || (strtolower($frame) == '_top')) {
-                return $this->_loadPage($method, $url, $parameters);
+                return $this->_loadPage($url, $parameters);
             }
-            return $this->_loadFrame(array($frame), $method, $url, $parameters);
+            return $this->_loadFrame(array($frame), $url, $parameters);
         }
         
         /**
          *    Fetches a page and makes it the current page/frame.
-         *    @param string $method                   GET or POST.
          *    @param string/SimpleUrl $url            Target to fetch as string.
-         *    @param SimpleFormEncoding $parameters   POST parameters.
+         *    @param SimplePostEncoding $parameters   POST parameters.
          *    @return string                          Raw content of page.
          *    @access private
          */
-        function _loadPage($method, $url, $parameters = false) {
-            $this->_page = &$this->_fetch(strtoupper($method), $url, $parameters);
+        function _loadPage($url, $parameters) {
+            $this->_page = &$this->_fetch($url, $parameters);
             $this->_history->recordEntry(
                     $this->_page->getMethod(),
                     $this->_page->getUrl(),
@@ -310,14 +307,13 @@
          *    Fetches a frame into the existing frameset replacing the
          *    original.
          *    @param array $frames                    List of names to drill down.
-         *    @param string $method                   GET or POST.
          *    @param string/SimpleUrl $url            Target to fetch as string.
          *    @param SimpleFormEncoding $parameters   POST parameters.
          *    @return string                          Raw content of page.
          *    @access private
          */
-        function _loadFrame($frames, $method, $url, $parameters = false) {
-            $page = &$this->_fetch(strtoupper($method), $url, $parameters);
+        function _loadFrame($frames, $url, $parameters) {
+            $page = &$this->_fetch($url, $parameters);
             $this->_page->setFrame($frames, $page);
         }
         
@@ -437,7 +433,7 @@
          *    Fetches the page content with a HEAD request.
          *    Will affect cookies, but will not change the base URL.
          *    @param string/SimpleUrl $url                Target to fetch as string.
-         *    @param hash/SimpleFormEncoding $parameters  Additional parameters for
+         *    @param hash/SimpleHeadEncoding $parameters  Additional parameters for
          *                                                HEAD request.
          *    @return boolean                             True if successful.
          *    @access public
@@ -446,16 +442,15 @@
             if (! is_object($url)) {
                 $url = new SimpleUrl($url);
             }
-            if (is_array($parameters)) {
-                $parameters = new SimpleUrlEncoding($parameters);
+            if (! is_array($parameters)) {
+                $parameters = array();
             }
             if ($this->getUrl()) {
                 $url = $url->makeAbsolute($this->getUrl());
             }
             $response = &$this->_user_agent->fetchResponse(
-                    'HEAD',
                     $url,
-                    $parameters);
+                    new SimpleHeadEncoding($parameters));
             return ! $response->isError();
         }
         
@@ -471,13 +466,13 @@
             if (! is_object($url)) {
                 $url = new SimpleUrl($url);
             }
-            if (is_array($parameters)) {
-                $parameters = new SimpleGetEncoding($parameters);
+            if (! is_array($parameters)) {
+                $parameters = array();
             }
             if ($this->getUrl()) {
                 $url = $url->makeAbsolute($this->getUrl());
             }
-            return $this->_load('GET', $url, $parameters);
+            return $this->_load($url, new SimpleGetEncoding($parameters));
         }
         
         /**
@@ -491,13 +486,13 @@
             if (! is_object($url)) {
                 $url = new SimpleUrl($url);
             }
-            if (is_array($parameters)) {
-                $parameters = new SimplePostEncoding($parameters);
+            if (! is_array($parameters)) {
+                $parameters = array();
             }
             if ($this->getUrl()) {
                 $url = $url->makeAbsolute($this->getUrl());
             }
-            return $this->_load('POST', $url, $parameters);
+            return $this->_load($url, new SimplePostEncoding($parameters));
         }
         
         /**
@@ -513,14 +508,12 @@
             if (count($frames) > 0) {
                 $this->_loadFrame(
                         $frames,
-                        $this->_page->getMethod(),
                         $this->_page->getUrl(),
                         $this->_page->getRequestData());
                 return $this->_page->getRaw();
             }
             if ($method = $this->_history->getMethod()) {
                 $this->_page = &$this->_fetch(
-                        $method,
                         $this->_history->getUrl(),
                         $this->_history->getParameters());
                 return $this->_page->getRaw();
@@ -853,7 +846,6 @@
                 return false;
             }
             $success = $this->_load(
-                    $form->getMethod(),
                     $form->getAction(),
                     $form->submitButtonByLabel($label, $additional));
             return ($success ? $this->getContent() : $success);
@@ -872,7 +864,6 @@
                 return false;
             }
             $success = $this->_load(
-                    $form->getMethod(),
                     $form->getAction(),
                     $form->submitButtonByName($name, $additional));
             return ($success ? $this->getContent() : $success);
@@ -891,7 +882,6 @@
                 return false;
             }
             $success = $this->_load(
-                    $form->getMethod(),
                     $form->getAction(),
                     $form->submitButtonById($id, $additional));
             return ($success ? $this->getContent() : $success);
@@ -915,7 +905,6 @@
                 return false;
             }
             $success = $this->_load(
-                    $form->getMethod(),
                     $form->getAction(),
                     $form->submitImageByLabel($label, $x, $y, $additional));
             return ($success ? $this->getContent() : $success);
@@ -939,7 +928,6 @@
                 return false;
             }
             $success = $this->_load(
-                    $form->getMethod(),
                     $form->getAction(),
                     $form->submitImageByName($name, $x, $y, $additional));
             return ($success ? $this->getContent() : $success);
@@ -962,7 +950,6 @@
                 return false;
             }
             $success = $this->_load(
-                    $form->getMethod(),
                     $form->getAction(),
                     $form->submitImageById($id, $x, $y, $additional));
             return ($success ? $this->getContent() : $success);
@@ -980,7 +967,6 @@
                 return false;
             }
             $success = $this->_load(
-                    $form->getMethod(),
                     $form->getAction(),
                     $form->submit());
             return ($success ? $this->getContent() : $success);
@@ -1004,7 +990,7 @@
             if (count($urls) < $index + 1) {
                 return false;
             }
-            $this->_load('GET', $urls[$index]);
+            $this->_load($urls[$index], new SimpleGetEncoding());
             return $this->getContent();
         }
         
@@ -1028,7 +1014,7 @@
             if (! ($url = $this->_page->getUrlById($id))) {
                 return false;
             }
-            $this->_load('GET', $url);
+            $this->_load($url, new SimpleGetEncoding());
             return $this->getContent();
         }
         

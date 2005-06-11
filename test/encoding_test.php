@@ -27,7 +27,7 @@
             $encoding = &new SimpleGetEncoding();
             $this->assertIdentical($encoding->getValue('a'), false);
             $this->assertIdentical($encoding->getKeys(), array());
-            $this->assertIdentical($encoding->asString(), '');
+            $this->assertIdentical($encoding->asUrlRequest(), '');
         }
         
         function testPostEmpty() {

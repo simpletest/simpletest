@@ -17,7 +17,8 @@
      *    got broken in PHP 4.3.0. Adds some browser specific
      *    functionality such as expandomatics.
      *    Guesses a bit trying to separate the host from
-     *    the path.
+     *    the path and tries to keep a raw, possibly unparsable,
+     *    request string as long as possible.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
@@ -182,7 +183,7 @@
          */
         function _parseRequest($raw) {
             $this->_raw = $raw;
-            $request = new SimpleEncoding();
+            $request = new SimpleGetEncoding();
             foreach (split("&", $raw) as $pair) {
                 if (preg_match('/(.*?)=(.*)/', $pair, $matches)) {
                     $request->add($matches[1], urldecode($matches[2]));
@@ -342,7 +343,7 @@
             if ($this->_raw) {
                 $encoded = $this->_raw;
             } else {
-                $encoded = $this->_request->asString();
+                $encoded = $this->_request->asUrlRequest();
             }
             if ($encoded) {
                 return '?' . preg_replace('/^\?/', '', $encoded);
@@ -378,7 +379,7 @@
          */
         function clearRequest() {
             $this->_raw = false;
-            $this->_request = &new SimpleEncoding();
+            $this->_request = &new SimpleGetEncoding();
         }
         
         /**

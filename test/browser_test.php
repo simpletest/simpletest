@@ -280,11 +280,11 @@
             $agent->expectArgumentsAt(
                     0,
                     'fetchResponse',
-                    array('GET', new SimpleUrl('http://this.com/page.html'), false));
+                    array(new SimpleUrl('http://this.com/page.html'), new SimpleGetEncoding()));
             $agent->expectArgumentsAt(
                     1,
                     'fetchResponse',
-                    array('GET', new SimpleUrl('http://this.com/new.html'), false));
+                    array(new SimpleUrl('http://this.com/new.html'), new SimpleGetEncoding()));
             $agent->expectCallCount('fetchResponse', 2);
             
             $page = &new MockSimplePage($this);
@@ -306,13 +306,13 @@
             $agent->expectArgumentsAt(
                     0,
                     'fetchResponse',
-                    array('GET', new SimpleUrl('http://this.com/page.html'), false));
+                    array(new SimpleUrl('http://this.com/page.html'), new SimpleGetEncoding()));
             $target = new SimpleUrl('http://this.com/new.html');
             $target->setTarget('missing');
             $agent->expectArgumentsAt(
                     1,
                     'fetchResponse',
-                    array('GET', $target, false));
+                    array($target, new SimpleGetEncoding()));
             $agent->expectCallCount('fetchResponse', 2);
             
             $parsed_url = new SimpleUrl('http://this.com/new.html');
@@ -351,7 +351,7 @@
             $agent->expectArgumentsAt(
                     1,
                     'fetchResponse',
-                    array('GET', new SimpleUrl('1.html'), false));
+                    array(new SimpleUrl('1.html'), new SimpleGetEncoding()));
             $agent->expectCallCount('fetchResponse', 2);
             
             $page = &new MockSimplePage($this);
@@ -371,9 +371,8 @@
             $agent = &new MockSimpleUserAgent($this);
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
             $agent->expectArgumentsAt(1, 'fetchResponse', array(
-                    'GET',
                     new SimpleUrl('http://this.com/link.html'),
-                    false));
+                    new SimpleGetEncoding()));
             $agent->expectCallCount('fetchResponse', 2);
             
             $page = &new MockSimplePage($this);
@@ -405,7 +404,6 @@
             $agent = &new MockSimpleUserAgent($this);
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
             $agent->expectArgumentsAt(1, 'fetchResponse', array(
-                    'POST',
                     new SimpleUrl('http://this.com/handler.html'),
                     new SimplePostEncoding(array('a' => 'A'))));
             $agent->expectCallCount('fetchResponse', 2);
@@ -434,7 +432,6 @@
             $agent = &new MockSimpleUserAgent($this);
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
             $agent->expectArgumentsAt(1,  'fetchResponse', array(
-                    'GET',
                     new SimpleUrl('http://this.com/page.html'),
                     new SimpleGetEncoding(array('a' => 'A'))));
             $agent->expectCallCount('fetchResponse', 2);
@@ -576,7 +573,6 @@
             $agent = &new MockSimpleUserAgent($this);
             $agent->setReturnReference('fetchResponse', new MockSimpleHttpResponse($this));
             $agent->expectArgumentsAt(1, 'fetchResponse', array(
-                    'POST',
                     new SimpleUrl('http://this.com/handler.html'),
                     new SimplePostEncoding(array('a' => 'A'))));
             $agent->expectCallCount('fetchResponse', 2);
@@ -616,7 +612,7 @@
                 $response = &new MockSimpleHttpResponse($this);
                 $response->setReturnValue('getUrl', $url);
                 $response->setReturnValue('getContent', $raw);
-                $agent->setReturnReference('fetchResponse', $response, array('*', $url, '*'));
+                $agent->setReturnReference('fetchResponse', $response, array($url, '*'));
             }
             return $agent;
         }
