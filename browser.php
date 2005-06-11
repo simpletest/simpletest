@@ -68,31 +68,16 @@
         
         /**
          *    Adds a successfully fetched page to the history.
-         *    @param string $method                 GET or POST.
          *    @param SimpleUrl $url                 URL of fetch.
-         *    @param SimpleFormEncoding $parameters Any post data with the fetch.
+         *    @param SimpleEncoding $parameters     Any post data with the fetch.
          *    @access public
          */
-        function recordEntry($method, $url, $parameters) {
+        function recordEntry($url, $parameters) {
             $this->_dropFuture();
             array_push(
                     $this->_sequence,
-                    array('method' => $method, 'url' => $url, 'parameters' => $parameters));
+                    array('url' => $url, 'parameters' => $parameters));
             $this->_position++;
-        }
-        
-        /**
-         *    Last fetching method for current history
-         *    position.
-         *    @return string      GET or POST for this point in
-         *                        the history.
-         *    @access public
-         */
-        function getMethod() {
-            if ($this->_isEmpty()) {
-                return false;
-            }
-            return $this->_sequence[$this->_position]['method'];
         }
         
         /**
@@ -297,7 +282,6 @@
         function _loadPage($url, $parameters) {
             $this->_page = &$this->_fetch($url, $parameters);
             $this->_history->recordEntry(
-                    $this->_page->getMethod(),
                     $this->_page->getUrl(),
                     $this->_page->getRequestData());
             return $this->_page->getRaw();
@@ -442,15 +426,10 @@
             if (! is_object($url)) {
                 $url = new SimpleUrl($url);
             }
-            if (! is_array($parameters)) {
-                $parameters = array();
-            }
             if ($this->getUrl()) {
                 $url = $url->makeAbsolute($this->getUrl());
             }
-            $response = &$this->_user_agent->fetchResponse(
-                    $url,
-                    new SimpleHeadEncoding($parameters));
+            $response = &$this->_user_agent->fetchResponse($url, new SimpleHeadEncoding($parameters));
             return ! $response->isError();
         }
         
@@ -465,9 +444,6 @@
         function get($url, $parameters = false) {
             if (! is_object($url)) {
                 $url = new SimpleUrl($url);
-            }
-            if (! is_array($parameters)) {
-                $parameters = array();
             }
             if ($this->getUrl()) {
                 $url = $url->makeAbsolute($this->getUrl());
@@ -485,9 +461,6 @@
         function post($url, $parameters = false) {
             if (! is_object($url)) {
                 $url = new SimpleUrl($url);
-            }
-            if (! is_array($parameters)) {
-                $parameters = array();
             }
             if ($this->getUrl()) {
                 $url = $url->makeAbsolute($this->getUrl());
@@ -512,10 +485,8 @@
                         $this->_page->getRequestData());
                 return $this->_page->getRaw();
             }
-            if ($method = $this->_history->getMethod()) {
-                $this->_page = &$this->_fetch(
-                        $this->_history->getUrl(),
-                        $this->_history->getParameters());
+            if ($url = $this->_history->getUrl()) {
+                $this->_page = &$this->_fetch($url, $this->_history->getParameters());
                 return $this->_page->getRaw();
             }
             return false;

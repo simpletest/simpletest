@@ -27,7 +27,7 @@ Parser
 Browser
 -------
 Add file uploading (3).
-Add form-data encoding for forms (5/5).
+Add form-data encoding for forms (5/9) - done.
 Single click() method for links, buttons or images (2/1) - done.
 setCookie() should be able to create a new one (1).
 Simultaneous POST and GET parameters (3/2) - done.

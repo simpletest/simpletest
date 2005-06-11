@@ -24,7 +24,6 @@
         
         function testEmptyHistoryHasFalseContents() {
             $history = &new SimpleBrowserHistory();
-            $this->assertIdentical($history->getMethod(), false);
             $this->assertIdentical($history->getUrl(), false);
             $this->assertIdentical($history->getParameters(), false);
         }
@@ -38,10 +37,8 @@
         function testCurrentTargetAccessors() {
             $history = &new SimpleBrowserHistory();
             $history->recordEntry(
-                    'GET',
                     new SimpleUrl('http://www.here.com/'),
                     new SimpleGetEncoding());
-            $this->assertIdentical($history->getMethod(), 'GET');
             $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.here.com/'));
             $this->assertIdentical($history->getParameters(), new SimpleGetEncoding());
         }
@@ -49,14 +46,11 @@
         function testSecondEntryAccessors() {
             $history = &new SimpleBrowserHistory();
             $history->recordEntry(
-                    'GET',
                     new SimpleUrl('http://www.first.com/'),
                     new SimpleGetEncoding());
             $history->recordEntry(
-                    'POST',
                     new SimpleUrl('http://www.second.com/'),
                     new SimplePostEncoding(array('a' => 1)));
-            $this->assertIdentical($history->getMethod(), 'POST');
             $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.second.com/'));
             $this->assertIdentical(
                     $history->getParameters(),
@@ -66,15 +60,12 @@
         function testGoingBackwards() {
             $history = &new SimpleBrowserHistory();
             $history->recordEntry(
-                    'GET',
                     new SimpleUrl('http://www.first.com/'),
                     new SimpleGetEncoding());
             $history->recordEntry(
-                    'POST',
                     new SimpleUrl('http://www.second.com/'),
                     new SimplePostEncoding(array('a' => 1)));
             $this->assertTrue($history->back());
-            $this->assertIdentical($history->getMethod(), 'GET');
             $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.first.com/'));
             $this->assertIdentical($history->getParameters(), new SimpleGetEncoding());
         }
@@ -82,11 +73,9 @@
         function testGoingBackwardsOffBeginning() {
             $history = &new SimpleBrowserHistory();
             $history->recordEntry(
-                    'GET',
                     new SimpleUrl('http://www.first.com/'),
                     new SimpleGetEncoding());
             $this->assertFalse($history->back());
-            $this->assertIdentical($history->getMethod(), 'GET');
             $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.first.com/'));
             $this->assertIdentical($history->getParameters(), new SimpleGetEncoding());
         }
@@ -94,11 +83,9 @@
         function testGoingForwardsOffEnd() {
             $history = &new SimpleBrowserHistory();
             $history->recordEntry(
-                    'GET',
                     new SimpleUrl('http://www.first.com/'),
                     new SimpleGetEncoding());
             $this->assertFalse($history->forward());
-            $this->assertIdentical($history->getMethod(), 'GET');
             $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.first.com/'));
             $this->assertIdentical($history->getParameters(), new SimpleGetEncoding());
         }
@@ -106,16 +93,13 @@
         function testGoingBackwardsAndForwards() {
             $history = &new SimpleBrowserHistory();
             $history->recordEntry(
-                    'GET',
                     new SimpleUrl('http://www.first.com/'),
                     new SimpleGetEncoding());
             $history->recordEntry(
-                    'POST',
                     new SimpleUrl('http://www.second.com/'),
                     new SimplePostEncoding(array('a' => 1)));
             $this->assertTrue($history->back());
             $this->assertTrue($history->forward());
-            $this->assertIdentical($history->getMethod(), 'POST');
             $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.second.com/'));
             $this->assertIdentical(
                     $history->getParameters(),
@@ -125,19 +109,15 @@
         function testNewEntryReplacesNextOne() {
             $history = &new SimpleBrowserHistory();
             $history->recordEntry(
-                    'GET',
                     new SimpleUrl('http://www.first.com/'),
                     new SimpleGetEncoding());
             $history->recordEntry(
-                    'POST',
                     new SimpleUrl('http://www.second.com/'),
                     new SimplePostEncoding(array('a' => 1)));
             $history->back();
             $history->recordEntry(
-                    'GET',
                     new SimpleUrl('http://www.third.com/'),
                     new SimpleGetEncoding());
-            $this->assertIdentical($history->getMethod(), 'GET');
             $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.third.com/'));
             $this->assertIdentical($history->getParameters(), new SimpleGetEncoding());
         }
@@ -145,21 +125,17 @@
         function testNewEntryDropsFutureEntries() {
             $history = &new SimpleBrowserHistory();
             $history->recordEntry(
-                    'GET',
                     new SimpleUrl('http://www.first.com/'),
                     new SimpleGetEncoding());
             $history->recordEntry(
-                    'GET',
                     new SimpleUrl('http://www.second.com/'),
                     new SimpleGetEncoding());
             $history->recordEntry(
-                    'GET',
                     new SimpleUrl('http://www.third.com/'),
                     new SimpleGetEncoding());
             $history->back();
             $history->back();
             $history->recordEntry(
-                    'GET',
                     new SimpleUrl('http://www.fourth.com/'),
                     new SimpleGetEncoding());
             $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.fourth.com/'));

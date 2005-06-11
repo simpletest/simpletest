@@ -376,16 +376,17 @@
                     $this->_proxy->getHost(),
                     $this->_proxy->getPort() ? $this->_proxy->getPort() : 8080,
                     $timeout);
-            if (! $socket->isError()) {
-                $socket->write($this->_getRequestLine($method) . "\r\n");
-                $socket->write($this->_getHostLine() . "\r\n");
-                if ($this->_username && $this->_password) {
-                    $socket->write('Proxy-Authorization: Basic ' .
-                            base64_encode($this->_username . ':' . $this->_password) .
-                            "\r\n");
-                }
-                $socket->write("Connection: close\r\n");
+            if ($socket->isError()) {
+                return $socket;
             }
+            $socket->write($this->_getRequestLine($method) . "\r\n");
+            $socket->write($this->_getHostLine() . "\r\n");
+            if ($this->_username && $this->_password) {
+                $socket->write('Proxy-Authorization: Basic ' .
+                        base64_encode($this->_username . ':' . $this->_password) .
+                        "\r\n");
+            }
+            $socket->write("Connection: close\r\n");
             return $socket;
         }
     }

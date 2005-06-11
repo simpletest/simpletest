@@ -681,15 +681,11 @@
          *    the base URL reflects the new location.
          *    @param string $url          URL to fetch.
          *    @param hash $parameters     Optional additional GET data.
-         *    @return boolean             True on success.
+         *    @return boolean/string      Raw page on success.
          *    @access public
          */
         function get($url, $parameters = false) {
-            $content = $this->_browser->get($url, $parameters);
-            if ($content === false) {
-                return false;
-            }
-            return true;
+            return $this->_browser->get($url, $parameters);
         }
         
         /**
@@ -699,15 +695,11 @@
          *    the base URL reflects the new location.
          *    @param string $url          URL to fetch.
          *    @param hash $parameters     Optional additional GET data.
-         *    @return boolean             True on success.
+         *    @return boolean/string      Raw page on success.
          *    @access public
          */
         function post($url, $parameters = false) {
-            $content = $this->_browser->post($url, $parameters);
-            if ($content === false) {
-                return false;
-            }
-            return true;
+            return $this->_browser->post($url, $parameters);
         }
         
         /**
