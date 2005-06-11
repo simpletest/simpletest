@@ -404,15 +404,17 @@
         var $_cookies;
         
         /**
-         *    Saves the URL ready for fetching.
+         *    Builds the socket request from the different pieces.
+         *    These include proxy information, URL, cookies, headers,
+         *    request method and choice of encoding.
          *    @param SimpleRoute $route   Request route.
          *    @param string $method                  HTTP request method,
          *                                           usually GET.
          *    @param SimpleFormEncoding $encoding    Content to send with
-         *                                           request or false.
+         *                                           request.
          *    @access public
          */
-        function SimpleHttpRequest(&$route, $method, $encoding = false) {
+        function SimpleHttpRequest(&$route, $method, $encoding) {
             $this->_route = &$route;
             $this->_method = $method;
             $this->_encoding = $encoding;
@@ -421,10 +423,11 @@
         }
         
         /**
-         *    Fetches the content and parses the headers.
+         *    Dispatches the content to the route's socket.
          *    @param integer $timeout      Connection timeout.
          *    @return SimpleHttpResponse   A response which may only have
-         *                                 an error.
+         *                                 an error, but hopefully has a
+         *                                 complete web page.
          *    @access public
          */
         function &fetch($timeout) {
@@ -452,9 +455,6 @@
                 $socket->write("Cookie: " . $this->_marshallCookies($this->_cookies) . "\r\n");
             }
             if ($encoding || ($method == 'POST')) {
-                if (! $encoding) {
-                    $encoding = new SimplePostEncoding();
-                }
                 $encoding->writeHeadersTo(&$socket);
             }
             $socket->write("\r\n");
@@ -465,7 +465,7 @@
         
         /**
          *    Adds a header line to the request.
-         *    @param string $header_line    Text of header line.
+         *    @param string $header_line    Text of full header line.
          *    @access public
          */
         function addHeaderLine($header_line) {

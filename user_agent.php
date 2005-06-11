@@ -416,14 +416,14 @@
         
         /**
          *    Creates a full page request.
-         *    @param string $method                   Fetching method.
-         *    @param SimpleUrl $url                   Target to fetch as url object.
-         *    @param SimpleFormEncoding $parameters   POST/GET parameters.
-         *    @return SimpleHttpRequest               New request.
+         *    @param string $method                 Fetching method.
+         *    @param SimpleUrl $url                 Target to fetch as url object.
+         *    @param SimpleFormEncoding $encoding   POST/GET parameters.
+         *    @return SimpleHttpRequest             New request.
          *    @access private
          */
-        function &_createRequest($method, $url, $parameters) {
-            $request = &$this->_createHttpRequest($method, $url, $parameters);
+        function &_createRequest($method, $url, $encoding) {
+            $request = &$this->_createHttpRequest($method, $url, $encoding);
             $this->_addAdditionalHeaders($request);
             $this->_cookie_jar->addHeaders($request, $url);
             $this->_authenticator->addHeaders($request, $url);
@@ -438,18 +438,21 @@
          *    @return SimpleHttpRequest              New request object.
          *    @access protected
          */
-        function &_createHttpRequest($method, $url, $parameters) {
+        function &_createHttpRequest($method, $url, $encoding) {
             if ($method == 'POST') {
                 $request = &new SimpleHttpRequest(
                         $this->_createRoute($url),
                         'POST',
-                        $parameters);
+                        $encoding);
                 return $request;
             }
-            if ($parameters) {
-                $url->addRequestParameters($parameters);
+            if ($encoding) {
+                $url->addRequestParameters($encoding);
             }
-            return new SimpleHttpRequest($this->_createRoute($url), $method);
+            return new SimpleHttpRequest(
+                    $this->_createRoute($url),
+                    $method,
+                    new SimpleGetEncoding());
         }
         
         /**
