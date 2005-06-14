@@ -4,35 +4,36 @@
     require_once(dirname(__FILE__) . '/../shell_tester.php');
     require_once(dirname(__FILE__) . '/../mock_objects.php');
     require_once(dirname(__FILE__) . '/../web_tester.php');
-    require_once('../extensions/pear_test_case.php');
-    require_once('../extensions/phpunit_test_case.php');
+    require_once(dirname(__FILE__) . '/../extensions/pear_test_case.php');
+    require_once(dirname(__FILE__) . '/../extensions/phpunit_test_case.php');
     
     class UnitTests extends GroupTest {
         function UnitTests() {
             $this->GroupTest('Unit tests');
-            $this->addTestFile('errors_test.php');
-            $this->addTestFile('options_test.php');
-            $this->addTestFile('dumper_test.php');
-            $this->addTestFile('expectation_test.php');
-            $this->addTestFile('unit_tester_test.php');
-            $this->addTestFile('collector_test.php');
-            $this->addTestFile('simple_mock_test.php');
-            $this->addTestFile('adapter_test.php');
-            $this->addTestFile('socket_test.php');
-            $this->addTestFile('encoding_test.php');
-            $this->addTestFile('url_test.php');
-            $this->addTestFile('http_test.php');
-            $this->addTestFile('authentication_test.php');
-            $this->addTestFile('user_agent_test.php');
-            $this->addTestFile('parser_test.php');
-            $this->addTestFile('tag_test.php');
-            $this->addTestFile('form_test.php');
-            $this->addTestFile('page_test.php');
-            $this->addTestFile('frames_test.php');
-            $this->addTestFile('browser_test.php');
-            $this->addTestFile('web_tester_test.php');
-            $this->addTestFile('shell_tester_test.php');
-            $this->addTestFile('xml_test.php');
+            $test_path = dirname(__FILE__);
+            $this->addTestFile($test_path . '/errors_test.php');
+            $this->addTestFile($test_path . '/options_test.php');
+            $this->addTestFile($test_path . '/dumper_test.php');
+            $this->addTestFile($test_path . '/expectation_test.php');
+            $this->addTestFile($test_path . '/unit_tester_test.php');
+            $this->addTestFile($test_path . '/collector_test.php');
+            $this->addTestFile($test_path . '/simple_mock_test.php');
+            $this->addTestFile($test_path . '/adapter_test.php');
+            $this->addTestFile($test_path . '/socket_test.php');
+            $this->addTestFile($test_path . '/encoding_test.php');
+            $this->addTestFile($test_path . '/url_test.php');
+            $this->addTestFile($test_path . '/http_test.php');
+            $this->addTestFile($test_path . '/authentication_test.php');
+            $this->addTestFile($test_path . '/user_agent_test.php');
+            $this->addTestFile($test_path . '/parser_test.php');
+            $this->addTestFile($test_path . '/tag_test.php');
+            $this->addTestFile($test_path . '/form_test.php');
+            $this->addTestFile($test_path . '/page_test.php');
+            $this->addTestFile($test_path . '/frames_test.php');
+            $this->addTestFile($test_path . '/browser_test.php');
+            $this->addTestFile($test_path . '/web_tester_test.php');
+            $this->addTestFile($test_path . '/shell_tester_test.php');
+            $this->addTestFile($test_path . '/xml_test.php');
         }
     }
     
