@@ -63,7 +63,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>Autochargement des scénarios de test</td>
-                        <td>Lire un fichier avec des scénarios de test et les charger dans un groupe de test automatiquement</td>
+                        <td>Lire un fichier avec des scénarios de test et les charger dans un groupe de tests automatiquement</td>
                         <td style="color: green;">Fini</td>
                     </tr>
                     <tr>

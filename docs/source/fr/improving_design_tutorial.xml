@@ -70,7 +70,7 @@
             A l'autre extrême, passer ou créer le scripteur à chaque message aurait été répétitif et aurait réduit le code de la classe <code>Log</code> à une unique méthode, un signe certain que toute la classe est devenue redondante.
         </p>
         <p>
-            Cette tension entre la facilité du test et le refus de la répétition nous a permis de trouver une conception à la fois flexible et propre. Vous vous souvenez de notre bref envie de l'héritage multiple ? Nous l'avons remplacé par du polymorphisme (plein de scripteurs) et séparé la hiérarchie du journal de celle de l'écriture. Nous relions les deux par agrégation à travers le plus simple <code>Log</code>. Cette astuce est en fait un design pattern (motif de conception) appelé &quot;Pont&quot; ou &quot;Bridge&quot;.
+            Cette tension entre la facilité du test et le refus de la répétition nous a permis de trouver une conception à la fois flexible et propre. Vous vous souvenez de notre bref envie de l'héritage multiple ? Nous l'avons remplacé par du polymorphisme (plein de scripteurs) et séparé la hiérarchie du journal de celle de l'écriture. Nous relions les deux par agrégation à travers le plus simple <code>Log</code>. Cette astuce est en fait un design pattern (modèle de conception) appelé &quot;Pont&quot; ou &quot;Bridge&quot;.
         </p>
         <p>
             Donc nous avons été poussé par le code de test (nous n'avons presque rien écrit d'autre) vers un design pattern. Pensez-y une seconde. Les tests améliorent la qualité du code, à coup sûr dans mon cas, mais il y a quelque chose de bien plus profond et plus puissant.

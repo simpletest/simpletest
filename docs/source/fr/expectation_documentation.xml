@@ -131,7 +131,7 @@ $authorisation->setReturnValue('isAllowed', false);</strong>
         </section>
         <section name="unitaire" title="Sous le capot du testeur unitaire">
             <p>
-                Le <a href="http://sourceforge.net/projects/simpletest/">frameworkd de test unitaire SimpleTest</a> utilise aussi dans son coeur des classes d'attente pour la <a local="unit_test_documentation">classe UnitTestCase</a>. Nous pouvons aussi tirer parti de ces mécanismes pour réutiliser nos propres classes attente à l'intérieur même des suites de test.
+                Le <a href="http://sourceforge.net/projects/simpletest/">framework de test unitaire SimpleTest</a> utilise aussi dans son coeur des classes d'attente pour la <a local="unit_test_documentation">classe UnitTestCase</a>. Nous pouvons aussi tirer parti de ces mécanismes pour réutiliser nos propres classes attente à l'intérieur même des suites de test.
             </p>
             <p>
                 La méthode la plus directe est d'utiliser la méthode <code>SimpleTest::assertExpectation()</code> pour effectuer le test...

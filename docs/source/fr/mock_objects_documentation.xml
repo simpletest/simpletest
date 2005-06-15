@@ -202,7 +202,7 @@ class LoggingSessionPool {
                     <li>Créer un objet <code>SessionPool</code>.</li>
                     <li>Lancer une session, ce qui demande probablement pas mal de choses.</li>
                     <li>Invoquer <code>findSession()</code>.</li>
-                    <li>Lire le nouvel identifiant de sessions (en espérant qu'il existe un accesseur !).</li>
+                    <li>Lire le nouvel identifiant de session (en espérant qu'il existe un accesseur !).</li>
                     <li>Lever une assertion de test pour vérifier que cet identifiant correspond bien au cookie.</li>
                     <li>Lire la dernière ligne du fichier de log.</li>
                     <li>Supprimer avec une (ou plusieurs) expression rationnelle les timestamps de log en trop, etc.</li>
@@ -312,16 +312,16 @@ class LoggingSessionPoolTest extends UnitTestCase {
         </section>
         <section name="approches" title="D'autres approches">
             <p>
-                Il existe trois approches pour créer des objets fantaisie en comprenant celle utiliser par SimpleTest. Les coder à la main en utilisant une classe de base, les générer dans un fichier ou les générer dynamiquement à la volée.
+                Il existe trois approches pour créer des objets fantaisie en comprenant celle utilisée par SimpleTest. Les coder à la main en utilisant une classe de base, les générer dans un fichier ou les générer dynamiquement à la volée.
             </p>
             <p>
-                Les objets fantaisie générés avec <a local="simple_test">SimpleTest</a> sont dynamiques. Ils sont créés à l'exécution dans la mémoire, grâce à <code>eval()</code>, plutôt qu'écrit dans un fichier. Cette opération les rend facile à créer, en une seule ligne, surtout par rapport à leur création à la main dans une hiérarchie de classe parallèle. Le problème avec ce comportement tient généralement dans la mise en place des tests proprement dits. Si les objets originaux changent les versions fantaisie sur lesquels reposent les tests, une désynchronisation peut subvenir. Cela peut aussi arriver avec l'approche en hiérarchie parallèle, mais c'est détecté beaucoup plus vite.
+                Les objets fantaisie générés avec <a local="simple_test">SimpleTest</a> sont dynamiques. Ils sont créés à l'exécution dans la mémoire, grâce à <code>eval()</code>, plutôt qu'écrits dans un fichier. Cette opération les rend facile à créer, en une seule ligne, surtout par rapport à leur création à la main dans une hiérarchie de classe parallèle. Le problème avec ce comportement tient généralement dans la mise en place des tests proprement dits. Si les objets originaux changent les versions fantaisie sur lesquels reposent les tests, une désynchronisation peut subvenir. Cela peut aussi arriver avec l'approche en hiérarchie parallèle, mais c'est détecté beaucoup plus vite.
             </p>
             <p>
                 Bien sûr, la solution est d'ajouter de véritables tests d'intégration. Vous n'en avez pas besoin de beaucoup et le côté pratique des objets fantaisie fait plus que compenser la petite dose de test supplémentaire. Vous ne pouvez pas avoir confiance dans du code qui ne serait testé que par des objets fantaisie.
             </p>
             <p>
-                Si vous restez déterminé de construire des librairies statiques d'objets fantaisie parce que vous souhaitez émuler un comportement très spécifique, vous pouvez y parvenir grâce au générateur de classe de SimpleTest. Dans votre fichier librairie, par exemple <em>mocks/connection.php</em> pour une connexion à une base de données, créer un objet fantaisie et provoquer m'héritage pour hériter pour surcharger des méthodes spéciales ou ajouter des préréglages...
+                Si vous restez déterminé de construire des librairies statiques d'objets fantaisie parce que vous souhaitez émuler un comportement très spécifique, vous pouvez y parvenir grâce au générateur de classe de SimpleTest. Dans votre fichier librairie, par exemple <em>mocks/connection.php</em> pour une connexion à une base de données, créer un objet fantaisie et provoquer l'héritage pour hériter pour surcharger des méthodes spéciales ou ajouter des préréglages...
 <php><![CDATA[
 <?php
     require_once('simpletest/mock_objects.php');

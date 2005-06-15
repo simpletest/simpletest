@@ -4,7 +4,7 @@
     <content>
         <section name="telecharger" title="Télécharger une page">
             <p>
-                Tester des classes c'es très bien. Reste que PHP est avant tout un langage pour créer des fonctionnalités à l'intérieur de pages web. Comment pouvons tester la partie de devant -- celle de l'interface -- dans nos applications en PHP ? Etant donné qu'une page web n'est constituée que de texte, nous devrions pouvoir les examiner exactement comme n'importe quelle autre donnée de test.
+                Tester des classes c'est très bien. Reste que PHP est avant tout un langage pour créer des fonctionnalités à l'intérieur de pages web. Comment pouvons tester la partie de devant -- celle de l'interface -- dans nos applications en PHP ? Etant donné qu'une page web n'est constituée que de texte, nous devrions pouvoir les examiner exactement comme n'importe quelle autre donnée de test.
             </p>
             <p>
                 Cela nous amène à une situation délicate. Si nous testons dans un niveau trop bas, vérifier des balises avec un motif ad hoc par exemple, nos tests seront trop fragiles. Le moindre changement dans la présentation pourrait casser un grand nombre de test. Si nos tests sont situés trop haut, en utilisant une version fantaisie du moteur de template pour donner un cas précis, alors nous perdons complètement la capacité à automatiser certaines classes de test. Par exemple, l'interaction entre des formulaires et la navigation devra être testé manuellement. Ces types de test sont extrêmement fastidieux et plutôt sensibles aux erreurs.

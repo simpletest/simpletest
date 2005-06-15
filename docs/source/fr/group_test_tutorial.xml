@@ -116,7 +116,7 @@ class TestOfLogging extends UnitTestCase {
             Que vous préfériez cette version ou la précédente ne dépend que de votre goût personnel. Il y a un peu plus de code dans cette dernière mais la logique du test est plus claire.
         </p>
         <p>
-            <a class="target" name="groupe"><h2>Un groupe de test</h2></a>
+            <a class="target" name="groupe"><h2>Un groupe de tests</h2></a>
             Un scénario de test ne fonctionne pas tout seul pendant très longtemps. Quand on code pour de vrai nous souhaitons exécuter un maximum de tests aussi souvent et aussi rapidement que possible. Ça veut dire les grouper dans des suites de tests qui incluent l'ensemble des tests de l'application.
         </p>
         <p>
@@ -130,7 +130,7 @@ class TestOfLogging extends UnitTestCase {
     }</strong>
 ?>
 ]]></php>
-            Nous n'avons plus besoin de la constante <code>SIMPLE_TEST</code>. Ensuite nous créons un groupe de test appelé <em>all_tests.php</em> dans le répertoire <em>tests</em>...
+            Nous n'avons plus besoin de la constante <code>SIMPLE_TEST</code>. Ensuite nous créons un groupe de tests appelé <em>all_tests.php</em> dans le répertoire <em>tests</em>...
 <php><![CDATA[
 <strong><?php
     if (! defined('SIMPLE_TEST')) {

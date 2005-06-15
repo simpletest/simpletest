@@ -40,10 +40,10 @@
     }
 ?>
 ]]></php>
-                La classe <code>FileTester</code> ne contient aucun test véritable, il s'agit d'une classe de base pour d'autres scénarios de test. Pour cette raison nous utilisons la directive <code>SimpleTestOptions::ignore()</code> pour indiquer au prochain groupe de test de l'ignorer. Cette directive peut se placer n'importe où dans le fichier et fonctionne quand un fichier complet des scénarios de test est chargé (cf. ci-dessous). Nous l'appelons <em>file_test.php</em>.
+                La classe <code>FileTester</code> ne contient aucun test véritable, il s'agit d'une classe de base pour d'autres scénarios de test. Pour cette raison nous utilisons la directive <code>SimpleTestOptions::ignore()</code> pour indiquer au prochain groupe de tests de l'ignorer. Cette directive peut se placer n'importe où dans le fichier et fonctionne quand un fichier complet des scénarios de test est chargé (cf. ci-dessous). Nous l'appelons <em>file_test.php</em>.
             </p>
             <p>
-                Ensuite nous créons un fichier de groupe de test, disons <em>group_test.php</em>. Vous penserez à un nom plus convaincant, j'en suis sûr. Nous lui ajoutons le fichier de test avec une méthode sans risque...
+                Ensuite nous créons un fichier de groupe de tests, disons <em>group_test.php</em>. Vous penserez à un nom plus convaincant, j'en suis sûr. Nous lui ajoutons le fichier de test avec une méthode sans risque...
 <php><![CDATA[
 <?php
     require_once('simpletest/unit_tester.php');
@@ -76,9 +76,9 @@
     $test = &new GroupTest('All file tests');<strong>
     $test->addTestFile('file_test.php');</strong>
     $test->run(new HtmlReporter());
-?&gt;
+?>
 ]]></php>
-                Voici ce qui vient de se passer : la classe <code>GroupTest</code> a réalisé le <code>require_once()</code> pour nous. Ensuite elle vérifie si de nouvelles classes de scénario de test ont été créées par ce nouveau fichier et les ajoute automatiquement au groupe de test. Désormais tout ce qu'il nous reste à faire, c'est d'ajouter chaque nouveau fichier.
+                Voici ce qui vient de se passer : la classe <code>GroupTest</code> a réalisé le <code>require_once()</code> pour nous. Ensuite elle vérifie si de nouvelles classes de scénario de test ont été créées par ce nouveau fichier et les ajoute automatiquement au groupe de tests. Désormais tout ce qu'il nous reste à faire, c'est d'ajouter chaque nouveau fichier.
             </p>
             <p>
                 Il y a deux choses qui peuvent planter et qui demandent un minimum d'attention...
@@ -87,7 +87,7 @@
                         Le fichier peut déjà avoir été analysé par PHP et dans ce cas aucune classe ne sera ajoutée. Pensez à bien vérifier que les scénarios de test ne sont inclus que dans ce fichier et dans aucun autre.
                     </li>
                     <li>
-                        Les nouvelles classes d'extension de scénario de test qui sont incluses seront placées dans le groupe de test et exécutées par la même occasion. Vous aurez à ajouter une directive <code>SimpleTestOptions::ignore()</code> pour ces classes ou alors pensez à les ajouter avant la ligne <code>GroupTest::addTestFile()</code>.
+                        Les nouvelles classes d'extension de scénario de test qui sont incluses seront placées dans le groupe de tests et exécutées par la même occasion. Vous aurez à ajouter une directive <code>SimpleTestOptions::ignore()</code> pour ces classes ou alors pensez à les ajouter avant la ligne <code>GroupTest::addTestFile()</code>.
                     </li>
                 </ol>
             </p>
@@ -97,7 +97,7 @@
                 La technique ci-dessus place tous les scénarios de test dans un unique et grand groupe. Sauf que pour des projets plus conséquents, ce n'est probablement pas assez souple ; vous voudriez peut-être grouper les tests tout à fait différemment.
             </p>
             <p>
-                Pour obtenir un groupe de test plus souple nous pouvons sous classer <code>GroupTest</code> et ensuite l'instancier au cas par cas...
+                Pour obtenir un groupe de tests plus souple nous pouvons sous classer <code>GroupTest</code> et ensuite l'instancier au cas par cas...
 <php><![CDATA[
 <?php
     require_once('simpletest/unit_tester.php');
@@ -131,7 +131,7 @@
     $test->run(new HtmlReporter());</strong>
 ?>
 ]]></php>
-                Si nous souhaitons lancer le groupe de test original sans utiliser ses petits fichiers d'exécution, nous pouvons mettre le code du lanceur de test derrière des barreaux quand nous créons chaque groupe.
+                Si nous souhaitons lancer le groupe de tests original sans utiliser ses petits fichiers d'exécution, nous pouvons mettre le code du lanceur de test derrière des barreaux quand nous créons chaque groupe.
 <php><![CDATA[
 <?php
     class FileGroupTest extends GroupTest {
@@ -148,7 +148,7 @@
     }
 ?>
 ]]></php>
-                Cette approche exige aux barrières d'être activées à l'inclusion du fichier de groupe de test, mais c'est quand même moins de tracas que beaucoup de fichiers de lancement éparpillés. Reste à inclure des barreaux identiques au niveau supérieur afin de s'assurer que le <code>run()</code> ne sera lancé qu'une seule fois à partir du script de haut niveau qui l'a invoqué.
+                Cette approche exige aux barrières d'être activées à l'inclusion du fichier de groupe de tests, mais c'est quand même moins de tracas que beaucoup de fichiers de lancement éparpillés. Reste à inclure des barreaux identiques au niveau supérieur afin de s'assurer que le <code>run()</code> ne sera lancé qu'une seule fois à partir du script de haut niveau qui l'a invoqué.
 <php><![CDATA[
 <?php
     define('RUNNER', true);
@@ -191,7 +191,7 @@
     }
 }</strong>
 ]]></php>
-                Le groupe de test peut le reconnaître à partir du moment où nous mettons l'adaptateur approprié avant d'ajouter le fichier de test...
+                Le groupe de tests peut le reconnaître à partir du moment où nous mettons l'adaptateur approprié avant d'ajouter le fichier de test...
 <php><![CDATA[
 <?php
     require_once('simpletest/unit_tester.php');

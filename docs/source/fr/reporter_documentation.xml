@@ -62,7 +62,7 @@ class HtmlReporter extends SimpleReporter {
                     </li>
                     <li>
                         <code>void paintHeader(string $test_name)</code><br />
-                        est appelé une fois, au début du test quand l'évènement de démarrage survient. Le premier évènement de démarrage est souvent délivré par le groupe de test du niveau le plus haut et donc c'est de là que le <code>$test_name</code> arrive. Il peint les titres de la page, CSS, la balise &quot;body&quot;, etc. Il ne renvoie rien du tout (<code>void</code>).
+                        est appelé une fois, au début du test quand l'évènement de démarrage survient. Le premier évènement de démarrage est souvent délivré par le groupe de tests du niveau le plus haut et donc c'est de là que le <code>$test_name</code> arrive. Il peint les titres de la page, CSS, la balise &quot;body&quot;, etc. Il ne renvoie rien du tout (<code>void</code>).
                     </li>
                     <li>
                         <code>void paintFooter(string $test_name)</code><br />
@@ -70,7 +70,7 @@ class HtmlReporter extends SimpleReporter {
                     </li>
                     <li>
                         <code>void paintMethodStart(string $test_name)</code><br />
-                        est appelé au début de chaque méthode de test. Normalement le nom vient de celui de la méthode. Les autres évènements de départ de test se comportent de la même manière sauf que celui du groupe de test indique au rapporteur le nombre de scénarios de test qu'il contient. De la sorte le rapporteur peut afficher une barre de progrès au fur et à mesure que l'exécuteur passe en revue les scénarios de test.
+                        est appelé au début de chaque méthode de test. Normalement le nom vient de celui de la méthode. Les autres évènements de départ de test se comportent de la même manière sauf que celui du groupe de tests indique au rapporteur le nombre de scénarios de test qu'il contient. De la sorte le rapporteur peut afficher une barre de progrès au fur et à mesure que l'exécuteur passe en revue les scénarios de test.
                     </li>
                     <li>
                         <code>void paintMethodEnd(string $test_name)</code><br />
@@ -278,7 +278,7 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 <code>$test_output</code> devrait être au format XML, à partir du rapporteur XML, et pourrait venir d'une exécution en ligne de commande d'un scénario de test.  Le parseur envoie des évènements au rapporteur exactement comme tout autre exécution de test. Il y a des occasions bizarres dans lesquelles c'est en fait très utile.
             </p>
             <p>
-                Un problème des suites de test très grandes, c'est qu'elles peuvent venir à bout de la limite de mémoire par défaut d'un process PHP - 8Mb. En plaçant la sortie des groupes de test dans du XML et leur exécution dans des process différents, le résultat peut être parser à nouveau pour agrégrer les résultats avec moins d'impact sur le test au premier niveau.
+                Un problème des suites de test très grandes, c'est qu'elles peuvent venir à bout de la limite de mémoire par défaut d'un process PHP - 8Mb. En plaçant la sortie des groupes de test dans du XML et leur exécution dans des process différents, le résultat peut être parser à nouveau pour agréger les résultats avec moins d'impact sur le test au premier niveau.
             </p>
             <p>
                 Parce que la sortie XML peut venir de n'importe où, ça ouvre des possibilités d'agrégation d'exécutions de test depuis des serveur distants. Un scénario de test pour le réaliser existe déjà à l'intérieur du framework SimpleTest, mais il est encore expérimental...
@@ -295,7 +295,7 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
     $test->run(new HtmlReporter());
 ?>
 ]]></php>
-                <code>RemoteTestCase</code> prend la localisation réelle du lanceur de test, tout simplement un page web au format XML. Il prend aussi l'URL d'un rapporteur initié pour effectuer une exécution sèche. Cette technique est employée pour que les progrès soient correctement rapportés vers le haut. <code>RemoteTestCase</code> peut être ajouté à une suite de test comme n'importe quel autre groupe de test.
+                <code>RemoteTestCase</code> prend la localisation réelle du lanceur de test, tout simplement un page web au format XML. Il prend aussi l'URL d'un rapporteur initié pour effectuer une exécution sèche. Cette technique est employée pour que les progrès soient correctement rapportés vers le haut. <code>RemoteTestCase</code> peut être ajouté à une suite de test comme n'importe quel autre groupe de tests.
             </p>
         </section>
     </content>
