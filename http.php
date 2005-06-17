@@ -451,7 +451,7 @@
             if (count($this->_cookies) > 0) {
                 $socket->write("Cookie: " . $this->_marshallCookies($this->_cookies) . "\r\n");
             }
-            $encoding->writeHeadersTo(&$socket);
+            $encoding->writeHeadersTo($socket);
             $socket->write("\r\n");
             $encoding->writeTo($socket);
         }
