@@ -825,12 +825,23 @@
         }
         
         /**
+         *    Clicks a visible text item. Will first try buttons,
+         *    then links and then images.
+         *    @param string $label        Visible text or alt text.
+         *    @return string/boolean      Raw page or false.
+         *    @access public
+         */
+        function click($label) {
+            return $this->_browser->click($label);
+        }
+        
+        /**
          *    Clicks the submit button by label. The owning
          *    form will be submitted by this.
          *    @param string $label    Button label. An unlabeled
          *                            button can be triggered by 'Submit'.
          *    @param hash $additional Additional form values.
-         *    @return boolean/string  Page on success.
+         *    @return boolean/string  Page on success, else false.
          *    @access public
          */
         function clickSubmit($label = 'Submit', $additional = false) {

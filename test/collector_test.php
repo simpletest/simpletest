@@ -8,13 +8,13 @@ class TestOfCollector extends UnitTestCase {
     
     function testCollectionIsAddedToGroup() {
         $group = &new MockGroupTest($this);
-        $group->expectCallCount('addTestFile', 2);
+        $group->expectMinimumCallCount('addTestFile', 2);
         $group->expectArguments(
                 'addTestFile',
                 array(new WantedPatternExpectation('/collectable\\.(1|2)$/')));
         
         $collector = &new SimpleCollector();
-        $collector->collect($group, dirname(__FILE__) . '/support/');
+        $collector->collect($group, dirname(__FILE__) . '/support/collector/');
         
         $group->tally();
     }
@@ -30,17 +30,17 @@ class TestOfPatternCollector extends UnitTestCase {
                 array(new WantedPatternExpectation('/collectable\\.(1|2)$/')));
         
         $collector = &new SimplePatternCollector();
-        $collector->collect($group, dirname(__FILE__) . '/support/', '/.*/');
+        $collector->collect($group, dirname(__FILE__) . '/support/collector/', '/.*/');
         
         $group->tally();
     }
         
     function testOnlyMatchedFilesAreAddedToGroup() {
         $group = &new MockGroupTest($this);
-        $group->expectOnce('addTestFile', array(dirname(__FILE__) . '/support/collectable.1'));
+        $group->expectOnce('addTestFile', array(dirname(__FILE__) . '/support/collector/collectable.1'));
         
         $collector = &new SimplePatternCollector();
-        $collector->collect($group, dirname(__FILE__) . '/support/', '/1$/');
+        $collector->collect($group, dirname(__FILE__) . '/support/collector/', '/1$/');
         
         $group->tally();
     }
