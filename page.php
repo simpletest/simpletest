@@ -16,6 +16,99 @@
     /**#@-*/
     
     /**
+     *    Creates tags and widgets given HTML tag
+     *    attributes.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleTagBuilder {
+        
+        /**
+         *    Factory for the tag objects. Creates the
+         *    appropriate tag object for the incoming tag name
+         *    and attributes.
+         *    @param string $name        HTML tag name.
+         *    @param hash $attributes    Element attributes.
+         *    @return SimpleTag          Tag object.
+         *    @access public
+         */
+        function &createTag($name, $attributes) {
+            static $map = array(
+                    'a' => 'SimpleAnchorTag',
+                    'title' => 'SimpleTitleTag',
+                    'button' => 'SimpleButtonTag',
+                    'textarea' => 'SimpleTextAreaTag',
+                    'option' => 'SimpleOptionTag',
+                    'label' => 'SimpleLabelTag',
+                    'form' => 'SimpleFormTag',
+                    'frame' => 'SimpleFrameTag');
+            $attributes = $this->_keysToLowerCase($attributes);
+            if (array_key_exists($name, $map)) {
+                $tag_class = $map[$name];
+                return new $tag_class($attributes);
+            } elseif ($name == 'select') {
+                return $this->_createSelectionTag($attributes);
+            } elseif ($name == 'input') {
+                return $this->_createInputTag($attributes);
+            }
+            return new SimpleTag($name, $attributes);
+        }
+        
+        /**
+         *    Factory for selection fields.
+         *    @param hash $attributes    Element attributes.
+         *    @return SimpleTag          Tag object.
+         *    @access protected
+         */
+        function &_createSelectionTag($attributes) {
+            if (isset($attributes['multiple'])) {
+                return new MultipleSelectionTag($attributes);
+            }
+            return new SimpleSelectionTag($attributes);
+        }
+        
+        /**
+         *    Factory for input tags.
+         *    @param hash $attributes    Element attributes.
+         *    @return SimpleTag          Tag object.
+         *    @access protected
+         */
+        function &_createInputTag($attributes) {
+            if (! isset($attributes['type'])) {
+                return new SimpleTextTag($attributes);
+            }
+            $type = strtolower($attributes['type']);
+            $map = array(
+                    'submit' => 'SimpleSubmitTag',
+                    'image' => 'SimpleImageSubmitTag',
+                    'checkbox' => 'SimpleCheckboxTag',
+                    'radio' => 'SimpleRadioButtonTag',
+                    'text' => 'SimpleTextTag',
+                    'hidden' => 'SimpleTextTag',
+                    'password' => 'SimpleTextTag');
+            if (array_key_exists($type, $map)) {
+                $tag_class = $map[$type];
+                return new $tag_class($attributes);
+            }
+            return false;
+        }
+        
+        /**
+         *    Make the keys lower case for case insensitive look-ups.
+         *    @param hash $map   Hash to convert.
+         *    @return hash       Unchanged values, but keys lower case.
+         *    @access private
+         */
+        function _keysToLowerCase($map) {
+            $lower = array();
+            foreach ($map as $key => $value) {
+                $lower[strtolower($key)] = $value;
+            }
+            return $lower;
+        }
+    }
+    
+    /**
      *    SAX event handler. Maintains a list of
      *    open tags and dispatches them as they close.
 	 *    @package SimpleTest
@@ -71,20 +164,6 @@
         }
         
         /**
-         *    Make the keys lower case for case insensitive look-ups.
-         *    @param hash $map   Hash to convert.
-         *    @return hash       Unchanged values, but keys lower case.
-         *    @access private
-         */
-        function _keysToLowerCase($map) {
-            $lower = array();
-            foreach ($map as $key => $value) {
-                $lower[strtolower($key)] = $value;
-            }
-            return $lower;
-        }
-        
-        /**
          *    Start of element event. Opens a new tag.
          *    @param string $name         Element name.
          *    @param hash $attributes     Attributes without content
@@ -93,7 +172,11 @@
          *    @access public
          */
         function startElement($name, $attributes) {
-            $tag = &$this->_createTag($name, $this->_keysToLowerCase($attributes));
+            $factory = &new SimpleTagBuilder();
+            $tag = &$factory->createTag($name, $attributes);
+            if (! $tag) {
+                return true;
+            }
             if ($name == 'label') {
                 $this->_page->acceptLabelStart($tag);
                 $this->_openTag($tag);
@@ -195,10 +278,10 @@
         }
         
         /**
-         *    Parsed relevant data. The parsed tag is added
+         *    Parsed data in tag form. The parsed tag is added
          *    to every open tag. Used for adding options to select
          *    fields only.
-         *    @param SimpleTag $tag        May include unparsed tags.
+         *    @param SimpleTag $tag        Option tags only.
          *    @access private
          */
         function _addContentTagToOpenTags(&$tag) {
@@ -224,76 +307,6 @@
                 $this->_tags[$name] = array();
             }
             $this->_tags[$name][] = &$tag;
-        }
-        
-        /**
-         *    Factory for the tag objects. Creates the
-         *    appropriate tag object for the incoming tag name.
-         *    @param string $name        HTML tag name.
-         *    @param hash $attributes    Element attributes.
-         *    @return SimpleTag          Tag object.
-         *    @access protected
-         */
-        function &_createTag($name, $attributes) {
-            if ($name == 'a') {
-                return new SimpleAnchorTag($attributes);
-            } elseif ($name == 'title') {
-                return new SimpleTitleTag($attributes);
-            } elseif ($name == 'input') {
-                return $this->_createInputTag($attributes);
-            } elseif ($name == 'button') {
-                return new SimpleButtonTag($attributes);
-            } elseif ($name == 'textarea') {
-                return new SimpleTextAreaTag($attributes);
-            } elseif ($name == 'select') {
-                return $this->_createSelectionTag($attributes);
-            } elseif ($name == 'option') {
-                return new SimpleOptionTag($attributes);
-            } elseif ($name == 'label') {
-                return new SimpleLabelTag($attributes);
-            } elseif ($name == 'form') {
-                return new SimpleFormTag($attributes);
-            } elseif ($name == 'frame') {
-                return new SimpleFrameTag($attributes);
-            }
-            return new SimpleTag($name, $attributes);
-        }
-        
-        /**
-         *    Factory for selection fields.
-         *    @param hash $attributes    Element attributes.
-         *    @return SimpleTag          Tag object.
-         *    @access protected
-         */
-        function &_createSelectionTag($attributes) {
-            if (isset($attributes['multiple'])) {
-                return new MultipleSelectionTag($attributes);
-            }
-            return new SimpleSelectionTag($attributes);
-        }
-        
-        /**
-         *    Factory for input tags.
-         *    @param hash $attributes    Element attributes.
-         *    @return SimpleTag          Tag object.
-         *    @access protected
-         */
-        function &_createInputTag($attributes) {
-            if (! isset($attributes['type'])) {
-                return new SimpleTextTag($attributes);
-            }
-            $type = strtolower($attributes['type']);
-            if ($type == 'submit') {
-                return new SimpleSubmitTag($attributes);
-            } elseif ($type == 'image') {
-                return new SimpleImageSubmitTag($attributes);
-            } elseif ($type == 'checkbox') {
-                return new SimpleCheckboxTag($attributes);
-            } elseif ($type == 'radio') {
-                return new SimpleRadioButtonTag($attributes);
-            } else {
-                return new SimpleTextTag($attributes);
-            }
         }
     }
     

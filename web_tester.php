@@ -1053,7 +1053,7 @@
         
         /**
          *    Sets all form fields with that label, or name if there
-         *    is no label attached. Label not yet implemented.
+         *    is no label attached.
          *    @param string $name    Name of field in forms.
          *    @param string $value   New value of field.
          *    @return boolean        True if field exists, otherwise false.

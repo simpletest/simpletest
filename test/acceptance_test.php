@@ -754,10 +754,12 @@
         function setUp() {
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTestOptions::getVersion());
         }
-        
+
         function TODO_testSingleFileUpload() {
             $this->get('http://www.lastcraft.com/test/upload_form.html');
-            $this->setField('Content:', dirname(__FILE__) . '/support/upload_sample.txt');
+            $this->assertTrue($this->setField('Content:',
+                    dirname(__FILE__) . '/support/upload_sample.txt'));
+            $this->dump($this->getBrowser());
             $this->click('Go!');
             $this->assertWantedText('Sample for testing file upload');
         }

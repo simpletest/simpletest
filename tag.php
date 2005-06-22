@@ -610,6 +610,23 @@
     }
     
     /**
+     *    File upload widget.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleUploadTag extends SimpleWidget {
+        
+        /**
+         *    Starts with attributes only.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
+        function SimpleUploadTag($attributes) {
+            $this->SimpleWidget('input', $attributes);
+        }
+    }
+    
+    /**
      *    Checkbox widget.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
