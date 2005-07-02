@@ -530,9 +530,8 @@
          *    @private
          */
         function _isLeaf($tag) {
-            return in_array(
-                    $tag,
-                    array('NAME', 'PASS', 'FAIL', 'EXCEPTION', 'MESSAGE', 'FORMATTED', 'SIGNAL'));
+            return in_array($tag, array(
+                    'NAME', 'PASS', 'FAIL', 'EXCEPTION', 'MESSAGE', 'FORMATTED', 'SIGNAL'));
         }
 
         /**

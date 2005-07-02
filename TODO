@@ -11,6 +11,7 @@ Add floating point equality (2/1) - done.
 Add donated fix for assertReference() from Knak-Nielsen (1/1) - done.
 Promote assertEqual() to other test cases (1/1) - done.
 Create separate group test files for unit and acceptance tests (1/1) - done.
+Remove class_exists() auto loading disabling flag  (1).
 
 Reporter
 --------
@@ -20,6 +21,7 @@ Mock objects
 Change semantics of expectAtLeastOnce() for Jason (2).
 Add expectOrder() for loose order checking (3).
 Add expectSequence() or strict order checking (3).
+Fix bug with PHP5 subclasses failing to mock with PHP4 constructors (2).
 
 Parser
 ------
