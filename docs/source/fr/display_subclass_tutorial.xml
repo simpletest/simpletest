@@ -133,7 +133,7 @@ class ShowPasses extends HtmlReporter {
                 <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">3/3 test cases complete.
                 <strong>6</strong> passes and <strong>0</strong> fails.</div>
             </div>
-            Joli, mais pas encore digne d'une médaille d'or. Nous avons perdu un peu d'information au pasage. L'affichage du <code>span.pass</code> n'est pas stylé en CSS, mais nous pouvons l'ajouter en modifiant une autre méthode...
+            Joli, mais pas encore digne d'une médaille d'or. Nous avons perdu un peu d'information au passage. L'affichage du <code>span.pass</code> n'est pas stylé en CSS, mais nous pouvons l'ajouter en modifiant une autre méthode...
 <php><![CDATA[
 class ShowPasses extends HtmlReporter {
     

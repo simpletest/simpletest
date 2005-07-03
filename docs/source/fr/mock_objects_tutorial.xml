@@ -143,7 +143,7 @@ Mock::generate('Clock');
 <php><![CDATA[
 $clock = &new MockClock($this);
 ]]></php>
-            Cette ligne peut être ajouté dans n'importe quelle méthode de test qui nous intéresserait. Elle crée l'horloge fantaisie prête à recevoir nos instructions.
+            Cette ligne peut être ajoutée dans n'importe quelle méthode de test qui nous intéresserait. Elle crée l'horloge fantaisie prête à recevoir nos instructions.
         </p>
         <p>
             Notre scénario de test en est à ses premiers pas vers un nettoyage radical...
