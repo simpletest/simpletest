@@ -31,7 +31,7 @@
          *                               converted to lower case.
          */
         function SimpleTag($name, $attributes) {
-            $this->_name = $name;
+            $this->_name = strtolower(trim($name));
             $this->_attributes = $attributes;
             $this->_content = '';
         }
@@ -73,7 +73,7 @@
         }
         
         /**
-         *    List oflegal child elements.
+         *    List of legal child elements.
          *    @return array        List of element names.
          *    @access public
          */
@@ -623,6 +623,15 @@
          */
         function SimpleUploadTag($attributes) {
             $this->SimpleWidget('input', $attributes);
+        }
+        
+        /**
+         *    Tag contains no content.
+         *    @return boolean        False.
+         *    @access public
+         */
+        function expectEndTag() {
+            return false;
         }
     }
     

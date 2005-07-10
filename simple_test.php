@@ -30,8 +30,8 @@
 	 *    @subpackage	UnitTester
      */
     class SimpleTestCase {
-        var $_label;
-        var $_runner;
+        var $_label = false;
+        var $_runner = false;
 
         /**
          *    Sets up the test with no display.
@@ -40,8 +40,9 @@
          *    @access public
          */
         function SimpleTestCase($label = false) {
-            $this->_label = $label ? $label : get_class($this);
-            $this->_runner = false;
+            if ($label) {
+                $this->_label = $label;
+            }
         }
 
         /**
@@ -50,7 +51,7 @@
          *    @access public
          */
         function getLabel() {
-            return $this->_label;
+            return $this->_label ? $this->_label : get_class($this);
         }
 
         /**

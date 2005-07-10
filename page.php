@@ -13,6 +13,7 @@
     require_once(dirname(__FILE__) . '/parser.php');
     require_once(dirname(__FILE__) . '/tag.php');
     require_once(dirname(__FILE__) . '/form.php');
+    require_once(dirname(__FILE__) . '/selector.php');
     /**#@-*/
     
     /**
@@ -77,7 +78,7 @@
             if (! isset($attributes['type'])) {
                 return new SimpleTextTag($attributes);
             }
-            $type = strtolower($attributes['type']);
+            $type = strtolower(trim($attributes['type']));
             $map = array(
                     'submit' => 'SimpleSubmitTag',
                     'image' => 'SimpleImageSubmitTag',
@@ -85,7 +86,8 @@
                     'radio' => 'SimpleRadioButtonTag',
                     'text' => 'SimpleTextTag',
                     'hidden' => 'SimpleTextTag',
-                    'password' => 'SimpleTextTag');
+                    'password' => 'SimpleTextTag',
+                    'file' => 'SimpleUploadTag');
             if (array_key_exists($type, $map)) {
                 $tag_class = $map[$type];
                 return new $tag_class($attributes);
@@ -177,24 +179,24 @@
             if (! $tag) {
                 return true;
             }
-            if ($name == 'label') {
+            if ($tag->getTagName() == 'label') {
                 $this->_page->acceptLabelStart($tag);
                 $this->_openTag($tag);
                 return true;
             }
-            if ($name == 'form') {
+            if ($tag->getTagName() == 'form') {
                 $this->_page->acceptFormStart($tag);
                 return true;
             }
-            if ($name == 'frameset') {
+            if ($tag->getTagName() == 'frameset') {
                 $this->_page->acceptFramesetStart($tag);
                 return true;
             }
-            if ($name == 'frame') {
+            if ($tag->getTagName() == 'frame') {
                 $this->_page->acceptFrame($tag);
                 return true;
             }
-            if ($name == 'option') {
+            if ($tag->getTagName() == 'option') {
                 $this->_in_option = true;
             }
             if ($tag->expectEndTag()) {
@@ -227,13 +229,24 @@
             if ($name == 'option') {
                 $this->_in_option = false;
             }
-            if (isset($this->_tags[$name]) && (count($this->_tags[$name]) > 0)) {
+            if ($this->_hasNamedTagOnOpenTagStack($name)) {
                 $tag = array_pop($this->_tags[$name]);
                 $this->_addContentTagToOpenTags($tag);
                 $this->_page->acceptTag($tag);
                 return true;
             }
             return true;
+        }
+        
+        /**
+         *    Test to see if there are any open tags awaiting
+         *    closure that match the tag name.
+         *    @param string $name        Element name.
+         *    @return boolean            True if any are still open.
+         *    @access private
+         */
+        function _hasNamedTagOnOpenTagStack($name) {
+            return isset($this->_tags[$name]) && (count($this->_tags[$name]) > 0);
         }
         
         /**
@@ -874,7 +887,7 @@
          */
         function &getFormBySubmitLabel($label) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasSubmitLabel($label)) {
+                if ($this->_complete_forms[$i]->hasSubmitBySelector(new SimpleSelectByLabel($label))) {
                     return $this->_complete_forms[$i];
                 }
             }
@@ -890,7 +903,7 @@
          */
         function &getFormBySubmitName($name) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasSubmitName($name)) {
+                if ($this->_complete_forms[$i]->hasSubmitBySelector(new SimpleSelectByName($name))) {
                     return $this->_complete_forms[$i];
                 }
             }
@@ -906,7 +919,7 @@
          */
         function &getFormBySubmitId($id) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasSubmitId($id)) {
+                if ($this->_complete_forms[$i]->hasSubmitBySelector(new SimpleSelectById($id))) {
                     return $this->_complete_forms[$i];
                 }
             }
@@ -922,7 +935,7 @@
          */
         function &getFormByImageLabel($label) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasImageLabel($label)) {
+                if ($this->_complete_forms[$i]->hasImageBySelector(new SimpleSelectByLabel($label))) {
                     return $this->_complete_forms[$i];
                 }
             }
@@ -938,7 +951,7 @@
          */
         function &getFormByImageName($name) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasImageName($name)) {
+                if ($this->_complete_forms[$i]->hasImageBySelector(new SimpleSelectByName($name))) {
                     return $this->_complete_forms[$i];
                 }
             }
@@ -954,7 +967,7 @@
          */
         function &getFormByImageId($id) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasImageId($id)) {
+                if ($this->_complete_forms[$i]->hasImageBySelector(new SimpleSelectById($id))) {
                     return $this->_complete_forms[$i];
                 }
             }
@@ -990,7 +1003,7 @@
         function setField($label, $value) {
             $is_set = false;
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->setFieldByLabel($label, $value)) {
+                if ($this->_complete_forms[$i]->setFieldBySelector(new SimpleSelectByLabel($label), $value)) {
                     $is_set = true;
                 }
             }
@@ -1011,7 +1024,7 @@
         function setFieldByName($name, $value) {
             $is_set = false;
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->setFieldByName($name, $value)) {
+                if ($this->_complete_forms[$i]->setFieldBySelector(new SimpleSelectByname($name), $value)) {
                     $is_set = true;
                 }
             }
@@ -1028,7 +1041,7 @@
          */
         function setFieldById($id, $value) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->setFieldById($id, $value)) {
+                if ($this->_complete_forms[$i]->setFieldBySelector(new SimpleSelectById($id), $value)) {
                     return true;
                 }
             }
@@ -1047,7 +1060,7 @@
          */
         function getField($label) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                $value = $this->_complete_forms[$i]->getValueByLabel($label);
+                $value = $this->_complete_forms[$i]->getValueBySelector(new SimpleSelectByLabel($label));
                 if (isset($value)) {
                     return $value;
                 }
@@ -1066,7 +1079,7 @@
          */
         function getFieldByName($name) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                $value = $this->_complete_forms[$i]->getValue($name);
+                $value = $this->_complete_forms[$i]->getValueBySelector(new SimpleSelectByName($name));
                 if (isset($value)) {
                     return $value;
                 }
@@ -1085,7 +1098,7 @@
          */
         function getFieldById($id) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                $value = $this->_complete_forms[$i]->getValueById($id);
+                $value = $this->_complete_forms[$i]->getValueBySelector(new SimpleSelectById($id));
                 if (isset($value)) {
                     return $value;
                 }

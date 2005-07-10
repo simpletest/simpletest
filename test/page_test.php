@@ -461,14 +461,14 @@
         function testFormCanBeSubmitted() {
             $page = &new SimplePage(new MockSimpleHttpResponse($this));
             $page->acceptFormStart(
-                    new SimpleFormTag(array("method" => "GET", "action" => "here.php")));
+                    new SimpleFormTag(array('method' => 'GET', 'action' => 'here.php')));
             $page->AcceptTag(
-                    new SimpleSubmitTag(array("type" => "submit", "name" => "s")));
+                    new SimpleSubmitTag(array('type' => 'submit', 'name' => 's')));
             $page->acceptFormEnd();
-            $form = &$page->getFormBySubmitLabel("Submit");
+            $form = &$page->getFormBySubmitLabel('Submit');
             $this->assertEqual(
-                    $form->submitButtonByLabel("Submit"),
-                    new SimpleGetEncoding(array("s" => "Submit")));
+                    $form->submitButtonBySelector(new SimpleSelectbyLabel('Submit')),
+                    new SimpleGetEncoding(array('s' => 'Submit')));
         }
         
         function testInputFieldCanBeReadBack() {

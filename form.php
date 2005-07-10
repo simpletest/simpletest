@@ -11,94 +11,9 @@
      */
     require_once(dirname(__FILE__) . '/tag.php');
     require_once(dirname(__FILE__) . '/encoding.php');
+    require_once(dirname(__FILE__) . '/selector.php');
     /**#@-*/
     
-    /**
-     *    Used to extract form elements for testing against.
-     *    Searches by name attribute.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
-     */
-    class SimpleNameSelector {
-        var $_name;
-        
-        /**
-         *    Stashes the name for later comparison.
-         *    @param string $name     Name attribute to match.
-         */
-        function SimpleNameSelector($name) {
-            $this->_name = $name;
-        }
-
-        /**
-         *    Comparison. Compares with name attribute of
-         *    widget.
-         *    @param SimpleWidget $widget    Control to compare.
-         *    @access public
-         */
-        function isMatch($widget) {
-            return ($widget->getName() == $this->_name);
-        }
-    }
-    
-    /**
-     *    Used to extract form elements for testing against.
-     *    Searches by visible label or alt text.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
-     */
-    class SimpleLabelSelector {
-        var $_label;
-        
-        /**
-         *    Stashes the name for later comparison.
-         *    @param string $label     Visible text to match.
-         */
-        function SimpleLabelSelector($label) {
-            $this->_label = $label;
-        }
-
-        /**
-         *    Comparison. Compares visible text of widget or
-         *    related label.
-         *    @param SimpleWidget $widget    Control to compare.
-         *    @access public
-         */
-        function isMatch($widget) {
-            if (! method_exists($widget, 'isLabel')) {
-                return false;
-            }
-            return $widget->isLabel($this->_label);
-        }
-    }
-    
-    /**
-     *    Used to extract form elements for testing against.
-     *    Searches dy id attribute.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
-     */
-    class SimpleIdSelector {
-        var $_id;
-        
-        /**
-         *    Stashes the name for later comparison.
-         *    @param string $id     ID atribute to match.
-         */
-        function SimpleIdSelector($id) {
-            $this->_id = $id;
-        }
-
-        /**
-         *    Comparison. Compares id attribute of widget.
-         *    @param SimpleWidget $widget    Control to compare.
-         *    @access public
-         */
-        function isMatch($widget) {
-            return $widget->isId($this->_id);
-        }
-    }
-   
     /**
      *    Form tag class to hold widget values.
 	 *    @package SimpleTest
@@ -293,7 +208,7 @@
          *                                      if not set.
          *    @access public
          */
-        function _getValueBySelector($selector) {
+        function getValueBySelector($selector) {
             for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($selector->isMatch($this->_widgets[$i])) {
                     return $this->_widgets[$i]->getValue();
@@ -315,7 +230,7 @@
          *    @access public
          */
         function getValue($name) {
-            return $this->_getValueBySelector(new SimpleNameSelector($name));
+            return $this->getValueBySelector(new SimpleSelectByName($name));
         }
         
         /**
@@ -326,7 +241,7 @@
          *    @access public
          */
         function getValueByLabel($name) {
-            return $this->_getValueBySelector(new SimpleLabelSelector($name));
+            return $this->getValueBySelector(new SimpleSelectByLabel($name));
         }
         
         /**
@@ -337,7 +252,7 @@
          *    @access public
          */
         function getValueById($id) {
-            return $this->_getValueBySelector(new SimpleIdSelector($id));
+            return $this->getValueBySelector(new SimpleSelectById($id));
         }
         
         /**
@@ -349,7 +264,7 @@
          *                                      present, nothing will be set.
          *    @access public
          */
-        function _setFieldBySelector($selector, $value) {
+        function setFieldBySelector($selector, $value) {
             $success = false;
             for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($selector->isMatch($this->_widgets[$i])) {
@@ -371,7 +286,7 @@
          *    @access public
          */
         function setFieldByName($name, $value) {
-            return $this->_setFieldBySelector(new SimpleNameSelector($name), $value);
+            return $this->setFieldBySelector(new SimpleSelectByName($name), $value);
         }
         
         /**
@@ -384,7 +299,7 @@
          *    @access public
          */
         function setFieldByLabel($label, $value) {
-            return $this->_setFieldBySelector(new SimpleLabelSelector($label), $value);
+            return $this->setFieldBySelector(new SimpleSelectByLabel($label), $value);
         }
          
         /**
@@ -397,16 +312,17 @@
          *    @access public
          */
         function setFieldById($id, $value) {
-            return $this->_setFieldBySelector(new SimpleIdSelector($id), $value);
+            return $this->setFieldBySelector(new SimpleSelectById($id), $value);
         }
         
         /**
-         *    Used by the page to set external labels.
+         *    Used by the page object to set widgets labels to
+         *    external label tags.
          *    @param string $label        Label to attach.
          *    @access public
          */
         function setLabelById($id, $label) {
-            $selector = new SimpleIdSelector($id);
+            $selector = new SimpleSelectById($id);
             for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($selector->isMatch($this->_widgets[$i])) {
                     $this->_widgets[$i]->setLabel($label);
@@ -420,8 +336,9 @@
          *    @param SimpleSelector $selector   Criteria to apply.
          *    @return boolean                   True if present.
          *    @access private
+         *    @access public
          */
-        function _hasSubmitBySelector($selector) {
+        function hasSubmitBySelector($selector) {
             foreach ($this->_buttons as $button) {
                 if ($selector->isMatch($button)) {
                     return true;
@@ -431,85 +348,18 @@
         }
         
         /**
-         *    Test to see if a form has a submit button with this
-         *    name attribute.
-         *    @param string $name        Name to look for.
-         *    @return boolean            True if present.
-         *    @access public
-         */
-        function hasSubmitName($name) {
-            return $this->_hasSubmitBySelector(new SimpleNameSelector($name));
-        }
-        
-        /**
-         *    Test to see if a form has a submit button with this
-         *    value attribute.
-         *    @param string $label    Button label to search for.
-         *    @return boolean         True if present.
-         *    @access public
-         */
-        function hasSubmitLabel($label) {
-            return $this->_hasSubmitBySelector(new SimpleLabelSelector($label));
-        }
-        
-        /**
-         *    Test to see if a form has a submit button with this
-         *    ID attribute.
-         *    @param string $id      Button ID attribute to search for.
-         *    @return boolean        True if present.
-         *    @access public
-         */
-        function hasSubmitId($id) {
-            return $this->_hasSubmitBySelector(new SimpleIdSelector($id));
-        }
-        
-        /**
          *    Test to see if a form has an image control.
          *    @param SimpleSelector $selector   Criteria to apply.
          *    @return boolean                   True if present.
          *    @access public
          */
-        function _hasImageBySelector($selector) {
+        function hasImageBySelector($selector) {
             foreach ($this->_images as $image) {
                 if ($selector->isMatch($image)) {
                     return true;
                 }
             }
             return false;
-        }
-        
-        /**
-         *    Test to see if a form has a submit button with this
-         *    name attribute.
-         *    @param string $label   Button alt attribute to search for
-         *                           or nearest equivalent.
-         *    @return boolean        True if present.
-         *    @access public
-         */
-        function hasImageLabel($label) {
-            return $this->_hasImageBySelector(new SimpleLabelSelector($label));
-        }
-        
-        /**
-         *    Test to see if a form has a submittable image with this
-         *    field name.
-         *    @param string $name    Image name to search for.
-         *    @return boolean        True if present.
-         *    @access public
-         */
-        function hasImageName($name) {
-            return $this->_hasImageBySelector(new SimpleNameSelector($name));
-        }
-         
-        /**
-         *    Test to see if a form has a submittable image with this
-         *    ID attribute.
-         *    @param string $id      Button ID attribute to search for.
-         *    @return boolean        True if present.
-         *    @access public
-         */
-        function hasImageId($id) {
-            return $this->_hasImageBySelector(new SimpleIdSelector($id));
         }
        
         /**
@@ -521,7 +371,8 @@
          *                                      in the form.
          *    @access public
          */
-        function _submitButtonBySelector($selector, $additional) {
+        function submitButtonBySelector($selector, $additional = false) {
+            $additional = $additional ? $additional : array();
             foreach ($this->_buttons as $button) {
                 if ($selector->isMatch($button)) {
                     $encoding = $this->_encode();
@@ -533,51 +384,6 @@
                 }
             }
             return false;
-        }
-       
-        /**
-         *    Gets the submit values for a named button.
-         *    @param string $name      Button label to search for.
-         *    @param hash $additional  Additional data for the form.
-         *    @return SimpleEncoding   Submitted values or false
-         *                             if there is no such button in the
-         *                             form.
-         *    @access public
-         */
-        function submitButtonByName($name, $additional = false) {
-            return $this->_submitButtonBySelector(
-                    new SimpleNameSelector($name),
-                    $additional);
-        }
-        
-        /**
-         *    Gets the submit values for a named button.
-         *    @param string $label     Button label to search for.
-         *    @param hash $additional  Additional data for the form.
-         *    @return SimpleEncoding   Submitted values or false
-         *                             if there is no such button in the
-         *                             form.
-         *    @access public
-         */
-        function submitButtonByLabel($label, $additional = false) {
-            return $this->_submitButtonBySelector(
-                    new SimpleLabelSelector($label),
-                    $additional);
-        }
-        
-        /**
-         *    Gets the submit values for a button identified by the ID.
-         *    @param string $id        Button ID attribute to search for.
-         *    @param hash $additional  Additional data for the form.
-         *    @return SimpleEncoding   Submitted values or false
-         *                             if there is no such button in the
-         *                             form.
-         *    @access public
-         */
-        function submitButtonById($id, $additional = false) {
-            return $this->_submitButtonBySelector(
-                    new SimpleIdSelector($id),
-                    $additional);
         }
          
         /**
@@ -591,7 +397,8 @@
          *                                      form.
          *    @access public
          */
-        function _submitImageBySelector($selector, $x, $y, $additional) {
+        function submitImageBySelector($selector, $x, $y, $additional = false) {
+            $additional = $additional ? $additional : array();
             foreach ($this->_images as $image) {
                 if ($selector->isMatch($image)) {
                     $encoding = $this->_encode();
@@ -603,64 +410,6 @@
                 }
             }
             return false;
-        }
-         
-        /**
-         *    Gets the submit values for an image identified by the alt
-         *    tag or nearest equivalent.
-         *    @param string $label     Button label to search for.
-         *    @param integer $x        X-coordinate of click.
-         *    @param integer $y        Y-coordinate of click.
-         *    @param hash $additional  Additional data for the form.
-         *    @return SimpleEncoding   Submitted values or false
-         *                             if there is no such button in the
-         *                             form.
-         *    @access public
-         */
-        function submitImageByLabel($label, $x, $y, $additional = false) {
-            return $this->_submitImageBySelector(
-                    new SimpleLabelSelector($label),
-                    $x,
-                    $y,
-                    $additional);
-        }
-         
-        /**
-         *    Gets the submit values for an image identified by the ID.
-         *    @param string $name      Image name to search for.
-         *    @param integer $x        X-coordinate of click.
-         *    @param integer $y        Y-coordinate of click.
-         *    @param hash $additional  Additional data for the form.
-         *    @return SimpleEncoding   Submitted values or false
-         *                             if there is no such button in the
-         *                             form.
-         *    @access public
-         */
-        function submitImageByName($name, $x, $y, $additional = false) {
-            return $this->_submitImageBySelector(
-                    new SimpleNameSelector($name),
-                    $x,
-                    $y,
-                    $additional);
-        }
-          
-        /**
-         *    Gets the submit values for an image identified by the ID.
-         *    @param string/integer $id  Button ID attribute to search for.
-         *    @param integer $x          X-coordinate of click.
-         *    @param integer $y          Y-coordinate of click.
-         *    @param hash $additional    Additional data for the form.
-         *    @return SimpleEncoding     Submitted values or false
-         *                               if there is no such button in the
-         *                               form.
-         *    @access public
-         */
-        function submitImageById($id, $x, $y, $additional = false) {
-            return $this->_submitImageBySelector(
-                    new SimpleIdSelector($id),
-                    $x,
-                    $y,
-                    $additional);
         }
       
         /**

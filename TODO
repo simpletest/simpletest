@@ -39,6 +39,7 @@ Add referer header (3).
 Add &nbsp; to space normalisation (1).
 Add label tag parsing (3/10) - done.
 Use lexer for plain text extraction (3).
+Fix bug with redirects failing on directory without trailing slash (1).
 
 Web tester
 ----------

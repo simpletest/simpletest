@@ -387,8 +387,8 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
             $form->setReturnValue('getMethod', 'post');
-            $form->setReturnValue('submitButtonByLabel', new SimplePostEncoding(array('a' => 'A')));
-            $form->expectOnce('submitButtonByLabel', array('Go', false));
+            $form->setReturnValue('submitButtonBySelector', new SimplePostEncoding(array('a' => 'A')));
+            $form->expectOnce('submitButtonBySelector', array(new SimpleSelectByLabel('Go'), false));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormBySubmitLabel', $form);
@@ -415,7 +415,7 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', new SimpleUrl('http://this.com/page.html'));
             $form->setReturnValue('getMethod', 'get');
-            $form->setReturnValue('submitButtonByLabel', new SimpleGetEncoding(array('a' => 'A')));
+            $form->setReturnValue('submitButtonBySelector', new SimpleGetEncoding(array('a' => 'A')));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormBySubmitLabel', $form);
@@ -439,7 +439,7 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
             $form->setReturnValue('getMethod', 'post');
-            $form->setReturnValue('submitButtonByName', new SimplePostEncoding(array('a' => 'A')));
+            $form->setReturnValue('submitButtonBySelector', new SimplePostEncoding(array('a' => 'A')));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormBySubmitName', $form);
@@ -460,8 +460,8 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
             $form->setReturnValue('getMethod', 'post');
-            $form->setReturnValue('submitButtonById', new SimplePostEncoding(array('a' => 'A')));
-            $form->expectOnce('submitButtonById', array(99, false));
+            $form->setReturnValue('submitButtonBySelector', new SimplePostEncoding(array('a' => 'A')));
+            $form->expectOnce('submitButtonBySelector', array(new SimpleSelectById(99), false));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormBySubmitId', $form);
@@ -483,8 +483,8 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
             $form->setReturnValue('getMethod', 'post');
-            $form->setReturnValue('submitImageByLabel', new SimplePostEncoding(array('a' => 'A')));
-            $form->expectOnce('submitImageByLabel', array('Go!', 10, 11, false));
+            $form->setReturnValue('submitImageBySelector', new SimplePostEncoding(array('a' => 'A')));
+            $form->expectOnce('submitImageBySelector', array(new SimpleSelectByLabel('Go!'), 10, 11, false));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormByImageLabel', $form);
@@ -506,8 +506,8 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
             $form->setReturnValue('getMethod', 'post');
-            $form->setReturnValue('submitImageByName', new SimplePostEncoding(array('a' => 'A')));
-            $form->expectOnce('submitImageByName', array('a', 10, 11, false));
+            $form->setReturnValue('submitImageBySelector', new SimplePostEncoding(array('a' => 'A')));
+            $form->expectOnce('submitImageBySelector', array(new SimpleSelectByName('a'), 10, 11, false));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormByImageName', $form);
@@ -529,8 +529,8 @@
             $form = &new MockSimpleForm($this);
             $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
             $form->setReturnValue('getMethod', 'post');
-            $form->setReturnValue('submitImageById', new SimplePostEncoding(array('a' => 'A')));
-            $form->expectOnce('submitImageById', array(99, 10, 11, false));
+            $form->setReturnValue('submitImageBySelector', new SimplePostEncoding(array('a' => 'A')));
+            $form->expectOnce('submitImageBySelector', array(new SimpleSelectById(99), 10, 11, false));
             
             $page = &new MockSimplePage($this);
             $page->setReturnReference('getFormByImageId', $form);

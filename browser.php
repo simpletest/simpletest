@@ -13,6 +13,7 @@
     require_once(dirname(__FILE__) . '/http.php');
     require_once(dirname(__FILE__) . '/encoding.php');
     require_once(dirname(__FILE__) . '/page.php');
+    require_once(dirname(__FILE__) . '/selector.php');
     require_once(dirname(__FILE__) . '/frames.php');
     require_once(dirname(__FILE__) . '/user_agent.php');
     /**#@-*/
@@ -818,7 +819,7 @@
             }
             $success = $this->_load(
                     $form->getAction(),
-                    $form->submitButtonByLabel($label, $additional));
+                    $form->submitButtonBySelector(new SimpleSelectByLabel($label), $additional));
             return ($success ? $this->getContent() : $success);
         }
         
@@ -836,7 +837,7 @@
             }
             $success = $this->_load(
                     $form->getAction(),
-                    $form->submitButtonByName($name, $additional));
+                    $form->submitButtonBySelector(new SimpleSelectByName($name), $additional));
             return ($success ? $this->getContent() : $success);
         }
         
@@ -854,7 +855,7 @@
             }
             $success = $this->_load(
                     $form->getAction(),
-                    $form->submitButtonById($id, $additional));
+                    $form->submitButtonBySelector(new SimpleSelectById($id), $additional));
             return ($success ? $this->getContent() : $success);
         }
         
@@ -877,7 +878,7 @@
             }
             $success = $this->_load(
                     $form->getAction(),
-                    $form->submitImageByLabel($label, $x, $y, $additional));
+                    $form->submitImageBySelector(new SimpleSelectByLabel($label), $x, $y, $additional));
             return ($success ? $this->getContent() : $success);
         }
         
@@ -900,7 +901,7 @@
             }
             $success = $this->_load(
                     $form->getAction(),
-                    $form->submitImageByName($name, $x, $y, $additional));
+                    $form->submitImageBySelector(new SimpleSelectByName($name), $x, $y, $additional));
             return ($success ? $this->getContent() : $success);
         }
          
@@ -922,7 +923,7 @@
             }
             $success = $this->_load(
                     $form->getAction(),
-                    $form->submitImageById($id, $x, $y, $additional));
+                    $form->submitImageBySelector(new SimpleSelectById($id), $x, $y, $additional));
             return ($success ? $this->getContent() : $success);
         }
         
