@@ -759,7 +759,9 @@
             $this->get('http://www.lastcraft.com/test/upload_form.html');
             $this->assertTrue($this->setField('Content:',
                     dirname(__FILE__) . '/support/upload_sample.txt'));
+            $this->assertField('Content:', dirname(__FILE__) . '/support/upload_sample.txt');
             $this->click('Go!');
+            //$this->showRequest();
             //$this->assertWantedText('Sample for testing file upload');
         }
     }

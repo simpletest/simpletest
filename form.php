@@ -121,9 +121,7 @@
         function _encode() {
             $encoding = $this->_encoding;
             for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-                $encoding->add(
-                        $this->_widgets[$i]->getName(),
-                        $this->_widgets[$i]->getValue());
+                $this->_widgets[$i]->write($encoding);
             }
             return $encoding;
         }

@@ -67,6 +67,16 @@
         }
         
         /**
+         *    Adds a MIME part to the query. Does nothing for
+         *    a standrad form encoded packet.
+         *    @param string $key            Key to add value to.
+         *    @param string/array $value    New data.
+         *    @access public
+         */
+        function addMime($key, $value) {
+        }
+        
+        /**
          *    Adds a set of parameters to this query.
          *    @param array/SimpleQueryString $query  Multiple values are
          *                                           as lists on a single key.
@@ -288,6 +298,16 @@
         function SimpleMultipartEncoding($query = false, $boundary = false) {
             $this->SimplePostEncoding($query);
             $this->_boundary = ($boundary === false ? uniqid('st') : $boundary);
+        }
+        
+        /**
+         *    Adds a MIME part to the query.
+         *    @param string $key          Key to add value to.
+         *    @param string $value        Raw data.
+         *    @access public
+         */
+        function addMime($key, $value) {
+            $this->add($key, $value);
         }
         
         /**

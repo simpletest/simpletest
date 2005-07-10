@@ -2,6 +2,9 @@
     // $Id$
     
     require_once(dirname(__FILE__) . '/../tag.php');
+    require_once(dirname(__FILE__) . '/../encoding.php');
+    
+    Mock::generate('SimpleMultipartEncoding');
     
     class TestOfTag extends UnitTestCase {
         
@@ -476,6 +479,24 @@
             $this->assertFalse($group->isId(0));
             $this->assertTrue($group->isId(1));
             $this->assertTrue($group->isId(2));
+        }
+    }
+    
+    class TestofUploadWidget extends UnitTestCase {
+        
+        function testValueIsFilePath() {
+            $upload = &new SimpleUploadTag(array('name' => 'a'));
+            $upload->setValue(dirname(__FILE__) . '/support/upload_sample.txt');
+            $this->assertEqual($upload->getValue(), dirname(__FILE__) . '/support/upload_sample.txt');
+        }
+        
+        function testSubmitsFileContents() {
+            $encoding = &new MockSimpleMultipartEncoding($this);
+            $encoding->expectOnce('addMime', array('a', 'Sample for testing file upload'));
+            $upload = &new SimpleUploadTag(array('name' => 'a'));
+            $upload->setValue(dirname(__FILE__) . '/support/upload_sample.txt');
+            $upload->write($encoding);
+            $encoding->tally();
         }
     }
     

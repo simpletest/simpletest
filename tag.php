@@ -10,6 +10,7 @@
      * include SimpleTest files
      */
     require_once(dirname(__FILE__) . '/parser.php');
+    require_once(dirname(__FILE__) . '/encoding.php');
     /**#@-*/
    
     /**
@@ -288,6 +289,15 @@
          */
         function isLabel($label) {
             return $this->_label == trim($label);
+        }
+        
+        /**
+         *    Dispatches the value into the form encoded packet.
+         *    @param SimpleEncoding $encoding    Form packet.
+         *    @access public
+         */
+        function write(&$encoding) {
+            $encoding->add($this->getName(), $this->getValue());
         }
     }
     
@@ -632,6 +642,18 @@
          */
         function expectEndTag() {
             return false;
+        }
+        
+        /**
+         *    Dispatches the value into the form encoded packet.
+         *    @param SimpleEncoding $encoding    Form packet.
+         *    @access public
+         */
+        function write(&$encoding) {
+            if (! file_exists($this->getValue())) {
+                return;
+            }
+            $encoding->addMime($this->getName(), implode('', file($this->getValue())));
         }
     }
     
@@ -1046,6 +1068,15 @@
                 }
             }
             return false;
+        }
+        
+        /**
+         *    Dispatches the value into the form encoded packet.
+         *    @param SimpleEncoding $encoding    Form packet.
+         *    @access public
+         */
+        function write(&$encoding) {
+            $encoding->add($this->getName(), $this->getValue());
         }
     }
 
