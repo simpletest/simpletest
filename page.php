@@ -720,7 +720,7 @@
             }
             foreach ($this->_left_over_labels as $label) {
                 for ($i = 0, $count = count($this->_complete_forms); $i < $count; $i++) {
-                    $this->_complete_forms[$i]->setLabelById($label->getFor(), $label->getText());
+                    $this->_complete_forms[$i]->attachLabelBySelector(new SimpleSelectById($label->getFor()), $label->getText());
                 }
             }
         }

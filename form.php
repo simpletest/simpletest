@@ -223,39 +223,6 @@
         }
         
         /**
-         *    Extracts current value from form.
-         *    @param string $name        Keyed by widget name.
-         *    @return string/array       Value(s) or null
-         *                               if not set.
-         *    @access public
-         */
-        function getValue($name) {
-            return $this->getValueBySelector(new SimpleSelectByName($name));
-        }
-        
-        /**
-         *    Extracts current value from form by the label.
-         *    @param string $label       External label content.
-         *    @return string/array       Value(s) or null
-         *                               if not set.
-         *    @access public
-         */
-        function getValueByLabel($name) {
-            return $this->getValueBySelector(new SimpleSelectByLabel($name));
-        }
-        
-        /**
-         *    Extracts current value from form by the ID.
-         *    @param string/integer $id  Keyed by widget ID attribute.
-         *    @return string/array       Value(s) or null
-         *                               if not set.
-         *    @access public
-         */
-        function getValueById($id) {
-            return $this->getValueBySelector(new SimpleSelectById($id));
-        }
-        
-        /**
          *    Sets a widget value within the form.
          *    @param SimpleSelector $selector   Criteria to apply.
          *    @param string $value              Value to input into the widget.
@@ -277,52 +244,28 @@
         }
         
         /**
-         *    Sets a widget value within the form by name only.
-         *    @param string $name     Name of widget tag.
-         *    @param string $value    Value to input into the widget.
-         *    @return boolean         True if value is legal, false
-         *                            otherwise. If the field is not
-         *                            present, nothing will be set.
-         *    @access public
-         */
-        function setFieldByName($name, $value) {
-            return $this->setFieldBySelector(new SimpleSelectByName($name), $value);
-        }
-        
-        /**
-         *    Sets a widget value within the form by label tag.
-         *    @param string $label    label associated with widget tag.
-         *    @param string $value    Value to input into the widget.
-         *    @return boolean         True if value is legal, false
-         *                            otherwise. If the field is not
-         *                            present, nothing will be set.
-         *    @access public
-         */
-        function setFieldByLabel($label, $value) {
-            return $this->setFieldBySelector(new SimpleSelectByLabel($label), $value);
-        }
-         
-        /**
-         *    Sets a widget value within the form by using the ID.
-         *    @param string/integer $id   Name of widget tag.
-         *    @param string $value        Value to input into the widget.
-         *    @return boolean             True if value is legal, false
-         *                                otherwise. If the field is not
-         *                                present, nothing will be set.
-         *    @access public
-         */
-        function setFieldById($id, $value) {
-            return $this->setFieldBySelector(new SimpleSelectById($id), $value);
-        }
-        
-        /**
          *    Used by the page object to set widgets labels to
          *    external label tags.
          *    @param string $label        Label to attach.
          *    @access public
          */
-        function setLabelById($id, $label) {
+        function _setLabelById($id, $label) {
             $selector = new SimpleSelectById($id);
+            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
+                if ($selector->isMatch($this->_widgets[$i])) {
+                    $this->_widgets[$i]->setLabel($label);
+                    return;
+                }
+            }
+        }
+        
+        /**
+         *    Used by the page object to set widgets labels to
+         *    external label tags.
+         *    @param SimpleSelector $selector   Criteria to apply.
+         *    @access public
+         */
+        function attachLabelBySelector($selector, $label) {
             for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($selector->isMatch($this->_widgets[$i])) {
                     $this->_widgets[$i]->setLabel($label);
