@@ -14,7 +14,7 @@
                     $form->getAction(),
                     new SimpleUrl('http://host/a/here.php'));
             $this->assertIdentical($form->getId(), '33');
-            $this->assertNull($form->getValueBySelector(new SimpleSelectByName('a')));
+            $this->assertNull($form->getValue(new SimpleByName('a')));
         }
         
         function testEmptyAction() {
@@ -57,11 +57,11 @@
                     new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleTextTag(
                     array('name' => 'me', 'type' => 'text', 'value' => 'Myself')));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('me')), 'Myself');
-            $this->assertTrue($form->setFieldBySelector(new SimpleSelectByName('me'), 'Not me'));
-            $this->assertFalse($form->setFieldBySelector(new SimpleSelectByName('not_present'), 'Not me'));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('me')), 'Not me');
-            $this->assertNull($form->getValueBySelector(new SimpleSelectByName('not_present')));
+            $this->assertIdentical($form->getValue(new SimpleByName('me')), 'Myself');
+            $this->assertTrue($form->setField(new SimpleByName('me'), 'Not me'));
+            $this->assertFalse($form->setField(new SimpleByName('not_present'), 'Not me'));
+            $this->assertIdentical($form->getValue(new SimpleByName('me')), 'Not me');
+            $this->assertNull($form->getValue(new SimpleByName('not_present')));
         }
         
         function testTextWidgetById() {
@@ -70,9 +70,9 @@
                     new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleTextTag(
                     array('name' => 'me', 'type' => 'text', 'value' => 'Myself', 'id' => 50)));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectById(50)), 'Myself');
-            $this->assertTrue($form->setFieldBySelector(new SimpleSelectById(50), 'Not me'));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectById(50)), 'Not me');
+            $this->assertIdentical($form->getValue(new SimpleById(50)), 'Myself');
+            $this->assertTrue($form->setField(new SimpleById(50), 'Not me'));
+            $this->assertIdentical($form->getValue(new SimpleById(50)), 'Not me');
         }
         
         function testTextWidgetByLabel() {
@@ -82,9 +82,9 @@
             $widget = &new SimpleTextTag(array('name' => 'me', 'type' => 'text', 'value' => 'a'));
             $form->addWidget($widget);
             $widget->setLabel('thing');
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByLabel('thing')), 'a');
-            $this->assertTrue($form->setFieldBySelector(new SimpleSelectByLabel('thing'), 'b'));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByLabel('thing')), 'b');
+            $this->assertIdentical($form->getValue(new SimpleByLabel('thing')), 'a');
+            $this->assertTrue($form->setField(new SimpleByLabel('thing'), 'b'));
+            $this->assertIdentical($form->getValue(new SimpleByLabel('thing')), 'b');
         }
         
         function testSubmitEmpty() {
@@ -100,17 +100,17 @@
                     new SimpleUrl('http://host'));
             $form->addWidget(new SimpleSubmitTag(
                     array('type' => 'submit', 'name' => 'go', 'value' => 'Go!', 'id' => '9')));
-            $this->assertTrue($form->hasSubmitBySelector(new SimpleSelectByName('go')));
-            $this->assertEqual($form->getValueBySelector(new SimpleSelectByName('go')), 'Go!');
-            $this->assertEqual($form->getValueBySelector(new SimpleSelectById(9)), 'Go!');
+            $this->assertTrue($form->hasSubmit(new SimpleByName('go')));
+            $this->assertEqual($form->getValue(new SimpleByName('go')), 'Go!');
+            $this->assertEqual($form->getValue(new SimpleById(9)), 'Go!');
             $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectByName('go')),
+                    $form->submitButton(new SimpleByName('go')),
                     new SimpleGetEncoding(array('go' => 'Go!')));            
             $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectByLabel('Go!')),
+                    $form->submitButton(new SimpleByLabel('Go!')),
                     new SimpleGetEncoding(array('go' => 'Go!')));            
             $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectById(9)),
+                    $form->submitButton(new SimpleById(9)),
                     new SimpleGetEncoding(array('go' => 'Go!')));            
         }
         
@@ -119,15 +119,9 @@
                     new SimpleFormTag(array()),
                     new SimpleUrl('http://host'));
             $form->addWidget(new SimpleSubmitTag(
-                    array('type' => 'submit', 'name' => 'go', 'value' => 'Go!', 'id' => '9')));
+                    array('type' => 'submit', 'name' => 'go', 'value' => 'Go!')));
             $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectByName('go'), array('a' => 'A')),
-                    new SimpleGetEncoding(array('go' => 'Go!', 'a' => 'A')));            
-            $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectByLabel('Go!'), array('a' => 'A')),
-                    new SimpleGetEncoding(array('go' => 'Go!', 'a' => 'A')));            
-            $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectById(9), array('a' => 'A')),
+                    $form->submitButton(new SimpleByLabel('Go!'), array('a' => 'A')),
                     new SimpleGetEncoding(array('go' => 'Go!', 'a' => 'A')));            
         }
         
@@ -136,18 +130,12 @@
                     new SimpleFormTag(array()),
                     new SimpleUrl('http://host'));
             $form->addWidget(new SimpleSubmitTag(
-                    array('type' => 'submit', 'name' => 'test', 'value' => 'Submit', 'id' => '9')));
-            $this->assertTrue($form->hasSubmitBySelector(new SimpleSelectByName('test')));
-            $this->assertEqual($form->getValueBySelector(new SimpleSelectByName('test')), 'Submit');
-            $this->assertEqual($form->getValueBySelector(new SimpleSelectById(9)), 'Submit');
+                    array('type' => 'submit', 'name' => 'test', 'value' => 'Submit')));
             $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectByName('test')),
+                    $form->submitButton(new SimpleByName('test')),
                     new SimpleGetEncoding(array('test' => 'Submit')));            
             $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectByLabel('Submit')),
-                    new SimpleGetEncoding(array('test' => 'Submit')));            
-            $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectById(9)),
+                    $form->submitButton(new SimpleByLabel('Submit')),
                     new SimpleGetEncoding(array('test' => 'Submit')));            
         }
         
@@ -156,11 +144,9 @@
                     new SimpleFormTag(array()),
                     new SimpleUrl('http://host'));
             $form->addWidget(new SimpleSubmitTag(
-                    array('type' => 'submit', 'name' => 'test', 'value' => ' Submit ', 'id' => '9')));
-            $this->assertEqual($form->getValueBySelector(new SimpleSelectByName('test')), ' Submit ');
-            $this->assertEqual($form->getValueBySelector(new SimpleSelectById(9)), ' Submit ');
+                    array('type' => 'submit', 'name' => 'test', 'value' => ' Submit ')));
             $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectByLabel('Submit')),
+                    $form->submitButton(new SimpleByLabel('Submit')),
                     new SimpleGetEncoding(array('test' => ' Submit ')));            
         }
         
@@ -174,17 +160,17 @@
                     'name' => 'go',
                     'alt' => 'Go!',
                     'id' => '9')));
-            $this->assertTrue($form->hasImageBySelector(new SimpleSelectByLabel('Go!')));
+            $this->assertTrue($form->hasImage(new SimpleByLabel('Go!')));
             $this->assertEqual(
-                    $form->submitImageBySelector(new SimpleSelectByLabel('Go!'), 100, 101),
+                    $form->submitImage(new SimpleByLabel('Go!'), 100, 101),
                     new SimpleGetEncoding(array('go.x' => 100, 'go.y' => 101)));
-            $this->assertTrue($form->hasImageBySelector(new SimpleSelectByName('go')));
+            $this->assertTrue($form->hasImage(new SimpleByName('go')));
             $this->assertEqual(
-                    $form->submitImageBySelector(new SimpleSelectByName('go'), 100, 101),
+                    $form->submitImage(new SimpleByName('go'), 100, 101),
                     new SimpleGetEncoding(array('go.x' => 100, 'go.y' => 101)));
-            $this->assertTrue($form->hasImageBySelector(new SimpleSelectById(9)));
+            $this->assertTrue($form->hasImage(new SimpleById(9)));
             $this->assertEqual(
-                    $form->submitImageBySelector(new SimpleSelectById(9), 100, 101),
+                    $form->submitImage(new SimpleById(9), 100, 101),
                     new SimpleGetEncoding(array('go.x' => 100, 'go.y' => 101)));
         }
         
@@ -196,18 +182,9 @@
                     'type' => 'image',
                     'src' => 'source.jpg',
                     'name' => 'go',
-                    'alt' => 'Go!',
-                    'id' => '9')));
+                    'alt' => 'Go!')));
             $this->assertEqual(
-                    $form->submitImageBySelector(new SimpleSelectByLabel('Go!'), 100, 101, array('a' => 'A')),
-                    new SimpleGetEncoding(array('go.x' => 100, 'go.y' => 101, 'a' => 'A')));
-            $this->assertTrue($form->hasImageBySelector(new SimpleSelectByName('go')));
-            $this->assertEqual(
-                    $form->submitImageBySelector(new SimpleSelectByName('go'), 100, 101, array('a' => 'A')),
-                    new SimpleGetEncoding(array('go.x' => 100, 'go.y' => 101, 'a' => 'A')));
-            $this->assertTrue($form->hasImageBySelector(new SimpleSelectById(9)));
-            $this->assertEqual(
-                    $form->submitImageBySelector(new SimpleSelectById(9), 100, 101, array('a' => 'A')),
+                    $form->submitImage(new SimpleByLabel('Go!'), 100, 101, array('a' => 'A')),
                     new SimpleGetEncoding(array('go.x' => 100, 'go.y' => 101, 'a' => 'A')));
         }
         
@@ -219,16 +196,16 @@
                     array('type' => 'submit', 'name' => 'go', 'value' => 'Go', 'id' => '9'));
             $widget->addContent('Go!');
             $form->addWidget($widget);
-            $this->assertTrue($form->hasSubmitBySelector(new SimpleSelectByName('go')));
-            $this->assertTrue($form->hasSubmitBySelector(new SimpleSelectByLabel('Go!')));
+            $this->assertTrue($form->hasSubmit(new SimpleByName('go')));
+            $this->assertTrue($form->hasSubmit(new SimpleByLabel('Go!')));
             $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectByName('go')),
+                    $form->submitButton(new SimpleByName('go')),
                     new SimpleGetEncoding(array('go' => 'Go')));
             $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectByLabel('Go!')),
+                    $form->submitButton(new SimpleByLabel('Go!')),
                     new SimpleGetEncoding(array('go' => 'Go')));
             $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectById(9)),
+                    $form->submitButton(new SimpleById(9)),
                     new SimpleGetEncoding(array('go' => 'Go')));
         }
         
@@ -264,11 +241,11 @@
                     new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleCheckboxTag(
                     array('name' => 'me', 'type' => 'checkbox')));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('me')), false);
-            $this->assertTrue($form->setFieldBySelector(new SimpleSelectByName('me'), 'on'));
-            $this->assertEqual($form->getValueBySelector(new SimpleSelectByName('me')), 'on');
-            $this->assertFalse($form->setFieldBySelector(new SimpleSelectByName('me'), 'other'));
-            $this->assertEqual($form->getValueBySelector(new SimpleSelectByName('me')), 'on');
+            $this->assertIdentical($form->getValue(new SimpleByName('me')), false);
+            $this->assertTrue($form->setField(new SimpleByName('me'), 'on'));
+            $this->assertEqual($form->getValue(new SimpleByName('me')), 'on');
+            $this->assertFalse($form->setField(new SimpleByName('me'), 'other'));
+            $this->assertEqual($form->getValue(new SimpleByName('me')), 'on');
         }
         
         function testChecked() {
@@ -277,11 +254,11 @@
                     new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleCheckboxTag(
                     array('name' => 'me', 'value' => 'a', 'type' => 'checkbox', 'checked' => '')));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('me')), 'a');
-            $this->assertTrue($form->setFieldBySelector(new SimpleSelectByName('me'), 'a'));
-            $this->assertEqual($form->getValueBySelector(new SimpleSelectByName('me')), 'a');
-            $this->assertTrue($form->setFieldBySelector(new SimpleSelectByName('me'), false));
-            $this->assertEqual($form->getValueBySelector(new SimpleSelectByName('me')), false);
+            $this->assertIdentical($form->getValue(new SimpleByName('me')), 'a');
+            $this->assertTrue($form->setField(new SimpleByName('me'), 'a'));
+            $this->assertEqual($form->getValue(new SimpleByName('me')), 'a');
+            $this->assertTrue($form->setField(new SimpleByName('me'), false));
+            $this->assertEqual($form->getValue(new SimpleByName('me')), false);
         }
         
         function testSingleUncheckedRadioButton() {
@@ -290,9 +267,9 @@
                     new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleRadioButtonTag(
                     array('name' => 'me', 'value' => 'a', 'type' => 'radio')));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('me')), false);
-            $this->assertTrue($form->setFieldBySelector(new SimpleSelectByName('me'), 'a'));
-            $this->assertEqual($form->getValueBySelector(new SimpleSelectByName('me')), 'a');
+            $this->assertIdentical($form->getValue(new SimpleByName('me')), false);
+            $this->assertTrue($form->setField(new SimpleByName('me'), 'a'));
+            $this->assertEqual($form->getValue(new SimpleByName('me')), 'a');
         }
         
         function testSingleCheckedRadioButton() {
@@ -301,8 +278,8 @@
                     new SimpleUrl('htp://host'));
             $form->addWidget(new SimpleRadioButtonTag(
                     array('name' => 'me', 'value' => 'a', 'type' => 'radio', 'checked' => '')));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('me')), 'a');
-            $this->assertFalse($form->setFieldBySelector(new SimpleSelectByName('me'), 'other'));
+            $this->assertIdentical($form->getValue(new SimpleByName('me')), 'a');
+            $this->assertFalse($form->setField(new SimpleByName('me'), 'other'));
         }
         
         function testUncheckedRadioButtons() {
@@ -313,13 +290,13 @@
                     array('name' => 'me', 'value' => 'a', 'type' => 'radio')));
             $form->addWidget(new SimpleRadioButtonTag(
                     array('name' => 'me', 'value' => 'b', 'type' => 'radio')));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('me')), false);
-            $this->assertTrue($form->setFieldBySelector(new SimpleSelectByName('me'), 'a'));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('me')), 'a');
-            $this->assertTrue($form->setFieldBySelector(new SimpleSelectByName('me'), 'b'));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('me')), 'b');
-            $this->assertFalse($form->setFieldBySelector(new SimpleSelectByName('me'), 'c'));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('me')), 'b');
+            $this->assertIdentical($form->getValue(new SimpleByName('me')), false);
+            $this->assertTrue($form->setField(new SimpleByName('me'), 'a'));
+            $this->assertIdentical($form->getValue(new SimpleByName('me')), 'a');
+            $this->assertTrue($form->setField(new SimpleByName('me'), 'b'));
+            $this->assertIdentical($form->getValue(new SimpleByName('me')), 'b');
+            $this->assertFalse($form->setField(new SimpleByName('me'), 'c'));
+            $this->assertIdentical($form->getValue(new SimpleByName('me')), 'b');
         }
         
         function testCheckedRadioButtons() {
@@ -330,9 +307,9 @@
                     array('name' => 'me', 'value' => 'a', 'type' => 'radio')));
             $form->addWidget(new SimpleRadioButtonTag(
                     array('name' => 'me', 'value' => 'b', 'type' => 'radio', 'checked' => '')));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('me')), 'b');
-            $this->assertTrue($form->setFieldBySelector(new SimpleSelectByName('me'), 'a'));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('me')), 'a');
+            $this->assertIdentical($form->getValue(new SimpleByName('me')), 'b');
+            $this->assertTrue($form->setField(new SimpleByName('me'), 'a'));
+            $this->assertIdentical($form->getValue(new SimpleByName('me')), 'a');
         }
         
         function testMultipleFieldsWithSameKey() {
@@ -343,9 +320,9 @@
                     array('name' => 'a', 'type' => 'checkbox', 'value' => 'me')));
             $form->addWidget(new SimpleCheckboxTag(
                     array('name' => 'a', 'type' => 'checkbox', 'value' => 'you')));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('a')), false);
-            $this->assertTrue($form->setFieldBySelector(new SimpleSelectByName('a'), 'me'));
-            $this->assertIdentical($form->getValueBySelector(new SimpleSelectByName('a')), 'me');
+            $this->assertIdentical($form->getValue(new SimpleByName('a')), false);
+            $this->assertTrue($form->setField(new SimpleByName('a'), 'me'));
+            $this->assertIdentical($form->getValue(new SimpleByName('a')), 'me');
         }
     }
 ?>

@@ -819,7 +819,7 @@
             }
             $success = $this->_load(
                     $form->getAction(),
-                    $form->submitButtonBySelector(new SimpleSelectByLabel($label), $additional));
+                    $form->submitButton(new SimpleByLabel($label), $additional));
             return ($success ? $this->getContent() : $success);
         }
         
@@ -837,7 +837,7 @@
             }
             $success = $this->_load(
                     $form->getAction(),
-                    $form->submitButtonBySelector(new SimpleSelectByName($name), $additional));
+                    $form->submitButton(new SimpleByName($name), $additional));
             return ($success ? $this->getContent() : $success);
         }
         
@@ -855,7 +855,7 @@
             }
             $success = $this->_load(
                     $form->getAction(),
-                    $form->submitButtonBySelector(new SimpleSelectById($id), $additional));
+                    $form->submitButton(new SimpleById($id), $additional));
             return ($success ? $this->getContent() : $success);
         }
         
@@ -878,7 +878,7 @@
             }
             $success = $this->_load(
                     $form->getAction(),
-                    $form->submitImageBySelector(new SimpleSelectByLabel($label), $x, $y, $additional));
+                    $form->submitImage(new SimpleByLabel($label), $x, $y, $additional));
             return ($success ? $this->getContent() : $success);
         }
         
@@ -901,7 +901,7 @@
             }
             $success = $this->_load(
                     $form->getAction(),
-                    $form->submitImageBySelector(new SimpleSelectByName($name), $x, $y, $additional));
+                    $form->submitImage(new SimpleByName($name), $x, $y, $additional));
             return ($success ? $this->getContent() : $success);
         }
          
@@ -923,7 +923,7 @@
             }
             $success = $this->_load(
                     $form->getAction(),
-                    $form->submitImageBySelector(new SimpleSelectById($id), $x, $y, $additional));
+                    $form->submitImage(new SimpleById($id), $x, $y, $additional));
             return ($success ? $this->getContent() : $success);
         }
         

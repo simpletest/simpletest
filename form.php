@@ -208,7 +208,7 @@
          *                                      if not set.
          *    @access public
          */
-        function getValueBySelector($selector) {
+        function getValue($selector) {
             for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($selector->isMatch($this->_widgets[$i])) {
                     return $this->_widgets[$i]->getValue();
@@ -231,7 +231,7 @@
          *                                      present, nothing will be set.
          *    @access public
          */
-        function setFieldBySelector($selector, $value) {
+        function setField($selector, $value) {
             $success = false;
             for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($selector->isMatch($this->_widgets[$i])) {
@@ -241,22 +241,6 @@
                 }
             }
             return $success;
-        }
-        
-        /**
-         *    Used by the page object to set widgets labels to
-         *    external label tags.
-         *    @param string $label        Label to attach.
-         *    @access public
-         */
-        function _setLabelById($id, $label) {
-            $selector = new SimpleSelectById($id);
-            for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-                if ($selector->isMatch($this->_widgets[$i])) {
-                    $this->_widgets[$i]->setLabel($label);
-                    return;
-                }
-            }
         }
         
         /**
@@ -281,7 +265,7 @@
          *    @access private
          *    @access public
          */
-        function hasSubmitBySelector($selector) {
+        function hasSubmit($selector) {
             foreach ($this->_buttons as $button) {
                 if ($selector->isMatch($button)) {
                     return true;
@@ -296,7 +280,7 @@
          *    @return boolean                   True if present.
          *    @access public
          */
-        function hasImageBySelector($selector) {
+        function hasImage($selector) {
             foreach ($this->_images as $image) {
                 if ($selector->isMatch($image)) {
                     return true;
@@ -314,7 +298,7 @@
          *                                      in the form.
          *    @access public
          */
-        function submitButtonBySelector($selector, $additional = false) {
+        function submitButton($selector, $additional = false) {
             $additional = $additional ? $additional : array();
             foreach ($this->_buttons as $button) {
                 if ($selector->isMatch($button)) {
@@ -340,7 +324,7 @@
          *                                      form.
          *    @access public
          */
-        function submitImageBySelector($selector, $x, $y, $additional = false) {
+        function submitImage($selector, $x, $y, $additional = false) {
             $additional = $additional ? $additional : array();
             foreach ($this->_images as $image) {
                 if ($selector->isMatch($image)) {

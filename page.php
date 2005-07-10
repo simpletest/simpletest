@@ -720,7 +720,7 @@
             }
             foreach ($this->_left_over_labels as $label) {
                 for ($i = 0, $count = count($this->_complete_forms); $i < $count; $i++) {
-                    $this->_complete_forms[$i]->attachLabelBySelector(new SimpleSelectById($label->getFor()), $label->getText());
+                    $this->_complete_forms[$i]->attachLabelBySelector(new SimpleById($label->getFor()), $label->getText());
                 }
             }
         }
@@ -887,7 +887,7 @@
          */
         function &getFormBySubmitLabel($label) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasSubmitBySelector(new SimpleSelectByLabel($label))) {
+                if ($this->_complete_forms[$i]->hasSubmit(new SimpleByLabel($label))) {
                     return $this->_complete_forms[$i];
                 }
             }
@@ -903,7 +903,7 @@
          */
         function &getFormBySubmitName($name) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasSubmitBySelector(new SimpleSelectByName($name))) {
+                if ($this->_complete_forms[$i]->hasSubmit(new SimpleByName($name))) {
                     return $this->_complete_forms[$i];
                 }
             }
@@ -919,7 +919,7 @@
          */
         function &getFormBySubmitId($id) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasSubmitBySelector(new SimpleSelectById($id))) {
+                if ($this->_complete_forms[$i]->hasSubmit(new SimpleById($id))) {
                     return $this->_complete_forms[$i];
                 }
             }
@@ -935,7 +935,7 @@
          */
         function &getFormByImageLabel($label) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasImageBySelector(new SimpleSelectByLabel($label))) {
+                if ($this->_complete_forms[$i]->hasImage(new SimpleByLabel($label))) {
                     return $this->_complete_forms[$i];
                 }
             }
@@ -951,7 +951,7 @@
          */
         function &getFormByImageName($name) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasImageBySelector(new SimpleSelectByName($name))) {
+                if ($this->_complete_forms[$i]->hasImage(new SimpleByName($name))) {
                     return $this->_complete_forms[$i];
                 }
             }
@@ -967,7 +967,7 @@
          */
         function &getFormByImageId($id) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasImageBySelector(new SimpleSelectById($id))) {
+                if ($this->_complete_forms[$i]->hasImage(new SimpleById($id))) {
                     return $this->_complete_forms[$i];
                 }
             }
@@ -1003,7 +1003,7 @@
         function setField($label, $value) {
             $is_set = false;
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->setFieldBySelector(new SimpleSelectByLabel($label), $value)) {
+                if ($this->_complete_forms[$i]->setField(new SimpleByLabel($label), $value)) {
                     $is_set = true;
                 }
             }
@@ -1024,7 +1024,7 @@
         function setFieldByName($name, $value) {
             $is_set = false;
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->setFieldBySelector(new SimpleSelectByname($name), $value)) {
+                if ($this->_complete_forms[$i]->setField(new SimpleByName($name), $value)) {
                     $is_set = true;
                 }
             }
@@ -1041,7 +1041,7 @@
          */
         function setFieldById($id, $value) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->setFieldBySelector(new SimpleSelectById($id), $value)) {
+                if ($this->_complete_forms[$i]->setField(new SimpleById($id), $value)) {
                     return true;
                 }
             }
@@ -1060,7 +1060,7 @@
          */
         function getField($label) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                $value = $this->_complete_forms[$i]->getValueBySelector(new SimpleSelectByLabel($label));
+                $value = $this->_complete_forms[$i]->getValue(new SimpleByLabel($label));
                 if (isset($value)) {
                     return $value;
                 }
@@ -1079,7 +1079,7 @@
          */
         function getFieldByName($name) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                $value = $this->_complete_forms[$i]->getValueBySelector(new SimpleSelectByName($name));
+                $value = $this->_complete_forms[$i]->getValue(new SimpleByName($name));
                 if (isset($value)) {
                     return $value;
                 }
@@ -1098,7 +1098,7 @@
          */
         function getFieldById($id) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                $value = $this->_complete_forms[$i]->getValueBySelector(new SimpleSelectById($id));
+                $value = $this->_complete_forms[$i]->getValue(new SimpleById($id));
                 if (isset($value)) {
                     return $value;
                 }

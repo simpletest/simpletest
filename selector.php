@@ -19,14 +19,14 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleSelectByName {
+    class SimpleByName {
         var $_name;
         
         /**
          *    Stashes the name for later comparison.
          *    @param string $name     Name attribute to match.
          */
-        function SimpleSelectByName($name) {
+        function SimpleByName($name) {
             $this->_name = $name;
         }
 
@@ -46,14 +46,14 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleSelectByLabel {
+    class SimpleByLabel {
         var $_label;
         
         /**
          *    Stashes the name for later comparison.
          *    @param string $label     Visible text to match.
          */
-        function SimpleSelectByLabel($label) {
+        function SimpleByLabel($label) {
             $this->_label = $label;
         }
 
@@ -77,14 +77,14 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleSelectById {
+    class SimpleById {
         var $_id;
         
         /**
          *    Stashes the name for later comparison.
          *    @param string $id     ID atribute to match.
          */
-        function SimpleSelectById($id) {
+        function SimpleById($id) {
             $this->_id = $id;
         }
 

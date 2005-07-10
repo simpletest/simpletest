@@ -467,7 +467,7 @@
             $page->acceptFormEnd();
             $form = &$page->getFormBySubmitLabel('Submit');
             $this->assertEqual(
-                    $form->submitButtonBySelector(new SimpleSelectbyLabel('Submit')),
+                    $form->submitButton(new SimpleByLabel('Submit')),
                     new SimpleGetEncoding(array('s' => 'Submit')));
         }
         
