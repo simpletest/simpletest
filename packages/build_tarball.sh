@@ -18,6 +18,7 @@ FILES=(simpletest/errors.php \
           simpletest/browser.php \
           simpletest/parser.php \
           simpletest/tag.php \
+          simpletest/selector.php \
           simpletest/form.php \
           simpletest/frames.php \
           simpletest/page.php \

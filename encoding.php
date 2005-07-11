@@ -13,6 +13,35 @@
     /**#@-*/
 
     /**
+     *    Single post parameter.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleEncodedPair {
+        var $_key;
+        var $_value;
+        
+        /**
+         *    Stashes the data for rendering later.
+         *    @param string $key       Form element name.
+         *    @param string $value     Data to send.
+         */
+        function SimpleEncodedPair($key, $value) {
+        }
+        
+        /**
+         *    The MIME part ass a string.
+         *    @return string        MIME part encoding.
+         */
+        function asMime() {
+            $part = 'Content-Disposition: form-data; ';
+            $part .= "name=\"" . $this->_key . "\"\r\n";
+            $part .= "\r\n" . $this->_value;
+            return $part;
+        }
+    }
+
+    /**
      *    Bundle of GET/POST parameters. Can include
      *    repeated parameters.
 	 *    @package SimpleTest
@@ -67,13 +96,16 @@
         }
         
         /**
-         *    Adds a MIME part to the query. Does nothing for
-         *    a standrad form encoded packet.
-         *    @param string $key            Key to add value to.
-         *    @param string/array $value    New data.
+         *    Adds a MIME part to the query. Does nothing for a
+         *    form encoded packet.
+         *    @param string $key          Key to add value to.
+         *    @param string $value        Raw data.
+         *    @param hash $disposition    Additional information for the
+         *                                Content-disposition header.
+         *    @param array $headers       List of additional MIME headers.
          *    @access public
          */
-        function addMime($key, $value) {
+        function addMime($key, $value, $disposition, $headers) {
         }
         
         /**
@@ -278,7 +310,7 @@
             return '';
         }
     }
-
+    
     /**
      *    Bundle of POST parameters in the multipart
      *    format. Can include file uploads.
@@ -304,9 +336,12 @@
          *    Adds a MIME part to the query.
          *    @param string $key          Key to add value to.
          *    @param string $value        Raw data.
+         *    @param hash $disposition    Additional information for the
+         *                                Content-disposition header.
+         *    @param array $headers       List of additional MIME headers.
          *    @access public
          */
-        function addMime($key, $value) {
+        function addMime($key, $value, $disposition, $headers) {
             $this->add($key, $value);
         }
         

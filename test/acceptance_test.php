@@ -762,6 +762,7 @@
             $this->assertField('Content:', dirname(__FILE__) . '/support/upload_sample.txt');
             $this->click('Go!');
             //$this->showRequest();
+            //$this->showSource();
             //$this->assertWantedText('Sample for testing file upload');
         }
     }
