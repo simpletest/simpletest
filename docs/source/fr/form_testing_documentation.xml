@@ -4,7 +4,7 @@
     <content>
         <section name="submit" title="Valider un formulaire simple">
             <p>
-                Lorsqu'une page est téléchargée par <code>WebTestCase</code> en utilisant <code>get()</code> ou <code>post()</code> le contenu de la page est automatiquement analysé. De cette analyse découle le fait que toutes les commandes à l'intérieur de la balise &lt;form&gt; sont disponibles depuis l'intérieur du scénario de test. Prenons pas exemple cet extrait de code HTML...
+                Lorsqu'une page est téléchargée par <code>WebTestCase</code> en utilisant <code>get()</code> ou <code>post()</code> le contenu de la page est automatiquement analysé. De cette analyse découle le fait que toutes les commandes à l'intérieur de la balise &lt;form&gt; sont disponibles depuis l'intérieur du scénario de test. Prenons par exemple cet extrait de code HTML...
 <pre><![CDATA[
 <form>
     <input type="text" name="a" value="A default" />
