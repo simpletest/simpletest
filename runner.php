@@ -11,7 +11,7 @@
      * for dependent libraries.
      */
     require_once(dirname(__FILE__) . '/errors.php');
-    require_once(dirname(__FILE__) . '/options.php');
+    require_once(dirname(__FILE__) . '/compatibility.php');
     require_once(dirname(__FILE__) . '/scorer.php');
     require_once(dirname(__FILE__) . '/expectation.php');
     require_once(dirname(__FILE__) . '/dumper.php');
@@ -54,9 +54,11 @@
          *    @access public
          */
         function invoke($method) {
+            $this->_test_case->before($method);
             $this->_test_case->setUp();
             $this->_test_case->$method();
             $this->_test_case->tearDown();
+            $this->_test_case->after($method);
         }
     }
     
@@ -134,8 +136,7 @@
 
     /**
      *    The standard runner. Will run every method starting
-     *    with test Basically the
-     *    Mediator pattern.
+     *    with test.
 	 *	  @package SimpleTest
 	 *	  @subpackage UnitTester
      */
@@ -163,7 +164,8 @@
         }
         
         /**
-         *    Runs the test methods in the test case.
+         *    Runs the test methods in the test case, or not if the
+         *    scorer blocks it.
          *    @param SimpleTest $test_case    Test case to run test on.
          *    @param string $method           Name of test method.
          *    @access public
@@ -178,11 +180,9 @@
                 if ($this->_isConstructor($method)) {
                     continue;
                 }
-                $this->_scorer->paintMethodStart($method);
                 if ($this->_scorer->shouldInvoke($this->_test_case->getLabel(), $method)) {
                     $invoker->invoke($method);
                 }
-                $this->_scorer->paintMethodEnd($method);
             }
         }
         

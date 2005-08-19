@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #DEST_DIR=../docs/pkg
 if [ ! -d ../tutorials ] 
@@ -28,5 +28,16 @@ Xalan -o ${DEST_DIR}/FormTesting.pkg ../docs/source/en/form_testing_documentatio
 Xalan -o ${DEST_DIR}/Authentication.pkg ../docs/source/en/authentication_documentation.xml phpdoc_docs.xslt
 Xalan -o ${DEST_DIR}/Browser.pkg ../docs/source/en/browser_documentation.xml phpdoc_docs.xslt
 
+# some cleanup work
+cd $DEST_DIR
 
+# remove XML declaration
+for f in $(ls *.pkg --color=none)
+do
+	grep -v -e '^<?xml' $f > tmp.pkg
+	mv tmp.pkg $f
+done
 
+# fix overview title
+cat SimpleTest.pkg | sed -e 's/<refname>Overview/<refname>Simple Test PHP Unit Test Framework/g;s/<\([A-Za-z0-9]*\)\/>/<\1><\/\1>/g' > tmp.pkg
+mv tmp.pkg SimpleTest.pkg

@@ -1,6 +1,14 @@
 <?php
-// $Id$
+    /**
+     *  Base include file for SimpleTest
+     *  @package        SimpleTest
+     *  @subpackage     UnitTester
+     *  @version        $Id$
+     */
 
+/**
+ * include base reporter
+ */
 require_once(dirname(__FILE__) . '/../reporter.php');
 
 
@@ -29,7 +37,6 @@ class ColorTextReporter extends TextReporter {
         parent::TextReporter();
     }
     
-    
     /**
      * Capture the attempt to display the final test results and insert the 
      * ANSI-color codes in place.
@@ -41,7 +48,7 @@ class ColorTextReporter extends TextReporter {
     function paintFooter($test_name) {
         ob_start();
         parent::paintFooter($test_name);
-        $output = trim(ob_get_flush());
+        $output = trim(ob_get_clean());
         if ($output) {
             if (($this->getFailCount() + $this->getExceptionCount()) == 0) {
                 $color = $this->_passColor;

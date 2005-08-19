@@ -1,30 +1,6 @@
 <?php
     // $Id$
-    
-    require_once(dirname(__FILE__) . '/../options.php');
-    
-    class TestOfOptions extends UnitTestCase {
-
-        function testMockBase() {
-            $old_class = SimpleTestOptions::getMockBaseClass();
-            SimpleTestOptions::setMockBaseClass('Fred');
-            $this->assertEqual(SimpleTestOptions::getMockBaseClass(), 'Fred');
-            SimpleTestOptions::setMockBaseClass($old_class);
-        }
-        
-        function testStubBase() {
-            $old_class = SimpleTestOptions::getStubBaseClass();
-            SimpleTestOptions::setStubBaseClass('Fred');
-            $this->assertEqual(SimpleTestOptions::getStubBaseClass(), 'Fred');
-            SimpleTestOptions::setStubBaseClass($old_class);
-        }
-        
-        function testIgnoreList() {
-            $this->assertFalse(SimpleTestOptions::isIgnored('ImaginaryTestCase'));
-            SimpleTestOptions::ignore('ImaginaryTestCase');
-            $this->assertTrue(SimpleTestOptions::isIgnored('ImaginaryTestCase'));
-        }
-    }
+    require_once(dirname(__FILE__) . '/../compatibility.php');
     
     class ComparisonClass {
     }

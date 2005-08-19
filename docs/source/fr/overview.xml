@@ -168,6 +168,16 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td style="color: green;">Fini</td>
                     </tr>
                     <tr>
+                        <td>Test de l'upload de fichier</td>
+                        <td>Peut simuler la balise input de type file</td>
+                        <td style="color: red;">1.0.1</td>
+                    </tr>
+                    <tr>
+                        <td>Amélioration sur la machinerie des rapports</td>
+                        <td>Retouche sur la transmission des messages pour une meilleur coopération avec les IDEs</td>
+                        <td style="color: red;">1.1</td>
+                    </tr>
+                    <tr>
                         <td>Amélioration de l'affichage des tests</td>
                         <td>Une meilleure interface graphique web, avec un arbre des scénarios de test.</td>
                         <td style="color: red;">1.1</td>
@@ -190,11 +200,6 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     <tr>
                         <td>Rercherche d'éléments avec XPath</td>
                         <td>Peut utiliser Tidy HTML pour un appariement plus rapide et plus souple.</td>
-                        <td style="color: red;">2.0</td>
-                    </tr>
-                    <tr>
-                        <td>Test de l'upload de fichier</td>
-                        <td>Peut simuler la balise input de type file</td>
                         <td style="color: red;">2.0</td>
                     </tr>
                 </tbody></table>

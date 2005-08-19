@@ -9,7 +9,7 @@
     /**#@+
      * include SimpleTest files
      */
-    require_once(dirname(__FILE__) . '/options.php');
+    require_once(dirname(__FILE__) . '/compatibility.php');
     /**#@-*/
 
     /**
@@ -123,7 +123,7 @@
          *    is a workaround for PHP4 always throwing a warning
          *    with a secure socket.
          *    @param integer $block_size       Size of chunk to read.
-         *    @return integer                  Incoming bytes. False
+         *    @return string/boolean           Incoming bytes. False
          *                                     on error.
          *    @access public
          */

@@ -34,7 +34,7 @@ class HtmlReporter extends TestDisplay {
             <ul class="api">
                 <li>
                     <code>HtmlReporter()</code><br />
-                    est le constructeur. Notez que un test unitaire initie le lien vers l'affichage plutôt que l'inverse. L'affichage est un réceptacle passif des évènements de test. Cela permet une adaptation facile de l'affichage pour d'autres systèmes de test en dehors des tests unitaires comme la surveillance de serveurs par exemple. Autre avantage, un test unitaire peut écrire vers plus d'un affichage à la fois.
+                    est le constructeur. Notez qu'un test unitaire initie le lien vers l'affichage plutôt que l'inverse. L'affichage est un réceptacle passif des évènements de test. Cela permet une adaptation facile de l'affichage pour d'autres systèmes de test en dehors des tests unitaires comme la surveillance de serveurs par exemple. Autre avantage, un test unitaire peut écrire vers plus d'un affichage à la fois.
                 </li>
                 <li>
                     <code>void paintFail(string $message)</code><br />
@@ -88,7 +88,7 @@ function paintFail($message) {
     print "-&gt;$message<br />\n";
 }
 ]]></php>
-            Essentiellement elle s'enchaîne à la version du parent, que nous devons aussi réaliser pour garantir le ménage, et ensuite imprime une trace calculée à partir de la liste des tests courants. Par contre elle perd au passage le nom du test du premier niveau. Etant donné qu'il est identique pour chaque test, ce serait un peu trop d'information. En la transposant dans notre nouvelle classe...
+            Essentiellement elle s'enchaîne à la version du parent, que nous devons aussi réaliser pour garantir le ménage, et ensuite imprime une trace calculée à partir de la liste des tests courants. Par contre elle perd au passage le nom du test du premier niveau. Etant donné qu'il est identique pour chaque test, ce serait un peu trop d'informations. En la transposant dans notre nouvelle classe...
 <php><![CDATA[
 class ShowPasses extends HtmlReporter {
     

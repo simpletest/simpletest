@@ -39,7 +39,7 @@
         function SimpleForm($tag, $url) {
             $this->_method = $tag->getAttribute('method');
             $this->_action = $this->_createAction($tag->getAttribute('action'), $url);
-            $this->_encoding = $this->_createEmptyEncoding($tag);
+            $this->_encoding = $this->_setEncodingClass($tag);
             $this->_default_target = false;
             $this->_id = $tag->getAttribute('id');
             $this->_buttons = array();
@@ -52,17 +52,17 @@
         /**
          *    Creates the request packet to be sent by the form.
          *    @param SimpleTag $tag        Form tag to read.
-         *    @return SimpleEncoding       Packet.
+         *    @return string               Packet class.
          *    @access private
          */
-        function _createEmptyEncoding($tag) {
+        function _setEncodingClass($tag) {
             if (strtolower($tag->getAttribute('method')) == 'post') {
                 if (strtolower($tag->getAttribute('enctype')) == 'multipart/form-data') {
-                    return new SimpleMultipartEncoding();
+                    return 'SimpleMultipartEncoding';
                 }
-                return new SimplePostEncoding();
+                return 'SimplePostEncoding';
             }
-            return new SimpleGetEncoding();
+            return 'SimpleGetEncoding';
         }
         
         /**
@@ -93,9 +93,8 @@
         function _createAction($action, $base) {
             if (is_bool($action)) {
                 return $base;
-            } else {
-                $url = new SimpleUrl($action);
             }
+            $url = new SimpleUrl($action);
             return $url->makeAbsolute($base);
         }
         
@@ -119,7 +118,8 @@
          *    @access private
          */
         function _encode() {
-            $encoding = $this->_encoding;
+            $class = $this->_encoding;
+            $encoding = new $class();
             for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 $this->_widgets[$i]->write($encoding);
             }
@@ -250,8 +250,10 @@
         function attachLabelBySelector($selector, $label) {
             for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
                 if ($selector->isMatch($this->_widgets[$i])) {
-                    $this->_widgets[$i]->setLabel($label);
-                    return;
+                    if (method_exists($this->_widgets[$i], 'setLabel')) {
+                        $this->_widgets[$i]->setLabel($label);
+                        return;
+                    }
                 }
             }
         }
@@ -260,7 +262,6 @@
          *    Test to see if a form has a submit button.
          *    @param SimpleSelector $selector   Criteria to apply.
          *    @return boolean                   True if present.
-         *    @access private
          *    @access public
          */
         function hasSubmit($selector) {

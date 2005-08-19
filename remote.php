@@ -11,7 +11,7 @@
      */
     require_once(dirname(__FILE__) . '/browser.php');
     require_once(dirname(__FILE__) . '/xml.php');
-    require_once(dirname(__FILE__) . '/simple_test.php');
+    require_once(dirname(__FILE__) . '/test_case.php');
     /**#@-*/
 
     /**

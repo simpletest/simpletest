@@ -6,6 +6,29 @@
     
     Mock::generate('SimpleSocket');
     
+    class TestOfEncodedParts extends UnitTestCase {
+        
+        function testFormEncodedAsKeyEqualsValue() {
+            $pair = new SimpleEncodedPair('a', 'A');
+            $this->assertEqual($pair->asRequest(), 'a=A');
+        }
+        
+        function testMimeEncodedAsHeadersAndContent() {
+            $pair = new SimpleEncodedPair('a', 'A');
+            $this->assertEqual(
+                    $pair->asMime(),
+                    "Content-Disposition: form-data; name=\"a\"\r\n\r\nA");
+        }
+        
+        function testAttachmentEncodedAsHeadersWithDispositionAndContent() {
+            $part = new SimpleAttachment('a', 'A', 'aaa.txt');
+            $this->assertEqual(
+                    $part->asMime(),
+                    "Content-Disposition: form-data; name=\"a\"; filename=\"aaa.txt\"\r\n" .
+                            "Content-Type: text/plain\r\n\r\nA");
+        }
+    }
+    
     class TestOfEncoding extends UnitTestCase {
         var $_content_so_far;
         
@@ -26,28 +49,24 @@
         function testGetEmpty() {
             $encoding = &new SimpleGetEncoding();
             $this->assertIdentical($encoding->getValue('a'), false);
-            $this->assertIdentical($encoding->getKeys(), array());
             $this->assertIdentical($encoding->asUrlRequest(), '');
         }
         
         function testPostEmpty() {
             $encoding = &new SimplePostEncoding();
             $this->assertIdentical($encoding->getValue('a'), false);
-            $this->assertIdentical($encoding->getKeys(), array());
             $this->assertWritten($encoding, '');
         }
         
         function testPrefilled() {
             $encoding = &new SimplePostEncoding(array('a' => 'aaa'));
             $this->assertIdentical($encoding->getValue('a'), 'aaa');
-            $this->assertIdentical($encoding->getKeys(), array('a'));
             $this->assertWritten($encoding, 'a=aaa');
         }
         
         function testPrefilledWithObject() {
             $encoding = &new SimplePostEncoding(new SimpleEncoding(array('a' => 'aaa')));
             $this->assertIdentical($encoding->getValue('a'), 'aaa');
-            $this->assertIdentical($encoding->getKeys(), array('a'));
             $this->assertWritten($encoding, 'a=aaa');
         }
         
@@ -123,10 +142,22 @@
         function testPrefilledMultipart() {
             $encoding = &new SimpleMultipartEncoding(array('a' => 'aaa'), 'boundary');
             $this->assertIdentical($encoding->getValue('a'), 'aaa');
-            $this->assertIdentical($encoding->getKeys(), array('a'));
             $this->assertwritten($encoding,
                     "--boundary\r\n" .
                     "Content-Disposition: form-data; name=\"a\"\r\n" .
+                    "\r\n" .
+                    "aaa\r\n" .
+                    "--boundary--\r\n");
+        }
+        
+        function testAttachment() {
+            $encoding = &new SimpleMultipartEncoding(array(), 'boundary');
+            $encoding->attach('a', 'aaa', 'aaa.txt');
+            $this->assertIdentical($encoding->getValue('a'), 'aaa.txt');
+            $this->assertwritten($encoding,
+                    "--boundary\r\n" .
+                    "Content-Disposition: form-data; name=\"a\"; filename=\"aaa.txt\"\r\n" .
+                    "Content-Type: text/plain\r\n" .
                     "\r\n" .
                     "aaa\r\n" .
                     "--boundary--\r\n");
@@ -136,21 +167,19 @@
     class TestOfFormHeaders extends UnitTestCase {
         
         function testEmptyEncodingWritesZeroContentLength() {
-            $socket = &new MockSimpleSocket($this);
+            $socket = &new MockSimpleSocket();
             $socket->expectArgumentsAt(0, 'write', array("Content-Length: 0\r\n"));
             $socket->expectArgumentsAt(1, 'write', array("Content-Type: application/x-www-form-urlencoded\r\n"));
             $encoding = &new SimplePostEncoding();
             $encoding->writeHeadersTo($socket);
-            $socket->tally();
         }
         
         function testEmptyMultipartEncodingWritesEndBoundaryContentLength() {
-            $socket = &new MockSimpleSocket($this);
+            $socket = &new MockSimpleSocket();
             $socket->expectArgumentsAt(0, 'write', array("Content-Length: 14\r\n"));
             $socket->expectArgumentsAt(1, 'write', array("Content-Type: multipart/form-data, boundary=boundary\r\n"));
             $encoding = &new SimpleMultipartEncoding(array(), 'boundary');
             $encoding->writeHeadersTo($socket);
-            $socket->tally();
         }
     }
 ?>

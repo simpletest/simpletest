@@ -10,8 +10,13 @@
      * include SimpleTest files
      */
     require_once(dirname(__FILE__) . '/expectation.php');
-    require_once(dirname(__FILE__) . '/options.php');
+    require_once(dirname(__FILE__) . '/simpletest.php');
     require_once(dirname(__FILE__) . '/dumper.php');
+    if (version_compare(phpversion(), '5') >= 0) {
+        require_once(dirname(__FILE__) . '/reflection_php5.php');
+    } else {
+        require_once(dirname(__FILE__) . '/reflection_php4.php');
+    }
     /**#@-*/
     
     /**
@@ -47,7 +52,7 @@
          */
         function testMessage($compare) {
             $dumper = &$this->_getDumper();
-            return 'Wildcard always matches [' . $dumper->describeValue($compare) . ']';
+            return 'Anything always matches [' . $dumper->describeValue($compare) . ']';
         }
     }
     
@@ -367,7 +372,8 @@
         function &findFirstMatch($parameters) {
             $slot = $this->_findFirstSlot($parameters);
             if (!isset($slot)) {
-                return null;
+                $null = null;
+                return $null;
             }
             return $slot["content"];
         }
@@ -398,35 +404,106 @@
                     return $this->_map[$i];
                 }
             }
-            return null;
+            $null = null;
+            return $null;
         }
     }
     
     /**
      *    An empty collection of methods that can have their
-     *    return values set. Used for prototyping.
+     *    return values set and expectations made of the
+     *    calls upon them. The mock will assert the
+     *    expectations against it's attached test case in
+     *    addition to the server stub behaviour.
 	 *    @package SimpleTest
 	 *    @subpackage MockObjects
      */
-    class SimpleStub {
-        var $_wildcard;
-        var $_is_strict;
+    class SimpleMock {
+        var $_wildcard = MOCK_ANYTHING;
+        var $_is_strict = true;
         var $_returns;
         var $_return_sequence;
         var $_call_counts;
+        var $_expected_counts;
+        var $_max_counts;
+        var $_expected_args;
+        var $_expected_args_at;
         
         /**
-         *    Sets up the wildcard and everything else empty.
-         *    @param mixed $wildcard      Parameter matching wildcard.
-         *    @param boolean $is_strict   Enables method name checks.
-         *    @access public
+         *    Creates an empty return list and expectation list.
+         *    All call counts are set to zero.
+         *    @param SimpleTestCase $test    Test case to test expectations in.
+         *    @param mixed $wildcard         Parameter matching wildcard.
+         *    @param boolean $is_strict      Enables method name checks on
+         *                                   expectations.
          */
-        function SimpleStub($wildcard, $is_strict = true) {
-            $this->_wildcard = $wildcard;
-            $this->_is_strict = $is_strict;
+        function SimpleMock() {
             $this->_returns = array();
             $this->_return_sequence = array();
             $this->_call_counts = array();
+            $test = &$this->_getCurrentTestCase();
+            $test->tell($this);
+            $this->_expected_counts = array();
+            $this->_max_counts = array();
+            $this->_expected_args = array();
+            $this->_expected_args_at = array();
+        }
+        
+        /**
+         *    Disables a name check when setting expectations.
+         *    This hack is needed for the partial mocks.
+         *    @access public
+         */
+        function disableExpectationNameChecks() {
+            $this->_is_strict = false;
+        }
+        
+        /**
+         *    Changes the default wildcard object.
+         *    @param mixed $wildcard         Parameter matching wildcard.
+         *    @access public
+         */
+        function setWildcard($wildcard) {
+            $this->_wildcard = $wildcard;
+        }
+        
+        /**
+         *    Finds currently running test.
+         *    @return SimpeTestCase    Current test case.
+         *    @access protected
+         */
+        function &_getCurrentTestCase() {
+            return SimpleTest::getCurrent();
+        }
+        
+        /**
+         *    Die if bad arguments array is passed
+         *    @param mixed $args     The arguments value to be checked.
+         *    @param string $task    Description of task attempt.
+         *    @return boolean        Valid arguments
+         *    @access private
+         */
+        function _checkArgumentsIsArray($args, $task) {
+        	if (! is_array($args)) {
+        		trigger_error(
+        			"Cannot $task as \$args parameter is not an array",
+        			E_USER_ERROR);
+        	}
+        }
+        
+        /**
+         *    Triggers a PHP error if the method is not part
+         *    of this object.
+         *    @param string $method        Name of method.
+         *    @param string $task          Description of task attempt.
+         *    @access protected
+         */
+        function _dieOnNoMethod($method, $task) {
+            if ($this->_is_strict && ! method_exists($this, $method)) {
+                trigger_error(
+                        "Cannot $task as no ${method}() in class " . get_class($this),
+                        E_USER_ERROR);
+            }
         }
         
         /**
@@ -447,35 +524,6 @@
                 }
             }
             return $args;
-        }
-        
-        /**
-         *    Returns the expected value for the method name.
-         *    @param string $method       Name of method to simulate.
-         *    @param array $args          Arguments as an array.
-         *    @return mixed               Stored return.
-         *    @access private
-         */
-        function &_invoke($method, $args) {
-            $method = strtolower($method);
-            $step = $this->getCallCount($method);
-            $this->_addCall($method, $args);
-            return $this->_getReturn($method, $args, $step);
-        }
-        
-        /**
-         *    Triggers a PHP error if the method is not part
-         *    of this object.
-         *    @param string $method        Name of method.
-         *    @param string $task          Description of task attempt.
-         *    @access protected
-         */
-        function _dieOnNoMethod($method, $task) {
-            if ($this->_is_strict && !method_exists($this, $method)) {
-                trigger_error(
-                        "Cannot $task as no ${method}() in class " . get_class($this),
-                        E_USER_ERROR);
-            }
         }
         
         /**
@@ -596,93 +644,6 @@
                 $this->_return_sequence[$method][$timing] = new CallMap();
             }
             $this->_return_sequence[$method][$timing]->addReference($args, $reference);
-        }
-        
-        /**
-         *    Finds the return value matching the incoming
-         *    arguments. If there is no matching value found
-         *    then an error is triggered.
-         *    @param string $method      Method name.
-         *    @param array $args         Calling arguments.
-         *    @param integer $step       Current position in the
-         *                               call history.
-         *    @return mixed              Stored return.
-         *    @access protected
-         */
-        function &_getReturn($method, $args, $step) {
-            if (isset($this->_return_sequence[$method][$step])) {
-                if ($this->_return_sequence[$method][$step]->isMatch($args)) {
-                    return $this->_return_sequence[$method][$step]->findFirstMatch($args);
-                }
-            }
-            if (isset($this->_returns[$method])) {
-                return $this->_returns[$method]->findFirstMatch($args);
-            }
-            return null;
-        }
-    }
-    
-    /**
-     *    An empty collection of methods that can have their
-     *    return values set and expectations made of the
-     *    calls upon them. The mock will assert the
-     *    expectations against it's attached test case in
-     *    addition to the server stub behaviour.
-	 *    @package SimpleTest
-	 *    @subpackage MockObjects
-     */
-    class SimpleMock extends SimpleStub {
-        var $_test;
-        var $_expected_counts;
-        var $_max_counts;
-        var $_expected_args;
-        var $_expected_args_at;
-        
-        /**
-         *    Creates an empty return list and expectation list.
-         *    All call counts are set to zero.
-         *    @param SimpleTestCase $test    Test case to test expectations in.
-         *    @param mixed $wildcard         Parameter matching wildcard.
-         *    @param boolean $is_strict      Enables method name checks on
-         *                                   expectations.
-         *    @access public
-         */
-        function SimpleMock(&$test, $wildcard, $is_strict = true) {
-            $this->SimpleStub($wildcard, $is_strict);
-            if (! $test) {
-                trigger_error('No unit tester for mock object', E_USER_ERROR);
-                return;
-            }
-            $this->_test = SimpleMock::registerTest($test);
-            $this->_expected_counts = array();
-            $this->_max_counts = array();
-            $this->_expected_args = array();
-            $this->_expected_args_at = array();
-        }
-        
-        /**
-         *    Accessor for attached unit test so that when
-         *    subclassed, new expectations can be added easily.
-         *    @return SimpleTestCase      Unit test passed in constructor.
-         *    @access public
-         */
-        function &getTest() {
-            return $this->_test;
-        }
-        
-        /**
-         *    Die if bad arguments array is passed
-         *    @param mixed $args     The arguments value to be checked.
-         *    @param string $task    Description of task attempt.
-         *    @return boolean        Valid arguments
-         *    @access private
-         */
-        function _checkArgumentsIsArray($args, $task) {
-        	if (! is_array($args)) {
-        		trigger_error(
-        			"Cannot $task as \$args parameter is not an array",
-        			E_USER_ERROR);
-        	}
         }
         
         /**
@@ -824,14 +785,20 @@
         }
         
         /**
-         *    Totals up the call counts and triggers a test
-         *    assertion if a test is present for expected
-         *    call counts.
-         *    This method must be called explicitly for the call
-         *    count assertions to be triggered.
-         *    @access public
+         *    @deprecated
          */
         function tally() {
+        }
+        
+        /**
+         *    Receives event from unit test that the current
+         *    test method has finished. Totals up the call
+         *    counts and triggers a test assertion if a test
+         *    is present for expected call counts.
+         *    @param string $method    Current method name.
+         *    @access public
+         */
+        function atTestEnd($method) {
             foreach ($this->_expected_counts as $method => $expectation) {
                 $this->_assertTrue(
                         $expectation->test($this->getCallCount($method)),
@@ -861,7 +828,33 @@
             $step = $this->getCallCount($method);
             $this->_addCall($method, $args);
             $this->_checkExpectations($method, $args, $step);
-            return $this->_getReturn($method, $args, $step);
+            $result = &$this->_getReturn($method, $args, $step);
+            return $result;
+        }
+        /**
+         *    Finds the return value matching the incoming
+         *    arguments. If there is no matching value found
+         *    then an error is triggered.
+         *    @param string $method      Method name.
+         *    @param array $args         Calling arguments.
+         *    @param integer $step       Current position in the
+         *                               call history.
+         *    @return mixed              Stored return.
+         *    @access protected
+         */
+        function &_getReturn($method, $args, $step) {
+            if (isset($this->_return_sequence[$method][$step])) {
+                if ($this->_return_sequence[$method][$step]->isMatch($args)) {
+                    $result = &$this->_return_sequence[$method][$step]->findFirstMatch($args);
+                    return $result;
+                }
+            }
+            if (isset($this->_returns[$method])) {
+                $result = &$this->_returns[$method]->findFirstMatch($args);
+                return $result;
+            }
+            $null = null;
+            return $null;
         }
         
         /**
@@ -903,210 +896,8 @@
          *    @access protected
          */
         function _assertTrue($assertion, $message) {
-            $test = &SimpleMock::injectTest($this->_test);
+            $test = &$this->_getCurrentTestCase();
             $test->assertTrue($assertion, $message);
-        }
-        
-        /**
-         *    Stashes the test case for later recovery.
-         *    @param SimpleTestCase $test    Test case.
-         *    @return string                 Key to find it again.
-         *    @access public
-         *    @static
-         */
-        function registerTest(&$test) {
-            $registry = &SimpleMock::_getRegistry();
-            $registry[$class = get_class($test)] = &$test;
-            return $class;
-        }
-        
-        /**
-         *    Resolves the dependency on the test case.
-         *    @param string $class      Key to look up test case in.
-         *    @return SimpleTestCase    Test case to send results to.
-         *    @access public
-         *    @static
-         */
-        function &injectTest($key) {
-            $registry = &SimpleMock::_getRegistry();
-            return $registry[$key];
-        }
-        
-        /**
-         *    Registry for test cases. The reason for this is
-         *    to break the reference between the test cases and
-         *    the mocks. It was leading to a fatal error due to
-         *    recursive dependencies during comparisons. See
-         *    http://bugs.php.net/bug.php?id=31449 for the PHP
-         *    bug.
-         *    @return array        List of references.
-         *    @access private
-         *    @static
-         */
-        function &_getRegistry() {
-            static $registry;
-            if (! isset($registry)) {
-                $registry = array();
-            }
-            return $registry;
-        }
-    }
-    
-    /**
-     *    Static methods only service class for code generation of
-     *    server stubs.
-	 *    @package SimpleTest
-	 *    @subpackage MockObjects
-     */
-    class Stub {
-        
-        /**
-         *    Factory for server stub classes.
-         */
-        function Stub() {
-            trigger_error('Stub factory methods are class only.');
-        }
-        
-        /**
-         *    Clones a class' interface and creates a stub version
-         *    that can have return values set.
-         *    @param string $class        Class to clone.
-         *    @param string $stub_class   New class name. Default is
-         *                                the old name with "Stub"
-         *                                prepended.
-         *    @param array $methods       Additional methods to add beyond
-         *                                those in the cloned class. Use this
-         *                                to emulate the dynamic addition of
-         *                                methods in the cloned class or when
-         *                                the class hasn't been written yet.
-         *    @static
-         *    @access public
-         */
-        function generate($class, $stub_class = false, $methods = false) {
-            if (! SimpleTestCompatibility::classExists($class)) {
-                return false;
-            }
-            if (! $stub_class) {
-                $stub_class = "Stub" . $class;
-            }
-            if (SimpleTestCompatibility::classExists($stub_class)) {
-                return false;
-            }
-            return eval(Stub::_createClassCode(
-                    $class,
-                    $stub_class,
-                    $methods ? $methods : array()) . " return true;");
-        }
-        
-        /**
-         *    The new server stub class code in string form.
-         *    @param string $class           Class to clone.
-         *    @param string $mock_class      New class name.
-         *    @param array $methods          Additional methods.
-         *    @static
-         *    @access private
-         */
-        function _createClassCode($class, $stub_class, $methods) {
-            $stub_base = SimpleTestOptions::getStubBaseClass();
-            $code = "class $stub_class extends $stub_base {\n";
-            $code .= "    function $stub_class(\$wildcard = MOCK_ANYTHING) {\n";
-            $code .= "        \$this->$stub_base(\$wildcard);\n";
-            $code .= "    }\n";
-            $code .= Stub::_createHandlerCode($class, $stub_base, $methods);
-            $code .= "}\n";
-            return $code;
-        }
-        
-        /**
-         *    Creates code within a class to generate replaced
-         *    methods. All methods call the _invoke() handler
-         *    with the method name and the arguments in an
-         *    array.
-         *    @param string $class     Class to clone.
-         *    @param string $base      Base mock/stub class with methods that
-         *                             cannot be cloned. Otherwise you
-         *                             would be stubbing the accessors used
-         *                             to set the stubs.
-         *    @param array $methods    Additional methods.
-         *    @static
-         *    @access private
-         */
-        function _createHandlerCode($class, $base, $methods) {
-            $code = "";
-            $methods = array_merge($methods, get_class_methods($class));
-            foreach ($methods as $method) {
-                if (Stub::_isConstructor($method)) {
-                    continue;
-                }
-                if (in_array($method, get_class_methods($base))) {
-                    continue;
-                }
-                $code .= Stub::_createFunctionDeclaration($method);
-                $code .= "        \$args = func_get_args();\n";
-                $code .= "        return \$this->_invoke(\"$method\", \$args);\n";
-                $code .= "    }\n";
-            }
-            return $code;
-        }
-        
-        /**
-         *    Creates the appropriate function declaration.
-         *    @see _determineArguments(), _createHandlerCode()
-         *    @param string $method    Method name.
-         *    @return string           The proper function declaration
-         *    @access private
-         *    @static
-         */
-        function _createFunctionDeclaration($method) {
-            $arguments = Stub::_determineArguments($method);
-            return sprintf("    function &%s(%s) {\n", $method, $arguments);
-        }
-        
-        /**
-         *    Returns the necessary arguments for a given method.
-         *    @param string $method    Method name
-         *    @return string           The arguments string for a method, or
-         *                             blank if no arguments are required.
-         *    @access private
-         *    @static
-         */
-        function _determineArguments($method) {
-            $code = '';
-            if (Stub::_isSpecial($method)) {
-                $args = array(
-                    '__call' => '$method, $value',
-                    '__get' => '$key',
-                    '__set' => '$key, $value');
-                $code = $args[$method];
-            }
-            return $code;
-        }
-        
-        /**
-         *    Tests to see if a special PHP method is about to
-         *    be stubbed by mistake.
-         *    @param string $method    Method name.
-         *    @return boolean          True if special.
-         *    @access private
-         *    @static
-         */
-        function _isConstructor($method) {
-            return in_array(
-                    strtolower($method),
-                    array('__construct', '__clone'));
-        }
-        
-        /**
-         *    Tests for an special method.
-         *    @param string $method    Method name.
-         *    @return boolean          True if special.
-         *    @access private
-         *    @static
-         */
-        function _isSpecial($method) {
-            return in_array(
-                    strtolower($method),
-                    array('__get', '__set', '__call'));
         }
     }
     
@@ -1142,13 +933,13 @@
          *    @access public
          */
         function generate($class, $mock_class = false, $methods = false) {
-            if (! SimpleTestCompatibility::classExists($class)) {
+            if (! SimpleReflection::classOrInterfaceExists($class)) {
                 return false;
             }
             if (! $mock_class) {
-                $mock_class = "Mock" . $class;
+                $mock_class = "Mock$class";
             }
-            if (SimpleTestCompatibility::classExists($mock_class)) {
+            if (SimpleReflection::classOrInterfaceExistsSansAutoload($mock_class)) {
                 return false;
             }
             return eval(Mock::_createClassCode(
@@ -1170,10 +961,10 @@
          *    @access public
          */
         function generatePartial($class, $mock_class, $methods) {
-            if (! SimpleTestCompatibility::classExists($class)) {
+            if (! SimpleReflection::classOrInterfaceExists($class)) {
                 return false;
             }
-            if (SimpleTestCompatibility::classExists($mock_class)) {
+            if (SimpleReflection::classOrInterfaceExistsSansAutoload($mock_class)) {
                 trigger_error("Partial mock class [$mock_class] already exists");
                 return false;
             }
@@ -1190,12 +981,12 @@
          *    @access private
          */
         function _createClassCode($class, $mock_class, $methods) {
-            $mock_base = SimpleTestOptions::getMockBaseClass();
+            $mock_base = SimpleTest::getMockBaseClass();
             $code = "class $mock_class extends $mock_base {\n";
-            $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_ANYTHING) {\n";
-            $code .= "        \$this->$mock_base(\$test, \$wildcard);\n";
+            $code .= "    function $mock_class() {\n";
+            $code .= "        \$this->$mock_base();\n";
             $code .= "    }\n";
-            $code .= Stub::_createHandlerCode($class, $mock_base, $methods);
+            $code .= Mock::_createHandlerCode($class, $mock_base, $methods);
             $code .= "}\n";
             return $code;
         }
@@ -1212,20 +1003,113 @@
          *    @access private
          */
         function _extendClassCode($class, $mock_class, $methods) {
-            $mock_base = SimpleTestOptions::getMockBaseClass();
+            $mock_base = SimpleTest::getMockBaseClass();
             $code  = "class $mock_class extends $class {\n";
             $code .= "    var \$_mock;\n";
             $code .= Mock::_addMethodList($methods);
             $code .= "\n";
-            $code .= "    function $mock_class(&\$test, \$wildcard = MOCK_ANYTHING) {\n";
-            $code .= "        \$this->_mock = &new $mock_base(\$test, \$wildcard, false);\n";
+            $code .= "    function $mock_class() {\n";
+            $code .= "        \$this->_mock = &new $mock_base();\n";
+            $code .= "        \$this->_mock->disableExpectationNameChecks();\n";
             $code .= "    }\n";
             $code .= Mock::_chainMockReturns();
             $code .= Mock::_chainMockExpectations();
             $code .= Mock::_overrideMethods($methods);
-            $code .= SimpleTestOptions::getPartialMockCode();
             $code .= "}\n";
             return $code;
+        }
+        
+        /**
+         *    Creates code within a class to generate replaced
+         *    methods. All methods call the _invoke() handler
+         *    with the method name and the arguments in an
+         *    array.
+         *    @param string $class     Class to clone.
+         *    @param string $base      Base mock class with methods that
+         *                             cannot be cloned. Otherwise you
+         *                             would be stubbing the accessors used
+         *                             to set the stubs.
+         *    @param array $methods    Additional methods.
+         *    @static
+         *    @access private
+         */
+        function _createHandlerCode($class, $base, $methods) {
+            $code = '';
+            $methods = array_merge($methods, SimpleReflection::getMethods($class));
+            foreach ($methods as $method) {
+                if (Mock::_isConstructor($method)) {
+                    continue;
+                }
+                if (in_array($method, SimpleReflection::getMethods($base))) {
+                    continue;
+                }
+                $code .= Mock::_createFunctionDeclaration($method);
+                $code .= "        \$args = func_get_args();\n";
+                $code .= "        \$result = &\$this->_invoke(\"$method\", \$args);\n";
+                $code .= "        return \$result;\n";
+                $code .= "    }\n";
+            }
+            return $code;
+        }
+        
+        /**
+         *    Creates the appropriate function declaration.
+         *    @see _determineArguments(), _createHandlerCode()
+         *    @param string $method    Method name.
+         *    @return string           The proper function declaration
+         *    @access private
+         *    @static
+         */
+        function _createFunctionDeclaration($method) {
+            $arguments = Mock::_determineArguments($method);
+            return sprintf("    function &%s(%s) {\n", $method, $arguments);
+        }
+        
+        /**
+         *    Returns the necessary arguments for a given method.
+         *    @param string $method    Method name
+         *    @return string           The arguments string for a method, or
+         *                             blank if no arguments are required.
+         *    @access private
+         *    @static
+         */
+        function _determineArguments($method) {
+            $code = '';
+            if (Mock::_isSpecial($method)) {
+                $args = array(
+                    '__call' => '$method, $value',
+                    '__get' => '$key',
+                    '__set' => '$key, $value');
+                $code = $args[$method];
+            }
+            return $code;
+        }
+        
+        /**
+         *    Tests to see if a special PHP method is about to
+         *    be stubbed by mistake.
+         *    @param string $method    Method name.
+         *    @return boolean          True if special.
+         *    @access private
+         *    @static
+         */
+        function _isConstructor($method) {
+            return in_array(
+                    strtolower($method),
+                    array('__construct', '__clone'));
+        }
+        
+        /**
+         *    Tests for an special method.
+         *    @param string $method    Method name.
+         *    @return boolean          True if special.
+         *    @access private
+         *    @static
+         */
+        function _isSpecial($method) {
+            return in_array(
+                    strtolower($method),
+                    array('__get', '__set', '__call'));
         }
         
         /**
@@ -1247,7 +1131,8 @@
         function _bailOutIfNotMocked($alias) {
             $code  = "        if (! in_array($alias, \$this->_mocked_methods)) {\n";
             $code .= "            trigger_error(\"Method [$alias] is not mocked\");\n";
-            $code .= "            return;\n";
+            $code .= "            \$null = null;\n";
+            $code .= "            return \$null;\n";
             $code .= "        }\n";
             return $code;
         }
@@ -1336,7 +1221,8 @@
             foreach ($methods as $method) {
                 $code .= Stub::_createFunctionDeclaration($method);
                 $code .= "        \$args = func_get_args();\n";
-                $code .= "        return \$this->_mock->_invoke(\"$method\", \$args);\n";
+                $code .= "        \$result = &\$this->_mock->_invoke(\"$method\", \$args);\n";
+                $code .= "        return \$result;\n";
                 $code .= "    }\n";
             }
             return $code;
@@ -1359,5 +1245,11 @@
             }
             return SimpleDumper::getFormattedAssertionLine($stack, $format, 'expect');
         }
+    }
+    
+    /**
+     *    @deprecated
+     */
+    class Stub extends Mock {
     }
 ?>

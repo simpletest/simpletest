@@ -67,7 +67,7 @@
     $test->run(new HtmlReporter());
 ?>
 ]]></php>
-                Le problème de cette technique est que pour chaque scénario de test supplémentaire nous aurons à <code>require_once()</code> le fichier de code de test et à manuellement instancier chaque scénario de test. Nous pouvons nous épargner beaucoup de dactylographie avec...
+                Le problème de cette technique est que pour chaque scénario de test supplémentaire nous aurons à importer (via <code>require_once()</code>) le fichier de code de test et à instancier manuellement chaque scénario de test. Nous pouvons nous épargner beaucoup de dactylographie avec...
 <php><![CDATA[
 <?php
     require_once('simpletest/unit_tester.php');
@@ -178,7 +178,7 @@
                 Si vous avez déjà des tests unitaires pour votre code ou alors si vous étendez des classes externes qui ont déjà leurs propres tests, il y a peu de chances pour que ceux-ci soient déjà au format SimpleTest. Heureusement il est possible d'incorporer ces scénarios de test en provenance d'autres testeurs unitaires directement dans des groupes de test SimpleTest.
             </p>
             <p>
-                Par exemple, supposons que nous ayons ce scénario de test prévu pour <a href="http://sourceforge.net/projects/phpunit">PhpUnit</a>dans le fichier <em>config_test.php</em>...
+                Par exemple, supposons que nous ayons ce scénario de test prévu pour <a href="http://sourceforge.net/projects/phpunit">PhpUnit</a> dans le fichier <em>config_test.php</em>...
 <php><![CDATA[
 <strong>class ConfigFileTest extends TestCase {
     function ConfigFileTest() {

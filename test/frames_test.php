@@ -11,14 +11,14 @@
     class TestOfFrameset extends UnitTestCase {
         
         function testTitleReadFromFramesetPage() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $page->setReturnValue('getTitle', 'This page');
             $frameset = &new SimpleFrameset($page);
             $this->assertEqual($frameset->getTitle(), 'This page');
         }
         
         function TestHeadersReadFromFramesetByDefault() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $page->setReturnValue('getHeaders', 'Header: content');
             $page->setReturnValue('getMimeType', 'text/xml');
             $page->setReturnValue('getResponseCode', 401);
@@ -37,17 +37,17 @@
         }
         
         function testEmptyFramesetHasNoContent() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $page->setReturnValue('getRaw', 'This content');
             $frameset = &new SimpleFrameset($page);
             $this->assertEqual($frameset->getRaw(), '');
         }
         
         function testRawContentIsFromOnlyFrame() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $page->expectNever('getRaw');
             
-            $frame = &new MockSimplePage($this);
+            $frame = &new MockSimplePage();
             $frame->setReturnValue('getRaw', 'Stuff');
             
             $frameset = &new SimpleFrameset($page);
@@ -56,13 +56,13 @@
         }
         
         function testRawContentIsFromAllFrames() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $page->expectNever('getRaw');
             
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->setReturnValue('getRaw', 'Stuff1');
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->setReturnValue('getRaw', 'Stuff2');
             
             $frameset = &new SimpleFrameset($page);
@@ -72,10 +72,10 @@
         }
         
         function testTextContentIsFromOnlyFrame() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $page->expectNever('getText');
             
-            $frame = &new MockSimplePage($this);
+            $frame = &new MockSimplePage();
             $frame->setReturnValue('getText', 'Stuff');
             
             $frameset = &new SimpleFrameset($page);
@@ -84,13 +84,13 @@
         }
         
         function testTextContentIsFromAllFrames() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $page->expectNever('getText');
             
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->setReturnValue('getText', 'Stuff1');
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->setReturnValue('getText', 'Stuff2');
             
             $frameset = &new SimpleFrameset($page);
@@ -100,36 +100,33 @@
         }
         
         function testFieldFoundIsFirstInFramelist() {
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->setReturnValue('getFieldByName', null);
             $frame1->expectOnce('getFieldByName', array('a'));
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->setReturnValue('getFieldByName', 'A');
             $frame2->expectOnce('getFieldByName', array('a'));
             
-            $frame3 = &new MockSimplePage($this);
+            $frame3 = &new MockSimplePage();
             $frame3->expectNever('getFieldByName');
             
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $frameset = &new SimpleFrameset($page);
             $frameset->addFrame($frame1);
             $frameset->addFrame($frame2);
             $frameset->addFrame($frame3);
-            
             $this->assertIdentical($frameset->getFieldByName('a'), 'A');
-            $frame1->tally();
-            $frame2->tally();
         }
         
         function testFrameReplacementByIndex() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $page->expectNever('getRaw');
             
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->setReturnValue('getRaw', 'Stuff1');
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->setReturnValue('getRaw', 'Stuff2');
             
             $frameset = &new SimpleFrameset($page);
@@ -139,13 +136,13 @@
         }
         
         function testFrameReplacementByName() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $page->expectNever('getRaw');
             
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->setReturnValue('getRaw', 'Stuff1');
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->setReturnValue('getRaw', 'Stuff2');
             
             $frameset = &new SimpleFrameset($page);
@@ -158,17 +155,17 @@
     class TestOfFrameNavigation extends UnitTestCase {
         
         function testStartsWithoutFrameFocus() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $frameset = &new SimpleFrameset($page);
             $frameset->addFrame($frame);
             $this->assertFalse($frameset->getFrameFocus());
         }
         
         function testCanFocusOnSingleFrame() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $page->expectNever('getRaw');
             
-            $frame = &new MockSimplePage($this);
+            $frame = &new MockSimplePage();
             $frame->setReturnValue('getFrameFocus', array());
             $frame->setReturnValue('getRaw', 'Stuff');
             
@@ -183,13 +180,13 @@
         }
         
         function testContentComesFromFrameInFocus() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->setReturnValue('getRaw', 'Stuff1');
             $frame1->setReturnValue('getFrameFocus', array());
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->setReturnValue('getRaw', 'Stuff2');
             $frame2->setReturnValue('getFrameFocus', array());
             
@@ -212,13 +209,13 @@
             $this->assertEqual($frameset->getRaw(), 'Stuff1Stuff2');
         }
         function testCanFocusByName() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->setReturnValue('getRaw', 'Stuff1');
             $frame1->setReturnValue('getFrameFocus', array());
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->setReturnValue('getRaw', 'Stuff2');
             $frame2->setReturnValue('getFrameFocus', array());
             
@@ -306,7 +303,7 @@
         }
         
         function testHeadersReadFromFrameIfInFocus() {
-            $frame = &new MockSimplePage($this);
+            $frame = &new MockSimplePage();
             $frame->setReturnValue('getUrl', new SimpleUrl('http://localhost/stuff'));
             
             $frame->setReturnValue('getRequest', 'POST stuff');
@@ -319,7 +316,7 @@
             $frame->setReturnValue('getAuthentication', 'Basic');
             $frame->setReturnValue('getRealm', 'Safe place');
             
-            $frameset = &new SimpleFrameset(new MockSimplePage($this));
+            $frameset = &new SimpleFrameset(new MockSimplePage());
             $frameset->addFrame($frame);
             $frameset->setFrameFocusByIndex(1);
             
@@ -339,15 +336,15 @@
         }
         
         function testAbsoluteUrlsComeFromBothFrames() {
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $page->expectNever('getAbsoluteUrls');
             
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->setReturnValue(
                     'getAbsoluteUrls',
                     array('http://www.lastcraft.com/', 'http://myserver/'));
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->setReturnValue(
                     'getAbsoluteUrls',
                     array('http://www.lastcraft.com/', 'http://test/'));
@@ -361,17 +358,17 @@
         }
         
         function testRelativeUrlsComeFromBothFrames() {
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->setReturnValue(
                     'getRelativeUrls',
                     array('/', '.', '/test/', 'goodbye.php'));
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->setReturnValue(
                     'getRelativeUrls',
                     array('/', '..', '/test/', 'hello.php'));
             
-            $page = &new MockSimplePage($this);
+            $page = &new MockSimplePage();
             $page->expectNever('getRelativeUrls');
             
             $frameset = &new SimpleFrameset($page);
@@ -383,19 +380,19 @@
         }
         
         function testLabelledUrlsComeFromBothFrames() {
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->setReturnValue(
                     'getUrlsByLabel',
                     array(new SimpleUrl('goodbye.php')),
                     array('a'));
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->setReturnValue(
                     'getUrlsByLabel',
                     array(new SimpleUrl('hello.php')),
                     array('a'));
             
-            $frameset = &new SimpleFrameset(new MockSimplePage($this));
+            $frameset = &new SimpleFrameset(new MockSimplePage());
             $frameset->addFrame($frame1);
             $frameset->addFrame($frame2, 'Two');
             
@@ -409,15 +406,15 @@
         }
         
         function testUrlByIdComesFromFirstFrameToRespond() {
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->setReturnValue('getUrlById', new SimpleUrl('four.php'), array(4));
             $frame1->setReturnValue('getUrlById', false, array(5));
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->setReturnValue('getUrlById', false, array(4));
             $frame2->setReturnValue('getUrlById', new SimpleUrl('five.php'), array(5));
             
-            $frameset = &new SimpleFrameset(new MockSimplePage($this));
+            $frameset = &new SimpleFrameset(new MockSimplePage());
             $frameset->addFrame($frame1);
             $frameset->addFrame($frame2);
             
@@ -430,19 +427,19 @@
         }
         
         function testReadUrlsFromFrameInFocus() {
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->setReturnValue('getAbsoluteUrls', array('a'));
             $frame1->setReturnValue('getRelativeUrls', array('r'));
             $frame1->setReturnValue('getUrlsByLabel', array(new SimpleUrl('l')));
             $frame1->setReturnValue('getUrlById', new SimpleUrl('i'));
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->expectNever('getAbsoluteUrls');
             $frame2->expectNever('getRelativeUrls');
             $frame2->expectNever('getUrlsByLabel');
             $frame2->expectNever('getUrlById');
 
-            $frameset = &new SimpleFrameset(new MockSimplePage($this));
+            $frameset = &new SimpleFrameset(new MockSimplePage());
             $frameset->addFrame($frame1, 'A');
             $frameset->addFrame($frame2, 'B');
             $frameset->setFrameFocus('A');
@@ -458,7 +455,7 @@
         }
           
         function testReadFrameTaggedUrlsFromFrameInFocus() {
-            $frame = &new MockSimplePage($this);
+            $frame = &new MockSimplePage();
             
             $by_label = new SimpleUrl('l');
             $by_label->setTarget('L');
@@ -468,7 +465,7 @@
             $by_id->setTarget('I');
             $frame->setReturnValue('getUrlById', $by_id);
             
-            $frameset = &new SimpleFrameset(new MockSimplePage($this));
+            $frameset = &new SimpleFrameset(new MockSimplePage());
             $frameset->addFrame($frame, 'A');
             $frameset->setFrameFocus('A');
             
@@ -483,14 +480,14 @@
                     'getFormByImageName', 'getFormByImageId', 'getFormById');
             $forms = array();
             
-            $frame = &new MockSimplePage($this);
+            $frame = &new MockSimplePage();
             for ($i = 0; $i < count($finders); $i++) {
-                $forms[$i] = &new MockSimpleForm($this);
+                $forms[$i] = &new MockSimpleForm();
                 $frame->setReturnReference($finders[$i], $forms[$i], array('a'));
             }
 
-            $frameset = &new SimpleFrameset(new MockSimplePage($this));
-            $frameset->addFrame(new MockSimplePage($this), 'A');
+            $frameset = &new SimpleFrameset(new MockSimplePage());
+            $frameset->addFrame(new MockSimplePage(), 'A');
             $frameset->addFrame($frame, 'B');
             for ($i = 0; $i < count($finders); $i++) {
                 $method = $finders[$i];
@@ -511,53 +508,50 @@
         }
         
         function testSettingAllFrameFieldsWhenNoFrameFocus() {
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->expectOnce('setFieldByName', array('a', 'A'));
             $frame1->expectOnce('setFieldById', array(22, 'A'));
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->expectOnce('setFieldByName', array('a', 'A'));
             $frame2->expectOnce('setFieldById', array(22, 'A'));
             
-            $frameset = &new SimpleFrameset(new MockSimplePage($this));
+            $frameset = &new SimpleFrameset(new MockSimplePage());
             $frameset->addFrame($frame1, 'A');
             $frameset->addFrame($frame2, 'B');
             
             $frameset->setFieldByName('a', 'A');
             $frameset->setFieldById(22, 'A');
-            $frame1->tally();
-            $frame2->tally();
         }
         
         function testOnlySettingFieldFromFocusedFrame() {
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->expectOnce('setField', array('a', 'A'));
             $frame1->expectOnce('setFieldById', array(22, 'A'));
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->expectNever('setField');
             $frame2->expectNever('setFieldById');
             
-            $frameset = &new SimpleFrameset(new MockSimplePage($this));
+            $frameset = &new SimpleFrameset(new MockSimplePage());
             $frameset->addFrame($frame1, 'A');
             $frameset->addFrame($frame2, 'B');
             $frameset->setFrameFocus('A');
             
             $frameset->setField('a', 'A');
             $frameset->setFieldById(22, 'A');
-            $frame1->tally();
         }
         
         function testOnlyGettingFieldFromFocusedFrame() {
-            $frame1 = &new MockSimplePage($this);
+            $frame1 = &new MockSimplePage();
             $frame1->setReturnValue('getField', 'f', array('a'));
             $frame1->setReturnValue('getFieldById', 'i', array(7));
             
-            $frame2 = &new MockSimplePage($this);
+            $frame2 = &new MockSimplePage();
             $frame2->expectNever('getField');
             $frame2->expectNever('getFieldById');
             
-            $frameset = &new SimpleFrameset(new MockSimplePage($this));
+            $frameset = &new SimpleFrameset(new MockSimplePage());
             $frameset->addFrame($frame1, 'A');
             $frameset->addFrame($frame2, 'B');
             $frameset->setFrameFocus('A');

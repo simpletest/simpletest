@@ -438,28 +438,23 @@
                 $base = new SimpleUrl($base);
             }
             $scheme = $this->getScheme() ? $this->getScheme() : $base->getScheme();
-            $host = $this->getHost() ? $this->getHost() : $base->getHost();
-            $port = $this->_extractAbsolutePort($base);
+            if ($this->getHost()) {
+                $host = $this->getHost();
+                $port = $this->getPort() ? ':' . $this->getPort() : '';
+                $identity = $this->getIdentity() ? $this->getIdentity() . '@' : '';
+                if (! $identity) {
+                    $identity = $base->getIdentity() ? $base->getIdentity() . '@' : '';
+                }
+            } else {
+                $host = $base->getHost();
+                $port = $base->getPort() ? ':' . $base->getPort() : '';
+                $identity = $base->getIdentity() ? $base->getIdentity() . '@' : '';
+            }
             $path = $this->normalisePath($this->_extractAbsolutePath($base));
-            $identity = $this->_getIdentity() ? $this->_getIdentity() . '@' : '';
             $encoded = $this->getEncodedRequest();
             $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
             $coords = $this->getX() === false ? '' : '?' . $this->getX() . ',' . $this->getY();
             return new SimpleUrl("$scheme://$identity$host$port$path$encoded$fragment$coords");
-        }
-        
-        /**
-         *    Extracts the port from the base URL if it's needed, but
-         *    not present, in the current URL.
-         *    @param string/SimpleUrl $base       Base URL.
-         *    @param string                       Absolute port number.
-         *    @access private
-         */
-        function _extractAbsolutePort($base) {
-            if ($this->getHost()) {
-                return ($this->getPort() ? ':' . $this->getPort() : '');
-            }
-            return ($base->getPort() ? ':' . $base->getPort() : '');
         }
         
         /**
@@ -496,9 +491,9 @@
          *    Extracts the username and password for use in rendering
          *    a URL.
          *    @return string/boolean    Form of username:password@ or false.
-         *    @access private
+         *    @access public
          */
-        function _getIdentity() {
+        function getIdentity() {
             if ($this->_username && $this->_password) {
                 return $this->_username . ':' . $this->_password;
             }

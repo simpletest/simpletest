@@ -4,9 +4,10 @@
 #
 cd ../..
 
-NAME=php_simpletest_`cat simpletest/VERSION`.tar.gz
+NAME=simpletest_`cat simpletest/VERSION`.tar.gz
 FILES=(simpletest/errors.php \
-          simpletest/options.php \
+          simpletest/compatibility.php \
+          simpletest/collector.php \
           simpletest/dumper.php \
           simpletest/expectation.php \
           simpletest/socket.php \
@@ -22,12 +23,15 @@ FILES=(simpletest/errors.php \
           simpletest/form.php \
           simpletest/frames.php \
           simpletest/page.php \
+          simpletest/reflection_php4.php \
+          simpletest/reflection_php5.php \
           simpletest/remote.php \
           simpletest/runner.php \
           simpletest/scorer.php \
           simpletest/reporter.php \
           simpletest/mock_objects.php \
-          simpletest/simple_test.php \
+          simpletest/simpletest.php \
+          simpletest/test_case.php \
           simpletest/unit_tester.php \
           simpletest/web_tester.php \
           simpletest/shell_tester.php \
@@ -40,9 +44,12 @@ FILES=(simpletest/errors.php \
           simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE \
           simpletest/test/all_tests.php \
           simpletest/test/unit_tests.php \
+          simpletest/test/test_groups.php \
           simpletest/test/acceptance_test.php \
+          simpletest/test/collector_test.php \
+          simpletest/test/simpletest_test.php \
           simpletest/test/errors_test.php \
-          simpletest/test/options_test.php \
+          simpletest/test/compatibility_test.php \
           simpletest/test/dumper_test.php \
           simpletest/test/expectation_test.php \
           simpletest/test/adapter_test.php \
@@ -58,8 +65,10 @@ FILES=(simpletest/errors.php \
           simpletest/test/form_test.php \
           simpletest/test/frames_test.php \
           simpletest/test/page_test.php \
+          simpletest/test/reflection_php4_test.php \
+          simpletest/test/reflection_php5_test.php \
           simpletest/test/remote_test.php \
-          simpletest/test/simple_mock_test.php \
+          simpletest/test/mock_objects_test.php \
           simpletest/test/visual_test.php \
           simpletest/test/shell_test.php \
           simpletest/test/web_tester_test.php \
@@ -70,8 +79,11 @@ FILES=(simpletest/errors.php \
           simpletest/test/real_sites_test.php \
           simpletest/test/parse_error_test.php \
           simpletest/test/test_with_parse_error.php \
-          simpletest/test/support/collectable.1 \
-          simpletest/test/support/collectable.2 \
+          simpletest/test/support/collector/collectable.1 \
+          simpletest/test/support/collector/collectable.2 \
+          simpletest/test/support/upload_sample.txt \
+          simpletest/test/support/supplementary_upload_sample.txt \
+          simpletest/test/support/latin1_sample \
           simpletest/docs/en/docs.css \
           simpletest/docs/en/index.html \
           simpletest/docs/en/overview.html \

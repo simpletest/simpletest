@@ -108,7 +108,7 @@
                     new SimpleGetEncoding(array('go' => 'Go!')));            
             $this->assertEqual(
                     $form->submitButton(new SimpleByLabel('Go!')),
-                    new SimpleGetEncoding(array('go' => 'Go!')));            
+                    new SimpleGetEncoding(array('go' => 'Go!')));
             $this->assertEqual(
                     $form->submitButton(new SimpleById(9)),
                     new SimpleGetEncoding(array('go' => 'Go!')));            

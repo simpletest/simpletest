@@ -65,7 +65,7 @@ class TestOfNewsService extends UnitTestCase {
                 Plutôt que de transmettre le paramètre attendu au <code>MockWriter</code>, nous envoyons une classe d'attente appelée <code>WantedPatternExpectation</code>. L'objet fantaisie est suffisamment élégant pour reconnaître qu'il s'agit d'un truc spécial et pour le traiter différemment. Plutôt que de comparer l'argument entrant à cet objet, il utilise l'objet attente lui-même pour exécuter le test.
             </p>
             <p>
-                <code>WantedPatternExpectation</code> utilise l'expression rationnelle pour la comparaison avec son constructeur. A chaque fois q'une comparaison est fait à travers <code>MockWriter</code> par rapport à cette classe attente, elle fera un <code>preg_match()</code> avec ce motif. Dans notre scénario de test ci-dessus, aussi longtemps que la chaîne &quot;cannot connect&quot; apparaît dans le texte, la fantaisie transmettra un succès au testeur unitaire. Peu importe le reste du texte.
+                <code>WantedPatternExpectation</code> utilise l'expression rationnelle pour la comparaison avec son constructeur. A chaque fois qu'une comparaison est fait à travers <code>MockWriter</code> par rapport à cette classe attente, elle fera un <code>preg_match()</code> avec ce motif. Dans notre scénario de test ci-dessus, aussi longtemps que la chaîne &quot;cannot connect&quot; apparaît dans le texte, la fantaisie transmettra un succès au testeur unitaire. Peu importe le reste du texte.
             </p>
             <p>
                 Les classes attente possibles sont...
@@ -85,7 +85,7 @@ class TestOfNewsService extends UnitTestCase {
         </section>
         <section name="comportement" title="Utiliser les attentes pour contrôler les bouchons serveur">
             <p>
-                Les classes attente peuvent servir à autre chose que l'envoi d'assertions depuis les objets fantaisie, afin de choisir le comportement d'un <a local="mock_objects_documentation">objet fantaisie</a> our celui d'un <a local="server_stubs_documentation">bouchon serveur</a>. A chaque fois qu'une liste d'arguments est donnée, une liste d'objets attente peut être insérée à la place.
+                Les classes attente peuvent servir à autre chose que l'envoi d'assertions depuis les objets fantaisie, afin de choisir le comportement d'un <a local="mock_objects_documentation">objet fantaisie</a> ou celui d'un <a local="server_stubs_documentation">bouchon serveur</a>. A chaque fois qu'une liste d'arguments est donnée, une liste d'objets d'attente peut être insérée à la place.
             </p>
             <p>
                 Mettons que nous voulons qu'un bouchon serveur d'autorisation simule une connexion réussie seulement si il reçoit un objet de session valide. Nous pouvons y arriver avec ce qui suit...

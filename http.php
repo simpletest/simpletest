@@ -304,9 +304,11 @@
          */
         function &_createSocket($scheme, $host, $port, $timeout) {
             if (in_array($scheme, array('https'))) {
-                return new SimpleSecureSocket($host, $port, $timeout);
+                $socket = &new SimpleSecureSocket($host, $port, $timeout);
+            } else {
+                $socket = &new SimpleSocket($host, $port, $timeout);
             }
-            return new SimpleSocket($host, $port, $timeout);
+            return $socket;
         }
     }
     
@@ -429,11 +431,11 @@
          */
         function &fetch($timeout) {
             $socket = &$this->_route->createConnection($this->_encoding->getMethod(), $timeout);
-            if ($socket->isError()) {
-                return $this->_createResponse($socket);
+            if (! $socket->isError()) {
+                $this->_dispatchRequest($socket, $this->_encoding);
             }
-            $this->_dispatchRequest($socket, $this->_encoding);
-            return $this->_createResponse($socket);
+            $response = &$this->_createResponse($socket);
+            return $response;
         }
         
         /**
@@ -496,10 +498,11 @@
          *    @access protected
          */
         function &_createResponse(&$socket) {
-            return new SimpleHttpResponse(
+            $response = &new SimpleHttpResponse(
                     $socket,
                     $this->_route->getUrl(),
                     $this->_encoding);
+            return $response;
         }
     }
     

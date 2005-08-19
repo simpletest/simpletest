@@ -41,7 +41,7 @@ $connection = new StubDatabaseConnection();
 <php><![CDATA[
 <strong>$connection->setReturnValue('query', 37)</strong>
 ]]></php>
-                Désormais à chaque appel de <code><![CDATA[$connection->query()]]></code> nous obtenons un résultat de 37. Nous pouvons choisir n'importe quelle valeur pour le résultat, par exemple un hash de résultats provenant d'un base de données imaginaire ou alors une liste d'objets persistants. Peu importe les paramètres, nous obtenons systématiquement les même valeurs chaque fois qu'ils ont été initialisés de la sorte : ça ne ressemble peut-être pas à une réponse convaincante venant d'une connexion vers une base de données. Mais pour la demi-douzaine de lignes d'une méthode de test c'est souvent largement suffisant.
+                Désormais à chaque appel de <code><![CDATA[$connection->query()]]></code> nous obtenons un résultat de 37. Nous pouvons choisir n'importe quelle valeur pour le résultat, par exemple un hash de résultats provenant d'une base de données imaginaire ou alors une liste d'objets persistants. Peu importe les paramètres, nous obtenons systématiquement les même valeurs chaque fois qu'ils ont été initialisés de la sorte : ça ne ressemble peut-être pas à une réponse convaincante venant d'une connexion vers une base de données. Mais pour la demi-douzaine de lignes d'une méthode de test c'est souvent largement suffisant.
             </p>
         </section>
         <section name="modèles" title="Modèles de simulation">
@@ -138,7 +138,7 @@ $complex->setReturnReferenceAt(3, 'get', $stuff, array('*', 1));</strong>
                 Le <code>$stuff</code> ne sera renvoyé qu'au troisième appel et seulement si deux paramètres étaient indiqués, avec la contrainte que le second de ceux-ci soit l'entier 1. N'est-ce pas suffisant pour des situations de prototypage simple ?
             </p>
             <p>
-                Un dernier cas critique reste celle d'un objet en créant un autre, connu sous le nom du modèle factory - fabrique. Supposons qu'après une requête réussie à notre base de données imaginaire, un ensemble de résultats est retourné sous la forme d'un itérateur, chaque appel à <code>next()</code> donnant un ligne et à la fin un <code>false</code>.
+                Un dernier cas critique reste celle d'un objet en créant un autre, connu sous le nom du modèle factory - fabrique. Supposons qu'après une requête réussie à notre base de données imaginaire, un ensemble de résultats est retourné sous la forme d'un itérateur, chaque appel à <code>next()</code> donnant une ligne et à la fin un <code>false</code>.
                 Au premier abord, ça donne l'impression d'être cauchemardesque à simuler. Alors qu'en fait tout peut être bouchonné en utilisant les mécanismes ci-dessus.
             </p>
             <p>
@@ -193,7 +193,7 @@ $iterator->setReturnValue('next', 0);
                 Les méthodes <code>next()</code> et <code>isError()</code> peuvent maintenant renvoyer des ensembles de valeurs exactement comme si elles existaient dans la classe originale.
             </p>
             <p>
-                Un moyen encore plus ésotérique de modifier les bouchons est de changer le joker utiliser par défaut pour la correspondance des paramètres.
+                Un moyen encore plus ésotérique de modifier les bouchons est de changer le joker utilisé par défaut pour la correspondance des paramètres.
 <php><![CDATA[
 <strong>Stub::generate('Connection');
 $iterator = &new StubConnection('wild');

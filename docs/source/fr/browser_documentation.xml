@@ -4,7 +4,7 @@
     <content>
         <introduction>
             <p>
-                Le composant de navigation web de SimpleTest peut être utilisé non seulement à l'extérieur de la classe <code>WebTestCase</code>, mais aussi indépendamment du frameword SimpleTest lui-même.
+                Le composant de navigation web de SimpleTest peut être utilisé non seulement à l'extérieur de la classe <code>WebTestCase</code>, mais aussi indépendamment du framework SimpleTest lui-même.
             </p>
         </introduction>
         <section name="script" title="Le navigateur scriptable">
@@ -25,7 +25,7 @@
     print $matches[1];
 ?>
 ]]></php>
-                Bien sûr Il y a des méthodes plus simple pour réaliser cet exemple en PHP. Par exemple, vous pourriez juste utiliser la commande PHP <code>file()</code> sur ce qui est ici une page fixe. Cependant, en utilisant des scripts avec le navigateur web vous vous autorisez l'authentification, la gestion des cookies, le chargement automatique des fenêtres, les redirections, la transmission de formulaire et la capacité d'examiner les entêtes. De telles méthodes sont fragiles dans un site en constante évolution et vous voudrez employer une méthode plus directe pour accéder aux données de façon permanente, mais pour des tâches simples cette technique peut s'avérer une solution très rapide.
+                Bien sûr Il y a des méthodes plus simple pour réaliser cet exemple en PHP. Par exemple, vous pourriez juste utiliser la commande PHP <code>file()</code> sur ce qui est ici une page fixe. Cependant, en utilisant des scripts avec le navigateur web vous vous autorisez l'authentification, la gestion des cookies, le chargement automatique des fenêtres, les redirections, la transmission de formulaires et la capacité d'examiner les entêtes. De telles méthodes sont fragiles dans un site en constante évolution et vous voudrez employer une méthode plus directe pour accéder aux données de façon permanente, mais pour des tâches simples cette technique peut s'avérer une solution très rapide.
             </p>
             <p>
                 Toutes les méthode de navigation utilisées dans <a local="web_tester_documentation">WebTestCase</a> sont présente dans la classe <code>SimpleBrowser</code>, mais les assertions sont remplacées par de simples accesseurs. Voici une liste complète des méthodes de navigation de page à page...
@@ -53,7 +53,7 @@
                     <tr><td><code>getCookieValue($host, $path, $name)</code></td><td>Lit le cookie le plus spécifique</td></tr>
                     <tr><td><code>getCurrentCookieValue($name)</code></td><td>Lit le contenue du cookie en cours</td></tr>
                 </tbody></table>
-                Les méthode <code>SimpleBrowser::useProxy()</code> et <code>SimpleBrowser::addHeader()</code> sont spéciales. Une fois appellées, elles continuent à s'appliquer sur les téléchargements suivants.
+                Les méthode <code>SimpleBrowser::useProxy()</code> et <code>SimpleBrowser::addHeader()</code> sont spéciales. Une fois appelées, elles continuent à s'appliquer sur les téléchargements suivants.
             </p>
             <p>
                 Naviguer dans les formulaires est similaire à la <a local="form_testing_documentation">navigation des formulaires via WebTestCase</a>...
@@ -70,10 +70,10 @@
                     <tr><td><code>clickImageById($id, $x, $y)</code></td><td>Clique sur l'image par son identifiant</td></tr>
                     <tr><td><code>submitFormById($id)</code></td><td>Transmet le formulaire par son identifiant propre</td></tr>
                 </tbody></table>
-                A aujourd'hui il n'existe aucune méthode pour lister les formulaires et les champs disponibles : ce sera probablement ajouté dans des versions successives de SimpleTest.
+                Au jourd d'aujourd'hui il n'existe aucune méthode pour lister les formulaires et les champs disponibles : ce sera probablement ajouté dans des versions successives de SimpleTest.
             </p>
             <p>
-                A l'intérieur d'une page, les fenêtres individuelles peuvent être sélectionnées. Si aucune sélection n'est réalisée alors toutes les fenêtres sont fusionnées ensemble dans un unique et grande page. Le contenu de la page en cours sera une concaténation des toutes les fenêtres dans l'ordre spécifié par les balises &quot;frameset&quot;.
+                A l'intérieur d'une page, les fenêtres individuelles peuvent être sélectionnées. Si aucune sélection n'est réalisée alors toutes les fenêtres sont fusionnées ensemble dans une unique et grande page. Le contenu de la page en cours sera une concaténation des toutes les fenêtres dans l'ordre spécifié par les balises &quot;frameset&quot;.
                 <table><tbody>
                     <tr><td><code>getFrames()</code></td><td>Un déchargement de la structure de la fenêtre courante</td></tr>
                     <tr><td><code>getFrameFocus()</code></td><td>L'index ou l'étiquette de la fenêtre en courante</td></tr>
@@ -94,14 +94,14 @@
                     <tr><td><code>getTransportError()</code></td><td>N'importe quel erreur au niveau de la socket dans le dernier téléchargement</td></tr>
                     <tr><td><code>getResponseCode()</code></td><td>La réponse HTTP de la page ou de la fenêtre</td></tr>
                     <tr><td><code>getMimeType()</code></td><td>Le type Mime de la page our de la fenêtre</td></tr>
-                    <tr><td><code>getAuthentication()</code></td><td>Le type d'authenficiation dans l'entête d'une provocation 401</td></tr>
+                    <tr><td><code>getAuthentication()</code></td><td>Le type d'authentification dans l'entête d'une provocation 401</td></tr>
                     <tr><td><code>getRealm()</code></td><td>Le realm d'authentification dans l'entête d'une provocation 401</td></tr>
-                    <tr><td><code>setMaximumRedirects($max)</code></td><td>Nombre de redirection avant que la page ne soit chargée automatiquement</td></tr>
+                    <tr><td><code>setMaximumRedirects($max)</code></td><td>Nombre de redirections avant que la page ne soit chargée automatiquement</td></tr>
                     <tr><td><code>setMaximumNestedFrames($max)</code></td><td>Protection contre des framesets récursifs</td></tr>
                     <tr><td><code>ignoreFrames()</code></td><td>Neutralise le support des fenêtres</td></tr>
                     <tr><td><code>useFrames()</code></td><td>Autorise le support des fenêtres</td></tr>
                 </tbody></table>
-                Les méthodes <code>SimpleBrowser::setConnectionTimeout()</code>, <code>SimpleBrowser::setMaximumRedirects()</code>,<code>SimpleBrowser::setMaximumNestedFrames()</code>, <code>SimpleBrowser::ignoreFrames()</code> et <code>SimpleBrowser::useFrames()</code> continuent à s'appliquer sur toutes les requêtes suivantes. Les autres méthodes tiennent compte des fenêtres. Cela veut dire que si une fenêtre individuel ne se charge pas, il suffit de se diriger vers elle avec <code>SimpleBrowser::setFrameFocus()</code> : ensuite on utilisera <code>SimpleBrowser::getRequest()</code>, etc. pour voir ce qui se passe.
+                Les méthodes <code>SimpleBrowser::setConnectionTimeout()</code>, <code>SimpleBrowser::setMaximumRedirects()</code>,<code>SimpleBrowser::setMaximumNestedFrames()</code>, <code>SimpleBrowser::ignoreFrames()</code> et <code>SimpleBrowser::useFrames()</code> continuent à s'appliquer sur toutes les requêtes suivantes. Les autres méthodes tiennent compte des fenêtres. Cela veut dire que si une fenêtre individuelle ne se charge pas, il suffit de se diriger vers elle avec <code>SimpleBrowser::setFrameFocus()</code> : ensuite on utilisera <code>SimpleBrowser::getRequest()</code>, etc. pour voir ce qui se passe.
             </p>
         </section>
         <section name="unit" title="Tests unitaires complexes avec des navigateurs multiples">
@@ -122,7 +122,7 @@ class TestOfRegistration extends UnitTestCase {
     }
 }
 ]]></php>
-                Bien que ça puisse être utile par convenance temporaire, je ne suis pas fan de ce genre de test. Ce test s'applique à sur plusieurs couches de l'application, ça implique qu'il est plus que probable qu'il faudra le remanier lorsque le code change.
+                Bien que ça puisse être utile par convenance temporaire, je ne suis pas fan de ce genre de test. Ce test s'applique à plusieurs couches de l'application, ça implique qu'il est plus que probable qu'il faudra le remanier lorsque le code changera.
             </p>
             <p>
                 Un cas plus utile d'utilisation directe du navigateur est le moment où le <code>WebTestCase</code> ne peut plus suivre. Un exemple ? Quand deux navigateurs doivent être utilisés en même temps.

@@ -73,7 +73,7 @@
             $url->addRequestParameter('b', 'B');
             $this->assertEqual($url->getEncodedRequest(), '?a=A&b=B');
             $url->addRequestParameter('a', 'aaa');
-            $this->assertEqual($url->getEncodedRequest(), '?a=A&a=aaa&b=B');
+            $this->assertEqual($url->getEncodedRequest(), '?a=A&b=B&a=aaa');
         }
         
         function testClearingParameters() {
@@ -326,6 +326,14 @@
             $this->assertEqual($absolute->getPath(), '/here.html');
         }
         
+        function testCarryAuthenticationFromRootPage() {
+            $url = new SimpleUrl('here.html');
+            $absolute = $url->makeAbsolute('http://test:secret@host.com/');
+            $this->assertEqual($absolute->getPath(), '/here.html');
+            $this->assertEqual($absolute->getUsername(), 'test');
+            $this->assertEqual($absolute->getPassword(), 'secret');
+        }
+        
         function testMakingCoordinateUrlAbsolute() {
             $url = new SimpleUrl('?1,2');
             $this->assertEqual($url->getPath(), '');
@@ -360,6 +368,14 @@
             $this->assertEqual($absolute->getPath(), '/stuff/');
             $this->assertEqual($absolute->getEncodedRequest(), '?a=1');
             $this->assertEqual($absolute->getFragment(), 'f');
+        }
+        
+        function testMakingAbsoluteCarriesAuthenticationWhenAlreadyAbsolute() {
+            $url = new SimpleUrl('https://www.lastcraft.com');
+            $absolute = $url->makeAbsolute('http://test:secret@host.com/here/');
+            $this->assertEqual($absolute->getHost(), 'www.lastcraft.com');
+            $this->assertEqual($absolute->getUsername(), 'test');
+            $this->assertEqual($absolute->getPassword(), 'secret');
         }
         
         function testMakingHostOnlyAbsoluteDoesNotCarryAnyOtherInformation() {

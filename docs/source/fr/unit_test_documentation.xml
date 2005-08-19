@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <page title="Documentation sur les tests unitaires en PHP" here="testeur unitaire">
-    <long_title>Documenation SimpleTest pour les tests de régression en PHP</long_title>
+    <long_title>Documentation SimpleTest pour les tests de régression en PHP</long_title>
     <content>
         <section name="unitaire" title="Scénarios de tests unitaires">
             <p>

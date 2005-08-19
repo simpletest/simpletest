@@ -111,7 +111,7 @@
     class TestOfLexer extends UnitTestCase {
         
         function testEmptyPage() {
-            $handler = &new MockTestParser($this);
+            $handler = &new MockTestParser();
             $handler->expectNever("accept");
             $handler->setReturnValue("accept", true);
             $handler->expectNever("accept");
@@ -122,7 +122,7 @@
         }
         
         function testSinglePattern() {
-            $handler = &new MockTestParser($this);
+            $handler = &new MockTestParser();
             $handler->expectArgumentsAt(0, "accept", array("aaa", LEXER_MATCHED));
             $handler->expectArgumentsAt(1, "accept", array("x", LEXER_UNMATCHED));
             $handler->expectArgumentsAt(2, "accept", array("a", LEXER_MATCHED));
@@ -136,11 +136,10 @@
             $lexer = &new SimpleLexer($handler);
             $lexer->addPattern("a+");
             $this->assertTrue($lexer->parse("aaaxayyyaxaaaz"));
-            $handler->tally();
         }
         
         function testMultiplePattern() {
-            $handler = &new MockTestParser($this);
+            $handler = &new MockTestParser();
             $target = array("a", "b", "a", "bb", "x", "b", "a", "xxxxxx", "a", "x");
             for ($i = 0; $i < count($target); $i++) {
                 $handler->expectArgumentsAt($i, "accept", array($target[$i], '*'));
@@ -151,14 +150,13 @@
             $lexer->addPattern("a+");
             $lexer->addPattern("b+");
             $this->assertTrue($lexer->parse("ababbxbaxxxxxxax"));
-            $handler->tally();
         }
     }
 
     class TestOfLexerModes extends UnitTestCase {
         
         function testIsolatedPattern() {
-            $handler = &new MockTestParser($this);
+            $handler = &new MockTestParser();
             $handler->expectArgumentsAt(0, "a", array("a", LEXER_MATCHED));
             $handler->expectArgumentsAt(1, "a", array("b", LEXER_UNMATCHED));
             $handler->expectArgumentsAt(2, "a", array("aa", LEXER_MATCHED));
@@ -173,11 +171,10 @@
             $lexer->addPattern("a+", "a");
             $lexer->addPattern("b+", "b");
             $this->assertTrue($lexer->parse("abaabxbaaaxaaaax"));
-            $handler->tally();
         }
         
         function testModeChange() {
-            $handler = &new MockTestParser($this);
+            $handler = &new MockTestParser();
             $handler->expectArgumentsAt(0, "a", array("a", LEXER_MATCHED));
             $handler->expectArgumentsAt(1, "a", array("b", LEXER_UNMATCHED));
             $handler->expectArgumentsAt(2, "a", array("aa", LEXER_MATCHED));
@@ -200,11 +197,10 @@
             $lexer->addEntryPattern(":", "a", "b");
             $lexer->addPattern("b+", "b");
             $this->assertTrue($lexer->parse("abaabaaa:ababbabbba"));
-            $handler->tally();
         }
         
         function testNesting() {
-            $handler = &new MockTestParser($this);
+            $handler = &new MockTestParser();
             $handler->setReturnValue("a", true);
             $handler->setReturnValue("b", true);
             $handler->expectArgumentsAt(0, "a", array("aa", LEXER_MATCHED));
@@ -226,11 +222,10 @@
             $lexer->addPattern("b+", "b");
             $lexer->addExitPattern(")", "b");
             $this->assertTrue($lexer->parse("aabaab(bbabb)aab"));
-            $handler->tally();
         }
         
         function testSingular() {
-            $handler = &new MockTestParser($this);
+            $handler = &new MockTestParser();
             $handler->setReturnValue("a", true);
             $handler->setReturnValue("b", true);
             $handler->expectArgumentsAt(0, "a", array("aa", LEXER_MATCHED));
@@ -245,11 +240,10 @@
             $lexer->addPattern("a+", "a");
             $lexer->addSpecialPattern("b+", "a", "b");
             $this->assertTrue($lexer->parse("aabaaxxbbbxx"));
-            $handler->tally();
         }
         
         function testUnwindTooFar() {
-            $handler = &new MockTestParser($this);
+            $handler = &new MockTestParser();
             $handler->setReturnValue("a", true);
             $handler->expectArgumentsAt(0, "a", array("aa", LEXER_MATCHED));
             $handler->expectArgumentsAt(1, "a", array(")", LEXER_EXIT));
@@ -258,14 +252,13 @@
             $lexer->addPattern("a+", "a");
             $lexer->addExitPattern(")", "a");
             $this->assertFalse($lexer->parse("aa)aa"));
-            $handler->tally();
         }
     }
 
     class TestOfLexerHandlers extends UnitTestCase {
         
         function testModeMapping() {
-            $handler = &new MockTestParser($this);
+            $handler = &new MockTestParser();
             $handler->setReturnValue("a", true);
             $handler->expectArgumentsAt(0, "a", array("aa", LEXER_MATCHED));
             $handler->expectArgumentsAt(1, "a", array("(", LEXER_ENTER));
@@ -283,7 +276,6 @@
             $lexer->mapHandler("mode_a", "a");
             $lexer->mapHandler("mode_b", "a");
             $this->assertTrue($lexer->parse("aa(bbabb)b"));
-            $handler->tally();
         }
     }
     
@@ -294,7 +286,7 @@
         var $_lexer;
         
         function setUp() {
-            $this->_handler = &new MockSimpleSaxParser($this);
+            $this->_handler = &new MockSimpleSaxParser();
             $this->_handler->setReturnValue("acceptStartToken", true);
             $this->_handler->setReturnValue("acceptEndToken", true);
             $this->_handler->setReturnValue("acceptAttributeToken", true);
@@ -525,8 +517,8 @@
         var $_lexer;
         
         function setUp() {
-            $this->_listener = &new MockSimpleSaxListener($this);
-            $this->_lexer = &new MockSimpleLexer($this);
+            $this->_listener = &new MockSimpleSaxListener();
+            $this->_lexer = &new MockSimpleLexer();
             $this->_parser = &new TestSimpleSaxParser($this->_listener, $this->_lexer);
         }
         

@@ -123,7 +123,7 @@
     class TestOfTextExpectations extends UnitTestCase {
         
         function testMatchingSubString() {
-            $expectation = new WantedTextExpectation('wanted');
+            $expectation = new TextExpectation('wanted');
             $this->assertIdentical($expectation->test(''), false);
             $this->assertIdentical($expectation->test('Wanted'), false);
             $this->assertIdentical($expectation->test('wanted'), true);
@@ -131,7 +131,7 @@
         }
         
         function testNotMatchingSubString() {
-            $expectation = new UnwantedTextExpectation('wanted');
+            $expectation = new NoTextExpectation('wanted');
             $this->assertIdentical($expectation->test(''), true);
             $this->assertIdentical($expectation->test('Wanted'), true);
             $this->assertIdentical($expectation->test('wanted'), false);

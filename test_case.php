@@ -11,12 +11,16 @@
      * for dependent libraries.
      */
     require_once(dirname(__FILE__) . '/errors.php');
-    require_once(dirname(__FILE__) . '/options.php');
+    require_once(dirname(__FILE__) . '/compatibility.php');
     require_once(dirname(__FILE__) . '/runner.php');
     require_once(dirname(__FILE__) . '/scorer.php');
     require_once(dirname(__FILE__) . '/expectation.php');
     require_once(dirname(__FILE__) . '/dumper.php');
+    require_once(dirname(__FILE__) . '/simpletest.php');
     if (! defined('SIMPLE_TEST')) {
+        /**
+         * @ignore
+         */
         define('SIMPLE_TEST', dirname(__FILE__) . '/');
     }
     /**#@-*/
@@ -32,6 +36,7 @@
     class SimpleTestCase {
         var $_label = false;
         var $_runner = false;
+        var $_observers;
 
         /**
          *    Sets up the test with no display.
@@ -60,7 +65,8 @@
          *    @access public
          */
         function &createInvoker() {
-            return new SimpleErrorTrappingInvoker(new SimpleInvoker($this));
+            $invoker = &new SimpleErrorTrappingInvoker(new SimpleInvoker($this));
+            return $invoker;
         }
 
         /**
@@ -72,7 +78,8 @@
          *    @access protected
          */
         function &_createRunner(&$reporter) {
-            return new SimpleRunner($this, $reporter);
+            $runner = &new SimpleRunner($this, $reporter);
+            return $runner;
         }
 
         /**
@@ -83,11 +90,23 @@
          *    @access public
          */
         function run(&$reporter) {
+            SimpleTest::setCurrent($this);
             $reporter->paintCaseStart($this->getLabel());
             $this->_runner = &$this->_createRunner($reporter);
             $this->_runner->run();
+            $this->_runner = false;
             $reporter->paintCaseEnd($this->getLabel());
             return $reporter->getStatus();
+        }
+        
+        /**
+         *    Announces the start of the test.
+         *    @param string $method    Test method just started.
+         *    @access public
+         */
+        function before($method) {
+            $this->_runner->paintMethodStart($method);
+            $this->_observers = array();
         }
 
         /**
@@ -105,6 +124,28 @@
          *    @access public
          */
         function tearDown() {
+        }
+        
+        /**
+         *    Announces the end of the test. Includes private clean up.
+         *    @param string $method    Test method just finished.
+         *    @access public
+         */
+        function after($method) {
+            for ($i = 0; $i < count($this->_observers); $i++) {
+                $this->_observers[$i]->atTestEnd($method);
+            }
+            $this->_runner->paintMethodEnd($method);
+        }
+
+        /**
+         *    Sets up an observer for the test end.
+         *    @param object $observer    Must have atTestEnd()
+         *                               method.
+         *    @access public
+         */
+        function tell(&$observer) {
+            $this->_observers[] = &$observer;
         }
 
         /**
@@ -169,15 +210,22 @@
          *    Runs an expectation directly, for extending the
          *    tests with new expectation classes.
          *    @param SimpleExpectation $expectation  Expectation subclass.
-         *    @param mixed $test_value               Value to compare.
+         *    @param mixed $compare               Value to compare.
          *    @param string $message                 Message to display.
          *    @return boolean                        True on pass
          *    @access public
          */
-        function assertExpectation(&$expectation, $test_value, $message = '%s') {
+        function assert(&$expectation, $compare, $message = '%s') {
             return $this->assertTrue(
-                    $expectation->test($test_value),
-                    sprintf($message, $expectation->overlayMessage($test_value)));
+                    $expectation->test($compare),
+                    sprintf($message, $expectation->overlayMessage($compare)));
+        }
+        
+        /**
+         *	  @deprecated
+         */
+        function assertExpectation(&$expectation, $compare, $message = '%s') {
+        	return $this->assert($expectation, $compare, $message);
         }
 
         /**
@@ -330,7 +378,11 @@
          *    @access public
          */
         function addTestClass($class) {
-            $this->_test_cases[] = $class;
+            if ($this->_getBaseTestCase($class) == 'grouptest') {
+                $this->_test_cases[] = &new $class();
+            } else {
+                $this->_test_cases[] = $class;
+            }
         }
 
         /**
@@ -366,10 +418,10 @@
             include($file);
             $error = isset($php_errormsg) ? $php_errormsg : false;
             $this->_disableErrorReporting();
-            $self_inflicted = array(
+            $self_inflicted_errors = array(
                     'Assigning the return value of new by reference is deprecated',
                     'var: Deprecated. Please use the public/private/protected modifiers');
-            if (in_array($error, $self_inflicted)) {
+            if (in_array($error, $self_inflicted_errors)) {
                 return false;
             }
             return $error;
@@ -417,10 +469,9 @@
                 if (in_array($class, $existing_classes)) {
                     continue;
                 }
-                if (! $this->_isTestCase($class)) {
-                    continue;
+                if ($this->_getBaseTestCase($class)) {
+                    $classes[] = $class;
                 }
-                $classes[] = $class;
             }
             return $classes;
         }
@@ -436,7 +487,7 @@
         function _createGroupFromClasses($title, $classes) {
             $group = new GroupTest($title);
             foreach ($classes as $class) {
-                if (SimpleTestOptions::isIgnored($class)) {
+                if (SimpleTest::isIgnored($class)) {
                     continue;
                 }
                 $group->addTestClass($class);
@@ -446,15 +497,15 @@
 
         /**
          *    Test to see if a class is derived from the
-         *    TestCase class.
+         *    SimpleTestCase class.
          *    @param string $class     Class name.
          *    @access private
          */
-        function _isTestCase($class) {
+        function _getBaseTestCase($class) {
             while ($class = get_parent_class($class)) {
                 $class = strtolower($class);
                 if ($class == "simpletestcase" || $class == "grouptest") {
-                    return true;
+                    return $class;
                 }
             }
             return false;

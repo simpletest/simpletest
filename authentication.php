@@ -100,7 +100,26 @@
          *    @access public
          */
         function isWithin($url) {
-            return (strpos($url->getBasePath(), $this->_root) === 0);
+            if ($this->_isIn($this->_root, $url->getBasePath())) {
+                return true;
+            }
+            if ($this->_isIn($this->_root, $url->getBasePath() . $url->getPage() . '/')) {
+                return true;
+            }
+            return false;
+        }
+        
+        /**
+         *    Tests to see if one string is a substring of
+         *    another.
+         *    @param string $part        Small bit.
+         *    @param string $whole       Big bit.
+         *    @return boolean            True if the small bit is
+         *                               in the big bit.
+         *    @access private
+         */
+        function _isIn($part, $whole) {
+            return strpos($whole, $part) === 0;
         }
     }
     

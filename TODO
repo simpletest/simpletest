@@ -1,54 +1,43 @@
 TODO
-This is immediate stuff only for this iteration (1.1alpha1) of 46 hours (23 done).
+This is immediate stuff only for this iteration (1.0.1beta) of 45 hours.
 
 $Id$
 
 Unit tester
 -----------
-Keep original raw URL for as long as possible (3/2) - done.
-Allow expectation to be passed to assertError() method (2/3) - done.
-Add floating point equality (2/1) - done.
-Add donated fix for assertReference() from Knak-Nielsen (1/1) - done.
-Promote assertEqual() to other test cases (1/1) - done.
-Create separate group test files for unit and acceptance tests (1/1) - done.
-Remove class_exists() auto loading disabling flag  (1).
 
 Reporter
 --------
 
 Mock objects
 ------------
-Change semantics of expectAtLeastOnce() for Jason (2).
-Add expectOrder() for loose order checking (3).
-Add expectSequence() or strict order checking (3).
-Fix bug with PHP5 subclasses failing to mock with PHP4 constructors (2).
+Allow mocking of interfaces (5/1).
+Carry interfaces to pass type hints (3).
+Add expectSequence() method (5).
+Change expectOnce(), etc to act by signature (3).
+Remove $this passing in mocks (5/4) - done.
+Remove the need for tally() call (2/3) - done.
+Fix autoload glitch (1/1) - done.
+Deprecate Stub and SimpleStub (2/2) - done.
 
 Parser
 ------
 
 Browser
 -------
-Add file uploading (3/6).
-Add form-data encoding for forms (5/9) - done.
-Single click() method for links, buttons or images (2/1) - done.
-setCookie() should be able to create a new one (1).
-Simultaneous POST and GET parameters (3/2) - done.
-Fix split bug with simple URLs not being parsed correctly (1/1) - done.
-Fix double slash bug in URL (1/1) - done.
-Add referer header (3).
-Add &nbsp; to space normalisation (1).
-Add label tag parsing (3/10) - done.
-Fix bug with redirect authorisation failing on directory without trailing slash (1).
+Add assertSubmit() method (1).
+Promote selector classes and factor out excessive chaining (3).
+Allow ignoring of cookies (2).
 
 Web tester
 ----------
-Allow expectations to be used for title comparisons (2).
-Add assertSubmit() test (1).
+Change assertWantedText(), etc to assertText() method (1/1) - done.
+Pass expectations to assertTitle() (3).
+Pass expectations to assertHeader() (3).
+Fix bug with multiple selection fields not being selected by label (1/1) - done.
 
 Documentation
 -------------
-Note that additional parameters can be added to get(), post(), etc (2).
 
 Build
 -----
-

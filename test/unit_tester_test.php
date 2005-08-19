@@ -65,7 +65,8 @@
     class TestOfJBehaveStyleRunner extends UnitTestCase {
         
         function &_createRunner(&$reporter) {
-            return new JBehaveStyleRunner($this, $reporter);
+            $runner = &new JBehaveStyleRunner($this, $reporter);
+            return $runner;
         }
         
         function testFail() {

@@ -27,17 +27,158 @@
          *    @param string $value     Data to send.
          */
         function SimpleEncodedPair($key, $value) {
+            $this->_key = $key;
+            $this->_value = $value;
         }
         
         /**
-         *    The MIME part ass a string.
+         *    The pair as a single string.
+         *    @return string        Encoded pair.
+         *    @access public
+         */
+        function asRequest() {
+            return $this->_key . '=' . urlencode($this->_value);
+        }
+        
+        /**
+         *    The MIME part as a string.
          *    @return string        MIME part encoding.
+         *    @access public
          */
         function asMime() {
             $part = 'Content-Disposition: form-data; ';
             $part .= "name=\"" . $this->_key . "\"\r\n";
             $part .= "\r\n" . $this->_value;
             return $part;
+        }
+        
+        /**
+         *    Is this the value we are looking for?
+         *    @param string $key    Identifier.
+         *    @return boolean       True if matched.
+         *    @access public
+         */
+        function isKey($key) {
+            return $key == $this->_key;
+        }
+        
+        /**
+         *    Is this the value we are looking for?
+         *    @return string       Identifier.
+         *    @access public
+         */
+        function getKey() {
+            return $this->_key;
+        }
+        
+        /**
+         *    Is this the value we are looking for?
+         *    @return string       Content.
+         *    @access public
+         */
+        function getValue() {
+            return $this->_value;
+        }
+    }
+
+    /**
+     *    Single post parameter.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleAttachment {
+        var $_key;
+        var $_content;
+        var $_filename;
+        
+        /**
+         *    Stashes the data for rendering later.
+         *    @param string $key          Key to add value to.
+         *    @param string $content      Raw data.
+         *    @param hash $filename       Original filename.
+         */
+        function SimpleAttachment($key, $content, $filename) {
+            $this->_key = $key;
+            $this->_content = $content;
+            $this->_filename = $filename;
+        }
+        
+        /**
+         *    The pair as a single string.
+         *    @return string        Encoded pair.
+         *    @access public
+         */
+        function asRequest() {
+            return '';
+        }
+        
+        /**
+         *    The MIME part as a string.
+         *    @return string        MIME part encoding.
+         *    @access public
+         */
+        function asMime() {
+            $part = 'Content-Disposition: form-data; ';
+            $part .= 'name="' . $this->_key . '"; ';
+            $part .= 'filename="' . $this->_filename . '"';
+            $part .= "\r\nContent-Type: " . $this->_deduceMimeType();
+            $part .= "\r\n\r\n" . $this->_content;
+            return $part;
+        }
+        
+        /**
+         *    Attempts to figure out the MIME type from the
+         *    file extension and the content.
+         *    @return string        MIME type.
+         *    @access private
+         */
+        function _deduceMimeType() {
+            if ($this->_isOnlyAscii($this->_content)) {
+                return 'text/plain';
+            }
+            return 'application/octet-stream';
+        }
+        
+        /**
+         *    Tests each character is in the range 0-127.
+         *    @param string $ascii    String to test.
+         *    @access private
+         */
+        function _isOnlyAscii($ascii) {
+            for ($i = 0, $length = strlen($ascii); $i < $length; $i++) {
+                if (ord($ascii[$i]) > 127) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        /**
+         *    Is this the value we are looking for?
+         *    @param string $key    Identifier.
+         *    @return boolean       True if matched.
+         *    @access public
+         */
+        function isKey($key) {
+            return $key == $this->_key;
+        }
+        
+        /**
+         *    Is this the value we are looking for?
+         *    @return string       Identifier.
+         *    @access public
+         */
+        function getKey() {
+            return $this->_key;
+        }
+        
+        /**
+         *    Is this the value we are looking for?
+         *    @return string       Content.
+         *    @access public
+         */
+        function getValue() {
+            return $this->_filename;
         }
     }
 
@@ -83,29 +224,35 @@
             if ($value === false) {
                 return;
             }
-            if (! isset($this->_request[$key])) {
-                $this->_request[$key] = array();
-            }
             if (is_array($value)) {
                 foreach ($value as $item) {
-                    $this->_request[$key][] = $item;
+                    $this->_addPair($key, $item);
                 }
             } else {
-                $this->_request[$key][] = $value;
+                $this->_addPair($key, $value);
             }
+        }
+        
+        /**
+         *    Adds a new value into the request.
+         *    @param string $key            Key to add value to.
+         *    @param string/array $value    New data.
+         *    @access private
+         */
+        function _addPair($key, $value) {
+            $this->_request[] = new SimpleEncodedPair($key, $value);
         }
         
         /**
          *    Adds a MIME part to the query. Does nothing for a
          *    form encoded packet.
          *    @param string $key          Key to add value to.
-         *    @param string $value        Raw data.
-         *    @param hash $disposition    Additional information for the
-         *                                Content-disposition header.
-         *    @param array $headers       List of additional MIME headers.
+         *    @param string $content      Raw data.
+         *    @param hash $filename       Original filename.
          *    @access public
          */
-        function addMime($key, $value, $disposition, $headers) {
+        function attach($key, $content, $filename) {
+            $this->_request[] = new SimpleAttachment($key, $content, $filename);
         }
         
         /**
@@ -116,9 +263,7 @@
          */
         function merge($query) {
             if (is_object($query)) {
-                foreach ($query->getKeys() as $key) {
-                    $this->add($key, $query->getValue($key));
-                }
+                $this->_request = array_merge($this->_request, $query->getAll());
             } elseif (is_array($query)) {
                 foreach ($query as $key => $value) {
                     $this->add($key, $value);
@@ -134,22 +279,28 @@
          *    @access public
          */
         function getValue($key) {
-            if (! isset($this->_request[$key])) {
+            $values = array();
+            foreach ($this->_request as $pair) {
+                if ($pair->isKey($key)) {
+                    $values[] = $pair->getValue();
+                }
+            }
+            if (count($values) == 0) {
                 return false;
-            } elseif (count($this->_request[$key]) == 1) {
-                return $this->_request[$key][0];
+            } elseif (count($values) == 1) {
+                return $values[0];
             } else {
-                return $this->_request[$key];
+                return $values;
             }
         }
         
         /**
-         *    Accessor for key list.
-         *    @return array        List of keys present.
+         *    Accessor for listing of pairs.
+         *    @return array        All pair objects.
          *    @access public
          */
-        function getKeys() {
-            return array_keys($this->_request);
+        function getAll() {
+            return $this->_request;
         }
         
         /**
@@ -160,9 +311,9 @@
          */
         function _encode() {
             $statements = array();
-            foreach ($this->_request as $key => $values) {
-                foreach ($values as $value) {
-                    $statements[] = "$key=" . urlencode($value);
+            foreach ($this->_request as $pair) {
+                if ($statement = $pair->asRequest()) {
+                    $statements[] = $statement;
                 }
             }
             return implode('&', $statements);
@@ -206,7 +357,7 @@
         }
         
         /**
-         *    No data is sent to teh socket as the data is encoded into
+         *    No data is sent to the socket as the data is encoded into
          *    the URL.
          *    @param SimpleSocket $socket        Socket to write to.
          *    @access public
@@ -333,19 +484,6 @@
         }
         
         /**
-         *    Adds a MIME part to the query.
-         *    @param string $key          Key to add value to.
-         *    @param string $value        Raw data.
-         *    @param hash $disposition    Additional information for the
-         *                                Content-disposition header.
-         *    @param array $headers       List of additional MIME headers.
-         *    @access public
-         */
-        function addMime($key, $value, $disposition, $headers) {
-            $this->add($key, $value);
-        }
-        
-        /**
          *    Dispatches the form headers down the socket.
          *    @param SimpleSocket $socket        Socket to write to.
          *    @access public
@@ -372,12 +510,9 @@
          */
         function _encode() {
             $stream = '';
-            foreach ($this->_request as $key => $values) {
-                foreach ($values as $value) {
-                    $stream .= "--" . $this->_boundary . "\r\n";
-                    $stream .= "Content-Disposition: form-data; name=\"$key\"\r\n";
-                    $stream .= "\r\n$value\r\n";
-                }
+            foreach ($this->_request as $pair) {
+                $stream .= "--" . $this->_boundary . "\r\n";
+                $stream .= $pair->asMime() . "\r\n";
             }
             $stream .= "--" . $this->_boundary . "--\r\n";
             return $stream;

@@ -3,10 +3,10 @@
     require_once(dirname(__FILE__) . '/../unit_tester.php');
     require_once(dirname(__FILE__) . '/../socket.php');
     require_once(dirname(__FILE__) . '/../http.php');
-    require_once(dirname(__FILE__) . '/../options.php');
+    require_once(dirname(__FILE__) . '/../compatibility.php');
 
-    if (SimpleTestOptions::getDefaultProxy()) {
-        SimpleTestOptions::ignore('LiveHttpTestCase');
+    if (SimpleTest::getDefaultProxy()) {
+        SimpleTest::ignore('LiveHttpTestCase');
     }
     
     class LiveHttpTestCase extends UnitTestCase {
@@ -14,7 +14,7 @@
         function testBadSocket() {
             $socket = &new SimpleSocket('bad_url', 111, 5);
             $this->assertTrue($socket->isError());
-            $this->assertWantedPattern(
+            $this->assertPattern(
                     '/Cannot open \\[bad_url:111\\] with \\[/',
                     $socket->getError());
             $this->assertFalse($socket->isOpen());

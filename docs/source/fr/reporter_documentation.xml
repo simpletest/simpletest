@@ -78,7 +78,7 @@ class HtmlReporter extends SimpleReporter {
                     </li>
                     <li>
                         <code>void paintFail(string $message)</code><br />
-                        peint un échec. Par défait il ne fait qu'afficher le mot &quot;fail&quot;, une trace d'arborescence affichant la position du test en cours et le message transmis par l'assertion.
+                        peint un échec. Par défaut il ne fait qu'afficher le mot &quot;fail&quot;, une trace d'arborescence affichant la position du test en cours et le message transmis par l'assertion.
                     </li>
                     <li>
                         <code>void paintPass(string $message)</code><br />
@@ -139,7 +139,7 @@ class HtmlReporter extends SimpleReporter {
                 Une méthode qui a beaucoup fait jaser reste la méthode <code>makeDry()</code>. Si vous lancez cette méthode, sans paramètre, sur le rapporteur avant que la suite de test ne soit exécutée alors aucune méthode de test ne sera appelée. Vous continuerez à avoir les évènements entrants et sortants des méthodes et scénarios de test, mais aucun succès ni échec ou erreur, parce que le code de test ne sera pas exécuté.
             </p>
             <p>
-                La raison ? Pour permettre un affichage complexe d'une IHM (ou GUI) qui permettrait la sélection de scénarios de test individuels. Afin de construire une liste de tests possibles, ils ont besoin d'un rapport sur la structure du test pour, par exemple, l'affichage un vue en arbre de la suite de test. Avec un rapporteur lancé sur une exécution sèche qui ne renverrait que les évènements d'affichage, cela devient facilement réalisable.
+                La raison ? Pour permettre un affichage complexe d'une IHM (ou GUI) qui permettrait la sélection de scénarios de test individuels. Afin de construire une liste de tests possibles, ils ont besoin d'un rapport sur la structure du test pour l'affichage, par exemple, d'une vue en arbre de la suite de test. Avec un rapporteur lancé sur une exécution sèche qui ne renverrait que les évènements d'affichage, cela devient facilement réalisable.
             </p>
         </section>
         <section name="autre" title="Etendre le rapporteur">
@@ -147,7 +147,7 @@ class HtmlReporter extends SimpleReporter {
                 Plutôt que de modifier l'affichage existant, vous voudrez peut-être produire une présentation HTML complètement différente, ou même générer une version texte ou XML. Plutôt que de surcharger chaque méthode dans  <code>HtmlReporter</code> nous pouvons nous rendre une étape plus haut dans la hiérarchie de classe vers <code>SimpleReporter</code> dans le fichier source <em>simple_test.php</em>.
             </p>
             <p>
-                Un affichage sans rien, un canvas vierge pour votre propre création, serait...
+                Un affichage sans rien, un canevas vierge pour votre propre création, serait...
 <php><![CDATA[
 <strong>require_once('simpletest/simple_test.php');</strong>
 
@@ -278,7 +278,7 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 <code>$test_output</code> devrait être au format XML, à partir du rapporteur XML, et pourrait venir d'une exécution en ligne de commande d'un scénario de test.  Le parseur envoie des évènements au rapporteur exactement comme tout autre exécution de test. Il y a des occasions bizarres dans lesquelles c'est en fait très utile.
             </p>
             <p>
-                Un problème des suites de test très grandes, c'est qu'elles peuvent venir à bout de la limite de mémoire par défaut d'un process PHP - 8Mb. En plaçant la sortie des groupes de test dans du XML et leur exécution dans des process différents, le résultat peut être parser à nouveau pour agréger les résultats avec moins d'impact sur le test au premier niveau.
+                Un problème des très grandes suites de test , c'est qu'elles peuvent venir à bout de la limite de mémoire par défaut d'un process PHP - 8Mb. En plaçant la sortie des groupes de test dans du XML et leur exécution dans des process différents, le résultat peut être parsé à nouveau pour agréger les résultats avec moins d'impact sur le test au premier niveau.
             </p>
             <p>
                 Parce que la sortie XML peut venir de n'importe où, ça ouvre des possibilités d'agrégation d'exécutions de test depuis des serveur distants. Un scénario de test pour le réaliser existe déjà à l'intérieur du framework SimpleTest, mais il est encore expérimental...

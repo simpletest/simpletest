@@ -250,7 +250,7 @@ class TelnetTest extends UnitTestCase {
         </section>
         <section name="moins" title="Tester moins qu'une classe">
             <p>
-                Les méthodes issues d'un objet fantaisie n'ont pas besoin d'être des méthodes fabrique, Il peut s'agir de n'importe quelle sorte de méthode. Ainsi les objets fantaisie partiels nous permettent de prendre le contrôle de n'importe quelle partie d'une classe, le constructeur excepté. Nous pourrions même aller jusqu'à créer des fantaisies sur toutes les méthode à part celle que nous voulons effectivement tester.
+                Les méthodes issues d'un objet fantaisie n'ont pas besoin d'être des méthodes fabrique, Il peut s'agir de n'importe quelle sorte de méthode. Ainsi les objets fantaisie partiels nous permettent de prendre le contrôle de n'importe quelle partie d'une classe, le constructeur excepté. Nous pourrions même aller jusqu'à créer des fantaisies sur toutes les méthodes à part celle que nous voulons effectivement tester.
             </p>
             <p>
                 Cette situation est assez hypothétique, étant donné que je ne l'ai jamais essayée. Je suis ouvert à cette possibilité, mais je crains qu'en forçant la granularité d'un objet on n'obtienne pas forcément un code de meilleur qualité. Personnellement j'utilise les objets fantaisie partiels comme moyen de passer outre la création ou alors de temps en temps pour tester le modèle de conception TemplateMethod.

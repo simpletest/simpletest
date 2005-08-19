@@ -467,7 +467,8 @@
          *    @access public
          */
         function &getFormBySubmitLabel($label) {
-            return $this->_findForm('getFormBySubmitLabel', $label);
+            $form = &$this->_findForm('getFormBySubmitLabel', $label);
+            return $form;
         }
         
         /**
@@ -480,7 +481,8 @@
          *    @access public
          */
         function &getFormBySubmitName($name) {
-            return $this->_findForm('getFormBySubmitName', $name);
+            $form = &$this->_findForm('getFormBySubmitName', $name);
+            return $form;
         }
         
         /**
@@ -493,7 +495,8 @@
          *    @access public
          */
         function &getFormBySubmitId($id) {
-            return $this->_findForm('getFormBySubmitId', $id);
+            $form = &$this->_findForm('getFormBySubmitId', $id);
+            return $form;
         }
         
         /**
@@ -506,7 +509,8 @@
          *    @access public
          */
         function &getFormByImageLabel($label) {
-            return $this->_findForm('getFormByImageLabel', $label);
+            $form = &$this->_findForm('getFormByImageLabel', $label);
+            return $form;
         }
         
         /**
@@ -519,7 +523,8 @@
          *    @access public
          */
         function &getFormByImageName($name) {
-            return $this->_findForm('getFormByImageName', $name);
+            $form = &$this->_findForm('getFormByImageName', $name);
+            return $form;
         }
         
         /**
@@ -532,7 +537,8 @@
          *    @access public
          */
         function &getFormByImageId($id) {
-            return $this->_findForm('getFormByImageId', $id);
+            $form = &$this->_findForm('getFormByImageId', $id);
+            return $form;
         }
         
         /**
@@ -546,7 +552,8 @@
          *    @access public
          */
         function &getFormById($id) {
-            return $this->_findForm('getFormById', $id);
+            $form = &$this->_findForm('getFormById', $id);
+            return $form;
         }
         
         /**
@@ -559,11 +566,12 @@
          */
         function &_findForm($method, $attribute) {
             if (is_integer($this->_focus)) {
-                return $this->_findFormInFrame(
+                $form = &$this->_findFormInFrame(
                         $this->_frames[$this->_focus],
                         $this->_focus,
                         $method,
                         $attribute);
+                return $form;
             }
             for ($i = 0; $i < count($this->_frames); $i++) {
                 $form = &$this->_findFormInFrame(
@@ -575,7 +583,8 @@
                     return $form;
                 }
             }
-            return null;
+            $null = null;
+            return $null;
         }
         
         /**

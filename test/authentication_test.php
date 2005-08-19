@@ -38,6 +38,14 @@
                     new SimpleUrl('http://www.here.com/pathmore/hello.html')));
         }
         
+        function testInsideWithMissingTrailingSlash() {
+            $realm = &new SimpleRealm(
+                    'Basic',
+                    new SimpleUrl('http://www.here.com/path/'));
+            $this->assertTrue($realm->isWithin(
+                    new SimpleUrl('http://www.here.com/path')));
+        }
+        
         function testDifferentPageNameStillInside() {
             $realm = &new SimpleRealm(
                     'Basic',
@@ -80,11 +88,10 @@
     class TestOfAuthenticator extends UnitTestCase {
         
         function testNoRealms() {
-            $request = &new MockSimpleHttpRequest($this);
+            $request = &new MockSimpleHttpRequest();
             $request->expectNever('addHeaderLine');
             $authenticator = &new SimpleAuthenticator();
             $authenticator->addHeaders($request, new SimpleUrl('http://here.com/'));
-            $request->tally();
         }
         
         function &createSingleRealm() {
@@ -98,44 +105,40 @@
         }
         
         function testOutsideRealm() {
-            $request = &new MockSimpleHttpRequest($this);
+            $request = &new MockSimpleHttpRequest();
             $request->expectNever('addHeaderLine');
             $authenticator = &$this->createSingleRealm();
             $authenticator->addHeaders(
                     $request,
                     new SimpleUrl('http://www.here.com/hello.html'));
-            $request->tally();
         }
         
         function testWithinRealm() {
-            $request = &new MockSimpleHttpRequest($this);
+            $request = &new MockSimpleHttpRequest();
             $request->expectOnce('addHeaderLine');
             $authenticator = &$this->createSingleRealm();
             $authenticator->addHeaders(
                     $request,
                     new SimpleUrl('http://www.here.com/path/more/hello.html'));
-            $request->tally();
         }
         
         function testRestartingClearsRealm() {
-            $request = &new MockSimpleHttpRequest($this);
+            $request = &new MockSimpleHttpRequest();
             $request->expectNever('addHeaderLine');
             $authenticator = &$this->createSingleRealm();
             $authenticator->restartSession();
             $authenticator->addHeaders(
                     $request,
                     new SimpleUrl('http://www.here.com/hello.html'));
-            $request->tally();
         }
         
         function testDifferentHostIsOutsideRealm() {
-            $request = &new MockSimpleHttpRequest($this);
+            $request = &new MockSimpleHttpRequest();
             $request->expectNever('addHeaderLine');
             $authenticator = &$this->createSingleRealm();
             $authenticator->addHeaders(
                     $request,
                     new SimpleUrl('http://here.com/path/hello.html'));
-            $request->tally();
         }
     }
 ?>

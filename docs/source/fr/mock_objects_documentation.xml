@@ -244,7 +244,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
                 Si l'appel n'est jamais effectué alors n'est généré ni le succès, ni l'échec. Pour contourner cette limitation, nous devons dire à l'objet fantaisie que le test est terminé : il pourra alors décider si les attentes ont été répondues. L'assertion du testeur unitaire de ceci est déclenchée par l'appel <code>tally()</code> à la fin du test.
             </p>
             <p>
-                Nous utilisons le même modèle pour mettre sur pied le loggueur fantaisie. Nous lui indiquons que <code>message()</code> devrait être invoqué une fois et une fois seulement avec l'argument &quot;Starting session abc&quot;. En testant les arguments d'appel, plutôt que ceux de sorite du loggueur, nous isolons le test de tout modification dans le loggueur.
+                Nous utilisons le même modèle pour mettre sur pied le loggueur fantaisie. Nous lui indiquons que <code>message()</code> devrait être invoqué une fois et une fois seulement avec l'argument &quot;Starting session abc&quot;. En testant les arguments d'appel, plutôt que ceux de sortie du loggueur, nous isolons le test de tout modification dans le loggueur.
             </p>
             <p>
                 Nous commençons le lancement nos tests à la création du nouveau <code>LoggingSessionPool</code> et nous l'alimentons avec nos objets fantaisie juste créés. Désormais tout est sous contrôle. Au final nous confirmons que le <code>$session</code> donné au décorateur est bien celui reçu et prions les objets fantaisie de lancer leurs tests de comptage d'appel interne avec les appels <code>tally()</code>.
@@ -295,7 +295,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
                     <dd>Le nom de la méthode, sous la forme d'une chaîne, à laquelle la condition doit être appliquée.</dd>
                     <dt class="new_code">$args</dt>
                     <dd>
-                        Les arguments sous la forme d'une liste. Les jokers peuvent être inclus de la même manière qu'avec <code>setReturn()</code>. Cet argument est optionel pour <code>expectOnce()</code> et <code>expectAtLeastOnce()</code>.
+                        Les arguments sous la forme d'une liste. Les jokers peuvent être inclus de la même manière qu'avec <code>setReturn()</code>. Cet argument est optionnel pour <code>expectOnce()</code> et <code>expectAtLeastOnce()</code>.
                     </dd>
                     <dt class="new_code">$timing</dt>
                     <dd>

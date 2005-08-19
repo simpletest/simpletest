@@ -9,7 +9,7 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__) . '/simple_test.php');
+    require_once(dirname(__FILE__) . '/test_case.php');
     require_once(dirname(__FILE__) . '/errors.php');
     require_once(dirname(__FILE__) . '/dumper.php');
     /**#@-*/
@@ -78,7 +78,7 @@
          *    @access public
          */
         function assertIsA($object, $type, $message = "%s") {
-            return $this->assertExpectation(
+            return $this->assert(
                     new IsAExpectation($type),
                     $object,
                     $message);
@@ -95,7 +95,7 @@
          *    @access public
          */
         function assertNotA($object, $type, $message = "%s") {
-            return $this->assertExpectation(
+            return $this->assert(
                     new NotAExpectation($type),
                     $object,
                     $message);
@@ -111,7 +111,7 @@
          *    @access public
          */
         function assertEqual($first, $second, $message = "%s") {
-            return $this->assertExpectation(
+            return $this->assert(
                     new EqualExpectation($first),
                     $second,
                     $message);
@@ -127,7 +127,7 @@
          *    @access public
          */
         function assertNotEqual($first, $second, $message = "%s") {
-            return $this->assertExpectation(
+            return $this->assert(
                     new NotEqualExpectation($first),
                     $second,
                     $message);
@@ -144,7 +144,7 @@
          *    @access public
          */
         function assertWithinMargin($first, $second, $margin, $message = "%s") {
-            return $this->assertExpectation(
+            return $this->assert(
                     new WithinMarginExpectation($first, $margin),
                     $second,
                     $message);
@@ -161,7 +161,7 @@
          *    @access public
          */
         function assertOutsideMargin($first, $second, $margin, $message = "%s") {
-            return $this->assertExpectation(
+            return $this->assert(
                     new OutsideMarginExpectation($first, $margin),
                     $second,
                     $message);
@@ -177,7 +177,7 @@
          *    @access public
          */
         function assertIdentical($first, $second, $message = "%s") {
-            return $this->assertExpectation(
+            return $this->assert(
                     new IdenticalExpectation($first),
                     $second,
                     $message);
@@ -193,7 +193,7 @@
          *    @access public
          */
         function assertNotIdentical($first, $second, $message = "%s") {
-            return $this->assertExpectation(
+            return $this->assert(
                     new NotIdenticalExpectation($first),
                     $second,
                     $message);
@@ -251,11 +251,18 @@
          *    @return boolean           True on pass
          *    @access public
          */
-        function assertWantedPattern($pattern, $subject, $message = "%s") {
-            return $this->assertExpectation(
-                    new WantedPatternExpectation($pattern),
+        function assertPattern($pattern, $subject, $message = "%s") {
+            return $this->assert(
+                    new PatternExpectation($pattern),
                     $subject,
                     $message);
+        }
+        
+        /**
+         *	  @deprecated
+         */
+        function assertWantedPattern($pattern, $subject, $message = "%s") {
+        	return $this->assertPattern($pattern, $subject, $message);
         }
         
         /**
@@ -268,11 +275,18 @@
          *    @return boolean           True on pass
          *    @access public
          */
-        function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
-            return $this->assertExpectation(
-                    new UnwantedPatternExpectation($pattern),
+        function assertNoPattern($pattern, $subject, $message = "%s") {
+            return $this->assert(
+                    new NoPatternExpectation($pattern),
                     $subject,
                     $message);
+        }
+        
+        /**
+         *	  @deprecated
+         */
+        function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
+        	return $this->assertNoPattern($pattern, $subject, $message);
         }
         
         /**
@@ -311,7 +325,7 @@
                         "Captured a PHP error of [$content] severity [$severity] in [$file] line [$line] -> %s");
             }
             $expected = $this->_coerceToExpectation($expected);
-            return $this->assertExpectation(
+            return $this->assert(
                     $expected,
                     $content,
                     "Expected PHP error [$content] severity [$severity] in [$file] line [$line] -> %s");
@@ -336,7 +350,7 @@
          *    @deprecated
          */
         function assertErrorPattern($pattern, $message = "%s") {
-            return $this->assertError(new WantedPatternExpectation($pattern), $message);
+            return $this->assertError(new PatternExpectation($pattern), $message);
         }
     }
 ?>

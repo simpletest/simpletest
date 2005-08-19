@@ -401,7 +401,8 @@
          */
         function &_fetch($url, $encoding) {
             $request = &$this->_createRequest($url, $encoding);
-            return $request->fetch($this->_connection_timeout);
+            $response = &$request->fetch($this->_connection_timeout);
+            return $response;
         }
         
         /**
@@ -427,7 +428,8 @@
          *    @access protected
          */
         function &_createHttpRequest($url, $encoding) {
-            return new SimpleHttpRequest($this->_createRoute($url), $encoding);
+            $request = &new SimpleHttpRequest($this->_createRoute($url), $encoding);
+            return $request;
         }
         
         /**
@@ -438,13 +440,15 @@
          */
         function &_createRoute($url) {
             if ($this->_proxy) {
-                return new SimpleProxyRoute(
+                $route = &new SimpleProxyRoute(
                         $url,
                         $this->_proxy,
                         $this->_proxy_username,
                         $this->_proxy_password);
+            } else {
+                $route = &new SimpleRoute($url);
             }
-            return new SimpleRoute($url);
+            return $route;
         }
         
         /**

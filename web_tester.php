@@ -9,7 +9,7 @@
     /**#@+
      *	include other SimpleTest class files
      */
-    require_once(dirname(__FILE__) . '/simple_test.php');
+    require_once(dirname(__FILE__) . '/test_case.php');
     require_once(dirname(__FILE__) . '/browser.php');
     require_once(dirname(__FILE__) . '/page.php');
     require_once(dirname(__FILE__) . '/expectation.php');
@@ -28,8 +28,8 @@
          *    @param mixed $value        Test value to match.
          *    @access public
          */
-        function FieldExpectation($value) {
-            $this->SimpleExpectation();
+        function FieldExpectation($value, $message = '%s') {
+            $this->SimpleExpectation($message);
             if (is_array($value)) {
                 sort($value);
             }
@@ -321,7 +321,7 @@
 	 *	  @package SimpleTest
 	 *	  @subpackage UnitTester
      */
-    class WantedTextExpectation extends SimpleExpectation {
+    class TextExpectation extends SimpleExpectation {
         var $_substring;
         
         /**
@@ -330,7 +330,7 @@
          *    @param string $message    Customised message on failure.
          *    @access public
          */
-        function WantedTextExpectation($substring, $message = '%s') {
+        function TextExpectation($substring, $message = '%s') {
             $this->SimpleExpectation($message);
             $this->_substring = $substring;
         }
@@ -395,7 +395,7 @@
 	 *	  @package SimpleTest
 	 *	  @subpackage UnitTester
      */
-    class UnwantedTextExpectation extends WantedTextExpectation {
+    class NoTextExpectation extends TextExpectation {
         
         /**
          *    Sets the reject pattern
@@ -403,8 +403,8 @@
          *    @param string $message    Customised message on failure.
          *    @access public
          */
-        function UnwantedTextExpectation($substring, $message = '%s') {
-            $this->WantedTextExpectation($substring, $message);
+        function NoTextExpectation($substring, $message = '%s') {
+            $this->TextExpectation($substring, $message);
         }
         
         /**
@@ -438,36 +438,6 @@
     }
     
     /**
-     *    Extension that builds a web browser at the start of each
-     *    test.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
-     */
-    class WebTestCaseInvoker extends SimpleInvokerDecorator {
-        
-        /**
-         *    Takes in the test case and reporter to mediate between.
-         *    @param SimpleTestCase $test_case  Test case to run.
-         *    @param SimpleScorer $scorer       Reporter to receive events.
-         */
-        function WebTestCaseInvoker(&$invoker) {
-            $this->SimpleInvokerDecorator($invoker);
-        }
-        
-        /**
-         *    Builds the browser and runs the test.
-         *    @param string $method    Test method to call.
-         *    @access public
-         */
-        function invoke($method) {
-            $test = &$this->getTestCase();
-            $test->setBrowser($test->createBrowser());
-            parent::invoke($method);
-            $test->unsetBrowser();
-        }
-    }
-    
-    /**
      *    Test case for testing of web pages. Allows
      *    fetching of pages, parsing of HTML and
      *    submitting forms.
@@ -489,13 +459,23 @@
         }
         
         /**
-         *    Sets the invoker to one that restarts the browser on
-         *    each request.
-         *    @return SimpleInvoker        Invoker for each method.
+         *    Announces the start of the test.
+         *    @param string $method    Test method just started.
          *    @access public
          */
-        function &createInvoker() {
-            return new WebTestCaseInvoker(parent::createInvoker());
+        function before($method) {
+            parent::before($method);
+            $this->setBrowser($this->createBrowser());
+        }
+
+        /**
+         *    Announces the end of the test. Includes private clean up.
+         *    @param string $method    Test method just finished.
+         *    @access public
+         */
+        function after($method) {
+            $this->unsetBrowser();
+            parent::after($method);
         }
         
         /**
@@ -536,7 +516,8 @@
          *    @access public
          */
         function &createBrowser() {
-            return new SimpleBrowser();
+            $browser = &new SimpleBrowser();
+            return $browser;
         }
         
         /**
@@ -968,7 +949,7 @@
          *    @access public
          */
         function assertEqual($first, $second, $message = "%s") {
-            return $this->assertExpectation(
+            return $this->assert(
                     new EqualExpectation($first),
                     $second,
                     $message);
@@ -985,7 +966,7 @@
          *    @access public
          */
         function assertNotEqual($first, $second, $message = "%s") {
-            return $this->assertExpectation(
+            return $this->assert(
                     new NotEqualExpectation($first),
                     $second,
                     $message);
@@ -1098,17 +1079,18 @@
          *    @return boolean           True if pass.
          *    @access public
          */
-        function assertField($label, $expected = true, $message = "%s") {
+        function assertField($label, $expected = true, $message = '%s') {
             $value = $this->_browser->getField($label);
             if ($expected === true) {
                 return $this->assertTrue(
                         isset($value),
                         sprintf($message, "Field [$label] should exist"));
             } else {
-                return $this->assertExpectation(
-                        new FieldExpectation($expected),
+                $label = str_replace('%', '%%', $label);
+                return $this->assert(
+                        new FieldExpectation($expected, "Field [$label] should match with [%s]"),
                         $value,
-                        sprintf($message, "Field [$label] should match with [%s]"));
+                        $message);
             }
         }
         
@@ -1125,17 +1107,18 @@
          *    @return boolean           True if pass.
          *    @access public
          */
-        function assertFieldByName($name, $expected = true, $message = "%s") {
+        function assertFieldByName($name, $expected = true, $message = '%s') {
             $value = $this->_browser->getFieldByName($name);
             if ($expected === true) {
                 return $this->assertTrue(
                         isset($value),
                         sprintf($message, "Field name [$name] should exist"));
             } else {
-                return $this->assertExpectation(
-                        new FieldExpectation($expected),
+                $name = str_replace('%', '%%', $name);
+                return $this->assert(
+                        new FieldExpectation($expected, "Field named [$name] should match with [%s]"),
                         $value,
-                        sprintf($message, "Field name [$name] should match with [%s]"));
+                        $message);
             }
         }
          
@@ -1152,17 +1135,17 @@
          *    @return boolean            True if pass.
          *    @access public
          */
-        function assertFieldById($id, $expected = true, $message = "%s") {
+        function assertFieldById($id, $expected = true, $message = '%s') {
             $value = $this->_browser->getFieldById($id);
             if ($expected === true) {
                 return $this->assertTrue(
                         isset($value),
                         sprintf($message, "Field of ID [$id] should exist"));
             } else {
-                return $this->assertExpectation(
-                        new FieldExpectation($expected),
+                return $this->assert(
+                        new FieldExpectation($expected, "Field of ID [$id] should match with [%s]"),
                         $value,
-                        sprintf($message, "Field of ID [$id] should match with [%s]"));
+                        $message);
             }
         }
        
@@ -1261,7 +1244,7 @@
          *    @access public
          */
         function assertHeader($header, $value = false, $message = '%s') {
-            return $this->assertExpectation(
+            return $this->assert(
                     new HttpHeaderExpectation($header, $value),
                     $this->_browser->getHeaders(),
                     $message);
@@ -1275,7 +1258,7 @@
          *    @access public
          */
         function assertHeaderPattern($header, $pattern, $message = '%s') {
-            return $this->assertExpectation(
+            return $this->assert(
                     new HttpHeaderPatternExpectation($header, $pattern),
                     $this->_browser->getHeaders(),
                     $message);
@@ -1291,7 +1274,7 @@
          *    @access public
          */
         function assertNoUnwantedHeader($header, $message = '%s') {
-            return $this->assertExpectation(
+            return $this->assert(
                     new HttpUnwantedHeaderExpectation($header),
                     $this->_browser->getHeaders(),
                     $message);
@@ -1320,11 +1303,18 @@
          *    @return boolean           True if pass.
          *    @access public
          */
-        function assertWantedText($text, $message = '%s') {
-            return $this->assertExpectation(
-                    new WantedTextExpectation($text),
+        function assertText($text, $message = '%s') {
+            return $this->assert(
+                    new TextExpectation($text),
                     $this->_browser->getContentAsText(),
                     $message);
+        }
+        
+        /**
+         *	  @deprecated
+         */
+        function assertWantedText($text, $message = '%s') {
+        	return $this->assertText($text, $message);
         }
         
         /**
@@ -1335,11 +1325,18 @@
          *    @return boolean           True if pass.
          *    @access public
          */
-        function assertNoUnwantedText($text, $message = '%s') {
-            return $this->assertExpectation(
-                    new UnwantedTextExpectation($text),
+        function assertNoText($text, $message = '%s') {
+            return $this->assert(
+                    new NoTextExpectation($text),
                     $this->_browser->getContentAsText(),
                     $message);
+        }
+        
+        /**
+         *	  @deprecated
+         */
+        function assertNoUnwantedText($text, $message = '%s') {
+        	return $this->assertNoText($text, $message);
         }
         
         /**
@@ -1351,11 +1348,18 @@
          *    @return boolean           True if pass.
          *    @access public
          */
-        function assertWantedPattern($pattern, $message = '%s') {
-            return $this->assertExpectation(
-                    new WantedPatternExpectation($pattern),
+        function assertPattern($pattern, $message = '%s') {
+            return $this->assert(
+                    new PatternExpectation($pattern),
                     $this->_browser->getContent(),
                     $message);
+        }
+        
+        /**
+         *	  @deprecated
+         */
+        function assertWantedPattern($pattern, $message = '%s') {
+        	return $this->assertPattern($pattern, $message);
         }
         
         /**
@@ -1367,11 +1371,18 @@
          *    @return boolean           True if pass.
          *    @access public
          */
-        function assertNoUnwantedPattern($pattern, $message = '%s') {
-            return $this->assertExpectation(
-                    new UnwantedPatternExpectation($pattern),
+        function assertNoPattern($pattern, $message = '%s') {
+            return $this->assert(
+                    new NoPatternExpectation($pattern),
                     $this->_browser->getContent(),
                     $message);
+        }
+        
+        /**
+         *	  @deprecated
+         */
+        function assertNoUnwantedPattern($pattern, $message = '%s') {
+        	return $this->assertNoPattern($pattern, $message);
         }
         
         /**

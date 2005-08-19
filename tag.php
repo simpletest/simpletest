@@ -653,11 +653,10 @@
             if (! file_exists($this->getValue())) {
                 return;
             }
-            $encoding->addMime(
+            $encoding->attach(
                     $this->getName(),
                     implode('', file($this->getValue())),
-                    array('filename' => basename($this->getValue())),
-                    array('Content-type: text/plain'));
+                    basename($this->getValue()));
         }
     }
     
@@ -786,7 +785,7 @@
          */
         function setValue($value) {
             for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
-                if (trim($this->_options[$i]->getContent()) == trim($value)) {
+                if ($this->_options[$i]->isValue($value)) {
                     $this->_choice = $i;
                     return true;
                 }
@@ -864,25 +863,29 @@
         }
         
         /**
-         *    Can only set allowed values.
-         *    @param array $values       New choices.
-         *    @return boolean            True if allowed.
+         *    Can only set allowed values. Any illegal value
+         *    will result in a failure, but all correct values
+         *    will be set.
+         *    @param array $desired      New choices.
+         *    @return boolean            True if all allowed.
          *    @access public
          */
-        function setValue($values) {
-            foreach ($values as $value) {
-                $is_option = false;
+        function setValue($desired) {
+            $achieved = array();
+            foreach ($desired as $value) {
+                $success = false;
                 for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
-                    if (trim($this->_options[$i]->getContent()) == trim($value)) {
-                        $is_option = true;
+                    if ($this->_options[$i]->isValue($value)) {
+                        $achieved[] = $this->_options[$i]->getValue();
+                        $success = true;
                         break;
                     }
                 }
-                if (! $is_option) {
+                if (! $success) {
                     return false;
                 }
             }
-            $this->_values = $values;
+            $this->_values = $achieved;
             return true;
         }
         
@@ -921,6 +924,20 @@
          */
         function setValue($value) {
             return false;
+        }
+        
+        /**
+         *    Test to see if a value matches the option.
+         *    @param string $compare    Value to compare with.
+         *    @return boolean           True if possible match.
+         *    @access public
+         */
+        function isValue($compare) {
+            $compare = trim($compare);
+            if (trim($this->getValue()) == $compare) {
+                return true;
+            }
+            return trim($this->getContent()) == $compare;
         }
         
         /**

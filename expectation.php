@@ -1,23 +1,23 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	UnitTester
-     *	@version	$Id$
+     *    base include file for SimpleTest
+     *    @package    SimpleTest
+     *    @subpackage    UnitTester
+     *    @version    $Id$
      */
      
     /**#@+
-     *	include other SimpleTest class files
+     *    include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/dumper.php');
-    require_once(dirname(__FILE__) . '/options.php');
+    require_once(dirname(__FILE__) . '/compatibility.php');
     /**#@-*/
     
     /**
      *    Assertion that can display failure information.
      *    Also includes various helper methods.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *      @package SimpleTest
+     *      @subpackage UnitTester
      *    @abstract
      */
     class SimpleExpectation {
@@ -57,7 +57,7 @@
         
         /**
          *    Overlays the generated message onto the stored user
-         *    message.
+         *    message. An additional message can be interjected.
          *    @param mixed $compare      Comparison value.
          *    @return string             Description of success
          *                               or failure.
@@ -79,8 +79,8 @@
     
     /**
      *    Test for equality.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *      @package SimpleTest
+     *      @subpackage UnitTester
      */
     class EqualExpectation extends SimpleExpectation {
         var $_value;
@@ -103,7 +103,7 @@
          *    @return boolean              True if correct.
          *    @access public
          */
-        function test($compare, $nasty = false) {
+        function test($compare) {
             return (($this->_value == $compare) && ($compare == $this->_value));
         }
         
@@ -135,8 +135,8 @@
     
     /**
      *    Test for inequality.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *      @package SimpleTest
+     *      @subpackage UnitTester
      */
     class NotEqualExpectation extends EqualExpectation {
         
@@ -183,8 +183,8 @@
     
     /**
      *    Test for being within a range.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *      @package SimpleTest
+     *      @subpackage UnitTester
      */
     class WithinMarginExpectation extends SimpleExpectation {
         var $_upper;
@@ -258,8 +258,8 @@
     
     /**
      *    Test for being outside of a range.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *      @package SimpleTest
+     *      @subpackage UnitTester
      */
     class OutsideMarginExpectation extends WithinMarginExpectation {
         
@@ -304,8 +304,8 @@
     
     /**
      *    Test for identity.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *      @package SimpleTest
+     *      @subpackage UnitTester
      */
     class IdenticalExpectation extends EqualExpectation {
         
@@ -352,8 +352,8 @@
     
     /**
      *    Test for non-identity.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *      @package SimpleTest
+     *      @subpackage UnitTester
      */
     class NotIdenticalExpectation extends IdenticalExpectation {
         
@@ -398,10 +398,10 @@
     
     /**
      *    Test for a pattern using Perl regex rules.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *      @package SimpleTest
+     *      @subpackage UnitTester
      */
-    class WantedPatternExpectation extends SimpleExpectation {
+    class PatternExpectation extends SimpleExpectation {
         var $_pattern;
         
         /**
@@ -410,7 +410,7 @@
          *    @param string $message    Customised message on failure.
          *    @access public
          */
-        function WantedPatternExpectation($pattern, $message = '%s') {
+        function PatternExpectation($pattern, $message = '%s') {
             $this->SimpleExpectation($message);
             $this->_pattern = $pattern;
         }
@@ -456,6 +456,8 @@
         /**
          *    Describes a pattern match including the string
          *    found and it's position.
+     *    @package SimpleTest
+     *    @subpackage UnitTester
          *    @param string $pattern        Regex to match against.
          *    @param string $subject        Subject to search.
          *    @access protected
@@ -472,12 +474,18 @@
     }
     
     /**
+     *      @deprecated
+     */
+    class WantedPatternExpectation extends PatternExpectation {
+    }
+    
+    /**
      *    Fail if a pattern is detected within the
      *    comparison.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *      @package SimpleTest
+     *      @subpackage UnitTester
      */
-    class UnwantedPatternExpectation extends WantedPatternExpectation {
+    class NoPatternExpectation extends PatternExpectation {
         
         /**
          *    Sets the reject pattern
@@ -485,8 +493,8 @@
          *    @param string $message    Customised message on failure.
          *    @access public
          */
-        function UnwantedPatternExpectation($pattern, $message = '%s') {
-            $this->WantedPatternExpectation($pattern, $message);
+        function NoPatternExpectation($pattern, $message = '%s') {
+            $this->PatternExpectation($pattern, $message);
         }
         
         /**
@@ -520,9 +528,17 @@
     }
     
     /**
+     *    @package SimpleTest
+     *    @subpackage UnitTester
+     *      @deprecated
+     */
+    class UnwantedPatternExpectation extends NoPatternExpectation {
+    }
+    
+    /**
      *    Tests either type or class name if it's an object.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *      @package SimpleTest
+     *      @subpackage UnitTester
      */
     class IsAExpectation extends SimpleExpectation {
         var $_type;
@@ -598,8 +614,8 @@
     /**
      *    Tests either type or class name if it's an object.
      *    Will succeed if the type does not match.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *      @package SimpleTest
+     *      @subpackage UnitTester
      */
     class NotAExpectation extends IsAExpectation {
         var $_type;
@@ -641,8 +657,8 @@
 
     /**
      *    Tests for existance of a method in an object
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *      @package SimpleTest
+     *      @subpackage UnitTester
      */
     class MethodExistsExpectation extends SimpleExpectation {
         var $_method;
@@ -677,13 +693,13 @@
          *    @access public
          */
         function testMessage($compare) {
-			$dumper = &$this->_getDumper();
-			if (! is_object($compare)) {
-			    return 'No method on non-object [' . $dumper->describeValue($compare) . ']';
-			}
-			$method = $this->_method;
-			return "Object [" . $dumper->describeValue($compare) .
-					"] should contain method [$method]";
+            $dumper = &$this->_getDumper();
+            if (! is_object($compare)) {
+                return 'No method on non-object [' . $dumper->describeValue($compare) . ']';
+            }
+            $method = $this->_method;
+            return "Object [" . $dumper->describeValue($compare) .
+                    "] should contain method [$method]";
         }
     }
 ?>

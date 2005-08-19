@@ -243,7 +243,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>Reporting machinery enhancements</td>
-                        <td>Inmproved message passing for better cooperation with IDEs</td>
+                        <td>Improved message passing for better cooperation with IDEs</td>
                         <td style="color: red;">1.1</td>
                     </tr>
                     <tr>

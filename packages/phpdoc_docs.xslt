@@ -58,11 +58,11 @@
     </xsl:template>
     
     <xsl:template match="php">
-        <programlisting role="php">
+        <programlisting role="php"><xsl:text disable-output-escaping="yes">&lt;</xsl:text>![CDATA[
             <xsl:call-template name="strip_strong">
                 <xsl:with-param name="raw" select="."/>
             </xsl:call-template>
-        </programlisting>
+        ]]<xsl:text disable-output-escaping="yes">&gt;</xsl:text></programlisting>
     </xsl:template>
     
     <xsl:template match="code">
@@ -115,13 +115,13 @@
         <xsl:param name="raw"/>
         <xsl:choose>
             <xsl:when test="contains($raw, '&lt;strong&gt;') and contains($raw, '&lt;/strong&gt;')">
-                <xsl:value-of select="substring-before($raw, '&lt;strong&gt;')"/>
-                <xsl:value-of select="substring-before(substring-after($raw, '&lt;strong&gt;'), '&lt;/strong&gt;')"/>
+                <xsl:value-of disable-output-escaping="yes" select="substring-before($raw, '&lt;strong&gt;')"/>
+                <xsl:value-of disable-output-escaping="yes" select="substring-before(substring-after($raw, '&lt;strong&gt;'), '&lt;/strong&gt;')"/>
                 <xsl:call-template name="strip_strong">
                     <xsl:with-param name="raw" select="substring-after($raw, '&lt;/strong&gt;')"/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:otherwise><xsl:value-of select="$raw"/></xsl:otherwise>
+            <xsl:otherwise><xsl:value-of disable-output-escaping="yes" select="$raw"/></xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 </xsl:stylesheet>
