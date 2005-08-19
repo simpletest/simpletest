@@ -339,9 +339,10 @@
     }
     
     if (version_compare(phpversion(), '5') >= 0) {
-    	interface DummyInterface {
-    		function aMethod();
-    	}
+    	eval(
+                "interface DummyInterface {\n" .
+                "    function aMethod();\n" .
+                "}\n");
     	
     	Mock::generate('DummyInterface');
     	
