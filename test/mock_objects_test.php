@@ -338,6 +338,24 @@
         }
     }
     
+    if (version_compare(phpversion(), '5') >= 0) {
+    	interface DummyInterface {
+    		function aMethod();
+    	}
+    	
+    	Mock::generate('DummyInterface');
+    	
+    	class TestOfMockInterfaces extends UnitTestCase {
+    		function testCanMockAnInterface() {
+    			$mock = new MockDummyInterface();
+            	$this->assertIsA($mock, 'SimpleMock');
+            	$this->assertIsA($mock, 'MockDummyInterface');
+            	$this->assertTrue(method_exists($mock, 'aMethod'));
+            	$this->assertNull($mock->aMethod());
+    		}
+    	}
+	}
+    
     class TestOfMockReturns extends UnitTestCase {
         
         function testParameteredReturn() {

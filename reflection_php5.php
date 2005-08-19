@@ -16,12 +16,17 @@
         /**
          *    Checks that a class or interface has been
          *    declared.
-         *    @return boolean        True if defined.
+         *	  @param string $interface   Name of interface or class
+         *								 to test for.
+         *    @return boolean            True if defined.
          *    @access public
          *    @static
          */
-        function classOrInterfaceExists($class) {
-            return class_exists($class);
+        function classOrInterfaceExists($interface) {
+            if (interface_exists($interface)) {
+            	return true;
+            }
+            return class_exists($interface);
         }
         
         /**
@@ -31,20 +36,23 @@
          *    @access public
          *    @static
          */
-        function classOrInterfaceExistsSansAutoload($class) {
-            return class_exists($class, false);
+        function classOrInterfaceExistsSansAutoload($interface) {
+            if (interface_exists($interface, false)) {
+            	return true;
+            }
+            return class_exists($interface, false);
         }
         
         /**
          *    Gets the list of methods on a class or
          *    interface.
-         *    @param string $class    Class or interface.
-         *    @returns array          List of method names.
+         *    @param string $interface    Class or interface.
+         *    @returns array              List of method names.
          *    @access public
          *    @static
          */
-        function getMethods($class) {
-            return get_class_methods($class);
+        function getMethods($interface) {
+            return get_class_methods($interface);
         }
     }
 ?>

@@ -11,7 +11,7 @@ Reporter
 
 Mock objects
 ------------
-Allow mocking of interfaces (5/1).
+Allow mocking of interfaces (5/3) - done.
 Carry interfaces to pass type hints (3).
 Add expectSequence() method (5).
 Change expectOnce(), etc to act by signature (3).
