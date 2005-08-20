@@ -61,7 +61,7 @@
 	</xsl:template>
 			
 	<xsl:template name="list_files">
-		<xsl:variable name="map" select="document('site_map_onpk.xml')/page"/>
+		<xsl:variable name="map" select="document('map_onpk.xml')/page"/>
 		<xsl:choose>
 			<xsl:when test="/page/@here = 'php / simpletest'">
 				<div class="menu">

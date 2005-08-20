@@ -1,8 +1,8 @@
 <?php
 
 $transform = "onpk.xslt";
-$source_path = "../docs/source/fr/";
-$destination_path = "../docs/onpk/";
+$source_path = "../../docs/source/fr/";
+$destination_path = "../../docs/onpk/";
 
 $dir = opendir($source_path);
 while (($file = readdir($dir)) !== false) {
