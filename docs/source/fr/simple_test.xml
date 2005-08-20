@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<page title="Simple Test pour PHP" here="SimpleTest">
+<page title="Prise en main rapide de SimpleTest" here="Prise en main rapide de SimpleTest">
     <long_title>
         Prise en main rapide de SimpleTest pour PHP - Tests unitaire et objets fantaisie pour PHP
     </long_title>

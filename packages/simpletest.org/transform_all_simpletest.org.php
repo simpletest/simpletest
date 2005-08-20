@@ -1,7 +1,7 @@
 <?php
 
 $transform = "simpletest.org.xslt";
-$source_paths = array("../../docs/source/wiki/", "en" => "../../docs/source/en/", "fr" => "../../docs/source/fr/");
+$source_paths = array("../../docs/wiki/", "en" => "../../docs/source/en/", "fr" => "../../docs/source/fr/");
 $destination_path = "../../../../simpletest.org/wiki/data/";
 
 foreach ($source_paths as $lang => $source_path) {

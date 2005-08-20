@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<page title="Prendre le contrôle des tests" here="Prendre le contrôle">
+<page title="Prendre le contrôle des tests" here="Prendre le contrôle des tests">
     <long_title>Tutorial de test unitaire en PHP  - Isoler les variables pendant le test</long_title>
     <content>
         <p>

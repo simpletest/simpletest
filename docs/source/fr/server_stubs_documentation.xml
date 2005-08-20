@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<page title="Documentation sur les bouchons serveur" here="Bouchons serveur">
+<page title="Documentation sur les bouchons serveur" here="Les bouchons serveur">
     <long_title>Documentation SimpleTest : les bouchons serveur</long_title>
     <content>
         <section name="quoi" title="Que sont les bouchons serveur ?">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<page title="Documentation sur les attentes" here="Attentes">
+<page title="Documentation sur les attentes" here="Les attentes">
     <long_title>Documentation SimpleTest : étendre le testeur unitaire avec des classes d'attentes supplémentaires</long_title>
     <content>
         <section name="fantaisie" title="Plus de contrôle sur les objets fantaisie">
