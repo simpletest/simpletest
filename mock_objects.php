@@ -961,10 +961,10 @@
          *    @access public
          */
         function generatePartial($class, $mock_class, $methods) {
-            if (! SimpleReflection::classOrInterfaceExists($class)) {
+            if (! SimpleReflection::classExists($class)) {
                 return false;
             }
-            if (SimpleReflection::classOrInterfaceExistsSansAutoload($mock_class)) {
+            if (SimpleReflection::classExistsSansAutoload($mock_class)) {
                 trigger_error("Partial mock class [$mock_class] already exists");
                 return false;
             }

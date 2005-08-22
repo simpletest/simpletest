@@ -14,6 +14,29 @@
     class SimpleReflection {
         
         /**
+         *    Checks that a class has been declared.
+         *	  @param string $interface   Name of interface or class
+         *								 to test for.
+         *    @return boolean            True if defined.
+         *    @access public
+         *    @static
+         */
+        function classExists($interface) {
+            return class_exists($interface);
+        }
+        
+        /**
+         *    Needed to kill the autoload feature in PHP5
+         *    for classes created dynamically.
+         *    @return boolean        True if defined.
+         *    @access public
+         *    @static
+         */
+        function classExistsSansAutoload($interface) {
+            return class_exists($interface, false);
+        }
+        
+        /**
          *    Checks that a class or interface has been
          *    declared.
          *	  @param string $interface   Name of interface or class
