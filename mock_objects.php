@@ -1019,7 +1019,7 @@
             $code .= "    }\n";
             $code .= Mock::_chainMockReturns();
             $code .= Mock::_chainMockExpectations();
-            $code .= Mock::_overrideMethods($methods);
+            $code .= Mock::_overrideMethods($class, $methods);
             $code .= "}\n";
             return $code;
         }
@@ -1039,7 +1039,7 @@
          *    @access private
          */
         function _createHandlerCode($class, $base, $methods) {
-            $code = '';
+        	$code = '';
             $methods = array_merge($methods, SimpleReflection::getMethods($class));
             foreach ($methods as $method) {
                 if (Mock::_isConstructor($method)) {
@@ -1048,45 +1048,13 @@
                 if (in_array($method, SimpleReflection::getMethods($base))) {
                     continue;
                 }
-                $code .= Mock::_createFunctionDeclaration($method);
+                $code .= "    " . SimpleReflection::getSignature($class, $method) . " {\n";
                 $code .= "        \$args = func_get_args();\n";
                 $code .= "        \$result = &\$this->_invoke(\"$method\", \$args);\n";
                 $code .= "        return \$result;\n";
                 $code .= "    }\n";
             }
             return $code;
-        }
-        
-        /**
-         *    Creates the appropriate function declaration.
-         *    @see _determineArguments(), _createHandlerCode()
-         *    @param string $method    Method name.
-         *    @return string           The proper function declaration
-         *    @access private
-         *    @static
-         */
-        function _createFunctionDeclaration($method) {
-            $arguments = Mock::_determineArguments($method);
-            return sprintf("    function &%s(%s) {\n", $method, $arguments);
-        }
-        
-        /**
-         *    Returns the necessary arguments for a given method.
-         *    @param string $method    Method name
-         *    @return string           The arguments string for a method, or
-         *                             blank if no arguments are required.
-         *    @access private
-         *    @static
-         */
-        function _determineArguments($method) {
-            if (Mock::_isSpecial($method)) {
-                $args = array(
-                    '__call' => '$method, $value',
-                    '__get' => '$key',
-                    '__set' => '$key, $value');
-                return $args[$method];
-            }
-            return '';
         }
         
         /**
@@ -1100,20 +1068,7 @@
         function _isConstructor($method) {
             return in_array(
                     strtolower($method),
-                    array('__construct', '__clone'));
-        }
-        
-        /**
-         *    Tests for an special method.
-         *    @param string $method    Method name.
-         *    @return boolean          True if special.
-         *    @access private
-         *    @static
-         */
-        function _isSpecial($method) {
-            return in_array(
-                    strtolower($method),
-                    array('__get', '__set', '__call'));
+                    array('__construct', '__destruct', '__clone'));
         }
         
         /**
@@ -1215,15 +1170,16 @@
         /**
          *    Creates source code to override a list of methods
          *    with mock versions.
+         *	  @param string class	   Class or interface.
          *    @param array $methods    Methods to be overridden
          *                             with mock versions.
          *    @return string           Code for overridden chains.
          *    @access private
          */
-        function _overrideMethods($methods) {
+        function _overrideMethods($class, $methods) {
             $code = "";
             foreach ($methods as $method) {
-                $code .= Stub::_createFunctionDeclaration($method);
+                $code .= "    " . SimpleReflection::getSignature($class, $method) . " {\n";
                 $code .= "        \$args = func_get_args();\n";
                 $code .= "        \$result = &\$this->_mock->_invoke(\"$method\", \$args);\n";
                 $code .= "        return \$result;\n";

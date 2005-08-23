@@ -143,8 +143,8 @@
         function Dummy() {
         }
         
-        function aMethod($parameter) {
-            return $parameter;
+        function aMethod() {
+            return true;
         }
         
         function anotherMethod() {
@@ -174,7 +174,7 @@
         function testCloning() {
             $stub = &new StubDummy();
             $this->assertTrue(method_exists($stub, "aMethod"));
-            $this->assertNull($stub->aMethod());
+            $this->assertNull($stub->aMethod(null));
         }
         
         function testCloningWithExtraMethod() {
@@ -341,7 +341,8 @@
     if (version_compare(phpversion(), '5') >= 0) {
     	eval(
                 "interface DummyInterface {\n" .
-                "    function &aMethod();\n" .
+                "    function aMethod();\n" .
+                "    function anotherMethod(\$a);\n" .
                 "}\n");
     	eval(
                 "class Hinter {\n" .
@@ -359,6 +360,12 @@
             	$this->assertIsA($mock, 'MockDummyInterface');
             	$this->assertTrue(method_exists($mock, 'aMethod'));
             	$this->assertNull($mock->aMethod());
+    		}
+    		
+    		function testMockedInterfaceExpectsParameters() {
+    			$mock = new MockDummyInterface();
+            	$this->assertNull($mock->anotherMethod());
+            	$this->assertError();
     		}
     		
     		function testCannotPartiallyMockAnInterface() {

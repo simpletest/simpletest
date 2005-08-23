@@ -80,5 +80,23 @@
         function getInterfaces($class) {
             return array();
         }
+        
+        /**
+         *	  Gets the source code matching the declaration
+         *	  of a method.
+         *    @param string $interface    Class or interface.
+         * 	  @param string $method		  Method name.
+         *    @access public
+         *    @static
+         */
+        function getSignature($interface, $method) {
+        	if ($method == '__get') {
+        		return 'function __get($key)';
+        	}
+        	if ($method == '__set') {
+        		return 'function __set($key, $value)';
+        	}
+        	return "function &$method()";
+        }
     }
 ?>

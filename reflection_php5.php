@@ -93,5 +93,34 @@
             	return array($class);
             }
         }
+        
+        /**
+         *	  Gets the source code matching the declaration
+         *	  of a method.
+         *    @param string $interface    Class or interface.
+         * 	  @param string $method		  Method name.
+         *    @access public
+         *    @static
+         */
+        function getSignature($interface, $method) {
+        	if ($method == '__get') {
+        		return 'function __get($key)';
+        	}
+        	if ($method == '__set') {
+        		return 'function __set($key, $value)';
+        	}
+        	$code = "function $method(";
+        	if (is_callable(array($interface, $method))) {
+	            $reflection = new ReflectionClass($interface);
+	            $as_code = array();
+	            foreach ($reflection->getMethod($method)->getParameters() as $parameter) {
+	            	$as_code[] = '$' . $parameter->getName() .
+	            			($parameter->isOptional() ? ' = false' : '');
+	            }
+	            $code .= implode(', ', $as_code);
+	        }
+        	$code .= ")";
+        	return $code;
+        }
     }
 ?>
