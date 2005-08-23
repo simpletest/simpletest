@@ -109,12 +109,17 @@
         	if ($method == '__set') {
         		return 'function __set($key, $value)';
         	}
+	        $reflection = new ReflectionClass($interface);
         	$code = "function $method(";
         	if (is_callable(array($interface, $method))) {
-	            $reflection = new ReflectionClass($interface);
+		        if ($reflection->getMethod($method)->returnsReference()) {
+	        		$code = "function &$method(";
+	        	}
 	            $as_code = array();
 	            foreach ($reflection->getMethod($method)->getParameters() as $parameter) {
-	            	$as_code[] = '$' . $parameter->getName() .
+	            	$as_code[] =
+	            			($parameter->isPassedByReference() ? '&' : '') .
+	            			'$' . $parameter->getName() .
 	            			($parameter->isOptional() ? ' = false' : '');
 	            }
 	            $code .= implode(', ', $as_code);

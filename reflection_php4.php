@@ -90,12 +90,6 @@
          *    @static
          */
         function getSignature($interface, $method) {
-        	if ($method == '__get') {
-        		return 'function __get($key)';
-        	}
-        	if ($method == '__set') {
-        		return 'function __set($key, $value)';
-        	}
         	return "function &$method()";
         }
     }

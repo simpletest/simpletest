@@ -337,49 +337,7 @@
             $this->assertTrue(method_exists($mock, "aMethod"));
         }
     }
-    
-    if (version_compare(phpversion(), '5') >= 0) {
-    	eval(
-                "interface DummyInterface {\n" .
-                "    function aMethod();\n" .
-                "    function anotherMethod(\$a);\n" .
-                "}\n");
-    	eval(
-                "class Hinter {\n" .
-                "    function hinted(DummyInterface \$object) { }\n" .
-                "}\n");
-    	
-    	Mock::generate('DummyInterface');
-    	Mock::generatePartial('DummyInterface', 'PartialDummyInterface', array());
-    	
-    	class TestOfMockInterfaces extends UnitTestCase {
-    		
-    		function testCanMockAnInterface() {
-    			$mock = new MockDummyInterface();
-            	$this->assertIsA($mock, 'SimpleMock');
-            	$this->assertIsA($mock, 'MockDummyInterface');
-            	$this->assertTrue(method_exists($mock, 'aMethod'));
-            	$this->assertNull($mock->aMethod());
-    		}
-    		
-    		function testMockedInterfaceExpectsParameters() {
-    			$mock = new MockDummyInterface();
-            	$this->assertNull($mock->anotherMethod());
-            	$this->assertError();
-    		}
-    		
-    		function testCannotPartiallyMockAnInterface() {
-    		    $this->assertFalse(class_exists('PartialDummyInterface'));
-    		}
-    		
-    		function testMocksCanPassThroughTypeHints() {
-    		    $mock = new MockDummyInterface();
-    		    $hinter = new Hinter();
-    		    $hinter->hinted($mock);
-    		}
-    	}
-	}
-    
+   
     class TestOfMockReturns extends UnitTestCase {
         
         function testParameteredReturn() {
@@ -676,4 +634,47 @@
             $this->assertError();
         }
     }
-?>
+    
+    if (version_compare(phpversion(), '5') >= 0) {
+    	eval(
+                "interface DummyInterface {\n" .
+                "    function aMethod();\n" .
+                "    function anotherMethod(\$a);\n" .
+                "    function &referenceMethod(&\$a);\n" .
+                "}\n");
+    	eval(
+                "class Hinter {\n" .
+                "    function hinted(DummyInterface \$object) { }\n" .
+                "}\n");
+    	
+    	Mock::generate('DummyInterface');
+    	Mock::generatePartial('DummyInterface', 'PartialDummyInterface', array());
+    	
+    	class TestOfMockInterfaces extends UnitTestCase {
+    		
+    		function testCanMockAnInterface() {
+    			$mock = new MockDummyInterface();
+            	$this->assertIsA($mock, 'SimpleMock');
+            	$this->assertIsA($mock, 'MockDummyInterface');
+            	$this->assertTrue(method_exists($mock, 'aMethod'));
+            	$this->assertNull($mock->aMethod());
+    		}
+    		
+    		function testMockedInterfaceExpectsParameters() {
+    			$mock = new MockDummyInterface();
+            	$this->assertNull($mock->anotherMethod());
+            	$this->assertError();
+    		}
+    		
+    		function testCannotPartiallyMockAnInterface() {
+    		    $this->assertFalse(class_exists('PartialDummyInterface'));
+    		}
+    		
+    		function testMocksCanPassThroughTypeHints() {
+    		    $mock = new MockDummyInterface();
+    		    $hinter = new Hinter();
+    		    $hinter->hinted($mock);
+    		}
+    	}
+	}
+ ?>
