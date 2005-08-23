@@ -27,7 +27,7 @@
         }
         
         function testMostGeneralPossibleSignature() {
-        	$ths->assertEqualIgnoringCase(
+        	$this->assertEqualIgnoringCase(
         			SimpleReflection::getSignature('AnyOldThing', 'aMethod'),
         			'function &aMethod()');
         }
