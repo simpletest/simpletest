@@ -77,5 +77,21 @@
         function getMethods($interface) {
             return get_class_methods($interface);
         }
+        
+        /**
+         *    Gets the list of interfaces from a class. If the
+         *	  class name is actually an interface then just that
+         *	  interface is returned.
+         *    @param string $class    Class to examine.
+         *    @returns array          List of interfaces.
+         *    @access public
+         *    @static
+         */
+        function getInterfaces($class) {
+            $reflection = new ReflectionClass($class);
+            if ($reflection->isInterface()) {
+            	return array($class);
+            }
+        }
     }
 ?>

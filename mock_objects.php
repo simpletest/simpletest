@@ -982,7 +982,12 @@
          */
         function _createClassCode($class, $mock_class, $methods) {
             $mock_base = SimpleTest::getMockBaseClass();
-            $code = "class $mock_class extends $mock_base {\n";
+            $implements = '';
+            $interfaces = SimpleReflection::getInterfaces($class);
+            if (count($interfaces) > 0) {
+            	$implements = 'implements ' . implode(', ', $interfaces);
+            }
+            $code = "class $mock_class extends $mock_base $implements {\n";
             $code .= "    function $mock_class() {\n";
             $code .= "        \$this->$mock_base();\n";
             $code .= "    }\n";
@@ -1024,7 +1029,7 @@
          *    methods. All methods call the _invoke() handler
          *    with the method name and the arguments in an
          *    array.
-         *    @param string $class     Class to clone.
+         *    @param string $class     Class or interface to clone.
          *    @param string $base      Base mock class with methods that
          *                             cannot be cloned. Otherwise you
          *                             would be stubbing the accessors used
@@ -1074,15 +1079,14 @@
          *    @static
          */
         function _determineArguments($method) {
-            $code = '';
             if (Mock::_isSpecial($method)) {
                 $args = array(
                     '__call' => '$method, $value',
                     '__get' => '$key',
                     '__set' => '$key, $value');
-                $code = $args[$method];
+                return $args[$method];
             }
-            return $code;
+            return '';
         }
         
         /**

@@ -341,17 +341,18 @@
     if (version_compare(phpversion(), '5') >= 0) {
     	eval(
                 "interface DummyInterface {\n" .
-                "    function aMethod();\n" .
+                "    function &aMethod();\n" .
                 "}\n");
     	eval(
                 "class Hinter {\n" .
-                "    function hinted(PartialDummyInterface $object) { }\n;" .
+                "    function hinted(DummyInterface \$object) { }\n" .
                 "}\n");
     	
     	Mock::generate('DummyInterface');
-    	Mock::generatePartial('PartialDummyInterface');
+    	Mock::generatePartial('DummyInterface', 'PartialDummyInterface', array());
     	
     	class TestOfMockInterfaces extends UnitTestCase {
+    		
     		function testCanMockAnInterface() {
     			$mock = new MockDummyInterface();
             	$this->assertIsA($mock, 'SimpleMock');
@@ -361,7 +362,7 @@
     		}
     		
     		function testCannotPartiallyMockAnInterface() {
-    		    $this->assert_false(class_exists('PartialDummyInterface'));
+    		    $this->assertFalse(class_exists('PartialDummyInterface'));
     		}
     		
     		function testMocksCanPassThroughTypeHints() {
