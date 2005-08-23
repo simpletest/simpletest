@@ -69,6 +69,7 @@ FILES=(simpletest/errors.php \
           simpletest/test/reflection_php5_test.php \
           simpletest/test/remote_test.php \
           simpletest/test/mock_objects_test.php \
+          simpletest/test/interfaces_test.php \
           simpletest/test/visual_test.php \
           simpletest/test/shell_test.php \
           simpletest/test/web_tester_test.php \

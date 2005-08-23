@@ -592,7 +592,7 @@
         }
     }
     
-    Mock::generatePartial("Dummy", "TestDummy", array("anotherMethod"));
+    Mock::generatePartial('Dummy', 'TestDummy', array('anotherMethod'));
     
     class TestOfPartialMocks extends UnitTestCase {
         
@@ -604,9 +604,9 @@
         
         function testSettingReturns() {
             $mock = &new TestDummy();
-            $mock->setReturnValue("anotherMethod", 33, array(3));
-            $mock->setReturnValue("anotherMethod", 22);
-            $mock->setReturnValueAt(2, "anotherMethod", 44, array(3));
+            $mock->setReturnValue('anotherMethod', 33, array(3));
+            $mock->setReturnValue('anotherMethod', 22);
+            $mock->setReturnValueAt(2, 'anotherMethod', 44, array(3));
             $this->assertEqual($mock->anotherMethod(), 22);
             $this->assertEqual($mock->anotherMethod(3), 33);
             $this->assertEqual($mock->anotherMethod(3), 44);
@@ -615,66 +615,23 @@
         function testReferences() {
             $mock = &new TestDummy();
             $object = new Dummy();
-            $mock->setReturnReferenceAt(0, "anotherMethod", $object, array(3));
+            $mock->setReturnReferenceAt(0, 'anotherMethod', $object, array(3));
             $this->assertReference($mock->anotherMethod(3), $object);
         }
         
         function testExpectations() {
             $mock = &new TestDummy();
-            $mock->expectCallCount("anotherMethod", 2);
-            $mock->expectArguments("anotherMethod", array(77));
-            $mock->expectArgumentsAt(1, "anotherMethod", array(66));
+            $mock->expectCallCount('anotherMethod', 2);
+            $mock->expectArguments('anotherMethod', array(77));
+            $mock->expectArgumentsAt(1, 'anotherMethod', array(66));
             $mock->anotherMethod(77);
             $mock->anotherMethod(66);
         }
         
         function testSettingExpectationOnMissingMethodThrowsError() {
             $mock = &new TestDummy();
-            $mock->expectCallCount("aMissingMethod", 2);
+            $mock->expectCallCount('aMissingMethod', 2);
             $this->assertError();
         }
     }
-    
-    if (version_compare(phpversion(), '5') >= 0) {
-    	eval(
-                "interface DummyInterface {\n" .
-                "    function aMethod();\n" .
-                "    function anotherMethod(\$a);\n" .
-                "    function &referenceMethod(&\$a);\n" .
-                "}\n");
-    	eval(
-                "class Hinter {\n" .
-                "    function hinted(DummyInterface \$object) { }\n" .
-                "}\n");
-    	
-    	Mock::generate('DummyInterface');
-    	Mock::generatePartial('DummyInterface', 'PartialDummyInterface', array());
-    	
-    	class TestOfMockInterfaces extends UnitTestCase {
-    		
-    		function testCanMockAnInterface() {
-    			$mock = new MockDummyInterface();
-            	$this->assertIsA($mock, 'SimpleMock');
-            	$this->assertIsA($mock, 'MockDummyInterface');
-            	$this->assertTrue(method_exists($mock, 'aMethod'));
-            	$this->assertNull($mock->aMethod());
-    		}
-    		
-    		function testMockedInterfaceExpectsParameters() {
-    			$mock = new MockDummyInterface();
-            	$this->assertNull($mock->anotherMethod());
-            	$this->assertError();
-    		}
-    		
-    		function testCannotPartiallyMockAnInterface() {
-    		    $this->assertFalse(class_exists('PartialDummyInterface'));
-    		}
-    		
-    		function testMocksCanPassThroughTypeHints() {
-    		    $mock = new MockDummyInterface();
-    		    $hinter = new Hinter();
-    		    $hinter->hinted($mock);
-    		}
-    	}
-	}
- ?>
+?>
