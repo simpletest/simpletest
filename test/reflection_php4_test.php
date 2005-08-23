@@ -20,6 +20,18 @@
             $this->assertEqualIgnoringCase($methods[0], 'aMethod');
         }
         
+        function testNoInterfacesForPHP4() {
+        	$this->assertEqual(
+        			SimpleReflection::getInterfaces('AnyOldThing'),
+        			array());
+        }
+        
+        function testMostGeneralPossibleSignature() {
+        	$ths->assertEqualIgnoringCase(
+        			SimpleReflection::getSignature('AnyOldThing', 'aMethod'),
+        			'function &aMethod()');
+        }
+        
         function assertEqualIgnoringCase($a, $b) {
             return $this->assertEqual(strtolower($a), strtolower($b));
         }

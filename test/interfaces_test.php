@@ -7,10 +7,6 @@
         function &referenceMethod(&$a);
     }
     
-    class Hinter {
-        function hinted(DummyInterface $object) { }
-    }
-    
     Mock::generate('DummyInterface');
     Mock::generatePartial('DummyInterface', 'PartialDummyInterface', array());
     
@@ -35,9 +31,28 @@
         }
     }
     
-    class TestOfTypeHints {
+    class Hinter {
+        function hinted(DummyInterface $object) { }
+    }
+    
+    class ImplementsDummy implements DummyInterface {
+        function aMethod() { }
+        function anotherMethod($a) { }
+        function &referenceMethod(&$a) { }
+    }
+    
+    Mock::generate('ImplementsDummy');
+    
+    class TestOfTypeHints extends UnitTestCase {
+    	
         function testMockedInterfaceCanPassThroughTypeHint() {
             $mock = new MockDummyInterface();
+            $hinter = new Hinter();
+            $hinter->hinted($mock);
+        }
+        
+        function testImplementedInterfacesAreCarried() {
+            $mock = new MockImplementsDummy();
             $hinter = new Hinter();
             $hinter->hinted($mock);
         }

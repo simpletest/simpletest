@@ -92,6 +92,11 @@
             if ($reflection->isInterface()) {
             	return array($class);
             }
+            $interfaces = array();
+            foreach ($reflection->getInterfaces() as $interface) {
+            	$interfaces[] = $interface->getName();
+            }
+            return $interfaces;
         }
         
         /**
