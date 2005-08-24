@@ -17,7 +17,6 @@
             $this->addTestFile($path . '/dumper_test.php');
             $this->addTestFile($path . '/expectation_test.php');
             $this->addTestFile($path . '/unit_tester_test.php');
-            $this->addTestFile($path . '/collector_test.php');
             if (version_compare(phpversion(), '5') >= 0) {
                 $this->addTestFile($path . '/reflection_php5_test.php');
             } else {
@@ -27,6 +26,7 @@
             if (version_compare(phpversion(), '5') >= 0) {
                 $this->addTestFile($path . '/interfaces_test.php');
             }
+            $this->addTestFile($path . '/collector_test.php');
             $this->addTestFile($path . '/adapter_test.php');
             $this->addTestFile($path . '/socket_test.php');
             $this->addTestFile($path . '/encoding_test.php');

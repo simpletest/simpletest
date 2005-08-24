@@ -19,44 +19,54 @@
     class TestOfReflection extends UnitTestCase {
         
         function testClassExistence() {
-            $this->assertTrue(SimpleReflection::classOrInterfaceExists('AnyOldClass'));
-            $this->assertFalse(SimpleReflection::classOrInterfaceExists('UnknownClass'));
-            $this->assertTrue(SimpleReflection::classOrInterfaceExistsSansAutoload('AnyOldClass'));
-            $this->assertFalse(SimpleReflection::classOrInterfaceExistsSansAutoload('UnknownClass'));
+            $reflection = new SimpleReflection('AnyOldThing');
+            $this->assertTrue($reflection->classOrInterfaceExists());
+            $this->assertTrue($reflection->classOrInterfaceExistsSansAutoload());
         }
         
+        function testClassNonExistence() {
+            $reflection = new SimpleReflection('UnknownThing');
+            $this->assertFalse($reflection->classOrInterfaceExists());
+            $this->assertFalse($reflection->classOrInterfaceExistsSansAutoload(
+        
         function testInterfaceExistence() {
+            $reflection = new SimpleReflection('AnyOldInterface');
             $this->assertTrue(
-            		SimpleReflection::classOrInterfaceExists('AnyOldInterface'));
+            		$reflection->classOrInterfaceExists());
             $this->assertTrue(
-            		SimpleReflection::classOrInterfaceExistsSansAutoload('AnyOldInterface'));
+            		$reflection->classOrInterfaceExistsSansAutoload());
         }
         
         function testMethodsListFromClass() {
-            $methods = SimpleReflection::getMethods('AnyOldClass');
+            $reflection = new SimpleReflection('AnyOldClass');
+            $methods = $reflection->getMethods();
             $this->assertEqual($methods[0], 'aMethod');
         }
         
         function testMethodsListFromInterface() {
-            $methods = SimpleReflection::getMethods('AnyOldInterface');
+            $reflection = new SimpleReflection('AnyOldInterface');
+            $methods = $reflection->getMethods();
             $this->assertEqual($methods[0], 'aMethod');
         }
         
         function testInterfaceHasOnlyItselfToImplement() {
+            $reflection = new SimpleReflection('AnyOldInterface');
         	$this->assertEqual(
-        			SimpleReflection::getInterfaces('AnyOldInterface'),
+        			$reflection->getInterfaces(),
         			array('AnyOldInterface'));
         }
         
         function testInterfacesListedForClass() {
+            $reflection = new SimpleReflection('AnyOldImplementation');
         	$this->assertEqual(
-        			SimpleReflection::getInterfaces('AnyOldImplementation'),
+        			$reflection->getInterfaces(),
         			array('AnyOldInterface'));
         }
         
         function testInterfacesListedForSubclass() {
+            $reflection = new SimpleReflection('AnyOldSubclass');
         	$this->assertEqual(
-        			SimpleReflection::getInterfaces('AnyOldSubclass'),
+        			$reflection->getInterfaces(),
         			array('AnyOldInterface'));
         }
     }

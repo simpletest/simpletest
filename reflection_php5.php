@@ -12,17 +12,24 @@
 	 *	  @subpackage UnitTester
      */
     class SimpleReflection {
+        var $_interface;
+        
+        /**
+         *    Stashes the class/interface.
+         *    @param string $interface    Class or interface
+         *                                to inspect.
+         */
+        function SimpleReflection($interface) {
+            $this->_interface = $interface;
+        }
         
         /**
          *    Checks that a class has been declared.
-         *	  @param string $interface   Name of interface or class
-         *								 to test for.
          *    @return boolean            True if defined.
          *    @access public
-         *    @static
          */
-        function classExists($interface) {
-            return class_exists($interface);
+        function classExists() {
+            return class_exists($this->_interface);
         }
         
         /**
@@ -30,26 +37,22 @@
          *    for classes created dynamically.
          *    @return boolean        True if defined.
          *    @access public
-         *    @static
          */
-        function classExistsSansAutoload($interface) {
-            return class_exists($interface, false);
+        function classExistsSansAutoload() {
+            return class_exists($this->_interface, false);
         }
         
         /**
          *    Checks that a class or interface has been
          *    declared.
-         *	  @param string $interface   Name of interface or class
-         *								 to test for.
          *    @return boolean            True if defined.
          *    @access public
-         *    @static
          */
-        function classOrInterfaceExists($interface) {
-            if (interface_exists($interface)) {
+        function classOrInterfaceExists() {
+            if (interface_exists($this->_interface)) {
             	return true;
             }
-            return class_exists($interface);
+            return class_exists($this->_interface);
         }
         
         /**
@@ -57,38 +60,33 @@
          *    for classes created dynamically.
          *    @return boolean        True if defined.
          *    @access public
-         *    @static
          */
-        function classOrInterfaceExistsSansAutoload($interface) {
-            if (interface_exists($interface, false)) {
+        function classOrInterfaceExistsSansAutoload() {
+            if (interface_exists($this->_interface, false)) {
             	return true;
             }
-            return class_exists($interface, false);
+            return class_exists($this->_interface, false);
         }
         
         /**
          *    Gets the list of methods on a class or
          *    interface.
-         *    @param string $interface    Class or interface.
          *    @returns array              List of method names.
          *    @access public
-         *    @static
          */
-        function getMethods($interface) {
-            return get_class_methods($interface);
+        function getMethods() {
+            return get_class_methods($this->_interface);
         }
         
         /**
          *    Gets the list of interfaces from a class. If the
          *	  class name is actually an interface then just that
          *	  interface is returned.
-         *    @param string $class    Class to examine.
          *    @returns array          List of interfaces.
          *    @access public
-         *    @static
          */
-        function getInterfaces($class) {
-            $reflection = new ReflectionClass($class);
+        function getInterfaces() {
+            $reflection = new ReflectionClass($this->_interface);
             if ($reflection->isInterface()) {
             	return array($class);
             }
@@ -102,19 +100,17 @@
         /**
          *	  Gets the source code matching the declaration
          *	  of a method.
-         *    @param string $interface    Class or interface.
          * 	  @param string $method		  Method name.
          *    @access public
-         *    @static
          */
-        function getSignature($interface, $method) {
+        function getSignature($method) {
         	if ($method == '__get') {
         		return 'function __get($key)';
         	}
         	if ($method == '__set') {
         		return 'function __set($key, $value)';
         	}
-	        $reflection = new ReflectionClass($interface);
+	        $reflection = new ReflectionClass($this->_interface);
         	$code = "function $method(";
         	if (is_callable(array($interface, $method))) {
 		        if ($reflection->getMethod($method)->returnsReference()) {

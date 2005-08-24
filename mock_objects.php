@@ -980,8 +980,7 @@
     }
     
     /**
-     *    Static methods only service class for code generation of
-     *    mock objects.
+     *    Service class for code generation of mock objects.
 	 *    @package SimpleTest
 	 *    @subpackage MockObjects
      */
@@ -989,11 +988,13 @@
         var $_class;
         var $_mock_class;
         var $_mock_base;
+        var $_reflection;
         
         function MockGenerator($class, $mock_class) {
             $this->_class = $class;
             $this->_mock_class = $mock_class;
             $this->_mock_base = SimpleTest::getMockBaseClass();
+            $this->_reflection = new SimpleReflection($this->_class);
         }
         
         /**
@@ -1007,13 +1008,14 @@
          *    @access public
          */
         function generate($methods) {
-            if (! SimpleReflection::classOrInterfaceExists($this->_class)) {
+            if (! $this->_reflection->classOrInterfaceExists()) {
                 return false;
             }
             if (! $this->_mock_class) {
                 $this->_mock_class = 'Mock' . $this->_class;
             }
-            if (SimpleReflection::classOrInterfaceExistsSansAutoload($this->_mock_class)) {
+            $mock_reflection = new SimpleReflection($this->_mock_class);
+            if ($mock_reflection->classExistsSansAutoload()) {
                 return false;
             }
             return eval(
@@ -1031,10 +1033,11 @@
          *    @access public
          */
         function generatePartial($methods) {
-            if (! SimpleReflection::classExists($this->_class)) {
+            if (! $this->_reflection->classExists($this->_class)) {
                 return false;
             }
-            if (SimpleReflection::classExistsSansAutoload($this->_mock_class)) {
+            $mock_reflection = new SimpleReflection($this->_mock_class);
+            if ($mock_reflection->classExistsSansAutoload()) {
                 trigger_error("Partial mock class [$mock_class] already exists");
                 return false;
             }
@@ -1049,7 +1052,7 @@
          */
         function _createClassCode($methods) {
             $implements = '';
-            $interfaces = SimpleReflection::getInterfaces($this->_class);
+            $interfaces = $this->_reflection->getInterfaces();
             if (count($interfaces) > 0) {
             	$implements = 'implements ' . implode(', ', $interfaces);
             }
@@ -1096,15 +1099,16 @@
          */
         function _createHandlerCode($methods) {
         	$code = '';
-            $methods = array_merge($methods, SimpleReflection::getMethods($this->_class));
+            $methods = array_merge($methods, $this->_reflection->getMethods());
             foreach ($methods as $method) {
                 if ($this->_isConstructor($method)) {
                     continue;
                 }
-                if (in_array($method, SimpleReflection::getMethods($this->_mock_base))) {
+                $mock_reflection = new SimpleReflection($this->_mock_base);
+                if (in_array($method, $mock_reflection->getMethods())) {
                     continue;
                 }
-                $code .= "    " . SimpleReflection::getSignature($this->_class, $method) . " {\n";
+                $code .= "    " . $this->_reflection->getSignature($method) . " {\n";
                 $code .= "        \$args = func_get_args();\n";
                 $code .= "        \$result = &\$this->_invoke(\"$method\", \$args);\n";
                 $code .= "        return \$result;\n";
@@ -1233,7 +1237,7 @@
         function _overrideMethods($methods) {
             $code = "";
             foreach ($methods as $method) {
-                $code .= "    " . SimpleReflection::getSignature($this->_class, $method) . " {\n";
+                $code .= "    " . $this->_reflection->getSignature($method) . " {\n";
                 $code .= "        \$args = func_get_args();\n";
                 $code .= "        \$result = &\$this->_mock->_invoke(\"$method\", \$args);\n";
                 $code .= "        return \$result;\n";

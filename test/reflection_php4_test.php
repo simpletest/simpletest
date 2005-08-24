@@ -9,26 +9,34 @@
     class TestOfReflection extends UnitTestCase {
         
         function testClassExistence() {
-            $this->assertTrue(SimpleReflection::classOrInterfaceExists('AnyOldThing'));
-            $this->assertFalse(SimpleReflection::classOrInterfaceExists('UnknownThing'));
-            $this->assertTrue(SimpleReflection::classOrInterfaceExistsSansAutoload('AnyOldThing'));
-            $this->assertFalse(SimpleReflection::classOrInterfaceExistsSansAutoload('UnknownThing'));
+            $reflection = new SimpleReflection('AnyOldThing');
+            $this->assertTrue($reflection->classOrInterfaceExists());
+            $this->assertTrue($reflection->classOrInterfaceExistsSansAutoload());
+        }
+        
+        function testClassNonExistence() {
+            $reflection = new SimpleReflection('UnknownThing');
+            $this->assertFalse($reflection->classOrInterfaceExists());
+            $this->assertFalse($reflection->classOrInterfaceExistsSansAutoload());
         }
         
         function testMethodsListFromClass() {
-            $methods = SimpleReflection::getMethods(new AnyOldThing());
+            $reflection = new SimpleReflection('AnyOldThing');
+            $methods = $reflection->getMethods();
             $this->assertEqualIgnoringCase($methods[0], 'aMethod');
         }
         
         function testNoInterfacesForPHP4() {
+            $reflection = new SimpleReflection('AnyOldThing');
         	$this->assertEqual(
-        			SimpleReflection::getInterfaces('AnyOldThing'),
+        			$reflection->getInterfaces(),
         			array());
         }
         
         function testMostGeneralPossibleSignature() {
+            $reflection = new SimpleReflection('AnyOldThing');
         	$this->assertEqualIgnoringCase(
-        			SimpleReflection::getSignature('AnyOldThing', 'aMethod'),
+        			$reflection->getSignature('aMethod'),
         			'function &aMethod()');
         }
         
