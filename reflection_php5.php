@@ -92,7 +92,9 @@
             }
             $interfaces = array();
             foreach ($reflection->getInterfaces() as $interface) {
-            	$interfaces[] = $interface->getName();
+                if (! $interface->isInternal()) {
+                    $interfaces[] = $interface->getName();
+                }
             }
             return $interfaces;
         }
