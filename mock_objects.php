@@ -933,19 +933,8 @@
          *    @access public
          */
         function generate($class, $mock_class = false, $methods = false) {
-            if (! SimpleReflection::classOrInterfaceExists($class)) {
-                return false;
-            }
-            if (! $mock_class) {
-                $mock_class = "Mock$class";
-            }
-            if (SimpleReflection::classOrInterfaceExistsSansAutoload($mock_class)) {
-                return false;
-            }
-            return eval(Mock::_createClassCode(
-                    $class,
-                    $mock_class,
-                    $methods ? $methods : array()) . " return true;");
+            $generator = new MockGenerator($class, $mock_class);
+            return $generator->generate($methods);
         }
         
         /**
@@ -961,37 +950,114 @@
          *    @access public
          */
         function generatePartial($class, $mock_class, $methods) {
-            if (! SimpleReflection::classExists($class)) {
+            $generator = new MockGenerator($class, $mock_class);
+            return $generator->generatePartial($methods);
+        }
+        
+        /**
+         *    Uses a stack trace to find the line of an assertion.
+         *    @param string $format    String formatting.
+         *    @param array $stack      Stack frames top most first. Only
+         *                             needed if not using the PHP
+         *                             backtrace function.
+         *    @return string           Line number of first expect*
+         *                             method embedded in format string.
+         *    @access public
+         *    @static
+         */
+        function getExpectationLine($format = '%d', $stack = false) {
+            if ($stack === false) {
+                $stack = SimpleTestCompatibility::getStackTrace();
+            }
+            return SimpleDumper::getFormattedAssertionLine($stack, $format, 'expect');
+        }
+    }
+    
+    /**
+     *    @deprecated
+     */
+    class Stub extends Mock {
+    }
+    
+    /**
+     *    Static methods only service class for code generation of
+     *    mock objects.
+	 *    @package SimpleTest
+	 *    @subpackage MockObjects
+     */
+    class MockGenerator {
+        var $_class;
+        var $_mock_class;
+        var $_mock_base;
+        
+        function MockGenerator($class, $mock_class) {
+            $this->_class = $class;
+            $this->_mock_class = $mock_class;
+            $this->_mock_base = SimpleTest::getMockBaseClass();
+        }
+        
+        /**
+         *    Clones a class' interface and creates a mock version
+         *    that can have return values and expectations set.
+         *    @param array $methods        Additional methods to add beyond
+         *                                 those in th cloned class. Use this
+         *                                 to emulate the dynamic addition of
+         *                                 methods in the cloned class or when
+         *                                 the class hasn't been written yet.
+         *    @access public
+         */
+        function generate($methods) {
+            if (! SimpleReflection::classOrInterfaceExists($this->_class)) {
                 return false;
             }
-            if (SimpleReflection::classExistsSansAutoload($mock_class)) {
+            if (! $this->_mock_class) {
+                $this->_mock_class = 'Mock' . $this->_class;
+            }
+            if (SimpleReflection::classOrInterfaceExistsSansAutoload($this->_mock_class)) {
+                return false;
+            }
+            return eval(
+                    $this->_createClassCode($methods ? $methods : array()) .
+                    " return true;");
+        }
+        
+        /**
+         *    Generates a version of a class with selected
+         *    methods mocked only. Inherits the old class
+         *    and chains the mock methods of an aggregated
+         *    mock object.
+         *    @param array $methods           Methods to be overridden
+         *                                    with mock versions.
+         *    @access public
+         */
+        function generatePartial($methods) {
+            if (! SimpleReflection::classExists($this->_class)) {
+                return false;
+            }
+            if (SimpleReflection::classExistsSansAutoload($this->_mock_class)) {
                 trigger_error("Partial mock class [$mock_class] already exists");
                 return false;
             }
-            return eval(Mock::_extendClassCode($class, $mock_class, $methods));
+            return eval($this->_extendClassCode($methods));
         }
 
         /**
          *    The new mock class code as a string.
-         *    @param string $class           Class to clone.
-         *    @param string $mock_class      New class name.
          *    @param array $methods          Additional methods.
          *    @return string                 Code for new mock class.
-         *    @static
          *    @access private
          */
-        function _createClassCode($class, $mock_class, $methods) {
-            $mock_base = SimpleTest::getMockBaseClass();
+        function _createClassCode($methods) {
             $implements = '';
-            $interfaces = SimpleReflection::getInterfaces($class);
+            $interfaces = SimpleReflection::getInterfaces($this->_class);
             if (count($interfaces) > 0) {
             	$implements = 'implements ' . implode(', ', $interfaces);
             }
-            $code = "class $mock_class extends $mock_base $implements {\n";
-            $code .= "    function $mock_class() {\n";
-            $code .= "        \$this->$mock_base();\n";
+            $code = "class " . $this->_mock_class . " extends " . $this->_mock_base . " $implements {\n";
+            $code .= "    function " . $this->_mock_class . "() {\n";
+            $code .= "        \$this->" . $this->_mock_base . "();\n";
             $code .= "    }\n";
-            $code .= Mock::_createHandlerCode($class, $mock_base, $methods);
+            $code .= $this->_createHandlerCode($methods);
             $code .= "}\n";
             return $code;
         }
@@ -1000,26 +1066,22 @@
          *    The extension class code as a string. The class
          *    composites a mock object and chains mocked methods
          *    to it.
-         *    @param string $class         Class to extend.
-         *    @param string $mock_class    New class name.
          *    @param array  $methods       Mocked methods.
          *    @return string               Code for a new class.
-         *    @static
          *    @access private
          */
-        function _extendClassCode($class, $mock_class, $methods) {
-            $mock_base = SimpleTest::getMockBaseClass();
-            $code  = "class $mock_class extends $class {\n";
+        function _extendClassCode($methods) {
+            $code  = "class " . $this->_mock_class . " extends " . $this->_class . " {\n";
             $code .= "    var \$_mock;\n";
-            $code .= Mock::_addMethodList($methods);
+            $code .= $this->_addMethodList($methods);
             $code .= "\n";
-            $code .= "    function $mock_class() {\n";
-            $code .= "        \$this->_mock = &new $mock_base();\n";
+            $code .= "    function " . $this->_mock_class . "() {\n";
+            $code .= "        \$this->_mock = &new " . $this->_mock_base . "();\n";
             $code .= "        \$this->_mock->disableExpectationNameChecks();\n";
             $code .= "    }\n";
-            $code .= Mock::_chainMockReturns();
-            $code .= Mock::_chainMockExpectations();
-            $code .= Mock::_overrideMethods($class, $methods);
+            $code .= $this->_chainMockReturns();
+            $code .= $this->_chainMockExpectations();
+            $code .= $this->_overrideMethods($methods);
             $code .= "}\n";
             return $code;
         }
@@ -1029,26 +1091,20 @@
          *    methods. All methods call the _invoke() handler
          *    with the method name and the arguments in an
          *    array.
-         *    @param string $class     Class or interface to clone.
-         *    @param string $base      Base mock class with methods that
-         *                             cannot be cloned. Otherwise you
-         *                             would be stubbing the accessors used
-         *                             to set the stubs.
          *    @param array $methods    Additional methods.
-         *    @static
          *    @access private
          */
-        function _createHandlerCode($class, $base, $methods) {
+        function _createHandlerCode($methods) {
         	$code = '';
-            $methods = array_merge($methods, SimpleReflection::getMethods($class));
+            $methods = array_merge($methods, SimpleReflection::getMethods($this->_class));
             foreach ($methods as $method) {
-                if (Mock::_isConstructor($method)) {
+                if ($this->_isConstructor($method)) {
                     continue;
                 }
-                if (in_array($method, SimpleReflection::getMethods($base))) {
+                if (in_array($method, SimpleReflection::getMethods($this->_mock_base))) {
                     continue;
                 }
-                $code .= "    " . SimpleReflection::getSignature($class, $method) . " {\n";
+                $code .= "    " . SimpleReflection::getSignature($this->_class, $method) . " {\n";
                 $code .= "        \$args = func_get_args();\n";
                 $code .= "        \$result = &\$this->_invoke(\"$method\", \$args);\n";
                 $code .= "        return \$result;\n";
@@ -1063,7 +1119,6 @@
          *    @param string $method    Method name.
          *    @return boolean          True if special.
          *    @access private
-         *    @static
          */
         function _isConstructor($method) {
             return in_array(
@@ -1104,19 +1159,19 @@
          */
         function _chainMockReturns() {
             $code  = "    function setReturnValue(\$method, \$value, \$args = false) {\n";
-            $code .= Mock::_bailOutIfNotMocked("\$method");
+            $code .= $this->_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->setReturnValue(\$method, \$value, \$args);\n";
             $code .= "    }\n";
             $code .= "    function setReturnValueAt(\$timing, \$method, \$value, \$args = false) {\n";
-            $code .= Mock::_bailOutIfNotMocked("\$method");
+            $code .= $this->_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->setReturnValueAt(\$timing, \$method, \$value, \$args);\n";
             $code .= "    }\n";
             $code .= "    function setReturnReference(\$method, &\$ref, \$args = false) {\n";
-            $code .= Mock::_bailOutIfNotMocked("\$method");
+            $code .= $this->_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->setReturnReference(\$method, \$ref, \$args);\n";
             $code .= "    }\n";
             $code .= "    function setReturnReferenceAt(\$timing, \$method, &\$ref, \$args = false) {\n";
-            $code .= Mock::_bailOutIfNotMocked("\$method");
+            $code .= $this->_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->setReturnReferenceAt(\$timing, \$method, \$ref, \$args);\n";
             $code .= "    }\n";
             return $code;
@@ -1130,35 +1185,35 @@
          */
         function _chainMockExpectations() {
             $code = "    function expectArguments(\$method, \$args = false) {\n";
-            $code .= Mock::_bailOutIfNotMocked("\$method");
+            $code .= $this->_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectArguments(\$method, \$args);\n";
             $code .= "    }\n";
             $code .= "    function expectArgumentsAt(\$timing, \$method, \$args = false) {\n";
-            $code .= Mock::_bailOutIfNotMocked("\$method");
+            $code .= $this->_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectArgumentsAt(\$timing, \$method, \$args);\n";
             $code .= "    }\n";
             $code .= "    function expectCallCount(\$method, \$count) {\n";
-            $code .= Mock::_bailOutIfNotMocked("\$method");
+            $code .= $this->_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectCallCount(\$method, \$count);\n";
             $code .= "    }\n";
             $code .= "    function expectMaximumCallCount(\$method, \$count) {\n";
-            $code .= Mock::_bailOutIfNotMocked("\$method");
+            $code .= $this->_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectMaximumCallCount(\$method, \$count);\n";
             $code .= "    }\n";
             $code .= "    function expectMinimumCallCount(\$method, \$count) {\n";
-            $code .= Mock::_bailOutIfNotMocked("\$method");
+            $code .= $this->_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectMinimumCallCount(\$method, \$count);\n";
             $code .= "    }\n";
             $code .= "    function expectNever(\$method) {\n";
-            $code .= Mock::_bailOutIfNotMocked("\$method");
+            $code .= $this->_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectNever(\$method);\n";
             $code .= "    }\n";
             $code .= "    function expectOnce(\$method, \$args = false) {\n";
-            $code .= Mock::_bailOutIfNotMocked("\$method");
+            $code .= $this->_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectOnce(\$method, \$args);\n";
             $code .= "    }\n";
             $code .= "    function expectAtLeastOnce(\$method, \$args = false) {\n";
-            $code .= Mock::_bailOutIfNotMocked("\$method");
+            $code .= $this->_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectAtLeastOnce(\$method, \$args);\n";
             $code .= "    }\n";
             $code .= "    function tally() {\n";
@@ -1170,16 +1225,15 @@
         /**
          *    Creates source code to override a list of methods
          *    with mock versions.
-         *	  @param string class	   Class or interface.
          *    @param array $methods    Methods to be overridden
          *                             with mock versions.
          *    @return string           Code for overridden chains.
          *    @access private
          */
-        function _overrideMethods($class, $methods) {
+        function _overrideMethods($methods) {
             $code = "";
             foreach ($methods as $method) {
-                $code .= "    " . SimpleReflection::getSignature($class, $method) . " {\n";
+                $code .= "    " . SimpleReflection::getSignature($this->_class, $method) . " {\n";
                 $code .= "        \$args = func_get_args();\n";
                 $code .= "        \$result = &\$this->_mock->_invoke(\"$method\", \$args);\n";
                 $code .= "        return \$result;\n";
@@ -1187,29 +1241,5 @@
             }
             return $code;
         }
-        
-        /**
-         *    Uses a stack trace to find the line of an assertion.
-         *    @param string $format    String formatting.
-         *    @param array $stack      Stack frames top most first. Only
-         *                             needed if not using the PHP
-         *                             backtrace function.
-         *    @return string           Line number of first expect*
-         *                             method embedded in format string.
-         *    @access public
-         *    @static
-         */
-        function getExpectationLine($format = '%d', $stack = false) {
-            if ($stack === false) {
-                $stack = SimpleTestCompatibility::getStackTrace();
-            }
-            return SimpleDumper::getFormattedAssertionLine($stack, $format, 'expect');
-        }
-    }
-    
-    /**
-     *    @deprecated
-     */
-    class Stub extends Mock {
     }
 ?>
