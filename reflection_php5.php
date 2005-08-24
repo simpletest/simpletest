@@ -88,7 +88,7 @@
         function getInterfaces() {
             $reflection = new ReflectionClass($this->_interface);
             if ($reflection->isInterface()) {
-            	return array($class);
+            	return array($this->_interface);
             }
             $interfaces = array();
             foreach ($reflection->getInterfaces() as $interface) {
@@ -112,7 +112,7 @@
         	}
 	        $reflection = new ReflectionClass($this->_interface);
         	$code = "function $method(";
-        	if (is_callable(array($interface, $method))) {
+        	if (is_callable(array($this->_interface, $method))) {
 		        if ($reflection->getMethod($method)->returnsReference()) {
 	        		$code = "function &$method(";
 	        	}

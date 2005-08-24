@@ -12,7 +12,7 @@ Reporter
 Mock objects
 ------------
 Allow mocking of interfaces (5/3) - done.
-Carry interfaces to pass type hints (3/6) - done.
+Carry interfaces to pass type hints (3/7) - done.
 Change expectOnce(), etc to act by signature (3).
 Remove $this passing in mocks (5/4) - done.
 Remove the need for tally() call (2/3) - done.

@@ -19,7 +19,7 @@
     class TestOfReflection extends UnitTestCase {
         
         function testClassExistence() {
-            $reflection = new SimpleReflection('AnyOldThing');
+            $reflection = new SimpleReflection('AnyOldClass');
             $this->assertTrue($reflection->classOrInterfaceExists());
             $this->assertTrue($reflection->classOrInterfaceExistsSansAutoload());
         }
@@ -27,7 +27,8 @@
         function testClassNonExistence() {
             $reflection = new SimpleReflection('UnknownThing');
             $this->assertFalse($reflection->classOrInterfaceExists());
-            $this->assertFalse($reflection->classOrInterfaceExistsSansAutoload(
+            $this->assertFalse($reflection->classOrInterfaceExistsSansAutoload());
+        }
         
         function testInterfaceExistence() {
             $reflection = new SimpleReflection('AnyOldInterface');
