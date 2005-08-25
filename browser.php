@@ -5,7 +5,7 @@
      *	@subpackage	WebTester
      *	@version	$Id$
      */
-    
+
     /**#@+
      *	include other SimpleTest class files
      */
@@ -17,11 +17,11 @@
     require_once(dirname(__FILE__) . '/frames.php');
     require_once(dirname(__FILE__) . '/user_agent.php');
     /**#@-*/
-    
+
     if (!defined('DEFAULT_MAX_NESTED_FRAMES')) {
         define('DEFAULT_MAX_NESTED_FRAMES', 3);
     }
-    
+
     /**
      *    Browser history list.
 	 *    @package SimpleTest
@@ -30,7 +30,7 @@
     class SimpleBrowserHistory {
         var $_sequence;
         var $_position;
-        
+
         /**
          *    Starts empty.
          *    @access public
@@ -39,7 +39,7 @@
             $this->_sequence = array();
             $this->_position = -1;
         }
-        
+
         /**
          *    Test for no entries yet.
          *    @return boolean        True if empty.
@@ -48,7 +48,7 @@
         function _isEmpty() {
             return ($this->_position == -1);
         }
-        
+
         /**
          *    Test for being at the beginning.
          *    @return boolean        True if first.
@@ -57,7 +57,7 @@
         function _atBeginning() {
             return ($this->_position == 0) && ! $this->_isEmpty();
         }
-        
+
         /**
          *    Test for being at the last entry.
          *    @return boolean        True if last.
@@ -66,7 +66,7 @@
         function _atEnd() {
             return ($this->_position + 1 >= count($this->_sequence)) && ! $this->_isEmpty();
         }
-        
+
         /**
          *    Adds a successfully fetched page to the history.
          *    @param SimpleUrl $url                 URL of fetch.
@@ -80,7 +80,7 @@
                     array('url' => $url, 'parameters' => $parameters));
             $this->_position++;
         }
-        
+
         /**
          *    Last fully qualified URL for current history
          *    position.
@@ -93,7 +93,7 @@
             }
             return $this->_sequence[$this->_position]['url'];
         }
-        
+
         /**
          *    Parameters of last fetch from current history
          *    position.
@@ -106,7 +106,7 @@
             }
             return $this->_sequence[$this->_position]['parameters'];
         }
-        
+
         /**
          *    Step back one place in the history. Stops at
          *    the first page.
@@ -120,7 +120,7 @@
             $this->_position--;
             return true;
         }
-        
+
         /**
          *    Step forward one place. If already at the
          *    latest entry then nothing will happen.
@@ -134,7 +134,7 @@
             $this->_position++;
             return true;
         }
-        
+
         /**
          *    Ditches all future entries beyond the current
          *    point.
@@ -149,7 +149,7 @@
             }
         }
     }
-    
+
     /**
      *    Simulated web browser. This is an aggregate of
      *    the user agent, the HTML parsing, request history
@@ -163,7 +163,7 @@
         var $_history;
         var $_ignore_frames;
         var $_maximum_nested_frames;
-        
+
         /**
          *    Starts with a fresh browser with no
          *    cookie or any other state information. The
@@ -182,7 +182,7 @@
             $this->_ignore_frames = false;
             $this->_maximum_nested_frames = DEFAULT_MAX_NESTED_FRAMES;
         }
-        
+
         /**
          *    Creates the underlying user agent.
          *    @return SimpleFetcher    Content fetcher.
@@ -192,7 +192,7 @@
             $user_agent = &new SimpleUserAgent();
             return $user_agent;
         }
-        
+
         /**
          *    Creates a new empty history list.
          *    @return SimpleBrowserHistory    New list.
@@ -202,7 +202,7 @@
             $history = &new SimpleBrowserHistory();
             return $history;
         }
-        
+
         /**
          *    Disables frames support. Frames will not be fetched
          *    and the frameset page will be used instead.
@@ -211,7 +211,7 @@
         function ignoreFrames() {
             $this->_ignore_frames = true;
         }
-        
+
         /**
          *    Enables frames support. Frames will be fetched from
          *    now on.
@@ -220,7 +220,7 @@
         function useFrames() {
             $this->_ignore_frames = false;
         }
-        
+
         /**
          *    Parses the raw content into a page. Will load further
          *    frame pages unless frames are disabled.
@@ -242,7 +242,7 @@
             }
             return $frameset;
         }
-        
+
         /**
          *    Fetches a page.
          *    @param string/SimpleUrl $url          Target to fetch.
@@ -260,7 +260,7 @@
             }
             return $page;
         }
-        
+
         /**
          *    Fetches a page or a single frame if that is the current
          *    focus.
@@ -276,7 +276,7 @@
             }
             return $this->_loadFrame(array($frame), $url, $parameters);
         }
-        
+
         /**
          *    Fetches a page and makes it the current page/frame.
          *    @param string/SimpleUrl $url            Target to fetch as string.
@@ -291,7 +291,7 @@
                     $this->_page->getRequestData());
             return $this->_page->getRaw();
         }
-        
+
         /**
          *    Fetches a frame into the existing frameset replacing the
          *    original.
@@ -305,7 +305,7 @@
             $page = &$this->_fetch($url, $parameters);
             $this->_page->setFrame($frames, $page);
         }
-        
+
         /**
          *    Removes expired and temporary cookies as if
          *    the browser was closed and re-opened.
@@ -317,7 +317,7 @@
         function restart($date = false) {
             $this->_user_agent->restart($date);
         }
-        
+
         /**
          *    Adds a header to every fetch.
          *    @param string $header       Header line to add to every
@@ -327,7 +327,7 @@
         function addHeader($header) {
             $this->_user_agent->addHeader($header);
         }
-        
+
         /**
          *    Ages the cookies by the specified time.
          *    @param integer $interval    Amount in seconds.
@@ -336,7 +336,7 @@
         function ageCookies($interval) {
             $this->_user_agent->ageCookies($interval);
         }
-        
+
         /**
          *    Sets an additional cookie. If a cookie has
          *    the same name and path it is replaced.
@@ -350,7 +350,7 @@
         function setCookie($name, $value, $host = false, $path = '/', $expiry = false) {
             $this->_user_agent->setCookie($name, $value, $host, $path, $expiry);
         }
-        
+
         /**
          *    Reads the most specific cookie value from the
          *    browser cookies.
@@ -364,7 +364,7 @@
         function getCookieValue($host, $path, $name) {
             return $this->_user_agent->getCookieValue($host, $path, $name);
         }
-        
+
         /**
          *    Reads the current cookies for the current URL.
          *    @param string $name   Key of cookie to find.
@@ -375,7 +375,7 @@
         function getCurrentCookieValue($name) {
             return $this->_user_agent->getBaseCookieValue($name, $this->_page->getUrl());
         }
-        
+
         /**
          *    Sets the maximum number of redirects before
          *    a page will be loaded anyway.
@@ -385,7 +385,7 @@
         function setMaximumRedirects($max) {
             $this->_user_agent->setMaximumRedirects($max);
         }
-        
+
         /**
          *    Sets the maximum number of nesting of framed pages
          *    within a framed page to prevent loops.
@@ -395,7 +395,7 @@
         function setMaximumNestedFrames($max) {
             $this->_maximum_nested_frames = $max;
         }
-        
+
         /**
          *    Sets the socket timeout for opening a connection.
          *    @param integer $timeout      Maximum time in seconds.
@@ -404,7 +404,7 @@
         function setConnectionTimeout($timeout) {
             $this->_user_agent->setConnectionTimeout($timeout);
         }
-        
+
         /**
          *    Sets proxy to use on all requests for when
          *    testing from behind a firewall. Set URL
@@ -417,7 +417,7 @@
         function useProxy($proxy, $username = false, $password = false) {
             $this->_user_agent->useProxy($proxy, $username, $password);
         }
-        
+
         /**
          *    Fetches the page content with a HEAD request.
          *    Will affect cookies, but will not change the base URL.
@@ -437,7 +437,7 @@
             $response = &$this->_user_agent->fetchResponse($url, new SimpleHeadEncoding($parameters));
             return ! $response->isError();
         }
-        
+
         /**
          *    Fetches the page content with a simple GET request.
          *    @param string/SimpleUrl $url                Target to fetch.
@@ -455,7 +455,7 @@
             }
             return $this->_load($url, new SimpleGetEncoding($parameters));
         }
-        
+
         /**
          *    Fetches the page content with a POST request.
          *    @param string/SimpleUrl $url                Target to fetch as string.
@@ -472,7 +472,7 @@
             }
             return $this->_load($url, new SimplePostEncoding($parameters));
         }
-        
+
         /**
          *    Equivalent to hitting the retry button on the
          *    browser. Will attempt to repeat the page fetch. If
@@ -496,7 +496,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Equivalent to hitting the back button on the
          *    browser. The browser history is unchanged on
@@ -516,7 +516,7 @@
             }
             return $content;
         }
-        
+
         /**
          *    Equivalent to hitting the forward button on the
          *    browser. The browser history is unchanged on
@@ -536,7 +536,7 @@
             }
             return $content;
         }
-        
+
         /**
          *    Retries a request after setting the authentication
          *    for the current realm.
@@ -562,7 +562,7 @@
                     $password);
             return $this->retry();
         }
-        
+
         /**
          *    Accessor for a breakdown of the frameset.
          *    @return array   Hash tree of frames by name
@@ -572,7 +572,7 @@
         function getFrames() {
             return $this->_page->getFrames();
         }
-        
+
         /**
          *    Accessor for current frame focus. Will be
          *    false if no frame has focus.
@@ -584,7 +584,7 @@
         function getFrameFocus() {
             return $this->_page->getFrameFocus();
         }
-        
+
         /**
          *    Sets the focus by index. The integer index starts from 1.
          *    @param integer $choice    Chosen frame.
@@ -594,7 +594,7 @@
         function setFrameFocusByIndex($choice) {
             return $this->_page->setFrameFocusByIndex($choice);
         }
-        
+
         /**
          *    Sets the focus by name.
          *    @param string $name    Chosen frame.
@@ -604,7 +604,7 @@
         function setFrameFocus($name) {
             return $this->_page->setFrameFocus($name);
         }
-        
+
         /**
          *    Clears the frame focus. All frames will be searched
          *    for content.
@@ -613,7 +613,7 @@
         function clearFrameFocus() {
             return $this->_page->clearFrameFocus();
         }
-        
+
         /**
          *    Accessor for last error.
          *    @return string        Error from last response.
@@ -622,7 +622,7 @@
         function getTransportError() {
             return $this->_page->getTransportError();
         }
-        
+
         /**
          *    Accessor for current MIME type.
          *    @return string    MIME type as string; e.g. 'text/html'
@@ -631,7 +631,7 @@
         function getMimeType() {
             return $this->_page->getMimeType();
         }
-        
+
         /**
          *    Accessor for last response code.
          *    @return integer    Last HTTP response code received.
@@ -640,7 +640,7 @@
         function getResponseCode() {
             return $this->_page->getResponseCode();
         }
-        
+
         /**
          *    Accessor for last Authentication type. Only valid
          *    straight after a challenge (401).
@@ -650,7 +650,7 @@
         function getAuthentication() {
             return $this->_page->getAuthentication();
         }
-        
+
         /**
          *    Accessor for last Authentication realm. Only valid
          *    straight after a challenge (401).
@@ -660,7 +660,7 @@
         function getRealm() {
             return $this->_page->getRealm();
         }
-        
+
         /**
          *    Accessor for current URL of page or frame if
          *    focused.
@@ -671,7 +671,7 @@
             $url = $this->_page->getUrl();
             return $url ? $url->asString() : false;
         }
-        
+
         /**
          *    Accessor for raw bytes sent down the wire.
          *    @return string      Original text sent.
@@ -698,7 +698,7 @@
         function getContent() {
             return $this->_page->getRaw();
         }
-        
+
         /**
          *    Accessor for plain text version of the page.
          *    @return string      Normalised text representation.
@@ -707,7 +707,7 @@
         function getContentAsText() {
             return $this->_page->getText();
         }
-        
+
         /**
          *    Accessor for parsed title.
          *    @return string     Title or false if no title is present.
@@ -716,7 +716,7 @@
         function getTitle() {
             return $this->_page->getTitle();
         }
-        
+
         /**
          *    Accessor for a list of all fixed links in current page.
          *    @return array   List of urls with scheme of
@@ -726,7 +726,7 @@
         function getAbsoluteUrls() {
             return $this->_page->getAbsoluteUrls();
         }
-        
+
         /**
          *    Accessor for a list of all relative links.
          *    @return array      List of urls without hostname.
@@ -735,7 +735,7 @@
         function getRelativeUrls() {
             return $this->_page->getRelativeUrls();
         }
-        
+
         /**
          *    Sets all form fields with that name.
          *    @param string $name    Name of field in forms.
@@ -746,7 +746,7 @@
         function setField($name, $value) {
             return $this->_page->setField($name, $value);
         }
-        
+
         /**
          *    Sets all form fields with that name. Will use label if
          *    one is available (not yet implemented).
@@ -758,7 +758,7 @@
         function setFieldByName($name, $value) {
             return $this->_page->setFieldByName($name, $value);
         }
-          
+
         /**
          *    Sets all form fields with that id attribute.
          *    @param string/integer $id   Id of field in forms.
@@ -769,7 +769,7 @@
         function setFieldById($id, $value) {
             return $this->_page->setFieldById($id, $value);
         }
-      
+
         /**
          *    Accessor for a form element value within the page.
          *    Finds the first match.
@@ -782,7 +782,7 @@
         function getField($label) {
             return $this->_page->getField($label);
         }
-      
+
         /**
          *    Accessor for a form element value within the page.
          *    Finds the first match.
@@ -807,7 +807,7 @@
         function getFieldById($id) {
             return $this->_page->getFieldById($id);
         }
-        
+
         /**
          *    Clicks the submit button by label. The owning
          *    form will be submitted by this.
@@ -818,7 +818,7 @@
          *    @access public
          */
         function clickSubmit($label = 'Submit', $additional = false) {
-            if (! ($form = &$this->_page->getFormBySubmitLabel($label))) {
+            if (! ($form = &$this->_page->getFormBySubmit(new SimpleByLabel($label)))) {
                 return false;
             }
             $success = $this->_load(
@@ -826,7 +826,7 @@
                     $form->submitButton(new SimpleByLabel($label), $additional));
             return ($success ? $this->getContent() : $success);
         }
-        
+
         /**
          *    Clicks the submit button by name attribute. The owning
          *    form will be submitted by this.
@@ -844,7 +844,7 @@
                     $form->submitButton(new SimpleByName($name), $additional));
             return ($success ? $this->getContent() : $success);
         }
-        
+
         /**
          *    Clicks the submit button by ID attribute of the button
          *    itself. The owning form will be submitted by this.
@@ -862,7 +862,7 @@
                     $form->submitButton(new SimpleById($id), $additional));
             return ($success ? $this->getContent() : $success);
         }
-        
+
         /**
          *    Clicks the submit image by some kind of label. Usually
          *    the alt tag or the nearest equivalent. The owning
@@ -885,7 +885,7 @@
                     $form->submitImage(new SimpleByLabel($label), $x, $y, $additional));
             return ($success ? $this->getContent() : $success);
         }
-        
+
         /**
          *    Clicks the submit image by the name. Usually
          *    the alt tag or the nearest equivalent. The owning
@@ -908,7 +908,7 @@
                     $form->submitImage(new SimpleByName($name), $x, $y, $additional));
             return ($success ? $this->getContent() : $success);
         }
-         
+
         /**
          *    Clicks the submit image by ID attribute. The owning
          *    form will be submitted by this. Clicking outside of
@@ -930,7 +930,7 @@
                     $form->submitImage(new SimpleById($id), $x, $y, $additional));
             return ($success ? $this->getContent() : $success);
         }
-        
+
         /**
          *    Submits a form by the ID.
          *    @param string $id       The form ID. No submit button value
@@ -947,7 +947,7 @@
                     $form->submit());
             return ($success ? $this->getContent() : $success);
         }
-        
+
         /**
          *    Follows a link by label. Will click the first link
          *    found with this link text by default, or a later
@@ -969,7 +969,7 @@
             $this->_load($urls[$index], new SimpleGetEncoding());
             return $this->getContent();
         }
-        
+
         /**
          *    Tests to see if a link is present by label.
          *    @param string $label     Text of value attribute.
@@ -979,7 +979,7 @@
         function isLink($label) {
             return (count($this->_page->getUrlsByLabel($label)) > 0);
         }
-        
+
         /**
          *    Follows a link by id attribute.
          *    @param string $id        ID attribute value.
@@ -993,7 +993,7 @@
             $this->_load($url, new SimpleGetEncoding());
             return $this->getContent();
         }
-        
+
         /**
          *    Tests to see if a link is present by ID attribute.
          *    @param string $id     Text of id attribute.
@@ -1003,7 +1003,7 @@
         function isLinkById($id) {
             return (boolean)$this->_page->getUrlById($id);
         }
-        
+
         /**
          *    Clicks a visible text item. Will first try buttons,
          *    then links and then images.

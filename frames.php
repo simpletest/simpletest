@@ -12,7 +12,7 @@
     require_once(dirname(__FILE__) . '/page.php');
     require_once(dirname(__FILE__) . '/user_agent.php');
     /**#@-*/
-    
+
     /**
      *    A composite page. Wraps a frameset page and
      *    adds subframes. The original page will be
@@ -26,7 +26,7 @@
         var $_frames;
         var $_focus;
         var $_names;
-        
+
         /**
          *    Stashes the frameset page. Will make use of the
          *    browser to fetch the sub frames recursively.
@@ -38,7 +38,7 @@
             $this->_focus = false;
             $this->_names = array();
         }
-        
+
         /**
          *    Adds a parsed page to the frameset.
          *    @param SimplePage $page    Frame page.
@@ -51,7 +51,7 @@
                 $this->_names[$name] = count($this->_frames) - 1;
             }
         }
-        
+
         /**
          *    Replaces existing frame with another. If the
          *    frame is nested, then the call is passed down
@@ -73,7 +73,7 @@
             }
             $this->_frames[$index]->setFrame($path, $page);
         }
-        
+
         /**
          *    Accessor for current frame focus. Will be
          *    false if no frame has focus. Will have the nested
@@ -89,7 +89,7 @@
                     array($this->_getPublicNameFromIndex($this->_focus)),
                     $this->_frames[$this->_focus]->getFrameFocus());
         }
-        
+
         /**
          *    Turns an internal array index into the frames list
          *    into a public name, or if none, then a one offset
@@ -106,7 +106,7 @@
             }
             return $subject + 1;
         }
-        
+
         /**
          *    Sets the focus by index. The integer index starts from 1.
          *    If already focused and the target frame also has frames,
@@ -127,7 +127,7 @@
             $this->_focus = $choice - 1;
             return true;
         }
-        
+
         /**
          *    Sets the focus by name. If already focused and the
          *    target frame also has frames, then the nested frame
@@ -148,7 +148,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Clears the frame focus.
          *    @access public
@@ -157,7 +157,7 @@
             $this->_focus = false;
             $this->_clearNestedFramesFocus();
         }
-        
+
         /**
          *    Clears the frame focus for any nested frames.
          *    @access private
@@ -167,7 +167,7 @@
                 $this->_frames[$i]->clearFrameFocus();
             }
         }
-        
+
         /**
          *    Test for the presence of a frameset.
          *    @return boolean        Always true.
@@ -176,7 +176,7 @@
         function hasFrames() {
             return true;
         }
-        
+
         /**
          *    Accessor for frames information.
          *    @return array/string      Recursive hash of frame URL strings.
@@ -192,7 +192,7 @@
             }
             return $report;
         }
-        
+
         /**
          *    Accessor for raw text of either all the pages or
          *    the frame in focus.
@@ -209,7 +209,7 @@
             }
             return $raw;
         }
-        
+
         /**
          *    Accessor for plain text of either all the pages or
          *    the frame in focus.
@@ -226,7 +226,7 @@
             }
             return trim($raw);
         }
-        
+
         /**
          *    Accessor for last error.
          *    @return string        Error from last response.
@@ -238,7 +238,7 @@
             }
             return $this->_frameset->getTransportError();
         }
-        
+
         /**
          *    Request method used to fetch this frame.
          *    @return string      GET, POST or HEAD.
@@ -250,7 +250,7 @@
             }
             return $this->_frameset->getMethod();
         }
-        
+
         /**
          *    Original resource name.
          *    @return SimpleUrl        Current url.
@@ -265,7 +265,7 @@
             }
             return $url;
         }
-        
+
         /**
          *    Original request data.
          *    @return mixed              Sent content.
@@ -277,7 +277,7 @@
             }
             return $this->_frameset->getRequestData();
         }
-        
+
         /**
          *    Accessor for current MIME type.
          *    @return string    MIME type as string; e.g. 'text/html'
@@ -289,7 +289,7 @@
             }
             return $this->_frameset->getMimeType();
         }
-        
+
         /**
          *    Accessor for last response code.
          *    @return integer    Last HTTP response code received.
@@ -301,7 +301,7 @@
             }
             return $this->_frameset->getResponseCode();
         }
-        
+
         /**
          *    Accessor for last Authentication type. Only valid
          *    straight after a challenge (401).
@@ -314,7 +314,7 @@
             }
             return $this->_frameset->getAuthentication();
         }
-        
+
         /**
          *    Accessor for last Authentication realm. Only valid
          *    straight after a challenge (401).
@@ -327,7 +327,7 @@
             }
             return $this->_frameset->getRealm();
         }
-        
+
         /**
          *    Accessor for outgoing header information.
          *    @return string      Header block.
@@ -339,7 +339,7 @@
             }
             return $this->_frameset->getRequest();
         }
-        
+
         /**
          *    Accessor for raw header information.
          *    @return string      Header block.
@@ -351,7 +351,7 @@
             }
             return $this->_frameset->getHeaders();
         }
-        
+
         /**
          *    Accessor for parsed title.
          *    @return string     Title or false if no title is present.
@@ -360,7 +360,7 @@
         function getTitle() {
             return $this->_frameset->getTitle();
         }
-        
+
         /**
          *    Accessor for a list of all fixed links.
          *    @return array   List of urls with scheme of
@@ -377,7 +377,7 @@
             }
             return array_values(array_unique($urls));
         }
-        
+
         /**
          *    Accessor for a list of all relative links.
          *    @return array      List of urls without hostname.
@@ -393,7 +393,7 @@
             }
             return array_values(array_unique($urls));
         }
-        
+
         /**
          *    Accessor for URLs by the link label. Label will match
          *    regardess of whitespace issues and case.
@@ -417,7 +417,7 @@
             }
             return $urls;
         }
-        
+
         /**
          *    Accessor for a URL by the id attribute. If in a frameset
          *    then the first link found with that ID attribute is
@@ -438,7 +438,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Attaches the intended frame index to a list of URLs.
          *    @param array $urls        List of SimpleUrls.
@@ -456,7 +456,19 @@
             }
             return $tagged;
         }
-        
+
+        /**
+         *    Finds a held form by button label. Will only
+         *    search correctly built forms.
+         *    @param SimpleSelector $selector       Button finder.
+         *    @return SimpleForm                    Form object containing
+         *                                          the button.
+         *    @access public
+         */
+        function &getFormBySubmit($selector) {
+            $form = &$this->_findForm('getFormBySubmit', $selector);
+            return $form;
+        }
         /**
          *    Finds a held form by button label. Will only
          *    search correctly built forms. The first form found
@@ -470,7 +482,7 @@
             $form = &$this->_findForm('getFormBySubmitLabel', $label);
             return $form;
         }
-        
+
         /**
          *    Finds a held form by button label. Will only
          *    search correctly built forms. The first form found
@@ -484,7 +496,7 @@
             $form = &$this->_findForm('getFormBySubmitName', $name);
             return $form;
         }
-        
+
         /**
          *    Finds a held form by button id. Will only
          *    search correctly built forms. The first form found
@@ -498,7 +510,22 @@
             $form = &$this->_findForm('getFormBySubmitId', $id);
             return $form;
         }
-        
+
+        /**
+         *    Finds a held form by image using a selector.
+         *    Will only search correctly built forms. The first
+         *    form found either within the focused frame, or
+         *    across frames, will be the one returned.
+         *    @param SimpleSelector $selector  Image finder.
+         *    @return SimpleForm               Form object containing
+         *                                     the image.
+         *    @access public
+         */
+        function &getFormByImage($selector) {
+            $form = &$this->_findForm('getFormByImage', $selector);
+            return $form;
+        }
+
         /**
          *    Finds a held form by image label. Will only
          *    search correctly built forms. The first form found
@@ -512,7 +539,7 @@
             $form = &$this->_findForm('getFormByImageLabel', $label);
             return $form;
         }
-        
+
         /**
          *    Finds a held form by image button id. Will only
          *    search correctly built forms. The first form found
@@ -526,7 +553,7 @@
             $form = &$this->_findForm('getFormByImageName', $name);
             return $form;
         }
-        
+
         /**
          *    Finds a held form by image button id. Will only
          *    search correctly built forms. The first form found
@@ -540,7 +567,7 @@
             $form = &$this->_findForm('getFormByImageId', $id);
             return $form;
         }
-        
+
         /**
          *    Finds a held form by the form ID. A way of
          *    identifying a specific form when we have control
@@ -555,14 +582,14 @@
             $form = &$this->_findForm('getFormById', $id);
             return $form;
         }
-        
+
         /**
          *    General form finder. Will search all the frames or
          *    just the one in focus.
          *    @param string $method    Method to use to find in a page.
          *    @param string $attribute Label, name or ID.
          *    @return SimpleForm    Form object containing the matching ID.
-         *    @access private         
+         *    @access private
          */
         function &_findForm($method, $attribute) {
             if (is_integer($this->_focus)) {
@@ -586,7 +613,7 @@
             $null = null;
             return $null;
         }
-        
+
         /**
          *    Finds a form in a page using a form finding method. Will
          *    also tag the form with the frame name it belongs in.
@@ -595,7 +622,7 @@
          *    @param string $method    Method to use to find in a page.
          *    @param string $attribute Label, name or ID.
          *    @return SimpleForm       Form object containing the matching ID.
-         *    @access private         
+         *    @access private
          */
         function &_findFormInFrame(&$page, $index, $method, $attribute) {
             $form = &$this->_frames[$index]->$method($attribute);
@@ -604,7 +631,7 @@
             }
             return $form;
         }
-        
+
         /**
          *    Sets a field on each form in which the field is
          *    available by label and then name. labels are not
@@ -623,7 +650,7 @@
                 }
             }
         }
-        
+
         /**
          *    Sets a field on each form in which the field is
          *    available.
@@ -641,7 +668,7 @@
                 }
             }
         }
-         
+
         /**
          *    Sets a field on the form in which the unique field is
          *    available.
@@ -659,7 +686,7 @@
                 }
             }
         }
-       
+
         /**
          *    Accessor for a form element value within a frameset.
          *    Finds the first match amongst the frames.
@@ -678,7 +705,7 @@
             }
             return null;
         }
-       
+
         /**
          *    Accessor for a form element value within a frameset.
          *    Finds the first match amongst the frames.
@@ -697,7 +724,7 @@
             }
             return null;
         }
-         
+
         /**
          *    Accessor for a form element value within a page.
          *    Finds the first match.

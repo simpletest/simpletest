@@ -15,7 +15,7 @@
     require_once(dirname(__FILE__) . '/form.php');
     require_once(dirname(__FILE__) . '/selector.php');
     /**#@-*/
-    
+
     /**
      *    Creates tags and widgets given HTML tag
      *    attributes.
@@ -23,7 +23,7 @@
 	 *    @subpackage WebTester
      */
     class SimpleTagBuilder {
-        
+
         /**
          *    Factory for the tag objects. Creates the
          *    appropriate tag object for the incoming tag name
@@ -54,7 +54,7 @@
             }
             return new SimpleTag($name, $attributes);
         }
-        
+
         /**
          *    Factory for selection fields.
          *    @param hash $attributes    Element attributes.
@@ -67,7 +67,7 @@
             }
             return new SimpleSelectionTag($attributes);
         }
-        
+
         /**
          *    Factory for input tags.
          *    @param hash $attributes    Element attributes.
@@ -94,7 +94,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Make the keys lower case for case insensitive look-ups.
          *    @param hash $map   Hash to convert.
@@ -109,7 +109,7 @@
             return $lower;
         }
     }
-    
+
     /**
      *    SAX event handler. Maintains a list of
      *    open tags and dispatches them as they close.
@@ -120,7 +120,7 @@
         var $_tags;
         var $_page;
         var $_in_option = false;
-        
+
         /**
          *    Sets the builder up empty.
          *    @access public
@@ -128,7 +128,7 @@
         function SimplePageBuilder() {
             $this->SimpleSaxListener();
         }
-        
+
         /**
          *    Reads the raw content and send events
          *    into the page to be built.
@@ -144,7 +144,7 @@
             $this->_page->acceptPageEnd();
             return $this->_page;
         }
-        
+
         /**
          *    Creates an empty page.
          *    @return SimplePage        New unparsed page.
@@ -154,7 +154,7 @@
             $page = &new SimplePage($response);
             return $page;
         }
-        
+
         /**
          *    Creates the parser used with the builder.
          *    @param $listener SimpleSaxListener   Target of parser.
@@ -166,7 +166,7 @@
             $parser = &new SimpleSaxParser($listener);
             return $parser;
         }
-        
+
         /**
          *    Start of element event. Opens a new tag.
          *    @param string $name         Element name.
@@ -208,7 +208,7 @@
             $this->_page->acceptTag($tag);
             return true;
         }
-        
+
         /**
          *    End of element event.
          *    @param string $name        Element name.
@@ -219,15 +219,15 @@
             if ($name == 'label') {
                 $this->_page->acceptLabelEnd();
                 return true;
-            }            
+            }
             if ($name == 'form') {
                 $this->_page->acceptFormEnd();
                 return true;
-            }            
+            }
             if ($name == 'frameset') {
                 $this->_page->acceptFramesetEnd();
                 return true;
-            }            
+            }
             if ($name == 'option') {
                 $this->_in_option = false;
             }
@@ -239,7 +239,7 @@
             }
             return true;
         }
-        
+
         /**
          *    Test to see if there are any open tags awaiting
          *    closure that match the tag name.
@@ -250,7 +250,7 @@
         function _hasNamedTagOnOpenTagStack($name) {
             return isset($this->_tags[$name]) && (count($this->_tags[$name]) > 0);
         }
-        
+
         /**
          *    Unparsed, but relevant data. The data is added
          *    to every open tag.
@@ -266,7 +266,7 @@
             }
             return true;
         }
-        
+
         /**
          *    Option tags swallow content and so we want any
          *    new content to go only to the most current option.
@@ -277,7 +277,7 @@
             $current = count($this->_tags['option']) - 1;
             $this->_tags['option'][$current]->addContent($text);
         }
-        
+
         /**
          *    Any content fills all currently open tags unless it
          *    is part of an option tag.
@@ -291,7 +291,7 @@
                 }
             }
         }
-        
+
         /**
          *    Parsed data in tag form. The parsed tag is added
          *    to every open tag. Used for adding options to select
@@ -309,7 +309,7 @@
                 }
             }
         }
-        
+
         /**
          *    Opens a tag for receiving content. Multiple tags
          *    will be receiving input at the same time.
@@ -324,7 +324,7 @@
             $this->_tags[$name][] = &$tag;
         }
     }
-    
+
     /**
      *    A wrapper for a web page.
 	 *    @package SimpleTest
@@ -349,7 +349,7 @@
         var $_method;
         var $_url;
         var $_request_data;
-        
+
         /**
          *    Parses a page ready to access it's contents.
          *    @param SimpleHttpResponse $response     Result of HTTP fetch.
@@ -371,7 +371,7 @@
                 $this->_noResponse();
             }
         }
-        
+
         /**
          *    Extracts all of the response information.
          *    @param SimpleHttpResponse $response    Response being parsed.
@@ -386,7 +386,7 @@
             $this->_url = $response->getUrl();
             $this->_request_data = $response->getRequestData();
         }
-        
+
         /**
          *    Sets up a missing response.
          *    @access private
@@ -400,7 +400,7 @@
             $this->_url = false;
             $this->_request_data = false;
         }
-        
+
         /**
          *    Original request as bytes sent down the wire.
          *    @return mixed              Sent content.
@@ -409,7 +409,7 @@
         function getRequest() {
             return $this->_sent;
         }
-        
+
         /**
          *    Accessor for raw text of page.
          *    @return string        Raw unparsed content.
@@ -418,7 +418,7 @@
         function getRaw() {
             return $this->_raw;
         }
-        
+
         /**
          *    Accessor for plain text of page as a text browser
          *    would see it.
@@ -431,7 +431,7 @@
             }
             return $this->_text;
         }
-        
+
         /**
          *    Accessor for raw headers of page.
          *    @return string       Header block as text.
@@ -443,7 +443,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Original request method.
          *    @return string        GET, POST or HEAD.
@@ -452,7 +452,7 @@
         function getMethod() {
             return $this->_method;
         }
-        
+
         /**
          *    Original resource name.
          *    @return SimpleUrl        Current url.
@@ -461,7 +461,7 @@
         function getUrl() {
             return $this->_url;
         }
-        
+
         /**
          *    Original request data.
          *    @return mixed              Sent content.
@@ -470,7 +470,7 @@
         function getRequestData() {
             return $this->_request_data;
         }
-        
+
         /**
          *    Accessor for last error.
          *    @return string        Error from last response.
@@ -479,7 +479,7 @@
         function getTransportError() {
             return $this->_transport_error;
         }
-        
+
         /**
          *    Accessor for current MIME type.
          *    @return string    MIME type as string; e.g. 'text/html'
@@ -491,7 +491,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Accessor for HTTP response code.
          *    @return integer    HTTP response code received.
@@ -503,7 +503,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Accessor for last Authentication type. Only valid
          *    straight after a challenge (401).
@@ -516,7 +516,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Accessor for last Authentication realm. Only valid
          *    straight after a challenge (401).
@@ -529,7 +529,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Accessor for current frame focus. Will be
          *    false as no frames.
@@ -539,7 +539,7 @@
         function getFrameFocus() {
             return array();
         }
-        
+
         /**
          *    Sets the focus by index. The integer index starts from 1.
          *    @param integer $choice    Chosen frame.
@@ -549,7 +549,7 @@
         function setFrameFocusByIndex($choice) {
             return false;
         }
-        
+
         /**
          *    Sets the focus by name. Always fails for a leaf page.
          *    @param string $name    Chosen frame.
@@ -559,14 +559,14 @@
         function setFrameFocus($name) {
             return false;
         }
-        
+
         /**
          *    Clears the frame focus. Does nothing for a leaf page.
          *    @access public
          */
         function clearFrameFocus() {
         }
-        
+
         /**
          *    Adds a tag to the page.
          *    @param SimpleTag $tag        Tag to accept.
@@ -584,7 +584,7 @@
                 $this->_last_widget = &$tag;
             }
         }
-        
+
         /**
          *    Opens a label for a described widget.
          *    @param SimpleFormTag $tag      Tag to accept.
@@ -594,7 +594,7 @@
             $this->_label = &$tag;
             unset($this->_last_widget);
         }
-        
+
         /**
          *    Closes the most recently opened label.
          *    @access public
@@ -610,7 +610,7 @@
                 unset($this->_label);
             }
         }
-        
+
         /**
          *    Tests to see if a tag is a possible form
          *    element.
@@ -621,7 +621,7 @@
         function _isFormElement($name) {
             return in_array($name, array('input', 'button', 'textarea', 'select'));
         }
-        
+
         /**
          *    Opens a form. New widgets go here.
          *    @param SimpleFormTag $tag      Tag to accept.
@@ -630,7 +630,7 @@
         function acceptFormStart(&$tag) {
             $this->_open_forms[] = &new SimpleForm($tag, $this->getUrl());
         }
-        
+
         /**
          *    Closes the most recently opened form.
          *    @access public
@@ -640,7 +640,7 @@
                 $this->_complete_forms[] = array_pop($this->_open_forms);
             }
         }
-        
+
         /**
          *    Opens a frameset. A frameset may contain nested
          *    frameset tags.
@@ -653,7 +653,7 @@
             }
             $this->_frameset_nesting_level++;
         }
-        
+
         /**
          *    Closes the most recently opened frameset.
          *    @access public
@@ -663,7 +663,7 @@
                 $this->_frameset_nesting_level--;
             }
         }
-        
+
         /**
          *    Takes a single frame tag and stashes it in
          *    the current frame set.
@@ -677,7 +677,7 @@
                 }
             }
         }
-        
+
         /**
          *    Test to see if in the middle of reading
          *    a frameset.
@@ -690,7 +690,7 @@
             }
             return ($this->_frameset_nesting_level > 0);
         }
-        
+
         /**
          *    Test to see if link is an absolute one.
          *    @param string $url     Url to test.
@@ -701,7 +701,7 @@
             $parsed = new SimpleUrl($url);
             return (boolean)($parsed->getScheme() && $parsed->getHost());
         }
-        
+
         /**
          *    Adds a link to the page.
          *    @param SimpleAnchorTag $tag      Link to accept.
@@ -710,7 +710,7 @@
         function _addLink($tag) {
             $this->_links[] = $tag;
         }
-        
+
         /**
          *    Marker for end of complete page. Any work in
          *    progress can now be closed.
@@ -728,7 +728,7 @@
                 }
             }
         }
-        
+
         /**
          *    Test for the presence of a frameset.
          *    @return boolean        True if frameset.
@@ -737,7 +737,7 @@
         function hasFrames() {
             return (boolean)$this->_frameset;
         }
-        
+
         /**
          *    Accessor for frame name and source URL for every frame that
          *    will need to be loaded. Immediate children only.
@@ -759,7 +759,7 @@
             }
             return $urls;
         }
-        
+
         /**
          *    Fetches a list of loaded frames.
          *    @return array/string    Just the URL for a single page.
@@ -769,7 +769,7 @@
             $url = $this->getUrl();
             return $url->asString();
         }
-        
+
         /**
          *    Accessor for a list of all fixed links.
          *    @return array   List of urls with scheme of
@@ -785,7 +785,7 @@
             }
             return $all;
         }
-        
+
         /**
          *    Accessor for a list of all relative links.
          *    @return array      List of urls without hostname.
@@ -800,7 +800,7 @@
             }
             return $all;
         }
-        
+
         /**
          *    Accessor for URLs by the link label. Label will match
          *    regardess of whitespace issues and case.
@@ -817,7 +817,7 @@
             }
             return $matches;
         }
-        
+
         /**
          *    Accessor for a URL by the id attribute.
          *    @param string $id       Id attribute of link.
@@ -832,7 +832,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Converts a link into a target URL.
          *    @param SimpleAnchor $link    Parsed link.
@@ -846,7 +846,7 @@
             }
             return $url;
         }
-        
+
         /**
          *    Expands expandomatic URLs into fully qualified
          *    URLs.
@@ -860,7 +860,7 @@
             }
             return $url->makeAbsolute($this->getUrl());
         }
-        
+
         /**
          *    Sets the title tag contents.
          *    @param SimpleTitleTag $tag    Title of page.
@@ -869,7 +869,7 @@
         function _setTitle(&$tag) {
             $this->_title = &$tag;
         }
-        
+
         /**
          *    Accessor for parsed title.
          *    @return string     Title or false if no title is present.
@@ -881,7 +881,25 @@
             }
             return false;
         }
-        
+
+        /**
+         *    Finds a held form by button label. Will only
+         *    search correctly built forms.
+         *    @param SimpleSelector $selector       Button finder.
+         *    @return SimpleForm                    Form object containing
+         *                                          the button.
+         *    @access public
+         */
+        function &getFormBySubmit($selector) {
+            for ($i = 0; $i < count($this->_complete_forms); $i++) {
+                if ($this->_complete_forms[$i]->hasSubmit($selector)) {
+                    return $this->_complete_forms[$i];
+                }
+            }
+            $null = null;
+            return $null;
+        }
+
         /**
          *    Finds a held form by button label. Will only
          *    search correctly built forms.
@@ -889,16 +907,11 @@
          *    @return SimpleForm         Form object containing the button.
          *    @access public
          */
-        function &getFormBySubmitLabel($label) {
-            for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasSubmit(new SimpleByLabel($label))) {
-                    return $this->_complete_forms[$i];
-                }
-            }
-            $null = null;
-            return $null;
+        function &_getFormBySubmitLabel($label) {
+            $form = &$this->getFormBySubmit(new SimpleByLabel($label));
+            return $form;
         }
-        
+
         /**
          *    Finds a held form by button label. Will only
          *    search correctly built forms.
@@ -907,32 +920,41 @@
          *    @access public
          */
         function &getFormBySubmitName($name) {
-            for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasSubmit(new SimpleByName($name))) {
-                    return $this->_complete_forms[$i];
-                }
-            }
-            $null = null;
-            return $null;
+            $form = &$this->getFormBySubmit(new SimpleByName($name));
+            return $form;
         }
-        
+
         /**
          *    Finds a held form by button id. Will only
          *    search correctly built forms.
          *    @param string $id          Button ID attribute.
-         *    @return SimpleForm         Form object containing the button.
+         *    @return SimpleForm         Form object containing
+         *                               the button.
          *    @access public
          */
         function &getFormBySubmitId($id) {
+            $form = &$this->getFormBySubmit(new SimpleById($id));
+            return $form;
+        }
+
+        /**
+         *    Finds a held form by image using a selector.
+         *    Will only search correctly built forms.
+         *    @param SimpleSelector $selector  Image finder.
+         *    @return SimpleForm               Form object containing
+         *                                     the image.
+         *    @access public
+         */
+        function &getFormByImage($selector) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasSubmit(new SimpleById($id))) {
+                if ($this->_complete_forms[$i]->hasImage($selector)) {
                     return $this->_complete_forms[$i];
                 }
             }
             $null = null;
             return $null;
         }
-        
+
         /**
          *    Finds a held form by image label. Will only
          *    search correctly built forms.
@@ -941,32 +963,22 @@
          *    @access public
          */
         function &getFormByImageLabel($label) {
-            for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasImage(new SimpleByLabel($label))) {
-                    return $this->_complete_forms[$i];
-                }
-            }
-            $null = null;
-            return $null;
+            $form = &$this->getFormByImage(new SimpleByLabel($label));
+            return $form;
         }
-        
+
         /**
-         *    Finds a held form by image button id. Will only
+         *    Finds a held form by image button name. Will only
          *    search correctly built forms.
          *    @param string $name        Image name.
          *    @return SimpleForm         Form object containing the image.
          *    @access public
          */
         function &getFormByImageName($name) {
-            for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasImage(new SimpleByName($name))) {
-                    return $this->_complete_forms[$i];
-                }
-            }
-            $null = null;
-            return $null;
+            $form = &$this->getFormByImage(new SimpleByName($name));
+            return $form;
         }
-        
+
         /**
          *    Finds a held form by image button id. Will only
          *    search correctly built forms.
@@ -975,15 +987,10 @@
          *    @access public
          */
         function &getFormByImageId($id) {
-            for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->hasImage(new SimpleById($id))) {
-                    return $this->_complete_forms[$i];
-                }
-            }
-            $null = null;
-            return $null;
+            $form = &$this->getFormByImage(new SimpleById($id));
+            return $form;
         }
-        
+
         /**
          *    Finds a held form by the form ID. A way of
          *    identifying a specific form when we have control
@@ -1001,7 +1008,7 @@
             $null = null;
             return $null;
         }
-        
+
         /**
          *    Sets a field on each form in which the field is
          *    available. Sets by label, but for compatibility
@@ -1023,7 +1030,7 @@
             }
             return $this->setFieldByName($label, $value);
         }
-        
+
         /**
          *    Sets a field on each form in which the field is
          *    available by name.
@@ -1041,7 +1048,7 @@
             }
             return $is_set;
         }
-         
+
         /**
          *    Sets a field on the form in which the unique field is
          *    available.
@@ -1058,7 +1065,7 @@
             }
             return false;
         }
-       
+
         /**
          *    Accessor for a form element value within a page.
          *    Finds the first match by label first. If none are found
@@ -1078,7 +1085,7 @@
             }
             return $this->getFieldByName($label);
         }
-       
+
         /**
          *    Accessor for a form element value within a page.
          *    Finds the first match by name only.
@@ -1097,7 +1104,7 @@
             }
             return null;
         }
-         
+
         /**
          *    Accessor for a form element value within a page.
          *    Finds the first match.
