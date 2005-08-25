@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.0.1beta) of 42 hours.
+This is immediate stuff only for this iteration (1.0.1beta) of 40 hours.
 
 $Id$
 
@@ -13,7 +13,6 @@ Mock objects
 ------------
 Allow mocking of interfaces (5/3) - done.
 Carry interfaces to pass type hints (3/7) - done.
-Change expectOnce(), etc to act by signature (3).
 Remove $this passing in mocks (5/4) - done.
 Remove the need for tally() call (2/3) - done.
 Fix autoload glitch (1/1) - done.
@@ -25,7 +24,8 @@ Parser
 Browser
 -------
 Add assertSubmit() method (1).
-Promote selector classes and factor out excessive chaining (3).
+Add assertClickable() method (1).
+Promote selector classes and factor out excessive chaining (3/3).
 Allow ignoring of cookies (2).
 
 Web tester
@@ -37,7 +37,7 @@ Fix bug with multiple selection fields not being selected by label (1/1) - done.
 
 Documentation
 -------------
-Change license to GNU? (2).
+Change license to GNU? (2/1).
 
 Build
 -----
