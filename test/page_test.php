@@ -664,7 +664,9 @@
                     '<html><head><form><input type="submit"></form></head></html>');
             $page = &$this->parse($response);
             $this->assertNull($page->getFormBySubmit(new SimpleByLabel('submit')));
-            $this->assertIsA($page->getFormBySubmitName('submit'), 'SimpleForm');
+            $this->assertIsA(
+                    $page->getFormBySubmit(new SimpleByName('submit')),
+                    'SimpleForm');
             $this->assertIsA(
                     $page->getFormBySubmit(new SimpleByLabel('Submit')),
                     'SimpleForm');
@@ -676,7 +678,9 @@
                     'getContent',
                     '<html><head><FORM><INPUT TYPE="SUBMIT"></FORM></head></html>');
             $page = &$this->parse($response);
-            $this->assertIsA($page->getFormBySubmitName('submit'), 'SimpleForm');
+            $this->assertIsA(
+                    $page->getFormBySubmit(new SimpleByName('submit')),
+                    'SimpleForm');
             $this->assertIsA(
                     $page->getFormBySubmit(new SimpleByLabel('Submit')),
                     'SimpleForm');
@@ -703,7 +707,9 @@
             $page = &$this->parse($response);
             $this->assertNull($page->getFormBySubmit(new SimpleByLabel('b')));
             $this->assertNull($page->getFormBySubmit(new SimpleByLabel('B')));
-            $this->assertIsA($page->getFormBySubmitName('b'), 'SimpleForm');
+            $this->assertIsA(
+                    $page->getFormBySubmit(new SimpleByName('b')),
+                    'SimpleForm');
             $this->assertIsA(
                     $page->getFormBySubmit(new SimpleByLabel('BBB')),
                     'SimpleForm');

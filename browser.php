@@ -795,7 +795,7 @@
         function getFieldByName($name) {
             return $this->_page->getFieldByName($name);
         }
-        
+
         /**
          *    Accessor for a form element value within the page.
          *    @param string/integer $id  Id of field in forms.
@@ -836,7 +836,7 @@
          *    @access public
          */
         function clickSubmitByName($name, $additional = false) {
-            if (! ($form = &$this->_page->getFormBySubmitName($name))) {
+            if (! ($form = &$this->_page->getFormBySubmit(new SimpleByName($name)))) {
                 return false;
             }
             $success = $this->_load(
@@ -854,7 +854,7 @@
          *    @access public
          */
         function clickSubmitById($id, $additional = false) {
-            if (! ($form = &$this->_page->getFormBySubmitId($id))) {
+            if (! ($form = &$this->_page->getFormBySubmit(new SimpleById($id)))) {
                 return false;
             }
             $success = $this->_load(

@@ -476,8 +476,7 @@
 
         function testFindingFormsByAllFinders() {
             $finders = array(
-                    'getFormBySubmitName',
-                    'getFormBySubmitId', 'getFormByImageLabel',
+                    'getFormByImageLabel',
                     'getFormByImageName', 'getFormByImageId', 'getFormById');
             $forms = array();
 

@@ -901,43 +901,6 @@
         }
 
         /**
-         *    Finds a held form by button label. Will only
-         *    search correctly built forms.
-         *    @param string $label       Button label, default 'Submit'.
-         *    @return SimpleForm         Form object containing the button.
-         *    @access public
-         */
-        function &_getFormBySubmitLabel($label) {
-            $form = &$this->getFormBySubmit(new SimpleByLabel($label));
-            return $form;
-        }
-
-        /**
-         *    Finds a held form by button label. Will only
-         *    search correctly built forms.
-         *    @param string $name        Button name attribute.
-         *    @return SimpleForm         Form object containing the button.
-         *    @access public
-         */
-        function &getFormBySubmitName($name) {
-            $form = &$this->getFormBySubmit(new SimpleByName($name));
-            return $form;
-        }
-
-        /**
-         *    Finds a held form by button id. Will only
-         *    search correctly built forms.
-         *    @param string $id          Button ID attribute.
-         *    @return SimpleForm         Form object containing
-         *                               the button.
-         *    @access public
-         */
-        function &getFormBySubmitId($id) {
-            $form = &$this->getFormBySubmit(new SimpleById($id));
-            return $form;
-        }
-
-        /**
          *    Finds a held form by image using a selector.
          *    Will only search correctly built forms.
          *    @param SimpleSelector $selector  Image finder.

@@ -415,8 +415,8 @@
             $form->setReturnValue('submitButton', new SimplePostEncoding(array('a' => 'A')));
 
             $page = &new MockSimplePage();
-            $page->setReturnReference('getFormBySubmitName', $form);
-            $page->expectOnce('getFormBySubmitName', array('me'));
+            $page->setReturnReference('getFormBySubmit', $form);
+            $page->expectOnce('getFormBySubmit', array(new SimpleByName('me')));
             $page->setReturnValue('getRaw', 'stuff');
 
             $browser = &$this->createBrowser($agent, $page);
@@ -435,8 +435,8 @@
             $form->expectOnce('submitButton', array(new SimpleById(99), false));
 
             $page = &new MockSimplePage();
-            $page->setReturnReference('getFormBySubmitId', $form);
-            $page->expectOnce('getFormBySubmitId', array(99));
+            $page->setReturnReference('getFormBySubmit', $form);
+            $page->expectOnce('getFormBySubmit', array(new SimpleById(99)));
             $page->setReturnValue('getRaw', 'stuff');
 
             $browser = &$this->createBrowser($agent, $page);
