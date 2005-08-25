@@ -919,42 +919,6 @@
         }
 
         /**
-         *    Finds a held form by image label. Will only
-         *    search correctly built forms.
-         *    @param string $label       Usually the alt attribute.
-         *    @return SimpleForm         Form object containing the image.
-         *    @access public
-         */
-        function &getFormByImageLabel($label) {
-            $form = &$this->getFormByImage(new SimpleByLabel($label));
-            return $form;
-        }
-
-        /**
-         *    Finds a held form by image button name. Will only
-         *    search correctly built forms.
-         *    @param string $name        Image name.
-         *    @return SimpleForm         Form object containing the image.
-         *    @access public
-         */
-        function &getFormByImageName($name) {
-            $form = &$this->getFormByImage(new SimpleByName($name));
-            return $form;
-        }
-
-        /**
-         *    Finds a held form by image button id. Will only
-         *    search correctly built forms.
-         *    @param string $id          Image ID attribute.
-         *    @return SimpleForm         Form object containing the image.
-         *    @access public
-         */
-        function &getFormByImageId($id) {
-            $form = &$this->getFormByImage(new SimpleById($id));
-            return $form;
-        }
-
-        /**
          *    Finds a held form by the form ID. A way of
          *    identifying a specific form when we have control
          *    of the HTML code.

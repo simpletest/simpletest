@@ -455,8 +455,8 @@
             $form->expectOnce('submitImage', array(new SimpleByLabel('Go!'), 10, 11, false));
 
             $page = &new MockSimplePage();
-            $page->setReturnReference('getFormByImageLabel', $form);
-            $page->expectOnce('getFormByImageLabel', array('Go!'));
+            $page->setReturnReference('getFormByImage', $form);
+            $page->expectOnce('getFormByImage', array(new SimpleByLabel('Go!')));
             $page->setReturnValue('getRaw', 'stuff');
 
             $browser = &$this->createBrowser($agent, $page);
@@ -475,8 +475,8 @@
             $form->expectOnce('submitImage', array(new SimpleByName('a'), 10, 11, false));
 
             $page = &new MockSimplePage();
-            $page->setReturnReference('getFormByImageName', $form);
-            $page->expectOnce('getFormByImageName', array('a'));
+            $page->setReturnReference('getFormByImage', $form);
+            $page->expectOnce('getFormByImage', array(new SimpleByName('a')));
             $page->setReturnValue('getRaw', 'stuff');
 
             $browser = &$this->createBrowser($agent, $page);
@@ -495,8 +495,8 @@
             $form->expectOnce('submitImage', array(new SimpleById(99), 10, 11, false));
 
             $page = &new MockSimplePage();
-            $page->setReturnReference('getFormByImageId', $form);
-            $page->expectOnce('getFormByImageId', array(99));
+            $page->setReturnReference('getFormByImage', $form);
+            $page->expectOnce('getFormByImage', array(new SimpleById(99)));
             $page->setReturnValue('getRaw', 'stuff');
 
             $browser = &$this->createBrowser($agent, $page);

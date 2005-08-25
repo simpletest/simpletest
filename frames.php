@@ -469,47 +469,6 @@
             $form = &$this->_findForm('getFormBySubmit', $selector);
             return $form;
         }
-        /**
-         *    Finds a held form by button label. Will only
-         *    search correctly built forms. The first form found
-         *    either within the focused frame, or across frames,
-         *    will be the one returned.
-         *    @param string $label       Button label, default 'Submit'.
-         *    @return SimpleForm         Form object containing the button.
-         *    @access public
-         */
-        function &getFormBySubmitLabel($label) {
-            $form = &$this->_findForm('getFormBySubmitLabel', $label);
-            return $form;
-        }
-
-        /**
-         *    Finds a held form by button label. Will only
-         *    search correctly built forms. The first form found
-         *    either within the focused frame, or across frames,
-         *    will be the one returned.
-         *    @param string $name        Button name attribute.
-         *    @return SimpleForm         Form object containing the button.
-         *    @access public
-         */
-        function &getFormBySubmitName($name) {
-            $form = &$this->_findForm('getFormBySubmitName', $name);
-            return $form;
-        }
-
-        /**
-         *    Finds a held form by button id. Will only
-         *    search correctly built forms. The first form found
-         *    either within the focused frame, or across frames,
-         *    will be the one returned.
-         *    @param string $id          Button ID attribute.
-         *    @return SimpleForm         Form object containing the button.
-         *    @access public
-         */
-        function &getFormBySubmitId($id) {
-            $form = &$this->_findForm('getFormBySubmitId', $id);
-            return $form;
-        }
 
         /**
          *    Finds a held form by image using a selector.
@@ -523,48 +482,6 @@
          */
         function &getFormByImage($selector) {
             $form = &$this->_findForm('getFormByImage', $selector);
-            return $form;
-        }
-
-        /**
-         *    Finds a held form by image label. Will only
-         *    search correctly built forms. The first form found
-         *    either within the focused frame, or across frames,
-         *    will be the one returned.
-         *    @param string $label       Usually the alt attribute.
-         *    @return SimpleForm         Form object containing the image.
-         *    @access public
-         */
-        function &getFormByImageLabel($label) {
-            $form = &$this->_findForm('getFormByImageLabel', $label);
-            return $form;
-        }
-
-        /**
-         *    Finds a held form by image button id. Will only
-         *    search correctly built forms. The first form found
-         *    either within the focused frame, or across frames,
-         *    will be the one returned.
-         *    @param string $name        Image name.
-         *    @return SimpleForm         Form object containing the image.
-         *    @access public
-         */
-        function &getFormByImageName($name) {
-            $form = &$this->_findForm('getFormByImageName', $name);
-            return $form;
-        }
-
-        /**
-         *    Finds a held form by image button id. Will only
-         *    search correctly built forms. The first form found
-         *    either within the focused frame, or across frames,
-         *    will be the one returned.
-         *    @param string $id          Image ID attribute.
-         *    @return SimpleForm         Form object containing the image.
-         *    @access public
-         */
-        function &getFormByImageId($id) {
-            $form = &$this->_findForm('getFormByImageId', $id);
             return $form;
         }
 

@@ -474,71 +474,61 @@
             $this->assertIdentical($frameset->getUrlById(99), $by_id);
         }
 
-        function testFindingFormsByAllFinders() {
-            $finders = array(
-                    'getFormByImageLabel',
-                    'getFormByImageName', 'getFormByImageId', 'getFormById');
-            $forms = array();
-
+        function testFindingFormsById() {
             $frame = &new MockSimplePage();
-            for ($i = 0; $i < count($finders); $i++) {
-                $forms[$i] = &new MockSimpleForm();
-                $frame->setReturnReference($finders[$i], $forms[$i], array('a'));
-            }
+            $form = &new MockSimpleForm();
+            $frame->setReturnReference('getFormById', $form, array('a'));
 
             $frameset = &new SimpleFrameset(new MockSimplePage());
             $frameset->addFrame(new MockSimplePage(), 'A');
             $frameset->addFrame($frame, 'B');
-            for ($i = 0; $i < count($finders); $i++) {
-                $method = $finders[$i];
-                $this->assertReference($frameset->$method('a'), $forms[$i]);
-            }
+            $this->assertReference($frameset->getFormById('a'), $form);
 
             $frameset->setFrameFocus('A');
-            for ($i = 0; $i < count($finders); $i++) {
-                $method = $finders[$i];
-                $this->assertNull($frameset->$method('a'));
-            }
+            $this->assertNull($frameset->getFormById('a'));
 
             $frameset->setFrameFocus('B');
-            for ($i = 0; $i < count($finders); $i++) {
-                $method = $finders[$i];
-                $this->assertReference($frameset->$method('a'), $forms[$i]);
-            }
+            $this->assertReference($frameset->getFormById('a'), $form);
         }
 
-        function testFindingFormsBySelectors() {
-            $finders = array('getFormBySubmit', 'getFormByImage');
-            $forms = array();
-
+        function testFindingFormsBySubmit() {
             $frame = &new MockSimplePage();
-            for ($i = 0; $i < count($finders); $i++) {
-                $forms[$i] = &new MockSimpleForm();
-                $frame->setReturnReference(
-                        $finders[$i],
-                        $forms[$i],
-                        array(new SimpleByLabel('a')));
-            }
+            $form = &new MockSimpleForm();
+            $frame->setReturnReference(
+                    'getFormBySubmit',
+                    $form,
+                    array(new SimpleByLabel('a')));
 
             $frameset = &new SimpleFrameset(new MockSimplePage());
             $frameset->addFrame(new MockSimplePage(), 'A');
             $frameset->addFrame($frame, 'B');
-            for ($i = 0; $i < count($finders); $i++) {
-                $method = $finders[$i];
-                $this->assertReference($frameset->$method(new SimpleByLabel('a')), $forms[$i]);
-            }
+            $this->assertReference($frameset->getFormBySubmit(new SimpleByLabel('a')), $form);
 
             $frameset->setFrameFocus('A');
-            for ($i = 0; $i < count($finders); $i++) {
-                $method = $finders[$i];
-                $this->assertNull($frameset->$method(new SimpleByLabel('a')));
-            }
+            $this->assertNull($frameset->getFormBySubmit(new SimpleByLabel('a')));
 
             $frameset->setFrameFocus('B');
-            for ($i = 0; $i < count($finders); $i++) {
-                $method = $finders[$i];
-                $this->assertReference($frameset->$method(new SimpleByLabel('a')), $forms[$i]);
-            }
+            $this->assertReference($frameset->getFormBySubmit(new SimpleByLabel('a')), $form);
+        }
+
+        function testFindingFormsByImage() {
+            $frame = &new MockSimplePage();
+            $form = &new MockSimpleForm();
+            $frame->setReturnReference(
+                    'getFormByImage',
+                    $form,
+                    array(new SimpleByLabel('a')));
+
+            $frameset = &new SimpleFrameset(new MockSimplePage());
+            $frameset->addFrame(new MockSimplePage(), 'A');
+            $frameset->addFrame($frame, 'B');
+            $this->assertReference($frameset->getFormByImage(new SimpleByLabel('a')), $form);
+
+            $frameset->setFrameFocus('A');
+            $this->assertNull($frameset->getFormByImage(new SimpleByLabel('a')));
+
+            $frameset->setFrameFocus('B');
+            $this->assertReference($frameset->getFormByImage(new SimpleByLabel('a')), $form);
         }
 
         function testSettingAllFrameFieldsWhenNoFrameFocus() {

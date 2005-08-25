@@ -693,9 +693,15 @@
                     '<input type="image" id=100 alt="Label" name="me">' .
                     '</form></head></html>');
             $page = &$this->parse($response);
-            $this->assertIsA($page->getFormByImageLabel('Label'), 'SimpleForm');
-            $this->assertIsA($page->getFormByImageName('me'), 'SimpleForm');
-            $this->assertIsA($page->getFormByImageId(100), 'SimpleForm');
+            $this->assertIsA(
+                    $page->getFormByImage(new SimpleByLabel('Label')),
+                    'SimpleForm');
+            $this->assertIsA(
+                    $page->getFormByImage(new SimpleByName('me')),
+                    'SimpleForm');
+            $this->assertIsA(
+                    $page->getFormByImage(new SimpleById(100)),
+                    'SimpleForm');
         }
 
         function testFindFormByButtonTag() {

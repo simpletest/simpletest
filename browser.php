@@ -877,7 +877,7 @@
          *    @access public
          */
         function clickImage($label, $x = 1, $y = 1, $additional = false) {
-            if (! ($form = &$this->_page->getFormByImageLabel($label))) {
+            if (! ($form = &$this->_page->getFormByImage(new SimpleByLabel($label)))) {
                 return false;
             }
             $success = $this->_load(
@@ -900,7 +900,7 @@
          *    @access public
          */
         function clickImageByName($name, $x = 1, $y = 1, $additional = false) {
-            if (! ($form = &$this->_page->getFormByImageName($name))) {
+            if (! ($form = &$this->_page->getFormByImage(new SimpleByName($name)))) {
                 return false;
             }
             $success = $this->_load(
@@ -922,7 +922,7 @@
          *    @access public
          */
         function clickImageById($id, $x = 1, $y = 1, $additional = false) {
-            if (! ($form = &$this->_page->getFormByImageId($id))) {
+            if (! ($form = &$this->_page->getFormByImage(new SimpleById($id)))) {
                 return false;
             }
             $success = $this->_load(
