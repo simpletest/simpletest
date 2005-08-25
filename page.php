@@ -948,14 +948,11 @@
         function setField($label, $value) {
             $is_set = false;
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->setField(new SimpleByLabel($label), $value)) {
+                if ($this->_complete_forms[$i]->setField(new SimpleByLabelOrName($label), $value)) {
                     $is_set = true;
                 }
             }
-            if ($is_set) {
-                return true;
-            }
-            return $this->setFieldByName($label, $value);
+            return $is_set;
         }
 
         /**
@@ -1005,12 +1002,13 @@
          */
         function getField($label) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                $value = $this->_complete_forms[$i]->getValue(new SimpleByLabel($label));
+                $value = $this->_complete_forms[$i]->getValue(
+                        new SimpleByLabelOrName($label));
                 if (isset($value)) {
                     return $value;
                 }
             }
-            return $this->getFieldByName($label);
+            return null;
         }
 
         /**

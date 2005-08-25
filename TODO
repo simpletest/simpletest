@@ -23,13 +23,13 @@ Parser
 
 Browser
 -------
-Add assertSubmit() method (1).
-Add assertClickable() method (1).
-Promote selector classes and factor out excessive chaining (3/3).
+Promote selector classes and factor out excessive chaining (3/4).
 Allow ignoring of cookies (2).
 
 Web tester
 ----------
+Add assertSubmit() method (1).
+Add assertClickable() method (1).
 Change assertWantedText(), etc to assertText() method (1/1) - done.
 Pass expectations to assertTitle() (3).
 Pass expectations to assertHeader() (3).
