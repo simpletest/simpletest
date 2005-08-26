@@ -1,10 +1,11 @@
 TODO
-This is immediate stuff only for this iteration (1.0.1beta) of 40 hours.
+This is immediate stuff only for this iteration (1.0.1beta) of 46 hours.
 
 $Id$
 
 Unit tester
 -----------
+Fix fatal error in PHP 5.1 (3).
 
 Reporter
 --------
@@ -17,6 +18,7 @@ Remove $this passing in mocks (5/4) - done.
 Remove the need for tally() call (2/3) - done.
 Fix autoload glitch (1/1) - done.
 Deprecate Stub and SimpleStub (2/2) - done.
+Fix bug partially mocking class with no constructor (1).
 
 Parser
 ------
@@ -24,7 +26,7 @@ Parser
 Browser
 -------
 Promote selector classes and factor out excessive chaining (3/4).
-Allow ignoring of cookies (2).
+Allow ignoring of cookies as per feature request (2).
 
 Web tester
 ----------
