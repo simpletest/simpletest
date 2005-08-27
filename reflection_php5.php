@@ -64,8 +64,10 @@
          *    @access public
          */
         function classOrInterfaceExistsSansAutoload() {
-            if (interface_exists($this->_interface, false)) {
-            	return true;
+            if (function_exists('interface_exists')) {
+                if (interface_exists($this->_interface, false)) {
+                    return true;
+                }
             }
             return class_exists($this->_interface, false);
         }
