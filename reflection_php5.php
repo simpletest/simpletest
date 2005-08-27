@@ -49,8 +49,10 @@
          *    @access public
          */
         function classOrInterfaceExists() {
-            if (interface_exists($this->_interface)) {
-            	return true;
+            if (function_exists('interface_exists')) {
+                if (interface_exists($this->_interface)) {
+                    return true;
+                }
             }
             return class_exists($this->_interface);
         }
