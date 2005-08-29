@@ -73,25 +73,26 @@
      */
     class SimpleSocket extends SimpleStickyError {
         var $_handle;
-        var $_is_open;
-        var $_sent;
+        var $_is_open = false;
+        var $_sent = '';
+        var $lock_size;
 
         /**
          *    Opens a socket for reading and writing.
-         *    @param string $host      Hostname to send request to.
-         *    @param integer $port     Port on remote machine to open.
-         *    @param integer $timeout  Connection timeout in seconds.
+         *    @param string $host          Hostname to send request to.
+         *    @param integer $port         Port on remote machine to open.
+         *    @param integer $timeout      Connection timeout in seconds.
+         *    @param integer $block_size   Size of chunk to read.
          *    @access public
          */
-        function SimpleSocket($host, $port, $timeout) {
+        function SimpleSocket($host, $port, $timeout, $block_size = 255) {
             $this->SimpleStickyError();
-            $this->_is_open = false;
-            $this->_sent = '';
             if (! ($this->_handle = $this->_openSocket($host, $port, $error_number, $error, $timeout))) {
                 $this->_setError("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
                 return;
             }
             $this->_is_open = true;
+            $this->_block_size = $block_size;
             SimpleTestCompatibility::setTimeout($this->_handle, $timeout);
         }
 
@@ -122,16 +123,15 @@
          *    Reads data from the socket. The error suppresion
          *    is a workaround for PHP4 always throwing a warning
          *    with a secure socket.
-         *    @param integer $block_size       Size of chunk to read.
-         *    @return string/boolean           Incoming bytes. False
+         *    @return integer/boolean           Incoming bytes. False
          *                                     on error.
          *    @access public
          */
-        function read($block_size = 255) {
+        function read() {
             if ($this->isError() || ! $this->isOpen()) {
                 return false;
             }
-            $raw = @fread($this->_handle, $block_size);
+            $raw = @fread($this->_handle, $this->_block_size);
             if ($raw === false) {
                 $this->_setError('Cannot read from socket');
                 $this->close();

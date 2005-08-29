@@ -8,8 +8,8 @@
 
     /**
      *    Version specific reflection API.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+	 *    @package SimpleTest
+	 *    @subpackage UnitTester
      */
     class SimpleReflection {
         var $_interface;
@@ -24,12 +24,18 @@
         }
 
         /**
-         *    Checks that a class has been declared.
+         *    Checks that a class has been declared. Versions
+         *    before PHP5.0.2 need a check that it's not really
+         *    an interface.
          *    @return boolean            True if defined.
          *    @access public
          */
         function classExists() {
-            return class_exists($this->_interface);
+            if (! class_exists($this->_interface)) {
+                return false;
+            }
+            $reflection = new ReflectionClass($this->_interface);
+            return ! $reflection->isInterface();
         }
 
         /**
@@ -49,12 +55,7 @@
          *    @access public
          */
         function classOrInterfaceExists() {
-            if (function_exists('interface_exists')) {
-                if (interface_exists($this->_interface)) {
-                    return true;
-                }
-            }
-            return class_exists($this->_interface);
+            return $this->_classOrInterfaceExistsWithAutoload($this->_interface, true);
         }
 
         /**
@@ -64,12 +65,24 @@
          *    @access public
          */
         function classOrInterfaceExistsSansAutoload() {
+            return $this->_classOrInterfaceExistsWithAutoload($this->_interface, false);
+        }
+        
+        /**
+         *    Needed to select the autoload feature in PHP5
+         *    for classes created dynamically.
+         *    @param string $interface       Class or interface name.
+         *    @param boolean $autoload       True totriggerautoload.
+         *    @return boolean                True if interface defined.
+         *    @access private
+         */
+        function _classOrInterfaceExistsWithAutoload($interface, $autoload) {
             if (function_exists('interface_exists')) {
-                if (interface_exists($this->_interface, false)) {
+                if (interface_exists($this->_interface, $autoload)) {
                     return true;
                 }
             }
-            return class_exists($this->_interface, false);
+            return class_exists($this->_interface, $autoload);
         }
 
         /**
@@ -130,8 +143,8 @@
         }
 
         /**
-         *	  Gets the source code for each parameter.
-         * 	  @param ReflectionMethod $method   Method object from
+         *    Gets the source code for each parameter.
+         *    @param ReflectionMethod $method   Method object from
          *										reflection API
          *    @return array                     List of strings, each
          *                                      a snippet of code.
@@ -143,9 +156,23 @@
             	$signatures[] =
             			($parameter->isPassedByReference() ? '&' : '') .
             			'$' . $parameter->getName() .
-            			($parameter->isOptional() ? ' = false' : '');
+            			($this->_isOptional($parameter) ? ' = false' : '');
             }
             return $signatures;
+        }
+        
+        /**
+         *    Test of a reflection parameter being optional
+         *    that works with early versions of PHP5.
+         *    @param reflectionParameter $parameter    Is this optional.
+         *    @return boolean                          True if optional.
+         *    @access private
+         */
+        function _isOptional($parameter) {
+            if (method_exists($parameter, 'isOptional')) {
+                return $parameter->isOptional();
+            }
+            return false;
         }
     }
 ?>
