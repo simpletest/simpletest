@@ -15,6 +15,15 @@
     }
     
     class AnyOldSubclass extends AnyOldIMplementation { }
+	
+	class AnyOldArgumentClass {
+		function aMethod($argument) { }
+	}
+	
+	class AnyOldTypeHintedClass {
+		function aMethod(SimpleTest $argument) { }
+	}
+	
 
     class TestOfReflection extends UnitTestCase {
         
@@ -70,5 +79,17 @@
         			$reflection->getInterfaces(),
         			array('AnyOldInterface'));
         }
+		
+		function testParameterCreationWithoutTypeHinting() {
+			$reflection = new SimpleReflection('AnyOldArgumentClass');
+			$function = $reflection->getSignature('aMethod');
+			$this->assertEqual('function aMethod($argument)', $function);
+		}
+		
+		function testParameterCreationForTypeHinting() {
+			$reflection = new SimpleReflection('AnyOldTypeHintedClass');
+			$function = $reflection->getSignature('aMethod');
+			$this->assertEqual('function aMethod(SimpleTest $argument)', $function);
+		}
     }
 ?>

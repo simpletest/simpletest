@@ -154,6 +154,7 @@
         	$signatures = array();
             foreach ($method->getParameters() as $parameter) {
             	$signatures[] =
+					(!is_null($parameter->getClass()) ? $parameter->getClass()->getName() . ' ' : '') .
             			($parameter->isPassedByReference() ? '&' : '') .
             			'$' . $parameter->getName() .
             			($this->_isOptional($parameter) ? ' = false' : '');
