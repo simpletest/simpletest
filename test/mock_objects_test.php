@@ -634,4 +634,25 @@
             $this->assertError();
         }
     }
+    
+    class ConstructorSuperClass {
+        function ConstructorSuperClass() { }
+    }
+    
+    class ConstructorSubClass extends ConstructorSuperClass {
+        
+    }
+    
+    class TestOfPHP4StyleSuperClassConstruct extends UnitTestCase {
+        /**
+         * This addresses issue #1231401.  Without the fix in place, this will
+		 * generate a fatal PHP error.
+		 */
+        function testBasicConstruct() {
+            Mock::generate('ConstructorSubClass');
+            $mock = &new MockConstructorSubClass();
+            $this->assertIsA($mock, 'SimpleMock');
+            $this->assertTrue(method_exists($mock, 'ConstructorSuperClass'));
+        }
+    }
 ?>

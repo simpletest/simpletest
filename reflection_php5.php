@@ -92,7 +92,7 @@
          *    @access public
          */
         function getMethods() {
-            return get_class_methods($this->_interface);
+            return array_unique(get_class_methods($this->_interface));
         }
 
         /**
