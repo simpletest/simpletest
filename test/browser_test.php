@@ -218,7 +218,7 @@
         function testSettingFieldIsPassedToPage() {
             $page = &new MockSimplePage();
             $page->expectOnce('setField', array(new SimpleByLabelOrName('key'), 'Value'));
-            $page->setReturnValue('getFieldBySelector', 'Value');
+            $page->setReturnValue('getField', 'Value');
             $browser = &$this->loadPage($page);
             $this->assertEqual($browser->getField('key'), 'Value');
             $browser->setField('key', 'Value');

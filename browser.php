@@ -780,7 +780,7 @@
          *    @access public
          */
         function getField($label) {
-            return $this->_page->getFieldBySelector(new SimpleByLabelOrName($label));
+            return $this->_page->getField(new SimpleByLabelOrName($label));
         }
 
         /**
@@ -793,7 +793,7 @@
          *    @access public
          */
         function getFieldByName($name) {
-            return $this->_page->getFieldBySelector(new SimpleByName($name));
+            return $this->_page->getField(new SimpleByName($name));
         }
 
         /**
@@ -805,7 +805,7 @@
          *    @access public
          */
         function getFieldById($id) {
-            return $this->_page->getFieldBySelector(new SimpleById($id));
+            return $this->_page->getField(new SimpleById($id));
         }
 
         /**

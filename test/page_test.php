@@ -482,7 +482,7 @@
             $page->AcceptTag(
                     new SimpleSubmitTag(array("type" => "submit", "name" => "s")));
             $page->acceptFormEnd();
-            $this->assertEqual($page->getField('l'), 'A');
+            $this->assertEqual($page->getField(new SimpleByLabel('l')), 'A');
         }
     }
 
@@ -784,9 +784,9 @@
                     '</form></head></html>');
             $page = &$this->parse($response);
             $this->assertEqual($page->getFieldByName('a'), 'A');
-            $this->assertEqual($page->getField('Stuff'), 'A');
+            $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'A');
             $this->assertTrue($page->setField(new SimpleByLabel('Stuff'), 'aaa'));
-            $this->assertEqual($page->getField('Stuff'), 'aaa');
+            $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'aaa');
         }
 
         function testGettingTextFieldByEnclosingLabelWithConflictingOtherFields() {
@@ -801,7 +801,7 @@
             $page = &$this->parse($response);
             $this->assertEqual($page->getFieldByName('a'), 'A');
             $this->assertEqual($page->getFieldByName('b'), 'B');
-            $this->assertEqual($page->getField('Stuff'), 'A');
+            $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'A');
         }
 
         function testSettingTextFieldByExternalLabel() {
@@ -812,9 +812,9 @@
                     '<input id="aaa" type="text" name="a" value="A">' .
                     '</form></head></html>');
             $page = &$this->parse($response);
-            $this->assertEqual($page->getField('Stuff'), 'A');
+            $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'A');
             $this->assertTrue($page->setField(new SimpleByLabel('Stuff'), 'aaa'));
-            $this->assertEqual($page->getField('Stuff'), 'aaa');
+            $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'aaa');
         }
 
         function testReadingTextArea() {
@@ -866,9 +866,9 @@
                     '</label>' .
                     '</form></head></html>');
             $page = &$this->parse($response);
-            $this->assertEqual($page->getField('Stuff'), 'A');
+            $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'A');
             $this->assertTrue($page->setField(new SimpleByLabel('Stuff'), 'B'));
-            $this->assertEqual($page->getField('Stuff'), 'B');
+            $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'B');
         }
 
         function testSettingRadioButonByEnclosingLabel() {
@@ -879,9 +879,9 @@
                     '<label>B<input type="radio" name="r" value="b"></label>' .
                     '</form></head></html>');
             $page = &$this->parse($response);
-            $this->assertEqual($page->getField('A'), 'a');
+            $this->assertEqual($page->getField(new SimpleByLabel('A')), 'a');
             $this->assertTrue($page->setField(new SimpleBylabel('B'), 'b'));
-            $this->assertEqual($page->getField('B'), 'b');
+            $this->assertEqual($page->getField(new SimpleByLabel('B')), 'b');
         }
     }
 ?>

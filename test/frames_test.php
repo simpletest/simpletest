@@ -564,7 +564,7 @@
 
         function testOnlyGettingFieldFromFocusedFrame() {
             $frame1 = &new MockSimplePage();
-            $frame1->setReturnValue('getField', 'f', array('a'));
+            $frame1->setReturnValue('getField', 'f', array(new SimpleByName('a')));
             $frame1->setReturnValue('getFieldById', 'i', array(7));
 
             $frame2 = &new MockSimplePage();
@@ -576,7 +576,7 @@
             $frameset->addFrame($frame2, 'B');
             $frameset->setFrameFocus('A');
 
-            $this->assertIdentical($frameset->getField('a'), 'f');
+            $this->assertIdentical($frameset->getField(new SimpleByName('a')), 'f');
             $this->assertIdentical($frameset->getFieldById(7), 'i');
         }
     }

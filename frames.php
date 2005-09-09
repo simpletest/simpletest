@@ -611,28 +611,9 @@
          *                                       and null if missing.
          *    @access public
          */
-        function getFieldBySelector($selector) {
+        function getField($selector) {
             for ($i = 0; $i < count($this->_frames); $i++) {
-                $value = $this->_frames[$i]->getBySelector($selector);
-                if (isset($value)) {
-                    return $value;
-                }
-            }
-            return null;
-        }
-
-        /**
-         *    Accessor for a form element value within a frameset.
-         *    Finds the first match amongst the frames.
-         *    @param string $label       Field label.
-         *    @return string/boolean     A string if the field is
-         *                               present, false if unchecked
-         *                               and null if missing.
-         *    @access public
-         */
-        function getField($label) {
-            for ($i = 0; $i < count($this->_frames); $i++) {
-                $value = $this->_frames[$i]->getField($label);
+                $value = $this->_frames[$i]->getField($selector);
                 if (isset($value)) {
                     return $value;
                 }
