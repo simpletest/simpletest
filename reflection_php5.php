@@ -67,7 +67,7 @@
         function classOrInterfaceExistsSansAutoload() {
             return $this->_classOrInterfaceExistsWithAutoload($this->_interface, false);
         }
-        
+
         /**
          *    Needed to select the autoload feature in PHP5
          *    for classes created dynamically.
@@ -107,13 +107,31 @@
             if ($reflection->isInterface()) {
             	return array($this->_interface);
             }
-            $interfaces = array();
-            foreach ($reflection->getInterfaces() as $interface) {
-                if (! $interface->isInternal()) {
-                    $interfaces[] = $interface->getName();
+            return $this->_onlyParents($reflection->getInterfaces());
+        }
+
+        /**
+         *    Wittles a list of interfaces down to only the top
+         *    level parents.
+         *    @param array $interfaces     Reflection API interfaces
+         *                                 to reduce.
+         *    @returns array               List of parent interface names.
+         *    @access private
+         */
+        function _onlyParents($interfaces) {
+            $parents = array();
+            foreach ($interfaces as $interface) {
+                foreach($interfaces as $possible_parent) {
+                    if ($interface->getName() == $possible_parent->getName()) {
+                        continue;
+                    }
+                    if ($interface->isSubClassOf($possible_parent)) {
+                        break;
+                    }
                 }
+                $parents[] = $interface->getName();
             }
-            return $interfaces;
+            return $parents;
         }
 
         /**
@@ -154,14 +172,14 @@
         	$signatures = array();
             foreach ($method->getParameters() as $parameter) {
             	$signatures[] =
-					(!is_null($parameter->getClass()) ? $parameter->getClass()->getName() . ' ' : '') .
+					(! is_null($parameter->getClass()) ? $parameter->getClass()->getName() . ' ' : '') .
             			($parameter->isPassedByReference() ? '&' : '') .
             			'$' . $parameter->getName() .
             			($this->_isOptional($parameter) ? ' = false' : '');
             }
             return $signatures;
         }
-        
+
         /**
          *    Test of a reflection parameter being optional
          *    that works with early versions of PHP5.
