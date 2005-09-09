@@ -944,29 +944,10 @@
          *    @return boolean                    True if value is valid.
          *    @access public
          */
-        function setFieldBySelector($selector, $value) {
+        function setField($selector, $value) {
             $is_set = false;
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
                 if ($this->_complete_forms[$i]->setField($selector, $value)) {
-                    $is_set = true;
-                }
-            }
-            return $is_set;
-        }
-
-        /**
-         *    Sets a field on each form in which the field is
-         *    available. Sets by label, but for compatibility
-         *    drops back to a name.
-         *    @param string $label       Field label or name.
-         *    @param string $value       Value to set field to.
-         *    @return boolean            True if value is valid.
-         *    @access public
-         */
-        function setField($label, $value) {
-            $is_set = false;
-            for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->setField(new SimpleByLabelOrName($label), $value)) {
                     $is_set = true;
                 }
             }

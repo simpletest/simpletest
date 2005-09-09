@@ -744,9 +744,7 @@
          *    @access public
          */
         function setField($label, $value) {
-            return $this->_page->setFieldBySelector(
-                    new SimpleByLabelOrName($label),
-                    $value);
+            return $this->_page->setField(new SimpleByLabelOrName($label), $value);
         }
 
         /**
@@ -758,7 +756,7 @@
          *    @access public
          */
         function setFieldByName($name, $value) {
-            return $this->_page->setFieldBySelector(new SimpleByName($name), $value);
+            return $this->_page->setField(new SimpleByName($name), $value);
         }
 
         /**
@@ -769,7 +767,7 @@
          *    @access public
          */
         function setFieldById($id, $value) {
-            return $this->_page->setFieldBySelector(new SimpleById($id), $value);
+            return $this->_page->setField(new SimpleById($id), $value);
         }
 
         /**

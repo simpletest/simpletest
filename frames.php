@@ -557,31 +557,12 @@
          *    @return boolean                    True if value is valid.
          *    @access public
          */
-        function setFieldBySelector($selector, $value) {
+        function setField($selector, $value) {
             if (is_integer($this->_focus)) {
-                $this->_frames[$this->_focus]->setFieldBySelector($selector, $value);
+                $this->_frames[$this->_focus]->setField($selector, $value);
             } else {
                 for ($i = 0; $i < count($this->_frames); $i++) {
-                    $this->_frames[$i]->setFieldBySelector($selector, $value);
-                }
-            }
-        }
-
-        /**
-         *    Sets a field on each form in which the field is
-         *    available by label and then name. labels are not
-         *    yet implemented.
-         *    @param string $label        Field name.
-         *    @param string $value       Value to set field to.
-         *    @return boolean            True if value is valid.
-         *    @access public
-         */
-        function setField($label, $value) {
-            if (is_integer($this->_focus)) {
-                $this->_frames[$this->_focus]->setField($label, $value);
-            } else {
-                for ($i = 0; $i < count($this->_frames); $i++) {
-                    $this->_frames[$i]->setField($label, $value);
+                    $this->_frames[$i]->setField($selector, $value);
                 }
             }
         }

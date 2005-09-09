@@ -785,7 +785,7 @@
             $page = &$this->parse($response);
             $this->assertEqual($page->getFieldByName('a'), 'A');
             $this->assertEqual($page->getField('Stuff'), 'A');
-            $this->assertTrue($page->setField('Stuff', 'aaa'));
+            $this->assertTrue($page->setField(new SimpleByLabel('Stuff'), 'aaa'));
             $this->assertEqual($page->getField('Stuff'), 'aaa');
         }
 
@@ -813,7 +813,7 @@
                     '</form></head></html>');
             $page = &$this->parse($response);
             $this->assertEqual($page->getField('Stuff'), 'A');
-            $this->assertTrue($page->setField('Stuff', 'aaa'));
+            $this->assertTrue($page->setField(new SimpleByLabel('Stuff'), 'aaa'));
             $this->assertEqual($page->getField('Stuff'), 'aaa');
         }
 
@@ -867,7 +867,7 @@
                     '</form></head></html>');
             $page = &$this->parse($response);
             $this->assertEqual($page->getField('Stuff'), 'A');
-            $this->assertTrue($page->setField('Stuff', 'B'));
+            $this->assertTrue($page->setField(new SimpleByLabel('Stuff'), 'B'));
             $this->assertEqual($page->getField('Stuff'), 'B');
         }
 
@@ -880,7 +880,7 @@
                     '</form></head></html>');
             $page = &$this->parse($response);
             $this->assertEqual($page->getField('A'), 'a');
-            $this->assertTrue($page->setField('B', 'b'));
+            $this->assertTrue($page->setField(new SimpleBylabel('B'), 'b'));
             $this->assertEqual($page->getField('B'), 'b');
         }
     }
