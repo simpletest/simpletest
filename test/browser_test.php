@@ -215,20 +215,13 @@
             $this->assertFalse($browser->isLinkById(98));
         }
 
-        function testFormHandling() {
+        function testSettingFieldIsPassedToPage() {
             $page = &new MockSimplePage();
-            $page->setReturnValue('getFieldByName', 'Value');
-            $page->expectOnce('getFieldByName', array('key'));
-            $page->expectOnce('setFieldByName', array('key', 'Value'));
-            $page->setReturnValue('getFieldById', 'Id value');
-            $page->expectOnce('getFieldById', array(99));
-            $page->expectOnce('setFieldById', array(99, 'Id value'));
-
+            $page->expectOnce('setFieldBySelector', array(new SimpleByLabelOrName('key'), 'Value'));
+            $page->setReturnValue('getFieldBySelector', 'Value');
             $browser = &$this->loadPage($page);
-            $this->assertEqual($browser->getFieldByName('key'), 'Value');
-            $this->assertEqual($browser->getFieldById(99), 'Id value');
-            $browser->setFieldByName('key', 'Value');
-            $browser->setFieldById(99, 'Id value');
+            $this->assertEqual($browser->getField('key'), 'Value');
+            $browser->setField('key', 'Value');
         }
     }
 

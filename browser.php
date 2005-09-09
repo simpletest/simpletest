@@ -738,13 +738,15 @@
 
         /**
          *    Sets all form fields with that name.
-         *    @param string $name    Name of field in forms.
+         *    @param string $label   Name or label of field in forms.
          *    @param string $value   New value of field.
          *    @return boolean        True if field exists, otherwise false.
          *    @access public
          */
-        function setField($name, $value) {
-            return $this->_page->setField($name, $value);
+        function setField($label, $value) {
+            return $this->_page->setFieldBySelector(
+                    new SimpleByLabelOrName($label),
+                    $value);
         }
 
         /**
@@ -756,7 +758,7 @@
          *    @access public
          */
         function setFieldByName($name, $value) {
-            return $this->_page->setFieldByName($name, $value);
+            return $this->_page->setFieldBySelector(new SimpleByName($name), $value);
         }
 
         /**
@@ -767,7 +769,7 @@
          *    @access public
          */
         function setFieldById($id, $value) {
-            return $this->_page->setFieldById($id, $value);
+            return $this->_page->setFieldBySelector(new SimpleById($id), $value);
         }
 
         /**
@@ -780,7 +782,7 @@
          *    @access public
          */
         function getField($label) {
-            return $this->_page->getField($label);
+            return $this->_page->getFieldBySelector(new SimpleByLabelOrName($label));
         }
 
         /**
@@ -793,7 +795,7 @@
          *    @access public
          */
         function getFieldByName($name) {
-            return $this->_page->getFieldByName($name);
+            return $this->_page->getFieldBySelector(new SimpleByName($name));
         }
 
         /**
@@ -805,7 +807,7 @@
          *    @access public
          */
         function getFieldById($id) {
-            return $this->_page->getFieldById($id);
+            return $this->_page->getFieldBySelector(new SimpleById($id));
         }
 
         /**
