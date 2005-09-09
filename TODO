@@ -18,7 +18,7 @@ Remove $this passing in mocks (5/4) - done.
 Remove the need for tally() call (2/3) - done.
 Fix autoload glitch (1/1) - done.
 Deprecate Stub and SimpleStub (2/2) - done.
-Fix bug partially mocking class with no constructor (.75/1) - done.
+Fix bug partially mocking class with no constructor (1/1) - done.
 
 Parser
 ------

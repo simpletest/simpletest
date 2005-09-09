@@ -938,6 +938,24 @@
 
         /**
          *    Sets a field on each form in which the field is
+         *    available.
+         *    @param SimpleSelector $selector    Field finder.
+         *    @param string $value               Value to set field to.
+         *    @return boolean                    True if value is valid.
+         *    @access public
+         */
+        function setFieldBySelector($selector, $value) {
+            $is_set = false;
+            for ($i = 0; $i < count($this->_complete_forms); $i++) {
+                if ($this->_complete_forms[$i]->setField($selector, $value)) {
+                    $is_set = true;
+                }
+            }
+            return $is_set;
+        }
+
+        /**
+         *    Sets a field on each form in which the field is
          *    available. Sets by label, but for compatibility
          *    drops back to a name.
          *    @param string $label       Field label or name.
@@ -988,6 +1006,24 @@
                 }
             }
             return false;
+        }
+
+        /**
+         *    Accessor for a form element value within a page.
+         *    @param SimpleSelector $selector    Field finder.
+         *    @return string/boolean             A string if the field is
+         *                                       present, false if unchecked
+         *                                       and null if missing.
+         *    @access public
+         */
+        function getFieldBySelector($selector) {
+            for ($i = 0; $i < count($this->_complete_forms); $i++) {
+                $value = $this->_complete_forms[$i]->getValue($selector);
+                if (isset($value)) {
+                    return $value;
+                }
+            }
+            return null;
         }
 
         /**

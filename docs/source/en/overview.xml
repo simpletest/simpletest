@@ -93,19 +93,18 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 milestones rather depends on time available.
                 Green stuff has been coded, but not necessarily released yet.
                 If you have a pressing need for a green but unreleased feature
-                then you should check-out the code from sourceforge CVS directly.
-                A released feature is marked as &quot;Done&quot;.
+                then you should check-out the code from Sourceforge CVS directly.
                 <table><thead>
                     <tr><th>Feature</th><th>Description</th><th>Release</th></tr>
                     </thead><tbody><tr>
                         <td>Unit test case</td>
                         <td>Core test case class and assertions</td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Html display</td>
                         <td>Simplest possible display</td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Autoloading of test cases</td>
@@ -113,41 +112,20 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                             Reading a file with test cases and loading them into a
                             group test automatically
                         </td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
-                        <td>Mock objects code generator</td>
+                        <td>Mock objects</td>
                         <td>
                             Objects capable of simulating other objects removing
                             test dependencies
                         </td>
-                        <td style="color: green;">Done</td>
-                    </tr>
-                    <tr>
-                        <td>Server stubs</td>
-                        <td>
-                            Mocks without expectations to be used outside of test cases,
-                            e.g. for prototyping
-                        </td>
-                        <td style="color: green;">Done</td>
-                    </tr>
-                    <tr>
-                        <td>Integration of other unit testers</td>
-                        <td>
-                            The ability to read and simulate test cases from PHPUnit
-                            and PEAR::PhpUnit
-                        </td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Web test case</td>
-                        <td>Basic pattern matching of fetched pages</td>
-                        <td style="color: green;">Done</td>
-                    </tr>
-                    <tr>
-                        <td>HTML parsing of pages</td>
                         <td>Allows link following and title tag matching</td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Partial mocks</td>
@@ -155,32 +133,32 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                             Mocking parts of a class for testing less than a class
                             or for complex simulations
                         </td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Web cookie handling</td>
                         <td>Correct handling of cookies when fetching pages</td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Following redirects</td>
                         <td>Page fetching automatically follows 300 redirects</td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Form parsing</td>
                         <td>Ability to submit simple forms and read default form values</td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Command line interface</td>
                         <td>Test display without the need of a web browser</td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Exposure of expectation classes</td>
                         <td>Can create precise tests with mocks as well as test cases</td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>XML output and parsing</td>
@@ -188,25 +166,15 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                             Allows multi host testing and the integration of acceptance
                             testing extensions
                         </td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
-                        <td>Command line test case</td>
-                        <td>Allows testing of utilities and file handling</td>
-                        <td style="color: green;">Done</td>
-                    </tr>
-                    <tr>
-                        <td>PHP Documentor compatibility</td>
-                        <td>Fully generated class level documentation</td>
-                        <td style="color: green;">Done</td>
-                    </tr>
-                    <tr>
-                        <td>Browser interface</td>
+                        <td>Browser component</td>
                         <td>
                             Exposure of lower level web browser interface for more
                             detailed test cases
                         </td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>HTTP authentication</td>
@@ -214,41 +182,39 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                             Fetching protected web pages with basic authentication
                             only
                         </td>
-                        <td style="color: green;">Done</td>
-                    </tr>
-                    <tr>
-                        <td>Browser navigation buttons</td>
-                        <td>Back, forward and retry</td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>SSL support</td>
                         <td>Can connect to https: pages</td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Proxy support</td>
                         <td>Can connect via. common proxies</td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Frames support</td>
                         <td>Handling of frames in web test cases</td>
-                        <td style="color: green;">Done</td>
+                        <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>File upload testing</td>
                         <td>Can simulate the input type file tag</td>
-                        <td style="color: red;">1.01</td>
+                        <td style="color: green;">1.0.1</td>
+                    </tr>
+                    <tr>
+                        <td>Mocking interfaces</td>
+                        <td>
+                            Can generate mock objects to interfaces as well as classes
+                            and class interfaces are carried for type hints
+                        </td>
+                        <td style="color: green;">1.0.1</td>
                     </tr>
                     <tr>
                         <td>Reporting machinery enhancements</td>
                         <td>Improved message passing for better cooperation with IDEs</td>
-                        <td style="color: red;">1.1</td>
-                    </tr>
-                    <tr>
-                        <td>Improved display</td>
-                        <td>Better web GUI with tree display of test cases</td>
                         <td style="color: red;">1.1</td>
                     </tr>
                     <tr>
@@ -257,19 +223,29 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td style="color: red;">1.1</td>
                     </tr>
                     <tr>
-                        <td>Mocking interfaces</td>
-                        <td>Can generate mock objects to interfaces as well as classes</td>
-                        <td style="color: red;">2.0</td>
-                    </tr>
-                    <tr>
                         <td>Testing exceptions</td>
                         <td>Similar to testing PHP errors</td>
+                        <td style="color: red;">1.1</td>
+                    </tr>
+                    <tr>
+                        <td>Improved mock interface</td>
+                        <td>More compact way of expressing mocks</td>
                         <td style="color: red;">2.0</td>
                     </tr>
                     <tr>
-                        <td>XPath searching of elements</td>
-                        <td>Can make use of HTML tidy for faster and more flexible content matching</td>
+                        <td>XPath searching of HTML elements</td>
+                        <td>More flexible content matching</td>
                         <td style="color: red;">2.0</td>
+                    </tr>
+                    <tr>
+                        <td>Alternate HTML parsers</td>
+                        <td>Can detect compiled parsers for performance improvements</td>
+                        <td style="color: red;">2.0</td>
+                    </tr>
+                    <tr>
+                        <td>Javascript suport</td>
+                        <td>Use of PECL module to add Javascript</td>
+                        <td style="color: red;">3.0</td>
                     </tr>
                 </tbody></table>
                 PHP5 migraton will start straight after the version 1.1 series,

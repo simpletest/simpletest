@@ -551,6 +551,24 @@
 
         /**
          *    Sets a field on each form in which the field is
+         *    available.
+         *    @param SimpleSelector $selector    Field finder.
+         *    @param string $value               Value to set field to.
+         *    @return boolean                    True if value is valid.
+         *    @access public
+         */
+        function setFieldBySelector($selector, $value) {
+            if (is_integer($this->_focus)) {
+                $this->_frames[$this->_focus]->setFieldBySelector($selector, $value);
+            } else {
+                for ($i = 0; $i < count($this->_frames); $i++) {
+                    $this->_frames[$i]->setFieldBySelector($selector, $value);
+                }
+            }
+        }
+
+        /**
+         *    Sets a field on each form in which the field is
          *    available by label and then name. labels are not
          *    yet implemented.
          *    @param string $label        Field name.
@@ -602,6 +620,24 @@
                     $this->_frames[$i]->setFieldById($id, $value);
                 }
             }
+        }
+
+        /**
+         *    Accessor for a form element value within a page.
+         *    @param SimpleSelector $selector    Field finder.
+         *    @return string/boolean             A string if the field is
+         *                                       present, false if unchecked
+         *                                       and null if missing.
+         *    @access public
+         */
+        function getFieldBySelector($selector) {
+            for ($i = 0; $i < count($this->_frames); $i++) {
+                $value = $this->_frames[$i]->getBySelector($selector);
+                if (isset($value)) {
+                    return $value;
+                }
+            }
+            return null;
         }
 
         /**
