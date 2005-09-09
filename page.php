@@ -1009,25 +1009,6 @@
 
         /**
          *    Accessor for a form element value within a page.
-         *    Finds the first match by name only.
-         *    @param string $name        Field name.
-         *    @return string/boolean     A string if the field is
-         *                               present, false if unchecked
-         *                               and null if missing.
-         *    @access public
-         */
-        function getFieldByName($name) {
-            for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                $value = $this->_complete_forms[$i]->getValue(new SimpleByName($name));
-                if (isset($value)) {
-                    return $value;
-                }
-            }
-            return null;
-        }
-
-        /**
-         *    Accessor for a form element value within a page.
          *    Finds the first match.
          *    @param string/integer $id  Field ID attribute.
          *    @return string/boolean     A string if the field is

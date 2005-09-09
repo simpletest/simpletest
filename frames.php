@@ -622,25 +622,6 @@
         }
 
         /**
-         *    Accessor for a form element value within a frameset.
-         *    Finds the first match amongst the frames.
-         *    @param string $name        Field name.
-         *    @return string/boolean     A string if the field is
-         *                               present, false if unchecked
-         *                               and null if missing.
-         *    @access public
-         */
-        function getFieldByName($name) {
-            for ($i = 0; $i < count($this->_frames); $i++) {
-                $value = $this->_frames[$i]->getFieldByName($name);
-                if (isset($value)) {
-                    return $value;
-                }
-            }
-            return null;
-        }
-
-        /**
          *    Accessor for a form element value within a page.
          *    Finds the first match.
          *    @param string/integer $id  Field ID attribute.

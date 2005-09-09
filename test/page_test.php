@@ -466,7 +466,7 @@
             $page->AcceptTag(
                     new SimpleSubmitTag(array("type" => "submit", "name" => "s")));
             $page->acceptFormEnd();
-            $this->assertEqual($page->getFieldByName('a'), 'A');
+            $this->assertEqual($page->getField(new SimpleByName('a')), 'A');
         }
 
         function testInputFieldCanBeReadBackByLabel() {
@@ -557,7 +557,7 @@
                     '<input type="text" name="here" value="Hello">' .
                     '</form></head></html>');
             $page = &$this->parse($response);
-            $this->assertEqual($page->getFieldByName('here'), "Hello");
+            $this->assertEqual($page->getField(new SimpleByName('here')), "Hello");
         }
 
         function testUnclosedForm() {
@@ -567,7 +567,7 @@
                     '<input type="text" name="here" value="Hello">' .
                     '</head></html>');
             $page = &$this->parse($response);
-            $this->assertEqual($page->getFieldByName('here'), "Hello");
+            $this->assertEqual($page->getField(new SimpleByName('here')), "Hello");
         }
 
         function testEmptyFrameset() {
@@ -739,9 +739,9 @@
                     '<input type="text" name="b" value="bbb" id=3>' .
                     '</form></head></html>');
             $page = &$this->parse($response);
-            $this->assertNull($page->getFieldByName('missing'));
-            $this->assertIdentical($page->getFieldByName('a'), '');
-            $this->assertIdentical($page->getFieldByName('b'), 'bbb');
+            $this->assertNull($page->getField(new SimpleByName('missing')));
+            $this->assertIdentical($page->getField(new SimpleByName('a')), '');
+            $this->assertIdentical($page->getField(new SimpleByName('b')), 'bbb');
         }
 
         function testReadingTextFieldIsCaseInsensitive() {
@@ -752,9 +752,9 @@
                     '<INPUT TYPE="TEXT" NAME="b" VALUE="bbb" id=3>' .
                     '</FORM></head></html>');
             $page = &$this->parse($response);
-            $this->assertNull($page->getFieldByName('missing'));
-            $this->assertIdentical($page->getFieldByName('a'), '');
-            $this->assertIdentical($page->getFieldByName('b'), 'bbb');
+            $this->assertNull($page->getField(new SimpleByName('missing')));
+            $this->assertIdentical($page->getField(new SimpleByName('a')), '');
+            $this->assertIdentical($page->getField(new SimpleByName('b')), 'bbb');
         }
 
         function testSettingTextField() {
@@ -766,12 +766,12 @@
                     '<input type="submit">' .
                     '</form></head></html>');
             $page = &$this->parse($response);
-            $this->assertTrue($page->setFieldByName('a', 'aaa'));
-            $this->assertEqual($page->getFieldByName('a'), 'aaa');
-            $this->assertTrue($page->setFieldById(3, 'bbb'));
-            $this->assertEqual($page->getFieldById(3), 'bbb');
-            $this->assertFalse($page->setFieldByName('z', 'zzz'));
-            $this->assertNull($page->getFieldByName('z'));
+            $this->assertTrue($page->setField(new SimpleByName('a'), 'aaa'));
+            $this->assertEqual($page->getField(new SimpleByName('a')), 'aaa');
+            $this->assertTrue($page->setField(new SimpleById(3), 'bbb'));
+            $this->assertEqual($page->getField(new SimpleBYId(3)), 'bbb');
+            $this->assertFalse($page->setField(new SimpleByName('z'), 'zzz'));
+            $this->assertNull($page->getField(new SimpleByName('z')));
         }
 
         function testSettingTextFieldByEnclosingLabel() {
@@ -783,7 +783,7 @@
                     '</label>' .
                     '</form></head></html>');
             $page = &$this->parse($response);
-            $this->assertEqual($page->getFieldByName('a'), 'A');
+            $this->assertEqual($page->getField(new SimpleByName('a')), 'A');
             $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'A');
             $this->assertTrue($page->setField(new SimpleByLabel('Stuff'), 'aaa'));
             $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'aaa');
@@ -799,8 +799,8 @@
                     '<input type="text" name="b" value="B">' .
                     '</form></head></html>');
             $page = &$this->parse($response);
-            $this->assertEqual($page->getFieldByName('a'), 'A');
-            $this->assertEqual($page->getFieldByName('b'), 'B');
+            $this->assertEqual($page->getField(new SimpleByName('a')), 'A');
+            $this->assertEqual($page->getField(new SimpleByName('b')), 'B');
             $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'A');
         }
 
@@ -825,7 +825,7 @@
                     '<input type="submit">' .
                     '</form></head></html>');
             $page = &$this->parse($response);
-            $this->assertEqual($page->getFieldByName('a'), 'aaa');
+            $this->assertEqual($page->getField(new SimpleByName('a')), 'aaa');
         }
 
         function testSettingTextArea() {
@@ -836,8 +836,8 @@
                     '<input type="submit">' .
                     '</form></head></html>');
             $page = &$this->parse($response);
-            $this->assertTrue($page->setFieldByName('a', 'AAA'));
-            $this->assertEqual($page->getFieldByName('a'), 'AAA');
+            $this->assertTrue($page->setField(new SimpleByName('a'), 'AAA'));
+            $this->assertEqual($page->getField(new SimpleByName('a')), 'AAA');
         }
 
         function testSettingSelectionField() {
@@ -851,10 +851,10 @@
                     '<input type="submit">' .
                     '</form></head></html>');
             $page = &$this->parse($response);
-            $this->assertEqual($page->getFieldByName('a'), 'bbb');
-            $this->assertFalse($page->setFieldByName('a', 'ccc'));
-            $this->assertTrue($page->setFieldByName('a', 'aaa'));
-            $this->assertEqual($page->getFieldByName('a'), 'aaa');
+            $this->assertEqual($page->getField(new SimpleByName('a')), 'bbb');
+            $this->assertFalse($page->setField(new SimpleByName('a'), 'ccc'));
+            $this->assertTrue($page->setField(new SimpleByName('a'), 'aaa'));
+            $this->assertEqual($page->getField(new SimpleByName('a')), 'aaa');
         }
 
         function testSettingSelectionFieldByEnclosingLabel() {

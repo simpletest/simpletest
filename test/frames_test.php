@@ -101,22 +101,22 @@
 
         function testFieldFoundIsFirstInFramelist() {
             $frame1 = &new MockSimplePage();
-            $frame1->setReturnValue('getFieldByName', null);
-            $frame1->expectOnce('getFieldByName', array('a'));
+            $frame1->setReturnValue('getField', null);
+            $frame1->expectOnce('getField', array(new SimpleByName('a')));
 
             $frame2 = &new MockSimplePage();
-            $frame2->setReturnValue('getFieldByName', 'A');
-            $frame2->expectOnce('getFieldByName', array('a'));
+            $frame2->setReturnValue('getField', 'A');
+            $frame2->expectOnce('getField', array(new SimpleByName('a')));
 
             $frame3 = &new MockSimplePage();
-            $frame3->expectNever('getFieldByName');
+            $frame3->expectNever('getField');
 
             $page = &new MockSimplePage();
             $frameset = &new SimpleFrameset($page);
             $frameset->addFrame($frame1);
             $frameset->addFrame($frame2);
             $frameset->addFrame($frame3);
-            $this->assertIdentical($frameset->getFieldByName('a'), 'A');
+            $this->assertIdentical($frameset->getField(new SimpleByName('a')), 'A');
         }
 
         function testFrameReplacementByIndex() {
