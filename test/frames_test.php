@@ -533,19 +533,15 @@
 
         function testSettingAllFrameFieldsWhenNoFrameFocus() {
             $frame1 = &new MockSimplePage();
-            $frame1->expectOnce('setFieldByName', array('a', 'A'));
-            $frame1->expectOnce('setFieldById', array(22, 'A'));
+            $frame1->expectOnce('setField', array(new SimpleById(22), 'A'));
 
             $frame2 = &new MockSimplePage();
-            $frame2->expectOnce('setFieldByName', array('a', 'A'));
-            $frame2->expectOnce('setFieldById', array(22, 'A'));
+            $frame2->expectOnce('setField', array(new SimpleById(22), 'A'));
 
             $frameset = &new SimpleFrameset(new MockSimplePage());
             $frameset->addFrame($frame1, 'A');
             $frameset->addFrame($frame2, 'B');
-
-            $frameset->setFieldByName('a', 'A');
-            $frameset->setFieldById(22, 'A');
+            $frameset->setField(new SimpleById(22), 'A');
         }
 
         function testOnlySettingFieldFromFocusedFrame() {
@@ -565,19 +561,15 @@
         function testOnlyGettingFieldFromFocusedFrame() {
             $frame1 = &new MockSimplePage();
             $frame1->setReturnValue('getField', 'f', array(new SimpleByName('a')));
-            $frame1->setReturnValue('getFieldById', 'i', array(7));
 
             $frame2 = &new MockSimplePage();
             $frame2->expectNever('getField');
-            $frame2->expectNever('getFieldById');
 
             $frameset = &new SimpleFrameset(new MockSimplePage());
             $frameset->addFrame($frame1, 'A');
             $frameset->addFrame($frame2, 'B');
             $frameset->setFrameFocus('A');
-
             $this->assertIdentical($frameset->getField(new SimpleByName('a')), 'f');
-            $this->assertIdentical($frameset->getFieldById(7), 'i');
         }
     }
 ?>

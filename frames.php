@@ -568,42 +568,6 @@
         }
 
         /**
-         *    Sets a field on each form in which the field is
-         *    available.
-         *    @param string $name        Field name.
-         *    @param string $value       Value to set field to.
-         *    @return boolean            True if value is valid.
-         *    @access public
-         */
-        function setFieldByName($name, $value) {
-            if (is_integer($this->_focus)) {
-                $this->_frames[$this->_focus]->setFieldByName($name, $value);
-            } else {
-                for ($i = 0; $i < count($this->_frames); $i++) {
-                    $this->_frames[$i]->setFieldByName($name, $value);
-                }
-            }
-        }
-
-        /**
-         *    Sets a field on the form in which the unique field is
-         *    available.
-         *    @param string/integer $id  Field ID attribute.
-         *    @param string $value       Value to set field to.
-         *    @return boolean            True if value is valid.
-         *    @access public
-         */
-        function setFieldById($id, $value) {
-            if (is_integer($this->_focus)) {
-                $this->_frames[$this->_focus]->setFieldById($id, $value);
-            } else {
-                for ($i = 0; $i < count($this->_frames); $i++) {
-                    $this->_frames[$i]->setFieldById($id, $value);
-                }
-            }
-        }
-
-        /**
          *    Accessor for a form element value within a page.
          *    @param SimpleSelector $selector    Field finder.
          *    @return string/boolean             A string if the field is
@@ -614,25 +578,6 @@
         function getField($selector) {
             for ($i = 0; $i < count($this->_frames); $i++) {
                 $value = $this->_frames[$i]->getField($selector);
-                if (isset($value)) {
-                    return $value;
-                }
-            }
-            return null;
-        }
-
-        /**
-         *    Accessor for a form element value within a page.
-         *    Finds the first match.
-         *    @param string/integer $id  Field ID attribute.
-         *    @return string/boolean     A string if the field is
-         *                               present, false if unchecked
-         *                               and null if missing.
-         *    @access public
-         */
-        function getFieldById($id) {
-            for ($i = 0; $i < count($this->_frames); $i++) {
-                $value = $this->_frames[$i]->getFieldById($id);
                 if (isset($value)) {
                     return $value;
                 }

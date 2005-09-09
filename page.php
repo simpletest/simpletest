@@ -955,41 +955,6 @@
         }
 
         /**
-         *    Sets a field on each form in which the field is
-         *    available by name.
-         *    @param string $name        Field name.
-         *    @param string $value       Value to set field to.
-         *    @return boolean            True if value is valid.
-         *    @access public
-         */
-        function setFieldByName($name, $value) {
-            $is_set = false;
-            for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->setField(new SimpleByName($name), $value)) {
-                    $is_set = true;
-                }
-            }
-            return $is_set;
-        }
-
-        /**
-         *    Sets a field on the form in which the unique field is
-         *    available.
-         *    @param string/integer $id  Field ID attribute.
-         *    @param string $value       Value to set field to.
-         *    @return boolean            True if value is valid.
-         *    @access public
-         */
-        function setFieldById($id, $value) {
-            for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                if ($this->_complete_forms[$i]->setField(new SimpleById($id), $value)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /**
          *    Accessor for a form element value within a page.
          *    @param SimpleSelector $selector    Field finder.
          *    @return string/boolean             A string if the field is
@@ -1000,25 +965,6 @@
         function getField($selector) {
             for ($i = 0; $i < count($this->_complete_forms); $i++) {
                 $value = $this->_complete_forms[$i]->getValue($selector);
-                if (isset($value)) {
-                    return $value;
-                }
-            }
-            return null;
-        }
-
-        /**
-         *    Accessor for a form element value within a page.
-         *    Finds the first match.
-         *    @param string/integer $id  Field ID attribute.
-         *    @return string/boolean     A string if the field is
-         *                               present, false if unchecked
-         *                               and null if missing.
-         *    @access public
-         */
-        function getFieldById($id) {
-            for ($i = 0; $i < count($this->_complete_forms); $i++) {
-                $value = $this->_complete_forms[$i]->getValue(new SimpleById($id));
                 if (isset($value)) {
                     return $value;
                 }

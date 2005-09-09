@@ -25,7 +25,7 @@ Parser
 
 Browser
 -------
-Promote selector classes and factor out excessive chaining (3/4).
+Promote selector classes and factor out excessive chaining (3/6) - done.
 Allow ignoring of cookies as per feature request (2).
 
 Web tester
