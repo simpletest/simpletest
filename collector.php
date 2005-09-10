@@ -85,26 +85,18 @@ class SimpleCollector {
  */
 class SimplePatternCollector extends SimpleCollector {
     var $_pattern;
-        
+    
+    
     /**
-     * Scans the directory and adds what it can that matches a given pattern.
      *
-     * No verification is done on the pattern, so it is incumbent about the
-     * developer to insure it is a proper pattern.
-     *
-     * Defaults to files ending in "php"
-     *
-     * @param object $test    See {@link SimpleCollector::collect()}
-     * @param string $path    See {@link Simplecollector::collect()}
      * @param string $pattern   Perl compatible regex to test name against
      *  See {@link http://us4.php.net/manual/en/reference.pcre.pattern.syntax.php PHP's PCRE}
      *  for full documentation of valid pattern.s
      */
-    function collect(&$test, $path, $pattern = '/php$/i') {
+    function SimplePatternCollector($pattern = '/php$/i') {
         $this->_pattern = $pattern;
-        
-        parent::collect($test, $path);
     }
+    
     
     /**
      * Attempts to add files that match a given pattern.

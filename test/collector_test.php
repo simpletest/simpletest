@@ -35,16 +35,16 @@ class TestOfPatternCollector extends UnitTestCase {
         $group->expectArguments(
                 'addTestFile',
                 array(new PatternExpectation('/collectable\\.(1|2)$/')));
-        $collector = &new SimplePatternCollector();
-        $collector->collect($group, dirname(__FILE__) . '/support/collector/', '/.*/');
+        $collector = &new SimplePatternCollector('/.*/');
+        $collector->collect($group, dirname(__FILE__) . '/support/collector/');
     }
         
     function testOnlyMatchedFilesAreAddedToGroup() {
         $group = &new MockGroupTest();
         $group->expectOnce('addTestFile', array(new PathEqualExpectation(
         		dirname(__FILE__) . '/support/collector/collectable.1')));
-        $collector = &new SimplePatternCollector();
-        $collector->collect($group, dirname(__FILE__) . '/support/collector/', '/1$/');
+        $collector = &new SimplePatternCollector('/1$/');
+        $collector->collect($group, dirname(__FILE__) . '/support/collector/');
     }
 }
 ?>
