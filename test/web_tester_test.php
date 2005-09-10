@@ -86,7 +86,7 @@
         }
         
         function testPatternMatching() {
-            $expectation = new HttpHeaderPatternExpectation('a', '/A/');
+            $expectation = new HttpHeaderExpectation('a', new PatternExpectation('/A/'));
             $this->assertIdentical($expectation->test('a: A'), true);
             $this->assertIdentical($expectation->test('A: A'), true);
             $this->assertIdentical($expectation->test('A: a'), false);
@@ -96,7 +96,7 @@
         }
         
         function testCaseInsensitivePatternMatching() {
-            $expectation = new HttpHeaderPatternExpectation('a', '/A/i');
+            $expectation = new HttpHeaderExpectation('a', new PatternExpectation('/A/i'));
             $this->assertIdentical($expectation->test('a: a'), true);
             $this->assertIdentical($expectation->test('a: B'), false);
             $this->assertIdentical($expectation->test(' a : A '), true);
@@ -105,7 +105,7 @@
         }
         
         function testUnwantedHeader() {
-            $expectation = new HttpUnwantedHeaderExpectation('a');
+            $expectation = new NoHttpHeaderExpectation('a');
             $this->assertIdentical($expectation->test(''), true);
             $this->assertIdentical($expectation->test('stuff'), true);
             $this->assertIdentical($expectation->test('b: B'), true);
@@ -114,7 +114,7 @@
         }
         
         function testMultilineUnwantedSearch() {
-            $expectation = new HttpUnwantedHeaderExpectation('a');
+            $expectation = new NoHttpHeaderExpectation('a');
             $this->assertIdentical($expectation->test("aa:A\r\nb:B\r\nc:C"), true);
             $this->assertIdentical($expectation->test("aa:A\r\na:A\r\nb:B"), false);
         }

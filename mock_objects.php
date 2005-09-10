@@ -166,7 +166,7 @@
          *    @access private
          */
         function _coerceToExpectation($expected) {
-            if (SimpleTestCompatibility::isA($expected, 'SimpleExpectation')) {
+            if (SimpleExpectation::isExpectation($expected)) {
                 return $expected;
             }
             return new IdenticalExpectation($expected);

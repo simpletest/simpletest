@@ -25,7 +25,8 @@
         
         /**
          *    Sets the field value to compare against.
-         *    @param mixed $value        Test value to match.
+         *    @param mixed $value     Test value to match. Can be an
+         *                            expectation for say pattern matching.
          *    @access public
          */
         function FieldExpectation($value, $message = '%s') {
@@ -135,8 +136,10 @@
         /**
          *    Sets the field and value to compare against.
          *    @param string $header   Case insenstive trimmed header name.
-         *    @param string $value    Optional value to compare. If not
-         *                            given then any value will match.
+         *    @param mixed $valu e    Optional value to compare. If not
+         *                            given then any value will match. If
+         *                            an expectation object then that will
+         *                            be used instead.
          */
         function HttpHeaderExpectation($header, $value = false) {
             $this->_expected_header = $this->_normaliseHeader($header);
@@ -219,6 +222,9 @@
             if ($expected === false) {
                 return true;
             }
+            if (SimpleExpectation::isExpectation($expected)) {
+                return $expected->test(trim($value));
+            }
             return (trim($value) == trim($expected));
         }
         
@@ -230,14 +236,16 @@
          *    @access public
          */
         function testMessage($compare) {
-            $expectation = $this->_expected_header;
-            if ($this->_expected_value) {
-                $expectation .= ': ' . $this->_expected_header;
+            if (SimpleExpectation::isExpectation($this->_expected_value)) {
+                $message = $this->_expected_value->testMessage($compare);
+            } else {
+                $message = $this->_expected_header .
+                        ($this->_expected_value ? ': ' . $this->_expected_value : '');
             }
             if (is_string($line = $this->_findHeader($compare))) {
-                return "Searching for header [$expectation] found [$line]";
+                return "Searching for header [$message] found [$line]";
             } else {
-                return "Failed to find header [$expectation]";
+                return "Failed to find header [$message]";
             }
         }
     }
@@ -248,7 +256,7 @@
 	 *	  @package SimpleTest
 	 *	  @subpackage WebTester
      */
-    class HttpUnwantedHeaderExpectation extends HttpHeaderExpectation {
+    class NoHttpHeaderExpectation extends HttpHeaderExpectation {
         var $_expected_header;
         var $_expected_value;
         
@@ -256,7 +264,7 @@
          *    Sets the field and value to compare against.
          *    @param string $unwanted   Case insenstive trimmed header name.
          */
-        function HttpUnwantedHeaderExpectation($unwanted) {
+        function NoHttpHeaderExpectation($unwanted) {
             $this->HttpHeaderExpectation($unwanted);
         }
         
@@ -284,35 +292,6 @@
             } else {
                 return "Did not find unwanted header [$expectation]";
             }
-        }
-    }
-      
-    /**
-     *    Test for a specific HTTP header within a header block.
-	 *	  @package SimpleTest
-	 *	  @subpackage WebTester
-     */
-    class HttpHeaderPatternExpectation extends HttpHeaderExpectation {
-        
-        /**
-         *    Sets the field and value to compare against.
-         *    @param string $header   Case insenstive header name.
-         *    @param string $pattern  Pattern to compare value against.
-         *    @access public
-         */
-        function HttpHeaderPatternExpectation($header, $pattern) {
-            $this->HttpHeaderExpectation($header, $pattern);
-        }
-        
-        /**
-         *    Tests the value part of the header.
-         *    @param string $value        Value to test.
-         *    @param mixed $pattern       Pattern to test against.
-         *    @return boolean             True if matched.
-         *    @access protected
-         */
-        function _testHeaderValue($value, $expected) {
-            return (boolean)preg_match($expected, trim($value));
         }
     }
     
@@ -1081,17 +1060,7 @@
          */
         function assertField($label, $expected = true, $message = '%s') {
             $value = $this->_browser->getField($label);
-            if ($expected === true) {
-                return $this->assertTrue(
-                        isset($value),
-                        sprintf($message, "Field [$label] should exist"));
-            } else {
-                $label = str_replace('%', '%%', $label);
-                return $this->assert(
-                        new FieldExpectation($expected, "Field [$label] should match with [%s]"),
-                        $value,
-                        $message);
-            }
+            return $this->_assertFieldValue($label, $value, $expected, $message);
         }
         
         /**
@@ -1109,17 +1078,7 @@
          */
         function assertFieldByName($name, $expected = true, $message = '%s') {
             $value = $this->_browser->getFieldByName($name);
-            if ($expected === true) {
-                return $this->assertTrue(
-                        isset($value),
-                        sprintf($message, "Field name [$name] should exist"));
-            } else {
-                $name = str_replace('%', '%%', $name);
-                return $this->assert(
-                        new FieldExpectation($expected, "Field named [$name] should match with [%s]"),
-                        $value,
-                        $message);
-            }
+            return $this->_assertFieldValue($name, $value, $expected, $message);
         }
          
         /**
@@ -1137,16 +1096,31 @@
          */
         function assertFieldById($id, $expected = true, $message = '%s') {
             $value = $this->_browser->getFieldById($id);
+            return $this->_assertFieldValue($id, $value, $expected, $message);
+        }
+        
+        /**
+         *    Tests the field value against the expectation.
+         *    @param string $identifier      Name, ID or label.
+         *    @param mixed $value            Current field value.
+         *    @param mixed $expected         Expected value to match.
+         *    @param string $message         Failure message.
+         *    @return boolean                True if pass
+         *    @access protected
+         */
+        function _assertFieldValue($identifier, $value, $expected, $message) {
             if ($expected === true) {
                 return $this->assertTrue(
                         isset($value),
-                        sprintf($message, "Field of ID [$id] should exist"));
-            } else {
-                return $this->assert(
-                        new FieldExpectation($expected, "Field of ID [$id] should match with [%s]"),
-                        $value,
-                        $message);
+                        sprintf($message, "Field [$identifier] should exist"));
             }
+            if (! SimpleExpectation::isExpectation($expected)) {
+                $identifier = str_replace('%', '%%', $identifier);
+                $expected = new FieldExpectation(
+                        $expected,
+                        "Field [$identifier] should match with [%s]");
+            }
+            return $this->assert($expected, $value, $message);
         }
        
         /**
@@ -1238,8 +1212,9 @@
          *    Checks each header line for the required value. If no
          *    value is given then only an existence check is made.
          *    @param string $header    Case insensitive header name.
-         *    @param string $value     Case sensitive trimmed string to
-         *                             match against.
+         *    @param mixed $value      Case sensitive trimmed string to
+         *                             match against. An expectation object
+         *                             can be used for pattern matching.
          *    @return boolean          True if pass.
          *    @access public
          */
@@ -1251,15 +1226,11 @@
         }
           
         /**
-         *    Checks each header line for the required pattern.
-         *    @param string $header    Case insensitive header name.
-         *    @param string $pattern   Pattern to match value against.
-         *    @return boolean          True if pass.
-         *    @access public
+         *    @deprecated
          */
         function assertHeaderPattern($header, $pattern, $message = '%s') {
             return $this->assert(
-                    new HttpHeaderPatternExpectation($header, $pattern),
+                    new HttpHeaderExpectation($header, new PatternExpectation($pattern)),
                     $this->_browser->getHeaders(),
                     $message);
         }
@@ -1273,11 +1244,18 @@
          *    @return boolean          True if pass.
          *    @access public
          */
-        function assertNoUnwantedHeader($header, $message = '%s') {
+        function assertNoHeader($header, $message = '%s') {
             return $this->assert(
-                    new HttpUnwantedHeaderExpectation($header),
+                    new NoHttpHeaderExpectation($header),
                     $this->_browser->getHeaders(),
                     $message);
+        }
+          
+        /**
+         *    @deprecated
+         */
+        function assertNoUnwantedHeader($header, $message = '%s') {
+            return $this->assertNoHeader($header, $message);
         }
         
         /**

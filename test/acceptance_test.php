@@ -315,7 +315,7 @@
             $this->assertHeader('content-type');
             $this->assertHeader('content-type', 'text/html');
             $this->assertHeaderPattern('content-type', '/HTML/i');
-            $this->assertNoUnwantedHeader('WWW-Authenticate');
+            $this->assertNoHeader('WWW-Authenticate');
         }
     }
      
@@ -647,6 +647,12 @@
             $this->assertTrue($this->setFieldByName('d', ''));
             $this->clickSubmit('Go!');
             $this->assertText('d=[]');
+        }
+        
+        function testAssertingFieldValueWithPattern() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->setField('c', 'A very long string');
+            $this->assertField('c', new PatternExpectation('/very long/'));
         }
         
         function testSendingMultipartFormDataEncodedForm() {
@@ -1012,7 +1018,7 @@
             
             $this->assertTrue($this->setFrameFocusByIndex(4));
             $this->assertResponse(200);
-            $this->assertWantedTExt('Count: 1');
+            $this->assertText('Count: 1');
             
             $this->assertTrue($this->setFrameFocusByIndex(5));
             $this->assertResponse(200);

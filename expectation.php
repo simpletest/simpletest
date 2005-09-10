@@ -75,6 +75,21 @@
         function &_getDumper() {
             return $this->_dumper;
         }
+        
+        /**
+         *    Test to see if a value is an expectation object.
+         *    A useful utility method.
+         *    @param mixed $expectation    Hopefully an Epectation
+         *                                 class.
+         *    @return boolean              True if descended from
+         *                                 this class.
+         *    @access public
+         *    @static
+         */
+        function isExpectation($expectation) {
+            return is_object($expectation) &&
+                    SimpleTestCompatibility::isA($expectation, 'SimpleExpectation');
+        }
     }
     
     /**
