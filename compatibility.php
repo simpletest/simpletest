@@ -134,7 +134,8 @@
          */
         function isA($object, $class) {
             if (version_compare(phpversion(), '5') >= 0) {
-                if (! class_exists($class, false)) {
+                if (! class_exists($class, false) && 
+                    (function_exists('interface_exists') && !interface_exists($class, false)) ) {
                     return false;
                 }
                 eval("\$is_a = \$object instanceof $class;");

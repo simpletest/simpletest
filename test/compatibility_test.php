@@ -8,6 +8,11 @@
     class ComparisonSubclass extends ComparisonClass {
     }
     
+    if (version_compare(phpversion(), '5') >= 0) {
+        eval('interface ComparisonInterface { }');
+        eval('class ComparisonClassWithInterface implements ComparisonInterface { }');
+    }
+    
     class TestOfCompatibility extends UnitTestCase {
         
         function testIsA() {
@@ -66,6 +71,20 @@
                         $object,
                         $object_assignment));
             }
+        }
+        
+        function testInteraceComparison() {
+            if (version_compare(phpversion(), '5', '<')) {
+                return;
+            }
+            
+            $object = new ComparisonClassWithInterface();
+            $this->assertFalse(SimpleTestCompatibility::isA(
+                    new ComparisonClass(),
+                    'ComparisonInterface'));
+            $this->assertTrue(SimpleTestCompatibility::isA(
+                    new ComparisonClassWithInterface(),
+                    'ComparisonInterface'));
         }
     }
 ?>
