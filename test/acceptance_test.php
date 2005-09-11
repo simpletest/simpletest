@@ -898,6 +898,7 @@
             $this->assertResponse(401);
             $this->assertAuthentication('Basic');
             $this->assertRealm('SimpleTest basic authentication');
+            $this->assertRealm(new PatternExpectation('/simpletest/i'));
             $this->authenticate('test', 'secret');
             $this->assertResponse(200);
             $this->retry();

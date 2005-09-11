@@ -1201,11 +1201,13 @@
          *    @access public
          */
         function assertRealm($realm, $message = '%s') {
-            $message = sprintf($message, "Expected realm [$realm] got [" .
-                    $this->_browser->getRealm() . "]");
-            return $this->assertTrue(
-                    strtolower($this->_browser->getRealm()) == strtolower($realm),
-                    $message);
+            if (! SimpleExpectation::isExpectation($realm)) {
+                $realm = new EqualExpectation($realm);
+            }
+            return $this->assert(
+                    $realm,
+                    $this->_browser->getRealm(),
+                    "Expected realm -> $message");
         }
         
         /**
