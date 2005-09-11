@@ -393,6 +393,11 @@
             $this->assertCookie('day_cookie', 'C');
         }
         
+        function testCookiePatternAssertions() {
+            $this->get('http://www.lastcraft.com/test/set_cookies.php');
+            $this->assertCookie('session_cookie', new PatternExpectation('/a/i'));
+        }
+        
         function testTemporaryCookieExpiry() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
             $this->restart();

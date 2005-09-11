@@ -1374,15 +1374,15 @@
          */
         function assertCookie($name, $expected = false, $message = '%s') {
             $value = $this->getCookie($name);
-            if ($expected) {
-                return $this->assertTrue($value === $expected, sprintf(
-                        $message,
-                        "Expecting cookie [$name] value [$expected], got [$value]"));
-            } else {
+            if (! $expected) {
                 return $this->assertTrue(
                         $value,
                         sprintf($message, "Expecting cookie [$name]"));
             }
+            if (! SimpleExpectation::isExpectation($expected)) {
+                $expected = new EqualExpectation($expected);
+            }
+            return $this->assert($expected, $value, "Expecting cookie [$name] -> $message");
         }
         
         /**

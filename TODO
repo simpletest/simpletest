@@ -38,7 +38,7 @@ Change assertWantedText(), etc to assertText() method (1/1) - done.
 Pass expectations to assertTitle() (3/1) - done.
 Pass expectations to assertHeader() (3/1) - done.
 Pass expectations to assertField() (2/2) - done.
-Pass expectations to assertCookie() (1).
+Pass expectations to assertCookie() (1/1) - done.
 Fix bug with multiple selection fields not being selected by label (1/1) - done.
 
 Documentation
