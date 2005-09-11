@@ -3,7 +3,6 @@ Xalan -o ../docs/en/index.html ../docs/source/en/simple_test.xml bundled_docs.xs
 Xalan -o ../docs/en/overview.html ../docs/source/en/overview.xml bundled_docs.xslt
 Xalan -o ../docs/en/unit_test_documentation.html ../docs/source/en/unit_test_documentation.xml bundled_docs.xslt
 Xalan -o ../docs/en/group_test_documentation.html ../docs/source/en/group_test_documentation.xml bundled_docs.xslt
-Xalan -o ../docs/en/server_stubs_documentation.html ../docs/source/en/server_stubs_documentation.xml bundled_docs.xslt
 Xalan -o ../docs/en/mock_objects_documentation.html ../docs/source/en/mock_objects_documentation.xml bundled_docs.xslt
 Xalan -o ../docs/en/partial_mocks_documentation.html ../docs/source/en/partial_mocks_documentation.xml bundled_docs.xslt
 Xalan -o ../docs/en/reporter_documentation.html ../docs/source/en/reporter_documentation.xml bundled_docs.xslt

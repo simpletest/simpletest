@@ -22,9 +22,9 @@
     
     $browser = &new SimpleBrowser();
     $browser->get('http://php.net/');
-    $browser->clickLink('reporting bugs');
-    $browser->clickLink('statistics');
-    $page = $browser->clickLink('PHP 5 bugs only');
+    $browser->click('reporting bugs');
+    $browser->click('statistics');
+    $page = $browser->click('PHP 5 bugs only');
     preg_match('/status=Open.*?by=Any.*?(\d+)<\/a>/', $page, $matches);
     print $matches[1];
 ?></strong>
@@ -161,7 +161,7 @@ class TestOfRegistration extends UnitTestCase {
         $browser->get('http://my-site.com/register.php');
         $browser->setField('email', 'me@here');
         $browser->setField('password', 'Secret');
-        $browser->clickSubmit('Register');
+        $browser->click('Register');
         <strong>
         $authenticator = &new Authenticator();
         $member = &$authenticator->findByEmail('me@here');
@@ -190,14 +190,14 @@ class TestOfSecurity extends UnitTestCase {
         $first->get('http://my-site.com/login.php');
         $first->setField('name', 'Me');
         $first->setField('password', 'Secret');
-        $first->clickSubmit('Enter');
+        $first->click('Enter');
         $this->assertEqual($first->getTitle(), 'Welcome');
         
         $second = &new SimpleBrowser();
         $second->get('http://my-site.com/login.php');
         $second->setField('name', 'Me');
         $second->setField('password', 'Secret');
-        $second->clickSubmit('Enter');
+        $second->click('Enter');
         $this->assertEqual($second->getTitle(), 'Access Denied');</strong>
     }
 }

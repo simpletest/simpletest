@@ -55,6 +55,19 @@ class AuthenticationTest extends WebTestCase {
                 on the amount of detail you want to see.
             </p>
             <p>
+                One theme that runs through SimpleTest is the ability to use
+                <code>SimpleExpectation</code> objects wherever a simple
+                match is not enough.
+                If you want only an approximate match to the realm for
+                example, you can do this...
+<php><![CDATA[
+class AuthenticationTest extends WebTestCase {
+    function test401Header() {
+        $this->get('http://www.lastcraft.com/protected/');
+        $this->assertRealm(<strong>new PatternExpectation('/simpletest/i')</strong>);
+    }
+}
+]]></php>
                 Most of the time we are not interested in testing the
                 authentication itself, but want to get past it to test
                 the pages underneath.
@@ -62,7 +75,7 @@ class AuthenticationTest extends WebTestCase {
                 an authentication response...
 <php><![CDATA[
 class AuthenticationTest extends WebTestCase {
-    function testAuthentication() {
+    function testCanAuthenticate() {
         $this->get('http://www.lastcraft.com/protected/');<strong>
         $this->authenticate('Me', 'Secret');</strong>
         $this->assertTitle(...);
@@ -148,9 +161,15 @@ class LogInTest extends WebTestCase {
 ]]></php>
                 All we are doing is confirming that the cookie is set.
                 As the value is likely to be rather cryptic it's not
-                really worth testing this.
-            </p>
-            <p>
+                really worth testing this with...
+<php><![CDATA[
+class LogInTest extends WebTestCase {
+    function testSessionCookieIsCorrectPattern() {
+        $this->get('http://www.my-site.com/login.php');
+        $this->assertCookie('SID', <strong>new PatternExpectation('/[a-f0-9]{32}/i')</strong>);
+    }
+}
+]]></php>
                 The rest of the test would be the same as any other form,
                 but we might want to confirm that we still have the same
                 cookie after log-in as before we entered.
@@ -164,8 +183,8 @@ class LogInTest extends WebTestCase {
         $session = $this->getCookie('SID');
         $this->setField('u', 'Me');
         $this->setField('p', 'Secret');
-        $this->clickSubmit('Log in');
-        $this->assertWantedPattern('/Welcome Me/');
+        $this->click('Log in');
+        $this->assertText('Welcome Me');
         $this->assertCookie('SID', $session);</strong>
     }
 }
@@ -183,7 +202,7 @@ class LogInTest extends WebTestCase {
         $this->get('http://www.my-site.com/login.php');<strong>
         $this->setCookie('SID', 'Some other session');
         $this->get('http://www.my-site.com/restricted.php');</strong>
-        $this->assertWantedPattern('/Access denied/');
+        $this->assertText('Access denied');
     }
 }
 ]]></php>
@@ -202,12 +221,12 @@ class LogInTest extends WebTestCase {
         $this->get('http://www.my-site.com/login.php');
         $this->setField('u', 'Me');
         $this->setField('p', 'Secret');
-        $this->clickSubmit('Log in');
-        $this->assertWantedPattern('/Welcome Me/');<strong>
+        $this->click('Log in');
+        $this->assertText('Welcome Me');<strong>
         
         $this->restart();
         $this->get('http://www.my-site.com/restricted.php');
-        $this->assertWantedPattern('/Access denied/');</strong>
+        $this->assertText('Access denied');</strong>
     }
 }
 ]]></php>
@@ -233,13 +252,13 @@ class LogInTest extends WebTestCase {
         $this->get('http://www.my-site.com/login.php');
         $this->setField('u', 'Me');
         $this->setField('p', 'Secret');
-        $this->clickSubmit('Log in');
-        $this->assertWantedPattern('/Welcome Me/');
+        $this->click('Log in');
+        $this->assertText('Welcome Me');
         <strong>
         $this->ageCookies(3600);</strong>
         $this->restart();
         $this->get('http://www.my-site.com/restricted.php');
-        $this->assertWantedPattern('/Access denied/');
+        $this->assertText('Access denied');
     }
 }
 ]]></php>

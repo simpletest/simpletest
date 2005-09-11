@@ -6,8 +6,9 @@
     </long_title>
     <content>
         <news>
-            The first stable release of is finally out. It only took 22 months... And it means SimpleTest
-			v1.0 has been released on Sourceforge.
+            1.0.1 release cycle started.
+            Features include include file upload, better PHP5 support for
+            mock objects and a big clean up of method names.
         </news>
         <introduction>
             <p>
@@ -50,26 +51,22 @@
                 We start by creating a test script which we will call
                 <em>tests/log_test.php</em> and populate it as follows...
 <php><![CDATA[
-<strong><?php
+<?php<strong>
 require_once('simpletest/unit_tester.php');
 require_once('simpletest/reporter.php');
 require_once('../classes/log.php');
-?></strong>
-]]></php>
-                Here the <em>simpletest</em> folder is either local or in the path.
-                You would have to edit these locations depending on where you
-                placed the toolset.
-                Next we create a test case...
-<php><![CDATA[
-<?php
-require_once('simpletest/unit_tester.php');
-require_once('simpletest/reporter.php');
-require_once('../classes/log.php');
-<strong>
+
 class TestOfLogging extends UnitTestCase {
 }</strong>
 ?>
 ]]></php>
+                Here the <em>simpletest</em> folder is either local or in the path.
+                You would have to edit these locations depending on where you
+                placed the toolset.
+                The <code>TestOfLogging</code> is our frst test case and it&apos;s
+                currently empty.
+            </p>
+            <p>
                 Now we have five lines of scaffolding code and still no tests.
                 However from this part on we get return on our investment very quickly.
                 We&apos;ll assume that the <code>Log</code> class
@@ -315,27 +312,28 @@ Mock::generate('Log');</strong>
 class TestOfSessionLogging extends UnitTestCase {
     
     function testLogInIsLogged() {<strong>
-        $log = &new MockLog($this);
+        $log = &new MockLog();
         $log->expectOnce('message', array('User fred logged in.'));</strong>
         $session_pool = &new SessionPool($log);
-        $session_pool->logIn('fred');<strong>
-        $log->tally();</strong>
+        $session_pool->logIn('fred');
     }
 }
 ?>
 ]]></php>
-                The <code>tally()</code> call is needed to
-                tell the mock object that time is up for the expected call
-                count.
-                Without it the mock would wait forever for the method
-                call to come in without ever actually notifying the test case.
-                The other test will be triggered when the call to
+                The test will be triggered when the call to
                 <code>message()</code> is invoked on the
                 <code>MockLog</code> object.
                 The mock call will trigger a parameter comparison and then send the
                 resulting pass or fail event to the test display.
                 Wildcards can be included here too so as to prevent tests
                 becoming too specific.
+            </p>
+            <p>
+                If the mock reaches the end of the test case without the
+                method being called, the <code>expectOnce()</code>
+                expectation will trigger a test failure.
+                In other words the mocks can detect the absence of
+                behaviour as well as the presence.
             </p>
             <p>
                 The mock objects in the SimpleTest suite can have arbitrary
@@ -374,12 +372,12 @@ class TestOfAbout extends WebTestCase {
     
     function setUp() {
         $this->get('http://test-server/index.php');
-        $this->clickLink('About');
+        $this->click('About');
     }
     
     function testSearchEngineOptimisations() {
         $this->assertTitle('A long title about us for search engines');
-        $this->assertWantedPattern('/a popular keyphrase/i');
+        $this->assertPattern('/a popular keyphrase/i');
     }
 }</strong>
 $test = &new TestOfAbout();

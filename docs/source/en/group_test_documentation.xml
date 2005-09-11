@@ -33,7 +33,7 @@
     class MyFileTestCase extends UnitTestCase {
         ...
     }
-    SimpleTestOptions::ignore('MyFileTestCase');</strong>
+    SimpleTest::ignore('MyFileTestCase');</strong>
 
     class FileTester extends MyFileTestCase {
         ...

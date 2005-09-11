@@ -3,7 +3,6 @@
     <page title="Overview" file="overview.html"/>
     <page title="Unit tester" file="unit_test_documentation.html"/>
     <page title="Group tests" file="group_test_documentation.html"/>
-    <page title="Server stubs" file="server_stubs_documentation.html"/>
     <page title="Mock objects" file="mock_objects_documentation.html"/>
     <page title="Partial mocks" file="partial_mocks_documentation.html"/>
     <page title="Reporting" file="reporter_documentation.html"/>

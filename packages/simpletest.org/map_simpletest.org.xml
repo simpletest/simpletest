@@ -7,7 +7,6 @@
 			<page title="Overview" file="doku.php?id=en-overview"/>
 			<page title="Unit tester" file="doku.php?id=en-unit_test_documentation"/>
 			<page title="Group tests" file="doku.php?id=en-group_test_documentation"/>
-			<page title="Server stubs" file="doku.php?id=en-server_stubs_documentation"/>
 			<page title="Mock objects" file="doku.php?id=en-mock_objects_documentation"/>
 			<page title="Partial mocks" file="doku.php?id=en-partial_mocks_documentation"/>
 			<page title="Reporting" file="doku.php?id=en-reporter_documentation"/>

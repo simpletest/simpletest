@@ -18,7 +18,6 @@ cp ../docs/pkg/SimpleTest.pkg.ini ${DEST_DIR}
 Xalan -o ${DEST_DIR}/SimpleTest.pkg ../docs/source/en/overview.xml phpdoc_docs.xslt
 Xalan -o ${DEST_DIR}/UnitTestCase.pkg ../docs/source/en/unit_test_documentation.xml phpdoc_docs.xslt
 Xalan -o ${DEST_DIR}/GroupTests.pkg ../docs/source/en/group_test_documentation.xml phpdoc_docs.xslt
-Xalan -o ${DEST_DIR}/ServerStubs.pkg ../docs/source/en/server_stubs_documentation.xml phpdoc_docs.xslt
 Xalan -o ${DEST_DIR}/MockObjects.pkg ../docs/source/en/mock_objects_documentation.xml phpdoc_docs.xslt
 Xalan -o ${DEST_DIR}/PartialMock.pkg ../docs/source/en/partial_mocks_documentation.xml phpdoc_docs.xslt
 Xalan -o ${DEST_DIR}/Reporting.pkg ../docs/source/en/reporter_documentation.xml phpdoc_docs.xslt

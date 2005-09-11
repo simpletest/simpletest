@@ -42,7 +42,9 @@ class SimpleFormTests extends WebTestCase {
                 their default values just as they would appear in the web browser.
                 The assertion tests that a HTML widget exists in the page with the
                 name &quot;a&quot; and that it is currently set to the value
-                &quot;A default&quot;
+                &quot;A default&quot;.
+                As usual, we could use a pattern expectation instead if a fixed
+                string.
             </p>
             <p>
                 We could submit the form straight away, but first we&apos;ll change
@@ -54,7 +56,7 @@ class SimpleFormTests extends WebTestCase {
         $this->get('http://www.my-site.com/');
         $this->assertField('a', 'A default');<strong>
         $this->setField('a', 'New value');
-        $this->clickSubmit('Go');</strong>
+        $this->click('Go');</strong>
     }
 }
 ]]></php>
@@ -173,7 +175,7 @@ class SimpleFormTests extends WebTestCase {
         $this->get('http://www.lastcraft.com/form_testing_documentation.php');
         $this->assertField('crud', array('c', 'r', 'u', 'd'));
         $this->setField('crud', array('r'));
-        $this->clickSubmit('Enable Privileges');
+        $this->click('Enable Privileges');
     }</strong>
 }
 ]]></php>
@@ -197,7 +199,7 @@ class SimpleFormTests extends WebTestCase {
         $this->post(
                 'http://www.my-site.com/add_user.php',
                 array('type' => 'superuser'));
-        $this->assertNoUnwantedPattern('/user created/i');
+        $this->assertNoText('user created');
     }</strong>
 }
 ]]></php>

@@ -98,8 +98,8 @@ class FileTestCase extends UnitTestCase {
                     <tr><td><code>assertNotIdentical($x, $y)</code></td><td>Fail if $x == $y is true and types match</td></tr>
                     <tr><td><code>assertReference($x, $y)</code></td><td>Fail unless $x and $y are the same variable</td></tr>
                     <tr><td><code>assertCopy($x, $y)</code></td><td>Fail if $x and $y are the same variable</td></tr>
-                    <tr><td><code>assertWantedPattern($p, $x)</code></td><td>Fail unless the regex $p matches $x</td></tr>
-                    <tr><td><code>assertNoUnwantedPattern($p, $x)</code></td><td>Fail if the regex $p matches $x</td></tr>
+                    <tr><td><code>assertPattern($p, $x)</code></td><td>Fail unless the regex $p matches $x</td></tr>
+                    <tr><td><code>assertNoPattern($p, $x)</code></td><td>Fail if the regex $p matches $x</td></tr>
                     <tr><td><code>assertNoErrors()</code></td><td>Fail if any PHP error occoured</td></tr>
                     <tr><td><code>assertError($x)</code></td><td>Fail if no PHP error or incorrect message/expectation</td></tr>
                     <tr><td><code>assertExpectation($e)</code></td><td>Fail on failed expectation object</td></tr>
@@ -138,7 +138,7 @@ $this->assertReference($a, $b);</strong>
 ]]></php>
                 Will fail as the variable <code>$a</code> is a copy of <code>$b</code>.
 <php><![CDATA[
-<strong>$this->assertWantedPattern('/hello/i', 'Hello world');</strong>
+<strong>$this->assertPattern('/hello/i', 'Hello world');</strong>
 ]]></php>
                 This will pass as using a case insensitive match the string
                 <code>hello</code> is contained in <code>Hello world</code>.
@@ -299,7 +299,11 @@ class FileTestCase extends <strong>FileTester</strong> {
             simpletest documentation,
             phpunit,
             junit,
-            xunit
+            xunit,
+            agile web development,
+            eXtreme Programming,
+            Test Driven,
+            TDD
         </keywords>
     </meta>
 </page>
