@@ -228,8 +228,18 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td style="color: red;">1.1</td>
                     </tr>
                     <tr>
+                        <td>IFrame support</td>
+                        <td>Reads IFrame content that can be refreshed</td>
+                        <td style="color: red;">1.1</td>
+                    </tr>
+                    <tr>
                         <td>Improved mock interface</td>
                         <td>More compact way of expressing mocks</td>
+                        <td style="color: red;">2.0</td>
+                    </tr>
+                    <tr>
+                        <td>HTML table assertions</td>
+                        <td>Can match table elements to numerical assertions</td>
                         <td style="color: red;">2.0</td>
                     </tr>
                     <tr>

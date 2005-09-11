@@ -1260,17 +1260,16 @@
         
         /**
          *    Tests the text between the title tags.
-         *    @param string $title     Expected title or empty
-         *                             if expecting no title.
-         *    @param string $message   Message to display.
-         *    @return boolean          True if pass.
+         *    @param string $title      Expected title.
+         *    @param string $message    Message to display.
+         *    @return boolean           True if pass.
          *    @access public
          */
         function assertTitle($title = false, $message = '%s') {
-            return $this->assertTrue(
-                    $title === $this->_browser->getTitle(),
-                    sprintf($message, "Expecting title [$title] got [" .
-                            $this->_browser->getTitle() . "]"));
+            if (! SimpleExpectation::isExpectation($title)) {
+                $title = new EqualExpectation($title);
+            }
+            return $this->assert($title, $this->_browser->getTitle(), $message);
         }
         
         /**

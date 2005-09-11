@@ -96,6 +96,7 @@
             $this->assertText('target for the SimpleTest');
             $this->assertPattern('/Request method.*?<dd>GET<\/dd>/');
             $this->assertTitle('Simple test target file');
+            $this->assertTitle(new PatternExpectation('/target file/'));
             $this->assertResponse(200);
             $this->assertMime('text/html');
         }
