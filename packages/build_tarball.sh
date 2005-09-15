@@ -90,7 +90,6 @@ FILES=(simpletest/errors.php \
           simpletest/docs/en/overview.html \
           simpletest/docs/en/unit_test_documentation.html \
           simpletest/docs/en/group_test_documentation.html \
-          simpletest/docs/en/server_stubs_documentation.html \
           simpletest/docs/en/mock_objects_documentation.html \
           simpletest/docs/en/partial_mocks_documentation.html \
           simpletest/docs/en/reporter_documentation.html \
