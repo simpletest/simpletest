@@ -5,39 +5,30 @@ $Id$
 
 Unit tester
 -----------
+Fix fatal error in PHP 5.1 (3).
 
 Reporter
 --------
 
 Mock objects
 ------------
-Allow mocking of interfaces (5/3) - done.
-Carry interfaces to pass type hints (3/7) - done.
-Remove $this passing in mocks (5/4) - done.
-Remove the need for tally() call (2/3) - done.
-Fix autoload glitch (1/1) - done.
-Deprecate Stub and SimpleStub (2/2) - done.
-Fix bug partially mocking class with no constructor (1/1) - done.
 
 Parser
 ------
 
 Browser
 -------
-Promote selector classes and factor out excessive chaining (3/6) - done.
+Allow ignoring of cookies as per feature request (2).
+Fix bug URL losing spaces (3).
+Fix bug clicking keeps encoding (3).
 
 Web tester
 ----------
-Change assertWantedText(), etc to assertText() method (1/1) - done.
-Pass expectations to assertTitle() (3/1) - done.
-Pass expectations to assertHeader() (3/1) - done.
-Pass expectations to assertField() (2/2) - done.
-Pass expectations to assertCookie() (1/1) - done.
-Fix bug with multiple selection fields not being selected by label (1/1) - done.
+Add assertSubmit() method (1).
+Add assertClickable() method (1).
 
 Documentation
 -------------
-Change license to GNU? (2/2) - done.
 
 Build
 -----
