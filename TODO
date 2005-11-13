@@ -1,20 +1,26 @@
 TODO
-This is immediate stuff only for this iteration (1.0.1beta) of 46 hours.
+This is immediate stuff only for this iteration (1.0.1beta) of 36 hours.
 
 $Id$
 
 Unit tester
 -----------
-Fix fatal error in PHP 5.1 (3).
+Fix fatal error in PHP 5.1RC1 (3).
+Fix fatal error in PHP 5.0.5 (3).
+Change assertCopy() to assertClone() and add identical check (1).
+Add character set option to PatternExpectation (2).
 
 Reporter
 --------
 
 Mock objects
 ------------
+Refactor internals to create an instance queue (4).
 
 Parser
 ------
+Extract character set for regex match (3).
+Parse fieldsets correctly with labels (4).
 
 Browser
 -------
@@ -26,9 +32,11 @@ Web tester
 ----------
 Add assertSubmit() method (1).
 Add assertClickable() method (1).
+Setting an option by id attribute should only toggle that option (3).
 
 Documentation
 -------------
+Get method lists up to date (3).
 
 Build
 -----

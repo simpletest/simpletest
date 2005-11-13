@@ -37,7 +37,7 @@
                 case "Object":
                     return "Object: of " . get_class($value);
                 case "String":
-                    return "String: " . $this->clipString($value, 100);
+                    return "String: " . $this->clipString($value, 200);
                 default:
                     return "$type: $value";
             }
@@ -186,8 +186,8 @@
             $position = $this->_stringDiffersAt($first, $second);
             $message = "at character $position";
             $message .= " with [" .
-                    $this->clipString($first, 100, $position) . "] and [" .
-                    $this->clipString($second, 100, $position) . "]";
+                    $this->clipString($first, 200, $position) . "] and [" .
+                    $this->clipString($second, 200, $position) . "]";
             return $message;
         }
         
@@ -334,7 +334,7 @@
             $position = 0;
             $step = strlen($first);
             while ($step > 1) {
-                $step = (integer)(($step + 1)/2);
+                $step = (integer)(($step + 1) / 2);
                 if (strncmp($first, $second, $position + $step) == 0) {
                     $position += $step;
                 }
