@@ -1,14 +1,16 @@
 TODO
-This is immediate stuff only for this iteration (1.0.1beta) of 36 hours.
+This is immediate stuff only for this iteration (1.0.1beta) of 41 hours.
 
 $Id$
 
 Unit tester
 -----------
-Fix fatal error in PHP 5.1RC1 (3).
+Fix fatal error in PHP 5.1 (3).
 Fix fatal error in PHP 5.0.5 (3).
-Change assertCopy() to assertClone() and add identical check (1).
+Change assertCopy() to assertClone() and add identical check (1) - done.
 Add character set option to PatternExpectation (2).
+The ignore() directive should ignore parent classes as well (1).
+The fail() method should issue a line number (2).
 
 Reporter
 --------
@@ -16,6 +18,7 @@ Reporter
 Mock objects
 ------------
 Refactor internals to create an instance queue (4).
+Expectations and returns should follow most recent setting (2).
 
 Parser
 ------
@@ -26,7 +29,7 @@ Browser
 -------
 Allow ignoring of cookies as per feature request (2).
 Fix bug URL losing spaces (3).
-Fix bug clicking keeps encoding (3).
+Investigate bug, clicking keeps encoding (3).
 
 Web tester
 ----------

@@ -5,6 +5,14 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems and their fixes...
 
+No method assertCopy()
+----------------------
+This is deprecated in 1.0.1 in favour of assertClone().
+The assertClone() method is slightly different in that
+the objects must be identical, but without being a
+reference. It is thus not a strict inversion of
+assertReference().
+
 Wildcard override has no effect in mocks
 ----------------------------------------
 As of 1.0.1beta this is now set with setWildcard() instead

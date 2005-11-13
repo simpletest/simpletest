@@ -42,13 +42,13 @@
         function testCloneOnObjects() {
             $a = &new ReferenceForTesting();
             $b = &new ReferenceForTesting();
-            $this->assertCopy($a, $b);
+            $this->assertClone($a, $b);
         }
         
         function testCloneOnScalars() {
             $a = 25;
             $b = 25;
-            $this->assertCopy($a, $b);
+            $this->assertClone($a, $b);
         }
     }
     

@@ -222,12 +222,30 @@
         
         /**
          *    Will trigger a pass if both parameters refer
-         *    to different objects. Fail otherwise.
+         *    to different objects. Fail otherwise. The objects
+         *    have to be identical though.
          *    @param mixed $first           Object reference to check.
          *    @param mixed $second          Hopefully not the same object.
          *    @param string $message        Message to display.
          *    @return boolean               True on pass
          *    @access public
+         */
+        function assertClone(&$first, &$second, $message = "%s") {
+            $dumper = &new SimpleDumper();
+            $message = sprintf(
+                    $message,
+                    "[" . $dumper->describeValue($first) .
+                            "] and [" . $dumper->describeValue($second) .
+                            "] should not be the same object");
+            $identical = &new IdenticalExpectation($first);
+            return $this->assertTrue(
+                    $identical->test($second) &&
+                            ! SimpleTestCompatibility::isReference($first, $second),
+                    $message);
+        }
+        
+        /**
+         *    @deprecated
          */
         function assertCopy(&$first, &$second, $message = "%s") {
             $dumper = &new SimpleDumper();

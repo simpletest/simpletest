@@ -146,10 +146,15 @@
             $a = "fred";
             $b = &$a;
             $this->assertReference($a, $b, "%s -> Pass");
-            $this->assertCopy($a, $b, "%s -> Fail");        // Fail.
+            $this->assertClone($a, $b, "%s -> Fail");        // Fail.
+        }
+        
+        function testCloneOnDifferentObjects() {
+            $a = "fred";
+            $b = $a;
             $c = "Hello";
-            $this->assertReference($a, $c, "%s -> Fail");        // Fail.
-            $this->assertCopy($a, $c, "%s -> Pass");
+            $this->assertClone($a, $b, "%s -> Pass");
+            $this->assertClone($a, $c, "%s -> Fail");        // Fail.
         }
 
         function testPatterns() {
@@ -372,7 +377,7 @@
         }
     }
 
-    $test = &new GroupTest("Visual test with 51 passes, 51 fails and 4 exceptions");
+    $test = &new GroupTest("Visual test with 50 passes, 50 fails and 4 exceptions");
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());
