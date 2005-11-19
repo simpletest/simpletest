@@ -6,18 +6,18 @@ $Id$
 Unit tester
 -----------
 Change assertCopy() to assertClone() and add identical check (1) - done.
-The ignore() directive should ignore parent classes as well (1).
-The fail() method should issue a line number (2).
+The ignore() directive should ignore parent classes as well (1) - done.
+The fail() method should issue a line number (2) - done.
+Abstract test cases should be ignored automatically (2).
 
 Reporter
 --------
 Chunk by test method in output (2).
 Allow multiple reporters (2).
+Split and refactor dumpers by type (2).
 
 Mock objects
 ------------
-Refactor internals to create an instance queue (4).
-Expectations and returns should follow most recent setting (2).
 
 Parser
 ------

@@ -8,7 +8,7 @@
     /**
      * does type matter
      */
-    if (!defined('TYPE_MATTERS')) {
+    if (! defined('TYPE_MATTERS')) {
         define('TYPE_MATTERS', true);
     }
     
@@ -368,10 +368,13 @@
          */
         function getFormattedAssertionLine($stack, $format = '%d', $prefix = 'assert') {
             foreach ($stack as $frame) {
-                if (isset($frame['file']) && strpos($frame['file'], 'simpletest') !== false) {     // dirname() is a bit slow.
-                    if (substr(dirname($frame['file']), -10) == 'simpletest') {
+                if (isset($frame['file']) && strpos($frame['file'], 'test_case') !== false) {     // dirname() is a bit slow.
+                    if (substr(dirname($frame['file']), -10) == 'test_case') {
                         continue;
                     }
+                }
+                if (($frame['function'] == 'fail') || ($frame['function'] == 'pass')) {
+                    return sprintf($format, $frame['line']);
                 }
                 if (strncmp($frame['function'], $prefix, strlen($prefix)) == 0) {
                     return sprintf($format, $frame['line']);
