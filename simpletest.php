@@ -33,7 +33,10 @@
          */
         function ignore($class) {
             $registry = &SimpleTest::_getRegistry();
-            $registry['IgnoreList'][] = strtolower($class);
+            $registry['IgnoreList'][strtolower($class)] = true;
+            if ($parent = strtolower(get_parent_class($class))) {
+                SimpleTest::ignore($parent);
+            }
         }
         
         /**
@@ -46,18 +49,11 @@
          */
         function isIgnored($class) {
             $registry = &SimpleTest::_getRegistry();
-            return in_array(strtolower($class), $registry['IgnoreList']);
+            return isset($registry['IgnoreList'][strtolower($class)]);
         }
         
         /**
-         *    The base class name is settable here. This is the
-         *    class that a new mock will inherited from.
-         *    To modify the generated mocks simply extend the
-         *    SimpleMock class and set it's name
-         *    with this method before any mocks are generated.
-         *    @param string $mock_base        Mock base class to use.
-         *    @static
-         *    @access public
+         *    @deprecated
          */
         function setMockBaseClass($mock_base) {
             $registry = &SimpleTest::_getRegistry();

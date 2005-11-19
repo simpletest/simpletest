@@ -5,6 +5,12 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems and their fixes...
 
+No method SimpleTestOptions::ignore()
+-------------------------------------
+This is deprecated in version 1.0.1beta and has been moved
+to SimpleTest::ignore() as that is more readable. In
+addition, parent classes are also ignored automatically.
+
 No method assertCopy()
 ----------------------
 This is deprecated in 1.0.1 in favour of assertClone().
