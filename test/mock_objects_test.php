@@ -214,7 +214,7 @@
             $stub = &new StubDummy();
             $object = new Dummy();
             $stub->setReturnReference("aMethod", $object, array(1, 2, 3));
-            $this->assertReference($zref =ze2 = $stub->aMethod(1, 2, 3), $object);
+            $this->assertReference($zref =& $stub->aMethod(1, 2, 3), $object);
         }
         
         function testCallCount() {
@@ -254,7 +254,7 @@
             $object = new Dummy();
             $stub->setReturnReferenceAt(1, "aMethod", $object);
             $this->assertNull($stub->aMethod());
-            $this->assertReference($zref =ze2 = $stub->aMethod(), $object);
+            $this->assertReference($zref =& $stub->aMethod(), $object);
             $this->assertNull($stub->aMethod());
         }
         
@@ -268,7 +268,7 @@
             $stub->setReturnValue("aMethod", 3, array(3));
             $this->assertNull($stub->aMethod());
             $this->assertEqual($stub->aMethod("a"), "aaa");
-            $this->assertReference($zref =ze2 = $stub->aMethod(1, 2), $object);
+            $this->assertReference($zref =& $stub->aMethod(1, 2), $object);
             $this->assertEqual($stub->aMethod(3), 3);
             $this->assertNull($stub->aMethod());
         }
@@ -351,7 +351,7 @@
             $mock = &new MockDummy();
             $object = new Dummy();
             $mock->setReturnReference("aMethod", $object, array(1, 2, 3));
-            $this->assertReference($zref =ze2 = $mock->aMethod(1, 2, 3), $object);
+            $this->assertReference($zref =& $mock->aMethod(1, 2, 3), $object);
         }
         
         function testWildcardReturn() {
@@ -386,7 +386,7 @@
             $object = new Dummy();
             $mock->setReturnReferenceAt(1, "aMethod", $object);
             $this->assertNull($mock->aMethod());
-            $this->assertReference($zref =ze2 = $mock->aMethod(), $object);
+            $this->assertReference($zref =& $mock->aMethod(), $object);
             $this->assertNull($mock->aMethod());
             $this->swallowErrors();
         }
@@ -616,7 +616,7 @@
             $mock = &new TestDummy();
             $object = new Dummy();
             $mock->setReturnReferenceAt(0, 'anotherMethod', $object, array(3));
-            $this->assertReference($zref =ze2 = $mock->anotherMethod(3), $object);
+            $this->assertReference($zref =& $mock->anotherMethod(3), $object);
         }
         
         function testExpectations() {
