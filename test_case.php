@@ -403,7 +403,7 @@
                 $this->addTestCase(new BadGroupTest($test_file, 'No new test cases'));
                 return;
             }
-            $this->addTestCase($this->_createGroupFromClasses($test_file, $classes));
+            $this->addTestCase($zref =& $this->_createGroupFromClasses($test_file, $classes));
         }
 
         /**
