@@ -1,7 +1,7 @@
 <?php
     // $Id$
 
-    class AnyOldClass {
+    abstract class AnyOldClass {
         function aMethod() {
         }
     }
@@ -24,7 +24,6 @@
 		function aMethod(SimpleTest $argument) { }
 	}
 
-
     class TestOfReflection extends UnitTestCase {
 
         function testClassExistence() {
@@ -37,6 +36,16 @@
             $reflection = new SimpleReflection('UnknownThing');
             $this->assertFalse($reflection->classOrInterfaceExists());
             $this->assertFalse($reflection->classOrInterfaceExistsSansAutoload());
+        }
+
+        function testDetectionOfAbstractClass() {
+            $reflection = new SimpleReflection('AnyOldClass');
+            $this->assertTrue($reflection->isAbstract());
+        }
+
+        function testFindingParentClass() {
+            $reflection = new SimpleReflection('AnyOldSubclass');
+            $this->assertEqual($reflection->getParent(), 'AnyOldImplementation');
         }
 
         function testInterfaceExistence() {

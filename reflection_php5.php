@@ -111,6 +111,30 @@
         }
 
         /**
+         *    Finds the parent class name.
+         *    @returns string      Parent class name.
+         *    @access public
+         */
+        function getParent() {
+            $reflection = new ReflectionClass($this->_interface);
+            $parent = $reflection->getParentClass();
+            if ($parent) {
+                return $parent->getName();
+            }
+            return false;
+        }
+
+        /**
+         *    Determines if the class is abstract.
+         *    @returns boolean      True if abstract.
+         *    @access public
+         */
+        function isAbstract() {
+            $reflection = new ReflectionClass($this->_interface);
+            return $reflection->isAbstract();
+        }
+
+        /**
          *    Wittles a list of interfaces down to only the top
          *    level parents.
          *    @param array $interfaces     Reflection API interfaces

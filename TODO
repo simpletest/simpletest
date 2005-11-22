@@ -5,10 +5,10 @@ $Id$
 
 Unit tester
 -----------
-Change assertCopy() to assertClone() and add identical check (1) - done.
-The ignore() directive should ignore parent classes as well (1) - done.
-The fail() method should issue a line number (2) - done.
-Abstract test cases should be ignored automatically (2).
+Change assertCopy() to assertClone() and add identical check (1/1) - done.
+The ignore() directive should ignore parent classes as well (1/2) - done.
+The fail() method should issue a line number (2/1) - done.
+Abstract test cases should be ignored automatically (2/2) - done.
 
 Reporter
 --------

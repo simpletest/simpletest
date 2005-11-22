@@ -17,6 +17,11 @@
     require_once(dirname(__FILE__) . '/expectation.php');
     require_once(dirname(__FILE__) . '/dumper.php');
     require_once(dirname(__FILE__) . '/simpletest.php');
+    if (version_compare(phpversion(), '5') >= 0) {
+        require_once(dirname(__FILE__) . '/reflection_php5.php');
+    } else {
+        require_once(dirname(__FILE__) . '/reflection_php4.php');
+    }
     if (! defined('SIMPLE_TEST')) {
         /**
          * @ignore
@@ -98,7 +103,7 @@
             $reporter->paintCaseEnd($this->getLabel());
             return $reporter->getStatus();
         }
-        
+
         /**
          *    Announces the start of the test.
          *    @param string $method    Test method just started.
@@ -125,7 +130,7 @@
          */
         function tearDown() {
         }
-        
+
         /**
          *    Announces the end of the test. Includes private clean up.
          *    @param string $method    Test method just finished.
@@ -220,7 +225,7 @@
                     $expectation->test($compare),
                     sprintf($message, $expectation->overlayMessage($compare)));
         }
-        
+
         /**
          *	  @deprecated
          */
@@ -487,6 +492,11 @@
         function _createGroupFromClasses($title, $classes) {
             $group = new GroupTest($title);
             foreach ($classes as $class) {
+                $reflection = new SimpleReflection($class);
+                if ($reflection->isAbstract()) {
+                    SimpleTest::ignore($class);
+                    continue;
+                }
                 if (SimpleTest::isIgnored($class)) {
                     continue;
                 }
@@ -510,7 +520,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Delegates to a visiting collector to add test
          *    files.

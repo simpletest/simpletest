@@ -5,13 +5,23 @@
      *	@subpackage	UnitTester
      *	@version	$Id$
      */
-    
+
+    /**#@+
+     * include SimpleTest files
+     */
+    if (version_compare(phpversion(), '5') >= 0) {
+        require_once(dirname(__FILE__) . '/reflection_php5.php');
+    } else {
+        require_once(dirname(__FILE__) . '/reflection_php4.php');
+    }
+    /**#@-*/
+
     /**
      *    Static global directives and options.
      *	  @package	SimpleTest
      */
     class SimpleTest {
-        
+
         /**
          *    Reads the SimpleTest version from the release file.
          *    @return string        Version string.
@@ -22,7 +32,7 @@
             $content = file(dirname(__FILE__) . '/VERSION');
             return trim($content[0]);
         }
-        
+
         /**
          *    Sets the name of a test case to ignore, usually
          *    because the class is an abstract case that should
@@ -34,11 +44,12 @@
         function ignore($class) {
             $registry = &SimpleTest::_getRegistry();
             $registry['IgnoreList'][strtolower($class)] = true;
-            if ($parent = strtolower(get_parent_class($class))) {
+            $reflection = new SimpleReflection($class);
+            if ($parent = $reflection->getParent()) {
                 SimpleTest::ignore($parent);
             }
         }
-        
+
         /**
          *    Test to see if a test case is in the ignore
          *    list.
@@ -51,7 +62,7 @@
             $registry = &SimpleTest::_getRegistry();
             return isset($registry['IgnoreList'][strtolower($class)]);
         }
-        
+
         /**
          *    @deprecated
          */
@@ -59,7 +70,7 @@
             $registry = &SimpleTest::_getRegistry();
             $registry['MockBaseClass'] = $mock_base;
         }
-        
+
         /**
          *    @deprecated
          */
@@ -67,7 +78,7 @@
             $registry = &SimpleTest::_getRegistry();
             return $registry['MockBaseClass'];
         }
-        
+
         /**
          *    Sets proxy to use on all requests for when
          *    testing from behind a firewall. Set host
@@ -84,7 +95,7 @@
             $registry['DefaultProxyUsername'] = $username;
             $registry['DefaultProxyPassword'] = $password;
         }
-        
+
         /**
          *    Accessor for default proxy host.
          *    @return string       Proxy URL.
@@ -94,7 +105,7 @@
             $registry = &SimpleTest::_getRegistry();
             return $registry['DefaultProxy'];
         }
-        
+
         /**
          *    Accessor for default proxy username.
          *    @return string    Proxy username for authentication.
@@ -104,7 +115,7 @@
             $registry = &SimpleTest::_getRegistry();
             return $registry['DefaultProxyUsername'];
         }
-        
+
         /**
          *    Accessor for default proxy password.
          *    @return string    Proxy password for authentication.
@@ -114,7 +125,7 @@
             $registry = &SimpleTest::_getRegistry();
             return $registry['DefaultProxyPassword'];
         }
-        
+
         /**
          *    Sets the current test case instance. This
          *    global instance can be used by the mock objects
@@ -127,7 +138,7 @@
             $registry = &SimpleTest::_getRegistry();
             $registry['CurrentTestCase'] = &$test;
         }
-        
+
         /**
          *    Accessor for current test instance.
          *    @return SimpleTEstCase        Currently running test.
@@ -138,7 +149,7 @@
             $registry = &SimpleTest::_getRegistry();
             return $registry['CurrentTestCase'];
         }
-        
+
         /**
          *    Accessor for global registry of options.
          *    @return hash           All stored values.
@@ -152,7 +163,7 @@
             }
             return $registry;
         }
-        
+
         /**
          *    Constant default values.
          *    @return hash       All registry defaults.
@@ -169,68 +180,68 @@
                     'DefaultProxyPassword' => false);
         }
     }
-    
+
     /**
      *    @deprecated
      */
     class SimpleTestOptions extends SimpleTest {
-        
+
         /**
          *    @deprecated
          */
         function getVersion() {
             return Simpletest::getVersion();
         }
-        
+
         /**
          *    @deprecated
          */
         function ignore($class) {
             return Simpletest::ignore($class);
         }
-        
+
         /**
          *    @deprecated
          */
         function isIgnored($class) {
             return Simpletest::isIgnored($class);
         }
-        
+
         /**
          *    @deprecated
          */
         function setMockBaseClass($mock_base) {
             return Simpletest::setMockBaseClass($mock_base);
         }
-        
+
         /**
          *    @deprecated
          */
         function getMockBaseClass() {
             return Simpletest::getMockBaseClass();
         }
-        
+
         /**
          *    @deprecated
          */
         function useProxy($proxy, $username = false, $password = false) {
             return Simpletest::useProxy($proxy, $username, $password);
         }
-        
+
         /**
          *    @deprecated
          */
         function getDefaultProxy() {
             return Simpletest::getDefaultProxy();
         }
-        
+
         /**
          *    @deprecated
          */
         function getDefaultProxyUsername() {
             return Simpletest::getDefaultProxyUsername();
         }
-        
+
         /**
          *    @deprecated
          */
