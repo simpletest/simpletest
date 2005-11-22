@@ -11,12 +11,4 @@
 
     class ShouldNeverBeRunEither extends ShouldNeverBeRun { }
     SimpleTest::ignore('ShouldNeverBeRunEither');
-
-    if (version_compare(phpversion(), '5') >= 0) {
-        abstract class ShouldNeverRunAnAbstract extends UnitTestCase {
-            function testWithNoChanceOfSuccess() {
-                $this->fail('Should be ignored');
-            }
-        }
-    }
 ?>
