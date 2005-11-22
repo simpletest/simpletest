@@ -29,6 +29,8 @@ Browser
 Allow ignoring of cookies as per feature request (2).
 Fix bug URL losing spaces (3).
 Investigate bug, clicking keeps encoding (3).
+Change getUrls() to return more information (2).
+Add a file() loading command (2).
 
 Web tester
 ----------
