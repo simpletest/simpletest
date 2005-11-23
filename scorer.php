@@ -35,6 +35,8 @@
          *    Signals that the next evaluation will be a dry
          *    run. That is, the structure events will be
          *    recorded, but no tests will be run.
+         *    @param boolean $is_dry        Dry run if true.
+         *    @access public
          */
         function makeDry($is_dry = true) {
             $this->_is_dry_run = $is_dry;
@@ -63,21 +65,22 @@
             }
             return true;
         }
-        
+       
         /**
-         *    Paints the start of a test method.
+         *    Paints the start of a group test.
          *    @param string $test_name     Name of test or other label.
+         *    @param integer $size         Number of test cases starting.
          *    @access public
          */
-        function paintMethodStart($test_name) {
+        function paintGroupStart($test_name, $size) {
         }
         
         /**
-         *    Paints the end of a test method.
+         *    Paints the end of a group test.
          *    @param string $test_name     Name of test or other label.
          *    @access public
          */
-        function paintMethodEnd($test_name) {
+        function paintGroupEnd($test_name) {
         }
          
         /**
@@ -95,22 +98,21 @@
          */
         function paintCaseEnd($test_name) {
         }
-       
+        
         /**
-         *    Paints the start of a group test.
+         *    Paints the start of a test method.
          *    @param string $test_name     Name of test or other label.
-         *    @param integer $size         Number of test cases starting.
          *    @access public
          */
-        function paintGroupStart($test_name, $size) {
+        function paintMethodStart($test_name) {
         }
         
         /**
-         *    Paints the end of a group test.
+         *    Paints the end of a test method.
          *    @param string $test_name     Name of test or other label.
          *    @access public
          */
-        function paintGroupEnd($test_name) {
+        function paintMethodEnd($test_name) {
         }
         
         /**
@@ -373,6 +375,178 @@
          */
         function inCli() {
             return php_sapi_name() == 'cli';
+        }
+    }
+
+    /**
+     *    For modifying the behaviour of the visual reporters.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class SimpleReporterDecorator {
+        var $_reporter;
+        
+        /**
+         *    Mediates between teh reporter and the test case.
+         *    @param SimpleScorer $reporter       Reporter to receive events.
+         */
+        function SimpleReporterDecorator(&$reporter) {
+            $this->_reporter = &$reporter;
+        }
+        
+        /**
+         *    Signals that the next evaluation will be a dry
+         *    run. That is, the structure events will be
+         *    recorded, but no tests will be run.
+         *    @param boolean $is_dry        Dry run if true.
+         *    @access public
+         */
+        function makeDry($is_dry = true) {
+            $this->_reporter->makeDry($is_dry);
+        }
+
+        /**
+         *    Accessor for current status. Will be false
+         *    if there have been any failures or exceptions.
+         *    Used for command line tools.
+         *    @return boolean        True if no failures.
+         *    @access public
+         */
+        function getStatus() {
+            return $this->_reporter->getStatus();
+        }
+        
+        /**
+         *    The reporter has a veto on what should be run.
+         *    @param string $test_case_name  name of test case.
+         *    @param string $method          Name of test method.
+         *    @access public
+         */
+        function shouldInvoke($test_case_name, $method) {
+            return $this->_reporter->shouldInvoke($test_case_name, $method);
+        }
+        
+        /**
+         *    Paints the start of a group test.
+         *    @param string $test_name     Name of test or other label.
+         *    @param integer $size         Number of test cases starting.
+         *    @access public
+         */
+        function paintGroupStart($test_name, $size) {
+            $this->_reporter->paintGroupStart($test_name, $size);
+        }
+        
+        /**
+         *    Paints the end of a group test.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintGroupEnd($test_name) {
+            $this->_reporter->paintGroupEnd($test_name);
+        }
+         
+        /**
+         *    Paints the start of a test case.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintCaseStart($test_name) {
+            $this->_reporter->paintCaseStart($test_name);
+        }
+        
+        /**
+         *    Paints the end of a test case.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintCaseEnd($test_name) {
+            $this->_reporter->paintCaseEnd($test_name);
+        }
+        
+        /**
+         *    Paints the start of a test method.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintMethodStart($test_name) {
+            $this->_reporter->paintMethodStart($test_name);
+        }
+        
+        /**
+         *    Paints the end of a test method.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintMethodEnd($test_name) {
+            $this->_reporter->paintMethodEnd($test_name);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message        Message is ignored.
+         *    @access public
+         */
+        function paintPass($message) {
+            $this->_reporter->paintPass($message);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message        Message is ignored.
+         *    @access public
+         */
+        function paintFail($message) {
+            $this->_reporter->paintFail($message);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message    Text of error formatted by
+         *                              the test case.
+         *    @access public
+         */
+        function paintError($message) {
+            $this->_reporter->paintError($message);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param Exception $exception     Object thrown.
+         *    @access public
+         */
+        function paintException($exception) {
+            $this->_reporter->paintException($exception);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message        Text to display.
+         *    @access public
+         */
+        function paintMessage($message) {
+            $this->_reporter->paintMessage($message);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message        Text to display.
+         *    @access public
+         */
+        function paintFormattedMessage($message) {
+            $this->_reporter->paintFormattedMessage($message);
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $type        Event type as text.
+         *    @param mixed $payload      Message or object.
+         *    @return boolean            Should return false if this
+         *                               type of signal should fail the
+         *                               test suite.
+         *    @access public
+         */
+        function paintSignal($type, &$payload) {
+            $this->_reporter->paintSignal($type, $payload);
         }
     }
 ?>

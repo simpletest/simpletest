@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.0.1beta) of 48 hours.
+This is immediate stuff only for this iteration (1.0.1beta) of 50 hours.
 
 $Id$
 
@@ -12,9 +12,11 @@ Abstract test cases should be ignored automatically (2/2) - done.
 
 Reporter
 --------
-Chunk by test method in output (2).
+Chunk by test method in HtmlReporter output (2).
 Allow multiple reporters (2).
 Split and refactor dumpers by type (2).
+Can we get rid of that useless runner class? yes! (1/1) - done.
+Test case should say what tests are available (1/1) - done.
 
 Mock objects
 ------------
@@ -37,7 +39,7 @@ Web tester
 Add assertSubmit() method (1).
 Add assertClickable() method (1).
 Setting an option by id attribute should only toggle that option (3).
-Failure to connect should be reported unless suppressed(2).
+Failure to connect should be reported unless suppressed (2).
 
 Documentation
 -------------
@@ -48,5 +50,5 @@ Extension docs (1).
 Build
 -----
 Fix fatal error in PHP 5.1 (3).
-Fix fatal error in PHP 5.0.5 (3).
+Fix fatal error in PHP 5.0.5 (3/2) - done.
 Test with PHP 4.4.1 (1).

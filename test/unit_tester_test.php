@@ -52,21 +52,10 @@
         }
     }
     
-    class JBehaveStyleRunner extends SimpleRunner {
-        function JBehaveStyleRunner(&$test_case, &$scorer) {
-            $this->SimpleRunner($test_case, $scorer);
-        }
+    class TestOfJBehaveStyle extends UnitTestCase {
         
         function _isTest($method) {
             return strtolower(substr($method, 0, 6)) == 'should';
-        }
-    }
-    
-    class TestOfJBehaveStyleRunner extends UnitTestCase {
-        
-        function &_createRunner(&$reporter) {
-            $runner = &new JBehaveStyleRunner($this, $reporter);
-            return $runner;
         }
         
         function testFail() {

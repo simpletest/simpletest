@@ -40,7 +40,7 @@
      */
     class SimpleTestCase {
         var $_label = false;
-        var $_runner = false;
+        var $_reporter = false;
         var $_observers;
 
         /**
@@ -75,19 +75,6 @@
         }
 
         /**
-         *    Can modify the incoming reporter so as to run
-         *    the tests differently. This version simply
-         *    passes it straight through.
-         *    @param SimpleReporter $reporter    Incoming observer.
-         *    @return SimpleReporter
-         *    @access protected
-         */
-        function &_createRunner(&$reporter) {
-            $runner = &new SimpleRunner($this, $reporter);
-            return $runner;
-        }
-
-        /**
          *    Uses reflection to run every method within itself
          *    starting with the string "test" unless a method
          *    is specified.
@@ -96,12 +83,50 @@
          */
         function run(&$reporter) {
             SimpleTest::setCurrent($this);
-            $reporter->paintCaseStart($this->getLabel());
-            $this->_runner = &$this->_createRunner($reporter);
-            $this->_runner->run();
-            $this->_runner = false;
-            $reporter->paintCaseEnd($this->getLabel());
+            $this->_reporter = &$reporter;
+            $this->_reporter->paintCaseStart($this->getLabel());
+            $invoker = &$this->createInvoker();
+            foreach ($this->getTests() as $method) {
+                if ($this->_reporter->shouldInvoke($this->getLabel(), $method)) {
+                    $invoker->invoke($method);
+                }
+            }
+            $this->_reporter->paintCaseEnd($this->getLabel());
+            unset($this->_reporter);
             return $reporter->getStatus();
+        }
+        
+        /**
+         *    Gets a list of test names. Normally that will
+         *    be all internal methods that start with the
+         *    name "test". This method should be overridden
+         *    if you want a different rule.
+         *    @return array        List of test names.
+         *    @access public
+         */
+        function getTests() {
+            $methods = array();
+            foreach (get_class_methods(get_class($this)) as $method) {
+                if ($this->_isTest($method)) {
+                    $methods[] = $method;
+                }
+            }
+            return $methods;
+        }
+
+        /**
+         *    Tests to see if the method is a test that should
+         *    be run. Currently any method that starts with 'test'
+         *    is a candidate unless it is the constructor.
+         *    @param string $method        Method name to try.
+         *    @return boolean              True if test method.
+         *    @access protected
+         */
+        function _isTest($method) {
+            if (strtolower(substr($method, 0, 4)) == 'test') {
+                return ! SimpleTestCompatibility::isA($this, strtolower($method));
+            }
+            return false;
         }
 
         /**
@@ -110,7 +135,7 @@
          *    @access public
          */
         function before($method) {
-            $this->_runner->paintMethodStart($method);
+            $this->_reporter->paintMethodStart($method);
             $this->_observers = array();
         }
 
@@ -140,7 +165,7 @@
             for ($i = 0; $i < count($this->_observers); $i++) {
                 $this->_observers[$i]->atTestEnd($method);
             }
-            $this->_runner->paintMethodEnd($method);
+            $this->_reporter->paintMethodEnd($method);
         }
 
         /**
@@ -159,7 +184,7 @@
          *    @access public
          */
         function pass($message = "Pass") {
-            $this->_runner->paintPass($message . $this->getAssertionLine(' at line [%d]'));
+            $this->_reporter->paintPass($message . $this->getAssertionLine(' at line [%d]'));
             return true;
         }
 
@@ -169,7 +194,7 @@
          *    @access public
          */
         function fail($message = "Fail") {
-            $this->_runner->paintFail($message . $this->getAssertionLine(' at line [%d]'));
+            $this->_reporter->paintFail($message . $this->getAssertionLine(' at line [%d]'));
             return false;
         }
 
@@ -185,7 +210,7 @@
          */
         function error($severity, $message, $file, $line, $globals) {
             $severity = SimpleErrorQueue::getSeverityAsString($severity);
-            $this->_runner->paintError(
+            $this->_reporter->paintError(
                     "Unexpected PHP error [$message] severity [$severity] in [$file] line [$line]");
         }
 
@@ -199,7 +224,7 @@
          *    @access public
          */
         function signal($type, &$payload) {
-            $this->_runner->paintSignal($type, $payload);
+            $this->_reporter->paintSignal($type, $payload);
         }
 
         /**
@@ -301,7 +326,7 @@
             if ($message) {
                 $formatted = $message . "\n" . $formatted;
             }
-            $this->_runner->paintFormattedMessage($formatted);
+            $this->_reporter->paintFormattedMessage($formatted);
             return $variable;
         }
 
@@ -312,7 +337,7 @@
          *    @access public
          */
         function sendMessage($message) {
-            $this->_runner->PaintMessage($message);
+            $this->_reporter->PaintMessage($message);
         }
 
         /**
