@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.0.1beta) of 50 hours.
+This is immediate stuff only for this iteration (1.0.1beta) of 51 hours.
 
 $Id$
 
@@ -9,6 +9,7 @@ Change assertCopy() to assertClone() and add identical check (1/1) - done.
 The ignore() directive should ignore parent classes as well (1/2) - done.
 The fail() method should issue a line number (2/1) - done.
 Abstract test cases should be ignored automatically (2/2) - done.
+More meaningful message when trying a test in the constructor (1).
 
 Reporter
 --------

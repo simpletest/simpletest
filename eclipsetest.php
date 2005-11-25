@@ -9,7 +9,7 @@
     /**#@+
      * include SimpleTest files
      */
-	require_once dirname(__FILE__)."/socket.php";
+	require_once(dirname(__FILE__) . '/socket.php');
 	require_once(dirname(__FILE__) . '/test_case.php');
 	require_once(dirname(__FILE__) . '/runner.php');
 	/**#@-*/
@@ -35,10 +35,10 @@
 	    *    Invokes run() on all of the held test cases, instantiating
 	    *    them if necessary.
 	    *    @param SimpleReporter $reporter    Current test reporter.
-	    *    @param int $port Port to report test results on
+	    *    @param integer $port               Port to report test results on.
 	    *    @access public
 	    */
-	   function run(&$reporter,$port) {
+	   function run(&$reporter, $port) {
 		   $count = count($this->_test_cases);
 	       for ($i = 0; $i < $count; $i++) {
 				if (is_string($this->_test_cases[$i])) {
@@ -47,15 +47,14 @@
 		
 		           	ob_start();
 					$reporter->paintGroupStart($this->getLabel(), $this->getSize());
-					
 	                $reporter->paintCaseStart($test->getLabel());
-	                $start=ob_get_contents();
+	                $start = ob_get_contents();
 					ob_end_clean();
 					
 					ob_start();
 					$reporter->paintCaseEnd($test->getLabel());
 					$reporter->paintGroupEnd($this->getLabel());
-			        $end=ob_get_contents();
+			        $end = ob_get_contents();
 					ob_end_clean();
 					
 					//the guts from SimpleTestCase::run($reporter) where 
@@ -121,7 +120,7 @@
 	 *	  @package SimpleTest
 	 *	  @subpackage UnitTester
      */
-	class EclipseRunner extends SimpleRunner{
+	class EclipseRunner {
 		
 		/**
          *    Takes in the test case and reporter to mediate between.
