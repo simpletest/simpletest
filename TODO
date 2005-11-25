@@ -24,7 +24,7 @@ Mock objects
 
 Parser
 ------
-Extract character set for regex match (3).
+Extract character encoding for regex match (3).
 Parse fieldsets correctly with labels (4).
 
 Browser
@@ -34,6 +34,7 @@ Fix bug URL losing spaces (3).
 Investigate bug, clicking keeps encoding (3).
 Change getUrls() to return more information (2).
 Add a file() loading command (2).
+Setting a radio button with value 0 doesn't happen (1).
 
 Web tester
 ----------

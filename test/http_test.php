@@ -369,7 +369,8 @@
     class TestOfHttpHeaders extends UnitTestCase {
         
         function testParseBasicHeaders() {
-            $headers = new SimpleHttpHeaders("HTTP/1.1 200 OK\r\n" .
+            $headers = new SimpleHttpHeaders(
+                    "HTTP/1.1 200 OK\r\n" .
                     "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n" .
                     "Content-Type: text/plain\r\n" .
                     "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n" .
@@ -377,6 +378,13 @@
             $this->assertIdentical($headers->getHttpVersion(), "1.1");
             $this->assertIdentical($headers->getResponseCode(), 200);
             $this->assertEqual($headers->getMimeType(), "text/plain");
+        }
+        
+        function testNonStandardResponseHeader() {
+            $headers = new SimpleHttpHeaders(
+                    "HTTP/1.1 302 (HTTP-Version SP Status-Code CRLF)\r\n" .
+                    "Connection: close");
+            $this->assertIdentical($headers->getResponseCode(), 302);
         }
         
         function testParseOfCookies() {

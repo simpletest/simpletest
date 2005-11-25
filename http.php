@@ -642,7 +642,7 @@
          *    @access protected
          */
         function _parseHeaderLine($header_line) {
-            if (preg_match('/HTTP\/(\d+\.\d+)\s+(\S*)/i', $header_line, $matches)) {
+            if (preg_match('/HTTP\/(\d+\.\d+)\s+(\d+)/i', $header_line, $matches)) {
                 $this->_http_version = $matches[1];
                 $this->_response_code = $matches[2];
             }
@@ -729,7 +729,7 @@
                 $this->_setError('Nothing fetched');
                 $this->_headers = &new SimpleHttpHeaders('');
             } elseif (! strstr($raw, "\r\n\r\n")) {
-                $this->_setError('Could not parse headers');
+                $this->_setError('Could not split headers from content');
                 $this->_headers = &new SimpleHttpHeaders($raw);
             } else {
                 list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);

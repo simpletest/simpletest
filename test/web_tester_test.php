@@ -118,6 +118,11 @@
             $this->assertIdentical($expectation->test("aa:A\r\nb:B\r\nc:C"), true);
             $this->assertIdentical($expectation->test("aa:A\r\na:A\r\nb:B"), false);
         }
+        
+        function testLocationHeaderSplitsCorrectly() {
+            $expectation = new HttpHeaderExpectation('Location', 'http://here/');
+            $this->assertIdentical($expectation->test('Location: http://here/'), true);
+        }
     }
     
     class TestOfTextExpectations extends UnitTestCase {
