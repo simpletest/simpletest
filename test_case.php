@@ -40,7 +40,7 @@
      */
     class SimpleTestCase {
         var $_label = false;
-        var $_reporter = false;
+        var $_reporter;
         var $_observers;
 
         /**
@@ -184,6 +184,9 @@
          *    @access public
          */
         function pass($message = "Pass") {
+            if (! isset($this->_reporter)) {
+                trigger_error('Can only make assertions within test methods');
+            }
             $this->_reporter->paintPass($message . $this->getAssertionLine(' at line [%d]'));
             return true;
         }
@@ -194,6 +197,9 @@
          *    @access public
          */
         function fail($message = "Fail") {
+            if (! isset($this->_reporter)) {
+                trigger_error('Can only make assertions within test methods');
+            }
             $this->_reporter->paintFail($message . $this->getAssertionLine(' at line [%d]'));
             return false;
         }
@@ -209,6 +215,9 @@
          *    @access public
          */
         function error($severity, $message, $file, $line, $globals) {
+            if (! isset($this->_reporter)) {
+                trigger_error('Can only make assertions within test methods');
+            }
             $severity = SimpleErrorQueue::getSeverityAsString($severity);
             $this->_reporter->paintError(
                     "Unexpected PHP error [$message] severity [$severity] in [$file] line [$line]");
@@ -224,6 +233,9 @@
          *    @access public
          */
         function signal($type, &$payload) {
+            if (! isset($this->_reporter)) {
+                trigger_error('Can only make assertions within test methods');
+            }
             $this->_reporter->paintSignal($type, $payload);
         }
 

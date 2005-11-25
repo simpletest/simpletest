@@ -9,12 +9,14 @@ Change assertCopy() to assertClone() and add identical check (1/1) - done.
 The ignore() directive should ignore parent classes as well (1/2) - done.
 The fail() method should issue a line number (2/1) - done.
 Abstract test cases should be ignored automatically (2/2) - done.
-More meaningful message when trying a test in the constructor (1).
+More meaningful message when trying a test in the constructor (1/1) - done.
 
 Reporter
 --------
 Chunk by test method in HtmlReporter output (2).
 Allow multiple reporters (2).
+Add a repeating reporter (2).
+Add a test case selecting ReporterDecorator (2).
 Split and refactor dumpers by type (2).
 Can we get rid of that useless runner class? yes! (1/1) - done.
 Test case should say what tests are available (1/1) - done.
@@ -35,6 +37,7 @@ Investigate bug, clicking keeps encoding (3).
 Change getUrls() to return more information (2).
 Add a file() loading command (2).
 Setting a radio button with value 0 doesn't happen (1).
+Fix quoting issue with fields as in bug report (2).
 
 Web tester
 ----------
