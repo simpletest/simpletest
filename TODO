@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.0.1beta) of 51 hours.
+This is immediate stuff only for this iteration (1.0.1beta) of 38 hours.
 
 $Id$
 
@@ -13,11 +13,8 @@ More meaningful message when trying a test in the constructor (1/1) - done.
 
 Reporter
 --------
-Chunk by test method in HtmlReporter output (2).
 Allow multiple reporters (2).
-Add a repeating reporter (2).
 Add a test case selecting ReporterDecorator (2).
-Split and refactor dumpers by type (2).
 Can we get rid of that useless runner class? yes! (1/1) - done.
 Test case should say what tests are available (1/1) - done.
 
@@ -26,31 +23,23 @@ Mock objects
 
 Parser
 ------
-Extract character encoding for regex match (3).
-Parse fieldsets correctly with labels (4).
 
 Browser
 -------
 Allow ignoring of cookies as per feature request (2).
-Fix bug URL losing spaces (3).
-Investigate bug, clicking keeps encoding (3).
-Change getUrls() to return more information (2).
-Add a file() loading command (2).
-Setting a radio button with value 0 doesn't happen (1).
+Setting a radio button with value 0 just doesn't happen (1).
 Fix quoting issue with fields as in bug report (2).
+Fix bug with GET parameters not being transmitted in form action (3).
+Confirm that button with no name has no value transmitted (2).
 
 Web tester
 ----------
-Add assertSubmit() method (1).
-Add assertClickable() method (1).
 Setting an option by id attribute should only toggle that option (3).
 Failure to connect should be reported unless suppressed (2).
 
 Documentation
 -------------
 Get method lists up to date (3).
-Add page for projects that use or extend SimpleTest (2).
-Extension docs (1).
 
 Build
 -----

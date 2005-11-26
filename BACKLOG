@@ -1,0 +1,42 @@
+BACKLOG
+This is stuff that may be nice to have in future iterations.
+
+$Id$
+
+Unit tester
+-----------
+
+Reporter
+--------
+Add a repeating reporter (2).
+Split and refactor dumpers by type (2).
+Chunk by test method in HtmlReporter output (2).
+
+Mock objects
+------------
+
+Parser
+------
+Extract character encoding for regex match (3).
+Parse fieldsets correctly with labels (4).
+
+Browser
+-------
+Change getUrls() to return more information (2).
+Add a file() loading command (2).
+Investigate bug, clicking keeps encoding again and again (3).
+Fix bug URL losing spaces (3).
+
+Web tester
+----------
+Add assertClickable() method (1).
+Add additional parameters to click() method (1).
+Add assertSubmit() method (1).
+
+Documentation
+-------------
+Extension docs (1).
+Add page for projects that use or extend SimpleTest (2).
+
+Build
+-----
