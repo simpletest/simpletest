@@ -353,7 +353,7 @@
         }
     }
 
-    class AllOutputReporter extends HtmlReporter {
+    class PassesAsWellReporter extends HtmlReporter {
 
         function _getCss() {
             return parent::_getCss() . ' .pass { color: darkgreen; }';
@@ -388,7 +388,7 @@
     } elseif (TextReporter::inCli()) {
         $reporter = &new TextReporter();
     } else {
-        $reporter = &new AllOutputReporter();
+        $reporter = &new PassesAsWellReporter();
     }
     if (isset($_GET['dry']) || in_array('dry', (isset($argv) ? $argv : array()))) {
         $reporter->makeDry();

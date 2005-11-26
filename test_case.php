@@ -85,9 +85,9 @@
             SimpleTest::setCurrent($this);
             $this->_reporter = &$reporter;
             $this->_reporter->paintCaseStart($this->getLabel());
-            $invoker = &$this->createInvoker();
             foreach ($this->getTests() as $method) {
                 if ($this->_reporter->shouldInvoke($this->getLabel(), $method)) {
+                    $invoker = &$this->_reporter->createInvoker($this->createInvoker());
                     $invoker->invoke($method);
                 }
             }

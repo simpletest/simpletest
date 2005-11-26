@@ -53,6 +53,17 @@
         }
 
         /**
+         *    Can wrap the invoker in preperation for running
+         *    a test.
+         *    @param SimpleInvoker $invoker   Individual test runner.
+         *    @return SimpleInvoker           Wrapped test runner.
+         *    @access public
+         */
+        function &createInvoker(&$invoker) {
+            return $invoker;
+        }
+
+        /**
          *    Accessor for current status. Will be false
          *    if there have been any failures or exceptions.
          *    Used for command line tools.
@@ -425,6 +436,17 @@
         function shouldInvoke($test_case_name, $method) {
             return $this->_reporter->shouldInvoke($test_case_name, $method);
         }
+
+        /**
+         *    Can wrap the invoker in preperation for running
+         *    a test.
+         *    @param SimpleInvoker $invoker   Individual test runner.
+         *    @return SimpleInvoker           Wrapped test runner.
+         *    @access public
+         */
+        function &createInvoker(&$invoker) {
+            return $this->_reporter->createInvoker(&$invoker);
+        }
         
         /**
          *    Paints the start of a group test.
@@ -612,6 +634,19 @@
                 }
             }
             return true;
+        }
+
+        /**
+         *    Every reporter gets a chance to wrap the invoker.
+         *    @param SimpleInvoker $invoker   Individual test runner.
+         *    @return SimpleInvoker           Wrapped test runner.
+         *    @access public
+         */
+        function &createInvoker(&$invoker) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $invoker = &$this->_reporters[$i]->createInvoker(&$invoker);
+            }
+            return $invoker;
         }
         
         /**
