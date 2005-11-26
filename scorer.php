@@ -549,4 +549,218 @@
             $this->_reporter->paintSignal($type, $payload);
         }
     }
+
+    /**
+     *    For sending messages to multiple reporters at
+     *    the same time.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class MultipleReporter {
+        var $_reporters = array();
+        
+        /**
+         *    Adds a reporter to the subscriber list.
+         *    @param SimpleScorer $reporter     Reporter to receive events.
+         *    @access public
+         */
+        function attachReporter(&$reporter) {
+            $this->_reporters[] = &$reporter;
+        }
+        
+        /**
+         *    Signals that the next evaluation will be a dry
+         *    run. That is, the structure events will be
+         *    recorded, but no tests will be run.
+         *    @param boolean $is_dry        Dry run if true.
+         *    @access public
+         */
+        function makeDry($is_dry = true) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->makeDry($is_dry);
+            }
+        }
+
+        /**
+         *    Accessor for current status. Will be false
+         *    if there have been any failures or exceptions.
+         *    If any reporter reports a failure, the whole
+         *    suite fails.
+         *    @return boolean        True if no failures.
+         *    @access public
+         */
+        function getStatus() {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                if (! $this->_reporters[$i]->getStatus()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        /**
+         *    The reporter has a veto on what should be run.
+         *    It requires all reporters to want to run the method.
+         *    @param string $test_case_name  name of test case.
+         *    @param string $method          Name of test method.
+         *    @access public
+         */
+        function shouldInvoke($test_case_name, $method) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                if (! $this->_reporters[$i]->shouldInvoke($test_case_name, $method)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        /**
+         *    Paints the start of a group test.
+         *    @param string $test_name     Name of test or other label.
+         *    @param integer $size         Number of test cases starting.
+         *    @access public
+         */
+        function paintGroupStart($test_name, $size) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->paintGroupStart($test_name, $size);
+            }
+        }
+        
+        /**
+         *    Paints the end of a group test.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintGroupEnd($test_name) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->paintGroupEnd($test_name);
+            }
+        }
+         
+        /**
+         *    Paints the start of a test case.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintCaseStart($test_name) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->paintCaseStart($test_name);
+            }
+        }
+        
+        /**
+         *    Paints the end of a test case.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintCaseEnd($test_name) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->paintCaseEnd($test_name);
+            }
+        }
+        
+        /**
+         *    Paints the start of a test method.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintMethodStart($test_name) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->paintMethodStart($test_name);
+            }
+        }
+        
+        /**
+         *    Paints the end of a test method.
+         *    @param string $test_name     Name of test or other label.
+         *    @access public
+         */
+        function paintMethodEnd($test_name) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->paintMethodEnd($test_name);
+            }
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message        Message is ignored.
+         *    @access public
+         */
+        function paintPass($message) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->paintPass($message);
+            }
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message        Message is ignored.
+         *    @access public
+         */
+        function paintFail($message) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->paintFail($message);
+            }
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message    Text of error formatted by
+         *                              the test case.
+         *    @access public
+         */
+        function paintError($message) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->paintError($message);
+            }
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param Exception $exception     Object thrown.
+         *    @access public
+         */
+        function paintException($exception) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->paintException($exception);
+            }
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message        Text to display.
+         *    @access public
+         */
+        function paintMessage($message) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->paintMessage($message);
+            }
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $message        Text to display.
+         *    @access public
+         */
+        function paintFormattedMessage($message) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->paintFormattedMessage($message);
+            }
+        }
+        
+        /**
+         *    Chains to the wrapped reporter.
+         *    @param string $type        Event type as text.
+         *    @param mixed $payload      Message or object.
+         *    @return boolean            Should return false if this
+         *                               type of signal should fail the
+         *                               test suite.
+         *    @access public
+         */
+        function paintSignal($type, &$payload) {
+            for ($i = 0; $i < count($this->_reporters); $i++) {
+                $this->_reporters[$i]->paintSignal($type, $payload);
+            }
+        }
+    }
 ?>

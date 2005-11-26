@@ -385,7 +385,7 @@
 
     if (isset($_GET['xml']) || in_array('xml', (isset($argv) ? $argv : array()))) {
         $reporter = &new XmlReporter();
-    } elseif(SimpleReporter::inCli()) {
+    } elseif (TextReporter::inCli()) {
         $reporter = &new TextReporter();
     } else {
         $reporter = &new AllOutputReporter();

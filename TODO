@@ -13,7 +13,7 @@ More meaningful message when trying a test in the constructor (1/1) - done.
 
 Reporter
 --------
-Allow multiple reporters (2).
+Allow multiple reporters (2/1) - done.
 Add a test case selecting ReporterDecorator (2).
 Can we get rid of that useless runner class? yes! (1/1) - done.
 Test case should say what tests are available (1/1) - done.
