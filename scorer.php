@@ -6,6 +6,10 @@
      *	@version	$Id$
      */
     
+    /**#@+*/
+    require_once(dirname(__FILE__) . '/invoker.php');
+    /**#@-*/
+
     /**
      *    Can recieve test events and display them. Display
      *    is achieved by making display methods available

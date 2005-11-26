@@ -26,7 +26,7 @@ FILES=(simpletest/errors.php \
           simpletest/reflection_php4.php \
           simpletest/reflection_php5.php \
           simpletest/remote.php \
-          simpletest/runner.php \
+          simpletest/invoker.php \
           simpletest/scorer.php \
           simpletest/reporter.php \
           simpletest/mock_objects.php \

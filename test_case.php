@@ -12,7 +12,7 @@
      */
     require_once(dirname(__FILE__) . '/errors.php');
     require_once(dirname(__FILE__) . '/compatibility.php');
-    require_once(dirname(__FILE__) . '/runner.php');
+    require_once(dirname(__FILE__) . '/invoker.php');
     require_once(dirname(__FILE__) . '/scorer.php');
     require_once(dirname(__FILE__) . '/expectation.php');
     require_once(dirname(__FILE__) . '/dumper.php');

@@ -11,7 +11,6 @@
      */
 	require_once(dirname(__FILE__) . '/socket.php');
 	require_once(dirname(__FILE__) . '/test_case.php');
-	require_once(dirname(__FILE__) . '/runner.php');
 	/**#@-*/
 	
 	/**
@@ -95,7 +94,7 @@
 	   			$group = new EclipseTest($title);
 	   		}
 	   		foreach ($classes as $class) {
-	       		if (SimpleTestOptions::isIgnored($class)) {
+	       		if (SimpleTest::isIgnored($class)) {
 	           		continue;
 	       		}
 		   
