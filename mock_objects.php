@@ -1053,6 +1053,10 @@
         function _createClassCode($methods) {
             $implements = '';
             $interfaces = $this->_reflection->getInterfaces();
+            if (function_exists('spl_classes')) {
+            	$interfaces = array_diff($interfaces, array('Traversable'));
+            }
+            
             if (count($interfaces) > 0) {
             	$implements = 'implements ' . implode(', ', $interfaces);
             }
