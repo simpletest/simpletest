@@ -8,7 +8,8 @@
     
     $test = &new AllTests();
     if (SimpleReporter::inCli()) {
-        exit ($test->run(new TextReporter()) ? 0 : 1);
+        $result = $test->run(new SelectiveReporter(new TextReporter(), $argv[1], $argv[2]));
+        return ($result ? 0 : 1);
     }
     $test->run(new HtmlReporter());
 ?>

@@ -435,6 +435,7 @@
          *    The reporter has a veto on what should be run.
          *    @param string $test_case_name  name of test case.
          *    @param string $method          Name of test method.
+         *    @return boolean                True if test should be run.
          *    @access public
          */
         function shouldInvoke($test_case_name, $method) {
