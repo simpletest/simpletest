@@ -239,15 +239,15 @@
     }
     
     /**
-     *    Runs just a single test case, a single group or
-     *    even a single test within that group.
+     *    Runs just a single test group, a single case or
+     *    even a single test within that case.
 	 *	  @package SimpleTest
 	 *	  @subpackage UnitTester
      */
     class SelectiveReporter extends SimpleReporterDecorator {
-        var $_just_this_case;
+        var $_just_this_case =false;
         var $_just_this_test = false;
-        var $_within_test_case = false;
+        var $_within_test_case = true;
         
         /**
          *    Selects the test case or group to be run,
@@ -256,8 +256,11 @@
          *    @param string $just_this_case    Only this case or group will run.
          *    @param string $just_this_test    Only this test method will run.
          */
-        function SelectiveReporter(&$reporter, $just_this_case, $just_this_test = false) {
-            $this->_just_this_case = strtolower($just_this_case);
+        function SelectiveReporter(&$reporter, $just_this_case = false, $just_this_test = false) {
+            if (isset($just_this_case) && $just_this_case) {
+                $this->_just_this_case = strtolower($just_this_case);
+                $this->_within_test_case = false;
+            }
             if (isset($just_this_test) && $just_this_test) {
                 $this->_just_this_test = strtolower($just_this_test);
             }
@@ -271,7 +274,10 @@
          *    @access protected
          */
         function _isCaseMatch($test_case) {
-            return $this->_just_this_case == strtolower($test_case);
+            if ($this->_just_this_case) {
+                return $this->_just_this_case == strtolower($test_case);
+            }
+            return false;
         }
         
         /**
@@ -281,10 +287,10 @@
          *    @access protected
          */
         function _isTestMatch($method) {
-            if (! $this->_just_this_test) {
-                return true;
+            if ($this->_just_this_test) {
+                return $this->_just_this_test == strtolower($method);
             }
-            return $this->_just_this_test == strtolower($method);
+            return true;
         }
         
         /**

@@ -17,7 +17,10 @@
     /**#@-*/
 
     /**
-     *    Static global directives and options.
+     *    Static global directives and options. I hate this
+     *    class. It's a mixture of reference hacks, configuration
+     *    and previous design screw-ups that I have to maintain
+     *    to keep backward compatibility.
      *	  @package	SimpleTest
      */
     class SimpleTest {
@@ -36,7 +39,8 @@
         /**
          *    Sets the name of a test case to ignore, usually
          *    because the class is an abstract case that should
-         *    not be run.
+         *    not be run. Eventually this will disappear as a
+         *    public method and "abstract" will rule.
          *    @param string $class        Add a class to ignore.
          *    @static
          *    @access public
@@ -52,7 +56,10 @@
 
         /**
          *    Test to see if a test case is in the ignore
-         *    list.
+         *    list. Quite obviously the ignore list should
+         *    be a separate object and will be one day.
+         *    This method is internal to SimpleTest. Don't
+         *    use it.
          *    @param string $class        Class name to test.
          *    @return boolean             True if should not be run.
          *    @access public
