@@ -302,7 +302,7 @@
             foreach ($this->_buttons as $button) {
                 if ($selector->isMatch($button)) {
                     $encoding = $this->_encode();
-                    $encoding->merge($button->getSubmitValues());
+                    $button->write($encoding);
                     if ($additional) {
                         $encoding->merge($additional);
                     }

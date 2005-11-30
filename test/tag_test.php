@@ -94,12 +94,15 @@
         
         function testSubmitDefaults() {
             $tag = &new SimpleSubmitTag(array('type' => 'submit'));
-            $this->assertEqual($tag->getName(), 'submit');
+            $this->assertIdentical($tag->getName(), false);
             $this->assertEqual($tag->getValue(), 'Submit');
             $this->assertFalse($tag->setValue('Cannot set this'));
             $this->assertEqual($tag->getValue(), 'Submit');
             $this->assertEqual($tag->getLabel(), 'Submit');
-            $this->assertEqual($tag->getSubmitValues(), array('submit' => 'Submit'));
+            
+            $encoding = &new MockSimpleMultipartEncoding();
+            $encoding->expectNever('add');
+            $tag->write($encoding);
         }
         
         function testPopulatedSubmit() {

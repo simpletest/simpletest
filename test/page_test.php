@@ -664,25 +664,23 @@
                     '<html><head><form><input type="submit"></form></head></html>');
             $page = &$this->parse($response);
             $this->assertNull($page->getFormBySubmit(new SimpleByLabel('submit')));
-            $this->assertIsA(
-                    $page->getFormBySubmit(new SimpleByName('submit')),
-                    'SimpleForm');
+            $this->assertNull($page->getFormBySubmit(new SimpleByName('submit')));
             $this->assertIsA(
                     $page->getFormBySubmit(new SimpleByLabel('Submit')),
                     'SimpleForm');
         }
 
-        function testConfirmSubmitAttributesAreCaseInsensitive() {
+        function testConfirmSubmitAttributesAreCaseSensitive() {
             $response = &new MockSimpleHttpResponse();
             $response->setReturnValue(
                     'getContent',
-                    '<html><head><FORM><INPUT TYPE="SUBMIT"></FORM></head></html>');
+                    '<html><head><FORM><INPUT TYPE="SUBMIT" NAME="S" VALUE="S"></FORM></head></html>');
             $page = &$this->parse($response);
             $this->assertIsA(
-                    $page->getFormBySubmit(new SimpleByName('submit')),
+                    $page->getFormBySubmit(new SimpleByName('S')),
                     'SimpleForm');
             $this->assertIsA(
-                    $page->getFormBySubmit(new SimpleByLabel('Submit')),
+                    $page->getFormBySubmit(new SimpleByLabel('S')),
                     'SimpleForm');
         }
 
@@ -871,7 +869,7 @@
             $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'B');
         }
 
-        function testSettingRadioButonByEnclosingLabel() {
+        function testSettingRadioButtonByEnclosingLabel() {
             $response = &new MockSimpleHttpResponse();
             $response->setReturnValue('getContent',
                     '<html><head><form>' .

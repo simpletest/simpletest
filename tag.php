@@ -297,7 +297,9 @@
          *    @access public
          */
         function write(&$encoding) {
-            $encoding->add($this->getName(), $this->getValue());
+            if ($this->getName()) {
+                $encoding->add($this->getName(), $this->getValue());
+            }
         }
     }
     
@@ -358,9 +360,6 @@
          */
         function SimpleSubmitTag($attributes) {
             $this->SimpleWidget('input', $attributes);
-            if ($this->getAttribute('name') === false) {
-                $this->_setAttribute('name', 'submit');
-            }
             if ($this->getAttribute('value') === false) {
                 $this->_setAttribute('value', 'Submit');
             }
