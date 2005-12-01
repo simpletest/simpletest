@@ -111,7 +111,10 @@
             $this->assertEqual($tag->getName(), 's');
             $this->assertEqual($tag->getValue(), 'Ok!');
             $this->assertEqual($tag->getLabel(), 'Ok!');
-            $this->assertEqual($tag->getSubmitValues(), array('s' => 'Ok!'));
+            
+            $encoding = &new MockSimpleMultipartEncoding();
+            $encoding->expectOnce('add', array('s', 'Ok!'));
+            $tag->write($encoding);
         }
         
         function testImageSubmit() {
@@ -119,9 +122,11 @@
                     array('type' => 'image', 'name' => 's', 'alt' => 'Label'));
             $this->assertEqual($tag->getName(), 's');
             $this->assertEqual($tag->getLabel(), 'Label');
-            $this->assertEqual(
-                    $tag->getSubmitValues(20, 30),
-                    array('s.x' => 20, 's.y' => 30));
+            
+            $encoding = &new MockSimpleMultipartEncoding();
+            $encoding->expectAt(0, 'add', array('s.x', 20));
+            $encoding->expectAt(1, 'add', array('s.y', 30));
+            $tag->write($encoding, 20, 30);
         }
         
         function testImageSubmitTitlePreferredOverAltForLabel() {
@@ -137,7 +142,10 @@
             $this->assertEqual($tag->getName(), 's');
             $this->assertEqual($tag->getValue(), 'do');
             $this->assertEqual($tag->getLabel(), 'I am a button');
-            $this->assertEqual($tag->getSubmitValues(), array('s' => 'do'));
+
+            $encoding = &new MockSimpleMultipartEncoding();
+            $encoding->expectOnce('add', array('s', 'do'));
+            $tag->write($encoding);
         }
     }
     

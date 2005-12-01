@@ -657,13 +657,20 @@
          *    @param string $message       Overridden message.
          *    @access public
          */
-        function expectArguments($method, $args, $message = '%s') {
+        function expect($method, $args, $message = '%s') {
             $this->_dieOnNoMethod($method, 'set expected arguments');
             $this->_checkArgumentsIsArray($args, 'set expected arguments');
             $args = $this->_replaceWildcards($args);
             $message .= Mock::getExpectationLine(' at line [%d]');
             $this->_expected_args[strtolower($method)] =
                     new ParametersExpectation($args, $message);
+        }
+        
+        /**
+         *    @deprecated
+         */
+        function expectArguments($method, $args, $message = '%s') {
+            return $this->expect($method, $args, $message);
         }
         
         /**
@@ -679,7 +686,7 @@
          *    @param string $message    Overridden message.
          *    @access public
          */
-        function expectArgumentsAt($timing, $method, $args, $message = '%s') {
+        function expectAt($timing, $method, $args, $message = '%s') {
             $this->_dieOnNoMethod($method, 'set expected arguments at time');
             $this->_checkArgumentsIsArray($args, 'set expected arguments at time');
             $args = $this->_replaceWildcards($args);
@@ -690,6 +697,13 @@
             $message .= Mock::getExpectationLine(' at line [%d]');
             $this->_expected_args_at[$timing][$method] =
                     new ParametersExpectation($args, $message);
+        }
+        
+        /**
+         *    @deprecated
+         */
+        function expectArgumentsAt($timing, $method, $args, $message = '%s') {
+            return $this->expectAt($timing, $method, $args, $message);
         }
         
         /**
@@ -1192,9 +1206,17 @@
          *    @access private
          */
         function _chainMockExpectations() {
-            $code = "    function expectArguments(\$method, \$args = false) {\n";
+            $code  = "    function expect(\$method, \$args = false) {\n";
+            $code .= $this->_bailOutIfNotMocked("\$method");
+            $code .= "        \$this->_mock->expect(\$method, \$args);\n";
+            $code .= "    }\n";
+            $code .= "    function expectArguments(\$method, \$args = false) {\n";
             $code .= $this->_bailOutIfNotMocked("\$method");
             $code .= "        \$this->_mock->expectArguments(\$method, \$args);\n";
+            $code .= "    }\n";
+            $code .= "    function expectAt(\$timing, \$method, \$args = false) {\n";
+            $code .= $this->_bailOutIfNotMocked("\$method");
+            $code .= "        \$this->_mock->expectArgumentsAt(\$timing, \$method, \$args);\n";
             $code .= "    }\n";
             $code .= "    function expectArgumentsAt(\$timing, \$method, \$args = false) {\n";
             $code .= $this->_bailOutIfNotMocked("\$method");

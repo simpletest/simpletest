@@ -402,15 +402,6 @@
         function isLabel($label) {
             return trim($label) == trim($this->getLabel());
         }
-        
-        /**
-         *    Gets the values submitted as a form.
-         *    @return array    Hash of name and values.
-         *    @access public
-         */
-        function getSubmitValues() {
-            return array($this->getName() => $this->getValue());
-        }
     }
       
     /**
@@ -468,17 +459,6 @@
          */
         function isLabel($label) {
             return trim($label) == trim($this->getLabel());
-        }
-        
-        /**
-         *    Gets the values submitted as a form.
-         *    @return array    Hash of name and values.
-         *    @access public
-         */
-        function getSubmitValues($x, $y) {
-            return array(
-                    $this->getName() . '.x' => $x,
-                    $this->getName() . '.y' => $y);
         }
         
         /**
@@ -553,22 +533,6 @@
          */
         function isLabel($label) {
             return trim($label) == trim($this->getLabel());
-        }
-        
-        /**
-         *    Gets the values submitted as a form. Gone
-         *    for the Mozilla defaults values.
-         *    @return array    Hash of name and values.
-         *    @access public
-         */
-        function getSubmitValues() {
-            if ($this->getAttribute('name') === false) {
-                return array();
-            }
-            if ($this->getAttribute('value') === false) {
-                return array($this->getName() => '');
-            }
-            return array($this->getName() => $this->getValue());
         }
     }
   
