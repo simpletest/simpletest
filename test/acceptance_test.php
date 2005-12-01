@@ -583,9 +583,18 @@
         
         function testFormSubmissionWithMixedPostAndGet() {
             $this->get('http://www.lastcraft.com/test/form_with_mixed_post_and_get.html');
-            $this->setFieldByName('a', 'A');
+            $this->setField('Text A', 'Hello');
             $this->assertTrue($this->clickSubmit('Go!'));
-            $this->assertText('a=[A]');
+            $this->assertText('a=[Hello]');
+            $this->assertText('x=[X]');
+            $this->assertText('y=[Y]');
+        }
+        
+        function testFormSubmissionWithMixedPostAndEncodedGet() {
+            $this->get('http://www.lastcraft.com/test/form_with_mixed_post_and_get.html');
+            $this->setField('Text B', 'Hello');
+            $this->assertTrue($this->clickSubmit('Go encoded!'));
+            $this->assertText('b=[Hello]');
             $this->assertText('x=[X]');
             $this->assertText('y=[Y]');
         }

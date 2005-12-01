@@ -317,7 +317,7 @@ class DatabaseTest extends UnitTestCase {
         $result->setReturnValueAt(1, 'next', array(3, 'dick'));
         $result->setReturnValueAt(2, 'next', array(6, 'harry'));
         
-        $connection = &new StubDatabaseConnection();
+        $connection = &new MockDatabaseConnection();
         $connection->setReturnValue('query', false);
         $connection->setReturnReference(
                 'query',
@@ -509,11 +509,11 @@ class LoggingSessionPoolTest extends UnitTestCase {
                 <table><thead>
                     <tr><th>Expectation</th><th>Needs <code>tally()</code></th></tr>
                     </thead><tbody><tr>
-                        <td><code>expectArguments($method, $args)</code></td>
+                        <td><code>expect($method, $args)</code></td>
                         <td style="text-align: center">No</td>
                     </tr>
                     <tr>
-                        <td><code>expectArgumentsAt($timing, $method, $args)</code></td>
+                        <td><code>expectAt($timing, $method, $args)</code></td>
                         <td style="text-align: center">No</td>
                     </tr>
                     <tr>
