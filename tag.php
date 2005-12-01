@@ -480,6 +480,23 @@
                     $this->getName() . '.x' => $x,
                     $this->getName() . '.y' => $y);
         }
+        
+        /**
+         *    Dispatches the value into the form encoded packet.
+         *    @param SimpleEncoding $encoding    Form packet.
+         *    @param integer $x                  X coordinate of click.
+         *    @param integer $y                  Y coordinate of click.
+         *    @access public
+         */
+        function write(&$encoding, $x, $y) {
+            if ($this->getName()) {
+                $encoding->add($this->getName() . '.x', $x);
+                $encoding->add($this->getName() . '.y', $y);
+            } else {
+                $encoding->add('x', $x);
+                $encoding->add('y', $y);
+            }
+        }
     }
       
     /**

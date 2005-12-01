@@ -328,7 +328,7 @@
             foreach ($this->_images as $image) {
                 if ($selector->isMatch($image)) {
                     $encoding = $this->_encode();
-                    $encoding->merge($image->getSubmitValues($x, $y));
+                    $image->write($encoding, $x, $y);
                     if ($additional) {
                         $encoding->merge($additional);
                     }

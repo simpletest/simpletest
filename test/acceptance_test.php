@@ -631,11 +631,25 @@
             $this->assertPattern('/go=\[ButtonGo\]/s');
         }
         
-        function testSubmittingNamelessButtonSendsNoButtonValue() {
+        function testNamelessSubmitSendsNoValue() {
             $this->get('http://www.lastcraft.com/test/form_with_unnamed_submit.html');
             $this->click('Go!');
             $this->assertNoText('Go!');
             $this->assertNoText('submit');
+        }
+        
+        function testNamelessImageSendsXAndYValues() {
+            $this->get('http://www.lastcraft.com/test/form_with_unnamed_submit.html');
+            $this->clickImage('Image go!', 4, 5);
+            $this->assertNoText('ImageGo');
+            $this->assertText('x=[4]');
+            $this->assertText('y=[5]');
+        }
+        
+        function testNamelessButtonSendsNoValue() {
+            $this->get('http://www.lastcraft.com/test/form_with_unnamed_submit.html');
+            $this->click('Button Go!');
+            $this->assertNoText('ButtonGo');
         }
         
         function testSelfSubmit() {
