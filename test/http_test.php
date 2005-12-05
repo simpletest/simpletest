@@ -203,7 +203,7 @@
             $route->setReturnReference('createConnection', $socket);
             
             $request = &new SimpleHttpRequest($route, new SimpleGetEncoding());
-            $request->setCookie(new SimpleCookie('a', 'A'));
+            $request->setCookie('a', 'A');
             $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
         }
         
@@ -215,8 +215,8 @@
             $route->setReturnReference('createConnection', $socket);
             
             $request = &new SimpleHttpRequest($route, new SimpleGetEncoding());
-            $request->setCookie(new SimpleCookie('a', 'A'));
-            $request->setCookie(new SimpleCookie('b', 'B'));
+            $request->setCookie('a', 'A');
+            $request->setCookie('b', 'B');
             $request->fetch(15);
         }
     }

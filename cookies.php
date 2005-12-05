@@ -283,7 +283,7 @@
          *    @param string $expiry     Expiry date.
          *    @access public
          */
-        function replaceCookie($name, $value, $host = false, $path = '/', $expiry = false) {
+        function setCookie($name, $value, $host = false, $path = '/', $expiry = false) {
             $cookie = new SimpleCookie($name, $value, $path, $expiry);
             if ($host) {
                 $cookie->setHost($host);
@@ -324,7 +324,7 @@
          *                          on the cookie name.
          *    @access public
          */
-        function getValidCookies($host = false, $path = "/") {
+        function getValidCookies($host = false, $path = '/') {
             $valid_cookies = array();
             foreach ($this->_cookies as $cookie) {
                 if ($this->_isMatch($cookie, $host, $path, $cookie->getName())) {
@@ -373,7 +373,7 @@
             if ($cookie->getName() != $name) {
                 return false;
             }
-            if ($host && $cookie->getHost() && !$cookie->isValidHost($host)) {
+            if ($host && $cookie->getHost() && ! $cookie->isValidHost($host)) {
                 return false;
             }
             if (! $cookie->isValidPath($path)) {
@@ -383,16 +383,20 @@
         }
         
         /**
-         *    Adds the current cookies to a request.
-         *    @param SimpleHttpRequest $request    Request to modify.
-         *    @param SimpleUrl $url                Cookie selector.
-         *    @access private
+         *    Uses a URL to sift relevant cookies by host and
+         *    path. Results are list of strings of form "name=value".
+         *    @param SimpleUrl $url       Url to select by.
+         *    @return array               Valid name and value pairs.
+         *    @access public
          */
-        function addHeaders(&$request, $url) {
-            $cookies = $this->getValidCookies($url->getHost(), $url->getPath());
-            foreach ($cookies as $cookie) {
-                $request->setCookie($cookie);
+        function selectAsPairs($url) {
+            $pairs = array();
+            foreach ($this->_cookies as $cookie) {
+                if ($this->_isMatch($cookie, $url->getHost(), $url->getPath(), $cookie->getName())) {
+                    $pairs[] = $cookie->getName() . '=' . $cookie->getValue();
+                }
             }
+            return $pairs;
         }
     }
 ?>

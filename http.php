@@ -203,7 +203,7 @@
          *    Builds the socket request from the different pieces.
          *    These include proxy information, URL, cookies, headers,
          *    request method and choice of encoding.
-         *    @param SimpleRoute $route   Request route.
+         *    @param SimpleRoute $route              Request route.
          *    @param SimpleFormEncoding $encoding    Content to send with
          *                                           request.
          *    @access public
@@ -245,7 +245,7 @@
                 $socket->write($header_line . "\r\n");
             }
             if (count($this->_cookies) > 0) {
-                $socket->write("Cookie: " . $this->_marshallCookies($this->_cookies) . "\r\n");
+                $socket->write("Cookie: " . implode(";", $this->_cookies) . "\r\n");
             }
             $encoding->writeHeadersTo($socket);
             $socket->write("\r\n");
@@ -263,26 +263,23 @@
         
         /**
          *    Adds a cookie to the request.
-         *    @param SimpleCookie $cookie   Additional cookie.
+         *    @param string $name        Cookie name.
+         *    @param string $value       Cookie value.
          *    @access public
          */
-        function setCookie($cookie) {
-            $this->_cookies[] = $cookie;
+        function setCookie($name, $value) {
+            $this->_cookies[] = "$name=$value";
         }
         
         /**
-         *    Serialises the cookie hash ready for
-         *    transmission.
-         *    @param hash $cookies     Parsed cookies.
-         *    @return array            Cookies in header form.
-         *    @access private
+         *    Reads all the relevant cookies from the
+         *    cookie jar.
+         *    @param SimpleCookieJar $jar     Jar to read
+         *    @param SimpleUrl $url           Url to use for scope.
+         *    @access public
          */
-        function _marshallCookies($cookies) {
-            $cookie_pairs = array();
-            foreach ($cookies as $cookie) {
-                $cookie_pairs[] = $cookie->getName() . "=" . $cookie->getValue();
-            }
-            return implode(";", $cookie_pairs);
+        function fromCookieJar($jar, $url) {
+            $this->_cookies = $jar->selectAsPairs($url);
         }
         
         /**

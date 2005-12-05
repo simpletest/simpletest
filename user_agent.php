@@ -98,7 +98,7 @@
          *    @access public
          */
         function setCookie($name, $value, $host = false, $path = '/', $expiry = false) {
-            $this->_cookie_jar->replaceCookie($name, $value, $host, $path, $expiry);
+            $this->_cookie_jar->setCookie($name, $value, $host, $path, $expiry);
         }
         
         /**
@@ -268,7 +268,7 @@
         function &_createRequest($url, $encoding) {
             $request = &$this->_createHttpRequest($url, $encoding);
             $this->_addAdditionalHeaders($request);
-            $this->_cookie_jar->addHeaders($request, $url);
+            $request->fromCookieJar($this->_cookie_jar, $url);
             $this->_authenticator->addHeaders($request, $url);
             return $request;
         }
@@ -323,7 +323,7 @@
          */
         function _addCookiesToJar($url, $cookies) {
             foreach ($cookies as $cookie) {
-                $this->_cookie_jar->replaceCookie(
+                $this->_cookie_jar->setCookie(
                         $cookie->getName(),
                         $cookie->getValue(),
                         $url->getHost(),

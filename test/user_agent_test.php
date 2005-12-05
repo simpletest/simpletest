@@ -147,23 +147,26 @@
         }
         
         function testSendingExistingCookie() {
+            $jar = new SimpleCookieJar();
+            $jar->setCookie('a', 'A');
+            
             $request = &new MockSimpleHttpRequest();
             $request->setReturnReference('fetch', $this->_createStandardResponse());
-            $request->expectOnce('setCookie', array(new SimpleCookie('a', 'A')));
+            $request->expectOnce('fromCookieJar', array($jar, '*'));
             
             $agent = &$this->_createPartialFetcher($request);
             $agent->setCookie('a', 'A');
             $response = $agent->fetchResponse(
                     new SimpleUrl('http://this.com/this/path/page.html'),
                     new SimpleGetEncoding());
-            $this->assertEqual($response->getContent(), "stuff");
+            $this->assertEqual($response->getContent(), 'stuff');
         }
         
         function testOverwriteCookieThatAlreadyExists() {
             $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAAA", "this/path/")));
             $agent = &$this->_createPartialFetcher($request);
             
-            $agent->setCookie("a", "A");
+            $agent->setCookie('a', 'A');
             $agent->fetchResponse(
                     new SimpleUrl('http://this.com/this/path/page.html'),
                     new SimpleGetEncoding());
