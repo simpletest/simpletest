@@ -39,7 +39,7 @@ Failure to connect should be reported unless suppressed (2).
 
 Documentation
 -------------
-Get method lists up to date removing deprecated documentation (3).
+Get method lists up to date, removing deprecated documentation (3).
 
 Build
 -----

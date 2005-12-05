@@ -11,105 +11,6 @@
             'SimpleProxyRoute',
             'PartialSimpleProxyRoute',
             array('_createSocket'));
-
-    class TestOfCookie extends UnitTestCase {
-        
-        function testCookieDefaults() {
-            $cookie = new SimpleCookie("name");
-            $this->assertFalse($cookie->getValue());
-            $this->assertEqual($cookie->getPath(), "/");
-            $this->assertIdentical($cookie->getHost(), false);
-            $this->assertFalse($cookie->getExpiry());
-            $this->assertFalse($cookie->isSecure());
-        }
-        
-        function testCookieAccessors() {
-            $cookie = new SimpleCookie(
-                    "name",
-                    "value",
-                    "/path",
-                    "Mon, 18 Nov 2002 15:50:29 GMT",
-                    true);
-            $this->assertEqual($cookie->getName(), "name");
-            $this->assertEqual($cookie->getValue(), "value");
-            $this->assertEqual($cookie->getPath(), "/path/");
-            $this->assertEqual($cookie->getExpiry(), "Mon, 18 Nov 2002 15:50:29 GMT");
-            $this->assertTrue($cookie->isSecure());
-        }
-        
-        function testFullHostname() {
-            $cookie = new SimpleCookie("name");
-            $this->assertTrue($cookie->setHost("host.name.here"));
-            $this->assertEqual($cookie->getHost(), "host.name.here");
-            $this->assertTrue($cookie->setHost("host.com"));
-            $this->assertEqual($cookie->getHost(), "host.com");
-        }
-        
-        function testHostTruncation() {
-            $cookie = new SimpleCookie("name");
-            $cookie->setHost("this.host.name.here");
-            $this->assertEqual($cookie->getHost(), "host.name.here");
-            $cookie->setHost("this.host.com");
-            $this->assertEqual($cookie->getHost(), "host.com");
-            $this->assertTrue($cookie->setHost("dashes.in-host.com"));
-            $this->assertEqual($cookie->getHost(), "in-host.com");
-        }
-        
-        function testBadHosts() {
-            $cookie = new SimpleCookie("name");
-            $this->assertFalse($cookie->setHost("gibberish"));
-            $this->assertFalse($cookie->setHost("host.here"));
-            $this->assertFalse($cookie->setHost("host..com"));
-            $this->assertFalse($cookie->setHost("..."));
-            $this->assertFalse($cookie->setHost("host.com."));
-        }
-        
-        function testHostValidity() {
-            $cookie = new SimpleCookie("name");
-            $cookie->setHost("this.host.name.here");
-            $this->assertTrue($cookie->isValidHost("host.name.here"));
-            $this->assertTrue($cookie->isValidHost("that.host.name.here"));
-            $this->assertFalse($cookie->isValidHost("bad.host"));
-            $this->assertFalse($cookie->isValidHost("nearly.name.here"));
-        }
-        
-        function testPathValidity() {
-            $cookie = new SimpleCookie("name", "value", "/path");
-            $this->assertFalse($cookie->isValidPath("/"));
-            $this->assertTrue($cookie->isValidPath("/path/"));
-            $this->assertTrue($cookie->isValidPath("/path/more"));
-        }
-        
-        function testSessionExpiring() {
-            $cookie = new SimpleCookie("name", "value", "/path");
-            $this->assertTrue($cookie->isExpired(0));
-        }
-        
-        function testTimestampExpiry() {
-            $cookie = new SimpleCookie("name", "value", "/path", 456);
-            $this->assertFalse($cookie->isExpired(0));
-            $this->assertTrue($cookie->isExpired(457));
-            $this->assertFalse($cookie->isExpired(455));
-        }
-        
-        function testDateExpiry() {
-            $cookie = new SimpleCookie(
-                    "name",
-                    "value",
-                    "/path",
-                    "Mon, 18 Nov 2002 15:50:29 GMT");
-            $this->assertTrue($cookie->isExpired("Mon, 18 Nov 2002 15:50:30 GMT"));
-            $this->assertFalse($cookie->isExpired("Mon, 18 Nov 2002 15:50:28 GMT"));
-        }
-        
-        function testAging() {
-            $cookie = new SimpleCookie("name", "value", "/path", 200);
-            $cookie->agePrematurely(199);
-            $this->assertFalse($cookie->isExpired(0));
-            $cookie->agePrematurely(2);
-            $this->assertTrue($cookie->isExpired(0));
-        }
-    }
     
     class TestOfDirectRoute extends UnitTestCase {
         
@@ -387,7 +288,7 @@
             $this->assertIdentical($headers->getResponseCode(), 302);
         }
         
-        function testParseOfCookies() {
+        function testCanParseMultipleCookies() {
             $headers = new SimpleHttpHeaders("HTTP/1.1 200 OK\r\n" .
                     "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n" .
                     "Content-Type: text/plain\r\n" .
@@ -407,7 +308,7 @@
             $this->assertEqual($cookies[1]->getExpiry(), "");
         }
         
-        function testRedirect() {
+        function testCanRecogniseRedirect() {
             $headers = new SimpleHttpHeaders("HTTP/1.1 301 OK\r\n" .
                     "Content-Type: text/plain\r\n" .
                     "Content-Length: 0\r\n" .
@@ -418,7 +319,7 @@
             $this->assertTrue($headers->isRedirect());
         }
         
-        function testParseChallenge() {
+        function testCanParseChallenge() {
             $headers = new SimpleHttpHeaders("HTTP/1.1 401 Authorization required\r\n" .
                     "Content-Type: text/plain\r\n" .
                     "Connection: close\r\n" .

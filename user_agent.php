@@ -9,152 +9,18 @@
     /**#@+
      *	include other SimpleTest class files
      */
+    require_once(dirname(__FILE__) . '/cookies.php');
     require_once(dirname(__FILE__) . '/http.php');
     require_once(dirname(__FILE__) . '/encoding.php');
     require_once(dirname(__FILE__) . '/authentication.php');
     /**#@-*/
    
-    if (!defined('DEFAULT_MAX_REDIRECTS')) {
+    if (! defined('DEFAULT_MAX_REDIRECTS')) {
         define('DEFAULT_MAX_REDIRECTS', 3);
     }
     
-    if (!defined('DEFAULT_CONNECTION_TIMEOUT')) {
+    if (! defined('DEFAULT_CONNECTION_TIMEOUT')) {
         define('DEFAULT_CONNECTION_TIMEOUT', 15);
-    }
-    
-    /**
-     *    Repository for cookies. This stuff is a
-     *    tiny bit browser dependent.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
-     */
-    class SimpleCookieJar {
-        var $_cookies;
-        
-        /**
-         *    Constructor. Jar starts empty.
-         *    @access public
-         */
-        function SimpleCookieJar() {
-            $this->_cookies = array();
-        }
-        
-        /**
-         *    Removes expired and temporary cookies as if
-         *    the browser was closed and re-opened.
-         *    @param string/integer $now   Time to test expiry against.
-         *    @access public
-         */
-        function restartSession($date = false) {
-            $surviving_cookies = array();
-            for ($i = 0; $i < count($this->_cookies); $i++) {
-                if (! $this->_cookies[$i]->getValue()) {
-                    continue;
-                }
-                if (! $this->_cookies[$i]->getExpiry()) {
-                    continue;
-                }
-                if ($date && $this->_cookies[$i]->isExpired($date)) {
-                    continue;
-                }
-                $surviving_cookies[] = $this->_cookies[$i];
-            }
-            $this->_cookies = $surviving_cookies;
-        }
-        
-        /**
-         *    Ages all cookies in the cookie jar.
-         *    @param integer $interval     The old session is moved
-         *                                 into the past by this number
-         *                                 of seconds. Cookies now over
-         *                                 age will be removed.
-         *    @access public
-         */
-        function agePrematurely($interval) {
-            for ($i = 0; $i < count($this->_cookies); $i++) {
-                $this->_cookies[$i]->agePrematurely($interval);
-            }
-        }
-        
-        /**
-         *    Adds a cookie to the jar. This will overwrite
-         *    cookies with matching host, paths and keys.
-         *    @param SimpleCookie $cookie        New cookie.
-         *    @access public
-         */
-        function setCookie($cookie) {
-            for ($i = 0; $i < count($this->_cookies); $i++) {
-                $is_match = $this->_isMatch(
-                        $cookie,
-                        $this->_cookies[$i]->getHost(),
-                        $this->_cookies[$i]->getPath(),
-                        $this->_cookies[$i]->getName());
-                if ($is_match) {
-                    $this->_cookies[$i] = $cookie;
-                    return;
-                }
-            }
-            $this->_cookies[] = $cookie;
-        }
-        
-        /**
-         *    Fetches a hash of all valid cookies filtered
-         *    by host, path and keyed by name
-         *    Any cookies with missing categories will not
-         *    be filtered out by that category. Expired
-         *    cookies must be cleared by restarting the session.
-         *    @param string $host   Host name requirement.
-         *    @param string $path   Path encompassing cookies.
-         *    @return hash          Valid cookie objects keyed
-         *                          on the cookie name.
-         *    @access public
-         */
-        function getValidCookies($host = false, $path = "/") {
-            $valid_cookies = array();
-            foreach ($this->_cookies as $cookie) {
-                if ($this->_isMatch($cookie, $host, $path, $cookie->getName())) {
-                    $valid_cookies[] = $cookie;
-                }
-            }
-            return $valid_cookies;
-        }
-        
-        /**
-         *    Tests cookie for matching against search
-         *    criteria.
-         *    @param SimpleTest $cookie    Cookie to test.
-         *    @param string $host          Host must match.
-         *    @param string $path          Cookie path must be shorter than
-         *                                 this path.
-         *    @param string $name          Name must match.
-         *    @return boolean              True if matched.
-         *    @access private
-         */
-        function _isMatch($cookie, $host, $path, $name) {
-            if ($cookie->getName() != $name) {
-                return false;
-            }
-            if ($host && $cookie->getHost() && !$cookie->isValidHost($host)) {
-                return false;
-            }
-            if (! $cookie->isValidPath($path)) {
-                return false;
-            }
-            return true;
-        }
-        
-        /**
-         *    Adds the current cookies to a request.
-         *    @param SimpleHttpRequest $request    Request to modify.
-         *    @param SimpleUrl $url                Cookie selector.
-         *    @access private
-         */
-        function addHeaders(&$request, $url) {
-            $cookies = $this->getValidCookies($url->getHost(), $url->getPath());
-            foreach ($cookies as $cookie) {
-                $request->setCookie($cookie);
-            }
-        }
     }
 
     /**
@@ -232,11 +98,7 @@
          *    @access public
          */
         function setCookie($name, $value, $host = false, $path = '/', $expiry = false) {
-            $cookie = new SimpleCookie($name, $value, $path, $expiry);
-            if ($host) {
-                $cookie->setHost($host);
-            }
-            $this->_cookie_jar->setCookie($cookie);
+            $this->_cookie_jar->replaceCookie($name, $value, $host, $path, $expiry);
         }
         
         /**
@@ -250,23 +112,14 @@
          *    @access public
          */
         function getCookieValue($host, $path, $name) {
-            $longest_path = '';
-            foreach ($this->_cookie_jar->getValidCookies($host, $path) as $cookie) {
-                if ($name == $cookie->getName()) {
-                    if (strlen($cookie->getPath()) > strlen($longest_path)) {
-                        $value = $cookie->getValue();
-                        $longest_path = $cookie->getPath();
-                    }
-                }
-            }
-            return (isset($value) ? $value : false);
+            return $this->_cookie_jar->getCookieValue($host, $path, $name);
         }
         
         /**
          *    Reads the current cookies within the base URL.
          *    @param string $name     Key of cookie to find.
          *    @param SimpleUrl $base  Base URL to search from.
-         *    @return string          Null if there is no base URL, false
+         *    @return string/boolean  Null if there is no base URL, false
          *                            if the cookie is not set.
          *    @access public
          */
@@ -470,10 +323,12 @@
          */
         function _addCookiesToJar($url, $cookies) {
             foreach ($cookies as $cookie) {
-                if ($url->getHost()) {
-                    $cookie->setHost($url->getHost());
-                }
-                $this->_cookie_jar->setCookie($cookie);
+                $this->_cookie_jar->replaceCookie(
+                        $cookie->getName(),
+                        $cookie->getValue(),
+                        $url->getHost(),
+                        $cookie->getPath(),
+                        $cookie->getExpiry());
             }
         }
     }

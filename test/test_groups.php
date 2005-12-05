@@ -31,6 +31,7 @@
             $this->addTestFile($path . '/socket_test.php');
             $this->addTestFile($path . '/encoding_test.php');
             $this->addTestFile($path . '/url_test.php');
+            $this->addTestFile($path . '/cookies_test.php');
             $this->addTestFile($path . '/http_test.php');
             $this->addTestFile($path . '/authentication_test.php');
             $this->addTestFile($path . '/user_agent_test.php');
