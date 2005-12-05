@@ -262,16 +262,6 @@
         }
         
         /**
-         *    Adds a cookie to the request.
-         *    @param string $name        Cookie name.
-         *    @param string $value       Cookie value.
-         *    @access public
-         */
-        function setCookie($name, $value) {
-            $this->_cookies[] = "$name=$value";
-        }
-        
-        /**
          *    Reads all the relevant cookies from the
          *    cookie jar.
          *    @param SimpleCookieJar $jar     Jar to read
@@ -424,6 +414,23 @@
          */
         function getNewCookies() {
             return $this->_cookies;
+        }
+        
+        /**
+         *    Writes new cookies to the cookie jar.
+         *    @param SimpleCookieJar $jar   Jar to write to.
+         *    @param SimpleUrl $url         Host and path to write under.
+         *    @access public
+         */
+        function writeCookiesToJar(&$jar, $url) {
+            foreach ($this->_cookies as $cookie) {
+                $jar->setCookie(
+                        $cookie->getName(),
+                        $cookie->getValue(),
+                        $url->getHost(),
+                        $cookie->getPath(),
+                        $cookie->getExpiry());
+            }
         }
 
         /**

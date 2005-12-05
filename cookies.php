@@ -313,28 +313,6 @@
         }
         
         /**
-         *    Fetches a hash of all valid cookies filtered
-         *    by host, path and keyed by name
-         *    Any cookies with missing categories will not
-         *    be filtered out by that category. Expired
-         *    cookies must be cleared by restarting the session.
-         *    @param string $host   Host name requirement.
-         *    @param string $path   Path encompassing cookies.
-         *    @return hash          Valid cookie objects keyed
-         *                          on the cookie name.
-         *    @access public
-         */
-        function getValidCookies($host = false, $path = '/') {
-            $valid_cookies = array();
-            foreach ($this->_cookies as $cookie) {
-                if ($this->_isMatch($cookie, $host, $path, $cookie->getName())) {
-                    $valid_cookies[] = $cookie;
-                }
-            }
-            return $valid_cookies;
-        }
-        
-        /**
          *    Reads the most specific cookie value from the
          *    browser cookies. Looks for the longest path that
          *    matches.
@@ -347,8 +325,8 @@
          */
         function getCookieValue($host, $path, $name) {
             $longest_path = '';
-            foreach ($this->getValidCookies($host, $path) as $cookie) {
-                if ($name == $cookie->getName()) {
+            foreach ($this->_cookies as $cookie) {
+                if ($this->_isMatch($cookie, $host, $path, $name)) {
                     if (strlen($cookie->getPath()) > strlen($longest_path)) {
                         $value = $cookie->getValue();
                         $longest_path = $cookie->getPath();

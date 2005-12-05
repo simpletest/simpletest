@@ -125,9 +125,8 @@
             return $response;
         }
         
-        function &_createCookieSite($cookies) {
-            $headers = &new MockSimpleHttpHeaders();
-            $headers->setReturnValue("getNewCookies", $cookies);
+        function &_createCookieSite($header_lines) {
+            $headers = &new SimpleHttpHeaders($header_lines);
             
             $response = &new MockSimpleHttpResponse();
             $response->setReturnValue("isError", false);
@@ -163,7 +162,7 @@
         }
         
         function testOverwriteCookieThatAlreadyExists() {
-            $request = &$this->_createCookieSite(array(new SimpleCookie("a", "AAAA", "this/path/")));
+            $request = &$this->_createCookieSite('Set-cookie: a=AAAA');
             $agent = &$this->_createPartialFetcher($request);
             
             $agent->setCookie('a', 'A');
@@ -174,8 +173,7 @@
         }
         
         function testClearCookieBySettingExpiry() {
-            $request = &$this->_createCookieSite(array(
-                    new SimpleCookie("a", "b", "this/path/", "Wed, 25-Dec-02 04:24:19 GMT")));
+            $request = &$this->_createCookieSite('Set-cookie: a=b');
             $agent = &$this->_createPartialFetcher($request);
             
             $agent->setCookie("a", "A", "this/path/", "Wed, 25-Dec-02 04:24:21 GMT");
@@ -192,8 +190,7 @@
         }
         
         function testAgeingAndClearing() {
-            $request = &$this->_createCookieSite(array(
-                    new SimpleCookie("a", "A", "this/path/", "Wed, 25-Dec-02 04:24:21 GMT")));
+            $request = &$this->_createCookieSite('Set-cookie: a=A; expires=Wed, 25-Dec-02 04:24:21 GMT; path=/this/path');
             $agent = &$this->_createPartialFetcher($request);
             
             $agent->fetchResponse(
@@ -211,8 +208,7 @@
         }
         
         function testReadingIncomingAndSetCookies() {
-            $request = &$this->_createCookieSite(array(
-                    new SimpleCookie("a", "AAA", "this/path/")));
+            $request = &$this->_createCookieSite('Set-cookie: a=AAA');
             $agent = &$this->_createPartialFetcher($request);
             
             $this->assertNull($agent->getBaseCookieValue("a", false));

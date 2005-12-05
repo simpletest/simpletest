@@ -202,8 +202,11 @@
             $route = &new MockSimpleRoute();
             $route->setReturnReference('createConnection', $socket);
             
+            $jar = new SimpleCookieJar();
+            $jar->setCookie('a', 'A');
+            
             $request = &new SimpleHttpRequest($route, new SimpleGetEncoding());
-            $request->setCookie('a', 'A');
+            $request->fromCookieJar($jar, new SimpleUrl('/'));
             $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
         }
         
@@ -214,9 +217,12 @@
             $route = &new MockSimpleRoute();
             $route->setReturnReference('createConnection', $socket);
             
+            $jar = new SimpleCookieJar();
+            $jar->setCookie('a', 'A');
+            $jar->setCookie('b', 'B');
+            
             $request = &new SimpleHttpRequest($route, new SimpleGetEncoding());
-            $request->setCookie('a', 'A');
-            $request->setCookie('b', 'B');
+            $request->fromCookieJar($jar, new SimpleUrl('/'));
             $request->fetch(15);
         }
     }

@@ -236,7 +236,7 @@
                 $headers = $response->getHeaders();
                 $location = new SimpleUrl($headers->getLocation());
                 $url = $location->makeAbsolute($url);
-                $this->_addCookiesToJar($url, $headers->getNewCookies());
+                $headers->writeCookiesToJar($this->_cookie_jar, $url);
                 if (! $headers->isRedirect()) {
                     break;
                 }
