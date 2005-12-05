@@ -163,7 +163,7 @@
                 $this->_proxy = false;
                 return;
             }
-            if (strncmp($proxy, 'http://', 7) != 0) {
+            if ((strncmp($proxy, 'http://', 7) != 0) && (strncmp($proxy, 'https://', 8) != 0)) {
                 $proxy = 'http://'. $proxy;
             }
             $this->_proxy = &new SimpleUrl($proxy);

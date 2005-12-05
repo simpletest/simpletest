@@ -274,34 +274,13 @@
         }
         
         /**
-         *    Adds a cookie to the jar. This will overwrite
-         *    cookies with matching host, paths and keys.
-         *    @param SimpleCookie $cookie        New cookie.
-         *    @access public
-         */
-        function _setCookie($cookie) {
-            for ($i = 0; $i < count($this->_cookies); $i++) {
-                $is_match = $this->_isMatch(
-                        $cookie,
-                        $this->_cookies[$i]->getHost(),
-                        $this->_cookies[$i]->getPath(),
-                        $this->_cookies[$i]->getName());
-                if ($is_match) {
-                    $this->_cookies[$i] = $cookie;
-                    return;
-                }
-            }
-            $this->_cookies[] = $cookie;
-        }
-        
-        /**
          *    Sets an additional cookie. If a cookie has
          *    the same name and path it is replaced.
-         *    @param string $name            Cookie key.
-         *    @param string $value           Value of cookie.
-         *    @param string $host            Host upon which the cookie is valid.
-         *    @param string $path            Cookie path if not host wide.
-         *    @param string $expiry          Expiry date.
+         *    @param string $name       Cookie key.
+         *    @param string $value      Value of cookie.
+         *    @param string $host       Host upon which the cookie is valid.
+         *    @param string $path       Cookie path if not host wide.
+         *    @param string $expiry     Expiry date.
          *    @access public
          */
         function replaceCookie($name, $value, $host = false, $path = '/', $expiry = false) {
@@ -309,7 +288,28 @@
             if ($host) {
                 $cookie->setHost($host);
             }
-            $this->_setCookie($cookie);
+            $this->_cookies[$this->_findFirstMatch($cookie)] = $cookie;
+        }
+        
+        /**
+         *    Finds a matching cookie to write over or the
+         *    first empty slot if none.
+         *    @param SimpleCookie $cookie    Cookie to write into jar.
+         *    @return integer                Available slot.
+         *    @access private
+         */
+        function _findFirstMatch($cookie) {
+            for ($i = 0; $i < count($this->_cookies); $i++) {
+                $is_match = $this->_isMatch(
+                        $cookie,
+                        $this->_cookies[$i]->getHost(),
+                        $this->_cookies[$i]->getPath(),
+                        $this->_cookies[$i]->getName());
+                if ($is_match) {
+                    return $i;
+                }
+            }
+            return count($this->_cookies);
         }
         
         /**
