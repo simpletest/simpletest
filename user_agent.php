@@ -314,22 +314,5 @@
                 $request->addHeaderLine($header);
             }
         }
-        
-        /**
-         *    Extracts new cookies into the cookie jar.
-         *    @param SimpleUrl $url     Target to fetch as url object.
-         *    @param array $cookies     New cookies.
-         *    @access private
-         */
-        function _addCookiesToJar($url, $cookies) {
-            foreach ($cookies as $cookie) {
-                $this->_cookie_jar->setCookie(
-                        $cookie->getName(),
-                        $cookie->getValue(),
-                        $url->getHost(),
-                        $cookie->getPath(),
-                        $cookie->getExpiry());
-            }
-        }
     }
 ?>
