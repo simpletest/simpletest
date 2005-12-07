@@ -4,7 +4,9 @@
     require_once(dirname(__FILE__) . '/../encoding.php');
     require_once(dirname(__FILE__) . '/../http.php');
     require_once(dirname(__FILE__) . '/../socket.php');
+    require_once(dirname(__FILE__) . '/../cookies.php');
     Mock::generate('SimpleSocket');
+    Mock::generate('SimpleCookieJar');
     Mock::generate('SimpleRoute');
     Mock::generatePartial('SimpleRoute', 'PartialSimpleRoute', array('_createSocket'));
     Mock::generatePartial(
@@ -206,7 +208,7 @@
             $jar->setCookie('a', 'A');
             
             $request = &new SimpleHttpRequest($route, new SimpleGetEncoding());
-            $request->fromCookieJar($jar, new SimpleUrl('/'));
+            $request->readCookiesFromJar($jar, new SimpleUrl('/'));
             $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
         }
         
@@ -222,7 +224,7 @@
             $jar->setCookie('b', 'B');
             
             $request = &new SimpleHttpRequest($route, new SimpleGetEncoding());
-            $request->fromCookieJar($jar, new SimpleUrl('/'));
+            $request->readCookiesFromJar($jar, new SimpleUrl('/'));
             $request->fetch(15);
         }
     }
@@ -295,23 +297,19 @@
         }
         
         function testCanParseMultipleCookies() {
-            $headers = new SimpleHttpHeaders("HTTP/1.1 200 OK\r\n" .
+            $jar = &new MockSimpleCookieJar();
+            $jar->expectAt(0, 'setCookie', array('a', 'aaa', 'host', '/here/', 'Wed, 25 Dec 2002 04:24:20 GMT'));
+            $jar->expectAt(1, 'setCookie', array('b', 'bbb', 'host', '/', false));
+
+            $headers = new SimpleHttpHeaders(
+                    "HTTP/1.1 200 OK\r\n" .
                     "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n" .
                     "Content-Type: text/plain\r\n" .
                     "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n" .
                     "Set-Cookie: a=aaa; expires=Wed, 25-Dec-02 04:24:20 GMT; path=/here/\r\n" .
                     "Set-Cookie: b=bbb\r\n" .
                     "Connection: close");
-            $cookies = $headers->getNewCookies();
-            $this->assertEqual(count($cookies), 2);
-            $this->assertEqual($cookies[0]->getName(), "a");
-            $this->assertEqual($cookies[0]->getValue(), "aaa");
-            $this->assertEqual($cookies[0]->getPath(), "/here/");
-            $this->assertEqual($cookies[0]->getExpiry(), "Wed, 25 Dec 2002 04:24:20 GMT");
-            $this->assertEqual($cookies[1]->getName(), "b");
-            $this->assertEqual($cookies[1]->getValue(), "bbb");
-            $this->assertEqual($cookies[1]->getPath(), "/");
-            $this->assertEqual($cookies[1]->getExpiry(), "");
+            $headers->writeCookiesToJar($jar, new SimpleUrl('http://host'));
         }
         
         function testCanRecogniseRedirect() {
@@ -374,7 +372,7 @@
             $this->assertEqual($response->getContent(), "");
         }
         
-        function testParseOfResponseHeaders() {
+        function testParseOfResponseHeadersWhenChunked() {
             $socket = &new MockSimpleSocket();
             $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\nDate: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
             $socket->setReturnValueAt(1, "read", "Content-Type: text/plain\r\n");
@@ -394,27 +392,6 @@
             $this->assertEqual($headers->getMimeType(), "text/plain");
             $this->assertFalse($headers->isRedirect());
             $this->assertFalse($headers->getLocation());
-        }
-        
-        function testParseOfCookies() {
-            $socket = &new MockSimpleSocket();
-            $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\n");
-            $socket->setReturnValueAt(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
-            $socket->setReturnValueAt(2, "read", "Content-Type: text/plain\r\n");
-            $socket->setReturnValueAt(3, "read", "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n");
-            $socket->setReturnValueAt(4, "read", "Set-Cookie: a=aaa; expires=Wed, 25-Dec-02 04:24:20 GMT; path=/here/\r\n");
-            $socket->setReturnValueAt(5, "read", "Connection: close\r\n");
-            $socket->setReturnValueAt(6, "read", "\r\n");
-            $socket->setReturnValue("read", "");
-            
-            $response = &new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
-            $this->assertFalse($response->isError());
-            $headers = $response->getHeaders();
-            $cookies = $headers->getNewCookies();
-            $this->assertEqual($cookies[0]->getName(), "a");
-            $this->assertEqual($cookies[0]->getValue(), "aaa");
-            $this->assertEqual($cookies[0]->getPath(), "/here/");
-            $this->assertEqual($cookies[0]->getExpiry(), "Wed, 25 Dec 2002 04:24:20 GMT");
         }
         
         function testRedirect() {

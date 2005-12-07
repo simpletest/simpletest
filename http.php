@@ -268,7 +268,7 @@
          *    @param SimpleUrl $url           Url to use for scope.
          *    @access public
          */
-        function fromCookieJar($jar, $url) {
+        function readCookiesFromJar($jar, $url) {
             $this->_cookies = $jar->selectAsPairs($url);
         }
         
@@ -405,15 +405,6 @@
          */
         function getRealm() {
             return $this->_realm;
-        }
-        
-        /**
-         *    Accessor for any new cookies.
-         *    @return array       List of new cookies.
-         *    @access public
-         */
-        function getNewCookies() {
-            return $this->_cookies;
         }
         
         /**

@@ -371,19 +371,24 @@
             $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
         }
         
-        function testCookieSetting() {
+        function testCookieSettingAndAssertions() {
             $this->setCookie('a', 'Test cookie a');
             $this->setCookie('b', 'Test cookie b', 'www.lastcraft.com');
             $this->setCookie('c', 'Test cookie c', 'www.lastcraft.com', 'test');
             $this->get('http://www.lastcraft.com/test/network_confirm.php');
-            $this->assertPattern('/Test cookie a/');
-            $this->assertPattern('/Test cookie b/');
-            $this->assertPattern('/Test cookie c/');
+            $this->assertText('Test cookie a');
+            $this->assertText('Test cookie b');
+            $this->assertText('Test cookie c');
             $this->assertCookie('a');
             $this->assertCookie('b', 'Test cookie b');
-            $this->assertTrue($this->getCookie('a') == 'Test cookie a');
-            $this->assertTrue($this->getCookie('b') == 'Test cookie b');
             $this->assertTrue($this->getCookie('c') == 'Test cookie c');
+        }
+        
+        function testNoCookieSetWhenCookiesDisabled() {
+            $this->setCookie('a', 'Test cookie a');
+            $this->ignoreCookies();
+            $this->get('http://www.lastcraft.com/test/network_confirm.php');
+            $this->assertNoText('Test cookie a');
         }
         
         function testCookieReading() {
@@ -392,7 +397,15 @@
             $this->assertCookie('short_cookie', 'B');
             $this->assertCookie('day_cookie', 'C');
         }
-        
+         
+        function testNoCookieReadingWhenCookiesDisabled() {
+            $this->ignoreCookies();
+            $this->get('http://www.lastcraft.com/test/set_cookies.php');
+            $this->assertNoCookie('session_cookie');
+            $this->assertNoCookie('short_cookie');
+            $this->assertNoCookie('day_cookie');
+        }
+       
         function testCookiePatternAssertions() {
             $this->get('http://www.lastcraft.com/test/set_cookies.php');
             $this->assertCookie('session_cookie', new PatternExpectation('/a/i'));

@@ -31,13 +31,14 @@
      */
     class SimpleUserAgent {
         var $_cookie_jar;
+        var $_cookies_enabled = true;
         var $_authenticator;
-        var $_max_redirects;
-        var $_proxy;
-        var $_proxy_username;
-        var $_proxy_password;
-        var $_connection_timeout;
-        var $_additional_headers;
+        var $_max_redirects = DEFAULT_MAX_REDIRECTS;
+        var $_proxy = false;
+        var $_proxy_username = false;
+        var $_proxy_password = false;
+        var $_connection_timeout = DEFAULT_CONNECTION_TIMEOUT;
+        var $_additional_headers = array();
         
         /**
          *    Starts with no cookies, realms or proxies.
@@ -46,12 +47,6 @@
         function SimpleUserAgent() {
             $this->_cookie_jar = &new SimpleCookieJar();
             $this->_authenticator = &new SimpleAuthenticator();
-            $this->setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
-            $this->_proxy = false;
-            $this->_proxy_username = false;
-            $this->_proxy_password = false;
-            $this->setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
-            $this->_additional_headers = array();
         }
         
         /**
@@ -128,6 +123,22 @@
                 return null;
             }
             return $this->getCookieValue($base->getHost(), $base->getPath(), $name);
+        }
+        
+        /**
+         *    Switches off cookie sending and recieving.
+         *    @access public
+         */
+        function ignoreCookies() {
+            $this->_cookies_enabled = false;
+        }
+        
+        /**
+         *    Switches back on the cookie sending and recieving.
+         *    @access public
+         */
+        function useCookies() {
+            $this->_cookies_enabled = true;
         }
         
         /**
@@ -236,7 +247,9 @@
                 $headers = $response->getHeaders();
                 $location = new SimpleUrl($headers->getLocation());
                 $url = $location->makeAbsolute($url);
-                $headers->writeCookiesToJar($this->_cookie_jar, $url);
+                if ($this->_cookies_enabled) {
+                    $headers->writeCookiesToJar($this->_cookie_jar, $url);
+                }
                 if (! $headers->isRedirect()) {
                     break;
                 }
@@ -268,7 +281,9 @@
         function &_createRequest($url, $encoding) {
             $request = &$this->_createHttpRequest($url, $encoding);
             $this->_addAdditionalHeaders($request);
-            $request->fromCookieJar($this->_cookie_jar, $url);
+            if ($this->_cookies_enabled) {
+                $request->readCookiesFromJar($this->_cookie_jar, $url);
+            }
             $this->_authenticator->addHeaders($request, $url);
             return $request;
         }

@@ -220,6 +220,22 @@
         function useFrames() {
             $this->_ignore_frames = false;
         }
+        
+        /**
+         *    Switches off cookie sending and recieving.
+         *    @access public
+         */
+        function ignoreCookies() {
+            $this->_user_agent->ignoreCookies();
+        }
+        
+        /**
+         *    Switches back on the cookie sending and recieving.
+         *    @access public
+         */
+        function useCookies() {
+            $this->_user_agent->useCookies();
+        }
 
         /**
          *    Parses the raw content into a page. Will load further

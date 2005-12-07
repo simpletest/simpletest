@@ -586,6 +586,14 @@
         function ignoreFrames() {
             $this->_browser->ignoreFrames();
         }
+        
+        /**
+         *    Switches off cookie sending and recieving.
+         *    @access public
+         */
+        function ignoreCookies() {
+            $this->_browser->ignoreCookies();
+        }
 
         /**
          *    Adds a header to every fetch.
