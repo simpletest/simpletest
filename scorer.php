@@ -450,7 +450,7 @@
          *    @access public
          */
         function &createInvoker(&$invoker) {
-            return $this->_reporter->createInvoker(&$invoker);
+            return $this->_reporter->createInvoker($invoker);
         }
         
         /**
@@ -649,7 +649,7 @@
          */
         function &createInvoker(&$invoker) {
             for ($i = 0; $i < count($this->_reporters); $i++) {
-                $invoker = &$this->_reporters[$i]->createInvoker(&$invoker);
+                $invoker = &$this->_reporters[$i]->createInvoker($invoker);
             }
             return $invoker;
         }
