@@ -8,7 +8,7 @@
                 At the moment this site is maintained by myself,
                 <a href="mailto:marcus@lastcraft.com">Marcus Baker</a>
                 and I am an <a href="marcus_cv.html">Object Oriented web developer</a>.
-                I am currently a freelancer working as lead developer for
+                I am currently a freelancer working as a senior developer for
                 <a href="http://www.wordtracker.com">Wordtracker</a>
                 and as a consultant to various smaller companies.
                 Wordtracker is an internet statistics company with a huge database
@@ -18,9 +18,10 @@
             <p>
                 My wife <a href="mailto:aviva@lastcraft.com">Aviva Racher</a> is a
                 microbiologist.
-                Bryn was born on the 30th of July.
+            </p>
+            <p>
+                Bryn was born on the 30th of July 2004.
                 He is doing very well.
-                We are not doing so well due to the loss of sleep.
             </p>
         </section>
         <section name="issues" title="Issues">
@@ -83,6 +84,10 @@
             <a href="http://www.xpdeveloper.com/cgi-bin/wiki.cgi?MarcuS">Extreme Tuesday</a>
             Club is an informal meeting in London to promote
             <a href="http://www.extremeprogramming.org/">Extreme programming</a>.
+        </link>
+        <link>
+            <a href="http://www.phplondon.org/">PHPLondon</a>
+            is a user group that meets the first thursday of every month.
         </link>
         <link>
             <a href="http://www.wordtracker.com">Wordtracker</a>

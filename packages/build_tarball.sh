@@ -26,7 +26,6 @@ FILES=(simpletest/errors.php \
           simpletest/page.php \
           simpletest/reflection_php4.php \
           simpletest/reflection_php5.php \
-          simpletest/remote.php \
           simpletest/invoker.php \
           simpletest/scorer.php \
           simpletest/reporter.php \
@@ -37,6 +36,8 @@ FILES=(simpletest/errors.php \
           simpletest/web_tester.php \
           simpletest/shell_tester.php \
           simpletest/xml.php \
+          simpletest/detached.php \
+          simpletest/remote.php \
           simpletest/extensions/pear_test_case.php \
           simpletest/extensions/phpunit_test_case.php \
           simpletest/README \
@@ -69,7 +70,6 @@ FILES=(simpletest/errors.php \
           simpletest/test/page_test.php \
           simpletest/test/reflection_php4_test.php \
           simpletest/test/reflection_php5_test.php \
-          simpletest/test/remote_test.php \
           simpletest/test/mock_objects_test.php \
           simpletest/test/interfaces_test.php \
           simpletest/test/visual_test.php \
@@ -81,6 +81,8 @@ FILES=(simpletest/errors.php \
           simpletest/test/live_test.php \
           simpletest/test/real_sites_test.php \
           simpletest/test/parse_error_test.php \
+          simpletest/test/detached_test.php \
+          simpletest/test/remote_test.php \
           simpletest/test/test_with_parse_error.php \
           simpletest/test/support/collector/collectable.1 \
           simpletest/test/support/collector/collectable.2 \

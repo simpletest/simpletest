@@ -258,7 +258,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td style="color: red;">3.0</td>
                     </tr>
                 </tbody></table>
-                PHP5 migraton will start straight after the version 1.1 series,
+                PHP5 migraton will start straight after the version 1.0.1 series,
                 whereupon PHP4 will no longer be supported.
                 SimpleTest is currently compatible with PHP5, but will not
                 make use of all of the new features until version 2.
@@ -298,18 +298,6 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 existing <a href="http://www.junit.org/">JUnit</a> test cases.
             </p>
             <p>
-                Library writers don&apos;t seem to ship tests with their code very often
-                which is a shame.
-                Library code that includes tests can be more safely refactored and
-                the test code can act as additional documentation in a fairly standard
-                form.
-                This can save trawling the source code for clues when problems occour,
-                especially when upgrading such a library.
-                Libraries using SimpleTest for their unit testing include
-                <a href="http://wact.sourceforge.net/">WACT</a> and
-                <a href="http://sourceforge.net/projects/htmlsax">PEAR::XML_HTMLSax</a>.
-            </p>
-            <p>
                 There is currently a sad lack of material on mock objects, which is a shame
                 as unit testing without them is a lot more work.
                 The <a href="http://www.sidewize.com/company/mockobjects.pdf">original mock objects paper</a>
@@ -324,7 +312,8 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 makes a good starting point.
             </p>
             <p>
-                There are plenty of web testing tools, but most are written in Java and
+                There are plenty of web testing tools, but the scriptable ones
+                are mostly are written in Java and
                 tutorials and advice are rather thin on the ground.
                 The only hope is to look at the documentation for
                 <a href="http://httpunit.sourceforge.net/">HTTPUnit</a>,
@@ -332,6 +321,13 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 or <a href="http://jwebunit.sourceforge.net/">JWebUnit</a> and hope for clues.
                 There are some XML driven test frameworks, but again most
                 require Java to run.
+            </p>
+            <p>
+                A new generation of tools that run directly in the web browser
+                are now available.
+                These include
+                <a href="http://www.openqa.org/selenium/">Selenium</a> and
+                <a href="http://wtr.rubyforge.org/">Watir</a>.
                 As SimpleTest does not support JavaScript you would probably
                 have to look at these tools anyway if you have highly dynamic
                 pages.

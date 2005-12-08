@@ -133,12 +133,16 @@
                     <tr><td><code>setMaximumNestedFrames($max)</code></td><td>Protection against recursive framesets</td></tr>
                     <tr><td><code>ignoreFrames()</code></td><td>Disables frames support</td></tr>
                     <tr><td><code>useFrames()</code></td><td>Enables frames support</td></tr>
+                    <tr><td><code>ignoreCookies()</code></td><td>Disables sending and receiving of cookies</td></tr>
+                    <tr><td><code>useCookies()</code></td><td>Enables cookie support</td></tr>
                 </tbody></table>
                 The methods <code>SimpleBrowser::setConnectionTimeout()</code>
                 <code>SimpleBrowser::setMaximumRedirects()</code>,
                 <code>SimpleBrowser::setMaximumNestedFrames()</code>,
-                <code>SimpleBrowser::ignoreFrames()</code> and
-                <code>SimpleBrowser::useFrames()</code> continue to apply
+                <code>SimpleBrowser::ignoreFrames()</code>,
+                <code>SimpleBrowser::useFrames()</code>,
+                <code>SimpleBrowser::ignoreCookies()</code> and
+                <code>SimpleBrowser::useCokies()</code> continue to apply
                 to every subsequent request.
                 The other methods are frames aware.
                 This means that if you have an individual frame that is not
