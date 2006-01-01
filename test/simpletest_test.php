@@ -2,6 +2,7 @@
     // $Id$
     require_once(dirname(__FILE__) . '/../simpletest.php');
 
+    SimpleTest::ignore('ShouldNeverBeRunEither');
 
     class ShouldNeverBeRun extends UnitTestCase {
         function testWithNoChanceOfSuccess() {
@@ -10,5 +11,4 @@
     }
 
     class ShouldNeverBeRunEither extends ShouldNeverBeRun { }
-    SimpleTest::ignore('ShouldNeverBeRunEither');
 ?>

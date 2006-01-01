@@ -95,7 +95,7 @@
             unset($this->_reporter);
             return $reporter->getStatus();
         }
-        
+
         /**
          *    Gets a list of test names. Normally that will
          *    be all internal methods that start with the
@@ -445,7 +445,8 @@
                 $this->addTestCase(new BadGroupTest($test_file, 'No new test cases'));
                 return;
             }
-            $this->addTestCase($zref = $this->_createGroupFromClasses($test_file, $classes));
+            $group = &$this->_createGroupFromClasses($test_file, $classes);
+            $this->addTestCase($group);
         }
 
         /**
@@ -498,7 +499,8 @@
 
         /**
          *    Calculates the incoming test cases from a before
-         *    and after list of loaded classes.
+         *    and after list of loaded classes. Skips abstract
+         *    classes.
          *    @param array $existing_classes   Classes before require().
          *    @param array $new_classes        Classes after require().
          *    @return array                    New classes which are test
@@ -512,6 +514,10 @@
                     continue;
                 }
                 if ($this->_getBaseTestCase($class)) {
+                    $reflection = new SimpleReflection($class);
+                    if ($reflection->isAbstract()) {
+                        SimpleTest::ignore($class);
+                    }
                     $classes[] = $class;
                 }
             }
@@ -527,17 +533,12 @@
          *    @access private
          */
         function _createGroupFromClasses($title, $classes) {
+            SimpleTest::ignoreParentsIfIgnored($classes);
             $group = new GroupTest($title);
             foreach ($classes as $class) {
-                $reflection = new SimpleReflection($class);
-                if ($reflection->isAbstract()) {
-                    SimpleTest::ignore($class);
-                    continue;
+                if (! SimpleTest::isIgnored($class)) {
+                    $group->addTestClass($class);
                 }
-                if (SimpleTest::isIgnored($class)) {
-                    continue;
-                }
-                $group->addTestClass($class);
             }
             return $group;
         }

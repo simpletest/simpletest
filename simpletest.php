@@ -39,8 +39,8 @@
         /**
          *    Sets the name of a test case to ignore, usually
          *    because the class is an abstract case that should
-         *    not be run. Eventually this will disappear as a
-         *    public method and "abstract" will rule.
+         *    not be run. Once PHP4 is dropped this will disappear
+         *    as a public method and "abstract" will rule.
          *    @param string $class        Add a class to ignore.
          *    @static
          *    @access public
@@ -48,9 +48,32 @@
         function ignore($class) {
             $registry = &SimpleTest::_getRegistry();
             $registry['IgnoreList'][strtolower($class)] = true;
-            $reflection = new SimpleReflection($class);
-            if ($parent = $reflection->getParent()) {
-                SimpleTest::ignore($parent);
+        }
+
+        /**
+         *    Scans the now complete ignore list, and adds
+         *    all parent classes to the list. If a class
+         *    is not a runnable test case, then it's parents
+         *    wouldn't be either. This is syntactic sugar
+         *    to cut down on ommissions of ignore()'s or
+         *    missing abstract declarations. This cannot
+         *    be done whilst loading classes wiithout forcing
+         *    a particular order on the class declarations and
+         *    the ignore() calls. It's nice to havethe ignore()
+         *    calls at the top of teh file.
+         *    @param array $classes     Class names of interest.
+         *    @static
+         *    @access public
+         */
+        function ignoreParentsIfIgnored($classes) {
+            $registry = &SimpleTest::_getRegistry();
+            foreach ($classes as $class) {
+                if (SimpleTest::isIgnored($class)) {
+                    $reflection = new SimpleReflection($class);
+                    if ($parent = $reflection->getParent()) {
+                        SimpleTest::ignore($parent);
+                    }
+                }
             }
         }
 
