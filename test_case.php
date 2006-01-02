@@ -532,9 +532,9 @@
          *                               test cases.
          *    @access private
          */
-        function _createGroupFromClasses($title, $classes) {
+        function &_createGroupFromClasses($title, $classes) {
             SimpleTest::ignoreParentsIfIgnored($classes);
-            $group = new GroupTest($title);
+            $group = &new GroupTest($title);
             foreach ($classes as $class) {
                 if (! SimpleTest::isIgnored($class)) {
                     $group->addTestClass($class);
