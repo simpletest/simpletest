@@ -163,11 +163,17 @@
             $tag->addContent("Lot's of text that should be wrapped");
             $this->assertEqual(
                     $tag->getDefault(),
-                    "Lot's of\ntext that\nshould be\nwrapped");
-            $tag->setValue("New long text\nwith two lines");
+                    "Lot's of\r\ntext that\r\nshould be\r\nwrapped");
+            $tag->setValue("New long text\r\nwith two lines");
             $this->assertEqual(
                     $tag->getValue(),
-                    "New long\ntext\nwith two\nlines");
+                    "New long\r\ntext\r\nwith two\r\nlines");
+        }
+        
+        function testBreaksAreNewLieAndCarriageReturn() {
+            $tag = &new SimpleTextAreaTag(array('cols' => '10'));
+            $tag->addContent("Some\nText\rwith\r\nbreaks");
+            $this->assertEqual($tag->getValue(), "Some\r\nText\r\nwith\r\nbreaks");
         }
     }
     

@@ -571,13 +571,7 @@
          *    @access public
          */
         function getDefault() {
-            if ($this->_wrapIsEnabled()) {
-                return wordwrap(
-                        $this->getContent(),
-                        (integer)$this->getAttribute('cols'),
-                        "\n");
-            }
-            return $this->getContent();
+            return $this->_wrap($this->getContent());
         }
         
         /**
@@ -587,13 +581,7 @@
          *    @access public
          */
         function setValue($value) {
-            if ($this->_wrapIsEnabled()) {
-                $value = wordwrap(
-                        $value,
-                        (integer)$this->getAttribute('cols'),
-                        "\n");
-            }
-            return parent::setValue($value);
+            return parent::setValue($this->_wrap($value));
         }
         
         /**
@@ -609,6 +597,26 @@
                 }
             }
             return false;
+        }
+        
+        /**
+         *    Performs the formatting that is peculiar to
+         *    this tag.
+         *    @param string $text    Text to wrap.
+         *    @return string         Text wrapped with carriage
+         *                           returns and line feeds
+         *    @access private
+         */
+        function _wrap($text) {
+            $text = str_replace("\r\r\n", "\r\n", str_replace("\n", "\r\n", $text));
+            $text = str_replace("\r\n\n", "\r\n", str_replace("\r", "\r\n", $text));
+            if ($this->_wrapIsEnabled()) {
+                return wordwrap(
+                        $text,
+                        (integer)$this->getAttribute('cols'),
+                        "\r\n");
+            }
+            return $text;
         }
         
         /**
