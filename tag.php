@@ -48,6 +48,19 @@
         }
         
         /**
+         *    The current tag should not swallow all content for
+         *    itself as it's searchable page content. Private
+         *    content tags are usually widgets that contain default
+         *    values.
+         *    @return boolean        False as content is available
+         *                           to other tags by default.
+         *    @access public
+         */
+        function isPrivateContent() {
+            return false;
+        }
+
+        /**
          *    Appends string content to the current content.
          *    @param string $content        Additional text.
          *    @access public
@@ -597,6 +610,15 @@
             }
             return false;
         }
+        
+        /**
+         *    The content of textarea is not part of the page.
+         *    @return boolean        True.
+         *    @access public
+         */
+        function isPrivateContent() {
+            return true;
+        }
     }
     
     /**
@@ -931,6 +953,15 @@
                 return $this->getContent();
             }
             return $this->getAttribute('value');
+        }
+        
+        /**
+         *    The content of options is not part of the page.
+         *    @return boolean        True.
+         *    @access public
+         */
+        function isPrivateContent() {
+            return true;
         }
     }
     

@@ -119,7 +119,7 @@
     class SimplePageBuilder extends SimpleSaxListener {
         var $_tags;
         var $_page;
-        var $_in_option = false;
+        var $_private_content_tag;
 
         /**
          *    Sets the builder up empty.
@@ -166,7 +166,7 @@
             $parser = &new SimpleSaxParser($listener);
             return $parser;
         }
-
+        
         /**
          *    Start of element event. Opens a new tag.
          *    @param string $name         Element name.
@@ -198,8 +198,8 @@
                 $this->_page->acceptFrame($tag);
                 return true;
             }
-            if ($tag->getTagName() == 'option') {
-                $this->_in_option = true;
+            if ($tag->isPrivateContent() && ! isset($this->_private_content_tag)) {
+                $this->_private_content_tag = &$tag;
             }
             if ($tag->expectEndTag()) {
                 $this->_openTag($tag);
@@ -228,11 +228,11 @@
                 $this->_page->acceptFramesetEnd();
                 return true;
             }
-            if ($name == 'option') {
-                $this->_in_option = false;
-            }
             if ($this->_hasNamedTagOnOpenTagStack($name)) {
                 $tag = array_pop($this->_tags[$name]);
+                if ($tag->isPrivateContent() && $this->_private_content_tag->getTagName() == $name) {
+                    unset($this->_private_content_tag);
+                }
                 $this->_addContentTagToOpenTags($tag);
                 $this->_page->acceptTag($tag);
                 return true;
@@ -259,23 +259,12 @@
          *    @access public
          */
         function addContent($text) {
-            if ($this->_in_option) {
-                $this->_addContentToOptionTag($text);
+            if (isset($this->_private_content_tag)) {
+                $this->_private_content_tag->addContent($text);
             } else {
                 $this->_addContentToAllOpenTags($text);
             }
             return true;
-        }
-
-        /**
-         *    Option tags swallow content and so we want any
-         *    new content to go only to the most current option.
-         *    @param string $text        May include unparsed tags.
-         *    @access private
-         */
-        function _addContentToOptionTag($text) {
-            $current = count($this->_tags['option']) - 1;
-            $this->_tags['option'][$current]->addContent($text);
         }
 
         /**

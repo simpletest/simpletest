@@ -733,6 +733,19 @@
             $this->assertText('h=[1]');
             $this->assertText('go=[Go!]');
         }
+        
+        function testVariousNullDefaultsInFields() {
+            $this->get('http://www.lastcraft.com/test/form_with_false_defaults.html');
+            $this->assertField('Text A', '0');
+            //$this->assertField('Text area B', '0');
+            //$this->assertField('Text area C', '                ');
+            //$this->assertField('Selection D', '');
+            //$this->assertField('Checkbox E', '');
+            $this->assertField('Checkbox F', 'on');
+            $this->assertField('Checkbox G', '0');
+            $this->assertField('Checkbox H', '.');
+            //$this->assertField('Radio i', '');
+        }
     }
     
     class TestOfLiveMultiValueWidgets extends WebTestCase {

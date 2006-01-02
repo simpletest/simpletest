@@ -442,7 +442,7 @@
             }
             $classes = $this->_selectRunnableTests($existing_classes, get_declared_classes());
             if (count($classes) == 0) {
-                $this->addTestCase(new BadGroupTest($test_file, 'No new test cases'));
+                $this->addTestCase(new BadGroupTest($test_file, "No runnable test cases in [$test_file]"));
                 return;
             }
             $group = &$this->_createGroupFromClasses($test_file, $classes);
