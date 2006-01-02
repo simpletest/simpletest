@@ -128,15 +128,18 @@
          *    class hiearchy.
          *    @param object $object    Object to test.
          *    @param string $class     Root name of hiearchy.
-         *	  @return boolean		   True if class in hiearchy.
+         *    @return boolean		  True if class in hiearchy.
          *    @access public
          *    @static
          */
         function isA($object, $class) {
             if (version_compare(phpversion(), '5') >= 0) {
-                if (! class_exists($class, false) && 
-                    (function_exists('interface_exists') && !interface_exists($class, false)) ) {
-                    return false;
+                if (! class_exists($class, false)) {
+                    if (function_exists('interface_exists')) {
+                        if (! interface_exists($class, false))  {
+                            return false;
+                        }
+                    }
                 }
                 eval("\$is_a = \$object instanceof $class;");
                 return $is_a;

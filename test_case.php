@@ -124,7 +124,7 @@
          */
         function _isTest($method) {
             if (strtolower(substr($method, 0, 4)) == 'test') {
-                return ! SimpleTestCompatibility::isA($this, strtolower($method));
+                return strtolower(get_class($this)) != strtolower($method);
             }
             return false;
         }
