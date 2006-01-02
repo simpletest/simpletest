@@ -739,7 +739,7 @@
             $this->assertField('Text A', '0');
             $this->assertField('Text area B', '0');
             $this->assertField('Text area C', "\r\n                ");
-            //$this->assertField('Selection D', '');
+            $this->assertField('Selection D', '');
             //$this->assertField('Checkbox E', '');
             $this->assertField('Checkbox F', 'on');
             $this->assertField('Checkbox G', '0');

@@ -187,7 +187,8 @@
             if (! isset($this->_reporter)) {
                 trigger_error('Can only make assertions within test methods');
             }
-            $this->_reporter->paintPass($message . $this->getAssertionLine(' at line [%d]'));
+            $this->_reporter->paintPass(
+                    $message . ' at [' . $this->getAssertionLine() . ']');
             return true;
         }
 
@@ -200,7 +201,8 @@
             if (! isset($this->_reporter)) {
                 trigger_error('Can only make assertions within test methods');
             }
-            $this->_reporter->paintFail($message . $this->getAssertionLine(' at line [%d]'));
+            $this->_reporter->paintFail(
+                    $message . ' at [' . $this->getAssertionLine() . ']');
             return false;
         }
 
@@ -317,11 +319,11 @@
          *                             method embedded in format string.
          *    @access public
          */
-        function getAssertionLine($format = '%d', $stack = false) {
+        function getAssertionLine($stack = false) {
             if ($stack === false) {
                 $stack = SimpleTestCompatibility::getStackTrace();
             }
-            return SimpleDumper::getFormattedAssertionLine($stack, $format);
+            return SimpleDumper::getFormattedAssertionLine($stack);
         }
 
         /**

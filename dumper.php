@@ -361,26 +361,34 @@
          *    Extracts the last assertion that was not within
          *    Simpletest itself. The name must start with "assert".
          *    @param array $stack      List of stack frames.
-         *    @param string $format    String formatting.
-         *    @param string $prefix    Prefix of method to search for.
          *    @access public
          *    @static
          */
-        function getFormattedAssertionLine($stack, $format = '%d', $prefix = 'assert') {
+        function getFormattedAssertionLine($stack) {
             foreach ($stack as $frame) {
                 if (isset($frame['file']) && strpos($frame['file'], 'test_case') !== false) {     // dirname() is a bit slow.
                     if (substr(dirname($frame['file']), -10) == 'test_case') {
                         continue;
                     }
                 }
-                if (($frame['function'] == 'fail') || ($frame['function'] == 'pass')) {
-                    return sprintf($format, $frame['line']);
-                }
-                if (strncmp($frame['function'], $prefix, strlen($prefix)) == 0) {
-                    return sprintf($format, $frame['line']);
+                if (SimpleDumper::_stackFrameIsAnAssertion($frame)) {
+                    return $frame['file'] . ' line ' . $frame['line'];
                 }
             }
             return '';
+        }
+        
+        /**
+         *    Tries to determine if the method call is an assertion.
+         *    @param array $frame     PHP stack frame.
+         *    @access private
+         *    @static
+         */
+        function _stackFrameIsAnAssertion($frame) {
+            if (($frame['function'] == 'fail') || ($frame['function'] == 'pass')) {
+                return true;
+            }
+            return strncmp($frame['function'], 'assert', 6) == 0;
         }
     }
 ?>
