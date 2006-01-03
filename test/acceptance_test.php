@@ -745,7 +745,7 @@
             $this->assertField('Checkbox G', '0');
             $this->assertField('Checkbox H', '.');
             //$this->assertField('Radio i', '');
-            $this->dump($this->_browser->_page->_complete_forms[0]);
+            //$this->dump($this->_browser->_page->_complete_forms[0]);
         }
     }
     
