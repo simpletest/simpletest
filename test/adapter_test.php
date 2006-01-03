@@ -48,27 +48,27 @@
     
     class TestOfPhpUnitAdapter extends TestCase {
         function TestOfPhpUnitAdapter() {
-            $this->TestCase("TestOfPhpUnitAdapter");
+            $this->TestCase('TestOfPhpUnitAdapter');
         }
         
         function testBoolean() {
-            $this->assert(true, "PHP Unit true");
+            $this->assert(true, 'PHP Unit true');
         }
         
         function testName() {
-            $this->assertTrue($this->name() == "TestOfPhpUnitAdapter");
+            $this->assertTrue($this->name() == 'TestOfPhpUnitAdapter');
         }
         
         function testEquals() {
-            $this->assertEquals(12, 12, "PHP Unit equality");
+            $this->assertEquals(12, 12, 'PHP Unit equality');
         }
         
         function testMultilineEquals() {
-            $this->assertEquals("a\nb\n", "a\nb\n", "PHP Unit equality");
+            $this->assertEquals("a\nb\n", "a\nb\n", 'PHP Unit equality');
         }
         
         function testRegExp() {
-            $this->assertRegexp('/hello/', "A big hello from me", "PEAR regex");
+            $this->assertRegexp('/hello/', 'A big hello from me', 'PHPUnit regex');
         }
     }
 ?>

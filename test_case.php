@@ -188,7 +188,7 @@
                 trigger_error('Can only make assertions within test methods');
             }
             $this->_reporter->paintPass(
-                    $message . ' at [' . $this->getAssertionLine() . ']');
+                    $message . $this->getAssertionLine());
             return true;
         }
 
@@ -202,7 +202,7 @@
                 trigger_error('Can only make assertions within test methods');
             }
             $this->_reporter->paintFail(
-                    $message . ' at [' . $this->getAssertionLine() . ']');
+                    $message . $this->getAssertionLine());
             return false;
         }
 

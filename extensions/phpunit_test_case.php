@@ -17,7 +17,7 @@
      *    Adapter for sourceforge PHPUnit test case to allow
      *    legacy test cases to be used with SimpleTest.
      *    @package		SimpleTest
-     *    @subpackage	 Extensions
+     *    @subpackage	Extensions
      */
     class TestCase extends SimpleTestCase {
         
