@@ -92,13 +92,21 @@
 		function testParameterCreationWithoutTypeHinting() {
 			$reflection = new SimpleReflection('AnyOldArgumentClass');
 			$function = $reflection->getSignature('aMethod');
-			$this->assertEqual('function aMethod($argument)', $function);
+			if (version_compare(phpversion(), '5.0.2', '<=')) {
+			    $this->assertEqual('function amethod($argument)', $function);
+    	    } else {
+			    $this->assertEqual('function aMethod($argument)', $function);
+    	    }
 		}
 
 		function testParameterCreationForTypeHinting() {
 			$reflection = new SimpleReflection('AnyOldTypeHintedClass');
 			$function = $reflection->getSignature('aMethod');
-			$this->assertEqual('function aMethod(SimpleTest $argument)', $function);
+			if (version_compare(phpversion(), '5.0.2', '<=')) {
+			    $this->assertEqual('function amethod(SimpleTest $argument)', $function);
+    	    } else {
+			    $this->assertEqual('function aMethod(SimpleTest $argument)', $function);
+    	    }
 		}
     }
 ?>
