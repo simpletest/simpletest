@@ -279,8 +279,20 @@
         }
     }
     
-    Mock::generate("HtmlSaxParser");
-    
+    class TestOfSimpleHtmlLexer extends UnitTestCase {
+        
+        function testNoContent() {
+            $parser = &new MockSimpleSaxParser();
+            $parser->expectNever('acceptStartToken');
+            $parser->expectNever('acceptEndToken');
+            $parser->expectNever('acceptAttributeToken');
+            $parser->expectNever('acceptEntityToken');
+            $parser->expectNever('acceptTextToken');
+            $lexer = &new SimpleHtmlLexer($parser);
+            $this->assertTrue($lexer->parse(''));
+        }
+    }
+        
     class TestOfHtmlLexer extends UnitTestCase {
         var $_handler;
         var $_lexer;
@@ -294,10 +306,6 @@
             $this->_handler->setReturnValue("acceptTextToken", true);
             $this->_handler->setReturnValue("ignore", true);
             $this->_lexer = &SimpleSaxParser::createLexer($this->_handler);
-        }
-        
-        function tearDown() {
-            $this->_handler->tally();
         }
         
         function testUninteresting() {
@@ -495,7 +503,7 @@
                     '<>"&');
         }
     }
-
+    
     class TestSimpleSaxParser extends SimpleSaxParser {
         var $_lexer;
         
@@ -509,9 +517,9 @@
         }
     }
     
-    Mock::generate("SimpleSaxListener");
-    Mock::generate("SimpleLexer");
-    
+    Mock::generate('SimpleLexer');
+    Mock::generate('SimpleSaxListener');
+        
     class TestOfSaxGeneration extends UnitTestCase {
         var $_listener;
         var $_lexer;
@@ -538,7 +546,7 @@
         }
         
         function testSimpleLinkStart() {
-            $this->_parser->parse("");
+            $this->_parser->parse('');
             $this->_listener->expectOnce("startElement", array("a", array()));
             $this->_listener->setReturnValue("startElement", true);
             $this->assertTrue($this->_parser->acceptStartToken("<a", LEXER_ENTER));
@@ -546,7 +554,7 @@
         }
         
         function testSimpleTitleStart() {
-            $this->_parser->parse("");
+            $this->_parser->parse('');
             $this->_listener->expectOnce("startElement", array("title", array()));
             $this->_listener->setReturnValue("startElement", true);
             $this->assertTrue($this->_parser->acceptStartToken("<title", LEXER_ENTER));
@@ -554,7 +562,7 @@
         }
         
         function testSimpleLabelStart() {
-            $this->_parser->parse("");
+            $this->_parser->parse('');
             $this->_listener->expectOnce("startElement", array("label", array()));
             $this->_listener->setReturnValue("startElement", true);
             $this->assertTrue($this->_parser->acceptStartToken("<label", LEXER_ENTER));
@@ -562,7 +570,7 @@
         }
         
         function testLinkStart() {
-            $this->_parser->parse("");
+            $this->_parser->parse('');
             $this->_listener->expectOnce("startElement", array("a", array("href" => "here.html")));
             $this->_listener->setReturnValue("startElement", true);
             $this->assertTrue($this->_parser->acceptStartToken("<a", LEXER_ENTER));
@@ -574,7 +582,7 @@
         }
         
         function testLinkStartWithEncodedUrl() {
-            $this->_parser->parse("");
+            $this->_parser->parse('');
             $this->_listener->expectOnce(
                     "startElement",
                     array("a", array("href" => "here&there.html")));
@@ -588,7 +596,7 @@
         }
         
         function testLinkStartWithId() {
-            $this->_parser->parse("");
+            $this->_parser->parse('');
             $this->_listener->expectOnce(
                     "startElement",
                     array("a", array("id" => "0")));
@@ -602,14 +610,14 @@
         }
         
         function testLinkEnd() {
-            $this->_parser->parse("");
+            $this->_parser->parse('');
             $this->_listener->expectOnce("endElement", array("a"));
             $this->_listener->setReturnValue("endElement", true);
             $this->assertTrue($this->_parser->acceptEndToken("</a>", LEXER_SPECIAL));
         }
         
         function testInput() {
-            $this->_parser->parse("");
+            $this->_parser->parse('');
             $this->_listener->expectOnce(
                     "startElement",
                     array("input", array("name" => "a")));
@@ -621,7 +629,7 @@
         }
          
         function testButton() {
-            $this->_parser->parse("");
+            $this->_parser->parse('');
             $this->_listener->expectOnce(
                     "startElement",
                     array("button", array("name" => "a")));
@@ -633,14 +641,14 @@
         }
        
         function testContent() {
-            $this->_parser->parse("");
+            $this->_parser->parse('');
             $this->_listener->expectOnce("addContent", array("stuff"));
             $this->_listener->setReturnValue("addContent", true);
             $this->assertTrue($this->_parser->acceptTextToken("stuff", LEXER_UNMATCHED));
         }
         
         function testIgnore() {
-            $this->_parser->parse("");
+            $this->_parser->parse('');
             $this->_listener->expectNever("addContent");
             $this->assertTrue($this->_parser->ignore("stuff", LEXER_UNMATCHED));
         }

@@ -451,6 +451,98 @@
     }
     
     /**
+     *    Breas HTML into SAX events.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleHtmlLexer extends SimpleLexer {
+        
+        /**
+         *    Sets up the lexer with case insensitive matching
+         *    and adds the HTML handlers.
+         *    @param SimpleSaxParser $parser  Handling strategy by
+         *                                    reference.
+         *    @access public
+         */
+        function SimpleHtmlLexer(&$parser) {
+            $this->SimpleLexer($parser, 'text');
+            $this->mapHandler('text', 'acceptTextToken');
+            $this->_addSkipping();
+            foreach ($this->_getParsedTags() as $tag) {
+                $this->_addTag($tag);
+            }
+            $this->_addInTagTokens();
+        }
+        
+        /**
+         *    List of parsed tags. Others are ignored.
+         *    @return array        List of searched for tags.
+         *    @access private
+         */
+        function _getParsedTags() {
+            return array('a', 'title', 'form', 'input', 'button', 'textarea', 'select',
+                    'option', 'frameset', 'frame', 'label');
+        }
+        
+        /**
+         *    The lexer has to skip certain sections such
+         *    as server code, client code and styles.
+         *    @access private
+         */
+        function _addSkipping() {
+            $this->mapHandler('css', 'ignore');
+            $this->addEntryPattern('<style', 'text', 'css');
+            $this->addExitPattern('</style>', 'css');
+            $this->mapHandler('js', 'ignore');
+            $this->addEntryPattern('<script', 'text', 'js');
+            $this->addExitPattern('</script>', 'js');
+            $this->mapHandler('comment', 'ignore');
+            $this->addEntryPattern('<!--', 'text', 'comment');
+            $this->addExitPattern('-->', 'comment');
+        }
+        
+        /**
+         *    Pattern matches to start and end a tag.
+         *    @param string $tag          Name of tag to scan for.
+         *    @access private
+         */
+        function _addTag($tag) {
+            $this->addSpecialPattern("</$tag>", 'text', 'acceptEndToken');
+            $this->addEntryPattern("<$tag", 'text', 'tag');
+        }
+        
+        /**
+         *    Pattern matches to parse the inside of a tag
+         *    including the attributes and their quoting.
+         *    @access private
+         */
+        function _addInTagTokens() {
+            $this->mapHandler('tag', 'acceptStartToken');
+            $this->addSpecialPattern('\s+', 'tag', 'ignore');
+            $this->_addAttributeTokens();
+            $this->addExitPattern('>', 'tag');
+        }
+        
+        /**
+         *    Matches attributes that are either single quoted,
+         *    double quoted or unquoted.
+         *    @access private
+         */
+        function _addAttributeTokens() {
+            $this->mapHandler('dq_attribute', 'acceptAttributeToken');
+            $this->addEntryPattern('=\s*"', 'tag', 'dq_attribute');
+            $this->addPattern("\\\\\"", 'dq_attribute');
+            $this->addExitPattern('"', 'dq_attribute');
+            $this->mapHandler('sq_attribute', 'acceptAttributeToken');
+            $this->addEntryPattern("=\s*'", 'tag', 'sq_attribute');
+            $this->addPattern("\\\\'", 'sq_attribute');
+            $this->addExitPattern("'", 'sq_attribute');
+            $this->mapHandler('uq_attribute', 'acceptAttributeToken');
+            $this->addSpecialPattern('=\s*[^>\s]*', 'tag', 'uq_attribute');
+        }
+    }
+    
+    /**
      *    Converts HTML tokens into selected SAX events.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
@@ -599,13 +691,13 @@
                 $success = $this->_listener->startElement(
                         $this->_tag,
                         $this->_attributes);
-                $this->_tag = "";
+                $this->_tag = '';
                 $this->_attributes = array();
                 return $success;
             }
-            if ($token != "=") {
+            if ($token != '=') {
                 $this->_current_attribute = strtolower(SimpleSaxParser::decodeHtml($token));
-                $this->_attributes[$this->_current_attribute] = "";
+                $this->_attributes[$this->_current_attribute] = '';
             }
             return true;
         }
