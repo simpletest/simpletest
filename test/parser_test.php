@@ -281,8 +281,19 @@
     
     class TestOfSimpleHtmlLexer extends UnitTestCase {
         
-        function testNoContent() {
+        function &createParser() {
             $parser = &new MockSimpleSaxParser();
+            $parser->setReturnValue('acceptStartToken', true);
+            $parser->setReturnValue('acceptEndToken', true);
+            $parser->setReturnValue('acceptAttributeToken', true);
+            $parser->setReturnValue('acceptEntityToken', true);
+            $parser->setReturnValue('acceptTextToken', true);
+            $parser->setReturnValue('ignore', true);
+            return $parser;
+        }
+        
+        function testNoContent() {
+            $parser = &$this->createParser();
             $parser->expectNever('acceptStartToken');
             $parser->expectNever('acceptEndToken');
             $parser->expectNever('acceptAttributeToken');
@@ -290,6 +301,64 @@
             $parser->expectNever('acceptTextToken');
             $lexer = &new SimpleHtmlLexer($parser);
             $this->assertTrue($lexer->parse(''));
+        }
+        
+        function testUninteresting() {
+            $parser = &$this->createParser();
+            $parser->expectOnce('acceptTextToken', array('<html></html>', '*'));
+            $lexer = &new SimpleHtmlLexer($parser);
+            $this->assertTrue($lexer->parse('<html></html>'));
+        }
+        
+        function testSkipCss() {
+            $parser = &$this->createParser();
+            $parser->expectNever('acceptTextToken');
+            $parser->expectAtLeastOnce('ignore');
+            $lexer = &new SimpleHtmlLexer($parser);
+            $this->assertTrue($lexer->parse("<style>Lot's of styles</style>"));
+        }
+        
+        function testSkipJavaScript() {
+            $parser = &$this->createParser();
+            $parser->expectNever('acceptTextToken');
+            $parser->expectAtLeastOnce('ignore');
+            $lexer = &new SimpleHtmlLexer($parser);
+            $this->assertTrue($lexer->parse("<SCRIPT>Javascript code {';:^%^%£$'@\"*(}</SCRIPT>"));
+        }
+        
+        function testSkipHtmlComments() {
+            $parser = &$this->createParser();
+            $parser->expectNever('acceptTextToken');
+            $parser->expectAtLeastOnce('ignore');
+            $lexer = &new SimpleHtmlLexer($parser);
+            $this->assertTrue($lexer->parse("<!-- <title>title</title><style>styles</style> -->"));
+        }
+        
+        function testTagWithNoAttributes() {
+            $parser = &$this->createParser();
+            $parser->expectArgumentsAt(0, 'acceptStartToken', array('<title', '*'));
+            $parser->expectArgumentsAt(1, 'acceptStartToken', array('>', '*'));
+            $parser->expectCallCount('acceptStartToken', 2);
+            $parser->expectOnce('acceptTextToken', array('Hello', '*'));
+            $parser->expectOnce('acceptEndToken', array('</title>', '*'));
+            $lexer = &new SimpleHtmlLexer($parser);
+            $this->assertTrue($lexer->parse('<title>Hello</title>'));
+        }
+        
+        function testTagWithAttributes() {
+            $parser = &$this->createParser();
+            $parser->expectOnce('acceptTextToken', array('label', '*'));
+            $parser->expectArgumentsAt(0, 'acceptStartToken', array('<a', '*'));
+            $parser->expectArgumentsAt(1, 'acceptStartToken', array('href', '*'));
+            $parser->expectArgumentsAt(2, 'acceptStartToken', array('>', '*'));
+            $parser->expectCallCount('acceptStartToken', 3);
+            $parser->expectArgumentsAt(0, 'acceptAttributeToken', array('= "', '*'));
+            $parser->expectArgumentsAt(1, 'acceptAttributeToken', array('here.html', '*'));
+            $parser->expectArgumentsAt(2, 'acceptAttributeToken', array('"', '*'));
+            $parser->expectCallCount('acceptAttributeToken', 3);
+            $parser->expectOnce('acceptEndToken', array('</a>', '*'));
+            $lexer = &new SimpleHtmlLexer($parser);
+            $this->assertTrue($lexer->parse('<a href = "here.html">label</a>'));
         }
     }
         
@@ -306,38 +375,6 @@
             $this->_handler->setReturnValue("acceptTextToken", true);
             $this->_handler->setReturnValue("ignore", true);
             $this->_lexer = &SimpleSaxParser::createLexer($this->_handler);
-        }
-        
-        function testUninteresting() {
-            $this->_handler->expectOnce("acceptTextToken", array("<html></html>", "*"));
-            $this->assertTrue($this->_lexer->parse("<html></html>"));
-        }
-        
-        function testSkipCss() {
-            $this->_handler->expectMaximumCallCount("acceptTextToken", 0);
-            $this->_handler->expectAtLeastOnce("ignore");
-            $this->assertTrue($this->_lexer->parse("<style>Lot's of styles</style>"));
-        }
-        
-        function testSkipJavaScript() {
-            $this->_handler->expectMaximumCallCount("acceptTextToken", 0);
-            $this->_handler->expectAtLeastOnce("ignore");
-            $this->assertTrue($this->_lexer->parse("<SCRIPT>Javascript code {';:^%^%£$'@\"*(}</SCRIPT>"));
-        }
-        
-        function testSkipComments() {
-            $this->_handler->expectMaximumCallCount("acceptTextToken", 0);
-            $this->_handler->expectAtLeastOnce("ignore");
-            $this->assertTrue($this->_lexer->parse("<!-- <style>Lot's of styles</style> -->"));
-        }
-        
-        function testTitleTag() {
-            $this->_handler->expectArgumentsAt(0, "acceptStartToken", array("<title", "*"));
-            $this->_handler->expectArgumentsAt(1, "acceptStartToken", array(">", "*"));
-            $this->_handler->expectCallCount("acceptStartToken", 2);
-            $this->_handler->expectOnce("acceptTextToken", array("Hello", "*"));
-            $this->_handler->expectOnce("acceptEndToken", array("</title>", "*"));
-            $this->assertTrue($this->_lexer->parse("<title>Hello</title>"));
         }
         
         function testFramesetTag() {
