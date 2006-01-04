@@ -106,9 +106,6 @@
             if (! isset($this->_attributes[$label])) {
                 return false;
             }
-            if ($this->_attributes[$label] === '') {
-                return true;
-            }
             return (string)$this->_attributes[$label];
         }
         
@@ -723,7 +720,7 @@
          *    @access public
          */
         function getDefault() {
-            if ($this->getAttribute('checked')) {
+            if ($this->getAttribute('checked') !== false) {
                 return $this->getAttribute('value');
             }
             return false;
@@ -777,7 +774,7 @@
          */
         function getDefault() {
             for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
-                if ($this->_options[$i]->getAttribute('selected')) {
+                if ($this->_options[$i]->getAttribute('selected') !== false) {
                     return $this->_options[$i]->getDefault();
                 }
             }
@@ -865,7 +862,7 @@
         function getDefault() {
             $default = array();
             for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
-                if ($this->_options[$i]->getAttribute('selected')) {
+                if ($this->_options[$i]->getAttribute('selected') !== false) {
                     $default[] = $this->_options[$i]->getDefault();
                 }
             }
@@ -1011,7 +1008,7 @@
             if ($value === false) {
                 return parent::setValue($value);
             }
-            if ($value != $this->getAttribute('value')) {
+            if ($value !== $this->getAttribute('value')) {
                 return false;
             }
             return parent::setValue($value);
@@ -1023,7 +1020,7 @@
          *    @access public
          */
         function getDefault() {
-            if ($this->getAttribute('checked')) {
+            if ($this->getAttribute('checked') !== false) {
                 return $this->getAttribute('value');
             }
             return false;
@@ -1137,7 +1134,7 @@
             $values = array();
             $widgets = &$this->_getWidgets();
             for ($i = 0, $count = count($widgets); $i < $count; $i++) {
-                if ($widgets[$i]->getValue()) {
+                if ($widgets[$i]->getValue() !== false) {
                     $values[] = $widgets[$i]->getValue();
                 }
             }
@@ -1153,7 +1150,7 @@
             $values = array();
             $widgets = &$this->_getWidgets();
             for ($i = 0, $count = count($widgets); $i < $count; $i++) {
-                if ($widgets[$i]->getDefault()) {
+                if ($widgets[$i]->getDefault() !== false) {
                     $values[] = $widgets[$i]->getDefault();
                 }
             }
@@ -1314,7 +1311,7 @@
         function getDefault() {
             $widgets = &$this->_getWidgets();
             for ($i = 0, $count = count($widgets); $i < $count; $i++) {
-                if ($widgets[$i]->getDefault()) {
+                if ($widgets[$i]->getDefault() !== false) {
                     return $widgets[$i]->getDefault();
                 }
             }

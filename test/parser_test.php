@@ -381,7 +381,7 @@
             $this->assertTrue($parser->parse('<frameset>Frames</frameset>'));
         }
         
-        function testInputTag() {
+        function testTagWithUnquotedAttributes() {
             $listener = &$this->createListener();
             $listener->expectOnce(
                     'startElement',
@@ -390,7 +390,7 @@
             $this->assertTrue($parser->parse('<input name=a.b.c value = d>'));
         }
         
-        function testEmptyLink() {
+        function testTagInsideContent() {
             $listener = &$this->createListener();
             $listener->expectOnce('startElement', array('a', array()));
             $listener->expectAt(0, 'addContent', array('<html>'));
@@ -399,10 +399,11 @@
             $this->assertTrue($parser->parse('<html><a></a></html>'));
         }
         
-        function testLabelledLink() {
+        function testTagWithInternalContent() {
             $listener = &$this->createListener();
             $listener->expectOnce('startElement', array('a', array()));
             $listener->expectOnce('addContent', array('label'));
+            $listener->expectOnce('endElement', array('a'));
             $parser = &new SimpleHtmlSaxParser($listener);
             $this->assertTrue($parser->parse('<a>label</a>'));
         }
@@ -411,6 +412,7 @@
             $listener = &$this->createListener();
             $listener->expectOnce('startElement', array('a', array('href' => 'here.html')));
             $listener->expectOnce('addContent', array('label'));
+            $listener->expectOnce('endElement', array('a'));
             $parser = &new SimpleHtmlSaxParser($listener);
             $this->assertTrue($parser->parse("<a href = 'here.html'>label</a>"));
         }
@@ -419,6 +421,7 @@
             $listener = &$this->createListener();
             $listener->expectOnce('startElement', array('a', array('href' => 'here&there.html')));
             $listener->expectOnce('addContent', array('label'));
+            $listener->expectOnce('endElement', array('a'));
             $parser = &new SimpleHtmlSaxParser($listener);
             $this->assertTrue($parser->parse("<a href = 'here&amp;there.html'>label</a>"));
         }
@@ -427,18 +430,31 @@
             $listener = &$this->createListener();
             $listener->expectOnce('startElement', array('a', array('id' => '0')));
             $listener->expectOnce('addContent', array('label'));
+            $listener->expectOnce('endElement', array('a'));
             $parser = &new SimpleHtmlSaxParser($listener);
             $this->assertTrue($parser->parse('<a id="0">label</a>'));
         }
-        
-        function testComplexTag() {
+         
+        function testTagWithEmptyAttributes() {
             $listener = &$this->createListener();
             $listener->expectOnce(
                     'startElement',
-                    array('a', array('href' => 'here.html', 'bool' => '', 'style' => "'cool'")));
+                    array('option', array('value' => '', 'selected' => '')));
             $listener->expectOnce('addContent', array('label'));
+            $listener->expectOnce('endElement', array('option'));
             $parser = &new SimpleHtmlSaxParser($listener);
-            $this->assertTrue($parser->parse('<A HREF = \'here.html\' bool Style="\'cool\'">label</A>'));
+            $this->assertTrue($parser->parse('<option value="" selected>label</option>'));
+        }
+       
+        function testComplexTagWithLotsOfCaseVariations() {
+            $listener = &$this->createListener();
+            $listener->expectOnce(
+                    'startElement',
+                    array('a', array('href' => 'here.html', 'style' => "'cool'")));
+            $listener->expectOnce('addContent', array('label'));
+            $listener->expectOnce('endElement', array('a'));
+            $parser = &new SimpleHtmlSaxParser($listener);
+            $this->assertTrue($parser->parse('<A HREF = \'here.html\' Style="\'cool\'">label</A>'));
         }
         
         function testXhtmlSelfClosingTag() {

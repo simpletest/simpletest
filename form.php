@@ -91,7 +91,7 @@
          *    @return SimpleUrl        Absolute form target.
          */
         function _createAction($action, $base) {
-            if (is_bool($action)) {
+            if ($action === '') {
                 return $base;
             }
             $url = new SimpleUrl($action);

@@ -12,7 +12,7 @@
             $tag = new SimpleTitleTag(array('a' => '1', 'b' => ''));
             $this->assertEqual($tag->getTagName(), 'title');
             $this->assertIdentical($tag->getAttribute('a'), '1');
-            $this->assertIdentical($tag->getAttribute('b'), true);
+            $this->assertIdentical($tag->getAttribute('b'), '');
             $this->assertIdentical($tag->getAttribute('c'), false);
             $this->assertIdentical($tag->getContent(), '');
         }
@@ -43,7 +43,7 @@
             $this->assertEqual($tag->getHref(), 'http://here/');
             
             $tag = &new SimpleAnchorTag(array('href' => ''));
-            $this->assertIdentical($tag->getAttribute('href'), true);
+            $this->assertIdentical($tag->getAttribute('href'), '');
             $this->assertIdentical($tag->getHref(), '');
             
             $tag = &new SimpleAnchorTag(array());
