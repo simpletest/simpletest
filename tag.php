@@ -236,14 +236,7 @@
          *    @access public
          */
         function getDefault() {
-            $default = $this->getAttribute('value');
-            if ($default === true) {
-                $default = '';
-            }
-            if ($default === false) {
-                $default = '';
-            }
-            return $default;
+            return $this->getAttribute('value');
         }
         
         /**
@@ -668,66 +661,6 @@
     }
     
     /**
-     *    Checkbox widget.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
-     */
-    class SimpleCheckboxTag extends SimpleWidget {
-        
-        /**
-         *    Starts with attributes only.
-         *    @param hash $attributes    Attribute names and
-         *                               string values.
-         */
-        function SimpleCheckboxTag($attributes) {
-            $this->SimpleWidget('input', $attributes);
-            if ($this->getAttribute('value') === false) {
-                $this->_setAttribute('value', 'on');
-            }
-        }
-        
-        /**
-         *    Tag contains no content.
-         *    @return boolean        False.
-         *    @access public
-         */
-        function expectEndTag() {
-            return false;
-        }
-        
-        /**
-         *    The only allowed value in the one in the
-         *    "value" attribute. The default for this
-         *    attribute is "on".
-         *    @param string $value      New value.
-         *    @return boolean           True if allowed.
-         *    @access public
-         */
-        function setValue($value) {
-            if ($value === false) {
-                return parent::setValue($value);
-            }
-            if ($value != $this->getAttribute('value')) {
-                return false;
-            }
-            return parent::setValue($value);
-        }
-        
-        /**
-         *    Accessor for starting value. The default
-         *    value is "on".
-         *    @return string        Parsed value.
-         *    @access public
-         */
-        function getDefault() {
-            if ($this->getAttribute('checked') !== false) {
-                return $this->getAttribute('value');
-            }
-            return false;
-        }
-    }
-    
-    /**
      *    Drop down widget.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
@@ -983,9 +916,6 @@
          */
         function SimpleRadioButtonTag($attributes) {
             $this->SimpleWidget('input', $attributes);
-            if ($this->getAttribute('value') === false) {
-                $this->_setAttribute('value', 'on');
-            }
         }
         
         /**
@@ -998,7 +928,7 @@
         }
         
         /**
-         *    The only allowed value in the one in the
+         *    The only allowed value sn the one in the
          *    "value" attribute.
          *    @param string $value      New value.
          *    @return boolean           True if allowed.
@@ -1016,6 +946,66 @@
         
         /**
          *    Accessor for starting value.
+         *    @return string        Parsed value.
+         *    @access public
+         */
+        function getDefault() {
+            if ($this->getAttribute('checked') !== false) {
+                return $this->getAttribute('value');
+            }
+            return false;
+        }
+    }
+    
+    /**
+     *    Checkbox widget.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleCheckboxTag extends SimpleWidget {
+        
+        /**
+         *    Starts with attributes only.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
+        function SimpleCheckboxTag($attributes) {
+            $this->SimpleWidget('input', $attributes);
+            if ($this->getAttribute('value') === false) {
+                $this->_setAttribute('value', 'on');
+            }
+        }
+        
+        /**
+         *    Tag contains no content.
+         *    @return boolean        False.
+         *    @access public
+         */
+        function expectEndTag() {
+            return false;
+        }
+        
+        /**
+         *    The only allowed value in the one in the
+         *    "value" attribute. The default for this
+         *    attribute is "on".
+         *    @param string $value      New value.
+         *    @return boolean           True if allowed.
+         *    @access public
+         */
+        function setValue($value) {
+            if ($value === false) {
+                return parent::setValue($value);
+            }
+            if ($value != $this->getAttribute('value')) {
+                return false;
+            }
+            return parent::setValue($value);
+        }
+        
+        /**
+         *    Accessor for starting value. The default
+         *    value is "on".
          *    @return string        Parsed value.
          *    @access public
          */
@@ -1295,7 +1285,7 @@
         function getValue() {
             $widgets = &$this->_getWidgets();
             for ($i = 0, $count = count($widgets); $i < $count; $i++) {
-                if ($widgets[$i]->getValue()) {
+                if ($widgets[$i]->getValue() !== false) {
                     return $widgets[$i]->getValue();
                 }
             }

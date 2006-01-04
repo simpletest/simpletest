@@ -740,12 +740,23 @@
             $this->assertField('Text area B', '0');
             $this->assertField('Text area C', "\r\n                ");
             $this->assertField('Selection D', '');
+            $this->setField('Selection D', 'D2');
+            $this->assertField('Selection D', 'D2');
+            $this->setField('Selection D', 'D3');
+            $this->assertField('Selection D', '0');
+            $this->setField('Selection D', 'D4');
+            $this->assertField('Selection D', '.');
             $this->assertField('Checkbox E', '');
             $this->assertField('Checkbox F', 'on');
             $this->assertField('Checkbox G', '0');
             $this->assertField('Checkbox H', '.');
-            //$this->assertField('Radio I', '');
-            //$this->dump($this->_browser->_page->_complete_forms[0]);
+            $this->assertFieldByName('i', false);
+            $this->setFieldByName('i', '');
+            $this->assertFieldByName('i', '');
+            $this->setFieldByName('i', '0');
+            $this->assertFieldByName('i', '0');
+            $this->setFieldByName('i', '.');
+            $this->assertFieldByName('i', '.');
         }
     }
     
