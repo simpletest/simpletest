@@ -5,7 +5,7 @@
     require_once(dirname(__FILE__) . '/../page.php');
     require_once(dirname(__FILE__) . '/../parser.php');
 
-    Mock::generate('SimpleSaxParser');
+    Mock::generate('SimpleHtmlSaxParser');
     Mock::generate('SimplePage');
     Mock::generate('SimpleHttpResponse');
     Mock::generate('SimpleHttpHeaders');
@@ -27,7 +27,7 @@
 
             $builder = &new PartialSimplePageBuilder();
             $builder->setReturnReference('_createPage', $page);
-            $builder->setReturnReference('_createParser', new MockSimpleSaxParser());
+            $builder->setReturnReference('_createParser', new MockSimpleHtmlSaxParser());
             $builder->SimplePageBuilder();
 
             $builder->parse(new MockSimpleHttpResponse());
@@ -48,7 +48,7 @@
 
             $builder = &new PartialSimplePageBuilder();
             $builder->setReturnReference('_createPage', $page);
-            $builder->setReturnReference('_createParser', new MockSimpleSaxParser());
+            $builder->setReturnReference('_createParser', new MockSimpleHtmlSaxParser());
             $builder->SimplePageBuilder();
 
             $builder->parse(new MockSimpleHttpResponse());
@@ -69,7 +69,7 @@
 
             $builder = &new PartialSimplePageBuilder();
             $builder->setReturnReference('_createPage', $page);
-            $builder->setReturnReference('_createParser', new MockSimpleSaxParser());
+            $builder->setReturnReference('_createParser', new MockSimpleHtmlSaxParser());
             $builder->SimplePageBuilder();
 
             $builder->parse(new MockSimpleHttpResponse());
@@ -96,7 +96,7 @@
 
             $builder = &new PartialSimplePageBuilder();
             $builder->setReturnReference('_createPage', $page);
-            $builder->setReturnReference('_createParser', new MockSimpleSaxParser());
+            $builder->setReturnReference('_createParser', new MockSimpleHtmlSaxParser());
             $builder->SimplePageBuilder();
 
             $builder->parse(new MockSimpleHttpResponse());
@@ -119,7 +119,7 @@
 
             $builder = &new PartialSimplePageBuilder();
             $builder->setReturnReference('_createPage', $page);
-            $builder->setReturnReference('_createParser', new MockSimpleSaxParser());
+            $builder->setReturnReference('_createParser', new MockSimpleHtmlSaxParser());
             $builder->SimplePageBuilder();
 
             $builder->parse(new MockSimpleHttpResponse());
@@ -136,7 +136,7 @@
 
             $builder = &new PartialSimplePageBuilder();
             $builder->setReturnReference('_createPage', $page);
-            $builder->setReturnReference('_createParser', new MockSimpleSaxParser());
+            $builder->setReturnReference('_createParser', new MockSimpleHtmlSaxParser());
             $builder->SimplePageBuilder();
 
             $builder->parse(new MockSimpleHttpResponse());
@@ -149,7 +149,7 @@
     class TestOfPageParsing extends UnitTestCase {
 
         function testParseMechanics() {
-            $parser = &new MockSimpleSaxParser();
+            $parser = &new MockSimpleHtmlSaxParser();
             $parser->expectOnce('parse', array('stuff'));
 
             $page = &new MockSimplePage();

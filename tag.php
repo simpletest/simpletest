@@ -139,7 +139,7 @@
          *    @access public
          */
         function getText() {
-            return SimpleSaxParser::normalise($this->_content);
+            return SimpleHtmlSaxParser::normalise($this->_content);
         }
         
         /**

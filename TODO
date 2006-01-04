@@ -27,7 +27,7 @@ Parser
 Browser
 -------
 Allow ignoring of cookies as per feature request (2/8) - done.
-Setting a radio button with value 0 just doesn't happen (1/5).
+Setting a radio button with value 0 just doesn't happen (1/6).
 Fix quoting issue with fields as in bug report (2).
 Fix bug with encoded GET parameters not being transmitted in form action (3/1) - done.
 Confirm that button with no name has no value transmitted (2/4) - done.

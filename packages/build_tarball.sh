@@ -79,7 +79,6 @@ FILES=(simpletest/errors.php \
           simpletest/test/shell_tester_test.php \
           simpletest/test/xml_test.php \
           simpletest/test/live_test.php \
-          simpletest/test/real_sites_test.php \
           simpletest/test/parse_error_test.php \
           simpletest/test/detached_test.php \
           simpletest/test/remote_test.php \

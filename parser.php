@@ -520,6 +520,7 @@
             $this->mapHandler('tag', 'acceptStartToken');
             $this->addSpecialPattern('\s+', 'tag', 'ignore');
             $this->_addAttributeTokens();
+            $this->addExitPattern('/>', 'tag');
             $this->addExitPattern('>', 'tag');
         }
         
@@ -547,7 +548,7 @@
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
-    class SimpleSaxParser {
+    class SimpleHtmlSaxParser {
         var $_lexer;
         var $_listener;
         var $_tag;
@@ -559,7 +560,7 @@
          *    @param SimpleSaxListener $listener    SAX event handler.
          *    @access public
          */
-        function SimpleSaxParser(&$listener) {
+        function SimpleHtmlSaxParser(&$listener) {
             $this->_listener = &$listener;
             $this->_lexer = &$this->createLexer($this);
             $this->_tag = '';
@@ -586,89 +587,8 @@
          *    @static
          */
         function &createLexer(&$parser) {
-            $lexer = &new SimpleLexer($parser, 'text');
-            $lexer->mapHandler('text', 'acceptTextToken');
-            SimpleSaxParser::_addSkipping($lexer);
-            foreach (SimpleSaxParser::_getParsedTags() as $tag) {
-                SimpleSaxParser::_addTag($lexer, $tag);
-            }
-            SimpleSaxParser::_addInTagTokens($lexer);
+            $lexer = &new SimpleHtmlLexer($parser);
             return $lexer;
-        }
-        
-        /**
-         *    List of parsed tags. Others are ignored.
-         *    @return array        List of searched for tags.
-         *    @access private
-         */
-        function _getParsedTags() {
-            return array('a', 'title', 'form', 'input', 'button', 'textarea', 'select',
-                    'option', 'frameset', 'frame', 'label');
-        }
-        
-        /**
-         *    The lexer has to skip certain sections such
-         *    as server code, client code and styles.
-         *    @param SimpleLexer $lexer        Lexer to add patterns to.
-         *    @access private
-         *    @static
-         */
-        function _addSkipping(&$lexer) {
-            $lexer->mapHandler('css', 'ignore');
-            $lexer->addEntryPattern('<style', 'text', 'css');
-            $lexer->addExitPattern('</style>', 'css');
-            $lexer->mapHandler('js', 'ignore');
-            $lexer->addEntryPattern('<script', 'text', 'js');
-            $lexer->addExitPattern('</script>', 'js');
-            $lexer->mapHandler('comment', 'ignore');
-            $lexer->addEntryPattern('<!--', 'text', 'comment');
-            $lexer->addExitPattern('-->', 'comment');
-        }
-        
-        /**
-         *    Pattern matches to start and end a tag.
-         *    @param SimpleLexer $lexer   Lexer to add patterns to.
-         *    @param string $tag          Name of tag to scan for.
-         *    @access private
-         *    @static
-         */
-        function _addTag(&$lexer, $tag) {
-            $lexer->addSpecialPattern("</$tag>", 'text', 'acceptEndToken');
-            $lexer->addEntryPattern("<$tag", 'text', 'tag');
-        }
-        
-        /**
-         *    Pattern matches to parse the inside of a tag
-         *    including the attributes and their quoting.
-         *    @param SimpleLexer $lexer    Lexer to add patterns to.
-         *    @access private
-         *    @static
-         */
-        function _addInTagTokens(&$lexer) {
-            $lexer->mapHandler('tag', 'acceptStartToken');
-            $lexer->addSpecialPattern('\s+', 'tag', 'ignore');
-            SimpleSaxParser::_addAttributeTokens($lexer);
-            $lexer->addExitPattern('>', 'tag');
-        }
-        
-        /**
-         *    Matches attributes that are either single quoted,
-         *    double quoted or unquoted.
-         *    @param SimpleLexer $lexer     Lexer to add patterns to.
-         *    @access private
-         *    @static
-         */
-        function _addAttributeTokens(&$lexer) {
-            $lexer->mapHandler('dq_attribute', 'acceptAttributeToken');
-            $lexer->addEntryPattern('=\s*"', 'tag', 'dq_attribute');
-            $lexer->addPattern("\\\\\"", 'dq_attribute');
-            $lexer->addExitPattern('"', 'dq_attribute');
-            $lexer->mapHandler('sq_attribute', 'acceptAttributeToken');
-            $lexer->addEntryPattern("=\s*'", 'tag', 'sq_attribute');
-            $lexer->addPattern("\\\\'", 'sq_attribute');
-            $lexer->addExitPattern("'", 'sq_attribute');
-            $lexer->mapHandler('uq_attribute', 'acceptAttributeToken');
-            $lexer->addSpecialPattern('=\s*[^>\s]*', 'tag', 'uq_attribute');
         }
         
         /**
@@ -696,7 +616,7 @@
                 return $success;
             }
             if ($token != '=') {
-                $this->_current_attribute = strtolower(SimpleSaxParser::decodeHtml($token));
+                $this->_current_attribute = strtolower(SimpleHtmlSaxParser::decodeHtml($token));
                 $this->_attributes[$this->_current_attribute] = '';
             }
             return true;
@@ -727,11 +647,11 @@
         function acceptAttributeToken($token, $event) {
             if ($event == LEXER_UNMATCHED) {
                 $this->_attributes[$this->_current_attribute] .=
-                        SimpleSaxParser::decodeHtml($token);
+                        SimpleHtmlSaxParser::decodeHtml($token);
             }
             if ($event == LEXER_SPECIAL) {
                 $this->_attributes[$this->_current_attribute] .=
-                        preg_replace('/^=\s*/' , '', SimpleSaxParser::decodeHtml($token));
+                        preg_replace('/^=\s*/' , '', SimpleHtmlSaxParser::decodeHtml($token));
             }
             return true;
         }
@@ -799,7 +719,7 @@
             $text = preg_replace('|<img.*?alt\s*=\s*\'(.*?)\'.*?>|', ' \1 ', $text);
             $text = preg_replace('|<img.*?alt\s*=\s*([a-zA-Z_]+).*?>|', ' \1 ', $text);
             $text = preg_replace('|<.*?>|', '', $text);
-            $text = SimpleSaxParser::decodeHtml($text);
+            $text = SimpleHtmlSaxParser::decodeHtml($text);
             $text = preg_replace('|\s+|', ' ', $text);
             return trim($text);
         }

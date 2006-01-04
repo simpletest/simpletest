@@ -163,7 +163,7 @@
          *    @access protected
          */
         function &_createParser(&$listener) {
-            $parser = &new SimpleSaxParser($listener);
+            $parser = &new SimpleHtmlSaxParser($listener);
             return $parser;
         }
         
@@ -416,7 +416,7 @@
          */
         function getText() {
             if (! $this->_text) {
-                $this->_text = SimpleSaxParser::normalise($this->_raw);
+                $this->_text = SimpleHtmlSaxParser::normalise($this->_raw);
             }
             return $this->_text;
         }
