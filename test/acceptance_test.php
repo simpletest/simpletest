@@ -734,29 +734,86 @@
             $this->assertText('go=[Go!]');
         }
         
-        function testVariousBlanksInFields() {
+        function testSettingVariousBlanksInFields() {
             $this->get('http://www.lastcraft.com/test/form_with_false_defaults.html');
+            $this->assertField('Text A', '');
+            $this->setField('Text A', '0');
             $this->assertField('Text A', '0');
+            $this->assertField('Text area B', '');
+            $this->setField('Text area B', '0');
             $this->assertField('Text area B', '0');
-            $this->assertField('Text area C', "\r\n                ");
+            $this->assertField('Text area C', "                ");
             $this->assertField('Selection D', '');
             $this->setField('Selection D', 'D2');
             $this->assertField('Selection D', 'D2');
             $this->setField('Selection D', 'D3');
             $this->assertField('Selection D', '0');
             $this->setField('Selection D', 'D4');
-            $this->assertField('Selection D', '.');
+            $this->assertField('Selection D', '?');
             $this->assertField('Checkbox E', '');
             $this->assertField('Checkbox F', 'on');
             $this->assertField('Checkbox G', '0');
-            $this->assertField('Checkbox H', '.');
-            $this->assertFieldByName('i', false);
+            $this->assertField('Checkbox H', '?');
+            $this->assertFieldByName('i', 'on');
             $this->setFieldByName('i', '');
             $this->assertFieldByName('i', '');
             $this->setFieldByName('i', '0');
             $this->assertFieldByName('i', '0');
-            $this->setFieldByName('i', '.');
-            $this->assertFieldByName('i', '.');
+            $this->setFieldByName('i', '?');
+            $this->assertFieldByName('i', '?');
+        }
+        
+        function testSubmissionOfBlankFields() {
+            $this->get('http://www.lastcraft.com/test/form_with_false_defaults.html');
+            $this->setField('Text A', '');
+            $this->setField('Text area B', '');
+            $this->setFieldByName('i', '');
+            $this->click('Go!');
+            $this->assertText('a=[]');
+            $this->assertText('b=[]');
+            $this->assertPattern('/c=\[                \]/');
+            $this->assertText('d=[]');
+            $this->assertText('e=[]');
+            $this->assertText('i=[]');
+        }
+        
+        function testSubmissionOfEmptyValues() {
+            $this->get('http://www.lastcraft.com/test/form_with_false_defaults.html');
+            $this->setField('Selection D', 'D2');
+            $this->click('Go!');
+            $this->assertText('a=[]');
+            $this->assertText('b=[]');
+            $this->assertText('d=[D2]');
+            $this->assertText('f=[on]');
+            $this->assertText('i=[on]');
+        }
+        
+        function testSubmissionOfZeroes() {
+            $this->get('http://www.lastcraft.com/test/form_with_false_defaults.html');
+            $this->setField('Text A', '0');
+            $this->setField('Text area B', '0');
+            $this->setField('Selection D', 'D3');
+            $this->setFieldByName('i', '0');
+            $this->click('Go!');
+            $this->assertText('a=[0]');
+            $this->assertText('b=[0]');
+            $this->assertText('d=[0]');
+            $this->assertText('g=[0]');
+            $this->assertText('i=[0]');
+        }
+        
+        function testSubmissionOfQuestionMarks() {
+            $this->get('http://www.lastcraft.com/test/form_with_false_defaults.html');
+            $this->setField('Text A', '?');
+            $this->setField('Text area B', '?');
+            $this->setField('Selection D', 'D4');
+            $this->setFieldByName('i', '?');
+            $this->click('Go!');
+            $this->assertText('a=[?]');
+            $this->assertText('b=[?]');
+            $this->assertText('d=[?]');
+            $this->assertText('h=[?]');
+            $this->assertText('i=[?]');
         }
     }
     

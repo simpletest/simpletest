@@ -591,7 +591,9 @@
         
         /**
          *    Performs the formatting that is peculiar to
-         *    this tag.
+         *    this tag. There is strange behaviour in this
+         *    one, including stripping a leading new line.
+         *    Go figure. I am using Firefox as a guide.
          *    @param string $text    Text to wrap.
          *    @return string         Text wrapped with carriage
          *                           returns and line feeds
@@ -600,6 +602,9 @@
         function _wrap($text) {
             $text = str_replace("\r\r\n", "\r\n", str_replace("\n", "\r\n", $text));
             $text = str_replace("\r\n\n", "\r\n", str_replace("\r", "\r\n", $text));
+            if (strncmp($text, "\r\n", strlen("\r\n")) == 0) {
+                $text = substr($text, strlen("\r\n"));
+            }
             if ($this->_wrapIsEnabled()) {
                 return wordwrap(
                         $text,
@@ -916,6 +921,9 @@
          */
         function SimpleRadioButtonTag($attributes) {
             $this->SimpleWidget('input', $attributes);
+            if ($this->getAttribute('value') === false) {
+                $this->_setAttribute('value', 'on');
+            }
         }
         
         /**

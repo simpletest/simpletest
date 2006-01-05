@@ -170,6 +170,14 @@
                     "New long\r\ntext\r\nwith two\r\nlines");
         }
         
+        function testWrappingRemovesLeadingcariageReturn() {
+            $tag = &new SimpleTextAreaTag(array('cols' => '20', 'wrap' => 'physical'));
+            $tag->addContent("\rStuff");
+            $this->assertEqual($tag->getDefault(), 'Stuff');
+            $tag->setValue("\nNew stuff\n");
+            $this->assertEqual($tag->getValue(), "New stuff\r\n");
+        }
+        
         function testBreaksAreNewLieAndCarriageReturn() {
             $tag = &new SimpleTextAreaTag(array('cols' => '10'));
             $tag->addContent("Some\nText\rwith\r\nbreaks");
