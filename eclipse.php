@@ -1,4 +1,9 @@
 <?php
+/**
+*	base include file for eclipse plugin 
+*	@package	SimpleTest
+*	@version	$Id$
+*/
 include_once "xml.php";
 include_once "invoker.php";
 include_once "socket.php";
@@ -9,52 +14,49 @@ class EclipseReporter extends XmlReporter {
 		$this->XmlReporter();
 	}
 	
-	function &createInvoker(&$invoker) {
-		$eclinvoker = &new SimpleErrorTrappingInvoker(new EclipseInvoker($invoker->getTestCase(),$this->_port));
+	function &createInvoker(&$invoker){
+		$eclinvoker = &new EclipseInvoker($invoker, $this->_port);
 		return $eclinvoker;
 	}
 	
 	function paintMethodStart($method) {
-		parent::paintGroupStart($method, $this->_size);
-		parent::paintCaseStart($method);
+		parent::paintGroupStart($this->_group, $this->_size);
+		parent::paintCaseStart($this->_case);
 		parent::paintMethodStart($method);
 	}
 	
 	function paintMethodEnd($method){
 		parent::paintMethodEnd($method);
-		parent::paintCaseEnd($method);
-		parent::paintGroupEnd($method);
+		parent::paintCaseEnd($this->_case);
+		parent::paintGroupEnd($this->_group);
 		
 	}
 	
-	function paintCaseStart($method){
-		//do nothing
+	function paintCaseStart($case){
+		$this->_case = $case;
 	}
-	function paintCaseEnd($method){
-		//do nothing
+	
+	function paintCaseEnd($case){
+		$this->_case = "";
 	}
-	function paintGroupStart($method,$size){
-		//do nothing
+	function paintGroupStart($group,$size){
+		$this->_group = $group;
 	}
-	function paintGroupEnd($method){
-		//do nothing
+	function paintGroupEnd($group){
+		$this->_group = "";
 	}
 }
 
-class EclipseInvoker extends SimpleInvoker{
+class EclipseInvoker extends SimpleInvokerDecorator{
 	var $_port;
-	function EclipseInvoker(&$test_case,$port) {
+	function EclipseInvoker(&$invoker,$port) {
 		$this->_port = $port;
-		$this->_test_case = &$test_case;
+		$this->SimpleInvokerDecorator($invoker);
 	}
 	
 	function invoke($method) {
 		ob_start();
-		$this->_test_case->before($method);
-		$this->_test_case->setUp();
-		$this->_test_case->$method();
-		$this->_test_case->tearDown();
-		$this->_test_case->after($method);
+		parent::invoke($method);
 		$output = ob_get_contents();
 		ob_end_clean();
 
