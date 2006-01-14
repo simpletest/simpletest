@@ -490,7 +490,7 @@
         /**
          *    Extracts the username and password for use in rendering
          *    a URL.
-         *    @return string/boolean    Form of username:password@ or false.
+         *    @return string/boolean    Form of username:password or false.
          *    @access public
          */
         function getIdentity() {

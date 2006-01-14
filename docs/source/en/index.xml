@@ -21,24 +21,25 @@
                 Along with Jon Ramsey, Matt Jones and Demian Turner, I am involved in
                 <a href="http://www.phplondon.org/wiki/">PHP London</a>, a PHP user
                 group not surprisingly based in London.
-                It is early days, but going well.
+                It's going well.
                 The networking meetings take place on the first Thursday of every month.
+            </p>
+            <p>
                 In addition the group organises other events that now include a
-                <a href="http://phpconference.co.uk/">London PHP Conference</a>.
-                This is a one day event on Friday the 10th of February.
+                <a href="http://phpconference.co.uk/">London UK PHP Conference</a>.
+                This is a one day event on Friday the 10th of February and costs only
+                fifty quid.
+                The line up includes Matt Zanstra, Derick Rethans and Harry Fuecks.
+                Should be interesting.
             </p>
             <p>
                 The <a local="simple_test">SimpleTest PHP unit tester</a>
                 is available for download from your nearest
                 <a href="http://souceforge.net/projects/simpletest/">SourceForge</a>.
-                It is a PHP unit test and web test framework that has been built
-                to be extensible in various ways.
+                It is a PHP unit test and web test framework.
                 Users of <a href="http://www.junit.org/">JUnit</a> will be
                 familiar with most of the interface.
-                The test display is customisable as well as the base test
-                case and in addition the mock objects can be used with other unit
-                testers.
-                <a href="http://jwebunit.sourceforge.net/">JWebUnit</a>
+                The <a href="http://jwebunit.sourceforge.net/">JWebUnit</a>
                 style functionality is more complete now.
                 It has support for SSL, forms, frames, proxies and basic authentication.
                 The current CVS code should become the 1.0.1 release real soon now and
@@ -76,7 +77,8 @@
                 You will likely need an SMPT gateway that talks to a POP client that
                 you can read the queue from.
                 That's a lot of set up.
-                Fakemail acts as an SMTP gateway on any port you define.
+                <a local="fakemail">Fakemail acts as an SMTP gateway</a> on any port
+                you define.
                 When you send it a mail it simply copies that mail to the local file
                 system in whatever directory you want.
                 You then just have to look at the local file.
@@ -88,9 +90,10 @@
                 <a href="http://www.phparch.com/">PHP Architect</a>.
                 The articles have been OO and agile development related, but the
                 last one I will write will be out in February.
+                Look forward to an interesting replacement.
                 I found the articles time consuming in the extreme, although
-                enjoyable.
-                I want to devote more time to fatherhood and other writing projects.
+                enjoyable, but I want to devote more time to fatherhood and
+                other writing projects.
             </p>
         </section>
         <section name="why" title="Why the Last Craft?">

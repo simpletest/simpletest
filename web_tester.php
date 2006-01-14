@@ -147,7 +147,7 @@
         }
         
         /**
-         *    Accessor for subclases.
+         *    Accessor for aggregated object.
          *    @return mixed        Expectation set in constructor.
          *    @access protected
          */
@@ -425,6 +425,7 @@
      */
     class WebTestCase extends SimpleTestCase {
         var $_browser;
+        var $_ignore_errors = false;
         
         /**
          *    Creates an empty test case. Should be subclassed
@@ -594,6 +595,34 @@
         function ignoreCookies() {
             $this->_browser->ignoreCookies();
         }
+        
+        /**
+         *    Skips errors for the next request only. You might
+         *    want to confirm that a page is unreachable for
+         *    example.
+         *    @access public
+         */
+        function ignoreErrors() {
+            $this->_ignore_errors = true;
+        }
+        
+        /**
+         *    Issues a fail if there is a transport error anywhere
+         *    in the current frameset. Only one such error is
+         *    reported.
+         *    @param string/boolean $result   HTML or failure.
+         *    @return string/boolean $result  Passes through result.
+         *    @access private
+         */
+        function _failOnError($result) {
+            if (! $this->_ignore_errors) {
+                if ($error = $this->_browser->getTransportError()) {
+                    $this->fail($error);
+                }
+            }
+            $this->_ignore_errors = false;
+            return $result;
+        }
 
         /**
          *    Adds a header to every fetch.
@@ -653,7 +682,7 @@
          *    @access public
          */
         function get($url, $parameters = false) {
-            return $this->_browser->get($url, $parameters);
+            return $this->_failOnError($this->_browser->get($url, $parameters));
         }
         
         /**
@@ -667,7 +696,7 @@
          *    @access public
          */
         function post($url, $parameters = false) {
-            return $this->_browser->post($url, $parameters);
+            return $this->_failOnError($this->_browser->post($url, $parameters));
         }
         
         /**
@@ -679,7 +708,7 @@
          *    @access public
          */
         function head($url, $parameters = false) {
-            return $this->_browser->head($url, $parameters);
+            return $this->_failOnError($this->_browser->head($url, $parameters));
         }
         
         /**
@@ -689,7 +718,7 @@
          *    @access public
          */
         function retry() {
-            return $this->_browser->retry();
+            return $this->_failOnError($this->_browser->retry());
         }
         
         /**
@@ -700,7 +729,7 @@
          *    @access public
          */
         function back() {
-            return $this->_browser->back();
+            return $this->_failOnError($this->_browser->back());
         }
         
         /**
@@ -711,7 +740,7 @@
          *    @access public
          */
         function forward() {
-            return $this->_browser->forward();
+            return $this->_failOnError($this->_browser->forward());
         }
         
         /**
@@ -719,13 +748,14 @@
          *    for the current realm.
          *    @param string $username    Username for realm.
          *    @param string $password    Password for realm.
-         *    @return boolean            True if successful fetch. Note
+         *    @return boolean/string     HTML on successful fetch. Note
          *                               that authentication may still have
          *                               failed.
          *    @access public
          */
         function authenticate($username, $password) {
-            return $this->_browser->authenticate($username, $password);
+            return $this->_failOnError(
+                    $this->_browser->authenticate($username, $password));
         }
         
         /**
@@ -800,7 +830,7 @@
          *    @access public
          */
         function click($label) {
-            return $this->_browser->click($label);
+            return $this->_failOnError($this->_browser->click($label));
         }
         
         /**
@@ -813,7 +843,8 @@
          *    @access public
          */
         function clickSubmit($label = 'Submit', $additional = false) {
-            return $this->_browser->clickSubmit($label, $additional);
+            return $this->_failOnError(
+                    $this->_browser->clickSubmit($label, $additional));
         }
         
         /**
@@ -825,7 +856,8 @@
          *    @access public
          */
         function clickSubmitByName($name, $additional = false) {
-            return $this->_browser->clickSubmitByName($name, $additional);
+            return $this->_failOnError(
+                    $this->_browser->clickSubmitByName($name, $additional));
         }
         
         /**
@@ -837,7 +869,8 @@
          *    @access public
          */
         function clickSubmitById($id, $additional = false) {
-            return $this->_browser->clickSubmitById($id, $additional);
+            return $this->_failOnError(
+                    $this->_browser->clickSubmitById($id, $additional));
         }
         
         /**
@@ -854,7 +887,8 @@
          *    @access public
          */
         function clickImage($label, $x = 1, $y = 1, $additional = false) {
-            return $this->_browser->clickImage($label, $x, $y, $additional);
+            return $this->_failOnError(
+                    $this->_browser->clickImage($label, $x, $y, $additional));
         }
         
         /**
@@ -871,7 +905,8 @@
          *    @access public
          */
         function clickImageByName($name, $x = 1, $y = 1, $additional = false) {
-            return $this->_browser->clickImageByName($name, $x, $y, $additional);
+            return $this->_failOnError(
+                    $this->_browser->clickImageByName($name, $x, $y, $additional));
         }
         
         /**
@@ -887,7 +922,8 @@
          *    @access public
          */
         function clickImageById($id, $x = 1, $y = 1, $additional = false) {
-            return $this->_browser->clickImageById($id, $x, $y, $additional);
+            return $this->_failOnError(
+                    $this->_browser->clickImageById($id, $x, $y, $additional));
         }
         
         /**
@@ -898,7 +934,7 @@
          *    @access public
          */
         function submitFormById($id) {
-            return $this->_browser->submitFormById($id);
+            return $this->_failOnError($this->_browser->submitFormById($id));
         }
         
         /**
@@ -912,7 +948,7 @@
          *    @access public
          */
         function clickLink($label, $index = 0) {
-            return $this->_browser->clickLink($label, $index);
+            return $this->_failOnError($this->_browser->clickLink($label, $index));
         }
         
         /**
@@ -922,7 +958,7 @@
          *    @access public
          */
         function clickLinkById($id) {
-            return $this->_browser->clickLinkById($id);
+            return $this->_failOnError($this->_browser->clickLinkById($id));
         }
         
         /**

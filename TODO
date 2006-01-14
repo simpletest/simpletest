@@ -35,7 +35,7 @@ Confirm that button with no name has no value transmitted (2/4) - done.
 Web tester
 ----------
 Setting an option by id attribute should only toggle that option (3).
-Failure to connect should be reported unless suppressed (2).
+Failure to connect should be reported unless suppressed (2/2) - done.
 
 Documentation
 -------------

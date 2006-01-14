@@ -5,11 +5,23 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems and their fixes...
 
+Failure to connect now emits failures
+-------------------------------------
+It used to be that you would have to use the
+getTransferError() call on the web tester to see if
+there was a socket level error in a fetch. This check
+is now always carried out by the WebTestCase unless
+the fetch is prefaced with WebTestCase::ignoreErrors().
+The ignore directive only lasts for test case fetching
+action such as get() and click().
+
 No method SimpleTestOptions::ignore()
 -------------------------------------
 This is deprecated in version 1.0.1beta and has been moved
 to SimpleTest::ignore() as that is more readable. In
 addition, parent classes are also ignored automatically.
+If you are using PHP5 you can skip this directive simply
+by marking your test case as abstract.
 
 No method assertCopy()
 ----------------------
@@ -19,8 +31,8 @@ the objects must be identical, but without being a
 reference. It is thus not a strict inversion of
 assertReference().
 
-Wildcard override has no effect in mocks
-----------------------------------------
+Constructor wildcard override has no effect in mocks
+----------------------------------------------------
 As of 1.0.1beta this is now set with setWildcard() instead
 of in the constructor.
 

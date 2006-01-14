@@ -107,6 +107,7 @@
         
         function testTimedOutGet() {
             $this->setConnectionTimeout(1);
+            $this->ignoreErrors();
             $this->assertFalse($this->get('http://www.lastcraft.com/test/slow_page.php'));
         }
         
