@@ -816,6 +816,13 @@
             $this->assertText('h=[?]');
             $this->assertText('i=[?]');
         }
+        
+        function testSubmissionOfHtmlEncodedvalues() {
+            $this->get('http://www.lastcraft.com/test/form_with_tricky_defaults.html');
+            $this->assertField('Text A', '&\'"<>');
+            $this->assertField('Text B', '"');
+            //$this->assertField('Text area C', '&\'"<>');
+        }
     }
     
     class TestOfLiveMultiValueWidgets extends WebTestCase {
