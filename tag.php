@@ -561,7 +561,7 @@
          *    @access public
          */
         function getDefault() {
-            return $this->_wrap($this->getContent());
+            return $this->_wrap(SimpleHtmlSaxParser::decodeHtml($this->getContent()));
         }
         
         /**
