@@ -817,7 +817,7 @@
             $this->assertText('i=[?]');
         }
         
-        function testSubmissionOfHtmlEncodedvalues() {
+        function testSubmissionOfHtmlEncodedValues() {
             $this->get('http://www.lastcraft.com/test/form_with_tricky_defaults.html');
             $this->assertField('Text A', '&\'"<>');
             $this->assertField('Text B', '"');
@@ -825,14 +825,12 @@
             $this->assertField('Selection D', "'");
             $this->assertField('Checkbox E', '&\'"<>');
             $this->assertField('Checkbox F', false);
-            //$this->assertField('Radio I', "'");
+            $this->assertFieldByname('i', "'");
             $this->click('Go!');
-            //$this->assertText('a=[&\'"<>]');
-            //$this->assertText('b=["]');
-            //$this->assertText('c=[&\'"<>]');
+            $this->assertText('a=[&\'"<>, "]');
+            $this->assertText('c=[&\'"<>]');
             $this->assertText("d=[']");
-            //$this->assertText('e=[&\'"<>]');
-            //$this->assertText('f=[]');
+            $this->assertText('e=[&\'"<>]');
             $this->assertText("i=[']");
         }
     }

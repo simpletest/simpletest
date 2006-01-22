@@ -28,7 +28,7 @@
         <?php
             if (count($_COOKIE) > 0) {
                 foreach ($_COOKIE as $key => $value) {
-                    print $key . "=[" . $value . "]<br />\n";
+                    print htmlentities($key) . "=[" . htmlentities($value) . "]<br />\n";
                 }
             }
         ?>
@@ -44,7 +44,7 @@
                     if (is_array($value)) {
                         $value = implode(', ', $value);
                     }
-                    print $key . "=[" . $value . "]<br />\n";
+                    print htmlentities($key) . "=[" . htmlentities($value) . "]<br />\n";
                 }
             }
         ?>
@@ -63,11 +63,11 @@
         <?php
             if (count($_POST) > 0) {
                 foreach ($_POST as $key => $value) {
-                    print $key . "=[";
+                    print htmlentities($key) . "=[";
                     if (is_array($value)) {
-                        print implode(', ', $value);
+                        print implode(', ', htmlentities($value));
                     } else {
-                        print $value;
+                        print htmlentities($value);
                     }
                     print "]<br />\n";
                 }
