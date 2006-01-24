@@ -8,7 +8,7 @@
         <?php
             if (count($_COOKIE) > 0) {
                 foreach ($_COOKIE as $key => $value) {
-                    print $key . "=[" . $value . "]<br />\n";
+                    print "$key=[$value]<br />\n";
                 }
             }
         ?>
@@ -24,7 +24,7 @@
                     if (is_array($value)) {
                         $value = implode(', ', $value);
                     }
-                    print $key . "=[" . $value . "]<br />\n";
+                    print "$key=[$value]<br />\n";
                 }
             }
         ?>

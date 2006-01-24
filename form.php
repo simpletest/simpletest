@@ -75,7 +75,7 @@
         }
         
         /**
-         *    Accessor for form action.
+         *    Accessor for method of form submission.
          *    @return string           Either get or post.
          *    @access public
          */
@@ -91,7 +91,7 @@
          *    @return SimpleUrl        Absolute form target.
          */
         function _createAction($action, $base) {
-            if ($action === '') {
+            if (($action === '') || ($action === false)) {
                 return $base;
             }
             $url = new SimpleUrl($action);

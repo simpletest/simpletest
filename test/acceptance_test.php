@@ -305,6 +305,35 @@
             $this->clickSubmit('Down one');
             $this->assertText('Index of /test');
         }
+        
+        function testSubmitToNamedPageWithMixedPostAndGet() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/?a=A');
+            $this->assertText('Simple test front controller');
+            $this->clickSubmit('Index post');
+            $this->assertText('action=[Index post]');
+            $this->assertNoText('[a=A]');
+        }
+        
+        function testSubmitToSameDirectoryMixedPostAndGet() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/index.php?a=A');
+            $this->clickSubmit('Same directory post');
+            $this->assertText('action=[Same directory post]');
+            $this->assertNoText('[a=A]');
+        }
+        
+        function testSubmitToEmptyActionMixedPostAndGet() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/index.php?a=A');
+            $this->clickSubmit('Empty action post');
+            $this->assertText('action=[Empty action post]');
+            $this->assertText('[a=A]');
+        }
+        
+        function testSubmitToNoActionMixedPostAndGet() {
+            $this->get('http://www.lastcraft.com/test/front_controller_style/index.php?a=A');
+            $this->clickSubmit('No action post');
+            $this->assertText('action=[No action post]');
+            $this->assertText('[a=A]');
+        }
     }
     
     class TestOfLiveHeaders extends WebTestCase {
