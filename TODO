@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.0.1beta) of 38 hours.
+This is immediate stuff only for this iteration (1.0.1beta) of 43 hours.
 
 $Id$
 
@@ -34,8 +34,8 @@ Setting a radio button with value 0 just doesn't happen (1/10) - done.
 Fix quoting issue with fields as in bug report (2/2) - done.
 Fix bug with encoded GET parameters not being transmitted in form action (3/2) - done.
 Confirm that button with no name has no value transmitted (2/4) - done.
-Allow setting of checkboxes by setting them to true (1).
-Add memory fixes to builder (1).
+Allow setting of checkboxes by setting them to true (1/1) - done.
+Add memory fixes to builder (1/1) - done.
 
 Web tester
 ----------

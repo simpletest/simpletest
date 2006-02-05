@@ -243,11 +243,10 @@
          *    @param SimpleHttpResponse $response    Response from fetch.
          *    @param integer $depth                  Nested frameset depth.
          *    @return SimplePage                     Parsed HTML.
-         *    @access protected
+         *    @access private
          */
         function &_parse($response, $depth = 0) {
-            $builder = &new SimplePageBuilder();
-            $page = &$builder->parse($response);
+            $page = &$this->_buildPage($response);
             if ($this->_ignore_frames || ! $page->hasFrames() || ($depth > $this->_maximum_nested_frames)) {
                 return $page;
             }
@@ -258,9 +257,26 @@
             }
             return $frameset;
         }
+        
+        /**
+         *    Assembles the parsing machinery and actually parses
+         *    a single page. Frees all of the builder memory and so
+         *    unjams the PHP memory management.
+         *    @param SimpleHttpResponse $response    Response from fetch.
+         *    @return SimplePage                     Parsed top level page.
+         *    @access protected
+         */
+        function &_buildPage($response) {
+            $builder = &new SimplePageBuilder();
+            $page = &$builder->parse($response);
+            $builder->free();
+            unset($builder);
+            return $page;
+        }
 
         /**
-         *    Fetches a page.
+         *    Fetches a page. Jointly recursive with the _parse()
+         *    method as it descends a frameset.
          *    @param string/SimpleUrl $url          Target to fetch.
          *    @param SimpleEncoding $encoding       GET/POST parameters.
          *    @param integer $depth                 Nested frameset depth protection.

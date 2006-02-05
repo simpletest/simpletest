@@ -128,6 +128,17 @@
         function SimplePageBuilder() {
             $this->SimpleSaxListener();
         }
+        
+        /**
+         *    Frees up any references so as to allow the PHP garbage
+         *    collection from unset() to work.
+         *    @access public
+         */
+        function free() {
+            unset($this->_tags);
+            unset($this->_page);
+            unset($this->_private_content_tags);
+        }
 
         /**
          *    Reads the raw content and send events
