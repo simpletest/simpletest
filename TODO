@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.0.1beta) of 44 hours.
+This is immediate stuff only for this iteration (1.0.1alpha3) of 45 hours.
 
 $Id$
 
@@ -22,6 +22,7 @@ Test case should say what tests are available (1/1) - done.
 Mock objects
 ------------
 Confirm mocking of SPL classes and derivatives (3/4) - done.
+Optional parameters generate spurious warnings in PHP 5.0.2 (1).
 
 Parser
 ------

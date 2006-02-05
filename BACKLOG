@@ -5,6 +5,7 @@ $Id$
 
 Unit tester
 -----------
+Add skip facility (4).
 
 Reporter
 --------
@@ -17,7 +18,7 @@ Mock objects
 Parser
 ------
 Add U flag to regexes to allow unicode (3).
-Parse fieldsets correctly with labels (4).
+Parse fieldsets correctly with labels (5).
 
 Browser
 -------
@@ -27,6 +28,7 @@ Investigate bug, clicking keeps encoding again and again (3).
 Fix bug URL losing spaces (3).
 Setting an option by id attribute should only toggle that option (3).
 Add additional parameters to click() method (1).
+Allow index selection of controls (3).
 
 Web tester
 ----------
@@ -36,6 +38,8 @@ Add assertSubmit() method (1).
 Documentation
 -------------
 Extension docs (1).
+Replace all deprecated methods (3).
+Split mock objects off fromtutorial (4).
 Add page for projects that use or extend SimpleTest (2).
 
 Build
