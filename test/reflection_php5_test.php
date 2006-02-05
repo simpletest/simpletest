@@ -2,16 +2,21 @@
     // $Id$
 
     abstract class AnyOldClass {
-        function aMethod() {
-        }
+        function aMethod() { }
     }
 
     interface AnyOldInterface {
         function aMethod();
     }
 
+    interface AnyDescendentInterface extends AnyOldInterface {
+    }
+
     class AnyOldImplementation implements AnyOldInterface {
     	function aMethod() { }
+    }
+
+    abstract class AnyAbstractImplementation implements AnyOldInterface {
     }
 
     class AnyOldSubclass extends AnyOldImplementation { }
@@ -64,6 +69,18 @@
 
         function testMethodsListFromInterface() {
             $reflection = new SimpleReflection('AnyOldInterface');
+            $methods = $reflection->getMethods();
+            $this->assertEqual($methods[0], 'aMethod');
+        }
+
+        function testMethodsComeFromDescendentInterfacesASWell() {
+            $reflection = new SimpleReflection('AnyDescendentInterface');
+            $methods = $reflection->getMethods();
+            $this->assertEqual($methods[0], 'aMethod');
+        }
+
+        function testMethodsComeFromDescendentInterfacesInAbstractClass() {
+            $reflection = new SimpleReflection('AnyAbstractImplementation');
             $methods = $reflection->getMethods();
             $this->assertEqual($methods[0], 'aMethod');
         }

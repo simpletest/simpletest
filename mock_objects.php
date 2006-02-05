@@ -18,21 +18,21 @@
         require_once(dirname(__FILE__) . '/reflection_php4.php');
     }
     /**#@-*/
-    
+
     /**
      * Default character simpletest will substitute for any value
      */
     if (! defined('MOCK_ANYTHING')) {
         define('MOCK_ANYTHING', '*');
     }
-    
+
     /**
      *    A wildcard expectation always matches.
 	 *    @package SimpleTest
 	 *    @subpackage MockObjects
      */
     class AnythingExpectation extends SimpleExpectation {
-        
+
         /**
          *    Tests the expectation. Always true.
          *    @param mixed $compare  Ignored.
@@ -42,7 +42,7 @@
         function test($compare) {
             return true;
         }
-        
+
         /**
          *    Returns a human readable test message.
          *    @param mixed $compare      Comparison value.
@@ -55,7 +55,7 @@
             return 'Anything always matches [' . $dumper->describeValue($compare) . ']';
         }
     }
-    
+
     /**
      *    Parameter comparison assertion.
 	 *    @package SimpleTest
@@ -63,7 +63,7 @@
      */
     class ParametersExpectation extends SimpleExpectation {
         var $_expected;
-        
+
         /**
          *    Sets the expected parameter list.
          *    @param array $parameters  Array of parameters including
@@ -79,7 +79,7 @@
             $this->SimpleExpectation($message);
             $this->_expected = $expected;
         }
-        
+
         /**
          *    Tests the assertion. True if correct.
          *    @param array $parameters     Comparison values.
@@ -100,7 +100,7 @@
             }
             return true;
         }
-        
+
         /**
          *    Tests an individual parameter.
          *    @param mixed $parameter    Value to test.
@@ -113,7 +113,7 @@
             $comparison = $this->_coerceToExpectation($expected);
             return $comparison->test($parameter);
         }
-        
+
         /**
          *    Returns a human readable test message.
          *    @param array $comparison   Incoming parameter list.
@@ -130,7 +130,7 @@
                 return $this->_describeDifference($this->_expected, $parameters);
             }
         }
-        
+
         /**
          *    Message to display if expectation differs from
          *    the parameters actually received.
@@ -156,7 +156,7 @@
             }
             return "Parameter expectation differs at " . implode(" and ", $messages);
         }
-        
+
         /**
          *    Creates an identical expectation if the
          *    object/value is not already some type
@@ -171,7 +171,7 @@
             }
             return new IdenticalExpectation($expected);
         }
-        
+
         /**
          *    Renders the argument list as a string for
          *    messages.
@@ -190,14 +190,14 @@
             return implode(', ', $descriptions);
         }
     }
-    
+
     /**
      *    Confirms that the number of calls on a method is as expected.
      */
     class CallCountExpectation extends SimpleExpectation {
         var $_method;
         var $_count;
-        
+
         /**
          *    Stashes the method and expected count for later
          *    reporting.
@@ -210,7 +210,7 @@
             $this->_count = $count;
             $this->SimpleExpectation($message);
         }
-        
+
         /**
          *    Tests the assertion. True if correct.
          *    @param integer $compare     Measured call count.
@@ -220,7 +220,7 @@
         function test($compare) {
             return ($this->_count == $compare);
         }
-        
+
         /**
          *    Reports the comparison.
          *    @param integer $compare     Measured call count.
@@ -233,14 +233,14 @@
                     '] got [' . $compare . ']';
         }
     }
-      
+
     /**
      *    Confirms that the number of calls on a method is as expected.
      */
     class MinimumCallCountExpectation extends SimpleExpectation {
         var $_method;
         var $_count;
-        
+
         /**
          *    Stashes the method and expected count for later
          *    reporting.
@@ -253,7 +253,7 @@
             $this->_count = $count;
             $this->SimpleExpectation($message);
         }
-        
+
         /**
          *    Tests the assertion. True if correct.
          *    @param integer $compare     Measured call count.
@@ -263,7 +263,7 @@
         function test($compare) {
             return ($this->_count <= $compare);
         }
-        
+
         /**
          *    Reports the comparison.
          *    @param integer $compare     Measured call count.
@@ -276,14 +276,14 @@
                     '] got [' . $compare . ']';
         }
     }
-        
+
     /**
      *    Confirms that the number of calls on a method is as expected.
      */
     class MaximumCallCountExpectation extends SimpleExpectation {
         var $_method;
         var $_count;
-        
+
         /**
          *    Stashes the method and expected count for later
          *    reporting.
@@ -296,7 +296,7 @@
             $this->_count = $count;
             $this->SimpleExpectation($message);
         }
-        
+
         /**
          *    Tests the assertion. True if correct.
          *    @param integer $compare     Measured call count.
@@ -306,7 +306,7 @@
         function test($compare) {
             return ($this->_count >= $compare);
         }
-        
+
         /**
          *    Reports the comparison.
          *    @param integer $compare     Measured call count.
@@ -328,7 +328,7 @@
      */
     class CallMap {
         var $_map;
-        
+
         /**
          *    Creates an empty call map.
          *    @access public
@@ -336,7 +336,7 @@
         function CallMap() {
             $this->_map = array();
         }
-        
+
         /**
          *    Stashes a value against a method call.
          *    @param array $parameters    Arguments including wildcards.
@@ -346,7 +346,7 @@
         function addValue($parameters, $value) {
             $this->addReference($parameters, $value);
         }
-        
+
         /**
          *    Stashes a reference against a method call.
          *    @param array $parameters    Array of arguments (including wildcards).
@@ -359,7 +359,7 @@
             $this->_map[$place]["params"] = new ParametersExpectation($parameters);
             $this->_map[$place]["content"] = &$reference;
         }
-        
+
         /**
          *    Searches the call list for a matching parameter
          *    set. Returned by reference.
@@ -377,7 +377,7 @@
             }
             return $slot["content"];
         }
-        
+
         /**
          *    Searches the call list for a matching parameter
          *    set. True if successful.
@@ -389,7 +389,7 @@
         function isMatch($parameters) {
             return ($this->_findFirstSlot($parameters) != null);
         }
-        
+
         /**
          *    Searches the map for a matching item.
          *    @param array $parameters    Parameters to search by
@@ -408,7 +408,7 @@
             return $null;
         }
     }
-    
+
     /**
      *    An empty collection of methods that can have their
      *    return values set and expectations made of the
@@ -428,7 +428,7 @@
         var $_max_counts;
         var $_expected_args;
         var $_expected_args_at;
-        
+
         /**
          *    Creates an empty return list and expectation list.
          *    All call counts are set to zero.
@@ -448,7 +448,7 @@
             $this->_expected_args = array();
             $this->_expected_args_at = array();
         }
-        
+
         /**
          *    Disables a name check when setting expectations.
          *    This hack is needed for the partial mocks.
@@ -457,7 +457,7 @@
         function disableExpectationNameChecks() {
             $this->_is_strict = false;
         }
-        
+
         /**
          *    Changes the default wildcard object.
          *    @param mixed $wildcard         Parameter matching wildcard.
@@ -466,7 +466,7 @@
         function setWildcard($wildcard) {
             $this->_wildcard = $wildcard;
         }
-        
+
         /**
          *    Finds currently running test.
          *    @return SimpeTestCase    Current test case.
@@ -475,7 +475,7 @@
         function &_getCurrentTestCase() {
             return SimpleTest::getCurrent();
         }
-        
+
         /**
          *    Die if bad arguments array is passed
          *    @param mixed $args     The arguments value to be checked.
@@ -490,7 +490,7 @@
         			E_USER_ERROR);
         	}
         }
-        
+
         /**
          *    Triggers a PHP error if the method is not part
          *    of this object.
@@ -505,7 +505,7 @@
                         E_USER_ERROR);
             }
         }
-        
+
         /**
          *    Replaces wildcard matches with wildcard
          *    expectations in the argument list.
@@ -525,7 +525,7 @@
             }
             return $args;
         }
-        
+
         /**
          *    Adds one to the call count of a method.
          *    @param string $method        Method called.
@@ -538,7 +538,7 @@
             }
             $this->_call_counts[$method]++;
         }
-        
+
         /**
          *    Fetches the call count of a method so far.
          *    @param string $method        Method name called.
@@ -553,7 +553,7 @@
             }
             return $this->_call_counts[$method];
         }
-        
+
         /**
          *    Sets a return for a parameter list that will
          *    be passed by value for all calls to this method.
@@ -572,7 +572,7 @@
             }
             $this->_returns[$method]->addValue($args, $value);
         }
-                
+
         /**
          *    Sets a return for a parameter list that will
          *    be passed by value only when the required call count
@@ -599,7 +599,7 @@
             }
             $this->_return_sequence[$method][$timing]->addValue($args, $value);
         }
-         
+
         /**
          *    Sets a return for a parameter list that will
          *    be passed by reference for all calls.
@@ -618,7 +618,7 @@
             }
             $this->_returns[$method]->addReference($args, $reference);
         }
-        
+
         /**
          *    Sets a return for a parameter list that will
          *    be passed by value only when the required call count
@@ -645,7 +645,7 @@
             }
             $this->_return_sequence[$method][$timing]->addReference($args, $reference);
         }
-        
+
         /**
          *    Sets up an expected call with a set of
          *    expected parameters in that call. All
@@ -665,14 +665,14 @@
             $this->_expected_args[strtolower($method)] =
                     new ParametersExpectation($args, $message);
         }
-        
+
         /**
          *    @deprecated
          */
         function expectArguments($method, $args, $message = '%s') {
             return $this->expect($method, $args, $message);
         }
-        
+
         /**
          *    Sets up an expected call with a set of
          *    expected parameters in that call. The
@@ -698,14 +698,14 @@
             $this->_expected_args_at[$timing][$method] =
                     new ParametersExpectation($args, $message);
         }
-        
+
         /**
          *    @deprecated
          */
         function expectArgumentsAt($timing, $method, $args, $message = '%s') {
             return $this->expectAt($timing, $method, $args, $message);
         }
-        
+
         /**
          *    Sets an expectation for the number of times
          *    a method will be called. The tally method
@@ -722,7 +722,7 @@
             $this->_expected_counts[strtolower($method)] =
                     new CallCountExpectation($method, $count, $message);
         }
-        
+
         /**
          *    Sets the number of times a method may be called
          *    before a test failure is triggered.
@@ -735,10 +735,10 @@
         function expectMaximumCallCount($method, $count, $message = '%s') {
             $this->_dieOnNoMethod($method, 'set maximum call count');
             $message .= Mock::getExpectationLine();
-            $this->_max_counts[strtolower($method)] = 
+            $this->_max_counts[strtolower($method)] =
                     new MaximumCallCountExpectation($method, $count, $message);
         }
-        
+
         /**
          *    Sets the number of times to call a method to prevent
          *    a failure on the tally.
@@ -754,7 +754,7 @@
             $this->_expected_counts[strtolower($method)] =
                     new MinimumCallCountExpectation($method, $count, $message);
         }
-        
+
         /**
          *    Convenience method for barring a method
          *    call.
@@ -765,7 +765,7 @@
         function expectNever($method, $message = '%s') {
             $this->expectMaximumCallCount($method, 0, $message);
         }
-        
+
         /**
          *    Convenience method for a single method
          *    call.
@@ -781,7 +781,7 @@
                 $this->expectArguments($method, $args, $message);
             }
         }
-        
+
         /**
          *    Convenience method for requiring a method
          *    call.
@@ -797,13 +797,13 @@
                 $this->expectArguments($method, $args, $message);
             }
         }
-        
+
         /**
          *    @deprecated
          */
         function tally() {
         }
-        
+
         /**
          *    Receives event from unit test that the current
          *    test method has finished. Totals up the call
@@ -870,7 +870,7 @@
             $null = null;
             return $null;
         }
-        
+
         /**
          *    Tests the arguments against expectations.
          *    @param string $method        Method to check.
@@ -898,7 +898,7 @@
                         "Mock method [$method] -> " . $this->_expected_args[$method]->overlayMessage($args));
             }
         }
-        
+
         /**
          *    Triggers an assertion on the held test case.
          *    Should be overridden when using another test
@@ -914,7 +914,7 @@
             $test->assertTrue($assertion, $message);
         }
     }
-    
+
     /**
      *    Static methods only service class for code generation of
      *    mock objects.
@@ -922,7 +922,7 @@
 	 *    @subpackage MockObjects
      */
     class Mock {
-        
+
         /**
          *    Factory for mock object classes.
          *    @access public
@@ -930,7 +930,7 @@
         function Mock() {
             trigger_error('Mock factory methods are class only.');
         }
-        
+
         /**
          *    Clones a class' interface and creates a mock version
          *    that can have return values and expectations set.
@@ -950,7 +950,7 @@
             $generator = new MockGenerator($class, $mock_class);
             return $generator->generate($methods);
         }
-        
+
         /**
          *    Generates a version of a class with selected
          *    methods mocked only. Inherits the old class
@@ -967,7 +967,7 @@
             $generator = new MockGenerator($class, $mock_class);
             return $generator->generatePartial($methods);
         }
-        
+
         /**
          *    Uses a stack trace to find the line of an assertion.
          *    @param array $stack      Stack frames top most first. Only
@@ -985,13 +985,13 @@
             return SimpleDumper::getFormattedAssertionLine($stack);
         }
     }
-    
+
     /**
      *    @deprecated
      */
     class Stub extends Mock {
     }
-    
+
     /**
      *    Service class for code generation of mock objects.
 	 *    @package SimpleTest
@@ -1002,14 +1002,14 @@
         var $_mock_class;
         var $_mock_base;
         var $_reflection;
-        
+
         function MockGenerator($class, $mock_class) {
             $this->_class = $class;
             $this->_mock_class = $mock_class;
             $this->_mock_base = SimpleTest::getMockBaseClass();
             $this->_reflection = new SimpleReflection($this->_class);
         }
-        
+
         /**
          *    Clones a class' interface and creates a mock version
          *    that can have return values and expectations set.
@@ -1035,7 +1035,7 @@
                     $this->_createClassCode($methods ? $methods : array()) .
                     " return true;");
         }
-        
+
         /**
          *    Generates a version of a class with selected
          *    methods mocked only. Inherits the old class
@@ -1069,7 +1069,6 @@
             if (function_exists('spl_classes')) {
             	$interfaces = array_diff($interfaces, array('Traversable'));
             }
-            
             if (count($interfaces) > 0) {
             	$implements = 'implements ' . implode(', ', $interfaces);
             }
@@ -1105,7 +1104,7 @@
             $code .= "}\n";
             return $code;
         }
-        
+
         /**
          *    Creates code within a class to generate replaced
          *    methods. All methods call the _invoke() handler
@@ -1133,7 +1132,7 @@
             }
             return $code;
         }
-        
+
         /**
          *    Tests to see if a special PHP method is about to
          *    be stubbed by mistake.
@@ -1146,7 +1145,7 @@
                     strtolower($method),
                     array('__construct', '__destruct', '__clone'));
         }
-        
+
         /**
          *    Creates a list of mocked methods for error checking.
          *    @param array $methods       Mocked methods.
@@ -1156,7 +1155,7 @@
         function _addMethodList($methods) {
             return "    var \$_mocked_methods = array('" . implode("', '", $methods) . "');\n";
         }
-        
+
         /**
          *    Creates code to abandon the expectation if not mocked.
          *    @param string $alias       Parameter name of method name.
@@ -1171,7 +1170,7 @@
             $code .= "        }\n";
             return $code;
         }
-        
+
         /**
          *    Creates source code for chaining to the composited
          *    mock object.
@@ -1197,7 +1196,7 @@
             $code .= "    }\n";
             return $code;
         }
-        
+
         /**
          *    Creates source code for chaining to an aggregated
          *    mock object.
@@ -1250,7 +1249,7 @@
             $code .= "    }\n";
             return $code;
         }
-        
+
         /**
          *    Creates source code to override a list of methods
          *    with mock versions.

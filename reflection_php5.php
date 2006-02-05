@@ -87,7 +87,8 @@
 
         /**
          *    Gets the list of methods on a class or
-         *    interface.
+         *    interface. Needs to recursively look at all of
+         *    the interfaces included.
          *    @returns array              List of method names.
          *    @access public
          */
@@ -198,10 +199,22 @@
             	$signatures[] =
 					(! is_null($parameter->getClass()) ? $parameter->getClass()->getName() . ' ' : '') .
             			($parameter->isPassedByReference() ? '&' : '') .
-            			'$' . $parameter->getName() .
+            			'$' . $this->_suppressSpurious($parameter->getName()) .
             			($this->_isOptional($parameter) ? ' = false' : '');
             }
             return $signatures;
+        }
+
+        /**
+         *    The SPL library has problems with the
+         *    Reflection library. In particular, you can
+         *    get extra characters in parameter names :(.
+         *    @param string $name    Parameter name.
+         *    @return string         Cleaner name.
+         *    @access private
+         */
+        function _suppressSpurious($name) {
+            return str_replace(array('[', ']', ' '), '', $name);
         }
 
         /**
