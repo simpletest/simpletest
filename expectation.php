@@ -16,8 +16,8 @@
     /**
      *    Assertion that can display failure information.
      *    Also includes various helper methods.
-     *      @package SimpleTest
-     *      @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      *    @abstract
      */
     class SimpleExpectation {
@@ -319,8 +319,8 @@
     
     /**
      *    Test for identity.
-     *      @package SimpleTest
-     *      @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class IdenticalExpectation extends EqualExpectation {
         
@@ -367,8 +367,8 @@
     
     /**
      *    Test for non-identity.
-     *      @package SimpleTest
-     *      @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class NotIdenticalExpectation extends IdenticalExpectation {
         
@@ -413,8 +413,8 @@
     
     /**
      *    Test for a pattern using Perl regex rules.
-     *      @package SimpleTest
-     *      @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class PatternExpectation extends SimpleExpectation {
         var $_pattern;

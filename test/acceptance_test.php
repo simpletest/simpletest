@@ -99,6 +99,8 @@
             $this->assertTitle(new PatternExpectation('/target file/'));
             $this->assertResponse(200);
             $this->assertMime('text/html');
+            $this->assertHeader('connection', 'close');
+            $this->assertHeader('connection', new PatternExpectation('/los/'));
         }
         
         function testSlowGet() {

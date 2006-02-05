@@ -1,5 +1,5 @@
 TODO
-This is immediate stuff only for this iteration (1.0.1beta) of 43 hours.
+This is immediate stuff only for this iteration (1.0.1beta) of 44 hours.
 
 $Id$
 
@@ -18,11 +18,10 @@ Allow multiple reporters (2/1) - done.
 Add a test case selecting ReporterDecorator (2/4) - done.
 Can we get rid of that useless runner class? yes! (1/2) - done.
 Test case should say what tests are available (1/1) - done.
-No message bug in pattern assertions (2).
 
 Mock objects
 ------------
-Confirm mocking of SPL classes and derivatives (2).
+Confirm mocking of SPL classes and derivatives (3).
 
 Parser
 ------
@@ -40,6 +39,7 @@ Add memory fixes to builder (1/1) - done.
 Web tester
 ----------
 Failure to connect should be reported unless suppressed (2/2) - done.
+Message bug in web header pattern assertions (2/1) - done.
 
 Documentation
 -------------

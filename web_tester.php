@@ -27,6 +27,8 @@
          *    Sets the field value to compare against.
          *    @param mixed $value     Test value to match. Can be an
          *                            expectation for say pattern matching.
+         *    @param string $message  Optiona message override. Can use %s as
+         *                            a placeholder for the original message.
          *    @access public
          */
         function FieldExpectation($value, $message = '%s') {
@@ -136,12 +138,15 @@
         /**
          *    Sets the field and value to compare against.
          *    @param string $header   Case insenstive trimmed header name.
-         *    @param mixed $valu e    Optional value to compare. If not
+         *    @param mixed $value     Optional value to compare. If not
          *                            given then any value will match. If
          *                            an expectation object then that will
          *                            be used instead.
+         *    @param string $message  Optiona message override. Can use %s as
+         *                            a placeholder for the original message.
          */
-        function HttpHeaderExpectation($header, $value = false) {
+        function HttpHeaderExpectation($header, $value = false, $message = '%s') {
+            $this->SimpleExpectation($message);
             $this->_expected_header = $this->_normaliseHeader($header);
             $this->_expected_value = $value;
         }
@@ -263,9 +268,11 @@
         /**
          *    Sets the field and value to compare against.
          *    @param string $unwanted   Case insenstive trimmed header name.
+         *    @param string $message    Optiona message override. Can use %s as
+         *                              a placeholder for the original message.
          */
-        function NoHttpHeaderExpectation($unwanted) {
-            $this->HttpHeaderExpectation($unwanted);
+        function NoHttpHeaderExpectation($unwanted, $message = '%s') {
+            $this->HttpHeaderExpectation($unwanted, false, $message);
         }
         
         /**
