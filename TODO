@@ -22,7 +22,7 @@ Test case should say what tests are available (1/1) - done.
 Mock objects
 ------------
 Confirm mocking of SPL classes and derivatives (3/4) - done.
-Optional parameters generate spurious warnings in PHP 5.0.2 (1).
+Optional parameters generate spurious warnings in PHP 5.0.2 (1/2).
 
 Parser
 ------

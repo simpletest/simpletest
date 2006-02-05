@@ -98,8 +98,8 @@
 
         /**
          *    Gets the list of interfaces from a class. If the
-         *	  class name is actually an interface then just that
-         *	  interface is returned.
+         *    class name is actually an interface then just that
+         *    interface is returned.
          *    @returns array          List of interfaces.
          *    @access public
          */
@@ -109,6 +109,31 @@
             	return array($this->_interface);
             }
             return $this->_onlyParents($reflection->getInterfaces());
+        }
+
+        /**
+         *    Gets the list of methods for the implemented
+         *    interfaces only.
+         *    @returns array      List of enforced method signatures.
+         *    @access public
+         */
+        function getInterfaceMethods() {
+            $methods = array();
+            foreach ($this->getInterfaces() as $interface) {
+                $methods = array_merge($methods, get_class_methods($interface));
+            }
+            return array_unique($methods);
+        }
+        
+        /**
+         *    Checks to see if the method signature has to be tightly
+         *    specified.
+         *    @param string $method        Method name.
+         *    @returns boolean             True if enforced.
+         *    @access private
+         */
+        function _isInterfaceMethod($method) {
+            return in_array($method, $this->getInterfaceMethods());
         }
 
         /**
@@ -160,11 +185,11 @@
         }
 
         /**
-         *	  Gets the source code matching the declaration
-         *	  of a method.
-         * 	  @param string $name	Method name.
-         *    @return string        Method signature up to last
-         *                          bracket.
+         *    Gets the source code matching the declaration
+         *    of a method.
+         *    @param string $name    Method name.
+         *    @return string         Method signature up to last
+         *                           bracket.
          *    @access public
          */
         function getSignature($name) {
@@ -177,6 +202,21 @@
         	if (! is_callable(array($this->_interface, $name))) {
         		return "function $name()";
         	}
+        	if ($this->_isInterfaceMethod($name)) {
+        	    return $this->_getFullSignature($name);
+        	}
+        	return "function $name()";
+        }
+        
+        /**
+         *    For a signature specified in an interface, full
+         *    details must be replicated to be a valid implementation.
+         *    @param string $name    Method name.
+         *    @return string         Method signature up to last
+         *                           bracket.
+         *    @access private
+         */
+        function _getFullSignature($name) {
 	        $interface = new ReflectionClass($this->_interface);
 	        $method = $interface->getMethod($name);
 	        $reference = $method->returnsReference() ? '&' : '';
@@ -196,11 +236,12 @@
         function _getParameterSignatures($method) {
         	$signatures = array();
             foreach ($method->getParameters() as $parameter) {
+                $type = $parameter->getClass();
             	$signatures[] =
-					(! is_null($parameter->getClass()) ? $parameter->getClass()->getName() . ' ' : '') .
+					(! is_null($type) ? $type->getName() . ' ' : '') .
             			($parameter->isPassedByReference() ? '&' : '') .
             			'$' . $this->_suppressSpurious($parameter->getName()) .
-            			($this->_isOptional($parameter) ? ' = false' : '');
+            			($this->_isOptional($parameter) ? ' = null' : '');
             }
             return $signatures;
         }

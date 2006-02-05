@@ -63,7 +63,7 @@
        }
     }
 
-    class Hinter {
+    class WithHint {
         function hinted(DummyInterface $object) { }
     }
 
@@ -71,22 +71,28 @@
         function aMethod() { }
         function anotherMethod($a) { }
         function &referenceMethod(&$a) { }
+        function extraMethod($a = false) { }
     }
 
     Mock::generate('ImplementsDummy');
 
-    class TestOfTypeHints extends UnitTestCase {
+    class TestOfImplementations extends UnitTestCase {
 
         function testMockedInterfaceCanPassThroughTypeHint() {
             $mock = new MockDummyInterface();
-            $hinter = new Hinter();
+            $hinter = new WithHint();
             $hinter->hinted($mock);
         }
 
         function testImplementedInterfacesAreCarried() {
             $mock = new MockImplementsDummy();
-            $hinter = new Hinter();
+            $hinter = new WithHint();
             $hinter->hinted($mock);
+        }
+        
+        function testNoSpuriousWarningsWhenSkippingDefaultedParameter() {
+            $mock = new MockImplementsDummy();
+            $mock->extraMethod();
         }
     }
 ?>
