@@ -178,10 +178,20 @@
             $this->assertEqual($tag->getValue(), "New stuff\r\n");
         }
         
-        function testBreaksAreNewLieAndCarriageReturn() {
+        function testBreaksAreNewlineAndCarriageReturn() {
             $tag = &new SimpleTextAreaTag(array('cols' => '10'));
             $tag->addContent("Some\nText\rwith\r\nbreaks");
             $this->assertEqual($tag->getValue(), "Some\r\nText\r\nwith\r\nbreaks");
+        }
+    }
+    
+    class TestOfCheckbox extends UnitTestCase {
+        
+        function testCanSetCheckboxToNamedValueWithBooleanTrue() {
+            $tag = &new SimpleCheckboxTag(array('name' => 'a', 'value' => 'A'));
+            $this->assertEqual($tag->getValue(), false);
+            $tag->setValue(true);
+            $this->assertIdentical($tag->getValue(), 'A');
         }
     }
     

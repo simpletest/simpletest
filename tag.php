@@ -996,7 +996,8 @@
         /**
          *    The only allowed value in the one in the
          *    "value" attribute. The default for this
-         *    attribute is "on".
+         *    attribute is "on". If this widget is set to
+         *    true, then the usual value will be taken.
          *    @param string $value      New value.
          *    @return boolean           True if allowed.
          *    @access public
@@ -1004,6 +1005,9 @@
         function setValue($value) {
             if ($value === false) {
                 return parent::setValue($value);
+            }
+            if ($value === true) {
+                return parent::setValue($this->getAttribute('value'));
             }
             if ($value != $this->getAttribute('value')) {
                 return false;

@@ -612,7 +612,7 @@
             $this->setField('Checkbox F', false);
             $this->setField('2', 'g2');
             $this->setField('Selection H', 'H1');
-            $this->assertTrue($this->clickSubmit('Go!'));
+            $this->clickSubmit('Go!');
             $this->assertText('a=[aaa]');
             $this->assertText('b=[bbb]');
             $this->assertText('c=[ccc]');
@@ -622,6 +622,14 @@
             $this->assertText('g=[g2]');
             $this->assertText('h=[1]');
             $this->assertText('go=[Go!]');
+        }
+        
+        function testSettingCheckboxWithBooleanTrueSetsUnderlyingValue() {
+            $this->get('http://www.lastcraft.com/test/form.html');
+            $this->setField('Checkbox E', true);
+            $this->assertField('Checkbox E', 'on');
+            $this->clickSubmit('Go!');
+            $this->assertText('e=[on]');
         }
         
         function testFormSubmissionWithMixedPostAndGet() {
