@@ -12,7 +12,7 @@
             Things are never that simple with object oriented programming, though.
             You think you understand a problem and then something comes a long
             that challenges your perspective and leads to an even deeper appreciation.
-            I though I understood the logging class and that only the first page
+            I thought I understood the logging class and that only the first page
             of the tutorial would use it.
             After that I would move on to something more complicated.
             No one is more surprised than me that I still haven&apos;t got to
@@ -223,14 +223,13 @@
             $this->UnitTestCase('Log class test');
         }<strong>
         function testWriting() {
-            $clock = &new MockClock($this);
+            $clock = &new MockClock();
             $clock->setReturnValue('now', 'Timestamp');
             $writer = &new MockFileWriter($this);
             $writer->expectArguments('write', array('[Timestamp] Test line'));
             $writer->expectCallCount('write', 1);
             $log = &new Log(\$writer);
             $log->message('Test line', &$clock);
-            $writer->tally();
         }</strong>
     }
 ?>
@@ -267,20 +266,11 @@
             When that method is called the expected parameters are
             compared with this and either a pass or a fail is sent
             to the unit test as a result.
-            That is why a new mock object has a reference to
-            <code>\$this</code> in its constructor,
-            it needs <code>\$this</code> to send
-            its test results to.
         </p>
         <p>
             The other expectation is that <code>write()</code>
             will be called only once.
             Simply setting this up is not enough.
-            The mock object
-            will wait forever if the method is never called and so
-            never send the failure message before the end of the test.
-            To get round this the <code>tally()</code> call tells it
-            to check the call counts at that point.
             We can see all this in action by running the tests...
             <div class="demo">
                 <h1>All tests</h1>
@@ -299,13 +289,12 @@
             can actually combine the two seperate expectations...
 <php><![CDATA[
 function testWriting() {
-    $clock = &new MockClock($this);
+    $clock = &new MockClock();
     $clock->setReturnValue('now', 'Timestamp');
     $writer = &new MockFileWriter($this);<strong>
     $writer->expectOnce('write', array('[Timestamp] Test line'));</strong>
     $log = &new Log($writer);
     $log->message('Test line', &$clock);
-    $writer->tally();
 }
 ]]></php>
             This can be an effective shorthand.
