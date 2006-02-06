@@ -48,16 +48,34 @@
         }
 
         /**
+         *    Runs test level set up. Used for changing
+         *    the mechanics of base test cases.
+         *    @param string $method    Test method to call.
+         *    @access public
+         */
+        function before($method) {
+            $this->_test_case->before($method);
+        }
+
+        /**
          *    Invokes a test method and buffered with setUp()
          *    and tearDown() calls.
          *    @param string $method    Test method to call.
          *    @access public
          */
         function invoke($method) {
-            $this->_test_case->before($method);
             $this->_test_case->setUp();
             $this->_test_case->$method();
             $this->_test_case->tearDown();
+        }
+
+        /**
+         *    Runs test level clean up. Used for changing
+         *    the mechanics of base test cases.
+         *    @param string $method    Test method to call.
+         *    @access public
+         */
+        function after($method) {
             $this->_test_case->after($method);
         }
     }
@@ -89,6 +107,16 @@
         }
 
         /**
+         *    Runs test level set up. Used for changing
+         *    the mechanics of base test cases.
+         *    @param string $method    Test method to call.
+         *    @access public
+         */
+        function before($method) {
+            $this->_invoker->before($method);
+        }
+
+        /**
          *    Invokes a test method and buffered with setUp()
          *    and tearDown() calls.
          *    @param string $method    Test method to call.
@@ -96,6 +124,16 @@
          */
         function invoke($method) {
             $this->_invoker->invoke($method);
+        }
+
+        /**
+         *    Runs test level clean up. Used for changing
+         *    the mechanics of base test cases.
+         *    @param string $method    Test method to call.
+         *    @access public
+         */
+        function after($method) {
+            $this->_invoker->after($method);
         }
     }
 ?>

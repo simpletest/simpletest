@@ -92,7 +92,9 @@
             foreach ($this->getTests() as $method) {
                 if ($this->_reporter->shouldInvoke($this->getLabel(), $method)) {
                     $invoker = &$this->_reporter->createInvoker($this->createInvoker());
+                    $invoker->before($method);
                     $invoker->invoke($method);
+                    $invoker->after($method);
                 }
             }
             $this->_reporter->paintCaseEnd($this->getLabel());
