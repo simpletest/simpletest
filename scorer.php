@@ -5,7 +5,7 @@
      *	@subpackage	UnitTester
      *	@version	$Id$
      */
-    
+
     /**#@+*/
     require_once(dirname(__FILE__) . '/invoker.php');
     /**#@-*/
@@ -23,7 +23,7 @@
         var $_fails;
         var $_exceptions;
         var $_is_dry_run;
-        
+
         /**
          *    Starts the test run with no results.
          *    @access public
@@ -34,7 +34,7 @@
             $this->_exceptions = 0;
             $this->_is_dry_run = false;
         }
-        
+
         /**
          *    Signals that the next evaluation will be a dry
          *    run. That is, the structure events will be
@@ -45,7 +45,7 @@
         function makeDry($is_dry = true) {
             $this->_is_dry_run = $is_dry;
         }
-        
+
         /**
          *    The reporter has a veto on what should be run.
          *    @param string $test_case_name  name of test case.
@@ -80,7 +80,7 @@
             }
             return true;
         }
-       
+
         /**
          *    Paints the start of a group test.
          *    @param string $test_name     Name of test or other label.
@@ -89,7 +89,7 @@
          */
         function paintGroupStart($test_name, $size) {
         }
-        
+
         /**
          *    Paints the end of a group test.
          *    @param string $test_name     Name of test or other label.
@@ -97,7 +97,7 @@
          */
         function paintGroupEnd($test_name) {
         }
-         
+
         /**
          *    Paints the start of a test case.
          *    @param string $test_name     Name of test or other label.
@@ -105,7 +105,7 @@
          */
         function paintCaseStart($test_name) {
         }
-        
+
         /**
          *    Paints the end of a test case.
          *    @param string $test_name     Name of test or other label.
@@ -113,7 +113,7 @@
          */
         function paintCaseEnd($test_name) {
         }
-        
+
         /**
          *    Paints the start of a test method.
          *    @param string $test_name     Name of test or other label.
@@ -121,7 +121,7 @@
          */
         function paintMethodStart($test_name) {
         }
-        
+
         /**
          *    Paints the end of a test method.
          *    @param string $test_name     Name of test or other label.
@@ -129,7 +129,7 @@
          */
         function paintMethodEnd($test_name) {
         }
-        
+
         /**
          *    Increments the pass count.
          *    @param string $message        Message is ignored.
@@ -138,7 +138,7 @@
         function paintPass($message) {
             $this->_passes++;
         }
-        
+
         /**
          *    Increments the fail count.
          *    @param string $message        Message is ignored.
@@ -147,27 +147,18 @@
         function paintFail($message) {
             $this->_fails++;
         }
-        
+
         /**
-         *    Deals with PHP 4 throwing an error.
+         *    Deals with PHP 4 throwing an error or PHP 5
+         *    throwing an exception.
          *    @param string $message    Text of error formatted by
          *                              the test case.
          *    @access public
          */
         function paintError($message) {
-            $this->paintException($message);
-        }
-        
-        /**
-         *    Deals with PHP 5 throwing an exception
-         *    This isn't really implemented yet.
-         *    @param Exception $exception     Object thrown.
-         *    @access public
-         */
-        function paintException($exception) {
             $this->_exceptions++;
         }
-        
+
         /**
          *    Accessor for the number of passes so far.
          *    @return integer       Number of passes.
@@ -176,7 +167,7 @@
         function getPassCount() {
             return $this->_passes;
         }
-        
+
         /**
          *    Accessor for the number of fails so far.
          *    @return integer       Number of fails.
@@ -185,7 +176,7 @@
         function getFailCount() {
             return $this->_fails;
         }
-        
+
         /**
          *    Accessor for the number of untrapped errors
          *    so far.
@@ -195,7 +186,7 @@
         function getExceptionCount() {
             return $this->_exceptions;
         }
-        
+
         /**
          *    Paints a simple supplementary message.
          *    @param string $message        Text to display.
@@ -203,7 +194,7 @@
          */
         function paintMessage($message) {
         }
-        
+
         /**
          *    Paints a formatted ASCII message such as a
          *    variable dump.
@@ -212,7 +203,7 @@
          */
         function paintFormattedMessage($message) {
         }
-        
+
         /**
          *    By default just ignores user generated events.
          *    @param string $type        Event type as text.
@@ -235,7 +226,7 @@
         var $_test_stack;
         var $_size;
         var $_progress;
-        
+
         /**
          *    Starts the display with no results in.
          *    @access public
@@ -246,7 +237,7 @@
             $this->_size = null;
             $this->_progress = 0;
         }
-        
+
         /**
          *    Paints the start of a group test. Will also paint
          *    the page header and footer if this is the
@@ -265,7 +256,7 @@
             }
             $this->_test_stack[] = $test_name;
         }
-        
+
         /**
          *    Paints the end of a group test. Will paint the page
          *    footer if the stack of tests has unwound.
@@ -279,7 +270,7 @@
                 $this->paintFooter($test_name);
             }
         }
-        
+
         /**
          *    Paints the start of a test case. Will also paint
          *    the page header and footer if this is the
@@ -297,7 +288,7 @@
             }
             $this->_test_stack[] = $test_name;
         }
-        
+
         /**
          *    Paints the end of a test case. Will paint the page
          *    footer if the stack of tests has unwound.
@@ -311,7 +302,7 @@
                 $this->paintFooter($test_name);
             }
         }
-        
+
         /**
          *    Paints the start of a test method.
          *    @param string $test_name   Name of test that is starting.
@@ -320,7 +311,7 @@
         function paintMethodStart($test_name) {
             $this->_test_stack[] = $test_name;
         }
-        
+
         /**
          *    Paints the end of a test method. Will paint the page
          *    footer if the stack of tests has unwound.
@@ -330,7 +321,7 @@
         function paintMethodEnd($test_name) {
             array_pop($this->_test_stack);
         }
-        
+
         /**
          *    Paints the test document header.
          *    @param string $test_name     First test top level
@@ -340,7 +331,7 @@
          */
         function paintHeader($test_name) {
         }
-        
+
         /**
          *    Paints the test document footer.
          *    @param string $test_name        The top level test.
@@ -349,7 +340,7 @@
          */
         function paintFooter($test_name) {
         }
-        
+
         /**
          *    Accessor for internal test stack. For
          *    subclasses that need to see the whole test
@@ -360,7 +351,7 @@
         function getTestList() {
             return $this->_test_stack;
         }
-        
+
         /**
          *    Accessor for total test size in number
          *    of test cases. Null until the first
@@ -371,7 +362,7 @@
         function getTestCaseCount() {
             return $this->_size;
         }
-        
+
         /**
          *    Accessor for the number of test cases
          *    completed so far.
@@ -381,7 +372,7 @@
         function getTestCaseProgress() {
             return $this->_progress;
         }
-        
+
         /**
          *    Static check for running in the comand line.
          *    @return boolean        True if CLI.
@@ -400,7 +391,7 @@
      */
     class SimpleReporterDecorator {
         var $_reporter;
-        
+
         /**
          *    Mediates between teh reporter and the test case.
          *    @param SimpleScorer $reporter       Reporter to receive events.
@@ -408,7 +399,7 @@
         function SimpleReporterDecorator(&$reporter) {
             $this->_reporter = &$reporter;
         }
-        
+
         /**
          *    Signals that the next evaluation will be a dry
          *    run. That is, the structure events will be
@@ -430,7 +421,7 @@
         function getStatus() {
             return $this->_reporter->getStatus();
         }
-        
+
         /**
          *    The reporter has a veto on what should be run.
          *    @param string $test_case_name  name of test case.
@@ -452,7 +443,7 @@
         function &createInvoker(&$invoker) {
             return $this->_reporter->createInvoker($invoker);
         }
-        
+
         /**
          *    Paints the start of a group test.
          *    @param string $test_name     Name of test or other label.
@@ -462,7 +453,7 @@
         function paintGroupStart($test_name, $size) {
             $this->_reporter->paintGroupStart($test_name, $size);
         }
-        
+
         /**
          *    Paints the end of a group test.
          *    @param string $test_name     Name of test or other label.
@@ -471,7 +462,7 @@
         function paintGroupEnd($test_name) {
             $this->_reporter->paintGroupEnd($test_name);
         }
-         
+
         /**
          *    Paints the start of a test case.
          *    @param string $test_name     Name of test or other label.
@@ -480,7 +471,7 @@
         function paintCaseStart($test_name) {
             $this->_reporter->paintCaseStart($test_name);
         }
-        
+
         /**
          *    Paints the end of a test case.
          *    @param string $test_name     Name of test or other label.
@@ -489,7 +480,7 @@
         function paintCaseEnd($test_name) {
             $this->_reporter->paintCaseEnd($test_name);
         }
-        
+
         /**
          *    Paints the start of a test method.
          *    @param string $test_name     Name of test or other label.
@@ -498,7 +489,7 @@
         function paintMethodStart($test_name) {
             $this->_reporter->paintMethodStart($test_name);
         }
-        
+
         /**
          *    Paints the end of a test method.
          *    @param string $test_name     Name of test or other label.
@@ -507,7 +498,7 @@
         function paintMethodEnd($test_name) {
             $this->_reporter->paintMethodEnd($test_name);
         }
-        
+
         /**
          *    Chains to the wrapped reporter.
          *    @param string $message        Message is ignored.
@@ -516,7 +507,7 @@
         function paintPass($message) {
             $this->_reporter->paintPass($message);
         }
-        
+
         /**
          *    Chains to the wrapped reporter.
          *    @param string $message        Message is ignored.
@@ -525,7 +516,7 @@
         function paintFail($message) {
             $this->_reporter->paintFail($message);
         }
-        
+
         /**
          *    Chains to the wrapped reporter.
          *    @param string $message    Text of error formatted by
@@ -535,16 +526,7 @@
         function paintError($message) {
             $this->_reporter->paintError($message);
         }
-        
-        /**
-         *    Chains to the wrapped reporter.
-         *    @param Exception $exception     Object thrown.
-         *    @access public
-         */
-        function paintException($exception) {
-            $this->_reporter->paintException($exception);
-        }
-        
+
         /**
          *    Chains to the wrapped reporter.
          *    @param string $message        Text to display.
@@ -553,7 +535,7 @@
         function paintMessage($message) {
             $this->_reporter->paintMessage($message);
         }
-        
+
         /**
          *    Chains to the wrapped reporter.
          *    @param string $message        Text to display.
@@ -562,7 +544,7 @@
         function paintFormattedMessage($message) {
             $this->_reporter->paintFormattedMessage($message);
         }
-        
+
         /**
          *    Chains to the wrapped reporter.
          *    @param string $type        Event type as text.
@@ -585,7 +567,7 @@
      */
     class MultipleReporter {
         var $_reporters = array();
-        
+
         /**
          *    Adds a reporter to the subscriber list.
          *    @param SimpleScorer $reporter     Reporter to receive events.
@@ -594,7 +576,7 @@
         function attachReporter(&$reporter) {
             $this->_reporters[] = &$reporter;
         }
-        
+
         /**
          *    Signals that the next evaluation will be a dry
          *    run. That is, the structure events will be
@@ -624,7 +606,7 @@
             }
             return true;
         }
-        
+
         /**
          *    The reporter has a veto on what should be run.
          *    It requires all reporters to want to run the method.
@@ -653,7 +635,7 @@
             }
             return $invoker;
         }
-        
+
         /**
          *    Paints the start of a group test.
          *    @param string $test_name     Name of test or other label.
@@ -665,7 +647,7 @@
                 $this->_reporters[$i]->paintGroupStart($test_name, $size);
             }
         }
-        
+
         /**
          *    Paints the end of a group test.
          *    @param string $test_name     Name of test or other label.
@@ -676,7 +658,7 @@
                 $this->_reporters[$i]->paintGroupEnd($test_name);
             }
         }
-         
+
         /**
          *    Paints the start of a test case.
          *    @param string $test_name     Name of test or other label.
@@ -687,7 +669,7 @@
                 $this->_reporters[$i]->paintCaseStart($test_name);
             }
         }
-        
+
         /**
          *    Paints the end of a test case.
          *    @param string $test_name     Name of test or other label.
@@ -698,7 +680,7 @@
                 $this->_reporters[$i]->paintCaseEnd($test_name);
             }
         }
-        
+
         /**
          *    Paints the start of a test method.
          *    @param string $test_name     Name of test or other label.
@@ -709,7 +691,7 @@
                 $this->_reporters[$i]->paintMethodStart($test_name);
             }
         }
-        
+
         /**
          *    Paints the end of a test method.
          *    @param string $test_name     Name of test or other label.
@@ -720,7 +702,7 @@
                 $this->_reporters[$i]->paintMethodEnd($test_name);
             }
         }
-        
+
         /**
          *    Chains to the wrapped reporter.
          *    @param string $message        Message is ignored.
@@ -731,7 +713,7 @@
                 $this->_reporters[$i]->paintPass($message);
             }
         }
-        
+
         /**
          *    Chains to the wrapped reporter.
          *    @param string $message        Message is ignored.
@@ -742,7 +724,7 @@
                 $this->_reporters[$i]->paintFail($message);
             }
         }
-        
+
         /**
          *    Chains to the wrapped reporter.
          *    @param string $message    Text of error formatted by
@@ -754,18 +736,7 @@
                 $this->_reporters[$i]->paintError($message);
             }
         }
-        
-        /**
-         *    Chains to the wrapped reporter.
-         *    @param Exception $exception     Object thrown.
-         *    @access public
-         */
-        function paintException($exception) {
-            for ($i = 0; $i < count($this->_reporters); $i++) {
-                $this->_reporters[$i]->paintException($exception);
-            }
-        }
-        
+
         /**
          *    Chains to the wrapped reporter.
          *    @param string $message        Text to display.
@@ -776,7 +747,7 @@
                 $this->_reporters[$i]->paintMessage($message);
             }
         }
-        
+
         /**
          *    Chains to the wrapped reporter.
          *    @param string $message        Text to display.
@@ -787,7 +758,7 @@
                 $this->_reporters[$i]->paintFormattedMessage($message);
             }
         }
-        
+
         /**
          *    Chains to the wrapped reporter.
          *    @param string $type        Event type as text.

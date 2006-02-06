@@ -10,10 +10,9 @@
      *	include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/test_case.php');
-    require_once(dirname(__FILE__) . '/errors.php');
     require_once(dirname(__FILE__) . '/dumper.php');
     /**#@-*/
-    
+
     /**
      *    Standard unit test class for day to day testing
      *    of PHP code XP style. Adds some useful standard
@@ -22,7 +21,7 @@
 	 *	  @subpackage	UnitTester
      */
     class UnitTestCase extends SimpleTestCase {
-        
+
         /**
          *    Creates an empty test case. Should be subclassed
          *    with test methods for a functional test case.
@@ -36,7 +35,7 @@
             }
             $this->SimpleTestCase($label);
         }
-        
+
         /**
          *    Will be true if the value is null.
          *    @param null $value       Supposedly null value.
@@ -51,7 +50,7 @@
                     "[" . $dumper->describeValue($value) . "] should be null");
             return $this->assertTrue(! isset($value), $message);
         }
-        
+
         /**
          *    Will be true if the value is set.
          *    @param mixed $value           Supposedly set value.
@@ -66,7 +65,7 @@
                     "[" . $dumper->describeValue($value) . "] should not be null");
             return $this->assertTrue(isset($value), $message);
         }
-        
+
         /**
          *    Type and class test. Will pass if class
          *    matches the type name or is a subclass or
@@ -83,7 +82,7 @@
                     $object,
                     $message);
         }
-        
+
         /**
          *    Type and class mismatch test. Will pass if class
          *    name or underling type does not match the one
@@ -100,7 +99,7 @@
                     $object,
                     $message);
         }
-        
+
         /**
          *    Will trigger a pass if the two parameters have
          *    the same value only. Otherwise a fail.
@@ -116,7 +115,7 @@
                     $second,
                     $message);
         }
-        
+
         /**
          *    Will trigger a pass if the two parameters have
          *    a different value. Otherwise a fail.
@@ -132,7 +131,7 @@
                     $second,
                     $message);
         }
-        
+
         /**
          *    Will trigger a pass if the if the first parameter
          *    is near enough to the second by the margin.
@@ -149,7 +148,7 @@
                     $second,
                     $message);
         }
-        
+
         /**
          *    Will trigger a pass if the two parameters differ
          *    by more than the margin.
@@ -166,7 +165,7 @@
                     $second,
                     $message);
         }
-        
+
         /**
          *    Will trigger a pass if the two parameters have
          *    the same value and same type. Otherwise a fail.
@@ -182,7 +181,7 @@
                     $second,
                     $message);
         }
-        
+
         /**
          *    Will trigger a pass if the two parameters have
          *    the different value or different type.
@@ -198,7 +197,7 @@
                     $second,
                     $message);
         }
-        
+
         /**
          *    Will trigger a pass if both parameters refer
          *    to the same object. Fail otherwise.
@@ -219,7 +218,7 @@
                     SimpleTestCompatibility::isReference($first, $second),
                     $message);
         }
-        
+
         /**
          *    Will trigger a pass if both parameters refer
          *    to different objects. Fail otherwise. The objects
@@ -243,7 +242,7 @@
                             ! SimpleTestCompatibility::isReference($first, $second),
                     $message);
         }
-        
+
         /**
          *    @deprecated
          */
@@ -258,7 +257,7 @@
                     SimpleTestCompatibility::isReference($first, $second),
                     $message);
         }
-        
+
         /**
          *    Will trigger a pass if the Perl regex pattern
          *    is found in the subject. Fail otherwise.
@@ -275,14 +274,14 @@
                     $subject,
                     $message);
         }
-        
+
         /**
          *	  @deprecated
          */
         function assertWantedPattern($pattern, $subject, $message = "%s") {
         	return $this->assertPattern($pattern, $subject, $message);
         }
-        
+
         /**
          *    Will trigger a pass if the perl regex pattern
          *    is not present in subject. Fail if found.
@@ -299,14 +298,14 @@
                     $subject,
                     $message);
         }
-        
+
         /**
          *	  @deprecated
          */
         function assertNoUnwantedPattern($pattern, $subject, $message = "%s") {
         	return $this->assertNoPattern($pattern, $subject, $message);
         }
-        
+
         /**
          *    Confirms that no errors have occoured so
          *    far in the test method.
@@ -320,7 +319,7 @@
                     $queue->isEmpty(),
                     sprintf($message, "Should be no errors"));
         }
-        
+
         /**
          *    Confirms that an error has occoured and
          *    optionally that the error text matches exactly.
@@ -348,7 +347,7 @@
                     $content,
                     "Expected PHP error [$content] severity [$severity] in [$file] line [$line] -> %s");
         }
-        
+
         /**
          *    Creates an equality expectation if the
          *    object/value is not already some type
@@ -363,7 +362,7 @@
             }
             return new EqualExpectation($expected);
         }
-        
+
         /**
          *    @deprecated
          */

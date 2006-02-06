@@ -5,11 +5,52 @@
      *	@subpackage	UnitTester
      *	@version	$Id$
      */
+
     /** @ignore - PHP5 compatibility fix. */
     if (! defined('E_STRICT')) {
         define('E_STRICT', 2048);
     }
-    
+
+    /**#@+
+     * Includes SimpleTest files.
+     */
+    require_once(dirname(__FILE__) . '/invoker.php');
+
+    /**
+     *    Extension that traps errors into an error queue.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
+     */
+    class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
+
+        /**
+         *    Stores the invoker to wrap.
+         *    @param SimpleInvoker $invoker  Test method runner.
+         */
+        function SimpleErrorTrappingInvoker(&$invoker) {
+            $this->SimpleInvokerDecorator($invoker);
+        }
+
+        /**
+         *    Invokes a test method and dispatches any
+         *    untrapped errors. Called back from
+         *    the visiting runner.
+         *    @param string $method    Test method to call.
+         *    @access public
+         */
+        function invoke($method) {
+            set_error_handler('simpleTestErrorHandler');
+            parent::invoke($method);
+            $queue = &SimpleErrorQueue::instance();
+            while (list($severity, $message, $file, $line, $globals) = $queue->extract()) {
+                $severity = SimpleErrorQueue::getSeverityAsString($severity);
+                $test_case = &$this->getTestCase();
+                $test_case->error($severity, $message, $file, $line);
+            }
+            restore_error_handler();
+        }
+    }
+
     /**
      *    Singleton error queue used to record trapped
      *    errors.
@@ -18,7 +59,7 @@
      */
     class SimpleErrorQueue {
         var $_queue;
-        
+
         /**
          *    Starts with an empty queue.
          *    @access public
@@ -26,7 +67,7 @@
         function SimpleErrorQueue() {
             $this->clear();
         }
-        
+
         /**
          *    Adds an error to the front of the queue.
          *    @param $severity        PHP error code.
@@ -41,7 +82,7 @@
                     $this->_queue,
                     array($severity, $message, $filename, $line, $super_globals));
         }
-        
+
         /**
          *    Pulls the earliest error from the queue.
          *    @return     False if none, or a list of error
@@ -57,7 +98,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Discards the contents of the error queue.
          *    @access public
@@ -65,7 +106,7 @@
         function clear() {
             $this->_queue = array();
         }
-        
+
         /**
          *    Tests to see if the queue is empty.
          *    @return        True if empty.
@@ -73,7 +114,7 @@
         function isEmpty() {
             return (count($this->_queue) == 0);
         }
-        
+
         /**
          *    Global access to a single error queue.
          *    @return        Global error queue object.
@@ -87,7 +128,7 @@
             }
             return $queue;
         }
-        
+
         /**
          *    Converst an error code into it's string
          *    representation.
@@ -113,7 +154,7 @@
             return $map[$severity];
         }
     }
-    
+
     /**
      *    Error handler that simply stashes any errors into the global
      *    error queue. Simulates the existing behaviour with respect to

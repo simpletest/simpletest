@@ -5,10 +5,11 @@
 cd ../..
 
 NAME=simpletest_`cat simpletest/VERSION`.tar.gz
-FILES=(simpletest/errors.php \
-          simpletest/compatibility.php \
+FILES=(simpletest/compatibility.php \
           simpletest/collector.php \
           simpletest/dumper.php \
+          simpletest/errors.php \
+          simpletest/exceptions.php \
           simpletest/expectation.php \
           simpletest/socket.php \
           simpletest/encoding.php \
@@ -88,6 +89,7 @@ FILES=(simpletest/errors.php \
           simpletest/test/support/upload_sample.txt \
           simpletest/test/support/supplementary_upload_sample.txt \
           simpletest/test/support/latin1_sample \
+          simpletest/test/support/spl_examples.php \
           simpletest/docs/en/docs.css \
           simpletest/docs/en/index.html \
           simpletest/docs/en/overview.html \

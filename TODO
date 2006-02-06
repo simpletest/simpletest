@@ -10,7 +10,7 @@ The ignore() directive should ignore parent classes as well (1/3) - done.
 The fail() method should issue a line number (2/1) - done.
 Abstract test cases should be ignored automatically (2/2) - done.
 More meaningful message when trying a test in the constructor (1/1) - done.
-Add exception trap (2).
+Add exception trap (2/2) - done.
 
 Reporter
 --------
@@ -22,7 +22,7 @@ Test case should say what tests are available (1/1) - done.
 Mock objects
 ------------
 Confirm mocking of SPL classes and derivatives (3/4) - done.
-Optional parameters generate spurious warnings in PHP 5.0.2 (1/2).
+Optional parameters generate spurious warnings in PHP 5.0.2 (1/2) - done.
 
 Parser
 ------

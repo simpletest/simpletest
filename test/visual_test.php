@@ -92,12 +92,12 @@
             $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "%s -> Pass");
             $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "Z"), "%s -> Pass");
         }
-        
+
         function testWithin() {
             $this->assertWithinMargin(5, 5.4, 0.5, "%s -> Pass");
             $this->assertWithinMargin(5, 5.6, 0.5, "%s -> Fail");   // Fail.
         }
-        
+
         function testOutside() {
             $this->assertOutsideMargin(5, 5.4, 0.5, "%s -> Fail");   // Fail.
             $this->assertOutsideMargin(5, 5.6, 0.5, "%s -> Pass");
@@ -148,7 +148,7 @@
             $this->assertReference($a, $b, "%s -> Pass");
             $this->assertClone($a, $b, "%s -> Fail");        // Fail.
         }
-        
+
         function testCloneOnDifferentObjects() {
             $a = "fred";
             $b = $a;
@@ -187,6 +187,12 @@
             $this->assertNoErrors("%s -> Fail");        // Fail.
             $this->assertError();
             $this->assertNoErrors("%s -> Pass at end");
+        }
+
+        function testExceptionTrap() {
+            if (version_compare(phpversion(), '5') >= 0) {
+                eval('throw new Exception("Ouch!");');
+            }
         }
 
         function testErrorText() {

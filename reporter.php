@@ -11,7 +11,7 @@
      */
     require_once(dirname(__FILE__) . '/scorer.php');
     /**#@-*/
-    
+
     /**
      *    Sample minimal test displayer. Generates only
      *    failure messages and a pass count.
@@ -20,7 +20,7 @@
      */
     class HtmlReporter extends SimpleReporter {
         var $_character_set;
-        
+
         /**
          *    Does nothing yet. The first output will
          *    be sent on the first test start. For use
@@ -31,7 +31,7 @@
             $this->SimpleReporter();
             $this->_character_set = $character_set;
         }
-        
+
         /**
          *    Paints the top of the web page setting the
          *    title to the name of the starting test.
@@ -50,7 +50,7 @@
             print "<h1>$test_name</h1>\n";
             flush();
         }
-        
+
         /**
          *    Send the headers necessary to ensure the page is
          *    reloaded on every request. Otherwise you could be
@@ -67,7 +67,7 @@
                 header("Pragma: no-cache");
             }
         }
-        
+
         /**
          *    Paints the CSS. Add additional styles here.
          *    @return string            CSS code as text.
@@ -76,7 +76,7 @@
         function _getCss() {
             return ".fail { color: red; } pre { background-color: lightgray; }";
         }
-        
+
         /**
          *    Paints the end of the test with a summary of
          *    the passes and failures.
@@ -96,7 +96,7 @@
             print "</div>\n";
             print "</body>\n</html>\n";
         }
-        
+
         /**
          *    Paints the test failure with a breadcrumbs
          *    trail of the nesting test suites below the
@@ -113,22 +113,22 @@
             print implode(" -&gt; ", $breadcrumb);
             print " -&gt; " . $this->_htmlEntities($message) . "<br />\n";
         }
-        
+
         /**
          *    Paints a PHP error or exception.
          *    @param string $message        Message is ignored.
          *    @access public
          *    @abstract
          */
-        function paintException($message) {
-            parent::paintException($message);
+        function paintError($message) {
+            parent::paintError($message);
             print "<span class=\"fail\">Exception</span>: ";
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
             print implode(" -&gt; ", $breadcrumb);
             print " -&gt; <strong>" . $this->_htmlEntities($message) . "</strong><br />\n";
         }
-        
+
         /**
          *    Paints formatted text such as dumped variables.
          *    @param string $message        Text to show.
@@ -137,7 +137,7 @@
         function paintFormattedMessage($message) {
             print '<pre>' . $this->_htmlEntities($message) . '</pre>';
         }
-        
+
         /**
          *    Character set adjusted entity conversion.
          *    @param string $message    Plain text or Unicode message.
@@ -148,7 +148,7 @@
             return htmlentities($message, ENT_COMPAT, $this->_character_set);
         }
     }
-    
+
     /**
      *    Sample minimal test displayer. Generates only
      *    failure messages and a pass count. For command
@@ -159,7 +159,7 @@
 	 *	  @subpackage UnitTester
      */
     class TextReporter extends SimpleReporter {
-        
+
         /**
          *    Does nothing yet. The first output will
          *    be sent on the first test start.
@@ -168,7 +168,7 @@
         function TextReporter() {
             $this->SimpleReporter();
         }
-        
+
         /**
          *    Paints the title only.
          *    @param string $test_name        Name class of test.
@@ -181,7 +181,7 @@
             print "$test_name\n";
             flush();
         }
-        
+
         /**
          *    Paints the end of the test with a summary of
          *    the passes and failures.
@@ -200,7 +200,7 @@
                     ", Failures: " . $this->getFailCount() .
                     ", Exceptions: " . $this->getExceptionCount() . "\n";
         }
-        
+
         /**
          *    Paints the test failure as a stack trace.
          *    @param string $message    Failure message displayed in
@@ -215,18 +215,18 @@
             print "\tin " . implode("\n\tin ", array_reverse($breadcrumb));
             print "\n";
         }
-        
+
         /**
          *    Paints a PHP error or exception.
          *    @param string $message        Message is ignored.
          *    @access public
          *    @abstract
          */
-        function paintException($message) {
-            parent::paintException($message);
+        function paintError($message) {
+            parent::paintError($message);
             print "Exception " . $this->getExceptionCount() . "!\n$message\n";
         }
-        
+
         /**
          *    Paints formatted text such as dumped variables.
          *    @param string $message        Text to show.
@@ -237,7 +237,7 @@
             flush();
         }
     }
-    
+
     /**
      *    Runs just a single test group, a single case or
      *    even a single test within that case.
@@ -248,7 +248,7 @@
         var $_just_this_case =false;
         var $_just_this_test = false;
         var $_within_test_case = true;
-        
+
         /**
          *    Selects the test case or group to be run,
          *    and optionally a specific test.
@@ -266,7 +266,7 @@
             }
             $this->SimpleReporterDecorator($reporter);
         }
-        
+
         /**
          *    Compares criteria to actual the case/group name.
          *    @param string $test_case    The incoming test.
@@ -279,7 +279,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Compares criteria to actual the test name.
          *    @param string $method       The incoming test method.
@@ -292,7 +292,7 @@
             }
             return true;
         }
-        
+
         /**
          *    Veto everything that doesn't match the method wanted.
          *    @param string $test_case       Name of test case.
@@ -306,7 +306,7 @@
             }
             return false;
         }
-        
+
         /**
          *    Paints the start of a group test.
          *    @param string $test_case     Name of test or other label.
@@ -321,7 +321,7 @@
                 $this->_reporter->paintGroupStart($test_case, $size);
             }
         }
-        
+
         /**
          *    Paints the end of a group test.
          *    @param string $test_case     Name of test or other label.
@@ -335,7 +335,7 @@
                 $this->_within_test_case = false;
             }
         }
-         
+
         /**
          *    Paints the start of a test case.
          *    @param string $test_case     Name of test or other label.
@@ -349,7 +349,7 @@
                 $this->_reporter->paintCaseStart($test_case);
             }
         }
-        
+
         /**
          *    Paints the end of a test case.
          *    @param string $test_case     Name of test or other label.

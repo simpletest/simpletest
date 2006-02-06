@@ -10,14 +10,15 @@
      * Includes SimpleTest files and defined the root constant
      * for dependent libraries.
      */
+    require_once(dirname(__FILE__) . '/invoker.php');
     require_once(dirname(__FILE__) . '/errors.php');
     require_once(dirname(__FILE__) . '/compatibility.php');
-    require_once(dirname(__FILE__) . '/invoker.php');
     require_once(dirname(__FILE__) . '/scorer.php');
     require_once(dirname(__FILE__) . '/expectation.php');
     require_once(dirname(__FILE__) . '/dumper.php');
     require_once(dirname(__FILE__) . '/simpletest.php');
     if (version_compare(phpversion(), '5') >= 0) {
+        require_once(dirname(__FILE__) . '/exceptions.php');
         require_once(dirname(__FILE__) . '/reflection_php5.php');
     } else {
         require_once(dirname(__FILE__) . '/reflection_php4.php');
@@ -71,6 +72,9 @@
          */
         function &createInvoker() {
             $invoker = &new SimpleErrorTrappingInvoker(new SimpleInvoker($this));
+            if (version_compare(phpversion(), '5') >= 0) {
+                $invoker = &new SimpleExceptionTrappingInvoker($invoker);
+            }
             return $invoker;
         }
 
@@ -208,27 +212,39 @@
 
         /**
          *    Formats a PHP error and dispatches it to the
-         *    runner.
+         *    reporter.
          *    @param integer $severity  PHP error code.
          *    @param string $message    Text of error.
          *    @param string $file       File error occoured in.
          *    @param integer $line      Line number of error.
-         *    @param hash $globals      PHP super global arrays.
          *    @access public
          */
-        function error($severity, $message, $file, $line, $globals) {
+        function error($severity, $message, $file, $line) {
             if (! isset($this->_reporter)) {
                 trigger_error('Can only make assertions within test methods');
             }
-            $severity = SimpleErrorQueue::getSeverityAsString($severity);
             $this->_reporter->paintError(
                     "Unexpected PHP error [$message] severity [$severity] in [$file] line [$line]");
         }
 
         /**
-         *    Sends a user defined event to the test runner.
+         *    Formats an exception and dispatches it to the
+         *    reporter.
+         *    @param Exception $exception    Object thrown.
+         *    @access public
+         */
+        function exception($exception) {
+            $this->_reporter->paintError(
+                    'Unexpected exception of type [' . get_class($exception) .
+                    '] with message ['. $exception->getMessage() .
+                    '] in ['. $exception->getFile() .
+                    '] line [' . $exception->getLine() . ']');
+        }
+
+        /**
+         *    Sends a user defined event to the test reporter.
          *    This is for small scale extension where
-         *    both the test case and either the runner or
+         *    both the test case and either the reporter or
          *    display are subclassed.
          *    @param string $type       Type of event.
          *    @param mixed $payload     Object or message to deliver.
