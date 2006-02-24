@@ -13,27 +13,27 @@ include_once('mock_objects.php');
 
 class EclipseReporter extends SimpleScorer {
 	var $_listener;
-	function EclipseReporter($listener){
-		$this->_listener = $listener;
+	function EclipseReporter(&$listener){
+		$this->_listener = &$listener;
 		$this->SimpleScorer();
 		$this->_case = "";
 		$this->_group = "";
 		$this->_method = "";
 	}
 	
-	function createListener($port,$host="127.0.0.1"){
+	function &createListener($port,$host="127.0.0.1"){
 		$tmplistener = & new SimpleSocket($host,$port,5);
 		return $tmplistener;
 	}
 	
 	function &createInvoker(&$invoker){
-		$eclinvoker = &new EclipseInvoker($invoker, $this->_listener);
+		$eclinvoker = & new EclipseInvoker(&$invoker, &$this->_listener);
 		return $eclinvoker;
 	}
 	
 	function escapeVal($val){
-		$needle = array("\"","/","\\","\b","\f","\n","\r","\t");
-		$replace = array('\"','\/','\\\\','\b','\f','\n','\r','\t');
+		$needle = array("\\","\"","/","\b","\f","\n","\r","\t");
+		$replace = array('\\\\','\"','\/','\b','\f','\n','\r','\t');
 		return str_replace($needle,$replace,$val);
 	}
 	
@@ -95,10 +95,12 @@ class EclipseReporter extends SimpleScorer {
 
 class EclipseInvoker extends SimpleInvokerDecorator{
 	var $_listener;
-	function EclipseInvoker(&$invoker,$listener) {
-		$this->_listener = $listener;
-		$this->SimpleInvokerDecorator($invoker);
+	
+	function EclipseInvoker(&$invoker,&$listener) {
+		$this->_listener = &$listener;
+		$this->SimpleInvokerDecorator(&$invoker);
 	}
+	
 	function before($method){
 		ob_start();
 		$this->_invoker->before($method);
@@ -108,7 +110,10 @@ class EclipseInvoker extends SimpleInvokerDecorator{
 		$this->_invoker->after($method);
 		$output = ob_get_contents();
 		ob_end_clean();
-		$this->_listener->write($output);
+		$result = $this->_listener->write($output);
+		if ($result == -1){
+			$this->_listener->output = $output;
+		}
 		//debug: 
 		//echo $output;
 	}
