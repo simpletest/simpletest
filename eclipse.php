@@ -38,6 +38,7 @@ class EclipseReporter extends SimpleScorer {
 	}
 	
 	function paintPass($message){
+        //get the first passing item -- so that clicking the test item goes to first pass
 		if (!$this->_pass){
 			$this->_message = $this->escapeVal($message);
 		}
@@ -45,15 +46,21 @@ class EclipseReporter extends SimpleScorer {
 	}
 	
 	function paintFail($message){
-		$this->_fail = true;
-		$this->_message = $this->escapeVal($message);
-		echo '{status:"fail",message:"'.$this->_message.'",group:"'.$this->_group.'",case:"'.$this->_case.'",method:"'.$this->_method.'"}';
-	}
+        //only get the first failure or error
+        if (!$this->_fail && !$this->_error){
+    		$this->_fail = true;
+    		$this->_message = $this->escapeVal($message);
+    		echo '{status:"fail",message:"'.$this->_message.'",group:"'.$this->_group.'",case:"'.$this->_case.'",method:"'.$this->_method.'"}';
+        }
+    }
 	
 	function paintError($message){
-		$this->_error = true;
-		$this->_message = $this->escapeVal($message);
-		echo '{status:"error",message:"'.$this->_message.'",group:"'.$this->_group.'",case:"'.$this->_case.'",method:"'.$this->_method.'"}';
+        //only get the first failure or error
+        if (!$this->_fail && !$this->_error){
+    		$this->_error = true;
+    		$this->_message = $this->escapeVal($message);
+    		echo '{status:"error",message:"'.$this->_message.'",group:"'.$this->_group.'",case:"'.$this->_case.'",method:"'.$this->_method.'"}';
+        }
 	}
 	
 	function paintHeader($method){
