@@ -27,7 +27,7 @@ class EclipseReporter extends SimpleScorer {
 	}
 	
 	function &createInvoker(&$invoker){
-		$eclinvoker = & new EclipseInvoker(&$invoker, &$this->_listener);
+		$eclinvoker = & new EclipseInvoker( $invoker, $this->_listener);
 		return $eclinvoker;
 	}
 	
@@ -105,7 +105,7 @@ class EclipseInvoker extends SimpleInvokerDecorator{
 	
 	function EclipseInvoker(&$invoker,&$listener) {
 		$this->_listener = &$listener;
-		$this->SimpleInvokerDecorator(&$invoker);
+		$this->SimpleInvokerDecorator($invoker);
 	}
 	
 	function before($method){
