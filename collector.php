@@ -24,14 +24,6 @@ class SimpleCollector {
      * @param string $path    Path to normalise.
      */
     function _removeTrailingSlash($path) {
-        return preg_replace('|[\\/]$|', '', $path);
-        
-       /**
-        * @internal
-        * Try benchmarking the following.  It's more code, but by not using the
-        * regex, it may be faster?  Also, shouldn't be looking for 
-        * DIRECTORY_SEPERATOR instead of a manual "/"? 
-        */
         if (substr($path, -1) == DIRECTORY_SEPERATOR) {
             return substr($path, 0, -1);
         } else {
@@ -69,7 +61,7 @@ class SimpleCollector {
      * @access protected
      */
     function _handle(&$test, $file) {
-        if (!is_dir($file)) {
+        if (! is_dir($file)) {
             $test->addTestFile($file);
         }
     }
