@@ -393,7 +393,7 @@
         var $_reporter;
 
         /**
-         *    Mediates between teh reporter and the test case.
+         *    Mediates between the reporter and the test case.
          *    @param SimpleScorer $reporter       Reporter to receive events.
          */
         function SimpleReporterDecorator(&$reporter) {

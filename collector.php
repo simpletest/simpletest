@@ -19,12 +19,12 @@
 class SimpleCollector {
     
     /**
-     * Strips off any kind of slash at the end so as to normalise the path
-     *
+     * Strips off any kind of slash at the end so as to normalise the path.
      * @param string $path    Path to normalise.
+     * @return string         Path without trailing slash.
      */
     function _removeTrailingSlash($path) {
-        if (substr($path, -1) == DIRECTORY_SEPERATOR) {
+        if (substr($path, -1) == DIRECTORY_SEPARATOR) {
             return substr($path, 0, -1);
         } else {
             return $path;
@@ -78,7 +78,6 @@ class SimpleCollector {
 class SimplePatternCollector extends SimpleCollector {
     var $_pattern;
     
-    
     /**
      *
      * @param string $pattern   Perl compatible regex to test name against
@@ -88,7 +87,6 @@ class SimplePatternCollector extends SimpleCollector {
     function SimplePatternCollector($pattern = '/php$/i') {
         $this->_pattern = $pattern;
     }
-    
     
     /**
      * Attempts to add files that match a given pattern.

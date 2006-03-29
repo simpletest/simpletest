@@ -5,6 +5,7 @@ $Id$
 
 Unit tester
 -----------
+Add expectException() and expectError().
 
 Reporter
 --------
