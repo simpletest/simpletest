@@ -5,6 +5,20 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems and their fixes...
 
+No method assertError(), assertNoErrors(), swallowErrors()
+----------------------------------------------------------
+These have been deprecated in 1.0.1beta in favour of
+expectError() and expectException().
+
+No method TestCase::signal()
+----------------------------
+This has been deprecated in favour of triggering an error or
+throwing an exception. Deprecated as of 1.0.1beta.
+
+No method TestCase::sendMessage()
+---------------------------------
+This has been deprecated as of 1.0.1beta.
+
 Failure to connect now emits failures
 -------------------------------------
 It used to be that you would have to use the

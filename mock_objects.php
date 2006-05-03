@@ -27,36 +27,6 @@
     }
 
     /**
-     *    A wildcard expectation always matches.
-	 *    @package SimpleTest
-	 *    @subpackage MockObjects
-     */
-    class AnythingExpectation extends SimpleExpectation {
-
-        /**
-         *    Tests the expectation. Always true.
-         *    @param mixed $compare  Ignored.
-         *    @return boolean        True.
-         *    @access public
-         */
-        function test($compare) {
-            return true;
-        }
-
-        /**
-         *    Returns a human readable test message.
-         *    @param mixed $compare      Comparison value.
-         *    @return string             Description of success
-         *                               or failure.
-         *    @access public
-         */
-        function testMessage($compare) {
-            $dumper = &$this->_getDumper();
-            return 'Anything always matches [' . $dumper->describeValue($compare) . ']';
-        }
-    }
-
-    /**
      *    Parameter comparison assertion.
 	 *    @package SimpleTest
 	 *    @subpackage MockObjects

@@ -192,6 +192,8 @@
         function testExceptionTrap() {
             if (version_compare(phpversion(), '5') >= 0) {
                 eval('throw new Exception("Ouch!");');
+            } else {
+                trigger_error('No exceptions in PHP4');
             }
         }
 

@@ -5,8 +5,9 @@ $Id$
 
 Unit tester
 -----------
-Add skip facility (4).
+Add skip facility (4/1) - done.
 Integrate SpikeSource code coverage tool (5).
+Add expectException() and expectError() (3/2).
 
 Reporter
 --------
@@ -19,7 +20,6 @@ Fix new type hinting bug in PHP 5.0.2 and above (1).
 Parser
 ------
 Multiple dimension arrays in form values (3).
-Add U flag to regexes to allow unicode (3).
 Parse fieldsets correctly with labels (8).
 
 Browser

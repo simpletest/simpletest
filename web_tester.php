@@ -784,7 +784,7 @@
          *    @param string $expiry        Expiry date.
          *    @access public
          */
-        function setCookie($name, $value, $host = false, $path = "/", $expiry = false) {
+        function setCookie($name, $value, $host = false, $path = '/', $expiry = false) {
             $this->_browser->setCookie($name, $value, $host, $path, $expiry);
         }
         
@@ -978,7 +978,7 @@
          *    @return boolean              True on pass
          *    @access public
          */
-        function assertEqual($first, $second, $message = "%s") {
+        function assertEqual($first, $second, $message = '%s') {
             return $this->assert(
                     new EqualExpectation($first),
                     $second,
@@ -995,7 +995,7 @@
          *    @return boolean               True on pass
          *    @access public
          */
-        function assertNotEqual($first, $second, $message = "%s") {
+        function assertNotEqual($first, $second, $message = '%s') {
             return $this->assert(
                     new NotEqualExpectation($first),
                     $second,
@@ -1011,7 +1011,7 @@
          *    @return boolean          True if link present.
          *    @access public
          */
-        function assertLink($label, $message = "%s") {
+        function assertLink($label, $message = '%s') {
             return $this->assertTrue(
                     $this->_browser->isLink($label),
                     sprintf($message, "Link [$label] should exist"));
@@ -1027,7 +1027,7 @@
          *    @return boolean                 True if link missing.
          *    @access public
          */
-        function assertNoLink($label, $message = "%s") {
+        function assertNoLink($label, $message = '%s') {
             return $this->assertFalse(
                     $this->_browser->isLink($label),
                     sprintf($message, "Link [$label] should not exist"));
@@ -1041,7 +1041,7 @@
          *    @return boolean          True if link present.
          *    @access public
          */
-        function assertLinkById($id, $message = "%s") {
+        function assertLinkById($id, $message = '%s') {
             return $this->assertTrue(
                     $this->_browser->isLinkById($id),
                     sprintf($message, "Link ID [$id] should exist"));
@@ -1056,7 +1056,7 @@
          *    @return boolean          True if link missing.
          *    @access public
          */
-        function assertNoLinkById($id, $message = "%s") {
+        function assertNoLinkById($id, $message = '%s') {
             return $this->assertFalse(
                     $this->_browser->isLinkById($id),
                     sprintf($message, "Link ID [$id] should not exist"));

@@ -52,18 +52,14 @@
         }
     }
     
-    class TestOfJBehaveStyle extends UnitTestCase {
+    class ThisClassShouldBeSkipped extends UnitTestCase {
         
-        function _isTest($method) {
-            return strtolower(substr($method, 0, 6)) == 'should';
+        function skip() {
+            return true;
         }
         
-        function testFail() {
+        function testWillfail() {
             $this->fail('This should not be run');
-        }
-        
-        function shouldBeRun() {
-            $this->pass('This should be run');
         }
     }
 ?>

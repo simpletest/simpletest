@@ -24,9 +24,7 @@
         require_once(dirname(__FILE__) . '/reflection_php4.php');
     }
     if (! defined('SIMPLE_TEST')) {
-        /**
-         * @ignore
-         */
+        /** @ignore */
         define('SIMPLE_TEST', dirname(__FILE__) . '/');
     }
     /**#@-*/
@@ -64,6 +62,15 @@
         function getLabel() {
             return $this->_label ? $this->_label : get_class($this);
         }
+        
+        /**
+         *    If this method returns true, the test case will not run.
+         *    @return boolean          False to run.
+         *    @access public
+         */
+        function skip() {
+            return false;
+        }
 
         /**
          *    Used to invoke the single tests.
@@ -86,19 +93,21 @@
          *    @access public
          */
         function run(&$reporter) {
-            SimpleTest::setCurrent($this);
-            $this->_reporter = &$reporter;
-            $this->_reporter->paintCaseStart($this->getLabel());
-            foreach ($this->getTests() as $method) {
-                if ($this->_reporter->shouldInvoke($this->getLabel(), $method)) {
-                    $invoker = &$this->_reporter->createInvoker($this->createInvoker());
-                    $invoker->before($method);
-                    $invoker->invoke($method);
-                    $invoker->after($method);
+            if (! $this->skip()) {
+                SimpleTest::setCurrent($this);
+                $this->_reporter = &$reporter;
+                $this->_reporter->paintCaseStart($this->getLabel());
+                foreach ($this->getTests() as $method) {
+                    if ($this->_reporter->shouldInvoke($this->getLabel(), $method)) {
+                        $invoker = &$this->_reporter->createInvoker($this->createInvoker());
+                        $invoker->before($method);
+                        $invoker->invoke($method);
+                        $invoker->after($method);
+                    }
                 }
+                $this->_reporter->paintCaseEnd($this->getLabel());
+                unset($this->_reporter);
             }
-            $this->_reporter->paintCaseEnd($this->getLabel());
-            unset($this->_reporter);
             return $reporter->getStatus();
         }
 
@@ -185,9 +194,7 @@
         }
 
         /**
-         *    Sends a pass event with a message.
-         *    @param string $message        Message to send.
-         *    @access public
+         *    @deprecated
          */
         function pass($message = "Pass") {
             if (! isset($this->_reporter)) {
@@ -244,13 +251,7 @@
         }
 
         /**
-         *    Sends a user defined event to the test reporter.
-         *    This is for small scale extension where
-         *    both the test case and either the reporter or
-         *    display are subclassed.
-         *    @param string $type       Type of event.
-         *    @param mixed $payload     Object or message to deliver.
-         *    @access public
+         *    @deprecated
          */
         function signal($type, &$payload) {
             if (! isset($this->_reporter)) {
@@ -260,8 +261,7 @@
         }
 
         /**
-         *    Cancels any outstanding errors.
-         *    @access public
+         *    @deprecated
          */
         function swallowErrors() {
             $queue = &SimpleErrorQueue::instance();
@@ -363,10 +363,7 @@
         }
 
         /**
-         *    Dispatches a text message straight to the
-         *    test suite. Useful for status bar displays.
-         *    @param string $message        Message to show.
-         *    @access public
+         *    @deprecated
          */
         function sendMessage($message) {
             $this->_reporter->PaintMessage($message);

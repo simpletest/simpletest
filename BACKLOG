@@ -5,7 +5,6 @@ $Id$
 
 Unit tester
 -----------
-Add expectException() and expectError().
 
 Reporter
 --------
@@ -16,6 +15,7 @@ Optionally separate setting of expectations from mocks (8).
 
 Parser
 ------
+Add U flag to regexes to allow unicode (3).
 
 Browser
 -------
