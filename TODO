@@ -7,7 +7,7 @@ Unit tester
 -----------
 Add skip facility (4/1) - done.
 Integrate SpikeSource code coverage tool (5).
-Add expectException() and expectError() (3/2).
+Add expectException() and expectError() (6/2).
 
 Reporter
 --------
