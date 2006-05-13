@@ -11,4 +11,17 @@
     }
 
     class ShouldNeverBeRunEither extends ShouldNeverBeRun { }
+    
+    class TestOfStackTrace extends UnitTestCase {
+        
+        function testCanFindAssertInTrace() {
+            $trace = new SimpleStackTrace(array('assert'));
+            $this->assertEqual(
+                    $trace->traceMethod(array(array(
+                            'file' => '/my_test.php',
+                            'line' => 24,
+                            'function' => 'assertSomething'))),
+                    ' at [/my_test.php line 24]');
+        }
+    }
 ?>

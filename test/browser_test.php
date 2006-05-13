@@ -203,16 +203,16 @@
             $page->setReturnValue('getUrlsByLabel', array('http://www.nowhere.com'));
             $page->expectOnce('getUrlsByLabel', array('a link label'));
             $browser = &$this->loadPage($page);
-            $this->assertTrue($browser->isLink('a link label'));
+            $this->assertIdentical($browser->getLink('a link label'), 'http://www.nowhere.com');
         }
 
         function testLinkAffirmationByIdWhenPresent() {
             $page = &new MockSimplePage();
-            $page->setReturnValue('getUrlById', true, array(99));
+            $page->setReturnValue('getUrlById', 'a_page.com', array(99));
             $page->setReturnValue('getUrlById', false, array('*'));
             $browser = &$this->loadPage($page);
-            $this->assertTrue($browser->isLinkById(99));
-            $this->assertFalse($browser->isLinkById(98));
+            $this->assertIdentical($browser->getLinkById(99), 'a_page.com');
+            $this->assertFalse($browser->getLinkById(98));
         }
 
         function testSettingFieldIsPassedToPage() {

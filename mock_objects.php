@@ -940,19 +940,12 @@
 
         /**
          *    Uses a stack trace to find the line of an assertion.
-         *    @param array $stack      Stack frames top most first. Only
-         *                             needed if not using the PHP
-         *                             backtrace function.
-         *    @return string           Location of first expect*
-         *                             method embedded in format string.
          *    @access public
          *    @static
          */
-        function getExpectationLine($stack = false) {
-            if ($stack === false) {
-                $stack = SimpleTestCompatibility::getStackTrace();
-            }
-            return SimpleDumper::getFormattedAssertionLine($stack);
+        function getExpectationLine() {
+            $trace = new SimpleStackTrace(array('expect'));
+            return $trace->traceMethod();
         }
     }
 

@@ -107,10 +107,13 @@ class TestOfNewsService extends UnitTestCase {
             <p>
                 The possible expectation classes are...
                 <table><tbody>
+                    <tr><td><code>AnythingExpectation</code></td><td>Will always match</td></tr>
                     <tr><td><code>EqualExpectation</code></td><td>An equality, rather than the stronger identity comparison</td></tr>
                     <tr><td><code>NotEqualExpectation</code></td><td>An inequality comparison</td></tr>
                     <tr><td><code>IndenticalExpectation</code></td><td>The default mock object check which must match exactly</td></tr>
                     <tr><td><code>NotIndenticalExpectation</code></td><td>Inverts the mock object logic</td></tr>
+                    <tr><td><code>WithinMarginExpectation</code></td><td>Compares a value to within a margin</td></tr>
+                    <tr><td><code>OutsideMarginExpectation</code></td><td>Checks that a value is out side the margin</td></tr>
                     <tr><td><code>PatternExpectation</code></td><td>Uses a Perl Regex to match a string</td></tr>
                     <tr><td><code>NoPatternExpectation</code></td><td>Passes only if failing a Perl Regex</td></tr>
                     <tr><td><code>IsAExpectation</code></td><td>Checks the type or class name only</td></tr>
@@ -122,6 +125,38 @@ class TestOfNewsService extends UnitTestCase {
                 and the <code>IsAExpectation</code> and <code>NotAExpectation</code> which takes a type
                 or class name as a string.
             </p>
+            <p>
+                Some examples...
+            </p>
+            <p>
+<php><![CDATA[
+$mock->expectOnce('method', array(new IdenticalExpectation(14)));
+]]></php>
+                This is the same as <code>$mock->expectOnce('method', array(14))</code>.
+<php><![CDATA[
+$mock->expectOnce('method', array(new EqualExpectation(14)));
+]]></php>
+                This is different from the previous version in that the string
+                <code>"14"</code> as a parameter will also pass.
+                Sometimes the additional type checks of SimpleTest are too restrictive.
+<php><![CDATA[
+$mock->expectOnce('method', array(new AnythingExpectation(14)));
+]]></php>
+                This is the same as <code>$mock->expectOnce('method', array('*'))</code>.
+<php><![CDATA[
+$mock->expectOnce('method', array(new IdenticalExpectation('*')));
+]]></php>
+                This is handy if you want to assert a literal <code>"*"</code>.
+<php><![CDATA[
+new NotIdenticalExpectation(14)
+]]></php>
+                This matches on anything other than integer 14.
+                Even the string <code>"14"</code> would pass.
+<php><![CDATA[
+new WithinMarginExpectation(14.0, 0.001)
+]]></php>
+                This will accept any value from 13.999 to 14.001 inclusive.
+            </p>
         </section>
         <section name="behaviour" title="Using expectations to control stubs">
             <p>
@@ -132,8 +167,8 @@ class TestOfNewsService extends UnitTestCase {
                 can be inserted instead.
             </p>
             <p>
-                Suppose we want an authorisation server mock to simulate a successful login
-                only if it receives a valid session object.
+                Suppose we want a mock authorisation server to simulate a successful login,
+                but only if it receives a valid session object.
                 We can do this as follows...
 <php><![CDATA[
 Mock::generate('Authorisation');

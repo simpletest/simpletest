@@ -329,19 +329,13 @@
 
         /**
          *    Uses a stack trace to find the line of an assertion.
-         *    @param string $format    String formatting.
-         *    @param array $stack      Stack frames top most first. Only
-         *                             needed if not using the PHP
-         *                             backtrace function.
          *    @return string           Line number of first assert*
          *                             method embedded in format string.
          *    @access public
          */
-        function getAssertionLine($stack = false) {
-            if ($stack === false) {
-                $stack = SimpleTestCompatibility::getStackTrace();
-            }
-            return SimpleDumper::getFormattedAssertionLine($stack);
+        function getAssertionLine() {
+            $trace = new SimpleStackTrace(array('assert', 'expect', 'pass', 'fail'));
+            return $trace->traceMethod();
         }
 
         /**
@@ -600,6 +594,7 @@
                     $class = $this->_test_cases[$i];
                     $test = &new $class();
                     $test->run($reporter);
+                    unset($test);
                 } else {
                     $this->_test_cases[$i]->run($reporter);
                 }

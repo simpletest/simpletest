@@ -16,8 +16,8 @@
 			familiar with most of the interface.
 			<a href="http://jwebunit.sourceforge.net/">JWebUnit</a>
 			style functionality is more complete now.
-			It has support for SSL, frames, proxies, basic authentication and a wider
-			range of HTML controls.
+			It has support for SSL, frames, proxies, basic authentication and the
+			standard HTML controls.
 			The idea is that common but fiddly PHP tasks, such as logging into a site,
 			can be tested easily.
 		</p>

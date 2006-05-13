@@ -8,7 +8,7 @@
         <news>
             1.0.1 release cycle started.
             Features include include file upload, better PHP5 support for
-            mock objects and HTML label support.
+            mock objects, and HTML label support.
             There is also a big clean up of method names and some internals
             refactoring.
         </news>

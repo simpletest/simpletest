@@ -107,10 +107,10 @@ class TestOfLastcraft extends WebTestCase {
                 Here is the list of possible content assertions...
                 <table><tbody>
                     <tr><td><code>assertTitle($title)</code></td><td>Pass if title is an exact match</td></tr>
-                    <tr><td><code>assertPattern($pattern)</code></td><td>A Perl pattern match against the page content</td></tr>
-                    <tr><td><code>assertNoPattern($pattern)</code></td><td>A Perl pattern match to not find content</td></tr>
                     <tr><td><code>assertText($text)</code></td><td>Pass if matches visible and &quot;alt&quot; text</td></tr>
                     <tr><td><code>assertNoText($text)</code></td><td>Pass if doesn&apos;t match visible and &quot;alt&quot; text</td></tr>
+                    <tr><td><code>assertPattern($pattern)</code></td><td>A Perl pattern match against the page content</td></tr>
+                    <tr><td><code>assertNoPattern($pattern)</code></td><td>A Perl pattern match to not find content</td></tr>
                     <tr><td><code>assertLink($label)</code></td><td>Pass if a link with this text is present</td></tr>
                     <tr><td><code>assertNoLink($label)</code></td><td>Pass if no link with this text is present</td></tr>
                     <tr><td><code>assertLinkById($id)</code></td><td>Pass if a link with this id attribute is present</td></tr>

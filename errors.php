@@ -45,7 +45,7 @@
             $queue->setTestCase($this->GetTestCase());
             set_error_handler('SimpleTestErrorHandler');
             parent::invoke($method);
-            while (list($severity, $message, $file, $line, $globals) = $queue->extract()) {
+            while (list($severity, $message, $file, $line) = $queue->extract()) {
                 $severity = SimpleErrorQueue::getSeverityAsString($severity);
                 $test = &$this->getTestCase();
                 $test->error($severity, $message, $file, $line);
@@ -114,9 +114,9 @@
             $is_match = $this->_test->assert(
                     $expected,
                     $content,
-                    sprintf($message, "Expected PHP error [$content] severity [$severity] in [$file] line [$line]"));
+                    sprintf($message, "%s -> PHP error [$content] severity [$severity] in [$filename] line [$line]"));
             if (! $is_match) {
-                $this->_test->error($severity, $content, $file, $line);
+                $this->_test->error($severity, $content, $filename, $line);
             }
         }
 
@@ -179,7 +179,7 @@
          *    @param string $message                Message to display.
          *    @access public
          */
-        function expect($expected, $message) {
+        function expectError($expected, $message) {
             array_push(
                     $this->_expectation_queue,
                     array($expected, $message));

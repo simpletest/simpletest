@@ -85,7 +85,7 @@
             $test->expectNever('error');
             $queue = &new SimpleErrorQueue();
             $queue->setTestCase($test);
-            $queue->expect(new MockSimpleExpectation(), 'a message');
+            $queue->expectError(new MockSimpleExpectation(), 'a message');
             $queue->add(1024, 'B', 'b.php', 100);
         }
         
@@ -96,7 +96,7 @@
             $test->expectOnce('error');
             $queue = &new SimpleErrorQueue();
             $queue->setTestCase($test);
-            $queue->expect(new MockSimpleExpectation(), 'a message');
+            $queue->expectError(new MockSimpleExpectation(), 'a message');
             $queue->add(1024, 'B', 'b.php', 100);
         }
     }
@@ -106,7 +106,7 @@
         
         function setUp() {
             $this->_old = error_reporting(E_ALL);
-            set_error_handler('simpleTestErrorHandler');
+            set_error_handler('SimpleTestErrorHandler');
         }
         
         function tearDown() {
@@ -114,14 +114,40 @@
             error_reporting($this->_old);
         }
         
-        function testTrappedErrorPlacedInQueue() {
+        function testQueueStartsEmpty() {
             $queue = &SimpleErrorQueue::instance();
             $this->assertFalse($queue->extract());
+        }
+        
+        function testTrappedErrorPlacedInQueue() {
             trigger_error('Ouch!');
+            $queue = &SimpleErrorQueue::instance();
             list($severity, $message, $file, $line) = $queue->extract();
             $this->assertEqual($message, 'Ouch!');
             $this->assertEqual($file, __FILE__);
             $this->assertFalse($queue->extract());
+        }
+        
+        function testErrorsAreSwallowedByMatchingExpectation() {
+            $this->expectError('Ouch!');
+            trigger_error('Ouch!');
+        }
+        
+        function testErrorsAreSwallowedInOrder() {
+            $this->expectError('a');
+            $this->expectError('b');
+            trigger_error('a');
+            trigger_error('b');
+        }
+        
+        function testAnyErrorCanBeSwallowed() {
+            $this->expectError();
+            trigger_error('Ouch!');
+        }
+        
+        function testErrorCanBeSwallowedByPatternMatching() {
+            $this->expectError(new PatternExpectation('/ouch/i'));
+            trigger_error('Ouch!');
         }
     }
     

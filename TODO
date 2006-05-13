@@ -1,13 +1,13 @@
 TODO
-This is immediate stuff only for this iteration (1.0.1beta) of 55 hours.
+This is immediate stuff only for this iteration (1.0.1beta) of 60 hours.
 
 $Id$
 
 Unit tester
 -----------
 Add skip facility (4/1) - done.
-Integrate SpikeSource code coverage tool (5).
-Add expectException() and expectError() (6/2).
+Integrate SpikeSource code coverage tool (10).
+Add expectException() and expectError() (8/2).
 
 Reporter
 --------
@@ -30,12 +30,13 @@ Add additional parameters to click() method (1).
 
 Web tester
 ----------
-Add assertClickable() method (1).
-Add assertSubmit() method (1).
+Add assertClickable() method (1/1).
+Add assertSubmit() method (1/0).
+Improve assertLink() to take expectations (0/1).
 
 Documentation
 -------------
-Replace all deprecated methods (3).
+Replace all deprecated methods (3/1).
 Split mock objects off from tutorial (4).
 
 Build

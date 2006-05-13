@@ -173,6 +173,10 @@
             $this->assertEqual($text . $text, $text . "a" . $text);        // Fail.
         }
 
+        function testDumping() {
+            $this->dump(array('Hello'), 'Displaying a variable');
+        }
+
         function testErrorDisplay() {
             trigger_error('Default');        // Exception.
             trigger_error('Error', E_USER_ERROR);        // Exception.
@@ -181,12 +185,24 @@
         }
 
         function testErrorTrap() {
-            $this->assertNoErrors("%s -> Pass");
-            $this->assertError();        // Fail.
+            $this->expectError();        // Pass.
             trigger_error('Error 1');
-            $this->assertNoErrors("%s -> Fail");        // Fail.
-            $this->assertError();
-            $this->assertNoErrors("%s -> Pass at end");
+        }
+
+        function testErrorText() {
+            $this->expectError('Error 2', "%s -> Pass");
+            $this->expectError('Error 2b', "%s -> Fail");        // Fail.
+            trigger_error('Error 2');
+            $this->dump('This should lie between the two errors');
+            trigger_error('Error 3');
+        }
+
+        function testErrorPatterns() {
+            $this->expectError(new PatternExpectation('/Error 2/'), "%s -> Pass");
+            $this->expectError(new PatternExpectation('/Error 2/'), "%s -> Fail");        // Fail.
+            trigger_error('Error 2');
+            $this->dump('This should lie between the two errors');
+            trigger_error('Error 3');
         }
 
         function testExceptionTrap() {
@@ -195,24 +211,6 @@
             } else {
                 trigger_error('No exceptions in PHP4');
             }
-        }
-
-        function testErrorText() {
-            trigger_error('Error 2');
-            $this->assertError('Error 2', "%s -> Pass");
-            trigger_error('Error 3');
-            $this->assertError('Error 2', "%s -> Fail");        // Fail.
-        }
-
-        function testErrorPatterns() {
-            trigger_error('Error 2');
-            $this->assertErrorPattern('/Error 2/', "%s -> Pass");
-            trigger_error('Error 3');
-            $this->assertErrorPattern('/Error 2/', "%s -> Fail");        // Fail.
-        }
-
-        function testDumping() {
-            $this->dump(array("Hello"), "Displaying a variable");
         }
 
         function testSignal() {
@@ -385,7 +383,7 @@
         }
     }
 
-    $test = &new GroupTest("Visual test with 50 passes, 50 fails and 5 exceptions");
+    $test = &new GroupTest("Visual test with 48 passes, 48 fails and 7 exceptions");
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());
