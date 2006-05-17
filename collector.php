@@ -1,8 +1,8 @@
 <?php
 /**
- * This file contains the following classes: {@link SimpleCollector}, 
+ * This file contains the following classes: {@link SimpleCollector},
  * {@link SimplePatternCollector}.
- * 
+ *
  * @author Travis Swicegood <development@domain51.com>
  * @package SimpleTest
  * @subpackage UnitTester
@@ -17,7 +17,7 @@
  * @subpackage UnitTester
  */
 class SimpleCollector {
-    
+
     /**
      * Strips off any kind of slash at the end so as to normalise the path.
      * @param string $path    Path to normalise.
@@ -25,6 +25,8 @@ class SimpleCollector {
      */
     function _removeTrailingSlash($path) {
         if (substr($path, -1) == DIRECTORY_SEPARATOR) {
+            return substr($path, 0, -1);
+        } elseif (substr($path, -1) == '/') {
             return substr($path, 0, -1);
         } else {
             return $path;
@@ -46,12 +48,12 @@ class SimpleCollector {
             closedir($handle);
         }
     }
-    
+
     /**
      * This method determines what should be done with a given file and adds
      * it via {@link GroupTest::addTestFile()} if necessary.
      *
-     * This method should be overriden to provide custom matching criteria, 
+     * This method should be overriden to provide custom matching criteria,
      * such as pattern matching, recursive matching, etc.  For an example, see
      * {@link SimplePatternCollector::_handle()}.
      *
@@ -77,7 +79,7 @@ class SimpleCollector {
  */
 class SimplePatternCollector extends SimpleCollector {
     var $_pattern;
-    
+
     /**
      *
      * @param string $pattern   Perl compatible regex to test name against
@@ -87,7 +89,7 @@ class SimplePatternCollector extends SimpleCollector {
     function SimplePatternCollector($pattern = '/php$/i') {
         $this->_pattern = $pattern;
     }
-    
+
     /**
      * Attempts to add files that match a given pattern.
      *

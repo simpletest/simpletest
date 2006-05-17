@@ -6,16 +6,16 @@ Mock::generate('GroupTest');
 
 class PathEqualExpectation extends EqualExpectation {
 	function PathEqualExpectation($value, $message = '%s') {
-    	$this->EqualExpectation(str_replace('\\', '/', $value), $message);
+    	$this->EqualExpectation($v = str_replace("\\", '/', $value), $message);
 	}
-	
+
     function test($compare) {
-        return parent::test(str_replace('\\', '/', $compare));
+        return parent::test(str_replace("\\", '/', $compare));
     }
 }
 
 class TestOfCollector extends UnitTestCase {
-    
+
     function testCollectionIsAddedToGroup() {
         $group = &new MockGroupTest();
         $group->expectMinimumCallCount('addTestFile', 2);
@@ -26,9 +26,9 @@ class TestOfCollector extends UnitTestCase {
         $collector->collect($group, dirname(__FILE__) . '/support/collector/');
     }
 }
-    
+
 class TestOfPatternCollector extends UnitTestCase {
-    
+
     function testAddingEverythingToGroup() {
         $group = &new MockGroupTest();
         $group->expectCallCount('addTestFile', 2);
@@ -38,7 +38,7 @@ class TestOfPatternCollector extends UnitTestCase {
         $collector = &new SimplePatternCollector('/.*/');
         $collector->collect($group, dirname(__FILE__) . '/support/collector/');
     }
-        
+
     function testOnlyMatchedFilesAreAddedToGroup() {
         $group = &new MockGroupTest();
         $group->expectOnce('addTestFile', array(new PathEqualExpectation(
