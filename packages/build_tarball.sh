@@ -52,6 +52,7 @@ FILES=(simpletest/compatibility.php \
           simpletest/test/collector_test.php \
           simpletest/test/simpletest_test.php \
           simpletest/test/errors_test.php \
+          simpletest/test/exceptions_test.php \
           simpletest/test/compatibility_test.php \
           simpletest/test/dumper_test.php \
           simpletest/test/expectation_test.php \

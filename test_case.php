@@ -25,7 +25,7 @@
     }
     if (! defined('SIMPLE_TEST')) {
         /** @ignore */
-        define('SIMPLE_TEST', dirname(__FILE__) . '/');
+        define('SIMPLE_TEST', dirname(__FILE__) . SEPARATOR);
     }
     /**#@-*/
 
@@ -62,7 +62,7 @@
         function getLabel() {
             return $this->_label ? $this->_label : get_class($this);
         }
-        
+
         /**
          *    If this method returns true, the test case will not run.
          *    @return boolean          False to run.
