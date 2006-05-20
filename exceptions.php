@@ -45,14 +45,37 @@
         }
     }
 
+    /**
+     *    Tests exceptions either by type or the exact
+     *    exception. This could be improved to accept
+     *    a pattern expectation to test the error
+     *    message, but that will have to come later.
+     */
     class ExceptionExpectation extends SimpleExpectation {
         private $expected;
 
+        /**
+         *    Sets up the conditions to test against.
+         *    If the expected value is a string, then
+         *    it will act as a test of the class name.
+         *    An exception as the comparison will
+         *    trigger an identical match. Writing this
+         *    down now makes it look doubly dumb. I hope
+         *    come up with a better scheme later.
+         *    @param mixed $expected   A class name or an actual
+         *                             exception to compare with.
+         *    @param string $message   Message to display.
+         */
         function __construct($expected, $message = '%s') {
             $this->expected = $expected;
             parent::__construct($message);
         }
 
+        /**
+         *    Carry out the test.
+         *    @param Exception $compare    Value to check.
+         *    @return boolean              True if matched.
+         */
         function test($compare) {
             if (is_string($this->expected)) {
                 return ($compare instanceof $this->expected);
@@ -63,17 +86,27 @@
             return $compare->getMessage() == $this->expected->getMessage();
         }
 
+        /**
+         *    Create the message to display describing the test.
+         *    @param Exception $compare     Exception to match.
+         *    @return string                Final message.
+         */
         function testMessage($compare) {
             if (is_string($this->expected)) {
-                return "Exception [" . $this->dumpException($compare) .
+                return "Exception [" . $this->describeException($compare) .
                         "] should be type [" . $this->expected . "]";
             }
-            return "Exception [" . $this->dumpException($compare) .
+            return "Exception [" . $this->describeException($compare) .
                     "] should match [" .
                     $this->dumpException($this->expected) . "]";
         }
 
-        protected function dumpException($exception) {
+        /**
+         *    Summary of an Exception object.
+         *    @param Exception $compare     Exception to describe.
+         *    @return string                Text description.
+         */
+        protected function describeException($exception) {
             return get_class($exception) . ": " . $exception->getMessage();
         }
     }
