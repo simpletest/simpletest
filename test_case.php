@@ -473,11 +473,14 @@
             $error = isset($php_errormsg) ? $php_errormsg : false;
             $this->_disableErrorReporting();
             $self_inflicted_errors = array(
-                    'Assigning the return value of new by reference is deprecated',
-                    'var: Deprecated. Please use the public/private/protected modifiers');
-            if (in_array($error, $self_inflicted_errors)) {
-                return false;
-            }
+                    '/Assigning the return value of new by reference/i',
+                    '/var: Deprecated/i',
+					'/Non-static method/i');
+            foreach ($self_inflicted_errors as $pattern) {
+				if (preg_match($pattern, $error)) {
+					return false;
+				}
+			}
             return $error;
         }
 
