@@ -87,5 +87,11 @@
             $this->expectException(new Exception('Ouch'));
             throw new Exception('Ouch');
         }
+
+        function testLastExceptionIsTheOneThatCounts() {
+            $this->expectException('OtherTestException');
+            $this->expectException('MyTestException');
+            throw new HigherTestException();
+        }
     }
 ?>

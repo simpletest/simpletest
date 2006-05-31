@@ -128,7 +128,8 @@
 	 *	  @subpackage	UnitTester
      */
     class SimpleExceptionQueue {
-        private $queue;
+        private $expected;
+        private $message;
         static $instance = false;
 
         /**
@@ -153,9 +154,8 @@
             if (! SimpleExpectation::isExpectation($expected)) {
                 $expected = new ExceptionExpectation($expected);
             }
-            array_push(
-                    $this->queue,
-                    array($expected, $message));
+            $this->expected = $expected;
+            $this->message = $message;
         }
 
         /**
@@ -167,18 +167,18 @@
          *    @return boolean                False on no match.
          */
         function isExpected($test, $exception) {
-            if (count($this->queue) == 0) {
+            if (! $this->expected) {
                 return false;
             }
-            list($expectation, $message) = array_shift($this->queue);
-            return $test->assert($expectation, $exception, $message);
+            return $test->assert($this->expected, $exception, $this->message);
         }
 
         /**
          *    Discards the contents of the error queue.
          */
         function clear() {
-            $this->queue = array();
+            $this->expected = false;
+            $this->message = '%s';
         }
 
         /**
