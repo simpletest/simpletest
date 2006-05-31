@@ -107,7 +107,7 @@
             }
             return "Exception [" . $this->describeException($compare) .
                     "] should match [" .
-                    $this->dumpException($this->expected) . "]";
+                    $this->describeException($this->expected) . "]";
         }
 
         /**

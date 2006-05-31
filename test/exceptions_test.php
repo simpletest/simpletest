@@ -77,5 +77,15 @@
             $this->expectException();
             throw new Exception();
         }
+
+        function testCanMatchExceptionByClass() {
+            $this->expectException('MyTestException');
+            throw new HigherTestException();
+        }
+
+        function testCanMatchExceptionExactly() {
+            $this->expectException(new Exception('Ouch'));
+            throw new Exception('Ouch');
+        }
     }
 ?>
