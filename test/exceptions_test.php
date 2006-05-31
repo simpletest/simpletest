@@ -39,7 +39,7 @@
         function testNoExceptionsInQueueMeansNoTestMessages() {
             $test = new MockSimpleTestCase();
             $test->expectNever('assert');
-            $queue = new SimpleExpectedExceptionQueue();
+            $queue = new SimpleExceptionQueue();
             $this->assertFalse($queue->isExpected($test, new Exception()));
         }
 
@@ -48,7 +48,7 @@
             $expectation->setReturnValue('test', true);
             $test = new MockSimpleTestCase();
             $test->setReturnValue('assert', true);
-            $queue = new SimpleExpectedExceptionQueue();
+            $queue = new SimpleExceptionQueue();
             $queue->expectException($expectation, 'message');
             $this->assertTrue($queue->isExpected($test, new Exception()));
         }
@@ -59,9 +59,23 @@
                     '*',
                     new ExceptionExpectation(new Exception()),
                     'message'));
-            $queue = new SimpleExpectedExceptionQueue();
+            $queue = new SimpleExceptionQueue();
             $queue->expectException(new ExceptionExpectation(new Exception()), 'message');
             $queue->isExpected($test, new Exception());
+        }
+
+        function testQueueIsSingleton() {
+            $this->assertReference(
+                    SimpleExceptionQueue::instance(),
+                    SimpleExceptionQueue::instance());
+        }
+    }
+
+    class TestOfCatchingExceptions extends UnitTestCase {
+
+        function testCanCatchAnyExpectedException() {
+            $this->expectException();
+            throw new Exception();
         }
     }
 ?>

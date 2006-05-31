@@ -321,15 +321,31 @@
             $queue = &SimpleErrorQueue::instance();
             return $queue->assertError($this->_coerceExpectation($expected), $message);
         }
-        
+
         /**
          *    Prepares for an error. If the error mismatches it
          *    passes through, otherwise it is swallowed. Any
          *    left over errors trigger failures.
+         *    @param SimpleExpectation/string $expected   The error to match.
+         *    @param string $message                      Message on failure.
+         *    @access public
          */
         function expectError($expected = false, $message = '%s') {
             $queue = &SimpleErrorQueue::instance();
             $queue->expectError($this->_coerceExpectation($expected), $message);
+        }
+
+        /**
+         *    Prepares for an exception. If the error mismatches it
+         *    passes through, otherwise it is swallowed. Any
+         *    left over errors trigger failures.
+         *    @param SimpleExpectation/Exception $expected  The error to match.
+         *    @param string $message                        Message on failure.
+         *    @access public
+         */
+        function expectException($expected = false, $message = '%s') {
+            $queue = &SimpleExceptionQueue::instance();
+            $queue->expectException($expected, $message);
         }
 
         /**

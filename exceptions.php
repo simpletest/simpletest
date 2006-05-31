@@ -36,11 +36,18 @@
          *    @param string $method    Test method to call.
          */
         function invoke($method) {
+            $queue = SimpleExceptionQueue::instance();
+            $queue->clear();
             try {
                 parent::invoke($method);
             } catch (Exception $exception) {
                 $test_case = $this->getTestCase();
-                $test_case->exception($exception);
+                if (! $queue->isExpected($test_case, $exception)) {
+                    $test_case->exception($exception);
+                }
+                $test_case->pass('Swallowed exception [' .
+                        get_class($exception) . ']');
+                $queue->clear();
             }
         }
     }
@@ -50,6 +57,8 @@
      *    exception. This could be improved to accept
      *    a pattern expectation to test the error
      *    message, but that will have to come later.
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      */
     class ExceptionExpectation extends SimpleExpectation {
         private $expected;
@@ -118,8 +127,9 @@
 	 *	  @package	SimpleTest
 	 *	  @subpackage	UnitTester
      */
-    class SimpleExpectedExceptionQueue {
+    class SimpleExceptionQueue {
         private $queue;
+        static $instance = false;
 
         /**
          *    Clears down the queue ready for action.
@@ -136,7 +146,10 @@
          *    @param string $message                Message to display.
          *    @access public
          */
-        function expectException($expected, $message = '%s') {
+        function expectException($expected = false, $message = '%s') {
+            if ($expected === false) {
+                $expected = new AnythingExpectation();
+            }
             if (! SimpleExpectation::isExpectation($expected)) {
                 $expected = new ExceptionExpectation($expected);
             }
@@ -166,6 +179,17 @@
          */
         function clear() {
             $this->queue = array();
+        }
+
+        /**
+         *    Singleton pending a test context object.
+         *    @return SimpleExceptionQueue    Global instance.
+         */
+        static function instance() {
+            if (! self::$instance) {
+                self::$instance = new SimpleExceptionQueue();
+            }
+            return self::$instance;
         }
     }
 ?>
