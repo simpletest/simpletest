@@ -4,28 +4,28 @@
     require_once(dirname(__FILE__) . '/../test_case.php');
     Mock::generate('SimpleTestCase');
     Mock::generate('SimpleExpectation');
-    
+
     class TestOfErrorQueue extends UnitTestCase {
-        
+
         function setUp() {
-            $queue = &SimpleErrorQueue::instance();
+            $queue = &SimpleTest::getErrorQueue();
             $queue->clear();
         }
-        
+
         function tearDown() {
-            $queue = &SimpleErrorQueue::instance();
+            $queue = &SimpleTest::getErrorQueue();
             $queue->clear();
         }
-        
+
         function testSingleton() {
             $this->assertReference(
-                    SimpleErrorQueue::instance(),
-                    SimpleErrorQueue::instance());
-            $this->assertIsA(SimpleErrorQueue::instance(), 'SimpleErrorQueue');
+                    SimpleTest::getErrorQueue(),
+                    SimpleTest::getErrorQueue());
+            $this->assertIsA(SimpleTest::getErrorQueue(), 'SimpleErrorQueue');
         }
-        
+
         function testOrder() {
-            $queue = &SimpleErrorQueue::instance();
+            $queue = &SimpleTest::getErrorQueue();
             $queue->add(1024, 'Ouch', 'here.php', 100);
             $queue->add(512, 'Yuk', 'there.php', 101);
             $this->assertEqual(
@@ -36,7 +36,7 @@
                     array(512, 'Yuk', 'there.php', 101));
             $this->assertFalse($queue->extract());
         }
-        
+
         function testAssertNoErrorsGivesTrueWhenNoErrors() {
             $test = &new MockSimpleTestCase();
             $test->expectOnce('assertTrue', array(true, 'Should be no errors'));
@@ -45,7 +45,7 @@
             $queue->setTestCase($test);
             $this->assertTrue($queue->assertNoErrors('%s'));
         }
-        
+
         function testAssertNoErrorsIssuesFailWhenErrors() {
             $test = &new MockSimpleTestCase();
             $test->expectOnce('assertTrue', array(false, 'Should be no errors'));
@@ -55,7 +55,7 @@
             $queue->add(1024, 'Ouch', 'here.php', 100);
             $this->assertFalse($queue->assertNoErrors('%s'));
         }
-        
+
         function testAssertErrorFailsWhenNoError() {
             $test = &new MockSimpleTestCase();
             $test->expectOnce('fail', array('Expected error not found'));
@@ -64,7 +64,7 @@
             $queue->setTestCase($test);
             $this->assertFalse($queue->assertError(false, '%s'));
         }
-        
+
         function testAssertErrorFailsWhenErrorDoesntMatch() {
             $test = &new MockSimpleTestCase();
             $test->expectOnce('assert', array(
@@ -77,7 +77,7 @@
             $queue->add(1024, 'B', 'b.php', 100);
             $this->assertFalse($queue->assertError(new MockSimpleExpectation(), '%s'));
         }
-        
+
         function testExpectationMatchCancelsIncomingError() {
             $test = &new MockSimpleTestCase();
             $test->expectOnce('assert', array(new MockSimpleExpectation(), 'B', 'a message'));
@@ -88,7 +88,7 @@
             $queue->expectError(new MockSimpleExpectation(), 'a message');
             $queue->add(1024, 'B', 'b.php', 100);
         }
-        
+
         function testExpectationMissTriggersError() {
             $test = &new MockSimpleTestCase();
             $test->expectOnce('assert', array(new MockSimpleExpectation(), 'B', 'a message'));
@@ -100,117 +100,117 @@
             $queue->add(1024, 'B', 'b.php', 100);
         }
     }
-    
+
     class TestOfErrorTrap extends UnitTestCase {
         var $_old;
-        
+
         function setUp() {
             $this->_old = error_reporting(E_ALL);
             set_error_handler('SimpleTestErrorHandler');
         }
-        
+
         function tearDown() {
             restore_error_handler();
             error_reporting($this->_old);
         }
-        
+
         function testQueueStartsEmpty() {
-            $queue = &SimpleErrorQueue::instance();
+            $queue = &SimpleTest::getErrorQueue();
             $this->assertFalse($queue->extract());
         }
-        
+
         function testTrappedErrorPlacedInQueue() {
             trigger_error('Ouch!');
-            $queue = &SimpleErrorQueue::instance();
+            $queue = &SimpleTest::getErrorQueue();
             list($severity, $message, $file, $line) = $queue->extract();
             $this->assertEqual($message, 'Ouch!');
             $this->assertEqual($file, __FILE__);
             $this->assertFalse($queue->extract());
         }
-        
+
         function testErrorsAreSwallowedByMatchingExpectation() {
             $this->expectError('Ouch!');
             trigger_error('Ouch!');
         }
-        
+
         function testErrorsAreSwallowedInOrder() {
             $this->expectError('a');
             $this->expectError('b');
             trigger_error('a');
             trigger_error('b');
         }
-        
+
         function testAnyErrorCanBeSwallowed() {
             $this->expectError();
             trigger_error('Ouch!');
         }
-        
+
         function testErrorCanBeSwallowedByPatternMatching() {
             $this->expectError(new PatternExpectation('/ouch/i'));
             trigger_error('Ouch!');
         }
     }
-    
+
     class TestOfErrors extends UnitTestCase {
         var $_old;
-        
+
         function setUp() {
             $this->_old = error_reporting(E_ALL);
         }
-        
+
         function tearDown() {
             error_reporting($this->_old);
         }
-        
+
         function testDefaultWhenAllReported() {
             error_reporting(E_ALL);
             trigger_error('Ouch!');
             $this->assertError('Ouch!');
         }
-        
+
         function testNoticeWhenReported() {
             error_reporting(E_ALL);
             trigger_error('Ouch!', E_USER_NOTICE);
             $this->assertError('Ouch!');
         }
-        
+
         function testWarningWhenReported() {
             error_reporting(E_ALL);
             trigger_error('Ouch!', E_USER_WARNING);
             $this->assertError('Ouch!');
         }
-        
+
         function testErrorWhenReported() {
             error_reporting(E_ALL);
             trigger_error('Ouch!', E_USER_ERROR);
             $this->assertError('Ouch!');
         }
-        
+
         function testNoNoticeWhenNotReported() {
             error_reporting(0);
             trigger_error('Ouch!', E_USER_NOTICE);
         }
-        
+
         function testNoWarningWhenNotReported() {
             error_reporting(0);
             trigger_error('Ouch!', E_USER_WARNING);
         }
-        
+
         function testNoErrorWhenNotReported() {
             error_reporting(0);
             trigger_error('Ouch!', E_USER_ERROR);
         }
-        
+
         function testNoticeSuppressedWhenReported() {
             error_reporting(E_ALL);
             @trigger_error('Ouch!', E_USER_NOTICE);
         }
-        
+
         function testWarningSuppressedWhenReported() {
             error_reporting(E_ALL);
             @trigger_error('Ouch!', E_USER_WARNING);
         }
-        
+
         function testErrorSuppressedWhenReported() {
             error_reporting(E_ALL);
             @trigger_error('Ouch!', E_USER_ERROR);

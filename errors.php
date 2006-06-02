@@ -41,7 +41,7 @@
          *    @access public
          */
         function invoke($method) {
-            $queue = &SimpleErrorQueue::instance();
+            $queue = &SimpleTest::getErrorQueue();
             $queue->setTestCase($this->GetTestCase());
             set_error_handler('SimpleTestErrorHandler');
             parent::invoke($method);
@@ -71,7 +71,7 @@
         function SimpleErrorQueue() {
             $this->clear();
         }
-        
+
         /**
          *    Sets the currently running test case.
          *    @param SimpleTestCase $test    Test case to send messages to.
@@ -98,7 +98,7 @@
                         array($severity, $content, $filename, $line));
             }
         }
-        
+
         /**
          *    Tests the error against the most recent expected
          *    error.
@@ -144,7 +144,7 @@
             $this->_queue = array();
             $this->_expectation_queue = array();
         }
-        
+
         /**
          *    @deprecated
          */
@@ -169,7 +169,7 @@
                     $content,
                     sprintf($message, "Expected PHP error [$content] severity [$severity] in [$file] line [$line]"));
         }
-        
+
         /**
          *    Sets up an expectation of an error. If this is
          *    not fulfilled at the end of the test, a failure
@@ -186,21 +186,7 @@
         }
 
         /**
-         *    Global access to a single error queue.
-         *    @return                        Global error queue object.
-         *    @access public
-         *    @static
-         */
-        function &instance() {
-            static $queue = false;
-            if (! $queue) {
-                $queue = new SimpleErrorQueue();
-            }
-            return $queue;
-        }
-
-        /**
-         *    Converst an error code into it's string
+         *    Converts an error code into it's string
          *    representation.
          *    @param $severity  PHP integer error code.
          *    @return           String version of error code.
@@ -244,7 +230,7 @@
                 $label = SimpleErrorQueue::getSeverityAsString($severity);
                 error_log("$label: $message in $filename on line $line");
             }
-            $queue = &SimpleErrorQueue::instance();
+            $queue = &SimpleTest::getErrorQueue();
             $queue->add($severity, $message, $filename, $line);
             set_error_handler('SimpleTestErrorHandler');
         }

@@ -261,14 +261,6 @@
         }
 
         /**
-         *    @deprecated
-         */
-        function swallowErrors() {
-            $queue = &SimpleErrorQueue::instance();
-            $queue->clear();
-        }
-
-        /**
          *    Runs an expectation directly, for extending the
          *    tests with new expectation classes.
          *    @param SimpleExpectation $expectation  Expectation subclass.

@@ -17,10 +17,8 @@
     /**#@-*/
 
     /**
-     *    Static global directives and options. I hate this
-     *    class. It's a mixture of reference hacks, configuration
-     *    and previous design screw-ups that I have to maintain
-     *    to keep backward compatibility.
+     *    Registry and test context. Includes a few
+     *    global options taht I'm slowly getting rid of.
      *	  @package	SimpleTest
      */
     class SimpleTest {
@@ -171,7 +169,7 @@
 
         /**
          *    Accessor for current test instance.
-         *    @return SimpleTEstCase        Currently running test.
+         *    @return SimpleTestCase        Currently running test.
          *    @access public
          *    @static
          */
@@ -192,6 +190,20 @@
                 $registry = SimpleTest::_getDefaults();
             }
             return $registry;
+        }
+
+        /**
+         *    Accessor for the Singleton error queue.
+         *    @return SimpleErrorQueue       Global error queue object.
+         *    @access public
+         *    @static
+         */
+        function &getErrorQueue() {
+            static $queue = false;
+            if (! $queue) {
+                $queue = new SimpleErrorQueue();
+            }
+            return $queue;
         }
 
         /**

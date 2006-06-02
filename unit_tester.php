@@ -309,8 +309,16 @@
         /**
          *    @deprecated
          */
+        function swallowErrors() {
+            $queue = &SimpleTest::getErrorQueue();
+            $queue->clear();
+        }
+
+        /**
+         *    @deprecated
+         */
         function assertNoErrors($message = '%s') {
-            $queue = &SimpleErrorQueue::instance();
+            $queue = &SimpleTest::getErrorQueue();
             return $queue->assertNoErrors($message);
         }
 
@@ -318,7 +326,7 @@
          *    @deprecated
          */
         function assertError($expected = false, $message = '%s') {
-            $queue = &SimpleErrorQueue::instance();
+            $queue = &SimpleTest::getErrorQueue();
             return $queue->assertError($this->_coerceExpectation($expected), $message);
         }
 
@@ -331,7 +339,7 @@
          *    @access public
          */
         function expectError($expected = false, $message = '%s') {
-            $queue = &SimpleErrorQueue::instance();
+            $queue = &SimpleTest::getErrorQueue();
             $queue->expectError($this->_coerceExpectation($expected), $message);
         }
 
