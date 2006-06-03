@@ -41,7 +41,8 @@
          *    @access public
          */
         function invoke($method) {
-            $queue = &SimpleTest::getErrorQueue();
+            $context = &SimpleTest::getContext();
+            $queue = &$context->get('SimpleErrorQueue');
             $queue->setTestCase($this->GetTestCase());
             set_error_handler('SimpleTestErrorHandler');
             parent::invoke($method);
@@ -230,7 +231,8 @@
                 $label = SimpleErrorQueue::getSeverityAsString($severity);
                 error_log("$label: $message in $filename on line $line");
             }
-            $queue = &SimpleTest::getErrorQueue();
+            $context = &SimpleTest::getContext();
+            $queue = &$context->get('SimpleErrorQueue');
             $queue->add($severity, $message, $filename, $line);
             set_error_handler('SimpleTestErrorHandler');
         }

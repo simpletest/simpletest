@@ -422,7 +422,8 @@
 
     class MockDummyWithInjectedTestCase extends MockDummy {
         function &_getCurrentTestCase() {
-            $test = &SimpleTest::getCurrent();
+            $context = &SimpleTest::getContext();
+            $test = &$context->getTest();
             return $test->test;
         }
     }

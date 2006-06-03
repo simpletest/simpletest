@@ -8,24 +8,20 @@
     class TestOfErrorQueue extends UnitTestCase {
 
         function setUp() {
-            $queue = &SimpleTest::getErrorQueue();
+            $context = &SimpleTest::getContext();
+            $queue = &$context->get('SimpleErrorQueue');
             $queue->clear();
         }
 
         function tearDown() {
-            $queue = &SimpleTest::getErrorQueue();
+            $context = &SimpleTest::getContext();
+            $queue = &$context->get('SimpleErrorQueue');
             $queue->clear();
         }
 
-        function testSingleton() {
-            $this->assertReference(
-                    SimpleTest::getErrorQueue(),
-                    SimpleTest::getErrorQueue());
-            $this->assertIsA(SimpleTest::getErrorQueue(), 'SimpleErrorQueue');
-        }
-
         function testOrder() {
-            $queue = &SimpleTest::getErrorQueue();
+            $context = &SimpleTest::getContext();
+            $queue = &$context->get('SimpleErrorQueue');
             $queue->add(1024, 'Ouch', 'here.php', 100);
             $queue->add(512, 'Yuk', 'there.php', 101);
             $this->assertEqual(
@@ -115,13 +111,15 @@
         }
 
         function testQueueStartsEmpty() {
-            $queue = &SimpleTest::getErrorQueue();
+            $context = &SimpleTest::getContext();
+            $queue = &$context->get('SimpleErrorQueue');
             $this->assertFalse($queue->extract());
         }
 
         function testTrappedErrorPlacedInQueue() {
             trigger_error('Ouch!');
-            $queue = &SimpleTest::getErrorQueue();
+            $context = &SimpleTest::getContext();
+            $queue = &$context->get('SimpleErrorQueue');
             list($severity, $message, $file, $line) = $queue->extract();
             $this->assertEqual($message, 'Ouch!');
             $this->assertEqual($file, __FILE__);

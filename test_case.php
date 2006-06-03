@@ -94,7 +94,8 @@
          */
         function run(&$reporter) {
             if (! $this->skip()) {
-                SimpleTest::setCurrent($this);
+                $context = &SimpleTest::getContext();
+                $context->setTest($this);
                 $this->_reporter = &$reporter;
                 $this->_reporter->paintCaseStart($this->getLabel());
                 foreach ($this->getTests() as $method) {

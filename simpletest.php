@@ -155,30 +155,6 @@
         }
 
         /**
-         *    Sets the current test case instance. This
-         *    global instance can be used by the mock objects
-         *    to send message to the test cases.
-         *    @param SimpleTestCase $test        Test case to register.
-         *    @access public
-         *    @static
-         */
-        function setCurrent(&$test) {
-            $registry = &SimpleTest::_getRegistry();
-            $registry['CurrentTestCase'] = &$test;
-        }
-
-        /**
-         *    Accessor for current test instance.
-         *    @return SimpleTestCase        Currently running test.
-         *    @access public
-         *    @static
-         */
-        function &getCurrent() {
-            $registry = &SimpleTest::_getRegistry();
-            return $registry['CurrentTestCase'];
-        }
-
-        /**
          *    Accessor for global registry of options.
          *    @return hash           All stored values.
          *    @access private
@@ -193,31 +169,18 @@
         }
 
         /**
-         *    Accessor for the Singleton error queue.
-         *    @return SimpleErrorQueue       Global error queue object.
+         *    Accessor for the context of the current
+         *    test run.
+         *    @return SimpleTestContext    Current test run.
          *    @access public
          *    @static
          */
-        function &getErrorQueue() {
-            static $queue;
-            if (! isset($queue)) {
-                $queue = new SimpleErrorQueue();
+        function &getContext() {
+            static $context = false;
+            if (! $context) {
+                $context = new SimpleTestContext();
             }
-            return $queue;
-        }
-
-        /**
-         *    Singleton pending a test context object.
-         *    @return SimpleExceptionQueue    Global instance.
-         *    @access public
-         *    @static
-         */
-        function &getExceptionMask() {
-            static $queue;
-            if (! isset($queue)) {
-                $queue = new SimpleExceptionQueue();
-            }
-            return $queue;
+            return $context;
         }
 
         /**
@@ -234,6 +197,62 @@
                     'DefaultProxy' => false,
                     'DefaultProxyUsername' => false,
                     'DefaultProxyPassword' => false);
+        }
+    }
+
+    /**
+     *    Container for all components for a specific
+     *    test run. Makes things like error queues
+     *    available to PHP event handlers, and also
+     *    gets around some nasty reference issues in
+     *    the mocks.
+     *	  @package	SimpleTest
+     */
+    class SimpleTestContext {
+        var $_test;
+        var $_resources;
+
+        /**
+         *    Clears down the current context.
+         *    @access public
+         */
+        function clear() {
+            $this->_test = null;
+            $this->_resources = array();
+        }
+
+        /**
+         *    Sets the current test case instance. This
+         *    global instance can be used by the mock objects
+         *    to send message to the test cases.
+         *    @param SimpleTestCase $test        Test case to register.
+         *    @access public
+         */
+        function setTest(&$test) {
+            $this->clear();
+            $this->_test = &$test;
+        }
+
+        /**
+         *    Accessor for currently running test case.
+         *    @return SimpleTestCase    Current test.
+         *    @acess pubic
+         */
+        function &getTest() {
+            return $this->_test;
+        }
+
+        /**
+         *    Accessor for the Singleton resource.
+         *    @return object       Global resource.
+         *    @access public
+         *    @static
+         */
+        function &get($resource) {
+            if (! isset($this->_resources[$resource])) {
+                $this->_resources[$resource] = &new $resource();
+            }
+            return $this->_resources[$resource];
         }
     }
 

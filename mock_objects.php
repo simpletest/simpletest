@@ -443,7 +443,8 @@
          *    @access protected
          */
         function &_getCurrentTestCase() {
-            return SimpleTest::getCurrent();
+            $context = &SimpleTest::getContext();
+            return $context->getTest();
         }
 
         /**

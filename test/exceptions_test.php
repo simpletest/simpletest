@@ -63,12 +63,6 @@
             $queue->expectException(new ExceptionExpectation(new Exception()), 'message');
             $queue->isExpected($test, new Exception());
         }
-
-        function testMaskIsSingleton() {
-            $this->assertReference(
-                    SimpleTest::getExceptionMask(),
-                    SimpleTest::getExceptionMask());
-        }
     }
 
     class TestOfCatchingExceptions extends UnitTestCase {

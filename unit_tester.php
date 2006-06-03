@@ -310,7 +310,8 @@
          *    @deprecated
          */
         function swallowErrors() {
-            $queue = &SimpleTest::getErrorQueue();
+            $context = &SimpleTest::getContext();
+            $queue = &$context->get('SimpleErrorQueue');
             $queue->clear();
         }
 
@@ -318,7 +319,8 @@
          *    @deprecated
          */
         function assertNoErrors($message = '%s') {
-            $queue = &SimpleTest::getErrorQueue();
+            $context = &SimpleTest::getContext();
+            $queue = &$context->get('SimpleErrorQueue');
             return $queue->assertNoErrors($message);
         }
 
@@ -326,7 +328,8 @@
          *    @deprecated
          */
         function assertError($expected = false, $message = '%s') {
-            $queue = &SimpleTest::getErrorQueue();
+            $context = &SimpleTest::getContext();
+            $queue = &$context->get('SimpleErrorQueue');
             return $queue->assertError($this->_coerceExpectation($expected), $message);
         }
 
@@ -339,7 +342,8 @@
          *    @access public
          */
         function expectError($expected = false, $message = '%s') {
-            $queue = &SimpleTest::getErrorQueue();
+            $context = &SimpleTest::getContext();
+            $queue = &$context->get('SimpleErrorQueue');
             $queue->expectError($this->_coerceExpectation($expected), $message);
         }
 
@@ -352,7 +356,8 @@
          *    @access public
          */
         function expectException($expected = false, $message = '%s') {
-            $queue = &SimpleTest::getExceptionMask();
+            $context = &SimpleTest::getContext();
+            $queue = &$context->get('SimpleExceptionQueue');
             $queue->expectException($expected, $message);
         }
 

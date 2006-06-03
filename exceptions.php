@@ -36,7 +36,8 @@
          *    @param string $method    Test method to call.
          */
         function invoke($method) {
-            $queue = SimpleTest::getExceptionMask();
+            $context = SimpleTest::getContext();
+            $queue = $context->get('SimpleExceptionQueue');
             $queue->clear();
             try {
                 parent::invoke($method);
