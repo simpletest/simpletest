@@ -199,9 +199,23 @@
          *    @static
          */
         function &getErrorQueue() {
-            static $queue = false;
-            if (! $queue) {
+            static $queue;
+            if (! isset($queue)) {
                 $queue = new SimpleErrorQueue();
+            }
+            return $queue;
+        }
+
+        /**
+         *    Singleton pending a test context object.
+         *    @return SimpleExceptionQueue    Global instance.
+         *    @access public
+         *    @static
+         */
+        function &getExceptionMask() {
+            static $queue;
+            if (! isset($queue)) {
+                $queue = new SimpleExceptionQueue();
             }
             return $queue;
         }

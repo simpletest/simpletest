@@ -352,7 +352,7 @@
          *    @access public
          */
         function expectException($expected = false, $message = '%s') {
-            $queue = &SimpleExceptionQueue::instance();
+            $queue = &SimpleTest::getExceptionMask();
             $queue->expectException($expected, $message);
         }
 

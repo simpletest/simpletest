@@ -36,7 +36,7 @@
          *    @param string $method    Test method to call.
          */
         function invoke($method) {
-            $queue = SimpleExceptionQueue::instance();
+            $queue = SimpleTest::getExceptionMask();
             $queue->clear();
             try {
                 parent::invoke($method);
@@ -179,17 +179,6 @@
         function clear() {
             $this->expected = false;
             $this->message = '%s';
-        }
-
-        /**
-         *    Singleton pending a test context object.
-         *    @return SimpleExceptionQueue    Global instance.
-         */
-        static function instance() {
-            if (! self::$instance) {
-                self::$instance = new SimpleExceptionQueue();
-            }
-            return self::$instance;
         }
     }
 ?>

@@ -64,10 +64,10 @@
             $queue->isExpected($test, new Exception());
         }
 
-        function testQueueIsSingleton() {
+        function testMaskIsSingleton() {
             $this->assertReference(
-                    SimpleExceptionQueue::instance(),
-                    SimpleExceptionQueue::instance());
+                    SimpleTest::getExceptionMask(),
+                    SimpleTest::getExceptionMask());
         }
     }
 
