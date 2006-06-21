@@ -18,7 +18,7 @@
 
     /**
      *    Registry and test context. Includes a few
-     *    global options taht I'm slowly getting rid of.
+     *    global options that I'm slowly getting rid of.
      *	  @package	SimpleTest
      */
     class SimpleTest {

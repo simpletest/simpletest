@@ -63,7 +63,7 @@
 
     /**
      *    Test case for testing of command line scripts and
-     *    utilities. Usually scripts taht are external to the
+     *    utilities. Usually scripts that are external to the
      *    PHP code, but support it in some way.
 	 *	  @package SimpleTest
 	 *	  @subpackage UnitTester
