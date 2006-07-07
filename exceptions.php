@@ -42,18 +42,19 @@
             try {
                 parent::invoke($method);
             } catch (Exception $exception) {
-                $test_case = $this->getTestCase();
-                if (! $trap->isExpected($test_case, $exception)) {
-                    $test_case->exception($exception);
-                }
-                $test_case->pass('Swallowed exception [' .
-                        get_class($exception) . ']');
-				if ($message = $trap->getOustanding()) {
-					$test_case->fail($message);
-				}
-                $trap->clear();
+                $this->compareException($trap, $exception);
+	            $trap->clear();			
             }
+			if ($message = $trap->getOutstanding()) {
+				$this->getTestCase()->fail($message);
+			}
         }
+
+		private function compareException($trap, $exception) {
+            if (! $trap->isExpected($this->getTestCase(), $exception)) {
+                $this->getTestCase()->exception($exception);
+            }
+		}
     }
 
     /**
@@ -170,21 +171,17 @@
          *    @return boolean                False on no match.
          */
         function isExpected($test, $exception) {
-            if (! $this->expected) {
-                return false;
+            if ($this->expected) {
+	            return $test->assert($this->expected, $exception, $this->message);
             }
-            $expected = $test->assert($this->expected, $exception, $this->message);
-			if ($expected) {
-				$this->clear();
-			}
-			return $expected;
+			return false;
         }
 
 		/**
 		 *    Tests for any left over exception.
 		 *    @return string/false     The failure message or false if none.
 		 */
-		function getOustanding() {
+		function getOutstanding() {
 			return sprintf($this->message, 'Failed to trap exception');
 		}
 

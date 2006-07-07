@@ -25,81 +25,63 @@
         }
     }
 
-    class TestOfUnitTestCaseOutput extends UnitTestCase {
+    class PassingUnitTestCaseOutput extends UnitTestCase {
 
         function testOfResults() {
             $this->pass('Pass');
-            $this->fail('Fail');        // Fail.
         }
 
         function testTrue() {
             $this->assertTrue(true);
-            $this->assertTrue(false);        // Fail.
         }
 
         function testFalse() {
-            $this->assertFalse(true);        // Fail.
             $this->assertFalse(false);
         }
 
         function testExpectation() {
             $expectation = &new EqualExpectation(25, 'My expectation message: %s');
             $this->assert($expectation, 25, 'My assert message : %s');
-            $this->assert($expectation, 24, 'My assert message : %s');        // Fail.
         }
 
         function testNull() {
             $this->assertNull(null, "%s -> Pass");
-            $this->assertNull(false, "%s -> Fail");        // Fail.
-            $this->assertNotNull(null, "%s -> Fail");        // Fail.
             $this->assertNotNull(false, "%s -> Pass");
         }
 
         function testType() {
             $this->assertIsA("hello", "string", "%s -> Pass");
-            $this->assertIsA(14, "string", "%s -> Fail");        // Fail.
-            $this->assertIsA($this, "TestOfUnitTestCaseOutput", "%s -> Pass");
+            $this->assertIsA($this, "PassingUnitTestCaseOutput", "%s -> Pass");
             $this->assertIsA($this, "UnitTestCase", "%s -> Pass");
-            $this->assertIsA(14, "TestOfUnitTestCaseOutput", "%s -> Fail");        // Fail.
-            $this->assertIsA($this, "TestReporter", "%s -> Fail");        // Fail.
         }
 
         function testTypeEquality() {
             $this->assertEqual("0", 0, "%s -> Pass");
-            $this->assertNotEqual("0", 0, "%s -> Fail");        // Fail.
         }
 
         function testNullEquality() {
-            $this->assertEqual(null, 1, "%s -> Fail");        // Fail.
             $this->assertNotEqual(null, 1, "%s -> Pass");
-            $this->assertEqual(1, null, "%s -> Fail");        // Fail.
             $this->assertNotEqual(1, null, "%s -> Pass");
         }
 
         function testIntegerEquality() {
-            $this->assertEqual(1, 2, "%s -> Fail");        // Fail.
             $this->assertNotEqual(1, 2, "%s -> Pass");
         }
 
         function testStringEquality() {
             $this->assertEqual("a", "a", "%s -> Pass");
-            $this->assertNotEqual("a", "a", "%s -> Fail");    // Fail.
-            $this->assertEqual("aa", "ab", "%s -> Fail");        // Fail.
             $this->assertNotEqual("aa", "ab", "%s -> Pass");
         }
 
         function testHashEquality() {
             $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "%s -> Pass");
-            $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "Z"), "%s -> Pass");
         }
 
         function testWithin() {
             $this->assertWithinMargin(5, 5.4, 0.5, "%s -> Pass");
-            $this->assertWithinMargin(5, 5.6, 0.5, "%s -> Fail");   // Fail.
         }
 
         function testOutside() {
-            $this->assertOutsideMargin(5, 5.4, 0.5, "%s -> Fail");   // Fail.
             $this->assertOutsideMargin(5, 5.6, 0.5, "%s -> Pass");
         }
 
@@ -107,38 +89,29 @@
             $a = "fred";
             $b = $a;
             $this->assertIdentical($a, $b, "%s -> Pass");
-            $this->assertNotIdentical($a, $b, "%s -> Fail");       // Fail.
         }
 
         function testTypeIdentity() {
             $a = "0";
             $b = 0;
-            $this->assertIdentical($a, $b, "%s -> Fail");        // Fail.
             $this->assertNotIdentical($a, $b, "%s -> Pass");
         }
 
         function testNullIdentity() {
-            $this->assertIdentical(null, 1, "%s -> Fail");        // Fail.
             $this->assertNotIdentical(null, 1, "%s -> Pass");
-            $this->assertIdentical(1, null, "%s -> Fail");        // Fail.
             $this->assertNotIdentical(1, null, "%s -> Pass");
         }
 
         function testHashIdentity() {
-            $this->assertIdentical(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "%s -> fail");        // Fail.
         }
 
         function testObjectEquality() {
             $this->assertEqual(new TestDisplayClass(4), new TestDisplayClass(4), "%s -> Pass");
-            $this->assertNotEqual(new TestDisplayClass(4), new TestDisplayClass(4), "%s -> Fail");    // Fail.
-            $this->assertEqual(new TestDisplayClass(4), new TestDisplayClass(5), "%s -> Fail");        // Fail.
             $this->assertNotEqual(new TestDisplayClass(4), new TestDisplayClass(5), "%s -> Pass");
         }
 
         function testObjectIndentity() {
             $this->assertIdentical(new TestDisplayClass(false), new TestDisplayClass(false), "%s -> Pass");
-            $this->assertNotIdentical(new TestDisplayClass(false), new TestDisplayClass(false), "%s -> Fail");    // Fail.
-            $this->assertIdentical(new TestDisplayClass(false), new TestDisplayClass(0), "%s -> Fail");        // Fail.
             $this->assertNotIdentical(new TestDisplayClass(false), new TestDisplayClass(0), "%s -> Pass");
         }
 
@@ -146,7 +119,6 @@
             $a = "fred";
             $b = &$a;
             $this->assertReference($a, $b, "%s -> Pass");
-            $this->assertClone($a, $b, "%s -> Fail");        // Fail.
         }
 
         function testCloneOnDifferentObjects() {
@@ -154,12 +126,127 @@
             $b = $a;
             $c = "Hello";
             $this->assertClone($a, $b, "%s -> Pass");
-            $this->assertClone($a, $c, "%s -> Fail");        // Fail.
         }
 
         function testPatterns() {
             $this->assertPattern('/hello/i', "Hello there", "%s -> Pass");
             $this->assertNoPattern('/hello/', "Hello there", "%s -> Pass");
+        }
+
+        function testLongStrings() {
+            $text = "";
+            for ($i = 0; $i < 10; $i++) {
+                $text .= "0123456789";
+            }
+            $this->assertEqual($text, $text);
+        }
+    }
+
+    class FailingUnitTestCaseOutput extends UnitTestCase {
+
+        function testOfResults() {
+            $this->fail('Fail');        // Fail.
+        }
+
+        function testTrue() {
+            $this->assertTrue(false);        // Fail.
+        }
+
+        function testFalse() {
+            $this->assertFalse(true);        // Fail.
+        }
+
+        function testExpectation() {
+            $expectation = &new EqualExpectation(25, 'My expectation message: %s');
+            $this->assert($expectation, 24, 'My assert message : %s');        // Fail.
+        }
+
+        function testNull() {
+            $this->assertNull(false, "%s -> Fail");        // Fail.
+            $this->assertNotNull(null, "%s -> Fail");        // Fail.
+        }
+
+        function testType() {
+            $this->assertIsA(14, "string", "%s -> Fail");        // Fail.
+            $this->assertIsA(14, "TestOfUnitTestCaseOutput", "%s -> Fail");        // Fail.
+            $this->assertIsA($this, "TestReporter", "%s -> Fail");        // Fail.
+        }
+
+        function testTypeEquality() {
+            $this->assertNotEqual("0", 0, "%s -> Fail");        // Fail.
+        }
+
+        function testNullEquality() {
+            $this->assertEqual(null, 1, "%s -> Fail");        // Fail.
+            $this->assertEqual(1, null, "%s -> Fail");        // Fail.
+        }
+
+        function testIntegerEquality() {
+            $this->assertEqual(1, 2, "%s -> Fail");        // Fail.
+        }
+
+        function testStringEquality() {
+            $this->assertNotEqual("a", "a", "%s -> Fail");    // Fail.
+            $this->assertEqual("aa", "ab", "%s -> Fail");        // Fail.
+        }
+
+        function testHashEquality() {
+            $this->assertEqual(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "Z"), "%s -> Fail");
+        }
+
+        function testWithin() {
+            $this->assertWithinMargin(5, 5.6, 0.5, "%s -> Fail");   // Fail.
+        }
+
+        function testOutside() {
+            $this->assertOutsideMargin(5, 5.4, 0.5, "%s -> Fail");   // Fail.
+        }
+
+        function testStringIdentity() {
+            $a = "fred";
+            $b = $a;
+            $this->assertNotIdentical($a, $b, "%s -> Fail");       // Fail.
+        }
+
+        function testTypeIdentity() {
+            $a = "0";
+            $b = 0;
+            $this->assertIdentical($a, $b, "%s -> Fail");        // Fail.
+        }
+
+        function testNullIdentity() {
+            $this->assertIdentical(null, 1, "%s -> Fail");        // Fail.
+            $this->assertIdentical(1, null, "%s -> Fail");        // Fail.
+        }
+
+        function testHashIdentity() {
+            $this->assertIdentical(array("a" => "A", "b" => "B"), array("b" => "B", "a" => "A"), "%s -> fail");        // Fail.
+        }
+
+        function testObjectEquality() {
+            $this->assertNotEqual(new TestDisplayClass(4), new TestDisplayClass(4), "%s -> Fail");    // Fail.
+            $this->assertEqual(new TestDisplayClass(4), new TestDisplayClass(5), "%s -> Fail");        // Fail.
+        }
+
+        function testObjectIndentity() {
+            $this->assertNotIdentical(new TestDisplayClass(false), new TestDisplayClass(false), "%s -> Fail");    // Fail.
+            $this->assertIdentical(new TestDisplayClass(false), new TestDisplayClass(0), "%s -> Fail");        // Fail.
+        }
+
+        function testReference() {
+            $a = "fred";
+            $b = &$a;
+            $this->assertClone($a, $b, "%s -> Fail");        // Fail.
+        }
+
+        function testCloneOnDifferentObjects() {
+            $a = "fred";
+            $b = $a;
+            $c = "Hello";
+            $this->assertClone($a, $c, "%s -> Fail");        // Fail.
+        }
+
+        function testPatterns() {
             $this->assertPattern('/hello/', "Hello there", "%s -> Fail");            // Fail.
             $this->assertNoPattern('/hello/i', "Hello there", "%s -> Fail");      // Fail.
         }
@@ -169,9 +256,11 @@
             for ($i = 0; $i < 10; $i++) {
                 $text .= "0123456789";
             }
-            $this->assertEqual($text, $text);
             $this->assertEqual($text . $text, $text . "a" . $text);        // Fail.
         }
+	}
+	
+	class VisualTestOfErrors extends UnitTestCase {
 
         function testDumping() {
             $this->dump(array('Hello'), 'Displaying a variable');
@@ -208,6 +297,7 @@
         function testExceptionTrap() {
             if (version_compare(phpversion(), '5') >= 0) {
                 eval('throw new Exception("Ouch!");');
+				$this->message('Should not be here');
             } else {
                 trigger_error('No exceptions in PHP4');
             }
@@ -216,6 +306,15 @@
 		function testExceptionExpectationShowsErrorWhenNoException() {
             if (version_compare(phpversion(), '5') >= 0) {
 				$this->expectException();
+            } else {
+                trigger_error('No exceptions in PHP4');
+            }
+		}
+
+		function testExceptionExpectationShowsPassWhenException() {
+            if (version_compare(phpversion(), '5') >= 0) {
+				$this->expectException();
+                eval('throw new Exception("Ouch!");');
             } else {
                 trigger_error('No exceptions in PHP4');
             }
@@ -391,8 +490,10 @@
         }
     }
 
-    $test = &new GroupTest("Visual test with 48 passes, 48 fails and 8 exceptions");
-    $test->addTestCase(new TestOfUnitTestCaseOutput());
+    $test = &new GroupTest("Visual test with 49 passes, 49 fails and 8 exceptions");
+    $test->addTestCase(new PassingUnitTestCaseOutput());
+    $test->addTestCase(new FailingUnitTestCaseOutput());
+    $test->addTestCase(new VisualTestOfErrors());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());
     $test->addTestCase(new TestOfVisualShell());
