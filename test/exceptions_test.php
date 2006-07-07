@@ -34,12 +34,12 @@
         }
     }
 
-    class TestOfExceptionQueue extends UnitTestCase {
+    class TestOfExceptionTrap extends UnitTestCase {
 
         function testNoExceptionsInQueueMeansNoTestMessages() {
             $test = new MockSimpleTestCase();
             $test->expectNever('assert');
-            $queue = new SimpleExceptionQueue();
+            $queue = new SimpleExceptionTrap();
             $this->assertFalse($queue->isExpected($test, new Exception()));
         }
 
@@ -48,7 +48,7 @@
             $expectation->setReturnValue('test', true);
             $test = new MockSimpleTestCase();
             $test->setReturnValue('assert', true);
-            $queue = new SimpleExceptionQueue();
+            $queue = new SimpleExceptionTrap();
             $queue->expectException($expectation, 'message');
             $this->assertTrue($queue->isExpected($test, new Exception()));
         }
@@ -59,7 +59,7 @@
                     '*',
                     new ExceptionExpectation(new Exception()),
                     'message'));
-            $queue = new SimpleExceptionQueue();
+            $queue = new SimpleExceptionTrap();
             $queue->expectException(new ExceptionExpectation(new Exception()), 'message');
             $queue->isExpected($test, new Exception());
         }

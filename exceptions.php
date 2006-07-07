@@ -37,18 +37,21 @@
          */
         function invoke($method) {
             $context = SimpleTest::getContext();
-            $queue = $context->get('SimpleExceptionQueue');
-            $queue->clear();
+            $trap = $context->get('SimpleExceptionTrap');
+            $trap->clear();
             try {
                 parent::invoke($method);
             } catch (Exception $exception) {
                 $test_case = $this->getTestCase();
-                if (! $queue->isExpected($test_case, $exception)) {
+                if (! $trap->isExpected($test_case, $exception)) {
                     $test_case->exception($exception);
                 }
                 $test_case->pass('Swallowed exception [' .
                         get_class($exception) . ']');
-                $queue->clear();
+				if ($message = $trap->getOustanding()) {
+					$test_case->fail($message);
+				}
+                $trap->clear();
             }
         }
     }
@@ -128,10 +131,9 @@
 	 *	  @package	SimpleTest
 	 *	  @subpackage	UnitTester
      */
-    class SimpleExceptionQueue {
+    class SimpleExceptionTrap {
         private $expected;
         private $message;
-        static $instance = false;
 
         /**
          *    Clears down the queue ready for action.
@@ -171,15 +173,27 @@
             if (! $this->expected) {
                 return false;
             }
-            return $test->assert($this->expected, $exception, $this->message);
+            $expected = $test->assert($this->expected, $exception, $this->message);
+			if ($expected) {
+				$this->clear();
+			}
+			return $expected;
         }
+
+		/**
+		 *    Tests for any left over exception.
+		 *    @return string/false     The failure message or false if none.
+		 */
+		function getOustanding() {
+			return sprintf($this->message, 'Failed to trap exception');
+		}
 
         /**
          *    Discards the contents of the error queue.
          */
         function clear() {
             $this->expected = false;
-            $this->message = '%s';
+            $this->message = false;
         }
     }
 ?>

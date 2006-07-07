@@ -6,7 +6,7 @@
     //                         ----------------
 
     // The following tests are a bit hacky. Whilst Kent Beck tried to
-    // build a unit tester with a unit tester I am not that brave.
+    // build a unit tester with a unit tester, I am not that brave.
     // Instead I have just hacked together odd test scripts until
     // I have enough of a tester to procede more formally.
     //
@@ -213,6 +213,14 @@
             }
         }
 
+		function testExceptionExpectationShowsErrorWhenNoException() {
+            if (version_compare(phpversion(), '5') >= 0) {
+				$this->expectException();
+            } else {
+                trigger_error('No exceptions in PHP4');
+            }
+		}
+
         function testSignal() {
             $fred = "signal as a string";
             $this->signal("Signal", $fred);        // Signal.
@@ -383,7 +391,7 @@
         }
     }
 
-    $test = &new GroupTest("Visual test with 48 passes, 48 fails and 7 exceptions");
+    $test = &new GroupTest("Visual test with 48 passes, 48 fails and 8 exceptions");
     $test->addTestCase(new TestOfUnitTestCaseOutput());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());
