@@ -234,7 +234,7 @@
                 trigger_error('Can only make assertions within test methods');
             }
             $this->_reporter->paintError(
-                    "Unexpected PHP error [$message] severity [$severity] in [$file] line [$line]");
+                    "Unexpected PHP error [$message] severity [$severity] in [$file line $line]");
         }
 
         /**
@@ -248,7 +248,7 @@
                     'Unexpected exception of type [' . get_class($exception) .
                     '] with message ['. $exception->getMessage() .
                     '] in ['. $exception->getFile() .
-                    '] line [' . $exception->getLine() . ']');
+                    ' line ' . $exception->getLine() . ']');
         }
 
         /**
