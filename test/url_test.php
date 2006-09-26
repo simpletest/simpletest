@@ -159,6 +159,13 @@
                     SimpleUrl::normalisePath('https://host.com/I/am/here/../there/somewhere.php'),
                     'https://host.com/I/am/there/somewhere.php');
         }
+
+		// regression test for #1535407
+        function testPathNormalisationWithSinglePeriod() {
+            $this->assertEqual(
+                SimpleUrl::normalisePath('https://host.com/I/am/here/./../there/somewhere.php'),
+                'https://host.com/I/am/there/somewhere.php');
+        }
         
         function testUsernameAndPasswordAreUrlDecoded() {
             $url = new SimpleUrl('http://' . urlencode('test@test') .
