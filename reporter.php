@@ -40,6 +40,7 @@
          */
         function paintHeader($test_name) {
             $this->sendNoCacheHeaders();
+            print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
             print "<html>\n<head>\n<title>$test_name</title>\n";
             print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" .
                     $this->_character_set . "\">\n";
@@ -74,7 +75,7 @@
          *    @access protected
          */
         function _getCss() {
-            return ".fail { color: red; } pre { background-color: lightgray; }";
+            return ".fail { background-color: inherit; color: red; } pre { background-color: lightgray; color: inherit; }";
         }
 
         /**
