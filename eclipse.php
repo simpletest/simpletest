@@ -136,7 +136,7 @@ class EclipseInvoker extends SimpleInvokerDecorator{
 		$output = ob_get_contents();
 		ob_end_clean();
 		if ($output!==""){
-			$result = $this->_listener->write('{status:"info",message:"'.base64_encode($output).'"}');
+			$result = $this->_listener->write('{status:"info",message:"'.EclipseReporter::escapeVal($output).'"}');
 		}
 	}
 	
