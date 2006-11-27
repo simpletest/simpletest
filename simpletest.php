@@ -237,7 +237,7 @@
         /**
          *    Accessor for currently running test case.
          *    @return SimpleTestCase    Current test.
-         *    @access pubic
+         *    @access public
          */
         function &getTest() {
             return $this->_test;
@@ -258,7 +258,7 @@
         /**
          *    Accessor for current reporter.
          *    @return SimpleReporter    Current reporter.
-         *    @access pubic
+         *    @access public
          */
         function &getReporter() {
             return $this->_reporter;
