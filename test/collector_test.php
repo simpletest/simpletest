@@ -2,7 +2,7 @@
 // $Id$
 
 require_once(dirname(__FILE__) . '/../collector.php');
-Mock::generate('GroupTest');
+Mock::generate('TestSuite');
 
 class PathEqualExpectation extends EqualExpectation {
 	function PathEqualExpectation($value, $message = '%s') {
@@ -17,34 +17,34 @@ class PathEqualExpectation extends EqualExpectation {
 class TestOfCollector extends UnitTestCase {
 
     function testCollectionIsAddedToGroup() {
-        $group = &new MockGroupTest();
-        $group->expectMinimumCallCount('addTestFile', 2);
-        $group->expectArguments(
+        $suite = &new MockTestSuite();
+        $suite->expectMinimumCallCount('addTestFile', 2);
+        $suite->expectArguments(
                 'addTestFile',
                 array(new PatternExpectation('/collectable\\.(1|2)$/')));
         $collector = &new SimpleCollector();
-        $collector->collect($group, dirname(__FILE__) . '/support/collector/');
+        $collector->collect($suite, dirname(__FILE__) . '/support/collector/');
     }
 }
 
 class TestOfPatternCollector extends UnitTestCase {
 
     function testAddingEverythingToGroup() {
-        $group = &new MockGroupTest();
-        $group->expectCallCount('addTestFile', 2);
-        $group->expectArguments(
+        $suite = &new MockTestSuite();
+        $suite->expectCallCount('addTestFile', 2);
+        $suite->expectArguments(
                 'addTestFile',
                 array(new PatternExpectation('/collectable\\.(1|2)$/')));
         $collector = &new SimplePatternCollector('/.*/');
-        $collector->collect($group, dirname(__FILE__) . '/support/collector/');
+        $collector->collect($suite, dirname(__FILE__) . '/support/collector/');
     }
 
     function testOnlyMatchedFilesAreAddedToGroup() {
-        $group = &new MockGroupTest();
-        $group->expectOnce('addTestFile', array(new PathEqualExpectation(
+        $suite = &new MockTestSuite();
+        $suite->expectOnce('addTestFile', array(new PathEqualExpectation(
         		dirname(__FILE__) . '/support/collector/collectable.1')));
         $collector = &new SimplePatternCollector('/1$/');
-        $collector->collect($group, dirname(__FILE__) . '/support/collector/');
+        $collector->collect($suite, dirname(__FILE__) . '/support/collector/');
     }
 }
 ?>

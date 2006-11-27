@@ -51,15 +51,4 @@
             $this->assertClone($a, $b);
         }
     }
-    
-    class ThisClassShouldBeSkipped extends UnitTestCase {
-        
-        function skip() {
-            return true;
-        }
-        
-        function testWillfail() {
-            $this->fail('This should not be run');
-        }
-    }
 ?>

@@ -37,6 +37,33 @@
         }
 
         /**
+         *    Called from within the test methods to register
+         *    passes and failures.
+         *    @param boolean $result    Pass on true.
+         *    @param string $message    Message to display describing
+         *                              the test state.
+         *    @return boolean           True on pass
+         *    @access public
+         */
+        function assertTrue($result, $message = false) {
+            return $this->assert(new TrueExpectation(), $result, $message);
+        }
+
+        /**
+         *    Will be true on false and vice versa. False
+         *    is the PHP definition of false, so that null,
+         *    empty strings, zero and an empty array all count
+         *    as false.
+         *    @param boolean $result    Pass on false.
+         *    @param string $message    Message to display.
+         *    @return boolean           True on pass
+         *    @access public
+         */
+        function assertFalse($result, $message = '%s') {
+            return $this->assert(new FalseExpectation(), $result, $message);
+        }
+
+        /**
          *    Will be true if the value is null.
          *    @param null $value       Supposedly null value.
          *    @param string $message   Message to display.
@@ -358,7 +385,7 @@
         function expectException($expected = false, $message = '%s') {
             $context = &SimpleTest::getContext();
             $queue = &$context->get('SimpleExceptionTrap');
-            $queue->expectException($expected, $message);
+            $queue->expectException($expected, $message . $this->getAssertionLine());
         }
 
         /**
@@ -376,6 +403,9 @@
             if (SimpleTestCompatibility::isA($expected, 'SimpleExpectation')) {
                 return $expected;
             }
+			if(is_string($expected)) {
+				$expected = str_replace('%', '%%', $expected);
+			}
             return new EqualExpectation($expected);
         }
 

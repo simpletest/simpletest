@@ -144,6 +144,15 @@
             $this->sendValidEnd($parser);
         }
 
+        function testSkip() {
+            $listener = &new MockSimpleScorer();
+            $listener->expectOnce('paintSkip', array('a_message'));
+            $parser = &new SimpleTestXmlParser($listener);
+            $this->sendValidStart($parser);
+            $this->assertTrue($parser->parse("<skip>a_message</skip>\n"));
+            $this->sendValidEnd($parser);
+        }
+
         function testSignal() {
             $signal = new AnyOldSignal();
             $signal->stuff = "Hello";

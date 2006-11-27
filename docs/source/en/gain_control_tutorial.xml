@@ -79,7 +79,7 @@
     require_once('log_test.php');<strong>
     require_once('clock_test.php');</strong>
 
-    $test = &new GroupTest('All tests');
+    $test = &new TestSuite('All tests');
     $test->addTestCase(new TestOfLogging());<strong>
     $test->addTestCase(new TestOfClock());</strong>
     $test->run(new HtmlReporter());
@@ -212,7 +212,7 @@ class Clock {<strong>
             We have to manually add our test cases from each included
             file.
             It is possible to remove it, but use of the following requires care.
-            The <code>GroupTest</code> class has a
+            The <code>TestSuite</code> class has a
             convenience method called <code>addTestFile()</code>
             that takes a PHP file as a parameter.
             This mechanism makes a note of all the classes, requires in the
@@ -230,7 +230,7 @@ class Clock {<strong>
     require_once(SIMPLE_TEST . 'unit_tester.php');
     require_once(SIMPLE_TEST . 'reporter.php');</strong>
 
-    $test = &new GroupTest('All tests');<strong>
+    $test = &new TestSuite('All tests');<strong>
     $test->addTestFile('log_test.php');
     $test->addTestFile('clock_test.php');</strong>
     $test->run(new HtmlReporter());

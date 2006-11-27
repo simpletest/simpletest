@@ -15,22 +15,40 @@
                 It is hoped only that what you find gives you ideas and enthusiasm
                 from a fellow computer programmer.
             </p>
+            <p>
+                I've been a little busy of late with children (two versions).
+                They take quite a chunk of your professional life and 100% of
+                what's left!
+                Hopefully the projects below should start to get back on track.
+            </p>
         </introduction>
         <section name="what" title="Ongoing projects">
             <p>
-                Along with Jon Ramsey, Matt Jones and Demian Turner, I am involved in
+                My latest project is <a href="cgreen.html">Cgreen</a>.
+                It's a C unit tester.
+                There are a couple of C unit testing tools out there already of course.
+                What makes <em>Cgreen</em> different is that it is pure C99, includes
+                a tutorial right here and has facilities for creating mock functions.
+                Mock functions should lead to more decoupled C code if Mock objects are
+                anything to go by.
+                It's alpha status right now until I get feedback from other users.
+                So if you want to be influential, try it out right now.
+                The project has been mostly funded by <a href="http://www.wordtracker.com/">Wordtracker</a>,
+                for which I am very grateful.
+            </p>
+            <p>
+                Along with Jon Ramsey, I am a founder of
                 <a href="http://www.phplondon.org/wiki/">PHP London</a>, a PHP user
                 group not surprisingly based in London.
                 It's going well.
-                The networking meetings take place on the first Thursday of every month.
+                The networking meetings take place on the first Thursday of every month
+                at a pub.
             </p>
             <p>
-                In addition the group organises other events that now include a
+                In addition the group organises other events that include the 2nd
                 <a href="http://phpconference.co.uk/">London UK PHP Conference</a>.
-                This is a one day event on Friday the 10th of February and costs only
-                seventy five quid.
-                The line up includes Matt Zanstra, Derick Rethans and Harry Fuecks.
-                Should be interesting.
+                This is a one day event on Friday the 23rd of February 2007 and costs only
+                fifty quid.
             </p>
             <p>
                 The <a local="simple_test">SimpleTest PHP unit tester</a>
@@ -61,17 +79,7 @@
             <p>
                 Also on the subject of open source, <a href="http://www.wordtracker.com/">Wordtracker</a>
                 have kindly agreed to publish some of their in house tools.
-                The first of these was a lightweight persistence library.
-                Written in PHP, it is built around the <em>UnitOfWork</em> pattern
-                rather than the notion of persistence.
-                The idea is that being short lived, PHP scripts affect a change on
-                an object model rather handle in memeory objects that happen to know
-                how to survive requests.
-                So far it has only been published in
-                <a href="http://www.sitepoint.com/forums/showthread.php?t=214183">this SitePoint thread</a>.
-            </p>
-            <p>
-                Another Wordtracker spin off is <a local="fakemail">fakeMail</a>.
+                A Wordtracker spin off is <a local="fakemail">fakeMail</a>.
                 Testing applications that send e-mails can be a right royal pain because
                 of all of the infrastructure involved.
                 You will likely need an SMPT gateway that talks to a POP client that
@@ -84,16 +92,6 @@
                 You then just have to look at the local file.
                 It means that you must be able to configure your application to use
                 a port other than 25, but that's not usualy difficult.
-            </p>
-            <p>
-                For the last year I have been a regular columnist for
-                <a href="http://www.phparch.com/">PHP Architect</a>.
-                The articles have been OO and agile development related, but the
-                last one I will write will be out in February.
-                Look forward to an interesting replacement.
-                I found the articles time consuming in the extreme, although
-                enjoyable, but I want to devote more time to fatherhood and
-                other writing projects.
             </p>
         </section>
         <section name="why" title="Why the Last Craft?">
@@ -130,18 +128,16 @@
         <section name="crc" title="The cards?">
             <p>
                 The panel at the top is supposed to resemble a standard office index card.
-                The way it is marked out is called an
-                <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0201379430/ref=lib_dp_TFCV/102-1207283-8247304?v=glance&amp;s=books&amp;vi=reader#reader-link">RRC card</a>.
-                It stands for Roles, Responsibilities and
+                The way it is marked out is called a
+                <a href="http://www.c2.com/doc/crc/draw.html">CRC card</a>.
+                It stands for Classes, Responsibilities and
                 Collaborations and is the cheapest software development tool you
                 can find.
                 You really do buy a pack of cards.
             <p>
             </p>
                 The role is written at the top and would often be just a class
-                name (they are usually called
-                <a href="http://www.c2.com/doc/crc/draw.html">CRC cards</a>
-                in this case).
+                name.
                 The left side is the object&apos;s responsibilities and on the
                 right collaborations (within the page I have treated these as
                 internal links and external links repectively).
@@ -154,7 +150,7 @@
             <p>
                 Now nothing beats a whiteboard for collaboration, but if the level
                 of detail is getting too high and you want a temporary record,
-                give the RRC cards a try.
+                give the CRC cards a try.
             </p>
         </section>
     </content>

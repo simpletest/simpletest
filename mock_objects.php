@@ -40,8 +40,6 @@
          *                              those that are wildcarded.
          *                              If the value is not an array
          *                              then it is considered to match any.
-         *    @param mixed $wildcard    Any parameter matching this
-         *                              will always match.
          *    @param string $message    Customised message on failure.
          *    @access public
          */
@@ -121,7 +119,7 @@
                 $comparison = $this->_coerceToExpectation($expected[$i]);
                 if (! $comparison->test($parameters[$i])) {
                     $messages[] = "parameter " . ($i + 1) . " with [" .
-                            $comparison->overlayMessage($parameters[$i]) . "]";
+                            $comparison->overlayMessage($parameters[$i], $this->_getDumper()) . "]";
                 }
             }
             return "Parameter expectation differs at " . implode(" and ", $messages);
@@ -163,6 +161,8 @@
 
     /**
      *    Confirms that the number of calls on a method is as expected.
+     *	@package	SimpleTest
+     *	@subpackage	MockObjects
      */
     class CallCountExpectation extends SimpleExpectation {
         var $_method;
@@ -206,6 +206,8 @@
 
     /**
      *    Confirms that the number of calls on a method is as expected.
+     *	@package	SimpleTest
+     *	@subpackage	MockObjects
      */
     class MinimumCallCountExpectation extends SimpleExpectation {
         var $_method;
@@ -249,6 +251,8 @@
 
     /**
      *    Confirms that the number of calls on a method is as expected.
+     *	@package	SimpleTest
+     *	@subpackage	MockObjects
      */
     class MaximumCallCountExpectation extends SimpleExpectation {
         var $_method;
@@ -780,20 +784,17 @@
          *    test method has finished. Totals up the call
          *    counts and triggers a test assertion if a test
          *    is present for expected call counts.
-         *    @param string $method    Current method name.
+         *    @param string $test_method    Current method name.
+         *    @param SimpleTestCase $test   Test to send message to.
          *    @access public
          */
-        function atTestEnd($method) {
+        function atTestEnd($test_method, &$test) {
             foreach ($this->_expected_counts as $method => $expectation) {
-                $this->_assertTrue(
-                        $expectation->test($this->getCallCount($method)),
-                        $expectation->overlayMessage($this->getCallCount($method)));
+                $test->assert($expectation, $this->getCallCount($method));
             }
             foreach ($this->_max_counts as $method => $expectation) {
                 if ($expectation->test($this->getCallCount($method))) {
-                    $this->_assertTrue(
-                            true,
-                            $expectation->overlayMessage($this->getCallCount($method)));
+                    $test->assert($expectation, $this->getCallCount($method));
                 }
             }
         }
@@ -851,38 +852,23 @@
          *    @access private
          */
         function _checkExpectations($method, $args, $timing) {
+            $test = &$this->_getCurrentTestCase();
             if (isset($this->_max_counts[$method])) {
                 if (! $this->_max_counts[$method]->test($timing + 1)) {
-                    $this->_assertTrue(
-                            false,
-                            $this->_max_counts[$method]->overlayMessage($timing + 1));
+                    $test->assert($this->_max_counts[$method], $timing + 1);
                 }
             }
             if (isset($this->_expected_args_at[$timing][$method])) {
-                $this->_assertTrue(
-                        $this->_expected_args_at[$timing][$method]->test($args),
-                        "Mock method [$method] at [$timing] -> " .
-                                $this->_expected_args_at[$timing][$method]->overlayMessage($args));
+                $test->assert(
+                        $this->_expected_args_at[$timing][$method],
+                        $args,
+                        "Mock method [$method] at [$timing] -> %s");
             } elseif (isset($this->_expected_args[$method])) {
-                $this->_assertTrue(
-                        $this->_expected_args[$method]->test($args),
-                        "Mock method [$method] -> " . $this->_expected_args[$method]->overlayMessage($args));
+                $test->assert(
+                        $this->_expected_args[$method],
+                        $args,
+                        "Mock method [$method] -> %s");
             }
-        }
-
-        /**
-         *    Triggers an assertion on the held test case.
-         *    Should be overridden when using another test
-         *    framework other than the SimpleTest one if the
-         *    assertion method has a different name.
-         *    @param boolean $assertion     True will pass.
-         *    @param string $message        Message that will go with
-         *                                  the test event.
-         *    @access protected
-         */
-        function _assertTrue($assertion, $message) {
-            $test = &$this->_getCurrentTestCase();
-            $test->assertTrue($assertion, $message);
         }
     }
 
@@ -899,7 +885,7 @@
          *    @access public
          */
         function Mock() {
-            trigger_error('Mock factory methods are class only.');
+            trigger_error('Mock factory methods are static.');
         }
 
         /**
@@ -951,6 +937,8 @@
     }
 
     /**
+     *	@package	SimpleTest
+     *	@subpackage	MockObjects
      *    @deprecated
      */
     class Stub extends Mock {
@@ -1015,7 +1003,7 @@
             }
             $mock_reflection = new SimpleReflection($this->_mock_class);
             if ($mock_reflection->classExistsSansAutoload()) {
-                trigger_error("Partial mock class [$mock_class] already exists");
+                trigger_error('Partial mock class [' . $this->_mock_class . '] already exists');
                 return false;
             }
             return eval($this->_extendClassCode($methods));

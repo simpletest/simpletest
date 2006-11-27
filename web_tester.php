@@ -120,8 +120,8 @@
             } else {
                 return "Field expectation [" . $dumper->describeValue($this->_value) .
                         "] fails with [" .
-                        $this->_dumper->describeValue($compare) . "] " .
-                        $this->_dumper->describeDifference($this->_value, $compare);
+                        $dumper->describeValue($compare) . "] " .
+                        $dumper->describeDifference($this->_value, $compare);
             }
         }
     }
@@ -242,7 +242,7 @@
          */
         function testMessage($compare) {
             if (SimpleExpectation::isExpectation($this->_expected_value)) {
-                $message = $this->_expected_value->testMessage($compare);
+                $message = $this->_expected_value->overlayMessage($compare, $this->_getDumper());
             } else {
                 $message = $this->_expected_header .
                         ($this->_expected_value ? ': ' . $this->_expected_value : '');
@@ -1464,6 +1464,33 @@
             return $this->assertTrue(
                     $this->getCookie($name) === false,
                     sprintf($message, "Not expecting cookie [$name]"));
+        }
+
+        /**
+         *    Called from within the test methods to register
+         *    passes and failures.
+         *    @param boolean $result    Pass on true.
+         *    @param string $message    Message to display describing
+         *                              the test state.
+         *    @return boolean           True on pass
+         *    @access public
+         */
+        function assertTrue($result, $message = false) {
+            return $this->assert(new TrueExpectation(), $result, $message);
+        }
+
+        /**
+         *    Will be true on false and vice versa. False
+         *    is the PHP definition of false, so that null,
+         *    empty strings, zero and an empty array all count
+         *    as false.
+         *    @param boolean $result    Pass on false.
+         *    @param string $message    Message to display.
+         *    @return boolean           True on pass
+         *    @access public
+         */
+        function assertFalse($result, $message = '%s') {
+            return $this->assert(new FalseExpectation(), $result, $message);
         }
         
         /**

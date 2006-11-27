@@ -20,6 +20,7 @@
      *    Registry and test context. Includes a few
      *    global options that I'm slowly getting rid of.
      *	  @package	SimpleTest
+     *    @subpackage	UnitTester
      */
     class SimpleTest {
 
@@ -210,6 +211,7 @@
      */
     class SimpleTestContext {
         var $_test;
+        var $_reporter;
         var $_resources;
 
         /**
@@ -217,7 +219,6 @@
          *    @access public
          */
         function clear() {
-            $this->_test = null;
             $this->_resources = array();
         }
 
@@ -236,10 +237,31 @@
         /**
          *    Accessor for currently running test case.
          *    @return SimpleTestCase    Current test.
-         *    @acess pubic
+         *    @access pubic
          */
         function &getTest() {
             return $this->_test;
+        }
+
+        /**
+         *    Sets the current reporter. This
+         *    global instance can be used by the mock objects
+         *    to send messages.
+         *    @param SimpleReporter $reporter     Reporter to register.
+         *    @access public
+         */
+        function setReporter(&$reporter) {
+            $this->clear();
+            $this->_reporter = &$reporter;
+        }
+
+        /**
+         *    Accessor for current reporter.
+         *    @return SimpleReporter    Current reporter.
+         *    @access pubic
+         */
+        function &getReporter() {
+            return $this->_reporter;
         }
 
         /**
@@ -342,6 +364,8 @@
     }
 
     /**
+	 *	  @package SimpleTest
+	 *	  @subpackage UnitTester
      *    @deprecated
      */
     class SimpleTestOptions extends SimpleTest {

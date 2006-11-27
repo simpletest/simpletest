@@ -73,7 +73,6 @@
         function &referenceMethod(&$a) { }
         function extraMethod($a = false) { }
     }
-
     Mock::generate('ImplementsDummy');
 
     class TestOfImplementations extends UnitTestCase {

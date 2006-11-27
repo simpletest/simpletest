@@ -195,12 +195,12 @@ class TestOfLogging extends UnitTestCase {
 require_once('simpletest/unit_tester.php');
 require_once('simpletest/reporter.php');
 
-$test = &new GroupTest('All tests');
+$test = &new TestSuite('All tests');
 $test->addTestFile('log_test.php');
 $test->run(new HtmlReporter());
 ?></strong>
 ]]></php>
-                The method <code>GroupTest::addTestFile()</code>
+                The method <code>TestSuite::addTestFile()</code>
                 will include the test case file and read any new classes created
                 that are descended from <code>SimpleTestCase</code>, of which
                 <code>UnitTestCase</code> is one example.
@@ -219,7 +219,7 @@ $test->run(new HtmlReporter());
                 Also the test case file should not have been included
                 elsewhere or no cases will be added to this group test.
                 This would be a more serious error as if the test case classes are
-                already loaded by PHP the <code>GroupTest::addTestFile()</code>
+                already loaded by PHP the <code>TestSuite::addTestFile()</code>
                 method will not detect them.
             </p>
             <p>

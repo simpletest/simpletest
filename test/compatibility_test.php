@@ -27,6 +27,12 @@
                     'ComparisonClass'));
         }
         
+        function testIdentityOfNumericStrings() {
+            $numericString1 = "123";
+            $numericString2 = "00123";
+            $this->assertNotIdentical($numericString1, $numericString2);
+        }
+        
         function testIdentityOfObjects() {
             $object1 = new ComparisonClass();
             $object2 = new ComparisonClass();

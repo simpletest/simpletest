@@ -11,8 +11,7 @@ Reporter
 
 Mock objects
 ------------
-Optionally separate setting of expectations from mocks (8).
-Allow action objects to be associated with will() (3).
+Fix new type hinting bug in PHP 5.0.2 and above (1).
 
 Parser
 ------

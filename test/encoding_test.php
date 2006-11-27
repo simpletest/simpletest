@@ -96,6 +96,12 @@
             $this->assertWritten($encoding, 'a=Hello+there%21');
         }
         
+        function testUrlEncodingOfKey() {
+            $encoding = &new SimplePostEncoding();
+            $encoding->add('a!', 'Hello');
+            $this->assertWritten($encoding, 'a%21=Hello');
+        }
+        
         function testMultipleParameter() {
             $encoding = &new SimplePostEncoding();
             $encoding->add('a', 'Hello');

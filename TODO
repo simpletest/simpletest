@@ -1,43 +1,35 @@
 TODO
-This is immediate stuff only for this iteration (1.0.1beta) of 60 hours.
+This is immediate stuff only for this iteration (1.0.1beta) of 13 hours.
 
 $Id$
 
 Unit tester
 -----------
-Add skip facility (4/1) - done.
-Integrate SpikeSource code coverage tool (10).
+Add decent skip facility (5/1) - done.
 Add expectException() and expectError() (13/2) - done.
+Rename GroupTest to TestSuite (1/0) - done.
 
 Reporter
 --------
+expectException() should receive the exception (2/0) - done.
+Dumper should come from the reporter (4/1) - done.
 
 Mock objects
 ------------
-Fix bug in PHP 5 mocking objects with __call() method (1).
-Fix new type hinting bug in PHP 5.0.2 and above (1).
+Fix bug in PHP 5 mocking objects with __call() method (1/1) - done.
+Fix other special method bugs in PHP5 (2/1) - done.
 
 Parser
 ------
-Multiple dimension arrays in form values (3).
-Parse fieldsets correctly with labels (8).
 
 Browser
 -------
-Setting an option by id attribute should only toggle that option (3).
-Allow index selection of controls (3).
-Add additional parameters to click() method (1).
 
 Web tester
 ----------
-Add assertClickable() method (1/1).
-Add assertSubmit() method (1/0).
-Improve assertLink() to take expectations (0/1).
 
 Documentation
 -------------
-Replace all deprecated methods (3/1).
-Split mock objects off from tutorial (4).
 
 Build
 -----

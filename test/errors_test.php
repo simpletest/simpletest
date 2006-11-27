@@ -35,8 +35,8 @@
 
         function testAssertNoErrorsGivesTrueWhenNoErrors() {
             $test = &new MockSimpleTestCase();
-            $test->expectOnce('assertTrue', array(true, 'Should be no errors'));
-            $test->setReturnValue('assertTrue', true);
+            $test->expectOnce('assert', array(new TrueExpectation(), true, 'Should be no errors'));
+            $test->setReturnValue('assert', true);
             $queue = &new SimpleErrorQueue();
             $queue->setTestCase($test);
             $this->assertTrue($queue->assertNoErrors('%s'));
@@ -44,8 +44,8 @@
 
         function testAssertNoErrorsIssuesFailWhenErrors() {
             $test = &new MockSimpleTestCase();
-            $test->expectOnce('assertTrue', array(false, 'Should be no errors'));
-            $test->setReturnValue('assertTrue', false);
+            $test->expectOnce('assert', array(new TrueExpectation(), false, 'Should be no errors'));
+            $test->setReturnValue('assert', false);
             $queue = &new SimpleErrorQueue();
             $queue->setTestCase($test);
             $queue->add(1024, 'Ouch', 'here.php', 100);
@@ -55,7 +55,7 @@
         function testAssertErrorFailsWhenNoError() {
             $test = &new MockSimpleTestCase();
             $test->expectOnce('fail', array('Expected error not found'));
-            $test->setReturnValue('assertTrue', false);
+            $test->setReturnValue('assert', false);
             $queue = &new SimpleErrorQueue();
             $queue->setTestCase($test);
             $this->assertFalse($queue->assertError(false, '%s'));
@@ -147,6 +147,16 @@
             $this->expectError(new PatternExpectation('/ouch/i'));
             trigger_error('Ouch!');
         }
+		
+		/*
+		 * Regression Test for Error messages producing
+		 * sprintf errors if they contain standalone % char
+		 */
+		function testErrorWithPercentsPassesWithNoSprintfError()
+		{
+			$this->expectError("%");
+			trigger_error('%');
+		}
     }
 
     class TestOfErrors extends UnitTestCase {
@@ -213,5 +223,16 @@
             error_reporting(E_ALL);
             @trigger_error('Ouch!', E_USER_ERROR);
         }
+
+		/*
+		 * Regression Test for Error messages producing
+		 * sprintf errors if they contain standalone % char
+		 */
+		function testErrorWithPercentsReportedWithNoSprintfError()
+		{
+			trigger_error('%');
+			$this->assertError('%');
+		}
     }
+// TODO: Add stacked error handler test
 ?>

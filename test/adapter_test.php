@@ -56,7 +56,7 @@
         }
         
         function testName() {
-            $this->assertTrue($this->name() == 'TestOfPhpUnitAdapter');
+            $this->assert($this->name() == 'TestOfPhpUnitAdapter');
         }
         
         function testEquals() {

@@ -489,14 +489,68 @@
             print " -&gt; " . htmlentities(serialize($payload)) . "<br />\n";
         }
     }
+    
+    class TestOfSkippingNoMatterWhat extends UnitTestCase {
+        
+        function skip() {
+            $this->skipIf(true, 'Always skipped -> %s');
+        }
+        
+        function testFail() {
+            $this->fail('This really shouldn\'t have happened');
+        }
+    }
+    
+    class TestOfSkippingOrElse extends UnitTestCase {
+        
+        function skip() {
+            $this->skipUnless(false, 'Always skipped -> %s');
+        }
+        
+        function testFail() {
+            $this->fail('This really shouldn\'t have happened');
+        }
+    }
+    
+    class TestOfSkippingTwiceOver extends UnitTestCase {
+        
+        function skip() {
+            $this->skipIf(true, 'First reason -> %s');
+            $this->skipIf(true, 'Second reason -> %s');
+        }
+        
+        function testFail() {
+            $this->fail('This really shouldn\'t have happened');
+        }
+    }
+    
+    class TestThatShouldNotBeSkipped extends UnitTestCase {
+        
+        function skip() {
+            $this->skipIf(false);
+            $this->skipUnless(true);
+        }
+        
+        function testFail() {
+            $this->fail('We should see this message');
+        }
+        
+        function testPass() {
+            $this->pass('We should see this message');
+        }
+    }
 
-    $test = &new GroupTest("Visual test with 49 passes, 49 fails and 8 exceptions");
+    $test = &new TestSuite('Visual test with 50 passes, 50 fails and 7 exceptions');
     $test->addTestCase(new PassingUnitTestCaseOutput());
     $test->addTestCase(new FailingUnitTestCaseOutput());
     $test->addTestCase(new VisualTestOfErrors());
     $test->addTestCase(new TestOfMockObjectsOutput());
     $test->addTestCase(new TestOfPastBugs());
     $test->addTestCase(new TestOfVisualShell());
+    $test->addTestCase(new TestOfSkippingNoMatterWhat());
+    $test->addTestCase(new TestOfSkippingOrElse());
+    $test->addTestCase(new TestOfSkippingTwiceOver());
+    $test->addTestCase(new TestThatShouldNotBeSkipped());
 
     if (isset($_GET['xml']) || in_array('xml', (isset($argv) ? $argv : array()))) {
         $reporter = &new XmlReporter();

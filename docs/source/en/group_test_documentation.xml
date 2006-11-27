@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<page title="Group Test documentation" here="Group tests">
-    <long_title>SimpleTest for PHP group test documentation</long_title>
+<page title="Test suite documentation" here="Group tests">
+    <long_title>SimpleTest for PHP test suites</long_title>
     <content>
-        <section name="group" title="Grouping tests">
+        <section name="group" title="Grouping tests into suites">
             <p>
                 To run test cases as part of a group, the test cases should really
                 be placed in files without the runner code...
@@ -75,7 +75,7 @@ class SocketTester extends UnitTestCase { ... }
     require_once('simpletest/reporter.php');<strong>
     require_once('file_test.php');
 
-    $test = &new GroupTest('All file tests');
+    $test = &new TestSuite('All file tests');
     $test->addTestCase(new FileTestCase());
     $test->run(new HtmlReporter());</strong>
 ?>
@@ -98,12 +98,12 @@ class SocketTester extends UnitTestCase { ... }
     require_once('simpletest/unit_tester.php');
     require_once('simpletest/reporter.php');
 
-    $test = &new GroupTest('All file tests');<strong>
+    $test = &new TestSuite('All file tests');<strong>
     $test->addTestFile('file_test.php');</strong>
     $test->run(new HtmlReporter());
 ?&gt;
 ]]></php>
-                What happens here is that the <code>GroupTest</code>
+                What happens here is that the <code>TestSuite</code>
                 class has done the <code>require_once()</code>
                 for us.
                 It then checks to see if any new test case classes
@@ -130,13 +130,13 @@ class SocketTester extends UnitTestCase { ... }
                         placed in the group test and run also.
                         You will need to add a <code>SimpleTestOptions::ignore()</code>
                         directive for these classes, or make sure that they are included
-                        before the <code>GroupTest::addTestFile()</code>
+                        before the <code>TestSuite::addTestFile()</code>
                         line, or make sure that they are abstract classes.
                     </li>
                 </ol>
             </p>
         </section>
-        <section name="higher" title="Higher groupings">
+        <section name="higher" title="Composite suites">
             <p>
                 The above method places all of the test cases into one large group.
                 For larger projects though this may not be flexible enough; you
@@ -144,15 +144,15 @@ class SocketTester extends UnitTestCase { ... }
             </p>
             <p>
                 To get a more flexible group test we can subclass
-                <code>GroupTest</code> and then instantiate it as needed...
+                <code>TestSuite</code> and then instantiate it as needed...
 <php><![CDATA[
 <?php
     require_once('simpletest/unit_tester.php');
     require_once('simpletest/reporter.php');
     <strong>
-    class FileGroupTest extends GroupTest {
-        function FileGroupTest() {
-            $this->GroupTest('All file tests');
+    class FileTestSuite extends TestSuite {
+        function FileTestSuite() {
+            $this->TestSuite('All file tests');
             $this->addTestFile('file_test.php');
         }
     }</strong>
@@ -164,9 +164,9 @@ class SocketTester extends UnitTestCase { ... }
                 We can now invoke the tests from a separate runner file...
 <php><![CDATA[
 <?php
-    require_once('file_group_test.php');
+    require_once('file_test_suite.php');
     <strong>
-    $test = &new FileGroupTest();
+    $test = &new FileTestSuite();
     $test->run(new HtmlReporter());</strong>
 ?>
 ]]></php>
@@ -176,8 +176,8 @@ class SocketTester extends UnitTestCase { ... }
 <php><![CDATA[
 <?php
     <strong>
-    $test = &new BigGroupTest('Big group');
-    $test->addTestFile('file_group_test.php');
+    $test = &new BigTestSuite('Big group');
+    $test->addTestFile('file_test_suite.php');
     $test->addTestFile('some_test_case.php');</strong>
     $test->run(new HtmlReporter());
 ?>
@@ -192,16 +192,16 @@ class SocketTester extends UnitTestCase { ... }
                 each group.
 <php><![CDATA[
 <?php
-    class FileGroupTest extends GroupTest {
-        function FileGroupTest() {
-            $this->GroupTest('All file tests');
+    class FileTestSuite extends TestSuite {
+        function FileTestSuite() {
+            $this->TestSuite('All file tests');
             $test->addTestFile('file_test.php');
         }
     }
     <strong>
     if (! defined('RUNNER')) {
         define('RUNNER', true);</strong>
-        $test = &new FileGroupTest();
+        $test = &new FileTestSuite();
         $test->run(new HtmlReporter());
     }
 ?>
@@ -215,22 +215,22 @@ class SocketTester extends UnitTestCase { ... }
 <php><![CDATA[
 <?php<strong>
     define('RUNNER', true);</strong>
-    require_once('file_group_test.php');
+    require_once('file_test_suite.php');
 
-    $test = &new BigGroupTest('Big group');
-    $test->addTestCase(new FileGroupTest());
+    $test = &new BigTestSuite('Big group');
+    $test->addTestCase(new FileTestSuite());
     $test->addTestCase(...);
     $test->run(new HtmlReporter());
 ?>
 ]]></php>
-                As with the normal test cases, a <code>GroupTest</code> can
-                be loaded with the <code>GroupTest::addTestFile()</code> method.
+                As with the normal test cases, a <code>TestSuite</code> can
+                be loaded with the <code>TestSuite::addTestFile()</code> method.
 <php><![CDATA[
 <?php
     define('RUNNER', true);
 
-    $test = &new BigGroupTest('Big group');<strong>
-    $test->addTestFile('file_group_test.php');
+    $test = &new BigTestSuite('Big group');<strong>
+    $test->addTestFile('file_test_suite.php');
     $test->addTestFile(...);</strong>
     $test->run(new HtmlReporter());
 ?>
@@ -270,7 +270,7 @@ class SocketTester extends UnitTestCase { ... }
     require_once('simpletest/reporter.php');<strong>
     require_once('simpletest/adapters/phpunit_test_case.php');</strong>
 
-    $test = &new GroupTest('All file tests');<strong>
+    $test = &new TestSuite('All file tests');<strong>
     $test->addTestFile('config_test.php');</strong>
     $test->run(new HtmlReporter());
 ?>
@@ -284,7 +284,7 @@ class SocketTester extends UnitTestCase { ... }
     require_once('simpletest/reporter.php');<strong>
     require_once('simpletest/adapters/pear_test_case.php');</strong>
 
-    $test = &new GroupTest('All file tests');<strong>
+    $test = &new TestSuite('All file tests');<strong>
     $test->addTestFile('some_pear_test_cases.php');</strong>
     $test->run(new HtmlReporter());
 ?>

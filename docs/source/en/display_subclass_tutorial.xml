@@ -160,7 +160,7 @@ class ShowPasses extends HtmlReporter {
     require_once(SIMPLE_TEST . 'unit_tester.php');<strong>
     require_once('show_passes.php');</strong>
 
-    $test = &new GroupTest('All tests');
+    $test = &new TestSuite('All tests');
     $test->addTestFile('log_test.php');
     $test->addTestFile('clock_test.php');
     $test->run(<strong>new ShowPasses()</strong>);

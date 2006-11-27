@@ -23,7 +23,7 @@
 			
 			$pathparts = pathinfo($fullpath);
 			$filename = $pathparts['basename'];
-			$test= &new GroupTest($filename);
+			$test= &new TestSuite($filename);
 			$test->addTestFile($fullpath);
 			$test->run(new EclipseReporter(&$listener));
 			$this->assertEqual($expected,$listener->output);

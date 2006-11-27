@@ -70,6 +70,9 @@
             if (is_array($first) && is_array($second)) {
                 return SimpleTestCompatibility::_isArrayOfIdenticalTypes($first, $second);
             }
+            if ($first !== $second) {
+                return false;
+            }
             return true;
         }
         
@@ -105,8 +108,7 @@
          *    @static
          */
         function isReference(&$first, &$second) {
-            if (version_compare(phpversion(), '5', '>=')
-	    	    && is_object($first)) {
+            if (version_compare(phpversion(), '5', '>=') && is_object($first)) {
 	    	    return ($first === $second);
 	        }
 	        if (is_object($first) && is_object($second)) {

@@ -45,7 +45,7 @@
     require_once('simpletest/web_tester.php');</strong>
     require_once('simpletest/reporter.php');
     
-    $test = &new GroupTest('Web site tests');<strong>
+    $test = &new TestSuite('Web site tests');<strong>
     $test->addTestFile('lastcraft_test.php');</strong>
     exit ($test->run(new TextReporter()) ? 0 : 1);
 ?>
@@ -95,7 +95,7 @@ class TestOfLastcraft extends WebTestCase {
     
     function testHomepage() {<strong>
         $this->get('http://www.lastcraft.com/');
-        $this->assertTest('Why the last craft');</strong>
+        $this->assertText('Why the last craft');</strong>
     }
 }
 ]]></php>
