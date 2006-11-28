@@ -4,8 +4,8 @@ img { border : 0; }
 
 #logo { margin-bottom : 20px; }
 #actions { position : absolute; top : 20px; left : 20px; width : 335px; }
-#content { position : absolute; top : 20px; left : 390px; width : 450px; }
-#news { border : 2px solid #009933; padding : 1em; font-weight : bold; font-size : 18pt; }
+#content { position : absolute; top : 20px; left : 390px; width : 560px; }
+#news { border : 2px solid #009933; padding : 20px; font-weight : bold; font-size : 18pt; width : 451px; }
 #news a { color : #009933; }
 
 .screenshot { border : 1px solid #cccccc;}
