@@ -230,7 +230,8 @@ class SimpleErrorQueue {
  *    @access public
  */
 function SimpleTestErrorHandler($severity, $message, $filename, $line, $super_globals) {
-	if ($severity = $severity & error_reporting()) {
+    $severity = $severity & error_reporting();
+	if ($severity) {
 		restore_error_handler();
 		if (ini_get('log_errors')) {
 			$label = SimpleErrorQueue::getSeverityAsString($severity);
