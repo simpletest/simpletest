@@ -1,10 +1,13 @@
 /* SimpleTest - Unit Testing for PHP */
 body { font-family : georgia, serif; }
 img { border : 0; }
+h1 { color : #009933; }
 
 #logo { margin-bottom : 20px; }
+#credits { margin-top : 40px; }
 #actions { position : absolute; top : 20px; left : 20px; width : 335px; }
-#content { position : absolute; top : 20px; left : 390px; width : 560px; }
+#actions div { width : 305px; }
+#content { position : absolute; top : 20px; left : 390px; width : 491px; }
 #news { border : 2px solid #009933; padding : 20px; font-weight : bold; font-size : 18pt; width : 451px; }
 #news a { color : #009933; }
 
