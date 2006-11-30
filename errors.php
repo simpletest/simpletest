@@ -7,7 +7,7 @@
  */
 
 /**
- * @ignore - PHP5 compatibility fix. 
+ * @ignore - PHP5 compatibility fix.
  */
 if (! defined('E_STRICT')) {
 	define('E_STRICT', 2048);
@@ -241,6 +241,10 @@ function SimpleTestErrorHandler($severity, $message, $filename, $line, $super_gl
 		$queue = &$context->get('SimpleErrorQueue');
 		$queue->add($severity, $message, $filename, $line);
 		set_error_handler('SimpleTestErrorHandler');
+	} else {
+		if (version_compare(phpversion(), '5.2') >= 0) {
+			return false;
+		}
 	}
 }
 ?>
