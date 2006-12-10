@@ -21,13 +21,15 @@ include_once 'mock_objects.php';
  *	@subpackage	Eclipse
  */
 class EclipseReporter extends SimpleScorer {
-	var $_listener;
-	function EclipseReporter(&$listener){
+	function EclipseReporter(&$listener,$cc=false){
 		$this->_listener = &$listener;
 		$this->SimpleScorer();
 		$this->_case = "";
 		$this->_group = "";
 		$this->_method = "";
+		$this->_cc = $cc;
+		$this->_error = false;
+		$this->_fail = false;
 	}
 	
 	function getDumper() {
@@ -107,9 +109,46 @@ class EclipseReporter extends SimpleScorer {
 	}
 	function paintGroupStart($group,$size){
 		$this->_group = $this->escapeVal($group);
+		if ($this->_cc){
+			if (extension_loaded('xdebug')){
+				xdebug_start_code_coverage(XDEBUG_CC_UNUSED| XDEBUG_CC_DEAD_CODE); 
+			}
+		}
 	}
 	function paintGroupEnd($group){
 		$this->_group = "";
+		$cc = "";
+		if ($this->_cc){
+			if (extension_loaded('xdebug')){
+				$arrfiles = xdebug_get_code_coverage();
+				xdebug_stop_code_coverage();
+				$thisdir = dirname(__FILE__);
+				$thisdirlen = strlen($thisdir);
+				foreach ($arrfiles as $index=>$file){
+					if (substr($index,0,$thisdirlen)===$thisdir){
+						continue;
+					}
+					$lcnt = 0;
+					$ccnt = 0;
+					foreach ($file as $line){
+						if ($line == -2){
+							continue;
+						}
+						$lcnt++;
+						if ($line==1){
+							$ccnt++;
+						}
+					}
+					if ($lcnt > 0){
+						$cc.=round(($ccnt/$lcnt)*100,2).'%';
+					}else{
+						$cc.="0.00%";
+					}
+					$cc.= "\t".$index."\n";
+				}
+			}
+		}
+		$this->_listener->write('{status:"coverage",message:"'.EclipseReporter::escapeVal($cc).'"}');
 	}
 }
 
@@ -119,8 +158,6 @@ class EclipseReporter extends SimpleScorer {
  *	@subpackage	Eclipse
  */
 class EclipseInvoker extends SimpleInvokerDecorator{
-	var $_listener;
-	
 	function EclipseInvoker(&$invoker,&$listener) {
 		$this->_listener = &$listener;
 		$this->SimpleInvokerDecorator($invoker);
