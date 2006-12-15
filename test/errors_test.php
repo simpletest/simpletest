@@ -148,12 +148,7 @@
             trigger_error('Ouch!');
         }
 		
-		/*
-		 * Regression Test for Error messages producing
-		 * sprintf errors if they contain standalone % char
-		 */
-		function testErrorWithPercentsPassesWithNoSprintfError()
-		{
+		function testErrorWithPercentsPassesWithNoSprintfError() {
 			$this->expectError("%");
 			trigger_error('%');
 		}
@@ -204,11 +199,6 @@
             trigger_error('Ouch!', E_USER_WARNING);
         }
 
-        function testNoErrorWhenNotReported() {
-            error_reporting(0);
-            trigger_error('Ouch!', E_USER_ERROR);
-        }
-
         function testNoticeSuppressedWhenReported() {
             error_reporting(E_ALL);
             @trigger_error('Ouch!', E_USER_NOTICE);
@@ -219,20 +209,27 @@
             @trigger_error('Ouch!', E_USER_WARNING);
         }
 
-        function testErrorSuppressedWhenReported() {
-            error_reporting(E_ALL);
-            @trigger_error('Ouch!', E_USER_ERROR);
-        }
-
-		/*
-		 * Regression Test for Error messages producing
-		 * sprintf errors if they contain standalone % char
-		 */
-		function testErrorWithPercentsReportedWithNoSprintfError()
-		{
+		function testErrorWithPercentsReportedWithNoSprintfError() {
 			trigger_error('%');
 			$this->assertError('%');
 		}
     }
+    
+    class TestOfErrorsExcludingPHP52AndAbove extends UnitTestCase {
+        function skip() {
+            $this->skipIf(version_compare(phpversion(), '5.2', '>='), 'E_USER_ERROR not tested for PHP 5.2 and above');
+        }
+
+        function testNoErrorWhenNotReported() {
+            error_reporting(0);
+            trigger_error('Ouch!', E_USER_ERROR);
+        }
+
+        function testErrorSuppressedWhenReported() {
+            error_reporting(E_ALL);
+            @trigger_error('Ouch!', E_USER_ERROR);
+        }
+    }
+    
 // TODO: Add stacked error handler test
 ?>
