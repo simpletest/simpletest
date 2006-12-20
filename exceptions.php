@@ -45,6 +45,7 @@ class SimpleExceptionTrappingInvoker extends SimpleInvokerDecorator {
 				$this->getTestCase()->exception($exception);
 			}
 			$trap->clear();
+			$this->_invoker->getTestCase()->tearDown();
 		}
 		if ($message = $trap->getOutstanding()) {
 			$this->getTestCase()->fail($message);
