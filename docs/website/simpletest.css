@@ -2,6 +2,7 @@
 body { font-family : georgia, serif; }
 img { border : 0; }
 h1 { color : #009933; }
+blockquote { background: transparent url('images/quote.png') left top no-repeat; font-style : italic; padding-left : 40px; margin-left : 10px; }
 
 #logo { margin-bottom : 20px; }
 #credits { margin-top : 40px; }
