@@ -433,15 +433,6 @@
         }
 
         /**
-         *    Changes the default wildcard object.
-         *    @param mixed $wildcard         Parameter matching wildcard.
-         *    @access public
-         */
-        function setWildcard($wildcard) {
-            $this->_wildcard = $wildcard;
-        }
-
-        /**
          *    Finds currently running test.
          *    @return SimpeTestCase    Current test case.
          *    @access protected
@@ -896,7 +887,7 @@
          *                                 the old name with "Mock"
          *                                 prepended.
          *    @param array $methods        Additional methods to add beyond
-         *                                 those in th cloned class. Use this
+         *                                 those in the cloned class. Use this
          *                                 to emulate the dynamic addition of
          *                                 methods in the cloned class or when
          *                                 the class hasn't been written yet.
@@ -906,6 +897,14 @@
         function generate($class, $mock_class = false, $methods = false) {
             $generator = new MockGenerator($class, $mock_class);
             return $generator->generate($methods);
+        }
+        
+        /**
+         *    Temporary method while refactoring.
+         */
+        function generateSubclass($class, $mock_class = false, $methods = array()) {
+            $generator = new MockGenerator($class, $mock_class);
+            return $generator->generateSubclass($methods);
         }
 
         /**
@@ -958,6 +957,9 @@
         function MockGenerator($class, $mock_class) {
             $this->_class = $class;
             $this->_mock_class = $mock_class;
+            if (! $this->_mock_class) {
+                $this->_mock_class = 'Mock' . $this->_class;
+            }
             $this->_mock_base = SimpleTest::getMockBaseClass();
             $this->_reflection = new SimpleReflection($this->_class);
         }
@@ -976,9 +978,6 @@
             if (! $this->_reflection->classOrInterfaceExists()) {
                 return false;
             }
-            if (! $this->_mock_class) {
-                $this->_mock_class = 'Mock' . $this->_class;
-            }
             $mock_reflection = new SimpleReflection($this->_mock_class);
             if ($mock_reflection->classExistsSansAutoload()) {
                 return false;
@@ -986,6 +985,35 @@
             return eval(
                     $this->_createClassCode($methods ? $methods : array()) .
                     " return true;");
+        }
+        
+        /**
+         *    Subclasses a class and overrides every method with a mock one.
+         *    that can have return values and expectations set.
+         *    @param array $methods        Additional methods to add beyond
+         *                                 those in th cloned class. Use this
+         *                                 to emulate the dynamic addition of
+         *                                 methods in the cloned class or when
+         *                                 the class hasn't been written yet.
+         *    @access public
+         */
+        function generateSubclass($methods) {
+            if (! $this->_reflection->classOrInterfaceExists()) {
+                return false;
+            }
+            $mock_reflection = new SimpleReflection($this->_mock_class);
+            if ($mock_reflection->classExistsSansAutoload()) {
+                return false;
+            }
+            if ($this->_reflection->isInterface()) {
+                return eval(
+                        $this->_createClassCode($methods ? $methods : array()) .
+                        " return true;");
+            } else {
+                return eval(
+                        $this->_createSubclassCode($methods ? $methods : array()) .
+                        " return true;");
+            }
         }
 
         /**
@@ -1029,6 +1057,30 @@
             $code .= "        \$this->" . $this->_mock_base . "();\n";
             $code .= "    }\n";
             $code .= $this->_createHandlerCode($methods);
+            $code .= "}\n";
+            return $code;
+        }
+
+        /**
+         *    The new mock class code as a string. The mock will
+         *    be a subclass of the original mocked class.
+         *    @param array $methods          Additional methods.
+         *    @return string                 Code for new mock class.
+         *    @access private
+         */
+        function _createSubclassCode($methods) {
+            $code  = "class " . $this->_mock_class . " extends " . $this->_class . " {\n";
+            $code .= "    var \$_mock;\n";
+            $code .= $this->_addMethodList(array_merge($methods, $this->_reflection->getMethods()));
+            $code .= "\n";
+            $code .= "    function " . $this->_mock_class . "() {\n";
+            $code .= "        \$this->_mock = &new " . $this->_mock_base . "();\n";
+            $code .= "        \$this->_mock->disableExpectationNameChecks();\n";
+            $code .= "    }\n";
+            $code .= $this->_chainMockReturns();
+            $code .= $this->_chainMockExpectations();
+            $code .= $this->_overrideMethods($this->_reflection->getMethods());
+            $code .= $this->_createNewMethodCode($methods);
             $code .= "}\n";
             return $code;
         }
@@ -1079,6 +1131,33 @@
                 $code .= "    " . $this->_reflection->getSignature($method) . " {\n";
                 $code .= "        \$args = func_get_args();\n";
                 $code .= "        \$result = &\$this->_invoke(\"$method\", \$args);\n";
+                $code .= "        return \$result;\n";
+                $code .= "    }\n";
+            }
+            return $code;
+        }
+
+        /**
+         *    Creates code within a class to generate a new
+         *    methods. All methods call the _invoke() handler
+         *    on the internal mock with the method name and
+         *    the arguments in an array.
+         *    @param array $methods    Additional methods.
+         *    @access private
+         */
+        function _createNewMethodCode($methods) {
+        	$code = '';
+            foreach ($methods as $method) {
+                if ($this->_isConstructor($method)) {
+                    continue;
+                }
+                $mock_reflection = new SimpleReflection($this->_mock_base);
+                if (in_array($method, $mock_reflection->getMethods())) {
+                    continue;
+                }
+                $code .= "    " . $this->_reflection->getSignature($method) . " {\n";
+                $code .= "        \$args = func_get_args();\n";
+                $code .= "        \$result = &\$this->_mock->_invoke(\"$method\", \$args);\n";
                 $code .= "        return \$result;\n";
                 $code .= "    }\n";
             }

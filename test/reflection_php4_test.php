@@ -22,9 +22,10 @@
             $this->assertFalse($reflection->classOrInterfaceExistsSansAutoload());
         }
 
-        function testDetectionOfAbstractClass() {
+        function testDetectionOfInterfacesAlwaysFalse() {
             $reflection = new SimpleReflection('AnyOldThing');
             $this->assertFalse($reflection->isAbstract());
+            $this->assertFalse($reflection->isInterface());
         }
 
         function testFindingParentClass() {

@@ -1,6 +1,10 @@
 <?php
     // $Id$
 
+    class AnyOldLeafClass {
+        function aMethod() { }
+    }
+
     abstract class AnyOldClass {
         function aMethod() { }
     }
@@ -46,9 +50,11 @@
     class TestOfReflection extends UnitTestCase {
 
         function testClassExistence() {
-            $reflection = new SimpleReflection('AnyOldClass');
+            $reflection = new SimpleReflection('AnyOldLeafClass');
             $this->assertTrue($reflection->classOrInterfaceExists());
             $this->assertTrue($reflection->classOrInterfaceExistsSansAutoload());
+            $this->assertFalse($reflection->isAbstract());
+            $this->assertFalse($reflection->isInterface());
         }
 
         function testClassNonExistence() {
@@ -73,6 +79,7 @@
             		$reflection->classOrInterfaceExists());
             $this->assertTrue(
             		$reflection->classOrInterfaceExistsSansAutoload());
+			$this->assertTrue($reflection->isInterface());
         }
 
         function testMethodsListFromClass() {

@@ -161,7 +161,17 @@
         }
 
         /**
-         *    Wittles a list of interfaces down to only the top
+         *    Determines if the class is an interface.
+         *    @returns boolean      True if interface.
+         *    @access public
+         */
+        function isInterface() {
+            $reflection = new ReflectionClass($this->_interface);
+            return $reflection->isInterface();
+        }
+
+        /**
+         *    Whittles a list of interfaces down to only the top
          *    level parents.
          *    @param array $interfaces     Reflection API interfaces
          *                                 to reduce.

@@ -10,7 +10,7 @@
         function &referenceMethod(&$a);
     }
 
-    Mock::generate('DummyInterface');
+    Mock::generateSubclass('DummyInterface');
     Mock::generatePartial('DummyInterface', 'PartialDummyInterface', array());
 
     class TestOfMockInterfaces extends UnitTestCase {

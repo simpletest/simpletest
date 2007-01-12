@@ -1,23 +1,19 @@
 TODO
-This is immediate stuff only for this iteration (1.0.1beta) of 13 hours.
+This is immediate stuff only for this iteration (1.0.1beta2) of 15 hours.
 
 $Id$
 
 Unit tester
 -----------
-Add decent skip facility (5/1) - done.
-Add expectException() and expectError() (13/2) - done.
-Rename GroupTest to TestSuite (1/0) - done.
+Fix errors_test.php in PHP 5.2+ (2).
 
 Reporter
 --------
-expectException() should receive the exception (2/0) - done.
-Dumper should come from the reporter (4/1) - done.
+Dumper should be passed in testMessage() call to expectation (3).
 
 Mock objects
 ------------
-Fix bug in PHP 5 mocking objects with __call() method (1/1) - done.
-Fix other special method bugs in PHP5 (2/1) - done.
+Mocks should inherit mocked class (9/2).
 
 Parser
 ------
@@ -30,6 +26,7 @@ Web tester
 
 Documentation
 -------------
+Update roadmap (1).
 
 Build
 -----

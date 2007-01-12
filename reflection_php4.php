@@ -104,6 +104,16 @@ class SimpleReflection {
 	}
 
 	/**
+	 *    Determines if the the entity is an interface, which for PHP 4
+	 *    will never be the case.
+	 *    @returns boolean      True if interface.
+	 *    @access public
+	 */
+	function isInterface() {
+		return false;
+	}
+
+	/**
 	 *	  Gets the source code matching the declaration
 	 *	  of a method.
 	 * 	  @param string $method		  Method name.
