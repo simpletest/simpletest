@@ -337,14 +337,6 @@
             $this->assertReference($zref =& $mock->aMethod(1, 2, 3), $object);
         }
 
-        function TODO_testWildcardReturn() {
-            $mock = &new MockDummy();
-            $mock->setWildcard('wild');
-            $mock->setReturnValue('aMethod', 'a', array(1, 'wild', 3));
-            $this->assertIdentical($mock->aMethod(1, 'something', 3), 'a');
-            $this->assertIdentical($mock->aMethod(1, 'anything', 3), 'a');
-        }
-
         function testPatternMatchReturn() {
             $mock = &new MockDummy();
             $mock->setReturnValue(

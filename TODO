@@ -13,7 +13,7 @@ Dumper should be passed in testMessage() call to expectation (3).
 
 Mock objects
 ------------
-Mocks should inherit mocked class (9/2).
+Mocks should inherit mocked class (9/4).
 
 Parser
 ------
