@@ -180,16 +180,19 @@
          */
         function _onlyParents($interfaces) {
             $parents = array();
+            $blacklist = array();
             foreach ($interfaces as $interface) {
                 foreach($interfaces as $possible_parent) {
                     if ($interface->getName() == $possible_parent->getName()) {
                         continue;
                     }
                     if ($interface->isSubClassOf($possible_parent)) {
-                        break;
+                        $blacklist[$possible_parent->getName()] = true;
                     }
                 }
-                $parents[] = $interface->getName();
+                if (!isset($blacklist[$interface->getName()])) {
+                    $parents[] = $interface->getName();
+                }
             }
             return $parents;
         }

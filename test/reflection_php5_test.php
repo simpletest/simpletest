@@ -41,6 +41,10 @@
 	class AnyOldTypeHintedClass implements AnyOldArgumentInterface {
 		function aMethod(AnyOldInterface $argument) { }
 	}
+
+    class AnyDescendentImplementation implements AnyDescendentInterface {
+        function aMethod() { }
+    }
     
     class AnyOldOverloadedClass {
         function __isset($key) { }
@@ -178,6 +182,13 @@
             } else {
                 $this->assertEqual('function __unset()', $function);
             }
+        }
+
+        function testProperlyReflectsTheFinalInterfaceWhenObjectImplementsAnExtendedInterface() {
+            $reflection = new SimpleReflection('AnyDescendentImplementation');
+            $interfaces = $reflection->getInterfaces();
+            $this->assertEqual(1, count($interfaces));
+            $this->assertEqual('AnyDescendentInterface', array_shift($interfaces));
         }
     }
 ?>
