@@ -1179,7 +1179,7 @@
         function _isConstructor($method) {
             return in_array(
                     strtolower($method),
-                    array('__construct', '__destruct', '__clone'));
+                    array('__construct', '__destruct'));
         }
 
         /**

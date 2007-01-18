@@ -105,4 +105,15 @@
             $this->assertNoErrors();
         }
     }
+
+	interface SampleInterfaceWithClone {
+		function __clone();
+	}
+
+	class TestOfSampleInterfaceWithClone extends UnitTestCase {
+		function testCanMockWithoutErrors() {
+			Mock::generate('SampleInterfaceWithClone');
+			$this->assertNoErrors();
+		}
+	}
 ?>
