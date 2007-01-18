@@ -94,4 +94,15 @@
             $mock->extraMethod();
         }
     }
+
+    interface SampleClassWithConstruct {
+        function __construct($something);
+    }
+
+    class TestOfInterfaceMocksWithConstruct extends UnitTestCase {
+        function testBasicConstructOfAnInterface() {
+            Mock::generate('SampleClassWithConstruct');
+            $this->assertNoErrors();
+        }
+    }
 ?>
