@@ -1297,6 +1297,9 @@
         function _overrideMethods($methods) {
             $code = "";
             foreach ($methods as $method) {
+                if ($this->_isConstructor($method)) {
+                    continue;
+                }
                 $code .= "    " . $this->_reflection->getSignature($method) . " {\n";
                 $code .= "        \$args = func_get_args();\n";
                 $code .= "        \$result = &\$this->_mock->_invoke(\"$method\", \$args);\n";
