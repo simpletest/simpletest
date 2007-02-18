@@ -106,6 +106,19 @@
         }
     }
 
+    interface SampleInterfaceWithHintInSignature {
+        function method(array $hinted);
+    }
+
+    class TestOfInterfaceMocksWithHintInSignature extends UnitTestCase {
+        function testBasicConstructOfAnInterfaceWithHintInSignature() {
+            Mock::generate('SampleInterfaceWithHintInSignature');
+            $this->assertNoErrors();
+            $mock = new MockSampleInterfaceWithHintInSignature();
+            $this->assertIsA($mock, 'SampleInterfaceWithHintInSignature');
+        }
+    }
+
 	interface SampleInterfaceWithClone {
 		function __clone();
 	}

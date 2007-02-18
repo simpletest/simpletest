@@ -163,7 +163,7 @@
 			    $this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
     	    }
 		}
-        
+
         function testIssetFunctionSignature() {
             $reflection = new SimpleReflection('AnyOldOverloadedClass');
             $function = $reflection->getSignature('__isset');
@@ -189,6 +189,24 @@
             $interfaces = $reflection->getInterfaces();
             $this->assertEqual(1, count($interfaces));
             $this->assertEqual('AnyDescendentInterface', array_shift($interfaces));
+        }
+    }
+
+    class TestOfReflectionWithTypeHints extends UnitTestCase {
+        function skip() {
+            $this->skipIf(version_compare(phpversion(), '5.1.0', '<'), 'Reflection with type hints only tested for PHP 5.1.0 and above');
+        }
+
+        function testParameterCreationForTypeHintingWithArray() {
+            eval('interface AnyOldArrayTypeHintedInterface {
+            	      function amethod(array $argument);
+            	  } 
+                  class AnyOldArrayTypeHintedClass implements AnyOldArrayTypeHintedInterface {
+                      function amethod(array $argument) {}
+                  }');
+            $reflection = new SimpleReflection('AnyOldArrayTypeHintedClass');
+            $function = $reflection->getSignature('amethod');
+            $this->assertEqual('function amethod(array $argument)', $function);
         }
     }
 ?>

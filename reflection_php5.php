@@ -254,12 +254,21 @@
         function _getParameterSignatures($method) {
             $signatures = array();
             foreach ($method->getParameters() as $parameter) {
+                $signature = '';
                 $type = $parameter->getClass();
-            	$signatures[] =
-                        (! is_null($type) ? $type->getName() . ' ' : '') .
-                        ($parameter->isPassedByReference() ? '&' : '') .
-                        '$' . $this->_suppressSpurious($parameter->getName()) .
-                        ($this->_isOptional($parameter) ? ' = null' : '');
+            	if (is_null($type) && version_compare(phpversion(), '5.1.0', '>=') && $parameter->isArray()) {
+                    $signature .= 'array ';
+                } elseif (!is_null($type)) {
+                	$signature .= $type->getName() . ' ';
+                }
+                if ($parameter->isPassedByReference()) {
+                	$signature .= '&';
+                }
+               	$signature .= '$' . $this->_suppressSpurious($parameter->getName());
+                if ($this->_isOptional($parameter)) {
+                	$signature .= ' = null';
+                }
+                $signatures[] = $signature;
             }
             return $signatures;
         }
