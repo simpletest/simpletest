@@ -25,7 +25,7 @@
     }
     if (! defined('SIMPLE_TEST')) {
         /**
-         * @ignore 
+         * @ignore
          */
         define('SIMPLE_TEST', dirname(__FILE__) . DIRECTORY_SEPARATOR);
     }
@@ -74,7 +74,7 @@
          */
         function skip() {
         }
-		
+
         /**
          *    Will issue a message to the reporter and tell the test
          *    case to skip if the incoming flag is true.
@@ -89,7 +89,7 @@
 				$this->_reporter->paintSkip($message . $this->getAssertionLine());
 			}
         }
-		
+
         /**
          *    Will issue a message to the reporter and tell the test
          *    case to skip if the incoming flag is false.
@@ -100,7 +100,7 @@
         function skipUnless($shouldnt_skip, $message = false) {
 			$this->skipIf(! $shouldnt_skip, $message);
         }
-		
+
         /**
          *    Used to invoke the single tests.
          *    @return SimpleInvoker        Individual test runner.
@@ -377,6 +377,7 @@
         var $_test_cases;
         var $_old_track_errors;
         var $_xdebug_is_enabled;
+        var $_included_files = array();
 
         /**
          *    Sets the name of the test suite.
@@ -447,20 +448,69 @@
                 $this->addTestCase(new BadTestSuite($test_file, "No runnable test cases in [$test_file]"));
                 return;
             }
+            $this->_markFileAsIncluded($test_file);
             $group = &$this->_createGroupFromClasses($test_file, $classes);
             $this->addTestCase($group);
         }
 
         /**
+         *    Builds a group test from a library of test cases.
+         *    The new group is composed into this one.
+         *    The file is included via PHP's 'include_once' call unlike
+         *    'include' in addTestFile
+         *    @see addTestFile()
+         *    @param string $test_file        File name of library with
+         *                                    test case classes.
+         *    @access public
+         */
+        function addTestFileOnce($test_file) {
+            $classes = array();
+            if(!$this->_isFileIncluded($test_file)) {
+               $existing_classes = get_declared_classes();
+               if ($error = $this->_requireWithError($test_file, true)) {
+                   $this->addTestCase(new BadTestSuite($test_file, $error));
+                   return;
+               }
+               $classes = $this->_selectRunnableTests($existing_classes, get_declared_classes());
+               $this->_markFileAsIncluded($test_file);
+            }
+            $group = &$this->_createGroupFromClasses($test_file, $classes);
+            $this->addTestCase($group);
+        }
+
+        /**
+         *    Checks whether specified file was already included.
+         *    @param string $file             File path.
+         *    @access private
+         */
+        function _isFileIncluded($file) {
+           return isset($this->_included_files[realpath($file)]);
+        }
+
+        /**
+         *    Marks specified file as already included.
+         *    @param string $file             File path.
+         *    @access private
+         */
+        function _markFileAsIncluded($file) {
+            $this->_included_files[realpath($file)] = true;
+        }
+
+        /**
          *    Requires a source file recording any syntax errors.
          *    @param string $file        File name to require in.
+         *    @param bool $include_once  Whether to use include_once call instead of include(false by default)
          *    @return string/boolean     An error message on failure or false
          *                               if no errors.
          *    @access private
          */
-        function _requireWithError($file) {
+        function _requireWithError($file, $include_once=false) {
             $this->_enableErrorReporting();
-            include($file);
+            if ($include_once) {
+                include_once($file);
+            } else {
+                include($file);
+            }
             $error = isset($php_errormsg) ? $php_errormsg : false;
             $this->_disableErrorReporting();
             $self_inflicted_errors = array(
@@ -614,7 +664,7 @@
             return $count;
         }
     }
-    
+
     /**
 	 *    @package		SimpleTest
 	 *    @subpackage	UnitTester
@@ -674,7 +724,7 @@
             return 0;
         }
     }
-    
+
     /**
 	 *    @package		SimpleTest
 	 *    @subpackage	UnitTester
