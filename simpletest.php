@@ -77,6 +77,64 @@
         }
 
         /**
+         *   Checks whether the passed object is a subclass
+         *   of one of SimpleTest's 'official' test case classes
+         *   @param object $candidate    Object to test.
+         *   @static
+         *   @access public
+         */
+        function isTestCase($candidate) {
+            $allowed = array('UnitTestCase',
+                             'WebTestCase',
+                             'TestSuite');
+            foreach ($allowed as $class) {
+                if (SimpleTestCompatibility :: isA($candidate, $class)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         *   Puts the object to the global pool of 'preferred' objects
+         *   which can be retrieved with SimpleTest :: preferred() method.
+         *   Instances of the same class are overwritten.
+         *   @param object $object      Preferred object
+         *   @static
+         *   @access public
+         *   @see preferred()
+         */
+        function prefer(&$object) {
+            $registry = &SimpleTest::_getRegistry();
+            $registry['Preferred'][get_class($object)] = &$object;
+        }
+
+        /**
+         *   Retrieves 'preferred' objects from global pool. Class filter
+         *   can be applied in order to retrieve the object of the specific
+         *   class
+         *   @param string $class        Class name filter(optional)
+         *   @static
+         *   @access public
+         *   @return array|object|null
+         *   @see prefer()
+         */
+        function &preferred($class = null) {
+            $registry = &SimpleTest::_getRegistry();
+            if (! $class) {
+                return $registry['Preferred'];
+            }
+            $result = null;
+            foreach (array_keys($registry['Preferred']) as $key) {
+                if (SimpleTestCompatibility :: isA($registry['Preferred'][$key], $class)) {
+                    $result = &$registry['Preferred'][$key];
+                    break;
+                }
+            }
+            return $result;
+        }
+
+        /**
          *    Test to see if a test case is in the ignore
          *    list. Quite obviously the ignore list should
          *    be a separate object and will be one day.
@@ -197,7 +255,8 @@
                     'IgnoreList' => array(),
                     'DefaultProxy' => false,
                     'DefaultProxyUsername' => false,
-                    'DefaultProxyPassword' => false);
+                    'DefaultProxyPassword' => false,
+                    'Preferred' => array());
         }
     }
 
