@@ -8,7 +8,7 @@
     require_once dirname(__FILE__) . '/unit_tester.php';
     require_once dirname(__FILE__) . '/reporter.php';
 
-    $SIMPLE_TEST_AUTORUNNER_INITIAL_CLASSES = get_declared_classes();
+    $GLOBALS['SIMPLE_TEST_AUTORUNNER_INITIAL_CLASSES'] = get_declared_classes();
 
     register_shutdown_function('SimpleTestAutoRunner');
 
