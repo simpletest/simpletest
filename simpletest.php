@@ -77,18 +77,21 @@
         }
 
         /**
-         *   Checks whether the passed object is a subclass
+         *   Checks whether the passed class or object is a subclass
          *   of one of SimpleTest's 'official' test case classes
-         *   @param object $candidate    Object to test.
+         *   @param string|object $candidate    Class or object to test.
          *   @static
          *   @access public
          */
         function isTestCase($candidate) {
-            $allowed = array('UnitTestCase',
-                             'WebTestCase',
-                             'TestSuite');
-            foreach ($allowed as $class) {
-                if (SimpleTestCompatibility :: isA($candidate, $class)) {
+            $allowed = array('unittestcase',
+                             'webtestcase',
+                             'testsuite',
+                             'grouptest');
+            $class = is_object($candidate) ? get_class($candidate) : $candidate;
+            while ($class = get_parent_class($class)) {
+                $class = strtolower($class);
+                if (in_array($class, $allowed)) {
                     return true;
                 }
             }
