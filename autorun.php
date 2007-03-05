@@ -16,25 +16,19 @@
         global $SIMPLE_TEST_AUTORUNNER_INITIAL_CLASSES;
 
         $file = reset(get_included_files());
-        $classes = array_diff(get_declared_classes(),
+        $diff_classes = array_diff(get_declared_classes(),
                               $SIMPLE_TEST_AUTORUNNER_INITIAL_CLASSES ?
                               $SIMPLE_TEST_AUTORUNNER_INITIAL_CLASSES : array());
+        //this is done for PHP4 compatibility
+        $diff_classes = array_map('strtolower', $diff_classes);
 
         $group = new GroupTest();
 
-        foreach ($classes as $class) {
-            if (version_compare(phpversion(), '5') >= 0) {
-                $refl = new ReflectionClass($class);
-                if ($refl->getFileName() == $file) {
-                    $candidate = new $class;
-                    if (SimpleTest :: isTestCase($candidate)) {
-                        $group->addTestCase($candidate);
-                    }
-                }
-            } else {
-                $candidate = new $class;
-                if (SimpleTest :: isTestCase($candidate)) {
-                    $group->addTestCase($candidate);
+        if (preg_match_all('~class\s+(\w+)~', file_get_contents($file), $matches)) {
+            foreach($matches[1] as $candidate) {
+                if(SimpleTest :: isTestCase($candidate) &&
+                   in_array(strtolower($candidate), $diff_classes)) {
+                    $group->addTestCase(new $candidate);
                 }
             }
         }
