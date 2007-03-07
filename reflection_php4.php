@@ -112,6 +112,16 @@ class SimpleReflection {
 	function isInterface() {
 		return false;
 	}
+        
+	/**
+	 *	  Scans for final methods, but as it's PHP 4 there
+	 *	  aren't any.
+	 *    @returns boolean   True if the class has a final method.
+	 *    @access public
+	 */
+	function hasFinal() {
+		return false;
+	}
 
 	/**
 	 *	  Gets the source code matching the declaration

@@ -1,212 +1,221 @@
 <?php
-    // $Id$
+// $Id$
 
-    class AnyOldLeafClass {
-        function aMethod() { }
-    }
+class AnyOldLeafClass {
+	function aMethod() { }
+}
 
-    abstract class AnyOldClass {
-        function aMethod() { }
-    }
+abstract class AnyOldClass {
+	function aMethod() { }
+}
 
-    interface AnyOldInterface {
-        function aMethod();
-    }
+class AnyOldLeafClassWithAFinal {
+	final function aMethod() { }
+}
 
-    interface AnyOldArgumentInterface {
-        function aMethod(AnyOldInterface $argument);
-    }
+interface AnyOldInterface {
+	function aMethod();
+}
 
-    interface AnyDescendentInterface extends AnyOldInterface {
-    }
+interface AnyOldArgumentInterface {
+	function aMethod(AnyOldInterface $argument);
+}
 
-    class AnyOldImplementation implements AnyOldInterface {
-    	function aMethod() { }
-    	function extraMethod() { }
-    }
+interface AnyDescendentInterface extends AnyOldInterface {
+}
 
-    abstract class AnyAbstractImplementation implements AnyOldInterface {
-    }
+class AnyOldImplementation implements AnyOldInterface {
+	function aMethod() { }
+	function extraMethod() { }
+}
 
-    class AnyOldSubclass extends AnyOldImplementation { }
+abstract class AnyAbstractImplementation implements AnyOldInterface {
+}
 
-	class AnyOldArgumentClass {
-		function aMethod($argument) { }
+class AnyOldSubclass extends AnyOldImplementation { }
+
+class AnyOldArgumentClass {
+	function aMethod($argument) { }
+}
+
+class AnyOldArgumentImplementation implements AnyOldArgumentInterface {
+	function aMethod(AnyOldInterface $argument) { }
+}
+
+class AnyOldTypeHintedClass implements AnyOldArgumentInterface {
+	function aMethod(AnyOldInterface $argument) { }
+}
+
+class AnyDescendentImplementation implements AnyDescendentInterface {
+	function aMethod() { }
+}
+
+class AnyOldOverloadedClass {
+	function __isset($key) { }
+	function __unset($key) { }
+}
+
+class TestOfReflection extends UnitTestCase {
+
+	function testClassExistence() {
+		$reflection = new SimpleReflection('AnyOldLeafClass');
+		$this->assertTrue($reflection->classOrInterfaceExists());
+		$this->assertTrue($reflection->classOrInterfaceExistsSansAutoload());
+		$this->assertFalse($reflection->isAbstract());
+		$this->assertFalse($reflection->isInterface());
 	}
 
-	class AnyOldArgumentImplementation implements AnyOldArgumentInterface {
-		function aMethod(AnyOldInterface $argument) { }
+	function testClassNonExistence() {
+		$reflection = new SimpleReflection('UnknownThing');
+		$this->assertFalse($reflection->classOrInterfaceExists());
+		$this->assertFalse($reflection->classOrInterfaceExistsSansAutoload());
 	}
 
-	class AnyOldTypeHintedClass implements AnyOldArgumentInterface {
-		function aMethod(AnyOldInterface $argument) { }
+	function testDetectionOfAbstractClass() {
+		$reflection = new SimpleReflection('AnyOldClass');
+		$this->assertTrue($reflection->isAbstract());
 	}
 
-    class AnyDescendentImplementation implements AnyDescendentInterface {
-        function aMethod() { }
-    }
-    
-    class AnyOldOverloadedClass {
-        function __isset($key) { }
-        function __unset($key) { }
-    }
+	function testDetectionOfFinalMethods() {
+		$reflection = new SimpleReflection('AnyOldClass');
+		$this->assertFalse($reflection->hasFinal());
+		$reflection = new SimpleReflection('AnyOldLeafClassWithAFinal');
+		$this->assertTrue($reflection->hasFinal());
+	}
 
-    class TestOfReflection extends UnitTestCase {
+	function testFindingParentClass() {
+		$reflection = new SimpleReflection('AnyOldSubclass');
+		$this->assertEqual($reflection->getParent(), 'AnyOldImplementation');
+	}
 
-        function testClassExistence() {
-            $reflection = new SimpleReflection('AnyOldLeafClass');
-            $this->assertTrue($reflection->classOrInterfaceExists());
-            $this->assertTrue($reflection->classOrInterfaceExistsSansAutoload());
-            $this->assertFalse($reflection->isAbstract());
-            $this->assertFalse($reflection->isInterface());
-        }
+	function testInterfaceExistence() {
+		$reflection = new SimpleReflection('AnyOldInterface');
+		$this->assertTrue($reflection->classOrInterfaceExists());
+		$this->assertTrue($reflection->classOrInterfaceExistsSansAutoload());
+		$this->assertTrue($reflection->isInterface());
+	}
 
-        function testClassNonExistence() {
-            $reflection = new SimpleReflection('UnknownThing');
-            $this->assertFalse($reflection->classOrInterfaceExists());
-            $this->assertFalse($reflection->classOrInterfaceExistsSansAutoload());
-        }
+	function testMethodsListFromClass() {
+		$reflection = new SimpleReflection('AnyOldClass');
+		$this->assertIdentical($reflection->getMethods(), array('aMethod'));
+	}
 
-        function testDetectionOfAbstractClass() {
-            $reflection = new SimpleReflection('AnyOldClass');
-            $this->assertTrue($reflection->isAbstract());
-        }
+	function testMethodsListFromInterface() {
+		$reflection = new SimpleReflection('AnyOldInterface');
+		$this->assertIdentical($reflection->getMethods(), array('aMethod'));
+		$this->assertIdentical($reflection->getInterfaceMethods(), array('aMethod'));
+	}
 
-        function testFindingParentClass() {
-            $reflection = new SimpleReflection('AnyOldSubclass');
-            $this->assertEqual($reflection->getParent(), 'AnyOldImplementation');
-        }
+	function testMethodsComeFromDescendentInterfacesASWell() {
+		$reflection = new SimpleReflection('AnyDescendentInterface');
+		$this->assertIdentical($reflection->getMethods(), array('aMethod'));
+	}
+	
+	function testCanSeparateInterfaceMethodsFromOthers() {
+		$reflection = new SimpleReflection('AnyOldImplementation');
+		$this->assertIdentical($reflection->getMethods(), array('aMethod', 'extraMethod'));
+		$this->assertIdentical($reflection->getInterfaceMethods(), array('aMethod'));
+	}
 
-        function testInterfaceExistence() {
-            $reflection = new SimpleReflection('AnyOldInterface');
-            $this->assertTrue(
-            		$reflection->classOrInterfaceExists());
-            $this->assertTrue(
-            		$reflection->classOrInterfaceExistsSansAutoload());
-			$this->assertTrue($reflection->isInterface());
-        }
+	function testMethodsComeFromDescendentInterfacesInAbstractClass() {
+		$reflection = new SimpleReflection('AnyAbstractImplementation');
+		$this->assertIdentical($reflection->getMethods(), array('aMethod'));
+	}
 
-        function testMethodsListFromClass() {
-            $reflection = new SimpleReflection('AnyOldClass');
-            $this->assertIdentical($reflection->getMethods(), array('aMethod'));
-        }
+	function testInterfaceHasOnlyItselfToImplement() {
+		$reflection = new SimpleReflection('AnyOldInterface');
+		$this->assertEqual(
+				$reflection->getInterfaces(),
+				array('AnyOldInterface'));
+	}
 
-        function testMethodsListFromInterface() {
-            $reflection = new SimpleReflection('AnyOldInterface');
-            $this->assertIdentical($reflection->getMethods(), array('aMethod'));
-            $this->assertIdentical($reflection->getInterfaceMethods(), array('aMethod'));
-        }
+	function testInterfacesListedForClass() {
+		$reflection = new SimpleReflection('AnyOldImplementation');
+		$this->assertEqual(
+				$reflection->getInterfaces(),
+				array('AnyOldInterface'));
+	}
 
-        function testMethodsComeFromDescendentInterfacesASWell() {
-            $reflection = new SimpleReflection('AnyDescendentInterface');
-            $this->assertIdentical($reflection->getMethods(), array('aMethod'));
-        }
-        
-        function testCanSeparateInterfaceMethodsFromOthers() {
-            $reflection = new SimpleReflection('AnyOldImplementation');
-            $this->assertIdentical($reflection->getMethods(), array('aMethod', 'extraMethod'));
-            $this->assertIdentical($reflection->getInterfaceMethods(), array('aMethod'));
-        }
+	function testInterfacesListedForSubclass() {
+		$reflection = new SimpleReflection('AnyOldSubclass');
+		$this->assertEqual(
+				$reflection->getInterfaces(),
+				array('AnyOldInterface'));
+	}
 
-        function testMethodsComeFromDescendentInterfacesInAbstractClass() {
-            $reflection = new SimpleReflection('AnyAbstractImplementation');
-            $this->assertIdentical($reflection->getMethods(), array('aMethod'));
-        }
-
-        function testInterfaceHasOnlyItselfToImplement() {
-            $reflection = new SimpleReflection('AnyOldInterface');
-        	$this->assertEqual(
-        			$reflection->getInterfaces(),
-        			array('AnyOldInterface'));
-        }
-
-        function testInterfacesListedForClass() {
-            $reflection = new SimpleReflection('AnyOldImplementation');
-        	$this->assertEqual(
-        			$reflection->getInterfaces(),
-        			array('AnyOldInterface'));
-        }
-
-        function testInterfacesListedForSubclass() {
-            $reflection = new SimpleReflection('AnyOldSubclass');
-        	$this->assertEqual(
-        			$reflection->getInterfaces(),
-        			array('AnyOldInterface'));
-        }
-
-		function testNoParameterCreationWhenNoInterface() {
-			$reflection = new SimpleReflection('AnyOldArgumentClass');
-			$function = $reflection->getSignature('aMethod');
-			if (version_compare(phpversion(), '5.0.2', '<=')) {
-			    $this->assertEqual('function amethod()', strtolower($function));
-    	    } else {
-			    $this->assertEqual('function aMethod()', $function);
-    	    }
+	function testNoParameterCreationWhenNoInterface() {
+		$reflection = new SimpleReflection('AnyOldArgumentClass');
+		$function = $reflection->getSignature('aMethod');
+		if (version_compare(phpversion(), '5.0.2', '<=')) {
+			$this->assertEqual('function amethod()', strtolower($function));
+		} else {
+			$this->assertEqual('function aMethod()', $function);
 		}
+	}
 
-		function testParameterCreationWithoutTypeHinting() {
-			$reflection = new SimpleReflection('AnyOldArgumentImplementation');
-			$function = $reflection->getSignature('aMethod');
-			if (version_compare(phpversion(), '5.0.2', '<=')) {
-			    $this->assertEqual('function amethod(AnyOldInterface $argument)', $function);
-    	    } else {
-			    $this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
-    	    }
+	function testParameterCreationWithoutTypeHinting() {
+		$reflection = new SimpleReflection('AnyOldArgumentImplementation');
+		$function = $reflection->getSignature('aMethod');
+		if (version_compare(phpversion(), '5.0.2', '<=')) {
+			$this->assertEqual('function amethod(AnyOldInterface $argument)', $function);
+		} else {
+			$this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
 		}
+	}
 
-		function testParameterCreationForTypeHinting() {
-			$reflection = new SimpleReflection('AnyOldTypeHintedClass');
-			$function = $reflection->getSignature('aMethod');
-			if (version_compare(phpversion(), '5.0.2', '<=')) {
-			    $this->assertEqual('function amethod(AnyOldInterface $argument)', $function);
-    	    } else {
-			    $this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
-    	    }
+	function testParameterCreationForTypeHinting() {
+		$reflection = new SimpleReflection('AnyOldTypeHintedClass');
+		$function = $reflection->getSignature('aMethod');
+		if (version_compare(phpversion(), '5.0.2', '<=')) {
+			$this->assertEqual('function amethod(AnyOldInterface $argument)', $function);
+		} else {
+			$this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
 		}
+	}
 
-        function testIssetFunctionSignature() {
-            $reflection = new SimpleReflection('AnyOldOverloadedClass');
-            $function = $reflection->getSignature('__isset');
-            if (version_compare(phpversion(), '5.1.0', '>=')) {
-                $this->assertEqual('function __isset($key)', $function);
-            } else {
-                $this->assertEqual('function __isset()', $function);
-            }
-        }
-        
-        function testUnsetFunctionSignature() {
-            $reflection = new SimpleReflection('AnyOldOverloadedClass');
-            $function = $reflection->getSignature('__unset');
-            if (version_compare(phpversion(), '5.1.0', '>=')) {
-                $this->assertEqual('function __unset($key)', $function);
-            } else {
-                $this->assertEqual('function __unset()', $function);
-            }
-        }
+	function testIssetFunctionSignature() {
+		$reflection = new SimpleReflection('AnyOldOverloadedClass');
+		$function = $reflection->getSignature('__isset');
+		if (version_compare(phpversion(), '5.1.0', '>=')) {
+			$this->assertEqual('function __isset($key)', $function);
+		} else {
+			$this->assertEqual('function __isset()', $function);
+		}
+	}
+	
+	function testUnsetFunctionSignature() {
+		$reflection = new SimpleReflection('AnyOldOverloadedClass');
+		$function = $reflection->getSignature('__unset');
+		if (version_compare(phpversion(), '5.1.0', '>=')) {
+			$this->assertEqual('function __unset($key)', $function);
+		} else {
+			$this->assertEqual('function __unset()', $function);
+		}
+	}
 
-        function testProperlyReflectsTheFinalInterfaceWhenObjectImplementsAnExtendedInterface() {
-            $reflection = new SimpleReflection('AnyDescendentImplementation');
-            $interfaces = $reflection->getInterfaces();
-            $this->assertEqual(1, count($interfaces));
-            $this->assertEqual('AnyDescendentInterface', array_shift($interfaces));
-        }
-    }
+	function testProperlyReflectsTheFinalInterfaceWhenObjectImplementsAnExtendedInterface() {
+		$reflection = new SimpleReflection('AnyDescendentImplementation');
+		$interfaces = $reflection->getInterfaces();
+		$this->assertEqual(1, count($interfaces));
+		$this->assertEqual('AnyDescendentInterface', array_shift($interfaces));
+	}
+}
 
-    class TestOfReflectionWithTypeHints extends UnitTestCase {
-        function skip() {
-            $this->skipIf(version_compare(phpversion(), '5.1.0', '<'), 'Reflection with type hints only tested for PHP 5.1.0 and above');
-        }
+class TestOfReflectionWithTypeHints extends UnitTestCase {
+	function skip() {
+		$this->skipIf(version_compare(phpversion(), '5.1.0', '<'), 'Reflection with type hints only tested for PHP 5.1.0 and above');
+	}
 
-        function testParameterCreationForTypeHintingWithArray() {
-            eval('interface AnyOldArrayTypeHintedInterface {
-            	      function amethod(array $argument);
-            	  } 
-                  class AnyOldArrayTypeHintedClass implements AnyOldArrayTypeHintedInterface {
-                      function amethod(array $argument) {}
-                  }');
-            $reflection = new SimpleReflection('AnyOldArrayTypeHintedClass');
-            $function = $reflection->getSignature('amethod');
-            $this->assertEqual('function amethod(array $argument)', $function);
-        }
-    }
+	function testParameterCreationForTypeHintingWithArray() {
+		eval('interface AnyOldArrayTypeHintedInterface {
+				  function amethod(array $argument);
+			  } 
+			  class AnyOldArrayTypeHintedClass implements AnyOldArrayTypeHintedInterface {
+				  function amethod(array $argument) {}
+			  }');
+		$reflection = new SimpleReflection('AnyOldArrayTypeHintedClass');
+		$function = $reflection->getSignature('amethod');
+		$this->assertEqual('function amethod(array $argument)', $function);
+	}
+}
 ?>
