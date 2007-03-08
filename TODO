@@ -5,7 +5,7 @@ $Id$
 
 Unit tester
 -----------
-Fix errors_test.php in PHP 5.2+ (2).
+Fix errors_test.php in PHP 5.2+ (1/2).
 
 Reporter
 --------
@@ -13,7 +13,7 @@ Dumper should be passed in testMessage() call to expectation (3).
 
 Mock objects
 ------------
-Mocks should inherit mocked class (9/4).
+Mocks should inherit mocked class (12/4).
 
 Parser
 ------

@@ -127,19 +127,26 @@
 			$context->setTest($this);
 			$context->setReporter($reporter);
             $this->_reporter = &$reporter;
-            $reporter->paintCaseStart($this->getLabel());
-			$this->skip();
-            if (! $this->_should_skip) {
-                foreach ($this->getTests() as $method) {
-                    if ($reporter->shouldInvoke($this->getLabel(), $method)) {
-                        $invoker = &$this->_reporter->createInvoker($this->createInvoker());
-                        $invoker->before($method);
-                        $invoker->invoke($method);
-                        $invoker->after($method);
+            $started = false;
+            foreach ($this->getTests() as $method) {
+                if ($reporter->shouldInvoke($this->getLabel(), $method)) {
+                    $this->skip();
+                    if ($this->_should_skip) {
+                        break;
                     }
+                    if (! $started) {
+                        $reporter->paintCaseStart($this->getLabel());
+                        $started = true;
+                    }
+                    $invoker = &$this->_reporter->createInvoker($this->createInvoker());
+                    $invoker->before($method);
+                    $invoker->invoke($method);
+                    $invoker->after($method);
                 }
             }
-            $reporter->paintCaseEnd($this->getLabel());
+            if ($started) {
+                $reporter->paintCaseEnd($this->getLabel());
+            }
             unset($this->_reporter);
             return $reporter->getStatus();
         }
@@ -449,8 +456,8 @@
                 return;
             }
             $this->_markFileAsIncluded($test_file);
-            $group = &$this->_createGroupFromClasses($test_file, $classes);
-            $this->addTestCase($group);
+            $suite = &$this->_createSuiteFromClasses($test_file, $classes);
+            $this->addTestCase($suite);
         }
 
         /**
@@ -474,7 +481,7 @@
                $classes = $this->_selectRunnableTests($existing_classes, get_declared_classes());
                $this->_markFileAsIncluded($test_file);
             }
-            $group = &$this->_createGroupFromClasses($test_file, $classes);
+            $group = &$this->_createSuiteFromClasses($test_file, $classes);
             $this->addTestCase($group);
         }
 
@@ -587,7 +594,7 @@
          *                               test cases.
          *    @access private
          */
-        function &_createGroupFromClasses($title, $classes) {
+        function &_createSuiteFromClasses($title, $classes) {
             SimpleTest::ignoreParentsIfIgnored($classes);
             $group = &new TestSuite($title);
             foreach ($classes as $class) {

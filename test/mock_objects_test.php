@@ -150,9 +150,9 @@
         }
     }
 
-    Stub::generateSubclass('Dummy', 'StubDummy');
-    Stub::generateSubclass('Dummy', 'AnotherStubDummy');
-    Stub::generateSubclass('Dummy', 'StubDummyWithExtraMethods', array('extraMethod'));
+    Stub::generate('Dummy', 'StubDummy');
+    Stub::generate('Dummy', 'AnotherStubDummy');
+    Stub::generate('Dummy', 'StubDummyWithExtraMethods', array('extraMethod'));
 
     class SpecialSimpleStub extends SimpleMock {
         function SpecialSimpleStub() {
@@ -160,7 +160,7 @@
         }
     }
     SimpleTest::setMockBaseClass('SpecialSimpleStub');
-    Stub::generateSubclass('Dummy', 'SpecialStubDummy');
+    Stub::generate('Dummy', 'SpecialStubDummy');
     SimpleTest::setMockBaseClass('SimpleMock');
 
     class TestOfStubGeneration extends UnitTestCase {
@@ -287,15 +287,15 @@
         }
     }
 
-    Mock::generateSubclass('Dummy');
-    Mock::generateSubclass('Dummy', 'AnotherMockDummy');
-    Mock::generateSubclass('Dummy', 'MockDummyWithExtraMethods', array('extraMethod'));
+    Mock::generate('Dummy');
+    Mock::generate('Dummy', 'AnotherMockDummy');
+    Mock::generate('Dummy', 'MockDummyWithExtraMethods', array('extraMethod'));
 
     class SpecialSimpleMock extends SimpleMock { }
 
-    SimpleTest::setMockBaseClass("SpecialSimpleMock");
-    Mock::generateSubclass("Dummy", "SpecialMockDummy");
-    SimpleTest::setMockBaseClass("SimpleMock");
+    SimpleTest::setMockBaseClass('SpecialSimpleMock');
+    Mock::generate('Dummy', 'SpecialMockDummy');
+    SimpleTest::setMockBaseClass('SimpleMock');
 
     class TestOfMockGeneration extends UnitTestCase {
 
@@ -333,8 +333,8 @@
         function testReferenceReturned() {
             $mock = &new MockDummy();
             $object = new Dummy();
-            $mock->setReturnReference("aMethod", $object, array(1, 2, 3));
-            $this->assertReference($zref =& $mock->aMethod(1, 2, 3), $object);
+            $mock->setReturnReference('aMethod', $object, array(1, 2, 3));
+            $this->assertReference($zref = &$mock->aMethod(1, 2, 3), $object);
         }
 
         function testPatternMatchReturn() {
@@ -366,7 +366,7 @@
         function __call($method, $arguments) { }
         function __toString() { }
     }
-    Mock::generateSubclass('ClassWithSpecialMethods');
+    Mock::generate('ClassWithSpecialMethods');
 
     class TestOfSpecialMethods extends UnitTestCase {
         function skip() {
@@ -446,9 +446,9 @@
     }
 
     SimpleTest::setMockBaseClass('MockWithInjectedTestCase');
-    Mock::generateSubclass('Dummy', 'MockDummyWithInjectedTestCase');
+    Mock::generate('Dummy', 'MockDummyWithInjectedTestCase');
     SimpleTest::setMockBaseClass('SimpleMock');
-    Mock::generateSubclass('SimpleTestCase');
+    Mock::generate('SimpleTestCase');
 
     class TestOfMockExpectations extends UnitTestCase {
         var $test;
@@ -657,7 +657,7 @@
 		 * generate a fatal PHP error.
 		 */
         function testBasicConstruct() {
-            Mock::generateSubclass('ConstructorSubClass');
+            Mock::generate('ConstructorSubClass');
             $mock = &new MockConstructorSubClass();
             $this->assertIsA($mock, 'ConstructorSubClass');
             $this->assertTrue(method_exists($mock, 'ConstructorSuperClass'));

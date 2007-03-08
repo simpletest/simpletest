@@ -124,6 +124,35 @@
     }
 
     /**
+     *    An expectation that never matches.
+     *    @package SimpleTest
+     *    @subpackage MockObjects
+     */
+    class FailedExpectation extends SimpleExpectation {
+
+        /**
+         *    Tests the expectation. Always false.
+         *    @param mixed $compare  Ignored.
+         *    @return boolean        True.
+         *    @access public
+         */
+        function test($compare) {
+            return false;
+        }
+
+        /**
+         *    Returns a human readable test message.
+         *    @param mixed $compare      Comparison value.
+         *    @return string             Description of failure.
+         *    @access public
+         */
+        function testMessage($compare) {
+            $dumper = &$this->_getDumper();
+            return 'Failed expectation never matches [' . $dumper->describeValue($compare) . ']';
+        }
+    }
+
+    /**
      *    An expectation that passes on boolean true.
      *    @package SimpleTest
      *    @subpackage MockObjects

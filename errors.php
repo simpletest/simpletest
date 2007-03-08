@@ -186,9 +186,7 @@ class SimpleErrorQueue {
 	 *    @access public
 	 */
 	function expectError($expected, $message) {
-		array_push(
-				$this->_expectation_queue,
-				array($expected, $message));
+		array_push($this->_expectation_queue, array($expected, $message));
 	}
 
 	/**
