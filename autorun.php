@@ -15,6 +15,13 @@
     function SimpleTestAutoRunner() {
         global $SIMPLE_TEST_AUTORUNNER_INITIAL_CLASSES;
 
+        //are tests already executed? If yes no autorunning.
+        if ($ctx = SimpleTest :: getContext()) {
+          if ($ctx->getTest()) {
+              return;
+          }
+        }
+
         $file = reset(get_included_files());
         $diff_classes = array_diff(get_declared_classes(),
                               $SIMPLE_TEST_AUTORUNNER_INITIAL_CLASSES ?
