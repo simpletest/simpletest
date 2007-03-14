@@ -393,7 +393,7 @@
          *    @access public
          */
         function TestSuite($label = false) {
-            $this->_label = $label ? $label : get_class($this);
+            $this->_label = $label;
             $this->_test_cases = array();
             $this->_old_track_errors = ini_get('track_errors');
             $this->_xdebug_is_enabled = function_exists('xdebug_is_enabled') ?
@@ -401,12 +401,18 @@
         }
 
         /**
-         *    Accessor for the test name for subclasses.
+         *    Accessor for the test name for subclasses. If the suite
+		 *    wraps a single test case the label defaults to the name of that test.
          *    @return string           Name of the test.
          *    @access public
          */
         function getLabel() {
-            return $this->_label;
+			if (!$this->_label) {
+				return ($this->getSize() == 1) ?
+					get_class($this->_test_cases[0]) : get_class($this);
+			} else {
+				return $this->_label;
+			}
         }
 
         /**

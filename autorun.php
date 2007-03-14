@@ -29,24 +29,24 @@
         //this is done for PHP4 compatibility
         $diff_classes = array_map('strtolower', $diff_classes);
 
-        $group = new GroupTest();
+        $suite = new TestSuite();
 
         if (preg_match_all('~class\s+(\w+)~', file_get_contents($file), $matches)) {
             foreach($matches[1] as $candidate) {
                 if(SimpleTest :: isTestCase($candidate) &&
                    in_array(strtolower($candidate), $diff_classes)) {
-                    $group->addTestCase(new $candidate);
+                    $suite->addTestCase(new $candidate);
                 }
             }
         }
-
+		
         if ($reporter = &SimpleTest :: preferred('SimpleReporter')) {
-            $res = $group->run($reporter);
+            $res = $suite->run($reporter);
         } else {
             if (SimpleReporter::inCli()) {
-                $res = $group->run(new TextReporter());
+                $res = $suite->run(new TextReporter());
             } else {
-                $res = $group->run(new HtmlReporter());
+                $res = $suite->run(new HtmlReporter());
             }
         }
 
