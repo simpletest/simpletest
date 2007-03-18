@@ -14,7 +14,7 @@
 require_once('simpletest/unit_tester.php');
 require_once('simpletest/reporter.php');
 
-$group = new GroupTest();
+$group = new TestSuite();
 $group->addTestFile('test_of_module_ship.php');
 $group->addTestFile('test_of_module_pay.php');
 
@@ -31,7 +31,7 @@ $group->run(new HtmlReporter());
 require_once('simpletest/unit_tester.php');
 require_once('simpletest/reporter.php');
 
-$group = new GroupTest();
+$group = new TestSuite();
 $group->addTestFile('test_of_module_ship.php');<strong>
 $group->addTestFile('test_of_module_ship_overseas.php');
 $group->addTestFile('test_of_module_ship_france.php');
@@ -67,7 +67,7 @@ $group->run(new HtmlReporter());
 			look like :
 <php><![CDATA[
 <?php<strong>
-require_once(dirname(__FILE__) . 'simpletest/autorun.php');</strong>
+require_once('simpletest/autorun.php');</strong>
 
 class TestUsingParcelForce extends UnitTestCase {
   function testParcelForceIsFine() {
@@ -93,7 +93,7 @@ class TestUsingMyOwnAirplane extends UnitTestCase {
 			We can tell our <em>test_of_module_ship_us.php</em> to use it by default :
 <php><![CDATA[
 <?php
-require_once(dirname(__FILE__) . 'simpletest/autorun.php');<strong>
+require_once('simpletest/autorun.php');<strong>
 SimpleTest :: prefer(new HtmlReporter());</strong>
 
 class TestUsingParcelForce extends UnitTestCase {
@@ -113,7 +113,7 @@ class TestUsingMyOwnAirplane extends UnitTestCase {
 		<p>
 			We get a nice green bar :
             <div class="demo">
-                <h1>GroupTest</h1>
+                <h1>TestSuite</h1>
                 <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">2/2 test cases complete:
 				<strong>2</strong> passes, <strong>0</strong> fails and <strong>0</strong> exceptions.</div>
             </div>
