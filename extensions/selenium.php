@@ -1,5 +1,6 @@
 <?php
 
+require_once dirname(__FILE__) . '/../unit_tester.php';
 require_once dirname(__FILE__) . '/selenium/remote-control.php';
 
 class SeleniumTestCase extends UnitTestCase
@@ -99,6 +100,16 @@ class SeleniumTestCase extends UnitTestCase
 				'verifyValue failed on [%s] == [%s]',
 				$selector,
 				$value
+			)
+		);
+	}
+
+	public function verifyTitle($pattern) {
+		return $this->assertTrue(
+			$this->selenium->verifyTitle($pattern),
+			sprintf(
+				'verifyTitle failed on [%s]',
+				$pattern
 			)
 		);
 	}
