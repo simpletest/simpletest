@@ -6,53 +6,60 @@
      *	@version	$Id$
      */
     require_once dirname(__FILE__) . '/unit_tester.php';
-    require_once dirname(__FILE__) . '/reporter.php';
+    require_once dirname(__FILE__) . '/collector.php';
+    require_once dirname(__FILE__) . '/default_reporter.php';
 
-    $GLOBALS['SIMPLE_TEST_AUTORUNNER_INITIAL_CLASSES'] = get_declared_classes();
+    $GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_CLASSES'] = get_declared_classes();
+    register_shutdown_function('simpletest_autorun');
 
-    register_shutdown_function('SimpleTestAutoRunner');
-
-    function SimpleTestAutoRunner() {
-        global $SIMPLE_TEST_AUTORUNNER_INITIAL_CLASSES;
-
-        //are tests already executed? If yes no autorunning.
-        if ($ctx = SimpleTest :: getContext()) {
-          if ($ctx->getTest()) {
-              return;
-          }
+    function simpletest_autorun() {
+        if (tests_have_run()) {
+			return;
         }
-
-        $file = reset(get_included_files());
-        $diff_classes = array_diff(get_declared_classes(),
-                              $SIMPLE_TEST_AUTORUNNER_INITIAL_CLASSES ?
-                              $SIMPLE_TEST_AUTORUNNER_INITIAL_CLASSES : array());
-        //this is done for PHP4 compatibility
-        $diff_classes = array_map('strtolower', $diff_classes);
-
-        $suite = new TestSuite();
-
-        if (preg_match_all('~class\s+(\w+)~', file_get_contents($file), $matches)) {
-            foreach($matches[1] as $candidate) {
-                if(SimpleTest :: isTestCase($candidate) &&
-                   in_array(strtolower($candidate), $diff_classes)) {
-                    $suite->addTestCase(new $candidate);
-                }
-            }
-        }
-		
-        if ($reporter = &SimpleTest :: preferred('SimpleReporter')) {
-            $res = $suite->run($reporter);
-        } else {
-            if (SimpleReporter::inCli()) {
-                $res = $suite->run(new TextReporter());
-            } else {
-                $res = $suite->run(new HtmlReporter());
-            }
-        }
-
+        $new_classes = capture_new_classes();
+        $suite = new TestSuite(basename(initial_file()));
+		foreach (classes_defined_in_initial_file() as $candidate) {
+			if (SimpleTest::isTestCase($candidate)) {
+				if (in_array(strtolower($candidate), $new_classes)) {
+					$suite->addTestCase(new $candidate);
+				}
+			}
+		}
+        $result = $suite->run(SimpleTest::preferred(
+				array('SimpleReporter', 'SimpleReporterDecorator')));
         if (SimpleReporter::inCli()) {
-            exit($res ? 0 : 1);
+            exit($result ? 0 : 1);
         }
     }
 
+	function tests_have_run() {
+        if ($context = SimpleTest::getContext()) {
+			if ($context->getTest()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	function initial_file() {
+		static $file = false;
+		if (! $file) {
+			$file = reset(get_included_files());
+		}
+		return $file;
+	}
+	
+	function classes_defined_in_initial_file() {
+        if (! preg_match_all('~class\s+(\w+)~', file_get_contents(initial_file()), $matches)) {
+			return array();
+		}
+		return $matches[1];
+	}
+	
+	function capture_new_classes() {
+        global $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES;
+        return array_map('strtolower', array_diff(get_declared_classes(),
+                              $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES ?
+                              $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES : array()));
+	}
 ?>

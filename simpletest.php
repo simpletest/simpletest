@@ -14,6 +14,7 @@
     } else {
         require_once(dirname(__FILE__) . '/reflection_php4.php');
     }
+    require_once(dirname(__FILE__) . '/default_reporter.php');
     /**#@-*/
 
     /**
@@ -109,32 +110,32 @@
          */
         function prefer(&$object) {
             $registry = &SimpleTest::_getRegistry();
-            $registry['Preferred'][get_class($object)] = &$object;
+            $registry['Preferred'][] = &$object;
         }
 
         /**
          *   Retrieves 'preferred' objects from global pool. Class filter
          *   can be applied in order to retrieve the object of the specific
          *   class
-         *   @param string $class        Class name filter(optional)
+         *   @param array|string $classes       Allowed classes or interfaces.
          *   @static
          *   @access public
          *   @return array|object|null
          *   @see prefer()
          */
-        function &preferred($class = null) {
-            $registry = &SimpleTest::_getRegistry();
-            if (! $class) {
-                return $registry['Preferred'];
+        function &preferred($classes) {
+            if (! is_array($classes)) {
+                $classes = array($classes);
             }
-            $result = null;
-            foreach (array_keys($registry['Preferred']) as $key) {
-                if (SimpleTestCompatibility :: isA($registry['Preferred'][$key], $class)) {
-                    $result = &$registry['Preferred'][$key];
-                    break;
+            $registry = &SimpleTest::_getRegistry();
+            for ($i = count($registry['Preferred']) - 1; $i >= 0; $i--) {
+                foreach ($classes as $class) {
+                    if (SimpleTestCompatibility::isA($registry['Preferred'][$i], $class)) {
+                        return $registry['Preferred'][$i];
+                    }
                 }
             }
-            return $result;
+            return null;
         }
 
         /**
@@ -259,7 +260,7 @@
                     'DefaultProxy' => false,
                     'DefaultProxyUsername' => false,
                     'DefaultProxyPassword' => false,
-                    'Preferred' => array());
+                    'Preferred' => array(new DefaultReporter()));
         }
     }
 
