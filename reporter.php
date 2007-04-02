@@ -259,6 +259,10 @@
         function paintError($message) {
             parent::paintError($message);
             print "Exception " . $this->getExceptionCount() . "!\n$message\n";
+            $breadcrumb = $this->getTestList();
+            array_shift($breadcrumb);
+            print "\tin " . implode("\n\tin ", array_reverse($breadcrumb));
+            print "\n";
         }
 
         /**
@@ -274,6 +278,10 @@
                     '] in ['. $exception->getFile() .
                     ' line ' . $exception->getLine() . ']';
             print "Exception " . $this->getExceptionCount() . "!\n$message\n";
+            $breadcrumb = $this->getTestList();
+            array_shift($breadcrumb);
+            print "\tin " . implode("\n\tin ", array_reverse($breadcrumb));
+            print "\n";
         }
 		
 		/**
