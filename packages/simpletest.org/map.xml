@@ -2,7 +2,9 @@
 
 <page title="SimpleTest.org" file="index.html">
 	<page title="English version" here="English version" file="en/index.html">
-		<page title="Donwload SimpleTest" here="Download SimpleTest" file="en/download.html" />
+		<page title="Download SimpleTest" here="Download SimpleTest" file="en/download.html">
+	        <page title="Install the Eclipse Plugin" here="Eclipse" file="en/extension_eclipse.html" />
+		</page>
 
 		<page title="Start testing with SimpleTest" here="SimpleTest" file="en/start-testing.html">
 		    <page title="Documentation overview" here="Overview" file="en/overview.html">
@@ -26,6 +28,10 @@
 		        <page title="Boundary classes" here="Boundary classes" file="en/boundary_classes_tutorial.html" />
 		        <page title="Top down testing" here="Top down testing" file="en/improving_design_tutorial.html" />
 		    </page>
+		    <page title="Experimental stuff (in CVS only)" here="Experimental stuff" file="en/experimental_intro.html">
+		        <page title="[experimental] Running the tests, the easy way with autorun" here="Autorunning test cases" file="en/experimental_autorun.html" />
+		        <page title="[experimental] Using the test results for other tools with the Recorder" here="Recorder" file="en/experimental_recorder.html" />
+		    </page>
 	    </page>
 
 		<page title="Support mailing list" here="Support mailing list" file="en/support.html">
@@ -34,7 +40,9 @@
 	</page>
 
 	<page title="Version française" here="Version française" file="fr/index.html">
-		<page title="Télécharger SimpleTest" here="Télécharger SimpleTest" file="fr/download.html" />
+		<page title="Télécharger SimpleTest" here="Télécharger SimpleTest" file="fr/download.html">
+	        <page title="Installer le plugin Eclipse" here="Plugin Eclipse" file="fr/extension_eclipse.html" />
+		</page>
 
 		<page title="Prise en main rapide de SimpleTest" here="Prise en main rapide de SimpleTest" file="fr/start-testing.html">
 		    <page title="Documentation : les tests unitaires en PHP" here="Documentation : les tests unitaires en PHP" file="fr/unit_test_documentation.html">
