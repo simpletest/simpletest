@@ -212,6 +212,21 @@ class SimpleReflection {
 		return $parents;
 	}
 
+    /**
+     * Checks whether a method is abstract or not.
+     *
+     * @param   string   $name  Method name.
+     * @return  bool            true if method is abstract, else false
+     * @access  private
+     */
+    function _isAbstractMethod($name) {
+        $interface = new ReflectionClass($this->_interface);
+        if (! $interface->hasMethod($name)) {
+            return false;
+        }
+        return $interface->getMethod($name)->isAbstract();
+	}
+
 	/**
 	 *    Gets the source code matching the declaration
 	 *    of a method.
@@ -232,10 +247,12 @@ class SimpleReflection {
 				return "function {$name}(\$key)";
 			}
 		}
-		if (! is_callable(array($this->_interface, $name))) {
+		// second check is required because methods can be protected abstract
+		// which means they are not callable, but need a complete signature
+		if (! is_callable(array($this->_interface, $name)) && ! $this->_isAbstractMethod($name)) {
 			return "function $name()";
 		}
-		if ($this->_isInterfaceMethod($name)) {
+		if ($this->_isInterfaceMethod($name) || $this->_isAbstractMethod($name)) {
 			return $this->_getFullSignature($name);
 		}
 		return "function $name()";

@@ -32,6 +32,10 @@ class AnyOldImplementation implements AnyOldInterface {
 abstract class AnyAbstractImplementation implements AnyOldInterface {
 }
 
+abstract class AnotherOldAbstractClass {
+    protected abstract function aMethod(AnyOldInterface $argument);
+}
+
 class AnyOldSubclass extends AnyOldImplementation { }
 
 class AnyOldArgumentClass {
@@ -198,6 +202,11 @@ class TestOfReflection extends UnitTestCase {
 		$interfaces = $reflection->getInterfaces();
 		$this->assertEqual(1, count($interfaces));
 		$this->assertEqual('AnyDescendentInterface', array_shift($interfaces));
+	}
+	
+	function testCreatingSignatureForAbstractMethod() {
+	    $reflection = new SimpleReflection('AnotherOldAbstractClass');
+	    $this->assertEqual($reflection->getSignature('aMethod'), 'function aMethod(AnyOldInterface $argument)');
 	}
 }
 
