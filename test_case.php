@@ -620,7 +620,7 @@
         function _getBaseTestCase($class) {
             while ($class = get_parent_class($class)) {
                 $class = strtolower($class);
-                if ($class == 'simpletestcase' || $class == 'testsuite' || $class == 'grouptest') {
+                if ($class == 'simpletestcase' || $class == 'testsuite') {
                     return $class;
                 }
             }

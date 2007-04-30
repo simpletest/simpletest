@@ -1,5 +1,7 @@
 <?php
 // $Id$
+require_once(dirname(__FILE__) . '/../autorun.php');
+require_once(dirname(__FILE__) . '/../reflection_php5.php');
 
 class AnyOldLeafClass {
 	function aMethod() { }

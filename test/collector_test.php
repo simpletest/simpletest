@@ -1,6 +1,6 @@
 <?php
 // $Id$
-
+require_once(dirname(__FILE__) . '/../autorun.php');
 require_once(dirname(__FILE__) . '/../collector.php');
 SimpleTest::ignore('MockTestSuite');
 Mock::generate('TestSuite');

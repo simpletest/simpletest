@@ -15,6 +15,7 @@
         require_once(dirname(__FILE__) . '/reflection_php4.php');
     }
     require_once(dirname(__FILE__) . '/default_reporter.php');
+    require_once(dirname(__FILE__) . '/compatibility.php');
     /**#@-*/
 
     /**
@@ -85,17 +86,12 @@
          *   @access public
          */
         function isTestCase($candidate) {
-            $allowed = array('unittestcase',
-                             'webtestcase',
-                             'testsuite',
-                             'grouptest');
-            $class = is_object($candidate) ? get_class($candidate) : $candidate;
-            while ($class = get_parent_class($class)) {
-                $class = strtolower($class);
-                if (in_array($class, $allowed)) {
+            $class = strtolower(is_object($candidate) ? get_class($candidate) : $candidate);
+            do {
+                if (($class == 'simpletestcase') || ($class == 'testsuite')) {
                     return true;
                 }
-            }
+            } while ($class = strtolower(get_parent_class($class)));
             return false;
         }
 
