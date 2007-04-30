@@ -1,4 +1,5 @@
 <?php
+require_once(dirname(__FILE__) . '/../autorun.php');
 require_once(dirname(__FILE__) . '/../errors.php');
 require_once(dirname(__FILE__) . '/../expectation.php');
 require_once(dirname(__FILE__) . '/../test_case.php');

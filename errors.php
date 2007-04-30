@@ -227,7 +227,7 @@ class SimpleErrorQueue {
  *    @static
  *    @access public
  */
-function SimpleTestErrorHandler($severity, $message, $filename, $line, $super_globals) {
+function SimpleTestErrorHandler($severity, $message, $filename = null, $line = null, $super_globals = null, $mask = null) {
     $severity = $severity & error_reporting();
 	if ($severity) {
 		restore_error_handler();
@@ -239,10 +239,7 @@ function SimpleTestErrorHandler($severity, $message, $filename, $line, $super_gl
 		$queue = &$context->get('SimpleErrorQueue');
 		$queue->add($severity, $message, $filename, $line);
 		set_error_handler('SimpleTestErrorHandler');
-	} else {
-		if (version_compare(phpversion(), '5.2') >= 0) {
-			return false;
-		}
 	}
+	return true;
 }
 ?>
