@@ -371,153 +371,129 @@
             return 1;
         }
     }
-
+    
     /**
-     *    This is a composite test class for combining
-     *    test cases and other RunnableTest classes into
-     *    a group test.
-	 *    @package		SimpleTest
-	 *    @subpackage	UnitTester
+     *  Helps to extract test cases automatically from a file.
      */
-    class TestSuite {
-        var $_label;
-        var $_test_cases;
+    class SimpleTestExtractor {
         var $_old_track_errors;
         var $_xdebug_is_enabled;
         var $_included_files = array();
-
+        
         /**
-         *    Sets the name of the test suite.
-         *    @param string $label    Name sent at the start and end
-         *                            of the test.
-         *    @access public
+         *  Sets up error tracking.
          */
-        function TestSuite($label = false) {
-            $this->_label = $label;
-            $this->_test_cases = array();
+        function SimpleTestExtractor() {
             $this->_old_track_errors = ini_get('track_errors');
             $this->_xdebug_is_enabled = function_exists('xdebug_is_enabled') ?
                     xdebug_is_enabled() : false;
         }
 
         /**
-         *    Accessor for the test name for subclasses. If the suite
-		 *    wraps a single test case the label defaults to the name of that test.
-         *    @return string           Name of the test.
-         *    @access public
-         */
-        function getLabel() {
-			if (!$this->_label) {
-				return ($this->getSize() == 1) ?
-					get_class($this->_test_cases[0]) : get_class($this);
-			} else {
-				return $this->_label;
-			}
-        }
-
-        /**
-         *    Adds a test into the suite. Can be either a group
-         *    test or some other unit test.
-         *    @param SimpleTestCase $test_case  Suite or individual test
-         *                                      case implementing the
-         *                                      runnable test interface.
-         *    @access public
-         */
-        function addTestCase(&$test_case) {
-            $this->_test_cases[] = &$test_case;
-        }
-
-        /**
-         *    Adds a test into the suite by class name. The class will
-         *    be instantiated as needed.
-         *    @param SimpleTestCase $test_case  Suite or individual test
-         *                                      case implementing the
-         *                                      runnable test interface.
-         *    @access public
-         */
-        function addTestClass($class) {
-            if ($this->_getBaseTestCase($class) == 'testsuite' || $this->_getBaseTestCase($class) == 'grouptest') {
-                $this->_test_cases[] = &new $class();
-            } else {
-                $this->_test_cases[] = $class;
-            }
-        }
-
-        /**
-         *    Builds a group test from a library of test cases.
-         *    The new group is composed into this one.
+         *    Builds a test suite from a library of test cases.
+         *    The new suite is composed into this one.
          *    @param string $test_file        File name of library with
          *                                    test case classes.
+         *    @return TestSuite               The new test suite.
          *    @access public
          */
-        function addTestFile($test_file) {
+        function &extractTestCases($test_file) {
             $existing_classes = get_declared_classes();
             if ($error = $this->_requireWithError($test_file)) {
-                $this->addTestCase(new BadTestSuite($test_file, $error));
-                return;
+                $suite = &new BadTestSuite($test_file, $error);
+                return $suite;
             }
             $classes = $this->_selectRunnableTests($existing_classes, get_declared_classes());
             if (count($classes) == 0) {
-                $this->addTestCase(new BadTestSuite($test_file, "No runnable test cases in [$test_file]"));
-                return;
+                $suite = &new BadTestSuite($test_file, "No runnable test cases in [$test_file]");
+                return $suite;
             }
             $this->_markFileAsIncluded($test_file);
             $suite = &$this->_createSuiteFromClasses($test_file, $classes);
-            $this->addTestCase($suite);
+            return $suite;
         }
 
         /**
          *    Builds a group test from a library of test cases.
          *    The new group is composed into this one.
          *    The file is included via PHP's 'include_once' call unlike
-         *    'include' in addTestFile
-         *    @see addTestFile()
+         *    'include' in extractTestCases
+         *    @see extractTestCases()
          *    @param string $test_file        File name of library with
          *                                    test case classes.
          *    @access public
          */
-        function addTestFileOnce($test_file) {
+        function &extractTestCasesOnce($test_file) {
             $classes = array();
-            if(!$this->_isFileIncluded($test_file)) {
-               $existing_classes = get_declared_classes();
-               if ($error = $this->_requireWithError($test_file, true)) {
-                   $this->addTestCase(new BadTestSuite($test_file, $error));
-                   return;
-               }
-               $classes = $this->_selectRunnableTests($existing_classes, get_declared_classes());
-               $this->_markFileAsIncluded($test_file);
+            if (! $this->_isFileIncluded($test_file)) {
+                $existing_classes = get_declared_classes();
+                if ($error = $this->_requireWithError($test_file, true)) {
+                    $suite = &new BadTestSuite($test_file, $error);
+                    return $suite;
+                }
+                $classes = $this->_selectRunnableTests($existing_classes, get_declared_classes());
+                $this->_markFileAsIncluded($test_file);
             }
-            $group = &$this->_createSuiteFromClasses($test_file, $classes);
-            $this->addTestCase($group);
+            $suite = &$this->_createSuiteFromClasses($test_file, $classes);
+            return $suite;
         }
 
         /**
-         *    Checks whether specified file was already included.
-         *    @param string $file             File path.
+         *    Calculates the incoming test cases from a before
+         *    and after list of loaded classes. Skips abstract
+         *    classes.
+         *    @param array $existing_classes   Classes before require().
+         *    @param array $new_classes        Classes after require().
+         *    @return array                    New classes which are test
+         *                                     cases that shouldn't be ignored.
          *    @access private
          */
-        function _isFileIncluded($file) {
-           return isset($this->_included_files[realpath($file)]);
+        function _selectRunnableTests($existing_classes, $new_classes) {
+            $classes = array();
+            foreach ($new_classes as $class) {
+                if (in_array($class, $existing_classes)) {
+                    continue;
+                }
+                if (TestSuite::getBaseTestCase($class)) {
+                    $reflection = new SimpleReflection($class);
+                    if ($reflection->isAbstract()) {
+                        SimpleTest::ignore($class);
+                    }
+                    $classes[] = $class;
+                }
+            }
+            return $classes;
         }
 
         /**
-         *    Marks specified file as already included.
-         *    @param string $file             File path.
+         *    Builds a test suite from a class list.
+         *    @param string $title       Title of new group.
+         *    @param array $classes      Test classes.
+         *    @return TestSuite          Group loaded with the new
+         *                               test cases.
          *    @access private
          */
-        function _markFileAsIncluded($file) {
-            $this->_included_files[realpath($file)] = true;
+        function &_createSuiteFromClasses($title, $classes) {
+            SimpleTest::ignoreParentsIfIgnored($classes);
+            $suite = &new TestSuite($title);
+            foreach ($classes as $class) {
+                if (! SimpleTest::isIgnored($class)) {
+                    $suite->addTestClass($class);
+                }
+            }
+            return $suite;
         }
 
         /**
          *    Requires a source file recording any syntax errors.
          *    @param string $file        File name to require in.
-         *    @param bool $include_once  Whether to use include_once call instead of include(false by default)
+         *    @param bool $include_once  Whether to use include_once call
+         *                               instead of include (false by default)
          *    @return string/boolean     An error message on failure or false
          *                               if no errors.
          *    @access private
          */
-        function _requireWithError($file, $include_once=false) {
+        function _requireWithError($file, $include_once = false) {
             $this->_enableErrorReporting();
             if ($include_once) {
                 include_once($file);
@@ -566,65 +542,114 @@
         }
 
         /**
-         *    Calculates the incoming test cases from a before
-         *    and after list of loaded classes. Skips abstract
-         *    classes.
-         *    @param array $existing_classes   Classes before require().
-         *    @param array $new_classes        Classes after require().
-         *    @return array                    New classes which are test
-         *                                     cases that shouldn't be ignored.
+         *    Checks whether specified file was already included.
+         *    @param string $file             File path.
          *    @access private
          */
-        function _selectRunnableTests($existing_classes, $new_classes) {
-            $classes = array();
-            foreach ($new_classes as $class) {
-                if (in_array($class, $existing_classes)) {
-                    continue;
-                }
-                if ($this->_getBaseTestCase($class)) {
-                    $reflection = new SimpleReflection($class);
-                    if ($reflection->isAbstract()) {
-                        SimpleTest::ignore($class);
-                    }
-                    $classes[] = $class;
-                }
-            }
-            return $classes;
+        function _isFileIncluded($file) {
+            return isset($this->_included_files[realpath($file)]);
         }
 
         /**
-         *    Builds a group test from a class list.
-         *    @param string $title       Title of new group.
-         *    @param array $classes      Test classes.
-         *    @return TestSuite          Group loaded with the new
-         *                               test cases.
+         *    Marks specified file as already included.
+         *    @param string $file             File path.
          *    @access private
          */
-        function &_createSuiteFromClasses($title, $classes) {
-            SimpleTest::ignoreParentsIfIgnored($classes);
-            $group = &new TestSuite($title);
-            foreach ($classes as $class) {
-                if (! SimpleTest::isIgnored($class)) {
-                    $group->addTestClass($class);
-                }
-            }
-            return $group;
+        function _markFileAsIncluded($file) {
+            $this->_included_files[realpath($file)] = true;
+        }
+    }
+
+    /**
+     *    This is a composite test class for combining
+     *    test cases and other RunnableTest classes into
+     *    a group test.
+	 *    @package		SimpleTest
+	 *    @subpackage	UnitTester
+     */
+    class TestSuite {
+        var $_label;
+        var $_test_cases;
+
+        /**
+         *    Sets the name of the test suite.
+         *    @param string $label    Name sent at the start and end
+         *                            of the test.
+         *    @access public
+         */
+        function TestSuite($label = false) {
+            $this->_label = $label;
+            $this->_test_cases = array();
         }
 
         /**
-         *    Test to see if a class is derived from the
-         *    SimpleTestCase class.
-         *    @param string $class     Class name.
-         *    @access private
+         *    Accessor for the test name for subclasses. If the suite
+		 *    wraps a single test case the label defaults to the name of that test.
+         *    @return string           Name of the test.
+         *    @access public
          */
-        function _getBaseTestCase($class) {
-            while ($class = get_parent_class($class)) {
-                $class = strtolower($class);
-                if ($class == 'simpletestcase' || $class == 'testsuite') {
-                    return $class;
-                }
+        function getLabel() {
+			if (! $this->_label) {
+				return ($this->getSize() == 1) ?
+                        get_class($this->_test_cases[0]) : get_class($this);
+			} else {
+				return $this->_label;
+			}
+        }
+
+        /**
+         *    Adds a test into the suite. Can be either a test
+         *    suite or some other unit test.
+         *    @param SimpleTestCase $test_case  Suite or individual test
+         *                                      case implementing the
+         *                                      runnable test interface.
+         *    @access public
+         */
+        function addTestCase(&$test_case) {
+            $this->_test_cases[] = &$test_case;
+        }
+
+        /**
+         *    Adds a test into the suite by class name. The class will
+         *    be instantiated if it's a test suite.
+         *    @param SimpleTestCase $test_case  Suite or individual test
+         *                                      case implementing the
+         *                                      runnable test interface.
+         *    @access public
+         */
+        function addTestClass($class) {
+            if (TestSuite::getBaseTestCase($class) == 'testsuite') {
+                $this->_test_cases[] = &new $class();
+            } else {
+                $this->_test_cases[] = $class;
             }
-            return false;
+        }
+
+        /**
+         *    Builds a test suite from a library of test cases.
+         *    The new suite is composed into this one.
+         *    @param string $test_file        File name of library with
+         *                                    test case classes.
+         *    @access public
+         */
+        function addTestFile($test_file) {
+            $extractor = new SimpleTestExtractor();
+            $this->addTestCase($extractor->extractTestCases($test_file));
+        }
+
+        /**
+         *    Builds a group test from a library of test cases.
+         *    The new group is composed into this one.
+         *    The file is included via PHP's 'include_once' call unlike
+         *    'include' in addTestFile
+         *    @see addTestFile()
+         *    @param string $test_file        File name of library with
+         *                                    test case classes.
+         *    @access public
+         */
+        function addTestFileOnce($test_file) {
+            $extractor = new SimpleTestExtractor();
+            $this->addTestCase($extractor->extractTestCasesOnce($test_file));
         }
 
         /**
@@ -675,6 +700,23 @@
                 }
             }
             return $count;
+        }
+
+        /**
+         *    Test to see if a class is derived from the
+         *    SimpleTestCase class.
+         *    @param string $class     Class name.
+         *    @access public
+         *    @static
+         */
+        function getBaseTestCase($class) {
+            while ($class = get_parent_class($class)) {
+                $class = strtolower($class);
+                if ($class == 'simpletestcase' || $class == 'testsuite') {
+                    return $class;
+                }
+            }
+            return false;
         }
     }
 
