@@ -660,14 +660,7 @@
         }
 
         /**
-         *    Builds a group test from a library of test cases.
-         *    The new group is composed into this one.
-         *    The file is included via PHP's 'include_once' call unlike
-         *    'include' in addTestFile
-         *    @see addTestFile()
-         *    @param string $test_file        File name of library with
-         *                                    test case classes.
-         *    @access public
+         *    @deprecated
          */
         function loadOnce($test_file) {
             $extractor = new SimpleFileLoader();

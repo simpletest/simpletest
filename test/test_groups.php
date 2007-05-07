@@ -11,42 +11,42 @@
         function UnitTests() {
             $this->TestSuite('Unit tests');
             $path = dirname(__FILE__);
-            $this->addTestFile($path . '/errors_test.php');
+            $this->load($path . '/errors_test.php');
             if (version_compare(phpversion(), '5') >= 0) {
-                $this->addTestFile($path . '/exceptions_test.php');
+                $this->load($path . '/exceptions_test.php');
             }
-            $this->addTestFile($path . '/compatibility_test.php');
-            $this->addTestFile($path . '/simpletest_test.php');
-            $this->addTestFile($path . '/dumper_test.php');
-            $this->addTestFile($path . '/expectation_test.php');
-            $this->addTestFile($path . '/unit_tester_test.php');
+            $this->load($path . '/compatibility_test.php');
+            $this->load($path . '/simpletest_test.php');
+            $this->load($path . '/dumper_test.php');
+            $this->load($path . '/expectation_test.php');
+            $this->load($path . '/unit_tester_test.php');
             if (version_compare(phpversion(), '5', '>=')) {
-                $this->addTestFile($path . '/reflection_php5_test.php');
+                $this->load($path . '/reflection_php5_test.php');
             } else {
-                $this->addTestFile($path . '/reflection_php4_test.php');
+                $this->load($path . '/reflection_php4_test.php');
             }
-            $this->addTestFile($path . '/mock_objects_test.php');
+            $this->load($path . '/mock_objects_test.php');
             if (version_compare(phpversion(), '5', '>=')) {
-                $this->addTestFile($path . '/interfaces_test.php');
+                $this->load($path . '/interfaces_test.php');
             }
-            $this->addTestFile($path . '/collector_test.php');
-            $this->addTestFile($path . '/adapter_test.php');
-            $this->addTestFile($path . '/socket_test.php');
-            $this->addTestFile($path . '/encoding_test.php');
-            $this->addTestFile($path . '/url_test.php');
-            $this->addTestFile($path . '/cookies_test.php');
-            $this->addTestFile($path . '/http_test.php');
-            $this->addTestFile($path . '/authentication_test.php');
-            $this->addTestFile($path . '/user_agent_test.php');
-            $this->addTestFile($path . '/parser_test.php');
-            $this->addTestFile($path . '/tag_test.php');
-            $this->addTestFile($path . '/form_test.php');
-            $this->addTestFile($path . '/page_test.php');
-            $this->addTestFile($path . '/frames_test.php');
-            $this->addTestFile($path . '/browser_test.php');
-            $this->addTestFile($path . '/web_tester_test.php');
-            $this->addTestFile($path . '/shell_tester_test.php');
-            $this->addTestFile($path . '/xml_test.php');
+            $this->load($path . '/collector_test.php');
+            $this->load($path . '/adapter_test.php');
+            $this->load($path . '/socket_test.php');
+            $this->load($path . '/encoding_test.php');
+            $this->load($path . '/url_test.php');
+            $this->load($path . '/cookies_test.php');
+            $this->load($path . '/http_test.php');
+            $this->load($path . '/authentication_test.php');
+            $this->load($path . '/user_agent_test.php');
+            $this->load($path . '/parser_test.php');
+            $this->load($path . '/tag_test.php');
+            $this->load($path . '/form_test.php');
+            $this->load($path . '/page_test.php');
+            $this->load($path . '/frames_test.php');
+            $this->load($path . '/browser_test.php');
+            $this->load($path . '/web_tester_test.php');
+            $this->load($path . '/shell_tester_test.php');
+            $this->load($path . '/xml_test.php');
         }
     }
 
@@ -58,10 +58,10 @@
     class AllTests extends TestSuite {
         function AllTests() {
             $this->TestSuite('All tests for SimpleTest ' . SimpleTest::getVersion());
-            $this->addTestCase(new UnitTests());
-            $this->addTestFile(dirname(__FILE__) . '/shell_test.php');
-            $this->addTestFile(dirname(__FILE__) . '/live_test.php');
-            $this->addTestFile(dirname(__FILE__) . '/acceptance_test.php');
+            $this->add(new UnitTests());
+            $this->load(dirname(__FILE__) . '/shell_test.php');
+            $this->load(dirname(__FILE__) . '/live_test.php');
+            $this->load(dirname(__FILE__) . '/acceptance_test.php');
         }
     }
 ?>
