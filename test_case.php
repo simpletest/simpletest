@@ -375,7 +375,7 @@
     /**
      *  Helps to extract test cases automatically from a file.
      */
-    class SimpleTestExtractor {
+    class SimpleFileLoader {
         var $_old_track_errors;
         var $_xdebug_is_enabled;
         var $_included_files = array();
@@ -383,7 +383,7 @@
         /**
          *  Sets up error tracking.
          */
-        function SimpleTestExtractor() {
+        function SimpleFileLoader() {
             $this->_old_track_errors = ini_get('track_errors');
             $this->_xdebug_is_enabled = function_exists('xdebug_is_enabled') ?
                     xdebug_is_enabled() : false;
@@ -397,7 +397,7 @@
          *    @return TestSuite               The new test suite.
          *    @access public
          */
-        function &extractTestCases($test_file) {
+        function &load($test_file) {
             $existing_classes = get_declared_classes();
             if ($error = $this->_requireWithError($test_file)) {
                 $suite = &new BadTestSuite($test_file, $error);
@@ -417,13 +417,13 @@
          *    Builds a group test from a library of test cases.
          *    The new group is composed into this one.
          *    The file is included via PHP's 'include_once' call unlike
-         *    'include' in extractTestCases
-         *    @see extractTestCases()
+         *    'include' in load
+         *    @see load()
          *    @param string $test_file        File name of library with
          *                                    test case classes.
          *    @access public
          */
-        function &extractTestCasesOnce($test_file) {
+        function &loadOnce($test_file) {
             $classes = array();
             if (! $this->_isFileIncluded($test_file)) {
                 $existing_classes = get_declared_classes();
@@ -598,24 +598,14 @@
         }
 
         /**
-         *    Adds a test into the suite. Can be either a test
-         *    suite or some other unit test.
-         *    @param SimpleTestCase $test_case  Suite or individual test
-         *                                      case implementing the
-         *                                      runnable test interface.
-         *    @access public
+         *    @deprecated
          */
         function addTestCase(&$test_case) {
             $this->_test_cases[] = &$test_case;
         }
 
         /**
-         *    Adds a test into the suite by class name. The class will
-         *    be instantiated if it's a test suite.
-         *    @param SimpleTestCase $test_case  Suite or individual test
-         *                                      case implementing the
-         *                                      runnable test interface.
-         *    @access public
+         *    @deprecated
          */
         function addTestClass($class) {
             if (TestSuite::getBaseTestCase($class) == 'testsuite') {
@@ -626,15 +616,47 @@
         }
 
         /**
+         *    Adds a test into the suite by instance or class. The class will
+         *    be instantiated if it's a test suite.
+         *    @param SimpleTestCase $test_case  Suite or individual test
+         *                                      case implementing the
+         *                                      runnable test interface.
+         *    @access public
+         */
+        function add(&$test_case) {
+            if (! is_string($test_case)) {
+                $this->_test_cases[] = &$test_case;
+            } elseif (TestSuite::getBaseTestCase($class) == 'testsuite') {
+                $this->_test_cases[] = &new $class();
+            } else {
+                $this->_test_cases[] = $class;
+            }
+        }
+
+        /**
+         *    @deprecated
+         */
+        function addTestFile($test_file) {
+            $this->load($test_file);
+        }
+
+        /**
          *    Builds a test suite from a library of test cases.
          *    The new suite is composed into this one.
          *    @param string $test_file        File name of library with
          *                                    test case classes.
          *    @access public
          */
-        function addTestFile($test_file) {
-            $extractor = new SimpleTestExtractor();
-            $this->addTestCase($extractor->extractTestCases($test_file));
+        function load($test_file) {
+            $extractor = new SimpleFileLoader();
+            $this->add($extractor->load($test_file));
+        }
+
+        /**
+         *    @deprecated
+         */
+        function addTestFileOnce($test_file) {
+            $this->loadOnce($test_file);
         }
 
         /**
@@ -647,9 +669,9 @@
          *                                    test case classes.
          *    @access public
          */
-        function addTestFileOnce($test_file) {
-            $extractor = new SimpleTestExtractor();
-            $this->addTestCase($extractor->extractTestCasesOnce($test_file));
+        function loadOnce($test_file) {
+            $extractor = new SimpleFileLoader();
+            $this->addTestCase($extractor->loadOnce($test_file));
         }
 
         /**
