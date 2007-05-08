@@ -17,15 +17,13 @@
         if (tests_have_run()) {
 			return;
         }
-        $new_classes = capture_new_classes();
-        $suite = new TestSuite(basename(initial_file()));
-		foreach (classes_defined_in_initial_file() as $candidate) {
-			if (SimpleTest::isTestCase($candidate)) {
-				if (in_array(strtolower($candidate), $new_classes)) {
-					$suite->addTestCase(new $candidate);
-				}
-			}
-		}
+        $candidates = array_intersect(
+                capture_new_classes(),
+                classes_defined_in_initial_file());
+        $loader = new SimpleFileLoader();
+        $suite = $loader->createSuiteFromClasses(
+                basename(initial_file()),
+                $loader->selectRunnableTests($candidates));
         $result = $suite->run(SimpleTest::preferred(
 				array('SimpleReporter', 'SimpleReporterDecorator')));
         if (SimpleReporter::inCli()) {
@@ -54,7 +52,7 @@
         if (! preg_match_all('~class\s+(\w+)~', file_get_contents(initial_file()), $matches)) {
 			return array();
 		}
-		return $matches[1];
+		return array_map('strtolower', $matches[1]);
 	}
 	
 	function capture_new_classes() {

@@ -79,23 +79,6 @@
         }
 
         /**
-         *   Checks whether the passed class or object is a subclass
-         *   of one of SimpleTest's 'official' test case classes
-         *   @param string|object $candidate    Class or object to test.
-         *   @static
-         *   @access public
-         */
-        function isTestCase($candidate) {
-            $class = strtolower(is_object($candidate) ? get_class($candidate) : $candidate);
-            do {
-                if (($class == 'simpletestcase') || ($class == 'testsuite')) {
-                    return true;
-                }
-            } while ($class = strtolower(get_parent_class($class)));
-            return false;
-        }
-
-        /**
          *   Puts the object to the global pool of 'preferred' objects
          *   which can be retrieved with SimpleTest :: preferred() method.
          *   Instances of the same class are overwritten.

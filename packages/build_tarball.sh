@@ -39,6 +39,7 @@ FILES=(simpletest/compatibility.php \
           simpletest/xml.php \
           simpletest/detached.php \
           simpletest/remote.php \
+          simpletest/eclipse.php \
           simpletest/extensions/pear_test_case.php \
           simpletest/extensions/phpunit_test_case.php \
           simpletest/README \
@@ -47,7 +48,6 @@ FILES=(simpletest/compatibility.php \
           simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE \
           simpletest/test/all_tests.php \
           simpletest/test/unit_tests.php \
-          simpletest/test/test_groups.php \
           simpletest/test/acceptance_test.php \
           simpletest/test/collector_test.php \
           simpletest/test/simpletest_test.php \
