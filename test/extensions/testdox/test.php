@@ -1,8 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../autorun.php';
-require_once dirname(__FILE__) . '/../../ui/colortext_reporter.php';
-require_once dirname(__FILE__) . '/../../extensions/testdox.php';
+require_once dirname(__FILE__) . '/../../../autorun.php';
+require_once dirname(__FILE__) . '/../../../extensions/testdox.php';
 
 // uncomment to see test dox in action
 //SimpleTest::prefer(new TestDoxReporter());
