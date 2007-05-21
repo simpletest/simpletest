@@ -35,4 +35,8 @@ class TestDoxReporter extends SimpleReporter
     function paintMethodEnd() {
         echo "\n";
     }
+
+    function paintFail() {
+        echo " [FAILED]";
+    }
 }

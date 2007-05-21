@@ -86,5 +86,13 @@ class TestOfTestDoxReporter extends UnitTestCase
         $buffer = ob_get_clean();
         $this->assertEqual('- a very simple again a very simple method', $buffer);
     }
+
+    function testOnFailureThisPrintsFailureNotice() {
+        $dox = new TestDoxReporter();
+        ob_start();
+        $dox->paintFail();
+        $buffer = ob_get_clean();
+        $this->assertEqual(' [FAILED]', $buffer);
+    }
 }
 
