@@ -77,7 +77,14 @@ class TestOfTestDoxReporter extends UnitTestCase
         $buffer = ob_get_clean();
         $this->assertEqual("\n", $buffer);
         $this->assertNoErrors();
+    }
 
+    function testProperlySpacesSingleLettersInMethodName() {
+        $dox = new TestDoxReporter();
+        ob_start();
+        $dox->paintMethodStart('testAVerySimpleAgainAVerySimpleMethod');
+        $buffer = ob_get_clean();
+        $this->assertEqual('- a very simple again a very simple method', $buffer);
     }
 }
 

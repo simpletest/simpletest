@@ -28,7 +28,7 @@ class TestDoxReporter extends SimpleReporter
         }
         $test_name = $matches[1];
 
-        $methodName = preg_replace('/([A-Z])([A-Z])/', '$1 $2', $test_name);
+        $test_name = preg_replace('/([A-Z])([A-Z])/', '$1 $2', $test_name);
         echo '- ' . strtolower(preg_replace('/([a-zA-Z])([A-Z0-9])/', '$1 $2', $test_name));
     }
 
