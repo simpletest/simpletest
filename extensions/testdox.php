@@ -23,7 +23,7 @@ class TestDoxReporter extends SimpleReporter
     }
 
     function paintMethodStart($test_name) {
-        if (!preg_match('/^test(.*)$/', $test_name, $matches)) {
+        if (!preg_match('/^test(.*)$/i', $test_name, $matches)) {
             return;
         }
         $test_name = $matches[1];
