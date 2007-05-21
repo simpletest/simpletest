@@ -1,6 +1,7 @@
 <?php
 // $Id$
 require_once(dirname(__FILE__) . '/../autorun.php');
+require_once dirname(__FILE__) . '/../extensions/testdox.php';
 require_once(dirname(__FILE__) . '/../unit_tester.php');
 require_once(dirname(__FILE__) . '/../shell_tester.php');
 require_once(dirname(__FILE__) . '/../mock_objects.php');
@@ -48,6 +49,7 @@ class UnitTests extends TestSuite {
         $this->addFile($path . '/web_tester_test.php');
         $this->addFile($path . '/shell_tester_test.php');
         $this->addFile($path . '/xml_test.php');
+        $this->addFile($path . '/extensions/testdox.php');
     }
 }
 ?>
