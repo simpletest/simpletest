@@ -22,7 +22,7 @@
 	 *    @subpackage UnitTester
 	 */
 	class SimpleCommandLineParser {
-		var $_to_long_form = array(
+		var $_to_property = array(
 				'case' => '_case', 'c' => '_case',
 				'test' => '_test', 't' => '_test',
 				'xml' => '_xml', 'x' => '_xml');
@@ -36,12 +36,12 @@
 			}
 			foreach ($arguments as $i => $argument) {
 				if (preg_match('/^--?(test|case|t|c)=(.+)$/', $argument, $matches)) {
-					$command = $this->_to_long_form[$matches[1]];
-					$this->$command = $matches[2];
+					$property = $this->_to_property[$matches[1]];
+					$this->$property = $matches[2];
 				} elseif (preg_match('/^--?(test|case|t|c)$/', $argument, $matches)) {
-					$command = $this->_to_long_form[$matches[1]];
+					$property = $this->_to_property[$matches[1]];
 					if (isset($arguments[$i + 1])) {
-						$this->$command = $arguments[$i + 1];
+						$this->$property = $arguments[$i + 1];
 					}
 				} elseif (preg_match('/^--?(xml|x)$/', $argument)) {
 					$this->_xml = true;

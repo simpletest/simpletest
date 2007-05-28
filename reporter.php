@@ -312,10 +312,10 @@
 	 *	  @subpackage UnitTester
      */
     class SelectiveReporter extends SimpleReporterDecorator {
-        var $_just_this_case =false;
+        var $_just_this_case = false;
         var $_just_this_test = false;
-        var $_within_test_case = true;
-
+        var $_on;
+        
         /**
          *    Selects the test case or group to be run,
          *    and optionally a specific test.
@@ -326,7 +326,9 @@
         function SelectiveReporter(&$reporter, $just_this_case = false, $just_this_test = false) {
             if (isset($just_this_case) && $just_this_case) {
                 $this->_just_this_case = strtolower($just_this_case);
-                $this->_within_test_case = false;
+                $this->_off();
+            } else {
+                $this->_on();
             }
             if (isset($just_this_test) && $just_this_test) {
                 $this->_just_this_test = strtolower($just_this_test);
@@ -340,24 +342,39 @@
          *    @return boolean             True if matched.
          *    @access protected
          */
-        function _isCaseMatch($test_case) {
-            if ($this->_just_this_case) {
-                return $this->_just_this_case == strtolower($test_case);
-            }
-            return false;
+        function _matchesTestCase($test_case) {
+            return $this->_just_this_case == strtolower($test_case);
         }
 
         /**
-         *    Compares criteria to actual the test name.
+         *    Compares criteria to actual the test name. If no
+         *    name was specified at the beginning, then all tests
+         *    can run.
          *    @param string $method       The incoming test method.
          *    @return boolean             True if matched.
          *    @access protected
          */
-        function _isTestMatch($method) {
-            if ($this->_just_this_test) {
-                return $this->_just_this_test == strtolower($method);
+        function _shouldRunTest($test_case, $method) {
+            if ($this->_isOn() || $this->_matchesTestCase($test_case)) {
+                if ($this->_just_this_test) {
+                    return $this->_just_this_test == strtolower($method);
+                } else {
+                    return true;
+                }
             }
-            return true;
+            return false;
+        }
+        
+        function _on() {
+            $this->_on = true;
+        }
+        
+        function _off() {
+            $this->_on = false;
+        }
+        
+        function _isOn() {
+            return $this->_on;
         }
 
         /**
@@ -368,7 +385,7 @@
          *    @access public
          */
         function shouldInvoke($test_case, $method) {
-            if ($this->_within_test_case && $this->_isTestMatch($method)) {
+            if ($this->_shouldRunTest($test_case, $method)) {
                 return $this->_reporter->shouldInvoke($test_case, $method);
             }
             return false;
@@ -381,12 +398,10 @@
          *    @access public
          */
         function paintGroupStart($test_case, $size) {
-            if ($this->_isCaseMatch($test_case)) {
-                $this->_within_test_case = true;
+            if ($this->_just_this_case && $this->_matchesTestCase($test_case)) {
+                $this->_on();
             }
-            if ($this->_within_test_case) {
-                $this->_reporter->paintGroupStart($test_case, $size);
-            }
+            $this->_reporter->paintGroupStart($test_case, $size);
         }
 
         /**
@@ -395,11 +410,9 @@
          *    @access public
          */
         function paintGroupEnd($test_case) {
-            if ($this->_within_test_case) {
-                $this->_reporter->paintGroupEnd($test_case);
-            }
-            if ($this->_isCaseMatch($test_case)) {
-                $this->_within_test_case = false;
+            $this->_reporter->paintGroupEnd($test_case);
+            if ($this->_just_this_case && $this->_matchesTestCase($test_case)) {
+                $this->_off();
             }
         }
 
@@ -409,12 +422,10 @@
          *    @access public
          */
         function paintCaseStart($test_case) {
-            if ($this->_isCaseMatch($test_case)) {
-                $this->_within_test_case = true;
+            if ($this->_just_this_case && $this->_matchesTestCase($test_case)) {
+                $this->_on();
             }
-            if ($this->_within_test_case) {
-                $this->_reporter->paintCaseStart($test_case);
-            }
+            $this->_reporter->paintCaseStart($test_case);
         }
 
         /**
@@ -423,11 +434,9 @@
          *    @access public
          */
         function paintCaseEnd($test_case) {
-            if ($this->_within_test_case) {
-                $this->_reporter->paintCaseEnd($test_case);
-            }
-            if ($this->_isCaseMatch($test_case)) {
-                $this->_within_test_case = false;
+            $this->_reporter->paintCaseEnd($test_case);
+            if ($this->_just_this_case && $this->_matchesTestCase($test_case)) {
+                $this->_off();
             }
         }
     }
