@@ -365,14 +365,27 @@
             return false;
         }
         
+        /**
+         *    Switch on testing for the group or subgroup.
+         *    @access private
+         */
         function _on() {
             $this->_on = true;
         }
         
+        /**
+         *    Switch off testing for the group or subgroup.
+         *    @access private
+         */
         function _off() {
             $this->_on = false;
         }
         
+        /**
+         *    Is this group actually being tested?
+         *    @return boolean     True if the current test group is active.
+         *    @access private
+         */
         function _isOn() {
             return $this->_on;
         }
@@ -411,30 +424,6 @@
          */
         function paintGroupEnd($test_case) {
             $this->_reporter->paintGroupEnd($test_case);
-            if ($this->_just_this_case && $this->_matchesTestCase($test_case)) {
-                $this->_off();
-            }
-        }
-
-        /**
-         *    Paints the start of a test case.
-         *    @param string $test_case     Name of test or other label.
-         *    @access public
-         */
-        function paintCaseStart($test_case) {
-            if ($this->_just_this_case && $this->_matchesTestCase($test_case)) {
-                $this->_on();
-            }
-            $this->_reporter->paintCaseStart($test_case);
-        }
-
-        /**
-         *    Paints the end of a test case.
-         *    @param string $test_case     Name of test or other label.
-         *    @access public
-         */
-        function paintCaseEnd($test_case) {
-            $this->_reporter->paintCaseEnd($test_case);
             if ($this->_just_this_case && $this->_matchesTestCase($test_case)) {
                 $this->_off();
             }
