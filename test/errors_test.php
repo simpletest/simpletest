@@ -248,6 +248,12 @@ class TestOfErrorsExcludingPHP52AndAbove extends UnitTestCase {
 }
 
 SimpleTest::ignore('TestOfNotEnoughErrors');
+/**
+ * This test is ignored as it is used by {@link TestRunnerForLeftOverAndNotEnoughErrors}
+ * to verify that it fails as expected.
+ *
+ * @ignore
+ */
 class TestOfNotEnoughErrors extends UnitTestCase {
     function testExpectTwoErrorsThrowOne() {
         $this->expectError('Error 1');
@@ -257,6 +263,12 @@ class TestOfNotEnoughErrors extends UnitTestCase {
 }
 
 SimpleTest::ignore('TestOfLeftOverErrors');
+/**
+ * This test is ignored as it is used by {@link TestRunnerForLeftOverAndNotEnoughErrors}
+ * to verify that it fails as expected.
+ *
+ * @ignore
+ */
 class TestOfLeftOverErrors extends UnitTestCase {
     function testExpectOneErrorGetTwo() {
         $this->expectError('Error 1');
