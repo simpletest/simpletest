@@ -246,6 +246,36 @@ class TestOfErrorsExcludingPHP52AndAbove extends UnitTestCase {
         @trigger_error('Ouch!', E_USER_ERROR);
     }
 }
+
+SimpleTest::ignore('TestOfNotEnoughErrors');
+class TestOfNotEnoughErrors extends UnitTestCase {
+    function testExpectTwoErrorsThrowOne() {
+        $this->expectError('Error 1');
+        trigger_error('Error 1');
+        $this->expectError('Error 2');
+    }
+}
+
+SimpleTest::ignore('TestOfLeftOverErrors');
+class TestOfLeftOverErrors extends UnitTestCase {
+    function testExpectOneErrorGetTwo() {
+        $this->expectError('Error 1');
+        trigger_error('Error 1');
+        trigger_error('Error 2');
+    }
+}
+
+class TestRunnerForLeftOverAndNotEnoughErrors extends UnitTestCase {
+    function testRunLeftOverErrorsTestCase() {
+        $test = new TestOfLeftOverErrors();
+        $this->assertFalse($test->run(new SimpleReporter()));
+    }
+    
+    function testRunNotEnoughErrors() {
+        $test = new TestOfNotEnoughErrors();
+        $this->assertFalse($test->run(new SimpleReporter()));
+    }
+}
     
 // TODO: Add stacked error handler test
 ?>
