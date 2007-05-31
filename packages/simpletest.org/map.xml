@@ -31,6 +31,7 @@
 		    <page title="Experimental stuff (in CVS only)" here="Experimental stuff" file="en/experimental_intro.html">
 		        <page title="[experimental] Running the tests, the easy way with autorun" here="Autorunning test cases" file="en/experimental_autorun.html" />
 		        <page title="[experimental] Using the test results for other tools with the Recorder" here="Recorder" file="en/experimental_recorder.html" />
+		        <page title="[experimental] Testing elements by CSS selector" here="DOM tester" file="en/experimental_dom_tester.html" />
 		    </page>
 	    </page>
 
