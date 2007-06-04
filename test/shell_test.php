@@ -31,7 +31,7 @@ class TestOfShellTesterAndShell extends ShellTestCase {
     }
     
     function testFilePatterns() {
-        $this->assertFilePattern('/all_tests/i', dirname(__FILE__) . '/all_tests.php');
+        $this->assertFilePattern('/all[_ ]tests/i', dirname(__FILE__) . '/all_tests.php');
         $this->assertNoFilePattern('/sputnik/i', dirname(__FILE__) . '/all_tests.php');
     }
 }
