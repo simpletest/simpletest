@@ -402,7 +402,6 @@
         var $_max_counts;
         var $_expected_args;
         var $_expected_args_at;
-        var $_has_listener = false;
 
         /**
          *    Creates an empty return list and expectation list.
@@ -416,28 +415,8 @@
             $this->_max_counts = array();
             $this->_expected_args = array();
             $this->_expected_args_at = array();
-        }
-        
-        /**
-         *    Sets the mock listener to an explicit test case.
-         *    This is a hook for testing.
-         *    @param SimpleTestCase $test    Test case to test expectations in.
-         *    @access public
-         */
-        function talkTo(&$test) {
-            if (! $this->_has_listener) {
-                $test->tell($this);
-                $this->_has_listener = true;
-            }
-        }
-        
-        /**
-         *    Connects the mock to the currently running
-         *    test case if not connected already.
-         *    @access private
-         */
-        function _talkToCurrentTest() {
-            $this->talkTo($this->_getCurrentTestCase());
+            $test = &$this->_getCurrentTestCase();
+            $test->tell($this);
         }
         
         /**
@@ -647,7 +626,6 @@
             $message .= Mock::getExpectationLine();
             $this->_expected_args[strtolower($method)] =
                     new ParametersExpectation($args, $message);
-            $this->_talkToCurrentTest();
         }
 
         /**
@@ -681,7 +659,6 @@
             $message .= Mock::getExpectationLine();
             $this->_expected_args_at[$timing][$method] =
                     new ParametersExpectation($args, $message);
-            $this->_talkToCurrentTest();
         }
 
         /**
@@ -706,7 +683,6 @@
             $message .= Mock::getExpectationLine();
             $this->_expected_counts[strtolower($method)] =
                     new CallCountExpectation($method, $count, $message);
-            $this->_talkToCurrentTest();
         }
 
         /**
@@ -723,7 +699,6 @@
             $message .= Mock::getExpectationLine();
             $this->_max_counts[strtolower($method)] =
                     new MaximumCallCountExpectation($method, $count, $message);
-            $this->_talkToCurrentTest();
         }
 
         /**
@@ -740,7 +715,6 @@
             $message .= Mock::getExpectationLine();
             $this->_expected_counts[strtolower($method)] =
                     new MinimumCallCountExpectation($method, $count, $message);
-            $this->_talkToCurrentTest();
         }
 
         /**
@@ -1008,9 +982,10 @@
         
         /**
          *    Subclasses a class and overrides every method with a mock one
-         *    that can have return values and expectations set.
+         *    that can have return values and expectations set. Chains
+         *    to an aggregated SimpleMock.
          *    @param array $methods        Additional methods to add beyond
-         *                                 those in th cloned class. Use this
+         *                                 those in the cloned class. Use this
          *                                 to emulate the dynamic addition of
          *                                 methods in the cloned class or when
          *                                 the class hasn't been written yet.
@@ -1024,7 +999,7 @@
             if ($mock_reflection->classExistsSansAutoload()) {
                 return false;
             }
-            if ($this->_reflection->isInterface() || $this->_reflection->hasfinal()) {
+            if ($this->_reflection->isInterface() || $this->_reflection->hasFinal()) {
                 $code = $this->_createClassCode($methods ? $methods : array());
                 return eval("$code return \$code;");
             } else {
@@ -1207,7 +1182,9 @@
          *    @access private
          */
         function _addMethodList($methods) {
-            return "    var \$_mocked_methods = array('" . implode("', '", $methods) . "');\n";
+            return "    var \$_mocked_methods = array('" .
+                    implode("', '", array_map('strtolower', $methods)) .
+                    "');\n";
         }
 
         /**

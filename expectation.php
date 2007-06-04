@@ -21,7 +21,7 @@
      *    @abstract
      */
     class SimpleExpectation {
-        var $_dumper;
+        var $_dumper = false;
         var $_message;
         
         /**
@@ -74,6 +74,10 @@
          *    @access protected
          */
         function &_getDumper() {
+            if (! $this->_dumper) {
+                $dumper = &new SimpleDumper();
+                return $dumper;
+            }
             return $this->_dumper;
         }
         
