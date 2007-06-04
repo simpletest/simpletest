@@ -318,13 +318,58 @@ class TestOfMockExpectationsThatPass extends UnitTestCase {
         $mock->aMethod(1, 2);
         $mock->aMethod(3, 4);
     }
+    
+    function testAtLeastOnceSatisfiedByOneCall() {
+        $mock = &new MockDummy();
+        $mock->expectAtLeastOnce('aMethod');
+        $mock->aMethod();
+    }
+    
+    function testAtLeastOnceSatisfiedByTwoCalls() {
+        $mock = &new MockDummy();
+        $mock->expectAtLeastOnce('aMethod');
+        $mock->aMethod();
+        $mock->aMethod();
+    }
+    
+    function testOnceSatisfiedByOneCall() {
+        $mock = &new MockDummy();
+        $mock->expectOnce('aMethod');
+        $mock->aMethod();
+    }
+    
+    function testMinimumCallsSatisfiedByEnoughCalls() {
+        $mock = &new MockDummy();
+        $mock->expectMinimumCallCount('aMethod', 1);
+        $mock->aMethod();
+    }
+    
+    function testMinimumCallsSatisfiedByTooManyCalls() {
+        $mock = &new MockDummy();
+        $mock->expectMinimumCallCount('aMethod', 3);
+        $mock->aMethod();
+        $mock->aMethod();
+        $mock->aMethod();
+        $mock->aMethod();
+    }
+    
+    function testMaximumCallsSatisfiedByEnoughCalls() {
+        $mock = &new MockDummy();
+        $mock->expectMaximumCallCount('aMethod', 1);
+        $mock->aMethod();
+    }
+    
+    function testMaximumCallsSatisfiedByNoCalls() {
+        $mock = &new MockDummy();
+        $mock->expectMaximumCallCount('aMethod', 1);
+    }
 }
 
 class MockWithInjectedTestCase extends SimpleMock {
     function &_getCurrentTestCase() {
         $context = &SimpleTest::getContext();
         $test = &$context->getTest();
-        return $test->test;        // Get the test within the actual test.
+        return $test->getMockedTest();
     }
 }
 SimpleTest::setMockBaseClass('MockWithInjectedTestCase');
@@ -354,6 +399,10 @@ class TestOfMockExpectations extends UnitTestCase {
 
     function setUp() {
         $this->test = &new MockSimpleTestCase();
+    }
+    
+    function &getMockedTest() {
+        return $this->test;
     }
 
     function testSettingExpectationOnNonMethodThrowsError() {
@@ -605,26 +654,11 @@ class TestOfSpecialMethods extends UnitTestCase {
     }
 }
 
-class TestOfMockTally extends UnitTestCase {
-
-    function testZeroCallCount() {
-        $mock = &new MockDummy();
-        $mock->expectCallCount('aMethod', 0);
-    }
-
-    function testExpectedCallCount() {
-        $mock = &new MockDummy();
-        $mock->expectCallCount('aMethod', 2);
-        $mock->aMethod();
-        $mock->aMethod();
-    }
-}
-
 Mock::generatePartial('Dummy', 'TestDummy', array('anotherMethod'));
 
 class TestOfPartialMocks extends UnitTestCase {
 
-    function testMethodReplacement() {
+    function testMethodReplacementWithNoBehaviourReturnsNull() {
         $mock = &new TestDummy();
         $this->assertEqual($mock->aMethod(99), 99);
         $this->assertNull($mock->anotherMethod());
@@ -650,8 +684,8 @@ class TestOfPartialMocks extends UnitTestCase {
     function testExpectations() {
         $mock = &new TestDummy();
         $mock->expectCallCount('anotherMethod', 2);
-        $mock->expectArguments('anotherMethod', array(77));
-        $mock->expectArgumentsAt(1, 'anotherMethod', array(66));
+        $mock->expect('anotherMethod', array(77));
+        $mock->expectAt(1, 'anotherMethod', array(66));
         $mock->anotherMethod(77);
         $mock->anotherMethod(66);
     }
