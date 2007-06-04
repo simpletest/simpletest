@@ -151,153 +151,9 @@ class Dummy {
         return true;
     }
 }
-
-Stub::generate('Dummy', 'StubDummy');
-Stub::generate('Dummy', 'AnotherStubDummy');
-Stub::generate('Dummy', 'StubDummyWithExtraMethods', array('extraMethod'));
-
-class SpecialSimpleStub extends SimpleMock {
-    function SpecialSimpleStub() {
-        $this->SimpleMock();
-    }
-}
-SimpleTest::setMockBaseClass('SpecialSimpleStub');
-Stub::generate('Dummy', 'SpecialStubDummy');
-SimpleTest::setMockBaseClass('SimpleMock');
-
-class TestOfStubGeneration extends UnitTestCase {
-
-    function testCloning() {
-        $stub = &new StubDummy();
-        $this->assertTrue(method_exists($stub, "aMethod"));
-        $this->assertNull($stub->aMethod(null));
-    }
-
-    function testCloningWithExtraMethod() {
-        $stub = &new StubDummyWithExtraMethods();
-        $this->assertTrue(method_exists($stub, "extraMethod"));
-    }
-
-    function testCloningWithChosenClassName() {
-        $stub = &new AnotherStubDummy();
-        $this->assertTrue(method_exists($stub, "aMethod"));
-    }
-
-    function testCloningWithDifferentBaseClass() {
-        $stub = &new SpecialStubDummy();
-        $this->assertTrue(method_exists($stub, "aMethod"));
-    }
-}
-
-class TestOfServerStubReturns extends UnitTestCase {
-
-    function testDefaultReturn() {
-        $stub = &new StubDummy();
-        $stub->setReturnValue("aMethod", "aaa");
-        $this->assertIdentical($stub->aMethod(), "aaa");
-        $this->assertIdentical($stub->aMethod(), "aaa");
-    }
-
-    function testParameteredReturn() {
-        $stub = &new StubDummy();
-        $stub->setReturnValue("aMethod", "aaa", array(1, 2, 3));
-        $this->assertNull($stub->aMethod());
-        $this->assertIdentical($stub->aMethod(1, 2, 3), "aaa");
-    }
-
-    function testReferenceReturned() {
-        $stub = &new StubDummy();
-        $object = new Dummy();
-        $stub->setReturnReference("aMethod", $object, array(1, 2, 3));
-        $this->assertReference($zref =& $stub->aMethod(1, 2, 3), $object);
-    }
-
-    function testMultipleMethods() {
-        $stub = &new StubDummy();
-        $stub->setReturnValue("aMethod", 100, array(1));
-        $stub->setReturnValue("aMethod", 200, array(2));
-        $stub->setReturnValue("anotherMethod", 10, array(1));
-        $stub->setReturnValue("anotherMethod", 20, array(2));
-        $this->assertIdentical($stub->aMethod(1), 100);
-        $this->assertIdentical($stub->anotherMethod(1), 10);
-        $this->assertIdentical($stub->aMethod(2), 200);
-        $this->assertIdentical($stub->anotherMethod(2), 20);
-    }
-
-    function testReturnSequence() {
-        $stub = &new StubDummy();
-        $stub->setReturnValueAt(0, "aMethod", "aaa");
-        $stub->setReturnValueAt(1, "aMethod", "bbb");
-        $stub->setReturnValueAt(3, "aMethod", "ddd");
-        $this->assertIdentical($stub->aMethod(), "aaa");
-        $this->assertIdentical($stub->aMethod(), "bbb");
-        $this->assertNull($stub->aMethod());
-        $this->assertIdentical($stub->aMethod(), "ddd");
-    }
-
-    function testReturnReferenceSequence() {
-        $stub = &new StubDummy();
-        $object = new Dummy();
-        $stub->setReturnReferenceAt(1, "aMethod", $object);
-        $this->assertNull($stub->aMethod());
-        $this->assertReference($zref =& $stub->aMethod(), $object);
-        $this->assertNull($stub->aMethod());
-    }
-
-    function testComplicatedReturnSequence() {
-        $stub = &new StubDummy();
-        $object = new Dummy();
-        $stub->setReturnValueAt(1, "aMethod", "aaa", array("a"));
-        $stub->setReturnValueAt(1, "aMethod", "bbb");
-        $stub->setReturnReferenceAt(2, "aMethod", $object, array('*', 2));
-        $stub->setReturnValueAt(2, "aMethod", "value", array('*', 3));
-        $stub->setReturnValue("aMethod", 3, array(3));
-        $this->assertNull($stub->aMethod());
-        $this->assertEqual($stub->aMethod("a"), "aaa");
-        $this->assertReference($zref =& $stub->aMethod(1, 2), $object);
-        $this->assertEqual($stub->aMethod(3), 3);
-        $this->assertNull($stub->aMethod());
-    }
-
-    function testMultipleMethodSequences() {
-        $stub = &new StubDummy();
-        $stub->setReturnValueAt(0, "aMethod", "aaa");
-        $stub->setReturnValueAt(1, "aMethod", "bbb");
-        $stub->setReturnValueAt(0, "anotherMethod", "ccc");
-        $stub->setReturnValueAt(1, "anotherMethod", "ddd");
-        $this->assertIdentical($stub->aMethod(), "aaa");
-        $this->assertIdentical($stub->anotherMethod(), "ccc");
-        $this->assertIdentical($stub->aMethod(), "bbb");
-        $this->assertIdentical($stub->anotherMethod(), "ddd");
-    }
-
-    function testSequenceFallback() {
-        $stub = &new StubDummy();
-        $stub->setReturnValueAt(0, "aMethod", "aaa", array('a'));
-        $stub->setReturnValueAt(1, "aMethod", "bbb", array('a'));
-        $stub->setReturnValue("aMethod", "AAA");
-        $this->assertIdentical($stub->aMethod('a'), "aaa");
-        $this->assertIdentical($stub->aMethod('b'), "AAA");
-    }
-
-    function testMethodInterference() {
-        $stub = &new StubDummy();
-        $stub->setReturnValueAt(0, "anotherMethod", "aaa");
-        $stub->setReturnValue("aMethod", "AAA");
-        $this->assertIdentical($stub->aMethod(), "AAA");
-        $this->assertIdentical($stub->anotherMethod(), "aaa");
-    }
-}
-
 Mock::generate('Dummy');
 Mock::generate('Dummy', 'AnotherMockDummy');
 Mock::generate('Dummy', 'MockDummyWithExtraMethods', array('extraMethod'));
-
-class SpecialSimpleMock extends SimpleMock { }
-
-SimpleTest::setMockBaseClass('SpecialSimpleMock');
-Mock::generate('Dummy', 'SpecialMockDummy');
-SimpleTest::setMockBaseClass('SimpleMock');
 
 class TestOfMockGeneration extends UnitTestCase {
 
@@ -316,14 +172,16 @@ class TestOfMockGeneration extends UnitTestCase {
         $mock = &new AnotherMockDummy();
         $this->assertTrue(method_exists($mock, "aMethod"));
     }
-
-    function testCloningWithDifferentBaseClass() {
-        $mock = &new SpecialMockDummy();
-        $this->assertTrue(method_exists($mock, "aMethod"));
-    }
 }
 
 class TestOfMockReturns extends UnitTestCase {
+
+    function testDefaultReturn() {
+        $mock = &new MockDummy();
+        $mock->setReturnValue("aMethod", "aaa");
+        $this->assertIdentical($mock->aMethod(), "aaa");
+        $this->assertIdentical($mock->aMethod(), "aaa");
+    }
 
     function testParameteredReturn() {
         $mock = &new MockDummy();
@@ -349,14 +207,80 @@ class TestOfMockReturns extends UnitTestCase {
         $this->assertNull($mock->aMethod('Goodbye'));
     }
 
+    function testMultipleMethods() {
+        $mock = &new MockDummy();
+        $mock->setReturnValue("aMethod", 100, array(1));
+        $mock->setReturnValue("aMethod", 200, array(2));
+        $mock->setReturnValue("anotherMethod", 10, array(1));
+        $mock->setReturnValue("anotherMethod", 20, array(2));
+        $this->assertIdentical($mock->aMethod(1), 100);
+        $this->assertIdentical($mock->anotherMethod(1), 10);
+        $this->assertIdentical($mock->aMethod(2), 200);
+        $this->assertIdentical($mock->anotherMethod(2), 20);
+    }
+
+    function testReturnSequence() {
+        $mock = &new MockDummy();
+        $mock->setReturnValueAt(0, "aMethod", "aaa");
+        $mock->setReturnValueAt(1, "aMethod", "bbb");
+        $mock->setReturnValueAt(3, "aMethod", "ddd");
+        $this->assertIdentical($mock->aMethod(), "aaa");
+        $this->assertIdentical($mock->aMethod(), "bbb");
+        $this->assertNull($mock->aMethod());
+        $this->assertIdentical($mock->aMethod(), "ddd");
+    }
+
     function testReturnReferenceSequence() {
         $mock = &new MockDummy();
         $object = new Dummy();
-        $mock->setReturnReferenceAt(1, 'aMethod', $object);
+        $mock->setReturnReferenceAt(1, "aMethod", $object);
         $this->assertNull($mock->aMethod());
         $this->assertReference($zref =& $mock->aMethod(), $object);
         $this->assertNull($mock->aMethod());
-        $this->swallowErrors();
+    }
+
+    function testComplicatedReturnSequence() {
+        $mock = &new MockDummy();
+        $object = new Dummy();
+        $mock->setReturnValueAt(1, "aMethod", "aaa", array("a"));
+        $mock->setReturnValueAt(1, "aMethod", "bbb");
+        $mock->setReturnReferenceAt(2, "aMethod", $object, array('*', 2));
+        $mock->setReturnValueAt(2, "aMethod", "value", array('*', 3));
+        $mock->setReturnValue("aMethod", 3, array(3));
+        $this->assertNull($mock->aMethod());
+        $this->assertEqual($mock->aMethod("a"), "aaa");
+        $this->assertReference($zref =& $mock->aMethod(1, 2), $object);
+        $this->assertEqual($mock->aMethod(3), 3);
+        $this->assertNull($mock->aMethod());
+    }
+
+    function testMultipleMethodSequences() {
+        $mock = &new MockDummy();
+        $mock->setReturnValueAt(0, "aMethod", "aaa");
+        $mock->setReturnValueAt(1, "aMethod", "bbb");
+        $mock->setReturnValueAt(0, "anotherMethod", "ccc");
+        $mock->setReturnValueAt(1, "anotherMethod", "ddd");
+        $this->assertIdentical($mock->aMethod(), "aaa");
+        $this->assertIdentical($mock->anotherMethod(), "ccc");
+        $this->assertIdentical($mock->aMethod(), "bbb");
+        $this->assertIdentical($mock->anotherMethod(), "ddd");
+    }
+
+    function testSequenceFallback() {
+        $mock = &new MockDummy();
+        $mock->setReturnValueAt(0, "aMethod", "aaa", array('a'));
+        $mock->setReturnValueAt(1, "aMethod", "bbb", array('a'));
+        $mock->setReturnValue("aMethod", "AAA");
+        $this->assertIdentical($mock->aMethod('a'), "aaa");
+        $this->assertIdentical($mock->aMethod('b'), "AAA");
+    }
+
+    function testMethodInterference() {
+        $mock = &new MockDummy();
+        $mock->setReturnValueAt(0, "anotherMethod", "aaa");
+        $mock->setReturnValue("aMethod", "AAA");
+        $this->assertIdentical($mock->aMethod(), "AAA");
+        $this->assertIdentical($mock->anotherMethod(), "aaa");
     }
 }
 

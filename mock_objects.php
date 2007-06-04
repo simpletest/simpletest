@@ -402,27 +402,44 @@
         var $_max_counts;
         var $_expected_args;
         var $_expected_args_at;
+        var $_has_listener = false;
 
         /**
          *    Creates an empty return list and expectation list.
          *    All call counts are set to zero.
-         *    @param SimpleTestCase $test    Test case to test expectations in.
-         *    @param mixed $wildcard         Parameter matching wildcard.
-         *    @param boolean $is_strict      Enables method name checks on
-         *                                   expectations.
          */
         function SimpleMock() {
             $this->_returns = array();
             $this->_return_sequence = array();
             $this->_call_counts = array();
-            $test = &$this->_getCurrentTestCase();
-            $test->tell($this);
             $this->_expected_counts = array();
             $this->_max_counts = array();
             $this->_expected_args = array();
             $this->_expected_args_at = array();
         }
-
+        
+        /**
+         *    Sets the mock listener to an explicit test case.
+         *    This is a hook for testing.
+         *    @param SimpleTestCase $test    Test case to test expectations in.
+         *    @access public
+         */
+        function talkTo(&$test) {
+            if (! $this->_has_listener) {
+                $test->tell($this);
+                $this->_has_listener = true;
+            }
+        }
+        
+        /**
+         *    Connects the mock to the currently running
+         *    test case if not connected already.
+         *    @access private
+         */
+        function _talkToCurrentTest() {
+            $this->talkTo($this->_getCurrentTestCase());
+        }
+        
         /**
          *    Disables a name check when setting expectations.
          *    This hack is needed for the partial mocks.
@@ -630,6 +647,7 @@
             $message .= Mock::getExpectationLine();
             $this->_expected_args[strtolower($method)] =
                     new ParametersExpectation($args, $message);
+            $this->_talkToCurrentTest();
         }
 
         /**
@@ -663,6 +681,7 @@
             $message .= Mock::getExpectationLine();
             $this->_expected_args_at[$timing][$method] =
                     new ParametersExpectation($args, $message);
+            $this->_talkToCurrentTest();
         }
 
         /**
@@ -687,6 +706,7 @@
             $message .= Mock::getExpectationLine();
             $this->_expected_counts[strtolower($method)] =
                     new CallCountExpectation($method, $count, $message);
+            $this->_talkToCurrentTest();
         }
 
         /**
@@ -703,6 +723,7 @@
             $message .= Mock::getExpectationLine();
             $this->_max_counts[strtolower($method)] =
                     new MaximumCallCountExpectation($method, $count, $message);
+            $this->_talkToCurrentTest();
         }
 
         /**
@@ -719,6 +740,7 @@
             $message .= Mock::getExpectationLine();
             $this->_expected_counts[strtolower($method)] =
                     new MinimumCallCountExpectation($method, $count, $message);
+            $this->_talkToCurrentTest();
         }
 
         /**
@@ -744,7 +766,7 @@
         function expectOnce($method, $args = false, $message = '%s') {
             $this->expectCallCount($method, 1, $message);
             if ($args !== false) {
-                $this->expectArguments($method, $args, $message);
+                $this->expect($method, $args, $message);
             }
         }
 
@@ -760,7 +782,7 @@
         function expectAtLeastOnce($method, $args = false, $message = '%s') {
             $this->expectMinimumCallCount($method, 1, $message);
             if ($args !== false) {
-                $this->expectArguments($method, $args, $message);
+                $this->expect($method, $args, $message);
             }
         }
 
@@ -775,8 +797,8 @@
          *    test method has finished. Totals up the call
          *    counts and triggers a test assertion if a test
          *    is present for expected call counts.
-         *    @param string $test_method    Current method name.
-         *    @param SimpleTestCase $test   Test to send message to.
+         *    @param string $test_method      Current method name.
+         *    @param SimpleTestCase $test     Test to send message to.
          *    @access public
          */
         function atTestEnd($test_method, &$test) {
@@ -928,8 +950,8 @@
     }
 
     /**
-     *	@package	SimpleTest
-     *	@subpackage	MockObjects
+     *	  @package	SimpleTest
+     *	  @subpackage	MockObjects
      *    @deprecated
      */
     class Stub extends Mock {
@@ -946,6 +968,12 @@
         var $_mock_base;
         var $_reflection;
 
+        /**
+         *    Builds initial reflection object.
+         *    @param string $class        Class to be mocked.
+         *    @param string $mock_class   New class with identical interface,
+         *                                but no behaviour.
+         */
         function MockGenerator($class, $mock_class) {
             $this->_class = $class;
             $this->_mock_class = $mock_class;
@@ -1189,7 +1217,7 @@
          *    @access private
          */
         function _bailOutIfNotMocked($alias) {
-            $code  = "        if (! in_array($alias, \$this->_mocked_methods)) {\n";
+            $code  = "        if (! in_array(strtolower($alias), \$this->_mocked_methods)) {\n";
             $code .= "            trigger_error(\"Method [$alias] is not mocked\");\n";
             $code .= "            \$null = null;\n";
             $code .= "            return \$null;\n";
@@ -1271,7 +1299,6 @@
             $code .= "        \$this->_mock->expectAtLeastOnce(\$method, \$args, \$msg);\n";
             $code .= "    }\n";
             $code .= "    function tally() {\n";
-            $code .= "        \$this->_mock->tally();\n";
             $code .= "    }\n";
             return $code;
         }
