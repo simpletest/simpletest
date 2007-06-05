@@ -96,6 +96,7 @@ class SimpleSeleniumRemoteControl
             throw new Exception('Unable to setup curl');
         }
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, floor($this->_timeout / 1000));
         $result = curl_exec($ch);
 
         if (($errno = curl_errno($ch)) != 0) {
