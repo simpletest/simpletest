@@ -39,7 +39,7 @@ class SimpleSeleniumRemoteControl
 
 	public function start() {
 		$response = $this->cmd('getNewBrowserSession', array($this->_browser, $this->_browserUrl));
-		$this->_sessionId = (int)substr($response, 3);
+		$this->_sessionId = substr($response, 3);
 	}
 
 	public function stop() {
