@@ -6,7 +6,6 @@
  * http://domain51.googlecode.com/svn/Domain51/trunk/
  *
  * @author Travis Swicegood <development [at] domain51 [dot] com>
- * @contributor Perrick Penet <perrick [at] noparking [dot] net>
  *
  */
 class SimpleSeleniumRemoteControl
@@ -78,28 +77,29 @@ class SimpleSeleniumRemoteControl
 		return "http://{$this->_host}:{$this->_port}/selenium-server/driver/";
 	}
 
+    public function buildUrlCmd($method, $arguments = array()) {
+        $params = array(
+            'cmd=' . urlencode($method),
+        );
+        $i = 1;
+        foreach ($arguments as $param) {
+            $params[] = $i++ . '=' . urlencode(trim($param));
+        }
+        if (isset($this->_sessionId)) {
+            $params[] = 'sessionId=' . $this->_sessionId;
+        }
+
+        return $this->_server()."?".implode('&', $params);
+    }
+
 	public function cmd($method, $arguments = array()) {
-		$params = array();
-		$params['cmd'] = $method;
-		$i = 1;
-		foreach ($arguments as $param) {
-			$params[$i++] = trim($param);
-		}
-		if (isset($this->_sessionId)) {
-			$params['sessionId'] = $this->_sessionId;
-		}
-		$url = $this->_server()."?".http_build_query($params);
-		$response = $this->_sendRequest($url);
-		return $response;
+          $url = $this->buildUrlCmd($method, $arguments);
+          $response = $this->_sendRequest($url);
+          return $response;
 	}
 
 	public function isUp() {
-		$headers = @get_headers($this->_server());
-		$_isUp = false;
-		if (preg_match("/200 OK/", $headers[0])) {
-			$_isUp = true;
-		}
-	    return $_isUp;
+        return (bool)@fsockopen($this->_host, $this->_port, $errno, $errstr, 30);
 	}
 	
 	private function _initCurl($url) {
@@ -110,7 +110,7 @@ class SimpleSeleniumRemoteControl
             throw new Exception('Unable to setup curl');
         }
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, floor($this->_timeout / 1000));
+        curl_setopt($ch, CURLOPT_TIMEOUT, floor($this->_timeout));
 		return $ch;	
 	}
 	
