@@ -37,9 +37,13 @@ class SimpleSeleniumRemoteControl
 		$this->_timeout = $timeout;
 	}
 
+	public function sessionIdParser($response) {
+		return substr($response, 3);
+	}
+	
 	public function start() {
 		$response = $this->cmd('getNewBrowserSession', array($this->_browser, $this->_browserUrl));
-		$this->_sessionId = substr($response, 3);
+		$this->_sessionId = $this->sessionIdParser($response);
 	}
 
 	public function stop() {
@@ -69,36 +73,49 @@ class SimpleSeleniumRemoteControl
 		}
 	}
 	
+	private function _server() {
+		return "http://{$this->_host}:{$this->_port}/selenium-server/driver/";
+	}
+
 	public function cmd($method, $arguments = array()) {
-		$url = "http://{$this->_host}:{$this->_port}/selenium-server/driver/?";
-		$params = array(
-			'cmd=' . urlencode($method),
-		);
+		$params = array();
+		$params['cmd'] = $method;
 		$i = 1;
 		foreach ($arguments as $param) {
-			$params[] = $i++ . '=' . urlencode(trim($param));
+			$params[$i++] = trim($param);
 		}
 		if (isset($this->_sessionId)) {
-			$params[] = 'sessionId=' . $this->_sessionId;
+			$params['sessionId'] = $this->_sessionId;
 		}
-
-		$url .= implode('&', $params);
+		$url = $this->_server()."?".http_build_query($params);
 		$response = $this->_sendRequest($url);
 		return $response;
 	}
 
-	private function _sendRequest($url) {
+	public function isUp() {
+		$headers = @get_headers($this->_server());
+		$_isUp = false;
+		if (preg_match("/200 OK/", $headers[0])) {
+			$_isUp = true;
+		}
+	    return $_isUp;
+	}
+	
+	private function _initCurl($url) {
         if (!function_exists('curl_init')) {
             throw new Exception('this code currently requires the curl extension');
         }
-
         if (!$ch = curl_init($url)) {
             throw new Exception('Unable to setup curl');
         }
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, floor($this->_timeout / 1000));
+		return $ch;	
+	}
+	
+	private function _sendRequest($url) {
+        $ch = $this->_initCurl($url);
         $result = curl_exec($ch);
-
         if (($errno = curl_errno($ch)) != 0) {
             throw new Exception('Curl returned non-null errno ' . $errno . ':' . curl_error($ch));
         }
@@ -106,4 +123,3 @@ class SimpleSeleniumRemoteControl
         return $result;
 	}
 }
-
