@@ -355,7 +355,26 @@ class SeleneseTestCase extends UnitTestCase {
 		}
 		$this->selenium->stop();
 	}
-	
+    
+	/**
+	 * launchPhpFile
+	 * 
+	 * Parse the PHP file then launch the computed test suite
+	 * 
+	 * @param string $file
+	 * 
+	 */
+    function launchPhpFile($file) {
+        ob_start();
+        require($file);
+        $data = ob_get_contents();
+        ob_end_clean();
+        
+        $this->testFile = $file;
+        $this->html = $data;
+        $this->launch($this->html);
+    }
+    
 	/**
 	 * launchFile
 	 * 

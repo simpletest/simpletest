@@ -6,6 +6,7 @@
  * http://domain51.googlecode.com/svn/Domain51/trunk/
  *
  * @author Travis Swicegood <development [at] domain51 [dot] com>
+ * @contributor Perrick Penet <perrick [at] noparking [dot] net>
  *
  */
 class SimpleSeleniumRemoteControl

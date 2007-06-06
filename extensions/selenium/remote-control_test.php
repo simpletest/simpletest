@@ -18,7 +18,19 @@ class TestOfSimpleSeleniumRemoteControl extends UnitTestCase {
 
 	function testIsUpReturnsTrueWhenDirectedToLocalhostOnPort80() {
 		$remote_control = new SimpleSeleniumRemoteControl("tester", "http://simpletest.org/", "localhost", "80");
-		$this->assertFalse($remote_control->isUp());
+		$this->assertTrue($remote_control->isUp());
 	}
-}
 
+    function testIsUpReturnsTrue() {
+        $remote_control = new SimpleSeleniumRemoteControl("*custom opera -nosession", "http://simpletest.org/");
+        $this->assertTrue($remote_control->isUp());
+    }
+
+    function testOfCommandCreation() {
+        $remote_control = new SimpleSeleniumRemoteControl("tester", "http://simpletest.org/");
+        $this->assertEqual($remote_control->buildUrlCmd("test"), 'http://localhost:4444/selenium-server/driver/?cmd=test');
+        $this->assertEqual($remote_control->buildUrlCmd("test", array("next")), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=next');
+        $this->assertEqual($remote_control->buildUrlCmd("test", array("ŽtŽ")), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=%C3%A9t%C3%A9');
+        $this->assertEqual($remote_control->buildUrlCmd("test", array("next", "then")), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=next&2=then');
+    }
+}
