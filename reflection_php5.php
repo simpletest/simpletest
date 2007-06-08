@@ -226,6 +226,21 @@ class SimpleReflection {
         }
         return $interface->getMethod($name)->isAbstract();
 	}
+	
+	/**
+	 * Checks whether a method is static or not.
+	 *
+	 * @param	string	$name	Method name
+	 * @return	bool			true if method is static, else false
+	 * @access	private
+	 */
+	function _isStaticMethod($name) {
+		$interface = new ReflectionClass($this->_interface);
+		if (! $interface->hasMethod($name)) {
+			return false;
+		}
+		return $interface->getMethod($name)->isStatic();
+	}
 
 	/**
 	 *    Gets the source code matching the declaration
@@ -252,7 +267,7 @@ class SimpleReflection {
 		if (! is_callable(array($this->_interface, $name)) && ! $this->_isAbstractMethod($name)) {
 			return "function $name()";
 		}
-		if ($this->_isInterfaceMethod($name) || $this->_isAbstractMethod($name)) {
+		if ($this->_isInterfaceMethod($name) || $this->_isAbstractMethod($name) || $this->_isStaticMethod($name)) {
 			return $this->_getFullSignature($name);
 		}
 		return "function $name()";
@@ -270,7 +285,8 @@ class SimpleReflection {
 		$interface = new ReflectionClass($this->_interface);
 		$method = $interface->getMethod($name);
 		$reference = $method->returnsReference() ? '&' : '';
-		return "function $reference$name(" .
+		$static = $method->isStatic() ? 'static ' : '';
+		return "{$static}function $reference$name(" .
 				implode(', ', $this->_getParameterSignatures($method)) .
 				")";
 	}

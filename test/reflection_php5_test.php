@@ -61,6 +61,11 @@ class AnyOldOverloadedClass {
 	function __unset($key) { }
 }
 
+class AnyOldClassWithStaticMethods {
+	static function aStatic() { }
+	static function aStaticWithParameters($arg1, $arg2) { }
+}
+
 class TestOfReflection extends UnitTestCase {
 
 	function testClassExistence() {
@@ -209,6 +214,15 @@ class TestOfReflection extends UnitTestCase {
 	function testCreatingSignatureForAbstractMethod() {
 	    $reflection = new SimpleReflection('AnotherOldAbstractClass');
 	    $this->assertEqual($reflection->getSignature('aMethod'), 'function aMethod(AnyOldInterface $argument)');
+	}
+	
+	function testCanProperlyGenerateStaticMethodSignatures() {
+		$reflection = new SimpleReflection('AnyOldClassWithStaticMethods');
+		$this->assertEqual('static function aStatic()', $reflection->getSignature('aStatic'));
+		$this->assertEqual(
+			'static function aStaticWithParameters($arg1, $arg2)',
+			$reflection->getSignature('aStaticWithParameters')
+		);
 	}
 }
 

@@ -716,4 +716,21 @@ class TestOfPHP4StyleSuperClassConstruct extends UnitTestCase {
         $this->assertTrue(method_exists($mock, 'ConstructorSuperClass'));
     }
 }
+
+class TestOfPHP5StaticMethodMocking extends UnitTestCase {
+    function skip() {
+        $this->skipIf(version_compare(phpversion(), '5', '<='), 'Static methods not tested in PHP 4');
+    }
+    
+    function testCanCreateAMockObjectWithStaticMethodsWithoutError() {
+        eval('
+            class SimpleObjectContainingStaticMethod {
+                static function someStatic() { }
+            }
+        ');
+        
+        Mock::generate('SimpleObjectContainingStaticMethod');
+        $this->assertNoErrors();
+    }
+}
 ?>
