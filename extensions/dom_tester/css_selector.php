@@ -165,6 +165,11 @@ class CssSelector {
           continue; // Skip to next token
         }
 
+        if (preg_match('/^(\w*)(:first-child)$/', $token, $matches)) {
+          $token = $matches[1] ? $matches[1] : '*';
+          $combinator = $matches[2] ? $matches[2] : '';
+        }
+        
         // If we get here, token is JUST an element (not a class or ID selector)
         $nodes = $this->getElementsByTagName($nodes, $token, $combinator);
       }
@@ -218,6 +223,13 @@ class CssSelector {
 				$founds[] = $element;
 			}
 			break;
+        case ':first-child':
+          foreach ($node->getElementsByTagName($tagName) as $element) {
+            if (count($founds) == 0) {
+              $founds[] = $element;
+            }
+          }
+          break;
       }
     }
 

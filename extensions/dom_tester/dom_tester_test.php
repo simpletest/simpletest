@@ -141,6 +141,17 @@ class TestsOfChildAndAdjacentSelectors extends DomTestCase {
 		$this->dom->loadHTML($html);
 	}
 
+    function testFirstChild() {
+		$expectation = new CssSelectorExpectation($this->dom, 'p:first-child');
+        $this->assertTrue($expectation->test(array('First paragraph')));
+
+		$expectation = new CssSelectorExpectation($this->dom, 'body > p:first-child');
+        $this->assertTrue($expectation->test(array('First paragraph')));
+
+		$expectation = new CssSelectorExpectation($this->dom, 'body > p > a:first-child');
+        $this->assertTrue($expectation->test(array('paragraph')));
+    }
+
     function testChildren() {
 		$expectation = new CssSelectorExpectation($this->dom, 'body > p');
         $this->assertTrue($expectation->test(array('First paragraph', 'Second paragraph', 'Third paragraph')));
