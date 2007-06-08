@@ -11,7 +11,8 @@ class TestOfLiveCssSelectors extends DomTestCase {
     }
     
     function testGet() {
-        $url = 'http://simpletest.org/live/extensions/dom_tester/dom_tester.html';
+//        $url = 'http://simpletest.org/live/extensions/dom_tester/dom_tester.html';
+        $url = 'http://localhost/~perrick/simpletest/extensions/dom_tester/dom_tester.html';
         $this->assertTrue($this->get($url));
         $this->assertEqual($this->getUrl(), $url);
         $this->assertElementsBySelector('h1', array('Test page'));
@@ -22,7 +23,6 @@ class TestOfLiveCssSelectors extends DomTestCase {
 }
 
 class TestOfCssSelectors extends UnitTestCase {
-
 	function TestOfCssSelectors() {
 		$html = file_get_contents(dirname(__FILE__) . '/dom_tester.html');
 		$this->dom = new DomDocument('1.0', 'utf-8');
@@ -107,11 +107,11 @@ class TestOfCssSelectors extends UnitTestCase {
 		$expectation = new CssSelectorExpectation($this->dom, 'div#combinators>ul>li');
         $this->assertTrue($expectation->test(array('test 1', 'test 2')));
         
-		$expectation = new CssSelectorExpectation($this->dom, 'div#combinators ul  +   li');
-        $this->assertTrue($expectation->test(array('test 1', 'test 3')));
+		$expectation = new CssSelectorExpectation($this->dom, 'div#combinators li  +   li');
+        $this->assertTrue($expectation->test(array('test 2', 'test 4')));
         
-		$expectation = new CssSelectorExpectation($this->dom, 'div#combinators ul+li');
-        $this->assertTrue($expectation->test(array('test 1', 'test 3')));
+		$expectation = new CssSelectorExpectation($this->dom, 'div#combinators li+li');
+        $this->assertTrue($expectation->test(array('test 2', 'test 4')));
 
 		$expectation = new CssSelectorExpectation($this->dom, 'h1, h2');
         $this->assertTrue($expectation->test(array('Test page', 'Title 1', 'Title 2')));
@@ -128,7 +128,37 @@ class TestOfCssSelectors extends UnitTestCase {
 		$expectation = new CssSelectorExpectation($this->dom, 'h1,h2,h1');
         $this->assertTrue($expectation->test(array('Test page', 'Title 1', 'Title 2')));
 
-		$expectation = new CssSelectorExpectation($this->dom, 'p[onclick*="a . and a #"], div#combinators > ul + li');
-        $this->assertTrue($expectation->test(array('works great', 'test 1')));
+		$expectation = new CssSelectorExpectation($this->dom, 'p[onclick*="a . and a #"], div#combinators > ul > li + li');
+        $this->assertTrue($expectation->test(array('works great', 'test 2')));
     }
 }
+
+class TestsOfChildAndAdjacentSelectors extends DomTestCase {
+	function TestsOfChildAndAdjacentSelectors() {
+		$html = file_get_contents(dirname(__FILE__) . '/dom_tester_child_adjacent.html');
+		$this->dom = new DomDocument('1.0', 'utf-8');
+		$this->dom->validateOnParse = true;
+		$this->dom->loadHTML($html);
+	}
+
+    function testChildren() {
+		$expectation = new CssSelectorExpectation($this->dom, 'body > p');
+        $this->assertTrue($expectation->test(array('First paragraph', 'Second paragraph', 'Third paragraph')));
+
+		$expectation = new CssSelectorExpectation($this->dom, 'body > p > a');
+        $this->assertTrue($expectation->test(array('paragraph')));
+    }
+
+    function testAdjacents() {
+		$expectation = new CssSelectorExpectation($this->dom, 'p + p');
+        $this->assertTrue($expectation->test(array('Second paragraph', 'Third paragraph')));
+
+		$expectation = new CssSelectorExpectation($this->dom, 'body > p + p');
+        $this->assertTrue($expectation->test(array('Second paragraph', 'Third paragraph')));
+
+		$expectation = new CssSelectorExpectation($this->dom, 'body > p + p > a');
+        $this->assertTrue($expectation->test(array('paragraph')));
+    }
+}
+
+?>

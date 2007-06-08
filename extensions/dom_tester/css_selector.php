@@ -210,12 +210,14 @@ class CssSelector {
           }
           break;
         case '+':
-          $element = $node->childNodes->item(0);
-          if ($element && $tagName == $element->nodeName)
-          {
-            $founds[] = $element;
-          }
-          break;
+			$element = $node->nextSibling;
+			if ($element->nodeName == "#text") {
+				$element = $element->nextSibling;
+			}
+			if ($element && $tagName == $element->nodeName) {
+				$founds[] = $element;
+			}
+			break;
       }
     }
 
