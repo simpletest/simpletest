@@ -371,7 +371,7 @@
             return 1;
         }
     }
-    
+
     /**
      *  Helps to extract test cases automatically from a file.
      */
@@ -426,7 +426,7 @@
          */
         function &createSuiteFromClasses($title, $classes) {
             if (count($classes) == 0) {
-                $suite = &new BadTestSuite($test_file, "No runnable test cases in [$test_file]");
+                $suite = &new BadTestSuite($title, "No runnable test cases in [$title]");
                 return $suite;
             }
             SimpleTest::ignoreParentsIfIgnored($classes);
