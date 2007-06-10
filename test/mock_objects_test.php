@@ -750,6 +750,25 @@ class TestOfPHP5AbstractMethodMocking extends UnitTestCase {
         
         Mock::generate('SimpleAbstractClassContainingAbstractMethods');
         $this->assertNoErrors();
+        
+        $this->assertTrue(
+            method_exists(
+                'MockSimpleAbstractClassContainingAbstractMethods',
+                'anAbstract'
+            )
+        );
+        $this->assertTrue(
+            method_exists(
+                'MockSimpleAbstractClassContainingAbstractMethods',
+                'anAbstractWithParameter'
+            )
+        );
+        $this->assertTrue(
+            method_exists(
+                'MockSimpleAbstractClassContainingAbstractMethods',
+                'anAbstractWithMultipleParameters'
+            )
+        );
     }
 }
 
