@@ -733,4 +733,24 @@ class TestOfPHP5StaticMethodMocking extends UnitTestCase {
         $this->assertNoErrors();
     }
 }
+
+class TestOfPHP5AbstractMethodMocking extends UnitTestCase {
+    function skip() {
+        $this->skipIf(version_compare(phpversion(), '5', '<='), 'Abstract class/methods not tested in PHP 4');
+    }
+    
+    function testCanCreateAMockObjectFromAnAbstractWithProperFunctionDeclarations() {
+        eval('
+             abstract class SimpleAbstractClassContainingAbstractMethods {
+                abstract function anAbstract();
+                abstract function anAbstractWithParameter($foo);
+                abstract function anAbstractWithMultipleParameters($foo, $bar);
+            }
+        ');
+        
+        Mock::generate('SimpleAbstractClassContainingAbstractMethods');
+        $this->assertNoErrors();
+    }
+}
+
 ?>

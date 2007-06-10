@@ -66,6 +66,12 @@ class AnyOldClassWithStaticMethods {
 	static function aStaticWithParameters($arg1, $arg2) { }
 }
 
+abstract class AnyOldAbstractClassWithAbstractMethods {
+    abstract function anAbstract();
+    abstract function anAbstractWithParameter($foo);
+    abstract function anAbstractWithMultipleParameters($foo, $bar);
+}
+
 class TestOfReflection extends UnitTestCase {
 
 	function testClassExistence() {
@@ -243,4 +249,23 @@ class TestOfReflectionWithTypeHints extends UnitTestCase {
 		$this->assertEqual('function amethod(array $argument)', $function);
 	}
 }
+
+class TestOfAbstractsWithAbstractMethods extends UnitTestCase {
+    function testCanProperlyGenerateAbstractMethods() {
+        $reflection = new SimpleReflection('AnyOldAbstractClassWithAbstractMethods');
+        $this->assertEqual(
+            'function anAbstract()',
+            $reflection->getSignature('anAbstract')
+        );
+        $this->assertEqual(
+            'function anAbstractWithParameter($foo)',
+            $reflection->getSignature('anAbstractWithParameter')
+        );
+        $this->assertEqual(
+            'function anAbstractWithMultipleParameters($foo, $bar)',
+            $reflection->getSignature('anAbstractWithMultipleParameters')
+        );
+    }
+}
+
 ?>
