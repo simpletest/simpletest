@@ -56,14 +56,14 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
 		}
 		restore_error_handler();
 	}
-	
+
 	function after($method) {
 		$context = &SimpleTest::getContext();
 		$queue = &$context->get('SimpleErrorQueue');
 		$queue->setTestCase($this->getTestCase());
 		while (list($expected, $message) = $queue->extractExpectation()) {
 			$testCase = &$this->getTestCase();
-			
+
 			$testCase->fail(
 				sprintf('Expected PHP error [%s] not caught', $expected->_value)
 			);
@@ -154,7 +154,7 @@ class SimpleErrorQueue {
 		}
 		return false;
 	}
-	
+
 	function extractExpectation() {
 		if (count($this->_expectation_queue)) {
 			return array_shift($this->_expectation_queue);
@@ -232,6 +232,9 @@ class SimpleErrorQueue {
 				E_USER_ERROR => 'E_USER_ERROR',
 				E_USER_WARNING => 'E_USER_WARNING',
 				E_USER_NOTICE => 'E_USER_NOTICE');
+    if(version_compare(phpversion(), '5.2.0', '>=')) {
+       $map[E_RECOVERABLE_ERROR] = 'E_RECOVERABLE_ERROR';
+    }
 		return $map[$severity];
 	}
 }
