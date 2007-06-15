@@ -229,11 +229,6 @@ class TestOfErrors extends UnitTestCase {
     }
 }
 
-class RecoverableErrorTestingStub {
-  function ouch(RecoverableErrorTestingStub $obj) {
-  }
-}
-
 class TestOfPHP52RecoverableErrors extends UnitTestCase {
     function skip() {
         $this->skipIf(
@@ -242,6 +237,13 @@ class TestOfPHP52RecoverableErrors extends UnitTestCase {
     }
 
     function testError() {
+        eval('
+            class RecoverableErrorTestingStub {
+                function ouch(RecoverableErrorTestingStub $obj) {
+                }
+            }
+        ');
+
         $stub = new RecoverableErrorTestingStub();
         $this->expectError(new PatternExpectation('/must be an instance of RecoverableErrorTestingStub/i'));
         $stub->ouch(new stdClass());
