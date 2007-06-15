@@ -161,7 +161,7 @@ class TestOfErrorTrap extends UnitTestCase {
         $this->expectError(new PatternExpectation('/ouch/i'));
         trigger_error('Ouch!');
     }
-    
+
     function testErrorWithPercentsPassesWithNoSprintfError() {
         $this->expectError("%");
         trigger_error('%');
@@ -229,6 +229,25 @@ class TestOfErrors extends UnitTestCase {
     }
 }
 
+class RecoverableErrorTestingStub {
+  function ouch(RecoverableErrorTestingStub $obj) {
+  }
+}
+
+class TestOfPHP52RecoverableErrors extends UnitTestCase {
+    function skip() {
+        $this->skipIf(
+                version_compare(phpversion(), '5.2', '<'),
+                'E_RECOVERABLE_ERROR not tested for PHP below 5.2');
+    }
+
+    function testError() {
+        $stub = new RecoverableErrorTestingStub();
+        $this->expectError(new PatternExpectation('/must be an instance of RecoverableErrorTestingStub/i'));
+        $stub->ouch(new stdClass());
+    }
+}
+
 class TestOfErrorsExcludingPHP52AndAbove extends UnitTestCase {
     function skip() {
         $this->skipIf(
@@ -282,12 +301,12 @@ class TestRunnerForLeftOverAndNotEnoughErrors extends UnitTestCase {
         $test = new TestOfLeftOverErrors();
         $this->assertFalse($test->run(new SimpleReporter()));
     }
-    
+
     function testRunNotEnoughErrors() {
         $test = new TestOfNotEnoughErrors();
         $this->assertFalse($test->run(new SimpleReporter()));
     }
 }
-    
+
 // TODO: Add stacked error handler test
 ?>
