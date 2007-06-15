@@ -285,32 +285,32 @@ class TestOfMockReturns extends UnitTestCase {
 }
 
 class TestOfMockExpectationsThatPass extends UnitTestCase {
-    
+
     function testAnyArgument() {
         $mock = &new MockDummy();
         $mock->expect('aMethod', array('*'));
         $mock->aMethod(1);
         $mock->aMethod('hello');
     }
-    
+
     function testAnyTwoArguments() {
         $mock = &new MockDummy();
         $mock->expect('aMethod', array('*', '*'));
         $mock->aMethod(1, 2);
     }
-    
+
     function testSpecificArgument() {
         $mock = &new MockDummy();
         $mock->expect('aMethod', array(1));
         $mock->aMethod(1);
     }
-    
+
     function testExpectation() {
         $mock = &new MockDummy();
         $mock->expect('aMethod', array(new IsAExpectation('Dummy')));
         $mock->aMethod(new Dummy());
     }
-    
+
     function testArgumentsInSequence() {
         $mock = &new MockDummy();
         $mock->expectAt(0, 'aMethod', array(1, 2));
@@ -318,32 +318,32 @@ class TestOfMockExpectationsThatPass extends UnitTestCase {
         $mock->aMethod(1, 2);
         $mock->aMethod(3, 4);
     }
-    
+
     function testAtLeastOnceSatisfiedByOneCall() {
         $mock = &new MockDummy();
         $mock->expectAtLeastOnce('aMethod');
         $mock->aMethod();
     }
-    
+
     function testAtLeastOnceSatisfiedByTwoCalls() {
         $mock = &new MockDummy();
         $mock->expectAtLeastOnce('aMethod');
         $mock->aMethod();
         $mock->aMethod();
     }
-    
+
     function testOnceSatisfiedByOneCall() {
         $mock = &new MockDummy();
         $mock->expectOnce('aMethod');
         $mock->aMethod();
     }
-    
+
     function testMinimumCallsSatisfiedByEnoughCalls() {
         $mock = &new MockDummy();
         $mock->expectMinimumCallCount('aMethod', 1);
         $mock->aMethod();
     }
-    
+
     function testMinimumCallsSatisfiedByTooManyCalls() {
         $mock = &new MockDummy();
         $mock->expectMinimumCallCount('aMethod', 3);
@@ -352,13 +352,13 @@ class TestOfMockExpectationsThatPass extends UnitTestCase {
         $mock->aMethod();
         $mock->aMethod();
     }
-    
+
     function testMaximumCallsSatisfiedByEnoughCalls() {
         $mock = &new MockDummy();
         $mock->expectMaximumCallCount('aMethod', 1);
         $mock->aMethod();
     }
-    
+
     function testMaximumCallsSatisfiedByNoCalls() {
         $mock = &new MockDummy();
         $mock->expectMaximumCallCount('aMethod', 1);
@@ -382,12 +382,12 @@ class LikeExpectation extends IdenticalExpectation {
         $expectation->_message = '';
         $this->IdenticalExpectation($expectation);
     }
-    
+
     function test($compare) {
         $compare->_message = '';
         return parent::test($compare);
     }
-    
+
     function testMessage($compare) {
         $compare->_message = '';
         return parent::testMessage($compare);
@@ -400,7 +400,7 @@ class TestOfMockExpectations extends UnitTestCase {
     function setUp() {
         $this->test = &new MockSimpleTestCase();
     }
-    
+
     function &getMockedTest() {
         return $this->test;
     }
@@ -604,11 +604,11 @@ class TestOfSpecialMethods extends UnitTestCase {
     function skip() {
         $this->skipIf(version_compare(phpversion(), '5', '<='), 'Overloading not tested for PHP 4');
     }
-    
+
     function testCanMockTheThingAtAll() {
         $mock = new MockClassWithSpecialMethods();
     }
-    
+
     function testReturnFromSpecialAccessor() {
         $mock = &new MockClassWithSpecialMethods();
         $mock->setReturnValue('__get', '1st Return', array('first'));
@@ -616,32 +616,32 @@ class TestOfSpecialMethods extends UnitTestCase {
         $this->assertEqual($mock->first, '1st Return');
         $this->assertEqual($mock->second, '2nd Return');
     }
-    
+
     function testcanExpectTheSettingOfValue() {
         $mock = &new MockClassWithSpecialMethods();
         $mock->expectOnce('__set', array('a', 'A'));
         $mock->a = 'A';
     }
-    
+
     function testCanSimulateAnOverloadmethod() {
         $mock = &new MockClassWithSpecialMethods();
         $mock->expectOnce('__call', array('amOverloaded', array('A')));
         $mock->setReturnValue('__call', 'aaa');
         $this->assertIdentical($mock->amOverloaded('A'), 'aaa');
     }
-    
+
     function testCanEmulateIsset() {
         $mock = &new MockClassWithSpecialMethods();
         $mock->setReturnValue('__isset', true);
         $this->assertIdentical(isset($mock->a), true);
     }
-    
+
     function testCanExpectUnset() {
         $mock = &new MockClassWithSpecialMethods();
         $mock->expectOnce('__unset', array('a'));
         unset($mock->a);
     }
-    
+
     function testToStringMagic() {
         $mock = &new MockClassWithSpecialMethods();
         $mock->expectOnce('__toString');
@@ -721,14 +721,14 @@ class TestOfPHP5StaticMethodMocking extends UnitTestCase {
     function skip() {
         $this->skipIf(version_compare(phpversion(), '5', '<='), 'Static methods not tested in PHP 4');
     }
-    
+
     function testCanCreateAMockObjectWithStaticMethodsWithoutError() {
         eval('
             class SimpleObjectContainingStaticMethod {
                 static function someStatic() { }
             }
         ');
-        
+
         Mock::generate('SimpleObjectContainingStaticMethod');
         $this->assertNoErrors();
     }
@@ -738,7 +738,7 @@ class TestOfPHP5AbstractMethodMocking extends UnitTestCase {
     function skip() {
         $this->skipIf(version_compare(phpversion(), '5', '<='), 'Abstract class/methods not tested in PHP 4');
     }
-    
+
     function testCanCreateAMockObjectFromAnAbstractWithProperFunctionDeclarations() {
         eval('
              abstract class SimpleAbstractClassContainingAbstractMethods {
@@ -747,10 +747,10 @@ class TestOfPHP5AbstractMethodMocking extends UnitTestCase {
                 abstract function anAbstractWithMultipleParameters($foo, $bar);
             }
         ');
-        
+
         Mock::generate('SimpleAbstractClassContainingAbstractMethods');
         $this->assertNoErrors();
-        
+
         $this->assertTrue(
             method_exists(
                 'MockSimpleAbstractClassContainingAbstractMethods',
@@ -766,6 +766,44 @@ class TestOfPHP5AbstractMethodMocking extends UnitTestCase {
         $this->assertTrue(
             method_exists(
                 'MockSimpleAbstractClassContainingAbstractMethods',
+                'anAbstractWithMultipleParameters'
+            )
+        );
+    }
+
+    function testMethodsDefinedAsAbstractInParentShouldHaveFullSignature() {
+        eval('
+             abstract class SimpleParentAbstractClassContainingAbstractMethods {
+                abstract function anAbstract();
+                abstract function anAbstractWithParameter($foo);
+                abstract function anAbstractWithMultipleParameters($foo, $bar);
+            }
+
+             class SimpleChildAbstractClassContainingAbstractMethods extends SimpleParentAbstractClassContainingAbstractMethods {
+                function anAbstract(){}
+                function anAbstractWithParameter($foo){}
+                function anAbstractWithMultipleParameters($foo, $bar){}
+            }
+        ');
+
+        Mock::generate('SimpleChildAbstractClassContainingAbstractMethods');
+        $this->assertNoErrors();
+
+        $this->assertTrue(
+            method_exists(
+                'MockSimpleChildAbstractClassContainingAbstractMethods',
+                'anAbstract'
+            )
+        );
+        $this->assertTrue(
+            method_exists(
+                'MockSimpleChildAbstractClassContainingAbstractMethods',
+                'anAbstractWithParameter'
+            )
+        );
+        $this->assertTrue(
+            method_exists(
+                'MockSimpleChildAbstractClassContainingAbstractMethods',
                 'anAbstractWithMultipleParameters'
             )
         );

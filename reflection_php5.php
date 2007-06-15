@@ -123,7 +123,7 @@ class SimpleReflection {
 		}
 		return array_unique($methods);
 	}
-	
+
 	/**
 	 *    Checks to see if the method signature has to be tightly
 	 *    specified.
@@ -168,7 +168,7 @@ class SimpleReflection {
 		$reflection = new ReflectionClass($this->_interface);
 		return $reflection->isInterface();
 	}
-	
+
 	/**
 	 *	  Scans for final methods, as they screw up inherited
 	 *    mocks by not allowing you to override them.
@@ -226,7 +226,25 @@ class SimpleReflection {
         }
         return $interface->getMethod($name)->isAbstract();
 	}
-	
+
+    /**
+     * Checks whether a method is abstract in parent or not.
+     *
+     * @param   string   $name  Method name.
+     * @return  bool            true if method is abstract in parent, else false
+     * @access  private
+     */
+    function _isAbstractMethodInParent($name) {
+        $interface = new ReflectionClass($this->_interface);
+        if (! $parent = $interface->getParentClass()) {
+            return false;
+        }
+        if (! $parent->hasMethod($name)) {
+            return false;
+        }
+        return $parent->getMethod($name)->isAbstract();
+	}
+
 	/**
 	 * Checks whether a method is static or not.
 	 *
@@ -267,12 +285,15 @@ class SimpleReflection {
 		if (! is_callable(array($this->_interface, $name)) && ! $this->_isAbstractMethod($name)) {
 			return "function $name()";
 		}
-		if ($this->_isInterfaceMethod($name) || $this->_isAbstractMethod($name) || $this->_isStaticMethod($name)) {
+		if ($this->_isInterfaceMethod($name) ||
+            $this->_isAbstractMethod($name) ||
+            $this->_isAbstractMethodInParent($name) ||
+            $this->_isStaticMethod($name)) {
 			return $this->_getFullSignature($name);
 		}
 		return "function $name()";
 	}
-	
+
 	/**
 	 *    For a signature specified in an interface, full
 	 *    details must be replicated to be a valid implementation.
