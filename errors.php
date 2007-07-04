@@ -44,36 +44,29 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
 	 *    @access public
 	 */
 	function invoke($method) {
-		$context = &SimpleTest::getContext();
-		$queue = &$context->get('SimpleErrorQueue');
-		$queue->setTestCase($this->GetTestCase());
+		$queue = &$this->_createErrorQueue();
 		set_error_handler('SimpleTestErrorHandler');
 		parent::invoke($method);
-		while (list($severity, $message, $file, $line) = $queue->extract()) {
-			$severity = SimpleErrorQueue::getSeverityAsString($severity);
-			$test = &$this->getTestCase();
-			$test->error($severity, $message, $file, $line);
-		}
 		restore_error_handler();
+		$queue->tally();
 	}
-
-	function after($method) {
+	
+	/**
+	 *	  Wires up the error queue for a single test.
+	 *	  @return SimpleErrorQueue    Queue connected to the test.
+	 *	  @access private
+	 */
+	function &_createErrorQueue() {
 		$context = &SimpleTest::getContext();
+		$test = &$this->getTestCase();
 		$queue = &$context->get('SimpleErrorQueue');
-		$queue->setTestCase($this->getTestCase());
-		while (list($expected, $message) = $queue->extractExpectation()) {
-			$testCase = &$this->getTestCase();
-
-			$testCase->fail(
-				sprintf('Expected PHP error [%s] not caught', $expected->_value)
-			);
-		}
-		parent::after($method);
+		$queue->setTestCase($test);
+		return $queue;
 	}
 }
 
 /**
- *    Singleton error queue used to record trapped
+ *    Error queue used to record trapped
  *    errors.
  *	  @package	SimpleTest
  *	  @subpackage	UnitTester
@@ -82,12 +75,22 @@ class SimpleErrorQueue {
 	var $_queue;
 	var $_expectation_queue;
 	var $_test;
+	var $_using_expect_style = false;
 
 	/**
 	 *    Starts with an empty queue.
 	 */
 	function SimpleErrorQueue() {
 		$this->clear();
+	}
+
+	/**
+	 *    Discards the contents of the error queue.
+	 *    @access public
+	 */
+	function clear() {
+		$this->_queue = array();
+		$this->_expectation_queue = array();
 	}
 
 	/**
@@ -100,6 +103,20 @@ class SimpleErrorQueue {
 	}
 
 	/**
+	 *    Sets up an expectation of an error. If this is
+	 *    not fulfilled at the end of the test, a failure
+	 *    will occour. If the error does happen, then this
+	 *    will cancel it out and send a pass message.
+	 *    @param SimpleExpectation $expected    Expected error match.
+	 *    @param string $message                Message to display.
+	 *    @access public
+	 */
+	function expectError($expected, $message) {
+		$this->_using_expect_style = true;
+		array_push($this->_expectation_queue, array($expected, $message));
+	}
+
+	/**
 	 *    Adds an error to the front of the queue.
 	 *    @param integer $severity       PHP error code.
 	 *    @param string $content         Text of error.
@@ -109,12 +126,27 @@ class SimpleErrorQueue {
 	 */
 	function add($severity, $content, $filename, $line) {
 		$content = str_replace('%', '%%', $content);
-		if (count($this->_expectation_queue)) {
+		if ($this->_using_expect_style) {
 			$this->_testLatestError($severity, $content, $filename, $line);
 		} else {
 			array_push(
 					$this->_queue,
 					array($severity, $content, $filename, $line));
+		}
+	}
+	
+	/**
+	 *	  Any errors still in the queue are sent to the test
+	 *	  case. Any unfulfilled expectations trigger failures.
+	 *	  @access public
+	 */
+	function tally() {
+		while (list($severity, $message, $file, $line) = $this->extract()) {
+			$severity = $this->getSeverityAsString($severity);
+			$this->_test->error($severity, $message, $file, $line);
+		}
+		while (list($expected, $message) = $this->_extractExpectation()) {
+			$this->_test->assert($expected, false, "%s -> Expected error not caught");
 		}
 	}
 
@@ -128,24 +160,25 @@ class SimpleErrorQueue {
 	 *    @access private
 	 */
 	function _testLatestError($severity, $content, $filename, $line) {
-		list($expected, $message) = array_shift($this->_expectation_queue);
-		$severity = $this->getSeverityAsString($severity);
-		$is_match = $this->_test->assert(
-				$expected,
-				$content,
-				sprintf($message, "%s -> PHP error [$content] severity [$severity] in [$filename] line [$line]"));
-		if (! $is_match) {
+		if ($expectation = $this->_extractExpectation()) {
+			list($expected, $message) = $expectation;
+			$this->_test->assert($expected, $content, sprintf(
+					$message,
+					"%s -> PHP error [$content] severity [" .
+							$this->getSeverityAsString($severity) .
+							"] in [$filename] line [$line]"));
+		} else {
 			$this->_test->error($severity, $content, $filename, $line);
 		}
 	}
 
 	/**
 	 *    Pulls the earliest error from the queue.
-	 *    @return     False if none, or a list of error
-	 *                information. Elements are: severity
-	 *                as the PHP error code, the error message,
-	 *                the file with the error, the line number
-	 *                and a list of PHP super global arrays.
+	 *    @return  mixed    False if none, or a list of error
+	 *                		information. Elements are: severity
+	 *                		as the PHP error code, the error message,
+	 *                		the file with the error, the line number
+	 *               	 	and a list of PHP super global arrays.
 	 *    @access public
 	 */
 	function extract() {
@@ -155,20 +188,16 @@ class SimpleErrorQueue {
 		return false;
 	}
 
-	function extractExpectation() {
+	/**
+	 *	  Pulls the earliest expectation from the queue.
+	 *	  @return     SimpleExpectation    False if none.
+	 *    @access private
+	 */
+	function _extractExpectation() {
 		if (count($this->_expectation_queue)) {
 			return array_shift($this->_expectation_queue);
 		}
 		return false;
-	}
-
-	/**
-	 *    Discards the contents of the error queue.
-	 *    @access public
-	 */
-	function clear() {
-		$this->_queue = array();
-		$this->_expectation_queue = array();
 	}
 
 	/**
@@ -198,19 +227,6 @@ class SimpleErrorQueue {
 	}
 
 	/**
-	 *    Sets up an expectation of an error. If this is
-	 *    not fulfilled at the end of the test, a failure
-	 *    will occour. If the error does happen, then this
-	 *    will cancel it out and send a pass message.
-	 *    @param SimpleExpectation $expected    Expected error match.
-	 *    @param string $message                Message to display.
-	 *    @access public
-	 */
-	function expectError($expected, $message) {
-		array_push($this->_expectation_queue, array($expected, $message));
-	}
-
-	/**
 	 *    Converts an error code into it's string
 	 *    representation.
 	 *    @param $severity  PHP integer error code.
@@ -232,9 +248,9 @@ class SimpleErrorQueue {
 				E_USER_ERROR => 'E_USER_ERROR',
 				E_USER_WARNING => 'E_USER_WARNING',
 				E_USER_NOTICE => 'E_USER_NOTICE');
-    if(version_compare(phpversion(), '5.2.0', '>=')) {
-       $map[E_RECOVERABLE_ERROR] = 'E_RECOVERABLE_ERROR';
-    }
+		if (version_compare(phpversion(), '5.2.0', '>=')) {
+			$map[E_RECOVERABLE_ERROR] = 'E_RECOVERABLE_ERROR';
+		}
 		return $map[$severity];
 	}
 }

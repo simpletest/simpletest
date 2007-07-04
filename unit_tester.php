@@ -398,15 +398,13 @@
          */
         function _coerceExpectation($expected) {
             if ($expected == false) {
-                return new AnythingExpectation();
+                return new TrueExpectation();
             }
             if (SimpleTestCompatibility::isA($expected, 'SimpleExpectation')) {
                 return $expected;
             }
-			if(is_string($expected)) {
-				$expected = str_replace('%', '%%', $expected);
-			}
-            return new EqualExpectation($expected);
+            return new EqualExpectation(
+                    is_string($expected) ? str_replace('%', '%%', $expected) : $expected);
         }
 
         /**

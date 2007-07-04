@@ -95,20 +95,6 @@ class TestOfErrorQueue extends UnitTestCase {
         $queue->expectError(new AnythingExpectation(), 'a message');
         $queue->add(1024, 'B', 'b.php', 100);
     }
-
-    function testExpectationMissTriggersError() {
-        $test = &new MockSimpleTestCase();
-        $test->expectOnce('assert', array(
-                new IdenticalExpectation(new FailedExpectation()),
-                'B',
-                'a message'));
-        $test->setReturnValue('assert', false);
-        $test->expectOnce('error');
-        $queue = &new SimpleErrorQueue();
-        $queue->setTestCase($test);
-        $queue->expectError(new FailedExpectation(), 'a message');
-        $queue->add(1024, 'B', 'b.php', 100);
-    }
 }
 
 class TestOfErrorTrap extends UnitTestCase {
