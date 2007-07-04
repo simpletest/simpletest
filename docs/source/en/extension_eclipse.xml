@@ -135,7 +135,7 @@
         <li>Create a new test project (a holding place for related files)
 			<ol>
 			<li>Select "File" > "New" > "Project.." from the menu</li>
-			<li>Expand the folder "Simple" and select "Project"</li>
+			<li>Expand the folder "General" and select "Project"</li>
 			<li>Click the "Next" button</li>
 			<li>On the next tab enter a project name: "Test"</li>
 			<li>Use the default Project Contents</li>

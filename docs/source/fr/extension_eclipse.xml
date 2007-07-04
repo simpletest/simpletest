@@ -146,7 +146,7 @@
         <li>Créer une nouveau projet de test (un lieu pour grouper des fichiers similaires)
 			<ol type="a">
 			<li>Sélectionner "File > New > Project.." dans le menu</li>
-			<li>Agrandir le répertoire "Simple" et choisrir "Project"</li>
+			<li>Agrandir le répertoire "General" et choisir "Project"</li>
 			<li>Cliquer sur le bouton "Next"</li>
 			<li>Sur le tab suivant, ajouter un nom de projet : "Test"</li>
 			<li>Utiliser le contenu de projet par défaut</li>
