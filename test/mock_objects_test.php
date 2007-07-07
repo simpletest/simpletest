@@ -654,6 +654,27 @@ class TestOfSpecialMethods extends UnitTestCase {
     }
 }
 
+if (version_compare(phpversion(), '5', '>=')) {
+    $class  = 'class WithStaticMethod { ';
+    $class .= '    static function aStaticMethod() { } ';
+    $class .= '}';
+    eval($class);
+}
+Mock::generate('WithStaticMethod');
+
+class TestOfMockingClassesWithStaticMethods extends UnitTestCase {
+    function skip() {
+        $this->skipUnless(version_compare(phpversion(), '5', '>='));
+    }
+    
+    function testStaticMethodIsMockedAsStatic() {
+        $mock = new WithStaticMethod();
+        $reflection = new ReflectionClass($mock);
+        $method = $reflection->getMethod('aStaticMethod');
+        $this->assertTrue($method->isStatic());
+    }
+}
+
 Mock::generatePartial('Dummy', 'TestDummy', array('anotherMethod'));
 
 class TestOfPartialMocks extends UnitTestCase {

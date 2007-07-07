@@ -239,7 +239,7 @@
                     'DefaultProxy' => false,
                     'DefaultProxyUsername' => false,
                     'DefaultProxyPassword' => false,
-                    'Preferred' => array(new DefaultReporter()));
+                    'Preferred' => array(new HtmlReporter(), new TextReporter(), new XmlReporter()));
         }
     }
 

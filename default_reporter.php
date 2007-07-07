@@ -9,6 +9,7 @@
     /**#@+
      *	include other SimpleTest class files
      */
+    require_once(dirname(__FILE__) . '/simpletest.php');
     require_once(dirname(__FILE__) . '/scorer.php');
     require_once(dirname(__FILE__) . '/reporter.php');
     require_once(dirname(__FILE__) . '/xml.php');
@@ -64,7 +65,8 @@
 
     /**
      *    The default reporter used by SimpleTest's autorun
-     *    feature.
+     *    feature. The actual reporters used are dependency
+     *    injected and can be overridden.
 	 *	  @package SimpleTest
 	 *	  @subpackage UnitTester
      */
@@ -77,11 +79,16 @@
             if (SimpleReporter::inCli()) {
 				global $argv;
 				$parser = new SimpleCommandLineParser($argv);
-				$reporter_class = $parser->isXml() ? 'XmlReporter' : 'TextReporter';
+				$interfaces = $parser->isXml() ? array('XmlReporter') : array('TextReporter');
                 $reporter = &new SelectiveReporter(
-						new $reporter_class(), $parser->getTestCase(), $parser->getTest());
+						SimpleTest::preferred($interfaces),
+                        $parser->getTestCase(),
+                        $parser->getTest());
             } else {
-                $reporter = &new SelectiveReporter(new HtmlReporter(), @$_GET['c'], @$_GET['t']);
+                $reporter = &new SelectiveReporter(
+						SimpleTest::preferred('HtmlReporter'),
+                        @$_GET['c'],
+                        @$_GET['t']);
             }
             $this->SimpleReporterDecorator($reporter);
         }

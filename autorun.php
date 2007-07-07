@@ -24,8 +24,7 @@
         $suite = $loader->createSuiteFromClasses(
                 basename(initial_file()),
                 $loader->selectRunnableTests($candidates));
-        $result = $suite->run(SimpleTest::preferred(
-				array('SimpleReporter', 'SimpleReporterDecorator')));
+        $result = $suite->run(new DefaultReporter());
         if (SimpleReporter::inCli()) {
             exit($result ? 0 : 1);
         }
