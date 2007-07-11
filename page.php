@@ -37,6 +37,7 @@
             static $map = array(
                     'a' => 'SimpleAnchorTag',
                     'title' => 'SimpleTitleTag',
+                    'base' => 'SimpleBaseTag',
                     'button' => 'SimpleButtonTag',
                     'textarea' => 'SimpleTextAreaTag',
                     'option' => 'SimpleOptionTag',
@@ -348,6 +349,7 @@
         var $_headers;
         var $_method;
         var $_url;
+        var $_base_url;
         var $_request_data;
 
         /**
@@ -463,6 +465,15 @@
         }
 
         /**
+         *    Base URL if set via BASE tag page url otherwise
+         *    @return SimpleUrl        Base url.
+         *    @access public
+         */
+        function getBaseUrl() {
+            return $this->_base ? $this->_base : $this->_url;
+        }
+
+        /**
          *    Original request data.
          *    @return mixed              Sent content.
          *    @access public
@@ -575,6 +586,8 @@
         function acceptTag(&$tag) {
             if ($tag->getTagName() == "a") {
                 $this->_addLink($tag);
+            } elseif ($tag->getTagName() == "base") {
+                $this->_setBaseTag($tag);
             } elseif ($tag->getTagName() == "title") {
                 $this->_setTitle($tag);
             } elseif ($this->_isFormElement($tag->getTagName())) {
@@ -628,7 +641,7 @@
          *    @access public
          */
         function acceptFormStart(&$tag) {
-            $this->_open_forms[] = &new SimpleForm($tag, $this->getUrl());
+            $this->_open_forms[] = &new SimpleForm($tag, $this->getBaseUrl());
         }
 
         /**
@@ -858,7 +871,17 @@
             if (! is_object($url)) {
                 $url = new SimpleUrl($url);
             }
-            return $url->makeAbsolute($this->getUrl());
+            return $url->makeAbsolute($this->getBaseUrl());
+        }
+	
+        /**
+         *    Sets the base url for the page.
+         *    @param SimpleTag $tag    Base URL for page.
+         *    @access protected
+         */
+        function _setBase(&$tag) {
+        	$url = $tag->getAttribute('href');
+            $this->_base = new SimpleUrl($url);
         }
 
         /**

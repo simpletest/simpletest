@@ -703,6 +703,15 @@
             $url = $this->_page->getUrl();
             return $url ? $url->asString() : false;
         }
+ 
+        /**
+         *    Accessor for base URL of page if set via BASE tag
+         *    @return string    base URL
+         */
+        function getBaseUrl() {
+            $url = $this->_page->getBaseUrl();
+            return $url ? $url->asString() : false;
+        }
 
         /**
          *    Accessor for raw bytes sent down the wire.

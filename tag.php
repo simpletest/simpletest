@@ -151,6 +151,32 @@
     }
     
     /**
+     *    Base url.
+	 *    @package SimpleTest
+	 *    @subpackage WebTester
+     */
+    class SimpleBaseTag extends SimpleTag {
+        
+        /**
+         *    Starts with a named tag with attributes only.
+         *    @param hash $attributes    Attribute names and
+         *                               string values.
+         */
+        function SimpleBaseTag($attributes) {
+            $this->SimpleTag('base', $attributes);
+        }
+
+		/**
+		 *    Base tag is not a block tag.
+		 *    @return boolean		false
+		 *    @access public
+		 */
+        function expectEndTag() {
+            return false;
+        }
+    }
+    
+    /**
      *    Page title.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester

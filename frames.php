@@ -267,6 +267,21 @@
         }
 
         /**
+         *    Page base URL.
+         *    @return SimpleUrl        Current url.
+         *    @access public
+         */
+        function getBaseUrl() {
+            if (is_integer($this->_focus)) {
+                $url = $this->_frames[$this->_focus]->getBaseUrl();
+                $url->setTarget($this->_getPublicNameFromIndex($this->_focus));
+            } else {
+                $url = $this->_frameset->getBaseUrl();
+            }
+            return $url;
+        }
+
+        /**
          *    Original request data.
          *    @return mixed              Sent content.
          *    @access public

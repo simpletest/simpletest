@@ -9,7 +9,6 @@ Fix errors_test.php in PHP 5.2+ (1/4) - done.
 
 Reporter
 --------
-Dumper should be passed in testMessage() call to expectation (3).
 
 Mock objects
 ------------
@@ -20,6 +19,7 @@ Parser
 
 Browser
 -------
+Supports base tag (8).
 
 Web tester
 ----------

@@ -9,21 +9,13 @@
     /**#@+
      * Lexer mode stack constants
      */
-    if (! defined('LEXER_ENTER')) {
-        define('LEXER_ENTER', 1);
-    }
-    if (! defined('LEXER_MATCHED')) {
-        define('LEXER_MATCHED', 2);
-    }
-    if (! defined('LEXER_UNMATCHED')) {
-        define('LEXER_UNMATCHED', 3);
-    }
-    if (! defined('LEXER_EXIT')) {
-        define('LEXER_EXIT', 4);
-    }
-    if (! defined('LEXER_SPECIAL')) {
-        define('LEXER_SPECIAL', 5);
-    }
+	foreach (array('LEXER_ENTER', 'LEXER_MATCHED',
+					'LEXER_UNMATCHED', 'LEXER_EXIT',
+					'LEXER_SPECIAL') as $i => $constant) {
+		if (! defined($constant)) {
+			define($constant, $i + 1);
+		}
+	}
     /**#@-*/
     
     /**
@@ -451,7 +443,7 @@
     }
     
     /**
-     *    Breas HTML into SAX events.
+     *    Breaks HTML into SAX events.
 	 *    @package SimpleTest
 	 *    @subpackage WebTester
      */
@@ -480,7 +472,7 @@
          *    @access private
          */
         function _getParsedTags() {
-            return array('a', 'title', 'form', 'input', 'button', 'textarea', 'select',
+            return array('a', 'base', 'title', 'form', 'input', 'button', 'textarea', 'select',
                     'option', 'frameset', 'frame', 'label');
         }
         
