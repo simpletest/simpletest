@@ -349,7 +349,7 @@
         var $_headers;
         var $_method;
         var $_url;
-        var $_base_url;
+        var $_base = false;
         var $_request_data;
 
         /**
