@@ -8,16 +8,6 @@ require_once(dirname(__FILE__) . '/../unit_tester.php');
 
 class SimpleTestAcceptanceTest extends WebTestCase {
     function samples() {
-        // if (isset($_SERVER['SCRIPT_URI'])) {
-        //     $me = $_SERVER['SCRIPT_URI'];
-        // } elseif (isset($_SERVER['HTTP_HOST']) && isset($_SERVER['PHP_SELF'])) {
-        //     $me =  'http://'. $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
-        // } else {
-        //     $me = false;
-        // }
-        // if ($me) {
-        //     return preg_replace('|/test/.*?\.php|i', '/test/site/', $me);
-        // }
         return 'http://www.lastcraft.com/test/';
     }
 }

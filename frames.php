@@ -378,33 +378,16 @@
 
         /**
          *    Accessor for a list of all fixed links.
-         *    @return array   List of urls with scheme of
-         *                    http or https and hostname.
+         *    @return array   List of urls as strings.
          *    @access public
          */
-        function getAbsoluteUrls() {
+        function getUrls() {
             if (is_integer($this->_focus)) {
-                return $this->_frames[$this->_focus]->getAbsoluteUrls();
+                return $this->_frames[$this->_focus]->getUrls();
             }
             $urls = array();
             foreach ($this->_frames as $frame) {
-                $urls = array_merge($urls, $frame->getAbsoluteUrls());
-            }
-            return array_values(array_unique($urls));
-        }
-
-        /**
-         *    Accessor for a list of all relative links.
-         *    @return array      List of urls without hostname.
-         *    @access public
-         */
-        function getRelativeUrls() {
-            if (is_integer($this->_focus)) {
-                return $this->_frames[$this->_focus]->getRelativeUrls();
-            }
-            $urls = array();
-            foreach ($this->_frames as $frame) {
-                $urls = array_merge($urls, $frame->getRelativeUrls());
+                $urls = array_merge($urls, $frame->getUrls());
             }
             return array_values(array_unique($urls));
         }

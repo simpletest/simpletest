@@ -5,6 +5,14 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems and their fixes...
 
+No method getRelativeUrls() or getAbsoluteUrls()
+------------------------------------------------
+These methods were always a bit weird anyway, and
+the new parsing of the base tag makes them more so.
+They have been replaced with getUrls() instead. If
+you want the old functionality then simply chop
+off the current domain from getUrl().
+
 Method setWildcard() removed in mocks
 -------------------------------------
 Even setWildcard() has been removed in 1.0.1beta now.

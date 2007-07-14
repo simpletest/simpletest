@@ -587,7 +587,7 @@
             if ($tag->getTagName() == "a") {
                 $this->_addLink($tag);
             } elseif ($tag->getTagName() == "base") {
-                $this->_setBaseTag($tag);
+                $this->_setBase($tag);
             } elseif ($tag->getTagName() == "title") {
                 $this->_setTitle($tag);
             } elseif ($this->_isFormElement($tag->getTagName())) {
@@ -784,32 +784,16 @@
         }
 
         /**
-         *    Accessor for a list of all fixed links.
+         *    Accessor for a list of all links.
          *    @return array   List of urls with scheme of
          *                    http or https and hostname.
          *    @access public
          */
-        function getAbsoluteUrls() {
+        function getUrls() {
             $all = array();
             foreach ($this->_links as $link) {
-                if ($this->_linkIsAbsolute($link->getHref())) {
-                    $all[] = $link->getHref();
-                }
-            }
-            return $all;
-        }
-
-        /**
-         *    Accessor for a list of all relative links.
-         *    @return array      List of urls without hostname.
-         *    @access public
-         */
-        function getRelativeUrls() {
-            $all = array();
-            foreach ($this->_links as $link) {
-                if (! $this->_linkIsAbsolute($link->getHref())) {
-                    $all[] = $link->getHref();
-                }
+                $url = $this->_getUrlFromLink($link);
+                $all[] = $url->asString();
             }
             return $all;
         }

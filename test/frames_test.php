@@ -4,7 +4,6 @@ require_once(dirname(__FILE__) . '/../autorun.php');
 require_once(dirname(__FILE__) . '/../tag.php');
 require_once(dirname(__FILE__) . '/../page.php');
 require_once(dirname(__FILE__) . '/../frames.php');
-
 Mock::generate('SimplePage');
 Mock::generate('SimpleForm');
 
@@ -336,48 +335,26 @@ class TestOfFramesetPageInterface extends UnitTestCase {
         $this->assertIdentical($frameset->getRealm(), 'Safe place');
     }
 
-    function testAbsoluteUrlsComeFromBothFrames() {
+    function testUrlsComeFromBothFrames() {
         $page = &new MockSimplePage();
-        $page->expectNever('getAbsoluteUrls');
+        $page->expectNever('getUrls');
 
         $frame1 = &new MockSimplePage();
         $frame1->setReturnValue(
-                'getAbsoluteUrls',
+                'getUrls',
                 array('http://www.lastcraft.com/', 'http://myserver/'));
 
         $frame2 = &new MockSimplePage();
         $frame2->setReturnValue(
-                'getAbsoluteUrls',
+                'getUrls',
                 array('http://www.lastcraft.com/', 'http://test/'));
 
         $frameset = &new SimpleFrameset($page);
         $frameset->addFrame($frame1);
         $frameset->addFrame($frame2);
         $this->assertListInAnyOrder(
-                $frameset->getAbsoluteUrls(),
+                $frameset->getUrls(),
                 array('http://www.lastcraft.com/', 'http://myserver/', 'http://test/'));
-    }
-
-    function testRelativeUrlsComeFromBothFrames() {
-        $frame1 = &new MockSimplePage();
-        $frame1->setReturnValue(
-                'getRelativeUrls',
-                array('/', '.', '/test/', 'goodbye.php'));
-
-        $frame2 = &new MockSimplePage();
-        $frame2->setReturnValue(
-                'getRelativeUrls',
-                array('/', '..', '/test/', 'hello.php'));
-
-        $page = &new MockSimplePage();
-        $page->expectNever('getRelativeUrls');
-
-        $frameset = &new SimpleFrameset($page);
-        $frameset->addFrame($frame1);
-        $frameset->addFrame($frame2);
-        $this->assertListInAnyOrder(
-                $frameset->getRelativeUrls(),
-                array('/', '.', '/test/', 'goodbye.php', '..', 'hello.php'));
     }
 
     function testLabelledUrlsComeFromBothFrames() {
@@ -429,14 +406,12 @@ class TestOfFramesetPageInterface extends UnitTestCase {
 
     function testReadUrlsFromFrameInFocus() {
         $frame1 = &new MockSimplePage();
-        $frame1->setReturnValue('getAbsoluteUrls', array('a'));
-        $frame1->setReturnValue('getRelativeUrls', array('r'));
+        $frame1->setReturnValue('getUrls', array('a'));
         $frame1->setReturnValue('getUrlsByLabel', array(new SimpleUrl('l')));
         $frame1->setReturnValue('getUrlById', new SimpleUrl('i'));
 
         $frame2 = &new MockSimplePage();
-        $frame2->expectNever('getAbsoluteUrls');
-        $frame2->expectNever('getRelativeUrls');
+        $frame2->expectNever('getUrls');
         $frame2->expectNever('getUrlsByLabel');
         $frame2->expectNever('getUrlById');
 
@@ -445,8 +420,7 @@ class TestOfFramesetPageInterface extends UnitTestCase {
         $frameset->addFrame($frame2, 'B');
         $frameset->setFrameFocus('A');
 
-        $this->assertIdentical($frameset->getAbsoluteUrls(), array('a'));
-        $this->assertIdentical($frameset->getRelativeUrls(), array('r'));
+        $this->assertIdentical($frameset->getUrls(), array('a'));
         $expected = new SimpleUrl('l');
         $expected->setTarget('A');
         $this->assertIdentical($frameset->getUrlsByLabel('label'), array($expected));

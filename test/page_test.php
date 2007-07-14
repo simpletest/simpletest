@@ -166,9 +166,9 @@ class TestOfPageParsing extends UnitTestCase {
     }
 }
 
-class TestOfErrorPage extends UnitTestCase {
+class TestOfPageInterface extends UnitTestCase {
 
-    function testInterface() {
+    function testInterfaceOnEmptyPage() {
         $page = &new SimplePage();
         $this->assertEqual($page->getTransportError(), 'No page fetched yet');
         $this->assertIdentical($page->getRaw(), false);
@@ -178,8 +178,7 @@ class TestOfErrorPage extends UnitTestCase {
         $this->assertIdentical($page->getAuthentication(), false);
         $this->assertIdentical($page->getRealm(), false);
         $this->assertFalse($page->hasFrames());
-        $this->assertIdentical($page->getAbsoluteUrls(), array());
-        $this->assertIdentical($page->getRelativeUrls(), array());
+        $this->assertIdentical($page->getUrls(), array());
         $this->assertIdentical($page->getTitle(), false);
     }
 }
@@ -276,20 +275,15 @@ class TestOfHtmlPage extends UnitTestCase {
 
     function testNoLinks() {
         $page = &new SimplePage(new MockSimpleHttpResponse());
-        $this->assertIdentical($page->getAbsoluteUrls(), array(), 'abs->%s');
-        $this->assertIdentical($page->getRelativeUrls(), array(), 'rel->%s');
+        $this->assertIdentical($page->getUrls(), array());
         $this->assertIdentical($page->getUrlsByLabel('Label'), array());
     }
 
     function testAddAbsoluteLink() {
         $link = &new SimpleAnchorTag(array('href' => 'http://somewhere.com'));
         $link->addContent('Label');
-
         $page = &new SimplePage(new MockSimpleHttpResponse());
         $page->AcceptTag($link);
-
-        $this->assertEqual($page->getAbsoluteUrls(), array('http://somewhere.com'), 'abs->%s');
-        $this->assertIdentical($page->getRelativeUrls(), array(), 'rel->%s');
         $this->assertEqual(
                 $page->getUrlsByLabel('Label'),
                 array(new SimpleUrl('http://somewhere.com')));
@@ -298,35 +292,49 @@ class TestOfHtmlPage extends UnitTestCase {
     function testAddStrictRelativeLink() {
         $link = &new SimpleAnchorTag(array('href' => './somewhere.php'));
         $link->addContent('Label');
-
         $response = &new MockSimpleHttpResponse();
         $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
-
         $page = &new SimplePage($response);
         $page->AcceptTag($link);
-
-        $this->assertEqual($page->getAbsoluteUrls(), array(), 'abs->%s');
-        $this->assertIdentical($page->getRelativeUrls(), array('./somewhere.php'), 'rel->%s');
         $this->assertEqual(
                 $page->getUrlsByLabel('Label'),
                 array(new SimpleUrl('http://host/somewhere.php')));
     }
 
-    function testAddRelativeLink() {
-        $link = &new SimpleAnchorTag(array('href' => 'somewhere.php'));
-        $link->addContent('Label');
-
+    function testAddBareRelativeLink() {
         $response = &new MockSimpleHttpResponse();
         $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
-
         $page = &new SimplePage($response);
-        $page->AcceptTag($link);
+        $page->AcceptTag(new SimpleAnchorTag(array('href' => 'somewhere.php')));
+        $this->assertIdentical($page->getUrls(), array('http://host/somewhere.php'));
+    }
 
-        $this->assertEqual($page->getAbsoluteUrls(), array(), 'abs->%s');
-        $this->assertIdentical($page->getRelativeUrls(), array('somewhere.php'), 'rel->%s');
+    function testAddRelativeLinkWithBaseTag() {
+        $link = &new SimpleAnchorTag(array('href' => 'somewhere.php'));
+        $link->addContent('Label');
+        $response = &new MockSimpleHttpResponse();
+        $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
+        $page = &new SimplePage($response);
+        $page->AcceptTag($link);        
+        $base = &new SimpleBaseTag(array('href' => 'www.lastcraft.com/stuff/'));
+        $page->AcceptTag($base);
         $this->assertEqual(
                 $page->getUrlsByLabel('Label'),
-                array(new SimpleUrl('http://host/somewhere.php')));
+                array(new SimpleUrl('www.lastcraft.com/stuff/somewhere.php')));
+    }
+
+    function testAddAbsoluteLinkWithBaseTag() {
+        $link = &new SimpleAnchorTag(array('href' => 'http://here.com/somewhere.php'));
+        $link->addContent('Label');
+        $response = &new MockSimpleHttpResponse();
+        $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
+        $page = &new SimplePage($response);
+        $page->AcceptTag($link);        
+        $base = &new SimpleBaseTag(array('href' => 'www.lastcraft.com/stuff/'));
+        $page->AcceptTag($base);
+        $this->assertEqual(
+                $page->getUrlsByLabel('Label'),
+                array(new SimpleUrl('http://here.com/somewhere.php')));
     }
 
     function testLinkIds() {
@@ -496,18 +504,15 @@ class TestOfPageScraping extends UnitTestCase {
 
     function testEmptyPage() {
         $page = &new SimplePage(new MockSimpleHttpResponse());
-        $this->assertIdentical($page->getAbsoluteUrls(), array());
-        $this->assertIdentical($page->getRelativeUrls(), array());
+        $this->assertIdentical($page->getUrls(), array());
         $this->assertIdentical($page->getTitle(), false);
     }
 
     function testUninterestingPage() {
         $response = &new MockSimpleHttpResponse();
         $response->setReturnValue('getContent', '<html><body><p>Stuff</p></body></html>');
-
         $page = &$this->parse($response);
-        $this->assertIdentical($page->getAbsoluteUrls(), array());
-        $this->assertIdentical($page->getRelativeUrls(), array());
+        $this->assertIdentical($page->getUrls(), array());
     }
 
     function testLinksPage() {
@@ -521,11 +526,8 @@ class TestOfPageScraping extends UnitTestCase {
 
         $page = &$this->parse($response);
         $this->assertIdentical(
-                $page->getAbsoluteUrls(),
-                array('http://there.com/that.html'));
-        $this->assertIdentical(
-                $page->getRelativeUrls(),
-                array('there.html'));
+                $page->getUrls(),
+                array('http://www.here.com/a/there.html', 'http://there.com/that.html'));
         $this->assertIdentical(
                 $page->getUrlsByLabel('There'),
                 array(new SimpleUrl('http://www.here.com/a/there.html')));
