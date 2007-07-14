@@ -81,7 +81,7 @@
          *    @access private
          */
         function _chompScheme(&$url) {
-            if (preg_match('/(.*?):(\/\/)(.*)/', $url, $matches)) {
+            if (preg_match('/^([^\/:]*):(\/\/)(.*)/', $url, $matches)) {
                 $url = $matches[2] . $matches[3];
                 return $matches[1];
             }

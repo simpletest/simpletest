@@ -98,6 +98,14 @@ class TestOfUrl extends UnitTestCase {
                 '?a=' . urlencode('?!"\'#~@[]{}:;<>,./|£$%^&*()_+-='));
     }
     
+    function testUrlInQueryDoesNotConfuseParsing() {
+        $url = new SimpleUrl('wibble/login.php?url=http://www.google.com/moo/');
+        $this->assertFalse($url->getScheme());
+        $this->assertFalse($url->getHost());
+        $this->assertEqual($url->getPath(), 'wibble/login.php');
+        $this->assertEqual($url->getEncodedRequest(), '?url=http://www.google.com/moo/');
+    }
+    
     function testSettingCordinates() {
         $url = new SimpleUrl('');
         $url->setCoordinates('32', '45');
