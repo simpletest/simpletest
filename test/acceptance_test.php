@@ -152,6 +152,12 @@ class TestOfLiveFetching extends SimpleTestAcceptanceTest {
         $this->assertTrue($this->post('network_confirm.php'));
         $this->assertText('target for the SimpleTest');
     }
+}
+
+class TestOfLinkFollowing extends SimpleTestAcceptanceTest {
+    function setUp() {
+        $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
+    }
     
     function testLinkAssertions() {
         $this->get($this->samples() . 'link_confirm.php');
@@ -183,6 +189,12 @@ class TestOfLiveFetching extends SimpleTestAcceptanceTest {
         $this->get($this->samples() . 'link_confirm.php');
         $this->get('http://www.lastcraft.com');
         $this->assertText('No guarantee of quality is given or even intended');
+    }
+    
+    function testRelativeUrlRespectsBaseTag() {
+        $this->get($this->samples() . 'base_tag/relative_link.html');
+        $this->click('Back to test pages');
+        $this->assertTitle('Simple test target file');
     }
 }
 
