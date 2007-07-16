@@ -220,51 +220,81 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     <tr>
                         <td>HTML label support</td>
                         <td>Can access all controls using the visual label</td>
-                        <td style="color: red;">1.0.1</td>
+                        <td style="color: green;">1.0.1</td>
                     </tr>
                     <tr>
-                        <td>Code coverage</td>
-                        <td>Reports using the bundled SpikeSource coverage tool</td>
-                        <td style="color: red;">1.0.1</td>
+                        <td>Base tag support</td>
+                        <td>Respects page base tag when clicking</td>
+                        <td style="color: green;">1.0.1</td>
+                    </tr>
+                    <tr>
+                        <td>PHP 5 E_STRICT compliant</td>
+                        <td>PHP 5 only version that works with the E_STRICT error level</td>
+                        <td style="color: red;">1.1</td>
+                    </tr>
+                    <tr>
+                        <td>BDD style fixtures</td>
+                        <td>Can import fixtures using a mixin like given() method</td>
+                        <td style="color: red;">1.5</td>
                     </tr>
                     <tr>
                         <td>Reporting machinery enhancements</td>
                         <td>Improved message passing for better cooperation with IDEs</td>
-                        <td style="color: red;">1.1</td>
+                        <td style="color: red;">1.5</td>
+                    </tr>
+                    <tr>
+                        <td>Fluent mock interface</td>
+                        <td>More flexible and concise mock objects</td>
+                        <td style="color: red;">1.6</td>
                     </tr>
                     <tr>
                         <td>Localisation</td>
                         <td>Messages abstracted and code generated from XML</td>
-                        <td style="color: red;">1.1</td>
+                        <td style="color: red;">1.6</td>
+                    </tr>
+                    <tr>
+                        <td>CSS selectors</td>
+                        <td>HTML content can be examined using CSS selectors</td>
+                        <td style="color: red;">1.7</td>
+                    </tr>
+                    <tr>
+                        <td>HTML table assertions</td>
+                        <td>Can match HTML or table elements to expectations</td>
+                        <td style="color: red;">1.7</td>
+                    </tr>
+                    <tr>
+                        <td>Unified acceptance testing model</td>
+                        <td>Content searchable through selectors combined with expectations</td>
+                        <td style="color: red;">1.7</td>
+                    </tr>
+                    <tr>
+                        <td>DatabaseTestCase</td>
+                        <td>SQL selectors and DB drivers</td>
+                        <td style="color: red;">1.7</td>
                     </tr>
                     <tr>
                         <td>IFrame support</td>
                         <td>Reads IFrame content that can be refreshed</td>
-                        <td style="color: red;">1.1</td>
-                    </tr>
-                    <tr>
-                        <td>Improved mock interface</td>
-                        <td>More compact way of expressing mocks using fluent interfaces</td>
-                        <td style="color: red;">2.0</td>
-                    </tr>
-                    <tr>
-                        <td>Assertion packs</td>
-                        <td>Can dynamically add assertions to test cases</td>
-                        <td style="color: red;">2.0</td>
-                    </tr>
-                    <tr>
-                        <td>HTML table assertions</td>
-                        <td>Can match table elements to numerical assertions</td>
-                        <td style="color: red;">2.0</td>
-                    </tr>
-                    <tr>
-                        <td>XPath searching of HTML elements</td>
-                        <td>More flexible content matching</td>
-                        <td style="color: red;">2.0</td>
+                        <td style="color: red;">1.8</td>
                     </tr>
                     <tr>
                         <td>Alternate HTML parsers</td>
                         <td>Can detect compiled parsers for performance improvements</td>
+                        <td style="color: red;">1.8</td>
+                    </tr>
+                    <tr>
+                        <td>Integrated Selenium support</td>
+                        <td>Easy to use built in Selenium driver and tutorial</td>
+                        <td style="color: red;">1.9</td>
+                    </tr>
+                    <tr>
+                        <td>Code coverage</td>
+                        <td>Reports using the bundled tool when using XDebug</td>
+                        <td style="color: red;">1.9</td>
+                    </tr>
+                    <tr>
+                        <td>Deprecation of old methods</td>
+                        <td>Simpler interface for SimpleTest2</td>
                         <td style="color: red;">2.0</td>
                     </tr>
                     <tr>
