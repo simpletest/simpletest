@@ -554,9 +554,7 @@ class TestOfBrowserFrames extends UnitTestCase {
     function testFramesetWithNoFrames() {
         $browser = &$this->createBrowser($this->createUserAgent(
                 array('http://site.with.no.frames/' => '<frameset></frameset>')));
-        $this->assertEqual(
-                $browser->get('http://site.with.no.frames/'),
-                '');
+        $this->assertEqual($browser->get('http://site.with.no.frames/'), '');
         $this->assertIdentical($browser->getFrames(), array());
     }
 
@@ -565,10 +563,7 @@ class TestOfBrowserFrames extends UnitTestCase {
         $browser = &$this->createBrowser($this->createUserAgent(array(
                 'http://site.with.one.frame/' => $frameset,
                 'http://site.with.one.frame/frame.html' => 'A frame')));
-
-        $this->assertEqual(
-                $browser->get('http://site.with.one.frame/'),
-                'A frame');
+        $this->assertEqual($browser->get('http://site.with.one.frame/'), 'A frame');
         $this->assertIdentical(
                 $browser->getFrames(),
                 array('a' => 'http://site.with.one.frame/frame.html'));
@@ -580,7 +575,6 @@ class TestOfBrowserFrames extends UnitTestCase {
         $browser = &$this->createBrowser($this->createUserAgent(array(
                 'http://site.with.one.frame/' => $frameset,
                 'http://site.with.one.frame/frame.html' => '<title>Page title</title>')));
-
         $browser->get('http://site.with.one.frame/');
         $this->assertEqual($browser->getTitle(), 'Frameset title');
     }
@@ -590,7 +584,6 @@ class TestOfBrowserFrames extends UnitTestCase {
         $browser = &$this->createBrowser($this->createUserAgent(array(
                 'http://site.with.one.frame/' => $frameset,
                 'http://site.with.one.frame/frame.html' => 'One frame')));
-
         $this->assertEqual(
                 $browser->get('http://site.with.one.frame/'),
                 'One frame');
@@ -610,7 +603,6 @@ class TestOfBrowserFrames extends UnitTestCase {
                 'http://site.with.frames/frame_a.html' => 'A frame',
                 'http://site.with.frames/frame_b.html' => 'B frame',
                 'http://site.with.frames/frame_c.html' => 'C frame')));
-
         $this->assertEqual(
                 $browser->get('http://site.with.frames/'),
                 'A frameB frameC frame');
@@ -631,7 +623,6 @@ class TestOfBrowserFrames extends UnitTestCase {
                 'http://site.with.frames/frame_a.html' => 'A frame',
                 'http://site.with.frames/frame_b.html' => 'B frame',
                 'http://site.with.frames/frame_c.html' => 'C frame')));
-
         $browser->get('http://site.with.frames/');
         $browser->setFrameFocus('a');
         $this->assertEqual($browser->getContent(), 'A frame');
@@ -654,7 +645,6 @@ class TestOfBrowserFrames extends UnitTestCase {
                 'http://site.with.frames/frame_b.html' => 'B frame',
                 'http://site.with.frames/frame_c.html' => 'C frame',
                 'http://site.with.frames/frame_d.html' => 'D frame')));
-
         $this->assertEqual(
                 $browser->get('http://site.with.frames/'),
                 'A frameB frameC frameD frame');
@@ -678,7 +668,6 @@ class TestOfBrowserFrames extends UnitTestCase {
                 'http://site.with.frames/frame_b.html' => 'B frame',
                 'http://site.with.frames/frame_c.html' => 'C frame',
                 'http://site.with.frames/frame_d.html' => 'D frame')));
-
         $browser->get('http://site.with.frames/');
         $browser->setFrameFocus('a');
         $this->assertEqual($browser->getContent(), 'A frame');
@@ -703,7 +692,6 @@ class TestOfBrowserFrames extends UnitTestCase {
                 'http://site.with.nested.frame/' => $outer,
                 'http://site.with.nested.frame/inner.html' => $inner,
                 'http://site.with.nested.frame/page.html' => 'The page')));
-
         $this->assertEqual(
                 $browser->get('http://site.with.nested.frame/'),
                 'The page');

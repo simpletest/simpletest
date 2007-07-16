@@ -192,7 +192,7 @@ class TestOfLinkFollowing extends SimpleTestAcceptanceTest {
     }
     
     function testRelativeUrlRespectsBaseTag() {
-        $this->get($this->samples() . 'base_tag/relative_link.html');
+        $this->get($this->samples() . 'base_tag/base_link.html');
         $this->click('Back to test pages');
         $this->assertTitle('Simple test target file');
     }
@@ -1421,6 +1421,21 @@ class TestOfLoadingFrames extends SimpleTestAcceptanceTest {
         $this->assertLink('3');
         $this->assertNoLink('2');
         $this->assertTitle('Frameset for testing of SimpleTest');
+    }
+    
+    function testFrameWithRelativeLinksRespectsBaseTagForThatPage() {
+        $this->get($this->samples() . 'base_tag/frameset.html');
+        $this->click('Back to test pages');
+        $this->assertTitle('Frameset for testing of SimpleTest');
+        $this->assertText('A target for the SimpleTest test suite');
+    }
+    
+    function testRelativeLinkInFrameIsNotAffectedByFramesetBaseTag() {
+        $this->get($this->samples() . 'base_tag/frameset_with_base_tag.html');
+        $this->assertText('This is page 1');
+        $this->click('To page 2');
+        $this->assertTitle('Frameset for testing of SimpleTest');
+        $this->assertText('This is page 2');
     }
 }
 

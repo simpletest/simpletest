@@ -448,6 +448,22 @@ class TestOfHtmlPage extends UnitTestCase {
                 'B' => new SimpleUrl('http://here/3.html'),
                 4 => new SimpleUrl('http://here/4.html')));
     }
+    
+    function testRelativeFramesRespectBaseTag() {
+        $response = &new MockSimpleHttpResponse();
+        $response->setReturnValue('getUrl', new SimpleUrl('http://here.com/'));
+        $page = &new SimplePage($response);
+
+        $base = &new SimpleBaseTag(array('href' => 'https://there.com/stuff/'));
+        $page->AcceptTag($base);
+
+        $page->acceptFramesetStart(new SimpleTag('frameset', array()));
+        $page->acceptFrame(new SimpleFrameTag(array('src' => '1.html')));
+        $page->acceptFramesetEnd();
+        $this->assertIdentical(
+                $page->getFrameset(),
+                array(1 => new SimpleUrl('https://there.com/stuff/1.html')));
+    }
 }
 
 class TestOfFormsCreatedFromEventStream extends UnitTestCase {

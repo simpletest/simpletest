@@ -759,22 +759,13 @@
         }
 
         /**
-         *    Accessor for a list of all fixed links in current page.
+         *    Accessor for a list of all links in current page.
          *    @return array   List of urls with scheme of
          *                    http or https and hostname.
          *    @access public
          */
-        function getAbsoluteUrls() {
-            return $this->_page->getAbsoluteUrls();
-        }
-
-        /**
-         *    Accessor for a list of all relative links.
-         *    @return array      List of urls without hostname.
-         *    @access public
-         */
-        function getRelativeUrls() {
-            return $this->_page->getRelativeUrls();
+        function getUrls() {
+            return $this->_page->getUrls();
         }
 
         /**

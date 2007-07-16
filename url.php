@@ -41,7 +41,7 @@
          *    @param string $url        Incoming URL.
          *    @access public
          */
-        function SimpleUrl($url) {
+        function SimpleUrl($url = '') {
             list($x, $y) = $this->_chompCoordinates($url);
             $this->setCoordinates($x, $y);
             $this->_scheme = $this->_chompScheme($url);
@@ -437,8 +437,8 @@
             if (! is_object($base)) {
                 $base = new SimpleUrl($base);
             }
-            $scheme = $this->getScheme() ? $this->getScheme() : $base->getScheme();
             if ($this->getHost()) {
+                $scheme = $this->getScheme();
                 $host = $this->getHost();
                 $port = $this->getPort() ? ':' . $this->getPort() : '';
                 $identity = $this->getIdentity() ? $this->getIdentity() . '@' : '';
@@ -446,6 +446,7 @@
                     $identity = $base->getIdentity() ? $base->getIdentity() . '@' : '';
                 }
             } else {
+                $scheme = $base->getScheme();
                 $host = $base->getHost();
                 $port = $base->getPort() ? ':' . $base->getPort() : '';
                 $identity = $base->getIdentity() ? $base->getIdentity() . '@' : '';

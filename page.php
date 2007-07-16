@@ -470,7 +470,7 @@
          *    @access public
          */
         function getBaseUrl() {
-            return $this->_base ? $this->_base : $this->_url;
+            return $this->_base;
         }
 
         /**
@@ -641,7 +641,8 @@
          *    @access public
          */
         function acceptFormStart(&$tag) {
-            $this->_open_forms[] = &new SimpleForm($tag, $this->getBaseUrl());
+            $here = $this->getUrl() ? $this->getUrl() : new SimpleUrl();
+            $this->_open_forms[] = &new SimpleForm($tag, $here->makeAbsolute($this->getBaseUrl()));
         }
 
         /**
@@ -768,7 +769,7 @@
             for ($i = 0; $i < count($this->_frames); $i++) {
                 $name = $this->_frames[$i]->getAttribute('name');
                 $url = new SimpleUrl($this->_frames[$i]->getAttribute('src'));
-                $urls[$name ? $name : $i + 1] = $url->makeAbsolute($this->getUrl());
+                $urls[$name ? $name : $i + 1] = $this->_expandUrl($url);
             }
             return $urls;
         }
@@ -779,7 +780,7 @@
          *    @access public
          */
         function getFrames() {
-            $url = $this->getUrl();
+            $url = $this->_expandUrl($this->getUrl());
             return $url->asString();
         }
 
@@ -831,13 +832,13 @@
         }
 
         /**
-         *    Converts a link into a target URL.
+         *    Converts a link tag into a target URL.
          *    @param SimpleAnchor $link    Parsed link.
          *    @return SimpleUrl            URL with frame target if any.
          *    @access private
          */
         function _getUrlFromLink($link) {
-            $url = $this->_makeAbsolute($link->getHref());
+            $url = $this->_expandUrl($link->getHref());
             if ($link->getAttribute('target')) {
                 $url->setTarget($link->getAttribute('target'));
             }
@@ -851,13 +852,14 @@
          *    @return SimpleUrl            Absolute URL.
          *    @access protected
          */
-        function _makeAbsolute($url) {
+        function _expandUrl($url = false) {
             if (! is_object($url)) {
                 $url = new SimpleUrl($url);
             }
-            return $url->makeAbsolute($this->getBaseUrl());
+            $location = $this->getBaseUrl() ? $this->getBaseUrl() : new SimpleUrl();
+            return $url->makeAbsolute($location->makeAbsolute($this->getUrl()));
         }
-	
+
         /**
          *    Sets the base url for the page.
          *    @param SimpleTag $tag    Base URL for page.
