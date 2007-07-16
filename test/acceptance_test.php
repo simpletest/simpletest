@@ -530,7 +530,7 @@ class TestOfLiveCookies extends SimpleTestAcceptanceTest {
     }
 }
 
-class TestOfLiveForms extends SimpleTestAcceptanceTest {
+class LiveTestOfForms extends SimpleTestAcceptanceTest {
     function setUp() {
         $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
     }
@@ -919,6 +919,13 @@ class TestOfLiveForms extends SimpleTestAcceptanceTest {
         $this->assertText("d=[']");
         $this->assertText('e=[&\'"<>]');
         $this->assertText("i=[']");
+    }
+    
+    function testFormActionRespectsBaseTag() {
+        $this->get($this->samples() . 'base_tag/form.html');
+        $this->assertTrue($this->clickSubmit('Go!'));
+        $this->assertText('go=[Go!]');
+        $this->assertText('a=[]');
     }
 }
 
