@@ -249,7 +249,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>Localisation</td>
-                        <td>Messages abstracted and code generated from XML</td>
+                        <td>Messages abstracted and code generated</td>
                         <td style="color: red;">1.6</td>
                     </tr>
                     <tr>
@@ -299,14 +299,14 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>Javascript suport</td>
-                        <td>Use of PECL module to add Javascript</td>
+                        <td>Use of PECL module to add Javascript to the native browser</td>
                         <td style="color: red;">3.0</td>
                     </tr>
                 </tbody></table>
                 PHP5 migraton will start straight after the version 1.0.1 series,
                 whereupon only PHP 5.1+ will be supported.
                 SimpleTest is currently compatible with PHP 5, but will not
-                make use of all of the new features until version 2.
+                make use of all of the new features until version 1.1.
             </p>
         </section>
         <section name="resources" title="Web resources for testing">
