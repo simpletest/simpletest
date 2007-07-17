@@ -4,11 +4,11 @@
     <content>
         <section name="current-release" title="Current release">
             <p>
-				The current release is : <a href="http://prdownloads.sourceforge.net/simpletest/simpletest_1.0.1beta.tar.gz">SimpleTest v1.0.1beta</a>.
+				The current release is : <a href="http://prdownloads.sourceforge.net/simpletest/simpletest_1.0.1beta2.tar.gz">SimpleTest v1.0.1beta2</a>.
 			</p>
 			<p>
 				You can download this version from
-				<a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=159054&amp;release_id=391231">SourceForget.net</a>
+				<a href="http://sourceforge.net/project/showfiles.php?group_id=76550&package_id=77275&release_id=523669">SourceForget.net</a>
 				and your local mirror. You may also want to look at
 				the <a href="changelog.html">current changelog</a>.
 			</p>
