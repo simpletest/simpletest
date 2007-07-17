@@ -48,6 +48,8 @@ FILES=(simpletest/README \
           simpletest/xml.php \
           simpletest/extensions/pear_test_case.php \
           simpletest/extensions/phpunit_test_case.php \
+          simpletest/extensions/testdox.php \
+          simpletest/extensions/testdox/test.php \
           simpletest/test/acceptance_test.php \
           simpletest/test/adapter_test.php \
           simpletest/test/all_tests.php \
