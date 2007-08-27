@@ -805,6 +805,8 @@ class TestOfPHP5AbstractMethodMocking extends UnitTestCase {
                 function anAbstractWithParameter($foo){}
                 function anAbstractWithMultipleParameters($foo, $bar){}
             }
+
+            class EvenDeeperEmptyChildClass extends SimpleChildAbstractClassContainingAbstractMethods {}
         ');
 
         Mock::generate('SimpleChildAbstractClassContainingAbstractMethods');
@@ -825,6 +827,28 @@ class TestOfPHP5AbstractMethodMocking extends UnitTestCase {
         $this->assertTrue(
             method_exists(
                 'MockSimpleChildAbstractClassContainingAbstractMethods',
+                'anAbstractWithMultipleParameters'
+            )
+        );
+        
+        Mock::generate('EvenDeeperEmptyChildClass');
+        $this->assertNoErrors();
+
+        $this->assertTrue(
+            method_exists(
+                'MockEvenDeeperEmptyChildClass',
+                'anAbstract'
+            )
+        );
+        $this->assertTrue(
+            method_exists(
+                'MockEvenDeeperEmptyChildClass',
+                'anAbstractWithParameter'
+            )
+        );
+        $this->assertTrue(
+            method_exists(
+                'MockEvenDeeperEmptyChildClass',
                 'anAbstractWithMultipleParameters'
             )
         );
