@@ -409,8 +409,9 @@
                     $reflection = new SimpleReflection($class);
                     if ($reflection->isAbstract()) {
                         SimpleTest::ignore($class);
+                    } else {
+                        $classes[] = $class;
                     }
-                    $classes[] = $class;
                 }
             }
             return $classes;
