@@ -61,16 +61,23 @@
         <pre><?php print_r(PageRequest::post()); ?></pre>
         <h1>POST data</h1>
         <?php
-            if (count($_POST) > 0) {
-                foreach ($_POST as $key => $value) {
-                    print htmlentities($key) . "=[";
+            function show_array_value($array) {
+                $html = "";
+                foreach ($array as $key => $value) {
+                    $html .= htmlentities($key) . "=[";
                     if (is_array($value)) {
-                        print implode(', ', htmlentities($value));
+                        $html .= show_array_value($value);
                     } else {
-                        print htmlentities($value);
+                        $html .= htmlentities($value);
                     }
-                    print "]<br />\n";
+                    $html .= "]";
                 }
+                
+                return $html;
+            }
+
+            if (count($_POST) > 0) {
+                echo show_array_value($_POST)."<br />\n";
             }
         ?>
     </body>

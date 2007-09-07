@@ -420,8 +420,39 @@
          *    @access public
          */
         function SimplePostEncoding($query = false) {
+			if (is_array($query) and $this->hasMoreThanOneLevel($query)) {
+				$query = $this->rewriteArrayWithMultipleLevels($query);
+			}
             $this->SimpleEncoding($query);
         }
+        
+        function hasMoreThanOneLevel($query) {
+        	foreach ($query as $key => $value) {
+        		if (is_array($value)) {
+        			return true;
+        		}
+        	}
+        	return false;
+        }
+
+        function rewriteArrayWithMultipleLevels($query) {
+        	$query_ = array();
+        	foreach ($query as $key => $value) {
+        		if (is_array($value)) {
+        			foreach ($value as $sub_key => $sub_value) {
+        				$query_[$key."[".$sub_key."]"] = $sub_value;
+        			}
+        		} else {
+        			$query_[$key] = $value;
+        		}
+        	}
+        	if ($this->hasMoreThanOneLevel($query_)) {
+        		$query_ = $this->rewriteArrayWithMultipleLevels($query_);
+        	}
+        	
+        	return $query_;
+        }
+        
         
         /**
          *    HTTP request method.

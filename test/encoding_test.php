@@ -64,6 +64,24 @@ class TestOfEncoding extends UnitTestCase {
         $this->assertWritten($encoding, 'a=aaa');
     }
     
+    function testPrefilledWithTwoLevels() {
+        $query = array('a' => array('aa' => 'aaa'));
+        $encoding = &new SimplePostEncoding($query);
+        $this->assertTrue($encoding->hasMoreThanOneLevel($query));
+        $this->assertEqual($encoding->rewriteArrayWithMultipleLevels($query), array('a[aa]' => 'aaa'));
+        $this->assertIdentical($encoding->getValue('a[aa]'), 'aaa');
+        $this->assertWritten($encoding, 'a%5Baa%5D=aaa');
+    }
+    
+    function testPrefilledWithThreeLevels() {
+        $query = array('a' => array('aa' => array('aaa' => 'aaaa')));
+        $encoding = &new SimplePostEncoding($query);
+        $this->assertTrue($encoding->hasMoreThanOneLevel($query));
+        $this->assertEqual($encoding->rewriteArrayWithMultipleLevels($query), array('a[aa][aaa]' => 'aaaa'));
+        $this->assertIdentical($encoding->getValue('a[aa][aaa]'), 'aaaa');
+        $this->assertWritten($encoding, 'a%5Baa%5D%5Baaa%5D=aaaa');
+    }
+    
     function testPrefilledWithObject() {
         $encoding = &new SimplePostEncoding(new SimpleEncoding(array('a' => 'aaa')));
         $this->assertIdentical($encoding->getValue('a'), 'aaa');
@@ -71,9 +89,13 @@ class TestOfEncoding extends UnitTestCase {
     }
     
     function testMultiplePrefilled() {
-        $encoding = &new SimplePostEncoding(array('a' => array('a1', 'a2')));
-        $this->assertIdentical($encoding->getValue('a'), array('a1', 'a2'));
-        $this->assertWritten($encoding, 'a=a1&a=a2');
+        $query = array('a' => array('a1', 'a2'));
+        $encoding = &new SimplePostEncoding($query);
+        $this->assertTrue($encoding->hasMoreThanOneLevel($query));
+        $this->assertEqual($encoding->rewriteArrayWithMultipleLevels($query), array('a[0]' => 'a1', 'a[1]' => 'a2'));
+        $this->assertIdentical($encoding->getValue('a[0]'), 'a1');
+        $this->assertIdentical($encoding->getValue('a[1]'), 'a2');
+        $this->assertWritten($encoding, 'a%5B0%5D=a1&a%5B1%5D=a2');
     }
     
     function testSingleParameter() {

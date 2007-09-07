@@ -99,7 +99,7 @@ class TestOfLiveFetching extends SimpleTestAcceptanceTest {
     function setUp() {
         $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
     }
-    
+/*    
     function testGet() {
         $this->assertTrue($this->get($this->samples() . 'network_confirm.php'));
         $this->assertEqual($this->getUrl(), $this->samples() . 'network_confirm.php');
@@ -140,7 +140,29 @@ class TestOfLiveFetching extends SimpleTestAcceptanceTest {
         $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
         $this->assertText('a=[aaa]');
     }
-    
+*/
+    function testPostWithRecursiveData() {
+        $this->post($this->samples() . 'network_confirm.php', array("a" => "aaa"));
+        $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
+        $this->assertText('a=[aaa]');
+
+        $this->post($this->samples() . 'network_confirm.php', array("a[aa]" => "aaa"));
+        $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
+        $this->assertText('a=[aa=[aaa]]');
+
+        $this->post($this->samples() . 'network_confirm.php', array("a[aa][aaa]" => "aaaa"));
+        $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
+        $this->assertText('a=[aa=[aaa=[aaaa]]]');
+
+        $this->post($this->samples() . 'network_confirm.php', array("a" => array("aa" => "aaa")));
+        $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
+        $this->assertText('a=[aa=[aaa]]');
+
+        $this->post($this->samples() . 'network_confirm.php', array("a" => array("aa" => array("aaa" => "aaaa"))));
+        $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
+        $this->assertText('a=[aa=[aaa=[aaaa]]]');
+    }
+
     function testRelativeGet() {
         $this->get($this->samples() . 'link_confirm.php');
         $this->assertTrue($this->get('network_confirm.php'));
@@ -1371,7 +1393,7 @@ class TestOfLoadingFrames extends SimpleTestAcceptanceTest {
     function testJumpBackADirectoryLevelReplacesJustThatFrame() {
         $this->get($this->samples() . 'messy_frameset.html');
         $this->clickLink('Down one');
-        $this->assertPattern('/index of \/test/i');
+        $this->assertPattern('/index of .*\/test/i');
         $this->assertPattern('/Count: 1/');
     }
     
@@ -1411,7 +1433,7 @@ class TestOfLoadingFrames extends SimpleTestAcceptanceTest {
     function testSubmitBackADirectoryLevelReplacesJustThatFrame() {
         $this->get($this->samples() . 'messy_frameset.html');
         $this->clickSubmit('Down one');
-        $this->assertPattern('/index of \/test/i');
+        $this->assertPattern('/index of .*\/test/i');
         $this->assertPattern('/Count: 1/');
     }
     
