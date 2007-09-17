@@ -78,6 +78,16 @@ class EclipseReporter extends SimpleScorer {
         }
 	}
 	
+	function paintException($exception){
+        //only get the first failure or error
+        if (!$this->_fail && !$this->_error){
+    		$this->_error = true;
+    		$message = 'Unexpected exception of type['.get_class($exception).'] with message ['.$exception->getMessage().'] in ['.$exception->getFile().' line '.$exception->getLine().']';
+    		$this->_message = $this->escapeVal($message);
+    		$this->_listener->write('{status:"error",message:"'.$this->_message.'",group:"'.$this->_group.'",case:"'.$this->_case.'",method:"'.$this->_method.'"}');
+        }
+	}
+	
 	function paintHeader($method){
 	}
 	
