@@ -5,23 +5,6 @@
 require_once dirname(__FILE__) . '/../../../autorun.php';
 require_once dirname(__FILE__) . '/../../../extensions/dom_tester.php';
 
-class TestOfLiveCssSelectors extends DomTestCase {
-    function setUp() {
-        $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
-    }
-    
-    function testGet() {
-//        $url = 'http://simpletest.org/live/extensions/dom_tester/dom_tester.html';
-        $url = 'http://localhost/~perrick/simpletest/extensions/dom_tester/dom_tester.html';
-        $this->assertTrue($this->get($url));
-        $this->assertEqual($this->getUrl(), $url);
-        $this->assertElementsBySelector('h1', array('Test page'));
-        $this->assertElementsBySelector('ul#list li a[href]', array('link'));
-        $this->assertElementsBySelector('body  h1', array('Test page'));
-        $this->assertElementsBySelector('#mybar', array('myfoo bis'));
-    }
-}
-
 class TestOfCssSelectors extends UnitTestCase {
 	function TestOfCssSelectors() {
 		$html = file_get_contents(dirname(__FILE__) . '/support/dom_tester.html');
