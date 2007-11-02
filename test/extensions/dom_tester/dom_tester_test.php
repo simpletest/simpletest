@@ -2,8 +2,8 @@
 
 // $Id$
 
-require_once(dirname(__FILE__) . '/../../autorun.php');
-require_once(dirname(__FILE__) . '/../dom_tester.php');
+require_once dirname(__FILE__) . '/../../../autorun.php';
+require_once dirname(__FILE__) . '/../../../extensions/dom_tester.php';
 
 class TestOfLiveCssSelectors extends DomTestCase {
     function setUp() {
@@ -24,7 +24,7 @@ class TestOfLiveCssSelectors extends DomTestCase {
 
 class TestOfCssSelectors extends UnitTestCase {
 	function TestOfCssSelectors() {
-		$html = file_get_contents(dirname(__FILE__) . '/dom_tester.html');
+		$html = file_get_contents(dirname(__FILE__) . '/support/dom_tester.html');
 		$this->dom = new DomDocument('1.0', 'utf-8');
 		$this->dom->validateOnParse = true;
 		$this->dom->loadHTML($html);
@@ -135,7 +135,7 @@ class TestOfCssSelectors extends UnitTestCase {
 
 class TestsOfChildAndAdjacentSelectors extends DomTestCase {
 	function TestsOfChildAndAdjacentSelectors() {
-		$html = file_get_contents(dirname(__FILE__) . '/dom_tester_child_adjacent.html');
+		$html = file_get_contents(dirname(__FILE__) . '/support/child_adjacent.html');
 		$this->dom = new DomDocument('1.0', 'utf-8');
 		$this->dom->validateOnParse = true;
 		$this->dom->loadHTML($html);
