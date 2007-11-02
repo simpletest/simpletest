@@ -1,0 +1,27 @@
+<project name="simpletest" default="package" basedir="..">
+
+	<target name="info">
+		<echo msg="Builds a packaged release from SimpleTest extension source" />
+	</target>
+	
+	<input propertyname="ext_name" promptChar=":">Name of the extension to build</input>
+
+	<target name="package">
+		<mkdir dir="extensions/${ext_name}/test" />
+		<copy todir="extensions/${ext_name}/test">
+			<fileset dir="test/extensions/${ext_name}">
+				<include name="**/*" />	
+			</fileset>
+		</copy>
+		<zip destfile="${ext_name}.zip">
+			<fileset dir="extensions">
+				<include name="${ext_name}.php" />
+			</fileset>
+			<fileset dir="extensions">
+				<include name="${ext_name}/**/*" />
+			</fileset>
+		</zip>
+		<delete dir="extensions/${ext_name}/test" />
+	</target>
+
+</project>
