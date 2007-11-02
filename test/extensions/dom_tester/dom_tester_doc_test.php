@@ -13,7 +13,7 @@ class TestOfLiveCssSelectors extends DomTestCase {
     }
     
     function testGet() {
-        $url = 'http://localhost/~perrick/simpletest/docs/simpletest.org/';
+        $url = 'http://simpletest.org/';
         $this->assertTrue($this->get($url));
         $this->assertEqual($this->getUrl(), $url);
         $this->assertElementsBySelector('h2', array('Screenshots', 'Documentation', 'Contributing'));
