@@ -251,8 +251,8 @@ class MinimumCallCountExpectation extends SimpleExpectation {
 
 /**
  *    Confirms that the number of calls on a method is as expected.
- *	@package	SimpleTest
- *	@subpackage	MockObjects
+ *	  @package	    SimpleTest
+ *	  @subpackage	MockObjects
  */
 class MaximumCallCountExpectation extends SimpleExpectation {
     var $_method;
@@ -295,19 +295,19 @@ class MaximumCallCountExpectation extends SimpleExpectation {
 }
 
 /**
- *    Retrieves values and references by searching the
- *    parameter lists until a match is found.
+ *    Retrieves method actions by searching the
+ *    parameter lists until an expected match is found.
  *    @package SimpleTest
  *    @subpackage MockObjects
  */
-class CallMap {
+class SimpleSignatureMap {
     var $_map;
 
     /**
      *    Creates an empty call map.
      *    @access public
      */
-    function CallMap() {
+    function SimpleSignatureMap() {
         $this->_map = array();
     }
 
@@ -317,8 +317,8 @@ class CallMap {
      *    @param mixed $value         Value copied into the map.
      *    @access public
      */
-    function addValue($parameters, $value) {
-        $this->addReference($parameters, $value);
+    function addByValue($parameters, $value) {
+        $this->add($parameters, $value);
     }
 
     /**
@@ -327,7 +327,7 @@ class CallMap {
      *    @param mixed $reference     Array reference placed in the map.
      *    @access public
      */
-    function addReference($parameters, &$reference) {
+    function add($parameters, &$reference) {
         $place = count($this->_map);
         $this->_map[$place] = array();
         $this->_map[$place]["params"] = new ParametersExpectation($parameters);
@@ -345,7 +345,7 @@ class CallMap {
      */
     function &findFirstMatch($parameters) {
         $slot = $this->_findFirstSlot($parameters);
-        if (!isset($slot)) {
+        if (! isset($slot)) {
             $null = null;
             return $null;
         }
@@ -362,6 +362,23 @@ class CallMap {
      */
     function isMatch($parameters) {
         return ($this->_findFirstSlot($parameters) != null);
+    }
+    
+    /**
+     *    Compares the incoming parameters with the
+     *    internal expectation. Uses the incoming $test
+     *    to dispatch the test message.
+     *    @param SimpleTestCase $test   Test to dispatch to.
+     *    @param array $parameters      The actual calling arguments.
+     *    @param string $message        The message to overlay.
+     *    @access public
+     */
+    function asExpected(&$test, $parameters, $message) {
+        $slot = $this->_findFirstSlot($parameters);
+        if (! isset($slot)) {
+            return;
+        }
+        $test->assert($slot["params"], $parameters, $message);
     }
 
     /**
@@ -384,19 +401,249 @@ class CallMap {
 }
 
 /**
- *    An empty collection of methods that can have their
+ *    Allows setting of actions against call signatures either
+ *    at a specific time, or always. Specific time settings
+ *    trump lasting ones, otherwise the most recently added
+ *    will mask an earlier match.
+ *    @package SimpleTest
+ *    @subpackage MockObjects
+ */
+class SimpleCallSchedule {
+    var $_wildcard = MOCK_ANYTHING;
+    var $_always;
+    var $_at;
+    
+    /**
+     *    Sets up an empty response schedule.
+     *    Creates an empty call map.
+     */
+    function SimpleCallSchedule() {
+        $this->_always = array();
+        $this->_at = array();
+    }
+    
+    /**
+     *    Stores an action against a signature that
+     *    will always fire unless masked by a time
+     *    specific one.
+     *    @param string $method        Method name.
+     *    @param array $args           Calling parameters.
+     *    @param SimpleAction $action  Actually simpleByValue, etc.
+     *    @access public
+     */
+    function register($method, $args, &$action) {
+        $args = $this->_replaceWildcards($args);
+        $method = strtolower($method);
+        if (! isset($this->_always[$method])) {
+            $this->_always[$method] = new SimpleSignatureMap();
+        }
+        $this->_always[$method]->add($args, $action);
+    }
+    
+    /**
+     *    Stores an action against a signature that
+     *    will fire at a specific time in the future.
+     *    @param integer $step         delay of calls to this method,
+     *                                 0 is next.
+     *    @param string $method        Method name.
+     *    @param array $args           Calling parameters.
+     *    @param SimpleAction $action  Actually SimpleByValue, etc.
+     *    @access public
+     */
+    function registerAt($step, $method, $args, &$action) {
+        $args = $this->_replaceWildcards($args);
+        $method = strtolower($method);
+        if (! isset($this->_at[$method])) {
+            $this->_at[$method] = array();
+        }
+        if (! isset($this->_at[$method][$step])) {
+            $this->_at[$method][$step] = new SimpleSignatureMap();
+        }
+        $this->_at[$method][$step]->add($args, $action);
+    }
+    
+    /**
+     *    Actually carry out the action stored previously,
+     *    if the parameters match.
+     *    @param integer $step      Time of call.
+     *    @param string $method     Method name.
+     *    @param array $args        The parameters making up the
+     *                              rest of the call.
+     *    @return mixed             The result of the action.
+     *    @access public.
+     */
+    function &respond($step, $method, $args) {
+        $method = strtolower($method);
+        if (isset($this->_at[$method][$step])) {
+            if ($this->_at[$method][$step]->isMatch($args)) {
+                $action = &$this->_at[$method][$step]->findFirstMatch($args);
+                if (isset($action)) {
+                    return $action->act($this->_test);
+                }
+            }
+        }
+        if (isset($this->_always[$method])) {
+            $action = &$this->_always[$method]->findFirstMatch($args);
+            if (isset($action)) {
+                return $action->act($this->_test);
+            }
+        }
+        $null = null;
+        return $null;
+    }
+    
+    /**
+     *    Replaces wildcard matches with wildcard
+     *    expectations in the argument list.
+     *    @param array $args      Raw argument list.
+     *    @return array           Argument list with
+     *                            expectations.
+     *    @access private
+     */
+    function _replaceWildcards($args) {
+        if ($args === false) {
+            return false;
+        }
+        for ($i = 0; $i < count($args); $i++) {
+            if ($args[$i] === $this->_wildcard) {
+                $args[$i] = new AnythingExpectation();
+            }
+        }
+        return $args;
+    }
+}
+
+/**
+ *    A type of SimpleMethodAction.
+ *    Stashes a reference for returning later.
+ *    @package SimpleTest
+ *    @subpackage MockObjects
+ */
+class SimpleByReference {
+    var $_reference;
+    
+    /**
+     *    Stashes it for later.
+     *    @param mixed $reference     Actual PHP4 style reference.
+     *    @access public
+     */
+    function SimpleByReference(&$reference) {
+        $this->_reference = &$reference;
+    }
+    
+    /**
+     *    Returns the reference stored earlier.
+     *    @return mixed    Whatever was stashed.
+     *    @access public
+     */
+    function &act() {
+        return $this->_reference;
+    }
+}
+
+/**
+ *    A type of SimpleMethodAction.
+ *    Stashes a value for returning later.
+ *    @package SimpleTest
+ *    @subpackage MockObjects
+ */
+class SimpleByValue {
+    var $_value;
+    
+    /**
+     *    Stashes it for later.
+     *    @param mixed $value     You need to clone objects
+     *                            if you want copy semantics
+     *                            for these.
+     *    @access public
+     */
+    function SimpleByValue($value) {
+        $this->_value = $value;
+    }
+    
+    /**
+     *    Returns the value stored earlier.
+     *    @return mixed    Whatever was stashed.
+     *    @access public
+     */
+    function act() {
+        return $this->_value;
+    }
+}
+
+/**
+ *    A type of SimpleMethodAction.
+ *    Stashes an exception for throwing later.
+ *    @package SimpleTest
+ *    @subpackage MockObjects
+ */
+class SimpleThrower {
+    var $_exception;
+    
+    /**
+     *    Stashes it for later.
+     *    @param Exception $exception    The exception object to throw.
+     *    @access public
+     */
+    function SimpleThrower($exception) {
+        $this->_exception = $exception;
+    }
+    
+    /**
+     *    Throws the exceptins stashed earlier.
+     *    @access public
+     */
+    function act() {
+        eval('throw $this->_exception;');
+    }
+}
+
+/**
+ *    A type of SimpleMethodAction.
+ *    Stashes an error for emitting later.
+ *    @package SimpleTest
+ *    @subpackage MockObjects
+ */
+class SimpleErrorThrower {
+    var $_error;
+    var $_severity;
+    
+    /**
+     *    Stashes an error to throw later.
+     *    @param string $error      Error message.
+     *    @param integer $severity  PHP error constant, e.g E_USER_ERROR.
+     *    @access public
+     */
+    function SimpleErrorThrower($error, $severity) {
+        $this->_error = $error;
+        $this->_severity = $severity;
+    }
+    
+    /**
+     *    Triggers the stashed error.
+     *    @return null
+     *    @access public
+     */
+    function act() {
+        trigger_error($this->_error, $this->_severity);
+    }
+}
+
+/**
+ *    A base class or delegate that extends an
+ *    empty collection of methods that can have their
  *    return values set and expectations made of the
  *    calls upon them. The mock will assert the
  *    expectations against it's attached test case in
- *    addition to the server stub behaviour.
+ *    addition to the server stub behaviour or returning
+ *    preprogrammed responses.
  *    @package SimpleTest
  *    @subpackage MockObjects
  */
 class SimpleMock {
+    var $_actions;
     var $_wildcard = MOCK_ANYTHING;
     var $_is_strict = true;
-    var $_returns;
-    var $_return_sequence;
     var $_call_counts;
     var $_expected_counts;
     var $_max_counts;
@@ -404,12 +651,13 @@ class SimpleMock {
     var $_expected_args_at;
 
     /**
-     *    Creates an empty return list and expectation list.
+     *    Creates an empty action list and expectation list.
      *    All call counts are set to zero.
+     *    @access public
      */
     function SimpleMock() {
-        $this->_returns = array();
-        $this->_return_sequence = array();
+        $this->_actions = &new SimpleCallSchedule();
+        $this->_expectations = &new SimpleCallSchedule();
         $this->_call_counts = array();
         $this->_expected_counts = array();
         $this->_max_counts = array();
@@ -527,12 +775,7 @@ class SimpleMock {
      */
     function setReturnValue($method, $value, $args = false) {
         $this->_dieOnNoMethod($method, "set return value");
-        $args = $this->_replaceWildcards($args);
-        $method = strtolower($method);
-        if (! isset($this->_returns[$method])) {
-            $this->_returns[$method] = new CallMap();
-        }
-        $this->_returns[$method]->addValue($args, $value);
+        $this->_actions->register($method, $args, new SimpleByValue($value));
     }
 
     /**
@@ -551,15 +794,7 @@ class SimpleMock {
      */
     function setReturnValueAt($timing, $method, $value, $args = false) {
         $this->_dieOnNoMethod($method, "set return value sequence");
-        $args = $this->_replaceWildcards($args);
-        $method = strtolower($method);
-        if (! isset($this->_return_sequence[$method])) {
-            $this->_return_sequence[$method] = array();
-        }
-        if (! isset($this->_return_sequence[$method][$timing])) {
-            $this->_return_sequence[$method][$timing] = new CallMap();
-        }
-        $this->_return_sequence[$method][$timing]->addValue($args, $value);
+        $this->_actions->registerAt($timing, $method, $args, new SimpleByValue($value));
     }
 
     /**
@@ -573,12 +808,7 @@ class SimpleMock {
      */
     function setReturnReference($method, &$reference, $args = false) {
         $this->_dieOnNoMethod($method, "set return reference");
-        $args = $this->_replaceWildcards($args);
-        $method = strtolower($method);
-        if (! isset($this->_returns[$method])) {
-            $this->_returns[$method] = new CallMap();
-        }
-        $this->_returns[$method]->addReference($args, $reference);
+        $this->_actions->register($method, $args, new SimpleByReference(&$reference));
     }
 
     /**
@@ -597,15 +827,7 @@ class SimpleMock {
      */
     function setReturnReferenceAt($timing, $method, &$reference, $args = false) {
         $this->_dieOnNoMethod($method, "set return reference sequence");
-        $args = $this->_replaceWildcards($args);
-        $method = strtolower($method);
-        if (! isset($this->_return_sequence[$method])) {
-            $this->_return_sequence[$method] = array();
-        }
-        if (! isset($this->_return_sequence[$method][$timing])) {
-            $this->_return_sequence[$method][$timing] = new CallMap();
-        }
-        $this->_return_sequence[$method][$timing]->addReference($args, $reference);
+        $this->_actions->registerAt($timing, $method, $args, new SimpleByReference(&$reference));
     }
 
     /**
@@ -759,6 +981,26 @@ class SimpleMock {
             $this->expect($method, $args, $message);
         }
     }
+    
+    /**
+     *    Sets up a trigger to throw an exception upon the
+     *    method call.
+     */
+    function throwOn($method, $exception = false, $args = false) {
+        $this->_dieOnNoMethod($method, "throw on");
+        $this->_actions->register($method, $args,
+                new SimpleThrower($exception ? $exception : new Exception()));
+    }
+    
+    /**
+     *    Sets up a trigger to throw an exception upon the
+     *    method call.
+     */
+    function throwAt($timing, $method, $exception = false, $args = false) {
+        $this->_dieOnNoMethod($method, "throw on");
+        $this->_actions->registerAt($timing, $method, $args,
+                new SimpleThrower($exception ? $exception : new Exception()));
+    }
 
     /**
      *    @deprecated
@@ -801,9 +1043,10 @@ class SimpleMock {
         $step = $this->getCallCount($method);
         $this->_addCall($method, $args);
         $this->_checkExpectations($method, $args, $step);
-        $result = &$this->_getReturn($method, $args, $step);
+        $result = &$this->_emulateCall($method, $args, $step);
         return $result;
     }
+    
     /**
      *    Finds the return value matching the incoming
      *    arguments. If there is no matching value found
@@ -812,22 +1055,11 @@ class SimpleMock {
      *    @param array $args         Calling arguments.
      *    @param integer $step       Current position in the
      *                               call history.
-     *    @return mixed              Stored return.
+     *    @return mixed              Stored return or other action.
      *    @access protected
      */
-    function &_getReturn($method, $args, $step) {
-        if (isset($this->_return_sequence[$method][$step])) {
-            if ($this->_return_sequence[$method][$step]->isMatch($args)) {
-                $result = &$this->_return_sequence[$method][$step]->findFirstMatch($args);
-                return $result;
-            }
-        }
-        if (isset($this->_returns[$method])) {
-            $result = &$this->_returns[$method]->findFirstMatch($args);
-            return $result;
-        }
-        $null = null;
-        return $null;
+    function &_emulateCall($method, $args, $step) {
+        return $this->_actions->respond($step, $method, $args);
     }
 
     /**
@@ -1077,6 +1309,7 @@ class MockGenerator {
         $code .= "    }\n";
         $code .= $this->_chainMockReturns();
         $code .= $this->_chainMockExpectations();
+        $code .= $this->_chainThrowMethods();
         $code .= $this->_overrideMethods($this->_reflection->getMethods());
         $code .= $this->_createNewMethodCode($methods);
         $code .= "}\n";
@@ -1102,6 +1335,7 @@ class MockGenerator {
         $code .= "    }\n";
         $code .= $this->_chainMockReturns();
         $code .= $this->_chainMockExpectations();
+        $code .= $this->_chainThrowMethods();
         $code .= $this->_overrideMethods($methods);
         $code .= "}\n";
         return $code;
@@ -1276,6 +1510,23 @@ class MockGenerator {
         $code .= "        \$this->_mock->expectAtLeastOnce(\$method, \$args, \$msg);\n";
         $code .= "    }\n";
         $code .= "    function tally() {\n";
+        $code .= "    }\n";
+        return $code;
+    }
+    
+    /**
+     *    Adds code for chaining the throw methods.
+     *    @return string           Code for chains.
+     *    @access private
+     */
+    function _chainThrowMethods() {
+        $code .= "    function throwOn(\$method, \$exception = false, \$args = false) {\n";
+        $code .= $this->_bailOutIfNotMocked("\$method");
+        $code .= "        \$this->_mock->throwOn(\$method, \$exception, \$args);\n";
+        $code .= "    }\n";
+        $code .= "    function throwAt(\$timing, \$method, \$exception = false, \$args = false) {\n";
+        $code .= $this->_bailOutIfNotMocked("\$method");
+        $code .= "        \$this->_mock->throwAt(\$timing, \$method, \$exception, \$args);\n";
         $code .= "    }\n";
         return $code;
     }

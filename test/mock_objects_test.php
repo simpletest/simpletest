@@ -75,19 +75,19 @@ class TestOfParametersExpectation extends UnitTestCase {
     }
 }
 
-class TestOfCallMap extends UnitTestCase {
+class TestOfSimpleSignatureMap extends UnitTestCase {
 
     function testEmpty() {
-        $map = new CallMap();
+        $map = new SimpleSignatureMap();
         $this->assertFalse($map->isMatch("any", array()));
         $this->assertNull($map->findFirstMatch("any", array()));
     }
 
     function testExactValue() {
-        $map = new CallMap();
-        $map->addValue(array(0), "Fred");
-        $map->addValue(array(1), "Jim");
-        $map->addValue(array("1"), "Tom");
+        $map = new SimpleSignatureMap();
+        $map->addByValue(array(0), "Fred");
+        $map->addByValue(array(1), "Jim");
+        $map->addByValue(array("1"), "Tom");
         $this->assertTrue($map->isMatch(array(0)));
         $this->assertEqual($map->findFirstMatch(array(0)), "Fred");
         $this->assertTrue($map->isMatch(array(1)));
@@ -96,39 +96,39 @@ class TestOfCallMap extends UnitTestCase {
     }
 
     function testExactReference() {
-        $map = new CallMap();
+        $map = new SimpleSignatureMap();
         $ref = "Fred";
-        $map->addReference(array(0), $ref);
+        $map->add(array(0), $ref);
         $this->assertEqual($map->findFirstMatch(array(0)), "Fred");
         $ref2 = &$map->findFirstMatch(array(0));
         $this->assertReference($ref2, $ref);
     }
 
     function testWildcard() {
-        $map = new CallMap();
-        $map->addValue(array(new AnythingExpectation(), 1, 3), "Fred");
+        $map = new SimpleSignatureMap();
+        $map->addByValue(array(new AnythingExpectation(), 1, 3), "Fred");
         $this->assertTrue($map->isMatch(array(2, 1, 3)));
         $this->assertEqual($map->findFirstMatch(array(2, 1, 3)), "Fred");
     }
 
     function testAllWildcard() {
-        $map = new CallMap();
+        $map = new SimpleSignatureMap();
         $this->assertFalse($map->isMatch(array(2, 1, 3)));
-        $map->addValue("", "Fred");
+        $map->addByValue("", "Fred");
         $this->assertTrue($map->isMatch(array(2, 1, 3)));
         $this->assertEqual($map->findFirstMatch(array(2, 1, 3)), "Fred");
     }
 
     function testOrdering() {
-        $map = new CallMap();
-        $map->addValue(array(1, 2), "1, 2");
-        $map->addValue(array(1, 3), "1, 3");
-        $map->addValue(array(1), "1");
-        $map->addValue(array(1, 4), "1, 4");
-        $map->addValue(array(new AnythingExpectation()), "Any");
-        $map->addValue(array(2), "2");
-        $map->addValue("", "Default");
-        $map->addValue(array(), "None");
+        $map = new SimpleSignatureMap();
+        $map->addByValue(array(1, 2), "1, 2");
+        $map->addByValue(array(1, 3), "1, 3");
+        $map->addByValue(array(1), "1");
+        $map->addByValue(array(1, 4), "1, 4");
+        $map->addByValue(array(new AnythingExpectation()), "Any");
+        $map->addByValue(array(2), "2");
+        $map->addByValue("", "Default");
+        $map->addByValue(array(), "None");
         $this->assertEqual($map->findFirstMatch(array(1, 2)), "1, 2");
         $this->assertEqual($map->findFirstMatch(array(1, 3)), "1, 3");
         $this->assertEqual($map->findFirstMatch(array(1, 4)), "1, 4");
@@ -136,6 +136,70 @@ class TestOfCallMap extends UnitTestCase {
         $this->assertEqual($map->findFirstMatch(array(2)), "Any");
         $this->assertEqual($map->findFirstMatch(array(3)), "Any");
         $this->assertEqual($map->findFirstMatch(array()), "Default");
+    }
+}
+
+class TestOfCallSchedule extends UnitTestCase {
+    function testCanBeSetToAlwaysReturnTheSameReference() {
+        $a = 5;
+        $schedule = &new SimpleCallSchedule();
+        $schedule->register('aMethod', false, new SimpleByReference($a));
+        $this->assertReference($schedule->respond(0, 'aMethod', array()), $a);
+        $this->assertReference($schedule->respond(1, 'aMethod', array()), $a);
+    }
+
+    function testSpecificSignaturesOverrideTheAlwaysCase() {
+        $any = 'any';
+        $one = 'two';
+        $schedule = &new SimpleCallSchedule();
+        $schedule->register('aMethod', array(1), new SimpleByReference($one));
+        $schedule->register('aMethod', false, new SimpleByReference($any));
+        $this->assertReference($schedule->respond(0, 'aMethod', array(2)), $any);
+        $this->assertReference($schedule->respond(0, 'aMethod', array(1)), $one);
+    }
+    
+    function testReturnsCanBeSetOverTime() {
+        $one = 'one';
+        $two = 'two';
+        $schedule = &new SimpleCallSchedule();
+        $schedule->registerAt(0, 'aMethod', false, new SimpleByReference($one));
+        $schedule->registerAt(1, 'aMethod', false, new SimpleByReference($two));
+        $this->assertReference($schedule->respond(0, 'aMethod', array()), $one);
+        $this->assertReference($schedule->respond(1, 'aMethod', array()), $two);
+    }
+    
+    function testReturnsOverTimecanBeAlteredByTheArguments() {
+        $one = '1';
+        $two = '2';
+        $two_a = '2a';
+        $schedule = &new SimpleCallSchedule();
+        $schedule->registerAt(0, 'aMethod', false, new SimpleByReference($one));
+        $schedule->registerAt(1, 'aMethod', array('a'), new SimpleByReference($two_a));
+        $schedule->registerAt(1, 'aMethod', false, new SimpleByReference($two));
+        $this->assertReference($schedule->respond(0, 'aMethod', array()), $one);
+        $this->assertReference($schedule->respond(1, 'aMethod', array()), $two);
+        $this->assertReference($schedule->respond(1, 'aMethod', array('a')), $two_a);
+    }
+    
+    function testCanReturnByValue() {
+        $a = 5;
+        $schedule = &new SimpleCallSchedule();
+        $schedule->register('aMethod', false, new SimpleByValue($a));
+        $this->assertClone($schedule->respond(0, 'aMethod', array()), $a);
+    }
+    
+    function testCanThrowException() {
+        $schedule = &new SimpleCallSchedule();
+        $schedule->register('aMethod', false, new SimpleThrower(new Exception('Ouch')));
+        $this->expectException(new Exception('Ouch'));
+        $schedule->respond(0, 'aMethod', array());
+    }
+    
+    function testCanEmitError() {
+        $schedule = &new SimpleCallSchedule();
+        $schedule->register('aMethod', false, new SimpleErrorThrower('Ouch', E_USER_WARNING));
+        $this->expectError('Ouch');
+        $schedule->respond(0, 'aMethod', array());
     }
 }
 
@@ -672,6 +736,46 @@ class TestOfMockingClassesWithStaticMethods extends UnitTestCase {
         $reflection = new ReflectionClass($mock);
         $method = $reflection->getMethod('aStaticMethod');
         $this->assertTrue($method->isStatic());
+    }
+}
+
+class MockTestException extends Exception { }
+
+class TestOfThrowingExceptionsFromMocks extends UnitTestCase {
+    function skip() {
+        $this->skipUnless(version_compare(phpversion(), '5', '>='));
+    }
+
+    function testCanThrowOnMethodCall() {
+        $mock = new MockDummy();
+        $mock->throwOn('aMethod');
+        $this->expectException();
+        $mock->aMethod();
+    }
+
+    function testCanThrowSpecificExceptionOnMethodCall() {
+        $mock = new MockDummy();
+        $mock->throwOn('aMethod', new MockTestException());
+        $this->expectException();
+        $mock->aMethod();
+    }
+    
+    function testThrowsOnlyWhenCallSignatureMatches() {
+        $mock = new MockDummy();
+        $mock->throwOn('aMethod', new MockTestException(), array(3));
+        $mock->aMethod(1);
+        $mock->aMethod(2);
+        $this->expectException();
+        $mock->aMethod(3);
+    }
+    
+    function testCanThrowOnParticularInvocation() {
+        $mock = new MockDummy();
+        $mock->throwAt(2, 'aMethod', new MockTestException());
+        $mock->aMethod();
+        $mock->aMethod();
+        $this->expectException();
+        $mock->aMethod();
     }
 }
 
