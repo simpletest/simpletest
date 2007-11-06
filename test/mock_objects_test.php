@@ -189,10 +189,12 @@ class TestOfCallSchedule extends UnitTestCase {
     }
     
     function testCanThrowException() {
-        $schedule = &new SimpleCallSchedule();
-        $schedule->register('aMethod', false, new SimpleThrower(new Exception('Ouch')));
-        $this->expectException(new Exception('Ouch'));
-        $schedule->respond(0, 'aMethod', array());
+        if (version_compare(phpversion(), '5', '>=')) {
+            $schedule = &new SimpleCallSchedule();
+            $schedule->register('aMethod', false, new SimpleThrower(new Exception('Ouch')));
+            $this->expectException(new Exception('Ouch'));
+            $schedule->respond(0, 'aMethod', array());
+        }
     }
     
     function testCanEmitError() {
@@ -739,7 +741,9 @@ class TestOfMockingClassesWithStaticMethods extends UnitTestCase {
     }
 }
 
-class MockTestException extends Exception { }
+if (version_compare(phpversion(), '5', '>=')) {
+    class MockTestException extends Exception { }
+}
 
 class TestOfThrowingExceptionsFromMocks extends UnitTestCase {
     function skip() {

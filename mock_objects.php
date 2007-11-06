@@ -478,14 +478,14 @@ class SimpleCallSchedule {
             if ($this->_at[$method][$step]->isMatch($args)) {
                 $action = &$this->_at[$method][$step]->findFirstMatch($args);
                 if (isset($action)) {
-                    return $action->act($this->_test);
+                    return $action->act();
                 }
             }
         }
         if (isset($this->_always[$method])) {
             $action = &$this->_always[$method]->findFirstMatch($args);
             if (isset($action)) {
-                return $action->act($this->_test);
+                return $action->act();
             }
         }
         $null = null;
@@ -566,8 +566,9 @@ class SimpleByValue {
      *    @return mixed    Whatever was stashed.
      *    @access public
      */
-    function act() {
-        return $this->_value;
+    function &act() {
+        $dummy = $this->_value;
+        return $dummy;
     }
 }
 
@@ -621,11 +622,13 @@ class SimpleErrorThrower {
     
     /**
      *    Triggers the stashed error.
-     *    @return null
+     *    @return null        The usual PHP4.4 shenanigans are needed here.
      *    @access public
      */
-    function act() {
+    function &act() {
         trigger_error($this->_error, $this->_severity);
+        $null = null;
+        return $null;
     }
 }
 
@@ -1520,7 +1523,7 @@ class MockGenerator {
      *    @access private
      */
     function _chainThrowMethods() {
-        $code .= "    function throwOn(\$method, \$exception = false, \$args = false) {\n";
+        $code  = "    function throwOn(\$method, \$exception = false, \$args = false) {\n";
         $code .= $this->_bailOutIfNotMocked("\$method");
         $code .= "        \$this->_mock->throwOn(\$method, \$exception, \$args);\n";
         $code .= "    }\n";

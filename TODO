@@ -13,7 +13,7 @@ Add Eclipse support to DefaultReporter (2).
 
 Mock objects
 ------------
-Add throwOn() method for generating exceptions (4).
+Add throwOn() method for generating exceptions (4/6).
 
 Parser
 ------
