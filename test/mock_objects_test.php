@@ -783,6 +783,34 @@ class TestOfThrowingExceptionsFromMocks extends UnitTestCase {
     }
 }
 
+class TestOfThrowingErrorsFromMocks extends UnitTestCase {
+    
+    function testCanGenerateErrorFromMethodCall() {
+        $mock = new MockDummy();
+        $mock->errorOn('aMethod', 'Ouch!');
+        $this->expectError('Ouch!');
+        $mock->aMethod();
+    }
+    
+    function testGeneratesErrorOnlyWhenCallSignatureMatches() {
+        $mock = new MockDummy();
+        $mock->errorOn('aMethod', 'Ouch!', array(3));
+        $mock->aMethod(1);
+        $mock->aMethod(2);
+        $this->expectError();
+        $mock->aMethod(3);
+    }
+    
+    function testCanGenerateErrorOnParticularInvocation() {
+        $mock = new MockDummy();
+        $mock->errorAt(2, 'aMethod', 'Ouch!');
+        $mock->aMethod();
+        $mock->aMethod();
+        $this->expectError();
+        $mock->aMethod();
+    }
+}
+
 Mock::generatePartial('Dummy', 'TestDummy', array('anotherMethod'));
 
 class TestOfPartialMocks extends UnitTestCase {

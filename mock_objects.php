@@ -988,6 +988,7 @@ class SimpleMock {
     /**
      *    Sets up a trigger to throw an exception upon the
      *    method call.
+     *    @param string $method     Method name to throw on.
      */
     function throwOn($method, $exception = false, $args = false) {
         $this->_dieOnNoMethod($method, "throw on");
@@ -1000,9 +1001,27 @@ class SimpleMock {
      *    method call.
      */
     function throwAt($timing, $method, $exception = false, $args = false) {
-        $this->_dieOnNoMethod($method, "throw on");
+        $this->_dieOnNoMethod($method, "throw at");
         $this->_actions->registerAt($timing, $method, $args,
                 new SimpleThrower($exception ? $exception : new Exception()));
+    }
+    
+    /**
+     *    Sets up a trigger to throw an error upon the
+     *    method call.
+     */
+    function errorOn($method, $error = 'A mock error', $args = false, $severity = E_USER_ERROR) {
+        $this->_dieOnNoMethod($method, "error on");
+        $this->_actions->register($method, $args, new SimpleErrorThrower($error, $severity));
+    }
+    
+    /**
+     *    Sets up a trigger to throw an error upon the
+     *    method call.
+     */
+    function errorAt($timing, $method, $error = 'A mock error', $args = false, $severity = E_USER_ERROR) {
+        $this->_dieOnNoMethod($method, "error at");
+        $this->_actions->registerAt($timing, $method, $args, new SimpleErrorThrower($error, $severity));
     }
 
     /**
@@ -1530,6 +1549,14 @@ class MockGenerator {
         $code .= "    function throwAt(\$timing, \$method, \$exception = false, \$args = false) {\n";
         $code .= $this->_bailOutIfNotMocked("\$method");
         $code .= "        \$this->_mock->throwAt(\$timing, \$method, \$exception, \$args);\n";
+        $code .= "    }\n";
+        $code .= "    function errorOn(\$method, \$error = 'A mock error', \$args = false, \$severity = E_USER_ERROR) {\n";
+        $code .= $this->_bailOutIfNotMocked("\$method");
+        $code .= "        \$this->_mock->errorOn(\$method, \$error, \$args, \$severity);\n";
+        $code .= "    }\n";
+        $code .= "    function errorAt(\$timing, \$method, \$error = 'A mock error', \$args = false, \$severity = E_USER_ERROR) {\n";
+        $code .= $this->_bailOutIfNotMocked("\$method");
+        $code .= "        \$this->_mock->errorAt(\$timing, \$method, \$error, \$args, \$severity);\n";
         $code .= "    }\n";
         return $code;
     }
