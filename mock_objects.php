@@ -811,7 +811,7 @@ class SimpleMock {
      */
     function setReturnReference($method, &$reference, $args = false) {
         $this->_dieOnNoMethod($method, "set return reference");
-        $this->_actions->register($method, $args, new SimpleByReference(&$reference));
+        $this->_actions->register($method, $args, new SimpleByReference($reference));
     }
 
     /**
@@ -830,7 +830,7 @@ class SimpleMock {
      */
     function setReturnReferenceAt($timing, $method, &$reference, $args = false) {
         $this->_dieOnNoMethod($method, "set return reference sequence");
-        $this->_actions->registerAt($timing, $method, $args, new SimpleByReference(&$reference));
+        $this->_actions->registerAt($timing, $method, $args, new SimpleByReference($reference));
     }
 
     /**
