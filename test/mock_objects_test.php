@@ -80,62 +80,62 @@ class TestOfSimpleSignatureMap extends UnitTestCase {
     function testEmpty() {
         $map = new SimpleSignatureMap();
         $this->assertFalse($map->isMatch("any", array()));
-        $this->assertNull($map->findFirstMatch("any", array()));
-    }
-
-    function testExactValue() {
-        $map = new SimpleSignatureMap();
-        $map->addByValue(array(0), "Fred");
-        $map->addByValue(array(1), "Jim");
-        $map->addByValue(array("1"), "Tom");
-        $this->assertTrue($map->isMatch(array(0)));
-        $this->assertEqual($map->findFirstMatch(array(0)), "Fred");
-        $this->assertTrue($map->isMatch(array(1)));
-        $this->assertEqual($map->findFirstMatch(array(1)), "Jim");
-        $this->assertEqual($map->findFirstMatch(array("1")), "Tom");
+        $this->assertNull($map->findFirstAction("any", array()));
     }
 
     function testExactReference() {
         $map = new SimpleSignatureMap();
         $ref = "Fred";
         $map->add(array(0), $ref);
-        $this->assertEqual($map->findFirstMatch(array(0)), "Fred");
-        $ref2 = &$map->findFirstMatch(array(0));
+        $this->assertEqual($map->findFirstAction(array(0)), "Fred");
+        $ref2 = &$map->findFirstAction(array(0));
         $this->assertReference($ref2, $ref);
+    }
+    
+    function testDifferentCallSignaturesCanHaveDifferentReferences() {
+        $map = new SimpleSignatureMap();
+        $fred = 'Fred';
+        $jim = 'jim';
+        $map->add(array(0), $fred);
+        $map->add(array('0'), $jim);
+        $this->assertReference($fred, $map->findFirstAction(array(0)));
+        $this->assertReference($jim, $map->findFirstAction(array('0')));
     }
 
     function testWildcard() {
+        $fred = 'Fred';
         $map = new SimpleSignatureMap();
-        $map->addByValue(array(new AnythingExpectation(), 1, 3), "Fred");
+        $map->add(array(new AnythingExpectation(), 1, 3), $fred);
         $this->assertTrue($map->isMatch(array(2, 1, 3)));
-        $this->assertEqual($map->findFirstMatch(array(2, 1, 3)), "Fred");
+        $this->assertReference($map->findFirstAction(array(2, 1, 3)), $fred);
     }
 
     function testAllWildcard() {
+        $fred = 'Fred';
         $map = new SimpleSignatureMap();
         $this->assertFalse($map->isMatch(array(2, 1, 3)));
-        $map->addByValue("", "Fred");
+        $map->add('', $fred);
         $this->assertTrue($map->isMatch(array(2, 1, 3)));
-        $this->assertEqual($map->findFirstMatch(array(2, 1, 3)), "Fred");
+        $this->assertReference($map->findFirstAction(array(2, 1, 3)), $fred);
     }
 
     function testOrdering() {
         $map = new SimpleSignatureMap();
-        $map->addByValue(array(1, 2), "1, 2");
-        $map->addByValue(array(1, 3), "1, 3");
-        $map->addByValue(array(1), "1");
-        $map->addByValue(array(1, 4), "1, 4");
-        $map->addByValue(array(new AnythingExpectation()), "Any");
-        $map->addByValue(array(2), "2");
-        $map->addByValue("", "Default");
-        $map->addByValue(array(), "None");
-        $this->assertEqual($map->findFirstMatch(array(1, 2)), "1, 2");
-        $this->assertEqual($map->findFirstMatch(array(1, 3)), "1, 3");
-        $this->assertEqual($map->findFirstMatch(array(1, 4)), "1, 4");
-        $this->assertEqual($map->findFirstMatch(array(1)), "1");
-        $this->assertEqual($map->findFirstMatch(array(2)), "Any");
-        $this->assertEqual($map->findFirstMatch(array(3)), "Any");
-        $this->assertEqual($map->findFirstMatch(array()), "Default");
+        $map->add(array(1, 2), new SimpleByValue("1, 2"));
+        $map->add(array(1, 3), new SimpleByValue("1, 3"));
+        $map->add(array(1), new SimpleByValue("1"));
+        $map->add(array(1, 4), new SimpleByValue("1, 4"));
+        $map->add(array(new AnythingExpectation()), new SimpleByValue("Any"));
+        $map->add(array(2), new SimpleByValue("2"));
+        $map->add("", new SimpleByValue("Default"));
+        $map->add(array(), new SimpleByValue("None"));
+        $this->assertEqual($map->findFirstAction(array(1, 2)), new SimpleByValue("1, 2"));
+        $this->assertEqual($map->findFirstAction(array(1, 3)), new SimpleByValue("1, 3"));
+        $this->assertEqual($map->findFirstAction(array(1, 4)), new SimpleByValue("1, 4"));
+        $this->assertEqual($map->findFirstAction(array(1)), new SimpleByValue("1"));
+        $this->assertEqual($map->findFirstAction(array(2)), new SimpleByValue("Any"));
+        $this->assertEqual($map->findFirstAction(array(3)), new SimpleByValue("Any"));
+        $this->assertEqual($map->findFirstAction(array()), new SimpleByValue("Default"));
     }
 }
 
