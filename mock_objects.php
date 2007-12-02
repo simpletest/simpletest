@@ -312,26 +312,16 @@ class SimpleSignatureMap {
     }
 
     /**
-     *    Stashes a value against a method call.
-     *    @param array $parameters    Arguments including wildcards.
-     *    @param mixed $value         Value copied into the map.
-     *    @access public
-     */
-    function addByValue($parameters, $value) {
-        $this->add($parameters, $value);
-    }
-
-    /**
      *    Stashes a reference against a method call.
      *    @param array $parameters    Array of arguments (including wildcards).
-     *    @param mixed $reference     Array reference placed in the map.
+     *    @param mixed $action        Reference placed in the map.
      *    @access public
      */
-    function add($parameters, &$reference) {
+    function add($parameters, &$action) {
         $place = count($this->_map);
         $this->_map[$place] = array();
-        $this->_map[$place]["params"] = new ParametersExpectation($parameters);
-        $this->_map[$place]["content"] = &$reference;
+        $this->_map[$place]['params'] = new ParametersExpectation($parameters);
+        $this->_map[$place]['content'] = &$action;
     }
 
     /**
@@ -343,13 +333,13 @@ class SimpleSignatureMap {
      *                                slot, otherwise null.
      *    @access public
      */
-    function &findFirstMatch($parameters) {
+    function &findFirstAction($parameters) {
         $slot = $this->_findFirstSlot($parameters);
-        if (! isset($slot)) {
-            $null = null;
-            return $null;
+        if (isset($slot) && isset($slot['content'])) {
+            return $slot['content'];
         }
-        return $slot["content"];
+        $null = null;
+        return $null;
     }
 
     /**
@@ -373,12 +363,7 @@ class SimpleSignatureMap {
      *    @param string $message        The message to overlay.
      *    @access public
      */
-    function asExpected(&$test, $parameters, $message) {
-        $slot = $this->_findFirstSlot($parameters);
-        if (! isset($slot)) {
-            return;
-        }
-        $test->assert($slot["params"], $parameters, $message);
+    function test(&$test, $parameters, $message) {
     }
 
     /**
@@ -462,6 +447,14 @@ class SimpleCallSchedule {
         $this->_at[$method][$step]->add($args, $action);
     }
     
+    function expectArguments($method, $args, $message) {
+        $args = $this->_replaceWildcards($args);
+        $message .= Mock::getExpectationLine();
+        $this->_expected_args[strtolower($method)] =
+                new ParametersExpectation($args, $message);
+
+    }
+    
     /**
      *    Actually carry out the action stored previously,
      *    if the parameters match.
@@ -476,14 +469,14 @@ class SimpleCallSchedule {
         $method = strtolower($method);
         if (isset($this->_at[$method][$step])) {
             if ($this->_at[$method][$step]->isMatch($args)) {
-                $action = &$this->_at[$method][$step]->findFirstMatch($args);
+                $action = &$this->_at[$method][$step]->findFirstAction($args);
                 if (isset($action)) {
                     return $action->act();
                 }
             }
         }
         if (isset($this->_always[$method])) {
-            $action = &$this->_always[$method]->findFirstMatch($args);
+            $action = &$this->_always[$method]->findFirstAction($args);
             if (isset($action)) {
                 return $action->act();
             }
@@ -690,7 +683,7 @@ class SimpleMock {
     }
 
     /**
-     *    Die if bad arguments array is passed
+     *    Die if bad arguments array is passed.
      *    @param mixed $args     The arguments value to be checked.
      *    @param string $task    Description of task attempt.
      *    @return boolean        Valid arguments
@@ -746,7 +739,7 @@ class SimpleMock {
      *    @access protected
      */
     function _addCall($method, $args) {
-        if (!isset($this->_call_counts[$method])) {
+        if (! isset($this->_call_counts[$method])) {
             $this->_call_counts[$method] = 0;
         }
         $this->_call_counts[$method]++;
@@ -755,7 +748,7 @@ class SimpleMock {
     /**
      *    Fetches the call count of a method so far.
      *    @param string $method        Method name called.
-     *    @return                      Number of calls so far.
+     *    @return integer              Number of calls so far.
      *    @access public
      */
     function getCallCount($method) {
@@ -847,6 +840,7 @@ class SimpleMock {
     function expect($method, $args, $message = '%s') {
         $this->_dieOnNoMethod($method, 'set expected arguments');
         $this->_checkArgumentsIsArray($args, 'set expected arguments');
+        $this->_expectations->expectArguments($method, $args, $message);
         $args = $this->_replaceWildcards($args);
         $message .= Mock::getExpectationLine();
         $this->_expected_args[strtolower($method)] =
