@@ -409,12 +409,14 @@
          *    @access public
          */
         function asString() {
-            $scheme = $identity = $host = $path = $encoded = $fragment = '';
+            $path = $this->_path;
+            $scheme = $identity = $host = $encoded = $fragment = '';
             if ($this->_username && $this->_password) {
                 $identity = $this->_username . ':' . $this->_password . '@';
             }
             if ($this->getHost()) {
                 $scheme = $this->getScheme() ? $this->getScheme() : 'http';
+                $scheme .= "://";
                 $host = $this->getHost();
             }
             if (substr($this->_path, 0, 1) == '/') {
@@ -423,7 +425,7 @@
             $encoded = $this->getEncodedRequest();
             $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
             $coords = $this->getX() === false ? '' : '?' . $this->getX() . ',' . $this->getY();
-            return "$scheme://$identity$host$path$encoded$fragment$coords";
+            return "$scheme$identity$host$path$encoded$fragment$coords";
         }
         
         /**

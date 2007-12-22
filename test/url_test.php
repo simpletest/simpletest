@@ -280,6 +280,15 @@ class TestOfUrl extends UnitTestCase {
 
 class TestOfAbsoluteUrls extends UnitTestCase {
     
+	function testDirectoriesAfterFilename() {
+		$string = '../../index.php/foo/bar';
+		$url = new SimpleUrl($string);
+		$this->assertEqual($url->asString(), $string);
+		
+		$absolute = $url->makeAbsolute('http://www.domain.com/some/path/')->asString();
+		$this->assertEqual($absolute, 'http://www.domain.com/index.php/foo/bar');
+	}
+
     function testMakingAbsolute() {
         $url = new SimpleUrl('../there/somewhere.php');
         $this->assertEqual($url->getPath(), '../there/somewhere.php');
