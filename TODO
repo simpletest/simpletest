@@ -17,7 +17,7 @@ Add throwOn() method for generating exceptions (4/6).
 
 Parser
 ------
-Fix bug 1688238 with lost paths when absoluting a link (2).
+Fix bug 1688238 with lost paths when absoluting a link (2) - done by pp11.
 Fix bug 1671539 with assertText picking up JavaScript (1).
 Add U flag to regexes to allow unicode (3).
 
