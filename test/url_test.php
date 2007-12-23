@@ -285,8 +285,8 @@ class TestOfAbsoluteUrls extends UnitTestCase {
 		$url = new SimpleUrl($string);
 		$this->assertEqual($url->asString(), $string);
 		
-		$absolute = $url->makeAbsolute('http://www.domain.com/some/path/')->asString();
-		$this->assertEqual($absolute, 'http://www.domain.com/index.php/foo/bar');
+		$absolute = $url->makeAbsolute('http://www.domain.com/some/path/');
+		$this->assertEqual($absolute->asString(), 'http://www.domain.com/index.php/foo/bar');
 	}
 
     function testMakingAbsolute() {
