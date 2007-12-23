@@ -481,10 +481,41 @@ class TestOfHtmlSaxParser extends UnitTestCase {
 
 class TestOfTextExtraction extends UnitTestCase {
     
+	function testImageSuppressionWhileKeepingParagraphsAndAltText() {
+        $this->assertEqual(
+                SimpleHtmlSaxParser::normalise('<img src="foo.png" /><p>some text</p><img src="bar.png" alt="bar" />'),
+                'some text bar');
+		
+	}
+
     function testSpaceNormalisation() {
         $this->assertEqual(
                 SimpleHtmlSaxParser::normalise("\nOne\tTwo   \nThree\t"),
                 'One Two Three');
+    }
+    
+    function testMultilinesCommentSuppression() {
+        $this->assertEqual(
+                SimpleHtmlSaxParser::normalise('<!--\n Hello \n-->'),
+                '');
+    }
+    
+    function testCommentSuppression() {
+        $this->assertEqual(
+                SimpleHtmlSaxParser::normalise('<!--Hello-->'),
+                '');
+    }
+    
+    function testJavascriptSuppression() {
+        $this->assertEqual(
+                SimpleHtmlSaxParser::normalise('<script attribute="test">\nHello\n</script>'),
+                '');
+        $this->assertEqual(
+                SimpleHtmlSaxParser::normalise('<script attribute="test">Hello</script>'),
+                '');
+        $this->assertEqual(
+                SimpleHtmlSaxParser::normalise('<script>Hello</script>'),
+                '');
     }
     
     function testTagSuppression() {

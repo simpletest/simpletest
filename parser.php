@@ -709,10 +709,11 @@ class SimpleHtmlSaxParser {
      */
     function normalise($html) {
         $text = preg_replace('|<!--.*?-->|', '', $html);
-        $text = preg_replace('|<img.*?alt\s*=\s*"(.*?)".*?>|', ' \1 ', $text);
-        $text = preg_replace('|<img.*?alt\s*=\s*\'(.*?)\'.*?>|', ' \1 ', $text);
-        $text = preg_replace('|<img.*?alt\s*=\s*([a-zA-Z_]+).*?>|', ' \1 ', $text);
-        $text = preg_replace('|<.*?>|', '', $text);
+        $text = preg_replace('|<script[^>]*>.*?</script>|', '', $text);
+        $text = preg_replace('|<img[^>]*alt\s*=\s*"([^>]*)"[^>]*>|', ' \1 ', $text);
+        $text = preg_replace('|<img[^>]*alt\s*=\s*\'([^>]*)\'[^>]*>|', ' \1 ', $text);
+        $text = preg_replace('|<img[^>]*alt\s*=\s*([a-zA-Z_]+)[^>]*>|', ' \1 ', $text);
+        $text = preg_replace('|<[^>]*>|', '', $text);
         $text = SimpleHtmlSaxParser::decodeHtml($text);
         $text = preg_replace('|\s+|', ' ', $text);
         return trim($text);
