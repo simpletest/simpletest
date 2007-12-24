@@ -104,7 +104,7 @@
                 $prefix = $matches[1];
                 $url = $matches[2];
             }
-            if (preg_match('/(.*?)@(.*)/', $url, $matches)) {
+            if (preg_match('/^([^\/]*)@(.*)/', $url, $matches)) {
                 $url = $prefix . $matches[2];
                 $parts = split(":", $matches[1]);
                 return array(

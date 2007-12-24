@@ -175,6 +175,25 @@ class TestOfUrl extends UnitTestCase {
             'https://host.com/I/am/there/somewhere.php');
     }
     
+    // regression test for #1852413
+    function testHostnameExtractedFromUContainingAtSign() {
+        $url = new SimpleUrl("http://localhost/name@example.com");
+        $this->assertEqual($url->getScheme(), "http");
+        $this->assertEqual($url->getUsername(), "");
+        $this->assertEqual($url->getPassword(), "");
+        $this->assertEqual($url->getHost(), "localhost");
+        $this->assertEqual($url->getPath(), "/name@example.com");
+    }
+
+    function testHostnameInLocalhost() {
+        $url = new SimpleUrl("http://localhost/name/example.com");
+        $this->assertEqual($url->getScheme(), "http");
+        $this->assertEqual($url->getUsername(), "");
+        $this->assertEqual($url->getPassword(), "");
+        $this->assertEqual($url->getHost(), "localhost");
+        $this->assertEqual($url->getPath(), "/name/example.com");
+    }
+
     function testUsernameAndPasswordAreUrlDecoded() {
         $url = new SimpleUrl('http://' . urlencode('test@test') .
                 ':' . urlencode('$!£@*&%') . '@www.lastcraft.com');
