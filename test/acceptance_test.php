@@ -16,7 +16,7 @@ class TestOfLiveBrowser extends UnitTestCase {
     function samples() {
         return SimpleTestAcceptanceTest::samples();
     }
-    
+
     function testGet() {
         $browser = &new SimpleBrowser();
         $browser->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
@@ -99,7 +99,15 @@ class TestOfLiveFetching extends SimpleTestAcceptanceTest {
     function setUp() {
         $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
     }
-/*    
+ 
+	function testFormWithQuotedValues() {
+		$this->get($this->samples() . 'form_with_quoted_values.php');
+		$this->assertField('a', 'default');
+		$this->assertFieldById('text_field', 'default');
+		$this->clickSubmit('Go');
+        $this->assertPattern('/a=default&submit=Go/');
+	}
+
     function testGet() {
         $this->assertTrue($this->get($this->samples() . 'network_confirm.php'));
         $this->assertEqual($this->getUrl(), $this->samples() . 'network_confirm.php');
@@ -140,7 +148,7 @@ class TestOfLiveFetching extends SimpleTestAcceptanceTest {
         $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
         $this->assertText('a=[aaa]');
     }
-*/
+
     function testPostWithRecursiveData() {
         $this->post($this->samples() . 'network_confirm.php', array("a" => "aaa"));
         $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
@@ -925,7 +933,7 @@ class LiveTestOfForms extends SimpleTestAcceptanceTest {
         $this->assertText('h=[?]');
         $this->assertText('i=[?]');
     }
-    
+
     function testSubmissionOfHtmlEncodedValues() {
         $this->get($this->samples() . 'form_with_tricky_defaults.html');
         $this->assertField('Text A', '&\'"<>');
@@ -1590,4 +1598,5 @@ class TestOfNestedFrames extends SimpleTestAcceptanceTest {
         $this->assertPattern('/A target for the SimpleTest test suite/');
     }
 }
+
 ?>
