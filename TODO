@@ -31,7 +31,7 @@ Look at adding a file() loading command (4).
 
 Web tester
 ----------
-Fix issue 1605972 missing isLink(), probably by changing docs (1).
+Fix issue 1605972 missing isLink(), probably by changing docs (1) - done by pp11.
 
 Documentation
 -------------
