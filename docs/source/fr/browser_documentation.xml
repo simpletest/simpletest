@@ -36,9 +36,7 @@
                     <tr><td><code>get($url, $parameters)</code></td><td>Télécharge une page avec un GET</td></tr>
                     <tr><td><code>post($url, $parameters)</code></td><td>Télécharge une page avec un POST</td></tr>
                     <tr><td><code>clickLink($label)</code></td><td>Suit un lien par son étiquette</td></tr>
-                    <tr><td><code>isLink($label)</code></td><td>Vérifie si un lien avec cette étiquette existe</td></tr>
                     <tr><td><code>clickLinkById($id)</code></td><td>Suit un lien par son attribut d'identification</td></tr>
-                    <tr><td><code>isLinkById($id)</code></td><td>Vérifie si un lien avec cet attribut d'identification existe</td></tr>
                     <tr><td><code>getUrl()</code></td><td>La page ou la fenêtre URL en cours</td></tr>
                     <tr><td><code>getTitle()</code></td><td>Le titre de la page</td></tr>
                     <tr><td><code>getContent()</code></td><td>Le page ou la fenêtre brute</td></tr>

@@ -54,9 +54,7 @@
                     <tr><td><code>get($url, $parameters)</code></td><td>Fetch a page with GET</td></tr>
                     <tr><td><code>post($url, $parameters)</code></td><td>Fetch a page with POST</td></tr>
                     <tr><td><code>clickLink($label)</code></td><td>Follows a link by label</td></tr>
-                    <tr><td><code>isLink($label)</code></td><td>See if a link is present by label</td></tr>
                     <tr><td><code>clickLinkById($id)</code></td><td>Follows a link by attribute</td></tr>
-                    <tr><td><code>isLinkById($id)</code></td><td>See if a link is present by attribut</td></tr>
                     <tr><td><code>getUrl()</code></td><td>Current URL of page or frame</td></tr>
                     <tr><td><code>getTitle()</code></td><td>Page title</td></tr>
                     <tr><td><code>getContent()</code></td><td>Raw page or frame</td></tr>
