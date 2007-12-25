@@ -72,6 +72,7 @@
 
 		<page title="Mailing-list de support" here="Mailing-list de support" file="fr/support.html">
 			<page title="Livres" here="Livres" file="fr/books.html" />
+			<page title="Logiciels" here="Logiciels" file="fr/logiciels_utilisant_simpletest.html" />
 		</page>
 	</page>
 </page>

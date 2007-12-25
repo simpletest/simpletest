@@ -19,6 +19,14 @@
 					yet more powerful.
 				</dd>
 				<dt>
+					<a href="http://dev.e-taller.net/simpletestxul/">
+						SimpleTestXUL
+					</a>
+				</dt>
+				<dd>
+					A XUL interface to SimpleTest framework.
+				</dd>
+				<dt>
 					<a href="http://trac.piece-framework.com/sh-testrunner/">
 						Stagehand_TestRunner
 					</a>
@@ -78,6 +86,19 @@
 					and Application Controller patterns.
 				</dd>
 				<dt>
+					<a href="http://limb-project.com/">
+						Limb3
+					</a>
+				</dt>
+				<dd>
+					<strong>Limb</strong> is an OpenSource(LGPL) PHP framework aimed for
+					rapid web application development.
+					It is a committed proponents of the beautiful and
+					easy-to-maintain code that simply works.
+					That is why the Limb code is developed and constantly refactored in a
+					test driven manner using the best agile development practices.
+				</dd>
+				<dt>
 					<a href="http://drupal.org/project/simpletest">
 						Drupal | SimpleTest
 					</a>
@@ -133,13 +154,10 @@
     </content>
     <internal>
         <link>
-        	<a href="#latest-recommandation">Latest recommandation</a>
+        	<a href="#projects-extending-simpletest">Projects extending SimpleTest</a>
         </link>
         <link>
-        	<a href="#books-by-contributors">Books by contributors</a>
-        </link>
-        <link>
-        	<a href="#buying-books">Buying books</a>
+        	<a href="#projects-using-simpletest">"Projects using SimpleTest</a>
         </link>
     </internal>
 
