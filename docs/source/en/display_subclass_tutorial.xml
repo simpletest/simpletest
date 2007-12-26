@@ -108,7 +108,7 @@ class HtmlReporter extends TestDisplay {
             $this->HtmlReporter();
         }
     }
-?>
+?></strong>
 ]]></php>
             A quick peruse of the
             <a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/simpletest/simpletest/reporter.php?content-type=text/vnd.viewcvs-markup">SimpleTest code base</a> shows the
