@@ -336,6 +336,7 @@
         function _loadFrame($frames, $url, $parameters) {
             $page = &$this->_fetch($url, $parameters);
             $this->_page->setFrame($frames, $page);
+            return $page->getRaw();
         }
 
         /**
