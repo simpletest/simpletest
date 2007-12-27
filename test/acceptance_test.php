@@ -102,7 +102,7 @@ class TestOfLiveBrowser extends UnitTestCase {
         $this->assertPattern('/go=\[Go!\]/', $browser->getContent());
     }
 }
-/*
+
 class TestRadioFields extends SimpleTestAcceptanceTest {
 	function testSetFieldAsInteger() {
 		$this->get($this->samples() . 'form_with_radio_buttons.html');
@@ -1622,5 +1622,5 @@ class TestOfNestedFrames extends SimpleTestAcceptanceTest {
         $this->assertPattern('/A target for the SimpleTest test suite/');
     }
 }
-*/
+
 ?>
