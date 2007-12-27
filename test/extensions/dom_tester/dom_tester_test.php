@@ -67,7 +67,10 @@ class TestOfCssSelectors extends UnitTestCase {
 		$expectation = new CssSelectorExpectation($this->dom, 'ul#list li a[href="http://www.google.com/"]');
         $this->assertTrue($expectation->test(array('link')));
 
-		$expectation = new CssSelectorExpectation($this->dom, 'ul#anotherlist li a[class|="bar1"]');
+		$expectation = new CssSelectorExpectation($this->dom, "ul#list li a[href='http://www.google.com/']");
+		$this->assertTrue($expectation->test(array('link')));
+        
+        $expectation = new CssSelectorExpectation($this->dom, 'ul#anotherlist li a[class|="bar1"]');
         $this->assertTrue($expectation->test(array('another link')));  	
 
 		$expectation = new CssSelectorExpectation($this->dom, 'ul#list li a[class*="oba"][class*="ba"]');
