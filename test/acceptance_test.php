@@ -95,6 +95,22 @@ class TestOfLiveBrowser extends UnitTestCase {
     }
 }
 
+class TestRadioFields extends SimpleTestAcceptanceTest {
+	function testSetFieldAsInteger() {
+		$this->get($this->samples() . 'form_with_radio_buttons.html');
+		$this->assertTrue($this->setField('tested_field', 2));
+		$this->clickSubmitByName('send');
+		$this->assertEqual($this->getUrl(), $this->samples() . 'form_with_radio_buttons.html?tested_field=2&send=click+me');
+	}
+
+	function testSetFieldAsString() {
+		$this->get($this->samples() . 'form_with_radio_buttons.html');
+		$this->assertTrue($this->setField('tested_field', '2'));
+		$this->clickSubmitByName('send');
+		$this->assertEqual($this->getUrl(), $this->samples() . 'form_with_radio_buttons.html?tested_field=2&send=click+me');
+	}
+}
+
 class TestOfLiveFetching extends SimpleTestAcceptanceTest {
     function setUp() {
         $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
@@ -1598,5 +1614,4 @@ class TestOfNestedFrames extends SimpleTestAcceptanceTest {
         $this->assertPattern('/A target for the SimpleTest test suite/');
     }
 }
-
 ?>

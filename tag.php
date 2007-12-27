@@ -972,7 +972,7 @@
             if ($value === false) {
                 return parent::setValue($value);
             }
-            if ($value !== $this->getAttribute('value')) {
+            if ($value != $this->getAttribute('value')) {
                 return false;
             }
             return parent::setValue($value);
