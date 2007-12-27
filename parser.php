@@ -691,7 +691,7 @@ class SimpleHtmlSaxParser {
      *    @static
      */
     function decodeHtml($html) {
-        return html_entity_decode($html, ENT_QUOTES, "UTF-8");
+        return html_entity_decode($html, ENT_QUOTES);
     }
     
     /**
