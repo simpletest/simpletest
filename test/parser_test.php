@@ -544,8 +544,8 @@ class TestOfTextExtraction extends UnitTestCase {
     
     function testHtmlEntityTranslation() {
         $this->assertEqual(
-                SimpleHtmlSaxParser::normalise('&lt;&gt;&quot;&amp;'),
-                '<>"&');
+                SimpleHtmlSaxParser::normalise('&lt;&gt;&quot;&amp;&#039;'),
+                '<>"&\'');
     }
 }
 ?>

@@ -691,11 +691,7 @@ class SimpleHtmlSaxParser {
      *    @static
      */
     function decodeHtml($html) {
-        static $translations;
-        if (! isset($translations)) {
-            $translations = array_flip(get_html_translation_table(HTML_ENTITIES));
-        }
-        return strtr($html, $translations);
+        return html_entity_decode($html, ENT_QUOTES, "UTF-8");
     }
     
     /**
