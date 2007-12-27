@@ -84,9 +84,9 @@
                     <tr><td><code>clickSubmit($label)</code></td><td>Submits form by button label</td></tr>
                     <tr><td><code>clickSubmitByName($name)</code></td><td>Submits form by button attribute</td></tr>
                     <tr><td><code>clickSubmitById($id)</code></td><td>Submits form by button attribute</td></tr>
-                    <tr><td><code>clickImage($label, $x, $y)</code></td><td>Clicks the image by alt text</td></tr>
-                    <tr><td><code>clickImageByName($name, $x, $y)</code></td><td>Clicks the image by attribute</td></tr>
-                    <tr><td><code>clickImageById($id, $x, $y)</code></td><td>Clicks the image by attribute</td></tr>
+                    <tr><td><code>clickImage($label, $x, $y)</code></td><td>Clicks an input tag of type image by title or alt text</td></tr>
+                    <tr><td><code>clickImageByName($name, $x, $y)</code></td><td>Clicks an input tag of type image by name</td></tr>
+                    <tr><td><code>clickImageById($id, $x, $y)</code></td><td>Clicks an input tag of type image by ID attribute</td></tr>
                     <tr><td><code>submitFormById($id)</code></td><td>Submits by the form tag attribute</td></tr>
                 </tbody></table>
                 At the moment there aren't any methods to list available forms

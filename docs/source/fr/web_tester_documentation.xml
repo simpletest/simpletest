@@ -180,9 +180,9 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>clickSubmit($label)</code></td><td>Clique sur le premier bouton avec cette étiquette</td></tr>
                     <tr><td><code>clickSubmitByName($name)</code></td><td>Clique sur le bouton avec cet attribut de nom</td></tr>
                     <tr><td><code>clickSubmitById($id)</code></td><td>Clique sur le bouton avec cet attribut d'identification</td></tr>
-                    <tr><td><code>clickImage($label, $x, $y)</code></td><td>Clique sur une balise input de type image avec ce titre ou ce texte dans l'attribut alt</td></tr>
-                    <tr><td><code>clickImageByName($name, $x, $y)</code></td><td>Clique sur une balise input de type image avec ce nom</td></tr>
-                    <tr><td><code>clickImageById($id, $x, $y)</code></td><td>Clique sur une balise input de type image avec cet attribut d'identification</td></tr>
+                    <tr><td><code>clickImage($label, $x, $y)</code></td><td>Clique sur une balise input de type image par son titre (title="*") our son texte alternatif (alt="*")</td></tr>
+                    <tr><td><code>clickImageByName($name, $x, $y)</code></td><td>Clique sur une balise input de type image par son attribut (name="*")</td></tr>
+                    <tr><td><code>clickImageById($id, $x, $y)</code></td><td>Clique sur une balise input de type image par son identifiant (id="*")</td></tr>
                     <tr><td><code>submitFormById($id)</code></td><td>Soumet un formulaire sans valeur de soumission</td></tr>
                     <tr><td><code>clickLink($label, $index)</code></td><td>Clique sur une ancre avec ce texte d'étiquette visible</td></tr>
                     <tr><td><code>clickLinkById($id)</code></td><td>Clique sur une ancre avec cet attribut d'identification</td></tr>

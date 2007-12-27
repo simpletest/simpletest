@@ -63,9 +63,9 @@
                     <tr><td><code>clickSubmit($label)</code></td><td>Transmet le formulaire avec l'étiquette de son bouton</td></tr>
                     <tr><td><code>clickSubmitByName($name)</code></td><td>Transmet le formulaire avec l'attribut de son bouton</td></tr>
                     <tr><td><code>clickSubmitById($id)</code></td><td>Transmet le formulaire avec l'identifiant de son bouton</td></tr>
-                    <tr><td><code>clickImage($label, $x, $y)</code></td><td>Clique sur l'image par son texte alternatif</td></tr>
-                    <tr><td><code>clickImageByName($name, $x, $y)</code></td><td>Clique sur l'image par son attribut</td></tr>
-                    <tr><td><code>clickImageById($id, $x, $y)</code></td><td>Clique sur l'image par son identifiant</td></tr>
+                    <tr><td><code>clickImage($label, $x, $y)</code></td><td>Clique sur une balise input de type image par son titre (title="*") our son texte alternatif (alt="*")</td></tr>
+                    <tr><td><code>clickImageByName($name, $x, $y)</code></td><td>Clique sur une balise input de type image par son attribut (name="*")</td></tr>
+                    <tr><td><code>clickImageById($id, $x, $y)</code></td><td>Clique sur une balise input de type image par son identifiant (id="*")</td></tr>
                     <tr><td><code>submitFormById($id)</code></td><td>Transmet le formulaire par son identifiant propre</td></tr>
                 </tbody></table>
                 Au jourd d'aujourd'hui il n'existe aucune méthode pour lister les formulaires et les champs disponibles : ce sera probablement ajouté dans des versions successives de SimpleTest.
