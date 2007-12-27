@@ -1016,7 +1016,7 @@
          */
         function assertLink($label, $expected = true, $message = '%s') {
             $url = $this->_browser->getLink($label);
-            if ($expected === true) {
+            if ($expected === true || ($expected !== true && $url === false)) {
                 return $this->assertTrue($url !== false, sprintf($message, "Link [$label] should exist"));
             }
             if (! SimpleExpectation::isExpectation($expected)) {
