@@ -11,6 +11,53 @@ class MyTestException extends Exception {}
 class HigherTestException extends MyTestException {}
 class OtherTestException extends Exception {}
 
+class TestOfExceptionThrownLate extends UnitTestCase {
+
+	function tearDown() {
+        $GLOBALS['TestOfExceptionThrownLate'] = true;
+	}
+	
+	function testShouldCarryOn() {
+        $this->expectException();
+        throw new Exception();
+	}
+
+	function testShouldBeAffectedByTearDown() {
+		$this->assertTrue($GLOBALS['TestOfExceptionThrownLate']);
+	}
+}
+
+class TestOfExceptionThrownEarly extends UnitTestCase {
+
+	function setUp() {
+        $this->expectException();
+        throw new Exception();
+	}
+	
+	function testShouldNotBeRun() {
+        $GLOBALS['TestOfExceptionThrownEarly'] = true;
+	}
+
+	function testShouldNotBeRunEither() {
+		$this->assertFalse(isset($GLOBALS['TestOfExceptionThrownEarly']));
+	}
+}
+
+class TestOfExpectExceptionWithSetUp extends UnitTestCase {
+
+	function setUp() {
+        $this->expectException();
+	}
+	
+	function testJustThrowingException() {
+        throw new Exception();
+	}
+
+	function testJustThrowingMyTestException() {
+        throw new MyTestException();
+	}
+}
+
 class TestOfExceptionExpectation extends UnitTestCase {
 
     function testExceptionClassAsStringWillMatchExceptionsRootedOnThatClass() {

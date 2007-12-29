@@ -5,7 +5,7 @@ $Id$
 
 Unit tester
 -----------
-Make sure expectException() works correctly with setUp() and tearDown() methods (3).
+Make sure expectException() works correctly with setUp() and tearDown() methods (3) - done by pp11.
 
 Reporter
 --------
