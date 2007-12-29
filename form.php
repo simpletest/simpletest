@@ -230,9 +230,13 @@ class SimpleForm {
      */
     function setField($selector, $value) {
         $success = false;
+        $_value = $value;
         for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
             if ($selector->isMatch($this->_widgets[$i])) {
-                if ($this->_widgets[$i]->setValue($value)) {
+				if (is_array($value)) {
+					$_value = array_shift($value);
+				}
+                if ($this->_widgets[$i]->setValue($_value)) {
                     $success = true;
                 }
             }

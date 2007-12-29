@@ -208,6 +208,19 @@ class TestOfForm extends UnitTestCase {
                 new SimpleGetEncoding(array('go' => 'Go')));
     }
     
+    function testMultipleFieldsWithSameNameSubmitted() {
+        $form = &new SimpleForm(new SimpleFormTag(array()), $this->page('htp://host'));
+        $input = &new SimpleTextTag(array('name' => 'elements[]', 'value' => '1'));
+        $form->addWidget($input);
+        $input = &new SimpleTextTag(array('name' => 'elements[]', 'value' => '2'));
+        $form->addWidget($input);
+        $form->setField(new SimpleByLabelOrName('elements[]'), array('3', '4'));
+		$submit = $form->submit();
+        $this->assertEqual(count($submit->_request), 2);
+        $this->assertIdentical($submit->_request[0], new SimpleEncodedPair('elements[]', '3'));
+        $this->assertIdentical($submit->_request[1], new SimpleEncodedPair('elements[]', '4'));
+    }
+    
     function testSingleSelectFieldSubmitted() {
         $form = &new SimpleForm(new SimpleFormTag(array()), $this->page('htp://host'));
         $select = &new SimpleSelectionTag(array('name' => 'a'));

@@ -124,6 +124,13 @@ class TestOfLiveFetching extends SimpleTestAcceptanceTest {
         $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
     }
  
+	function testFormWithArrayBasedInputs() {
+		$this->get($this->samples() . 'form_with_array_based_inputs.php');
+		$this->setField('value[]', array('3', '4'));
+		$this->clickSubmit('Go');
+        $this->assertPattern('/QUERY_STRING : value%5B%5D=3&value%5B%5D=4&submit=Go/');
+	}
+
 	function testFormWithQuotedValues() {
 		$this->get($this->samples() . 'form_with_quoted_values.php');
 		$this->assertField('a', 'default');
