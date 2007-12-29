@@ -1100,7 +1100,7 @@
         }
           
         /**
-         *    Sets all form fields with that name.
+         *    Sets all form fields with that id.
          *    @param string/integer $id   Id of field in forms.
          *    @param string $value        New value of field.
          *    @return boolean             True if field exists, otherwise false.
