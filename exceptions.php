@@ -39,16 +39,22 @@ class SimpleExceptionTrappingInvoker extends SimpleInvokerDecorator {
 		$trap = SimpleTest::getContext()->get('SimpleExceptionTrap');
 		$trap->clear();
 		try {
+			$has_thrown = false;
 			parent::invoke($method);
 		} catch (Exception $exception) {
+			$has_thrown = true;
 			if (! $trap->isExpected($this->getTestCase(), $exception)) {
 				$this->getTestCase()->exception($exception);
 			}
 			$trap->clear();
-			$this->_invoker->getTestCase()->tearDown();
 		}
 		if ($message = $trap->getOutstanding()) {
 			$this->getTestCase()->fail($message);
+		}
+		if ($has_thrown) {
+			try {
+				parent::getTestCase()->tearDown();
+			} catch (Exception $e) { }
 		}
 	}
 }

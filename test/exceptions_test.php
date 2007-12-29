@@ -11,53 +11,6 @@ class MyTestException extends Exception {}
 class HigherTestException extends MyTestException {}
 class OtherTestException extends Exception {}
 
-class TestOfExceptionThrownLate extends UnitTestCase {
-
-	function tearDown() {
-        $GLOBALS['TestOfExceptionThrownLate'] = true;
-	}
-	
-	function testShouldCarryOn() {
-        $this->expectException();
-        throw new Exception();
-	}
-
-	function testShouldBeAffectedByTearDown() {
-		$this->assertTrue($GLOBALS['TestOfExceptionThrownLate']);
-	}
-}
-
-class TestOfExceptionThrownEarly extends UnitTestCase {
-
-	function setUp() {
-        $this->expectException();
-        throw new Exception();
-	}
-	
-	function testShouldNotBeRun() {
-        $GLOBALS['TestOfExceptionThrownEarly'] = true;
-	}
-
-	function testShouldNotBeRunEither() {
-		$this->assertFalse(isset($GLOBALS['TestOfExceptionThrownEarly']));
-	}
-}
-
-class TestOfExpectExceptionWithSetUp extends UnitTestCase {
-
-	function setUp() {
-        $this->expectException();
-	}
-	
-	function testJustThrowingException() {
-        throw new Exception();
-	}
-
-	function testJustThrowingMyTestException() {
-        throw new MyTestException();
-	}
-}
-
 class TestOfExceptionExpectation extends UnitTestCase {
 
     function testExceptionClassAsStringWillMatchExceptionsRootedOnThatClass() {
@@ -138,30 +91,63 @@ class TestOfCatchingExceptions extends UnitTestCase {
     }
 }
 
-class Test1Exception extends Exception {}
-class Test2Exception extends Exception {}
-
-class TestOfCallingTearDownWithExceptions extends UnitTestCase {
-    public function setUp() {
-        $GLOBALS['setUp'] = true;
-	}
-
-    public function tearDown() {
-        $GLOBALS['tearDown'] = true;
+class TestOfCallingTearDownAfterExceptions extends UnitTestCase {
+    private $debri = 0;
+    
+    function tearDown() {
+        $this->debri--;
     }
 
-    public function test1() { 
-        $this->assertTrue($GLOBALS['setUp']);
-        $this->assertNull($GLOBALS['tearDown']);
-        $this->expectException('Test1Exception');
-        throw new Test1Exception(__FUNCTION__);
+    function testLeaveSomeDebri() { 
+        $this->debri++;
+        $this->expectException();
+        throw new Exception(__FUNCTION__);
     }
 
-	public function test2() {
-        $this->assertTrue($GLOBALS['setUp']);
-        $this->assertTrue($GLOBALS['tearDown']);
-		$this->expectException('Test2Exception');
-		throw new Test2Exception(__FUNCTION__);
+	function testDebriWasRemovedOnce() {
+        $this->assertEqual($this->debri, 0);
 	}
+}
+
+class TestOfExceptionThrownInSetUpDoesNotRunTestBody extends UnitTestCase {
+
+	function setUp() {
+        $this->expectException();
+        throw new Exception();
+	}
+	
+	function testShouldNotBeRun() {
+        $this->fail('This test body should not be run');
+	}
+
+	function testShouldNotBeRunEither() {
+        $this->fail('This test body should not be run either');
+	}
+}
+
+class TestOfExpectExceptionWithSetUp extends UnitTestCase {
+
+	function setUp() {
+        $this->expectException();
+	}
+	
+	function testThisExceptionShouldBeCaught() {
+        throw new Exception();
+	}
+
+	function testJustThrowingMyTestException() {
+        throw new MyTestException();
+	}
+}
+
+class TestOfThrowingExceptionsInTearDown extends UnitTestCase {
+    
+    function tearDown() {
+        throw new Exception();
+    }
+    
+    function testDoesntFatal() {
+        $this->expectException();
+    }
 }
 ?>
