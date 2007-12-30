@@ -55,6 +55,7 @@ class SimpleTestXMLElement extends SimpleXMLElement {
 		$content = "";
 		$sections = $this->xpath('//section');
 		foreach ($sections as $section) {
+			$content .= "<a name=\"".(string)$section->attributes()->name."\">";
 			$content .= "<h2>".(string)$section->attributes()->title."</h2>";
 			foreach ($section as $element) {
 				$content_element = $element->asXML();
@@ -74,6 +75,34 @@ class SimpleTestXMLElement extends SimpleXMLElement {
 		}
 		
 		return $content;
+	}
+
+	function internal() {
+		$internal = "";
+		
+		if (isset($this->internal->link)) {
+			foreach ($this->internal->link as $link) {
+				$internal .= "<div>".$link->asXML()."</div>";
+			}
+		}
+
+		return $internal;
+	}
+	
+	function external() {
+		$external = "";
+
+		if (isset($this->external->link)) {
+			foreach ($this->external->link as $link) {
+				$external .= "<div>".$link->asXML()."</div>";
+			}
+		}
+
+		return $external;
+	}
+
+	function keywords() {
+		return trim(preg_replace('/(\s+)/', ' ', $source->meta->keywords));
 	}
 
 	function here() {

@@ -43,7 +43,7 @@ class <strong>MyTestCase</strong> extends UnitTestCase {
             is a fairly advanced tutorial.
         </link>
         <link>
-            <a href="http://simpletest.sourceforge.net/">SimpleTest API</a> from phpdoc.
+            <a href="http://simpletest.org/api/">SimpleTest API</a> from phpdoc.
         </link>
     </external>
     <meta>
