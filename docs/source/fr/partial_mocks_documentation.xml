@@ -279,7 +279,7 @@ class TelnetTest extends UnitTestCase {
             La page du projet SimpleTest sur <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
         </link>
         <link>
-            <a href="http://simpletest.sourceforge.net/">L'API complète pour SimpleTest</a> à partir de PHPDoc.
+            <a href="http://simpletest.org/api/">L'API complète pour SimpleTest</a> à partir de PHPDoc.
         </link>
         <link>
             La méthode fabrique protégée est décrite dans <a href="http://www-106.ibm.com/developerworks/java/library/j-mocktest.html">cet article d'IBM</a>. Il s'agit de l'unique papier formel que j'ai vu sur ce problème.

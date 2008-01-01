@@ -317,7 +317,7 @@ class TestOfNetworking extends UnitTestCase {
             The expectations mimic the constraints in <a href="http://www.jmock.org/">JMock</a>.
         </link>
         <link>
-            <a href="http://simpletest.sourceforge.net/">Full API for SimpleTest</a>
+            <a href="http://simpletest.org/api/">Full API for SimpleTest</a>
             from the PHPDoc.
         </link>
     </external>

@@ -154,10 +154,10 @@
     </content>
     <internal>
         <link>
-        	<a href="#projects-extending-simpletest">Projects extending SimpleTest</a>
+        	Projects <a href="#projects-extending-simpletest">extending SimpleTest</a>
         </link>
         <link>
-        	<a href="#projects-using-simpletest">"Projects using SimpleTest</a>
+        	And some <a href="#projects-using-simpletest">using SimpleTest</a>
         </link>
     </internal>
 

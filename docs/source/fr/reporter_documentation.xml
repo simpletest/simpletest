@@ -321,7 +321,7 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
             La page de téléchargement de SimpleTest sur <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
         </link>
         <link>
-            L'<a href="http://simpletest.sourceforge.net/">API pour développeur de SimpleTest</a> donne tous les détails sur les classes et les assertions disponibles.
+            L'<a href="http://simpletest.org/api/">API pour développeur de SimpleTest</a> donne tous les détails sur les classes et les assertions disponibles.
         </link>
     </external>
     <meta>

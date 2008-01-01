@@ -204,7 +204,7 @@ class FileTestCase extends <strong>FileTester</strong> {
             La page de téléchargement de SimpleTest sur <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
         </link>
         <link>
-            <a href="http://simpletest.sourceforge.net/">L'API complète de SimpleTest</a> à partir de PHPDoc.
+            <a href="http://simpletest.org/api/">L'API complète de SimpleTest</a> à partir de PHPDoc.
         </link>
     </external>
     <meta>

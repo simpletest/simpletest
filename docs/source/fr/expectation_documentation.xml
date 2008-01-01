@@ -195,7 +195,7 @@ class TestOfNetworking extends UnitTestCase {
             Les attentes imitent les contraintes dans <a href="http://www.jmock.org/">JMock</a>.
         </link>
         <link>
-            <a href="http://simpletest.sourceforge.net/">L'API complète pour SimpleTest</a> réalisé avec PHPDoc.
+            <a href="http://simpletest.org/api/">L'API complète pour SimpleTest</a> réalisé avec PHPDoc.
         </link>
     </external>
     <meta>

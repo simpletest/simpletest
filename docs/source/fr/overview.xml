@@ -243,7 +243,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
             <a href="http://www.lastcraft.com/first_test_tutorial.php">Comment écrire des scénarios de test en PHP</a> est un tutoriel plutôt avancé.
         </link>
         <link>
-            <a href="http://simpletest.sourceforge.net/">L'API de SimpleTest</a> par phpdoc.
+            <a href="http://simpletest.org/api/">L'API de SimpleTest</a> par phpdoc.
         </link>
     </external>
     <meta>

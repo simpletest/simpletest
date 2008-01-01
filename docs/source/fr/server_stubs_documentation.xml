@@ -226,7 +226,7 @@ $iterator->setReturnValue('query', array('id' => 33), array('wild'));
             La page de téléchargement de SimpleTest sur <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
         </link>
         <link>
-            <a href="http://simpletest.sourceforge.net/">L'API complète pour SimpleTest</a> générée par PHPDoc.
+            <a href="http://simpletest.org/api/">L'API complète pour SimpleTest</a> générée par PHPDoc.
         </link>
     </external>
     <meta>

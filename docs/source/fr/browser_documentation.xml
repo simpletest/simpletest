@@ -169,7 +169,7 @@ class TestOfSecurity extends UnitTestCase {
             La page de téléchargement de SimpleTest sur <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
         </link>
         <link>
-            <a href="http://simpletest.sourceforge.net/">L'API de développeur pour SimpleTest</a> donne tous les détails sur les classes et les assertions disponibles.
+            <a href="http://simpletest.org/api/">L'API de développeur pour SimpleTest</a> donne tous les détails sur les classes et les assertions disponibles.
         </link>
     </external>
     <meta>

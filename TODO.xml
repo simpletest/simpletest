@@ -98,30 +98,25 @@
             <a href="#iteration">Current iteration</a> is 1.0.1RC1.
         </link>
         <link>
-	        <a href="#unit-tester">Unit tester</a> items.
-        </link>
-        <link>
-	        <a href="#reporter">Reporter</a> items.
-        </link>
-        <link>
-	        <a href="#mock-objects">Mock objects</a> items.
-        </link>
-        <link>
-	        <a href="#parser">Parser</a> items.
-        </link>
-        <link>
-	        <a href="#browser">Browser</a> items.
-        </link>
-        <link>
-	        <a href="#web-tester">Web tester</a> items.
-        </link>
-        <link>
-	        <a href="#documentation">Documentation</a> items.
-        </link>
-        <link>
-	        <a href="#build">Build</a> items.
+	        Items for
+			<a href="#unit-tester">Unit tester</a>,
+			<a href="#reporter">Reporter</a>,
+			<a href="#mock-objects">Mock objects</a>,
+			<a href="#parser">Parser</a>,
+			<a href="#browser">Browser</a>,
+	        <a href="#web-tester">Web tester</a>,
+	        <a href="#documentation">Documentation</a> and
+	        <a href="#build">Build</a>.
         </link>
     </internal>
+	<external>
+        <link>
+	        Trackers for : 
+			<a href="https://sourceforge.net/tracker/?group_id=76550&amp;atid=547458">feature requests</a>,
+			<a href="https://sourceforge.net/tracker/?group_id=76550&amp;atid=547455">bugs</a> and
+			<a href="https://sourceforge.net/tracker/?group_id=76550&amp;atid=547457">patches</a>.
+        </link>
+	</external>
     <meta>
         <keywords>
             software development,

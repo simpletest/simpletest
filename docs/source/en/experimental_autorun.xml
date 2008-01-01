@@ -181,10 +181,6 @@ class AllTests extends TestSuite {
             has plenty of useful testing advice.
         </link>
         <link>
-            <a href="group_test_tutorial.php">Next</a> is grouping test
-            cases together.
-        </link>
-        <link>
             You will need the <a href="simple_test.php">SimpleTest testing framework</a>
             for these examples.
         </link>

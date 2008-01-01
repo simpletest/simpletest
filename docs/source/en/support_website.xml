@@ -15,25 +15,17 @@
 			That's anything between 1 and 4 messages per day on average.
 		</p>
     </content>
+
     <internal>
-        <link>
-        	<a href="#current-release">Current release</a>
-        </link>
-        <link>
-        	<a href="#eclipse-release">Eclipse release</a>
-        </link>
-        <link>
-        	<a href="#packages">Packages</a>
-        </link>
-        <link>
-        	<a href="#source">Source</a>
-        </link>
-        <link>
-        	<a href="#older-stable-releases">Older stable releases</a>
-        </link>
     </internal>
 
     <external>
+        <link>
+        	Subscribing to the <a href="https://lists.sourceforge.net/lists/listinfo/simpletest-support">Support mailing list</a>.
+        </link>
+        <link>
+        	Reading the <a href="http://sourceforge.net/mailarchive/forum.php?forum=simpletest-support">archive</a>.
+        </link>
     </external>
 
     <meta>

@@ -287,7 +287,7 @@ class LogInTest extends WebTestCase {
             SimpleTest download page on <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
         </link>
         <link>
-            The <a href="http://simpletest.sourceforge.net/">developer&apos;s API for SimpleTest</a>
+            The <a href="http://simpletest.org/api/">developer&apos;s API for SimpleTest</a>
             gives full detail on the classes and assertions available.
         </link>
     </external>
