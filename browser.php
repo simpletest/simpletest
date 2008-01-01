@@ -776,8 +776,8 @@
          *    @return boolean        True if field exists, otherwise false.
          *    @access public
          */
-        function setField($label, $value) {
-            return $this->_page->setField(new SimpleByLabelOrName($label), $value);
+        function setField($label, $value, $position=false) {
+            return $this->_page->setField(new SimpleByLabelOrName($label), $value, $position);
         }
 
         /**
@@ -788,8 +788,8 @@
          *    @return boolean        True if field exists, otherwise false.
          *    @access public
          */
-        function setFieldByName($name, $value) {
-            return $this->_page->setField(new SimpleByName($name), $value);
+        function setFieldByName($name, $value, $position=false) {
+            return $this->_page->setField(new SimpleByName($name), $value, $position);
         }
 
         /**

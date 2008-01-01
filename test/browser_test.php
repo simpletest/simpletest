@@ -217,7 +217,7 @@ class TestOfParsedPageAccess extends UnitTestCase {
 
     function testSettingFieldIsPassedToPage() {
         $page = &new MockSimplePage();
-        $page->expectOnce('setField', array(new SimpleByLabelOrName('key'), 'Value'));
+        $page->expectOnce('setField', array(new SimpleByLabelOrName('key'), 'Value', false));
         $page->setReturnValue('getField', 'Value');
         $browser = &$this->loadPage($page);
         $this->assertEqual($browser->getField('key'), 'Value');

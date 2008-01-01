@@ -1084,8 +1084,8 @@
          *    @return boolean        True if field exists, otherwise false.
          *    @access public
          */
-        function setField($label, $value) {
-            return $this->_browser->setField($label, $value);
+        function setField($label, $value, $position=false) {
+            return $this->_browser->setField($label, $value, $position);
         }
         
         /**
@@ -1095,8 +1095,8 @@
          *    @return boolean        True if field exists, otherwise false.
          *    @access public
          */
-        function setFieldByName($name, $value) {
-            return $this->_browser->setFieldByName($name, $value);
+        function setFieldByName($name, $value, $position=false) {
+            return $this->_browser->setFieldByName($name, $value, $position);
         }
           
         /**

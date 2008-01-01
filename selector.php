@@ -30,6 +30,10 @@
             $this->_name = $name;
         }
 
+        function getName() {
+            return $this->_name;
+        }
+
         /**
          *    Compares with name attribute of widget.
          *    @param SimpleWidget $widget    Control to compare.
