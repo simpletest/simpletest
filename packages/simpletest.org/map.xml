@@ -39,7 +39,10 @@
 			<page title="Books" here="Books" file="en/books.html" />
 			<page title="Softwares" here="Softwares" file="en/softwares_using_simpletest.html" />
 			<page title="Speakers, Coaches and Consultants" here="Speakers" file="en/speakers_coaches_consultants.html" />
-			<page title="Current TODO items" here="TODO" file="en/todo.html" />
+		</page>
+
+		<page title="Current TODO items" here="TODO" file="en/todo.html">
+			<page title="Coding standards &amp; formatting" here="Coding Standards" file="en/coding_standards.html" />
 		</page>
 	</page>
 

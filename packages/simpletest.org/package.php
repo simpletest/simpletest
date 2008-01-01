@@ -230,6 +230,7 @@ class SimpleTestXMLElement extends SimpleXMLElement {
 		$links['download'] = "";
 		$links['start_testing'] = "";
 		$links['support'] = "";
+		$links['contribute'] = "";
 
 		$map = simplexml_load_file($path_to_map);
 
@@ -273,6 +274,8 @@ class SimpleTestXMLElement extends SimpleXMLElement {
 			$links['start_testing'] = $link;
 		} elseif (strpos($link, 'support.html') !== false) {
 			$links['support'] = $link;
+		} elseif (strpos($link, 'todo.html') !== false) {
+			$links['contribute'] = $link;
 		}
 
 		return $links;
