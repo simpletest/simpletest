@@ -15,8 +15,8 @@
     /**
      *    Creates the XML needed for remote communication
      *    by SimpleTest.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class XmlReporter extends SimpleReporter {
         var $_indent;
@@ -142,7 +142,7 @@
         }
 
         /**
-		 *    Paints pass as XML.
+         *    Paints pass as XML.
          *    @param string $message        Message to encode.
          *    @access public
          */
@@ -155,7 +155,7 @@
         }
 
         /**
-		 *    Paints failure as XML.
+         *    Paints failure as XML.
          *    @param string $message        Message to encode.
          *    @access public
          */
@@ -168,7 +168,7 @@
         }
 
         /**
-		 *    Paints error as XML.
+         *    Paints error as XML.
          *    @param string $message        Message to encode.
          *    @access public
          */
@@ -181,7 +181,7 @@
         }
 
         /**
-		 *    Paints exception as XML.
+         *    Paints exception as XML.
          *    @param Exception $exception    Exception to encode.
          *    @access public
          */
@@ -286,8 +286,8 @@
      *    Accumulator for incoming tag. Holds the
      *    incoming test structure information for
      *    later dispatch to the reporter.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class NestingXmlTag {
         var $_name;
@@ -336,8 +336,8 @@
      *    Accumulator for incoming method tag. Holds the
      *    incoming test structure information for
      *    later dispatch to the reporter.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class NestingMethodTag extends NestingXmlTag {
 
@@ -376,8 +376,8 @@
      *    Accumulator for incoming case tag. Holds the
      *    incoming test structure information for
      *    later dispatch to the reporter.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class NestingCaseTag extends NestingXmlTag {
 
@@ -416,8 +416,8 @@
      *    Accumulator for incoming group tag. Holds the
      *    incoming test structure information for
      *    later dispatch to the reporter.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class NestingGroupTag extends NestingXmlTag {
 
@@ -468,8 +468,8 @@
     /**
      *    Parser for importing the output of the XmlReporter.
      *    Dispatches that output to another reporter.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class SimpleTestXmlParser {
         var $_listener;
