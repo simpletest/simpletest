@@ -11,8 +11,7 @@ $languages = array("en/", "fr/", "../../");
 foreach ($languages as $language) {
 	$dir = opendir($source_path.$language);
 	while (($file = readdir($dir)) !== false) {
-//		if (is_file($source_path.$language.$file) and preg_match("/\.xml$/", $file)) {
-		if ($file == "writing_extensions.xml") {
+		if (is_file($source_path.$language.$file) and preg_match("/\.xml$/", $file)) {
 			$source = simplexml_load_file($source_path.$language.$file, "SimpleTestXMLElement");
 			$destination = $source->destination("map.xml");
 			
