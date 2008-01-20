@@ -18,14 +18,27 @@ class SimpleTestXMLElement extends SimpleXMLElement {
 	}
 
 	function content() {
-		$content = "";
+		$content = $this->introduction();
 		$sections = $this->xpath('//section');
 		if (count($sections) > 0) {
-			$content = $this->content_with_sections();
+			$content .= $this->content_with_sections();
 		} else {
-			$content = $this->content_without_sections();
+			$content .= $this->content_without_sections();
 		}
 	
+		return $content;
+	}
+	
+	function introduction() {
+		$content = "";
+
+		$introductions = $this->xpath('//introduction');
+		foreach ($introductions as $introduction) {
+			foreach ($introduction as $element) {
+				$content .= $element->asXML();
+			}
+		}
+		
 		return $content;
 	}
 	

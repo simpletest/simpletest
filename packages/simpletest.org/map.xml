@@ -42,6 +42,7 @@
 		</page>
 
 		<page title="Current TODO items" here="TODO" file="en/todo.html">
+			<page title="Writing an extension" here="Writing an extension" file="en/writing_extensions.html" />
 			<page title="Coding standards &amp; formatting" here="Coding Standards" file="en/coding_standards.html" />
 		</page>
 	</page>
