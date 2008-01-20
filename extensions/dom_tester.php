@@ -17,7 +17,7 @@ require_once dirname(__FILE__).'/dom_tester/css_selector.php';
 /**
  * CssSelectorExpectation
  * 
- * Create a CSS Selector expectactation
+ * Create a CSS Selector expectation
  * 
  * @param DomDocument $_dom
  * @param string $_selector
