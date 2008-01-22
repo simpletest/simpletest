@@ -69,20 +69,30 @@
 				<ol>
 					<li>
 						Main code goes into a file located at<br />
-						<code>/extensions/my_new_extension.php</code>.
+						<code>/extensions/my_new_extension.php</code>
 					</li>
 					<li>
 						If you need extra stuff (classes, sub-routines, js or css files),
 						make sure everything is located your own<br />
-						<code>/extensions/my_new_extension/*</code>.
+						<code>/extensions/my_new_extension/*</code>
 					</li>
 					<li>
 						And since your package is unit-tested,
 						your tests go into<br />
-						<code>/test/extensions/my_new_extension/*</code>.
+						<code>/extensions/my_new_extension/test/*</code><br />
+						or<br />
+						<code>/extensions/my_new_extension/*</code>
+					</li>
+					<li>
+						Bonus : you can get your own test suite caught directly
+						from SimpleTest. There's dedicated test scanning recursively
+						the extensions' directories and running the test file matching
+						<code>/test.php$/</code>.
+						An easy way for us to check if everyone's extension carries
+						on working with the current code base...
 					</li>
 				</ol>
-				And for general coding practices, you can have a look at the
+				Also for general coding practices, you can have a look at the
 				<a href="coding_standards.php">coding standards and formatting</a>.
 			</p>
 		</section>
