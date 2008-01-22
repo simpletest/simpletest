@@ -18,11 +18,13 @@ class TestOfSimpleSeleniumRemoteControl extends UnitTestCase {
 		$remote_control = new SimpleSeleniumRemoteControl("tester", "http://simpletest.org/", "localhost", "80");
 		$this->assertTrue($remote_control->isUp());
 	}
+}
 
-    function testIsUpReturnsTrue() {
+class TestOfSimpleSeleniumRemoteControlWhenItIsUp extends UnitTestCase {
+	function skip() {
         $remote_control = new SimpleSeleniumRemoteControl("*custom opera -nosession", "http://simpletest.org/");
-        $this->assertTrue($remote_control->isUp());
-    }
+		$this->skipUnless($remote_control->isUp(), 'Remote control tests desperatly need a working Selenium Server.');
+	}
 
     function testOfCommandCreation() {
         $remote_control = new SimpleSeleniumRemoteControl("tester", "http://simpletest.org/");
