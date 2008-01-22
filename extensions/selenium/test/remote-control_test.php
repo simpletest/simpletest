@@ -1,7 +1,7 @@
 <?php
 // $Id$
 require_once(dirname(__FILE__) . '/../../../autorun.php');
-require_once(dirname(__FILE__) . '/../../../extensions/selenium/remote-control.php');
+require_once(dirname(__FILE__) . '/../remote-control.php');
 
 class TestOfSimpleSeleniumRemoteControl extends UnitTestCase {
 	function testSesssionIdShouldBePreserved() {
