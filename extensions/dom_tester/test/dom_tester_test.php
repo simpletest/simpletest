@@ -3,7 +3,7 @@
 // $Id$
 
 require_once dirname(__FILE__) . '/../../../autorun.php';
-require_once dirname(__FILE__) . '/../../../extensions/dom_tester.php';
+require_once dirname(__FILE__) . '/../../dom_tester.php';
 
 class TestOfCssSelectors extends UnitTestCase {
 	function TestOfCssSelectors() {
