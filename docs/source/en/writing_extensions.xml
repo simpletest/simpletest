@@ -34,7 +34,7 @@
 					provides an adapter for sourceforge PHPUnit test case to allow
 					legacy test cases to be used with SimpleTest.
 				</dd>
-				<dt>recoder</dt>
+				<dt>recorder</dt>
 				<dd>
 					returns an array with timestamp, status, test name
 					and message for each pass and failure.
