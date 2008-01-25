@@ -32,3 +32,4 @@ pre { font-family: monospaced; border-left: 1px solid #999999; background-color:
 
 dd { font-size : 10.5pt; }
 .done, .done span, .done + dd { color : #AAAAAA; text-decoration : line-through; }
+.postponed, .postponed span, .postponed + dd { color : #AAAAAA; } 

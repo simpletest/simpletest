@@ -24,7 +24,7 @@
         </section>
         <section name="reporter" title="Reporter">
             <dl>
-            	<dt>
+            	<dt class="postponed">
 	           		Add Eclipse support to DefaultReporter (2).
            		</dt>
                 <dd>
