@@ -374,9 +374,10 @@ class DatabaseTest extends UnitTestCase {
 class Session {
     ...
 }</strong>
-</php>
+]]></php>
                 While our logging code looks like this...
-<php><strong>
+<php><![CDATA[
+<strong>
 class Log {
     function Log() {
         ...
@@ -392,7 +393,7 @@ class LoggingSessionPool {
         ...
     }
     
-    function &findSession(\$cookie) {
+    function &findSession($cookie) {
         ...
     }
     ...
