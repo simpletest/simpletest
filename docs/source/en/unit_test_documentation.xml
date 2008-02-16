@@ -20,6 +20,7 @@
             <p>
                 For example...
 <php><![CDATA[
+require_once('simpletest/autorun.php');
 require_once('../classes/writer.php');
 
 class FileTestCase extends UnitTestCase {
@@ -176,7 +177,7 @@ trigger_error('Catastrophe');
                 Of course additional test methods can be added to create
                 specific types of test case, so as to extend framework...
 <php><![CDATA[
-require_once('simpletest/unit_tester.php');
+require_once('simpletest/autorun.php');
 <strong>
 class FileTester extends UnitTestCase {
     function FileTester($name = false) {
@@ -197,6 +198,11 @@ class FileTester extends UnitTestCase {
             <p>
                 To prevent this test case being run accidently, it is
                 advisable to mark it as <code>abstract</code>.
+			</p>
+			<p>
+				Alternatively you could add a
+				<code>SimpleTestOptions::ignore('FileTester');</code>
+				directive in your code.
             </p>
             <p>
                 This new case can be now be inherited just like
@@ -229,30 +235,31 @@ class FileTestCase extends <strong>FileTester</strong> {
                 It is found in <em>simple_test.php</em> rather than
                 <em>unit_tester.php</em>.
                 See <a local="group_test_documentation">later</a> if you
-                want to incorporate other unit tester&apos;s
+                want to incorporate other unit tester's
                 test cases in your test suites.
             </p>
         </section>
         <section name="running_unit" title="Running a single test case">
             <p>
-                You won&apos;t often run single test cases except when bashing
-                away at a module that is having difficulty, and you don&apos;t
+                You won't often run single test cases except when bashing
+                away at a module that is having difficulty, and you don't
                 want to upset the main test suite.
-                Here is the scaffolding needed to run a lone test case...
+                With <em>autorun</em> no particular scaffolding is needed,
+				just launch your particular test file and you're ready to go.
+			</p>
+			<p>
+				You can even decide which reporter (for example,
+				<code>TextReporter</code> or <code>HtmlReporter</code>)
+				you prefer for a specific file when launched on its own...
 <php><![CDATA[
 <?php
-    require_once('simpletest/unit_tester.php');<strong>
-    require_once('simpletest/reporter.php');</strong>
-    require_once('../classes/writer.php');
+require_once('simpletest/autorun.php');<strong>
+SimpleTest :: prefer(new TextReporter());</strong>
+require_once('../classes/writer.php');
 
-    class FileTestCase extends UnitTestCase {
-        function FileTestCase() {
-            $this->UnitTestCase('File test');
-        }
-    }<strong>
-    
-    $test = &new FileTestCase();
-    $test->run(new HtmlReporter());</strong>
+class FileTestCase extends UnitTestCase {
+    ...
+}
 ?>
 ]]></php>
                 This script will run as is, but of course will output zero passes

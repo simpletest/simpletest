@@ -34,7 +34,7 @@
                 In this context SimpleTest aims to be a complete PHP developer
                 test solution and is called &quot;Simple&quot; because it
                 should be easy to use and extend.
-                It wasn&apos;t a good choice of name really.
+                It wasn't a good choice of name really.
                 It includes all of the typical functions you would expect from
                 <a href="http://www.junit.org/">JUnit</a> and the
                 <a href="http://sourceforge.net/projects/phpunit/">PHPUnit</a>
@@ -54,8 +54,7 @@
                 <em>tests/log_test.php</em> and populate it as follows...
 <php><![CDATA[
 <?php<strong>
-require_once('simpletest/unit_tester.php');
-require_once('simpletest/reporter.php');
+require_once('simpletest/autorun.php');
 require_once('../classes/log.php');
 
 class TestOfLogging extends UnitTestCase {
@@ -65,19 +64,18 @@ class TestOfLogging extends UnitTestCase {
                 Here the <em>simpletest</em> folder is either local or in the path.
                 You would have to edit these locations depending on where you
                 placed the toolset.
-                The <code>TestOfLogging</code> is our frst test case and it&apos;s
+                The <code>TestOfLogging</code> is our frst test case and it's
                 currently empty.
             </p>
             <p>
                 Now we have five lines of scaffolding code and still no tests.
                 However from this part on we get return on our investment very quickly.
-                We&apos;ll assume that the <code>Log</code> class
+                We'll assume that the <code>Log</code> class
                 takes the file name to write to in the constructor and we have
                 a temporary folder in which to place this file...
 <php><![CDATA[
 <?php
-require_once('simpletest/unit_tester.php');
-require_once('simpletest/reporter.php');
+require_once('simpletest/autorun.php');
 require_once('../classes/log.php');
 
 class TestOfLogging extends UnitTestCase {
@@ -105,29 +103,8 @@ class TestOfLogging extends UnitTestCase {
             </p>
             <p>
                 To see these results we have to actually run the tests.
-                If this is the only test case we wish to run we can achieve
-                it with...
-<php><![CDATA[
-<?php
-require_once('simpletest/unit_tester.php');
-require_once('simpletest/reporter.php');
-require_once('../classes/log.php');
-
-class TestOfLogging extends UnitTestCase {
-    
-    function testCreatingNewFile() {
-        @unlink('/temp/test.log');
-        $log = new Log('/temp/test.log');
-        $this->assertFalse(file_exists('/temp/test.log'));
-        $log->message('Should write this to a file');
-        $this->assertTrue(file_exists('/temp/test.log'));
-    }
-}
-<strong>
-$test = &new TestOfLogging();
-$test->run(new HtmlReporter());</strong>
-?>
-]]></php>
+                No other code is necessary : we can just open the page
+				with our browser.
             </p>
             <p>
                 On failure the display looks like this...
@@ -155,10 +132,10 @@ class Log {
         function Log($file_path) {
         }
 
-		function message() {
-		}
+        function message() {
+        }
 }
-?>;
+?>
 ]]></php>
             </p>
         </section>
@@ -170,37 +147,21 @@ class Log {
                 script that can, if need be, run every test in the application.
             </p>
             <p>
-                Our first step is to strip the includes and to undo our
-                previous hack...
+                Our first step is to create a new file called <em>tests/all_tests.php</em>
+                and insert the following code...
 <php><![CDATA[
-<?php<strong>
-require_once('../classes/log.php');</strong>
+<strong><?php
+require_once('simpletest/autorun.php');
 
-class TestOfLogging extends UnitTestCase {
-    
-    function testCreatingNewFile() {
-        @unlink('/temp/test.log');
-        $log = new Log('/temp/test.log');
-        $this->assertFalse(file_exists('/temp/test.log'));
-        $log->message('Should write this to a file');
-        $this->assertTrue(file_exists('/temp/test.log'));<strong>
+class AllTests extends TestSuite {
+    function AllTests() {
+        $this->TestSuite('All tests');
+        $this->addFile('log_test.php');
     }
 }
 ?></strong>
 ]]></php>
-                Next we create a new file called <em>tests/all_tests.php</em>
-                and insert the following code...
-<php><![CDATA[
-<strong><?php
-require_once('simpletest/unit_tester.php');
-require_once('simpletest/reporter.php');
-
-$test = &new TestSuite('All tests');
-$test->addTestFile('log_test.php');
-$test->run(new HtmlReporter());
-?></strong>
-]]></php>
-                The method <code>TestSuite::addTestFile()</code>
+                The method <code>TestSuite::addFile()</code>
                 will include the test case file and read any new classes created
                 that are descended from <code>SimpleTestCase</code>, of which
                 <code>UnitTestCase</code> is one example.
@@ -219,7 +180,7 @@ $test->run(new HtmlReporter());
                 Also the test case file should not have been included
                 elsewhere or no cases will be added to this group test.
                 This would be a more serious error as if the test case classes are
-                already loaded by PHP the <code>TestSuite::addTestFile()</code>
+                already loaded by PHP the <code>TestSuite::addFile()</code>
                 method will not detect them.
             </p>
             <p>
@@ -229,7 +190,7 @@ $test->run(new HtmlReporter());
         </section>
         <section name="mock" title="Using mock objects">
             <p>
-                Let&apos;s move further into the future.
+                Let's move further into the future.
             </p>
             <p>
                 Assume that our logging class is tested and completed.
@@ -255,6 +216,7 @@ class SessionPool {
                 A conventional test case might look like this...
 <php><![CDATA[<strong>
 <?php
+require_once('simpletest/autorun.php');
 require_once('../classes/log.php');
 require_once('../classes/session_pool.php');
 
@@ -283,7 +245,7 @@ class TestOfSessionLogging extends UnitTestCase {
                 not part of our test. Worse, we have created close ties
                 with the <code>Log</code> class and
                 this test.
-                What if we don&apos;t use files any more, but use ths
+                What if we don't use files any more, but use ths
                 <em>syslog</em> library instead?
                 Did you notice the extra carriage return in the message?
                 Was that added by the logger?
@@ -298,7 +260,7 @@ class TestOfSessionLogging extends UnitTestCase {
                 It would have to look exactly like our original though.
             </p>
             <p>
-                If the fake object doesn&apos;t write to a file then we save on deleting
+                If the fake object doesn't write to a file then we save on deleting
                 the file before and after each test. We could save even more
                 test code if the fake object would kindly run the assertion for us.
             <p>
@@ -307,9 +269,11 @@ class TestOfSessionLogging extends UnitTestCase {
                 Luckily we can create such an object easily...
 <php><![CDATA[
 <?php
+require_once('simpletest/autorun.php');
 require_once('../classes/log.php');
-require_once('../classes/session_pool.php');<strong>
-Mock::generate('Log');</strong>
+require_once('../classes/session_pool.php');
+
+<strong>Mock::generate('Log');</strong>
 
 class TestOfSessionLogging extends UnitTestCase {
     
@@ -344,10 +308,6 @@ class TestOfSessionLogging extends UnitTestCase {
                 parameter expectations and limits on the number of times
                 a method is to be invoked.
             </p>
-            <p>
-                For this test to run the mock objects library must have been
-                included in the test suite, say in <em>all_tests.php</em>.
-            </p>
         </section>
         <section name="web" title="Web page testing">
             <p>
@@ -366,11 +326,11 @@ class TestOfSessionLogging extends UnitTestCase {
                 page is fetched, from which we navigate to an &quot;about&quot;
                 page and then test some client determined content.
 <php><![CDATA[
-<?php<strong>
-require_once('simpletest/web_tester.php');</strong>
-require_once('simpletest/reporter.php');
-<strong>
-class TestOfAbout extends WebTestCase {
+<?php
+require_once('simpletest/autorun.php');
+<strong>require_once('simpletest/web_tester.php');
+
+class TestOfAbout extends WebTestCase</strong> {
     
     function setUp() {
         $this->get('http://test-server/index.php');
@@ -382,8 +342,6 @@ class TestOfAbout extends WebTestCase {
         $this->assertPattern('/a popular keyphrase/i');
     }
 }</strong>
-$test = &new TestOfAbout();
-$test->run(new HtmlReporter());
 ?>
 ]]></php>
                 With this code as an acceptance test you can ensure that
@@ -419,7 +377,7 @@ $test->run(new HtmlReporter());
             from <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
         </link>
         <link>
-            The <a href="http://simpletest.org/api/">developer&apos;s API for SimpleTest</a>
+            The <a href="http://simpletest.org/api/">developer's API for SimpleTest</a>
             gives full detail on the classes and assertions available.
         </link>
     </external>

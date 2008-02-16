@@ -23,6 +23,8 @@
                 A <a local="unit_test_documentation">test case</a> looks like this...
 <php><![CDATA[
 <?php
+require_once('simpletest/autorun.php');
+
 class <strong>MyTestCase</strong> extends UnitTestCase {
     <strong>
     function testLogWroteMessage() {
@@ -71,6 +73,9 @@ class <strong>MyTestCase</strong> extends UnitTestCase {
                 A <a local="web_tester_documentation">WebTestCase</a> looks like this...
 <php><![CDATA[
 <?php
+require_once('simpletest/autorun.php');
+require_once('simpletest/web_tester.php');
+
 class <strong>MySiteTest</strong> extends WebTestCase {
     <strong>
     function testHomePage() {
