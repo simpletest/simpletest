@@ -123,11 +123,19 @@ class SimpleFormTests extends WebTestCase {
                     <li>Images.</li>
                 </ul>
             </p>
-            <p>
-                Although most standard HTML widgets are catered for by <em>SimpleTest</em>&apos;s
-                built in parser, it is unlikely that JavaScript will be implemented
-                anytime soon.
-            </p>
+			<p>
+				The browser emulation offered by SimpleTest mimics
+				the actions which can be perform by a user on a
+				standard HTML page. Javascript is not supported, and
+				it's unlikely that support will be added any time
+				soon.
+			</p>
+			<p>
+				Of particular note is that the Javascript idiom of
+				passing form results by setting a hidden field cannot
+				be performed using the normal SimpleTest
+				commands. See below for a way to test such forms.
+			</p>
         </section>
         <section name="multiple" title="Fields with multiple values">
             <p>
@@ -185,9 +193,42 @@ class SimpleFormTests extends WebTestCase {
                 We can then write other test code to confirm the effect of this, perhaps
                 by logging in as that user and attempting an update.
             </p>
-            <p>
-                <a class="target" name="raw"><h2>Raw posting</h2></a>
-            </p>
+		</section>
+		<section name="hidden-field" title="Forms which use javascript to set a hidden field">
+			<p>
+				If you want to test a form which relies on javascript to set a hidden
+				field, you can't just call setField().
+				The following code will <em>not</em> work:
+<php><![CDATA[
+class SimpleFormTests extends WebTestCase {
+    function testMyJavascriptForm() {
+        <strong>// This does *not* work</strong>
+        $this->setField('a_hidden_field', '123');
+        $this->clickSubmit('OK');
+    }
+}
+]]></php>
+				Instead, you need to pass the additional form parameters to the
+				clickSubmit() method:
+<php><![CDATA[
+class SimpleFormTests extends WebTestCase {
+    function testMyJavascriptForm() {
+        // Pass the hidden field value as an additional POST variable
+        <strong>$this->clickSubmit('OK', array('a_hidden_field'=>'123'));</strong>
+    }
+
+}
+]]></php>
+			</p>
+			<p>
+				Bear in mind that in doing this you're effectively stubbing out a
+				part of your software (the javascript code in the form), and
+				perhaps you might be better off using something like 
+				<a href="http://selenium.openqa.org/">Selenium</a> to ensure a complete
+				acceptance test.
+			</p>
+		</section>
+		<section name="raw" title="Raw posting">
             <p>
                 If you want to test a form handler, but have not yet written
                 or do not have access to the form itself, you can create a
@@ -216,6 +257,9 @@ class SimpleFormTests extends WebTestCase {
         <link>
             Handling <a href="#multiple">widgets with multiple values</a>
             by setting lists.
+        </link>
+        <link>
+            Bypassing javascript to <a href="#hidden-field">set a hidden field</a>.
         </link>
         <link>
             <a href="#raw">Raw posting</a> when you don&apos;t have a button
