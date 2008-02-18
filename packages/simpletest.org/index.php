@@ -43,12 +43,6 @@ foreach ($languages as $language) {
 				} else {
 					$result = "KO";
 				}
-				$sections = $source->xpath('//section');
-				if (count($sections) > 0) {
-					$result .= " <span style='color : green'>avec sections</span>";
-				} else {
-					$result .= " <span style='color : red'>sans sections</span>";
-				}
 				
 				echo $destination_path.$destination." : ".$result."<br />";
 			}
