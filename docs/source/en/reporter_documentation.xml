@@ -275,12 +275,12 @@ class MyDisplay extends SimpleReporter {<strong>
                 for the HTML version...
 <php><![CDATA[
 <?php
-    require_once('simpletest/unit_tester.php');
-    require_once('simpletest/reporter.php');
+require_once('simpletest/unit_tester.php');
+require_once('simpletest/reporter.php');
 
-    $test = &new TestSuite('File test');
-    $test->addTestFile('tests/file_test.php');
-    $test->run(<strong>new TextReporter()</strong>);
+$test = &new TestSuite('File test');
+$test->addTestFile('tests/file_test.php');
+$test->run(<strong>new TextReporter()</strong>);
 ?>
 ]]></php>
                 Then invoke the test suite from the command line...
@@ -317,12 +317,12 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 code...
 <php><![CDATA[
 <?php
-    require_once('simpletest/unit_tester.php');
-    require_once('simpletest/reporter.php');
+require_once('simpletest/unit_tester.php');
+require_once('simpletest/reporter.php');
 
-    $test = &new TestSuite('File test');
-    $test->addTestFile('tests/file_test.php');
-    <strong>exit ($test->run(new TextReporter()) ? 0 : 1);</strong>
+$test = &new TestSuite('File test');
+$test->addTestFile('tests/file_test.php');
+<strong>exit ($test->run(new TextReporter()) ? 0 : 1);</strong>
 ?>
 ]]></php>
                 Of course we don&apos;t really want to create two test scripts,
@@ -331,15 +331,15 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 run time environment...
 <php><![CDATA[
 <?php
-    require_once('simpletest/unit_tester.php');
-    require_once('simpletest/reporter.php');
+require_once('simpletest/unit_tester.php');
+require_once('simpletest/reporter.php');
 
-    $test = &new TestSuite('File test');
-    $test->addTestFile('tests/file_test.php');
-    <strong>if (TextReporter::inCli()) {</strong>
-        exit ($test->run(new TextReporter()) ? 0 : 1);
-    <strong>}</strong>
-    $test->run(new HtmlReporter());
+$test = &new TestSuite('File test');
+$test->addTestFile('tests/file_test.php');
+<strong>if (TextReporter::inCli()) {</strong>
+    exit ($test->run(new TextReporter()) ? 0 : 1);
+<strong>}</strong>
+$test->run(new HtmlReporter());
 ?>
 ]]></php>
                 This is the form used within SimpleTest itself.
@@ -378,11 +378,11 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 resides in <em>xml.php</em> within the SimpleTest package...
 <php><![CDATA[
 <?php
-    require_once('simpletest/xml.php');
+require_once('simpletest/xml.php');
     
-    ...
-    $parser = &new SimpleTestXmlParser(new HtmlReporter());
-    $parser->parse($test_output);
+...
+$parser = &new SimpleTestXmlParser(new HtmlReporter());
+$parser->parse($test_output);
 ?>
 ]]></php>
                 The <code>$test_output</code> should be the XML format
@@ -408,15 +408,15 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 framework, but it is currently experimental...
 <php><![CDATA[
 <?php
-    <strong>require_once('../remote.php');</strong>
-    require_once('../reporter.php');
+<strong>require_once('../remote.php');</strong>
+require_once('../reporter.php');
     
-    $test_url = ...;
-    $dry_url = ...;
+$test_url = ...;
+$dry_url = ...;
     
-    $test = &new TestSuite('Remote tests');
-    $test->addTestCase(<strong>new RemoteTestCase($test_url, $dry_url)</strong>);
-    $test->run(new HtmlReporter());
+$test = &new TestSuite('Remote tests');
+$test->addTestCase(<strong>new RemoteTestCase($test_url, $dry_url)</strong>);
+$test->run(new HtmlReporter());
 ?>
 ]]></php>
                 The <code>RemoteTestCase</code> takes the actual location

@@ -35,7 +35,7 @@ class SimpleTestXMLElement extends SimpleXMLElement {
 		$introductions = $this->xpath('//introduction');
 		foreach ($introductions as $introduction) {
 			foreach ($introduction as $element) {
-				$content .= $element->asXML();
+				$content .= $this->deal_with_php_code($element->asXML());
 			}
 		}
 		
@@ -46,24 +46,30 @@ class SimpleTestXMLElement extends SimpleXMLElement {
 		$content_without_sections = "";
 		$contents = $this->xpath('//content');
 		foreach ($contents as $content) {
-			$content_element = $content->asXML();
-			$elements_divided = preg_split('/<php>|<\/php>/', $content_element);
-
-			if (count($elements_divided) > 1) {
-				$content_element = '';
-				foreach ($elements_divided as $element_divided) {
-					if (strpos($element_divided, '<![CDATA[') === 0) {
-						$element_divided = '<pre>'.$this->transform_code($element_divided).'</pre>';
-					}
-					$content_element .= $element_divided;
-				}
-			}
-			$content_without_sections .= $content_element;
+			$content_without_sections .= $this->deal_with_php_code($content->asXML());
 		}
 		
 		return $content_without_sections;
 	}
 	
+	function deal_with_php_code($content) {
+		$elements_divided = preg_split('/<php>|<\/php>/', $content);
+		$content_element = '';
+
+		if (count($elements_divided) > 1) {
+			foreach ($elements_divided as $element_divided) {
+				if (strpos($element_divided, '<![CDATA[') === 0) {
+					$element_divided = '<pre>'.$this->transform_code($element_divided).'</pre>';
+				}
+				$content_element .= $element_divided;
+			}
+		} else {
+			$content_element .= $content;
+		}
+		
+		return $content_element;
+	}
+
 	function content_with_sections() {
 		$content = "";
 		$sections = $this->xpath('//section');
@@ -71,19 +77,7 @@ class SimpleTestXMLElement extends SimpleXMLElement {
 			$content .= "<a name=\"".(string)$section->attributes()->name."\">";
 			$content .= "<h2>".(string)$section->attributes()->title."</h2>";
 			foreach ($section as $element) {
-				$content_element = $element->asXML();
-				$elements_divided = preg_split('/<php>|<\/php>/', $content_element);
-
-				if (count($elements_divided) > 1) {
-					$content_element = '';
-					foreach ($elements_divided as $element_divided) {
-						if (strpos($element_divided, '<![CDATA[') === 0) {
-							$element_divided = '<pre>'.$this->transform_code($element_divided).'</pre>';
-						}
-						$content_element .= $element_divided;
-					}
-				}
-				$content .= $content_element;
+				$content .= $this->deal_with_php_code($element->asXML());
 			}
 		}
 		

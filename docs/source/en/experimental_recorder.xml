@@ -2,26 +2,26 @@
 <page title="Using the test results for other tools" here="Recorder">
     <long_title>[experimental] Using the test results for other tools with the Recorder</long_title>
     <content>
-        <div class="experimental">
-            Careful : this documentation refers to un-released code. It's only available in CVS.
-        </div>
-        <p>
-            What the developer wants from his tests is immediate feedback. The <em>TextReporter</em>
-			and the <em>HtmlReporter</em> are there to show this feedback. As quickly as possible
-			and as close to your working tools as possible : the console, the browser.
-		</p>
-         <p>
-			<a class="target" name="recorder"><h2>A Recorder for non-developpers</h2></a>
-		</p>
-		<p>
-			But often developers don't work alone : you may have a team contributing to
-			the same code base next door, a manager a little bit further away and even
-			a team of testers or power users on the other side of the planet.
-		</p>
-		<p>
-			For them as well tests' results are valuable pieces of information ! They just need
-			to be formatted and archived somewhere. The <em>Recorder</em> allows you to grab all
-			output to a simple PHP array.
+		<introduction>
+	        <div class="experimental">
+	            Careful : this documentation refers to un-released code. It's only available in CVS.
+	        </div>
+	        <p>
+	            What the developer wants from his tests is immediate feedback. The <em>TextReporter</em>
+				and the <em>HtmlReporter</em> are there to show this feedback. As quickly as possible
+				and as close to your working tools as possible : the console, the browser.
+			</p>
+         </introduction>
+		 <section name="recorder" title="A Recorder for non-developpers">
+			<p>
+				But often developers don't work alone : you may have a team contributing to
+				the same code base next door, a manager a little bit further away and even
+				a team of testers or power users on the other side of the planet.
+			</p>
+			<p>
+				For them as well tests' results are valuable pieces of information ! They just need
+				to be formatted and archived somewhere. The <em>Recorder</em> allows you to grab all
+				output to a simple PHP array.
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');<strong>
@@ -35,11 +35,11 @@ $recorder = new Recorder();
 $group->run($recorder);</strong>
 ?>
 ]]></php>
-        </p>
-        <p>
-            Within this <em>$recorder</em> object lies the test suite information.
-			Let's dump the <em>$recorder->results</em> variable and check what's
-			in it :
+	        </p>
+	        <p>
+	            Within this <em>$recorder</em> object lies the test suite information.
+				Let's dump the <em>$recorder->results</em> variable and check what's
+				in it :
 <php><![CDATA[
 <?php
 array(4) {
@@ -90,22 +90,21 @@ array(4) {
 }
 ?>
 ]]></php>
-        </p>
-         <p>
-			<a class="target" name="recorder-results"><h2>Exploring the Recorder results</h2></a>
-		</p>
-		<p>
-			Each element of the <em>$recoder->results</em> array contains one assertion's
-			information :
-			<ul>
-				<li><em>time</em> : when the assertion was executed, in a timestamp format.</li>
-				<li><em>status</em> : either <strong>Passed</strong> or <strong>Failed</strong></li>
-				<li><em>test</em> : the name of the test</li>
-				<li><em>message</em> : the actual message, useful for understanding what went wrong</li>
-			</ul>
-		</p>
-		<p>
-			Now iterating throught the results becomes really easy...
+        	</p>
+         </section>
+		 <section name="recorder-results" title="Exploring the Recorder results">
+			<p>
+				Each element of the <em>$recoder->results</em> array contains one assertion's
+				information :
+				<ul>
+					<li><em>time</em> : when the assertion was executed, in a timestamp format.</li>
+					<li><em>status</em> : either <strong>Passed</strong> or <strong>Failed</strong></li>
+					<li><em>test</em> : the name of the test</li>
+					<li><em>message</em> : the actual message, useful for understanding what went wrong</li>
+				</ul>
+			</p>
+			<p>
+				Now iterating throught the results becomes really easy...
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');
@@ -125,7 +124,8 @@ $group->run($recorder);
 </strong>
 ?>
 ]]></php>
-		</p>
+			</p>
+		</section>
     </content>
     <internal>
         <link>A <a href="#recorder">Recorder</a> for non-developpers.</link>

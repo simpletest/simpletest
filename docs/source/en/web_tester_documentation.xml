@@ -37,17 +37,21 @@
 }</strong>
 ]]></php>
                 Here we are about to test the
-                <a href="http://www/lastcraft.com/">Last Craft</a> site itself.
+                <a href="http://www.lastcraft.com/">Last Craft</a> site itself.
                 If this test case is in a file called <em>lastcraft_test.php</em>
                 then it can be loaded in a runner script just like unit tests...
 <php><![CDATA[
-<?php<strong>
-    require_once('simpletest/web_tester.php');</strong>
-    require_once('simpletest/reporter.php');
-    
-    $test = &new TestSuite('Web site tests');<strong>
-    $test->addTestFile('lastcraft_test.php');</strong>
-    exit ($test->run(new TextReporter()) ? 0 : 1);
+<?php
+require_once('simpletest/autorun.php');<strong>
+require_once('simpletest/web_tester.php');</strong>
+SimpleTest::prefer(new TextReporter());
+
+class WebTests extends TestSuite {
+    function WebTests() {
+        $this->TestSuite('Web site tests');<strong>
+        $this->addFile('lastcraft_test.php');</strong>
+    }
+}
 ?>
 ]]></php>
                 I am using the text reporter here to more clearly

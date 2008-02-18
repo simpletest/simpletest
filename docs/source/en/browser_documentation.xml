@@ -18,15 +18,15 @@
                 open PHP 5 bugs from the <a href="http://www.php.net/">PHP web site</a>...
 <php><![CDATA[
 <strong><?php
-    require_once('simpletest/browser.php');
+require_once('simpletest/browser.php');
     
-    $browser = &new SimpleBrowser();
-    $browser->get('http://php.net/');
-    $browser->click('reporting bugs');
-    $browser->click('statistics');
-    $page = $browser->click('PHP 5 bugs only');
-    preg_match('/status=Open.*?by=Any.*?(\d+)<\/a>/', $page, $matches);
-    print $matches[1];
+$browser = &new SimpleBrowser();
+$browser->get('http://php.net/');
+$browser->click('reporting bugs');
+$browser->click('statistics');
+$page = $browser->click('PHP 5 bugs only');
+preg_match('/status=Open.*?by=Any.*?(\d+)<\/a>/', $page, $matches);
+print $matches[1];
 ?></strong>
 ]]></php>
                 There are simpler methods to do this particular example in PHP
@@ -156,8 +156,8 @@
                 now be done in a <a local="unit_tester_documentation">UnitTestCase</a>.
                 This means that we can freely mix domain object testing with the
                 web interface...
-<php><![CDATA[<strong>
-class TestOfRegistration extends UnitTestCase {
+<php><![CDATA[
+<strong>class TestOfRegistration extends UnitTestCase {
     function testNewUserAddedToAuthenticator() {</strong>
         $browser = &new SimpleBrowser();
         $browser->get('http://my-site.com/register.php');
