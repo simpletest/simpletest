@@ -53,7 +53,7 @@
             	<dt class="done">
 	           		Fix bug 1671539 with assertText picking up JavaScript (1).
            		</dt>
-            	<dt>
+            	<dt class="done">
            			Add U flag to regexes to allow unicode (3).
            		</dt>
 	        </dl>
@@ -113,6 +113,7 @@
                     It means going through all of the core documentation and updating
                     it with new methods and features.
                     In particular, the introductory pages should switch to autoload.
+					Should be checked : addTestFile.
                 </dd>
 	        	<dt class="done">
 	           		Extension docs (1).
