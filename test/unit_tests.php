@@ -16,6 +16,7 @@ class UnitTests extends TestSuite {
         if (version_compare(phpversion(), '5') >= 0) {
             $this->addFile($path . '/exceptions_test.php');
         }
+        $this->addFile($path . '/autorun_test.php');
         $this->addFile($path . '/compatibility_test.php');
         $this->addFile($path . '/simpletest_test.php');
         $this->addFile($path . '/dumper_test.php');
