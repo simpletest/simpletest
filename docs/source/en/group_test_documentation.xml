@@ -120,10 +120,11 @@ class SocketTester extends UnitTestCase { ... }
                 There are two things that could go wrong and which require care...
                 <ol>
                     <li>
-                        The file could already have been parsed by PHP, and so no
+						The file could already have been parsed by PHP, and so no
                         new classes will have been added. You should make
                         sure that the test cases are only included in this file
-                        and no others.
+                        and no others (Note : with the new <cite>autorun</cite>
+						functionnality, this problem has now been solved).
                     </li>
                     <li>
                         New test case extension classes that get included will be
