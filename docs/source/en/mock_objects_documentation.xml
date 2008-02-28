@@ -566,6 +566,14 @@ class LoggingSessionPoolTest extends UnitTestCase {
                 It is silent if the limit is never reached.
             </p>
             <p>
+				Also if you have juste one call in your test, make sure you're using
+				<code>expectOnce</code>.<br />
+				Using <code>$mocked->expectAt(0, 'method', 'args);</code>
+				on its own will not be catched :
+				checking the arguments and the overall call count
+				are currently independant.
+            </p>
+            <p>
                 Like the assertions within test cases, all of the expectations
                 can take a message override as an extra parameter.
                 Also the original failure message can be embedded in the output
