@@ -198,11 +198,11 @@ class FileTester extends UnitTestCase {
             <p>
                 To prevent this test case being run accidently, it is
                 advisable to mark it as <code>abstract</code>.
-			</p>
-			<p>
-				Alternatively you could add a
-				<code>SimpleTestOptions::ignore('FileTester');</code>
-				directive in your code.
+            </p>
+            <p>
+                Alternatively you could add a
+                <code>SimpleTestOptions::ignore('FileTester');</code>
+                directive in your code.
             </p>
             <p>
                 This new case can be now be inherited just like
@@ -245,12 +245,12 @@ class FileTestCase extends <strong>FileTester</strong> {
                 away at a module that is having difficulty, and you don't
                 want to upset the main test suite.
                 With <em>autorun</em> no particular scaffolding is needed,
-				just launch your particular test file and you're ready to go.
-			</p>
-			<p>
-				You can even decide which reporter (for example,
-				<code>TextReporter</code> or <code>HtmlReporter</code>)
-				you prefer for a specific file when launched on its own...
+                just launch your particular test file and you're ready to go.
+            </p>
+            <p>
+                You can even decide which reporter (for example,
+                <code>TextReporter</code> or <code>HtmlReporter</code>)
+                you prefer for a specific file when launched on its own...
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');<strong>
