@@ -32,7 +32,7 @@
                 In the context of agile development the test code sits right
                 next to the source code as both are written simultaneously.
                 In this context SimpleTest aims to be a complete PHP developer
-                test solution and is called &quot;Simple&quot; because it
+                test solution and is called "Simple" because it
                 should be easy to use and extend.
                 It wasn't a good choice of name really.
                 It includes all of the typical functions you would expect from
@@ -104,7 +104,7 @@ class TestOfLogging extends UnitTestCase {
             <p>
                 To see these results we have to actually run the tests.
                 No other code is necessary : we can just open the page
-				with our browser.
+                with our browser.
             </p>
             <p>
                 On failure the display looks like this...
@@ -120,11 +120,11 @@ class TestOfLogging extends UnitTestCase {
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
                     <strong>2</strong> passes and <strong>0</strong> fails.</div>
                 </div>
-				And if you get this...
+                And if you get this...
                 <div class="demo">
                     <b>Fatal error</b>:  Failed opening required '../classes/log.php' (include_path='') in <b>/home/marcus/projects/lastcraft/tutorial_tests/Log/tests/log_test.php</b> on line <b>7</b>
                 </div>
-				it means you're missing the <em>classes/Log.php</em> file that could look like...
+                it means you're missing the <em>classes/Log.php</em> file that could look like...
 <php><![CDATA[
 <?php
 class Log {
@@ -137,6 +137,10 @@ class Log {
 }
 ?>
 ]]></php>
+            </p>
+            <p>
+                For more information about <code>UnitTestCase</code>, see
+                the <a local="unit_test_documentation">unit test documentation</a>.
             </p>
         </section>
         <section name="group" title="Building group tests">
@@ -186,6 +190,10 @@ class AllTests extends TestSuite {
             <p>
                 To display the results it is necessary only to invoke
                 <em>tests/all_tests.php</em> from the web server.
+            </p>
+            <p>
+                For more information about grouping tests,
+                see the <a local="group_test_documentation">test suite documentation</a>.
             </p>
         </section>
         <section name="mock" title="Using mock objects">
@@ -308,6 +316,10 @@ class TestOfSessionLogging extends UnitTestCase {
                 parameter expectations and limits on the number of times
                 a method is to be invoked.
             </p>
+            <p>
+                For more information about mocking and stubbing, see the
+                <a local="mock_objects_documentation">mock objects documentation</a>.
+            </p>
         </section>
         <section name="web" title="Web page testing">
             <p>
@@ -323,7 +335,7 @@ class TestOfSessionLogging extends UnitTestCase {
                 The web testing in SimpleTest is fairly primitive, there is
                 no JavaScript for example.
                 To give an idea here is a trivial example where a home
-                page is fetched, from which we navigate to an &quot;about&quot;
+                page is fetched, from which we navigate to an "about"
                 page and then test some client determined content.
 <php><![CDATA[
 <?php
@@ -347,6 +359,11 @@ class TestOfAbout extends WebTestCase</strong> {
                 With this code as an acceptance test you can ensure that
                 the content always meets the specifications of both the
                 developers and the other project stakeholders.
+            </p>
+            <p>
+                For more information about web testing, see the
+                <a href="http://localhost/simpletest/docs/en/browser_documentation.html">scriptable
+                browser documentation</a>.
             </p>
             <p>
                 <a href="http://sourceforge.net/projects/simpletest/"><img src="http://sourceforge.net/sflogo.php?group_id=76550&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo"/></a>
