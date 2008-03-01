@@ -248,8 +248,11 @@ class SimpleErrorQueue {
 				E_USER_ERROR => 'E_USER_ERROR',
 				E_USER_WARNING => 'E_USER_WARNING',
 				E_USER_NOTICE => 'E_USER_NOTICE');
-		if (version_compare(phpversion(), '5.2.0', '>=')) {
+		if (defined('E_RECOVERABLE_ERROR')) {
 			$map[E_RECOVERABLE_ERROR] = 'E_RECOVERABLE_ERROR';
+		}
+		if (defined('E_DEPRECATED')) {
+			$map[E_DEPRECATED] = 'E_DEPRECATED';
 		}
 		return $map[$severity];
 	}

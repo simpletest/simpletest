@@ -236,6 +236,20 @@ class TestOfPHP52RecoverableErrors extends UnitTestCase {
     }
 }
 
+class TestOfPHP53DeprecatedErrors extends UnitTestCase {
+    function skip() {
+        $this->skipIf(
+                version_compare(phpversion(), '5.3', '<') ||
+                version_compare(phpversion(), '6',   '>='),
+                'E_DEPRECATED is tested for PHP 5.3 and above, but not PHP 6');
+    }
+
+    function testError() {
+        $this->expectError(new PatternExpectation('/This function is deprecated and moved in PHP 6/i'));
+        get_magic_quotes_gpc();
+    }
+}
+
 class TestOfErrorsExcludingPHP52AndAbove extends UnitTestCase {
     function skip() {
         $this->skipIf(
