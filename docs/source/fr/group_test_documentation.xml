@@ -161,15 +161,15 @@
 ?>
 ]]></php>
                 Comme les scénarios de test normaux, un <code>GroupTest</code> peut être chargé avec la méthode <code>GroupTest::addTestFile()</code>.
-<php><![CDATA[	
-<?php	
-    define('RUNNER', true);	
- 	 	
-    $test = &new BigGroupTest('Big group');<strong>	
-    $test->addTestFile('file_group_test.php');	
-    $test->addTestFile(...);</strong>	
-    $test->run(new HtmlReporter());	
-?>	
+<php><![CDATA[  
+<?php   
+    define('RUNNER', true); 
+        
+    $test = &new BigGroupTest('Big group');<strong> 
+    $test->addTestFile('file_group_test.php');  
+    $test->addTestFile(...);</strong>   
+    $test->run(new HtmlReporter()); 
+?>  
 ]]></php>
             </p>
         </section>

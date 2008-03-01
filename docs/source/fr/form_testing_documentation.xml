@@ -94,18 +94,18 @@ class SimpleFormTests extends WebTestCase {
                     <li>Images.</li>
                 </ul>
             </p>
-			<p>
-				Le navigateur proposé par SimpleTest émule les actions
-				qui peuvent être réalisées par un utilisateur sur
-				une page HTML standard. Javascript n'est pas supporté et
-				il y a peu de chance pour qu'il le soit prochainement.
-			</p>
-			<p>
-				Une attention particulière doit être porté aux techniques Javascript
-				qui changent la valeur d'un champ caché : elles ne peuvent pas être
-				réalisées avec les commandes classiques de SimpleTest.
-				Une méthode alternative est proposée plus loin.
-			</p>
+            <p>
+                Le navigateur proposé par SimpleTest émule les actions
+                qui peuvent être réalisées par un utilisateur sur
+                une page HTML standard. Javascript n'est pas supporté et
+                il y a peu de chance pour qu'il le soit prochainement.
+            </p>
+            <p>
+                Une attention particulière doit être porté aux techniques Javascript
+                qui changent la valeur d'un champ caché : elles ne peuvent pas être
+                réalisées avec les commandes classiques de SimpleTest.
+                Une méthode alternative est proposée plus loin.
+            </p>
         </section>
         <section name="multiple" title="Champs à valeurs multiples">
             <p>
@@ -153,13 +153,13 @@ class SimpleFormTests extends WebTestCase {
 ]]></php>
                 Plutôt que d'initier le champ à une valeur unique, nous lui donnons une liste de valeurs. Nous faisons la même chose pour tester les valeurs attendues. Nous pouvons écrire d'autres bouts de code de test pour confirmer cet effet, peut-être en nous connectant comme utilisateur et en essayant d'effectuer une mise à jour.
             </p>
-		</section>
-		<section name="hidden-field" title="Formulaires utilisant Javascript pour changer un champ caché">
-			<p>
-				Si vous souhaitez tester un formulaire dépendant de Javascript
-				pour la modification d'un champ caché, vous ne pouvez pas
-				simplement utiliser setField().
-				Le code suivant <em>ne fonctionnera pas</em> :
+        </section>
+        <section name="hidden-field" title="Formulaires utilisant Javascript pour changer un champ caché">
+            <p>
+                Si vous souhaitez tester un formulaire dépendant de Javascript
+                pour la modification d'un champ caché, vous ne pouvez pas
+                simplement utiliser setField().
+                Le code suivant <em>ne fonctionnera pas</em> :
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
     function testMyJavascriptForm() {
@@ -169,8 +169,8 @@ class SimpleFormTests extends WebTestCase {
     }
 }
 ]]></php>
-				A la place, vous aurez besoin d'ajouter le paramètre supplémentaire
-				du formulaire à la méthode clickSubmit() :
+                A la place, vous aurez besoin d'ajouter le paramètre supplémentaire
+                du formulaire à la méthode clickSubmit() :
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
     function testMyJavascriptForm() {
@@ -180,17 +180,17 @@ class SimpleFormTests extends WebTestCase {
 
 }
 ]]></php>
-			</p>
-			<p>
-				N'oubliez pas que de la sorte, vous êtes effectivement en train
-				de court-circuitez une partie de votre application (le code Javascript
-				dans le formulaire) et que peut-être serait-il plus prudent
-				d'utiliser un outil comme
-				<a href="http://selenium.openqa.org/">Selenium</a> pour mettre sur pied
-				un test de recette complet.
-			</p>
-		</section>
-		<section name="brut" title="Envoi brut">
+            </p>
+            <p>
+                N'oubliez pas que de la sorte, vous êtes effectivement en train
+                de court-circuitez une partie de votre application (le code Javascript
+                dans le formulaire) et que peut-être serait-il plus prudent
+                d'utiliser un outil comme
+                <a href="http://selenium.openqa.org/">Selenium</a> pour mettre sur pied
+                un test de recette complet.
+            </p>
+        </section>
+        <section name="brut" title="Envoi brut">
             <p>
                 Si vous souhaitez tester un gestionnaire de formulaire mais que vous ne l'avez pas écrit ou que vous n'y avez pas encore accès, vous pouvez créer un envoi de formulaire à la main.
 <php><![CDATA[
@@ -205,22 +205,22 @@ class SimpleFormTests extends WebTestCase {
 }
 ]]></php>
                 En ajoutant des données à la méthode <code>WebTestCase::post()</code>,
-				nous essayons de télécharger la page via la transmission d'un formulaire.
+                nous essayons de télécharger la page via la transmission d'un formulaire.
             </p>
         </section>
     </content>
     <internal>
         <link>
             Modifier les valeurs d'un formulaire et
-			<a href="#submit">réussir à transmettre un simple formulaire</a>
+            <a href="#submit">réussir à transmettre un simple formulaire</a>
         </link>
         <link>
             Gérer des <a href="#multiple">objets à valeurs multiples</a>
-			en initialisant des listes.
+            en initialisant des listes.
         </link>
-		<link>
-			Le cas des formulaires utilisant Javascript pour
-			modifier <a href="#hidden-field">un champ caché</a>
+        <link>
+            Le cas des formulaires utilisant Javascript pour
+            modifier <a href="#hidden-field">un champ caché</a>
         </link>
         <link>
             <a href="#brut">Envoi brut</a> quand il n'existe pas de bouton à cliquer.
