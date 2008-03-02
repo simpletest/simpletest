@@ -362,7 +362,7 @@ class TestOfAbout extends WebTestCase</strong> {
             </p>
             <p>
                 For more information about web testing, see the
-                <a href="http://localhost/simpletest/docs/en/browser_documentation.html">scriptable
+                <a href="browser_documentation.php">scriptable
                 browser documentation</a>.
             </p>
             <p>
