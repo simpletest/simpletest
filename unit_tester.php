@@ -1,13 +1,13 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	UnitTester
-     *	@version	$Id$
+     *  base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage UnitTester
+     *  @version    $Id$
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/test_case.php');
     require_once(dirname(__FILE__) . '/dumper.php');
@@ -17,8 +17,8 @@
      *    Standard unit test class for day to day testing
      *    of PHP code XP style. Adds some useful standard
      *    assertions.
-	 *	  @package	SimpleTest
-	 *	  @subpackage	UnitTester
+     *    @package  SimpleTest
+     *    @subpackage   UnitTester
      */
     class UnitTestCase extends SimpleTestCase {
 
@@ -303,10 +303,10 @@
         }
 
         /**
-         *	  @deprecated
+         *    @deprecated
          */
         function assertWantedPattern($pattern, $subject, $message = '%s') {
-        	return $this->assertPattern($pattern, $subject, $message);
+            return $this->assertPattern($pattern, $subject, $message);
         }
 
         /**
@@ -327,10 +327,10 @@
         }
 
         /**
-         *	  @deprecated
+         *    @deprecated
          */
         function assertNoUnwantedPattern($pattern, $subject, $message = '%s') {
-        	return $this->assertNoPattern($pattern, $subject, $message);
+            return $this->assertNoPattern($pattern, $subject, $message);
         }
 
         /**

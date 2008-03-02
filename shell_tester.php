@@ -1,21 +1,21 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	UnitTester
-     *	@version	$Id$
+     *  base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage UnitTester
+     *  @version    $Id$
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/test_case.php');
     /**#@-*/
 
     /**
      *    Wrapper for exec() functionality.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class SimpleShell {
         var $_output;
@@ -56,17 +56,17 @@
          *    @return array         Output as array of lines.
          *    @access public
          */
-		function getOutputAsList() {
-			return $this->_output;
-		}
+        function getOutputAsList() {
+            return $this->_output;
+        }
     }
 
     /**
      *    Test case for testing of command line scripts and
      *    utilities. Usually scripts that are external to the
      *    PHP code, but support it in some way.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class ShellTestCase extends SimpleTestCase {
         var $_current_shell;
@@ -113,20 +113,20 @@
          *    @return string        Output as text.
          *    @access public
          */
-		function getOutput() {
+        function getOutput() {
             $shell = &$this->_getShell();
             return $shell->getOutput();
-		}
+        }
 
         /**
          *    Accessor for the last output.
          *    @return array         Output as array of lines.
          *    @access public
          */
-		function getOutputAsList() {
+        function getOutputAsList() {
             $shell = &$this->_getShell();
             return $shell->getOutputAsList();
-		}
+        }
 
         /**
          *    Called from within the test methods to register

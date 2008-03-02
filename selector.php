@@ -1,9 +1,9 @@
 <?php
     /**
-     *	Base include file for SimpleTest.
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id$
+     *  Base include file for SimpleTest.
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id$
      */
 
     /**#@+
@@ -16,8 +16,8 @@
     /**
      *    Used to extract form elements for testing against.
      *    Searches by name attribute.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleByName {
         var $_name;
@@ -47,8 +47,8 @@
     /**
      *    Used to extract form elements for testing against.
      *    Searches by visible label or alt text.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleByLabel {
         var $_label;
@@ -78,8 +78,8 @@
     /**
      *    Used to extract form elements for testing against.
      *    Searches dy id attribute.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleById {
         var $_id;
@@ -105,8 +105,8 @@
     /**
      *    Used to extract form elements for testing against.
      *    Searches by visible label, name or alt text.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleByLabelOrName {
         var $_label;

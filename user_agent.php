@@ -1,13 +1,13 @@
 <?php
     /**
-     *	Base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id$
+     *  Base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id$
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/cookies.php');
     require_once(dirname(__FILE__) . '/http.php');
@@ -26,8 +26,8 @@
     /**
      *    Fetches web pages whilst keeping track of
      *    cookies and authentication.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleUserAgent {
         var $_cookie_jar;

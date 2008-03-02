@@ -1,13 +1,13 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id$
+     *  base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id$
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/socket.php');
     require_once(dirname(__FILE__) . '/cookies.php');
@@ -17,8 +17,8 @@
     /**
      *    Creates HTTP headers for the end point of
      *    a HTTP request.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleRoute {
         var $_url;
@@ -109,8 +109,8 @@
     /**
      *    Creates HTTP headers for the end point of
      *    a HTTP request via a proxy server.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleProxyRoute extends SimpleRoute {
         var $_proxy;
@@ -190,8 +190,8 @@
     /**
      *    HTTP request for a web page. Factory for
      *    HttpResponse object.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleHttpRequest {
         var $_route;
@@ -289,8 +289,8 @@
     
     /**
      *    Collection of header lines in the response.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleHttpHeaders {
         var $_raw_headers;
@@ -475,8 +475,8 @@
     
     /**
      *    Basic HTTP response.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleHttpResponse extends SimpleStickyError {
         var $_url;

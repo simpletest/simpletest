@@ -1,19 +1,19 @@
 <?php
     /**
-     *	Base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id$
+     *  Base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id$
      */
     /**
-     *	include http class
+     *  include http class
      */
     require_once(dirname(__FILE__) . '/http.php');
     
     /**
      *    Represents a single security realm's identity.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleRealm {
         var $_type;
@@ -125,8 +125,8 @@
     
     /**
      *    Manages security realms.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleAuthenticator {
         var $_realms;

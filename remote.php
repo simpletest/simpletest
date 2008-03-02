@@ -1,13 +1,13 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	UnitTester
-     *	@version	$Id$
+     *  base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage UnitTester
+     *  @version    $Id$
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/browser.php');
     require_once(dirname(__FILE__) . '/xml.php');
@@ -16,8 +16,8 @@
 
     /**
      *    Runs an XML formated test on a remote server.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class RemoteTestCase {
         var $_url;

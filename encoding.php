@@ -1,21 +1,21 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id$
+     *  base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id$
      */
      
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/socket.php');
     /**#@-*/
 
     /**
      *    Single post parameter.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleEncodedPair {
         var $_key;
@@ -83,8 +83,8 @@
 
     /**
      *    Single post parameter.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleAttachment {
         var $_key;
@@ -185,8 +185,8 @@
     /**
      *    Bundle of GET/POST parameters. Can include
      *    repeated parameters.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleEncoding {
         var $_request;
@@ -323,8 +323,8 @@
     /**
      *    Bundle of GET parameters. Can include
      *    repeated parameters.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleGetEncoding extends SimpleEncoding {
         
@@ -378,8 +378,8 @@
     
     /**
      *    Bundle of URL parameters for a HEAD request.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleHeadEncoding extends SimpleGetEncoding {
         
@@ -407,8 +407,8 @@
     /**
      *    Bundle of POST parameters. Can include
      *    repeated parameters.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimplePostEncoding extends SimpleEncoding {
         
@@ -420,37 +420,37 @@
          *    @access public
          */
         function SimplePostEncoding($query = false) {
-			if (is_array($query) and $this->hasMoreThanOneLevel($query)) {
-				$query = $this->rewriteArrayWithMultipleLevels($query);
-			}
+            if (is_array($query) and $this->hasMoreThanOneLevel($query)) {
+                $query = $this->rewriteArrayWithMultipleLevels($query);
+            }
             $this->SimpleEncoding($query);
         }
         
         function hasMoreThanOneLevel($query) {
-        	foreach ($query as $key => $value) {
-        		if (is_array($value)) {
-        			return true;
-        		}
-        	}
-        	return false;
+            foreach ($query as $key => $value) {
+                if (is_array($value)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         function rewriteArrayWithMultipleLevels($query) {
-        	$query_ = array();
-        	foreach ($query as $key => $value) {
-        		if (is_array($value)) {
-        			foreach ($value as $sub_key => $sub_value) {
-        				$query_[$key."[".$sub_key."]"] = $sub_value;
-        			}
-        		} else {
-        			$query_[$key] = $value;
-        		}
-        	}
-        	if ($this->hasMoreThanOneLevel($query_)) {
-        		$query_ = $this->rewriteArrayWithMultipleLevels($query_);
-        	}
-        	
-        	return $query_;
+            $query_ = array();
+            foreach ($query as $key => $value) {
+                if (is_array($value)) {
+                    foreach ($value as $sub_key => $sub_value) {
+                        $query_[$key."[".$sub_key."]"] = $sub_value;
+                    }
+                } else {
+                    $query_[$key] = $value;
+                }
+            }
+            if ($this->hasMoreThanOneLevel($query_)) {
+                $query_ = $this->rewriteArrayWithMultipleLevels($query_);
+            }
+            
+            return $query_;
         }
         
         
@@ -496,8 +496,8 @@
     /**
      *    Bundle of POST parameters in the multipart
      *    format. Can include file uploads.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleMultipartEncoding extends SimplePostEncoding {
         var $_boundary;

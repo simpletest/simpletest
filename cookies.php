@@ -1,13 +1,13 @@
 <?php
     /**
-     *	Base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id$
+     *  Base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id$
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/url.php');
     /**#@-*/
@@ -17,8 +17,8 @@
      *    arbitary stuff. I have used...
      *    http://wp.netscape.com/newsref/std/cookie_spec.html
      *    http://www.cookiecentral.com/faq/
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleCookie {
         var $_host;
@@ -222,8 +222,8 @@
     /**
      *    Repository for cookies. This stuff is a
      *    tiny bit browser dependent.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleCookieJar {
         var $_cookies;

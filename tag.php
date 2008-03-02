@@ -1,9 +1,9 @@
 <?php
     /**
-     *	Base include file for SimpleTest.
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id$
+     *  Base include file for SimpleTest.
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id$
      */
      
     /**#@+
@@ -15,8 +15,8 @@
    
     /**
      *    HTML or XML tag.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleTag {
         var $_name;
@@ -152,8 +152,8 @@
     
     /**
      *    Base url.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleBaseTag extends SimpleTag {
         
@@ -166,11 +166,11 @@
             $this->SimpleTag('base', $attributes);
         }
 
-		/**
-		 *    Base tag is not a block tag.
-		 *    @return boolean		false
-		 *    @access public
-		 */
+        /**
+         *    Base tag is not a block tag.
+         *    @return boolean       false
+         *    @access public
+         */
         function expectEndTag() {
             return false;
         }
@@ -178,8 +178,8 @@
     
     /**
      *    Page title.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleTitleTag extends SimpleTag {
         
@@ -195,8 +195,8 @@
     
     /**
      *    Link.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleAnchorTag extends SimpleTag {
         
@@ -225,8 +225,8 @@
     
     /**
      *    Form element.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleWidget extends SimpleTag {
         var $_value;
@@ -334,8 +334,8 @@
     
     /**
      *    Text, password and hidden field.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleTextTag extends SimpleWidget {
         
@@ -377,8 +377,8 @@
     
     /**
      *    Submit button as input tag.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleSubmitTag extends SimpleWidget {
         
@@ -435,8 +435,8 @@
       
     /**
      *    Image button as input tag.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleImageSubmitTag extends SimpleWidget {
         
@@ -510,8 +510,8 @@
       
     /**
      *    Submit button as button tag.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleButtonTag extends SimpleWidget {
         
@@ -567,8 +567,8 @@
   
     /**
      *    Content tag for text area.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleTextAreaTag extends SimpleWidget {
         
@@ -652,8 +652,8 @@
     
     /**
      *    File upload widget.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleUploadTag extends SimpleWidget {
         
@@ -693,8 +693,8 @@
     
     /**
      *    Drop down widget.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleSelectionTag extends SimpleWidget {
         var $_options;
@@ -780,8 +780,8 @@
     
     /**
      *    Drop down widget.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class MultipleSelectionTag extends SimpleWidget {
         var $_options;
@@ -875,8 +875,8 @@
     
     /**
      *    Option for selection field.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleOptionTag extends SimpleWidget {
         
@@ -936,8 +936,8 @@
     
     /**
      *    Radio button.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleRadioButtonTag extends SimpleWidget {
         
@@ -993,8 +993,8 @@
     
     /**
      *    Checkbox widget.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleCheckboxTag extends SimpleWidget {
         
@@ -1057,8 +1057,8 @@
     
     /**
      *    A group of multiple widgets with some shared behaviour.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleTagGroup {
         var $_widgets = array();
@@ -1147,8 +1147,8 @@
 
     /**
      *    A group of tags with the same name within a form.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleCheckboxGroup extends SimpleTagGroup {
         
@@ -1270,8 +1270,8 @@
     /**
      *    A group of tags with the same name within a form.
      *    Used for radio buttons.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleRadioGroup extends SimpleTagGroup {
         
@@ -1349,8 +1349,8 @@
     
     /**
      *    Tag to keep track of labels.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleLabelTag extends SimpleTag {
         
@@ -1375,8 +1375,8 @@
     
     /**
      *    Tag to aid parsing the form.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleFormTag extends SimpleTag {
         
@@ -1392,8 +1392,8 @@
     
     /**
      *    Tag to aid parsing the frames in a page.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleFrameTag extends SimpleTag {
         

@@ -1,9 +1,9 @@
 <?php
     /**
-     *	Autorunner which runs all tests cases found in a file
-     *	that includes this module.
-     *	@package	SimpleTest
-     *	@version	$Id$
+     *  Autorunner which runs all tests cases found in a file
+     *  that includes this module.
+     *  @package    SimpleTest
+     *  @version    $Id$
      */
     require_once dirname(__FILE__) . '/unit_tester.php';
     require_once dirname(__FILE__) . '/mock_objects.php';
@@ -15,7 +15,7 @@
 
     function simpletest_autorun() {
         if (tests_have_run()) {
-			return;
+            return;
         }
         $candidates = array_intersect(
                 capture_new_classes(),
@@ -30,34 +30,34 @@
         }
     }
 
-	function tests_have_run() {
+    function tests_have_run() {
         if ($context = SimpleTest::getContext()) {
-			if ($context->getTest()) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	function initial_file() {
-		static $file = false;
-		if (! $file) {
-			$file = reset(get_included_files());
-		}
-		return $file;
-	}
-	
-	function classes_defined_in_initial_file() {
+            if ($context->getTest()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    function initial_file() {
+        static $file = false;
+        if (! $file) {
+            $file = reset(get_included_files());
+        }
+        return $file;
+    }
+    
+    function classes_defined_in_initial_file() {
         if (! preg_match_all('~class\s+(\w+)~', file_get_contents(initial_file()), $matches)) {
-			return array();
-		}
-		return array_map('strtolower', $matches[1]);
-	}
-	
-	function capture_new_classes() {
+            return array();
+        }
+        return array_map('strtolower', $matches[1]);
+    }
+    
+    function capture_new_classes() {
         global $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES;
         return array_map('strtolower', array_diff(get_declared_classes(),
                               $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES ?
                               $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES : array()));
-	}
+    }
 ?>

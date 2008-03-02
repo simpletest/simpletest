@@ -1,13 +1,13 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	UnitTester
-     *	@version	$Id$
+     *  base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage UnitTester
+     *  @version    $Id$
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/xml.php');
     require_once(dirname(__FILE__) . '/shell_tester.php');
@@ -15,8 +15,8 @@
 
     /**
      *    Runs an XML formated test in a separate process.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class DetachedTestCase {
         var $_command;
@@ -53,8 +53,8 @@
          *    @access public
          */
         function run(&$reporter) {
-			$shell = &new SimpleShell();
-			$shell->execute($this->_command);
+            $shell = &new SimpleShell();
+            $shell->execute($this->_command);
             $parser = &$this->_createParser($reporter);
             if (! $parser->parse($shell->getOutput())) {
                 trigger_error('Cannot parse incoming XML from [' . $this->_command . ']');
@@ -70,8 +70,8 @@
          */
         function getSize() {
             if ($this->_size === false) {
-				$shell = &new SimpleShell();
-				$shell->execute($this->_dry_command);
+                $shell = &new SimpleShell();
+                $shell->execute($this->_dry_command);
                 $reporter = &new SimpleReporter();
                 $parser = &$this->_createParser($reporter);
                 if (! $parser->parse($shell->getOutput())) {

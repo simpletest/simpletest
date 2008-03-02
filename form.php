@@ -1,9 +1,9 @@
 <?php
 /**
- *	Base include file for SimpleTest.
- *	@package	SimpleTest
- *	@subpackage	WebTester
- *	@version	$Id$
+ *  Base include file for SimpleTest.
+ *  @package    SimpleTest
+ *  @subpackage WebTester
+ *  @version    $Id$
  */
     
 /**#@+
@@ -233,11 +233,11 @@ class SimpleForm {
         $_position = 0;
         for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
             if ($selector->isMatch($this->_widgets[$i])) {
-				$_position++;
+                $_position++;
                 if ($position === false or $_position === (int)$position) {
-                	if ($this->_widgets[$i]->setValue($value)) {
-                    	$success = true;
-                	}
+                    if ($this->_widgets[$i]->setValue($value)) {
+                        $success = true;
+                    }
                 }
             }
         }

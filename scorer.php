@@ -1,9 +1,9 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	UnitTester
-     *	@version	$Id$
+     *  base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage UnitTester
+     *  @version    $Id$
      */
 
     /**#@+*/
@@ -14,8 +14,8 @@
      *    Can recieve test events and display them. Display
      *    is achieved by making display methods available
      *    and visiting the incoming event.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      *    @abstract
      */
     class SimpleScorer {
@@ -166,14 +166,14 @@
         function paintException($exception) {
             $this->_exceptions++;
         }
-		
-		/**
-		 *    Prints the message for skipping tests.
+        
+        /**
+         *    Prints the message for skipping tests.
          *    @param string $message    Text of skip condition.
          *    @access public
          */
-		function paintSkip($message) {
-		}
+        function paintSkip($message) {
+        }
 
         /**
          *    Accessor for the number of passes so far.
@@ -235,8 +235,8 @@
      *    page footers and headers. Also keeps track of the
      *    test nesting. This is the main base class on which
      *    to build the finished test (page based) displays.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class SimpleReporter extends SimpleScorer {
         var $_test_stack;
@@ -412,8 +412,8 @@
 
     /**
      *    For modifying the behaviour of the visual reporters.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class SimpleReporterDecorator {
         var $_reporter;
@@ -571,15 +571,15 @@
         function paintException($exception) {
             $this->_reporter->paintException($exception);
         }
-		
-		/**
-		 *    Prints the message for skipping tests.
+        
+        /**
+         *    Prints the message for skipping tests.
          *    @param string $message    Text of skip condition.
          *    @access public
          */
-		function paintSkip($message) {
+        function paintSkip($message) {
             $this->_reporter->paintSkip($message);
-		}
+        }
 
         /**
          *    Chains to the wrapped reporter.
@@ -616,8 +616,8 @@
     /**
      *    For sending messages to multiple reporters at
      *    the same time.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class MultipleReporter {
         var $_reporters = array();
@@ -800,7 +800,7 @@
                 $this->_reporters[$i]->paintError($message);
             }
         }
-		
+        
         /**
          *    Chains to the wrapped reporter.
          *    @param Exception $exception    Exception to display.
@@ -812,16 +812,16 @@
             }
         }
 
-		/**
-		 *    Prints the message for skipping tests.
+        /**
+         *    Prints the message for skipping tests.
          *    @param string $message    Text of skip condition.
          *    @access public
          */
-		function paintSkip($message) {
+        function paintSkip($message) {
             for ($i = 0; $i < count($this->_reporters); $i++) {
                 $this->_reporters[$i]->paintSkip($message);
             }
-		}
+        }
 
         /**
          *    Chains to the wrapped reporter.

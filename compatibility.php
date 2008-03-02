@@ -1,31 +1,31 @@
 <?php
     /**
-     *	base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@version	$Id$
+     *  base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @version    $Id$
      */
     
     /**
      *  Static methods for compatibility between different
      *  PHP versions.
-     *  @package	SimpleTest
+     *  @package    SimpleTest
      */
     class SimpleTestCompatibility {
-    	
-    	/**
-    	 *	  Creates a copy whether in PHP5 or PHP4.
-    	 *	  @param object $object		Thing to copy.
-    	 *	  @return object			A copy.
-    	 *	  @access public
-    	 *	  @static
-    	 */
-    	function copy($object) {
+        
+        /**
+         *    Creates a copy whether in PHP5 or PHP4.
+         *    @param object $object     Thing to copy.
+         *    @return object            A copy.
+         *    @access public
+         *    @static
+         */
+        function copy($object) {
             if (version_compare(phpversion(), '5') >= 0) {
-            	eval('$copy = clone $object;');
-            	return $copy;
+                eval('$copy = clone $object;');
+                return $copy;
             }
             return $object;
-    	}
+        }
         
         /**
          *    Identity test. Drops back to equality + types for PHP5
@@ -33,7 +33,7 @@
          *    stronger reference constraint.
          *    @param mixed $first    Test subject.
          *    @param mixed $second   Comparison object.
-         *	  @return boolean		 True if identical.
+         *    @return boolean        True if identical.
          *    @access public
          *    @static
          */
@@ -51,7 +51,7 @@
          *    Recursive type test.
          *    @param mixed $first    Test subject.
          *    @param mixed $second   Comparison object.
-         *	  @return boolean		 True if same type.
+         *    @return boolean        True if same type.
          *    @access private
          *    @static
          */
@@ -80,7 +80,7 @@
          *    Recursive type test for each element of an array.
          *    @param mixed $first    Test subject.
          *    @param mixed $second   Comparison object.
-         *	  @return boolean		 True if identical.
+         *    @return boolean        True if identical.
          *    @access private
          *    @static
          */
@@ -103,22 +103,22 @@
          *    Test for two variables being aliases.
          *    @param mixed $first    Test subject.
          *    @param mixed $second   Comparison object.
-         *	  @return boolean		 True if same.
+         *    @return boolean        True if same.
          *    @access public
          *    @static
          */
         function isReference(&$first, &$second) {
             if (version_compare(phpversion(), '5', '>=') && is_object($first)) {
-	    	    return ($first === $second);
-	        }
-	        if (is_object($first) && is_object($second)) {
+                return ($first === $second);
+            }
+            if (is_object($first) && is_object($second)) {
                 $id = uniqid("test");
                 $first->$id = true;
                 $is_ref = isset($second->$id);
                 unset($first->$id);
                 return $is_ref;
-	        }
-	        $temp = $first;
+            }
+            $temp = $first;
             $first = uniqid("test");
             $is_ref = ($first === $second);
             $first = $temp;
@@ -130,7 +130,7 @@
          *    class hiearchy.
          *    @param object $object    Object to test.
          *    @param string $class     Root name of hiearchy.
-         *    @return boolean		  True if class in hiearchy.
+         *    @return boolean         True if class in hiearchy.
          *    @access public
          *    @static
          */

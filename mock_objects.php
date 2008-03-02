@@ -1,9 +1,9 @@
 <?php
 /**
- *	base include file for SimpleTest
- *	@package	SimpleTest
- *	@subpackage	MockObjects
- *	@version	$Id$
+ *  base include file for SimpleTest
+ *  @package    SimpleTest
+ *  @subpackage MockObjects
+ *  @version    $Id$
  */
 
 /**#@+
@@ -161,8 +161,8 @@ class ParametersExpectation extends SimpleExpectation {
 
 /**
  *    Confirms that the number of calls on a method is as expected.
- *	@package	SimpleTest
- *	@subpackage	MockObjects
+ *  @package    SimpleTest
+ *  @subpackage MockObjects
  */
 class CallCountExpectation extends SimpleExpectation {
     var $_method;
@@ -206,8 +206,8 @@ class CallCountExpectation extends SimpleExpectation {
 
 /**
  *    Confirms that the number of calls on a method is as expected.
- *	@package	SimpleTest
- *	@subpackage	MockObjects
+ *  @package    SimpleTest
+ *  @subpackage MockObjects
  */
 class MinimumCallCountExpectation extends SimpleExpectation {
     var $_method;
@@ -251,8 +251,8 @@ class MinimumCallCountExpectation extends SimpleExpectation {
 
 /**
  *    Confirms that the number of calls on a method is as expected.
- *	  @package	    SimpleTest
- *	  @subpackage	MockObjects
+ *    @package      SimpleTest
+ *    @subpackage   MockObjects
  */
 class MaximumCallCountExpectation extends SimpleExpectation {
     var $_method;
@@ -1172,8 +1172,8 @@ class Mock {
 }
 
 /**
- *	  @package	SimpleTest
- *	  @subpackage	MockObjects
+ *    @package  SimpleTest
+ *    @subpackage   MockObjects
  *    @deprecated
  */
 class Stub extends Mock {

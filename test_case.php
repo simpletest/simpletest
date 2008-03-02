@@ -1,9 +1,9 @@
 <?php
 /**
- *	Base include file for SimpleTest
- *	@package	SimpleTest
- *	@subpackage	UnitTester
- *	@version	$Id$
+ *  Base include file for SimpleTest
+ *  @package    SimpleTest
+ *  @subpackage UnitTester
+ *  @version    $Id$
  */
 
 /**#@+
@@ -36,14 +36,14 @@ if (! defined('SIMPLE_TEST')) {
  *    suite. It searches for
  *    all methods that start with the the string "test" and
  *    runs them. Working test cases extend this class.
- *    @package		SimpleTest
- *    @subpackage	UnitTester
+ *    @package      SimpleTest
+ *    @subpackage   UnitTester
  */
 class SimpleTestCase {
     var $_label = false;
     var $_reporter;
     var $_observers;
-	var $_should_skip = false;
+    var $_should_skip = false;
 
     /**
      *    Sets up the test with no display.
@@ -79,26 +79,26 @@ class SimpleTestCase {
      *    Will issue a message to the reporter and tell the test
      *    case to skip if the incoming flag is true.
      *    @param string $should_skip    Condition causing the tests to be skipped.
-     *    @param string $message    	Text of skip condition.
+     *    @param string $message        Text of skip condition.
      *    @access public
      */
     function skipIf($should_skip, $message = '%s') {
-		if ($should_skip && ! $this->_should_skip) {
-			$this->_should_skip = true;
-			$message = sprintf($message, 'Skipping [' . get_class($this) . ']');
-			$this->_reporter->paintSkip($message . $this->getAssertionLine());
-		}
+        if ($should_skip && ! $this->_should_skip) {
+            $this->_should_skip = true;
+            $message = sprintf($message, 'Skipping [' . get_class($this) . ']');
+            $this->_reporter->paintSkip($message . $this->getAssertionLine());
+        }
     }
 
     /**
      *    Will issue a message to the reporter and tell the test
      *    case to skip if the incoming flag is false.
      *    @param string $shouldnt_skip  Condition causing the tests to be run.
-     *    @param string $message    	Text of skip condition.
+     *    @param string $message        Text of skip condition.
      *    @access public
      */
     function skipUnless($shouldnt_skip, $message = false) {
-		$this->skipIf(! $shouldnt_skip, $message);
+        $this->skipIf(! $shouldnt_skip, $message);
     }
 
     /**
@@ -123,9 +123,9 @@ class SimpleTestCase {
      *    @access public
      */
     function run(&$reporter) {
-		$context = &SimpleTest::getContext();
-		$context->setTest($this);
-		$context->setReporter($reporter);
+        $context = &SimpleTest::getContext();
+        $context->setTest($this);
+        $context->setReporter($reporter);
         $this->_reporter = &$reporter;
         $started = false;
         foreach ($this->getTests() as $method) {
@@ -318,10 +318,10 @@ class SimpleTestCase {
     }
 
     /**
-     *	  @deprecated
+     *    @deprecated
      */
     function assertExpectation(&$expectation, $compare, $message = '%s') {
-    	return $this->assert($expectation, $compare, $message);
+        return $this->assert($expectation, $compare, $message);
     }
 
     /**
@@ -452,8 +452,8 @@ class SimpleFileLoader {
  *    This is a composite test class for combining
  *    test cases and other RunnableTest classes into
  *    a group test.
- *    @package		SimpleTest
- *    @subpackage	UnitTester
+ *    @package      SimpleTest
+ *    @subpackage   UnitTester
  */
 class TestSuite {
     var $_label;
@@ -472,17 +472,17 @@ class TestSuite {
 
     /**
      *    Accessor for the test name for subclasses. If the suite
-	 *    wraps a single test case the label defaults to the name of that test.
+     *    wraps a single test case the label defaults to the name of that test.
      *    @return string           Name of the test.
      *    @access public
      */
     function getLabel() {
-		if (! $this->_label) {
-			return ($this->getSize() == 1) ?
+        if (! $this->_label) {
+            return ($this->getSize() == 1) ?
                     get_class($this->_test_cases[0]) : get_class($this);
-		} else {
-			return $this->_label;
-		}
+        } else {
+            return $this->_label;
+        }
     }
 
     /**
@@ -609,8 +609,8 @@ class TestSuite {
 }
 
 /**
- *    @package		SimpleTest
- *    @subpackage	UnitTester
+ *    @package      SimpleTest
+ *    @subpackage   UnitTester
  *    @deprecated
  */
 class GroupTest extends TestSuite { }
@@ -618,8 +618,8 @@ class GroupTest extends TestSuite { }
 /**
  *    This is a failing group test for when a test suite hasn't
  *    loaded properly.
- *    @package		SimpleTest
- *    @subpackage	UnitTester
+ *    @package      SimpleTest
+ *    @subpackage   UnitTester
  */
 class BadTestSuite {
     var $_label;
@@ -669,8 +669,8 @@ class BadTestSuite {
 }
 
 /**
- *    @package		SimpleTest
- *    @subpackage	UnitTester
+ *    @package      SimpleTest
+ *    @subpackage   UnitTester
  *    @deprecated
  */
 class BadGroupTest extends BadTestSuite { }

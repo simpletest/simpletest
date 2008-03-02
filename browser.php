@@ -1,13 +1,13 @@
 <?php
     /**
-     *	Base include file for SimpleTest
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id$
+     *  Base include file for SimpleTest
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id$
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/simpletest.php');
     require_once(dirname(__FILE__) . '/http.php');
@@ -24,8 +24,8 @@
 
     /**
      *    Browser history list.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleBrowserHistory {
         var $_sequence;
@@ -154,8 +154,8 @@
      *    Simulated web browser. This is an aggregate of
      *    the user agent, the HTML parsing, request history
      *    and the last header set.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class SimpleBrowser {
         var $_user_agent;

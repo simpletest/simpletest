@@ -1,13 +1,13 @@
 <?php
     /**
-     *	Base include file for SimpleTest.
-     *	@package	SimpleTest
-     *	@subpackage	WebTester
-     *	@version	$Id$
+     *  Base include file for SimpleTest.
+     *  @package    SimpleTest
+     *  @subpackage WebTester
+     *  @version    $Id$
      */
 
     /**#@+
-     *	include other SimpleTest class files
+     *  include other SimpleTest class files
      */
     require_once(dirname(__FILE__) . '/test_case.php');
     require_once(dirname(__FILE__) . '/browser.php');
@@ -17,8 +17,8 @@
     
     /**
      *    Test for an HTML widget value match.
-	 *	  @package SimpleTest
-	 *	  @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class FieldExpectation extends SimpleExpectation {
         var $_value;
@@ -128,8 +128,8 @@
     
     /**
      *    Test for a specific HTTP header within a header block.
-	 *	  @package SimpleTest
-	 *	  @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class HttpHeaderExpectation extends SimpleExpectation {
         var $_expected_header;
@@ -258,8 +258,8 @@
     /**
      *    Test for a specific HTTP header within a header block that
      *    should not be found.
-	 *	  @package SimpleTest
-	 *	  @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class NoHttpHeaderExpectation extends HttpHeaderExpectation {
         var $_expected_header;
@@ -304,8 +304,8 @@
     
     /**
      *    Test for a text substring.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class TextExpectation extends SimpleExpectation {
         var $_substring;
@@ -378,8 +378,8 @@
     /**
      *    Fail if a substring is detected within the
      *    comparison text.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *    @package SimpleTest
+     *    @subpackage UnitTester
      */
     class NoTextExpectation extends TextExpectation {
         
@@ -427,8 +427,8 @@
      *    Test case for testing of web pages. Allows
      *    fetching of pages, parsing of HTML and
      *    submitting forms.
-	 *    @package SimpleTest
-	 *    @subpackage WebTester
+     *    @package SimpleTest
+     *    @subpackage WebTester
      */
     class WebTestCase extends SimpleTestCase {
         var $_browser;
@@ -1355,10 +1355,10 @@
         }
         
         /**
-         *	  @deprecated
+         *    @deprecated
          */
         function assertWantedText($text, $message = '%s') {
-        	return $this->assertText($text, $message);
+            return $this->assertText($text, $message);
         }
         
         /**
@@ -1377,10 +1377,10 @@
         }
         
         /**
-         *	  @deprecated
+         *    @deprecated
          */
         function assertNoUnwantedText($text, $message = '%s') {
-        	return $this->assertNoText($text, $message);
+            return $this->assertNoText($text, $message);
         }
         
         /**
@@ -1400,10 +1400,10 @@
         }
         
         /**
-         *	  @deprecated
+         *    @deprecated
          */
         function assertWantedPattern($pattern, $message = '%s') {
-        	return $this->assertPattern($pattern, $message);
+            return $this->assertPattern($pattern, $message);
         }
         
         /**
@@ -1423,10 +1423,10 @@
         }
         
         /**
-         *	  @deprecated
+         *    @deprecated
          */
         function assertNoUnwantedPattern($pattern, $message = '%s') {
-        	return $this->assertNoPattern($pattern, $message);
+            return $this->assertNoPattern($pattern, $message);
         }
         
         /**
