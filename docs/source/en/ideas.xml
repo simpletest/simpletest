@@ -69,6 +69,28 @@
         <section name="integraton" title="Third-party tools integration">
             <dl>
                 <dt>
+                    Standalone notifying tool
+                </dt>
+                <dd>
+                    Based on rules, this notifying tool detects a file change
+                    within a particular directory (maybe with 
+                    <a href="http://code.google.com/p/php-inotifytools/">php-inotifytools</a> :
+                    such a monitor could learn how your code works by observing it being tested.
+                    For example, call graphing via static analysis might work, as would
+                    running Xdebug code coverage while running the tests and monitoring
+                    the code executed after each test method, as would some sort of
+                    DBG-derived client that received notifications from Xdebug while
+                    the code was being executed like a debugging client.
+                    We'd have "rings" of functionality.  The first
+                    ring is the tests that exercises the particular method/function
+                    you're working with by a direct call.
+                    Then start working rings out based on how far away the test method
+                    is when that code is called.
+                    These rings would then be executed on a save, starting with the inner
+                    most. Any failure would stop further tests cause a system alert to
+                    something like Growl or Snarl or any Reporter that you drop in.
+                </dd>
+                <dt>
                     Creative IDE integration
                 </dt>
                 <dd>
