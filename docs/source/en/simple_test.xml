@@ -38,14 +38,20 @@
                 It includes all of the typical functions you would expect from
                 <a href="http://www.junit.org/">JUnit</a> and the
                 <a href="http://sourceforge.net/projects/phpunit/">PHPUnit</a>
-                ports, but also adds
+                ports, and includes
                 <a href="http://www.mockobjects.com">mock objects</a>.
-                It has some <a href="http://sourceforge.net/projects/jwebunit/">JWebUnit</a>
-                functionality as well.
-                This includes web page navigation, cookie testing and form submission.
             </p>
             <p>
-                The quickest way to demonstrate is with an example.
+                What makes this tool immediately useful to the PHP developer is the internal
+                web browser.
+                This allows tests that navigate web sites, fill in forms and test pages.
+                Being able to write these test in PHP means that it is easy to write
+                integrated tests.
+                An example might be confirming that a user was written to a database
+                after a signing up through the web site.
+            </p>
+            <p>
+                The quickest way to demonstrate SimpleTest is with an example.
             </p>
             <p>
                 Let us suppose we are testing a simple file logging class called
@@ -53,25 +59,34 @@
                 We start by creating a test script which we will call
                 <em>tests/log_test.php</em> and populate it as follows...
 <php><![CDATA[
-<?php<strong>
-require_once('simpletest/autorun.php');
+<?php
+<strong>require_once('simpletest/autorun.php');</strong>
 require_once('../classes/log.php');
 
-class TestOfLogging extends UnitTestCase {
-}</strong>
+class TestOfLogging extends <strong>UnitTestCase</strong> {
+}
 ?>
 ]]></php>
                 Here the <em>simpletest</em> folder is either local or in the path.
                 You would have to edit these locations depending on where you
-                placed the toolset.
-                The <code>TestOfLogging</code> is our frst test case and it's
-                currently empty.
+                unpacked the toolset.
+                The &quot;autorun.php&quot; file does more than just include the
+                SimpleTest files, it also runs our test for us.
             </p>
             <p>
-                Now we have five lines of scaffolding code and still no tests.
-                However from this part on we get return on our investment very quickly.
-                We'll assume that the <code>Log</code> class
-                takes the file name to write to in the constructor and we have
+                The <code>TestOfLogging</code> is our first test case and it's
+                currently empty.
+                Each test case is a class that extends one of the SimpleTet base classes
+                and we can have as many of these in the file as we want.
+            </p>
+            <p>
+                With three lines of scaffolding, and our <code>Log</code> class
+                include, we have a test suite.
+                No tests though.
+            </p>
+            <p>
+                For our first test, we'll assume that the <code>Log</code> class
+                takes the file name to write to in the constructor, and we have
                 a temporary folder in which to place this file...
 <php><![CDATA[
 <?php
@@ -79,44 +94,48 @@ require_once('simpletest/autorun.php');
 require_once('../classes/log.php');
 
 class TestOfLogging extends UnitTestCase {
-    <strong>
-    function testCreatingNewFile() {
+    function <strong>testLogCreatesNewFileOnFirstMessage()</strong> {
         @unlink('/temp/test.log');
         $log = new Log('/temp/test.log');
-        $this->assertFalse(file_exists('/temp/test.log'));
+        <strong>$this->assertFalse(file_exists('/temp/test.log'));</strong>
         $log->message('Should write this to a file');
-        $this->assertTrue(file_exists('/temp/test.log'));
-    }</strong>
+        <strong>$this->assertTrue(file_exists('/temp/test.log'));</strong>
+    }
 }
 ?>
 ]]></php>
-                When a test case runs it will search for any method that
-                starts with the string <code>test</code>
+                When a test case runs, it will search for any method that
+                starts with the string &quot;test&quot;
                 and execute that method.
-                We would normally have more than one test method of course.
+                If the method starts &quot;test&quot;, it's a test.
+                Note the very long name <code>testLogCreatesNewFileOnFirstMessage()</code>.
+                This is considered good style and makes the test output more readable.
+                We would normally have more than one test method.
+            </p>
+            <p>
                 Assertions within the test methods trigger messages to the
                 test framework which displays the result immediately.
                 This immediate response is important, not just in the event
                 of the code causing a crash, but also so that
                 <code>print</code> statements can display
-                their content right next to the test case concerned.
+                their debugging content right next to the test case concerned.
             </p>
             <p>
                 To see these results we have to actually run the tests.
-                No other code is necessary : we can just open the page
+                No other code is necessary - we can just open the page
                 with our browser.
             </p>
             <p>
                 On failure the display looks like this...
                 <div class="demo">
                     <h1>testoflogging</h1>
-                    <span class="fail">Fail</span>: testcreatingnewfile-&gt;True assertion failed.<br />
+                    <span class="fail">Fail</span>: testLogCreatesNewFileOnFirstMessage-&gt;True assertion failed.<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
                     <strong>1</strong> passes and <strong>1</strong> fails.</div>
                 </div>
                 ...and if it passes like this...
                 <div class="demo">
-                    <h1>testoflogging</h1>
+                    <h1>TestOfLogging</h1>
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
                     <strong>2</strong> passes and <strong>0</strong> fails.</div>
                 </div>
@@ -128,12 +147,11 @@ class TestOfLogging extends UnitTestCase {
 <php><![CDATA[
 <?php
 class Log {
-    
-        function Log($file_path) {
-        }
+    function Log($file_path) {
+    }
 
-        function message() {
-        }
+    function message() {
+    }
 }
 ?>
 ]]></php>
@@ -143,45 +161,65 @@ class Log {
                 the <a local="unit_test_documentation">unit test documentation</a>.
             </p>
         </section>
-        <section name="group" title="Building group tests">
+        <section name="group" title="Building test suites">
             <p>
                 It is unlikely in a real application that we will only ever run
                 one test case.
                 This means that we need a way of grouping cases into a test
-                script that can, if need be, run every test in the application.
+                script that can, if need be, run every test for the application.
             </p>
             <p>
                 Our first step is to create a new file called <em>tests/all_tests.php</em>
                 and insert the following code...
 <php><![CDATA[
-<strong><?php
-require_once('simpletest/autorun.php');
+<?php
+<strong>require_once('simpletest/autorun.php');</strong>
 
-class AllTests extends TestSuite {
+class AllTests extends <strong>TestSuite</strong> {
     function AllTests() {
-        $this->TestSuite('All tests');
-        $this->addFile('log_test.php');
+        $this->TestSuite(<strong>'All tests'</strong>);
+        <strong>$this->addFile('log_test.php');</strong>
     }
 }
-?></strong>
+?>
 ]]></php>
-                The method <code>TestSuite::addFile()</code>
-                will include the test case file and read any new classes created
-                that are descended from <code>SimpleTestCase</code>, of which
-                <code>UnitTestCase</code> is one example.
-                Just the class names are stored for now, so that the test runner
-                can instantiate the class when it works its way
-                through your test suite.
+                The &quot;autorun&quot; include allows our upcoming test suite
+                to be run just by invoking this script.
             </p>
             <p>
-                For this to work properly the test case file should not blindly include
+                The <code>TestSuite</code> subclass must chain it's constructor.
+                This limitation will be removed in future versions.
+            </p>
+            <p>
+                The method <code>TestSuite::addFile()</code>
+                will include the test case file and read any new classes
+                that are descended from <code>SimpleTestCase</code>.
+                <code>UnitTestCase</code> is just one example of a class derived from
+                <code>SimpleTestCase</code>, and you can create your own.
+            </p>
+            <p>
+                The class will not be instantiated yet.
+                When the test suite runs it will construct each instance once
+                it reaches that test, then destroy it straight after.
+                This means that the constructor is run just before each run
+                of that test file, and the destructor is run before the next test case starts.
+            </p>
+            <p>
+                It is common to group test case code into superclasses which are not
+                supposed to run, but become the base classes of other tests.
+                For &quot;autorun&quot; to work properly the test case file should not blindly run
                 any other test case extensions that do not actually run tests.
                 This could result in extra test cases being counted during the test
                 run.
-                Hardly a major problem, but to avoid this inconvenience simply add
+                Hardly a major problem, but to avoid this inconvenience simply mark your
+                base class as <code>abstract</code>.
+                SimpleTest won't run abstract classes.
+                If you are still using PHP4, then
                 a <code>SimpleTestOptions::ignore()</code> directive
-                somewhere in the test case file.
-                Also the test case file should not have been included
+                somewhere in the test case file will have the same effect.
+            </p>
+            <p>
+                Also, the test case file should not have been included
                 elsewhere or no cases will be added to this group test.
                 This would be a more serious error as if the test case classes are
                 already loaded by PHP the <code>TestSuite::addFile()</code>
@@ -189,16 +227,16 @@ class AllTests extends TestSuite {
             </p>
             <p>
                 To display the results it is necessary only to invoke
-                <em>tests/all_tests.php</em> from the web server.
+                <em>tests/all_tests.php</em> from the web server or the command line.
             </p>
             <p>
-                For more information about grouping tests,
+                For more information about building test suites,
                 see the <a local="group_test_documentation">test suite documentation</a>.
             </p>
         </section>
         <section name="mock" title="Using mock objects">
             <p>
-                Let's move further into the future.
+                Let's move further into the future and do something really complicated.
             </p>
             <p>
                 Assume that our logging class is tested and completed.

@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <page title="Introduction to SimpleTest" here="English version">
     <long_title>
-        The Last Craft? Web developer tutorials on PHP, Extreme programming
-        and Object Oriented development
+        Summary of SimpleTest including it's Java tool roots.
     </long_title>
     <content>
         <introduction>
@@ -15,18 +14,16 @@
                 It is a PHP unit test, mock objects and web test framework.
                 Users of <a href="http://www.junit.org/">JUnit</a> will be
                 familiar with most of the interface.
-                <a href="http://jwebunit.sourceforge.net/">JWebUnit</a>
-                style functionality is more complete now.
-                It has support for SSL, frames, proxies, basic authentication and the
-                standard HTML controls.
+                For web testing a small web browser is included, similar to
+                <a href="http://jwebunit.sourceforge.net/">JWebUnit</a>.
+                It has support for SSL, frames, proxies, basic authentication, redirects,
+                and the standard HTML form controls.
                 The idea is that common but fiddly PHP tasks, such as logging into a site,
-                can be tested easily.
+                can be tested easily as calling <code>click()</code>.
             </p>
             <p>
                 There is currently no support for JavaScript in the web tester.
                 For testing these elements we recommend
-                <a href="http://www.edwardh.com/jsunit/">JSUnit</a>
-                or
                 <a href="http://selenium.thoughtworks.com/index.html">Selenium</a>.
             </p>
         </introduction>
