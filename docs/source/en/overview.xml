@@ -27,7 +27,7 @@ require_once('simpletest/autorun.php');
 
 class <strong>MyTestCase</strong> extends UnitTestCase {
     <strong>
-    function testLogWroteMessage() {
+    function testCreatedLogFile() {
         $log = &new Log('my.log');
         $log->message('Hello');
         $this->assertTrue(file_exists('my.log'));
@@ -94,11 +94,11 @@ class <strong>MySiteTest</strong> extends WebTestCase {
             <p>
                 The following is a very rough outline of past and future features
                 and their expected point of release.
-                I am afraid it is liable to change without warning as meeting the
+                I am afraid it is liable to change without warning, as meeting the
                 milestones rather depends on time available.
                 Green stuff has been coded, but not necessarily released yet.
                 If you have a pressing need for a green but unreleased feature
-                then you should check-out the code from Sourceforge CVS directly.
+                then you should check-out the code from Sourceforge SVN directly.
                 <table><thead>
                     <tr><th>Feature</th><th>Description</th><th>Release</th></tr>
                     </thead><tbody><tr>
@@ -339,19 +339,22 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 Once you get bitten by the bug you will certainly appreciate the phrase
                 <a href="http://junit.sourceforge.net/doc/testinfected/testing.htm">test infected</a>
                 coined by Eric Gamma.
-                If you are still reviewing which unit tester to use the main choices
-                are <a href="http://phpunit.sourceforge.net/">PHPUnit</a>
-                and <a href="http://pear.php.net/manual/en/package.php.phpunit.php">Pear PHP::PHPUnit</a>.
-                They currently lack a lot of features found in
-                <a href="http://www.lastcraft.com/simple_test.php">SimpleTest</a>, but the PEAR
-                version at least has been upgraded for PHP5 and is recommended if you are porting
-                existing <a href="http://www.junit.org/">JUnit</a> test cases.
+                If you are still reviewing which unit tester to use you can find pretty complete
+                lists from
+                <a href="http://en.wikipedia.org/wiki/List_of_unit_testing_frameworks">Wikipedia</a>,
+                <a href="http://www.testingfaqs.org/t-unit.html">Software testing FAQ</a>,
+                and <a href="http://www.opensourcetesting.org/functional.php">Open source testing</a>.
             </p>
             <p>
-                There is currently a sad lack of material on mock objects, which is a shame
+                There is still very little material on using mock objects, which is a shame
                 as unit testing without them is a lot more work.
                 The <a href="http://www.sidewize.com/company/mockobjects.pdf">original mock objects paper</a>
                 is very Java focused, but still worth a read.
+                The most authoritive sources are probably
+                <a href="http://mockobjects.com">the original mock objects site</a> and
+                <a href="http://jmock.org/">JMock</a>.
+                Java centric, but tucked away in PDFs they contain some deep knowledge on using mocks from the
+                extended experience of the concept inventors.
                 As a new technology there are plenty of discussions and debate on how to use mocks,
                 often on Wikis such as
                 <a href="http://xpdeveloper.com/cgi-bin/oldwiki.cgi?MockObjects">Extreme Tuesday</a>
@@ -373,11 +376,12 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 require Java to run.
             </p>
             <p>
-                A new generation of tools that run directly in the web browser
+                Most significant is a new generation of tools that run directly in the web browser
                 are now available.
                 These include
                 <a href="http://www.openqa.org/selenium/">Selenium</a> and
                 <a href="http://wtr.rubyforge.org/">Watir</a>.
+                They are non-trivial to set up and slow to run, but can essentially test anything.
                 As SimpleTest does not support JavaScript you would probably
                 have to look at these tools anyway if you have highly dynamic
                 pages.
@@ -439,9 +443,9 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 </authorblurb>
             </author>
             <author>
-                Harry Fuecks
+                Perrick Pennet
                 <authorblurb>
-                    <para>Packager</para><para>{@link mailto:harryf@users.sourceforge.net harryf@users.sourceforge.net}</para>
+                    <para>General manager</para><para>{@link mailto:perrick@noparking.net perrick@noparking.net}</para>
                 </authorblurb>
             </author>
             <author>
