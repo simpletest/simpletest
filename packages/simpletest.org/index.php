@@ -23,7 +23,6 @@ foreach ($languages as $language) {
 				$page = str_replace('CONTENT', $source->content(), $page);
 				$page = str_replace('INTERNAL', $source->internal(), $page);
 				$page = str_replace('EXTERNAL', $source->external(), $page);
-				$page = preg_replace("/\"([a-z_]*)\.php\"/", "\"\\1.html\"", $page);
 				
 				$links = $source->links("map.xml");
 				foreach ($links as $category => $link) {

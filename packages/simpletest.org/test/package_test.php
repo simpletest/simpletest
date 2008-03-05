@@ -5,7 +5,19 @@ require_once(dirname(__FILE__).'/../../..//reporter.php');
 require_once(dirname(__FILE__).'/../package.php');
 
 class TestOfContentTransformationFromXMLToHTML extends UnitTestCase {
-	function testOfPHPTags() {
+	function testOfNonLinksFileWithPHPExtension() {
+		$file = dirname(__FILE__).'/package/one_section_with_autorum_php.xml';
+		$source = simplexml_load_file($file, "SimpleTestXMLElement");
+		$content = $source->content();
+		$this->assertPattern('/autorun\.php/', $content);
+		$this->assertNoPattern('/autorun\.html/', $content);
+		$this->assertPattern('/autodive\.php/', $content);
+		$this->assertNoPattern('/autodive\.html/', $content);
+		$this->assertNoPattern('/autowalk\.php/', $content);
+		$this->assertPattern('/autowalk\.html/', $content);
+	}
+
+    function testOfPHPTags() {
 		$file = dirname(__FILE__).'/package/one_section_with_php_code.xml';
 		$source = simplexml_load_file($file, "SimpleTestXMLElement");
 		$content = $source->content();
@@ -26,7 +38,7 @@ class TestOfContentTransformationFromXMLToHTML extends UnitTestCase {
 		$source = simplexml_load_file($file, "SimpleTestXMLElement");
 		$map = dirname(__FILE__).'/package/map.xml';
 		$links = $source->links($map);
-		$this->assertEqual(count($links), 3);
+		$this->assertEqual(count($links), 4);
 		$links_download = '<ul><li><a href="download.html">Download SimpleTest</a></li></ul>';
 		$this->assertEqual($links['download'], $links_download);
 	}
@@ -36,7 +48,7 @@ class TestOfContentTransformationFromXMLToHTML extends UnitTestCase {
 		$source = simplexml_load_file($file, "SimpleTestXMLElement");
 		$map = dirname(__FILE__).'/package/map.xml';
 		$links = $source->links($map);
-		$this->assertEqual(count($links), 3);
+		$this->assertEqual(count($links), 4);
 		$links_support = '<ul><li><a href="support.html">Support mailing list</a></li>'.
 		'<li><a href="books.html">Books</a></li></ul>';
 		$this->assertEqual($links['support'], $links_support);
@@ -47,7 +59,7 @@ class TestOfContentTransformationFromXMLToHTML extends UnitTestCase {
 		$source = simplexml_load_file($file, "SimpleTestXMLElement");
 		$map = dirname(__FILE__).'/package/map.xml';
 		$links = $source->links($map);
-		$this->assertEqual(count($links), 3);
+		$this->assertEqual(count($links), 4);
 		$links_start_testing = '<ul><li><a href="start-testing.html">Start testing with SimpleTest</a></li>'.
 		'<li><a href="overview.html">Documentation overview</a>'.
 		'<ul><li><a href="unit_test_documentation.html">Unit tester</a></li>'.
@@ -61,7 +73,7 @@ class TestOfContentTransformationFromXMLToHTML extends UnitTestCase {
 		$source = simplexml_load_file($file, "SimpleTestXMLElement");
 		$map = dirname(__FILE__).'/package/map.xml';
 		$links = $source->links($map);
-		$this->assertEqual(count($links), 3);
+		$this->assertEqual(count($links), 4);
 		$links_start_testing = '<ul><li><a href="start-testing.html">Start testing with SimpleTest</a></li>'.
 		'<li><a href="overview.html">Documentation overview</a></li>'.
 		'<li><a href="tutorial.html">Tutorial overview</a></li></ul>';
@@ -73,7 +85,7 @@ class TestOfContentTransformationFromXMLToHTML extends UnitTestCase {
 		$source = simplexml_load_file($file, "SimpleTestXMLElement");
 		$map = dirname(__FILE__).'/package/map.xml';
 		$links = $source->links($map);
-		$this->assertEqual(count($links), 3);
+		$this->assertEqual(count($links), 4);
 		$links_start_testing = '<ul><li><a href="start-testing.html">Start testing with SimpleTest</a></li>'.
 		'<li><a href="overview.html">Documentation overview</a>'.
 		'<ul><li><a href="unit_test_documentation.html">Unit tester</a></li>'.
