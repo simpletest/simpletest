@@ -423,6 +423,25 @@ class TestOfAbout extends <strong>WebTestCase</strong> {
                 developers, and the other project stakeholders.
             </p>
             <p>
+                You can navigate forms too...
+<php><![CDATA[
+<?php
+require_once('simpletest/autorun.php');
+require_once('simpletest/web_tester.php');
+
+class TestOfRankings extends WebTestCase {
+    function testWeAreTopOfGoogle() {
+        $this->get('http://google.com/');
+        $this->setField('q', 'simpletest');
+        $this->click("I'm Feeling Lucky");
+        $this->assertTitle('SimpleTest - Unit Testing for PHP');
+    }
+}
+?>
+]]></php>
+                ...although this could violate Google's(tm) terms and conditions.
+            </p>
+            <p>
                 For more information about web testing, see the
                 <a local="browser_documentation">scriptable
                 browser documentation</a> and the
