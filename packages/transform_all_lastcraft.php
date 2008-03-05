@@ -10,7 +10,7 @@
         $source = $source_path . $file;
         $destination = $destination_path .
                 preg_replace('/\.xml$/', '.php', basename($source));
-        $command = "Xalan -o $destination $source $transform\n";
+        $command = "xsltproc $transform $source > $destination\n";
         `$command`;
     }
     closedir($dir);

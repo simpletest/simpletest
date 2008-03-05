@@ -227,6 +227,16 @@ class SimpleReflection {
     }
 
     /**
+     * Checks whether a method is the constructor.
+     * @param   string   $name  Method name.
+     * @return  bool            true if method is the constructor
+     * @access  private
+     */
+    function _isConstructor($name) {
+        return ($name == '__construct') || ($name == $this->_interface);
+    }
+
+    /**
      * Checks whether a method is abstract in all parents or not.
      * @param   string   $name  Method name.
      * @return  bool            true if method is abstract in parent, else false
@@ -262,7 +272,7 @@ class SimpleReflection {
     }
 
     /**
-     *    Gets the source code matching the declaration
+     *    Writes the source code matching the declaration
      *    of a method.
      *    @param string $name    Method name.
      *    @return string         Method signature up to last
@@ -281,9 +291,7 @@ class SimpleReflection {
                 return "function {$name}(\$key)";
             }
         }
-        if (! is_callable(array($this->_interface, $name)) && 
-        ! $this->_isAbstractMethod($name) && 
-        ! $this->_isAbstractMethodInParents($name)) {
+        if ($name == '__toString') {
             return "function $name()";
         }
         if ($this->_isInterfaceMethod($name) ||
