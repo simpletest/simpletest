@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Livres" here="Livres">
-    <synchronisation lang="en" version="1475" date="19/01/2007" maintainer="pp11" />
+    <synchronisation lang="en" version="1684" date="06/03/2008" maintainer="pp11" />
     <long_title>Livres avec / à propos / pas loin de SimpleTest</long_title>
     <content>
         <section name="latest-recommandation" title="Dernière recommandation">
