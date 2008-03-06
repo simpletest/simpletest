@@ -296,4 +296,62 @@ class SimpleTestXMLElement extends SimpleXMLElement {
     }
 }
 
+class PackagingSynchronisation {
+    public $file;
+    public $lang;
+    public $content;
+    
+    function __construct($file, $lang="fr") {
+        $this->file = $file;
+        $this->lang = $lang;
+        $this->content = "";
+        if (file_exists($this->file)) {
+            $this->content = file_get_contents($this->file);
+        }
+    }
+
+    function isSynchronisable() {
+        return (bool)strpos($this->content, "<synchronisation");
+    }
+
+    function result() {
+        if (!$this->isSynchronisable()) {
+            return false;
+        } elseif (!$this->sourceRevision()) {
+            return "<span style=\"color : red\"><strong>missing id</strong></span>";
+        } elseif ($this->sourceRevision() > $this->lastSynchroRevision()) {
+            return "<span style=\"color : red\"><strong>late</strong></span>";
+        } else {
+            return "<span style=\"color : green\">synchro</span>";
+        }
+    }
+    
+    function revision() {
+        $matches = array();
+        preg_match("/Id: [a-z_-]*\.[a-z]* ([0-9]*)/", $this->content, $matches);
+        return $matches[1];    
+    }
+    
+    function sourceLang() {
+        $matches = array();
+        preg_match("/synchronisation.*lang=\"([a-z]*)\"/", $this->content, $matches);
+        return $matches[1];    
+    }
+
+    function sourceRevision() {
+        $source_lang = $this->sourceLang();
+        $source_file = str_replace("/".$this->lang."/", "/".$source_lang."/", $this->file);
+        if (file_exists($source_file)) {
+            $source = new PackagingSynchronisation($source_file, $source_lang);
+            return $source->revision();
+        }
+        return false;
+    }
+    
+    function lastSynchroRevision() {
+        $matches = array();
+        preg_match("/synchronisation.*version=\"([0-9]*)\"/", $this->content, $matches);
+        return $matches[1];    
+    }
+}
 ?>

@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="PHP Scriptable Web Browser" here="Scriptable browser">
     <long_title>SimpleTest documentation for the scriptable web browser component</long_title>
     <content>

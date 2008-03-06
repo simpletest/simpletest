@@ -1,8 +1,29 @@
 <?php
 
-require_once(dirname(__FILE__).'/../../../unit_tester.php');
-require_once(dirname(__FILE__).'/../../..//reporter.php');
+require_once(dirname(__FILE__).'/../../../autorun.php');
 require_once(dirname(__FILE__).'/../package.php');
+
+class TestOfSynchronisationCheck extends UnitTestCase {
+	function testOfSynchronisationNotNecessary() {
+	    $source = dirname(__FILE__)."/package/fr/no-synchronisation.xml";
+	    $synchro = new PackagingSynchronisation($source);
+	    $this->assertEqual($synchro->result(), "");
+
+	    $source = dirname(__FILE__)."/package/en/synchronisation.xml";
+	    $synchro = new PackagingSynchronisation($source);
+	    $this->assertEqual($synchro->result(), "");
+	}
+	
+	function testOfSynchronisationNecessary() {
+	    $source = dirname(__FILE__)."/package/fr/synchronisation.xml";
+	    $synchro = new PackagingSynchronisation($source);
+	    $this->assertEqual($synchro->revision(), "1672");
+	    $this->assertEqual($synchro->sourceRevision(), "1671");
+	    $this->assertEqual($synchro->sourceLang(), "en");
+	    $this->assertEqual($synchro->lastSynchroRevision(), "1475");
+	    $this->assertPattern("/style=\"color : red\"/", $synchro->result());
+	}
+}
 
 class TestOfContentTransformationFromXMLToHTML extends UnitTestCase {
 	function testOfNonLinksFileWithPHPExtension() {
@@ -94,8 +115,5 @@ class TestOfContentTransformationFromXMLToHTML extends UnitTestCase {
 		$this->assertEqual($links['start_testing'], $links_start_testing);
 	}
 }
-
-$test = &new TestOfContentTransformationFromXMLToHTML();
-$test->run(new HtmlReporter());
 
 ?>

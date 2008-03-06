@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- $Id$ -->
 <page title="Changer l'affichage du test" here="Changer l'affichage du test">
+    <synchronisation lang="en" version="1475" date="19/01/2007" maintainer="pp11" />
     <long_title>Tutorial de test unitaire en PHP - Sous-classer l'affichage du test</long_title>
     <content>
         <introduction>

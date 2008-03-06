@@ -42,6 +42,10 @@ foreach ($languages as $language) {
 				} else {
 					$result = "KO";
 				}
+
+				$synchronisation = new PackagingSynchronisation($source_path.$language.$file);
+				$result .= " ".$synchronisation->result();
+				
 				
 				echo $destination_path.$destination." : ".$result."<br />";
 			}

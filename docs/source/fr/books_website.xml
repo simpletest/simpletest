@@ -1,22 +1,24 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- $Id$ -->
 <page title="Livres" here="Livres">
-    <long_title>Livres avec / Ã  propos / pas loin de SimpleTest</long_title>
+    <synchronisation lang="en" version="1475" date="19/01/2007" maintainer="pp11" />
+    <long_title>Livres avec / à propos / pas loin de SimpleTest</long_title>
     <content>
-        <section name="latest-recommandation" title="DerniÃ¨re recommandation">
+        <section name="latest-recommandation" title="Dernière recommandation">
             <p>
-                De temps en temsp, un livre est recommandÃ© sur la mailing-list,
+                De temps en temsp, un livre est recommandé sur la mailing-list,
                 vous le trouverez ci-dessous avec les commentaires originaux !
             </p>
             <p>
                 <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215?ie=UTF8&amp;tag=simpletest-21&amp;"><img src="../images/book-domain-driven-design.jpg" alt="Domain-Driven Design: Tackling Complexity in the Heart of Software" /></a>
             </p>
             <blockquote>
-                Le DÃ©veloppement PilotÃ© par les Tests est principalement intÃ©ressÃ© par
-                les mÃ©canismes pour coder, mais il dit que c'est fini quand il n'y plus
-                de duplication. Le DÃ©veloppement PilotÃ© par la Conception (DDD) considÃ¨re
+                Le Développement Piloté par les Tests est principalement intéressé par
+                les mécanismes pour coder, mais il dit que c'est fini quand il n'y plus
+                de duplication. Le Développement Piloté par la Conception (DDD) considère
                 que le code est constamment <strike>in churn</strike>, changeant de terminologie au
-                fur et Ã  mesure que le domaine devient plus clair, et aussi nourrisant le domaine
-                avec des nouveaux termes quand le code Ã©volue..<br />
+                fur et à mesure que le domaine devient plus clair, et aussi nourrisant le domaine
+                avec des nouveaux termes quand le code évolue..<br />
                 <br />
                 Et puis, c'est un super bouquin :)
                 [<a href="http://sourceforge.net/mailarchive/message.php?msg_id=37546605">source</a>]
@@ -24,7 +26,7 @@
         </section>
         <section name="books-by-contributors" title="Livres par des contributeurs">
             <p>
-                Deux contributeurs de Simpletest ont Ã©crit des livres sur PHP.
+                Deux contributeurs de Simpletest ont écrit des livres sur PHP.
                 Tous les deux ont de nombreux exemples avec le framework SimpleTest.
             </p>
             <p>
@@ -47,9 +49,9 @@
         </section>
         <section name="buying-books" title="Achter des livres">
             <p>
-                Une maniÃ¨re d'aider l'Ã©quipe de contributeurs, c'est d'acheter des livres via
-                cete page avec Amazon (avec le mot-clÃ© <cite>simpletest-21</cite>).
-                Nous adorons tous lire des trucs Ã  la fois intÃ©ressants et stimulants.
+                Une manière d'aider l'équipe de contributeurs, c'est d'acheter des livres via
+                cete page avec Amazon (avec le mot-clé <cite>simpletest-21</cite>).
+                Nous adorons tous lire des trucs à la fois intéressants et stimulants.
             </p>
         </section>
     </content>

@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="Changing the test display" here="Showing passes">
     <long_title>PHP unit testing tutorial - Subclassing the test display</long_title>
     <content>

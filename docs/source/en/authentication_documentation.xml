@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="Authentication documentation" here="Authentication">
     <long_title>SimpleTest documentation for testing log-in and authentication</long_title>
     <content>
