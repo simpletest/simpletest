@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="Taking control of testing" here="Taking control">
     <long_title>PHP unit testing tutorial - Isolating variables when testing</long_title>
     <content>

@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="Mock Objects" here="Using mock objects">
     <long_title>PHP unit testing tutorial - Using mock objects in PHP</long_title>
     <content>

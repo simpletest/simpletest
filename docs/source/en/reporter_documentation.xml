@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="Test reporter documentation" here="Reporting">
     <long_title>SimpleTest for PHP test runner and display documentation</long_title>
     <content>

@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="Mock objects documentation" here="Mock objects">
     <long_title>SimpleTest for PHP mock objects documentation</long_title>
     <content>

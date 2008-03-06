@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- $Id$ -->
 <page title="Documentation sur les tests unitaires en PHP" here="Documentation : les tests unitaires en PHP">
+    <synchronisation lang="en" version="1475" date="19/01/2007" maintainer="pp11" />
     <long_title>Documentation SimpleTest pour les tests de régression en PHP</long_title>
     <content>
         <section name="unitaire" title="Scénarios de tests unitaires">

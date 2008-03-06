@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- $Id$ -->
 <page title="Prise en main rapide de SimpleTest" here="Prise en main rapide de SimpleTest">
+    <synchronisation lang="en" version="1475" date="19/01/2007" maintainer="pp11" />
     <long_title>
         Prise en main rapide de SimpleTest pour PHP -
         Tests unitaire et objets fantaisie pour PHP

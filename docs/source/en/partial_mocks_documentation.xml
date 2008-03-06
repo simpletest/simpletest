@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="Partial mock objects documentation" here="Partial mocks">
     <long_title>SimpleTest for PHP partial mocks documentation</long_title>
     <content>

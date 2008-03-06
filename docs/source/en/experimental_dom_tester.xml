@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="Testing elements by CSS selector" here="DOM tester">
     <long_title>[experimental] Testing elements by CSS selector</long_title>
     <content>

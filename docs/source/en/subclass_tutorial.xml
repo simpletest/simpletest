@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="Subclassing a unit test case" here="Reusing cases">
     <long_title>PHP unit testing tutorial - Subclassing a test case</long_title>
     <content>

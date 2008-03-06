@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="Expectation documentation" here="Expectations">
     <long_title>
         Extending the SimpleTest unit tester with additional expectation classes

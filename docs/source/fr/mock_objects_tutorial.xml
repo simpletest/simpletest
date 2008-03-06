@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- $Id$ -->
 <page title="Objets fantaisie" here="Utiliser des objets fantaisie">
+    <synchronisation lang="en" version="1475" date="19/01/2007" maintainer="pp11" />
     <long_title>tutorial sur les tests unitaires en PHP - Utiliser les objets fantaisie en PHP</long_title>
     <content>
         <section name="remaniement" title="Remanier les tests à nouveau">

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- $Id$ -->
 <page title="Du haut vers le bas et piloté par les tests" here="Du haut vers le bas et piloté par les tests">
+    <synchronisation lang="en" version="1475" date="19/01/2007" maintainer="pp11" />
     <long_title>
         tutoriel de test unitaire en PHP - Conception du haut vers le bas, tester d'abord avec des objets fantaisie
     </long_title>

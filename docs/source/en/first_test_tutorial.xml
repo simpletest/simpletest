@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="Creating a new test case" here="PHP unit testing">
     <long_title>PHP unit testing tutorial - Creating an example test case in PHP</long_title>
     <content>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- $Id$ -->
 <page title="Documentation sur les objets fantaisie partiels" here="Les objets fantaisie partiels">
+    <synchronisation lang="en" version="1475" date="19/01/2007" maintainer="pp11" />
     <long_title>Documentation SimpleTest : les objets fantaisie partiels</long_title>
     <content>
         <introduction>

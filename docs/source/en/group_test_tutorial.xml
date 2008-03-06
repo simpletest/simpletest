@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="Grouping tests" here="Grouping tests">
     <long_title>
         PHP unit testing tutorial - Grouping together unit

@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- $Id$ -->
 <page title="Overview of SimpleTest" here="Overview">
     <long_title>
         Overview and feature list for the SimpleTest PHP unit tester and web tester
