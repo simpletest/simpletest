@@ -92,6 +92,23 @@
                     something like Growl or Snarl or any Reporter that you drop in.
                 </dd>
                 <dt>
+                    PDT (Eclipse) : implement PHPUnit hooks
+                </dt>
+                <dd>
+                    There are somme hooks inside PDT implemented for PHPUnit.
+                    But it seems there're unused since PHPUnit changed too much
+                    recently. SimpleTest could use them as well :
+                    the SimpleTest Eclipse plugin could then become
+                    the PDT Test plugin while fixing those hooks.
+                </dd>
+                <dt>
+                    PDT (Eclipse) : debug while unit testing
+                </dt>
+                <dd>
+                    The GUI for Eclipse recently caught up with PDT : debugging while
+                    running a SimpleTest test case is finally doable.
+                </dd>
+                <dt>
                     Creative IDE integration
                 </dt>
                 <dd>
