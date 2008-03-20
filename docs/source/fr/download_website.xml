@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- $Id$ -->
 <page title="Télécharger SimpleTest" here="Télécharger SimpleTest">
-    <synchronisation lang="en" version="1475" date="19/01/2007" maintainer="pp11" />
+    <synchronisation lang="en" version="1695" date="20/03/2007" maintainer="pp11" />
     <long_title>Télécharger SimpleTest</long_title>
     <content>
         <section name="current-release" title="Version courante">
@@ -17,7 +17,7 @@
             </p>
             <p>
                 Au fait, ne soyez pas effrayé par le mot <quote>beta</quote> :
-                pas mal d'utilisateurs vont même jusqu'à utiliser la version CVS.
+                pas mal d'utilisateurs vont même jusqu'à utiliser la version SVN.
             </p>
         </section>
         <section name="eclipse-release" title="Paquet Eclipse">
@@ -53,7 +53,8 @@
         <section name="source" title="Source">
             <p>
                 Le code source est hébergé par SourceForge : vous pouvez l'étudier / le butiner
-                via le <a href="http://simpletest.cvs.sourceforge.net/simpletest/">CVS repository</a>.
+                via le
+                <a href="http://simpletest.svn.sourceforge.net/viewvc/simpletest/">dépôt SVN</a>.
             </p>
         </section>
         <section name="older-stable-releases" title="Autres versions stables">

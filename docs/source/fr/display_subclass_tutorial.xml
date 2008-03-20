@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Changer l'affichage du test" here="Changer l'affichage du test">
-    <synchronisation lang="en" version="1684" date="20/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1694" date="20/03/2008" maintainer="pp11" />
     <long_title>Tutorial de test unitaire en PHP - Sous-classer l'affichage du test</long_title>
     <content>
         <introduction>
@@ -114,7 +114,7 @@ class HtmlReporter extends TestDisplay {
 ?></strong>
 ]]></php>
                 Une rapide mais attentive lecture du
-                <a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/simpletest/simpletest/reporter.php?content-type=text/vnd.viewcvs-markup">code de SimpleTest</a>
+                <a href="http://simpletest.svn.sourceforge.net/viewvc/simpletest/simpletest/trunk/reporter.php?view=markup">code de SimpleTest</a>
                 indique que l'implémentation de <code>paintFail()</code> ressemble à...
 <php><![CDATA[
 function paintFail($message) {
