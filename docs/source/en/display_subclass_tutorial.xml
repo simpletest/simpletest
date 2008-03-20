@@ -111,8 +111,8 @@ class ShowPasses extends HtmlReporter {
 ?></strong>
 ]]></php>
                 A quick peruse of the
-                <a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/simpletest/simpletest/reporter.php?content-type=text/vnd.viewcvs-markup">SimpleTest code base</a> shows the
-                <code>paintFail()</code> implementation
+                <a href="http://simpletest.svn.sourceforge.net/viewvc/simpletest/simpletest/trunk/reporter.php?view=markup">SimpleTest code base</a>
+                shows the <code>paintFail()</code> implementation
                 at the time of writing to look like this...
 <php><![CDATA[
 function paintFail($message) {
