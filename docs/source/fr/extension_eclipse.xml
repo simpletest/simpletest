@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- $Id$ -->
 <page title="Plugin Eclipse pour Simpletest" here="Plugin Eclipse">
-    <synchronisation lang="en" version="1475" date="19/01/2007" maintainer="pp11" />
+    <synchronisation lang="en" version="1687" date="20/03/2008" maintainer="pp11" />
     <long_title>Documentation du plugin Eclipse pour Simpletest</long_title>
     <content>
         <section name="compat" title="Compatibilité">
