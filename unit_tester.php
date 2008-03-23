@@ -385,7 +385,10 @@
         function expectException($expected = false, $message = '%s') {
             $context = &SimpleTest::getContext();
             $queue = &$context->get('SimpleExceptionTrap');
-            $queue->expectException($expected, $message . $this->getAssertionLine());
+            // :HACK: Directly substituting in seems to cause a segfault with
+            // Zend Optimizer on some systems
+            $line = $this->getAssertionLine();
+            $queue->expectException($expected, $message . $line);
         }
 
         /**
