@@ -668,7 +668,7 @@ Mock::generate('ClassWithSpecialMethods');
 
 class TestOfSpecialMethods extends UnitTestCase {
     function skip() {
-        $this->skipIf(version_compare(phpversion(), '5', '<='), 'Overloading not tested for PHP 4');
+        $this->skipIf(version_compare(phpversion(), '5', '<='), 'Overloading not tested unless PHP 5+');
     }
 
     function testCanMockTheThingAtAll() {
@@ -730,7 +730,7 @@ Mock::generate('WithStaticMethod');
 
 class TestOfMockingClassesWithStaticMethods extends UnitTestCase {
     function skip() {
-        $this->skipUnless(version_compare(phpversion(), '5', '>='));
+        $this->skipUnless(version_compare(phpversion(), '5', '>='), 'Static methods not tested unless PHP 5+');
     }
     
     function testStaticMethodIsMockedAsStatic() {
@@ -747,7 +747,7 @@ if (version_compare(phpversion(), '5', '>=')) {
 
 class TestOfThrowingExceptionsFromMocks extends UnitTestCase {
     function skip() {
-        $this->skipUnless(version_compare(phpversion(), '5', '>='));
+        $this->skipUnless(version_compare(phpversion(), '5', '>='), 'Exception throwing not tested unless PHP 5+');
     }
 
     function testCanThrowOnMethodCall() {
@@ -876,7 +876,7 @@ class TestOfPHP4StyleSuperClassConstruct extends UnitTestCase {
 
 class TestOfPHP5StaticMethodMocking extends UnitTestCase {
     function skip() {
-        $this->skipIf(version_compare(phpversion(), '5', '<='), 'Static methods not tested in PHP 4');
+        $this->skipIf(version_compare(phpversion(), '5', '<='), 'Static methods not tested unless PHP 5+');
     }
 
     function testCanCreateAMockObjectWithStaticMethodsWithoutError() {
@@ -893,7 +893,7 @@ class TestOfPHP5StaticMethodMocking extends UnitTestCase {
 
 class TestOfPHP5AbstractMethodMocking extends UnitTestCase {
     function skip() {
-        $this->skipIf(version_compare(phpversion(), '5', '<='), 'Abstract class/methods not tested in PHP 4');
+        $this->skipIf(version_compare(phpversion(), '5', '<='), 'Abstract class/methods not tested unless PHP 5+');
     }
 
     function testCanCreateAMockObjectFromAnAbstractWithProperFunctionDeclarations() {

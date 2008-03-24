@@ -31,6 +31,10 @@
         var $_test = '';
         var $_xml = false;
         
+        /**
+         *    Parses raw command line arguments into object properties.
+         *    @param string $arguments        Raw commend line arguments.
+         */
         function SimpleCommandLineParser($arguments) {
             if (! is_array($arguments)) {
                 return;
@@ -50,14 +54,29 @@
             }
         }
         
+        /**
+         *    Run only this test.
+         *    @return string        Test name to run.
+         *    @access public
+         */
         function getTest() {
             return $this->_test;
         }
         
+        /**
+         *    Run only this test suite.
+         *    @return string        Test class name to run.
+         *    @access public
+         */
         function getTestCase() {
             return $this->_case;
         }
         
+        /**
+         *    Output should be XML or not.
+         *    @return boolean        True if XML desired.
+         *    @access public
+         */
         function isXml() {
             return $this->_xml;
         }

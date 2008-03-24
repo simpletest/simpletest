@@ -1630,5 +1630,4 @@ class TestOfNestedFrames extends SimpleTestAcceptanceTest {
         $this->assertPattern('/A target for the SimpleTest test suite/');
     }
 }
-
 ?>
