@@ -39,7 +39,7 @@ class TestOfMockInterfaces extends UnitTestCase {
 class TestOfSpl extends UnitTestCase {
     
     function skip() {
-        $this->skipUnless(function_exists('spl_classes'));
+        $this->skipUnless(function_exists('spl_classes'), 'No SPL module loaded');
     }
 
     function testCanMockAllSplClasses() {
@@ -47,6 +47,9 @@ class TestOfSpl extends UnitTestCase {
             return;
         }
         foreach(spl_classes() as $class) {
+            if ($class == 'SplHeap') {
+                continue;
+            }
             $mock_class = "Mock$class";
             Mock::generate($class);
             $this->assertIsA(new $mock_class(), $mock_class);
