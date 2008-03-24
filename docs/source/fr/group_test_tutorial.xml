@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Grouper des tests" here="Grouper des tests">
-    <synchronisation lang="en" version="1475" date="19/01/2007" maintainer="pp11" />
+    <synchronisation lang="en" version="1687" date="24/03/2008" maintainer="pp11" />
     <long_title>
         Tutorial de test unitaire PHP - Grouper des tests unitaires et exemples d'écriture de scénarios de tests
     </long_title>
@@ -13,7 +13,8 @@
         </introduction>
         <section name="autre" title="Un autre test">
             <p>
-                Ajouter un autre test peut être aussi simple qu'ajouter une nouvelle méthode à un scénario de test...
+                Ajouter un autre test peut être aussi simple
+                qu'ajouter une nouvelle méthode à un scénario de test...
 <php><![CDATA[
 class TestOfLogging extends UnitTestCase {
     function TestOfLogging() {
@@ -40,10 +41,18 @@ class TestOfLogging extends UnitTestCase {
     }</strong>
 }
 ]]></php>
-                La méthode du scénario de test <code>assertWantedPattern()</code> utilise les expressions rationnelles Perl pour vérifier qu'une chaîne respecte un certain motif.
+                La méthode du scénario de test <code>assertWantedPattern()</code>
+                utilise les expressions rationnelles Perl pour vérifier
+                qu'une chaîne respecte un certain motif.
             </p>
             <p>
-                Tout ce que nous faisons dans ce nouveau test, c'est écrire une ligne dans un fichier, puis la lire, le tout deux fois de suite. Nous souhaitons  simplement vérifier que le loggueur ajoute le texte à la fin plutôt qu'écraser les données déjà existantes. Quelque peu pédant, mais après tout il s'agit d'un tutorial !
+                Tout ce que nous faisons dans ce nouveau test,
+                c'est écrire une ligne dans un fichier, puis la lire,
+                le tout deux fois de suite.
+                Nous souhaitons simplement vérifier que le loggueur
+                ajoute le texte à la fin plutôt qu'écraser
+                les données déjà existantes. Quelque peu pédant,
+                mais après tout il s'agit d'un tutorial !
             </p>
             <p>
                 De toute façon ce test passe directement...
@@ -52,7 +61,14 @@ class TestOfLogging extends UnitTestCase {
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
                     <strong>4</strong> passes and <strong>0</strong> fails.</div>
                 </div>
-                Notre code contient actuellement beaucoup de répétitions, nous devons effacer le fichier de test avant et après chaque test. De même que <a href="http://www.junit.org/">JUnit</a>, SimpleTest utilise les méthodes <code>setUp()</code> et <code>tearDown()</code> qui sont exécutées respectivement avant et après chaque test. La suppression du fichier est commune à tous les tests : nous devrions donc y mettre cette opération.
+                Notre code contient actuellement beaucoup de répétitions,
+                nous devons effacer le fichier de test avant et après chaque test.
+                De même que <a href="http://www.junit.org/">JUnit</a>,
+                SimpleTest utilise les méthodes
+                <code>setUp()</code> et <code>tearDown()</code>
+                qui sont exécutées respectivement avant et après chaque test.
+                La suppression du fichier est commune à tous les tests :
+                nous devrions donc y mettre cette opération.
             </p>
             <p>
                 Nos tests sont verts donc nous pouvons faire un peu de remaniement...
@@ -84,7 +100,12 @@ class TestOfLogging extends UnitTestCase {
     }</strong>
 }
 ]]></php>
-                Le test reste vert. Nous pouvons continuer à ajouter des méthodes sans test au scénario, il suffit que leur nom ne commence pas par la chaîne &quot;test&quot;. Seules les méthodes commençant par &quot;test&quot; sont exécutées. Nous pouvons donc continuer le remaniement...
+                Le test reste vert. Nous pouvons continuer
+                à ajouter des méthodes sans test au scénario,
+                il suffit que leur nom ne commence pas par
+                la chaîne &quot;test&quot;.
+                Seules les méthodes commençant par &quot;test&quot; sont exécutées.
+                Nous pouvons donc continuer le remaniement...
 <php><![CDATA[
 class TestOfLogging extends UnitTestCase {
     function TestOfLogging() {
@@ -115,25 +136,38 @@ class TestOfLogging extends UnitTestCase {
     }
 }
 ]]></php>
-                Que vous préfériez cette version ou la précédente ne dépend que de votre goût personnel. Il y a un peu plus de code dans cette dernière mais la logique du test est plus claire.
+                Que vous préfériez cette version ou la précédente ne dépend
+                que de votre goût personnel.
+                Il y a un peu plus de code dans cette dernière
+                mais la logique du test est plus claire.
             </p>
         </section>
         <section name="groupe" title="Un groupe de tests">
             <p>
-                Un scénario de test ne fonctionne pas tout seul pendant très longtemps. Quand on code pour de vrai nous souhaitons exécuter un maximum de tests aussi souvent et aussi rapidement que possible. Ça veut dire les grouper dans des suites de tests qui incluent l'ensemble des tests de l'application.
+                Un scénario de test ne fonctionne pas tout seul
+                pendant très longtemps.
+                Quand on code pour de vrai nous souhaitons exécuter
+                un maximum de tests aussi souvent
+                et aussi rapidement que possible.
+                Ça veut dire les grouper dans des suites de tests
+                qui incluent l'ensemble des tests de l'application.
             </p>
             <p>
-                Premièrement nous devons supprimer le code d'exécution des tests se trouvant dans notre scénario de test.
+                Premièrement nous devons supprimer le code d'exécution
+                des tests se trouvant dans notre scénario de test.
 <php><![CDATA[
 <?php<strong>
-    require_once('../classes/log.php');
+require_once('../classes/log.php');
 
-    class TestOfLogging extends UnitTestCase {
-        ...
-    }</strong>
+class TestOfLogging extends UnitTestCase {
+    ...
+}</strong>
 ?>
 ]]></php>
-                Nous n'avons plus besoin de la constante <code>SIMPLE_TEST</code>. Ensuite nous créons un groupe de tests appelé <em>all_tests.php</em> dans le répertoire <em>tests</em>...
+                Nous n'avons plus besoin de la constante
+                <code>SIMPLE_TEST</code>.
+                Ensuite nous créons un groupe de tests appelé
+                <em>all_tests.php</em> dans le répertoire <em>tests</em>...
 <php><![CDATA[
 <strong><?php
     if (! defined('SIMPLE_TEST')) {
@@ -154,10 +188,17 @@ class TestOfLogging extends UnitTestCase {
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
                     <strong>4</strong> passes and <strong>0</strong> fails.</div>
                 </div>
-                Les tests du groupe s'ajoutent au compteur des scénarios de test. Ajouter des nouveaux scénarios de test est très simple. Il suffit d'inclure le fichier d'un scénario et d'ajouter individuellement tous les scénarios autonomes. Vous pouvez aussi emboîter les groupes de test les uns dans les autres (tout en faisant bien attention d'éviter les boucles).
+                Les tests du groupe s'ajoutent au compteur
+                des scénarios de test. Ajouter des nouveaux scénarios
+                de test est très simple.
+                Il suffit d'inclure le fichier d'un scénario
+                et d'ajouter individuellement tous les scénarios autonomes.
+                Vous pouvez aussi emboîter les groupes de test
+                les uns dans les autres (tout en faisant bien attention d'éviter les boucles).
             </p>
             <p>
-                Dans la <a href="gain_control_tutorial.php">page suivante</a> nous les ajouterons encore plus rapidement.
+                Dans la <a href="gain_control_tutorial.php">page suivante</a>
+                nous les ajouterons encore plus rapidement.
             </p>
         </section>
     </content>
@@ -171,13 +212,17 @@ class TestOfLogging extends UnitTestCase {
     </internal>
     <external>
         <link>
-            <a href="gain_control_tutorial.php">Ensuite</a> vient le contrôle de comment la classe sous le test interagit avec le reste du système.
+            <a href="gain_control_tutorial.php">Ensuite</a>
+            vient le contrôle de comment la classe sous le test interagit
+            avec le reste du système.
         </link>
         <link>
-            <a href="first_test_tutorial.php">Avant</a> il y a la création du premier test.
+            <a href="first_test_tutorial.php">Avant</a>
+            il y a la création du premier test.
         </link>
         <link>
-            Vous aurez besoin de <a href="simple_test.php">SimpleTest</a> pour exécuter ces exemples.
+            Vous aurez besoin de <a href="simple_test.php">SimpleTest</a>
+            pour exécuter ces exemples.
         </link>
     </external>
     <meta>

@@ -1,37 +1,73 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Documentation sur le testeur web" here="Le testeur web">
-    <synchronisation lang="en" version="1475" date="19/01/2007" maintainer="pp11" />
+    <synchronisation lang="en" version="1687" date="24/03/2008" maintainer="pp11" />
     <long_title>Documentation SimpleTest : tester des scripts web</long_title>
     <content>
         <section name="telecharger" title="Télécharger une page">
             <p>
-                Tester des classes c'est très bien. Reste que PHP est avant tout un langage pour créer des fonctionnalités à l'intérieur de pages web. Comment pouvons tester la partie de devant -- celle de l'interface -- dans nos applications en PHP ? Etant donné qu'une page web n'est constituée que de texte, nous devrions pouvoir les examiner exactement comme n'importe quelle autre donnée de test.
+                Tester des classes c'est très bien.
+                Reste que PHP est avant tout un langage
+                pour créer des fonctionnalités à l'intérieur de pages web.
+                Comment pouvons tester la partie de devant
+                -- celle de l'interface -- dans nos applications en PHP ?
+                Etant donné qu'une page web n'est constituée que de texte,
+                nous devrions pouvoir les examiner exactement
+                comme n'importe quelle autre donnée de test.
             </p>
             <p>
-                Cela nous amène à une situation délicate. Si nous testons dans un niveau trop bas, vérifier des balises avec un motif ad hoc par exemple, nos tests seront trop fragiles. Le moindre changement dans la présentation pourrait casser un grand nombre de test. Si nos tests sont situés trop haut, en utilisant une version fantaisie du moteur de template pour donner un cas précis, alors nous perdons complètement la capacité à automatiser certaines classes de test. Par exemple, l'interaction entre des formulaires et la navigation devra être testé manuellement. Ces types de test sont extrêmement fastidieux et plutôt sensibles aux erreurs.
+                Cela nous amène à une situation délicate.
+                Si nous testons dans un niveau trop bas,
+                vérifier des balises avec un motif ad hoc par exemple,
+                nos tests seront trop fragiles. Le moindre changement
+                dans la présentation pourrait casser un grand nombre de test.
+                Si nos tests sont situés trop haut, en utilisant
+                une version fantaisie du moteur de template pour
+                donner un cas précis, alors nous perdons complètement
+                la capacité à automatiser certaines classes de test.
+                Par exemple, l'interaction entre des formulaires
+                et la navigation devra être testé manuellement.
+                Ces types de test sont extrêmement fastidieux
+                et plutôt sensibles aux erreurs.
             </p>
             <p>
-                SimpleTest comprend une forme spéciale de scénario de test pour tester les actions d'une page web. <code>WebTestCase</code> inclut des facilités pour la navigation, des vérifications sur le contenu et les cookies ainsi que la gestion des formulaires. Utiliser ces scénarios de test ressemble fortement à <code>UnitTestCase</code>...
+                SimpleTest comprend une forme spéciale de scénario
+                de test pour tester les actions d'une page web.
+                <code>WebTestCase</code> inclut des facilités pour la navigation,
+                des vérifications sur le contenu
+                et les cookies ainsi que la gestion des formulaires.
+                Utiliser ces scénarios de test ressemble
+                fortement à <code>UnitTestCase</code>...
 <php><![CDATA[
 <strong>class TestOfLastcraft extends WebTestCase {
 }</strong>
 ]]></php>
-                Ici nous sommes sur le point de tester le site de <a href="http://www/lastcraft.com/">Last Craft</a>. Si ce scénario de test est situé dans un fichier appelé <em>lastcraft_test.php</em> alors il peut être chargé dans un script de lancement tout comme des tests unitaires...
+                Ici nous sommes sur le point de tester
+                le site de <a href="http://www.lastcraft.com/">Last Craft</a>.
+                Si ce scénario de test est situé dans un fichier appelé
+                <em>lastcraft_test.php</em> alors il peut être chargé
+                dans un script de lancement tout comme des tests unitaires...
 <php><![CDATA[
-<?php<strong>
-    require_once('simpletest/web_tester.php');</strong>
-    require_once('simpletest/reporter.php');
-    
-    $test = &new GroupTest('Web site tests');<strong>
-    $test->addTestFile('lastcraft_test.php');</strong>
-    exit ($test->run(new TextReporter()) ? 0 : 1);
+<?php
+require_once('simpletest/autorun.php');<strong>
+require_once('simpletest/web_tester.php');</strong>
+SimpleTest::prefer(new TextReporter());
+
+class WebTests extends TestSuite {
+    function WebTests() {
+        $this->TestSuite('Web site tests');<strong>
+        $this->addFile('lastcraft_test.php');</strong>
+    }
+}
 ?>
 ]]></php>
-                J'utilise ici le rapporteur en mode texte pour mieux distinguer le contenu au format HTML du résultat du test proprement dit.
+                J'utilise ici le rapporteur en mode texte
+                pour mieux distinguer le contenu au format HTML
+                du résultat du test proprement dit.
             </p>
             <p>
-                Rien n'est encore testé. Nous pouvons télécharger la page d'accueil en utilisant la méthode <code>get()</code>...
+                Rien n'est encore testé. Nous pouvons télécharger
+                la page d'accueil en utilisant la méthode <code>get()</code>...
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
     <strong>
@@ -40,21 +76,32 @@ class TestOfLastcraft extends WebTestCase {
     }</strong>
 }
 ]]></php>
-                La méthode <code>get()</code> renverra &quot;true&quot; uniquement si le contenu de la page a bien été téléchargé. C'est un moyen simple, mais efficace pour vérifier qu'une page web a bien été délivré par le serveur web. Cependant le contenu peut révéler être une erreur 404 et dans ce cas notre méthode <code>get()</code> renverrait encore un succès.
+                La méthode <code>get()</code> renverra &quot;true&quot;
+                uniquement si le contenu de la page a bien été téléchargé.
+                C'est un moyen simple, mais efficace pour vérifier
+                qu'une page web a bien été délivré par le serveur web.
+                Cependant le contenu peut révéler être une erreur 404
+                et dans ce cas notre méthode <code>get()</code> renverrait encore un succès.
             </p>
             <p>
-                En supposant que le serveur web pour le site Last Craft soit opérationnel (malheureusement ce n'est pas toujours le cas), nous devrions voir...
+                En supposant que le serveur web pour le site Last Craft
+                soit opérationnel (malheureusement ce n'est pas toujours le cas),
+                nous devrions voir...
 <pre class="shell">
 Web site tests
 OK
 Test cases run: 1/1, Failures: 0, Exceptions: 0
 </pre>
-                Nous avons vérifié qu'une page, de n'importe quel type, a bien été renvoyée. Nous ne savons pas encore s'il s'agit de celle que nous souhaitions.
+                Nous avons vérifié qu'une page, de n'importe quel type,
+                a bien été renvoyée. Nous ne savons pas encore
+                s'il s'agit de celle que nous souhaitions.
             </p>
         </section>
         <section name="contenu" title="Tester le contenu d'une page">
             <p>
-                Pour obtenir la confirmation que la page téléchargée est bien celle que nous attendions, nous devons vérifier son contenu.
+                Pour obtenir la confirmation que la page téléchargée
+                est bien celle que nous attendions,
+                nous devons vérifier son contenu.
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
     
@@ -64,7 +111,11 @@ class TestOfLastcraft extends WebTestCase {
     }
 }
 ]]></php>
-                La page obtenue par le dernier téléchargement est placée dans un buffer au sein même du scénario de test. Il n'est donc pas nécessaire de s'y référer directement. La correspondance du motif est toujours effectuée par rapport à ce buffer.
+                La page obtenue par le dernier téléchargement est
+                placée dans un buffer au sein même du scénario de test.
+                Il n'est donc pas nécessaire de s'y référer directement.
+                La correspondance du motif est toujours effectuée
+                par rapport à ce buffer.
             </p>
             <p>
                 Voici une liste possible d'assertions sur le contenu...
@@ -88,18 +139,26 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>assertCookie($name, $value)</code></td><td>Passe s'il existe un cookie correspondant</td></tr>
                     <tr><td><code>assertNoCookie($name)</code></td><td>Passe s'il n'y a pas de cookie avec un tel nom</td></tr>
                 </tbody></table>
-                Comme d'habitude avec les assertions de SimpleTest, elles renvoient toutes &quot;false&quot; en cas d'échec et &quot;true&quot; si c'est un succès. Elles renvoient aussi un message de test optionnel : vous pouvez l'ajouter dans votre propre message en utilisant &quot;%s&quot;.
+                Comme d'habitude avec les assertions de SimpleTest,
+                elles renvoient toutes &quot;false&quot; en cas d'échec
+                et &quot;true&quot; si c'est un succès.
+                Elles renvoient aussi un message de test optionnel :
+                vous pouvez l'ajouter dans votre propre message en utilisant &quot;%s&quot;.
             </p>
             <p>
                 A présent nous pourrions effectué le test sur le titre uniquement...
 <php><![CDATA[
 <strong>$this->assertTitle('The Last Craft?');</strong>
 ]]></php>
-                En plus d'une simple vérification sur le contenu HTML, nous pouvons aussi vérifier que le type MIME est bien d'un type acceptable...
+                En plus d'une simple vérification sur le contenu HTML,
+                nous pouvons aussi vérifier que le type MIME est bien d'un type acceptable...
 <php><![CDATA[
 <strong>$this->assertMime(array('text/plain', 'text/html'));</strong>
 ]]></php>
-                Plus intéressant encore est la vérification sur le code de la réponse HTTP. Pareillement au type MIME, nous pouvons nous assurer que le code renvoyé se trouve bien dans un liste de valeurs possibles...
+                Plus intéressant encore est la vérification sur
+                le code de la réponse HTTP. Pareillement au type MIME,
+                nous pouvons nous assurer que le code renvoyé se trouve
+                bien dans un liste de valeurs possibles...
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
     
@@ -109,7 +168,18 @@ class TestOfLastcraft extends WebTestCase {
     }
 }
 ]]></php>
-                Ici nous vérifions que le téléchargement s'est bien terminé en ne permettant qu'une réponse HTTP 200.  Ce test passera, mais ce n'est pas la meilleure façon de procéder. Il n'existe aucune page sur <em>http://simpletest.sourceforge.net/</em>, à la place le serveur renverra une redirection vers <em>http://www.lastcraft.com/simple_test.php</em>. <code>WebTestCase</code> suit automatiquement trois de ces redirections. Les tests sont quelque peu plus robustes de la sorte. Surtout qu'on est souvent plus intéressé par l'interaction entre les pages que de leur simple livraison. Si les redirections se révèlent être digne d'intérêt, il reste possible de les supprimer...
+                Ici nous vérifions que le téléchargement s'est
+                bien terminé en ne permettant qu'une réponse HTTP 200.
+                Ce test passera, mais ce n'est pas la meilleure façon de procéder.
+                Il n'existe aucune page sur <em>http://simpletest.sourceforge.net/</em>,
+                à la place le serveur renverra une redirection vers
+                <em>http://www.lastcraft.com/simple_test.php</em>.
+                <code>WebTestCase</code> suit automatiquement trois
+                de ces redirections. Les tests sont quelque peu plus
+                robustes de la sorte. Surtout qu'on est souvent plus intéressé
+                par l'interaction entre les pages que de leur simple livraison.
+                Si les redirections se révèlent être digne d'intérêt,
+                il reste possible de les supprimer...
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
     
@@ -146,7 +216,10 @@ class TestOfLastcraft extends WebTestCase {
         </section>
         <section name="navigation" title="Navigeur dans un site web">
             <p>
-                Les utilisateurs ne naviguent pas souvent en tapant les URLs, mais surtout en cliquant sur des liens et des boutons. Ici nous confirmons que les informations sur le contact peuvent être atteintes depuis la page d'accueil...
+                Les utilisateurs ne naviguent pas souvent en tapant les URLs,
+                mais surtout en cliquant sur des liens et des boutons.
+                Ici nous confirmons que les informations sur le contact
+                peuvent être atteintes depuis la page d'accueil...
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
     ...
@@ -160,7 +233,9 @@ class TestOfLastcraft extends WebTestCase {
                 Le paramètre est le texte du lien.
             </p>
             <p>
-                Il l'objectif est un bouton plutôt qu'une balise ancre, alors <code>clickSubmit()</code> doit être utilisé avec le titre du bouton...
+                Il l'objectif est un bouton plutôt qu'une balise ancre,
+                alors <code>clickSubmit()</code> doit être utilisé avec
+                le titre du bouton...
 <php><![CDATA[
 <strong>$this->clickSubmit('Go!');</strong>
 ]]></php>
@@ -191,21 +266,53 @@ class TestOfLastcraft extends WebTestCase {
                 </tbody></table>
             </p>
             <p>
-                Les paramètres dans les méthodes <code>get()</code>, <code>post()</code> et <code>head()</code> sont optionnels. Le téléchargement via  HTTP HEAD ne modifie pas le contexte du navigateur, il se limite au chargement des cookies. Cela peut être utilise lorsqu'une image ou une feuille de style initie un cookie pour bloquer un robot trop entreprenant.
+                Les paramètres dans les méthodes <code>get()</code>, 
+                <code>post()</code> et <code>head()</code> sont optionnels.
+                Le téléchargement via  HTTP HEAD ne modifie pas
+                le contexte du navigateur, il se limite au chargement des cookies.
+                Cela peut être utilise lorsqu'une image ou une feuille de style
+                initie un cookie pour bloquer un robot trop entreprenant.
             </p>
             <p>
-                Les commandes <code>retry()</code>, <code>back()</code> et <code>forward()</code> fonctionnent exactement comme dans un navigateur. Elles utilisent l'historique pour relancer les pages. Une technique bien pratique pour vérifier les effets d'un bouton retour sur vos formulaires.
+                Les commandes <code>retry()</code>, <code>back()</code>
+                et <code>forward()</code> fonctionnent exactement comme
+                dans un navigateur. Elles utilisent l'historique pour
+                relancer les pages. Une technique bien pratique pour
+                vérifier les effets d'un bouton retour sur vos formulaires.
             </p>
             <p>
-                Les méthodes sur les fenêtres méritent une petite explication. Par défaut, une page avec des fenêtres est traitée comme toutes les autres. Le contenu sera vérifié à travers l'ensemble de la &quot;frameset&quot;, par conséquent un lien fonctionnera, peu importe la fenêtre qui contient la balise ancre. Vous pouvez outrepassé ce comportement en exigeant le focus sur une unique fenêtre. Si vous réalisez cela, toutes les recherches et toutes les actions se limiteront à cette unique fenêtre, y compris les demandes d'authentification. Si un lien ou un bouton n'est pas dans la fenêtre en focus alors il ne peut pas être cliqué.
+                Les méthodes sur les fenêtres méritent une petite explication.
+                Par défaut, une page avec des fenêtres est traitée comme toutes
+                les autres. Le contenu sera vérifié à travers l'ensemble de
+                la &quot;frameset&quot;, par conséquent un lien fonctionnera,
+                peu importe la fenêtre qui contient la balise ancre.
+                Vous pouvez outrepassé ce comportement en exigeant
+                le focus sur une unique fenêtre. Si vous réalisez cela,
+                toutes les recherches et toutes les actions se limiteront
+                à cette unique fenêtre, y compris les demandes d'authentification.
+                Si un lien ou un bouton n'est pas dans la fenêtre en focus alors
+                il ne peut pas être cliqué.
             </p>
             <p>
-                Tester la navigation sur des pages fixes ne vous alerte que quand vous avez cassé un script entier. Pour des pages fortement dynamiques, un forum de discussion par exemple, ça peut être crucial pour vérifier l'état de l'application. Pour la plupart des applications cependant, la logique vraiment délicate se situe dans la gestion des formulaires et des sessions. Heureusement SimpleTest aussi inclut <a local="form_testing_documentation">des outils pour tester des formulaires web</a>.
+                Tester la navigation sur des pages fixes ne vous alerte que
+                quand vous avez cassé un script entier.
+                Pour des pages fortement dynamiques,
+                un forum de discussion par exemple,
+                ça peut être crucial pour vérifier l'état de l'application.
+                Pour la plupart des applications cependant,
+                la logique vraiment délicate se situe dans la gestion
+                des formulaires et des sessions.
+                Heureusement SimpleTest aussi inclut
+                <a local="form_testing_documentation">
+                des outils pour tester des formulaires web</a>.
             </p>
         </section>
         <section name="requete" title="Modifier la requête">
             <p>
-                Bien que SimpleTest n'ait pas comme objectif de contrôler des erreurs réseau, il contient quand même des méthodes pour modifier et déboguer les requêtes qu'il lance. Voici une autre liste de méthode...
+                Bien que SimpleTest n'ait pas comme objectif
+                de contrôler des erreurs réseau, il contient quand même
+                des méthodes pour modifier et déboguer les requêtes qu'il lance.
+                Voici une autre liste de méthode...
                 <table><tbody>
                     <tr><td><code>getTransportError()</code></td><td>La dernière erreur de socket</td></tr>
                     <tr><td><code>getUrl()</code></td><td>La localisation courante</td></tr>
@@ -238,13 +345,16 @@ class TestOfLastcraft extends WebTestCase {
     </internal>
     <external>
         <link>
-            La page du projet SimpleTest sur <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
+            La page du projet SimpleTest sur
+            <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
         </link>
         <link>
-            La page de téléchargement de SimpleTest sur <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
+            La page de téléchargement de SimpleTest sur
+            <a href="http://www.lastcraft.com/simple_test.php">LastCraft</a>.
         </link>
         <link>
-            <a href="http://simpletest.org/api/">L'API du développeur pour SimpleTest</a> donne tous les détails sur les classes et les assertions disponibles.
+            <a href="http://simpletest.org/api/">L'API du développeur pour SimpleTest</a>
+            donne tous les détails sur les classes et les assertions disponibles.
         </link>
     </external>
     <meta>
@@ -265,4 +375,3 @@ class TestOfLastcraft extends WebTestCase {
         </keywords>
     </meta>
 </page>
-

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- $Id$ -->
 <page title="Mailing-list de support" here="Mailing-list de support">
-    <synchronisation lang="en" version="1475" date="19/01/2007" maintainer="pp11" />
+    <synchronisation lang="en" version="1687" date="24/03/2008" maintainer="pp11" />
     <long_title>Mailing-list de support</long_title>
     <content>
         <introduction>
@@ -26,10 +26,18 @@
     </content>
     <internal>
     </internal>
-
     <external>
+        <link>
+            S'inscrire à la
+            <a href="https://lists.sourceforge.net/lists/listinfo/simpletest-support">
+            mailing list "Support"</a>.
+        </link>
+        <link>
+            Lire les
+            <a href="http://sourceforge.net/mailarchive/forum.php?forum=simpletest-support">
+            archives</a>.
+        </link>
     </external>
-
     <meta>
         <keywords>
             SimpleTest,
