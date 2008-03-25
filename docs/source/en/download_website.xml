@@ -5,11 +5,11 @@
     <content>
         <section name="current-release" title="Current release">
             <p>
-                The current release is : <a href="http://prdownloads.sourceforge.net/simpletest/simpletest_1.0.1beta2.tar.gz">SimpleTest v1.0.1beta2</a>.
+                The current release is : <a href="http://downloads.sourceforge.net/simpletest/simpletest_1.0.1RC1.tar.gz">SimpleTest v1.0.1RC1</a>.
             </p>
             <p>
                 You can download this version from
-                <a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=77275&amp;release_id=523669">SourceForget.net</a>
+                <a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=77275&amp;release_id=586797">SourceForget.net</a>
                 and your local mirror. You may also want to look at
                 the <a href="changelog.html">current changelog</a>.
             </p>
@@ -21,7 +21,7 @@
         <section name="eclipse-release" title="Eclipse release">
             <p>
                 If eclipse is your IDE / editor of choice, you might consider
-                the <a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=159054&amp;release_id=403632">Eclipse plugin</a>.
+                the <a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=159054">Eclipse plugin</a>.
             </p>
             <p>
                 For automatic "find and install", the URL is :
