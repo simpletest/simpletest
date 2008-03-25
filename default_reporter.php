@@ -123,7 +123,7 @@ class DefaultReporter extends SimpleReporterDecorator {
                     SimpleTest::preferred('HtmlReporter'),
                     @$_GET['c'],
                     @$_GET['t']);
-            if (@$_GET['skips'] == 'no' || @$_GET['show-skips'] = 'no') {
+            if (@$_GET['skips'] == 'no' || @$_GET['show-skips'] == 'no') {
                 $reporter = &new NoSkipsReporter($reporter);
             }
         }

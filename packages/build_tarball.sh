@@ -87,6 +87,7 @@ FILES=(simpletest/README \
           simpletest/test/test_with_parse_error.php \
           simpletest/test/unit_tests.php \
           simpletest/test/unit_tester_test.php \
+          simpletest/test/autorun_test.php \
           simpletest/test/url_test.php \
           simpletest/test/user_agent_test.php \
           simpletest/test/visual_test.php \
@@ -99,6 +100,7 @@ FILES=(simpletest/README \
           simpletest/test/support/latin1_sample \
           simpletest/test/support/spl_examples.php \
           simpletest/test/support/empty_test_file.php \
+          simpletest/test/support/test1.php \
           simpletest/docs/en/docs.css \
           simpletest/docs/en/index.html \
           simpletest/docs/en/overview.html \
