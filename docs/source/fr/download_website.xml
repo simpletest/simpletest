@@ -1,17 +1,19 @@
 <?xml version="1.0"?>
 <!-- $Id$ -->
 <page title="Télécharger SimpleTest" here="Télécharger SimpleTest">
-    <synchronisation lang="en" version="1695" date="20/03/2007" maintainer="pp11" />
+    <synchronisation lang="en" version="1706" date="25/03/2008" maintainer="pp11" />
     <long_title>Télécharger SimpleTest</long_title>
     <content>
         <section name="current-release" title="Version courante">
             <p>
                 La version courante est :
-                <a href="http://prdownloads.sourceforge.net/simpletest/simpletest_1.0.1beta2.tar.gz">SimpleTest v1.0.1beta2</a>.
+                <a href="http://downloads.sourceforge.net/simpletest/simpletest_1.0.1RC1.tar.gz">
+                SimpleTest v1.0.1RC1</a>.
             </p>
             <p>
                 Vous pouvez télécharger cette version depuis
-                <a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=77275&amp;release_id=523669">SourceForget.net</a>
+                <a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=77275&amp;release_id=586797">
+                SourceForget.net</a>
                 et votre miroir le plus proche. Vous pouvez aussi jeter un oeil du côté
                 du <a href="changelog.html">changelog actuel</a>.
             </p>
@@ -24,7 +26,8 @@
             <p>
                 Si Eclipse est votre IDE / éditeur de prédilection, vous aurez
                 peut-être envie d'utiliser le
-                <a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=159054&amp;release_id=403632">plugin Eclipse</a>.
+                <a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=159054">
+                plugin Eclipse</a>.
             </p>
             <p>
                 Pour utilser les procédures automatiques, l'URL est :
@@ -37,13 +40,16 @@
             </p>
             <ul>
                 <li>
-                    <a href="http://packages.debian.org/unstable/web/php-simpletest">paquet Debian</a>
+                    <a href="http://packages.debian.org/unstable/web/php-simpletest">
+                    paquet Debian</a>
                 </li>
                 <li>
-                    <a href="http://www.pearified.com/index.php?package=SimpleTest">paquet Pearified</a>
+                    <a href="http://www.pearified.com/index.php?package=SimpleTest">
+                    paquet Pearified</a>
                 </li>
                 <li>
-                    <a href="http://drupal.org/project/simpletest">module Drupal</a>
+                    <a href="http://drupal.org/project/simpletest">
+                    module Drupal</a>
                 </li>
             </ul>
             <p>
@@ -60,7 +66,8 @@
         <section name="older-stable-releases" title="Autres versions stables">
             <ul>
                 <li>
-                    <a href="http://prdownloads.sourceforge.net/simpletest/simpletest_1.0.tar.gz">1.0.0</a>
+                    <a href="http://prdownloads.sourceforge.net/simpletest/simpletest_1.0.tar.gz">
+                    1.0.0</a>
                 </li>
             </ul>
         </section>
