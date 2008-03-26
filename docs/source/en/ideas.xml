@@ -16,8 +16,9 @@
                 to add your wishes on the mailing-list.
             </p>
             <div class="experimental">
-                Careful though : currently the SimpleTest project is not part of the
-                Mentoring Organizations. So handle with care!
+                Careful though : currently the SimpleTest project is taking part under the
+                <a href="http://code.google.com/soc/2008/php/about.html">PHP umbrella</a>.
+                So handle with care!
             </div>
         </introduction>
         <section name="browser" title="Browser related">
@@ -57,6 +58,25 @@
                     It's super-fast compared to parsing in PHP.
                     If there are worries about adding a dependency,
                     then maybe make it an optional plug-in instead.
+                </dd>
+                <dt>
+                    Web Form Fuzzer.
+                </dt>
+                <dd>
+                    Fuzz testing is a software testing technique that provides random data
+                    ("fuzz") to the inputs of a program. If the program fails (for
+                    example, by crashing, or by failing built-in code assertions), the
+                    defects can be noted.
+                    <br />
+                    A Web Form Fuzzer would be built on top of the basic WebTestCase api,
+                    enabling developers to point a test case at a target URL and have it
+                    introspect form inputs and post actions. The fuzzer would generate
+                    random data strings, populate the input fields, and repeatedly post
+                    the forms, looking for errors, validation responses, and HTTP status
+                    codes that reflect how the site handled a combination of well-formed
+                    and malformed input. This would have the potential to completely wreck
+                    some websites, but would be great for testing the robustness and edge
+                    case behavior of CMS's and other online administration tools.
                 </dd>
             </dl>
         </section>
