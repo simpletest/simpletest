@@ -1,5 +1,9 @@
 <?php
 
+if (!function_exists("simplexml_load_file")) {
+    die("Whenever SourceForge.net updates to PHP5 :-(");
+}
+
 $feed = "http://api.flickr.com/services/feeds/photos_public.gne?tags=simpletest&amp;format=atom&amp;en-us";
 $source = simplexml_load_file($feed, "SimpleFlickrStreamXMLElement");
 echo $source->showLastPhotos();
