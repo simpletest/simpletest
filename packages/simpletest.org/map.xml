@@ -37,6 +37,7 @@
 
 		<page title="Support mailing list" here="Support mailing list" file="en/support.html">
 			<page title="Books" here="Books" file="en/books.html" />
+            <page title="Screencasts" here="Screencasts" file="en/screencasts.html" />
 			<page title="Softwares" here="Softwares" file="en/softwares_using_simpletest.html" />
 			<page title="Speakers, Coaches and Consultants" here="Speakers" file="en/speakers_coaches_consultants.html" />
 		</page>
