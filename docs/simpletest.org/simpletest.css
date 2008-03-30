@@ -29,6 +29,10 @@ pre { font-family: monospaced; border-left: 1px solid #999999; background-color:
 .bubble, .bubble h3 { font-size: 9pt; }
 .people { margin : 0; list-style : none; padding : 0; }
 .geo { color : #777777; }
+.photo { margin-bottom : 2em; }
+.photo span { display : block; }
+.photo span.title { font-weight : bold; margin-top : 1em; }
+.photo img { border : 1px solid #777777; padding : 1em; margin : 1em; }
 
 dd { font-size : 10.5pt; }
 .done, .done span, .done + dd { color : #AAAAAA; text-decoration : line-through; }
