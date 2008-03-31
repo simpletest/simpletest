@@ -55,14 +55,6 @@
             </p>
             <dl>
                 <dt>
-                    <a href="http://code.google.com/p/phpspec/">
-                        PHPSpec
-                    </a>
-                </dt>
-                <dd>
-                    A framework to facilitate Behaviour-Driven Development in PHP.
-                </dd>
-                <dt>
                     <a href="http://www.cakephp.org/">
                         CakePHP
                     </a>
