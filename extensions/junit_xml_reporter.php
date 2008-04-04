@@ -2,11 +2,11 @@
 /**
  *	@package	JunitXMLReporter
  *	@subpackage	Reporter
- *	@version	$Id: selenese_tester.php 1534 2007-06-06 16:58:53Z pp11 $
+ *	@version	$Id$
  *  @author Patrice Neff - mailinglists@patrice.ch (original code)
  *  */
 
-require_once 'simpletest/reporter.php';
+require_once dirname(__FILE__).'/../reporter.php';
 
 /**
  * Reporter which outputs test results in a format compatible
