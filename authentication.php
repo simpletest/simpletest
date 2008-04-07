@@ -128,7 +128,7 @@ class SimpleRealm {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-cs SimpleAuthenticator {
+class SimpleAuthenticator {
     var $_realms;
     
     /**
