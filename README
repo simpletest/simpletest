@@ -8,7 +8,7 @@ a version from the location above. You must read and accept that
 licence to use this software. The file is titled simply LICENSE.
 
 What is it? It's a framework for unit testing, web site testing and
-mock objects for PHP 4.2.0+ (and PHP 5.0 to 5.3 without E_STRICT).
+mock objects for PHP 5.0.5+.
 
 If you have used JUnit, you will find this PHP unit testing version very
 similar. Also included is a mock objects and server stubs generator.
@@ -21,17 +21,17 @@ A web tester similar in concept to JWebUnit is also included. There is no
 JavaScript or tables support, but forms, authentication, cookies and
 frames are handled.
 
-You can see a release schedule at http://www.lastcraft.com/overview.php
+You can see a release schedule at http://simpletest.org/en/overview.html
 which is also copied to the documentation folder with this release.
 A full PHPDocumenter API documentation exists at
-http://simpletest.sourceforge.net/.
+http://simpletest.org/api/.
 
 The user interface is minimal
 in the extreme, but a lot of information flows from the test suite.
 After version 1.0 we will release a better web UI, but we are leaving XUL
 and GTk versions to volunteers as everybody has their own opinion
 on a good GUI, and we don't want to discourage development by shipping
-one with the toolkit. YOucan download an Eclipse plug-in separately.
+one with the toolkit. You can download an Eclipse plug-in separately.
 
 You are looking at a second full release. The unit tests for SimpleTest
 itself can be run here...
@@ -70,12 +70,12 @@ There is a documentation folder which contains the core reference information
 in English and French, although this information is fairly basic.
 You can find a tutorial on...
 
-http://www.lastcraft.com/first_test_tutorial.php
+http://simpletest.org/en/first_test_tutorial.html
 
 ...to get you started and this material will eventually become included
 with the project documentation. A French translation exists at...
 
-http://www.onpk.net/index.php/2005/01/12/254-tutoriel-simpletest-decouvrir-les-tests-unitaires.
+http://simpletest.org/fr/first_test_tutorial.html
 
 If you download and use, and possibly even extend this tool, please let us
 know. Any feedback, even bad, is always welcome and we will work to get
@@ -101,7 +101,7 @@ mean "Lite" in this context.
 Thanks to everyone who has sent comments and offered suggestions. They
 really are invaluable, but sadly you are too many to mention in full.
 Thanks to all on the advanced PHP forum on SitePoint, especially Harry
-Feucks. Early adopters are always an inspiration.
+Fuecks. Early adopters are always an inspiration.
 
 Marcus Baker, Jason Sweat, Travis Swicegood, Perrick Penet and Edward Z. Yang.
 -- 
