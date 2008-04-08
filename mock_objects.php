@@ -1313,7 +1313,7 @@ class MockGenerator {
      */
     function _createSubclassCode($methods) {
         $code  = "class " . $this->_mock_class . " extends " . $this->_class . " {\n";
-        $code .= "    protected \$_mock;\n";
+        $code .= "    public \$_mock;\n";
         $code .= $this->_addMethodList(array_merge($methods, $this->_reflection->getMethods()));
         $code .= "\n";
         $code .= "    function " . $this->_mock_class . "() {\n";
