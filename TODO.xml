@@ -17,8 +17,14 @@
                     All deprecated methods need to be removed.
                 </dt>
                 <dt>
-                    Methods, etc starting with an underscore need private/protected.
+                    Methods, etc starting with an underscore need "protected".
                 </dt>
+                <dd>
+                    And remove the underscore as well.
+                    That way people will start complaining.
+                    Upon each complaint we'll add an accessor and
+                    capture the use case from them.
+                </dd>
             </dl>
         </section>
         <section name="reporter" title="Reporter">
@@ -49,6 +55,9 @@
                 </dt>
                 <dt>
                     Docblocks need to be cut back to the minimum.
+                </dt>
+                <dt>
+                    Move everything to a new server.
                 </dt>
             </dl>
         </section>
