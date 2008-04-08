@@ -387,18 +387,47 @@ class SimpleFileLoader {
      */
     function &load($test_file) {
         $existing_classes = get_declared_classes();
+        $existing_globals = get_defined_vars();
         include_once($test_file);
-        $file_classes = array_diff(get_declared_classes(), $existing_classes);
-
-        // Lookup classnames from file contents, in case the file may have been included before:
-        if( empty($file_classes) ) {
-            preg_match_all( '~^\s*class\s+(\w+)(\s+(extends|implements)\s+\w+)*\s*\{~mi', file_get_contents($test_file), $matches );
-            $file_classes = $matches[1];
+        $new_globals = get_defined_vars();
+        $this->_makeFileVariablesGlobal($existing_globals, $new_globals);
+        $new_classes = array_diff(get_declared_classes(), $existing_classes);
+        if (empty($new_classes)) {
+            $new_classes = $this->_scrapeClassesFromFile($test_file);
         }
-
-        $classes = $this->selectRunnableTests($file_classes);
+        $classes = $this->selectRunnableTests($new_classes);
         $suite = &$this->createSuiteFromClasses($test_file, $classes);
         return $suite;
+    }
+    
+    /**
+     *    Imports new variables into the global namespace.
+     *    @param hash $existing   Variables before the file was loaded.
+     *    @param hash $new        Variables after the file was loaded.
+     *    @access private
+     */
+    function _makeFileVariablesGlobal($existing, $new) {
+        $globals = array_diff(array_keys($new), array_keys($existing));
+        foreach ($globals as $global) {
+            $_GLOBALS[$global] = $new[$global];
+        }
+    }
+    
+    /**
+     *    Lookup classnames from file contents, in case the
+     *    file may have been included before.
+     *    Note: This is probably too clever by half. Figuring this
+     *    out after a failed test case is going to be tricky for us,
+     *    never mind the user. A test case should not be included
+     *    twice anyway.
+     *    @param string $test_file        File name with classes.
+     *    @access private
+     */
+    function _scrapeClassesFromFile($test_file) {
+        preg_match_all('~^\s*class\s+(\w+)(\s+(extends|implements)\s+\w+)*\s*\{~mi',
+                        file_get_contents($test_file),
+                        $matches );
+        return $matches[1];
     }
 
     /**

@@ -712,7 +712,7 @@ class SimpleHtmlSaxParser {
         $text = preg_replace('|<[^>]*>|', '', $text);
         $text = SimpleHtmlSaxParser::decodeHtml($text);
         $text = preg_replace('|\s+|', ' ', $text);
-        return trim($text);
+        return trim(trim($text), "\xA0");        // TODO: The \xAO is a &nbsp;. Add a test for this.
     }
 }
 

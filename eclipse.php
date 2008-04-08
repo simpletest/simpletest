@@ -21,7 +21,13 @@ include_once 'mock_objects.php';
  *  @subpackage Eclipse
  */
 class EclipseReporter extends SimpleScorer {
-    function EclipseReporter(&$listener,$cc=false){
+    
+    /**
+     *    Reporter to be run inside of Eclipse interface.
+     *    @param object $listener   Eclipse listener (?).
+     *    @param boolean $cc        Whether to include test coverage.
+     */
+    function EclipseReporter(&$listener, $cc=false){
         $this->_listener = &$listener;
         $this->SimpleScorer();
         $this->_case = "";
@@ -32,68 +38,134 @@ class EclipseReporter extends SimpleScorer {
         $this->_fail = false;
     }
     
+    /**
+     *    Means to display human readable object comparisons.
+     *    @return SimpleDumper        Visual comparer.
+     */
     function getDumper() {
         return new SimpleDumper();
     }
     
-    function &createListener($port,$host="127.0.0.1"){
-        $tmplistener = & new SimpleSocket($host,$port,5);
+    /**
+     *    Localhost connection from Eclipse.
+     *    @param integer $port      Port to connect to Eclipse.
+     *    @param string $host       Normally localhost.
+     *    @return SimpleSocket      Connection to Eclipse.
+     */
+    function &createListener($port, $host="127.0.0.1"){
+        $tmplistener = &new SimpleSocket($host, $port, 5);
         return $tmplistener;
     }
     
+    /**
+     *    Wraps the test in an output buffer.
+     *    @param SimpleInvoker $invoker     Current test runner.
+     *    @return EclipseInvoker            Decorator with output buffering.
+     *    @access public
+     */
     function &createInvoker(&$invoker){
-        $eclinvoker = & new EclipseInvoker( $invoker, $this->_listener);
+        $eclinvoker = &new EclipseInvoker($invoker, $this->_listener);
         return $eclinvoker;
     }
     
-    function escapeVal($val){
+    /**
+     *    C style escaping.
+     *    @param string $raw    String with backslashes, quotes and whitespace.
+     *    @return string        Replaced with C backslashed tokens.
+     */
+    function escapeVal($raw){
         $needle = array("\\","\"","/","\b","\f","\n","\r","\t");
         $replace = array('\\\\','\"','\/','\b','\f','\n','\r','\t');
-        return str_replace($needle,$replace,$val);
+        return str_replace($needle, $replace, $raw);
     }
     
+    /**
+     *    Stash the first passing item. Clicking the test
+     *    item goes to first pass.
+     *    @param string $message    Test message, but we only wnat the first.
+     *    @access public
+     */
     function paintPass($message){
-        //get the first passing item -- so that clicking the test item goes to first pass
-        if (!$this->_pass){
+        if (! $this->_pass){
             $this->_message = $this->escapeVal($message);
         }
         $this->_pass = true;
     }
     
+    /**
+     *    Stash the first failing item. Clicking the test
+     *    item goes to first fail.
+     *    @param string $message    Test message, but we only wnat the first.
+     *    @access public
+     */
     function paintFail($message){
         //only get the first failure or error
-        if (!$this->_fail && !$this->_error){
+        if (! $this->_fail && ! $this->_error){
             $this->_fail = true;
             $this->_message = $this->escapeVal($message);
             $this->_listener->write('{status:"fail",message:"'.$this->_message.'",group:"'.$this->_group.'",case:"'.$this->_case.'",method:"'.$this->_method.'"}');
         }
     }
     
+    /**
+     *    Stash the first error. Clicking the test
+     *    item goes to first error.
+     *    @param string $message    Test message, but we only wnat the first.
+     *    @access public
+     */
     function paintError($message){
-        //only get the first failure or error
-        if (!$this->_fail && !$this->_error){
+        if (! $this->_fail && ! $this->_error){
             $this->_error = true;
             $this->_message = $this->escapeVal($message);
             $this->_listener->write('{status:"error",message:"'.$this->_message.'",group:"'.$this->_group.'",case:"'.$this->_case.'",method:"'.$this->_method.'"}');
         }
     }
     
+    
+    /**
+     *    Stash the first exception. Clicking the test
+     *    item goes to first message.
+     *    @param string $message    Test message, but we only wnat the first.
+     *    @access public
+     */
     function paintException($exception){
-        //only get the first failure or error
-        if (!$this->_fail && !$this->_error){
+        if (! $this->_fail && ! $this->_error){
             $this->_error = true;
-            $message = 'Unexpected exception of type['.get_class($exception).'] with message ['.$exception->getMessage().'] in ['.$exception->getFile().' line '.$exception->getLine().']';
+            $message = 'Unexpected exception of type[' . get_class($exception) .
+                    '] with message [' . $exception->getMessage() . '] in [' .
+                    $exception->getFile() .' line '. $exception->getLine() . ']';
             $this->_message = $this->escapeVal($message);
-            $this->_listener->write('{status:"error",message:"'.$this->_message.'",group:"'.$this->_group.'",case:"'.$this->_case.'",method:"'.$this->_method.'"}');
+            $this->_listener->write(
+                    '{status:"error",message:"' . $this->_message . '",group:"' .
+                    $this->_group . '",case:"' . $this->_case . '",method:"' . $this->_method
+                    . '"}');
         }
     }
     
-    function paintHeader($method){
+
+    /**
+     *    We don't display any special header.
+     *    @param string $test_name     First test top level
+     *                                 to start.
+     *    @access public
+     */
+    function paintHeader($test_name) {
+    }
+
+    /**
+     *    We don't display any special footer.
+     *    @param string $test_name        The top level test.
+     *    @access public
+     */
+    function paintFooter($test_name) {
     }
     
-    function paintFooter($method){
-    }
-    
+    /**
+     *    Paints nothing at the start of a test method, but stash
+     *    the method name for later.
+     *    @param string $test_name   Name of test that is starting.
+     *    @access public
+     */
     function paintMethodStart($method) {
         $this->_pass = false;
         $this->_fail = false;
@@ -101,30 +173,61 @@ class EclipseReporter extends SimpleScorer {
         $this->_method = $this->escapeVal($method);
     }
         
+    /**
+     *    Only send one message if the test passes, after that
+     *    suppress the message.
+     *    @param string $test_name   Name of test that is ending.
+     *    @access public
+     */
     function paintMethodEnd($method){   
-        if ($this->_fail || $this->_error || !$this->_pass){
-            //do nothing
-        }else{
-            //this ensures we only get one message per method that passes
-            $this->_listener->write('{status:"pass",message:"'.$this->_message.'",group:"'.$this->_group.'",case:"'.$this->_case.'",method:"'.$this->_method.'"}');
+        if ($this->_fail || $this->_error || ! $this->_pass){
+        } else {
+            $this->_listener->write(
+                        '{status:"pass",message:"' . $this->_message . '",group:"' .
+                        $this->_group . '",case:"' . $this->_case . '",method:"' .
+                        $this->_method . '"}');
         }
     }
     
+    /**
+     *    Stashes the test case name for the later failure message.
+     *    @param string $test_name     Name of test or other label.
+     *    @access public
+     */
     function paintCaseStart($case){
         $this->_case = $this->escapeVal($case);
     }
     
+    /**
+     *    Drops the name.
+     *    @param string $test_name     Name of test or other label.
+     *    @access public
+     */
     function paintCaseEnd($case){
         $this->_case = "";
     }
-    function paintGroupStart($group,$size){
+    
+    /**
+     *    Stashes the name of the test suite. Starts test coverage
+     *    if enabled.
+     *    @param string $group     Name of test or other label.
+     *    @param integer $size     Number of test cases starting.
+     *    @access public
+     */
+    function paintGroupStart($group, $size){
         $this->_group = $this->escapeVal($group);
         if ($this->_cc){
             if (extension_loaded('xdebug')){
-                xdebug_start_code_coverage(XDEBUG_CC_UNUSED| XDEBUG_CC_DEAD_CODE); 
+                xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE); 
             }
         }
     }
+
+    /**
+     *    Paints coverage report if enabled.
+     *    @param string $group     Name of test or other label.
+     *    @access public
+     */
     function paintGroupEnd($group){
         $this->_group = "";
         $cc = "";
@@ -135,7 +238,7 @@ class EclipseReporter extends SimpleScorer {
                 $thisdir = dirname(__FILE__);
                 $thisdirlen = strlen($thisdir);
                 foreach ($arrfiles as $index=>$file){
-                    if (substr($index,0,$thisdirlen)===$thisdir){
+                    if (substr($index, 0, $thisdirlen)===$thisdir){
                         continue;
                     }
                     $lcnt = 0;
@@ -150,44 +253,55 @@ class EclipseReporter extends SimpleScorer {
                         }
                     }
                     if ($lcnt > 0){
-                        $cc.=round(($ccnt/$lcnt)*100,2).'%';
+                        $cc .= round(($ccnt/$lcnt) * 100, 2) . '%';
                     }else{
-                        $cc.="0.00%";
+                        $cc .= "0.00%";
                     }
-                    $cc.= "\t".$index."\n";
+                    $cc.= "\t". $index . "\n";
                 }
             }
         }
-        $this->_listener->write('{status:"coverage",message:"'.EclipseReporter::escapeVal($cc).'"}');
+        $this->_listener->write('{status:"coverage",message:"' .
+                                EclipseReporter::escapeVal($cc) . '"}');
     }
 }
 
 /**
- *  base invoker class for eclipse plugin  
+ *  Invoker decorator for Eclipse. Captures output until
+ *  the end of the test.  
  *  @package    SimpleTest
  *  @subpackage Eclipse
  */
 class EclipseInvoker extends SimpleInvokerDecorator{
-    function EclipseInvoker(&$invoker,&$listener) {
+    function EclipseInvoker(&$invoker, &$listener) {
         $this->_listener = &$listener;
         $this->SimpleInvokerDecorator($invoker);
     }
     
+    /**
+     *    Starts output buffering.
+     *    @param string $method    Test method to call.
+     *    @access public
+     */
     function before($method){
         ob_start();
         $this->_invoker->before($method);
     }
 
+    /**
+     *    Stops output buffering and send the captured output
+     *    to the listener.
+     *    @param string $method    Test method to call.
+     *    @access public
+     */
     function after($method) {
         $this->_invoker->after($method);
         $output = ob_get_contents();
         ob_end_clean();
-        if ($output!==""){
-            $result = $this->_listener->write('{status:"info",message:"'.EclipseReporter::escapeVal($output).'"}');
+        if ($output !== ""){
+            $result = $this->_listener->write('{status:"info",message:"' .
+                                              EclipseReporter::escapeVal($output) . '"}');
         }
     }
-    
-    
 }
-
 ?>
