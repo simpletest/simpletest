@@ -89,8 +89,8 @@ hours.
 
 There is no change log except at Sourceforge. You can visit the
 release notes to see the completed TODO list after each cycle and also the
-status of any bugs, but if the bug is recent then it will be fixed in CVS only.
-The CVS check-ins always have all the tests passing and so CVS snapshots should
+status of any bugs, but if the bug is recent then it will be fixed in SVN only.
+The SVN check-ins always have all the tests passing and so SVN snapshots should
 be pretty usable, although the code may not look so good internally.
 
 Oh, yes. It is called "Simple" because it should be simple to
