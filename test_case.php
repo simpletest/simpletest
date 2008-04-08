@@ -365,7 +365,6 @@ class SimpleTestCase {
      *    Accessor for the number of subtests including myelf.
      *    @return integer           Number of test cases.
      *    @access public
-     *    @static
      */
     function getSize() {
         return 1;
@@ -626,9 +625,8 @@ class TestSuite {
      *    SimpleTestCase class.
      *    @param string $class     Class name.
      *    @access public
-     *    @static
      */
-    function getBaseTestCase($class) {
+    static function getBaseTestCase($class) {
         while ($class = get_parent_class($class)) {
             $class = strtolower($class);
             if ($class == 'simpletestcase' || $class == 'testsuite') {

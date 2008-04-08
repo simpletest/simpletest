@@ -57,9 +57,8 @@ class HtmlReporter extends SimpleReporter {
      *    reloaded on every request. Otherwise you could be
      *    scratching your head over out of date test data.
      *    @access public
-     *    @static
      */
-    function sendNoCacheHeaders() {
+    static function sendNoCacheHeaders() {
         if (! headers_sent()) {
             header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
             header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");

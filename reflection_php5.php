@@ -294,13 +294,21 @@ class SimpleReflection {
         if ($name == '__toString') {
             return "function $name()";
         }
-        if ($this->_isInterfaceMethod($name) ||
-                $this->_isAbstractMethod($name) ||
-                $this->_isAbstractMethodInParents($name) ||
-                $this->_isStaticMethod($name)) {
-            return $this->_getFullSignature($name);
+        
+        // This wonky try-catch is a work around for a faulty method_exists()
+        // in early versions of PHP 5 which would return false for static
+        // methods. The Reflection classes work fine, but hasMethod()
+        // doesn't exist prior to PHP 5.1.0, so we need to use a more crude
+        // detection method.
+        try {
+            $interface = new ReflectionClass($this->_interface);
+            $interface->getMethod($name);
+        } catch (ReflectionException $e) {
+            return "function $name()";
         }
-        return "function $name()";
+        
+        return $this->_getFullSignature($name);
+        
     }
 
     /**

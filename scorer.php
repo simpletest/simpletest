@@ -403,9 +403,8 @@ class SimpleReporter extends SimpleScorer {
      *    Static check for running in the comand line.
      *    @return boolean        True if CLI.
      *    @access public
-     *    @static
      */
-    function inCli() {
+    static function inCli() {
         return php_sapi_name() == 'cli';
     }
 }

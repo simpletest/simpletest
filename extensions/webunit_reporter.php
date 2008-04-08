@@ -120,7 +120,6 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    reloaded on every request. Otherwise you could be
          *    scratching your head over out of date test data.
          *    @access public
-         *    @static
          */
         function sendNoCacheHeaders() {
             header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");

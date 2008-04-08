@@ -347,9 +347,8 @@ class SimpleDumper {
      *    @param mixed $variable    Variable to display.
      *    @return string            Output from print_r().
      *    @access public
-     *    @static
      */
-    function dump($variable) {
+    static function dump($variable) {
         ob_start();
         print_r($variable);
         $formatted = ob_get_contents();

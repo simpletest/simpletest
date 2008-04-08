@@ -1134,11 +1134,10 @@ class Mock {
      *                                 those in the cloned class. Use this
      *                                 to emulate the dynamic addition of
      *                                 methods in the cloned class or when
-     *                                 the class hasn't been written yet.
-     *    @static
+     *                                 the class hasn't been written yet.sta
      *    @access public
      */
-    function generate($class, $mock_class = false, $methods = false) {
+    static function generate($class, $mock_class = false, $methods = false) {
         $generator = new MockGenerator($class, $mock_class);
         return $generator->generateSubclass($methods);
     }
@@ -1152,10 +1151,9 @@ class Mock {
      *    @param string $mock_class       New class name.
      *    @param array $methods           Methods to be overridden
      *                                    with mock versions.
-     *    @static
      *    @access public
      */
-    function generatePartial($class, $mock_class, $methods) {
+    static function generatePartial($class, $mock_class, $methods) {
         $generator = new MockGenerator($class, $mock_class);
         return $generator->generatePartial($methods);
     }
@@ -1163,9 +1161,8 @@ class Mock {
     /**
      *    Uses a stack trace to find the line of an assertion.
      *    @access public
-     *    @static
      */
-    function getExpectationLine() {
+    static function getExpectationLine() {
         $trace = new SimpleStackTrace(array('expect'));
         return $trace->traceMethod();
     }
@@ -1316,11 +1313,11 @@ class MockGenerator {
      */
     function _createSubclassCode($methods) {
         $code  = "class " . $this->_mock_class . " extends " . $this->_class . " {\n";
-        $code .= "    var \$_mock;\n";
+        $code .= "    protected \$_mock;\n";
         $code .= $this->_addMethodList(array_merge($methods, $this->_reflection->getMethods()));
         $code .= "\n";
         $code .= "    function " . $this->_mock_class . "() {\n";
-        $code .= "        \$this->_mock = &new " . $this->_mock_base . "();\n";
+        $code .= "        \$this->_mock = new " . $this->_mock_base . "();\n";
         $code .= "        \$this->_mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
         $code .= $this->_chainMockReturns();
@@ -1342,11 +1339,11 @@ class MockGenerator {
      */
     function _extendClassCode($methods) {
         $code  = "class " . $this->_mock_class . " extends " . $this->_class . " {\n";
-        $code .= "    var \$_mock;\n";
+        $code .= "    protected \$_mock;\n";
         $code .= $this->_addMethodList($methods);
         $code .= "\n";
         $code .= "    function " . $this->_mock_class . "() {\n";
-        $code .= "        \$this->_mock = &new " . $this->_mock_base . "();\n";
+        $code .= "        \$this->_mock = new " . $this->_mock_base . "();\n";
         $code .= "        \$this->_mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
         $code .= $this->_chainMockReturns();
@@ -1432,7 +1429,7 @@ class MockGenerator {
      *    @access private
      */
     function _addMethodList($methods) {
-        return "    var \$_mocked_methods = array('" .
+        return "    protected \$_mocked_methods = array('" .
                 implode("', '", array_map('strtolower', $methods)) .
                 "');\n";
     }

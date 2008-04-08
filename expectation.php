@@ -84,14 +84,13 @@ class SimpleExpectation {
     /**
      *    Test to see if a value is an expectation object.
      *    A useful utility method.
-     *    @param mixed $expectation    Hopefully an Epectation
+     *    @param mixed $expectation    Hopefully an Expectation
      *                                 class.
      *    @return boolean              True if descended from
      *                                 this class.
      *    @access public
-     *    @static
      */
-    function isExpectation($expectation) {
+    static function isExpectation($expectation) {
         return is_object($expectation) &&
                 SimpleTestCompatibility::isA($expectation, 'SimpleExpectation');
     }

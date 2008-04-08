@@ -164,9 +164,9 @@ class TestOfReflection extends UnitTestCase {
 		$reflection = new SimpleReflection('AnyOldArgumentClass');
 		$function = $reflection->getSignature('aMethod');
 		if (version_compare(phpversion(), '5.0.2', '<=')) {
-			$this->assertEqual('function amethod()', strtolower($function));
+			$this->assertEqual('function amethod($argument)', strtolower($function));
 		} else {
-			$this->assertEqual('function aMethod()', $function);
+			$this->assertEqual('function aMethod($argument)', $function);
 		}
 	}
 

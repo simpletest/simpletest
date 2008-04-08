@@ -19,17 +19,24 @@ register_shutdown_function('simpletest_autorun');
  *    it's output controlled with SimpleTest::prefer().
  */
 function simpletest_autorun() {
-    if (tests_have_run()) {
-        return;
+    try {
+        if (tests_have_run()) {
+            return;
+        }
+        $candidates = array_intersect(
+                capture_new_classes(),
+                classes_defined_in_initial_file());
+        $loader = new SimpleFileLoader();
+        $suite = $loader->createSuiteFromClasses(
+                basename(initial_file()),
+                $loader->selectRunnableTests($candidates));
+        $result = $suite->run(new DefaultReporter());
+    } catch (Exception $e) {
+        // This is here, because under normal circumstances shutdown
+        // functions don't have a stack frame, leading to obscure errors.
+        echo $e->__toString();
+        $result = false;
     }
-    $candidates = array_intersect(
-            capture_new_classes(),
-            classes_defined_in_initial_file());
-    $loader = new SimpleFileLoader();
-    $suite = $loader->createSuiteFromClasses(
-            basename(initial_file()),
-            $loader->selectRunnableTests($candidates));
-    $result = $suite->run(new DefaultReporter());
     if (SimpleReporter::inCli()) {
         exit($result ? 0 : 1);
     }
@@ -54,7 +61,8 @@ function tests_have_run() {
 function initial_file() {
     static $file = false;
     if (! $file) {
-        $file = reset(get_included_files());
+        $included_files = get_included_files();
+        $file = reset($included_files);
     }
     return $file;
 }

@@ -576,9 +576,8 @@ class SimpleHtmlSaxParser {
      *    @param SimpleSaxParser $parser    Event generator, usually $self.
      *    @return SimpleLexer               Lexer suitable for this parser.
      *    @access public
-     *    @static
      */
-    function &createLexer(&$parser) {
+    static function &createLexer(&$parser) {
         $lexer = &new SimpleHtmlLexer($parser);
         return $lexer;
     }
@@ -688,9 +687,8 @@ class SimpleHtmlSaxParser {
      *    @param string $html    Incoming HTML.
      *    @return string         Outgoing plain text.
      *    @access public
-     *    @static
      */
-    function decodeHtml($html) {
+    static function decodeHtml($html) {
         return html_entity_decode($html, ENT_QUOTES);
     }
     
@@ -701,9 +699,8 @@ class SimpleHtmlSaxParser {
      *    @param string $html        HTML to convert.
      *    @return string             Plain text.
      *    @access public
-     *    @static
      */
-    function normalise($html) {
+    static function normalise($html) {
         $text = preg_replace('|<!--.*?-->|', '', $html);
         $text = preg_replace('|<script[^>]*>.*?</script>|', '', $text);
         $text = preg_replace('|<img[^>]*alt\s*=\s*"([^"]*)"[^>]*>|', ' \1 ', $text);

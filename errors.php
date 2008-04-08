@@ -232,9 +232,8 @@ class SimpleErrorQueue {
      *    @param $severity  PHP integer error code.
      *    @return           String version of error code.
      *    @access public
-     *    @static
      */
-    function getSeverityAsString($severity) {
+    static function getSeverityAsString($severity) {
         static $map = array(
                 E_STRICT => 'E_STRICT',
                 E_ERROR => 'E_ERROR',
@@ -267,7 +266,6 @@ class SimpleErrorQueue {
  *    @param $filename        File error occoured in.
  *    @param $line            Line number of error.
  *    @param $super_globals   Hash of PHP super global arrays.
- *    @static
  *    @access public
  */
 function SimpleTestErrorHandler($severity, $message, $filename = null, $line = null, $super_globals = null, $mask = null) {
