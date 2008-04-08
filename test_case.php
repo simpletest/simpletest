@@ -362,7 +362,7 @@ class SimpleTestCase {
     }
 
     /**
-     *    Accessor for the number of subtests.
+     *    Accessor for the number of subtests including myelf.
      *    @return integer           Number of test cases.
      *    @access public
      *    @static
@@ -611,7 +611,9 @@ class TestSuite {
         $count = 0;
         foreach ($this->_test_cases as $case) {
             if (is_string($case)) {
-                $count++;
+                if (! SimpleTest::isIgnored($case)) {
+                    $count++;
+                }
             } else {
                 $count += $case->getSize();
             }
