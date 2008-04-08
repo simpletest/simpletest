@@ -97,7 +97,9 @@ class SimpleRoute {
      *    @access protected
      */
     function &_createSocket($scheme, $host, $port, $timeout) {
-        if (in_array($scheme, array('https'))) {
+        if (in_array($scheme, array('file'))) {
+            $socket = &new SimpleFileSocket($this->_url);
+        } elseif (in_array($scheme, array('https'))) {
             $socket = &new SimpleSecureSocket($host, $port, $timeout);
         } else {
             $socket = &new SimpleSocket($host, $port, $timeout);
@@ -517,6 +519,9 @@ class SimpleHttpResponse extends SimpleStickyError {
         if (! $raw) {
             $this->_setError('Nothing fetched');
             $this->_headers = &new SimpleHttpHeaders('');
+        } elseif ('file' == $this->_url->getScheme()) {
+            $this->_headers = &new SimpleHttpHeaders('');
+            $this->_content = $raw;
         } elseif (! strstr($raw, "\r\n\r\n")) {
             $this->_setError('Could not split headers from content');
             $this->_headers = &new SimpleHttpHeaders($raw);

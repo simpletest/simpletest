@@ -103,6 +103,22 @@ class TestOfLiveBrowser extends UnitTestCase {
     }
 }
 
+class TestOfLocalFileBrowser extends UnitTestCase {
+    function samples() {
+        return 'file://'.dirname(__FILE__).'/site/';
+    }
+
+    function testGet() {
+        $browser = &new SimpleBrowser();
+        $browser->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
+        $this->assertTrue($browser->get($this->samples() . 'file.html'));
+        $this->assertPattern('/Link to SimpleTest/', $browser->getContent());
+        $this->assertEqual($browser->getTitle(), 'Link to SimpleTest');
+        $this->assertFalse($browser->getResponseCode());
+        $this->assertEqual($browser->getMimeType(), '');
+    }
+}
+
 class TestRadioFields extends SimpleTestAcceptanceTest {
 	function testSetFieldAsInteger() {
 		$this->get($this->samples() . 'form_with_radio_buttons.html');

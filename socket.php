@@ -66,6 +66,100 @@ class SimpleStickyError {
     }
 }
 
+class SimpleFileSocket extends SimpleStickyError {
+    var $_handle;
+    var $_is_open = false;
+    var $_sent = '';
+    var $lock_size;
+
+    /**
+     *    Opens a socket for reading and writing.
+     *    @param string $host          Hostname to send request to.
+     *    @param integer $port         Port on remote machine to open.
+     *    @param integer $timeout      Connection timeout in seconds.
+     *    @param integer $block_size   Size of chunk to read.
+     *    @access public
+     */
+    function SimpleFileSocket($url, $block_size = 1024) {
+        $this->SimpleStickyError();
+        if (! ($this->_handle = $this->_openFile($url, $error))) {
+            $this->_setError("Cannot open [$file] with [$error]");
+            return;
+        }
+        $this->_is_open = true;
+        $this->_block_size = $block_size;
+    }
+
+    /**
+     *    Writes some data to the socket and saves alocal copy.
+     *    @param string $message       String to send to socket.
+     *    @return boolean              True if successful.
+     *    @access public
+     */
+    function write($message) {
+        return true;
+    }
+
+    /**
+     *    Reads data from the socket. The error suppresion
+     *    is a workaround for PHP4 always throwing a warning
+     *    with a secure socket.
+     *    @return integer/boolean           Incoming bytes. False
+     *                                     on error.
+     *    @access public
+     */
+    function read() {
+        $raw = @fread($this->_handle, $this->_block_size);
+        if ($raw === false) {
+            $this->_setError('Cannot read from socket');
+            $this->close();
+        }
+        return $raw;
+    }
+
+    /**
+     *    Accessor for socket open state.
+     *    @return boolean           True if open.
+     *    @access public
+     */
+    function isOpen() {
+        return $this->_is_open;
+    }
+
+    /**
+     *    Closes the socket preventing further reads.
+     *    Cannot be reopened once closed.
+     *    @return boolean           True if successful.
+     *    @access public
+     */
+    function close() {
+        $this->_is_open = false;
+        return fclose($this->_handle);
+    }
+
+    /**
+     *    Accessor for content so far.
+     *    @return string        Bytes sent only.
+     *    @access public
+     */
+    function getSent() {
+        return $this->_sent;
+    }
+
+    /**
+     *    Actually opens the low level socket.
+     *    @param string $host          Host to connect to.
+     *    @param integer $port         Port on host.
+     *    @param integer $error_number Recipient of error code.
+     *    @param string $error         Recipoent of error message.
+     *    @param integer $timeout      Maximum time to wait for connection.
+     *    @access protected
+     */
+    function _openFile($file, &$error) {
+        return @fopen($file->asString(), 'r');
+    }
+}
+
 /**
  *    Wrapper for TCP/IP socket.
  *    @package SimpleTest
