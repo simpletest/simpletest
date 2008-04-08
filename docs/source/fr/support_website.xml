@@ -11,6 +11,8 @@
                 que tout se passe la plupart du temps. Attention tout de même : les échanges
                 ont lieu en anglais.
             </p>
+        </introduction>
+        <section name="subscribe" title="Pour s'abonner">
             <p>
                 C'est vraiment
                 <a href="https://lists.sourceforge.net/lists/listinfo/simpletest-support">
@@ -22,9 +24,12 @@
                 Au dernier pointage, il y avait 114 abonnés et 1908 messages envoyés.
                 Cela fait de 1 à 4 messages par jour en moyenne.
             </p>
-        </introduction>
+        </section>
     </content>
     <internal>
+        <link>
+            Pour <a href="#subscribe">s'abonner</a>.
+        </link>
     </internal>
     <external>
         <link>

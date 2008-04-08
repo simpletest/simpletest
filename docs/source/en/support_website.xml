@@ -9,6 +9,8 @@
                 the most active area around SimpleTest :
                 help, advice, bugs and workarounds tend to happen most of the time.
             </p>
+        </introduction>
+        <section name="subscribe" title="To subscribe">
             <p>
                 It's really
                 <a href="https://lists.sourceforge.net/lists/listinfo/simpletest-support">
@@ -21,9 +23,12 @@
                 At the last count, there were about 114 subscribers and 1908 message sent.
                 That's anything between 1 and 4 messages per day on average.
             </p>
-        </introduction>
+        </section>
     </content>
     <internal>
+        <link>
+            To <a href="#subscribe">subscribe</a>.
+        </link>
     </internal>
     <external>
         <link>
