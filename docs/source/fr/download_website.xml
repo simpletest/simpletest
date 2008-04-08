@@ -7,12 +7,12 @@
         <section name="current-release" title="Version courante">
             <p>
                 La version courante est :
-                <a href="http://downloads.sourceforge.net/simpletest/simpletest_1.0.1RC1.tar.gz">
-                SimpleTest v1.0.1RC1</a>.
+                <a href="http://downloads.sourceforge.net/simpletest/simpletest_1.0.1.tar.gz">
+                SimpleTest v1.0.1</a>.
             </p>
             <p>
                 Vous pouvez télécharger cette version depuis
-                <a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=77275&amp;release_id=586797">
+                <a href="https://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=77275&amp;release_id=590611">
                 SourceForget.net</a>
                 et votre miroir le plus proche. Vous pouvez aussi jeter un oeil du côté
                 du <a href="changelog.html">changelog actuel</a>.
