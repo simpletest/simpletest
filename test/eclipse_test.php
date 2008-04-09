@@ -25,7 +25,7 @@ class TestOfEclipse extends UnitTestCase {
 		$filename = $pathparts['basename'];
 		$test= &new TestSuite($filename);
 		$test->addTestFile($fullpath);
-		$test->run(new EclipseReporter(&$listener));
+		$test->run(new EclipseReporter($listener));
 		$this->assertEqual($expected,$listener->output);
 	}
 }
