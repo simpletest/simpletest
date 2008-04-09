@@ -264,6 +264,7 @@ class TestOfUrl extends UnitTestCase {
         $this->assertPreserved('http://host#stuff');
         $this->assertPreserved('http://me:secret@www.here.com/a/b/c/here.html?a=A?7,6');
         $this->assertPreserved('http://www.here.com/?a=A__b=B');
+        $this->assertPreserved('http://www.example.com:8080/');
     }
     
     function assertUrl($raw, $parts, $params = false, $coords = false) {
