@@ -38,8 +38,8 @@ class SimpleForm {
      */
     function SimpleForm($tag, &$page) {
         $this->_method = $tag->getAttribute('method');
-        $this->_action = $this->_createAction($tag->getAttribute('action'), $page);
-        $this->_encoding = $this->_setEncodingClass($tag);
+        $this->_action = $this->createAction($tag->getAttribute('action'), $page);
+        $this->_encoding = $this->setEncodingClass($tag);
         $this->_default_target = false;
         $this->_id = $tag->getAttribute('id');
         $this->_buttons = array();
@@ -55,7 +55,7 @@ class SimpleForm {
      *    @return string               Packet class.
      *    @access private
      */
-    function _setEncodingClass($tag) {
+    protected function setEncodingClass($tag) {
         if (strtolower($tag->getAttribute('method')) == 'post') {
             if (strtolower($tag->getAttribute('enctype')) == 'multipart/form-data') {
                 return 'SimpleMultipartEncoding';
@@ -90,7 +90,7 @@ class SimpleForm {
      *    @param SimpleUrl $base   Page location.
      *    @return SimpleUrl        Absolute form target.
      */
-    function _createAction($action, &$page) {
+    protected function createAction($action, &$page) {
         if (($action === '') || ($action === false)) {
             return $page->expandUrl($page->getUrl());
         }

@@ -86,7 +86,7 @@ class SimpleFrameset {
             return array();
         }
         return array_merge(
-                array($this->_getPublicNameFromIndex($this->_focus)),
+                array($this->getPublicNameFromIndex($this->_focus)),
                 $this->_frames[$this->_focus]->getFrameFocus());
     }
 
@@ -98,7 +98,7 @@ class SimpleFrameset {
      *    @return integer/string     Public name.
      *    @access private
      */
-    function _getPublicNameFromIndex($subject) {
+    protected function getPublicNameFromIndex($subject) {
         foreach ($this->_names as $name => $index) {
             if ($subject == $index) {
                 return $name;
@@ -187,7 +187,7 @@ class SimpleFrameset {
     function getFrames() {
         $report = array();
         for ($i = 0; $i < count($this->_frames); $i++) {
-            $report[$this->_getPublicNameFromIndex($i)] =
+            $report[$this->getPublicNameFromIndex($i)] =
                     $this->_frames[$i]->getFrames();
         }
         return $report;
@@ -259,7 +259,7 @@ class SimpleFrameset {
     function getUrl() {
         if (is_integer($this->_focus)) {
             $url = $this->_frames[$this->_focus]->getUrl();
-            $url->setTarget($this->_getPublicNameFromIndex($this->_focus));
+            $url->setTarget($this->getPublicNameFromIndex($this->_focus));
         } else {
             $url = $this->_frameset->getUrl();
         }
@@ -439,7 +439,7 @@ class SimpleFrameset {
         foreach ($this->_frames as $index => $frame) {
             if ($url = $frame->getUrlById($id)) {
                 if (! $url->gettarget()) {
-                    $url->setTarget($this->_getPublicNameFromIndex($index));
+                    $url->setTarget($this->getPublicNameFromIndex($index));
                 }
                 return $url;
             }
@@ -458,7 +458,7 @@ class SimpleFrameset {
         $tagged = array();
         foreach ($urls as $url) {
             if (! $url->getTarget()) {
-                $url->setTarget($this->_getPublicNameFromIndex($frame));
+                $url->setTarget($this->getPublicNameFromIndex($frame));
             }
             $tagged[] = $url;
         }
@@ -552,7 +552,7 @@ class SimpleFrameset {
     function &_findFormInFrame(&$page, $index, $method, $attribute) {
         $form = &$this->_frames[$index]->$method($attribute);
         if (isset($form)) {
-            $form->setDefaultTarget($this->_getPublicNameFromIndex($index));
+            $form->setDefaultTarget($this->getPublicNameFromIndex($index));
         }
         return $form;
     }

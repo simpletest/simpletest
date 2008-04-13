@@ -127,7 +127,7 @@ class SimpleErrorQueue {
     function add($severity, $content, $filename, $line) {
         $content = str_replace('%', '%%', $content);
         if ($this->_using_expect_style) {
-            $this->_testLatestError($severity, $content, $filename, $line);
+            $this->testLatestError($severity, $content, $filename, $line);
         } else {
             array_push(
                     $this->_queue,
@@ -145,7 +145,7 @@ class SimpleErrorQueue {
             $severity = $this->getSeverityAsString($severity);
             $this->_test->error($severity, $message, $file, $line);
         }
-        while (list($expected, $message) = $this->_extractExpectation()) {
+        while (list($expected, $message) = $this->extractExpectation()) {
             $this->_test->assert($expected, false, "%s -> Expected error not caught");
         }
     }
@@ -159,8 +159,8 @@ class SimpleErrorQueue {
      *    @param integer $line           Line number of error.
      *    @access private
      */
-    function _testLatestError($severity, $content, $filename, $line) {
-        if ($expectation = $this->_extractExpectation()) {
+    protected function testLatestError($severity, $content, $filename, $line) {
+        if ($expectation = $this->extractExpectation()) {
             list($expected, $message) = $expectation;
             $this->_test->assert($expected, $content, sprintf(
                     $message,
@@ -193,7 +193,7 @@ class SimpleErrorQueue {
      *    @return     SimpleExpectation    False if none.
      *    @access private
      */
-    function _extractExpectation() {
+    protected function extractExpectation() {
         if (count($this->_expectation_queue)) {
             return array_shift($this->_expectation_queue);
         }

@@ -44,14 +44,14 @@ class SimpleTagBuilder {
                 'label' => 'SimpleLabelTag',
                 'form' => 'SimpleFormTag',
                 'frame' => 'SimpleFrameTag');
-        $attributes = $this->_keysToLowerCase($attributes);
+        $attributes = $this->keysToLowerCase($attributes);
         if (array_key_exists($name, $map)) {
             $tag_class = $map[$name];
             return new $tag_class($attributes);
         } elseif ($name == 'select') {
-            return $this->_createSelectionTag($attributes);
+            return $this->createSelectionTag($attributes);
         } elseif ($name == 'input') {
-            return $this->_createInputTag($attributes);
+            return $this->createInputTag($attributes);
         }
         return new SimpleTag($name, $attributes);
     }
@@ -62,7 +62,7 @@ class SimpleTagBuilder {
      *    @return SimpleTag          Tag object.
      *    @access protected
      */
-    function _createSelectionTag($attributes) {
+    protected function createSelectionTag($attributes) {
         if (isset($attributes['multiple'])) {
             return new MultipleSelectionTag($attributes);
         }
@@ -75,7 +75,7 @@ class SimpleTagBuilder {
      *    @return SimpleTag          Tag object.
      *    @access protected
      */
-    function _createInputTag($attributes) {
+    protected function createInputTag($attributes) {
         if (! isset($attributes['type'])) {
             return new SimpleTextTag($attributes);
         }
@@ -102,7 +102,7 @@ class SimpleTagBuilder {
      *    @return hash       Unchanged values, but keys lower case.
      *    @access private
      */
-    function _keysToLowerCase($map) {
+    protected function keysToLowerCase($map) {
         $lower = array();
         foreach ($map as $key => $value) {
             $lower[strtolower($key)] = $value;
@@ -150,7 +150,7 @@ class SimplePageBuilder extends SimpleSaxListener {
      */
     function &parse($response) {
         $this->_tags = array();
-        $this->_page = &$this->_createPage($response);
+        $this->_page = &$this->createPage($response);
         $parser = &$this->_createParser($this);
         $parser->parse($response->getContent());
         $this->_page->acceptPageEnd();
@@ -162,7 +162,7 @@ class SimplePageBuilder extends SimpleSaxListener {
      *    @return SimplePage        New unparsed page.
      *    @access protected
      */
-    function &_createPage($response) {
+    protected function &createPage($response) {
         $page = &new SimplePage($response);
         return $page;
     }
@@ -195,7 +195,7 @@ class SimplePageBuilder extends SimpleSaxListener {
         }
         if ($tag->getTagName() == 'label') {
             $this->_page->acceptLabelStart($tag);
-            $this->_openTag($tag);
+            $this->openTag($tag);
             return true;
         }
         if ($tag->getTagName() == 'form') {
@@ -214,7 +214,7 @@ class SimplePageBuilder extends SimpleSaxListener {
             $this->_private_content_tag = &$tag;
         }
         if ($tag->expectEndTag()) {
-            $this->_openTag($tag);
+            $this->openTag($tag);
             return true;
         }
         $this->_page->acceptTag($tag);
@@ -240,12 +240,12 @@ class SimplePageBuilder extends SimpleSaxListener {
             $this->_page->acceptFramesetEnd();
             return true;
         }
-        if ($this->_hasNamedTagOnOpenTagStack($name)) {
+        if ($this->hasNamedTagOnOpenTagStack($name)) {
             $tag = array_pop($this->_tags[$name]);
             if ($tag->isPrivateContent() && $this->_private_content_tag->getTagName() == $name) {
                 unset($this->_private_content_tag);
             }
-            $this->_addContentTagToOpenTags($tag);
+            $this->addContentTagToOpenTags($tag);
             $this->_page->acceptTag($tag);
             return true;
         }
@@ -259,7 +259,7 @@ class SimplePageBuilder extends SimpleSaxListener {
      *    @return boolean            True if any are still open.
      *    @access private
      */
-    function _hasNamedTagOnOpenTagStack($name) {
+    protected function hasNamedTagOnOpenTagStack($name) {
         return isset($this->_tags[$name]) && (count($this->_tags[$name]) > 0);
     }
 
@@ -274,7 +274,7 @@ class SimplePageBuilder extends SimpleSaxListener {
         if (isset($this->_private_content_tag)) {
             $this->_private_content_tag->addContent($text);
         } else {
-            $this->_addContentToAllOpenTags($text);
+            $this->addContentToAllOpenTags($text);
         }
         return true;
     }
@@ -285,7 +285,7 @@ class SimplePageBuilder extends SimpleSaxListener {
      *    @param string $text        May include unparsed tags.
      *    @access private
      */
-    function _addContentToAllOpenTags($text) {
+    protected function addContentToAllOpenTags($text) {
         foreach (array_keys($this->_tags) as $name) {
             for ($i = 0, $count = count($this->_tags[$name]); $i < $count; $i++) {
                 $this->_tags[$name][$i]->addContent($text);
@@ -300,7 +300,7 @@ class SimplePageBuilder extends SimpleSaxListener {
      *    @param SimpleTag $tag        Option tags only.
      *    @access private
      */
-    function _addContentTagToOpenTags(&$tag) {
+    protected function addContentTagToOpenTags(&$tag) {
         if ($tag->getTagName() != 'option') {
             return;
         }
@@ -317,7 +317,7 @@ class SimplePageBuilder extends SimpleSaxListener {
      *    @param SimpleTag $tag        New content tag.
      *    @access private
      */
-    function _openTag(&$tag) {
+    protected function openTag(&$tag) {
         $name = $tag->getTagName();
         if (! in_array($name, array_keys($this->_tags))) {
             $this->_tags[$name] = array();
@@ -368,9 +368,9 @@ class SimplePage {
         $this->_frameset_nesting_level = 0;
         $this->_text = false;
         if ($response) {
-            $this->_extractResponse($response);
+            $this->extractResponse($response);
         } else {
-            $this->_noResponse();
+            $this->noResponse();
         }
     }
 
@@ -379,7 +379,7 @@ class SimplePage {
      *    @param SimpleHttpResponse $response    Response being parsed.
      *    @access private
      */
-    function _extractResponse($response) {
+    protected function extractResponse($response) {
         $this->_transport_error = $response->getError();
         $this->_raw = $response->getContent();
         $this->_sent = $response->getSent();
@@ -393,7 +393,7 @@ class SimplePage {
      *    Sets up a missing response.
      *    @access private
      */
-    function _noResponse() {
+    protected function noResponse() {
         $this->_transport_error = 'No page fetched yet';
         $this->_raw = false;
         $this->_sent = false;
@@ -585,12 +585,12 @@ class SimplePage {
      */
     function acceptTag(&$tag) {
         if ($tag->getTagName() == "a") {
-            $this->_addLink($tag);
+            $this->addLink($tag);
         } elseif ($tag->getTagName() == "base") {
-            $this->_setBase($tag);
+            $this->setBase($tag);
         } elseif ($tag->getTagName() == "title") {
-            $this->_setTitle($tag);
-        } elseif ($this->_isFormElement($tag->getTagName())) {
+            $this->setTitle($tag);
+        } elseif ($this->isFormElement($tag->getTagName())) {
             for ($i = 0; $i < count($this->_open_forms); $i++) {
                 $this->_open_forms[$i]->addWidget($tag);
             }
@@ -631,7 +631,7 @@ class SimplePage {
      *    @return boolean         True if form element.
      *    @access private
      */
-    function _isFormElement($name) {
+    protected function isFormElement($name) {
         return in_array($name, array('input', 'button', 'textarea', 'select'));
     }
 
@@ -661,7 +661,7 @@ class SimplePage {
      *    @access public
      */
     function acceptFramesetStart(&$tag) {
-        if (! $this->_isLoadingFrames()) {
+        if (! $this->isLoadingFrames()) {
             $this->_frameset = &$tag;
         }
         $this->_frameset_nesting_level++;
@@ -672,7 +672,7 @@ class SimplePage {
      *    @access public
      */
     function acceptFramesetEnd() {
-        if ($this->_isLoadingFrames()) {
+        if ($this->isLoadingFrames()) {
             $this->_frameset_nesting_level--;
         }
     }
@@ -684,7 +684,7 @@ class SimplePage {
      *    @access public
      */
     function acceptFrame(&$tag) {
-        if ($this->_isLoadingFrames()) {
+        if ($this->isLoadingFrames()) {
             if ($tag->getAttribute('src')) {
                 $this->_frames[] = &$tag;
             }
@@ -697,7 +697,7 @@ class SimplePage {
      *    @return boolean        True if inframeset.
      *    @access private
      */
-    function _isLoadingFrames() {
+    protected function isLoadingFrames() {
         if (! $this->_frameset) {
             return false;
         }
@@ -710,7 +710,7 @@ class SimplePage {
      *    @return boolean        True if absolute.
      *    @access protected
      */
-    function _linkIsAbsolute($url) {
+    protected function linkIsAbsolute($url) {
         $parsed = new SimpleUrl($url);
         return (boolean)($parsed->getScheme() && $parsed->getHost());
     }
@@ -720,7 +720,7 @@ class SimplePage {
      *    @param SimpleAnchorTag $tag      Link to accept.
      *    @access protected
      */
-    function _addLink($tag) {
+    protected function addLink($tag) {
         $this->_links[] = $tag;
     }
 
@@ -792,7 +792,7 @@ class SimplePage {
     function getUrls() {
         $all = array();
         foreach ($this->_links as $link) {
-            $url = $this->_getUrlFromLink($link);
+            $url = $this->getUrlFromLink($link);
             $all[] = $url->asString();
         }
         return $all;
@@ -809,7 +809,7 @@ class SimplePage {
         $matches = array();
         foreach ($this->_links as $link) {
             if ($link->getText() == $label) {
-                $matches[] = $this->_getUrlFromLink($link);
+                $matches[] = $this->getUrlFromLink($link);
             }
         }
         return $matches;
@@ -824,7 +824,7 @@ class SimplePage {
     function getUrlById($id) {
         foreach ($this->_links as $link) {
             if ($link->getAttribute('id') === (string)$id) {
-                return $this->_getUrlFromLink($link);
+                return $this->getUrlFromLink($link);
             }
         }
         return false;
@@ -836,7 +836,7 @@ class SimplePage {
      *    @return SimpleUrl            URL with frame target if any.
      *    @access private
      */
-    function _getUrlFromLink($link) {
+    protected function getUrlFromLink($link) {
         $url = $this->expandUrl($link->getHref());
         if ($link->getAttribute('target')) {
             $url->setTarget($link->getAttribute('target'));
@@ -864,7 +864,7 @@ class SimplePage {
      *    @param SimpleTag $tag    Base URL for page.
      *    @access protected
      */
-    function _setBase(&$tag) {
+    protected function setBase(&$tag) {
         $url = $tag->getAttribute('href');
         $this->_base = new SimpleUrl($url);
     }
@@ -874,7 +874,7 @@ class SimplePage {
      *    @param SimpleTitleTag $tag    Title of page.
      *    @access protected
      */
-    function _setTitle(&$tag) {
+    protected function setTitle(&$tag) {
         $this->_title = &$tag;
     }
 

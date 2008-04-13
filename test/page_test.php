@@ -13,7 +13,7 @@ Mock::generate('SimplePageBuilder');
 Mock::generatePartial(
         'SimplePageBuilder',
         'PartialSimplePageBuilder',
-        array('_createPage', '_createParser'));
+        array('createPage', '_createParser'));
 
 class TestOfPageBuilder extends UnitTestCase {
 
@@ -26,7 +26,7 @@ class TestOfPageBuilder extends UnitTestCase {
         $page->expectCallCount('acceptTag', 1);
 
         $builder = &new PartialSimplePageBuilder();
-        $builder->setReturnReference('_createPage', $page);
+        $builder->setReturnReference('createPage', $page);
         $builder->setReturnReference('_createParser', new MockSimpleHtmlSaxParser());
         $builder->SimplePageBuilder();
 
@@ -47,7 +47,7 @@ class TestOfPageBuilder extends UnitTestCase {
         $page->expectCallCount("acceptTag", 1);
 
         $builder = &new PartialSimplePageBuilder();
-        $builder->setReturnReference('_createPage', $page);
+        $builder->setReturnReference('createPage', $page);
         $builder->setReturnReference('_createParser', new MockSimpleHtmlSaxParser());
         $builder->SimplePageBuilder();
 
@@ -68,7 +68,7 @@ class TestOfPageBuilder extends UnitTestCase {
         $page->expectCallCount("acceptTag", 1);
 
         $builder = &new PartialSimplePageBuilder();
-        $builder->setReturnReference('_createPage', $page);
+        $builder->setReturnReference('createPage', $page);
         $builder->setReturnReference('_createParser', new MockSimpleHtmlSaxParser());
         $builder->SimplePageBuilder();
 
@@ -95,7 +95,7 @@ class TestOfPageBuilder extends UnitTestCase {
         $page->expectCallCount("acceptTag", 2);
 
         $builder = &new PartialSimplePageBuilder();
-        $builder->setReturnReference('_createPage', $page);
+        $builder->setReturnReference('createPage', $page);
         $builder->setReturnReference('_createParser', new MockSimpleHtmlSaxParser());
         $builder->SimplePageBuilder();
 
@@ -118,7 +118,7 @@ class TestOfPageBuilder extends UnitTestCase {
         $page->expectCallCount("acceptTag", 1);
 
         $builder = &new PartialSimplePageBuilder();
-        $builder->setReturnReference('_createPage', $page);
+        $builder->setReturnReference('createPage', $page);
         $builder->setReturnReference('_createParser', new MockSimpleHtmlSaxParser());
         $builder->SimplePageBuilder();
 
@@ -135,7 +135,7 @@ class TestOfPageBuilder extends UnitTestCase {
         $page->expectOnce("acceptFormEnd", array());
 
         $builder = &new PartialSimplePageBuilder();
-        $builder->setReturnReference('_createPage', $page);
+        $builder->setReturnReference('createPage', $page);
         $builder->setReturnReference('_createParser', new MockSimpleHtmlSaxParser());
         $builder->SimplePageBuilder();
 
@@ -156,7 +156,7 @@ class TestOfPageParsing extends UnitTestCase {
         $page->expectOnce('acceptPageEnd');
 
         $builder = &new PartialSimplePageBuilder();
-        $builder->setReturnReference('_createPage', $page);
+        $builder->setReturnReference('createPage', $page);
         $builder->setReturnReference('_createParser', $parser);
         $builder->SimplePageBuilder();
 

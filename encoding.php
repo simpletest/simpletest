@@ -26,7 +26,7 @@ class SimpleEncodedPair {
      *    @param string $key       Form element name.
      *    @param string $value     Data to send.
      */
-    function SimpleEncodedPair($key, $value) {
+    function __construct($key, $value) {
         $this->_key = $key;
         $this->_value = $value;
     }
@@ -97,7 +97,7 @@ class SimpleAttachment {
      *    @param string $content      Raw data.
      *    @param hash $filename       Original filename.
      */
-    function SimpleAttachment($key, $content, $filename) {
+    function __construct($key, $content, $filename) {
         $this->_key = $key;
         $this->_content = $content;
         $this->_filename = $filename;
@@ -121,7 +121,7 @@ class SimpleAttachment {
         $part = 'Content-Disposition: form-data; ';
         $part .= 'name="' . $this->_key . '"; ';
         $part .= 'filename="' . $this->_filename . '"';
-        $part .= "\r\nContent-Type: " . $this->_deduceMimeType();
+        $part .= "\r\nContent-Type: " . $this->deduceMimeType();
         $part .= "\r\n\r\n" . $this->_content;
         return $part;
     }
@@ -132,8 +132,8 @@ class SimpleAttachment {
      *    @return string        MIME type.
      *    @access private
      */
-    function _deduceMimeType() {
-        if ($this->_isOnlyAscii($this->_content)) {
+    protected function deduceMimeType() {
+        if ($this->isOnlyAscii($this->_content)) {
             return 'text/plain';
         }
         return 'application/octet-stream';
@@ -144,7 +144,7 @@ class SimpleAttachment {
      *    @param string $ascii    String to test.
      *    @access private
      */
-    function _isOnlyAscii($ascii) {
+    protected function isOnlyAscii($ascii) {
         for ($i = 0, $length = strlen($ascii); $i < $length; $i++) {
             if (ord($ascii[$i]) > 127) {
                 return false;
@@ -226,10 +226,10 @@ class SimpleEncoding {
         }
         if (is_array($value)) {
             foreach ($value as $item) {
-                $this->_addPair($key, $item);
+                $this->addPair($key, $item);
             }
         } else {
-            $this->_addPair($key, $value);
+            $this->addPair($key, $value);
         }
     }
     
@@ -239,7 +239,7 @@ class SimpleEncoding {
      *    @param string/array $value    New data.
      *    @access private
      */
-    function _addPair($key, $value) {
+    protected function addPair($key, $value) {
         $this->_request[] = new SimpleEncodedPair($key, $value);
     }
     

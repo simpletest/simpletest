@@ -47,7 +47,7 @@ class SimpleRoute {
      *    @return string          Request line content.
      *    @access protected
      */
-    function _getRequestLine($method) {
+    protected function getRequestLine($method) {
         return $method . ' ' . $this->_url->getPath() .
                 $this->_url->getEncodedRequest() . ' HTTP/1.0';
     }
@@ -57,7 +57,7 @@ class SimpleRoute {
      *    @return string          Host line content.
      *    @access protected
      */
-    function _getHostLine() {
+    protected function getHostLine() {
         $line = 'Host: ' . $this->_url->getHost();
         if ($this->_url->getPort()) {
             $line .= ':' . $this->_url->getPort();
@@ -80,8 +80,8 @@ class SimpleRoute {
                 $this->_url->getPort() ? $this->_url->getPort() : $default_port,
                 $timeout);
         if (! $socket->isError()) {
-            $socket->write($this->_getRequestLine($method) . "\r\n");
-            $socket->write($this->_getHostLine() . "\r\n");
+            $socket->write($this->getRequestLine($method) . "\r\n");
+            $socket->write($this->getHostLine() . "\r\n");
             $socket->write("Connection: close\r\n");
         }
         return $socket;
@@ -141,7 +141,7 @@ class SimpleProxyRoute extends SimpleRoute {
      *    @return string          Request line content.
      *    @access protected
      */
-    function _getRequestLine($method) {
+    function getRequestLine($method) {
         $url = $this->getUrl();
         $scheme = $url->getScheme() ? $url->getScheme() : 'http';
         $port = $url->getPort() ? ':' . $url->getPort() : '';
@@ -155,7 +155,7 @@ class SimpleProxyRoute extends SimpleRoute {
      *    @return string          Host line content.
      *    @access protected
      */
-    function _getHostLine() {
+    function getHostLine() {
         $host = 'Host: ' . $this->_proxy->getHost();
         $port = $this->_proxy->getPort() ? $this->_proxy->getPort() : 8080;
         return "$host:$port";
@@ -177,8 +177,8 @@ class SimpleProxyRoute extends SimpleRoute {
         if ($socket->isError()) {
             return $socket;
         }
-        $socket->write($this->_getRequestLine($method) . "\r\n");
-        $socket->write($this->_getHostLine() . "\r\n");
+        $socket->write($this->getRequestLine($method) . "\r\n");
+        $socket->write($this->getHostLine() . "\r\n");
         if ($this->_username && $this->_password) {
             $socket->write('Proxy-Authorization: Basic ' .
                     base64_encode($this->_username . ':' . $this->_password) .
@@ -228,7 +228,7 @@ class SimpleHttpRequest {
     function &fetch($timeout) {
         $socket = &$this->_route->createConnection($this->_encoding->getMethod(), $timeout);
         if (! $socket->isError()) {
-            $this->_dispatchRequest($socket, $this->_encoding);
+            $this->dispatchRequest($socket, $this->_encoding);
         }
         $response = &$this->_createResponse($socket);
         return $response;
@@ -242,7 +242,7 @@ class SimpleHttpRequest {
      *    @param SimpleFormEncoding $encoding   Content to send with request.
      *    @access private
      */
-    function _dispatchRequest(&$socket, $encoding) {
+    protected function dispatchRequest(&$socket, $encoding) {
         foreach ($this->_headers as $header_line) {
             $socket->write($header_line . "\r\n");
         }
@@ -319,7 +319,7 @@ class SimpleHttpHeaders {
         $this->_authentication = false;
         $this->_realm = false;
         foreach (split("\r\n", $headers) as $header_line) {
-            $this->_parseHeaderLine($header_line);
+            $this->parseHeaderLine($header_line);
         }
     }
     
@@ -432,7 +432,7 @@ class SimpleHttpHeaders {
      *    @param string $header_line        One line of header.
      *    @access protected
      */
-    function _parseHeaderLine($header_line) {
+    protected function parseHeaderLine($header_line) {
         if (preg_match('/HTTP\/(\d+\.\d+)\s+(\d+)/i', $header_line, $matches)) {
             $this->_http_version = $matches[1];
             $this->_response_code = $matches[2];
@@ -444,7 +444,7 @@ class SimpleHttpHeaders {
             $this->_location = trim($matches[1]);
         }
         if (preg_match('/Set-cookie:(.*)/i', $header_line, $matches)) {
-            $this->_cookies[] = $this->_parseCookie($matches[1]);
+            $this->_cookies[] = $this->parseCookie($matches[1]);
         }
         if (preg_match('/WWW-Authenticate:\s+(\S+)\s+realm=\"(.*?)\"/i', $header_line, $matches)) {
             $this->_authentication = $matches[1];
@@ -458,7 +458,7 @@ class SimpleHttpHeaders {
      *    @return SimpleCookie          New cookie object.
      *    @access private
      */
-    function _parseCookie($cookie_line) {
+    protected function parseCookie($cookie_line) {
         $parts = split(";", $cookie_line);
         $cookie = array();
         preg_match('/\s*(.*?)\s*=(.*)/', array_shift($parts), $cookie);
@@ -502,7 +502,7 @@ class SimpleHttpResponse extends SimpleStickyError {
         $this->_encoding = $encoding;
         $this->_sent = $socket->getSent();
         $this->_content = false;
-        $raw = $this->_readAll($socket);
+        $raw = $this->readAll($socket);
         if ($socket->isError()) {
             $this->_setError('Error reading socket [' . $socket->getError() . ']');
             return;
@@ -604,9 +604,9 @@ class SimpleHttpResponse extends SimpleStickyError {
      *                                 else false.
      *    @access private
      */
-    function _readAll(&$socket) {
+    protected function readAll(&$socket) {
         $all = '';
-        while (! $this->_isLastPacket($next = $socket->read())) {
+        while (! $this->isLastPacket($next = $socket->read())) {
             $all .= $next;
         }
         return $all;
@@ -619,7 +619,7 @@ class SimpleHttpResponse extends SimpleStickyError {
      *    @return boolean          True if empty or EOF.
      *    @access private
      */
-    function _isLastPacket($packet) {
+    protected function isLastPacket($packet) {
         if (is_string($packet)) {
             return $packet === '';
         }

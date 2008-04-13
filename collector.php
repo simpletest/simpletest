@@ -23,7 +23,7 @@ class SimpleCollector {
      * @param string $path    Path to normalise.
      * @return string         Path without trailing slash.
      */
-    function _removeTrailingSlash($path) {
+    protected function removeTrailingSlash($path) {
         if (substr($path, -1) == DIRECTORY_SEPARATOR) {
             return substr($path, 0, -1);
         } elseif (substr($path, -1) == '/') {
@@ -40,10 +40,10 @@ class SimpleCollector {
      * @see _attemptToAdd()
      */
     function collect(&$test, $path) {
-        $path = $this->_removeTrailingSlash($path);
+        $path = $this->removeTrailingSlash($path);
         if ($handle = opendir($path)) {
             while (($entry = readdir($handle)) !== false) {
-                if ($this->_isHidden($entry)) {
+                if ($this->isHidden($entry)) {
                     continue;
                 }
                 $this->_handle($test, $path . DIRECTORY_SEPARATOR . $entry);
@@ -79,7 +79,7 @@ class SimpleCollector {
      *  @return boolean                True if hidden file.
      *  @access private
      */
-    function _isHidden($filename) {
+    protected function isHidden($filename) {
         return strncmp($filename, '.', 1) == 0;
     }
 }
@@ -101,7 +101,7 @@ class SimplePatternCollector extends SimpleCollector {
      *  See {@link http://us4.php.net/manual/en/reference.pcre.pattern.syntax.php PHP's PCRE}
      *  for full documentation of valid pattern.s
      */
-    function SimplePatternCollector($pattern = '/php$/i') {
+    function __construct($pattern = '/php$/i') {
         $this->_pattern = $pattern;
     }
 

@@ -36,7 +36,7 @@ class SimpleCommandLineParser {
      *    Parses raw command line arguments into object properties.
      *    @param string $arguments        Raw commend line arguments.
      */
-    function SimpleCommandLineParser($arguments) {
+    function __construct($arguments) {
         if (! is_array($arguments)) {
             return;
         }
@@ -106,7 +106,7 @@ class DefaultReporter extends SimpleReporterDecorator {
     /**
      *  Assembles the appopriate reporter for the environment.
      */
-    function DefaultReporter() {
+    function __construct() {
         if (SimpleReporter::inCli()) {
             global $argv;
             $parser = new SimpleCommandLineParser($argv);

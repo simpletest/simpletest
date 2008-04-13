@@ -266,7 +266,7 @@ class EqualExpectation extends SimpleExpectation {
      *    @return mixed       Held value to compare with.
      *    @access protected
      */
-    function _getValue() {
+    protected function getValue() {
         return $this->_value;
     }
 }
@@ -310,10 +310,10 @@ class NotEqualExpectation extends EqualExpectation {
         $dumper = &$this->_getDumper();
         if ($this->test($compare)) {
             return "Not equal expectation passes " .
-                    $dumper->describeDifference($this->_getValue(), $compare);
+                    $dumper->describeDifference($this->getValue(), $compare);
         } else {
             return "Not equal expectation fails [" .
-                    $dumper->describeValue($this->_getValue()) .
+                    $dumper->describeValue($this->getValue()) .
                     "] matches";
         }
     }
@@ -486,7 +486,7 @@ class ReferenceExpectation extends SimpleExpectation {
         }
     }
 
-    function _getValue() {
+    function getValue() {
         return $this->_value;
     }
 }
@@ -516,7 +516,7 @@ class IdenticalExpectation extends EqualExpectation {
      *    @access public
      */
     function test($compare) {
-        return SimpleTestCompatibility::isIdentical($this->_getValue(), $compare);
+        return SimpleTestCompatibility::isIdentical($this->getValue(), $compare);
     }
 
     /**
@@ -529,12 +529,12 @@ class IdenticalExpectation extends EqualExpectation {
     function testMessage($compare) {
         $dumper = &$this->_getDumper();
         if ($this->test($compare)) {
-            return "Identical expectation [" . $dumper->describeValue($this->_getValue()) . "]";
+            return "Identical expectation [" . $dumper->describeValue($this->getValue()) . "]";
         } else {
-            return "Identical expectation [" . $dumper->describeValue($this->_getValue()) .
+            return "Identical expectation [" . $dumper->describeValue($this->getValue()) .
                     "] fails with [" .
                     $dumper->describeValue($compare) . "] " .
-                    $dumper->describeDifference($this->_getValue(), $compare, TYPE_MATTERS);
+                    $dumper->describeDifference($this->getValue(), $compare, TYPE_MATTERS);
         }
     }
 }
@@ -578,9 +578,9 @@ class NotIdenticalExpectation extends IdenticalExpectation {
         $dumper = &$this->_getDumper();
         if ($this->test($compare)) {
             return "Not identical expectation passes " .
-                    $dumper->describeDifference($this->_getValue(), $compare, TYPE_MATTERS);
+                    $dumper->describeDifference($this->getValue(), $compare, TYPE_MATTERS);
         } else {
-            return "Not identical expectation [" . $dumper->describeValue($this->_getValue()) . "] matches";
+            return "Not identical expectation [" . $dumper->describeValue($this->getValue()) . "] matches";
         }
     }
 }

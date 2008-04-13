@@ -83,7 +83,7 @@ class SimpleDumper {
      */
     function describeDifference($first, $second, $identical = false) {
         if ($identical) {
-            if (! $this->_isTypeMatch($first, $second)) {
+            if (! $this->isTypeMatch($first, $second)) {
                 return "with type mismatch as [" . $this->describeValue($first) .
                     "] does not match [" . $this->describeValue($second) . "]";
             }
@@ -103,7 +103,7 @@ class SimpleDumper {
      *    @return boolean            True if matches.
      *    @access private
      */
-    function _isTypeMatch($first, $second) {
+    protected function isTypeMatch($first, $second) {
         return ($this->getType($first) == $this->getType($second));
     }
 

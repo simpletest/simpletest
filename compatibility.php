@@ -37,7 +37,7 @@ class SimpleTestCompatibility {
      */
     static function isIdentical($first, $second) {
         if (version_compare(phpversion(), '5') >= 0) {
-            return SimpleTestCompatibility::_isIdenticalType($first, $second);
+            return SimpleTestCompatibility::isIdenticalType($first, $second);
         }
         if ($first != $second) {
             return false;
@@ -52,7 +52,7 @@ class SimpleTestCompatibility {
      *    @return boolean        True if same type.
      *    @access private
      */
-    static function _isIdenticalType($first, $second) {
+    protected static function isIdenticalType($first, $second) {
         if (gettype($first) != gettype($second)) {
             return false;
         }
@@ -60,12 +60,12 @@ class SimpleTestCompatibility {
             if (get_class($first) != get_class($second)) {
                 return false;
             }
-            return SimpleTestCompatibility::_isArrayOfIdenticalTypes(
+            return SimpleTestCompatibility::isArrayOfIdenticalTypes(
                     get_object_vars($first),
                     get_object_vars($second));
         }
         if (is_array($first) && is_array($second)) {
-            return SimpleTestCompatibility::_isArrayOfIdenticalTypes($first, $second);
+            return SimpleTestCompatibility::isArrayOfIdenticalTypes($first, $second);
         }
         if ($first !== $second) {
             return false;
@@ -80,12 +80,12 @@ class SimpleTestCompatibility {
      *    @return boolean        True if identical.
      *    @access private
      */
-    static function _isArrayOfIdenticalTypes($first, $second) {
+    protected static function isArrayOfIdenticalTypes($first, $second) {
         if (array_keys($first) != array_keys($second)) {
             return false;
         }
         foreach (array_keys($first) as $key) {
-            $is_identical = SimpleTestCompatibility::_isIdenticalType(
+            $is_identical = SimpleTestCompatibility::isIdenticalType(
                     $first[$key],
                     $second[$key]);
             if (! $is_identical) {
