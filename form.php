@@ -20,16 +20,16 @@ require_once(dirname(__FILE__) . '/selector.php');
  *    @subpackage WebTester
  */
 class SimpleForm {
-    var $_method;
-    var $_action;
-    var $_encoding;
-    var $_default_target;
-    var $_id;
-    var $_buttons;
-    var $_images;
-    var $_widgets;
-    var $_radios;
-    var $_checkboxes;
+    private $_method;
+    private $_action;
+    private $_encoding;
+    private $_default_target;
+    private $_id;
+    private $_buttons;
+    private $_images;
+    private $_widgets;
+    private $_radios;
+    private $_checkboxes;
     
     /**
      *    Starts with no held controls/widgets.

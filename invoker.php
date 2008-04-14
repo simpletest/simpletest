@@ -28,14 +28,14 @@ if (! defined('SIMPLE_TEST')) {
  *    @subpackage UnitTester
  */
 class SimpleInvoker {
-    var $_test_case;
+    private $_test_case;
 
     /**
      *    Stashes the test case for later.
      *    @param SimpleTestCase $test_case  Test case to run.
      */
-    function SimpleInvoker(&$test_case) {
-        $this->_test_case = &$test_case;
+    function SimpleInvoker($test_case) {
+        $this->_test_case = $test_case;
     }
 
     /**
@@ -43,7 +43,7 @@ class SimpleInvoker {
      *    @return SimpleTestCase    Test case.
      *    @access public
      */
-    function &getTestCase() {
+    function getTestCase() {
         return $this->_test_case;
     }
 
@@ -87,14 +87,14 @@ class SimpleInvoker {
  *    @subpackage UnitTester
  */
 class SimpleInvokerDecorator {
-    var $_invoker;
+    private $_invoker;
 
     /**
      *    Stores the invoker to wrap.
      *    @param SimpleInvoker $invoker  Test method runner.
      */
-    function SimpleInvokerDecorator(&$invoker) {
-        $this->_invoker = &$invoker;
+    function SimpleInvokerDecorator($invoker) {
+        $this->_invoker = $invoker;
     }
 
     /**
@@ -102,7 +102,7 @@ class SimpleInvokerDecorator {
      *    @return SimpleTestCase    Test case.
      *    @access public
      */
-    function &getTestCase() {
+    function getTestCase() {
         return $this->_invoker->getTestCase();
     }
 

@@ -21,12 +21,12 @@ require_once(dirname(__FILE__) . '/url.php');
  *    @subpackage WebTester
  */
 class SimpleCookie {
-    var $_host;
-    var $_name;
-    var $_value;
-    var $_path;
-    var $_expiry;
-    var $_is_secure;
+    private $_host;
+    private $_name;
+    private $_value;
+    private $_path;
+    private $_expiry;
+    private $_is_secure;
     
     /**
      *    Constructor. Sets the stored values.
@@ -226,7 +226,7 @@ class SimpleCookie {
  *    @subpackage WebTester
  */
 class SimpleCookieJar {
-    var $_cookies;
+    private $_cookies;
     
     /**
      *    Constructor. Jar starts empty.

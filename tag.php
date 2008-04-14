@@ -19,9 +19,9 @@ require_once(dirname(__FILE__) . '/encoding.php');
  *    @subpackage WebTester
  */
 class SimpleTag {
-    var $_name;
-    var $_attributes;
-    var $_content;
+    private $_name;
+    private $_attributes;
+    private $_content;
     
     /**
      *    Starts with a named tag with attributes only.
@@ -229,9 +229,9 @@ class SimpleAnchorTag extends SimpleTag {
  *    @subpackage WebTester
  */
 class SimpleWidget extends SimpleTag {
-    var $_value;
-    var $_label;
-    var $_is_set;
+    private $_value;
+    private $_label;
+    private $_is_set;
     
     /**
      *    Starts with a named tag with attributes only.
@@ -248,7 +248,7 @@ class SimpleWidget extends SimpleTag {
     
     /**
      *    Accessor for name submitted as the key in
-     *    GET/POST variables hash.
+     *    GET/POST privateiables hash.
      *    @return string        Parsed value.
      *    @access public
      */
@@ -697,8 +697,8 @@ class SimpleUploadTag extends SimpleWidget {
  *    @subpackage WebTester
  */
 class SimpleSelectionTag extends SimpleWidget {
-    var $_options;
-    var $_choice;
+    private $_options;
+    private $_choice;
     
     /**
      *    Starts with attributes only.
@@ -784,8 +784,8 @@ class SimpleSelectionTag extends SimpleWidget {
  *    @subpackage WebTester
  */
 class MultipleSelectionTag extends SimpleWidget {
-    var $_options;
-    var $_values;
+    private $_options;
+    private $_values;
     
     /**
      *    Starts with attributes only.
@@ -1061,7 +1061,7 @@ class SimpleCheckboxTag extends SimpleWidget {
  *    @subpackage WebTester
  */
 class SimpleTagGroup {
-    var $_widgets = array();
+    private $_widgets = array();
 
     /**
      *    Adds a tag to the group.

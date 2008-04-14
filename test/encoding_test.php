@@ -30,7 +30,7 @@ class TestOfEncodedParts extends UnitTestCase {
 }
 
 class TestOfEncoding extends UnitTestCase {
-    var $_content_so_far;
+    private $_content_so_far;
     
     function write($content) {
         $this->_content_so_far .= $content;

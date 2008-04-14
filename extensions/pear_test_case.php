@@ -22,7 +22,7 @@
      *    @subpackage   Extensions
      */
     class PHPUnit_TestCase extends SimpleTestCase {
-        var $_loosely_typed;
+        private $_loosely_typed;
         
         /**
          *    Constructor. Sets the test name.

@@ -19,8 +19,8 @@ require_once(dirname(__FILE__) . '/scorer.php');
  *    @subpackage UnitTester
  */
 class XmlReporter extends SimpleReporter {
-    var $_indent;
-    var $_namespace;
+    private $_indent;
+    private $_namespace;
 
     /**
      *    Sets up indentation and namespace.
@@ -225,7 +225,7 @@ class XmlReporter extends SimpleReporter {
 
     /**
      *    Paints a formatted ASCII message such as a
-     *    variable dump.
+     *    privateiable dump.
      *    @param string $message        Text to display.
      *    @access public
      */
@@ -290,8 +290,8 @@ class XmlReporter extends SimpleReporter {
  *    @subpackage UnitTester
  */
 class NestingXmlTag {
-    var $_name;
-    var $_attributes;
+    private $_name;
+    private $_attributes;
 
     /**
      *    Sets the basic test information except
@@ -472,12 +472,12 @@ class NestingGroupTag extends NestingXmlTag {
  *    @subpackage UnitTester
  */
 class SimpleTestXmlParser {
-    var $_listener;
-    var $_expat;
-    var $_tag_stack;
-    var $_in_content_tag;
-    var $_content;
-    var $_attributes;
+    private $_listener;
+    private $_expat;
+    private $_tag_stack;
+    private $_in_content_tag;
+    private $_content;
+    private $_attributes;
 
     /**
      *    Loads a listener with the SimpleReporter

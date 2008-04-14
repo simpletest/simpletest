@@ -19,7 +19,7 @@ require_once(dirname(__FILE__) . '/scorer.php');
  *    @subpackage UnitTester
  */
 class HtmlReporter extends SimpleReporter {
-    var $_character_set;
+    private $_character_set;
 
     /**
      *    Does nothing yet. The first output will
@@ -163,7 +163,7 @@ class HtmlReporter extends SimpleReporter {
     }
 
     /**
-     *    Paints formatted text such as dumped variables.
+     *    Paints formatted text such as dumped privateiables.
      *    @param string $message        Text to show.
      *    @access public
      */
@@ -294,7 +294,7 @@ class TextReporter extends SimpleReporter {
     }
 
     /**
-     *    Paints formatted text such as dumped variables.
+     *    Paints formatted text such as dumped privateiables.
      *    @param string $message        Text to show.
      *    @access public
      */
@@ -311,9 +311,9 @@ class TextReporter extends SimpleReporter {
  *    @subpackage UnitTester
  */
 class SelectiveReporter extends SimpleReporterDecorator {
-    var $_just_this_case = false;
-    var $_just_this_test = false;
-    var $_on;
+    private $_just_this_case = false;
+    private $_just_this_test = false;
+    private $_on;
     
     /**
      *    Selects the test case or group to be run,

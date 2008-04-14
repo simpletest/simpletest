@@ -37,7 +37,7 @@ class TestOfErrorQueue extends UnitTestCase {
 }
 
 class TestOfErrorTrap extends UnitTestCase {
-    var $_old;
+    private $_old;
 
     function setUp() {
         $this->_old = error_reporting(E_ALL);
@@ -50,8 +50,8 @@ class TestOfErrorTrap extends UnitTestCase {
     }
 
     function testQueueStartsEmpty() {
-        $context = &SimpleTest::getContext();
-        $queue = &$context->get('SimpleErrorQueue');
+        $context = SimpleTest::getContext();
+        $queue = $context->get('SimpleErrorQueue');
         $this->assertFalse($queue->extract());
     }
 
@@ -84,7 +84,7 @@ class TestOfErrorTrap extends UnitTestCase {
 }
 
 class TestOfErrors extends UnitTestCase {
-    var $_old;
+    private $_old;
 
     function setUp() {
         $this->_old = error_reporting(E_ALL);

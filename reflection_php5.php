@@ -12,7 +12,7 @@
  *    @subpackage UnitTester
  */
 class SimpleReflection {
-    var $_interface;
+    private $_interface;
 
     /**
      *    Stashes the class/interface.

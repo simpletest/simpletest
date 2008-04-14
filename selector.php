@@ -20,7 +20,7 @@ require_once(dirname(__FILE__) . '/encoding.php');
  *    @subpackage WebTester
  */
 class SimpleByName {
-    var $_name;
+    private $_name;
 
     /**
      *    Stashes the name for later comparison.
@@ -30,6 +30,10 @@ class SimpleByName {
         $this->_name = $name;
     }
 
+    /**
+     *  Accessor for name.
+     *  @returns string $name       Name to match.
+     */
     function getName() {
         return $this->_name;
     }
@@ -51,7 +55,7 @@ class SimpleByName {
  *    @subpackage WebTester
  */
 class SimpleByLabel {
-    var $_label;
+    private $_label;
 
     /**
      *    Stashes the name for later comparison.
@@ -82,7 +86,7 @@ class SimpleByLabel {
  *    @subpackage WebTester
  */
 class SimpleById {
-    var $_id;
+    private $_id;
 
     /**
      *    Stashes the name for later comparison.
@@ -109,7 +113,7 @@ class SimpleById {
  *    @subpackage WebTester
  */
 class SimpleByLabelOrName {
-    var $_label;
+    private $_label;
 
     /**
      *    Stashes the name/label for later comparison.

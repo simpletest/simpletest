@@ -21,8 +21,8 @@ require_once(dirname(__FILE__) . '/compatibility.php');
  *    @abstract
  */
 class SimpleExpectation {
-    var $_dumper = false;
-    var $_message;
+    protected $_dumper = false;
+    private $_message;
 
     /**
      *    Creates a dumper for displaying values and sets
@@ -221,7 +221,7 @@ class FalseExpectation extends SimpleExpectation {
  *    @subpackage UnitTester
  */
 class EqualExpectation extends SimpleExpectation {
-    var $_value;
+    private $_value;
 
     /**
      *    Sets the value to compare against.
@@ -325,8 +325,8 @@ class NotEqualExpectation extends EqualExpectation {
  *    @subpackage UnitTester
  */
 class WithinMarginExpectation extends SimpleExpectation {
-    var $_upper;
-    var $_lower;
+    private $_upper;
+    private $_lower;
 
     /**
      *    Sets the value to compare against and the fuzziness of
@@ -446,7 +446,7 @@ class OutsideMarginExpectation extends WithinMarginExpectation {
  *    @subpackage UnitTester
  */
 class ReferenceExpectation {
-    var $_value;
+    private $_value;
 
     /**
      *    Sets the reference value to compare against.
@@ -614,7 +614,7 @@ class NotIdenticalExpectation extends IdenticalExpectation {
  *    @subpackage UnitTester
  */
 class PatternExpectation extends SimpleExpectation {
-    var $_pattern;
+    private $_pattern;
 
     /**
      *    Sets the value to compare against.
@@ -737,7 +737,7 @@ class NoPatternExpectation extends PatternExpectation {
  *      @subpackage UnitTester
  */
 class IsAExpectation extends SimpleExpectation {
-    var $_type;
+    private $_type;
 
     /**
      *    Sets the type to compare with.
@@ -814,7 +814,7 @@ class IsAExpectation extends SimpleExpectation {
  *      @subpackage UnitTester
  */
 class NotAExpectation extends IsAExpectation {
-    var $_type;
+    private $_type;
 
     /**
      *    Sets the type to compare with.
@@ -857,7 +857,7 @@ class NotAExpectation extends IsAExpectation {
  *      @subpackage UnitTester
  */
 class MethodExistsExpectation extends SimpleExpectation {
-    var $_method;
+    private $_method;
 
     /**
      *    Sets the value to compare against.

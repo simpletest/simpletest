@@ -65,10 +65,10 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
  *    @subpackage   UnitTester
  */
 class SimpleErrorQueue {
-    var $_queue;
-    var $_expectation_queue;
-    var $_test;
-    var $_using_expect_style = false;
+    private $_queue;
+    private $_expectation_queue;
+    private $_test;
+    private $_using_expect_style = false;
 
     /**
      *    Starts with an empty queue.

@@ -19,10 +19,10 @@ require_once(dirname(__FILE__) . '/invoker.php');
  *    @abstract
  */
 class SimpleScorer {
-    var $_passes;
-    var $_fails;
-    var $_exceptions;
-    var $_is_dry_run;
+    private $_passes;
+    private $_fails;
+    private $_exceptions;
+    private $_is_dry_run;
 
     /**
      *    Starts the test run with no results.
@@ -213,7 +213,7 @@ class SimpleScorer {
 
     /**
      *    Paints a formatted ASCII message such as a
-     *    variable dump.
+     *    privateiable dump.
      *    @param string $message        Text to display.
      *    @access public
      */
@@ -239,9 +239,9 @@ class SimpleScorer {
  *    @subpackage UnitTester
  */
 class SimpleReporter extends SimpleScorer {
-    var $_test_stack;
-    var $_size;
-    var $_progress;
+    private $_test_stack;
+    private $_size;
+    private $_progress;
 
     /**
      *    Starts the display with no results in.
@@ -255,7 +255,7 @@ class SimpleReporter extends SimpleScorer {
     }
     
     /**
-     *    Gets the formatter for variables and other small
+     *    Gets the formatter for privateiables and other small
      *    generic data items.
      *    @return SimpleDumper          Formatter.
      *    @access public
@@ -415,7 +415,7 @@ class SimpleReporter extends SimpleScorer {
  *    @subpackage UnitTester
  */
 class SimpleReporterDecorator {
-    var $_reporter;
+    protected $_reporter;
 
     /**
      *    Mediates between the reporter and the test case.
@@ -470,7 +470,7 @@ class SimpleReporterDecorator {
     }
     
     /**
-     *    Gets the formatter for variables and other small
+     *    Gets the formatter for privateiables and other small
      *    generic data items.
      *    @return SimpleDumper          Formatter.
      *    @access public
@@ -619,7 +619,7 @@ class SimpleReporterDecorator {
  *    @subpackage UnitTester
  */
 class MultipleReporter {
-    var $_reporters = array();
+    private $_reporters = array();
 
     /**
      *    Adds a reporter to the subscriber list.
@@ -690,7 +690,7 @@ class MultipleReporter {
     }
     
     /**
-     *    Gets the formatter for variables and other small
+     *    Gets the formatter for privateiables and other small
      *    generic data items.
      *    @return SimpleDumper          Formatter.
      *    @access public

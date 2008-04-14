@@ -28,7 +28,7 @@ if (! defined('MOCK_ANYTHING')) {
  *    @subpackage MockObjects
  */
 class ParametersExpectation extends SimpleExpectation {
-    var $_expected;
+    private $_expected;
 
     /**
      *    Sets the expected parameter list.
@@ -161,8 +161,8 @@ class ParametersExpectation extends SimpleExpectation {
  *  @subpackage MockObjects
  */
 class CallCountExpectation extends SimpleExpectation {
-    var $_method;
-    var $_count;
+    private $_method;
+    private $_count;
 
     /**
      *    Stashes the method and expected count for later
@@ -206,8 +206,8 @@ class CallCountExpectation extends SimpleExpectation {
  *  @subpackage MockObjects
  */
 class MinimumCallCountExpectation extends SimpleExpectation {
-    var $_method;
-    var $_count;
+    private $_method;
+    private $_count;
 
     /**
      *    Stashes the method and expected count for later
@@ -251,8 +251,8 @@ class MinimumCallCountExpectation extends SimpleExpectation {
  *    @subpackage   MockObjects
  */
 class MaximumCallCountExpectation extends SimpleExpectation {
-    var $_method;
-    var $_count;
+    private $_method;
+    private $_count;
 
     /**
      *    Stashes the method and expected count for later
@@ -297,7 +297,7 @@ class MaximumCallCountExpectation extends SimpleExpectation {
  *    @subpackage MockObjects
  */
 class SimpleSignatureMap {
-    var $_map;
+    private $_map;
 
     /**
      *    Creates an empty call map.
@@ -390,9 +390,9 @@ class SimpleSignatureMap {
  *    @subpackage MockObjects
  */
 class SimpleCallSchedule {
-    var $_wildcard = MOCK_ANYTHING;
-    var $_always;
-    var $_at;
+    private $_wildcard = MOCK_ANYTHING;
+    private $_always;
+    private $_at;
     
     /**
      *    Sets up an empty response schedule.
@@ -517,7 +517,7 @@ class SimpleCallSchedule {
  *    @subpackage MockObjects
  */
 class SimpleReturn {
-    var $_value;
+    private $_value;
     
     /**
      *    Stashes it for later.
@@ -547,7 +547,7 @@ class SimpleReturn {
  *    @subpackage MockObjects
  */
 class SimpleByReference {
-    var $_reference;
+    private $_reference;
     
     /**
      *    Stashes it for later.
@@ -575,7 +575,7 @@ class SimpleByReference {
  *    @subpackage MockObjects
  */
 class SimpleByValue {
-    var $_value;
+    private $_value;
     
     /**
      *    Stashes it for later.
@@ -606,7 +606,7 @@ class SimpleByValue {
  *    @subpackage MockObjects
  */
 class SimpleThrower {
-    var $_exception;
+    private $_exception;
     
     /**
      *    Stashes it for later.
@@ -633,8 +633,8 @@ class SimpleThrower {
  *    @subpackage MockObjects
  */
 class SimpleErrorThrower {
-    var $_error;
-    var $_severity;
+    private $_error;
+    private $_severity;
     
     /**
      *    Stashes an error to throw later.
@@ -670,14 +670,14 @@ class SimpleErrorThrower {
  *    @subpackage MockObjects
  */
 class SimpleMock {
-    var $_actions;
-    var $_wildcard = MOCK_ANYTHING;
-    var $_is_strict = true;
-    var $_call_counts;
-    var $_expected_counts;
-    var $_max_counts;
-    var $_expected_args;
-    var $_expected_args_at;
+    private $_actions;
+    private $_wildcard = MOCK_ANYTHING;
+    private $_is_strict = true;
+    private $_call_counts;
+    private $_expected_counts;
+    private $_max_counts;
+    private $_expected_args;
+    private $_expected_args_at;
 
     /**
      *    Creates an empty action list and expectation list.
@@ -1235,10 +1235,10 @@ class Mock {
  *    @subpackage MockObjects
  */
 class MockGenerator {
-    var $_class;
-    var $_mock_class;
-    var $_mock_base;
-    var $_reflection;
+    private $_class;
+    private $_mock_class;
+    private $_mock_base;
+    private $_reflection;
 
     /**
      *    Builds initial reflection object.

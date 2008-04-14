@@ -242,9 +242,9 @@ class SimpleTest {
  *    @package  SimpleTest
  */
 class SimpleTestContext {
-    var $_test;
-    var $_reporter;
-    var $_resources;
+    private $_test;
+    private $_reporter;
+    private $_resources;
 
     /**
      *    Clears down the current context.
@@ -316,7 +316,7 @@ class SimpleTestContext {
  *    @subpackage UnitTester
  */
 class SimpleStackTrace {
-    var $_prefixes;
+    private $_prefixes;
 
     /**
      *    Stashes the list of target prefixes.
