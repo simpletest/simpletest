@@ -5,11 +5,21 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems and their fixes...
 
+setReturnReference() throws errors in E_STRICT
+----------------------------------------------
+Happens when an object is passed by reference.
+This also happens with setReturnReferenceAt().
+If you want to return objects then replace these
+with calls to returns() and returnsAt() with the
+same arguments. This change was forced the 1.1
+version.
+
 assertReference() throws errors in E_STRICT
 -------------------------------------------
 Due to language restrictions you cannot compare
 both variables and objects in E_STRICT mode. Use
-assertSame() in this mode with objects.
+assertSame() in this mode with objects. This change
+was forced the 1.1 version.
 
 Cannot create GroupTest
 -----------------------
