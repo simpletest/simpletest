@@ -1,5 +1,6 @@
 <?php
 // $Id$
+
 require_once dirname(__FILE__) . '/../../../autorun.php';
 require_once dirname(__FILE__) . '/../../dom_tester.php';
 
