@@ -402,8 +402,8 @@
 
     class PassesAsWellReporter extends HtmlReporter {
 
-        function _getCss() {
-            return parent::_getCss() . ' .pass { color: darkgreen; }';
+        protected function getCss() {
+            return parent::getCss() . ' .pass { color: darkgreen; }';
         }
 
         function paintPass($message) {

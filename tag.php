@@ -115,7 +115,7 @@ class SimpleTag {
      *    @return string $value   New attribute value.
      *    @access protected
      */
-    function _setAttribute($label, $value) {
+    protected function setAttribute($label, $value) {
         $this->_attributes[strtolower($label)] = $value;
     }
     
@@ -347,7 +347,7 @@ class SimpleTextTag extends SimpleWidget {
     function SimpleTextTag($attributes) {
         $this->SimpleWidget('input', $attributes);
         if ($this->getAttribute('value') === false) {
-            $this->_setAttribute('value', '');
+            $this->setAttribute('value', '');
         }
     }
     
@@ -390,7 +390,7 @@ class SimpleSubmitTag extends SimpleWidget {
     function SimpleSubmitTag($attributes) {
         $this->SimpleWidget('input', $attributes);
         if ($this->getAttribute('value') === false) {
-            $this->_setAttribute('value', 'Submit');
+            $this->setAttribute('value', 'Submit');
         }
     }
     
@@ -587,7 +587,7 @@ class SimpleTextAreaTag extends SimpleWidget {
      *    @access public
      */
     function getDefault() {
-        return $this->_wrap(SimpleHtmlSaxParser::decodeHtml($this->getContent()));
+        return $this->wrap(SimpleHtmlSaxParser::decodeHtml($this->getContent()));
     }
     
     /**
@@ -597,7 +597,7 @@ class SimpleTextAreaTag extends SimpleWidget {
      *    @access public
      */
     function setValue($value) {
-        return parent::setValue($this->_wrap($value));
+        return parent::setValue($this->wrap($value));
     }
     
     /**
@@ -605,7 +605,7 @@ class SimpleTextAreaTag extends SimpleWidget {
      *    @return boolean        True if wrapping on.
      *    @access private
      */
-    function _wrapIsEnabled() {
+    function wrapIsEnabled() {
         if ($this->getAttribute('cols')) {
             $wrap = $this->getAttribute('wrap');
             if (($wrap == 'physical') || ($wrap == 'hard')) {
@@ -625,13 +625,13 @@ class SimpleTextAreaTag extends SimpleWidget {
      *                           returns and line feeds
      *    @access private
      */
-    function _wrap($text) {
+    protected function wrap($text) {
         $text = str_replace("\r\r\n", "\r\n", str_replace("\n", "\r\n", $text));
         $text = str_replace("\r\n\n", "\r\n", str_replace("\r", "\r\n", $text));
         if (strncmp($text, "\r\n", strlen("\r\n")) == 0) {
             $text = substr($text, strlen("\r\n"));
         }
-        if ($this->_wrapIsEnabled()) {
+        if ($this->wrapIsEnabled()) {
             return wordwrap(
                     $text,
                     (integer)$this->getAttribute('cols'),
@@ -948,7 +948,7 @@ class SimpleRadioButtonTag extends SimpleWidget {
     function SimpleRadioButtonTag($attributes) {
         $this->SimpleWidget('input', $attributes);
         if ($this->getAttribute('value') === false) {
-            $this->_setAttribute('value', 'on');
+            $this->setAttribute('value', 'on');
         }
     }
     
@@ -1006,7 +1006,7 @@ class SimpleCheckboxTag extends SimpleWidget {
     function SimpleCheckboxTag($attributes) {
         $this->SimpleWidget('input', $attributes);
         if ($this->getAttribute('value') === false) {
-            $this->_setAttribute('value', 'on');
+            $this->setAttribute('value', 'on');
         }
     }
     
@@ -1166,7 +1166,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup {
                 $values[] = $widgets[$i]->getValue();
             }
         }
-        return $this->_coerceValues($values);
+        return $this->coerceValues($values);
     }
     
     /**
@@ -1182,7 +1182,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup {
                 $values[] = $widgets[$i]->getDefault();
             }
         }
-        return $this->_coerceValues($values);
+        return $this->coerceValues($values);
     }
     
     /**
@@ -1193,8 +1193,8 @@ class SimpleCheckboxGroup extends SimpleTagGroup {
      *    @access public
      */
     function setValue($values) {
-        $values = $this->_makeArray($values);
-        if (! $this->_valuesArePossible($values)) {
+        $values = $this->makeArray($values);
+        if (! $this->valuesArePossible($values)) {
             return false;
         }
         $widgets = $this->_getWidgets();
@@ -1217,7 +1217,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup {
      *                                          missing value.
      *    @access private
      */
-    function _valuesArePossible($values) {
+    protected function valuesArePossible($values) {
         $matches = array();
         $widgets = &$this->_getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
@@ -1237,7 +1237,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup {
      *    @return string/array/boolean   Expected format for a tag.
      *    @access private
      */
-    function _coerceValues($values) {
+    protected function coerceValues($values) {
         if (count($values) == 0) {
             return false;
         } elseif (count($values) == 1) {
@@ -1256,7 +1256,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup {
      *    @return array                       List of values, possibly empty.
      *    @access private
      */
-    function _makeArray($value) {
+    protected function makeArray($value) {
         if ($value === false) {
             return array();
         }
@@ -1284,7 +1284,7 @@ class SimpleRadioGroup extends SimpleTagGroup {
      *    @access public
      */
     function setValue($value) {
-        if (! $this->_valueIsPossible($value)) {
+        if (! $this->valueIsPossible($value)) {
             return false;
         }
         $index = false;
@@ -1303,7 +1303,7 @@ class SimpleRadioGroup extends SimpleTagGroup {
      *    @return boolean  True if a valid value.
      *    @access private
      */
-    function _valueIsPossible($value) {
+    protected function valueIsPossible($value) {
         $widgets = $this->_getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if ($widgets[$i]->getAttribute('value') == $value) {

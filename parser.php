@@ -72,7 +72,7 @@ class ParallelRegex {
         if (count($this->_patterns) == 0) {
             return false;
         }
-        if (! preg_match($this->_getCompoundedRegex(), $subject, $matches)) {
+        if (! preg_match($this->getCompoundedRegex(), $subject, $matches)) {
             $match = '';
             return false;
         }
@@ -93,7 +93,7 @@ class ParallelRegex {
      *    @param array $patterns    List of patterns in order.
      *    @access private
      */
-    function _getCompoundedRegex() {
+    protected function getCompoundedRegex() {
         if ($this->_regex == null) {
             for ($i = 0, $count = count($this->_patterns); $i < $count; $i++) {
                 $this->_patterns[$i] = '(' . str_replace(
@@ -101,7 +101,7 @@ class ParallelRegex {
                         array('\/', '\(', '\)'),
                         $this->_patterns[$i]) . ')';
             }
-            $this->_regex = "/" . implode("|", $this->_patterns) . "/" . $this->_getPerlMatchingFlags();
+            $this->_regex = "/" . implode("|", $this->_patterns) . "/" . $this->getPerlMatchingFlags();
         }
         return $this->_regex;
     }
@@ -111,7 +111,7 @@ class ParallelRegex {
      *    @return string       Perl regex flags.
      *    @access private
      */
-    function _getPerlMatchingFlags() {
+    protected function getPerlMatchingFlags() {
         return ($this->_case ? "msS" : "msSi");
     }
 }
@@ -310,9 +310,9 @@ class SimpleLexer {
             return false;
         }
         $length = strlen($raw);
-        while (is_array($parsed = $this->_reduce($raw))) {
+        while (is_array($parsed = $this->reduce($raw))) {
             list($raw, $unmatched, $matched, $mode) = $parsed;
-            if (! $this->_dispatchTokens($unmatched, $matched, $mode)) {
+            if (! $this->dispatchTokens($unmatched, $matched, $mode)) {
                 return false;
             }
             if ($raw === '') {
@@ -326,7 +326,7 @@ class SimpleLexer {
         if (! $parsed) {
             return false;
         }
-        return $this->_invokeParser($raw, LEXER_UNMATCHED);
+        return $this->invokeParser($raw, LEXER_UNMATCHED);
     }
     
     /**
@@ -341,28 +341,28 @@ class SimpleLexer {
      *                                from the parser.
      *    @access private
      */
-    function _dispatchTokens($unmatched, $matched, $mode = false) {
-        if (! $this->_invokeParser($unmatched, LEXER_UNMATCHED)) {
+    protected function dispatchTokens($unmatched, $matched, $mode = false) {
+        if (! $this->invokeParser($unmatched, LEXER_UNMATCHED)) {
             return false;
         }
         if (is_bool($mode)) {
-            return $this->_invokeParser($matched, LEXER_MATCHED);
+            return $this->invokeParser($matched, LEXER_MATCHED);
         }
-        if ($this->_isModeEnd($mode)) {
-            if (! $this->_invokeParser($matched, LEXER_EXIT)) {
+        if ($this->isModeEnd($mode)) {
+            if (! $this->invokeParser($matched, LEXER_EXIT)) {
                 return false;
             }
             return $this->_mode->leave();
         }
-        if ($this->_isSpecialMode($mode)) {
-            $this->_mode->enter($this->_decodeSpecial($mode));
-            if (! $this->_invokeParser($matched, LEXER_SPECIAL)) {
+        if ($this->isSpecialMode($mode)) {
+            $this->_mode->enter($this->decodeSpecial($mode));
+            if (! $this->invokeParser($matched, LEXER_SPECIAL)) {
                 return false;
             }
             return $this->_mode->leave();
         }
         $this->_mode->enter($mode);
-        return $this->_invokeParser($matched, LEXER_ENTER);
+        return $this->invokeParser($matched, LEXER_ENTER);
     }
     
     /**
@@ -373,7 +373,7 @@ class SimpleLexer {
      *    @return boolean        True if this is the exit mode.
      *    @access private
      */
-    function _isModeEnd($mode) {
+    protected function isModeEnd($mode) {
         return ($mode === "__exit");
     }
     
@@ -385,7 +385,7 @@ class SimpleLexer {
      *    @return boolean        True if this is the exit mode.
      *    @access private
      */
-    function _isSpecialMode($mode) {
+    protected function isSpecialMode($mode) {
         return (strncmp($mode, "_", 1) == 0);
     }
     
@@ -396,7 +396,7 @@ class SimpleLexer {
      *    @return string         Underlying mode name.
      *    @access private
      */
-    function _decodeSpecial($mode) {
+    protected function decodeSpecial($mode) {
         return substr($mode, 1);
     }
     
@@ -409,7 +409,7 @@ class SimpleLexer {
      *                                  than unparsed data.
      *    @access private
      */
-    function _invokeParser($content, $is_match) {
+    protected function invokeParser($content, $is_match) {
         if (($content === '') || ($content === false)) {
             return true;
         }
@@ -431,7 +431,7 @@ class SimpleLexer {
      *                               is a parsing error.
      *    @access private
      */
-    function _reduce($raw) {
+    protected function reduce($raw) {
         if ($action = $this->_regexes[$this->_mode->getCurrent()]->match($raw, $match)) {
             $unparsed_character_count = strpos($raw, $match);
             $unparsed = substr($raw, 0, $unparsed_character_count);
@@ -459,11 +459,11 @@ class SimpleHtmlLexer extends SimpleLexer {
     function SimpleHtmlLexer($parser) {
         $this->SimpleLexer($parser, 'text');
         $this->mapHandler('text', 'acceptTextToken');
-        $this->_addSkipping();
-        foreach ($this->_getParsedTags() as $tag) {
-            $this->_addTag($tag);
+        $this->addSkipping();
+        foreach ($this->getParsedTags() as $tag) {
+            $this->addTag($tag);
         }
-        $this->_addInTagTokens();
+        $this->addInTagTokens();
     }
     
     /**
@@ -471,7 +471,7 @@ class SimpleHtmlLexer extends SimpleLexer {
      *    @return array        List of searched for tags.
      *    @access private
      */
-    function _getParsedTags() {
+    protected function getParsedTags() {
         return array('a', 'base', 'title', 'form', 'input', 'button', 'textarea', 'select',
                 'option', 'frameset', 'frame', 'label');
     }
@@ -481,7 +481,7 @@ class SimpleHtmlLexer extends SimpleLexer {
      *    as server code, client code and styles.
      *    @access private
      */
-    function _addSkipping() {
+    protected function addSkipping() {
         $this->mapHandler('css', 'ignore');
         $this->addEntryPattern('<style', 'text', 'css');
         $this->addExitPattern('</style>', 'css');
@@ -498,7 +498,7 @@ class SimpleHtmlLexer extends SimpleLexer {
      *    @param string $tag          Name of tag to scan for.
      *    @access private
      */
-    function _addTag($tag) {
+    protected function addTag($tag) {
         $this->addSpecialPattern("</$tag>", 'text', 'acceptEndToken');
         $this->addEntryPattern("<$tag", 'text', 'tag');
     }
@@ -508,10 +508,10 @@ class SimpleHtmlLexer extends SimpleLexer {
      *    including the attributes and their quoting.
      *    @access private
      */
-    function _addInTagTokens() {
+    protected function addInTagTokens() {
         $this->mapHandler('tag', 'acceptStartToken');
         $this->addSpecialPattern('\s+', 'tag', 'ignore');
-        $this->_addAttributeTokens();
+        $this->addAttributeTokens();
         $this->addExitPattern('/>', 'tag');
         $this->addExitPattern('>', 'tag');
     }
@@ -521,7 +521,7 @@ class SimpleHtmlLexer extends SimpleLexer {
      *    double quoted or unquoted.
      *    @access private
      */
-    function _addAttributeTokens() {
+    protected function addAttributeTokens() {
         $this->mapHandler('dq_attribute', 'acceptAttributeToken');
         $this->addEntryPattern('=\s*"', 'tag', 'dq_attribute');
         $this->addPattern("\\\\\"", 'dq_attribute');

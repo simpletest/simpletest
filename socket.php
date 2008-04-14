@@ -82,7 +82,7 @@ class SimpleFileSocket extends SimpleStickyError {
      */
     function SimpleFileSocket($url, $block_size = 1024) {
         $this->SimpleStickyError();
-        if (! ($this->_handle = $this->_openFile($url, $error))) {
+        if (! ($this->_handle = $this->openFile($url, $error))) {
             $this->_setError("Cannot open [$file] with [$error]");
             return;
         }
@@ -155,7 +155,7 @@ class SimpleFileSocket extends SimpleStickyError {
      *    @param integer $timeout      Maximum time to wait for connection.
      *    @access protected
      */
-    function _openFile($file, &$error) {
+    protected function openFile($file, &$error) {
         return @fopen($file->asString(), 'r');
     }
 }
@@ -181,7 +181,7 @@ class SimpleSocket extends SimpleStickyError {
      */
     function SimpleSocket($host, $port, $timeout, $block_size = 255) {
         $this->SimpleStickyError();
-        if (! ($this->_handle = $this->_openSocket($host, $port, $error_number, $error, $timeout))) {
+        if (! ($this->_handle = $this->openSocket($host, $port, $error_number, $error, $timeout))) {
             $this->_setError("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
             return;
         }
@@ -271,7 +271,7 @@ class SimpleSocket extends SimpleStickyError {
      *    @param integer $timeout      Maximum time to wait for connection.
      *    @access protected
      */
-    function _openSocket($host, $port, &$error_number, &$error, $timeout) {
+    protected function openSocket($host, $port, &$error_number, &$error, $timeout) {
         return @fsockopen($host, $port, $error_number, $error, $timeout);
     }
 }
@@ -303,8 +303,8 @@ class SimpleSecureSocket extends SimpleSocket {
      *    @param integer $timeout      Maximum time to wait for connection.
      *    @access protected
      */
-    function _openSocket($host, $port, &$error_number, &$error, $timeout) {
-        return parent::_openSocket("tls://$host", $port, $error_number, $error, $timeout);
+    function openSocket($host, $port, &$error_number, &$error, $timeout) {
+        return parent::openSocket("tls://$host", $port, $error_number, $error, $timeout);
     }
 }
 ?>

@@ -182,7 +182,7 @@ class SimpleTest {
     static function &_getRegistry() {
         static $registry = false;
         if (! $registry) {
-            $registry = SimpleTest::_getDefaults();
+            $registry = SimpleTest::getDefaults();
         }
         return $registry;
     }
@@ -206,7 +206,7 @@ class SimpleTest {
      *    @return hash       All registry defaults.
      *    @access private
      */
-    static function _getDefaults() {
+    protected static function getDefaults() {
         return array(
                 'MockBaseClass' => 'SimpleMock',
                 'IgnoreList' => array(),
@@ -336,12 +336,12 @@ class SimpleStackTrace {
      *    @access public
      */
     function traceMethod($stack = false) {
-        $stack = $stack ? $stack : $this->_captureTrace();
+        $stack = $stack ? $stack : $this->captureTrace();
         foreach ($stack as $frame) {
-            if ($this->_frameLiesWithinSimpleTestFolder($frame)) {
+            if ($this->frameLiesWithinSimpleTestFolder($frame)) {
                 continue;
             }
-            if ($this->_frameMatchesPrefix($frame)) {
+            if ($this->frameMatchesPrefix($frame)) {
                 return ' at [' . $frame['file'] . ' line ' . $frame['line'] . ']';
             }
         }
@@ -354,7 +354,7 @@ class SimpleStackTrace {
      *    @return boolean         True if a SimpleTest file.
      *    @access private
      */
-    function _frameLiesWithinSimpleTestFolder($frame) {
+    protected function frameLiesWithinSimpleTestFolder($frame) {
         if (isset($frame['file'])) {
             $path = substr(SIMPLE_TEST, 0, -1);
             if (strpos($frame['file'], $path) === 0) {
@@ -372,7 +372,7 @@ class SimpleStackTrace {
      *    @return boolean         True if matches a target.
      *    @access private
      */
-    function _frameMatchesPrefix($frame) {
+    protected function frameMatchesPrefix($frame) {
         foreach ($this->_prefixes as $prefix) {
             if (strncmp($frame['function'], $prefix, strlen($prefix)) == 0) {
                 return true;
@@ -386,7 +386,7 @@ class SimpleStackTrace {
      *    @return array        Fulle trace.
      *    @access private
      */
-    function _captureTrace() {
+    protected function captureTrace() {
         if (function_exists('debug_backtrace')) {
             return array_reverse(debug_backtrace());
         }

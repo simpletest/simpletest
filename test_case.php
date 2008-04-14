@@ -155,7 +155,7 @@ class SimpleTestCase {
     function getTests() {
         $methods = array();
         foreach (get_class_methods(get_class($this)) as $method) {
-            if ($this->_isTest($method)) {
+            if ($this->isTest($method)) {
                 $methods[] = $method;
             }
         }
@@ -170,7 +170,7 @@ class SimpleTestCase {
      *    @return boolean              True if test method.
      *    @access protected
      */
-    function _isTest($method) {
+    protected function isTest($method) {
         if (strtolower(substr($method, 0, 4)) == 'test') {
             return ! SimpleTestCompatibility::isA($this, strtolower($method));
         }
@@ -370,10 +370,10 @@ class SimpleFileLoader {
         $existing_globals = get_defined_vars();
         include_once($test_file);
         $new_globals = get_defined_vars();
-        $this->_makeFileVariablesGlobal($existing_globals, $new_globals);
+        $this->makeFileVariablesGlobal($existing_globals, $new_globals);
         $new_classes = array_diff(get_declared_classes(), $existing_classes);
         if (empty($new_classes)) {
-            $new_classes = $this->_scrapeClassesFromFile($test_file);
+            $new_classes = $this->scrapeClassesFromFile($test_file);
         }
         $classes = $this->selectRunnableTests($new_classes);
         return $this->createSuiteFromClasses($test_file, $classes);
@@ -385,7 +385,7 @@ class SimpleFileLoader {
      *    @param hash $new        Variables after the file was loaded.
      *    @access private
      */
-    function _makeFileVariablesGlobal($existing, $new) {
+    protected function makeFileVariablesGlobal($existing, $new) {
         $globals = array_diff(array_keys($new), array_keys($existing));
         foreach ($globals as $global) {
             $_GLOBALS[$global] = $new[$global];
@@ -402,7 +402,7 @@ class SimpleFileLoader {
      *    @param string $test_file        File name with classes.
      *    @access private
      */
-    function _scrapeClassesFromFile($test_file) {
+    protected function scrapeClassesFromFile($test_file) {
         preg_match_all('~^\s*class\s+(\w+)(\s+(extends|implements)\s+\w+)*\s*\{~mi',
                         file_get_contents($test_file),
                         $matches );

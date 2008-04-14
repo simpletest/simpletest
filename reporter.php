@@ -45,7 +45,7 @@ class HtmlReporter extends SimpleReporter {
         print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" .
                 $this->_character_set . "\">\n";
         print "<style type=\"text/css\">\n";
-        print $this->_getCss() . "\n";
+        print $this->getCss() . "\n";
         print "</style>\n";
         print "</head>\n<body>\n";
         print "<h1>$test_name</h1>\n";
@@ -73,7 +73,7 @@ class HtmlReporter extends SimpleReporter {
      *    @return string            CSS code as text.
      *    @access protected
      */
-    function _getCss() {
+    protected function getCss() {
         return ".fail { background-color: inherit; color: red; }" .
                 ".pass { background-color: inherit; color: green; }" .
                 " pre { background-color: lightgray; color: inherit; }";
@@ -113,7 +113,7 @@ class HtmlReporter extends SimpleReporter {
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
         print implode(" -&gt; ", $breadcrumb);
-        print " -&gt; " . $this->_htmlEntities($message) . "<br />\n";
+        print " -&gt; " . $this->htmlEntities($message) . "<br />\n";
     }
 
     /**
@@ -127,7 +127,7 @@ class HtmlReporter extends SimpleReporter {
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
         print implode(" -&gt; ", $breadcrumb);
-        print " -&gt; <strong>" . $this->_htmlEntities($message) . "</strong><br />\n";
+        print " -&gt; <strong>" . $this->htmlEntities($message) . "</strong><br />\n";
     }
 
     /**
@@ -145,7 +145,7 @@ class HtmlReporter extends SimpleReporter {
                 '] with message ['. $exception->getMessage() .
                 '] in ['. $exception->getFile() .
                 ' line ' . $exception->getLine() . ']';
-        print " -&gt; <strong>" . $this->_htmlEntities($message) . "</strong><br />\n";
+        print " -&gt; <strong>" . $this->htmlEntities($message) . "</strong><br />\n";
     }
     
     /**
@@ -159,7 +159,7 @@ class HtmlReporter extends SimpleReporter {
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
         print implode(" -&gt; ", $breadcrumb);
-        print " -&gt; " . $this->_htmlEntities($message) . "<br />\n";
+        print " -&gt; " . $this->htmlEntities($message) . "<br />\n";
     }
 
     /**
@@ -168,7 +168,7 @@ class HtmlReporter extends SimpleReporter {
      *    @access public
      */
     function paintFormattedMessage($message) {
-        print '<pre>' . $this->_htmlEntities($message) . '</pre>';
+        print '<pre>' . $this->htmlEntities($message) . '</pre>';
     }
 
     /**
@@ -177,7 +177,7 @@ class HtmlReporter extends SimpleReporter {
      *    @return string            Browser readable message.
      *    @access protected
      */
-    function _htmlEntities($message) {
+    protected function htmlEntities($message) {
         return htmlentities($message, ENT_COMPAT, $this->_character_set);
     }
 }
@@ -341,7 +341,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    @return boolean             True if matched.
      *    @access protected
      */
-    function _matchesTestCase($test_case) {
+    protected function matchesTestCase($test_case) {
         return $this->_just_this_case == strtolower($test_case);
     }
 
@@ -353,8 +353,8 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    @return boolean             True if matched.
      *    @access protected
      */
-    function _shouldRunTest($test_case, $method) {
-        if ($this->_isOn() || $this->_matchesTestCase($test_case)) {
+    protected function shouldRunTest($test_case, $method) {
+        if ($this->isOn() || $this->matchesTestCase($test_case)) {
             if ($this->_just_this_test) {
                 return $this->_just_this_test == strtolower($method);
             } else {
@@ -385,7 +385,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    @return boolean     True if the current test group is active.
      *    @access private
      */
-    function _isOn() {
+    protected function isOn() {
         return $this->_on;
     }
 
@@ -397,7 +397,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    @access public
      */
     function shouldInvoke($test_case, $method) {
-        if ($this->_shouldRunTest($test_case, $method)) {
+        if ($this->shouldRunTest($test_case, $method)) {
             return $this->_reporter->shouldInvoke($test_case, $method);
         }
         return false;
@@ -410,7 +410,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    @access public
      */
     function paintGroupStart($test_case, $size) {
-        if ($this->_just_this_case && $this->_matchesTestCase($test_case)) {
+        if ($this->_just_this_case && $this->matchesTestCase($test_case)) {
             $this->_on();
         }
         $this->_reporter->paintGroupStart($test_case, $size);
@@ -423,7 +423,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      */
     function paintGroupEnd($test_case) {
         $this->_reporter->paintGroupEnd($test_case);
-        if ($this->_just_this_case && $this->_matchesTestCase($test_case)) {
+        if ($this->_just_this_case && $this->matchesTestCase($test_case)) {
             $this->_off();
         }
     }

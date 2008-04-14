@@ -42,18 +42,18 @@ class SimpleUrl {
      *    @access public
      */
     function SimpleUrl($url = '') {
-        list($x, $y) = $this->_chompCoordinates($url);
+        list($x, $y) = $this->chompCoordinates($url);
         $this->setCoordinates($x, $y);
-        $this->_scheme = $this->_chompScheme($url);
-        list($this->_username, $this->_password) = $this->_chompLogin($url);
-        $this->_host = $this->_chompHost($url);
+        $this->_scheme = $this->chompScheme($url);
+        list($this->_username, $this->_password) = $this->chompLogin($url);
+        $this->_host = $this->chompHost($url);
         $this->_port = false;
         if (preg_match('/(.*?):(.*)/', $this->_host, $host_parts)) {
             $this->_host = $host_parts[1];
             $this->_port = (integer)$host_parts[2];
         }
-        $this->_path = $this->_chompPath($url);
-        $this->_request = $this->_parseRequest($this->_chompRequest($url));
+        $this->_path = $this->chompPath($url);
+        $this->_request = $this->parseRequest($this->chompRequest($url));
         $this->_fragment = (strncmp($url, "#", 1) == 0 ? substr($url, 1) : false);
         $this->_target = false;
     }
@@ -65,7 +65,7 @@ class SimpleUrl {
      *    @return array        X, Y as a pair of integers.
      *    @access private
      */
-    function _chompCoordinates(&$url) {
+    protected function chompCoordinates(&$url) {
         if (preg_match('/(.*)\?(\d+),(\d+)$/', $url, $matches)) {
             $url = $matches[1];
             return array((integer)$matches[2], (integer)$matches[3]);
@@ -80,7 +80,7 @@ class SimpleUrl {
      *    @return string       Scheme part or false.
      *    @access private
      */
-    function _chompScheme(&$url) {
+    protected function chompScheme(&$url) {
         if (preg_match('/^([^\/:]*):(\/\/)(.*)/', $url, $matches)) {
             $url = $matches[2] . $matches[3];
             return $matches[1];
@@ -98,7 +98,7 @@ class SimpleUrl {
      *                          password. Will urldecode() them.
      *    @access private
      */
-    function _chompLogin(&$url) {
+    protected function chompLogin(&$url) {
         $prefix = '';
         if (preg_match('/^(\/\/)(.*)/', $url, $matches)) {
             $prefix = $matches[1];
@@ -126,7 +126,7 @@ class SimpleUrl {
      *    @return string        Host part guess or false.
      *    @access private
      */
-    function _chompHost(&$url) {
+    protected function chompHost(&$url) {
         if (preg_match('/^(\/\/)(.*?)(\/.*|\?.*|#.*|$)/', $url, $matches)) {
             $url = $matches[3];
             return $matches[2];
@@ -152,7 +152,7 @@ class SimpleUrl {
      *    @return string         Path part or '/'.
      *    @access private
      */
-    function _chompPath(&$url) {
+    protected function chompPath(&$url) {
         if (preg_match('/(.*?)(\?|#|$)(.*)/', $url, $matches)) {
             $url = $matches[2] . $matches[3];
             return ($matches[1] ? $matches[1] : '');
@@ -167,7 +167,7 @@ class SimpleUrl {
      *    @return string      Raw request part.
      *    @access private
      */
-    function _chompRequest(&$url) {
+    protected function chompRequest(&$url) {
         if (preg_match('/\?(.*?)(#|$)(.*)/', $url, $matches)) {
             $url = $matches[2] . $matches[3];
             return $matches[1];
@@ -181,7 +181,7 @@ class SimpleUrl {
      *    @return SimpleFormEncoding    Parsed data.
      *    @access private
      */
-    function _parseRequest($raw) {
+    protected function parseRequest($raw) {
         $this->_raw = $raw;
         $request = new SimpleGetEncoding();
         foreach (split("&", $raw) as $pair) {
@@ -457,7 +457,7 @@ class SimpleUrl {
             $port = $base->getPort() ? ':' . $base->getPort() : '';
             $identity = $base->getIdentity() ? $base->getIdentity() . '@' : '';
         }
-        $path = $this->normalisePath($this->_extractAbsolutePath($base));
+        $path = $this->normalisePath($this->extractAbsolutePath($base));
         $encoded = $this->getEncodedRequest();
         $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
         $coords = $this->getX() === false ? '' : '?' . $this->getX() . ',' . $this->getY();
@@ -471,11 +471,11 @@ class SimpleUrl {
      *    @param string                       Absolute path.
      *    @access private
      */
-    function _extractAbsolutePath($base) {
+    protected function extractAbsolutePath($base) {
         if ($this->getHost()) {
             return $this->_path;
         }
-        if (! $this->_isRelativePath($this->_path)) {
+        if (! $this->isRelativePath($this->_path)) {
             return $this->_path;
         }
         if ($this->_path) {
@@ -490,7 +490,7 @@ class SimpleUrl {
      *    @return boolean            True if starts with a "/".
      *    @access private
      */
-    function _isRelativePath($path) {
+    protected function isRelativePath($path) {
         return (substr($path, 0, 1) != '/');
     }
     

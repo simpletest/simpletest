@@ -187,7 +187,7 @@ class SimpleUserAgent {
      *    @return boolean                  True if over.
      *    @access private
      */
-    function _isTooManyRedirects($redirects) {
+    protected function isTooManyRedirects($redirects) {
         return ($redirects > $this->_max_redirects);
     }
     
@@ -253,7 +253,7 @@ class SimpleUserAgent {
                 break;
             }
             $encoding = new SimpleGetEncoding();
-        } while (! $this->_isTooManyRedirects(++$redirects));
+        } while (! $this->isTooManyRedirects(++$redirects));
         return $response;
     }
     
@@ -278,7 +278,7 @@ class SimpleUserAgent {
      */
     function _createRequest($url, $encoding) {
         $request = $this->_createHttpRequest($url, $encoding);
-        $this->_addAdditionalHeaders($request);
+        $this->addAdditionalHeaders($request);
         if ($this->_cookies_enabled) {
             $request->readCookiesFromJar($this->_cookie_jar, $url);
         }
@@ -319,7 +319,7 @@ class SimpleUserAgent {
      *    @param SimpleHttpRequest $request    Outgoing request.
      *    @access private
      */
-    function _addAdditionalHeaders($request) {
+    protected function addAdditionalHeaders(&$request) {
         foreach ($this->_additional_headers as $header) {
             $request->addHeaderLine($header);
         }

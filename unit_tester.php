@@ -363,7 +363,7 @@ class UnitTestCase extends SimpleTestCase {
      */
     function expectError($expected = false, $message = '%s') {
         $queue = SimpleTest::getContext()->get('SimpleErrorQueue');
-        $queue->expectError($this->_coerceExpectation($expected), $message);
+        $queue->expectError($this->coerceExpectation($expected), $message);
     }
 
     /**
@@ -388,7 +388,7 @@ class UnitTestCase extends SimpleTestCase {
      *    @return SimpleExpectation   Expectation object.
      *    @access private
      */
-    function _coerceExpectation($expected) {
+    protected function coerceExpectation($expected) {
         if ($expected == false) {
             return new TrueExpectation();
         }
