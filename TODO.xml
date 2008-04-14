@@ -1,75 +1,124 @@
 <?xml version="1.0"?>
-<page title="TODO items for the current iteration" here="TODO">
-    <long_title>TODO items for the current iteration</long_title>
+<page title="TODO tasks for the current iteration" here="TODO">
+    <long_title>TODO tasks for the current iteration</long_title>
     <content>
-        <section name="iteration" title="Current iteration">
+        <section name="release-process" title="Release process">
             <p>
-                This is immediate stuff only for
-                this iteration (1.1beta).
+                The following is the approximate plan for the next full point release.
+            </p>
+            <p>
+                Before each release we hope to have te following done.
+                More may get done, depending on the interest of the volunteers,
+                but this is the current minimum.
+            </p>
+            <p>
+                The aim of this release cycle is to producr a functionally
+                identical version to the 1.0.1 release, but bug-fixed and
+                fully compatible with PHP 5.0.5+ under E_STRICT.
+                We are also hoping to flush out issues and use cases
+                caused by people hacking against unpublished flex points
+                in SimpleTest.
+                We want to break people's code now, not while we are developing
+                features.
+            </p>
+            <p>
+                With the website move to a new server, and more developers,
+                we are able to improve the test automation and developer
+                cooperation.
+                This release is a deep drawing of breath before going forward.
             </p>
         </section>
-        <section name="unit-tester" title="Unit tester">
-            <dl>
-                <dt class="done">
-                    PHP 5.0.5 to PHP 5.3 compatible under E_STRICT.
-                </dt>
-                <dt>
-                    All deprecated methods need to be removed.
-                </dt>
-                <dt>
-                    Methods, etc starting with an underscore need "protected".
-                </dt>
-                <dd>
-                    And remove the underscore as well.
-                    That way people will start complaining.
-                    Upon each complaint we'll add an accessor and
-                    capture the use case from them.
-                </dd>
-            </dl>
-        </section>
-        <section name="reporter" title="Reporter">
-        </section>
-        <section name="mock-objects" title="Mock objects">
-        </section>
-        <section name="parser" title="Parser">
-        </section>
-        <section name="browser" title="Browser">
-            <dl>
-                <dt class="done">
-                    Look at adding a file() loading command.
-                </dt>
-                <dd>
-                    Can be found in the patches section.
-                </dd>
-            </dl>
-        </section>
-        <section name="web-tester" title="Web tester">
-        </section>
-        <section name="documentation" title="Documentation">
-            <dl>
-                <dt>
-                    The HELP_MY_TESTS_DONT_WORK_ANYMORE needs to be updated.
-                </dt>
-                <dt class="done">
-                    README needs to be updated.
-                </dt>
-                <dt>
-                    Docblocks need to be cut back to the minimum.
-                </dt>
-                <dt>
-                    Move everything to a new server.
-                </dt>
-            </dl>
-        </section>
-        <section name="build" title="Build">
+        <section name="plan" title="Release plan" version="1.1">
+            <milestone version="1.1beta">
+                <concern name="unit-tester"/>
+                <concern name="reporter"/>
+                <concern name="mock-objects"/>
+                <concern name="parser"/>
+                <concern name="browser"/>
+                <concern name="web-tester"/>
+                <concern name="documentation">
+                    <task>
+                        The HELP_MY_TESTS_DONT_WORK_ANYMORE needs to be updated.
+                    </task>
+                    <task>README needs to be updated.</task>
+                    <task>Write XSLT code for this file so Perrick doesn't strangle me</task>
+                </concern>
+                <concern name="extensions"/>
+                <concern name="build">
+                    <task status="done">PHP 5.3 compatible under E_STRICT</task>
+                    <task>PHP 5.2.0-5 compatible under E_STRICT</task>
+                    <task>PHP 5.1.0-6 compatible under E_STRICT</task>
+                    <task>Remove all deprecated methods</task>
+                    <task>
+                        Drop underscores from protected methods and
+                        private variables.
+                        Make all variables private and add protected
+                        accessors where we use them internally.
+                        <note>
+                            That way people will start complaining.
+                            Upon each complaint we'll add an accessor and
+                            capture the use case from them.
+                        </note>
+                    </task>
+                    <task>Move web site to new server</task>
+                </concern>
+            </milestone>
+            <milestone version="1.1beta2">
+                <concern name="unit-tester"/>
+                <concern name="reporter">
+                    <task>
+                        Deprecate all mentions of GroupTest without breaking
+                        existing code.
+                        <note>
+                            Need to swap the terminology for TestSuite
+                            in method names, etc.
+                        </note>
+                    </task>
+                </concern>
+                <concern name="mock-objects">
+                    <task>Remove reflection facade for PHP4</task>
+                </concern>
+                <concern name="parser"/>
+                <concern name="browser"/>
+                <concern name="web-tester"/>
+                <concern name="documentation">
+                    <task>Docblocks need to be cut back to a miinimum</task>
+                </concern>
+                <concern name="extensions"/>
+                <concern name="build">
+                    <task>PHP 5.0.5 compatible under E_STRICT</task>
+                    <task>Move acceptance tests sample pages to new server</task>
+                </concern>
+            </milestone>
+            <milestone version="1.1RC1">
+                <concern name="unit-tester"/>
+                <concern name="reporter"/>
+                <concern name="mock-objects">
+                    <task>Remove reflection facade for PHP4</task>
+                </concern>
+                <concern name="parser"/>
+                <concern name="browser"/>
+                <concern name="web-tester"/>
+                <concern name="documentation">
+                    <task>Throw away old tutorial</task>
+                </concern>
+                <concern name="extensions"/>
+                <concern name="build">
+                    <task>PHP 6 compatible under E_STRICT</task>
+                    <task>
+                        Automated nightly test script that runs tests on all
+                        targeted PHP versions.
+                    </task>
+                </concern>
+            </milestone>
         </section>
     </content>
     <internal>
         <link>
-            <a href="#iteration">Current iteration</a> is 1.1beta.
+            <a href="#plan">Current iteration</a> is 1.1beta.
         </link>
         <link>
-            Items for
+            Upcoming tasks for
             <a href="#unit-tester">Unit tester</a>,
             <a href="#reporter">Reporter</a>,
             <a href="#mock-objects">Mock objects</a>,
