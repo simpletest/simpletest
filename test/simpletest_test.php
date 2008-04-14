@@ -31,26 +31,26 @@ class DummyResource { }
 class TestOfContext extends UnitTestCase {
 
     function testCurrentContextIsUnique() {
-        $this->assertReference(
+        $this->assertSame(
                 SimpleTest::getContext(),
                 SimpleTest::getContext());
     }
 
     function testContextHoldsCurrentTestCase() {
-        $context = &SimpleTest::getContext();
-        $this->assertReference($this, $context->getTest());
+        $context = SimpleTest::getContext();
+        $this->assertSame($this, $context->getTest());
     }
 
     function testResourceIsSingleInstanceWithContext() {
-        $context = &new SimpleTestContext();
-        $this->assertReference(
+        $context = new SimpleTestContext();
+        $this->assertSame(
                 $context->get('DummyResource'),
                 $context->get('DummyResource'));
     }
 
     function testClearingContextResetsResources() {
-        $context = &new SimpleTestContext();
-        $resource = &$context->get('DummyResource');
+        $context = new SimpleTestContext();
+        $resource = $context->get('DummyResource');
         $context->clear();
         $this->assertClone($resource, $context->get('DummyResource'));
     }

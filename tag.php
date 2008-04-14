@@ -74,7 +74,7 @@ class SimpleTag {
      *    @param SimpleTag $tag    New tag.
      *    @access public
      */
-    function addTag(&$tag) {
+    function addTag($tag) {
     }
     
     /**
@@ -325,7 +325,7 @@ class SimpleWidget extends SimpleTag {
      *    @param SimpleEncoding $encoding    Form packet.
      *    @access public
      */
-    function write(&$encoding) {
+    function write($encoding) {
         if ($this->getName()) {
             $encoding->add($this->getName(), $this->getValue());
         }
@@ -497,7 +497,7 @@ class SimpleImageSubmitTag extends SimpleWidget {
      *    @param integer $y                  Y coordinate of click.
      *    @access public
      */
-    function write(&$encoding, $x, $y) {
+    function write($encoding, $x = 1, $y = 1) {
         if ($this->getName()) {
             $encoding->add($this->getName() . '.x', $x);
             $encoding->add($this->getName() . '.y', $y);
@@ -680,7 +680,7 @@ class SimpleUploadTag extends SimpleWidget {
      *    @param SimpleEncoding $encoding    Form packet.
      *    @access public
      */
-    function write(&$encoding) {
+    function write($encoding) {
         if (! file_exists($this->getValue())) {
             return;
         }
@@ -716,9 +716,9 @@ class SimpleSelectionTag extends SimpleWidget {
      *    @param SimpleOptionTag $tag     New option.
      *    @access public
      */
-    function addTag(&$tag) {
+    function addTag($tag) {
         if ($tag->getTagName() == 'option') {
-            $this->_options[] = &$tag;
+            $this->_options[] = $tag;
         }
     }
     
@@ -803,7 +803,7 @@ class MultipleSelectionTag extends SimpleWidget {
      *    @param SimpleOptionTag $tag     New option.
      *    @access public
      */
-    function addTag(&$tag) {
+    function addTag($tag) {
         if ($tag->getTagName() == 'option') {
             $this->_options[] = &$tag;
         }
@@ -1068,8 +1068,8 @@ class SimpleTagGroup {
      *    @param SimpleWidget $widget
      *    @access public
      */
-    function addWidget(&$widget) {
-        $this->_widgets[] = &$widget;
+    function addWidget($widget) {
+        $this->_widgets[] = $widget;
     }
     
     /**
@@ -1140,7 +1140,7 @@ class SimpleTagGroup {
      *    @param SimpleEncoding $encoding    Form packet.
      *    @access public
      */
-    function write(&$encoding) {
+    function write($encoding) {
         $encoding->add($this->getName(), $this->getValue());
     }
 }
@@ -1160,7 +1160,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup {
      */
     function getValue() {
         $values = array();
-        $widgets = &$this->_getWidgets();
+        $widgets = $this->_getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if ($widgets[$i]->getValue() !== false) {
                 $values[] = $widgets[$i]->getValue();
@@ -1176,7 +1176,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup {
      */
     function getDefault() {
         $values = array();
-        $widgets = &$this->_getWidgets();
+        $widgets = $this->_getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if ($widgets[$i]->getDefault() !== false) {
                 $values[] = $widgets[$i]->getDefault();
@@ -1197,7 +1197,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup {
         if (! $this->_valuesArePossible($values)) {
             return false;
         }
-        $widgets = &$this->_getWidgets();
+        $widgets = $this->_getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             $possible = $widgets[$i]->getAttribute('value');
             if (in_array($widgets[$i]->getAttribute('value'), $values)) {
@@ -1288,7 +1288,7 @@ class SimpleRadioGroup extends SimpleTagGroup {
             return false;
         }
         $index = false;
-        $widgets = &$this->_getWidgets();
+        $widgets = $this->_getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if (! $widgets[$i]->setValue($value)) {
                 $widgets[$i]->setValue(false);
@@ -1304,7 +1304,7 @@ class SimpleRadioGroup extends SimpleTagGroup {
      *    @access private
      */
     function _valueIsPossible($value) {
-        $widgets = &$this->_getWidgets();
+        $widgets = $this->_getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if ($widgets[$i]->getAttribute('value') == $value) {
                 return true;
@@ -1321,7 +1321,7 @@ class SimpleRadioGroup extends SimpleTagGroup {
      *    @access public
      */
     function getValue() {
-        $widgets = &$this->_getWidgets();
+        $widgets = $this->_getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if ($widgets[$i]->getValue() !== false) {
                 return $widgets[$i]->getValue();
@@ -1337,7 +1337,7 @@ class SimpleRadioGroup extends SimpleTagGroup {
      *    @access public
      */
     function getDefault() {
-        $widgets = &$this->_getWidgets();
+        $widgets = $this->_getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if ($widgets[$i]->getDefault() !== false) {
                 return $widgets[$i]->getDefault();

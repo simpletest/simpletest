@@ -111,7 +111,7 @@ class FieldExpectation extends SimpleExpectation {
      *    @access public
      */
     function testMessage($compare) {
-        $dumper = &$this->_getDumper();
+        $dumper = $this->_getDumper();
         if (is_array($compare)) {
             sort($compare);
         }
@@ -352,7 +352,7 @@ class TextExpectation extends SimpleExpectation {
         if ($this->test($compare)) {
             return $this->_describeTextMatch($this->_getSubstring(), $compare);
         } else {
-            $dumper = &$this->_getDumper();
+            $dumper = $this->_getDumper();
             return "Text [" . $this->_getSubstring() .
                     "] not detected in [" .
                     $dumper->describeValue($compare) . "]";
@@ -368,7 +368,7 @@ class TextExpectation extends SimpleExpectation {
      */
     function _describeTextMatch($substring, $subject) {
         $position = strpos($subject, $substring);
-        $dumper = &$this->_getDumper();
+        $dumper = $this->_getDumper();
         return "Text [$substring] detected at character [$position] in [" .
                 $dumper->describeValue($subject) . "] in region [" .
                 $dumper->clipString($subject, 100, $position) . "]";
@@ -413,7 +413,7 @@ class NoTextExpectation extends TextExpectation {
      */
     function testMessage($compare) {
         if ($this->test($compare)) {
-            $dumper = &$this->_getDumper();
+            $dumper = $this->_getDumper();
             return "Text [" . $this->_getSubstring() .
                     "] not detected in [" .
                     $dumper->describeValue($compare) . "]";
@@ -472,7 +472,7 @@ class WebTestCase extends SimpleTestCase {
      *    @return SimpleBrowser     Current test browser object.
      *    @access public
      */
-    function &getBrowser() {
+    function getBrowser() {
         return $this->_browser;
     }
     
@@ -483,8 +483,8 @@ class WebTestCase extends SimpleTestCase {
      *    @param SimpleBrowser $browser    New test browser object.
      *    @access public
      */
-    function setBrowser(&$browser) {
-        return $this->_browser = &$browser;
+    function setBrowser($browser) {
+        return $this->_browser = $browser;
     }
         
     /**
@@ -502,9 +502,8 @@ class WebTestCase extends SimpleTestCase {
      *    @return TestBrowser           New browser.
      *    @access public
      */
-    function &createBrowser() {
-        $browser = &new SimpleBrowser();
-        return $browser;
+    function createBrowser() {
+        return new SimpleBrowser();
     }
     
     /**
@@ -1291,16 +1290,6 @@ class WebTestCase extends SimpleTestCase {
                 $this->_browser->getHeaders(),
                 $message);
     }
-        
-    /**
-     *    @deprecated
-     */
-    function assertHeaderPattern($header, $pattern, $message = '%s') {
-        return $this->assert(
-                new HttpHeaderExpectation($header, new PatternExpectation($pattern)),
-                $this->_browser->getHeaders(),
-                $message);
-    }
 
     /**
      *    Confirms that the header type has not been received.
@@ -1316,13 +1305,6 @@ class WebTestCase extends SimpleTestCase {
                 new NoHttpHeaderExpectation($header),
                 $this->_browser->getHeaders(),
                 $message);
-    }
-        
-    /**
-     *    @deprecated
-     */
-    function assertNoUnwantedHeader($header, $message = '%s') {
-        return $this->assertNoHeader($header, $message);
     }
     
     /**
@@ -1355,13 +1337,6 @@ class WebTestCase extends SimpleTestCase {
     }
     
     /**
-     *    @deprecated
-     */
-    function assertWantedText($text, $message = '%s') {
-        return $this->assertText($text, $message);
-    }
-    
-    /**
      *    Will trigger a pass if the text is not found in the plain
      *    text form of the page.
      *    @param string $text       Text to look for.
@@ -1374,13 +1349,6 @@ class WebTestCase extends SimpleTestCase {
                 new NoTextExpectation($text),
                 $this->_browser->getContentAsText(),
                 $message);
-    }
-    
-    /**
-     *    @deprecated
-     */
-    function assertNoUnwantedText($text, $message = '%s') {
-        return $this->assertNoText($text, $message);
     }
     
     /**
@@ -1400,13 +1368,6 @@ class WebTestCase extends SimpleTestCase {
     }
     
     /**
-     *    @deprecated
-     */
-    function assertWantedPattern($pattern, $message = '%s') {
-        return $this->assertPattern($pattern, $message);
-    }
-    
-    /**
      *    Will trigger a pass if the perl regex pattern
      *    is not present in raw content.
      *    @param string $pattern    Perl regex to look for including
@@ -1420,13 +1381,6 @@ class WebTestCase extends SimpleTestCase {
                 new NoPatternExpectation($pattern),
                 $this->_browser->getContent(),
                 $message);
-    }
-    
-    /**
-     *    @deprecated
-     */
-    function assertNoUnwantedPattern($pattern, $message = '%s') {
-        return $this->assertNoPattern($pattern, $message);
     }
     
     /**

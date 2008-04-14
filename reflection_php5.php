@@ -306,9 +306,7 @@ class SimpleReflection {
         } catch (ReflectionException $e) {
             return "function $name()";
         }
-        
         return $this->_getFullSignature($name);
-        
     }
 
     /**

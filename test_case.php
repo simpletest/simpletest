@@ -17,12 +17,8 @@ require_once(dirname(__FILE__) . '/scorer.php');
 require_once(dirname(__FILE__) . '/expectation.php');
 require_once(dirname(__FILE__) . '/dumper.php');
 require_once(dirname(__FILE__) . '/simpletest.php');
-if (version_compare(phpversion(), '5') >= 0) {
-    require_once(dirname(__FILE__) . '/exceptions.php');
-    require_once(dirname(__FILE__) . '/reflection_php5.php');
-} else {
-    require_once(dirname(__FILE__) . '/reflection_php4.php');
-}
+require_once(dirname(__FILE__) . '/exceptions.php');
+require_once(dirname(__FILE__) . '/reflection_php5.php');
 if (! defined('SIMPLE_TEST')) {
     /**
      * @ignore
@@ -106,12 +102,9 @@ class SimpleTestCase {
      *    @return SimpleInvoker        Individual test runner.
      *    @access public
      */
-    function &createInvoker() {
-        $invoker = &new SimpleErrorTrappingInvoker(new SimpleInvoker($this));
-        if (version_compare(phpversion(), '5') >= 0) {
-            $invoker = &new SimpleExceptionTrappingInvoker($invoker);
-        }
-        return $invoker;
+    function createInvoker() {
+        return new SimpleExceptionTrappingInvoker(
+                new SimpleErrorTrappingInvoker(new SimpleInvoker($this)));
     }
 
     /**
@@ -122,11 +115,11 @@ class SimpleTestCase {
      *    @return boolean                    True if all tests passed.
      *    @access public
      */
-    function run(&$reporter) {
-        $context = &SimpleTest::getContext();
+    function run($reporter) {
+        $context = SimpleTest::getContext();
         $context->setTest($this);
         $context->setReporter($reporter);
-        $this->_reporter = &$reporter;
+        $this->_reporter = $reporter;
         $started = false;
         foreach ($this->getTests() as $method) {
             if ($reporter->shouldInvoke($this->getLabel(), $method)) {
@@ -138,7 +131,7 @@ class SimpleTestCase {
                     $reporter->paintCaseStart($this->getLabel());
                     $started = true;
                 }
-                $invoker = &$this->_reporter->createInvoker($this->createInvoker());
+                $invoker = $this->_reporter->createInvoker($this->createInvoker());
                 $invoker->before($method);
                 $invoker->invoke($method);
                 $invoker->after($method);
@@ -229,7 +222,7 @@ class SimpleTestCase {
      *                               method.
      *    @access public
      */
-    function tell(&$observer) {
+    function tell($observer) {
         $this->_observers[] = &$observer;
     }
 
@@ -287,9 +280,11 @@ class SimpleTestCase {
     }
 
     /**
-     *    @deprecated
+     *    For user defined expansion of the available messages.
+     *    @param string $type       Tag for sorting the signals.
+     *    @param mixed $payload     Extra user specific information.
      */
-    function signal($type, &$payload) {
+    function signal($type, $payload) {
         if (! isset($this->_reporter)) {
             trigger_error('Can only make assertions within test methods');
         }
@@ -305,7 +300,7 @@ class SimpleTestCase {
      *    @return boolean                        True on pass
      *    @access public
      */
-    function assert(&$expectation, $compare, $message = '%s') {
+    function assert($expectation, $compare, $message = '%s') {
         if ($expectation->test($compare)) {
             return $this->pass(sprintf(
                     $message,
@@ -315,13 +310,6 @@ class SimpleTestCase {
                     $message,
                     $expectation->overlayMessage($compare, $this->_reporter->getDumper())));
         }
-    }
-
-    /**
-     *    @deprecated
-     */
-    function assertExpectation(&$expectation, $compare, $message = '%s') {
-        return $this->assert($expectation, $compare, $message);
     }
 
     /**
@@ -355,13 +343,6 @@ class SimpleTestCase {
     }
 
     /**
-     *    @deprecated
-     */
-    function sendMessage($message) {
-        $this->_reporter->PaintMessage($message);
-    }
-
-    /**
      *    Accessor for the number of subtests including myelf.
      *    @return integer           Number of test cases.
      *    @access public
@@ -384,7 +365,7 @@ class SimpleFileLoader {
      *    @return TestSuite               The new test suite.
      *    @access public
      */
-    function &load($test_file) {
+    function load($test_file) {
         $existing_classes = get_declared_classes();
         $existing_globals = get_defined_vars();
         include_once($test_file);
@@ -395,8 +376,7 @@ class SimpleFileLoader {
             $new_classes = $this->_scrapeClassesFromFile($test_file);
         }
         $classes = $this->selectRunnableTests($new_classes);
-        $suite = &$this->createSuiteFromClasses($test_file, $classes);
-        return $suite;
+        return $this->createSuiteFromClasses($test_file, $classes);
     }
     
     /**
@@ -460,16 +440,16 @@ class SimpleFileLoader {
      *                               test cases.
      *    @access public
      */
-    function &createSuiteFromClasses($title, $classes) {
+    function createSuiteFromClasses($title, $classes) {
         if (count($classes) == 0) {
-            $suite = &new BadTestSuite($title, "No runnable test cases in [$title]");
+            $suite = new BadTestSuite($title, "No runnable test cases in [$title]");
             return $suite;
         }
         SimpleTest::ignoreParentsIfIgnored($classes);
-        $suite = &new TestSuite($title);
+        $suite = new TestSuite($title);
         foreach ($classes as $class) {
             if (! SimpleTest::isIgnored($class)) {
-                $suite->addTestClass($class);
+                $suite->add($class);
             }
         }
         return $suite;
@@ -514,24 +494,6 @@ class TestSuite {
     }
 
     /**
-     *    @deprecated
-     */
-    function addTestCase(&$test_case) {
-        $this->_test_cases[] = &$test_case;
-    }
-
-    /**
-     *    @deprecated
-     */
-    function addTestClass($class) {
-        if (TestSuite::getBaseTestCase($class) == 'testsuite') {
-            $this->_test_cases[] = &new $class();
-        } else {
-            $this->_test_cases[] = $class;
-        }
-    }
-
-    /**
      *    Adds a test into the suite by instance or class. The class will
      *    be instantiated if it's a test suite.
      *    @param SimpleTestCase $test_case  Suite or individual test
@@ -539,21 +501,14 @@ class TestSuite {
      *                                      runnable test interface.
      *    @access public
      */
-    function add(&$test_case) {
+    function add($test_case) {
         if (! is_string($test_case)) {
-            $this->_test_cases[] = &$test_case;
-        } elseif (TestSuite::getBaseTestCase($class) == 'testsuite') {
-            $this->_test_cases[] = &new $class();
+            $this->_test_cases[] = $test_case;
+        } elseif (TestSuite::getBaseTestCase($test_case) == 'testsuite') {
+            $this->_test_cases[] = new $test_case();
         } else {
-            $this->_test_cases[] = $class;
+            $this->_test_cases[] = $test_case;
         }
-    }
-
-    /**
-     *    @deprecated
-     */
-    function addTestFile($test_file) {
-        $this->addFile($test_file);
     }
 
     /**
@@ -575,7 +530,7 @@ class TestSuite {
      *    @param SimpleCollector $collector    Directory scanner.
      *    @access public
      */
-    function collect($path, &$collector) {
+    function collect($path, $collector) {
         $collector->collect($this, $path);
     }
 
@@ -585,12 +540,12 @@ class TestSuite {
      *    @param SimpleReporter $reporter    Current test reporter.
      *    @access public
      */
-    function run(&$reporter) {
+    function run($reporter) {
         $reporter->paintGroupStart($this->getLabel(), $this->getSize());
         for ($i = 0, $count = count($this->_test_cases); $i < $count; $i++) {
             if (is_string($this->_test_cases[$i])) {
                 $class = $this->_test_cases[$i];
-                $test = &new $class();
+                $test = new $class();
                 $test->run($reporter);
                 unset($test);
             } else {
@@ -638,13 +593,6 @@ class TestSuite {
 }
 
 /**
- *    @package      SimpleTest
- *    @subpackage   UnitTester
- *    @deprecated
- */
-class GroupTest extends TestSuite { }
-
-/**
  *    This is a failing group test for when a test suite hasn't
  *    loaded properly.
  *    @package      SimpleTest
@@ -679,7 +627,7 @@ class BadTestSuite {
      *    @param SimpleReporter $reporter    Current test reporter.
      *    @access public
      */
-    function run(&$reporter) {
+    function run($reporter) {
         $reporter->paintGroupStart($this->getLabel(), $this->getSize());
         $reporter->paintFail('Bad TestSuite [' . $this->getLabel() .
                 '] with error [' . $this->_error . ']');
@@ -696,11 +644,4 @@ class BadTestSuite {
         return 0;
     }
 }
-
-/**
- *    @package      SimpleTest
- *    @subpackage   UnitTester
- *    @deprecated
- */
-class BadGroupTest extends BadTestSuite { }
 ?>

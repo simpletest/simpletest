@@ -163,15 +163,17 @@ class TestOfUrl extends UnitTestCase {
     }
     
     function testPathNormalisation() {
+        $url = new SimpleUrl();
         $this->assertEqual(
-                SimpleUrl::normalisePath('https://host.com/I/am/here/../there/somewhere.php'),
+                $url->normalisePath('https://host.com/I/am/here/../there/somewhere.php'),
                 'https://host.com/I/am/there/somewhere.php');
     }
 
     // regression test for #1535407
     function testPathNormalisationWithSinglePeriod() {
+        $url = new SimpleUrl();
         $this->assertEqual(
-            SimpleUrl::normalisePath('https://host.com/I/am/here/./../there/somewhere.php'),
+            $url->normalisePath('https://host.com/I/am/here/./../there/somewhere.php'),
             'https://host.com/I/am/there/somewhere.php');
     }
     

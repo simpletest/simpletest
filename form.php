@@ -36,7 +36,7 @@ class SimpleForm {
      *    @param SimpleTag $tag        Form tag to read.
      *    @param SimplePage $page      Holding page.
      */
-    function SimpleForm($tag, &$page) {
+    function SimpleForm($tag, $page) {
         $this->_method = $tag->getAttribute('method');
         $this->_action = $this->createAction($tag->getAttribute('action'), $page);
         $this->_encoding = $this->setEncodingClass($tag);
@@ -90,7 +90,7 @@ class SimpleForm {
      *    @param SimpleUrl $base   Page location.
      *    @return SimpleUrl        Absolute form target.
      */
-    protected function createAction($action, &$page) {
+    protected function createAction($action, $page) {
         if (($action === '') || ($action === false)) {
             return $page->expandUrl($page->getUrl());
         }
@@ -139,11 +139,11 @@ class SimpleForm {
      *    @param SimpleWidget $tag        Input tag to add.
      *    @access public
      */
-    function addWidget(&$tag) {
+    function addWidget($tag) {
         if (strtolower($tag->getAttribute('type')) == 'submit') {
-            $this->_buttons[] = &$tag;
+            $this->_buttons[] = $tag;
         } elseif (strtolower($tag->getAttribute('type')) == 'image') {
-            $this->_images[] = &$tag;
+            $this->_images[] = $tag;
         } elseif ($tag->getName()) {
             $this->_setWidget($tag);
         }
@@ -155,7 +155,7 @@ class SimpleForm {
      *    @param SimpleWidget $tag   Incoming form control.
      *    @access private
      */
-    function _setWidget(&$tag) {
+    function _setWidget($tag) {
         if (strtolower($tag->getAttribute('type')) == 'radio') {
             $this->_addRadioButton($tag);
         } elseif (strtolower($tag->getAttribute('type')) == 'checkbox') {
@@ -170,9 +170,9 @@ class SimpleForm {
      *    @param SimpleRadioButtonTag $tag   Incoming form control.
      *    @access private
      */
-    function _addRadioButton(&$tag) {
+    function _addRadioButton($tag) {
         if (! isset($this->_radios[$tag->getName()])) {
-            $this->_widgets[] = &new SimpleRadioGroup();
+            $this->_widgets[] = new SimpleRadioGroup();
             $this->_radios[$tag->getName()] = count($this->_widgets) - 1;
         }
         $this->_widgets[$this->_radios[$tag->getName()]]->addWidget($tag);
@@ -183,15 +183,15 @@ class SimpleForm {
      *    @param SimpleCheckboxTag $tag   Incoming form control.
      *    @access private
      */
-    function _addCheckbox(&$tag) {
+    function _addCheckbox($tag) {
         if (! isset($this->_checkboxes[$tag->getName()])) {
-            $this->_widgets[] = &$tag;
+            $this->_widgets[] = $tag;
             $this->_checkboxes[$tag->getName()] = count($this->_widgets) - 1;
         } else {
             $index = $this->_checkboxes[$tag->getName()];
             if (! SimpleTestCompatibility::isA($this->_widgets[$index], 'SimpleCheckboxGroup')) {
-                $previous = &$this->_widgets[$index];
-                $this->_widgets[$index] = &new SimpleCheckboxGroup();
+                $previous = $this->_widgets[$index];
+                $this->_widgets[$index] = new SimpleCheckboxGroup();
                 $this->_widgets[$index]->addWidget($previous);
             }
             $this->_widgets[$index]->addWidget($tag);

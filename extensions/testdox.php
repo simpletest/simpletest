@@ -18,7 +18,7 @@ class TestDoxReporter extends SimpleReporter
         }
     }
 
-    function paintCaseEnd() {
+    function paintCaseEnd($test_name) {
         echo "\n";
     }
 
@@ -32,11 +32,11 @@ class TestDoxReporter extends SimpleReporter
         echo '- ' . strtolower(preg_replace('/([a-zA-Z])([A-Z0-9])/', '$1 $2', $test_name));
     }
 
-    function paintMethodEnd() {
+    function paintMethodEnd($test_name) {
         echo "\n";
     }
 
-    function paintFail() {
+    function paintFail($message) {
         echo " [FAILED]";
     }
 }

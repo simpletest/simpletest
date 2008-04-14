@@ -69,7 +69,7 @@ class SimpleCollector {
         if (is_dir($file)) {
             return;
         }
-        $test->addTestFile($file);
+        $test->addFile($file);
     }
     
     /**

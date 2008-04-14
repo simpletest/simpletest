@@ -3,16 +3,10 @@
 require_once(dirname(__FILE__) . '/../autorun.php');
 require_once(dirname(__FILE__) . '/../compatibility.php');
 
-class ComparisonClass {
-}
-
-class ComparisonSubclass extends ComparisonClass {
-}
-
-if (version_compare(phpversion(), '5') >= 0) {
-    eval('interface ComparisonInterface { }');
-    eval('class ComparisonClassWithInterface implements ComparisonInterface { }');
-}
+class ComparisonClass { }
+class ComparisonSubclass extends ComparisonClass { }
+interface ComparisonInterface { }
+class ComparisonClassWithInterface implements ComparisonInterface { }
 
 class TestOfCompatibility extends UnitTestCase {
     
@@ -56,8 +50,8 @@ class TestOfCompatibility extends UnitTestCase {
     }
     
     function testObjectReferences () {
-        $object = &new ComparisonClass();
-        $object_reference = &$object;
+        $object = new ComparisonClass();
+        $object_reference = $object;
         $object_copy = new ComparisonClass();
         $object_assignment = $object;
         $this->assertTrue(SimpleTestCompatibility::isReference(
@@ -81,10 +75,6 @@ class TestOfCompatibility extends UnitTestCase {
     }
     
     function testInteraceComparison() {
-        if (version_compare(phpversion(), '5', '<')) {
-            return;
-        }
-        
         $object = new ComparisonClassWithInterface();
         $this->assertFalse(SimpleTestCompatibility::isA(
                 new ComparisonClass(),

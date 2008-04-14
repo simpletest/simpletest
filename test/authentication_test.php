@@ -8,7 +8,7 @@ Mock::generate('SimpleHttpRequest');
 class TestOfRealm extends UnitTestCase {
     
     function testWithinSameUrl() {
-        $realm = &new SimpleRealm(
+        $realm = new SimpleRealm(
                 'Basic',
                 new SimpleUrl('http://www.here.com/path/hello.html'));
         $this->assertTrue($realm->isWithin(
@@ -16,7 +16,7 @@ class TestOfRealm extends UnitTestCase {
     }
     
     function testInsideWithLongerUrl() {
-        $realm = &new SimpleRealm(
+        $realm = new SimpleRealm(
                 'Basic',
                 new SimpleUrl('http://www.here.com/path/'));
         $this->assertTrue($realm->isWithin(
@@ -24,7 +24,7 @@ class TestOfRealm extends UnitTestCase {
     }
     
     function testBelowRootIsOutside() {
-        $realm = &new SimpleRealm(
+        $realm = new SimpleRealm(
                 'Basic',
                 new SimpleUrl('http://www.here.com/path/'));
         $this->assertTrue($realm->isWithin(
@@ -32,7 +32,7 @@ class TestOfRealm extends UnitTestCase {
     }
     
     function testOldNetscapeDefinitionIsOutside() {
-        $realm = &new SimpleRealm(
+        $realm = new SimpleRealm(
                 'Basic',
                 new SimpleUrl('http://www.here.com/path/'));
         $this->assertFalse($realm->isWithin(
@@ -40,7 +40,7 @@ class TestOfRealm extends UnitTestCase {
     }
     
     function testInsideWithMissingTrailingSlash() {
-        $realm = &new SimpleRealm(
+        $realm = new SimpleRealm(
                 'Basic',
                 new SimpleUrl('http://www.here.com/path/'));
         $this->assertTrue($realm->isWithin(
@@ -48,7 +48,7 @@ class TestOfRealm extends UnitTestCase {
     }
     
     function testDifferentPageNameStillInside() {
-        $realm = &new SimpleRealm(
+        $realm = new SimpleRealm(
                 'Basic',
                 new SimpleUrl('http://www.here.com/path/hello.html'));
         $this->assertTrue($realm->isWithin(
@@ -56,7 +56,7 @@ class TestOfRealm extends UnitTestCase {
     }
     
     function testNewUrlInSameDirectoryDoesNotChangeRealm() {
-        $realm = &new SimpleRealm(
+        $realm = new SimpleRealm(
                 'Basic',
                 new SimpleUrl('http://www.here.com/path/hello.html'));
         $realm->stretch(new SimpleUrl('http://www.here.com/path/goodbye.html'));
@@ -67,7 +67,7 @@ class TestOfRealm extends UnitTestCase {
     }
     
     function testNewUrlMakesRealmTheCommonPath() {
-        $realm = &new SimpleRealm(
+        $realm = new SimpleRealm(
                 'Basic',
                 new SimpleUrl('http://www.here.com/path/here/hello.html'));
         $realm->stretch(new SimpleUrl('http://www.here.com/path/there/goodbye.html'));
@@ -89,14 +89,14 @@ class TestOfRealm extends UnitTestCase {
 class TestOfAuthenticator extends UnitTestCase {
     
     function testNoRealms() {
-        $request = &new MockSimpleHttpRequest();
+        $request = new MockSimpleHttpRequest();
         $request->expectNever('addHeaderLine');
-        $authenticator = &new SimpleAuthenticator();
+        $authenticator = new SimpleAuthenticator();
         $authenticator->addHeaders($request, new SimpleUrl('http://here.com/'));
     }
     
     function &createSingleRealm() {
-        $authenticator = &new SimpleAuthenticator();
+        $authenticator = new SimpleAuthenticator();
         $authenticator->addRealm(
                 new SimpleUrl('http://www.here.com/path/hello.html'),
                 'Basic',
@@ -106,7 +106,7 @@ class TestOfAuthenticator extends UnitTestCase {
     }
     
     function testOutsideRealm() {
-        $request = &new MockSimpleHttpRequest();
+        $request = new MockSimpleHttpRequest();
         $request->expectNever('addHeaderLine');
         $authenticator = &$this->createSingleRealm();
         $authenticator->addHeaders(
@@ -115,7 +115,7 @@ class TestOfAuthenticator extends UnitTestCase {
     }
     
     function testWithinRealm() {
-        $request = &new MockSimpleHttpRequest();
+        $request = new MockSimpleHttpRequest();
         $request->expectOnce('addHeaderLine');
         $authenticator = &$this->createSingleRealm();
         $authenticator->addHeaders(
@@ -124,7 +124,7 @@ class TestOfAuthenticator extends UnitTestCase {
     }
     
     function testRestartingClearsRealm() {
-        $request = &new MockSimpleHttpRequest();
+        $request = new MockSimpleHttpRequest();
         $request->expectNever('addHeaderLine');
         $authenticator = &$this->createSingleRealm();
         $authenticator->restartSession();
@@ -134,7 +134,7 @@ class TestOfAuthenticator extends UnitTestCase {
     }
     
     function testDifferentHostIsOutsideRealm() {
-        $request = &new MockSimpleHttpRequest();
+        $request = new MockSimpleHttpRequest();
         $request->expectNever('addHeaderLine');
         $authenticator = &$this->createSingleRealm();
         $authenticator->addHeaders(

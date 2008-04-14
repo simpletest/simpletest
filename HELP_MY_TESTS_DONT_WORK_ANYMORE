@@ -5,6 +5,18 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems and their fixes...
 
+assertReference() throws errors in E_STRICT
+-------------------------------------------
+Due to language restrictions you cannot compare
+both variables and objects in E_STRICT mode. Use
+assertSame() in this mode with objects.
+
+Cannot create GroupTest
+-----------------------
+The GroupTest has been renamed TestSuite (see below).
+It was removed completely in 1.1 in favoour of this
+name.
+
 No method getRelativeUrls() or getAbsoluteUrls()
 ------------------------------------------------
 These methods were always a bit weird anyway, and

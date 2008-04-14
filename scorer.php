@@ -63,7 +63,7 @@ class SimpleScorer {
      *    @return SimpleInvoker           Wrapped test runner.
      *    @access public
      */
-    function &createInvoker(&$invoker) {
+    function createInvoker($invoker) {
         return $invoker;
     }
 
@@ -421,8 +421,8 @@ class SimpleReporterDecorator {
      *    Mediates between the reporter and the test case.
      *    @param SimpleScorer $reporter       Reporter to receive events.
      */
-    function SimpleReporterDecorator(&$reporter) {
-        $this->_reporter = &$reporter;
+    function SimpleReporterDecorator($reporter) {
+        $this->_reporter = $reporter;
     }
 
     /**
@@ -465,7 +465,7 @@ class SimpleReporterDecorator {
      *    @return SimpleInvoker           Wrapped test runner.
      *    @access public
      */
-    function &createInvoker(&$invoker) {
+    function createInvoker($invoker) {
         return $this->_reporter->createInvoker($invoker);
     }
     
@@ -607,7 +607,7 @@ class SimpleReporterDecorator {
      *                               test suite.
      *    @access public
      */
-    function paintSignal($type, &$payload) {
+    function paintSignal($type, $payload) {
         $this->_reporter->paintSignal($type, $payload);
     }
 }
@@ -626,8 +626,8 @@ class MultipleReporter {
      *    @param SimpleScorer $reporter     Reporter to receive events.
      *    @access public
      */
-    function attachReporter(&$reporter) {
-        $this->_reporters[] = &$reporter;
+    function attachReporter($reporter) {
+        $this->_reporters[] = $reporter;
     }
 
     /**
@@ -682,9 +682,9 @@ class MultipleReporter {
      *    @return SimpleInvoker           Wrapped test runner.
      *    @access public
      */
-    function &createInvoker(&$invoker) {
+    function createInvoker($invoker) {
         for ($i = 0; $i < count($this->_reporters); $i++) {
-            $invoker = &$this->_reporters[$i]->createInvoker($invoker);
+            $invoker = $this->_reporters[$i]->createInvoker($invoker);
         }
         return $invoker;
     }
@@ -853,7 +853,7 @@ class MultipleReporter {
      *                               test suite.
      *    @access public
      */
-    function paintSignal($type, &$payload) {
+    function paintSignal($type, $payload) {
         for ($i = 0; $i < count($this->_reporters); $i++) {
             $this->_reporters[$i]->paintSignal($type, $payload);
         }

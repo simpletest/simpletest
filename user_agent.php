@@ -44,8 +44,8 @@ class SimpleUserAgent {
      *    @access public
      */
     function SimpleUserAgent() {
-        $this->_cookie_jar = &new SimpleCookieJar();
-        $this->_authenticator = &new SimpleAuthenticator();
+        $this->_cookie_jar = new SimpleCookieJar();
+        $this->_authenticator = new SimpleAuthenticator();
     }
     
     /**
@@ -176,7 +176,7 @@ class SimpleUserAgent {
         if ((strncmp($proxy, 'http://', 7) != 0) && (strncmp($proxy, 'https://', 8) != 0)) {
             $proxy = 'http://'. $proxy;
         }
-        $this->_proxy = &new SimpleUrl($proxy);
+        $this->_proxy = new SimpleUrl($proxy);
         $this->_proxy_username = $username;
         $this->_proxy_password = $password;
     }
@@ -211,12 +211,12 @@ class SimpleUserAgent {
      *    @return SimpleHttpResponse        Hopefully the target page.
      *    @access public
      */
-    function &fetchResponse($url, $encoding) {
+    function fetchResponse($url, $encoding) {
         if ($encoding->getMethod() != 'POST') {
             $url->addRequestParameters($encoding);
             $encoding->clear();
         }
-        $response = &$this->_fetchWhileRedirected($url, $encoding);
+        $response = $this->_fetchWhileRedirected($url, $encoding);
         if ($headers = $response->getHeaders()) {
             if ($headers->isChallenge()) {
                 $this->_authenticator->addRealm(
@@ -236,10 +236,10 @@ class SimpleUserAgent {
      *    @return SimpleHttpResponse             Hopefully the target page.
      *    @access private
      */
-    function &_fetchWhileRedirected($url, $encoding) {
+    function _fetchWhileRedirected($url, $encoding) {
         $redirects = 0;
         do {
-            $response = &$this->_fetch($url, $encoding);
+            $response = $this->_fetch($url, $encoding);
             if ($response->isError()) {
                 return $response;
             }
@@ -264,10 +264,9 @@ class SimpleUserAgent {
      *    @return SimpleHttpResponse              Headers and hopefully content.
      *    @access protected
      */
-    function &_fetch($url, $encoding) {
-        $request = &$this->_createRequest($url, $encoding);
-        $response = &$request->fetch($this->_connection_timeout);
-        return $response;
+    function _fetch($url, $encoding) {
+        $request = $this->_createRequest($url, $encoding);
+        return $request->fetch($this->_connection_timeout);
     }
     
     /**
@@ -277,8 +276,8 @@ class SimpleUserAgent {
      *    @return SimpleHttpRequest             New request.
      *    @access private
      */
-    function &_createRequest($url, $encoding) {
-        $request = &$this->_createHttpRequest($url, $encoding);
+    function _createRequest($url, $encoding) {
+        $request = $this->_createHttpRequest($url, $encoding);
         $this->_addAdditionalHeaders($request);
         if ($this->_cookies_enabled) {
             $request->readCookiesFromJar($this->_cookie_jar, $url);
@@ -294,9 +293,8 @@ class SimpleUserAgent {
      *    @return SimpleHttpRequest              New request object.
      *    @access protected
      */
-    function &_createHttpRequest($url, $encoding) {
-        $request = &new SimpleHttpRequest($this->_createRoute($url), $encoding);
-        return $request;
+    function _createHttpRequest($url, $encoding) {
+        return new SimpleHttpRequest($this->_createRoute($url), $encoding);
     }
     
     /**
@@ -305,17 +303,15 @@ class SimpleUserAgent {
      *    @return SimpleRoute     Route to take to fetch URL.
      *    @access protected
      */
-    function &_createRoute($url) {
+    function _createRoute($url) {
         if ($this->_proxy) {
-            $route = &new SimpleProxyRoute(
+            return new SimpleProxyRoute(
                     $url,
                     $this->_proxy,
                     $this->_proxy_username,
                     $this->_proxy_password);
-        } else {
-            $route = &new SimpleRoute($url);
         }
-        return $route;
+        return new SimpleRoute($url);
     }
     
     /**
@@ -323,7 +319,7 @@ class SimpleUserAgent {
      *    @param SimpleHttpRequest $request    Outgoing request.
      *    @access private
      */
-    function _addAdditionalHeaders(&$request) {
+    function _addAdditionalHeaders($request) {
         foreach ($this->_additional_headers as $header) {
             $request->addHeaderLine($header);
         }

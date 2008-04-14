@@ -19,7 +19,7 @@ class TestOfTestDoxReporter extends UnitTestCase
         ob_start();
         $dox->paintCaseStart('TestOfTestDoxReporter');
         $buffer = ob_get_clean();
-        $this->assertWantedPattern('/^TestDoxReporter/', $buffer);
+        $this->assertPattern('/^TestDoxReporter/', $buffer);
     }
 
     function testOutputOfTestCaseNameFilteredByConstructParameter() {
@@ -27,7 +27,7 @@ class TestOfTestDoxReporter extends UnitTestCase
         ob_start();
         $dox->paintCaseStart('SomeGreatWidgetTest');
         $buffer = ob_get_clean();
-        $this->assertWantedPattern('/^SomeGreatWidget/', $buffer);
+        $this->assertPattern('/^SomeGreatWidget/', $buffer);
     }
 
     function testIfTest_case_patternIsEmptyAssumeEverythingMatches() {
@@ -35,7 +35,7 @@ class TestOfTestDoxReporter extends UnitTestCase
         ob_start();
         $dox->paintCaseStart('TestOfTestDoxReporter');
         $buffer = ob_get_clean();
-        $this->assertWantedPattern('/^TestOfTestDoxReporter/', $buffer);
+        $this->assertPattern('/^TestOfTestDoxReporter/', $buffer);
     }
 
     function testEmptyLineInsertedWhenCaseEnds() {
@@ -75,7 +75,6 @@ class TestOfTestDoxReporter extends UnitTestCase
         $dox->paintMethodEnd('someMethod');
         $buffer = ob_get_clean();
         $this->assertEqual("\n", $buffer);
-        $this->assertNoErrors();
     }
 
     function testProperlySpacesSingleLettersInMethodName() {
@@ -89,7 +88,7 @@ class TestOfTestDoxReporter extends UnitTestCase
     function testOnFailureThisPrintsFailureNotice() {
         $dox = new TestDoxReporter();
         ob_start();
-        $dox->paintFail();
+        $dox->paintFail('');
         $buffer = ob_get_clean();
         $this->assertEqual(' [FAILED]', $buffer);
     }
@@ -105,4 +104,4 @@ class TestOfTestDoxReporter extends UnitTestCase
         );
     }
 }
-
+?>

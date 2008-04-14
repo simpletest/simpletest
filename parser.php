@@ -193,11 +193,11 @@ class SimpleLexer {
      *    @param boolean $case            True for case sensitive.
      *    @access public
      */
-    function SimpleLexer(&$parser, $start = "accept", $case = false) {
+    function SimpleLexer($parser, $start = "accept", $case = false) {
         $this->_case = $case;
         $this->_regexes = array();
-        $this->_parser = &$parser;
-        $this->_mode = &new SimpleStateStack($start);
+        $this->_parser = $parser;
+        $this->_mode = new SimpleStateStack($start);
         $this->_mode_handlers = array($start => $start);
     }
     
@@ -456,7 +456,7 @@ class SimpleHtmlLexer extends SimpleLexer {
      *                                    reference.
      *    @access public
      */
-    function SimpleHtmlLexer(&$parser) {
+    function SimpleHtmlLexer($parser) {
         $this->SimpleLexer($parser, 'text');
         $this->mapHandler('text', 'acceptTextToken');
         $this->_addSkipping();
@@ -552,9 +552,9 @@ class SimpleHtmlSaxParser {
      *    @param SimpleSaxListener $listener    SAX event handler.
      *    @access public
      */
-    function SimpleHtmlSaxParser(&$listener) {
-        $this->_listener = &$listener;
-        $this->_lexer = &$this->createLexer($this);
+    function SimpleHtmlSaxParser($listener) {
+        $this->_listener = $listener;
+        $this->_lexer = $this->createLexer($this);
         $this->_tag = '';
         $this->_attributes = array();
         $this->_current_attribute = '';
@@ -577,9 +577,8 @@ class SimpleHtmlSaxParser {
      *    @return SimpleLexer               Lexer suitable for this parser.
      *    @access public
      */
-    static function &createLexer(&$parser) {
-        $lexer = &new SimpleHtmlLexer($parser);
-        return $lexer;
+    static function createLexer(&$parser) {
+        return new SimpleHtmlLexer($parser);
     }
     
     /**

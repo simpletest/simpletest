@@ -6,13 +6,6 @@
  *  @version    $Id$
  */
 
-/**
- * @ignore - PHP5 compatibility fix.
- */
-if (! defined('E_STRICT')) {
-    define('E_STRICT', 2048);
-}
-
 /**#@+
  * Includes SimpleTest files.
  */
@@ -32,7 +25,7 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
      *    Stores the invoker to wrap.
      *    @param SimpleInvoker $invoker  Test method runner.
      */
-    function SimpleErrorTrappingInvoker(&$invoker) {
+    function SimpleErrorTrappingInvoker($invoker) {
         $this->SimpleInvokerDecorator($invoker);
     }
 
@@ -44,7 +37,7 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
      *    @access public
      */
     function invoke($method) {
-        $queue = &$this->_createErrorQueue();
+        $queue = $this->_createErrorQueue();
         set_error_handler('SimpleTestErrorHandler');
         parent::invoke($method);
         restore_error_handler();
@@ -56,10 +49,10 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
      *    @return SimpleErrorQueue    Queue connected to the test.
      *    @access private
      */
-    function &_createErrorQueue() {
-        $context = &SimpleTest::getContext();
-        $test = &$this->getTestCase();
-        $queue = &$context->get('SimpleErrorQueue');
+    function _createErrorQueue() {
+        $context = SimpleTest::getContext();
+        $test = $this->getTestCase();
+        $queue = $context->get('SimpleErrorQueue');
         $queue->setTestCase($test);
         return $queue;
     }
@@ -98,8 +91,8 @@ class SimpleErrorQueue {
      *    @param SimpleTestCase $test    Test case to send messages to.
      *    @access public
      */
-    function setTestCase(&$test) {
-        $this->_test = &$test;
+    function setTestCase($test) {
+        $this->_test = $test;
     }
 
     /**
@@ -112,7 +105,6 @@ class SimpleErrorQueue {
      *    @access public
      */
     function expectError($expected, $message) {
-        $this->_using_expect_style = true;
         array_push($this->_expectation_queue, array($expected, $message));
     }
 
@@ -126,13 +118,7 @@ class SimpleErrorQueue {
      */
     function add($severity, $content, $filename, $line) {
         $content = str_replace('%', '%%', $content);
-        if ($this->_using_expect_style) {
-            $this->testLatestError($severity, $content, $filename, $line);
-        } else {
-            array_push(
-                    $this->_queue,
-                    array($severity, $content, $filename, $line));
-        }
+        $this->testLatestError($severity, $content, $filename, $line);
     }
     
     /**
@@ -201,32 +187,6 @@ class SimpleErrorQueue {
     }
 
     /**
-     *    @deprecated
-     */
-    function assertNoErrors($message) {
-        return $this->_test->assert(
-                new TrueExpectation(),
-                count($this->_queue) == 0,
-                sprintf($message, 'Should be no errors'));
-    }
-
-    /**
-     *    @deprecated
-     */
-    function assertError($expected, $message) {
-        if (count($this->_queue) == 0) {
-            $this->_test->fail(sprintf($message, 'Expected error not found'));
-            return false;
-        }
-        list($severity, $content, $file, $line) = $this->extract();
-        $severity = $this->getSeverityAsString($severity);
-        return $this->_test->assert(
-                $expected,
-                $content,
-                sprintf($message, "Expected PHP error [$content] severity [$severity] in [$file] line [$line]"));
-    }
-
-    /**
      *    Converts an error code into it's string
      *    representation.
      *    @param $severity  PHP integer error code.
@@ -272,15 +232,26 @@ function SimpleTestErrorHandler($severity, $message, $filename = null, $line = n
     $severity = $severity & error_reporting();
     if ($severity) {
         restore_error_handler();
-        if (ini_get('log_errors')) {
-            $label = SimpleErrorQueue::getSeverityAsString($severity);
-            error_log("$label: $message in $filename on line $line");
+        if (IsNotCausedBySimpleTest($message)) {
+            if (ini_get('log_errors')) {
+                $label = SimpleErrorQueue::getSeverityAsString($severity);
+                error_log("$label: $message in $filename on line $line");
+            }
+            $queue = SimpleTest::getContext()->get('SimpleErrorQueue');
+            $queue->add($severity, $message, $filename, $line);
         }
-        $context = &SimpleTest::getContext();
-        $queue = &$context->get('SimpleErrorQueue');
-        $queue->add($severity, $message, $filename, $line);
         set_error_handler('SimpleTestErrorHandler');
     }
     return true;
+}
+
+/**
+ *  Certain messages can be caused by the unit tester itself.
+ *  These have to be filtered.
+ *  @param string $message      Message to filter.
+ *  @return boolean             True if genuine failure.
+ */
+function IsNotCausedBySimpleTest($message) {
+    return ! preg_match('/returned by reference/', $message);
 }
 ?>

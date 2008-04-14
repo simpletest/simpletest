@@ -82,7 +82,7 @@ class ShellTestCase extends SimpleTestCase {
      */
     function ShellTestCase($label = false) {
         $this->SimpleTestCase($label);
-        $this->_current_shell = &$this->_createShell();
+        $this->_current_shell = $this->_createShell();
         $this->_last_status = false;
         $this->_last_command = '';
     }
@@ -94,7 +94,7 @@ class ShellTestCase extends SimpleTestCase {
      *    @access public
      */
     function execute($command) {
-        $shell = &$this->_getShell();
+        $shell = $this->_getShell();
         $this->_last_status = $shell->execute($command);
         $this->_last_command = $command;
         return ($this->_last_status === 0);
@@ -114,7 +114,7 @@ class ShellTestCase extends SimpleTestCase {
      *    @access public
      */
     function getOutput() {
-        $shell = &$this->_getShell();
+        $shell = $this->_getShell();
         return $shell->getOutput();
     }
 
@@ -124,7 +124,7 @@ class ShellTestCase extends SimpleTestCase {
      *    @access public
      */
     function getOutputAsList() {
-        $shell = &$this->_getShell();
+        $shell = $this->_getShell();
         return $shell->getOutputAsList();
     }
 
@@ -213,7 +213,7 @@ class ShellTestCase extends SimpleTestCase {
      *    @access public
      */
     function assertOutput($expected, $message = "%s") {
-        $shell = &$this->_getShell();
+        $shell = $this->_getShell();
         return $this->assert(
                 new EqualExpectation($expected),
                 $shell->getOutput(),
@@ -229,7 +229,7 @@ class ShellTestCase extends SimpleTestCase {
      *    @access public
      */
     function assertOutputPattern($pattern, $message = "%s") {
-        $shell = &$this->_getShell();
+        $shell = $this->_getShell();
         return $this->assert(
                 new PatternExpectation($pattern),
                 $shell->getOutput(),
@@ -245,7 +245,7 @@ class ShellTestCase extends SimpleTestCase {
      *    @access public
      */
     function assertNoOutputPattern($pattern, $message = "%s") {
-        $shell = &$this->_getShell();
+        $shell = $this->_getShell();
         return $this->assert(
                 new NoPatternExpectation($pattern),
                 $shell->getOutput(),
@@ -286,7 +286,6 @@ class ShellTestCase extends SimpleTestCase {
      *    @access public
      */
     function assertFilePattern($pattern, $path, $message = "%s") {
-        $shell = &$this->_getShell();
         return $this->assert(
                 new PatternExpectation($pattern),
                 implode('', file($path)),
@@ -303,7 +302,6 @@ class ShellTestCase extends SimpleTestCase {
      *    @access public
      */
     function assertNoFilePattern($pattern, $path, $message = "%s") {
-        $shell = &$this->_getShell();
         return $this->assert(
                 new NoPatternExpectation($pattern),
                 implode('', file($path)),
@@ -316,7 +314,7 @@ class ShellTestCase extends SimpleTestCase {
      *    @return Shell        Current shell.
      *    @access protected
      */
-    function &_getShell() {
+    function _getShell() {
         return $this->_current_shell;
     }
 
@@ -325,9 +323,8 @@ class ShellTestCase extends SimpleTestCase {
      *    @return Shell        New shell object.
      *    @access protected
      */
-    function &_createShell() {
-        $shell = &new SimpleShell();
-        return $shell;
+    function _createShell() {
+        return new SimpleShell();
     }
 }
 ?>

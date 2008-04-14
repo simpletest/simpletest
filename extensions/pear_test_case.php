@@ -44,9 +44,9 @@
          */
         function assertEquals($first, $second, $message = "%s", $delta = 0) {
             if ($this->_loosely_typed) {
-                $expectation = &new EqualExpectation($first);
+                $expectation = new EqualExpectation($first);
             } else {
-                $expectation = &new IdenticalExpectation($first);
+                $expectation = new IdenticalExpectation($first);
             }
             $this->assert($expectation, $second, $message);
         }
@@ -72,15 +72,14 @@
         }
         
         /**
-         *    In PHP5 the identity test tests for the same
-         *    object. This is a reference test in PHP4.
+         *    Identity test tests for the same object.
          *    @param $first          First object handle.
          *    @param $second         Hopefully the same handle.
          *    @param $message        Message to display.
          *    @public
          */
-        function assertSame(&$first, &$second, $message = "%s") {
-            $dumper = &new SimpleDumper();
+        function assertSame($first, $second, $message = "%s") {
+            $dumper = new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($first) .
@@ -93,15 +92,14 @@
         }
         
         /**
-         *    In PHP5 the identity test tests for the same
-         *    object. This is a reference test in PHP4.
+         *    Inverted identity test.
          *    @param $first          First object handle.
          *    @param $second         Hopefully a different handle.
          *    @param $message        Message to display.
          *    @public
          */
-        function assertNotSame(&$first, &$second, $message = "%s") {
-            $dumper = &new SimpleDumper();
+        function assertNotSame($first, $second, $message = "%s") {
+            $dumper = new SimpleDumper();
             $message = sprintf(
                     $message,
                     "[" . $dumper->describeValue($first) .

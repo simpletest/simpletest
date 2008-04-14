@@ -15,7 +15,6 @@ xsltproc bundled_docs.xslt ../docs/source/fr/simple_test.xml > ../docs/fr/index.
 xsltproc bundled_docs.xslt ../docs/source/fr/overview.xml > ../docs/fr/overview.html
 xsltproc bundled_docs.xslt ../docs/source/fr/unit_test_documentation.xml > ../docs/fr/unit_test_documentation.html
 xsltproc bundled_docs.xslt ../docs/source/fr/group_test_documentation.xml > ../docs/fr/group_test_documentation.html
-xsltproc bundled_docs.xslt ../docs/source/fr/server_stubs_documentation.xml > ../docs/fr/server_stubs_documentation.html
 xsltproc bundled_docs.xslt ../docs/source/fr/mock_objects_documentation.xml > ../docs/fr/mock_objects_documentation.html
 xsltproc bundled_docs.xslt ../docs/source/fr/partial_mocks_documentation.xml > ../docs/fr/partial_mocks_documentation.html
 xsltproc bundled_docs.xslt ../docs/source/fr/reporter_documentation.xml > ../docs/fr/reporter_documentation.html

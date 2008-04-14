@@ -32,8 +32,8 @@ class SimpleFrameset {
      *    browser to fetch the sub frames recursively.
      *    @param SimplePage $page        Frameset page.
      */
-    function SimpleFrameset(&$page) {
-        $this->_frameset = &$page;
+    function SimpleFrameset($page) {
+        $this->_frameset = $page;
         $this->_frames = array();
         $this->_focus = false;
         $this->_names = array();
@@ -45,8 +45,8 @@ class SimpleFrameset {
      *    @param string $name        Name of frame in frameset.
      *    @access public
      */
-    function addFrame(&$page, $name = false) {
-        $this->_frames[] = &$page;
+    function addFrame($page, $name = false) {
+        $this->_frames[] = $page;
         if ($name) {
             $this->_names[$name] = count($this->_frames) - 1;
         }
@@ -60,7 +60,7 @@ class SimpleFrameset {
      *    @param SimplePage $page   Frame source.
      *    @access public
      */
-    function setFrame($path, &$page) {
+    function setFrame($path, $page) {
         $name = array_shift($path);
         if (isset($this->_names[$name])) {
             $index = $this->_names[$name];
@@ -473,9 +473,8 @@ class SimpleFrameset {
      *                                          the button.
      *    @access public
      */
-    function &getFormBySubmit($selector) {
-        $form = &$this->_findForm('getFormBySubmit', $selector);
-        return $form;
+    function getFormBySubmit($selector) {
+        return $this->_findForm('getFormBySubmit', $selector);
     }
 
     /**
@@ -488,9 +487,8 @@ class SimpleFrameset {
      *                                     the image.
      *    @access public
      */
-    function &getFormByImage($selector) {
-        $form = &$this->_findForm('getFormByImage', $selector);
-        return $form;
+    function getFormByImage($selector) {
+        return $this->_findForm('getFormByImage', $selector);
     }
 
     /**
@@ -503,9 +501,8 @@ class SimpleFrameset {
      *    @return SimpleForm    Form object containing the matching ID.
      *    @access public
      */
-    function &getFormById($id) {
-        $form = &$this->_findForm('getFormById', $id);
-        return $form;
+    function getFormById($id) {
+        return $this->_findForm('getFormById', $id);
     }
 
     /**
@@ -516,17 +513,16 @@ class SimpleFrameset {
         *    @return SimpleForm    Form object containing the matching ID.
         *    @access private
         */
-    function &_findForm($method, $attribute) {
+    function _findForm($method, $attribute) {
         if (is_integer($this->_focus)) {
-            $form = &$this->_findFormInFrame(
+            return $this->_findFormInFrame(
                     $this->_frames[$this->_focus],
                     $this->_focus,
                     $method,
                     $attribute);
-            return $form;
         }
         for ($i = 0; $i < count($this->_frames); $i++) {
-            $form = &$this->_findFormInFrame(
+            $form = $this->_findFormInFrame(
                     $this->_frames[$i],
                     $i,
                     $method,
@@ -549,8 +545,8 @@ class SimpleFrameset {
      *    @return SimpleForm       Form object containing the matching ID.
      *    @access private
      */
-    function &_findFormInFrame(&$page, $index, $method, $attribute) {
-        $form = &$this->_frames[$index]->$method($attribute);
+    function _findFormInFrame($page, $index, $method, $attribute) {
+        $form = $this->_frames[$index]->$method($attribute);
         if (isset($form)) {
             $form->setDefaultTarget($this->getPublicNameFromIndex($index));
         }

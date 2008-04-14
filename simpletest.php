@@ -83,9 +83,9 @@ class SimpleTest {
      *   @access public
      *   @see preferred()
      */
-    static function prefer(&$object) {
+    static function prefer($object) {
         $registry = &SimpleTest::_getRegistry();
-        $registry['Preferred'][] = &$object;
+        $registry['Preferred'][] = $object;
     }
 
     /**
@@ -97,7 +97,7 @@ class SimpleTest {
      *   @return array|object|null
      *   @see prefer()
      */
-    static function &preferred($classes) {
+    static function preferred($classes) {
         if (! is_array($classes)) {
             $classes = array($classes);
         }
@@ -125,22 +125,6 @@ class SimpleTest {
     static function isIgnored($class) {
         $registry = &SimpleTest::_getRegistry();
         return isset($registry['IgnoreList'][strtolower($class)]);
-    }
-
-    /**
-     *    @deprecated
-     */
-    static function setMockBaseClass($mock_base) {
-        $registry = &SimpleTest::_getRegistry();
-        $registry['MockBaseClass'] = $mock_base;
-    }
-
-    /**
-     *    @deprecated
-     */
-    static function getMockBaseClass() {
-        $registry = &SimpleTest::_getRegistry();
-        return $registry['MockBaseClass'];
     }
 
     /**
@@ -209,7 +193,7 @@ class SimpleTest {
      *    @return SimpleTestContext    Current test run.
      *    @access public
      */
-    static function &getContext() {
+    static function getContext() {
         static $context = false;
         if (! $context) {
             $context = new SimpleTestContext();
@@ -224,13 +208,28 @@ class SimpleTest {
      */
     static function _getDefaults() {
         return array(
-                'StubBaseClass' => 'SimpleStub',
                 'MockBaseClass' => 'SimpleMock',
                 'IgnoreList' => array(),
                 'DefaultProxy' => false,
                 'DefaultProxyUsername' => false,
                 'DefaultProxyPassword' => false,
                 'Preferred' => array(new HtmlReporter(), new TextReporter(), new XmlReporter()));
+    }
+    
+    /**
+     *    @deprecated
+     */
+    static function setMockBaseClass($mock_base) {
+        $registry = &SimpleTest::_getRegistry();
+        $registry['MockBaseClass'] = $mock_base;
+    }
+
+    /**
+     *    @deprecated
+     */
+    static function getMockBaseClass() {
+        $registry = &SimpleTest::_getRegistry();
+        return $registry['MockBaseClass'];
     }
 }
 
@@ -262,9 +261,9 @@ class SimpleTestContext {
      *    @param SimpleTestCase $test        Test case to register.
      *    @access public
      */
-    function setTest(&$test) {
+    function setTest($test) {
         $this->clear();
-        $this->_test = &$test;
+        $this->_test = $test;
     }
 
     /**
@@ -272,7 +271,7 @@ class SimpleTestContext {
      *    @return SimpleTestCase    Current test.
      *    @access public
      */
-    function &getTest() {
+    function getTest() {
         return $this->_test;
     }
 
@@ -283,9 +282,9 @@ class SimpleTestContext {
      *    @param SimpleReporter $reporter     Reporter to register.
      *    @access public
      */
-    function setReporter(&$reporter) {
+    function setReporter($reporter) {
         $this->clear();
-        $this->_reporter = &$reporter;
+        $this->_reporter = $reporter;
     }
 
     /**
@@ -293,7 +292,7 @@ class SimpleTestContext {
      *    @return SimpleReporter    Current reporter.
      *    @access public
      */
-    function &getReporter() {
+    function getReporter() {
         return $this->_reporter;
     }
 
@@ -302,9 +301,9 @@ class SimpleTestContext {
      *    @return object       Global resource.
      *    @access public
      */
-    function &get($resource) {
+    function get($resource) {
         if (! isset($this->_resources[$resource])) {
-            $this->_resources[$resource] = &new $resource();
+            $this->_resources[$resource] = new $resource();
         }
         return $this->_resources[$resource];
     }
@@ -392,77 +391,6 @@ class SimpleStackTrace {
             return array_reverse(debug_backtrace());
         }
         return array();
-    }
-}
-
-/**
- *    @package SimpleTest
- *    @subpackage UnitTester
- *    @deprecated
- */
-class SimpleTestOptions extends SimpleTest {
-
-    /**
-     *    @deprecated
-     */
-    static function getVersion() {
-        return Simpletest::getVersion();
-    }
-
-    /**
-     *    @deprecated
-     */
-    static function ignore($class) {
-        return Simpletest::ignore($class);
-    }
-
-    /**
-     *    @deprecated
-     */
-    static function isIgnored($class) {
-        return Simpletest::isIgnored($class);
-    }
-
-    /**
-     *    @deprecated
-     */
-    static function setMockBaseClass($mock_base) {
-        return Simpletest::setMockBaseClass($mock_base);
-    }
-
-    /**
-     *    @deprecated
-     */
-    static function getMockBaseClass() {
-        return Simpletest::getMockBaseClass();
-    }
-
-    /**
-     *    @deprecated
-     */
-    static function useProxy($proxy, $username = false, $password = false) {
-        return Simpletest::useProxy($proxy, $username, $password);
-    }
-
-    /**
-     *    @deprecated
-     */
-    static function getDefaultProxy() {
-        return Simpletest::getDefaultProxy();
-    }
-
-    /**
-     *    @deprecated
-     */
-    static function getDefaultProxyUsername() {
-        return Simpletest::getDefaultProxyUsername();
-    }
-
-    /**
-     *    @deprecated
-     */
-    static function getDefaultProxyPassword() {
-        return Simpletest::getDefaultProxyPassword();
     }
 }
 ?>

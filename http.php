@@ -72,9 +72,9 @@ class SimpleRoute {
      *    @return SimpleSocket       New socket.
      *    @access public
      */
-    function &createConnection($method, $timeout) {
+    function createConnection($method, $timeout) {
         $default_port = ('https' == $this->_url->getScheme()) ? 443 : 80;
-        $socket = &$this->_createSocket(
+        $socket = $this->_createSocket(
                 $this->_url->getScheme() ? $this->_url->getScheme() : 'http',
                 $this->_url->getHost(),
                 $this->_url->getPort() ? $this->_url->getPort() : $default_port,
@@ -96,15 +96,14 @@ class SimpleRoute {
      *    @return SimpleSocket/SimpleSecureSocket New socket.
      *    @access protected
      */
-    function &_createSocket($scheme, $host, $port, $timeout) {
+    function _createSocket($scheme, $host, $port, $timeout) {
         if (in_array($scheme, array('file'))) {
-            $socket = &new SimpleFileSocket($this->_url);
+            return new SimpleFileSocket($this->_url);
         } elseif (in_array($scheme, array('https'))) {
-            $socket = &new SimpleSecureSocket($host, $port, $timeout);
+            return new SimpleSecureSocket($host, $port, $timeout);
         } else {
-            $socket = &new SimpleSocket($host, $port, $timeout);
+            return new SimpleSocket($host, $port, $timeout);
         }
-        return $socket;
     }
 }
 
@@ -168,8 +167,8 @@ class SimpleProxyRoute extends SimpleRoute {
      *    @return SimpleSocket        New socket.
      *    @access public
      */
-    function &createConnection($method, $timeout) {
-        $socket = &$this->_createSocket(
+    function createConnection($method, $timeout) {
+        $socket = $this->_createSocket(
                 $this->_proxy->getScheme() ? $this->_proxy->getScheme() : 'http',
                 $this->_proxy->getHost(),
                 $this->_proxy->getPort() ? $this->_proxy->getPort() : 8080,
@@ -210,8 +209,8 @@ class SimpleHttpRequest {
      *                                           request.
      *    @access public
      */
-    function SimpleHttpRequest(&$route, $encoding) {
-        $this->_route = &$route;
+    function SimpleHttpRequest($route, $encoding) {
+        $this->_route = $route;
         $this->_encoding = $encoding;
         $this->_headers = array();
         $this->_cookies = array();
@@ -225,13 +224,12 @@ class SimpleHttpRequest {
      *                                 complete web page.
      *    @access public
      */
-    function &fetch($timeout) {
-        $socket = &$this->_route->createConnection($this->_encoding->getMethod(), $timeout);
+    function fetch($timeout) {
+        $socket = $this->_route->createConnection($this->_encoding->getMethod(), $timeout);
         if (! $socket->isError()) {
             $this->dispatchRequest($socket, $this->_encoding);
         }
-        $response = &$this->_createResponse($socket);
-        return $response;
+        return $this->_createResponse($socket);
     }
     
     /**
@@ -242,7 +240,7 @@ class SimpleHttpRequest {
      *    @param SimpleFormEncoding $encoding   Content to send with request.
      *    @access private
      */
-    protected function dispatchRequest(&$socket, $encoding) {
+    protected function dispatchRequest($socket, $encoding) {
         foreach ($this->_headers as $header_line) {
             $socket->write($header_line . "\r\n");
         }
@@ -280,12 +278,11 @@ class SimpleHttpRequest {
      *    @return SimpleHttpResponse    Parsed response object.
      *    @access protected
      */
-    function &_createResponse(&$socket) {
-        $response = &new SimpleHttpResponse(
+    function _createResponse($socket) {
+        return new SimpleHttpResponse(
                 $socket,
                 $this->_route->getUrl(),
                 $this->_encoding);
-        return $response;
     }
 }
 
@@ -415,7 +412,7 @@ class SimpleHttpHeaders {
      *    @param SimpleUrl $url         Host and path to write under.
      *    @access public
      */
-    function writeCookiesToJar(&$jar, $url) {
+    function writeCookiesToJar($jar, $url) {
         foreach ($this->_cookies as $cookie) {
             $jar->setCookie(
                     $cookie->getName(),
@@ -496,7 +493,7 @@ class SimpleHttpResponse extends SimpleStickyError {
      *    @param mixed $encoding        Record of content sent.
      *    @access public
      */
-    function SimpleHttpResponse(&$socket, $url, $encoding) {
+    function SimpleHttpResponse($socket, $url, $encoding) {
         $this->SimpleStickyError();
         $this->_url = $url;
         $this->_encoding = $encoding;
@@ -518,16 +515,16 @@ class SimpleHttpResponse extends SimpleStickyError {
     function _parse($raw) {
         if (! $raw) {
             $this->_setError('Nothing fetched');
-            $this->_headers = &new SimpleHttpHeaders('');
+            $this->_headers = new SimpleHttpHeaders('');
         } elseif ('file' == $this->_url->getScheme()) {
-            $this->_headers = &new SimpleHttpHeaders('');
+            $this->_headers = new SimpleHttpHeaders('');
             $this->_content = $raw;
         } elseif (! strstr($raw, "\r\n\r\n")) {
             $this->_setError('Could not split headers from content');
-            $this->_headers = &new SimpleHttpHeaders($raw);
+            $this->_headers = new SimpleHttpHeaders($raw);
         } else {
             list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);
-            $this->_headers = &new SimpleHttpHeaders($headers);
+            $this->_headers = new SimpleHttpHeaders($headers);
         }
     }
     
@@ -604,7 +601,7 @@ class SimpleHttpResponse extends SimpleStickyError {
      *                                 else false.
      *    @access private
      */
-    protected function readAll(&$socket) {
+    protected function readAll($socket) {
         $all = '';
         while (! $this->isLastPacket($next = $socket->read())) {
             $all .= $next;

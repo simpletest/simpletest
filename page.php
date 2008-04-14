@@ -148,10 +148,10 @@ class SimplePageBuilder extends SimpleSaxListener {
      *    @return SimplePage                   Newly parsed page.
      *    @access public
      */
-    function &parse($response) {
+    function parse($response) {
         $this->_tags = array();
-        $this->_page = &$this->createPage($response);
-        $parser = &$this->_createParser($this);
+        $this->_page = $this->createPage($response);
+        $parser = $this->_createParser($this);
         $parser->parse($response->getContent());
         $this->_page->acceptPageEnd();
         return $this->_page;
@@ -162,9 +162,8 @@ class SimplePageBuilder extends SimpleSaxListener {
      *    @return SimplePage        New unparsed page.
      *    @access protected
      */
-    protected function &createPage($response) {
-        $page = &new SimplePage($response);
-        return $page;
+    protected function createPage($response) {
+        return new SimplePage($response);
     }
 
     /**
@@ -174,9 +173,8 @@ class SimplePageBuilder extends SimpleSaxListener {
      *                                         events for the builder.
      *    @access protected
      */
-    function &_createParser(&$listener) {
-        $parser = &new SimpleHtmlSaxParser($listener);
-        return $parser;
+    function _createParser(&$listener) {
+        return new SimpleHtmlSaxParser($listener);
     }
     
     /**
@@ -188,7 +186,7 @@ class SimplePageBuilder extends SimpleSaxListener {
      *    @access public
      */
     function startElement($name, $attributes) {
-        $factory = &new SimpleTagBuilder();
+        $factory = new SimpleTagBuilder();
         $tag = $factory->createTag($name, $attributes);
         if (! $tag) {
             return true;
@@ -317,12 +315,12 @@ class SimplePageBuilder extends SimpleSaxListener {
      *    @param SimpleTag $tag        New content tag.
      *    @access private
      */
-    protected function openTag(&$tag) {
+    protected function openTag($tag) {
         $name = $tag->getTagName();
         if (! in_array($name, array_keys($this->_tags))) {
             $this->_tags[$name] = array();
         }
-        $this->_tags[$name][] = &$tag;
+        $this->_tags[$name][] = $tag;
     }
 }
 
@@ -583,7 +581,7 @@ class SimplePage {
      *    @param SimpleTag $tag        Tag to accept.
      *    @access public
      */
-    function acceptTag(&$tag) {
+    function acceptTag($tag) {
         if ($tag->getTagName() == "a") {
             $this->addLink($tag);
         } elseif ($tag->getTagName() == "base") {
@@ -603,8 +601,8 @@ class SimplePage {
      *    @param SimpleFormTag $tag      Tag to accept.
      *    @access public
      */
-    function acceptLabelStart(&$tag) {
-        $this->_label = &$tag;
+    function acceptLabelStart($tag) {
+        $this->_label = $tag;
         unset($this->_last_widget);
     }
 
@@ -640,8 +638,8 @@ class SimplePage {
      *    @param SimpleFormTag $tag      Tag to accept.
      *    @access public
      */
-    function acceptFormStart(&$tag) {
-        $this->_open_forms[] = &new SimpleForm($tag, $this);
+    function acceptFormStart($tag) {
+        $this->_open_forms[] = new SimpleForm($tag, $this);
     }
 
     /**
@@ -660,9 +658,9 @@ class SimplePage {
      *    @param SimpleFramesetTag $tag      Tag to accept.
      *    @access public
      */
-    function acceptFramesetStart(&$tag) {
+    function acceptFramesetStart($tag) {
         if (! $this->isLoadingFrames()) {
-            $this->_frameset = &$tag;
+            $this->_frameset = $tag;
         }
         $this->_frameset_nesting_level++;
     }
@@ -683,10 +681,10 @@ class SimplePage {
      *    @param SimpleFrameTag $tag      Tag to accept.
      *    @access public
      */
-    function acceptFrame(&$tag) {
+    function acceptFrame($tag) {
         if ($this->isLoadingFrames()) {
             if ($tag->getAttribute('src')) {
-                $this->_frames[] = &$tag;
+                $this->_frames[] = $tag;
             }
         }
     }
@@ -864,7 +862,7 @@ class SimplePage {
      *    @param SimpleTag $tag    Base URL for page.
      *    @access protected
      */
-    protected function setBase(&$tag) {
+    protected function setBase($tag) {
         $url = $tag->getAttribute('href');
         $this->_base = new SimpleUrl($url);
     }
@@ -874,8 +872,8 @@ class SimplePage {
      *    @param SimpleTitleTag $tag    Title of page.
      *    @access protected
      */
-    protected function setTitle(&$tag) {
-        $this->_title = &$tag;
+    protected function setTitle($tag) {
+        $this->_title = $tag;
     }
 
     /**
@@ -916,14 +914,13 @@ class SimplePage {
      *                                     the image.
      *    @access public
      */
-    function &getFormByImage($selector) {
+    function getFormByImage($selector) {
         for ($i = 0; $i < count($this->_complete_forms); $i++) {
             if ($this->_complete_forms[$i]->hasImage($selector)) {
                 return $this->_complete_forms[$i];
             }
         }
-        $null = null;
-        return $null;
+        return null;
     }
 
     /**
@@ -934,14 +931,13 @@ class SimplePage {
      *    @return SimpleForm    Form object containing the matching ID.
      *    @access public
      */
-    function &getFormById($id) {
+    function getFormById($id) {
         for ($i = 0; $i < count($this->_complete_forms); $i++) {
             if ($this->_complete_forms[$i]->getId() == $id) {
                 return $this->_complete_forms[$i];
             }
         }
-        $null = null;
-        return $null;
+        return null;
     }
 
     /**

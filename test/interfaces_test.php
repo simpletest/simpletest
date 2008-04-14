@@ -27,8 +27,8 @@ class TestOfMockInterfaces extends UnitTestCase {
 
     function testMockedInterfaceExpectsParameters() {
         $mock = new MockDummyInterface();
+        $this->expectError();
         $mock->anotherMethod();
-        $this->assertError();
     }
 
     function testCannotPartiallyMockAnInterface() {
@@ -107,7 +107,6 @@ interface SampleClassWithConstruct {
 class TestOfInterfaceMocksWithConstruct extends UnitTestCase {
     function testBasicConstructOfAnInterface() {
         Mock::generate('SampleClassWithConstruct');
-        $this->assertNoErrors();
     }
 }
 
@@ -118,7 +117,6 @@ interface SampleInterfaceWithHintInSignature {
 class TestOfInterfaceMocksWithHintInSignature extends UnitTestCase {
     function testBasicConstructOfAnInterfaceWithHintInSignature() {
         Mock::generate('SampleInterfaceWithHintInSignature');
-        $this->assertNoErrors();
         $mock = new MockSampleInterfaceWithHintInSignature();
         $this->assertIsA($mock, 'SampleInterfaceWithHintInSignature');
     }
@@ -131,7 +129,6 @@ interface SampleInterfaceWithClone {
 class TestOfSampleInterfaceWithClone extends UnitTestCase {
     function testCanMockWithoutErrors() {
         Mock::generate('SampleInterfaceWithClone');
-        $this->assertNoErrors();
     }
 }
 ?>
