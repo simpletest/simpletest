@@ -27,6 +27,9 @@
                 cooperation.
                 This release is a deep drawing of breath before going forward.
             </p>
+            <p>
+                <strong>This TODO doesn't yet include the triage from the bug fixes.</strong>
+            </p>
         </section>
         <section name="plan" title="Release plan" version="1.1">
             <milestone version="1.1beta">
@@ -125,7 +128,8 @@
             <a href="#parser">Parser</a>,
             <a href="#browser">Browser</a>,
             <a href="#web-tester">Web tester</a>,
-            <a href="#documentation">Documentation</a> and
+            <a href="#documentation">Documentation</a>,
+            <a href="#extensions">Build</a> and
             <a href="#build">Build</a>.
         </link>
     </internal>
