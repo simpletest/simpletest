@@ -19,21 +19,20 @@
                 caused by people hacking against unpublished flex points
                 in SimpleTest.
                 We want to break people's code now, not while we are developing
-                features.
+                features down the line.
             </p>
             <p>
                 With the website move to a new server, and more developers,
-                we are able to improve the test automation and developer
+                we are able and need to improve the test automation and developer
                 cooperation.
                 This release is a deep drawing of breath before going forward.
-            </p>
-            <p>
-                <strong>This TODO doesn't yet include the triage from the bug fixes.</strong>
             </p>
         </section>
         <section name="plan" title="Release plan" version="1.1">
             <milestone version="1.1beta">
-                <concern name="unit-tester"/>
+                <concern name="unit-tester">
+                    <bug tracker="1896582">Undefined property $_reporter + fatal error</bug>
+                </concern>
                 <concern name="reporter"/>
                 <concern name="mock-objects"/>
                 <concern name="parser"/>
@@ -51,6 +50,8 @@
                     <task status="done">PHP 5.3 compatible under E_STRICT</task>
                     <task>PHP 5.2.0-5 compatible under E_STRICT</task>
                     <task>PHP 5.1.0-6 compatible under E_STRICT</task>
+                    <bug tracker="1884013">continuous integration</bug>
+                    <bug tracker="1853765">error_reporting(E_ALL|E_STRICT)gives lots of warning</bug>
                     <task>Remove all deprecated methods</task>
                     <task>
                         Drop underscores from protected methods and
@@ -62,6 +63,7 @@
                             Upon each complaint we'll add an accessor and
                             capture the use case from them.
                         </note>
+                        <note>We'll stick the use cases in the feature request tracker for now</note>
                     </task>
                     <task>Move web site to new server</task>
                 </concern>
@@ -77,12 +79,16 @@
                             in method names, etc.
                         </note>
                     </task>
+                    <bug tracker="1864974">XmlReporter generating invalid XML</bug>
                 </concern>
                 <concern name="mock-objects">
                     <task>Remove reflection facade for PHP4</task>
                 </concern>
                 <concern name="parser"/>
-                <concern name="browser"/>
+                <concern name="browser">
+                    <bug tracker="1913229">label not assigned to radio and checkbox</bug>
+                    <bug tracker="1706283">incorrect proxy requests</bug>
+                </concern>
                 <concern name="web-tester"/>
                 <concern name="documentation">
                     <task>Docblocks need to be cut back to a miinimum</task>
