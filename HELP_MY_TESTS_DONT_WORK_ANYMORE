@@ -24,7 +24,7 @@ was forced the 1.1 version.
 Cannot create GroupTest
 -----------------------
 The GroupTest has been renamed TestSuite (see below).
-It was removed completely in 1.1 in favoour of this
+It was removed completely in 1.1 in favour of this
 name.
 
 No method getRelativeUrls() or getAbsoluteUrls()
