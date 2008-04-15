@@ -7,11 +7,11 @@ class TestOfSynchronisationCheck extends UnitTestCase {
 	function testOfSynchronisationNotNecessary() {
 	    $source = dirname(__FILE__)."/package/fr/no-synchronisation.xml";
 	    $synchro = new PackagingSynchronisation($source);
-	    $this->assertEqual($synchro->result(), "");
+	    $this->assertEqual($synchro->result(), "<span style=\"color : green\">source</span>");
 
 	    $source = dirname(__FILE__)."/package/en/synchronisation.xml";
 	    $synchro = new PackagingSynchronisation($source);
-	    $this->assertEqual($synchro->result(), "");
+	    $this->assertEqual($synchro->result(), "<span style=\"color : green\">source</span>");
 	}
 	
 	function testOfSynchronisationNecessary() {
@@ -53,7 +53,27 @@ class TestOfContentTransformationFromXMLToHTML extends UnitTestCase {
 		$content = $source->content();
 		$this->assertPattern('/<p>/', $content);
 	}
-
+	
+	function testOfContentFromMilestoneSection() {
+		$file = dirname(__FILE__).'/package/one_section_milestoned.xml';
+		$source = simplexml_load_file($file, "SimpleTestXMLElement");
+		$content = $source->content();
+		$this->assertPattern('/<h3>1\.1beta<\/h3>/', $content);
+		$this->assertPattern('/<a name=\"unit-tester\"><\/a>/', $content);
+		$this->assertPattern('/<h4>Unit tester<\/h4>/', $content);
+		$this->assertPattern('/<h4>Documentation<\/h4>/', $content);
+		$this->assertPattern('/<h4>Extensions<\/h4>/', $content);
+		$this->assertPattern('/<h4>Build<\/h4>/', $content);
+		$this->assertPattern('/<dt>\[bug\] Undefined property \$_reporter \+ fatal error<\/dt>/', $content);
+		$this->assertPattern('/<dd>tracker : 1896582<\/dd>/', $content);
+		$this->assertPattern('/<dt>\[task\] The HELP_MY_TESTS_DONT_WORK_ANYMORE needs to be updated\.<\/dt>/', $content);
+		$this->assertPattern('/<dt class=\"done\">\[task\] PHP 5.3 compatible under E_STRICT<\/dt>/', $content);
+		$this->assertPattern('/<dt class=\"done\">\[bug\] continuous integration<\/dt>/', $content);
+		$this->assertPattern('/<dd>tracker : 1884013<\/dd>/', $content);
+		$this->assertPattern('/<dt>\[bug\] error_reporting\(E_ALL|E_STRICT\)gives lots of warning<\/dt>/', $content);
+		$this->assertPattern('/<dd>We\'ve know this for years, this is the time\.<\/dd>/', $content);
+	}
+	
 	function testOfSingleLink() {
 		$file = dirname(__FILE__).'/package/here_download.xml';
 		$source = simplexml_load_file($file, "SimpleTestXMLElement");

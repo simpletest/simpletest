@@ -71,17 +71,52 @@ class SimpleTestXMLElement extends SimpleXMLElement {
         return $content_element;
     }
 
+    function to_title($name) {
+        return ucfirst(str_replace("-", " ", $name));
+    }
+    
     function content_with_sections() {
         $content = "";
         $sections = $this->xpath('//section');
+        $anchors = array();
         foreach ($sections as $section) {
-            $content .= "<a name=\"".(string)$section->attributes()->name."\">";
+            if (!isset($anchors[(string)$section->attributes()->name])) {
+                $content .= "<a name=\"".(string)$section->attributes()->name."\"></a>";
+                $anchors[(string)$section->attributes()->name] = true;
+            }
             $content .= "<h2>".(string)$section->attributes()->title."</h2>";
-            foreach ($section as $element) {
-                $content .= $this->deal_with_php_code($element->asXML());
+            foreach ($section->p as $paragraph) {
+                $content .= $this->deal_with_php_code($paragraph->asXML());
+            }
+            foreach ($section->milestone as $milestone) {
+                $content .= "<h3>".(string)$milestone->attributes()->version."</h3>";
+                foreach ($milestone->concern as $concern) {
+		            if (!isset($anchors[(string)$concern->attributes()->name])) {
+		                $content .= "<a name=\"".(string)$concern->attributes()->name."\"></a>";
+		                $anchors[(string)$concern->attributes()->name] = true;
+    	            }
+                    $content .= "<h4>".$this->to_title($concern->attributes()->name)."</h4>";
+                    if (sizeof($concern) > 0) {
+                        $content .= "<dl>";
+                        foreach ($concern as $ype => $element) {
+                            $status = "";
+                            if (isset($element->attributes()->status)) {
+                                $status = " class=\"".$element->attributes()->status."\"";
+                            }
+                            $content .= "<dt".$status.">[".$ype."] ".trim($element)."</dt>";
+                            foreach ($element->attributes() as $name => $value) {
+                                $content .= "<dd>".$name." : ".$value."</dd>"; 
+                            }
+                            foreach ($element->note as $note) {
+                                $content .= "<dd>".trim((string)$note)."</dd>"; 
+                            }
+                        }
+                        $content .= "</dl>";
+                    }    
+                }
             }
         }
-        
+
         return $content;
     }
 
@@ -110,7 +145,7 @@ class SimpleTestXMLElement extends SimpleXMLElement {
     }
 
     function keywords() {
-        return trim(preg_replace('/(\s+)/', ' ', $source->meta->keywords));
+        return trim(preg_replace('/(\s+)/', ' ', $this->meta->keywords));
     }
 
     function here() {
@@ -316,7 +351,7 @@ class PackagingSynchronisation {
 
     function result() {
         if (!$this->isSynchronisable()) {
-            return false;
+            return "<span style=\"color : green\">source</span>";
         } elseif (!$this->sourceRevision()) {
             return "<span style=\"color : red\"><strong>missing id</strong></span>";
         } elseif ($this->sourceRevision() > $this->lastSynchroRevision()) {
