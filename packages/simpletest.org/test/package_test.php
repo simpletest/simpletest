@@ -65,11 +65,10 @@ class TestOfContentTransformationFromXMLToHTML extends UnitTestCase {
 		$this->assertPattern('/<h4>Extensions<\/h4>/', $content);
 		$this->assertPattern('/<h4>Build<\/h4>/', $content);
 		$this->assertPattern('/<dt>\[bug\] Undefined property \$_reporter \+ fatal error<\/dt>/', $content);
-		$this->assertPattern('/<dd>tracker : 1896582<\/dd>/', $content);
+		$this->assertPattern('/<dd>tracker : <a href=\"http:\/\/sourceforge.net\/tracker\/index.php\?func=detail&group_id=76550&atid=547455&aid=1896582\">1896582<\/a><\/dd>/', $content);
 		$this->assertPattern('/<dt>\[task\] The HELP_MY_TESTS_DONT_WORK_ANYMORE needs to be updated\.<\/dt>/', $content);
 		$this->assertPattern('/<dt class=\"done\">\[task\] PHP 5.3 compatible under E_STRICT<\/dt>/', $content);
 		$this->assertPattern('/<dt class=\"done\">\[bug\] continuous integration<\/dt>/', $content);
-		$this->assertPattern('/<dd>tracker : 1884013<\/dd>/', $content);
 		$this->assertPattern('/<dt>\[bug\] error_reporting\(E_ALL|E_STRICT\)gives lots of warning<\/dt>/', $content);
 		$this->assertPattern('/<dd>We\'ve know this for years, this is the time\.<\/dd>/', $content);
 	}

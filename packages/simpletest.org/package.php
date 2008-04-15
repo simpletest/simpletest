@@ -71,8 +71,12 @@ class SimpleTestXMLElement extends SimpleXMLElement {
         return $content_element;
     }
 
-    function to_title($name) {
+    function as_title($name) {
         return ucfirst(str_replace("-", " ", $name));
+    }
+    
+    function as_tracker_link($number) {
+        return "<a href=\"http://sourceforge.net/tracker/index.php?func=detail&group_id=76550&atid=547455&aid=".$number."\">".$number."</a>";
     }
     
     function content_with_sections() {
@@ -95,16 +99,19 @@ class SimpleTestXMLElement extends SimpleXMLElement {
 		                $content .= "<a name=\"".(string)$concern->attributes()->name."\"></a>";
 		                $anchors[(string)$concern->attributes()->name] = true;
     	            }
-                    $content .= "<h4>".$this->to_title($concern->attributes()->name)."</h4>";
+                    $content .= "<h4>".$this->as_title($concern->attributes()->name)."</h4>";
                     if (sizeof($concern) > 0) {
                         $content .= "<dl>";
-                        foreach ($concern as $ype => $element) {
+                        foreach ($concern as $type => $element) {
                             $status = "";
                             if (isset($element->attributes()->status)) {
                                 $status = " class=\"".$element->attributes()->status."\"";
                             }
-                            $content .= "<dt".$status.">[".$ype."] ".trim($element)."</dt>";
+                            $content .= "<dt".$status.">[".$type."] ".trim($element)."</dt>";
                             foreach ($element->attributes() as $name => $value) {
+                                if ($name == "tracker" and $type == "bug") {
+                                    $value = $this->as_tracker_link($value);
+                                }
                                 $content .= "<dd>".$name." : ".$value."</dd>"; 
                             }
                             foreach ($element->note as $note) {
