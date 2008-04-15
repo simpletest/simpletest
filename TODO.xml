@@ -7,12 +7,12 @@
                 The following is the approximate plan for the next full point release.
             </p>
             <p>
-                Before each release we hope to have te following done.
+                Before each release we hope to have the following done.
                 More may get done, depending on the interest of the volunteers,
                 but this is the current minimum.
             </p>
             <p>
-                The aim of this release cycle is to producr a functionally
+                The aim of this release cycle is to produce a functionally
                 identical version to the 1.0.1 release, but bug-fixed and
                 fully compatible with PHP 5.0.5+ under E_STRICT.
                 We are also hoping to flush out issues and use cases
@@ -43,7 +43,9 @@
                         The HELP_MY_TESTS_DONT_WORK_ANYMORE needs to be updated.
                     </task>
                     <task>README needs to be updated.</task>
-                    <task>Write XSLT code for this file so Perrick doesn't strangle me</task>
+                    <task status="done">
+                        Write XSLT code for this file so Perrick doesn't strangle me
+                    </task>
                 </concern>
                 <concern name="extensions"/>
                 <concern name="build">
@@ -91,7 +93,7 @@
                 </concern>
                 <concern name="web-tester"/>
                 <concern name="documentation">
-                    <task>Docblocks need to be cut back to a miinimum</task>
+                    <task>Docblocks need to be cut back to a minimum</task>
                 </concern>
                 <concern name="extensions"/>
                 <concern name="build">
@@ -135,7 +137,7 @@
             <a href="#browser">Browser</a>,
             <a href="#web-tester">Web tester</a>,
             <a href="#documentation">Documentation</a>,
-            <a href="#extensions">Build</a> and
+            <a href="#extensions">Extensions</a> and
             <a href="#build">Build</a>.
         </link>
     </internal>
