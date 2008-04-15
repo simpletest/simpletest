@@ -11,10 +11,9 @@ if (isset($_SERVER['SCRIPT_URI'])) {
 };
 $test_url = str_replace('remote_test.php', 'visual_test.php', $base_uri);
 
-$test = &new TestSuite('Remote tests');
-$test->addTestCase(new RemoteTestCase($test_url . '?xml=yes', $test_url . '?xml=yes&dry=yes'));
+$test = new TestSuite('Remote tests');
+$test->add(new RemoteTestCase($test_url . '?xml=yes', $test_url . '?xml=yes&dry=yes'));
 if (SimpleReporter::inCli()) {
     exit ($test->run(new TextReporter()) ? 0 : 1);
 }
 $test->run(new HtmlReporter());
-?>
