@@ -2,6 +2,7 @@
 body { font-family : georgia, serif; }
 img { border : 0; }
 h1 { color : #009933; }
+h3 { width : 100%; border-bottom : 1px solid #cccccc; }
 blockquote { background: transparent url('images/quote.png') left top no-repeat; font-style : italic; padding-left : 40px; margin-left : 10px; }
 td { vertical-align : top; }
 
@@ -36,4 +37,7 @@ pre { font-family: monospaced; border-left: 1px solid #999999; background-color:
 
 dd { font-size : 10.5pt; }
 .done, .done span, .done + dd { color : #AAAAAA; text-decoration : line-through; }
-.postponed, .postponed span, .postponed + dd { color : #AAAAAA; } 
+.postponed, .postponed span, .postponed + dd { color : #AAAAAA; }
+
+dt div.fail { background-color : red; color : white; padding : 0.2em; }
+dt div.pass { background-color : green; color : white; padding : 0.2em; }
