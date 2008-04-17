@@ -5,6 +5,12 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems and their fixes...
 
+Custom CSS in HtmlReporter not being applied
+--------------------------------------------
+Batch rename of protected and private methods 
+means that _getCss() was renamed to getCss();
+replace your function definition accordingly.
+
 setReturnReference() throws errors in E_STRICT
 ----------------------------------------------
 Happens when an object is passed by reference.
