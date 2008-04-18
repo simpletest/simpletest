@@ -28,7 +28,7 @@ class SimpleRoute {
      *    @param SimpleUrl $url   URL as object.
      *    @access public
      */
-    function SimpleRoute($url) {
+    function __construct($url) {
         $this->_url = $url;
     }
     
@@ -126,8 +126,8 @@ class SimpleProxyRoute extends SimpleRoute {
      *    @param string $password   Password for autentication.
      *    @access public
      */
-    function SimpleProxyRoute($url, $proxy, $username = false, $password = false) {
-        $this->SimpleRoute($url);
+    function __construct($url, $proxy, $username = false, $password = false) {
+        parent::__construct($url);
         $this->_proxy = $proxy;
         $this->_username = $username;
         $this->_password = $password;
@@ -493,8 +493,8 @@ class SimpleHttpResponse extends SimpleStickyError {
      *    @param mixed $encoding        Record of content sent.
      *    @access public
      */
-    function SimpleHttpResponse($socket, $url, $encoding) {
-        $this->SimpleStickyError();
+    function __construct($socket, $url, $encoding) {
+        parent::__construct();
         $this->_url = $url;
         $this->_encoding = $encoding;
         $this->_sent = $socket->getSent();

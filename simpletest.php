@@ -323,7 +323,7 @@ class SimpleStackTrace {
      *    @param array $prefixes      List of method prefixes
      *                                to search for.
      */
-    function SimpleStackTrace($prefixes) {
+    function __construct($prefixes) {
         $this->_prefixes = $prefixes;
     }
 

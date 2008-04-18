@@ -8,7 +8,10 @@ require_once(dirname(__FILE__) . '/../cookies.php');
 Mock::generate('SimpleSocket');
 Mock::generate('SimpleCookieJar');
 Mock::generate('SimpleRoute');
-Mock::generatePartial('SimpleRoute', 'PartialSimpleRoute', array('_createSocket'));
+Mock::generatePartial(
+		'SimpleRoute',
+		'PartialSimpleRoute',
+        array('_createSocket'));
 Mock::generatePartial(
         'SimpleProxyRoute',
         'PartialSimpleProxyRoute',
@@ -24,7 +27,7 @@ class TestOfDirectRoute extends UnitTestCase {
         $socket->expectCallCount('write', 3);
         $route = new PartialSimpleRoute();
         $route->setReturnReference('_createSocket', $socket);
-        $route->SimpleRoute(new SimpleUrl('http://a.valid.host/here.html'));
+        $route->__construct(new SimpleUrl('http://a.valid.host/here.html'));
         $this->assertSame($route->createConnection('GET', 15), $socket);
     }
     
@@ -37,7 +40,7 @@ class TestOfDirectRoute extends UnitTestCase {
         
         $route = new PartialSimpleRoute();
         $route->setReturnReference('_createSocket', $socket);
-        $route->SimpleRoute(new SimpleUrl('http://a.valid.host/here.html'));
+        $route->__construct(new SimpleUrl('http://a.valid.host/here.html'));
         
         $route->createConnection('POST', 15);
     }
@@ -51,7 +54,7 @@ class TestOfDirectRoute extends UnitTestCase {
         
         $route = new PartialSimpleRoute();
         $route->setReturnReference('_createSocket', $socket);
-        $route->SimpleRoute(new SimpleUrl('http://a.valid.host:81/here.html'));
+        $route->__construct(new SimpleUrl('http://a.valid.host:81/here.html'));
         
         $route->createConnection('GET', 15);
     }
@@ -65,7 +68,7 @@ class TestOfDirectRoute extends UnitTestCase {
         
         $route = new PartialSimpleRoute();
         $route->setReturnReference('_createSocket', $socket);
-        $route->SimpleRoute(new SimpleUrl('http://a.valid.host/here.html?a=1&b=2'));
+        $route->__construct(new SimpleUrl('http://a.valid.host/here.html?a=1&b=2'));
         
         $route->createConnection('GET', 15);
     }
@@ -82,7 +85,7 @@ class TestOfProxyRoute extends UnitTestCase {
         
         $route = new PartialSimpleProxyRoute();
         $route->setReturnReference('_createSocket', $socket);
-        $route->SimpleProxyRoute(
+        $route->__construct(
                 new SimpleUrl('http://a.valid.host/here.html'),
                 new SimpleUrl('http://my-proxy'));
         $route->createConnection('GET', 15);
@@ -97,7 +100,7 @@ class TestOfProxyRoute extends UnitTestCase {
         
         $route = new PartialSimpleProxyRoute();
         $route->setReturnReference('_createSocket', $socket);
-        $route->SimpleProxyRoute(
+        $route->__construct(
                 new SimpleUrl('http://a.valid.host/here.html'),
                 new SimpleUrl('http://my-proxy'));
         $route->createConnection('POST', 15);
@@ -112,7 +115,7 @@ class TestOfProxyRoute extends UnitTestCase {
         
         $route = new PartialSimpleProxyRoute();
         $route->setReturnReference('_createSocket', $socket);
-        $route->SimpleProxyRoute(
+        $route->__construct(
                 new SimpleUrl('http://a.valid.host:81/here.html'),
                 new SimpleUrl('http://my-proxy:8081'));
         $route->createConnection('GET', 15);
@@ -127,7 +130,7 @@ class TestOfProxyRoute extends UnitTestCase {
         
         $route = new PartialSimpleProxyRoute();
         $route->setReturnReference('_createSocket', $socket);
-        $route->SimpleProxyRoute(
+        $route->__construct(
                 new SimpleUrl('http://a.valid.host/here.html?a=1&b=2'),
                 new SimpleUrl('http://my-proxy'));
         $route->createConnection('GET', 15);
@@ -145,7 +148,7 @@ class TestOfProxyRoute extends UnitTestCase {
         
         $route = new PartialSimpleProxyRoute();
         $route->setReturnReference('_createSocket', $socket);
-        $route->SimpleProxyRoute(
+        $route->__construct(
                 new SimpleUrl('http://a.valid.host/here.html'),
                 new SimpleUrl('http://my-proxy'),
                 'Me',
