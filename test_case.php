@@ -87,6 +87,14 @@ class SimpleTestCase {
     }
 
     /**
+     *    Accessor for the private variable $_shoud_skip
+     *    @access public
+     */
+    function shouldSkip() {
+        return $this->_should_skip;
+    }
+    
+    /**
      *    Will issue a message to the reporter and tell the test
      *    case to skip if the incoming flag is false.
      *    @param string $shouldnt_skip  Condition causing the tests to be run.
