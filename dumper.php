@@ -348,7 +348,7 @@ class SimpleDumper {
      *    @return string            Output from print_r().
      *    @access public
      */
-    static function dump($variable) {
+    function dump($variable) {
         ob_start();
         print_r($variable);
         $formatted = ob_get_contents();
