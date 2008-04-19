@@ -198,7 +198,7 @@ class SimpleEncoding {
      *                              as lists on a single key.
      *    @access public
      */
-    function SimpleEncoding($query = false) {
+    function __construct($query = false) {
         if (! $query) {
             $query = array();
         }
@@ -335,8 +335,8 @@ class SimpleGetEncoding extends SimpleEncoding {
      *                              as lists on a single key.
      *    @access public
      */
-    function SimpleGetEncoding($query = false) {
-        $this->SimpleEncoding($query);
+    function __construct($query = false) {
+        parent::__construct($query);
     }
     
     /**
@@ -419,11 +419,11 @@ class SimplePostEncoding extends SimpleEncoding {
      *                              as lists on a single key.
      *    @access public
      */
-    function SimplePostEncoding($query = false) {
+    function __construct($query = false) {
         if (is_array($query) and $this->hasMoreThanOneLevel($query)) {
             $query = $this->rewriteArrayWithMultipleLevels($query);
         }
-        $this->SimpleEncoding($query);
+        parent::__construct($query);
     }
     
     function hasMoreThanOneLevel($query) {
@@ -509,8 +509,8 @@ class SimpleMultipartEncoding extends SimplePostEncoding {
      *                              as lists on a single key.
      *    @access public
      */
-    function SimpleMultipartEncoding($query = false, $boundary = false) {
-        $this->SimplePostEncoding($query);
+    function __construct($query = false, $boundary = false) {
+        parent::__construct($query);
         $this->_boundary = ($boundary === false ? uniqid('st') : $boundary);
     }
     

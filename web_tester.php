@@ -31,8 +31,8 @@ class FieldExpectation extends SimpleExpectation {
      *                            a placeholder for the original message.
      *    @access public
      */
-    function FieldExpectation($value, $message = '%s') {
-        $this->SimpleExpectation($message);
+    function __construct($value, $message = '%s') {
+        parent::__construct($message);
         if (is_array($value)) {
             sort($value);
         }
@@ -145,8 +145,8 @@ class HttpHeaderExpectation extends SimpleExpectation {
      *    @param string $message  Optiona message override. Can use %s as
      *                            a placeholder for the original message.
      */
-    function HttpHeaderExpectation($header, $value = false, $message = '%s') {
-        $this->SimpleExpectation($message);
+    function __construct($header, $value = false, $message = '%s') {
+        parent::__construct($message);
         $this->_expected_header = $this->_normaliseHeader($header);
         $this->_expected_value = $value;
     }
@@ -271,8 +271,8 @@ class NoHttpHeaderExpectation extends HttpHeaderExpectation {
      *    @param string $message    Optiona message override. Can use %s as
      *                              a placeholder for the original message.
      */
-    function NoHttpHeaderExpectation($unwanted, $message = '%s') {
-        $this->HttpHeaderExpectation($unwanted, false, $message);
+    function __construct($unwanted, $message = '%s') {
+        parent::__construct($unwanted, false, $message);
     }
     
     /**
@@ -316,8 +316,8 @@ class TextExpectation extends SimpleExpectation {
      *    @param string $message    Customised message on failure.
      *    @access public
      */
-    function TextExpectation($substring, $message = '%s') {
-        $this->SimpleExpectation($message);
+    function __construct($substring, $message = '%s') {
+        parent::__construct($message);
         $this->_substring = $substring;
     }
     
@@ -389,8 +389,8 @@ class NoTextExpectation extends TextExpectation {
      *    @param string $message    Customised message on failure.
      *    @access public
      */
-    function NoTextExpectation($substring, $message = '%s') {
-        $this->TextExpectation($substring, $message);
+    function __construct($substring, $message = '%s') {
+        parent::__construct($substring, $message);
     }
     
     /**
@@ -441,8 +441,8 @@ class WebTestCase extends SimpleTestCase {
      *                             the class name if none specified.
      *    @access public
      */
-    function WebTestCase($label = false) {
-        $this->SimpleTestCase($label);
+    function __construct($label = false) {
+        parent::__construct($label);
     }
     
     /**

@@ -36,7 +36,7 @@ class SimpleForm {
      *    @param SimpleTag $tag        Form tag to read.
      *    @param SimplePage $page      Holding page.
      */
-    function SimpleForm($tag, $page) {
+    function __construct($tag, $page) {
         $this->_method = $tag->getAttribute('method');
         $this->_action = $this->createAction($tag->getAttribute('action'), $page);
         $this->_encoding = $this->setEncodingClass($tag);

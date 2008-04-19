@@ -39,8 +39,8 @@ class ParametersExpectation extends SimpleExpectation {
      *    @param string $message    Customised message on failure.
      *    @access public
      */
-    function ParametersExpectation($expected = false, $message = '%s') {
-        $this->SimpleExpectation($message);
+    function __construct($expected = false, $message = '%s') {
+        parent::__construct($message);
         $this->_expected = $expected;
     }
 
@@ -171,10 +171,10 @@ class CallCountExpectation extends SimpleExpectation {
      *    @param integer $count    Expected number of calls.
      *    @param string $message   Custom error message.
      */
-    function CallCountExpectation($method, $count, $message = '%s') {
+    function __construct($method, $count, $message = '%s') {
         $this->_method = $method;
         $this->_count = $count;
-        $this->SimpleExpectation($message);
+        parent::__construct($message);
     }
 
     /**
@@ -216,10 +216,10 @@ class MinimumCallCountExpectation extends SimpleExpectation {
      *    @param integer $count    Minimum number of calls.
      *    @param string $message   Custom error message.
      */
-    function MinimumCallCountExpectation($method, $count, $message = '%s') {
+    function __construct($method, $count, $message = '%s') {
         $this->_method = $method;
         $this->_count = $count;
-        $this->SimpleExpectation($message);
+        parent::__construct($message);
     }
 
     /**
@@ -261,10 +261,10 @@ class MaximumCallCountExpectation extends SimpleExpectation {
      *    @param integer $count    Minimum number of calls.
      *    @param string $message   Custom error message.
      */
-    function MaximumCallCountExpectation($method, $count, $message = '%s') {
+    function __construct($method, $count, $message = '%s') {
         $this->_method = $method;
         $this->_count = $count;
-        $this->SimpleExpectation($message);
+        parent::__construct($message);
     }
 
     /**
@@ -303,7 +303,7 @@ class SimpleSignatureMap {
      *    Creates an empty call map.
      *    @access public
      */
-    function SimpleSignatureMap() {
+    function __construct() {
         $this->_map = array();
     }
 
@@ -398,7 +398,7 @@ class SimpleCallSchedule {
      *    Sets up an empty response schedule.
      *    Creates an empty call map.
      */
-    function SimpleCallSchedule() {
+    function __construct() {
         $this->_always = array();
         $this->_at = array();
     }
@@ -554,7 +554,7 @@ class SimpleByReference {
      *    @param mixed $reference     Actual PHP4 style reference.
      *    @access public
      */
-    function SimpleByReference(&$reference) {
+    function __construct(&$reference) {
         $this->_reference = &$reference;
     }
     
@@ -584,7 +584,7 @@ class SimpleByValue {
      *                            for these.
      *    @access public
      */
-    function SimpleByValue($value) {
+    function __construct($value) {
         $this->_value = $value;
     }
     
@@ -613,7 +613,7 @@ class SimpleThrower {
      *    @param Exception $exception    The exception object to throw.
      *    @access public
      */
-    function SimpleThrower($exception) {
+    function __construct($exception) {
         $this->_exception = $exception;
     }
     
@@ -642,7 +642,7 @@ class SimpleErrorThrower {
      *    @param integer $severity  PHP error constant, e.g E_USER_ERROR.
      *    @access public
      */
-    function SimpleErrorThrower($error, $severity) {
+    function __construct($error, $severity) {
         $this->_error = $error;
         $this->_severity = $severity;
     }
@@ -1180,7 +1180,7 @@ class Mock {
      *    Factory for mock object classes.
      *    @access public
      */
-    function Mock() {
+    function __construct() {
         trigger_error('Mock factory methods are static.');
     }
 
@@ -1246,7 +1246,7 @@ class MockGenerator {
      *    @param string $mock_class   New class with identical interface,
      *                                but no behaviour.
      */
-    function MockGenerator($class, $mock_class) {
+    function __construct($class, $mock_class) {
         $this->_class = $class;
         $this->_mock_class = $mock_class;
         if (! $this->_mock_class) {

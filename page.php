@@ -126,8 +126,8 @@ class SimplePageBuilder extends SimpleSaxListener {
      *    Sets the builder up empty.
      *    @access public
      */
-    function SimplePageBuilder() {
-        $this->SimpleSaxListener();
+    function __construct() {
+        parent::__construct();
     }
     
     /**
@@ -355,7 +355,7 @@ class SimplePage {
      *    @param SimpleHttpResponse $response     Result of HTTP fetch.
      *    @access public
      */
-    function SimplePage($response = false) {
+    function __construct($response = false) {
         $this->_links = array();
         $this->_title = false;
         $this->_left_over_labels = array();

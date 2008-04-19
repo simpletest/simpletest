@@ -25,8 +25,8 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
      *    Stores the invoker to wrap.
      *    @param SimpleInvoker $invoker  Test method runner.
      */
-    function SimpleErrorTrappingInvoker($invoker) {
-        $this->SimpleInvokerDecorator($invoker);
+    function __construct($invoker) {
+        parent::__construct($invoker);
     }
 
     /**
@@ -73,7 +73,7 @@ class SimpleErrorQueue {
     /**
      *    Starts with an empty queue.
      */
-    function SimpleErrorQueue() {
+    function __construct() {
         $this->clear();
     }
 

@@ -27,7 +27,7 @@ class TestOfFetchingUrlParameters extends UnitTestCase {
         
         $agent = new MockRequestUserAgent();
         $agent->returns('_createHttpRequest', $this->_request);
-        $agent->SimpleUserAgent();
+        $agent->__construct();
         
         $response = $agent->fetchResponse(
                 new SimpleUrl('http://test:secret@this.com/page.html'),
@@ -50,7 +50,7 @@ class TestOfAdditionalHeaders extends UnitTestCase {
         
         $agent = new MockRequestUserAgent();
         $agent->setReturnReference('_createHttpRequest', $request);
-        $agent->SimpleUserAgent();
+        $agent->__construct();
         $agent->addHeader('User-Agent: SimpleTest');
         $response = $agent->fetchResponse(new SimpleUrl('http://this.host/'), new SimpleGetEncoding());
     }
@@ -80,7 +80,7 @@ class TestOfBrowserCookies extends UnitTestCase {
     function _createMockedRequestUserAgent(&$request) {
         $agent = new MockRequestUserAgent();
         $agent->setReturnReference('_createHttpRequest', $request);
-        $agent->SimpleUserAgent();
+        $agent->__construct();
         return $agent;
     }
     
@@ -214,7 +214,7 @@ class TestOfHttpRedirects extends UnitTestCase {
                 '_createHttpRequest',
                 $this->createRedirect('stuff', 'there.html'));
         $agent->expectOnce('_createHttpRequest');
-        $agent->SimpleUserAgent();
+        $agent->__construct();
         $agent->setMaximumRedirects(0);
         $response = $agent->fetchResponse(new SimpleUrl('here.html'), new SimpleGetEncoding());
         $this->assertEqual($response->getContent(), 'stuff');
@@ -231,7 +231,7 @@ class TestOfHttpRedirects extends UnitTestCase {
                 '_createHttpRequest',
                 $this->createRedirect('second', 'three.html'));
         $agent->expectCallCount('_createHttpRequest', 2);
-        $agent->SimpleUserAgent();
+        $agent->__construct();
         
         $agent->setMaximumRedirects(1);
         $response = $agent->fetchResponse(new SimpleUrl('one.html'), new SimpleGetEncoding());
@@ -253,7 +253,7 @@ class TestOfHttpRedirects extends UnitTestCase {
                 '_createHttpRequest',
                 $this->createRedirect('third', 'four.html'));
         $agent->expectCallCount('_createHttpRequest', 3);
-        $agent->SimpleUserAgent();
+        $agent->__construct();
         
         $agent->setMaximumRedirects(2);
         $response = $agent->fetchResponse(new SimpleUrl('one.html'), new SimpleGetEncoding());
@@ -275,7 +275,7 @@ class TestOfHttpRedirects extends UnitTestCase {
                 '_createHttpRequest',
                 $this->createRedirect('third', 'four.html'));
         $agent->expectCallCount('_createHttpRequest', 2);
-        $agent->SimpleUserAgent();
+        $agent->__construct();
         
         $agent->setMaximumRedirects(2);
         $response = $agent->fetchResponse(new SimpleUrl('one.html'), new SimpleGetEncoding());
@@ -295,7 +295,7 @@ class TestOfHttpRedirects extends UnitTestCase {
                 $this->createRedirect('second', 'three.html'));
         $agent->expectAt(1, '_createHttpRequest', array('*', new IsAExpectation('SimpleGetEncoding')));
         $agent->expectCallCount('_createHttpRequest', 2);
-        $agent->SimpleUserAgent();
+        $agent->__construct();
         $agent->setMaximumRedirects(1);
         $response = $agent->fetchResponse(new SimpleUrl('one.html'), new SimplePostEncoding());
     }
@@ -317,7 +317,7 @@ class TestOfBadHosts extends UnitTestCase {
         $request = $this->_createSimulatedBadHost();
         $agent = new MockRequestUserAgent();
         $agent->setReturnReference('_createHttpRequest', $request);
-        $agent->SimpleUserAgent();
+        $agent->__construct();
         $response = $agent->fetchResponse(
                 new SimpleUrl('http://this.host/this/path/page.html'),
                 new SimpleGetEncoding());
@@ -339,7 +339,7 @@ class TestOfAuthorisation extends UnitTestCase {
         
         $agent = new MockRequestUserAgent();
         $agent->returns('_createHttpRequest', $request);
-        $agent->SimpleUserAgent();
+        $agent->__construct();
         $response = $agent->fetchResponse(
                 new SimpleUrl('http://test:secret@this.host'),
                 new SimpleGetEncoding());

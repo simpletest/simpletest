@@ -28,8 +28,8 @@ class XmlReporter extends SimpleReporter {
      *    @param string $indent           Indenting to add on each nesting.
      *    @access public
      */
-    function XmlReporter($namespace = false, $indent = '  ') {
-        $this->SimpleReporter();
+    function __construct($namespace = false, $indent = '  ') {
+        parent::__construct();
         $this->_namespace = ($namespace ? $namespace . ':' : '');
         $this->_indent = $indent;
     }

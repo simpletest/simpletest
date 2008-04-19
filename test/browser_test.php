@@ -156,7 +156,7 @@ class TestOfParsedPageAccess extends UnitTestCase {
         $browser = new MockParseSimpleBrowser($this);
         $browser->returns('_createUserAgent', $agent);
         $browser->returns('_parse', $page);
-        $browser->SimpleBrowser();
+        $browser->__construct();
 
         $browser->get('http://this.com/page.html');
         return $browser;
@@ -166,7 +166,7 @@ class TestOfParsedPageAccess extends UnitTestCase {
         $agent = new MockSimpleUserAgent($this);
         $browser = new MockParseSimpleBrowser($this);
         $browser->returns('_createUserAgent', $agent);
-        $browser->SimpleBrowser();
+        $browser->__construct();
         $this->assertEqual($browser->getContent(), '');
     }
 
@@ -226,7 +226,7 @@ class TestOfBrowserNavigation extends UnitTestCase {
         $browser = new MockParseSimpleBrowser();
         $browser->returns('_createUserAgent', $agent);
         $browser->returns('_parse', $page);
-        $browser->SimpleBrowser();
+        $browser->__construct();
         return $browser;
     }
 
@@ -521,7 +521,7 @@ class TestOfBrowserFrames extends UnitTestCase {
     function createBrowser($agent) {
         $browser = new MockUserAgentSimpleBrowser();
         $browser->returns('_createUserAgent', $agent);
-        $browser->SimpleBrowser();
+        $browser->__construct();
         return $browser;
     }
 

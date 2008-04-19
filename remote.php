@@ -30,7 +30,7 @@ class RemoteTestCase {
      *    @param string $dry_url   Location for dry run.
      *    @access public
      */
-    function RemoteTestCase($url, $dry_url = false) {
+    function __construct($url, $dry_url = false) {
         $this->_url = $url;
         $this->_dry_url = $dry_url ? $dry_url : $url;
         $this->_size = false;

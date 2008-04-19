@@ -35,7 +35,7 @@ class SimpleBrowserHistory {
      *    Starts empty.
      *    @access public
      */
-    function SimpleBrowserHistory() {
+    function __construct() {
         $this->_sequence = array();
         $this->_position = -1;
     }
@@ -171,7 +171,7 @@ class SimpleBrowser {
      *    set up if specified in the options.
      *    @access public
      */
-    function SimpleBrowser() {
+    function __construct() {
         $this->_user_agent = $this->_createUserAgent();
         $this->_user_agent->useProxy(
                 SimpleTest::getDefaultProxy(),

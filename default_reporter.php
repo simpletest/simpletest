@@ -127,7 +127,7 @@ class DefaultReporter extends SimpleReporterDecorator {
                 $reporter = new NoSkipsReporter($reporter);
             }
         }
-        $this->SimpleReporterDecorator($reporter);
+        parent::__construct($reporter);
     }
 }
 ?>

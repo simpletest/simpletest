@@ -209,7 +209,7 @@ class SimpleHttpRequest {
      *                                           request.
      *    @access public
      */
-    function SimpleHttpRequest($route, $encoding) {
+    function __construct($route, $encoding) {
         $this->_route = $route;
         $this->_encoding = $encoding;
         $this->_headers = array();
@@ -306,7 +306,7 @@ class SimpleHttpHeaders {
      *    @param string $headers     Header block.
      *    @access public
      */
-    function SimpleHttpHeaders($headers) {
+    function __construct($headers) {
         $this->_raw_headers = $headers;
         $this->_response_code = false;
         $this->_http_version = false;
