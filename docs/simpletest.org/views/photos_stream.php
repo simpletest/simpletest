@@ -1,4 +1,5 @@
 <?php
+// $Id: adapter_test.php 1505 2007-04-30 23:39:59Z lastcraft $
 
 if (!function_exists("simplexml_load_file")) {
     die("Whenever SourceForge.net updates to PHP5 :-(");
