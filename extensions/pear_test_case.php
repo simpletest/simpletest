@@ -30,7 +30,7 @@
          *    @public
          */
         function PHPUnit_TestCase($label = false) {
-            $this->SimpleTestCase($label);
+            parent::__construct($label);
             $this->_loosely_typed = false;
         }
         
