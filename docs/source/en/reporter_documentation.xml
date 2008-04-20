@@ -62,7 +62,7 @@ class HtmlReporter extends SimpleReporter {
     public void paintException(string $message) { ... }
     public void paintMessage(string $message) { ... }
     public void paintFormattedMessage(string $message) { ... }
-    protected string _getCss() { ... }
+    protected string getCss() { ... }
     public array getTestList() { ... }
     public integer getPassCount() { ... }
     public integer getFailCount() { ... }
@@ -139,7 +139,7 @@ class HtmlReporter extends SimpleReporter {
                         by default does nothing.
                     </li>
                     <li>
-                        <code>string _getCss()</code><br />
+                        <code>string getCss()</code><br />
                         Returns the CSS styles as a string for the page header
                         method.
                         Additional styles have to be appended here if you are
@@ -197,8 +197,8 @@ class HtmlReporter extends SimpleReporter {
         print "-&gt;$message<br />\n";
     }
     
-    function _getCss() {
-        return parent::_getCss() . ' .pass { color: green; }';
+    protected function getCss() {
+        return parent::getCss() . ' .pass { color: green; }';
     }
 }</strong>
 ]]></php>

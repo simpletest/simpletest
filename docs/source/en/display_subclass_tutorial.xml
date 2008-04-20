@@ -33,7 +33,7 @@ class HtmlReporter extends TestDisplay {
     public void paintEnd(string $test_name, $size) { ... }
     public void paintFail(string $message) { ... }
     public void paintPass(string $message) { ... }
-    protected string _getCss() { ... }
+    protected string getCss() { ... }
     public array getTestList() { ... }
     public integer getPassCount() { ... }
     public integer getFailCount() { ... }
@@ -68,7 +68,7 @@ class HtmlReporter extends TestDisplay {
                         This is the method we will modify.
                     </li>
                     <li>
-                        <code>string _getCss()</code><br />
+                        <code>string getCss()</code><br />
                         returns the CSS styles as a string for the page header
                         method.
                         Additional styles have to be appended here.
@@ -199,8 +199,8 @@ class ShowPasses extends HtmlReporter {
         print "->$message<br />\n";
     }
     <strong>
-    function _getCss() {
-        return parent::_getCss() . ' .pass { color: green; }';
+    protected function getCss() {
+        return parent::getCss() . ' .pass { color: green; }';
     }</strong>
 }
 ]]></php>
