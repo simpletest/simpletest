@@ -45,12 +45,26 @@ class SimpleUrl {
         list($x, $y) = $this->chompCoordinates($url);
         $this->setCoordinates($x, $y);
         $this->_scheme = $this->chompScheme($url);
+        if ($this->_scheme === 'file') {
+            // Unescaped backslashes not used in directory separator context
+            // will get caught by this, but they should have been urlencoded
+            // anyway so we don't care. If this ends up being a problem, the
+            // host regexp must be modified to match for backslashes when
+            // the scheme is file.
+            $url = str_replace('\\', '/', $url);
+        }
         list($this->_username, $this->_password) = $this->chompLogin($url);
         $this->_host = $this->chompHost($url);
         $this->_port = false;
         if (preg_match('/(.*?):(.*)/', $this->_host, $host_parts)) {
-            $this->_host = $host_parts[1];
-            $this->_port = (integer)$host_parts[2];
+            if ($this->_scheme === 'file' && strlen($this->_host) === 2) {
+                // DOS drive was placed in authority; promote it to path.
+                $url = '/' . $this->_host . $url;
+                $this->_host = false;
+            } else {
+                $this->_host = $host_parts[1];
+                $this->_port = (integer)$host_parts[2];
+            }
         }
         $this->_path = $this->chompPath($url);
         $this->_request = $this->parseRequest($this->chompRequest($url));
@@ -81,7 +95,7 @@ class SimpleUrl {
      *    @access private
      */
     protected function chompScheme(&$url) {
-        if (preg_match('/^([^\/:]*):(\/\/)(.*)/', $url, $matches)) {
+        if (preg_match('#^([^/:]*):(//)(.*)#', $url, $matches)) {
             $url = $matches[2] . $matches[3];
             return $matches[1];
         }
@@ -100,11 +114,11 @@ class SimpleUrl {
      */
     protected function chompLogin(&$url) {
         $prefix = '';
-        if (preg_match('/^(\/\/)(.*)/', $url, $matches)) {
+        if (preg_match('#^(//)(.*)#', $url, $matches)) {
             $prefix = $matches[1];
             $url = $matches[2];
         }
-        if (preg_match('/^([^\/]*)@(.*)/', $url, $matches)) {
+        if (preg_match('#^([^/]*)@(.*)#', $url, $matches)) {
             $url = $prefix . $matches[2];
             $parts = split(":", $matches[1]);
             return array(
@@ -127,11 +141,11 @@ class SimpleUrl {
      *    @access private
      */
     protected function chompHost(&$url) {
-        if (preg_match('/^(\/\/)(.*?)(\/.*|\?.*|#.*|$)/', $url, $matches)) {
+        if (preg_match('!^(//)(.*?)(/.*|\?.*|#.*|$)!', $url, $matches)) {
             $url = $matches[3];
             return $matches[2];
         }
-        if (preg_match('/(.*?)(\.\.\/|\.\/|\/|\?|#|$)(.*)/', $url, $matches)) {
+        if (preg_match('!(.*?)(\.\./|\./|/|\?|#|$)(.*)!', $url, $matches)) {
             $tlds = SimpleUrl::getAllTopLevelDomains();
             if (preg_match('/[a-z0-9\-]+\.(' . $tlds . ')/i', $matches[1])) {
                 $url = $matches[2] . $matches[3];
@@ -418,6 +432,11 @@ class SimpleUrl {
             $scheme = $this->getScheme() ? $this->getScheme() : 'http';
             $scheme .= "://";
             $host = $this->getHost();
+        } elseif ($this->getScheme() === 'file') {
+            // Safest way; otherwise, file URLs on Windows have an extra
+            // leading slash. It might be possible to convert file://
+            // URIs to local file paths, but that requires more research.
+            $scheme = 'file://';
         }
         if ($this->getPort() && $this->getPort() != 80 ) {
             $port = ':'.$this->getPort();

@@ -74,16 +74,15 @@ class SimpleFileSocket extends SimpleStickyError {
 
     /**
      *    Opens a socket for reading and writing.
-     *    @param string $host          Hostname to send request to.
-     *    @param integer $port         Port on remote machine to open.
-     *    @param integer $timeout      Connection timeout in seconds.
+     *    @param SimpleUrl $file       Target URI to fetch.
      *    @param integer $block_size   Size of chunk to read.
      *    @access public
      */
-    function __construct($url, $block_size = 1024) {
+    function __construct($file, $block_size = 1024) {
         parent::__construct();
-        if (! ($this->_handle = $this->openFile($url, $error))) {
-            $this->_setError("Cannot open [$file] with [$error]");
+        if (! ($this->_handle = $this->openFile($file, $error))) {
+            $file_string = $file->asString();
+            $this->_setError("Cannot open [$file_string] with [$error]");
             return;
         }
         $this->_is_open = true;
@@ -133,6 +132,7 @@ class SimpleFileSocket extends SimpleStickyError {
      *    @access public
      */
     function close() {
+        if (!$this->_is_open) return false;
         $this->_is_open = false;
         return fclose($this->_handle);
     }
@@ -148,10 +148,8 @@ class SimpleFileSocket extends SimpleStickyError {
 
     /**
      *    Actually opens the low level socket.
-     *    @param string $host          Host to connect to.
-     *    @param integer $port         Port on host.
-     *    @param integer $error_number Recipient of error code.
-     *    @param string $error         Recipoent of error message.
+     *    @param SimpleUrl $file       SimpleUrl file target.
+     *    @param string $error         Recipient of error message.
      *    @param integer $timeout      Maximum time to wait for connection.
      *    @access protected
      */

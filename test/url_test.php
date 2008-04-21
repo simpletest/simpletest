@@ -443,4 +443,54 @@ class TestOfFrameUrl extends UnitTestCase {
         $this->assertIdentical($url->getTarget(), 'A frame');
     }
 }
+
+/**
+ * @note Based off of http://www.mozilla.org/quality/networking/testing/filetests.html
+ */
+class TestOfFileUrl extends UnitTestCase {
+    
+    function testMinimalUrl() {
+        $url = new SimpleUrl('file:///');
+        $this->assertEqual($url->getScheme(), 'file');
+        $this->assertIdentical($url->getHost(), false);
+        $this->assertEqual($url->getPath(), '/');
+    }
+    
+    function testUnixUrl() {
+        $url = new SimpleUrl('file:///fileInRoot');
+        $this->assertEqual($url->getScheme(), 'file');
+        $this->assertIdentical($url->getHost(), false);
+        $this->assertEqual($url->getPath(), '/fileInRoot');
+    }
+    
+    function testDOSVolumeUrl() {
+        $url = new SimpleUrl('file:///C:/config.sys');
+        $this->assertEqual($url->getScheme(), 'file');
+        $this->assertIdentical($url->getHost(), false);
+        $this->assertEqual($url->getPath(), '/C:/config.sys');
+    }
+    
+    function testDOSVolumePromotion() {
+        $url = new SimpleUrl('file://C:/config.sys');
+        $this->assertEqual($url->getScheme(), 'file');
+        $this->assertIdentical($url->getHost(), false);
+        $this->assertEqual($url->getPath(), '/C:/config.sys');
+    }
+    
+    function testDOSBackslashes() {
+        $url = new SimpleUrl('file:///C:\config.sys');
+        $this->assertEqual($url->getScheme(), 'file');
+        $this->assertIdentical($url->getHost(), false);
+        $this->assertEqual($url->getPath(), '/C:/config.sys');
+    }
+    
+    function testDOSDirnameAfterFile() {
+        $url = new SimpleUrl('file://C:\config.sys');
+        $this->assertEqual($url->getScheme(), 'file');
+        $this->assertIdentical($url->getHost(), false);
+        $this->assertEqual($url->getPath(), '/C:/config.sys');
+    }
+    
+}
+
 ?>
