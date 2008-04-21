@@ -1348,7 +1348,7 @@ class MockGenerator {
         $code .= "        \$this->" . $this->_mock_base . "();\n";
         $code .= "    }\n";
         if (in_array('__construct', $this->_reflection->getMethods())) {
-            $code .= "    " . $this->_reflection->getSignature('__construct') . " {\n";
+            $code .= "    function __construct() {\n";
             $code .= "        \$this->" . $this->_mock_base . "();\n";
             $code .= "    }\n";
         }
