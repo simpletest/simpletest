@@ -193,21 +193,13 @@ class TestOfReflection extends UnitTestCase {
 	function testIssetFunctionSignature() {
 		$reflection = new SimpleReflection('AnyOldOverloadedClass');
 		$function = $reflection->getSignature('__isset');
-		if (version_compare(phpversion(), '5.1.0', '>=')) {
-			$this->assertEqual('function __isset($key)', $function);
-		} else {
-			$this->assertEqual('function __isset()', $function);
-		}
+		$this->assertEqual('function __isset($key)', $function);
 	}
 	
 	function testUnsetFunctionSignature() {
 		$reflection = new SimpleReflection('AnyOldOverloadedClass');
 		$function = $reflection->getSignature('__unset');
-		if (version_compare(phpversion(), '5.1.0', '>=')) {
-			$this->assertEqual('function __unset($key)', $function);
-		} else {
-			$this->assertEqual('function __unset()', $function);
-		}
+		$this->assertEqual('function __unset($key)', $function);
 	}
 
 	function testProperlyReflectsTheFinalInterfaceWhenObjectImplementsAnExtendedInterface() {

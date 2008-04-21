@@ -673,9 +673,29 @@ class ClassWithSpecialMethods {
 }
 Mock::generate('ClassWithSpecialMethods');
 
+class TestOfSpecialMethodsAfterPHP51 extends UnitTestCase {
+    
+    function skip() {
+        $this->skipIf(version_compare(phpversion(), '5.1', '<'), '__isset and __unset overloading not tested unless PHP 5.1+');
+    }
+    
+    function testCanEmulateIsset() {
+        $mock = new MockClassWithSpecialMethods();
+        $mock->setReturnValue('__isset', true);
+        $this->assertIdentical(isset($mock->a), true);
+    }
+
+    function testCanExpectUnset() {
+        $mock = new MockClassWithSpecialMethods();
+        $mock->expectOnce('__unset', array('a'));
+        unset($mock->a);
+    }
+    
+}
+
 class TestOfSpecialMethods extends UnitTestCase {
     function skip() {
-        $this->skipIf(version_compare(phpversion(), '5', '<='), 'Overloading not tested unless PHP 5+');
+        $this->skipIf(version_compare(phpversion(), '5', '<'), 'Overloading not tested unless PHP 5+');
     }
 
     function testCanMockTheThingAtAll() {
@@ -701,18 +721,6 @@ class TestOfSpecialMethods extends UnitTestCase {
         $mock->expectOnce('__call', array('amOverloaded', array('A')));
         $mock->setReturnValue('__call', 'aaa');
         $this->assertIdentical($mock->amOverloaded('A'), 'aaa');
-    }
-
-    function testCanEmulateIsset() {
-        $mock = new MockClassWithSpecialMethods();
-        $mock->setReturnValue('__isset', true);
-        $this->assertIdentical(isset($mock->a), true);
-    }
-
-    function testCanExpectUnset() {
-        $mock = new MockClassWithSpecialMethods();
-        $mock->expectOnce('__unset', array('a'));
-        unset($mock->a);
     }
 
     function testToStringMagic() {
@@ -886,7 +894,7 @@ class TestOfPHP5StaticMethodMocking extends UnitTestCase {
 class TestOfPHP5AbstractMethodMocking extends UnitTestCase {
     function testCanCreateAMockObjectFromAnAbstractWithProperFunctionDeclarations() {
         eval('
-             abstract class SimpleAbstractClassContainingAbstractMethods {
+            abstract class SimpleAbstractClassContainingAbstractMethods {
                 abstract function anAbstract();
                 abstract function anAbstractWithParameter($foo);
                 abstract function anAbstractWithMultipleParameters($foo, $bar);
@@ -895,19 +903,20 @@ class TestOfPHP5AbstractMethodMocking extends UnitTestCase {
         Mock::generate('SimpleAbstractClassContainingAbstractMethods');
         $this->assertTrue(
             method_exists(
-                'MockSimpleAbstractClassContainingAbstractMethods',
+                // Testing with class name alone does not work in PHP 5.0
+                new MockSimpleAbstractClassContainingAbstractMethods,
                 'anAbstract'
             )
         );
         $this->assertTrue(
             method_exists(
-                'MockSimpleAbstractClassContainingAbstractMethods',
+                new MockSimpleAbstractClassContainingAbstractMethods,
                 'anAbstractWithParameter'
             )
         );
         $this->assertTrue(
             method_exists(
-                'MockSimpleAbstractClassContainingAbstractMethods',
+                new MockSimpleAbstractClassContainingAbstractMethods,
                 'anAbstractWithMultipleParameters'
             )
         );
@@ -932,38 +941,38 @@ class TestOfPHP5AbstractMethodMocking extends UnitTestCase {
         Mock::generate('SimpleChildAbstractClassContainingAbstractMethods');
         $this->assertTrue(
             method_exists(
-                'MockSimpleChildAbstractClassContainingAbstractMethods',
+                new MockSimpleChildAbstractClassContainingAbstractMethods,
                 'anAbstract'
             )
         );
         $this->assertTrue(
             method_exists(
-                'MockSimpleChildAbstractClassContainingAbstractMethods',
+                new MockSimpleChildAbstractClassContainingAbstractMethods,
                 'anAbstractWithParameter'
             )
         );
         $this->assertTrue(
             method_exists(
-                'MockSimpleChildAbstractClassContainingAbstractMethods',
+                new MockSimpleChildAbstractClassContainingAbstractMethods,
                 'anAbstractWithMultipleParameters'
             )
         );
         Mock::generate('EvenDeeperEmptyChildClass');
         $this->assertTrue(
             method_exists(
-                'MockEvenDeeperEmptyChildClass',
+                new MockEvenDeeperEmptyChildClass,
                 'anAbstract'
             )
         );
         $this->assertTrue(
             method_exists(
-                'MockEvenDeeperEmptyChildClass',
+                new MockEvenDeeperEmptyChildClass,
                 'anAbstractWithParameter'
             )
         );
         $this->assertTrue(
             method_exists(
-                'MockEvenDeeperEmptyChildClass',
+                new MockEvenDeeperEmptyChildClass,
                 'anAbstractWithMultipleParameters'
             )
         );
