@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Documentation sur le rapporteur de test" here="Le rapporteur de test">
-    <synchronisation lang="en" version="1687" date="24/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1771" date="20/04/2008" maintainer="pp11" />
     <long_title>Documentation SimpleTest : le rapporteur de test</long_title>
     <content>
         <introduction>
