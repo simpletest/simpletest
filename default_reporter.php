@@ -26,10 +26,11 @@ class SimpleCommandLineParser {
     private $_to_property = array(
             'case' => '_case', 'c' => '_case',
             'test' => '_test', 't' => '_test',
-            'xml' => '_xml', 'x' => '_xml');
+    );
     private $_case = '';
     private $_test = '';
-    private $_xml = false;
+    private $_xml  = false;
+    private $_help = false;
     private $_no_skips = false;
     
     /**
@@ -53,6 +54,8 @@ class SimpleCommandLineParser {
                 $this->_xml = true;
             } elseif (preg_match('/^--?(no-skip|no-skips|s)$/', $argument)) {
                 $this->_no_skips = true;
+            } elseif (preg_match('/^--?(help|h)$/', $argument)) {
+                $this->_help = true;
             }
         }
     }
@@ -60,7 +63,6 @@ class SimpleCommandLineParser {
     /**
      *    Run only this test.
      *    @return string        Test name to run.
-     *    @access public
      */
     function getTest() {
         return $this->_test;
@@ -69,7 +71,6 @@ class SimpleCommandLineParser {
     /**
      *    Run only this test suite.
      *    @return string        Test class name to run.
-     *    @access public
      */
     function getTestCase() {
         return $this->_case;
@@ -78,7 +79,6 @@ class SimpleCommandLineParser {
     /**
      *    Output should be XML or not.
      *    @return boolean        True if XML desired.
-     *    @access public
      */
     function isXml() {
         return $this->_xml;
@@ -87,11 +87,37 @@ class SimpleCommandLineParser {
     /**
      *    Output should suppress skip messages.
      *    @return boolean        True for no skips.
-     *    @access public
      */
     function noSkips() {
         return $this->_no_skips;
     }
+    
+    /**
+     *    Output should be a help message. Disabled during XML mode.
+     *    @return boolean        True if help message desired.
+     */
+    function help() {
+        return $this->_help && !$this->_xml;
+    }
+    
+    /**
+     *    Returns plain-text help message for command line runner.
+     *    @return string         String help message
+     */
+    function getHelpText() {
+        return <<<HELP
+SimpleTest command line default reporter (autorun)
+Usage: php <test_file> [args...]
+
+    -c <class>      Run only the test-case <class>
+    -t <method>     Run only the test method <method>
+    -s              Suppress skip messages
+    -x              Return test results in XML
+    -h              Display this help message
+
+HELP;
+    }
+    
 }
 
 /**
@@ -108,9 +134,13 @@ class DefaultReporter extends SimpleReporterDecorator {
      */
     function __construct() {
         if (SimpleReporter::inCli()) {
-            global $argv;
-            $parser = new SimpleCommandLineParser($argv);
+            $parser = new SimpleCommandLineParser($_SERVER['argv']);
             $interfaces = $parser->isXml() ? array('XmlReporter') : array('TextReporter');
+            if ($parser->help()) {
+                // I'm not sure if we should do the echo'ing here -- ezyang
+                echo $parser->getHelpText();
+                exit(1);
+            }
             $reporter = new SelectiveReporter(
                     SimpleTest::preferred($interfaces),
                     $parser->getTestCase(),
