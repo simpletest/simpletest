@@ -4,6 +4,9 @@ require_once(dirname(__FILE__) . '/../autorun.php');
 if (function_exists('spl_classes')) {
     include(dirname(__FILE__) . '/support/spl_examples.php');
 }
+if (version_compare(PHP_VERSION, '5.1', '>=')) {
+    include(dirname(__FILE__) . '/interfaces_test_php5_1.php');
+}
 
 interface DummyInterface {
     function aMethod();
@@ -48,6 +51,18 @@ class TestOfSpl extends UnitTestCase {
         }
         foreach(spl_classes() as $class) {
             if ($class == 'SplHeap') {
+                continue;
+            }
+            if (version_compare(PHP_VERSION, '5.1', '<') &&
+                $class == 'CachingIterator' ||
+                $class == 'CachingRecursiveIterator' ||
+                $class == 'FilterIterator' ||
+                $class == 'LimitIterator' ||
+                $class == 'ParentIterator') {
+                // These iterators require an iterator be passed to them during
+                // construction in PHP 5.0; there is no way for SimpleTest
+                // to supply such an iterator, however, so support for it is
+                // disabled.
                 continue;
             }
             $mock_class = "Mock$class";
@@ -107,18 +122,6 @@ interface SampleClassWithConstruct {
 class TestOfInterfaceMocksWithConstruct extends UnitTestCase {
     function testBasicConstructOfAnInterface() {
         Mock::generate('SampleClassWithConstruct');
-    }
-}
-
-interface SampleInterfaceWithHintInSignature {
-    function method(array $hinted);
-}
-
-class TestOfInterfaceMocksWithHintInSignature extends UnitTestCase {
-    function testBasicConstructOfAnInterfaceWithHintInSignature() {
-        Mock::generate('SampleInterfaceWithHintInSignature');
-        $mock = new MockSampleInterfaceWithHintInSignature();
-        $this->assertIsA($mock, 'SampleInterfaceWithHintInSignature');
     }
 }
 
