@@ -67,7 +67,7 @@
                         </note>
                         <note>We'll stick the use cases in the feature request tracker for now</note>
                     </task>
-                    <task>Move web site to new server</task>
+                    <task status="done">Move web site to new server</task>
                 </concern>
             </milestone>
             <milestone version="1.1beta2">
