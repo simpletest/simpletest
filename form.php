@@ -116,7 +116,7 @@ class SimpleForm {
      *    @return SimpleFormEncoding    Request to submit.
      *    @access private
      */
-    function _encode() {
+    protected function encode() {
         $class = $this->_encoding;
         $encoding = new $class();
         for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
@@ -145,7 +145,7 @@ class SimpleForm {
         } elseif (strtolower($tag->getAttribute('type')) == 'image') {
             $this->_images[] = $tag;
         } elseif ($tag->getName()) {
-            $this->_setWidget($tag);
+            $this->setWidget($tag);
         }
     }
     
@@ -155,11 +155,11 @@ class SimpleForm {
      *    @param SimpleWidget $tag   Incoming form control.
      *    @access private
      */
-    function _setWidget($tag) {
+    protected function setWidget($tag) {
         if (strtolower($tag->getAttribute('type')) == 'radio') {
-            $this->_addRadioButton($tag);
+            $this->addRadioButton($tag);
         } elseif (strtolower($tag->getAttribute('type')) == 'checkbox') {
-            $this->_addCheckbox($tag);
+            $this->addCheckbox($tag);
         } else {
             $this->_widgets[] = &$tag;
         }
@@ -170,7 +170,7 @@ class SimpleForm {
      *    @param SimpleRadioButtonTag $tag   Incoming form control.
      *    @access private
      */
-    function _addRadioButton($tag) {
+    protected function addRadioButton($tag) {
         if (! isset($this->_radios[$tag->getName()])) {
             $this->_widgets[] = new SimpleRadioGroup();
             $this->_radios[$tag->getName()] = count($this->_widgets) - 1;
@@ -183,7 +183,7 @@ class SimpleForm {
      *    @param SimpleCheckboxTag $tag   Incoming form control.
      *    @access private
      */
-    function _addCheckbox($tag) {
+    protected function addCheckbox($tag) {
         if (! isset($this->_checkboxes[$tag->getName()])) {
             $this->_widgets[] = $tag;
             $this->_checkboxes[$tag->getName()] = count($this->_widgets) - 1;
@@ -304,7 +304,7 @@ class SimpleForm {
         $additional = $additional ? $additional : array();
         foreach ($this->_buttons as $button) {
             if ($selector->isMatch($button)) {
-                $encoding = $this->_encode();
+                $encoding = $this->encode();
                 $button->write($encoding);
                 if ($additional) {
                     $encoding->merge($additional);
@@ -330,7 +330,7 @@ class SimpleForm {
         $additional = $additional ? $additional : array();
         foreach ($this->_images as $image) {
             if ($selector->isMatch($image)) {
-                $encoding = $this->_encode();
+                $encoding = $this->encode();
                 $image->write($encoding, $x, $y);
                 if ($additional) {
                     $encoding->merge($additional);
@@ -349,7 +349,7 @@ class SimpleForm {
      *    @access public
      */
     function submit() {
-        return $this->_encode();
+        return $this->encode();
     }
 }
 ?>

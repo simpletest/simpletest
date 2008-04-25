@@ -13,7 +13,7 @@ Mock::generate('SimplePageBuilder');
 Mock::generatePartial(
         'SimplePageBuilder',
         'PartialSimplePageBuilder',
-        array('createPage', '_createParser'));
+        array('createPage', 'createParser'));
 
 class TestOfPageBuilder extends UnitTestCase {
 
@@ -27,7 +27,7 @@ class TestOfPageBuilder extends UnitTestCase {
 
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
-        $builder->returns('_createParser', new MockSimpleHtmlSaxParser());
+        $builder->returns('createParser', new MockSimpleHtmlSaxParser());
         $builder->__construct();
 
         $builder->parse(new MockSimpleHttpResponse());
@@ -48,7 +48,7 @@ class TestOfPageBuilder extends UnitTestCase {
 
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
-        $builder->returns('_createParser', new MockSimpleHtmlSaxParser());
+        $builder->returns('createParser', new MockSimpleHtmlSaxParser());
         $builder->__construct();
 
         $builder->parse(new MockSimpleHttpResponse());
@@ -69,7 +69,7 @@ class TestOfPageBuilder extends UnitTestCase {
 
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
-        $builder->returns('_createParser', new MockSimpleHtmlSaxParser());
+        $builder->returns('createParser', new MockSimpleHtmlSaxParser());
         $builder->__construct();
 
         $builder->parse(new MockSimpleHttpResponse());
@@ -96,7 +96,7 @@ class TestOfPageBuilder extends UnitTestCase {
 
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
-        $builder->returns('_createParser', new MockSimpleHtmlSaxParser());
+        $builder->returns('createParser', new MockSimpleHtmlSaxParser());
         $builder->__construct();
 
         $builder->parse(new MockSimpleHttpResponse());
@@ -119,7 +119,7 @@ class TestOfPageBuilder extends UnitTestCase {
 
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
-        $builder->returns('_createParser', new MockSimpleHtmlSaxParser());
+        $builder->returns('createParser', new MockSimpleHtmlSaxParser());
         $builder->__construct();
 
         $builder->parse(new MockSimpleHttpResponse());
@@ -136,7 +136,7 @@ class TestOfPageBuilder extends UnitTestCase {
 
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
-        $builder->returns('_createParser', new MockSimpleHtmlSaxParser());
+        $builder->returns('createParser', new MockSimpleHtmlSaxParser());
         $builder->__construct();
 
         $builder->parse(new MockSimpleHttpResponse());
@@ -157,7 +157,7 @@ class TestOfPageParsing extends UnitTestCase {
 
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
-        $builder->returns('_createParser', $parser);
+        $builder->returns('createParser', $parser);
         $builder->__construct();
 
         $response = new MockSimpleHttpResponse();

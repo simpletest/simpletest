@@ -115,7 +115,7 @@ class ParametersExpectation extends SimpleExpectation {
             $comparison = $this->coerceToExpectation($expected[$i]);
             if (! $comparison->test($parameters[$i])) {
                 $messages[] = "parameter " . ($i + 1) . " with [" .
-                        $comparison->overlayMessage($parameters[$i], $this->_getDumper()) . "]";
+                        $comparison->overlayMessage($parameters[$i], $this->getDumper()) . "]";
             }
         }
         return "Parameter expectation differs at " . implode(" and ", $messages);
@@ -1098,7 +1098,7 @@ class SimpleMock {
      *    @return mixed               Stored return.
      *    @access private
      */
-    function &_invoke($method, $args) {
+    function &invoke($method, $args) {
         $method = strtolower($method);
         $step = $this->getCallCount($method);
         $this->addCall($method, $args);
@@ -1409,7 +1409,7 @@ class MockGenerator {
 
     /**
      *    Creates code within a class to generate replaced
-     *    methods. All methods call the _invoke() handler
+     *    methods. All methods call the invoke() handler
      *    with the method name and the arguments in an
      *    array.
      *    @param array $methods    Additional methods.
@@ -1419,7 +1419,7 @@ class MockGenerator {
         $code = '';
         $methods = array_merge($methods, $this->_reflection->getMethods());
         foreach ($methods as $method) {
-            if ($this->_isConstructor($method)) {
+            if ($this->isConstructor($method)) {
                 continue;
             }
             $mock_reflection = new SimpleReflection($this->_mock_base);
@@ -1428,7 +1428,7 @@ class MockGenerator {
             }
             $code .= "    " . $this->_reflection->getSignature($method) . " {\n";
             $code .= "        \$args = func_get_args();\n";
-            $code .= "        \$result = &\$this->_invoke(\"$method\", \$args);\n";
+            $code .= "        \$result = &\$this->invoke(\"$method\", \$args);\n";
             $code .= "        return \$result;\n";
             $code .= "    }\n";
         }
@@ -1437,7 +1437,7 @@ class MockGenerator {
 
     /**
      *    Creates code within a class to generate a new
-     *    methods. All methods call the _invoke() handler
+     *    methods. All methods call the invoke() handler
      *    on the internal mock with the method name and
      *    the arguments in an array.
      *    @param array $methods    Additional methods.
@@ -1446,7 +1446,7 @@ class MockGenerator {
     protected function createNewMethodCode($methods) {
         $code = '';
         foreach ($methods as $method) {
-            if ($this->_isConstructor($method)) {
+            if ($this->isConstructor($method)) {
                 continue;
             }
             $mock_reflection = new SimpleReflection($this->_mock_base);
@@ -1455,7 +1455,7 @@ class MockGenerator {
             }
             $code .= "    " . $this->_reflection->getSignature($method) . " {\n";
             $code .= "        \$args = func_get_args();\n";
-            $code .= "        \$result = &\$this->_mock->_invoke(\"$method\", \$args);\n";
+            $code .= "        \$result = &\$this->_mock->invoke(\"$method\", \$args);\n";
             $code .= "        return \$result;\n";
             $code .= "    }\n";
         }
@@ -1469,7 +1469,7 @@ class MockGenerator {
      *    @return boolean          True if special.
      *    @access private
      */
-    function _isConstructor($method) {
+    protected function isConstructor($method) {
         return in_array(
                 strtolower($method),
                 array('__construct', '__destruct'));
@@ -1614,12 +1614,12 @@ class MockGenerator {
     protected function overrideMethods($methods) {
         $code = "";
         foreach ($methods as $method) {
-            if ($this->_isConstructor($method)) {
+            if ($this->isConstructor($method)) {
                 continue;
             }
             $code .= "    " . $this->_reflection->getSignature($method) . " {\n";
             $code .= "        \$args = func_get_args();\n";
-            $code .= "        \$result = &\$this->_mock->_invoke(\"$method\", \$args);\n";
+            $code .= "        \$result = &\$this->_mock->invoke(\"$method\", \$args);\n";
             $code .= "        return \$result;\n";
             $code .= "    }\n";
         }

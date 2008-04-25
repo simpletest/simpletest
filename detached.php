@@ -55,7 +55,7 @@ class DetachedTestCase {
     function run(&$reporter) {
         $shell = &new SimpleShell();
         $shell->execute($this->_command);
-        $parser = &$this->_createParser($reporter);
+        $parser = &$this->createParser($reporter);
         if (! $parser->parse($shell->getOutput())) {
             trigger_error('Cannot parse incoming XML from [' . $this->_command . ']');
             return false;
@@ -73,7 +73,7 @@ class DetachedTestCase {
             $shell = &new SimpleShell();
             $shell->execute($this->_dry_command);
             $reporter = &new SimpleReporter();
-            $parser = &$this->_createParser($reporter);
+            $parser = &$this->createParser($reporter);
             if (! $parser->parse($shell->getOutput())) {
                 trigger_error('Cannot parse incoming XML from [' . $this->_dry_command . ']');
                 return false;
@@ -89,7 +89,7 @@ class DetachedTestCase {
      *    @return SimpleTestXmlListener      XML reader.
      *    @access protected
      */
-    function &_createParser(&$reporter) {
+    protected function &createParser(&$reporter) {
         return new SimpleTestXmlParser($reporter);
     }
 }

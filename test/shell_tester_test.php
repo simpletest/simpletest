@@ -7,7 +7,7 @@ Mock::generate('SimpleShell');
 class TestOfShellTestCase extends ShellTestCase {
     var $_mock_shell = false;
     
-    function _getShell() {
+    function getShell() {
         return $this->_mock_shell;
     }
     

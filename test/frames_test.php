@@ -244,8 +244,8 @@ class TestOfFramesetPageInterface extends UnitTestCase {
 
     function __construct() {
         parent::__construct();
-        $this->_page_interface = $this->_getPageMethods();
-        $this->_frameset_interface = $this->_getFramesetMethods();
+        $this->_page_interface = $this->getPageMethods();
+        $this->_frameset_interface = $this->getFramesetMethods();
     }
 
     function assertListInAnyOrder($list, $expected) {
@@ -254,7 +254,7 @@ class TestOfFramesetPageInterface extends UnitTestCase {
         $this->assertEqual($list, $expected);
     }
 
-    function _getPageMethods() {
+    private function getPageMethods() {
         $methods = array();
         foreach (get_class_methods('SimplePage') as $method) {
             if (strtolower($method) == strtolower('SimplePage')) {
@@ -274,7 +274,7 @@ class TestOfFramesetPageInterface extends UnitTestCase {
         return $methods;
     }
 
-    function _getFramesetMethods() {
+    private function getFramesetMethods() {
         $methods = array();
         foreach (get_class_methods('SimpleFrameset') as $method) {
             if (strtolower($method) == strtolower('SimpleFrameset')) {

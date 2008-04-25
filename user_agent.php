@@ -216,7 +216,7 @@ class SimpleUserAgent {
             $url->addRequestParameters($encoding);
             $encoding->clear();
         }
-        $response = $this->_fetchWhileRedirected($url, $encoding);
+        $response = $this->fetchWhileRedirected($url, $encoding);
         if ($headers = $response->getHeaders()) {
             if ($headers->isChallenge()) {
                 $this->_authenticator->addRealm(
@@ -236,10 +236,10 @@ class SimpleUserAgent {
      *    @return SimpleHttpResponse             Hopefully the target page.
      *    @access private
      */
-    function _fetchWhileRedirected($url, $encoding) {
+    protected function fetchWhileRedirected($url, $encoding) {
         $redirects = 0;
         do {
-            $response = $this->_fetch($url, $encoding);
+            $response = $this->fetch($url, $encoding);
             if ($response->isError()) {
                 return $response;
             }
@@ -264,8 +264,8 @@ class SimpleUserAgent {
      *    @return SimpleHttpResponse              Headers and hopefully content.
      *    @access protected
      */
-    function _fetch($url, $encoding) {
-        $request = $this->_createRequest($url, $encoding);
+    protected function fetch($url, $encoding) {
+        $request = $this->createRequest($url, $encoding);
         return $request->fetch($this->_connection_timeout);
     }
     
@@ -276,8 +276,8 @@ class SimpleUserAgent {
      *    @return SimpleHttpRequest             New request.
      *    @access private
      */
-    function _createRequest($url, $encoding) {
-        $request = $this->_createHttpRequest($url, $encoding);
+    protected function createRequest($url, $encoding) {
+        $request = $this->createHttpRequest($url, $encoding);
         $this->addAdditionalHeaders($request);
         if ($this->_cookies_enabled) {
             $request->readCookiesFromJar($this->_cookie_jar, $url);
@@ -293,8 +293,8 @@ class SimpleUserAgent {
      *    @return SimpleHttpRequest              New request object.
      *    @access protected
      */
-    function _createHttpRequest($url, $encoding) {
-        return new SimpleHttpRequest($this->_createRoute($url), $encoding);
+    protected function createHttpRequest($url, $encoding) {
+        return new SimpleHttpRequest($this->createRoute($url), $encoding);
     }
     
     /**
@@ -303,7 +303,7 @@ class SimpleUserAgent {
      *    @return SimpleRoute     Route to take to fetch URL.
      *    @access protected
      */
-    function _createRoute($url) {
+    protected function createRoute($url) {
         if ($this->_proxy) {
             return new SimpleProxyRoute(
                     $url,

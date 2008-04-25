@@ -37,7 +37,7 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
      *    @access public
      */
     function invoke($method) {
-        $queue = $this->_createErrorQueue();
+        $queue = $this->createErrorQueue();
         set_error_handler('SimpleTestErrorHandler');
         parent::invoke($method);
         restore_error_handler();
@@ -49,7 +49,7 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
      *    @return SimpleErrorQueue    Queue connected to the test.
      *    @access private
      */
-    function _createErrorQueue() {
+    protected function createErrorQueue() {
         $context = SimpleTest::getContext();
         $test = $this->getTestCase();
         $queue = $context->get('SimpleErrorQueue');

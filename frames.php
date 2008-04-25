@@ -155,14 +155,14 @@ class SimpleFrameset {
      */
     function clearFrameFocus() {
         $this->_focus = false;
-        $this->_clearNestedFramesFocus();
+        $this->clearNestedFramesFocus();
     }
 
     /**
      *    Clears the frame focus for any nested frames.
      *    @access private
      */
-    function _clearNestedFramesFocus() {
+    protected function clearNestedFramesFocus() {
         for ($i = 0; $i < count($this->_frames); $i++) {
             $this->_frames[$i]->clearFrameFocus();
         }
@@ -411,7 +411,7 @@ class SimpleFrameset {
      */
     function getUrlsByLabel($label) {
         if (is_integer($this->_focus)) {
-            return $this->_tagUrlsWithFrame(
+            return $this->tagUrlsWithFrame(
                     $this->_frames[$this->_focus]->getUrlsByLabel($label),
                     $this->_focus);
         }
@@ -419,7 +419,7 @@ class SimpleFrameset {
         foreach ($this->_frames as $index => $frame) {
             $urls = array_merge(
                     $urls,
-                    $this->_tagUrlsWithFrame(
+                    $this->tagUrlsWithFrame(
                                 $frame->getUrlsByLabel($label),
                                 $index));
         }
@@ -454,7 +454,7 @@ class SimpleFrameset {
      *    @return array             List of tagged URLs.
      *    @access private
      */
-    function _tagUrlsWithFrame($urls, $frame) {
+    protected function tagUrlsWithFrame($urls, $frame) {
         $tagged = array();
         foreach ($urls as $url) {
             if (! $url->getTarget()) {
@@ -474,7 +474,7 @@ class SimpleFrameset {
      *    @access public
      */
     function getFormBySubmit($selector) {
-        return $this->_findForm('getFormBySubmit', $selector);
+        return $this->findForm('getFormBySubmit', $selector);
     }
 
     /**
@@ -488,7 +488,7 @@ class SimpleFrameset {
      *    @access public
      */
     function getFormByImage($selector) {
-        return $this->_findForm('getFormByImage', $selector);
+        return $this->findForm('getFormByImage', $selector);
     }
 
     /**
@@ -502,7 +502,7 @@ class SimpleFrameset {
      *    @access public
      */
     function getFormById($id) {
-        return $this->_findForm('getFormById', $id);
+        return $this->findForm('getFormById', $id);
     }
 
     /**
@@ -513,16 +513,16 @@ class SimpleFrameset {
         *    @return SimpleForm    Form object containing the matching ID.
         *    @access private
         */
-    function _findForm($method, $attribute) {
+    protected function findForm($method, $attribute) {
         if (is_integer($this->_focus)) {
-            return $this->_findFormInFrame(
+            return $this->findFormInFrame(
                     $this->_frames[$this->_focus],
                     $this->_focus,
                     $method,
                     $attribute);
         }
         for ($i = 0; $i < count($this->_frames); $i++) {
-            $form = $this->_findFormInFrame(
+            $form = $this->findFormInFrame(
                     $this->_frames[$i],
                     $i,
                     $method,
@@ -545,7 +545,7 @@ class SimpleFrameset {
      *    @return SimpleForm       Form object containing the matching ID.
      *    @access private
      */
-    function _findFormInFrame($page, $index, $method, $attribute) {
+    protected function findFormInFrame($page, $index, $method, $attribute) {
         $form = $this->_frames[$index]->$method($attribute);
         if (isset($form)) {
             $form->setDefaultTarget($this->getPublicNameFromIndex($index));

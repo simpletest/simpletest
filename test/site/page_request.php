@@ -11,12 +11,11 @@ class PageRequest {
             if (strpos($statement, '=') === false) {
                 continue;
             }
-            $this->_parseStatement($statement);
+            $this->parseStatement($statement);
         }
     }
     
-    /** @access private */
-    function _parseStatement($statement) {
+    private function parseStatement($statement) {
         list($key, $value) = explode('=', $statement);
         $key = urldecode($key);
         if (preg_match('/(.*)\[\]$/', $key, $matches)) {
@@ -24,24 +23,22 @@ class PageRequest {
             if (! isset($this->_parsed[$key])) {
                 $this->_parsed[$key] = array();
             }
-            $this->_addValue($key, $value);
+            $this->addValue($key, $value);
         } elseif (isset($this->_parsed[$key])) {
-            $this->_addValue($key, $value);
+            $this->addValue($key, $value);
         } else {
-            $this->_setValue($key, $value);
+            $this->setValue($key, $value);
         }
     }
     
-    /** @access private */
-    function _addValue($key, $value) {
+    private function addValue($key, $value) {
         if (! is_array($this->_parsed[$key])) {
             $this->_parsed[$key] = array($this->_parsed[$key]);
         }
         $this->_parsed[$key][] = urldecode($value);
     }
     
-    /** @access private */
-    function _setValue($key, $value) {
+    private function setValue($key, $value) {
         $this->_parsed[$key] = urldecode($value);
     }
     

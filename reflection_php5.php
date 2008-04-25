@@ -218,7 +218,7 @@ class SimpleReflection {
      * @return  bool            true if method is abstract, else false
      * @access  private
      */
-    function _isAbstractMethod($name) {
+    protected function isAbstractMethod($name) {
         $interface = new ReflectionClass($this->_interface);
         if (! $interface->hasMethod($name)) {
             return false;
@@ -232,7 +232,7 @@ class SimpleReflection {
      * @return  bool            true if method is the constructor
      * @access  private
      */
-    function _isConstructor($name) {
+    protected function isConstructor($name) {
         return ($name == '__construct') || ($name == $this->_interface);
     }
 

@@ -14,11 +14,11 @@ Mock::generate('SimpleUserAgent');
 Mock::generatePartial(
         'SimpleBrowser',
         'MockParseSimpleBrowser',
-        array('_createUserAgent', '_parse'));
+        array('createUserAgent', 'parse'));
 Mock::generatePartial(
         'SimpleBrowser',
         'MockUserAgentSimpleBrowser',
-        array('_createUserAgent'));
+        array('createUserAgent'));
 
 class TestOfHistory extends UnitTestCase {
 
@@ -154,8 +154,8 @@ class TestOfParsedPageAccess extends UnitTestCase {
         $agent->returns('fetchResponse', $response);
 
         $browser = new MockParseSimpleBrowser($this);
-        $browser->returns('_createUserAgent', $agent);
-        $browser->returns('_parse', $page);
+        $browser->returns('createUserAgent', $agent);
+        $browser->returns('parse', $page);
         $browser->__construct();
 
         $browser->get('http://this.com/page.html');
@@ -165,7 +165,7 @@ class TestOfParsedPageAccess extends UnitTestCase {
     function testAccessorsWhenNoPage() {
         $agent = new MockSimpleUserAgent($this);
         $browser = new MockParseSimpleBrowser($this);
-        $browser->returns('_createUserAgent', $agent);
+        $browser->returns('createUserAgent', $agent);
         $browser->__construct();
         $this->assertEqual($browser->getContent(), '');
     }
@@ -224,8 +224,8 @@ class TestOfParsedPageAccess extends UnitTestCase {
 class TestOfBrowserNavigation extends UnitTestCase {
     function createBrowser($agent, $page) {
         $browser = new MockParseSimpleBrowser();
-        $browser->returns('_createUserAgent', $agent);
-        $browser->returns('_parse', $page);
+        $browser->returns('createUserAgent', $agent);
+        $browser->returns('parse', $page);
         $browser->__construct();
         return $browser;
     }
@@ -520,7 +520,7 @@ class TestOfBrowserFrames extends UnitTestCase {
 
     function createBrowser($agent) {
         $browser = new MockUserAgentSimpleBrowser();
-        $browser->returns('_createUserAgent', $agent);
+        $browser->returns('createUserAgent', $agent);
         $browser->__construct();
         return $browser;
     }

@@ -40,7 +40,7 @@ class SimpleCookie {
         $this->_host = false;
         $this->_name = $name;
         $this->_value = $value;
-        $this->_path = ($path ? $this->_fixPath($path) : "/");
+        $this->_path = ($path ? $this->fixPath($path) : "/");
         $this->_expiry = false;
         if (is_string($expiry)) {
             $this->_expiry = strtotime($expiry);
@@ -61,7 +61,7 @@ class SimpleCookie {
      *    @access public
      */
     function setHost($host) {
-        if ($host = $this->_truncateHost($host)) {
+        if ($host = $this->truncateHost($host)) {
             $this->_host = $host;
             return true;
         }
@@ -85,7 +85,7 @@ class SimpleCookie {
      *                           here.
      */
     function isValidHost($host) {
-        return ($this->_truncateHost($host) === $this->getHost());
+        return ($this->truncateHost($host) === $this->getHost());
     }
     
     /**
@@ -95,7 +95,7 @@ class SimpleCookie {
      *    @return string        Domain or false on a bad host.
      *    @access private
      */
-    function _truncateHost($host) {
+    protected function truncateHost($host) {
         $tlds = SimpleUrl::getAllTopLevelDomains();
         if (preg_match('/[a-z\-]+\.(' . $tlds . ')$/i', $host, $matches)) {
             return $matches[0];
@@ -143,7 +143,7 @@ class SimpleCookie {
      */
     function isValidPath($path) {
         return (strncmp(
-                $this->_fixPath($path),
+                $this->fixPath($path),
                 $this->getPath(),
                 strlen($this->getPath())) == 0);
     }
@@ -208,7 +208,7 @@ class SimpleCookie {
      *    @param string $path            Path to fix.
      *    @access private
      */
-    function _fixPath($path) {
+    protected function fixPath($path) {
         if (substr($path, 0, 1) != '/') {
             $path = '/' . $path;
         }
@@ -288,7 +288,7 @@ class SimpleCookieJar {
         if ($host) {
             $cookie->setHost($host);
         }
-        $this->_cookies[$this->_findFirstMatch($cookie)] = $cookie;
+        $this->_cookies[$this->findFirstMatch($cookie)] = $cookie;
     }
     
     /**
@@ -298,9 +298,9 @@ class SimpleCookieJar {
      *    @return integer                Available slot.
      *    @access private
      */
-    function _findFirstMatch($cookie) {
+    protected function findFirstMatch($cookie) {
         for ($i = 0; $i < count($this->_cookies); $i++) {
-            $is_match = $this->_isMatch(
+            $is_match = $this->isMatch(
                     $cookie,
                     $this->_cookies[$i]->getHost(),
                     $this->_cookies[$i]->getPath(),
@@ -326,7 +326,7 @@ class SimpleCookieJar {
     function getCookieValue($host, $path, $name) {
         $longest_path = '';
         foreach ($this->_cookies as $cookie) {
-            if ($this->_isMatch($cookie, $host, $path, $name)) {
+            if ($this->isMatch($cookie, $host, $path, $name)) {
                 if (strlen($cookie->getPath()) > strlen($longest_path)) {
                     $value = $cookie->getValue();
                     $longest_path = $cookie->getPath();
@@ -347,7 +347,7 @@ class SimpleCookieJar {
      *    @return boolean              True if matched.
      *    @access private
      */
-    function _isMatch($cookie, $host, $path, $name) {
+    protected function isMatch($cookie, $host, $path, $name) {
         if ($cookie->getName() != $name) {
             return false;
         }
@@ -370,7 +370,7 @@ class SimpleCookieJar {
     function selectAsPairs($url) {
         $pairs = array();
         foreach ($this->_cookies as $cookie) {
-            if ($this->_isMatch($cookie, $url->getHost(), $url->getPath(), $cookie->getName())) {
+            if ($this->isMatch($cookie, $url->getHost(), $url->getPath(), $cookie->getName())) {
                 $pairs[] = $cookie->getName() . '=' . $cookie->getValue();
             }
         }

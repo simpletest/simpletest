@@ -309,7 +309,7 @@ class SimpleEncoding {
      *    @return string        Part of URL.
      *    @access protected
      */
-    function _encode() {
+    protected function encode() {
         $statements = array();
         foreach ($this->_request as $pair) {
             if ($statement = $pair->asRequest()) {
@@ -372,7 +372,7 @@ class SimpleGetEncoding extends SimpleEncoding {
      *    @access public
      */
     function asUrlRequest() {
-        return $this->_encode();
+        return $this->encode();
     }
 }
 
@@ -469,7 +469,7 @@ class SimplePostEncoding extends SimpleEncoding {
      *    @access public
      */
     function writeHeadersTo(&$socket) {
-        $socket->write("Content-Length: " . (integer)strlen($this->_encode()) . "\r\n");
+        $socket->write("Content-Length: " . (integer)strlen($this->encode()) . "\r\n");
         $socket->write("Content-Type: application/x-www-form-urlencoded\r\n");
     }
     
@@ -479,7 +479,7 @@ class SimplePostEncoding extends SimpleEncoding {
      *    @access public
      */
     function writeTo(&$socket) {
-        $socket->write($this->_encode());
+        $socket->write($this->encode());
     }
     
     /**
@@ -520,7 +520,7 @@ class SimpleMultipartEncoding extends SimplePostEncoding {
      *    @access public
      */
     function writeHeadersTo(&$socket) {
-        $socket->write("Content-Length: " . (integer)strlen($this->_encode()) . "\r\n");
+        $socket->write("Content-Length: " . (integer)strlen($this->encode()) . "\r\n");
         $socket->write("Content-Type: multipart/form-data, boundary=" . $this->_boundary . "\r\n");
     }
     
@@ -530,7 +530,7 @@ class SimpleMultipartEncoding extends SimplePostEncoding {
      *    @access public
      */
     function writeTo(&$socket) {
-        $socket->write($this->_encode());
+        $socket->write($this->encode());
     }
     
     /**
@@ -539,7 +539,7 @@ class SimpleMultipartEncoding extends SimplePostEncoding {
      *    @return string        Part of URL.
      *    @access public
      */
-    function _encode() {
+    function encode() {
         $stream = '';
         foreach ($this->_request as $pair) {
             $stream .= "--" . $this->_boundary . "\r\n";

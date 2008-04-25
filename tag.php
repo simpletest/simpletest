@@ -1077,7 +1077,7 @@ class SimpleTagGroup {
      *    @return array        All widgets.
      *    @access protected
      */
-    function &_getWidgets() {
+    protected function &getWidgets() {
         return $this->_widgets;
     }
 
@@ -1160,7 +1160,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup {
      */
     function getValue() {
         $values = array();
-        $widgets = $this->_getWidgets();
+        $widgets = $this->getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if ($widgets[$i]->getValue() !== false) {
                 $values[] = $widgets[$i]->getValue();
@@ -1176,7 +1176,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup {
      */
     function getDefault() {
         $values = array();
-        $widgets = $this->_getWidgets();
+        $widgets = $this->getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if ($widgets[$i]->getDefault() !== false) {
                 $values[] = $widgets[$i]->getDefault();
@@ -1197,7 +1197,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup {
         if (! $this->valuesArePossible($values)) {
             return false;
         }
-        $widgets = $this->_getWidgets();
+        $widgets = $this->getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             $possible = $widgets[$i]->getAttribute('value');
             if (in_array($widgets[$i]->getAttribute('value'), $values)) {
@@ -1219,7 +1219,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup {
      */
     protected function valuesArePossible($values) {
         $matches = array();
-        $widgets = &$this->_getWidgets();
+        $widgets = &$this->getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             $possible = $widgets[$i]->getAttribute('value');
             if (in_array($possible, $values)) {
@@ -1288,7 +1288,7 @@ class SimpleRadioGroup extends SimpleTagGroup {
             return false;
         }
         $index = false;
-        $widgets = $this->_getWidgets();
+        $widgets = $this->getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if (! $widgets[$i]->setValue($value)) {
                 $widgets[$i]->setValue(false);
@@ -1304,7 +1304,7 @@ class SimpleRadioGroup extends SimpleTagGroup {
      *    @access private
      */
     protected function valueIsPossible($value) {
-        $widgets = $this->_getWidgets();
+        $widgets = $this->getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if ($widgets[$i]->getAttribute('value') == $value) {
                 return true;
@@ -1321,7 +1321,7 @@ class SimpleRadioGroup extends SimpleTagGroup {
      *    @access public
      */
     function getValue() {
-        $widgets = $this->_getWidgets();
+        $widgets = $this->getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if ($widgets[$i]->getValue() !== false) {
                 return $widgets[$i]->getValue();
@@ -1337,7 +1337,7 @@ class SimpleRadioGroup extends SimpleTagGroup {
      *    @access public
      */
     function getDefault() {
-        $widgets = $this->_getWidgets();
+        $widgets = $this->getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if ($widgets[$i]->getDefault() !== false) {
                 return $widgets[$i]->getDefault();

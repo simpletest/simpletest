@@ -325,9 +325,9 @@ class SelectiveReporter extends SimpleReporterDecorator {
     function __construct($reporter, $just_this_case = false, $just_this_test = false) {
         if (isset($just_this_case) && $just_this_case) {
             $this->_just_this_case = strtolower($just_this_case);
-            $this->_off();
+            $this->off();
         } else {
-            $this->_on();
+            $this->on();
         }
         if (isset($just_this_test) && $just_this_test) {
             $this->_just_this_test = strtolower($just_this_test);
@@ -368,7 +368,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    Switch on testing for the group or subgroup.
      *    @access private
      */
-    function _on() {
+    protected function on() {
         $this->_on = true;
     }
     
@@ -376,7 +376,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    Switch off testing for the group or subgroup.
      *    @access private
      */
-    function _off() {
+    protected function off() {
         $this->_on = false;
     }
     
@@ -411,7 +411,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      */
     function paintGroupStart($test_case, $size) {
         if ($this->_just_this_case && $this->matchesTestCase($test_case)) {
-            $this->_on();
+            $this->on();
         }
         $this->_reporter->paintGroupStart($test_case, $size);
     }
@@ -424,7 +424,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
     function paintGroupEnd($test_case) {
         $this->_reporter->paintGroupEnd($test_case);
         if ($this->_just_this_case && $this->matchesTestCase($test_case)) {
-            $this->_off();
+            $this->off();
         }
     }
 }

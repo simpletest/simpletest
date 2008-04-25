@@ -151,7 +151,7 @@ class SimplePageBuilder extends SimpleSaxListener {
     function parse($response) {
         $this->_tags = array();
         $this->_page = $this->createPage($response);
-        $parser = $this->_createParser($this);
+        $parser = $this->createParser($this);
         $parser->parse($response->getContent());
         $this->_page->acceptPageEnd();
         return $this->_page;
@@ -173,7 +173,7 @@ class SimplePageBuilder extends SimpleSaxListener {
      *                                         events for the builder.
      *    @access protected
      */
-    function _createParser(&$listener) {
+    protected function createParser(&$listener) {
         return new SimpleHtmlSaxParser($listener);
     }
     

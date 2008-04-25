@@ -42,7 +42,7 @@ class SimpleRealm {
      *    @access public
      */
     function stretch($url) {
-        $this->_root = $this->_getCommonPath($this->_root, $url->getPath());
+        $this->_root = $this->getCommonPath($this->_root, $url->getPath());
     }
     
     /**
@@ -52,7 +52,7 @@ class SimpleRealm {
      *    @return string              Common directories.
      *    @access private
      */
-    function _getCommonPath($first, $second) {
+    protected function getCommonPath($first, $second) {
         $first = explode('/', $first);
         $second = explode('/', $second);
         for ($i = 0; $i < min(count($first), count($second)); $i++) {
@@ -100,10 +100,10 @@ class SimpleRealm {
      *    @access public
      */
     function isWithin($url) {
-        if ($this->_isIn($this->_root, $url->getBasePath())) {
+        if ($this->isIn($this->_root, $url->getBasePath())) {
             return true;
         }
-        if ($this->_isIn($this->_root, $url->getBasePath() . $url->getPage() . '/')) {
+        if ($this->isIn($this->_root, $url->getBasePath() . $url->getPage() . '/')) {
             return true;
         }
         return false;
@@ -118,7 +118,7 @@ class SimpleRealm {
      *                               in the big bit.
      *    @access private
      */
-    function _isIn($part, $whole) {
+    protected function isIn($part, $whole) {
         return strpos($whole, $part) === 0;
     }
 }
@@ -188,7 +188,7 @@ class SimpleAuthenticator {
      *    @return SimpleRealm          Name of realm.
      *    @access private
      */
-    function _findRealmFromUrl($url) {
+    protected function findRealmFromUrl($url) {
         if (! isset($this->_realms[$url->getHost()])) {
             return false;
         }
@@ -210,7 +210,7 @@ class SimpleAuthenticator {
         if ($url->getUsername() && $url->getPassword()) {
             $username = $url->getUsername();
             $password = $url->getPassword();
-        } elseif ($realm = $this->_findRealmFromUrl($url)) {
+        } elseif ($realm = $this->findRealmFromUrl($url)) {
             $username = $realm->getUsername();
             $password = $realm->getPassword();
         } else {

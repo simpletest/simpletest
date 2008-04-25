@@ -92,7 +92,7 @@ class SimpleDumper {
         if ($type == "Unknown") {
             return "with unknown type";
         }
-        $method = '_describe' . $type . 'Difference';
+        $method = 'describe' . $type . 'Difference';
         return $this->$method($first, $second, $identical);
     }
     
@@ -138,7 +138,7 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeGenericDifference($first, $second) {
+    protected function describeGenericDifference($first, $second) {
         return "as [" . $this->describeValue($first) .
                 "] does not match [" .
                 $this->describeValue($second) . "]";
@@ -153,8 +153,8 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeNullDifference($first, $second, $identical) {
-        return $this->_describeGenericDifference($first, $second);
+    protected function describeNullDifference($first, $second, $identical) {
+        return $this->describeGenericDifference($first, $second);
     }
     
     /**
@@ -166,8 +166,8 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeBooleanDifference($first, $second, $identical) {
-        return $this->_describeGenericDifference($first, $second);
+    protected function describeBooleanDifference($first, $second, $identical) {
+        return $this->describeGenericDifference($first, $second);
     }
     
     /**
@@ -179,11 +179,11 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeStringDifference($first, $second, $identical) {
+    protected function describeStringDifference($first, $second, $identical) {
         if (is_object($second) || is_array($second)) {
-            return $this->_describeGenericDifference($first, $second);
+            return $this->describeGenericDifference($first, $second);
         }
-        $position = $this->_stringDiffersAt($first, $second);
+        $position = $this->stringDiffersAt($first, $second);
         $message = "at character $position";
         $message .= " with [" .
                 $this->clipString($first, 200, $position) . "] and [" .
@@ -200,9 +200,9 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeIntegerDifference($first, $second, $identical) {
+    protected function describeIntegerDifference($first, $second, $identical) {
         if (is_object($second) || is_array($second)) {
-            return $this->_describeGenericDifference($first, $second);
+            return $this->describeGenericDifference($first, $second);
         }
         return "because [" . $this->describeValue($first) .
                 "] differs from [" .
@@ -219,9 +219,9 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeFloatDifference($first, $second, $identical) {
+    protected function describeFloatDifference($first, $second, $identical) {
         if (is_object($second) || is_array($second)) {
-            return $this->_describeGenericDifference($first, $second);
+            return $this->describeGenericDifference($first, $second);
         }
         return "because [" . $this->describeValue($first) .
                 "] differs from [" .
@@ -238,11 +238,11 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeArrayDifference($first, $second, $identical) {
+    protected function describeArrayDifference($first, $second, $identical) {
         if (! is_array($second)) {
-            return $this->_describeGenericDifference($first, $second);
+            return $this->describeGenericDifference($first, $second);
         }
-        if (! $this->_isMatchingKeys($first, $second, $identical)) {
+        if (! $this->isMatchingKeys($first, $second, $identical)) {
             return "as key list [" .
                     implode(", ", array_keys($first)) . "] does not match key list [" .
                     implode(", ", array_keys($second)) . "]";
@@ -272,7 +272,7 @@ class SimpleDumper {
      *    @return boolean             True if matching.
      *    @access private
      */
-    function _isMatchingKeys($first, $second, $identical) {
+    protected function isMatchingKeys($first, $second, $identical) {
         $first_keys = array_keys($first);
         $second_keys = array_keys($second);
         if ($identical) {
@@ -292,8 +292,8 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeResourceDifference($first, $second, $identical) {
-        return $this->_describeGenericDifference($first, $second);
+    protected function describeResourceDifference($first, $second, $identical) {
+        return $this->describeGenericDifference($first, $second);
     }
     
     /**
@@ -305,11 +305,11 @@ class SimpleDumper {
      *    @return string              Human readable description.
      *    @access private
      */
-    function _describeObjectDifference($first, $second, $identical) {
+    protected function describeObjectDifference($first, $second, $identical) {
         if (! is_object($second)) {
-            return $this->_describeGenericDifference($first, $second);
+            return $this->describeGenericDifference($first, $second);
         }
-        return $this->_describeArrayDifference(
+        return $this->describeArrayDifference(
                 get_object_vars($first),
                 get_object_vars($second),
                 $identical);
@@ -324,7 +324,7 @@ class SimpleDumper {
      *                                character.
      *    @access private
      */
-    function _stringDiffersAt($first, $second) {
+    protected function stringDiffersAt($first, $second) {
         if (! $first || ! $second) {
             return 0;
         }

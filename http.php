@@ -74,7 +74,7 @@ class SimpleRoute {
      */
     function createConnection($method, $timeout) {
         $default_port = ('https' == $this->_url->getScheme()) ? 443 : 80;
-        $socket = $this->_createSocket(
+        $socket = $this->createSocket(
                 $this->_url->getScheme() ? $this->_url->getScheme() : 'http',
                 $this->_url->getHost(),
                 $this->_url->getPort() ? $this->_url->getPort() : $default_port,
@@ -96,7 +96,7 @@ class SimpleRoute {
      *    @return SimpleSocket/SimpleSecureSocket New socket.
      *    @access protected
      */
-    function _createSocket($scheme, $host, $port, $timeout) {
+    protected function createSocket($scheme, $host, $port, $timeout) {
         if (in_array($scheme, array('file'))) {
             return new SimpleFileSocket($this->_url);
         } elseif (in_array($scheme, array('https'))) {
@@ -168,7 +168,7 @@ class SimpleProxyRoute extends SimpleRoute {
      *    @access public
      */
     function createConnection($method, $timeout) {
-        $socket = $this->_createSocket(
+        $socket = $this->createSocket(
                 $this->_proxy->getScheme() ? $this->_proxy->getScheme() : 'http',
                 $this->_proxy->getHost(),
                 $this->_proxy->getPort() ? $this->_proxy->getPort() : 8080,
@@ -229,7 +229,7 @@ class SimpleHttpRequest {
         if (! $socket->isError()) {
             $this->dispatchRequest($socket, $this->_encoding);
         }
-        return $this->_createResponse($socket);
+        return $this->createResponse($socket);
     }
     
     /**
@@ -278,7 +278,7 @@ class SimpleHttpRequest {
      *    @return SimpleHttpResponse    Parsed response object.
      *    @access protected
      */
-    function _createResponse($socket) {
+    protected  function createResponse($socket) {
         return new SimpleHttpResponse(
                 $socket,
                 $this->_route->getUrl(),
@@ -501,10 +501,10 @@ class SimpleHttpResponse extends SimpleStickyError {
         $this->_content = false;
         $raw = $this->readAll($socket);
         if ($socket->isError()) {
-            $this->_setError('Error reading socket [' . $socket->getError() . ']');
+            $this->setError('Error reading socket [' . $socket->getError() . ']');
             return;
         }
-        $this->_parse($raw);
+        $this->parse($raw);
     }
     
     /**
@@ -512,15 +512,15 @@ class SimpleHttpResponse extends SimpleStickyError {
      *    @param string $raw    Content to parse.
      *    @access private
      */
-    function _parse($raw) {
+    protected function parse($raw) {
         if (! $raw) {
-            $this->_setError('Nothing fetched');
+            $this->setError('Nothing fetched');
             $this->_headers = new SimpleHttpHeaders('');
         } elseif ('file' == $this->_url->getScheme()) {
             $this->_headers = new SimpleHttpHeaders('');
             $this->_content = $raw;
         } elseif (! strstr($raw, "\r\n\r\n")) {
-            $this->_setError('Could not split headers from content');
+            $this->setError('Could not split headers from content');
             $this->_headers = new SimpleHttpHeaders($raw);
         } else {
             list($headers, $this->_content) = split("\r\n\r\n", $raw, 2);

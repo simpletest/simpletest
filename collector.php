@@ -46,7 +46,7 @@ class SimpleCollector {
                 if ($this->isHidden($entry)) {
                     continue;
                 }
-                $this->_handle($test, $path . DIRECTORY_SEPARATOR . $entry);
+                $this->handle($test, $path . DIRECTORY_SEPARATOR . $entry);
             }
             closedir($handle);
         }
@@ -65,7 +65,7 @@ class SimpleCollector {
      * @see collect()
      * @access protected
      */
-    function _handle(&$test, $file) {
+    protected function handle(&$test, $file) {
         if (is_dir($file)) {
             return;
         }
@@ -113,9 +113,9 @@ class SimplePatternCollector extends SimpleCollector {
      * @param string $path    Directory to scan.
      * @access protected
      */
-    function _handle(&$test, $filename) {
+    protected function handle(&$test, $filename) {
         if (preg_match($this->_pattern, $filename)) {
-            parent::_handle($test, $filename);
+            parent::handle($test, $filename);
         }
     }
 }
