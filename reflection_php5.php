@@ -12,7 +12,7 @@
  *    @subpackage UnitTester
  */
 class SimpleReflection {
-    private $_interface;
+    private $interface;
 
     /**
      *    Stashes the class/interface.
@@ -20,7 +20,7 @@ class SimpleReflection {
      *                                to inspect.
      */
     function __construct($interface) {
-        $this->_interface = $interface;
+        $this->interface = $interface;
     }
 
     /**
@@ -31,10 +31,10 @@ class SimpleReflection {
      *    @access public
      */
     function classExists() {
-        if (! class_exists($this->_interface)) {
+        if (! class_exists($this->interface)) {
             return false;
         }
-        $reflection = new ReflectionClass($this->_interface);
+        $reflection = new ReflectionClass($this->interface);
         return ! $reflection->isInterface();
     }
 
@@ -45,7 +45,7 @@ class SimpleReflection {
      *    @access public
      */
     function classExistsSansAutoload() {
-        return class_exists($this->_interface, false);
+        return class_exists($this->interface, false);
     }
 
     /**
@@ -55,7 +55,7 @@ class SimpleReflection {
      *    @access public
      */
     function classOrInterfaceExists() {
-        return $this->classOrInterfaceExistsWithAutoload($this->_interface, true);
+        return $this->classOrInterfaceExistsWithAutoload($this->interface, true);
     }
 
     /**
@@ -65,7 +65,7 @@ class SimpleReflection {
      *    @access public
      */
     function classOrInterfaceExistsSansAutoload() {
-        return $this->classOrInterfaceExistsWithAutoload($this->_interface, false);
+        return $this->classOrInterfaceExistsWithAutoload($this->interface, false);
     }
 
     /**
@@ -78,11 +78,11 @@ class SimpleReflection {
      */
     protected function classOrInterfaceExistsWithAutoload($interface, $autoload) {
         if (function_exists('interface_exists')) {
-            if (interface_exists($this->_interface, $autoload)) {
+            if (interface_exists($this->interface, $autoload)) {
                 return true;
             }
         }
-        return class_exists($this->_interface, $autoload);
+        return class_exists($this->interface, $autoload);
     }
 
     /**
@@ -92,7 +92,7 @@ class SimpleReflection {
      *    @access public
      */
     function getMethods() {
-        return array_unique(get_class_methods($this->_interface));
+        return array_unique(get_class_methods($this->interface));
     }
 
     /**
@@ -103,9 +103,9 @@ class SimpleReflection {
      *    @access public
      */
     function getInterfaces() {
-        $reflection = new ReflectionClass($this->_interface);
+        $reflection = new ReflectionClass($this->interface);
         if ($reflection->isInterface()) {
-            return array($this->_interface);
+            return array($this->interface);
         }
         return $this->onlyParents($reflection->getInterfaces());
     }
@@ -141,7 +141,7 @@ class SimpleReflection {
      *    @access public
      */
     function getParent() {
-        $reflection = new ReflectionClass($this->_interface);
+        $reflection = new ReflectionClass($this->interface);
         $parent = $reflection->getParentClass();
         if ($parent) {
             return $parent->getName();
@@ -155,7 +155,7 @@ class SimpleReflection {
      *    @access public
      */
     function isAbstract() {
-        $reflection = new ReflectionClass($this->_interface);
+        $reflection = new ReflectionClass($this->interface);
         return $reflection->isAbstract();
     }
 
@@ -165,7 +165,7 @@ class SimpleReflection {
      *    @access public
      */
     function isInterface() {
-        $reflection = new ReflectionClass($this->_interface);
+        $reflection = new ReflectionClass($this->interface);
         return $reflection->isInterface();
     }
 
@@ -176,7 +176,7 @@ class SimpleReflection {
      *    @access public
      */
     function hasFinal() {
-        $reflection = new ReflectionClass($this->_interface);
+        $reflection = new ReflectionClass($this->interface);
         foreach ($reflection->getMethods() as $method) {
             if ($method->isFinal()) {
                 return true;
@@ -219,7 +219,7 @@ class SimpleReflection {
      * @access  private
      */
     protected function isAbstractMethod($name) {
-        $interface = new ReflectionClass($this->_interface);
+        $interface = new ReflectionClass($this->interface);
         if (! $interface->hasMethod($name)) {
             return false;
         }
@@ -233,7 +233,7 @@ class SimpleReflection {
      * @access  private
      */
     protected function isConstructor($name) {
-        return ($name == '__construct') || ($name == $this->_interface);
+        return ($name == '__construct') || ($name == $this->interface);
     }
 
     /**
@@ -243,7 +243,7 @@ class SimpleReflection {
      * @access  private
      */
     protected function isAbstractMethodInParents($name) {
-        $interface = new ReflectionClass($this->_interface);
+        $interface = new ReflectionClass($this->interface);
         $parent = $interface->getParentClass();
         while($parent) {
             if (! $parent->hasMethod($name)) {
@@ -264,7 +264,7 @@ class SimpleReflection {
      * @access  private
      */
     protected function isStaticMethod($name) {
-        $interface = new ReflectionClass($this->_interface);
+        $interface = new ReflectionClass($this->interface);
         if (! $interface->hasMethod($name)) {
             return false;
         }
@@ -301,7 +301,7 @@ class SimpleReflection {
         // doesn't exist prior to PHP 5.1.0, so we need to use a more crude
         // detection method.
         try {
-            $interface = new ReflectionClass($this->_interface);
+            $interface = new ReflectionClass($this->interface);
             $interface->getMethod($name);
         } catch (ReflectionException $e) {
             return "function $name()";
@@ -318,7 +318,7 @@ class SimpleReflection {
      *    @access private
      */
     protected function getFullSignature($name) {
-        $interface = new ReflectionClass($this->_interface);
+        $interface = new ReflectionClass($this->interface);
         $method = $interface->getMethod($name);
         $reference = $method->returnsReference() ? '&' : '';
         $static = $method->isStatic() ? 'static ' : '';

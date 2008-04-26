@@ -18,14 +18,14 @@ require_once(dirname(__FILE__) . '/test_case.php');
  *    @subpackage UnitTester
  */
 class SimpleShell {
-    private $_output;
+    private $output;
 
     /**
      *    Executes the shell comand and stashes the output.
      *    @access public
      */
     function __construct() {
-        $this->_output = false;
+        $this->output = false;
     }
 
     /**
@@ -37,8 +37,8 @@ class SimpleShell {
      *    @access public
      */
     function execute($command) {
-        $this->_output = false;
-        exec($command, $this->_output, $ret);
+        $this->output = false;
+        exec($command, $this->output, $ret);
         return $ret;
     }
 
@@ -48,7 +48,7 @@ class SimpleShell {
      *    @access public
      */
     function getOutput() {
-        return implode("\n", $this->_output);
+        return implode("\n", $this->output);
     }
 
     /**
@@ -57,7 +57,7 @@ class SimpleShell {
      *    @access public
      */
     function getOutputAsList() {
-        return $this->_output;
+        return $this->output;
     }
 }
 
@@ -69,9 +69,9 @@ class SimpleShell {
  *    @subpackage UnitTester
  */
 class ShellTestCase extends SimpleTestCase {
-    private $_current_shell;
-    private $_last_status;
-    private $_last_command;
+    private $current_shell;
+    private $last_status;
+    private $last_command;
 
     /**
      *    Creates an empty test case. Should be subclassed
@@ -82,9 +82,9 @@ class ShellTestCase extends SimpleTestCase {
      */
     function __construct($label = false) {
         parent::__construct($label);
-        $this->_current_shell = $this->createShell();
-        $this->_last_status = false;
-        $this->_last_command = '';
+        $this->current_shell = $this->createShell();
+        $this->last_status = false;
+        $this->last_command = '';
     }
 
     /**
@@ -95,9 +95,9 @@ class ShellTestCase extends SimpleTestCase {
      */
     function execute($command) {
         $shell = $this->getShell();
-        $this->_last_status = $shell->execute($command);
-        $this->_last_command = $command;
-        return ($this->_last_status === 0);
+        $this->last_status = $shell->execute($command);
+        $this->last_command = $command;
+        return ($this->last_status === 0);
     }
 
     /**
@@ -199,9 +199,9 @@ class ShellTestCase extends SimpleTestCase {
      */
     function assertExitCode($status, $message = "%s") {
         $message = sprintf($message, "Expected status code of [$status] from [" .
-                $this->_last_command . "], but got [" .
-                $this->_last_status . "]");
-        return $this->assertTrue($status === $this->_last_status, $message);
+                $this->last_command . "], but got [" .
+                $this->last_status . "]");
+        return $this->assertTrue($status === $this->last_status, $message);
     }
 
     /**
@@ -315,7 +315,7 @@ class ShellTestCase extends SimpleTestCase {
      *    @access protected
      */
     protected function getShell() {
-        return $this->_current_shell;
+        return $this->current_shell;
     }
 
     /**

@@ -19,7 +19,7 @@ require_once(dirname(__FILE__) . '/compatibility.php');
  *    @subpackage WebTester
  */
 class SimpleStickyError {
-    var $_error = 'Constructor not chained';
+    private $error = 'Constructor not chained';
 
     /**
      *    Sets the error to empty.
@@ -35,7 +35,7 @@ class SimpleStickyError {
      *    @access public
      */
     function isError() {
-        return ($this->_error != '');
+        return ($this->error != '');
     }
 
     /**
@@ -45,7 +45,7 @@ class SimpleStickyError {
      *    @access public
      */
     function getError() {
-        return $this->_error;
+        return $this->error;
     }
 
     /**
@@ -54,7 +54,7 @@ class SimpleStickyError {
      *    @access protected
      */
     function setError($error) {
-        $this->_error = $error;
+        $this->error = $error;
     }
 
     /**
@@ -67,10 +67,10 @@ class SimpleStickyError {
 }
 
 class SimpleFileSocket extends SimpleStickyError {
-    var $_handle;
-    var $_is_open = false;
-    var $_sent = '';
-    var $lock_size;
+    private $handle;
+    private $is_open = false;
+    private $sent = '';
+    private $lock_size;
 
     /**
      *    Opens a socket for reading and writing.
@@ -80,12 +80,12 @@ class SimpleFileSocket extends SimpleStickyError {
      */
     function __construct($file, $block_size = 1024) {
         parent::__construct();
-        if (! ($this->_handle = $this->openFile($file, $error))) {
+        if (! ($this->handle = $this->openFile($file, $error))) {
             $file_string = $file->asString();
             $this->setError("Cannot open [$file_string] with [$error]");
             return;
         }
-        $this->_is_open = true;
+        $this->is_open = true;
         $this->_block_size = $block_size;
     }
 
@@ -108,7 +108,7 @@ class SimpleFileSocket extends SimpleStickyError {
      *    @access public
      */
     function read() {
-        $raw = @fread($this->_handle, $this->_block_size);
+        $raw = @fread($this->handle, $this->_block_size);
         if ($raw === false) {
             $this->setError('Cannot read from socket');
             $this->close();
@@ -122,7 +122,7 @@ class SimpleFileSocket extends SimpleStickyError {
      *    @access public
      */
     function isOpen() {
-        return $this->_is_open;
+        return $this->is_open;
     }
 
     /**
@@ -132,9 +132,9 @@ class SimpleFileSocket extends SimpleStickyError {
      *    @access public
      */
     function close() {
-        if (!$this->_is_open) return false;
-        $this->_is_open = false;
-        return fclose($this->_handle);
+        if (!$this->is_open) return false;
+        $this->is_open = false;
+        return fclose($this->handle);
     }
 
     /**
@@ -143,7 +143,7 @@ class SimpleFileSocket extends SimpleStickyError {
      *    @access public
      */
     function getSent() {
-        return $this->_sent;
+        return $this->sent;
     }
 
     /**
@@ -164,10 +164,10 @@ class SimpleFileSocket extends SimpleStickyError {
  *    @subpackage WebTester
  */
 class SimpleSocket extends SimpleStickyError {
-    var $_handle;
-    var $_is_open = false;
-    var $_sent = '';
-    var $lock_size;
+    private $handle;
+    private $is_open = false;
+    private $sent = '';
+    private $lock_size;
 
     /**
      *    Opens a socket for reading and writing.
@@ -179,13 +179,13 @@ class SimpleSocket extends SimpleStickyError {
      */
     function __construct($host, $port, $timeout, $block_size = 255) {
         parent::__construct();
-        if (! ($this->_handle = $this->openSocket($host, $port, $error_number, $error, $timeout))) {
+        if (! ($this->handle = $this->openSocket($host, $port, $error_number, $error, $timeout))) {
             $this->setError("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
             return;
         }
-        $this->_is_open = true;
+        $this->is_open = true;
         $this->_block_size = $block_size;
-        SimpleTestCompatibility::setTimeout($this->_handle, $timeout);
+        SimpleTestCompatibility::setTimeout($this->handle, $timeout);
     }
 
     /**
@@ -198,7 +198,7 @@ class SimpleSocket extends SimpleStickyError {
         if ($this->isError() || ! $this->isOpen()) {
             return false;
         }
-        $count = fwrite($this->_handle, $message);
+        $count = fwrite($this->handle, $message);
         if (! $count) {
             if ($count === false) {
                 $this->setError('Cannot write to socket');
@@ -206,8 +206,8 @@ class SimpleSocket extends SimpleStickyError {
             }
             return false;
         }
-        fflush($this->_handle);
-        $this->_sent .= $message;
+        fflush($this->handle);
+        $this->sent .= $message;
         return true;
     }
 
@@ -223,7 +223,7 @@ class SimpleSocket extends SimpleStickyError {
         if ($this->isError() || ! $this->isOpen()) {
             return false;
         }
-        $raw = @fread($this->_handle, $this->_block_size);
+        $raw = @fread($this->handle, $this->_block_size);
         if ($raw === false) {
             $this->setError('Cannot read from socket');
             $this->close();
@@ -237,7 +237,7 @@ class SimpleSocket extends SimpleStickyError {
      *    @access public
      */
     function isOpen() {
-        return $this->_is_open;
+        return $this->is_open;
     }
 
     /**
@@ -247,8 +247,8 @@ class SimpleSocket extends SimpleStickyError {
      *    @access public
      */
     function close() {
-        $this->_is_open = false;
-        return fclose($this->_handle);
+        $this->is_open = false;
+        return fclose($this->handle);
     }
 
     /**
@@ -257,7 +257,7 @@ class SimpleSocket extends SimpleStickyError {
      *    @access public
      */
     function getSent() {
-        return $this->_sent;
+        return $this->sent;
     }
 
     /**

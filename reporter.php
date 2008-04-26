@@ -19,7 +19,7 @@ require_once(dirname(__FILE__) . '/scorer.php');
  *    @subpackage UnitTester
  */
 class HtmlReporter extends SimpleReporter {
-    private $_character_set;
+    private $character_set;
 
     /**
      *    Does nothing yet. The first output will
@@ -29,7 +29,7 @@ class HtmlReporter extends SimpleReporter {
      */
     function __construct($character_set = 'ISO-8859-1') {
         parent::__construct();
-        $this->_character_set = $character_set;
+        $this->character_set = $character_set;
     }
 
     /**
@@ -43,7 +43,7 @@ class HtmlReporter extends SimpleReporter {
         print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
         print "<html>\n<head>\n<title>$test_name</title>\n";
         print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" .
-                $this->_character_set . "\">\n";
+                $this->character_set . "\">\n";
         print "<style type=\"text/css\">\n";
         print $this->getCss() . "\n";
         print "</style>\n";
@@ -178,7 +178,7 @@ class HtmlReporter extends SimpleReporter {
      *    @access protected
      */
     protected function htmlEntities($message) {
-        return htmlentities($message, ENT_COMPAT, $this->_character_set);
+        return htmlentities($message, ENT_COMPAT, $this->character_set);
     }
 }
 
@@ -311,9 +311,9 @@ class TextReporter extends SimpleReporter {
  *    @subpackage UnitTester
  */
 class SelectiveReporter extends SimpleReporterDecorator {
-    private $_just_this_case = false;
-    private $_just_this_test = false;
-    private $_on;
+    private $just_this_case = false;
+    private $just_this_test = false;
+    private $on;
     
     /**
      *    Selects the test case or group to be run,
@@ -324,13 +324,13 @@ class SelectiveReporter extends SimpleReporterDecorator {
      */
     function __construct($reporter, $just_this_case = false, $just_this_test = false) {
         if (isset($just_this_case) && $just_this_case) {
-            $this->_just_this_case = strtolower($just_this_case);
+            $this->just_this_case = strtolower($just_this_case);
             $this->off();
         } else {
             $this->on();
         }
         if (isset($just_this_test) && $just_this_test) {
-            $this->_just_this_test = strtolower($just_this_test);
+            $this->just_this_test = strtolower($just_this_test);
         }
         parent::__construct($reporter);
     }
@@ -342,7 +342,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    @access protected
      */
     protected function matchesTestCase($test_case) {
-        return $this->_just_this_case == strtolower($test_case);
+        return $this->just_this_case == strtolower($test_case);
     }
 
     /**
@@ -355,8 +355,8 @@ class SelectiveReporter extends SimpleReporterDecorator {
      */
     protected function shouldRunTest($test_case, $method) {
         if ($this->isOn() || $this->matchesTestCase($test_case)) {
-            if ($this->_just_this_test) {
-                return $this->_just_this_test == strtolower($method);
+            if ($this->just_this_test) {
+                return $this->just_this_test == strtolower($method);
             } else {
                 return true;
             }
@@ -369,7 +369,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    @access private
      */
     protected function on() {
-        $this->_on = true;
+        $this->on = true;
     }
     
     /**
@@ -377,7 +377,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    @access private
      */
     protected function off() {
-        $this->_on = false;
+        $this->on = false;
     }
     
     /**
@@ -386,7 +386,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    @access private
      */
     protected function isOn() {
-        return $this->_on;
+        return $this->on;
     }
 
     /**
@@ -410,7 +410,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    @access public
      */
     function paintGroupStart($test_case, $size) {
-        if ($this->_just_this_case && $this->matchesTestCase($test_case)) {
+        if ($this->just_this_case && $this->matchesTestCase($test_case)) {
             $this->on();
         }
         $this->_reporter->paintGroupStart($test_case, $size);
@@ -423,7 +423,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      */
     function paintGroupEnd($test_case) {
         $this->_reporter->paintGroupEnd($test_case);
-        if ($this->_just_this_case && $this->matchesTestCase($test_case)) {
+        if ($this->just_this_case && $this->matchesTestCase($test_case)) {
             $this->off();
         }
     }

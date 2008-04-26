@@ -19,20 +19,20 @@ require_once(dirname(__FILE__) . '/invoker.php');
  *    @abstract
  */
 class SimpleScorer {
-    private $_passes;
-    private $_fails;
-    private $_exceptions;
-    private $_is_dry_run;
+    private $passes;
+    private $fails;
+    private $exceptions;
+    private $is_dry_run;
 
     /**
      *    Starts the test run with no results.
      *    @access public
      */
     function __construct() {
-        $this->_passes = 0;
-        $this->_fails = 0;
-        $this->_exceptions = 0;
-        $this->_is_dry_run = false;
+        $this->passes = 0;
+        $this->fails = 0;
+        $this->exceptions = 0;
+        $this->is_dry_run = false;
     }
 
     /**
@@ -43,7 +43,7 @@ class SimpleScorer {
      *    @access public
      */
     function makeDry($is_dry = true) {
-        $this->_is_dry_run = $is_dry;
+        $this->is_dry_run = $is_dry;
     }
 
     /**
@@ -53,7 +53,7 @@ class SimpleScorer {
      *    @access public
      */
     function shouldInvoke($test_case_name, $method) {
-        return ! $this->_is_dry_run;
+        return ! $this->is_dry_run;
     }
 
     /**
@@ -75,7 +75,7 @@ class SimpleScorer {
      *    @access public
      */
     function getStatus() {
-        if ($this->_exceptions + $this->_fails > 0) {
+        if ($this->exceptions + $this->fails > 0) {
             return false;
         }
         return true;
@@ -136,7 +136,7 @@ class SimpleScorer {
      *    @access public
      */
     function paintPass($message) {
-        $this->_passes++;
+        $this->passes++;
     }
 
     /**
@@ -145,7 +145,7 @@ class SimpleScorer {
      *    @access public
      */
     function paintFail($message) {
-        $this->_fails++;
+        $this->fails++;
     }
 
     /**
@@ -155,7 +155,7 @@ class SimpleScorer {
      *    @access public
      */
     function paintError($message) {
-        $this->_exceptions++;
+        $this->exceptions++;
     }
 
     /**
@@ -164,7 +164,7 @@ class SimpleScorer {
      *    @access public
      */
     function paintException($exception) {
-        $this->_exceptions++;
+        $this->exceptions++;
     }
     
     /**
@@ -181,7 +181,7 @@ class SimpleScorer {
      *    @access public
      */
     function getPassCount() {
-        return $this->_passes;
+        return $this->passes;
     }
 
     /**
@@ -190,7 +190,7 @@ class SimpleScorer {
      *    @access public
      */
     function getFailCount() {
-        return $this->_fails;
+        return $this->fails;
     }
 
     /**
@@ -200,7 +200,7 @@ class SimpleScorer {
      *    @access public
      */
     function getExceptionCount() {
-        return $this->_exceptions;
+        return $this->exceptions;
     }
 
     /**

@@ -242,16 +242,16 @@ class SimpleTest {
  *    @package  SimpleTest
  */
 class SimpleTestContext {
-    private $_test;
-    private $_reporter;
-    private $_resources;
+    private $test;
+    private $reporter;
+    private $resources;
 
     /**
      *    Clears down the current context.
      *    @access public
      */
     function clear() {
-        $this->_resources = array();
+        $this->resources = array();
     }
 
     /**
@@ -263,7 +263,7 @@ class SimpleTestContext {
      */
     function setTest($test) {
         $this->clear();
-        $this->_test = $test;
+        $this->test = $test;
     }
 
     /**
@@ -272,7 +272,7 @@ class SimpleTestContext {
      *    @access public
      */
     function getTest() {
-        return $this->_test;
+        return $this->test;
     }
 
     /**
@@ -284,7 +284,7 @@ class SimpleTestContext {
      */
     function setReporter($reporter) {
         $this->clear();
-        $this->_reporter = $reporter;
+        $this->reporter = $reporter;
     }
 
     /**
@@ -293,7 +293,7 @@ class SimpleTestContext {
      *    @access public
      */
     function getReporter() {
-        return $this->_reporter;
+        return $this->reporter;
     }
 
     /**
@@ -302,10 +302,10 @@ class SimpleTestContext {
      *    @access public
      */
     function get($resource) {
-        if (! isset($this->_resources[$resource])) {
-            $this->_resources[$resource] = new $resource();
+        if (! isset($this->resources[$resource])) {
+            $this->resources[$resource] = new $resource();
         }
-        return $this->_resources[$resource];
+        return $this->resources[$resource];
     }
 }
 
@@ -316,7 +316,7 @@ class SimpleTestContext {
  *    @subpackage UnitTester
  */
 class SimpleStackTrace {
-    private $_prefixes;
+    private $prefixes;
 
     /**
      *    Stashes the list of target prefixes.
@@ -324,7 +324,7 @@ class SimpleStackTrace {
      *                                to search for.
      */
     function __construct($prefixes) {
-        $this->_prefixes = $prefixes;
+        $this->prefixes = $prefixes;
     }
 
     /**
@@ -373,7 +373,7 @@ class SimpleStackTrace {
      *    @access private
      */
     protected function frameMatchesPrefix($frame) {
-        foreach ($this->_prefixes as $prefix) {
+        foreach ($this->prefixes as $prefix) {
             if (strncmp($frame['function'], $prefix, strlen($prefix)) == 0) {
                 return true;
             }

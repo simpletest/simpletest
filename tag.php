@@ -19,9 +19,9 @@ require_once(dirname(__FILE__) . '/encoding.php');
  *    @subpackage WebTester
  */
 class SimpleTag {
-    private $_name;
-    private $_attributes;
-    private $_content;
+    private $name;
+    private $attributes;
+    private $content;
     
     /**
      *    Starts with a named tag with attributes only.
@@ -32,9 +32,9 @@ class SimpleTag {
      *                               converted to lower case.
      */
     function __construct($name, $attributes) {
-        $this->_name = strtolower(trim($name));
-        $this->_attributes = $attributes;
-        $this->_content = '';
+        $this->name = strtolower(trim($name));
+        $this->attributes = $attributes;
+        $this->content = '';
     }
     
     /**
@@ -66,7 +66,7 @@ class SimpleTag {
      *    @access public
      */
     function addContent($content) {
-        $this->_content .= (string)$content;
+        $this->content .= (string)$content;
     }
     
     /**
@@ -83,7 +83,7 @@ class SimpleTag {
      *    @access public
      */
     function getTagName() {
-        return $this->_name;
+        return $this->name;
     }
     
     /**
@@ -103,10 +103,10 @@ class SimpleTag {
      */
     function getAttribute($label) {
         $label = strtolower($label);
-        if (! isset($this->_attributes[$label])) {
+        if (! isset($this->attributes[$label])) {
             return false;
         }
-        return (string)$this->_attributes[$label];
+        return (string)$this->attributes[$label];
     }
     
     /**
@@ -116,7 +116,7 @@ class SimpleTag {
      *    @access protected
      */
     protected function setAttribute($label, $value) {
-        $this->_attributes[strtolower($label)] = $value;
+        $this->attributes[strtolower($label)] = $value;
     }
     
     /**
@@ -125,7 +125,7 @@ class SimpleTag {
      *    @access public
      */
     function getContent() {
-        return $this->_content;
+        return $this->content;
     }
     
     /**
@@ -136,7 +136,7 @@ class SimpleTag {
      *    @access public
      */
     function getText() {
-        return SimpleHtmlSaxParser::normalise($this->_content);
+        return SimpleHtmlSaxParser::normalise($this->content);
     }
     
     /**
@@ -229,7 +229,7 @@ class SimpleAnchorTag extends SimpleTag {
  *    @subpackage WebTester
  */
 class SimpleWidget extends SimpleTag {
-    private $_value;
+    private $value;
     private $_label;
     private $_is_set;
     
@@ -241,7 +241,7 @@ class SimpleWidget extends SimpleTag {
      */
     function __construct($name, $attributes) {
         parent::__construct($name, $attributes);
-        $this->_value = false;
+        $this->value = false;
         $this->_label = false;
         $this->_is_set = false;
     }
@@ -276,7 +276,7 @@ class SimpleWidget extends SimpleTag {
         if (! $this->_is_set) {
             return $this->getDefault();
         }
-        return $this->_value;
+        return $this->value;
     }
     
     /**
@@ -286,7 +286,7 @@ class SimpleWidget extends SimpleTag {
      *    @access public
      */
     function setValue($value) {
-        $this->_value = $value;
+        $this->value = $value;
         $this->_is_set = true;
         return true;
     }
@@ -697,8 +697,8 @@ class SimpleUploadTag extends SimpleWidget {
  *    @subpackage WebTester
  */
 class SimpleSelectionTag extends SimpleWidget {
-    private $_options;
-    private $_choice;
+    private $options;
+    private $choice;
     
     /**
      *    Starts with attributes only.
@@ -707,8 +707,8 @@ class SimpleSelectionTag extends SimpleWidget {
      */
     function __construct($attributes) {
         parent::__construct('select', $attributes);
-        $this->_options = array();
-        $this->_choice = false;
+        $this->options = array();
+        $this->choice = false;
     }
     
     /**
@@ -718,7 +718,7 @@ class SimpleSelectionTag extends SimpleWidget {
      */
     function addTag($tag) {
         if ($tag->getTagName() == 'option') {
-            $this->_options[] = $tag;
+            $this->options[] = $tag;
         }
     }
     
@@ -737,13 +737,13 @@ class SimpleSelectionTag extends SimpleWidget {
      *    @access public
      */
     function getDefault() {
-        for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
-            if ($this->_options[$i]->getAttribute('selected') !== false) {
-                return $this->_options[$i]->getDefault();
+        for ($i = 0, $count = count($this->options); $i < $count; $i++) {
+            if ($this->options[$i]->getAttribute('selected') !== false) {
+                return $this->options[$i]->getDefault();
             }
         }
         if ($count > 0) {
-            return $this->_options[0]->getDefault();
+            return $this->options[0]->getDefault();
         }
         return '';
     }
@@ -755,9 +755,9 @@ class SimpleSelectionTag extends SimpleWidget {
      *    @access public
      */
     function setValue($value) {
-        for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
-            if ($this->_options[$i]->isValue($value)) {
-                $this->_choice = $i;
+        for ($i = 0, $count = count($this->options); $i < $count; $i++) {
+            if ($this->options[$i]->isValue($value)) {
+                $this->choice = $i;
                 return true;
             }
         }
@@ -771,10 +771,10 @@ class SimpleSelectionTag extends SimpleWidget {
      *    @access public
      */
     function getValue() {
-        if ($this->_choice === false) {
+        if ($this->choice === false) {
             return $this->getDefault();
         }
-        return $this->_options[$this->_choice]->getValue();
+        return $this->options[$this->choice]->getValue();
     }
 }
 
@@ -784,8 +784,8 @@ class SimpleSelectionTag extends SimpleWidget {
  *    @subpackage WebTester
  */
 class MultipleSelectionTag extends SimpleWidget {
-    private $_options;
-    private $_values;
+    private $options;
+    private $values;
     
     /**
      *    Starts with attributes only.
@@ -794,8 +794,8 @@ class MultipleSelectionTag extends SimpleWidget {
      */
     function __construct($attributes) {
         parent::__construct('select', $attributes);
-        $this->_options = array();
-        $this->_values = false;
+        $this->options = array();
+        $this->values = false;
     }
     
     /**
@@ -805,7 +805,7 @@ class MultipleSelectionTag extends SimpleWidget {
      */
     function addTag($tag) {
         if ($tag->getTagName() == 'option') {
-            $this->_options[] = &$tag;
+            $this->options[] = &$tag;
         }
     }
     
@@ -825,9 +825,9 @@ class MultipleSelectionTag extends SimpleWidget {
      */
     function getDefault() {
         $default = array();
-        for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
-            if ($this->_options[$i]->getAttribute('selected') !== false) {
-                $default[] = $this->_options[$i]->getDefault();
+        for ($i = 0, $count = count($this->options); $i < $count; $i++) {
+            if ($this->options[$i]->getAttribute('selected') !== false) {
+                $default[] = $this->options[$i]->getDefault();
             }
         }
         return $default;
@@ -845,9 +845,9 @@ class MultipleSelectionTag extends SimpleWidget {
         $achieved = array();
         foreach ($desired as $value) {
             $success = false;
-            for ($i = 0, $count = count($this->_options); $i < $count; $i++) {
-                if ($this->_options[$i]->isValue($value)) {
-                    $achieved[] = $this->_options[$i]->getValue();
+            for ($i = 0, $count = count($this->options); $i < $count; $i++) {
+                if ($this->options[$i]->isValue($value)) {
+                    $achieved[] = $this->options[$i]->getValue();
                     $success = true;
                     break;
                 }
@@ -856,7 +856,7 @@ class MultipleSelectionTag extends SimpleWidget {
                 return false;
             }
         }
-        $this->_values = $achieved;
+        $this->values = $achieved;
         return true;
     }
     
@@ -866,10 +866,10 @@ class MultipleSelectionTag extends SimpleWidget {
      *    @access public
      */
     function getValue() {
-        if ($this->_values === false) {
+        if ($this->values === false) {
             return $this->getDefault();
         }
-        return $this->_values;
+        return $this->values;
     }
 }
 
@@ -1061,7 +1061,7 @@ class SimpleCheckboxTag extends SimpleWidget {
  *    @subpackage WebTester
  */
 class SimpleTagGroup {
-    private $_widgets = array();
+    private $widgets = array();
 
     /**
      *    Adds a tag to the group.
@@ -1069,7 +1069,7 @@ class SimpleTagGroup {
      *    @access public
      */
     function addWidget($widget) {
-        $this->_widgets[] = $widget;
+        $this->widgets[] = $widget;
     }
     
     /**
@@ -1078,7 +1078,7 @@ class SimpleTagGroup {
      *    @access protected
      */
     protected function &getWidgets() {
-        return $this->_widgets;
+        return $this->widgets;
     }
 
     /**
@@ -1098,8 +1098,8 @@ class SimpleTagGroup {
      *    @access public
      */
     function getName() {
-        if (count($this->_widgets) > 0) {
-            return $this->_widgets[0]->getName();
+        if (count($this->widgets) > 0) {
+            return $this->widgets[0]->getName();
         }
     }
     
@@ -1111,8 +1111,8 @@ class SimpleTagGroup {
      *    @access public
      */
     function isId($id) {
-        for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-            if ($this->_widgets[$i]->isId($id)) {
+        for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
+            if ($this->widgets[$i]->isId($id)) {
                 return true;
             }
         }
@@ -1127,8 +1127,8 @@ class SimpleTagGroup {
      *    @access public
      */
     function isLabel($label) {
-        for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-            if ($this->_widgets[$i]->isLabel($label)) {
+        for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
+            if ($this->widgets[$i]->isLabel($label)) {
                 return true;
             }
         }
