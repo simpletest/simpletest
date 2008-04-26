@@ -29,23 +29,23 @@ if (! defined('DEFAULT_CONNECTION_TIMEOUT')) {
  *    @subpackage WebTester
  */
 class SimpleUserAgent {
-    var $_cookie_jar;
-    var $_cookies_enabled = true;
-    var $_authenticator;
-    var $_max_redirects = DEFAULT_MAX_REDIRECTS;
-    var $_proxy = false;
-    var $_proxy_username = false;
-    var $_proxy_password = false;
-    var $_connection_timeout = DEFAULT_CONNECTION_TIMEOUT;
-    var $_additional_headers = array();
+    private $cookie_jar;
+    private $cookies_enabled = true;
+    private $authenticator;
+    private $max_redirects = DEFAULT_MAX_REDIRECTS;
+    private $proxy = false;
+    private $proxy_username = false;
+    private $proxy_password = false;
+    private $connection_timeout = DEFAULT_CONNECTION_TIMEOUT;
+    private $additional_headers = array();
     
     /**
      *    Starts with no cookies, realms or proxies.
      *    @access public
      */
     function __construct() {
-        $this->_cookie_jar = new SimpleCookieJar();
-        $this->_authenticator = new SimpleAuthenticator();
+        $this->cookie_jar = new SimpleCookieJar();
+        $this->authenticator = new SimpleAuthenticator();
     }
     
     /**
@@ -58,8 +58,8 @@ class SimpleUserAgent {
      *    @access public
      */
     function restart($date = false) {
-        $this->_cookie_jar->restartSession($date);
-        $this->_authenticator->restartSession();
+        $this->cookie_jar->restartSession($date);
+        $this->authenticator->restartSession();
     }
     
     /**
@@ -69,7 +69,7 @@ class SimpleUserAgent {
      *    @access public
      */
     function addHeader($header) {
-        $this->_additional_headers[] = $header;
+        $this->additional_headers[] = $header;
     }
     
     /**
@@ -78,7 +78,7 @@ class SimpleUserAgent {
      *    @access public
      */
     function ageCookies($interval) {
-        $this->_cookie_jar->agePrematurely($interval);
+        $this->cookie_jar->agePrematurely($interval);
     }
     
     /**
@@ -92,7 +92,7 @@ class SimpleUserAgent {
      *    @access public
      */
     function setCookie($name, $value, $host = false, $path = '/', $expiry = false) {
-        $this->_cookie_jar->setCookie($name, $value, $host, $path, $expiry);
+        $this->cookie_jar->setCookie($name, $value, $host, $path, $expiry);
     }
     
     /**
@@ -106,7 +106,7 @@ class SimpleUserAgent {
      *    @access public
      */
     function getCookieValue($host, $path, $name) {
-        return $this->_cookie_jar->getCookieValue($host, $path, $name);
+        return $this->cookie_jar->getCookieValue($host, $path, $name);
     }
     
     /**
@@ -129,7 +129,7 @@ class SimpleUserAgent {
      *    @access public
      */
     function ignoreCookies() {
-        $this->_cookies_enabled = false;
+        $this->cookies_enabled = false;
     }
     
     /**
@@ -137,7 +137,7 @@ class SimpleUserAgent {
      *    @access public
      */
     function useCookies() {
-        $this->_cookies_enabled = true;
+        $this->cookies_enabled = true;
     }
     
     /**
@@ -146,7 +146,7 @@ class SimpleUserAgent {
      *    @access public
      */
     function setConnectionTimeout($timeout) {
-        $this->_connection_timeout = $timeout;
+        $this->connection_timeout = $timeout;
     }
     
     /**
@@ -156,7 +156,7 @@ class SimpleUserAgent {
      *    @access public
      */
     function setMaximumRedirects($max) {
-        $this->_max_redirects = $max;
+        $this->max_redirects = $max;
     }
     
     /**
@@ -170,15 +170,15 @@ class SimpleUserAgent {
      */
     function useProxy($proxy, $username, $password) {
         if (! $proxy) {
-            $this->_proxy = false;
+            $this->proxy = false;
             return;
         }
         if ((strncmp($proxy, 'http://', 7) != 0) && (strncmp($proxy, 'https://', 8) != 0)) {
             $proxy = 'http://'. $proxy;
         }
-        $this->_proxy = new SimpleUrl($proxy);
-        $this->_proxy_username = $username;
-        $this->_proxy_password = $password;
+        $this->proxy = new SimpleUrl($proxy);
+        $this->proxy_username = $username;
+        $this->proxy_password = $password;
     }
     
     /**
@@ -188,7 +188,7 @@ class SimpleUserAgent {
      *    @access private
      */
     protected function isTooManyRedirects($redirects) {
-        return ($redirects > $this->_max_redirects);
+        return ($redirects > $this->max_redirects);
     }
     
     /**
@@ -200,7 +200,7 @@ class SimpleUserAgent {
      *    @access public
      */
     function setIdentity($host, $realm, $username, $password) {
-        $this->_authenticator->setIdentityForRealm($host, $realm, $username, $password);
+        $this->authenticator->setIdentityForRealm($host, $realm, $username, $password);
     }
     
     /**
@@ -219,7 +219,7 @@ class SimpleUserAgent {
         $response = $this->fetchWhileRedirected($url, $encoding);
         if ($headers = $response->getHeaders()) {
             if ($headers->isChallenge()) {
-                $this->_authenticator->addRealm(
+                $this->authenticator->addRealm(
                         $url,
                         $headers->getAuthentication(),
                         $headers->getRealm());
@@ -246,8 +246,8 @@ class SimpleUserAgent {
             $headers = $response->getHeaders();
             $location = new SimpleUrl($headers->getLocation());
             $url = $location->makeAbsolute($url);
-            if ($this->_cookies_enabled) {
-                $headers->writeCookiesToJar($this->_cookie_jar, $url);
+            if ($this->cookies_enabled) {
+                $headers->writeCookiesToJar($this->cookie_jar, $url);
             }
             if (! $headers->isRedirect()) {
                 break;
@@ -266,7 +266,7 @@ class SimpleUserAgent {
      */
     protected function fetch($url, $encoding) {
         $request = $this->createRequest($url, $encoding);
-        return $request->fetch($this->_connection_timeout);
+        return $request->fetch($this->connection_timeout);
     }
     
     /**
@@ -279,10 +279,10 @@ class SimpleUserAgent {
     protected function createRequest($url, $encoding) {
         $request = $this->createHttpRequest($url, $encoding);
         $this->addAdditionalHeaders($request);
-        if ($this->_cookies_enabled) {
-            $request->readCookiesFromJar($this->_cookie_jar, $url);
+        if ($this->cookies_enabled) {
+            $request->readCookiesFromJar($this->cookie_jar, $url);
         }
-        $this->_authenticator->addHeaders($request, $url);
+        $this->authenticator->addHeaders($request, $url);
         return $request;
     }
     
@@ -304,12 +304,12 @@ class SimpleUserAgent {
      *    @access protected
      */
     protected function createRoute($url) {
-        if ($this->_proxy) {
+        if ($this->proxy) {
             return new SimpleProxyRoute(
                     $url,
-                    $this->_proxy,
-                    $this->_proxy_username,
-                    $this->_proxy_password);
+                    $this->proxy,
+                    $this->proxy_username,
+                    $this->proxy_password);
         }
         return new SimpleRoute($url);
     }
@@ -320,7 +320,7 @@ class SimpleUserAgent {
      *    @access private
      */
     protected function addAdditionalHeaders(&$request) {
-        foreach ($this->_additional_headers as $header) {
+        foreach ($this->additional_headers as $header) {
             $request->addHeaderLine($header);
         }
     }

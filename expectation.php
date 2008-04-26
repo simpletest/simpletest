@@ -221,7 +221,7 @@ class FalseExpectation extends SimpleExpectation {
  *    @subpackage UnitTester
  */
 class EqualExpectation extends SimpleExpectation {
-    private $_value;
+    private $value;
 
     /**
      *    Sets the value to compare against.
@@ -231,7 +231,7 @@ class EqualExpectation extends SimpleExpectation {
      */
     function __construct($value, $message = '%s') {
         parent::__construct($message);
-        $this->_value = $value;
+        $this->value = $value;
     }
 
     /**
@@ -242,7 +242,7 @@ class EqualExpectation extends SimpleExpectation {
      *    @access public
      */
     function test($compare) {
-        return (($this->_value == $compare) && ($compare == $this->_value));
+        return (($this->value == $compare) && ($compare == $this->value));
     }
 
     /**
@@ -254,10 +254,10 @@ class EqualExpectation extends SimpleExpectation {
      */
     function testMessage($compare) {
         if ($this->test($compare)) {
-            return "Equal expectation [" . $this->dumper->describeValue($this->_value) . "]";
+            return "Equal expectation [" . $this->dumper->describeValue($this->value) . "]";
         } else {
             return "Equal expectation fails " .
-                    $this->dumper->describeDifference($this->_value, $compare);
+                    $this->dumper->describeDifference($this->value, $compare);
         }
     }
 
@@ -267,7 +267,7 @@ class EqualExpectation extends SimpleExpectation {
      *    @access protected
      */
     protected function getValue() {
-        return $this->_value;
+        return $this->value;
     }
 }
 
@@ -446,7 +446,7 @@ class OutsideMarginExpectation extends WithinMarginExpectation {
  *    @subpackage UnitTester
  */
 class ReferenceExpectation {
-    private $_value;
+    private $value;
 
     /**
      *    Sets the reference value to compare against.
@@ -456,7 +456,7 @@ class ReferenceExpectation {
      */
     function __construct(&$value, $message = '%s') {
         $this->message = $message;
-        $this->_value = &$value;
+        $this->value = &$value;
     }
 
     /**
@@ -467,7 +467,7 @@ class ReferenceExpectation {
      *    @access public
      */
     function test(&$compare) {
-        return SimpleTestCompatibility::isReference($this->_value, $compare);
+        return SimpleTestCompatibility::isReference($this->value, $compare);
     }
 
     /**
@@ -479,10 +479,10 @@ class ReferenceExpectation {
      */
     function testMessage($compare) {
         if ($this->test($compare)) {
-            return "Reference expectation [" . $this->dumper->describeValue($this->_value) . "]";
+            return "Reference expectation [" . $this->dumper->describeValue($this->value) . "]";
         } else {
             return "Reference expectation fails " .
-                    $this->dumper->describeDifference($this->_value, $compare);
+                    $this->dumper->describeDifference($this->value, $compare);
         }
     }
 

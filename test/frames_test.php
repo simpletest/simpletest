@@ -239,13 +239,13 @@ class TestOfFrameNavigation extends UnitTestCase {
 }
 
 class TestOfFramesetPageInterface extends UnitTestCase {
-    var $_page_interface;
-    var $_frameset_interface;
+    private $page_interface;
+    private $frameset_interface;
 
     function __construct() {
         parent::__construct();
-        $this->_page_interface = $this->getPageMethods();
-        $this->_frameset_interface = $this->getFramesetMethods();
+        $this->page_interface = $this->getPageMethods();
+        $this->frameset_interface = $this->getFramesetMethods();
     }
 
     function assertListInAnyOrder($list, $expected) {
@@ -293,8 +293,8 @@ class TestOfFramesetPageInterface extends UnitTestCase {
 
     function testFramsetHasPageInterface() {
         $difference = array();
-        foreach ($this->_page_interface as $method) {
-            if (! in_array($method, $this->_frameset_interface)) {
+        foreach ($this->page_interface as $method) {
+            if (! in_array($method, $this->frameset_interface)) {
                 $this->fail("No [$method] in Frameset class");
                 return;
             }

@@ -2,11 +2,11 @@
 // $Id$
 
 class PageRequest {
-    var $_parsed;
+    private $parsed;
     
     function PageRequest($raw) {
         $statements = explode('&', $raw);
-        $this->_parsed = array();
+        $this->parsed = array();
         foreach ($statements as $statement) {
             if (strpos($statement, '=') === false) {
                 continue;
@@ -20,11 +20,11 @@ class PageRequest {
         $key = urldecode($key);
         if (preg_match('/(.*)\[\]$/', $key, $matches)) {
             $key = $matches[1];
-            if (! isset($this->_parsed[$key])) {
-                $this->_parsed[$key] = array();
+            if (! isset($this->parsed[$key])) {
+                $this->parsed[$key] = array();
             }
             $this->addValue($key, $value);
-        } elseif (isset($this->_parsed[$key])) {
+        } elseif (isset($this->parsed[$key])) {
             $this->addValue($key, $value);
         } else {
             $this->setValue($key, $value);
@@ -32,18 +32,18 @@ class PageRequest {
     }
     
     private function addValue($key, $value) {
-        if (! is_array($this->_parsed[$key])) {
-            $this->_parsed[$key] = array($this->_parsed[$key]);
+        if (! is_array($this->parsed[$key])) {
+            $this->parsed[$key] = array($this->parsed[$key]);
         }
-        $this->_parsed[$key][] = urldecode($value);
+        $this->parsed[$key][] = urldecode($value);
     }
     
     private function setValue($key, $value) {
-        $this->_parsed[$key] = urldecode($value);
+        $this->parsed[$key] = urldecode($value);
     }
     
     function getAll() {
-        return $this->_parsed;
+        return $this->parsed;
     }
     
     function get() {

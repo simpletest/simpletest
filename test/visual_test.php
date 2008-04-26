@@ -18,10 +18,10 @@
     require_once('../xml.php');
 
     class TestDisplayClass {
-        var $_a;
+        private $a;
 
         function TestDisplayClass($a) {
-            $this->_a = $a;
+            $this->a = $a;
         }
     }
 
@@ -258,7 +258,7 @@
             }
             $this->assertEqual($text . $text, $text . "a" . $text);        // Fail.
         }
-	}
+}
 
     class Dummy {
         function Dummy() {
