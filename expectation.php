@@ -658,7 +658,7 @@ class PatternExpectation extends SimpleExpectation {
         if ($this->test($compare)) {
             return $this->describePatternMatch($this->getPattern(), $compare);
         } else {
-            $dumper = &$this->getDumper();
+            $dumper = $this->getDumper();
             return "Pattern [" . $this->getPattern() .
                     "] not detected in [" .
                     $dumper->describeValue($compare) . "]";
