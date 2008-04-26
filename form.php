@@ -20,16 +20,16 @@ require_once(dirname(__FILE__) . '/selector.php');
  *    @subpackage WebTester
  */
 class SimpleForm {
-    private $_method;
-    private $_action;
-    private $_encoding;
-    private $_default_target;
-    private $_id;
-    private $_buttons;
-    private $_images;
-    private $_widgets;
-    private $_radios;
-    private $_checkboxes;
+    private $method;
+    private $action;
+    private $encoding;
+    private $default_target;
+    private $id;
+    private $buttons;
+    private $images;
+    private $widgets;
+    private $radios;
+    private $checkboxes;
     
     /**
      *    Starts with no held controls/widgets.
@@ -37,16 +37,16 @@ class SimpleForm {
      *    @param SimplePage $page      Holding page.
      */
     function __construct($tag, $page) {
-        $this->_method = $tag->getAttribute('method');
-        $this->_action = $this->createAction($tag->getAttribute('action'), $page);
-        $this->_encoding = $this->setEncodingClass($tag);
-        $this->_default_target = false;
-        $this->_id = $tag->getAttribute('id');
-        $this->_buttons = array();
-        $this->_images = array();
-        $this->_widgets = array();
-        $this->_radios = array();
-        $this->_checkboxes = array();
+        $this->method = $tag->getAttribute('method');
+        $this->action = $this->createAction($tag->getAttribute('action'), $page);
+        $this->encoding = $this->setEncodingClass($tag);
+        $this->default_target = false;
+        $this->id = $tag->getAttribute('id');
+        $this->buttons = array();
+        $this->images = array();
+        $this->widgets = array();
+        $this->radios = array();
+        $this->checkboxes = array();
     }
     
     /**
@@ -71,7 +71,7 @@ class SimpleForm {
      *    @access public
      */
     function setDefaultTarget($frame) {
-        $this->_default_target = $frame;
+        $this->default_target = $frame;
     }
     
     /**
@@ -80,7 +80,7 @@ class SimpleForm {
      *    @access public
      */
     function getMethod() {
-        return ($this->_method ? strtolower($this->_method) : 'get');
+        return ($this->method ? strtolower($this->method) : 'get');
     }
     
     /**
@@ -103,9 +103,9 @@ class SimpleForm {
      *    @access public
      */
     function getAction() {
-        $url = $this->_action;
-        if ($this->_default_target && ! $url->getTarget()) {
-            $url->setTarget($this->_default_target);
+        $url = $this->action;
+        if ($this->default_target && ! $url->getTarget()) {
+            $url->setTarget($this->default_target);
         }
         return $url;
     }
@@ -117,10 +117,10 @@ class SimpleForm {
      *    @access private
      */
     protected function encode() {
-        $class = $this->_encoding;
+        $class = $this->encoding;
         $encoding = new $class();
-        for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-            $this->_widgets[$i]->write($encoding);
+        for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
+            $this->widgets[$i]->write($encoding);
         }
         return $encoding;
     }
@@ -131,7 +131,7 @@ class SimpleForm {
      *    @access public
      */
     function getId() {
-        return $this->_id;
+        return $this->id;
     }
     
     /**
@@ -141,9 +141,9 @@ class SimpleForm {
      */
     function addWidget($tag) {
         if (strtolower($tag->getAttribute('type')) == 'submit') {
-            $this->_buttons[] = $tag;
+            $this->buttons[] = $tag;
         } elseif (strtolower($tag->getAttribute('type')) == 'image') {
-            $this->_images[] = $tag;
+            $this->images[] = $tag;
         } elseif ($tag->getName()) {
             $this->setWidget($tag);
         }
@@ -161,7 +161,7 @@ class SimpleForm {
         } elseif (strtolower($tag->getAttribute('type')) == 'checkbox') {
             $this->addCheckbox($tag);
         } else {
-            $this->_widgets[] = &$tag;
+            $this->widgets[] = &$tag;
         }
     }
     
@@ -171,11 +171,11 @@ class SimpleForm {
      *    @access private
      */
     protected function addRadioButton($tag) {
-        if (! isset($this->_radios[$tag->getName()])) {
-            $this->_widgets[] = new SimpleRadioGroup();
-            $this->_radios[$tag->getName()] = count($this->_widgets) - 1;
+        if (! isset($this->radios[$tag->getName()])) {
+            $this->widgets[] = new SimpleRadioGroup();
+            $this->radios[$tag->getName()] = count($this->widgets) - 1;
         }
-        $this->_widgets[$this->_radios[$tag->getName()]]->addWidget($tag);
+        $this->widgets[$this->radios[$tag->getName()]]->addWidget($tag);
     }
     
     /**
@@ -184,17 +184,17 @@ class SimpleForm {
      *    @access private
      */
     protected function addCheckbox($tag) {
-        if (! isset($this->_checkboxes[$tag->getName()])) {
-            $this->_widgets[] = $tag;
-            $this->_checkboxes[$tag->getName()] = count($this->_widgets) - 1;
+        if (! isset($this->checkboxes[$tag->getName()])) {
+            $this->widgets[] = $tag;
+            $this->checkboxes[$tag->getName()] = count($this->widgets) - 1;
         } else {
-            $index = $this->_checkboxes[$tag->getName()];
-            if (! SimpleTestCompatibility::isA($this->_widgets[$index], 'SimpleCheckboxGroup')) {
-                $previous = $this->_widgets[$index];
-                $this->_widgets[$index] = new SimpleCheckboxGroup();
-                $this->_widgets[$index]->addWidget($previous);
+            $index = $this->checkboxes[$tag->getName()];
+            if (! SimpleTestCompatibility::isA($this->widgets[$index], 'SimpleCheckboxGroup')) {
+                $previous = $this->widgets[$index];
+                $this->widgets[$index] = new SimpleCheckboxGroup();
+                $this->widgets[$index]->addWidget($previous);
             }
-            $this->_widgets[$index]->addWidget($tag);
+            $this->widgets[$index]->addWidget($tag);
         }
     }
     
@@ -206,12 +206,12 @@ class SimpleForm {
      *    @access public
      */
     function getValue($selector) {
-        for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-            if ($selector->isMatch($this->_widgets[$i])) {
-                return $this->_widgets[$i]->getValue();
+        for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
+            if ($selector->isMatch($this->widgets[$i])) {
+                return $this->widgets[$i]->getValue();
             }
         }
-        foreach ($this->_buttons as $button) {
+        foreach ($this->buttons as $button) {
             if ($selector->isMatch($button)) {
                 return $button->getValue();
             }
@@ -231,11 +231,11 @@ class SimpleForm {
     function setField($selector, $value, $position=false) {
         $success = false;
         $_position = 0;
-        for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-            if ($selector->isMatch($this->_widgets[$i])) {
+        for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
+            if ($selector->isMatch($this->widgets[$i])) {
                 $_position++;
                 if ($position === false or $_position === (int)$position) {
-                    if ($this->_widgets[$i]->setValue($value)) {
+                    if ($this->widgets[$i]->setValue($value)) {
                         $success = true;
                     }
                 }
@@ -251,10 +251,10 @@ class SimpleForm {
      *    @access public
      */
     function attachLabelBySelector($selector, $label) {
-        for ($i = 0, $count = count($this->_widgets); $i < $count; $i++) {
-            if ($selector->isMatch($this->_widgets[$i])) {
-                if (method_exists($this->_widgets[$i], 'setLabel')) {
-                    $this->_widgets[$i]->setLabel($label);
+        for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
+            if ($selector->isMatch($this->widgets[$i])) {
+                if (method_exists($this->widgets[$i], 'setLabel')) {
+                    $this->widgets[$i]->setLabel($label);
                     return;
                 }
             }
@@ -268,7 +268,7 @@ class SimpleForm {
      *    @access public
      */
     function hasSubmit($selector) {
-        foreach ($this->_buttons as $button) {
+        foreach ($this->buttons as $button) {
             if ($selector->isMatch($button)) {
                 return true;
             }
@@ -283,7 +283,7 @@ class SimpleForm {
      *    @access public
      */
     function hasImage($selector) {
-        foreach ($this->_images as $image) {
+        foreach ($this->images as $image) {
             if ($selector->isMatch($image)) {
                 return true;
             }
@@ -302,7 +302,7 @@ class SimpleForm {
      */
     function submitButton($selector, $additional = false) {
         $additional = $additional ? $additional : array();
-        foreach ($this->_buttons as $button) {
+        foreach ($this->buttons as $button) {
             if ($selector->isMatch($button)) {
                 $encoding = $this->encode();
                 $button->write($encoding);
@@ -328,7 +328,7 @@ class SimpleForm {
      */
     function submitImage($selector, $x, $y, $additional = false) {
         $additional = $additional ? $additional : array();
-        foreach ($this->_images as $image) {
+        foreach ($this->images as $image) {
             if ($selector->isMatch($image)) {
                 $encoding = $this->encode();
                 $image->write($encoding, $x, $y);

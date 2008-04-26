@@ -65,10 +65,10 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
  *    @subpackage   UnitTester
  */
 class SimpleErrorQueue {
-    private $_queue;
-    private $_expectation_queue;
-    private $_test;
-    private $_using_expect_style = false;
+    private $queue;
+    private $expectation_queue;
+    private $test;
+    private $using_expect_style = false;
 
     /**
      *    Starts with an empty queue.
@@ -82,8 +82,8 @@ class SimpleErrorQueue {
      *    @access public
      */
     function clear() {
-        $this->_queue = array();
-        $this->_expectation_queue = array();
+        $this->queue = array();
+        $this->expectation_queue = array();
     }
 
     /**
@@ -92,7 +92,7 @@ class SimpleErrorQueue {
      *    @access public
      */
     function setTestCase($test) {
-        $this->_test = $test;
+        $this->test = $test;
     }
 
     /**
@@ -105,7 +105,7 @@ class SimpleErrorQueue {
      *    @access public
      */
     function expectError($expected, $message) {
-        array_push($this->_expectation_queue, array($expected, $message));
+        array_push($this->expectation_queue, array($expected, $message));
     }
 
     /**
@@ -129,10 +129,10 @@ class SimpleErrorQueue {
     function tally() {
         while (list($severity, $message, $file, $line) = $this->extract()) {
             $severity = $this->getSeverityAsString($severity);
-            $this->_test->error($severity, $message, $file, $line);
+            $this->test->error($severity, $message, $file, $line);
         }
         while (list($expected, $message) = $this->extractExpectation()) {
-            $this->_test->assert($expected, false, "%s -> Expected error not caught");
+            $this->test->assert($expected, false, "%s -> Expected error not caught");
         }
     }
 
@@ -148,13 +148,13 @@ class SimpleErrorQueue {
     protected function testLatestError($severity, $content, $filename, $line) {
         if ($expectation = $this->extractExpectation()) {
             list($expected, $message) = $expectation;
-            $this->_test->assert($expected, $content, sprintf(
+            $this->test->assert($expected, $content, sprintf(
                     $message,
                     "%s -> PHP error [$content] severity [" .
                             $this->getSeverityAsString($severity) .
                             "] in [$filename] line [$line]"));
         } else {
-            $this->_test->error($severity, $content, $filename, $line);
+            $this->test->error($severity, $content, $filename, $line);
         }
     }
 
@@ -168,8 +168,8 @@ class SimpleErrorQueue {
      *    @access public
      */
     function extract() {
-        if (count($this->_queue)) {
-            return array_shift($this->_queue);
+        if (count($this->queue)) {
+            return array_shift($this->queue);
         }
         return false;
     }
@@ -180,8 +180,8 @@ class SimpleErrorQueue {
      *    @access private
      */
     protected function extractExpectation() {
-        if (count($this->_expectation_queue)) {
-            return array_shift($this->_expectation_queue);
+        if (count($this->expectation_queue)) {
+            return array_shift($this->expectation_queue);
         }
         return false;
     }

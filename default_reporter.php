@@ -23,16 +23,16 @@ require_once(dirname(__FILE__) . '/xml.php');
  *    @subpackage UnitTester
  */
 class SimpleCommandLineParser {
-    private $_to_property = array(
-            'case' => '_case', 'c' => '_case',
-            'test' => '_test', 't' => '_test',
+    private $to_property = array(
+            'case' => 'case', 'c' => 'case',
+            'test' => 'test', 't' => 'test',
     );
-    private $_case = '';
-    private $_test = '';
-    private $_xml  = false;
-    private $_help = false;
-    private $_no_skips = false;
-    
+    private $case = '';
+    private $test = '';
+    private $xml = false;
+    private $help = false;
+    private $no_skips = false;
+
     /**
      *    Parses raw command line arguments into object properties.
      *    @param string $arguments        Raw commend line arguments.
@@ -43,19 +43,19 @@ class SimpleCommandLineParser {
         }
         foreach ($arguments as $i => $argument) {
             if (preg_match('/^--?(test|case|t|c)=(.+)$/', $argument, $matches)) {
-                $property = $this->_to_property[$matches[1]];
+                $property = $this->to_property[$matches[1]];
                 $this->$property = $matches[2];
             } elseif (preg_match('/^--?(test|case|t|c)$/', $argument, $matches)) {
-                $property = $this->_to_property[$matches[1]];
+                $property = $this->to_property[$matches[1]];
                 if (isset($arguments[$i + 1])) {
                     $this->$property = $arguments[$i + 1];
                 }
             } elseif (preg_match('/^--?(xml|x)$/', $argument)) {
-                $this->_xml = true;
+                $this->xml = true;
             } elseif (preg_match('/^--?(no-skip|no-skips|s)$/', $argument)) {
-                $this->_no_skips = true;
+                $this->no_skips = true;
             } elseif (preg_match('/^--?(help|h)$/', $argument)) {
-                $this->_help = true;
+                $this->help = true;
             }
         }
     }
@@ -65,7 +65,7 @@ class SimpleCommandLineParser {
      *    @return string        Test name to run.
      */
     function getTest() {
-        return $this->_test;
+        return $this->test;
     }
     
     /**
@@ -73,7 +73,7 @@ class SimpleCommandLineParser {
      *    @return string        Test class name to run.
      */
     function getTestCase() {
-        return $this->_case;
+        return $this->case;
     }
     
     /**
@@ -81,7 +81,7 @@ class SimpleCommandLineParser {
      *    @return boolean        True if XML desired.
      */
     function isXml() {
-        return $this->_xml;
+        return $this->xml;
     }
     
     /**
@@ -89,7 +89,7 @@ class SimpleCommandLineParser {
      *    @return boolean        True for no skips.
      */
     function noSkips() {
-        return $this->_no_skips;
+        return $this->no_skips;
     }
     
     /**
@@ -97,7 +97,7 @@ class SimpleCommandLineParser {
      *    @return boolean        True if help message desired.
      */
     function help() {
-        return $this->_help && !$this->_xml;
+        return $this->help && !$this->xml;
     }
     
     /**

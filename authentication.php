@@ -16,10 +16,10 @@ require_once(dirname(__FILE__) . '/http.php');
  *    @subpackage WebTester
  */
 class SimpleRealm {
-    private $_type;
-    private $_root;
-    private $_username;
-    private $_password;
+    private $type;
+    private $root;
+    private $username;
+    private $password;
     
     /**
      *    Starts with the initial entry directory.
@@ -30,10 +30,10 @@ class SimpleRealm {
      *    @access public
      */
     function SimpleRealm($type, $url) {
-        $this->_type = $type;
-        $this->_root = $url->getBasePath();
-        $this->_username = false;
-        $this->_password = false;
+        $this->type = $type;
+        $this->root = $url->getBasePath();
+        $this->username = false;
+        $this->password = false;
     }
     
     /**
@@ -42,7 +42,7 @@ class SimpleRealm {
      *    @access public
      */
     function stretch($url) {
-        $this->_root = $this->getCommonPath($this->_root, $url->getPath());
+        $this->root = $this->getCommonPath($this->root, $url->getPath());
     }
     
     /**
@@ -70,8 +70,8 @@ class SimpleRealm {
      *    @access public
      */
     function setIdentity($username, $password) {
-        $this->_username = $username;
-        $this->_password = $password;
+        $this->username = $username;
+        $this->password = $password;
     }
     
     /**
@@ -80,7 +80,7 @@ class SimpleRealm {
      *    @access public
      */
     function getUsername() {
-        return $this->_username;
+        return $this->username;
     }
     
     /**
@@ -89,7 +89,7 @@ class SimpleRealm {
      *    @access public
      */
     function getPassword() {
-        return $this->_password;
+        return $this->password;
     }
     
     /**
@@ -100,10 +100,10 @@ class SimpleRealm {
      *    @access public
      */
     function isWithin($url) {
-        if ($this->isIn($this->_root, $url->getBasePath())) {
+        if ($this->isIn($this->root, $url->getBasePath())) {
             return true;
         }
-        if ($this->isIn($this->_root, $url->getBasePath() . $url->getPage() . '/')) {
+        if ($this->isIn($this->root, $url->getBasePath() . $url->getPage() . '/')) {
             return true;
         }
         return false;
@@ -129,7 +129,7 @@ class SimpleRealm {
  *    @subpackage WebTester
  */
 class SimpleAuthenticator {
-    private $_realms;
+    private $realms;
     
     /**
      *    Clears the realms.
@@ -144,7 +144,7 @@ class SimpleAuthenticator {
      *    @access public
      */
     function restartSession() {
-        $this->_realms = array();
+        $this->realms = array();
     }
     
     /**
@@ -164,7 +164,7 @@ class SimpleAuthenticator {
      *    @access public
      */
     function addRealm($url, $type, $realm) {
-        $this->_realms[$url->getHost()][$realm] = new SimpleRealm($type, $url);
+        $this->realms[$url->getHost()][$realm] = new SimpleRealm($type, $url);
     }
     
     /**
@@ -177,8 +177,8 @@ class SimpleAuthenticator {
      *    @access public
      */
     function setIdentityForRealm($host, $realm, $username, $password) {
-        if (isset($this->_realms[$host][$realm])) {
-            $this->_realms[$host][$realm]->setIdentity($username, $password);
+        if (isset($this->realms[$host][$realm])) {
+            $this->realms[$host][$realm]->setIdentity($username, $password);
         }
     }
     
@@ -189,10 +189,10 @@ class SimpleAuthenticator {
      *    @access private
      */
     protected function findRealmFromUrl($url) {
-        if (! isset($this->_realms[$url->getHost()])) {
+        if (! isset($this->realms[$url->getHost()])) {
             return false;
         }
-        foreach ($this->_realms[$url->getHost()] as $name => $realm) {
+        foreach ($this->realms[$url->getHost()] as $name => $realm) {
             if ($realm->isWithin($url)) {
                 return $realm;
             }
@@ -230,7 +230,7 @@ class SimpleAuthenticator {
     static function addBasicHeaders(&$request, $username, $password) {
         if ($username && $password) {
             $request->addHeaderLine(
-                    'Authorization: Basic ' . base64_encode("$username:$password"));
+                'Authorization: Basic ' . base64_encode("$username:$password"));
         }
     }
 }

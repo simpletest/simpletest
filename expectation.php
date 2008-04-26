@@ -21,8 +21,8 @@ require_once(dirname(__FILE__) . '/compatibility.php');
  *    @abstract
  */
 class SimpleExpectation {
-    protected $_dumper = false;
-    private $_message;
+    protected $dumper = false;
+    private $message;
 
     /**
      *    Creates a dumper for displaying values and sets
@@ -30,7 +30,7 @@ class SimpleExpectation {
      *    @param string $message    Customised message on failure.
      */
     function __construct($message = '%s') {
-        $this->_message = $message;
+        $this->message = $message;
     }
 
     /**
@@ -64,8 +64,8 @@ class SimpleExpectation {
      *    @access public
      */
     function overlayMessage($compare, $dumper) {
-        $this->_dumper = $dumper;
-        return sprintf($this->_message, $this->testMessage($compare));
+        $this->dumper = $dumper;
+        return sprintf($this->message, $this->testMessage($compare));
     }
 
     /**
@@ -74,11 +74,11 @@ class SimpleExpectation {
      *    @access protected
      */
     protected function getDumper() {
-        if (! $this->_dumper) {
+        if (! $this->dumper) {
             $dumper = new SimpleDumper();
             return $dumper;
         }
-        return $this->_dumper;
+        return $this->dumper;
     }
 
     /**
@@ -254,10 +254,10 @@ class EqualExpectation extends SimpleExpectation {
      */
     function testMessage($compare) {
         if ($this->test($compare)) {
-            return "Equal expectation [" . $this->_dumper->describeValue($this->_value) . "]";
+            return "Equal expectation [" . $this->dumper->describeValue($this->_value) . "]";
         } else {
             return "Equal expectation fails " .
-                    $this->_dumper->describeDifference($this->_value, $compare);
+                    $this->dumper->describeDifference($this->_value, $compare);
         }
     }
 
@@ -374,8 +374,8 @@ class WithinMarginExpectation extends SimpleExpectation {
      *    @access private
      */
     protected function withinMessage($compare) {
-        return "Within expectation [" . $this->_dumper->describeValue($this->_lower) . "] and [" .
-                $this->_dumper->describeValue($this->_upper) . "]";
+        return "Within expectation [" . $this->dumper->describeValue($this->_lower) . "] and [" .
+                $this->dumper->describeValue($this->_upper) . "]";
     }
 
     /**
@@ -386,10 +386,10 @@ class WithinMarginExpectation extends SimpleExpectation {
     protected function outsideMessage($compare) {
         if ($compare > $this->_upper) {
             return "Outside expectation " .
-                    $this->_dumper->describeDifference($compare, $this->_upper);
+                    $this->dumper->describeDifference($compare, $this->_upper);
         } else {
             return "Outside expectation " .
-                    $this->_dumper->describeDifference($compare, $this->_lower);
+                    $this->dumper->describeDifference($compare, $this->_lower);
         }
     }
 }
@@ -455,7 +455,7 @@ class ReferenceExpectation {
      *    @access public
      */
     function __construct(&$value, $message = '%s') {
-        $this->_message = $message;
+        $this->message = $message;
         $this->_value = &$value;
     }
 
@@ -479,10 +479,10 @@ class ReferenceExpectation {
      */
     function testMessage($compare) {
         if ($this->test($compare)) {
-            return "Reference expectation [" . $this->_dumper->describeValue($this->_value) . "]";
+            return "Reference expectation [" . $this->dumper->describeValue($this->_value) . "]";
         } else {
             return "Reference expectation fails " .
-                    $this->_dumper->describeDifference($this->_value, $compare);
+                    $this->dumper->describeDifference($this->_value, $compare);
         }
     }
 
@@ -496,8 +496,8 @@ class ReferenceExpectation {
      *    @access public
      */
     function overlayMessage($compare, $dumper) {
-        $this->_dumper = $dumper;
-        return sprintf($this->_message, $this->testMessage($compare));
+        $this->dumper = $dumper;
+        return sprintf($this->message, $this->testMessage($compare));
     }
 
     /**
@@ -506,11 +506,11 @@ class ReferenceExpectation {
      *    @access protected
      */
     protected function getDumper() {
-        if (! $this->_dumper) {
+        if (! $this->dumper) {
             $dumper = new SimpleDumper();
             return $dumper;
         }
-        return $this->_dumper;
+        return $this->dumper;
     }
 }
 

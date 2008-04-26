@@ -93,7 +93,7 @@ class SimpleCollector {
  * @see SimpleCollector
  */
 class SimplePatternCollector extends SimpleCollector {
-    private $_pattern;
+    private $pattern;
 
     /**
      *
@@ -102,7 +102,7 @@ class SimplePatternCollector extends SimpleCollector {
      *  for full documentation of valid pattern.s
      */
     function __construct($pattern = '/php$/i') {
-        $this->_pattern = $pattern;
+        $this->pattern = $pattern;
     }
 
     /**
@@ -114,7 +114,7 @@ class SimplePatternCollector extends SimpleCollector {
      * @access protected
      */
     protected function handle(&$test, $filename) {
-        if (preg_match($this->_pattern, $filename)) {
+        if (preg_match($this->pattern, $filename)) {
             parent::handle($test, $filename);
         }
     }

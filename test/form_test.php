@@ -217,9 +217,10 @@ class TestOfForm extends UnitTestCase {
         $form->setField(new SimpleByLabelOrName('elements[]'), '3', 1);
         $form->setField(new SimpleByLabelOrName('elements[]'), '4', 2);
 		$submit = $form->submit();
-        $this->assertEqual(count($submit->_request), 2);
-        $this->assertIdentical($submit->_request[0], new SimpleEncodedPair('elements[]', '3'));
-        $this->assertIdentical($submit->_request[1], new SimpleEncodedPair('elements[]', '4'));
+		$requests = $submit->getAll();
+        $this->assertEqual(count($requests), 2);
+        $this->assertIdentical($requests[0], new SimpleEncodedPair('elements[]', '3'));
+        $this->assertIdentical($requests[1], new SimpleEncodedPair('elements[]', '4'));
     }
     
     function testSingleSelectFieldSubmitted() {
