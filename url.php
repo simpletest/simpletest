@@ -41,7 +41,7 @@ class SimpleUrl {
      *    @param string $url        Incoming URL.
      *    @access public
      */
-    function SimpleUrl($url = '') {
+    function __construct($url = '') {
         list($x, $y) = $this->chompCoordinates($url);
         $this->setCoordinates($x, $y);
         $this->scheme = $this->chompScheme($url);
@@ -430,7 +430,7 @@ class SimpleUrl {
         }
         if ($this->getHost()) {
             $scheme = $this->getScheme() ? $this->getScheme() : 'http';
-            $scheme .= "://";
+            $scheme .= '://';
             $host = $this->getHost();
         } elseif ($this->getScheme() === 'file') {
             // Safest way; otherwise, file URLs on Windows have an extra
