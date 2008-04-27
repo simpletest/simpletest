@@ -453,17 +453,17 @@ Mock::generate('SimpleTestCase');
 
 class LikeExpectation extends IdenticalExpectation {
     function __construct($expectation) {
-        $expectation->_message = '';
+        $expectation->message = '';
         parent::__construct($expectation);
     }
 
     function test($compare) {
-        $compare->_message = '';
+        $compare->message = '';
         return parent::test($compare);
     }
 
     function testMessage($compare) {
-        $compare->_message = '';
+        $compare->message = '';
         return parent::testMessage($compare);
     }
 }
@@ -494,7 +494,7 @@ class TestOfMockExpectations extends UnitTestCase {
         $mock->aMethod();
         $mock->aMethod();
         $mock->aMethod();
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testTallyOnMaxCallsSendsPassOnUnderrun() {
@@ -505,7 +505,7 @@ class TestOfMockExpectations extends UnitTestCase {
         $mock->expectMaximumCallCount("aMethod", 2);
         $mock->aMethod();
         $mock->aMethod();
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testExpectNeverDetectsOverrun() {
@@ -515,7 +515,7 @@ class TestOfMockExpectations extends UnitTestCase {
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectNever('aMethod');
         $mock->aMethod();
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testTallyOnExpectNeverStillSendsPassOnUnderrun() {
@@ -524,7 +524,7 @@ class TestOfMockExpectations extends UnitTestCase {
                 0));
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectNever('aMethod');
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testMinCalls() {
@@ -535,7 +535,7 @@ class TestOfMockExpectations extends UnitTestCase {
         $mock->expectMinimumCallCount('aMethod', 2);
         $mock->aMethod();
         $mock->aMethod();
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testFailedNever() {
@@ -545,7 +545,7 @@ class TestOfMockExpectations extends UnitTestCase {
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectNever('aMethod');
         $mock->aMethod();
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testUnderOnce() {
@@ -554,7 +554,7 @@ class TestOfMockExpectations extends UnitTestCase {
                 0));
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectOnce('aMethod');
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testOverOnce() {
@@ -565,7 +565,7 @@ class TestOfMockExpectations extends UnitTestCase {
         $mock->expectOnce('aMethod');
         $mock->aMethod();
         $mock->aMethod();
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testUnderAtLeastOnce() {
@@ -574,7 +574,7 @@ class TestOfMockExpectations extends UnitTestCase {
                 0));
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectAtLeastOnce("aMethod");
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testZeroArguments() {
@@ -585,7 +585,7 @@ class TestOfMockExpectations extends UnitTestCase {
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expect("aMethod", array());
         $mock->aMethod();
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testExpectedArguments() {
@@ -596,7 +596,7 @@ class TestOfMockExpectations extends UnitTestCase {
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expect('aMethod', array(1, 2, 3));
         $mock->aMethod(1, 2, 3);
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testFailedArguments() {
@@ -607,7 +607,7 @@ class TestOfMockExpectations extends UnitTestCase {
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expect('aMethod', array('this'));
         $mock->aMethod('that');
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testWildcardsAreTranslatedToAnythingExpectations() {
@@ -619,7 +619,7 @@ class TestOfMockExpectations extends UnitTestCase {
         $mock = new MockDummyWithInjectedTestCase($this);
         $mock->expect("aMethod", array('*', 123, '*'));
         $mock->aMethod(100, 123, 101);
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testSpecificPassingSequence() {
@@ -638,7 +638,7 @@ class TestOfMockExpectations extends UnitTestCase {
         $mock->aMethod(1, 2, 3);
         $mock->aMethod('Hello');
         $mock->aMethod();
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
     function testNonArrayForExpectedParametersGivesError() {
@@ -646,7 +646,7 @@ class TestOfMockExpectations extends UnitTestCase {
         $this->expectError(new PatternExpectation('/\$args.*not an array/i'));
         $mock->expect("aMethod", "foo");
         $mock->aMethod();
-        $mock->_mock->atTestEnd('testSomething', $this->test);
+        $mock->mock->atTestEnd('testSomething', $this->test);
    }
 }
 

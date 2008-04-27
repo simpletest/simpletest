@@ -230,8 +230,8 @@ class SimpleAnchorTag extends SimpleTag {
  */
 class SimpleWidget extends SimpleTag {
     private $value;
-    private $_label;
-    private $_is_set;
+    private $label;
+    private $is_set;
     
     /**
      *    Starts with a named tag with attributes only.
@@ -242,8 +242,8 @@ class SimpleWidget extends SimpleTag {
     function __construct($name, $attributes) {
         parent::__construct($name, $attributes);
         $this->value = false;
-        $this->_label = false;
-        $this->_is_set = false;
+        $this->label = false;
+        $this->is_set = false;
     }
     
     /**
@@ -273,7 +273,7 @@ class SimpleWidget extends SimpleTag {
      *    @access public
      */
     function getValue() {
-        if (! $this->_is_set) {
+        if (! $this->is_set) {
             return $this->getDefault();
         }
         return $this->value;
@@ -287,7 +287,7 @@ class SimpleWidget extends SimpleTag {
      */
     function setValue($value) {
         $this->value = $value;
-        $this->_is_set = true;
+        $this->is_set = true;
         return true;
     }
     
@@ -297,7 +297,7 @@ class SimpleWidget extends SimpleTag {
      *    @access public
      */
     function resetValue() {
-        $this->_is_set = false;
+        $this->is_set = false;
     }
     
     /**
@@ -307,7 +307,7 @@ class SimpleWidget extends SimpleTag {
      *    @access public
      */
     function setLabel($label) {
-        $this->_label = trim($label);
+        $this->label = trim($label);
     }
     
     /**
@@ -317,7 +317,7 @@ class SimpleWidget extends SimpleTag {
      *    @access public
      */
     function isLabel($label) {
-        return $this->_label == trim($label);
+        return $this->label == trim($label);
     }
     
     /**

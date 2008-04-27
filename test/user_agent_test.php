@@ -13,12 +13,12 @@ Mock::generatePartial('SimpleUserAgent', 'MockRequestUserAgent', array('createHt
 class TestOfFetchingUrlParameters extends UnitTestCase {
     
     function setUp() {
-        $this->_headers = new MockSimpleHttpHeaders();
-        $this->_response = new MockSimpleHttpResponse();
-        $this->_response->setReturnValue('isError', false);
-        $this->_response->returns('getHeaders', new MockSimpleHttpHeaders());
-        $this->_request = new MockSimpleHttpRequest();
-        $this->_request->returns('fetch', $this->_response);
+        $this->headers = new MockSimpleHttpHeaders();
+        $this->response = new MockSimpleHttpResponse();
+        $this->response->setReturnValue('isError', false);
+        $this->response->returns('getHeaders', new MockSimpleHttpHeaders());
+        $this->request = new MockSimpleHttpRequest();
+        $this->request->returns('fetch', $this->response);
     }
     
     function testGetRequestWithoutIncidentGivesNoErrors() {
@@ -26,7 +26,7 @@ class TestOfFetchingUrlParameters extends UnitTestCase {
         $url->addRequestParameters(array('a' => 'A', 'b' => 'B'));
         
         $agent = new MockRequestUserAgent();
-        $agent->returns('createHttpRequest', $this->_request);
+        $agent->returns('createHttpRequest', $this->request);
         $agent->__construct();
         
         $response = $agent->fetchResponse(

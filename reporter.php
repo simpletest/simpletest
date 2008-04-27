@@ -398,7 +398,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      */
     function shouldInvoke($test_case, $method) {
         if ($this->shouldRunTest($test_case, $method)) {
-            return $this->_reporter->shouldInvoke($test_case, $method);
+            return $this->reporter->shouldInvoke($test_case, $method);
         }
         return false;
     }
@@ -413,7 +413,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
         if ($this->just_this_case && $this->matchesTestCase($test_case)) {
             $this->on();
         }
-        $this->_reporter->paintGroupStart($test_case, $size);
+        $this->reporter->paintGroupStart($test_case, $size);
     }
 
     /**
@@ -422,7 +422,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
      *    @access public
      */
     function paintGroupEnd($test_case) {
-        $this->_reporter->paintGroupEnd($test_case);
+        $this->reporter->paintGroupEnd($test_case);
         if ($this->just_this_case && $this->matchesTestCase($test_case)) {
             $this->off();
         }

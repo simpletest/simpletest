@@ -30,20 +30,20 @@ class TestOfEncodedParts extends UnitTestCase {
 }
 
 class TestOfEncoding extends UnitTestCase {
-    private $_content_so_far;
+    private $content_so_far;
     
     function write($content) {
-        $this->_content_so_far .= $content;
+        $this->content_so_far .= $content;
     }
     
     function clear() {
-        $this->_content_so_far = '';
+        $this->content_so_far = '';
     }
     
     function assertWritten($encoding, $content, $message = '%s') {
         $this->clear();
         $encoding->writeTo($this);
-        $this->assertIdentical($this->_content_so_far, $content, $message);
+        $this->assertIdentical($this->content_so_far, $content, $message);
     }
     
     function testGetEmpty() {

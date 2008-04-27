@@ -70,7 +70,7 @@ class SimpleFileSocket extends SimpleStickyError {
     private $handle;
     private $is_open = false;
     private $sent = '';
-    private $lock_size;
+    private $block_size;
 
     /**
      *    Opens a socket for reading and writing.
@@ -86,7 +86,7 @@ class SimpleFileSocket extends SimpleStickyError {
             return;
         }
         $this->is_open = true;
-        $this->_block_size = $block_size;
+        $this->block_size = $block_size;
     }
 
     /**
@@ -108,7 +108,7 @@ class SimpleFileSocket extends SimpleStickyError {
      *    @access public
      */
     function read() {
-        $raw = @fread($this->handle, $this->_block_size);
+        $raw = @fread($this->handle, $this->block_size);
         if ($raw === false) {
             $this->setError('Cannot read from socket');
             $this->close();
@@ -184,7 +184,7 @@ class SimpleSocket extends SimpleStickyError {
             return;
         }
         $this->is_open = true;
-        $this->_block_size = $block_size;
+        $this->block_size = $block_size;
         SimpleTestCompatibility::setTimeout($this->handle, $timeout);
     }
 
@@ -223,7 +223,7 @@ class SimpleSocket extends SimpleStickyError {
         if ($this->isError() || ! $this->isOpen()) {
             return false;
         }
-        $raw = @fread($this->handle, $this->_block_size);
+        $raw = @fread($this->handle, $this->block_size);
         if ($raw === false) {
             $this->setError('Cannot read from socket');
             $this->close();

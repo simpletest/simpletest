@@ -413,7 +413,7 @@ class SimpleUrl {
      *    @access public
      */
     function setTarget($frame) {
-        $this->_raw = false;
+        $this->raw = false;
         $this->target = $frame;
     }
     

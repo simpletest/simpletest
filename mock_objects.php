@@ -517,7 +517,7 @@ class SimpleCallSchedule {
  *    @subpackage MockObjects
  */
 class SimpleReturn {
-    private $_value;
+    private $value;
     
     /**
      *    Stashes it for later.
@@ -527,7 +527,7 @@ class SimpleReturn {
      *    @access public
      */
     function __construct($value) {
-        $this->_value = $value;
+        $this->value = $value;
     }
     
     /**
@@ -536,7 +536,7 @@ class SimpleReturn {
      *    @access public
      */
     function act() {
-        return $this->_value;
+        return $this->value;
     }
 }
 
@@ -547,7 +547,7 @@ class SimpleReturn {
  *    @subpackage MockObjects
  */
 class SimpleByReference {
-    private $_reference;
+    private $reference;
     
     /**
      *    Stashes it for later.
@@ -555,7 +555,7 @@ class SimpleByReference {
      *    @access public
      */
     function __construct(&$reference) {
-        $this->_reference = &$reference;
+        $this->reference = &$reference;
     }
     
     /**
@@ -564,7 +564,7 @@ class SimpleByReference {
      *    @access public
      */
     function &act() {
-        return $this->_reference;
+        return $this->reference;
     }
 }
 
@@ -575,7 +575,7 @@ class SimpleByReference {
  *    @subpackage MockObjects
  */
 class SimpleByValue {
-    private $_value;
+    private $value;
     
     /**
      *    Stashes it for later.
@@ -585,7 +585,7 @@ class SimpleByValue {
      *    @access public
      */
     function __construct($value) {
-        $this->_value = $value;
+        $this->value = $value;
     }
     
     /**
@@ -594,7 +594,7 @@ class SimpleByValue {
      *    @access public
      */
     function &act() {
-        $dummy = $this->_value;
+        $dummy = $this->value;
         return $dummy;
     }
 }
@@ -606,7 +606,7 @@ class SimpleByValue {
  *    @subpackage MockObjects
  */
 class SimpleThrower {
-    private $_exception;
+    private $exception;
     
     /**
      *    Stashes it for later.
@@ -614,7 +614,7 @@ class SimpleThrower {
      *    @access public
      */
     function __construct($exception) {
-        $this->_exception = $exception;
+        $this->exception = $exception;
     }
     
     /**
@@ -622,7 +622,7 @@ class SimpleThrower {
      *    @access public
      */
     function act() {
-        throw $this->_exception;
+        throw $this->exception;
     }
 }
 
@@ -671,6 +671,7 @@ class SimpleErrorThrower {
  */
 class SimpleMock {
     private $actions;
+    private $expectations;
     private $wildcard = MOCK_ANYTHING;
     private $is_strict = true;
     private $call_counts;
@@ -686,7 +687,7 @@ class SimpleMock {
      */
     function SimpleMock() {
         $this->actions = new SimpleCallSchedule();
-        $this->_expectations = new SimpleCallSchedule();
+        $this->expectations = new SimpleCallSchedule();
         $this->call_counts = array();
         $this->expected_counts = array();
         $this->max_counts = array();
@@ -904,7 +905,7 @@ class SimpleMock {
     function expect($method, $args, $message = '%s') {
         $this->dieOnNoMethod($method, 'set expected arguments');
         $this->checkArgumentsIsArray($args, 'set expected arguments');
-        $this->_expectations->expectArguments($method, $args, $message);
+        $this->expectations->expectArguments($method, $args, $message);
         $args = $this->replaceWildcards($args);
         $message .= Mock::getExpectationLine();
         $this->expected_args[strtolower($method)] =
@@ -1366,12 +1367,12 @@ class MockGenerator {
      */
     protected function createSubclassCode($methods) {
         $code  = "class " . $this->mock_class . " extends " . $this->class . " {\n";
-        $code .= "    public \$_mock;\n";
+        $code .= "    public \$mock;\n";
         $code .= $this->addMethodList(array_merge($methods, $this->reflection->getMethods()));
         $code .= "\n";
         $code .= "    function " . $this->mock_class . "() {\n";
-        $code .= "        \$this->_mock = new " . $this->mock_base . "();\n";
-        $code .= "        \$this->_mock->disableExpectationNameChecks();\n";
+        $code .= "        \$this->mock = new " . $this->mock_base . "();\n";
+        $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
         $code .= $this->chainMockReturns();
         $code .= $this->chainMockExpectations();
@@ -1392,12 +1393,12 @@ class MockGenerator {
      */
     protected function extendClassCode($methods) {
         $code  = "class " . $this->mock_class . " extends " . $this->class . " {\n";
-        $code .= "    protected \$_mock;\n";
+        $code .= "    protected \$mock;\n";
         $code .= $this->addMethodList($methods);
         $code .= "\n";
         $code .= "    function " . $this->mock_class . "() {\n";
-        $code .= "        \$this->_mock = new " . $this->mock_base . "();\n";
-        $code .= "        \$this->_mock->disableExpectationNameChecks();\n";
+        $code .= "        \$this->mock = new " . $this->mock_base . "();\n";
+        $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
         $code .= $this->chainMockReturns();
         $code .= $this->chainMockExpectations();
@@ -1455,7 +1456,7 @@ class MockGenerator {
             }
             $code .= "    " . $this->reflection->getSignature($method) . " {\n";
             $code .= "        \$args = func_get_args();\n";
-            $code .= "        \$result = &\$this->_mock->invoke(\"$method\", \$args);\n";
+            $code .= "        \$result = &\$this->mock->invoke(\"$method\", \$args);\n";
             $code .= "        return \$result;\n";
             $code .= "    }\n";
         }
@@ -1482,7 +1483,7 @@ class MockGenerator {
      *    @access private
      */
     protected function addMethodList($methods) {
-        return "    protected \$_mocked_methods = array('" .
+        return "    protected \$mocked_methods = array('" .
                 implode("', '", array_map('strtolower', $methods)) .
                 "');\n";
     }
@@ -1494,7 +1495,7 @@ class MockGenerator {
      *    @access private
      */
     protected function bailOutIfNotMocked($alias) {
-        $code  = "        if (! in_array(strtolower($alias), \$this->_mocked_methods)) {\n";
+        $code  = "        if (! in_array(strtolower($alias), \$this->mocked_methods)) {\n";
         $code .= "            trigger_error(\"Method [$alias] is not mocked\");\n";
         $code .= "            \$null = null;\n";
         $code .= "            return \$null;\n";
@@ -1511,27 +1512,27 @@ class MockGenerator {
     protected function chainMockReturns() {
         $code  = "    function returns(\$method, \$value, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->returns(\$method, \$value, \$args);\n";
+        $code .= "        \$this->mock->returns(\$method, \$value, \$args);\n";
         $code .= "    }\n";
         $code .= "    function returnsAt(\$timing, \$method, \$value, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->returnsAt(\$timing, \$method, \$value, \$args);\n";
+        $code .= "        \$this->mock->returnsAt(\$timing, \$method, \$value, \$args);\n";
         $code .= "    }\n";
         $code .= "    function setReturnValue(\$method, \$value, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->setReturnValue(\$method, \$value, \$args);\n";
+        $code .= "        \$this->mock->setReturnValue(\$method, \$value, \$args);\n";
         $code .= "    }\n";
         $code .= "    function setReturnValueAt(\$timing, \$method, \$value, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->setReturnValueAt(\$timing, \$method, \$value, \$args);\n";
+        $code .= "        \$this->mock->setReturnValueAt(\$timing, \$method, \$value, \$args);\n";
         $code .= "    }\n";
         $code .= "    function setReturnReference(\$method, &\$ref, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->setReturnReference(\$method, \$ref, \$args);\n";
+        $code .= "        \$this->mock->setReturnReference(\$method, \$ref, \$args);\n";
         $code .= "    }\n";
         $code .= "    function setReturnReferenceAt(\$timing, \$method, &\$ref, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->setReturnReferenceAt(\$timing, \$method, \$ref, \$args);\n";
+        $code .= "        \$this->mock->setReturnReferenceAt(\$timing, \$method, \$ref, \$args);\n";
         $code .= "    }\n";
         return $code;
     }
@@ -1545,35 +1546,35 @@ class MockGenerator {
     protected function chainMockExpectations() {
         $code  = "    function expect(\$method, \$args = false, \$msg = '%s') {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->expect(\$method, \$args, \$msg);\n";
+        $code .= "        \$this->mock->expect(\$method, \$args, \$msg);\n";
         $code .= "    }\n";
         $code .= "    function expectAt(\$timing, \$method, \$args = false, \$msg = '%s') {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->expectAt(\$timing, \$method, \$args, \$msg);\n";
+        $code .= "        \$this->mock->expectAt(\$timing, \$method, \$args, \$msg);\n";
         $code .= "    }\n";
         $code .= "    function expectCallCount(\$method, \$count) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->expectCallCount(\$method, \$count, \$msg = '%s');\n";
+        $code .= "        \$this->mock->expectCallCount(\$method, \$count, \$msg = '%s');\n";
         $code .= "    }\n";
         $code .= "    function expectMaximumCallCount(\$method, \$count, \$msg = '%s') {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->expectMaximumCallCount(\$method, \$count, \$msg = '%s');\n";
+        $code .= "        \$this->mock->expectMaximumCallCount(\$method, \$count, \$msg = '%s');\n";
         $code .= "    }\n";
         $code .= "    function expectMinimumCallCount(\$method, \$count, \$msg = '%s') {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->expectMinimumCallCount(\$method, \$count, \$msg = '%s');\n";
+        $code .= "        \$this->mock->expectMinimumCallCount(\$method, \$count, \$msg = '%s');\n";
         $code .= "    }\n";
         $code .= "    function expectNever(\$method) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->expectNever(\$method);\n";
+        $code .= "        \$this->mock->expectNever(\$method);\n";
         $code .= "    }\n";
         $code .= "    function expectOnce(\$method, \$args = false, \$msg = '%s') {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->expectOnce(\$method, \$args, \$msg);\n";
+        $code .= "        \$this->mock->expectOnce(\$method, \$args, \$msg);\n";
         $code .= "    }\n";
         $code .= "    function expectAtLeastOnce(\$method, \$args = false, \$msg = '%s') {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->expectAtLeastOnce(\$method, \$args, \$msg);\n";
+        $code .= "        \$this->mock->expectAtLeastOnce(\$method, \$args, \$msg);\n";
         $code .= "    }\n";
         return $code;
     }
@@ -1586,19 +1587,19 @@ class MockGenerator {
     protected function chainThrowMethods() {
         $code  = "    function throwOn(\$method, \$exception = false, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->throwOn(\$method, \$exception, \$args);\n";
+        $code .= "        \$this->mock->throwOn(\$method, \$exception, \$args);\n";
         $code .= "    }\n";
         $code .= "    function throwAt(\$timing, \$method, \$exception = false, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->throwAt(\$timing, \$method, \$exception, \$args);\n";
+        $code .= "        \$this->mock->throwAt(\$timing, \$method, \$exception, \$args);\n";
         $code .= "    }\n";
         $code .= "    function errorOn(\$method, \$error = 'A mock error', \$args = false, \$severity = E_USER_ERROR) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->errorOn(\$method, \$error, \$args, \$severity);\n";
+        $code .= "        \$this->mock->errorOn(\$method, \$error, \$args, \$severity);\n";
         $code .= "    }\n";
         $code .= "    function errorAt(\$timing, \$method, \$error = 'A mock error', \$args = false, \$severity = E_USER_ERROR) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
-        $code .= "        \$this->_mock->errorAt(\$timing, \$method, \$error, \$args, \$severity);\n";
+        $code .= "        \$this->mock->errorAt(\$timing, \$method, \$error, \$args, \$severity);\n";
         $code .= "    }\n";
         return $code;
     }
@@ -1619,7 +1620,7 @@ class MockGenerator {
             }
             $code .= "    " . $this->reflection->getSignature($method) . " {\n";
             $code .= "        \$args = func_get_args();\n";
-            $code .= "        \$result = &\$this->_mock->invoke(\"$method\", \$args);\n";
+            $code .= "        \$result = &\$this->mock->invoke(\"$method\", \$args);\n";
             $code .= "        return \$result;\n";
             $code .= "    }\n";
         }

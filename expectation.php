@@ -325,8 +325,8 @@ class NotEqualExpectation extends EqualExpectation {
  *    @subpackage UnitTester
  */
 class WithinMarginExpectation extends SimpleExpectation {
-    private $_upper;
-    private $_lower;
+    private $upper;
+    private $lower;
 
     /**
      *    Sets the value to compare against and the fuzziness of
@@ -338,8 +338,8 @@ class WithinMarginExpectation extends SimpleExpectation {
      */
     function __construct($value, $margin, $message = '%s') {
         parent::__construct($message);
-        $this->_upper = $value + $margin;
-        $this->_lower = $value - $margin;
+        $this->upper = $value + $margin;
+        $this->lower = $value - $margin;
     }
 
     /**
@@ -350,7 +350,7 @@ class WithinMarginExpectation extends SimpleExpectation {
      *    @access public
      */
     function test($compare) {
-        return (($compare <= $this->_upper) && ($compare >= $this->_lower));
+        return (($compare <= $this->upper) && ($compare >= $this->lower));
     }
 
     /**
@@ -374,8 +374,8 @@ class WithinMarginExpectation extends SimpleExpectation {
      *    @access private
      */
     protected function withinMessage($compare) {
-        return "Within expectation [" . $this->dumper->describeValue($this->_lower) . "] and [" .
-                $this->dumper->describeValue($this->_upper) . "]";
+        return "Within expectation [" . $this->dumper->describeValue($this->lower) . "] and [" .
+                $this->dumper->describeValue($this->upper) . "]";
     }
 
     /**
@@ -384,12 +384,12 @@ class WithinMarginExpectation extends SimpleExpectation {
      *    @access private
      */
     protected function outsideMessage($compare) {
-        if ($compare > $this->_upper) {
+        if ($compare > $this->upper) {
             return "Outside expectation " .
-                    $this->dumper->describeDifference($compare, $this->_upper);
+                    $this->dumper->describeDifference($compare, $this->upper);
         } else {
             return "Outside expectation " .
-                    $this->dumper->describeDifference($compare, $this->_lower);
+                    $this->dumper->describeDifference($compare, $this->lower);
         }
     }
 }
@@ -614,7 +614,7 @@ class NotIdenticalExpectation extends IdenticalExpectation {
  *    @subpackage UnitTester
  */
 class PatternExpectation extends SimpleExpectation {
-    private $_pattern;
+    private $pattern;
 
     /**
      *    Sets the value to compare against.
@@ -624,7 +624,7 @@ class PatternExpectation extends SimpleExpectation {
      */
     function __construct($pattern, $message = '%s') {
         parent::__construct($message);
-        $this->_pattern = $pattern;
+        $this->pattern = $pattern;
     }
 
     /**
@@ -633,7 +633,7 @@ class PatternExpectation extends SimpleExpectation {
      *    @access protected
      */
     protected function getPattern() {
-        return $this->_pattern;
+        return $this->pattern;
     }
 
     /**
@@ -737,7 +737,7 @@ class NoPatternExpectation extends PatternExpectation {
  *      @subpackage UnitTester
  */
 class IsAExpectation extends SimpleExpectation {
-    private $_type;
+    private $type;
 
     /**
      *    Sets the type to compare with.
@@ -747,7 +747,7 @@ class IsAExpectation extends SimpleExpectation {
      */
     function __construct($type, $message = '%s') {
         parent::__construct($message);
-        $this->_type = $type;
+        $this->type = $type;
     }
 
     /**
@@ -756,7 +756,7 @@ class IsAExpectation extends SimpleExpectation {
      *    @access protected
      */
     protected function getType() {
-        return $this->_type;
+        return $this->type;
     }
 
     /**
@@ -768,9 +768,9 @@ class IsAExpectation extends SimpleExpectation {
      */
     function test($compare) {
         if (is_object($compare)) {
-            return SimpleTestCompatibility::isA($compare, $this->_type);
+            return SimpleTestCompatibility::isA($compare, $this->type);
         } else {
-            return (strtolower(gettype($compare)) == $this->canonicalType($this->_type));
+            return (strtolower(gettype($compare)) == $this->canonicalType($this->type));
         }
     }
 
@@ -803,7 +803,7 @@ class IsAExpectation extends SimpleExpectation {
     function testMessage($compare) {
         $dumper = $this->getDumper();
         return "Value [" . $dumper->describeValue($compare) .
-                "] should be type [" . $this->_type . "]";
+                "] should be type [" . $this->type . "]";
     }
 }
 
@@ -814,7 +814,7 @@ class IsAExpectation extends SimpleExpectation {
  *      @subpackage UnitTester
  */
 class NotAExpectation extends IsAExpectation {
-    private $_type;
+    private $type;
 
     /**
      *    Sets the type to compare with.
@@ -857,7 +857,7 @@ class NotAExpectation extends IsAExpectation {
  *      @subpackage UnitTester
  */
 class MethodExistsExpectation extends SimpleExpectation {
-    private $_method;
+    private $method;
 
     /**
      *    Sets the value to compare against.
@@ -868,7 +868,7 @@ class MethodExistsExpectation extends SimpleExpectation {
      */
     function __construct($method, $message = '%s') {
         parent::__construct($message);
-        $this->_method = &$method;
+        $this->method = &$method;
     }
 
     /**
@@ -878,7 +878,7 @@ class MethodExistsExpectation extends SimpleExpectation {
      *    @access public
      */
     function test($compare) {
-        return (boolean)(is_object($compare) && method_exists($compare, $this->_method));
+        return (boolean)(is_object($compare) && method_exists($compare, $this->method));
     }
 
     /**
@@ -893,7 +893,7 @@ class MethodExistsExpectation extends SimpleExpectation {
         if (! is_object($compare)) {
             return 'No method on non-object [' . $dumper->describeValue($compare) . ']';
         }
-        $method = $this->_method;
+        $method = $this->method;
         return "Object [" . $dumper->describeValue($compare) .
                 "] should contain method [$method]";
     }

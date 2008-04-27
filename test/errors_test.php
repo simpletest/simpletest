@@ -37,16 +37,16 @@ class TestOfErrorQueue extends UnitTestCase {
 }
 
 class TestOfErrorTrap extends UnitTestCase {
-    private $_old;
+    private $old;
 
     function setUp() {
-        $this->_old = error_reporting(E_ALL);
+        $this->old = error_reporting(E_ALL);
         set_error_handler('SimpleTestErrorHandler');
     }
 
     function tearDown() {
         restore_error_handler();
-        error_reporting($this->_old);
+        error_reporting($this->old);
     }
 
     function testQueueStartsEmpty() {
@@ -84,14 +84,14 @@ class TestOfErrorTrap extends UnitTestCase {
 }
 
 class TestOfErrors extends UnitTestCase {
-    private $_old;
+    private $old;
 
     function setUp() {
-        $this->_old = error_reporting(E_ALL);
+        $this->old = error_reporting(E_ALL);
     }
 
     function tearDown() {
-        error_reporting($this->_old);
+        error_reporting($this->old);
     }
 
     function testDefaultWhenAllReported() {
