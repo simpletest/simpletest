@@ -55,7 +55,7 @@
                     <bug tracker="1884013">continuous integration</bug>
                     <bug tracker="1853765">error_reporting(E_ALL|E_STRICT)gives lots of warning</bug>
                     <task>Remove all deprecated methods</task>
-                    <task>
+                    <task status="done">
                         Drop underscores from protected methods and
                         private variables.
                         Make all variables private and add protected
