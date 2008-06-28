@@ -92,41 +92,84 @@ class SimpleTestXMLElement extends SimpleXMLElement {
             foreach ($section->p as $paragraph) {
                 $content .= $this->deal_with_php_code($paragraph->asXML());
             }
-            foreach ($section->milestone as $milestone) {
-                $content .= "<h3>".(string)$milestone->attributes()->version."</h3>";
-                foreach ($milestone->concern as $concern) {
-		            if (!isset($anchors[(string)$concern->attributes()->name])) {
-		                $content .= "<a name=\"".(string)$concern->attributes()->name."\"></a>";
-		                $anchors[(string)$concern->attributes()->name] = true;
-    	            }
-                    $content .= "<h4>".$this->as_title($concern->attributes()->name)."</h4>";
-                    if (sizeof($concern) > 0) {
-                        $content .= "<dl>";
-                        foreach ($concern as $type => $element) {
-                            $status = "";
-                            if (isset($element->attributes()->status)) {
-                                $status = " class=\"".$element->attributes()->status."\"";
-                            }
-                            $content .= "<dt".$status.">[".$type."] ".trim($element)."</dt>";
-                            foreach ($element->attributes() as $name => $value) {
-                                if ($name == "tracker" and $type == "bug") {
-                                    $value = $this->as_tracker_link($value);
-                                }
-                                $content .= "<dd>".$name." : ".$value."</dd>"; 
-                            }
-                            foreach ($element->note as $note) {
-                                $content .= "<dd>".trim((string)$note)."</dd>"; 
-                            }
-                        }
-                        $content .= "</dl>";
-                    }    
-                }
-            }
+            $content .= $this->deal_with_milestones($section);
+            $content .= $this->deal_with_changelogs($section);
         }
 
         return $content;
     }
 
+    function deal_with_changelogs($section) {
+        $content = "";
+            
+        foreach ($section->changelog as $changelog) {
+            $content .= "<h3>Version ".(string)$changelog->attributes()->version."</h3>";
+            $content .= "<ul>";
+            foreach ($changelog->change as $change) {
+                $content .= "<li>";
+                $content .= trim((string)$change);
+                $content .= "</li>";
+            }
+            foreach ($changelog->bug as $bug) {
+                $content .= "<li>";
+                $number = "";
+                if (isset($bug->attributes()->tracker)) {
+                    $number = " ".$this->as_tracker_link($bug->attributes()->tracker);
+                }
+                $content .= "[bug".$number."] ".trim((string)$bug);
+                $content .= "</li>";
+            }
+            foreach ($changelog->patch as $patch) {
+                $content .= "<li>";
+                $number = "";
+                if (isset($patch->attributes()->tracker)) {
+                    $number = " ".$this->as_tracker_link($patch->attributes()->tracker);
+                }
+                $content .= "[patch".$number."] ".trim((string)$patch);
+                $content .= "</li>";
+            }
+            $content .= "</ul>";
+        }
+        return $content;
+    }
+    
+    function deal_with_milestones($section) {
+        $content = "";
+            
+        foreach ($section->milestone as $milestone) {
+            $content .= "<h3>".(string)$milestone->attributes()->version."</h3>";
+            foreach ($milestone->concern as $concern) {
+	            if (!isset($anchors[(string)$concern->attributes()->name])) {
+	                $content .= "<a name=\"".(string)$concern->attributes()->name."\"></a>";
+	                $anchors[(string)$concern->attributes()->name] = true;
+	            }
+	            $content .= "<h4>".$this->as_title($concern->attributes()->name)."</h4>";
+	            if (sizeof($concern) > 0) {
+	                $content .= "<dl>";
+	                foreach ($concern as $type => $element) {
+	                    $status = "";
+	                    if (isset($element->attributes()->status)) {
+	                        $status = " class=\"".$element->attributes()->status."\"";
+	                    }
+	                    $content .= "<dt".$status.">[".$type."] ".trim($element)."</dt>";
+	                    foreach ($element->attributes() as $name => $value) {
+	                        if ($name == "tracker" and $type == "bug") {
+	                            $value = $this->as_tracker_link($value);
+	                        }
+	                        $content .= "<dd>".$name." : ".$value."</dd>"; 
+	                    }
+	                    foreach ($element->note as $note) {
+	                        $content .= "<dd>".trim((string)$note)."</dd>"; 
+	                    }
+	                }
+	                $content .= "</dl>";
+	            }    
+            }
+        }
+
+        return $content;
+    }
+    
     function internal() {
         $internal = "";
         

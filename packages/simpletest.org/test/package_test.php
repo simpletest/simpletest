@@ -54,6 +54,16 @@ class TestOfContentTransformationFromXMLToHTML extends UnitTestCase {
 		$this->assertPattern('/<p>/', $content);
 	}
 	
+	function testOfContentFromChangeLogSection() {
+		$file = dirname(__FILE__).'/package/one_section_changelogged.xml';
+		$source = simplexml_load_file($file, "SimpleTestXMLElement");
+		$content = $source->content();
+		$this->assertPattern('/<h3>Version 1.0.1<\/h3>/', $content);
+		$this->assertPattern('/<li>\[bug\] Patches and whitespace clean up<\/li>/', $content);
+		$this->assertPattern('/<li>Some in line documentation fixes<\/li>/', $content);
+		$this->assertPattern('/<li>\[bug <a href=\"http:\/\/sourceforge.net\/tracker\/index.php\?func=detail&group_id=76550&atid=547455&aid=1853765\">1853765<\/a>\] Fixing one of the incompatible interface errors<\/li>/', $content);
+	}
+	
 	function testOfContentFromMilestoneSection() {
 		$file = dirname(__FILE__).'/package/one_section_milestoned.xml';
 		$source = simplexml_load_file($file, "SimpleTestXMLElement");

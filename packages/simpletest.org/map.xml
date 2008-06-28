@@ -4,6 +4,7 @@
 	<page title="English version" here="English version" file="en/index.html">
 		<page title="Download SimpleTest" here="Download SimpleTest" file="en/download.html">
 	        <page title="Install the Eclipse Plugin" here="Eclipse" file="en/extension_eclipse.html" />
+	        <page title="ChangeLog" here="Changelog" file="en/changelog.html" />
 		</page>
 
 		<page title="Start testing with SimpleTest" here="SimpleTest" file="en/start-testing.html">

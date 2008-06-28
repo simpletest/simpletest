@@ -92,26 +92,4 @@
             extreme programming in php
         </keywords>
     </meta>
-    <refsynopsisdiv>
-        <authorgroup>
-            <author>
-                Marcus Baker
-                <authorblurb>
-                    <para>Primary Developer</para><para>{@link mailto:marcus@lastcraft.com marcus@lastcraft.com}</para>
-                </authorblurb>
-            </author>
-            <author>
-                Harry Fuecks
-                <authorblurb>
-                    <para>Packager</para><para>{@link mailto:harryf@users.sourceforge.net harryf@users.sourceforge.net}</para>
-                </authorblurb>
-            </author>
-            <author>
-                Jason Sweat
-                <authorblurb>
-                    <para>Documentation</para><para>{@link mailto:jsweat_php@yahoo.com jsweat_php@yahoo.com}</para>
-                </authorblurb>
-            </author>
-        </authorgroup>
-    </refsynopsisdiv>
 </page>
