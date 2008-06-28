@@ -28,8 +28,12 @@ function sparklinequery(o) {
 
 	var co = document.createElement("canvas");
 
-	if ( co.getContext ) o.css({ display: "inline" });
-	else return false;
+	if ( co.getContext ) {
+		o.css({ display: "inline" });
+	} else {
+		return false;
+	}
+	
 
 	co.style.height = h;
 	co.style.width = w;
@@ -61,10 +65,12 @@ function sparklinequery(o) {
 			} else {
 				y = 0;
 			}
+			y = 3 * i;
 			c.lineTo(x, y);
 		}
 
 		c.stroke();
+alert(c);
 		o.css({ display:"inline" });
 	}
 }

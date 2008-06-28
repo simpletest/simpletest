@@ -185,12 +185,12 @@
     </xsl:template>
     
     <xsl:template match="section">
-        <p>
+        <h2>
             <a class="target">
-                <xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
-                <h2><xsl:value-of select="@title"/></h2>
-            </a>
-        </p>
+                <xsl:attribute name="name"><xsl:value-of select="@name" /></xsl:attribute>
+             </a>
+             <xsl:value-of select="@title" />
+        </h2>
         <xsl:apply-templates/>
     </xsl:template>
     

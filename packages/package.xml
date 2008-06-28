@@ -47,9 +47,6 @@ can also be accessed by the test code if they are in the same language. </descri
 stable release 1.0 version. It features many improvements to the HTML form
 parsing and exposure of the underlying web browser. There are also numerous
 minor improvements and bug fixes.</notes>
-    <deps>
-      <dep type="php" rel="ge" version="4.2.2" optional="no"/>
-    </deps>
     <provides type="class" name="PHPUnit_TestCase" extends="SimpleTestCase" />
     <provides type="function" name="PHPUnit_TestCase::assertEquals" />
     <provides type="function" name="PHPUnit_TestCase::assertNotNull" />
@@ -563,6 +560,9 @@ minor improvements and bug fixes.</notes>
     <provides type="function" name="NestingGroupTag::paintEnd" />
     <provides type="function" name="NestingGroupTag::getSize" />
     <provides type="function" name="SimpleTestXmlParser::parse" />
+    <deps>
+      <dep type="php" rel="ge" version="4.2.2" optional="no"/>
+    </deps>
     <filelist>
       <file role="data" baseinstalldir="simpletest" md5sum="57b8d745384127342f95660d97e1c9c2" name="adapters/CVS/Entries"/>
       <file role="data" baseinstalldir="simpletest" md5sum="2b7250390148247001cadb8a5fbfadd3" name="adapters/CVS/Repository"/>
