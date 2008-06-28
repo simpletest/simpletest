@@ -60,7 +60,7 @@ class SimpleTestXMLElement extends SimpleXMLElement {
         if (count($elements_divided) > 1) {
             foreach ($elements_divided as $element_divided) {
                 if (strpos($element_divided, '<![CDATA[') === 0) {
-                    $element_divided = '<pre>'.$this->transform_code($element_divided).'</pre>';
+                    $element_divided = '</p><pre>'.$this->transform_code($element_divided).'</pre><p>';
                 }
                 $content_element .= $element_divided;
             }
