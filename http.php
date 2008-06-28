@@ -278,11 +278,13 @@ class SimpleHttpRequest {
      *    @return SimpleHttpResponse    Parsed response object.
      *    @access protected
      */
-    protected  function createResponse($socket) {
-        return new SimpleHttpResponse(
+    protected function createResponse($socket) {
+        $response = new SimpleHttpResponse(
                 $socket,
                 $this->route->getUrl(),
                 $this->encoding);
+        $socket->close();
+        return $response;
     }
 }
 
