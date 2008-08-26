@@ -33,8 +33,8 @@ class ColorTextReporter extends TextReporter {
      *
      * @param {@link TextReporter}
      */
-    function ColorTextReporter() {
-        parent::TextReporter();
+    function __construct() {
+        parent::__construct();
     }
     
     /**

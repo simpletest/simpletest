@@ -19,7 +19,7 @@ class SeleniumTestCase extends UnitTestCase
 	protected $newInstanceEachTest = true;
 
 	public function __construct($name = 'Selenium Test Case') {
-		parent::UnitTestCase($name);
+		parent::__construct($name);
 
 		if (empty($this->browser)) {
 			trigger_error('browser property must be set in ' . get_class($this));
