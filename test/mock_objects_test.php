@@ -978,4 +978,35 @@ class TestOfPHP5AbstractMethodMocking extends UnitTestCase {
         );
     }
 }
+
+class DummyWithProtected
+{
+    public function aMethodCallsProtected() { return $this->aProtectedMethod(); }
+    protected function aProtectedMethod() { return true; }
+}
+
+Mock::generatePartial('DummyWithProtected', 'TestDummyWithProtected', array('aProtectedMethod'));
+class TestOfProtectedMethodPartialMocks extends UnitTestCase
+{
+    function testProtectedMethodExists() {
+        $this->assertTrue(
+            method_exists(
+                new TestDummyWithProtected,
+                'aProtectedMethod'
+            )
+        );
+    }
+
+    function testProtectedMethodIsCalled() {
+        $object = new DummyWithProtected();
+        $this->assertTrue($object->aMethodCallsProtected(), 'ensure original was called');
+    }
+
+    function testMockedMethodIsCalled() {
+        $object = new TestDummyWithProtected();
+        $object->setReturnValue('aProtectedMethod', false);
+        $this->assertFalse($object->aMethodCallsProtected());
+    }
+}
+
 ?>
