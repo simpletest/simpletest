@@ -1,10 +1,10 @@
 <?php
-    /**
-     *  Base include file for SimpleTest
-     *  @package        SimpleTest
-     *  @subpackage     UnitTester
-     *  @version        $Id$
-     */
+/**
+ *  Base include file for SimpleTest
+ *  @package        SimpleTest
+ *  @subpackage     Extensions
+ *  @version        $Id$
+ */
 
 /**
  * include base reporter
@@ -22,7 +22,7 @@ require_once(dirname(__FILE__) . '/../reporter.php');
  * @author Jason Sweat (original code)
  * @author Travis Swicegood <development@domain51.com>
  * @package SimpleTest
- * @subpackage UnitTester
+ * @subpackage Extensions
  */
 class ColorTextReporter extends TextReporter { 
     var $_failColor = 41;

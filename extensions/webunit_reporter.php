@@ -2,7 +2,7 @@
 /**
  *	base include file for SimpleTest PUnit reporter
  *	@package	SimpleTest
- *	@subpackage	UnitTester
+ *	@subpackage	Extensions
  *	@version	$Id$
  */
 

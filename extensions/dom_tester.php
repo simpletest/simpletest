@@ -2,7 +2,7 @@
 
 /**
  *	@package	SimpleTest
- *	@subpackage	DomTestCase
+ *	@subpackage	Extensions
  *  @author     Perrick Penet <perrick@noparking.net>
  *	@version	$Id$
  */
@@ -24,7 +24,6 @@ require_once dirname(__FILE__).'/dom_tester/css_selector.php';
  * @param array $_value
  * 
  */
-
 class CssSelectorExpectation extends SimpleExpectation {
     var $_dom;
     var $_selector;

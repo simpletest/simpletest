@@ -1,6 +1,8 @@
 <?php
 /**
- *	extension file for SimpleTest
+ *	Extension file for SimpleTest
+ *  @package        SimpleTest
+ *  @subpackage     Extensions
  *	@version	$Id$
  */
 require_once(dirname(__FILE__) . '/../scorer.php');
@@ -8,6 +10,9 @@ require_once(dirname(__FILE__) . '/treemap_reporter/treemap_recorder.php');
 
 /**
  * Constructs and renders a treemap visualization of a test run
+ *
+ * @package SimpleTest
+ * @subpackage Extensions
  */
 class TreemapReporter extends SimpleReporterDecorator {
 

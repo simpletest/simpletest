@@ -1,6 +1,8 @@
 <?php
 /**
  *	extension file for SimpleTest
+ *  @package        SimpleTest
+ *  @subpackage     Extensions
  *	@version	$Id$
  */
 require_once dirname(__FILE__) . '/../treemap_reporter.php';
@@ -8,6 +10,9 @@ require_once dirname(__FILE__) . '/../treemap_reporter.php';
 /**
  * outputs <ul> representing treemap of test report,
  * and attaches jQuery Treemap to render results.
+ *
+ *  @package        SimpleTest
+ *  @subpackage     Extensions
  */
 class JqueryTreemapReporter extends TreemapReporter {
 

@@ -1,6 +1,8 @@
 <?php
 /**
  *	extension file for SimpleTest
+ *  @package        SimpleTest
+ *  @subpackage     Extensions
  *	@version	$Id$
  */
 require_once(dirname(__FILE__) . '/../../scorer.php');
@@ -8,6 +10,9 @@ require_once(dirname(__FILE__) . '/../../scorer.php');
 /**
  * Collects SimpleReporter messages and constructs a
  * TreemapNode graph.
+ *
+ *  @package        SimpleTest
+ *  @subpackage     Extensions
  */
 class TreemapRecorder extends SimpleReporter {
 	var $_graph;
@@ -150,6 +155,9 @@ class TreemapRecorder extends SimpleReporter {
 /**
  * Creates a treemap graph, representing
  * each node in a test visualization.
+ *
+ *  @package        SimpleTest
+ *  @subpackage     Extensions
  */
 class TreemapNode {
 	var $_name;
@@ -257,6 +265,9 @@ class TreemapNode {
 
 /**
  * provides LIFO stack semantics
+ *
+ *  @package        SimpleTest
+ *  @subpackage     Extensions
  */
 class TreemapStack {
 	var $_list;

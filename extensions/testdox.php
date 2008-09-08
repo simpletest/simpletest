@@ -1,5 +1,17 @@
 <?php
+/**
+ *	base include file for SimpleTest
+ *	@package	SimpleTest
+ *	@subpackage	Extensions
+ *	@version	$Id$
+ */
 
+/**
+ *	base include file for SimpleTest
+ *	@package	SimpleTest
+ *	@subpackage	Extensions
+ *	@version	$Id$
+ */
 class TestDoxReporter extends SimpleReporter
 {
     var $_test_case_pattern = '/^TestOf(.*)$/';

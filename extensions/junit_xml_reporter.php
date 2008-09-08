@@ -1,10 +1,10 @@
 <?php
 /**
- *	@package	JunitXMLReporter
- *	@subpackage	Reporter
+ *	@package	SimpleTest
+ *	@subpackage	Extensions
  *	@version	$Id$
  *  @author Patrice Neff - mailinglists@patrice.ch (original code)
- *  */
+ */
 
 require_once dirname(__FILE__).'/../reporter.php';
 

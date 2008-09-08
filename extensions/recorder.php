@@ -2,7 +2,7 @@
 /**
  *	base include file for SimpleTest
  *	@package	SimpleTest
- *	@subpackage	UnitTester
+ *	@subpackage	Extensions
  *	@version	$Id$
  */
 
@@ -22,7 +22,7 @@ require_once(dirname(__FILE__) . '/../scorer.php');
  *    @author Rene vd O (original code)
  *    @author Perrick Penet
  *	  @package SimpleTest
- *	  @subpackage UnitTester
+ *	  @subpackage Extensions
  */
 class Recorder extends SimpleReporter {
     var $results;
