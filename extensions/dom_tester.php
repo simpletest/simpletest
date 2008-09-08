@@ -17,7 +17,7 @@ require_once dirname(__FILE__).'/dom_tester/css_selector.php';
 /**
  * CssSelectorExpectation
  * 
- * Create a CSS Selector expectation
+ * Create a CSS Selector expectactation
  * 
  * @param DomDocument $_dom
  * @param string $_selector
@@ -32,30 +32,19 @@ class CssSelectorExpectation extends SimpleExpectation {
     /**
      *    Sets the dom tree and the css selector to compare against
      *    @param mixed $dom          Dom tree to search into.
-     *    @param string $selector    Css selector to match element.
+     *    @param mixed $selector     Css selector to match element.
      *    @param string $message     Customised message on failure.
      *    @access public
      */
     function CssSelectorExpectation($dom, $selector, $message = '%s') {
         $this->SimpleExpectation($message);
         $this->_dom = $dom;
-        $this->_selector = $this->_normalizeSelector($selector);
+        $this->_selector = $selector;
         
         $css_selector = new CssSelector($this->_dom);
         $this->_value = $css_selector->getTexts($this->_selector);
     }
-
-    /**
-     *    Normalizes the selector. In particular, replaces single-quotes with
-     *    double-quotes.
-     *    @param string $selector     Css selector to match element.
-     *    @return string              Normalized Css selector.
-     *    @access public
-     */
-	function _normalizeSelector($selector) {
-		return str_replace("'", '"', $selector);
-	}    
-
+    
     /**
      *    Tests the expectation. True if it matches the
      *    held value.
@@ -98,9 +87,6 @@ class CssSelectorExpectation extends SimpleExpectation {
  * Extend Web test case with DOM related assertions,
  * CSS selectors in particular
  * 
- * @category Testing
- * @package DomTestCase
- * 
  * @param DomDocument $dom
  * 
  */
@@ -117,6 +103,15 @@ class DomTestCase extends WebTestCase {
                 $elements,
                 $message);
     }
+    
+	function getElementsBySelector($selector) {
+		$this->dom = new DomDocument('1.0', 'utf-8');
+		$this->dom->validateOnParse = true;
+		$this->dom->loadHTML($this->_browser->getContent());
+		
+		$css_selector = new CssSelectorExpectation($this->dom, $selector);
+		return $css_selector->_value;
+	}
 }
 
 ?>
