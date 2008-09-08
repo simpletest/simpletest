@@ -2,8 +2,7 @@
 <!-- $Id$ -->
 <page title="The Application Boundary" here="Boundary classes">
     <long_title>
-        PHP unit testing tutorial - Organising unit tests and boundary
-        class test cases
+        PHP unit testing tutorial - Organising unit tests and &quot;setup tests&quot;
     </long_title>
     <content>
         <introduction>
@@ -84,31 +83,27 @@
                 Back to the tests...
 <php><![CDATA[
 <?php
+require_once('simpletest/autorun.php');
 require_once('../classes/log.php');
 require_once('../classes/clock.php');<strong>
 require_once('../classes/writer.php');</strong>
 Mock::generate('Clock');
 
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase('Log class test');
-    }
     function setUp() {
         @unlink('../temp/test.log');
     }
     function tearDown() {
         @unlink('../temp/test.log');
     }
-    function getFileLine($filename, $index) {
-        $messages = file($filename);
-        return $messages[$index];
-    }
+
     function testCreatingNewFile() {<strong>
         $log = new Log(new FileWriter('../temp/test.log'));</strong>
         $this->assertFalse(file_exists('../temp/test.log'), 'Created before message');
         $log->message('Should write this to a file');
         $this->assertTrue(file_exists('../temp/test.log'), 'File created');
     }
+
     function testAppendingToFile() {<strong>
         $log = new Log(new FileWriter('../temp/test.log'));</strong>
         $log->message('Test line 1');
@@ -120,15 +115,21 @@ class TestOfLogging extends UnitTestCase {
                 '/Test line 2/',
                 $this->getFileLine('../temp/test.log', 1));
     }
+
     function testTimestamps() {
-        $clock = &new MockClock($this);
+        $clock = new MockClock($this);
         $clock->setReturnValue('now', 'Timestamp');<strong>
         $log = new Log(new FileWriter('../temp/test.log'));</strong>
-        $log->message('Test line', &$clock);
+        $log->message('Test line', $clock);
         $this->assertWantedPattern(
                 '/Timestamp/',
                 $this->getFileLine('../temp/test.log', 0),
                 'Found timestamp');
+    }
+
+    function getFileLine($filename, $index) {
+        $messages = file($filename);
+        return $messages[$index];
     }
 }
 ?>
@@ -137,7 +138,7 @@ class TestOfLogging extends UnitTestCase {
                 confused.
                 I have replaced the file names with an imaginary
                 <code>FileWriter</code> class from
-                a file <em>classes/writer.php</em>.
+                an imaginary file <em>classes/writer.php</em>.
                 This will cause the tests to crash as we have not written
                 the writer yet.
                 Should we do that now?
@@ -167,17 +168,17 @@ require_once('../classes/clock.php');<strong>
 require_once('../classes/writer.php');</strong>
     
 class Log {<strong>
-    var $_writer;</strong>
+    private $writer;</strong>
         
-    function Log(<strong>&$writer</strong>) {<strong>
-        $this->_writer = &$writer;</strong>
+    function Log(<strong>$writer</strong>) {<strong>
+        $this->writer = $writer;</strong>
     }
         
     function message($message, $clock = false) {
         if (! is_object($clock)) {
             $clock = new Clock();
         }<strong>
-        $this->_writer->write("[" . $clock->now() . "] $message");</strong>
+        $this->writer->write("[" . $clock->now() . "] $message");</strong>
     }
 }
 ?>
@@ -201,17 +202,18 @@ class Log {<strong>
                 First we add a <em>tests/writer_test.php</em> so that
                 we have somewhere to place our test code from <em>log_test.php</em>
                 that we are going to shuffle around.
-                I won&apos;t yet add it to the <em>all_tests.php</em> file
-                though as it is the logging aspect we are tackling right now.
+                I won&apos;t yet add it to the <em>all_tests.php</em> file,
+                as it is the logging aspect we are tackling right now.
             </p>
             <p>
-                Now I have done that (honest) we remove any
+                Now I have done that (honest!) we remove any
                 tests from <em>log_test.php</em> that are not strictly logging
                 related and move them to <em>writer_test.php</em> for later.
                 We will also mock the writer so that it does not write
                 out to real files...
 <php><![CDATA[
 <?php
+require_once('simpletest/autorun.php');
 require_once('../classes/log.php');
 require_once('../classes/clock.php');
 require_once('../classes/writer.php');
@@ -219,17 +221,14 @@ Mock::generate('Clock');<strong>
 Mock::generate('FileWriter');</strong>
 
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase('Log class test');
-    }<strong>
+    <strong>
     function testWriting() {
-        $clock = &new MockClock();
+        $clock = new MockClock();
         $clock->setReturnValue('now', 'Timestamp');
-        $writer = &new MockFileWriter($this);
-        $writer->expectArguments('write', array('[Timestamp] Test line'));
-        $writer->expectCallCount('write', 1);
-        $log = &new Log(\$writer);
-        $log->message('Test line', &$clock);
+        $writer = new MockFileWriter($this);
+        $writer->expectOnce('write', array('[Timestamp] Test line'));
+        $log = new Log(\$writer);
+        $log->message('Test line', $clock);
     }</strong>
 }
 ?>
@@ -246,7 +245,7 @@ class TestOfLogging extends UnitTestCase {
                         created and so I moved the
                         <code>setUp()</code> and
                         <code>tearDown()</code> off into the
-                        writing tests.
+                        <code>FileWriter</code> tests.
                     </li>
                     <li>
                         The test now consists of sending a sample message and
@@ -258,7 +257,7 @@ class TestOfLogging extends UnitTestCase {
             <p>
                 The mock objects do much more than simply behave like other
                 objects, they also run tests.
-                The <code>expectArguments()</code>
+                The <code>expectOnce()</code>
                 call told the mock to expect a single parameter of
                 the string &quot;[Timestamp] Test line&quot; when
                 the mock <code>write()</code> method is
@@ -269,8 +268,9 @@ class TestOfLogging extends UnitTestCase {
             </p>
             <p>
                 The other expectation is that <code>write()</code>
-                will be called only once.
-                Simply setting this up is not enough.
+                will be called and called only once.
+                If the method is not called before the end of the test,
+                a failure is generated.
                 We can see all this in action by running the tests...
                 <div class="demo">
                     <h1>All tests</h1>
@@ -283,22 +283,6 @@ class TestOfLogging extends UnitTestCase {
                     <strong>4</strong> passes and <strong>0</strong> fails.</div>
                 </div>
             </p>
-            <p>
-                We can actually shorten our test slightly more.
-                The mock object expectation <code>expectOnce()</code>
-                can actually combine the two seperate expectations...
-<php><![CDATA[
-function testWriting() {
-    $clock = &new MockClock();
-    $clock->setReturnValue('now', 'Timestamp');
-    $writer = &new MockFileWriter($this);<strong>
-    $writer->expectOnce('write', array('[Timestamp] Test line'));</strong>
-    $log = &new Log($writer);
-    $log->message('Test line', &$clock);
-}
-]]></php>
-                This can be an effective shorthand.
-            </p>
         </section>
         <section name="boundary" title="Boundary classes">
             <p>
@@ -307,7 +291,7 @@ function testWriting() {
             </p>
             <p>
                 The only things it depends on now are classes that we have written
-                ourselves and
+                ourselves, and
                 in the tests these are mocked and so there are no dependencies
                 on anything other than our own PHP code.
                 No writing to files or waiting for clocks to tick over.
@@ -320,10 +304,10 @@ function testWriting() {
                 around and painstakingly confirmed, often by ad hoc tricks.
             </p>
             <p>
-                Our last refactoring has helped a lot.
+                Our last refactoring has helped a bit.
                 The hard to test classes on the boundary of the application
-                and the system are now smaller as the I/O code has
-                been further separated from the application logic.
+                and the system are now smaller, as the I/O code has
+                been further separated from the domain logic.
                 They are direct mappings to PHP operations:
                 <code>FileWriter::write()</code> maps
                 to PHP <code>fwrite()</code> with the
@@ -348,12 +332,27 @@ function testWriting() {
                 boundary tests, but typical applications can have
                 twenty boundary classes and two hundred application
                 classes.
-                To keep these running at full speed you will want
+                To keep the unit tests running at full speed you will want
                 to keep them separate.
+            </p>
+            <p>
+                Another benefit of this separation is that you are left
+                with the smaller test suite for all your dependencies.
+                Suppose you want to set up a server for your application
+                and you want to make sure that all underlying components,
+                directories and configuration are correct.
+                You no longer need to run the entire test suite to find out,
+                just run the tests for your boundary classes.
+                For this reason, this test suite is often called the
+                &quot;setup tests&quot;.
+                Hand them to your system administrator, and they can set up
+                your server for you.
             </p>
             <p>
                 Besides, separating off decisions of which system components
                 to use is good development.
+                Being able to change the underlying dependencies easily is a
+                good thing.
                 Perhaps all this mocking is
                 <a href="improving_design_tutorial.php">improving our design</a>?
             </p>
@@ -367,8 +366,7 @@ function testWriting() {
             Abstracting further with a <a href="#writer">mock Writer</a> class.
         </link>
         <link>
-            Separating <a href="#boundary">Boundary class</a> tests
-            cleans things up.
+            Separating out<a href="#boundary">setup tests</a> cleans things up.
         </link>
     </internal>
     <external>

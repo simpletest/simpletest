@@ -12,7 +12,6 @@ Classname to __construct; derived classes invoking
 their parent constructors should replace parent::Classname()
 with parent::__construct().
 
-
 Custom CSS in HtmlReporter not being applied
 --------------------------------------------
 Batch rename of protected and private methods 
@@ -25,8 +24,8 @@ Happens when an object is passed by reference.
 This also happens with setReturnReferenceAt().
 If you want to return objects then replace these
 with calls to returns() and returnsAt() with the
-same arguments. This change was forced the 1.1
-version.
+same arguments. This change was forced in the 1.1
+version for E_STRICT compatibility.
 
 assertReference() throws errors in E_STRICT
 -------------------------------------------

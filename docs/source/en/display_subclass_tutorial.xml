@@ -5,18 +5,22 @@
     <content>
         <introduction>
             <p>
-                The display component of SimpleTest is actually the part
-                to be developed last.
-                Some of the following section will change in the future
-                and hopefully more sophisticated display components will
-                be written, but
-                in the meantime if a minimal display is not enough, here
+                SimpleTest ships with the simplest possible interface by default.
+                Mostly you just want to know if your test passed, or your test failed.
+                If it failed, you want the reason.
+                Nothing more.
+            </p>
+            <p>
+                Sometimes you want a more sophisticated output for stakeholders
+                and for acceptance testing.
+                If a minimal display is not enough, here
                 is how to roll your own.
             </p>
         </introduction>
         <section name="passes" title="I want to see the passes!">
             <p>
-                Oh all right then, here&apos;s how.
+                Do you really need to see the passes?
+                Oh all right then, here's how.
             </p>
             <p>
                 We have to subclass the attached display, which in our case
@@ -26,7 +30,7 @@
                 the following interface...
 <php><![CDATA[
 class HtmlReporter extends TestDisplay {
-    public TestHtmlDisplay() { ... }
+    public __construct() { ... }
     public void paintHeader(string $test_name) { ... }
     public void paintFooter(string $test_name) { ... }
     public void paintStart(string $test_name, $size) { ... }
@@ -47,7 +51,7 @@ class HtmlReporter extends TestDisplay {
                 if you are interested.
                 <ul class="api">
                     <li>
-                        <code>HtmlReporter()</code><br />
+                        <code>__construct()</code><br />
                         is the constructor.
                         Note that the unit test sets up the link to the display
                         rather than the other way around.
@@ -87,13 +91,12 @@ class HtmlReporter extends TestDisplay {
                 To show the passes we just need the
                 <code>paintPass()</code> method to behave
                 just like <code>paintFail()</code>.
-                Of course we won&apos;t modify the original.
-                We&apos;ll subclass.
+                Of course we won't modify the original, we'll subclass.
             </p>
         </section>
         <section name="subclass" title="A display subclass">
             <p>
-                Firstly we&apos;ll create a <em>tests/show_passes.php</em> file
+                Firstly we'll create a <em>tests/show_passes.php</em> file
                 in our logging project and then place in it this empty class...
 <php><![CDATA[
 <strong><?php
@@ -103,10 +106,6 @@ if (! defined('SIMPLE_TEST')) {
 require_once(SIMPLE_TEST . 'reporter.php');
     
 class ShowPasses extends HtmlReporter {
-        
-    function ShowPasses() {
-        $this->HtmlReporter();
-    }
 }
 ?></strong>
 ]]></php>
@@ -124,7 +123,7 @@ function paintFail($message) {
     print "-&gt;$message<br />\n";
 }
 ]]></php>
-                Essentially it chains to the parent&apos;s version, which we
+                Essentially it chains to the parent's version, which we
                 have to do also to preserve house keeping, and then
                 prints a breadcrumbs trail calculated from the current test
                 list.
@@ -134,10 +133,6 @@ function paintFail($message) {
                 Transposing this to our new class...
 <php><![CDATA[
 class ShowPasses extends HtmlReporter {
-    
-    function ShowPasses() {
-        $this->HtmlReporter();
-    }
     <strong>
     function paintPass($message) {
         parent::paintPass($message);
@@ -151,19 +146,21 @@ class ShowPasses extends HtmlReporter {
 ]]></php>
                 So far so good.
                 Now to make use of our new class we have to modify our
-                <em>tests/all_tests.php</em> file...
+                <em>tests/all_tests.php</em> file.
 <php><![CDATA[
-<?php
-if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}
-require_once(SIMPLE_TEST . 'unit_tester.php');<strong>
-require_once('show_passes.php');</strong>
+<?php<strong>
+require_once('show_passes.php');
+require_once('simpletest/simpletest.php');
+SimpleTest::prefer('ShowPasses');</strong>
+require_once('simpletest/autorun.php');
 
-$test = &new TestSuite('All tests');
-$test->addTestFile('log_test.php');
-$test->addTestFile('clock_test.php');
-$test->run(<strong>new ShowPasses()</strong>);
+class AllTests {
+    function __construct() {
+        parent::__construct('All tests');
+        $this->addTestFile('log_test.php');
+        $this->addTestFile('clock_test.php');
+    }
+}
 ?>
 ]]></php>
                 We can run this to see the results of our handywork...
@@ -185,10 +182,6 @@ $test->run(<strong>new ShowPasses()</strong>);
                 easily by overriding one more method...
 <php><![CDATA[
 class ShowPasses extends HtmlReporter {
-    
-    function ShowPasses() {
-        $this->HtmlReporter();
-    }
     
     function paintPass($message) {
         parent::paintPass($message);
@@ -226,7 +219,7 @@ class ShowPasses extends HtmlReporter {
             </p>
             <p>
                 Try it both ways and see which you prefer.
-                We&apos;ll leave it in for a bit anyhow when looking at the
+                We'll leave it in for a bit anyhow when looking at the
                 <a href="mock_objects_tutorial.php">mock objects coming up</a>.
                 This is the first test tool that generates additional tests
                 and it will be useful to see what is happening behind the scenes.

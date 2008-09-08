@@ -5,7 +5,7 @@
     <content>
         <introduction>
             <p>
-                SimpleTest is hard-coded to be flexible and extensible.
+                SimpleTest is coded to be flexible and extensible.
                 It means you can <a href="subclass_tutorial.php">add your own assertions</a>.
                 You can also add your own reporter or any other tool worth your fancy.
                 In fact there's a special directory inside SimpleTest SVN trunk devoted

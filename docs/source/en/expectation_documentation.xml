@@ -31,7 +31,7 @@
 <php><![CDATA[
 <strong>class NewsService {
     ...
-    function publish(&$writer) {
+    function publish($writer) {
         if (! $this->isConnected()) {
             $writer->write('Cannot connect to news service "' .
                     $this->_name . '" at this time. ' .
@@ -49,13 +49,13 @@
 class TestOfNewsService extends UnitTestCase {
     ...
     function testConnectionFailure() {<strong>
-        $writer = &new MockWriter();
+        $writer = new MockWriter();
         $writer->expectOnce('write', array(
                 'Cannot connect to news service ' .
                 '"BBC News" at this time. ' .
                 'Please try again later.'));
         
-        $service = &new NewsService('BBC News');
+        $service = new NewsService('BBC News');
         $service->publish($writer);</strong>
     }
 }
@@ -74,12 +74,12 @@ class TestOfNewsService extends UnitTestCase {
 class TestOfNewsService extends UnitTestCase {
     ...
     function testConnectionFailure() {
-        $writer = &new MockWriter();<strong>
+        $writer = new MockWriter();<strong>
         $writer->expectOnce(
                 'write',
                 array(new PatternExpectation('/cannot connect/i')));</strong>
         
-        $service = &new NewsService('BBC News');
+        $service = new NewsService('BBC News');
         $service->publish($writer);
     }
 }

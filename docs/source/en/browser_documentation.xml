@@ -37,7 +37,9 @@ print $matches[1];
                 However, using the web browser for scripts allows authentication,
                 correct handling of cookies, automatic loading of frames, redirects,
                 form submission and the ability to examine the page headers.
-                Such methods are fragile against a site that is constantly
+            <p>
+            </p>
+                Methods such as periodic scraping are fragile against a site that is constantly
                 evolving and you would want a more direct way of accessing
                 data in a permanent set up, but for simple tasks this can provide
                 a very rapid solution.
@@ -54,6 +56,7 @@ print $matches[1];
                     <tr><td><code>head($url, $parameters)</code></td><td>Perform a HEAD request</td></tr>
                     <tr><td><code>get($url, $parameters)</code></td><td>Fetch a page with GET</td></tr>
                     <tr><td><code>post($url, $parameters)</code></td><td>Fetch a page with POST</td></tr>
+                    <tr><td><code>click($label)</code></td><td>Clicks visible link or button text</td></tr>
                     <tr><td><code>clickLink($label)</code></td><td>Follows a link by label</td></tr>
                     <tr><td><code>clickLinkById($id)</code></td><td>Follows a link by attribute</td></tr>
                     <tr><td><code>getUrl()</code></td><td>Current URL of page or frame</td></tr>
@@ -78,9 +81,11 @@ print $matches[1];
                 Navigating forms is similar to the
                 <a local="form_testing_documentation">WebTestCase form navigation</a>...
                 <table><tbody>
-                    <tr><td><code>setField($name, $value)</code></td><td>Sets all form fields with that name</td></tr>
+                    <tr><td><code>setField($label, $value)</code></td><td>Sets all form fields with that label or name</td></tr>
+                    <tr><td><code>setFieldByName($name, $value)</code></td><td>Sets all form fields with that name</td></tr>
                     <tr><td><code>setFieldById($id, $value)</code></td><td>Sets all form fields with that id</td></tr>
-                    <tr><td><code>getField($name)</code></td><td>Accessor for a form element value</td></tr>
+                    <tr><td><code>getField($label)</code></td><td>Accessor for a form element value by label tag and then name</td></tr>
+                    <tr><td><code>getFieldByName($name)</code></td><td>Accessor for a form element value using name attribute</td></tr>
                     <tr><td><code>getFieldById($id)</code></td><td>Accessor for a form element value</td></tr>
                     <tr><td><code>clickSubmit($label)</code></td><td>Submits form by button label</td></tr>
                     <tr><td><code>clickSubmitByName($name)</code></td><td>Submits form by button attribute</td></tr>
@@ -90,9 +95,20 @@ print $matches[1];
                     <tr><td><code>clickImageById($id, $x, $y)</code></td><td>Clicks an input tag of type image by ID attribute</td></tr>
                     <tr><td><code>submitFormById($id)</code></td><td>Submits by the form tag attribute</td></tr>
                 </tbody></table>
-                At the moment there aren't any methods to list available forms
-                and fields.
-                This will probably be added to later versions of SimpleTest.
+                At the moment there aren't many methods to list available links and fields.
+                <table><tbody>
+                    <tr><td><code>isClickable($label)</code></td><td>Test to see if a click target exists by label or name</td></tr>
+                    <tr><td><code>isSubmit($label)</code></td><td>Test for the existence of a button with that label or name</td></tr>
+                    <tr><td><code>isImage($label)</code></td><td>Test for the existence of an image button with that label or name</td></tr>
+                    <tr><td><code>getLink($label)</code></td><td>Finds a URL from it's label</td></tr>
+                    <tr><td><code>getLinkById($label)</code></td><td>Finds a URL from it's ID attribute</td></tr>
+                    <tr><td><code>getUrls()</code></td><td>Lists available links in the current page</td></tr>
+                </tbody></table>
+                This will be expanded in later versions of SimpleTest.
+            </p>
+            <p>
+                Frames are a rather esoteric feature these days, but SimpleTest has
+                retained support for them.
             </p>
             <p>
                 Within a page, individual frames can be selected.
@@ -121,6 +137,7 @@ print $matches[1];
                 aid in debugging...
                 <table><tbody>
                     <tr><td><code>setConnectionTimeout($timeout)</code></td><td>Close the socket on overrun</td></tr>
+                    <tr><td><code>getUrl()</code></td><td>Url of most recent page fetched</td></tr>
                     <tr><td><code>getRequest()</code></td><td>Raw request header of page or frame</td></tr>
                     <tr><td><code>getHeaders()</code></td><td>Raw response header of page or frame</td></tr>
                     <tr><td><code>getTransportError()</code></td><td>Any socket level errors in the last fetch</td></tr>
@@ -128,6 +145,7 @@ print $matches[1];
                     <tr><td><code>getMimeType()</code></td><td>Mime type of page or frame</td></tr>
                     <tr><td><code>getAuthentication()</code></td><td>Authentication type in 401 challenge header</td></tr>
                     <tr><td><code>getRealm()</code></td><td>Authentication realm in 401 challenge header</td></tr>
+                    <tr><td><code>getBaseUrl()</code></td><td>Base url only of most recent page fetched</td></tr>
                     <tr><td><code>setMaximumRedirects($max)</code></td><td>Number of redirects before page is loaded anyway</td></tr>
                     <tr><td><code>setMaximumNestedFrames($max)</code></td><td>Protection against recursive framesets</td></tr>
                     <tr><td><code>ignoreFrames()</code></td><td>Disables frames support</td></tr>
@@ -155,19 +173,19 @@ print $matches[1];
                 Anything that could be done in a
                 <a local="web_tester_documentation">WebTestCase</a> can
                 now be done in a <a local="unit_tester_documentation">UnitTestCase</a>.
-                This means that we can freely mix domain object testing with the
+                This means that we could freely mix domain object testing with the
                 web interface...
 <php><![CDATA[
 <strong>class TestOfRegistration extends UnitTestCase {
     function testNewUserAddedToAuthenticator() {</strong>
-        $browser = &new SimpleBrowser();
+        $browser = new SimpleBrowser();
         $browser->get('http://my-site.com/register.php');
         $browser->setField('email', 'me@here');
         $browser->setField('password', 'Secret');
         $browser->click('Register');
         <strong>
-        $authenticator = &new Authenticator();
-        $member = &$authenticator->findByEmail('me@here');
+        $authenticator = new Authenticator();
+        $member = $authenticator->findByEmail('me@here');
         $this->assertEqual($member->getPassword(), 'Secret');
     }
 }</strong>
@@ -189,25 +207,25 @@ print $matches[1];
 <php><![CDATA[
 class TestOfSecurity extends UnitTestCase {
     function testNoMultipleLoginsFromSameUser() {<strong>
-        $first = &new SimpleBrowser();
-        $first->get('http://my-site.com/login.php');
-        $first->setField('name', 'Me');
-        $first->setField('password', 'Secret');
-        $first->click('Enter');
-        $this->assertEqual($first->getTitle(), 'Welcome');
+        $first_attempt = new SimpleBrowser();
+        $first_attempt->get('http://my-site.com/login.php');
+        $first_attempt->setField('name', 'Me');
+        $first_attempt->setField('password', 'Secret');
+        $first_attempt->click('Enter');
+        $this->assertEqual($first_attempt->getTitle(), 'Welcome');
         
-        $second = &new SimpleBrowser();
-        $second->get('http://my-site.com/login.php');
-        $second->setField('name', 'Me');
-        $second->setField('password', 'Secret');
-        $second->click('Enter');
-        $this->assertEqual($second->getTitle(), 'Access Denied');</strong>
+        $second_attempt = new SimpleBrowser();
+        $second_attempt->get('http://my-site.com/login.php');
+        $second_attempt->setField('name', 'Me');
+        $second_attempt->setField('password', 'Secret');
+        $second_attempt->click('Enter');
+        $this->assertEqual($second_attempt->getTitle(), 'Access Denied');</strong>
     }
 }
 ]]></php>
                 You can also use the <code>SimpleBrowser</code> class
                 directly when you want to write test cases using a different
-                test tool than SimpleTest.
+                test tool than SimpleTest, such as PHPUnit.
             </p>
         </section>
     </content>
