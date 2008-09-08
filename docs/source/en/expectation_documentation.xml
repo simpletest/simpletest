@@ -87,7 +87,7 @@ class TestOfNewsService extends UnitTestCase {
                 Instead of passing in the expected parameter to the
                 <code>MockWriter</code> we pass an
                 expectation class called
-                <code>WantedPatternExpectation</code>.
+                <code>PatternExpectation</code>.
                 The mock object is smart enough to recognise this as special
                 and to treat it differently.
                 Rather than simply comparing the incoming argument to this
@@ -95,7 +95,7 @@ class TestOfNewsService extends UnitTestCase {
                 perform the test.
             </p>
             <p>
-                The <code>WantedPatternExpectation</code> takes
+                The <code>PatternExpectation</code> takes
                 the regular expression to match in its constructor.
                 Whenever a comparison is made by the <code>MockWriter</code>
                 against this expectation class, it will do a
@@ -120,6 +120,8 @@ class TestOfNewsService extends UnitTestCase {
                     <tr><td><code>IsAExpectation</code></td><td>Checks the type or class name only</td></tr>
                     <tr><td><code>NotAExpectation</code></td><td>Opposite of the <code>IsAExpectation</code></td></tr>
                     <tr><td><code>MethodExistsExpectation</code></td><td>Checks a method is available on an object</td></tr>
+                    <tr><td><code>TrueExpectation</code></td><td>Accepts any PHP variable that evaluates to true</td></tr>
+                    <tr><td><code>FalseExpectation</code></td><td>Accepts any PHP variable that evaluates to false</td></tr>
                 </tbody></table>
                 Most take the expected value in the constructor.
                 The exceptions are the pattern matchers, which take a regular expression,
@@ -206,7 +208,7 @@ $authorisation->setReturnValue('isAllowed', false);</strong>
                 valid IP addresses.
                 In order to work correctly with the stubs and mocks the new
                 expectation class should extend
-                <code>SimpleExpectation</code>...
+                <code>SimpleExpectation</code> or forther extend a subclass...
 <php><![CDATA[
 <strong>class ValidIp extends SimpleExpectation {
     
@@ -231,6 +233,47 @@ $authorisation->setReturnValue('isAllowed', false);</strong>
                 This class can now be used in place of the earlier expectation
                 classes.
             </p>
+            <p>
+                Here is a more typical example, matching part of a hash...
+<php><![CDATA[
+<strong>class JustField extends EqualExpectation {
+    private $key;
+    
+    function __construct($key, $expected) {
+        parent::__construct($expected);
+        $this->key = $key;
+    }
+    
+    function test($compare) {
+        if (! isset($compare[$this->key])) {
+            return false;
+        }
+        return parent::test($compare[$this->key]);
+    }
+    
+    function testMessage($compare) {
+        if (! isset($compare[$this->key])) {
+            return 'Key [' . $this->key . '] does not exist';
+        }
+        return 'Key [' . $this->key . '] -> ' .
+                parent::testMessage($compare[$this->key]);
+    }
+}</strong>
+]]></php>
+                We tend to seperate message clauses with
+                &quot;<![CDATA[&nbsp;->&nbsp;]]>&quot;.
+                This allows derivative tools to reformat the output.
+            </p>
+            <p>
+                Suppose some authenticator is expecting to be given
+                a database row corresponding to the user, and we
+                only need to confirm the username is correct.
+                We can assert just their username with...
+<php><![CDATA[
+$mock->expectOnce('authenticate',
+                  array(new JustKey('username', 'marcus')));
+]]></php>
+            </p>
         </section>
         <section name="unit" title="Under the bonnet of the unit tester">
             <p>
@@ -241,7 +284,7 @@ $authorisation->setReturnValue('isAllowed', false);</strong>
                 homebrew expectation classes within the test suites directly.
             </p>
             <p>
-                The most crude way of doing this is to use the
+                The most crude way of doing this is to use the generic
                 <code>SimpleTest::assert()</code> method to
                 test against it directly...
 <php><![CDATA[
@@ -256,6 +299,9 @@ $authorisation->setReturnValue('isAllowed', false);</strong>
     }
 }</strong>
 ]]></php>
+                <code>assert()</code> will test any expectation class directly.
+            </p>
+            <p>
                 This is a little untidy compared with our usual
                 <code>assert...()</code> syntax.
             </p>
@@ -281,14 +327,12 @@ class TestOfNetworking extends UnitTestCase {
     }
 }
 ]]></php>
-                It is unlikely we would ever need this degree of control
-                over the testing machinery.
                 It is rare to need the expectations for more than pattern
-                matching.
+                matching, but these facilities do allow testers to build
+                some sort of domain language for testing their application.
                 Also, complex expectation classes could make the tests
                 harder to read and debug.
-                These mechanisms are really of most use to authors of systems
-                that will extend the test framework to create their own tool set.
+                In effect extending the test framework to create their own tool set.
             </p>
         </section>
     </content>
