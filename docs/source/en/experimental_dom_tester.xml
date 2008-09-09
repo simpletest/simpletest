@@ -5,7 +5,7 @@
     <content>
         <introduction>
             <div class="experimental">
-                Careful : this documentation refers to un-released code. It's only available in CVS.
+                Careful : this documentation refers to un-released code. It's only available in SVN.
             </div>
             <p>
                 Before SimpleTest2 gets a new browser (PHP5 only and DOM based), a new

@@ -5,7 +5,7 @@
     <content>
         <introduction>
             <div class="experimental">
-                Careful : this documentation refers to un-released code. It's only available in CVS.
+                Careful : this documentation refers to un-released code. It's only available in SVN.
             </div>
             <p>
                 What the developer wants from his tests is immediate feedback. The <em>TextReporter</em>

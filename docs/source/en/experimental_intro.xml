@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <!-- $Id$ -->
-<page title="Experimental stuff (in CVS only)" here="Experimental stuff">
-    <long_title>Experimental stuff, found in CVS only</long_title>
+<page title="Experimental stuff (in SVN only)" here="Experimental stuff">
+    <long_title>Experimental stuff, found in SVN only</long_title>
     <content>
-        <section name="intro" title="Why only in CVS">
+        <section name="intro" title="Why only in SVN">
             <p>
                 If a bug is found in SimpleTest, chances are it'll get corrected
-                inside the CVS tree with the corresponding test case : just to make
+                inside the SVN tree with the corresponding test case : just to make
                 sure the bug doesn't make a come back later on. 
             </p>
             <p>
-                Also the SimpleTest CVS trunk is usually full of little known
+                Also the SimpleTest SVN trunk is usually full of little known
                 experiments with code : new ideas are usually tried out there
                 before a general release. Before it happens, the documentation need
                 to be completed : that's where this section comes into place. You'll
