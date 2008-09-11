@@ -1416,7 +1416,7 @@ class WebTestCase extends SimpleTestCase {
      */
     function assertNoCookie($name, $message = '%s') {
         return $this->assertTrue(
-                $this->getCookie($name) === false,
+                $this->getCookie($name) === null or $this->getCookie($name) === false,
                 sprintf($message, "Not expecting cookie [$name]"));
     }
 

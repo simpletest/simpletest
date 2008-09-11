@@ -48,7 +48,7 @@ class TestOfLiveBrowser extends UnitTestCase {
         $browser = new SimpleBrowser();
         $browser->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
         $browser->get($this->samples() . 'link_confirm.php');
-        $this->assertTrue($browser->clickLink("märcêl kiek'eboe"));
+        $this->assertTrue($browser->clickLink("mï¿½rcï¿½l kiek'eboe"));
         $this->assertPattern('/target for the SimpleTest/', $browser->getContent());
     }
     
@@ -553,6 +553,10 @@ class TestOfLiveCookies extends SimpleTestAcceptanceTest {
         $this->assertCookie('day_cookie', 'C');
     }
      
+    function testNoCookie() {
+        $this->assertNoCookie('aRandomCookie');
+    }
+
     function testNoCookieReadingWhenCookiesDisabled() {
         $this->ignoreCookies();
         $this->get($this->samples() . 'set_cookies.php');
