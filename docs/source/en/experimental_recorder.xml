@@ -129,7 +129,7 @@ $group->run($recorder);
         </section>
     </content>
     <internal>
-        <link>A <a href="#recorder">Recorder</a> for non-developpers.</link>
+        <link>A <a href="#recorder">Recorder</a> for non-developers.</link>
         <link>Exploring the <a href="#recorder-results">Recorder results</a>.</link>
     </internal>
     <external>

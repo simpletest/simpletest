@@ -43,13 +43,10 @@
                 OK, let&apos;s make a test...
 <php><![CDATA[
 <strong><?php
-if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}
-require_once(SIMPLE_TEST . 'autorun.php');
+require_once(dirname(__FILE__) . '/simpletest/autorun.php');
 
 class TestOfLogging extends UnitTestCase {
-    function testCreatingNewFile() {
+    function testFirstLogMessagesCreatesFileIfNonexistent() {
     }
 }
 ?></strong>
@@ -57,44 +54,30 @@ class TestOfLogging extends UnitTestCase {
                 Piece by piece here is what it all means.
             </p>
             <p>
-                The <code>SIMPLE_TEST</code> constant
-                is the path from this file to the Simple Test classes.
-                The classes could be placed into the path in the
-                <em>php.ini</em> file, but if you are using a shared
-                hosting account you do not have access to this.
-                To keep everybody happy this path is declared explicitely
-                in the test script.
-                Later we will see how it eventually ends up in only one
-                place.
+                The <code>dirname(__FILE__)</code> construct just ensures
+                that the path is taken relative current file.
             </p>
             <p>
                 What is this <em>autorun.php</em> file?
-                The Simple Test libraries are a toolkit for creating
-                your own standardised test suite.
-                They can be used &quot;as is&quot; without trouble, but consist
-                of separate components that have to be assembled.
-                <em>autorun.php</em> is a special component : it provides both
-                the unit testing and display pieces. It catches all test classes
-                and runs them automagically.
-            </p>
-            <p>
-                It is probable that you will eventually write your own display
-                and so including the default set is optional.
-                SimpleTest includes a usable, but basic, test display class
-                called <code>HtmlReporter</code>.
-                It can record test starts, ends, errors, passes and fails.
-                It displays this information as quickly as possible in case
-                the test code crashes the script and obscures the point of
-                failure.
+                This file does the expected work of pulling in the definitions
+                of <code>UnitTestCase</code>.
+                It collects all test classes in the current file and runs
+                them automagically.
+                It does this by setting up an exit handler.
+                More on this later when we look at modifying the output.
             </p>
             <p>
                 The tests themselves are gathered in test case classes.
-                This one is typical in extending
+                This one, the <code>TestOfLogging</code>class , is typical in extending
                 <code>UnitTestCase</code>.
-                When the test is run it will search for any method within
-                that starts with the name &quot;test&quot; and run it.
+                When the test case is invoked by the autorunner it will
+                search for any method within that starts with the name &quot;test&quot;.
+                Each of these methods will be executed in the order they are
+                defined in the class.
+            </p>
+            <p>
                 Our only test method at present is called
-                <code>testCreatingNewFile()</code>.
+                <code>testFirstLogMessagesCreatesFileIfNonexistent()</code>.
                 There is nothing in it yet.
             </p>
             <p>
@@ -102,22 +85,20 @@ class TestOfLogging extends UnitTestCase {
                 We need to actually place some code inside it.
                 The <code>UnitTestCase</code> class
                 will typically generate test events when run and these events are
-                sent to an observer.
+                sent to an observing reporter using methods inherited from
+                <code>UnitTestCase</code>.
             </p>
             <p>
                 Now to add test code...
 <php><![CDATA[
 <?php
-if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}
-require_once(SIMPLE_TEST . 'autorun.php');<strong>
+require_once(dirname(__FILE__) . '/simpletest/autorun.php');
 require_once('../classes/log.php');</strong>
 
 class TestOfLogging extends UnitTestCase {
-    function testCreatingNewFile() {<strong>
-        @unlink('../temp/test.log');
-        $log = new Log('../temp/test.log');
+    function testFirstLogMessagesCreatesFileIfNonexistent() {<strong>
+        @unlink(dirname(__FILE__) . '/../temp/test.log');
+        $log = new Log(dirname(__FILE__) . '/../temp/test.log');
         $log->message('Should write this to a file');
         $this->assertTrue(file_exists('../temp/test.log'));</strong>
     }
@@ -133,6 +114,14 @@ class TestOfLogging extends UnitTestCase {
                 pretty much as one liners.
                 Even less when using some of the test artifacts that we
                 will use later.
+            </p>
+            <p>
+                You might also have been thinking that
+                <code>testFirstLogMessagesCreatesFileIfNonexistent</code>
+                is an awfully long method name.
+                Normally that would be true, but here it's a good thing.
+                We will never type this name again, and we save ourselves having
+                to write comments or specifications.
             </p>
             <p>
                 Now comes the first of our decisions.
@@ -173,23 +162,30 @@ class TestOfLogging extends UnitTestCase {
                 true and a fail event otherwise.
                 We can have a variety of different assertions and even more
                 if we extend our base test cases.
+            </p>
+            <p>
                 Here is the base list...
                 <table><tbody>
-                    <tr><td><code>assertTrue($x)</code></td><td>Fail if $x is false</td></tr>
-                    <tr><td><code>assertFalse($x)</code></td><td>Fail if $x is true</td></tr>
-                    <tr><td><code>assertNull($x)</code></td><td>Fail if $x is set</td></tr>
-                    <tr><td><code>assertNotNull($x)</code></td><td>Fail if $x not set</td></tr>
-                    <tr><td><code>assertIsA($x, $t)</code></td><td>Fail if $x is not the class or type $t</td></tr>
-                    <tr><td><code>assertEqual($x, $y)</code></td><td>Fail if $x == $y is false</td></tr>
-                    <tr><td><code>assertNotEqual($x, $y)</code></td><td>Fail if $x == $y is true</td></tr>
-                    <tr><td><code>assertIdentical($x, $y)</code></td><td>Fail if $x === $y is false</td></tr>
-                    <tr><td><code>assertNotIdentical($x, $y)</code></td><td>Fail if $x === $y is true</td></tr>
+                    <tr><td><code>assertTrue($x)</code></td><td>Fail unless $x evaluates true</td></tr>
+                    <tr><td><code>assertFalse($x)</code></td><td>Fail unless $x evaluates false</td></tr>
+                    <tr><td><code>assertNull($x)</code></td><td>Fail unless $x is not set</td></tr>
+                    <tr><td><code>assertNotNull($x)</code></td><td>Fail unless $x is set to something</td></tr>
+                    <tr><td><code>assertIsA($x, $t)</code></td><td>Fail unless $x is the class or type $t</td></tr>
+                    <tr><td><code>assertNotA($x, $t)</code></td><td>Fail unless $x is not the class or type $t</td></tr>
+                    <tr><td><code>assertEqual($x, $y)</code></td><td>Fail unless $x == $y is true</td></tr>
+                    <tr><td><code>assertNotEqual($x, $y)</code></td><td>Fail unless $x == $y is false</td></tr>
+                    <tr><td><code>assertWithinMargin($x, $y, $margin)</code></td><td>Fail unless $x and $y are separated less than $margin</td></tr>
+                    <tr><td><code>assertOutsideMargin($x, $y, $margin)</code></td><td>Fail unless $x and $y are sufficiently different</td></tr>
+                    <tr><td><code>assertIdentical($x, $y)</code></td><td>Fail unless $x === $y for variables, $x == $y for objects of the same type</td></tr>
+                    <tr><td><code>assertNotIdentical($x, $y)</code></td><td>Fail unless $x === $y is false, or two objects are unequal or different types</td></tr>
                     <tr><td><code>assertReference($x, $y)</code></td><td>Fail unless $x and $y are the same variable</td></tr>
-                    <tr><td><code>assertCopy($x, $y)</code></td><td>Fail if $x and $y are the same variable</td></tr>
-                    <tr><td><code>assertWantedPattern($p, $x)</code></td><td>Fail unless the regex $p matches $x</td></tr>
-                    <tr><td><code>assertNoUnwantedPattern($p, $x)</code></td><td>Fail if the regex $p matches $x</td></tr>
-                    <tr><td><code>assertNoErrors()</code></td><td>Fail if any PHP error occoured</td></tr>
-                    <tr><td><code>assertError($x)</code></td><td>Fail if no PHP error or incorrect message</td></tr>
+                    <tr><td><code>assertCopy($x, $y)</code></td><td>Fail unless $x and $y are the different in any way</td></tr>
+                    <tr><td><code>assertSame($x, $y)</code></td><td>Fail unless $x and $y are the same objects</td></tr>
+                    <tr><td><code>assertClone($x, $y)</code></td><td>Fail unless $x and $y are identical, but separate objects</td></tr>
+                    <tr><td><code>assertPattern($p, $x)</code></td><td>Fail unless the regex $p matches $x</td></tr>
+                    <tr><td><code>assertNoPattern($p, $x)</code></td><td>Fail if the regex $p matches $x</td></tr>
+                    <tr><td><code>expectError($e)</code></td><td>Triggers a fail if this error does not happen before the end of the test</td></tr>
+                    <tr><td><code>expectException($e)</code></td><td>Triggers a fail if this exception is not thrown before the end of the test</td></tr>
                 </tbody></table>
             </p>
             <p>
@@ -198,13 +194,13 @@ class TestOfLogging extends UnitTestCase {
                 What happens?
                 It should crash...
                 <div class="demo">
-                    <b>Fatal error</b>:  Failed opening required '../classes/log.php' (include_path='') in <b>/home/marcus/projects/lastcraft/tutorial_tests/Log/tests/log_test.php</b> on line <b>7</b>
+                    <b>Fatal error</b>: Failed opening required '../classes/log.php' (include_path='') in <b>/home/marcus/projects/lastcraft/tutorial_tests/Log/tests/log_test.php</b> on line <b>7</b>
                 </div>
                 The reason is that we have not yet created <em>log.php</em>.
             </p>
             <p>
-                Hang on, that&apos;s silly!
-                You aren&apos;t going to build a test without creating any of the
+                Hang on, that's silly!
+                You aren't going to build a test without creating any of the
                 code you are testing, surely...?
             </p>
         </section>
@@ -225,8 +221,7 @@ class TestOfLogging extends UnitTestCase {
                 You write another test and get that passing.
                 What you will now have is some duplication and generally lousy
                 code.
-                You re-arrange
-                (refactor)
+                You re-arrange (refactor)
                 that code while the tests are passing and thus while you cannot break
                 anything.
                 Once the code is as clean as possible you are ready to add more

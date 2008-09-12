@@ -31,10 +31,8 @@ function simpletest_autorun() {
                 basename(initial_file()),
                 $loader->selectRunnableTests($candidates));
         $result = $suite->run(new DefaultReporter());
-    } catch (Exception $e) {
-        // This is here, because under normal circumstances shutdown
-        // functions don't have a stack frame, leading to obscure errors.
-        echo $e->__toString();
+    } catch (Exception $stack_frame_fix) {
+        print $stack_frame_fix->getMessage();
         $result = false;
     }
     if (SimpleReporter::inCli()) {
