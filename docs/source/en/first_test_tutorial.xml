@@ -100,7 +100,7 @@ class TestOfLogging extends UnitTestCase {
         @unlink(dirname(__FILE__) . '/../temp/test.log');
         $log = new Log(dirname(__FILE__) . '/../temp/test.log');
         $log->message('Should write this to a file');
-        $this->assertTrue(file_exists('../temp/test.log'));</strong>
+        $this->assertTrue(file_exists(dirname(__FILE__) . '../temp/test.log'));</strong>
     }
 }
 ?>
@@ -221,24 +221,28 @@ class TestOfLogging extends UnitTestCase {
                 You write another test and get that passing.
                 What you will now have is some duplication and generally lousy
                 code.
-                You re-arrange (refactor)
-                that code while the tests are passing and thus while you cannot break
-                anything.
+                You re-arrange (refactor) that code while the tests are passing.
+                This stops you breaking anything.
                 Once the code is as clean as possible you are ready to add more
-                functionality.
-                In turn you only achieve this by adding another test and starting the
+                functionality, which you don't do.
+                Instead you add another test for your feature and start the
                 cycle again.
+                Your functionality gets created by trying to pass the tests that
+                define it.
             </p>
             <p>
-                This is a radical approach and one that I feel is incomplete.
-                However it makes for a great way to explain a unit tester!
+                Think of it as an executable specification that you create just in time.
+            </p>
+            <p>
+                This is a radical approach and one that I feel is incomplete,
+                but it makes for a great way to explain a unit tester!
                 We happen to have a failing, not to say crashing, test right now so
-                let&apos;s write some code into <em>log.php</em>...
+                let's write some code into <em>log.php</em>...
 <php><![CDATA[
 <strong><?php
 class Log {
     
-    function Log($file_path) {
+    function __construct($file_path) {
     }
         
     function message($message) {
@@ -249,43 +253,37 @@ class Log {
                 This is the minimum to avoid a PHP fatal error.
                 We now get the response...
                 <div class="demo">
-                    <h1>testoflogging</h1>
-                    <span class="fail">Fail</span>: testcreatingnewfile-&gt;True assertion failed.<br />
+                    <h1>TestOfLogging</h1>
+                    <span class="fail">Fail</span>: testFirstLogMessagesCreatesFileIfNonexistent-&gt;True assertion failed.<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
                     <strong>0</strong> passes and <strong>1</strong> fails.</div>
                 </div>
-                And &quot;testoflogging&quot; has failed.
-                PHP has this really annoying effect of reducing class and method
-                names to lower case internally.
-                SimpleTest uses these names by default to describe the tests, but
-                we can replace them with our own...
+                And &quot;TestOfLogging&quot; has failed.
+                SimpleTest uses class names by default to describe the tests, but
+                we can replace the name with our own...
 <php><![CDATA[
 class TestOfLogging extends UnitTestCase {
-    <strong>function TestOfLogging() {
-        $this->UnitTestCase('Log class test');
+    <strong>function __construct() {
+        parent::__construct('Log test');
     }</strong>
-    function testCreatingNewFile() {
-        @unlink('../temp/test.log');
-        $log = new Log('../temp/test.log');
-        $log->message('Should write this to a file');<strong>
-        $this->assertTrue(file_exists('../temp/test.log'), 'File created');</strong>
+
+    function testFirstLogMessagesCreatesFileIfNonexistent() {<strong>
+        @unlink(dirname(__FILE__) . '/../temp/test.log');
+        $log = new Log(dirname(__FILE__) . '/../temp/test.log');
+        $log->message('Should write this to a file');
+        $this->assertTrue(file_exists(dirname(__FILE__) . '../temp/test.log'));</strong>
     }
 }
 ]]></php>
                 Giving...
                 <div class="demo">
-                    <h1>Log class test</h1>
-                    <span class="fail">Fail</span>: testcreatingnewfile-&gt;File created.<br />
+                    <h1>Log test</h1>
+                    <span class="fail">Fail</span>: testFirstLogMessagesCreatesFileIfNonexistent-&gt;File created.<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
                     <strong>0</strong> passes and <strong>1</strong> fails.</div>
                 </div>
-                There is not much we can do about the method name I am afraid.
-            </p>
-            <p>
-                Test messages like this are a bit like code comments.
-                Some organisations insist on them while others ban them as clutter
-                and a waste of good typing.
-                I am somewhere in the middle.
+                If you want to change the test name, then you'd have to do it by
+                changing the reporter output, which we look at later.
             </p>
             <p>
                 To get the test passing we could just create the file in the
@@ -355,7 +353,7 @@ class TestOfLogging extends UnitTestCase {
     function TestOfLogging() {
         $this->UnitTestCase('Log class test');
     }
-    function testCreatingNewFile() {
+    function testFirstLogMessagesCreatesFileIfNonexistent() {
         @unlink('../temp/test.log');
         $log = new Log('../temp/test.log');<strong>
         $this->assertFalse(file_exists('../temp/test.log'), 'No file created before first message');</strong>
