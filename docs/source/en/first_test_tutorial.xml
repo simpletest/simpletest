@@ -221,7 +221,7 @@ class TestOfLogging extends UnitTestCase {
                 You write another test and get that passing.
                 What you will now have is some duplication and generally lousy
                 code.
-                You re-arrange (refactor) that code while the tests are passing.
+                You re-arrange, or &quot;refactor&quot;, that code while the tests are passing.
                 This stops you breaking anything.
                 Once the code is as clean as possible you are ready to add more
                 functionality, which you don't do.
@@ -256,7 +256,7 @@ class Log {
                     <h1>TestOfLogging</h1>
                     <span class="fail">Fail</span>: testFirstLogMessagesCreatesFileIfNonexistent-&gt;True assertion failed.<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
-                    <strong>0</strong> passes and <strong>1</strong> fails.</div>
+                    <strong>0</strong> passes, <strong>1</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
                 And &quot;TestOfLogging&quot; has failed.
                 SimpleTest uses class names by default to describe the tests, but
@@ -271,7 +271,7 @@ class TestOfLogging extends UnitTestCase {
         @unlink(dirname(__FILE__) . '/../temp/test.log');
         $log = new Log(dirname(__FILE__) . '/../temp/test.log');
         $log->message('Should write this to a file');
-        $this->assertTrue(file_exists(dirname(__FILE__) . '../temp/test.log'));</strong>
+        $this->assertTrue(file_exists(dirname(__FILE__) . '/../temp/test.log'));</strong>
     }
 }
 ]]></php>
@@ -280,7 +280,7 @@ class TestOfLogging extends UnitTestCase {
                     <h1>Log test</h1>
                     <span class="fail">Fail</span>: testFirstLogMessagesCreatesFileIfNonexistent-&gt;File created.<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
-                    <strong>0</strong> passes and <strong>1</strong> fails.</div>
+                    <strong>0</strong> passes, <strong>1</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
                 If you want to change the test name, then you'd have to do it by
                 changing the reporter output, which we look at later.
@@ -297,14 +297,14 @@ class TestOfLogging extends UnitTestCase {
 <php><![CDATA[
 <?php   
 class Log {<strong>
-    var $_file_path;</strong>
+    var $path;</strong>
         
-    function Log($file_path) {<strong>
-        $this->_file_path = $file_path;</strong>
+    function __construct($path) {<strong>
+        $this->path = $path;</strong>
     }
         
     function message($message) {<strong>
-        $file = fopen($this->_file_path, 'a');
+        $file = fopen($this->path, 'a');
         fwrite($file, $message . "\n");
         fclose($file);</strong>
     }
@@ -314,14 +314,16 @@ class Log {<strong>
                 It took me no less than four failures to get to the next step.
                 I had not created the temporary directory, I had not made it
                 publicly writeable, I had one typo and I did not check in the
-                new directory to CVS.
+                new directory to CVS (I found out later).
                 Any one of these could have kept me busy for several hours if
                 they had come to light later, but then that is what testing is for.
+            </p>
+            <p>
                 With the necessary fixes we get...
                 <div class="demo">
-                    <h1>Log class test</h1>
+                    <h1>Log test</h1>
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
-                    <strong>1</strong> passes and <strong>0</strong> fails.</div>
+                    <strong>1</strong> passes, <strong>0</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
                 Success!
             </p>
@@ -344,29 +346,27 @@ class Log {<strong>
         <section name="doc" title="Tests as Documentation">
             <p>
                 There is a subtlety here.
-                We don&apos;t want the file created until we actually send
+                We don't want the file created until we actually send
                 a message.
-                Rather than think about this too deeply we will just add
-                another test for it...
+                Rather than think about this too deeply we will just
+                assert it...
 <php><![CDATA[
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase('Log class test');
-    }
     function testFirstLogMessagesCreatesFileIfNonexistent() {
-        @unlink('../temp/test.log');
-        $log = new Log('../temp/test.log');<strong>
-        $this->assertFalse(file_exists('../temp/test.log'), 'No file created before first message');</strong>
+        @unlink(dirname(__FILE__) . '/../temp/test.log');
+        $log = new Log(dirname(__FILE__) . '/../temp/test.log');<strong>
+        $this->assertFalse(file_exists(dirname(__FILE__) . '/../temp/test.log'));</strong>
         $log->message('Should write this to a file');
-        $this->assertTrue(file_exists('../temp/test.log'), 'File created');
+        $this->assertTrue(file_exists(dirname(__FILE__) . '/../temp/test.log'));
+
     }
 }
 ]]></php>
                 ...and find it already works...
                 <div class="demo">
-                    <h1>Log class test</h1>
+                    <h1>TestOfLogging</h1>
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
-                    <strong>2</strong> passes and <strong>0</strong> fails.</div>
+                    <strong>2</strong> passes, <strong>0</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
                 Actually I knew it would.
                 I am putting this test in to confirm this partly for peace of mind, but
