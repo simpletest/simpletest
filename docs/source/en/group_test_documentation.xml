@@ -9,15 +9,15 @@
                 be placed in files without the runner code...
 <php><![CDATA[
 <strong><?php
-    require_once('../classes/io.php');
+require_once('../classes/io.php');
 
-    class FileTester extends UnitTestCase {
-        ...
-    }
+class FileTester extends UnitTestCase {
+    ...
+}
 
-    class SocketTester extends UnitTestCase {
-        ...
-    }
+class SocketTester extends UnitTestCase {
+    ...
+}
 ?></strong>
 ]]></php>
                 As many cases as needed can appear in a single file.

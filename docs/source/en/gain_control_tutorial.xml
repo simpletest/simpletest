@@ -27,11 +27,13 @@
                 resources and configuration amongst others.
                 The failure or misinstall of one of these components will
                 break the test suite.
+            </p>
+            <p>
                 Do we add tests to confirm these components are installed?
                 This is a good idea, but if you place them into code module
                 tests you will start to clutter you test code with detail
                 that is irrelavent to the immediate task.
-                They should be placed in their own test group.
+                They should be placed in their own test suite.
             </p>
             <p>
                 Another problem, though, is that our development machines
@@ -43,19 +45,21 @@
                 When faced with this while coding we will often create wrapper
                 versions of classes that deal with these resources.
                 Ugly details of these resources are then coded once only.
-                I like to call these classes &quot;boundary classes&quot;
+                I like to call these classes &quot;gateway classes&quot;,
                 as they exist at the edges of the application, 
                 the interface of your application with the rest of the
                 system.
-                These boundary classes are best simulated during testing
-                by simulated versions.
-                These run faster as well and are often called
-                &quot;Server Stubs&quot; or in more generic form
+                These gateway classes are best simulated during testing
+                by fake versions.
+                These run faster and are often called
+                &quot;Server Stubs&quot;, or in more generic form
                 &quot;Mock Objects&quot;.
-                It is a great time saver to wrap and stub out every such resource.
+                It is a great time saver to wrap and stub out such resources.
             </p>
             <p>
-                One often neglected factor is time.
+                One often neglected external resource is time.
+            </p>
+            <p>
                 For example, to test a session time-out coders will often
                 temporarily set the session time limit to a small value, say two seconds,
                 and then do a <code>sleep(3)</code>
@@ -68,51 +72,42 @@
         </section>
         <section name="clock" title="A clock class">
             <p>
-                Again we will design our clock wrapper by writing tests.
-                Firstly we add a clock test case to our <em>tests/all_tests.php</em>
+                We will again design our clock wrapper by first writing tests.
+                We add a clock test case to our <em>tests/all_tests.php</em>
                 test suite...
 <php><![CDATA[
 <?php
-if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}
-require_once(SIMPLE_TEST . 'autorun.php');
-require_once('log_test.php');<strong>
-require_once('clock_test.php');</strong>
+require_once(dirname(__FILE__) . '/simpletest/autorun.php');
+require_once(dirname(__FILE__) . '/log_test.php');
+require_once(dirname(__FILE__) . '/clock_test.php');
 
-$test = &new TestSuite('All tests');
-$test->addTestCase(new TestOfLogging());<strong>
-$test->addTestCase(new TestOfClock());</strong>
-$test->run(new HtmlReporter());
+class AllTests extends TestSuite {
+    function __construct() {
+        parent::__construct();
+        $this->addTest(new TestOfLogging());<strong>
+        $this->addTest(new TestOfClock());</strong>
+    }
+}
 ?>
 ]]></php>
                 Then we create the test case in the new file
                 <em>tests/clock_test.php</em>...
 <php><![CDATA[
-<strong><?php
-require_once('../classes/clock.php');
-
+<?php
+require_once(dirname(__FILE__) . '/../classes/clock.php');
+<strong>
 class TestOfClock extends UnitTestCase {
-    function TestOfClock() {
-        $this->UnitTestCase('Clock class test');
-    }
     function testClockTellsTime() {
         $clock = new Clock();
-        $this->assertEqual($clock->now(), time(), 'Now is the right time');
+        $this->assertEqual($clock->now(), time());
     }
-    function testClockAdvance() {
-    }
-}
-?></strong>
+}</strong>
+?>
 ]]></php>
                 Our only test at the moment is that our new
                 <code>Clock</code> class acts
                 as a simple PHP <code>time()</code>
                 function substitute.
-                The other method is a place holder.
-                It&apos;s our <em>TODO</em> item if you like.
-                We haven&apos;t done a test for it yet because that
-                would spoil our rhythm.
                 We will write the time shift functionality once we are green.
                 At the moment we are obviously not green...
                 <div class="demo">
@@ -121,14 +116,10 @@ class TestOfClock extends UnitTestCase {
                     <b>/home/marcus/projects/lastcraft/tutorial_tests/tests/clock_test.php</b> on line <b>2</b>
                     <br />
                 </div>
-                We create a <em>classes/clock.php</em> file like so...
+                We create a <em>classes/clock.php</em> file...
 <php><![CDATA[
 <strong><?php
 class Clock {
-    
-    function Clock() {
-    }
-    
     function now() {
     }
 }
@@ -136,30 +127,28 @@ class Clock {
 ]]></php>
                 This regains our flow ready for coding.
                 <div class="demo">
-                    <h1>All tests</h1>
-                    <span class="fail">Fail</span>: Clock class test-&gt;testclocktellstime-&gt;[NULL: ] should be equal to [integer: 1050257362]<br />
+                    <h1>AllTests</h1>
+                    <span class="fail">Fail</span>: TestOfClock -&gt; testClockTellsTime -&gt; [NULL: ] should be equal to [integer: 1050257362]<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">3/3 test cases complete.
-                    <strong>4</strong> passes and <strong>1</strong> fails.</div>
+                    <strong>4</strong> passes, <strong>1</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
                 This is now easy to fix...
 <php><![CDATA[
 class Clock {
-    
-    function Clock() {
-    }
-    
     function now() {<strong>
         return time();</strong>
     }
 }
 ]]></php>
-                And now we are green...
+                And we are green...
                 <div class="demo">
-                    <h1>All tests</h1>
+                    <h1>AllTests</h1>
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">3/3 test cases complete.
-                    <strong>5</strong> passes and <strong>0</strong> fails.</div>
+                    <strong>5</strong> passes, <strong>0</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
                 There is still a problem.
+            </p>
+            <p>
                 The clock could roll over during the assertion causing the
                 result to be out by one second.
                 The chances are small, but if there were a lot of timing tests
@@ -172,17 +161,16 @@ class Clock {
                 The advancement test looks like this...
 <php><![CDATA[
 class TestOfClock extends UnitTestCase {
-    function TestOfClock() {
-        $this->UnitTestCase('Clock class test');
-    }
+
     function testClockTellsTime() {
         $clock = new Clock();
-        $this->assertEqual($clock->now(), time(), 'Now is the right time');
-    }<strong>
+        $this->assertEqual($clock->now(), time());
+    }
+    <strong>
     function testClockAdvance() {
         $clock = new Clock();
         $clock->advance(10);
-        $this->assertEqual($clock->now(), time() + 10, 'Advancement');
+        $this->assertEqual($clock->now(), time() + 10);
     }</strong>
 }
 ]]></php>
@@ -190,24 +178,20 @@ class TestOfClock extends UnitTestCase {
                 a time offset.
 <php><![CDATA[
 class Clock {<strong>
-    var $_offset;</strong>
-    
-    function Clock() {<strong>
-        $this->_offset = 0;</strong>
-    }
+    private $offset = 0;</strong>
     
     function now() {
-        return time()<strong> + $this->_offset</strong>;
+        return time()<strong> + $this->offset</strong>;
     }
     <strong>
     function advance($offset) {
-        $this->_offset += $offset;
+        $this->offset += $offset;
     }</strong>
 }
 ]]></php>
             </p>
         </section>
-        <section name="tidy" title="Group test tidy up">
+        <section name="tidy" title="Test suite tidy up">
             <p>
                 Our <em>all_tests.php</em> file has some repetition we could
                 do without.
@@ -219,29 +203,22 @@ class Clock {<strong>
                 that takes a PHP file as a parameter.
                 This mechanism makes a note of all the classes, requires in the
                 file and then has a look at any newly created classes.
-                If they are descendents of <code>TestCase</code>
-                they are added as a new group test.
-            </p>
-            <p>
-                In addition the <em>autorun</em> library will run all the collected
-                test cases automagically after loading them.
+                If they are descendents of <code>SimpleTestCase</code>
+                they are added as a new <code>TestSuite</code>.
             </p>
             <p>
                 Here is our refactored test suite using this method...
 <php><![CDATA[
-<?php
-if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}<strong>
-require_once(SIMPLE_TEST . 'autorun.php');</strong>
-<strong>
+<?php<strong>
+require_once(dirname(__FILE__) . '/simpletest/autorun.php');</strong>
+    
 class AllTests extends TestSuite {
     function AllTests() {
-        $this->TestSuite('All tests');
+        parent::__construct();<strong>
         $this->addFile('log_test.php');
-        $this->addFile('clock_test.php');
+        $this->addFile('clock_test.php');</strong>
     }
-}</strong>
+}
 ?>
 ]]></php>
                 The pitfalls of this are...
@@ -252,14 +229,19 @@ class AllTests extends TestSuite {
                     </li>
                     <li>
                         If the test file has other classes that are
-                        related to <code>TestCase</code>
+                        related to <code>SimpleTestCase</code>
                         then these will be added to the group test as well.
                     </li>
                 </ol>
-                In our tests we have only test cases in the test files and
-                we removed their inclusion from the <em>all_tests.php</em>
-                script and so we are OK.
-                This is the usual situation.
+                In practice neither of these turn out to be problems.
+                Test suites are usually a tree structure.
+                It's rare to need a test case in two places.
+                As for extra classes being included, they have to be
+                descendents of <code>SimpleTestCase</code>.
+                These are likely to be superclasses of helper code
+                for several other tests.
+                Simply marking them as <code>abstract</code> is
+                enough to stop them being run.
             </p>
             <p>
                 We should really fix the glitch with the possible

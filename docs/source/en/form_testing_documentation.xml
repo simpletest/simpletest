@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- $Id$ -->
 <page title="Form testing documentation" here="Testing forms">
-    <long_title>Simple Test documentation for testing HTML forms</long_title>
+    <long_title>SimpleTest documentation for testing HTML forms</long_title>
     <content>
         <section name="submit" title="Submitting a simple form">
             <p>
@@ -31,8 +31,7 @@
                 <a href="http://www.lastcraft.com/form_testing_documentation.php">LastCraft</a>
                 site, with the following test...
 <php><![CDATA[
-class SimpleFormTests extends WebTestCase {
-    <strong>
+class SimpleFormTests extends WebTestCase {<strong>
     function testDefaultValue() {
         $this->get('http://www.lastcraft.com/form_testing_documentation.php');
         $this->assertField('a', 'A default');
@@ -44,15 +43,20 @@ class SimpleFormTests extends WebTestCase {
                 The assertion tests that a HTML widget exists in the page with the
                 name &quot;a&quot; and that it is currently set to the value
                 &quot;A default&quot;.
-                As usual, we could use a pattern expectation instead if a fixed
+                As usual, we could use a pattern expectation instead of a fixed
                 string.
-            </p>
-            <p>
-                We could submit the form straight away, but first we&apos;ll change
+<php><![CDATA[
+class SimpleFormTests extends WebTestCase {
+    function testDefaultValue() {
+        $this->get('http://www.lastcraft.com/form_testing_documentation.php');
+        $this->assertField('a', <strong>new PatternExpectation('/default/')</strong>);
+    }
+}
+]]></php>
+                We could submit the form straight away, but first we'll change
                 the value of the text field and only then submit it...
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
-
     function testDefaultValue() {
         $this->get('http://www.my-site.com/');
         $this->assertField('a', 'A default');<strong>
@@ -61,16 +65,17 @@ class SimpleFormTests extends WebTestCase {
     }
 }
 ]]></php>
-                Because we didn&apos;t specify a method attribute on the form tag, and
-                didn&apos;t specify an action either, the test case will follow
+                Because we didn't specify a method attribute on the form tag, and
+                didn't specify an action either, the test case will follow
                 the usual browser behaviour of submitting the form data as a <em>GET</em>
                 request back to the same location.
-                SimpleTest tries to emulate typical browser behaviour as much as possible,
-                rather than attempting to catch missing attributes on tags.
+                In general SimpleTest tries to emulate typical browser behaviour as much as possible,
+                rather than attempting to catch any form of HTML omission.
                 This is because the target of the testing framework is the PHP application
                 logic, not syntax or other errors in the HTML code.
                 For HTML errors, other tools such as
-                <a href="http://www.w3.org/People/Raggett/tidy/">HTMLTidy</a> should be used.
+                <a href="http://www.w3.org/People/Raggett/tidy/">HTMLTidy</a> should be used,
+                or any of the HTML and CSS validators already out there.
             </p>
             <p>
                 If a field is not present in any form, or if an option is unavailable,
@@ -109,8 +114,7 @@ class SimpleFormTests extends WebTestCase {
     }
 }
 ]]></php>
-                The selection will not be changed on a failure to set
-                a widget value.
+                The current selection will not be changed if the new value is not an option.
             </p>
             <p>
                 Here is the full list of widgets currently supported...
@@ -202,7 +206,7 @@ class SimpleFormTests extends WebTestCase {
                 The following code will <em>not</em> work:
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
-    function testMyJavascriptForm() {
+    function testEmulateMyJavascriptForm() {
         <strong>// This does *not* work</strong>
         $this->setField('a_hidden_field', '123');
         $this->clickSubmit('OK');
@@ -214,19 +218,16 @@ class SimpleFormTests extends WebTestCase {
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
     function testMyJavascriptForm() {
-        // Pass the hidden field value as an additional POST variable
         <strong>$this->clickSubmit('OK', array('a_hidden_field'=>'123'));</strong>
     }
 
 }
 ]]></php>
-            </p>
-            <p>
                 Bear in mind that in doing this you're effectively stubbing out a
                 part of your software (the javascript code in the form), and
                 perhaps you might be better off using something like 
                 <a href="http://selenium.openqa.org/">Selenium</a> to ensure a complete
-                acceptance test.
+                test.
             </p>
         </section>
         <section name="raw" title="Raw posting">
@@ -246,7 +247,11 @@ class SimpleFormTests extends WebTestCase {
 }
 ]]></php>
                 By adding data to the <code>WebTestCase::post()</code>
-                method, we are attempting to fetch the page as a form submission.
+                method, we are emulating a form submission.
+                You would normally only do this as a temporary expedient, or where
+                you are expecting a 3rd party to submit to a form.
+                The exception is when you want tests to protect you from
+                attempts to spoof your pages.
             </p>
         </section>
     </content>
