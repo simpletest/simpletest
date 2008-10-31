@@ -30,7 +30,6 @@
 		        <page title="Top down testing" here="Top down testing" file="en/improving_design_tutorial.html" />
 		    </page>
 		    <page title="Experimental stuff (in SVN only)" here="Experimental stuff" file="en/experimental_intro.html">
-		        <page title="Running the tests, the easy way with autorun (experimental)" here="Autorunning test cases" file="en/experimental_autorun.html" />
 		        <page title="Using the test results for other tools with the Recorder (experimental)" here="Recorder" file="en/experimental_recorder.html" />
 		        <page title="Testing elements by CSS selector (experimental)" here="DOM tester" file="en/experimental_dom_tester.html" />
 		    </page>
