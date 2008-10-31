@@ -9,11 +9,10 @@ class SimpleTestXMLElement extends SimpleXMLElement {
     function transform_code($code) {
         $code = str_replace('<![CDATA[', '', $code);
         $code = str_replace(']]>', '', $code);
-        $code = str_replace('<', '&lt;', $code);
-        $code = str_replace('>', '&gt;', $code);
         $code = str_replace('&lt;strong&gt;', '<strong>', $code);
         $code = str_replace('&lt;/strong&gt;', '</strong>', $code);
-
+        $code = str_replace('&', '&amp;', $code);
+        
         return $code;
     }
 
@@ -199,8 +198,8 @@ class SimpleTestXMLElement extends SimpleXMLElement {
     }
 
     function here() {
-        $pages = $this->xpath('//page');
-        return $pages[0]->attributes()->here;
+        $here = $this->xpath('@here');
+        return (string)$here[0];
     }
 
     function parent($map) {
@@ -223,7 +222,6 @@ class SimpleTestXMLElement extends SimpleXMLElement {
                 break;
             }
         }
-        
         return $destination;
     }
 
@@ -401,13 +399,13 @@ class PackagingSynchronisation {
 
     function result() {
         if (!$this->isSynchronisable()) {
-            return "<span style=\"color : green\">source</span>";
+            return "source";
         } elseif (!$this->sourceRevision()) {
-            return "<span style=\"color : red\"><strong>missing id</strong></span>";
+            return "missing id";
         } elseif ($this->sourceRevision() > $this->lastSynchroRevision()) {
-            return "<span style=\"color : red\"><strong>late</strong></span>";
+            return "late";
         } else {
-            return "<span style=\"color : green\">synchro</span>";
+            return "synchro";
         }
     }
     

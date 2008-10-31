@@ -7,11 +7,11 @@ class TestOfSynchronisationCheck extends UnitTestCase {
 	function testOfSynchronisationNotNecessary() {
 	    $source = dirname(__FILE__)."/package/fr/no-synchronisation.xml";
 	    $synchro = new PackagingSynchronisation($source);
-	    $this->assertEqual($synchro->result(), "<span style=\"color : green\">source</span>");
+	    $this->assertEqual($synchro->result(), "source");
 
 	    $source = dirname(__FILE__)."/package/en/synchronisation.xml";
 	    $synchro = new PackagingSynchronisation($source);
-	    $this->assertEqual($synchro->result(), "<span style=\"color : green\">source</span>");
+	    $this->assertEqual($synchro->result(), "source");
 	}
 	
 	function testOfSynchronisationNecessary() {
@@ -21,7 +21,7 @@ class TestOfSynchronisationCheck extends UnitTestCase {
 	    $this->assertEqual($synchro->sourceRevision(), "1671");
 	    $this->assertEqual($synchro->sourceLang(), "en");
 	    $this->assertEqual($synchro->lastSynchroRevision(), "1475");
-	    $this->assertPattern("/style=\"color : red\"/", $synchro->result());
+	    $this->assertEqual($synchro->result(), "late");
 	}
 }
 
@@ -45,7 +45,9 @@ class TestOfContentTransformationFromXMLToHTML extends UnitTestCase {
 		$this->assertPattern('/<pre>/', $content);
 		$this->assertNoPattern('/<\!\[CDATA\[/', $content);
 		$this->assertPattern('/<p>/', $content);
-	}
+		$this->assertPattern('/\$log = &amp;new Log\(\'my.log\'\);/', $content);
+		$this->assertPattern('/log->message/', $content);
+    }
 
 	function testOfContentWithoutSections() {
 		$file = dirname(__FILE__).'/package/content_without_section.xml';
