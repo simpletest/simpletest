@@ -317,7 +317,7 @@ class SimpleHttpHeaders {
         $this->cookies = array();
         $this->authentication = false;
         $this->realm = false;
-        foreach (split("\r\n", $headers) as $header_line) {
+        foreach (explode("\r\n", $headers) as $header_line) {
             $this->parseHeaderLine($header_line);
         }
     }
@@ -458,7 +458,7 @@ class SimpleHttpHeaders {
      *    @access private
      */
     protected function parseCookie($cookie_line) {
-        $parts = split(";", $cookie_line);
+        $parts = explode(";", $cookie_line);
         $cookie = array();
         preg_match('/\s*(.*?)\s*=(.*)/', array_shift($parts), $cookie);
         foreach ($parts as $part) {
@@ -525,7 +525,7 @@ class SimpleHttpResponse extends SimpleStickyError {
             $this->setError('Could not split headers from content');
             $this->headers = new SimpleHttpHeaders($raw);
         } else {
-            list($headers, $this->content) = split("\r\n\r\n", $raw, 2);
+            list($headers, $this->content) = explode("\r\n\r\n", $raw, 2);
             $this->headers = new SimpleHttpHeaders($headers);
         }
     }
