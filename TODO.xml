@@ -53,10 +53,10 @@
                 <concern name="build">
                 	<task>Update PEAR package task to be compatible with latest PEAR installer.</task>
                     <task status="done">PHP 5.3 compatible under E_STRICT</task>
-                    <task>PHP 5.2.0-5 compatible under E_STRICT</task>
-                    <task>PHP 5.1.0-6 compatible under E_STRICT</task>
+                    <task status="done">PHP 5.2.0-5 compatible under E_STRICT</task>
+                    <task status="done">PHP 5.1.0-6 compatible under E_STRICT</task>
                     <bug tracker="1884013">continuous integration</bug>
-                    <bug tracker="1853765">error_reporting(E_ALL|E_STRICT)gives lots of warning</bug>
+                    <bug tracker="1853765" status="done">error_reporting(E_ALL|E_STRICT)gives lots of warning</bug>
                     <task>Remove all deprecated methods</task>
                     <task status="done">
                         Drop underscores from protected methods and
