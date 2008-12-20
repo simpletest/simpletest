@@ -5,6 +5,13 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems and their fixes...
 
+Overloaded method not working
+-----------------------------
+
+All protected and private methods had underscores
+removed. This means that any private/protected methods that
+you overloaded with those names need to be updated.
+
 Fatal error: Call to undefined method Classname::classname()
 ------------------------------------------------------------
 SimpleTest renamed all of its constructors from 

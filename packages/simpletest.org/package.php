@@ -155,7 +155,7 @@ class SimpleTestXMLElement extends SimpleXMLElement {
 	                        if ($name == "tracker" and $type == "bug") {
 	                            $value = $this->as_tracker_link($value);
 	                        }
-	                        $content .= "<dd>".$name." : ".$value."</dd>"; 
+	                        $content .= "<dd$status>".$name." : ".$value."</dd>"; 
 	                    }
 	                    foreach ($element->note as $note) {
 	                        $content .= "<dd>".trim((string)$note)."</dd>"; 
