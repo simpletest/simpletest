@@ -44,11 +44,12 @@ class TestOfLiveBrowser extends UnitTestCase {
         $this->assertPattern('/target for the SimpleTest/', $browser->getContent());
     }
     
-    function testRelativeEncodedeLinkFollowing() {
+    function testRelativeEncodedLinkFollowing() {
         $browser = new SimpleBrowser();
         $browser->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
         $browser->get($this->samples() . 'link_confirm.php');
-        $this->assertTrue($browser->clickLink("m�rc�l kiek'eboe"));
+        // Warning: the below data is ISO 8859-1 encoded
+        $this->assertTrue($browser->clickLink("m\xE4rc\xEAl kiek'eboe"));
         $this->assertPattern('/target for the SimpleTest/', $browser->getContent());
     }
     
