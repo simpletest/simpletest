@@ -23,9 +23,7 @@ function simpletest_autorun() {
         if (tests_have_run()) {
             return;
         }
-        $candidates = array_intersect(
-                capture_new_classes(),
-                classes_defined_in_initial_file());
+        $candidates = capture_new_classes();
         $loader = new SimpleFileLoader();
         $suite = $loader->createSuiteFromClasses(
                 basename(initial_file()),
@@ -67,20 +65,6 @@ function initial_file() {
         }
     }
     return $file;
-}
-
-/**
- *    Just the classes from the first autorun script. May
- *    get a few false positives, as it just does a regex based
- *    on following the word "class".
- *    @return array        List of all possible classes in first
- *                         autorun script.
- */
-function classes_defined_in_initial_file() {
-    if (preg_match_all('/\bclass\s+(\w+)/i', file_get_contents(initial_file()), $matches)) {
-        return array_map('strtolower', $matches[1]);
-    }
-    return array();
 }
 
 /**
