@@ -89,8 +89,8 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    by a web browser.
          *    @access public
          */
-        function WebUnitReporter($path='../ui/') {
-            $this->SimpleReporter();
+        function __construct($path='../ui/') {
+            parent::__construct();
             $this->path = $path;
         }
         

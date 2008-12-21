@@ -48,7 +48,7 @@
                     </task>
                 </concern>
                 <concern name="extensions">
-                	<task>Ensure extensions are compatible with PHP5 constructor renaming in the current trunk.</task>
+                	<task status="done">Ensure extensions are compatible with PHP5 constructor renaming in the current trunk.</task>
                 </concern>
                 <concern name="build">
                 	<task>Update PEAR package task to be compatible with latest PEAR installer.</task>

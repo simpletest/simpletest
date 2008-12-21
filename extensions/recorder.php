@@ -27,8 +27,8 @@ require_once(dirname(__FILE__) . '/../scorer.php');
 class Recorder extends SimpleReporter {
     var $results;
   
-	function Recorder() {
-        $this->SimpleReporter();
+	function __construct() {
+        parent::__construct();
         $this->results = array();
 	}
 	

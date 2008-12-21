@@ -16,8 +16,8 @@ require_once(dirname(__FILE__) . '/treemap_reporter/treemap_recorder.php');
  */
 class TreemapReporter extends SimpleReporterDecorator {
 
-	function TreemapReporter() {
-		$this->SimpleReporterDecorator(new TreemapRecorder());
+	function __construct() {
+		parent::__construct(new TreemapRecorder());
 	}
 
 	/**
