@@ -85,7 +85,7 @@ function classes_defined_in_initial_file() {
 
 /**
  *    Every class since the first autorun include. This
- *    is safe enough if require_once() is alwyas used.
+ *    is safe enough if require_once() is always used.
  *    @return array        Class names.
  */
 function capture_new_classes() {
