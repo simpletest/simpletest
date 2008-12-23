@@ -9,10 +9,11 @@ class SimpleTestXMLElement extends SimpleXMLElement {
     function transform_code($code) {
         $code = str_replace('<![CDATA[', '', $code);
         $code = str_replace(']]>', '', $code);
+        $code = str_replace('<', '&lt;', $code);
+        $code = str_replace('>', '&gt;', $code);
         $code = str_replace('&lt;strong&gt;', '<strong>', $code);
         $code = str_replace('&lt;/strong&gt;', '</strong>', $code);
-        $code = str_replace('&', '&amp;', $code);
-        
+
         return $code;
     }
 
@@ -88,11 +89,22 @@ class SimpleTestXMLElement extends SimpleXMLElement {
                 $anchors[(string)$section->attributes()->name] = true;
             }
             $content .= "<h2>".(string)$section->attributes()->title."</h2>";
-            foreach ($section->p as $paragraph) {
-                $content .= $this->deal_with_php_code($paragraph->asXML());
+
+            switch (true) {
+            	case isset($section->milestone):
+            		$content .= $this->deal_with_milestones($section);
+            		break;
+            	case isset($section->changelog):
+		            $content .= $this->deal_with_changelogs($section);
+		            break;
+				case isset($section->p):
+			        foreach ($section->p as $paragraph) {
+		                $content .= $this->deal_with_php_code($paragraph->asXML());
+		            }
+		            break;
+            	default:
+            		$content .= $section->asXML();
             }
-            $content .= $this->deal_with_milestones($section);
-            $content .= $this->deal_with_changelogs($section);
         }
 
         return $content;
@@ -155,7 +167,7 @@ class SimpleTestXMLElement extends SimpleXMLElement {
 	                        if ($name == "tracker" and $type == "bug") {
 	                            $value = $this->as_tracker_link($value);
 	                        }
-	                        $content .= "<dd$status>".$name." : ".$value."</dd>"; 
+	                        $content .= "<dd>".$name." : ".$value."</dd>"; 
 	                    }
 	                    foreach ($element->note as $note) {
 	                        $content .= "<dd>".trim((string)$note)."</dd>"; 
@@ -198,8 +210,8 @@ class SimpleTestXMLElement extends SimpleXMLElement {
     }
 
     function here() {
-        $here = $this->xpath('@here');
-        return (string)$here[0];
+        $pages = $this->xpath('//page');
+        return $pages[0]->attributes()->here;
     }
 
     function parent($map) {
@@ -222,6 +234,7 @@ class SimpleTestXMLElement extends SimpleXMLElement {
                 break;
             }
         }
+        
         return $destination;
     }
 
@@ -399,13 +412,13 @@ class PackagingSynchronisation {
 
     function result() {
         if (!$this->isSynchronisable()) {
-            return "source";
+            return "<span style=\"color : green\">source</span>";
         } elseif (!$this->sourceRevision()) {
-            return "missing id";
+            return "<span style=\"color : red\"><strong>missing id</strong></span>";
         } elseif ($this->sourceRevision() > $this->lastSynchroRevision()) {
-            return "late";
+            return "<span style=\"color : red\"><strong>late</strong></span>";
         } else {
-            return "synchro";
+            return "<span style=\"color : green\">synchro</span>";
         }
     }
     
