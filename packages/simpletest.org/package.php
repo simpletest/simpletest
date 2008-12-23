@@ -201,7 +201,8 @@ class SimpleTestXMLElement extends SimpleXMLElement {
                 $external .= "<div>".$link->asXML()."</div>";
             }
         }
-
+        $external = preg_replace("/href=\"([a-z_]*)\.php\"/", "href=\"\\1.html\"", $external);
+        
         return $external;
     }
 
