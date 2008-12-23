@@ -223,15 +223,15 @@ class TimeTestCase extends UnitTestCase {
     <external>
         <link>
             The previous section was
-            <a local="gain_control_tutorial">controlling test variables</a>.
+            <a href="gain_control_tutorial.php">controlling test variables</a>.
         </link>
         <link>
             The next tutorial section was
-            <a local="display_subclass_tutorial">changing the test display</a>.
+            <a href="display_subclass_tutorial.php">changing the test display</a>.
         </link>
         <link>
             You will need the
-            <a local="simple_test">SimpleTest test tool</a> to run the
+            <a href="simple_test.php">SimpleTest test tool</a> to run the
             sample code.
         </link>
     </external>

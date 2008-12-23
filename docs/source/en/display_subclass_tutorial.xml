@@ -244,6 +244,10 @@ class ShowPasses extends HtmlReporter {
             <a href="simple_test.php">SimpleTest</a>.
             If you use another tool you will want to skip this.
         </link>
+        <link>
+            But you can also move on to
+            <a href="mock_objects_tutorial.php">Mock Objects</a>.
+        </link>
     </external>
     <meta>
         <keywords>
