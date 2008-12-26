@@ -1,5 +1,13 @@
 <?php
+/**
+ *  index file for test site
+ *  @package    SimpleTest
+ *  @version    $Id$
+ */
 
+/**
+ * include package.php
+ */
 require_once(dirname(__FILE__).'/package.php');
 
 $source_path = dirname(__FILE__).'/../../docs/source/';
