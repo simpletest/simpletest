@@ -6,6 +6,9 @@
  *  @author Patrice Neff - mailinglists@patrice.ch (original code)
  */
 
+/**
+ * include SimpleTest reporter
+ */
 require_once dirname(__FILE__).'/../reporter.php';
 
 /**
@@ -13,6 +16,8 @@ require_once dirname(__FILE__).'/../reporter.php';
  * with JUnit / Maven XML output. Can be used for integrating
  * test suite with continuous integration servers such as
  * Atlassian Bamboo.
+ * @package	SimpleTest
+ * @subpackage	Extensions
  */
 class JUnitXMLReporter extends SimpleReporter {
     function __construct() {
