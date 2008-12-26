@@ -1,5 +1,9 @@
 <?php
-// $Id: adapter_test.php 1505 2007-04-30 23:39:59Z lastcraft $
+/**
+ *	integration file
+ *  @package    SimpleTest
+ *  @version    $Id: adapter_test.php 1505 2007-04-30 23:39:59Z lastcraft $
+ */
 
 $target = dirname(__FILE__)."/public_html/logs";
 $integration = new SimpleIntegration($target);
@@ -12,6 +16,10 @@ $working_copy = dirname(__FILE__)."/working-copies/simpletest";
 $binary = "svn";
 $integration->updateSvnLog($working_copy, $binary);
 
+/**
+ *	SimpleIntegration class
+ *  @package    SimpleTest
+ */
 class SimpleIntegration {
     public $target_directory;
     
