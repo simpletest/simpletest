@@ -1,11 +1,19 @@
 <?php
-// $Id: adapter_test.php 1505 2007-04-30 23:39:59Z lastcraft $
+/**
+ *  heartbeat file
+ *  @package    SimpleTest
+ *  @version    $Id: adapter_test.php 1505 2007-04-30 23:39:59Z lastcraft $
+ */
 
 $log_directory = dirname(__FILE__)."/../logs";
 
 $heartbeat = new SimpleHeartBeat($log_directory);
 echo $heartbeat->view($_SERVER['QUERY_STRING']);
 
+/**
+ *  SimpleHeartBeat class
+ *  @package    SimpleTest
+ */
 class SimpleHeartBeat {
     public $log_directory;
     public $tests_directory;
@@ -141,6 +149,10 @@ class SimpleHeartBeat {
     }
 }
 
+/**
+ *  SimpleHeartBeatLog class
+ *  @package    SimpleTest
+ */
 class SimpleHeartBeatLog {
     public $node;
     public $content = "";
