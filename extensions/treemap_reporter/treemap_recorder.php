@@ -5,6 +5,10 @@
  *  @subpackage     Extensions
  *	@version	$Id$
  */
+
+/**
+ * include SimpleTest Scorer class file
+ */
 require_once(dirname(__FILE__) . '/../../scorer.php');
 
 /**
