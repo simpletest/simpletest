@@ -1,5 +1,4 @@
 <?php
-
 /**
  *	@package	SimpleTest
  *	@subpackage	Extensions
@@ -19,6 +18,8 @@ require_once dirname(__FILE__).'/dom_tester/css_selector.php';
  * 
  * Create a CSS Selector expectactation
  * 
+ * @package	SimpleTest
+ * @subpackage	Extensions
  * @param DomDocument $_dom
  * @param string $_selector
  * @param array $_value
@@ -87,6 +88,8 @@ class CssSelectorExpectation extends SimpleExpectation {
  * Extend Web test case with DOM related assertions,
  * CSS selectors in particular
  * 
+ * @package	SimpleTest
+ * @subpackage	Extensions
  * @param DomDocument $dom
  * 
  */
