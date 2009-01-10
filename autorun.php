@@ -19,11 +19,24 @@ $GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_CLASSES'] = get_declared_classes();
 register_shutdown_function('simpletest_autorun');
 
 /**
- *    Exit handler to run all recent test cases if no test has
+ *    Exit handler to run all recent test cases and exit system if in CLI
+ */
+function simpletest_autorun() {
+    if (tests_have_run()) {
+        return;
+    }
+    $result = run_local_tests();
+    if (SimpleReporter::inCli()) {        
+        exit($result ? 0 : 1);
+    }
+}
+
+/**
+ *    run all recent test cases if no test has
  *    so far been run. Uses the DefaultReporter which can have
  *    it's output controlled with SimpleTest::prefer().
  */
-function simpletest_autorun() {
+function run_local_tests() {
     try {
         if (tests_have_run()) {
             return;
@@ -37,9 +50,6 @@ function simpletest_autorun() {
     } catch (Exception $stack_frame_fix) {
         print $stack_frame_fix->getMessage();
         $result = false;
-    }
-    if (SimpleReporter::inCli()) {
-        exit($result ? 0 : 1);
     }
 }
 

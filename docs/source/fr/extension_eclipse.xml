@@ -58,7 +58,7 @@
         <ol>
         <li>Télécharger et installer Eclipse (<a href="http://www.eclipse.org">www.eclipse.org</a>) – si vous n'êtes pas sûr quoi télécharger, prenez le SDK 3.1.0 d'Eclipse.</li>
         <li>Télécharger le dernier fichier ZIP du plugin Eclipse pour SimpleTest (<a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=159054">Simpletest Sourceforge</a>)</li>
-        <li>Extgraire le contenu du fichier ZIP vers un répertoire temporaire {cette documentation y fera référence par $unzip}</li>
+        <li>Extraire le contenu du fichier ZIP vers un répertoire temporaire {cette documentation y fera référence par $unzip}</li>
         <li>Lancer Eclipse</li>
         <li>Ouvrir "Install Wizard" en cliquant sur "Help > Software Updates > Find and Install" depuis la barre du menu.</li>
         <li>Choisisser le deuxième bouton, "Search for new features to install" et cliquer sur "Next".</li>
@@ -183,8 +183,8 @@ class test1 extends UnitTestCase {
         <li>Une seule classe de test, plusieurs tests
             <ol type="a">
             <li>dans l'explorateur de paquet, cliquer droit sur le projet "Test" et sélectionner "New > File".</li>
-            <li>En tant que nom de fichier, utiliser : test2.php et cliquer sur "Finish".</li>
-            <li>Double-cliquer sur l'entrée test2.php dans l'explorateur de paquet : une nouvelle vue s'ouvre, prête pour l'édition.</li>
+            <li>En tant que nom de fichier, utiliser : grouptest.php et cliquer sur "Finish".</li>
+            <li>Double-cliquer sur l'entrée grouptest.php dans l'explorateur de paquet : une nouvelle vue s'ouvre, prête pour l'édition.</li>
             <li>Remplir le contenu avec :
 <php><![CDATA[
 <?php
