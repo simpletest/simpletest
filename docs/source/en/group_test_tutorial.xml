@@ -158,16 +158,11 @@ class TestOfLogging extends UnitTestCase {
 }</strong>
 ?>
 ]]></php>
-                We no longer need the <code>SIMPLE_TEST</code>
-                constant.
                 Next we create a group test called <em>all_tests.php</em>
                 in the <em>tests</em> folder...
 <php><![CDATA[
 <strong><?php
-if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}
-require_once(SIMPLE_TEST . 'autorun.php');
+require_once(dirname(__FILE__) . '/simpletest/autorun.php');
 require_once('log_test.php');
 
 $test = &new GroupTest('All tests');
