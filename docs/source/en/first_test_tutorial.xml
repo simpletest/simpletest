@@ -100,7 +100,7 @@ class TestOfLogging extends UnitTestCase {
         @unlink(dirname(__FILE__) . '/../temp/test.log');
         $log = new Log(dirname(__FILE__) . '/../temp/test.log');
         $log->message('Should write this to a file');
-        $this->assertTrue(file_exists(dirname(__FILE__) . '../temp/test.log'));</strong>
+        $this->assertTrue(file_exists(dirname(__FILE__) . '/../temp/test.log'));</strong>
     }
 }
 ?>
