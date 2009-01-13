@@ -242,7 +242,7 @@ class TestOfLogging extends UnitTestCase {
 <strong><?php
 class Log {
     
-    function __construct($file_path) {
+    function __construct($path) {
     }
         
     function message($message) {
