@@ -628,7 +628,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
     class MockConnection extends BasicMockConnection {
         function MockConnection() {
             $this->BasicMockConnection();
-            $this->setReturn('query', false);
+            $this->setReturnValue('query', false);
         }
     }</strong>
 ?>
