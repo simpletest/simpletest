@@ -116,7 +116,19 @@ class TestOfClock extends UnitTestCase {
                     <b>/home/marcus/projects/lastcraft/tutorial_tests/tests/clock_test.php</b> on line <b>2</b>
                     <br />
                 </div>
-                We create a <em>classes/clock.php</em> file...
+            </p>
+            <p> 
+                If you don't see this kind of error, it means your error settings
+                need some adjustments. You may want to add these lines at the top of your test :
+<php><![CDATA[
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+]]></php>
+				The PHP documentation will come handy if you're stuck withouth the <code>Fatal error</code>.                 
+            </p>
+            <p> 
+                Assuming the error was indeed shown, we can carry on
+                and create a <em>classes/clock.php</em> file...
 <php><![CDATA[
 <strong><?php
 class Clock {
