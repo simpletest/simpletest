@@ -227,7 +227,7 @@ class TestOfLogging extends UnitTestCase {
         $clock->setReturnValue('now', 'Timestamp');
         $writer = new MockFileWriter($this);
         $writer->expectOnce('write', array('[Timestamp] Test line'));
-        $log = new Log(\$writer);
+        $log = new Log($writer);
         $log->message('Test line', $clock);
     }</strong>
 }
