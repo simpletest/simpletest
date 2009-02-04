@@ -100,10 +100,7 @@ class HtmlReporter extends TestDisplay {
                 in our logging project and then place in it this empty class...
 <php><![CDATA[
 <strong><?php
-if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}
-require_once(SIMPLE_TEST . 'reporter.php');
+require_once('simpletest/reporter.php');
     
 class ShowPasses extends HtmlReporter {
 }
@@ -151,14 +148,14 @@ class ShowPasses extends HtmlReporter {
 <?php<strong>
 require_once('show_passes.php');
 require_once('simpletest/simpletest.php');
-SimpleTest::prefer('ShowPasses');</strong>
+SimpleTest::prefer(new ShowPasses());</strong>
 require_once('simpletest/autorun.php');
 
-class AllTests {
+class AllTests extends TestSuite {
     function __construct() {
         parent::__construct('All tests');
-        $this->addTestFile('log_test.php');
-        $this->addTestFile('clock_test.php');
+        $this->addFile(dirname(__FILE__).'/log_test.php');
+        $this->addFile(dirname(__FILE__).'/clock_test.php');
     }
 }
 ?>
