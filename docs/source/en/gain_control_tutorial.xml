@@ -84,8 +84,8 @@ require_once(dirname(__FILE__) . '/clock_test.php');
 class AllTests extends TestSuite {
     function __construct() {
         parent::__construct();
-        $this->addTest(new TestOfLogging());<strong>
-        $this->addTest(new TestOfClock());</strong>
+        $this->addTestCase(new TestOfLogging());<strong>
+        $this->addTestCase(new TestOfClock());</strong>
     }
 }
 ?>
