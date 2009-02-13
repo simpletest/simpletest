@@ -31,7 +31,7 @@
         <section name="plan" title="Release plan" version="1.1">
             <milestone version="1.1beta">
                 <concern name="unit-tester">
-                    <bug tracker="1896582">Undefined property $_reporter + fatal error</bug>
+                    <bug tracker="1896582" status="done">Undefined property $_reporter + fatal error</bug>
                 </concern>
                 <concern name="reporter"/>
                 <concern name="mock-objects"/>
@@ -51,13 +51,12 @@
                 	<task status="done">Ensure extensions are compatible with PHP5 constructor renaming in the current trunk.</task>
                 </concern>
                 <concern name="build">
-                	<task>Update PEAR package task to be compatible with latest PEAR installer.</task>
                     <task status="done">PHP 5.3 compatible under E_STRICT</task>
                     <task status="done">PHP 5.2.0-5 compatible under E_STRICT</task>
                     <task status="done">PHP 5.1.0-6 compatible under E_STRICT</task>
                     <bug tracker="1884013" status="done">continuous integration</bug>
                     <bug tracker="1853765" status="done">error_reporting(E_ALL|E_STRICT)gives lots of warning</bug>
-                    <task>Remove all deprecated methods</task>
+                    <task status="done">Remove all deprecated methods</task>
                     <task status="done">
                         Drop underscores from protected methods and
                         private variables.
@@ -118,6 +117,7 @@
                 </concern>
                 <concern name="extensions"/>
                 <concern name="build">
+                	<task>Update PEAR package task to be compatible with latest PEAR installer.</task>
                     <task>PHP 6 compatible under E_STRICT</task>
                     <task>
                         Automated nightly test script that runs tests on all
