@@ -24,8 +24,8 @@
             <p>
                 If mock objects only behaved as actors they would simply be
                 known as server stubs.
-                This was originally a pattern named by Robert Binder (Testing
-                object-oriented systems: models, patterns, and tools,
+                This was originally a pattern named by Robert Binder (<a href="">Testing
+                object-oriented systems</a>: models, patterns, and tools,
                 Addison-Wesley) in 1999.
             </p>
             <p>
@@ -55,47 +55,41 @@
         </section>
         <section name="creation" title="Creating mock objects">
             <p>
-                In the same way that we create server stubs, all we need is an
-                existing class, say a database connection that looks like this...
+                All we need is an existing class, say a database connection
+                that looks like this...
+                The class does not need to have been implemented yet, or it
+                could be just an interface...
 <php><![CDATA[
-<strong>class DatabaseConnection {
-    function DatabaseConnection() {
-    }
-    
-    function query() {
-    }
-    
-    function selectQuery() {
-    }
+<strong>interface DatabaseConnection {
+    function DatabaseConnection();
+    function query();
+    function selectQuery();
 }</strong>
 ]]></php>
-                The class does not need to have been implemented yet.
-                To create a mock version of the class we need to include the
-                mock object library and run the generator...
+                To create a mock version of the class we need to run a
+                code generator...
 <php><![CDATA[
-<strong>require_once('simpletest/unit_tester.php');
-require_once('simpletest/mock_objects.php');
+require_once('simpletest/autorun.php');
 require_once('database_connection.php');
 
-Mock::generate('DatabaseConnection');</strong>
+<strong>Mock::generate('DatabaseConnection');</strong>
 ]]></php>
                 This generates a clone class called
                 <code>MockDatabaseConnection</code>.
                 We can now create instances of the new class within
                 our test case...
 <php><![CDATA[
-require_once('simpletest/unit_tester.php');
-require_once('simpletest/mock_objects.php');
+require_once('simpletest/autorun.php');
 require_once('database_connection.php');
 
 Mock::generate('DatabaseConnection');
-<strong>
+
 class MyTestCase extends UnitTestCase {
     
     function testSomething() {
-        $connection = &new MockDatabaseConnection();
+        <strong>$connection = new MockDatabaseConnection();</strong>
     }
-}</strong>
+}
 ]]></php>
                 Unlike the generated stubs the mock constructor needs a reference
                 to the test case so that it can dispatch passes and failures while

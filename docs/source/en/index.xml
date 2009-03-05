@@ -17,15 +17,28 @@
                 from a fellow computer programmer.
             </p>
             <p>
-                I've been a little busy of late with children (two versions).
+                I've been a little busy of late with children, concurrently
+                maintaining version 1.0 and version 2.0.
                 They take quite a chunk of your professional life and 100% of
-                what's left!
-                Hopefully the projects below should start to get back on track.
+                what's left.
+                Hopefully the projects below should start to get back on track
+                now that they are reaching school age.
             </p>
         </introduction>
         <section name="what" title="Ongoing projects">
             <p>
-                My latest project is <a href="cgreen.html">Cgreen</a>.
+                A recently revived project is
+                <a href="http://sourceforge.net/projects/phemto/">Phemto</a>,
+                <a href="">a dependency injection container</a>
+                for <a href="">PHP</a>.
+                Similar to <a href="">Pico</a> in concept, it uses a fluent interface and
+                plenty of automagic to cut down the amount of configuration
+                you have to write.
+                This was originally written as a 50 line demo for a
+                <a>PHP Architect</a> column on creating objects.
+            </p>
+            <p>
+                My newest project is <a href="cgreen.html">Cgreen</a>.
                 It's a C unit tester.
                 There are a couple of C unit testing tools out there already of course.
                 What makes <em>Cgreen</em> different is that it is pure C99, includes
@@ -34,7 +47,7 @@
                 anything to go by.
                 It's alpha status right now until I get feedback from other users.
                 So if you want to be influential, try it out right now.
-                The project has been mostly funded by <a href="http://www.wordtracker.com/">Wordtracker</a>,
+                The project has been partly funded by <a href="http://www.wordtracker.com/">Wordtracker</a>,
                 for which I am very grateful.
             </p>
             <p>
@@ -42,45 +55,28 @@
                 <a href="http://www.phplondon.org/wiki/">PHP London</a>, a PHP user
                 group not surprisingly based in London.
                 It's going well.
+                We run a yearly conference called
+                <a href="http://www.phpconference.co.uk/">PHP UK</a>, this year at
+                Olympia that attracted 300 delegates.
                 The networking meetings take place on the first Thursday of every month
-                at a pub.
-            </p>
-            <p>
-                In addition the group organises other events that include the 2nd
-                <a href="http://phpconference.co.uk/">London UK PHP Conference</a>.
-                This is a one day event on Friday the 23rd of February 2007 and costs only
-                fifty quid.
+                at a pub, and typically attract about 60 people.
             </p>
             <p>
                 The <a local="simple_test">SimpleTest PHP unit tester</a>
                 is available for download from your nearest
                 <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
-                It is a PHP unit test and web test framework.
-                Users of <a href="http://www.junit.org/">JUnit</a> will be
-                familiar with most of the interface.
-                The <a href="http://jwebunit.sourceforge.net/">JWebUnit</a>
-                style functionality is more complete now.
-                It has support for SSL, forms, frames, proxies and basic authentication.
-                The current CVS code should become the 1.0.1 release real soon now and
-                includes file upload and many small improvements.
+                It is a PHP web test and unit test framework, with mock objects.
+                A <a href="">native PHP web browser</a> is included, so that functional tests
+                of web pages can be carried out.
                 The idea is that common but fiddly PHP tasks, such as logging into a site,
                 can be tested easily.
-            </p>
-            <p>
-                My most neglected project right now is a requirents testing
-                and sign-off tool called
-                <a href="http://sourceforge.net/projects/arbiter">Arbiter</a>.
-                It's actually best described in this
-                <a href="http://www.sitepoint.com/forums/showthread.php?t=193797">Sitepoint thread</a>,
-                but basically think of it as a document driven FIT for small
-                web projects only.
-                The project is currently stalled due the birth of children and
-                writing projects.
+                The browser is pretty complete, but does not support Javascript.
+                It does not yet support CSS selectors, but these will be added later.
             </p>
             <p>
                 Also on the subject of open source, <a href="http://www.wordtracker.com/">Wordtracker</a>
                 have kindly agreed to publish some of their in house tools.
-                A Wordtracker spin off is <a local="fakemail">fakeMail</a>.
+                A Wordtracker spin off is <a local="fakemail">fakemail</a>.
                 Testing applications that send e-mails can be a right royal pain because
                 of all of the infrastructure involved.
                 You will likely need an SMPT gateway that talks to a POP client that
@@ -91,8 +87,7 @@
                 When you send it a mail it simply copies that mail to the local file
                 system in whatever directory you want.
                 You then just have to look at the local file.
-                It means that you must be able to configure your application to use
-                a port other than 25, but that's not usualy difficult.
+                Perl and Python versions are available.
             </p>
         </section>
         <section name="why" title="Why the Last Craft?">
@@ -150,7 +145,7 @@
             </p>
             <p>
                 Now nothing beats a whiteboard for collaboration, but if the level
-                of detail is getting too high and you want a temporary record,
+                of detail is getting too high, and you want a temporary record,
                 give the CRC cards a try.
             </p>
         </section>
@@ -165,7 +160,7 @@
             Odd name isn&apos;t it?
         </link>
         <link>
-            <a href="#crc">Why this index card</a> at the top?
+            <a href="#crc">Why the funny index card</a> at the top?
         </link>
     </internal>
     <external>

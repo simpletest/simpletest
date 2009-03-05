@@ -84,8 +84,8 @@ require_once(dirname(__FILE__) . '/clock_test.php');
 class AllTests extends TestSuite {
     function __construct() {
         parent::__construct();
-        $this->addTestCase(new TestOfLogging());<strong>
-        $this->addTestCase(new TestOfClock());</strong>
+        $this->addTest(new TestOfLogging());<strong>
+        $this->addTest(new TestOfClock());</strong>
     }
 }
 ?>
@@ -124,10 +124,11 @@ class TestOfClock extends UnitTestCase {
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 ]]></php>
-				The PHP documentation will come handy if you're stuck withouth the <code>Fatal error</code>.                 
+				The PHP documentation will come handy if you're stuck without being
+                able to see the <code>Fatal error</code>.                 
             </p>
             <p> 
-                Assuming the error was indeed shown, we can carry on
+                Assuming the error was shown, we can carry on
                 and create a <em>classes/clock.php</em> file...
 <php><![CDATA[
 <strong><?php
@@ -246,11 +247,13 @@ class AllTests extends TestSuite {
                     </li>
                 </ol>
                 In practice neither of these turn out to be problems.
-                Test suites are usually a tree structure.
-                It's rare to need a test case in two places.
+                Test suites are usually a tree structure, so
+                it's rare to need a test case in two places.
+            </p>
+            <p>
                 As for extra classes being included, they have to be
-                descendents of <code>SimpleTestCase</code>.
-                These are likely to be superclasses of helper code
+                descendents of <code>SimpleTestCase</code> anyway.
+                Such subclasses are likely to be superclasses of helper code
                 for several other tests.
                 Simply marking them as <code>abstract</code> is
                 enough to stop them being run.
@@ -265,12 +268,12 @@ class AllTests extends TestSuite {
     <internal>
         <link><a href="#time">Time</a> is an often neglected variable in tests.</link>
         <link>A <a href="#clock">clock class</a> allows us to alter time.</link>
-        <link><a href="#tidy">Tidying the group test</a>.</link>
+        <link><a href="#tidy">Tidying the test suite</a>.</link>
     </internal>
     <external>
         <link>
             The previous section is
-            <a href="group_test_tutorial.php">grouping unit tests</a>.
+            <a href="group_test_tutorial.php">grouping into test suites</a>.
         </link>
         <link>
             The next section is
@@ -290,13 +293,11 @@ class AllTests extends TestSuite {
             software development tools,
             php tutorial,
             free php scripts,
-            architecture,
-            php resources,
-            mock objects,
-            junit,
+            software architecture,
             php testing,
             unit test,
-            php testing
+            php testing,
+            development process
         </keywords>
     </meta>
 </page>

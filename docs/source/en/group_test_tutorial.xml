@@ -17,9 +17,7 @@
                 to a test case...
 <php><![CDATA[
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase('Log class test');
-    }
+
     function testCreatingNewFile() {
         @unlink('../temp/test.log');
         $log = new Log('../temp/test.log');
@@ -27,21 +25,22 @@ class TestOfLogging extends UnitTestCase {
         $log->message('Should write this to a file');
         $this->assertTrue(file_exists('../temp/test.log'), 'File created');<strong>
         @unlink('../temp/test.log');</strong>
-    }<strong>
-    function testAppendingToFile() {
+    }
+    <strong>
+    function testSecondMessageIsAppended() {
         @unlink('../temp/test.log');
         $log = new Log('../temp/test.log');
         $log->message('Test line 1');
         $messages = file('../temp/test.log');
-        $this->assertWantedPattern('/Test line 1/', $messages[0]);
+        $this->assertPattern('/Test line 1/', $messages[0]);
         $log->message('Test line 2');
         $messages = file('../temp/test.log');
-        $this->assertWantedPattern('/Test line 2/', $messages[1]);
+        $this->assertPattern('/Test line 2/', $messages[1]);
         @unlink('../temp/test.log');
     }</strong>
 }
 ]]></php>
-                The <code>assertWantedPattern()</code>
+                The <code>assertPattern()</code>
                 test case method uses Perl style regular expressions for
                 matching.
             </p>
@@ -50,17 +49,18 @@ class TestOfLogging extends UnitTestCase {
                 reading it back twice over.
                 We simply want to confirm that the logger appends the
                 text rather than writing over the old file.
-                A little pedantic, but hey, it&apos;s a tutorial!
             </p>
             <p>
                 In fact this unit test actually passes straight away...
                 <div class="demo">
                     <h1>Log class test</h1>
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
-                    <strong>4</strong> passes and <strong>0</strong> fails.</div>
+                    <strong>4</strong> passes, <strong>0</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
                 The trouble is there is already a lot of repetition here,
                 we have to delete the test file before and after every test.
+            </p>
+            <p>
                 With outrageous plagarism from <a href="http://www.junit.org/">JUnit</a>,
                 SimpleTest has <code>setUp()</code> and
                 <code>tearDown()</code> methods
@@ -72,30 +72,31 @@ class TestOfLogging extends UnitTestCase {
                 Our tests are green so we can refactor...
 <php><![CDATA[
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase('Log class test');
-    }<strong>
+<strong>
     function setUp() {
         @unlink('../temp/test.log');
     }
+
     function tearDown() {
         @unlink('../temp/test.log');
     }
-    function testCreatingNewFile() {</strong>
+</strong>
+    function testCreatingNewFile() {
         $log = new Log('../temp/test.log');
         $this->assertFalse(file_exists('../temp/test.log'), 'Created before message');
         $log->message('Should write this to a file');
         $this->assertTrue(file_exists('../temp/test.log'), 'File created');<strong>
     }
-    function testAppendingToFile() {</strong>
+    
+    function testSecondMessageIsAppended() {
         $log = new Log('../temp/test.log');
         $log->message('Test line 1');
         $messages = file('../temp/test.log');
-        $this->assertWantedPattern('/Test line 1/', $messages[0]);
+        $this->assertPattern('/Test line 1/', $messages[0]);
         $log->message('Test line 2');
         $messages = file('../temp/test.log');
-        $this->assertWantedPattern('/Test line 2/', $messages[1]);<strong>
-    }</strong>
+        $this->assertPattern('/Test line 2/', $messages[1]);
+    }
 }
 ]]></php>
                 The test stays green.
@@ -105,31 +106,33 @@ class TestOfLogging extends UnitTestCase {
                 This allows further optional refactoring...
 <php><![CDATA[
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase('Log class test');
-    }
+
     function setUp() {
         @unlink('../temp/test.log');
     }
+
     function tearDown() {
         @unlink('../temp/test.log');
-    }<strong>
+    }
+    <strong>
     function getFileLine($filename, $index) {
         $messages = file($filename);
         return $messages[$index];
-    }</strong>
+    }
+    </strong>
     function testCreatingNewFile() {
         $log = new Log('../temp/test.log');
         $this->assertFalse(file_exists('../temp/test.log'), 'Created before message');
         $log->message('Should write this to a file');
         $this->assertTrue(file_exists('../temp/test.log'), 'File created');
     }
-    function testAppendingToFile() {
+    
+    function testSecondMessageIsAppended() {
         $log = new Log('../temp/test.log');
         $log->message('Test line 1');<strong>
-        $this->assertWantedPattern('/Test line 1/', $this->getFileLine('../temp/test.log', 0));</strong>
+        $this->assertPattern('/Test line 1/', $this->getFileLine('../temp/test.log', 0));</strong>
         $log->message('Test line 2');<strong>
-        $this->assertWantedPattern('/Test line 2/', $this->getFileLine('../temp/test.log', 1));</strong>
+        $this->assertPattern('/Test line 2/', $this->getFileLine('../temp/test.log', 1));</strong>
     }
 }
 ]]></php>
@@ -138,7 +141,7 @@ class TestOfLogging extends UnitTestCase {
                 the logic of the test is clearer.
             </p>
         </section>
-        <section name="group" title="A group test">
+        <section name="suite" title="A test suite">
             <p>
                 A test case does not function alone for very long.
                 When coding for real we usually want to run as many tests as
@@ -147,27 +150,19 @@ class TestOfLogging extends UnitTestCase {
                 could easily include every test in the application.
             </p>
             <p>
-                Firstly we have to clean out the test running code from
-                our existing test case...
-<php><![CDATA[
-<?php<strong>
-require_once('../classes/log.php');
-
-class TestOfLogging extends UnitTestCase {
-    ...
-}</strong>
-?>
-]]></php>
-                Next we create a group test called <em>all_tests.php</em>
+                Firstly we create a test suite called <em>all_tests.php</em>
                 in the <em>tests</em> folder...
 <php><![CDATA[
-<strong><?php
+<?php
 require_once(dirname(__FILE__) . '/simpletest/autorun.php');
-require_once('log_test.php');
+<strong>require_once('log_test.php');
 
-$test = &new GroupTest('All tests');
-$test->addTestCase(new TestOfLogging());
-$test->run(new HtmlReporter());
+class AllTests extends TestSuite {
+    function __construct() {
+        parent::__construct();
+        $this->addTest(new TestOfLogging());
+    }
+}
 ?></strong>
 ]]></php>
                 We hardly notice the difference when things work...
@@ -176,12 +171,7 @@ $test->run(new HtmlReporter());
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
                     <strong>4</strong> passes and <strong>0</strong> fails.</div>
                 </div>
-                Group tests add to the test case count.
                 Adding new test cases is very straight forward.
-                Simply include the test cases file and add any contained test
-                cases individually.
-                You can also nest group tests within other group tests
-                (although you should avoid loops).
             </p>
             <p>
                 In the <a href="gain_control_tutorial.php">next page</a>
@@ -195,7 +185,7 @@ $test->run(new HtmlReporter());
             and refactoring.
         </link>
         <link>
-            The crude way to <a href="#group">group unit tests</a>.
+            The crude way to <a href="#suite">group unit tests</a> into a test suite.
         </link>
     </internal>
     <external>

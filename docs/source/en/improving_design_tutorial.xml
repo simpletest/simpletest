@@ -31,6 +31,7 @@ class <strong>Writer</strong> {
                 The corresponding test changes are...
 <php><![CDATA[
 <?php
+require_once(dirname(__FILE__) . '/simpletest/autorun.php');
 require_once('../classes/log.php');
 require_once('../classes/clock.php');
 require_once('../classes/writer.php');
@@ -38,17 +39,14 @@ Mock::generate('Clock');<strong>
 Mock::generate('Writer');</strong>
 
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase('Log class test');
-    }
+
     function testWriting() {
-        $clock = &new MockClock($this);
+        $clock = new MockClock();
         $clock->setReturnValue('now', 'Timestamp');
-        $writer = &new <strong>MockWriter($this)</strong>;
+        $writer = new <strong>MockWriter()</strong>;
         $writer->expectOnce('write', array('[Timestamp] Test line'));
-        $log = &new Log($writer);
-        $log->message('Test line', &$clock);
-        $writer->tally();
+        $log = new Log($writer);
+        $log->message('Test line', $clock);
     }
 }
 ?>
