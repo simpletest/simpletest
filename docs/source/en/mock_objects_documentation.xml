@@ -57,13 +57,20 @@
             <p>
                 All we need is an existing class, say a database connection
                 that looks like this...
-                The class does not need to have been implemented yet, or it
-                could be just an interface...
+<php><![CDATA[
+<strong>class DatabaseConnection {
+    function DatabaseConnection() { }
+    function query($sql) { }
+    function selectQuery($sql) { }
+}</strong>
+]]></php>
+                The class does not need to have been implemented yet.
+                It could be just an interface...
 <php><![CDATA[
 <strong>interface DatabaseConnection {
     function DatabaseConnection();
-    function query();
-    function selectQuery();
+    function query($sql);
+    function selectQuery($sql);
 }</strong>
 ]]></php>
                 To create a mock version of the class we need to run a
@@ -91,31 +98,51 @@ class MyTestCase extends UnitTestCase {
     }
 }
 ]]></php>
-                Unlike the generated stubs the mock constructor needs a reference
-                to the test case so that it can dispatch passes and failures while
-                checking its expectations.
-                This means that mock objects can only be used within test cases.
-                Despite this their extra power means that stubs are hardly ever used
-                if mocks are available.
+                The mock version now has all the methods of the original.
+                Also, any type hints will be faithfully preserved.
+                Say our query methods expect a <code>Query</code> object...
+<php><![CDATA[
+<strong>class DatabaseConnection {
+    function DatabaseConnection() { }
+    function query(Query $query) { }
+    function selectQuery(Query $query) { }
+}</strong>
+]]></php>
+                If we now pass the wrong type of object, or worse a non-object...
+<php><![CDATA[
+class MyTestCase extends UnitTestCase {
+    
+    function testSomething() {
+        $connection = new MockDatabaseConnection();
+        $connection->query('insert into accounts () values ()');
+    }
+}
+]]></php>
+                ...the code will throw a type violation at you just as the
+                original class would.
+            </p>
+            <p>
+                The mock version now has all the methods of the original.
+                Unfortunately, they all return <code>null</code>.
+                As methods that always return <code>null</code> are not that useful,
+                we need to be able to set them to something else...
             </p>
             <p>
                 <a class="target" name="stub"><h2>Mocks as actors</h2></a>
             </p>
             <p>
-                The mock version of a class has all the methods of the original,
-                so that operations like
-                <code><![CDATA[$connection->query()]]></code> are still
-                legal.
-                The return value will be <code>null</code>,
-                but we can change that with...
+                Changing the return value of a method from <code>null</code>
+                to something else is pretty easy...
 <php><![CDATA[
 <strong>$connection->setReturnValue('query', 37)</strong>
 ]]></php>
                 Now every time we call
                 <code><![CDATA[$connection->query()]]></code> we get
                 the result of 37.
-                We can set the return value to anything, say a hash of
-                imaginary database results or a list of persistent objects.
+                There is nothing special about 37.
+                The return value can be arbitrarily complicated.
+            </p>
+            <p>
                 Parameters are irrelevant here, we always get the same
                 values back each time once they have been set up this way.
                 That may not sound like a convincing replica of a
@@ -123,16 +150,24 @@ class MyTestCase extends UnitTestCase {
                 a test method it is usually all you need.
             </p>
             <p>
-                We can also add extra methods to the mock when generating it
-                and choose our own class name...
+                <!-- Need to move this to it's own section -->
+                Objects with dynamic interfaces, using <code>__call</code>, can
+                be problematic.
+                A quick way round this is to add extra methods to the mock when
+                generating it.
+                In a large test suite this could cause trouble, as you probably
+                already have a mock version of the class without the extra methods.
+                The code generator will not generate a mock version of the class if
+                one of the same name already exists.
+                You will confusingly fail to see your method.
+                To cope with this, SimpleTest allows you to name the new class at
+                the same time as you add the extra methods.
+                Here it is...
 <php><![CDATA[
 <strong>Mock::generate('DatabaseConnection', 'MyMockDatabaseConnection', array('setOptions'));</strong>
 ]]></php>
                 Here the mock will behave as if the <code>setOptions()</code>
                 existed in the original class.
-                This is handy if a class has used the PHP <code>overload()</code>
-                mechanism to add dynamic methods.
-                You can create a special mock to simulate this situation.
             </p>
             <p>
                 Things aren&apos;t always that simple though.
@@ -336,6 +371,13 @@ class DatabaseTest extends UnitTestCase {
                 the class actually
                 being tested here, to come up with goods.
                 A very precise test and not a real database in sight.
+            </p>
+            <p>
+                Mock objects can only be used within test cases, as they send messages
+                straight to the currently running test case.
+                Creating them outside a test case will cause a run time error
+                when an expectation is triggered.
+                We cover expectations next.
             </p>
         </section>
         <section name="expectations" title="Mocks as critics">
