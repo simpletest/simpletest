@@ -834,9 +834,14 @@ class SimpleMock {
      *                                including wildcards.
      *    @access public
      */
-    function setReturnValue($method, $value, $args = false) {
+    function returnsByValue($method, $value, $args = false) {
         $this->dieOnNoMethod($method, "set return value");
         $this->actions->register($method, $args, new SimpleByValue($value));
+    }
+    
+    /** @deprecated */
+    function setReturnValue($method, $value, $args = false) {
+        $this->returnsByValue($method, $value, $args);
     }
 
     /**
@@ -853,9 +858,14 @@ class SimpleMock {
      *                             including wildcards.
      *    @access public
      */
-    function setReturnValueAt($timing, $method, $value, $args = false) {
+    function returnsByValueAt($timing, $method, $value, $args = false) {
         $this->dieOnNoMethod($method, "set return value sequence");
         $this->actions->registerAt($timing, $method, $args, new SimpleByValue($value));
+    }
+    
+    /** @deprecated */
+    function setReturnValueAt($timing, $method, $value, $args = false) {
+        $this->returnsByValueAt($timing, $method, $value, $args);
     }
 
     /**
@@ -867,11 +877,16 @@ class SimpleMock {
      *                                including wildcards.
      *    @access public
      */
-    function setReturnReference($method, &$reference, $args = false) {
+    function returnsByReference($method, &$reference, $args = false) {
         $this->dieOnNoMethod($method, "set return reference");
         $this->actions->register($method, $args, new SimpleByReference($reference));
     }
-
+    
+    /** @deprecated */
+    function setReturnReference($method, &$reference, $args = false) {
+        $this->returnsByReference($method, $reference, $args);
+    }
+    
     /**
      *    Sets a return for a parameter list that will
      *    be passed by value only when the required call count
@@ -886,11 +901,16 @@ class SimpleMock {
      *                              including wildcards.
      *    @access public
      */
-    function setReturnReferenceAt($timing, $method, &$reference, $args = false) {
+    function returnsByReferenceAt($timing, $method, &$reference, $args = false) {
         $this->dieOnNoMethod($method, "set return reference sequence");
         $this->actions->registerAt($timing, $method, $args, new SimpleByReference($reference));
     }
-
+    
+    /** @deprecated */
+    function setReturnReferenceAt($timing, $method, &$reference, $args = false) {
+        $this->returnsByReferenceAt($timing, $method, $reference, $args);
+    }
+    
     /**
      *    Sets up an expected call with a set of
      *    expected parameters in that call. All
@@ -1517,6 +1537,22 @@ class MockGenerator {
         $code .= "    function returnsAt(\$timing, \$method, \$value, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");
         $code .= "        \$this->mock->returnsAt(\$timing, \$method, \$value, \$args);\n";
+        $code .= "    }\n";
+        $code .= "    function returnsByValue(\$method, \$value, \$args = false) {\n";
+        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= "        \$this->mock->setReturnValue(\$method, \$value, \$args);\n";
+        $code .= "    }\n";
+        $code .= "    function returnsByValueAt(\$timing, \$method, \$value, \$args = false) {\n";
+        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= "        \$this->mock->setReturnValueAt(\$timing, \$method, \$value, \$args);\n";
+        $code .= "    }\n";
+        $code .= "    function returnsByReference(\$method, &\$ref, \$args = false) {\n";
+        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= "        \$this->mock->setReturnReference(\$method, \$ref, \$args);\n";
+        $code .= "    }\n";
+        $code .= "    function returnsByReferenceAt(\$timing, \$method, &\$ref, \$args = false) {\n";
+        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= "        \$this->mock->setReturnReferenceAt(\$timing, \$method, \$ref, \$args);\n";
         $code .= "    }\n";
         $code .= "    function setReturnValue(\$method, \$value, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked("\$method");

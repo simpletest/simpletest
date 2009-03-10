@@ -238,14 +238,14 @@ class TestOfMockReturns extends UnitTestCase {
 
     function testDefaultReturn() {
         $mock = new MockDummy();
-        $mock->setReturnValue("aMethod", "aaa");
+        $mock->returnsByValue("aMethod", "aaa");
         $this->assertIdentical($mock->aMethod(), "aaa");
         $this->assertIdentical($mock->aMethod(), "aaa");
     }
 
     function testParameteredReturn() {
         $mock = new MockDummy();
-        $mock->setReturnValue('aMethod', 'aaa', array(1, 2, 3));
+        $mock->returnsByValue('aMethod', 'aaa', array(1, 2, 3));
         $this->assertNull($mock->aMethod());
         $this->assertIdentical($mock->aMethod(1, 2, 3), 'aaa');
     }
@@ -260,26 +260,26 @@ class TestOfMockReturns extends UnitTestCase {
     function testSetReturnReferenceGivesOriginalReference() {
         $mock = new MockDummy();
         $object = 1;
-        $mock->setReturnReference('aReferenceMethod', $object, array(1, 2, 3));
+        $mock->returnsByReference('aReferenceMethod', $object, array(1, 2, 3));
         $this->assertReference($mock->aReferenceMethod(1, 2, 3), $object);
     }
 
-    function testPatternMatchReturn() {
+    function testReturnValueCanBeChosenJustByPatternMatchingArguments() {
         $mock = new MockDummy();
-        $mock->setReturnValue(
+        $mock->returnsByValue(
                 "aMethod",
                 "aaa",
                 array(new PatternExpectation('/hello/i')));
-        $this->assertIdentical($mock->aMethod('Hello'), "aaa");
+        $this->assertIdentical($mock->aMethod('Hello'), 'aaa');
         $this->assertNull($mock->aMethod('Goodbye'));
     }
 
     function testMultipleMethods() {
         $mock = new MockDummy();
-        $mock->setReturnValue("aMethod", 100, array(1));
-        $mock->setReturnValue("aMethod", 200, array(2));
-        $mock->setReturnValue("anotherMethod", 10, array(1));
-        $mock->setReturnValue("anotherMethod", 20, array(2));
+        $mock->returnsByValue("aMethod", 100, array(1));
+        $mock->returnsByValue("aMethod", 200, array(2));
+        $mock->returnsByValue("anotherMethod", 10, array(1));
+        $mock->returnsByValue("anotherMethod", 20, array(2));
         $this->assertIdentical($mock->aMethod(1), 100);
         $this->assertIdentical($mock->anotherMethod(1), 10);
         $this->assertIdentical($mock->aMethod(2), 200);
@@ -288,9 +288,9 @@ class TestOfMockReturns extends UnitTestCase {
 
     function testReturnSequence() {
         $mock = new MockDummy();
-        $mock->setReturnValueAt(0, "aMethod", "aaa");
-        $mock->setReturnValueAt(1, "aMethod", "bbb");
-        $mock->setReturnValueAt(3, "aMethod", "ddd");
+        $mock->returnsByValueAt(0, "aMethod", "aaa");
+        $mock->returnsByValueAt(1, "aMethod", "bbb");
+        $mock->returnsByValueAt(3, "aMethod", "ddd");
         $this->assertIdentical($mock->aMethod(), "aaa");
         $this->assertIdentical($mock->aMethod(), "bbb");
         $this->assertNull($mock->aMethod());
@@ -300,7 +300,7 @@ class TestOfMockReturns extends UnitTestCase {
     function testSetReturnReferenceAtGivesOriginal() {
         $mock = new MockDummy();
         $object = 100;
-        $mock->setReturnReferenceAt(1, "aReferenceMethod", $object);
+        $mock->returnsByReferenceAt(1, "aReferenceMethod", $object);
         $this->assertNull($mock->aReferenceMethod());
         $this->assertReference($mock->aReferenceMethod(), $object);
         $this->assertNull($mock->aReferenceMethod());
@@ -332,10 +332,10 @@ class TestOfMockReturns extends UnitTestCase {
 
     function testMultipleMethodSequences() {
         $mock = new MockDummy();
-        $mock->setReturnValueAt(0, "aMethod", "aaa");
-        $mock->setReturnValueAt(1, "aMethod", "bbb");
-        $mock->setReturnValueAt(0, "anotherMethod", "ccc");
-        $mock->setReturnValueAt(1, "anotherMethod", "ddd");
+        $mock->returnsByValueAt(0, "aMethod", "aaa");
+        $mock->returnsByValueAt(1, "aMethod", "bbb");
+        $mock->returnsByValueAt(0, "anotherMethod", "ccc");
+        $mock->returnsByValueAt(1, "anotherMethod", "ddd");
         $this->assertIdentical($mock->aMethod(), "aaa");
         $this->assertIdentical($mock->anotherMethod(), "ccc");
         $this->assertIdentical($mock->aMethod(), "bbb");
@@ -344,17 +344,17 @@ class TestOfMockReturns extends UnitTestCase {
 
     function testSequenceFallback() {
         $mock = new MockDummy();
-        $mock->setReturnValueAt(0, "aMethod", "aaa", array('a'));
-        $mock->setReturnValueAt(1, "aMethod", "bbb", array('a'));
-        $mock->setReturnValue("aMethod", "AAA");
+        $mock->returnsByValueAt(0, "aMethod", "aaa", array('a'));
+        $mock->returnsByValueAt(1, "aMethod", "bbb", array('a'));
+        $mock->returnsByValue("aMethod", "AAA");
         $this->assertIdentical($mock->aMethod('a'), "aaa");
         $this->assertIdentical($mock->aMethod('b'), "AAA");
     }
 
     function testMethodInterference() {
         $mock = new MockDummy();
-        $mock->setReturnValueAt(0, "anotherMethod", "aaa");
-        $mock->setReturnValue("aMethod", "AAA");
+        $mock->returnsByValueAt(0, "anotherMethod", "aaa");
+        $mock->returnsByValue("aMethod", "AAA");
         $this->assertIdentical($mock->aMethod(), "AAA");
         $this->assertIdentical($mock->anotherMethod(), "aaa");
     }
@@ -681,7 +681,7 @@ class TestOfSpecialMethodsAfterPHP51 extends UnitTestCase {
     
     function testCanEmulateIsset() {
         $mock = new MockClassWithSpecialMethods();
-        $mock->setReturnValue('__isset', true);
+        $mock->returnsByValue('__isset', true);
         $this->assertIdentical(isset($mock->a), true);
     }
 
@@ -704,8 +704,8 @@ class TestOfSpecialMethods extends UnitTestCase {
 
     function testReturnFromSpecialAccessor() {
         $mock = new MockClassWithSpecialMethods();
-        $mock->setReturnValue('__get', '1st Return', array('first'));
-        $mock->setReturnValue('__get', '2nd Return', array('second'));
+        $mock->returnsByValue('__get', '1st Return', array('first'));
+        $mock->returnsByValue('__get', '2nd Return', array('second'));
         $this->assertEqual($mock->first, '1st Return');
         $this->assertEqual($mock->second, '2nd Return');
     }
@@ -719,14 +719,14 @@ class TestOfSpecialMethods extends UnitTestCase {
     function testCanSimulateAnOverloadmethod() {
         $mock = new MockClassWithSpecialMethods();
         $mock->expectOnce('__call', array('amOverloaded', array('A')));
-        $mock->setReturnValue('__call', 'aaa');
+        $mock->returnsByValue('__call', 'aaa');
         $this->assertIdentical($mock->amOverloaded('A'), 'aaa');
     }
 
     function testToStringMagic() {
         $mock = new MockClassWithSpecialMethods();
         $mock->expectOnce('__toString');
-        $mock->setReturnValue('__toString', 'AAA');
+        $mock->returnsByValue('__toString', 'AAA');
         ob_start();
         print $mock;
         $output = ob_get_contents();
@@ -827,9 +827,9 @@ class TestOfPartialMocks extends UnitTestCase {
 
     function testSettingReturns() {
         $mock = new TestDummy();
-        $mock->setReturnValue('anotherMethod', 33, array(3));
-        $mock->setReturnValue('anotherMethod', 22);
-        $mock->setReturnValueAt(2, 'anotherMethod', 44, array(3));
+        $mock->returnsByValue('anotherMethod', 33, array(3));
+        $mock->returnsByValue('anotherMethod', 22);
+        $mock->returnsByValueAt(2, 'anotherMethod', 44, array(3));
         $this->assertEqual($mock->anotherMethod(), 22);
         $this->assertEqual($mock->anotherMethod(3), 33);
         $this->assertEqual($mock->anotherMethod(3), 44);
@@ -838,7 +838,7 @@ class TestOfPartialMocks extends UnitTestCase {
     function testSetReturnReferenceGivesOriginal() {
         $mock = new TestDummy();
         $object = 99;
-        $mock->setReturnReferenceAt(0, 'aReferenceMethod', $object, array(3));
+        $mock->returnsByReferenceAt(0, 'aReferenceMethod', $object, array(3));
         $this->assertReference($mock->aReferenceMethod(3), $object);
     }
 
@@ -1004,7 +1004,7 @@ class TestOfProtectedMethodPartialMocks extends UnitTestCase
 
     function testMockedMethodIsCalled() {
         $object = new TestDummyWithProtected();
-        $object->setReturnValue('aProtectedMethod', false);
+        $object->returnsByValue('aProtectedMethod', false);
         $this->assertFalse($object->aMethodCallsProtected());
     }
 }

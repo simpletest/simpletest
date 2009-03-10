@@ -134,7 +134,7 @@ class MyTestCase extends UnitTestCase {
                 Changing the return value of a method from <code>null</code>
                 to something else is pretty easy...
 <php><![CDATA[
-<strong>$connection->setReturnValue('query', 37)</strong>
+<strong>$connection->returns('query', 37)</strong>
 ]]></php>
                 Now every time we call
                 <code><![CDATA[$connection->query()]]></code> we get
@@ -150,26 +150,6 @@ class MyTestCase extends UnitTestCase {
                 a test method it is usually all you need.
             </p>
             <p>
-                <!-- Need to move this to it's own section -->
-                Objects with dynamic interfaces, using <code>__call</code>, can
-                be problematic.
-                A quick way round this is to add extra methods to the mock when
-                generating it.
-                In a large test suite this could cause trouble, as you probably
-                already have a mock version of the class without the extra methods.
-                The code generator will not generate a mock version of the class if
-                one of the same name already exists.
-                You will confusingly fail to see your method.
-                To cope with this, SimpleTest allows you to name the new class at
-                the same time as you add the extra methods.
-                Here it is...
-<php><![CDATA[
-<strong>Mock::generate('DatabaseConnection', 'MyMockDatabaseConnection', array('setOptions'));</strong>
-]]></php>
-                Here the mock will behave as if the <code>setOptions()</code>
-                existed in the original class.
-            </p>
-            <p>
                 Things aren&apos;t always that simple though.
                 One common problem is iterators, where constantly returning
                 the same value could cause an endless loop in the object
@@ -178,11 +158,8 @@ class MyTestCase extends UnitTestCase {
                 Let&apos;s say we have a simple iterator that looks like this...
 <php><![CDATA[
 class Iterator {
-    function Iterator() {
-    }
-    
-    function next() {
-    }
+    function Iterator() { }
+    function next() { }
 }
 ]]></php>
                 This is about the simplest iterator you could have.
@@ -195,16 +172,16 @@ Mock::generate('Iterator');
 class IteratorTest extends UnitTestCase() {
     
     function testASequence() {<strong>
-        $iterator = &new MockIterator();
-        $iterator->setReturnValue('next', false);
-        $iterator->setReturnValueAt(0, 'next', 'First string');
-        $iterator->setReturnValueAt(1, 'next', 'Second string');</strong>
+        $iterator = new MockIterator();
+        $iterator->returns('next', false);
+        $iterator->returnsAt(0, 'next', 'First string');
+        $iterator->returnsAt(1, 'next', 'Second string');</strong>
         ...
     }
 }
 ]]></php>
                 When <code>next()</code> is called on the
-                mock iterator it will first return &quot;First string&quot;,
+                <code>MockIterator</code> it will first return &quot;First string&quot;,
                 on the second call &quot;Second string&quot; will be returned
                 and on any other call <code>false</code> will
                 be returned.
@@ -219,36 +196,32 @@ class IteratorTest extends UnitTestCase() {
                 Say we have a configuration class like...
 <php><![CDATA[
 class Configuration {
-    function Configuration() {
-    }
-    
-    function getValue($key) {
-    }
+    function Configuration() { ... }
+    function get($key) { ... }
 }
 ]]></php>
-                This is a classic situation for using mock objects as
-                actual configuration will vary from machine to machine,
-                hardly helping the reliability of our tests if we use it
-                directly.
+                This is a likely situation for using mock objects, as
+                actual configuration will vary from machine to machine and
+                even from test to test.
                 The problem though is that all the data comes through the
-                <code>getValue()</code> method and yet
+                <code>get()</code> method and yet
                 we want different results for different keys.
                 Luckily the mocks have a filter system...
 <php><![CDATA[
 <strong>$config = &new MockConfiguration();
-$config->setReturnValue('getValue', 'primary', array('db_host'));
-$config->setReturnValue('getValue', 'admin', array('db_user'));
-$config->setReturnValue('getValue', 'secret', array('db_password'));</strong>
+$config->returns('get', 'primary', array('db_host'));
+$config->returns('get', 'admin', array('db_user'));
+$config->returns('get', 'secret', array('db_password'));</strong>
 ]]></php>
                 The extra parameter is a list of arguments to attempt
                 to match.
                 In this case we are trying to match only one argument which
                 is the look up key.
                 Now when the mock object has the
-                <code>getValue()</code> method invoked
+                <code>get()</code> method invoked
                 like this...
 <php><![CDATA[
-$config->getValue('db_user')
+$config->get('db_user')
 ]]></php>
                 ...it will return &quot;admin&quot;.
                 It finds this by attempting to match the calling arguments
@@ -258,12 +231,12 @@ $config->getValue('db_user')
             <p>
                 You can set a default argument argument like so...
 <php><![CDATA[<strong>
-$config->setReturnValue('getValue', false, array('*'));</strong>
+$config->returns('get', false, array('*'));</strong>
 ]]></php>
                 This is not the same as setting the return value without
                 any argument requirements like this...
 <php><![CDATA[<strong>
-$config->setReturnValue('getValue', false);</strong>
+$config->returns('get', false);</strong>
 ]]></php>
                 In the first case it will accept any single argument,
                 but exactly one is required.
@@ -278,83 +251,77 @@ $config->setReturnValue('getValue', false);</strong>
                 Declare the most specific matches first if you are not sure.
             </p>
             <p>
-                There are times when you want a specific object to be
-                dished out by the mock rather than a copy.
-                The PHP4 copy semantics force us to use a different method
-                for this.
-                You might be simulating a container for example...
+                There are times when you want a specific reference to be
+                dished out by the mock rather than a copy or object handle.
+                This a rarity to say the least, but you might be simulating
+                a container that can hold primitives such as strings.
+                For example...
 <php><![CDATA[
-class Thing {
-}
-
-class Vector {
-    function Vector() {
-    }
-    
-    function get($index) {
-    }
+class Pad {
+    function Pad() { }
+    function &note($index) { }
 }
 ]]></php>
                 In this case you can set a reference into the mock&apos;s
                 return list...
 <php><![CDATA[
-$thing = &new Thing();<strong>
-$vector = &new MockVector();
-$vector->setReturnReference('get', $thing, array(12));</strong>
+function testTaskReads() {
+    $note = 'Buy books';
+    $pad = new MockPad();
+    $vector-><strong>returnsByReference(</strong>'note', $note, array(3)<strong>)</strong>;
+    $task = new Task($pad);
+    ...
+}
 ]]></php>
                 With this arrangement you know that every time
-                <code><![CDATA[$vector->get(12)]]></code> is
-                called it will return the same
-                <code>$thing</code> each time.
-                This is compatible with PHP5 as well.
+                <code><![CDATA[$pad->note(3)]]></code> is
+                called it will return the same <code>$note</code> each time,
+                even if it get's modified.
             </p>
             <p>
                 These three factors, timing, parameters and whether to copy,
                 can be combined orthogonally.
                 For example...
 <php><![CDATA[
-$complex = &new MockComplexThing();
-$stuff = &new Stuff();<strong>
-$complex->setReturnReferenceAt(3, 'get', $stuff, array('*', 1));</strong>
+$buy_books = 'Buy books';
+$write_code = 'Write code';
+$pad = new MockPad();
+$vector-><strong>returnsByReferenceAt(0, 'note', $buy_books, array('*', 3));
+$vector-><strong>returnsByReferenceAt(1, 'note', $write_code, array('*', 3));
 ]]></php>
-                This will return the <code>$stuff</code> only on the third
-                call and only if two parameters were set the second of
-                which must be the integer 1.
-                That should cover most simple prototyping situations.
+                This will return a reference to <code>$buy_books</code> and
+                then to <code>$write_code</code>, but only if two parameters
+                were set the second of which must be the integer 3.
+                That should cover most situations.
             </p>
             <p>
                 A final tricky case is one object creating another, known
                 as a factory pattern.
                 Suppose that on a successful query to our imaginary
-                database, a result set is returned as an iterator with
-                each call to <code>next()</code> giving
+                database, a result set is returned as an iterator, with
+                each call to the the iterator&apos;s <code>next()</code> giving
                 one row until false.
                 This sounds like a simulation nightmare, but in fact it can all
-                be mocked using the mechanics above.
-            </p>
-            <p>
-                Here&apos;s how...
+                be mocked using the mechanics above...
 <php><![CDATA[
 Mock::generate('DatabaseConnection');
 Mock::generate('ResultIterator');
 
 class DatabaseTest extends UnitTestCase {
     
-    function testUserFinder() {<strong>
-        $result = &new MockResultIterator();
-        $result->setReturnValue('next', false);
-        $result->setReturnValueAt(0, 'next', array(1, 'tom'));
-        $result->setReturnValueAt(1, 'next', array(3, 'dick'));
-        $result->setReturnValueAt(2, 'next', array(6, 'harry'));
+    function testUserFinderReadsResultsFromDatabase() {
+        $result = new MockResultIterator();
+        $result->returns('next', false);
+        $result->returnsAt(0, 'next', array(1, 'tom'));
+        $result->returnsAt(1, 'next', array(3, 'dick'));
+        $result->returnsAt(2, 'next', array(6, 'harry'));
         
-        $connection = &new MockDatabaseConnection();
-        $connection->setReturnValue('query', false);
-        $connection->setReturnReference(
-                'query',
-                $result,
-                array('select id, name from users'));</strong>
+        $connection = new MockDatabaseConnection();
+        $connection->returns('query', false);<strong>
+        $connection->returns(
+                'query', $result, array('select id, name from users'));</strong>
                 
-        $finder = &new UserFinder($connection);
+        $finder = new UserFinder($connection);
         $this->assertIdentical(
                 $finder->findNames(),
                 array('tom', 'dick', 'harry'));
@@ -378,6 +345,30 @@ class DatabaseTest extends UnitTestCase {
                 Creating them outside a test case will cause a run time error
                 when an expectation is triggered.
                 We cover expectations next.
+            </p>
+            <p>
+                Objects with dynamic interfaces, using <code>__call</code>, can
+                be problematic with the current mock objects implemntation.
+                A quick way round this is to add extra methods to the mock when
+                generating it.
+<php><![CDATA[
+<strong>Mock::generate('DatabaseConnection', 'MockDatabaseConnection', array('setOptions'));</strong>
+]]></php>
+                In a large test suite this could cause trouble, as you probably
+                already have a mock version of the class called
+                <code>MockDatabaseConnection</code> without the extra methods.
+                The code generator will not generate a mock version of the class if
+                one of the same name already exists.
+                You will confusingly fail to see your method.
+            </p>
+            <p>
+                To cope with this, SimpleTest allows you to name the new class at
+                the same time as you add the extra methods.
+<php><![CDATA[
+Mock::generate('DatabaseConnection', <strong>'MyMockDatabaseConnection'</strong>, array('setOptions'));
+]]></php>
+                Here the mock will behave as if the <code>setOptions()</code>
+                existed in the original class.
             </p>
         </section>
         <section name="expectations" title="Mocks as critics">
@@ -481,7 +472,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
     function testFindSessionLogging() {<strong>
         $session = &new MockSession();
         $pool = &new MockSessionPool();
-        $pool->setReturnReference('findSession', $session);
+        $pool->returnsByReference('findSession', $session);
         $pool->expectOnce('findSession', array('abc'));
         
         $log = &new MockLog();
@@ -664,7 +655,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
     class MockConnection extends BasicMockConnection {
         function MockConnection() {
             $this->BasicMockConnection();
-            $this->setReturnValue('query', false);
+            $this->returns('query', false);
         }
     }</strong>
 ?>
