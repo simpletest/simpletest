@@ -309,7 +309,7 @@ Mock::generate('ResultIterator');
 
 class DatabaseTest extends UnitTestCase {
     
-    function testUserFinderReadsResultsFromDatabase() {
+    function testUserFinderReadsResultsFromDatabase() {<strong>
         $result = new MockResultIterator();
         $result->returns('next', false);
         $result->returnsAt(0, 'next', array(1, 'tom'));
@@ -317,11 +317,9 @@ class DatabaseTest extends UnitTestCase {
         $result->returnsAt(2, 'next', array(6, 'harry'));
         
         $connection = new MockDatabaseConnection();
-        $connection->returns('query', false);<strong>
-        $connection->returns(
-                'query', $result, array('select id, name from users'));</strong>
+        $connection->returns('selectQuery', $result);</strong>
                 
-        $finder = new UserFinder($connection);
+        $finder = new UserFinder(<strong>$connection</strong>);
         $this->assertIdentical(
                 $finder->findNames(),
                 array('tom', 'dick', 'harry'));
@@ -329,8 +327,8 @@ class DatabaseTest extends UnitTestCase {
 }
 ]]></php>
                 Now only if our
-                <code>$connection</code> is called with the correct
-                <code>query()</code> will the
+                <code>$connection</code> is called with the
+                <code>query()</code> method will the
                 <code>$result</code> be returned that is
                 itself exhausted after the third call to <code>next()</code>.
                 This should be enough
@@ -338,6 +336,93 @@ class DatabaseTest extends UnitTestCase {
                 the class actually
                 being tested here, to come up with goods.
                 A very precise test and not a real database in sight.
+            </p>
+            <p>
+                We could refine this test further by insisting that the correct
+                query is sent...
+<php><![CDATA[
+$connection->returns('selectQuery', $result, array(<strong>'select name, id from people'</strong>));
+]]></php>
+                This is actually a bad idea.
+            </p>
+            <p>
+                We have a <code>UserFinder</code> in object land, talking to
+                database tables using a large interface - the whole of SQL.
+                Imagine that we have written a lot of tests that now depend
+                on the exact SQL string passed.
+                These queries could change en masse for all sorts of reasons
+                not related to the specific test.
+                For example the quoting rules could change, a table name could
+                change, a link table added or whatever.
+                This would require the rewriting of every single test any time
+                one of these refactoring is made, yet the intended behaviour has
+                stayed the same.
+                Tests are supposed to help refactoring, not hinder it.
+                I&apos;d certainly like to have a test suite that passes while I change
+                table names.
+            </p>
+            <p>
+                As a rule it is best not to mock a fat interface.
+            </p>
+            <p>
+                By contrast, here is the round trip test...
+<php><![CDATA[
+class DatabaseTest extends UnitTestCase {<strong>
+    function setUp() { ... }
+    function tearDown() { ... }</strong>
+    
+    function testUserFinderReadsResultsFromDatabase() {
+        $finder = new UserFinder(<strong>new DatabaseConnection()</strong>);
+        $finder->add('tom');
+        $finder->add('dick');
+        $finder->add('harry');
+        $this->assertIdentical(
+                $finder->findNames(),
+                array('tom', 'dick', 'harry'));
+    }
+}
+]]></php>
+                This test is immune to schema changes.
+                It will only fail if you actually break the functionality, which
+                is what you want a test to do.
+            </p>
+            <p>
+                The catch is those <code>setUp()</code> and <code>tearDown()</code>
+                methods that we&apos;ve rather glossed over.
+                They have to clear out the database tables and ensure that the
+                schema is defined correctly.
+                That can be a chunk of extra work, but you usually have this code
+                lying around anyway for deployment purposes.
+            </p>
+            <p>
+                One place where you definitely need a mock is simulating failures.
+                Say the database goes down while <code>UserFinder</code> is doing
+                it&apos;s work.
+                Does <code>UserFinder</code> behave well...?
+<php><![CDATA[
+class DatabaseTest extends UnitTestCase {
+    
+    function testUserFinder() {
+        $connection = new MockDatabaseConnection();<strong>
+        $connection->throwOn('selectQuery', new TimedOut('Ouch!'));</strong>
+        $alert = new MockAlerts();<strong>
+        $alert->expectOnce('notify', 'Database is busy - please retry');</strong>
+        $finder = new UserFinder($connection, $alert);
+        $this->assertIdentical($finder->findNames(), array());
+    }
+}
+]]></php>
+                We've passed the <code>UserFinder</code> an <code>$alert</code>
+                object.
+                This is going to do some kind of pretty notifications in the
+                user interface.
+                To pass this test, the finder has to write a nice user friendly
+                message to <code>$alert</code>, rather than propogating the exception.
+            </p>
+            <p>
+                How do we get the mock <code>DatabaseConnection</code> to throw an exception?
+                We generate the exception using the <code>throwOn</code> method
+                on the mock.
             </p>
             <p>
                 Mock objects can only be used within test cases, as they send messages
