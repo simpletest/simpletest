@@ -15,6 +15,7 @@ class TestOfLiveCssSelectors extends DomTestCase {
         $url = 'http://simpletest.org/';
         $this->assertTrue($this->get($url));
         $this->assertEqual($this->getUrl(), $url);
+        $this->assertEqual($this->getElementsBySelector('h2'), array('Screenshots', 'Documentation', 'Contributing'));
         $this->assertElementsBySelector('h2', array('Screenshots', 'Documentation', 'Contributing'));
 		$this->assertElementsBySelector('a[href="http://simpletest.org/api/"]', array('the complete API', 'documented API'));
    		$this->assertElementsBySelector('div#content > p > strong', array('SimpleTest PHP unit tester'));

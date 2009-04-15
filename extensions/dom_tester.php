@@ -94,27 +94,27 @@ class CssSelectorExpectation extends SimpleExpectation {
  * 
  */
 class DomTestCase extends WebTestCase {
-	var $dom;
-
-    function assertElementsBySelector($selector, $elements, $message = '%s') {
+	public $dom;
+	
+	function loadDom() {
 		$this->dom = new DomDocument('1.0', 'utf-8');
 		$this->dom->validateOnParse = true;
-		$this->dom->loadHTML($this->getBrowser()->getContent());
+		$this->dom->loadHTML($this->_browser->getContent());
+	}
 
-        return $this->assert(
+    function getElementsBySelector($selector) {
+		$this->loadDom();    	
+		$css_selector = new CssSelectorExpectation($this->dom, $selector);
+    	return $css_selector->_value;
+    }
+    
+	function assertElementsBySelector($selector, $elements, $message = '%s') {
+		$this->loadDom();    	
+		return $this->assert(
                 new CssSelectorExpectation($this->dom, $selector),
                 $elements,
                 $message);
     }
-    
-	function getElementsBySelector($selector) {
-		$this->dom = new DomDocument('1.0', 'utf-8');
-		$this->dom->validateOnParse = true;
-		$this->dom->loadHTML($this->getBrowser()->getContent());
-		
-		$css_selector = new CssSelectorExpectation($this->dom, $selector);
-		return $css_selector->value;
-	}
 }
 
 ?>
