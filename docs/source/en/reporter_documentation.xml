@@ -276,8 +276,7 @@ class MyDisplay extends SimpleReporter {<strong>
                 for the HTML version...
 <php><![CDATA[
 <?php
-require_once('simpletest/unit_tester.php');
-require_once('simpletest/reporter.php');
+require_once('simpletest/autorun.php');
 
 $test = &new TestSuite('File test');
 $test->addTestFile('tests/file_test.php');
@@ -318,8 +317,7 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 code...
 <php><![CDATA[
 <?php
-require_once('simpletest/unit_tester.php');
-require_once('simpletest/reporter.php');
+require_once('simpletest/autorun.php');
 
 $test = &new TestSuite('File test');
 $test->addTestFile('tests/file_test.php');
@@ -332,8 +330,7 @@ $test->addTestFile('tests/file_test.php');
                 run time environment...
 <php><![CDATA[
 <?php
-require_once('simpletest/unit_tester.php');
-require_once('simpletest/reporter.php');
+require_once('simpletest/autorun.php');
 
 $test = &new TestSuite('File test');
 $test->addTestFile('tests/file_test.php');
