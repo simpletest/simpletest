@@ -231,7 +231,7 @@ class TestOfLogging extends UnitTestCase {
         $clock->returns('now', 'Timestamp');
         $log = new Log('../temp/test.log');
         $log->message('Test line', &$clock);
-        $this->assertWantedPattern(
+        $this->assertPattern(
                 '/Timestamp/',
                 $this->getFileLine('../temp/test.log', 0),
                 'Found timestamp');</strong>

@@ -107,11 +107,11 @@ class TestOfLogging extends UnitTestCase {
     function testAppendingToFile() {<strong>
         $log = new Log(new FileWriter('../temp/test.log'));</strong>
         $log->message('Test line 1');
-        $this->assertWantedPattern(
+        $this->assertPattern(
                 '/Test line 1/',
                 $this->getFileLine('../temp/test.log', 0));
         $log->message('Test line 2');
-        $this->assertWantedPattern(
+        $this->assertPattern(
                 '/Test line 2/',
                 $this->getFileLine('../temp/test.log', 1));
     }
@@ -121,7 +121,7 @@ class TestOfLogging extends UnitTestCase {
         $clock->returns('now', 'Timestamp');<strong>
         $log = new Log(new FileWriter('../temp/test.log'));</strong>
         $log->message('Test line', $clock);
-        $this->assertWantedPattern(
+        $this->assertPattern(
                 '/Timestamp/',
                 $this->getFileLine('../temp/test.log', 0),
                 'Found timestamp');
