@@ -118,7 +118,7 @@ class TestOfLogging extends UnitTestCase {
 
     function testTimestamps() {
         $clock = new MockClock($this);
-        $clock->setReturnValue('now', 'Timestamp');<strong>
+        $clock->returns('now', 'Timestamp');<strong>
         $log = new Log(new FileWriter('../temp/test.log'));</strong>
         $log->message('Test line', $clock);
         $this->assertWantedPattern(
@@ -224,7 +224,7 @@ class TestOfLogging extends UnitTestCase {
     <strong>
     function testWriting() {
         $clock = new MockClock();
-        $clock->setReturnValue('now', 'Timestamp');
+        $clock->returns('now', 'Timestamp');
         $writer = new MockFileWriter($this);
         $writer->expectOnce('write', array('[Timestamp] Test line'));
         $log = new Log($writer);

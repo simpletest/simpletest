@@ -42,7 +42,7 @@ class TestOfLogging extends UnitTestCase {
 
     function testWriting() {
         $clock = new MockClock();
-        $clock->setReturnValue('now', 'Timestamp');
+        $clock->returns('now', 'Timestamp');
         $writer = new <strong>MockWriter()</strong>;
         $writer->expectOnce('write', array('[Timestamp] Test line'));
         $log = new Log($writer);

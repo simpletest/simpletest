@@ -177,11 +177,11 @@ new WithinMarginExpectation(14.0, 0.001)
 Mock::generate('Authorisation');
 <strong>
 $authorisation = new MockAuthorisation();
-$authorisation->setReturnValue(
+$authorisation->returns(
         'isAllowed',
         true,
         array(new IsAExpectation('Session', 'Must be a session')));
-$authorisation->setReturnValue('isAllowed', false);</strong>
+$authorisation->returns('isAllowed', false);</strong>
 ]]></php>
                 We have set the default mock behaviour to return false when
                 <code>isAllowed</code> is called.

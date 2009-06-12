@@ -228,7 +228,7 @@ class TestOfLogging extends UnitTestCase {
     }
     function testTimestamps() {<strong>
         $clock = &new MockClock($this);
-        $clock->setReturnValue('now', 'Timestamp');
+        $clock->returns('now', 'Timestamp');
         $log = new Log('../temp/test.log');
         $log->message('Test line', &$clock);
         $this->assertWantedPattern(
