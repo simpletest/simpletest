@@ -29,8 +29,8 @@ require_once('simpletest/autorun.php');<strong>
 require_once('simpletest/ui/recorder.php');</strong>
 
 $group = new TestSuite();
-$group->addTestFile('test_of_module_ship.php');
-$group->addTestFile('test_of_module_pay.php');
+$group->addFile('test_of_module_ship.php');
+$group->addFile('test_of_module_pay.php');
 <strong>
 $recorder = new Recorder();
 $group->run($recorder);</strong>
@@ -112,8 +112,8 @@ require_once('simpletest/autorun.php');
 require_once('simpletest/ui/recorder.php');
 
 $group = new TestSuite();
-$group->addTestFile('test_of_module_ship.php');
-$group->addTestFile('test_of_module_pay.php');
+$group->addFile('test_of_module_ship.php');
+$group->addFile('test_of_module_pay.php');
 $recorder = new Recorder();
 $group->run($recorder);
 

@@ -279,7 +279,7 @@ class MyDisplay extends SimpleReporter {<strong>
 require_once('simpletest/autorun.php');
 
 $test = &new TestSuite('File test');
-$test->addTestFile('tests/file_test.php');
+$test->addFile('tests/file_test.php');
 $test->run(<strong>new TextReporter()</strong>);
 ?>
 ]]></php>
@@ -320,7 +320,7 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
 require_once('simpletest/autorun.php');
 
 $test = &new TestSuite('File test');
-$test->addTestFile('tests/file_test.php');
+$test->addFile('tests/file_test.php');
 <strong>exit ($test->run(new TextReporter()) ? 0 : 1);</strong>
 ?>
 ]]></php>
@@ -333,7 +333,7 @@ $test->addTestFile('tests/file_test.php');
 require_once('simpletest/autorun.php');
 
 $test = &new TestSuite('File test');
-$test->addTestFile('tests/file_test.php');
+$test->addFile('tests/file_test.php');
 <strong>if (TextReporter::inCli()) {</strong>
     exit ($test->run(new TextReporter()) ? 0 : 1);
 <strong>}</strong>

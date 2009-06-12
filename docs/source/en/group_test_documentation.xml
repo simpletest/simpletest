@@ -123,7 +123,7 @@ require_once('simpletest/autorun.php');
 class BigTestSuite extends TestSuite {
     function __construct() {
         parent::__construct();
-        $this->addTestFile('file_tests.php');
+        $this->addFile('file_tests.php');
     }
 }</strong>
 ?>
@@ -141,7 +141,7 @@ class BigTestSuite extends TestSuite {
     function __construct() {
         parent::__construct();
         $this->addFile('file_tests.php');
-        <strong>$this->addTestFile('some_other_test.php');</strong>
+        <strong>$this->addFile('some_other_test.php');</strong>
     }
 }
 ?>

@@ -210,8 +210,8 @@ class test2 extends UnitTestCase {
 class myGroupTest extends GroupTest {
   function myGroupTest() {
     parent::GroupTest('');
-    $this->addTestFile(dirname(__FILE__).'/test1.php');
-    $this->addTestFile(dirname(__FILE__).'/test2.php');
+    $this->addFile(dirname(__FILE__).'/test1.php');
+    $this->addFile(dirname(__FILE__).'/test2.php');
   }
 }
 ?>
