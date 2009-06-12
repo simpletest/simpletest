@@ -162,7 +162,7 @@ class TelnetTest extends UnitTestCase {
         $socket = &new MockSocket($this);
         ...
         $network = &new MockNetwork($this);
-        $network->setReturnReference('createSocket', $socket);
+        $network->returnsByReference('createSocket', $socket);
         $telnet = &new Telnet($network);
         $telnet->connect('127.0.0.1', 21, 'Me', 'Secret');
         ...</strong>
