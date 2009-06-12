@@ -169,7 +169,7 @@ class BigTestSuite extends TestSuite {
     </external>
     <meta>
         <keywords>
-            php unit testing, test integration, documentation, marcus baker, simple test,
+            php unit testing, test integration, documentation, marcus baker, simpletest,
             simpletest documentation, phpunit, pear
         </keywords>
     </meta>

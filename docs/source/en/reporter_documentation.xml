@@ -461,7 +461,6 @@ $test->run(new HtmlReporter());
             php unit testing,
             documentation,
             marcus baker,
-            simple test,
             simpletest,
             remote testing,
             xml tests,

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!-- $Id$ -->
-<page title="Simple Test for PHP" here="SimpleTest">
+<page title="SimpleTest for PHP" here="SimpleTest">
     <long_title>
-        Download the Simple Test testing framework -
+        Download the SimpleTest testing framework -
         Unit tests and mock objects for PHP
     </long_title>
     <content>
@@ -473,7 +473,7 @@ class TestOfRankings extends WebTestCase {
     </internal>
     <external>
         <link>
-            <a href="https://sourceforge.net/project/showfiles.php?group_id=76550&amp;release_id=153280">Download PHP Simple Test</a>
+            <a href="https://sourceforge.net/project/showfiles.php?group_id=76550&amp;release_id=153280">Download PHP SimpleTest</a>
             from <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
         </link>
         <link>

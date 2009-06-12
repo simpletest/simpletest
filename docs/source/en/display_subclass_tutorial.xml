@@ -256,7 +256,7 @@ class ShowPasses extends HtmlReporter {
             free php sample code,
             architecture,
             sample test cases,
-            php simple test framework,
+            php simpletest framework,
             php resources,
             php test case examples,
             phpunit,
