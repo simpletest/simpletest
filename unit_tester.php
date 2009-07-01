@@ -381,6 +381,17 @@ class UnitTestCase extends SimpleTestCase {
     }
 
     /**
+     *    Tells SimpleTest to ignore an upcoming exception as not relevant
+     *    to the current test. It doesn't affect the test, whether thrown or
+     *    not.
+     *    @param SimpleExpectation/Exception $ignored  The error to ignore.
+     *    @access public
+     */
+    function ignoreException($ignored = false) {
+        SimpleTest::getContext()->get('SimpleExceptionTrap')->ignoreException($ignored);
+    }
+
+    /**
      *    Creates an equality expectation if the
      *    object/value is not already some type
      *    of expectation.

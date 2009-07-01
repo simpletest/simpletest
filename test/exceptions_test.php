@@ -91,14 +91,44 @@ class TestOfCatchingExceptions extends UnitTestCase {
     }
 }
 
+class TestOfIgnoringExceptions extends UnitTestCase {
+
+    function testCanIgnoreAnyException() {
+        $this->ignoreException();
+        throw new Exception();
+    }
+
+    function testCanIgnoreSpecificException() {
+        $this->ignoreException('MyTestException');
+        throw new MyTestException();
+    }
+
+    function testCanIgnoreExceptionExactly() {
+        $this->ignoreException(new Exception('Ouch'));
+        throw new Exception('Ouch');
+    }
+
+    function testIgnoredExceptionsDoNotMaskExpectedExceptions() {
+        $this->ignoreException('Exception');
+        $this->expectException('MyTestException');
+        throw new MyTestException();
+    }
+
+    function testCanIgnoreMultipleExceptions() {
+        $this->ignoreException('MyTestException');
+        $this->ignoreException('OtherTestException');
+        throw new OtherTestException();
+    }
+}
+
 class TestOfCallingTearDownAfterExceptions extends UnitTestCase {
     private $debri = 0;
-    
+
     function tearDown() {
         $this->debri--;
     }
 
-    function testLeaveSomeDebri() { 
+    function testLeaveSomeDebri() {
         $this->debri++;
         $this->expectException();
         throw new Exception(__FUNCTION__);
@@ -115,7 +145,7 @@ class TestOfExceptionThrownInSetUpDoesNotRunTestBody extends UnitTestCase {
         $this->expectException();
         throw new Exception();
 	}
-	
+
 	function testShouldNotBeRun() {
         $this->fail('This test body should not be run');
 	}
@@ -130,7 +160,7 @@ class TestOfExpectExceptionWithSetUp extends UnitTestCase {
 	function setUp() {
         $this->expectException();
 	}
-	
+
 	function testThisExceptionShouldBeCaught() {
         throw new Exception();
 	}
@@ -141,11 +171,11 @@ class TestOfExpectExceptionWithSetUp extends UnitTestCase {
 }
 
 class TestOfThrowingExceptionsInTearDown extends UnitTestCase {
-    
+
     function tearDown() {
         throw new Exception();
     }
-    
+
     function testDoesntFatal() {
         $this->expectException();
     }

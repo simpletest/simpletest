@@ -28,15 +28,15 @@ class FileTestCase extends UnitTestCase {
     function FileTestCase() {
         $this->UnitTestCase('File test');
     }<strong>
-    
+
     function setUp() {
         @unlink('../temp/test.txt');
     }
-    
+
     function tearDown() {
         @unlink('../temp/test.txt');
     }
-    
+
     function testCreation() {
         $writer = &new FileWriter('../temp/test.txt');
         $writer->write('Hello');
@@ -99,7 +99,9 @@ class FileTestCase extends UnitTestCase {
                     <tr><td><code>assertClone($x, $y)</code></td><td>Fail unless $x and $y are identical copies</td></tr>
                     <tr><td><code>assertPattern($p, $x)</code></td><td>Fail unless the regex $p matches $x</td></tr>
                     <tr><td><code>assertNoPattern($p, $x)</code></td><td>Fail if the regex $p matches $x</td></tr>
-                    <tr><td><code>expectError($x)</code></td><td>Swallows any upcoming matching error</td></tr>
+                    <tr><td><code>expectError($x)</code></td><td>Fail if matching error does not occour</td></tr>
+                    <tr><td><code>expectException($x)</code></td><td>Fail if matching exception is not thrown</td></tr>
+                    <tr><td><code>ignoreException($x)</code></td><td>Swallows any upcoming matching exception</td></tr>
                     <tr><td><code>assert($e)</code></td><td>Fail on failed <a local="expectation_documentation">expectation</a> object $e</td></tr>
                 </tbody></table>
                 All assertion methods can take an optional description as a
@@ -184,7 +186,7 @@ class FileTester extends UnitTestCase {
     function FileTester($name = false) {
         $this->UnitTestCase($name);
     }
-    
+
     function assertFileExists($filename, $message = '%s') {
         $this->assertTrue(
                 file_exists($filename),
@@ -210,15 +212,15 @@ class FileTester extends UnitTestCase {
                 a normal test case...
 <php><![CDATA[
 class FileTestCase extends <strong>FileTester</strong> {
-    
+
     function setUp() {
         @unlink('../temp/test.txt');
     }
-    
+
     function tearDown() {
         @unlink('../temp/test.txt');
     }
-    
+
     function testCreation() {
         $writer = &new FileWriter('../temp/test.txt');
         $writer->write('Hello');<strong>
