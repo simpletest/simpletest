@@ -47,7 +47,6 @@ FILES=(simpletest/README \
           simpletest/web_tester.php \
           simpletest/xml.php \
           simpletest/extensions/pear_test_case.php \
-          simpletest/extensions/phpunit_test_case.php \
           simpletest/extensions/testdox.php \
           simpletest/extensions/testdox/test.php \
           simpletest/test/acceptance_test.php \
@@ -119,7 +118,6 @@ FILES=(simpletest/README \
           simpletest/docs/fr/overview.html \
           simpletest/docs/fr/unit_test_documentation.html \
           simpletest/docs/fr/group_test_documentation.html \
-          simpletest/docs/fr/server_stubs_documentation.html \
           simpletest/docs/fr/mock_objects_documentation.html \
           simpletest/docs/fr/partial_mocks_documentation.html \
           simpletest/docs/fr/reporter_documentation.html \
