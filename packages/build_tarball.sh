@@ -70,6 +70,7 @@ FILES=(simpletest/README \
           simpletest/test/frames_test.php \
           simpletest/test/http_test.php \
           simpletest/test/interfaces_test.php \
+          simpletest/test/interfaces_test_php5_1.php \
           simpletest/test/live_test.php \
           simpletest/test/mock_objects_test.php \
           simpletest/test/page_test.php \
@@ -102,6 +103,7 @@ FILES=(simpletest/README \
           simpletest/test/support/test1.php \
           simpletest/test/support/failing_test.php \
           simpletest/test/support/passing_test.php \
+          simpletest/test/site/file.html \
           simpletest/docs/en/docs.css \
           simpletest/docs/en/index.html \
           simpletest/docs/en/overview.html \
