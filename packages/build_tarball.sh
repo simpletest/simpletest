@@ -100,6 +100,8 @@ FILES=(simpletest/README \
           simpletest/test/support/spl_examples.php \
           simpletest/test/support/empty_test_file.php \
           simpletest/test/support/test1.php \
+          simpletest/test/support/failing_test.php \
+          simpletest/test/support/passing_test.php \
           simpletest/docs/en/docs.css \
           simpletest/docs/en/index.html \
           simpletest/docs/en/overview.html \
