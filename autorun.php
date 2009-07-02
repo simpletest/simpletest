@@ -35,6 +35,9 @@ function simpletest_autorun() {
  *    run all recent test cases if no test has
  *    so far been run. Uses the DefaultReporter which can have
  *    it's output controlled with SimpleTest::prefer().
+ *    @return boolean/null false if there were test failures, true if
+ *                         there were no failures, null if tests are
+ *                         already running
  */
 function run_local_tests() {
     try {
@@ -46,10 +49,10 @@ function run_local_tests() {
         $suite = $loader->createSuiteFromClasses(
                 basename(initial_file()),
                 $loader->selectRunnableTests($candidates));
-        $result = $suite->run(new DefaultReporter());
+        return $suite->run(new DefaultReporter());
     } catch (Exception $stack_frame_fix) {
         print $stack_frame_fix->getMessage();
-        $result = false;
+        return false;
     }
 }
 
@@ -75,8 +78,8 @@ function initial_file() {
         if (isset($_SERVER, $_SERVER['SCRIPT_FILENAME'])) {
             $file = $_SERVER['SCRIPT_FILENAME'];
         } else {
-	        $included_files = get_included_files();
-	        $file = reset($included_files);
+            $included_files = get_included_files();
+            $file = reset($included_files);
         }
     }
     return $file;
