@@ -93,7 +93,7 @@ class SimpleTestCase {
     function shouldSkip() {
         return $this->should_skip;
     }
-    
+
     /**
      *    Will issue a message to the reporter and tell the test
      *    case to skip if the incoming flag is false.
@@ -111,8 +111,8 @@ class SimpleTestCase {
      *    @access public
      */
     function createInvoker() {
-        return new SimpleExceptionTrappingInvoker(
-                new SimpleErrorTrappingInvoker(new SimpleInvoker($this)));
+        return new SimpleErrorTrappingInvoker(
+                new SimpleExceptionTrappingInvoker(new SimpleInvoker($this)));
     }
 
     /**
@@ -386,7 +386,7 @@ class SimpleFileLoader {
         $classes = $this->selectRunnableTests($new_classes);
         return $this->createSuiteFromClasses($test_file, $classes);
     }
-    
+
     /**
      *    Imports new variables into the global namespace.
      *    @param hash $existing   Variables before the file was loaded.
@@ -399,7 +399,7 @@ class SimpleFileLoader {
             $_GLOBALS[$global] = $new[$global];
         }
     }
-    
+
     /**
      *    Lookup classnames from file contents, in case the
      *    file may have been included before.
