@@ -22,11 +22,12 @@
                 test scripts by including a SimpleTest aurorun.php file.
             </p>
             <p>
-                The target audience of this tool is anyone developing a small
-                to medium PHP application, including developers new to
-                unit and web regression testing.
-                The core principles are ease of use first, with extendibility and
-                essential features.
+                These documents apply to SimpleTest version 1.1, although we
+                try hard to maintain compatibility between versions.
+                If you get a test failure after an upgrade, check out the
+                file &quot;HELP_MY_TESTS_DONT_WORK_ANYMORE&quot; in the
+                simpletest directory to see if a feature you are using
+                has since been deprecated and later removed.
             </p>
             <p>
                 A <a local="unit_test_documentation">test case</a> looks like this...
@@ -47,7 +48,7 @@ class <strong>MyTestCase</strong> extends UnitTestCase {
 ]]></php>
             </p>
             <p>
-                These tools are designed for the developer.
+                This tool is designed for the developer.
                 The target audience of this tool is anyone developing a small
                 to medium PHP application, including developers new to
                 unit and web regression testing.
