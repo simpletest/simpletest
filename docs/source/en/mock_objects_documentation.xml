@@ -23,7 +23,7 @@
             </p>
             <p>
                 If mock objects only behaved as actors they would simply be
-                known as server stubs.
+                known as &quot;server stubs&quot;.
                 This was originally a pattern named by Robert Binder (<a href="">Testing
                 object-oriented systems</a>: models, patterns, and tools,
                 Addison-Wesley) in 1999.
@@ -418,6 +418,7 @@ class DatabaseTest extends UnitTestCase {
                 user interface.
                 To pass this test, the finder has to write a nice user friendly
                 message to <code>$alert</code>, rather than propogating the exception.
+                So far, so good.
             </p>
             <p>
                 How do we get the mock <code>DatabaseConnection</code> to throw an exception?
@@ -425,16 +426,20 @@ class DatabaseTest extends UnitTestCase {
                 on the mock.
             </p>
             <p>
-                Mock objects can only be used within test cases, as they send messages
-                straight to the currently running test case.
-                Creating them outside a test case will cause a run time error
-                when an expectation is triggered.
-                We will explain an expectation next.
+                Finally, what if the method you want to simulate does not exist yet?
+                If you set a return value on a method that is not there, SimpleTest
+                will throw an error.
+                What if you are using <code>__call()</code> to simulate dynamic methods?
             </p>
             <p>
                 Objects with dynamic interfaces, using <code>__call</code>, can
                 be problematic with the current mock objects implemntation.
-                A quick way round this is to add extra methods to the mock when
+                You can mock the <code>__call()</code> method, but this is ugly.
+                Why should a test know anything about such low level implementation details?
+                It just wants to simulate the call.
+            </p>
+            <p>
+                The way round this is to add extra methods to the mock when
                 generating it.
 <php><![CDATA[
 <strong>Mock::generate('DatabaseConnection', 'MockDatabaseConnection', array('setOptions'));</strong>
@@ -444,16 +449,24 @@ class DatabaseTest extends UnitTestCase {
                 <code>MockDatabaseConnection</code> without the extra methods.
                 The code generator will not generate a mock version of the class if
                 one of the same name already exists.
-                You will confusingly fail to see your method.
+                You will confusingly fail to see your method if another definition
+                was run first.
             </p>
             <p>
-                To cope with this, SimpleTest allows you to name the new class at
-                the same time as you add the extra methods.
+                To cope with this, SimpleTest allows you to choose any name for the
+                new class at the same time as you add the extra methods.
 <php><![CDATA[
 Mock::generate('DatabaseConnection', <strong>'MyMockDatabaseConnection'</strong>, array('setOptions'));
 ]]></php>
                 Here the mock will behave as if the <code>setOptions()</code>
                 existed in the original class.
+            </p>
+            <p>
+                Mock objects can only be used within test cases, as they send messages,
+                upon expectations, straight to the currently running test case.
+                Creating them outside a test case will cause a run time error
+                when an expectation is triggered.
+                We cover expectations next.
             </p>
         </section>
         <section name="expectations" title="Mocks as critics">
@@ -464,7 +477,7 @@ Mock::generate('DatabaseConnection', <strong>'MyMockDatabaseConnection'</strong>
                 messages, but is your new class sending correct ones?
                 Testing this can get messy without a mock objects library.
             </p>
-            <p>
+			<p>
                 By way of example, let's take a simple <code>PageController</code>
                 class to handle a credit card payment form...
 <php><![CDATA[
@@ -680,7 +693,6 @@ function testAllRequiredFieldsHighlightedOnEmptyRequest() {
                     <dt class="new_code">$count</dt>
                     <dd>The number of calls expected.</dd>
                 </dl>
-                The method <code>expectMaximumCallCount()</code>
             </p>
             <p>
                 If you have just one call in your test, make sure you're using
@@ -706,9 +718,6 @@ function testAllRequiredFieldsHighlightedOnEmptyRequest() {
         </link>
         <link>
             <a href="#creation">Creating mock objects</a>.
-        </link>
-        <link>
-            <a href="#stub">Mocks as actors</a> or stubs.
         </link>
         <link>
             <a href="#expectations">Mocks as critics</a> with expectations.
