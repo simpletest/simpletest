@@ -13,15 +13,9 @@
                 Let&apos;s say <em>tests/time_test_case.php</em>...
 <php><![CDATA[
 <strong><?php
-if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}
-require_once(SIMPLE_TEST . 'unit_tester.php');
+require_once('simpletest/unit_tester.php');
 
-class TimeTestCase extends UnitTestCase {
-    function TimeTestCase($test_name = '') {
-        $this->UnitTestCase($test_name);
-    }
+abstract class TimeTestCase extends UnitTestCase {
     function assertSameTime($time1, $time2, $message = '') {
         if (! $message) {
             $message = "Time [$time1] should match time [$time2]";
@@ -44,30 +38,30 @@ class TimeTestCase extends UnitTestCase {
                 simplest possible thing, which is to look for a sequence of digits.
 <php><![CDATA[
 <?php
+require_once('simpletest/autorun.php');<strong>
+require_once('time_test_case.php');</strong>
 require_once('../classes/log.php');<strong>
 require_once('../classes/clock.php');
 
-class TestOfLogging extends TimeTestCase {
-    function TestOfLogging() {
-        $this->TimeTestCase('Log class test');
-    }</strong>
+class TestOfLogging extends TimeTestCase {</strong>
     function setUp() {
         @unlink('../temp/test.log');
     }
+
     function tearDown() {
         @unlink('../temp/test.log');
     }
+
     function getFileLine($filename, $index) {
         $messages = file($filename);
         return $messages[$index];
     }
-    function testCreatingNewFile() {
-        ...
-    }
-    function testAppendingToFile() {
-        ...
-    }<strong>
-    function testTimestamps() {
+
+    function testCreatingNewFile() { ... }
+
+    function testAppendingToFile() { ... }
+    <strong>
+    function testTimestampIsEmittedInMessage() {
         $log = new Log('../temp/test.log');
         $log->message('Test line');
         $this->assertTrue(
@@ -79,8 +73,7 @@ class TestOfLogging extends TimeTestCase {
 }
 ?>
 ]]></php>
-                The test case creates a new <code>Log</code>
-                object and writes a message.
+                The test case creates a new <code>Log</code> object and writes a message.
                 We look for a digit sequence and then test it against the current
                 time using our <code>Clock</code> object.
                 Of course it doesn&apos;t work until we write the code.
@@ -97,7 +90,7 @@ class TestOfLogging extends TimeTestCase {
                     <span class="pass">Pass</span>: clock_test.php->Clock class test->testclockadvance->Advancement<br />
                     <span class="pass">Pass</span>: clock_test.php->Clock class test->testclocktellstime->Now is the right time<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">3/3 test cases complete.
-                    <strong>6</strong> passes and <strong>2</strong> fails.</div>
+                    <strong>6</strong> passes, <strong>2</strong> fails and <strong>2</strong> exceptions.</div>
                 </div>
                 The test suite is still showing the passes from our earlier
                 modification.
@@ -112,17 +105,17 @@ class TestOfLogging extends TimeTestCase {
 <php><![CDATA[
 <?php<strong>
 require_once('../classes/clock.php');</strong>
-    
+
 class Log {
-    var $_file_path;
-        
-    function Log($file_path) {
-        $this->_file_path = $file_path;
+    private $path;
+
+    function __construct($path) {
+        $this->path = $path;
     }
-        
+
     function message($message) {<strong>
         $clock = new Clock();</strong>
-        $file = fopen($this->_file_path, 'a');<strong>
+        $file = fopen($this->path, 'a');<strong>
         fwrite($file, "[" . $clock->now() . "] $message\n");</strong>
         fclose($file);
     }
@@ -143,12 +136,13 @@ class Log {
                 It lacks cohesion, which is the same as saying it is not
                 tightly focused, testing facets of the clock as well as the log.
                 Our problems are caused in part because the clock output
-                is unpredictable when
-                all we really want to test is that the logging message
-                contains the output of
-                <code>Clock::now()</code>.
-                We don&apos;t
-                really care about the contents of that method call.
+                is unpredictable when all we really want to test is that the
+                logging message contains the output of <code>Clock::now()</code>.
+                We don&apos;t really care about the contents of that method call.
+            </p>
+            <p>
+                From the testing point of view, everything we've just done is
+                wrong.
             </p>
             <p>
                 Can we make that call predictable?
@@ -189,11 +183,12 @@ Mock::generate('Clock');
                 This is the line that does the work.
                 The code generator scans the class for all of its
                 methods, creates code to generate an identically
-                interfaced class, but with the name &quot;Mock&quot; added,
-                and then <code>eval()</code>s the new code to
+                interfaced or inherited class, but with the name
+                &quot;Mock&quot; added.
+                It then then <code>eval()</code>$apos;s the new code to
                 create the new class.
 <php><![CDATA[
-$clock = &new MockClock($this);
+$clock = new MockClock($this);
 ]]></php>
                 This line can be added to any test method we are interested in.
                 It creates the dummy clock ready to receive our instructions.
@@ -202,32 +197,32 @@ $clock = &new MockClock($this);
                 Our test case is on the first steps of a radical clean up...
 <php><![CDATA[
 <?php
+require_once('simpletest/autorun.php');<strong>
+require_once('simpletest/mock_objects.php');</strong>
 require_once('../classes/log.php');
 require_once('../classes/clock.php');<strong>
-Mock::generate('Clock');
+Mock::generate('Clock');</strong>
 
-class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase('Log class test');
-    }</strong>
+class TestOfLogging extends <strong>UnitTestCase</strong> {
     function setUp() {
         @unlink('../temp/test.log');
     }
+
     function tearDown() {
         @unlink('../temp/test.log');
     }
+
     function getFileLine($filename, $index) {
         $messages = file($filename);
         return $messages[$index];
     }
-    function testCreatingNewFile() {
-        ...
-    }
-    function testAppendingToFile() {
-        ...
-    }
+
+    function testCreatingNewFile() { ... }
+
+    function testAppendingToFile() { ... }
+
     function testTimestamps() {<strong>
-        $clock = &new MockClock($this);
+        $clock = new MockClock($this);
         $clock->returns('now', 'Timestamp');
         $log = new Log('../temp/test.log');
         $log->message('Test line', &$clock);
@@ -255,17 +250,15 @@ class TestOfLogging extends UnitTestCase {
                 the logging class to make testing possible...
 <php><![CDATA[
 class Log {
-    var $_file_path;
-    
-    function Log($file_path) {
-        $this->_file_path = $file_path;
+    private $path;
+
+    function Log($path) {
+        $this->path = $path;
     }
-    
+
     function message($message, <strong>$clock = false</strong>) {<strong>
-        if (!is_object($clock)) {
-            $clock = new Clock();
-        }</strong>
-        $file = fopen($this->_file_path, 'a');
+        $clock = $clock? $clock : new Clock();</strong>
+        $file = fopen($this->path, 'a');
         fwrite($file, "[" . $clock->now() . "] $message\n");
         fclose($file);
     }
@@ -283,7 +276,7 @@ class Log {
                 Have we sullied our class with test code?
             </p>
             <p>
-                Possibly, but consider this.
+                Its not ideal, but consider this.
                 Next chance you get, look at a circuit board, perhaps the motherboard
                 of the computer you are looking at right now.
                 On most boards you will find the odd empty hole, or solder
@@ -293,7 +286,6 @@ class Log {
                 variations, but most of the remainder will be for testing.
             </p>
             <p>
-                Think about that.
                 The factories making the boards many times over wasting material
                 on parts that do not add to the final function.
                 If hardware engineers can make this sacrifice of elegance I am
@@ -302,9 +294,7 @@ class Log {
             </p>
             <p>
                 Still bother you?
-                Actually it bothers me too, but not so much here.
-                The number one priority is code that works, not prizes
-                for minimalism.
+                Actually it bothers me too.
                 If it really bothers you, then move the creation of the clock
                 into another protected factory method.
                 Then subclass the clock for testing and override the
@@ -312,7 +302,9 @@ class Log {
                 Your tests are clumsier, but your interface is intact.
             </p>
             <p>
-                Again I leave the decision to you.
+                I leave the decision to you, but note that we have some
+                automation in the next section that helps make the subclassing
+                easier.
             </p>
         </section>
     </content>
