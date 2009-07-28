@@ -727,4 +727,210 @@ class SimpleSaxListener {
     function addContent($text) {
     }
 }
+
+/**
+ *    SAX event handler. Maintains a list of
+ *    open tags and dispatches them as they close.
+ *    @package SimpleTest
+ *    @subpackage WebTester
+ */
+class SimplePageBuilder extends SimpleSaxListener {
+    private $tags;
+    private $page;
+    private $private_content_tag;
+
+    /**
+     *    Frees up any references so as to allow the PHP garbage
+     *    collection from unset() to work.
+     *    @access public
+     */
+    function free() {
+        unset($this->tags);
+        unset($this->page);
+        unset($this->private_content_tags);
+    }
+
+    /**
+     *    Reads the raw content and send events
+     *    into the page to be built.
+     *    @param $response SimpleHttpResponse  Fetched response.
+     *    @return SimplePage                   Newly parsed page.
+     *    @access public
+     */
+    function parse($response) {
+        $this->tags = array();
+        $this->page = $this->createPage($response);
+        $parser = $this->createParser($this);
+        $parser->parse($response->getContent());
+        $this->page->acceptPageEnd();
+        return $this->page;
+    }
+
+    /**
+     *    Creates an empty page.
+     *    @return SimplePage        New unparsed page.
+     *    @access protected
+     */
+    protected function createPage($response) {
+        return new SimplePage($response);
+    }
+
+    /**
+     *    Creates the parser used with the builder.
+     *    @param $listener SimpleSaxListener   Target of parser.
+     *    @return SimpleSaxParser              Parser to generate
+     *                                         events for the builder.
+     *    @access protected
+     */
+    protected function createParser(&$listener) {
+        return new SimpleHtmlSaxParser($listener);
+    }
+
+    /**
+     *    Start of element event. Opens a new tag.
+     *    @param string $name         Element name.
+     *    @param hash $attributes     Attributes without content
+     *                                are marked as true.
+     *    @return boolean             False on parse error.
+     *    @access public
+     */
+    function startElement($name, $attributes) {
+        $factory = new SimpleTagBuilder();
+        $tag = $factory->createTag($name, $attributes);
+        if (! $tag) {
+            return true;
+        }
+        if ($tag->getTagName() == 'label') {
+            $this->page->acceptLabelStart($tag);
+            $this->openTag($tag);
+            return true;
+        }
+        if ($tag->getTagName() == 'form') {
+            $this->page->acceptFormStart($tag);
+            return true;
+        }
+        if ($tag->getTagName() == 'frameset') {
+            $this->page->acceptFramesetStart($tag);
+            return true;
+        }
+        if ($tag->getTagName() == 'frame') {
+            $this->page->acceptFrame($tag);
+            return true;
+        }
+        if ($tag->isPrivateContent() && ! isset($this->private_content_tag)) {
+            $this->private_content_tag = &$tag;
+        }
+        if ($tag->expectEndTag()) {
+            $this->openTag($tag);
+            return true;
+        }
+        $this->page->acceptTag($tag);
+        return true;
+    }
+
+    /**
+     *    End of element event.
+     *    @param string $name        Element name.
+     *    @return boolean            False on parse error.
+     *    @access public
+     */
+    function endElement($name) {
+        if ($name == 'label') {
+            $this->page->acceptLabelEnd();
+            return true;
+        }
+        if ($name == 'form') {
+            $this->page->acceptFormEnd();
+            return true;
+        }
+        if ($name == 'frameset') {
+            $this->page->acceptFramesetEnd();
+            return true;
+        }
+        if ($this->hasNamedTagOnOpenTagStack($name)) {
+            $tag = array_pop($this->tags[$name]);
+            if ($tag->isPrivateContent() && $this->private_content_tag->getTagName() == $name) {
+                unset($this->private_content_tag);
+            }
+            $this->addContentTagToOpenTags($tag);
+            $this->page->acceptTag($tag);
+            return true;
+        }
+        return true;
+    }
+
+    /**
+     *    Test to see if there are any open tags awaiting
+     *    closure that match the tag name.
+     *    @param string $name        Element name.
+     *    @return boolean            True if any are still open.
+     *    @access private
+     */
+    protected function hasNamedTagOnOpenTagStack($name) {
+        return isset($this->tags[$name]) && (count($this->tags[$name]) > 0);
+    }
+
+    /**
+     *    Unparsed, but relevant data. The data is added
+     *    to every open tag.
+     *    @param string $text        May include unparsed tags.
+     *    @return boolean            False on parse error.
+     *    @access public
+     */
+    function addContent($text) {
+        if (isset($this->private_content_tag)) {
+            $this->private_content_tag->addContent($text);
+        } else {
+            $this->addContentToAllOpenTags($text);
+        }
+        return true;
+    }
+
+    /**
+     *    Any content fills all currently open tags unless it
+     *    is part of an option tag.
+     *    @param string $text        May include unparsed tags.
+     *    @access private
+     */
+    protected function addContentToAllOpenTags($text) {
+        foreach (array_keys($this->tags) as $name) {
+            for ($i = 0, $count = count($this->tags[$name]); $i < $count; $i++) {
+                $this->tags[$name][$i]->addContent($text);
+            }
+        }
+    }
+
+    /**
+     *    Parsed data in tag form. The parsed tag is added
+     *    to every open tag. Used for adding options to select
+     *    fields only.
+     *    @param SimpleTag $tag        Option tags only.
+     *    @access private
+     */
+    protected function addContentTagToOpenTags(&$tag) {
+        if ($tag->getTagName() != 'option') {
+            return;
+        }
+        foreach (array_keys($this->tags) as $name) {
+            for ($i = 0, $count = count($this->tags[$name]); $i < $count; $i++) {
+                $this->tags[$name][$i]->addTag($tag);
+            }
+        }
+    }
+
+    /**
+     *    Opens a tag for receiving content. Multiple tags
+     *    will be receiving input at the same time.
+     *    @param SimpleTag $tag        New content tag.
+     *    @access private
+     */
+    protected function openTag($tag) {
+        $name = $tag->getTagName();
+        if (! in_array($name, array_keys($this->tags))) {
+            $this->tags[$name] = array();
+        }
+        $this->tags[$name][] = $tag;
+    }
+}
+
 ?>

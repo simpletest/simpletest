@@ -13,6 +13,7 @@ require_once(dirname(__FILE__) . '/simpletest.php');
 require_once(dirname(__FILE__) . '/http.php');
 require_once(dirname(__FILE__) . '/encoding.php');
 require_once(dirname(__FILE__) . '/page.php');
+require_once(dirname(__FILE__) . '/parser.php');
 require_once(dirname(__FILE__) . '/selector.php');
 require_once(dirname(__FILE__) . '/frames.php');
 require_once(dirname(__FILE__) . '/user_agent.php');
@@ -218,7 +219,7 @@ class SimpleBrowser {
     function useFrames() {
         $this->ignore_frames = false;
     }
-    
+
     /**
      *    Switches off cookie sending and recieving.
      *    @access public
@@ -226,7 +227,7 @@ class SimpleBrowser {
     function ignoreCookies() {
         $this->user_agent->ignoreCookies();
     }
-    
+
     /**
      *    Switches back on the cookie sending and recieving.
      *    @access public
@@ -255,7 +256,7 @@ class SimpleBrowser {
         }
         return $frameset;
     }
-    
+
     /**
      *    Assembles the parsing machinery and actually parses
      *    a single page. Frees all of the builder memory and so
@@ -891,7 +892,7 @@ class SimpleBrowser {
                 $form->submitButton(new SimpleById($id), $additional));
         return ($success ? $this->getContent() : $success);
     }
-    
+
     /**
      *    Tests to see if a submit button exists with this
      *    label.
@@ -970,7 +971,7 @@ class SimpleBrowser {
                 $form->submitImage(new SimpleById($id), $x, $y, $additional));
         return ($success ? $this->getContent() : $success);
     }
-    
+
     /**
      *    Tests to see if an image exists with this
      *    title or alt text.
@@ -1038,7 +1039,7 @@ class SimpleBrowser {
         $this->load($url, new SimpleGetEncoding());
         return $this->getContent();
     }
-    
+
     /**
      *    Finds a link by id attribute.
      *    @param string $id        ID attribute value.
