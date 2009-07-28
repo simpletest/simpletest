@@ -269,7 +269,7 @@ class TestOfFramesetPageInterface extends UnitTestCase {
             if (strncmp($method, 'accept', 6) == 0) {
                 continue;
             }
-            if ($method == 'normalise') {
+            if (in_array($method, array('setForms', 'normalise', 'setFrames'))) {
                 continue;
             }
             $methods[] = $method;

@@ -244,14 +244,6 @@ class TestOfHtmlPage extends UnitTestCase {
         $this->assertIdentical($page->getFrameset(), false);
     }
 
-    function testHasEmptyFrameset() {
-        $page = new SimplePage(new MockSimpleHttpResponse());
-        $page->acceptFramesetStart(new SimpleTag('frameset', array()));
-        $page->acceptFramesetEnd();
-        $this->assertTrue($page->hasFrames());
-        $this->assertIdentical($page->getFrameset(), array());
-    }
-
     function testFramesInPage() {
         $response = new MockSimpleHttpResponse();
         $response->setReturnValue('getUrl', new SimpleUrl('http://here'));
@@ -263,6 +255,7 @@ class TestOfHtmlPage extends UnitTestCase {
         $page->acceptFrame(new SimpleFrameTag(array('src' => '3.html')));
         $page->acceptFramesetEnd();
         $page->acceptFrame(new SimpleFrameTag(array('src' => '4.html')));
+        $page->acceptPageEnd();
 
         $this->assertTrue($page->hasFrames());
         $this->assertIdentical($page->getFrameset(), array(
@@ -281,6 +274,7 @@ class TestOfHtmlPage extends UnitTestCase {
         $page->acceptFrame(new SimpleFrameTag(array('src' => '3.html', 'name' => 'B')));
         $page->acceptFrame(new SimpleFrameTag(array('src' => '4.html')));
         $page->acceptFramesetEnd();
+        $page->acceptPageEnd();
 
         $this->assertTrue($page->hasFrames());
         $this->assertIdentical($page->getFrameset(), array(
@@ -301,6 +295,7 @@ class TestOfHtmlPage extends UnitTestCase {
         $page->acceptFramesetStart(new SimpleTag('frameset', array()));
         $page->acceptFrame(new SimpleFrameTag(array('src' => '1.html')));
         $page->acceptFramesetEnd();
+        $page->acceptPageEnd();
         $this->assertIdentical(
                 $page->getFrameset(),
                 array(1 => new SimpleUrl('https://there.com/stuff/1.html')));
@@ -313,9 +308,10 @@ class TestOfFormsCreatedFromEventStream extends UnitTestCase {
         $page = new SimplePage(new MockSimpleHttpResponse());
         $page->acceptFormStart(
                 new SimpleFormTag(array('method' => 'GET', 'action' => 'here.php')));
-        $page->AcceptTag(
+        $page->acceptTag(
                 new SimpleSubmitTag(array('type' => 'submit', 'name' => 's')));
         $page->acceptFormEnd();
+        $page->acceptPageEnd();
         $form = &$page->getFormBySubmit(new SimpleByLabel('Submit'));
         $this->assertEqual(
                 $form->submitButton(new SimpleByLabel('Submit')),
@@ -331,6 +327,7 @@ class TestOfFormsCreatedFromEventStream extends UnitTestCase {
         $page->AcceptTag(
                 new SimpleSubmitTag(array("type" => "submit", "name" => "s")));
         $page->acceptFormEnd();
+        $page->acceptPageEnd();
         $this->assertEqual($page->getField(new SimpleByName('a')), 'A');
     }
 
@@ -347,6 +344,7 @@ class TestOfFormsCreatedFromEventStream extends UnitTestCase {
         $page->AcceptTag(
                 new SimpleSubmitTag(array("type" => "submit", "name" => "s")));
         $page->acceptFormEnd();
+        $page->acceptPageEnd();
         $this->assertEqual($page->getField(new SimpleByLabel('l')), 'A');
     }
 }
@@ -428,16 +426,6 @@ class TestOfPageScraping extends UnitTestCase {
         $this->assertEqual($page->getField(new SimpleByName('here')), "Hello");
     }
 
-    function testEmptyFrameset() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue(
-                'getContent',
-                '<html><frameset></frameset></html>');
-        $page = $this->parse($response);
-        $this->assertTrue($page->hasFrames());
-        $this->assertIdentical($page->getFrameset(), array());
-    }
-
     function testSingleFrame() {
         $response = new MockSimpleHttpResponse();
         $response->setReturnValue(
@@ -463,16 +451,6 @@ class TestOfPageScraping extends UnitTestCase {
         $this->assertIdentical(
                 $page->getFrameset(),
                 array(1 => new SimpleUrl('http://host/a.html')));
-    }
-
-    function testFrameWithNoSource() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue(
-                'getContent',
-                '<html><frameset><frame></frameset></html>');
-        $page = $this->parse($response);
-        $this->assertTrue($page->hasFrames());
-        $this->assertIdentical($page->getFrameset(), array());
     }
 
     function testFramesCollectedWithNestedFramesetTags() {

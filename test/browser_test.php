@@ -546,13 +546,6 @@ class TestOfBrowserFrames extends UnitTestCase {
         $this->assertIdentical($browser->getFrames(), 'http://site.with.no.frames/');
     }
 
-    function testFramesetWithNoFrames() {
-        $browser = $this->createBrowser($this->createUserAgent(
-                array('http://site.with.no.frames/' => '<frameset></frameset>')));
-        $this->assertEqual($browser->get('http://site.with.no.frames/'), '');
-        $this->assertIdentical($browser->getFrames(), array());
-    }
-
     function testFramesetWithSingleFrame() {
         $frameset = '<frameset><frame name="a" src="frame.html"></frameset>';
         $browser = $this->createBrowser($this->createUserAgent(array(

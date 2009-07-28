@@ -29,7 +29,9 @@ class SimplePage {
     private $left_over_labels;
     private $open_forms;
     private $complete_forms;
+    private $forms;
     private $frameset;
+    private $loading_frames;
     private $frames;
     private $frameset_nesting_level;
     private $transport_error;
@@ -53,7 +55,9 @@ class SimplePage {
         $this->left_over_labels = array();
         $this->open_forms = array();
         $this->complete_forms = array();
+        $this->forms = array();
         $this->frameset = false;
+        $this->loading_frames = array();
         $this->frames = array();
         $this->frameset_nesting_level = 0;
         $this->text = false;
@@ -376,9 +380,13 @@ class SimplePage {
     function acceptFrame($tag) {
         if ($this->isLoadingFrames()) {
             if ($tag->getAttribute('src')) {
-                $this->frames[] = $tag;
+                $this->loading_frames[] = $tag;
             }
         }
+    }
+
+    function setFrames($frames) {
+        $this->frames = $frames;
     }
 
     /**
@@ -388,10 +396,7 @@ class SimplePage {
      *    @access private
      */
     protected function isLoadingFrames() {
-        if (! $this->frameset) {
-            return false;
-        }
-        return ($this->frameset_nesting_level > 0);
+        return $this->frameset and $this->frameset_nesting_level > 0;
     }
 
     /**
@@ -430,6 +435,15 @@ class SimplePage {
                         $label->getText());
             }
         }
+        $this->setForms($this->complete_forms);
+        $this->setFrames($this->loading_frames);
+    }
+
+    /**
+     *    TODO: write docs
+     */
+    function setForms($forms) {
+        $this->forms = $forms;
     }
 
     /**
@@ -438,7 +452,7 @@ class SimplePage {
      *    @access public
      */
     function hasFrames() {
-        return (boolean)$this->frameset;
+        return count($this->frames) > 0;
     }
 
     /**
@@ -451,7 +465,7 @@ class SimplePage {
      *    @access public
      */
     function getFrameset() {
-        if (! $this->frameset) {
+        if (! $this->hasFrames()) {
             return false;
         }
         $urls = array();
@@ -589,9 +603,9 @@ class SimplePage {
      *    @access public
      */
     function getFormBySubmit($selector) {
-        for ($i = 0; $i < count($this->complete_forms); $i++) {
-            if ($this->complete_forms[$i]->hasSubmit($selector)) {
-                return $this->complete_forms[$i];
+        for ($i = 0; $i < count($this->forms); $i++) {
+            if ($this->forms[$i]->hasSubmit($selector)) {
+                return $this->forms[$i];
             }
         }
         return null;
@@ -606,9 +620,9 @@ class SimplePage {
      *    @access public
      */
     function getFormByImage($selector) {
-        for ($i = 0; $i < count($this->complete_forms); $i++) {
-            if ($this->complete_forms[$i]->hasImage($selector)) {
-                return $this->complete_forms[$i];
+        for ($i = 0; $i < count($this->forms); $i++) {
+            if ($this->forms[$i]->hasImage($selector)) {
+                return $this->forms[$i];
             }
         }
         return null;
@@ -623,9 +637,9 @@ class SimplePage {
      *    @access public
      */
     function getFormById($id) {
-        for ($i = 0; $i < count($this->complete_forms); $i++) {
-            if ($this->complete_forms[$i]->getId() == $id) {
-                return $this->complete_forms[$i];
+        for ($i = 0; $i < count($this->forms); $i++) {
+            if ($this->forms[$i]->getId() == $id) {
+                return $this->forms[$i];
             }
         }
         return null;
@@ -641,8 +655,8 @@ class SimplePage {
      */
     function setField($selector, $value, $position=false) {
         $is_set = false;
-        for ($i = 0; $i < count($this->complete_forms); $i++) {
-            if ($this->complete_forms[$i]->setField($selector, $value, $position)) {
+        for ($i = 0; $i < count($this->forms); $i++) {
+            if ($this->forms[$i]->setField($selector, $value, $position)) {
                 $is_set = true;
             }
         }
@@ -658,8 +672,8 @@ class SimplePage {
      *    @access public
      */
     function getField($selector) {
-        for ($i = 0; $i < count($this->complete_forms); $i++) {
-            $value = $this->complete_forms[$i]->getValue($selector);
+        for ($i = 0; $i < count($this->forms); $i++) {
+            $value = $this->forms[$i]->getValue($selector);
             if (isset($value)) {
                 return $value;
             }
