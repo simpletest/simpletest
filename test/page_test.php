@@ -315,7 +315,7 @@ class TestOfHtmlPage extends UnitTestCase {
         $response = new MockSimpleHttpResponse();
         $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
         $page = new SimplePage($response);
-        $page->AcceptTag($link);        
+        $page->AcceptTag($link);
         $base = new SimpleBaseTag(array('href' => 'www.lastcraft.com/stuff/'));
         $page->AcceptTag($base);
         $this->assertEqual(
@@ -329,7 +329,7 @@ class TestOfHtmlPage extends UnitTestCase {
         $response = new MockSimpleHttpResponse();
         $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
         $page = new SimplePage($response);
-        $page->AcceptTag($link);        
+        $page->AcceptTag($link);
         $base = new SimpleBaseTag(array('href' => 'www.lastcraft.com/stuff/'));
         $page->AcceptTag($base);
         $this->assertEqual(
@@ -448,7 +448,7 @@ class TestOfHtmlPage extends UnitTestCase {
                 'B' => new SimpleUrl('http://here/3.html'),
                 4 => new SimpleUrl('http://here/4.html')));
     }
-    
+
     function testRelativeFramesRespectBaseTag() {
         $response = new MockSimpleHttpResponse();
         $response->setReturnValue('getUrl', new SimpleUrl('http://here.com/'));
@@ -893,6 +893,76 @@ class TestOfPageScraping extends UnitTestCase {
         $this->assertEqual($page->getField(new SimpleByLabel('A')), 'a');
         $this->assertTrue($page->setField(new SimpleBylabel('B'), 'b'));
         $this->assertEqual($page->getField(new SimpleByLabel('B')), 'b');
+    }
+}
+
+class TestOfHtmlStrippingAndNormalisation extends UnitTestCase {
+
+	function testImageSuppressionWhileKeepingParagraphsAndAltText() {
+        $this->assertEqual(
+                SimplePage::normalise('<img src="foo.png" /><p>some text</p><img src="bar.png" alt="bar" />'),
+                'some text bar');
+
+	}
+
+    function testSpaceNormalisation() {
+        $this->assertEqual(
+                SimplePage::normalise("\nOne\tTwo   \nThree\t"),
+                'One Two Three');
+    }
+
+    function testMultilinesCommentSuppression() {
+        $this->assertEqual(
+                SimplePage::normalise('<!--\n Hello \n-->'),
+                '');
+    }
+
+    function testCommentSuppression() {
+        $this->assertEqual(
+                SimplePage::normalise('<!--Hello-->'),
+                '');
+    }
+
+    function testJavascriptSuppression() {
+        $this->assertEqual(
+                SimplePage::normalise('<script attribute="test">\nHello\n</script>'),
+                '');
+        $this->assertEqual(
+                SimplePage::normalise('<script attribute="test">Hello</script>'),
+                '');
+        $this->assertEqual(
+                SimplePage::normalise('<script>Hello</script>'),
+                '');
+    }
+
+    function testTagSuppression() {
+        $this->assertEqual(
+                SimplePage::normalise('<b>Hello</b>'),
+                'Hello');
+    }
+
+    function testAdjoiningTagSuppression() {
+        $this->assertEqual(
+                SimplePage::normalise('<b>Hello</b><em>Goodbye</em>'),
+                'HelloGoodbye');
+    }
+
+    function testExtractImageAltTextWithDifferentQuotes() {
+        $this->assertEqual(
+                SimplePage::normalise('<img alt="One"><img alt=\'Two\'><img alt=Three>'),
+                'One Two Three');
+    }
+
+    function testExtractImageAltTextMultipleTimes() {
+        $this->assertEqual(
+                SimplePage::normalise('<img alt="One"><img alt="Two"><img alt="Three">'),
+                'One Two Three');
+    }
+
+    function testHtmlEntityTranslation() {
+        $this->assertEqual(
+                SimplePage::normalise('&lt;&gt;&quot;&amp;&#039;'),
+                '<>"&\'');
     }
 }
 ?>

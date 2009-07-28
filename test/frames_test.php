@@ -269,6 +269,9 @@ class TestOfFramesetPageInterface extends UnitTestCase {
             if (strncmp($method, 'accept', 6) == 0) {
                 continue;
             }
+            if ($method == 'normalise') {
+                continue;
+            }
             $methods[] = $method;
         }
         return $methods;

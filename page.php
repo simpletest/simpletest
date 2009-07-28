@@ -17,101 +17,6 @@ require_once(dirname(__FILE__) . '/selector.php');
 /**#@-*/
 
 /**
- *    Creates tags and widgets given HTML tag
- *    attributes.
- *    @package SimpleTest
- *    @subpackage WebTester
- */
-class SimpleTagBuilder {
-
-    /**
-     *    Factory for the tag objects. Creates the
-     *    appropriate tag object for the incoming tag name
-     *    and attributes.
-     *    @param string $name        HTML tag name.
-     *    @param hash $attributes    Element attributes.
-     *    @return SimpleTag          Tag object.
-     *    @access public
-     */
-    function createTag($name, $attributes) {
-        static $map = array(
-                'a' => 'SimpleAnchorTag',
-                'title' => 'SimpleTitleTag',
-                'base' => 'SimpleBaseTag',
-                'button' => 'SimpleButtonTag',
-                'textarea' => 'SimpleTextAreaTag',
-                'option' => 'SimpleOptionTag',
-                'label' => 'SimpleLabelTag',
-                'form' => 'SimpleFormTag',
-                'frame' => 'SimpleFrameTag');
-        $attributes = $this->keysToLowerCase($attributes);
-        if (array_key_exists($name, $map)) {
-            $tag_class = $map[$name];
-            return new $tag_class($attributes);
-        } elseif ($name == 'select') {
-            return $this->createSelectionTag($attributes);
-        } elseif ($name == 'input') {
-            return $this->createInputTag($attributes);
-        }
-        return new SimpleTag($name, $attributes);
-    }
-
-    /**
-     *    Factory for selection fields.
-     *    @param hash $attributes    Element attributes.
-     *    @return SimpleTag          Tag object.
-     *    @access protected
-     */
-    protected function createSelectionTag($attributes) {
-        if (isset($attributes['multiple'])) {
-            return new MultipleSelectionTag($attributes);
-        }
-        return new SimpleSelectionTag($attributes);
-    }
-
-    /**
-     *    Factory for input tags.
-     *    @param hash $attributes    Element attributes.
-     *    @return SimpleTag          Tag object.
-     *    @access protected
-     */
-    protected function createInputTag($attributes) {
-        if (! isset($attributes['type'])) {
-            return new SimpleTextTag($attributes);
-        }
-        $type = strtolower(trim($attributes['type']));
-        $map = array(
-                'submit' => 'SimpleSubmitTag',
-                'image' => 'SimpleImageSubmitTag',
-                'checkbox' => 'SimpleCheckboxTag',
-                'radio' => 'SimpleRadioButtonTag',
-                'text' => 'SimpleTextTag',
-                'hidden' => 'SimpleTextTag',
-                'password' => 'SimpleTextTag',
-                'file' => 'SimpleUploadTag');
-        if (array_key_exists($type, $map)) {
-            $tag_class = $map[$type];
-            return new $tag_class($attributes);
-        }
-        return false;
-    }
-
-    /**
-     *    Make the keys lower case for case insensitive look-ups.
-     *    @param hash $map   Hash to convert.
-     *    @return hash       Unchanged values, but keys lower case.
-     *    @access private
-     */
-    protected function keysToLowerCase($map) {
-        $lower = array();
-        foreach ($map as $key => $value) {
-            $lower[strtolower($key)] = $value;
-        }
-        return $lower;
-    }
-}
-
-/**
  *    SAX event handler. Maintains a list of
  *    open tags and dispatches them as they close.
  *    @package SimpleTest
@@ -122,14 +27,6 @@ class SimplePageBuilder extends SimpleSaxListener {
     private $page;
     private $private_content_tag;
 
-    /**
-     *    Sets the builder up empty.
-     *    @access public
-     */
-    function __construct() {
-        parent::__construct();
-    }
-    
     /**
      *    Frees up any references so as to allow the PHP garbage
      *    collection from unset() to work.
@@ -176,7 +73,7 @@ class SimplePageBuilder extends SimpleSaxListener {
     protected function createParser(&$listener) {
         return new SimpleHtmlSaxParser($listener);
     }
-    
+
     /**
      *    Start of element event. Opens a new tag.
      *    @param string $name         Element name.
@@ -427,7 +324,7 @@ class SimplePage {
      */
     function getText() {
         if (! $this->text) {
-            $this->text = SimpleHtmlSaxParser::normalise($this->raw);
+            $this->text = SimplePage::normalise($this->raw);
         }
         return $this->text;
     }
@@ -592,7 +489,7 @@ class SimplePage {
             for ($i = 0; $i < count($this->open_forms); $i++) {
                 $this->open_forms[$i]->addWidget($tag);
             }
-            $this->last_widget = &$tag;
+            $this->last_widget = $tag;
         }
     }
 
@@ -896,14 +793,13 @@ class SimplePage {
      *                                          the button.
      *    @access public
      */
-    function &getFormBySubmit($selector) {
+    function getFormBySubmit($selector) {
         for ($i = 0; $i < count($this->complete_forms); $i++) {
             if ($this->complete_forms[$i]->hasSubmit($selector)) {
                 return $this->complete_forms[$i];
             }
         }
-        $null = null;
-        return $null;
+        return null;
     }
 
     /**
@@ -974,6 +870,26 @@ class SimplePage {
             }
         }
         return null;
+    }
+
+    /**
+     *    Turns HTML into text browser visible text. Images
+     *    are converted to their alt text and tags are supressed.
+     *    Entities are converted to their visible representation.
+     *    @param string $html        HTML to convert.
+     *    @return string             Plain text.
+     *    @access public
+     */
+    static function normalise($html) {
+        $text = preg_replace('|<!--.*?-->|', '', $html);
+        $text = preg_replace('|<script[^>]*>.*?</script>|', '', $text);
+        $text = preg_replace('|<img[^>]*alt\s*=\s*"([^"]*)"[^>]*>|', ' \1 ', $text);
+        $text = preg_replace('|<img[^>]*alt\s*=\s*\'([^\']*)\'[^>]*>|', ' \1 ', $text);
+        $text = preg_replace('|<img[^>]*alt\s*=\s*([a-zA-Z_]+)[^>]*>|', ' \1 ', $text);
+        $text = preg_replace('|<[^>]*>|', '', $text);
+        $text = SimpleHtmlSaxParser::decodeHtml($text);
+        $text = preg_replace('|\s+|', ' ', $text);
+        return trim(trim($text), "\xA0");        // TODO: The \xAO is a &nbsp;. Add a test for this.
     }
 }
 ?>
