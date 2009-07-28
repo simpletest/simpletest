@@ -22,21 +22,15 @@ require_once(dirname(__FILE__) . '/selector.php');
  *    @subpackage WebTester
  */
 class SimplePage {
-    private $links;
-    private $title;
+    private $links = array();
+    private $title = false;
     private $last_widget;
     private $label;
-    private $left_over_labels;
-    private $open_forms;
-    private $complete_forms;
-    private $forms;
-    private $frameset;
-    private $loading_frames;
-    private $frames;
-    private $frameset_nesting_level;
+    private $forms = array();
+    private $frames = array();
     private $transport_error;
     private $raw;
-    private $text;
+    private $text = false;
     private $sent;
     private $headers;
     private $method;
@@ -50,17 +44,6 @@ class SimplePage {
      *    @access public
      */
     function __construct($response = false) {
-        $this->links = array();
-        $this->title = false;
-        $this->left_over_labels = array();
-        $this->open_forms = array();
-        $this->complete_forms = array();
-        $this->forms = array();
-        $this->frameset = false;
-        $this->loading_frames = array();
-        $this->frames = array();
-        $this->frameset_nesting_level = 0;
-        $this->text = false;
         if ($response) {
             $this->extractResponse($response);
         } else {
@@ -273,130 +256,10 @@ class SimplePage {
     }
 
     /**
-     *    Adds a tag to the page.
-     *    @param SimpleTag $tag        Tag to accept.
-     *    @access public
+     *    TODO: write docs
      */
-    function acceptTag($tag) {
-        if ($tag->getTagName() == "a") {
-            $this->addLink($tag);
-        } elseif ($tag->getTagName() == "base") {
-            $this->setBase($tag);
-        } elseif ($tag->getTagName() == "title") {
-            $this->setTitle($tag);
-        } elseif ($this->isFormElement($tag->getTagName())) {
-            for ($i = 0; $i < count($this->open_forms); $i++) {
-                $this->open_forms[$i]->addWidget($tag);
-            }
-            $this->last_widget = $tag;
-        }
-    }
-
-    /**
-     *    Opens a label for a described widget.
-     *    @param SimpleFormTag $tag      Tag to accept.
-     *    @access public
-     */
-    function acceptLabelStart($tag) {
-        $this->label = $tag;
-        unset($this->last_widget);
-    }
-
-    /**
-     *    Closes the most recently opened label.
-     *    @access public
-     */
-    function acceptLabelEnd() {
-        if (isset($this->label)) {
-            if (isset($this->last_widget)) {
-                $this->last_widget->setLabel($this->label->getText());
-                unset($this->last_widget);
-            } else {
-                $this->left_over_labels[] = SimpleTestCompatibility::copy($this->label);
-            }
-            unset($this->label);
-        }
-    }
-
-    /**
-     *    Tests to see if a tag is a possible form
-     *    element.
-     *    @param string $name     HTML element name.
-     *    @return boolean         True if form element.
-     *    @access private
-     */
-    protected function isFormElement($name) {
-        return in_array($name, array('input', 'button', 'textarea', 'select'));
-    }
-
-    /**
-     *    Opens a form. New widgets go here.
-     *    @param SimpleFormTag $tag      Tag to accept.
-     *    @access public
-     */
-    function acceptFormStart($tag) {
-        $this->open_forms[] = new SimpleForm($tag, $this);
-    }
-
-    /**
-     *    Closes the most recently opened form.
-     *    @access public
-     */
-    function acceptFormEnd() {
-        if (count($this->open_forms)) {
-            $this->complete_forms[] = array_pop($this->open_forms);
-        }
-    }
-
-    /**
-     *    Opens a frameset. A frameset may contain nested
-     *    frameset tags.
-     *    @param SimpleFramesetTag $tag      Tag to accept.
-     *    @access public
-     */
-    function acceptFramesetStart($tag) {
-        if (! $this->isLoadingFrames()) {
-            $this->frameset = $tag;
-        }
-        $this->frameset_nesting_level++;
-    }
-
-    /**
-     *    Closes the most recently opened frameset.
-     *    @access public
-     */
-    function acceptFramesetEnd() {
-        if ($this->isLoadingFrames()) {
-            $this->frameset_nesting_level--;
-        }
-    }
-
-    /**
-     *    Takes a single frame tag and stashes it in
-     *    the current frame set.
-     *    @param SimpleFrameTag $tag      Tag to accept.
-     *    @access public
-     */
-    function acceptFrame($tag) {
-        if ($this->isLoadingFrames()) {
-            if ($tag->getAttribute('src')) {
-                $this->loading_frames[] = $tag;
-            }
-        }
-    }
-
     function setFrames($frames) {
         $this->frames = $frames;
-    }
-
-    /**
-     *    Test to see if in the middle of reading
-     *    a frameset.
-     *    @return boolean        True if inframeset.
-     *    @access private
-     */
-    protected function isLoadingFrames() {
-        return $this->frameset and $this->frameset_nesting_level > 0;
     }
 
     /**
@@ -413,30 +276,9 @@ class SimplePage {
     /**
      *    Adds a link to the page.
      *    @param SimpleAnchorTag $tag      Link to accept.
-     *    @access protected
      */
-    protected function addLink($tag) {
+    function addLink($tag) {
         $this->links[] = $tag;
-    }
-
-    /**
-     *    Marker for end of complete page. Any work in
-     *    progress can now be closed.
-     *    @access public
-     */
-    function acceptPageEnd() {
-        while (count($this->open_forms)) {
-            $this->complete_forms[] = array_pop($this->open_forms);
-        }
-        foreach ($this->left_over_labels as $label) {
-            for ($i = 0, $count = count($this->complete_forms); $i < $count; $i++) {
-                $this->complete_forms[$i]->attachLabelBySelector(
-                        new SimpleById($label->getFor()),
-                        $label->getText());
-            }
-        }
-        $this->setForms($this->complete_forms);
-        $this->setFrames($this->loading_frames);
     }
 
     /**
@@ -566,9 +408,8 @@ class SimplePage {
     /**
      *    Sets the base url for the page.
      *    @param SimpleTag $tag    Base URL for page.
-     *    @access protected
      */
-    protected function setBase($tag) {
+    function setBase($tag) {
         $url = $tag->getAttribute('href');
         $this->base = new SimpleUrl($url);
     }
@@ -576,9 +417,8 @@ class SimplePage {
     /**
      *    Sets the title tag contents.
      *    @param SimpleTitleTag $tag    Title of page.
-     *    @access protected
      */
-    protected function setTitle($tag) {
+    function setTitle($tag) {
         $this->title = $tag;
     }
 

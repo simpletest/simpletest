@@ -301,7 +301,7 @@ class TestOfSimpleHtmlLexer extends UnitTestCase {
     }
 
     function testNoContent() {
-        $parser = &$this->createParser();
+        $parser = $this->createParser();
         $parser->expectNever('acceptStartToken');
         $parser->expectNever('acceptEndToken');
         $parser->expectNever('acceptAttributeToken');
@@ -312,14 +312,14 @@ class TestOfSimpleHtmlLexer extends UnitTestCase {
     }
 
     function testUninteresting() {
-        $parser = &$this->createParser();
+        $parser = $this->createParser();
         $parser->expectOnce('acceptTextToken', array('<html></html>', '*'));
         $lexer = new SimpleHtmlLexer($parser);
         $this->assertTrue($lexer->parse('<html></html>'));
     }
 
     function testSkipCss() {
-        $parser = &$this->createParser();
+        $parser = $this->createParser();
         $parser->expectNever('acceptTextToken');
         $parser->expectAtLeastOnce('ignore');
         $lexer = new SimpleHtmlLexer($parser);
@@ -327,7 +327,7 @@ class TestOfSimpleHtmlLexer extends UnitTestCase {
     }
 
     function testSkipJavaScript() {
-        $parser = &$this->createParser();
+        $parser = $this->createParser();
         $parser->expectNever('acceptTextToken');
         $parser->expectAtLeastOnce('ignore');
         $lexer = new SimpleHtmlLexer($parser);
@@ -335,7 +335,7 @@ class TestOfSimpleHtmlLexer extends UnitTestCase {
     }
 
     function testSkipHtmlComments() {
-        $parser = &$this->createParser();
+        $parser = $this->createParser();
         $parser->expectNever('acceptTextToken');
         $parser->expectAtLeastOnce('ignore');
         $lexer = new SimpleHtmlLexer($parser);
@@ -343,7 +343,7 @@ class TestOfSimpleHtmlLexer extends UnitTestCase {
     }
 
     function testTagWithNoAttributes() {
-        $parser = &$this->createParser();
+        $parser = $this->createParser();
         $parser->expectAt(0, 'acceptStartToken', array('<title', '*'));
         $parser->expectAt(1, 'acceptStartToken', array('>', '*'));
         $parser->expectCallCount('acceptStartToken', 2);
@@ -354,7 +354,7 @@ class TestOfSimpleHtmlLexer extends UnitTestCase {
     }
 
     function testTagWithAttributes() {
-        $parser = &$this->createParser();
+        $parser = $this->createParser();
         $parser->expectOnce('acceptTextToken', array('label', '*'));
         $parser->expectAt(0, 'acceptStartToken', array('<a', '*'));
         $parser->expectAt(1, 'acceptStartToken', array('href', '*'));
@@ -372,7 +372,7 @@ class TestOfSimpleHtmlLexer extends UnitTestCase {
 
 class TestOfHtmlSaxParser extends UnitTestCase {
 
-    function &createListener() {
+    function createListener() {
         $listener = new MockSimplePageBuilder();
         $listener->setReturnValue('startElement', true);
         $listener->setReturnValue('addContent', true);
@@ -381,7 +381,7 @@ class TestOfHtmlSaxParser extends UnitTestCase {
     }
 
     function testFramesetTag() {
-        $listener = &$this->createListener();
+        $listener = $this->createListener();
         $listener->expectOnce('startElement', array('frameset', array()));
         $listener->expectOnce('addContent', array('Frames'));
         $listener->expectOnce('endElement', array('frameset'));
@@ -390,7 +390,7 @@ class TestOfHtmlSaxParser extends UnitTestCase {
     }
 
     function testTagWithUnquotedAttributes() {
-        $listener = &$this->createListener();
+        $listener = $this->createListener();
         $listener->expectOnce(
                 'startElement',
                 array('input', array('name' => 'a.b.c', 'value' => 'd')));
@@ -399,7 +399,7 @@ class TestOfHtmlSaxParser extends UnitTestCase {
     }
 
     function testTagInsideContent() {
-        $listener = &$this->createListener();
+        $listener = $this->createListener();
         $listener->expectOnce('startElement', array('a', array()));
         $listener->expectAt(0, 'addContent', array('<html>'));
         $listener->expectAt(1, 'addContent', array('</html>'));
@@ -408,7 +408,7 @@ class TestOfHtmlSaxParser extends UnitTestCase {
     }
 
     function testTagWithInternalContent() {
-        $listener = &$this->createListener();
+        $listener = $this->createListener();
         $listener->expectOnce('startElement', array('a', array()));
         $listener->expectOnce('addContent', array('label'));
         $listener->expectOnce('endElement', array('a'));
@@ -417,7 +417,7 @@ class TestOfHtmlSaxParser extends UnitTestCase {
     }
 
     function testLinkAddress() {
-        $listener = &$this->createListener();
+        $listener = $this->createListener();
         $listener->expectOnce('startElement', array('a', array('href' => 'here.html')));
         $listener->expectOnce('addContent', array('label'));
         $listener->expectOnce('endElement', array('a'));
@@ -426,7 +426,7 @@ class TestOfHtmlSaxParser extends UnitTestCase {
     }
 
     function testEncodedAttribute() {
-        $listener = &$this->createListener();
+        $listener = $this->createListener();
         $listener->expectOnce('startElement', array('a', array('href' => 'here&there.html')));
         $listener->expectOnce('addContent', array('label'));
         $listener->expectOnce('endElement', array('a'));
@@ -435,7 +435,7 @@ class TestOfHtmlSaxParser extends UnitTestCase {
     }
 
     function testTagWithId() {
-        $listener = &$this->createListener();
+        $listener = $this->createListener();
         $listener->expectOnce('startElement', array('a', array('id' => '0')));
         $listener->expectOnce('addContent', array('label'));
         $listener->expectOnce('endElement', array('a'));
@@ -444,7 +444,7 @@ class TestOfHtmlSaxParser extends UnitTestCase {
     }
 
     function testTagWithEmptyAttributes() {
-        $listener = &$this->createListener();
+        $listener = $this->createListener();
         $listener->expectOnce(
                 'startElement',
                 array('option', array('value' => '', 'selected' => '')));
@@ -455,7 +455,7 @@ class TestOfHtmlSaxParser extends UnitTestCase {
     }
 
     function testComplexTagWithLotsOfCaseVariations() {
-        $listener = &$this->createListener();
+        $listener = $this->createListener();
         $listener->expectOnce(
                 'startElement',
                 array('a', array('href' => 'here.html', 'style' => "'cool'")));
@@ -466,7 +466,7 @@ class TestOfHtmlSaxParser extends UnitTestCase {
     }
 
     function testXhtmlSelfClosingTag() {
-        $listener = &$this->createListener();
+        $listener = $this->createListener();
         $listener->expectOnce(
                 'startElement',
                 array('input', array('type' => 'submit', 'name' => 'N', 'value' => 'V')));
@@ -475,7 +475,7 @@ class TestOfHtmlSaxParser extends UnitTestCase {
     }
 
     function testNestedFrameInFrameset() {
-        $listener = &$this->createListener();
+        $listener = $this->createListener();
         $listener->expectAt(0, 'startElement', array('frameset', array()));
         $listener->expectAt(1, 'startElement', array('frame', array('src' => 'frame.html')));
         $listener->expectCallCount('startElement', 2);
@@ -486,149 +486,4 @@ class TestOfHtmlSaxParser extends UnitTestCase {
                 '<frameset><frame src="frame.html"><noframes>Hello</noframes></frameset>'));
     }
 }
-
-class TestOfPageBuilder extends UnitTestCase {
-
-    function testLink() {
-        $tag = new SimpleAnchorTag(array('href' => 'http://somewhere'));
-        $tag->addContent('Label');
-
-        $page = new MockSimplePage();
-        $page->expect('acceptTag', array($tag));
-        $page->expectCallCount('acceptTag', 1);
-
-        $builder = new PartialSimplePageBuilder();
-        $builder->returns('createPage', $page);
-        $builder->returns('createParser', new MockSimpleHtmlSaxParser());
-
-        $builder->parse(new MockSimpleHttpResponse());
-        $this->assertTrue($builder->startElement(
-                'a',
-                array('href' => 'http://somewhere')));
-        $this->assertTrue($builder->addContent('Label'));
-        $this->assertTrue($builder->endElement('a'));
-    }
-
-    function testLinkWithId() {
-        $tag = new SimpleAnchorTag(array("href" => "http://somewhere", "id" => "44"));
-        $tag->addContent("Label");
-
-        $page = new MockSimplePage();
-        $page->expect("acceptTag", array($tag));
-        $page->expectCallCount("acceptTag", 1);
-
-        $builder = new PartialSimplePageBuilder();
-        $builder->returns('createPage', $page);
-        $builder->returns('createParser', new MockSimpleHtmlSaxParser());
-
-        $builder->parse(new MockSimpleHttpResponse());
-        $this->assertTrue($builder->startElement(
-                "a",
-                array("href" => "http://somewhere", "id" => "44")));
-        $this->assertTrue($builder->addContent("Label"));
-        $this->assertTrue($builder->endElement("a"));
-    }
-
-    function testLinkExtraction() {
-        $tag = new SimpleAnchorTag(array("href" => "http://somewhere"));
-        $tag->addContent("Label");
-
-        $page = new MockSimplePage();
-        $page->expect("acceptTag", array($tag));
-        $page->expectCallCount("acceptTag", 1);
-
-        $builder = new PartialSimplePageBuilder();
-        $builder->returns('createPage', $page);
-        $builder->returns('createParser', new MockSimpleHtmlSaxParser());
-
-        $builder->parse(new MockSimpleHttpResponse());
-        $this->assertTrue($builder->addContent("Starting stuff"));
-        $this->assertTrue($builder->startElement(
-                "a",
-                array("href" => "http://somewhere")));
-        $this->assertTrue($builder->addContent("Label"));
-        $this->assertTrue($builder->endElement("a"));
-        $this->assertTrue($builder->addContent("Trailing stuff"));
-    }
-
-    function testMultipleLinks() {
-        $a1 = new SimpleAnchorTag(array("href" => "http://somewhere"));
-        $a1->addContent("1");
-
-        $a2 = new SimpleAnchorTag(array("href" => "http://elsewhere"));
-        $a2->addContent("2");
-
-        $page = new MockSimplePage();
-        $page->expectAt(0, "acceptTag", array($a1));
-        $page->expectAt(1, "acceptTag", array($a2));
-        $page->expectCallCount("acceptTag", 2);
-
-        $builder = new PartialSimplePageBuilder();
-        $builder->returns('createPage', $page);
-        $builder->returns('createParser', new MockSimpleHtmlSaxParser());
-
-        $builder->parse(new MockSimpleHttpResponse());
-        $builder->startElement("a", array("href" => "http://somewhere"));
-        $builder->addContent("1");
-        $builder->endElement("a");
-        $builder->addContent("Padding");
-        $builder->startElement("a", array("href" => "http://elsewhere"));
-        $builder->addContent("2");
-        $builder->endElement("a");
-    }
-
-    function testTitle() {
-        $tag = new SimpleTitleTag(array());
-        $tag->addContent("HereThere");
-
-        $page = new MockSimplePage();
-        $page->expect("acceptTag", array($tag));
-        $page->expectCallCount("acceptTag", 1);
-
-        $builder = new PartialSimplePageBuilder();
-        $builder->returns('createPage', $page);
-        $builder->returns('createParser', new MockSimpleHtmlSaxParser());
-
-        $builder->parse(new MockSimpleHttpResponse());
-        $builder->startElement("title", array());
-        $builder->addContent("Here");
-        $builder->addContent("There");
-        $builder->endElement("title");
-    }
-
-    function testForm() {
-        $page = new MockSimplePage();
-        $page->expectOnce("acceptFormStart", array(new SimpleFormTag(array())));
-        $page->expectOnce("acceptFormEnd", array());
-
-        $builder = new PartialSimplePageBuilder();
-        $builder->returns('createPage', $page);
-        $builder->returns('createParser', new MockSimpleHtmlSaxParser());
-
-        $builder->parse(new MockSimpleHttpResponse());
-        $builder->startElement("form", array());
-        $builder->addContent("Stuff");
-        $builder->endElement("form");
-    }
-}
-
-class TestOfPageParsing extends UnitTestCase {
-
-    function testParseMechanics() {
-        $parser = new MockSimpleHtmlSaxParser();
-        $parser->expectOnce('parse', array('stuff'));
-
-        $page = new MockSimplePage();
-        $page->expectOnce('acceptPageEnd');
-
-        $builder = new PartialSimplePageBuilder();
-        $builder->returns('createPage', $page);
-        $builder->returns('createParser', $parser);
-
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent', 'stuff');
-        $builder->parse($response);
-    }
-}
-
 ?>

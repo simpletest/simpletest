@@ -692,6 +692,12 @@ class SimplePageBuilder {
     private $tags;
     private $page;
     private $private_content_tag;
+    private $open_forms = array();
+    private $complete_forms = array();
+    private $frameset = false;
+    private $loading_frames = array();
+    private $frameset_nesting_level = 0;
+    private $left_over_labels = array();
 
     /**
      *    Frees up any references so as to allow the PHP garbage
@@ -716,7 +722,7 @@ class SimplePageBuilder {
         $this->page = $this->createPage($response);
         $parser = $this->createParser($this);
         $parser->parse($response->getContent());
-        $this->page->acceptPageEnd();
+        $this->acceptPageEnd();
         return $this->page;
     }
 
@@ -755,20 +761,20 @@ class SimplePageBuilder {
             return true;
         }
         if ($tag->getTagName() == 'label') {
-            $this->page->acceptLabelStart($tag);
+            $this->acceptLabelStart($tag);
             $this->openTag($tag);
             return true;
         }
         if ($tag->getTagName() == 'form') {
-            $this->page->acceptFormStart($tag);
+            $this->acceptFormStart($tag);
             return true;
         }
         if ($tag->getTagName() == 'frameset') {
-            $this->page->acceptFramesetStart($tag);
+            $this->acceptFramesetStart($tag);
             return true;
         }
         if ($tag->getTagName() == 'frame') {
-            $this->page->acceptFrame($tag);
+            $this->acceptFrame($tag);
             return true;
         }
         if ($tag->isPrivateContent() && ! isset($this->private_content_tag)) {
@@ -778,7 +784,7 @@ class SimplePageBuilder {
             $this->openTag($tag);
             return true;
         }
-        $this->page->acceptTag($tag);
+        $this->acceptTag($tag);
         return true;
     }
 
@@ -790,15 +796,15 @@ class SimplePageBuilder {
      */
     function endElement($name) {
         if ($name == 'label') {
-            $this->page->acceptLabelEnd();
+            $this->acceptLabelEnd();
             return true;
         }
         if ($name == 'form') {
-            $this->page->acceptFormEnd();
+            $this->acceptFormEnd();
             return true;
         }
         if ($name == 'frameset') {
-            $this->page->acceptFramesetEnd();
+            $this->acceptFramesetEnd();
             return true;
         }
         if ($this->hasNamedTagOnOpenTagStack($name)) {
@@ -807,7 +813,7 @@ class SimplePageBuilder {
                 unset($this->private_content_tag);
             }
             $this->addContentTagToOpenTags($tag);
-            $this->page->acceptTag($tag);
+            $this->acceptTag($tag);
             return true;
         }
         return true;
@@ -885,6 +891,148 @@ class SimplePageBuilder {
         }
         $this->tags[$name][] = $tag;
     }
-}
 
+    /**
+     *    Adds a tag to the page.
+     *    @param SimpleTag $tag        Tag to accept.
+     *    @access public
+     */
+    function acceptTag($tag) {
+        if ($tag->getTagName() == "a") {
+            $this->page->addLink($tag);
+        } elseif ($tag->getTagName() == "base") {
+            $this->page->setBase($tag);
+        } elseif ($tag->getTagName() == "title") {
+            $this->page->setTitle($tag);
+        } elseif ($this->isFormElement($tag->getTagName())) {
+            for ($i = 0; $i < count($this->open_forms); $i++) {
+                $this->open_forms[$i]->addWidget($tag);
+            }
+            $this->last_widget = $tag;
+        }
+    }
+
+    /**
+     *    Opens a label for a described widget.
+     *    @param SimpleFormTag $tag      Tag to accept.
+     *    @access public
+     */
+    function acceptLabelStart($tag) {
+        $this->label = $tag;
+        unset($this->last_widget);
+    }
+
+    /**
+     *    Closes the most recently opened label.
+     *    @access public
+     */
+    function acceptLabelEnd() {
+        if (isset($this->label)) {
+            if (isset($this->last_widget)) {
+                $this->last_widget->setLabel($this->label->getText());
+                unset($this->last_widget);
+            } else {
+                $this->left_over_labels[] = SimpleTestCompatibility::copy($this->label);
+            }
+            unset($this->label);
+        }
+    }
+
+    /**
+     *    Tests to see if a tag is a possible form
+     *    element.
+     *    @param string $name     HTML element name.
+     *    @return boolean         True if form element.
+     *    @access private
+     */
+    protected function isFormElement($name) {
+        return in_array($name, array('input', 'button', 'textarea', 'select'));
+    }
+
+    /**
+     *    Opens a form. New widgets go here.
+     *    @param SimpleFormTag $tag      Tag to accept.
+     *    @access public
+     */
+    function acceptFormStart($tag) {
+        $this->open_forms[] = new SimpleForm($tag, $this->page);
+    }
+
+    /**
+     *    Closes the most recently opened form.
+     *    @access public
+     */
+    function acceptFormEnd() {
+        if (count($this->open_forms)) {
+            $this->complete_forms[] = array_pop($this->open_forms);
+        }
+    }
+
+    /**
+     *    Opens a frameset. A frameset may contain nested
+     *    frameset tags.
+     *    @param SimpleFramesetTag $tag      Tag to accept.
+     *    @access public
+     */
+    function acceptFramesetStart($tag) {
+        if (! $this->isLoadingFrames()) {
+            $this->frameset = $tag;
+        }
+        $this->frameset_nesting_level++;
+    }
+
+    /**
+     *    Closes the most recently opened frameset.
+     *    @access public
+     */
+    function acceptFramesetEnd() {
+        if ($this->isLoadingFrames()) {
+            $this->frameset_nesting_level--;
+        }
+    }
+
+    /**
+     *    Takes a single frame tag and stashes it in
+     *    the current frame set.
+     *    @param SimpleFrameTag $tag      Tag to accept.
+     *    @access public
+     */
+    function acceptFrame($tag) {
+        if ($this->isLoadingFrames()) {
+            if ($tag->getAttribute('src')) {
+                $this->loading_frames[] = $tag;
+            }
+        }
+    }
+
+    /**
+     *    Test to see if in the middle of reading
+     *    a frameset.
+     *    @return boolean        True if inframeset.
+     *    @access private
+     */
+    protected function isLoadingFrames() {
+        return $this->frameset and $this->frameset_nesting_level > 0;
+    }
+
+    /**
+     *    Marker for end of complete page. Any work in
+     *    progress can now be closed.
+     *    @access public
+     */
+    function acceptPageEnd() {
+        while (count($this->open_forms)) {
+            $this->complete_forms[] = array_pop($this->open_forms);
+        }
+        foreach ($this->left_over_labels as $label) {
+            for ($i = 0, $count = count($this->complete_forms); $i < $count; $i++) {
+                $this->complete_forms[$i]->attachLabelBySelector(
+                        new SimpleById($label->getFor()),
+                        $label->getText());
+            }
+        }
+        $this->page->setForms($this->complete_forms);
+        $this->page->setFrames($this->loading_frames);
+    }
+}
 ?>
