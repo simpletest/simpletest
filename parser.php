@@ -606,7 +606,7 @@ class SimpleHtmlSaxParser {
             return $success;
         }
         if ($token != '=') {
-            $this->current_attribute = strtolower(SimpleHtmlSaxParser::decodeHtml($token));
+            $this->current_attribute = strtolower(html_entity_decode($token, ENT_QUOTES));
             $this->attributes[$this->current_attribute] = '';
         }
         return true;
@@ -638,11 +638,11 @@ class SimpleHtmlSaxParser {
         if ($this->current_attribute) {
             if ($event == LEXER_UNMATCHED) {
                 $this->attributes[$this->current_attribute] .=
-                        SimpleHtmlSaxParser::decodeHtml($token);
+                        html_entity_decode($token, ENT_QUOTES);
             }
             if ($event == LEXER_SPECIAL) {
                 $this->attributes[$this->current_attribute] .=
-                        preg_replace('/^=\s*/' , '', SimpleHtmlSaxParser::decodeHtml($token));
+                        preg_replace('/^=\s*/' , '', html_entity_decode($token, ENT_QUOTES));
             }
         }
         return true;
@@ -679,16 +679,6 @@ class SimpleHtmlSaxParser {
      */
     function ignore($token, $event) {
         return true;
-    }
-
-    /**
-     *    Decodes any HTML entities.
-     *    @param string $html    Incoming HTML.
-     *    @return string         Outgoing plain text.
-     *    @access public
-     */
-    static function decodeHtml($html) {
-        return html_entity_decode($html, ENT_QUOTES);
     }
 }
 

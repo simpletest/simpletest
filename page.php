@@ -887,7 +887,7 @@ class SimplePage {
         $text = preg_replace('|<img[^>]*alt\s*=\s*\'([^\']*)\'[^>]*>|', ' \1 ', $text);
         $text = preg_replace('|<img[^>]*alt\s*=\s*([a-zA-Z_]+)[^>]*>|', ' \1 ', $text);
         $text = preg_replace('|<[^>]*>|', '', $text);
-        $text = SimpleHtmlSaxParser::decodeHtml($text);
+        $text = html_entity_decode($text, ENT_QUOTES);
         $text = preg_replace('|\s+|', ' ', $text);
         return trim(trim($text), "\xA0");        // TODO: The \xAO is a &nbsp;. Add a test for this.
     }

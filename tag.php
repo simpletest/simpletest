@@ -682,7 +682,7 @@ class SimpleTextAreaTag extends SimpleWidget {
      *    @access public
      */
     function getDefault() {
-        return $this->wrap(SimpleHtmlSaxParser::decodeHtml($this->getContent()));
+        return $this->wrap(html_entity_decode($this->getContent(), ENT_QUOTES));
     }
 
     /**
