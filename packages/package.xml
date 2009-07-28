@@ -241,7 +241,7 @@ minor improvements and bug fixes.</notes>
     <provides type="function" name="SimpleTestOptions::addPartialMockCode" />
     <provides type="function" name="SimpleTestOptions::getPartialMockCode" />
     <provides type="function" name="SimpleTestOptions::getDefaults" />
-    <provides type="class" name="SimplePageBuilder" extends="SimpleSaxListener" />
+    <provides type="class" name="SimplePageBuilder" />
     <provides type="class" name="SimplePage" />
     <provides type="function" name="SimplePageBuilder::parse" />
     <provides type="function" name="SimplePageBuilder::startElement" />
@@ -265,7 +265,6 @@ minor improvements and bug fixes.</notes>
     <provides type="class" name="SimpleStateStack" />
     <provides type="class" name="SimpleLexer" />
     <provides type="class" name="SimpleSaxParser" />
-    <provides type="class" name="SimpleSaxListener" />
     <provides type="function" name="ParallelRegex::addPattern" />
     <provides type="function" name="ParallelRegex::match" />
     <provides type="function" name="SimpleStateStack::getCurrent" />
@@ -285,9 +284,6 @@ minor improvements and bug fixes.</notes>
     <provides type="function" name="SimpleSaxParser::acceptEntityToken" />
     <provides type="function" name="SimpleSaxParser::acceptTextToken" />
     <provides type="function" name="SimpleSaxParser::ignore" />
-    <provides type="function" name="SimpleSaxListener::startElement" />
-    <provides type="function" name="SimpleSaxListener::endElement" />
-    <provides type="function" name="SimpleSaxListener::addContent" />
     <provides type="class" name="SimpleQueryString" />
     <provides type="function" name="SimpleQueryString::add" />
     <provides type="function" name="SimpleQueryString::getValue" />

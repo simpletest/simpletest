@@ -11,7 +11,7 @@ Mock::generatePartial(
         'PartialSimplePageBuilder',
         array('createPage', 'createParser'));
 Mock::generate('SimpleHtmlSaxParser');
-Mock::generate('SimpleSaxListener');
+Mock::generate('SimplePageBuilder');
 
 class TestOfParallelRegex extends UnitTestCase {
 
@@ -373,7 +373,7 @@ class TestOfSimpleHtmlLexer extends UnitTestCase {
 class TestOfHtmlSaxParser extends UnitTestCase {
 
     function &createListener() {
-        $listener = new MockSimpleSaxListener();
+        $listener = new MockSimplePageBuilder();
         $listener->setReturnValue('startElement', true);
         $listener->setReturnValue('addContent', true);
         $listener->setReturnValue('endElement', true);
@@ -500,7 +500,6 @@ class TestOfPageBuilder extends UnitTestCase {
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
         $builder->returns('createParser', new MockSimpleHtmlSaxParser());
-        $builder->__construct();
 
         $builder->parse(new MockSimpleHttpResponse());
         $this->assertTrue($builder->startElement(
@@ -521,7 +520,6 @@ class TestOfPageBuilder extends UnitTestCase {
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
         $builder->returns('createParser', new MockSimpleHtmlSaxParser());
-        $builder->__construct();
 
         $builder->parse(new MockSimpleHttpResponse());
         $this->assertTrue($builder->startElement(
@@ -542,7 +540,6 @@ class TestOfPageBuilder extends UnitTestCase {
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
         $builder->returns('createParser', new MockSimpleHtmlSaxParser());
-        $builder->__construct();
 
         $builder->parse(new MockSimpleHttpResponse());
         $this->assertTrue($builder->addContent("Starting stuff"));
@@ -569,7 +566,6 @@ class TestOfPageBuilder extends UnitTestCase {
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
         $builder->returns('createParser', new MockSimpleHtmlSaxParser());
-        $builder->__construct();
 
         $builder->parse(new MockSimpleHttpResponse());
         $builder->startElement("a", array("href" => "http://somewhere"));
@@ -592,7 +588,6 @@ class TestOfPageBuilder extends UnitTestCase {
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
         $builder->returns('createParser', new MockSimpleHtmlSaxParser());
-        $builder->__construct();
 
         $builder->parse(new MockSimpleHttpResponse());
         $builder->startElement("title", array());
@@ -609,7 +604,6 @@ class TestOfPageBuilder extends UnitTestCase {
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
         $builder->returns('createParser', new MockSimpleHtmlSaxParser());
-        $builder->__construct();
 
         $builder->parse(new MockSimpleHttpResponse());
         $builder->startElement("form", array());
@@ -630,7 +624,6 @@ class TestOfPageParsing extends UnitTestCase {
         $builder = new PartialSimplePageBuilder();
         $builder->returns('createPage', $page);
         $builder->returns('createParser', $parser);
-        $builder->__construct();
 
         $response = new MockSimpleHttpResponse();
         $response->setReturnValue('getContent', 'stuff');

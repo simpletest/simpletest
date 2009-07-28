@@ -549,7 +549,7 @@ class SimpleHtmlSaxParser {
 
     /**
      *    Sets the listener.
-     *    @param SimpleSaxListener $listener    SAX event handler.
+     *    @param SimplePageBuilder $listener    SAX event handler.
      *    @access public
      */
     function __construct($listener) {
@@ -683,58 +683,12 @@ class SimpleHtmlSaxParser {
 }
 
 /**
- *    SAX event handler.
- *    @package SimpleTest
- *    @subpackage WebTester
- *    @abstract
- */
-class SimpleSaxListener {
-
-    /**
-     *    Sets the document to write to.
-     *    @access public
-     */
-    function __construct() {
-    }
-
-    /**
-     *    Start of element event.
-     *    @param string $name        Element name.
-     *    @param hash $attributes    Name value pairs.
-     *                               Attributes without content
-     *                               are marked as true.
-     *    @return boolean            False on parse error.
-     *    @access public
-     */
-    function startElement($name, $attributes) {
-    }
-
-    /**
-     *    End of element event.
-     *    @param string $name        Element name.
-     *    @return boolean            False on parse error.
-     *    @access public
-     */
-    function endElement($name) {
-    }
-
-    /**
-     *    Unparsed, but relevant data.
-     *    @param string $text        May include unparsed tags.
-     *    @return boolean            False on parse error.
-     *    @access public
-     */
-    function addContent($text) {
-    }
-}
-
-/**
  *    SAX event handler. Maintains a list of
  *    open tags and dispatches them as they close.
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimplePageBuilder extends SimpleSaxListener {
+class SimplePageBuilder {
     private $tags;
     private $page;
     private $private_content_tag;
@@ -777,7 +731,7 @@ class SimplePageBuilder extends SimpleSaxListener {
 
     /**
      *    Creates the parser used with the builder.
-     *    @param $listener SimpleSaxListener   Target of parser.
+     *    @param SimplePageBuilder $listener   Target of parser.
      *    @return SimpleSaxParser              Parser to generate
      *                                         events for the builder.
      *    @access protected

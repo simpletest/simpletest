@@ -6,8 +6,8 @@ require_once(dirname(__FILE__) . '/../autorun.php');
 require_once(dirname(__FILE__) . '/../parser.php');
 require_once(dirname(__FILE__) . '/../url.php');
 Mock::generate('SimpleHtmlSaxParser');
-Mock::generate('SimpleSaxListener');
-     
+Mock::generate('SimplePageBuilder');
+
 class TestOfHtmlSaxParserWithDifferentCharset extends UnitTestCase {
     function testWithTextInUTF8() {
         $regex = &new ParallelRegex(false);
@@ -15,14 +15,14 @@ class TestOfHtmlSaxParserWithDifferentCharset extends UnitTestCase {
         $this->assertTrue($regex->match("eéêè", $match));
         $this->assertEqual($match, "eé");
     }
-    
+
     function testWithTextInLatin1() {
         $regex = &new ParallelRegex(false);
         $regex->addPattern(utf8_decode("eé"));
         $this->assertTrue($regex->match(utf8_decode("eéêè"), $match));
         $this->assertEqual($match, utf8_decode("eé"));
     }
-    
+
     function &createParser() {
         $parser = &new MockSimpleHtmlSaxParser();
         $parser->setReturnValue('acceptStartToken', true);
