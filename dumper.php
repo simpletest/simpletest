@@ -247,7 +247,6 @@ class SimpleDumper {
                     implode(", ", array_keys($first)) . "] does not match key list [" .
                     implode(", ", array_keys($second)) . "]";
         }
-        print_r($first);
         foreach (array_keys($first) as $key) {
             if ($identical && ($first[$key] === $second[$key])) {
                 continue;
@@ -304,16 +303,34 @@ class SimpleDumper {
      *    @param mixed $second        Object to compare with.
      *    @param boolean $identical   If true then type anomolies count.
      *    @return string              Human readable description.
-     *    @access private
      */
     protected function describeObjectDifference($first, $second, $identical) {
         if (! is_object($second)) {
             return $this->describeGenericDifference($first, $second);
         }
         return $this->describeArrayDifference(
-                (array) $first,
-                (array) $second,
+                $this->getMembers($first),
+                $this->getMembers($second),
                 $identical);
+    }
+
+    /**
+     *    Get all members of an object including private and protected ones.
+     *    A safer form of casting to an array.
+     *    @param object $object     Object to list members of,
+     *                              including private ones.
+     *    @return array             Names and values in the object.
+     */
+    protected function getMembers($object) {
+        $reflection = new ReflectionObject($object);
+        $members = array();
+        foreach ($reflection->getProperties() as $property) {
+            if (method_exists($property, 'setAccessible')) {
+                $property->setAccessible(true);
+            }
+            $members[$property->getName()] = $property->getValue();
+        }
+        return $members;
     }
 
     /**
