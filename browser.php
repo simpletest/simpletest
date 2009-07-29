@@ -266,7 +266,7 @@ class SimpleBrowser {
      *    @access protected
      */
     protected function buildPage($response) {
-        $builder = new SimplePageBuilder();
+        $builder = new SimplePHPPageBuilder();
         $page = $builder->parse($response);
         $builder->free();
         unset($builder);

@@ -549,7 +549,7 @@ class SimpleHtmlSaxParser {
 
     /**
      *    Sets the listener.
-     *    @param SimplePageBuilder $listener    SAX event handler.
+     *    @param SimplePhpPageBuilder $listener    SAX event handler.
      *    @access public
      */
     function __construct($listener) {
@@ -688,7 +688,7 @@ class SimpleHtmlSaxParser {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimplePageBuilder {
+class SimplePhpPageBuilder {
     private $tags;
     private $page;
     private $private_content_tag;
@@ -737,7 +737,7 @@ class SimplePageBuilder {
 
     /**
      *    Creates the parser used with the builder.
-     *    @param SimplePageBuilder $listener   Target of parser.
+     *    @param SimplePhpPageBuilder $listener   Target of parser.
      *    @return SimpleSaxParser              Parser to generate
      *                                         events for the builder.
      *    @access protected

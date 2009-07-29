@@ -126,7 +126,7 @@ class TestOfHtmlPage extends UnitTestCase {
 class TestOfPageScraping extends UnitTestCase {
 
     function parse($response) {
-        $builder = new SimplePageBuilder();
+        $builder = new SimplePhpPageBuilder();
         $page = $builder->parse($response);
         return $page;
     }

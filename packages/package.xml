@@ -241,12 +241,12 @@ minor improvements and bug fixes.</notes>
     <provides type="function" name="SimpleTestOptions::addPartialMockCode" />
     <provides type="function" name="SimpleTestOptions::getPartialMockCode" />
     <provides type="function" name="SimpleTestOptions::getDefaults" />
-    <provides type="class" name="SimplePageBuilder" />
+    <provides type="class" name="SimplePhpPageBuilder" />
     <provides type="class" name="SimplePage" />
-    <provides type="function" name="SimplePageBuilder::parse" />
-    <provides type="function" name="SimplePageBuilder::startElement" />
-    <provides type="function" name="SimplePageBuilder::endElement" />
-    <provides type="function" name="SimplePageBuilder::addContent" />
+    <provides type="function" name="SimplePhpPageBuilder::parse" />
+    <provides type="function" name="SimplePhpPageBuilder::startElement" />
+    <provides type="function" name="SimplePhpPageBuilder::endElement" />
+    <provides type="function" name="SimplePhpPageBuilder::addContent" />
     <provides type="function" name="SimplePage::getRaw" />
     <provides type="function" name="SimplePage::acceptTag" />
     <provides type="function" name="SimplePage::acceptFormStart" />

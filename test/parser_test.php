@@ -4,14 +4,14 @@ require_once(dirname(__FILE__) . '/../autorun.php');
 require_once(dirname(__FILE__) . '/../parser.php');
 require_once(dirname(__FILE__) . '/../tag.php');
 Mock::generate('SimplePage');
-Mock::generate('SimplePageBuilder');
+Mock::generate('SimplePhpPageBuilder');
 Mock::generate('SimpleHttpResponse');
 Mock::generatePartial(
-        'SimplePageBuilder',
-        'PartialSimplePageBuilder',
+        'SimplePhpPageBuilder',
+        'PartialSimplePhpPageBuilder',
         array('createPage', 'createParser'));
 Mock::generate('SimpleHtmlSaxParser');
-Mock::generate('SimplePageBuilder');
+Mock::generate('SimplePhpPageBuilder');
 
 class TestOfParallelRegex extends UnitTestCase {
 
@@ -373,7 +373,7 @@ class TestOfSimpleHtmlLexer extends UnitTestCase {
 class TestOfHtmlSaxParser extends UnitTestCase {
 
     function createListener() {
-        $listener = new MockSimplePageBuilder();
+        $listener = new MockSimplePhpPageBuilder();
         $listener->setReturnValue('startElement', true);
         $listener->setReturnValue('addContent', true);
         $listener->setReturnValue('endElement', true);

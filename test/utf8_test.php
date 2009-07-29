@@ -6,7 +6,7 @@ require_once(dirname(__FILE__) . '/../autorun.php');
 require_once(dirname(__FILE__) . '/../parser.php');
 require_once(dirname(__FILE__) . '/../url.php');
 Mock::generate('SimpleHtmlSaxParser');
-Mock::generate('SimplePageBuilder');
+Mock::generate('SimplePhpPageBuilder');
 
 class TestOfHtmlSaxParserWithDifferentCharset extends UnitTestCase {
     function testWithTextInUTF8() {
