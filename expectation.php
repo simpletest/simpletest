@@ -938,7 +938,7 @@ class MemberExpectation extends IdenticalExpectation {
     }
 
     /**
-     *    Extracts the memeber value even if private using reflection.
+     *    Extracts the member value even if private using reflection.
      *    @param string $name        Property name.
      *    @param object $object      Object to read.
      *    @return mixed              Value of property.
@@ -952,11 +952,22 @@ class MemberExpectation extends IdenticalExpectation {
         try {
             return $property->getValue($object);
         } catch (ReflectionException $e) {
-            return $this->getPrivateProperty($name, $object);
+            return $this->getPrivatePropertyNoMatterWhat($name, $object);
         }
     }
 
-    private function getPrivateProperty($name, $object) {
+    /**
+     *    Extracts a private member's value when reflection won't play ball.
+     *    @param string $name        Property name.
+     *    @param object $object      Object to read.
+     *    @return mixed              Value of property.
+     */
+    private function getPrivatePropertyNoMatterWhat($name, $object) {
+        foreach ((array)$object as $mangled_name => $value) {
+            if (substr($mangled_name, -strlen($name)) == $name) {
+                return $value;
+            }
+        }
         return null;
     }
 }
