@@ -162,6 +162,7 @@ class SimpleTag {
      */
     function addContent($content) {
         $this->content .= (string)$content;
+        return $this;
     }
 
     /**
@@ -823,6 +824,7 @@ class SimpleSelectionTag extends SimpleWidget {
      *    @access public
      */
     function addContent($content) {
+        return $this;
     }
 
     /**
@@ -910,6 +912,7 @@ class MultipleSelectionTag extends SimpleWidget {
      *    @access public
      */
     function addContent($content) {
+        return $this;
     }
 
     /**

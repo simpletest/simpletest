@@ -3,6 +3,7 @@
 require_once(dirname(__FILE__) . '/../autorun.php');
 require_once(dirname(__FILE__) . '/../page.php');
 require_once(dirname(__FILE__) . '/../php_parser.php');
+require_once(dirname(__FILE__) . '/../tidy_parser.php');
 Mock::generate('SimpleHttpResponse');
 
 abstract class TestOfParsing extends UnitTestCase {
@@ -31,6 +32,14 @@ abstract class TestOfParsing extends UnitTestCase {
     function testAddAbsoluteLink() {
         $page = $this->whenVisiting('http://host',
                                     '<html><a href="http://somewhere.com">Label</a></html>');
+        $this->assertEqual(
+                $page->getUrlsByLabel('Label'),
+                array(new SimpleUrl('http://somewhere.com')));
+    }
+
+    function testUrlLabelsHaveHtmlTagsStripped() {
+        $page = $this->whenVisiting('http://host',
+                                    '<html><a href="http://somewhere.com"><b>Label</b></a></html>');
         $this->assertEqual(
                 $page->getUrlsByLabel('Label'),
                 array(new SimpleUrl('http://somewhere.com')));
@@ -72,6 +81,14 @@ abstract class TestOfParsing extends UnitTestCase {
                 array(new SimpleUrl('http://here.com/somewhere.php')));
     }
 
+    function testCanFindLinkInsideForm() {
+        $raw = '<html><body><form><a href="./somewhere.php">Label</a></form></body></html>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertEqual(
+                $page->getUrlsByLabel('Label'),
+                array(new SimpleUrl('http://host/somewhere.php')));
+    }
+
     function testCanGetLinksByIdOrLabel() {
         $raw = '<html><body><a href="./somewhere.php" id="33">Label</a></body></html>';
         $page = $this->whenVisiting('http://host', $raw);
@@ -106,15 +123,14 @@ abstract class TestOfParsing extends UnitTestCase {
         $this->assertEqual($page->getTitle(), 'Me');
     }
 
-    function testNastyTitle() {
+    function testTitleWithEntityReference() {
         $page = $this->whenVisiting('http://host',
-                                    '<html><head><Title> <b>Me&amp;Me </TITLE></b></head></html>');
+                                    '<html><head><Title>Me&amp;Me</TITLE></head></html>');
         $this->assertEqual($page->getTitle(), "Me&Me");
     }
 
     function testOnlyFramesInFramesetAreRecognised() {
         $raw =
-            '<frame src="1.html"></frame>' .
             '<frameset>' .
             '  <frame src="2.html"></frame>' .
             '  <frame src="3.html"></frame>' .
@@ -435,6 +451,24 @@ class TestOfParsingUsingPhpParser extends TestOfParsing {
         $response->setReturnValue('getContent', $content);
         $response->setReturnValue('getUrl', new SimpleUrl($url));
         $builder = new SimplePhpPageBuilder();
+        return $builder->parse($response);
+    }
+
+    function testNastyTitle() {
+        $page = $this->whenVisiting('http://host',
+                                    '<html><head><Title> <b>Me&amp;Me </TITLE></b></head></html>');
+        $this->assertEqual($page->getTitle(), "Me&Me");
+    }
+
+}
+
+abstract class TestOfParsingUsingTidyParser extends TestOfParsing {
+
+    function whenVisiting($url, $content) {
+        $response = new MockSimpleHttpResponse();
+        $response->setReturnValue('getContent', $content);
+        $response->setReturnValue('getUrl', new SimpleUrl($url));
+        $builder = new SimpleTidyPageBuilder();
         return $builder->parse($response);
     }
 }

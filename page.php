@@ -282,7 +282,8 @@ class SimplePage {
     }
 
     /**
-     *    TODO: write docs
+     *    Set the forms
+     *    @param array $forms           An array of SimpleForm objects
      */
     function setForms($forms) {
         $this->forms = $forms;
@@ -407,10 +408,9 @@ class SimplePage {
 
     /**
      *    Sets the base url for the page.
-     *    @param SimpleTag $tag    Base URL for page.
+     *    @param string $url    Base URL for page.
      */
-    function setBase($tag) {
-        $url = $tag->getAttribute('href');
+    function setBase($url) {
         $this->base = new SimpleUrl($url);
     }
 

@@ -2,7 +2,7 @@
 /**
  *  base include file for SimpleTest
  *  @package    SimpleTest
- *  @subpackage MockObjects
+ *  @subpackage WebTester
  *  @version    $Id$
  */
 
@@ -897,11 +897,11 @@ class SimplePhpPageBuilder {
      *    @param SimpleTag $tag        Tag to accept.
      *    @access public
      */
-    function acceptTag($tag) {
+    protected function acceptTag($tag) {
         if ($tag->getTagName() == "a") {
             $this->page->addLink($tag);
         } elseif ($tag->getTagName() == "base") {
-            $this->page->setBase($tag);
+            $this->page->setBase($tag->getAttribute('href'));
         } elseif ($tag->getTagName() == "title") {
             $this->page->setTitle($tag);
         } elseif ($this->isFormElement($tag->getTagName())) {
@@ -917,7 +917,7 @@ class SimplePhpPageBuilder {
      *    @param SimpleFormTag $tag      Tag to accept.
      *    @access public
      */
-    function acceptLabelStart($tag) {
+    protected function acceptLabelStart($tag) {
         $this->label = $tag;
         unset($this->last_widget);
     }
@@ -926,7 +926,7 @@ class SimplePhpPageBuilder {
      *    Closes the most recently opened label.
      *    @access public
      */
-    function acceptLabelEnd() {
+    protected function acceptLabelEnd() {
         if (isset($this->label)) {
             if (isset($this->last_widget)) {
                 $this->last_widget->setLabel($this->label->getText());
@@ -954,7 +954,7 @@ class SimplePhpPageBuilder {
      *    @param SimpleFormTag $tag      Tag to accept.
      *    @access public
      */
-    function acceptFormStart($tag) {
+    protected function acceptFormStart($tag) {
         $this->open_forms[] = new SimpleForm($tag, $this->page);
     }
 
@@ -962,7 +962,7 @@ class SimplePhpPageBuilder {
      *    Closes the most recently opened form.
      *    @access public
      */
-    function acceptFormEnd() {
+    protected function acceptFormEnd() {
         if (count($this->open_forms)) {
             $this->complete_forms[] = array_pop($this->open_forms);
         }
@@ -974,7 +974,7 @@ class SimplePhpPageBuilder {
      *    @param SimpleFramesetTag $tag      Tag to accept.
      *    @access public
      */
-    function acceptFramesetStart($tag) {
+    protected function acceptFramesetStart($tag) {
         if (! $this->isLoadingFrames()) {
             $this->frameset = $tag;
         }
@@ -985,7 +985,7 @@ class SimplePhpPageBuilder {
      *    Closes the most recently opened frameset.
      *    @access public
      */
-    function acceptFramesetEnd() {
+    protected function acceptFramesetEnd() {
         if ($this->isLoadingFrames()) {
             $this->frameset_nesting_level--;
         }
@@ -997,7 +997,7 @@ class SimplePhpPageBuilder {
      *    @param SimpleFrameTag $tag      Tag to accept.
      *    @access public
      */
-    function acceptFrame($tag) {
+    protected function acceptFrame($tag) {
         if ($this->isLoadingFrames()) {
             if ($tag->getAttribute('src')) {
                 $this->loading_frames[] = $tag;
@@ -1020,7 +1020,7 @@ class SimplePhpPageBuilder {
      *    progress can now be closed.
      *    @access public
      */
-    function acceptPageEnd() {
+    protected function acceptPageEnd() {
         while (count($this->open_forms)) {
             $this->complete_forms[] = array_pop($this->open_forms);
         }
