@@ -963,12 +963,22 @@ class MemberExpectation extends IdenticalExpectation {
      *    @return mixed              Value of property.
      */
     private function getPrivatePropertyNoMatterWhat($name, $object) {
-        foreach ((array)$object as $mangled_name => $value) {
-            if (substr($mangled_name, -strlen($name)) == $name) {
+        foreach ((array)$object as $mangles_name => $value) {
+            if (unmangle($mangled_name) == $name) {
                 return $value;
             }
         }
-        return null;
+    }
+
+    /**
+     *    Removes crud from property name after it's been converted
+     *    to an array.
+     *    @param string $mangled     Name from array cast.
+     *    @return string             Cleaned up name.
+     */
+    function unmangle($mangled) {
+        $parts = preg_split('/[^a-zA-Z0-9_\x7f-\xff]+/', $mangled);
+        return array_pop($parts);
     }
 }
 ?>
