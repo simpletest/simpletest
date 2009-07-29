@@ -11,7 +11,7 @@
  *  @package    SimpleTest
  */
 class SimpleTestCompatibility {
-    
+
     /**
      *    Creates a copy whether in PHP5 or PHP4.
      *    @param object $object     Thing to copy.
@@ -25,7 +25,7 @@ class SimpleTestCompatibility {
         }
         return $object;
     }
-    
+
     /**
      *    Identity test. Drops back to equality + types for PHP5
      *    objects as the === operator counts as the
@@ -44,7 +44,7 @@ class SimpleTestCompatibility {
         }
         return ($first === $second);
     }
-    
+
     /**
      *    Recursive type test.
      *    @param mixed $first    Test subject.
@@ -61,8 +61,8 @@ class SimpleTestCompatibility {
                 return false;
             }
             return SimpleTestCompatibility::isArrayOfIdenticalTypes(
-                    get_object_vars($first),
-                    get_object_vars($second));
+                    (array) $first,
+                    (array) $second);
         }
         if (is_array($first) && is_array($second)) {
             return SimpleTestCompatibility::isArrayOfIdenticalTypes($first, $second);
@@ -72,7 +72,7 @@ class SimpleTestCompatibility {
         }
         return true;
     }
-    
+
     /**
      *    Recursive type test for each element of an array.
      *    @param mixed $first    Test subject.
@@ -94,7 +94,7 @@ class SimpleTestCompatibility {
         }
         return true;
     }
-    
+
     /**
      *    Test for two variables being aliases.
      *    @param mixed $first    Test subject.
@@ -119,7 +119,7 @@ class SimpleTestCompatibility {
         $first = $temp;
         return $is_ref;
     }
-    
+
     /**
      *    Test to see if an object is a member of a
      *    class hiearchy.
@@ -146,7 +146,7 @@ class SimpleTestCompatibility {
         return ((strtolower($class) == get_class($object))
                 or (is_subclass_of($object, $class)));
     }
-    
+
     /**
      *    Sets a socket timeout for each chunk.
      *    @param resource $handle    Socket handle.

@@ -85,6 +85,14 @@ class RecursiveNasty {
     }
 }
 
+class OpaqueContainer {
+    private $value;
+
+    public function __construct($value) {
+        $this->value = $value;
+    }
+}
+
 class TestOfIdentity extends UnitTestCase {
 
     function testType() {
@@ -101,6 +109,18 @@ class TestOfIdentity extends UnitTestCase {
     function _testReallyHorribleRecursiveStructure() {
         $hopeful = new IdenticalExpectation(new RecursiveNasty());
         $this->assertTrue($hopeful->test(new RecursiveNasty()));
+    }
+
+    function testCanComparePrivateMembers() {
+        $expectFive = new IdenticalExpectation(new OpaqueContainer(5));
+        $this->assertTrue($expectFive->test(new OpaqueContainer(5)));
+        $this->assertFalse($expectFive->test(new OpaqueContainer(6)));
+    }
+
+    function testCanComparePrivateMembersOfObjectsInArrays() {
+        $expectFive = new IdenticalExpectation(array(new OpaqueContainer(5)));
+        $this->assertTrue($expectFive->test(array(new OpaqueContainer(5))));
+        $this->assertFalse($expectFive->test(array(new OpaqueContainer(6))));
     }
 }
 

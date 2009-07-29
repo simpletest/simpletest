@@ -853,8 +853,8 @@ class NotAExpectation extends IsAExpectation {
 
 /**
  *    Tests for existance of a method in an object
- *      @package SimpleTest
- *      @subpackage UnitTester
+ *    @package SimpleTest
+ *    @subpackage UnitTester
  */
 class MethodExistsExpectation extends SimpleExpectation {
     private $method;
@@ -863,7 +863,6 @@ class MethodExistsExpectation extends SimpleExpectation {
      *    Sets the value to compare against.
      *    @param string $method     Method to check.
      *    @param string $message    Customised message on failure.
-     *    @access public
      *    @return void
      */
     function __construct($method, $message = '%s') {
@@ -875,7 +874,6 @@ class MethodExistsExpectation extends SimpleExpectation {
      *    Tests the expectation. True if the method exists in the test object.
      *    @param string $compare        Comparison method name.
      *    @return boolean               True if correct.
-     *    @access public
      */
     function test($compare) {
         return (boolean)(is_object($compare) && method_exists($compare, $this->method));
@@ -886,7 +884,6 @@ class MethodExistsExpectation extends SimpleExpectation {
      *    @param mixed $compare      Comparison value.
      *    @return string             Description of success
      *                               or failure.
-     *    @access public
      */
     function testMessage($compare) {
         $dumper = $this->getDumper();
@@ -896,6 +893,63 @@ class MethodExistsExpectation extends SimpleExpectation {
         $method = $this->method;
         return "Object [" . $dumper->describeValue($compare) .
                 "] should contain method [$method]";
+    }
+}
+
+/**
+ *    Compares an object member's value even if private.
+ *    @package SimpleTest
+ *    @subpackage UnitTester
+ */
+class MemberExpectation extends IdenticalExpectation {
+    private $name;
+
+    /**
+     *    Sets the value to compare against.
+     *    @param string $method     Method to check.
+     *    @param string $message    Customised message on failure.
+     *    @return void
+     */
+    function __construct($name, $expected) {
+        $this->name = $name;
+        parent::__construct($expected);
+    }
+
+    /**
+     *    Tests the expectation. True if the property value is identical.
+     *    @param object $actual         Comparison object.
+     *    @return boolean               True if identical.
+     */
+    function test($actual) {
+        if (! is_object($actual)) {
+            return false;
+        }
+        return parent::test($this->getPrivateProperty($this->name, $actual));
+    }
+
+    /**
+     *    Returns a human readable test message.
+     *    @param mixed $compare      Comparison value.
+     *    @return string             Description of success
+     *                               or failure.
+     */
+    function testMessage($actual) {
+        return parent::testMessage($this->getPrivateProperty($this->name, $actual));
+    }
+
+    /**
+     *    Extracts the memeber value even if private using reflection.
+     *    @param string $name        Property name.
+     *    @param object $object      Object to read.
+     *    @return mixed              Value of property.
+     */
+    private function getPrivateProperty($name, $object) {
+        $reflection = new ReflectionObject($object);
+        $property = $reflection->getProperty($name);
+        if (method_exists($property, 'setAccessible')) {
+            $property->setAccessible(true);
+        }
+        return $property->getValue($object);
     }
 }
 ?>
