@@ -332,7 +332,7 @@ class SimpleDumper {
                 $members[$property->getName()] = $property->getValue($object);
             } catch (ReflectionException $e) {
                 $members[$property->getName()] =
-                        $property->getPrivatePropertyNoMatterWhat($property->getName(), $object);
+                    $this->getPrivatePropertyNoMatterWhat($property->getName(), $object);
             }
         }
         return $members;

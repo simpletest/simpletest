@@ -1,8 +1,8 @@
 <?php
-require_once('../../shell_tester.php');
-require_once('../../mock_objects.php');
-require_once('../../xml.php');
-require_once('../../autorun.php');
+require_once(dirname(__FILE__) . '/../../shell_tester.php');
+require_once(dirname(__FILE__) . '/../../mock_objects.php');
+require_once(dirname(__FILE__) . '/../../xml.php');
+require_once(dirname(__FILE__) . '/../../autorun.php');
 
 class VisualTestOfErrors extends UnitTestCase {
 
@@ -61,5 +61,25 @@ class VisualTestOfExceptions extends UnitTestCase {
     function ouch() {
         eval('throw new Exception("Ouch!");');
     }
+}
+
+class OpaqueContainer {
+    private $stuff;
+    private $value;
+
+    public function __construct($value) {
+        $this->value = $value;
+    }
+}
+
+class VisualTestOfObjectComparison extends UnitTestCase {
+    function skip() {
+        $this->skipUnless(version_compare(phpversion(), '5') >= 0);
+    }
+
+    function testDifferenceBetweenPrivateMembersCanBeDescribed() {
+        $this->assertIdentical(new OpaqueContainer(1), new OpaqueContainer(2));
+    }
+
 }
 ?>
