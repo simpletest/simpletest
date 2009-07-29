@@ -604,7 +604,7 @@ minor improvements and bug fixes.</notes>
       <file role="test" baseinstalldir="simpletest" md5sum="e9ec6be76102634a378bc49b41bb7f65" name="test/live_test.php"/>
       <file role="test" baseinstalldir="simpletest" md5sum="90ce55650bab1ab0e6a3d6372647af1b" name="test/options_test.php"/>
       <file role="test" baseinstalldir="simpletest" md5sum="14e6276ae1641200a0e5c6ba484b2a17" name="test/page_test.php"/>
-      <file role="test" baseinstalldir="simpletest" md5sum="a6b6ef1926cd759885c060587fc9a49e" name="test/parser_test.php"/>
+      <file role="test" baseinstalldir="simpletest" md5sum="a6b6ef1926cd759885c060587fc9a49e" name="test/php_parser_test.php"/>
       <file role="test" baseinstalldir="simpletest" md5sum="5c40c7780cf01e236e4935fed6c52fd6" name="test/query_string_test.php"/>
       <file role="test" baseinstalldir="simpletest" md5sum="c1cc1d683670d73883d7fafad353090d" name="test/real_sites_test.php"/>
       <file role="test" baseinstalldir="simpletest" md5sum="32eda7f5b6e6e5a4aadda413c9ebeb06" name="test/remote_test.php"/>
@@ -673,7 +673,7 @@ minor improvements and bug fixes.</notes>
       <file role="php" baseinstalldir="simpletest" md5sum="948aba5c364abe2504b35551bb7d5e9a" name="mock_objects.php"/>
       <file role="php" baseinstalldir="simpletest" md5sum="881acb74595b13b77ef5c7faebf8fcfc" name="options.php"/>
       <file role="php" baseinstalldir="simpletest" md5sum="ef7759089217d3192568d7ceb86774be" name="page.php"/>
-      <file role="php" baseinstalldir="simpletest" md5sum="43fdcae4285d29d1f93930182c18a5fe" name="parser.php"/>
+      <file role="php" baseinstalldir="simpletest" md5sum="43fdcae4285d29d1f93930182c18a5fe" name="php_parser.php"/>
       <file role="php" baseinstalldir="simpletest" md5sum="10b1c6bb26cd88ac491c95e8bb1fc43d" name="query_string.php"/>
       <file role="doc" baseinstalldir="simpletest" md5sum="7109ef978192e5bc8a4d9237cc8aaea3" name="README"/>
       <file role="php" baseinstalldir="simpletest" md5sum="cca19e26be64c76eb34655c3f19b55ca" name="remote.php"/>

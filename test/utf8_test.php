@@ -3,7 +3,7 @@
 // Handle with care : this file is UTF8.
 
 require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../parser.php');
+require_once(dirname(__FILE__) . '/../php_parser.php');
 require_once(dirname(__FILE__) . '/../url.php');
 Mock::generate('SimpleHtmlSaxParser');
 Mock::generate('SimplePhpPageBuilder');

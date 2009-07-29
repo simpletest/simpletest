@@ -29,7 +29,7 @@ FILES=(simpletest/README \
           simpletest/invoker.php \
           simpletest/mock_objects.php \
           simpletest/page.php \
-          simpletest/parser.php \
+          simpletest/php_parser.php \
           simpletest/reflection_php4.php \
           simpletest/reflection_php5.php \
           simpletest/remote.php \
@@ -75,7 +75,7 @@ FILES=(simpletest/README \
           simpletest/test/mock_objects_test.php \
           simpletest/test/page_test.php \
           simpletest/test/parse_error_test.php \
-          simpletest/test/parser_test.php \
+          simpletest/test/php_parser_test.php \
           simpletest/test/reflection_php4_test.php \
           simpletest/test/reflection_php5_test.php \
           simpletest/test/remote_test.php \

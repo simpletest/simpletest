@@ -8,7 +8,6 @@ Mock::generate('SimpleHttpHeaders');
 Mock::generate('SimpleHttpResponse');
 
 class TestOfPageInterface extends UnitTestCase {
-
     function testInterfaceOnEmptyPage() {
         $page = new SimplePage();
         $this->assertEqual($page->getTransportError(), 'No page fetched yet');
@@ -96,58 +95,95 @@ class TestOfPageHeaders extends UnitTestCase {
     }
 }
 
-class TestOfHtmlPage extends UnitTestCase {
+class TestOfHtmlStrippingAndNormalisation extends UnitTestCase {
+
+	function testImageSuppressionWhileKeepingParagraphsAndAltText() {
+        $this->assertEqual(
+                SimplePage::normalise('<img src="foo.png" /><p>some text</p><img src="bar.png" alt="bar" />'),
+                'some text bar');
+	}
+
+    function testSpaceNormalisation() {
+        $this->assertEqual(
+                SimplePage::normalise("\nOne\tTwo   \nThree\t"),
+                'One Two Three');
+    }
+
+    function testMultilinesCommentSuppression() {
+        $this->assertEqual(
+                SimplePage::normalise('<!--\n Hello \n-->'),
+                '');
+    }
+
+    function testCommentSuppression() {
+        $this->assertEqual(
+                SimplePage::normalise('<!--Hello-->'),
+                '');
+    }
+
+    function testJavascriptSuppression() {
+        $this->assertEqual(
+                SimplePage::normalise('<script attribute="test">\nHello\n</script>'),
+                '');
+        $this->assertEqual(
+                SimplePage::normalise('<script attribute="test">Hello</script>'),
+                '');
+        $this->assertEqual(
+                SimplePage::normalise('<script>Hello</script>'),
+                '');
+    }
+
+    function testTagSuppression() {
+        $this->assertEqual(
+                SimplePage::normalise('<b>Hello</b>'),
+                'Hello');
+    }
+
+    function testAdjoiningTagSuppression() {
+        $this->assertEqual(
+                SimplePage::normalise('<b>Hello</b><em>Goodbye</em>'),
+                'HelloGoodbye');
+    }
+
+    function testExtractImageAltTextWithDifferentQuotes() {
+        $this->assertEqual(
+                SimplePage::normalise('<img alt="One"><img alt=\'Two\'><img alt=Three>'),
+                'One Two Three');
+    }
+
+    function testExtractImageAltTextMultipleTimes() {
+        $this->assertEqual(
+                SimplePage::normalise('<img alt="One"><img alt="Two"><img alt="Three">'),
+                'One Two Three');
+    }
+
+    function testHtmlEntityTranslation() {
+        $this->assertEqual(
+                SimplePage::normalise('&lt;&gt;&quot;&amp;&#039;'),
+                '<>"&\'');
+    }
+}
+
+abstract class TestOfPageScraping extends UnitTestCase {
 
     function testRawAccessor() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent', 'Raw HTML');
-
-        $page = new SimplePage($response);
+        $page = $this->whenVisiting('http://host/', 'Raw HTML');
         $this->assertEqual($page->getRaw(), 'Raw HTML');
     }
 
     function testTextAccessor() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent', '<b>Some</b> &quot;messy&quot; HTML');
-        $page = new SimplePage($response);
+        $page = $this->whenVisiting('http://host/', '<b>Some</b> &quot;messy&quot; HTML');
         $this->assertEqual($page->getText(), 'Some "messy" HTML');
     }
 
     function testFramesetAbsence() {
-        $url = new SimpleUrl('here');
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getUrl', $url);
-        $page = new SimplePage($response);
+        $page = $this->whenVisiting('http://here/', '');
         $this->assertFalse($page->hasFrames());
         $this->assertIdentical($page->getFrameset(), false);
     }
-}
 
-class TestOfPageScraping extends UnitTestCase {
-
-    function parse($response) {
-        $builder = new SimplePhpPageBuilder();
-        $page = $builder->parse($response);
-        return $page;
-    }
-
-    function whenVisiting($url, $content) {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent', $content);
-        $response->setReturnValue('getUrl', new SimpleUrl($url));
-        return $this->parse($response);
-    }
-
-    function testEmptyPage() {
-        $page = new SimplePage(new MockSimpleHttpResponse());
-        $this->assertIdentical($page->getUrls(), array());
-        $this->assertIdentical($page->getTitle(), false);
-    }
-
-    function testUninterestingPage() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent', '<html><body><p>Stuff</p></body></html>');
-        $page = $this->parse($response);
+    function testPageWithNoUrlsGivesEmptyArrayOfLinks() {
+        $page = $this->whenVisiting('http://here/', '<html><body><p>Stuff</p></body></html>');
         $this->assertIdentical($page->getUrls(), array());
     }
 
@@ -224,18 +260,14 @@ class TestOfPageScraping extends UnitTestCase {
     }
 
     function testTitle() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent', '<html><head><title>Me</title></head></html>');
-        $page = $this->parse($response);
+        $page = $this->whenVisiting('http://host',
+                                    '<html><head><title>Me</title></head></html>');
         $this->assertEqual($page->getTitle(), 'Me');
     }
 
     function testNastyTitle() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue(
-                'getContent',
-                '<html><head><Title> <b>Me&amp;Me </TITLE></b></head></html>');
-        $page = $this->parse($response);
+        $page = $this->whenVisiting('http://host',
+                                    '<html><head><Title> <b>Me&amp;Me </TITLE></b></head></html>');
         $this->assertEqual($page->getTitle(), "Me&Me");
     }
 
@@ -280,13 +312,10 @@ class TestOfPageScraping extends UnitTestCase {
     }
 
     function testSingleFrameInNestedFrameset() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><frameset><frameset>' .
+        $raw = '<html><frameset><frameset>' .
                 '<frame src="a.html">' .
-                '</frameset></frameset></html>');
-        $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
-        $page = $this->parse($response);
+                '</frameset></frameset></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertTrue($page->hasFrames());
         $this->assertIdentical(
                 $page->getFrameset(),
@@ -294,15 +323,12 @@ class TestOfPageScraping extends UnitTestCase {
     }
 
     function testFramesCollectedWithNestedFramesetTags() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><frameset>' .
+        $raw = '<html><frameset>' .
                 '<frame src="a.html">' .
                 '<frameset><frame src="b.html"></frameset>' .
                 '<frame src="c.html">' .
-                '</frameset></html>');
-        $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
-        $page = $this->parse($response);
+                '</frameset></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertTrue($page->hasFrames());
         $this->assertIdentical($page->getFrameset(), array(
                 1 => new SimpleUrl('http://host/a.html'),
@@ -311,16 +337,13 @@ class TestOfPageScraping extends UnitTestCase {
     }
 
     function testNamedFrames() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><frameset>' .
+        $raw = '<html><frameset>' .
                 '<frame src="a.html">' .
                 '<frame name="_one" src="b.html">' .
                 '<frame src="c.html">' .
                 '<frame src="d.html" name="_two">' .
-                '</frameset></html>');
-        $response->setReturnValue('getUrl', new SimpleUrl('http://host/'));
-        $page = $this->parse($response);
+                '</frameset></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertTrue($page->hasFrames());
         $this->assertIdentical($page->getFrameset(), array(
                 1 => new SimpleUrl('http://host/a.html'),
@@ -330,41 +353,32 @@ class TestOfPageScraping extends UnitTestCase {
     }
 
     function testCanReadElementOfCompleteForm() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<input type="text" name="here" value="Hello">' .
-                '</form></head></html>');
-        $page = $this->parse($response);
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByName('here')), "Hello");
     }
 
     function testCanReadElementOfUnclosedForm() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<input type="text" name="here" value="Hello">' .
-                '</head></html>');
-        $page = $this->parse($response);
+                '</head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByName('here')), "Hello");
     }
 
     function testCanReadElementByLabel() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<label>Where<input type="text" name="here" value="Hello"></label>' .
-                '</head></html>');
-        $page = $this->parse($response);
+                '</head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByLabel('Where')), "Hello");
     }
 
     function testCanFindFormByLabel() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue(
-                'getContent',
-                '<html><head><form><input type="submit"></form></head></html>');
-        $page = $this->parse($response);
+        $raw = '<html><head><form><input type="submit"></form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertNull($page->getFormBySubmit(new SimpleByLabel('submit')));
         $this->assertNull($page->getFormBySubmit(new SimpleByName('submit')));
         $this->assertIsA(
@@ -373,11 +387,8 @@ class TestOfPageScraping extends UnitTestCase {
     }
 
     function testConfirmSubmitAttributesAreCaseSensitive() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue(
-                'getContent',
-                '<html><head><FORM><INPUT TYPE="SUBMIT" NAME="S" VALUE="S"></FORM></head></html>');
-        $page = $this->parse($response);
+        $raw = '<html><head><FORM><INPUT TYPE="SUBMIT" NAME="S" VALUE="S"></FORM></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertIsA(
                 $page->getFormBySubmit(new SimpleByName('S')),
                 'SimpleForm');
@@ -387,12 +398,10 @@ class TestOfPageScraping extends UnitTestCase {
     }
 
     function testCanFindFormByImage() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<input type="image" id=100 alt="Label" name="me">' .
-                '</form></head></html>');
-        $page = $this->parse($response);
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertIsA(
                 $page->getFormByImage(new SimpleByLabel('Label')),
                 'SimpleForm');
@@ -405,12 +414,10 @@ class TestOfPageScraping extends UnitTestCase {
     }
 
     function testCanFindFormByButtonTag() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<button type="submit" name="b" value="B">BBB</button>' .
-                '</form></head></html>');
-        $page = $this->parse($response);
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertNull($page->getFormBySubmit(new SimpleByLabel('b')));
         $this->assertNull($page->getFormBySubmit(new SimpleByLabel('B')));
         $this->assertIsA(
@@ -422,21 +429,17 @@ class TestOfPageScraping extends UnitTestCase {
     }
 
     function testCanFindFormById() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue(
-                'getContent',
-                '<html><head><form id="55"><input type="submit"></form></head></html>');
-        $page = $this->parse($response);
+        $raw = '<html><head><form id="55"><input type="submit"></form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertNull($page->getFormById(54));
         $this->assertIsA($page->getFormById(55), 'SimpleForm');
     }
 
     function testFormCanBeSubmitted() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue(
-                'getContent',
-                '<html><head><form method="GET" action="here.php"><input type="submit" name="s" value="Submit"></form></head></html>');
-        $page = $this->parse($response);
+        $raw = '<html><head><form method="GET" action="here.php">' .
+                '<input type="submit" name="s" value="Submit">' .
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $form = $page->getFormBySubmit(new SimpleByLabel('Submit'));
         $this->assertEqual(
                 $form->submitButton(new SimpleByLabel('Submit')),
@@ -444,40 +447,34 @@ class TestOfPageScraping extends UnitTestCase {
     }
 
     function testReadingTextField() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<input type="text" name="a">' .
                 '<input type="text" name="b" value="bbb" id=3>' .
-                '</form></head></html>');
-        $page = $this->parse($response);
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertNull($page->getField(new SimpleByName('missing')));
         $this->assertIdentical($page->getField(new SimpleByName('a')), '');
         $this->assertIdentical($page->getField(new SimpleByName('b')), 'bbb');
     }
 
     function testReadingTextFieldIsCaseInsensitive() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><FORM>' .
+        $raw = '<html><head><FORM>' .
                 '<INPUT TYPE="TEXT" NAME="a">' .
                 '<INPUT TYPE="TEXT" NAME="b" VALUE="bbb" id=3>' .
-                '</FORM></head></html>');
-        $page = $this->parse($response);
+                '</FORM></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertNull($page->getField(new SimpleByName('missing')));
         $this->assertIdentical($page->getField(new SimpleByName('a')), '');
         $this->assertIdentical($page->getField(new SimpleByName('b')), 'bbb');
     }
 
     function testSettingTextField() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<input type="text" name="a">' .
                 '<input type="text" name="b" id=3>' .
                 '<input type="submit">' .
-                '</form></head></html>');
-        $page = $this->parse($response);
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertTrue($page->setField(new SimpleByName('a'), 'aaa'));
         $this->assertEqual($page->getField(new SimpleByName('a')), 'aaa');
         $this->assertTrue($page->setField(new SimpleById(3), 'bbb'));
@@ -487,14 +484,12 @@ class TestOfPageScraping extends UnitTestCase {
     }
 
     function testSettingTextFieldByEnclosingLabel() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<label>Stuff' .
                 '<input type="text" name="a" value="A">' .
                 '</label>' .
-                '</form></head></html>');
-        $page = $this->parse($response);
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByName('a')), 'A');
         $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'A');
         $this->assertTrue($page->setField(new SimpleByLabel('Stuff'), 'aaa'));
@@ -502,67 +497,57 @@ class TestOfPageScraping extends UnitTestCase {
     }
 
     function testGettingTextFieldByEnclosingLabelWithConflictingOtherFields() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<label>Stuff' .
                 '<input type="text" name="a" value="A">' .
                 '</label>' .
                 '<input type="text" name="b" value="B">' .
-                '</form></head></html>');
-        $page = $this->parse($response);
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByName('a')), 'A');
         $this->assertEqual($page->getField(new SimpleByName('b')), 'B');
         $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'A');
     }
 
     function testSettingTextFieldByExternalLabel() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<label for="aaa">Stuff</label>' .
                 '<input id="aaa" type="text" name="a" value="A">' .
-                '</form></head></html>');
-        $page = $this->parse($response);
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'A');
         $this->assertTrue($page->setField(new SimpleByLabel('Stuff'), 'aaa'));
         $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'aaa');
     }
 
     function testReadingTextArea() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<textarea name="a">aaa</textarea>' .
                 '<input type="submit">' .
-                '</form></head></html>');
-        $page = $this->parse($response);
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByName('a')), 'aaa');
     }
 
     function testSettingTextArea() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<textarea name="a">aaa</textarea>' .
                 '<input type="submit">' .
-                '</form></head></html>');
-        $page = $this->parse($response);
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertTrue($page->setField(new SimpleByName('a'), 'AAA'));
         $this->assertEqual($page->getField(new SimpleByName('a')), 'AAA');
     }
 
     function testSettingSelectionField() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<select name="a">' .
                 '<option>aaa</option>' .
                 '<option selected>bbb</option>' .
                 '</select>' .
                 '<input type="submit">' .
-                '</form></head></html>');
-        $page = $this->parse($response);
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByName('a')), 'bbb');
         $this->assertFalse($page->setField(new SimpleByName('a'), 'ccc'));
         $this->assertTrue($page->setField(new SimpleByName('a'), 'aaa'));
@@ -570,27 +555,23 @@ class TestOfPageScraping extends UnitTestCase {
     }
 
     function testSettingSelectionFieldByEnclosingLabel() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<label>Stuff' .
                 '<select name="a"><option selected>A</option><option>B</option></select>' .
                 '</label>' .
-                '</form></head></html>');
-        $page = $this->parse($response);
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'A');
         $this->assertTrue($page->setField(new SimpleByLabel('Stuff'), 'B'));
         $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'B');
     }
 
     function testSettingRadioButtonByEnclosingLabel() {
-        $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent',
-                '<html><head><form>' .
+        $raw = '<html><head><form>' .
                 '<label>A<input type="radio" name="r" value="a" checked></label>' .
                 '<label>B<input type="radio" name="r" value="b"></label>' .
-                '</form></head></html>');
-        $page = $this->parse($response);
+                '</form></head></html>';
+        $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByLabel('A')), 'a');
         $this->assertTrue($page->setField(new SimpleBylabel('B'), 'b'));
         $this->assertEqual($page->getField(new SimpleByLabel('B')), 'b');
@@ -606,72 +587,19 @@ class TestOfPageScraping extends UnitTestCase {
     }
 }
 
-class TestOfHtmlStrippingAndNormalisation extends UnitTestCase {
+class TestOfPageScrapingUsingPhpParser extends TestOfPageScraping {
 
-	function testImageSuppressionWhileKeepingParagraphsAndAltText() {
-        $this->assertEqual(
-                SimplePage::normalise('<img src="foo.png" /><p>some text</p><img src="bar.png" alt="bar" />'),
-                'some text bar');
-	}
-
-    function testSpaceNormalisation() {
-        $this->assertEqual(
-                SimplePage::normalise("\nOne\tTwo   \nThree\t"),
-                'One Two Three');
+    function parse($response) {
+        $builder = new SimplePhpPageBuilder();
+        $page = $builder->parse($response);
+        return $page;
     }
 
-    function testMultilinesCommentSuppression() {
-        $this->assertEqual(
-                SimplePage::normalise('<!--\n Hello \n-->'),
-                '');
-    }
-
-    function testCommentSuppression() {
-        $this->assertEqual(
-                SimplePage::normalise('<!--Hello-->'),
-                '');
-    }
-
-    function testJavascriptSuppression() {
-        $this->assertEqual(
-                SimplePage::normalise('<script attribute="test">\nHello\n</script>'),
-                '');
-        $this->assertEqual(
-                SimplePage::normalise('<script attribute="test">Hello</script>'),
-                '');
-        $this->assertEqual(
-                SimplePage::normalise('<script>Hello</script>'),
-                '');
-    }
-
-    function testTagSuppression() {
-        $this->assertEqual(
-                SimplePage::normalise('<b>Hello</b>'),
-                'Hello');
-    }
-
-    function testAdjoiningTagSuppression() {
-        $this->assertEqual(
-                SimplePage::normalise('<b>Hello</b><em>Goodbye</em>'),
-                'HelloGoodbye');
-    }
-
-    function testExtractImageAltTextWithDifferentQuotes() {
-        $this->assertEqual(
-                SimplePage::normalise('<img alt="One"><img alt=\'Two\'><img alt=Three>'),
-                'One Two Three');
-    }
-
-    function testExtractImageAltTextMultipleTimes() {
-        $this->assertEqual(
-                SimplePage::normalise('<img alt="One"><img alt="Two"><img alt="Three">'),
-                'One Two Three');
-    }
-
-    function testHtmlEntityTranslation() {
-        $this->assertEqual(
-                SimplePage::normalise('&lt;&gt;&quot;&amp;&#039;'),
-                '<>"&\'');
+    function whenVisiting($url, $content) {
+        $response = new MockSimpleHttpResponse();
+        $response->setReturnValue('getContent', $content);
+        $response->setReturnValue('getUrl', new SimpleUrl($url));
+        return $this->parse($response);
     }
 }
 ?>
