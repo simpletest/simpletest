@@ -963,8 +963,8 @@ class MemberExpectation extends IdenticalExpectation {
      *    @return mixed              Value of property.
      */
     private function getPrivatePropertyNoMatterWhat($name, $object) {
-        foreach ((array)$object as $mangles_name => $value) {
-            if (unmangle($mangled_name) == $name) {
+        foreach ((array)$object as $mangled_name => $value) {
+            if ($this->unmangle($mangled_name) == $name) {
                 return $value;
             }
         }

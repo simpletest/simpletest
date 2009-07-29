@@ -86,9 +86,25 @@ class RecursiveNasty {
 }
 
 class OpaqueContainer {
+    private $stuff;
     private $value;
 
     public function __construct($value) {
+        $this->value = $value;
+    }
+}
+
+class DerivedOpaqueContainer extends OpaqueContainer {
+    // Deliberately have a variable whose name with the same suffix as a later
+    // variable
+    private $new_value = 1;
+
+    // Deliberately obscures the variable of the same name in the base
+    // class.
+    private $value;
+
+    public function __construct($value, $base_value) {
+        parent::__construct($base_value);
         $this->value = $value;
     }
 }
@@ -122,6 +138,46 @@ class TestOfIdentity extends UnitTestCase {
         $this->assertTrue($expectFive->test(array(new OpaqueContainer(5))));
         $this->assertFalse($expectFive->test(array(new OpaqueContainer(6))));
     }
+
+    function testCanComparePrivateMembersOfObjectsWherePrivateMemberOfBaseClassIsObscured() {
+        $expectFive = new IdenticalExpectation(array(new DerivedOpaqueContainer(1,2)));
+        $this->assertTrue($expectFive->test(array(new DerivedOpaqueContainer(1,2))));
+        $this->assertFalse($expectFive->test(array(new DerivedOpaqueContainer(0,2))));
+        $this->assertFalse($expectFive->test(array(new DerivedOpaqueContainer(0,9))));
+        $this->assertFalse($expectFive->test(array(new DerivedOpaqueContainer(1,0))));
+    }
+}
+
+class TransparentContainer {
+    public $value;
+
+    public function __construct($value) {
+        $this->value = $value;
+    }
+}
+
+class TestOfMemberComparison extends UnitTestCase {
+
+    function testMemberExpectationCanMatchPublicMember() {
+        $expect_five = new MemberExpectation('value', 5);
+        $this->assertTrue($expect_five->test(new TransparentContainer(5)));
+        $this->assertFalse($expect_five->test(new TransparentContainer(8)));
+    }
+
+    function testMemberExpectationCanMatchPrivateMember() {
+        $expect_five = new MemberExpectation('value', 5);
+        $this->assertTrue($expect_five->test(new OpaqueContainer(5)));
+        $this->assertFalse($expect_five->test(new OpaqueContainer(8)));
+    }
+
+    function testMemberExpectationCanMatchPrivateMemberObscuredByDerivedClass() {
+        $expect_five = new MemberExpectation('value', 5);
+        $this->assertTrue($expect_five->test(new DerivedOpaqueContainer(5,8)));
+        $this->assertTrue($expect_five->test(new DerivedOpaqueContainer(5,5)));
+        $this->assertFalse($expect_five->test(new DerivedOpaqueContainer(8,8)));
+        $this->assertFalse($expect_five->test(new DerivedOpaqueContainer(8,5)));
+    }
+
 }
 
 class DummyReferencedObject{}
