@@ -328,7 +328,7 @@ class SimpleDumper {
             if (method_exists($property, 'setAccessible')) {
                 $property->setAccessible(true);
             }
-            $members[$property->getName()] = $property->getValue();
+            $members[$property->getName()] = $property->getValue($object);
         }
         return $members;
     }

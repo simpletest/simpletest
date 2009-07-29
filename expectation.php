@@ -924,7 +924,7 @@ class MemberExpectation extends IdenticalExpectation {
         if (! is_object($actual)) {
             return false;
         }
-        return parent::test($this->getPrivateProperty($this->name, $actual));
+        return parent::test($this->getProperty($this->name, $actual));
     }
 
     /**
@@ -934,7 +934,7 @@ class MemberExpectation extends IdenticalExpectation {
      *                               or failure.
      */
     function testMessage($actual) {
-        return parent::testMessage($this->getPrivateProperty($this->name, $actual));
+        return parent::testMessage($this->getProperty($this->name, $actual));
     }
 
     /**
@@ -943,13 +943,21 @@ class MemberExpectation extends IdenticalExpectation {
      *    @param object $object      Object to read.
      *    @return mixed              Value of property.
      */
-    private function getPrivateProperty($name, $object) {
+    private function getProperty($name, $object) {
         $reflection = new ReflectionObject($object);
         $property = $reflection->getProperty($name);
         if (method_exists($property, 'setAccessible')) {
             $property->setAccessible(true);
         }
-        return $property->getValue($object);
+        try {
+            return $property->getValue($object);
+        } catch (ReflectionException $e) {
+            return $this->getPrivateProperty($name, $object);
+        }
+    }
+
+    private function getPrivateProperty($name, $object) {
+        return null;
     }
 }
 ?>
