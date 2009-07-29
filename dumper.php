@@ -346,7 +346,7 @@ class SimpleDumper {
      */
     private function getPrivatePropertyNoMatterWhat($name, $object) {
         foreach ((array)$object as $mangles_name => $value) {
-            if (unmangle($mangled_name) == $name) {
+            if ($this->unmangle($mangled_name) == $name) {
                 return $value;
             }
         }
