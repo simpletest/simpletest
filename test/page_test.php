@@ -589,17 +589,12 @@ abstract class TestOfPageScraping extends UnitTestCase {
 
 class TestOfPageScrapingUsingPhpParser extends TestOfPageScraping {
 
-    function parse($response) {
-        $builder = new SimplePhpPageBuilder();
-        $page = $builder->parse($response);
-        return $page;
-    }
-
     function whenVisiting($url, $content) {
         $response = new MockSimpleHttpResponse();
         $response->setReturnValue('getContent', $content);
         $response->setReturnValue('getUrl', new SimpleUrl($url));
-        return $this->parse($response);
+        $builder = new SimplePhpPageBuilder();
+        return $builder->parse($response);
     }
 }
 ?>
