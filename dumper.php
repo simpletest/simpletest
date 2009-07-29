@@ -328,9 +328,39 @@ class SimpleDumper {
             if (method_exists($property, 'setAccessible')) {
                 $property->setAccessible(true);
             }
-            $members[$property->getName()] = $property->getValue($object);
+            try {
+                $members[$property->getName()] = $property->getValue($object);
+            } catch (ReflectionException $e) {
+                $members[$property->getName()] =
+                        $property->getPrivatePropertyNoMatterWhat($property->getName(), $object);
+            }
         }
         return $members;
+    }
+
+    /**
+     *    Extracts a private member's value when reflection won't play ball.
+     *    @param string $name        Property name.
+     *    @param object $object      Object to read.
+     *    @return mixed              Value of property.
+     */
+    private function getPrivatePropertyNoMatterWhat($name, $object) {
+        foreach ((array)$object as $mangles_name => $value) {
+            if (unmangle($mangled_name) == $name) {
+                return $value;
+            }
+        }
+    }
+
+    /**
+     *    Removes crud from property name after it's been converted
+     *    to an array.
+     *    @param string $mangled     Name from array cast.
+     *    @return string             Cleaned up name.
+     */
+    function unmangle($mangled) {
+        $parts = preg_split('/[^a-zA-Z0-9_\x7f-\xff]+/', $mangled);
+        return array_pop($parts);
     }
 
     /**
