@@ -32,6 +32,7 @@ class UnitTests extends TestSuite {
         $this->addFile($path . '/authentication_test.php');
         $this->addFile($path . '/user_agent_test.php');
         $this->addFile($path . '/php_parser_test.php');
+        $this->addFile($path . '/parsing_test.php');
         $this->addFile($path . '/tag_test.php');
         $this->addFile($path . '/form_test.php');
         $this->addFile($path . '/page_test.php');

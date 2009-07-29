@@ -76,6 +76,7 @@ FILES=(simpletest/README \
           simpletest/test/page_test.php \
           simpletest/test/parse_error_test.php \
           simpletest/test/php_parser_test.php \
+          simpletest/test/parsing_test.php \
           simpletest/test/reflection_php4_test.php \
           simpletest/test/reflection_php5_test.php \
           simpletest/test/remote_test.php \
