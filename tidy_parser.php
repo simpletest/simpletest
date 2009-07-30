@@ -81,6 +81,9 @@ class SimpleTidyPageBuilder {
         } elseif ($node->name == 'label') {
             $this->labels[] = $this->tags()->createTag($node->name, (array)$node->attribute)
                                            ->addContent($this->innerHtml($node));
+        } elseif ($node->name == 'select') {
+            $select = $this->tags()->createTag($node->name, (array)$node->attribute);
+            $form->addWidget($this->collectSelectOptions($select, $node));
         }
         if ($node->hasChildren()) {
             foreach ($node->child as $child) {
@@ -88,6 +91,19 @@ class SimpleTidyPageBuilder {
             }
         }
         return $form;
+    }
+
+    private function collectSelectOptions($select, $node) {
+        if ($node->name == 'option') {
+            $select->addTag($this->tags()->createTag($node->name, (array)$node->attribute)
+                                         ->addContent($this->innerHtml($node)));
+        }
+        if ($node->hasChildren()) {
+            foreach ($node->child as $child) {
+                $this->collectSelectOptions($select, $child);
+            }
+        }
+        return $select;
     }
 
     private function collectFrames($node) {
