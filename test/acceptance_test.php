@@ -121,19 +121,19 @@ class TestOfLocalFileBrowser extends UnitTestCase {
 }
 
 class TestRadioFields extends SimpleTestAcceptanceTest {
-	function testSetFieldAsInteger() {
-		$this->get($this->samples() . 'form_with_radio_buttons.html');
-		$this->assertTrue($this->setField('tested_field', 2));
-		$this->clickSubmitByName('send');
-		$this->assertEqual($this->getUrl(), $this->samples() . 'form_with_radio_buttons.html?tested_field=2&send=click+me');
-	}
+    function testSetFieldAsInteger() {
+        $this->get($this->samples() . 'form_with_radio_buttons.html');
+        $this->assertTrue($this->setField('tested_field', 2));
+        $this->clickSubmitByName('send');
+        $this->assertEqual($this->getUrl(), $this->samples() . 'form_with_radio_buttons.html?tested_field=2&send=click+me');
+    }
 
-	function testSetFieldAsString() {
-		$this->get($this->samples() . 'form_with_radio_buttons.html');
-		$this->assertTrue($this->setField('tested_field', '2'));
-		$this->clickSubmitByName('send');
-		$this->assertEqual($this->getUrl(), $this->samples() . 'form_with_radio_buttons.html?tested_field=2&send=click+me');
-	}
+    function testSetFieldAsString() {
+        $this->get($this->samples() . 'form_with_radio_buttons.html');
+        $this->assertTrue($this->setField('tested_field', '2'));
+        $this->clickSubmitByName('send');
+        $this->assertEqual($this->getUrl(), $this->samples() . 'form_with_radio_buttons.html?tested_field=2&send=click+me');
+    }
 }
 
 class TestOfLiveFetching extends SimpleTestAcceptanceTest {
@@ -141,21 +141,21 @@ class TestOfLiveFetching extends SimpleTestAcceptanceTest {
         $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
     }
  
-	function testFormWithArrayBasedInputs() {
-		$this->get($this->samples() . 'form_with_array_based_inputs.php');
-		$this->setField('value[]', '3', '1');
-		$this->setField('value[]', '4', '2');
-		$this->clickSubmit('Go');
+    function testFormWithArrayBasedInputs() {
+        $this->get($this->samples() . 'form_with_array_based_inputs.php');
+        $this->setField('value[]', '3', '1');
+        $this->setField('value[]', '4', '2');
+        $this->clickSubmit('Go');
         $this->assertPattern('/QUERY_STRING : value%5B%5D=3&value%5B%5D=4&submit=Go/');
-	}
+    }
 
-	function testFormWithQuotedValues() {
-		$this->get($this->samples() . 'form_with_quoted_values.php');
-		$this->assertField('a', 'default');
-		$this->assertFieldById('text_field', 'default');
-		$this->clickSubmit('Go');
+    function testFormWithQuotedValues() {
+        $this->get($this->samples() . 'form_with_quoted_values.php');
+        $this->assertField('a', 'default');
+        $this->assertFieldById('text_field', 'default');
+        $this->clickSubmit('Go');
         $this->assertPattern('/a=default&submit=Go/');
-	}
+    }
 
     function testGet() {
         $this->assertTrue($this->get($this->samples() . 'network_confirm.php'));
