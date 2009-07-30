@@ -492,7 +492,7 @@ class TestOfParsingUsingPhpParser extends TestOfParsing {
 class TestOfParsingUsingTidyParser extends TestOfParsing {
 
     function skip() {
-        $this->skipUnless(function_exists('tidy_parse_string'), 'Install \'tidy\' php extension to enable html tidy based parser');
+        $this->skipUnless(extension_loaded('tidy'), 'Install \'tidy\' php extension to enable html tidy based parser');
     }
 
     function whenVisiting($url, $content) {
