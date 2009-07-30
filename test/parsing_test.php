@@ -353,6 +353,26 @@ abstract class TestOfParsing extends UnitTestCase {
         $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'aaa');
     }
 
+    function TODO_testTwoForms() {
+        $raw = '<form action="network_confirm.php?x=X&y=Y" method="post">
+            <label>Text A <input type="text" name="a" value="one"></label>
+            <br />
+            <input type="submit" name="go" value="Go!">
+        </form>
+        <form action="network_confirm.php?x=X&amp;y=Y" method="post">
+            <label>Text B <input type="text" name="b" value="two"></label>
+            <br />
+            <input type="submit" name="go" value="Go encoded!">
+        </form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertEqual($page->getField(new SimpleByLabelOrName('Text A')), 'one');
+        $this->assertEqual($page->getField(new SimpleByLabelOrName('Text B')), 'two');
+        $this->assertTrue($page->setField(new SimpleByLabelOrName('Text A'), '1'));
+        $this->assertTrue($page->setField(new SimpleByLabelOrName('Text B'), '2'));
+        $this->assertEqual($page->getField(new SimpleByLabelOrName('Text A')), '1');
+        $this->assertEqual($page->getField(new SimpleByLabelOrName('Text B')), '2');
+    }
+
     function testGettingTextFieldByEnclosingLabelWithConflictingOtherFields() {
         $raw = '<html><head><form>' .
                 '<label>Stuff' .

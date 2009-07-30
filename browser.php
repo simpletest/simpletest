@@ -214,7 +214,7 @@ class SimpleBrowser {
         if ($this->builder) {
             return $this->builder;
         }
-        if (false and extension_loaded('tidy')) {
+        if (extension_loaded('tidy')) {
             return new SimpleTidyPageBuilder();
         }
         return new SimplePHPPageBuilder();
