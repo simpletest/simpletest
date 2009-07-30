@@ -75,10 +75,9 @@ class SimpleTidyPageBuilder {
                                               ->addContent($this->innerHtml($node)));
         } elseif (in_array($node->name, array('input', 'button', 'textarea', 'select'))) {
             $this->addWidgetToForm($node, $form, $enclosing_label);
-        } elseif ($node->name == 'label' and $this->hasFor($node)) {
+        } elseif ($node->name == 'label') {
             $this->labels[] = $this->tags()->createTag($node->name, (array)$node->attribute)
                                            ->addContent($this->innerHtml($node));
-        } elseif ($node->name == 'label' and ! $this->hasFor($node)) {
             if ($node->hasChildren()) {
                 foreach ($node->child as $child) {
                     $this->walkForm($child, $form, SimplePage::normalise($this->innerHtml($node)));
@@ -122,12 +121,12 @@ class SimpleTidyPageBuilder {
     }
 
     private function attributes($node) {
-        if (! preg_match('|<.*?\s(.*?)/?>|', $node->value, $first_tag_contents)) {
+        if (! preg_match('|<[^ ]+\s(.*?)/?>|s', $node->value, $first_tag_contents)) {
             return array();
         }
         $attributes = array();
-        preg_match_all('/(\S+\s*=\s*\'[^\']*\'|\S+?\s*=\s*"[^"]*"|[^ =]+\s*=\s*[^ "\']+?|[^ "\']+)/', $first_tag_contents[1], $matches);
-        foreach($matches[1] as $unparsed) {
+        preg_match_all('/\S+\s*=\s*\'[^\']*\'|(\S+\s*=\s*"[^"]*")|([^ =]+\s*=\s*[^ "\']+?)|[^ "\']+/', $first_tag_contents[1], $matches);
+        foreach($matches[0] as $unparsed) {
             $attributes = $this->mergeAttribute($attributes, $unparsed);
         }
         return $attributes;
@@ -136,7 +135,7 @@ class SimpleTidyPageBuilder {
     private function mergeAttribute($attributes, $raw) {
         $parts = explode('=', $raw);
         list($name, $value) = count($parts) == 1 ? array($parts[0], $parts[0]) : $parts;
-        $attributes[trim($name)] = $this->dequote($value);
+        $attributes[trim($name)] = $this->dequote(trim($value));
         return $attributes;
     }
 

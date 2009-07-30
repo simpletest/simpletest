@@ -387,23 +387,23 @@ abstract class TestOfParsing extends UnitTestCase {
     }
 
     function testSettingTextArea() {
-        $raw = '<html><head><form>' .
+        $raw = '<form>' .
                 '<textarea name="a">aaa</textarea>' .
                 '<input type="submit">' .
-                '</form></head></html>';
+                '</form>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertTrue($page->setField(new SimpleByName('a'), 'AAA'));
         $this->assertEqual($page->getField(new SimpleByName('a')), 'AAA');
     }
 
     function testSettingSelectionField() {
-        $raw = '<html><head><form>' .
+        $raw = '<form>' .
                 '<select name="a">' .
                 '<option>aaa</option>' .
                 '<option selected>bbb</option>' .
                 '</select>' .
                 '<input type="submit">' .
-                '</form></head></html>';
+                '</form>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByName('a')), 'bbb');
         $this->assertFalse($page->setField(new SimpleByName('a'), 'ccc'));
@@ -412,11 +412,11 @@ abstract class TestOfParsing extends UnitTestCase {
     }
 
     function testSettingSelectionFieldByEnclosingLabel() {
-        $raw = '<html><head><form>' .
+        $raw = '<form>' .
                 '<label>Stuff' .
                 '<select name="a"><option selected>A</option><option>B</option></select>' .
                 '</label>' .
-                '</form></head></html>';
+                '</form>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'A');
         $this->assertTrue($page->setField(new SimpleByLabel('Stuff'), 'B'));
@@ -424,14 +424,41 @@ abstract class TestOfParsing extends UnitTestCase {
     }
 
     function testSettingRadioButtonByEnclosingLabel() {
-        $raw = '<html><head><form>' .
+        $raw = '<form>' .
                 '<label>A<input type="radio" name="r" value="a" checked></label>' .
                 '<label>B<input type="radio" name="r" value="b"></label>' .
-                '</form></head></html>';
+                '</form>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByLabel('A')), 'a');
         $this->assertTrue($page->setField(new SimpleBylabel('B'), 'b'));
         $this->assertEqual($page->getField(new SimpleByLabel('B')), 'b');
+    }
+
+    function testCanParseInputsWithAllKindsOfAttributeQuoting() {
+        $raw = '<form>' .
+                '<input type="checkbox" name=\'first\' value=one checked></input>' .
+                '<input type=checkbox name="second" value="two"></input>' .
+                '<input type=checkbox name="third" value=\'three\' checked="checked" />' .
+                '</form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertEqual($page->getField(new SimpleByName('first')), 'one');
+        $this->assertEqual($page->getField(new SimpleByName('second')), false);
+        $this->assertEqual($page->getField(new SimpleByName('third')), 'three');
+    }
+
+    function testEnclosingLabelsCanAttachToOtherInputsUsingForAttribute() {
+        $raw = '<form>' .
+                '<label for="that">Label <input type=text name=this value=a></label>' .
+                '<input type=text id=that name=that value=b>' .
+                '</form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertEqual($page->getField(new SimpleByName('this')), 'a');
+        $this->assertEqual($page->getField(new SimpleByName('that')), 'b');
+        $this->assertTrue($page->setField(new SimpleByLabel('Label'), 'z'));
+        $this->assertEqual($page->getField(new SimpleByName('this')), 'z');
+        // TODO: the old php parser only attaches the label to the encosed input, not to the
+        // input referenced by id in the 'for' attribute. Do we want to retain this behaviour?
+        // $this->assertEqual($page->getField(new SimpleByName('that')), 'b');
     }
 
     function urlToString($url) {
@@ -462,7 +489,7 @@ class TestOfParsingUsingPhpParser extends TestOfParsing {
 
 }
 
-abstract class TestOfParsingUsingTidyParser extends TestOfParsing {
+class TestOfParsingUsingTidyParser extends TestOfParsing {
 
     function whenVisiting($url, $content) {
         $response = new MockSimpleHttpResponse();
