@@ -174,6 +174,16 @@ class SimpleTag {
     }
 
     /**
+     *    Adds multiple enclosed tags to the content.
+     *    @param array            List of SimpleTag objects to be added.
+     */
+    function addTags($tags) {
+        foreach ($tags as $tag) {
+            $this->addTag($tag);
+        }
+    }
+    
+    /**
      *    Accessor for tag name.
      *    @return string       Name of tag.
      *    @access public
@@ -404,6 +414,7 @@ class SimpleWidget extends SimpleTag {
      */
     function setLabel($label) {
         $this->label = trim($label);
+        return $this;
     }
 
     /**

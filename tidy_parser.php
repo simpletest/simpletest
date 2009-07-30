@@ -69,23 +69,23 @@ class SimpleTidyPageBuilder {
         return new SimpleForm($this->tags()->createTag($node->name, (array)$node->attribute), $this->page);
     }
 
-    private function walkForm($node, $form) {
+    private function walkForm($node, $form, $enclosing_label = '') {
         if ($node->name == 'a') {
             $this->page->addLink($this->tags()->createTag($node->name, (array)$node->attribute)
-                                        ->addContent($this->innerHtml($node)));
-        } elseif ($node->name == 'input') {
-            $form->addWidget($this->tags()->createTag($node->name, (array)$node->attribute));
-        } elseif ($node->name == 'button' || $node->name == 'textarea') {
-            $form->addWidget($this->tags()->createTag($node->name, (array)$node->attribute)
-                                          ->addContent($this->innerHtml($node)));
-        } elseif ($node->name == 'label') {
+                                              ->addContent($this->innerHtml($node)));
+        } elseif (in_array($node->name, array('input', 'button', 'textarea', 'select'))) {
+            $this->addWidgetToForm($node, $form, $enclosing_label);
+        } elseif ($node->name == 'label' and $this->hasFor($node)) {
             $this->labels[] = $this->tags()->createTag($node->name, (array)$node->attribute)
                                            ->addContent($this->innerHtml($node));
-        } elseif ($node->name == 'select') {
-            $select = $this->tags()->createTag($node->name, (array)$node->attribute);
-            $form->addWidget($this->collectSelectOptions($select, $node));
+        } elseif ($node->name == 'label' and ! $this->hasFor($node)) {
+            if ($node->hasChildren()) {
+                foreach ($node->child as $child) {
+                    $this->walkForm($child, $form, SimplePage::normalise($this->innerHtml($node)));
+                }
+            }
         }
-        if ($node->hasChildren()) {
+        else if ($node->hasChildren()) {
             foreach ($node->child as $child) {
                 $this->walkForm($child, $form);
             }
@@ -93,18 +93,60 @@ class SimpleTidyPageBuilder {
         return $form;
     }
 
-    private function collectSelectOptions($select, $node) {
+    private function hasFor($node) {
+        return isset($node->attribute) and $node->attribute['for'];
+    }
+
+    private function addWidgetToForm($node, $form, $enclosing_label) {
+        $widget = $this->tags()->createTag($node->name, $this->attributes($node))
+                               ->setLabel($enclosing_label)
+                               ->addContent($this->innerHtml($node));
+        if ($node->name == 'select') {
+            $widget->addTags($this->collectSelectOptions($node));
+        }
+        $form->addWidget($widget);
+    }
+
+    private function collectSelectOptions($node) {
+        $options = array();
         if ($node->name == 'option') {
-            $select->addTag($this->tags()->createTag($node->name, (array)$node->attribute)
-                                         ->addContent($this->innerHtml($node)));
+            $options[] = $this->tags()->createTag($node->name, $this->attributes($node))
+                                         ->addContent($this->innerHtml($node));
         }
         if ($node->hasChildren()) {
             foreach ($node->child as $child) {
-                $this->collectSelectOptions($select, $child);
+                $options = array_merge($options, $this->collectSelectOptions($child));
             }
         }
-        return $select;
+        return $options;
     }
+
+    private function attributes($node) {
+        if (! preg_match('|<.*?\s(.*?)/?>|', $node->value, $first_tag_contents)) {
+            return array();
+        }
+        $attributes = array();
+        preg_match_all('/(\S+\s*=\s*\'[^\']*\'|\S+?\s*=\s*"[^"]*"|[^ =]+\s*=\s*[^ "\']+?|[^ "\']+)/', $first_tag_contents[1], $matches);
+        foreach($matches[1] as $unparsed) {
+            $attributes = $this->mergeAttribute($attributes, $unparsed);
+        }
+        return $attributes;
+    }
+
+    private function mergeAttribute($attributes, $raw) {
+        $parts = explode('=', $raw);
+        list($name, $value) = count($parts) == 1 ? array($parts[0], $parts[0]) : $parts;
+        $attributes[trim($name)] = $this->dequote($value);
+        return $attributes;
+    }
+
+    private function dequote($quoted) {
+        if (preg_match('/^(\'([^\']*)\'|"([^"]*)")$/', $quoted, $matches)) {
+            return $matches[2] ? $matches[2] : $matches[3];
+        }
+        return $quoted;
+    }
+
 
     private function collectFrames($node) {
         if ($node->name == 'frame') {
