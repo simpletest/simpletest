@@ -14,6 +14,7 @@ require_once(dirname(__FILE__) . '/http.php');
 require_once(dirname(__FILE__) . '/encoding.php');
 require_once(dirname(__FILE__) . '/page.php');
 require_once(dirname(__FILE__) . '/php_parser.php');
+require_once(dirname(__FILE__) . '/tidy_parser.php');
 require_once(dirname(__FILE__) . '/selector.php');
 require_once(dirname(__FILE__) . '/frames.php');
 require_once(dirname(__FILE__) . '/user_agent.php');
@@ -164,6 +165,7 @@ class SimpleBrowser {
     private $history;
     private $ignore_frames;
     private $maximum_nested_frames;
+    private $builder;
 
     /**
      *    Starts with a fresh browser with no
@@ -200,6 +202,31 @@ class SimpleBrowser {
      */
     protected function createHistory() {
         return new SimpleBrowserHistory();
+    }
+
+    /**
+     *    Select the optimal page builder to use. If HTML tidy is
+     *    installed, that will be used. Otherwise, the native PHP
+     *    parser is used.
+     *    @return SimplePHPPageBuilder or SimpleTidyPageBuilder
+     */
+    protected function createBuilder() {
+        if ($this->builder) {
+            return $this->builder;
+        }
+        if (false and extension_loaded('tidy')) {
+            return new SimpleTidyPageBuilder();
+        }
+        return new SimplePHPPageBuilder();
+    }
+
+    /**
+     *    Override the default builder, allowing different page
+     *    builders (parsers) to be plugged in.
+     *    @param object           A page builder.
+     */
+    public function setPageBuilder($builder) {
+        $this->builder = $builder;
     }
 
     /**
@@ -263,10 +290,9 @@ class SimpleBrowser {
      *    unjams the PHP memory management.
      *    @param SimpleHttpResponse $response    Response from fetch.
      *    @return SimplePage                     Parsed top level page.
-     *    @access protected
      */
     protected function buildPage($response) {
-        $builder = new SimplePHPPageBuilder();
+        $builder = $this->createBuilder();
         $page = $builder->parse($response);
         $builder->free();
         unset($builder);

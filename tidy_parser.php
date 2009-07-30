@@ -17,6 +17,15 @@ class SimpleTidyPageBuilder {
     private $labels = array();
 
     public function __destruct() {
+        $this->free();
+    }
+
+    /**
+     *    Frees up any references so as to allow the PHP garbage
+     *    collection from unset() to work.
+     *    @access public
+     */
+    public function free() {
         unset($this->page);
         unset($this->forms);
         unset($this->labels);
