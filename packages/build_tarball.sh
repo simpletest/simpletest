@@ -41,6 +41,7 @@ FILES=(simpletest/README \
           simpletest/socket.php \
           simpletest/tag.php \
           simpletest/test_case.php \
+          simpletest/tidy_parser.php \
           simpletest/unit_tester.php \
           simpletest/url.php \
           simpletest/user_agent.php \
