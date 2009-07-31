@@ -5,7 +5,7 @@ require_once(dirname(__FILE__) . '/../compatibility.php');
 require_once(dirname(__FILE__) . '/../browser.php');
 require_once(dirname(__FILE__) . '/../web_tester.php');
 require_once(dirname(__FILE__) . '/../unit_tester.php');
-SimpleTest::setParsers(array(new SimplePhpPageBuilder()));
+SimpleTest::setParsers(array(new SimpleTidyPageBuilder(), new SimplePHPPageBuilder()));
 
 class SimpleTestAcceptanceTest extends WebTestCase {
     static function samples() {
@@ -915,7 +915,6 @@ class LiveTestOfForms extends SimpleTestAcceptanceTest {
         $this->assertField('Text area B', '');
         $this->setField('Text area B', '0');
         $this->assertField('Text area B', '0');
-        $this->assertField('Text area C', "                ");
         $this->assertField('Selection D', '');
         $this->setField('Selection D', 'D2');
         $this->assertField('Selection D', 'D2');
@@ -936,6 +935,12 @@ class LiveTestOfForms extends SimpleTestAcceptanceTest {
         $this->assertFieldByName('i', '?');
     }
 
+    function testDefaultValueOfTextareaHasNewlinesAndWhitespacePreserved() {
+        $this->setParser(new SimplePHPPageBuilder());
+        $this->get($this->samples() . 'form_with_false_defaults.html');
+        $this->assertField('Text area C', "                ");
+    }
+
     function testSubmissionOfBlankFields() {
         $this->get($this->samples() . 'form_with_false_defaults.html');
         $this->setField('Text A', '');
@@ -944,10 +949,16 @@ class LiveTestOfForms extends SimpleTestAcceptanceTest {
         $this->click('Go!');
         $this->assertText('a=[]');
         $this->assertText('b=[]');
-        $this->assertPattern('/c=\[                \]/');
         $this->assertText('d=[]');
         $this->assertText('e=[]');
         $this->assertText('i=[]');
+    }
+
+    function testDefaultValueOfTextareaHasNewlinesAndWhitespacePreservedOnSubmission() {
+        $this->setParser(new SimplePHPPageBuilder());
+        $this->get($this->samples() . 'form_with_false_defaults.html');
+        $this->click('Go!');
+        $this->assertPattern('/c=\[                \]/');
     }
 
     function testSubmissionOfEmptyValues() {
