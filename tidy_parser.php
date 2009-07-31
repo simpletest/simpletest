@@ -46,12 +46,14 @@ class SimpleTidyPageBuilder {
      */
     function parse($response) {
         $this->page = new SimplePage($response);
-        $tidied = tidy_parse_string($this->guardEmptyTags($response->getContent()), 
-                                    array('output-html' => true, 'new-empty-tags' => 'empty', 'new-inline-tags' => 'empty'), 
+        $tidied = tidy_parse_string($input = $this->guardEmptyTags($response->getContent()),
+                                    array('output-xml' => false,
+                                          'wrap' => '0',
+                                          'indent' => 'no'),
                                     'latin1');
         if ($tidied->errorBuffer) {
             foreach(explode("\n", $tidied->errorBuffer) as $notice) {
-                //user_error($notice, E_USER_NOTICE);
+                // user_error($notice, E_USER_NOTICE);
             }
         }
         $this->walkTree($tidied->html());
@@ -68,11 +70,11 @@ class SimpleTidyPageBuilder {
      *    @return string     The html with guard tags inserted.
      */
     private function guardEmptyTags($html) {
-        return preg_replace('#<(option|textarea)([^>]*)>(\s*)</(option|textarea)>#', '<\1\2><empty />\3</\4', $html);
+        return preg_replace('#<(option|textarea)([^>]*)>(\s*)</(option|textarea)>#', '<\1\2>___EMPTY___\3</\4>', $html);
     }
 
     private function stripGuards($html) {
-        return preg_replace('#(^|>)(\s*)<empty>(\s*)(</|$)#i', '\2\3', $html);
+        return preg_replace('#(^|>)(\s*)___EMPTY___(\s*)(</|$)#i', '\2\3', $html);
     }
 
     /**
@@ -168,7 +170,7 @@ class SimpleTidyPageBuilder {
     private function mergeAttribute($attributes, $raw) {
         $parts = explode('=', $raw);
         list($name, $value) = count($parts) == 1 ? array($parts[0], $parts[0]) : $parts;
-        $attributes[trim($name)] = $this->dequote(trim($value));
+        $attributes[trim($name)] = html_entity_decode($this->dequote(trim($value)), ENT_QUOTES);
         return $attributes;
     }
 

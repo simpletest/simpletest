@@ -314,6 +314,12 @@ abstract class TestOfParsing extends UnitTestCase {
         $this->assertIdentical($page->getField(new SimpleByName('b')), 'bbb');
     }
 
+    function testEntitiesAreDecodedInDefaultTextFieldValue() {
+        $raw = '<form><input type="text" name="a" value="&amp;\'&quot;&lt;&gt;"></form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertEqual($page->getField(new SimpleByName('a')), '&\'"<>');
+    }
+
     function testReadingTextFieldIsCaseInsensitive() {
         $raw = '<html><head><FORM>' .
                 '<INPUT TYPE="TEXT" NAME="a">' .
@@ -400,6 +406,12 @@ abstract class TestOfParsing extends UnitTestCase {
         $this->assertEqual($page->getField(new SimpleByName('a')), 'aaa');
     }
 
+    function testEntitiesAreDecodedInTextareaValue() {
+        $raw = '<form><textarea name="a">&amp;\'&quot;&lt;&gt;</textarea></form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertEqual($page->getField(new SimpleByName('a')), '&\'"<>');
+    }
+
     function testSettingTextArea() {
         $raw = '<form>' .
                 '<textarea name="a">aaa</textarea>' .
@@ -456,6 +468,41 @@ abstract class TestOfParsing extends UnitTestCase {
         $this->assertTrue($page->setField(new SimpleByName('d'), ''));
     }
 
+    function testTwoSelectionFieldsAreIndependent() {
+        $raw = '<form>
+                    <select id=4 name="d">
+                        <option value="d1" selected>D1</option>
+                        <option value="d2">D2</option>
+                    </select>
+                    <select id=11 name="h">
+                        <option value="h1">H1</option>
+                        <option value="h2" selected>H2</option>
+                    </select>
+                </form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertTrue($page->setField(new SimpleByName('d'), 'd2'));
+        $this->assertTrue($page->setField(new SimpleByName('h'), 'h1'));
+        $this->assertEqual($page->getField(new SimpleByName('d')), 'd2');
+    }
+
+    function testEmptyOptionDoesNotScrewUpTwoSelectionFields() {
+        $raw = '<form>
+                    <select name="d">
+                        <option value="d1" selected>D1</option>
+                        <option value="d2">D2</option>
+                        <option></option>
+                    </select>
+                    <select name="h">
+                        <option value="h1">H1</option>
+                        <option value="h2" selected>H2</option>
+                    </select>
+                </form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertTrue($page->setField(new SimpleByName('d'), 'd2'));
+        $this->assertTrue($page->setField(new SimpleByName('h'), 'h1'));
+        $this->assertEqual($page->getField(new SimpleByName('d')), 'd2');
+    }
+
     function testSettingSelectionFieldByEnclosingLabel() {
         $raw = '<form>' .
                 '<label>Stuff' .
@@ -466,6 +513,27 @@ abstract class TestOfParsing extends UnitTestCase {
         $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'A');
         $this->assertTrue($page->setField(new SimpleByLabel('Stuff'), 'B'));
         $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'B');
+    }
+
+    function testTwoSelectionFieldsWithLabelsAreIndependent() {
+        $raw = '<form>
+                    <label>Labelled D
+                        <select id=4 name="d">
+                            <option value="d1" selected>D1</option>
+                            <option value="d2">D2</option>
+                        </select>
+                    </label>
+                    <label>Labelled H
+                        <select id=11 name="h">
+                            <option value="h1">H1</option>
+                            <option value="h2" selected>H2</option>
+                        </select>
+                    </label>
+                </form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertTrue($page->setField(new SimpleByLabel('Labelled D'), 'd2'));
+        $this->assertTrue($page->setField(new SimpleByLabel('Labelled H'), 'h1'));
+        $this->assertEqual($page->getField(new SimpleByLabel('Labelled D')), 'd2');
     }
 
     function testSettingRadioButtonByEnclosingLabel() {
@@ -517,9 +585,14 @@ class TestOfParsingUsingPhpParser extends TestOfParsing {
         $this->assertEqual($page->getTitle(), "Me&Me");
     }
 
+    function testLabelShouldStopAtClosingLabelTag() {
+        $raw = '<form><label>start<textarea id=3 name="c" wrap="hard">stuff</textarea>end</label>stuff</form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertEqual($page->getField(new SimpleByLabel('startend')), 'stuff');
+    }
 }
 
-abstract class TestOfParsingUsingTidyParser extends TestOfParsing {
+class TestOfParsingUsingTidyParser extends TestOfParsing {
 
     function skip() {
         $this->skipUnless(extension_loaded('tidy'), 'Install \'tidy\' php extension to enable html tidy based parser');
