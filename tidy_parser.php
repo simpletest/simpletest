@@ -177,6 +177,7 @@ class SimpleTidyPageBuilder {
 
 
     private function collectFrames($node) {
+        $frames = array();
         if ($node->name == 'frame') {
             $frames = array($this->tags()->createTag($node->name, (array)$node->attribute));
         } else if ($node->hasChildren()) {

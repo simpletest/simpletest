@@ -513,7 +513,7 @@ class TestOfParsingUsingPhpParser extends TestOfParsing {
 
 }
 
-abstract class TestOfParsingUsingTidyParser extends TestOfParsing {
+class TestOfParsingUsingTidyParser extends TestOfParsing {
 
     function skip() {
         $this->skipUnless(extension_loaded('tidy'), 'Install \'tidy\' php extension to enable html tidy based parser');
