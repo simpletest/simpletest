@@ -23,12 +23,19 @@ class SimpleTidyPageBuilder {
     /**
      *    Frees up any references so as to allow the PHP garbage
      *    collection from unset() to work.
-     *    @access public
      */
-    public function free() {
+    private function free() {
         unset($this->page);
-        unset($this->forms);
-        unset($this->labels);
+        $this->forms = array();
+        $this->labels = array();
+    }
+
+    /**
+     *    This builder is only available if the 'tidy' extension is loaded.
+     *    @return boolean       True if available.
+     */
+    function can() {
+        return extension_loaded('tidy');
     }
 
     /**
@@ -47,7 +54,9 @@ class SimpleTidyPageBuilder {
         }
         $this->walkTree($tidied->html());
         $this->page->setForms($this->attachLabels($this->forms, $this->labels));
-        return $this->page;
+        $page = $this->page;
+        $this->free();
+        return $page;
     }
 
     /**

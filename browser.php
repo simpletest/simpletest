@@ -18,6 +18,9 @@ require_once(dirname(__FILE__) . '/tidy_parser.php');
 require_once(dirname(__FILE__) . '/selector.php');
 require_once(dirname(__FILE__) . '/frames.php');
 require_once(dirname(__FILE__) . '/user_agent.php');
+if (! SimpleTest::getPageBuilders()) {
+    SimpleTest::setPageBuilders(array(new SimplePHPPageBuilder()));
+}
 /**#@-*/
 
 if (!defined('DEFAULT_MAX_NESTED_FRAMES')) {
@@ -210,14 +213,15 @@ class SimpleBrowser {
      *    parser is used.
      *    @return SimplePHPPageBuilder or SimpleTidyPageBuilder
      */
-    protected function createBuilder() {
+    protected function getBuilder() {
         if ($this->builder) {
             return $this->builder;
         }
-        if (false and extension_loaded('tidy')) {
-            return new SimpleTidyPageBuilder();
+        foreach (SimpleTest::getPageBuilders() as $builder) {
+            if ($builder->can()) {
+                return $builder;
+            }
         }
-        return new SimplePHPPageBuilder();
     }
 
     /**
@@ -292,11 +296,7 @@ class SimpleBrowser {
      *    @return SimplePage                     Parsed top level page.
      */
     protected function buildPage($response) {
-        $builder = $this->createBuilder();
-        $page = $builder->parse($response);
-        $builder->free();
-        unset($builder);
-        return $page;
+        return $this->getBuilder()->parse($response);
     }
 
     /**

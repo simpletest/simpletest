@@ -708,6 +708,20 @@ class SimplePhpPageBuilder {
         unset($this->tags);
         unset($this->page);
         unset($this->private_content_tags);
+        $this->open_forms = array();
+        $this->complete_forms = array();
+        $this->frameset = false;
+        $this->loading_frames = array();
+        $this->frameset_nesting_level = 0;
+        $this->left_over_labels = array();
+    }
+
+    /**
+     *    This builder is always available.
+     *    @return boolean       Always true.
+     */
+    function can() {
+        return true;
     }
 
     /**
@@ -723,7 +737,9 @@ class SimplePhpPageBuilder {
         $parser = $this->createParser($this);
         $parser->parse($response->getContent());
         $this->acceptPageEnd();
-        return $this->page;
+        $page = $this->page;
+        $this->free();
+        return $page;
     }
 
     /**

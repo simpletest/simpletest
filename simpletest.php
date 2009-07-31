@@ -175,6 +175,30 @@ class SimpleTest {
     }
 
     /**
+     *    Accessor for default page builders.
+     *    These are actually parsers of the HTML.
+     *    @return array     List of parsers to try in
+     *                      order until one responds true
+     *                      to can().
+     */
+    static function getPageBuilders() {
+        $registry = &SimpleTest::getRegistry();
+        return $registry['PageBuilders'];
+    }
+
+    /**
+     *    Set the list of page builders.
+     *    These are actually parsers of the HTML.
+     *    @param array $builders    List of parsers to try in
+     *                              order until one responds true
+     *                              to can().
+     */
+    static function setPageBuilders($builders) {
+        $registry = &SimpleTest::getRegistry();
+        $registry['PageBuilders'] = $builders;
+    }
+
+    /**
      *    Accessor for global registry of options.
      *    @return hash           All stored values.
      *    @access private
@@ -208,6 +232,7 @@ class SimpleTest {
      */
     protected static function getDefaults() {
         return array(
+                'PageBuilders' => false,
                 'MockBaseClass' => 'SimpleMock',
                 'IgnoreList' => array(),
                 'DefaultProxy' => false,
