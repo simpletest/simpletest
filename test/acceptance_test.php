@@ -5,7 +5,6 @@ require_once(dirname(__FILE__) . '/../compatibility.php');
 require_once(dirname(__FILE__) . '/../browser.php');
 require_once(dirname(__FILE__) . '/../web_tester.php');
 require_once(dirname(__FILE__) . '/../unit_tester.php');
-SimpleTest::setParsers(array(new SimpleTidyPageBuilder(), new SimplePHPPageBuilder()));
 
 class SimpleTestAcceptanceTest extends WebTestCase {
     static function samples() {
