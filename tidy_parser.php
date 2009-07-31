@@ -68,7 +68,11 @@ class SimpleTidyPageBuilder {
      *    @return string     The html with guard tags inserted.
      */
     private function guardEmptyTags($html) {
-        return preg_replace('|<([^>/][^>]*)>(\s*)</|', '<\1><empty>\2</', $html);
+        return preg_replace('#<(option|textarea)([^>]*)>(\s*)</(option|textarea)>#', '<\1\2><empty />\3</\4', $html);
+    }
+
+    private function stripGuards($html) {
+        return preg_replace('#(^|>)(\s*)<empty>(\s*)(</|$)#i', '\2\3', $html);
     }
 
     /**
@@ -204,7 +208,7 @@ class SimpleTidyPageBuilder {
                 $raw .= $child->value;
             }
         }
-        return $raw;
+        return $this->stripGuards($raw);
     }
 
     private function tags() {
