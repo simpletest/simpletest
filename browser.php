@@ -18,8 +18,8 @@ require_once(dirname(__FILE__) . '/tidy_parser.php');
 require_once(dirname(__FILE__) . '/selector.php');
 require_once(dirname(__FILE__) . '/frames.php');
 require_once(dirname(__FILE__) . '/user_agent.php');
-if (! SimpleTest::getPageBuilders()) {
-    SimpleTest::setPageBuilders(array(new SimplePHPPageBuilder()));
+if (! SimpleTest::getParsers()) {
+    SimpleTest::setParsers(array(new SimplePHPPageBuilder()));
 }
 /**#@-*/
 
@@ -168,7 +168,7 @@ class SimpleBrowser {
     private $history;
     private $ignore_frames;
     private $maximum_nested_frames;
-    private $builder;
+    private $parser;
 
     /**
      *    Starts with a fresh browser with no
@@ -208,29 +208,28 @@ class SimpleBrowser {
     }
 
     /**
-     *    Select the optimal page builder to use. If HTML tidy is
-     *    installed, that will be used. Otherwise, the native PHP
-     *    parser is used.
-     *    @return SimplePHPPageBuilder or SimpleTidyPageBuilder
+     *    Get the HTML parser to use. Can be overridden by
+     *    setParser. Otherwise scans through the available parsers and
+     *    uses the first one which is available.
+     *    @return object SimplePHPPageBuilder or SimpleTidyPageBuilder
      */
-    protected function getBuilder() {
-        if ($this->builder) {
-            return $this->builder;
+    protected function getParser() {
+        if ($this->parser) {
+            return $this->parser;
         }
-        foreach (SimpleTest::getPageBuilders() as $builder) {
-            if ($builder->can()) {
-                return $builder;
+        foreach (SimpleTest::getParsers() as $parser) {
+            if ($parser->can()) {
+                return $parser;
             }
         }
     }
 
     /**
-     *    Override the default builder, allowing different page
-     *    builders (parsers) to be plugged in.
-     *    @param object           A page builder.
+     *    Override the default HTML parser, allowing parsers to be plugged in.
+     *    @param object           A parser object instance.
      */
-    public function setPageBuilder($builder) {
-        $this->builder = $builder;
+    public function setParser($parser) {
+        $this->parser = $parser;
     }
 
     /**
@@ -296,7 +295,7 @@ class SimpleBrowser {
      *    @return SimplePage                     Parsed top level page.
      */
     protected function buildPage($response) {
-        return $this->getBuilder()->parse($response);
+        return $this->getParser()->parse($response);
     }
 
     /**

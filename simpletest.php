@@ -175,27 +175,25 @@ class SimpleTest {
     }
 
     /**
-     *    Accessor for default page builders.
-     *    These are actually parsers of the HTML.
+     *    Accessor for default HTML parsers.
      *    @return array     List of parsers to try in
      *                      order until one responds true
      *                      to can().
      */
-    static function getPageBuilders() {
+    static function getParsers() {
         $registry = &SimpleTest::getRegistry();
-        return $registry['PageBuilders'];
+        return $registry['Parsers'];
     }
 
     /**
-     *    Set the list of page builders.
-     *    These are actually parsers of the HTML.
-     *    @param array $builders    List of parsers to try in
-     *                              order until one responds true
-     *                              to can().
+     *    Set the list of HTML parsers to attempt to use by default.
+     *    @param array $parsers    List of parsers to try in
+     *                             order until one responds true
+     *                             to can().
      */
-    static function setPageBuilders($builders) {
+    static function setParsers($parsers) {
         $registry = &SimpleTest::getRegistry();
-        $registry['PageBuilders'] = $builders;
+        $registry['Parsers'] = $parsers;
     }
 
     /**
@@ -232,7 +230,7 @@ class SimpleTest {
      */
     protected static function getDefaults() {
         return array(
-                'PageBuilders' => false,
+                'Parsers' => false,
                 'MockBaseClass' => 'SimpleMock',
                 'IgnoreList' => array(),
                 'DefaultProxy' => false,

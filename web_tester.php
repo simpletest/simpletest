@@ -486,7 +486,16 @@ class WebTestCase extends SimpleTestCase {
     function setBrowser($browser) {
         return $this->browser = $browser;
     }
-        
+
+    /**
+     *    Sets the HTML parser to use within this browser. 
+     *    @param object         The parser, one of SimplePHPPageBuilder or
+     *                          SimpleTidyPageBuilder.
+     */
+    function setParser($parser) {
+        $this->browser->setParser($parser);
+    }
+
     /**
      *    Clears the current browser reference to help the
      *    PHP garbage collector.
