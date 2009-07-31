@@ -353,16 +353,10 @@ abstract class TestOfParsing extends UnitTestCase {
         $this->assertEqual($page->getField(new SimpleByLabel('Stuff')), 'aaa');
     }
 
-    function TODO_testTwoForms() {
+    function testLabelsWithoutForDoNotAttachToInputsWithNoId() {
         $raw = '<form action="network_confirm.php?x=X&y=Y" method="post">
             <label>Text A <input type="text" name="a" value="one"></label>
-            <br />
-            <input type="submit" name="go" value="Go!">
-        </form>
-        <form action="network_confirm.php?x=X&amp;y=Y" method="post">
             <label>Text B <input type="text" name="b" value="two"></label>
-            <br />
-            <input type="submit" name="go" value="Go encoded!">
         </form>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByLabelOrName('Text A')), 'one');
@@ -466,21 +460,6 @@ abstract class TestOfParsing extends UnitTestCase {
         $this->assertEqual($page->getField(new SimpleByName('third')), 'three');
     }
 
-    function testEnclosingLabelsCanAttachToOtherInputsUsingForAttribute() {
-        $raw = '<form>' .
-                '<label for="that">Label <input type=text name=this value=a></label>' .
-                '<input type=text id=that name=that value=b>' .
-                '</form>';
-        $page = $this->whenVisiting('http://host', $raw);
-        $this->assertEqual($page->getField(new SimpleByName('this')), 'a');
-        $this->assertEqual($page->getField(new SimpleByName('that')), 'b');
-        $this->assertTrue($page->setField(new SimpleByLabel('Label'), 'z'));
-        $this->assertEqual($page->getField(new SimpleByName('this')), 'z');
-        // TODO: the old php parser only attaches the label to the encosed input, not to the
-        // input referenced by id in the 'for' attribute. Do we want to retain this behaviour?
-        // $this->assertEqual($page->getField(new SimpleByName('that')), 'b');
-    }
-
     function urlToString($url) {
         return $url->asString();
     }
@@ -491,7 +470,7 @@ abstract class TestOfParsing extends UnitTestCase {
     }
 }
 
-class TestOfParsingUsingPhpParser extends TestOfParsing {
+abstract class TestOfParsingUsingPhpParser extends TestOfParsing {
 
     function whenVisiting($url, $content) {
         $response = new MockSimpleHttpResponse();
@@ -506,7 +485,6 @@ class TestOfParsingUsingPhpParser extends TestOfParsing {
                                     '<html><head><Title> <b>Me&amp;Me </TITLE></b></head></html>');
         $this->assertEqual($page->getTitle(), "Me&Me");
     }
-
 }
 
 class TestOfParsingUsingTidyParser extends TestOfParsing {

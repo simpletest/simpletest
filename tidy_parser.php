@@ -92,8 +92,7 @@ class SimpleTidyPageBuilder {
                     $this->walkForm($child, $form, SimplePage::normalise($this->innerHtml($node)));
                 }
             }
-        }
-        else if ($node->hasChildren()) {
+        } elseif ($node->hasChildren()) {
             foreach ($node->child as $child) {
                 $this->walkForm($child, $form);
             }
@@ -193,9 +192,11 @@ class SimpleTidyPageBuilder {
     private function attachLabels($forms, $labels) {
         foreach ($labels as $label) {
             foreach($forms as $form) {
-                $form->attachLabelBySelector(
+                if ($label->getFor()) {
+                    $form->attachLabelBySelector(
                         new SimpleById($label->getFor()),
                         $label->getText());
+                }
             }
         }
         return $forms;
