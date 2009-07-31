@@ -485,6 +485,18 @@ abstract class TestOfParsingUsingPhpParser extends TestOfParsing {
                                     '<html><head><Title> <b>Me&amp;Me </TITLE></b></head></html>');
         $this->assertEqual($page->getTitle(), "Me&Me");
     }
+
+    function testCanParseBlankOptions() {
+        $raw = '<form>
+                <select id=4 name="d">
+                    <option value="d1">D1</option>
+                    <option value="d2">D2</option>
+                    <option></option>
+                </select>
+            </form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertTrue($page->setField(new SimpleByName('d'), ''));
+    }
 }
 
 class TestOfParsingUsingTidyParser extends TestOfParsing {
@@ -500,5 +512,6 @@ class TestOfParsingUsingTidyParser extends TestOfParsing {
         $builder = new SimpleTidyPageBuilder();
         return $builder->parse($response);
     }
+
 }
 ?>
