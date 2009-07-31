@@ -410,6 +410,12 @@ abstract class TestOfParsing extends UnitTestCase {
         $this->assertEqual($page->getField(new SimpleByName('a')), 'AAA');
     }
 
+    function testDontIncludeTextAreaContentInLabel() {
+        $raw = '<form><label>Text area C<textarea id=3 name="c">mouse</textarea></label></form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertEqual($page->getField(new SimpleByLabel('Text area C')), 'mouse');
+    }
+
     function testSettingSelectionField() {
         $raw = '<form>' .
                 '<select name="a">' .
@@ -513,7 +519,7 @@ class TestOfParsingUsingPhpParser extends TestOfParsing {
 
 }
 
-class TestOfParsingUsingTidyParser extends TestOfParsing {
+abstract class TestOfParsingUsingTidyParser extends TestOfParsing {
 
     function skip() {
         $this->skipUnless(extension_loaded('tidy'), 'Install \'tidy\' php extension to enable html tidy based parser');
