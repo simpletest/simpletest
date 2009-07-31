@@ -46,7 +46,9 @@ class SimpleTidyPageBuilder {
      */
     function parse($response) {
         $this->page = new SimplePage($response);
-        $tidied = tidy_parse_string($response->getContent(), array('output-html' => true), 'latin1');
+        $tidied = tidy_parse_string($this->guardEmptyTags($response->getContent()), 
+                                    array('output-html' => true, 'new-empty-tags' => 'empty', 'new-inline-tags' => 'empty'), 
+                                    'latin1');
         if ($tidied->errorBuffer) {
             foreach(explode("\n", $tidied->errorBuffer) as $notice) {
                 //user_error($notice, E_USER_NOTICE);
@@ -57,6 +59,16 @@ class SimpleTidyPageBuilder {
         $page = $this->page;
         $this->free();
         return $page;
+    }
+
+    /**
+     *    HTML tidy strips out empty tags such as <option> which we
+     *    need to preserve. This method inserts an additional tag.
+     *    @param string      The raw html.
+     *    @return string     The html with guard tags inserted.
+     */
+    private function guardEmptyTags($html) {
+        return preg_replace('|<([^>/][^>]*)>(\s*)</|', '<\1><empty>\2</', $html);
     }
 
     /**
@@ -127,7 +139,7 @@ class SimpleTidyPageBuilder {
         $options = array();
         if ($node->name == 'option') {
             $options[] = $this->tags()->createTag($node->name, $this->attributes($node))
-                                         ->addContent($this->innerHtml($node));
+                                      ->addContent($this->innerHtml($node));
         }
         if ($node->hasChildren()) {
             foreach ($node->child as $child) {

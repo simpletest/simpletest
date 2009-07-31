@@ -425,6 +425,31 @@ abstract class TestOfParsing extends UnitTestCase {
         $this->assertEqual($page->getField(new SimpleByName('a')), 'aaa');
     }
 
+    function testSelectionOptionsAreNormalised() {
+        $raw = '<form>' .
+                '<select name="a">' .
+                '<option selected><b>Big</b> bold</option>' .
+                '<option>small <em>italic</em></option>' .
+                '</select>' .
+                '</form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertEqual($page->getField(new SimpleByName('a')), 'Big bold');
+        $this->assertTrue($page->setField(new SimpleByName('a'), 'small italic'));
+        $this->assertEqual($page->getField(new SimpleByName('a')), 'small italic');
+    }
+
+    function testCanParseBlankOptions() {
+        $raw = '<form>
+                <select id=4 name="d">
+                    <option value="d1">D1</option>
+                    <option value="d2">D2</option>
+                    <option></option>
+                </select>
+                </form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertTrue($page->setField(new SimpleByName('d'), ''));
+    }
+
     function testSettingSelectionFieldByEnclosingLabel() {
         $raw = '<form>' .
                 '<label>Stuff' .
@@ -470,7 +495,7 @@ abstract class TestOfParsing extends UnitTestCase {
     }
 }
 
-abstract class TestOfParsingUsingPhpParser extends TestOfParsing {
+class TestOfParsingUsingPhpParser extends TestOfParsing {
 
     function whenVisiting($url, $content) {
         $response = new MockSimpleHttpResponse();
@@ -486,20 +511,9 @@ abstract class TestOfParsingUsingPhpParser extends TestOfParsing {
         $this->assertEqual($page->getTitle(), "Me&Me");
     }
 
-    function testCanParseBlankOptions() {
-        $raw = '<form>
-                <select id=4 name="d">
-                    <option value="d1">D1</option>
-                    <option value="d2">D2</option>
-                    <option></option>
-                </select>
-            </form>';
-        $page = $this->whenVisiting('http://host', $raw);
-        $this->assertTrue($page->setField(new SimpleByName('d'), ''));
-    }
 }
 
-class TestOfParsingUsingTidyParser extends TestOfParsing {
+abstract class TestOfParsingUsingTidyParser extends TestOfParsing {
 
     function skip() {
         $this->skipUnless(extension_loaded('tidy'), 'Install \'tidy\' php extension to enable html tidy based parser');
@@ -512,6 +526,5 @@ class TestOfParsingUsingTidyParser extends TestOfParsing {
         $builder = new SimpleTidyPageBuilder();
         return $builder->parse($response);
     }
-
 }
 ?>

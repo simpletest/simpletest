@@ -1017,7 +1017,7 @@ class SimpleOptionTag extends SimpleWidget {
         if (trim($this->getValue()) == $compare) {
             return true;
         }
-        return trim($this->getContent()) == $compare;
+        return trim(strip_tags($this->getContent())) == $compare;
     }
 
     /**
@@ -1028,7 +1028,7 @@ class SimpleOptionTag extends SimpleWidget {
      */
     function getDefault() {
         if ($this->getAttribute('value') === false) {
-            return $this->getContent();
+            return strip_tags($this->getContent());
         }
         return $this->getAttribute('value');
     }
