@@ -574,7 +574,7 @@ abstract class TestOfParsing extends UnitTestCase {
     }
 }
 
-class TestOfParsingUsingPhpParser extends TestOfParsing {
+abstract class TestOfParsingUsingPhpParser extends TestOfParsing {
 
     function whenVisiting($url, $content) {
         $response = new MockSimpleHttpResponse();

@@ -15,6 +15,7 @@ class SimpleTidyPageBuilder {
     private $page;
     private $forms = array();
     private $labels = array();
+    private $widgets_by_id = array();
 
     public function __destruct() {
         $this->free();
@@ -57,7 +58,8 @@ class SimpleTidyPageBuilder {
             }
         }
         $this->walkTree($tidied->html());
-        $this->page->setForms($this->attachLabels($this->forms, $this->labels));
+        $this->attachLabels($this->widgets_by_id, $this->labels);
+        $this->page->setForms($this->forms);
         $page = $this->page;
         $this->free();
         return $page;
@@ -142,6 +144,18 @@ class SimpleTidyPageBuilder {
             $widget->addTags($this->collectSelectOptions($node));
         }
         $form->addWidget($widget);
+        $this->indexWidgetById($widget);
+    }
+
+    private function indexWidgetById($widget) {
+        $id = $widget->getAttribute('id');
+        if (! $id) {
+            return;
+        }
+        if (! isset($this->widgets_by_id[$id])) {
+            $this->widgets_by_id[$id] = array();
+        }
+        $this->widgets_by_id[$id][] = $widget;
     }
 
     private function collectSelectOptions($node) {
@@ -219,17 +233,16 @@ class SimpleTidyPageBuilder {
         return new SimpleTagBuilder();
     }
 
-    private function attachLabels($forms, $labels) {
+    private function attachLabels($widgets_by_id, $labels) {
         foreach ($labels as $label) {
-            foreach($forms as $form) {
-                if ($label->getFor()) {
-                    $form->attachLabelBySelector(
-                        new SimpleById($label->getFor()),
-                        $label->getText());
+            $for = $label->getFor();
+            if ($for and isset($widgets_by_id[$for])) {
+                $text = $label->getText();
+                foreach ($widgets_by_id[$for] as $widget) {
+                    $widget->setLabel($text); 
                 }
             }
         }
-        return $forms;
     }
 }
 ?>
