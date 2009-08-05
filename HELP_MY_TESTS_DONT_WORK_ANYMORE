@@ -5,6 +5,19 @@ written with earlier versions will fail with the newest ones. The most
 dramatic changes are in the alpha releases. Here is a list of possible
 problems and their fixes...
 
+assertText() no longer finds a string inside a <script> tag
+===========================================================
+
+The assertText() method is intended to match only visible,
+human-readable text on the web page. Therefore, the contents of script
+tags should not be matched by this assertion. However there was a bug
+in the text normalisation code of simpletest which meant that <script>
+tags spanning multiple lines would not have their content stripped
+out.
+
+If you want to check the content of a <script> tag, use
+assertPattern(), or write a custom expectation.
+
 Overloaded method not working
 -----------------------------
 

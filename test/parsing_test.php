@@ -303,6 +303,11 @@ abstract class TestOfParsing extends UnitTestCase {
                 new SimpleGetEncoding(array('s' => 'Submit')));
     }
 
+    function testUnparsedTagDoesNotCrash() {
+        $raw = '<form><input type="reset" name="Clear"></form>';
+        $this->whenVisiting('http://host', $raw);
+    }
+
     function testReadingTextField() {
         $raw = '<html><head><form>' .
                 '<input type="text" name="a">' .

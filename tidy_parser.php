@@ -132,9 +132,12 @@ class SimpleTidyPageBuilder {
     }
 
     private function addWidgetToForm($node, $form, $enclosing_label) {
-        $widget = $this->tags()->createTag($node->name, $this->attributes($node))
-                               ->setLabel($enclosing_label)
-                               ->addContent($this->innerHtml($node));
+        $widget = $this->tags()->createTag($node->name, $this->attributes($node));
+        if (! $widget) {
+            return;
+        }
+        $widget->setLabel($enclosing_label)
+               ->addContent($this->innerHtml($node));
         if ($node->name == 'select') {
             $widget->addTags($this->collectSelectOptions($node));
         }
@@ -176,11 +179,10 @@ class SimpleTidyPageBuilder {
 
     private function dequote($quoted) {
         if (preg_match('/^(\'([^\']*)\'|"([^"]*)")$/', $quoted, $matches)) {
-            return $matches[2] ? $matches[2] : $matches[3];
+            return isset($matches[3]) ? $matches[3] : $matches[2];
         }
         return $quoted;
     }
-
 
     private function collectFrames($node) {
         $frames = array();
