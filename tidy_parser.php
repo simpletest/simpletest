@@ -84,7 +84,7 @@ class SimpleTidyPageBuilder {
         if ($node->name == 'a') {
             $this->page->addLink($this->tags()->createTag($node->name, (array)$node->attribute)
                                         ->addContent($this->innerHtml($node)));
-        } elseif ($node->name == 'base') {
+        } elseif ($node->name == 'base' and isset($node->attribute['href'])) {
             $this->page->setBase($node->attribute['href']);
         } elseif ($node->name == 'title') {
             $this->page->setTitle($this->tags()->createTag($node->name, (array)$node->attribute)
