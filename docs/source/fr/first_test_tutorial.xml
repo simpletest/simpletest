@@ -16,7 +16,7 @@
                 vous aurez besoin de créer un nouveau répertoire
                 et d'y installer trois dossiers :
                 <em>classes</em>, <em>tests</em> et <em>temp</em>.
-                Dézippez le framework <a href="simple_test.php">SimpleTest</a>
+                Dézippez le framework <a href="download.php">SimpleTest</a>
                 dans le dossier <em>tests</em>
                 et assurez vous que votre serveur web puisse atteindre ces endroits.
             </p>

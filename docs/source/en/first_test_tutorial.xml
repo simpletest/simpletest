@@ -13,7 +13,7 @@
             <p>
                 To run the examples as is, you need an empty directory with the folders
                 <em>classes</em>, <em>tests</em> and <em>temp</em>.
-                Unpack the <a href="simple_test.php">SimpleTest</a> framework
+                Unpack the <a href="download.php">SimpleTest</a> framework
                 into the <em>tests</em> folder and make sure your web server
                 can reach these locations.
             </p>
