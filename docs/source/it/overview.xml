@@ -9,13 +9,13 @@
             <p>
                 Il cuore di SimpleTest è un framework costruito intorno a classi
 				di test case. Queste ereditano delle classi test case di base
-				ed vengono estese con dei metodi che contengolo il codice di collaudo.
+				e vengono estese con dei metodi che contengono il codice di collaudo.
                 Ogni metodo di test di una classe test case è concepito per invocare
-				una serie di metodi assert come <code>assertEqual()</code> che lo sviluppatore
-				si aspetta che vengano confermati.
-                Se il risultato atteso viene confermata allora il buon
-				fine viene comunicato al test reporter in ascolto mentre qualsiasi
-				insuccesso o qualsiasi eccezione inattesa scatena un alert con una
+				una serie di metodi assert, come <code>assertEqual()</code>, che lo sviluppatore
+				si attende vengano confermati.
+                Se il risultato atteso viene confermato allora successo dell'operazione
+				viene comunicato al test reporter che è in ascolto mentre qualsiasi
+				insuccesso o qualsiasi eccezione inattesa scatena un alert con la
 				relativa descrizione della discordanza.
 				
                 Le dichiarazioni contenute del test case vengono convertite in
@@ -24,13 +24,13 @@
                 
             </p>
             <p>
-                Nonostante i molti sforzi che sono stati spesi per mantenere la
+                Nonostante i molti sforzi intrapresi per mantenere la
 				compatibilità tra le varie versioni, la presente documentazione si riferisce 
 				alla versione 1.1 di SimpleTest.
 				
-				Nel caso si rilevi una failure nei test dopo un aggiornamento,
+				Nel caso si rilevi un malfunzionamento nei test dopo un aggiornamento,
 				si provi a consultare i file &quot;HELP_MY_TESTS_DONT_WORK_ANYMORE&quot; nella
-				directory simpletest per vedere se una delle feature che si stanno utilizzando
+				directory simpletest per accertarsi della possibilità che una delle feature che si stanno utilizzando
 				sia stata rimossa o indicata come deprecata.
             </p>
             <p>
@@ -55,26 +55,26 @@ class <strong>MyTestCase</strong> extends UnitTestCase {
 				SimpleTest è pensato per essere utilizzato da sviluppatori.
                 I destinatari di questo tool includono tutti gli sviluppatori
 				di applicazioni PHP di medie dimensioni, compresi gli sviluppatori
-				che si sono approcciati da poco all'argomento dello unit testing e del
+				che si sono avvicinati da poco all'argomento dello unit testing e del
 				web regression testing.
-                I principi cardine di SimpleTest sono la facilità d'uso, l'estendibilità e 
+                I principi cardine di SimpleTest sono la sua facilità d'uso, l'estendibilità e 
 				l'essenzialità delle sue caratteristiche.
             </p>
             <p>
-                I test vengono scritti direttamente in PHP, più o meno come lo è l'applicazione.
+                I test vengono scritti direttamente in PHP, cioè nel linguaggio principale dell'applicazione.
 				Il vantaggio nell'uso del PHP come linguaggio di testing risiede nel
-				non dover imparare un nuovo linguaggio i modo da poter iniziare
-				immediatamente ad implementare i test e da dare la possibilità allo sviluppatore di 
+				non dover imparare un nuovo linguaggio e nelle possibilità di iniziare
+				immediatamente ad implementare i test e da permettere allo sviluppatore di 
 				collaudare uan qualsiasi parte del codice.
 				Fondamentalmente, qualsiasi sezione possa essere raggiunto dal codice dell'applicazione può
-				essere anche raggiunto dal codice di test, dal momento che entrambi utilizzano il
+				essere anche raggiunta dal codice di test dal momento che entrambi utilizzano il
 				medesimo linguaggio di programmazione.
             </p>
             <p>
 				Il tipo più semplice di case test è lo 
 				<a local="unit_tester_documentation">UnitTestCase</a>.
-				Questa classe comprende i test standard per valutare l'uguaglianza dei valori e
-				dei riferimenti e il matching con pattern.
+				Questa classe comprende i test standard per valutare l'uguaglianza di valori e
+				riferimenti e il matching con pattern.
 				Tutti questi test eseguono delle verifiche sui valori attesi come ritorno di 
 				funzioni e metodi.
 				Si tratta senz'altro del tipo più comune di test nell'attività quotidiana di sviluppo
@@ -83,12 +83,12 @@ class <strong>MyTestCase</strong> extends UnitTestCase {
                 
             </p>
             <p>
-				L'obiettivo principale di un'applicazione web non è quello di
+				Tuttavia, l'obiettivo principale di un'applicazione web non è quello di
 				produrre gli output corretti dai suoi metodi e dai suoi oggetti ma quello
 				di generare pagine web.
 				La classe <a local="web_tester_documentation">WebTestCase</a> collauda le pagine web.
-                Simula l'attività di un browser che richiede una pagina e supporta i cookie, i proxy,
-				le connessioni sicure, l'autentiazione, i form, i frame e molti altri elementi di navigazione.
+                Simula l'attività di un browser che stia richiedendo una pagina e supporta cookie, proxy,
+				connessioni sicure, autenticazione, form, frame e molti altri elementi di navigazione.
                 Con questa tipologia di test case lo sviluppatore può verificare che le informazioni
 				presenti sulla pagina, sul form e nelle sessioni siano manipolate in modo corretto.
                 
@@ -116,19 +116,19 @@ class <strong>MySiteTest</strong> extends WebTestCase {
         </section>
         <section name="features" title="Feature list">
             <p>
-                Quanto segue è una grossonala panoramica delle caratteristiche esistenti e
-				future di SimpleTest e del momento previsto per il loro rilascio.
-				Temo che questo elenco possa cambiare senza preavviso dal momento che
+                Quanto segue è una grossolana panoramica delle caratteristiche esistenti e
+				pianificate per SimpleTest con l'indicazione del momento previsto per il loro rilascio.
+				C'è la possibilità che questo elenco possa cambiare senza preavviso dal momento che
 				le milestone dipendono essenzialmente sul tempo libero che ho a disposizione.
-                Gli elementi colorati in verde sono stati già sviluppati ma non necessariamente
-				rilasciati. Nel caso ci sia una particolare urgenza di accedere ad una
+                Gli elementi colorati in verde sono già stati sviluppati ma non sono stati necessariamente
+				rilasciati. Nel caso ci sia la particolare urgenza di accedere ad una
 				feature già svilupata ma non ancora rilasciata è possibile eseguire un checkout
 				direttamente dal server SVN di Sourceforge.
                 <table><thead>
                     <tr><th>Feature</th><th>Descrizione</th><th>Release</th></tr>
                     </thead><tbody><tr>
                         <td>Unit test case</td>
-                        <td>Classi test case class di base e assert</td>
+                        <td>Classi test case di base e assert</td>
                         <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
@@ -154,36 +154,36 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>Web test case</td>
-                        <td>Permette la navigazione tra link e i match sul tag title</td>
+                        <td>Permette la navigazione tra link e i matching sul tag title</td>
                         <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Mock parziali</td>
                         <td>
-							Eseguono il mocking di parte in una classe in modo da permettere il
-							collaudo di parti elementi più piccoli di una classe e simulazioni
+							Eseguono il mocking di parte in una classe per permettere il
+							collaudo di elementi più piccoli di una classe e simulazioni
 							particolarmente complesse.
                         </td>
                         <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
-                        <td>gestione dei cookie</td>
+                        <td>Gestione dei cookie</td>
                         <td>Manipola i cookie durante la ricezione delle pagine web</td>
                         <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Redirect</td>
-                        <td>Page fetching automatically follows 300 redirects ???</td>
+						<td>Il recupero di una pagina produce automaticamente un redirect 300.</td>
                         <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
                         <td>Parsing dei form</td>
-                        <td>Capacità di inviare semplici form e leggere i loro valori di default</td>
+                        <td>Capacità di compilare semplici form e leggere i loro valori di default</td>
                         <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
-                        <td>Command line interface</td>
-                        <td>Lancia e visualizza i test senza l'utilizzo di un browser</td>
+                        <td>Interfaccia a linea di comando</td>
+                        <td>Lancia e visualizza i test senza l'ausilio di un browser</td>
                         <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
