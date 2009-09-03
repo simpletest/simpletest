@@ -66,7 +66,7 @@ class FileTestCase extends UnitTestCase {
             <p>
                 You can place some test case set up into the constructor to
                 be run once for all the methods in the test case, but
-                you risk test inteference that way.
+                you risk test interference that way.
                 This way is slightly slower, but it is safer.
                 Note that if you come from a JUnit background this will not
                 be the behaviour you are used to.
