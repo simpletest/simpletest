@@ -327,7 +327,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                 </tbody></table>
                 PHP 5 migration is complete, which means that only PHP 5.0.5+
-                will be supported in SimpleTEst version 1.1+.
+                will be supported in SimpleTest version 1.1+.
                 Earlier versions of SimpleTest are compatible with PHP 4.2 up to
                 PHP 5 (non E_STRICT).
             </p>
