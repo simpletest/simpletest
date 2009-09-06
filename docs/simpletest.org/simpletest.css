@@ -22,7 +22,7 @@ div.demo { background-color: white; border: 4px ridge; border-color: gray; margi
 div.demo span.fail { color: red; }
 div.demo span.pass { color: green; }
 div.demo h1 { color: black; font-size: 12pt; font-weight: bold; text-align: left; }
-pre { font-family: monospaced; border-left: 1px solid #999999; background-color: white; padding: 5px; margin-left: 5px; font-size : 10pt; }
+pre { font-family: monospace; border-left: 1px solid #999999; background-color: white; padding: 5px; margin-left: 5px; font-size : 10pt; }
 
 .screenshot { border : 1px solid #cccccc;}
 .experimental { background-color : yellow; border : 4px dashed black; padding : 10px; }
