@@ -5,8 +5,8 @@
     <content>
         <section name="group" title="Grouping tests into suites">
             <p>
-                There are many ways to group tests together into test suites.
-                One way is to simply place multiple test cases into a single file...
+				Eistono molti sistemi per raggruppare i test in test suite.
+				Uno di questi è quello di mettere semplicemente più test case in un singolo file:
 <php><![CDATA[
 <strong><?php
 require_once(dirname(__FILE__) . '/simpletest/autorun.php');
@@ -21,13 +21,15 @@ class SocketTester extends UnitTestCase {
 }
 ?></strong>
 ]]></php>
-                As many cases as needed can appear in a single file.
-                They should include any code they need, such as the library
-                being tested, but need none of the SimpleTest libraries.
+				E' possibile mettere quanti test case si vuole in ogni file.
+				Ogni file necessario all'esecuzione, come ad esempio la libreria da
+				collaudare, dovrebbe essere incluso ma non è necessario includere
+				alcuna libreria di SimpleTest.
             </p>
             <p>
-                If you have extended any test cases, you can include them too.
-                Simply mark any test cases that should not be run as abstract...
+				Nel caso si sia estesa qualche test case da una classe base, anche questa
+				deve essere inclusa.
+                Qualsiasi classe di test non debba essere invocata deve essere marcata come abstract:
 <php><![CDATA[
 <strong>abstract</strong> class MyFileTestCase extends UnitTestCase {
     ...
@@ -37,17 +39,17 @@ class FileTester extends MyFileTestCase { ... }
 
 class SocketTester extends UnitTestCase { ... }
 ]]></php>
-                Here the <code>FileTester</code> class does
-                not contain any actual tests, but is a base class for other
-                test cases.
+				Qui, ad esempio, la classe <code>FileTester</code> non contiene
+				alcun test ma viene utilizzata come classe base per altri case test.
             </p>
             <p>
-                We will call this sample <em>file_test.php</em>.
-                Next we create a test suite file, called say <em>my_test_suite.php</em>.
-                You will think of a better name I am sure.
+				Chiameremo questo file di esempio <em>file_test.php</em>.
+				Il passo successivo è quello di creare il file della test suite
+				che potremmo chiamare <em>my_test_suite.php</em>.
+                Sono certo che saprai trovare nomi migliori di questo.
             </p>
             <p>
-                We will add the test file using a safe method...
+				Adesso aggiungeremo il test file alla suite con un metodo sicuro:
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');
@@ -61,18 +63,17 @@ class AllFileTests extends TestSuite {
 }
 ?>
 ]]></php>
-                What happens here is that the <code>TestSuite</code>
-                class will do the <code>require_once()</code>
-                for us.
-                It then checks to see if any new test case classes
-                have been created by the new file and automatically adds
-                them to the test suite.
-                This method gives us the most control.
+				Quello che accadrà è che la classe <code>TestSuite</code>
+				penserà autonomamente ad eseguire i <code>require_once()</code>
+				necessari, controllerà se nuove classi di test case sono presenti nel
+				file e all'occorrenza li aggiungerà alla test suite.
+				
+                Questo metodo ci fornisce il massimo del controllo.
             </p>
             <p>
-                If this is too much typing, and you are willing to group
-                test suites together in their own directories or otherwise
-                tag the file names, then there is a more automatic way...
+				Nel caso questo metodo sembrasse troppo prolisso e si desiderasse
+				di raggruppare tra loro più test suite di una stessa directory oppure in
+				base al loro nome del file, esiste un metodo ancora più automatico:
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');
@@ -86,36 +87,35 @@ class AllFileTests extends TestSuite {
 }
 ?>
 ]]></php>
-                This will scan a directory called &quot;unit&quot; for any files
-                ending with &quot;_test.php&quot; and load them.
-                You don&apos;t have to use <code>SimplePatternCollector</code> to
-                filter by a pattern in the filename, but this is the most common
-                usage.
+				Questo sistema ricerca nella directory &quot;unit&quot; i file
+				il cui nome termina per &quot;_test.php&quot; e li carica.
+				L'uso di <code>SimplePatternCollector</code> per filtrare in
+				base ad un pattern non è obbligatorio ma è il sistema più comune.
             </p>
             <p>
-                Now all you have to do is drop a file of test cases into the
-                directory and it will run just by running the test suite script.
+				Tutto quel che resta da fare adesso è creare un file nella directory 
+				dei test case che lancerà lo script della test suite.
             </p>
             <p>
-                Test cases loaded with the <code>addFile</code> method have some
-                useful properties.
-                You can guarantee that the constructor is run
-                just before the first test method and the destructor
-                is run just after the last test method.
-                This allows you to place test case wide set up and tear down
-                code in the constructor and destructor, just like a normal
-                class.
+				I test case caricati con il metodo <code>addFile</code> posseggono
+				alcune utili proprietà.
+				Si ha la certezza che il costruttore sia invocato prima del lancio del
+				primo test e il distruttore dopo l'esecuzione dell'ultimo.
+				Questo consente di ospitare nel costruttore e nel distruttore
+				il codice di set up e di tear down che deve valere per tutto il test case.
             </p>
         </section>
         <section name="higher" title="Composite suites">
             <p>
-                The above method places all of the test cases into one large suite.
-                For larger projects though this may not be flexible enough; you
-                may want to group the tests in all sorts of ways.
+				Il metodo appena presentato prevede di ospitare tutti i test case in
+				un'unica grande test suite.
+				Per progetti di grandi dimensione, tuttavia, questo metodo non risulta
+				abbastanza flessibile perché si potrebbe desiderare di raggrupare 
+				test nelle più varie modalità.
             </p>
             <p>
-                To get a more flexible group test we can subclass
-                <code>TestSuite</code> and then instantiate it as needed...
+				Per poter disporre di un group test più flessibile
+				è possibile istanziare una classe che erediti da <code>TestSuite</code>:
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');
@@ -128,11 +128,11 @@ class BigTestSuite extends TestSuite {
 }</strong>
 ?>
 ]]></php>
-                This effectively adds our test cases and a single suite below
-                the first.
-                Not much use as is, but we can add more than one suite at this point.
-                We can even mix groups and test cases freely as long as
-                we are careful about double includes.
+				In questo modo si è aggiunta una test suite dentro un'altra.
+				In questo caso non risulta molto utile ma è possibile aggiungere
+				altre suite a piacimento.
+				E' perfino possibile mescolare gruppi e singoli test case a patto
+				di prestare attenzione alle inclusioni multiple.
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');
@@ -146,8 +146,8 @@ class BigTestSuite extends TestSuite {
 }
 ?>
 ]]></php>
-                In the event of a double include, ony the first instance
-                of the test case will be run.
+                Nel caso si includa un file più di una volta, verrebbe eseguita
+				solo la prima istanza del test.
             </p>
         </section>
     </content>

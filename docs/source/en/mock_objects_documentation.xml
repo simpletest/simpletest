@@ -433,7 +433,7 @@ class DatabaseTest extends UnitTestCase {
             </p>
             <p>
                 Objects with dynamic interfaces, using <code>__call</code>, can
-                be problematic with the current mock objects implemntation.
+                be problematic with the current mock objects implementation.
                 You can mock the <code>__call()</code> method, but this is ugly.
                 Why should a test know anything about such low level implementation details?
                 It just wants to simulate the call.
@@ -571,8 +571,8 @@ function testMissingCvv2CausesAlert() {
             <p>
                 Tests without assertions can be both compact and very expressive.
                 Because we intercept the call on the way into an object, here of
-                the <code>Alert</code> class, we avoid having to assert it's state
-                afterwoods.
+                the <code>Alert</code> class, we avoid having to assert its state
+                afterwards.
                 This not only avoids the assertions in the tests, but also having
                 to add extra test only accessors to the original code.
                 If you catch yourself adding such accessors, called &quot;state based testing&quot;,

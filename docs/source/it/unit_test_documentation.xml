@@ -17,7 +17,7 @@
 				inizino per default con la stringa &quot;test&quot; in modo che quando
 				il test case viene invocato essi vengano lanciato nello stesso ordine
 				in cui l'introspezione di PHP li trova.
-				Possono essere aggiunti quanti metodi di test si desideri.
+				Possono essere aggiunti quanti metodi di test si vuole.
             </p>
             <p>
                 Per esempio:
