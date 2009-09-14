@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- $Id: gain_control_tutorial.xml 1867 2009-03-05 15:49:54Z lastcraft $ -->
-<page title="Taking control of testing" here="Taking control">
+<page title="Prendere il controllo dei test" here="Tutorial: prendere il controllo">
     <long_title>PHP unit testing tutorial - Isolating variables when testing</long_title>
     <content>
         <introduction>

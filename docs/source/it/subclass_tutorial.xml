@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- $Id: subclass_tutorial.xml 1878 2009-06-12 16:39:37Z pp11 $ -->
-<page title="Subclassing a unit test case" here="Reusing cases">
+<page title="Il riutilizzo dei casi" here="Tutorial: il riutilizzo dei casi">
     <long_title>PHP unit testing tutorial - Subclassing a test case</long_title>
     <content>
         <section name="time" title="A timing insensitive assertion">

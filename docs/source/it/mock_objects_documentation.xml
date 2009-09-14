@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!-- $Id: mock_objects_documentation.xml 1890 2009-07-26 12:09:04Z lastcraft $ -->
-<page title="Mock objects documentation" here="Mock objects">
+<page title="Gli oggetti mock" here="Gli oggetti mock">
     <long_title>SimpleTest for PHP mock objects documentation</long_title>
     <content>
-        <section name="what" title="What are mock objects?">
+        <section name="what" title="Cosa sono gli oggetti mock?">
             <p>
 				Gli oggetti mock svolgono due ruoli durante un test case: il ruolo di "attori"
 				ed il ruolo di "critici"
@@ -12,18 +12,18 @@
                 Nel ruolo di attore il mock ha la funzione di simulare il
 				comportamento di un altro oggetto che durante il test sarebbe
 				difficile o oneroso da instanziare.
-				L'esempio classico Ë quello di una connessione ad un database.
+				L'esempio classico √® quello di una connessione ad un database.
 				Allestire un database di collaudo all'inizio di ogni singolo testo
 				rallenterebbe il collaudo a livelli inaccettabile e richiederebbe
 				l'istallazione di un apposito motore di database e di dati di test sul
 				server di test.
-                Se ci fosse la possibilit‡ di similare la connessione e restituire
+                Se ci fosse la possibilit√† di similare la connessione e restituire
 				i dati selezionati per il collaudo non solo si otterrebbero dei
-				test pi˘ pragmatici ma ci si potrebbe permettere di alimentare il
+				test pi√π pragmatici ma ci si potrebbe permettere di alimentare il
 				codice con dati spuri per vederne la reazione.
-				Avremmo la possibilit‡ di simulare il caso di un database fuori linea o
-				altre condizioni estreme di questo tipo, senza la necessit‡ di generare
-				i malfunzionamenti nella realt‡.
+				Avremmo la possibilit√† di simulare il caso di un database fuori linea o
+				altre condizioni estreme di questo tipo, senza la necessit√† di generare
+				i malfunzionamenti nella realt√†.
 				In altre parole, i mock possono fornire un grande controllo dell'ambiente
 				di test.
             </p>
@@ -35,11 +35,11 @@
                 Addison-Wesley) nel 1999.
             </p>
             <p>
-				Un server stub Ë la simulazione di un oggetto o di un componente.
+				Un server stub √® la simulazione di un oggetto o di un componente.
 				Dovrebbe rimpiazzare esplicitamente un componente con lo scopo di
 				permettere il test o la prototipazione ma, fondamentalmente, resta un
 				componente leggero.
-				In questo modo permette ai test di eseguirsi con rapidit‡; nel caso
+				In questo modo permette ai test di eseguirsi con rapidit√†; nel caso
 				la classe simulata ancora non esista affatto, permettono di eseguire
 				comunque il codice.
             </p>
@@ -59,12 +59,12 @@
 				in grado di verificare l'oggetto chiamante stia usando una query, supponiamo
 				SQL, formalmente corretta.
 				Una volta preparai con expectation sufficientemente rigorose
-				non si avr‡ pi˘ bisogno di eseguire manualmente gli assert.
+				non si avr√† pi√π bisogno di eseguire manualmente gli assert.
             </p>
         </section>
-        <section name="creation" title="Creating mock objects">
+        <section name="creation" title="Creare oggetti mock">
             <p>
-				Tutto quello di cui abbiamo bisogno Ë una classe esistente,
+				Tutto quello di cui abbiamo bisogno √® una classe esistente,
 				supponiamo per la connessione al database, che abbia
 				questo aspetto:
 <php><![CDATA[
@@ -74,8 +74,8 @@
     function selectQuery($sql) { }
 }</strong>
 ]]></php>
-				Non c'Ë bisogno che la classe sia stata implementata.
-				PuÚ bastare la sua interfaccia:
+				Non c'√® bisogno che la classe sia stata implementata.
+				Pu√≤ bastare la sua interfaccia:
 <php><![CDATA[
 <strong>interface DatabaseConnection {
     function DatabaseConnection();
@@ -93,7 +93,7 @@ require_once('database_connection.php');
 ]]></php>
 				Questo genera una classe clone
 				chiamata <code>MockDatabaseConnection</code>.
-				Adesso Ë possibile istanziare la nuova classe
+				Adesso √® possibile istanziare la nuova classe
 				all'interno del test case:
 <php><![CDATA[
 require_once('simpletest/autorun.php');
@@ -145,30 +145,30 @@ class MyTestCase extends UnitTestCase {
             </p>
             <p>
                 Modificare il valore di ritorno di un metodo da <code>null</code>
-				a qualcos'altro Ë abbastanza semplice:
+				a qualcos'altro √® abbastanza semplice:
 <php><![CDATA[
 <strong>$connection->returns('query', 37)</strong>
 ]]></php>
                 Adesso, ogni invocazione di
                 <code><![CDATA[$connection->query()]]></code> restituisce 37.
-                38 non ha niente di speciale: il valore di ritorno puÚ
+                38 non ha niente di speciale: il valore di ritorno pu√≤
 				essere arbitrariamente complesso.
             </p>
             <p>
 				I parametri, in questo caso, sono irrilevanti e 
 				una volta che si sia impostato il mock con questo
-				sistema si otterr‡ sempre il medesimo valore qualsiasi essi siano
+				sistema si otterr√† sempre il medesimo valore qualsiasi essi siano
                 Questa potrebbe apparire una replica poco convincente di una
 				connessione al database, ma per un metodo di test di
-				una mezza dozzina di righe, solitamente, Ë tutto quello
-				di cui si puÚ aver bisogno.
+				una mezza dozzina di righe, solitamente, √® tutto quello
+				di cui si pu√≤ aver bisogno.
             </p>
             <p>
-				Tuttavia, le cose non sono sempre cosÏ semplici.
+				Tuttavia, le cose non sono sempre cos√¨ semplici.
 				Uno dei problemi comuni si propone con le iterazioni, nelle quali
-				il ritorno sistematico del solito valore puÚ causare cicli
+				il ritorno sistematico del solito valore pu√≤ causare cicli
 				infiniti dentro l'oggetto da collaudare.
-				Per questo c'Ë bisogno di poter impostare sequenze di valori.
+				Per questo c'√® bisogno di poter impostare sequenze di valori.
 				Supponiamo di avere una semplice iterazione come questa:
 <php><![CDATA[
 class Iterator {
@@ -176,10 +176,10 @@ class Iterator {
     function next() { }
 }
 ]]></php>
-				Stiamo parlando dell'iterazione pi˘ semplice che possa capitare.
+				Stiamo parlando dell'iterazione pi√π semplice che possa capitare.
 				Se si assume che questa iterazione restituisca del testo
 				fino a quando raggiunge la fine e che da quel momento
-				debba restituire false, si potrebbe simularla cosÏ:
+				debba restituire false, si potrebbe simularla cos√¨:
 <php><![CDATA[
 Mock::generate('Iterator');
 
@@ -195,17 +195,17 @@ class IteratorTest extends UnitTestCase() {
 }
 ]]></php>
 				Quando <code>next()</code> di <code>MockIterator</code> viene invocata
-				restituir‡ &quot;First string&quot; la prima volta e &quot;Second string&quot; la
+				restituir√† &quot;First string&quot; la prima volta e &quot;Second string&quot; la
 				seconda mentre false tutte le altre volte.
 				I valori di ritorno delle sequenze hanno precedenza sul valori
 				di ritorno costante.
-				Se puÚ essere utile, si puÚ pensare al valore di ritorno costante
+				Se pu√≤ essere utile, si pu√≤ pensare al valore di ritorno costante
 				come il valore di ritorno di default.
             </p>
             <p>
-				Un'altra situazione delicata Ë il caso di un'operazione 
+				Un'altra situazione delicata √® il caso di un'operazione 
                 <code>get()</code> overloaded.
-				Ad esempio Ë quando un'informazione conservata con una coppia nome/valore.
+				Ad esempio √® quando un'informazione conservata con una coppia nome/valore.
 				Supponiamo di avere una classe di configurazione come questa:
 <php><![CDATA[
 class Configuration {
@@ -213,10 +213,10 @@ class Configuration {
     function get($key) { ... }
 }
 ]]></php>
-				Questo Ë la tipica situazione in cui un oggetto mock risulta
-				utile, dal momento che la configurazione variet‡ da macchina
+				Questo √® la tipica situazione in cui un oggetto mock risulta
+				utile, dal momento che la configurazione variet√† da macchina
 				a macchina e perfino da test a test.
-				Tuttavia, il problema Ë che i dati vengono recuperati mediante
+				Tuttavia, il problema √® che i dati vengono recuperati mediante
 				la chiamata al metodo <code>get()</code> e che, contemporaneamente,
 				si desiderano valori differenti in corrispondenza di chiavi differenti.
 				Fortunatamente, i mock dispongono di un sistema di filtraggio:
@@ -226,7 +226,7 @@ $config->returns('get', 'primary', array('db_host'));
 $config->returns('get', 'admin', array('db_user'));
 $config->returns('get', 'secret', array('db_password'));</strong>
 ]]></php>
-				Il parametro aggiunto Ë l'elenco degli argomenti con
+				Il parametro aggiunto √® l'elenco degli argomenti con
 				i quali provare a fare un match.
 				In questo caso, ad esempio, si sta provando il match con il solo
 				argomento a disposizione il quale viene usato come look up key.
@@ -235,8 +235,8 @@ $config->returns('get', 'secret', array('db_password'));</strong>
 <php><![CDATA[
 $config->get('db_user')
 ]]></php>
-                ...restituir‡ &quot;admin&quot;.
-				Il risultato Ë stato ricavato tentando il match degli argomenti
+                ...restituir√† &quot;admin&quot;.
+				Il risultato √® stato ricavato tentando il match degli argomenti
 				richiesti con ognuno dei valori dell'elenco, fino a che un match
 				completo viene individuato.
             </p>
@@ -245,18 +245,18 @@ $config->get('db_user')
 <php><![CDATA[<strong>
 $config->returns('get', false, array('*'));</strong>
 ]]></php>
-				Questo non Ë equivalente ad impostare il valore di
+				Questo non √® equivalente ad impostare il valore di
 				ritorno che si deve avere in assenza di argomenti, come accade con:
 <php><![CDATA[<strong>
 $config->returns('get', false);</strong>
 ]]></php>
 				Nel primo caso, viene accettato qualsiasi singolo argomento ma
-				un argomento Ë comunque richiesto.
+				un argomento √® comunque richiesto.
                 Il secondo caso accetta un qualsiasi numero di argomenti e
-				viene considerato nel caso siano gi‡ stati tentati tutti gli altri match.
+				viene considerato nel caso siano gi√† stati tentati tutti gli altri match.
 				
 				Si noti che se nel primo caso si aggiungesse ulteriori parametri
-				dopo il carattere jolly questi verrebbero ignorati perchÈ 
+				dopo il carattere jolly questi verrebbero ignorati perch√© 
 				la condizione sul carattere jolly verrebbe soddisfatta prima della
 				loro valutazione.
 				
@@ -264,7 +264,7 @@ $config->returns('get', false);</strong>
 				potrebbe essere importante e si corre il rischio di avere delle
 				corrispondenze che vengono mascherate da caretteri jolly dichiarati
 				prima.
-				Nel caso di dubbi Ë meglio dichiarare i match pi˘ specifici all'inzio.
+				Nel caso di dubbi √® meglio dichiarare i match pi√π specifici all'inzio.
 
             </p>
             <p>
@@ -290,7 +290,7 @@ function testTaskReads() {
     ...
 }
 ]]></php>
-				Con questa soluzione si Ë certi che ogni volta che viene
+				Con questa soluzione si √® certi che ogni volta che viene
 				invocato  <code><![CDATA[$pad->note(3)]]></code> viene
 				restituito sempre il medesimo oggetto <code>$note</code>, perfino
 				quando questo viene modificato.
@@ -308,18 +308,18 @@ $vector-><strong>returnsByReferenceAt(1, 'note', $write_code, array('*', 3));
 ]]></php>
 				Questo restituisce un riferimento a <code>$buy_books</code> e
 				successivamente a <code>$write_code</code>, ma solo sei i due
-				paramtri risultano impostati ed il secondo Ë l'intero 3.
+				paramtri risultano impostati ed il secondo √® l'intero 3.
 				In questo modo ogni esigenza dovrebbe risultare soddisfatta.
             </p>
             <p>
-				Un ultimo caso delicato Ë quello di un oggetto che ne instanzia un
-				altro, ovvero quello che Ë conosciuto come factory pattern.
+				Un ultimo caso delicato √® quello di un oggetto che ne instanzia un
+				altro, ovvero quello che √® conosciuto come factory pattern.
                 Supponiamo che una query al nostro immaginario database abbia successo
 				e che venga restituito un result set nella forma di iteratore in modo
 				che ad ogni chiamata del metodo <code>next()</code> dell'iteratore venga fornita una
 				riga o il valore false.
-				L'idea di dover simulare un comportamento simile puÚ sembrare da incubo ma
-				in realt‡ puÚ essere realizzata con un mock con il meccanismi gi‡ presentati:
+				L'idea di dover simulare un comportamento simile pu√≤ sembrare da incubo ma
+				in realt√† pu√≤ essere realizzata con un mock con il meccanismi gi√† presentati:
 <php><![CDATA[
 Mock::generate('DatabaseConnection');
 Mock::generate('ResultIterator');
@@ -346,7 +346,7 @@ class DatabaseTest extends UnitTestCase {
 				Adesso solo se viene invocato il metodo <code>query()</code>
 				di <code>$connection</code> viene restituito l'oggetto <code>$result</code>
 				che si esaurisce la sua funzione dopo la terza chiamata a <code>next()</code>.
-                Dovrebbero esserci abbastanza informazioni perchÈ la classe
+                Dovrebbero esserci abbastanza informazioni perch√© la classe
 				<code>UserFinder</code> possa essere collaudata senza problemi.
 				Un test molto preciso e nessun database reale tra i piedi.
             </p>
@@ -356,7 +356,7 @@ class DatabaseTest extends UnitTestCase {
 <php><![CDATA[
 $connection->returns('selectQuery', $result, array(<strong>'select name, id from people'</strong>));
 ]]></php>
-                Il realt‡ questa Ë una cattiva idea.
+                Il realt√† questa √® una cattiva idea.
             </p>
             <p>
 				Abbiamo <code>UserFinder</code> che appartiene al mondo degli oggetti
@@ -364,10 +364,10 @@ $connection->returns('selectQuery', $result, array(<strong>'select name, id from
 				piuttosto estesa, l'intero SQL.
 				Immaginamo di aver scritto molti test come questo che adesso si trovano
 				a dipendere dall'esatta stringa SQL utilizzata.
-				C'Ë la possibilit‡ che queste query cambino in massa per ragioni non legate
+				C'√® la possibilit√† che queste query cambino in massa per ragioni non legate
 				allo specifico test. Ad esempio, le regole nell'uso di apici e virgolette
 				potrebbe cambiare, potrebbe essere rinominata una tabella, potrebbe venire
-				aggiunta una link table e cosÏ via.
+				aggiunta una link table e cos√¨ via.
 				Queste modifiche richiederebbero la riscrittura di ogni singolo test ogni volta
 				che viene eseguito un refactoring, nonostante il comportamento da collaudare
 				sia fondamentalmente restato inalterato.
@@ -376,7 +376,7 @@ $connection->returns('selectQuery', $result, array(<strong>'select name, id from
 				test solo per un cambio di nome di tabella.
             </p>
             <p>
-                Una regola Ë quella di non scrivere mock di interfacce troppo complesse.
+                Una regola √® quella di non scrivere mock di interfacce troppo complesse.
 				
             </p>
             <p>
@@ -397,20 +397,20 @@ class DatabaseTest extends UnitTestCase {<strong>
     }
 }
 ]]></php>
-				Questo collaudo Ë immune ai cambiamenti dello schema del db.
-				Fallisce solo se si rompono le funzionalit‡ dell'applicazione, cioË
+				Questo collaudo √® immune ai cambiamenti dello schema del db.
+				Fallisce solo se si rompono le funzionalit√† dell'applicazione, cio√®
 				quello che intendevamo collaudare.
             </p>
             <p>
-				Il segreto Ë nel codice di <code>setUp()</code> e di <code>tearDown()</code>
+				Il segreto √® nel codice di <code>setUp()</code> e di <code>tearDown()</code>
 				sui quali fino ad ora abbiamo sorvolato.
 				Questi metodi hanno il compito di ripulire le tabelle del database
 				ed assicurare la correttezza dello schema.
-				Realizzare questo risultato puÚ comportare molto lavoro ma generalente 
+				Realizzare questo risultato pu√≤ comportare molto lavoro ma generalente 
 				si dispone comunque di codice simile per svolgere il deployment.
             </p>
             <p>
-				Un'area dove si ha veramente bisogno del mocking Ë nella simulazione
+				Un'area dove si ha veramente bisogno del mocking √® nella simulazione
 				delle anomalie.
 				Supponiamo che il database cada durante il funzionamento di <code>UserFinder</code>
                 
@@ -429,7 +429,7 @@ class DatabaseTest extends UnitTestCase {
 }
 ]]></php>
 				E' stato passato un oggetto <code>$alert</code> a <code>UserFinder</code>.
-				Questo invier‡ alcuni messaggi all'interfaccia utente.
+				Questo invier√† alcuni messaggi all'interfaccia utente.
 				Per poter passare il test, il finder, piuttostci che propagare 
 				un'eccezione, deve scrivere un messaggio a <code>$alert</code>.
                 				
@@ -444,29 +444,29 @@ class DatabaseTest extends UnitTestCase {
 				Infine, cosa accade se il metodo che intendiamo simulare non esiste affatto?
 				Se si tenta di impostare un valore di ritorno su un metodo che non esiste,
 				SimpleTest lancia un'errore.
-				PerchÈ non usare <code>__call()</code> per simulare dinamicamente i metodi?
+				Perch√© non usare <code>__call()</code> per simulare dinamicamente i metodi?
             </p>
             <p>
 				L'uso di <code>__call</code> sugli oggetti con interfacce dinamiche
-				nella implementazione corrente dei mock puÚ essere problematico.
-				E' possibile fare il mock del metodo <code>__call()</code> ma Ë una soluzione
+				nella implementazione corrente dei mock pu√≤ essere problematico.
+				E' possibile fare il mock del metodo <code>__call()</code> ma √® una soluzione
 				orrenda.
-				PerchÈ mail un test dovrebbe prendersi cura di tali dettagli di implementazione?
+				Perch√© mail un test dovrebbe prendersi cura di tali dettagli di implementazione?
 				Il test vuole solo simulare la chiamata.
             </p>
             <p>
-				La soluzione a questo Ë di aggiungere metodi extra al mock durante
+				La soluzione a questo √® di aggiungere metodi extra al mock durante
 				la sua generazione.
 <php><![CDATA[
 <strong>Mock::generate('DatabaseConnection', 'MockDatabaseConnection', array('setOptions'));</strong>
 ]]></php>
-				In test suite di notevoli dimensioni questo puÚ generare problemi, dal momento
-				che c'Ë il rischio di avere gi‡ una classe chiamata 
+				In test suite di notevoli dimensioni questo pu√≤ generare problemi, dal momento
+				che c'√® il rischio di avere gi√† una classe chiamata 
                 <code>MockDatabaseConnection</code> priva dei metodi extra.
 				Il code generator infatti non genera la versione mock di una classe se ne
 				trova un'altra con lo stesso nome.
-				Vedere il proprio metodo fallire perchÈ un'altra definizione Ë stata
-				invocata precedentemente puÚ essere disorientante.
+				Vedere il proprio metodo fallire perch√© un'altra definizione √® stata
+				invocata precedentemente pu√≤ essere disorientante.
             </p>
             <p>
 				Per gestire questa situazione, SimpleTest permette allo sviluppatore
@@ -480,19 +480,19 @@ Mock::generate('DatabaseConnection', <strong>'MyMockDatabaseConnection'</strong>
             </p>
             <p>
 				Gli oggetti mock possono essere utilizzati solo all'interno dei test case
-				perchÈ inviano messaggi, come expectation, direttamente al test case.
+				perch√© inviano messaggi, come expectation, direttamente al test case.
                 Lanciarli al di fuori dell'ambiente del test case provocherebbe
 				un run time error non appena la prima expectation fosse invocata.
-				Parleremo delle expectation pi˘ avanti.
+				Parleremo delle expectation pi√π avanti.
             </p>
         </section>
-        <section name="expectations" title="Mocks as critics">
+        <section name="expectations" title="Mock come critici">
             <p>
 				Nonostante l'approccio dei server stub riesca ad isolare i test
-				dagli sconvolgimenti del mondo, questa Ë solo una met‡ dei benefici.
+				dagli sconvolgimenti del mondo, questa √® solo una met√† dei benefici.
 				E' possibile fare in modo che la classe sotto collaudo riceva
 				i messaggi richiesti: ma si riesce a fargli inviare indietro quelli corretti?
-				Il collaudo puÚ diventare un vero inferno senza una libreria di mocking.
+				Il collaudo pu√≤ diventare un vero inferno senza una libreria di mocking.
             </p>
 			<p>
 				Per fare un esempio, consideriamo una semplice classe <code>PageController</code>
@@ -511,7 +511,7 @@ class PaymentForm extends PageController {
 				di ogni campo del form che non sia stato compilato correttamente.
             </p>
             <p>
-				Il metodo che ci interessa Ë <code>makePayment()</code>.
+				Il metodo che ci interessa √® <code>makePayment()</code>.
 				Se viene inserito un numero &quot;CVV2&quot; errato (le ultime 3 cifre
 				sul retro della carta di credito) si vuole che il processo di pagamento non
 				venga nemmeno iniziato e che venga visualizzato invece un errore.
@@ -558,7 +558,7 @@ class PaymentFormFailuresShouldBeGraceful extends UnitTestCase {
             <p>
 				Nel caso non si sia interessati al messaggio, come accade nel caso
 				di messaggi provenienti dall'interfaccia utente soggetti a molti cambiamenti,
-				Ë possibile saltare il parametro con l'operatore &quot;*&quot;:
+				√® possibile saltare il parametro con l'operatore &quot;*&quot;:
 <php><![CDATA[
 class PaymentFormFailuresShouldBeGraceful extends UnitTestCase {
 
@@ -572,7 +572,7 @@ class PaymentFormFailuresShouldBeGraceful extends UnitTestCase {
     function requestWithMissingCvv2() { ... }
 }
 ]]></php>
-				Possiamo rendere ancora pi˘ debole il test tralasciando l'array
+				Possiamo rendere ancora pi√π debole il test tralasciando l'array
 				dei parametri:
 <php><![CDATA[
 function testMissingCvv2CausesAlert() {
@@ -582,21 +582,21 @@ function testMissingCvv2CausesAlert() {
     $controller->makePayment($this->requestWithMissingCvv2());
 }
 ]]></php>
-				In questo modo l'unico test che verr‡ effettuato Ë sull'invocazione
-				del metodo, il che puÚ essere un po' eccessivo in questo caso.
-				Pi˘ avanti vedremo come indebolire le expectation in modo pi˘ selettivo.
+				In questo modo l'unico test che verr√† effettuato √® sull'invocazione
+				del metodo, il che pu√≤ essere un po' eccessivo in questo caso.
+				Pi√π avanti vedremo come indebolire le expectation in modo pi√π selettivo.
             </p>
             <p>
 				I test senza assert sono sia compatti che molto espressivi.
 				Siccome la chiamata viene intercettata mentre arriva dall'interno dell'oggetto, in questo
-				caso della classe <code>Alert</code>, non c'Ë il bisogno di dichiarare alcun assert sul suo
+				caso della classe <code>Alert</code>, non c'√® il bisogno di dichiarare alcun assert sul suo
 				stato.
-				Non solo questo evita gli assert nei test ma anche la necessit‡ di aggiungere
+				Non solo questo evita gli assert nei test ma anche la necessit√† di aggiungere
 				altri accessor al codice originale.
-                Nel caso ci si dovesse scoprire ad aggiungere accessor al codice, cioË quelli che
+                Nel caso ci si dovesse scoprire ad aggiungere accessor al codice, cio√® quelli che
 				comunemente vengono chiamati &quot;state based testing&quot;, potrebbe essere il momento di
 				considerare l'uso dei mock nei propri test.
-				Quest'ultimo approccio Ë chiamato &quot;behaviour based testing&quot; ed Ë normalmente considerato
+				Quest'ultimo approccio √® chiamato &quot;behaviour based testing&quot; ed √® normalmente considerato
 				migliore rispetto all'uso degli accessor.
             </p>
             <p>
@@ -617,14 +617,14 @@ class PaymentFormFailuresShouldBeGraceful extends UnitTestCase {
     ...
 }
 ]]></php>
-				Nei test puÚ risultare molto difficile realizzare l'assert di una condizione negativa
+				Nei test pu√≤ risultare molto difficile realizzare l'assert di una condizione negativa
 				ma il metodo <code>expectNever()</code> rende l'operazione semplice:
             </p>
             <p>
-                <code>expectOnce()</code> e <code>expectNever()</code> sono pi˘ che sufficienti
+                <code>expectOnce()</code> e <code>expectNever()</code> sono pi√π che sufficienti
 				per la maggior parte dei test ma, occasionalmente, si potrebbe aver bisogno di
-				collaudare pi˘ eventi.
-				Normalmente, a vantaggio dell'usabilit‡, si vuole che vengano evidenziati  tutti i campi
+				collaudare pi√π eventi.
+				Normalmente, a vantaggio dell'usabilit√†, si vuole che vengano evidenziati  tutti i campi
 				non compilati del form e non solo il primo.
 				Allo scopo dovremmo essere in grado di eseguire chiamate multiple
 				a <code>Alert::warn()</code> e non solo una:
@@ -644,18 +644,18 @@ function testAllRequiredFieldsHighlightedOnEmptyRequest() {
 }
 ]]></php>
 				Il contatore presente in <code>expectAt()</code> rappresenta il numero
-				di volte per il quale il metodo Ë gi‡ stato invocato.
-				Qui si sta eseguendo un assert per ogni campo che verr‡ evidenziato.
+				di volte per il quale il metodo √® gi√† stato invocato.
+				Qui si sta eseguendo un assert per ogni campo che verr√† evidenziato.
             </p>
             <p>
 				Si noti che siamo costretti a valutare anche l'ordine delle chiamate.
 				SimpleTest non prevede ancora un sistema per evitare questo inconveniente
-				ma lo preveder‡ nelle prossime versioni.
+				ma lo preveder√† nelle prossime versioni.
             </p>
             <p>
-				Di seguito Ë riportato un elenco delle expectation utilizzabili su un
+				Di seguito √® riportato un elenco delle expectation utilizzabili su un
 				oggetto mock in <a href="http://simpletest.org/">SimpleTest</a>.
-				CosÏ come per gli assert, questi metodi accettano un parametro opzionale
+				Cos√¨ come per gli assert, questi metodi accettano un parametro opzionale
 				con il messaggio di failure.
                 <table>
                     <thead><tr><th>Expectation</th><th>Descrizione</th></tr></thead>
@@ -674,7 +674,7 @@ function testAllRequiredFieldsHighlightedOnEmptyRequest() {
                         </tr>
                         <tr>
                             <td><code>expectMaximumCallCount($method, $count)</code></td>
-                            <td>Il metodo deve essere invocato non pi˘ di <code>$count</code> volte</td>
+                            <td>Il metodo deve essere invocato non pi√π di <code>$count</code> volte</td>
                         </tr>
                         <tr>
                             <td><code>expectMinimumCallCount($method, $count)</code></td>
@@ -702,7 +702,7 @@ function testAllRequiredFieldsHighlightedOnEmptyRequest() {
                     <dd>
 						L'elenco degli argomenti. E' possibile utilizzare i caratteri jolly allo
 						stesso modo in cui si utilizzano con <code>setReturn()</code>.
-                        Questo argomento Ë opzionale in <code>expectOnce()</code>
+                        Questo argomento √® opzionale in <code>expectOnce()</code>
                         e in <code>expectAtLeastOnce()</code>.
                     </dd>
                     <dt class="new_code">$timing</dt>
@@ -716,19 +716,19 @@ function testAllRequiredFieldsHighlightedOnEmptyRequest() {
                 </dl>
             </p>
             <p>
-				Nel caso si abbia una sola chiamata nel test, Ë bene assicurarsi
+				Nel caso si abbia una sola chiamata nel test, √® bene assicurarsi
 				di usare <code>expectOnce</code>.<br />
                 L'uso di <code>$mocked->expectAt(0, 'method', 'args);</code>
 				consertirebbe al metodo di non essere mai invocato.
 				Il controllo degli argomenti ed il controllo del numero totale di chiamate 
 				sono operazioni indipendenti.
 				Quando si usa <code>expectAt()</code>, deve essere aggiunta la chiamata a <code>expectCallCount()</code> 
-				altrimenti risulter‡ consentito non invocare mai il metodo.
+				altrimenti risulter√† consentito non invocare mai il metodo.
             </p>
             <p>
 				Come per gli assert nei test case, tutte le expectation accettano come terzo parametro un
 				messaggio con il quale sovrascrivere il messaggio di default.
-				Come nell'altro caso, inoltre, il messaggio di default puÚ essere
+				Come nell'altro caso, inoltre, il messaggio di default pu√≤ essere
 				recuperato mediante &quot;%s&quot;.
             </p>
         </section>

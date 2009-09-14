@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!-- $Id: expectation_documentation.xml 1873 2009-06-12 16:12:18Z pp11 $ -->
-<page title="Expectation documentation" here="Expectations">
+<page title="Le expectation" here="Le expectation">
     <long_title>
         Extending the SimpleTest unit tester with additional expectation classes
     </long_title>
     <content>
-        <section name="mock" title="More control over mock objects">
+        <section name="mock" title="Maggiore controllo sugli oggetti mock">
             <p>
                 The default behaviour of the
                 <a local="mock_objects_documentation">mock objects</a>
@@ -161,7 +161,7 @@ new WithinMarginExpectation(14.0, 0.001)
                 This will accept any value from 13.999 to 14.001 inclusive.
             </p>
         </section>
-        <section name="behaviour" title="Using expectations to control stubs">
+        <section name="behaviour" title="Usare le expectation per controllare gli stub">
             <p>
                 The expectation classes can be used not just for sending assertions
                 from mock objects, but also for selecting behaviour for the
@@ -197,7 +197,7 @@ $authorisation->returns('isAllowed', false);</strong>
                 completeness.
             </p>
         </section>
-        <section name="extending" title="Creating your own expectations">
+        <section name="extending" title="Crearsi le proprie expectation">
             <p>
                 The expectation classes have a very simple structure.
                 So simple that it is easy to create your own versions for
@@ -275,7 +275,7 @@ $mock->expectOnce('authenticate',
 ]]></php>
             </p>
         </section>
-        <section name="unit" title="Under the bonnet of the unit tester">
+        <section name="unit" title="Dentro il cofano dello unit tester">
             <p>
                 The <a href="http://sourceforge.net/projects/simpletest/">SimpleTest unit testing framework</a>
                 also uses the expectation classes internally for the

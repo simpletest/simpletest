@@ -98,7 +98,7 @@ class HtmlReporter extends SimpleReporter {
                         The first start event is usually delivered by the top level group
                         test and so this is where <code>$test_name</code>
                         comes from.
-                        It paints the page titles, CSS, body tag, etc.
+                        It paints the page title, CSS, body tag, etc.
                         It returns nothing (<code>void</code>).
                     </li>
                     <li>
@@ -438,7 +438,7 @@ $test->run(new HtmlReporter());
             Using <a href="#cli">SimpleTest from the command line</a>
         </link>
         <link>
-            Using <a href="#xml">Using XML</a> for remote testing
+            <a href="#xml">Using XML</a> for remote testing
         </link>
     </internal>
     <external>

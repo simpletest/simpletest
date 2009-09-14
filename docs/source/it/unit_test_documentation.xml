@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!-- $Id: unit_test_documentation.xml 1882 2009-07-01 14:30:05Z lastcraft $ -->
-<page title="PHP Unit Test documentation" here="Unit tester">
+<page title="Lo Unit Test" here="Lo Unit Test">
     <long_title>Documentazione sui test di regressione con SimpleTest per PHP</long_title>
     <content>
-        <section name="unit" title="Unit test cases">
+        <section name="unit" title="Gli Unit Test Case">
             <p>
-				Il cuore di SimpleTest Ë un framework di test di regressione costruito intorno a classi
+				Il cuore di SimpleTest √® un framework di test di regressione costruito intorno a classi
 				di test case.
                 Un tipico test case ha questo aspetto:
                 
@@ -45,11 +45,11 @@ class FileTestCase extends UnitTestCase {
     }</strong>
 }
 ]]></php>
-				Il costruttore Ë opzionale e normalmente viene omesso.
+				Il costruttore √® opzionale e normalmente viene omesso.
 				In assenza di un nome, il test case prende il nome della classe.
             </p>
             <p>
-				L'unico metodo di test di cui disponiamo al momento Ë <code>testCreation()</code>
+				L'unico metodo di test di cui disponiamo al momento √® <code>testCreation()</code>
                 con il quale verificiamo che un file sia stato creato dall'oggetto
                 <code>Writer</code>.
                 Avremmo anche potuto mettere l'istruzione <code>unlink()</code>
@@ -68,9 +68,9 @@ class FileTestCase extends UnitTestCase {
 				set up in modo che venga eseguito una sola volta per tutti i metodi
 				del test case ma in questo modo di rischia di provocare delle interferenze
 				tra i test.
-				La modalit‡ utilizzata Ë leggermente pi˘ lenta ma Ë pi˘ sicura.
+				La modalit√† utilizzata √® leggermente pi√π lenta ma √® pi√π sicura.
 				Gli utenti che utilzzano JUnit facciano attenzione che questo comportamento
-				Ë diverso da quanto potrebbero attendersi.
+				√® diverso da quanto potrebbero attendersi.
 				Sorprendentemente, infatti, JUnit instanzia nuovamente l'intero
 				test case in corrispondenza dell'esecuzione di ogni test
 				per evitare interferenze.
@@ -81,22 +81,22 @@ class FileTestCase extends UnitTestCase {
 				Per visualizzare il risultato di un test
 				viene utilizzata una classe di reportistica che viene
 				avvisata dei risultati per mezzo dei metodi del tipo <code>assert...()</code>.
-				Di seguito Ë riportato l'elenco completo dei metodi assert disponibili
+				Di seguito √® riportato l'elenco completo dei metodi assert disponibili
 				nella classe  <code>UnitTestCase</code>, la classe standard di SimpleTest:
 
                 <table><tbody>
-                    <tr><td><code>assertTrue($x)</code></td><td>Fallisce se $x Ë falso</td></tr>
-                    <tr><td><code>assertFalse($x)</code></td><td>Fallisce se $x Ë vero</td></tr>
-                    <tr><td><code>assertNull($x)</code></td><td>Fallisce se $x Ë impostato</td></tr>
-                    <tr><td><code>assertNotNull($x)</code></td><td>Fallisce se $x Ë non impostato</td></tr>
-                    <tr><td><code>assertIsA($x, $t)</code></td><td>Fallisce se $x non Ë una classe del tipo $t</td></tr>
-                    <tr><td><code>assertNotA($x, $t)</code></td><td>Fallisce se $x Ë una classe del tipo $t</td></tr>
-                    <tr><td><code>assertEqual($x, $y)</code></td><td>Fallisce se $x == $y Ë falso</td></tr>
-                    <tr><td><code>assertNotEqual($x, $y)</code></td><td>Fallisce se $x == $y Ë vero</td></tr>
-                    <tr><td><code>assertWithinMargin($x, $y, $m)</code></td><td>Fallisce se abs($x - $y) &lt; $m Ë falso</td></tr>
-                    <tr><td><code>assertOutsideMargin($x, $y, $m)</code></td><td>Fallisce se abs($x - $y) &lt; $m Ë vero</td></tr>
-                    <tr><td><code>assertIdentical($x, $y)</code></td><td>Fallisce se $x == $y Ë falso or se i tipi differiscono</td></tr>
-                    <tr><td><code>assertNotIdentical($x, $y)</code></td><td>Fallisce se $x == $y Ë vero ed i tipi sono uguali</td></tr>
+                    <tr><td><code>assertTrue($x)</code></td><td>Fallisce se $x √® falso</td></tr>
+                    <tr><td><code>assertFalse($x)</code></td><td>Fallisce se $x √® vero</td></tr>
+                    <tr><td><code>assertNull($x)</code></td><td>Fallisce se $x √® impostato</td></tr>
+                    <tr><td><code>assertNotNull($x)</code></td><td>Fallisce se $x √® non impostato</td></tr>
+                    <tr><td><code>assertIsA($x, $t)</code></td><td>Fallisce se $x non √® una classe del tipo $t</td></tr>
+                    <tr><td><code>assertNotA($x, $t)</code></td><td>Fallisce se $x √® una classe del tipo $t</td></tr>
+                    <tr><td><code>assertEqual($x, $y)</code></td><td>Fallisce se $x == $y √® falso</td></tr>
+                    <tr><td><code>assertNotEqual($x, $y)</code></td><td>Fallisce se $x == $y √® vero</td></tr>
+                    <tr><td><code>assertWithinMargin($x, $y, $m)</code></td><td>Fallisce se abs($x - $y) &lt; $m √® falso</td></tr>
+                    <tr><td><code>assertOutsideMargin($x, $y, $m)</code></td><td>Fallisce se abs($x - $y) &lt; $m √® vero</td></tr>
+                    <tr><td><code>assertIdentical($x, $y)</code></td><td>Fallisce se $x == $y √® falso or se i tipi differiscono</td></tr>
+                    <tr><td><code>assertNotIdentical($x, $y)</code></td><td>Fallisce se $x == $y √® vero ed i tipi sono uguali</td></tr>
                     <tr><td><code>assertReference($x, $y)</code></td><td>Fallisce a meno che $x e $y siano la stessa variabile</td></tr>
                     <tr><td><code>assertClone($x, $y)</code></td><td>Fallisce a meno che $x e $y siano copie identiche</td></tr>
                     <tr><td><code>assertPattern($p, $x)</code></td><td>Fallisce a meno che l'espressione regolare $p soddisfi $x</td></tr>
@@ -107,10 +107,10 @@ class FileTestCase extends UnitTestCase {
                     <tr><td><code>assert($e)</code></td><td>Fallisce se l'oggetto <a local="expectation_documentation">expectation</a> $e fallisce</td></tr>
                 </tbody></table>
 				Tutti i metodi assert accettano come ultimo parametro opzionale una
-				descrizione che verr‡ utilizzata come label del risultato visualizzato
+				descrizione che verr√† utilizzata come label del risultato visualizzato
 				nel report. Nel caso sia omesso, il messaggio di default viene inviato e
-				normalmente questo Ë sufficientemente esplicativo.
-				Il messaggio di default puÚ essere incluso nel proprio messaggio
+				normalmente questo √® sufficientemente esplicativo.
+				Il messaggio di default pu√≤ essere incluso nel proprio messaggio
 				usando &quot;%s&quot; all'interno della stringa.
                 Tutti gli assert restituiscono true in caso di test passato con successo
 				e false in caso di fallimento.
@@ -138,12 +138,12 @@ $a = 1;
 $b = $a;
 <strong>$this->assertReference($a, $b);</strong>
 ]]></php>
-                Fallisce dal momento che la variabile <code>$a</code> Ë uan copia di <code>$b</code>.
+                Fallisce dal momento che la variabile <code>$a</code> √® uan copia di <code>$b</code>.
 <php><![CDATA[
 <strong>$this->assertPattern('/hello/i', 'Hello world');</strong>
 ]]></php>
-				Questo test passa perchÈ si sta verificando, con un matching case insensitive, se
-				la stringa <code>hello</code> Ë contenuta in <code>Hello world</code>.
+				Questo test passa perch√© si sta verificando, con un matching case insensitive, se
+				la stringa <code>hello</code> √® contenuta in <code>Hello world</code>.
 <php><![CDATA[
 <strong>$this->expectError();</strong>
 trigger_error('Catastrophe');
@@ -162,7 +162,7 @@ trigger_error('Catastrophe');
 				verrebbe riportata un'eccezione nel test.
             </p>
             <p>
-                Si noti che SimpleTest non Ë in grado di intercettare gli errori a
+                Si noti che SimpleTest non √® in grado di intercettare gli errori a
 				compile time del PHP.
             </p>
             <p>
@@ -179,9 +179,9 @@ trigger_error('Catastrophe');
                 </tbody></table>
             </p>
         </section>
-        <section name="extending_unit" title="Extending test cases">
+        <section name="extending_unit" title="Estendere i Test Case">
             <p>
-				Naturalmente Ë possibile aggiungere metodi addizionali in modo
+				Naturalmente √® possibile aggiungere metodi addizionali in modo
 				da creare dei tipi di test specifici ed estendere il framework:
 <php><![CDATA[
 require_once('simpletest/autorun.php');
@@ -200,20 +200,20 @@ class FileTester extends UnitTestCase {
 ]]></php>
 				In questo esempio si presuppone che la libreria SimpleTest sia
 				conservata nella directory locale <em>simpletest</em>.
-				Per far funzionare l'esempio, modificare con il path pi˘ adeguato.
+				Per far funzionare l'esempio, modificare con il path pi√π adeguato.
             </p>
             <p>
 				Per evitare che questo test case venga accidentamente eseguito,
-				Ë possibile marcare la classe come <code>abstract</code>.
+				√® possibile marcare la classe come <code>abstract</code>.
             </p>
             <p>
-                In alternativa Ë possibile usare la
+                In alternativa √® possibile usare la
 				direttiva
                 <code>SimpleTestOptions::ignore('FileTester');</code>
                 in qualche punto del codice.
             </p>
             <p>
-				Adesso Ë possibile ereditare da questo nuovo case esattamente come
+				Adesso √® possibile ereditare da questo nuovo case esattamente come
 				da ogni altro case test.
 <php><![CDATA[
 class FileTestCase extends <strong>FileTester</strong> {
@@ -237,7 +237,7 @@ class FileTestCase extends <strong>FileTester</strong> {
             <p>
 				Se si desiderasse un test case che non disponesse di
 				una sola parte degli assert di <code>UnitTestCase</code> e di
-				altri assert custom, si puÚ estendere <code>SimpleTestCase</code>.
+				altri assert custom, si pu√≤ estendere <code>SimpleTestCase</code>.
 				Si dovrebbe quindi includere il file <em>simple_test.php</em> invece del file
 				<em>unit_tester.php</em>.
                 
@@ -246,16 +246,16 @@ class FileTestCase extends <strong>FileTester</strong> {
 				test suite.
             </p>
         </section>
-        <section name="running_unit" title="Running a single test case">
+        <section name="running_unit" title="Eseguire un semplice Test Case">
             <p>
 				Se si esclude il caso in cui stia impazzendo con un modulo
 				particolarmente ostico e non si voglia disturbare l'intera
-				test suite, capiter‡ raramente di lanciare un solo test case.
-				Con <em>autorun</em> non c'Ë bisogno di una preparazione particolare: Ë
-				sufficiente lanciare uno specifico file di test ed il gioco Ë fatto.
+				test suite, capiter√† raramente di lanciare un solo test case.
+				Con <em>autorun</em> non c'√® bisogno di una preparazione particolare: √®
+				sufficiente lanciare uno specifico file di test ed il gioco √® fatto.
             </p>
             <p>
-				Quando si lancia singolarmente uno specifico file Ë 
+				Quando si lancia singolarmente uno specifico file √® 
 				perfino possibile decidere quale report usare (per esempio,
 				scegliendo tra <code>TextReporter</code> o <code>HtmlReporter</code>)
 				
@@ -270,8 +270,8 @@ class FileTestCase extends UnitTestCase {
 }
 ?>
 ]]></php>
-				Questo script verr‡ eseguito cosÏ com'Ë, ma naturalmente non visualizzer‡
-				alcun messagio di successo o fallimento finchÈ non vi vengono
+				Questo script verr√† eseguito cos√¨ com'√®, ma naturalmente non visualizzer√†
+				alcun messagio di successo o fallimento finch√© non vi vengono
 				aggiunti metodi di test.
             </p>
         </section>

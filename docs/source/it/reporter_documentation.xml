@@ -1,48 +1,47 @@
 <?xml version="1.0"?>
 <!-- $Id: reporter_documentation.xml 1878 2009-06-12 16:39:37Z pp11 $ -->
-<page title="Test reporter documentation" here="Reporting">
+<page title="I report" here="I report">
     <long_title>SimpleTest for PHP test runner and display documentation</long_title>
     <content>
         <introduction>
             <p>
-                SimpleTest pretty much follows the MVC pattern
+				SimpleTest abbraccia abbastanza fedelmente il pattern MVC
                 (Model-View-Controller).
-                The reporter classes are the view and the model is your
-                test cases and their hiearchy.
-                The controller is mostly hidden from the user of
-                SimpleTest unless you want to change how the test cases
-                are actually run, in which case it is possible to
-                override the runner objects from within the test case.
-                As usual with MVC, the controller is mostly undefined
-                and there are other places to control the test run.
+				Le classi reporter sono le viste mentre i test case e le loro
+				gerarchie sono i modelli.
+				I controller sono per lo più nascosti all'utente di SimpleTest a
+				meno che si voglia modificare il meccanismo di esecuzione dei
+				test, nel qual caso risulta possibile sovrascivere l'oggetto
+				in esecuzione dall'interno del test case.
+				Come accade di solito con l'MVC, il controller e per lo più
+				vuoto e si controlla l'esecuzione del test da altri posti.
             </p>
         </introduction>
-        <section name="html" title="Reporting results in HTML">
+        <section name="html" title="Visualizzare i report in HTML">
             <p>
-                The default test display is minimal in the extreme.
-                It reports success and failure with the conventional red and
-                green bars and shows a breadcrumb trail of test groups
-                for every failed assertion.
-                Here&apos;s a fail...
+				Il sistema di visualizzazione standard è minimale.
+                Si limita a riportare successi e fallimenti con le convenzionali
+				barre verdi e rosse e mostra un percorso (breadcrumb) dei gruppi di test
+				per ogni assert fallito.
+                Un esempio di test fallito è:
                 <div class="demo">
                     <h1>File test</h1>
                     <span class="fail">Fail</span>: createnewfile->True assertion failed.<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">1/1 test cases complete.
                     <strong>0</strong> passes, <strong>1</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
-                And here all tests passed...
+                Questo è il caso in cui tutti i test siano usciti con successo:
                 <div class="demo">
                     <h1>File test</h1>
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
                     <strong>1</strong> passes, <strong>0</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
-                The good news is that there are several points in the display
-                hiearchy for subclassing.
+				La buona notizia è che esistono molte classi della gerarchia del
+				reporter da cui poter ereditare:
             </p>
             <p>
-                For web page based displays there is the
-                <code>HtmlReporter</code> class with the following
-                signature...
+				Per la visualizzazione su pagine web si può usare la classe
+                <code>HtmlReporter</code> che ha la seguente interfaccia:
 <php><![CDATA[
 class HtmlReporter extends SimpleReporter {
     public HtmlReporter($encoding) { ... }
@@ -71,120 +70,125 @@ class HtmlReporter extends SimpleReporter {
     public integer getTestCaseProgress() { ... }
 }
 ]]></php>
-                Here is what some of these methods mean. First the display methods
-                that you will probably want to override...
+                Di seguito si riporta il significato dei vari metodi. Sono stati riportati
+				prima i metodi di visualizzazione dal momento che sono quelli che normalmente
+				si vuole riscrivere:
                 <ul class="api">
                     <li>
                         <code>HtmlReporter(string $encoding)</code><br />
-                        is the constructor.
-                        Note that the unit test sets up the link to the display
-                        rather than the other way around.
-                        The display is a mostly passive receiver of test events.
-                        This allows easy adaption of the display for other test
-                        systems beside unit tests, such as monitoring servers.
-                        The encoding is the character encoding you wish to
-                        display the test output in.
-                        In order to correctly render debug output when
-                        using the web tester, this should match the encoding
-                        of the site you are trying to test.
-                        The available character set strings are described in
-                        the PHP <a href="http://www.php.net/manual/en/function.htmlentities.php">html_entities()</a>
-                        function.
+                        è il costruttore.
+						Si noti che è lo unit test a conservare un riferimento
+						al reporter, e non il contrario.
+						Il reporter è sostanzialmente un ricevitore passivo di
+						eventi di test.
+                        Questo garantisce un facile adattamento del display ad altri
+						sistemi di test diversi dagli unit test, come ad esempio i
+						server di monitoraggio.
+						L'encoding è il sistema di codifica di caratteri che si vuole
+						venga usato nella visualizzazione dei report.
+						Per garantire che i messaggi di debug vengano visualizzati
+						correttamento durante il web testing, ci si dovrebbe assicurare
+						che la codifica dei caratteri coincida con quella usata nel sito
+						che si sta collaudando.
+						Le stringhe corrispondenti alle codifiche carattere sono
+						descritte nella documentazione della funzione 
+                        <a href="http://www.php.net/manual/en/function.htmlentities.php">html_entities()</a>.
                     </li>
                     <li>
                         <code>void paintHeader(string $test_name)</code><br />
-                        is called once at the very start of the test when the first
-                        start event arrives.
-                        The first start event is usually delivered by the top level group
-                        test and so this is where <code>$test_name</code>
-                        comes from.
-                        It paints the page titles, CSS, body tag, etc.
-                        It returns nothing (<code>void</code>).
+                        E' invocata all'inizio dei test non appena viene ricevuto
+						il primo evento di inizio test.
+						L'evento di inizio test è normalmente generato dal primo gruppo di test
+						ed è questo che fornisce <code>$test_name</code>.
+                        Questo metodo visualizza il titolo della pagina, i CSS, il tag body e così via.
+						Non restituisce niente.
                     </li>
                     <li>
                         <code>void paintFooter(string $test_name)</code><br />
-                        Called at the very end of the test to close any tags opened
-                        by the page header.
-                        By default it also displays the red/green bar and the final
-                        count of results.
-                        Actually the end of the test happens when a test end event
-                        comes in with the same name as the one that started it all
-                        at the same level.
-                        The tests nest you see.
-                        Closing the last test finishes the display.
+                        Viene invocato al termine del test e si preoccupa di chiudere
+						qualsiasi tag sia stato aperto dall'header della pagina.
+						Di default, mostra anche le barre verdi e rosse e il conteggio
+						finale dei risultati.
+						Per essere più precisi, la fine dei test è individuata dalla ricezione
+						di un evento di fine test avente lo stesso nome del test con il quale
+						si è iniziato l'intero processo al medesimo livello. I test, infatti,
+						possono essere annidati.
+						La chiusura dell'ultimo test fa terminare il display.
                     </li>
                     <li>
                         <code>void paintMethodStart(string $test_name)</code><br />
-                        is called at the start of each test method.
-                        The name normally comes from method name.
-                        The other test start events behave the same way except
-                        that the group test one tells the reporter how large
-                        it is in number of held test cases.
-                        This is so that the reporter can display a progress bar
-                        as the runner churns through the test cases.
+						Viene invocato all'inizio di ciascun metodo di test.
+						Il nome, normalmente, coincide con il nome del metodo.
+						Gli altri eventi di inizio test producono il medesimo comportamento
+						tranne per il fatto che il primo gruppo di test comunica al reporter
+						il numero di test case che contiene.
+						In questo modo il reporter può essere in grado di visualizzare
+						una barra di progressione mentre il motore macina i test case.
                     </li>
                     <li>
                         <code>void paintMethodEnd(string $test_name)</code><br />
-                        backs out of the test started with the same name.
+						resti
+                        termina il test che era stato iniziato con il medesimo nome.
                     </li>
                     <li>
                         <code>void paintFail(string $message)</code><br />
-                        paints a failure.
-                        By default it just displays the word fail, a breadcrumbs trail
-                        showing the current test nesting and the message issued by
-                        the assertion.
+                        visualizza una failure.
+						Il comportamento standard è quello di visualizzare la parola fail, un
+						indicatore della progressione indicante il test annidato ed il messaggio
+						riportato dall'assert.
                     </li>
                     <li>
                         <code>void paintPass(string $message)</code><br />
-                        by default does nothing.
+                        Di default non fa niente.
                     </li>
                     <li>
                         <code>string getCss()</code><br />
-                        Returns the CSS styles as a string for the page header
-                        method.
-                        Additional styles have to be appended here if you are
-                        not overriding the page header.
-                        You will want to use this method in an overriden page header
-                        if you want to include the original CSS.
+						restituisce gli stili CSS come un'unica striga per il metodo
+						dell'header della pagina.
+						Gli stili addizionali possono essere appesi qui a meno che
+						non si voglia fare l'overriding dell'header della pagina.
+						Se si è sovrascritto il page header, si può richiamare questo metodo per recuperare
+						il CSS originale.
                     </li>
                 </ul>
-                There are also some accessors to get information on the current
-                state of the test suite.
-                Use these to enrich the display...
+				Ci sono a disposizione anche alcuni metodi get che permettono di
+				recuperare informazioni sullo stato corrente della test suite.
+				Si utilizzano per arricchire la visualizzazione:
                 <ul class="api">
                     <li>
                         <code>array getTestList()</code><br />
-                        is the first convenience method for subclasses.
-                        Lists the current nesting of the tests as a list
-                        of test names.
-                        The first, most deeply nested test, is first in the
-                        list and the current test method will be last.
+                        è il primo metodo di appoggio per il subclassing.
+						Restituisce l'attuale struttura annidata dei test come un
+						elenco di nomi di test.
+                        Il test più profondamente annidato risulterà il primo
+						dell'elenco e il metodo correntemente eseguito l'ultimo.
                     </li>
                     <li>
                         <code>integer getPassCount()</code><br />
-                        returns the number of passes chalked up so far.
-                        Needed for the display at the end.
+                        restituisce il numero di passi eseguiti.
+						E' necessario per chiudere la visualizzazione.
                     </li>
                     <li>
                         <code>integer getFailCount()</code><br />
-                        is likewise the number of fails so far.
+						restituisce, analogamente, il numero dei fallimenti.
                     </li>
                     <li>
                         <code>integer getExceptionCount()</code><br />
-                        is likewise the number of errors so far.
+						Similmente a sopra, restituisce il numero delle eccezioni.
                     </li>
                     <li>
                         <code>integer getTestCaseCount()</code><br />
-                        is the total number of test cases in the test run.
-                        This includes the grouping tests themselves.
+						Restituisce il numero dei test case totale.
+						Il conteggio include anche i gruppi di test.
                     </li>
                     <li>
                         <code>integer getTestCaseProgress()</code><br />
-                        is the number of test cases completed so far.
+						Restituisce il numero di test completati.
                     </li>
                 </ul>
-                One simple modification is to get the HtmlReporter to display
-                the passes as well as the failures and errors...
+				Una delle modifiche semplici da effettuare è quella di fare in modo
+				che HtmlReported visualizzi anche i normali passi oltre che agli errori
+				e alle failure:
 <php><![CDATA[
 <strong>class ShowPasses extends HtmlReporter {
     
@@ -204,38 +208,33 @@ class HtmlReporter extends SimpleReporter {
 ]]></php>
             </p>
             <p>
-                One method that was glossed over was the <code>makeDry()</code>
-                method.
-                If you run this method, with no parameters, on the reporter
-                before the test suite is run no actual test methods
-                will be called.
-                You will still get the events of entering and leaving the
-                test methods and test cases, but no passes or failures etc,
-                because the test code will not actually be executed.
+				Un metodo sul quale si è sorvolato è <code>makeDry()</code>.
+				Quando viene invocato senza parametri prima del lancio dei test,
+				la sua esecuzione inibisce l'avvio dei test.
+				Tuttavia, si continueranno a ricevere gli eventi di inizio e fine dei
+				test e dei test case, ma nessun evento di successo o fallimento, poichè
+				il codice dei test non verrà fisicamente eseguito.d.
             </p>
             <p>
-                The reason for this is to allow for more sophistcated
-                GUI displays that allow the selection of individual test
-                cases.
-                In order to build a list of possible tests they need a
-                report on the test structure for drawing, say a tree view
-                of the test suite.
-                With a reporter set to dry run that just sends drawing events
-                this is easily accomplished.
+				Il motivo per cui esiste un tale metodo è legato alla possibilità
+				di costruire GUI particolarmente sofisticate che permettano di
+				selezionare individualmente i case test.
+				Con un reporter impostato in dry run cge unvia solo eventi di visualizzazione
+				questo è facilmente ottenibile.
             </p>
         </section>
-        <section name="other" title="Extending the reporter">
+        <section name="other" title="Visualizzare i risultati in altri formati">
             <p>
-                Rather than simply modifying the existing display, you might want to
-                produce a whole new HTML look, or even generate text or XML.
-                Rather than override every method in
-                <code>HtmlReporter</code> we can take one
-                step up the class hiearchy to <code>SimpleReporter</code>
-                in the <em>simple_test.php</em> source file.
+				Piuttosto che modificare il display esistente si potrebbe desiderare
+				di produrre un HTML completamente diverso o perfino generare un
+				output testuale o in XML.
+				Piuttosto che sovrascrivere ogni singolo metodi in, è possibile
+				salire di un passo nella gerarchia delle classi ed estendere direttamente
+				<code>SimpleReporter</code> dsel file <em>simple_test.php</em>.
             </p>
             <p>
-                A do nothing display, a blank canvas for your own creation, would
-                be...
+				Un esempio di display che non fa niente se non mostrare una pagina
+				bianca potrebbe essere:
 <php><![CDATA[
 <strong>require_once('simpletest/simple_test.php');</strong>
 
@@ -264,16 +263,17 @@ class MyDisplay extends SimpleReporter {<strong>
     }
 }
 ]]></php>
-                No output would come from this class until you add it.
+				Finché non si definisce un output questa classe non ne produrrà alcuno.
             </p>
         </section>
-        <section name="cli" title="The command line reporter">
+        <section name="cli" title="Usare SimpleTest dalla riga di comando">
             <p>
-                SimpleTest also ships with a minimal command line reporter.
-                The interface mimics JUnit to some extent, but paints the
-                failure messages as they arrive.
-                To use the command line reporter simply substitute it
-                for the HTML version...
+				SimpleTest è provvisto anche di un reporter minimale a riga di comando.
+				L'interfaccia, fino ad un certo punto, imita quella di JUnit ma
+				a differenza di questo visualizza i messaggi di failure non appena vengono
+				ricevuti.
+				Per utilizzare il reporter a riga di comando è sufficiente sostituirla
+				a quella HTML:
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');
@@ -283,19 +283,18 @@ $test->addFile('tests/file_test.php');
 $test->run(<strong>new TextReporter()</strong>);
 ?>
 ]]></php>
-                Then invoke the test suite from the command line...
+				Dopo di che, si invoca la test suite dalla command line:
 <pre class="shell">
 php file_test.php
 </pre>
-                You will need the command line version of PHP installed
-                of course.
-                A passing test suite looks like this...
+				Naturalmente, ci sarà bisogno della versione CLI di PHP.
+				Un test passato con successo assomiglierà a:
 <pre class="shell">
 File test
 OK
 Test cases run: 1/1, Failures: 0, Exceptions: 0
 </pre>
-                A failure triggers a display like this...
+                Un test fallito, invece, visualizzerà:
 <pre class="shell">
 File test
 1) True assertion failed.
@@ -305,16 +304,14 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
 </pre>
             </p>
             <p>
-                One of the main reasons for using a command line driven
-                test suite is of using the tester as part of some automated
-                process.
-                To function properly in shell scripts the test script should
-                return a non-zero exit code on failure.
-                If a test suite fails the value <code>false</code>
-                is returned from the <code>SimpleTest::run()</code>
-                method.
-                We can use that result to exit the script with the desired return
-                code...
+				Uno dei motivi per cui si può desiderare di usare una test suite
+				a linea di comando è per l'integrazione del tester all'intero di qualche
+				processo automatizzato.
+				Per un funzionamento corretto negli script shell, il test dovrebbe
+				restituire un codice diverso di zero in caso di fallimento.
+				Quando una test suite fallisce, il metodo <code>SimpleTest::run()</code>
+				restituisce <code>false</code>. E' possibile usaere questo risultato
+				per far produrre allo script l'adeguato codice di uscita:
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');
@@ -324,10 +321,10 @@ $test->addFile('tests/file_test.php');
 <strong>exit ($test->run(new TextReporter()) ? 0 : 1);</strong>
 ?>
 ]]></php>
-                Of course we don&apos;t really want to create two test scripts,
-                a command line one and a web browser one, for each test suite.
-                The command line reporter includes a method to sniff out the
-                run time environment...
+				Ovviamente, non si vuole dover scrivere davvero due script di test
+				separati per ogni test suite, uno per la riga di comando ed uno per il browser.
+                Per questo, il reporter a riga di comando include un metodo per 
+				intercettare l'ambiente di runtime:
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');
@@ -340,14 +337,14 @@ $test->addFile('tests/file_test.php');
 $test->run(new HtmlReporter());
 ?>
 ]]></php>
-                This is the form used within SimpleTest itself.
+				Questo è il sistema usato dentro SimpleTest stesso.
             </p>
         </section>
-        <section name="xml" title="Remote testing">
+        <section name="xml" title="Usare l'XML per i collaudi in remoto">
             <p>
-                SimpleTest ships with an <code>XmlReporter</code> class
-                used for internal communication.
-                When run the output looks like...
+				SimpleTest viene fornito con una classe <code>XmlReporter</code>
+				utilizzata per comunicazioni interne.
+				Quando viene eseguita, produce un output di questo tipo:
 <pre class="shell"><![CDATA[
 <?xml version="1.0"?>
 <run>
@@ -370,10 +367,10 @@ $test->run(new HtmlReporter());
   </group>
 </run>
 ]]></pre>
-                You can make use of this format with the parser
-                supplied as part of SimpleTest itself.
-                This is called <code>SimpleTestXmlParser</code> and
-                resides in <em>xml.php</em> within the SimpleTest package...
+				E' possibile utilizzare questo formato con il
+				parser di cui è provvisto SimpleTest, chiamato
+				<code>SimpleTestXmlParser</code> e memorizzato nel file
+				<em>xml.php</em> del pacchetto SimpleTest:
 <php><![CDATA[
 <?php
 require_once('simpletest/xml.php');
@@ -383,27 +380,27 @@ $parser = &new SimpleTestXmlParser(new HtmlReporter());
 $parser->parse($test_output);
 ?>
 ]]></php>
-                The <code>$test_output</code> should be the XML format
-                from the XML reporter, and could come from say a command
-                line run of a test case.
-                The parser sends events to the reporter just like any
-                other test run.
-                There are some odd occasions where this is actually useful.
+				<code>$test_output</code> dovrebbe essere il testo XML
+				prodotto dal reporter XML e potrebbe giungere dall'esecuzione
+				di un test case da riga di comando.
+				Il parser invia gli eventi al reporter esattamente come in
+				ogni altra esecuzione di test.
+                Ci sono alcuni casi particolari dove questo può risultare utile.
             </p>
             <p>
-                A problem with large test suites is thet they can exhaust
-                the default 8Mb memory limit on a PHP process.
-                By having the test groups output in XML and run in
-                separate processes, the output can be reparsed to
-                aggregate the results into a much smaller footprint top level
-                test.
+				Un problema con test suite particolarmente grandi è che possono
+				esaurire il limite standard di 8Mb a disposizione del processo PHP.
+				Con un output in XML e l'esecuzione in processi separati, l'output
+				può essere inviato successivamente al parser affinché produca un
+				risultato molto più leggero ad un test a livello più alto.
             </p>
             <p>
-                Because the XML output can come from anywhere, this opens
-                up the possibility of aggregating test runs from remote
-                servers.
-                A test case already exists to do this within the SimpleTest
-                framework, but it is currently experimental...
+				Dal momento che il risultato XML può essere stato prodotto ovunque,
+				questo apre la possibilità di aggregare i risultati delle esecuzioni di test di
+				server remoti.
+                Esiste un test case all'interno di SimpleTest che realizza questo risultato,
+				ma è ancora alla fase sperimentale:
+                
 <php><![CDATA[
 <?php
 <strong>require_once('../remote.php');</strong>
@@ -417,28 +414,28 @@ $test->addTest(<strong>new RemoteTestCase($test_url, $dry_url)</strong>);
 $test->run(new HtmlReporter());
 ?>
 ]]></php>
-                The <code>RemoteTestCase</code> takes the actual location
-                of the test runner, basically a web page in XML format.
-                It also takes the URL of a reporter set to do a dry run.
-                This is so that progress can be reported upward correctly.
-                The <code>RemoteTestCase</code> can be added to test suites
-                just like any other group test.
+				<code>RemoteTestCase</code> richiede l'url del test, cioè
+				fondamentalmente della pagina web in formato XML contenente il test.
+				Richiede inoltre l'url di un reporter impostato come dry run.
+                Questo è richiesto per visualizzare l'avanzamento dei test in modo corretto.
+				<code>RemoteTestCase</code> può essere aggiunto alle test suite
+				esattamente come ogni altro gruppo di test.
             </p>
         </section>
     </content>
     <internal>
         <link>
-            Displaying <a href="#html">results in HTML</a>
+            <a href="#html">Visualizzare i report in HTML</a>
         </link>
         <link>
-            Displaying and <a href="#other">reporting results</a>
-            in other formats
+             <a href="#other">Visualizzare i risultati in altri formati</a>
+            
         </link>
         <link>
-            Using <a href="#cli">SimpleTest from the command line</a>
+            <a href="#cli">Usare SimpleTest dalla riga di comando</a>
         </link>
         <link>
-            Using <a href="#xml">Using XML</a> for remote testing
+            <a href="#xml">Usare l'XML</a> per i collaudi in remoto
         </link>
     </internal>
     <external>

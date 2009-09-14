@@ -1,34 +1,34 @@
 <?xml version="1.0"?>
 <!-- $Id: partial_mocks_documentation.xml 1874 2009-06-12 16:17:51Z pp11 $ -->
-<page title="Partial mock objects documentation" here="Partial mocks">
+<page title="Il mocking parziale" here="Il mocking parziale">
     <long_title>SimpleTest for PHP partial mocks documentation</long_title>
     <content>
         <introduction>
             <p>
-				Il mocking parziale non è nient'altro che un pattern per facilitare la
+				Il mocking parziale non Ã¨ nient'altro che un pattern per facilitare la
 				risoluzione di alcuni problemi specifici che si incontrano nel collaudo con oggetti mock
 				e in cui l'uso degli oggetti mock diviene assai difficoltoso.
-				Si tratta di un tool abbastanza limitato e probabilmente non è nemmeno
+				Si tratta di un tool abbastanza limitato e probabilmente non Ã¨ nemmeno
 				un'idea brillante.
-				E' stato incluso comunque in SimpleTest perché l'ho personalmente trovato
-				utile in più occasioni e mi ha permesso di risparmiare molto tempo..
+				E' stato incluso comunque in SimpleTest perchÃ© l'ho personalmente trovato
+				utile in piÃ¹ occasioni e mi ha permesso di risparmiare molto tempo..
             </p>
         </introduction>
-        <section name="inject" title="The mock injection problem">
+        <section name="inject" title="Il problema del Mock Injection">
             <p>
-				Quando un oggetto ne uso un altro è semplicissimo passarli una versione mock
-				già decorata con le sue expectation.
-				Le cose diventano molto più complicate quando è un oggetto ne crea un altro
-				e l'oggetto creatore è quello che si deve collaudare.
-				Questo significa che è l'oggetto creato che dovrebbe essere sostituito dalla
-				versione mock: ma può essere difficile impartire alla classe sotto test l'ordine
+				Quando un oggetto ne uso un altro Ã¨ semplicissimo passarli una versione mock
+				giÃ  decorata con le sue expectation.
+				Le cose diventano molto piÃ¹ complicate quando Ã¨ un oggetto ne crea un altro
+				e l'oggetto creatore Ã¨ quello che si deve collaudare.
+				Questo significa che Ã¨ l'oggetto creato che dovrebbe essere sostituito dalla
+				versione mock: ma puÃ² essere difficile impartire alla classe sotto test l'ordine
 				di creare una versione mock invece dell'originale.
 				Del resto, la classe sotto test nemmeno dovrebbe essere a conoscenza
 				di essere eseguita all'interno di un test.
             </p>
             <p>
 				Per esempio, supponiamo che si stia scrivendo un client telnet e
-				che ci sia la necessità di creare un socket a cui passare i messaggi.
+				che ci sia la necessitÃ  di creare un socket a cui passare i messaggi.
 				Il metodo di connessione potrebbe avere un aspetto simile a questo:
 <php><![CDATA[
 <strong><?php
@@ -47,13 +47,13 @@ class Telnet {
 				Se volessimo avere una versione mock del socket, cosa si potrebbe fare?
             </p>
             <p>
-				La prima soluzione è quella di passare il socket come parametro,
+				La prima soluzione Ã¨ quella di passare il socket come parametro,
 				in mododi forzare la creazione al livello superiore.
-				Il fatto che sia il client a dover gestire la creazione è un buon approccio
-				se si è disposti a gestire la cosa e dovrebbe spingere verso una
+				Il fatto che sia il client a dover gestire la creazione Ã¨ un buon approccio
+				se si Ã¨ disposti a gestire la cosa e dovrebbe spingere verso una
 				fattorizazione della creazione.
-                Difatti, questo è uno dei sistemi con i quali il test con i mock object
-				costringono lo sviluppatore a sviluppare adottando soluzioni più rigorose.
+                Difatti, questo Ã¨ uno dei sistemi con i quali il test con i mock object
+				costringono lo sviluppatore a sviluppare adottando soluzioni piÃ¹ rigorose.
                 I mock migliorano lo stile di programmazione.
             </p>
             <p>
@@ -71,7 +71,7 @@ class Telnet {
 }
 ?>
 ]]></php>
-                Ciò significa che il codice di test si riduce all'invocazione
+                CiÃ² significa che il codice di test si riduce all'invocazione
 				tipica degli oggetti mock:
 <php><![CDATA[
 class TelnetTest extends UnitTestCase {
@@ -85,14 +85,14 @@ class TelnetTest extends UnitTestCase {
     }
 }
 ]]></php>
-				E' abbastanza evidente, tuttavia, che un unico livello è tutto quello che
-				ci si può aspettare di ottenere. Difficilmente accetteremo che l'applicazione
+				E' abbastanza evidente, tuttavia, che un unico livello Ã¨ tutto quello che
+				ci si puÃ² aspettare di ottenere. Difficilmente accetteremo che l'applicazione
 				stessa debba preoccuparsi della creazione di socket, connessione al database
 				ed altri oggetti necessari ai livelli sottostanti.
 				Sarebbe difficile anche conoscere i parametri necessari ai costruttori.
             </p>
             <p>
-				Un possibilecompromesso è quello di prevedere l'oggetto istanziato come
+				Un possibilecompromesso Ã¨ quello di prevedere l'oggetto istanziato come
 				parametro opzionale:
 <php><![CDATA[
 <?php
@@ -111,7 +111,7 @@ class Telnet {
 }
 ?>
 ]]></php>
-				Come soluzione di emergenza questo può anche andare bene.
+				Come soluzione di emergenza questo puÃ² anche andare bene.
 				Adesso il test funziona come se il parametro fosse formalmente
 				passato:
 <php><![CDATA[
@@ -126,15 +126,15 @@ class TelnetTest extends UnitTestCase {
     }
 }
 ]]></php>
-				Il problema di questo approccio è nel disordine che
+				Il problema di questo approccio Ã¨ nel disordine che
 				genera.
-				Nella classe principale c'è del codice di test e nel codice di test
+				Nella classe principale c'Ã¨ del codice di test e nel codice di test
 				ci sono dei paramtri che non vengono mai utilizzati.
-				E' un approccio veloce e sporco, ma nonostante tutto può essere
+				E' un approccio veloce e sporco, ma nonostante tutto puÃ² essere
 				efficace in molte situazioni.
             </p>
             <p>
-				Un'ulteriore soluzione è quella di passare un oggetto factory a cui
+				Un'ulteriore soluzione Ã¨ quella di passare un oggetto factory a cui
 				demandare la creazione:
 <php><![CDATA[
 <?php
@@ -154,10 +154,10 @@ class Telnet {<strong>
 }
 ?>
 ]]></php>
-				Questa è probabilmente la soluzione più fattorizzata dal momento che
-				la creazione degli oggetti è stata spostata all'interno di una
+				Questa Ã¨ probabilmente la soluzione piÃ¹ fattorizzata dal momento che
+				la creazione degli oggetti Ã¨ stata spostata all'interno di una
 				piccola classe specializzata.
-				Adesso il factory della rete può essere collaudato separatamente dal
+				Adesso il factory della rete puÃ² essere collaudato separatamente dal
 				resto ma risulta anche semplice crearne un mock nel momento del collaudo
 				della classe telnet:
 <php><![CDATA[
@@ -174,18 +174,18 @@ class TelnetTest extends UnitTestCase {
     }
 }
 ]]></php>
-				Il rovescio della medaglia è che si sono aggiunte molte classi
+				Il rovescio della medaglia Ã¨ che si sono aggiunte molte classi
 				alla libreria e che si stanno passando molte classi factory in qua
-				e là ed il codice diventa un po' meno intuitivo.
-				Questa è la soluzione più flessibile ma anche la più complessa.
+				e lÃ  ed il codice diventa un po' meno intuitivo.
+				Questa Ã¨ la soluzione piÃ¹ flessibile ma anche la piÃ¹ complessa.
             </p>
             <p>
                 Esiste una via di mezzo?
             </p>
         </section>
-        <section name="creation" title="Protected factory method">
+        <section name="creation" title="Il pattern Protected Factory">
             <p>
-                Esiste un sistema con cui è possibile circoscrivere il problema
+                Esiste un sistema con cui Ã¨ possibile circoscrivere il problema
 				senza creare nuove classi ma prevede l'utilizzo di una sottoclasse
 				della classe originale nel test.
 				Intanto, spostiamo la creazione del socket in un metodo dedicato:
@@ -207,7 +207,7 @@ class Telnet {
 }
 ?>
 ]]></php>
-				Questo è l'unico cambiamento richiesto al codice dell'applicazione.
+				Questo Ã¨ l'unico cambiamento richiesto al codice dell'applicazione.
             </p>
             <p>
 				Nel test case si deve creare una sottoclasse in modo da poter
@@ -226,12 +226,12 @@ class Telnet {
     }
 }</strong>
 ]]></php>
-				Qui il mock è stato passato al costruttore ma un
+				Qui il mock Ã¨ stato passato al costruttore ma un
 				ordinario metodo setter avrebbe svolto ugualmente il
 				medesimo compito.
-                Si noti come il mock è stato iniettato dentro l'oggetto
+                Si noti come il mock Ã¨ stato iniettato dentro l'oggetto
 				prima della chiamata del costruttore.
-				Questo è necessario nel caso il costruttore faccia
+				Questo Ã¨ necessario nel caso il costruttore faccia
 				chiamate a <code>connect()</code>. In caso
 				contrario <code>_createSocket()</code> avrebbe restituito 
 				al costruttore un valore nullo
@@ -239,7 +239,7 @@ class Telnet {
             </p>
             <p>
 				Dopo il completamento di tutto questo lavoro extra,
-				il test in se' è diascretamente più semplice.
+				il test in se' Ã¨ diascretamente piÃ¹ semplice.
 				E' sufficiente colaudare la nuova classe invece di
 				quella originale:
 <php><![CDATA[
@@ -254,24 +254,24 @@ class TelnetTest extends UnitTestCase {
     }
 }
 ]]></php>
-                La nuova classe, naturalmente, è molto semplice.
-				Semplicemente imposterà un valore di ritorno, come un mock.
+                La nuova classe, naturalmente, Ã¨ molto semplice.
+				Semplicemente imposterÃ  un valore di ritorno, come un mock.
 				Sarebbe bello se, oltre a questo, verificasse anche i parametri 
 				ricevuti. Proprio come un mock.
 				Visto che sembra useremo spesso questa tecnica,
 				possiamo automatizzare la creazione della sottoclasse?
             </p>
         </section>
-        <section name="partial" title="A partial mock">
+        <section name="partial" title="Un mock parziale">
             <p>
-				Naturalmente la risposta è &quot;sì&quot;, altrimenti avrei smesso di 
+				Naturalmente la risposta Ã¨ &quot;sÃ¬&quot;, altrimenti avrei smesso di 
 				scrivere da un pezzo!
 				L'ultimo test che abbiamo scritto ha comportato un bel po' di lavoro
 				ma si potrebbe utilizzare un approccio simile alla generazione
 				degli oggetti mock per creare la sottoclasse.
             </p>
             <p>
-                Questa è la versione del test con il mocking parziale:
+                Questa Ã¨ la versione del test con il mocking parziale:
 <php><![CDATA[
 <strong>Mock::generatePartial(
         'Telnet',
@@ -291,7 +291,7 @@ class TelnetTest extends UnitTestCase {
     }
 }
 ]]></php>
-				Il mock parziale è una sottoclasse della classe originale
+				Il mock parziale Ã¨ una sottoclasse della classe originale
 				nella quale alcuni metodi sono sostituiti con
 				versioni di test.
                 <code>generatePartial()</code> accetta tre parametri: la
@@ -299,20 +299,20 @@ class TelnetTest extends UnitTestCase {
 				un elenco dei metodi da sostituire.
             </p>
             <p>
-				Il modo di istanziare gli oggetti risultati è un po' delicato.
+				Il modo di istanziare gli oggetti risultati Ã¨ un po' delicato.
 				L'unico parametro atteso dal costruttore di un mock parziale
-				è un riferimento allo unit test. Così come gli ordinari oggetti
-				mock, infatti, questo è necesssario affinché l'oggetto possa restituire
+				Ã¨ un riferimento allo unit test. CosÃ¬ come gli ordinari oggetti
+				mock, infatti, questo Ã¨ necesssario affinchÃ© l'oggetto possa restituire
 				i risultati delle expectation valutate.
             </p>
             <p>
-				Il costruttore originale non è stato ancora invocato.
-				E' necessario rimandare la sua invocazione perché
+				Il costruttore originale non Ã¨ stato ancora invocato.
+				E' necessario rimandare la sua invocazione perchÃ©
 				potrebbe fare uso di uno dei metodi sostituiti ancora non
 				impostati.
 				Si impostano quindi i valori di ritorno e solo a questo punto
 				si invoca il costruttore con i suoi parametri.
-                Quello che distingue i mock parziali dai mock ordinari è la
+                Quello che distingue i mock parziali dai mock ordinari Ã¨ la
 				successione di questi tre passi: costruzione con &quot;new&quot;,
 				impostazione dei metodi, invocazione del costruttore vero e proprio.
             </p>
@@ -339,28 +339,28 @@ class TelnetTest extends UnitTestCase {
 ]]></php>
             </p>
         </section>
-        <section name="less" title="Testing less than a class">
+        <section name="less" title="Collaudare meno di una classe">
             <p>
-				Non è necessario che i metodi sostituiti siano metodi factory: è possibile
+				Non Ã¨ necessario che i metodi sostituiti siano metodi factory: Ã¨ possibile
 				sostituire qualsiasi tipologia di metodo.
-				Questo è il modo in cui i mock parziali permettono di prendere
+				Questo Ã¨ il modo in cui i mock parziali permettono di prendere
 				il controllo di qualsiasi parte di una classe, eslcuso il costruttore.
 				Sarebbe perfino possibile sostituire tutti i metodi tranne
 				l'unico da collaudare.
             </p>
             <p>
-				Quest'ultima situazione è piuttosto ipotetica dal momento che
+				Quest'ultima situazione Ã¨ piuttosto ipotetica dal momento che
 				non l'ho mai provata.
 				Posso anche credere che questo funzioni ma sono convinto che
-				forzando la granularità dell'oggetto non si ottengano necessariamente un
-				codice di qualità migliore.
+				forzando la granularitÃ  dell'oggetto non si ottengano necessariamente un
+				codice di qualitÃ  migliore.
 				Personalmente utilizzo il mocking parziale come un sistema per
 				l'override della creazione di oggetti o per l'occasionale test
 				di oggetti che implementino il design TemplateMethod.
             </p>
             <p>
-                Quale meccanismo utilizzare, alla fine, è una questione legata allo standard che
-				si è scelto per i propri progetti.
+                Quale meccanismo utilizzare, alla fine, Ã¨ una questione legata allo standard che
+				si Ã¨ scelto per i propri progetti.
             </p>
         </section>
     </content>

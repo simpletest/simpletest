@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!-- $Id: form_testing_documentation.xml 1812 2008-09-27 01:46:42Z lastcraft $ -->
-<page title="Form testing documentation" here="Testing forms">
+<page title="Il collaudo di form" here="Il collaudo di form">
     <long_title>SimpleTest documentation for testing HTML forms</long_title>
     <content>
-        <section name="submit" title="Submitting a simple form">
+        <section name="submit" title="Fare il Submit di un semplice form">
             <p>
                 When a page is fetched by the <code>WebTestCase</code>
                 using <code>get()</code> or
@@ -142,7 +142,7 @@ class SimpleFormTests extends WebTestCase {
                 commands. See below for a way to test such forms.
             </p>
         </section>
-        <section name="multiple" title="Fields with multiple values">
+        <section name="multiple" title="Campi con valori multipli">
             <p>
                 SimpleTest can cope with two types of multivalue controls: Multiple
                 selection drop downs, and multiple checkboxes with the same name
@@ -199,7 +199,7 @@ class SimpleFormTests extends WebTestCase {
                 by logging in as that user and attempting an update.
             </p>
         </section>
-        <section name="hidden-field" title="Forms which use javascript to set a hidden field">
+        <section name="hidden-field" title="Form che utilizzano Javascript per popolare campi nascosti">
             <p>
                 If you want to test a form which relies on javascript to set a hidden
                 field, you can't just call setField().

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- $Id: browser_documentation.xml 1803 2008-09-08 11:11:03Z lastcraft $ -->
-<page title="PHP Scriptable Web Browser" here="Scriptable browser">
+<page title="Scripting del browser" here="Scripting del browser">
     <long_title>SimpleTest documentation for the scriptable web browser component</long_title>
     <content>
         <introduction>
@@ -10,7 +10,7 @@
                 independently of the SimpleTest framework itself.
             </p>
         </introduction>
-        <section name="scripting" title="The Scriptable Browser">
+        <section name="scripting" title="Lo scripting del browser">
             <p>
                 You can use the web browser in PHP scripts to confirm
                 services are up and running, or to extract information
@@ -129,7 +129,7 @@ print $matches[1];
                 This includes links to click and forms to submit.
             </p>
         </section>
-        <section name="debug" title="What went wrong?">
+        <section name="debug" title="Cosa è andato storto?">
             <p>
                 All of this functionality is great when we actually manage to fetch pages,
                 but that doesn't always happen.
@@ -168,7 +168,7 @@ print $matches[1];
                 see what happened.
             </p>
         </section>
-        <section name="unit" title="Complex unit tests with multiple browsers">
+        <section name="unit" title="Unit test complessi con più browser">
             <p>
                 Anything that could be done in a
                 <a local="web_tester_documentation">WebTestCase</a> can

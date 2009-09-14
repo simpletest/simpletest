@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- $Id: authentication_documentation.xml 1803 2008-09-08 11:11:03Z lastcraft $ -->
-<page title="Authentication documentation" here="Authentication">
+<page title="L'autenticazione" here="L'autenticazione">
     <long_title>SimpleTest documentation for testing log-in and authentication</long_title>
     <content>
         <introduction>
@@ -11,7 +11,7 @@
                 the SimpleTest web tester.
             </p>
         </introduction>
-        <section name="basic" title="Basic HTTP authentication">
+        <section name="basic" title="Autenticazione HTTP di base">
             <p>
                 If you fetch a page protected by basic authentication then
                 rather than receiving content, you will instead get a 401
@@ -127,7 +127,7 @@ class AuthenticationTest extends WebTestCase {
                 in the future if enough people request this feature.
             </p>
         </section>
-        <section name="cookies" title="Cookies">
+        <section name="cookies" title="I Cookie">
             <p>
                 Basic authentication doesn't give enough control over the
                 user interface for web developers.
@@ -230,7 +230,7 @@ class LogInTest extends WebTestCase {
                 Is your site protected from this attack?
             </p>
         </section>
-        <section name="session" title="Browser sessions">
+        <section name="session" title="Le sessioni del browser">
             <p>
                 If you are testing an authentication system a critical piece
                 of behaviour is what happens when a user logs back in.

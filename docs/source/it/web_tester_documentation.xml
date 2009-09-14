@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!-- $Id: web_tester_documentation.xml 1876 2009-06-12 16:30:24Z pp11 $ -->
-<page title="Web tester documentation" here="Web tester">
+<page title="Il web test" here="Il web test">
     <long_title>SimpleTest for PHP web script testing documentation</long_title>
     <content>
-        <section name="fetch" title="Fetching a page">
+        <section name="fetch" title="Recuperare una pagina">
             <p>
                 Testing classes is all very well, but PHP is predominately
                 a language for creating functionality within web pages.
@@ -91,7 +91,7 @@ Test cases run: 1/1, Failures: 0, Exceptions: 0
                 We don&apos;t yet know if it was the right one.
             </p>
         </section>
-        <section name="content" title="Testing page content">
+        <section name="content" title="Collaudare il contenuto della pagina">
             <p>
                 To confirm that the page we think we are on is actually the
                 page we are on, we need to verify the page content.
@@ -209,7 +209,7 @@ class TestOfLastcraft extends WebTestCase {
                 This now passes.
             </p>
         </section>
-        <section name="navigation" title="Navigating a web site">
+        <section name="navigation" title="Navigare un sito web">
             <p>
                 Users don&apos;t often navigate sites by typing in URLs, but by
                 clicking links and buttons.
@@ -310,7 +310,7 @@ class TestOfLastcraft extends WebTestCase {
                 as well.
             </p>
         </section>
-        <section name="request" title="Modifying the request">
+        <section name="request" title="Modificare la richiesta">
             <p>
                 Although SimpleTest does not have the goal of testing networking
                 problems, it does include some methods to modify and debug

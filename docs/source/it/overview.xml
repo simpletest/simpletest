@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <!-- $Id: overview.xml 1893 2009-07-26 13:52:26Z lastcraft $ -->
-<page title="Overview of SimpleTest" here="Overview">
+<page title="Panoramica su SimpleTest" here="Panoramica su SimpleTest">
     <long_title>
         Panoramica ed elenco delle caratteristiche dello unit tester e del web tester di SimpleTest
     </long_title>
     <content>
-        <section name="summary" title="What is SimpleTest?">
+        <section name="summary" title="Cos'√® SimpleTest?">
             <p>
-                Il cuore di SimpleTest Ë un framework costruito intorno a classi
+                Il cuore di SimpleTest √® un framework costruito intorno a classi
 				di test case. Queste ereditano delle classi test case di base
 				e vengono estese con dei metodi che contengono il codice di collaudo.
-                Ogni metodo di test di una classe test case Ë concepito per invocare
+                Ogni metodo di test di una classe test case √® concepito per invocare
 				una serie di metodi assert, come <code>assertEqual()</code>, che lo sviluppatore
 				si attende vengano confermati.
                 Se il risultato atteso viene confermato allora successo dell'operazione
-				viene comunicato al test reporter che Ë in ascolto mentre qualsiasi
+				viene comunicato al test reporter che √® in ascolto mentre qualsiasi
 				insuccesso o qualsiasi eccezione inattesa scatena un alert con la
 				relativa descrizione della discordanza.
 				
@@ -25,12 +25,12 @@
             </p>
             <p>
                 Nonostante i molti sforzi intrapresi per mantenere la
-				compatibilit‡ tra le varie versioni, la presente documentazione si riferisce 
+				compatibilit√† tra le varie versioni, la presente documentazione si riferisce 
 				alla versione 1.1 di SimpleTest.
 				
 				Nel caso si rilevi un malfunzionamento nei test dopo un aggiornamento,
 				si provi a consultare i file &quot;HELP_MY_TESTS_DONT_WORK_ANYMORE&quot; nella
-				directory simpletest per accertarsi della possibilit‡ che una delle feature che si stanno utilizzando
+				directory simpletest per accertarsi della possibilit√† che una delle feature che si stanno utilizzando
 				sia stata rimossa o indicata come deprecata.
             </p>
             <p>
@@ -52,44 +52,44 @@ class <strong>MyTestCase</strong> extends UnitTestCase {
 ]]></php>
             </p>
             <p>
-				SimpleTest Ë pensato per essere utilizzato da sviluppatori.
+				SimpleTest √® pensato per essere utilizzato da sviluppatori.
                 I destinatari di questo tool includono tutti gli sviluppatori
 				di applicazioni PHP di medie dimensioni, compresi gli sviluppatori
 				che si sono avvicinati da poco all'argomento dello unit testing e del
 				web regression testing.
-                I principi cardine di SimpleTest sono la sua facilit‡ d'uso, l'estendibilit‡ e 
-				l'essenzialit‡ delle sue caratteristiche.
+                I principi cardine di SimpleTest sono la sua facilit√† d'uso, l'estendibilit√† e 
+				l'essenzialit√† delle sue caratteristiche.
             </p>
             <p>
-                I test vengono scritti direttamente in PHP, cioË nel linguaggio principale dell'applicazione.
+                I test vengono scritti direttamente in PHP, cio√® nel linguaggio principale dell'applicazione.
 				Il vantaggio nell'uso del PHP come linguaggio di testing risiede nel
-				non dover imparare un nuovo linguaggio e nelle possibilit‡ di iniziare
+				non dover imparare un nuovo linguaggio e nelle possibilit√† di iniziare
 				immediatamente ad implementare i test e da permettere allo sviluppatore di 
 				collaudare uan qualsiasi parte del codice.
-				Fondamentalmente, qualsiasi sezione possa essere raggiunto dal codice dell'applicazione puÚ
+				Fondamentalmente, qualsiasi sezione possa essere raggiunto dal codice dell'applicazione pu√≤
 				essere anche raggiunta dal codice di test dal momento che entrambi utilizzano il
 				medesimo linguaggio di programmazione.
             </p>
             <p>
-				Il tipo pi˘ semplice di case test Ë lo 
+				Il tipo pi√π semplice di case test √® lo 
 				<a local="unit_tester_documentation">UnitTestCase</a>.
 				Questa classe comprende i test standard per valutare l'uguaglianza di valori e
 				riferimenti e il matching con pattern.
 				Tutti questi test eseguono delle verifiche sui valori attesi come ritorno di 
 				funzioni e metodi.
-				Si tratta senz'altro del tipo pi˘ comune di test nell'attivit‡ quotidiana di sviluppo
+				Si tratta senz'altro del tipo pi√π comune di test nell'attivit√† quotidiana di sviluppo
 				e costituiscono il 95% dei test case.
 				
                 
             </p>
             <p>
-				Tuttavia, l'obiettivo principale di un'applicazione web non Ë quello di
+				Tuttavia, l'obiettivo principale di un'applicazione web non √® quello di
 				produrre gli output corretti dai suoi metodi e dai suoi oggetti ma quello
 				di generare pagine web.
 				La classe <a local="web_tester_documentation">WebTestCase</a> collauda le pagine web.
-                Simula l'attivit‡ di un browser che stia richiedendo una pagina e supporta cookie, proxy,
+                Simula l'attivit√† di un browser che stia richiedendo una pagina e supporta cookie, proxy,
 				connessioni sicure, autenticazione, form, frame e molti altri elementi di navigazione.
-                Con questa tipologia di test case lo sviluppatore puÚ verificare che le informazioni
+                Con questa tipologia di test case lo sviluppatore pu√≤ verificare che le informazioni
 				presenti sulla pagina, sul form e nelle sessioni siano manipolate in modo corretto.
                 
             </p>
@@ -114,15 +114,15 @@ class <strong>MySiteTest</strong> extends WebTestCase {
 ]]></php>
             </p>
         </section>
-        <section name="features" title="Feature list">
+        <section name="features" title="Elenco delle caratteristiche">
             <p>
-                Quanto segue Ë una grossolana panoramica delle caratteristiche esistenti e
+                Quanto segue √® una grossolana panoramica delle caratteristiche esistenti e
 				pianificate per SimpleTest con l'indicazione del momento previsto per il loro rilascio.
-				C'Ë la possibilit‡ che questo elenco possa cambiare senza preavviso dal momento che
+				C'√® la possibilit√† che questo elenco possa cambiare senza preavviso dal momento che
 				le milestone dipendono essenzialmente sul tempo libero che ho a disposizione.
-                Gli elementi colorati in verde sono gi‡ stati sviluppati ma non sono stati necessariamente
+                Gli elementi colorati in verde sono gi√† stati sviluppati ma non sono stati necessariamente
 				rilasciati. Nel caso ci sia la particolare urgenza di accedere ad una
-				feature gi‡ svilupata ma non ancora rilasciata Ë possibile eseguire un checkout
+				feature gi√† svilupata ma non ancora rilasciata √® possibile eseguire un checkout
 				direttamente dal server SVN di Sourceforge.
                 <table><thead>
                     <tr><th>Feature</th><th>Descrizione</th><th>Release</th></tr>
@@ -133,7 +133,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>Reportistica Html</td>
-                        <td>Il tipo di visualizzazione pi˘ semplice</td>
+                        <td>Il tipo di visualizzazione pi√π semplice</td>
                         <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
@@ -161,7 +161,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td>Mock parziali</td>
                         <td>
 							Eseguono il mocking di parte in una classe per permettere il
-							collaudo di elementi pi˘ piccoli di una classe e simulazioni
+							collaudo di elementi pi√π piccoli di una classe e simulazioni
 							particolarmente complesse.
                         </td>
                         <td style="color: green;">1.0</td>
@@ -178,7 +178,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>Parsing dei form</td>
-                        <td>Capacit‡ di compilare semplici form e leggere i loro valori di default</td>
+                        <td>Capacit√† di compilare semplici form e leggere i loro valori di default</td>
                         <td style="color: green;">1.0</td>
                     </tr>
                     <tr>
@@ -202,7 +202,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td>Browser component</td>
                         <td>
                             Espone un'interfaccia di basso livello per accedere al web browser ed eseguire
-							case test pi˘ dettagliati
+							case test pi√π dettagliati
                         </td>
                         <td style="color: green;">1.0</td>
                     </tr>
@@ -259,7 +259,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td style="color: green;">1.0.1</td>
                     </tr>
                     <tr>
-                        <td>Conformit‡ alla direttiva E_STRICT di PHP 5</td>
+                        <td>Conformit√† alla direttiva E_STRICT di PHP 5</td>
                         <td>Versione per PHP 5 in grado di funzionare con il livello di errore E_STRICT</td>
                         <td style="color: red;">1.1</td>
                     </tr>
@@ -280,7 +280,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>Fluent mock interface</td>
-                        <td>Oggetti mock ancora pi˘ flessibili e compatti</td>
+                        <td>Oggetti mock ancora pi√π flessibili e compatti</td>
                         <td style="color: red;">1.6</td>
                     </tr>
                     <tr>
@@ -290,7 +290,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>Selettori CSS</td>
-                        <td>Il contenuto HTML generato puÚ essere analizzato utilizzando i selettori CSS</td>
+                        <td>Il contenuto HTML generato pu√≤ essere analizzato utilizzando i selettori CSS</td>
                         <td style="color: red;">1.7</td>
                     </tr>
                     <tr>
@@ -325,7 +325,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>Vecchi metodi segnati come deprecati</td>
-                        <td>SimpleTest2 possiede un'interfaccia pi˘ semplice</td>
+                        <td>SimpleTest2 possiede un'interfaccia pi√π semplice</td>
                         <td style="color: red;">2.0</td>
                     </tr>
                     <tr>
@@ -334,8 +334,8 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td style="color: red;">3.0</td>
                     </tr>
                 </tbody></table>
-				L'integrazione con PHP 5 Ë completa il che significa che a partire dalla
-				versione 1.1 di SimpleTest verr‡ supportato solo PHP versione 5.0.5 o superiore.
+				L'integrazione con PHP 5 √® completa il che significa che a partire dalla
+				versione 1.1 di SimpleTest verr√† supportato solo PHP versione 5.0.5 o superiore.
                 Le precedenti versioni di SimpleTest sono compatibili con PHP dalla versione 4.2
 				alla versione 5 (non E_STRICT).
             </p>

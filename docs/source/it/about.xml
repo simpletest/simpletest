@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <!-- $Id: about.xml 1803 2008-09-08 11:11:03Z lastcraft $ -->
-<page title="About Last Craft" here="About">
+<page title="Informazioni su Last Craft" here="Informazioni su Last Craft">
+	<synchronisation lang="en" version="1684" date="19/03/2008" maintainer="pp11" />
     <long_title>Informazioni su Last Craft</long_title>
     <content>
         <section name="me" title="People">
@@ -13,20 +14,20 @@
                 Attualmente sono un freelancer che lavora come sviluppatore senior per
                 <a href="http://www.wordtracker.com">Wordtracker</a>
                 e come consulente per svariate piccole compagnie.
-                Wordtracker Ë un'agenzia di statistica su internet che gestisce un immenso
-                 database sulla popolarit‡ delle parole chiave dei motori di ricerca.
+                Wordtracker √® un'agenzia di statistica su internet che gestisce un immenso
+                 database sulla popolarit√† delle parole chiave dei motori di ricerca.
                 La compagnia adotta la metodologia di sviluppo eXtreme Programming.
             </p>
             <p>
-                Mia moglie <a href="mailto:aviva@lastcraft.com">Aviva Racher</a> Ë una
-                microbiologa ed Ë la madre dei miei due bambini.
+                Mia moglie <a href="mailto:aviva@lastcraft.com">Aviva Racher</a> √® una
+                microbiologa ed √® la madre dei miei due bambini.
             </p>
         </section>
         <section name="issues" title="Issues">
             <p>
                 Leggi l'intervista <a
                 href="http://www.oreillynet.com/pub/a/patents/2000/05/24/PizzoFiles.html">
-                Chi puÚ sentirsi davvero protetto?</a> sul network di
+                Chi pu√≤ sentirsi davvero protetto?</a> sul network di
                 O&#39;Reilly se sei interessato all'argomento delle licenze software.
             </p>
         </section>
