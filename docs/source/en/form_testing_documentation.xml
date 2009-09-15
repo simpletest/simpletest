@@ -12,12 +12,12 @@
                 This results in any form controls that are inside &lt;form&gt; tags
                 being available from within the test case.
                 For example, if we have this snippet of HTML...
-<pre><![CDATA[
+<php><![CDATA[
 <form>
     <input type="text" name="a" value="A default" />
     <input type="submit" value="Go" />
 </form>
-]]></pre>
+]]></php>
                 Which looks like this...
             </p>
             <p>

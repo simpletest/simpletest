@@ -2,32 +2,32 @@
 <!-- $Id: expectation_documentation.xml 1873 2009-06-12 16:12:18Z pp11 $ -->
 <page title="Le expectation" here="Le expectation">
     <long_title>
-        Extending the SimpleTest unit tester with additional expectation classes
+		Estendere lo unit tester di SimpleTest con nuove classi expectation.
     </long_title>
     <content>
         <section name="mock" title="Maggiore controllo sugli oggetti mock">
             <p>
-                The default behaviour of the
-                <a local="mock_objects_documentation">mock objects</a>
-                in
-                <a href="http://sourceforge.net/projects/simpletest/">SimpleTest</a>
-                is either an identical match on the argument or to allow any argument at all.
-                For almost all tests this is sufficient.
-                Sometimes, though, you want to weaken a test case.
+                Il comportamento standard degli <a local="mock_objects_documentation">oggetti mock</a>
+				di <a href="http://sourceforge.net/projects/simpletest/">SimpleTest</a> è di
+				prevedere un'esatta coincidenza degli argomenti o di accettarli tutti indistintamente.
+				Per la maggior parte dei test questo è sufficiente.
+				A volte, però, si potrebbe desiderare un case test più debole.
             </p>
             <p>
-                One place where a test can be too tightly coupled is with
-                text matching.
-                Suppose we have a component that outputs a helpful error
-                message when something goes wrong.
-                You want to test that the correct error was sent, but the actual
-                text may be rather long.
-                If you test for the text exactly, then every time the exact wording
-                of the message changes, you will have to go back and edit the test suite.
+				Un aspetto sul quale un test potrebbe rivelarsi troppo
+				fortemente accoppiato è nel match dei testi.
+				Si supponga, ad esempio, di disporre di un componente che
+				restituisca un messaggio di errore quando qualcosa sia andato
+				storto.
+				Si desidera eseguire il collaudo sulla correttezza dell'errore
+				riceuto ma il suo testo potrebbe essere piuttosto lungo.
+                Se si dovesse scrivere il test in funzione del testo esatto, ogni
+				volta che il messaggio viene modificato si deve tornare sui propri
+				passi e modificare di conseguenza anche la test suite.
             </p>
             <p>
-                For example, suppose we have a news service that has failed
-                to connect to its remote source.
+				Per fare un esempio, supponiamo di avere un servizio di new
+				che fallisca nel tentativo di collegarsi alla sorgente remota.
 <php><![CDATA[
 <strong>class NewsService {
     ...
@@ -41,10 +41,11 @@
     }
 }</strong>
 ]]></php>
-                Here it is sending its content to a
-                <code>Writer</code> class.
-                We could test this behaviour with a
-                <code>MockWriter</code> like so...
+				Il servizio invia il contenuto ad una classe
+                <code>Writer</code>.
+				Si potrebbe pensare di collaudare questo
+				comportamento con un 
+                <code>MockWriter</code>, in questo modo:
 <php><![CDATA[
 class TestOfNewsService extends UnitTestCase {
     ...
@@ -60,16 +61,16 @@ class TestOfNewsService extends UnitTestCase {
     }
 }
 ]]></php>
-                This is a good example of a brittle test.
-                If we decide to add additional instructions, such as
-                suggesting an alternative news source, we will break
-                our tests even though no underlying functionality
-                has been altered.
+				Questo è il tipico esempio di test debole.
+                Se solo si decidesse di aggiungere nuove istruzioni,
+				come il suggerimento di fonti di news alternative,
+				il test smetterebbe di funzionare nonostante nessuna  sottostante
+				funzionalità risulterebbe alterata.
             </p>
             <p>
-                To get around this, we would like to do a regular expression
-                test rather than an exact match.
-                We can actually do this with...
+				Per risolvere casi come questi, sarebbe comodo eseguire il match
+				con un'espressione regolare, piuttosto che con l'esatta stringa.
+                Si potrebbe cioè fare:
 <php><![CDATA[
 class TestOfNewsService extends UnitTestCase {
     ...
@@ -84,95 +85,96 @@ class TestOfNewsService extends UnitTestCase {
     }
 }
 ]]></php>
-                Instead of passing in the expected parameter to the
-                <code>MockWriter</code> we pass an
-                expectation class called
-                <code>PatternExpectation</code>.
-                The mock object is smart enough to recognise this as special
-                and to treat it differently.
-                Rather than simply comparing the incoming argument to this
-                object, it uses the expectation object itself to
-                perform the test.
+				Piuttosto che passare il <code>MockWriter</code> come parametro
+				si è passata una classe chiamata <code>PatternExpectation</code>.
+				L'oggetto mock è abbastanza intelligente per riconoscere che è
+				un caso speciale e lo tratta differentemente.
+                Invece di limitarsi a confrontare l'argomento in entrata con
+				l'oggetto, utilizza lo stesso oggetto expectation per eseguire il
+				test.
             </p>
             <p>
-                The <code>PatternExpectation</code> takes
-                the regular expression to match in its constructor.
-                Whenever a comparison is made by the <code>MockWriter</code>
-                against this expectation class, it will do a
-                <code>preg_match()</code> with this pattern.
-                With our test case above, as long as &quot;cannot connect&quot;
-                appears in the text of the string, the mock will issue a pass
-                to the unit tester.
-                The rest of the text does not matter.
+				<code>PatternExpectation</code> accetta l'espressione regolare da
+				utilizzare per il confronto come parametro del costruttore.
+				Ogni volta che <code>MockWriter</code> esegue una comparazione
+				con la classe expectation, utilizzerà <code>preg_match()</code> con
+				l'espressione regolare fornita.
+				Con il case test appena vista, ogni volta che la stringa
+				&quot;cannot connect&quot; compare nel testo del messaggio, il mock
+				segnalerà un evento di successo allo unit tester.
+				Il resto del testo verrà ignorato.
             </p>
             <p>
-                The possible expectation classes are...
+				Le possibili classi expectation sono:
                 <table><tbody>
-                    <tr><td><code>AnythingExpectation</code></td><td>Will always match</td></tr>
-                    <tr><td><code>EqualExpectation</code></td><td>An equality, rather than the stronger identity comparison</td></tr>
-                    <tr><td><code>NotEqualExpectation</code></td><td>An inequality comparison</td></tr>
-                    <tr><td><code>IndenticalExpectation</code></td><td>The default mock object check which must match exactly</td></tr>
-                    <tr><td><code>NotIndenticalExpectation</code></td><td>Inverts the mock object logic</td></tr>
-                    <tr><td><code>WithinMarginExpectation</code></td><td>Compares a value to within a margin</td></tr>
-                    <tr><td><code>OutsideMarginExpectation</code></td><td>Checks that a value is out side the margin</td></tr>
-                    <tr><td><code>PatternExpectation</code></td><td>Uses a Perl Regex to match a string</td></tr>
-                    <tr><td><code>NoPatternExpectation</code></td><td>Passes only if failing a Perl Regex</td></tr>
-                    <tr><td><code>IsAExpectation</code></td><td>Checks the type or class name only</td></tr>
-                    <tr><td><code>NotAExpectation</code></td><td>Opposite of the <code>IsAExpectation</code></td></tr>
-                    <tr><td><code>MethodExistsExpectation</code></td><td>Checks a method is available on an object</td></tr>
-                    <tr><td><code>TrueExpectation</code></td><td>Accepts any PHP variable that evaluates to true</td></tr>
-                    <tr><td><code>FalseExpectation</code></td><td>Accepts any PHP variable that evaluates to false</td></tr>
+                    <tr><td><code>AnythingExpectation</code></td><td>Corrisponde sempre</td></tr>
+                    <tr><td><code>EqualExpectation</code></td><td>Confronto di mera uguaglianza piuttosto che di indentità</td></tr>
+                    <tr><td><code>NotEqualExpectation</code></td><td>Comparazione di ineguaglianza</td></tr>
+                    <tr><td><code>IndenticalExpectation</code></td><td>E' la comparazione standard degli oggetti mock e confronta l'esatta uguaglianza</td></tr>
+                    <tr><td><code>NotIndenticalExpectation</code></td><td>Inverte la logica dell'oggetto mock</td></tr>
+                    <tr><td><code>WithinMarginExpectation</code></td><td>Confronta due valore entro un margine di tolleranza</td></tr>
+                    <tr><td><code>OutsideMarginExpectation</code></td><td>verifica che un valore sia al di fuori di un intervallo</td></tr>
+                    <tr><td><code>PatternExpectation</code></td><td>Utilizz il Regex di Perl per il match di una stringa</td></tr>
+                    <tr><td><code>NoPatternExpectation</code></td><td>Passa solo nel caso il Regex di Perl falisca</td></tr>
+                    <tr><td><code>IsAExpectation</code></td><td>Verifica solo il tipo della classe o il suo nome</td></tr>
+                    <tr><td><code>NotAExpectation</code></td><td>L'opposto di <code>IsAExpectation</code></td></tr>
+                    <tr><td><code>MethodExistsExpectation</code></td><td>Verifica che un certo metodo sia disponibile in un oggetto</td></tr>
+                    <tr><td><code>TrueExpectation</code></td><td>Accetta qualsiasi variabile che PHP valuti true</td></tr>
+                    <tr><td><code>FalseExpectation</code></td><td>Accetta qualsiasi variabile che PHP valuti false</td></tr>
                 </tbody></table>
-                Most take the expected value in the constructor.
-                The exceptions are the pattern matchers, which take a regular expression,
-                and the <code>IsAExpectation</code> and <code>NotAExpectation</code> which takes a type
-                or class name as a string.
+				La maggior parte delle expectation accettano il valore atteso nel costruttore.
+				Le expectation sono comparatori di pattern che accettano espressioni regolari e 
+				<code>IsAExpectation</code> e <code>NotAExpectation</code> che accettano un tipo o un nome
+				di classe come stringhe.
             </p>
             <p>
-                Some examples...
+                Vediamo alcuni esempi:
             </p>
             <p>
 <php><![CDATA[
 $mock->expectOnce('method', array(new IdenticalExpectation(14)));
 ]]></php>
-                This is the same as <code>$mock->expectOnce('method', array(14))</code>.
+				Questo è equivalente a <code>$mock->expectOnce('method', array(14))</code>.
 <php><![CDATA[
 $mock->expectOnce('method', array(new EqualExpectation(14)));
 ]]></php>
-                This is different from the previous version in that the string
-                <code>"14"</code> as a parameter will also pass.
-                Sometimes the additional type checks of SimpleTest are too restrictive.
+				Questo è diverso dall'esempio precedente, il quale avrebbe
+				accettat anche la stringa <code>"14"</code>.
+				A volte, il controllo aggiuntivo del tipo è troppo restrittivo.
 <php><![CDATA[
 $mock->expectOnce('method', array(new AnythingExpectation(14)));
 ]]></php>
-                This is the same as <code>$mock->expectOnce('method', array('*'))</code>.
+				Questo è equivalente a <code>$mock->expectOnce('method', array('*'))</code>.
 <php><![CDATA[
 $mock->expectOnce('method', array(new IdenticalExpectation('*')));
 ]]></php>
-                This is handy if you want to assert a literal <code>"*"</code>.
+				Questo può essere comodo ogni volta che si voglia specificare un
+				<code>"*"</code> letteralmente.
 <php><![CDATA[
 new NotIdenticalExpectation(14)
 ]]></php>
-                This matches on anything other than integer 14.
-                Even the string <code>"14"</code> would pass.
+				Questo match accetta qualsiasi parametro eccetto
+				l'intero 14.
+				Anche la stringa <code>"14"</code> viene accettata.
 <php><![CDATA[
 new WithinMarginExpectation(14.0, 0.001)
 ]]></php>
-                This will accept any value from 13.999 to 14.001 inclusive.
+				Accetta qualsiasi valore tra 13.999 e 14.001 inclusi.
             </p>
         </section>
-        <section name="behaviour" title="Usare le expectation per controllare gli stub">
+        <section name="behaviour" title="Cambiare il comportamento dei mock mediante le expectation">
             <p>
-                The expectation classes can be used not just for sending assertions
-                from mock objects, but also for selecting behaviour for the
-                <a local="mock_objects_documentation">mock objects</a>.
-                Anywhere a list of arguments is given, a list of expectation objects
-                can be inserted instead.
+				Le classi expectation possono essere utilizzate non soltanto per
+				inviare messaggi di assert ai mock ma anche per selezionare i
+				comportamenti che i <a local="mock_objects_documentation">mock</a>. devono assumere.
+                Ovunque sia previsto un elenco di argomenti è possibile fornire, al suo posto,
+				un elenco di oggetti expectation.
             </p>
             <p>
-                Suppose we want a mock authorisation server to simulate a successful login,
-                but only if it receives a valid session object.
-                We can do this as follows...
+				Supponiamo si voglia un mock di un server di autenticazione per simulare
+				un login che si concluda con successo solo nel caso venga ricevuto un
+				oggetto di sessione valido.
+				Si potrebbe agire così:
 <php><![CDATA[
 Mock::generate('Authorisation');
 <strong>
@@ -183,32 +185,30 @@ $authorisation->returns(
         array(new IsAExpectation('Session', 'Must be a session')));
 $authorisation->returns('isAllowed', false);</strong>
 ]]></php>
-                We have set the default mock behaviour to return false when
-                <code>isAllowed</code> is called.
-                When we call the method with a single parameter that
-                is a <code>Session</code> object, it will return true.
-                We have also added a second parameter as a message.
-                This will be displayed as part of the mock object
-                failure message if this expectation is the cause of
-                a failure.
+				Si è impostato il comportamento standard del mock per restituire
+				false nel caso venga invocato <code>isAllowed</code>.
+				Quando il metodo viene invocato con un oggetto <code>Session</code>
+				come unico parametro, verrà restituito true.
+				Si è anche previsto un secondo parametro come messaggio:
+				questo verrà visualizzato come parte del messaggio di fallimento
+				del mock nel caso la expectation sia la casua della failure.
             </p>
             <p>
-                This kind of sophistication is rarely useful, but is included for
-                completeness.
+				Questo meccasimo sofisticato è utilizzato piuttosto raramente ma è
+				stato incluso per completezza.
             </p>
         </section>
-        <section name="extending" title="Crearsi le proprie expectation">
+        <section name="extending" title="Estendere le expectation">
             <p>
-                The expectation classes have a very simple structure.
-                So simple that it is easy to create your own versions for
-                commonly used test logic.
+				Le classi expectation hanno una struttura molto semplice.
+				Talmente semplice che risulta molto facile crearne di proprie
+				per le più comuni esigenze di test.
             </p>
             <p>
-                As an example here is the creation of a class to test for
-                valid IP addresses.
-                In order to work correctly with the stubs and mocks the new
-                expectation class should extend
-                <code>SimpleExpectation</code> or forther extend a subclass...
+				L'esempio qui riportato riguarda il collaudo di indirizzi IP validi.
+				Allo scopo di far funzionare correttamente stub e mock, le nuove
+				classi expectation dovrebbero estendere <code>SimpleExpectation</code>
+				o, al più, una sua sottoclasse:
 <php><![CDATA[
 <strong>class ValidIp extends SimpleExpectation {
     
@@ -221,20 +221,18 @@ $authorisation->returns('isAllowed', false);</strong>
     }
 }</strong>
 ]]></php>
-                There are only two methods to implement.
-                The <code>test()</code> method should
-                evaluate to true if the expectation is to pass, and
-                false otherwise.
-                The <code>testMessage()</code> method
-                should simply return some helpful text explaining the test
-                that was carried out.
+				Ci sono solo due metodi da implementare.
+				Il metodo <code>test()</code> deve restituire true
+				nel caso di expectation passata e false altrimenti.
+				Il metodo <code>testMessage()</code> dovrebbe semplicemente
+				restituire un messaggio explicativo che sia di aiuto per
+				capire come il test è stato eseguito.
             </p>
             <p>
-                This class can now be used in place of the earlier expectation
-                classes.
+				A questo punto la classe può essere usata al posto della precedente.
             </p>
             <p>
-                Here is a more typical example, matching part of a hash...
+				Di seguito un esempio più comune, che segue il match di una parte di un hash:
 <php><![CDATA[
 <strong>class JustField extends EqualExpectation {
     private $key;
@@ -260,15 +258,17 @@ $authorisation->returns('isAllowed', false);</strong>
     }
 }</strong>
 ]]></php>
-                We tend to seperate message clauses with
-                &quot;<![CDATA[&nbsp;->&nbsp;]]>&quot;.
-                This allows derivative tools to reformat the output.
+				Una convenzione è quella di separare le parti
+				del masseaggio con
+                &quot;<![CDATA[&nbsp;->&nbsp;]]>&quot;,
+				in modo da facilitare eventuali altri tool nella
+				formattazione dell'output.
             </p>
             <p>
-                Suppose some authenticator is expecting to be given
-                a database row corresponding to the user, and we
-                only need to confirm the username is correct.
-                We can assert just their username with...
+				Supposiamo che un sistema di autenticazione si attenda
+				una riga proveniente dal database e corrispondente all'utente
+				e che si debba verificare che la username sia corretta.
+				Si potrà verificare la username con:
 <php><![CDATA[
 $mock->expectOnce('authenticate',
                   array(new JustKey('username', 'marcus')));
@@ -277,16 +277,16 @@ $mock->expectOnce('authenticate',
         </section>
         <section name="unit" title="Dentro il cofano dello unit tester">
             <p>
-                The <a href="http://sourceforge.net/projects/simpletest/">SimpleTest unit testing framework</a>
-                also uses the expectation classes internally for the
-                <a local="unit_test_documentation">UnitTestCase class</a>.
-                We can also take advantage of these mechanisms to reuse our
-                homebrew expectation classes within the test suites directly.
+				<a href="http://sourceforge.net/projects/simpletest/">SimpleTest unit testing framework</a>
+				utilizza internamente le classi expectation nella classe
+				<a local="unit_test_documentation">UnitTestCase</a>.
+                Possiamo avvantaggiarci di questi meccanismi per il riutilizzo
+				delle classi expectation fatte in casa direttamente all'interno
+				delle suite di test.
             </p>
             <p>
-                The most crude way of doing this is to use the generic
-                <code>SimpleTest::assert()</code> method to
-                test against it directly...
+				Il modo più rozzo per farlo è usare il metodo generico
+                <code>SimpleTest::assert()</code> per eseguire il test direttamente:
 <php><![CDATA[
 <strong>class TestOfNetworking extends UnitTestCase {
     ...
@@ -299,19 +299,20 @@ $mock->expectOnce('authenticate',
     }
 }</strong>
 ]]></php>
-                <code>assert()</code> will test any expectation class directly.
+                <code>assert()</code> eseguirà direttamente il test con la expecration fornita.
             </p>
             <p>
-                This is a little untidy compared with our usual
-                <code>assert...()</code> syntax.
+				In effetti, rispetto alla consueta sintassi di 
+				<code>assert...()</code> questo è un po' più disordinato.
+                
             </p>
             <p>
-                For such a simple case we would normally create a
-                separate assertion method on our test case rather
-                than bother using the expectation class.
-                If we pretend that our expectation is a little more
-                complicated for a moment, so that we want to reuse it,
-                we get...
+				In questo caso,  piuttosto che usare la classe
+				expectation direttamente, normalmente sarà preferibile creare un
+				metodo di assert separato.
+				Se per un attimo si immagina che la expectation sia 
+				più complicata abbastanza perché si desideri riutilizzarla,
+				si otterrà:
 <php><![CDATA[
 class TestOfNetworking extends UnitTestCase {
     ...<strong>
@@ -327,28 +328,29 @@ class TestOfNetworking extends UnitTestCase {
     }
 }
 ]]></php>
-                It is rare to need the expectations for more than pattern
-                matching, but these facilities do allow testers to build
-                some sort of domain language for testing their application.
-                Also, complex expectation classes could make the tests
-                harder to read and debug.
-                In effect extending the test framework to create their own tool set.
+				E' raro che una expectation debba eseguire il match di più pattern
+				ma questa facilitazione permette a chi si occupa di test di 
+				costruire una sorta di domain language per il collaudo delle proprie
+				applicazioni.
+				Inoltre, le classi expectation troppo complesse rendono i test
+				difficili da leggere e debuggare.
+				In effetti, estendere il framwork e creare il proprio set di strumenti
+				è il modo migliore di procedere.
             </p>
         </section>
     </content>
     <internal>
         <link>
-            Using expectations for
-            <a href="#mock">more precise testing with mock objects</a>
+            <a href="#mock">Estendere lo unit tester di SimpleTest con nuove classi expectation.</a>
         </link>
         <link>
-            <a href="#behaviour">Changing mock object behaviour</a> with expectations
+            <a href="#behaviour">Cambiare il comportamento dei mock mediante le expectation</a>
         </link>
         <link>
-            <a href="#extending">Extending the expectations</a>
+            <a href="#extending">Estendere le expectation</a>
         </link>
         <link>
-            Underneath SimpleTest <a href="#unit">uses expectation classes</a>
+            <a href="#unit">Dentro il cofano dello unit tester</a>
         </link>
     </internal>
     <external>

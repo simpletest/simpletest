@@ -208,7 +208,7 @@ $authorisation->returns('isAllowed', false);</strong>
                 valid IP addresses.
                 In order to work correctly with the stubs and mocks the new
                 expectation class should extend
-                <code>SimpleExpectation</code> or forther extend a subclass...
+                <code>SimpleExpectation</code> or further extend a subclass...
 <php><![CDATA[
 <strong>class ValidIp extends SimpleExpectation {
     

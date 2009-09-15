@@ -3,22 +3,21 @@
 <page title="Il collaudo di form" here="Il collaudo di form">
     <long_title>SimpleTest documentation for testing HTML forms</long_title>
     <content>
-        <section name="submit" title="Fare il Submit di un semplice form">
+        <section name="submit" title="Modificare i valori dei form ed eseguire il submit di un semplice form">
             <p>
-                When a page is fetched by the <code>WebTestCase</code>
-                using <code>get()</code> or
-                <code>post()</code> the page content is
-                automatically parsed.
-                This results in any form controls that are inside &lt;form&gt; tags
-                being available from within the test case.
-                For example, if we have this snippet of HTML...
-<pre><![CDATA[
+				Quando una pagina viene recuperata da <code>WebTestCase</code>
+				tramite <code>get()</code> o <code>post()</code>
+				il contenuto della pagina viene automaticamente analizzato.
+                Il risultato è che ogni elemento contenuto dentro un tag
+				&lt;form&gt; risulterà disponibile all'interno del test case.
+				Per esempio, con questo snippet HTML:
+<php><![CDATA[
 <form>
     <input type="text" name="a" value="A default" />
     <input type="submit" value="Go" />
 </form>
-]]></pre>
-                Which looks like this...
+]]></php>
+				che avrebbe questo aspetto:
             </p>
             <p>
                 <form class="demo">
@@ -27,9 +26,9 @@
                 </form>
             </p>
             <p>
-                We can navigate to this code, via the
-                <a href="http://www.lastcraft.com/form_testing_documentation.php">LastCraft</a>
-                site, with the following test...
+				si potrebbe navigare il codice, sul sito 
+				<a href="http://www.lastcraft.com/form_testing_documentation.php">LastCraft</a>
+				con il seguente test:
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {<strong>
     function testDefaultValue() {
@@ -38,13 +37,12 @@ class SimpleFormTests extends WebTestCase {<strong>
     }</strong>
 }
 ]]></php>
-                Immediately after loading the page all of the HTML controls are set at
-                their default values just as they would appear in the web browser.
-                The assertion tests that a HTML widget exists in the page with the
-                name &quot;a&quot; and that it is currently set to the value
-                &quot;A default&quot;.
-                As usual, we could use a pattern expectation instead of a fixed
-                string.
+				Immediatamente dopo il caricamento della pagina, tutti gli elementi HTML
+				vengono impostati al loro valore di default, proprio come nel caso
+				apparissero nel browser.
+				Gli assert dell'esempio si assicurano che nella pagina esista un widget HTML con il nome &quot;a&quot;
+				e che il suo valore sia &quot;A default&quot;..
+                Al solito, è possibile utilizzare un pattern invece di una stringa statica:
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
     function testDefaultValue() {
@@ -53,8 +51,9 @@ class SimpleFormTests extends WebTestCase {
     }
 }
 ]]></php>
-                We could submit the form straight away, but first we'll change
-                the value of the text field and only then submit it...
+				Si potrebbe eseguire il submit del form così com'è, ma prima
+				si proverà a modificare il valore del campo di testo e solo allora
+				si farà il submit:
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
     function testDefaultValue() {
@@ -65,24 +64,25 @@ class SimpleFormTests extends WebTestCase {
     }
 }
 ]]></php>
-                Because we didn't specify a method attribute on the form tag, and
-                didn't specify an action either, the test case will follow
-                the usual browser behaviour of submitting the form data as a <em>GET</em>
-                request back to the same location.
-                In general SimpleTest tries to emulate typical browser behaviour as much as possible,
-                rather than attempting to catch any form of HTML omission.
-                This is because the target of the testing framework is the PHP application
-                logic, not syntax or other errors in the HTML code.
-                For HTML errors, other tools such as
-                <a href="http://www.w3.org/People/Raggett/tidy/">HTMLTidy</a> should be used,
-                or any of the HTML and CSS validators already out there.
+				Siccome non è stato specificato un attributo method nel tag form e
+				nemmeno una action, il test case seguirà l'usuale comportameto di un
+				browser ed effettuerà il submit dei dati del form con una richiesta 
+				<em>GET</em> allo stesso indirizzo.
+				In generale, piuttosto che cercare di individuare gli elementi mancanti in un form,
+				SimpleTest cerca di emulare il più possibile il tipico comportamento di un
+				browser.
+                Il motivo di questo è che l'obiettivo di un framework di test è il collaudo
+				della logica di un'applicazione PHP e non la valutazione della correttezza
+				sintattica del codice HTML.
+				Per gli errori HTML dovrebbero essere utilizzati altri tool come 
+				<a href="http://www.w3.org/People/Raggett/tidy/">HTMLTidy</a> o qualsiasi
+				altro validatore HTML e CSS già sul mercato.
             </p>
             <p>
-                If a field is not present in any form, or if an option is unavailable,
-                then <code>WebTestCase::setField()</code> will return
-                <code>false</code>.
-                For example, suppose we wish to verify that a &quot;Superuser&quot;
-                option is not present in this form...
+				Se un campo non viene trovato in alcun form o se un'opzione non è disponibile,
+				allora <code>WebTestCase::setField()</code> restituirà <code>false</code>.
+				Per esempio, supponiamo che si voglia verificare che l'opzione &quot;Superuser&quot;
+				non sia presente su questo form:
 <pre><![CDATA[
 <strong>Select type of user to add:</strong>
 <select name="type">
@@ -91,7 +91,7 @@ class SimpleFormTests extends WebTestCase {
     <option>Administrator</option>
 </select>
 ]]></pre>
-                Which looks like...
+                che apparirebbe così:
             </p>
             <p>
                 <form class="demo">
@@ -104,7 +104,7 @@ class SimpleFormTests extends WebTestCase {
                 </form>
             </p>
             <p>
-                The following test will confirm it...
+                Il test seguente lo confermerebbe:
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
     ...
@@ -114,42 +114,41 @@ class SimpleFormTests extends WebTestCase {
     }
 }
 ]]></php>
-                The current selection will not be changed if the new value is not an option.
+				Se il nuovo valore non è una delle opzioni, la selezione corrente non viene modificata.
             </p>
             <p>
-                Here is the full list of widgets currently supported...
+				Di seguito un elenco di tutti i widget correntemente supportati:
                 <ul>
-                    <li>Text fields, including hidden and password fields.</li>
-                    <li>Submit buttons including the button tag, although not yet reset buttons</li>
-                    <li>Text area. This includes text wrapping behaviour.</li>
-                    <li>Checkboxes, including multiple checkboxes in the same form.</li>
-                    <li>Drop down selections, including multiple selects.</li>
-                    <li>Radio buttons.</li>
-                    <li>Images.</li>
+                    <li>Campi di testo, compresi i campi nascosti e le password.</li>
+                    <li>Pulsanti di submit, compreso il tag button ma escluso il pulsante reset</li>
+                    <li>Text area. E' compreso anche il comportamento "A capo automatico"</li>
+                    <li>Checkboxe,  compresi i checkboxe multipli all'interno dello stesso form</li>
+                    <li>Elenchi a cascata, inclusi quelli con selezione multipla</li>
+                    <li>Radio buttons</li>
+                    <li>Immagini</li>
                 </ul>
             </p>
             <p>
-                The browser emulation offered by SimpleTest mimics
-                the actions which can be perform by a user on a
-                standard HTML page. Javascript is not supported, and
-                it's unlikely that support will be added any time
-                soon.
+				L'emulazione del browser offerta da Simpletest imita
+				le azioni che un utente può effettuare su una pagina
+				HTML standard. Javascript non è supportato ed è
+				improbabile che venga aggiunto il supporto a breve.
             </p>
             <p>
-                Of particular note is that the Javascript idiom of
-                passing form results by setting a hidden field cannot
-                be performed using the normal SimpleTest
-                commands. See below for a way to test such forms.
+				Un aspetto da tenere in considerazione è che la tecnica
+				Javascript di inviare i form dopo l'impostazione di un
+				campo nascosto non può essere emulata con i normali comandi
+				di SimplTest.
+				Si veda oltre per un sistema di collaudo di form di questo tipo.
             </p>
         </section>
-        <section name="multiple" title="Campi con valori multipli">
+        <section name="multiple" title="Gestire widget con valori multipli">
             <p>
-                SimpleTest can cope with two types of multivalue controls: Multiple
-                selection drop downs, and multiple checkboxes with the same name
-                within a form.
-                The multivalue nature of these means that setting and testing
-                are slightly different.
-                Using checkboxes as an example...
+				SimpleTest può gestire due tipi di controlli multivalore: i drop-down
+				multipli e i checkbox multipli all'interno dello stesso form.
+				La natura di questi elementi comporta che la loro impostazione
+				ed il loro collaudo debba essere eseguito in modo leggermente differente.
+				Vediamo un esempio con i checkbox:
 <pre><![CDATA[
 <form class="demo">
     <strong>Create privileges allowed:</strong>
@@ -163,7 +162,7 @@ class SimpleFormTests extends WebTestCase {
     <input type="submit" value="Enable Privileges">
 </form>
 ]]></pre>
-                Which renders as...
+                Questo viene visualizzato come:
             </p>
             <p>
                 <form class="demo">
@@ -179,8 +178,9 @@ class SimpleFormTests extends WebTestCase {
                 </form>
             </p>
             <p>
-                If we wish to disable all but the retrieval privileges and
-                submit this information we can do it like this...
+				Se si desidera disabilitare tutti i checkbox escluso
+				"Retrieve privileges allowed" ed eseguire poi il submit, si può
+				fare così:
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
     ...<strong>
@@ -192,18 +192,19 @@ class SimpleFormTests extends WebTestCase {
     }</strong>
 }
 ]]></php>
-                Instead of setting the field to a single value, we give it a list
-                of values.
-                We do the same when testing expected values.
-                We can then write other test code to confirm the effect of this, perhaps
-                by logging in as that user and attempting an update.
+				Piuttosto che impostare il campo con un singolo valore, si è fornito
+				un elenco di valori.
+				Si fa la stessa cosa quando si verificano i valori attesi.
+				Si può procedere quindi scrivendo altri test per confermare l'effetto
+				di quest'ultimo, per esempio eseguendo il login con l'utente selezionato e tentando
+				di fare un update.
             </p>
         </section>
         <section name="hidden-field" title="Form che utilizzano Javascript per popolare campi nascosti">
             <p>
-                If you want to test a form which relies on javascript to set a hidden
-                field, you can't just call setField().
-                The following code will <em>not</em> work:
+				Se si vuole collaudare un form che fa affidamento sul fatto che Javascript
+				imposti un campo nascosto, non sarà sufficiente invocare setField().
+				Il codice riportato qui di seguito <em>non</em> funzionerà:
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
     function testEmulateMyJavascriptForm() {
@@ -213,8 +214,8 @@ class SimpleFormTests extends WebTestCase {
     }
 }
 ]]></php>
-                Instead, you need to pass the additional form parameters to the
-                clickSubmit() method:
+				Piuttosto, ci sarà bisogno di passare dei parametri aggiuntivi
+				al metodo clickSubmit():
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
     function testMyJavascriptForm() {
@@ -223,18 +224,17 @@ class SimpleFormTests extends WebTestCase {
 
 }
 ]]></php>
-                Bear in mind that in doing this you're effectively stubbing out a
-                part of your software (the javascript code in the form), and
-                perhaps you might be better off using something like 
-                <a href="http://selenium.openqa.org/">Selenium</a> to ensure a complete
-                test.
+				Si tenga in mente che in questo modo si sta effettivamente cortocircuitando
+				una parte del proprio software (il codice javascript nel form) e forse sarebbe
+				meglio utilizzare strumenti come <a href="http://selenium.openqa.org/">Selenium</a>
+				per assicurare un collaudo più completo.
             </p>
         </section>
-        <section name="raw" title="Raw posting">
+        <section name="raw" title="Post manuale in assenza del pulsante di submit">
             <p>
-                If you want to test a form handler, but have not yet written
-                or do not have access to the form itself, you can create a
-                form submission by hand.
+				Se si vuole collaudare un gestore di form non non si è ancora
+				scritto il form o non vi si può accedere, è possibile invocare il
+				submit manualmente:
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
     ...<strong>    
@@ -246,29 +246,29 @@ class SimpleFormTests extends WebTestCase {
     }</strong>
 }
 ]]></php>
-                By adding data to the <code>WebTestCase::post()</code>
-                method, we are emulating a form submission.
-                You would normally only do this as a temporary expedient, or where
-                you are expecting a 3rd party to submit to a form.
-                The exception is when you want tests to protect you from
-                attempts to spoof your pages.
+				Aggiungendo <code>WebTestCase::post()</code>
+				si sta emulando il submit del form.
+				Normalmente si userà questo sistema come espediente provvisorio
+				o nel caso ci si aspetti che sia un componente di terze parti ad
+				eseguire il submit.
+				Un'eccezione a questo è quando si desidera collaudare la protezione
+				dai tentativi di spoofing delle pagine.
             </p>
         </section>
     </content>
     <internal>
         <link>
-            Changing form values and successfully
-            <a href="#submit">Submitting a simple form</a>
+            <a href="#submit">Modificare i valori dei form</a> ed eseguire il submit di un semplice form
         </link>
         <link>
-            Handling <a href="#multiple">widgets with multiple values</a>
-            by setting lists.
+            <a href="#multiple">Gestire widget con valori multipli</a>
+            
         </link>
         <link>
-            Bypassing javascript to <a href="#hidden-field">set a hidden field</a>.
+            <a href="#hidden-field">Form che utilizzano Javascript per popolare campi nascosti</a>.
         </link>
         <link>
-            <a href="#raw">Raw posting</a> when you don&apos;t have a button
+            <a href="#raw">Post manuale in assenza del pulsante di submit</a>
             to click.
         </link>
     </internal>
