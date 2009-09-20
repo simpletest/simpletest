@@ -5,8 +5,12 @@
  *  @subpackage     Extensions
  *	@version	$Id$
  */
+/**#@+
+ *  include other SimpleTest class files
+ */
 require_once(dirname(__FILE__) . '/../scorer.php');
 require_once(dirname(__FILE__) . '/treemap_reporter/treemap_recorder.php');
+/**#@-*/
 
 /**
  * Constructs and renders a treemap visualization of a test run

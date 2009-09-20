@@ -5,10 +5,13 @@
  *  @subpackage     Extensions
  *	@version	$Id$
  */
+/**
+ * include treemap reporter
+ */
 require_once dirname(__FILE__) . '/../treemap_reporter.php';
 
 /**
- * outputs <ul> representing treemap of test report,
+ * outputs unordered list representing treemap of test report,
  * and attaches jQuery Treemap to render results.
  *
  *  @package        SimpleTest

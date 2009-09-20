@@ -1,4 +1,12 @@
 <?php
+/**
+ * @package        SimpleTest
+ * @subpackage     Extensions
+ */
+/**
+ * @package        SimpleTest
+ * @subpackage     Extensions
+ */
 class CoverageUtils {
 
     static function mkdir($dir) {

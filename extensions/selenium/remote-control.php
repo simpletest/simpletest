@@ -1,14 +1,17 @@
 <?php
-
-
-
+/**
+ * Selenium Remote Control Class
+ * @package        SimpleTest
+ * @subpackage     Extensions
+ */
 /**
  *
  * Based on the Domain51_Testing_Selenium class available at
  * http://domain51.googlecode.com/svn/Domain51/trunk/
  *
  * @author Travis Swicegood <development [at] domain51 [dot] com>
- *
+ * @package        SimpleTest
+ * @subpackage     Extensions
  */
 class SimpleSeleniumRemoteControl
 {

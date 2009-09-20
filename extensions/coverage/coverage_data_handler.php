@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * @package        SimpleTest
+ * @subpackage     Extensions
+ */
+/**
+ * @todo	which db abstraction layer is this?
+ */
 require_once 'DB/sqlite.php';
 
 /**
@@ -7,6 +13,8 @@ require_once 'DB/sqlite.php';
  * interpretation in report generator.  Be sure to not to keep an instance longer
  * than you have, otherwise you risk overwriting database edits from another process
  * also trying to make updates.
+ * @package        SimpleTest
+ * @subpackage     Extensions
  */
 class CoverageDataHandler {
 

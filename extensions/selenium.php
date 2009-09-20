@@ -5,12 +5,18 @@
  *	@subpackage	Extensions
  *	@version	$Id$
  */
+/**#@+
+ *  include other SimpleTest class files
+ */
 require_once dirname(__FILE__) . '/../unit_tester.php';
 require_once dirname(__FILE__) . '/selenium/remote-control.php';
+/**#@-*/
 
 /**
  * Provides test case wrapper to a Selenium remote
  * control instance.
+ *	@package	SimpleTest
+ *	@subpackage	Extensions
  */
 class SeleniumTestCase extends UnitTestCase
 {

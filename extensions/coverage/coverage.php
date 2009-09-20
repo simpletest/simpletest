@@ -1,10 +1,18 @@
 <?php
-
+/**
+* @package        SimpleTest
+* @subpackage     Extensions
+*/
+/**
+* load coverage data handle
+*/
 require_once dirname(__FILE__) . '/coverage_data_handler.php';
 
 /**
  * Orchestrates code coverage both in this thread and in subthread under apache
  * Assumes this is running on same machine as apache.
+ * @package        SimpleTest
+ * @subpackage     Extensions
  */
 class CodeCoverage  {
     var $log;

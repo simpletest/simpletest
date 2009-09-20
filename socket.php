@@ -66,6 +66,10 @@ class SimpleStickyError {
     }
 }
 
+/**
+ *    @package SimpleTest
+ *    @subpackage WebTester
+ */
 class SimpleFileSocket extends SimpleStickyError {
     private $handle;
     private $is_open = false;

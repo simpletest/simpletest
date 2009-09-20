@@ -1,7 +1,20 @@
 <?php
-
+/**
+ *  SimpleCoverageWriter class file
+ *  @package    SimpleTest
+ *  @subpackage UnitTester
+ *  @version    $Id: unit_tester.php 1882 2009-07-01 14:30:05Z lastcraft $
+ */
+/**
+ * base coverage writer class
+ */
 require_once dirname(__FILE__) .'/coverage_writer.php';
 
+/**
+ *  SimpleCoverageWriter class
+ *  @package    SimpleTest
+ *  @subpackage UnitTester
+ */
 class SimpleCoverageWriter implements CoverageWriter {
 
     function writeSummary($out, $variables) {

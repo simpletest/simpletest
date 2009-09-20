@@ -19,13 +19,13 @@ require_once(dirname(__FILE__) . '/dumper.php');
 require_once(dirname(__FILE__) . '/simpletest.php');
 require_once(dirname(__FILE__) . '/exceptions.php');
 require_once(dirname(__FILE__) . '/reflection_php5.php');
+/**#@-*/
 if (! defined('SIMPLE_TEST')) {
     /**
      * @ignore
      */
     define('SIMPLE_TEST', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 }
-/**#@-*/
 
 /**
  *    Basic test case. This is the smallest unit of a test
@@ -362,6 +362,8 @@ class SimpleTestCase {
 
 /**
  *  Helps to extract test cases automatically from a file.
+ *    @package      SimpleTest
+ *    @subpackage   UnitTester
  */
 class SimpleFileLoader {
 
