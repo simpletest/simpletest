@@ -5,29 +5,28 @@
     <content>
         <introduction>
             <p>
-                SimpleTest ships with the simplest possible interface by default.
-                Mostly you just want to know if your test passed, or your test failed.
-                If it failed, you want the reason.
-                Nothing more.
+				SimpleTest è fornita di default della più semplice interfaccia di visualizzazione.
+                Nella maggior parte dei casi tutto quello che si vorrà sapere è
+				se il test sono passati o sono falliti. Nel caso di fallimento si vorrà
+				conoscere il motivo. Niente di più.
             </p>
             <p>
-                Sometimes you want a more sophisticated output for stakeholders
-                and for acceptance testing.
-                If a minimal display is not enough, here
-                is how to roll your own.
+				A volte si possono desiderare output più sofisticati perché siano
+				letti da altri stakeholder  o per gli acceptance test.
+				Nel caso un display minimale non sia abbastanza, ecco come
+				forgiarsene uno proprio.
             </p>
         </introduction>
         <section name="passes" title="I want to see the passes!">
             <p>
-                Do you really need to see the passes?
-                Oh all right then, here's how.
+				Hai proprio necessità di visualizzare anche i successi?
+				Ok, allora ecco come fare.
             </p>
             <p>
-                We have to subclass the attached display, which in our case
-                is currently <code>HtmlReporter</code>.
-                The <code>HtmlReporter</code> class is in
-                the file <em>simpletest/reporter.php</em> and currently has
-                the following interface...
+				Si deve estendere la classe di display di default, che nel
+				nostro caso è <code>HtmlReporter</code>.
+                La classe <code>HtmlReporter</code> è definita nel file
+				<em>simpletest/reporter.php</em> ed ha la seguente interfaccia:
 <php><![CDATA[
 class HtmlReporter extends TestDisplay {
     public __construct() { ... }
@@ -45,59 +44,59 @@ class HtmlReporter extends TestDisplay {
     public integer getTestCaseProgress { ... }
 }
 ]]></php>
-                Here is what the relevant methods mean.
-                You can see the
-                <a href="reporter_documentation.php#html">whole list here</a>
-                if you are interested.
+				Ecco cosa significano i metodi più importanti.
+				Se sei interessato, trovi <a href="reporter_documentation.php#html">qui</a> l'elenco completo dei
+				metodi.
                 <ul class="api">
                     <li>
                         <code>__construct()</code><br />
-                        is the constructor.
-                        Note that the unit test sets up the link to the display
-                        rather than the other way around.
-                        The display is a passive receiver of test events.
-                        This allows easy adaption of the display for other test
-                        systems beside unit tests, such as monitoring servers.
-                        It also means that the unit test can write to more than
-                        one display at a time.
+						è il costruttore.
+						Nota che è lo unit test ad impostare il collegamento
+						con il display e non viceversa.
+						Il display è un ricevitore passivo di eventi di test.
+						Questo facilita l'utilizzo del display in altri sistemi di
+						test diversi dagli unit test, come i server di monitoraggio.
+						Permette anche allo unit test di scrivere i risultati su
+						pià display contemporaneamente.
                     </li>
                     <li>
                         <code>void paintFail(string $message)</code><br />
-                        paints a failure.
-                        See below.
+                        disegna una failure.
+                        Vedi oltre.
                     </li>
                     <li>
                         <code>void paintPass(string $message)</code><br />
-                        by default does nothing.
-                        This is the method we will modify.
+                        di default non fa niente.
+                        Questo è il metodo che modificheremo.
                     </li>
                     <li>
                         <code>string getCss()</code><br />
-                        returns the CSS styles as a string for the page header
-                        method.
-                        Additional styles have to be appended here.
+						restituisce lo stile CSS come stringa per il metodo
+						che gestisce l'header della pagina.
+						Gli stili aggiuntivi vengono accodati qui.
                     </li>
                     <li>
                         <code>array getTestList()</code><br />
-                        is a convenience method for subclasses.
-                        Lists the current nesting of the tests as a list
-                        of test names.
-                        The first, most deeply nested test, is first in the
-                        list and the current test method will be last.
+						è un metodo di aiuto per le sottoclassi.
+						Elenca l'attuale annidamento dei test come lista di
+						nomi di test.
+						Il test più profondamente annidato viene riportato per
+						primo e il test correntemente eseguito per ultimo.
                     </li>
                 </ul>
             </p>
             <p>
-                To show the passes we just need the
-                <code>paintPass()</code> method to behave
-                just like <code>paintFail()</code>.
-                Of course we won't modify the original, we'll subclass.
+				Per visualizzare i successi basta fare in modo che
+				il metodo <code>paintPass()</code> si comporti come
+                <code>paintFail()</code>.
+                Ovviamente non modificheremo il file originale: faremo un
+				subclassing.
             </p>
         </section>
-        <section name="subclass" title="A display subclass">
+        <section name="subclass" title="Una sottoclasse di display">
             <p>
-                Firstly we'll create a <em>tests/show_passes.php</em> file
-                in our logging project and then place in it this empty class...
+				Per prima cosa creeremo il file <em>tests/show_passes.php</em>
+				nel progetto e vi piazzeremo questa classe vuota:
 <php><![CDATA[
 <strong><?php
 require_once('simpletest/reporter.php');
@@ -106,10 +105,9 @@ class ShowPasses extends HtmlReporter {
 }
 ?></strong>
 ]]></php>
-                A quick peruse of the
-                <a href="http://simpletest.svn.sourceforge.net/viewvc/simpletest/simpletest/trunk/reporter.php?view=markup">SimpleTest code base</a>
-                shows the <code>paintFail()</code> implementation
-                at the time of writing to look like this...
+				Una rapida scorsa al <a href="http://simpletest.svn.sourceforge.net/viewvc/simpletest/simpletest/trunk/reporter.php?view=markup">code base</a>
+				di SimpleTest mostra l'implementazione di <code>paintFail()</code>
+                che, al momento della stesura di questo documento, appare così:
 <php><![CDATA[
 function paintFail($message) {
     parent::paintFail($message);
@@ -120,14 +118,13 @@ function paintFail($message) {
     print "-&gt;$message<br />\n";
 }
 ]]></php>
-                Essentially it chains to the parent's version, which we
-                have to do also to preserve house keeping, and then
-                prints a breadcrumbs trail calculated from the current test
-                list.
-                It drops the top level tests name, though.
-                As it is the same on every test that would be a little bit too
-                much information.
-                Transposing this to our new class...
+				Sostanzialmente, invoca la versione della classe padre, operazione
+				che per correttezza dovremmo eseguire anche noi, poi stampa un
+				breadcumb con la posizione calcolata dall'attuale elenco dei test,
+				rimuovendo il livello più alto dei nomi dei test.
+				Dal momento che quest'ultimo sarebbe identico per ogni test, sarebbe
+				un eccesso di informazione.
+				Trasponendo questo codice alla nostra nuova classe:
 <php><![CDATA[
 class ShowPasses extends HtmlReporter {
     <strong>
@@ -141,9 +138,9 @@ class ShowPasses extends HtmlReporter {
     }</strong>
 }
 ]]></php>
-                So far so good.
-                Now to make use of our new class we have to modify our
-                <em>tests/all_tests.php</em> file.
+                Per adesso tutto bene.
+                Adesso, utilizziamo la nuova classe per modificare il file
+                <em>tests/all_tests.php</em>.
 <php><![CDATA[
 <?php<strong>
 require_once('show_passes.php');
@@ -160,7 +157,7 @@ class AllTests extends TestSuite {
 }
 ?>
 ]]></php>
-                We can run this to see the results of our handywork...
+				Possiamo eseguirlo per vedere i risultati del nostro lavoro:
                 <div class="demo">
                     <h1>All tests</h1>
                     Pass: log_test.php-&gt;Log class test-&gt;testappendingtofile-&gt;Expecting [/Test line 1/] in [Test line 1]<br />
@@ -172,11 +169,11 @@ class AllTests extends TestSuite {
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">3/3 test cases complete.
                     <strong>6</strong> passes and <strong>0</strong> fails.</div>
                 </div>
-                Nice, but no gold star.
-                We have lost a little formatting here.
-                The display does not have a CSS style for
-                <code>span.pass</code>, but we can add this
-                easily by overriding one more method...
+				Buono, ma nona ancora perfetto.
+				Abbiamo ancora una formattazione scarsa.
+				Il display non prevede ancora uno stile CSS per 
+				<code>span.pass</code> ma possiamo facilmente aggiungerla
+				con l'ovrerriding di un ulteriore metodo:
 <php><![CDATA[
 class ShowPasses extends HtmlReporter {
     
@@ -194,9 +191,9 @@ class ShowPasses extends HtmlReporter {
     }</strong>
 }
 ]]></php>
-                If you are adding the code as you go, you will see the style
-                appended when you do view source on the test results page in your browser.
-                To the eye the display itself should now look like this...
+				Se stai aggiungendo il codice mentre procedi, potrai vedere lo
+				stile aggiunto nel sorgente delle pagine del risultato dei test nel browser.
+				Il display stesso dovrebbe apparire così:
                 <div class="demo">
                     <h1>All tests</h1>
                     <span class="pass">Pass</span>: log_test.php-&gt;Log class test-&gt;testappendingtofile-&gt;Expecting [/Test line 1/] in [Test line 1]<br />
@@ -208,27 +205,27 @@ class ShowPasses extends HtmlReporter {
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">3/3 test cases complete.
                     <strong>6</strong> passes and <strong>0</strong> fails.</div>
                 </div>
-                Some people definitely prefer to see the passes being added
-                as they are working on code; the feeling that you are getting
-                work done is nice after all.
-                Once you have to scroll up and down the page to find failures
-                though, you soon come to realise its dark side.
+				Alcuni preferiscono decisamente vedere i successi nei risultati
+				mentre lavorano sul codice: la sensazione di star lavorando correttamente,
+				dopo tutto, è piacevole.
+				Una volta che dovrai fare lo scroll su e giù per la pagina per trovare
+				le failure scoprirai il lato negativo di questo approccio.
             </p>
             <p>
-                Try it both ways and see which you prefer.
-                We'll leave it in for a bit anyhow when looking at the
-                <a href="mock_objects_tutorial.php">mock objects coming up</a>.
-                This is the first test tool that generates additional tests
-                and it will be useful to see what is happening behind the scenes.
+				Provali entrambi per decidere quale preferisci.
+				Lasceremo questa modalità attiva per affrontare
+				il prossimo argomento, i <a href="mock_objects_tutorial.php">oggetti mock</a>
+                Questo è il primo esempio di strumento di test che genera test aggiuntivi
+				e sarà utile per studiare cosa sta accadendo dietro le quinte.
             </p>
         </section>
     </content>
     <internal>
         <link>
-            How to Change the display to <a href="#passes">show test passes</a>.
+            Come modificare il display per <a href="#passes">mostrare i successi</a>.
         </link>
         <link>
-            <a href="#subclass">Subclassing the <code>HtmlReporter</code> class</a>.
+            <a href="#subclass">Fare il subclassing di <code>HtmlReporter</code> class</a>.
         </link>
     </internal>
     <external>

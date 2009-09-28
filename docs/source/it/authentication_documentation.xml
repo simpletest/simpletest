@@ -5,18 +5,18 @@
     <content>
         <introduction>
             <p>
-                One of the trickiest, and yet most important, areas
-                of testing web sites is the security.
-                Testing these schemes is one of the core goals of
-                the SimpleTest web tester.
+				Uno delle aree più delicate e più importanti del collaudo
+				di siti web è la sicurezza.
+				Collaudare quest'area è uno degli obiettivi centrali del
+				web tester di SimpleTest.
             </p>
         </introduction>
         <section name="basic" title="Autenticazione HTTP di base">
             <p>
-                If you fetch a page protected by basic authentication then
-                rather than receiving content, you will instead get a 401
-                header.
-                We can illustrate this with this test...
+				Se si prova a prelevare una pagina protetta con un sistema
+				di autenticazioen di base, invece di riceverne il contenuto si
+				ottiene un header 401.
+				Si può illustrare questo caso con il test seguente:
 <php><![CDATA[
 class AuthenticationTest extends WebTestCase {<strong>
     function test401Header() {
@@ -25,7 +25,7 @@ class AuthenticationTest extends WebTestCase {<strong>
     }</strong>
 }
 ]]></php>
-                This allows us to see the challenge header...
+                Questo ci permette di analizzare l'header della richiesta di autenticazione:
                 <div class="demo">
                     <h1>File test</h1>
 <pre style="background-color: lightgray; color: black"><![CDATA[
@@ -39,9 +39,9 @@ Content-Type: text/html; charset=iso-8859-1
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
                     <strong>0</strong> passes, <strong>0</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
-                We are trying to get away from visual inspection though, and so SimpleTest
-                allows to make automated assertions against the challenge.
-                Here is a thorough test of our header...
+				Tuttavia, siccome si sta cercando di evitare l'ispezione visuale, SimpleTest
+				permette di programmare degli assert automatzzati sul tentativo.
+				Qui viene mostrato un test scrupoloso dell'header:
 <php><![CDATA[
 class AuthenticationTest extends WebTestCase {
     function test401Header() {
@@ -52,15 +52,16 @@ class AuthenticationTest extends WebTestCase {
     }
 }
 ]]></php>
-                Any one of these tests would normally do on it's own depending
-                on the amount of detail you want to see.
+				Non importa quale degli assert da solo sia sufficiente,
+				tutto dipende dalla quantità di dettagli si vogliono analizzare.
             </p>
             <p>
-                One theme that runs through SimpleTest is the ability to use
-                <code>SimpleExpectation</code> objects wherever a simple
-                match is not enough.
-                If you want only an approximate match to the realm for
-                example, you can do this...
+				Una caratteristica di SimpleTest è di permettere l'utilizzo
+				di oggetti <code>SimpleExpectation</code>laddove un semplice confronto
+				di pattern non sia sufficiente.
+				
+				Se si desidera solo un confronto approssimativo delle credenziali 
+				per esempio, si può fare così:
 <php><![CDATA[
 class AuthenticationTest extends WebTestCase {
     function test401Header() {
@@ -69,14 +70,14 @@ class AuthenticationTest extends WebTestCase {
     }
 }
 ]]></php>
-                This type of test, testing HTTP responses, is not typical.
+				Il collaudo della risposta HTTP non molto rappresentativa.
             </p>
             <p>
-                Most of the time we are not interested in testing the
-                authentication itself, but want to get past it to test
-                the pages underneath.
-                As soon as the challenge has been issued we can reply with
-                an authentication response...
+				La maggior parte delle volte non si è interessati al collaudo
+				dell'autenticazione in se', ma la si vuole eseguire per accedere
+				al collaudo delle pagine sottostanti.
+				Non appena la richiesta di autenticazione è stato emesso si potrà
+				restituire una risposta di autenticazione:
 <php><![CDATA[
 class AuthenticationTest extends WebTestCase {
     function testCanAuthenticate() {
@@ -86,13 +87,16 @@ class AuthenticationTest extends WebTestCase {
     }
 }
 ]]></php>
-                The username and password will now be sent with every
-                subsequent request to that directory and subdirectories.
-                You will have to authenticate again if you step outside
-                the authenticated directory, but SimpleTest is smart enough
-                to merge subdirectories into a common realm.
+				Username e password saranno inviati ad ogni successiva richiesta
+				a quella directory e alle sue sotto-directory.
+				Sarà necessario autenticarsi nuovamente se si esce dalla
+				directory in cui ci si è autenticati, ma SimpleTest è abbastanza
+				intelligente da unire le sotto-directory sotto lo stesso database
+				di autenticazione.
             </p>
             <p>
+				Se si vuole, si può accorciare ancor più questo passo codicificando
+				le credenziali direttamente nell'URL:
                 If you want, you can shortcut this step further by encoding
                 the log in details straight into the URL...
 <php><![CDATA[
@@ -103,41 +107,43 @@ class AuthenticationTest extends WebTestCase {
     }
 }
 ]]></php>
-                If your username or password has special characters, then you
-                will have to URL encode them or the request will not be parsed
-                correctly.
-                I'm afraid we leave this up to you.
+				Se username o password contengono qualche carattere speciale
+				sarà necessario codificarli altrimenti la richiesta non 
+				verrà interpretata correttamente.
+				Temo che questo compito resterà responsabilità dello sviluppatore.
             </p>
             <p>
-                A problem with encoding the login details directly in the URL is
-                the authentication header will not be sent on subsequent requests.
-                If you navigate with relative URLs though, the authentication
-                information will be preserved along with the domain name.
+				Un problema nella codifica delle credenziali di autenticazione
+				direttamente nell'URL è che l'header di autenticazione non viene
+				inviata automaticamente ad ogni successiva richiesta.
+				Se si naviga il sito mediante URL relative, tuttavia, le informazioni
+				di autenticazioni verranno conservate insieme al nome di dominio.
             </p>
             <p>
-                Normally though, you use the <code>authenticate()</code> call.
-                SimpleTest will then remember your login information on each request.
+				Di solito, però, si utilizza la chiamata a <code>authenticate()</code>.
+                SimpleTest ricorderà allora le credenziali ad ogni richiesta.
             </p>
             <p>
-                Only testing with basic authentication is currently supported, and
-                this is only really secure in tandem with HTTPS connections.
-                This is usually good enough to protect test server from prying eyes,
-                however.
-                Digest authentication and NTLM authentication may be added
-                in the future if enough people request this feature.
+				Attualmente è supportato solo il collaudo dell'autenticazione di base
+				e questo è da considerarsi sicuro solo se usato insieme ad una
+				connessione HTTPS.
+				Comunque, di solito questo è sufficiente per proteggere il server da occhi indiscreti.
+                La Digest authentication e l'autenticazione NTLM potrebbero venire aggiunte
+				nel futuro se abbastanza persone dovessero richiedere queste feature.
             </p>
         </section>
-        <section name="cookies" title="I Cookie">
+        <section name="cookies" title="Collaudare i sistemi di autenticazione basati su cookie">
             <p>
-                Basic authentication doesn't give enough control over the
-                user interface for web developers.
-                More likely this functionality will be coded directly into
-                the web architecture using cookies with complicated timeouts.
-                We need to be able to test this too.
+				Per gli sviluppatori web l'autenticazione di base non fornisce sufficiente controllo
+				sull'interfaccia utente.
+				Molto più probabilmente questa funzionalità sarà codificata
+				direttamente dentro l'architettura dell'applicazione per mezzo
+				di cookie e di complessi timeout.
+                E' necessario essere in grado di collaudare anche questo.
             </p>
             <p>
-                Starting with a simple log-in form...
-<pre><![CDATA[
+                Iniziamo con un semplice form di login:
+<php><![CDATA[
 <form>
     Username:
     <input type="text" name="u" value="" /><br />
@@ -145,8 +151,8 @@ class AuthenticationTest extends WebTestCase {
     <input type="password" name="p" value="" /><br />
     <input type="submit" value="Log in" />
 </form>
-]]></pre>
-                Which looks like...
+]]></php>
+                che ha questo aspetto:
             </p>
             <p>
                 <form class="demo">
@@ -158,11 +164,11 @@ class AuthenticationTest extends WebTestCase {
                 </form>
             </p>
             <p>
-                Let's suppose that in fetching this page a cookie has been
-                set with a session ID.
-                We are not going to fill the form in yet, just test that
-                we are tracking the user.
-                Here is the test...
+				Supponiamo che recuperando questa pagina venga impostato un
+				cookie con l'ID di sessione.
+				Non abbiamo intnzione di riempire il form, ancora: vogliamo solo
+				verificare che l'utente venga tracciato.
+				Ecco il test:
 <php><![CDATA[
 class LogInTest extends WebTestCase {
     function testSessionCookieSetBeforeForm() {
@@ -171,9 +177,9 @@ class LogInTest extends WebTestCase {
     }
 }
 ]]></php>
-                All we are doing is confirming that the cookie is set.
-                As the value is likely to be rather cryptic it's not
-                really worth testing this with...
+				Tutto quel che si sta facendo è confermare che il cookie sia
+				impostato. Dal momento che il suo valore sarà abbastanza criptico,
+				non importa così tanto collaudarlo:
 <php><![CDATA[
 class LogInTest extends WebTestCase {
     function testSessionCookieIsCorrectPattern() {
@@ -182,20 +188,21 @@ class LogInTest extends WebTestCase {
     }
 }
 ]]></php>
-                If you are using PHP to handle sessions for you then
-                this test is even more useless, as we are just testing PHP itself.
+				Se si sta utilizzando PHP per gestire le sessioni allora questo
+				test è perfino ancora più inutile dal momento che si starebbe
+				collaudando PHOP stesso.
             </p>
             <p>
-                The simplest test of logging in is to visually inspect the
-                next page to see if you are really logged in.
-                Just test the next page with <code>WebTestCase::assertText()</code>.
+				Il miglior modo per verificare l'avvenuta autenticazione è
+				analizzare la pagina successiva per vedere se si è davvero loggati.
+				E' sufficiente verificare la successiva pagina con <code>WebTestCase::assertText()</code>.
             </p>
             <p>
-                The test is similar to any other form test,
-                but we might want to confirm that we still have the same
-                cookie after log-in as before we entered.
-                We wouldn't want to lose track of this after all.
-                Here is a possible test for this...
+				Questo testo è simile a qualsiasi altro test di form
+				ma si vorrà verificare che dopo l'autenticazione si starà
+				ottenendo lo stesso cookie di quello ottenuto al momento di entrare.
+				Non si vuole perdere traccia di questo, dopo tutto.
+				Ecco un possibile test per questo caso:
 <php><![CDATA[
 class LogInTest extends WebTestCase {
     ...
@@ -210,12 +217,13 @@ class LogInTest extends WebTestCase {
     }
 }
 ]]></php>
-                This confirms that the session identifier is maintained
-                afer log-in and we haven't accidently reset it.
+				Ciò conferma che l'identificatore di sessione è stato
+				mantenuto dopo il login e non lo si è incidentalmente cancellato.
             </p>
             <p>
-                We could even attempt to hack our own system by setting
-                arbitrary cookies to gain access...
+				Potremmo provare perfino a compromettere il nostro stesso
+				sistema impostanto un cookie arbitrario per tentare di
+				ottenere l'accesso senza autenticazione:
 <php><![CDATA[
 class LogInTest extends WebTestCase {
     ...
@@ -227,10 +235,10 @@ class LogInTest extends WebTestCase {
     }
 }
 ]]></php>
-                Is your site protected from this attack?
+                Il tuo sito è protetto da questo tipo di attacchi?
             </p>
         </section>
-        <section name="session" title="Le sessioni del browser">
+        <section name="session" title="Gestire le sessioni del browser ed i timeout">
             <p>
                 If you are testing an authentication system a critical piece
                 of behaviour is what happens when a user logs back in.
@@ -251,21 +259,20 @@ class LogInTest extends WebTestCase {
     }
 }
 ]]></php>
-                The <code>WebTestCase::restart()</code> method will
-                preserve cookies that have unexpired timeouts, but throw away
-                those that are temporary or expired.
-                You can optionally specify the time and date that the restart
-                happened.
+				Il metodo <code>WebTestCase::restart()</code> conserva i cookie
+				non ancora scaduti ma elimina quelli temporanea e quelli scaduti.
+				Opzionalmente si può indicare la data e l'ora nelle quali far
+				avvenire il riavvio.
+            </p>
+            <p>	
+				I cookie scaduti possono essrer un problema.
+				Dopo tutto, se si dispone di un cookie che scade dopo un'ora
+				non si potrà sospendere il test per un'ora intera nell'attesa che
+				il cookie scada.
             </p>
             <p>
-                Expiring cookies can be a problem.
-                After all, if you have a cookie that expires after an hour,
-                you don't want to stall the test for an hour while waiting
-                for the cookie to pass it's timeout.
-            </p>
-            <p>
-                To push the cookies over the hour limit you can age them
-                before you restart the session...
+				Per portare i cookie oltre il limite dell'ora è possibile
+				invecchiarli prima di riavviare la sessione:
 <php><![CDATA[
 class LogInTest extends WebTestCase {
     ...
@@ -283,21 +290,20 @@ class LogInTest extends WebTestCase {
     }
 }
 ]]></php>
-                After the restart it will appear that cookies are an
-                hour older, and any that pass their expiry will have
-                disappeared.
+				Dopo il riavvio i cookie risulteranno di un'ora più vecchi
+				e tutti quelli che saranno scaduto verranno eliminati.
             </p>
         </section>
     </content>
     <internal>
         <link>
-            Getting through <a href="#basic">Basic HTTP authentication</a>
+            <a href="#basic">Autenticazione HTTP di base</a>
         </link>
         <link>
-            Testing <a href="#cookies">cookie based authentication</a>
+            <a href="#cookies">Collaudare i sistemi di autenticazione basati su cookie</a>
         </link>
         <link>
-            Managing <a href="#session">browser sessions</a> and timeouts
+            <a href="#session">Gestire le sessioni del browser ed i timeout</a>
         </link>
     </internal>
     <external>

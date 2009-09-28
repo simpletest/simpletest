@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- $Id: simple_test.xml 1876 2009-06-12 16:30:24Z pp11 $ -->
-<page title="Tutorial rapido su SimpleTest" here="Tutorial rapido su SimpleTest">
+<page title="Scrivere test con SimpleTest" here="Scrivere test con SimpleTest">
     <long_title>
         Download the SimpleTest testing framework -
         Unit tests and mock objects for PHP
@@ -185,7 +185,7 @@ class Log {
 				si veda la documentazione su <a local="unit_test_documentation">unit test</a>.
             </p>
         </section>
-        <section name="group" title="Costruire Test suite">
+        <section name="group" title="Raggruppare i test">
             <p>
 				E' improbabile che in un'applicazione reale venga avviato un solo case test.
 				Questo implica che debba esistere un sistema per raggruppare i case in 
@@ -504,20 +504,18 @@ class TestOfRankings extends WebTestCase {
     </content>
     <internal>
         <link>
-            <a href="#unit">Using unit tester</a>
-            with an example.
+            <a href="#unit">Iniziare subito ad utilizzare il tester</a> con un esempio
         </link>
         <link>
-            <a href="#group">Grouping tests</a>
-            for testing with one click.
+            <a href="#group">Raggruppare i test</a> per collaudare più cose con un solo click
+            
         </link>
         <link>
-            <a href="#mock">Using mock objects</a>
-            to ease testing and gain tighter control.
+            <a href="#mock">Usare gli oggetti mock</a> per facilitare il collaudo e raffinare il controllo
         </link>
         <link>
-            <a href="#web">Testing web pages</a>
-            at the browser level.
+            <a href="#web">Il collaudo di pagine web</a> al livello del browser
+            
         </link>
     </internal>
     <external>

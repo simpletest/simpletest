@@ -5,76 +5,84 @@
     <content>
         <introduction>
             <p>
-                In order to test a code module you need very tight control
-                of its environment.
-                If anything can vary behind the scenes, for example a
-                configuration file, then this could cause the tests
-                to fail unexpectedly.
-                This would not be a fair test of the code and could
-                cause you to spend fruitless hours examining code that
-                is actually working, rather than dealing with the configuration issue
-                that actually failed the test.
-                At the very least your test cases get more complicated in
-                taking account the possible variations.
+				Per collaudare il codice di un modulo è necessario uno stretto
+				controllo dell'ambiente in cui questo opera.
+				Qualsiasi elemento dovesse variare dietro le quinte, per
+				esempio un file di configurazione, si potrebbe causare il
+				fallimento inaspettato dei test.
+                Si potrebbe trattare di un test non banale e potrebbe
+				essere necessario spendere molte infruttuose ore ad
+				esaminare del codice che in realtà sta funzionando invece che
+				preoccuparsi del problema di confirazione che, di fatto, sta provocando
+				il fallimento.
+                Molto rapidamente i test case diverranno abbastanza complicati da
+				rendere necessario di preoccuparsi delle possibili variazioni.
             </p>
         </introduction>
-        <section name="time" title="Controlling time">
+        <section name="time" title="Il tempo è spesso un elemento trascurato nei test">
             <p>
-                There are often a lot of obvious variables that could affect
-                a unit test case, especially in the web development
-                environment in which PHP usually operates.
-                These include database set up, file permissions, network
-                resources and configuration amongst others.
-                The failure or misinstall of one of these components will
-                break the test suite.
+				Ci sono solitamente molte ovvie variabili che possono influenzare
+				uno unit test case, specialmente negli ambienti di sviluppo web
+				in cui PHP normalmente opera.
+				Queste comprendono soprattutto il setup del database, i permessi sui file,
+				le risorse di rete e i file di configurazione.
+                La non operatività o i problemi di installazioni di questi componenti
+				provocheranno il fallimento della test suite.
+
             </p>
             <p>
-                Do we add tests to confirm these components are installed?
-                This is a good idea, but if you place them into code module
-                tests you will start to clutter you test code with detail
-                that is irrelavent to the immediate task.
-                They should be placed in their own test suite.
+				Dobbiamo aggiungere dei test per confermare che questi componenti
+				siano installati?
+				E' una buona idea, ma se si posizionano questi test nel codice di
+				collaudo del modulo si finisce per ingombrare il codice con dettagli
+				che sono irrilevanti per l'obiettivo diretto del test.
+				Dovrebbero essere usare test suite separate.
             </p>
             <p>
-                Another problem, though, is that our development machines
-                must have every system component installed to be able
-                to run the test suite.
-                Your tests run slower too.
+				Un altro problema, tuttavia, è che le macchine di sviluppo devono
+				essere provviste di tutti i moduli di sistena installati, per essere
+				in grado di eseguire le suite di test.
+				I test verranno anche eseguiti più lentamente.
             </p>
             <p>
-                When faced with this while coding we will often create wrapper
-                versions of classes that deal with these resources.
-                Ugly details of these resources are then coded once only.
-                I like to call these classes &quot;gateway classes&quot;,
-                as they exist at the edges of the application, 
-                the interface of your application with the rest of the
-                system.
-                These gateway classes are best simulated during testing
-                by fake versions.
-                These run faster and are often called
-                &quot;Server Stubs&quot;, or in more generic form
-                &quot;Mock Objects&quot;.
-                It is a great time saver to wrap and stub out such resources.
+				Quando si incontrano questi problemi durante lo sviluppo di solito
+				si creano delle versioni wrapper delle classi che si occupano
+				di gestire tali risorse.
+				I dettagli più problematici delle risorse vengono allora
+				codificate una volta per tutte.
+				Mi piace riferirmi a queste classi come &quot;classi gateway&quot;
+                dal momento che funzionano ai bordi l'applicazione,
+				cioè nell'interfaccia dell'applicazione con il resto del sistema.
+				Le classi gateway sono simulate durante il test da versioni fake.
+				Queste hanno esecuzioni molto più rapide degli originali
+				e vengono spesso chiamate 
+                &quot;Server Stub&quot;, o, più generalmente, 
+                &quot;oggetti Mock&quot;.
+				E' un gran risparmio di tempo fare il wrapping e la simulazione
+				di queste risorse.
             </p>
             <p>
-                One often neglected external resource is time.
+				Una delle risorse esterne a cui si presta solitamente
+				poca attenzione è il tempo.
             </p>
             <p>
-                For example, to test a session time-out coders will often
-                temporarily set the session time limit to a small value, say two seconds,
-                and then do a <code>sleep(3)</code>
-                and assert that the session is now invalid.
-                That adds three seconds to your test suite and is usually
-                a lot of extra code making your session classes that maleable.
-                Far simpler is to have a way to suddenly advance the clock.
-                To control time.
+				Per esempio, per collaudare il timeout di una sessione gli
+				sviluppatori solitamente impostano il limite di validità di una
+				sessione a valori molto piccoli, per esempio due secondi, dopo di che
+				utilizzano <code>sleep(3)</code> e verificano che la sessione sia
+				scaduta.
+				Tutto questo allunga di tre secondi la test suite e normalmente
+				molto codice per rendere le classi che gestiscono le sessioni abbastanza
+				flessibili.
+				Molto più semplice sarebbe avere un sistema per spostare in avanti
+				l'orologio. Cioè, il controllo sul tempo.
             </p>
         </section>
-        <section name="clock" title="A clock class">
+        <section name="clock" title="Una classe orologio">
             <p>
-                We will again design our clock wrapper by first writing tests.
-                We add a clock test case to our <em>tests/all_tests.php</em>
-                test suite...
+				Nuovamente, disegneremo il wrapper dell'orologio scrivendo
+				come prima cosa i suoi test.
+				Aggiungeremo un clock test case  alla suite <em>tests/all_tests.php</em>:
 <php><![CDATA[
 <?php
 require_once(dirname(__FILE__) . '/simpletest/autorun.php');
@@ -90,8 +98,8 @@ class AllTests extends TestSuite {
 }
 ?>
 ]]></php>
-                Then we create the test case in the new file
-                <em>tests/clock_test.php</em>...
+				Dopo di che si creerà il test case nel nuovo file
+                <em>tests/clock_test.php</em>:
 <php><![CDATA[
 <?php
 require_once(dirname(__FILE__) . '/../classes/clock.php');
@@ -104,12 +112,12 @@ class TestOfClock extends UnitTestCase {
 }</strong>
 ?>
 ]]></php>
-                Our only test at the moment is that our new
-                <code>Clock</code> class acts
-                as a simple PHP <code>time()</code>
-                function substitute.
-                We will write the time shift functionality once we are green.
-                At the moment we are obviously not green...
+				Il solo test eseguito al momento è che la nuova classe
+                <code>Clock</code> si comporti come un sostituto della funzione
+				PHP  <code>time()</code>.
+				Scriveremo la funzione di traslazione temporale solo una
+				volta che il test sarà verde.
+				Al momento, ovviamente, siamo rossi:
                 <div class="demo">
                     <br />
                     <b>Fatal error</b>:  Failed opening required '../classes/clock.php' (include_path='') in
@@ -118,18 +126,19 @@ class TestOfClock extends UnitTestCase {
                 </div>
             </p>
             <p> 
-                If you don't see this kind of error, it means your error settings
-                need some adjustments. You may want to add these lines at the top of your test :
+				Se non vedi questo tipo di errore significa che le tue impostazioni degli errori
+				richiedono aggiustamenti. Può darsi che sia necessario aggiungere
+				queste linee all'inizio del test:
 <php><![CDATA[
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 ]]></php>
-				The PHP documentation will come handy if you're stuck without being
-                able to see the <code>Fatal error</code>.                 
+				La documentazione di PHP sarà utile, se non ri riuscirà a visualizzare il
+				messaggio di <code>Fatal error</code>.                 
             </p>
             <p> 
-                Assuming the error was shown, we can carry on
-                and create a <em>classes/clock.php</em> file...
+				Assumento che l'errore venga visualizzato si proseguirà
+				con la creazione del file <em>classes/clock.php</em>:
 <php><![CDATA[
 <strong><?php
 class Clock {
@@ -138,14 +147,14 @@ class Clock {
 }
 ?></strong>
 ]]></php>
-                This regains our flow ready for coding.
+				Dopo di che si è pronti per proseguire a scrivere codice.
                 <div class="demo">
                     <h1>AllTests</h1>
                     <span class="fail">Fail</span>: TestOfClock -&gt; testClockTellsTime -&gt; [NULL: ] should be equal to [integer: 1050257362]<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">3/3 test cases complete.
                     <strong>4</strong> passes, <strong>1</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
-                This is now easy to fix...
+				Questo è facile da risolvere.
 <php><![CDATA[
 class Clock {
     function now() {<strong>
@@ -153,25 +162,25 @@ class Clock {
     }
 }
 ]]></php>
-                And we are green...
+                E quando otteniamo il verde:
                 <div class="demo">
                     <h1>AllTests</h1>
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">3/3 test cases complete.
                     <strong>5</strong> passes, <strong>0</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
-                There is still a problem.
+                C'è ancora un probelma.
             </p>
             <p>
-                The clock could roll over during the assertion causing the
-                result to be out by one second.
-                The chances are small, but if there were a lot of timing tests
-                you would end up with a test suite that is erratic, severely
-                limiting its usefulness.
-                We will <a href="subclass_tutorial.php">tackle this shortly</a> and for now just jot it onto our
-                &quot;to do&quot; list.
+				L'orologio continua ad andare avanti durante l'esecuzione del test
+				il che può risultare in secondo di disallineamento.
+				Le possibilità sono remote, ma nel caso si facciano molti collaudi
+				sul tempo si finirà con l'avere una suite di test sbagliata che limiterà
+				severamente la sua utilità.
+				Dobbiamo <a href="subclass_tutorial.php">contrastare rapidamente</a> questo fenomeno
+				e per adesso lo annotiamo nella lista &quot;to do&quot;.
             </p>
             <p>
-                The advancement test looks like this...
+				Il test di avanzamento appare così:
 <php><![CDATA[
 class TestOfClock extends UnitTestCase {
 
@@ -187,8 +196,8 @@ class TestOfClock extends UnitTestCase {
     }</strong>
 }
 ]]></php>
-                The code to get to green is straight forward and just involves adding
-                a time offset.
+				Il codice per ottenere il verde non è distante e comporta solo
+				l'aggiunta di un offset sul tempo.
 <php><![CDATA[
 class Clock {<strong>
     private $offset = 0;</strong>
@@ -204,23 +213,25 @@ class Clock {<strong>
 ]]></php>
             </p>
         </section>
-        <section name="tidy" title="Test suite tidy up">
+        <section name="tidy" title="Ordinare la test suite">
             <p>
-                Our <em>all_tests.php</em> file has some repetition we could
-                do without.
-                We have to manually add our test cases from each included
-                file.
-                It is possible to remove it, but use of the following requires care.
-                The <code>TestSuite</code> class has a
-                convenience method called <code>addFile()</code>
-                that takes a PHP file as a parameter.
-                This mechanism makes a note of all the classes, requires in the
-                file and then has a look at any newly created classes.
-                If they are descendents of <code>SimpleTestCase</code>
-                they are added as a new <code>TestSuite</code>.
+				Il nostro file <em>all_tests.php</em> ha delle ridondanze che
+				possiamo evitare.
+				Dobbiamo aggiugere manualmente i test case per ogni singolo file
+				da includere.
+				E' possibile evitarlo, ma l'uso di quanto stiamo per presentare
+				richiede dell'attenzione.
+				La classe <code>TestSuite</code> fornisce un comodo metodo
+				chiamato <code>addFile()</code> che accetta un file PHP come
+				parametro.
+				Il meccanismo prende nota di tutte le classi presenti nel file,
+				le include e analizza ogni nuova classe creata.
+				Se queste sono derivate da <code>SimpleTestCase</code>
+				le aggiunge come nuove <code>TestSuite</code>.
             </p>
             <p>
-                Here is our refactored test suite using this method...
+				Ecco una versione modificata della test suite in cui si utilizza
+				questo metodo:
 <php><![CDATA[
 <?php<strong>
 require_once(dirname(__FILE__) . '/simpletest/autorun.php');</strong>
@@ -234,41 +245,42 @@ class AllTests extends TestSuite {
 }
 ?>
 ]]></php>
-                The pitfalls of this are...
+                I punti critici sono:
                 <ol>
                     <li>
-                        If the test file has already been included,
-                        no new classes will be added to this group
+						Se il file fosse già stato incluso, non verrà
+						aggiunta alcuna classe al gruppo.
                     </li>
                     <li>
-                        If the test file has other classes that are
-                        related to <code>SimpleTestCase</code>
-                        then these will be added to the group test as well.
+						Se il file contiene altre classi che discendono
+						da <code>SimpleTestCase</code>, anche queste verranno
+						aggiunte al gruppo.
                     </li>
                 </ol>
-                In practice neither of these turn out to be problems.
-                Test suites are usually a tree structure, so
-                it's rare to need a test case in two places.
+				Nella pratica, nessuno di questi punti rappresenta un problema.
+				Le suite di test normalmente hanno una struttura ad albelo
+				per cui è raro che un test sia presente in due posizioni.
             </p>
             <p>
-                As for extra classes being included, they have to be
-                descendents of <code>SimpleTestCase</code> anyway.
-                Such subclasses are likely to be superclasses of helper code
-                for several other tests.
-                Simply marking them as <code>abstract</code> is
-                enough to stop them being run.
+				A proposito dell'inclusione di classi extra, queste
+				sono comunque derivate da <code>SimpleTestCase</code>.
+				Si tratta di classi utilizzate come superclassi di aiuto
+				per altri test.
+				E' sufficiente indicarle come <code>abstract</code>
+				per impedire che vengano eseguite.
             </p>
             <p>
-                We should really fix the glitch with the possible
-                clock rollover so we&apos;ll
-                <a href="subclass_tutorial.php">do this next</a>.
+				Dovremo veramente correggere l'inconveniente del
+				possibile slittamento dell'orologio e sarà quindi
+				il <a href="subclass_tutorial.php">prossimo passo</a>.
+                
             </p>
         </section>
     </content>
     <internal>
-        <link><a href="#time">Time</a> is an often neglected variable in tests.</link>
-        <link>A <a href="#clock">clock class</a> allows us to alter time.</link>
-        <link><a href="#tidy">Tidying the test suite</a>.</link>
+        <link><a href="#time">Il tempo</a> è spesso un elemento trascurato nei test.</link>
+        <link>Una <a href="#clock">classe orologio</a> che permette di controllare il tempo</link>
+        <link><a href="#tidy">Ordinare la test suite</a>.</link>
     </internal>
     <external>
         <link>
