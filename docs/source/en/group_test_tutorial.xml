@@ -85,9 +85,9 @@ class TestOfLogging extends UnitTestCase {
         $log = new Log('../temp/test.log');
         $this->assertFalse(file_exists('../temp/test.log'), 'Created before message');
         $log->message('Should write this to a file');
-        $this->assertTrue(file_exists('../temp/test.log'), 'File created');<strong>
+        $this->assertTrue(file_exists('../temp/test.log'), 'File created');
     }
-    
+    <strong>
     function testSecondMessageIsAppended() {
         $log = new Log('../temp/test.log');
         $log->message('Test line 1');
@@ -97,6 +97,7 @@ class TestOfLogging extends UnitTestCase {
         $messages = file('../temp/test.log');
         $this->assertPattern('/Test line 2/', $messages[1]);
     }
+	</strong>
 }
 ]]></php>
                 The test stays green.

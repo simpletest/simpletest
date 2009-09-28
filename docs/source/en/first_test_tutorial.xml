@@ -68,7 +68,7 @@ class TestOfLogging extends UnitTestCase {
             </p>
             <p>
                 The tests themselves are gathered in test case classes.
-                This one, the <code>TestOfLogging</code>class , is typical in extending
+                This one, the <code>TestOfLogging</code> class , is typical in extending
                 <code>UnitTestCase</code>.
                 When the test case is invoked by the autorunner it will
                 search for any method within that starts with the name &quot;test&quot;.
@@ -207,7 +207,7 @@ class TestOfLogging extends UnitTestCase {
         <section name="tdd" title="Test Driven Development">
             <p>
                 Co-inventor of
-                <a href="http://www.extremeprogramming.org/">Extreme Programming</a>,
+                <a href="http://www.extremeprogramming.org/">eXtreme Programming</a>,
                 Kent Beck, has come up with another manifesto.
                 The book is called
                 <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0321146530/ref=lib_dp_TFCV/102-2696523-7458519?v=glance&amp;s=books&amp;vi=reader#reader-link">Test driven development</a>
