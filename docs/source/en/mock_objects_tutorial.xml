@@ -185,7 +185,7 @@ Mock::generate('Clock');
                 methods, creates code to generate an identically
                 interfaced or inherited class, but with the name
                 &quot;Mock&quot; added.
-                It then then <code>eval()</code>$apos;s the new code to
+                It then <code>eval()</code>s the new code to
                 create the new class.
 <php><![CDATA[
 $clock = new MockClock($this);
@@ -276,7 +276,7 @@ class Log {
                 Have we sullied our class with test code?
             </p>
             <p>
-                Its not ideal, but consider this.
+                It's not ideal, but consider this.
                 Next chance you get, look at a circuit board, perhaps the motherboard
                 of the computer you are looking at right now.
                 On most boards you will find the odd empty hole, or solder
