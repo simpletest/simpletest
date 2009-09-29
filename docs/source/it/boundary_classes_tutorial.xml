@@ -6,81 +6,83 @@
     </long_title>
     <content>
         <introduction>
-            <p>
-                You are probably thinking that we have well and truly exhausted
-                the <code>Log</code> class by now and that there is
-                really nothing more to add.
-                Things are never that simple with object oriented programming, though.
-                You think you understand a problem and then something comes a long
-                that challenges your perspective and leads to an even deeper appreciation.
-                I thought I understood the logging class and that only the first page
-                of the tutorial would use it.
-                After that I would move on to something more complicated.
-                No one is more surprised than me that I still haven&apos;t got to
-                the bottom of it.
-                In fact I think I have only just figured out what a logger does.
+            <p>	
+				Probabilmente starai pensando che abbiamo esaurito ogni argomento
+				a proposito della classe <code>Log</code> e che adesso non c'è
+				davvero niente da aggiungere.
+				Ma le cose non sono mai così semplici nella programmazione orientata agli oggetti.
+				Pensi di aver compreso un problema quando sopraggiunge qualcosa che
+				sfida le tue convinzioni e ti porta ad una comprensione ancora più profonda.
+				Credevo di aver capito la classe log e che l'avrei citata solo nella
+				prima pagina del tutorial per dedicarmi in seguito a qualcosa di più
+				complesso. Nessuno è più sopreso di me nel non riuscire ancora a
+				vederne il fondo.
+				In effetti, penso di aver solo dato una vaga idea di cosa faccia una
+				classe per il logging.
             </p>
         </introduction>
-        <section name="variation" title="Log variations">
+        <section name="variation" title="Gestire le variazioni nel logger.">
             <p>
-                Supposing that we do not want to log to a file at all.
-                Perhaps we want to print to the screen, write the messages to a
-                socket or send them to the Unix(tm) <em>syslog</em> daemon for
-                dispatching across the network.
-                How do we incorporate this variation?
+				Supponiamo che non si voglia affatto fare il log su un file.
+				Forse desideriamo stampare il messaggio sullo schermo o scriverlo
+				su un socket o spedirmo al demone <em>syslog</em> di Unix(tm) perché
+				sia distribuito sulla rete.
+				Come possiamo incorporare queste variazioni?
             </p>
             <p>
-                Simplest is to subclass the <code>Log</code>
-                overriding the <code>message()</code> method
-                with new versions.
-                This will work in the short term, but there is actually something
-                subtle, but deeply wrong with this.
-                Suppose we do subclass and have loggers that write to files,
-                the screen and the network.
-                Three classes , but that is OK.
-                Now suppose that we want a new logging class that adds message
-                filtering by priority, letting only certain types of messages
-                through according to some configuration file.
+				Il modo più semplice è quello di fare il subclassing di 
+                <code>Log</code> facendo l'overring del metodo <code>message()</code> 
+				con una nuova versione.
+				Funziona a breve termine ma c'è qualcosa di sottile e di profondamente
+				sbagliato in questo.
+                Supponiamo di fare il subclassing e di ottenere i logger per
+				scrivere su file, sullo schermo e sulla rete.
+				Tre classi, ma va bene così.
+				Adesso supponiamo che si voglia una nuova classe di log che
+				aggiunga la funzionalità di filtro in base alla priorità
+				per consentire solo alcuni tipi di messaggio in funzione di un
+				qualche file di configurazione.
             </p>
             <p>
-                We are stuck. If we subclass again, we have to do it for all
-                three classes, giving us six classes.
-                The amount of duplication is horrible.
+				Siamo incastrati. Se applichiamo di nuovo il subclassing dobbiamo
+				farlo per 3 classi e finiamo per ottenerne 6.
+                La quantità di duplicazione è orribile.
             </p>
             <p>
-                So are you now wishing that PHP had multiple inheritence?
-                Well, here that would reduce the short term workload, but
-                complicate what should be a very simple class.
-                Multiple inheritance, even when supported, should be used
-                extremely carefully as all sorts of complicated entanglements
-                can result.
-                Treat it as a loaded gun.
-                In fact, our sudden need for it is telling us something else - perhaps
-                that we have gone wrong on the conceptual level.
+				Desideriamo forse che PHP avesse l'ereditarietà multipla?
+				Be', questo ridurrebbe il lavoro, a breve termine ma complicherebbe
+				quella che dovrebbe essere una classe molto semplice.
+				L'ereditarietà multipla, anche quando è supportata, dovrebbe
+				essere usata con estrema cautela perché porta ad ogni tipo
+				di complicazione.
+				Consideralo una pistola carico.
+                Infatti, la nostra necessità immediata è quella di ammetere qualcos'altro:
+				forse che abbiamo sbagliato qualcosa a livello concettuale.
             </p>
             <p>
-                What does a logger do?
-                Does it send messages to a file?
-                Does it send messages to a network?
-                Does it send messages to a screen?
-                Nope.
-                It just sends messages (full stop).
-                The target of those messages can be chosen when setting
-                up the log, but after that the
-                logger should be left to combine and format the message
-                elements as that is its real job.
-                We restricted ourselves by assuming that target was a filename.
+				Cosa fa un logger?
+				Invia messaggi ad un file?
+                Invia messaggi alla rete?
+                Invia messaggi ad uno schermo?
+                No.
+                Semplicemente invia messaggi. Punto.
+				Il destinatario di questi messaggi può anche essere
+				sceltro durante l'impostazione del logger ma, dopo tutto,
+				il logger dovrebbe limitarsi a combinare e formattare i
+				messaggi perché solo questo è il suo vero compito.
+				Prima ci siamo posti delle restrizioni assumendo che il destinatario
+				fosse un file.
             </p>
         </section>
-        <section name="writer" title="Abstracting a file to a writer">
+        <section name="writer" title="Astrazione di Writer">
             <p>
-                The solution to this plight is a real classic.
-                First we encapsulate the variation in a class as this will
-                add a level of indirection.
-                Instead of passing in the file name as a string we
-                will pass the &quot;thing that we will write to&quot;
-                which we will call a <code>Writer</code>.
-                Back to the tests...
+				La soluzione per questa triste situazione è un vero classico.
+				Primo, incapsuliamo la variazione in una classe così da aggiungere
+				un livello di isolamento.
+				Invece di passare il nome del file come stringa, passeremo
+				&quot;la cosa a cui bisogna inviare i messaggi&quot;
+                che potremmo chiamare <code>Writer</code>.
+                Torniamo ai test:
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');
@@ -134,20 +136,19 @@ class TestOfLogging extends UnitTestCase {
 }
 ?>
 ]]></php>
-                I am going to do this one step at a time so as not to get
-                confused.
-                I have replaced the file names with an imaginary
-                <code>FileWriter</code> class from
-                an imaginary file <em>classes/writer.php</em>.
-                This will cause the tests to crash as we have not written
-                the writer yet.
-                Should we do that now?
+				Procederò un passo alla volta in modo da non confonderci.
+				Ho rimpiazzato il nome dei file con un'immaginaria classe
+				<code>FileWriter</code> definita in un immaginario file
+				<em>classes/writer.php</em>.
+				Questo farà andare in crash i test dal momento che non abbiamo
+				ancora scritto il writer.
+                Dobbiamo farlo subito?
             </p>
             <p>
-                We could, but we don&apos;t have to.
-                We do need to create the interface, though, or we won&apos;t be
-                able to mock it.
-                This makes <em>classes/writer.php</em> looks like...
+				Potremmo, ma non è obbligatorio.
+				Piuttosto, abbiamo bisogno di scriverne l'interfaccia o non avremo
+				modo di fare il mock.
+				Ecco come appare <em>classes/writer.php</em>:
 <php><![CDATA[
 <?php
 class FileWriter {
@@ -160,8 +161,7 @@ class FileWriter {
 }
 ?>
 ]]></php>
-                We need to modify the <code>Log</code> class
-                as well...
+                Dobbiamo modificare anche la classe <code>Log</code>:
 <php><![CDATA[
 <?php
 require_once('../classes/clock.php');<strong>
@@ -183,34 +183,33 @@ class Log {<strong>
 }
 ?>
 ]]></php>
-                There is not much that hasn&apos;t changed in our now even smaller
-                class.
-                The tests run, but fail at this point unless we add code to
-                the writer.
-                What do we do now?
+				Non c'è molto che sia rimasto inalterato nella nostra nuova classe,
+				più piccola di prima.
+				I test si avviano ma continueranno a fallire a questo punto
+				fino a che non aggiungeremo il codice al writer.
+				Cosa possiamo fare?
             </p>
             <p>
-                We could start writing tests and code the
-                <code>FileWriter</code> class alongside, but
-                while we were doing this our <code>Log</code>
-                tests would be failing and disturbing our focus.
-                In fact we do not have to.
+				Potremmo iniziare a scrivere i test ed il codice di
+                <code>FileWriter</code> insieme, ma nel frattempo i
+				test di <code>Log</code> continuerebbero a fallire
+				e a distrarre la nostra attenzione.
+				In effetti non è quello che dobbiamo fare.
             </p>
             <p>
-                Part of our plan is to free the logging class from the file
-                system and there is a way to do this.
-                First we add a <em>tests/writer_test.php</em> so that
-                we have somewhere to place our test code from <em>log_test.php</em>
-                that we are going to shuffle around.
-                I won&apos;t yet add it to the <em>all_tests.php</em> file,
-                as it is the logging aspect we are tackling right now.
+				Uan parte del nostro piano è liberare la classe di logging
+				dal filesystem e c'è un modo per ottenerlo.
+				Per prima cosa agiungiamo un file <em>tests/writer_test.php</em>
+				così potremo disporre di un posto per ospitare il codice preso da
+                <em>log_test.php</em> che ci stiamo apprestando a mescolare.
+				Non lo aggiungerò ancora al file  <em>all_tests.php</em> file perché
+				è il logging l'argomento da affrontare al momento.
             </p>
             <p>
-                Now I have done that (honest!) we remove any
-                tests from <em>log_test.php</em> that are not strictly logging
-                related and move them to <em>writer_test.php</em> for later.
-                We will also mock the writer so that it does not write
-                out to real files...
+				Adesso che l'ho fatto (onestamente!) elimino tutti i test da <em>log_test.php</em> 
+				che non siano strettamente corrrelati all'attività di logging e li sposto
+				in <em>writer_test.php</em> per uso futuro.
+				Creo anche il mock del writer così che non scriva veramente su un file:
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');
@@ -233,45 +232,46 @@ class TestOfLogging extends UnitTestCase {
 }
 ?>
 ]]></php>
-                Yes that really is the whole test case and it really is that short.
-                A lot has happened here...
+				Sì, questo è davvero il test case nella sua interezza ed è
+				veramente così corto.
+				Sono successe molte cose:
                 <ol>
                     <li>
-                        The requirement to create the file only when needed has
-                        moved to the <code>FileWriter</code>.
+						Il requisito di creare un file solo quando necessario è
+						stato spostato in <code>FileWriter</code>.
                     </li>
                     <li>
-                        As we are dealing with mocks, no files are actually
-                        created and so I moved the
-                        <code>setUp()</code> and
-                        <code>tearDown()</code> off into the
-                        <code>FileWriter</code> tests.
+						Stiamo lavorando con dei mock: nessun file viene fisicamente
+						creato e, quindi, ho spostato
+                        <code>setUp()</code> e
+                        <code>tearDown()</code> dentro il test di
+                        <code>FileWriter</code>.
                     </li>
                     <li>
-                        The test now consists of sending a sample message and
-                        testing the format.
+						Il test adesso consiste nell'invio di un messaggio di
+						esempio e nella verifica del formato.
                     </li>
                 </ol>
-                Hang on a minute, where are the assertions?
+                Fermi un attimo: dove sono gli assert?
             </p>
             <p>
-                The mock objects do much more than simply behave like other
-                objects, they also run tests.
-                The <code>expectOnce()</code>
-                call told the mock to expect a single parameter of
-                the string &quot;[Timestamp] Test line&quot; when
-                the mock <code>write()</code> method is
-                called.
-                When that method is called the expected parameters are
-                compared with this and either a pass or a fail is sent
-                to the unit test as a result.
+				Gli oggetti mock fanno molto più che simulare il comportamento di altri oggetti:
+				eseguono anche i test.
+                
+				L'invocazione di <code>expectOnce()</code>
+				comunica al mock di attendersi come unico parametro 
+				la stringa &quot;[Timestamp] Test line&quot; 
+				quando il metodo <code>write()</code> viene chiamato.
+				Quando il metodo viene invocato, il parametro atteso viene
+				confrontato con questo e un messaggio di successo o di fallimento
+				viene inviato allo unit test come risultato.
             </p>
             <p>
-                The other expectation is that <code>write()</code>
-                will be called and called only once.
-                If the method is not called before the end of the test,
-                a failure is generated.
-                We can see all this in action by running the tests...
+				L'altro comportamento atteso è che <code>write()</code>
+				sia chiamato una ed una sola volta.
+				Nel caso il metodo non venga invocato entro la fine del test
+				viene generato un fallimento.
+                Possiamo vedere tutto questo in azione eseguendo i test:
                 <div class="demo">
                     <h1>All tests</h1>
                     <span class="pass">Pass</span>: log_test.php-&gt;Log class test-&gt;testwriting-&gt;Arguments for [write] were [String: [Timestamp] Test line]<br />
@@ -284,89 +284,84 @@ class TestOfLogging extends UnitTestCase {
                 </div>
             </p>
         </section>
-        <section name="boundary" title="Boundary classes">
+        <section name="boundary" title="Isolare i setup test">
             <p>
-                Something very nice has happened to the logger besides merely
-                getting smaller.
+				Apparte l'essersi ridotto di dimensioni, qualcosa di molto piacevole
+				è accaduto al logger.
             </p>
             <p>
-                The only things it depends on now are classes that we have written
-                ourselves, and
-                in the tests these are mocked and so there are no dependencies
-                on anything other than our own PHP code.
-                No writing to files or waiting for clocks to tick over.
-                This means that the <em>log_test.php</em> test case will
-                run as fast as the processor will carry it.
-                By contrast the <code>FileWriter</code>
-                and <code>Clock</code> classes are very
-                close to the system.
-                This makes them harder to test as real data must be moved
-                around and painstakingly confirmed, often by ad hoc tricks.
+				Gli unici elementi da cui adesso dipende sono le classi che abbiamo direttamente
+				scritto e queste, nei test, sono sostituite da mock così che non esiste
+				più alcuna dipendenza se non dal nostro stesso codice PHP.
+				Non c'è scrittura su file o attesa di ticchetii di orologio.
+				In altre parole, il test case <em>log_test.php</em> verrà eseguito alla massima
+				velocità supportata dal processore.
+				Al contrario, le classi <code>FileWriter</code> e <code>Clock</code> sono molto legate
+				al sistema e questo le rende più difficili da collaudare perché
+				i dati reali devono essere spostati ed assiduamente controllati,
+				spesso con trucchi ad hoc.
             </p>
             <p>
-                Our last refactoring has helped a bit.
-                The hard to test classes on the boundary of the application
-                and the system are now smaller, as the I/O code has
-                been further separated from the domain logic.
-                They are direct mappings to PHP operations:
-                <code>FileWriter::write()</code> maps
-                to PHP <code>fwrite()</code> with the
-                file opened for appending and
-                <code>Clock::now()</code> maps to
-                PHP <code>time()</code>.
-                This makes debugging easier.
-                It also means that these classes will change less often.
+				L'ultimo refactoring che abbiamo effettuato ci è stato utile.
+				La difficoltà nel collaudare le classi all'interfaccia tra
+				l'applicazione ed il sistema sono stati ridotti dal momento che
+				il codice di I/O e stato ulteriormente sepatato dalla logica
+				di dominio.
+				Esistono delle corrispondenze dirette con le operazioni PHP:
+                <code>FileWriter::write()</code> corrisponde al comando PHP
+				<code>fwrite()</code> con il file aperto in modalità append
+				e
+                <code>Clock::now()</code> corrisponde a <code>time()</code>.
+                Questo facilita enormemente il debugging.
+				Significa anche che queste classi cambieranno più raramente.
             </p>
             <p>
-                If they don&apos;t change a lot then there is no reason to
-                keep running the tests for them.
-                This means that tests for the boundary classes can be moved
-                off into there own test suite leaving the other unit tests
-                to run at full speed.
-                In fact this is what I tend to do and the test cases
-                in <a href="simple_test.php">SimpleTest</a> itself are
-                divided this way.
+				Se non cambieranno spesso allora non c'è ragione per
+				continuare ad eseguire i loro test.
+				Ciò implica che i test per le classi di interfaccia possono essere
+				trasferite in test suite dedicate in modo da permettere alle test
+				suite delle unità di essere eseguite al massimno della velocità.
+				In effeti è quello che cerco di fare e gli stessi test case di
+                <a href="simple_test.php">SimpleTest</a> sono suddivisi in questo modo.
             </p>
             <p>
-                That may not sound like much with one unit test and two
-                boundary tests, but typical applications can have
-                twenty boundary classes and two hundred application
-                classes.
-                To keep the unit tests running at full speed you will want
-                to keep them separate.
+				Può non sembrare molto per il caso di uno unit test con due
+				test di interfaccia ma, tipicamente, le applicazioni hanno
+				decine di classi di interfaccia e centinaia di classi di applicazione.
+				Per garantire che le unit test vengano eseguite al massimo della velocità
+				si cercherà sempre di mantenerle separate.
             </p>
             <p>
-                Another benefit of this separation is that you are left
-                with the smaller test suite for all your dependencies.
-                Suppose you want to set up a server for your application
-                and you want to make sure that all underlying components,
-                directories and configuration are correct.
-                You no longer need to run the entire test suite to find out,
-                just run the tests for your boundary classes.
-                For this reason, this test suite is often called the
-                &quot;setup tests&quot;.
-                Hand them to your system administrator, and they can set up
-                your server for you.
+				Un ulteriore vantaggio di questa separazione è che in tutti
+				i casi di dipendenza si ottengono test suite più ridotte.
+				Supponiamo si voglia impostare un server per l'applicazione e che
+				ci si voglia assicurare che le componenti sottostanti, le directory e
+				le configurazioni siano corretti.
+				Non ci sarà il bisogno di eseguire tutti i test: sarà sufficiente eseguire
+				i test delle classi di interfaccia.
+				Per questo motivo la test suite per lo scopo verrà chiamata
+                &quot;setup test&quot;.
+				Consegnala al tuo amministratore di sistema e lascia che venga
+				utilizzata per configurare il server per te.
             </p>
             <p>
-                Besides, separating off decisions of which system components
-                to use is good development.
-                Being able to change the underlying dependencies easily is a
-                good thing.
-                Perhaps all this mocking is
-                <a href="improving_design_tutorial.php">improving our design</a>?
+				Apparte questo, isolare le decisioni di quali componenti del sistema
+				utilizzare è una buona pratica nello sviluppo.
+				Possedere l'abilità di modificare le dipendenze sottostanti con facilità
+				è un bene. E' possibile che il mocking una pratica che 
+                <a href="improving_design_tutorial.php">migliora il design</a>?
             </p>
         </section>
     </content>
     <internal>
         <link>
-            <a href="#variation">Handling variation</a> in our logger.
+            <a href="#variation">Gestire le variazioni nel logger.</a>
         </link>
         <link>
-            Abstracting further with a <a href="#writer">mock Writer</a> class.
+            Aumentare l'astrazione con una <a href="#writer">classe mock di Writer</a>.
         </link>
         <link>
-            Separating out<a href="#boundary">setup tests</a> cleans things up.
+            <a href="#boundary">Isolare i setup test</a> per mantenere l'ordine.
         </link>
     </internal>
     <external>

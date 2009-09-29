@@ -5,12 +5,11 @@
     <content>
         <section name="refactor" title="Refactoring the tests again">
             <p>
-                Before more functionality is added there is some refactoring
-                to do.
-                We are going to do some timing tests and so the
-                <code>TimeTestCase</code> class definitely needs
-                its own file.
-                Let&apos;s say <em>tests/time_test_case.php</em>...
+				Prima di aggiungere nuove funzioanlità c'è del refactoring da fare.
+				Abbiamo da eseguire dei test riguardanti il tempo e 
+				la classe <code>TimeTestCase</code> ha definitivamente
+				bisogno di un suo proprio file.
+				Chiamiamolo <em>tests/time_test_case.php</em>:
 <php><![CDATA[
 <strong><?php
 require_once('simpletest/unit_tester.php');
@@ -27,15 +26,15 @@ abstract class TimeTestCase extends UnitTestCase {
 }
 ?></strong>
 ]]></php>
-                We can then <code>require()</code> this file into
-                the <em>all_tests.php</em> script.
+				Potremmo includerlo con <code>require()</code> nello script
+                <em>all_tests.php</em>.
             </p>
         </section>
-        <section name="timestamp" title="Adding a timestamp to the Log">
+        <section name="timestamp" title="Aggiungere un timestamp al log">
             <p>
-                I don&apos;t know quite what the format of the log message should
-                be for the test, so to check for a timestamp we could do the
-                simplest possible thing, which is to look for a sequence of digits.
+				Siccome non sappiamo con esattezza quale sia il formato del messaggio
+				di log durante il test, verificheremo il più semplice caso, quello di una
+				sequenza di numeri.
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');<strong>
@@ -73,10 +72,10 @@ class TestOfLogging extends TimeTestCase {</strong>
 }
 ?>
 ]]></php>
-                The test case creates a new <code>Log</code> object and writes a message.
-                We look for a digit sequence and then test it against the current
-                time using our <code>Clock</code> object.
-                Of course it doesn&apos;t work until we write the code.
+				Il test case genera un nuovo oggetto <code>Log</code> e scrive un messaggio.
+				Cerchiamo una sequenza di numeri e la confrontiamo con l'ora corrente
+				utilizzando l'oggetto <code>Clock</code>.
+				Naturalmente, niente funzionerà prima che si scriva il codice.
                 <div class="demo">
                     <h1>All tests</h1>
                     <span class="pass">Pass</span>: log_test.php->Log class test->testappendingtofile->Expecting [/Test line 1/] in [Test line 1]<br />
@@ -92,16 +91,15 @@ class TestOfLogging extends TimeTestCase {</strong>
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">3/3 test cases complete.
                     <strong>6</strong> passes, <strong>2</strong> fails and <strong>2</strong> exceptions.</div>
                 </div>
-                The test suite is still showing the passes from our earlier
-                modification.
+				La test suite continua a mostrare i successi della nostra prima modifica.
             </p>
             <p>
-                We can get the tests to pass simply by adding a timestamp
-                when writing out to the file.
-                Yes, of course all of this is trivial and
-                I would not normally test this fanatically, but it is going
-                to illustrate a more general problem.
-                The <em>log.php</em> file becomes...
+				Possiamo fare in modo che i test passino semplicemente aggiungendo un
+				timestemp al momento della scrittura del file.
+				Sì, naturalmente tutto questo è insignificante e
+				normalmente non collaudo a questi livelli da fanatismo, ma l'esempio
+				è buono per illustrare un problema più generale.
+                Il file <em>log.php</em> diventa:
 <php><![CDATA[
 <?php<strong>
 require_once('../classes/clock.php');</strong>
@@ -122,79 +120,81 @@ class Log {
 }
 ?>
 ]]></php>
-                The tests should now pass.
+                Il test dovrebbe passare.
             </p>
             <p>
-                Our new test is full of problems, though.
-                What if our time format changes to something else?
-                Things are going to be a lot more complicated to test if this
-                happens.
-                It also means that any changes to the clock class time
-                format will cause our logging tests to fail also.
-                This means that our log tests are tangled up with the clock tests
-                and extremely fragile.
-                It lacks cohesion, which is the same as saying it is not
-                tightly focused, testing facets of the clock as well as the log.
-                Our problems are caused in part because the clock output
-                is unpredictable when all we really want to test is that the
-                logging message contains the output of <code>Clock::now()</code>.
-                We don&apos;t really care about the contents of that method call.
+				Il nostro nuovo test, tuttavia, è pieno di problemi.
+				Cosa accadrebbe se il formato di stampa dell'ora dovesse
+				cambiare?
+                Le cose diventerebbero un bel po' più complicate se questo accadesse.
+				Comportebbe anche modificare il formato delle ore della classe
+				clock, il che porterebbe altri test a fallire.
+				In altre parole, i test di log sono accoppiati con i test di
+				clock e sono estremamente fragili.
+				Mancano di coesione, il che equivale a dire che non sono
+				molto a fuoco su un solo obiettivo, dal momento che collaudano
+				anche aspetti del clock oltre a quelli del log.
+				I nostri problemi sono in parte causati dal fatto che l'output
+				di clock è imprevedibile, anche se quel che si intendeva realmente
+				fare era collaudare che il messaggio del log contenesse l'output di
+				<code>Clock::now()</code>, qualunque esso fosse.
+				Non ci interessa davvero il contenuto di quella invocazione di metodo.
             </p>
             <p>
-                From the testing point of view, everything we've just done is
-                wrong.
+				Dal punto di vista del il collaudo, tutto quel che è stato fatto
+				fin'ora è errato.
             </p>
             <p>
-                Can we make that call predictable?
-                We could if we could get the log to use a dummy version
-                of the clock for the duration of the test.
-                The dummy clock class would have to behave the same way
-                as the <code>Clock</code> class
-                except for the fixed output from the
-                <code>now()</code> method.
-                Hey, that would even free us from using the
-                <code>TimeTestCase</code> class!
+				Possiamo rendere la chiamata predicibile?
+                Potremmo se solo potessi indurre log ad usare una versione
+				fasulla di clock almeno per la durata del test.
+				La falsa classe clock dovrebbe comportarsi come la classe
+				<code>Clock</code> apparte per l'output fisso del metodo
+                <code>now()</code>.
+				Hey, questo ci libererebbe perfino dall'uso della classe
+                <code>TimeTestCase</code>!
             </p>
             <p>
-                We could write such a class pretty easily although it is
-                rather tedious work.
-                We just create another clock class with same interface
-                except that the <code>now()</code> method
-                returns a value that we can change with some other setter method.
-                That is quite a lot of work for a pretty minor test.
+				Potremmo scriverefacilmente una classe di questo tipo anche
+				se il lavoro risulterebbe noioso.
+				Creeremmo un'altra classe clock con la stessa interfaccia
+				ma con il metodo <code>now()</code> pensato per restituire
+				un valore che potremmo essere in grado di modificare attraverso
+				degli appositi metodi setter.
+				E' un bel lavoro, per un test di minore entità.
             </p>
             <p>
-                Except that it is really no work at all.
+				Tranne il fatto che, nella realtà, non c'è affatto alcuno
+				sforzo da fare.
             </p>
         </section>
         <section name="mock" title="A mock clock">
             <p>
-                To reach instant testing clock nirvana we need
-                only three extra lines of code...
+				Per raggiungere istantaneamente il nirvana del clock per i test
+				abbiamo bisogno solo di tre righe di codice:
 <php><![CDATA[
 require_once('simpletest/mock_objects.php');
 ]]></php>
-                This includes the mock generator code.
-                It is simplest to place this in the <em>all_tests.php</em>
-                script as it gets used rather a lot.
+				Questa include il codice del generatore di mock.
+				La cosa più semplice è mettere questa riga in <em>all_tests.php</em>
+				dal momento che verrà usata spesso.
 <php><![CDATA[
 Mock::generate('Clock');
 ]]></php>
-                This is the line that does the work.
-                The code generator scans the class for all of its
-                methods, creates code to generate an identically
-                interfaced or inherited class, but with the name
-                &quot;Mock&quot; added.
-                It then then <code>eval()</code>$apos;s the new code to
-                create the new class.
+				Questa è la linea che fa il vero lavoro.
+				Il generatore di codice scansiona tutti i metodi della classe ,
+				crea il codice per generare un'interfaccia identica o una classe
+				ereditata ed aggiunge il prefisso &quot;Mock&quot; al nome.
+                Dopo di che, esegue con <code>eval()</code> il codice per
+				creare la nuova classe.
 <php><![CDATA[
 $clock = new MockClock($this);
 ]]></php>
-                This line can be added to any test method we are interested in.
-                It creates the dummy clock ready to receive our instructions.
+				Questa linea può essere aggiunta a qualsiasi metodo di test.
+				Genera un oggetto clock fasullo pronto per ricevere istruzioni.
             </p>
             <p>
-                Our test case is on the first steps of a radical clean up...
+				Il nostro test è il primo passo per una radicale pulizia:
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');<strong>
@@ -234,20 +234,20 @@ class TestOfLogging extends <strong>UnitTestCase</strong> {
 }
 ?>
 ]]></php>
-                This test method creates a <code>MockClock</code>
-                object and then sets the return value of the
-                <code>now()</code> method to be the string
+				Questo metodo di test genera un oggetto <code>MockClock</code>
+				ed imposta valore di ritorno del metodo <code>now()</code> perché
+				sia la stringa
                 &quot;Timestamp&quot;.
-                Every time we call <code>$clock->now()</code>
-                it will return this string.
-                This should be easy to spot.
+				Ogni volta che <code>$clock->now()</code> viene invocato
+				restituirà quella stringa.
+				Questo dovrebbe essere facile da comprendere.
             </p>
             <p>
-                Next we create our log and send a message.
-                We pass into the <code>message()</code>
-                call the clock we would like to use.
-                This means that we will have to add an optional parameter to
-                the logging class to make testing possible...
+				Successivamente, creiamo log e gli inviamo un messaggio.
+				Passiamo a <code>message()</code> il clock
+				che desideriamo usare.
+				Questo comporta che per rendere possibile il collaudo ci sia
+				la necessità di un parametro aggiuntivo alla classe di log:
 <php><![CDATA[
 class Log {
     private $path;
@@ -264,57 +264,57 @@ class Log {
     }
 }
 ]]></php>
-                All of the tests now pass and they test only the logging code.
-                We can breathe easy again.
+				Adesso tutti i test passano e collaudano solo il codice del log.
+				Possiamo tirare nuovamente un sospiro di sollievo.
             </p>
             <p>
-                Does that extra parameter in the <code>Log</code>
-                class bother you?
-                We have changed the interface just to facilitate testing after
-                all.
-                Are not interfaces the most important thing?
-                Have we sullied our class with test code?
+				Ti disturba il parametro extra in <code>Log</code>?
+				Dopo tutto, abbiamo modificato l'interfaccia al solo scopo di facilitare il
+				collaudo.
+                Non erano le interfaccie le cose più importanti?
+				Non abbiamo sporcato la nostra classe con il codice di test?
             </p>
             <p>
-                Its not ideal, but consider this.
-                Next chance you get, look at a circuit board, perhaps the motherboard
-                of the computer you are looking at right now.
-                On most boards you will find the odd empty hole, or solder
-                joint with nothing attached or perhaps a pin or socket
-                that has no obvious function.
-                Chances are that some of these are for expansion and
-                variations, but most of the remainder will be for testing.
+				Senza dubbio non è il caso ideale ma considera questo:
+				alla prossima occasione che ti si presentam dai un occhio ad un
+				circuito stampato, magari quello della scheda madre del computer dal
+				quale stai leggendo proprio adesso.
+				Nella maggior parte delle schede troverai degli strani fori o dei punti
+				di saldatura inutilizzati o forse dei pin o dei socket che non 
+				sembrano avere una funzione certa.
+				C'è la possibilità che alcune di queste servano per
+				l'espansione e la modifica della scheda ma la maggior parte
+				è lì per i collaudi.
             </p>
             <p>
-                The factories making the boards many times over wasting material
-                on parts that do not add to the final function.
-                If hardware engineers can make this sacrifice of elegance I am
-                sure we can too.
-                Our sacrifice wastes no materials after all.
+				Le fabbriche che producono le schede in migliaia di esemplari consumano
+				materiale su parti che non aggiungono alcuna funzione al prodotto finale.
+				Se gli ingegneri elettronici possono fare questo sacrificio di eleganza
+				sono certo che possiamo farlo anche noi.
+				Del resto, il nostro sacrificio non spreca nemmeno materiale.
+                
             </p>
             <p>
-                Still bother you?
-                Actually it bothers me too.
-                If it really bothers you, then move the creation of the clock
-                into another protected factory method.
-                Then subclass the clock for testing and override the
-                factory method with one that returns the mock.
-                Your tests are clumsier, but your interface is intact.
+                Ti disturba lo stesso?
+                A dire la verità disturba anche me.
+				Se la cosa davvero ti dà fastidio, allora sposta la creazione dell'orologio
+				dentro un apposito metodo di factoring protetto.
+				Dopo di che, estendi la classe clock per i collaudi e
+				fai l'overriding del metodo factory con uno che restituisca il mock.
+				I test risulteranno più scomodi ma l'interfaccia resterà intatta.
             </p>
             <p>
-                I leave the decision to you, but note that we have some
-                automation in the next section that helps make the subclassing
-                easier.
+				La decisione è personale ma nota che nella prossima sezione
+				si vedranno alcuni automatismi per facilitare il subclassing.
             </p>
         </section>
     </content>
     <internal>
         <link>
-            <a href="#refactor">Refactoring the tests</a> so we can reuse
-            our new time test.
+            <a href="#refactor">Refactoring dei test</a> per il riutilizzo dei test.
         </link>
-        <link>Adding <a href="#timestamp">Log timestamps</a>.</link>
-        <link><a href="#mock">Mocking the clock</a> to make the test cohesive.</link>
+        <link><a href="#timestamp">Aggiungere un timestamp ai log</a>.</link>
+        <link><a href="#mock">Mock dell'orologio</a> per rendre il test più coeso.</link>
     </internal>
     <external>
         <link>
