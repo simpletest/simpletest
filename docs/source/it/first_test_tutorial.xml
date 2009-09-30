@@ -5,9 +5,9 @@
     <content>
         <introduction>
             <p>
-				Nel caso tu sia inesperto di unit testing, si raccomanda
+				Nel caso tu sia inesperto di unit testing, la raccomandazione è
 				di provare di volta in volta il codice che si incontrerà durante lettura del tutorial:
-                non richiede molto da scrivere e fornisce la sensazione del ritmo
+                non richiede molto da scrivere e fornisce la sensazione di quale sia il ritmo
 				della programmazione guidata dal collaudo.
             </p>
             <p>
@@ -18,20 +18,20 @@
 				le varie posizioni.
             </p>
         </introduction>
-        <section name="new" title="A new test case">
+        <section name="new" title="Un nuovo test case">
             <p>
-				Il rapido <a local="{{simple_test}}">esempio introduttivo</a>
-				ha mostrato il collaudo di unità di una semplice classe per fare i log.
+				Nel <a href="start-testing.html">tutorial rapido</a>
+				è stato mostrato il collaudo di unità applicato ad una semplice classe di log.
 				In questo tutorial su SimpleTest ho intenzione di provare
 				a raccontare l'argomento dello sviluppo della classe nella sua interezza.
 				La classe dell'esempio è piccola e semplice e nel corso dell'introduzione
-				riceverà probabilmente più attenzione di quanto ne riceverebbe
+				riceverà probabilmente più attenzione di quanta ne riceverebbe
 				realmente in produzione.
 				Ma perfino una classe minuscola come questa richiederà decisioni sul
 				design di soprendente difficoltà.
             </p>
             <p>
-				Può darsi anche troppo difficili?
+				Può darsi decisioni fin troppo difficili?
                 Piuttosto che tentare di disegnare il tutto fin dall'inizio,
 				si partirà con un requisito noto: il fatto che si vuole
 				scrivere un messaggio su un file.
@@ -63,19 +63,19 @@ class TestOfLogging extends UnitTestCase {
                 <code>UnitTestCase</code>.
 				Recupera tutte le classi dei test definite nel file corrente
 				e le esegue automagicamente.
-				Per ottenere questo risultato imposta un hadler di uscita dallo
+				Per ottenere questo risultato, imposta un handler di uscita dallo
 				script PHP.
-				Approfondiremo l'argomento più tardi quando si affronterà
+				Approfondiremo il discorso più tardi quando si affronterà
 				l'argomento della modifica dell'output.
             </p>
             <p>
 				I test stessi sono raccolti in classi di test case.
-				La classe dell'esempio, <code>TestOfLogging</code>, estende come nel caso
-				più tipico <code>UnitTestCase</code>.
+				La classe dell'esempio, <code>TestOfLogging</code>, estende, come nel caso
+				più tipico, <code>UnitTestCase</code>.
 				Quando il test case viene invocato, l'autorunner si metterà alla ricerca
 				dei metodi della classe il cui nome inizi per &quot;test&quot;.
-				Ciascuno di questi metodi verrà eseguito nell'ordine in cui sono
-				definiti nella classe.
+				Ciascuno di questi metodi verrà eseguito nell'ordine in cui è
+				definito nella classe.
             </p>
             <p>
 				L'unico metodo attualmente presente nella classe è 
@@ -83,7 +83,7 @@ class TestOfLogging extends UnitTestCase {
                 Non contiene ancora niente.
             </p>
             <p>
-				Adesso, la definizione vuota del metodo non esegue alcunché.
+				Adesso, la definizione vuota del metodo non può eseguire alcunché.
 				Abbiamo bisogno di riempirla con del codice.
 				La classe <code>UnitTestCase</code>, normalmente, è
 				pensata per generare durante il suo funzionamento degli eventi  che 
@@ -109,21 +109,21 @@ class TestOfLogging extends UnitTestCase {
 ]]></php>
             </p>
             <p>
-				Probabilmente starai pensando che si tratta di troppo codice
+				Starai probabilmente pensando che si tratti di troppo codice
 				per un singolo collaudo e su questo concordo.
 				Non temere. Questo è un costo una tantum a da questo momento in poi
 				i test saranno uno scherzo da aggiungere.
-				E saranno ancora più semplici con i meccanismo che vedremo
+				E saranno ancora più semplici con i meccanismi che vedremo
 				più avanti.
             </p>
             <p>
 				Può anche darsi che tu abbia pensato che
                 <code>testFirstLogMessagesCreatesFileIfNonexistent</code>
-				sia un nome di metodo orribile e troppo lungo.
+				sia un nome orribile e troppo lungo per un metodo.
 				Generalmente questo sarebbe vero, ma in questo contesto è una
 				buona scelta.
 				Non capiterà mai più di dover digitare nuovamente questa stringa ed
-				il nome lungo ci permette di risparmiarci commenti e specifiche.
+				il nome lungo permette di risparmiare commenti e specifiche.
             </p>
             <p>
 				Adesso è il momento della nostra prima decisione.
@@ -147,7 +147,7 @@ class TestOfLogging extends UnitTestCase {
 				Il test di per se' è minimale.
 				Per prima cosa elimina qualsiasi file di test dovesse
 				essere rimasto da precedenti esecuzioni.
-				Le decisioni di design vengono rapidamente e tutte insieme.
+				Le decisioni di design sopraggiungono rapidamente e tutte insieme.
 				
 				La nostra classe si chiama <code>Log</code> ed
 				accetta il path del file nel costruttore.
@@ -155,7 +155,7 @@ class TestOfLogging extends UnitTestCase {
 				un messaggio con il metodo
                 <code>message()</code>.
 				Sfortunatamente, la capacità di scegliere nomi originali
-				non è una caratteristica molto richiesta negli sviluppatori
+				non è una caratteristica molto richiesta agli sviluppatori
 				software.
             </p>
             <p>
@@ -214,9 +214,9 @@ class TestOfLogging extends UnitTestCase {
             <p>
 				Il coinventore di <a href="http://www.extremeprogramming.org/">eXtreme Programming</a>,
 				Kent Beck, ha pubblicato un nuovo manifesto.
-				Il libro si intotola
-                The book is called <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0321146530/ref=lib_dp_TFCV/102-2696523-7458519?v=glance&amp;s=books&amp;vi=reader#reader-link">Test driven development</a>
-				o TDD e promuove lo unit testing ad una posizione chiave nel design di software.
+				Il libro si intitola
+                <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0321146530/ref=lib_dp_TFCV/102-2696523-7458519?v=glance&amp;s=books&amp;vi=reader#reader-link">Test driven development</a>
+				(TDD) e promuove lo unit testing ad una posizione chiave nel design di software.
 				In breve, l'idea è di scrivere  dei piccoli test prima e
 				solo dopo occuparsi della scrittura del codice.
 				Per qualsiasi codice.
@@ -224,10 +224,10 @@ class TestOfLogging extends UnitTestCase {
             </p>
             <p>
 				Scrivi un nuovo test e fai in modo che passi con successo.
-				Quello che otterrai e qualche ridondanza e generalmente del codice
+				Quello che otterrai all'inizio è un po' di ridondanza e, generalmente, del codice
 				di qualità schifosa.
-				Con i test che continuano a passare ti preoccupi di ri-arrangiare, cioè fare il
-				refactoring, del codice.
+				Assicurandoti che i test continuino a passare ti puoi preoccupare, allora, di ri-arrangiare 
+				il codice, cioè di fare il refactoring.
 				Questo ti garantisce di non compromettere le funzionalità.
 				Una volta che il codice è pulito quanto possibile sei pronto ad aggiungere
 				nuove funzionalità, ma non lo farai: aggiungerai, invece, un altro test
@@ -236,10 +236,10 @@ class TestOfLogging extends UnitTestCase {
 				passare con successo i test che le definiscono.
             </p>
             <p>
-				Immagina il test come una specifica eseguibile che sia stata creata al momento.
+				Immagina il test come una specifica eseguibile che sia stata creata per l'occasione.
             </p>
             <p>
-				E' un approccio radicale e che personalmente mi sembra incompleto ma
+				E' un approccio radicale e personalmente mi sembra incompleto ma
 				è molto efficace per spiegare cosa sia uno unit tester.
 				Nel nostro caso abbiamo un test che fallisce (per non dire che va in crash)
 				così avremo bisogno di scrivere del codice in <em>log.php</em>:
@@ -256,7 +256,7 @@ class Log {
 ?></strong>
 ]]></php>
 				Questo è il minimo da fare per evitare fatal error di PHP.
-				Adess recuperiamo il risultato:
+				Adesso recuperiamo il risultato:
                 <div class="demo">
                     <h1>TestOfLogging</h1>
                     <span class="fail">Fail</span>: testFirstLogMessagesCreatesFileIfNonexistent-&gt;True assertion failed.<br />
@@ -298,7 +298,7 @@ class TestOfLogging extends UnitTestCase {
 				Questo è particolarmente vero nel caso si siano registrati fallimenti dei 
 				test e ci si voglia assicurare di non aver dimenticato qualcosa di
 				stupido.
-				Non procederemo così lentamente, così:
+				Non procederemo così lentamente, perciò:
 <php><![CDATA[
 <?php   
 class Log {<strong>
@@ -316,14 +316,13 @@ class Log {<strong>
 }
 ?>
 ]]></php>
-				Ho avuto bisogno di non meno di quattro failure per arrivare al passo
-				successivo.
-				Non avevo creato la directory temporanea, non l'avevo impostata come
+				Ho dovuto incontrare non meno di quattro failure per raggiungere questo passo:
+				non avevo creato la directory temporanea, non l'avevo impostata come
 				pubblicamente accessibile in scrittura, avevo un errore di battitura e mi
 				ero dimenticato di aggiungere la nuova cartella sul CVS (questo l'ho scoperto più 
 				tardi).
 				Ognuno di questi problemi avrebbe potuto tenermi occupato per diverse ore
-				se solo si fossero manifestati in un secondo momento, ma è proprio per
+				se solo si fosse manifestato in un secondo momento, ma è proprio per
 				questo che i test servono.
                 
             </p>
@@ -338,14 +337,14 @@ class Log {<strong>
             </p>
             <p>
 				Può darsi che tu non gradisca lo stile di visualizzazione minimale.
-				Di default, i successi nonn vengono mostrati perché generalmente non c'è
+				Di default, i successi non vengono mostrati perché, generalmente, non c'è
 				bisogno di ulteriori informazioni quando si ha la situazione
 				sotto controllo.
-				Se non si sa come le cose stanno procedento, allora è il caso di scrivere
+				Se non si sa come le cose stanno procedendo, allora è il caso di scrivere
 				ulteriori test.
             </p>
             <p>
-				Ok, questa è un po' una rigidità.
+				Ok, qui sono stato fin troppo rigido.
 				Se desideri vedere anche i casi di successo allora ti basta
 				<a local="display_subclass_tutorial">estendere la classe
                 <code>HtmlReporter</code></a>
@@ -353,9 +352,9 @@ class Log {<strong>
 				Anche io gradisco il comfort, ogni tanto.
             </p>
         </section>
-        <section name="doc" title="Tests as Documentation">
+        <section name="doc" title="I test come documentazione">
             <p>
-				Adesso sottigliezza.
+				Adesso una sottigliezza.
                 Non vogliamo che il file creato esista fino a che non
 				inviamo il messaggio.
 				Piuttosto che pensarci troppo sopra, aggiungeremo
@@ -372,16 +371,16 @@ class TestOfLogging extends UnitTestCase {
     }
 }
 ]]></php>
-                per scoprire che già funziona così
+                per scoprire che già funzionava così:
                 <div class="demo">
                     <h1>TestOfLogging</h1>
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
                     <strong>2</strong> passes, <strong>0</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
 				Ora, sapevo che avrebbe funzionato.
-				Ho aggiunto il test per confermarlo in parte per mettere in pace l'animo ma
-				anche per documentare questo comportamento.
-				Questa unica linea extra dice molto di più in questo contesto di dozzine
+				Ho aggiunto il test che lo conferma in parte per mettere in pace l'animo e in parte
+				per documentare questo comportamento.
+				Questa unica linea extra dice molto di più, in questo contesto, di dozzine
 				di righe di use case o di un intero diagramma di attività UML.
 				Che la test suite sia una sorgente di documentazione è un piacevole
 				effetto collaterale di tutti i test.
