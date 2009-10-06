@@ -40,13 +40,13 @@ class SimpleTidyPageBuilder {
     }
 
     /**
-     *    Reads the raw content the page.
+     *    Reads the raw content the page using HTML Tidy.
      *    @param $response SimpleHttpResponse  Fetched response.
      *    @return SimplePage                   Newly parsed page.
      */
     function parse($response) {
         $this->page = new SimplePage($response);
-        $tidied = tidy_parse_string($input = $this->guardEmptyTags($response->getContent()),
+        $tidied = tidy_parse_string($input = $this->insertGuards($response->getContent()),
                                     array('output-xml' => false, 'wrap' => '0', 'indent' => 'no'),
                                     'latin1');
         $this->walkTree($tidied->html());
@@ -58,13 +58,35 @@ class SimpleTidyPageBuilder {
     }
 
     /**
-     *    HTML tidy strips out empty tags such as <option> which we
-     *    need to preserve. This method inserts an additional tag.
+     *    Stops HTMLTidy stripping content that we wish to preserve.
      *    @param string      The raw html.
      *    @return string     The html with guard tags inserted.
      */
-    private function guardEmptyTags($html) {
-        return preg_replace('#<(option|textarea)([^>]*)>(\s*)</(option|textarea)>#', '<\1\2>___EMPTY___\3</\4>', $html);
+    private function insertGuards($html) {
+        return $this->insertEmptyTagGuards($this->insertTextareaWhitespaceGuards($html));
+    }
+
+    /**
+     *    Removes the extra content added during the parse stage
+     *    in order to preserve content we don't want stripped
+     *    out by HTMLTidy.
+     *    @param string      The raw html.
+     *    @return string     The html with guard tags inserted.
+     */
+    private function stripGuards($html) {
+        return $this->stripTextareaWhitespaceGuards($this->stripEmptyTagGuards($html));
+    }
+
+    /**
+     *    HTML tidy strips out empty tags such as <option> which we
+     *    need to preserve. This method inserts an additional tag.
+     *    @param string      The raw html.
+     *    @return string     The html with guards inserted.
+     */
+    private function insertEmptyTagGuards($html) {
+        return preg_replace('#<(option|textarea)([^>]*)>(\s*)</(option|textarea)>#',
+                            '<\1\2>___EMPTY___\3</\4>',
+                            $html);
     }
 
     /**
@@ -72,10 +94,31 @@ class SimpleTidyPageBuilder {
      *    need to preserve. This method strips additional tags
      *    inserted by SimpleTest to the tidy output.
      *    @param string      The raw html.
-     *    @return string     The html with guard tags inserted.
+     *    @return string     The html with guards removed.
      */
-    private function stripGuards($html) {
+    private function stripEmptyTagGuards($html) {
         return preg_replace('#(^|>)(\s*)___EMPTY___(\s*)(</|$)#i', '\2\3', $html);
+    }
+
+    /**
+     *    By parsing the XML output of tidy, we lose some whitespace
+     *    information in textarea tags. We recode this data ourselves
+     *    so as not to lose it.
+     *    @param string      The raw html.
+     *    @return string     The html with guards inserted.
+     */
+    private function insertTextareaWhitespaceGuards($html) {
+        return $html;
+    }
+
+    /**
+     *    Removes the whitespace preserving guards we added
+     *    before parsing.
+     *    @param string      The raw html.
+     *    @return string     The html with guards removed.
+     */
+    private function stripTextareaWhitespaceGuards($html) {
+        return $html;
     }
 
     /**
@@ -100,6 +143,18 @@ class SimpleTidyPageBuilder {
                                            ->addContent($this->innerHtml($node));
         } else {
             $this->walkChildren($node);
+        }
+    }
+
+    /**
+     *  Helper method for traversing the XML tree.
+     *  @param object $node     Tidy XML node.
+     */
+    private function walkChildren($node) {
+        if ($node->hasChildren()) {
+            foreach ($node->child as $child) {
+                $this->walkTree($child);
+            }
         }
     }
 
@@ -263,18 +318,6 @@ class SimpleTidyPageBuilder {
             }
         }
         return $frames;
-    }
-
-    /**
-     *  Helper method for traversing the XML tree.
-     *  @param object $node     Tidy XML node.
-     */
-    private function walkChildren($node) {
-        if ($node->hasChildren()) {
-            foreach ($node->child as $child) {
-                $this->walkTree($child);
-            }
-        }
     }
 
     /**
