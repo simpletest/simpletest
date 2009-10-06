@@ -102,15 +102,28 @@ class SimpleTidyPageBuilder {
 
     /**
      *    By parsing the XML output of tidy, we lose some whitespace
-     *    information in textarea tags. We temprarily recode this
+     *    information in textarea tags. We temporarily recode this
      *    data ourselves so as not to lose it.
      *    @param string      The raw html.
      *    @return string     The html with guards inserted.
      */
     private function insertTextareaSimpleWhitespaceGuards($html) {
         return preg_replace_callback('#<textarea([^>]*)>(.*?)</textarea>#',
-                                     array(new SimpleWhitespaceGuard(), 'insert'),
+                                     array($this, 'insertWhitespaceGuards'),
                                      $html);
+    }
+
+    /**
+     *  Callback for insertTextareaSimpleWhitespaceGuards().
+     *  @param array $matches       Result of preg_replace_callback().
+     *  @return string              Guard tags now replace whitespace.
+     */
+    private function insertWhitespaceGuards($matches) {
+        return '<textarea' . $matches[1] . '>' .
+                str_replace(array("\n", "\r", "\t", ' '),
+                            array('___NEWLINE___', '___CR___', '___TAB___', '___SPACE___'),
+                            $matches[2]) .
+                '</textarea>';
     }
 
     /**
@@ -120,9 +133,9 @@ class SimpleTidyPageBuilder {
      *    @return string     The html with guards removed.
      */
     private function stripTextareaWhitespaceGuards($html) {
-        return preg_replace_callback('#<textarea([^>]*)>(.*?)</textarea>#',
-                                     array(new SimpleWhitespaceGuard(), 'strip'),
-                                     $html);
+        return str_replace(array('___NEWLINE___', '___CR___', '___TAB___', '___SPACE___'),
+                           array("\n", "\r", "\t", ' '),
+                           $html);
     }
 
     /**
@@ -363,20 +376,6 @@ class SimpleTidyPageBuilder {
                 }
             }
         }
-    }
-}
-
-class SimpleWhitespaceGuard {
-    function insert($matches) {
-        return '<textarea' . $matches[1] . '>' .
-                str_replace(array("\n", "\r"), array('___NEWLINE___', '___CR___'), $matches[2]) .
-                '</textarea>';
-    }
-
-    function strip($matches) {
-        return '<textarea' . $matches[1] . '>' .
-                str_replace(array('___NEWLINE___', '___CR___'), array("\n", "\r"), $matches[2]) .
-                '</textarea>';
     }
 }
 ?>

@@ -24,7 +24,7 @@ if (! SimpleTest::getParsers()) {
 }
 /**#@-*/
 
-if (!defined('DEFAULT_MAX_NESTED_FRAMES')) {
+if (! defined('DEFAULT_MAX_NESTED_FRAMES')) {
     define('DEFAULT_MAX_NESTED_FRAMES', 3);
 }
 
@@ -34,17 +34,8 @@ if (!defined('DEFAULT_MAX_NESTED_FRAMES')) {
  *    @subpackage WebTester
  */
 class SimpleBrowserHistory {
-    private $sequence;
-    private $position;
-
-    /**
-     *    Starts empty.
-     *    @access public
-     */
-    function __construct() {
-        $this->sequence = array();
-        $this->position = -1;
-    }
+    private $sequence = array();
+    private $position = -1;
 
     /**
      *    Test for no entries yet.

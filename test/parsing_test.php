@@ -417,10 +417,16 @@ abstract class TestOfParsing extends UnitTestCase {
         $this->assertEqual($page->getField(new SimpleByName('a')), '&\'"<>');
     }
 
-    function testWhitespaceIsPreservedInTextArea() {
+    function testNewlinesPreservedInTextArea() {
         $raw = "<form><textarea name=\"a\">hello\r\nworld</textarea></form>";
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByName('a')), "hello\r\nworld");
+    }
+
+    function testWhitespacePreservedInTextArea() {
+        $raw = '<form><textarea name="a">     </textarea></form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertEqual($page->getField(new SimpleByName('a')), "     ");
     }
 
     function testSettingTextArea() {
