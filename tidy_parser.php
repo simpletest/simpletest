@@ -63,7 +63,7 @@ class SimpleTidyPageBuilder {
      *    @return string     The html with guard tags inserted.
      */
     private function insertGuards($html) {
-        return $this->insertEmptyTagGuards($this->insertTextareaWhitespaceGuards($html));
+        return $this->insertEmptyTagGuards($this->insertTextareaSimpleWhitespaceGuards($html));
     }
 
     /**
@@ -71,7 +71,7 @@ class SimpleTidyPageBuilder {
      *    in order to preserve content we don't want stripped
      *    out by HTMLTidy.
      *    @param string      The raw html.
-     *    @return string     The html with guard tags inserted.
+     *    @return string     The html with guard tags removed.
      */
     private function stripGuards($html) {
         return $this->stripTextareaWhitespaceGuards($this->stripEmptyTagGuards($html));
@@ -102,13 +102,15 @@ class SimpleTidyPageBuilder {
 
     /**
      *    By parsing the XML output of tidy, we lose some whitespace
-     *    information in textarea tags. We recode this data ourselves
-     *    so as not to lose it.
+     *    information in textarea tags. We temprarily recode this
+     *    data ourselves so as not to lose it.
      *    @param string      The raw html.
      *    @return string     The html with guards inserted.
      */
-    private function insertTextareaWhitespaceGuards($html) {
-        return $html;
+    private function insertTextareaSimpleWhitespaceGuards($html) {
+        return preg_replace_callback('#<textarea([^>]*)>(.*?)</textarea>#',
+                                     array(new SimpleWhitespaceGuard(), 'insert'),
+                                     $html);
     }
 
     /**
@@ -118,7 +120,9 @@ class SimpleTidyPageBuilder {
      *    @return string     The html with guards removed.
      */
     private function stripTextareaWhitespaceGuards($html) {
-        return $html;
+        return preg_replace_callback('#<textarea([^>]*)>(.*?)</textarea>#',
+                                     array(new SimpleWhitespaceGuard(), 'strip'),
+                                     $html);
     }
 
     /**
@@ -359,6 +363,20 @@ class SimpleTidyPageBuilder {
                 }
             }
         }
+    }
+}
+
+class SimpleWhitespaceGuard {
+    function insert($matches) {
+        return '<textarea' . $matches[1] . '>' .
+                str_replace(array("\n", "\r"), array('___NEWLINE___', '___CR___'), $matches[2]) .
+                '</textarea>';
+    }
+
+    function strip($matches) {
+        return '<textarea' . $matches[1] . '>' .
+                str_replace(array('___NEWLINE___', '___CR___'), array("\n", "\r"), $matches[2]) .
+                '</textarea>';
     }
 }
 ?>

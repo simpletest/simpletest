@@ -863,7 +863,6 @@ class LiveTestOfForms extends SimpleTestAcceptanceTest {
     }
 
     function testSettingOfBlankOption() {
-        $this->setParser(new SimplePHPPageBuilder());
         $this->get($this->samples() . 'form.html');
         $this->assertTrue($this->setFieldByName('d', ''));
         $this->clickSubmit('Go!');
@@ -935,7 +934,7 @@ class LiveTestOfForms extends SimpleTestAcceptanceTest {
     }
 
     function testDefaultValueOfTextareaHasNewlinesAndWhitespacePreserved() {
-        $this->setParser(new SimplePHPPageBuilder());
+        $this->setParser(new SimplePhpPageBuilder());
         $this->get($this->samples() . 'form_with_false_defaults.html');
         $this->assertField('Text area C', "                ");
     }
@@ -954,7 +953,7 @@ class LiveTestOfForms extends SimpleTestAcceptanceTest {
     }
 
     function testDefaultValueOfTextareaHasNewlinesAndWhitespacePreservedOnSubmission() {
-        $this->setParser(new SimplePHPPageBuilder());
+        $this->setParser(new SimplePhpPageBuilder());
         $this->get($this->samples() . 'form_with_false_defaults.html');
         $this->click('Go!');
         $this->assertPattern('/c=\[                \]/');
