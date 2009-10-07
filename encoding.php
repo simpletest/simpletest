@@ -390,8 +390,8 @@ class SimpleHeadEncoding extends SimpleGetEncoding {
      *                              as lists on a single key.
      *    @access public
      */
-    function SimpleHeadEncoding($query = false) {
-        $this->SimpleGetEncoding($query);
+    function __construct($query = false) {
+        parent::__construct($query);
     }
     
     /**
@@ -405,12 +405,11 @@ class SimpleHeadEncoding extends SimpleGetEncoding {
 }
 
 /**
- *    Bundle of POST parameters. Can include
- *    repeated parameters.
+ *    Bundle of URL parameters for a DELETE request.
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimplePostEncoding extends SimpleEncoding {
+class SimpleDeleteEncoding extends SimpleGetEncoding {
     
     /**
      *    Starts empty.
@@ -420,10 +419,100 @@ class SimplePostEncoding extends SimpleEncoding {
      *    @access public
      */
     function __construct($query = false) {
+        parent::__construct($query);
+    }
+    
+    /**
+     *    HTTP request method.
+     *    @return string        Always HEAD.
+     *    @access public
+     */
+    function getMethod() {
+        return 'DELETE';
+    }
+}
+
+/**
+ *    Bundles an entity-body for transporting 
+ *    a raw content payload.
+ *    @package SimpleTest
+ *    @subpackage WebTester
+ */
+class SimpleEntityEncoding extends SimpleEncoding {
+    private $content_type;
+    private $body;
+    
+    function __construct($query = false, $content_type = false) {
+        $this->content_type = $content_type;
+    	if (is_string($query)) {
+            $this->body = $query;
+            parent::__construct();
+        } else {
+            parent::__construct($query);
+        }
+    }
+    
+    /**
+     *    Returns the media type of the entity body
+     *    @return string
+     *    @access public
+     */
+    function getContentType() {
+        if (!$this->content_type) {
+        	return ($this->body) ? 'text/plain' : 'application/x-www-form-urlencoded';
+        }
+    	return $this->content_type;
+    }
+       
+    /**
+     *    Dispatches the form headers down the socket.
+     *    @param SimpleSocket $socket        Socket to write to.
+     *    @access public
+     */
+    function writeHeadersTo(&$socket) {
+        $socket->write("Content-Length: " . (integer)strlen($this->encode()) . "\r\n");
+        $socket->write("Content-Type: " .  $this->getContentType() . "\r\n");
+    }
+    
+    /**
+     *    Dispatches the form data down the socket.
+     *    @param SimpleSocket $socket        Socket to write to.
+     *    @access public
+     */
+    function writeTo(&$socket) {
+        $socket->write($this->encode());
+    }
+    
+    /**
+     *    Renders the request body
+     *    @return Encoded entity body
+     *    @access protected
+     */
+    protected function encode() {
+        return ($this->body) ? $this->body : parent::encode();
+    }
+}
+
+/**
+ *    Bundle of POST parameters. Can include
+ *    repeated parameters.
+ *    @package SimpleTest
+ *    @subpackage WebTester
+ */
+class SimplePostEncoding extends SimpleEntityEncoding {
+    
+    /**
+     *    Starts empty.
+     *    @param array $query       Hash of parameters.
+     *                              Multiple values are
+     *                              as lists on a single key.
+     *    @access public
+     */
+    function __construct($query = false, $content_type = false) {
         if (is_array($query) and $this->hasMoreThanOneLevel($query)) {
             $query = $this->rewriteArrayWithMultipleLevels($query);
         }
-        parent::__construct($query);
+        parent::__construct($query, $content_type);
     }
     
     function hasMoreThanOneLevel($query) {
@@ -453,7 +542,6 @@ class SimplePostEncoding extends SimpleEncoding {
         return $query_;
     }
     
-    
     /**
      *    HTTP request method.
      *    @return string        Always POST.
@@ -464,25 +552,6 @@ class SimplePostEncoding extends SimpleEncoding {
     }
     
     /**
-     *    Dispatches the form headers down the socket.
-     *    @param SimpleSocket $socket        Socket to write to.
-     *    @access public
-     */
-    function writeHeadersTo(&$socket) {
-        $socket->write("Content-Length: " . (integer)strlen($this->encode()) . "\r\n");
-        $socket->write("Content-Type: application/x-www-form-urlencoded\r\n");
-    }
-    
-    /**
-     *    Dispatches the form data down the socket.
-     *    @param SimpleSocket $socket        Socket to write to.
-     *    @access public
-     */
-    function writeTo(&$socket) {
-        $socket->write($this->encode());
-    }
-    
-    /**
      *    Renders the query string as a URL encoded
      *    request part for attaching to a URL.
      *    @return string        Part of URL.
@@ -490,6 +559,34 @@ class SimplePostEncoding extends SimpleEncoding {
      */
     function asUrlRequest() {
         return '';
+    }
+}
+
+/**
+ *    Encoded entity body for a PUT request.
+ *    @package SimpleTest
+ *    @subpackage WebTester
+ */
+class SimplePutEncoding extends SimpleEntityEncoding {
+    
+    /**
+     *    Starts empty.
+     *    @param array $query       Hash of parameters.
+     *                              Multiple values are
+     *                              as lists on a single key.
+     *    @access public
+     */
+    function __construct($query = false, $content_type = false) {
+        parent::__construct($query, $content_type);
+    }
+    
+    /**
+     *    HTTP request method.
+     *    @return string        Always PUT.
+     *    @access public
+     */
+    function getMethod() {
+        return 'PUT';
     }
 }
 

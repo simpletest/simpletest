@@ -254,7 +254,7 @@ class TestOfHttpPostRequest extends UnitTestCase {
         $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
     }
     
-    function testContentHeadersCalculated() {
+    function testContentHeadersCalculatedWithUrlEncodedParams() {
         $socket = new MockSimpleSocket();
         $socket->expectAt(0, 'write', array("Content-Length: 3\r\n"));
         $socket->expectAt(1, 'write', array("Content-Type: application/x-www-form-urlencoded\r\n"));
@@ -270,8 +270,42 @@ class TestOfHttpPostRequest extends UnitTestCase {
                 new SimplePostEncoding(array('a' => 'A')));
         $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
     }
-}
+
+    function testContentHeadersCalculatedWithRawEntityBody() {
+        $socket = new MockSimpleSocket();
+        $socket->expectAt(0, 'write', array("Content-Length: 8\r\n"));
+        $socket->expectAt(1, 'write', array("Content-Type: text/plain\r\n"));
+        $socket->expectAt(2, 'write', array("\r\n"));
+        $socket->expectAt(3, 'write', array("raw body"));
+        
+        $route = new MockSimpleRoute();
+        $route->setReturnReference('createConnection', $socket);
+        $route->expect('createConnection', array('POST', 15));
+        
+        $request = new SimpleHttpRequest(
+                $route,
+                new SimplePostEncoding('raw body'));
+        $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
+    }
     
+    function testContentHeadersCalculatedWithXmlEntityBody() {
+        $socket = new MockSimpleSocket();
+        $socket->expectAt(0, 'write', array("Content-Length: 27\r\n"));
+        $socket->expectAt(1, 'write', array("Content-Type: text/xml\r\n"));
+        $socket->expectAt(2, 'write', array("\r\n"));
+        $socket->expectAt(3, 'write', array("<a><b>one</b><c>two</c></a>"));
+        
+        $route = new MockSimpleRoute();
+        $route->setReturnReference('createConnection', $socket);
+        $route->expect('createConnection', array('POST', 15));
+        
+        $request = new SimpleHttpRequest(
+                $route,
+                new SimplePostEncoding('<a><b>one</b><c>two</c></a>', 'text/xml'));
+        $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
+    }
+}
+
 class TestOfHttpHeaders extends UnitTestCase {
     
     function testParseBasicHeaders() {

@@ -190,15 +190,41 @@ class TestOfEncoding extends UnitTestCase {
                 "aaa\r\n" .
                 "--boundary--\r\n");
     }
+    
+    function testEntityEncodingDefaultContentType() {
+        $encoding = new SimpleEntityEncoding();
+        $this->assertIdentical($encoding->getContentType(), 'application/x-www-form-urlencoded');
+        $this->assertWritten($encoding, '');
+    }
+    
+    function testEntityEncodingTextBody() {
+        $encoding = new SimpleEntityEncoding('plain text');
+        $this->assertIdentical($encoding->getContentType(), 'text/plain');
+        $this->assertWritten($encoding, 'plain text');
+    }
+    
+    function testEntityEncodingXmlBody() {
+        $encoding = new SimpleEntityEncoding('<p><a>xml</b><b>text</b></p>', 'text/xml');
+        $this->assertIdentical($encoding->getContentType(), 'text/xml');
+        $this->assertWritten($encoding, '<p><a>xml</b><b>text</b></p>');
+    }
 }
 
-class TestOfFormHeaders extends UnitTestCase {
+class TestOfEncodingHeaders extends UnitTestCase {
     
     function testEmptyEncodingWritesZeroContentLength() {
         $socket = new MockSimpleSocket();
         $socket->expectAt(0, 'write', array("Content-Length: 0\r\n"));
         $socket->expectAt(1, 'write', array("Content-Type: application/x-www-form-urlencoded\r\n"));
-        $encoding = new SimplePostEncoding();
+        $encoding = new SimpleEntityEncoding();
+        $encoding->writeHeadersTo($socket);
+    }
+    
+    function testTextEncodingWritesDefaultContentType() {
+        $socket = new MockSimpleSocket();
+        $socket->expectAt(0, 'write', array("Content-Length: 18\r\n"));
+        $socket->expectAt(1, 'write', array("Content-Type: text/plain\r\n"));
+        $encoding = new SimpleEntityEncoding('one two three four');
         $encoding->writeHeadersTo($socket);
     }
     
@@ -209,5 +235,6 @@ class TestOfFormHeaders extends UnitTestCase {
         $encoding = new SimpleMultipartEncoding(array(), 'boundary');
         $encoding->writeHeadersTo($socket);
     }
+    
 }
 ?>
