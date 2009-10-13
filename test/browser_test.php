@@ -230,6 +230,41 @@ class TestOfBrowserNavigation extends UnitTestCase {
         return $browser;
     }
 
+    function testBrowserRequestMethods() {
+        $agent = new MockSimpleUserAgent();
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent->expectAt(
+                0,
+                'fetchResponse',
+                array(new SimpleUrl('http://this.com/get.req'), new SimpleGetEncoding()));
+        $agent->expectAt(
+                1,
+                'fetchResponse',
+                array(new SimpleUrl('http://this.com/post.req'), new SimplePostEncoding()));
+        $agent->expectAt(
+                2,
+                'fetchResponse',
+                array(new SimpleUrl('http://this.com/put.req'), new SimplePutEncoding()));
+        $agent->expectAt(
+                3,
+                'fetchResponse',
+                array(new SimpleUrl('http://this.com/delete.req'), new SimpleDeleteEncoding()));
+        $agent->expectAt(
+                4,
+                'fetchResponse',
+                array(new SimpleUrl('http://this.com/head.req'), new SimpleHeadEncoding()));                               
+        $agent->expectCallCount('fetchResponse', 5);
+
+        $page = new MockSimplePage();
+
+        $browser = $this->createBrowser($agent, $page);
+        $browser->get('http://this.com/get.req');
+        $browser->post('http://this.com/post.req');
+        $browser->put('http://this.com/put.req');
+        $browser->delete('http://this.com/delete.req');
+        $browser->head('http://this.com/head.req');
+    }  
+    
     function testClickLinkRequestsPage() {
         $agent = new MockSimpleUserAgent();
         $agent->returns('fetchResponse', new MockSimpleHttpResponse());

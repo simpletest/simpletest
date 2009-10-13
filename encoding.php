@@ -424,7 +424,7 @@ class SimpleDeleteEncoding extends SimpleGetEncoding {
     
     /**
      *    HTTP request method.
-     *    @return string        Always HEAD.
+     *    @return string        Always DELETE.
      *    @access public
      */
     function getMethod() {
@@ -434,7 +434,7 @@ class SimpleDeleteEncoding extends SimpleGetEncoding {
 
 /**
  *    Bundles an entity-body for transporting 
- *    a raw content payload.
+ *    a raw content payload with the request.
  *    @package SimpleTest
  *    @subpackage WebTester
  */
