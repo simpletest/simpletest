@@ -706,7 +706,7 @@ class WebTestCase extends SimpleTestCase {
      *    current base URL is used. After the fetch
      *    the base URL reflects the new location.
      *    @param string $url          URL to fetch.
-     *    @param hash $parameters     Optional additional GET data.
+     *    @param mixed $parameters    Optional POST parameters or content body to send
      *    @return boolean/string      Raw page on success.
      *    @access public
      */
@@ -714,6 +714,32 @@ class WebTestCase extends SimpleTestCase {
         return $this->failOnError($this->browser->post($url, $parameters));
     }
 
+    /**
+     *    Fetches a page by PUT into the page buffer.
+     *    If there is no base for the URL then the
+     *    current base URL is used. After the fetch
+     *    the base URL reflects the new location.
+     *    @param string $url          URL to fetch.
+     *    @param mixed $body          Optional content body to send
+     *    @return boolean/string      Raw page on success.
+     *    @access public
+     */
+    function put($url, $body = false) {
+        return $this->failOnError($this->browser->put($url, $body));
+    }
+    
+    /**
+     *    Fetches a page by a DELETE request
+     *    @param string $url          URL to fetch.
+     *    @param hash $parameters     Optional additional parameters.
+     *    @return boolean/string      Raw page on success.
+     *    @access public
+     */
+    function delete($url, $parameters = false) {
+        return $this->failOnError($this->browser->delete($url, $parameters));
+    }
+    
+    
     /**
      *    Does a HTTP HEAD fetch, fetching only the page
      *    headers. The current base URL is unchanged by this.
