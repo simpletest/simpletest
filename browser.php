@@ -316,8 +316,12 @@ class SimpleBrowser {
      *    @access private
      */
     protected function load($url, $parameters) {
-        if (! is_object($url)) $url = new SimpleUrl($url);
-        if ($this->getUrl()) $url = $url->makeAbsolute($this->getUrl());
+        if (! is_object($url)) {
+            $url = new SimpleUrl($url);
+        }
+        if ($this->getUrl()) {
+            $url = $url->makeAbsolute($this->getUrl());
+        }
         
         $frame = $url->getTarget();
         if (! $frame || ! $this->page->hasFrames() || (strtolower($frame) == '_top')) {
@@ -354,8 +358,8 @@ class SimpleBrowser {
         $page = $this->fetch($url, $parameters);
         $this->page->setFrame($frames, $page);
         return $page->getRaw();
-    }
-
+    }  
+    
     /**
      *    Removes expired and temporary cookies as if
      *    the browser was closed and re-opened.
@@ -484,7 +488,8 @@ class SimpleBrowser {
         if ($this->getUrl()) {
             $url = $url->makeAbsolute($this->getUrl());
         }
-        $response = &$this->user_agent->fetchResponse($url, new SimpleHeadEncoding($parameters));
+        $response = $this->user_agent->fetchResponse($url, new SimpleHeadEncoding($parameters));
+        $this->page = new SimplePage($response);
         return ! $response->isError();
     }
 
