@@ -707,11 +707,12 @@ class WebTestCase extends SimpleTestCase {
      *    the base URL reflects the new location.
      *    @param string $url          URL to fetch.
      *    @param mixed $parameters    Optional POST parameters or content body to send
+     *    @param string $content_type Content type of provided body
      *    @return boolean/string      Raw page on success.
      *    @access public
      */
-    function post($url, $parameters = false) {
-        return $this->failOnError($this->browser->post($url, $parameters));
+    function post($url, $parameters = false, $content_type = false) {
+        return $this->failOnError($this->browser->post($url, $parameters, $content_type));
     }
 
     /**
@@ -721,11 +722,12 @@ class WebTestCase extends SimpleTestCase {
      *    the base URL reflects the new location.
      *    @param string $url          URL to fetch.
      *    @param mixed $body          Optional content body to send
+     *    @param string $content_type Content type of provided body
      *    @return boolean/string      Raw page on success.
      *    @access public
      */
-    function put($url, $body = false) {
-        return $this->failOnError($this->browser->put($url, $body));
+    function put($url, $body = false, $content_type = false) {
+        return $this->failOnError($this->browser->put($url, $body, $content_type));
     }
     
     /**
