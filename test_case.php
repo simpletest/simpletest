@@ -398,7 +398,7 @@ class SimpleFileLoader {
     protected function makeFileVariablesGlobal($existing, $new) {
         $globals = array_diff(array_keys($new), array_keys($existing));
         foreach ($globals as $global) {
-            $_GLOBALS[$global] = $new[$global];
+            $GLOBALS[$global] = $new[$global];
         }
     }
 
