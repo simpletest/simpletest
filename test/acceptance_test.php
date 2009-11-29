@@ -8,8 +8,8 @@ require_once(dirname(__FILE__) . '/../unit_tester.php');
 
 class SimpleTestAcceptanceTest extends WebTestCase {
     static function samples() {
-        //return 'http://www.lastcraft.com/test/';
-        return 'http://simpletest.localhost/test/site/';
+        return 'http://www.lastcraft.com/test/';
+        //return 'http://simpletest.localhost/test/site/';
     }
 }
 
@@ -121,18 +121,18 @@ class TestOfLocalFileBrowser extends UnitTestCase {
     }
 }
 
-class TestOfRequestMethods extends UnitTestCase {
+class TestOfRequestMethods { // extends UnitTestCase {
 
     function samples() {
         return SimpleTestAcceptanceTest::samples();
-    }	
-	
+    }
+
 	function testHeadRequest() {
 		$browser = new SimpleBrowser();
 		$this->assertTrue($browser->head($this->samples() . 'request_methods.php'));
 		$this->assertEqual($browser->getResponseCode(), 202);
 	}
-	
+
 	function testGetRequest() {
 		$browser = new SimpleBrowser();
 		$this->assertTrue($browser->get($this->samples() . 'request_methods.php'));
@@ -173,7 +173,7 @@ class TestOfRequestMethods extends UnitTestCase {
 		$this->assertEqual($browser->getResponseCode(), 202);
 		$this->assertPattern("/Your delete request was accepted/", $browser->getContent());
 	}
-	
+
 }
 
 class TestRadioFields extends SimpleTestAcceptanceTest {
@@ -283,7 +283,7 @@ class TestOfLiveFetching extends SimpleTestAcceptanceTest {
     }
 
     function testRelativePost() {
-        $this->post($this->samples() . 'link_confirm.php');
+        $this->post($this->samples() . 'link_confirm.php', array('a' => '123'));
         $this->assertTrue($this->post('network_confirm.php'));
         $this->assertText('target for the SimpleTest');
     }
