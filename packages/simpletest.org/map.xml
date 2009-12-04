@@ -84,4 +84,41 @@
 			<page title="Logiciels" here="Logiciels" file="fr/logiciels_utilisant_simpletest.html" />
 		</page>
 	</page>
+	<page title="Versione italiana" here="Version italiana" file="it/index.html">
+		<page title="Télécharger SimpleTest" here="Télécharger SimpleTest" file="it/download.html">
+	        <page title="Installer le plugin Eclipse" here="Plugin Eclipse" file="it/extension_eclipse.html" />
+		</page>
+
+		<page title="Scrivere test con SimpleTest" here="Scrivere test con SimpleTest" file="it/start-testing.html" >
+				<page title="Panoramica su SimpleTest" here="Panoramica su SimpleTest" file="it/overview.html" >
+					<page title="Lo Unit Test" here="Lo Unit Test" file="it/unit_test_documentation.html" />
+					<page title="Raggruppamento di test" here="Raggruppamento di test" file="it/group_test_documentation.html"/>
+					<page title="Gli oggetti mock" here="Gli oggetti mock" file="it/mock_objects_documentation.html"/>
+					<page title="Il mocking parziale" here="Il mocking parziale" file="it/partial_mocks_documentation.html"/>
+					<page title="I report" here="I report" file="it/reporter_documentation.html"/>
+					<page title="Le expectation" here="Le expectation" file="it/expectation_documentation.html"/>
+					<page title="Il web test" here="Il web test" file="it/web_tester_documentation.html"/>
+					<page title="Il collaudo di form" here="Il collaudo di form" file="it/form_testing_documentation.html"/>
+					<page title="L'autenticazione" here="L'autenticazione" file="it/authentication_documentation.html"/>
+					<page title="Scripting del browser" here="Scripting del browser" file="it/browser_documentation.html"/>
+				</page>
+				<page title="Tutorial: unit testing con SimpleTest" here="Tutorial: unit testing con SimpleTest" file="it/first_test_tutorial.html">
+						<page title="Raggruppamento di test" here="Tutorial: Raggruppamento di test" file="it/group_test_tutorial.html"/>
+						<page title="Prendere il controllo dei test" here="Tutorial: prendere il controllo" file="it/gain_control_tutorial.html"/>
+						<page title="Il riutilizzo dei casi" here="Tutorial: il riutilizzo dei casi" file="it/subclass_tutorial.html"/>
+						<page title="Visualizzare i risultati" here="Tutorial: visualizzare i risultati" file="it/display_subclass_tutorial.html"/>
+						<page title="Gli oggetti mock" here="Tutorial: gli oggetti mock" file="it/mock_objects_tutorial.html"/>
+						<page title="Le classi boundary" here="Tutorial: le classi boundary" file="it/boundary_classes_tutorial.html"/>
+						<page title="Test con l'approccio top-down" here="Tutorial: test con l'approccio top-down" file="it/improving_design_tutorial.html"/>
+				</page>
+	    </page>
+		
+	
+
+		<page title="La Mailing-list" here="La Mailing-list" file="it/support.html">
+			<page title="Libri" here="Libri" file="it/books.html" />
+			<page title="Logiciels" here="Logiciels" file="it/logiciels_utilisant_simpletest.html" />
+		</page>
+	
+	</page>
 </page>

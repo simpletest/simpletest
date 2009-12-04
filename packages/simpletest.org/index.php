@@ -13,7 +13,7 @@ require_once(dirname(__FILE__).'/package.php');
 $source_path = dirname(__FILE__).'/../../docs/source/';
 $destination_path = dirname(__FILE__).'/../../docs/simpletest.org/';
 
-$languages = array("en/", "fr/", "../../");
+$languages = array("en/", "fr/", "it/", "../../");
 
 foreach ($languages as $language) {
     $dir = opendir($source_path.$language);
