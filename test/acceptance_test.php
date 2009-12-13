@@ -989,7 +989,13 @@ class LiveTestOfForms extends SimpleTestAcceptanceTest {
 
     function testDefaultValueOfTextareaHasNewlinesAndWhitespacePreserved() {
         $this->get($this->samples() . 'form_with_false_defaults.html');
-        $this->assertField('Text area C', "                ");
+        $this->assertField('Text area C', '                ');
+    }
+
+    function chars($t) {
+        for ($i = 0; $i < strlen($t); $i++) {
+            print "[$t[$i]]";
+        }
     }
 
     function testSubmissionOfBlankFields() {

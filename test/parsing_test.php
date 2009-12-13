@@ -426,7 +426,23 @@ abstract class TestOfParsing extends UnitTestCase {
     function testWhitespacePreservedInTextArea() {
         $raw = '<form><textarea name="a">     </textarea></form>';
         $page = $this->whenVisiting('http://host', $raw);
-        $this->assertEqual($page->getField(new SimpleByName('a')), "     ");
+        $this->assertEqual($page->getField(new SimpleByName('a')), '     ');
+    }
+
+    function testComplexWhitespaceInTextArea() {
+        $raw = "<html>\n" .
+                "    <head><title></title></head>\n" .
+                "    <body>\n" .
+                "        <form>\n".
+                "            <label>Text area C\n" .
+                "                <textarea name='c'>\n" .
+                "                </textarea>\n" .
+                "            </label>\n" .
+                "        </form>\n" .
+                "    </body>\n" .
+                "</html>";
+        $page = $this->whenVisiting('http://host', $raw);
+        $this->assertEqual($page->getField(new SimpleByName('c')), "                ");
     }
 
     function testSettingTextArea() {

@@ -79,20 +79,21 @@ class SimpleTidyPageBuilder {
 
     /**
      *    HTML tidy strips out empty tags such as <option> which we
-     *    need to preserve. This method inserts an additional tag.
+     *    need to preserve. This method inserts an additional marker.
      *    @param string      The raw html.
      *    @return string     The html with guards inserted.
      */
     private function insertEmptyTagGuards($html) {
-        return preg_replace('#<(option|textarea)([^>]*)>(\s*)</(option|textarea)>#',
+        return preg_replace('#<(option|textarea)([^>]*)>(\s*)</(option|textarea)>#is',
                             '<\1\2>___EMPTY___\3</\4>',
                             $html);
     }
 
     /**
      *    HTML tidy strips out empty tags such as <option> which we
-     *    need to preserve. This method strips additional tags
-     *    inserted by SimpleTest to the tidy output.
+     *    need to preserve. This method strips additional markers
+     *    inserted by SimpleTest to the tidy output used to make the
+     *    tags non-empty. This ensures their preservation.
      *    @param string      The raw html.
      *    @return string     The html with guards removed.
      */
@@ -108,7 +109,7 @@ class SimpleTidyPageBuilder {
      *    @return string     The html with guards inserted.
      */
     private function insertTextareaSimpleWhitespaceGuards($html) {
-        return preg_replace_callback('#<textarea([^>]*)>(.*?)</textarea>#',
+        return preg_replace_callback('#<textarea([^>]*)>(.*?)</textarea>#is',
                                      array($this, 'insertWhitespaceGuards'),
                                      $html);
     }
