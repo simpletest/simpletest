@@ -113,10 +113,10 @@ class Log {
         $this->path = $path;
     }
 
-    function message($message) {<strong>
-        $clock = new Clock();</strong>
-        $file = fopen($this->path, 'a');<strong>
-        fwrite($file, "[" . $clock->now() . "] $message\n");</strong>
+    function message($message) {
+        <strong>$clock = new Clock();</strong>
+        $file = fopen($this->path, 'a');
+        <strong>fwrite($file, "[" . $clock->now() . "] $message\n");</strong>
         fclose($file);
     }
 }
@@ -135,14 +135,18 @@ class Log {
                 and extremely fragile.
                 It lacks cohesion, which is the same as saying it is not
                 tightly focused, testing facets of the clock as well as the log.
+            </p>
+            <p>
                 Our problems are caused in part because the clock output
-                is unpredictable when all we really want to test is that the
+                is unpredictable, yet all we really want to test is that the
                 logging message contains the output of <code>Clock::now()</code>.
                 We don&apos;t really care about the contents of that method call.
             </p>
             <p>
                 From the testing point of view, everything we've just done is
                 wrong.
+                We've failed to control the inputs and the outputs of the object
+                we are testing.
             </p>
             <p>
                 Can we make that call predictable?
@@ -164,7 +168,7 @@ class Log {
                 That is quite a lot of work for a pretty minor test.
             </p>
             <p>
-                Except that it is really no work at all.
+                Except that it is hardly any work at all.
             </p>
         </section>
         <section name="mock" title="A mock clock">
@@ -184,17 +188,18 @@ Mock::generate('Clock');
                 The code generator scans the class for all of its
                 methods, creates code to generate an identically
                 interfaced or inherited class, but with the name
-                &quot;Mock&quot; added.
+                mangled to have &quot;Mock&quot; added.
                 It then <code>eval()</code>s the new code to
                 create the new class.
 <php><![CDATA[
-$clock = new MockClock($this);
+$clock = new MockClock();
 ]]></php>
                 This line can be added to any test method we are interested in.
                 It creates the dummy clock ready to receive our instructions.
             </p>
             <p>
-                Our test case is on the first steps of a radical clean up...
+                Our test case is on the first steps of a radical clean up.
+                First is to actually use the <code>MockClock</code> in our test...
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');<strong>
@@ -221,19 +226,23 @@ class TestOfLogging extends <strong>UnitTestCase</strong> {
 
     function testAppendingToFile() { ... }
 
-    function testTimestamps() {<strong>
-        $clock = new MockClock($this);
-        $clock->returns('now', 'Timestamp');
+    function testTimestamps() {
+        <strong>$clock = new MockClock();</strong>
+        <strong>$clock->returns('now', 'Timestamp');</strong>
         $log = new Log('../temp/test.log');
-        $log->message('Test line', &$clock);
+        $log->message('Test line', $clock);
         $this->assertPattern(
-                '/Timestamp/',
-                $this->getFileLine('../temp/test.log', 0),
-                'Found timestamp');</strong>
+                <strong>'/Timestamp/'</strong>,
+                $this->getFileLine('../temp/test.log', 0));
     }
 }
 ?>
 ]]></php>
+                Note that we don't need our <code>TimeTestCase</code> anymore.
+                It will still be useful for testing the <code>Clock</code>, but we
+                don't need it for testing the <code>Loc</code> anymore.
+            </p>
+            <p>
                 This test method creates a <code>MockClock</code>
                 object and then sets the return value of the
                 <code>now()</code> method to be the string

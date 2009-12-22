@@ -35,8 +35,51 @@
 <?php
 require_once('simpletest/autorun.php');
 
-class <strong>MyTestCase</strong> extends UnitTestCase {
-    <strong>
+class <strong>CanAddUp</strong> extends UnitTestCase {<strong>
+    function testWillCreateLogFileOnFirstMessage() {
+        $this->assertEqual(1 + 1, 2);
+    }</strong>
+}
+?>
+]]></php>
+                Tests are grouped into test cases, which are just
+                PHP classes that extend <code>UnitTestCase</code>
+                or <code>WebTestCase</code>.
+                The tests themselves are just normal methods that start
+                their name with the letters &quot;test&quot;.
+                You can have as many test cases as you want in a test
+                script and each test case can have as many test methods
+                as it wants too.
+            </p>
+            <p>
+                This test script is immediately runnable.
+            </p>
+            <p>
+                When run on the command line you should see something like...
+<pre class="shell">
+adding_test.php
+OK
+Test cases run: 1/1, Passes: 1, Failures: 0, Exceptions: 0
+</pre>
+            </p>
+            <p>
+                If you place it on a web server and point your
+                web browser at it...
+                <div class="demo">
+                    <h1>adding_test.php</h1>
+                    <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
+                    <strong>6</strong> passes, <strong>0</strong> fails and <strong>0</strong> exceptions.</div>
+                </div>
+            </p>
+            <p>
+                Of course this is a silly example.
+                A more realistic example might be...
+<php><![CDATA[
+<?php
+require_once('simpletest/autorun.php');
+require_once('log.php');
+
+class <strong>TestOfLogging</strong> extends UnitTestCase {
     function testWillCreateLogFileOnFirstMessage() {
         $log = new Log('my.log');
         $this->assertFalse(file_exists('my.log'));
