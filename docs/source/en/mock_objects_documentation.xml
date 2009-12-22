@@ -55,22 +55,13 @@
         </section>
         <section name="creation" title="Creating mock objects">
             <p>
-                All we need is an existing class, say a database connection
+                All we need is an existing class or interface, say a database connection
                 that looks like this...
 <php><![CDATA[
 <strong>class DatabaseConnection {
     function DatabaseConnection() { }
     function query($sql) { }
     function selectQuery($sql) { }
-}</strong>
-]]></php>
-                The class does not need to have been implemented yet.
-                It could be just an interface...
-<php><![CDATA[
-<strong>interface DatabaseConnection {
-    function DatabaseConnection();
-    function query($sql);
-    function selectQuery($sql);
 }</strong>
 ]]></php>
                 To create a mock version of the class we need to run a
@@ -81,8 +72,65 @@ require_once('database_connection.php');
 
 <strong>Mock::generate('DatabaseConnection');</strong>
 ]]></php>
-                This generates a clone class called
+                This code generates a clone class called
                 <code>MockDatabaseConnection</code>.
+                This new class appears to be the same, but actually has no behaviour at all.
+            </p>
+            <p>
+                The new class is usually a subclass of <code>DatabaseConnection</code>.
+                Unfortunately, there is no way to create a mock version of a
+                class with a <code>final</code> method without having a living version of
+                that method.
+                We consider that unsafe.
+                If the target is an interface, or if <code>final</code> methods are
+                present in a target class, then a whole new class
+                is created, but one implemeting the same interfaces.
+                If you try to pass this separate class through a type hint that specifies
+                the old concrete class name, it will fail.
+                Code like that insists on type hinting to a class with <code>final</code>
+                methods probably cannot be safely tested with mocks.
+            </p>
+            <p>
+                If you want to see the generated code, then simply <code>print</code>
+                the output of <code>Mock::generate()</code>.
+                Here is the generated code for the <code>DatabaseConnection</code>
+                class rather than the interface version...
+<php><![CDATA[
+class MockDatabaseConnection extends DatabaseConnection {
+    public $mock;
+    protected $mocked_methods = array('databaseconnection', 'query', 'selectquery');
+
+    function MockDatabaseConnection() {
+        $this->mock = new SimpleMock();
+        $this->mock->disableExpectationNameChecks();
+    }
+    ...
+    function DatabaseConnection() {
+        $args = func_get_args();
+        $result = &$this->mock->invoke("DatabaseConnection", $args);
+        return $result;
+    }
+    function query($sql) {
+        $args = func_get_args();
+        $result = &$this->mock->invoke("query", $args);
+        return $result;
+    }
+    function selectQuery($sql) {
+        $args = func_get_args();
+        $result = &$this->mock->invoke("selectQuery", $args);
+        return $result;
+    }
+}
+]]></php>
+                Your output may vary depending on the exact version
+                of SimpleTest you are using.
+            </p>
+            <p>
+                Besides the original methods of the class, you will see some extra
+                methods that help testing.
+                More on these later.
+            </p>
+            <p>
                 We can now create instances of the new class within
                 our test case...
 <php><![CDATA[
@@ -415,7 +463,13 @@ class DatabaseTest extends UnitTestCase {
                 We've passed the <code>UserFinder</code> an <code>$alert</code>
                 object.
                 This is going to do some kind of pretty notifications in the
-                user interface.
+                user interface in the event of an error.
+                We'd rather not sprinkle our code with hard wired <code>print</code>
+                statements if we can avoid it.
+                Wrapping the means of output means we can use this code anywhere.
+                It also makes testing easier.
+            </p>
+            <p>
                 To pass this test, the finder has to write a nice user friendly
                 message to <code>$alert</code>, rather than propogating the exception.
                 So far, so good.
@@ -456,16 +510,17 @@ class DatabaseTest extends UnitTestCase {
                 To cope with this, SimpleTest allows you to choose any name for the
                 new class at the same time as you add the extra methods.
 <php><![CDATA[
-Mock::generate('DatabaseConnection', <strong>'MyMockDatabaseConnection'</strong>, array('setOptions'));
+Mock::generate('DatabaseConnection', <strong>'MockDatabaseConnectionWithOptions'</strong>, array('setOptions'));
 ]]></php>
                 Here the mock will behave as if the <code>setOptions()</code>
                 existed in the original class.
             </p>
             <p>
-                Mock objects can only be used within test cases, as they send messages,
-                upon expectations, straight to the currently running test case.
+                Mock objects can only be used within test cases, as upon expectations
+                they send messages straight to the currently running test case.
                 Creating them outside a test case will cause a run time error
-                when an expectation is triggered.
+                when an expectation is triggered and there is no running test case
+                for the message to end up.
                 We cover expectations next.
             </p>
         </section>
@@ -492,6 +547,17 @@ class PaymentForm extends PageController {
                 This class talks to the page or template.
                 It's responsible for painting the error message and highlighting any
                 form fields that are incorrect.
+            </p>
+            <p>
+                It might look something like...
+<php><![CDATA[
+class Alert {
+    function warn($warning, $id) {
+        print '<div class="warning">' . $warning . '</div>';
+        print '<style type="text/css">#' . $id . ' { background-color: red }</style>';
+    }
+}
+]]></php>
             </p>
             <p>
                 Our interest is in the <code>makePayment()</code> method.
