@@ -157,6 +157,8 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                 and their expected point of release.
                 I am afraid it is liable to change without warning, as meeting the
                 milestones rather depends on time available.
+            </p>
+            <p>
                 Green stuff has been coded, but not necessarily released yet.
                 If you have a pressing need for a green but unreleased feature
                 then you should check-out the code from Sourceforge SVN directly.
@@ -296,16 +298,26 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     <tr>
                         <td>PHP 5 E_STRICT compliant</td>
                         <td>PHP 5 only version that works with the E_STRICT error level</td>
-                        <td style="color: red;">1.1</td>
+                        <td style="color: green;">1.1</td>
                     </tr>
                     <tr>
                         <td>Alternate HTML parsers</td>
                         <td>Can detect compiled parsers for performance improvements</td>
-                        <td style="color: red;">1.1</td>
+                        <td style="color: green;">1.1</td>
+                    </tr>
+                    <tr>
+                        <td>REST support</td>
+                        <td>Support for REST verbs as put(), delete(), etc.</td>
+                        <td style="color: green;">1.1</td>
                     </tr>
                     <tr>
                         <td>BDD style fixtures</td>
                         <td>Can import fixtures using a mixin like given() method</td>
+                        <td style="color: red;">1.5</td>
+                    </tr>
+                    <tr>
+                        <td>Plug-in architecture</td>
+                        <td>Automatic import of extensions including command line options</td>
                         <td style="color: red;">1.5</td>
                     </tr>
                     <tr>
@@ -320,7 +332,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>Localisation</td>
-                        <td>Messages abstracted and code generated</td>
+                        <td>Messages abstracted and code generated as well as UTF support</td>
                         <td style="color: red;">1.6</td>
                     </tr>
                     <tr>
@@ -350,7 +362,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>Integrated Selenium support</td>
-                        <td>Easy to use built in Selenium driver and tutorial</td>
+                        <td>Easy to use built in Selenium driver and tutorial or similar browser automation</td>
                         <td style="color: red;">1.9</td>
                     </tr>
                     <tr>
@@ -369,7 +381,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                         <td style="color: red;">3.0</td>
                     </tr>
                 </tbody></table>
-                PHP 5 migration is complete, which means that only PHP 5.0.5+
+                PHP 5 migration is complete, which means that only PHP 5.0.3+
                 will be supported in SimpleTest version 1.1+.
                 Earlier versions of SimpleTest are compatible with PHP 4.2 up to
                 PHP 5 (non E_STRICT).
