@@ -1,10 +1,18 @@
 <?php
 require_once(dirname(__FILE__) . '/../../../autorun.php');
 require_once(dirname(__FILE__) . '/../../../mock_objects.php');
-require_once dirname(__FILE__) .'/../coverage.php';
 
 class CodeCoverageTest extends UnitTestCase {
-
+    function skip() {
+        $this->skipIf(
+        		!file_exists('DB/sqlite.php'),
+                'The Coverage extension needs to have PEAR installed');
+    }
+	
+	function setUp() {
+        require_once dirname(__FILE__) .'/../coverage.php';
+    }
+	
     function testIsFileIncluded() {
         $coverage = new CodeCoverage();
         $this->assertTrue($coverage->isFileIncluded('aaa'));

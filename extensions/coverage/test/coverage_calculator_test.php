@@ -1,10 +1,15 @@
 <?php
 require_once(dirname(__FILE__) . '/../../../autorun.php');
-require_once dirname(__FILE__) .'/../coverage_calculator.php';
 
 class CoverageCalculatorTest extends UnitTestCase {
-
-    function setUp() {
+    function skip() {
+        $this->skipIf(
+        		!file_exists('DB/sqlite.php'),
+                'The Coverage extension needs to have PEAR installed');
+    }
+    
+	function setUp() {
+       	require_once dirname(__FILE__) .'/../coverage_calculator.php';
         $this->calc = new CoverageCalculator();
     }
 
