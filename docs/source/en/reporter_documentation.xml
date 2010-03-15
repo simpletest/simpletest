@@ -19,7 +19,7 @@
         </introduction>
         <section name="html" title="Reporting results in HTML">
             <p>
-                The default test display is minimal in the extreme.
+                The default HTML display is minimal in the extreme.
                 It reports success and failure with the conventional red and
                 green bars and shows a breadcrumb trail of test groups
                 for every failed assertion.
@@ -45,7 +45,7 @@
                 signature...
 <php><![CDATA[
 class HtmlReporter extends SimpleReporter {
-    public HtmlReporter($encoding) { ... }
+    public __construct($encoding) { ... }
     public makeDry(boolean $is_dry) { ... }
     public void paintHeader(string $test_name) { ... }
     public void sendNoCacheHeaders() { ... }

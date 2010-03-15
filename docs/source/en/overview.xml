@@ -36,7 +36,7 @@
 require_once('simpletest/autorun.php');
 
 class <strong>CanAddUp</strong> extends UnitTestCase {<strong>
-    function testWillCreateLogFileOnFirstMessage() {
+    function testOneAndOneMakesTwo() {
         $this->assertEqual(1 + 1, 2);
     }</strong>
 }
@@ -53,6 +53,10 @@ class <strong>CanAddUp</strong> extends UnitTestCase {<strong>
             </p>
             <p>
                 This test script is immediately runnable.
+                You just invoke it on the command line like so...
+<pre class="shell">
+php adding_test.php
+</pre>
             </p>
             <p>
                 When run on the command line you should see something like...
@@ -139,7 +143,7 @@ require_once('simpletest/web_tester.php');
 
 class <strong>MySiteTest</strong> extends WebTestCase {
     <strong>
-    function testHomePageHasContactDetails() {
+    function testHomePageHasContactDetailsLink() {
         $this->get('http://www.my-site.com/index.php');
         $this->assertTitle('My Home Page');
         $this->clickLink('Contact');
@@ -342,7 +346,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     </tr>
                     <tr>
                         <td>HTML table assertions</td>
-                        <td>Can match HTML or table elements to expectations</td>
+                        <td>Can match HTML or other table elements to expectations</td>
                         <td style="color: red;">1.7</td>
                     </tr>
                     <tr>

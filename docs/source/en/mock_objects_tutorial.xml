@@ -79,16 +79,16 @@ class TestOfLogging extends TimeTestCase {</strong>
                 Of course it doesn&apos;t work until we write the code.
                 <div class="demo">
                     <h1>All tests</h1>
-                    <span class="pass">Pass</span>: log_test.php->Log class test->testappendingtofile->Expecting [/Test line 1/] in [Test line 1]<br />
-                    <span class="pass">Pass</span>: log_test.php->Log class test->testappendingtofile->Expecting [/Test line 2/] in [Test line 2]<br />
-                    <span class="pass">Pass</span>: log_test.php->Log class test->testcreatingnewfile->Created before message<br />
-                    <span class="pass">Pass</span>: log_test.php->Log class test->testcreatingnewfile->File created<br />
-                    <span class="fail">Fail</span>: log_test.php->Log class test->testtimestamps->Found timestamp<br />
+                    <span class="pass">Pass</span>: log_test.php->Log class test->testAppendingToFile->Expecting [/Test line 1/] in [Test line 1]<br />
+                    <span class="pass">Pass</span>: log_test.php->Log class test->testAppendingToFile->Expecting [/Test line 2/] in [Test line 2]<br />
+                    <span class="pass">Pass</span>: log_test.php->Log class test->testCreatingNewFile->Created before message<br />
+                    <span class="pass">Pass</span>: log_test.php->Log class test->testCreatingNewFile->File created<br />
+                    <span class="fail">Fail</span>: log_test.php->Log class test->testTimestampIsEmittedInMessage->Found timestamp<br />
                     <br />
                     <b>Notice</b>:  Undefined offset:  1 in <b>/home/marcus/projects/lastcraft/tutorial_tests/tests/log_test.php</b> on line <b>44</b><br />
-                    <span class="fail">Fail</span>: log_test.php->Log class test->testtimestamps->Correct time<br />
-                    <span class="pass">Pass</span>: clock_test.php->Clock class test->testclockadvance->Advancement<br />
-                    <span class="pass">Pass</span>: clock_test.php->Clock class test->testclocktellstime->Now is the right time<br />
+                    <span class="fail">Fail</span>: log_test.php->Log class test->testTimestampIsEmittedInMessage->Correct time<br />
+                    <span class="pass">Pass</span>: clock_test.php->Clock class test->testClockAdvance->Advancement<br />
+                    <span class="pass">Pass</span>: clock_test.php->Clock class test->testClockTellsTime->Now is the right time<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">3/3 test cases complete.
                     <strong>6</strong> passes, <strong>2</strong> fails and <strong>2</strong> exceptions.</div>
                 </div>
