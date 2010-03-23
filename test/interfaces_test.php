@@ -50,7 +50,7 @@ class TestOfSpl extends UnitTestCase {
             return;
         }
         foreach(spl_classes() as $class) {
-            if ($class == 'SplHeap') {
+            if ($class == 'SplHeap' or $class = 'SplFileObject') {
                 continue;
             }
             if (version_compare(PHP_VERSION, '5.1', '<') &&
