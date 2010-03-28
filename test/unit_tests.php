@@ -23,6 +23,7 @@ class UnitTests extends TestSuite {
         $this->addFile($path . '/mock_objects_test.php');
         $this->addFile($path . '/interfaces_test.php');
         $this->addFile($path . '/collector_test.php');
+        $this->addFile($path . '/recorder_test.php');
         $this->addFile($path . '/adapter_test.php');
         $this->addFile($path . '/socket_test.php');
         $this->addFile($path . '/encoding_test.php');
