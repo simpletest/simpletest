@@ -5,13 +5,6 @@
  *	@subpackage	Extensions
  *	@version	$Id$
  */
-
-/**
- *	base include file for SimpleTest
- *	@package	SimpleTest
- *	@subpackage	Extensions
- *	@version	$Id$
- */
 class TestDoxReporter extends SimpleReporter
 {
     var $_test_case_pattern = '/^TestOf(.*)$/';
@@ -39,7 +32,6 @@ class TestDoxReporter extends SimpleReporter
             return;
         }
         $test_name = $matches[1];
-
         $test_name = preg_replace('/([A-Z])([A-Z])/', '$1 $2', $test_name);
         echo '- ' . strtolower(preg_replace('/([a-zA-Z])([A-Z0-9])/', '$1 $2', $test_name));
     }

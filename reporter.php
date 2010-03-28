@@ -105,7 +105,6 @@ class HtmlReporter extends SimpleReporter {
      *    top level test.
      *    @param string $message    Failure message displayed in
      *                              the context of the other tests.
-     *    @access public
      */
     function paintFail($message) {
         parent::paintFail($message);

@@ -5,7 +5,7 @@
     <content>
         <introduction>
             <p>
-                SimpleTest pretty much follows the MVC pattern
+                SimpleTest pretty much follows the MVC-ish pattern
                 (Model-View-Controller).
                 The reporter classes are the view and the model is your
                 test cases and their hiearchy.
@@ -186,7 +186,7 @@ class HtmlReporter extends SimpleReporter {
                 One simple modification is to get the HtmlReporter to display
                 the passes as well as the failures and errors...
 <php><![CDATA[
-<strong>class ShowPasses extends HtmlReporter {
+<strong>class ReporterShowingPasses extends HtmlReporter {
     
     function paintPass($message) {
         parent::paintPass($message);
@@ -237,7 +237,7 @@ class HtmlReporter extends SimpleReporter {
                 A do nothing display, a blank canvas for your own creation, would
                 be...
 <php><![CDATA[
-<strong>require_once('simpletest/simple_test.php');</strong>
+<strong>require_once('simpletest/simpletest.php');</strong>
 
 class MyDisplay extends SimpleReporter {<strong>
     </strong>
@@ -412,7 +412,7 @@ require_once('../reporter.php');
 $test_url = ...;
 $dry_url = ...;
     
-$test = &new TestSuite('Remote tests');
+$test = new TestSuite('Remote tests');
 $test->addTest(<strong>new RemoteTestCase($test_url, $dry_url)</strong>);
 $test->run(new HtmlReporter());
 ?>

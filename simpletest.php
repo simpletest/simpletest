@@ -9,11 +9,7 @@
 /**#@+
  * include SimpleTest files
  */
-if (version_compare(phpversion(), '5') >= 0) {
-    require_once(dirname(__FILE__) . '/reflection_php5.php');
-} else {
-    require_once(dirname(__FILE__) . '/reflection_php4.php');
-}
+require_once(dirname(__FILE__) . '/reflection_php5.php');
 require_once(dirname(__FILE__) . '/default_reporter.php');
 require_once(dirname(__FILE__) . '/compatibility.php');
 /**#@-*/
