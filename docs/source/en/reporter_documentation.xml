@@ -157,7 +157,7 @@ class HtmlReporter extends SimpleReporter {
                         is the first convenience method for subclasses.
                         Lists the current nesting of the tests as a list
                         of test names.
-                        The first, most deeply nested test, is first in the
+                        The first, top level test case, is first in the
                         list and the current test method will be last.
                     </li>
                     <li>
@@ -190,7 +190,7 @@ class HtmlReporter extends SimpleReporter {
     
     function paintPass($message) {
         parent::paintPass($message);
-        print "&<span class=\"pass\">Pass</span>: ";
+        print "<span class=\"pass\">Pass</span>: ";
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
         print implode("-&gt;", $breadcrumb);
@@ -241,11 +241,9 @@ class HtmlReporter extends SimpleReporter {
 
 class MyDisplay extends SimpleReporter {<strong>
     </strong>
-    function paintHeader($test_name) {
-    }
+    function paintHeader($test_name) { }
     
-    function paintFooter($test_name) {
-    }
+    function paintFooter($test_name) { }
     
     function paintStart($test_name, $size) {<strong>
         parent::paintStart($test_name, $size);</strong>
@@ -262,9 +260,54 @@ class MyDisplay extends SimpleReporter {<strong>
     function paintFail($message) {<strong>
         parent::paintFail($message);</strong>
     }
+    
+    function paintError($message) {<strong>
+        parent::paintError($message);</strong>
+    }
+    
+    function paintException($exception) {<strong>
+        parent::paintException($exception);</strong>
+    }
 }
 ]]></php>
                 No output would come from this class until you add it.
+            </p>
+            <p>
+                The catch with using this low level class is that you must
+                explicitely invoke it in the test script.
+                The &quot;autorun&quot; facility will not be able to use
+                it's runime context (whether it's running in a web browser
+                or the command line) to select the reporter.
+            </p>
+            <p>
+                You explicitely invoke the test runner like so...
+<php><![CDATA[
+<?php
+require_once('simpletest/autorun.php');
+
+$test = new TestSuite('File test');
+$test->addFile('tests/file_test.php');
+$test->run(<strong>new MyReporter()</strong>);
+?>
+]]></php>
+                ...perhaps like this...
+<php><![CDATA[
+<?php
+require_once('simpletest/simpletest.php');
+require_once('my_reporter.php');
+
+class MyTest extends TestSuite {
+    function __construct() {
+        parent::__construct();
+        $this->addFile('tests/file_test.php');
+    }
+}
+
+$test = new MyTest();
+$test->run(<strong>new MyReporter()</strong>);
+?>
+]]></php>
+                We&apos;ll show how to fit in with &quot;autorun&quot; later.
             </p>
         </section>
         <section name="cli" title="The command line reporter">
@@ -272,13 +315,13 @@ class MyDisplay extends SimpleReporter {<strong>
                 SimpleTest also ships with a minimal command line reporter.
                 The interface mimics JUnit to some extent, but paints the
                 failure messages as they arrive.
-                To use the command line reporter simply substitute it
+                To use the command line reporter explicitely, substitute it
                 for the HTML version...
 <php><![CDATA[
 <?php
 require_once('simpletest/autorun.php');
 
-$test = &new TestSuite('File test');
+$test = new TestSuite('File test');
 $test->addFile('tests/file_test.php');
 $test->run(<strong>new TextReporter()</strong>);
 ?>
@@ -293,15 +336,15 @@ php file_test.php
 <pre class="shell">
 File test
 OK
-Test cases run: 1/1, Failures: 0, Exceptions: 0
+Test cases run: 1/1, Passes: 1, Failures: 0, Exceptions: 0
 </pre>
                 A failure triggers a display like this...
 <pre class="shell">
 File test
 1) True assertion failed.
-    in createnewfile
+    in createNewFile
 FAILURES!!!
-Test cases run: 1/1, Failures: 1, Exceptions: 0
+Test cases run: 1/1, Passes: 0, Failures: 1, Exceptions: 0
 </pre>
             </p>
             <p>
@@ -319,12 +362,12 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
 <?php
 require_once('simpletest/autorun.php');
 
-$test = &new TestSuite('File test');
+$test = new TestSuite('File test');
 $test->addFile('tests/file_test.php');
 <strong>exit ($test->run(new TextReporter()) ? 0 : 1);</strong>
 ?>
 ]]></php>
-                Of course we don&apos;t really want to create two test scripts,
+                Of course we wouldn&apos;t really want to create two test scripts,
                 a command line one and a web browser one, for each test suite.
                 The command line reporter includes a method to sniff out the
                 run time environment...
@@ -332,7 +375,7 @@ $test->addFile('tests/file_test.php');
 <?php
 require_once('simpletest/autorun.php');
 
-$test = &new TestSuite('File test');
+$test = new TestSuite('File test');
 $test->addFile('tests/file_test.php');
 <strong>if (TextReporter::inCli()) {</strong>
     exit ($test->run(new TextReporter()) ? 0 : 1);
@@ -341,6 +384,24 @@ $test->run(new HtmlReporter());
 ?>
 ]]></php>
                 This is the form used within SimpleTest itself.
+                When you use the &quot;autorun.php&quot;, and no
+                test has been run by the end, this is pretty much
+                the code that SimpleTest will run for you implicitely.
+            </p>
+            <p>
+                In other words, this is gives the same result...
+<php><![CDATA[
+<?php
+require_once('simpletest/autorun.php');
+
+class MyTest extends TestSuite {
+    function __construct() {
+        parent::__construct();
+        $this->addFile('tests/file_test.php');
+    }
+}
+?>
+]]></php>
             </p>
         </section>
         <section name="xml" title="Remote testing">
@@ -370,7 +431,17 @@ $test->run(new HtmlReporter());
   </group>
 </run>
 ]]></pre>
-                You can make use of this format with the parser
+                To get your normal test cases to produce this format, on the
+                command line add the <code>--xml</code> flag.
+<pre class="shell">
+php my_test.php --xml
+</pre>
+                You can do teh same thing in the web browser by adding the
+                URL parameter <code>xml=1</code>.
+                Any true value will do.
+            </p>
+            <p>
+                You can consume this format with the parser
                 supplied as part of SimpleTest itself.
                 This is called <code>SimpleTestXmlParser</code> and
                 resides in <em>xml.php</em> within the SimpleTest package...
@@ -379,7 +450,7 @@ $test->run(new HtmlReporter());
 require_once('simpletest/xml.php');
     
 ...
-$parser = &new SimpleTestXmlParser(new HtmlReporter());
+$parser = new SimpleTestXmlParser(new HtmlReporter());
 $parser->parse($test_output);
 ?>
 ]]></php>
@@ -391,8 +462,30 @@ $parser->parse($test_output);
                 There are some odd occasions where this is actually useful.
             </p>
             <p>
+                Most likely it's when you want to isolate a problematic crash
+                prone test.
+                You can collect the XML output using the backtick operator
+                from another test.
+                In that way it runs in it's own process...
+<php><![CDATA[
+<?php
+require_once('simpletest/xml.php');
+
+if (TextReporter::inCli()) {
+    $parser = new SimpleTestXmlParser(new TextReporter());
+} else {
+    $parser = new SimpleTestXmlParser(new HtmlReporter());
+}
+$parser->parse(`php flakey_test.php --xml`);
+?>
+]]></php>
+            </p>
+            <p>
+                Another use is breaking up large test suites.
+            </p>
+            <p>
                 A problem with large test suites is thet they can exhaust
-                the default 8Mb memory limit on a PHP process.
+                the default 16Mb memory limit on a PHP process.
                 By having the test groups output in XML and run in
                 separate processes, the output can be reparsed to
                 aggregate the results into a much smaller footprint top level
@@ -407,14 +500,17 @@ $parser->parse($test_output);
 <php><![CDATA[
 <?php
 <strong>require_once('../remote.php');</strong>
-require_once('../reporter.php');
+require_once('simpletest/autorun.php');
     
 $test_url = ...;
 $dry_url = ...;
-    
-$test = new TestSuite('Remote tests');
-$test->addTest(<strong>new RemoteTestCase($test_url, $dry_url)</strong>);
-$test->run(new HtmlReporter());
+
+class MyTestOnAnotherServer extends RemoteTestCase {
+    function __construct() {
+        $test_url = ...
+        parent::__construct($test_url, $test_url . ' --dry');
+    }
+}
 ?>
 ]]></php>
                 The <code>RemoteTestCase</code> takes the actual location
@@ -422,7 +518,7 @@ $test->run(new HtmlReporter());
                 It also takes the URL of a reporter set to do a dry run.
                 This is so that progress can be reported upward correctly.
                 The <code>RemoteTestCase</code> can be added to test suites
-                just like any other group test.
+                just like any other test suite.
             </p>
         </section>
     </content>
