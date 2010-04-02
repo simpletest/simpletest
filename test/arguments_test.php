@@ -34,5 +34,11 @@ class TestOfCommandLineArguments extends UnitTestCase {
         $arguments = new SimpleArguments(array('me', '-a', 'A', '-a', 'AA', '-a', 'AAA'));
         $this->assertIdentical($arguments->a, array('A', 'AA', 'AAA'));
     }
+    
+    function testCanParseLongFormArguments() {
+        $arguments = new SimpleArguments(array('me', '--aa=AA', '--bb', 'BB'));
+        $this->assertIdentical($arguments->aa, 'AA');
+        $this->assertIdentical($arguments->bb, 'BB');
+    }
 }
 ?>

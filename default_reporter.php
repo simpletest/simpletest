@@ -97,7 +97,7 @@ class SimpleCommandLineParser {
      *    @return boolean        True if help message desired.
      */
     function help() {
-        return $this->help && !$this->xml;
+        return $this->help && ! $this->xml;
     }
     
     /**
