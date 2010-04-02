@@ -54,7 +54,7 @@ class TestOfHelpOutput extends UnitTestCase {
         $this->assertPattern('/This program is cool/', $help->render());
     }
     
-    function testDisplaysHelpOnShortFlag() {
+    function TODO_testDisplaysHelpOnShortFlag() {
         $help = new SimpleHelp('This program is cool');
         $help->explainFlag('a', 'This enables the AAA widget');
         $this->assertPattern('/-a\tThis enables the AA widget/', $help->render());
