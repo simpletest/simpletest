@@ -137,6 +137,9 @@ class SimpleHelp {
         $this->banner = $banner;
     }
     
+    function explainFlag($flags, $explanation) {
+    }
+    
     function render() {
         return $this->banner . "\n";
     }

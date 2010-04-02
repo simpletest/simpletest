@@ -40,12 +40,24 @@ class TestOfCommandLineArgumentParsing extends UnitTestCase {
         $this->assertIdentical($arguments->aa, 'AA');
         $this->assertIdentical($arguments->bb, 'BB');
     }
+    
+    function testGetsFullSetOfResultsAsHash() {
+        $arguments = new SimpleArguments(array('me', '-a', '-b=1', '-b', '2', '--aa=AA', '--bb', 'BB', '-c'));
+        $this->assertEqual($arguments->all(),
+                           array('a' => true, 'b' => array('1', '2'), 'aa' => 'AA', 'bb' => 'BB', 'c' => true));
+    }
 }
 
 class TestOfHelpOutput extends UnitTestCase {
     function testDisplaysGeneralHelpBanner() {
-        $help = new SimpleHelp("This program is cool");
+        $help = new SimpleHelp('This program is cool');
         $this->assertPattern('/This program is cool/', $help->render());
+    }
+    
+    function testDisplaysHelpOnShortFlag() {
+        $help = new SimpleHelp('This program is cool');
+        $help->explainFlag('a', 'This enables the AAA widget');
+        $this->assertPattern('/-a\tThis enables the AA widget/', $help->render());
     }
 }
 ?>
