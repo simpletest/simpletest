@@ -131,5 +131,14 @@ class SimpleArguments {
 }
 
 class SimpleHelp {
+    private $banner;
+    
+    function __construct($banner) {
+        $this->banner = $banner;
+    }
+    
+    function render() {
+        return $this->banner . "\n";
+    }
 }
 ?>

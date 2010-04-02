@@ -3,7 +3,7 @@
 require_once(dirname(__FILE__) . '/../autorun.php');
 require_once(dirname(__FILE__) . '/../arguments.php');
 
-class TestOfCommandLineArguments extends UnitTestCase {
+class TestOfCommandLineArgumentParsing extends UnitTestCase {
     function testArgumentListWithJustProgramNameGivesFalseToEveryName() {
         $arguments = new SimpleArguments(array('me'));
         $this->assertIdentical($arguments->a, false);
@@ -39,6 +39,13 @@ class TestOfCommandLineArguments extends UnitTestCase {
         $arguments = new SimpleArguments(array('me', '--aa=AA', '--bb', 'BB'));
         $this->assertIdentical($arguments->aa, 'AA');
         $this->assertIdentical($arguments->bb, 'BB');
+    }
+}
+
+class TestOfHelpOutput extends UnitTestCase {
+    function testDisplaysGeneralHelpBanner() {
+        $help = new SimpleHelp("This program is cool");
+        $this->assertPattern('/This program is cool/', $help->render());
     }
 }
 ?>
