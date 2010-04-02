@@ -13,6 +13,7 @@ class UnitTests extends TestSuite {
         $path = dirname(__FILE__);
         $this->addFile($path . '/errors_test.php');
         $this->addFile($path . '/exceptions_test.php');
+        $this->addFile($path . '/arguments_test.php');
         $this->addFile($path . '/autorun_test.php');
         $this->addFile($path . '/compatibility_test.php');
         $this->addFile($path . '/simpletest_test.php');

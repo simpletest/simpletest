@@ -1,0 +1,38 @@
+<?php
+// $Id: cookies_test.php 1506 2007-05-07 00:58:03Z lastcraft $
+require_once(dirname(__FILE__) . '/../autorun.php');
+require_once(dirname(__FILE__) . '/../arguments.php');
+
+class TestOfCommandLineArguments extends UnitTestCase {
+    function testArgumentListWithJustProgramNameGivesFalseToEveryName() {
+        $arguments = new SimpleArguments(array('me'));
+        $this->assertIdentical($arguments->a, false);
+        $this->assertIdentical($arguments->all(), array());
+    }
+    
+    function testSingleArgumentNameRecordedAsTrue() {
+        $arguments = new SimpleArguments(array('me', '-a'));
+        $this->assertIdentical($arguments->a, true);
+    }
+    
+    function testSingleArgumentCanBeGivenAValue() {
+        $arguments = new SimpleArguments(array('me', '-a=AAA'));
+        $this->assertIdentical($arguments->a, 'AAA');
+    }
+    
+    function testSingleArgumentCanBeGivenSpaceSeparatedValue() {
+        $arguments = new SimpleArguments(array('me', '-a', 'AAA'));
+        $this->assertIdentical($arguments->a, 'AAA');
+    }
+    
+    function testWillBuildArrayFromRepeatedValue() {
+        $arguments = new SimpleArguments(array('me', '-a', 'A', '-a', 'AA'));
+        $this->assertIdentical($arguments->a, array('A', 'AA'));
+    }
+    
+    function testWillBuildArrayFromMultiplyRepeatedValues() {
+        $arguments = new SimpleArguments(array('me', '-a', 'A', '-a', 'AA', '-a', 'AAA'));
+        $this->assertIdentical($arguments->a, array('A', 'AA', 'AAA'));
+    }
+}
+?>
