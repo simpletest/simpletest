@@ -154,7 +154,7 @@ class SimpleHelp {
      * @param string/array $flags       Flag and alternates. Don't
      *                                  worry about leading dashes
      *                                  as these are inserted automatically.
-     * @param string explanation        What that flag group does.
+     * @param string $explanation       What that flag group does.
      */
     function explainFlag($flags, $explanation) {
         $flags = is_array($flags) ? $flags : array($flags);
