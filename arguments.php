@@ -132,16 +132,44 @@ class SimpleArguments {
 
 class SimpleHelp {
     private $banner;
+    private $flag_sets = array();
+    private $explanations = array();
     
     function __construct($banner) {
         $this->banner = $banner;
     }
     
     function explainFlag($flags, $explanation) {
+        $flags = is_array($flags) ? $flags : array($flags);
+        $this->flag_sets[] = $flags;
+        $this->explanations[] = $explanation;
     }
     
     function render() {
-        return $this->banner . "\n";
+        $tab_stop = $this->longestFlag($this->flag_sets) + 4;
+        $text = $this->banner . "\n";
+        for ($i = 0; $i < count($this->flag_sets); $i++) {
+            $text .= $this->renderFlagSet($this->flag_sets[$i], $this->explanations[$i], $tab_stop);
+        }
+        return $text;
+    }
+    
+    private function longestFlag($flag_sets) {
+        $longest = 0;
+        foreach ($flag_sets as $flags) {
+            foreach ($flags as $flag) {
+                $longest = max($longest, strlen($this->renderFlag($flag)));
+            }
+        }
+        return $longest;
+    }
+    
+    private function renderFlag($flag) {
+        return (strlen($flag) == 1 ? '-' : '--') . $flag;
+    }
+    
+    private function renderFlagSet($flags, $explanation, $tab_stop) {
+        return str_pad($this->renderFlag($flags[0]), $tab_stop, ' ') . $explanation . "\n";
     }
 }
 ?>

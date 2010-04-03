@@ -50,14 +50,27 @@ class TestOfCommandLineArgumentParsing extends UnitTestCase {
 
 class TestOfHelpOutput extends UnitTestCase {
     function testDisplaysGeneralHelpBanner() {
-        $help = new SimpleHelp('This program is cool');
-        $this->assertPattern('/This program is cool/', $help->render());
+        $help = new SimpleHelp('Cool program');
+        $this->assertEqual($help->render(), "Cool program\n");
     }
     
-    function TODO_testDisplaysHelpOnShortFlag() {
-        $help = new SimpleHelp('This program is cool');
-        $help->explainFlag('a', 'This enables the AAA widget');
-        $this->assertPattern('/-a\tThis enables the AA widget/', $help->render());
+    function testDisplaysOnlySingleLineEndings() {
+        $help = new SimpleHelp("Cool program\n");
+        $this->assertEqual($help->render(), "Cool program\n");
+    }
+    
+    function testDisplaysHelpOnShortFlag() {
+        $help = new SimpleHelp('Cool program');
+        $help->explainFlag('a', 'Enables A');
+        $this->assertEqual($help->render(), "Cool program\n-a    Enables A\n");
+    }
+    
+    function testHasAtleastFourSpacesAfterLongestFlag() {
+        $help = new SimpleHelp('Cool program');
+        $help->explainFlag('a', 'Enables A');
+        $help->explainFlag('long', 'Enables Long');
+        $this->assertEqual($help->render(),
+                           "Cool program\n-a        Enables A\n--long    Enables Long\n");
     }
 }
 ?>
