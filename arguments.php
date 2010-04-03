@@ -151,7 +151,7 @@ class SimpleHelp {
         for ($i = 0; $i < count($this->flag_sets); $i++) {
             $text .= $this->renderFlagSet($this->flag_sets[$i], $this->explanations[$i], $tab_stop);
         }
-        return $text;
+        return $this->noDuplicateNewLines($text);
     }
     
     private function longestFlag($flag_sets) {
@@ -170,6 +170,10 @@ class SimpleHelp {
     
     private function renderFlagSet($flags, $explanation, $tab_stop) {
         return str_pad($this->renderFlag($flags[0]), $tab_stop, ' ') . $explanation . "\n";
+    }
+    
+    private function noDuplicateNewLines($text) {
+        return preg_replace('/(\n+)/', "\n", $text);
     }
 }
 ?>
