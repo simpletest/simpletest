@@ -72,5 +72,11 @@ class TestOfHelpOutput extends UnitTestCase {
         $this->assertEqual($help->render(),
                            "Cool program\n-a        Enables A\n--long    Enables Long\n");
     }
+    
+    function testCanDisplaysMultipleFlagsForEachOption() {
+        $help = new SimpleHelp('Cool program');
+        $help->explainFlag(array('a', 'aa'), 'Enables A');
+        $this->assertEqual($help->render(), "Cool program\n-a      Enables A\n  --aa\n");
+    }
 }
 ?>

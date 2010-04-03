@@ -130,30 +130,55 @@ class SimpleArguments {
     }
 }
 
+/**
+ *    Renders the help for the command line arguments.
+ *    @package  SimpleTest
+ *    @subpackage   UnitTester
+ */
 class SimpleHelp {
-    private $banner;
+    private $overview;
     private $flag_sets = array();
     private $explanations = array();
     
-    function __construct($banner) {
-        $this->banner = $banner;
+    /**
+     * Sets up the top level explanation for the program.
+     * @param string $overview        Summary of program.
+     */
+    function __construct($overview = '') {
+        $this->overview = $overview;
     }
     
+    /**
+     * Adds the explanation for a group of flags that all
+     * have the same function.
+     * @param string/array $flags       Flag and alternates. Don't
+     *                                  worry about leading dashes
+     *                                  as these are inserted automatically.
+     * @param string explanation        What that flag group does.
+     */
     function explainFlag($flags, $explanation) {
         $flags = is_array($flags) ? $flags : array($flags);
         $this->flag_sets[] = $flags;
         $this->explanations[] = $explanation;
     }
     
+    /**
+     * Generates the help text.
+     * @returns string      The complete formatted text.
+     */
     function render() {
         $tab_stop = $this->longestFlag($this->flag_sets) + 4;
-        $text = $this->banner . "\n";
+        $text = $this->overview . "\n";
         for ($i = 0; $i < count($this->flag_sets); $i++) {
             $text .= $this->renderFlagSet($this->flag_sets[$i], $this->explanations[$i], $tab_stop);
         }
         return $this->noDuplicateNewLines($text);
     }
     
+    /**
+     * Works out the longest flag for formatting purposes.
+     * @param array $flag_sets      The internal flag set list.
+     */
     private function longestFlag($flag_sets) {
         $longest = 0;
         foreach ($flag_sets as $flags) {
@@ -164,14 +189,34 @@ class SimpleHelp {
         return $longest;
     }
     
+    /**
+     * Generates the text for a single flag and it's alternate flags.
+     * @returns string           Help text for that flag group.
+     */
+    private function renderFlagSet($flags, $explanation, $tab_stop) {
+        $flag = array_shift($flags);
+        $text = str_pad($this->renderFlag($flag), $tab_stop, ' ') . $explanation . "\n";
+        foreach ($flags as $flag) {
+            $text .= '  ' . $this->renderFlag($flag) . "\n";
+        }
+        return $text;
+    }
+    
+    /**
+     * Generates the flag name including leading dashes.
+     * @param string $flag          Just the name.
+     * @returns                     Fag with apropriate dashes.
+     */
     private function renderFlag($flag) {
         return (strlen($flag) == 1 ? '-' : '--') . $flag;
     }
     
-    private function renderFlagSet($flags, $explanation, $tab_stop) {
-        return str_pad($this->renderFlag($flags[0]), $tab_stop, ' ') . $explanation . "\n";
-    }
-    
+    /**
+     * Converts multiple new lines into a single new line.
+     * Just there to trap accidental duplicate new lines.
+     * @param string $text      Text to clean up.
+     * @returns string          Text with no blank lines.
+     */
     private function noDuplicateNewLines($text) {
         return preg_replace('/(\n+)/', "\n", $text);
     }
