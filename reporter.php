@@ -10,6 +10,7 @@
  *  include other SimpleTest class files
  */
 require_once(dirname(__FILE__) . '/scorer.php');
+require_once(dirname(__FILE__) . '/arguments.php');
 /**#@-*/
 
 /**
@@ -195,7 +196,6 @@ class TextReporter extends SimpleReporter {
     /**
      *    Does nothing yet. The first output will
      *    be sent on the first test start.
-     *    @access public
      */
     function __construct() {
         parent::__construct();

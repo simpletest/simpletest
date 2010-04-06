@@ -130,7 +130,7 @@ HELP;
 class DefaultReporter extends SimpleReporterDecorator {
     
     /**
-     *  Assembles the appopriate reporter for the environment.
+     *  Assembles the appropriate reporter for the environment.
      */
     function __construct() {
         if (SimpleReporter::inCli()) {
