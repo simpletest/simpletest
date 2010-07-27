@@ -66,7 +66,7 @@ class CodeCoverage  {
                 }
             }
         }
-        fclose($parent);
+        closedir($parent);
     }
 
     function resetLog() {
