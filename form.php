@@ -107,6 +107,9 @@ class SimpleForm {
         if ($this->default_target && ! $url->getTarget()) {
             $url->setTarget($this->default_target);
         }
+        if ($this->getMethod() == 'get') {
+            $url->clearRequest();
+        }
         return $url;
     }
 

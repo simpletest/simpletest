@@ -320,5 +320,25 @@ class TestOfForm extends UnitTestCase {
         $this->assertTrue($form->setField(new SimpleByName('a'), 'me'));
         $this->assertIdentical($form->getValue(new SimpleByName('a')), 'me');
     }
+
+    function testRemoveGetParamsFromAction() {
+        Mock::generatePartial('SimplePage', 'MockPartialSimplePage', array('getUrl'));
+        $page = new MockPartialSimplePage();
+        $page->returns('getUrl', new SimpleUrl('htp://host/'));
+
+        # Keep GET params in "action", if the form has no widgets
+        $form = new SimpleForm(new SimpleFormTag(array('action'=>'?test=1')), $page);
+        $this->assertEqual($form->getAction()->asString(), 'htp://host/');
+
+        $form = new SimpleForm(new SimpleFormTag(array('action'=>'?test=1')),  $page);
+        $form->addWidget(new SimpleTextTag(array('name' => 'me', 'type' => 'text', 'value' => 'a')));
+        $this->assertEqual($form->getAction()->asString(), 'htp://host/');
+
+        $form = new SimpleForm(new SimpleFormTag(array('action'=>'')),  $page);
+        $this->assertEqual($form->getAction()->asString(), 'htp://host/');
+
+        $form = new SimpleForm(new SimpleFormTag(array('action'=>'?test=1', 'method'=>'post')),  $page);
+        $this->assertEqual($form->getAction()->asString(), 'htp://host/?test=1');
+    }
 }
 ?>
