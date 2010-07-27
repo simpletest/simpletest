@@ -200,9 +200,9 @@ class SimpleUrl {
         $request = new SimpleGetEncoding();
         foreach (explode("&", $raw) as $pair) {
             if (preg_match('/(.*?)=(.*)/', $pair, $matches)) {
-                $request->add($matches[1], urldecode($matches[2]));
+                $request->add(urldecode($matches[1]), urldecode($matches[2]));
             } elseif ($pair) {
-                $request->add($pair, '');
+                $request->add(urldecode($pair), '');
             }
         }
         return $request;
