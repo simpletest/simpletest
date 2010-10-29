@@ -100,7 +100,7 @@ require_once('socket.php');
 class Telnet {
     ...<strong>
     function connect($ip, $port, $username, $password, $socket = false) {
-        if (!$socket) {
+        if (! $socket) {
             $socket = new Socket($ip, $port);
         }
         $socket->read( ... );</strong>
@@ -164,8 +164,7 @@ class TelnetTest extends UnitTestCase {
         $network = new MockNetwork();
         $network->returnsByReference('createSocket', $socket);
         $telnet = new Telnet($network);
-        $telnet->connect('127.0.0.1', 21, 'Me', 'Secret');
-        ...</strong>
+        $telnet->connect('127.0.0.1', 21, 'Me', 'Secret');</strong>
     }
 }
 ]]></php>
