@@ -413,13 +413,13 @@ class PackagingSynchronisation {
 
     function result() {
         if (!$this->isSynchronisable()) {
-            return "<span style=\"color : green\">source</span>";
+            return "source";
         } elseif (!$this->sourceRevision()) {
-            return "<span style=\"color : red\"><strong>missing id</strong></span>";
+            return "MISSING ID";
         } elseif ($this->sourceRevision() > $this->lastSynchroRevision()) {
-            return "<span style=\"color : red\"><strong>late</strong></span>";
+            return "LATE";
         } else {
-            return "<span style=\"color : green\">synchro</span>";
+            return "synchro";
         }
     }
     

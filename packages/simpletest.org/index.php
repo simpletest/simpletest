@@ -13,14 +13,14 @@ require_once(dirname(__FILE__).'/package.php');
 $source_path = dirname(__FILE__).'/../../docs/source/';
 $destination_path = dirname(__FILE__).'/../../docs/simpletest.org/';
 
-$languages = array("en/", "fr/", "it/", "../../");
+$languages = array("en/", "fr/", "../../");
 
 foreach ($languages as $language) {
     $dir = opendir($source_path.$language);
 
     while (($file = readdir($dir)) !== false) {
 	    if (is_file($source_path.$language.$file) and preg_match("/\.xml$/", $file)) {
-	        $source = simplexml_load_file($source_path.$language.$file, "SimpleTestXMLElement");
+	    	$source = simplexml_load_file($source_path.$language.$file, "SimpleTestXMLElement");
 	        $destination = $source->destination(dirname(__FILE__).'/map.xml');
 
 			if (!empty($destination)) {

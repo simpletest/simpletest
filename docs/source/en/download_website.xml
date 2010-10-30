@@ -6,22 +6,20 @@
         <section name="current-release" title="Current release">
             <p>
                 The current release is :
-                <a href="http://downloads.sourceforge.net/simpletest/simpletest_1.0.1.tar.gz">
-                SimpleTest v1.0.1</a>.
+                <a href="http://sourceforge.net/projects/simpletest/files/simpletest/simpletest_1.1/simpletest_1.1alpha.tar.gz/download">
+                SimpleTest v1.1alpha</a>.
             </p>
             <p>
                 You can download this version from
-                <a href="https://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=77275&amp;release_id=590611">
+                <a href="https://sourceforge.net/projects/simpletest/files/simpletest/simpletest_1.1/">
                 SourceForge.net</a>
                 and your local mirror. You may also want to look at
                 the <a href="changelog.html">current changelog</a>.
             </p>
-            <!--
             <p>
-                By the way, don't be scared away by the <quote>beta</quote> tag :
+                By the way, don't be scared away by the <quote>alpha</quote> tag :
                 quite a few users actually use SimpleTest straight from SVN.
             </p>
-            -->
         </section>
         <section name="eclipse-release" title="Eclipse release">
             <p>
@@ -62,6 +60,9 @@
         </section>
         <section name="older-stable-releases" title="Older stable releases">
             <ul>
+                <li>
+                    <a href="https://sourceforge.net/projects/simpletest/files/simpletest/simpletest_1.0.1/simpletest_1.0.1.tar.gz/download">1.0.1</a>
+                </li>
                 <li>
                     <a href="http://prdownloads.sourceforge.net/simpletest/simpletest_1.0.tar.gz">1.0.0</a>
                 </li>
