@@ -16,6 +16,8 @@ require_once(dirname(__FILE__) . '/scorer.php');
 
 /**
  *	A single test result.
+ *	@package	SimpleTest
+ *	@subpackage	Extensions
  */
 abstract class SimpleResult {
 	public $time;
@@ -33,18 +35,32 @@ abstract class SimpleResult {
 	}
 }
 
-/** A single pass captured for later. */
+/**
+ *	A single pass captured for later. 
+ *	@package	SimpleTest
+ *	@subpackage	Extensions
+ */
 class SimpleResultOfPass extends SimpleResult { }
 
-/** A single failure captured for later. */
+/** 
+ *	A single failure captured for later.
+ *	@package	SimpleTest
+ *	@subpackage	Extensions
+ */
 class SimpleResultOfFail extends SimpleResult { }
 
-/** A single exception captured for later. */
+/** 
+ *	A single exception captured for later.
+ *	@package	SimpleTest
+ *	@subpackage	Extensions
+ */
 class SimpleResultOfException extends SimpleResult { }
 
 /**
  *    Array-based test recorder. Returns an array
  *    with timestamp, status, test name and message for each pass and failure.
+ *	@package	SimpleTest
+ *	@subpackage	Extensions
  */
 class Recorder extends SimpleReporterDecorator {
     public $results = array();
