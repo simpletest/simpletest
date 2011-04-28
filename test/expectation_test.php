@@ -286,6 +286,24 @@ class TestOfIsA extends UnitTestCase {
         $this->assertTrue($expectation->test(5));
         $this->assertFalse($expectation->test(5.0));
     }
+
+    function testScalar() {
+        $expectation = new IsAExpectation('scalar');
+        $this->assertTrue($expectation->test(5));
+        $this->assertFalse($expectation->test(array(5)));
+    }
+
+    function testNumeric() {
+        $expectation = new IsAExpectation('numeric');
+        $this->assertTrue($expectation->test(5));
+        $this->assertFalse($expectation->test('string'));
+    }
+
+    function testNull() {
+        $expectation = new IsAExpectation('null');
+        $this->assertTrue($expectation->test(null));
+        $this->assertFalse($expectation->test('string'));
+    }
 }
 
 class TestOfNotA extends UnitTestCase {
