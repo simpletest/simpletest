@@ -1466,7 +1466,7 @@ class WebTestCase extends SimpleTestCase {
      *    @return boolean           True on pass
      *    @access public
      */
-    function assertTrue($result, $message = false) {
+    function assertTrue($result, $message = '%s') {
         return $this->assert(new TrueExpectation(), $result, $message);
     }
 
