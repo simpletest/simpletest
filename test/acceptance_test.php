@@ -780,6 +780,12 @@ class LiveTestOfForms extends SimpleTestAcceptanceTest {
         $this->assertText('go=[Go!]');
     }
 
+    function testFormSubmissionWithIdsAndAdditionnalData() {
+        $this->get($this->samples() . 'form.html');
+        $this->assertTrue($this->clickSubmitById(99, array('additionnal' => "data")));
+        $this->assertText('additionnal=[data]');
+    }
+
     function testFormSubmissionWithLabels() {
         $this->get($this->samples() . 'form.html');
         $this->assertField('Text A', '');

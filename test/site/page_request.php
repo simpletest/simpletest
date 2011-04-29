@@ -47,13 +47,13 @@ class PageRequest {
     }
     
     function get() {
-        $request = &new PageRequest($_SERVER['QUERY_STRING']);
+        $request = new PageRequest($_SERVER['QUERY_STRING']);
         return $request->getAll();
     }
     
     function post() {
         global $HTTP_RAW_POST_DATA;
-        $request = &new PageRequest($HTTP_RAW_POST_DATA);
+        $request = new PageRequest($HTTP_RAW_POST_DATA);
         return $request->getAll();
     }
 }

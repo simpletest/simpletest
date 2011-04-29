@@ -1012,8 +1012,8 @@ class WebTestCase extends SimpleTestCase {
      *    @return boolean/string  Page on success.
      *    @access public
      */
-    function submitFormById($id) {
-        return $this->failOnError($this->browser->submitFormById($id));
+    function submitFormById($id, $additional = false) {
+        return $this->failOnError($this->browser->submitFormById($id, $additional));
     }
 
     /**

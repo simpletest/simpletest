@@ -1039,13 +1039,13 @@ class SimpleBrowser {
      *    @return string/boolean  Page on success.
      *    @access public
      */
-    function submitFormById($id) {
+    function submitFormById($id, $additional = false) {
         if (! ($form = $this->page->getFormById($id))) {
             return false;
         }
         $success = $this->load(
                 $form->getAction(),
-                $form->submit());
+                $form->submit($additional));
         return ($success ? $this->getContent() : $success);
     }
 

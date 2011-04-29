@@ -350,8 +350,12 @@ class SimpleForm {
      *    @return hash           Submitted values.
      *    @access public
      */
-    function submit() {
-        return $this->encode();
+    function submit($additional = false) {
+        $encoding = $this->encode();
+        if ($additional) {
+            $encoding->merge($additional);
+        }
+        return $encoding;
     }
 }
 ?>

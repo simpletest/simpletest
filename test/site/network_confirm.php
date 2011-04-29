@@ -1,11 +1,11 @@
 <?php
-    if (count($HTTP_COOKIE_VARS) > 0) {
+    if (isset($HTTP_COOKIE_VARS) and count($HTTP_COOKIE_VARS) > 0) {
         $_COOKIE = $HTTP_COOKIE_VARS;
     }
-    if (count($HTTP_GET_VARS) > 0) {
+    if (isset($HTTP_GET_VARS) and count($HTTP_GET_VARS) > 0) {
         $_GET = $HTTP_GET_VARS;
     }
-    if (count($HTTP_POST_VARS) > 0) {
+    if (isset($HTTP_POST_VARS) and count($HTTP_POST_VARS) > 0) {
         $_POST = $HTTP_POST_VARS;
     }
     if (! isset($_SERVER)) {
