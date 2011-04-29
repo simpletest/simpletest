@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!-- $Id$ -->
 <page title="Télécharger SimpleTest" here="Télécharger SimpleTest">
-    <synchronisation lang="en" version="1730" date="08/04/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="2002" date="29/04/2011" maintainer="pp11" />
     <long_title>Télécharger SimpleTest</long_title>
     <content>
         <section name="current-release" title="Version courante">
             <p>
                 La version courante est :
-                <a href="http://downloads.sourceforge.net/simpletest/simpletest_1.0.1.tar.gz">
-                SimpleTest v1.0.1</a>.
+                <a href="http://sourceforge.net/projects/simpletest/files/simpletest/simpletest_1.1/simpletest_1.1alpha2.tar.gz/download">
+                SimpleTest v1.1alpha2</a>.
             </p>
             <p>
                 Vous pouvez télécharger cette version depuis

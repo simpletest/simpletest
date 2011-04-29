@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Documentation sur les attentes" here="Les attentes">
-    <synchronisation lang="en" version="1687" date="20/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1952" date="29/04/2011" maintainer="pp11" />
     <long_title>Documentation SimpleTest : étendre le testeur unitaire avec des classes d'attentes supplémentaires</long_title>
     <content>
         <section name="fantaisie" title="Plus de contrôle sur les objets fantaisie">
@@ -32,7 +32,7 @@
 <php><![CDATA[
 <strong>class NewsService {
     ...
-    function publish(&$writer) {
+    function publish($writer) {
         if (! $this->isConnected()) {
             $writer->write('Cannot connect to news service "' .
                     $this->_name . '" at this time. ' .
@@ -48,13 +48,13 @@
 class TestOfNewsService extends UnitTestCase {
     ...
     function testConnectionFailure() {<strong>
-        $writer = &new MockWriter($this);
+        $writer = new MockWriter($this);
         $writer->expectOnce('write', array(
                 'Cannot connect to news service ' .
                 '"BBC News" at this time. ' .
                 'Please try again later.'));
         
-        $service = &new NewsService('BBC News');
+        $service = new NewsService('BBC News');
         $service->publish($writer);
         
         $writer->tally();</strong>
@@ -75,12 +75,12 @@ class TestOfNewsService extends UnitTestCase {
 class TestOfNewsService extends UnitTestCase {
     ...
     function testConnectionFailure() {
-        $writer = &new MockWriter($this);<strong>
+        $writer = new MockWriter($this);<strong>
         $writer->expectOnce(
                 'write',
-                array(new WantedPatternExpectation('/cannot connect/i')));</strong>
+                array(new PatternExpectation('/cannot connect/i')));</strong>
         
-        $service = &new NewsService('BBC News');
+        $service = new NewsService('BBC News');
         $service->publish($writer);
         
         $writer->tally();
@@ -88,14 +88,14 @@ class TestOfNewsService extends UnitTestCase {
 }
 ]]></php>
                 Plutôt que de transmettre le paramètre attendu au <code>MockWriter</code>,
-                nous envoyons une classe d'attente appelée <code>WantedPatternExpectation</code>.
+                nous envoyons une classe d'attente appelée <code>PatternExpectation</code>.
                 L'objet fantaisie est suffisamment élégant pour reconnaître
                 qu'il s'agit d'un truc spécial et pour le traiter différemment.
                 Plutôt que de comparer l'argument entrant à cet objet,
                 il utilise l'objet attente lui-même pour exécuter le test.
             </p>
             <p>
-                <code>WantedPatternExpectation</code> utilise
+                <code>PatternExpectation</code> utilise
                 l'expression rationnelle pour la comparaison avec son constructeur.
                 A chaque fois qu'une comparaison est fait à travers
                 <code>MockWriter</code> par rapport à cette classe attente,
@@ -108,15 +108,18 @@ class TestOfNewsService extends UnitTestCase {
             <p>
                 Les classes attente possibles sont...
                 <table><tbody>
+                    <tr><td><code>AnythingExpectation</code></td><td>Sera toujours validé</td></tr>
                     <tr><td><code>EqualExpectation</code></td><td>Une égalité, plutôt que la plus forte comparaison à l'identique</td></tr>
                     <tr><td><code>NotEqualExpectation</code></td><td>Une comparaison sur la non-égalité</td></tr>
                     <tr><td><code>IndenticalExpectation</code></td><td>La vérification par défaut de l'objet fantaisie qui doit correspondre exactement</td></tr>
                     <tr><td><code>NotIndenticalExpectation</code></td><td>Inverse la logique de l'objet fantaisie</td></tr>
-                    <tr><td><code>WantedPatternExpectation</code></td><td>Utilise une expression rationnelle Perl pour comparer une chaîne</td></tr>
-                    <tr><td><code>NoUnwantedPatternExpectation</code></td><td>Passe seulement si l'expression rationnelle Perl échoue</td></tr>
+                    <tr><td><code>PatternExpectation</code></td><td>Utilise une expression rationnelle Perl pour comparer une chaîne</td></tr>
+                    <tr><td><code>NoPatternExpectation</code></td><td>Passe seulement si l'expression rationnelle Perl échoue</td></tr>
                     <tr><td><code>IsAExpectation</code></td><td>Vérifie le type ou le nom de la classe uniquement</td></tr>
                     <tr><td><code>NotAExpectation</code></td><td>L'opposé de <code>IsAExpectation</code></td></tr>
                     <tr><td><code>MethodExistsExpectation</code></td><td>Vérifie si la méthode est disponible sur un objet</td></tr>
+					<tr><td><code>TrueExpectation</code></td><td>Accepte n'importe quelle variable PHP qui vaut vrai</td></tr>
+                    <tr><td><code>FalseExpectation</code></td><td>Accepte n'importe quelle variable PHP qui vaut faux</td></tr>
                 </tbody></table>
                 La plupart utilisent la valeur attendue dans le constructeur.
                 Les exceptions sont les vérifications sur motif,
@@ -144,11 +147,11 @@ class TestOfNewsService extends UnitTestCase {
 Stub::generate('Authorisation');
 <strong>
 $authorisation = new StubAuthorisation();
-$authorisation->setReturnValue(
+$authorisation->returns(
         'isAllowed',
         true,
         array(new IsAExpectation('Session', 'Must be a session')));
-$authorisation->setReturnValue('isAllowed', false);</strong>
+$authorisation->returns('isAllowed', false);</strong>
 ]]></php>
                 Le comportement par défaut du bouchon serveur
                 est défini pour renvoyer <code>false</code>
@@ -175,7 +178,7 @@ $authorisation->setReturnValue('isAllowed', false);</strong>
                 la validité d'adresses IP. Pour fonctionner correctement
                 avec les bouchons serveurs et les objets fantaisie,
                 cette nouvelle classe d'attente devrait étendre
-                <code>SimpleExpectation</code>...
+                <code>SimpleExpectation</code> ou une autre de ses sous-classes...
 <php><![CDATA[
 <strong>class ValidIp extends SimpleExpectation {
     
@@ -198,6 +201,47 @@ $authorisation->setReturnValue('isAllowed', false);</strong>
                 Cette classe peut désormais être employée à la place
                 des classes d'attente précédentes.
             </p>
+			<p>
+				Voici un exemple plus typique, vérifier un hash...
+<php><![CDATA[
+<strong>class JustField extends EqualExpectation {
+    private $key;
+    
+    function __construct($key, $expected) {
+        parent::__construct($expected);
+        $this->key = $key;
+    }
+    
+    function test($compare) {
+        if (! isset($compare[$this->key])) {
+            return false;
+        }
+        return parent::test($compare[$this->key]);
+    }
+    
+    function testMessage($compare) {
+        if (! isset($compare[$this->key])) {
+            return 'Key [' . $this->key . '] does not exist';
+        }
+        return 'Key [' . $this->key . '] -> ' .
+                parent::testMessage($compare[$this->key]);
+    }
+}</strong>
+]]></php>
+                L'habitude a été prise pour séparer les clauses du message avec
+                &quot;<![CDATA[&nbsp;->&nbsp;]]>&quot;.
+				Cela permet aux outils dérivés de reformater la sortie.
+            </p>
+            <p>
+                Supposons qu'un authentificateur s'attend à recevoir
+				une ligne de base de données correspondant à l'utilisateur,
+				et que nous avons juste besoin de valider le nom d'utilisateur.
+				Nous pouvons le faire très simplement avec... 
+<php><![CDATA[
+$mock->expectOnce('authenticate',
+                  array(new JustKey('username', 'marcus')));
+]]></php>
+            </p>
         </section>
         <section name="unitaire" title="Sous le capot du testeur unitaire">
             <p>
@@ -210,20 +254,23 @@ $authorisation->setReturnValue('isAllowed', false);</strong>
             </p>
             <p>
                 La méthode la plus directe est d'utiliser la méthode
-                <code>SimpleTest::assertExpectation()</code> pour effectuer le test...
+                <code>SimpleTest::assert()</code> pour effectuer le test...
 <php><![CDATA[
 <strong>class TestOfNetworking extends UnitTestCase {
     ...
     function testGetValidIp() {
         $server = &new Server();
-        $this->assertExpectation(
+        $this->assert(
                 new ValidIp(),
                 $server->getIp(),
                 'Server IP address->%s');
     }
 }</strong>
 ]]></php>
-                C'est plutôt sale par rapport à notre syntaxe habituelle
+                <code>assert()</code> testera toute attente directement.
+            </p>
+			<p>
+				C'est plutôt sale par rapport à notre syntaxe habituelle
                 du type <code>assert...()</code>.
             </p>
             <p>
@@ -247,11 +294,19 @@ class TestOfNetworking extends UnitTestCase {
     }
 }
 ]]></php>
-                Il est peu probable que nous ayons besoin
-                de ce niveau de contrôle sur la machinerie de test.
+                It is rare to need the expectations for more than pattern
+                matching, but these facilities do allow testers to build
+                some sort of domain language for testing their application.
+                Also, complex expectation classes could make the tests
+                harder to read and debug.
+                In effect extending the test framework to create their own tool set.
+            
+			
                 Il est assez rare que le besoin d'une attente dépasse
-                le stade de la reconnaissance d'un motif.
-                De plus, les classes d'attente complexes peuvent rendre
+                le stade de la reconnaissance d'un motif, mais ils permettent
+				aux testeurs de construire leur propre langage dédié ou DSL
+				(Domain Specific Language) pour tester leurs applications.
+                Attention, les classes d'attente complexes peuvent rendre
                 les tests difficiles à lire et à déboguer.
                 Ces mécanismes sont véritablement là pour les auteurs
                 de système qui étendront le framework de test

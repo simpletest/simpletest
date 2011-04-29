@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Documentation sur le navigateur scriptable" here="Le navigateur scriptable">
-    <synchronisation lang="en" version="1684" date="20/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1803" date="20/03/2008" maintainer="pp11" />
     <long_title>Documentation SimpleTest : le composant de navigation web scriptable</long_title>
     <content>
         <introduction>
@@ -40,9 +40,13 @@
                 avec le navigateur web vous vous autorisez l'authentification,
                 la gestion des cookies, le chargement automatique des fenêtres,
                 les redirections, la transmission de formulaires et la capacité
-                d'examiner les entêtes. De telles méthodes sont fragiles dans
-                un site en constante évolution et vous voudrez employer une méthode
-                plus directe pour accéder aux données de façon permanente,
+                d'examiner les entêtes.
+			</p>
+			<p>
+				Ces méthodes qui se basent sur le contenu textuel des pages
+				sont fragiles dans un site en constante évolution
+				et vous voudrez employer une méthode plus directe
+				pour accéder aux données de façon permanente,
                 mais pour des tâches simples cette technique peut s'avérer
                 une solution très rapide.
             </p>
@@ -54,6 +58,7 @@
                     <tr><td><code>head($url, $parameters)</code></td><td>Effectue une requête HEAD</td></tr>
                     <tr><td><code>get($url, $parameters)</code></td><td>Télécharge une page avec un GET</td></tr>
                     <tr><td><code>post($url, $parameters)</code></td><td>Télécharge une page avec un POST</td></tr>
+                    <tr><td><code>click($label)</code></td><td>Suit un lien visible ou un bouton texte par son étiquette</td></tr>
                     <tr><td><code>clickLink($label)</code></td><td>Suit un lien par son étiquette</td></tr>
                     <tr><td><code>isLink($label)</code></td><td>Vérifie l'existance d'un lien par son étiquette</td></tr>
                     <tr><td><code>clickLinkById($id)</code></td><td>Suit un lien par son attribut d'identification</td></tr>
@@ -79,9 +84,11 @@
             <p>
                 Naviguer dans les formulaires est similaire à la <a local="form_testing_documentation">navigation des formulaires via WebTestCase</a>...
                 <table><tbody>
-                    <tr><td><code>setField($name, $value)</code></td><td>Modifie tous les champs avec ce nom</td></tr>
+                    <tr><td><code>setField($label, $value)</code></td><td>Modifie tous les champs avec cette étiquette ou ce nom</td></tr>
+                    <tr><td><code>setFieldByName($name, $value)</code></td><td>Modifie tous les champs avec ce nom</td></tr>
                     <tr><td><code>setFieldById($id, $value)</code></td><td>Modifie tous les champs avec cet identifiant</td></tr>
-                    <tr><td><code>getField($name)</code></td><td>Accesseur de la valeur d'un élément de formulaire</td></tr>
+                    <tr><td><code>getField($label)</code></td><td>Accesseur de la valeur d'un élément de formulaire avec cette étiquette ou ce nom</td></tr>
+                    <tr><td><code>getFieldByName($name)</code></td><td>Accesseur de la valeur d'un élément de formulaire avec ce nom</td></tr>
                     <tr><td><code>getFieldById($id)</code></td><td>Accesseur de la valeur de l'élément de formulaire avec cet identifiant</td></tr>
                     <tr><td><code>clickSubmit($label)</code></td><td>Transmet le formulaire avec l'étiquette de son bouton</td></tr>
                     <tr><td><code>clickSubmitByName($name)</code></td><td>Transmet le formulaire avec l'attribut de son bouton</td></tr>
@@ -91,8 +98,17 @@
                     <tr><td><code>clickImageById($id, $x, $y)</code></td><td>Clique sur une balise input de type image par son identifiant (id="*")</td></tr>
                     <tr><td><code>submitFormById($id)</code></td><td>Transmet le formulaire par son identifiant propre</td></tr>
                 </tbody></table>
-                Au jourd d'aujourd'hui il n'existe aucune méthode pour lister
-                les formulaires et les champs disponibles : ce sera probablement
+                Au jourd d'aujourd'hui il n'existe pas beaucoup de méthodes pour lister
+                les formulaires et les champs disponibles.
+				<table><tbody>
+                    <tr><td><code>isClickable($label)</code></td><td>Vérifie si un lien existe avec cette étiquette ou ce nom</td></tr>
+                    <tr><td><code>isSubmit($label)</code></td><td>Vérifie si un bouton existe avec cette étiquette ou ce nom</td></tr>
+                    <tr><td><code>isImage($label)</code></td><td>Vérifie si un bouton image existe avec cette étiquette ou ce nom</td></tr>
+                    <tr><td><code>getLink($label)</code></td><td>Trouve une URL à partir de son label</td></tr>
+                    <tr><td><code>getLinkById($label)</code></td><td>Trouve une URL à partir de son identifiant</td></tr>
+                    <tr><td><code>getUrls()</code></td><td>Liste l'ensemble des liens de la page courante</td></tr>
+                </tbody></table>
+				Ce sera probablement
                 ajouté dans des versions successives de SimpleTest.
             </p>
             <p>
@@ -123,6 +139,7 @@
                 des méthodes pour aider au débogage.
                 <table><tbody>
                     <tr><td><code>setConnectionTimeout($timeout)</code></td><td>Ferme la socket avec un délai trop long</td></tr>
+                    <tr><td><code>getUrl()</code></td><td>L'URL de la page chargée le plus récemment</td></tr>
                     <tr><td><code>getRequest()</code></td><td>L'entête de la requête brute de la page ou de la fenêtre</td></tr>
                     <tr><td><code>getHeaders()</code></td><td>L'entête de réponse de la page ou de la fenêtre</td></tr>
                     <tr><td><code>getTransportError()</code></td><td>N'importe quel erreur au niveau de la socket dans le dernier téléchargement</td></tr>
@@ -130,6 +147,7 @@
                     <tr><td><code>getMimeType()</code></td><td>Le type Mime de la page our de la fenêtre</td></tr>
                     <tr><td><code>getAuthentication()</code></td><td>Le type d'authentification dans l'entête d'une provocation 401</td></tr>
                     <tr><td><code>getRealm()</code></td><td>Le realm d'authentification dans l'entête d'une provocation 401</td></tr>
+                    <tr><td><code>getBaseUrl()</code></td><td>Uniquement la base de l'URL de la page chargée le plus récemment</td></tr>
                     <tr><td><code>setMaximumRedirects($max)</code></td><td>Nombre de redirections avant que la page ne soit chargée automatiquement</td></tr>
                     <tr><td><code>setMaximumNestedFrames($max)</code></td><td>Protection contre des framesets récursifs</td></tr>
                     <tr><td><code>ignoreFrames()</code></td><td>Neutralise le support des fenêtres</td></tr>
@@ -158,14 +176,14 @@
 <php><![CDATA[<strong>
 class TestOfRegistration extends UnitTestCase {
     function testNewUserAddedToAuthenticator() {</strong>
-        $browser = &new SimpleBrowser();
+        $browser = new SimpleBrowser();
         $browser->get('http://my-site.com/register.php');
         $browser->setField('email', 'me@here');
         $browser->setField('password', 'Secret');
         $browser->clickSubmit('Register');
         <strong>
-        $authenticator = &new Authenticator();
-        $member = &$authenticator->findByEmail('me@here');
+        $authenticator = new Authenticator();
+        $member = $authenticator->findByEmail('me@here');
         $this->assertEqual($member->getPassword(), 'Secret');</strong>
     }
 }
@@ -205,7 +223,7 @@ class TestOfSecurity extends UnitTestCase {
 ]]></php>
                 Vous pouvez aussi utiliser la classe <code>SimpleBrowser</code>
                 quand vous souhaitez écrire des scénarios de test en utilisant
-                un autre outil que SimpleTest.
+                un autre outil que SimpleTest, comme PHPUnit par exemple.
             </p>
         </section>
     </content>

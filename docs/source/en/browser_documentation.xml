@@ -100,8 +100,8 @@ print $matches[1];
                     <tr><td><code>isClickable($label)</code></td><td>Test to see if a click target exists by label or name</td></tr>
                     <tr><td><code>isSubmit($label)</code></td><td>Test for the existence of a button with that label or name</td></tr>
                     <tr><td><code>isImage($label)</code></td><td>Test for the existence of an image button with that label or name</td></tr>
-                    <tr><td><code>getLink($label)</code></td><td>Finds a URL from it's label</td></tr>
-                    <tr><td><code>getLinkById($label)</code></td><td>Finds a URL from it's ID attribute</td></tr>
+                    <tr><td><code>getLink($label)</code></td><td>Finds a URL from its label</td></tr>
+                    <tr><td><code>getLinkById($label)</code></td><td>Finds a URL from its ID attribute</td></tr>
                     <tr><td><code>getUrls()</code></td><td>Lists available links in the current page</td></tr>
                 </tbody></table>
                 This will be expanded in later versions of SimpleTest.

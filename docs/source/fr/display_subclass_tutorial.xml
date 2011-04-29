@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Changer l'affichage du test" here="Changer l'affichage du test">
-    <synchronisation lang="en" version="1771" date="20/04/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1876" date="29/04/2011" maintainer="pp11" />
     <long_title>Tutorial de test unitaire en PHP - Sous-classer l'affichage du test</long_title>
     <content>
         <introduction>
             <p>
-                Le composant affichage de SimpleTest est en fait
-                la dernière partie à développer.
-                Des morceaux de la section suivante changeront prochainement
-                et -- avec optimisme -- des composants d'affichage
-                plus sophistiqués seront écrits, mais pour l'instant
-                si un affichage minime n'est pas suffisant,
+                SimpleTest est fourni avec un composant affichage ultra-simple.
+				La plupart du temps vous souhaitez juste savoir si votre test passe.
+				Et s'il ne passe pas, c'est la raison qui est importante.
+				Rien de plus.
+			</p>
+			<p>
+				Parfois vous aurez besoin d'une sortie pluse sophistiquée
+				parfois pour un boss, un responsable ou un tiers, parfois
+				pour les tests de recette.
+				Si un affichage minime n'est pas suffisant,
                 voici comment réaliser le votre.
             </p>
         </introduction>
         <section name="succès" title="Je veux voir les succès !">
             <p>
-                Bon d'accord, voici comment.
+                Vous voulez vraiment afficher les succès ?
+				Alors d'accord, voici comment.
             </p>
             <p>
                 Nous devons créer une sous-classe de l'affichage utilisée,
@@ -27,7 +32,7 @@
                 pour l'instant elle a l'interface suivante...
 <php><![CDATA[
 class HtmlReporter extends TestDisplay {
-    public TestHtmlDisplay() { ... }
+    public __construct() { ... }
     public void paintHeader(string $test_name) { ... }
     public void paintFooter(string $test_name) { ... }
     public void paintStart(string $test_name, $size) { ... }
@@ -48,7 +53,7 @@ class HtmlReporter extends TestDisplay {
                 si cela vous intéresse.
                 <ul class="api">
                     <li>
-                        <code>HtmlReporter()</code><br />
+                        <code>__construct()</code><br />
                         est le constructeur. Notez qu'un test unitaire initie
                         le lien vers l'affichage plutôt que l'inverse.
                         L'affichage est un réceptacle passif des évènements de test.
@@ -100,16 +105,9 @@ class HtmlReporter extends TestDisplay {
                 et y placer cette classe vide...
 <php><![CDATA[
 <strong><?php
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', 'simpletest/');
-    }
-    require_once(SIMPLE_TEST . 'reporter.php');
+    require_once('simpletest/reporter.php');
     
     class ShowPasses extends HtmlReporter {
-        
-        function ShowPasses() {
-            $this->HtmlReporter();
-        }
     }
 ?></strong>
 ]]></php>
@@ -136,10 +134,6 @@ function paintFail($message) {
                 En la transposant dans notre nouvelle classe...
 <php><![CDATA[
 class ShowPasses extends HtmlReporter {
-    
-    function ShowPasses() {
-        $this->HtmlReporter();
-    }
     <strong>
     function paintPass($message) {
         parent::paintPass($message);
@@ -155,17 +149,19 @@ class ShowPasses extends HtmlReporter {
                 Maintenant pour utiliser notre nouvelle classe,
                 nous allons modifier notre fichier <em>tests/all_tests.php</em>...
 <php><![CDATA[
-<?php
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', 'simpletest/');
-    }
-    require_once(SIMPLE_TEST . 'unit_tester.php');<strong>
-    require_once('show_passes.php');</strong>
+<?php<strong>
+require_once('show_passes.php');
+require_once('simpletest/simpletest.php');
+SimpleTest::prefer(new ShowPasses());</strong>
+require_once('simpletest/autorun.php');
 
-    $test = &new GroupTest('All tests');
-    $test->addTestFile('log_test.php');
-    $test->addTestFile('clock_test.php');
-    $test->run(<strong>new ShowPasses()</strong>);
+class AllTests extends TestSuite {
+    function __construct() {
+        parent::__construct('All tests');
+        $this->addFile(dirname(__FILE__).'/log_test.php');
+        $this->addFile(dirname(__FILE__).'/clock_test.php');
+    }
+}
 ?>
 ]]></php>
                 Nous pouvons le lancer pour voir le résultat de notre bricolage...
@@ -186,10 +182,6 @@ class ShowPasses extends HtmlReporter {
                 mais nous pouvons l'ajouter en modifiant une autre méthode...
 <php><![CDATA[
 class ShowPasses extends HtmlReporter {
-    
-    function ShowPasses() {
-        $this->HtmlReporter();
-    }
     
     function paintPass($message) {
         parent::paintPass($message);
@@ -255,6 +247,10 @@ class ShowPasses extends HtmlReporter {
             <a href="simple_test.php">SimpleTest</a>.
             Si vous utilisez un autre outil,
             n'hésitez pas à sauter pardessus.
+        </link>
+		<link>
+            Mais vous pouvez aussi aller jusqu'au
+            <a href="mock_objects_tutorial.php">objets fantaisie</a>.
         </link>
     </external>
     <meta>

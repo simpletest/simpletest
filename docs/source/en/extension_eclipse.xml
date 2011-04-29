@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- $Id$ -->
-<page title="Simpletest Eclipse Plugin" here="Eclipse">
-    <long_title>Simpletest Eclipse Plugin Documentation</long_title>
+<page title="SimpleTest Eclipse Plugin" here="Eclipse">
+    <long_title>SimpleTest Eclipse Plugin Documentation</long_title>
     <content>
         <section name="compat" title="Compatibility">
             <ul>
@@ -30,13 +30,13 @@
             Do not worry about specifying any other parameters, the plugin will handle setting the necessary parameters, as needed.
             </li>
             <li>
-            <b>Simpletest</b><br/>
-            The plugin has been designed to work with a specific version of Simpletest 
-            and in fact includes the associated version of Simpletest in the plugin for compatibility. 
+            <b>SimpleTest</b><br/>
+            The plugin has been designed to work with a specific version of SimpleTest 
+            and in fact includes the associated version of SimpleTest in the plugin for compatibility. 
             A plugin with a version number of 1.0.0_0.0.4 would indicate that the plugin was compatible 
-            with Simpletest version 1.0.0 and was version 0.0.4 of the plugin. 
-            Some slight modifications to the Simpletest code are required to make the plugin 
-            work with Simpletest; these modifications may or may not be in the released version of Simpletest.
+            with SimpleTest version 1.0.0 and was version 0.0.4 of the plugin. 
+            Some slight modifications to the SimpleTest code are required to make the plugin 
+            work with SimpleTest; these modifications may or may not be in the released version of SimpleTest.
             </li>
             <li>
             <b>PHPUnit2</b><br/>
@@ -50,7 +50,7 @@
         <section name="install" title="Installation">
             <ol>
             <li>Download and Install Eclipse (<a href="http://www.eclipse.org">www.eclipse.org</a>) – if you are not sure what to download, download the Eclipse 3.1.0 SDK.</li>
-            <li>Download the latest Simpletest Eclipse plug-in zip file (<a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=159054">Simpletest Sourceforge</a>)</li>
+            <li>Download the latest SimpleTest Eclipse plug-in zip file (<a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=159054">SimpleTest Sourceforge</a>)</li>
             <li>Extract the zip file to a temporary location {this will be referred to later in this documentation as $unzip}</li>
             <li>Start Eclipse</li>
             <li>Open the Install Wizard by clicking "Help" > "Software Updates" > "Find and Install" from the menu bar.</li>
@@ -60,7 +60,7 @@
             <li>Click the "OK" button.</li>
             <li>In the "Edit Local Site" window, Click the "OK" button</li>
             <li>Click the "Finish" button</li>
-            <li>In the "Search Results" window, drill down and select "Simpletest plug-in 0.0.x"</li>
+            <li>In the "Search Results" window, drill down and select "SimpleTest plug-in 0.0.x"</li>
             <li>Click the "Next" button.</li>
             <li>Read the license and accept the license by clicking the "I accept the terms in the license agreement" radio button and then clicking the "Next" button</li>
             <li>In the "Installation" window you can choose to change the location -- most users should just click the "Finish" button</li>
@@ -68,7 +68,7 @@
             <li>When prompted, restart Eclipse</li>
             <li>
                 <p>After starting Eclipse for the first time after installation 
-                 you will need to perform a quick configuration of the Simpletest Plug-in.  
+                 you will need to perform a quick configuration of the SimpleTest Plug-in.  
                  To perform this configuration:
                 </p>
                 <ol type="a">
@@ -76,7 +76,7 @@
                 Select "Window" > "Preferences" from the menu bar
                 </li>
                 <li>
-                Select "Simpletest" from the categories on the left hand side of the popup box.
+                Select "SimpleTest" from the categories on the left hand side of the popup box.
                 </li>
                 <li>
                 Enter or Browse for the location of a PHP executable to use.   
@@ -105,7 +105,7 @@
             portion).
             <ol>
             <li>Select "Help" > "Software Updates" > "Manage Configuration" from the menu</li>
-            <li>Drill down to find the Simpletest plugin and select it</li>
+            <li>Drill down to find the SimpleTest plugin and select it</li>
             <li>In the right hand pane click the link for "Scan for Updates"</li>
             <li>IF no updates are found, navigate to Window > Preferences > Install/Update > Valid Updates in the Eclipse preferences and select 'Compatible', not 'equivalent'.  Then repeat the steps above.</li>
             <li>Select the feature versions that you wish to upgrade, and click "Next".</li>
@@ -120,13 +120,13 @@
             </p>
             <ol>
             <li>Select "Help" > "Software Updates" > "Manage Configuration"</li>
-            <li>Drill down to find the Simpletest plugin</li>
-            <li>Right-click on the Simpletest plugin and select the option "Disable"</li>
+            <li>Drill down to find the SimpleTest plugin</li>
+            <li>Right-click on the SimpleTest plugin and select the option "Disable"</li>
             <li>when prompted, restart Eclipse</li>
             <li>After Eclipse has restarted, select "Help" > "Software Updates" > "Manage Configuration" from the menu bar</li>
             <li>Select the option from the toolbar "Show Disabled Features"</li>
-            <li>Drill down to find the Simpletest plugin</li>
-            <li>Right-click on the Simpletest plugin and select the option "Uninstall"</li>
+            <li>Drill down to find the SimpleTest plugin</li>
+            <li>Right-click on the SimpleTest plugin and select the option "Uninstall"</li>
             <li>When prompted, restart Eclipse</li>
             </ol>
         </section>
@@ -165,8 +165,8 @@ class test1 extends UnitTestCase {
 ]]></php>
                 </li>
                 <li>Select "File" > "Save" from the menu.</li>
-                <li>Right click on the test1.php entry and select "Run" > "Run Simpletest".</li>
-                <li>The "Result View" should populate with information about the test run and the Simpletest console should fill with some information as well.</li>
+                <li>Right click on the test1.php entry and select "Run" > "Run SimpleTest".</li>
+                <li>The "Result View" should populate with information about the test run and the SimpleTest console should fill with some information as well.</li>
                 </ol>
             </li>
             <li>Single Test class multiple tests
@@ -195,8 +195,8 @@ class test2 extends UnitTestCase {
 ]]></php>
                 </li>
                 <li>Select "File" > "save" from the menu bar.</li>
-                <li>Right click on the test2.php entry and select "Run" > "Run Simpletest".</li>
-                <li>The Result View should populate with information about the test run and the Simpletest console should fill with some information as well</li>
+                <li>Right click on the test2.php entry and select "Run" > "Run SimpleTest".</li>
+                <li>The Result View should populate with information about the test run and the SimpleTest console should fill with some information as well</li>
                 </ol>
             </li>
             <li>Group Tests (test multiple files at once)
@@ -218,8 +218,8 @@ class myGroupTest extends GroupTest {
 ]]></php>
                 </li>
                 <li>Select "File" > "save" from the menu</li>
-                <li>Right click on the grouptest.php entry and select "Run" > "Run Simpletest"</li>
-                <li>The Result View should populate with information about the test run and the Simpletest console should fill with some information as well</li>
+                <li>Right click on the grouptest.php entry and select "Run" > "Run SimpleTest"</li>
+                <li>The Result View should populate with information about the test run and the SimpleTest console should fill with some information as well</li>
                 </ol>
             </li>
             </ol>

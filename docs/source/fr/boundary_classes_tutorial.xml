@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Les frontières de l'application" here="Les frontières de l'application">
-    <synchronisation lang="en" version="1684" date="19/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1879" date="29/04/2011" maintainer="pp11" />
     <long_title>
         Tutorial de tests unitaires PHP - Organiser les tests unitaires et les scénarios de test de classe frontière
     </long_title>
@@ -76,51 +76,53 @@
                 nous appelons un <code>Writer</code>. Retour aux tests...
 <php><![CDATA[
 <?php
-    require_once('../classes/log.php');
+    require_once('simpletest/autorun.php');
+	require_once('../classes/log.php');
     require_once('../classes/clock.php');<strong>
     require_once('../classes/writer.php');</strong>
     Mock::generate('Clock');
 
     class TestOfLogging extends UnitTestCase {
-        function TestOfLogging() {
-            $this->UnitTestCase('Log class test');
-        }
         function setUp() {
             @unlink('../temp/test.log');
         }
         function tearDown() {
             @unlink('../temp/test.log');
         }
-        function getFileLine($filename, $index) {
-            $messages = file($filename);
-            return $messages[$index];
-        }
+
         function testCreatingNewFile() {<strong>
             $log = new Log(new FileWriter('../temp/test.log'));</strong>
             $this->assertFalse(file_exists('../temp/test.log'), 'Created before message');
             $log->message('Should write this to a file');
             $this->assertTrue(file_exists('../temp/test.log'), 'File created');
         }
+
         function testAppendingToFile() {<strong>
             $log = new Log(new FileWriter('../temp/test.log'));</strong>
             $log->message('Test line 1');
-            $this->assertWantedPattern(
+            $this->assertPattern(
                     '/Test line 1/',
                     $this->getFileLine('../temp/test.log', 0));
             $log->message('Test line 2');
-            $this->assertWantedPattern(
+            $this->assertPattern(
                     '/Test line 2/',
                     $this->getFileLine('../temp/test.log', 1));
         }
+
         function testTimestamps() {
             $clock = &new MockClock($this);
-            $clock->setReturnValue('now', 'Timestamp');<strong>
+            $clock->returns('now', 'Timestamp');<strong>
             $log = new Log(new FileWriter('../temp/test.log'));</strong>
             $log->message('Test line', &$clock);
-            $this->assertWantedPattern(
+            $this->assertPattern(
                     '/Timestamp/',
                     $this->getFileLine('../temp/test.log', 0),
                     'Found timestamp');
+        }
+
+        function getFileLine($filename, $index) {
+            $messages = file($filename);
+            return $messages[$index];
         }
     }
 ?>
@@ -128,7 +130,7 @@
                 Je vais parcourir ces tests pas à pas pour ne pas ajouter
                 trop de confusion. J'ai remplacé les noms de fichier par
                 une classe imaginaire <code>FileWriter</code> en provenance
-                d'un fichier <em>classes/writer.php</em>.
+                d'un fichier imaginaire <em>classes/writer.php</em>.
                 Par conséquent les tests devraient planter
                 puisque nous n'avons pas encore écrit ce scripteur.
                 Doit-on le faire maintenant ?
@@ -157,17 +159,17 @@
     require_once('../classes/writer.php');</strong>
     
     class Log {<strong>
-        var $_writer;</strong>
+        private $writer;</strong>
         
-        function Log(<strong>&$writer</strong>) {<strong>
-            $this->_writer = &$writer;</strong>
+        function Log(<strong>$writer</strong>) {<strong>
+            $this->_writer = $writer;</strong>
         }
         
         function message($message, $clock = false) {
             if (! is_object($clock)) {
                 $clock = new Clock();
             }<strong>
-            $this->_writer->write("[" . $clock->now() . "] $message");</strong>
+            $this->writer->write("[" . $clock->now() . "] $message");</strong>
         }
     }
 ?>
@@ -204,6 +206,7 @@
                 réellement dans un fichier...
 <php><![CDATA[
 <?php
+    require_once('simpletest/autorun.php');
     require_once('../classes/log.php');
     require_once('../classes/clock.php');
     require_once('../classes/writer.php');
@@ -211,18 +214,14 @@
     Mock::generate('FileWriter');</strong>
 
     class TestOfLogging extends UnitTestCase {
-        function TestOfLogging() {
-            $this->UnitTestCase('Log class test');
-        }<strong>
+        <strong>
         function testWriting() {
-            $clock = &new MockClock($this);
-            $clock->setReturnValue('now', 'Timestamp');
-            $writer = &new MockFileWriter($this);
-            $writer->expectArguments('write', array('[Timestamp] Test line'));
-            $writer->expectCallCount('write', 1);
-            $log = &new Log($writer);
-            $log->message('Test line', &$clock);
-            $writer->tally();
+            $clock = new MockClock($this);
+            $clock->returns('now', 'Timestamp');
+            $writer = new MockFileWriter($this);
+            $writer->expectOnce('write', array('[Timestamp] Test line'));
+            $log = new Log($writer);
+            $log->message('Test line', $clock);
         }</strong>
     }
 ?>
@@ -237,7 +236,7 @@
                     <li>
                         Étant donné que nous travaillons avec des objets fantaisie,
                         aucun fichier n'a été créé et donc <code>setUp()</code>
-                        et <code>tearDown()</code> passent dans les tests du scripteur.
+                        et <code>tearDown()</code> passent dans les tests <code>FileWriter</code>.
                     </li>
                     <li>
                         Désormais le test consiste simplement dans l'envoi
@@ -249,7 +248,7 @@
             <p>
                 Les objets fantaisie font beaucoup plus que se comporter
                 comme des objets, ils exécutent aussi des test.
-                L'appel <code>expectArguments()</code> dit à l'objet fantaisie
+                L'appel <code>expectOnce()</code> dit à l'objet fantaisie
                 d'attendre un seul paramètre de la chaîne &quot;[Timestamp] Test&quot;
                 quand la méthode fantaise <code>write()</code> est appelée.
                 Lorsque cette méthode est appelée les paramètres attendus
@@ -262,12 +261,8 @@
             <p>
                 L'autre attente, c'est que le <code>write</code> ne soit appelé
                 qu'une seule et unique fois. Juste l'initialiser ne serait pas suffisant.
-                L'objet fantaisie attendrait une éternité
-                si la méthode n'était jamais appelée
-                et par conséquent n'enverrait jamais
-                le message d'erreur à la fin du test.
-                Pour y faire face, l'appel <code>tally()</code> lui dit de vérifier
-                le nombre d'appel à ce moment là.
+				Si la méthode n'est pas appelée avant la fin des tests,
+				alors une erreur est générée.
                 Nous pouvons voir tout ça en lançant les tests...
                 <div class="demo">
                     <h1>All tests</h1>
@@ -279,23 +274,6 @@
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">3/3 test cases complete.
                     <strong>4</strong> passes and <strong>0</strong> fails.</div>
                 </div>
-            </p>
-            <p>
-                En fait nous pouvons encore raccourcir nos tests.
-                L'attente de l'objet fantaisie <code>expectOnce()</code>
-                peut combiner les deux attentes séparées.
-<php><![CDATA[
-function testWriting() {
-    $clock = &new MockClock($this);
-    $clock->setReturnValue('now', 'Timestamp');
-    $writer = &new MockFileWriter($this);<strong>
-    $writer->expectOnce('write', array('[Timestamp] Test line'));</strong>
-    $log = &new Log($writer);
-    $log->message('Test line', &$clock);
-    $writer->tally();
-}
-]]></php>
-                Cela peut être une abréviation utile.
             </p>
         </section>
         <section name="frontiere" title="Classes frontières">
@@ -350,10 +328,25 @@ function testWriting() {
                 Pour continuer leur exécution à toute vitesse,
                 vous voudrez les tenir séparées.
             </p>
+			<p>
+                Un autre bénéfice de cette séparation est que pour toutes vos dépendances
+				la suite de tests est désormais plus courte.
+				Supposez à présent que vous vouliez mettre en place un serveur
+				pour votre application et que vous souhaitiez vérifiere que tous élément
+				sous-jacents - composants, répertoires et configuration - sont correctes.
+				Vous n'avez plus besoin de lancer l'ensemble des tests pour vous en assurer,
+				il suffira de lancer ceux de la classe frontière.
+				C'est pour cette raison que cette suite de test s'appelle
+				le plus souvent &quot;setup tests&quot;.
+				Passer la à votre administrateur système, et elle servira à mettre
+				votre serveur sur pied.
+            </p>
             <p>
                 De plus, un bon développement passe par des décisions
                 de tri entre les composants à utiliser.
-                Peut-être, qui sait, tous ces simulacres pourront
+				Être capable de changer les dépendances sous-jacentes
+				facilement est une "bonne chose".
+                Peut-être, qui sait, que tous ces simulacres pourront
                 <a href="improving_design_tutorial.php">améliorer votre conception</a>.
             </p>
         </section>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Documentation sur l'authentification" here="L'authentification">
-    <synchronisation lang="en" version="1684" date="19/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1954" date="29/04/2011" maintainer="pp11" />
     <long_title>Documentation Simple Test : tester l'authentification</long_title>
     <content>
         <introduction>
@@ -55,6 +55,22 @@ class AuthenticationTest extends WebTestCase {
                 tout dépend de la masse de détails que vous souhaitez voir.
             </p>
             <p>
+                Un des axes qui traverse SimpleTest est la possibilité d'utiliser
+				des objets <code>SimpleExpectation</code> à chaque fois qu'une
+				vérification simple suffit.
+				Si vous souhaitez vérifiez simplement le contenu du realm - l'identification
+				du domaine - dans notre exemple, il suffit de faire...
+<php><![CDATA[
+class AuthenticationTest extends WebTestCase {
+    function test401Header() {
+        $this->get('http://www.lastcraft.com/protected/');
+        $this->assertRealm(<strong>new PatternExpectation('/simpletest/i')</strong>);
+    }
+}
+]]></php>
+                Ce type de test, vérifier les réponses HTTP, n'est cependant pas commun.
+            </p>
+			<p>
                 La plupart du temps, nous ne souhaitons pas tester
                 l'authentification en elle-même, mais plutôt
                 les pages protégées par cette authentification.
@@ -94,6 +110,10 @@ class AuthenticationTest extends WebTestCase {
                 sous requêtes si vous la définissez avec une URL absolue.
                 Par contre si vous naviguez avec des URL relatives,
                 l'information d'authentification sera préservée.
+            </p>
+            <p>
+                Normalement, vous utilisez l'appel <code>authenticate()</code>. SimpleTest
+				utilisera alors vos informations de connexion à chaque requête.
             </p>
             <p>
                  Pour l'instant, seule l'authentification de base est implémentée
@@ -149,7 +169,23 @@ class LogInTest extends WebTestCase {
 ]]></php>
                 Nous nous contentons ici de vérifier que le cookie a bien été défini.
                 Etant donné que sa valeur est plutôt énigmatique,
-                elle ne vaut pas la peine d'être testée.
+                elle ne vaudrait pas la peine d'être testée avec...
+<php><![CDATA[
+class LogInTest extends WebTestCase {
+    function testSessionCookieIsCorrectPattern() {
+        $this->get('http://www.my-site.com/login.php');
+        $this->assertCookie('SID', <strong>new PatternExpectation('/[a-f0-9]{32}/i')</strong>);
+    }
+}
+]]></php>
+                Si vous utilisez PHP pour gérer vos sessions alors
+				ce test est encore plus inutile, étant donné qu'il ne fait
+				que tester PHP lui-même.
+            </p>
+            <p>
+                Le test le plus simple pour vérifier que la connexion a bien eu lieu
+				reste d'inspecter visuellement la page suivante :
+				un simple appel à <code>WebTestCase::assertText()</code> et le tour est joué.
             </p>
             <p>
                 Le reste du test est le même que dans n'importe quel autre formulaire,

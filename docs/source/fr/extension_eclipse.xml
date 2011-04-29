@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!-- $Id$ -->
-<page title="Plugin Eclipse pour Simpletest" here="Plugin Eclipse">
-    <synchronisation lang="en" version="1687" date="20/03/2008" maintainer="pp11" />
-    <long_title>Documentation du plugin Eclipse pour Simpletest</long_title>
+<page title="Plugin Eclipse pour SimpleTest" here="Plugin Eclipse">
+    <synchronisation lang="en" version="1878" date="2ç/04/2011" maintainer="pp11" />
+    <long_title>Documentation du plugin Eclipse pour SimpleTest</long_title>
     <content>
         <section name="compat" title="Compatibilité">
         <ul>
@@ -35,7 +35,7 @@
         les paramètres nécessaires au besoin.
         </li>
         <li>
-        <b>Simpletest</b><br/>
+        <b>SimpleTest</b><br/>
         Le plugin est prévu pour tourner avec une version spécifique de SimpleTest.
         Et même plus : il inclut la version associée de SimpleTest compatible.
         Un plugin avec comme numéro de version 1.0.0_0.0.4 indiquerait que les plugin est compatible
@@ -57,7 +57,7 @@
         <section name="install" title="Installation">
         <ol>
         <li>Télécharger et installer Eclipse (<a href="http://www.eclipse.org">www.eclipse.org</a>) – si vous n'êtes pas sûr quoi télécharger, prenez le SDK 3.1.0 d'Eclipse.</li>
-        <li>Télécharger le dernier fichier ZIP du plugin Eclipse pour SimpleTest (<a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=159054">Simpletest Sourceforge</a>)</li>
+        <li>Télécharger le dernier fichier ZIP du plugin Eclipse pour SimpleTest (<a href="http://sourceforge.net/project/showfiles.php?group_id=76550&amp;package_id=159054">SimpleTest Sourceforge</a>)</li>
         <li>Extraire le contenu du fichier ZIP vers un répertoire temporaire {cette documentation y fera référence par $unzip}</li>
         <li>Lancer Eclipse</li>
         <li>Ouvrir "Install Wizard" en cliquant sur "Help > Software Updates > Find and Install" depuis la barre du menu.</li>
@@ -67,7 +67,7 @@
         <li>Cliquer sur le bouton "OK".</li>
         <li>Dans la fenêtre "Edit Local Site", cliquer sulick the "OK" button</li>
         <li>Cliquer sur le bouton "Finish"</li>
-        <li>Dans la fenêtre "Search Results", chercher puis sélectionner "Simpletest plug-in 0.0.x"</li>
+        <li>Dans la fenêtre "Search Results", chercher puis sélectionner "SimpleTest plug-in 0.0.x"</li>
         <li>Cliquer sur le bouton "Next"</li>
         <li>Lire la licence et l'accepter en cliquant le bouton radio "I accept the terms in the license agreement" puis cliquer sur le bouton "Next"</li>
         <li>Dans la fenêtre "Installation", vous pouvez changer le lieu d'installation -- la plupart des utilisateurs appuyeront juste sur le bouton "Finish"</li>
@@ -82,7 +82,7 @@
             Sélectionner "Window > Preferences" dans la barre de menu
             </li>
             <li>
-            Sélectionner "Simpletest" dans les catégories sur la gauche de la boîte de dialogue.
+            Sélectionner "SimpleTest" dans les catégories sur la gauche de la boîte de dialogue.
             </li>
             <li>
             Remplir ou choisir le répertoire contenant l'éxécutable PHP à utliser.   
@@ -110,7 +110,7 @@
         d'installation ci-dessus (vous ne devriez pas avoir à refaire la configuration initiale).
         <ol>
         <li>Sélectionner "Help > Software Updates > Manage Configuration" dans le menu</li>
-        <li>Trouver le plugin Simpletest dans la liste et le choisir</li>
+        <li>Trouver le plugin SimpleTest dans la liste et le choisir</li>
         <li>Dans la section de droite, cliquer sur le lien "Scan for Updates"</li>
         <li>Si aucune mise à jour n'est détectée, naviguer vers "Window > Preferences > Install/Update > Valid Updates" dans les préférences d'Eclipse
         et sélectionner "compatible", en lieu et place de "equivalent". Puis recommencer les étapes ci-dessus.</li>
@@ -130,8 +130,8 @@
         les répertoires qui avaient été ajoutés.
         <ol>
         <li>Sélectionner "Help > Software Updates > Manage Configuration"</li>
-        <li>Choisir le plugin Simpletest dans la liste</li>
-        <li>Cliquer-droit sur le plugin Simpletest et sélectionner l'option "Disable"</li>
+        <li>Choisir le plugin SimpleTest dans la liste</li>
+        <li>Cliquer-droit sur le plugin SimpleTest et sélectionner l'option "Disable"</li>
         <li>Accepter le redémarrage d'Eclipse</li>
         <li>Une fois Eclipse redémarré, sélectionner "Help > Software Updates > Manage Configuration" depuis le menu</li>
         <li>Sélectionner l'option "Show Disabled Features" dans la barre d'outils</li>
@@ -175,7 +175,7 @@ class test1 extends UnitTestCase {
 ]]></php>
             </li>
             <li>Sélectionner "File > Save" depuis le menu.</li>
-            <li>Cliquer-droit sur test1.php et sélectionner "Run > Run Simpletest".</li>
+            <li>Cliquer-droit sur test1.php et sélectionner "Run > Run SimpleTest".</li>
             <li>La "Result View" devrait se remplir avec les informations sur le résultat du test
             et la console SimpleTest devrait se remplir avec d'autres informations aussi.</li>
             </ol>
@@ -206,7 +206,7 @@ class test2 extends UnitTestCase {
 ]]></php>
             </li>
             <li>Sélectionner "File > save" dans la barre de menu.</li>
-            <li>Cliquer-droit sur grouptest.php et sélectionner "Run > Run Simpletest".</li>
+            <li>Cliquer-droit sur grouptest.php et sélectionner "Run > Run SimpleTest".</li>
             <li>La "Result View" devrait se remplir avec les informations issus du test lancé,
             idem pour pour la console SimpleTest.</li>
             </ol>
@@ -222,15 +222,15 @@ class test2 extends UnitTestCase {
 class myGroupTest extends GroupTest {
   function myGroupTest() {
     parent::GroupTest('');
-    $this->addTestFile(dirname(__FILE__).'/test1.php');
-    $this->addTestFile(dirname(__FILE__).'/test2.php');
+    $this->addFile(dirname(__FILE__).'/test1.php');
+    $this->addFile(dirname(__FILE__).'/test2.php');
   }
 }
 ?>
 ]]></php>
             </li>
             <li>Sélectionner "File > Save" depuis le menu.</li>
-            <li>Cliquer-droit sur test1.php et sélectionner "Run > Run Simpletest".</li>
+            <li>Cliquer-droit sur test1.php et sélectionner "Run > Run SimpleTest".</li>
             <li>La "Result View" devrait se remplir avec les informations sur le résultat du test
             et la console SimpleTest devrait se remplir avec d'autres informations aussi.</li>
             </ol>
