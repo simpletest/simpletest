@@ -149,6 +149,7 @@ class SimpleTestCase {
             $reporter->paintCaseEnd($this->getLabel());
         }
         unset($this->reporter);
+        $context->setTest(null);
         return $reporter->getStatus();
     }
 
