@@ -54,7 +54,7 @@ foreach ($languages as $language) {
 				$synchronisation = new PackagingSynchronisation($source_path.$language.$file);
 				$result .= " ".$synchronisation->result();
 
-				echo $destination_path.$destination." : ".$result."\n";
+				echo $destination." : ".$result."\n";
 			}
 	    }
 	}
