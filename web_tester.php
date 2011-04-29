@@ -729,7 +729,7 @@ class WebTestCase extends SimpleTestCase {
     function put($url, $body = false, $content_type = false) {
         return $this->failOnError($this->browser->put($url, $body, $content_type));
     }
-    
+
     /**
      *    Fetches a page by a DELETE request
      *    @param string $url          URL to fetch.
@@ -740,8 +740,8 @@ class WebTestCase extends SimpleTestCase {
     function delete($url, $parameters = false) {
         return $this->failOnError($this->browser->delete($url, $parameters));
     }
-    
-    
+
+
     /**
      *    Does a HTTP HEAD fetch, fetching only the page
      *    headers. The current base URL is unchanged by this.

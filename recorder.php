@@ -23,7 +23,7 @@ abstract class SimpleResult {
 	public $time;
 	public $breadcrumb;
 	public $message;
-	
+
 	/**
 	 * Records the test result as public members.
 	 * @param array $breadcrumb		Test stack at the time of the event.
@@ -36,20 +36,20 @@ abstract class SimpleResult {
 }
 
 /**
- *	A single pass captured for later. 
+ *	A single pass captured for later.
  *	@package	SimpleTest
  *	@subpackage	Extensions
  */
 class SimpleResultOfPass extends SimpleResult { }
 
-/** 
+/**
  *	A single failure captured for later.
  *	@package	SimpleTest
  *	@subpackage	Extensions
  */
 class SimpleResultOfFail extends SimpleResult { }
 
-/** 
+/**
  *	A single exception captured for later.
  *	@package	SimpleTest
  *	@subpackage	Extensions
@@ -64,7 +64,7 @@ class SimpleResultOfException extends SimpleResult { }
  */
 class Recorder extends SimpleReporterDecorator {
     public $results = array();
-	
+
 	/**
 	 *    Stashes the pass as a SimpleResultOfPass
 	 *    for later retrieval.
@@ -75,7 +75,7 @@ class Recorder extends SimpleReporterDecorator {
         parent::paintPass($message);
         $this->results[] = new SimpleResultOfPass(parent::getTestList(), $message);
 	}
-	
+
 	/**
 	 * 	  Stashes the fail as a SimpleResultOfFail
 	 * 	  for later retrieval.
@@ -86,7 +86,7 @@ class Recorder extends SimpleReporterDecorator {
         parent::paintFail($message);
         $this->results[] = new SimpleResultOfFail(parent::getTestList(), $message);
 	}
-	
+
 	/**
 	 * 	  Stashes the exception as a SimpleResultOfException
 	 * 	  for later retrieval.

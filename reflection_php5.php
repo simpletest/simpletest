@@ -294,7 +294,7 @@ class SimpleReflection {
         if ($name == '__toString') {
             return "function $name()";
         }
-        
+
         // This wonky try-catch is a work around for a faulty method_exists()
         // in early versions of PHP 5 which would return false for static
         // methods. The Reflection classes work fine, but hasMethod()

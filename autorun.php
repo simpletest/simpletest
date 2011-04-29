@@ -26,7 +26,7 @@ function simpletest_autorun() {
         return;
     }
     $result = run_local_tests();
-    if (SimpleReporter::inCli()) {        
+    if (SimpleReporter::inCli()) {
         exit($result ? 0 : 1);
     }
 }

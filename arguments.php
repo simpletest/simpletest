@@ -13,7 +13,7 @@
  */
 class SimpleArguments {
     private $all = array();
-    
+
     /**
      * Parses the command line arguments. The usual formats
      * are supported:
@@ -32,7 +32,7 @@ class SimpleArguments {
             $this->assign($key, $value);
         }
     }
-    
+
     /**
      * Sets the value in the argments object. If multiple
      * values are added under the same key, the key will
@@ -50,7 +50,7 @@ class SimpleArguments {
             $this->all[$key][] = $value;
         }
     }
-    
+
     /**
      * Extracts the next key and value from the argument list.
      * @param array $arguments      The remaining arguments to be parsed.
@@ -71,7 +71,7 @@ class SimpleArguments {
             return array($matches[1], $this->nextNonFlagElseTrue($arguments));
         }
     }
-    
+
     /**
      * Attempts to use the next argument as a value. It
      * won't use what it thinks is a flag.
@@ -83,7 +83,7 @@ class SimpleArguments {
     private function nextNonFlagElseTrue(&$arguments) {
         return $this->valueIsNext($arguments) ? array_shift($arguments) : true;
     }
-    
+
     /**
      * Test to see if the next available argument is a valid value.
      * If it starts with "-" or "--" it's a flag and doesn't count.
@@ -94,7 +94,7 @@ class SimpleArguments {
     function valueIsNext($arguments) {
         return isset($arguments[0]) && ! $this->isFlag($arguments[0]);
     }
-    
+
     /**
      * It's a flag if it starts with "-" or "--".
      * @param string $argument       Value to be tested.
@@ -103,7 +103,7 @@ class SimpleArguments {
     function isFlag($argument) {
         return strncmp($argument, '-', 1) == 0;
     }
-    
+
     /**
      * The arguments are available as individual member
      * variables on the object.
@@ -120,7 +120,7 @@ class SimpleArguments {
         }
         return false;
     }
-    
+
     /**
      * The entire argument set as a hash.
      * @return hash         Each argument and it's value(s).
@@ -139,7 +139,7 @@ class SimpleHelp {
     private $overview;
     private $flag_sets = array();
     private $explanations = array();
-    
+
     /**
      * Sets up the top level explanation for the program.
      * @param string $overview        Summary of program.
@@ -147,7 +147,7 @@ class SimpleHelp {
     function __construct($overview = '') {
         $this->overview = $overview;
     }
-    
+
     /**
      * Adds the explanation for a group of flags that all
      * have the same function.
@@ -161,7 +161,7 @@ class SimpleHelp {
         $this->flag_sets[] = $flags;
         $this->explanations[] = $explanation;
     }
-    
+
     /**
      * Generates the help text.
      * @returns string      The complete formatted text.
@@ -174,7 +174,7 @@ class SimpleHelp {
         }
         return $this->noDuplicateNewLines($text);
     }
-    
+
     /**
      * Works out the longest flag for formatting purposes.
      * @param array $flag_sets      The internal flag set list.
@@ -188,7 +188,7 @@ class SimpleHelp {
         }
         return $longest;
     }
-    
+
     /**
      * Generates the text for a single flag and it's alternate flags.
      * @returns string           Help text for that flag group.
@@ -201,7 +201,7 @@ class SimpleHelp {
         }
         return $text;
     }
-    
+
     /**
      * Generates the flag name including leading dashes.
      * @param string $flag          Just the name.
@@ -210,7 +210,7 @@ class SimpleHelp {
     private function renderFlag($flag) {
         return (strlen($flag) == 1 ? '-' : '--') . $flag;
     }
-    
+
     /**
      * Converts multiple new lines into a single new line.
      * Just there to trap accidental duplicate new lines.

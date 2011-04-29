@@ -182,7 +182,7 @@ class SimpleTag {
             $this->addTag($tag);
         }
     }
-    
+
     /**
      *    Accessor for tag name.
      *    @return string       Name of tag.
