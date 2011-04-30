@@ -202,7 +202,7 @@ class TreemapNode {
   	 * Return list of child nodes from direct edges.
 	 */
 	function getChildren() {
-		uksort($this->_children, array($this, 'compareChildren'));
+		@uksort($this->_new_children, array($this, 'compareChildren'));
 		return $this->_children;
 	}
 
