@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Documentation sur le navigateur scriptable" here="Le navigateur scriptable">
-    <synchronisation lang="en" version="1803" date="20/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="2015" date="20/03/2008" maintainer="pp11" />
     <long_title>Documentation SimpleTest : le composant de navigation web scriptable</long_title>
     <content>
         <introduction>
