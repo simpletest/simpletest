@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Prendre le contrôle des tests" here="Prendre le contrôle des tests">
-    <synchronisation lang="en" version="1687" date="24/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1867" date="24/05/2011" maintainer="pp11" />
     <long_title>Tutorial de test unitaire en PHP  - Isoler les variables pendant le test</long_title>
     <content>
         <introduction>
@@ -30,13 +30,15 @@
                 les droits de fichier et les ressources réseau, etc.
                 L'échec ou la mauvaise installation de l'un ou l'autre
                 de ces composants cassera la suite de test.
+			</p>
+			<p>
                 Est-ce que nous devons ajouter des tests pour valider
                 l'installation de ces composants ?
                 C'est une bonne idée mais si vous les placez
                 dans les tests du module de code vous aller commencer
                 à encombrer votre code de test avec des détails
                 hors de propos avec la tâche en cours.
-                Ils doivent être placés dans leur propre groupe de tests.
+                Ils doivent être placés dans leur propre suite de tests.
             </p>
             <p>
                 Par contre un autre problème reste :
@@ -48,10 +50,10 @@
                 Devant un tel dilemme, nous créerons souvent
                 des versions enveloppantes des classes qui gèrent ces ressources.
                 Les vilains détails de ces ressources sont ensuite codés une seule fois.
-                J'aime bien appeler ces classes des &quot;classes frontière&quot;
+                J'aime bien appeler ces classes des &quot;classes passerelle&quot;
                 étant donné qu'elles existent en bordure de l'application,
                 l'interface entre votre application et le reste du système.
-                Ces classes frontière sont - dans le meilleur des cas - simulées
+                Ces classes passerelle sont - dans le meilleur des cas - simulées
                 pendant les tests par des versions de simulacre.
                 Elles s'exécutent plus rapidement et sont souvent appelées
                 &quot;bouchon serveur [Ndt : Server Stubs]&quot;
@@ -62,6 +64,8 @@
             </p>
             <p>
                 Un des facteurs souvent négligés reste le temps.
+			</p>
+			<p>
                 Par exemple, pour tester l'expiration d'une session des codeurs
                 vont souvent temporairement en caler la durée
                 à une valeur très courte, disons 2 secondes,
@@ -82,44 +86,36 @@
                 dans notre suite de test <em>tests/all_tests.php</em>...
 <php><![CDATA[
 <?php
-if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}
-require_once(SIMPLE_TEST . 'autorun.php');
-require_once('log_test.php');<strong>
-require_once('clock_test.php');</strong>
+require_once(dirname(__FILE__) . '/simpletest/autorun.php');
+require_once(dirname(__FILE__) . '/log_test.php');
+require_once(dirname(__FILE__) . '/clock_test.php');
 
-$test = &new TestSuite('All tests');
-$test->addTestCase(new TestOfLogging());<strong>
-$test->addTestCase(new TestOfClock());</strong>
-$test->run(new HtmlReporter());
+class AllTests extends TestSuite {
+    function __construct() {
+        parent::__construct();
+        $this->addTest(new TestOfLogging());<strong>
+        $this->addTest(new TestOfClock());</strong>
+    }
+}
 ?>
 ]]></php>
                 Ensuite nous créons le scénario de test
                 dans un nouveau fichier <em>tests/clock_test.php</em>...
 <php><![CDATA[
-<strong><?php
-    require_once('../classes/clock.php');
-
-    class TestOfClock extends UnitTestCase {
-        function TestOfClock() {
-            $this->UnitTestCase('Clock class test');
-        }
-        function testClockTellsTime() {
-            $clock = new Clock();
-            $this->assertEqual($clock->now(), time(), 'Now is the right time');
-        }
-        function testClockAdvance() {
-        }
+<?php
+require_once(dirname(__FILE__) . '/../classes/clock.php');
+<strong>
+class TestOfClock extends UnitTestCase {
+    function testClockTellsTime() {
+        $clock = new Clock();
+        $this->assertEqual($clock->now(), time());
     }
-?></strong>
+}</strong>
+?>
 ]]></php>
                 Notre unique test pour le moment, c'est que
                 notre nouvelle class <code>Clock</code> se comporte
                 comme un simple substitut de la fonction <code>time()</code> en PHP.
-                L'autre méthode tient lieu d'emploi.
-                C'est notre <em>chose à faire</em> en quelque sorte.
-                Nous ne lui avons pas donnée de test parce que ça casserait notre rythme.
                 Nous écrirons cette fonctionnalité de décalage
                 dans le temps une fois que nous serons au vert.
                 Pour le moment nous ne sommes évidemment pas dans le vert...
@@ -129,33 +125,39 @@ $test->run(new HtmlReporter());
                     <b>/home/marcus/projects/lastcraft/tutorial_tests/tests/clock_test.php</b> on line <b>2</b>
                     <br />
                 </div>
-                Nous créons un fichier <em>classes/clock.php</em> comme ceci...
+			</p>
+			<p> 
+                Si vous ne voyez pas ce genre d'erreurs, c'est probablement que vos paramètres d'erreurs ont besoin
+				d'un petit ajustement. Vous aurez peut-être envie d'ajouter ces quelques lignes
+				en tête de votre fichier de test :
+<php><![CDATA[
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+]]></php>
+				La documentation PHP pourrait devenir pratique si vous êtes bloqué
+				sans voire cette <code>Fatal error</code>.                 
+            </p>
+            <p> 
+                Considérons que l'erreur s'affiche bien, nous pouvons alors continuer
+				et créer un fichier <em>classes/clock.php</em>...
 <php><![CDATA[
 <strong><?php
-    class Clock {
-        
-        function Clock() {
-        }
-        
-        function now() {
-        }
+class Clock {
+    function now() {
     }
+}
 ?></strong>
 ]]></php>
                 De la sorte nous reprenons le cours du code.
                 <div class="demo">
-                    <h1>All tests</h1>
-                    <span class="fail">Fail</span>: Clock class test-&gt;testclocktellstime-&gt;[NULL: ] should be equal to [integer: 1050257362]<br />
+                    <h1>AllTests</h1>
+                    <span class="fail">Fail</span>: TestOfClock -&gt; testClockTellsTime -&gt; [NULL: ] should be equal to [integer: 1050257362]<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">3/3 test cases complete.
-                    <strong>4</strong> passes and <strong>1</strong> fails.</div>
+                    <strong>4</strong> passes, <strong>1</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
                 Facile à corriger...
 <php><![CDATA[
 class Clock {
-    
-    function Clock() {
-    }
-    
     function now() {<strong>
         return time();</strong>
     }
@@ -163,11 +165,13 @@ class Clock {
 ]]></php>
                 Et nous revoici dans le vert...
                 <div class="demo">
-                    <h1>All tests</h1>
+                    <h1>AllTests</h1>
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">3/3 test cases complete.
-                    <strong>5</strong> passes and <strong>0</strong> fails.</div>
+                    <strong>5</strong> passes, <strong>0</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
-                Il y a juste un petit problème. 
+                Il y a juste un petit problème.
+			</p>
+			<p> 
                 L'horloge pourrait basculer pendant l'assertion
                 et créer un écart d'une seconde.
                 Les probabilités sont assez faibles mais s'il devait
@@ -181,17 +185,16 @@ class Clock {
                 Le test d'avancement ressemble à...
 <php><![CDATA[
 class TestOfClock extends UnitTestCase {
-    function TestOfClock() {
-        $this->UnitTestCase('Clock class test');
-    }
+
     function testClockTellsTime() {
         $clock = new Clock();
-        $this->assertEqual($clock->now(), time(), 'Now is the right time');
-    }<strong>
+        $this->assertEqual($clock->now(), time());
+    }
+    <strong>
     function testClockAdvance() {
         $clock = new Clock();
         $clock->advance(10);
-        $this->assertEqual($clock->now(), time() + 10, 'Advancement');
+        $this->assertEqual($clock->now(), time() + 10);
     }</strong>
 }
 ]]></php>
@@ -199,24 +202,20 @@ class TestOfClock extends UnitTestCase {
                 il suffit d'ajouter un décalage de temps.
 <php><![CDATA[
 class Clock {<strong>
-    var $_offset;</strong>
-    
-    function Clock() {<strong>
-        $this->_offset = 0;</strong>
-    }
+    private $offset = 0;</strong>
     
     function now() {
-        return time()<strong> + $this->_offset</strong>;
+        return time()<strong> + $this->offset</strong>;
     }
     <strong>
     function advance($offset) {
-        $this->_offset += $offset;
+        $this->offset += $offset;
     }</strong>
 }
 ]]></php>
             </p>
         </section>
-        <section name="nettoyer" title="Nettoyer le test de groupe">
+        <section name="nettoyer" title="Nettoyer la suite de  tests">
             <p>
                 Notre fichier <em>all_tests.php</em> contient des répétitions
                 dont nous pourrions nous débarrasser.
@@ -227,29 +226,22 @@ class Clock {<strong>
                 appelée <code>addTestFile()</code> qui prend un fichier PHP comme paramètre.
                 Ce mécanisme prend note de toutes les classes :
                 elle inclut le fichier et ensuite regarde toutes les classes
-                nouvellement créées. S'il y a des filles de <code>TestCase</code>
-                elles sont ajoutées au nouveau test de groupe.
-            </p>
-            <p>
-                En outre, la bibliothèque <em>autorun</em> lancera tous les scénarios
-                de test collectés automagiquement après les avoir chargés.
+                nouvellement créées. S'il y a des filles de <code>SimpleTestCase</code>
+                elles sont ajoutées comme une nouvelle <code>TestSuite</code>.
             </p>
             <p>
                 Voici notre suite de test remaniée en appliquant cette méthode...
 <php><![CDATA[
-<?php
-if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}<strong>
-require_once(SIMPLE_TEST . 'autorun.php');</strong>
-<strong>
+<?php<strong>
+require_once(dirname(__FILE__) . '/simpletest/autorun.php');</strong>
+    
 class AllTests extends TestSuite {
     function AllTests() {
-        $this->TestSuite('All tests');
+        parent::__construct();<strong>
         $this->addFile('log_test.php');
-        $this->addFile('clock_test.php');
+        $this->addFile('clock_test.php');</strong>
     }
-}</strong>
+}
 ?>
 ]]></php>
                 Les inconvéniants sont les suivants...
@@ -260,14 +252,17 @@ class AllTests extends TestSuite {
                     </li>
                     <li>
                         Si le fichier de test contient d'autres classes
-                        reliées à <code>TestCase</code> alors celles-ci
+                        reliées à <code>SimpleTestCase</code> alors celles-ci
                         aussi seront ajouté au test de groupe.
                     </li>
                 </ol>
-                Dans nos test nous n'avons que des scénarios dans les
-                fichiers de test et en plus nous avons supprimé
-                leur inclusion du script <em>all_tests.php</em> :
-                nous sommes donc en règle. C'est la situation la plus commune.
+                In practice neither of these turn out to be problems.
+                Test suites are usually a tree structure, so
+                it's rare to need a test case in two places.
+
+                En pratique, ni l'un ni l'autre ne sont véritablement un soucis.
+				Les suites de tests sont généralement structurées en arbre,
+				il est donc très rare qu'un test se retrouve dans deux endroits. 
             </p>
             <p>
                 Nous devrions corriger au plus vite le petit problème
@@ -285,13 +280,13 @@ class AllTests extends TestSuite {
             nous permet de modifier le temps.
         </link>
         <link>
-            <a href="#nettoyer">Nettoyer le test de groupe</a>.
+            <a href="#nettoyer">Nettoyer la suite de tests</a>.
         </link>
     </internal>
     <external>
         <link>
             La section précédente :
-            <a href="group_test_tutorial.php">grouper des tests unitaires</a>.
+            <a href="group_test_tutorial.php">grouper des tests unitaires en suite</a>.
         </link>
         <link>
             La section suivante :

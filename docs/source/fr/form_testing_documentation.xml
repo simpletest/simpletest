@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Documentation sur les tests de formulaire" here="Les tests des formulaires">
-    <synchronisation lang="en" version="1687" date="24/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1952" date="24/05/2011" maintainer="pp11" />
     <long_title>Documentation SimpleTest : tester des formulaires HTML</long_title>
     <content>
         <section name="submit" title="Valider un formulaire simple">
@@ -13,12 +13,12 @@
                 à l'intérieur de la balise &lt;form&gt; sont disponibles
                 depuis l'intérieur du scénario de test.
                 Prenons par exemple cet extrait de code HTML...
-<pre><![CDATA[
+<php><![CDATA[
 <form>
     <input type="text" name="a" value="A default" />
     <input type="submit" value="Go" />
 </form>
-]]></pre>
+]]></php>
                 Il ressemble à...
             </p>
             <p>
@@ -32,8 +32,7 @@
                 <a href="http://www.lastcraft.com/form_testing_documentation.php">LastCraft</a>,
                 avec le test suivant...
 <php><![CDATA[
-class SimpleFormTests extends WebTestCase {
-    <strong>
+class SimpleFormTests extends WebTestCase {<strong>
     function testDefaultValue() {
         $this->get('http://www.lastcraft.com/form_testing_documentation.php');
         $this->assertField('a', 'A default');
@@ -47,8 +46,16 @@ class SimpleFormTests extends WebTestCase {
                 et qu'il contient la valeur &quot;A default&quot;.
             </p>
             <p>
-                Nous pourrions retourner le formulaire tout de suite,
-                mais d'abord nous allons changer la valeur du champ texte.
+                Nous pourrions retourner le formulaire tout de suite...
+<php><![CDATA[
+class SimpleFormTests extends WebTestCase {
+    function testDefaultValue() {
+        $this->get('http://www.lastcraft.com/form_testing_documentation.php');
+        $this->assertField('a', <strong>new PatternExpectation('/default/')</strong>);
+    }
+}
+]]></php>
+                Mais d'abord nous allons changer la valeur du champ texte.
                 Ce n'est qu'après que nous le transmettrons...
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
@@ -65,15 +72,16 @@ class SimpleFormTests extends WebTestCase {
                 sur la balise form, ni attribut &quot;action&quot;,
                 le scénario de test suivra le comportement classique d'un navigateur :
                 transmission des données avec une requête <em>GET</em>
-                vers la même page. SimpleTest essaie d'émuler
+                vers la même page. En règle générale SimpleTest essaie d'émuler
                 le comportement typique d'un navigateur autant que possible,
                 plutôt que d'essayer d'attraper des attributs manquants sur les balises.
                 La raison est simple : la cible d'un framework de test est
                 la logique d'une application PHP, pas les erreurs
                 -- de syntaxe ou autres -- du code HTML.
                 Pour les erreurs HTML, d'autres outils tel
-                <a href="http://www.w3.org/People/Raggett/tidy/">HTMLTidy</a>
-                devraient être employés.
+				<a href="http://www.w3.org/People/Raggett/tidy/">HTMLTidy</a>
+                devraient être employés, ou même n'importe lequel des validateurs HTML et CSS
+				déjà sur le marché.
             </p>
             <p>
                 Si un champ manque dans n'importe quel formulaire ou si
@@ -81,14 +89,14 @@ class SimpleFormTests extends WebTestCase {
                 renverra <code>false</code>. Par exemple, supposons que
                 nous souhaitons vérifier qu'une option &quot;Superuser&quot;
                 n'est pas présente dans ce formulaire...
-<pre><![CDATA[
+<php><![CDATA[
 <strong>Select type of user to add:</strong>
 <select name="type">
     <option>Subscriber</option>
     <option>Author</option>
     <option>Administrator</option>
 </select>
-]]></pre>
+]]></php>
                 Qui ressemble à...
             </p>
             <p>
@@ -112,8 +120,7 @@ class SimpleFormTests extends WebTestCase {
     }
 }
 ]]></php>
-                La sélection ne sera pas changée suite à un échec d'initialisation
-                d'une valeur sur un objet.
+                La sélection ne sera pas changée si la nouvelle valeur n'est pas une des options.
             </p>
             <p>
                 Voici la liste complète des objets supportés à aujourd'hui...
@@ -148,7 +155,7 @@ class SimpleFormTests extends WebTestCase {
                 La nature de ceux-ci implique que leur initialisation
                 et leur test sont légèrement différents.
                 Voici un exemple avec des cases à cocher...
-<pre><![CDATA[
+<php><![CDATA[
 <form class="demo">
     <strong>Create privileges allowed:</strong>
     <input type="checkbox" name="crud" value="c" checked><br>
@@ -160,7 +167,7 @@ class SimpleFormTests extends WebTestCase {
     <input type="checkbox" name="crud" value="d" checked><br>
     <input type="submit" value="Enable Privileges">
 </form>
-]]></pre>
+]]></php>
                 Qui se traduit par...
             </p>
             <p>
@@ -207,9 +214,9 @@ class SimpleFormTests extends WebTestCase {
                 Le code suivant <em>ne fonctionnera pas</em> :
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
-    function testMyJavascriptForm() {
-        <strong>// Ne fonctionne *pas*</strong>
-        $this->setField('un_champ_caché', '123');
+    function testEmulateMyJavascriptForm() {
+        <strong>// This does *not* work</strong>
+        $this->setField('a_hidden_field', '123');
         $this->clickSubmit('OK');
     }
 }
@@ -219,8 +226,7 @@ class SimpleFormTests extends WebTestCase {
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
     function testMyJavascriptForm() {
-        // Ajoute le champ caché comme variable POST supplémentaire
-        <strong>$this->clickSubmit('OK', array('un_champ_caché'=>'123'));</strong>
+        <strong>$this->clickSubmit('OK', array('a_hidden_field'=>'123'));</strong>
     }
 
 }
@@ -232,7 +238,7 @@ class SimpleFormTests extends WebTestCase {
                 dans le formulaire) et que peut-être serait-il plus prudent
                 d'utiliser un outil comme
                 <a href="http://selenium.openqa.org/">Selenium</a> pour mettre sur pied
-                un test de recette complet.
+                un test complet.
             </p>
         </section>
         <section name="brut" title="Envoi brut">
@@ -252,7 +258,11 @@ class SimpleFormTests extends WebTestCase {
 }
 ]]></php>
                 En ajoutant des données à la méthode <code>WebTestCase::post()</code>,
-                nous essayons de télécharger la page via la transmission d'un formulaire.
+                nous émulons la transmission d'un formulaire.
+				D'ordinaire, vous ne ferez cela que pour parer au plus pressé,
+				ou alors si vous espérez un tiers (javascript ?) transmette le formulaire.
+				Il reste quand même exception : si vous souhaitez vous protégez
+				d'attaques de type "spoofing".  
             </p>
         </section>
     </content>
