@@ -3,7 +3,9 @@
 class SimpleTestXMLElement extends SimpleXMLElement {
     function title() {
         $titles = $this->xpath('//page');
-        return $titles[0]->attributes()->title;
+        if (isset($titles[0])) {
+	        return $titles[0]->attributes()->title;
+        }
     }
     
     function transform_code($code) {
@@ -212,7 +214,9 @@ class SimpleTestXMLElement extends SimpleXMLElement {
 
     function here() {
         $pages = $this->xpath('//page');
-        return $pages[0]->attributes()->here;
+        if (isset($pages[0])) {
+	        return $pages[0]->attributes()->here;
+        }
     }
 
     function parent($map) {

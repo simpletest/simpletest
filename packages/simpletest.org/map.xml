@@ -85,8 +85,8 @@
 		</page>
 	</page>
 	<page title="Versione italiana" here="Version italiana" file="it/index.html">
-		<page title="Télécharger SimpleTest" here="Télécharger SimpleTest" file="it/download.html">
-	        <page title="Installer le plugin Eclipse" here="Plugin Eclipse" file="it/extension_eclipse.html" />
+		<page title="Scaricare SimpleTest" here="Scaricare SimpleTest" file="it/download.html">
+	        <page title="Installare il plugin Eclipse" here="Installare il plugin Eclipse" file="it/extension_eclipse.html" />
 		</page>
 
 		<page title="Scrivere test con SimpleTest" here="Scrivere test con SimpleTest" file="it/start-testing.html" >
@@ -114,8 +114,8 @@
 	    </page>
 
 		<page title="La Mailing-list" here="La Mailing-list" file="it/support.html">
-			<page title="Libri" here="Libri" file="it/books.html" />
-			<page title="Logiciels" here="Logiciels" file="it/logiciels_utilisant_simpletest.html" />
+			<page title="Dei libri" here="Dei libri" file="it/books.html" />
+			<page title="Dei software" here="Dei software" file="it/logiciels_utilisant_simpletest.html" />
 		</page>
 	
 	</page>
