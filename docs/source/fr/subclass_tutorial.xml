@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Sous classer un scénario de test unitaire" here="Sous classer un scénario de test unitaire">
-    <synchronisation lang="en" version="1687" date="24/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1878" date="08/06/2011" maintainer="pp11" />
     <long_title>Tutorial de test unitaire en PHP - Sous classer un scénario de test</long_title>
     <content>
         <section name="temps" title="Une assertion insensible au chronomètre">
@@ -144,7 +144,7 @@ function TestOfClock() {
             <p>
                 Vous vous souvenez de quand nous avons construit
                 le test de groupe <em>all_tests.php</em>
-                en utilisant la méthode <code>addTestFile()</code>.
+                en utilisant la méthode <code>addFile()</code>.
                 Cette méthode recherche les classes de scénario de test,
                 les instancie si elles sont nouvelles puis exécute
                 tous nos tests. Ce qui s'est passé ?
@@ -227,11 +227,11 @@ class TimeTestCase extends UnitTestCase {
     <external>
         <link>
             Section précédente :
-            <a local="gain_control_tutorial">contrôler les variables de test</a>.
+            <a href="gain_control_tutorial.php">contrôler les variables de test</a>.
         </link>
         <link>
             Section suivante :
-            <a local="display_subclass_tutorial">changer l'affichage des tests</a>.
+            <a href="display_subclass_tutorial.php">changer l'affichage des tests</a>.
         </link>
         <link>
             Vous aurez besoin du
