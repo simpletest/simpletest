@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Objets fantaisie" here="Utiliser des objets fantaisie">
-    <synchronisation lang="en" version="1687" date="24/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1979" date="08/06/2011" maintainer="pp11" />
     <long_title>tutorial sur les tests unitaires en PHP - Utiliser les objets fantaisie en PHP</long_title>
     <content>
         <section name="remaniement" title="Remanier les tests à nouveau">
@@ -14,15 +14,9 @@
                 Appelons le <em>tests/time_test_case.php</em>...
 <php><![CDATA[
 <strong><?php
-if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}
-require_once(SIMPLE_TEST . 'unit_tester.php');
+require_once('simpletest/unit_tester.php');
 
-class TimeTestCase extends UnitTestCase {
-    function TimeTestCase($test_name = '') {
-        $this->UnitTestCase($test_name);
-    }
+abstract class TimeTestCase extends UnitTestCase {
     function assertSameTime($time1, $time2, $message = '') {
         if (! $message) {
             $message = "Time [$time1] should match time [$time2]";
@@ -47,30 +41,30 @@ class TimeTestCase extends UnitTestCase {
                 c'est à dire rechercher une suite de chiffres.
 <php><![CDATA[
 <?php
+require_once('simpletest/autorun.php');<strong>
+require_once('time_test_case.php');</strong>
 require_once('../classes/log.php');<strong>
 require_once('../classes/clock.php');
 
-class TestOfLogging extends TimeTestCase {
-    function TestOfLogging() {
-        $this->TimeTestCase('Log class test');
-    }</strong>
+class TestOfLogging extends TimeTestCase {</strong>
     function setUp() {
         @unlink('../temp/test.log');
     }
+
     function tearDown() {
         @unlink('../temp/test.log');
     }
+
     function getFileLine($filename, $index) {
         $messages = file($filename);
         return $messages[$index];
     }
-    function testCreatingNewFile() {
-        ...
-    }
-    function testAppendingToFile() {
-        ...
-    }<strong>
-    function testTimestamps() {
+
+    function testCreatingNewFile() { ... }
+
+    function testAppendingToFile() { ... }
+    <strong>
+    function testTimestampIsEmittedInMessage() {
         $log = new Log('../temp/test.log');
         $log->message('Test line');
         $this->assertTrue(
@@ -89,18 +83,18 @@ class TestOfLogging extends TimeTestCase {
                 avant d'avoir écrit le code.
                 <div class="demo">
                     <h1>All tests</h1>
-                    <span class="pass">Pass</span>: log_test.php->Log class test->testappendingtofile->Expecting [/Test line 1/] in [Test line 1]<br />
-                    <span class="pass">Pass</span>: log_test.php->Log class test->testappendingtofile->Expecting [/Test line 2/] in [Test line 2]<br />
-                    <span class="pass">Pass</span>: log_test.php->Log class test->testcreatingnewfile->Created before message<br />
-                    <span class="pass">Pass</span>: log_test.php->Log class test->testcreatingnewfile->File created<br />
-                    <span class="fail">Fail</span>: log_test.php->Log class test->testtimestamps->Found timestamp<br />
+                    <span class="pass">Pass</span>: log_test.php->Log class test->testAppendingToFile->Expecting [/Test line 1/] in [Test line 1]<br />
+                    <span class="pass">Pass</span>: log_test.php->Log class test->testAppendingToFile->Expecting [/Test line 2/] in [Test line 2]<br />
+                    <span class="pass">Pass</span>: log_test.php->Log class test->testCreatingNewFile->Created before message<br />
+                    <span class="pass">Pass</span>: log_test.php->Log class test->testCreatingNewFile->File created<br />
+                    <span class="fail">Fail</span>: log_test.php->Log class test->testTimestampIsEmittedInMessage->Found timestamp<br />
                     <br />
                     <b>Notice</b>:  Undefined offset:  1 in <b>/home/marcus/projects/lastcraft/tutorial_tests/tests/log_test.php</b> on line <b>44</b><br />
-                    <span class="fail">Fail</span>: log_test.php->Log class test->testtimestamps->Correct time<br />
-                    <span class="pass">Pass</span>: clock_test.php->Clock class test->testclockadvance->Advancement<br />
-                    <span class="pass">Pass</span>: clock_test.php->Clock class test->testclocktellstime->Now is the right time<br />
+                    <span class="fail">Fail</span>: log_test.php->Log class test->testTimestampIsEmittedInMessage->Correct time<br />
+                    <span class="pass">Pass</span>: clock_test.php->Clock class test->testClockAdvance->Advancement<br />
+                    <span class="pass">Pass</span>: clock_test.php->Clock class test->testClockTellsTime->Now is the right time<br />
                     <div style="padding: 8px; margin-top: 1em; background-color: red; color: white;">3/3 test cases complete.
-                    <strong>6</strong> passes and <strong>2</strong> fails.</div>
+                    <strong>6</strong> passes, <strong>2</strong> fails and <strong>2</strong> exceptions.</div>
                 </div>
                 Cette suite de tests montre encore les succès
                 de notre modification précédente.
@@ -117,16 +111,16 @@ class TestOfLogging extends TimeTestCase {
 require_once('../classes/clock.php');</strong>
 
 class Log {
-    var $_file_path;
-    
-    function Log($file_path) {
-        $this->_file_path = $file_path;
+    private $path;
+
+    function __construct($path) {
+        $this->path = $path;
     }
-    
-    function message($message) {<strong>
-        $clock = new Clock();</strong>
-        $file = fopen($this->_file_path, 'a');<strong>
-        fwrite($file, "[" . $clock->now() . "] $message\n");</strong>
+
+    function message($message) {
+        <strong>$clock = new Clock();</strong>
+        $file = fopen($this->path, 'a');
+        <strong>fwrite($file, "[" . $clock->now() . "] $message\n");</strong>
         fclose($file);
     }
 }
@@ -147,6 +141,8 @@ class Log {
                 Tester à la fois des facettes de l'horloge
                 et d'autres du log manque de cohésion,
                 ou de focalisation étanche si vous préférez.
+			</p>
+            <p>
                 Nos problèmes sont causés en partie parce que
                 le résultat de l'horloge est imprévisible alors que
                 l'unique chose à tester est la présence
@@ -173,7 +169,7 @@ class Log {
                 C'est plutôt pas mal de travail pour un test plutôt mineur.
             </p>
             <p>
-                Sauf que ça se fait sans aucun effort.
+                Sauf que ça se fait presque sans effort.
             </p>
         </section>
         <section name="fantaisie" title="Une horloge fantaisie">
@@ -193,11 +189,11 @@ Mock::generate('Clock');
                 C'est la ligne qui fait le travail.
                 Le générateur de code scanne la classe,
                 en extrait toutes ses méthodes, crée le code
-                pour générer une classe avec une interface identique,
+                pour générer une classe d'héritage ou avec une interface identique,
                 mais en ajoutant le nom &quot;Mock&quot;
                 et ensuite <code>eval()</code> le nouveau code pour créer la nouvelle classe.
 <php><![CDATA[
-$clock = &new MockClock($this);
+$clock = new MockClock();
 ]]></php>
                 Cette ligne peut être ajoutée dans n'importe
                 quelle méthode de test qui nous intéresserait.
@@ -205,46 +201,52 @@ $clock = &new MockClock($this);
             </p>
             <p>
                 Notre scénario de test en est à ses premiers pas
-                vers un nettoyage radical...
+                vers un nettoyage radical.
+				Le premier est d'utiliser effectivement
+				le <code>MockClock</code> dans notre test...
 <php><![CDATA[
 <?php
+require_once('simpletest/autorun.php');<strong>
+require_once('simpletest/mock_objects.php');</strong>
 require_once('../classes/log.php');
 require_once('../classes/clock.php');<strong>
-Mock::generate('Clock');
+Mock::generate('Clock');</strong>
 
-class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase('Log class test');
-    }</strong>
+class TestOfLogging extends <strong>UnitTestCase</strong> {
     function setUp() {
         @unlink('../temp/test.log');
     }
+
     function tearDown() {
         @unlink('../temp/test.log');
     }
+
     function getFileLine($filename, $index) {
         $messages = file($filename);
         return $messages[$index];
     }
-    function testCreatingNewFile() {
-        ...
-    }
-    function testAppendingToFile() {
-        ...
-    }
-    function testTimestamps() {<strong>
-        $clock = &new MockClock($this);
-        $clock->setReturnValue('now', 'Timestamp');
+
+    function testCreatingNewFile() { ... }
+
+    function testAppendingToFile() { ... }
+
+    function testTimestamps() {
+        <strong>$clock = new MockClock();</strong>
+        <strong>$clock->returns('now', 'Timestamp');</strong>
         $log = new Log('../temp/test.log');
-        $log->message('Test line', &$clock);
-        $this->assertWantedPattern(
-                '/Timestamp/',
-                $this->getFileLine('../temp/test.log', 0),
-                'Found timestamp');</strong>
+        $log->message('Test line', $clock);
+        $this->assertPattern(
+                <strong>'/Timestamp/'</strong>,
+                $this->getFileLine('../temp/test.log', 0));
     }
 }
 ?>
 ]]></php>
+				Notez que nous n'avons plus besoin de notre <code>TimeTestCase</code>.
+				Il sera encore utile pour l'objet <code>Clock</code>, mais
+				nous n'en n'avons plus besoin pour le <code>Log</code>.
+            </p>
+            <p>
                 Cette méthode de test crée un objet <code>MockClock</code>
                 puis définit la valeur retourné par la méthode
                 <code>now()</code> par la chaîne &quot;Timestamp&quot;.
@@ -260,17 +262,15 @@ class TestOfLogging extends UnitTestCase {
                 optionnel à la classe de log pour rendre ce test possible...
 <php><![CDATA[
 class Log {
-    var $_file_path;
-    
-    function Log($file_path) {
-        $this->_file_path = $file_path;
+    private $path;
+
+    function Log($path) {
+        $this->path = $path;
     }
-    
+
     function message($message, <strong>$clock = false</strong>) {<strong>
-        if (!is_object($clock)) {
-            $clock = new Clock();
-        }</strong>
-        $file = fopen($this->_file_path, 'a');
+        $clock = $clock? $clock : new Clock();</strong>
+        $file = fopen($this->path, 'a');
         fwrite($file, "[" . $clock->now() . "] $message\n");
         fclose($file);
     }
@@ -299,7 +299,7 @@ class Log {
                 ou d'une variation future, mais la plupart n'y sont que pour les tests.
             </p>
             <p>
-                Pensez-y. Les usines qui fabriquent ces cartes imprimées
+                Les usines qui fabriquent ces cartes imprimées
                 par centaine de milliers gaspillent des matières premières
                 sur des pièces qui n'ajoutent rien à la fonction finale.
                 Si les ingénieurs matériel peuvent faire quelques sacrifices
@@ -307,9 +307,7 @@ class Log {
                 Notre sacrifice ne gaspille pas de matériel après tout.
             </p>
             <p>
-                Ça vous gêne encore ? En fait moi aussi, mais pas tellement ici.
-                La priorité numéro 1 reste du code qui marche,
-                pas un prix pour minimalisme.
+                Ça vous gêne encore ? En fait moi aussi.
                 Si ça vous gêne vraiment alors déplacez la création
                 de l'horloge dans une autre méthode mère protégée.
                 Ensuite sous classez l'horloge pour le test
@@ -317,7 +315,10 @@ class Log {
                 Vos tests sont bancals mais votre interface est intacte.
             </p>
             <p>
-                Une nouvelle fois je vous laisse la décision finale.
+				Je vous laisse la décision finale, mais veuillez tenir compte
+				que nous verrons des techniques d'automatisation dans
+				la prochaine section afin de rendre ce sous-classage
+				plus facile.
             </p>
         </section>
     </content>
