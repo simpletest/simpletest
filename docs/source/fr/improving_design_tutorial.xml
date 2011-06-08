@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Du haut vers le bas et piloté par les tests" here="Du haut vers le bas et piloté par les tests">
-    <synchronisation lang="en" version="1687" date="24/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1873" date="08/06/2011" maintainer="pp11" />
     <long_title>
         tutoriel de test unitaire en PHP - Conception du haut vers le bas, tester d'abord avec des objets fantaisie
     </long_title>
@@ -19,12 +19,22 @@
                 dans <em>classes/writer.php</em>...
 <php><![CDATA[
 <?php
-class <strong>Writer</strong> {
-        
-    function <strong>Writer()</strong> {
-    }
-        
-    function write($message) {
+require_once(dirname(__FILE__) . '/simpletest/autorun.php');
+require_once('../classes/log.php');
+require_once('../classes/clock.php');
+require_once('../classes/writer.php');
+Mock::generate('Clock');<strong>
+Mock::generate('Writer');</strong>
+
+class TestOfLogging extends UnitTestCase {
+
+    function testWriting() {
+        $clock = new MockClock();
+        $clock->returns('now', 'Timestamp');
+        $writer = new <strong>MockWriter()</strong>;
+        $writer->expectOnce('write', array('[Timestamp] Test line'));
+        $log = new Log($writer);
+        $log->message('Test line', $clock);
     }
 }
 ?>
