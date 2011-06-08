@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Documentation sur les tests unitaires en PHP" here="Documentation : les tests unitaires en PHP">
-    <synchronisation lang="en" version="1687" date="24/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1946" date="08/06/2011" maintainer="pp11" />
     <long_title>Documentation SimpleTest pour les tests de régression en PHP</long_title>
     <content>
         <section name="unitaire" title="Scénarios de tests unitaires">
@@ -35,15 +35,15 @@ class FileTestCase extends UnitTestCase {
     function FileTestCase() {
         $this->UnitTestCase('File test');
     }<strong>
-    
+
     function setUp() {
         @unlink('../temp/test.txt');
     }
-    
+
     function tearDown() {
         @unlink('../temp/test.txt');
     }
-    
+
     function testCreation() {
         $writer = &new FileWriter('../temp/test.txt');
         $writer->write('Hello');
@@ -103,10 +103,12 @@ class FileTestCase extends UnitTestCase {
                 <tr><td><code>assertNotIdentical($x, $y)</code></td><td>Echoue si $x === $y est vrai</td></tr>
                 <tr><td><code>assertReference($x, $y)</code></td><td>Echoue sauf si $x et $y sont la même variable</td></tr>
                 <tr><td><code>assertCopy($x, $y)</code></td><td>Echoue si $x et $y sont la même variable</td></tr>
-                <tr><td><code>assertWantedPattern($p, $x)</code></td><td>Echoue sauf si l'expression rationnelle $p capture $x</td></tr>
-                <tr><td><code>assertNoUnwantedPattern($p, $x)</code></td><td>Echoue si l'expression rationnelle $p capture $x</td></tr>
-                <tr><td><code>assertNoErrors()</code></td><td>Echoue si une erreur PHP arrive</td></tr>
-                <tr><td><code>assertError($x)</code></td><td>Echoue si aucune erreur ou message incorrect de PHP n'arrive</td></tr>
+                <tr><td><code>assertPattern($p, $x)</code></td><td>Echoue sauf si l'expression rationnelle $p capture $x</td></tr>
+                <tr><td><code>assertNoPattern($p, $x)</code></td><td>Echoue si l'expression rationnelle $p capture $x</td></tr>
+                <tr><td><code>expectError($x)</code></td><td>Echoue si l'erreur correspondante n'arrive pas</td></tr>
+                <tr><td><code>expectException($x)</code></td><td>Echoue si l'exception correspondante n'est pas levée</td></tr>
+                <tr><td><code>ignoreException($x)</code></td><td>Avale toutes les exceptions correspondantes qui surviendraient</td></tr>
+                <tr><td><code>assert($e)</code></td><td>Echoue sur un objet <a local="expectation_documentation">attente</a> $e qui échouerait</td></tr>
             </tbody></table>
                 Toutes les méthodes d'assertion peuvent recevoir
                 une description optionnelle :
@@ -145,38 +147,35 @@ $this->assertReference($a, $b);</strong>
                 Échouera étant donné que la variable <code>$b</code>
                 est une copie de <code>$a</code>.
 <php><![CDATA[
-<strong>$this->assertWantedPattern('/hello/i', 'Hello world');</strong>
+<strong>$this->assertPattern('/hello/i', 'Hello world');</strong>
 ]]></php>
                 Là, ça passe puisque la recherche est insensible
                 à la casse et que donc <code>hello</code>
                 est bien repérable dans <code>Hello world</code>.
 <php><![CDATA[
-<strong>trigger_error('Disaster');
+<strong>$this->expectError();</strong>
 trigger_error('Catastrophe');
-$this->assertError();
-$this->assertError('Catastrophe');
-$this->assertNoErrors();</strong>
 ]]></php>
-                Ici, il y a besoin d'une petite explication :
-                toutes passent !
+                Ici la vérification attrape le message &quot;Catastrophe&quot;
+				sans vérifier le texte et passe.
+				Elle enlève l'erreur de la queue au passage.
+<php><![CDATA[
+<strong>$this->expectError('Catastrophe');</strong>
+trigger_error('Catastrophe');
+]]></php>
+                La vérification d'erreur suivante teste non seulement
+				l'existance de l'erreur mais aussi le texte qui,
+				dans le cas présent, correspond et donc un nouveau succès.
+				Si des erreurs non vérifiées sont laissées pour compte
+				à la fin d'une méthode de test alors un exception sera levé
+				dans le test.
             </p>
             <p>
-                Les erreurs PHP dans SimpleTest sont piégées et
-                placées dans une queue. Ici la première vérification
-                d'erreur attrape le message &quot;Disaster&quot;
-                sans vérifier le texte et passe. Résultat :
-                l'erreur est supprimée de la queue.
-                La vérification suivante teste non seulement l'existence
-                de l'erreur mais aussi le texte qui correspond :
-                un autre succès. Désormais la queue est vide
-                et le dernier test passe aussi.
-                Si une autre erreur non vérifiée est encore
-                dans la queue à la fin de notre méthode de test
-                alors une exception sera rapportée dans le test.
-                Notez que SimpleTest ne peut pas attraper les erreurs PHP à la compilation.
+                Notez que SimpleTest ne peut pas attraper des erreurs PHP
+				au moment de la compilation.
             </p>
             <p>
-                Les scénarios de test peuvent utiliser des méthodes
+                Les scénarios de tests peuvent utiliser des méthodes
                 bien pratiques pour déboguer le code ou pour étendre la suite...
                 <table><tbody>
                     <tr><td><code>setUp()</code></td><td>Est lancée avant chaque méthode de test</td></tr>
@@ -184,10 +183,8 @@ $this->assertNoErrors();</strong>
                     <tr><td><code>pass()</code></td><td>Envoie un succès</td></tr>
                     <tr><td><code>fail()</code></td><td>Envoie un échec</td></tr>
                     <tr><td><code>error()</code></td><td>Envoi un évènement exception</td></tr>
-                    <tr><td><code>sendMessage()</code></td><td>Envoie un message d'état aux systèmes d'affichage qui le supporte</td></tr>
                     <tr><td><code>signal($type, $payload)</code></td><td>Envoie un message défini par l'utilisateur au rapporteur du test</td></tr>
                     <tr><td><code>dump($var)</code></td><td>Effectue un <code>print_r()</code> formaté pour du déboguage rapide et grossier</td></tr>
-                    <tr><td><code>swallowErrors()</code></td><td>Vide les erreurs de la queue</td></tr>
                 </tbody></table>
             </p>
         </section>
@@ -203,7 +200,7 @@ class FileTester extends UnitTestCase {
     function FileTester($name = false) {
         $this->UnitTestCase($name);
     }
-    
+
     function assertFileExists($filename, $message = '%s') {
         $this->assertTrue(
                 file_exists($filename),
@@ -224,15 +221,15 @@ class FileTester extends UnitTestCase {
                 comme un scénario de test classique...
 <php><![CDATA[
 class FileTestCase extends <strong>FileTester</strong> {
-    
+
     function setUp() {
         @unlink('../temp/test.txt');
     }
-    
+
     function tearDown() {
         @unlink('../temp/test.txt');
     }
-    
+
     function testCreation() {
         $writer = &new FileWriter('../temp/test.txt');
         $writer->write('Hello');<strong>
@@ -320,7 +317,7 @@ class FileTestCase extends UnitTestCase {
             documentation,
             marcus baker,
             perrick penet
-            simple test,
+            simpletest,
             documentation simpletest,
             phpunit,
             junit,
