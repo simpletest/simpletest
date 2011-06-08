@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Prise en main rapide de SimpleTest" here="Prise en main rapide de SimpleTest">
-    <synchronisation lang="en" version="1687" date="24/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1876" date="08/06/2011" maintainer="pp11" />
     <long_title>
         Prise en main rapide de SimpleTest pour PHP -
         Tests unitaire et objets fantaisie pour PHP
@@ -505,7 +505,7 @@ class TestOfRankings extends WebTestCase {
     </internal>
     <external>
         <link>
-            <a href="https://sourceforge.net/project/showfiles.php?group_id=76550&amp;release_id=153280">Télécharger PHP Simple Test</a>
+            <a href="https://sourceforge.net/project/showfiles.php?group_id=76550&amp;release_id=153280">Télécharger PHP SimpleTest</a>
             depuis <a href="http://sourceforge.net/projects/simpletest/">SourceForge</a>.
         </link>
         <link>
