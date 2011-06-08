@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- $Id$ -->
 <page title="Grouper des tests" here="Grouper des tests">
-    <synchronisation lang="en" version="1687" date="24/03/2008" maintainer="pp11" />
+    <synchronisation lang="en" version="1954" date="08/06/2011" maintainer="pp11" />
     <long_title>
         Tutorial de test unitaire PHP - Grouper des tests unitaires et exemples d'écriture de scénarios de tests
     </long_title>
@@ -17,9 +17,7 @@
                 qu'ajouter une nouvelle méthode à un scénario de test...
 <php><![CDATA[
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase('Log class test');
-    }
+
     function testCreatingNewFile() {
         @unlink('../temp/test.log');
         $log = new Log('../temp/test.log');
@@ -27,21 +25,22 @@ class TestOfLogging extends UnitTestCase {
         $log->message('Should write this to a file');
         $this->assertTrue(file_exists('../temp/test.log'), 'File created');<strong>
         @unlink('../temp/test.log');</strong>
-    }<strong>
-    function testAppendingToFile() {
+    }
+    <strong>
+    function testSecondMessageIsAppended() {
         @unlink('../temp/test.log');
         $log = new Log('../temp/test.log');
         $log->message('Test line 1');
         $messages = file('../temp/test.log');
-        $this->assertWantedPattern('/Test line 1/', $messages[0]);
+        $this->assertPattern('/Test line 1/', $messages[0]);
         $log->message('Test line 2');
         $messages = file('../temp/test.log');
-        $this->assertWantedPattern('/Test line 2/', $messages[1]);
+        $this->assertPattern('/Test line 2/', $messages[1]);
         @unlink('../temp/test.log');
     }</strong>
 }
 ]]></php>
-                La méthode du scénario de test <code>assertWantedPattern()</code>
+                La méthode du scénario de test <code>assertPattern()</code>
                 utilise les expressions rationnelles Perl pour vérifier
                 qu'une chaîne respecte un certain motif.
             </p>
@@ -51,18 +50,19 @@ class TestOfLogging extends UnitTestCase {
                 le tout deux fois de suite.
                 Nous souhaitons simplement vérifier que le loggueur
                 ajoute le texte à la fin plutôt qu'écraser
-                les données déjà existantes. Quelque peu pédant,
-                mais après tout il s'agit d'un tutorial !
+                les données déjà existantes.
             </p>
             <p>
                 De toute façon ce test passe directement...
                 <div class="demo">
                     <h1>Log class test</h1>
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
-                    <strong>4</strong> passes and <strong>0</strong> fails.</div>
+                    <strong>4</strong> passes, <strong>0</strong> fails and <strong>0</strong> exceptions.</div>
                 </div>
                 Notre code contient actuellement beaucoup de répétitions,
                 nous devons effacer le fichier de test avant et après chaque test.
+			</p>
+			<p>
                 De même que <a href="http://www.junit.org/">JUnit</a>,
                 SimpleTest utilise les méthodes
                 <code>setUp()</code> et <code>tearDown()</code>
@@ -74,30 +74,32 @@ class TestOfLogging extends UnitTestCase {
                 Nos tests sont verts donc nous pouvons faire un peu de remaniement...
 <php><![CDATA[
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase('Log class test');
-    }<strong>
+<strong>
     function setUp() {
         @unlink('../temp/test.log');
     }
+
     function tearDown() {
         @unlink('../temp/test.log');
     }
-    function testCreatingNewFile() {</strong>
+</strong>
+    function testCreatingNewFile() {
         $log = new Log('../temp/test.log');
         $this->assertFalse(file_exists('../temp/test.log'), 'Created before message');
         $log->message('Should write this to a file');
-        $this->assertTrue(file_exists('../temp/test.log'), 'File created');<strong>
+        $this->assertTrue(file_exists('../temp/test.log'), 'File created');
     }
-    function testAppendingToFile() {</strong>
+    <strong>
+    function testSecondMessageIsAppended() {
         $log = new Log('../temp/test.log');
         $log->message('Test line 1');
         $messages = file('../temp/test.log');
-        $this->assertWantedPattern('/Test line 1/', $messages[0]);
+        $this->assertPattern('/Test line 1/', $messages[0]);
         $log->message('Test line 2');
         $messages = file('../temp/test.log');
-        $this->assertWantedPattern('/Test line 2/', $messages[1]);<strong>
-    }</strong>
+        $this->assertPattern('/Test line 2/', $messages[1]);
+    }
+	</strong>
 }
 ]]></php>
                 Le test reste vert. Nous pouvons continuer
@@ -108,31 +110,33 @@ class TestOfLogging extends UnitTestCase {
                 Nous pouvons donc continuer le remaniement...
 <php><![CDATA[
 class TestOfLogging extends UnitTestCase {
-    function TestOfLogging() {
-        $this->UnitTestCase('Log class test');
-    }
+
     function setUp() {
         @unlink('../temp/test.log');
     }
+
     function tearDown() {
         @unlink('../temp/test.log');
-    }<strong>
+    }
+    <strong>
     function getFileLine($filename, $index) {
         $messages = file($filename);
         return $messages[$index];
-    }</strong>
+    }
+    </strong>
     function testCreatingNewFile() {
         $log = new Log('../temp/test.log');
         $this->assertFalse(file_exists('../temp/test.log'), 'Created before message');
         $log->message('Should write this to a file');
         $this->assertTrue(file_exists('../temp/test.log'), 'File created');
     }
-    function testAppendingToFile() {
+    
+    function testSecondMessageIsAppended() {
         $log = new Log('../temp/test.log');
         $log->message('Test line 1');<strong>
-        $this->assertWantedPattern('/Test line 1/', $this->getFileLine('../temp/test.log', 0));</strong>
+        $this->assertPattern('/Test line 1/', $this->getFileLine('../temp/test.log', 0));</strong>
         $log->message('Test line 2');<strong>
-        $this->assertWantedPattern('/Test line 2/', $this->getFileLine('../temp/test.log', 1));</strong>
+        $this->assertPattern('/Test line 2/', $this->getFileLine('../temp/test.log', 1));</strong>
     }
 }
 ]]></php>
@@ -142,7 +146,7 @@ class TestOfLogging extends UnitTestCase {
                 mais la logique du test est plus claire.
             </p>
         </section>
-        <section name="groupe" title="Un groupe de tests">
+        <section name="suite" title="Une suite de tests">
             <p>
                 Un scénario de test ne fonctionne pas tout seul
                 pendant très longtemps.
@@ -153,33 +157,19 @@ class TestOfLogging extends UnitTestCase {
                 qui incluent l'ensemble des tests de l'application.
             </p>
             <p>
-                Premièrement nous devons supprimer le code d'exécution
-                des tests se trouvant dans notre scénario de test.
+                Premièrement nous devons créer une suite de tests
+				dans le répertoire <em>tests</em>...
 <php><![CDATA[
-<?php<strong>
-require_once('../classes/log.php');
+<?php
+require_once(dirname(__FILE__) . '/simpletest/autorun.php');
+<strong>require_once('log_test.php');
 
-class TestOfLogging extends UnitTestCase {
-    ...
-}</strong>
-?>
-]]></php>
-                Nous n'avons plus besoin de la constante
-                <code>SIMPLE_TEST</code>.
-                Ensuite nous créons un groupe de tests appelé
-                <em>all_tests.php</em> dans le répertoire <em>tests</em>...
-<php><![CDATA[
-<strong><?php
-    if (! defined('SIMPLE_TEST')) {
-        define('SIMPLE_TEST', 'simpletest/');
+class AllTests extends TestSuite {
+    function __construct() {
+        parent::__construct();
+        $this->addTest(new TestOfLogging());
     }
-    require_once(SIMPLE_TEST . 'unit_tester.php');
-    require_once(SIMPLE_TEST . 'reporter.php');
-    require_once('log_test.php');
-
-    $test = &new GroupTest('All tests');
-    $test->addTestCase(new TestOfLogging());
-    $test->run(new HtmlReporter());
+}
 ?></strong>
 ]]></php>
                 Il n'y a presque de pas de différence tant que les choses marchent...
@@ -188,14 +178,8 @@ class TestOfLogging extends UnitTestCase {
                     <div style="padding: 8px; margin-top: 1em; background-color: green; color: white;">1/1 test cases complete.
                     <strong>4</strong> passes and <strong>0</strong> fails.</div>
                 </div>
-                Les tests du groupe s'ajoutent au compteur
-                des scénarios de test. Ajouter des nouveaux scénarios
-                de test est très simple.
-                Il suffit d'inclure le fichier d'un scénario
-                et d'ajouter individuellement tous les scénarios autonomes.
-                Vous pouvez aussi emboîter les groupes de test
-                les uns dans les autres (tout en faisant bien attention d'éviter les boucles).
-            </p>
+				Ajouter des tests est donc très facile.
+			</p>
             <p>
                 Dans la <a href="gain_control_tutorial.php">page suivante</a>
                 nous les ajouterons encore plus rapidement.
@@ -207,7 +191,7 @@ class TestOfLogging extends UnitTestCase {
             <a href="#autre">Ajouter un autres test</a> au scénario existant et remanier.
         </link>
         <link>
-            La technique brute pour <a href="#groupe">grouper des tests unitaires</a>.
+            La technique brute pour <a href="#suite">créer des suites de tests unitaires</a>.
         </link>
     </internal>
     <external>
@@ -244,4 +228,3 @@ class TestOfLogging extends UnitTestCase {
         </keywords>
     </meta>
 </page>
-
