@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: boundary_classes_tutorial.xml 1879 2009-06-12 16:41:44Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Le classi boundary" here="Tutorial: le classi boundary">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>
         PHP unit testing tutorial - Organising unit tests and &quot;setup tests&quot;
     </long_title>

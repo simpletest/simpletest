@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: experimental_recorder.xml 1878 2009-06-12 16:39:37Z pp11 $ -->
-<page title="Using the test results for other tools" here="Recorder">
+<!-- $Id$ -->
+<page title="Utilizare i risultatti per altri utili" here="Il plugin Recorder">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>[experimental] Using the test results for other tools with the Recorder</long_title>
     <content>
         <introduction>

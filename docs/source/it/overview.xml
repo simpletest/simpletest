@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: overview.xml 1893 2009-07-26 13:52:26Z lastcraft $ -->
+<!-- $Id$ -->
 <page title="Panoramica su SimpleTest" here="Panoramica su SimpleTest">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>
         Panoramica ed elenco delle caratteristiche dello unit tester e del web tester di SimpleTest
     </long_title>

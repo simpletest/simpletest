@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: authentication.php 1672 2008-03-02 04:47:34Z edwardzyang $ -->
+<!-- $Id$ -->
 <page title="Coding Standards and Formatting" here="Coding Standards">
     <long_title>Coding Standards within SimpleTest</long_title>
     <content>

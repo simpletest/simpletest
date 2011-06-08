@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: partial_mocks_documentation.xml 1874 2009-06-12 16:17:51Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Il mocking parziale" here="Il mocking parziale">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>SimpleTest for PHP partial mocks documentation</long_title>
     <content>
         <introduction>

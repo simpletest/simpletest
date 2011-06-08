@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: experimental_intro.xml 1876 2009-06-12 16:30:24Z pp11 $ -->
-<page title="Experimental stuff (in SVN only)" here="Experimental stuff">
+<!-- $Id$ -->
+<page title="Cose sperimentale (solo nello SVN)" here="Cose sperimentale">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>Experimental stuff, found in SVN only</long_title>
     <content>
         <section name="intro" title="Why only in SVN">

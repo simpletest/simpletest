@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: web_tester_documentation.xml 1876 2009-06-12 16:30:24Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Il web test" here="Il web test">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>SimpleTest for PHP web script testing documentation</long_title>
     <content>
         <section name="fetch" title="Recuperare una pagina">

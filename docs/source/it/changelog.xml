@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: authentication_documentation.xml 1684 2008-03-06 08:36:59Z pp11 $ -->
-<page title="SimpleTest's Changelog" here="Changelog">
+<!-- $Id$ -->
+<page title="Il changelog di SimpleTest" here="Il changelog">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>SimpleTest's Changelog</long_title>
     <content>
         <section name="version1.0.1" title="SimpleTest Version 1.0.1">

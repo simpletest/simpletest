@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: simple_test.xml 1876 2009-06-12 16:30:24Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Scrivere test con SimpleTest" here="Scrivere test con SimpleTest">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>
         Download the SimpleTest testing framework -
         Unit tests and mock objects for PHP

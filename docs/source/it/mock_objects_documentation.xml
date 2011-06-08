@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: mock_objects_documentation.xml 1890 2009-07-26 12:09:04Z lastcraft $ -->
+<!-- $Id$ -->
 <page title="Gli oggetti mock" here="Gli oggetti mock">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>SimpleTest for PHP mock objects documentation</long_title>
     <content>
         <section name="what" title="Cosa sono gli oggetti mock?">

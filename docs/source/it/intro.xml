@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: intro.xml 1867 2009-03-05 15:49:54Z lastcraft $ -->
-<page title="Introduction to SimpleTest" here="English version">
+<!-- $Id$ -->
+<page title="Introduzione a SimpleTest" here="Versione italiana">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>
         Summary of SimpleTest including it's Java tool roots.
     </long_title>

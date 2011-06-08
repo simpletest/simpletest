@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: first_test_tutorial.xml 1941 2009-08-10 10:09:32Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Tutorial: unit testing con SimpleTest" here="Tutorial: unit testing con SimpleTest">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>PHP unit testing tutorial - Creating an example test case in PHP</long_title>
     <content>
         <introduction>

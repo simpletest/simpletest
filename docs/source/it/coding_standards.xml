@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: authentication.php 1672 2008-03-02 04:47:34Z edwardzyang $ -->
-<page title="Coding Standards and Formatting" here="Coding Standards">
+<!-- $Id$ -->
+<page title="I standardi per il coding e il formatting" here="I standardi per il coding">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>Coding Standards within SimpleTest</long_title>
     <content>
         <section name="coding-standards" title="Coding standards">

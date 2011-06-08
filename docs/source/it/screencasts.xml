@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: subclass_tutorial.xml 1687 2008-03-06 13:05:45Z pp11 $ -->
-<page title="Screencasts : Basic and Advanced TDD using SimpleTest" here="Screencasts">
+<!-- $Id$ -->
+<page title="Dei screencasts : TDD basico e elaborato con SimpleTest" here="Dei screencasts">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>Screencasts : Basic and Advanced TDD using SimpleTest</long_title>
     <content>
         <section name="screencast" title="Basic and Advanced TDD in PHP Demo">

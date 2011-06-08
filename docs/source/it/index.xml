@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: index.xml 1867 2009-03-05 15:49:54Z lastcraft $ -->
-<page title="The Last Craft?" here="Last Craft">
+<!-- $Id$ -->
+<page title="L'ultima Craft ?" here="L'ultima Craft">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>
         The Last Craft? Web developer tutorials on PHP, Extreme programming
         and Object Oriented development

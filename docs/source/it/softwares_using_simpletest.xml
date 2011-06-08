@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: download_website.xml 1684 2008-03-06 08:36:59Z pp11 $ -->
-<page title="Softwares" here="Softwares">
+<!-- $Id$ -->
+<page title="Dei software" here="Dei software">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>Softwares using SimpleTest</long_title>
     <content>
         <section name="projects-extending-simpletest" title="Projects extending SimpleTest">

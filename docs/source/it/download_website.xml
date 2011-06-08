@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: download_website.xml 1942 2009-08-10 10:11:14Z pp11 $ -->
-<page title="Downloading SimpleTest" here="Download SimpleTest">
+<!-- $Id$ -->
+<page title="Scaricare SimpleTest" here="Scaricare SimpleTest">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>Downloading SimpleTest</long_title>
     <content>
         <section name="current-release" title="Current release">

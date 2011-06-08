@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: authentication_documentation.xml 1803 2008-09-08 11:11:03Z lastcraft $ -->
+<!-- $Id$ -->
 <page title="L'autenticazione" here="L'autenticazione">
+	<synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>SimpleTest documentation for testing log-in and authentication</long_title>
     <content>
         <introduction>

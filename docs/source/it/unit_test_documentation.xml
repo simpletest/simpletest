@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: unit_test_documentation.xml 1882 2009-07-01 14:30:05Z lastcraft $ -->
+<!-- $Id$ -->
 <page title="Lo Unit Test" here="Lo Unit Test">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>Documentazione sui test di regressione con SimpleTest per PHP</long_title>
     <content>
         <section name="unit" title="Gli Unit Test Case">

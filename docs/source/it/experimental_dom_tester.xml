@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: experimental_dom_tester.xml 1807 2008-09-09 06:58:00Z pp11 $ -->
-<page title="Testing elements by CSS selector" here="DOM tester">
+<!-- $Id$ -->
+<page title="Testare elementi con seletori CSS" here="Il DOM tester">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>[experimental] Testing elements by CSS selector</long_title>
     <content>
         <introduction>

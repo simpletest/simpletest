@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: mock_objects_tutorial.xml 1891 2009-07-26 12:32:26Z lastcraft $ -->
+<!-- $Id$ -->
 <page title="Gli oggetti mock" here="Tutorial: gli oggetti mock">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>PHP unit testing tutorial - Using mock objects in PHP</long_title>
     <content>
         <section name="refactor" title="Refactoring the tests again">

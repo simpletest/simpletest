@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: download_website.xml 1684 2008-03-06 08:36:59Z pp11 $ -->
-<page title="Writing an extension for SimpleTest" here="Writing an extension">
+<!-- $Id$ -->
+<page title="Scrivere estensioni per SimpleTest" here="Scrivere estensioni">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>Writing an extension for SimpleTest</long_title>
     <content>
         <introduction>

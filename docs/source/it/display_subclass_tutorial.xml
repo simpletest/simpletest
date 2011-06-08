@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: display_subclass_tutorial.xml 1876 2009-06-12 16:30:24Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Visualizzare i risultati" here="Tutorial: visualizzare i risultati">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>PHP unit testing tutorial - Subclassing the test display</long_title>
     <content>
         <introduction>

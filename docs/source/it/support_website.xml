@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: support_website.xml 1732 2008-04-08 18:47:55Z pp11 $ -->
-<page title="Support mailing list" here="Support mailing list">
+<!-- $Id$ -->
+<page title="La Mailing-list" here="La Mailing-list">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>Support mailing list</long_title>
     <content>
         <introduction>

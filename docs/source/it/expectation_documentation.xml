@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: expectation_documentation.xml 1873 2009-06-12 16:12:18Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Le expectation" here="Le expectation">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>
 		Estendere lo unit tester di SimpleTest con nuove classi expectation.
     </long_title>

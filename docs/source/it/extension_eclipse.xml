@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: extension_eclipse.xml 1878 2009-06-12 16:39:37Z pp11 $ -->
-<page title="Simpletest Eclipse Plugin" here="Eclipse">
+<!-- $Id$ -->
+<page title="Il plugin Simpletest per Eclipse" here="Plugin Eclipse per SimpleTest">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>Simpletest Eclipse Plugin Documentation</long_title>
     <content>
         <section name="compat" title="Compatibility">

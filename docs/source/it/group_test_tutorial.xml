@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: group_test_tutorial.xml 1867 2009-03-05 15:49:54Z lastcraft $ -->
+<!-- $Id$ -->
 <page title="Raggruppamento di test" here="Tutorial: Raggruppamento di test">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>
         PHP unit testing tutorial - Grouping together unit
         tests and examples of writing test cases

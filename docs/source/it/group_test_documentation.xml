@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: group_test_documentation.xml 1878 2009-06-12 16:39:37Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Raggruppamento di test" here="Raggruppamento di test">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>SimpleTest for PHP test suites</long_title>
     <content>
         <section name="group" title="Raggruppare i test in suite">

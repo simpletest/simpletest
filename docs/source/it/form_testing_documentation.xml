@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!-- $Id: form_testing_documentation.xml 1812 2008-09-27 01:46:42Z lastcraft $ -->
+<!-- $Id$ -->
 <page title="Il collaudo di form" here="Il collaudo di form">
+    <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>SimpleTest documentation for testing HTML forms</long_title>
     <content>
         <section name="submit" title="Modificare i valori dei form ed eseguire il submit di un semplice form">
