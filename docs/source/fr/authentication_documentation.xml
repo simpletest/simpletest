@@ -247,8 +247,9 @@ class LogInTest extends WebTestCase {
     }
 }
 ]]></php>
-                La méthode <code>WebTestCase::restart()</code> préserve les cookies
-                dont le timeout a expiré, mais conserve les cookies temporaires ou expirés.
+                La méthode <code>WebTestCase::restart()</code> préserve
+                les cookies dont le timeout n'a pas expiré,
+                mais jette les cookies temporaires ou expirés.
                 Vous pouvez spécifier l'heure et la date de leur réactivation.
             </p>
             <p>
