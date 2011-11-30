@@ -244,14 +244,14 @@ class SimpleUserAgent {
                 return $response;
             }
             $headers = $response->getHeaders();
-            $location = new SimpleUrl($headers->getLocation());
-            $url = $location->makeAbsolute($url);
             if ($this->cookies_enabled) {
                 $headers->writeCookiesToJar($this->cookie_jar, $url);
             }
             if (! $headers->isRedirect()) {
                 break;
             }
+            $location = new SimpleUrl($headers->getLocation());
+            $url = $location->makeAbsolute($url);
             $encoding = new SimpleGetEncoding();
         } while (! $this->isTooManyRedirects(++$redirects));
         return $response;
