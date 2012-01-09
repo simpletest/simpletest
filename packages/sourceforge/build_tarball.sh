@@ -2,9 +2,9 @@
 
 # Builds project release.
 #
-cd ../..
+cd ../../..
 
-NAME=simpletest_`cat simpletest/VERSION`.tar.gz
+NAME=simpletest/packages/sourceforge/simpletest_`cat simpletest/VERSION`.tar.gz
 FILES=(simpletest/README \
           simpletest/VERSION \
           simpletest/LICENSE \
