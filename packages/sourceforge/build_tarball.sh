@@ -9,6 +9,7 @@ FILES=(simpletest/README \
           simpletest/VERSION \
           simpletest/LICENSE \
           simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE \
+          simpletest/arguments.php \
           simpletest/authentication.php \
           simpletest/autorun.php \
           simpletest/browser.php \
@@ -30,6 +31,7 @@ FILES=(simpletest/README \
           simpletest/mock_objects.php \
           simpletest/page.php \
           simpletest/php_parser.php \
+          simpletest/recorder.php \
           simpletest/reflection_php4.php \
           simpletest/reflection_php5.php \
           simpletest/remote.php \
@@ -53,6 +55,7 @@ FILES=(simpletest/README \
           simpletest/test/acceptance_test.php \
           simpletest/test/adapter_test.php \
           simpletest/test/all_tests.php \
+          simpletest/test/arguments_test.php \
           simpletest/test/authentication_test.php \
           simpletest/test/bad_test_suite.php \
           simpletest/test/browser_test.php \
@@ -78,7 +81,8 @@ FILES=(simpletest/README \
           simpletest/test/parse_error_test.php \
           simpletest/test/php_parser_test.php \
           simpletest/test/parsing_test.php \
-          simpletest/test/reflection_php4_test.php \
+          simpletest/test/parsing_test.php \
+          simpletest/test/recorder_test.php \
           simpletest/test/reflection_php5_test.php \
           simpletest/test/remote_test.php \
           simpletest/test/shell_test.php \
@@ -105,6 +109,7 @@ FILES=(simpletest/README \
           simpletest/test/support/test1.php \
           simpletest/test/support/failing_test.php \
           simpletest/test/support/passing_test.php \
+          simpletest/test/support/recorder_sample.php \
           simpletest/test/site/file.html \
           simpletest/docs/en/docs.css \
           simpletest/docs/en/index.html \
