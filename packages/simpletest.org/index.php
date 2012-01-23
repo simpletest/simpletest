@@ -38,7 +38,6 @@ foreach ($languages as $language) {
 				}
 				
 				$destination_dir = dirname($destination_path.$destination);
-var_dump($source_path.$language.$file, $destination_path.$destination);
 				if (!is_dir($destination_dir)) {
 					mkdir($destination_dir);
 				}
@@ -55,7 +54,7 @@ var_dump($source_path.$language.$file, $destination_path.$destination);
 				$synchronisation = new PackagingSynchronisation($source_path.$language.$file);
 				$result .= " ".$synchronisation->result();
 
-//				echo $destination." : ".$result."\n";
+				echo $destination." : ".$result."\n";
 			}
 	    }
 	}
