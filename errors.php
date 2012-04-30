@@ -212,6 +212,7 @@ class SimpleErrorQueue {
         }
         if (defined('E_DEPRECATED')) {
             $map[E_DEPRECATED] = 'E_DEPRECATED';
+            $map[E_USER_DEPRECATED] = 'E_USER_DEPRECATED';
         }
         return $map[$severity];
     }
