@@ -1,0 +1,15 @@
+{
+    "name": "lastcraft/simpletest",
+    "description": "Unit testing, mock objects and web testing framework for PHP built around test cases.",
+    "homepage": "http://simpletest.org/",
+    "authors": [
+        {
+            "name": "Marcus Baker",
+            "email": "marcus@lastcraft.com"
+        }
+    ],
+    "license": "LGPL-2.0+",
+    "require": {
+      "php": ">=5.0.5"
+    }
+}
