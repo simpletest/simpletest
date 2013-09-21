@@ -38,6 +38,10 @@
 	"require": {
 		"php": ">=5.0.5"
 	},
+	"replace": {
+		"vierbergenlars/simpletest": "self.version",
+		"lastcraft/simpletest": "self.version"
+	},
 	"autoload": {
 		"classmap": ["."]
 	}
