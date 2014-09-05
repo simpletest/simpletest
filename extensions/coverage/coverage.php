@@ -88,6 +88,9 @@ class CodeCoverage  {
         if(!extension_loaded("xdebug")) {
             throw new Exception("Could not load xdebug extension");
         };
+//         if(!xdebug_code_coverage_started()) {
+//             throw new Exception("Could not start xdebug code coverage (not enabled)");
+//         }
         xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
     }
 
@@ -112,14 +115,14 @@ class CodeCoverage  {
         }
     }
 
-    function writeSettings() {       
+    function writeSettings() {
         file_put_contents($this->settingsFile, $this->getSettings());
     }
 
     function getSettings() {
         $data = array(
-    	'log' => realpath($this->log), 
-    	'includes' => $this->includes, 
+    	'log' => realpath($this->log),
+    	'includes' => $this->includes,
     	'excludes' => $this->excludes);
         return serialize($data);
     }

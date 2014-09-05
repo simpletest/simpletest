@@ -31,8 +31,8 @@ class CoverageDataHandler {
 
     function &getFilenames() {
         $filenames = array();
-        $cursor = $this->db->unbufferedQuery("select distinct name from coverage");
-        while ($row = $cursor->fetch()) {
+        $cursor = $this->db->query("select distinct name from coverage");
+        while ($row = $cursor->fetchArray()) {
             $filenames[] = $row[0];
         }
 
@@ -61,10 +61,8 @@ class CoverageDataHandler {
         $sql = "select coverage from coverage where name = '$file'";
         $aggregate = array();
         $result = $this->db->query($sql);
-        while ($result->valid()) {
-            $row = $result->current();
+        while ($row = $result->fetchArray()) {
             $this->aggregateCoverage($aggregate, unserialize($row[0]));
-            $result->next();
         }
 
         return $aggregate;
@@ -109,10 +107,8 @@ class CoverageDataHandler {
     function &readUntouchedFiles() {
         $untouched = array();
         $result = $this->db->query("select filename from untouched order by filename");
-        while ($result->valid()) {
-            $row = $result->current();
+        while ($row = $result->fetchArray()) {
             $untouched[] = $row[0];
-            $result->next();
         }
 
         return $untouched;

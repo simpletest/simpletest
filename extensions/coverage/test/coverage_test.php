@@ -3,16 +3,16 @@ require_once(dirname(__FILE__) . '/../../../autorun.php');
 require_once(dirname(__FILE__) . '/../../../mock_objects.php');
 
 class CodeCoverageTest extends UnitTestCase {
-    function skip() {
-        $this->skipIf(
-        		!file_exists('DB/sqlite.php'),
-                'The Coverage extension needs to have PEAR installed');
-    }
-	
+//     function skip() {
+//         $this->skipIf(
+//         		!file_exists('DB/sqlite.php'),
+//                 'The Coverage extension needs to have PEAR installed');
+//     }
+
 	function setUp() {
         require_once dirname(__FILE__) .'/../coverage.php';
     }
-	
+
     function testIsFileIncluded() {
         $coverage = new CodeCoverage();
         $this->assertTrue($coverage->isFileIncluded('aaa'));
@@ -80,7 +80,7 @@ class CodeCoverageTest extends UnitTestCase {
 
     function testSettingsSerialization() {
         $coverage = new CodeCoverage();
-        $coverage->log = '/banana/boat';
+        $coverage->log = '/tmp';
         $coverage->includes = array('apple', 'orange');
         $coverage->excludes = array('tomato', 'pea');
         $data = $coverage->getSettings();
@@ -88,7 +88,7 @@ class CodeCoverageTest extends UnitTestCase {
 
         $actual = new CodeCoverage();
         $actual->setSettings($data);
-        $this->assertEqual('/banana/boat', $actual->log);
+        $this->assertEqual('/tmp', $actual->log);
         $this->assertEqual(array('apple', 'orange'), $actual->includes);
         $this->assertEqual(array('tomato', 'pea'), $actual->excludes);
     }
@@ -96,14 +96,14 @@ class CodeCoverageTest extends UnitTestCase {
     function testSettingsCanBeReadWrittenToDisk() {
         $settings_file = 'banana-boat-coverage-settings-test.dat';
         $coverage = new CodeCoverage();
-        $coverage->log = '/banana/boat';
+        $coverage->log = '/tmp';
         $coverage->settingsFile = $settings_file;
         $coverage->writeSettings();
 
         $actual = new CodeCoverage();
         $actual->settingsFile = $settings_file;
         $actual->readSettings();
-        $this->assertEqual('/banana/boat', $actual->log);
+        $this->assertEqual('/tmp', $actual->log);
     }
 }
 ?>
