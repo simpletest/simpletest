@@ -3,10 +3,6 @@
  * @package        SimpleTest
  * @subpackage     Extensions
  */
-/**
- * @todo	which db abstraction layer is this?
- */
-require_once 'DB/sqlite.php';
 
 /**
  * Persists code coverage data into SQLite database and aggregate data for convienent
@@ -22,15 +18,15 @@ class CoverageDataHandler {
 
     function __construct($filename) {
         $this->filename = $filename;
-        $this->db = new SQLiteDatabase($filename);
+        $this->db = new SQLite3($filename);
         if (empty($this->db)) {
             throw new Exception("Could not create sqlite db ". $filename);
         }
     }
 
     function createSchema() {
-        $this->db->queryExec("create table untouched (filename text)");
-        $this->db->queryExec("create table coverage (name text, coverage text)");
+        $this->db->query("create table untouched (filename text)");
+        $this->db->query("create table coverage (name text, coverage text)");
     }
 
     function &getFilenames() {
@@ -49,7 +45,7 @@ class CoverageDataHandler {
             $relativeFilename = self::ltrim(getcwd() . '/', $file);
             $sql = "insert into coverage (name, coverage) values ('$relativeFilename', '$coverageStr')";
             # if this fails, check you have write permission
-            $this->db->queryExec($sql);
+            $this->db->query($sql);
         }
     }
 
@@ -107,7 +103,7 @@ class CoverageDataHandler {
     function writeUntouchedFile($file) {
         $relativeFile = CoverageDataHandler::ltrim('./', $file);
         $sql = "insert into untouched values ('$relativeFile')";
-        $this->db->queryExec($sql);
+        $this->db->query($sql);
     }
 
     function &readUntouchedFiles() {

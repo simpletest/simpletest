@@ -19,18 +19,6 @@ class CoverageUtils {
         }
     }
 
-    static function requireSqlite() {
-        if (!self::isPackageClassAvailable('DB/sqlite.php', 'SQLiteDatabase')) {
-            echo "sqlite library is required to be installed and available in include_path";
-            exit(1);
-        }
-    }
-
-    static function isPackageClassAvailable($includeFile, $class) {
-        @include_once($includeFile);
-        return class_exists($class);
-    }
-
     /**
      * Parses simple parameters from CLI.
      *
