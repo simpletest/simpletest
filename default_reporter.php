@@ -33,6 +33,8 @@ class SimpleCommandLineParser {
     private $junit = false;
     private $help = false;
     private $no_skips = false;
+    private $doCodeCoverage = false;
+    private $excludes = array();
 
     /**
      *    Parses raw command line arguments into object properties.
@@ -51,10 +53,20 @@ class SimpleCommandLineParser {
                 if (isset($arguments[$i + 1])) {
                     $this->$property = $arguments[$i + 1];
                 }
+            } elseif (preg_match('/^--?(cx)=(.+)$/', $argument, $matches)) {
+//                 $property = $this->to_property[$matches[1]];
+                $this->excludes[] = $matches[2];
+            } elseif (preg_match('/^--?(cx)$/', $argument, $matches)) {
+//                 $property = $this->to_property[$matches[1]];
+                if (isset($arguments[$i + 1])) {
+                    $this->excludes[] = $arguments[$i + 1];
+                }
             } elseif (preg_match('/^--?(xml|x)$/', $argument)) {
                 $this->xml = true;
             } elseif (preg_match('/^--?(junit|j)$/', $argument)) {
                 $this->junit = true;
+            } elseif (preg_match('/^--?(codecoverage|cc)$/', $argument)) {
+                $this->doCodeCoverage = true;
             } elseif (preg_match('/^--?(no-skip|no-skips|s)$/', $argument)) {
                 $this->no_skips = true;
             } elseif (preg_match('/^--?(help|h)$/', $argument)) {
@@ -96,6 +108,22 @@ class SimpleCommandLineParser {
     }
 
     /**
+     *    Should code coverage be run or not.
+     *    @return boolean        True if code coverage should be run.
+     */
+    function doCodeCoverage() {
+        return $this->doCodeCoverage;
+    }
+
+    /**
+     *    Array of excluded folders.
+     *    @return array        Array of strings to exclude from code coverage.
+     */
+    function getExcludes() {
+        return $this->excludes;
+    }
+
+    /**
      *    Output should suppress skip messages.
      *    @return boolean        True for no skips.
      */
@@ -125,6 +153,8 @@ Usage: php <test_file> [args...]
     -s              Suppress skip messages
     -x              Return test results in XML
     -j              Return test results in JUnit format
+    -cc             Generate code coverage reports
+    -cx             Code coverage exclude folder (may have multiple)
     -h              Display this help message
 
 HELP;
@@ -141,12 +171,18 @@ HELP;
  */
 class DefaultReporter extends SimpleReporterDecorator {
 
+    public $doCodeCoverage;
+    public $excludes;
+
     /**
      *  Assembles the appropriate reporter for the environment.
      */
     function __construct() {
+        $this->doCodeCoverage = false;
         if (SimpleReporter::inCli()) {
             $parser = new SimpleCommandLineParser($_SERVER['argv']);
+            $this->doCodeCoverage = $parser->doCodeCoverage();
+            $this->excludes = $parser->getExcludes();
             if ($parser->isXml()) {
             	$interfaces = array('XmlReporter');
             } else if ($parser->isJUnit()) {
