@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ..
+cd ../..
 php ./extensions/coverage/bin/php-coverage-open.php \
 	--exclude='.*/test/.*' \
     --exclude='.*DB.common.php$' \
