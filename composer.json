@@ -1,8 +1,19 @@
 {
 	"name": "simpletest/simpletest",
 	"description": "Unit testing, mock objects and web testing framework for PHP built around test cases.",
-	"keywords": ["simpletest", "php", "unit-test", "testing", "junit", "xunit", "code-coverage", "selenium"],
+	"type": "library",
+	"keywords": [
+		"simpletest",
+		"unit-test",
+		"testing",
+		"code-coverage",
+		"selenium"
+	],
 	"homepage": "http://simpletest.org/",
+	"license": "LGPL-2.0+",
+	"support": {
+        "issues": "https://github.com/simpletest/simpletest/issues",
+    },
 	"authors": [
 		{
 			"name": "Marcus Baker",
@@ -34,7 +45,6 @@
 			"email": "vierbergenlars@gmail.com"
 		}
 	],
-	"license": "LGPL-2.0+",
 	"require": {
 		"php": ">=5.0.5"
 	},
