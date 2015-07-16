@@ -9,10 +9,10 @@
 /**#@+
  * include SimpleTest files
  */
-require_once(dirname(__FILE__) . '/expectation.php');
-require_once(dirname(__FILE__) . '/simpletest.php');
-require_once(dirname(__FILE__) . '/dumper.php');
-require_once(dirname(__FILE__) . '/reflection_php5.php');
+require_once dirname(__FILE__) . '/expectation.php';
+require_once dirname(__FILE__) . '/simpletest.php';
+require_once dirname(__FILE__) . '/dumper.php';
+require_once dirname(__FILE__) . '/reflection_php5.php';
 /**#@-*/
 
 /**
@@ -651,7 +651,7 @@ class SimpleMock {
      *    Creates an empty action list and expectation list.
      *    All call counts are set to zero.
      */
-    function SimpleMock() {
+    function __construct() {
         $this->actions = new SimpleCallSchedule();
         $this->expectations = new SimpleCallSchedule();
         $this->call_counts = array();
@@ -1638,4 +1638,3 @@ class MockGenerator {
         return $code;
     }
 }
-?>

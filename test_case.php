@@ -10,15 +10,15 @@
  * Includes SimpleTest files and defined the root constant
  * for dependent libraries.
  */
-require_once(dirname(__FILE__) . '/invoker.php');
-require_once(dirname(__FILE__) . '/errors.php');
-require_once(dirname(__FILE__) . '/compatibility.php');
-require_once(dirname(__FILE__) . '/scorer.php');
-require_once(dirname(__FILE__) . '/expectation.php');
-require_once(dirname(__FILE__) . '/dumper.php');
-require_once(dirname(__FILE__) . '/simpletest.php');
-require_once(dirname(__FILE__) . '/exceptions.php');
-require_once(dirname(__FILE__) . '/reflection_php5.php');
+require_once dirname(__FILE__) . '/invoker.php';
+require_once dirname(__FILE__) . '/errors.php';
+require_once dirname(__FILE__) . '/compatibility.php';
+require_once dirname(__FILE__) . '/scorer.php';
+require_once dirname(__FILE__) . '/expectation.php';
+require_once dirname(__FILE__) . '/dumper.php';
+require_once dirname(__FILE__) . '/simpletest.php';
+require_once dirname(__FILE__) . '/exceptions.php';
+require_once dirname(__FILE__) . '/reflection_php5.php';
 /**#@-*/
 if (! defined('SIMPLE_TEST')) {
     /**
@@ -484,7 +484,7 @@ class TestSuite {
      *                            of the test.
      *    @access public
      */
-    function TestSuite($label = false) {
+    function __construct($label = false) {
         $this->label = $label;
         $this->test_cases = array();
     }
@@ -619,7 +619,7 @@ class BadTestSuite {
      *                            of the test.
      *    @access public
      */
-    function BadTestSuite($label, $error) {
+    function __construct($label, $error) {
         $this->label = $label;
         $this->error = $error;
     }
@@ -655,4 +655,3 @@ class BadTestSuite {
         return 0;
     }
 }
-?>
