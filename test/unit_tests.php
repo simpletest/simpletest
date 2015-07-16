@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '/../extensions/pear_test_case.php');
 
 class UnitTests extends TestSuite {
     function UnitTests() {
-        $this->TestSuite('Unit tests');
+        parent::__construct('Unit tests');
         $path = dirname(__FILE__);
         $this->addFile($path . '/errors_test.php');
         $this->addFile($path . '/exceptions_test.php');
