@@ -1,7 +1,7 @@
 <?php
-// $Id$
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../expectation.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../expectation.php';
 
 class TestOfEquality extends UnitTestCase {
 
@@ -80,7 +80,7 @@ class TestOfInequality extends UnitTestCase {
 class RecursiveNasty {
     private $me;
 
-    function RecursiveNasty() {
+    function __construct() {
         $this->me = $this;
     }
 }
@@ -314,4 +314,3 @@ class TestOfNotA extends UnitTestCase {
         $this->assertTrue($expectation->test(5));
     }
 }
-?>
