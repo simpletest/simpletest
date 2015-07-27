@@ -10,13 +10,6 @@ class ComparisonClassWithInterface implements ComparisonInterface { }
 
 class TestOfCompatibility extends UnitTestCase
 {
-    
-    function testIsA() {
-        $this->assertTrue(is_a(new ComparisonClass(), 'ComparisonClass'));
-        $this->assertFalse(is_a(new ComparisonClass(), 'ComparisonSubclass'));
-        $this->assertTrue(is_a(new ComparisonSubclass(), 'ComparisonClass'));
-    }
-    
     function testIdentityOfNumericStrings() {
         $numericString1 = "123";
         $numericString2 = "00123";
@@ -33,15 +26,9 @@ class TestOfCompatibility extends UnitTestCase
         $thing = "Hello";
         $thing_reference = &$thing;
         $thing_copy = $thing;
-        $this->assertTrue(SimpleTestCompatibility::isReference(
-                $thing,
-                $thing));
-        $this->assertTrue(SimpleTestCompatibility::isReference(
-                $thing,
-                $thing_reference));
-        $this->assertFalse(SimpleTestCompatibility::isReference(
-                $thing,
-                $thing_copy));
+        $this->assertTrue(SimpleTestCompatibility::isReference($thing, $thing));
+        $this->assertTrue(SimpleTestCompatibility::isReference($thing, $thing_reference));
+        $this->assertFalse(SimpleTestCompatibility::isReference($thing, $thing_copy));
     }
     
     function testObjectReferences () {
