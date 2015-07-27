@@ -35,11 +35,8 @@ class VisualTestOfErrors extends UnitTestCase {
     }
 }
 
-class VisualTestOfExceptions extends UnitTestCase {
-    function skip() {
-        $this->skipUnless(version_compare(phpversion(), '5') >= 0);
-    }
-
+class VisualTestOfExceptions extends UnitTestCase
+{
     function testExceptionTrap() {
         $this->dump('One exception...');
         $this->ouch();
@@ -72,14 +69,9 @@ class OpaqueContainer {
     }
 }
 
-class VisualTestOfObjectComparison extends UnitTestCase {
-    function skip() {
-        $this->skipUnless(version_compare(phpversion(), '5') >= 0);
-    }
-
+class VisualTestOfObjectComparison extends UnitTestCase
+{
     function testDifferenceBetweenPrivateMembersCanBeDescribed() {
         $this->assertIdentical(new OpaqueContainer(1), new OpaqueContainer(2));
     }
-
 }
-?>

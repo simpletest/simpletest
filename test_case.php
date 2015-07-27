@@ -3,7 +3,6 @@
  *  Base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id$
  */
 
 /**#@+
@@ -35,7 +34,8 @@ if (! defined('SIMPLE_TEST')) {
  *    @package      SimpleTest
  *    @subpackage   UnitTester
  */
-class SimpleTestCase {
+class SimpleTestCase
+{
     private $label = false;
     protected $reporter;
     private $observers;
@@ -181,7 +181,7 @@ class SimpleTestCase {
      */
     protected function isTest($method) {
         if (strtolower(substr($method, 0, 4)) == 'test') {
-            return ! SimpleTestCompatibility::isA($this, strtolower($method));
+            return ! is_a($this, strtolower($method));
         }
         return false;
     }
@@ -275,7 +275,7 @@ class SimpleTestCase {
             trigger_error('Can only make assertions within test methods');
         }
         $this->reporter->paintError(
-                "Unexpected PHP error [$message] severity [$severity] in [$file line $line]");
+                "Unexpected PHP Error [$message] severity [$severity] in [$file line $line]");
     }
 
     /**
@@ -366,7 +366,8 @@ class SimpleTestCase {
  *    @package      SimpleTest
  *    @subpackage   UnitTester
  */
-class SimpleFileLoader {
+class SimpleFileLoader 
+{
 
     /**
      *    Builds a test suite from a library of test cases.
@@ -474,7 +475,8 @@ class SimpleFileLoader {
  *    @package      SimpleTest
  *    @subpackage   UnitTester
  */
-class TestSuite {
+class TestSuite 
+{
     private $label;
     private $test_cases;
 
@@ -609,7 +611,8 @@ class TestSuite {
  *    @package      SimpleTest
  *    @subpackage   UnitTester
  */
-class BadTestSuite {
+class BadTestSuite 
+{
     private $label;
     private $error;
 

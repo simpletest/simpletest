@@ -163,31 +163,19 @@ class TestOfReflection extends UnitTestCase {
 	function testNoParameterCreationWhenNoInterface() {
 		$reflection = new SimpleReflection('AnyOldArgumentClass');
 		$function = $reflection->getSignature('aMethod');
-		if (version_compare(phpversion(), '5.0.2', '<=')) {
-			$this->assertEqual('function amethod($argument)', strtolower($function));
-		} else {
-			$this->assertEqual('function aMethod($argument)', $function);
-		}
+		$this->assertEqual('function aMethod($argument)', $function);
 	}
 
 	function testParameterCreationWithoutTypeHinting() {
 		$reflection = new SimpleReflection('AnyOldArgumentImplementation');
 		$function = $reflection->getSignature('aMethod');
-		if (version_compare(phpversion(), '5.0.2', '<=')) {
-			$this->assertEqual('function amethod(AnyOldInterface $argument)', $function);
-		} else {
-			$this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
-		}
+        $this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
 	}
 
 	function testParameterCreationForTypeHinting() {
 		$reflection = new SimpleReflection('AnyOldTypeHintedClass');
 		$function = $reflection->getSignature('aMethod');
-		if (version_compare(phpversion(), '5.0.2', '<=')) {
-			$this->assertEqual('function amethod(AnyOldInterface $argument)', $function);
-		} else {
-			$this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
-		}
+		$this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
 	}
 
 	function testIssetFunctionSignature() {
@@ -224,11 +212,8 @@ class TestOfReflection extends UnitTestCase {
 	}
 }
 
-class TestOfReflectionWithTypeHints extends UnitTestCase {
-	function skip() {
-		$this->skipIf(version_compare(phpversion(), '5.1.0', '<'), 'Reflection with type hints only tested for PHP 5.1.0 and above');
-	}
-
+class TestOfReflectionWithTypeHints extends UnitTestCase
+{
 	function testParameterCreationForTypeHintingWithArray() {
 		eval('interface AnyOldArrayTypeHintedInterface {
 				  function amethod(array $argument);
@@ -259,5 +244,3 @@ class TestOfAbstractsWithAbstractMethods extends UnitTestCase {
         );
     }
 }
-
-?>

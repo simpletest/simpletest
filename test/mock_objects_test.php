@@ -1,8 +1,8 @@
 <?php
-// $Id$
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../expectation.php');
-require_once(dirname(__FILE__) . '/../mock_objects.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../expectation.php';
+require_once dirname(__FILE__) . '/../mock_objects.php';
 
 class TestOfAnythingExpectation extends UnitTestCase {
     function testSimpleInteger() {
@@ -178,13 +178,11 @@ class TestOfCallSchedule extends UnitTestCase {
         $this->assertCopy($schedule->respond(0, 'aMethod', array()), $a);
     }
 
-    function testCanThrowException() {
-        if (version_compare(phpversion(), '5', '>=')) {
-            $schedule = new SimpleCallSchedule();
-            $schedule->register('aMethod', false, new SimpleThrower(new Exception('Ouch')));
-            $this->expectException(new Exception('Ouch'));
-            $schedule->respond(0, 'aMethod', array());
-        }
+    function testCanThrowException() {        
+        $schedule = new SimpleCallSchedule();
+        $schedule->register('aMethod', false, new SimpleThrower(new Exception('Ouch')));
+        $this->expectException(new Exception('Ouch'));
+        $schedule->respond(0, 'aMethod', array());        
     }
 
     function testCanEmitError() {
@@ -666,10 +664,8 @@ class TestOfSpecialMethodsAfterPHP51 extends UnitTestCase {
 
 }
 
-class TestOfSpecialMethods extends UnitTestCase {
-    function skip() {
-        $this->skipIf(version_compare(phpversion(), '5', '<'), 'Overloading not tested unless PHP 5+');
-    }
+class TestOfSpecialMethods extends UnitTestCase
+{
 
     function testCanMockTheThingAtAll() {
         $mock = new MockClassWithSpecialMethods();
@@ -844,14 +840,14 @@ class ConstructorSuperClass {
 
 class ConstructorSubClass extends ConstructorSuperClass { }
 
-class TestOfPHP4StyleSuperClassConstruct extends UnitTestCase {
+/*class TestOfPHP4StyleSuperClassConstruct extends UnitTestCase {
     function testBasicConstruct() {
         Mock::generate('ConstructorSubClass');
         $mock = new MockConstructorSubClass();
         $this->assertIsA($mock, 'ConstructorSubClass');
         $this->assertTrue(method_exists($mock, 'ConstructorSuperClass'));
     }
-}
+}*/
 
 class TestOfPHP5StaticMethodMocking extends UnitTestCase {
     function testCanCreateAMockObjectWithStaticMethodsWithoutError() {

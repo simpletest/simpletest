@@ -3,7 +3,6 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id$
  */
 
 /**#@+
@@ -22,7 +21,8 @@ require_once(dirname(__FILE__) . '/encoding.php');
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleUrl {
+class SimpleUrl 
+{
     private $scheme;
     private $username;
     private $password;
@@ -547,4 +547,3 @@ class SimpleUrl {
         return 'com|edu|net|org|gov|mil|int|biz|info|name|pro|aero|coop|museum';
     }
 }
-?>

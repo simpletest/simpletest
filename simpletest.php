@@ -3,7 +3,6 @@
  *  Global state for SimpleTest and kicker script in future versions.
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id$
  */
 
 /**#@+
@@ -54,12 +53,13 @@ class SimpleTest {
      *    calls at the top of the file before the actual declarations.
      *    @param array $classes     Class names of interest.
      */
-    static function ignoreParentsIfIgnored($classes) {
-        $registry = &SimpleTest::getRegistry();
+    static function ignoreParentsIfIgnored($classes)
+    {        
         foreach ($classes as $class) {
             if (SimpleTest::isIgnored($class)) {
                 $reflection = new SimpleReflection($class);
-                if ($parent = $reflection->getParent()) {
+                $parent = $reflection->getParent();
+                if ($parent) {
                     SimpleTest::ignore($parent);
                 }
             }
@@ -93,7 +93,7 @@ class SimpleTest {
         $registry = &SimpleTest::getRegistry();
         for ($i = count($registry['Preferred']) - 1; $i >= 0; $i--) {
             foreach ($classes as $class) {
-                if (SimpleTestCompatibility::isA($registry['Preferred'][$i], $class)) {
+                if (is_a($registry['Preferred'][$i], $class)) {
                     return $registry['Preferred'][$i];
                 }
             }
@@ -245,7 +245,8 @@ class SimpleTest {
  *    the mocks.
  *    @package  SimpleTest
  */
-class SimpleTestContext {
+class SimpleTestContext 
+{
     private $test;
     private $reporter;
     private $resources;
@@ -314,7 +315,8 @@ class SimpleTestContext {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class SimpleStackTrace {
+class SimpleStackTrace
+{
     private $prefixes;
 
     /**
@@ -333,8 +335,10 @@ class SimpleStackTrace {
      *    @return string           Snippet of test report with line
      *                             number and file.
      */
-    function traceMethod($stack = false) {
+    function traceMethod($stack = false) 
+    {
         $stack = $stack ? $stack : $this->captureTrace();
+        
         foreach ($stack as $frame) {
             if ($this->frameLiesWithinSimpleTestFolder($frame)) {
                 continue;
@@ -388,4 +392,3 @@ class SimpleStackTrace {
         return array();
     }
 }
-?>

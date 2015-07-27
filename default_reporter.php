@@ -3,16 +3,15 @@
  *  Optional include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id$
  */
 
 /**#@+
  *  include other SimpleTest class files
  */
-require_once(dirname(__FILE__) . '/simpletest.php');
-require_once(dirname(__FILE__) . '/scorer.php');
-require_once(dirname(__FILE__) . '/reporter.php');
-require_once(dirname(__FILE__) . '/xml.php');
+require_once dirname(__FILE__) . '/simpletest.php';
+require_once dirname(__FILE__) . '/scorer.php';
+require_once dirname(__FILE__) . '/reporter.php';
+require_once dirname(__FILE__) . '/xml.php';
 /**#@-*/
 
 /**
@@ -22,7 +21,8 @@ require_once(dirname(__FILE__) . '/xml.php');
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class SimpleCommandLineParser {
+class SimpleCommandLineParser
+{
     private $to_property = array(
             'case' => 'case', 'c' => 'case',
             'test' => 'test', 't' => 'test',
@@ -127,7 +127,8 @@ HELP;
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class DefaultReporter extends SimpleReporterDecorator {
+class DefaultReporter extends SimpleReporterDecorator
+{
 
     /**
      *  Assembles the appropriate reporter for the environment.
@@ -160,4 +161,3 @@ class DefaultReporter extends SimpleReporterDecorator {
         parent::__construct($reporter);
     }
 }
-?>

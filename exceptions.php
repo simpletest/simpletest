@@ -3,7 +3,6 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id$
  */
 
 /**#@+
@@ -19,7 +18,8 @@ require_once dirname(__FILE__) . '/expectation.php';
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class SimpleExceptionTrappingInvoker extends SimpleInvokerDecorator {
+class SimpleExceptionTrappingInvoker extends SimpleInvokerDecorator
+{
 
     /**
      *    Stores the invoker to be wrapped.
@@ -67,7 +67,8 @@ class SimpleExceptionTrappingInvoker extends SimpleInvokerDecorator {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class ExceptionExpectation extends SimpleExpectation {
+class ExceptionExpectation extends SimpleExpectation
+{
     private $expected;
 
     /**
@@ -134,7 +135,8 @@ class ExceptionExpectation extends SimpleExpectation {
  *    @package  SimpleTest
  *    @subpackage   UnitTester
  */
-class SimpleExceptionTrap {
+class SimpleExceptionTrap
+{
     private $expected;
     private $ignored;
     private $message;
@@ -223,4 +225,3 @@ class SimpleExceptionTrap {
         $this->ignored = array();
     }
 }
-?>

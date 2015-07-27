@@ -2,28 +2,24 @@
 /**
  *  base include file for SimpleTest
  *  @package    SimpleTest
- *  @version    $Id$
  */
 
 /**
- *  Static methods for compatibility between different
- *  PHP versions.
+ *  Static methods for compatibility between different PHP versions.
  *  @package    SimpleTest
  */
-class SimpleTestCompatibility {
+class SimpleTestCompatibility
+{
 
     /**
-     *    Creates a copy whether in PHP5 or PHP4.
+     *    Creates a copy.
      *    @param object $object     Thing to copy.
      *    @return object            A copy.
      *    @access public
      */
-    static function copy($object) {
-        if (version_compare(phpversion(), '5') >= 0) {
-            eval('$copy = clone $object;');
-            return $copy;
-        }
-        return $object;
+    static function copy($object) {        
+        $copy = clone $object;
+        return $copy;        
     }
 
     /**
@@ -36,13 +32,7 @@ class SimpleTestCompatibility {
      *    @access public
      */
     static function isIdentical($first, $second) {
-        if (version_compare(phpversion(), '5') >= 0) {
-            return SimpleTestCompatibility::isIdenticalType($first, $second);
-        }
-        if ($first != $second) {
-            return false;
-        }
-        return ($first === $second);
+        return SimpleTestCompatibility::isIdenticalType($first, $second);        
     }
 
     /**
@@ -103,7 +93,7 @@ class SimpleTestCompatibility {
      *    @access public
      */
     static function isReference(&$first, &$second) {
-        if (version_compare(phpversion(), '5', '>=') && is_object($first)) {
+        if (is_object($first)) {
             return ($first === $second);
         }
         if (is_object($first) && is_object($second)) {
@@ -121,46 +111,12 @@ class SimpleTestCompatibility {
     }
 
     /**
-     *    Test to see if an object is a member of a
-     *    class hiearchy.
-     *    @param object $object    Object to test.
-     *    @param string $class     Root name of hiearchy.
-     *    @return boolean         True if class in hiearchy.
-     *    @access public
-     */
-    static function isA($object, $class) {
-        if (version_compare(phpversion(), '5') >= 0) {
-            if (! class_exists($class, false)) {
-                if (function_exists('interface_exists')) {
-                    if (! interface_exists($class, false))  {
-                        return false;
-                    }
-                }
-            }
-            eval("\$is_a = \$object instanceof $class;");
-            return $is_a;
-        }
-        if (function_exists('is_a')) {
-            return is_a($object, $class);
-        }
-        return ((strtolower($class) == get_class($object))
-                or (is_subclass_of($object, $class)));
-    }
-
-    /**
      *    Sets a socket timeout for each chunk.
      *    @param resource $handle    Socket handle.
      *    @param integer $timeout    Limit in seconds.
      *    @access public
      */
-    static function setTimeout($handle, $timeout) {
-        if (function_exists('stream_set_timeout')) {
-            stream_set_timeout($handle, $timeout, 0);
-        } elseif (function_exists('socket_set_timeout')) {
-            socket_set_timeout($handle, $timeout, 0);
-        } elseif (function_exists('set_socket_timeout')) {
-            set_socket_timeout($handle, $timeout, 0);
-        }
+    static function setTimeout($handle, $timeout) {       
+        stream_set_timeout($handle, $timeout, 0);        
     }
 }
-?>

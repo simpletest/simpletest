@@ -6,20 +6,20 @@
  *  @author Rene vd O (original code)
  *  @author Perrick Penet
  *  @author Marcus Baker
- *	@version	$Id$
  */
 
 /**
  *	include other SimpleTest class files
  */
-require_once(dirname(__FILE__) . '/scorer.php');
+require_once dirname(__FILE__) . '/scorer.php';
 
 /**
  *	A single test result.
  *	@package	SimpleTest
  *	@subpackage	Extensions
  */
-abstract class SimpleResult {
+abstract class SimpleResult 
+{
 	public $time;
 	public $breadcrumb;
 	public $message;
@@ -62,7 +62,8 @@ class SimpleResultOfException extends SimpleResult { }
  *	@package	SimpleTest
  *	@subpackage	Extensions
  */
-class Recorder extends SimpleReporterDecorator {
+class Recorder extends SimpleReporterDecorator 
+{
     public $results = array();
 
 	/**
@@ -98,4 +99,3 @@ class Recorder extends SimpleReporterDecorator {
         $this->results[] = new SimpleResultOfException(parent::getTestList(), $message);
 	}
 }
-?>

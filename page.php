@@ -3,17 +3,16 @@
  *  Base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id$
  */
 
 /**#@+
     *   include other SimpleTest class files
     */
-require_once(dirname(__FILE__) . '/http.php');
-require_once(dirname(__FILE__) . '/php_parser.php');
-require_once(dirname(__FILE__) . '/tag.php');
-require_once(dirname(__FILE__) . '/form.php');
-require_once(dirname(__FILE__) . '/selector.php');
+require_once dirname(__FILE__) . '/http.php';
+require_once dirname(__FILE__) . '/php_parser.php';
+require_once dirname(__FILE__) . '/tag.php';
+require_once dirname(__FILE__) . '/form.php';
+require_once dirname(__FILE__) . '/selector.php';
 /**#@-*/
 
 /**
@@ -21,7 +20,8 @@ require_once(dirname(__FILE__) . '/selector.php');
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimplePage {
+class SimplePage 
+{
     private $links = array();
     private $title = false;
     private $last_widget;

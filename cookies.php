@@ -3,13 +3,12 @@
  *  Base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id$
  */
 
 /**#@+
  *  include other SimpleTest class files
  */
-require_once(dirname(__FILE__) . '/url.php');
+require_once dirname(__FILE__) . '/url.php';
 /**#@-*/
 
 /**
@@ -20,7 +19,8 @@ require_once(dirname(__FILE__) . '/url.php');
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleCookie {
+class SimpleCookie
+{
     private $host;
     private $name;
     private $value;
@@ -225,7 +225,8 @@ class SimpleCookie {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleCookieJar {
+class SimpleCookieJar
+{
     private $cookies;
 
     /**
@@ -377,4 +378,3 @@ class SimpleCookieJar {
         return $pairs;
     }
 }
-?>

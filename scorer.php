@@ -3,11 +3,10 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id$
  */
 
 /**#@+*/
-require_once(dirname(__FILE__) . '/invoker.php');
+require_once dirname(__FILE__) . '/invoker.php';
 /**#@-*/
 
 /**
@@ -18,7 +17,8 @@ require_once(dirname(__FILE__) . '/invoker.php');
  *    @subpackage UnitTester
  *    @abstract
  */
-class SimpleScorer {
+class SimpleScorer 
+{
     private $passes;
     private $fails;
     private $exceptions;
@@ -238,7 +238,8 @@ class SimpleScorer {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class SimpleReporter extends SimpleScorer {
+class SimpleReporter extends SimpleScorer 
+{
     private $test_stack;
     private $size;
     private $progress;
@@ -872,4 +873,3 @@ class MultipleReporter {
         }
     }
 }
-?>

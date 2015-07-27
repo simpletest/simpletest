@@ -3,7 +3,6 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage MockObjects
- *  @version    $Id$
  */
 
 /**#@+
@@ -1213,7 +1212,7 @@ class Mock {
      */
     static function generate($class, $mock_class = false, $methods = false) {
         $generator = new MockGenerator($class, $mock_class);
-        return @$generator->generateSubclass($methods);
+        return $generator->generateSubclass($methods);
     }
 
     /**
@@ -1228,7 +1227,7 @@ class Mock {
      */
     static function generatePartial($class, $mock_class, $methods) {
         $generator = new MockGenerator($class, $mock_class);
-        return @$generator->generatePartial($methods);
+        return $generator->generatePartial($methods);
     }
 
     /**
@@ -1351,12 +1350,12 @@ class MockGenerator {
             $implements = 'implements ' . implode(', ', $interfaces);
         }
         $code = "class " . $this->mock_class . " extends " . $this->mock_base . " $implements {\n";
-        $code .= "    function " . $this->mock_class . "() {\n";
-        $code .= "        \$this->" . $this->mock_base . "();\n";
+        $code .= "    function __construct() {\n";
+        $code .= "        parent::__construct();\n";
         $code .= "    }\n";
         if (in_array('__construct', $this->reflection->getMethods())) {
             $code .= "    function __construct() {\n";
-            $code .= "        \$this->" . $this->mock_base . "();\n";
+            $code .= "        parent::__construct();\n";
             $code .= "    }\n";
         }
         $code .= $this->createHandlerCode($methods);
@@ -1375,7 +1374,7 @@ class MockGenerator {
         $code .= "    public \$mock;\n";
         $code .= $this->addMethodList(array_merge($methods, $this->reflection->getMethods()));
         $code .= "\n";
-        $code .= "    function " . $this->mock_class . "() {\n";
+        $code .= "    function __construct() {\n";
         $code .= "        \$this->mock = new " . $this->mock_base . "();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
@@ -1400,7 +1399,7 @@ class MockGenerator {
         $code .= "    protected \$mock;\n";
         $code .= $this->addMethodList($methods);
         $code .= "\n";
-        $code .= "    function " . $this->mock_class . "() {\n";
+        $code .= "    function __construct() {\n";
         $code .= "        \$this->mock = new " . $this->mock_base . "();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";

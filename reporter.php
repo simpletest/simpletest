@@ -3,14 +3,13 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id$
  */
 
 /**#@+
  *  include other SimpleTest class files
  */
-require_once(dirname(__FILE__) . '/scorer.php');
-//require_once(dirname(__FILE__) . '/arguments.php');
+require_once dirname(__FILE__) . '/scorer.php';
+//require_once dirname(__FILE__) . '/arguments.php';
 /**#@-*/
 
 /**
@@ -19,7 +18,8 @@ require_once(dirname(__FILE__) . '/scorer.php');
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class HtmlReporter extends SimpleReporter {
+class HtmlReporter extends SimpleReporter
+{
     private $character_set;
 
     /**
@@ -191,7 +191,8 @@ class HtmlReporter extends SimpleReporter {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class TextReporter extends SimpleReporter {
+class TextReporter extends SimpleReporter 
+{
 
     /**
      *    Does nothing yet. The first output will
@@ -309,7 +310,8 @@ class TextReporter extends SimpleReporter {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class SelectiveReporter extends SimpleReporterDecorator {
+class SelectiveReporter extends SimpleReporterDecorator 
+{
     private $just_this_case = false;
     private $just_this_test = false;
     private $on;
@@ -433,7 +435,8 @@ class SelectiveReporter extends SimpleReporterDecorator {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class NoSkipsReporter extends SimpleReporterDecorator {
+class NoSkipsReporter extends SimpleReporterDecorator 
+{
 
     /**
      *    Does nothing.
@@ -442,4 +445,3 @@ class NoSkipsReporter extends SimpleReporterDecorator {
      */
     function paintSkip($message) { }
 }
-?>

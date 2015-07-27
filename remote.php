@@ -3,15 +3,14 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id$
  */
 
 /**#@+
  *  include other SimpleTest class files
  */
-require_once(dirname(__FILE__) . '/browser.php');
-require_once(dirname(__FILE__) . '/xml.php');
-require_once(dirname(__FILE__) . '/test_case.php');
+require_once dirname(__FILE__) . '/browser.php';
+require_once dirname(__FILE__) . '/xml.php';
+require_once dirname(__FILE__) . '/test_case.php';
 /**#@-*/
 
 /**
@@ -19,7 +18,8 @@ require_once(dirname(__FILE__) . '/test_case.php');
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class RemoteTestCase {
+class RemoteTestCase 
+{
     private $url;
     private $dry_url;
     private $size;
@@ -112,4 +112,3 @@ class RemoteTestCase {
         return $this->size;
     }
 }
-?>

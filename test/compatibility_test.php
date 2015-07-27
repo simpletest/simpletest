@@ -1,25 +1,20 @@
 <?php
-// $Id$
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../compatibility.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../compatibility.php';
 
 class ComparisonClass { }
 class ComparisonSubclass extends ComparisonClass { }
 interface ComparisonInterface { }
 class ComparisonClassWithInterface implements ComparisonInterface { }
 
-class TestOfCompatibility extends UnitTestCase {
+class TestOfCompatibility extends UnitTestCase
+{
     
     function testIsA() {
-        $this->assertTrue(SimpleTestCompatibility::isA(
-                new ComparisonClass(),
-                'ComparisonClass'));
-        $this->assertFalse(SimpleTestCompatibility::isA(
-                new ComparisonClass(),
-                'ComparisonSubclass'));
-        $this->assertTrue(SimpleTestCompatibility::isA(
-                new ComparisonSubclass(),
-                'ComparisonClass'));
+        $this->assertTrue(is_a(new ComparisonClass(), 'ComparisonClass'));
+        $this->assertFalse(is_a(new ComparisonClass(), 'ComparisonSubclass'));
+        $this->assertTrue(is_a(new ComparisonSubclass(), 'ComparisonClass'));
     }
     
     function testIdentityOfNumericStrings() {
@@ -63,25 +58,14 @@ class TestOfCompatibility extends UnitTestCase {
         $this->assertFalse(SimpleTestCompatibility::isReference(
                 $object,
                 $object_copy));
-        if (version_compare(phpversion(), '5', '>=')) {
-            $this->assertTrue(SimpleTestCompatibility::isReference(
-                    $object,
-                    $object_assignment));
-        } else {
-            $this->assertFalse(SimpleTestCompatibility::isReference(
-                    $object,
-                    $object_assignment));
-        }
+        $this->assertTrue(SimpleTestCompatibility::isReference(
+                $object,
+                $object_assignment));
     }
     
     function testInteraceComparison() {
         $object = new ComparisonClassWithInterface();
-        $this->assertFalse(SimpleTestCompatibility::isA(
-                new ComparisonClass(),
-                'ComparisonInterface'));
-        $this->assertTrue(SimpleTestCompatibility::isA(
-                new ComparisonClassWithInterface(),
-                'ComparisonInterface'));
+        $this->assertFalse(is_a(new ComparisonClass(),'ComparisonInterface'));
+        $this->assertTrue(is_a(new ComparisonClassWithInterface(),'ComparisonInterface'));
     }
 }
-?>

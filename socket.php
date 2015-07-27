@@ -3,13 +3,12 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage MockObjects
- *  @version    $Id$
  */
 
 /**#@+
  * include SimpleTest files
  */
-require_once(dirname(__FILE__) . '/compatibility.php');
+require_once dirname(__FILE__) . '/compatibility.php';
 /**#@-*/
 
 /**
@@ -18,7 +17,8 @@ require_once(dirname(__FILE__) . '/compatibility.php');
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleStickyError {
+class SimpleStickyError 
+{
     private $error = 'Constructor not chained';
 
     /**

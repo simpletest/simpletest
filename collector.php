@@ -6,7 +6,6 @@
  * @author Travis Swicegood <development@domain51.com>
  * @package SimpleTest
  * @subpackage UnitTester
- * @version $Id$
  */
 
 /**
@@ -16,7 +15,8 @@
  * @package SimpleTest
  * @subpackage UnitTester
  */
-class SimpleCollector {
+class SimpleCollector
+{
 
     /**
      * Strips off any kind of slash at the end so as to normalise the path.
@@ -92,7 +92,8 @@ class SimpleCollector {
  * @subpackage UnitTester
  * @see SimpleCollector
  */
-class SimplePatternCollector extends SimpleCollector {
+class SimplePatternCollector extends SimpleCollector
+{
     private $pattern;
 
     /**
@@ -119,4 +120,3 @@ class SimplePatternCollector extends SimpleCollector {
         }
     }
 }
-?>

@@ -3,14 +3,13 @@
  *  Base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id$
  */
 
 /**#@+
  *  include other SimpleTest class files
  */
-require_once(dirname(__FILE__) . '/page.php');
-require_once(dirname(__FILE__) . '/user_agent.php');
+require_once dirname(__FILE__) . '/page.php';
+require_once dirname(__FILE__) . '/user_agent.php';
 /**#@-*/
 
 /**
@@ -21,7 +20,8 @@ require_once(dirname(__FILE__) . '/user_agent.php');
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleFrameset {
+class SimpleFrameset
+{
     private $frameset;
     private $frames;
     private $focus;
@@ -589,4 +589,3 @@ class SimpleFrameset {
         return null;
     }
 }
-?>

@@ -3,18 +3,17 @@
  *  Base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id$
  */
 
 /**#@+
  * Includes SimpleTest files and defined the root constant
  * for dependent libraries.
  */
-require_once(dirname(__FILE__) . '/errors.php');
-require_once(dirname(__FILE__) . '/compatibility.php');
-require_once(dirname(__FILE__) . '/scorer.php');
-require_once(dirname(__FILE__) . '/expectation.php');
-require_once(dirname(__FILE__) . '/dumper.php');
+require_once dirname(__FILE__) . '/errors.php';
+require_once dirname(__FILE__) . '/compatibility.php';
+require_once dirname(__FILE__) . '/scorer.php';
+require_once dirname(__FILE__) . '/expectation.php';
+require_once dirname(__FILE__) . '/dumper.php';
 if (! defined('SIMPLE_TEST')) {
     define('SIMPLE_TEST', dirname(__FILE__) . '/');
 }
@@ -27,7 +26,8 @@ if (! defined('SIMPLE_TEST')) {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class SimpleInvoker {
+class SimpleInvoker 
+{
     private $test_case;
 
     /**
@@ -86,7 +86,8 @@ class SimpleInvoker {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class SimpleInvokerDecorator {
+class SimpleInvokerDecorator 
+{
     private $invoker;
 
     /**
@@ -136,4 +137,3 @@ class SimpleInvokerDecorator {
         $this->invoker->after($method);
     }
 }
-?>

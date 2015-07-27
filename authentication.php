@@ -3,19 +3,19 @@
  *  Base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id$
  */
 /**
  *  include http class
  */
-require_once(dirname(__FILE__) . '/http.php');
+require_once dirname(__FILE__) . '/http.php';
 
 /**
  *    Represents a single security realm's identity.
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleRealm {
+class SimpleRealm
+{
     private $type;
     private $root;
     private $username;
@@ -128,7 +128,8 @@ class SimpleRealm {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleAuthenticator {
+class SimpleAuthenticator
+{
     private $realms;
 
     /**
@@ -206,7 +207,7 @@ class SimpleAuthenticator {
      *    @param SimpleUrl $url              Base of realm.
      *    @access public
      */
-    function addHeaders(&$request, $url) {
+    function addHeaders($request, $url) {
         if ($url->getUsername() && $url->getPassword()) {
             $username = $url->getUsername();
             $password = $url->getPassword();
@@ -234,4 +235,3 @@ class SimpleAuthenticator {
         }
     }
 }
-?>

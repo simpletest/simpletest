@@ -3,7 +3,6 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id$
  */
 
 /**
@@ -78,11 +77,11 @@ class SimpleReflection {
      */
     protected function classOrInterfaceExistsWithAutoload($interface, $autoload) {
         if (function_exists('interface_exists')) {
-            if (interface_exists($this->interface, $autoload)) {
+            if (interface_exists($interface, $autoload)) {
                 return true;
             }
         }
-        return class_exists($this->interface, $autoload);
+        return class_exists($interface, $autoload);
     }
 
     /**
@@ -286,10 +285,8 @@ class SimpleReflection {
         if ($name == '__call') {
             return 'function __call($method, $arguments)';
         }
-        if (version_compare(phpversion(), '5.1.0', '>=')) {
-            if (in_array($name, array('__get', '__isset', $name == '__unset'))) {
+        if (in_array($name, array('__get', '__isset', $name == '__unset'))) {
                 return "function {$name}(\$key)";
-            }
         }
         if ($name == '__toString') {
             return "function $name()";
@@ -383,4 +380,3 @@ class SimpleReflection {
         return false;
     }
 }
-?>

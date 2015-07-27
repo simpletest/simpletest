@@ -3,7 +3,6 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id$
  */
 /**
  * does type matter
@@ -17,7 +16,8 @@ if (! defined('TYPE_MATTERS')) {
  *    @package  SimpleTest
  *    @subpackage   UnitTester
  */
-class SimpleDumper {
+class SimpleDumper
+{
 
     /**
      *    Renders a variable in a shorter form than print_r().
@@ -404,4 +404,3 @@ class SimpleDumper {
         return $formatted;
     }
 }
-?>

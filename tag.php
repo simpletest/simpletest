@@ -3,14 +3,13 @@
  *  Base include file for SimpleTest.
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id$
  */
 
 /**#@+
  * include SimpleTest files
  */
-require_once(dirname(__FILE__) . '/page.php');
-require_once(dirname(__FILE__) . '/encoding.php');
+require_once dirname(__FILE__) . '/page.php';
+require_once dirname(__FILE__) . '/encoding.php';
 /**#@-*/
 
 /**
@@ -19,7 +18,8 @@ require_once(dirname(__FILE__) . '/encoding.php');
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleTagBuilder {
+class SimpleTagBuilder 
+{
 
     /**
      *    Factory for the tag objects. Creates the

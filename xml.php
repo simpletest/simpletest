@@ -3,7 +3,6 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id$
  */
 
 /**#@+
@@ -18,7 +17,8 @@ require_once dirname(__FILE__) . '/scorer.php';
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class XmlReporter extends SimpleReporter {
+class XmlReporter extends SimpleReporter
+{
     private $indent;
     private $namespace;
 
@@ -289,7 +289,8 @@ class XmlReporter extends SimpleReporter {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class NestingXmlTag {
+class NestingXmlTag
+{
     private $name;
     private $attributes;
 
@@ -339,7 +340,8 @@ class NestingXmlTag {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class NestingMethodTag extends NestingXmlTag {
+class NestingMethodTag extends NestingXmlTag
+{
 
     /**
      *    Sets the basic test information except
@@ -379,7 +381,8 @@ class NestingMethodTag extends NestingXmlTag {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class NestingCaseTag extends NestingXmlTag {
+class NestingCaseTag extends NestingXmlTag
+{
 
     /**
      *    Sets the basic test information except
@@ -419,7 +422,8 @@ class NestingCaseTag extends NestingXmlTag {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class NestingGroupTag extends NestingXmlTag {
+class NestingGroupTag extends NestingXmlTag
+{
 
     /**
      *    Sets the basic test information except
@@ -471,7 +475,8 @@ class NestingGroupTag extends NestingXmlTag {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class SimpleTestXmlParser {
+class SimpleTestXmlParser
+{
     private $listener;
     private $expat;
     private $tag_stack;

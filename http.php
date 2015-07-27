@@ -3,15 +3,14 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id$
  */
 
 /**#@+
  *  include other SimpleTest class files
  */
-require_once(dirname(__FILE__) . '/socket.php');
-require_once(dirname(__FILE__) . '/cookies.php');
-require_once(dirname(__FILE__) . '/url.php');
+require_once dirname(__FILE__) . '/socket.php';
+require_once dirname(__FILE__) . '/cookies.php';
+require_once dirname(__FILE__) . '/url.php';
 /**#@-*/
 
 /**
@@ -20,7 +19,8 @@ require_once(dirname(__FILE__) . '/url.php');
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleRoute {
+class SimpleRoute
+{
     private $url;
 
     /**

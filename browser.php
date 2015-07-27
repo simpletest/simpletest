@@ -3,21 +3,20 @@
  *  Base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id$
  */
 
 /**#@+
  *  include other SimpleTest class files
  */
-require_once(dirname(__FILE__) . '/simpletest.php');
-require_once(dirname(__FILE__) . '/http.php');
-require_once(dirname(__FILE__) . '/encoding.php');
-require_once(dirname(__FILE__) . '/page.php');
-require_once(dirname(__FILE__) . '/php_parser.php');
-require_once(dirname(__FILE__) . '/tidy_parser.php');
-require_once(dirname(__FILE__) . '/selector.php');
-require_once(dirname(__FILE__) . '/frames.php');
-require_once(dirname(__FILE__) . '/user_agent.php');
+require_once dirname(__FILE__) . '/simpletest.php';
+require_once dirname(__FILE__) . '/http.php';
+require_once dirname(__FILE__) . '/encoding.php';
+require_once dirname(__FILE__) . '/page.php';
+require_once dirname(__FILE__) . '/php_parser.php';
+require_once dirname(__FILE__) . '/tidy_parser.php';
+require_once dirname(__FILE__) . '/selector.php';
+require_once dirname(__FILE__) . '/frames.php';
+require_once dirname(__FILE__) . '/user_agent.php';
 if (! SimpleTest::getParsers()) {
     SimpleTest::setParsers(array(new SimpleTidyPageBuilder(), new SimplePHPPageBuilder()));
     //SimpleTest::setParsers(array(new SimplePHPPageBuilder()));
@@ -33,7 +32,8 @@ if (! defined('DEFAULT_MAX_NESTED_FRAMES')) {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleBrowserHistory {
+class SimpleBrowserHistory
+{
     private $sequence = array();
     private $position = -1;
 
@@ -154,7 +154,8 @@ class SimpleBrowserHistory {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleBrowser {
+class SimpleBrowser
+{
     private $user_agent;
     private $page;
     private $history;
@@ -1141,4 +1142,3 @@ class SimpleBrowser {
         return $this->isSubmit($label) || ($this->getLink($label) !== false) || $this->isImage($label);
     }
 }
-?>

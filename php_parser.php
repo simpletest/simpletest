@@ -3,7 +3,6 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id$
  */
 
 /**#@+
@@ -25,7 +24,8 @@ foreach (array('LEXER_ENTER', 'LEXER_MATCHED',
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class ParallelRegex {
+class ParallelRegex 
+{
     private $patterns;
     private $labels;
     private $regex;
@@ -540,7 +540,8 @@ class SimpleHtmlLexer extends SimpleLexer {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleHtmlSaxParser {
+class SimpleHtmlSaxParser 
+{
     private $lexer;
     private $listener;
     private $tag;

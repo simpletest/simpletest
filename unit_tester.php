@@ -3,14 +3,13 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id$
  */
 
 /**#@+
  *  include other SimpleTest class files
  */
-require_once(dirname(__FILE__) . '/test_case.php');
-require_once(dirname(__FILE__) . '/dumper.php');
+require_once dirname(__FILE__) . '/test_case.php';
+require_once dirname(__FILE__) . '/dumper.php';
 /**#@-*/
 
 /**
@@ -20,7 +19,8 @@ require_once(dirname(__FILE__) . '/dumper.php');
  *    @package  SimpleTest
  *    @subpackage   UnitTester
  */
-class UnitTestCase extends SimpleTestCase {
+class UnitTestCase extends SimpleTestCase
+{
 
     /**
      *    Creates an empty test case. Should be subclassed
@@ -403,11 +403,9 @@ class UnitTestCase extends SimpleTestCase {
         if ($expected == false) {
             return new TrueExpectation();
         }
-        if (SimpleTestCompatibility::isA($expected, 'SimpleExpectation')) {
+        if (is_a($expected, 'SimpleExpectation')) {
             return $expected;
         }
-        return new EqualExpectation(
-                is_string($expected) ? str_replace('%', '%%', $expected) : $expected);
+        return new EqualExpectation(is_string($expected) ? str_replace('%', '%%', $expected) : $expected);
     }
 }
-?>

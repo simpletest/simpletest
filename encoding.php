@@ -3,13 +3,12 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id$
  */
 
 /**#@+
  *  include other SimpleTest class files
  */
-require_once(dirname(__FILE__) . '/socket.php');
+require_once dirname(__FILE__) . '/socket.php';
 /**#@-*/
 
 /**
@@ -17,7 +16,8 @@ require_once(dirname(__FILE__) . '/socket.php');
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleEncodedPair {
+class SimpleEncodedPair
+{
     private $key;
     private $value;
 
@@ -86,7 +86,8 @@ class SimpleEncodedPair {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleAttachment {
+class SimpleAttachment
+{
     private $key;
     private $content;
     private $filename;
@@ -188,7 +189,8 @@ class SimpleAttachment {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleEncoding {
+class SimpleEncoding
+{
     private $request;
 
     /**
@@ -326,7 +328,8 @@ class SimpleEncoding {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleGetEncoding extends SimpleEncoding {
+class SimpleGetEncoding extends SimpleEncoding
+{
 
     /**
      *    Starts empty.
@@ -381,7 +384,8 @@ class SimpleGetEncoding extends SimpleEncoding {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleHeadEncoding extends SimpleGetEncoding {
+class SimpleHeadEncoding extends SimpleGetEncoding
+{
 
     /**
      *    Starts empty.
@@ -409,7 +413,8 @@ class SimpleHeadEncoding extends SimpleGetEncoding {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleDeleteEncoding extends SimpleGetEncoding {
+class SimpleDeleteEncoding extends SimpleGetEncoding
+{
 
     /**
      *    Starts empty.
@@ -438,7 +443,8 @@ class SimpleDeleteEncoding extends SimpleGetEncoding {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleEntityEncoding extends SimpleEncoding {
+class SimpleEntityEncoding extends SimpleEncoding
+{
     private $content_type;
     private $body;
 
@@ -499,7 +505,8 @@ class SimpleEntityEncoding extends SimpleEncoding {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimplePostEncoding extends SimpleEntityEncoding {
+class SimplePostEncoding extends SimpleEntityEncoding
+{
 
     /**
      *    Starts empty.
@@ -567,7 +574,8 @@ class SimplePostEncoding extends SimpleEntityEncoding {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimplePutEncoding extends SimpleEntityEncoding {
+class SimplePutEncoding extends SimpleEntityEncoding
+{
 
     /**
      *    Starts empty.
@@ -596,7 +604,8 @@ class SimplePutEncoding extends SimpleEntityEncoding {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleMultipartEncoding extends SimplePostEncoding {
+class SimpleMultipartEncoding extends SimplePostEncoding
+{
     private $boundary;
 
     /**
@@ -646,4 +655,3 @@ class SimpleMultipartEncoding extends SimplePostEncoding {
         return $stream;
     }
 }
-?>

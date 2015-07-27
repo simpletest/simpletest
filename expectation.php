@@ -91,8 +91,7 @@ class SimpleExpectation {
      *    @access public
      */
     static function isExpectation($expectation) {
-        return is_object($expectation) &&
-                SimpleTestCompatibility::isA($expectation, 'SimpleExpectation');
+        return is_object($expectation) && is_a($expectation, 'SimpleExpectation');
     }
 }
 
@@ -445,7 +444,7 @@ class OutsideMarginExpectation extends WithinMarginExpectation {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class ReferenceExpectation extends EqualExpectation {
+class ReferenceExpectation extends IdenticalExpectation {
     /**
      *    Tests the expectation. True if it exactly
      *    references the held value.
@@ -728,7 +727,7 @@ class IsAExpectation extends SimpleExpectation {
      */
     function test($compare) {
         if (is_object($compare)) {
-            return SimpleTestCompatibility::isA($compare, $this->type);
+            return is_a($compare, $this->type);
         } else {
             $function = 'is_'.$this->canonicalType($this->type);
             if (is_callable($function)) {

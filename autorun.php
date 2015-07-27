@@ -3,7 +3,6 @@
  *  Autorunner which runs all tests cases found in a file
  *  that includes this module.
  *  @package    SimpleTest
- *  @version    $Id$
  */
 
 /**#@+
@@ -64,7 +63,8 @@ function run_local_tests() {
  *    @return boolean        True if tests have run.
  */
 function tests_have_run() {
-    if ($context = SimpleTest::getContext()) {
+    $context = SimpleTest::getContext();
+    if ($context) {
         return (boolean)$context->getTest();
     }
     return false;
@@ -98,4 +98,3 @@ function capture_new_classes() {
                             $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES ?
                             $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES : array()));
 }
-?>

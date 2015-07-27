@@ -3,16 +3,15 @@
  *  Base include file for SimpleTest.
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id$
  */
 
 /**#@+
  *  include other SimpleTest class files
  */
-require_once(dirname(__FILE__) . '/test_case.php');
-require_once(dirname(__FILE__) . '/browser.php');
-require_once(dirname(__FILE__) . '/page.php');
-require_once(dirname(__FILE__) . '/expectation.php');
+require_once dirname(__FILE__) . '/test_case.php';
+require_once dirname(__FILE__) . '/browser.php';
+require_once dirname(__FILE__) . '/page.php';
+require_once dirname(__FILE__) . '/expectation.php';
 /**#@-*/
 
 /**
@@ -20,7 +19,8 @@ require_once(dirname(__FILE__) . '/expectation.php');
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class FieldExpectation extends SimpleExpectation {
+class FieldExpectation extends SimpleExpectation
+{
     private $value;
 
     /**
@@ -131,7 +131,8 @@ class FieldExpectation extends SimpleExpectation {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class HttpHeaderExpectation extends SimpleExpectation {
+class HttpHeaderExpectation extends SimpleExpectation
+{
     private $expected_header;
     private $expected_value;
 
@@ -261,7 +262,8 @@ class HttpHeaderExpectation extends SimpleExpectation {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class NoHttpHeaderExpectation extends HttpHeaderExpectation {
+class NoHttpHeaderExpectation extends HttpHeaderExpectation
+{
     private $expected_header;
     private $expected_value;
 
@@ -307,7 +309,8 @@ class NoHttpHeaderExpectation extends HttpHeaderExpectation {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class TextExpectation extends SimpleExpectation {
+class TextExpectation extends SimpleExpectation
+{
     private $substring;
 
     /**
@@ -381,7 +384,8 @@ class TextExpectation extends SimpleExpectation {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class NoTextExpectation extends TextExpectation {
+class NoTextExpectation extends TextExpectation
+{
 
     /**
      *    Sets the reject pattern
@@ -430,7 +434,8 @@ class NoTextExpectation extends TextExpectation {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class WebTestCase extends SimpleTestCase {
+class WebTestCase extends SimpleTestCase
+{
     private $browser;
     private $ignore_errors = false;
 
@@ -1529,4 +1534,3 @@ class WebTestCase extends SimpleTestCase {
         return $trace->traceMethod();
     }
 }
-?>

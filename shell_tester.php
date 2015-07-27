@@ -3,13 +3,12 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id$
  */
 
 /**#@+
  *  include other SimpleTest class files
  */
-require_once(dirname(__FILE__) . '/test_case.php');
+require_once dirname(__FILE__) . '/test_case.php';
 /**#@-*/
 
 /**
@@ -17,7 +16,8 @@ require_once(dirname(__FILE__) . '/test_case.php');
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class SimpleShell {
+class SimpleShell
+{
     private $output;
 
     /**
