@@ -91,8 +91,10 @@ class SimpleExpectation {
      *    @access public
      */
     static function isExpectation($expectation) {
-        return is_object($expectation) &&
-                SimpleTestCompatibility::isA($expectation, 'SimpleExpectation');
+        return is_object($expectation) && (
+            SimpleTestCompatibility::isA($expectation, 'SimpleExpectation') ||
+            SimpleTestCompatibility::isA($expectation, 'ReferenceExpectation')
+        );
     }
 }
 
