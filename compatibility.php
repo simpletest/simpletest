@@ -10,31 +10,6 @@
  */
 class SimpleTestCompatibility
 {
-
-    /**
-     *    Creates a copy.
-     *    @param object $object     Thing to copy.
-     *    @return object            A copy.
-     *    @access public
-     */
-    static function copy($object) {        
-        $copy = clone $object;
-        return $copy;        
-    }
-
-    /**
-     *    Identity test. Drops back to equality + types for PHP5
-     *    objects as the === operator counts as the
-     *    stronger reference constraint.
-     *    @param mixed $first    Test subject.
-     *    @param mixed $second   Comparison object.
-     *    @return boolean        True if identical.
-     *    @access public
-     */
-    static function isIdentical($first, $second) {
-        return SimpleTestCompatibility::isIdenticalType($first, $second);        
-    }
-
     /**
      *    Recursive type test.
      *    @param mixed $first    Test subject.
@@ -42,7 +17,7 @@ class SimpleTestCompatibility
      *    @return boolean        True if same type.
      *    @access private
      */
-    protected static function isIdenticalType($first, $second) {
+    static function isIdentical($first, $second) {
         if (gettype($first) != gettype($second)) {
             return false;
         }
@@ -75,7 +50,7 @@ class SimpleTestCompatibility
             return false;
         }
         foreach (array_keys($first) as $key) {
-            $is_identical = SimpleTestCompatibility::isIdenticalType(
+            $is_identical = SimpleTestCompatibility::isIdentical(
                     $first[$key],
                     $second[$key]);
             if (! $is_identical) {
@@ -95,28 +70,18 @@ class SimpleTestCompatibility
     static function isReference(&$first, &$second) {
         if (is_object($first)) {
             return ($first === $second);
-        }
+        } 
         if (is_object($first) && is_object($second)) {
-            $id = uniqid("test");
+            $id = uniqid(mt_rand());
             $first->$id = true;
             $is_ref = isset($second->$id);
             unset($first->$id);
             return $is_ref;
         }
         $temp = $first;
-        $first = uniqid("test");
+        $first = uniqid(mt_rand());
         $is_ref = ($first === $second);
         $first = $temp;
         return $is_ref;
-    }
-
-    /**
-     *    Sets a socket timeout for each chunk.
-     *    @param resource $handle    Socket handle.
-     *    @param integer $timeout    Limit in seconds.
-     *    @access public
-     */
-    static function setTimeout($handle, $timeout) {       
-        stream_set_timeout($handle, $timeout, 0);        
-    }
+    }    
 }

@@ -189,7 +189,7 @@ class SimpleSocket extends SimpleStickyError {
         }
         $this->is_open = true;
         $this->block_size = $block_size;
-        SimpleTestCompatibility::setTimeout($this->handle, $timeout);
+        stream_set_timeout($this->handle, $timeout, 0);
     }
 
     /**

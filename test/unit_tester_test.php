@@ -1,12 +1,12 @@
 <?php
-// $Id$
-require_once(dirname(__FILE__) . '/../autorun.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
 
 class ReferenceForTesting {
 }
 
-class TestOfUnitTester extends UnitTestCase {
-    
+class TestOfUnitTester extends UnitTestCase
+{    
     function testAssertTrueReturnsAssertionAsBoolean() {
         $this->assertTrue($this->assertTrue(true));
     }
@@ -58,4 +58,3 @@ class TestOfUnitTester extends UnitTestCase {
         $this->assertCopy($a, $b);
     }
 }
-?>

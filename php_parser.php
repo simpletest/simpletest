@@ -949,7 +949,7 @@ class SimplePhpPageBuilder {
                 $this->last_widget->setLabel($this->label->getText());
                 unset($this->last_widget);
             } else {
-                $this->left_over_labels[] = SimpleTestCompatibility::copy($this->label);
+                $this->left_over_labels[] = (clone $this->label);
             }
             unset($this->label);
         }

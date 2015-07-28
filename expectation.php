@@ -3,14 +3,13 @@
  *    base include file for SimpleTest
  *    @package    SimpleTest
  *    @subpackage    UnitTester
- *    @version    $Id$
  */
 
 /**#@+
  *    include other SimpleTest class files
  */
-require_once(dirname(__FILE__) . '/dumper.php');
-require_once(dirname(__FILE__) . '/compatibility.php');
+require_once dirname(__FILE__) . '/dumper.php';
+require_once dirname(__FILE__) . '/compatibility.php';
 /**#@-*/
 
 /**
@@ -20,7 +19,8 @@ require_once(dirname(__FILE__) . '/compatibility.php');
  *    @subpackage UnitTester
  *    @abstract
  */
-class SimpleExpectation {
+class SimpleExpectation
+{
     protected $dumper = false;
     private $message;
 
@@ -91,7 +91,9 @@ class SimpleExpectation {
      *    @access public
      */
     static function isExpectation($expectation) {
-        return is_object($expectation) && is_a($expectation, 'SimpleExpectation');
+        return is_object($expectation) && (
+            is_a($expectation, 'SimpleExpectation')
+        );
     }
 }
 
@@ -100,7 +102,8 @@ class SimpleExpectation {
  *    @package SimpleTest
  *    @subpackage MockObjects
  */
-class AnythingExpectation extends SimpleExpectation {
+class AnythingExpectation extends SimpleExpectation 
+{
 
     /**
      *    Tests the expectation. Always true.
@@ -130,7 +133,8 @@ class AnythingExpectation extends SimpleExpectation {
  *    @package SimpleTest
  *    @subpackage MockObjects
  */
-class FailedExpectation extends SimpleExpectation {
+class FailedExpectation extends SimpleExpectation 
+{
 
     /**
      *    Tests the expectation. Always false.
@@ -159,7 +163,8 @@ class FailedExpectation extends SimpleExpectation {
  *    @package SimpleTest
  *    @subpackage MockObjects
  */
-class TrueExpectation extends SimpleExpectation {
+class TrueExpectation extends SimpleExpectation 
+{
 
     /**
      *    Tests the expectation.
@@ -189,7 +194,8 @@ class TrueExpectation extends SimpleExpectation {
  *    @package SimpleTest
  *    @subpackage MockObjects
  */
-class FalseExpectation extends SimpleExpectation {
+class FalseExpectation extends SimpleExpectation 
+{
 
     /**
      *    Tests the expectation.
@@ -219,7 +225,8 @@ class FalseExpectation extends SimpleExpectation {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class EqualExpectation extends SimpleExpectation {
+class EqualExpectation extends SimpleExpectation 
+{
     private $value;
 
     /**
@@ -275,7 +282,8 @@ class EqualExpectation extends SimpleExpectation {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class NotEqualExpectation extends EqualExpectation {
+class NotEqualExpectation extends EqualExpectation 
+{
 
     /**
      *    Sets the value to compare against.
@@ -398,7 +406,8 @@ class WithinMarginExpectation extends SimpleExpectation {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class OutsideMarginExpectation extends WithinMarginExpectation {
+class OutsideMarginExpectation extends WithinMarginExpectation
+{
 
     /**
      *    Sets the value to compare against and the fuzziness of
@@ -444,16 +453,17 @@ class OutsideMarginExpectation extends WithinMarginExpectation {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class ReferenceExpectation extends IdenticalExpectation {
+class ReferenceExpectation extends IdenticalExpectation
+{
+   
     /**
-     *    Tests the expectation. True if it exactly
-     *    references the held value.
+     *    Tests the expectation. True if it exactly references the held value.
      *    @param mixed $compare        Comparison reference.
      *    @return boolean              True if correct.
      *    @access public
      */
     function test($compare) {
-        return SimpleTestCompatibility::isReference($this->getValue(), $compare);
+        return SimpleTestCompatibility::isReference($this->value, $compare);
     }
 
     /**
@@ -772,7 +782,8 @@ class IsAExpectation extends SimpleExpectation {
  *      @package SimpleTest
  *      @subpackage UnitTester
  */
-class NotAExpectation extends IsAExpectation {
+class NotAExpectation extends IsAExpectation 
+{
     private $type;
 
     /**
@@ -815,7 +826,8 @@ class NotAExpectation extends IsAExpectation {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class MethodExistsExpectation extends SimpleExpectation {
+class MethodExistsExpectation extends SimpleExpectation 
+{
     private $method;
 
     /**
@@ -860,7 +872,8 @@ class MethodExistsExpectation extends SimpleExpectation {
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class MemberExpectation extends IdenticalExpectation {
+class MemberExpectation extends IdenticalExpectation
+{
     private $name;
 
     /**
@@ -940,4 +953,3 @@ class MemberExpectation extends IdenticalExpectation {
         return array_pop($parts);
     }
 }
-?>
