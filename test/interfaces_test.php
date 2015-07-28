@@ -1,12 +1,8 @@
 <?php
-// $Id$
-require_once(dirname(__FILE__) . '/../autorun.php');
-if (function_exists('spl_classes')) {
-    include(dirname(__FILE__) . '/support/spl_examples.php');
-}
-if (version_compare(PHP_VERSION, '5.1', '>=')) {
-    include(dirname(__FILE__) . '/interfaces_test_php5_1.php');
-}
+
+require_once dirname(__FILE__) . '/../autorun.php';
+include(dirname(__FILE__) . '/support/spl_examples.php');
+include(dirname(__FILE__) . '/interfaces_test_php5_1.php');
 
 interface DummyInterface
 {
@@ -134,19 +130,6 @@ class TestOfImplementations extends UnitTestCase
     {
         $mock = new MockImplementsDummy();
         $mock->extraMethod();
-    }
-}
-
-interface SampleInterfaceWithConstruct
-{
-    public function __construct($something);
-}
-
-class TestOfInterfaceMocksWithConstruct extends UnitTestCase
-{
-    public function TODO_testBasicConstructOfAnInterface()
-    {   // Fails in PHP 5.3dev
-        Mock::generate('SampleInterfaceWithConstruct');
     }
 }
 
