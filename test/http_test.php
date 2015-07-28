@@ -1,21 +1,16 @@
 <?php
-// $Id$
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../encoding.php');
-require_once(dirname(__FILE__) . '/../http.php');
-require_once(dirname(__FILE__) . '/../socket.php');
-require_once(dirname(__FILE__) . '/../cookies.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../encoding.php';
+require_once dirname(__FILE__) . '/../http.php';
+require_once dirname(__FILE__) . '/../socket.php';
+require_once dirname(__FILE__) . '/../cookies.php';
+
 Mock::generate('SimpleSocket');
 Mock::generate('SimpleCookieJar');
 Mock::generate('SimpleRoute');
-Mock::generatePartial(
-        'SimpleRoute',
-        'PartialSimpleRoute',
-array('createSocket'));
-Mock::generatePartial(
-        'SimpleProxyRoute',
-        'PartialSimpleProxyRoute',
-array('createSocket'));
+Mock::generatePartial('SimpleRoute', 'PartialSimpleRoute', array('createSocket'));
+Mock::generatePartial('SimpleProxyRoute', 'PartialSimpleProxyRoute', array('createSocket'));
 
 class TestOfDirectRoute extends UnitTestCase
 {

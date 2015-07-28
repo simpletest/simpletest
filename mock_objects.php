@@ -1496,7 +1496,11 @@ class MockGenerator
         $code .= "    protected \$mock;\n";
         $code .= $this->addMethodList($methods);
         $code .= "\n";
-        $code .= "    function __construct() {\n";
+        
+        // TODO: switch from calling function mock_class to constructor calls
+        //$code .= "    function __construct() {\n";
+        
+        $code .= "    function " . $this->mock_class . "() {\n";
         $code .= "        \$this->mock = new " . $this->mock_base . "();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
