@@ -373,7 +373,7 @@ class NestingMethodTag extends NestingXmlTag
      */
     public function __construct($attributes)
     {
-        $this->NestingXmlTag($attributes);
+        parent::__construct($attributes);
     }
 
     /**
@@ -416,7 +416,7 @@ class NestingCaseTag extends NestingXmlTag
      */
     public function __construct($attributes)
     {
-        $this->NestingXmlTag($attributes);
+        parent::__construct($attributes);
     }
 
     /**
@@ -459,7 +459,7 @@ class NestingGroupTag extends NestingXmlTag
      */
     public function __construct($attributes)
     {
-        $this->NestingXmlTag($attributes);
+        parent::__construct($attributes);
     }
 
     /**
