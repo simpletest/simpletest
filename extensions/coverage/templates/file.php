@@ -36,12 +36,14 @@ h1 {
 <h1 id="title"><?php echo $title ?></h1>
 <table id="code">
   <tbody>
-<?php foreach ($lines as $lineNo => $line) { ?>
+<?php foreach ($lines as $lineNo => $line) {
+    ?>
     <tr>
        <td><span class="lineNo"><?php echo $lineNo ?></span></td>
        <td><span class="<?php echo $line['lineCoverage'] ?> code"><?php echo htmlentities($line['code']) ?></span></td>
     </tr>
-<?php } ?>
+<?php 
+} ?>
   </tbody>
 </table>
 <h2>Legend</h2>

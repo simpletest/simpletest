@@ -1,20 +1,23 @@
 <?php
 require_once(dirname(__FILE__) . '/../../../autorun.php');
 
-class SimpleCoverageWriterTest extends UnitTestCase {
-	function skip() {
+class SimpleCoverageWriterTest extends UnitTestCase
+{
+    public function skip()
+    {
         $this->skipIf(
-        		!file_exists('DB/sqlite.php'),
+                !file_exists('DB/sqlite.php'),
                 'The Coverage extension needs to have PEAR installed');
     }
-		
-	function setUp() {
-		require_once dirname(__FILE__) .'/../simple_coverage_writer.php';
-		require_once dirname(__FILE__) .'/../coverage_calculator.php';
-		
-	}
+        
+    public function setUp()
+    {
+        require_once dirname(__FILE__) .'/../simple_coverage_writer.php';
+        require_once dirname(__FILE__) .'/../coverage_calculator.php';
+    }
 
-	function testGenerateSummaryReport() {
+    public function testGenerateSummaryReport()
+    {
         $writer = new SimpleCoverageWriter();
         $coverage = array('file' => array(0, 1));
         $untouched = array('missed-file');
@@ -36,7 +39,8 @@ class SimpleCoverageWriterTest extends UnitTestCase {
         $this->assertEqual('missed-file', (string)$untouchedFile[0]);
     }
 
-    function testGenerateCoverageByFile() {
+    public function testGenerateCoverageByFile()
+    {
         $writer = new SimpleCoverageWriter();
         $cov = array(3 => 1, 4 => -2); // 2 comments, 1 code, 1 dead  (1-based indexes)
         $out = fopen("php://memory", 'w');
@@ -54,16 +58,17 @@ class SimpleCoverageWriterTest extends UnitTestCase {
         $this->assertEqual("dead code", self::getAttribute($cells[7], 'class'));
     }
 
-    static function getAttribute($element, $attribute) {
+    public static function getAttribute($element, $attribute)
+    {
         $a = $element->attributes();
         return $a[$attribute];
     }
 
-    static function dom($stream) {
+    public static function dom($stream)
+    {
         rewind($stream);
         $actual = stream_get_contents($stream);
         $html = DOMDocument::loadHTML($actual);
         return simplexml_import_dom($html);
     }
 }
-?>

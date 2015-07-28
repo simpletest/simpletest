@@ -7,9 +7,10 @@
 * @package        SimpleTest
 * @subpackage     Extensions
 */
-class CoverageCalculator {
-
-    function coverageByFileVariables($file, $coverage) {
+class CoverageCalculator
+{
+    public function coverageByFileVariables($file, $coverage)
+    {
         $hnd = fopen($file, 'r');
         if ($hnd == null) {
             throw new Exception("File $file is missing");
@@ -27,7 +28,8 @@ class CoverageCalculator {
         return $var;
     }
 
-    function lineCoverageCodeToStyleClass($coverage, $line) {
+    public function lineCoverageCodeToStyleClass($coverage, $line)
+    {
         if (!array_key_exists($line, $coverage)) {
             return "comment";
         }
@@ -45,36 +47,43 @@ class CoverageCalculator {
         return "covered";
     }
 
-    function totalLoc($total, $coverage) {
+    public function totalLoc($total, $coverage)
+    {
         return $total + sizeof($coverage);
     }
 
-    function lineCoverage($total, $line) {
+    public function lineCoverage($total, $line)
+    {
         # NOTE: counting dead code as covered, as it's almost always an executable line
         # strange artifact of xdebug or underlying system
         return $total + ($line > 0 || $line == -2 ? 1 : 0);
     }
 
-    function totalCoverage($total, $coverage) {
+    public function totalCoverage($total, $coverage)
+    {
         return $total + array_reduce($coverage, array(&$this, "lineCoverage"));
     }
 
-    static function reportFilename($filename) {
+    public static function reportFilename($filename)
+    {
         return preg_replace('|[/\\\\]|', '_', $filename) . '.html';
     }
 
-    function percentCoverageByFile($coverage, $file, &$results) {
+    public function percentCoverageByFile($coverage, $file, &$results)
+    {
         $byFileReport = self::reportFilename($file);
 
         $loc = sizeof($coverage);
-        if ($loc == 0)
-        return 0;
+        if ($loc == 0) {
+            return 0;
+        }
         $lineCoverage = array_reduce($coverage, array(&$this, "lineCoverage"));
         $percentage = 100 * ($lineCoverage / $loc);
         $results[0][$file] = array('byFileReport' => $byFileReport, 'percentage' => $percentage);
     }
 
-    function variables($coverage, $untouched) {
+    public function variables($coverage, $untouched)
+    {
         $coverageByFile = array();
         array_walk($coverage, array(&$this, "percentCoverageByFile"), array(&$coverageByFile));
 
@@ -95,4 +104,3 @@ class CoverageCalculator {
         return $var;
     }
 }
-?>

@@ -17,27 +17,31 @@ require_once dirname(__FILE__) .'/simple_coverage_writer.php';
  * @package        SimpleTest
  * @subpackage     Extensions
  */
-class CoverageReporter {
-    var $coverage;
-    var $untouched;
-    var $reportDir;
-    var $title = 'Coverage';
-    var $writer;
-    var $calculator;
+class CoverageReporter
+{
+    public $coverage;
+    public $untouched;
+    public $reportDir;
+    public $title = 'Coverage';
+    public $writer;
+    public $calculator;
 
-    function __construct() {
+    public function __construct()
+    {
         $this->writer = new SimpleCoverageWriter();
         $this->calculator = new CoverageCalculator();
     }
 
-    function generateSummaryReport($out) {
+    public function generateSummaryReport($out)
+    {
         $variables = $this->calculator->variables($this->coverage, $this->untouched);
         $variables['title'] = $this->title;
         $report = $this->writer->writeSummary($out, $variables);
         fwrite($out, $report);
     }
 
-    function generate() {
+    public function generate()
+    {
         CoverageUtils::mkdir($this->reportDir);
 
         $index = $this->reportDir .'/index.html';
@@ -55,14 +59,15 @@ class CoverageReporter {
         echo "generated report $index\n";
     }
 
-    function generateCoverageByFile($out, $file, $cov) {
+    public function generateCoverageByFile($out, $file, $cov)
+    {
         $variables = $this->calculator->coverageByFileVariables($file, $cov);
         $variables['title'] = $this->title .' - '. $file;
         $this->writer->writeByFile($out, $variables);
     }
 
-    static function reportFilename($filename) {
+    public static function reportFilename($filename)
+    {
         return preg_replace('|[/\\\\]|', '_', $filename) . '.html';
     }
 }
-?>

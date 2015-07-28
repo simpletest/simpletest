@@ -1,10 +1,12 @@
 <?php
 // $Id$
 
-class PageRequest {
+class PageRequest
+{
     private $parsed;
     
-    function PageRequest($raw) {
+    public function PageRequest($raw)
+    {
         $statements = explode('&', $raw);
         $this->parsed = array();
         foreach ($statements as $statement) {
@@ -15,7 +17,8 @@ class PageRequest {
         }
     }
     
-    private function parseStatement($statement) {
+    private function parseStatement($statement)
+    {
         list($key, $value) = explode('=', $statement);
         $key = urldecode($key);
         if (preg_match('/(.*)\[\]$/', $key, $matches)) {
@@ -31,30 +34,34 @@ class PageRequest {
         }
     }
     
-    private function addValue($key, $value) {
+    private function addValue($key, $value)
+    {
         if (! is_array($this->parsed[$key])) {
             $this->parsed[$key] = array($this->parsed[$key]);
         }
         $this->parsed[$key][] = urldecode($value);
     }
     
-    private function setValue($key, $value) {
+    private function setValue($key, $value)
+    {
         $this->parsed[$key] = urldecode($value);
     }
     
-    function getAll() {
+    public function getAll()
+    {
         return $this->parsed;
     }
     
-    function get() {
+    public function get()
+    {
         $request = new PageRequest($_SERVER['QUERY_STRING']);
         return $request->getAll();
     }
     
-    function post() {
+    public function post()
+    {
         global $HTTP_RAW_POST_DATA;
         $request = new PageRequest($HTTP_RAW_POST_DATA);
         return $request->getAll();
     }
 }
-?>

@@ -61,7 +61,8 @@
         <pre><?php print_r(PageRequest::post()); ?></pre>
         <h1>POST data</h1>
         <?php
-            function show_array_value($array) {
+            function show_array_value($array)
+            {
                 $html = "";
                 foreach ($array as $key => $value) {
                     $html .= htmlentities($key) . "=[";

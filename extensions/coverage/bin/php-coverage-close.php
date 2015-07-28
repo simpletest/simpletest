@@ -11,4 +11,3 @@ require_once(dirname(__FILE__) . '/../coverage.php');
 $cc = CodeCoverage::getInstance();
 $cc->readSettings();
 $cc->writeUntouched();
-?>

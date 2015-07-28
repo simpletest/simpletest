@@ -10,7 +10,7 @@
  * @ignore    originally defined in simple_test.php
  */
 if (!defined("SIMPLE_TEST")) {
-	define("SIMPLE_TEST", "simpletest/");
+    define("SIMPLE_TEST", "simpletest/");
 }
 require_once(SIMPLE_TEST . 'runner.php');
 require_once(SIMPLE_TEST . 'reporter.php');
@@ -72,16 +72,17 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
     /**
      *    Sample minimal test displayer. Generates only
      *    failure messages and a pass count.
-	 *	  @package SimpleTest
-	 *	  @subpackage UnitTester
+     *	  @package SimpleTest
+     *	  @subpackage UnitTester
      */
-    class WebUnitReporter extends SimpleReporter {
-    	/**
+    class WebUnitReporter extends SimpleReporter
+    {
+        /**
     	 *    @var string Base directory for PUnit script, images and style sheets.
     	 *    Needs to be a relative path from where the test scripts are run 
     	 *    (and obviously, visible in the document root).
     	 */
-    	var $path;
+        public $path;
         
         /**
          *    Does nothing yet. The first output will
@@ -89,7 +90,8 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    by a web browser.
          *    @access public
          */
-        function __construct($path='../ui/') {
+        public function __construct($path='../ui/')
+        {
             parent::__construct();
             $this->path = $path;
         }
@@ -100,18 +102,12 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    @param string $test_name      Name class of test.
          *    @access public
          */
-        function paintHeader($test_name) {
+        public function paintHeader($test_name)
+        {
             $this->sendNoCacheHeaders();
             echo sprintf(
-            	SIMPLETEST_WEBUNIT_HEAD
-            	,$test_name
-            	,$this->path.'js/'
-            	,$this->path.'js/'
-            	,$this->path.'css/'
-            	,$this->_getCss()
-            	,$test_name
-            	,$this->path.'img/'
-            	);
+                SIMPLETEST_WEBUNIT_HEAD, $test_name, $this->path.'js/', $this->path.'js/', $this->path.'css/', $this->_getCss(), $test_name, $this->path.'img/'
+                );
             flush();
         }
         
@@ -121,7 +117,8 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    scratching your head over out of date test data.
          *    @access public
          */
-        function sendNoCacheHeaders() {
+        public function sendNoCacheHeaders()
+        {
             header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
             header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
             header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -134,7 +131,8 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    @return string            CSS code as text.
          *    @access protected
          */
-        function _getCss() {
+        public function _getCss()
+        {
             return SIMPLETEST_WEBUNIT_CSS;
         }
         
@@ -144,7 +142,8 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    @param string $test_name        Name class of test.
          *    @access public
          */
-        function paintFooter($test_name) {
+        public function paintFooter($test_name)
+        {
             echo 'make_tree();</script>'.$this->outputScript("xHide('wait');");
             $colour = ($this->getFailCount() + $this->getExceptionCount() > 0 ? "red" : "green");
             $content = "<h1>$test_name</h1>\n";
@@ -158,7 +157,7 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
             $content .= "<strong>" . $this->getExceptionCount() . "</strong> exceptions.";
             $content .= "</div>\n";
 
-			echo $this->outputScript('foo = "'.$this->toJsString($content).'";'."\nset_div_content('run', foo);");
+            echo $this->outputScript('foo = "'.$this->toJsString($content).'";'."\nset_div_content('run', foo);");
             echo "\n</body>\n</html>\n";
         }
         
@@ -168,8 +167,9 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    @param string $message        Text to show.
          *    @access public
          */
-        function paintFormattedMessage($message) {
-           echo "add_log(\"".$this->toJsString("<pre>$message</pre>", true)."\");\n";
+        public function paintFormattedMessage($message)
+        {
+            echo "add_log(\"".$this->toJsString("<pre>$message</pre>", true)."\");\n";
         }
         
         /**
@@ -181,9 +181,10 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    @param integer $size       Number of test cases starting.
          *    @access public
          */
-        function paintGroupStart($test_name, $size) {
-             Parent::paintGroupStart($test_name, $size);
-             echo "add_group('$test_name');\n";
+        public function paintGroupStart($test_name, $size)
+        {
+            Parent::paintGroupStart($test_name, $size);
+            echo "add_group('$test_name');\n";
         }
  
          /**
@@ -194,7 +195,8 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
           *    @param string $test_name   Name of test that is starting.
           *    @access public
           */
-         function paintCaseStart($test_name) {
+         public function paintCaseStart($test_name)
+         {
              Parent::paintCaseStart($test_name);
              echo "add_case('$test_name');\n";
          }
@@ -205,7 +207,8 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
           *    @param string $test_name   Name of test that is starting.
           *    @access public
           */
-         function paintMethodStart($test_name) {
+         public function paintMethodStart($test_name)
+         {
              Parent::paintMethodStart($test_name);
              echo "add_method('$test_name');\n";
          }
@@ -215,7 +218,8 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
           *    @param string $test_name   Name of test that is ending.
           *    @access public
           */
-         function paintMethodEnd($test_name) {
+         public function paintMethodEnd($test_name)
+         {
              Parent::paintMethodEnd($test_name);
          }
 
@@ -227,7 +231,8 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
           *                               the context of the other tests.
           *    @access public
           */
-         function paintFail($message) {
+         public function paintFail($message)
+         {
              parent::paintFail($message);
              $msg = "<span class=\"fail\">Fail</span>: ";
              $breadcrumb = $this->getTestList();
@@ -243,7 +248,8 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    @access public
          *    @abstract
          */
-        function paintException($message) {
+        public function paintException($message)
+        {
             parent::paintException($message);
             $msg = "<span class=\"fail\">Exception</span>: ";
             $breadcrumb = $this->getTestList();
@@ -254,32 +260,27 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
         }
  
         /**
-		 * Returns the script passed in wrapped in script tags.
-		 *
-		 * @param	string	$script		the script to output
-		 * @return	string	the script wrapped with script tags
-		 */
-		function outputScript($script)
-		{
-			return "<script type=\"text/javascript\">\n".$script."\n</script>\n";
-		}
-		
+         * Returns the script passed in wrapped in script tags.
+         *
+         * @param	string	$script		the script to output
+         * @return	string	the script wrapped with script tags
+         */
+        public function outputScript($script)
+        {
+            return "<script type=\"text/javascript\">\n".$script."\n</script>\n";
+        }
+        
         
         /**
-		 *	Transform a string into a format acceptable to JavaScript
-		 *  @param string $str	the string to transform
-		 *	@return	string
-		 */
-		function toJsString($str, $preserveCr=false) {
-			$cr = ($preserveCr) ? '\\n' : '';
-			return str_replace(
-				array('"'
-					,"\n")
-				,array('\"'
-					,"$cr\"\n\t+\"")
-				,$str
-				);
-		}
+         *	Transform a string into a format acceptable to JavaScript
+         *  @param string $str	the string to transform
+         *	@return	string
+         */
+        public function toJsString($str, $preserveCr=false)
+        {
+            $cr = ($preserveCr) ? '\\n' : '';
+            return str_replace(
+                array('"', "\n"), array('\"', "$cr\"\n\t+\""), $str
+                );
+        }
     }
-    
-?>

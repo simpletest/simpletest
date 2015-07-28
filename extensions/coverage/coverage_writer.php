@@ -7,10 +7,9 @@
  * @package        SimpleTest
  * @subpackage     Extensions
  */
-interface CoverageWriter {
+interface CoverageWriter
+{
+    public function writeSummary($out, $variables);
 
-    function writeSummary($out, $variables);
-
-    function writeByFile($out, $variables);
+    public function writeByFile($out, $variables);
 }
-?>

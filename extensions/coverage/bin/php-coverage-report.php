@@ -26,4 +26,3 @@ $report->title = CoverageUtils::issetOr($args['title'], "Simpletest Coverage");
 $report->coverage = $handler->read();
 $report->untouched = $handler->readUntouchedFiles();
 $report->generate();
-?>

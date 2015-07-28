@@ -4,8 +4,7 @@ require_once dirname(__FILE__) . '/../autorun.php';
 
 class AllTests extends TestSuite
 {
-
-    function __construct()
+    public function __construct()
     {
         parent::__construct('All tests for SimpleTest ' . SimpleTest::getVersion());
         $this->addFile(dirname(__FILE__) . '/unit_tests.php');
@@ -13,5 +12,4 @@ class AllTests extends TestSuite
         $this->addFile(dirname(__FILE__) . '/live_test.php');
         $this->addFile(dirname(__FILE__) . '/acceptance_test.php');
     }
-
 }

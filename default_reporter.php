@@ -37,7 +37,8 @@ class SimpleCommandLineParser
      *    Parses raw command line arguments into object properties.
      *    @param string $arguments        Raw commend line arguments.
      */
-    function __construct($arguments) {
+    public function __construct($arguments)
+    {
         if (! is_array($arguments)) {
             return;
         }
@@ -64,7 +65,8 @@ class SimpleCommandLineParser
      *    Run only this test.
      *    @return string        Test name to run.
      */
-    function getTest() {
+    public function getTest()
+    {
         return $this->test;
     }
 
@@ -72,7 +74,8 @@ class SimpleCommandLineParser
      *    Run only this test suite.
      *    @return string        Test class name to run.
      */
-    function getTestCase() {
+    public function getTestCase()
+    {
         return $this->case;
     }
 
@@ -80,7 +83,8 @@ class SimpleCommandLineParser
      *    Output should be XML or not.
      *    @return boolean        True if XML desired.
      */
-    function isXml() {
+    public function isXml()
+    {
         return $this->xml;
     }
 
@@ -88,7 +92,8 @@ class SimpleCommandLineParser
      *    Output should suppress skip messages.
      *    @return boolean        True for no skips.
      */
-    function noSkips() {
+    public function noSkips()
+    {
         return $this->no_skips;
     }
 
@@ -96,7 +101,8 @@ class SimpleCommandLineParser
      *    Output should be a help message. Disabled during XML mode.
      *    @return boolean        True if help message desired.
      */
-    function help() {
+    public function help()
+    {
         return $this->help && ! $this->xml;
     }
 
@@ -104,7 +110,8 @@ class SimpleCommandLineParser
      *    Returns plain-text help message for command line runner.
      *    @return string         String help message
      */
-    function getHelpText() {
+    public function getHelpText()
+    {
         return <<<HELP
 SimpleTest command line default reporter (autorun)
 Usage: php <test_file> [args...]
@@ -117,7 +124,6 @@ Usage: php <test_file> [args...]
 
 HELP;
     }
-
 }
 
 /**
@@ -129,11 +135,11 @@ HELP;
  */
 class DefaultReporter extends SimpleReporterDecorator
 {
-
     /**
      *  Assembles the appropriate reporter for the environment.
      */
-    function __construct() {
+    public function __construct()
+    {
         if (SimpleReporter::inCli()) {
             $parser = new SimpleCommandLineParser($_SERVER['argv']);
             $interfaces = $parser->isXml() ? array('XmlReporter') : array('TextReporter');

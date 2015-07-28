@@ -14,4 +14,3 @@
         `$command`;
     }
     closedir($dir);
-?>

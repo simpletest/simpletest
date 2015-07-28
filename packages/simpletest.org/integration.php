@@ -20,15 +20,18 @@ $integration->updateSvnLog($working_copy, $binary);
  *	SimpleIntegration class
  *  @package    SimpleTest
  */
-class SimpleIntegration {
+class SimpleIntegration
+{
     public $target_directory;
     
-    function __construct($target_directory="") {
+    public function __construct($target_directory="")
+    {
         $this->target_directory = $target_directory;
     }
     
-    function updateTestLogs($cli_directory, $test_file) {
-        foreach(new DirectoryIterator($cli_directory) as $node) {
+    public function updateTestLogs($cli_directory, $test_file)
+    {
+        foreach (new DirectoryIterator($cli_directory) as $node) {
             if ($node->isDir() and !$node->isDot()) {
                 $bin = $node->getPathname()."/bin/php";
                 $result = shell_exec($bin." ".$test_file);
@@ -39,11 +42,10 @@ class SimpleIntegration {
         }
     }
     
-    function updateSvnLog($working_copy, $binary="svn") {
+    public function updateSvnLog($working_copy, $binary="svn")
+    {
         $start = date("Y-m-d", strtotime('-1year'));
         $command = $binary." log --xml --revision {".$start."}:HEAD ".$working_copy." > ".$this->target_directory."/svn.xml";
         return exec($command);
     }
 }
-
-?>

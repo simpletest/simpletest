@@ -154,13 +154,15 @@
                 <li>Enter the following for the contents of the file:
 <php><![CDATA[
 <?php
-class test1 extends UnitTestCase {
-  function test_pass(){
-    $x = 1;
-    $y = 2;
-    $total = $x + $y;
-    $this->assertEqual(3,$total, "This should pass");
-  }
+class test1 extends UnitTestCase
+{
+    public function test_pass()
+    {
+        $x = 1;
+        $y = 2;
+        $total = $x + $y;
+        $this->assertEqual(3, $total, "This should pass");
+    }
 }
 ?>
 ]]></php>
@@ -178,19 +180,22 @@ class test1 extends UnitTestCase {
                 <li>Enter the following for the contents of the file:
 <php><![CDATA[
 <?php
-class test2 extends UnitTestCase {          
-  function test_pass(){
-    $x = 1;
-    $y = 2;
-    $total = $x + $y;
-    $this->assertEqual(3,$total, "This should pass");
-  }
-  function test_fail(){
-    $x = 1;
-    $y = 2;
-    $total = $x + $y;
-    $this->assertEqual(4,$total,"This should fail");
-  }
+class test2 extends UnitTestCase
+{
+    public function test_pass()
+    {
+        $x = 1;
+        $y = 2;
+        $total = $x + $y;
+        $this->assertEqual(3, $total, "This should pass");
+    }
+    public function test_fail()
+    {
+        $x = 1;
+        $y = 2;
+        $total = $x + $y;
+        $this->assertEqual(4, $total, "This should fail");
+    }
 }
 ?>
 ]]></php>
@@ -208,12 +213,14 @@ class test2 extends UnitTestCase {
                 <li>Enter the following for the contents of the file:
 <php><![CDATA[
 <?php
-class myGroupTest extends GroupTest {
-  function myGroupTest() {
-    parent::GroupTest('');
-    $this->addFile(dirname(__FILE__).'/test1.php');
-    $this->addFile(dirname(__FILE__).'/test2.php');
-  }
+class myGroupTest extends GroupTest
+{
+    public function myGroupTest()
+    {
+        parent::GroupTest('');
+        $this->addFile(dirname(__FILE__).'/test1.php');
+        $this->addFile(dirname(__FILE__).'/test2.php');
+    }
 }
 ?>
 ]]></php>

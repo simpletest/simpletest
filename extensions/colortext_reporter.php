@@ -24,16 +24,18 @@ require_once(dirname(__FILE__) . '/../reporter.php');
  * @package SimpleTest
  * @subpackage Extensions
  */
-class ColorTextReporter extends TextReporter { 
-    var $_failColor = 41;
-    var $_passColor = 42;
+class ColorTextReporter extends TextReporter
+{
+    public $_failColor = 41;
+    public $_passColor = 42;
     
     /**
      * Handle initialization
      *
      * @param {@link TextReporter}
      */
-    function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
     
@@ -45,7 +47,8 @@ class ColorTextReporter extends TextReporter {
      * @see TextReporter
      * @access public
      */
-    function paintFooter($test_name) {
+    public function paintFooter($test_name)
+    {
         ob_start();
         parent::paintFooter($test_name);
         $output = trim(ob_get_clean());
@@ -69,7 +72,8 @@ class ColorTextReporter extends TextReporter {
      * @param int
      * @access protected
      */
-    function _setColor($color) {
+    public function _setColor($color)
+    {
         printf("%s[%sm\n", chr(27), $color);
     }
     
@@ -79,8 +83,8 @@ class ColorTextReporter extends TextReporter {
      *
      * @access protected
      */
-    function _resetColor() {
+    public function _resetColor()
+    {
         $this->_setColor(0);
     }
 }
-

@@ -17,7 +17,8 @@ class SimpleTestCompatibility
      *    @return boolean        True if same type.
      *    @access private
      */
-    static function isIdentical($first, $second) {
+    public static function isIdentical($first, $second)
+    {
         if (gettype($first) != gettype($second)) {
             return false;
         }
@@ -45,7 +46,8 @@ class SimpleTestCompatibility
      *    @return boolean        True if identical.
      *    @access private
      */
-    protected static function isArrayOfIdenticalTypes($first, $second) {
+    protected static function isArrayOfIdenticalTypes($first, $second)
+    {
         if (array_keys($first) != array_keys($second)) {
             return false;
         }
@@ -67,10 +69,11 @@ class SimpleTestCompatibility
      *    @return boolean        True if same.
      *    @access public
      */
-    static function isReference(&$first, &$second) {
+    public static function isReference(&$first, &$second)
+    {
         if (is_object($first)) {
             return ($first === $second);
-        } 
+        }
         if (is_object($first) && is_object($second)) {
             $id = uniqid(mt_rand());
             $first->$id = true;
@@ -83,5 +86,5 @@ class SimpleTestCompatibility
         $is_ref = ($first === $second);
         $first = $temp;
         return $is_ref;
-    }    
+    }
 }

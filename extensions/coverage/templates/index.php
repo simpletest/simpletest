@@ -57,22 +57,26 @@ table {
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($coverageByFile as $file => $coverage) { ?>
+		<?php foreach ($coverageByFile as $file => $coverage) {
+    ?>
 		<tr>
 			<td><a class="byFileReportLink" href="<?php echo $coverage['byFileReport']  ?>"><?php echo $file ?></a></td>
 			<td class="percentage"><span class="percentCoverage"><?php echo number_format($coverage['percentage'], 0) ?>%</span></td>
 		</tr>
-		<?php } ?>
+		<?php 
+} ?>
 	</tbody>
 </table>
 <table>
 	<caption>Files Not Covered (<a href="#untouched">?</a>)</caption>
 	<tbody>
-		<?php foreach ($untouched as $key => $file) { ?>
+		<?php foreach ($untouched as $key => $file) {
+    ?>
 		<tr>
 			<td><span class="untouchedFile"><?php echo $file ?></span></td>
 		</tr>
-		<?php } ?>
+		<?php 
+} ?>
 	</tbody>
 </table>
 
