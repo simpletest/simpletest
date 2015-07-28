@@ -1,10 +1,11 @@
 <?php
-// $Id$
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../url.php');
-require_once(dirname(__FILE__) . '/../form.php');
-require_once(dirname(__FILE__) . '/../page.php');
-require_once(dirname(__FILE__) . '/../encoding.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../url.php';
+require_once dirname(__FILE__) . '/../form.php';
+require_once dirname(__FILE__) . '/../page.php';
+require_once dirname(__FILE__) . '/../encoding.php';
+
 Mock::generate('SimplePage');
 
 class TestOfForm extends UnitTestCase
@@ -349,7 +350,7 @@ class TestOfForm extends UnitTestCase
         $this->assertIdentical($form->getValue(new SimpleByName('a')), 'me');
     }
 
-    public function testRemoveGetParamsFromAction()
+    public function TODO_testRemoveGetParamsFromAction()
     {
         Mock::generatePartial('SimplePage', 'MockPartialSimplePage', array('getUrl'));
         $page = new MockPartialSimplePage();
