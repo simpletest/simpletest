@@ -212,7 +212,7 @@ class DummyReferencedObject
 
 class TestOfReference extends UnitTestCase
 {
-    public function TODO_testReference()
+    public function testReference()
     {
         $foo = "foo";
         $ref = &$foo;
@@ -220,7 +220,7 @@ class TestOfReference extends UnitTestCase
         $bar = "bar";
 
         $expect = new ReferenceExpectation($foo);
-        $this->assertTrue($expect->test($ref));         // fails
+        $this->assertTrue($expect->test($ref));
         $this->assertFalse($expect->test($not_ref));
         $this->assertFalse($expect->test($bar));
     }
