@@ -477,15 +477,29 @@ class OutsideMarginExpectation extends WithinMarginExpectation
  *    @package SimpleTest
  *    @subpackage UnitTester
  */
-class ReferenceExpectation extends IdenticalExpectation
+class ReferenceExpectation
 {
+    private $value;
+
+    /**
+     *    Sets the reference value to compare against.
+     *    @param mixed $value       Test reference to match.
+     *    @param string $message    Customised message on failure.
+     *    @access public
+     */
+    public function __construct(&$value, $message = '%s')
+    {
+        $this->message = $message;
+        $this->value = &$value;
+    }
+
     /**
      *    Tests the expectation. True if it exactly references the held value.
      *    @param mixed $compare        Comparison reference.
      *    @return boolean              True if correct.
      *    @access public
      */
-    public function test($compare)
+    public function test(&$compare)
     {
         return SimpleTestCompatibility::isReference($this->value, $compare);
     }
@@ -500,11 +514,38 @@ class ReferenceExpectation extends IdenticalExpectation
     public function testMessage($compare)
     {
         if ($this->test($compare)) {
-            return "Reference expectation [" . $this->dumper->describeValue($this->getValue()) . "]";
+            return "Reference expectation [" . $this->dumper->describeValue($this->value) . "]";
         } else {
             return "Reference expectation fails " .
-                    $this->dumper->describeDifference($this->getValue(), $compare);
+                    $this->dumper->describeDifference($this->value, $compare);
         }
+    }
+
+    /**
+     *    Overlays the generated message onto the stored user
+     *    message. An additional message can be interjected.
+     *    @param mixed $compare        Comparison value.
+     *    @param SimpleDumper $dumper  For formatting the results.
+     *    @return string               Description of success
+     *                                 or failure.
+     *    @access public
+     */
+    public function overlayMessage($compare, $dumper) {
+        $this->dumper = $dumper;
+        return sprintf($this->message, $this->testMessage($compare));
+    }
+
+    /**
+     *    Accessor for the dumper.
+     *    @return SimpleDumper    Current value dumper.
+     *    @access protected
+     */
+    protected function getDumper() {
+        if (! $this->dumper) {
+            $dumper = new SimpleDumper();
+            return $dumper;
+        }
+        return $this->dumper;
     }
 }
 
