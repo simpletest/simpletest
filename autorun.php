@@ -44,7 +44,7 @@ function simpletest_autorun() {
 function run_local_tests() {
     try {
         if (tests_have_run()) {
-            return;
+            return true;
         }
         $candidates = capture_new_classes();
         $loader = new SimpleFileLoader();
@@ -70,6 +70,8 @@ function run_local_tests() {
             $writer = new PHP_CodeCoverage_Report_HTML;
             $writer->process($coverage, '/tmp/coverage');
         }
+
+        return true;
     } catch (Exception $stack_frame_fix) {
         print $stack_frame_fix->getMessage();
         return false;
