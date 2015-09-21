@@ -1448,11 +1448,6 @@ class MockGenerator
         $code .= "    function __construct() {\n";
         $code .= "        parent::__construct();\n";
         $code .= "    }\n";
-        if (in_array('__construct', $this->reflection->getMethods())) {
-            $code .= "    function __construct() {\n";
-            $code .= "        parent::__construct();\n";
-            $code .= "    }\n";
-        }
         $code .= $this->createHandlerCode($methods);
         $code .= "}\n";
         return $code;
