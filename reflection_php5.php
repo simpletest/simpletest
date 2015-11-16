@@ -368,8 +368,13 @@ class SimpleReflection
             if ($parameter->isPassedByReference()) {
                 $signature .= '&';
             }
+            // Variadic methods only supported in PHP 5.6+, so guard the call
+            $isVariadic = version_compare(phpversion(), '5.6.0', '>=') && $parameter->isVariadic();
+            if ($isVariadic) {
+                $signature .= '...';
+            }
             $signature .= '$' . $this->suppressSpurious($parameter->getName());
-            if ($this->isOptional($parameter)) {
+            if (!$isVariadic && $this->isOptional($parameter)) {
                 $signature .= ' = null';
             }
             $signatures[] = $signature;
