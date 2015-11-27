@@ -219,8 +219,11 @@ class TestOfCallSchedule extends UnitTestCase
 
 class Dummy
 {
+    public $init = false;
+
     public function __construct()
     {
+        $this->init = true;
     }
 
     public function aMethod()
@@ -241,6 +244,30 @@ class Dummy
 Mock::generate('Dummy');
 Mock::generate('Dummy', 'AnotherMockDummy');
 Mock::generate('Dummy', 'MockDummyWithExtraMethods', array('extraMethod'));
+
+class TestOfConstructorCreation extends UnitTestCase
+{
+    public function testCloning()
+    {
+        $mock = new MockDummy();
+        $this->assertTrue(method_exists($mock, "__constructor"));
+        $this->assertFalse($mock->init);
+        $this->assertNull($mock->__constructor());
+        $this->assertTrue($mock->init);
+    }
+
+    public function testCloningWithExtraMethod()
+    {
+        $mock = new MockDummyWithExtraMethods();
+        $this->assertTrue(method_exists($mock, "__constructor"));
+    }
+
+    public function testCloningWithChosenClassName()
+    {
+        $mock = new AnotherMockDummy();
+        $this->assertTrue(method_exists($mock, "__constructor"));
+    }
+}
 
 class TestOfMockGeneration extends UnitTestCase
 {
