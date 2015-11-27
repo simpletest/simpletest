@@ -6,10 +6,11 @@ class CoverageDataHandlerTest extends UnitTestCase
     public function skip()
     {
         $this->skipIf(
-                !file_exists('DB/sqlite.php'),
-                'The Coverage extension needs to have PEAR installed');
+            !extension_loaded('sqlite3'),
+            'The Coverage extension requires the PHP extension "php_sqlite3".'
+        );
     }
-    
+
     public function setUp()
     {
         require_once dirname(__FILE__) .'/../coverage_data_handler.php';

@@ -6,8 +6,9 @@ class SimpleCoverageWriterTest extends UnitTestCase
     public function skip()
     {
         $this->skipIf(
-                !file_exists('DB/sqlite.php'),
-                'The Coverage extension needs to have PEAR installed');
+            !extension_loaded('sqlite3'),
+            'The Coverage extension requires the PHP extension "php_sqlite3".'
+        );
     }
         
     public function setUp()
@@ -26,16 +27,17 @@ class SimpleCoverageWriterTest extends UnitTestCase
         $variables['title'] = 'coverage';
         $out = fopen("php://memory", 'w');
         $writer->writeSummary($out, $variables);
-        $dom = self::dom($out);
-        $totalPercentCoverage = $dom->elements->xpath("//span[@class='totalPercentCoverage']");
+        $dom = self::getDom($out);
+        
+        $totalPercentCoverage = $dom->xpath("//span[@class='totalPercentCoverage']");
         $this->assertEqual('50%', (string)$totalPercentCoverage[0]);
 
-        $fileLinks = $dom->elements->xpath("//a[@class='byFileReportLink']");
+        $fileLinks = $dom->xpath("//a[@class='byFileReportLink']");
         $fileLinkAttr = $fileLinks[0]->attributes();
         $this->assertEqual('file.html', $fileLinkAttr['href']);
         $this->assertEqual('file', (string)($fileLinks[0]));
 
-        $untouchedFile = $dom->elements->xpath("//span[@class='untouchedFile']");
+        $untouchedFile = $dom->xpath("//span[@class='untouchedFile']");
         $this->assertEqual('missed-file', (string)$untouchedFile[0]);
     }
 
@@ -49,9 +51,9 @@ class SimpleCoverageWriterTest extends UnitTestCase
         $variables = $calc->coverageByFileVariables($file, $cov);
         $variables['title'] = 'coverage';
         $writer->writeByFile($out, $variables);
-        $dom = self::dom($out);
+        $dom = self::getDom($out);
 
-        $cells = $dom->elements->xpath("//table[@id='code']/tbody/tr/td/span");
+        $cells = $dom->xpath("//table[@id='code']/tbody/tr/td/span");
         $this->assertEqual("comment code", self::getAttribute($cells[1], 'class'));
         $this->assertEqual("comment code", self::getAttribute($cells[3], 'class'));
         $this->assertEqual("covered code", self::getAttribute($cells[5], 'class'));
@@ -64,11 +66,11 @@ class SimpleCoverageWriterTest extends UnitTestCase
         return $a[$attribute];
     }
 
-    public static function dom($stream)
+    public static function getDom($stream)
     {
         rewind($stream);
-        $actual = stream_get_contents($stream);
-        $html = DOMDocument::loadHTML($actual);
-        return simplexml_import_dom($html);
+        $doc = new DOMDocument();
+        $doc->loadHTML(stream_get_contents($stream));
+        return new SimpleXMLElement($doc->saveHTML());
     }
 }

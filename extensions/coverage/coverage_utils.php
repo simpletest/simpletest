@@ -19,18 +19,10 @@ class CoverageUtils
             }
         }
     }
-
-    public static function requireSqlite()
+    
+    public static function isPackageClassAvailable($file, $class)
     {
-        if (!self::isPackageClassAvailable('DB/sqlite.php', 'SQLiteDatabase')) {
-            echo "sqlite library is required to be installed and available in include_path";
-            exit(1);
-        }
-    }
-
-    public static function isPackageClassAvailable($includeFile, $class)
-    {
-        @include_once($includeFile);
+        @include_once($file);
         return class_exists($class);
     }
 
@@ -67,12 +59,12 @@ class CoverageUtils
         $args['extraArguments'] = array();
         array_shift($argv); // scriptname
         foreach ($argv as $arg) {
-            if (ereg('^--([^=]+)=(.*)', $arg, $reg)) {
+            if (preg_match('#^--([^=]+)=(.*)#', $arg, $reg)) {
                 $args[$reg[1]] = $reg[2];
                 if ($mutliValueMode) {
                     self::addItemAsArray($args, $reg[1], $reg[2]);
                 }
-            } elseif (ereg('^[-]{1,2}([^[:blank:]]+)', $arg, $reg)) {
+            } elseif (preg_match('#^[-]{1,2}([^[:blank:]]+)#', $arg, $reg)) {
                 $nonnull = '';
                 $args[$reg[1]] = $nonnull;
                 if ($mutliValueMode) {

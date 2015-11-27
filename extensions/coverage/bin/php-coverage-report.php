@@ -9,13 +9,11 @@
 #  --reportDir=some/directory    the default is ./coverage-report
 #  --title='My Coverage Report'  title the main page of your report
 
-/**#@+
- * include coverage files
- */
-require_once(dirname(__FILE__) . '/../coverage_utils.php');
-require_once(dirname(__FILE__) . '/../coverage.php');
-require_once(dirname(__FILE__) . '/../coverage_reporter.php');
-/**#@-*/
+// include coverage files
+require_once dirname(__FILE__) . '/../coverage_utils.php';
+require_once dirname(__FILE__) . '/../coverage.php';
+require_once dirname(__FILE__) . '/../coverage_reporter.php';
+
 $cc = CodeCoverage::getInstance();
 $cc->readSettings();
 $handler = new CoverageDataHandler($cc->log);

@@ -6,6 +6,7 @@
  * @package        SimpleTest
  * @subpackage     Extensions
  */
+
 # optional arguments:
 #  --include=<some filepath regexp>      these files should be included coverage report
 #  --exclude=<come filepath regexp>      these files should not be included in coverage report
@@ -13,13 +14,13 @@
 #
 # Example: 
 # php-coverage-open.php --include='.*\.php$' --include='.*\.inc$' --exclude='.*/tests/.*' 
-/**#@+
- * include coverage files
- */
-require_once(dirname(__FILE__) . '/../coverage_utils.php');
-CoverageUtils::requireSqlite();
-require_once(dirname(__FILE__) . '/../coverage.php');
-/**#@-*/
+
+
+//include coverage files
+
+require_once dirname(__FILE__) . '/../coverage_utils.php';
+require_once dirname(__FILE__) . '/../coverage.php';
+
 $cc = new CodeCoverage();
 $cc->log = 'coverage.sqlite';
 $args = CoverageUtils::parseArguments($_SERVER['argv'], true);

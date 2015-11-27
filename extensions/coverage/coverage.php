@@ -3,14 +3,12 @@
 * @package        SimpleTest
 * @subpackage     Extensions
 */
-/**
-* load coverage data handle
-*/
+
 require_once dirname(__FILE__) . '/coverage_data_handler.php';
 
 /**
- * Orchestrates code coverage both in this thread and in subthread under apache
- * Assumes this is running on same machine as apache.
+ * SimpleTest Extension - CodeCoverage
+ * 
  * @package        SimpleTest
  * @subpackage     Extensions
  */
@@ -116,7 +114,7 @@ class CodeCoverage
         if (file_exists($this->settingsFile)) {
             $this->setSettings(file_get_contents($this->settingsFile));
         } else {
-            error_log("could not find file ". $this->settingsFile);
+            error_log("Could not find settings file ". $this->settingsFile);
         }
     }
 
@@ -128,9 +126,10 @@ class CodeCoverage
     public function getSettings()
     {
         $data = array(
-        'log' => realpath($this->log),
-        'includes' => $this->includes,
-        'excludes' => $this->excludes);
+            'log'      => realpath($this->log),
+            'includes' => $this->includes,
+            'excludes' => $this->excludes
+        );
         return serialize($data);
     }
 
@@ -202,7 +201,7 @@ class CodeCoverage
 
     public static function getInstance()
     {
-        if (self::$instance == null) {
+        if (self::$instance === null) {
             self::$instance = new CodeCoverage();
             self::$instance->readSettings();
         }

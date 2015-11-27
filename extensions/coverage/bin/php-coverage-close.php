@@ -4,10 +4,9 @@
  * @package        SimpleTest
  * @subpackage     Extensions
  */
-/**
- * include coverage files
- */
-require_once(dirname(__FILE__) . '/../coverage.php');
+
+require_once dirname(__FILE__) . '/../coverage.php';
+
 $cc = CodeCoverage::getInstance();
 $cc->readSettings();
 $cc->writeUntouched();

@@ -1,15 +1,16 @@
 <?php
-require_once(dirname(__FILE__) . '/../../../autorun.php');
+require_once dirname(__FILE__) . '/../../../autorun.php';
 
 class CoverageCalculatorTest extends UnitTestCase
 {
     public function skip()
     {
         $this->skipIf(
-                !file_exists('DB/sqlite.php'),
-                'The Coverage extension needs to have PEAR installed');
+            !extension_loaded('sqlite3'),
+            'The Coverage extension requires the PHP extension "php_sqlite3".'
+        );
     }
-    
+
     public function setUp()
     {
         require_once dirname(__FILE__) .'/../coverage_calculator.php';
@@ -63,11 +64,11 @@ class CoverageCalculatorTest extends UnitTestCase
         return $a[$attribute];
     }
 
-    public static function dom($stream)
+    public static function getDom($stream)
     {
         rewind($stream);
-        $actual = stream_get_contents($stream);
-        $html = DOMDocument::loadHTML($actual);
-        return simplexml_import_dom($html);
+        $doc = new DOMDocument();
+        $doc->loadHTML(stream_get_contents($stream));
+        return new SimpleXMLElement($doc->saveHTML());
     }
 }
