@@ -1,8 +1,7 @@
 <?php
-// $Id$
 
-require_once(dirname(__FILE__) . '/../../../autorun.php');
-require_once(dirname(__FILE__) . '/../../dom_tester.php');
+require_once dirname(__FILE__) . '/../../../autorun.php';
+require_once dirname(__FILE__) . '/../../dom_tester.php';
 
 class TestOfLiveCssSelectors extends DomTestCase
 {
@@ -10,7 +9,7 @@ class TestOfLiveCssSelectors extends DomTestCase
     {
         $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
     }
-    
+
     public function testGet()
     {
         $url = 'file://'.dirname(__FILE__).'/support/dom_tester.html';
@@ -31,7 +30,7 @@ class TestOfCssSelectors extends UnitTestCase
         $this->dom->validateOnParse = true;
         $this->dom->loadHTML($html);
     }
-    
+
     public function testBasicSelector()
     {
         $expectation = new CssSelectorExpectation($this->dom, 'h1');
@@ -61,7 +60,7 @@ class TestOfCssSelectors extends UnitTestCase
         $expectation = new CssSelectorExpectation($this->dom, '#nonexistant');
         $this->assertTrue($expectation->test(array()));
     }
-    
+
     public function testAttributeSelectors()
     {
         $expectation = new CssSelectorExpectation($this->dom, 'ul#list li a[href]');
@@ -100,7 +99,7 @@ class TestOfCssSelectors extends UnitTestCase
         $expectation = new CssSelectorExpectation($this->dom, 'p[onclick*="a . and a #"]');
         $this->assertTrue($expectation->test(array('works great')));
     }
-    
+
     public function testCombinators()
     {
         $expectation = new CssSelectorExpectation($this->dom, 'body  h1');
@@ -111,10 +110,10 @@ class TestOfCssSelectors extends UnitTestCase
 
         $expectation = new CssSelectorExpectation($this->dom, 'div#combinators>ul>li');
         $this->assertTrue($expectation->test(array('test 1', 'test 2')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, 'div#combinators li  +   li');
         $this->assertTrue($expectation->test(array('test 2', 'test 4')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, 'div#combinators li+li');
         $this->assertTrue($expectation->test(array('test 2', 'test 4')));
 
@@ -136,54 +135,54 @@ class TestOfCssSelectors extends UnitTestCase
         $expectation = new CssSelectorExpectation($this->dom, 'p[onclick*="a . and a #"], div#combinators > ul li + li');
         $this->assertTrue($expectation->test(array('works great', 'test 2', 'test 4')));
     }
-    
+
     public function testChildSelectors()
     {
         $expectation = new CssSelectorExpectation($this->dom, '.myfoo:contains("bis")');
         $this->assertTrue($expectation->test(array('myfoo bis')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, '.myfoo:eq(1)');
         $this->assertTrue($expectation->test(array('myfoo bis')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, '.myfoo:last');
         $this->assertTrue($expectation->test(array('myfoo bis')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, '.myfoo:first');
         $this->assertTrue($expectation->test(array('myfoo')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, 'h2:first');
         $this->assertTrue($expectation->test(array('Title 1')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, 'h2:first');
         $this->assertTrue($expectation->test(array('Title 1')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, 'p.myfoo:first');
         $this->assertTrue($expectation->test(array('myfoo')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, 'p:lt(2)');
         $this->assertTrue($expectation->test(array('header', 'multi-classes')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, 'p:gt(2)');
         $this->assertTrue($expectation->test(array('myfoo bis', 'works great', 'First paragraph', 'Second paragraph', 'Third paragraph')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, 'p:odd');
         $this->assertTrue($expectation->test(array('multi-classes', 'myfoo bis', 'First paragraph', 'Third paragraph')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, 'p:even');
         $this->assertTrue($expectation->test(array('header', 'myfoo', 'works great', 'Second paragraph')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, '#simplelist li:first-child');
         $this->assertTrue($expectation->test(array('First', 'First')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, '#simplelist li:nth-child(1)');
         $this->assertTrue($expectation->test(array('First', 'First')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, '#simplelist li:nth-child(2)');
         $this->assertTrue($expectation->test(array('Second with a link', 'Second')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, '#simplelist li:nth-child(3)');
         $this->assertTrue($expectation->test(array('Third with another link')));
-        
+
         $expectation = new CssSelectorExpectation($this->dom, '#simplelist li:last-child');
         $this->assertTrue($expectation->test(array('Second with a link', 'Third with another link')));
     }

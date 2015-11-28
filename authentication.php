@@ -27,7 +27,6 @@ class SimpleRealm
      *                             realm. Only Basic authentication
      *                             is currently supported.
      *    @param SimpleUrl $url    Somewhere in realm.
-     *    @access public
      */
     public function __construct($type, $url)
     {
@@ -40,7 +39,6 @@ class SimpleRealm
     /**
      *    Adds another location to the realm.
      *    @param SimpleUrl $url    Somewhere in realm.
-     *    @access public
      */
     public function stretch($url)
     {
@@ -52,7 +50,6 @@ class SimpleRealm
      *    @param string $first        Path to compare.
      *    @param string $second       Path to compare.
      *    @return string              Common directories.
-     *    @access private
      */
     protected function getCommonPath($first, $second)
     {
@@ -63,6 +60,7 @@ class SimpleRealm
                 return implode('/', array_slice($first, 0, $i)) . '/';
             }
         }
+
         return implode('/', $first) . '/';
     }
 
@@ -70,7 +68,6 @@ class SimpleRealm
      *    Sets the identity to try within this realm.
      *    @param string $username    Username in authentication dialog.
      *    @param string $username    Password in authentication dialog.
-     *    @access public
      */
     public function setIdentity($username, $password)
     {
@@ -81,7 +78,6 @@ class SimpleRealm
     /**
      *    Accessor for current identity.
      *    @return string        Last succesful username.
-     *    @access public
      */
     public function getUsername()
     {
@@ -91,7 +87,6 @@ class SimpleRealm
     /**
      *    Accessor for current identity.
      *    @return string        Last succesful password.
-     *    @access public
      */
     public function getPassword()
     {
@@ -103,7 +98,6 @@ class SimpleRealm
      *    tree of the realm.
      *    @param SimpleUrl $url    URL to test.
      *    @return boolean          True if subpath.
-     *    @access public
      */
     public function isWithin($url)
     {
@@ -113,6 +107,7 @@ class SimpleRealm
         if ($this->isIn($this->root, $url->getBasePath() . $url->getPage() . '/')) {
             return true;
         }
+
         return false;
     }
 
@@ -123,7 +118,6 @@ class SimpleRealm
      *    @param string $whole       Big bit.
      *    @return boolean            True if the small bit is
      *                               in the big bit.
-     *    @access private
      */
     protected function isIn($part, $whole)
     {
@@ -142,7 +136,6 @@ class SimpleAuthenticator
 
     /**
      *    Clears the realms.
-     *    @access public
      */
     public function __construct()
     {
@@ -151,7 +144,6 @@ class SimpleAuthenticator
 
     /**
      *    Starts with no realms set up.
-     *    @access public
      */
     public function restartSession()
     {
@@ -172,7 +164,6 @@ class SimpleAuthenticator
      *                             realm. Only Basic authentication
      *                             is currently supported.
      *    @param string $realm     Name of realm.
-     *    @access public
      */
     public function addRealm($url, $type, $realm)
     {
@@ -186,7 +177,6 @@ class SimpleAuthenticator
      *    @param string $realm       Name of realm.
      *    @param string $username    Username for realm.
      *    @param string $password    Password for realm.
-     *    @access public
      */
     public function setIdentityForRealm($host, $realm, $username, $password)
     {
@@ -199,7 +189,6 @@ class SimpleAuthenticator
      *    Finds the name of the realm by comparing URLs.
      *    @param SimpleUrl $url        URL to test.
      *    @return SimpleRealm          Name of realm.
-     *    @access private
      */
     protected function findRealmFromUrl($url)
     {
@@ -211,6 +200,7 @@ class SimpleAuthenticator
                 return $realm;
             }
         }
+
         return false;
     }
 
@@ -218,7 +208,6 @@ class SimpleAuthenticator
      *    Presents the appropriate headers for this location.
      *    @param SimpleHttpRequest $request  Request to modify.
      *    @param SimpleUrl $url              Base of realm.
-     *    @access public
      */
     public function addHeaders($request, $url)
     {
@@ -240,7 +229,6 @@ class SimpleAuthenticator
      *    @param SimpleHttpRequest $request  Request to modify.
      *    @param string $username            Username for realm.
      *    @param string $password            Password for realm.
-     *    @access public
      */
     public static function addBasicHeaders(&$request, $username, $password)
     {

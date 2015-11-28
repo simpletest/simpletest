@@ -5,14 +5,10 @@
  *  @subpackage MockObjects
  */
 
-/**#@+
- * include SimpleTest files
- */
 require_once dirname(__FILE__) . '/expectation.php';
 require_once dirname(__FILE__) . '/simpletest.php';
 require_once dirname(__FILE__) . '/dumper.php';
 require_once dirname(__FILE__) . '/reflection_php5.php';
-/**#@-*/
 
 /**
  * Default character simpletest will substitute for any value
@@ -62,6 +58,7 @@ class ParametersExpectation extends SimpleExpectation
                 return false;
             }
         }
+
         return true;
     }
 
@@ -75,6 +72,7 @@ class ParametersExpectation extends SimpleExpectation
     protected function testParameter($parameter, $expected)
     {
         $comparison = $this->coerceToExpectation($expected);
+
         return $comparison->test($parameter);
     }
 
@@ -87,9 +85,9 @@ class ParametersExpectation extends SimpleExpectation
     public function testMessage($parameters)
     {
         if ($this->test($parameters)) {
-            return "Expectation of " . count($this->expected) .
-                    " arguments of [" . $this->renderArguments($this->expected) .
-                    "] is correct";
+            return 'Expectation of ' . count($this->expected) .
+                    ' arguments of [' . $this->renderArguments($this->expected) .
+                    '] is correct';
         } else {
             return $this->describeDifference($this->expected, $parameters);
         }
@@ -105,20 +103,21 @@ class ParametersExpectation extends SimpleExpectation
     protected function describeDifference($expected, $parameters)
     {
         if (count($expected) != count($parameters)) {
-            return "Expected " . count($expected) .
-                    " arguments of [" . $this->renderArguments($expected) .
-                    "] but got " . count($parameters) .
-                    " arguments of [" . $this->renderArguments($parameters) . "]";
+            return 'Expected ' . count($expected) .
+                    ' arguments of [' . $this->renderArguments($expected) .
+                    '] but got ' . count($parameters) .
+                    ' arguments of [' . $this->renderArguments($parameters) . ']';
         }
         $messages = array();
         for ($i = 0; $i < count($expected); $i++) {
             $comparison = $this->coerceToExpectation($expected[$i]);
             if (! $comparison->test($parameters[$i])) {
-                $messages[] = "parameter " . ($i + 1) . " with [" .
-                        $comparison->overlayMessage($parameters[$i], $this->getDumper()) . "]";
+                $messages[] = 'parameter ' . ($i + 1) . ' with [' .
+                        $comparison->overlayMessage($parameters[$i], $this->getDumper()) . ']';
             }
         }
-        return "Parameter expectation differs at " . implode(" and ", $messages);
+
+        return 'Parameter expectation differs at ' . implode(' and ', $messages);
     }
 
     /**
@@ -133,6 +132,7 @@ class ParametersExpectation extends SimpleExpectation
         if (SimpleExpectation::isExpectation($expected)) {
             return $expected;
         }
+
         return new IdenticalExpectation($expected);
     }
 
@@ -151,6 +151,7 @@ class ParametersExpectation extends SimpleExpectation
                 $descriptions[] = $dumper->describeValue($arg);
             }
         }
+
         return implode(', ', $descriptions);
     }
 }
@@ -342,6 +343,7 @@ class SimpleSignatureMap
             return $slot['content'];
         }
         $null = null;
+
         return $null;
     }
 
@@ -379,11 +381,12 @@ class SimpleSignatureMap
     {
         $count = count($this->map);
         for ($i = 0; $i < $count; $i++) {
-            if ($this->map[$i]["params"]->test($parameters)) {
+            if ($this->map[$i]['params']->test($parameters)) {
                 return $this->map[$i];
             }
         }
         $null = null;
+
         return $null;
     }
 }
@@ -494,6 +497,7 @@ class SimpleCallSchedule
             }
         }
         $null = null;
+
         return $null;
     }
 
@@ -514,6 +518,7 @@ class SimpleCallSchedule
                 $args[$i] = new AnythingExpectation();
             }
         }
+
         return $args;
     }
 }
@@ -607,6 +612,7 @@ class SimpleByValue
     public function &act()
     {
         $dummy = $this->value;
+
         return $dummy;
     }
 }
@@ -668,6 +674,7 @@ class SimpleErrorThrower
     {
         trigger_error($this->error, $this->severity);
         $null = null;
+
         return $null;
     }
 }
@@ -776,6 +783,7 @@ class SimpleMock
                 $args[$i] = new AnythingExpectation();
             }
         }
+
         return $args;
     }
 
@@ -799,11 +807,12 @@ class SimpleMock
      */
     public function getCallCount($method)
     {
-        $this->dieOnNoMethod($method, "get call count");
+        $this->dieOnNoMethod($method, 'get call count');
         $method = strtolower($method);
         if (! isset($this->call_counts[$method])) {
             return 0;
         }
+
         return $this->call_counts[$method];
     }
 
@@ -817,7 +826,7 @@ class SimpleMock
      */
     public function returns($method, $value, $args = false)
     {
-        $this->dieOnNoMethod($method, "set return");
+        $this->dieOnNoMethod($method, 'set return');
         $this->actions->register($method, $args, new SimpleReturn($value));
     }
 
@@ -836,7 +845,7 @@ class SimpleMock
      */
     public function returnsAt($timing, $method, $value, $args = false)
     {
-        $this->dieOnNoMethod($method, "set return value sequence");
+        $this->dieOnNoMethod($method, 'set return value sequence');
         $this->actions->registerAt($timing, $method, $args, new SimpleReturn($value));
     }
 
@@ -850,7 +859,7 @@ class SimpleMock
      */
     public function returnsByValue($method, $value, $args = false)
     {
-        $this->dieOnNoMethod($method, "set return value");
+        $this->dieOnNoMethod($method, 'set return value');
         $this->actions->register($method, $args, new SimpleByValue($value));
     }
 
@@ -875,7 +884,7 @@ class SimpleMock
      */
     public function returnsByValueAt($timing, $method, $value, $args = false)
     {
-        $this->dieOnNoMethod($method, "set return value sequence");
+        $this->dieOnNoMethod($method, 'set return value sequence');
         $this->actions->registerAt($timing, $method, $args, new SimpleByValue($value));
     }
 
@@ -895,7 +904,7 @@ class SimpleMock
      */
     public function returnsByReference($method, &$reference, $args = false)
     {
-        $this->dieOnNoMethod($method, "set return reference");
+        $this->dieOnNoMethod($method, 'set return reference');
         $this->actions->register($method, $args, new SimpleByReference($reference));
     }
 
@@ -920,7 +929,7 @@ class SimpleMock
      */
     public function returnsByReferenceAt($timing, $method, &$reference, $args = false)
     {
-        $this->dieOnNoMethod($method, "set return reference sequence");
+        $this->dieOnNoMethod($method, 'set return reference sequence');
         $this->actions->registerAt($timing, $method, $args, new SimpleByReference($reference));
     }
 
@@ -1083,7 +1092,7 @@ class SimpleMock
      */
     public function throwOn($method, $exception = false, $args = false)
     {
-        $this->dieOnNoMethod($method, "throw on");
+        $this->dieOnNoMethod($method, 'throw on');
         $this->actions->register($method, $args,
                 new SimpleThrower($exception ? $exception : new Exception()));
     }
@@ -1108,7 +1117,7 @@ class SimpleMock
      */
     public function throwAt($timing, $method, $exception = false, $args = false)
     {
-        $this->dieOnNoMethod($method, "throw at");
+        $this->dieOnNoMethod($method, 'throw at');
         $this->actions->registerAt($timing, $method, $args,
                 new SimpleThrower($exception ? $exception : new Exception()));
     }
@@ -1127,7 +1136,7 @@ class SimpleMock
      */
     public function errorOn($method, $error = 'A mock error', $args = false, $severity = E_USER_ERROR)
     {
-        $this->dieOnNoMethod($method, "error on");
+        $this->dieOnNoMethod($method, 'error on');
         $this->actions->register($method, $args, new SimpleErrorThrower($error, $severity));
     }
 
@@ -1151,7 +1160,7 @@ class SimpleMock
      */
     public function errorAt($timing, $method, $error = 'A mock error', $args = false, $severity = E_USER_ERROR)
     {
-        $this->dieOnNoMethod($method, "error at");
+        $this->dieOnNoMethod($method, 'error at');
         $this->actions->registerAt($timing, $method, $args, new SimpleErrorThrower($error, $severity));
     }
 
@@ -1198,6 +1207,7 @@ class SimpleMock
             throw $e;
         }
         $this->restoreEStrict($was);
+
         return $result;
     }
 
@@ -1254,6 +1264,7 @@ class SimpleMock
     {
         $was = error_reporting();
         error_reporting($was & ~E_STRICT);
+
         return $was;
     }
 
@@ -1299,6 +1310,7 @@ class Mock
     public static function generate($class, $mock_class = false, $methods = false)
     {
         $generator = new MockGenerator($class, $mock_class);
+
         return $generator->generateSubclass($methods);
     }
 
@@ -1315,6 +1327,7 @@ class Mock
     public static function generatePartial($class, $mock_class, $methods)
     {
         $generator = new MockGenerator($class, $mock_class);
+
         return $generator->generatePartial($methods);
     }
 
@@ -1324,6 +1337,7 @@ class Mock
     public static function getExpectationLine()
     {
         $trace = new SimpleStackTrace(array('expect'));
+
         return $trace->traceMethod();
     }
 }
@@ -1376,6 +1390,7 @@ class MockGenerator
             return false;
         }
         $code = $this->createClassCode($methods ? $methods : array());
+
         return eval("$code return \$code;");
     }
 
@@ -1400,9 +1415,11 @@ class MockGenerator
         }
         if ($this->reflection->isInterface() || $this->reflection->hasFinal()) {
             $code = $this->createClassCode($methods ? $methods : array());
+
             return eval("$code return \$code;");
         } else {
             $code = $this->createSubclassCode($methods ? $methods : array());
+
             return eval("$code return \$code;");
         }
     }
@@ -1423,9 +1440,11 @@ class MockGenerator
         $mock_reflection = new SimpleReflection($this->mock_class);
         if ($mock_reflection->classExistsSansAutoload()) {
             trigger_error('Partial mock class [' . $this->mock_class . '] already exists');
+
             return false;
         }
         $code = $this->extendClassCode($methods);
+
         return eval("$code return \$code;");
     }
 
@@ -1444,12 +1463,13 @@ class MockGenerator
         if (count($interfaces) > 0) {
             $implements = 'implements ' . implode(', ', $interfaces);
         }
-        $code = "class " . $this->mock_class . " extends " . $this->mock_base . " $implements {\n";
+        $code = 'class ' . $this->mock_class . ' extends ' . $this->mock_base . " $implements {\n";
         $code .= "    function __construct() {\n";
         $code .= "        parent::__construct();\n";
         $code .= "    }\n";
         $code .= $this->createHandlerCode($methods);
         $code .= "}\n";
+
         return $code;
     }
 
@@ -1461,12 +1481,12 @@ class MockGenerator
      */
     protected function createSubclassCode($methods)
     {
-        $code  = "class " . $this->mock_class . " extends " . $this->class . " {\n";
+        $code  = 'class ' . $this->mock_class . ' extends ' . $this->class . " {\n";
         $code .= "    public \$mock;\n";
         $code .= $this->addMethodList(array_merge($methods, $this->reflection->getMethods()));
         $code .= "\n";
         $code .= "    function __construct() {\n";
-        $code .= "        \$this->mock = new " . $this->mock_base . "();\n";
+        $code .= '        $this->mock = new ' . $this->mock_base . "();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
         $code .= $this->chainMockReturns();
@@ -1475,6 +1495,7 @@ class MockGenerator
         $code .= $this->overrideMethods($this->reflection->getMethods());
         $code .= $this->createNewMethodCode($methods);
         $code .= "}\n";
+
         return $code;
     }
 
@@ -1487,16 +1508,16 @@ class MockGenerator
      */
     protected function extendClassCode($methods)
     {
-        $code  = "class " . $this->mock_class . " extends " . $this->class . " {\n";
+        $code  = 'class ' . $this->mock_class . ' extends ' . $this->class . " {\n";
         $code .= "    protected \$mock;\n";
         $code .= $this->addMethodList($methods);
         $code .= "\n";
-        
+
         // TODO: switch from calling function mock_class to constructor calls
         //$code .= "    function __construct() {\n";
-        
-        $code .= "    function " . $this->mock_class . "() {\n";
-        $code .= "        \$this->mock = new " . $this->mock_base . "();\n";
+
+        $code .= '    function ' . $this->mock_class . "() {\n";
+        $code .= '        $this->mock = new ' . $this->mock_base . "();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
         $code .= $this->chainMockReturns();
@@ -1504,6 +1525,7 @@ class MockGenerator
         $code .= $this->chainThrowMethods();
         $code .= $this->overrideMethods($methods);
         $code .= "}\n";
+
         return $code;
     }
 
@@ -1526,12 +1548,13 @@ class MockGenerator
             if (in_array($method, $mock_reflection->getMethods())) {
                 continue;
             }
-            $code .= "    " . $this->reflection->getSignature($method) . " {\n";
+            $code .= '    ' . $this->reflection->getSignature($method) . " {\n";
             $code .= "        \$args = func_get_args();\n";
             $code .= "        \$result = &\$this->invoke(\"$method\", \$args);\n";
             $code .= "        return \$result;\n";
             $code .= "    }\n";
         }
+
         return $code;
     }
 
@@ -1553,12 +1576,13 @@ class MockGenerator
             if (in_array($method, $mock_reflection->getMethods())) {
                 continue;
             }
-            $code .= "    " . $this->reflection->getSignature($method) . " {\n";
+            $code .= '    ' . $this->reflection->getSignature($method) . " {\n";
             $code .= "        \$args = func_get_args();\n";
             $code .= "        \$result = &\$this->mock->invoke(\"$method\", \$args);\n";
             $code .= "        return \$result;\n";
             $code .= "    }\n";
         }
+
         return $code;
     }
 
@@ -1599,6 +1623,7 @@ class MockGenerator
         $code .= "            \$null = null;\n";
         $code .= "            return \$null;\n";
         $code .= "        }\n";
+
         return $code;
     }
 
@@ -1610,45 +1635,46 @@ class MockGenerator
     protected function chainMockReturns()
     {
         $code  = "    function returns(\$method, \$value, \$args = false) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->returns(\$method, \$value, \$args);\n";
         $code .= "    }\n";
         $code .= "    function returnsAt(\$timing, \$method, \$value, \$args = false) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->returnsAt(\$timing, \$method, \$value, \$args);\n";
         $code .= "    }\n";
         $code .= "    function returnsByValue(\$method, \$value, \$args = false) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->setReturnValue(\$method, \$value, \$args);\n";
         $code .= "    }\n";
         $code .= "    function returnsByValueAt(\$timing, \$method, \$value, \$args = false) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->setReturnValueAt(\$timing, \$method, \$value, \$args);\n";
         $code .= "    }\n";
         $code .= "    function returnsByReference(\$method, &\$ref, \$args = false) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->setReturnReference(\$method, \$ref, \$args);\n";
         $code .= "    }\n";
         $code .= "    function returnsByReferenceAt(\$timing, \$method, &\$ref, \$args = false) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->setReturnReferenceAt(\$timing, \$method, \$ref, \$args);\n";
         $code .= "    }\n";
         $code .= "    function setReturnValue(\$method, \$value, \$args = false) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->setReturnValue(\$method, \$value, \$args);\n";
         $code .= "    }\n";
         $code .= "    function setReturnValueAt(\$timing, \$method, \$value, \$args = false) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->setReturnValueAt(\$timing, \$method, \$value, \$args);\n";
         $code .= "    }\n";
         $code .= "    function setReturnReference(\$method, &\$ref, \$args = false) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->setReturnReference(\$method, \$ref, \$args);\n";
         $code .= "    }\n";
         $code .= "    function setReturnReferenceAt(\$timing, \$method, &\$ref, \$args = false) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->setReturnReferenceAt(\$timing, \$method, \$ref, \$args);\n";
         $code .= "    }\n";
+
         return $code;
     }
 
@@ -1660,37 +1686,38 @@ class MockGenerator
     protected function chainMockExpectations()
     {
         $code  = "    function expect(\$method, \$args = false, \$msg = '%s') {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->expect(\$method, \$args, \$msg);\n";
         $code .= "    }\n";
         $code .= "    function expectAt(\$timing, \$method, \$args = false, \$msg = '%s') {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->expectAt(\$timing, \$method, \$args, \$msg);\n";
         $code .= "    }\n";
         $code .= "    function expectCallCount(\$method, \$count) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->expectCallCount(\$method, \$count, \$msg = '%s');\n";
         $code .= "    }\n";
         $code .= "    function expectMaximumCallCount(\$method, \$count, \$msg = '%s') {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->expectMaximumCallCount(\$method, \$count, \$msg = '%s');\n";
         $code .= "    }\n";
         $code .= "    function expectMinimumCallCount(\$method, \$count, \$msg = '%s') {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->expectMinimumCallCount(\$method, \$count, \$msg = '%s');\n";
         $code .= "    }\n";
         $code .= "    function expectNever(\$method) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->expectNever(\$method);\n";
         $code .= "    }\n";
         $code .= "    function expectOnce(\$method, \$args = false, \$msg = '%s') {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->expectOnce(\$method, \$args, \$msg);\n";
         $code .= "    }\n";
         $code .= "    function expectAtLeastOnce(\$method, \$args = false, \$msg = '%s') {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->expectAtLeastOnce(\$method, \$args, \$msg);\n";
         $code .= "    }\n";
+
         return $code;
     }
 
@@ -1701,21 +1728,22 @@ class MockGenerator
     protected function chainThrowMethods()
     {
         $code  = "    function throwOn(\$method, \$exception = false, \$args = false) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->throwOn(\$method, \$exception, \$args);\n";
         $code .= "    }\n";
         $code .= "    function throwAt(\$timing, \$method, \$exception = false, \$args = false) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->throwAt(\$timing, \$method, \$exception, \$args);\n";
         $code .= "    }\n";
         $code .= "    function errorOn(\$method, \$error = 'A mock error', \$args = false, \$severity = E_USER_ERROR) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->errorOn(\$method, \$error, \$args, \$severity);\n";
         $code .= "    }\n";
         $code .= "    function errorAt(\$timing, \$method, \$error = 'A mock error', \$args = false, \$severity = E_USER_ERROR) {\n";
-        $code .= $this->bailOutIfNotMocked("\$method");
+        $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->errorAt(\$timing, \$method, \$error, \$args, \$severity);\n";
         $code .= "    }\n";
+
         return $code;
     }
 
@@ -1728,17 +1756,18 @@ class MockGenerator
      */
     protected function overrideMethods($methods)
     {
-        $code = "";
+        $code = '';
         foreach ($methods as $method) {
             if ($this->isConstructor($method)) {
                 continue;
             }
-            $code .= "    " . $this->reflection->getSignature($method) . " {\n";
+            $code .= '    ' . $this->reflection->getSignature($method) . " {\n";
             $code .= "        \$args = func_get_args();\n";
             $code .= "        \$result = &\$this->mock->invoke(\"$method\", \$args);\n";
             $code .= "        return \$result;\n";
             $code .= "    }\n";
         }
+
         return $code;
     }
 }

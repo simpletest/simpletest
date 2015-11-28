@@ -1,5 +1,6 @@
 <?php
-require_once(dirname(__FILE__) . '/../../../autorun.php');
+
+require_once dirname(__FILE__) . '/../../../autorun.php';
 
 class CoverageReporterTest extends UnitTestCase
 {
@@ -10,7 +11,7 @@ class CoverageReporterTest extends UnitTestCase
             'The Coverage extension requires the PHP extension "php_sqlite3".'
         );
     }
-    
+
     public function setUp()
     {
         require_once dirname(__FILE__) .'/../coverage_reporter.php';
@@ -19,8 +20,8 @@ class CoverageReporterTest extends UnitTestCase
 
     public function testreportFilename()
     {
-        $this->assertEqual("parula.php.html", CoverageReporter::reportFilename("parula.php"));
-        $this->assertEqual("warbler_parula.php.html", CoverageReporter::reportFilename("warbler/parula.php"));
-        $this->assertEqual("warbler_parula.php.html", CoverageReporter::reportFilename("warbler\\parula.php"));
+        $this->assertEqual('parula.php.html', CoverageReporter::reportFilename('parula.php'));
+        $this->assertEqual('warbler_parula.php.html', CoverageReporter::reportFilename('warbler/parula.php'));
+        $this->assertEqual('warbler_parula.php.html', CoverageReporter::reportFilename('warbler\\parula.php'));
     }
 }

@@ -1,8 +1,9 @@
 <?php
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../errors.php');
-require_once(dirname(__FILE__) . '/../expectation.php');
-require_once(dirname(__FILE__) . '/../test_case.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../errors.php';
+require_once dirname(__FILE__) . '/../expectation.php';
+require_once dirname(__FILE__) . '/../test_case.php';
 Mock::generate('SimpleTestCase');
 Mock::generate('SimpleExpectation');
 SimpleTest::ignore('MockSimpleTestCase');
@@ -90,7 +91,7 @@ class TestOfErrorTrap extends UnitTestCase
 
     public function testErrorWithPercentsPassesWithNoSprintfError()
     {
-        $this->expectError("%");
+        $this->expectError('%');
         trigger_error('%');
     }
 }

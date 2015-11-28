@@ -1,7 +1,7 @@
 <?php
-// $Id$
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../collector.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../collector.php';
 SimpleTest::ignore('MockTestSuite');
 Mock::generate('TestSuite');
 
@@ -9,12 +9,12 @@ class PathEqualExpectation extends EqualExpectation
 {
     public function __construct($value, $message = '%s')
     {
-        parent::__construct(str_replace("\\", '/', $value), $message);
+        parent::__construct(str_replace('\\', '/', $value), $message);
     }
 
     public function test($compare)
     {
-        return parent::test(str_replace("\\", '/', $compare));
+        return parent::test(str_replace('\\', '/', $compare));
     }
 }
 

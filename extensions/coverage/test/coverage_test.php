@@ -1,6 +1,7 @@
 <?php
-require_once(dirname(__FILE__) . '/../../../autorun.php');
-require_once(dirname(__FILE__) . '/../../../mock_objects.php');
+
+require_once dirname(__FILE__) . '/../../../autorun.php';
+require_once dirname(__FILE__) . '/../../../mock_objects.php';
 
 class CodeCoverageTest extends UnitTestCase
 {
@@ -11,12 +12,12 @@ class CodeCoverageTest extends UnitTestCase
             'The Coverage extension requires the PHP extension "php_sqlite3".'
         );
     }
-    
+
     public function setUp()
     {
         require_once dirname(__FILE__) .'/../coverage.php';
     }
-    
+
     public function testIsFileIncluded()
     {
         $coverage = new CodeCoverage();
@@ -73,12 +74,12 @@ class CodeCoverageTest extends UnitTestCase
     public function testUntouchedFiles()
     {
         $coverage = new CodeCoverage();
-        $touched = array_flip(array("test/coverage_test.php"));
+        $touched = array_flip(array('test/coverage_test.php'));
         $actual = array();
         $coverage->includes = array('coverage_test\.php$');
         $parentDir = realpath(dirname(__FILE__));
         $coverage->getUntouchedFiles($actual, $touched, $parentDir, $parentDir);
-        $this->assertEqual(array("coverage_test.php"), $actual);
+        $this->assertEqual(array('coverage_test.php'), $actual);
     }
 
     public function testResetLog()
@@ -108,7 +109,7 @@ class CodeCoverageTest extends UnitTestCase
     public function testSettingsCanBeReadWrittenToDisk()
     {
         $settings_file = '0-coverage-settings-test.dat';
-        
+
         $coverage = new CodeCoverage();
         $coverage->log = sys_get_temp_dir();
         $coverage->settingsFile = $settings_file;
@@ -118,7 +119,7 @@ class CodeCoverageTest extends UnitTestCase
         $actual->settingsFile = $settings_file;
         $actual->readSettings();
         $this->assertEqual(sys_get_temp_dir(), $actual->log);
-        
+
         unlink($settings_file);
     }
 }

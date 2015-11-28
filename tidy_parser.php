@@ -58,6 +58,7 @@ class SimpleTidyPageBuilder
         $this->page->setForms($this->forms);
         $page = $this->page;
         $this->free();
+
         return $page;
     }
 
@@ -157,19 +158,19 @@ class SimpleTidyPageBuilder
     private function walkTree($node)
     {
         if ($node->name == 'a') {
-            $this->page->addLink($this->tags()->createTag($node->name, (array)$node->attribute)
+            $this->page->addLink($this->tags()->createTag($node->name, (array) $node->attribute)
                                         ->addContent($this->innerHtml($node)));
         } elseif ($node->name == 'base' and isset($node->attribute['href'])) {
             $this->page->setBase($node->attribute['href']);
         } elseif ($node->name == 'title') {
-            $this->page->setTitle($this->tags()->createTag($node->name, (array)$node->attribute)
+            $this->page->setTitle($this->tags()->createTag($node->name, (array) $node->attribute)
                                          ->addContent($this->innerHtml($node)));
         } elseif ($node->name == 'frameset') {
             $this->page->setFrames($this->collectFrames($node));
         } elseif ($node->name == 'form') {
             $this->forms[] = $this->walkForm($node, $this->createEmptyForm($node));
         } elseif ($node->name == 'label') {
-            $this->labels[] = $this->tags()->createTag($node->name, (array)$node->attribute)
+            $this->labels[] = $this->tags()->createTag($node->name, (array) $node->attribute)
                                            ->addContent($this->innerHtml($node));
         } else {
             $this->walkChildren($node);
@@ -196,7 +197,7 @@ class SimpleTidyPageBuilder
      */
     private function createEmptyForm($node)
     {
-        return new SimpleForm($this->tags()->createTag($node->name, (array)$node->attribute), $this->page);
+        return new SimpleForm($this->tags()->createTag($node->name, (array) $node->attribute), $this->page);
     }
 
     /**
@@ -206,12 +207,12 @@ class SimpleTidyPageBuilder
     private function walkForm($node, $form, $enclosing_label = '')
     {
         if ($node->name == 'a') {
-            $this->page->addLink($this->tags()->createTag($node->name, (array)$node->attribute)
+            $this->page->addLink($this->tags()->createTag($node->name, (array) $node->attribute)
                                               ->addContent($this->innerHtml($node)));
         } elseif (in_array($node->name, array('input', 'button', 'textarea', 'select'))) {
             $this->addWidgetToForm($node, $form, $enclosing_label);
         } elseif ($node->name == 'label') {
-            $this->labels[] = $this->tags()->createTag($node->name, (array)$node->attribute)
+            $this->labels[] = $this->tags()->createTag($node->name, (array) $node->attribute)
                                            ->addContent($this->innerHtml($node));
             if ($node->hasChildren()) {
                 foreach ($node->child as $child) {
@@ -223,6 +224,7 @@ class SimpleTidyPageBuilder
                 $this->walkForm($child, $form);
             }
         }
+
         return $form;
     }
 
@@ -292,6 +294,7 @@ class SimpleTidyPageBuilder
                 $options = array_merge($options, $this->collectSelectOptions($child));
             }
         }
+
         return $options;
     }
 
@@ -311,6 +314,7 @@ class SimpleTidyPageBuilder
         foreach ($matches[0] as $unparsed) {
             $attributes = $this->mergeAttribute($attributes, $unparsed);
         }
+
         return $attributes;
     }
 
@@ -326,6 +330,7 @@ class SimpleTidyPageBuilder
         $parts = explode('=', $raw);
         list($name, $value) = count($parts) == 1 ? array($parts[0], $parts[0]) : $parts;
         $attributes[trim($name)] = html_entity_decode($this->dequote(trim($value)), ENT_QUOTES);
+
         return $attributes;
     }
 
@@ -339,6 +344,7 @@ class SimpleTidyPageBuilder
         if (preg_match('/^(\'([^\']*)\'|"([^"]*)")$/', $quoted, $matches)) {
             return isset($matches[3]) ? $matches[3] : $matches[2];
         }
+
         return $quoted;
     }
 
@@ -351,13 +357,14 @@ class SimpleTidyPageBuilder
     {
         $frames = array();
         if ($node->name == 'frame') {
-            $frames = array($this->tags()->createTag($node->name, (array)$node->attribute));
+            $frames = array($this->tags()->createTag($node->name, (array) $node->attribute));
         } elseif ($node->hasChildren()) {
             $frames = array();
             foreach ($node->child as $child) {
                 $frames = array_merge($frames, $this->collectFrames($child));
             }
         }
+
         return $frames;
     }
 
@@ -374,6 +381,7 @@ class SimpleTidyPageBuilder
                 $raw .= $child->value;
             }
         }
+
         return $this->stripGuards($raw);
     }
 

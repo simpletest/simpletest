@@ -1,4 +1,5 @@
 <?php
+
 require_once dirname(__FILE__) . '/../../../autorun.php';
 
 class CoverageUnitTests extends TestSuite

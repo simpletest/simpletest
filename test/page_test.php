@@ -1,9 +1,9 @@
 <?php
-// $Id$
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../expectation.php');
-require_once(dirname(__FILE__) . '/../http.php');
-require_once(dirname(__FILE__) . '/../page.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../expectation.php';
+require_once dirname(__FILE__) . '/../http.php';
+require_once dirname(__FILE__) . '/../page.php';
 Mock::generate('SimpleHttpHeaders');
 Mock::generate('SimpleHttpResponse');
 

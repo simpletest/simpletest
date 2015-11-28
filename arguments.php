@@ -125,6 +125,7 @@ class SimpleArguments
         if (isset($this->all[$key])) {
             return $this->all[$key];
         }
+
         return false;
     }
 
@@ -184,6 +185,7 @@ class SimpleHelp
         for ($i = 0; $i < count($this->flag_sets); $i++) {
             $text .= $this->renderFlagSet($this->flag_sets[$i], $this->explanations[$i], $tab_stop);
         }
+
         return $this->noDuplicateNewLines($text);
     }
 
@@ -199,6 +201,7 @@ class SimpleHelp
                 $longest = max($longest, strlen($this->renderFlag($flag)));
             }
         }
+
         return $longest;
     }
 
@@ -213,6 +216,7 @@ class SimpleHelp
         foreach ($flags as $flag) {
             $text .= '  ' . $this->renderFlag($flag) . "\n";
         }
+
         return $text;
     }
 

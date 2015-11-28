@@ -5,12 +5,8 @@
  *  @subpackage UnitTester
  */
 
-/**#@+
- * Include required SimpleTest files
- */
 require_once dirname(__FILE__) . '/invoker.php';
 require_once dirname(__FILE__) . '/expectation.php';
-/**#@-*/
 
 /**
  *    Extension that traps exceptions and turns them into
@@ -104,6 +100,7 @@ class ExceptionExpectation extends SimpleExpectation
         if (get_class($compare) != get_class($this->expected)) {
             return false;
         }
+
         return $compare->getMessage() == $this->expected->getMessage();
     }
 
@@ -115,12 +112,13 @@ class ExceptionExpectation extends SimpleExpectation
     public function testMessage($compare)
     {
         if (is_string($this->expected)) {
-            return "Exception [" . $this->describeException($compare) .
-                    "] should be type [" . $this->expected . "]";
+            return 'Exception [' . $this->describeException($compare) .
+                    '] should be type [' . $this->expected . ']';
         }
-        return "Exception [" . $this->describeException($compare) .
-                "] should match [" .
-                $this->describeException($this->expected) . "]";
+
+        return 'Exception [' . $this->describeException($compare) .
+                '] should match [' .
+                $this->describeException($this->expected) . ']';
     }
 
     /**
@@ -130,7 +128,7 @@ class ExceptionExpectation extends SimpleExpectation
      */
     protected function describeException($exception)
     {
-        return get_class($exception) . ": " . $exception->getMessage();
+        return get_class($exception) . ': ' . $exception->getMessage();
     }
 }
 
@@ -161,7 +159,6 @@ class SimpleExceptionTrap
      *    exception that matches.
      *    @param SimpleExpectation $expected    Expected exception to match.
      *    @param string $message                Message to display.
-     *    @access public
      */
     public function expectException($expected = false, $message = '%s')
     {
@@ -173,7 +170,6 @@ class SimpleExceptionTrap
      *    Adds an exception to the ignore list. This is the list
      *    of exceptions that when thrown do not affect the test.
      *    @param SimpleExpectation $ignored    Exception to skip.
-     *    @access public
      */
     public function ignoreException($ignored)
     {
@@ -198,6 +194,7 @@ class SimpleExceptionTrap
                 return true;
             }
         }
+
         return false;
     }
 
@@ -216,6 +213,7 @@ class SimpleExceptionTrap
         if (! SimpleExpectation::isExpectation($exception)) {
             return new ExceptionExpectation($exception);
         }
+
         return $exception;
     }
 

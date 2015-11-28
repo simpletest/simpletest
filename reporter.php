@@ -5,12 +5,8 @@
  *  @subpackage UnitTester
  */
 
-/**#@+
- *  include other SimpleTest class files
- */
 require_once dirname(__FILE__) . '/scorer.php';
 //require_once dirname(__FILE__) . '/arguments.php';
-/**#@-*/
 
 /**
  *    Sample minimal test displayer. Generates only
@@ -26,7 +22,6 @@ class HtmlReporter extends SimpleReporter
      *    Does nothing yet. The first output will
      *    be sent on the first test start. For use
      *    by a web browser.
-     *    @access public
      */
     public function __construct($character_set = 'ISO-8859-1')
     {
@@ -38,14 +33,13 @@ class HtmlReporter extends SimpleReporter
      *    Paints the top of the web page setting the
      *    title to the name of the starting test.
      *    @param string $test_name      Name class of test.
-     *    @access public
      */
     public function paintHeader($test_name)
     {
         $this->sendNoCacheHeaders();
-        print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
+        print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
         print "<html>\n<head>\n<title>$test_name</title>\n";
-        print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" .
+        print '<meta http-equiv="Content-Type" content="text/html; charset=' .
                 $this->character_set . "\">\n";
         print "<style type=\"text/css\">\n";
         print $this->getCss() . "\n";
@@ -59,48 +53,45 @@ class HtmlReporter extends SimpleReporter
      *    Send the headers necessary to ensure the page is
      *    reloaded on every request. Otherwise you could be
      *    scratching your head over out of date test data.
-     *    @access public
      */
     public static function sendNoCacheHeaders()
     {
         if (! headers_sent()) {
-            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-            header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-            header("Cache-Control: no-store, no-cache, must-revalidate");
-            header("Cache-Control: post-check=0, pre-check=0", false);
-            header("Pragma: no-cache");
+            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+            header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+            header('Cache-Control: no-store, no-cache, must-revalidate');
+            header('Cache-Control: post-check=0, pre-check=0', false);
+            header('Pragma: no-cache');
         }
     }
 
     /**
      *    Paints the CSS. Add additional styles here.
      *    @return string            CSS code as text.
-     *    @access protected
      */
     protected function getCss()
     {
-        return ".fail { background-color: inherit; color: red; }" .
-                ".pass { background-color: inherit; color: green; }" .
-                " pre { background-color: lightgray; color: inherit; }";
+        return '.fail { background-color: inherit; color: red; }' .
+                '.pass { background-color: inherit; color: green; }' .
+                ' pre { background-color: lightgray; color: inherit; }';
     }
 
     /**
      *    Paints the end of the test with a summary of
      *    the passes and failures.
      *    @param string $test_name        Name class of test.
-     *    @access public
      */
     public function paintFooter($test_name)
     {
-        $colour = ($this->getFailCount() + $this->getExceptionCount() > 0 ? "red" : "green");
-        print "<div style=\"";
+        $colour = ($this->getFailCount() + $this->getExceptionCount() > 0 ? 'red' : 'green');
+        print '<div style="';
         print "padding: 8px; margin-top: 1em; background-color: $colour; color: white;";
-        print "\">";
-        print $this->getTestCaseProgress() . "/" . $this->getTestCaseCount();
+        print '">';
+        print $this->getTestCaseProgress() . '/' . $this->getTestCaseCount();
         print " test cases complete:\n";
-        print "<strong>" . $this->getPassCount() . "</strong> passes, ";
-        print "<strong>" . $this->getFailCount() . "</strong> fails and ";
-        print "<strong>" . $this->getExceptionCount() . "</strong> exceptions.";
+        print '<strong>' . $this->getPassCount() . '</strong> passes, ';
+        print '<strong>' . $this->getFailCount() . '</strong> fails and ';
+        print '<strong>' . $this->getExceptionCount() . '</strong> exceptions.';
         print "</div>\n";
         print "</body>\n</html>\n";
     }
@@ -115,66 +106,62 @@ class HtmlReporter extends SimpleReporter
     public function paintFail($message)
     {
         parent::paintFail($message);
-        print "<span class=\"fail\">Fail</span>: ";
+        print '<span class="fail">Fail</span>: ';
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
-        print implode(" -&gt; ", $breadcrumb);
-        print " -&gt; " . $this->htmlEntities($message) . "<br />\n";
+        print implode(' -&gt; ', $breadcrumb);
+        print ' -&gt; ' . $this->htmlEntities($message) . "<br />\n";
     }
 
     /**
      *    Paints a PHP error.
      *    @param string $message        Message is ignored.
-     *    @access public
      */
     public function paintError($message)
     {
         parent::paintError($message);
-        print "<span class=\"fail\">Exception</span>: ";
+        print '<span class="fail">Exception</span>: ';
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
-        print implode(" -&gt; ", $breadcrumb);
-        print " -&gt; <strong>" . $this->htmlEntities($message) . "</strong><br />\n";
+        print implode(' -&gt; ', $breadcrumb);
+        print ' -&gt; <strong>' . $this->htmlEntities($message) . "</strong><br />\n";
     }
 
     /**
      *    Paints a PHP exception.
      *    @param Exception $exception        Exception to display.
-     *    @access public
      */
     public function paintException($exception)
     {
         parent::paintException($exception);
-        print "<span class=\"fail\">Exception</span>: ";
+        print '<span class="fail">Exception</span>: ';
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
-        print implode(" -&gt; ", $breadcrumb);
+        print implode(' -&gt; ', $breadcrumb);
         $message = 'Unexpected exception of type [' . get_class($exception) .
                 '] with message ['. $exception->getMessage() .
                 '] in ['. $exception->getFile() .
                 ' line ' . $exception->getLine() . ']';
-        print " -&gt; <strong>" . $this->htmlEntities($message) . "</strong><br />\n";
+        print ' -&gt; <strong>' . $this->htmlEntities($message) . "</strong><br />\n";
     }
 
     /**
      *    Prints the message for skipping tests.
      *    @param string $message    Text of skip condition.
-     *    @access public
      */
     public function paintSkip($message)
     {
         parent::paintSkip($message);
-        print "<span class=\"pass\">Skipped</span>: ";
+        print '<span class="pass">Skipped</span>: ';
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
-        print implode(" -&gt; ", $breadcrumb);
-        print " -&gt; " . $this->htmlEntities($message) . "<br />\n";
+        print implode(' -&gt; ', $breadcrumb);
+        print ' -&gt; ' . $this->htmlEntities($message) . "<br />\n";
     }
 
     /**
      *    Paints formatted text such as dumped privateiables.
      *    @param string $message        Text to show.
-     *    @access public
      */
     public function paintFormattedMessage($message)
     {
@@ -185,7 +172,6 @@ class HtmlReporter extends SimpleReporter
      *    Character set adjusted entity conversion.
      *    @param string $message    Plain text or Unicode message.
      *    @return string            Browser readable message.
-     *    @access protected
      */
     protected function htmlEntities($message)
     {
@@ -216,7 +202,6 @@ class TextReporter extends SimpleReporter
     /**
      *    Paints the title only.
      *    @param string $test_name        Name class of test.
-     *    @access public
      */
     public function paintHeader($test_name)
     {
@@ -231,7 +216,6 @@ class TextReporter extends SimpleReporter
      *    Paints the end of the test with a summary of
      *    the passes and failures.
      *    @param string $test_name        Name class of test.
-     *    @access public
      */
     public function paintFooter($test_name)
     {
@@ -240,18 +224,17 @@ class TextReporter extends SimpleReporter
         } else {
             print "FAILURES!!!\n";
         }
-        print "Test cases run: " . $this->getTestCaseProgress() .
-                "/" . $this->getTestCaseCount() .
-                ", Passes: " . $this->getPassCount() .
-                ", Failures: " . $this->getFailCount() .
-                ", Exceptions: " . $this->getExceptionCount() . "\n";
+        print 'Test cases run: ' . $this->getTestCaseProgress() .
+                '/' . $this->getTestCaseCount() .
+                ', Passes: ' . $this->getPassCount() .
+                ', Failures: ' . $this->getFailCount() .
+                ', Exceptions: ' . $this->getExceptionCount() . "\n";
     }
 
     /**
      *    Paints the test failure as a stack trace.
      *    @param string $message    Failure message displayed in
      *                              the context of the other tests.
-     *    @access public
      */
     public function paintFail($message)
     {
@@ -266,13 +249,12 @@ class TextReporter extends SimpleReporter
     /**
      *    Paints a PHP error or exception.
      *    @param string $message        Message to be shown.
-     *    @access public
      *    @abstract
      */
     public function paintError($message)
     {
         parent::paintError($message);
-        print "Exception " . $this->getExceptionCount() . "!\n$message\n";
+        print 'Exception ' . $this->getExceptionCount() . "!\n$message\n";
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
         print "\tin " . implode("\n\tin ", array_reverse($breadcrumb));
@@ -282,7 +264,6 @@ class TextReporter extends SimpleReporter
     /**
      *    Paints a PHP error or exception.
      *    @param Exception $exception      Exception to describe.
-     *    @access public
      *    @abstract
      */
     public function paintException($exception)
@@ -292,7 +273,7 @@ class TextReporter extends SimpleReporter
                 '] with message ['. $exception->getMessage() .
                 '] in ['. $exception->getFile() .
                 ' line ' . $exception->getLine() . ']';
-        print "Exception " . $this->getExceptionCount() . "!\n$message\n";
+        print 'Exception ' . $this->getExceptionCount() . "!\n$message\n";
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
         print "\tin " . implode("\n\tin ", array_reverse($breadcrumb));
@@ -302,7 +283,6 @@ class TextReporter extends SimpleReporter
     /**
      *    Prints the message for skipping tests.
      *    @param string $message    Text of skip condition.
-     *    @access public
      */
     public function paintSkip($message)
     {
@@ -313,7 +293,6 @@ class TextReporter extends SimpleReporter
     /**
      *    Paints formatted text such as dumped privateiables.
      *    @param string $message        Text to show.
-     *    @access public
      */
     public function paintFormattedMessage($message)
     {
@@ -359,7 +338,6 @@ class SelectiveReporter extends SimpleReporterDecorator
      *    Compares criteria to actual the case/group name.
      *    @param string $test_case    The incoming test.
      *    @return boolean             True if matched.
-     *    @access protected
      */
     protected function matchesTestCase($test_case)
     {
@@ -372,7 +350,6 @@ class SelectiveReporter extends SimpleReporterDecorator
      *    can run.
      *    @param string $method       The incoming test method.
      *    @return boolean             True if matched.
-     *    @access protected
      */
     protected function shouldRunTest($test_case, $method)
     {
@@ -383,12 +360,12 @@ class SelectiveReporter extends SimpleReporterDecorator
                 return true;
             }
         }
+
         return false;
     }
 
     /**
      *    Switch on testing for the group or subgroup.
-     *    @access private
      */
     protected function on()
     {
@@ -397,7 +374,6 @@ class SelectiveReporter extends SimpleReporterDecorator
 
     /**
      *    Switch off testing for the group or subgroup.
-     *    @access private
      */
     protected function off()
     {
@@ -407,7 +383,6 @@ class SelectiveReporter extends SimpleReporterDecorator
     /**
      *    Is this group actually being tested?
      *    @return boolean     True if the current test group is active.
-     *    @access private
      */
     protected function isOn()
     {
@@ -419,13 +394,13 @@ class SelectiveReporter extends SimpleReporterDecorator
      *    @param string $test_case       Name of test case.
      *    @param string $method          Name of test method.
      *    @return boolean                True if test should be run.
-     *    @access public
      */
     public function shouldInvoke($test_case, $method)
     {
         if ($this->shouldRunTest($test_case, $method)) {
             return $this->reporter->shouldInvoke($test_case, $method);
         }
+
         return false;
     }
 
@@ -433,7 +408,6 @@ class SelectiveReporter extends SimpleReporterDecorator
      *    Paints the start of a group test.
      *    @param string $test_case     Name of test or other label.
      *    @param integer $size         Number of test cases starting.
-     *    @access public
      */
     public function paintGroupStart($test_case, $size)
     {
@@ -446,7 +420,6 @@ class SelectiveReporter extends SimpleReporterDecorator
     /**
      *    Paints the end of a group test.
      *    @param string $test_case     Name of test or other label.
-     *    @access public
      */
     public function paintGroupEnd($test_case)
     {
@@ -467,7 +440,6 @@ class NoSkipsReporter extends SimpleReporterDecorator
     /**
      *    Does nothing.
      *    @param string $message    Text of skip condition.
-     *    @access public
      */
     public function paintSkip($message)
     {

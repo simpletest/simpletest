@@ -19,10 +19,11 @@ class CoverageUtils
             }
         }
     }
-    
+
     public static function isPackageClassAvailable($file, $class)
     {
         @include_once($file);
+
         return class_exists($class);
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 require_once dirname(__FILE__) . '/../../../autorun.php';
 
 class CoverageCalculatorTest extends UnitTestCase
@@ -61,6 +62,7 @@ class CoverageCalculatorTest extends UnitTestCase
     public static function getAttribute($element, $attribute)
     {
         $a = $element->attributes();
+
         return $a[$attribute];
     }
 
@@ -69,6 +71,7 @@ class CoverageCalculatorTest extends UnitTestCase
         rewind($stream);
         $doc = new DOMDocument();
         $doc->loadHTML(stream_get_contents($stream));
+
         return new SimpleXMLElement($doc->saveHTML());
     }
 }

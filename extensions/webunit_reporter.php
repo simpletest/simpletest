@@ -3,17 +3,16 @@
  *	base include file for SimpleTest PUnit reporter
  *	@package	SimpleTest
  *	@subpackage	Extensions
- *	@version	$Id$
  */
 
 /**
  * @ignore    originally defined in simple_test.php
  */
-if (!defined("SIMPLE_TEST")) {
-    define("SIMPLE_TEST", "simpletest/");
+if (!defined('SIMPLE_TEST')) {
+    define('SIMPLE_TEST', 'simpletest/');
 }
-require_once(SIMPLE_TEST . 'runner.php');
-require_once(SIMPLE_TEST . 'reporter.php');
+require_once SIMPLE_TEST . 'runner.php';
+require_once SIMPLE_TEST . 'reporter.php';
 /**
  * Main sprintf template for the start of the page.
  * Sequence of parameters is:
@@ -78,29 +77,27 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
     class WebUnitReporter extends SimpleReporter
     {
         /**
-    	 *    @var string Base directory for PUnit script, images and style sheets.
-    	 *    Needs to be a relative path from where the test scripts are run 
-    	 *    (and obviously, visible in the document root).
-    	 */
+         *    @var string Base directory for PUnit script, images and style sheets.
+         *    Needs to be a relative path from where the test scripts are run 
+         *    (and obviously, visible in the document root).
+         */
         public $path;
-        
+
         /**
          *    Does nothing yet. The first output will
          *    be sent on the first test start. For use
          *    by a web browser.
-         *    @access public
          */
         public function __construct($path='../ui/')
         {
             parent::__construct();
             $this->path = $path;
         }
-        
+
         /**
          *    Paints the top of the web page setting the
          *    title to the name of the starting test.
          *    @param string $test_name      Name class of test.
-         *    @access public
          */
         public function paintHeader($test_name)
         {
@@ -110,68 +107,63 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
                 );
             flush();
         }
-        
+
         /**
          *    Send the headers necessary to ensure the page is
          *    reloaded on every request. Otherwise you could be
          *    scratching your head over out of date test data.
-         *    @access public
          */
         public function sendNoCacheHeaders()
         {
-            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-            header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-            header("Cache-Control: no-store, no-cache, must-revalidate");
-            header("Cache-Control: post-check=0, pre-check=0", false);
-            header("Pragma: no-cache");
+            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+            header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+            header('Cache-Control: no-store, no-cache, must-revalidate');
+            header('Cache-Control: post-check=0, pre-check=0', false);
+            header('Pragma: no-cache');
         }
-        
+
         /**
          *    Paints the CSS. Add additional styles here.
          *    @return string            CSS code as text.
-         *    @access protected
          */
         public function _getCss()
         {
             return SIMPLETEST_WEBUNIT_CSS;
         }
-        
+
         /**
          *    Paints the end of the test with a summary of
          *    the passes and failures.
          *    @param string $test_name        Name class of test.
-         *    @access public
          */
         public function paintFooter($test_name)
         {
             echo 'make_tree();</script>'.$this->outputScript("xHide('wait');");
-            $colour = ($this->getFailCount() + $this->getExceptionCount() > 0 ? "red" : "green");
+            $colour = ($this->getFailCount() + $this->getExceptionCount() > 0 ? 'red' : 'green');
             $content = "<h1>$test_name</h1>\n";
-            $content .= "<div style=\"";
+            $content .= '<div style="';
             $content .= "padding: 8px; margin-top: 1em; background-color: $colour; color: white;";
-            $content .= "\">";
-            $content .= $this->getTestCaseProgress() . "/" . $this->getTestCaseCount();
+            $content .= '">';
+            $content .= $this->getTestCaseProgress() . '/' . $this->getTestCaseCount();
             $content .= " test cases complete:\n";
-            $content .= "<strong>" . $this->getPassCount() . "</strong> passes, ";
-            $content .= "<strong>" . $this->getFailCount() . "</strong> fails and ";
-            $content .= "<strong>" . $this->getExceptionCount() . "</strong> exceptions.";
+            $content .= '<strong>' . $this->getPassCount() . '</strong> passes, ';
+            $content .= '<strong>' . $this->getFailCount() . '</strong> fails and ';
+            $content .= '<strong>' . $this->getExceptionCount() . '</strong> exceptions.';
             $content .= "</div>\n";
 
             echo $this->outputScript('foo = "'.$this->toJsString($content).'";'."\nset_div_content('run', foo);");
             echo "\n</body>\n</html>\n";
         }
-        
-        
+
         /**
          *    Paints formatted text such as dumped variables.
          *    @param string $message        Text to show.
-         *    @access public
          */
         public function paintFormattedMessage($message)
         {
-            echo "add_log(\"".$this->toJsString("<pre>$message</pre>", true)."\");\n";
+            echo 'add_log("'.$this->toJsString("<pre>$message</pre>", true)."\");\n";
         }
-        
+
         /**
          *    Paints the start of a group test. Will also paint
          *    the page header and footer if this is the
@@ -179,21 +171,19 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          *    start.
          *    @param string $test_name   Name of test that is starting.
          *    @param integer $size       Number of test cases starting.
-         *    @access public
          */
         public function paintGroupStart($test_name, $size)
         {
             Parent::paintGroupStart($test_name, $size);
             echo "add_group('$test_name');\n";
         }
- 
+
          /**
           *    Paints the start of a test case. Will also paint
           *    the page header and footer if this is the
           *    first test. Will stash the size if the first
           *    start.
           *    @param string $test_name   Name of test that is starting.
-          *    @access public
           */
          public function paintCaseStart($test_name)
          {
@@ -201,11 +191,9 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
              echo "add_case('$test_name');\n";
          }
 
-
          /**
           *    Paints the start of a test method.
           *    @param string $test_name   Name of test that is starting.
-          *    @access public
           */
          public function paintMethodStart($test_name)
          {
@@ -216,7 +204,6 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
          /**
           *    Paints the end of a test method.
           *    @param string $test_name   Name of test that is ending.
-          *    @access public
           */
          public function paintMethodEnd($test_name)
          {
@@ -229,36 +216,34 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
           *    top level test.
           *    @param string $message    Failure message displayed in
           *                               the context of the other tests.
-          *    @access public
           */
          public function paintFail($message)
          {
              parent::paintFail($message);
-             $msg = "<span class=\"fail\">Fail</span>: ";
+             $msg = '<span class="fail">Fail</span>: ';
              $breadcrumb = $this->getTestList();
              array_shift($breadcrumb);
-             $msg .= implode("-&gt;", $breadcrumb);
-             $msg .= "-&gt;" . htmlentities($message) . "<br />";
+             $msg .= implode('-&gt;', $breadcrumb);
+             $msg .= '-&gt;' . htmlentities($message) . '<br />';
              echo "add_fail('$msg');\n";
          }
 
         /**
          *    Paints a PHP error or exception.
          *    @param string $message        Message is ignored.
-         *    @access public
          *    @abstract
          */
         public function paintException($message)
         {
             parent::paintException($message);
-            $msg = "<span class=\"fail\">Exception</span>: ";
+            $msg = '<span class="fail">Exception</span>: ';
             $breadcrumb = $this->getTestList();
             array_shift($breadcrumb);
-            $msg .= implode("-&gt;", $breadcrumb);
-            $msg .= "-&gt;<strong>" . htmlentities($message) . "</strong><br />";
+            $msg .= implode('-&gt;', $breadcrumb);
+            $msg .= '-&gt;<strong>' . htmlentities($message) . '</strong><br />';
             echo "add_fail('$msg');\n";
         }
- 
+
         /**
          * Returns the script passed in wrapped in script tags.
          *
@@ -269,8 +254,7 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
         {
             return "<script type=\"text/javascript\">\n".$script."\n</script>\n";
         }
-        
-        
+
         /**
          *	Transform a string into a format acceptable to JavaScript
          *  @param string $str	the string to transform
@@ -279,6 +263,7 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
         public function toJsString($str, $preserveCr=false)
         {
             $cr = ($preserveCr) ? '\\n' : '';
+
             return str_replace(
                 array('"', "\n"), array('\"', "$cr\"\n\t+\""), $str
                 );

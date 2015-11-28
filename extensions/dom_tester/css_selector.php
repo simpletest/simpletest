@@ -155,7 +155,7 @@ class CssSelector
                     $token = $matches[1] ? $matches[1] : '*';
                     $combinator = $matches[2] ? $matches[2] : '';
                 }
-        
+
         // If we get here, token is JUST an element (not a class or ID selector)
         $nodes = $this->getElementsByTagName($nodes, $token, $combinator);
             }
@@ -194,7 +194,7 @@ class CssSelector
           break;
         case '+':
             $element = $node->nextSibling;
-            if (isset($element->nodeName) and $element->nodeName == "#text") {
+            if (isset($element->nodeName) and $element->nodeName == '#text') {
                 $element = $element->nextSibling;
             }
             if ($element && $tagName == $element->nodeName) {

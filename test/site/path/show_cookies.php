@@ -10,7 +10,7 @@
         <?php
             if (count($_COOKIE) > 0) {
                 foreach ($_COOKIE as $key => $value) {
-                    print $key . "=" . $value . ";";
+                    print $key . '=' . $value . ';';
                 }
             }
         ?>

@@ -5,11 +5,7 @@
  *  @subpackage UnitTester
  */
 
-/**#@+
- *  include other SimpleTest class files
- */
 require_once dirname(__FILE__) . '/scorer.php';
-/**#@-*/
 
 /**
  *    Creates the XML needed for remote communication
@@ -26,7 +22,6 @@ class XmlReporter extends SimpleReporter
      *    Sets up indentation and namespace.
      *    @param string $namespace        Namespace to add to each tag.
      *    @param string $indent           Indenting to add on each nesting.
-     *    @access public
      */
     public function __construct($namespace = false, $indent = '  ')
     {
@@ -40,7 +35,6 @@ class XmlReporter extends SimpleReporter
      *    from the current level of nesting.
      *    @param integer $offset  Extra indenting level.
      *    @return string          Leading space.
-     *    @access protected
      */
     protected function getIndent($offset = 0)
     {
@@ -54,7 +48,6 @@ class XmlReporter extends SimpleReporter
      *    entities string.
      *    @param string text        Unparsed character data.
      *    @return string            Parsed character data.
-     *    @access public
      */
     public function toParsedXml($text)
     {
@@ -68,211 +61,196 @@ class XmlReporter extends SimpleReporter
      *    Paints the start of a group test.
      *    @param string $test_name   Name of test that is starting.
      *    @param integer $size       Number of test cases starting.
-     *    @access public
      */
     public function paintGroupStart($test_name, $size)
     {
         parent::paintGroupStart($test_name, $size);
         print $this->getIndent();
-        print "<" . $this->namespace . "group size=\"$size\">\n";
+        print '<' . $this->namespace . "group size=\"$size\">\n";
         print $this->getIndent(1);
-        print "<" . $this->namespace . "name>" .
+        print '<' . $this->namespace . 'name>' .
                 $this->toParsedXml($test_name) .
-                "</" . $this->namespace . "name>\n";
+                '</' . $this->namespace . "name>\n";
     }
 
     /**
      *    Paints the end of a group test.
      *    @param string $test_name   Name of test that is ending.
-     *    @access public
      */
     public function paintGroupEnd($test_name)
     {
         print $this->getIndent();
-        print "</" . $this->namespace . "group>\n";
+        print '</' . $this->namespace . "group>\n";
         parent::paintGroupEnd($test_name);
     }
 
     /**
      *    Paints the start of a test case.
      *    @param string $test_name   Name of test that is starting.
-     *    @access public
      */
     public function paintCaseStart($test_name)
     {
         parent::paintCaseStart($test_name);
         print $this->getIndent();
-        print "<" . $this->namespace . "case>\n";
+        print '<' . $this->namespace . "case>\n";
         print $this->getIndent(1);
-        print "<" . $this->namespace . "name>" .
+        print '<' . $this->namespace . 'name>' .
                 $this->toParsedXml($test_name) .
-                "</" . $this->namespace . "name>\n";
+                '</' . $this->namespace . "name>\n";
     }
 
     /**
      *    Paints the end of a test case.
      *    @param string $test_name   Name of test that is ending.
-     *    @access public
      */
     public function paintCaseEnd($test_name)
     {
         print $this->getIndent();
-        print "</" . $this->namespace . "case>\n";
+        print '</' . $this->namespace . "case>\n";
         parent::paintCaseEnd($test_name);
     }
 
     /**
      *    Paints the start of a test method.
      *    @param string $test_name   Name of test that is starting.
-     *    @access public
      */
     public function paintMethodStart($test_name)
     {
         parent::paintMethodStart($test_name);
         print $this->getIndent();
-        print "<" . $this->namespace . "test>\n";
+        print '<' . $this->namespace . "test>\n";
         print $this->getIndent(1);
-        print "<" . $this->namespace . "name>" .
+        print '<' . $this->namespace . 'name>' .
                 $this->toParsedXml($test_name) .
-                "</" . $this->namespace . "name>\n";
+                '</' . $this->namespace . "name>\n";
     }
 
     /**
      *    Paints the end of a test method.
      *    @param string $test_name   Name of test that is ending.
      *    @param integer $progress   Number of test cases ending.
-     *    @access public
      */
     public function paintMethodEnd($test_name)
     {
         print $this->getIndent();
-        print "</" . $this->namespace . "test>\n";
+        print '</' . $this->namespace . "test>\n";
         parent::paintMethodEnd($test_name);
     }
 
     /**
      *    Paints pass as XML.
      *    @param string $message        Message to encode.
-     *    @access public
      */
     public function paintPass($message)
     {
         parent::paintPass($message);
         print $this->getIndent(1);
-        print "<" . $this->namespace . "pass>";
+        print '<' . $this->namespace . 'pass>';
         print $this->toParsedXml($message);
-        print "</" . $this->namespace . "pass>\n";
+        print '</' . $this->namespace . "pass>\n";
     }
 
     /**
      *    Paints failure as XML.
      *    @param string $message        Message to encode.
-     *    @access public
      */
     public function paintFail($message)
     {
         parent::paintFail($message);
         print $this->getIndent(1);
-        print "<" . $this->namespace . "fail>";
+        print '<' . $this->namespace . 'fail>';
         print $this->toParsedXml($message);
-        print "</" . $this->namespace . "fail>\n";
+        print '</' . $this->namespace . "fail>\n";
     }
 
     /**
      *    Paints error as XML.
      *    @param string $message        Message to encode.
-     *    @access public
      */
     public function paintError($message)
     {
         parent::paintError($message);
         print $this->getIndent(1);
-        print "<" . $this->namespace . "exception>";
+        print '<' . $this->namespace . 'exception>';
         print $this->toParsedXml($message);
-        print "</" . $this->namespace . "exception>\n";
+        print '</' . $this->namespace . "exception>\n";
     }
 
     /**
      *    Paints exception as XML.
      *    @param Exception $exception    Exception to encode.
-     *    @access public
      */
     public function paintException($exception)
     {
         parent::paintException($exception);
         print $this->getIndent(1);
-        print "<" . $this->namespace . "exception>";
+        print '<' . $this->namespace . 'exception>';
         $message = 'Unexpected exception of type [' . get_class($exception) .
                 '] with message ['. $exception->getMessage() .
                 '] in ['. $exception->getFile() .
                 ' line ' . $exception->getLine() . ']';
         print $this->toParsedXml($message);
-        print "</" . $this->namespace . "exception>\n";
+        print '</' . $this->namespace . "exception>\n";
     }
 
     /**
      *    Paints the skipping message and tag.
      *    @param string $message        Text to display in skip tag.
-     *    @access public
      */
     public function paintSkip($message)
     {
         parent::paintSkip($message);
         print $this->getIndent(1);
-        print "<" . $this->namespace . "skip>";
+        print '<' . $this->namespace . 'skip>';
         print $this->toParsedXml($message);
-        print "</" . $this->namespace . "skip>\n";
+        print '</' . $this->namespace . "skip>\n";
     }
 
     /**
      *    Paints a simple supplementary message.
      *    @param string $message        Text to display.
-     *    @access public
      */
     public function paintMessage($message)
     {
         parent::paintMessage($message);
         print $this->getIndent(1);
-        print "<" . $this->namespace . "message>";
+        print '<' . $this->namespace . 'message>';
         print $this->toParsedXml($message);
-        print "</" . $this->namespace . "message>\n";
+        print '</' . $this->namespace . "message>\n";
     }
 
     /**
      *    Paints a formatted ASCII message such as a
      *    privateiable dump.
      *    @param string $message        Text to display.
-     *    @access public
      */
     public function paintFormattedMessage($message)
     {
         parent::paintFormattedMessage($message);
         print $this->getIndent(1);
-        print "<" . $this->namespace . "formatted>";
+        print '<' . $this->namespace . 'formatted>';
         print "<![CDATA[$message]]>";
-        print "</" . $this->namespace . "formatted>\n";
+        print '</' . $this->namespace . "formatted>\n";
     }
 
     /**
      *    Serialises the event object.
      *    @param string $type        Event type as text.
      *    @param mixed $payload      Message or object.
-     *    @access public
      */
     public function paintSignal($type, $payload)
     {
         parent::paintSignal($type, $payload);
         print $this->getIndent(1);
-        print "<" . $this->namespace . "signal type=\"$type\">";
-        print "<![CDATA[" . serialize($payload) . "]]>";
-        print "</" . $this->namespace . "signal>\n";
+        print '<' . $this->namespace . "signal type=\"$type\">";
+        print '<![CDATA[' . serialize($payload) . ']]>';
+        print '</' . $this->namespace . "signal>\n";
     }
 
     /**
      *    Paints the test document header.
      *    @param string $test_name     First test top level
      *                                 to start.
-     *    @access public
      *    @abstract
      */
     public function paintHeader($test_name)
@@ -280,24 +258,23 @@ class XmlReporter extends SimpleReporter
         if (! SimpleReporter::inCli()) {
             header('Content-type: text/xml');
         }
-        print "<?xml version=\"1.0\"";
+        print '<?xml version="1.0"';
         if ($this->namespace) {
-            print " xmlns:" . $this->namespace .
-                    "=\"www.lastcraft.com/SimpleTest/Beta3/Report\"";
+            print ' xmlns:' . $this->namespace .
+                    '="www.lastcraft.com/SimpleTest/Beta3/Report"';
         }
         print "?>\n";
-        print "<" . $this->namespace . "run>\n";
+        print '<' . $this->namespace . "run>\n";
     }
 
     /**
      *    Paints the test document footer.
      *    @param string $test_name        The top level test.
-     *    @access public
      *    @abstract
      */
     public function paintFooter($test_name)
     {
-        print "</" . $this->namespace . "run>\n";
+        print '</' . $this->namespace . "run>\n";
     }
 }
 
@@ -317,7 +294,6 @@ class NestingXmlTag
      *    Sets the basic test information except
      *    the name.
      *    @param hash $attributes   Name value pairs.
-     *    @access public
      */
     public function __construct($attributes)
     {
@@ -328,7 +304,6 @@ class NestingXmlTag
     /**
      *    Sets the test case/method name.
      *    @param string $name        Name of test.
-     *    @access public
      */
     public function setName($name)
     {
@@ -338,7 +313,6 @@ class NestingXmlTag
     /**
      *    Accessor for name.
      *    @return string        Name of test.
-     *    @access public
      */
     public function getName()
     {
@@ -348,7 +322,6 @@ class NestingXmlTag
     /**
      *    Accessor for attributes.
      *    @return hash        All attributes.
-     *    @access protected
      */
     protected function getAttributes()
     {
@@ -369,7 +342,6 @@ class NestingMethodTag extends NestingXmlTag
      *    Sets the basic test information except
      *    the name.
      *    @param hash $attributes   Name value pairs.
-     *    @access public
      */
     public function __construct($attributes)
     {
@@ -380,7 +352,6 @@ class NestingMethodTag extends NestingXmlTag
      *    Signals the appropriate start event on the
      *    listener.
      *    @param SimpleReporter $listener    Target for events.
-     *    @access public
      */
     public function paintStart(&$listener)
     {
@@ -391,7 +362,6 @@ class NestingMethodTag extends NestingXmlTag
      *    Signals the appropriate end event on the
      *    listener.
      *    @param SimpleReporter $listener    Target for events.
-     *    @access public
      */
     public function paintEnd(&$listener)
     {
@@ -412,7 +382,6 @@ class NestingCaseTag extends NestingXmlTag
      *    Sets the basic test information except
      *    the name.
      *    @param hash $attributes   Name value pairs.
-     *    @access public
      */
     public function __construct($attributes)
     {
@@ -423,7 +392,6 @@ class NestingCaseTag extends NestingXmlTag
      *    Signals the appropriate start event on the
      *    listener.
      *    @param SimpleReporter $listener    Target for events.
-     *    @access public
      */
     public function paintStart(&$listener)
     {
@@ -434,7 +402,6 @@ class NestingCaseTag extends NestingXmlTag
      *    Signals the appropriate end event on the
      *    listener.
      *    @param SimpleReporter $listener    Target for events.
-     *    @access public
      */
     public function paintEnd(&$listener)
     {
@@ -455,7 +422,6 @@ class NestingGroupTag extends NestingXmlTag
      *    Sets the basic test information except
      *    the name.
      *    @param hash $attributes   Name value pairs.
-     *    @access public
      */
     public function __construct($attributes)
     {
@@ -466,7 +432,6 @@ class NestingGroupTag extends NestingXmlTag
      *    Signals the appropriate start event on the
      *    listener.
      *    @param SimpleReporter $listener    Target for events.
-     *    @access public
      */
     public function paintStart(&$listener)
     {
@@ -477,7 +442,6 @@ class NestingGroupTag extends NestingXmlTag
      *    Signals the appropriate end event on the
      *    listener.
      *    @param SimpleReporter $listener    Target for events.
-     *    @access public
      */
     public function paintEnd(&$listener)
     {
@@ -487,14 +451,14 @@ class NestingGroupTag extends NestingXmlTag
     /**
      *    The size in the attributes.
      *    @return integer     Value of size attribute or zero.
-     *    @access public
      */
     public function getSize()
     {
         $attributes = $this->getAttributes();
         if (isset($attributes['SIZE'])) {
-            return (integer)$attributes['SIZE'];
+            return (integer) $attributes['SIZE'];
         }
+
         return 0;
     }
 }
@@ -518,7 +482,6 @@ class SimpleTestXmlParser
      *    Loads a listener with the SimpleReporter
      *    interface.
      *    @param SimpleReporter $listener   Listener of tag events.
-     *    @access public
      */
     public function __construct(&$listener)
     {
@@ -535,22 +498,22 @@ class SimpleTestXmlParser
      *    the listener.
      *    @param string $chunk        Block of text to read.
      *    @return boolean             True if valid XML.
-     *    @access public
      */
     public function parse($chunk)
     {
         if (! xml_parse($this->expat, $chunk)) {
             trigger_error('XML parse error with ' .
                     xml_error_string(xml_get_error_code($this->expat)));
+
             return false;
         }
+
         return true;
     }
 
     /**
      *    Sets up expat as the XML parser.
      *    @return resource        Expat handle.
-     *    @access protected
      */
     protected function &createParser()
     {
@@ -559,6 +522,7 @@ class SimpleTestXmlParser
         xml_set_element_handler($expat, 'startElement', 'endElement');
         xml_set_character_data_handler($expat, 'addContent');
         xml_set_default_handler($expat, 'defaultContent');
+
         return $expat;
     }
 
@@ -566,7 +530,6 @@ class SimpleTestXmlParser
      *    Opens a new test nesting level.
      *    @return NestedXmlTag     The group, case or method tag
      *                             to start.
-     *    @access private
      */
     protected function pushNestingTag($nested)
     {
@@ -577,7 +540,6 @@ class SimpleTestXmlParser
      *    Accessor for current test structure tag.
      *    @return NestedXmlTag     The group, case or method tag
      *                             being parsed.
-     *    @access private
      */
     protected function &getCurrentNestingTag()
     {
@@ -588,7 +550,6 @@ class SimpleTestXmlParser
      *    Ends a nesting tag.
      *    @return NestedXmlTag     The group, case or method tag
      *                             just finished.
-     *    @access private
      */
     protected function popNestingTag()
     {
@@ -614,7 +575,6 @@ class SimpleTestXmlParser
      *    @param hash $attributes    Name value pairs.
      *                               Attributes without content
      *                               are marked as true.
-     *    @access protected
      */
     protected function startElement($expat, $tag, $attributes)
     {
@@ -635,7 +595,6 @@ class SimpleTestXmlParser
      *    End of element event.
      *    @param resource $expat     Parser handle.
      *    @param string $tag         Element name.
-     *    @access protected
      */
     protected function endElement($expat, $tag)
     {
@@ -670,13 +629,13 @@ class SimpleTestXmlParser
      *    Content between start and end elements.
      *    @param resource $expat     Parser handle.
      *    @param string $text        Usually output messages.
-     *    @access protected
      */
     protected function addContent($expat, $text)
     {
         if ($this->in_content_tag) {
             $this->content .= $text;
         }
+
         return true;
     }
 
@@ -684,7 +643,6 @@ class SimpleTestXmlParser
      *    XML and Doctype handler. Discards all such content.
      *    @param resource $expat     Parser handle.
      *    @param string $default     Text of default content.
-     *    @access protected
      */
     protected function defaultContent($expat, $default)
     {

@@ -1,7 +1,7 @@
 <?php
-// $Id$
-require_once('../detached.php');
-require_once('../reporter.php');
+
+require_once '../detached.php';
+require_once '../reporter.php';
 
 // The following URL will depend on your own installation.
 $command = 'php ' . dirname(__FILE__) . '/visual_test.php xml';

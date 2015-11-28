@@ -12,8 +12,8 @@
         $_SERVER = $HTTP_SERVER_VARS;
     }
     global $HTTP_RAW_POST_DATA;
-    
-    require_once('../page_request.php');
+
+    require_once '../page_request.php';
 ?><html>
     <head><title>Simple test page with links</title></head>
     <body>

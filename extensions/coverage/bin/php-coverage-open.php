@@ -26,6 +26,6 @@ $cc->log = 'coverage.sqlite';
 $args = CoverageUtils::parseArguments($_SERVER['argv'], true);
 $cc->includes = CoverageUtils::issetOr($args['include[]'], array('.*\.php$'));
 $cc->excludes = CoverageUtils::issetOr($args['exclude[]']);
-$cc->maxDirectoryDepth = (int)CoverageUtils::issetOr($args['maxdepth'], '1');
+$cc->maxDirectoryDepth = (int) CoverageUtils::issetOr($args['maxdepth'], '1');
 $cc->resetLog();
 $cc->writeSettings();

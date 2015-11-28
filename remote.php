@@ -5,13 +5,9 @@
  *  @subpackage UnitTester
  */
 
-/**#@+
- *  include other SimpleTest class files
- */
 require_once dirname(__FILE__) . '/browser.php';
 require_once dirname(__FILE__) . '/xml.php';
 require_once dirname(__FILE__) . '/test_case.php';
-/**#@-*/
 
 /**
  *    Runs an XML formated test on a remote server.
@@ -28,7 +24,6 @@ class RemoteTestCase
      *    Sets the location of the remote test.
      *    @param string $url       Test location.
      *    @param string $dry_url   Location for dry run.
-     *    @access public
      */
     public function __construct($url, $dry_url = false)
     {
@@ -40,7 +35,6 @@ class RemoteTestCase
     /**
      *    Accessor for the test name for subclasses.
      *    @return string           Name of the test.
-     *    @access public
      */
     public function getLabel()
     {
@@ -53,7 +47,6 @@ class RemoteTestCase
      *    once I have added iteration to the browser.
      *    @param SimpleReporter $reporter    Target of test results.
      *    @returns boolean                   True if no failures.
-     *    @access public
      */
     public function run($reporter)
     {
@@ -61,13 +54,16 @@ class RemoteTestCase
         $xml = $browser->get($this->url);
         if (! $xml) {
             trigger_error('Cannot read remote test URL [' . $this->url . ']');
+
             return false;
         }
         $parser = $this->createParser($reporter);
         if (! $parser->parse($xml)) {
             trigger_error('Cannot parse incoming XML from [' . $this->url . ']');
+
             return false;
         }
+
         return true;
     }
 
@@ -75,7 +71,6 @@ class RemoteTestCase
      *    Creates a new web browser object for fetching
      *    the XML report.
      *    @return SimpleBrowser           New browser.
-     *    @access protected
      */
     protected function createBrowser()
     {
@@ -86,7 +81,6 @@ class RemoteTestCase
      *    Creates the XML parser.
      *    @param SimpleReporter $reporter    Target of test results.
      *    @return SimpleTestXmlListener      XML reader.
-     *    @access protected
      */
     protected function createParser($reporter)
     {
@@ -96,7 +90,6 @@ class RemoteTestCase
     /**
      *    Accessor for the number of subtests.
      *    @return integer           Number of test cases.
-     *    @access public
      */
     public function getSize()
     {
@@ -105,16 +98,19 @@ class RemoteTestCase
             $xml = $browser->get($this->dry_url);
             if (! $xml) {
                 trigger_error('Cannot read remote test URL [' . $this->dry_url . ']');
+
                 return false;
             }
             $reporter = new SimpleReporter();
             $parser = $this->createParser($reporter);
             if (! $parser->parse($xml)) {
                 trigger_error('Cannot parse incoming XML from [' . $this->dry_url . ']');
+
                 return false;
             }
             $this->size = $reporter->getTestCaseCount();
         }
+
         return $this->size;
     }
 }

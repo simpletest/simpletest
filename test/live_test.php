@@ -1,9 +1,9 @@
 <?php
-// $Id$
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../socket.php');
-require_once(dirname(__FILE__) . '/../http.php');
-require_once(dirname(__FILE__) . '/../compatibility.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../socket.php';
+require_once dirname(__FILE__) . '/../http.php';
+require_once dirname(__FILE__) . '/../compatibility.php';
 
 if (SimpleTest::getDefaultProxy()) {
     SimpleTest::ignore('LiveHttpTestCase');
@@ -21,7 +21,7 @@ class LiveHttpTestCase extends UnitTestCase
         $this->assertFalse($socket->isOpen());
         $this->assertFalse($socket->write('A message'));
     }
-    
+
     public function testSocketClosure()
     {
         $socket = new SimpleSocket('www.lastcraft.com', 80, 15, 8);
@@ -29,11 +29,11 @@ class LiveHttpTestCase extends UnitTestCase
         $this->assertTrue($socket->write("GET /test/network_confirm.php HTTP/1.0\r\n"));
         $socket->write("Host: www.lastcraft.com\r\n");
         $socket->write("Connection: close\r\n\r\n");
-        $this->assertEqual($socket->read(), "HTTP/1.1");
+        $this->assertEqual($socket->read(), 'HTTP/1.1');
         $socket->close();
         $this->assertIdentical($socket->read(), false);
     }
-    
+
     public function testRecordOfSentCharacters()
     {
         $socket = new SimpleSocket('www.lastcraft.com', 80, 15);

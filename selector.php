@@ -5,12 +5,8 @@
  *  @subpackage WebTester
  */
 
-/**#@+
- * include SimpleTest files
- */
 require_once dirname(__FILE__) . '/tag.php';
 require_once dirname(__FILE__) . '/encoding.php';
-/**#@-*/
 
 /**
  *    Used to extract form elements for testing against.
@@ -43,7 +39,6 @@ class SimpleByName
     /**
      *    Compares with name attribute of widget.
      *    @param SimpleWidget $widget    Control to compare.
-     *    @access public
      */
     public function isMatch($widget)
     {
@@ -74,13 +69,13 @@ class SimpleByLabel
      *    Comparison. Compares visible text of widget or
      *    related label.
      *    @param SimpleWidget $widget    Control to compare.
-     *    @access public
      */
     public function isMatch($widget)
     {
         if (! method_exists($widget, 'isLabel')) {
             return false;
         }
+
         return $widget->isLabel($this->label);
     }
 }
@@ -107,7 +102,6 @@ class SimpleById
     /**
      *    Comparison. Compares id attribute of widget.
      *    @param SimpleWidget $widget    Control to compare.
-     *    @access public
      */
     public function isMatch($widget)
     {
@@ -138,7 +132,6 @@ class SimpleByLabelOrName
      *    Comparison. Compares visible text of widget or
      *    related label or name.
      *    @param SimpleWidget $widget    Control to compare.
-     *    @access public
      */
     public function isMatch($widget)
     {
@@ -147,6 +140,7 @@ class SimpleByLabelOrName
                 return true;
             }
         }
+
         return ($widget->getName() == $this->label);
     }
 }

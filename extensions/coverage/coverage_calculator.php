@@ -4,9 +4,9 @@
 * @subpackage     Extensions
 */
 /**
-* @package        SimpleTest
-* @subpackage     Extensions
-*/
+ * @package        SimpleTest
+ * @subpackage     Extensions
+ */
 class CoverageCalculator
 {
     public function coverageByFileVariables($file, $coverage)
@@ -25,26 +25,27 @@ class CoverageCalculator
         fclose($hnd);
 
         $var = compact('file', 'lines', 'coverage');
+
         return $var;
     }
 
     public function lineCoverageCodeToStyleClass($coverage, $line)
     {
         if (!array_key_exists($line, $coverage)) {
-            return "comment";
+            return 'comment';
         }
         $code = $coverage[$line];
         if (empty($code)) {
-            return "comment";
+            return 'comment';
         }
         switch ($code) {
             case -1:
-                return "missed";
+                return 'missed';
             case -2:
-                return "dead";
+                return 'dead';
         }
 
-        return "covered";
+        return 'covered';
     }
 
     public function totalLoc($total, $coverage)
@@ -61,7 +62,7 @@ class CoverageCalculator
 
     public function totalCoverage($total, $coverage)
     {
-        return $total + array_reduce($coverage, array(&$this, "lineCoverage"));
+        return $total + array_reduce($coverage, array(&$this, 'lineCoverage'));
     }
 
     public static function reportFilename($filename)
@@ -77,7 +78,7 @@ class CoverageCalculator
         if ($loc == 0) {
             return 0;
         }
-        $lineCoverage = array_reduce($coverage, array(&$this, "lineCoverage"));
+        $lineCoverage = array_reduce($coverage, array(&$this, 'lineCoverage'));
         $percentage = 100 * ($lineCoverage / $loc);
         $results[0][$file] = array('byFileReport' => $byFileReport, 'percentage' => $percentage);
     }
@@ -85,12 +86,12 @@ class CoverageCalculator
     public function variables($coverage, $untouched)
     {
         $coverageByFile = array();
-        array_walk($coverage, array(&$this, "percentCoverageByFile"), array(&$coverageByFile));
+        array_walk($coverage, array(&$this, 'percentCoverageByFile'), array(&$coverageByFile));
 
-        $totalLoc = array_reduce($coverage, array(&$this, "totalLoc"));
+        $totalLoc = array_reduce($coverage, array(&$this, 'totalLoc'));
 
         if ($totalLoc > 0) {
-            $totalLinesOfCoverage = array_reduce($coverage, array(&$this, "totalCoverage"));
+            $totalLinesOfCoverage = array_reduce($coverage, array(&$this, 'totalCoverage'));
             $totalPercentCoverage = 100 * ($totalLinesOfCoverage / $totalLoc);
         }
 
@@ -101,6 +102,7 @@ class CoverageCalculator
 
         $var = compact('coverageByFile', 'totalPercentCoverage', 'totalLoc', 'totalLinesOfCoverage', 'filesTouchedPercentage');
         $var['untouched'] = $untouched;
+
         return $var;
     }
 }

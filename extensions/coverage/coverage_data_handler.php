@@ -22,20 +22,20 @@ class CoverageDataHandler
         $this->filename = $filename;
         $this->db = new SQLite3($filename);
         if (empty($this->db)) {
-            throw new Exception("Could not create SQLite DB " . $filename);
+            throw new Exception('Could not create SQLite DB ' . $filename);
         }
     }
 
     public function createSchema()
     {
-        $this->db->query("CREATE TABLE untouched (filename text)");
-        $this->db->query("CREATE TABLE coverage (name text, coverage text)");
+        $this->db->query('CREATE TABLE untouched (filename text)');
+        $this->db->query('CREATE TABLE coverage (name text, coverage text)');
     }
 
     public function &getFilenames()
     {
         $filenames = array();
-        $cursor = $this->db->query("SELECT DISTINCT name FROM coverage");
+        $cursor = $this->db->query('SELECT DISTINCT name FROM coverage');
         while ($row = $cursor->fetchArray()) {
             $filenames[] = $row[0];
         }
@@ -60,6 +60,7 @@ class CoverageDataHandler
         foreach ($coverage as $file => $garbage) {
             $coverage[$file] = $this->readFile($file);
         }
+
         return $coverage;
     }
 
@@ -97,6 +98,7 @@ class CoverageDataHandler
                     case -1: return $code1;
                 }
         }
+
         return $code1 + $code2;
     }
 
@@ -105,12 +107,13 @@ class CoverageDataHandler
         if (stripos($pristine, $cruft) === 0) {
             return substr($pristine, strlen($cruft));
         }
+
         return $pristine;
     }
 
     public function writeUntouchedFile($file)
     {
-        $relativeFile = CoverageDataHandler::ltrim('./', $file);
+        $relativeFile = self::ltrim('./', $file);
         $sql = "INSERT INTO untouched values ('$relativeFile')";
         $this->db->query($sql);
     }
@@ -118,7 +121,7 @@ class CoverageDataHandler
     public function &readUntouchedFiles()
     {
         $untouched = array();
-        $result = $this->db->query("SELECT filename FROM untouched ORDER BY filename");
+        $result = $this->db->query('SELECT filename FROM untouched ORDER BY filename');
         while ($row = $result->fetchArray()) {
             $untouched[] = $row[0];
         }

@@ -3,16 +3,11 @@
  *  Base include file for SimpleTest.
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id$
  */
 
-/**#@+
- * include SimpleTest files
- */
-require_once(dirname(__FILE__) . '/tag.php');
-require_once(dirname(__FILE__) . '/encoding.php');
-require_once(dirname(__FILE__) . '/selector.php');
-/**#@-*/
+require_once dirname(__FILE__) . '/tag.php';
+require_once dirname(__FILE__) . '/encoding.php';
+require_once dirname(__FILE__) . '/selector.php';
 
 /**
  *    Form tag class to hold widget values.
@@ -55,7 +50,6 @@ class SimpleForm
      *    Creates the request packet to be sent by the form.
      *    @param SimpleTag $tag        Form tag to read.
      *    @return string               Packet class.
-     *    @access private
      */
     protected function setEncodingClass($tag)
     {
@@ -63,15 +57,16 @@ class SimpleForm
             if (strtolower($tag->getAttribute('enctype')) == 'multipart/form-data') {
                 return 'SimpleMultipartEncoding';
             }
+
             return 'SimplePostEncoding';
         }
+
         return 'SimpleGetEncoding';
     }
 
     /**
      *    Sets the frame target within a frameset.
      *    @param string $frame        Name of frame.
-     *    @access public
      */
     public function setDefaultTarget($frame)
     {
@@ -81,7 +76,6 @@ class SimpleForm
     /**
      *    Accessor for method of form submission.
      *    @return string           Either get or post.
-     *    @access public
      */
     public function getMethod()
     {
@@ -100,14 +94,13 @@ class SimpleForm
         if (($action === '') || ($action === false)) {
             return $page->expandUrl($page->getUrl());
         }
+
         return $page->expandUrl(new SimpleUrl($action));
-        ;
     }
 
     /**
      *    Absolute URL of the target.
      *    @return SimpleUrl           URL target.
-     *    @access public
      */
     public function getAction()
     {
@@ -118,6 +111,7 @@ class SimpleForm
         if ($this->getMethod() == 'get') {
             $url->clearRequest();
         }
+
         return $url;
     }
 
@@ -125,7 +119,6 @@ class SimpleForm
      *    Creates the encoding for the current values in the
      *    form.
      *    @return SimpleFormEncoding    Request to submit.
-     *    @access private
      */
     protected function encode()
     {
@@ -134,13 +127,13 @@ class SimpleForm
         for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
             $this->widgets[$i]->write($encoding);
         }
+
         return $encoding;
     }
 
     /**
      *    ID field of form for unique identification.
      *    @return string           Unique tag ID.
-     *    @access public
      */
     public function getId()
     {
@@ -166,7 +159,6 @@ class SimpleForm
      *    Sets the widget into the form, grouping radio
      *    buttons if any.
      *    @param SimpleWidget $tag   Incoming form control.
-     *    @access private
      */
     protected function setWidget($tag)
     {
@@ -182,7 +174,6 @@ class SimpleForm
     /**
      *    Adds a radio button, building a group if necessary.
      *    @param SimpleRadioButtonTag $tag   Incoming form control.
-     *    @access private
      */
     protected function addRadioButton($tag)
     {
@@ -196,7 +187,6 @@ class SimpleForm
     /**
      *    Adds a checkbox, making it a group on a repeated name.
      *    @param SimpleCheckboxTag $tag   Incoming form control.
-     *    @access private
      */
     protected function addCheckbox($tag)
     {
@@ -219,7 +209,6 @@ class SimpleForm
      *    @param SimpleSelector $selector   Criteria to apply.
      *    @return string/array              Value(s) as string or null
      *                                      if not set.
-     *    @access public
      */
     public function getValue($selector)
     {
@@ -233,6 +222,7 @@ class SimpleForm
                 return $button->getValue();
             }
         }
+
         return null;
     }
 
@@ -243,7 +233,6 @@ class SimpleForm
      *    @return boolean                   True if value is legal, false
      *                                      otherwise. If the field is not
      *                                      present, nothing will be set.
-     *    @access public
      */
     public function setField($selector, $value, $position=false)
     {
@@ -252,13 +241,14 @@ class SimpleForm
         for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
             if ($selector->isMatch($this->widgets[$i])) {
                 $_position++;
-                if ($position === false or $_position === (int)$position) {
+                if ($position === false or $_position === (int) $position) {
                     if ($this->widgets[$i]->setValue($value)) {
                         $success = true;
                     }
                 }
             }
         }
+
         return $success;
     }
 
@@ -266,7 +256,6 @@ class SimpleForm
      *    Used by the page object to set widgets labels to
      *    external label tags.
      *    @param SimpleSelector $selector   Criteria to apply.
-     *    @access public
      */
     public function attachLabelBySelector($selector, $label)
     {
@@ -274,6 +263,7 @@ class SimpleForm
             if ($selector->isMatch($this->widgets[$i])) {
                 if (method_exists($this->widgets[$i], 'setLabel')) {
                     $this->widgets[$i]->setLabel($label);
+
                     return;
                 }
             }
@@ -284,7 +274,6 @@ class SimpleForm
      *    Test to see if a form has a submit button.
      *    @param SimpleSelector $selector   Criteria to apply.
      *    @return boolean                   True if present.
-     *    @access public
      */
     public function hasSubmit($selector)
     {
@@ -293,6 +282,7 @@ class SimpleForm
                 return true;
             }
         }
+
         return false;
     }
 
@@ -300,7 +290,6 @@ class SimpleForm
      *    Test to see if a form has an image control.
      *    @param SimpleSelector $selector   Criteria to apply.
      *    @return boolean                   True if present.
-     *    @access public
      */
     public function hasImage($selector)
     {
@@ -309,6 +298,7 @@ class SimpleForm
                 return true;
             }
         }
+
         return false;
     }
 
@@ -319,7 +309,6 @@ class SimpleForm
      *    @return SimpleEncoding            Submitted values or false
      *                                      if there is no such button
      *                                      in the form.
-     *    @access public
      */
     public function submitButton($selector, $additional = false)
     {
@@ -331,9 +320,11 @@ class SimpleForm
                 if ($additional) {
                     $encoding->merge($additional);
                 }
+
                 return $encoding;
             }
         }
+
         return false;
     }
 
@@ -346,7 +337,6 @@ class SimpleForm
      *    @return SimpleEncoding            Submitted values or false
      *                                      if there is no such button in the
      *                                      form.
-     *    @access public
      */
     public function submitImage($selector, $x, $y, $additional = false)
     {
@@ -358,9 +348,11 @@ class SimpleForm
                 if ($additional) {
                     $encoding->merge($additional);
                 }
+
                 return $encoding;
             }
         }
+
         return false;
     }
 
@@ -369,7 +361,6 @@ class SimpleForm
      *    value. Used when there is only one button or it
      *    is unimportant.
      *    @return hash           Submitted values.
-     *    @access public
      */
     public function submit($additional = false)
     {
@@ -377,6 +368,7 @@ class SimpleForm
         if ($additional) {
             $encoding->merge($additional);
         }
+
         return $encoding;
     }
 }

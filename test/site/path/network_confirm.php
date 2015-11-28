@@ -12,8 +12,8 @@
         $_SERVER = $HTTP_SERVER_VARS;
     }
     global $HTTP_RAW_POST_DATA;
-    
-    require_once('../page_request.php');
+
+    require_once '../page_request.php';
 ?><html>
     <head><title>Simple test target file in folder</title></head>
     <body>
@@ -28,13 +28,13 @@
         <?php
             if (count($_COOKIE) > 0) {
                 foreach ($_COOKIE as $key => $value) {
-                    print $key . "=[" . $value . "]<br />\n";
+                    print $key . '=[' . $value . "]<br />\n";
                 }
             }
         ?>
         <h1>Raw GET data</h1>
         <?php
-            print "[" . $_SERVER['QUERY_STRING'] . "]";
+            print '[' . $_SERVER['QUERY_STRING'] . ']';
         ?>
         <h1>GET data</h1>
         <?php
@@ -44,20 +44,20 @@
                     if (is_array($value)) {
                         $value = implode(', ', $value);
                     }
-                    print $key . "=[" . $value . "]<br />\n";
+                    print $key . '=[' . $value . "]<br />\n";
                 }
             }
         ?>
         <h1>Raw POST data</h1>
         <?php
-            print "[" . $HTTP_RAW_POST_DATA . "]";
+            print '[' . $HTTP_RAW_POST_DATA . ']';
         ?>
         <pre><?php print_r(PageRequest::post()); ?></pre>
         <h1>POST data</h1>
         <?php
             if (count($_POST) > 0) {
                 foreach ($_POST as $key => $value) {
-                    print $key . "=[";
+                    print $key . '=[';
                     if (is_array($value)) {
                         print implode(', ', $value);
                     } else {

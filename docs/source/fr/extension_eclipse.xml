@@ -170,7 +170,7 @@ class test1 extends UnitTestCase
         $x = 1;
         $y = 2;
         $total = $x + $y;
-        $this->assertEqual(3, $total, "This should pass");
+        $this->assertEqual(3, $total, 'This should pass');
     }
 }
 ?>
@@ -197,14 +197,14 @@ class test2 extends UnitTestCase
         $x = 1;
         $y = 2;
         $total = $x + $y;
-        $this->assertEqual(3, $total, "This should pass");
+        $this->assertEqual(3, $total, 'This should pass');
     }
     public function test_fail()
     {
         $x = 1;
         $y = 2;
         $total = $x + $y;
-        $this->assertEqual(4, $total, "This should fail");
+        $this->assertEqual(4, $total, 'This should fail');
     }
 }
 ?>

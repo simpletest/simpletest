@@ -5,12 +5,8 @@
  *  @subpackage UnitTester
  */
 
-/**#@+
- *  include other SimpleTest class files
- */
 require_once dirname(__FILE__) . '/test_case.php';
 require_once dirname(__FILE__) . '/dumper.php';
-/**#@-*/
 
 /**
  *    Standard unit test class for day to day testing
@@ -26,7 +22,6 @@ class UnitTestCase extends SimpleTestCase
      *    with test methods for a functional test case.
      *    @param string $label     Name of test case. Will use
      *                             the class name if none specified.
-     *    @access public
      */
     public function __construct($label = false)
     {
@@ -43,7 +38,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param string $message    Message to display describing
      *                              the test state.
      *    @return boolean           True on pass
-     *    @access public
      */
     public function assertTrue($result, $message = '%s')
     {
@@ -58,7 +52,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param boolean $result    Pass on false.
      *    @param string $message    Message to display.
      *    @return boolean           True on pass
-     *    @access public
      */
     public function assertFalse($result, $message = '%s')
     {
@@ -70,7 +63,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param null $value       Supposedly null value.
      *    @param string $message   Message to display.
      *    @return boolean                        True on pass
-     *    @access public
      */
     public function assertNull($value, $message = '%s')
     {
@@ -78,6 +70,7 @@ class UnitTestCase extends SimpleTestCase
         $message = sprintf(
                 $message,
                 '[' . $dumper->describeValue($value) . '] should be null');
+
         return $this->assertTrue(! isset($value), $message);
     }
 
@@ -86,7 +79,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param mixed $value           Supposedly set value.
      *    @param string $message        Message to display.
      *    @return boolean               True on pass.
-     *    @access public
      */
     public function assertNotNull($value, $message = '%s')
     {
@@ -94,6 +86,7 @@ class UnitTestCase extends SimpleTestCase
         $message = sprintf(
                 $message,
                 '[' . $dumper->describeValue($value) . '] should not be null');
+
         return $this->assertTrue(isset($value), $message);
     }
 
@@ -105,7 +98,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param string $type          Type name as string.
      *    @param string $message       Message to display.
      *    @return boolean              True on pass.
-     *    @access public
      */
     public function assertIsA($object, $type, $message = '%s')
     {
@@ -123,7 +115,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param string $type          Type name as string.
      *    @param string $message       Message to display.
      *    @return boolean              True on pass.
-     *    @access public
      */
     public function assertNotA($object, $type, $message = '%s')
     {
@@ -140,7 +131,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param mixed $second         Value to compare.
      *    @param string $message       Message to display.
      *    @return boolean              True on pass
-     *    @access public
      */
     public function assertEqual($first, $second, $message = '%s')
     {
@@ -157,7 +147,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param mixed $second          Value to compare.
      *    @param string $message        Message to display.
      *    @return boolean               True on pass
-     *    @access public
      */
     public function assertNotEqual($first, $second, $message = '%s')
     {
@@ -175,7 +164,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param mixed $margin         Fuzziness of match.
      *    @param string $message       Message to display.
      *    @return boolean              True on pass
-     *    @access public
      */
     public function assertWithinMargin($first, $second, $margin, $message = '%s')
     {
@@ -193,7 +181,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param mixed $margin         Fuzziness of match.
      *    @param string $message       Message to display.
      *    @return boolean              True on pass
-     *    @access public
      */
     public function assertOutsideMargin($first, $second, $margin, $message = '%s')
     {
@@ -210,7 +197,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param mixed $second          Value to compare.
      *    @param string $message        Message to display.
      *    @return boolean               True on pass
-     *    @access public
      */
     public function assertIdentical($first, $second, $message = '%s')
     {
@@ -227,7 +213,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param mixed $second          Value to compare.
      *    @param string $message        Message to display.
      *    @return boolean               True on pass
-     *    @access public
      */
     public function assertNotIdentical($first, $second, $message = '%s')
     {
@@ -247,7 +232,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param mixed $second          Hopefully the same variable.
      *    @param string $message        Message to display.
      *    @return boolean               True on pass
-     *    @access public
      */
     public function assertReference(&$first, &$second, $message = '%s')
     {
@@ -257,6 +241,7 @@ class UnitTestCase extends SimpleTestCase
                 '[' . $dumper->describeValue($first) .
                         '] and [' . $dumper->describeValue($second) .
                         '] should reference the same object');
+
         return $this->assertTrue(
                 SimpleTestCompatibility::isReference($first, $second),
                 $message);
@@ -273,7 +258,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param mixed $second          Hopefully the same object.
      *    @param string $message        Message to display.
      *    @return boolean               True on pass
-     *    @access public
      */
     public function assertSame($first, $second, $message = '%s')
     {
@@ -283,6 +267,7 @@ class UnitTestCase extends SimpleTestCase
                 '[' . $dumper->describeValue($first) .
                         '] and [' . $dumper->describeValue($second) .
                         '] should reference the same object');
+
         return $this->assertTrue($first === $second, $message);
     }
 
@@ -294,7 +279,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param mixed $second          Hopefully not the same object.
      *    @param string $message        Message to display.
      *    @return boolean               True on pass
-     *    @access public
      */
     public function assertClone($first, $second, $message = '%s')
     {
@@ -305,6 +289,7 @@ class UnitTestCase extends SimpleTestCase
                         '] and [' . $dumper->describeValue($second) .
                         '] should not be the same object');
         $identical = new IdenticalExpectation($first);
+
         return $this->assertTrue(
                 $identical->test($second) && ! ($first === $second),
                 $message);
@@ -320,16 +305,16 @@ class UnitTestCase extends SimpleTestCase
      *    @param mixed $second          Hopefully not the same object.
      *    @param string $message        Message to display.
      *    @return boolean               True on pass
-     *    @access public
      */
-    public function assertCopy(&$first, &$second, $message = "%s")
+    public function assertCopy(&$first, &$second, $message = '%s')
     {
         $dumper = new SimpleDumper();
         $message = sprintf(
                 $message,
-                "[" . $dumper->describeValue($first) .
-                        "] and [" . $dumper->describeValue($second) .
-                        "] should not be the same object");
+                '[' . $dumper->describeValue($first) .
+                        '] and [' . $dumper->describeValue($second) .
+                        '] should not be the same object');
+
         return $this->assertFalse(
                 SimpleTestCompatibility::isReference($first, $second),
                 $message);
@@ -343,7 +328,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param string $subject    String to search in.
      *    @param string $message    Message to display.
      *    @return boolean           True on pass
-     *    @access public
      */
     public function assertPattern($pattern, $subject, $message = '%s')
     {
@@ -361,7 +345,6 @@ class UnitTestCase extends SimpleTestCase
      *    @param string $subject    String to search in.
      *    @param string $message    Message to display.
      *    @return boolean           True on pass
-     *    @access public
      */
     public function assertNoPattern($pattern, $subject, $message = '%s')
     {
@@ -377,7 +360,6 @@ class UnitTestCase extends SimpleTestCase
      *    left over errors trigger failures.
      *    @param SimpleExpectation/string $expected   The error to match.
      *    @param string $message                      Message on failure.
-     *    @access public
      */
     public function expectError($expected = false, $message = '%s')
     {
@@ -391,7 +373,6 @@ class UnitTestCase extends SimpleTestCase
      *    left over errors trigger failures.
      *    @param SimpleExpectation/Exception $expected  The error to match.
      *    @param string $message                        Message on failure.
-     *    @access public
      */
     public function expectException($expected = false, $message = '%s')
     {
@@ -405,7 +386,6 @@ class UnitTestCase extends SimpleTestCase
      *    to the current test. It doesn't affect the test, whether thrown or
      *    not.
      *    @param SimpleExpectation/Exception $ignored  The error to ignore.
-     *    @access public
      */
     public function ignoreException($ignored = false)
     {
@@ -418,7 +398,6 @@ class UnitTestCase extends SimpleTestCase
      *    of expectation.
      *    @param mixed $expected      Expected value.
      *    @return SimpleExpectation   Expectation object.
-     *    @access private
      */
     protected function coerceExpectation($expected)
     {
@@ -428,6 +407,7 @@ class UnitTestCase extends SimpleTestCase
         if (is_a($expected, 'SimpleExpectation')) {
             return $expected;
         }
+
         return new EqualExpectation(is_string($expected) ? str_replace('%', '%%', $expected) : $expected);
     }
 }

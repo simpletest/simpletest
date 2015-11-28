@@ -5,7 +5,6 @@
  * @subpackage     Extensions
  */
 /**
- *
  * Based on the Domain51_Testing_Selenium class available at
  * http://domain51.googlecode.com/svn/Domain51/trunk/
  *
@@ -47,7 +46,7 @@ class SimpleSeleniumRemoteControl
     {
         return substr($response, 3);
     }
-    
+
     public function start()
     {
         $response = $this->cmd('getNewBrowserSession', array($this->_browser, $this->_browserUrl));
@@ -63,7 +62,7 @@ class SimpleSeleniumRemoteControl
     public function __call($method, $arguments)
     {
         $response = $this->cmd($method, $arguments);
-        
+
         foreach ($this->_commandMap as $type => $commands) {
             if (!in_array($method, $commands)) {
                 continue;
@@ -82,7 +81,7 @@ class SimpleSeleniumRemoteControl
                 return $response;
         }
     }
-    
+
     private function _server()
     {
         return "http://{$this->_host}:{$this->_port}/selenium-server/driver/";
@@ -101,21 +100,22 @@ class SimpleSeleniumRemoteControl
             $params[] = 'sessionId=' . $this->_sessionId;
         }
 
-        return $this->_server()."?".implode('&', $params);
+        return $this->_server().'?'.implode('&', $params);
     }
 
     public function cmd($method, $arguments = array())
     {
         $url = $this->buildUrlCmd($method, $arguments);
         $response = $this->_sendRequest($url);
+
         return $response;
     }
 
     public function isUp()
     {
-        return (bool)@fsockopen($this->_host, $this->_port, $errno, $errstr, 30);
+        return (bool) @fsockopen($this->_host, $this->_port, $errno, $errstr, 30);
     }
-    
+
     private function _initCurl($url)
     {
         if (!function_exists('curl_init')) {
@@ -126,9 +126,10 @@ class SimpleSeleniumRemoteControl
         }
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, floor($this->_timeout));
+
         return $ch;
     }
-    
+
     private function _sendRequest($url)
     {
         $ch = $this->_initCurl($url);
@@ -137,6 +138,7 @@ class SimpleSeleniumRemoteControl
             throw new Exception('Curl returned non-null errno ' . $errno . ':' . curl_error($ch));
         }
         curl_close($ch);
+
         return $result;
     }
 }

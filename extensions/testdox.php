@@ -3,7 +3,6 @@
  *	Extension for a TestDox reporter
  *	@package	SimpleTest
  *	@subpackage	Extensions
- *	@version	$Id$
  */
 
 /**
@@ -53,6 +52,6 @@ class TestDoxReporter extends SimpleReporter
 
     public function paintFail($message)
     {
-        echo " [FAILED]";
+        echo ' [FAILED]';
     }
 }

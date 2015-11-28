@@ -1,6 +1,7 @@
 <?php
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/support/test1.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/support/test1.php';
 
 class TestOfAutorun extends UnitTestCase
 {

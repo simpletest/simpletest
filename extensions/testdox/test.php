@@ -1,5 +1,5 @@
 <?php
-// $Id$
+
 require_once dirname(__FILE__) . '/../../autorun.php';
 require_once dirname(__FILE__) . '/../testdox.php';
 
@@ -57,7 +57,7 @@ class TestOfTestDoxReporter extends UnitTestCase
         ob_start();
         $dox->paintMethodStart('testSomeGreatTestCase');
         $buffer = ob_get_clean();
-        $this->assertEqual("- some great test case", $buffer);
+        $this->assertEqual('- some great test case', $buffer);
         unset($buffer);
 
         $random = rand(100, 200);

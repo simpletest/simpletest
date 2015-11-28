@@ -1,7 +1,7 @@
 <?php
-// $Id$
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../xml.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../xml.php';
 Mock::generate('SimpleScorer');
 
 if (! function_exists('xml_parser_create')) {
@@ -171,13 +171,13 @@ class TestOfXmlResultsParsing extends UnitTestCase
     public function testSignal()
     {
         $signal = new AnyOldSignal();
-        $signal->stuff = "Hello";
+        $signal->stuff = 'Hello';
         $listener = new MockSimpleScorer();
         $listener->expectOnce('paintSignal', array('a_signal', $signal));
         $parser = new SimpleTestXmlParser($listener);
         $this->sendValidStart($parser);
         $this->assertTrue($parser->parse(
-                "<signal type=\"a_signal\"><![CDATA[" .
+                '<signal type="a_signal"><![CDATA[' .
                 serialize($signal) . "]]></signal>\n"));
         $this->sendValidEnd($parser);
     }

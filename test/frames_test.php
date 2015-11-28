@@ -1,9 +1,9 @@
 <?php
-// $Id$
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../tag.php');
-require_once(dirname(__FILE__) . '/../page.php');
-require_once(dirname(__FILE__) . '/../frames.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../tag.php';
+require_once dirname(__FILE__) . '/../page.php';
+require_once dirname(__FILE__) . '/../frames.php';
 Mock::generate('SimplePage');
 Mock::generate('SimpleForm');
 
@@ -289,6 +289,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
             }
             $methods[] = $method;
         }
+
         return $methods;
     }
 
@@ -307,6 +308,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
             }
             $methods[] = $method;
         }
+
         return $methods;
     }
 
@@ -316,6 +318,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
         foreach ($this->page_interface as $method) {
             if (! in_array($method, $this->frameset_interface)) {
                 $this->fail("No [$method] in Frameset class");
+
                 return;
             }
         }

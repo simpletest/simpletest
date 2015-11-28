@@ -15,7 +15,6 @@ class SimpleTestCompatibility
      *    @param mixed $first    Test subject.
      *    @param mixed $second   Comparison object.
      *    @return boolean        True if same type.
-     *    @access private
      */
     public static function isIdentical($first, $second)
     {
@@ -26,16 +25,18 @@ class SimpleTestCompatibility
             if (get_class($first) != get_class($second)) {
                 return false;
             }
-            return SimpleTestCompatibility::isArrayOfIdenticalTypes(
+
+            return self::isArrayOfIdenticalTypes(
                     (array) $first,
                     (array) $second);
         }
         if (is_array($first) && is_array($second)) {
-            return SimpleTestCompatibility::isArrayOfIdenticalTypes($first, $second);
+            return self::isArrayOfIdenticalTypes($first, $second);
         }
         if ($first !== $second) {
             return false;
         }
+
         return true;
     }
 
@@ -44,7 +45,6 @@ class SimpleTestCompatibility
      *    @param mixed $first    Test subject.
      *    @param mixed $second   Comparison object.
      *    @return boolean        True if identical.
-     *    @access private
      */
     protected static function isArrayOfIdenticalTypes($first, $second)
     {
@@ -52,13 +52,14 @@ class SimpleTestCompatibility
             return false;
         }
         foreach (array_keys($first) as $key) {
-            $is_identical = SimpleTestCompatibility::isIdentical(
+            $is_identical = self::isIdentical(
                     $first[$key],
                     $second[$key]);
             if (! $is_identical) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -67,7 +68,6 @@ class SimpleTestCompatibility
      *    @param mixed $first    Test subject.
      *    @param mixed $second   Comparison object.
      *    @return boolean        True if same.
-     *    @access public
      */
     public static function isReference(&$first, &$second)
     {
@@ -79,12 +79,14 @@ class SimpleTestCompatibility
             $first->$id = true;
             $is_ref = isset($second->$id);
             unset($first->$id);
+
             return $is_ref;
         }
         $temp = $first;
         $first = uniqid(mt_rand());
         $is_ref = ($first === $second);
         $first = $temp;
+
         return $is_ref;
     }
 }

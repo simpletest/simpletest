@@ -106,7 +106,7 @@ class HtmlReporter extends TestDisplay {
 <php><![CDATA[
 <strong><?php
     require_once('simpletest/reporter.php');
-    
+
     class ShowPasses extends HtmlReporter
     {
     }

@@ -5,11 +5,7 @@
  *  @subpackage WebTester
  */
 
-/**#@+
- *  include other SimpleTest class files
- */
 require_once dirname(__FILE__) . '/url.php';
-/**#@-*/
 
 /**
  *    Cookie data holder. Cookie rules are full of pretty
@@ -41,7 +37,7 @@ class SimpleCookie
         $this->host = false;
         $this->name = $name;
         $this->value = $value;
-        $this->path = ($path ? $this->fixPath($path) : "/");
+        $this->path = ($path ? $this->fixPath($path) : '/');
         $this->expiry = false;
         if (is_string($expiry)) {
             $this->expiry = strtotime($expiry);
@@ -59,14 +55,15 @@ class SimpleCookie
      *    call will fail.
      *    @param string $host       New hostname.
      *    @return boolean           True if hostname is valid.
-     *    @access public
      */
     public function setHost($host)
     {
         if ($host = $this->truncateHost($host)) {
             $this->host = $host;
+
             return true;
         }
+
         return false;
     }
 
@@ -74,7 +71,6 @@ class SimpleCookie
      *    Accessor for the truncated host to which this
      *    cookie applies.
      *    @return string       Truncated hostname.
-     *    @access public
      */
     public function getHost()
     {
@@ -97,7 +93,6 @@ class SimpleCookie
      *    cookie's host validity.
      *    @param string $host    Host name to truncate.
      *    @return string        Domain or false on a bad host.
-     *    @access private
      */
     protected function truncateHost($host)
     {
@@ -107,13 +102,13 @@ class SimpleCookie
         } elseif (preg_match('/[a-z\-]+\.[a-z\-]+\.[a-z\-]+$/i', $host, $matches)) {
             return $matches[0];
         }
+
         return false;
     }
 
     /**
      *    Accessor for name.
      *    @return string       Cookie key.
-     *    @access public
      */
     public function getName()
     {
@@ -124,7 +119,6 @@ class SimpleCookie
      *    Accessor for value. A deleted cookie will
      *    have an empty string for this.
      *    @return string       Cookie value.
-     *    @access public
      */
     public function getValue()
     {
@@ -134,7 +128,6 @@ class SimpleCookie
     /**
      *    Accessor for path.
      *    @return string       Valid cookie path.
-     *    @access public
      */
     public function getPath()
     {
@@ -147,7 +140,6 @@ class SimpleCookie
      *    equal to the cookie path.
      *    @param string $path       Path to test against.
      *    @return boolean           True if cookie valid here.
-     *    @access public
      */
     public function isValidPath($path)
     {
@@ -160,14 +152,14 @@ class SimpleCookie
     /**
      *    Accessor for expiry.
      *    @return string       Expiry string.
-     *    @access public
      */
     public function getExpiry()
     {
         if (! $this->expiry) {
             return false;
         }
-        return gmdate("D, d M Y H:i:s", $this->expiry) . " GMT";
+
+        return gmdate('D, d M Y H:i:s', $this->expiry) . ' GMT';
     }
 
     /**
@@ -179,7 +171,6 @@ class SimpleCookie
      *                                is later than the cookie expiry.
      *                                Can be either a timestamp integer
      *                                or a cookie format date.
-     *    @access public
      */
     public function isExpired($now)
     {
@@ -189,6 +180,7 @@ class SimpleCookie
         if (is_string($now)) {
             $now = strtotime($now);
         }
+
         return ($this->expiry < $now);
     }
 
@@ -208,7 +200,6 @@ class SimpleCookie
     /**
      *    Accessor for the secure flag.
      *    @return boolean       True if cookie needs SSL.
-     *    @access public
      */
     public function isSecure()
     {
@@ -219,7 +210,6 @@ class SimpleCookie
      *    Adds a trailing and leading slash to the path
      *    if missing.
      *    @param string $path            Path to fix.
-     *    @access private
      */
     protected function fixPath($path)
     {
@@ -229,6 +219,7 @@ class SimpleCookie
         if (substr($path, -1, 1) != '/') {
             $path .= '/';
         }
+
         return $path;
     }
 }
@@ -245,7 +236,6 @@ class SimpleCookieJar
 
     /**
      *    Constructor. Jar starts empty.
-     *    @access public
      */
     public function __construct()
     {
@@ -256,7 +246,6 @@ class SimpleCookieJar
      *    Removes expired and temporary cookies as if
      *    the browser was closed and re-opened.
      *    @param string/integer $now   Time to test expiry against.
-     *    @access public
      */
     public function restartSession($date = false)
     {
@@ -282,7 +271,6 @@ class SimpleCookieJar
      *                                 into the past by this number
      *                                 of seconds. Cookies now over
      *                                 age will be removed.
-     *    @access public
      */
     public function agePrematurely($interval)
     {
@@ -299,7 +287,6 @@ class SimpleCookieJar
      *    @param string $host       Host upon which the cookie is valid.
      *    @param string $path       Cookie path if not host wide.
      *    @param string $expiry     Expiry date.
-     *    @access public
      */
     public function setCookie($name, $value, $host = false, $path = '/', $expiry = false)
     {
@@ -315,7 +302,6 @@ class SimpleCookieJar
      *    first empty slot if none.
      *    @param SimpleCookie $cookie    Cookie to write into jar.
      *    @return integer                Available slot.
-     *    @access private
      */
     protected function findFirstMatch($cookie)
     {
@@ -329,6 +315,7 @@ class SimpleCookieJar
                 return $i;
             }
         }
+
         return count($this->cookies);
     }
 
@@ -341,7 +328,6 @@ class SimpleCookieJar
      *    @param string $name        Name of cookie to read.
      *    @return string             False if not present, else the
      *                               value as a string.
-     *    @access public
      */
     public function getCookieValue($host, $path, $name)
     {
@@ -354,6 +340,7 @@ class SimpleCookieJar
                 }
             }
         }
+
         return (isset($value) ? $value : false);
     }
 
@@ -366,7 +353,6 @@ class SimpleCookieJar
      *                                 this path.
      *    @param string $name          Name must match.
      *    @return boolean              True if matched.
-     *    @access private
      */
     protected function isMatch($cookie, $host, $path, $name)
     {
@@ -379,6 +365,7 @@ class SimpleCookieJar
         if (! $cookie->isValidPath($path)) {
             return false;
         }
+
         return true;
     }
 
@@ -387,7 +374,6 @@ class SimpleCookieJar
      *    path. Results are list of strings of form "name=value".
      *    @param SimpleUrl $url       Url to select by.
      *    @return array               Valid name and value pairs.
-     *    @access public
      */
     public function selectAsPairs($url)
     {
@@ -397,6 +383,7 @@ class SimpleCookieJar
                 $pairs[] = $cookie->getName() . '=' . $cookie->getValue();
             }
         }
+
         return $pairs;
     }
 }

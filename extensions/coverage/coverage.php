@@ -20,7 +20,7 @@ class CodeCoverage
     public $excludes;
     public $directoryDepth;
     public $maxDirectoryDepth = 20; // reasonable, otherwise arbitrary
-    public $title = "Code Coverage";
+    public $title = 'Code Coverage';
 
     # NOTE: This assumes all code shares the same current working directory.
     public $settingsFile = './code-coverage-settings.dat';
@@ -39,6 +39,7 @@ class CodeCoverage
     {
         $handler = new CoverageDataHandler($this->log);
         $touched = $handler->getFilenames();
+
         return $touched;
     }
 
@@ -74,13 +75,13 @@ class CodeCoverage
     public function resetLog()
     {
         error_log('reseting log');
-        $new_file = fopen($this->log, "w");
+        $new_file = fopen($this->log, 'w');
         if (!$new_file) {
-            throw new Exception("Could not create ". $this->log);
+            throw new Exception('Could not create '. $this->log);
         }
         fclose($new_file);
         if (!chmod($this->log, 0666)) {
-            throw new Exception("Could not change ownership on file  ". $this->log);
+            throw new Exception('Could not change ownership on file  '. $this->log);
         }
         $handler = new CoverageDataHandler($this->log);
         $handler->createSchema();
@@ -89,8 +90,8 @@ class CodeCoverage
     public function startCoverage()
     {
         $this->root = getcwd();
-        if (!extension_loaded("xdebug")) {
-            throw new Exception("Could not load xdebug extension");
+        if (!extension_loaded('xdebug')) {
+            throw new Exception('Could not load xdebug extension');
         };
         xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
     }
@@ -114,7 +115,7 @@ class CodeCoverage
         if (file_exists($this->settingsFile)) {
             $this->setSettings(file_get_contents($this->settingsFile));
         } else {
-            error_log("Could not find settings file ". $this->settingsFile);
+            error_log('Could not find settings file '. $this->settingsFile);
         }
     }
 
@@ -130,6 +131,7 @@ class CodeCoverage
             'includes' => $this->includes,
             'excludes' => $this->excludes
         );
+
         return serialize($data);
     }
 
@@ -166,6 +168,7 @@ class CodeCoverage
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -194,17 +197,20 @@ class CodeCoverage
         $coverage->readSettings();
         if (empty($coverage->log) || !file_exists($coverage->log)) {
             trigger_error('No coverage log');
+
             return false;
         }
+
         return true;
     }
 
     public static function getInstance()
     {
         if (self::$instance === null) {
-            self::$instance = new CodeCoverage();
+            self::$instance = new self();
             self::$instance->readSettings();
         }
+
         return self::$instance;
     }
 }

@@ -20,7 +20,7 @@ $handler = new CoverageDataHandler($cc->log);
 $report = new CoverageReporter();
 $args = CoverageUtils::parseArguments($_SERVER['argv']);
 $report->reportDir = CoverageUtils::issetOr($args['reportDir'], 'coverage-report');
-$report->title = CoverageUtils::issetOr($args['title'], "Simpletest Coverage");
+$report->title = CoverageUtils::issetOr($args['title'], 'Simpletest Coverage');
 $report->coverage = $handler->read();
 $report->untouched = $handler->readUntouchedFiles();
 $report->generate();

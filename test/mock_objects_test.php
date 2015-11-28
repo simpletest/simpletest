@@ -70,18 +70,18 @@ class TestOfParametersExpectation extends UnitTestCase
 
     public function testIdentityOnly()
     {
-        $expectation = new ParametersExpectation(array("0"));
+        $expectation = new ParametersExpectation(array('0'));
         $this->assertFalse($expectation->test(array(0)));
-        $this->assertTrue($expectation->test(array("0")));
+        $this->assertTrue($expectation->test(array('0')));
     }
 
     public function testLongList()
     {
         $expectation = new ParametersExpectation(
-                array("0", 0, new AnythingExpectation(), false));
-        $this->assertTrue($expectation->test(array("0", 0, 37, false)));
-        $this->assertFalse($expectation->test(array("0", 0, 37, true)));
-        $this->assertFalse($expectation->test(array("0", 0, 37)));
+                array('0', 0, new AnythingExpectation(), false));
+        $this->assertTrue($expectation->test(array('0', 0, 37, false)));
+        $this->assertFalse($expectation->test(array('0', 0, 37, true)));
+        $this->assertFalse($expectation->test(array('0', 0, 37)));
     }
 }
 
@@ -90,8 +90,8 @@ class TestOfSimpleSignatureMap extends UnitTestCase
     public function testEmpty()
     {
         $map = new SimpleSignatureMap();
-        $this->assertFalse($map->isMatch("any", array()));
-        $this->assertNull($map->findFirstAction("any", array()));
+        $this->assertFalse($map->isMatch('any', array()));
+        $this->assertNull($map->findFirstAction('any', array()));
     }
 
     public function testDifferentCallSignaturesCanHaveDifferentReferences()
@@ -127,21 +127,21 @@ class TestOfSimpleSignatureMap extends UnitTestCase
     public function testOrdering()
     {
         $map = new SimpleSignatureMap();
-        $map->add(array(1, 2), new SimpleByValue("1, 2"));
-        $map->add(array(1, 3), new SimpleByValue("1, 3"));
-        $map->add(array(1), new SimpleByValue("1"));
-        $map->add(array(1, 4), new SimpleByValue("1, 4"));
-        $map->add(array(new AnythingExpectation()), new SimpleByValue("Any"));
-        $map->add(array(2), new SimpleByValue("2"));
-        $map->add("", new SimpleByValue("Default"));
-        $map->add(array(), new SimpleByValue("None"));
-        $this->assertEqual($map->findFirstAction(array(1, 2)), new SimpleByValue("1, 2"));
-        $this->assertEqual($map->findFirstAction(array(1, 3)), new SimpleByValue("1, 3"));
-        $this->assertEqual($map->findFirstAction(array(1, 4)), new SimpleByValue("1, 4"));
-        $this->assertEqual($map->findFirstAction(array(1)), new SimpleByValue("1"));
-        $this->assertEqual($map->findFirstAction(array(2)), new SimpleByValue("Any"));
-        $this->assertEqual($map->findFirstAction(array(3)), new SimpleByValue("Any"));
-        $this->assertEqual($map->findFirstAction(array()), new SimpleByValue("Default"));
+        $map->add(array(1, 2), new SimpleByValue('1, 2'));
+        $map->add(array(1, 3), new SimpleByValue('1, 3'));
+        $map->add(array(1), new SimpleByValue('1'));
+        $map->add(array(1, 4), new SimpleByValue('1, 4'));
+        $map->add(array(new AnythingExpectation()), new SimpleByValue('Any'));
+        $map->add(array(2), new SimpleByValue('2'));
+        $map->add('', new SimpleByValue('Default'));
+        $map->add(array(), new SimpleByValue('None'));
+        $this->assertEqual($map->findFirstAction(array(1, 2)), new SimpleByValue('1, 2'));
+        $this->assertEqual($map->findFirstAction(array(1, 3)), new SimpleByValue('1, 3'));
+        $this->assertEqual($map->findFirstAction(array(1, 4)), new SimpleByValue('1, 4'));
+        $this->assertEqual($map->findFirstAction(array(1)), new SimpleByValue('1'));
+        $this->assertEqual($map->findFirstAction(array(2)), new SimpleByValue('Any'));
+        $this->assertEqual($map->findFirstAction(array(3)), new SimpleByValue('Any'));
+        $this->assertEqual($map->findFirstAction(array()), new SimpleByValue('Default'));
     }
 }
 
@@ -247,20 +247,20 @@ class TestOfMockGeneration extends UnitTestCase
     public function testCloning()
     {
         $mock = new MockDummy();
-        $this->assertTrue(method_exists($mock, "aMethod"));
+        $this->assertTrue(method_exists($mock, 'aMethod'));
         $this->assertNull($mock->aMethod());
     }
 
     public function testCloningWithExtraMethod()
     {
         $mock = new MockDummyWithExtraMethods();
-        $this->assertTrue(method_exists($mock, "extraMethod"));
+        $this->assertTrue(method_exists($mock, 'extraMethod'));
     }
 
     public function testCloningWithChosenClassName()
     {
         $mock = new AnotherMockDummy();
-        $this->assertTrue(method_exists($mock, "aMethod"));
+        $this->assertTrue(method_exists($mock, 'aMethod'));
     }
 }
 
@@ -269,9 +269,9 @@ class TestOfMockReturns extends UnitTestCase
     public function testDefaultReturn()
     {
         $mock = new MockDummy();
-        $mock->returnsByValue("aMethod", "aaa");
-        $this->assertIdentical($mock->aMethod(), "aaa");
-        $this->assertIdentical($mock->aMethod(), "aaa");
+        $mock->returnsByValue('aMethod', 'aaa');
+        $this->assertIdentical($mock->aMethod(), 'aaa');
+        $this->assertIdentical($mock->aMethod(), 'aaa');
     }
 
     public function testParameteredReturn()
@@ -302,8 +302,8 @@ class TestOfMockReturns extends UnitTestCase
     {
         $mock = new MockDummy();
         $mock->returnsByValue(
-                "aMethod",
-                "aaa",
+                'aMethod',
+                'aaa',
                 array(new PatternExpectation('/hello/i')));
         $this->assertIdentical($mock->aMethod('Hello'), 'aaa');
         $this->assertNull($mock->aMethod('Goodbye'));
@@ -312,10 +312,10 @@ class TestOfMockReturns extends UnitTestCase
     public function testMultipleMethods()
     {
         $mock = new MockDummy();
-        $mock->returnsByValue("aMethod", 100, array(1));
-        $mock->returnsByValue("aMethod", 200, array(2));
-        $mock->returnsByValue("anotherMethod", 10, array(1));
-        $mock->returnsByValue("anotherMethod", 20, array(2));
+        $mock->returnsByValue('aMethod', 100, array(1));
+        $mock->returnsByValue('aMethod', 200, array(2));
+        $mock->returnsByValue('anotherMethod', 10, array(1));
+        $mock->returnsByValue('anotherMethod', 20, array(2));
         $this->assertIdentical($mock->aMethod(1), 100);
         $this->assertIdentical($mock->anotherMethod(1), 10);
         $this->assertIdentical($mock->aMethod(2), 200);
@@ -325,20 +325,20 @@ class TestOfMockReturns extends UnitTestCase
     public function testReturnSequence()
     {
         $mock = new MockDummy();
-        $mock->returnsByValueAt(0, "aMethod", "aaa");
-        $mock->returnsByValueAt(1, "aMethod", "bbb");
-        $mock->returnsByValueAt(3, "aMethod", "ddd");
-        $this->assertIdentical($mock->aMethod(), "aaa");
-        $this->assertIdentical($mock->aMethod(), "bbb");
+        $mock->returnsByValueAt(0, 'aMethod', 'aaa');
+        $mock->returnsByValueAt(1, 'aMethod', 'bbb');
+        $mock->returnsByValueAt(3, 'aMethod', 'ddd');
+        $this->assertIdentical($mock->aMethod(), 'aaa');
+        $this->assertIdentical($mock->aMethod(), 'bbb');
         $this->assertNull($mock->aMethod());
-        $this->assertIdentical($mock->aMethod(), "ddd");
+        $this->assertIdentical($mock->aMethod(), 'ddd');
     }
 
     public function testSetReturnReferenceAtGivesOriginal()
     {
         $mock = new MockDummy();
         $object = 100;
-        $mock->returnsByReferenceAt(1, "aReferenceMethod", $object);
+        $mock->returnsByReferenceAt(1, 'aReferenceMethod', $object);
         $this->assertNull($mock->aReferenceMethod());
         $this->assertReference($mock->aReferenceMethod(), $object);
         $this->assertNull($mock->aReferenceMethod());
@@ -348,7 +348,7 @@ class TestOfMockReturns extends UnitTestCase
     {
         $mock = new MockDummy();
         $object = new Dummy();
-        $mock->returnsAt(1, "aMethod", $object);
+        $mock->returnsAt(1, 'aMethod', $object);
         $this->assertNull($mock->aMethod());
         $this->assertSame($mock->aMethod(), $object);
         $this->assertNull($mock->aMethod());
@@ -358,13 +358,13 @@ class TestOfMockReturns extends UnitTestCase
     {
         $mock = new MockDummy();
         $object = new Dummy();
-        $mock->returnsAt(1, "aMethod", "aaa", array("a"));
-        $mock->returnsAt(1, "aMethod", "bbb");
-        $mock->returnsAt(2, "aMethod", $object, array('*', 2));
-        $mock->returnsAt(2, "aMethod", "value", array('*', 3));
-        $mock->returns("aMethod", 3, array(3));
+        $mock->returnsAt(1, 'aMethod', 'aaa', array('a'));
+        $mock->returnsAt(1, 'aMethod', 'bbb');
+        $mock->returnsAt(2, 'aMethod', $object, array('*', 2));
+        $mock->returnsAt(2, 'aMethod', 'value', array('*', 3));
+        $mock->returns('aMethod', 3, array(3));
         $this->assertNull($mock->aMethod());
-        $this->assertEqual($mock->aMethod("a"), "aaa");
+        $this->assertEqual($mock->aMethod('a'), 'aaa');
         $this->assertSame($mock->aMethod(1, 2), $object);
         $this->assertEqual($mock->aMethod(3), 3);
         $this->assertNull($mock->aMethod());
@@ -373,33 +373,33 @@ class TestOfMockReturns extends UnitTestCase
     public function testMultipleMethodSequences()
     {
         $mock = new MockDummy();
-        $mock->returnsByValueAt(0, "aMethod", "aaa");
-        $mock->returnsByValueAt(1, "aMethod", "bbb");
-        $mock->returnsByValueAt(0, "anotherMethod", "ccc");
-        $mock->returnsByValueAt(1, "anotherMethod", "ddd");
-        $this->assertIdentical($mock->aMethod(), "aaa");
-        $this->assertIdentical($mock->anotherMethod(), "ccc");
-        $this->assertIdentical($mock->aMethod(), "bbb");
-        $this->assertIdentical($mock->anotherMethod(), "ddd");
+        $mock->returnsByValueAt(0, 'aMethod', 'aaa');
+        $mock->returnsByValueAt(1, 'aMethod', 'bbb');
+        $mock->returnsByValueAt(0, 'anotherMethod', 'ccc');
+        $mock->returnsByValueAt(1, 'anotherMethod', 'ddd');
+        $this->assertIdentical($mock->aMethod(), 'aaa');
+        $this->assertIdentical($mock->anotherMethod(), 'ccc');
+        $this->assertIdentical($mock->aMethod(), 'bbb');
+        $this->assertIdentical($mock->anotherMethod(), 'ddd');
     }
 
     public function testSequenceFallback()
     {
         $mock = new MockDummy();
-        $mock->returnsByValueAt(0, "aMethod", "aaa", array('a'));
-        $mock->returnsByValueAt(1, "aMethod", "bbb", array('a'));
-        $mock->returnsByValue("aMethod", "AAA");
-        $this->assertIdentical($mock->aMethod('a'), "aaa");
-        $this->assertIdentical($mock->aMethod('b'), "AAA");
+        $mock->returnsByValueAt(0, 'aMethod', 'aaa', array('a'));
+        $mock->returnsByValueAt(1, 'aMethod', 'bbb', array('a'));
+        $mock->returnsByValue('aMethod', 'AAA');
+        $this->assertIdentical($mock->aMethod('a'), 'aaa');
+        $this->assertIdentical($mock->aMethod('b'), 'AAA');
     }
 
     public function testMethodInterference()
     {
         $mock = new MockDummy();
-        $mock->returnsByValueAt(0, "anotherMethod", "aaa");
-        $mock->returnsByValue("aMethod", "AAA");
-        $this->assertIdentical($mock->aMethod(), "AAA");
-        $this->assertIdentical($mock->anotherMethod(), "aaa");
+        $mock->returnsByValueAt(0, 'anotherMethod', 'aaa');
+        $mock->returnsByValue('aMethod', 'AAA');
+        $this->assertIdentical($mock->aMethod(), 'AAA');
+        $this->assertIdentical($mock->anotherMethod(), 'aaa');
     }
 }
 
@@ -519,12 +519,14 @@ class LikeExpectation extends IdenticalExpectation
     public function test($compare)
     {
         $compare->message = '';
+
         return parent::test($compare);
     }
 
     public function testMessage($compare)
     {
         $compare->message = '';
+
         return parent::testMessage($compare);
     }
 }
@@ -565,7 +567,7 @@ class TestOfMockExpectations extends UnitTestCase
     {
         $this->test->expectOnce('assert', array(new MemberExpectation('count', 2), 2));
         $mock = new MockDummyWithInjectedTestCase();
-        $mock->expectMaximumCallCount("aMethod", 2);
+        $mock->expectMaximumCallCount('aMethod', 2);
         $mock->aMethod();
         $mock->aMethod();
         $mock->mock->atTestEnd('testSomething', $this->test);
@@ -629,7 +631,7 @@ class TestOfMockExpectations extends UnitTestCase
     {
         $this->test->expectOnce('assert', array(new MemberExpectation('count', 1), 0));
         $mock = new MockDummyWithInjectedTestCase();
-        $mock->expectAtLeastOnce("aMethod");
+        $mock->expectAtLeastOnce('aMethod');
         $mock->mock->atTestEnd('testSomething', $this->test);
     }
 
@@ -672,7 +674,7 @@ class TestOfMockExpectations extends UnitTestCase
                                                                   new AnythingExpectation())),
                                       array(100, 123, 101), '*'));
         $mock = new MockDummyWithInjectedTestCase($this);
-        $mock->expect("aMethod", array('*', 123, '*'));
+        $mock->expect('aMethod', array('*', 123, '*'));
         $mock->aMethod(100, 123, 101);
         $mock->mock->atTestEnd('testSomething', $this->test);
     }
@@ -697,7 +699,7 @@ class TestOfMockExpectations extends UnitTestCase
     {
         $mock = new MockDummyWithInjectedTestCase();
         $this->expectError(new PatternExpectation('/\$args.*not an array/i'));
-        $mock->expect("aMethod", "foo");
+        $mock->expect('aMethod', 'foo');
         $mock->aMethod();
         $mock->mock->atTestEnd('testSomething', $this->test);
     }

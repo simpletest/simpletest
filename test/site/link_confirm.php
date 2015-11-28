@@ -1,6 +1,7 @@
-<?php
-    require_once('self.php');
-?><html>
+<?php 
+require_once 'self.php';
+?>
+<html>
     <head><title>SimpleTest testing links</title></head>
     <body>
         <p>

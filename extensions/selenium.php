@@ -3,14 +3,10 @@
  *	base include file for SimpleTest
  *	@package	SimpleTest
  *	@subpackage	Extensions
- *	@version	$Id$
  */
-/**#@+
- *  include other SimpleTest class files
- */
+
 require_once dirname(__FILE__) . '/../unit_tester.php';
 require_once dirname(__FILE__) . '/selenium/remote-control.php';
-/**#@-*/
 
 /**
  * Provides test case wrapper to a Selenium remote
@@ -20,7 +16,7 @@ require_once dirname(__FILE__) . '/selenium/remote-control.php';
  */
 class SeleniumTestCase extends UnitTestCase
 {
-    /**#@+
+    /**
      * Selenium instantiation variables
      */
     protected $browser = '';
@@ -28,7 +24,6 @@ class SeleniumTestCase extends UnitTestCase
     protected $host = 'localhost';
     protected $port = '4444';
     protected $timeout = 30000;
-    /**#@-*/
 
     protected $selenium = null;
     protected $newInstanceEachTest = true;
@@ -85,7 +80,7 @@ class SeleniumTestCase extends UnitTestCase
                 sprintf('%s failed', $method)
             );
         }
-                    
+
         return call_user_func_array(
             array($this->selenium, $method),
             $arguments

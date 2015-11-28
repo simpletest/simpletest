@@ -5,14 +5,10 @@
  *  @subpackage WebTester
  */
 
-/**#@+
- *  include other SimpleTest class files
- */
 require_once dirname(__FILE__) . '/cookies.php';
 require_once dirname(__FILE__) . '/http.php';
 require_once dirname(__FILE__) . '/encoding.php';
 require_once dirname(__FILE__) . '/authentication.php';
-/**#@-*/
 
 if (! defined('DEFAULT_MAX_REDIRECTS')) {
     define('DEFAULT_MAX_REDIRECTS', 3);
@@ -41,7 +37,6 @@ class SimpleUserAgent
 
     /**
      *    Starts with no cookies, realms or proxies.
-     *    @access public
      */
     public function __construct()
     {
@@ -56,7 +51,6 @@ class SimpleUserAgent
      *    @param string/integer $date   Time when session restarted.
      *                                  If omitted then all persistent
      *                                  cookies are kept.
-     *    @access public
      */
     public function restart($date = false)
     {
@@ -68,7 +62,6 @@ class SimpleUserAgent
      *    Adds a header to every fetch.
      *    @param string $header       Header line to add to every
      *                                request until cleared.
-     *    @access public
      */
     public function addHeader($header)
     {
@@ -78,7 +71,6 @@ class SimpleUserAgent
     /**
      *    Ages the cookies by the specified time.
      *    @param integer $interval    Amount in seconds.
-     *    @access public
      */
     public function ageCookies($interval)
     {
@@ -93,7 +85,6 @@ class SimpleUserAgent
      *    @param string $host            Host upon which the cookie is valid.
      *    @param string $path            Cookie path if not host wide.
      *    @param string $expiry          Expiry date.
-     *    @access public
      */
     public function setCookie($name, $value, $host = false, $path = '/', $expiry = false)
     {
@@ -108,7 +99,6 @@ class SimpleUserAgent
      *    @param string $name        Name of cookie to read.
      *    @return string             False if not present, else the
      *                               value as a string.
-     *    @access public
      */
     public function getCookieValue($host, $path, $name)
     {
@@ -121,19 +111,18 @@ class SimpleUserAgent
      *    @param SimpleUrl $base  Base URL to search from.
      *    @return string/boolean  Null if there is no base URL, false
      *                            if the cookie is not set.
-     *    @access public
      */
     public function getBaseCookieValue($name, $base)
     {
         if (! $base) {
             return null;
         }
+
         return $this->getCookieValue($base->getHost(), $base->getPath(), $name);
     }
 
     /**
      *    Switches off cookie sending and recieving.
-     *    @access public
      */
     public function ignoreCookies()
     {
@@ -142,7 +131,6 @@ class SimpleUserAgent
 
     /**
      *    Switches back on the cookie sending and recieving.
-     *    @access public
      */
     public function useCookies()
     {
@@ -152,7 +140,6 @@ class SimpleUserAgent
     /**
      *    Sets the socket timeout for opening a connection.
      *    @param integer $timeout      Maximum time in seconds.
-     *    @access public
      */
     public function setConnectionTimeout($timeout)
     {
@@ -163,7 +150,6 @@ class SimpleUserAgent
      *    Sets the maximum number of redirects before
      *    a page will be loaded anyway.
      *    @param integer $max        Most hops allowed.
-     *    @access public
      */
     public function setMaximumRedirects($max)
     {
@@ -177,12 +163,12 @@ class SimpleUserAgent
      *    @param string $proxy        Proxy URL.
      *    @param string $username     Proxy username for authentication.
      *    @param string $password     Proxy password for authentication.
-     *    @access public
      */
     public function useProxy($proxy, $username, $password)
     {
         if (! $proxy) {
             $this->proxy = false;
+
             return;
         }
         if ((strncmp($proxy, 'http://', 7) != 0) && (strncmp($proxy, 'https://', 8) != 0)) {
@@ -197,7 +183,6 @@ class SimpleUserAgent
      *    Test to see if the redirect limit is passed.
      *    @param integer $redirects        Count so far.
      *    @return boolean                  True if over.
-     *    @access private
      */
     protected function isTooManyRedirects($redirects)
     {
@@ -210,7 +195,6 @@ class SimpleUserAgent
      *    @param string $realm       Full name of realm.
      *    @param string $username    Username for realm.
      *    @param string $password    Password for realm.
-     *    @access public
      */
     public function setIdentity($host, $realm, $username, $password)
     {
@@ -223,7 +207,6 @@ class SimpleUserAgent
      *    @param string/SimpleUrl $url      Target to fetch.
      *    @param SimpleEncoding $encoding   Additional parameters for request.
      *    @return SimpleHttpResponse        Hopefully the target page.
-     *    @access public
      */
     public function fetchResponse($url, $encoding)
     {
@@ -240,6 +223,7 @@ class SimpleUserAgent
                         $headers->getRealm());
             }
         }
+
         return $response;
     }
 
@@ -249,7 +233,6 @@ class SimpleUserAgent
      *    @param SimpleUrl $url                  Target to fetch.
      *    @param SimpelFormEncoding $encoding    Additional parameters for request.
      *    @return SimpleHttpResponse             Hopefully the target page.
-     *    @access private
      */
     protected function fetchWhileRedirected($url, $encoding)
     {
@@ -270,6 +253,7 @@ class SimpleUserAgent
             $url = $location->makeAbsolute($url);
             $encoding = new SimpleGetEncoding();
         } while (! $this->isTooManyRedirects(++$redirects));
+
         return $response;
     }
 
@@ -278,11 +262,11 @@ class SimpleUserAgent
      *    @param SimpleUrl $url                   Target to fetch.
      *    @param SimpleFormEncoding $encoding     Additional parameters for request.
      *    @return SimpleHttpResponse              Headers and hopefully content.
-     *    @access protected
      */
     protected function fetch($url, $encoding)
     {
         $request = $this->createRequest($url, $encoding);
+
         return $request->fetch($this->connection_timeout);
     }
 
@@ -291,7 +275,6 @@ class SimpleUserAgent
      *    @param SimpleUrl $url                 Target to fetch as url object.
      *    @param SimpleFormEncoding $encoding   POST/GET parameters.
      *    @return SimpleHttpRequest             New request.
-     *    @access private
      */
     protected function createRequest($url, $encoding)
     {
@@ -301,6 +284,7 @@ class SimpleUserAgent
             $request->readCookiesFromJar($this->cookie_jar, $url);
         }
         $this->authenticator->addHeaders($request, $url);
+
         return $request;
     }
 
@@ -309,7 +293,6 @@ class SimpleUserAgent
      *    @param SimpleUrl $url                  Target to fetch as url object.
      *    @param SimpleFormEncoding $parameters  POST/GET parameters.
      *    @return SimpleHttpRequest              New request object.
-     *    @access protected
      */
     protected function createHttpRequest($url, $encoding)
     {
@@ -320,7 +303,6 @@ class SimpleUserAgent
      *    Sets up either a direct route or via a proxy.
      *    @param SimpleUrl $url   Target to fetch as url object.
      *    @return SimpleRoute     Route to take to fetch URL.
-     *    @access protected
      */
     protected function createRoute($url)
     {
@@ -331,13 +313,13 @@ class SimpleUserAgent
                     $this->proxy_username,
                     $this->proxy_password);
         }
+
         return new SimpleRoute($url);
     }
 
     /**
      *    Adds additional manual headers.
      *    @param SimpleHttpRequest $request    Outgoing request.
-     *    @access private
      */
     protected function addAdditionalHeaders(&$request)
     {

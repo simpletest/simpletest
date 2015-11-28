@@ -1,10 +1,10 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../compatibility.php');
-require_once(dirname(__FILE__) . '/../browser.php');
-require_once(dirname(__FILE__) . '/../web_tester.php');
-require_once(dirname(__FILE__) . '/../unit_tester.php');
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../compatibility.php';
+require_once dirname(__FILE__) . '/../browser.php';
+require_once dirname(__FILE__) . '/../web_tester.php';
+require_once dirname(__FILE__) . '/../unit_tester.php';
 
 class SimpleTestAcceptanceTest extends WebTestCase
 {
@@ -278,37 +278,37 @@ class TestOfLiveFetching extends SimpleTestAcceptanceTest
 
     public function testGetWithData()
     {
-        $this->get($this->samples() . 'network_confirm.php', array("a" => "aaa"));
+        $this->get($this->samples() . 'network_confirm.php', array('a' => 'aaa'));
         $this->assertPattern('/Request method.*?<dd>GET<\/dd>/');
         $this->assertText('a=[aaa]');
     }
 
     public function testPostWithData()
     {
-        $this->post($this->samples() . 'network_confirm.php', array("a" => "aaa"));
+        $this->post($this->samples() . 'network_confirm.php', array('a' => 'aaa'));
         $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
         $this->assertText('a=[aaa]');
     }
 
     public function testPostWithRecursiveData()
     {
-        $this->post($this->samples() . 'network_confirm.php', array("a" => "aaa"));
+        $this->post($this->samples() . 'network_confirm.php', array('a' => 'aaa'));
         $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
         $this->assertText('a=[aaa]');
 
-        $this->post($this->samples() . 'network_confirm.php', array("a[aa]" => "aaa"));
+        $this->post($this->samples() . 'network_confirm.php', array('a[aa]' => 'aaa'));
         $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
         $this->assertText('a=[aa=[aaa]]');
 
-        $this->post($this->samples() . 'network_confirm.php', array("a[aa][aaa]" => "aaaa"));
+        $this->post($this->samples() . 'network_confirm.php', array('a[aa][aaa]' => 'aaaa'));
         $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
         $this->assertText('a=[aa=[aaa=[aaaa]]]');
 
-        $this->post($this->samples() . 'network_confirm.php', array("a" => array("aa" => "aaa")));
+        $this->post($this->samples() . 'network_confirm.php', array('a' => array('aa' => 'aaa')));
         $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
         $this->assertText('a=[aa=[aaa]]');
 
-        $this->post($this->samples() . 'network_confirm.php', array("a" => array("aa" => array("aaa" => "aaaa"))));
+        $this->post($this->samples() . 'network_confirm.php', array('a' => array('aa' => array('aaa' => 'aaaa'))));
         $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
         $this->assertText('a=[aa=[aaa=[aaaa]]]');
     }
@@ -664,12 +664,14 @@ class TestOfLiveCookies extends SimpleTestAcceptanceTest
     public function thisHost()
     {
         $here = $this->here();
+
         return $here->getHost();
     }
 
     public function thisPath()
     {
         $here = $this->here();
+
         return $here->getPath();
     }
 
@@ -896,7 +898,7 @@ class LiveTestOfForms extends SimpleTestAcceptanceTest
     public function testFormSubmissionWithIdsAndAdditionnalData()
     {
         $this->get($this->samples() . 'form.html');
-        $this->assertTrue($this->clickSubmitById(99, array('additionnal' => "data")));
+        $this->assertTrue($this->clickSubmitById(99, array('additionnal' => 'data')));
         $this->assertText('additionnal=[data]');
     }
 

@@ -14,7 +14,7 @@
         ?>
         <h1>Raw GET data</h1>
         <?php
-            print "[" . $_SERVER['QUERY_STRING'] . "]";
+            print '[' . $_SERVER['QUERY_STRING'] . ']';
         ?>
         <h1>GET data</h1>
         <?php
@@ -30,14 +30,14 @@
         ?>
         <h1>Raw POST data</h1>
         <?php
-            print "[" . $HTTP_RAW_POST_DATA . "]";
+            print '[' . $HTTP_RAW_POST_DATA . ']';
         ?>
         <pre><?php print_r(PageRequest::post()); ?></pre>
         <h1>POST data</h1>
         <?php
             if (count($_POST) > 0) {
                 foreach ($_POST as $key => $value) {
-                    print $key . "=[";
+                    print $key . '=[';
                     if (is_array($value)) {
                         print implode(', ', $value);
                     } else {

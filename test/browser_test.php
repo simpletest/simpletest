@@ -1,11 +1,11 @@
 <?php
-// $Id$
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../browser.php');
-require_once(dirname(__FILE__) . '/../user_agent.php');
-require_once(dirname(__FILE__) . '/../http.php');
-require_once(dirname(__FILE__) . '/../page.php');
-require_once(dirname(__FILE__) . '/../encoding.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../browser.php';
+require_once dirname(__FILE__) . '/../user_agent.php';
+require_once dirname(__FILE__) . '/../http.php';
+require_once dirname(__FILE__) . '/../page.php';
+require_once dirname(__FILE__) . '/../encoding.php';
 
 Mock::generate('SimpleHttpResponse');
 Mock::generate('SimplePage');
@@ -170,6 +170,7 @@ class TestOfParsedPageAccess extends UnitTestCase
         $browser->__construct();
 
         $browser->get('http://this.com/page.html');
+
         return $browser;
     }
 
@@ -245,6 +246,7 @@ class TestOfBrowserNavigation extends UnitTestCase
         $browser->returns('createUserAgent', $agent);
         $browser->returns('parse', $page);
         $browser->__construct();
+
         return $browser;
     }
 
@@ -283,7 +285,7 @@ class TestOfBrowserNavigation extends UnitTestCase
         $browser->delete('http://this.com/delete.req');
         $browser->head('http://this.com/head.req');
     }
-    
+
     public function testClickLinkRequestsPage()
     {
         $agent = new MockSimpleUserAgent();
@@ -591,6 +593,7 @@ class TestOfBrowserFrames extends UnitTestCase
         $browser = new MockUserAgentSimpleBrowser();
         $browser->returns('createUserAgent', $agent);
         $browser->__construct();
+
         return $browser;
     }
 
@@ -604,6 +607,7 @@ class TestOfBrowserFrames extends UnitTestCase
             $response->setReturnValue('getContent', $raw);
             $agent->returns('fetchResponse', $response, array($url, '*'));
         }
+
         return $agent;
     }
 

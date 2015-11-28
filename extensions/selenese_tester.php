@@ -2,15 +2,10 @@
 /**
  *	@package	SimpleTest
  *	@subpackage	Extensions
- *	@version	$Id$
  */
 
-/**#@+
- * include SimpleTest files
- */
 require_once dirname(__FILE__).'/../unit_tester.php';
 require_once dirname(__FILE__).'/selenium/remote-control.php';
-/**#@-*/
 
 /**
  * SeleneseTestCase
@@ -27,7 +22,6 @@ require_once dirname(__FILE__).'/selenium/remote-control.php';
  * @param array $parsed_table
  * @param string $logMessages
  * @param array $_commandMap
- * 
  */
 class SeleneseTestCase extends UnitTestCase
 {
@@ -36,221 +30,221 @@ class SeleneseTestCase extends UnitTestCase
     public $testFile;
     public $parsed_table;
     public $logMessages;
-    public $_commandMap = array("verify",
-                            "verifyErrorOnNext",
-                            "verifyNotErrorOnNext",
-                            "verifyFailureOnNext",
-                            "verifyNotFailureOnNext",
-                            "verifySelected",
-                            "verifyNotSelected",
-                            "verifyAlert",
-                            "verifyNotAlert",
-                            "verifyAllButtons",
-                            "verifyNotAllButtons",
-                            "verifyAllFields",
-                            "verifyNotAllFields",
-                            "verifyAllLinks",
-                            "verifyNotAllLinks",
-                            "verifyAllWindowIds",
-                            "verifyNotAllWindowIds",
-                            "verifyAllWindowNames",
-                            "verifyNotAllWindowNames",
-                            "verifyAllWindowTitles",
-                            "verifyNotAllWindowTitles",
-                            "verifyAttribute",
-                            "verifyNotAttribute",
-                            "verifyAttributeFromAllWindows",
-                            "verifyNotAttributeFromAllWindows",
-                            "verifyBodyText",
-                            "verifyNotBodyText",
-                            "verifyConfirmation",
-                            "verifyNotConfirmation",
-                            "verifyCookie",
-                            "verifyNotCookie",
-                            "verifyCursorPosition",
-                            "verifyNotCursorPosition",
-                            "verifyElementHeight",
-                            "verifyNotElementHeight",
-                            "verifyElementIndex",
-                            "verifyNotElementIndex",
-                            "verifyElementPositionLeft",
-                            "verifyNotElementPositionLeft",
-                            "verifyElementPositionTop",
-                            "verifyNotElementPositionTop",
-                            "verifyElementWidth",
-                            "verifyNotElementWidth",
-                            "verifyEval",
-                            "verifyNotEval",
-                            "verifyExpression",
-                            "verifyNotExpression",
-                            "verifyHtmlSource",
-                            "verifyNotHtmlSource",
-                            "verifyLocation",
-                            "verifyNotLocation",
-                            "verifyLogMessages",
-                            "verifyNotLogMessages",
-                            "verifyMouseSpeed",
-                            "verifyNotMouseSpeed",
-                            "verifyPrompt",
-                            "verifyNotPrompt",
-                            "verifySelectedId",
-                            "verifyNotSelectedId",
-                            "verifySelectedIds",
-                            "verifyNotSelectedIds",
-                            "verifySelectedIndex",
-                            "verifyNotSelectedIndex",
-                            "verifySelectedIndexes",
-                            "verifyNotSelectedIndexes",
-                            "verifySelectedLabel",
-                            "verifyNotSelectedLabel",
-                            "verifySelectedLabels",
-                            "verifyNotSelectedLabels",
-                            "verifySelectedValue",
-                            "verifyNotSelectedValue",
-                            "verifySelectedValues",
-                            "verifyNotSelectedValues",
-                            "verifySelectOptions",
-                            "verifyNotSelectOptions",
-                            "verifyTable",
-                            "verifyNotTable",
-                            "verifyText",
-                            "verifyNotText",
-                            "verifyTitle",
-                            "verifyNotTitle",
-                            "verifyValue",
-                            "verifyNotValue",
-                            "verifyWhetherThisFrameMatchFrameExpression",
-                            "verifyNotWhetherThisFrameMatchFrameExpression",
-                            "verifyWhetherThisWindowMatchWindowExpression",
-                            "verifyNotWhetherThisWindowMatchWindowExpression",
-                            "verifyAlertPresent",
-                            "verifyAlertNotPresent",
-                            "verifyChecked",
-                            "verifyNotChecked",
-                            "verifyConfirmationPresent",
-                            "verifyConfirmationNotPresent",
-                            "verifyEditable",
-                            "verifyNotEditable",
-                            "verifyElementPresent",
-                            "verifyElementNotPresent",
-                            "verifyOrdered",
-                            "verifyNotOrdered",
-                            "verifyPromptPresent",
-                            "verifyPromptNotPresent",
-                            "verifySomethingSelected",
-                            "verifyNotSomethingSelected",
-                            "verifyTextPresent",
-                            "verifyTextNotPresent",
-                            "verifyVisible",
-                            "verifyNotVisible",
-                            "assert",
-                            "assertErrorOnNext",
-                            "assertNotErrorOnNext",
-                            "assertFailureOnNext",
-                            "assertNotFailureOnNext",
-                            "assertSelected",
-                            "assertNotSelected",
-                            "assertAlert",
-                            "assertNotAlert",
-                            "assertAllButtons",
-                            "assertNotAllButtons",
-                            "assertAllFields",
-                            "assertNotAllFields",
-                            "assertAllLinks",
-                            "assertNotAllLinks",
-                            "assertAllWindowIds",
-                            "assertNotAllWindowIds",
-                            "assertAllWindowNames",
-                            "assertNotAllWindowNames",
-                            "assertAllWindowTitles",
-                            "assertNotAllWindowTitles",
-                            "assertAttribute",
-                            "assertNotAttribute",
-                            "assertAttributeFromAllWindows",
-                            "assertNotAttributeFromAllWindows",
-                            "assertBodyText",
-                            "assertNotBodyText",
-                            "assertConfirmation",
-                            "assertNotConfirmation",
-                            "assertCookie",
-                            "assertNotCookie",
-                            "assertCursorPosition",
-                            "assertNotCursorPosition",
-                            "assertElementHeight",
-                            "assertNotElementHeight",
-                            "assertElementIndex",
-                            "assertNotElementIndex",
-                            "assertElementPositionLeft",
-                            "assertNotElementPositionLeft",
-                            "assertElementPositionTop",
-                            "assertNotElementPositionTop",
-                            "assertElementWidth",
-                            "assertNotElementWidth",
-                            "assertEval",
-                            "assertNotEval",
-                            "assertExpression",
-                            "assertNotExpression",
-                            "assertHtmlSource",
-                            "assertNotHtmlSource",
-                            "assertLocation",
-                            "assertNotLocation",
-                            "assertLogMessages",
-                            "assertNotLogMessages",
-                            "assertMouseSpeed",
-                            "assertNotMouseSpeed",
-                            "assertPrompt",
-                            "assertNotPrompt",
-                            "assertSelectedId",
-                            "assertNotSelectedId",
-                            "assertSelectedIds",
-                            "assertNotSelectedIds",
-                            "assertSelectedIndex",
-                            "assertNotSelectedIndex",
-                            "assertSelectedIndexes",
-                            "assertNotSelectedIndexes",
-                            "assertSelectedLabel",
-                            "assertNotSelectedLabel",
-                            "assertSelectedLabels",
-                            "assertNotSelectedLabels",
-                            "assertSelectedValue",
-                            "assertNotSelectedValue",
-                            "assertSelectedValues",
-                            "assertNotSelectedValues",
-                            "assertSelectOptions",
-                            "assertNotSelectOptions",
-                            "assertTable",
-                            "assertNotTable",
-                            "assertText",
-                            "assertNotText",
-                            "assertTitle",
-                            "assertNotTitle",
-                            "assertValue",
-                            "assertNotValue",
-                            "assertWhetherThisFrameMatchFrameExpression",
-                            "assertNotWhetherThisFrameMatchFrameExpression",
-                            "assertWhetherThisWindowMatchWindowExpression",
-                            "assertNotWhetherThisWindowMatchWindowExpression",
-                            "assertAlertPresent",
-                            "assertAlertNotPresent",
-                            "assertChecked",
-                            "assertNotChecked",
-                            "assertConfirmationPresent",
-                            "assertConfirmationNotPresent",
-                            "assertEditable",
-                            "assertNotEditable",
-                            "assertElementPresent",
-                            "assertElementNotPresent",
-                            "assertOrdered",
-                            "assertNotOrdered",
-                            "assertPromptPresent",
-                            "assertPromptNotPresent",
-                            "assertSomethingSelected",
-                            "assertNotSomethingSelected",
-                            "assertTextPresent",
-                            "assertTextNotPresent",
-                            "assertVisible",
-                            "assertNotVisible");
-    
+    public $_commandMap = array('verify',
+                            'verifyErrorOnNext',
+                            'verifyNotErrorOnNext',
+                            'verifyFailureOnNext',
+                            'verifyNotFailureOnNext',
+                            'verifySelected',
+                            'verifyNotSelected',
+                            'verifyAlert',
+                            'verifyNotAlert',
+                            'verifyAllButtons',
+                            'verifyNotAllButtons',
+                            'verifyAllFields',
+                            'verifyNotAllFields',
+                            'verifyAllLinks',
+                            'verifyNotAllLinks',
+                            'verifyAllWindowIds',
+                            'verifyNotAllWindowIds',
+                            'verifyAllWindowNames',
+                            'verifyNotAllWindowNames',
+                            'verifyAllWindowTitles',
+                            'verifyNotAllWindowTitles',
+                            'verifyAttribute',
+                            'verifyNotAttribute',
+                            'verifyAttributeFromAllWindows',
+                            'verifyNotAttributeFromAllWindows',
+                            'verifyBodyText',
+                            'verifyNotBodyText',
+                            'verifyConfirmation',
+                            'verifyNotConfirmation',
+                            'verifyCookie',
+                            'verifyNotCookie',
+                            'verifyCursorPosition',
+                            'verifyNotCursorPosition',
+                            'verifyElementHeight',
+                            'verifyNotElementHeight',
+                            'verifyElementIndex',
+                            'verifyNotElementIndex',
+                            'verifyElementPositionLeft',
+                            'verifyNotElementPositionLeft',
+                            'verifyElementPositionTop',
+                            'verifyNotElementPositionTop',
+                            'verifyElementWidth',
+                            'verifyNotElementWidth',
+                            'verifyEval',
+                            'verifyNotEval',
+                            'verifyExpression',
+                            'verifyNotExpression',
+                            'verifyHtmlSource',
+                            'verifyNotHtmlSource',
+                            'verifyLocation',
+                            'verifyNotLocation',
+                            'verifyLogMessages',
+                            'verifyNotLogMessages',
+                            'verifyMouseSpeed',
+                            'verifyNotMouseSpeed',
+                            'verifyPrompt',
+                            'verifyNotPrompt',
+                            'verifySelectedId',
+                            'verifyNotSelectedId',
+                            'verifySelectedIds',
+                            'verifyNotSelectedIds',
+                            'verifySelectedIndex',
+                            'verifyNotSelectedIndex',
+                            'verifySelectedIndexes',
+                            'verifyNotSelectedIndexes',
+                            'verifySelectedLabel',
+                            'verifyNotSelectedLabel',
+                            'verifySelectedLabels',
+                            'verifyNotSelectedLabels',
+                            'verifySelectedValue',
+                            'verifyNotSelectedValue',
+                            'verifySelectedValues',
+                            'verifyNotSelectedValues',
+                            'verifySelectOptions',
+                            'verifyNotSelectOptions',
+                            'verifyTable',
+                            'verifyNotTable',
+                            'verifyText',
+                            'verifyNotText',
+                            'verifyTitle',
+                            'verifyNotTitle',
+                            'verifyValue',
+                            'verifyNotValue',
+                            'verifyWhetherThisFrameMatchFrameExpression',
+                            'verifyNotWhetherThisFrameMatchFrameExpression',
+                            'verifyWhetherThisWindowMatchWindowExpression',
+                            'verifyNotWhetherThisWindowMatchWindowExpression',
+                            'verifyAlertPresent',
+                            'verifyAlertNotPresent',
+                            'verifyChecked',
+                            'verifyNotChecked',
+                            'verifyConfirmationPresent',
+                            'verifyConfirmationNotPresent',
+                            'verifyEditable',
+                            'verifyNotEditable',
+                            'verifyElementPresent',
+                            'verifyElementNotPresent',
+                            'verifyOrdered',
+                            'verifyNotOrdered',
+                            'verifyPromptPresent',
+                            'verifyPromptNotPresent',
+                            'verifySomethingSelected',
+                            'verifyNotSomethingSelected',
+                            'verifyTextPresent',
+                            'verifyTextNotPresent',
+                            'verifyVisible',
+                            'verifyNotVisible',
+                            'assert',
+                            'assertErrorOnNext',
+                            'assertNotErrorOnNext',
+                            'assertFailureOnNext',
+                            'assertNotFailureOnNext',
+                            'assertSelected',
+                            'assertNotSelected',
+                            'assertAlert',
+                            'assertNotAlert',
+                            'assertAllButtons',
+                            'assertNotAllButtons',
+                            'assertAllFields',
+                            'assertNotAllFields',
+                            'assertAllLinks',
+                            'assertNotAllLinks',
+                            'assertAllWindowIds',
+                            'assertNotAllWindowIds',
+                            'assertAllWindowNames',
+                            'assertNotAllWindowNames',
+                            'assertAllWindowTitles',
+                            'assertNotAllWindowTitles',
+                            'assertAttribute',
+                            'assertNotAttribute',
+                            'assertAttributeFromAllWindows',
+                            'assertNotAttributeFromAllWindows',
+                            'assertBodyText',
+                            'assertNotBodyText',
+                            'assertConfirmation',
+                            'assertNotConfirmation',
+                            'assertCookie',
+                            'assertNotCookie',
+                            'assertCursorPosition',
+                            'assertNotCursorPosition',
+                            'assertElementHeight',
+                            'assertNotElementHeight',
+                            'assertElementIndex',
+                            'assertNotElementIndex',
+                            'assertElementPositionLeft',
+                            'assertNotElementPositionLeft',
+                            'assertElementPositionTop',
+                            'assertNotElementPositionTop',
+                            'assertElementWidth',
+                            'assertNotElementWidth',
+                            'assertEval',
+                            'assertNotEval',
+                            'assertExpression',
+                            'assertNotExpression',
+                            'assertHtmlSource',
+                            'assertNotHtmlSource',
+                            'assertLocation',
+                            'assertNotLocation',
+                            'assertLogMessages',
+                            'assertNotLogMessages',
+                            'assertMouseSpeed',
+                            'assertNotMouseSpeed',
+                            'assertPrompt',
+                            'assertNotPrompt',
+                            'assertSelectedId',
+                            'assertNotSelectedId',
+                            'assertSelectedIds',
+                            'assertNotSelectedIds',
+                            'assertSelectedIndex',
+                            'assertNotSelectedIndex',
+                            'assertSelectedIndexes',
+                            'assertNotSelectedIndexes',
+                            'assertSelectedLabel',
+                            'assertNotSelectedLabel',
+                            'assertSelectedLabels',
+                            'assertNotSelectedLabels',
+                            'assertSelectedValue',
+                            'assertNotSelectedValue',
+                            'assertSelectedValues',
+                            'assertNotSelectedValues',
+                            'assertSelectOptions',
+                            'assertNotSelectOptions',
+                            'assertTable',
+                            'assertNotTable',
+                            'assertText',
+                            'assertNotText',
+                            'assertTitle',
+                            'assertNotTitle',
+                            'assertValue',
+                            'assertNotValue',
+                            'assertWhetherThisFrameMatchFrameExpression',
+                            'assertNotWhetherThisFrameMatchFrameExpression',
+                            'assertWhetherThisWindowMatchWindowExpression',
+                            'assertNotWhetherThisWindowMatchWindowExpression',
+                            'assertAlertPresent',
+                            'assertAlertNotPresent',
+                            'assertChecked',
+                            'assertNotChecked',
+                            'assertConfirmationPresent',
+                            'assertConfirmationNotPresent',
+                            'assertEditable',
+                            'assertNotEditable',
+                            'assertElementPresent',
+                            'assertElementNotPresent',
+                            'assertOrdered',
+                            'assertNotOrdered',
+                            'assertPromptPresent',
+                            'assertPromptNotPresent',
+                            'assertSomethingSelected',
+                            'assertNotSomethingSelected',
+                            'assertTextPresent',
+                            'assertTextNotPresent',
+                            'assertVisible',
+                            'assertNotVisible');
+
     /**
      * constructor
      * 
@@ -264,7 +258,7 @@ class SeleneseTestCase extends UnitTestCase
         $this->selenium = new SimpleSeleniumRemoteControl($browser, $url);
         $this->parsed_table = array();
     }
-    
+
     /**
      * tidy
      * 
@@ -274,8 +268,8 @@ class SeleneseTestCase extends UnitTestCase
     {
         $tmp = $this->html;
         preg_match('/<meta.*>/', $tmp, $matche);
-        $matche[0] = str_replace("/>", ">", $matche[0]);
-        $matche[0] = str_replace(">", "/>", $matche[0]);
+        $matche[0] = str_replace('/>', '>', $matche[0]);
+        $matche[0] = str_replace('>', '/>', $matche[0]);
         $tmp = preg_replace('/<meta.*>/', $matche[0], $tmp);
         $this->html = $tmp;
     }
@@ -289,7 +283,7 @@ class SeleneseTestCase extends UnitTestCase
     {
         $parsedTab = array();
         $key1 = 0;
-    
+
         $contenthtml = new DOMDocument;
         @$contenthtml->loadHtml($this->html);
         $content = simplexml_import_dom($contenthtml);
@@ -313,14 +307,13 @@ class SeleneseTestCase extends UnitTestCase
      * @param string $function
      * @param string $param1
      * @param string $param2
-     * 
      */
     public function assertFunction($function, $param1, $param2)
     {
         $_verifyMap = array('verify', 'verifyTextPresent', 'verifyTextNotPresent', 'verifyValue');
-        
+
         $reponse = $this->selenium->__call($function, array($param1, $param2));
-        
+
         $message = $reponse;
         $message .= " using command '".$function ."' with target '".$param1."'";
         if (!empty($param2)) {
@@ -331,7 +324,7 @@ class SeleneseTestCase extends UnitTestCase
         if (!in_array($function, $_verifyMap)) {
             $reponse = substr($reponse, 0, 2) == 'OK' ? true : false;
         }
-        
+
         $this->assertTrue($reponse, $message);
     }
 
@@ -343,14 +336,13 @@ class SeleneseTestCase extends UnitTestCase
      * 
      * @param string $testFile
      * @param string $filename
-     * 
      */
-    public function launch($html="")
+    public function launch($html='')
     {
         $this->html = $html;
         $this->tidy();
         $this->parse();
-        
+
         $this->selenium->start();
         foreach ($this->parsed_table as $test) {
             if (in_array($test[0], $this->_commandMap)) {
@@ -361,14 +353,13 @@ class SeleneseTestCase extends UnitTestCase
         }
         $this->selenium->stop();
     }
-    
+
     /**
      * launchPhpFile
      * 
      * Parse the PHP file then launch the computed test suite
      * 
      * @param string $file
-     * 
      */
     public function launchPhpFile($file)
     {
@@ -376,19 +367,18 @@ class SeleneseTestCase extends UnitTestCase
         require($file);
         $data = ob_get_contents();
         ob_end_clean();
-        
+
         $this->testFile = $file;
         $this->html = $data;
         $this->launch($this->html);
     }
-    
+
     /**
      * launchFile
      * 
      * Launch the html test suite file on the url declared wihle constructing the object
      * 
      * @param string $testFile
-     * 
      */
     public function launchFile($testFile)
     {

@@ -125,7 +125,7 @@ class TestOfImplementations extends UnitTestCase
         $hinter = new WithHint();
         $hinter->hinted($mock);
     }
-    
+
     public function testNoSpuriousWarningsWhenSkippingDefaultedParameter()
     {
         $mock = new MockImplementsDummy();

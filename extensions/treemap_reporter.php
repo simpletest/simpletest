@@ -3,14 +3,10 @@
  *	Extension file for SimpleTest
  *  @package        SimpleTest
  *  @subpackage     Extensions
- *	@version	$Id$
  */
-/**#@+
- *  include other SimpleTest class files
- */
-require_once(dirname(__FILE__) . '/../scorer.php');
-require_once(dirname(__FILE__) . '/treemap_reporter/treemap_recorder.php');
-/**#@-*/
+
+require_once dirname(__FILE__) . '/../scorer.php';
+require_once dirname(__FILE__) . '/treemap_reporter/treemap_recorder.php';
 
 /**
  * Constructs and renders a treemap visualization of a test run
@@ -31,37 +27,38 @@ class TreemapReporter extends SimpleReporterDecorator
      */
     public function _getCss()
     {
-        $css = ".pass{background-color:green;}.fail{background-color:red;}";
-        $css .= "body {background-color:white;margin:0;padding:1em;}";
-        $css .= "div{float:right;margin:0;color:black;}";
-        $css .= "div{border-left:1px solid white;border-bottom:1px solid white;}";
-        $css .= "h1 {font:normal 1.8em Arial;color:black;margin:0 0 0.3em 0.1em;}";
-        $css .= ".clear { clear:both; }";
+        $css = '.pass{background-color:green;}.fail{background-color:red;}';
+        $css .= 'body {background-color:white;margin:0;padding:1em;}';
+        $css .= 'div{float:right;margin:0;color:black;}';
+        $css .= 'div{border-left:1px solid white;border-bottom:1px solid white;}';
+        $css .= 'h1 {font:normal 1.8em Arial;color:black;margin:0 0 0.3em 0.1em;}';
+        $css .= '.clear { clear:both; }';
+
         return $css;
     }
-    
+
     /**
      * paints the HTML header and sets up results
      */
     public function paintResultsHeader()
     {
         $title = $this->_reporter->getTitle();
-        echo "<html><head>";
+        echo '<html><head>';
         echo "<title>{$title}</title>";
-        echo "<style type=\"text/css\">" . $this->_getCss() . "</style>";
-        echo "</head><body>";
+        echo '<style type="text/css">' . $this->_getCss() . '</style>';
+        echo '</head><body>';
         echo "<h1>{$title}</h1>";
     }
-    
+
     /**
      * places a clearing break below the end of the test nodes
      */
     public function paintResultsFooter()
     {
-        echo "<br clear=\"all\">";
-        echo "</body></html>";
+        echo '<br clear="all">';
+        echo '</body></html>';
     }
-     
+
     /**
      * paints start tag for div representing a test node
      */
@@ -72,15 +69,15 @@ class TreemapReporter extends SimpleReporterDecorator
         $status = $node->getStatus();
         echo "<div title=\"$name: $description\" class=\"$status\" style=\"width:{$horiz}%;height:{$vert}%\">";
     }
-    
+
     /**
      * paints end tag for test node div
      */
     public function paintRectangleEnd()
     {
-        echo "</div>";
+        echo '</div>';
     }
-    
+
     /**
      * paints wrapping treemap divs
      * @todo how to configure aspect and other parameters?
@@ -94,7 +91,7 @@ class TreemapReporter extends SimpleReporterDecorator
         $this->paintRectangleEnd();
         $this->paintResultsFooter();
     }
-    
+
     /**
      * divides the test results based on a slice and dice algorithm
      *
@@ -125,7 +122,7 @@ class TreemapReporter extends SimpleReporterDecorator
             $this->paintRectangleEnd();
         }
     }
-    
+
     public function paintGroupEnd($group)
     {
         $this->_reporter->paintGroupEnd($group);

@@ -40,7 +40,7 @@ class TestOfDirectRoute extends UnitTestCase
 
         $route->createConnection('POST', 15);
     }
-    
+
     public function testDefaultDeleteRequest()
     {
         $socket = new MockSimpleSocket();
@@ -53,7 +53,7 @@ class TestOfDirectRoute extends UnitTestCase
         $route->__construct(new SimpleUrl('http://a.valid.host/here.html'));
         $this->assertSame($route->createConnection('DELETE', 15), $socket);
     }
-    
+
     public function testDefaultHeadRequest()
     {
         $socket = new MockSimpleSocket();
@@ -260,7 +260,7 @@ class TestOfHttpRequest extends UnitTestCase
         $request->readCookiesFromJar($jar, new SimpleUrl('/'));
         $request->fetch(15);
     }
-    
+
     public function testReadingDeleteConnection()
     {
         $socket = new MockSimpleSocket();
@@ -292,7 +292,7 @@ class TestOfHttpPostRequest extends UnitTestCase
         $socket->expectAt(0, 'write', array("Content-Length: 0\r\n"));
         $socket->expectAt(1, 'write', array("Content-Type: application/x-www-form-urlencoded\r\n"));
         $socket->expectAt(2, 'write', array("\r\n"));
-        $socket->expectAt(3, 'write', array(""));
+        $socket->expectAt(3, 'write', array(''));
 
         $route = new MockSimpleRoute();
         $route->setReturnReference('createConnection', $socket);
@@ -308,7 +308,7 @@ class TestOfHttpPostRequest extends UnitTestCase
         $socket->expectAt(0, 'write', array("Content-Length: 3\r\n"));
         $socket->expectAt(1, 'write', array("Content-Type: application/x-www-form-urlencoded\r\n"));
         $socket->expectAt(2, 'write', array("\r\n"));
-        $socket->expectAt(3, 'write', array("a=A"));
+        $socket->expectAt(3, 'write', array('a=A'));
 
         $route = new MockSimpleRoute();
         $route->setReturnReference('createConnection', $socket);
@@ -326,7 +326,7 @@ class TestOfHttpPostRequest extends UnitTestCase
         $socket->expectAt(0, 'write', array("Content-Length: 8\r\n"));
         $socket->expectAt(1, 'write', array("Content-Type: text/plain\r\n"));
         $socket->expectAt(2, 'write', array("\r\n"));
-        $socket->expectAt(3, 'write', array("raw body"));
+        $socket->expectAt(3, 'write', array('raw body'));
 
         $route = new MockSimpleRoute();
         $route->setReturnReference('createConnection', $socket);
@@ -344,7 +344,7 @@ class TestOfHttpPostRequest extends UnitTestCase
         $socket->expectAt(0, 'write', array("Content-Length: 27\r\n"));
         $socket->expectAt(1, 'write', array("Content-Type: text/xml\r\n"));
         $socket->expectAt(2, 'write', array("\r\n"));
-        $socket->expectAt(3, 'write', array("<a><b>one</b><c>two</c></a>"));
+        $socket->expectAt(3, 'write', array('<a><b>one</b><c>two</c></a>'));
 
         $route = new MockSimpleRoute();
         $route->setReturnReference('createConnection', $socket);
@@ -366,17 +366,17 @@ class TestOfHttpHeaders extends UnitTestCase
                 "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n" .
                 "Content-Type: text/plain\r\n" .
                 "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n" .
-                "Connection: close");
-        $this->assertIdentical($headers->getHttpVersion(), "1.1");
+                'Connection: close');
+        $this->assertIdentical($headers->getHttpVersion(), '1.1');
         $this->assertIdentical($headers->getResponseCode(), 200);
-        $this->assertEqual($headers->getMimeType(), "text/plain");
+        $this->assertEqual($headers->getMimeType(), 'text/plain');
     }
 
     public function testNonStandardResponseHeader()
     {
         $headers = new SimpleHttpHeaders(
                 "HTTP/1.1 302 (HTTP-Version SP Status-Code CRLF)\r\n" .
-                "Connection: close");
+                'Connection: close');
         $this->assertIdentical($headers->getResponseCode(), 302);
     }
 
@@ -393,7 +393,7 @@ class TestOfHttpHeaders extends UnitTestCase
                 "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n" .
                 "Set-Cookie: a=aaa; expires=Wed, 25-Dec-02 04:24:20 GMT; path=/here/\r\n" .
                 "Set-Cookie: b=bbb\r\n" .
-                "Connection: close");
+                'Connection: close');
         $headers->writeCookiesToJar($jar, new SimpleUrl('http://host'));
     }
 
@@ -403,9 +403,9 @@ class TestOfHttpHeaders extends UnitTestCase
                 "Content-Type: text/plain\r\n" .
                 "Content-Length: 0\r\n" .
                 "Location: http://www.somewhere-else.com/\r\n" .
-                "Connection: close");
+                'Connection: close');
         $this->assertIdentical($headers->getResponseCode(), 301);
-        $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com/");
+        $this->assertEqual($headers->getLocation(), 'http://www.somewhere-else.com/');
         $this->assertTrue($headers->isRedirect());
     }
 
@@ -414,7 +414,7 @@ class TestOfHttpHeaders extends UnitTestCase
         $headers = new SimpleHttpHeaders("HTTP/1.1 401 Authorization required\r\n" .
                 "Content-Type: text/plain\r\n" .
                 "Connection: close\r\n" .
-                "WWW-Authenticate: Basic realm=\"Somewhere\"");
+                'WWW-Authenticate: Basic realm="Somewhere"');
         $this->assertEqual($headers->getAuthentication(), 'Basic');
         $this->assertEqual($headers->getRealm(), 'Somewhere');
         $this->assertTrue($headers->isChallenge());
@@ -438,9 +438,9 @@ class TestOfHttpResponse extends UnitTestCase
     public function testBadSocketDuringResponse()
     {
         $socket = new MockSimpleSocket();
-        $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\n");
-        $socket->setReturnValueAt(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
-        $socket->setReturnValue("read", "");
+        $socket->setReturnValueAt(0, 'read', "HTTP/1.1 200 OK\r\n");
+        $socket->setReturnValueAt(1, 'read', "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+        $socket->setReturnValue('read', '');
         $socket->setReturnValue('getSent', 'HTTP/1.1 ...');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
@@ -452,25 +452,25 @@ class TestOfHttpResponse extends UnitTestCase
     public function testIncompleteHeader()
     {
         $socket = new MockSimpleSocket();
-        $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\n");
-        $socket->setReturnValueAt(1, "read", "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
-        $socket->setReturnValueAt(2, "read", "Content-Type: text/plain\r\n");
-        $socket->setReturnValue("read", "");
+        $socket->setReturnValueAt(0, 'read', "HTTP/1.1 200 OK\r\n");
+        $socket->setReturnValueAt(1, 'read', "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+        $socket->setReturnValueAt(2, 'read', "Content-Type: text/plain\r\n");
+        $socket->setReturnValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
         $this->assertTrue($response->isError());
-        $this->assertEqual($response->getContent(), "");
+        $this->assertEqual($response->getContent(), '');
     }
 
     public function testParseOfResponseHeadersWhenChunked()
     {
         $socket = new MockSimpleSocket();
-        $socket->setReturnValueAt(0, "read", "HTTP/1.1 200 OK\r\nDate: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
-        $socket->setReturnValueAt(1, "read", "Content-Type: text/plain\r\n");
-        $socket->setReturnValueAt(2, "read", "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\nConne");
-        $socket->setReturnValueAt(3, "read", "ction: close\r\n\r\nthis is a test file\n");
-        $socket->setReturnValueAt(4, "read", "with two lines in it\n");
-        $socket->setReturnValue("read", "");
+        $socket->setReturnValueAt(0, 'read', "HTTP/1.1 200 OK\r\nDate: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+        $socket->setReturnValueAt(1, 'read', "Content-Type: text/plain\r\n");
+        $socket->setReturnValueAt(2, 'read', "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\nConne");
+        $socket->setReturnValueAt(3, 'read', "ction: close\r\n\r\nthis is a test file\n");
+        $socket->setReturnValueAt(4, 'read', "with two lines in it\n");
+        $socket->setReturnValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
         $this->assertFalse($response->isError());
@@ -478,9 +478,9 @@ class TestOfHttpResponse extends UnitTestCase
         $response->getContent(),
                 "this is a test file\nwith two lines in it\n");
         $headers = $response->getHeaders();
-        $this->assertIdentical($headers->getHttpVersion(), "1.1");
+        $this->assertIdentical($headers->getHttpVersion(), '1.1');
         $this->assertIdentical($headers->getResponseCode(), 200);
-        $this->assertEqual($headers->getMimeType(), "text/plain");
+        $this->assertEqual($headers->getMimeType(), 'text/plain');
         $this->assertFalse($headers->isRedirect());
         $this->assertFalse($headers->getLocation());
     }
@@ -488,32 +488,32 @@ class TestOfHttpResponse extends UnitTestCase
     public function testRedirect()
     {
         $socket = new MockSimpleSocket();
-        $socket->setReturnValueAt(0, "read", "HTTP/1.1 301 OK\r\n");
-        $socket->setReturnValueAt(1, "read", "Content-Type: text/plain\r\n");
-        $socket->setReturnValueAt(2, "read", "Location: http://www.somewhere-else.com/\r\n");
-        $socket->setReturnValueAt(3, "read", "Connection: close\r\n");
-        $socket->setReturnValueAt(4, "read", "\r\n");
-        $socket->setReturnValue("read", "");
+        $socket->setReturnValueAt(0, 'read', "HTTP/1.1 301 OK\r\n");
+        $socket->setReturnValueAt(1, 'read', "Content-Type: text/plain\r\n");
+        $socket->setReturnValueAt(2, 'read', "Location: http://www.somewhere-else.com/\r\n");
+        $socket->setReturnValueAt(3, 'read', "Connection: close\r\n");
+        $socket->setReturnValueAt(4, 'read', "\r\n");
+        $socket->setReturnValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
         $headers = $response->getHeaders();
         $this->assertTrue($headers->isRedirect());
-        $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com/");
+        $this->assertEqual($headers->getLocation(), 'http://www.somewhere-else.com/');
     }
 
     public function testRedirectWithPort()
     {
         $socket = new MockSimpleSocket();
-        $socket->setReturnValueAt(0, "read", "HTTP/1.1 301 OK\r\n");
-        $socket->setReturnValueAt(1, "read", "Content-Type: text/plain\r\n");
-        $socket->setReturnValueAt(2, "read", "Location: http://www.somewhere-else.com:80/\r\n");
-        $socket->setReturnValueAt(3, "read", "Connection: close\r\n");
-        $socket->setReturnValueAt(4, "read", "\r\n");
-        $socket->setReturnValue("read", "");
+        $socket->setReturnValueAt(0, 'read', "HTTP/1.1 301 OK\r\n");
+        $socket->setReturnValueAt(1, 'read', "Content-Type: text/plain\r\n");
+        $socket->setReturnValueAt(2, 'read', "Location: http://www.somewhere-else.com:80/\r\n");
+        $socket->setReturnValueAt(3, 'read', "Connection: close\r\n");
+        $socket->setReturnValueAt(4, 'read', "\r\n");
+        $socket->setReturnValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
         $headers = $response->getHeaders();
         $this->assertTrue($headers->isRedirect());
-        $this->assertEqual($headers->getLocation(), "http://www.somewhere-else.com:80/");
+        $this->assertEqual($headers->getLocation(), 'http://www.somewhere-else.com:80/');
     }
 }

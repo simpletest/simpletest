@@ -22,7 +22,7 @@
 <php><![CDATA[
 <?php
     require_once('simpletest/browser.php');
-    
+
     $browser = &new SimpleBrowser();
     $browser->get('http://php.net/');
     $browser->clickLink('reporting bugs');

@@ -5,12 +5,8 @@
  *  @subpackage WebTester
  */
 
-/**#@+
- *  include other SimpleTest class files
- */
 require_once dirname(__FILE__) . '/page.php';
 require_once dirname(__FILE__) . '/user_agent.php';
-/**#@-*/
 
 /**
  *    A composite page. Wraps a frameset page and
@@ -44,7 +40,6 @@ class SimpleFrameset
      *    Adds a parsed page to the frameset.
      *    @param SimplePage $page    Frame page.
      *    @param string $name        Name of frame in frameset.
-     *    @access public
      */
     public function addFrame($page, $name = false)
     {
@@ -60,7 +55,6 @@ class SimpleFrameset
      *    one level.
      *    @param array $path        Path of frame in frameset.
      *    @param SimplePage $page   Frame source.
-     *    @access public
      */
     public function setFrame($path, $page)
     {
@@ -72,6 +66,7 @@ class SimpleFrameset
         }
         if (count($path) == 0) {
             $this->frames[$index] = &$page;
+
             return;
         }
         $this->frames[$index]->setFrame($path, $page);
@@ -82,13 +77,13 @@ class SimpleFrameset
      *    false if no frame has focus. Will have the nested
      *    frame focus if any.
      *    @return array     Labels or indexes of nested frames.
-     *    @access public
      */
     public function getFrameFocus()
     {
         if ($this->focus === false) {
             return array();
         }
+
         return array_merge(
                 array($this->getPublicNameFromIndex($this->focus)),
                 $this->frames[$this->focus]->getFrameFocus());
@@ -100,7 +95,6 @@ class SimpleFrameset
      *    index.
      *    @param integer $subject    Internal index.
      *    @return integer/string     Public name.
-     *    @access private
      */
     protected function getPublicNameFromIndex($subject)
     {
@@ -109,6 +103,7 @@ class SimpleFrameset
                 return $name;
             }
         }
+
         return $subject + 1;
     }
 
@@ -118,7 +113,6 @@ class SimpleFrameset
      *    then the nested frame will be focused.
      *    @param integer $choice    Chosen frame.
      *    @return boolean           True if frame exists.
-     *    @access public
      */
     public function setFrameFocusByIndex($choice)
     {
@@ -131,6 +125,7 @@ class SimpleFrameset
             return false;
         }
         $this->focus = $choice - 1;
+
         return true;
     }
 
@@ -140,7 +135,6 @@ class SimpleFrameset
      *    will be focused.
      *    @param string $name    Chosen frame.
      *    @return boolean        True if frame exists.
-     *    @access public
      */
     public function setFrameFocus($name)
     {
@@ -151,14 +145,15 @@ class SimpleFrameset
         }
         if (in_array($name, array_keys($this->names))) {
             $this->focus = $this->names[$name];
+
             return true;
         }
+
         return false;
     }
 
     /**
      *    Clears the frame focus.
-     *    @access public
      */
     public function clearFrameFocus()
     {
@@ -168,7 +163,6 @@ class SimpleFrameset
 
     /**
      *    Clears the frame focus for any nested frames.
-     *    @access private
      */
     protected function clearNestedFramesFocus()
     {
@@ -180,7 +174,6 @@ class SimpleFrameset
     /**
      *    Test for the presence of a frameset.
      *    @return boolean        Always true.
-     *    @access public
      */
     public function hasFrames()
     {
@@ -192,7 +185,6 @@ class SimpleFrameset
      *    @return array/string      Recursive hash of frame URL strings.
      *                              The key is either a numerical
      *                              index or the name attribute.
-     *    @access public
      */
     public function getFrames()
     {
@@ -201,6 +193,7 @@ class SimpleFrameset
             $report[$this->getPublicNameFromIndex($i)] =
                     $this->frames[$i]->getFrames();
         }
+
         return $report;
     }
 
@@ -208,7 +201,6 @@ class SimpleFrameset
      *    Accessor for raw text of either all the pages or
      *    the frame in focus.
      *    @return string        Raw unparsed content.
-     *    @access public
      */
     public function getRaw()
     {
@@ -219,6 +211,7 @@ class SimpleFrameset
         for ($i = 0; $i < count($this->frames); $i++) {
             $raw .= $this->frames[$i]->getRaw();
         }
+
         return $raw;
     }
 
@@ -226,7 +219,6 @@ class SimpleFrameset
      *    Accessor for plain text of either all the pages or
      *    the frame in focus.
      *    @return string        Plain text content.
-     *    @access public
      */
     public function getText()
     {
@@ -237,39 +229,39 @@ class SimpleFrameset
         for ($i = 0; $i < count($this->frames); $i++) {
             $raw .= ' ' . $this->frames[$i]->getText();
         }
+
         return trim($raw);
     }
 
     /**
      *    Accessor for last error.
      *    @return string        Error from last response.
-     *    @access public
      */
     public function getTransportError()
     {
         if (is_integer($this->focus)) {
             return $this->frames[$this->focus]->getTransportError();
         }
+
         return $this->frameset->getTransportError();
     }
 
     /**
      *    Request method used to fetch this frame.
      *    @return string      GET, POST or HEAD.
-     *    @access public
      */
     public function getMethod()
     {
         if (is_integer($this->focus)) {
             return $this->frames[$this->focus]->getMethod();
         }
+
         return $this->frameset->getMethod();
     }
 
     /**
      *    Original resource name.
      *    @return SimpleUrl        Current url.
-     *    @access public
      */
     public function getUrl()
     {
@@ -279,13 +271,13 @@ class SimpleFrameset
         } else {
             $url = $this->frameset->getUrl();
         }
+
         return $url;
     }
 
     /**
      *    Page base URL.
      *    @return SimpleUrl        Current url.
-     *    @access public
      */
     public function getBaseUrl()
     {
@@ -294,6 +286,7 @@ class SimpleFrameset
         } else {
             $url = $this->frameset->getBaseUrl();
         }
+
         return $url;
     }
 
@@ -302,7 +295,6 @@ class SimpleFrameset
      *    URLs for the frameset page.
      *    @param SimpleUrl $url        Relative URL.
      *    @return SimpleUrl            Absolute URL.
-     *    @access public
      */
     public function expandUrl($url)
     {
@@ -312,39 +304,39 @@ class SimpleFrameset
     /**
      *    Original request data.
      *    @return mixed              Sent content.
-     *    @access public
      */
     public function getRequestData()
     {
         if (is_integer($this->focus)) {
             return $this->frames[$this->focus]->getRequestData();
         }
+
         return $this->frameset->getRequestData();
     }
 
     /**
      *    Accessor for current MIME type.
      *    @return string    MIME type as string; e.g. 'text/html'
-     *    @access public
      */
     public function getMimeType()
     {
         if (is_integer($this->focus)) {
             return $this->frames[$this->focus]->getMimeType();
         }
+
         return $this->frameset->getMimeType();
     }
 
     /**
      *    Accessor for last response code.
      *    @return integer    Last HTTP response code received.
-     *    @access public
      */
     public function getResponseCode()
     {
         if (is_integer($this->focus)) {
             return $this->frames[$this->focus]->getResponseCode();
         }
+
         return $this->frameset->getResponseCode();
     }
 
@@ -352,13 +344,13 @@ class SimpleFrameset
      *    Accessor for last Authentication type. Only valid
      *    straight after a challenge (401).
      *    @return string    Description of challenge type.
-     *    @access public
      */
     public function getAuthentication()
     {
         if (is_integer($this->focus)) {
             return $this->frames[$this->focus]->getAuthentication();
         }
+
         return $this->frameset->getAuthentication();
     }
 
@@ -366,46 +358,45 @@ class SimpleFrameset
      *    Accessor for last Authentication realm. Only valid
      *    straight after a challenge (401).
      *    @return string    Name of security realm.
-     *    @access public
      */
     public function getRealm()
     {
         if (is_integer($this->focus)) {
             return $this->frames[$this->focus]->getRealm();
         }
+
         return $this->frameset->getRealm();
     }
 
     /**
      *    Accessor for outgoing header information.
      *    @return string      Header block.
-     *    @access public
      */
     public function getRequest()
     {
         if (is_integer($this->focus)) {
             return $this->frames[$this->focus]->getRequest();
         }
+
         return $this->frameset->getRequest();
     }
 
     /**
      *    Accessor for raw header information.
      *    @return string      Header block.
-     *    @access public
      */
     public function getHeaders()
     {
         if (is_integer($this->focus)) {
             return $this->frames[$this->focus]->getHeaders();
         }
+
         return $this->frameset->getHeaders();
     }
 
     /**
      *    Accessor for parsed title.
      *    @return string     Title or false if no title is present.
-     *    @access public
      */
     public function getTitle()
     {
@@ -415,7 +406,6 @@ class SimpleFrameset
     /**
      *    Accessor for a list of all fixed links.
      *    @return array   List of urls as strings.
-     *    @access public
      */
     public function getUrls()
     {
@@ -426,6 +416,7 @@ class SimpleFrameset
         foreach ($this->frames as $frame) {
             $urls = array_merge($urls, $frame->getUrls());
         }
+
         return array_values(array_unique($urls));
     }
 
@@ -434,7 +425,6 @@ class SimpleFrameset
      *    regardess of whitespace issues and case.
      *    @param string $label    Text of link.
      *    @return array           List of links with that label.
-     *    @access public
      */
     public function getUrlsByLabel($label)
     {
@@ -451,6 +441,7 @@ class SimpleFrameset
                                 $frame->getUrlsByLabel($label),
                                 $index));
         }
+
         return $urls;
     }
 
@@ -461,7 +452,6 @@ class SimpleFrameset
      *    a specific part of the frameset.
      *    @param string $id       Id attribute of link.
      *    @return string          URL with that id.
-     *    @access public
      */
     public function getUrlById($id)
     {
@@ -470,9 +460,11 @@ class SimpleFrameset
                 if (! $url->gettarget()) {
                     $url->setTarget($this->getPublicNameFromIndex($index));
                 }
+
                 return $url;
             }
         }
+
         return false;
     }
 
@@ -481,7 +473,6 @@ class SimpleFrameset
      *    @param array $urls        List of SimpleUrls.
      *    @param string $frame      Name of frame or index.
      *    @return array             List of tagged URLs.
-     *    @access private
      */
     protected function tagUrlsWithFrame($urls, $frame)
     {
@@ -492,6 +483,7 @@ class SimpleFrameset
             }
             $tagged[] = $url;
         }
+
         return $tagged;
     }
 
@@ -501,7 +493,6 @@ class SimpleFrameset
      *    @param SimpleSelector $selector       Button finder.
      *    @return SimpleForm                    Form object containing
      *                                          the button.
-     *    @access public
      */
     public function getFormBySubmit($selector)
     {
@@ -516,7 +507,6 @@ class SimpleFrameset
      *    @param SimpleSelector $selector  Image finder.
      *    @return SimpleForm               Form object containing
      *                                     the image.
-     *    @access public
      */
     public function getFormByImage($selector)
     {
@@ -531,7 +521,6 @@ class SimpleFrameset
      *    will be the one returned.
      *    @param string $id     Form label.
      *    @return SimpleForm    Form object containing the matching ID.
-     *    @access public
      */
     public function getFormById($id)
     {
@@ -539,13 +528,12 @@ class SimpleFrameset
     }
 
     /**
-        *    General form finder. Will search all the frames or
-        *    just the one in focus.
-        *    @param string $method    Method to use to find in a page.
-        *    @param string $attribute Label, name or ID.
-        *    @return SimpleForm    Form object containing the matching ID.
-        *    @access private
-        */
+     *    General form finder. Will search all the frames or
+     *    just the one in focus.
+     *    @param string $method    Method to use to find in a page.
+     *    @param string $attribute Label, name or ID.
+     *    @return SimpleForm    Form object containing the matching ID.
+     */
     protected function findForm($method, $attribute)
     {
         if (is_integer($this->focus)) {
@@ -566,6 +554,7 @@ class SimpleFrameset
             }
         }
         $null = null;
+
         return $null;
     }
 
@@ -577,7 +566,6 @@ class SimpleFrameset
      *    @param string $method    Method to use to find in a page.
      *    @param string $attribute Label, name or ID.
      *    @return SimpleForm       Form object containing the matching ID.
-     *    @access private
      */
     protected function findFormInFrame($page, $index, $method, $attribute)
     {
@@ -585,6 +573,7 @@ class SimpleFrameset
         if (isset($form)) {
             $form->setDefaultTarget($this->getPublicNameFromIndex($index));
         }
+
         return $form;
     }
 
@@ -594,7 +583,6 @@ class SimpleFrameset
      *    @param SimpleSelector $selector    Field finder.
      *    @param string $value               Value to set field to.
      *    @return boolean                    True if value is valid.
-     *    @access public
      */
     public function setField($selector, $value)
     {
@@ -613,7 +601,6 @@ class SimpleFrameset
      *    @return string/boolean             A string if the field is
      *                                       present, false if unchecked
      *                                       and null if missing.
-     *    @access public
      */
     public function getField($selector)
     {
@@ -623,6 +610,7 @@ class SimpleFrameset
                 return $value;
             }
         }
+
         return null;
     }
 }

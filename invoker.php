@@ -5,10 +5,7 @@
  *  @subpackage UnitTester
  */
 
-/**#@+
- * Includes SimpleTest files and defined the root constant
- * for dependent libraries.
- */
+// Includes SimpleTest files and defined the root constant for dependent libraries.
 require_once dirname(__FILE__) . '/errors.php';
 require_once dirname(__FILE__) . '/compatibility.php';
 require_once dirname(__FILE__) . '/scorer.php';
@@ -17,7 +14,6 @@ require_once dirname(__FILE__) . '/dumper.php';
 if (! defined('SIMPLE_TEST')) {
     define('SIMPLE_TEST', dirname(__FILE__) . '/');
 }
-/**#@-*/
 
 /**
  *    This is called by the class runner to run a
@@ -42,7 +38,6 @@ class SimpleInvoker
     /**
      *    Accessor for test case being run.
      *    @return SimpleTestCase    Test case.
-     *    @access public
      */
     public function getTestCase()
     {
@@ -53,7 +48,6 @@ class SimpleInvoker
      *    Runs test level set up. Used for changing
      *    the mechanics of base test cases.
      *    @param string $method    Test method to call.
-     *    @access public
      */
     public function before($method)
     {
@@ -64,7 +58,6 @@ class SimpleInvoker
      *    Invokes a test method and buffered with setUp()
      *    and tearDown() calls.
      *    @param string $method    Test method to call.
-     *    @access public
      */
     public function invoke($method)
     {
@@ -77,7 +70,6 @@ class SimpleInvoker
      *    Runs test level clean up. Used for changing
      *    the mechanics of base test cases.
      *    @param string $method    Test method to call.
-     *    @access public
      */
     public function after($method)
     {
@@ -107,7 +99,6 @@ class SimpleInvokerDecorator
     /**
      *    Accessor for test case being run.
      *    @return SimpleTestCase    Test case.
-     *    @access public
      */
     public function getTestCase()
     {
@@ -118,7 +109,6 @@ class SimpleInvokerDecorator
      *    Runs test level set up. Used for changing
      *    the mechanics of base test cases.
      *    @param string $method    Test method to call.
-     *    @access public
      */
     public function before($method)
     {
@@ -129,7 +119,6 @@ class SimpleInvokerDecorator
      *    Invokes a test method and buffered with setUp()
      *    and tearDown() calls.
      *    @param string $method    Test method to call.
-     *    @access public
      */
     public function invoke($method)
     {
@@ -140,7 +129,6 @@ class SimpleInvokerDecorator
      *    Runs test level clean up. Used for changing
      *    the mechanics of base test cases.
      *    @param string $method    Test method to call.
-     *    @access public
      */
     public function after($method)
     {

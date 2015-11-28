@@ -1,9 +1,9 @@
 <?php
-// $Id: page_test.php 1912 2009-07-29 16:39:17Z lastcraft $
-require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../page.php');
-require_once(dirname(__FILE__) . '/../php_parser.php');
-require_once(dirname(__FILE__) . '/../tidy_parser.php');
+
+require_once dirname(__FILE__) . '/../autorun.php';
+require_once dirname(__FILE__) . '/../page.php';
+require_once dirname(__FILE__) . '/../php_parser.php';
+require_once dirname(__FILE__) . '/../tidy_parser.php';
 Mock::generate('SimpleHttpResponse');
 
 abstract class TestOfParsing extends UnitTestCase
@@ -142,7 +142,7 @@ abstract class TestOfParsing extends UnitTestCase
     {
         $page = $this->whenVisiting('http://host',
                                     '<html><head><Title>Me&amp;Me</TITLE></head></html>');
-        $this->assertEqual($page->getTitle(), "Me&Me");
+        $this->assertEqual($page->getTitle(), 'Me&Me');
     }
 
     public function testOnlyFramesInFramesetAreRecognised()
@@ -237,7 +237,7 @@ abstract class TestOfParsing extends UnitTestCase
                 '<input type="text" name="here" value="Hello">' .
                 '</form></head></html>';
         $page = $this->whenVisiting('http://host', $raw);
-        $this->assertEqual($page->getField(new SimpleByName('here')), "Hello");
+        $this->assertEqual($page->getField(new SimpleByName('here')), 'Hello');
     }
 
     public function testCanReadElementOfUnclosedForm()
@@ -246,7 +246,7 @@ abstract class TestOfParsing extends UnitTestCase
                 '<input type="text" name="here" value="Hello">' .
                 '</head></html>';
         $page = $this->whenVisiting('http://host', $raw);
-        $this->assertEqual($page->getField(new SimpleByName('here')), "Hello");
+        $this->assertEqual($page->getField(new SimpleByName('here')), 'Hello');
     }
 
     public function testCanReadElementByLabel()
@@ -255,7 +255,7 @@ abstract class TestOfParsing extends UnitTestCase
                 '<label>Where<input type="text" name="here" value="Hello"></label>' .
                 '</head></html>';
         $page = $this->whenVisiting('http://host', $raw);
-        $this->assertEqual($page->getField(new SimpleByLabel('Where')), "Hello");
+        $this->assertEqual($page->getField(new SimpleByLabel('Where')), 'Hello');
     }
 
     public function testCanFindFormByLabel()
@@ -485,9 +485,9 @@ abstract class TestOfParsing extends UnitTestCase
                 "            </label>\n" .
                 "        </form>\n" .
                 "    </body>\n" .
-                "</html>";
+                '</html>';
         $page = $this->whenVisiting('http://host', $raw);
-        $this->assertEqual($page->getField(new SimpleByName('c')), "                ");
+        $this->assertEqual($page->getField(new SimpleByName('c')), '                ');
     }
 
     public function testSettingTextArea()
@@ -668,6 +668,7 @@ class TestOfParsingUsingPhpParser extends TestOfParsing
         $response->setReturnValue('getContent', $content);
         $response->setReturnValue('getUrl', new SimpleUrl($url));
         $builder = new SimplePhpPageBuilder();
+
         return $builder->parse($response);
     }
 
@@ -675,7 +676,7 @@ class TestOfParsingUsingPhpParser extends TestOfParsing
     {
         $page = $this->whenVisiting('http://host',
                                     '<html><head><Title> <b>Me&amp;Me </TITLE></b></head></html>');
-        $this->assertEqual($page->getTitle(), "Me&Me");
+        $this->assertEqual($page->getTitle(), 'Me&Me');
     }
 
     public function testLabelShouldStopAtClosingLabelTag()
@@ -699,6 +700,7 @@ class TestOfParsingUsingTidyParser extends TestOfParsing
         $response->setReturnValue('getContent', $content);
         $response->setReturnValue('getUrl', new SimpleUrl($url));
         $builder = new SimpleTidyPageBuilder();
+
         return $builder->parse($response);
     }
 }

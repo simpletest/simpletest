@@ -5,14 +5,10 @@
  *  @subpackage UnitTester
  */
 
-/**#@+
- *  include other SimpleTest class files
- */
 require_once dirname(__FILE__) . '/simpletest.php';
 require_once dirname(__FILE__) . '/scorer.php';
 require_once dirname(__FILE__) . '/reporter.php';
 require_once dirname(__FILE__) . '/xml.php';
-/**#@-*/
 
 /**
  *    Parser for command line arguments. Extracts

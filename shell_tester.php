@@ -5,11 +5,7 @@
  *  @subpackage UnitTester
  */
 
-/**#@+
- *  include other SimpleTest class files
- */
 require_once dirname(__FILE__) . '/test_case.php';
-/**#@-*/
 
 /**
  *    Wrapper for exec() functionality.
@@ -22,7 +18,6 @@ class SimpleShell
 
     /**
      *    Executes the shell comand and stashes the output.
-     *    @access public
      */
     public function __construct()
     {
@@ -35,19 +30,18 @@ class SimpleShell
      *    @param string $command    The actual command line
      *                              to run.
      *    @return integer           Exit code.
-     *    @access public
      */
     public function execute($command)
     {
         $this->output = false;
         exec($command, $this->output, $ret);
+
         return $ret;
     }
 
     /**
      *    Accessor for the last output.
      *    @return string        Output as text.
-     *    @access public
      */
     public function getOutput()
     {
@@ -57,7 +51,6 @@ class SimpleShell
     /**
      *    Accessor for the last output.
      *    @return array         Output as array of lines.
-     *    @access public
      */
     public function getOutputAsList()
     {
@@ -83,7 +76,6 @@ class ShellTestCase extends SimpleTestCase
      *    with test methods for a functional test case.
      *    @param string $label     Name of test case. Will use
      *                             the class name if none specified.
-     *    @access public
      */
     public function __construct($label = false)
     {
@@ -97,19 +89,18 @@ class ShellTestCase extends SimpleTestCase
      *    Executes a command and buffers the results.
      *    @param string $command     Command to run.
      *    @return boolean            True if zero exit code.
-     *    @access public
      */
     public function execute($command)
     {
         $shell = $this->getShell();
         $this->last_status = $shell->execute($command);
         $this->last_command = $command;
+
         return ($this->last_status === 0);
     }
 
     /**
      *    Dumps the output of the last command.
-     *    @access public
      */
     public function dumpOutput()
     {
@@ -119,22 +110,22 @@ class ShellTestCase extends SimpleTestCase
     /**
      *    Accessor for the last output.
      *    @return string        Output as text.
-     *    @access public
      */
     public function getOutput()
     {
         $shell = $this->getShell();
+
         return $shell->getOutput();
     }
 
     /**
      *    Accessor for the last output.
      *    @return array         Output as array of lines.
-     *    @access public
      */
     public function getOutputAsList()
     {
         $shell = $this->getShell();
+
         return $shell->getOutputAsList();
     }
 
@@ -145,7 +136,6 @@ class ShellTestCase extends SimpleTestCase
      *    @param string $message    Message to display describing
      *                              the test state.
      *    @return boolean           True on pass
-     *    @access public
      */
     public function assertTrue($result, $message = false)
     {
@@ -160,7 +150,6 @@ class ShellTestCase extends SimpleTestCase
      *    @param boolean $result    Pass on false.
      *    @param string $message    Message to display.
      *    @return boolean           True on pass
-     *    @access public
      */
     public function assertFalse($result, $message = '%s')
     {
@@ -175,9 +164,8 @@ class ShellTestCase extends SimpleTestCase
      *    @param mixed $second         Value to compare.
      *    @param string $message       Message to display.
      *    @return boolean              True on pass
-     *    @access public
      */
-    public function assertEqual($first, $second, $message = "%s")
+    public function assertEqual($first, $second, $message = '%s')
     {
         return $this->assert(
                 new EqualExpectation($first),
@@ -193,9 +181,8 @@ class ShellTestCase extends SimpleTestCase
      *    @param mixed $second          Value to compare.
      *    @param string $message        Message to display.
      *    @return boolean               True on pass
-     *    @access public
      */
-    public function assertNotEqual($first, $second, $message = "%s")
+    public function assertNotEqual($first, $second, $message = '%s')
     {
         return $this->assert(
                 new NotEqualExpectation($first),
@@ -209,13 +196,13 @@ class ShellTestCase extends SimpleTestCase
      *                             command.
      *    @param string $message   Message to display.
      *    @return boolean          True if pass.
-     *    @access public
      */
-    public function assertExitCode($status, $message = "%s")
+    public function assertExitCode($status, $message = '%s')
     {
         $message = sprintf($message, "Expected status code of [$status] from [" .
-                $this->last_command . "], but got [" .
-                $this->last_status . "]");
+                $this->last_command . '], but got [' .
+                $this->last_status . ']');
+
         return $this->assertTrue($status === $this->last_status, $message);
     }
 
@@ -225,11 +212,11 @@ class ShellTestCase extends SimpleTestCase
      *    @param string $expected  Expected output.
      *    @param string $message   Message to display.
      *    @return boolean          True if pass.
-     *    @access public
      */
-    public function assertOutput($expected, $message = "%s")
+    public function assertOutput($expected, $message = '%s')
     {
         $shell = $this->getShell();
+
         return $this->assert(
                 new EqualExpectation($expected),
                 $shell->getOutput(),
@@ -242,11 +229,11 @@ class ShellTestCase extends SimpleTestCase
      *    @param string $pattern    Regex to search for.
      *    @param string $message    Message to display.
      *    @return boolean           True if pass.
-     *    @access public
      */
-    public function assertOutputPattern($pattern, $message = "%s")
+    public function assertOutputPattern($pattern, $message = '%s')
     {
         $shell = $this->getShell();
+
         return $this->assert(
                 new PatternExpectation($pattern),
                 $shell->getOutput(),
@@ -259,11 +246,11 @@ class ShellTestCase extends SimpleTestCase
      *    @param string $pattern    Regex to search for.
      *    @param $message           Message to display.
      *    @return boolean           True if pass.
-     *    @access public
      */
-    public function assertNoOutputPattern($pattern, $message = "%s")
+    public function assertNoOutputPattern($pattern, $message = '%s')
     {
         $shell = $this->getShell();
+
         return $this->assert(
                 new NoPatternExpectation($pattern),
                 $shell->getOutput(),
@@ -275,11 +262,11 @@ class ShellTestCase extends SimpleTestCase
      *    @param string $path      Full filename and path.
      *    @param string $message   Message to display.
      *    @return boolean          True if pass.
-     *    @access public
      */
-    public function assertFileExists($path, $message = "%s")
+    public function assertFileExists($path, $message = '%s')
     {
         $message = sprintf($message, "File [$path] should exist");
+
         return $this->assertTrue(file_exists($path), $message);
     }
 
@@ -288,11 +275,11 @@ class ShellTestCase extends SimpleTestCase
      *    @param string $path      Full filename and path.
      *    @param string $message   Message to display.
      *    @return boolean          True if pass.
-     *    @access public
      */
-    public function assertFileNotExists($path, $message = "%s")
+    public function assertFileNotExists($path, $message = '%s')
     {
         $message = sprintf($message, "File [$path] should not exist");
+
         return $this->assertFalse(file_exists($path), $message);
     }
 
@@ -303,9 +290,8 @@ class ShellTestCase extends SimpleTestCase
      *    @param string $path       Full filename and path.
      *    @param string $message    Message to display.
      *    @return boolean           True if pass.
-     *    @access public
      */
-    public function assertFilePattern($pattern, $path, $message = "%s")
+    public function assertFilePattern($pattern, $path, $message = '%s')
     {
         return $this->assert(
                 new PatternExpectation($pattern),
@@ -320,9 +306,8 @@ class ShellTestCase extends SimpleTestCase
      *    @param string $path       Full filename and path.
      *    @param string $message    Message to display.
      *    @return boolean           True if pass.
-     *    @access public
      */
-    public function assertNoFilePattern($pattern, $path, $message = "%s")
+    public function assertNoFilePattern($pattern, $path, $message = '%s')
     {
         return $this->assert(
                 new NoPatternExpectation($pattern),
@@ -334,7 +319,6 @@ class ShellTestCase extends SimpleTestCase
      *    Accessor for current shell. Used for testing the
      *    the tester itself.
      *    @return Shell        Current shell.
-     *    @access protected
      */
     protected function getShell()
     {
@@ -344,7 +328,6 @@ class ShellTestCase extends SimpleTestCase
     /**
      *    Factory for the shell to run the command on.
      *    @return Shell        New shell object.
-     *    @access protected
      */
     protected function createShell()
     {
