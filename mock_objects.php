@@ -1467,6 +1467,7 @@ class MockGenerator
         $code .= "    function __construct() {\n";
         $code .= "        parent::__construct();\n";
         $code .= "    }\n";
+        $code .= $this->createConstructorCode();
         $code .= $this->createHandlerCode($methods);
         $code .= "}\n";
 
@@ -1489,6 +1490,7 @@ class MockGenerator
         $code .= '        $this->mock = new ' . $this->mock_base . "();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
+        $code .= $this->createConstructorCode();
         $code .= $this->chainMockReturns();
         $code .= $this->chainMockExpectations();
         $code .= $this->chainThrowMethods();
@@ -1520,6 +1522,7 @@ class MockGenerator
         $code .= '        $this->mock = new ' . $this->mock_base . "();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
+        $code .= $this->createConstructorCode();
         $code .= $this->chainMockReturns();
         $code .= $this->chainMockExpectations();
         $code .= $this->chainThrowMethods();
@@ -1624,6 +1627,19 @@ class MockGenerator
         $code .= "            return \$null;\n";
         $code .= "        }\n";
 
+        return $code;
+    }
+
+    /**
+     *    Creates source code for late calling the constructor of the
+     *    compositied mock object.
+     *    @return string           Code for late calls.
+     */
+    protected function createConstructorCode()
+    {
+        $code  = "    function __constructor() {\n";
+        $code .= "        call_user_func_array('parent::__construct', func_get_args());\n";
+        $code .= "    }\n";
         return $code;
     }
 
