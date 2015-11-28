@@ -202,15 +202,16 @@ class SimpleUserAgent
     }
 
     /**
-     *    Fetches a URL as a response object. Will keep trying if redirected.
-     *    It will also collect authentication realm information.
-     *    @param string/SimpleUrl $url      Target to fetch.
-     *    @param SimpleEncoding $encoding   Additional parameters for request.
-     *    @return SimpleHttpResponse        Hopefully the target page.
+     * Fetches a URL as a response object. Will keep trying if redirected.
+     * It will also collect authentication realm information.
+     *
+     * @param string/SimpleUrl $url      Target to fetch.
+     * @param SimpleEncoding $encoding   Additional parameters for request.
+     * @return SimpleHttpResponse        Hopefully the target page.
      */
     public function fetchResponse($url, $encoding)
     {
-        if ($encoding->getMethod() != 'POST') {
+        if (!in_array($encoding->getMethod(), array('POST', 'PUT'))) {
             $url->addRequestParameters($encoding);
             $encoding->clear();
         }
