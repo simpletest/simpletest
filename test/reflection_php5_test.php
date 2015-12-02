@@ -221,35 +221,35 @@ class TestOfReflection extends UnitTestCase
     public function testNoParameterCreationWhenNoInterface()
     {
         $reflection = new SimpleReflection('AnyOldArgumentClass');
-        $function = $reflection->getSignature('aMethod');
+        $function   = $reflection->getSignature('aMethod');
         $this->assertEqual('function aMethod($argument)', $function);
     }
 
     public function testParameterCreationWithoutTypeHinting()
     {
         $reflection = new SimpleReflection('AnyOldArgumentImplementation');
-        $function = $reflection->getSignature('aMethod');
+        $function   = $reflection->getSignature('aMethod');
         $this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
     }
 
     public function testParameterCreationForTypeHinting()
     {
         $reflection = new SimpleReflection('AnyOldTypeHintedClass');
-        $function = $reflection->getSignature('aMethod');
+        $function   = $reflection->getSignature('aMethod');
         $this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
     }
 
     public function testIssetFunctionSignature()
     {
         $reflection = new SimpleReflection('AnyOldOverloadedClass');
-        $function = $reflection->getSignature('__isset');
+        $function   = $reflection->getSignature('__isset');
         $this->assertEqual('function __isset($key)', $function);
     }
 
     public function testUnsetFunctionSignature()
     {
         $reflection = new SimpleReflection('AnyOldOverloadedClass');
-        $function = $reflection->getSignature('__unset');
+        $function   = $reflection->getSignature('__unset');
         $this->assertEqual('function __unset($key)', $function);
     }
 
@@ -289,7 +289,7 @@ class TestOfReflectionWithTypeHints extends UnitTestCase
 				  function amethod(array $argument) {}
 			  }');
         $reflection = new SimpleReflection('AnyOldArrayTypeHintedClass');
-        $function = $reflection->getSignature('amethod');
+        $function   = $reflection->getSignature('amethod');
         $this->assertEqual('function amethod(array $argument)', $function);
     }
 }

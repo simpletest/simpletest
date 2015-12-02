@@ -10,9 +10,12 @@ class AllTests extends TestSuite
         $this->addFile(dirname(__FILE__) . '/unit_tests.php');
         $this->addFile(dirname(__FILE__) . '/shell_test.php');
         $this->addFile(dirname(__FILE__) . '/live_test.php');
-
-        // jakoch: disabled acceptance tests. 
-        // because, we will not test against a live server over the network.
-        //$this->addFile(dirname(__FILE__) . '/acceptance_test.php');
+        
+        // The acceptance tests "examples" are served via PHP's built-in webserver,
+        // which is available from PHP5.4 on.
+        if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+            
+            $this->addFile(dirname(__FILE__) . '/acceptance_test.php');
+        }
     }
 }

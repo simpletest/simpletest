@@ -161,7 +161,7 @@ class TestOfParsedPageAccess extends UnitTestCase
     public function loadPage(&$page)
     {
         $response = new MockSimpleHttpResponse($this);
-        $agent = new MockSimpleUserAgent($this);
+        $agent    = new MockSimpleUserAgent($this);
         $agent->returns('fetchResponse', $response);
 
         $browser = new MockParseSimpleBrowser($this);
@@ -176,7 +176,7 @@ class TestOfParsedPageAccess extends UnitTestCase
 
     public function testAccessorsWhenNoPage()
     {
-        $agent = new MockSimpleUserAgent($this);
+        $agent   = new MockSimpleUserAgent($this);
         $browser = new MockParseSimpleBrowser($this);
         $browser->returns('createUserAgent', $agent);
         $browser->__construct();
@@ -601,7 +601,7 @@ class TestOfBrowserFrames extends UnitTestCase
     {
         $agent = new MockSimpleUserAgent();
         foreach ($pages as $url => $raw) {
-            $url = new SimpleUrl($url);
+            $url      = new SimpleUrl($url);
             $response = new MockSimpleHttpResponse();
             $response->setReturnValue('getUrl', $url);
             $response->setReturnValue('getContent', $raw);
@@ -624,8 +624,8 @@ class TestOfBrowserFrames extends UnitTestCase
     public function testFramesetWithSingleFrame()
     {
         $frameset = '<frameset><frame name="a" src="frame.html"></frameset>';
-        $browser = $this->createBrowser($this->createUserAgent(array(
-                'http://site.with.one.frame/' => $frameset,
+        $browser  = $this->createBrowser($this->createUserAgent(array(
+                'http://site.with.one.frame/'           => $frameset,
                 'http://site.with.one.frame/frame.html' => 'A frame')));
         $this->assertEqual($browser->get('http://site.with.one.frame/'), 'A frame');
         $this->assertIdentical(
@@ -638,7 +638,7 @@ class TestOfBrowserFrames extends UnitTestCase
         $frameset = '<title>Frameset title</title>' .
                 '<frameset><frame name="a" src="frame.html"></frameset>';
         $browser = $this->createBrowser($this->createUserAgent(array(
-                'http://site.with.one.frame/' => $frameset,
+                'http://site.with.one.frame/'           => $frameset,
                 'http://site.with.one.frame/frame.html' => '<title>Page title</title>')));
         $browser->get('http://site.with.one.frame/');
         $this->assertEqual($browser->getTitle(), 'Frameset title');
@@ -647,8 +647,8 @@ class TestOfBrowserFrames extends UnitTestCase
     public function testFramesetWithSingleUnnamedFrame()
     {
         $frameset = '<frameset><frame src="frame.html"></frameset>';
-        $browser = $this->createBrowser($this->createUserAgent(array(
-                'http://site.with.one.frame/' => $frameset,
+        $browser  = $this->createBrowser($this->createUserAgent(array(
+                'http://site.with.one.frame/'           => $frameset,
                 'http://site.with.one.frame/frame.html' => 'One frame')));
         $this->assertEqual(
                 $browser->get('http://site.with.one.frame/'),
@@ -666,7 +666,7 @@ class TestOfBrowserFrames extends UnitTestCase
                 '<frame name="c" src="frame_c.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent(array(
-                'http://site.with.frames/' => $frameset,
+                'http://site.with.frames/'             => $frameset,
                 'http://site.with.frames/frame_a.html' => 'A frame',
                 'http://site.with.frames/frame_b.html' => 'B frame',
                 'http://site.with.frames/frame_c.html' => 'C frame')));
@@ -687,7 +687,7 @@ class TestOfBrowserFrames extends UnitTestCase
                 '<frame name="c" src="frame_c.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent(array(
-                'http://site.with.frames/' => $frameset,
+                'http://site.with.frames/'             => $frameset,
                 'http://site.with.frames/frame_a.html' => 'A frame',
                 'http://site.with.frames/frame_b.html' => 'B frame',
                 'http://site.with.frames/frame_c.html' => 'C frame')));
@@ -709,7 +709,7 @@ class TestOfBrowserFrames extends UnitTestCase
                 '<frame src="frame_d.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent(array(
-                'http://site.with.frames/' => $frameset,
+                'http://site.with.frames/'             => $frameset,
                 'http://site.with.frames/frame_a.html' => 'A frame',
                 'http://site.with.frames/frame_b.html' => 'B frame',
                 'http://site.with.frames/frame_c.html' => 'C frame',
@@ -719,9 +719,9 @@ class TestOfBrowserFrames extends UnitTestCase
                 'A frameB frameC frameD frame');
         $this->assertIdentical($browser->getFrames(), array(
                 'a' => 'http://site.with.frames/frame_a.html',
-                2 => 'http://site.with.frames/frame_b.html',
+                2   => 'http://site.with.frames/frame_b.html',
                 'c' => 'http://site.with.frames/frame_c.html',
-                4 => 'http://site.with.frames/frame_d.html'));
+                4   => 'http://site.with.frames/frame_d.html'));
     }
 
     public function testFrameFocusWithMixedNamesAndIndexes()
@@ -733,7 +733,7 @@ class TestOfBrowserFrames extends UnitTestCase
                 '<frame src="frame_d.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent(array(
-                'http://site.with.frames/' => $frameset,
+                'http://site.with.frames/'             => $frameset,
                 'http://site.with.frames/frame_a.html' => 'A frame',
                 'http://site.with.frames/frame_b.html' => 'B frame',
                 'http://site.with.frames/frame_c.html' => 'C frame',
@@ -760,9 +760,9 @@ class TestOfBrowserFrames extends UnitTestCase
                 '<frame name="inner" src="inner.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent(array(
-                'http://site.with.nested.frame/' => $outer,
+                'http://site.with.nested.frame/'           => $outer,
                 'http://site.with.nested.frame/inner.html' => $inner,
-                'http://site.with.nested.frame/page.html' => 'The page')));
+                'http://site.with.nested.frame/page.html'  => 'The page')));
         $this->assertEqual(
                 $browser->get('http://site.with.nested.frame/'),
                 'The page');
@@ -782,10 +782,10 @@ class TestOfBrowserFrames extends UnitTestCase
                 '<frame name="three" src="three.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent(array(
-                'http://site.with.nested.frames/' => $outer,
+                'http://site.with.nested.frames/'           => $outer,
                 'http://site.with.nested.frames/inner.html' => $inner,
-                'http://site.with.nested.frames/one.html' => 'Page one',
-                'http://site.with.nested.frames/two.html' => 'Page two',
+                'http://site.with.nested.frames/one.html'   => 'Page one',
+                'http://site.with.nested.frames/two.html'   => 'Page two',
                 'http://site.with.nested.frames/three.html' => 'Page three')));
 
         $browser->get('http://site.with.nested.frames/');
@@ -821,10 +821,10 @@ class TestOfBrowserFrames extends UnitTestCase
                 '<frame src="three.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent(array(
-                'http://site.with.nested.frames/' => $outer,
+                'http://site.with.nested.frames/'           => $outer,
                 'http://site.with.nested.frames/inner.html' => $inner,
-                'http://site.with.nested.frames/one.html' => 'Page one',
-                'http://site.with.nested.frames/two.html' => 'Page two',
+                'http://site.with.nested.frames/one.html'   => 'Page one',
+                'http://site.with.nested.frames/two.html'   => 'Page two',
                 'http://site.with.nested.frames/three.html' => 'Page three')));
 
         $browser->get('http://site.with.nested.frames/');

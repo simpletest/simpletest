@@ -164,7 +164,7 @@ class TestOfLexer extends UnitTestCase
     public function testMultiplePattern()
     {
         $handler = new MockTestParser();
-        $target = array('a', 'b', 'a', 'bb', 'x', 'b', 'a', 'xxxxxx', 'a', 'x');
+        $target  = array('a', 'b', 'a', 'bb', 'x', 'b', 'a', 'xxxxxx', 'a', 'x');
         for ($i = 0; $i < count($target); $i++) {
             $handler->expectAt($i, 'accept', array($target[$i], '*'));
         }

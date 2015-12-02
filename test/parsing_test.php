@@ -93,7 +93,7 @@ abstract class TestOfParsing extends UnitTestCase
 
     public function testCanFindLinkInsideForm()
     {
-        $raw = '<html><body><form><a href="./somewhere.php">Label</a></form></body></html>';
+        $raw  = '<html><body><form><a href="./somewhere.php">Label</a></form></body></html>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual(
                 $page->getUrlsByLabel('Label'),
@@ -102,7 +102,7 @@ abstract class TestOfParsing extends UnitTestCase
 
     public function testCanGetLinksByIdOrLabel()
     {
-        $raw = '<html><body><a href="./somewhere.php" id="33">Label</a></body></html>';
+        $raw  = '<html><body><a href="./somewhere.php" id="33">Label</a></body></html>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual(
                 $page->getUrlsByLabel('Label'),
@@ -115,7 +115,7 @@ abstract class TestOfParsing extends UnitTestCase
 
     public function testCanFindLinkByNormalisedLabel()
     {
-        $raw = '<html><body><a href="./somewhere.php" id="33"><em>Long &amp; thin</em></a></body></html>';
+        $raw  = '<html><body><a href="./somewhere.php" id="33"><em>Long &amp; thin</em></a></body></html>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual(
                 $page->getUrlsByLabel('Long & thin'),
@@ -124,7 +124,7 @@ abstract class TestOfParsing extends UnitTestCase
 
     public function testCanFindLinkByImageAltText()
     {
-        $raw = '<a href="./somewhere.php" id="33"><img src="pic.jpg" alt="&lt;A picture&gt;"></a>';
+        $raw  = '<a href="./somewhere.php" id="33"><img src="pic.jpg" alt="&lt;A picture&gt;"></a>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual(
                 array_map(array($this, 'urlToString'), $page->getUrlsByLabel('<A picture>')),
@@ -172,15 +172,15 @@ abstract class TestOfParsing extends UnitTestCase
         $page = $this->whenVisiting('http://here', $raw);
         $this->assertTrue($page->hasFrames());
         $this->assertSameFrameset($page->getFrameset(), array(
-                1 => new SimpleUrl('http://here/1.html'),
+                1   => new SimpleUrl('http://here/1.html'),
                 'A' => new SimpleUrl('http://here/2.html'),
                 'B' => new SimpleUrl('http://here/3.html'),
-                4 => new SimpleUrl('http://here/4.html')));
+                4   => new SimpleUrl('http://here/4.html')));
     }
 
     public function testRelativeFramesRespectBaseTag()
     {
-        $raw = '<base href="https://there.com/stuff/"><frameset><frame src="1.html"></frameset>';
+        $raw  = '<base href="https://there.com/stuff/"><frameset><frame src="1.html"></frameset>';
         $page = $this->whenVisiting('http://here', $raw);
         $this->assertSameFrameset(
                 $page->getFrameset(),
@@ -225,9 +225,9 @@ abstract class TestOfParsing extends UnitTestCase
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertTrue($page->hasFrames());
         $this->assertIdentical($page->getFrameset(), array(
-                1 => new SimpleUrl('http://host/a.html'),
+                1      => new SimpleUrl('http://host/a.html'),
                 '_one' => new SimpleUrl('http://host/b.html'),
-                3 => new SimpleUrl('http://host/c.html'),
+                3      => new SimpleUrl('http://host/c.html'),
                 '_two' => new SimpleUrl('http://host/d.html')));
     }
 
@@ -260,7 +260,7 @@ abstract class TestOfParsing extends UnitTestCase
 
     public function testCanFindFormByLabel()
     {
-        $raw = '<html><head><form><input type="submit"></form></head></html>';
+        $raw  = '<html><head><form><input type="submit"></form></head></html>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertNull($page->getFormBySubmit(new SimpleByLabel('submit')));
         $this->assertNull($page->getFormBySubmit(new SimpleByName('submit')));
@@ -271,7 +271,7 @@ abstract class TestOfParsing extends UnitTestCase
 
     public function testConfirmSubmitAttributesAreCaseSensitive()
     {
-        $raw = '<html><head><FORM><INPUT TYPE="SUBMIT" NAME="S" VALUE="S"></FORM></head></html>';
+        $raw  = '<html><head><FORM><INPUT TYPE="SUBMIT" NAME="S" VALUE="S"></FORM></head></html>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertIsA(
                 $page->getFormBySubmit(new SimpleByName('S')),
@@ -316,7 +316,7 @@ abstract class TestOfParsing extends UnitTestCase
 
     public function testCanFindFormById()
     {
-        $raw = '<html><head><form id="55"><input type="submit"></form></head></html>';
+        $raw  = '<html><head><form id="55"><input type="submit"></form></head></html>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertNull($page->getFormById(54));
         $this->assertIsA($page->getFormById(55), 'SimpleForm');
@@ -354,7 +354,7 @@ abstract class TestOfParsing extends UnitTestCase
 
     public function testEntitiesAreDecodedInDefaultTextFieldValue()
     {
-        $raw = '<form><input type="text" name="a" value="&amp;\'&quot;&lt;&gt;"></form>';
+        $raw  = '<form><input type="text" name="a" value="&amp;\'&quot;&lt;&gt;"></form>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByName('a')), '&\'"<>');
     }
@@ -454,21 +454,21 @@ abstract class TestOfParsing extends UnitTestCase
 
     public function testEntitiesAreDecodedInTextareaValue()
     {
-        $raw = '<form><textarea name="a">&amp;\'&quot;&lt;&gt;</textarea></form>';
+        $raw  = '<form><textarea name="a">&amp;\'&quot;&lt;&gt;</textarea></form>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByName('a')), '&\'"<>');
     }
 
     public function testNewlinesPreservedInTextArea()
     {
-        $raw = "<form><textarea name=\"a\">hello\r\nworld</textarea></form>";
+        $raw  = "<form><textarea name=\"a\">hello\r\nworld</textarea></form>";
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByName('a')), "hello\r\nworld");
     }
 
     public function testWhitespacePreservedInTextArea()
     {
-        $raw = '<form><textarea name="a">     </textarea></form>';
+        $raw  = '<form><textarea name="a">     </textarea></form>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByName('a')), '     ');
     }
@@ -478,7 +478,7 @@ abstract class TestOfParsing extends UnitTestCase
         $raw = "<html>\n" .
                 "    <head><title></title></head>\n" .
                 "    <body>\n" .
-                "        <form>\n".
+                "        <form>\n" .
                 "            <label>Text area C\n" .
                 "                <textarea name='c'>\n" .
                 "                </textarea>\n" .
@@ -503,7 +503,7 @@ abstract class TestOfParsing extends UnitTestCase
 
     public function testDontIncludeTextAreaContentInLabel()
     {
-        $raw = '<form><label>Text area C<textarea id=3 name="c">mouse</textarea></label></form>';
+        $raw  = '<form><label>Text area C<textarea id=3 name="c">mouse</textarea></label></form>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByLabel('Text area C')), 'mouse');
     }
@@ -681,7 +681,7 @@ class TestOfParsingUsingPhpParser extends TestOfParsing
 
     public function testLabelShouldStopAtClosingLabelTag()
     {
-        $raw = '<form><label>start<textarea id=3 name="c" wrap="hard">stuff</textarea>end</label>stuff</form>';
+        $raw  = '<form><label>start<textarea id=3 name="c" wrap="hard">stuff</textarea>end</label>stuff</form>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SimpleByLabel('startend')), 'stuff');
     }

@@ -1,5 +1,5 @@
 <?php
-    if (count($HTTP_COOKIE_VARS) > 0) {
+    /*if (count($HTTP_COOKIE_VARS) > 0) {
         $_COOKIE = $HTTP_COOKIE_VARS;
     }
     if (count($HTTP_GET_VARS) > 0) {
@@ -10,7 +10,7 @@
     }
     if (!isset($_SERVER)) {
         $_SERVER = $HTTP_SERVER_VARS;
-    }
+    }*/
     global $HTTP_RAW_POST_DATA;
 
     require_once '../page_request.php';
@@ -22,7 +22,7 @@
         <dl>
             <dt>Protocol version</dt><dd><?php print $_SERVER['SERVER_PROTOCOL']; ?></dd>
             <dt>Request method</dt><dd><?php print $_SERVER['REQUEST_METHOD']; ?></dd>
-            <dt>Accept header</dt><dd><?php print $_SERVER['HTTP_ACCEPT']; ?></dd>
+            <dt>Accept header</dt><dd><?php print isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : ''; ?></dd>
         </dl>
         <h1>Cookies</h1>
         <?php
@@ -34,7 +34,9 @@
         ?>
         <h1>Raw GET data</h1>
         <?php
-            print '[' . $_SERVER['QUERY_STRING'] . ']';
+            if(!empty($_SERVER['QUERY_STRING'])) {
+                echo '[' . $_SERVER['QUERY_STRING'] . ']';
+            }
         ?>
         <h1>GET data</h1>
         <?php

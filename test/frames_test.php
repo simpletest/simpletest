@@ -118,7 +118,7 @@ class TestOfFrameset extends UnitTestCase
         $frame3 = new MockSimplePage();
         $frame3->expectNever('getField');
 
-        $page = new MockSimplePage();
+        $page     = new MockSimplePage();
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame($frame1);
         $frameset->addFrame($frame2);
@@ -165,7 +165,7 @@ class TestOfFrameNavigation extends UnitTestCase
 {
     public function testStartsWithoutFrameFocus()
     {
-        $page = new MockSimplePage();
+        $page     = new MockSimplePage();
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame(new MockSimplePage());
         $this->assertFalse($frameset->getFrameFocus());
@@ -260,7 +260,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
     public function __construct()
     {
         parent::__construct();
-        $this->page_interface = $this->getPageMethods();
+        $this->page_interface     = $this->getPageMethods();
         $this->frameset_interface = $this->getFramesetMethods();
     }
 
@@ -480,7 +480,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
     public function testFindingFormsById()
     {
         $frame = new MockSimplePage();
-        $form = new MockSimpleForm();
+        $form  = new MockSimpleForm();
         $frame->returns('getFormById', $form, array('a'));
 
         $frameset = new SimpleFrameset(new MockSimplePage());
@@ -498,7 +498,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
     public function testFindingFormsBySubmit()
     {
         $frame = new MockSimplePage();
-        $form = new MockSimpleForm();
+        $form  = new MockSimpleForm();
         $frame->returns(
                 'getFormBySubmit',
                 $form,
@@ -519,7 +519,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
     public function testFindingFormsByImage()
     {
         $frame = new MockSimplePage();
-        $form = new MockSimpleForm();
+        $form  = new MockSimpleForm();
         $frame->returns(
                 'getFormByImage',
                 $form,

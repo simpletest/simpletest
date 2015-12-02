@@ -191,7 +191,7 @@ class TestOfHttpRequest extends UnitTestCase
     public function testReadingBadConnection()
     {
         $socket = new MockSimpleSocket();
-        $route = new MockSimpleRoute();
+        $route  = new MockSimpleRoute();
         $route->setReturnReference('createConnection', $socket);
         $request = new SimpleHttpRequest($route, new SimpleGetEncoding());
         $reponse = $request->fetch(15);
@@ -279,7 +279,7 @@ class TestOfHttpPostRequest extends UnitTestCase
     public function testReadingBadConnectionCausesErrorBecauseOfDeadSocket()
     {
         $socket = new MockSimpleSocket();
-        $route = new MockSimpleRoute();
+        $route  = new MockSimpleRoute();
         $route->setReturnReference('createConnection', $socket);
         $request = new SimpleHttpRequest($route, new SimplePostEncoding());
         $reponse = $request->fetch(15);
@@ -496,7 +496,7 @@ class TestOfHttpResponse extends UnitTestCase
         $socket->setReturnValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
-        $headers = $response->getHeaders();
+        $headers  = $response->getHeaders();
         $this->assertTrue($headers->isRedirect());
         $this->assertEqual($headers->getLocation(), 'http://www.somewhere-else.com/');
     }
@@ -512,7 +512,7 @@ class TestOfHttpResponse extends UnitTestCase
         $socket->setReturnValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
-        $headers = $response->getHeaders();
+        $headers  = $response->getHeaders();
         $this->assertTrue($headers->isRedirect());
         $this->assertEqual($headers->getLocation(), 'http://www.somewhere-else.com:80/');
     }

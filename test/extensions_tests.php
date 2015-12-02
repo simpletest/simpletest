@@ -9,7 +9,7 @@ class ExtensionsTests extends TestSuite
     {
         parent::__construct('Extension tests for SimpleTest ' . SimpleTest::getVersion());
 
-        $nodes = new RecursiveDirectoryIterator(dirname(__FILE__).'/../extensions/');
+        $nodes = new RecursiveDirectoryIterator(dirname(__FILE__) . '/../extensions/');
         foreach (new RecursiveIteratorIterator($nodes) as $node) {
             if (preg_match('/test\.php$/', $node->getFilename())) {
                 $this->addFile($node->getPathname());

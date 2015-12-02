@@ -13,14 +13,14 @@ class TestOfErrorQueue extends UnitTestCase
     public function setUp()
     {
         $context = SimpleTest::getContext();
-        $queue = $context->get('SimpleErrorQueue');
+        $queue   = $context->get('SimpleErrorQueue');
         $queue->clear();
     }
 
     public function tearDown()
     {
         $context = SimpleTest::getContext();
-        $queue = $context->get('SimpleErrorQueue');
+        $queue   = $context->get('SimpleErrorQueue');
         $queue->clear();
     }
 
@@ -59,7 +59,7 @@ class TestOfErrorTrap extends UnitTestCase
     public function testQueueStartsEmpty()
     {
         $context = SimpleTest::getContext();
-        $queue = $context->get('SimpleErrorQueue');
+        $queue   = $context->get('SimpleErrorQueue');
         $this->assertFalse($queue->extract());
     }
 

@@ -1,13 +1,12 @@
 <?php
 
-
 class PageRequest
 {
     private $parsed;
 
-    public function PageRequest($raw)
+    public function __construct($raw)
     {
-        $statements = explode('&', $raw);
+        $statements   = explode('&', $raw);
         $this->parsed = array();
         foreach ($statements as $statement) {
             if (strpos($statement, '=') === false) {
@@ -20,7 +19,7 @@ class PageRequest
     private function parseStatement($statement)
     {
         list($key, $value) = explode('=', $statement);
-        $key = urldecode($key);
+        $key               = urldecode($key);
         if (preg_match('/(.*)\[\]$/', $key, $matches)) {
             $key = $matches[1];
             if (! isset($this->parsed[$key])) {
@@ -52,14 +51,18 @@ class PageRequest
         return $this->parsed;
     }
 
-    public function get()
+    public static function get()
     {
-        $request = new self($_SERVER['QUERY_STRING']);
+        if(isset($_SERVER['QUERY_STRING'])) {
+            $request = new self($_SERVER['QUERY_STRING']);
 
-        return $request->getAll();
+            return $request->getAll();
+        }
+        
+        return array();
     }
 
-    public function post()
+    public static function post()
     {
         global $HTTP_RAW_POST_DATA;
         $request = new self($HTTP_RAW_POST_DATA);

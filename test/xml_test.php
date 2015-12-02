@@ -170,9 +170,9 @@ class TestOfXmlResultsParsing extends UnitTestCase
 
     public function testSignal()
     {
-        $signal = new AnyOldSignal();
+        $signal        = new AnyOldSignal();
         $signal->stuff = 'Hello';
-        $listener = new MockSimpleScorer();
+        $listener      = new MockSimpleScorer();
         $listener->expectOnce('paintSignal', array('a_signal', $signal));
         $parser = new SimpleTestXmlParser($listener);
         $this->sendValidStart($parser);

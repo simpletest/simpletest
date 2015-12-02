@@ -76,7 +76,7 @@ class TestOfEncoding extends UnitTestCase
 
     public function testPrefilledWithTwoLevels()
     {
-        $query = array('a' => array('aa' => 'aaa'));
+        $query    = array('a' => array('aa' => 'aaa'));
         $encoding = new SimplePostEncoding($query);
         $this->assertTrue($encoding->hasMoreThanOneLevel($query));
         $this->assertEqual($encoding->rewriteArrayWithMultipleLevels($query), array('a[aa]' => 'aaa'));
@@ -86,7 +86,7 @@ class TestOfEncoding extends UnitTestCase
 
     public function testPrefilledWithThreeLevels()
     {
-        $query = array('a' => array('aa' => array('aaa' => 'aaaa')));
+        $query    = array('a' => array('aa' => array('aaa' => 'aaaa')));
         $encoding = new SimplePostEncoding($query);
         $this->assertTrue($encoding->hasMoreThanOneLevel($query));
         $this->assertEqual($encoding->rewriteArrayWithMultipleLevels($query), array('a[aa][aaa]' => 'aaaa'));
@@ -103,7 +103,7 @@ class TestOfEncoding extends UnitTestCase
 
     public function testMultiplePrefilled()
     {
-        $query = array('a' => array('a1', 'a2'));
+        $query    = array('a' => array('a1', 'a2'));
         $encoding = new SimplePostEncoding($query);
         $this->assertTrue($encoding->hasMoreThanOneLevel($query));
         $this->assertEqual($encoding->rewriteArrayWithMultipleLevels($query), array('a[0]' => 'a1', 'a[1]' => 'a2'));

@@ -4,7 +4,7 @@
         @unlink(dirname(__FILE__) . "/temp/$name");
         @move_uploaded_file($_FILES[$name]['tmp_name'], dirname(__FILE__) . "/temp/$name");
         $unsafe = @file_get_contents(dirname(__FILE__) . "/temp/$name");
-        $safe = htmlentities($unsafe);
+        $safe   = htmlentities($unsafe);
         $handle = fopen(dirname(__FILE__) . "/temp/$name", 'w');
         fwrite($handle, $safe);
         fclose($handle);

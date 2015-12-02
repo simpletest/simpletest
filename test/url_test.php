@@ -358,7 +358,7 @@ class TestOfAbsoluteUrls extends UnitTestCase
     public function testDirectoriesAfterFilename()
     {
         $string = '../../index.php/foo/bar';
-        $url = new SimpleUrl($string);
+        $url    = new SimpleUrl($string);
         $this->assertEqual($url->asString(), $string);
 
         $absolute = $url->makeAbsolute('http://www.domain.com/some/path/');
@@ -428,14 +428,14 @@ class TestOfAbsoluteUrls extends UnitTestCase
 
     public function testMakingARootPageUrlAbsolute()
     {
-        $url = new SimpleUrl('/here.html');
+        $url      = new SimpleUrl('/here.html');
         $absolute = $url->makeAbsolute('http://host.com/I/am/here/page.html');
         $this->assertEqual($absolute->getPath(), '/here.html');
     }
 
     public function testCarryAuthenticationFromRootPage()
     {
-        $url = new SimpleUrl('here.html');
+        $url      = new SimpleUrl('here.html');
         $absolute = $url->makeAbsolute('http://test:secret@host.com/');
         $this->assertEqual($absolute->getPath(), '/here.html');
         $this->assertEqual($absolute->getUsername(), 'test');
@@ -456,21 +456,21 @@ class TestOfAbsoluteUrls extends UnitTestCase
 
     public function testMakingAbsoluteAppendedPath()
     {
-        $url = new SimpleUrl('./there/somewhere.php');
+        $url      = new SimpleUrl('./there/somewhere.php');
         $absolute = $url->makeAbsolute('https://host.com/here/');
         $this->assertEqual($absolute->getPath(), '/here/there/somewhere.php');
     }
 
     public function testMakingAbsoluteBadlyFormedAppendedPath()
     {
-        $url = new SimpleUrl('there/somewhere.php');
+        $url      = new SimpleUrl('there/somewhere.php');
         $absolute = $url->makeAbsolute('https://host.com/here/');
         $this->assertEqual($absolute->getPath(), '/here/there/somewhere.php');
     }
 
     public function testMakingAbsoluteHasNoEffectWhenAlreadyAbsolute()
     {
-        $url = new SimpleUrl('https://test:secret@www.lastcraft.com:321/stuff/?a=1#f');
+        $url      = new SimpleUrl('https://test:secret@www.lastcraft.com:321/stuff/?a=1#f');
         $absolute = $url->makeAbsolute('http://host.com/here/');
         $this->assertEqual($absolute->getScheme(), 'https');
         $this->assertEqual($absolute->getUsername(), 'test');
@@ -484,7 +484,7 @@ class TestOfAbsoluteUrls extends UnitTestCase
 
     public function testMakingAbsoluteCarriesAuthenticationWhenAlreadyAbsolute()
     {
-        $url = new SimpleUrl('https://www.lastcraft.com');
+        $url      = new SimpleUrl('https://www.lastcraft.com');
         $absolute = $url->makeAbsolute('http://test:secret@host.com/here/');
         $this->assertEqual($absolute->getHost(), 'www.lastcraft.com');
         $this->assertEqual($absolute->getUsername(), 'test');
@@ -493,7 +493,7 @@ class TestOfAbsoluteUrls extends UnitTestCase
 
     public function testMakingHostOnlyAbsoluteDoesNotCarryAnyOtherInformation()
     {
-        $url = new SimpleUrl('http://www.lastcraft.com');
+        $url      = new SimpleUrl('http://www.lastcraft.com');
         $absolute = $url->makeAbsolute('https://host.com:81/here/');
         $this->assertEqual($absolute->getScheme(), 'http');
         $this->assertEqual($absolute->getHost(), 'www.lastcraft.com');

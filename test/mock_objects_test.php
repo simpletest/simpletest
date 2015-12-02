@@ -96,9 +96,9 @@ class TestOfSimpleSignatureMap extends UnitTestCase
 
     public function testDifferentCallSignaturesCanHaveDifferentReferences()
     {
-        $map = new SimpleSignatureMap();
+        $map  = new SimpleSignatureMap();
         $fred = 'Fred';
-        $jim = 'jim';
+        $jim  = 'jim';
         $map->add(array(0), $fred);
         $map->add(array('0'), $jim);
         $this->assertSame($fred, $map->findFirstAction(array(0)));
@@ -108,7 +108,7 @@ class TestOfSimpleSignatureMap extends UnitTestCase
     public function testWildcard()
     {
         $fred = 'Fred';
-        $map = new SimpleSignatureMap();
+        $map  = new SimpleSignatureMap();
         $map->add(array(new AnythingExpectation(), 1, 3), $fred);
         $this->assertTrue($map->isMatch(array(2, 1, 3)));
         $this->assertSame($map->findFirstAction(array(2, 1, 3)), $fred);
@@ -117,7 +117,7 @@ class TestOfSimpleSignatureMap extends UnitTestCase
     public function testAllWildcard()
     {
         $fred = 'Fred';
-        $map = new SimpleSignatureMap();
+        $map  = new SimpleSignatureMap();
         $this->assertFalse($map->isMatch(array(2, 1, 3)));
         $map->add('', $fred);
         $this->assertTrue($map->isMatch(array(2, 1, 3)));
@@ -149,7 +149,7 @@ class TestOfCallSchedule extends UnitTestCase
 {
     public function testCanBeSetToAlwaysReturnTheSameReference()
     {
-        $a = 5;
+        $a        = 5;
         $schedule = new SimpleCallSchedule();
         $schedule->register('aMethod', false, new SimpleByReference($a));
         $this->assertReference($schedule->respond(0, 'aMethod', array()), $a);
@@ -158,8 +158,8 @@ class TestOfCallSchedule extends UnitTestCase
 
     public function testSpecificSignaturesOverrideTheAlwaysCase()
     {
-        $any = 'any';
-        $one = 'two';
+        $any      = 'any';
+        $one      = 'two';
         $schedule = new SimpleCallSchedule();
         $schedule->register('aMethod', array(1), new SimpleByReference($one));
         $schedule->register('aMethod', false, new SimpleByReference($any));
@@ -169,8 +169,8 @@ class TestOfCallSchedule extends UnitTestCase
 
     public function testReturnsCanBeSetOverTime()
     {
-        $one = 'one';
-        $two = 'two';
+        $one      = 'one';
+        $two      = 'two';
         $schedule = new SimpleCallSchedule();
         $schedule->registerAt(0, 'aMethod', false, new SimpleByReference($one));
         $schedule->registerAt(1, 'aMethod', false, new SimpleByReference($two));
@@ -180,9 +180,9 @@ class TestOfCallSchedule extends UnitTestCase
 
     public function testReturnsOverTimecanBeAlteredByTheArguments()
     {
-        $one = '1';
-        $two = '2';
-        $two_a = '2a';
+        $one      = '1';
+        $two      = '2';
+        $two_a    = '2a';
         $schedule = new SimpleCallSchedule();
         $schedule->registerAt(0, 'aMethod', false, new SimpleByReference($one));
         $schedule->registerAt(1, 'aMethod', array('a'), new SimpleByReference($two_a));
@@ -194,7 +194,7 @@ class TestOfCallSchedule extends UnitTestCase
 
     public function testCanReturnByValue()
     {
-        $a = 5;
+        $a        = 5;
         $schedule = new SimpleCallSchedule();
         $schedule->register('aMethod', false, new SimpleByValue($a));
         $this->assertCopy($schedule->respond(0, 'aMethod', array()), $a);
@@ -250,7 +250,7 @@ class TestOfConstructorCreation extends UnitTestCase
     public function testCloning()
     {
         $mock = new MockDummy();
-        $this->assertTrue(method_exists($mock, "__constructor"));
+        $this->assertTrue(method_exists($mock, '__constructor'));
         $this->assertFalse($mock->init);
         $this->assertNull($mock->__constructor());
         $this->assertTrue($mock->init);
@@ -259,13 +259,13 @@ class TestOfConstructorCreation extends UnitTestCase
     public function testCloningWithExtraMethod()
     {
         $mock = new MockDummyWithExtraMethods();
-        $this->assertTrue(method_exists($mock, "__constructor"));
+        $this->assertTrue(method_exists($mock, '__constructor'));
     }
 
     public function testCloningWithChosenClassName()
     {
         $mock = new AnotherMockDummy();
-        $this->assertTrue(method_exists($mock, "__constructor"));
+        $this->assertTrue(method_exists($mock, '__constructor'));
     }
 }
 
@@ -311,7 +311,7 @@ class TestOfMockReturns extends UnitTestCase
 
     public function testSetReturnGivesObjectReference()
     {
-        $mock = new MockDummy();
+        $mock   = new MockDummy();
         $object = new Dummy();
         $mock->returns('aMethod', $object, array(1, 2, 3));
         $this->assertSame($mock->aMethod(1, 2, 3), $object);
@@ -319,7 +319,7 @@ class TestOfMockReturns extends UnitTestCase
 
     public function testSetReturnReferenceGivesOriginalReference()
     {
-        $mock = new MockDummy();
+        $mock   = new MockDummy();
         $object = 1;
         $mock->returnsByReference('aReferenceMethod', $object, array(1, 2, 3));
         $this->assertReference($mock->aReferenceMethod(1, 2, 3), $object);
@@ -363,7 +363,7 @@ class TestOfMockReturns extends UnitTestCase
 
     public function testSetReturnReferenceAtGivesOriginal()
     {
-        $mock = new MockDummy();
+        $mock   = new MockDummy();
         $object = 100;
         $mock->returnsByReferenceAt(1, 'aReferenceMethod', $object);
         $this->assertNull($mock->aReferenceMethod());
@@ -373,7 +373,7 @@ class TestOfMockReturns extends UnitTestCase
 
     public function testReturnsAtGivesOriginalObjectHandle()
     {
-        $mock = new MockDummy();
+        $mock   = new MockDummy();
         $object = new Dummy();
         $mock->returnsAt(1, 'aMethod', $object);
         $this->assertNull($mock->aMethod());
@@ -383,7 +383,7 @@ class TestOfMockReturns extends UnitTestCase
 
     public function testComplicatedReturnSequence()
     {
-        $mock = new MockDummy();
+        $mock   = new MockDummy();
         $object = new Dummy();
         $mock->returnsAt(1, 'aMethod', 'aaa', array('a'));
         $mock->returnsAt(1, 'aMethod', 'bbb');
@@ -848,9 +848,9 @@ class TestOfMockingClassesWithStaticMethods extends UnitTestCase
 {
     public function testStaticMethodIsMockedAsStatic()
     {
-        $mock = new WithStaticMethod();
+        $mock       = new WithStaticMethod();
         $reflection = new ReflectionClass($mock);
-        $method = $reflection->getMethod('aStaticMethod');
+        $method     = $reflection->getMethod('aStaticMethod');
         $this->assertTrue($method->isStatic());
     }
 }
@@ -953,7 +953,7 @@ class TestOfPartialMocks extends UnitTestCase
 
     public function testSetReturnReferenceGivesOriginal()
     {
-        $mock = new TestDummy();
+        $mock   = new TestDummy();
         $object = 99;
         $mock->returnsByReferenceAt(0, 'aReferenceMethod', $object, array(3));
         $this->assertReference($mock->aReferenceMethod(3), $object);
@@ -961,7 +961,7 @@ class TestOfPartialMocks extends UnitTestCase
 
     public function testReturnsAtGivesOriginalObjectHandle()
     {
-        $mock = new TestDummy();
+        $mock   = new TestDummy();
         $object = new Dummy();
         $mock->returnsAt(0, 'anotherMethod', $object, array(3));
         $this->assertSame($mock->anotherMethod(3), $object);

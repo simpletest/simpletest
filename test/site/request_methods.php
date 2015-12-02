@@ -13,8 +13,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'POST':
     case 'PUT':
-        if (in_array($_SERVER['CONTENT_TYPE'], array('text/xml', 'application/xml'))) {
-            $data = fopen('php://input', 'r');
+        $acceptedContentTypes = array('text/xml', 'application/xml');       
+        if (
+            (isset($_SERVER['CONTENT_TYPE']) && in_array($_SERVER['CONTENT_TYPE'], $acceptedContentTypes)) 
+            // https://bugs.php.net/bug.php?id=66606
+            || in_array($_SERVER['HTTP_CONTENT_TYPE'], $acceptedContentTypes)
+        ) {
+            $data    = fopen('php://input', 'r');
             $content = '';
             while ($chunk = fread($data, 1024)) {
                 $content .= $chunk;

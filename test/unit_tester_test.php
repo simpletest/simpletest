@@ -44,7 +44,7 @@ class TestOfUnitTester extends UnitTestCase
     public function testReferenceAssertionOnScalars()
     {
         $a = 25;
-        $b = &$a;
+        $b = &$a; // reference is a pointer to a scalar
         $this->assertReference($a, $b);
     }
 
@@ -55,12 +55,17 @@ class TestOfUnitTester extends UnitTestCase
         $this->assertClone($a, $b);
     }
 
-    public function TODO_testCloneOnScalars()
+    /**
+     * @todo
+     * http://php.net/manual/de/function.is-scalar.php
+     */
+    /*public function testCloneOnScalars()
     {
-        $a = 25;
-        $b = 25;
-        $this->assertClone($a, $b);
-    }
+        $this->assertClone(20, 20);       // int
+        $this->assertClone(20.2, 20.2);   // float
+        $this->assertClone("abc", "abc"); // string
+        $this->assertClone(true, true);   // bool
+    }*/
 
     public function testCopyOnScalars()
     {

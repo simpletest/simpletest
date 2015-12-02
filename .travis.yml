@@ -15,6 +15,8 @@ matrix:
         - php: hhvm
 
 script:
+ # start PHP5.4 built-in server in background
+ - nohup php -S localhost:80 -t test/site > /dev/null 2>&1 &
  - php test/all_tests.php
 
 # disable notifications

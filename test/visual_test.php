@@ -414,10 +414,10 @@ class TestOfMockObjectsOutput extends UnitTestCase
 
     public function testObjectMatching()
     {
-        $a = new Dummy();
-        $a->a = 'a';
-        $b = new Dummy();
-        $b->b = 'b';
+        $a     = new Dummy();
+        $a->a  = 'a';
+        $b     = new Dummy();
+        $b->b  = 'b';
         $dummy = &new MockDummy();
         $dummy->expect('a', array($a, $b));
         $dummy->a($a, $b);

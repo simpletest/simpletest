@@ -214,10 +214,10 @@ class TestOfReference extends UnitTestCase
 {
     public function testReference()
     {
-        $foo = 'foo';
-        $ref = &$foo;
+        $foo     = 'foo';
+        $ref     = &$foo;
         $not_ref = $foo;
-        $bar = 'bar';
+        $bar     = 'bar';
 
         $expect = new ReferenceExpectation($foo);
         $this->assertTrue($expect->test($ref));
@@ -265,7 +265,7 @@ class TestOfMethodExistence extends UnitTestCase
 {
     public function testHasMethod()
     {
-        $instance = new ExpectedMethodTarget();
+        $instance    = new ExpectedMethodTarget();
         $expectation = new MethodExistsExpectation('hasThisMethod');
         $this->assertTrue($expectation->test($instance));
         $expectation = new MethodExistsExpectation('doesNotHaveThisMethod');

@@ -114,14 +114,14 @@ class TestOfImplementations extends UnitTestCase
 {
     public function testMockedInterfaceCanPassThroughTypeHint()
     {
-        $mock = new MockDummyInterface();
+        $mock   = new MockDummyInterface();
         $hinter = new WithHint();
         $hinter->hinted($mock);
     }
 
     public function testImplementedInterfacesAreCarried()
     {
-        $mock = new MockImplementsDummy();
+        $mock   = new MockImplementsDummy();
         $hinter = new WithHint();
         $hinter->hinted($mock);
     }

@@ -21,7 +21,7 @@ class TestOfForm extends UnitTestCase
 
     public function testFormAttributes()
     {
-        $tag = new SimpleFormTag(array('method' => 'GET', 'action' => 'here.php', 'id' => '33'));
+        $tag  = new SimpleFormTag(array('method' => 'GET', 'action' => 'here.php', 'id' => '33'));
         $form = new SimpleForm($tag, $this->page('http://host/a/index.html'));
         $this->assertEqual($form->getMethod(), 'get');
         $this->assertIdentical($form->getId(), '33');
@@ -33,14 +33,14 @@ class TestOfForm extends UnitTestCase
         $page = new MockSimplePage();
         $page->expectOnce('expandUrl', array(new SimpleUrl('here.php')));
         $page->setReturnValue('expandUrl', new SimpleUrl('http://host/here.php'));
-        $tag = new SimpleFormTag(array('method' => 'GET', 'action' => 'here.php'));
+        $tag  = new SimpleFormTag(array('method' => 'GET', 'action' => 'here.php'));
         $form = new SimpleForm($tag, $page);
         $this->assertEqual($form->getAction(), new SimpleUrl('http://host/here.php'));
     }
 
     public function testEmptyAction()
     {
-        $tag = new SimpleFormTag(array('method' => 'GET', 'action' => '', 'id' => '33'));
+        $tag  = new SimpleFormTag(array('method' => 'GET', 'action' => '', 'id' => '33'));
         $form = new SimpleForm($tag, $this->page('http://host/a/index.html'));
         $this->assertEqual(
                 $form->getAction(),
@@ -49,7 +49,7 @@ class TestOfForm extends UnitTestCase
 
     public function testMissingAction()
     {
-        $tag = new SimpleFormTag(array('method' => 'GET'));
+        $tag  = new SimpleFormTag(array('method' => 'GET'));
         $form = new SimpleForm($tag, $this->page('http://host/a/index.html'));
         $this->assertEqual(
                 $form->getAction(),
@@ -61,7 +61,7 @@ class TestOfForm extends UnitTestCase
         $page = new MockSimplePage();
         $page->expectOnce('expandUrl', array(new SimpleUrl('/')));
         $page->setReturnValue('expandUrl', new SimpleUrl('http://host/'));
-        $tag = new SimpleFormTag(array('method' => 'GET', 'action' => '/'));
+        $tag  = new SimpleFormTag(array('method' => 'GET', 'action' => '/'));
         $form = new SimpleForm($tag, $page);
         $this->assertEqual(
                 $form->getAction(),
@@ -73,7 +73,7 @@ class TestOfForm extends UnitTestCase
         $page = new MockSimplePage();
         $page->expectOnce('expandUrl', array(new SimpleUrl('here.php')));
         $page->setReturnValue('expandUrl', new SimpleUrl('http://host/here.php'));
-        $tag = new SimpleFormTag(array('method' => 'GET', 'action' => 'here.php'));
+        $tag  = new SimpleFormTag(array('method' => 'GET', 'action' => 'here.php'));
         $form = new SimpleForm($tag, $page);
         $form->setDefaultTarget('frame');
         $expected = new SimpleUrl('http://host/here.php');
@@ -105,7 +105,7 @@ class TestOfForm extends UnitTestCase
 
     public function testTextWidgetByLabel()
     {
-        $form = new SimpleForm(new SimpleFormTag(array()), $this->page('htp://host'));
+        $form   = new SimpleForm(new SimpleFormTag(array()), $this->page('htp://host'));
         $widget = new SimpleTextTag(array('name' => 'me', 'type' => 'text', 'value' => 'a'));
         $form->addWidget($widget);
         $widget->setLabel('thing');
@@ -177,10 +177,10 @@ class TestOfForm extends UnitTestCase
         $form = new SimpleForm(new SimpleFormTag(array()),  $this->page('htp://host'));
         $form->addWidget(new SimpleImageSubmitTag(array(
                 'type' => 'image',
-                'src' => 'source.jpg',
+                'src'  => 'source.jpg',
                 'name' => 'go',
-                'alt' => 'Go!',
-                'id' => '9')));
+                'alt'  => 'Go!',
+                'id'   => '9')));
         $this->assertTrue($form->hasImage(new SimpleByLabel('Go!')));
         $this->assertEqual(
                 $form->submitImage(new SimpleByLabel('Go!'), 100, 101),
@@ -200,9 +200,9 @@ class TestOfForm extends UnitTestCase
         $form = new SimpleForm(new SimpleFormTag(array()), $this->page('htp://host'));
         $form->addWidget(new SimpleImageSubmitTag(array(
                 'type' => 'image',
-                'src' => 'source.jpg',
+                'src'  => 'source.jpg',
                 'name' => 'go',
-                'alt' => 'Go!')));
+                'alt'  => 'Go!')));
         $this->assertEqual(
                 $form->submitImage(new SimpleByLabel('Go!'), 100, 101, array('a' => 'A')),
                 new SimpleGetEncoding(array('go.x' => 100, 'go.y' => 101, 'a' => 'A')));
@@ -210,7 +210,7 @@ class TestOfForm extends UnitTestCase
 
     public function testButtonTag()
     {
-        $form = new SimpleForm(new SimpleFormTag(array()), $this->page('http://host'));
+        $form   = new SimpleForm(new SimpleFormTag(array()), $this->page('http://host'));
         $widget = new SimpleButtonTag(
                 array('type' => 'submit', 'name' => 'go', 'value' => 'Go', 'id' => '9'));
         $widget->addContent('Go!');
@@ -230,14 +230,14 @@ class TestOfForm extends UnitTestCase
 
     public function testMultipleFieldsWithSameNameSubmitted()
     {
-        $form = new SimpleForm(new SimpleFormTag(array()), $this->page('htp://host'));
+        $form  = new SimpleForm(new SimpleFormTag(array()), $this->page('htp://host'));
         $input = new SimpleTextTag(array('name' => 'elements[]', 'value' => '1'));
         $form->addWidget($input);
         $input = new SimpleTextTag(array('name' => 'elements[]', 'value' => '2'));
         $form->addWidget($input);
         $form->setField(new SimpleByLabelOrName('elements[]'), '3', 1);
         $form->setField(new SimpleByLabelOrName('elements[]'), '4', 2);
-        $submit = $form->submit();
+        $submit   = $form->submit();
         $requests = $submit->getAll();
         $this->assertEqual(count($requests), 2);
         $this->assertIdentical($requests[0], new SimpleEncodedPair('elements[]', '3'));
@@ -246,7 +246,7 @@ class TestOfForm extends UnitTestCase
 
     public function testSingleSelectFieldSubmitted()
     {
-        $form = new SimpleForm(new SimpleFormTag(array()), $this->page('htp://host'));
+        $form   = new SimpleForm(new SimpleFormTag(array()), $this->page('htp://host'));
         $select = new SimpleSelectionTag(array('name' => 'a'));
         $select->addTag(new SimpleOptionTag(
                 array('value' => 'aaa', 'selected' => '')));
@@ -258,8 +258,8 @@ class TestOfForm extends UnitTestCase
 
     public function testSingleSelectFieldSubmittedWithPost()
     {
-        $form = new SimpleForm(new SimpleFormTag(array('method' => 'post')), $this->page('htp://host'));
-        $select = new SimpleSelectionTag(array('name' => 'a'));
+        $form   = new SimpleForm(new SimpleFormTag(array('method' => 'post')), $this->page('htp://host'));
+        $select = new SimpleSelectionTag(array('name'             => 'a'));
         $select->addTag(new SimpleOptionTag(
                 array('value' => 'aaa', 'selected' => '')));
         $form->addWidget($select);
@@ -358,17 +358,17 @@ class TestOfForm extends UnitTestCase
         $page->returns('getUrl', new SimpleUrl('htp://host/'));
 
         # Keep GET params in "action", if the form has no widgets
-        $form = new SimpleForm(new SimpleFormTag(array('action'=>'?test=1')), $page);
+        $form = new SimpleForm(new SimpleFormTag(array('action'=> '?test=1')), $page);
         $this->assertEqual($form->getAction()->asString(), 'htp://host/');
 
-        $form = new SimpleForm(new SimpleFormTag(array('action'=>'?test=1')),  $page);
-        $form->addWidget(new SimpleTextTag(array('name' => 'me', 'type' => 'text', 'value' => 'a')));
+        $form = new SimpleForm(new SimpleFormTag(array('action'=> '?test=1')),  $page);
+        $form->addWidget(new SimpleTextTag(array('name'        => 'me', 'type' => 'text', 'value' => 'a')));
         $this->assertEqual($form->getAction()->asString(), 'htp://host/');
 
-        $form = new SimpleForm(new SimpleFormTag(array('action'=>'')),  $page);
+        $form = new SimpleForm(new SimpleFormTag(array('action'=> '')),  $page);
         $this->assertEqual($form->getAction()->asString(), 'htp://host/');
 
-        $form = new SimpleForm(new SimpleFormTag(array('action'=>'?test=1', 'method'=>'post')),  $page);
+        $form = new SimpleForm(new SimpleFormTag(array('action'=> '?test=1', 'method'=>'post')),  $page);
         $this->assertEqual($form->getAction()->asString(), 'htp://host/?test=1');
     }
 }

@@ -225,7 +225,7 @@ class TestOfSelection extends UnitTestCase
 
     public function testSingle()
     {
-        $tag = new SimpleSelectionTag(array('name' => 'a'));
+        $tag    = new SimpleSelectionTag(array('name' => 'a'));
         $option = new SimpleOptionTag(array());
         $option->addContent('AAA');
         $tag->addTag($option);
@@ -234,7 +234,7 @@ class TestOfSelection extends UnitTestCase
 
     public function testSingleDefault()
     {
-        $tag = new SimpleSelectionTag(array('name' => 'a'));
+        $tag    = new SimpleSelectionTag(array('name' => 'a'));
         $option = new SimpleOptionTag(array('selected' => ''));
         $option->addContent('AAA');
         $tag->addTag($option);
@@ -243,7 +243,7 @@ class TestOfSelection extends UnitTestCase
 
     public function testSingleMappedDefault()
     {
-        $tag = new SimpleSelectionTag(array('name' => 'a'));
+        $tag    = new SimpleSelectionTag(array('name' => 'a'));
         $option = new SimpleOptionTag(array('selected' => '', 'value' => 'aaa'));
         $option->addContent('AAA');
         $tag->addTag($option);
@@ -253,7 +253,7 @@ class TestOfSelection extends UnitTestCase
     public function testStartsWithDefault()
     {
         $tag = new SimpleSelectionTag(array('name' => 'a'));
-        $a = new SimpleOptionTag(array());
+        $a   = new SimpleOptionTag(array());
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag(array('selected' => ''));
@@ -268,7 +268,7 @@ class TestOfSelection extends UnitTestCase
     public function testSettingOption()
     {
         $tag = new SimpleSelectionTag(array('name' => 'a'));
-        $a = new SimpleOptionTag(array());
+        $a   = new SimpleOptionTag(array());
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag(array('selected' => ''));
@@ -283,7 +283,7 @@ class TestOfSelection extends UnitTestCase
     public function testSettingMappedOption()
     {
         $tag = new SimpleSelectionTag(array('name' => 'a'));
-        $a = new SimpleOptionTag(array('value' => 'aaa'));
+        $a   = new SimpleOptionTag(array('value' => 'aaa'));
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag(array('value' => 'bbb', 'selected' => ''));
@@ -301,7 +301,7 @@ class TestOfSelection extends UnitTestCase
     public function testSelectionDespiteSpuriousWhitespace()
     {
         $tag = new SimpleSelectionTag(array('name' => 'a'));
-        $a = new SimpleOptionTag(array());
+        $a   = new SimpleOptionTag(array());
         $a->addContent(' AAA ');
         $tag->addTag($a);
         $b = new SimpleOptionTag(array('selected' => ''));
@@ -318,7 +318,7 @@ class TestOfSelection extends UnitTestCase
     public function testFailToSetIllegalOption()
     {
         $tag = new SimpleSelectionTag(array('name' => 'a'));
-        $a = new SimpleOptionTag(array());
+        $a   = new SimpleOptionTag(array());
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag(array('selected' => ''));
@@ -334,7 +334,7 @@ class TestOfSelection extends UnitTestCase
     public function testNastyOptionValuesThatLookLikeFalse()
     {
         $tag = new SimpleSelectionTag(array('name' => 'a'));
-        $a = new SimpleOptionTag(array('value' => '1'));
+        $a   = new SimpleOptionTag(array('value' => '1'));
         $a->addContent('One');
         $tag->addTag($a);
         $b = new SimpleOptionTag(array('value' => '0'));
@@ -348,7 +348,7 @@ class TestOfSelection extends UnitTestCase
     public function testBlankOption()
     {
         $tag = new SimpleSelectionTag(array('name' => 'A'));
-        $a = new SimpleOptionTag(array());
+        $a   = new SimpleOptionTag(array());
         $tag->addTag($a);
         $b = new SimpleOptionTag(array());
         $b->addContent('b');
@@ -363,7 +363,7 @@ class TestOfSelection extends UnitTestCase
     public function testMultipleDefaultWithNoSelections()
     {
         $tag = new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
-        $a = new SimpleOptionTag(array());
+        $a   = new SimpleOptionTag(array());
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag(array());
@@ -376,7 +376,7 @@ class TestOfSelection extends UnitTestCase
     public function testMultipleDefaultWithSelections()
     {
         $tag = new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
-        $a = new SimpleOptionTag(array('selected' => ''));
+        $a   = new SimpleOptionTag(array('selected' => ''));
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag(array('selected' => ''));
@@ -389,7 +389,7 @@ class TestOfSelection extends UnitTestCase
     public function testSettingMultiple()
     {
         $tag = new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
-        $a = new SimpleOptionTag(array('selected' => ''));
+        $a   = new SimpleOptionTag(array('selected' => ''));
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag(array());
@@ -408,7 +408,7 @@ class TestOfSelection extends UnitTestCase
     public function testFailToSetIllegalOptionsInMultiple()
     {
         $tag = new MultipleSelectionTag(array('name' => 'a', 'multiple' => ''));
-        $a = new SimpleOptionTag(array('selected' => ''));
+        $a   = new SimpleOptionTag(array('selected' => ''));
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag(array());
@@ -483,7 +483,7 @@ class TestOfRadioGroup extends UnitTestCase
 
     public function testIsLabelMatchesAnyWidgetInSet()
     {
-        $group = new SimpleRadioGroup();
+        $group   = new SimpleRadioGroup();
         $button1 = new SimpleRadioButtonTag(array('value' => 'A'));
         $button1->setLabel('one');
         $group->addWidget($button1);
