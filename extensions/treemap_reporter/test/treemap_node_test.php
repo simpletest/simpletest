@@ -29,12 +29,12 @@ class TestOfTreemapDataTypes extends UnitTestCase
     {
         $root = new TreemapNode('root', 'test');
         $root->putChild(new TreemapNode('child', 'test'));
-        $childOne = new TreemapNode('child1', 'test');
-        $childTwo = new TreemapNode('child2', 'test');
+        $childOne   = new TreemapNode('child1', 'test');
+        $childTwo   = new TreemapNode('child2', 'test');
         $childThree = new TreemapNode('child3', 'test');
-        $childFour = new TreemapNode('child4', 'test');
-        $childFive = new TreemapNode('child5', 'test');
-        $childSix = new TreemapNode('child6', 'test');
+        $childFour  = new TreemapNode('child4', 'test');
+        $childFive  = new TreemapNode('child5', 'test');
+        $childSix   = new TreemapNode('child6', 'test');
         $childFour->putChild($childFive);
         $childFour->putChild($childSix);
         $this->assertEqual($childFour->getSize(), 2);

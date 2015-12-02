@@ -14,7 +14,7 @@ class CoverageUtilsTest extends UnitTestCase
 
     public function setUp()
     {
-        require_once dirname(__FILE__) .'/../coverage_utils.php';
+        require_once dirname(__FILE__) . '/../coverage_utils.php';
     }
 
     public function testMkdir()
@@ -29,7 +29,7 @@ class CoverageUtilsTest extends UnitTestCase
 
     public function testIsPackageClassAvailable()
     {
-        $coverageSource = dirname(__FILE__) .'/../coverage_calculator.php';
+        $coverageSource = dirname(__FILE__) . '/../coverage_calculator.php';
         $this->assertTrue(CoverageUtils::isPackageClassAvailable($coverageSource, 'CoverageCalculator'));
         $this->assertFalse(CoverageUtils::isPackageClassAvailable($coverageSource, 'BogusCoverage'));
         $this->assertFalse(CoverageUtils::isPackageClassAvailable('bogus-file', 'BogusCoverage'));
@@ -38,14 +38,14 @@ class CoverageUtilsTest extends UnitTestCase
 
     public function testParseArgumentsMultiValue()
     {
-        $actual = CoverageUtils::parseArguments(array('scriptname', '--a=b', '--a=c'), true);
+        $actual   = CoverageUtils::parseArguments(array('scriptname', '--a=b', '--a=c'), true);
         $expected = array('extraArguments' => array(), 'a' => 'c', 'a[]' => array('b', 'c'));
         $this->assertEqual($expected, $actual);
     }
 
     public function testParseArguments()
     {
-        $actual = CoverageUtils::parseArguments(array('scriptname', '--a=b', '-c', 'xxx'));
+        $actual   = CoverageUtils::parseArguments(array('scriptname', '--a=b', '-c', 'xxx'));
         $expected = array('a' => 'b', 'c' => '', 'extraArguments' => array('xxx'));
         $this->assertEqual($expected, $actual);
     }
@@ -58,7 +58,7 @@ class CoverageUtilsTest extends UnitTestCase
 
     public function testParseHyphenedExtraArguments()
     {
-        $actual = CoverageUtils::parseArguments(array('scriptname', '--alpha-beta=b', 'gamma-lambda'));
+        $actual   = CoverageUtils::parseArguments(array('scriptname', '--alpha-beta=b', 'gamma-lambda'));
         $expected = array('alpha-beta' => 'b', 'extraArguments' => array('gamma-lambda'));
         $this->assertEqual($expected, $actual);
     }

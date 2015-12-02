@@ -1,20 +1,13 @@
 <?php
-/**
- *  Base include file for SimpleTest
- *  @package    SimpleTest
- *  @subpackage WebTester
- */
 
 require_once dirname(__FILE__) . '/page.php';
 require_once dirname(__FILE__) . '/user_agent.php';
 
 /**
- *    A composite page. Wraps a frameset page and
- *    adds subframes. The original page will be
- *    mostly ignored. Implements the SimplePage
- *    interface so as to be interchangeable.
- *    @package SimpleTest
- *    @subpackage WebTester
+ * A composite page.
+ * Wraps a frameset page and adds subframes.
+ * The original page will be mostly ignored.
+ * Implements the SimplePage interface so as to be interchangeable.
  */
 class SimpleFrameset
 {
@@ -24,22 +17,24 @@ class SimpleFrameset
     private $names;
 
     /**
-     *    Stashes the frameset page. Will make use of the
-     *    browser to fetch the sub frames recursively.
-     *    @param SimplePage $page        Frameset page.
+     * Stashes the frameset page.
+     * Will make use of the browser to fetch the sub frames recursively.
+     *
+     * @param SimplePage $page        Frameset page.
      */
     public function __construct($page)
     {
         $this->frameset = $page;
-        $this->frames = array();
-        $this->focus = false;
-        $this->names = array();
+        $this->frames   = array();
+        $this->focus    = false;
+        $this->names    = array();
     }
 
     /**
-     *    Adds a parsed page to the frameset.
-     *    @param SimplePage $page    Frame page.
-     *    @param string $name        Name of frame in frameset.
+     * Adds a parsed page to the frameset.
+     *
+     * @param SimplePage $page    Frame page.
+     * @param string $name        Name of frame in frameset.
      */
     public function addFrame($page, $name = false)
     {
@@ -50,11 +45,11 @@ class SimpleFrameset
     }
 
     /**
-     *    Replaces existing frame with another. If the
-     *    frame is nested, then the call is passed down
-     *    one level.
-     *    @param array $path        Path of frame in frameset.
-     *    @param SimplePage $page   Frame source.
+     * Replaces existing frame with another.
+     * If the frame is nested, then the call is passed down one level.
+     *
+     * @param array $path        Path of frame in frameset.
+     * @param SimplePage $page   Frame source.
      */
     public function setFrame($path, $page)
     {
@@ -73,10 +68,10 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for current frame focus. Will be
-     *    false if no frame has focus. Will have the nested
-     *    frame focus if any.
-     *    @return array     Labels or indexes of nested frames.
+     * Accessor for current frame focus.
+     * Will be false if no frame has focus. Will have the nested frame focus if any.
+     *
+     * @return array     Labels or indexes of nested frames.
      */
     public function getFrameFocus()
     {
@@ -90,11 +85,12 @@ class SimpleFrameset
     }
 
     /**
-     *    Turns an internal array index into the frames list
-     *    into a public name, or if none, then a one offset
-     *    index.
-     *    @param integer $subject    Internal index.
-     *    @return integer/string     Public name.
+     * Turns an internal array index into the frames list,
+     * into a public name, or if none, then a one offset index.
+     *
+     * @param int $subject    Internal index.
+     *
+     * @return integer/string     Public name.
      */
     protected function getPublicNameFromIndex($subject)
     {
@@ -108,11 +104,13 @@ class SimpleFrameset
     }
 
     /**
-     *    Sets the focus by index. The integer index starts from 1.
-     *    If already focused and the target frame also has frames,
-     *    then the nested frame will be focused.
-     *    @param integer $choice    Chosen frame.
-     *    @return boolean           True if frame exists.
+     * Sets the focus by index. The integer index starts from 1.
+     * If already focused and the target frame also has frames,
+     * then the nested frame will be focused.
+     *
+     * @param int $choice    Chosen frame.
+     *
+     * @return bool           True if frame exists.
      */
     public function setFrameFocusByIndex($choice)
     {
@@ -130,11 +128,13 @@ class SimpleFrameset
     }
 
     /**
-     *    Sets the focus by name. If already focused and the
-     *    target frame also has frames, then the nested frame
-     *    will be focused.
-     *    @param string $name    Chosen frame.
-     *    @return boolean        True if frame exists.
+     * Sets the focus by name.
+     * If already focused and the target frame also has frames,
+     * then the nested frame will be focused.
+     *
+     * @param string $name    Chosen frame.
+     *
+     * @return bool        True if frame exists.
      */
     public function setFrameFocus($name)
     {
@@ -153,7 +153,7 @@ class SimpleFrameset
     }
 
     /**
-     *    Clears the frame focus.
+     * Clears the frame focus.
      */
     public function clearFrameFocus()
     {
@@ -162,7 +162,7 @@ class SimpleFrameset
     }
 
     /**
-     *    Clears the frame focus for any nested frames.
+     * Clears the frame focus for any nested frames.
      */
     protected function clearNestedFramesFocus()
     {
@@ -172,8 +172,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Test for the presence of a frameset.
-     *    @return boolean        Always true.
+     * Test for the presence of a frameset.
+     *
+     * @return bool        Always true.
      */
     public function hasFrames()
     {
@@ -181,26 +182,25 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for frames information.
-     *    @return array/string      Recursive hash of frame URL strings.
-     *                              The key is either a numerical
-     *                              index or the name attribute.
+     * Accessor for frames information.
+     *
+     * @return array/string      Recursive hash of frame URL strings. The key is either a numerical
+     * index or the name attribute.
      */
     public function getFrames()
     {
         $report = array();
         for ($i = 0; $i < count($this->frames); $i++) {
-            $report[$this->getPublicNameFromIndex($i)] =
-                    $this->frames[$i]->getFrames();
+            $report[$this->getPublicNameFromIndex($i)] = $this->frames[$i]->getFrames();
         }
 
         return $report;
     }
 
     /**
-     *    Accessor for raw text of either all the pages or
-     *    the frame in focus.
-     *    @return string        Raw unparsed content.
+     * Accessor for raw text of either all the pages or the frame in focus.
+     *
+     * @return string        Raw unparsed content.
      */
     public function getRaw()
     {
@@ -216,9 +216,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for plain text of either all the pages or
-     *    the frame in focus.
-     *    @return string        Plain text content.
+     * Accessor for plain text of either all the pages or the frame in focus.
+     *
+     * @return string        Plain text content.
      */
     public function getText()
     {
@@ -234,8 +234,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for last error.
-     *    @return string        Error from last response.
+     * Accessor for last error.
+     *
+     * @return string        Error from last response.
      */
     public function getTransportError()
     {
@@ -247,8 +248,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Request method used to fetch this frame.
-     *    @return string      GET, POST or HEAD.
+     * Request method used to fetch this frame.
+     *
+     * @return string      GET, POST or HEAD.
      */
     public function getMethod()
     {
@@ -260,8 +262,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Original resource name.
-     *    @return SimpleUrl        Current url.
+     * Original resource name.
+     *
+     * @return SimpleUrl        Current url.
      */
     public function getUrl()
     {
@@ -276,8 +279,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Page base URL.
-     *    @return SimpleUrl        Current url.
+     * Page base URL.
+     *
+     * @return SimpleUrl        Current url.
      */
     public function getBaseUrl()
     {
@@ -291,10 +295,11 @@ class SimpleFrameset
     }
 
     /**
-     *    Expands expandomatic URLs into fully qualified
-     *    URLs for the frameset page.
-     *    @param SimpleUrl $url        Relative URL.
-     *    @return SimpleUrl            Absolute URL.
+     * Expands expandomatic URLs into fully qualified URLs for the frameset page.
+     *
+     * @param SimpleUrl $url        Relative URL.
+     *
+     * @return SimpleUrl            Absolute URL.
      */
     public function expandUrl($url)
     {
@@ -302,8 +307,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Original request data.
-     *    @return mixed              Sent content.
+     * Original request data.
+     *
+     * @return mixed              Sent content.
      */
     public function getRequestData()
     {
@@ -315,8 +321,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for current MIME type.
-     *    @return string    MIME type as string; e.g. 'text/html'
+     * Accessor for current MIME type.
+     *
+     * @return string    MIME type as string; e.g. 'text/html'
      */
     public function getMimeType()
     {
@@ -328,8 +335,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for last response code.
-     *    @return integer    Last HTTP response code received.
+     * Accessor for last response code.
+     *
+     * @return int    Last HTTP response code received.
      */
     public function getResponseCode()
     {
@@ -341,9 +349,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for last Authentication type. Only valid
-     *    straight after a challenge (401).
-     *    @return string    Description of challenge type.
+     * Accessor for last Authentication type. Only valid straight after a challenge (401).
+     *
+     * @return string    Description of challenge type.
      */
     public function getAuthentication()
     {
@@ -355,9 +363,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for last Authentication realm. Only valid
-     *    straight after a challenge (401).
-     *    @return string    Name of security realm.
+     * Accessor for last Authentication realm. Only valid straight after a challenge (401).
+     *
+     * @return string    Name of security realm.
      */
     public function getRealm()
     {
@@ -369,8 +377,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for outgoing header information.
-     *    @return string      Header block.
+     * Accessor for outgoing header information.
+     *
+     * @return string      Header block.
      */
     public function getRequest()
     {
@@ -382,8 +391,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for raw header information.
-     *    @return string      Header block.
+     * Accessor for raw header information.
+     *
+     * @return string      Header block.
      */
     public function getHeaders()
     {
@@ -395,8 +405,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for parsed title.
-     *    @return string     Title or false if no title is present.
+     * Accessor for parsed title.
+     *
+     * @return string     Title or false if no title is present.
      */
     public function getTitle()
     {
@@ -404,8 +415,9 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for a list of all fixed links.
-     *    @return array   List of urls as strings.
+     * Accessor for a list of all fixed links.
+     *
+     * @return array   List of urls as strings.
      */
     public function getUrls()
     {
@@ -421,10 +433,12 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for URLs by the link label. Label will match
-     *    regardess of whitespace issues and case.
-     *    @param string $label    Text of link.
-     *    @return array           List of links with that label.
+     * Accessor for URLs by the link label. Label will match regardess of whitespace issues and
+     * case.
+     *
+     * @param string $label    Text of link.
+     *
+     * @return array           List of links with that label.
      */
     public function getUrlsByLabel($label)
     {
@@ -446,12 +460,13 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for a URL by the id attribute. If in a frameset
-     *    then the first link found with that ID attribute is
-     *    returned only. Focus on a frame if you want one from
-     *    a specific part of the frameset.
-     *    @param string $id       Id attribute of link.
-     *    @return string          URL with that id.
+     * Accessor for a URL by the id attribute. If in a frameset then the first link found with that
+     * ID attribute is returned only. Focus on a frame if you want one from a specific part of the
+     * frameset.
+     *
+     * @param string $id       Id attribute of link.
+     *
+     * @return string          URL with that id.
      */
     public function getUrlById($id)
     {
@@ -469,10 +484,12 @@ class SimpleFrameset
     }
 
     /**
-     *    Attaches the intended frame index to a list of URLs.
-     *    @param array $urls        List of SimpleUrls.
-     *    @param string $frame      Name of frame or index.
-     *    @return array             List of tagged URLs.
+     * Attaches the intended frame index to a list of URLs.
+     *
+     * @param array $urls        List of SimpleUrls.
+     * @param string $frame      Name of frame or index.
+     *
+     * @return array             List of tagged URLs.
      */
     protected function tagUrlsWithFrame($urls, $frame)
     {
@@ -488,11 +505,11 @@ class SimpleFrameset
     }
 
     /**
-     *    Finds a held form by button label. Will only
-     *    search correctly built forms.
-     *    @param SimpleSelector $selector       Button finder.
-     *    @return SimpleForm                    Form object containing
-     *                                          the button.
+     * Finds a held form by button label. Will only search correctly built forms.
+     *
+     * @param SimpleSelector $selector       Button finder.
+     *
+     * @return SimpleForm                    Form object containing the button.
      */
     public function getFormBySubmit($selector)
     {
@@ -500,13 +517,12 @@ class SimpleFrameset
     }
 
     /**
-     *    Finds a held form by image using a selector.
-     *    Will only search correctly built forms. The first
-     *    form found either within the focused frame, or
-     *    across frames, will be the one returned.
-     *    @param SimpleSelector $selector  Image finder.
-     *    @return SimpleForm               Form object containing
-     *                                     the image.
+     * Finds a held form by image using a selector. Will only search correctly built forms. The
+     * first form found either within the focused frame, or across frames, will be the one returned.
+     *
+     * @param SimpleSelector $selector  Image finder.
+     *
+     * @return SimpleForm               Form object containing the image.
      */
     public function getFormByImage($selector)
     {
@@ -514,13 +530,13 @@ class SimpleFrameset
     }
 
     /**
-     *    Finds a held form by the form ID. A way of
-     *    identifying a specific form when we have control
-     *    of the HTML code. The first form found
-     *    either within the focused frame, or across frames,
-     *    will be the one returned.
-     *    @param string $id     Form label.
-     *    @return SimpleForm    Form object containing the matching ID.
+     * Finds a held form by the form ID. A way of identifying a specific form when we have control
+     * of the HTML code. The first form found either within the focused frame, or across frames,
+     * will be the one returned.
+     *
+     * @param string $id     Form label.
+     *
+     * @return SimpleForm    Form object containing the matching ID.
      */
     public function getFormById($id)
     {
@@ -528,11 +544,12 @@ class SimpleFrameset
     }
 
     /**
-     *    General form finder. Will search all the frames or
-     *    just the one in focus.
-     *    @param string $method    Method to use to find in a page.
-     *    @param string $attribute Label, name or ID.
-     *    @return SimpleForm    Form object containing the matching ID.
+     * General form finder. Will search all the frames or just the one in focus.
+     *
+     * @param string $method    Method to use to find in a page.
+     * @param string $attribute Label, name or ID.
+     *
+     * @return SimpleForm    Form object containing the matching ID.
      */
     protected function findForm($method, $attribute)
     {
@@ -559,13 +576,15 @@ class SimpleFrameset
     }
 
     /**
-     *    Finds a form in a page using a form finding method. Will
-     *    also tag the form with the frame name it belongs in.
-     *    @param SimplePage $page  Page content of frame.
-     *    @param integer $index    Internal frame representation.
-     *    @param string $method    Method to use to find in a page.
-     *    @param string $attribute Label, name or ID.
-     *    @return SimpleForm       Form object containing the matching ID.
+     * Finds a form in a page using a form finding method.
+     * Will also tag the form with the frame name it belongs in.
+     *
+     * @param SimplePage $page  Page content of frame.
+     * @param int $index    Internal frame representation.
+     * @param string $method    Method to use to find in a page.
+     * @param string $attribute Label, name or ID.
+     *
+     * @return SimpleForm       Form object containing the matching ID.
      */
     protected function findFormInFrame($page, $index, $method, $attribute)
     {
@@ -578,11 +597,12 @@ class SimpleFrameset
     }
 
     /**
-     *    Sets a field on each form in which the field is
-     *    available.
-     *    @param SimpleSelector $selector    Field finder.
-     *    @param string $value               Value to set field to.
-     *    @return boolean                    True if value is valid.
+     * Sets a field on each form in which the field is available.
+     *
+     * @param SimpleSelector $selector    Field finder.
+     * @param string $value               Value to set field to.
+     *
+     * @return bool                    True if value is valid.
      */
     public function setField($selector, $value)
     {
@@ -596,11 +616,12 @@ class SimpleFrameset
     }
 
     /**
-     *    Accessor for a form element value within a page.
-     *    @param SimpleSelector $selector    Field finder.
-     *    @return string/boolean             A string if the field is
-     *                                       present, false if unchecked
-     *                                       and null if missing.
+     * Accessor for a form element value within a page.
+     *
+     * @param SimpleSelector $selector    Field finder.
+     *
+     * @return string/boolean             A string if the field is present, false if unchecked and
+     * null if missing.
      */
     public function getField($selector)
     {
@@ -611,6 +632,6 @@ class SimpleFrameset
             }
         }
 
-        return null;
+        return;
     }
 }

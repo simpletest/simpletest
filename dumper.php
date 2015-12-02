@@ -1,9 +1,5 @@
 <?php
-/**
- *  base include file for SimpleTest
- *  @package    SimpleTest
- *  @subpackage UnitTester
- */
+
 /**
  * does type matter
  */
@@ -12,16 +8,16 @@ if (! defined('TYPE_MATTERS')) {
 }
 
 /**
- *    Displays variables as text and does diffs.
- *    @package  SimpleTest
- *    @subpackage   UnitTester
+ * Displays variables as text and does diffs.
  */
 class SimpleDumper
 {
     /**
-     *    Renders a variable in a shorter form than print_r().
-     *    @param mixed $value      Variable to render as a string.
-     *    @return string           Human readable string form.
+     * Renders a variable in a shorter form than print_r().
+     *
+     * @param mixed $value      Variable to render as a string.
+     *
+     * @return string           Human readable string form.
      */
     public function describeValue($value)
     {
@@ -45,9 +41,11 @@ class SimpleDumper
     }
 
     /**
-     *    Gets the string representation of a type.
-     *    @param mixed $value    Variable to check against.
-     *    @return string         Type.
+     * Gets the string representation of a type.
+     *
+     * @param mixed $value    Variable to check against.
+     *
+     * @return string         Type.
      */
     public function getType($value)
     {
@@ -73,13 +71,14 @@ class SimpleDumper
     }
 
     /**
-     *    Creates a human readable description of the
-     *    difference between two variables. Uses a
-     *    dynamic call.
-     *    @param mixed $first        First variable.
-     *    @param mixed $second       Value to compare with.
-     *    @param boolean $identical  If true then type anomolies count.
-     *    @return string             Description of difference.
+     * Creates a human readable description of the difference between two variables.
+     * Uses a dynamic call.
+     *
+     * @param mixed $first        First variable.
+     * @param mixed $second       Value to compare with.
+     * @param bool $identical  If true then type anomolies count.
+     *
+     * @return string             Description of difference.
      */
     public function describeDifference($first, $second, $identical = false)
     {
@@ -99,10 +98,12 @@ class SimpleDumper
     }
 
     /**
-     *    Tests to see if types match.
-     *    @param mixed $first        First variable.
-     *    @param mixed $second       Value to compare with.
-     *    @return boolean            True if matches.
+     * Tests to see if types match.
+     *
+     * @param mixed $first        First variable.
+     * @param mixed $second       Value to compare with.
+     *
+     * @return bool            True if matches.
      */
     protected function isTypeMatch($first, $second)
     {
@@ -110,11 +111,13 @@ class SimpleDumper
     }
 
     /**
-     *    Clips a string to a maximum length.
-     *    @param string $value         String to truncate.
-     *    @param integer $size         Minimum string size to show.
-     *    @param integer $position     Centre of string section.
-     *    @return string               Shortened version.
+     * Clips a string to a maximum length.
+     *
+     * @param string $value         String to truncate.
+     * @param int $size         Minimum string size to show.
+     * @param int $position     Centre of string section.
+     *
+     * @return string               Shortened version.
      */
     public function clipString($value, $size, $position = 0)
     {
@@ -123,7 +126,7 @@ class SimpleDumper
             return $value;
         }
         $position = min($position, $length);
-        $start = ($size/2 > $position ? 0 : $position - $size/2);
+        $start    = ($size/2 > $position ? 0 : $position - $size/2);
         if ($start + $size > $length) {
             $start = $length - $size;
         }
@@ -133,12 +136,13 @@ class SimpleDumper
     }
 
     /**
-     *    Creates a human readable description of the
-     *    difference between two variables. The minimal
-     *    version.
-     *    @param null $first          First value.
-     *    @param mixed $second        Value to compare with.
-     *    @return string              Human readable description.
+     * Creates a human readable description of the difference between two variables.
+     * The minimal version.
+     *
+     * @param null $first          First value.
+     * @param mixed $second        Value to compare with.
+     *
+     * @return string              Human readable description.
      */
     protected function describeGenericDifference($first, $second)
     {
@@ -148,12 +152,13 @@ class SimpleDumper
     }
 
     /**
-     *    Creates a human readable description of the
-     *    difference between a null and another variable.
-     *    @param null $first          First null.
-     *    @param mixed $second        Null to compare with.
-     *    @param boolean $identical   If true then type anomolies count.
-     *    @return string              Human readable description.
+     * Creates a human readable description of the difference between a null and another variable.
+     *
+     * @param null $first          First null.
+     * @param mixed $second        Null to compare with.
+     * @param bool $identical   If true then type anomolies count.
+     *
+     * @return string              Human readable description.
      */
     protected function describeNullDifference($first, $second, $identical)
     {
@@ -161,12 +166,14 @@ class SimpleDumper
     }
 
     /**
-     *    Creates a human readable description of the
-     *    difference between a boolean and another variable.
-     *    @param boolean $first       First boolean.
-     *    @param mixed $second        Boolean to compare with.
-     *    @param boolean $identical   If true then type anomolies count.
-     *    @return string              Human readable description.
+     * Creates a human readable description of the difference between a boolean and another
+     * variable.
+     *
+     * @param bool $first       First boolean.
+     * @param mixed $second        Boolean to compare with.
+     * @param bool $identical   If true then type anomolies count.
+     *
+     * @return string              Human readable description.
      */
     protected function describeBooleanDifference($first, $second, $identical)
     {
@@ -174,12 +181,14 @@ class SimpleDumper
     }
 
     /**
-     *    Creates a human readable description of the
-     *    difference between a string and another variable.
-     *    @param string $first        First string.
-     *    @param mixed $second        String to compare with.
-     *    @param boolean $identical   If true then type anomolies count.
-     *    @return string              Human readable description.
+     * Creates a human readable description of the difference between
+     * a string and another variable.
+     *
+     * @param string $first        First string.
+     * @param mixed $second        String to compare with.
+     * @param bool $identical   If true then type anomolies count.
+     *
+     * @return string              Human readable description.
      */
     protected function describeStringDifference($first, $second, $identical)
     {
@@ -187,7 +196,7 @@ class SimpleDumper
             return $this->describeGenericDifference($first, $second);
         }
         $position = $this->stringDiffersAt($first, $second);
-        $message = "at character $position";
+        $message  = "at character $position";
         $message .= ' with [' .
                 $this->clipString($first, 200, $position) . '] and [' .
                 $this->clipString($second, 200, $position) . ']';
@@ -196,12 +205,14 @@ class SimpleDumper
     }
 
     /**
-     *    Creates a human readable description of the
-     *    difference between an integer and another variable.
-     *    @param integer $first       First number.
-     *    @param mixed $second        Number to compare with.
-     *    @param boolean $identical   If true then type anomolies count.
-     *    @return string              Human readable description.
+     * Creates a human readable description of the difference between
+     * an integer and another variable.
+     *
+     * @param int $first       First number.
+     * @param mixed $second        Number to compare with.
+     * @param bool $identical   If true then type anomolies count.
+     *
+     * @return string              Human readable description.
      */
     protected function describeIntegerDifference($first, $second, $identical)
     {
@@ -216,12 +227,14 @@ class SimpleDumper
     }
 
     /**
-     *    Creates a human readable description of the
-     *    difference between two floating point numbers.
-     *    @param float $first         First float.
-     *    @param mixed $second        Float to compare with.
-     *    @param boolean $identical   If true then type anomolies count.
-     *    @return string              Human readable description.
+     * Creates a human readable description of the difference between
+     * two floating point numbers.
+     *
+     * @param float $first         First float.
+     * @param mixed $second        Float to compare with.
+     * @param bool $identical   If true then type anomolies count.
+     *
+     * @return string              Human readable description.
      */
     protected function describeFloatDifference($first, $second, $identical)
     {
@@ -236,12 +249,13 @@ class SimpleDumper
     }
 
     /**
-     *    Creates a human readable description of the
-     *    difference between two arrays.
-     *    @param array $first         First array.
-     *    @param mixed $second        Array to compare with.
-     *    @param boolean $identical   If true then type anomolies count.
-     *    @return string              Human readable description.
+     * Creates a human readable description of the difference between two arrays.
+     *
+     * @param array $first         First array.
+     * @param mixed $second        Array to compare with.
+     * @param bool $identical   If true then type anomolies count.
+     *
+     * @return string              Human readable description.
      */
     protected function describeArrayDifference($first, $second, $identical)
     {
@@ -271,17 +285,18 @@ class SimpleDumper
     }
 
     /**
-     *    Compares two arrays to see if their key lists match.
-     *    For an identical match, the ordering and types of the keys
-     *    is significant.
-     *    @param array $first         First array.
-     *    @param array $second        Array to compare with.
-     *    @param boolean $identical   If true then type anomolies count.
-     *    @return boolean             True if matching.
+     * Compares two arrays to see if their key lists match.
+     * For an identical match, the ordering and types of the keys is significant.
+     *
+     * @param array $first         First array.
+     * @param array $second        Array to compare with.
+     * @param bool $identical   If true then type anomolies count.
+     *
+     * @return bool             True if matching.
      */
     protected function isMatchingKeys($first, $second, $identical)
     {
-        $first_keys = array_keys($first);
+        $first_keys  = array_keys($first);
         $second_keys = array_keys($second);
         if ($identical) {
             return ($first_keys === $second_keys);
@@ -293,12 +308,14 @@ class SimpleDumper
     }
 
     /**
-     *    Creates a human readable description of the
-     *    difference between a resource and another variable.
-     *    @param resource $first       First resource.
-     *    @param mixed $second         Resource to compare with.
-     *    @param boolean $identical    If true then type anomolies count.
-     *    @return string              Human readable description.
+     * Creates a human readable description of the difference between
+     * a resource and another variable.
+     *
+     * @param resource $first       First resource.
+     * @param mixed $second         Resource to compare with.
+     * @param bool $identical    If true then type anomolies count.
+     *
+     * @return string              Human readable description.
      */
     protected function describeResourceDifference($first, $second, $identical)
     {
@@ -306,12 +323,13 @@ class SimpleDumper
     }
 
     /**
-     *    Creates a human readable description of the
-     *    difference between two objects.
-     *    @param object $first        First object.
-     *    @param mixed $second        Object to compare with.
-     *    @param boolean $identical   If true then type anomolies count.
-     *    @return string              Human readable description.
+     * Creates a human readable description of the difference between two objects.
+     *
+     * @param object $first        First object.
+     * @param mixed $second        Object to compare with.
+     * @param bool $identical   If true then type anomolies count.
+     *
+     * @return string              Human readable description.
      */
     protected function describeObjectDifference($first, $second, $identical)
     {
@@ -326,16 +344,17 @@ class SimpleDumper
     }
 
     /**
-     *    Get all members of an object including private and protected ones.
-     *    A safer form of casting to an array.
-     *    @param object $object     Object to list members of,
-     *                              including private ones.
-     *    @return array             Names and values in the object.
+     * Get all members of an object including private and protected ones.
+     * A safer form of casting to an array.
+     *
+     * @param object $object     Object to list members of, including private ones.
+     *
+     * @return array             Names and values in the object.
      */
     protected function getMembers($object)
     {
         $reflection = new ReflectionObject($object);
-        $members = array();
+        $members    = array();
         foreach ($reflection->getProperties() as $property) {
             if (method_exists($property, 'setAccessible')) {
                 $property->setAccessible(true);
@@ -352,10 +371,12 @@ class SimpleDumper
     }
 
     /**
-     *    Extracts a private member's value when reflection won't play ball.
-     *    @param string $name        Property name.
-     *    @param object $object      Object to read.
-     *    @return mixed              Value of property.
+     * Extracts a private member's value when reflection won't play ball.
+     *
+     * @param string $name        Property name.
+     * @param object $object      Object to read.
+     *
+     * @return mixed              Value of property.
      */
     private function getPrivatePropertyNoMatterWhat($name, $object)
     {
@@ -367,10 +388,11 @@ class SimpleDumper
     }
 
     /**
-     *    Removes crud from property name after it's been converted
-     *    to an array.
-     *    @param string $mangled     Name from array cast.
-     *    @return string             Cleaned up name.
+     * Removes crud from property name after it's been converted to an array.
+     *
+     * @param string $mangled     Name from array cast.
+     *
+     * @return string             Cleaned up name.
      */
     public function unmangle($mangled)
     {
@@ -380,12 +402,12 @@ class SimpleDumper
     }
 
     /**
-     *    Find the first character position that differs
-     *    in two strings by binary chop.
-     *    @param string $first        First string.
-     *    @param string $second       String to compare with.
-     *    @return integer             Position of first differing
-     *                                character.
+     * Find the first character position that differs in two strings by binary chop.
+     *
+     * @param string $first        First string.
+     * @param string $second       String to compare with.
+     *
+     * @return int             Position of first differing character.
      */
     protected function stringDiffersAt($first, $second)
     {
@@ -396,7 +418,7 @@ class SimpleDumper
             list($first, $second) = array($second, $first);
         }
         $position = 0;
-        $step = strlen($first);
+        $step     = strlen($first);
         while ($step > 1) {
             $step = (integer) (($step + 1) / 2);
             if (strncmp($first, $second, $position + $step) == 0) {
@@ -408,9 +430,11 @@ class SimpleDumper
     }
 
     /**
-     *    Sends a formatted dump of a variable to a string.
-     *    @param mixed $variable    Variable to display.
-     *    @return string            Output from print_r().
+     * Sends a formatted dump of a variable to a string.
+     *
+     * @param mixed $variable    Variable to display.
+     *
+     * @return string            Output from print_r().
      */
     public function dump($variable)
     {

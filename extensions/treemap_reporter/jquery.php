@@ -1,18 +1,10 @@
 <?php
-/**
- *	extension file for SimpleTest
- *  @package        SimpleTest
- *  @subpackage     Extensions
- */
 
 require_once dirname(__FILE__) . '/../treemap_reporter.php';
 
 /**
- * outputs unordered list representing treemap of test report,
+ * Outputs unordered list representing treemap of test report,
  * and attaches jQuery Treemap to render results.
- *
- *  @package        SimpleTest
- *  @subpackage     Extensions
  */
 class JqueryTreemapReporter extends TreemapReporter
 {
@@ -29,6 +21,13 @@ class JqueryTreemapReporter extends TreemapReporter
         return $css;
     }
 
+    /**
+     * Render the results header.
+     *
+     * @todo  Check URLs of JS. Find repo/alternative for treemap.js.
+     *
+     * @return string HTML of results header.
+     */
     public function paintResultsHeader()
     {
         $title = $this->_reporter->getTitle();
@@ -54,7 +53,7 @@ class JqueryTreemapReporter extends TreemapReporter
 
     public function paintRectangleStart($node)
     {
-        echo '<li><span class="desc">'. basename($node->getDescription()) . '</span>';
+        echo '<li><span class="desc">' . basename($node->getDescription()) . '</span>';
         echo '<span class="data">' . $node->getTotalSize() . '</span>';
     }
 

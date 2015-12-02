@@ -14,13 +14,13 @@ class CoverageCalculatorTest extends UnitTestCase
 
     public function setUp()
     {
-        require_once dirname(__FILE__) .'/../coverage_calculator.php';
+        require_once dirname(__FILE__) . '/../coverage_calculator.php';
         $this->calc = new CoverageCalculator();
     }
 
     public function testVariables()
     {
-        $coverage = array('file' => array(1,1,1,1));
+        $coverage  = array('file' => array(1,1,1,1));
         $untouched = array('missed-file');
         $variables = $this->calc->variables($coverage, $untouched);
         $this->assertEqual(4, $variables['totalLoc']);
@@ -35,7 +35,7 @@ class CoverageCalculatorTest extends UnitTestCase
     public function testPercentageCoverageByFile()
     {
         $coverage = array(0,0,0,1,1,1);
-        $results = array();
+        $results  = array();
         $this->calc->percentCoverageByFile($coverage, 'file', $results);
         $pct = $results[0];
         $this->assertEqual(50, $pct['file']['percentage']);

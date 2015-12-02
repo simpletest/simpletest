@@ -1,20 +1,16 @@
 <?php
 /**
- *  base include file for SimpleTest
- *  @package    SimpleTest
- */
-
-/**
- *  Static methods for compatibility between different PHP versions.
- *  @package    SimpleTest
+ * Static methods for compatibility between different PHP versions.
  */
 class SimpleTestCompatibility
 {
     /**
-     *    Recursive type test.
-     *    @param mixed $first    Test subject.
-     *    @param mixed $second   Comparison object.
-     *    @return boolean        True if same type.
+     * Recursive type test.
+     *
+     * @param mixed $first    Test subject.
+     * @param mixed $second   Comparison object.
+     *
+     * @return bool        True if same type.
      */
     public static function isIdentical($first, $second)
     {
@@ -41,10 +37,12 @@ class SimpleTestCompatibility
     }
 
     /**
-     *    Recursive type test for each element of an array.
-     *    @param mixed $first    Test subject.
-     *    @param mixed $second   Comparison object.
-     *    @return boolean        True if identical.
+     * Recursive type test for each element of an array.
+     *
+     * @param mixed $first    Test subject.
+     * @param mixed $second   Comparison object.
+     *
+     * @return bool        True if identical.
      */
     protected static function isArrayOfIdenticalTypes($first, $second)
     {
@@ -64,10 +62,12 @@ class SimpleTestCompatibility
     }
 
     /**
-     *    Test for two variables being aliases.
-     *    @param mixed $first    Test subject.
-     *    @param mixed $second   Comparison object.
-     *    @return boolean        True if same.
+     * Test for two variables being aliases.
+     *
+     * @param mixed $first    Test subject.
+     * @param mixed $second   Comparison object.
+     *
+     * @return bool        True if same.
      */
     public static function isReference(&$first, &$second)
     {
@@ -75,17 +75,17 @@ class SimpleTestCompatibility
             return ($first === $second);
         }
         if (is_object($first) && is_object($second)) {
-            $id = uniqid(mt_rand());
+            $id         = uniqid(mt_rand());
             $first->$id = true;
-            $is_ref = isset($second->$id);
+            $is_ref     = isset($second->$id);
             unset($first->$id);
 
             return $is_ref;
         }
-        $temp = $first;
-        $first = uniqid(mt_rand());
+        $temp   = $first;
+        $first  = uniqid(mt_rand());
         $is_ref = ($first === $second);
-        $first = $temp;
+        $first  = $temp;
 
         return $is_ref;
     }

@@ -1,31 +1,23 @@
 <?php
-/**
- *	base include file for SimpleTest
- *	@package	SimpleTest
- *	@subpackage	Extensions
- */
 
 require_once dirname(__FILE__) . '/../unit_tester.php';
 require_once dirname(__FILE__) . '/selenium/remote-control.php';
 
 /**
- * Provides test case wrapper to a Selenium remote
- * control instance.
- *	@package	SimpleTest
- *	@subpackage	Extensions
+ * Provides test case wrapper to a Selenium remote control instance.
  */
 class SeleniumTestCase extends UnitTestCase
 {
     /**
      * Selenium instantiation variables
      */
-    protected $browser = '';
+    protected $browser    = '';
     protected $browserUrl = '';
-    protected $host = 'localhost';
-    protected $port = '4444';
-    protected $timeout = 30000;
+    protected $host       = 'localhost';
+    protected $port       = '4444';
+    protected $timeout    = 30000;
 
-    protected $selenium = null;
+    protected $selenium            = null;
     protected $newInstanceEachTest = true;
 
     public function __construct($name = 'Selenium Test Case')

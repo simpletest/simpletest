@@ -1,23 +1,16 @@
 <?php
-/**
- *  base include file for SimpleTest
- *  @package    SimpleTest
- *  @subpackage UnitTester
- */
 
 /**
- *    Version specific reflection API.
- *    @package SimpleTest
- *    @subpackage UnitTester
+ * Version specific reflection API.
  */
 class SimpleReflection
 {
     private $interface;
 
     /**
-     *    Stashes the class/interface.
-     *    @param string $interface    Class or interface
-     *                                to inspect.
+     * Stashes the class/interface.
+     *
+     * @param string $interface    Class or interface to inspect.
      */
     public function __construct($interface)
     {
@@ -25,10 +18,11 @@ class SimpleReflection
     }
 
     /**
-     *    Checks that a class has been declared. Versions
-     *    before PHP5.0.2 need a check that it's not really
-     *    an interface.
-     *    @return boolean            True if defined.
+     * Checks that a class has been declared.
+     *
+     * @todo  Versions before PHP5.0.2 need a check that it's not really an interface.
+     *
+     * @return bool            True if defined.
      */
     public function classExists()
     {
@@ -41,9 +35,9 @@ class SimpleReflection
     }
 
     /**
-     *    Needed to kill the autoload feature in PHP5
-     *    for classes created dynamically.
-     *    @return boolean        True if defined.
+     * Needed to kill the autoload feature in PHP5 for classes created dynamically.
+     *
+     * @return bool        True if defined.
      */
     public function classExistsSansAutoload()
     {
@@ -51,9 +45,9 @@ class SimpleReflection
     }
 
     /**
-     *    Checks that a class or interface has been
-     *    declared.
-     *    @return boolean            True if defined.
+     * Checks that a class or interface has been declared.
+     *
+     * @return bool            True if defined.
      */
     public function classOrInterfaceExists()
     {
@@ -61,9 +55,9 @@ class SimpleReflection
     }
 
     /**
-     *    Needed to kill the autoload feature in PHP5
-     *    for classes created dynamically.
-     *    @return boolean        True if defined.
+     * Needed to kill the autoload feature in PHP5 for classes created dynamically.
+     *
+     * @return bool        True if defined.
      */
     public function classOrInterfaceExistsSansAutoload()
     {
@@ -71,11 +65,12 @@ class SimpleReflection
     }
 
     /**
-     *    Needed to select the autoload feature in PHP5
-     *    for classes created dynamically.
-     *    @param string $interface       Class or interface name.
-     *    @param boolean $autoload       True totriggerautoload.
-     *    @return boolean                True if interface defined.
+     * Needed to select the autoload feature in PHP5 for classes created dynamically.
+     *
+     * @param string $interface       Class or interface name.
+     * @param bool $autoload       True totriggerautoload.
+     *
+     * @return bool                True if interface defined.
      */
     protected function classOrInterfaceExistsWithAutoload($interface, $autoload)
     {
@@ -89,9 +84,9 @@ class SimpleReflection
     }
 
     /**
-     *    Gets the list of methods on a class or
-     *    interface.
-     *    @returns array              List of method names.
+     * Gets the list of methods on a class or interface.
+     *
+     * @returns array              List of method names.
      */
     public function getMethods()
     {
@@ -99,10 +94,10 @@ class SimpleReflection
     }
 
     /**
-     *    Gets the list of interfaces from a class. If the
-     *    class name is actually an interface then just that
-     *    interface is returned.
-     *    @returns array          List of interfaces.
+     * Gets the list of interfaces from a class.
+     * If the class name is actually an interface then just that interface is returned.
+     *
+     * @returns array          List of interfaces.
      */
     public function getInterfaces()
     {
@@ -115,9 +110,9 @@ class SimpleReflection
     }
 
     /**
-     *    Gets the list of methods for the implemented
-     *    interfaces only.
-     *    @returns array      List of enforced method signatures.
+     * Gets the list of methods for the implemented interfaces only.
+     *
+     * @returns array      List of enforced method signatures.
      */
     public function getInterfaceMethods()
     {
@@ -130,10 +125,11 @@ class SimpleReflection
     }
 
     /**
-     *    Checks to see if the method signature has to be tightly
-     *    specified.
-     *    @param string $method        Method name.
-     *    @returns boolean             True if enforced.
+     * Checks to see if the method signature has to be tightly specified.
+     *
+     * @param string $method        Method name.
+     *
+     * @returns boolean             True if enforced.
      */
     protected function isInterfaceMethod($method)
     {
@@ -141,13 +137,14 @@ class SimpleReflection
     }
 
     /**
-     *    Finds the parent class name.
-     *    @returns string      Parent class name.
+     * Finds the parent class name.
+     *
+     * @returns string      Parent class name.
      */
     public function getParent()
     {
         $reflection = new ReflectionClass($this->interface);
-        $parent = $reflection->getParentClass();
+        $parent     = $reflection->getParentClass();
         if ($parent) {
             return $parent->getName();
         }
@@ -156,8 +153,9 @@ class SimpleReflection
     }
 
     /**
-     *    Trivially determines if the class is abstract.
-     *    @returns boolean      True if abstract.
+     * Trivially determines if the class is abstract.
+     *
+     * @returns boolean      True if abstract.
      */
     public function isAbstract()
     {
@@ -167,8 +165,9 @@ class SimpleReflection
     }
 
     /**
-     *    Trivially determines if the class is an interface.
-     *    @returns boolean      True if interface.
+     * Trivially determines if the class is an interface.
+     *
+     * @returns boolean      True if interface.
      */
     public function isInterface()
     {
@@ -178,9 +177,10 @@ class SimpleReflection
     }
 
     /**
-     *    Scans for final methods, as they screw up inherited
-     *    mocks by not allowing you to override them.
-     *    @returns boolean   True if the class has a final method.
+     * Scans for final methods, as they screw up inherited mocks
+     * by not allowing you to override them.
+     *
+     * @returns boolean   True if the class has a final method.
      */
     public function hasFinal()
     {
@@ -195,15 +195,15 @@ class SimpleReflection
     }
 
     /**
-     *    Whittles a list of interfaces down to only the
-     *    necessary top level parents.
-     *    @param array $interfaces     Reflection API interfaces
-     *                                 to reduce.
-     *    @returns array               List of parent interface names.
+     * Whittles a list of interfaces down to only the necessary top level parents.
+     *
+     * @param array $interfaces     Reflection API interfaces to reduce.
+     *
+     * @return array               List of parent interface names.
      */
     protected function onlyParents($interfaces)
     {
-        $parents = array();
+        $parents   = array();
         $blacklist = array();
         foreach ($interfaces as $interface) {
             foreach ($interfaces as $possible_parent) {
@@ -224,8 +224,10 @@ class SimpleReflection
 
     /**
      * Checks whether a method is abstract or not.
-     * @param   string   $name  Method name.
-     * @return  bool            true if method is abstract, else false
+     *
+     * @param string $name Method name.
+     *
+     * @return bool true if method is abstract, else false
      */
     protected function isAbstractMethod($name)
     {
@@ -239,8 +241,10 @@ class SimpleReflection
 
     /**
      * Checks whether a method is the constructor.
-     * @param   string   $name  Method name.
-     * @return  bool            true if method is the constructor
+     *
+     * @param string $name Method name.
+     *
+     * @return bool true if method is the constructor
      */
     protected function isConstructor($name)
     {
@@ -249,13 +253,15 @@ class SimpleReflection
 
     /**
      * Checks whether a method is abstract in all parents or not.
-     * @param   string   $name  Method name.
-     * @return  bool            true if method is abstract in parent, else false
+     *
+     * @param string $name Method name.
+     *
+     * @return bool true if method is abstract in parent, else false
      */
     protected function isAbstractMethodInParents($name)
     {
         $interface = new ReflectionClass($this->interface);
-        $parent = $interface->getParentClass();
+        $parent    = $interface->getParentClass();
         while ($parent) {
             if (! $parent->hasMethod($name)) {
                 return false;
@@ -271,8 +277,10 @@ class SimpleReflection
 
     /**
      * Checks whether a method is static or not.
-     * @param   string  $name   Method name
-     * @return  bool            true if method is static, else false
+     *
+     * @param string $name Method name
+     *
+     * @return bool true if method is static, else false
      */
     protected function isStaticMethod($name)
     {
@@ -285,11 +293,11 @@ class SimpleReflection
     }
 
     /**
-     *    Writes the source code matching the declaration
-     *    of a method.
-     *    @param string $name    Method name.
-     *    @return string         Method signature up to last
-     *                           bracket.
+     * Writes the source code matching the declaration of a method.
+     *
+     * @param string $name    Method name.
+     *
+     * @return string         Method signature up to last bracket.
      */
     public function getSignature($name)
     {
@@ -306,11 +314,14 @@ class SimpleReflection
             return "function $name()";
         }
 
-        // This wonky try-catch is a work around for a faulty method_exists()
-        // in early versions of PHP 5 which would return false for static
-        // methods. The Reflection classes work fine, but hasMethod()
-        // doesn't exist prior to PHP 5.1.0, so we need to use a more crude
-        // detection method.
+
+        /**
+         * @todo
+         * 1) This wonky try-catch is a work around for a faulty method_exists()
+         *    in early versions of PHP 5 which would return false for static methods.
+         * 2) The Reflection classes work fine, but hasMethod() doesn't exist prior to PHP 5.1.0,
+         *    so we need to use a more crude detection method.
+         */
         try {
             $interface = new ReflectionClass($this->interface);
             $interface->getMethod($name);
@@ -322,18 +333,19 @@ class SimpleReflection
     }
 
     /**
-     *    For a signature specified in an interface, full
-     *    details must be replicated to be a valid implementation.
-     *    @param string $name    Method name.
-     *    @return string         Method signature up to last
-     *                           bracket.
+     * For a signature specified in an interface,
+     * full details must be replicated to be a valid implementation.
+     *
+     * @param string $name    Method name.
+     *
+     * @return string         Method signature up to last bracket.
      */
     protected function getFullSignature($name)
     {
         $interface = new ReflectionClass($this->interface);
-        $method = $interface->getMethod($name);
+        $method    = $interface->getMethod($name);
         $reference = $method->returnsReference() ? '&' : '';
-        $static = $method->isStatic() ? 'static ' : '';
+        $static    = $method->isStatic() ? 'static ' : '';
 
         return "{$static}function $reference$name(" .
                 implode(', ', $this->getParameterSignatures($method)) .
@@ -341,18 +353,18 @@ class SimpleReflection
     }
 
     /**
-     *    Gets the source code for each parameter.
-     *    @param ReflectionMethod $method   Method object from
-     *                                      reflection API
-     *    @return array                     List of strings, each
-     *                                      a snippet of code.
+     * Gets the source code for each parameter.
+     *
+     * @param ReflectionMethod $method   Method object from reflection API
+     *
+     * @return array                     List of strings, each a snippet of code.
      */
     protected function getParameterSignatures($method)
     {
         $signatures = array();
         foreach ($method->getParameters() as $parameter) {
             $signature = '';
-            $type = $parameter->getClass();
+            $type      = $parameter->getClass();
             if (is_null($type) && version_compare(phpversion(), '5.1.0', '>=') && $parameter->isArray()) {
                 $signature .= 'array ';
             } elseif (!is_null($type)) {
@@ -377,11 +389,14 @@ class SimpleReflection
     }
 
     /**
-     *    The SPL library has problems with the
-     *    Reflection library. In particular, you can
-     *    get extra characters in parameter names :(.
-     *    @param string $name    Parameter name.
-     *    @return string         Cleaner name.
+     * The SPL library has problems with the Reflection library.
+     * In particular, you can get extra characters in parameter names :(.
+     *
+     * @todo check compatibility
+     *
+     * @param string $name    Parameter name.
+     *
+     * @return string         Cleaner name.
      */
     protected function suppressSpurious($name)
     {
@@ -389,10 +404,12 @@ class SimpleReflection
     }
 
     /**
-     *    Test of a reflection parameter being optional
-     *    that works with early versions of PHP5.
-     *    @param reflectionParameter $parameter    Is this optional.
-     *    @return boolean                          True if optional.
+     * Test of a reflection parameter being optional.
+     * That works with early versions of PHP5.
+     *
+     * @param reflectionParameter $parameter    Is this optional.
+     *
+     * @return bool                          True if optional.
      */
     protected function isOptional($parameter)
     {

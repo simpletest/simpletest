@@ -1,9 +1,4 @@
 <?php
-/**
- *  Base include file for SimpleTest
- *  @package    SimpleTest
- *  @subpackage WebTester
- */
 
 require_once dirname(__FILE__) . '/simpletest.php';
 require_once dirname(__FILE__) . '/http.php';
@@ -25,9 +20,7 @@ if (! defined('DEFAULT_MAX_NESTED_FRAMES')) {
 }
 
 /**
- *    Browser history list.
- *    @package SimpleTest
- *    @subpackage WebTester
+ * Browser history list.
  */
 class SimpleBrowserHistory
 {
@@ -35,8 +28,9 @@ class SimpleBrowserHistory
     private $position = -1;
 
     /**
-     *    Test for no entries yet.
-     *    @return boolean        True if empty.
+     * Test for no entries yet.
+     *
+     * @return bool        True if empty.
      */
     protected function isEmpty()
     {
@@ -44,8 +38,9 @@ class SimpleBrowserHistory
     }
 
     /**
-     *    Test for being at the beginning.
-     *    @return boolean        True if first.
+     * Test for being at the beginning.
+     *
+     * @return bool        True if first.
      */
     protected function atBeginning()
     {
@@ -53,8 +48,9 @@ class SimpleBrowserHistory
     }
 
     /**
-     *    Test for being at the last entry.
-     *    @return boolean        True if last.
+     * Test for being at the last entry.
+     *
+     * @return bool        True if last.
      */
     protected function atEnd()
     {
@@ -62,9 +58,10 @@ class SimpleBrowserHistory
     }
 
     /**
-     *    Adds a successfully fetched page to the history.
-     *    @param SimpleUrl $url                 URL of fetch.
-     *    @param SimpleEncoding $parameters     Any post data with the fetch.
+     * Adds a successfully fetched page to the history.
+     *
+     * @param SimpleUrl $url                 URL of fetch.
+     * @param SimpleEncoding $parameters     Any post data with the fetch.
      */
     public function recordEntry($url, $parameters)
     {
@@ -76,9 +73,9 @@ class SimpleBrowserHistory
     }
 
     /**
-     *    Last fully qualified URL for current history
-     *    position.
-     *    @return SimpleUrl        URL for this position.
+     * Last fully qualified URL for current history position.
+     *
+     * @return SimpleUrl        URL for this position.
      */
     public function getUrl()
     {
@@ -90,9 +87,9 @@ class SimpleBrowserHistory
     }
 
     /**
-     *    Parameters of last fetch from current history
-     *    position.
-     *    @return SimpleFormEncoding    Post parameters.
+     * Parameters of last fetch from current history position.
+     *
+     * @return SimpleFormEncoding    Post parameters.
      */
     public function getParameters()
     {
@@ -104,9 +101,9 @@ class SimpleBrowserHistory
     }
 
     /**
-     *    Step back one place in the history. Stops at
-     *    the first page.
-     *    @return boolean     True if any previous entries.
+     * Step back one place in the history. Stops at the first page.
+     *
+     * @return bool     True if any previous entries.
      */
     public function back()
     {
@@ -119,9 +116,9 @@ class SimpleBrowserHistory
     }
 
     /**
-     *    Step forward one place. If already at the
-     *    latest entry then nothing will happen.
-     *    @return boolean     True if any future entries.
+     * Step forward one place. If already at the latest entry then nothing will happen.
+     *
+     * @return bool     True if any future entries.
      */
     public function forward()
     {
@@ -134,8 +131,7 @@ class SimpleBrowserHistory
     }
 
     /**
-     *    Ditches all future entries beyond the current
-     *    point.
+     * Ditches all future entries beyond the current point.
      */
     protected function dropFuture()
     {
@@ -149,11 +145,8 @@ class SimpleBrowserHistory
 }
 
 /**
- *    Simulated web browser. This is an aggregate of
- *    the user agent, the HTML parsing, request history
- *    and the last header set.
- *    @package SimpleTest
- *    @subpackage WebTester
+ * Simulated web browser. This is an aggregate of the user agent,
+ * the HTML parsing, request history and the last header set.
  */
 class SimpleBrowser
 {
@@ -165,10 +158,8 @@ class SimpleBrowser
     private $parser;
 
     /**
-     *    Starts with a fresh browser with no
-     *    cookie or any other state information. The
-     *    exception is that a default proxy will be
-     *    set up if specified in the options.
+     * Starts with a fresh browser with no cookie or any other state information.
+     * The exception is that a default proxy will be set up if specified in the options.
      */
     public function __construct()
     {
@@ -177,15 +168,16 @@ class SimpleBrowser
                 SimpleTest::getDefaultProxy(),
                 SimpleTest::getDefaultProxyUsername(),
                 SimpleTest::getDefaultProxyPassword());
-        $this->page = new SimplePage();
-        $this->history = $this->createHistory();
-        $this->ignore_frames = false;
+        $this->page                  = new SimplePage();
+        $this->history               = $this->createHistory();
+        $this->ignore_frames         = false;
         $this->maximum_nested_frames = DEFAULT_MAX_NESTED_FRAMES;
     }
 
     /**
-     *    Creates the underlying user agent.
-     *    @return SimpleFetcher    Content fetcher.
+     * Creates the underlying user agent.
+     *
+     * @return SimpleFetcher    Content fetcher.
      */
     protected function createUserAgent()
     {
@@ -193,8 +185,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Creates a new empty history list.
-     *    @return SimpleBrowserHistory    New list.
+     * Creates a new empty history list.
+     *
+     * @return SimpleBrowserHistory    New list.
      */
     protected function createHistory()
     {
@@ -202,10 +195,10 @@ class SimpleBrowser
     }
 
     /**
-     *    Get the HTML parser to use. Can be overridden by
-     *    setParser. Otherwise scans through the available parsers and
-     *    uses the first one which is available.
-     *    @return object SimplePHPPageBuilder or SimpleTidyPageBuilder
+     * Get the HTML parser to use. Can be overridden by setParser.
+     * Otherwise scans through the available parsers and uses the first one which is available.
+     *
+     * @return object SimplePHPPageBuilder or SimpleTidyPageBuilder
      */
     protected function getParser()
     {
@@ -220,8 +213,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Override the default HTML parser, allowing parsers to be plugged in.
-     *    @param object           A parser object instance.
+     * Override the default HTML parser, allowing parsers to be plugged in.
+     *
+     * @param object           A parser object instance.
      */
     public function setParser($parser)
     {
@@ -229,8 +223,8 @@ class SimpleBrowser
     }
 
     /**
-     *    Disables frames support. Frames will not be fetched
-     *    and the frameset page will be used instead.
+     * Disables frames support.
+     * Frames will not be fetched and the frameset page will be used instead.
      */
     public function ignoreFrames()
     {
@@ -238,8 +232,7 @@ class SimpleBrowser
     }
 
     /**
-     *    Enables frames support. Frames will be fetched from
-     *    now on.
+     * Enables frames support. Frames will be fetched from now on.
      */
     public function useFrames()
     {
@@ -247,7 +240,7 @@ class SimpleBrowser
     }
 
     /**
-     *    Switches off cookie sending and recieving.
+     * Switches off cookie sending and recieving.
      */
     public function ignoreCookies()
     {
@@ -255,7 +248,7 @@ class SimpleBrowser
     }
 
     /**
-     *    Switches back on the cookie sending and recieving.
+     * Switches back on the cookie sending and recieving.
      */
     public function useCookies()
     {
@@ -263,11 +256,13 @@ class SimpleBrowser
     }
 
     /**
-     *    Parses the raw content into a page. Will load further
-     *    frame pages unless frames are disabled.
-     *    @param SimpleHttpResponse $response    Response from fetch.
-     *    @param integer $depth                  Nested frameset depth.
-     *    @return SimplePage                     Parsed HTML.
+     * Parses the raw content into a page.
+     * Will load further frame pages unless frames are disabled.
+     *
+     * @param SimpleHttpResponse $response    Response from fetch.
+     * @param int $depth                  Nested frameset depth.
+     *
+     * @return SimplePage                     Parsed HTML.
      */
     protected function parse($response, $depth = 0)
     {
@@ -285,11 +280,12 @@ class SimpleBrowser
     }
 
     /**
-     *    Assembles the parsing machinery and actually parses
-     *    a single page. Frees all of the builder memory and so
-     *    unjams the PHP memory management.
-     *    @param SimpleHttpResponse $response    Response from fetch.
-     *    @return SimplePage                     Parsed top level page.
+     * Assembles the parsing machinery and actually parses a single page.
+     * Frees all of the builder memory and so unjams the PHP memory management.
+     *
+     * @param SimpleHttpResponse $response    Response from fetch.
+     *
+     * @return SimplePage                     Parsed top level page.
      */
     protected function buildPage($response)
     {
@@ -297,12 +293,14 @@ class SimpleBrowser
     }
 
     /**
-     *    Fetches a page. Jointly recursive with the parse()
-     *    method as it descends a frameset.
-     *    @param string/SimpleUrl $url          Target to fetch.
-     *    @param SimpleEncoding $encoding       GET/POST parameters.
-     *    @param integer $depth                 Nested frameset depth protection.
-     *    @return SimplePage                    Parsed page.
+     * Fetches a page.
+     * Jointly recursive with the parse() method as it descends a frameset.
+     *
+     * @param string/SimpleUrl $url          Target to fetch.
+     * @param SimpleEncoding $encoding       GET/POST parameters.
+     * @param int $depth                 Nested frameset depth protection.
+     *
+     * @return SimplePage                    Parsed page.
      */
     protected function fetch($url, $encoding, $depth = 0)
     {
@@ -315,11 +313,12 @@ class SimpleBrowser
     }
 
     /**
-     *    Fetches a page or a single frame if that is the current
-     *    focus.
-     *    @param SimpleUrl $url                   Target to fetch.
-     *    @param SimpleEncoding $parameters       GET/POST parameters.
-     *    @return string                          Raw content of page.
+     * Fetches a page or a single frame if that is the current focus.
+     *
+     * @param SimpleUrl $url                   Target to fetch.
+     * @param SimpleEncoding $parameters       GET/POST parameters.
+     *
+     * @return string                          Raw content of page.
      */
     protected function load($url, $parameters)
     {
@@ -332,10 +331,12 @@ class SimpleBrowser
     }
 
     /**
-     *    Fetches a page and makes it the current page/frame.
-     *    @param string/SimpleUrl $url            Target to fetch as string.
-     *    @param SimplePostEncoding $parameters   POST parameters.
-     *    @return string                          Raw content of page.
+     * Fetches a page and makes it the current page/frame.
+     *
+     * @param string/SimpleUrl $url            Target to fetch as string.
+     * @param SimplePostEncoding $parameters   POST parameters.
+     *
+     * @return string                          Raw content of page.
      */
     protected function loadPage($url, $parameters)
     {
@@ -348,12 +349,13 @@ class SimpleBrowser
     }
 
     /**
-     *    Fetches a frame into the existing frameset replacing the
-     *    original.
-     *    @param array $frames                    List of names to drill down.
-     *    @param string/SimpleUrl $url            Target to fetch as string.
-     *    @param SimpleFormEncoding $parameters   POST parameters.
-     *    @return string                          Raw content of page.
+     * Fetches a frame into the existing frameset replacing the original.
+     *
+     * @param array $frames                    List of names to drill down.
+     * @param string/SimpleUrl $url            Target to fetch as string.
+     * @param SimpleFormEncoding $parameters   POST parameters.
+     *
+     * @return string                          Raw content of page.
      */
     protected function loadFrame($frames, $url, $parameters)
     {
@@ -364,11 +366,10 @@ class SimpleBrowser
     }
 
     /**
-     *    Removes expired and temporary cookies as if
-     *    the browser was closed and re-opened.
-     *    @param string/integer $date   Time when session restarted.
-     *                                  If omitted then all persistent
-     *                                  cookies are kept.
+     * Removes expired and temporary cookies as if the browser was closed and re-opened.
+     *
+     * @param string/integer $date   Time when session restarted. If omitted then all persistent
+     * cookies are kept.
      */
     public function restart($date = false)
     {
@@ -376,9 +377,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Adds a header to every fetch.
-     *    @param string $header       Header line to add to every
-     *                                request until cleared.
+     * Adds a header to every fetch.
+     *
+     * @param string $header       Header line to add to every request until cleared.
      */
     public function addHeader($header)
     {
@@ -386,8 +387,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Ages the cookies by the specified time.
-     *    @param integer $interval    Amount in seconds.
+     * Ages the cookies by the specified time.
+     *
+     * @param int $interval    Amount in seconds.
      */
     public function ageCookies($interval)
     {
@@ -395,13 +397,14 @@ class SimpleBrowser
     }
 
     /**
-     *    Sets an additional cookie. If a cookie has
-     *    the same name and path it is replaced.
-     *    @param string $name       Cookie key.
-     *    @param string $value      Value of cookie.
-     *    @param string $host       Host upon which the cookie is valid.
-     *    @param string $path       Cookie path if not host wide.
-     *    @param string $expiry     Expiry date.
+     * Sets an additional cookie.
+     * If a cookie has the same name and path it is replaced.
+     *
+     * @param string $name       Cookie key.
+     * @param string $value      Value of cookie.
+     * @param string $host       Host upon which the cookie is valid.
+     * @param string $path       Cookie path if not host wide.
+     * @param string $expiry     Expiry date.
      */
     public function setCookie($name, $value, $host = false, $path = '/', $expiry = false)
     {
@@ -409,13 +412,13 @@ class SimpleBrowser
     }
 
     /**
-     *    Reads the most specific cookie value from the
-     *    browser cookies.
-     *    @param string $host        Host to search.
-     *    @param string $path        Applicable path.
-     *    @param string $name        Name of cookie to read.
-     *    @return string             False if not present, else the
-     *                               value as a string.
+     * Reads the most specific cookie value from the browser cookies.
+     *
+     * @param string $host        Host to search.
+     * @param string $path        Applicable path.
+     * @param string $name        Name of cookie to read.
+     *
+     * @return string             False if not present, else the value as a string.
      */
     public function getCookieValue($host, $path, $name)
     {
@@ -423,10 +426,11 @@ class SimpleBrowser
     }
 
     /**
-     *    Reads the current cookies for the current URL.
-     *    @param string $name   Key of cookie to find.
-     *    @return string        Null if there is no current URL, false
-     *                          if the cookie is not set.
+     * Reads the current cookies for the current URL.
+     *
+     * @param string $name   Key of cookie to find.
+     *
+     * @return string        Null if there is no current URL, false if the cookie is not set.
      */
     public function getCurrentCookieValue($name)
     {
@@ -434,9 +438,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Sets the maximum number of redirects before
-     *    a page will be loaded anyway.
-     *    @param integer $max        Most hops allowed.
+     * Sets the maximum number of redirects before a page will be loaded anyway.
+     *
+     * @param int $max        Most hops allowed.
      */
     public function setMaximumRedirects($max)
     {
@@ -444,9 +448,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Sets the maximum number of nesting of framed pages
-     *    within a framed page to prevent loops.
-     *    @param integer $max        Highest depth allowed.
+     * Sets the maximum number of nesting of framed pages within a framed page to prevent loops.
+     *
+     * @param int $max        Highest depth allowed.
      */
     public function setMaximumNestedFrames($max)
     {
@@ -454,8 +458,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Sets the socket timeout for opening a connection.
-     *    @param integer $timeout      Maximum time in seconds.
+     * Sets the socket timeout for opening a connection.
+     *
+     * @param int $timeout      Maximum time in seconds.
      */
     public function setConnectionTimeout($timeout)
     {
@@ -463,12 +468,12 @@ class SimpleBrowser
     }
 
     /**
-     *    Sets proxy to use on all requests for when
-     *    testing from behind a firewall. Set URL
-     *    to false to disable.
-     *    @param string $proxy        Proxy URL.
-     *    @param string $username     Proxy username for authentication.
-     *    @param string $password     Proxy password for authentication.
+     * Sets proxy to use on all requests for when testing from behind a firewall.
+     * Set URL to false to disable.
+     *
+     * @param string $proxy        Proxy URL.
+     * @param string $username     Proxy username for authentication.
+     * @param string $password     Proxy password for authentication.
      */
     public function useProxy($proxy, $username = false, $password = false)
     {
@@ -476,12 +481,13 @@ class SimpleBrowser
     }
 
     /**
-     *    Fetches the page content with a HEAD request.
-     *    Will affect cookies, but will not change the base URL.
-     *    @param string/SimpleUrl $url                Target to fetch as string.
-     *    @param hash/SimpleHeadEncoding $parameters  Additional parameters for
-     *                                                HEAD request.
-     *    @return boolean                             True if successful.
+     * Fetches the page content with a HEAD request.
+     * Will affect cookies, but will not change the base URL.
+     *
+     * @param string/SimpleUrl $url                Target to fetch as string.
+     * @param hash/SimpleHeadEncoding $parameters  Additional parameters for HEAD request.
+     *
+     * @return bool                             True if successful.
      */
     public function head($url, $parameters = false)
     {
@@ -491,18 +497,19 @@ class SimpleBrowser
         if ($this->getUrl()) {
             $url = $url->makeAbsolute($this->getUrl());
         }
-        $response = $this->user_agent->fetchResponse($url, new SimpleHeadEncoding($parameters));
+        $response   = $this->user_agent->fetchResponse($url, new SimpleHeadEncoding($parameters));
         $this->page = new SimplePage($response);
 
         return ! $response->isError();
     }
 
     /**
-     *    Fetches the page content with a simple GET request.
-     *    @param string/SimpleUrl $url                Target to fetch.
-     *    @param hash/SimpleFormEncoding $parameters  Additional parameters for
-     *                                                GET request.
-     *    @return string                              Content of page or false.
+     * Fetches the page content with a simple GET request.
+     *
+     * @param string/SimpleUrl $url                Target to fetch.
+     * @param hash/SimpleFormEncoding $parameters  Additional parameters for GET request.
+     *
+     * @return string                              Content of page or false.
      */
     public function get($url, $parameters = false)
     {
@@ -517,11 +524,13 @@ class SimpleBrowser
     }
 
     /**
-     *    Fetches the page content with a POST request.
-     *    @param string/SimpleUrl $url                Target to fetch as string.
-     *    @param hash/SimpleFormEncoding $parameters  POST parameters or request body.
-     *    @param string $content_type                 MIME Content-Type of the request body
-     *    @return string                              Content of page.
+     * Fetches the page content with a POST request.
+     *
+     * @param string/SimpleUrl $url                Target to fetch as string.
+     * @param hash/SimpleFormEncoding $parameters  POST parameters or request body.
+     * @param string $content_type                 MIME Content-Type of the request body
+     *
+     * @return string                              Content of page.
      */
     public function post($url, $parameters = false, $content_type = false)
     {
@@ -536,11 +545,13 @@ class SimpleBrowser
     }
 
     /**
-     *    Fetches the page content with a PUT request.
-     *    @param string/SimpleUrl $url                Target to fetch as string.
-     *    @param hash/SimpleFormEncoding $parameters  PUT request body.
-     *    @param string $content_type                 MIME Content-Type of the request body
-     *    @return string                              Content of page.
+     * Fetches the page content with a PUT request.
+     *
+     * @param string/SimpleUrl $url                Target to fetch as string.
+     * @param hash/SimpleFormEncoding $parameters  PUT request body.
+     * @param string $content_type                 MIME Content-Type of the request body
+     *
+     * @return string                              Content of page.
      */
     public function put($url, $parameters = false, $content_type = false)
     {
@@ -552,11 +563,12 @@ class SimpleBrowser
     }
 
     /**
-     *    Sends a DELETE request and fetches the response.
-     *    @param string/SimpleUrl $url                Target to fetch.
-     *    @param hash/SimpleFormEncoding $parameters  Additional parameters for
-     *                                                DELETE request.
-     *    @return string                              Content of page or false.
+     * Sends a DELETE request and fetches the response.
+     *
+     * @param string/SimpleUrl $url                Target to fetch.
+     * @param hash/SimpleFormEncoding $parameters  Additional parameters for DELETE request.
+     *
+     * @return string                              Content of page or false.
      */
     public function delete($url, $parameters = false)
     {
@@ -568,11 +580,11 @@ class SimpleBrowser
     }
 
     /**
-     *    Equivalent to hitting the retry button on the
-     *    browser. Will attempt to repeat the page fetch. If
-     *    there is no history to repeat it will give false.
-     *    @return string/boolean   Content if fetch succeeded
-     *                             else false.
+     * Equivalent to hitting the retry button on the browser.
+     * Will attempt to repeat the page fetch.
+     * If there is no history to repeat it will give false.
+     *
+     * @return string/boolean   Content if fetch succeeded else false.
      */
     public function retry()
     {
@@ -595,12 +607,11 @@ class SimpleBrowser
     }
 
     /**
-     *    Equivalent to hitting the back button on the
-     *    browser. The browser history is unchanged on
-     *    failure. The page content is refetched as there
-     *    is no concept of content caching in SimpleTest.
-     *    @return boolean     True if history entry and
-     *                        fetch succeeded
+     * Equivalent to hitting the back button on the browser.
+     * The browser history is unchanged on failure.
+     * The page content is refetched as there is no concept of content caching in SimpleTest.
+     *
+     * @return bool     True if history entry and fetch succeeded
      */
     public function back()
     {
@@ -616,12 +627,11 @@ class SimpleBrowser
     }
 
     /**
-     *    Equivalent to hitting the forward button on the
-     *    browser. The browser history is unchanged on
-     *    failure. The page content is refetched as there
-     *    is no concept of content caching in SimpleTest.
-     *    @return boolean     True if history entry and
-     *                        fetch succeeded
+     * Equivalent to hitting the forward button on the browser.
+     * The browser history is unchanged on failure.
+     * The page content is refetched as there is no concept of content caching in SimpleTest.
+     *
+     * @return bool     True if history entry and fetch succeeded
      */
     public function forward()
     {
@@ -637,13 +647,12 @@ class SimpleBrowser
     }
 
     /**
-     *    Retries a request after setting the authentication
-     *    for the current realm.
-     *    @param string $username    Username for realm.
-     *    @param string $password    Password for realm.
-     *    @return boolean            True if successful fetch. Note
-     *                               that authentication may still have
-     *                               failed.
+     * Retries a request after setting the authentication for the current realm.
+     *
+     * @param string $username    Username for realm.
+     * @param string $password    Password for realm.
+     *
+     * @return bool    True if successful fetch. Note that authentication may still have failed.
      */
     public function authenticate($username, $password)
     {
@@ -664,9 +673,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for a breakdown of the frameset.
-     *    @return array   Hash tree of frames by name
-     *                    or index if no name.
+     * Accessor for a breakdown of the frameset.
+     *
+     * @return array   Hash tree of frames by name or index if no name.
      */
     public function getFrames()
     {
@@ -674,11 +683,10 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for current frame focus. Will be
-     *    false if no frame has focus.
-     *    @return integer/string/boolean    Label if any, otherwise
-     *                                      the position in the frameset
-     *                                      or false if none.
+     * Accessor for current frame focus. Will be false if no frame has focus.
+     *
+     * @return integer/string/boolean    Label if any, otherwise the position in the frameset or
+     * false if none.
      */
     public function getFrameFocus()
     {
@@ -686,9 +694,11 @@ class SimpleBrowser
     }
 
     /**
-     *    Sets the focus by index. The integer index starts from 1.
-     *    @param integer $choice    Chosen frame.
-     *    @return boolean           True if frame exists.
+     * Sets the focus by index. The integer index starts from 1.
+     *
+     * @param int $choice    Chosen frame.
+     *
+     * @return bool           True if frame exists.
      */
     public function setFrameFocusByIndex($choice)
     {
@@ -696,9 +706,11 @@ class SimpleBrowser
     }
 
     /**
-     *    Sets the focus by name.
-     *    @param string $name    Chosen frame.
-     *    @return boolean        True if frame exists.
+     * Sets the focus by name.
+     *
+     * @param string $name    Chosen frame.
+     *
+     * @return bool        True if frame exists.
      */
     public function setFrameFocus($name)
     {
@@ -706,8 +718,7 @@ class SimpleBrowser
     }
 
     /**
-     *    Clears the frame focus. All frames will be searched
-     *    for content.
+     * Clears the frame focus. All frames will be searched for content.
      */
     public function clearFrameFocus()
     {
@@ -715,8 +726,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for last error.
-     *    @return string        Error from last response.
+     * Accessor for last error.
+     *
+     * @return string        Error from last response.
      */
     public function getTransportError()
     {
@@ -724,8 +736,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for current MIME type.
-     *    @return string    MIME type as string; e.g. 'text/html'
+     * Accessor for current MIME type.
+     *
+     * @return string    MIME type as string; e.g. 'text/html'
      */
     public function getMimeType()
     {
@@ -733,8 +746,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for last response code.
-     *    @return integer    Last HTTP response code received.
+     * Accessor for last response code.
+     *
+     * @return int    Last HTTP response code received.
      */
     public function getResponseCode()
     {
@@ -742,9 +756,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for last Authentication type. Only valid
-     *    straight after a challenge (401).
-     *    @return string    Description of challenge type.
+     * Accessor for last Authentication type. Only valid straight after a challenge (401).
+     *
+     * @return string    Description of challenge type.
      */
     public function getAuthentication()
     {
@@ -752,9 +766,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for last Authentication realm. Only valid
-     *    straight after a challenge (401).
-     *    @return string    Name of security realm.
+     * Accessor for last Authentication realm. Only valid straight after a challenge (401).
+     *
+     * @return string    Name of security realm.
      */
     public function getRealm()
     {
@@ -762,10 +776,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for current URL of page or frame if
-     *    focused.
-     *    @return string    Location of current page or frame as
-     *                      a string.
+     * Accessor for current URL of page or frame if focused.
+     *
+     * @return string    Location of current page or frame as a string.
      */
     public function getUrl()
     {
@@ -775,8 +788,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for base URL of page if set via BASE tag
-     *    @return string    base URL
+     * Accessor for base URL of page if set via BASE tag
+     *
+     * @return string    base URL
      */
     public function getBaseUrl()
     {
@@ -786,8 +800,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for raw bytes sent down the wire.
-     *    @return string      Original text sent.
+     * Accessor for raw bytes sent down the wire.
+     *
+     * @return string      Original text sent.
      */
     public function getRequest()
     {
@@ -795,8 +810,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for raw header information.
-     *    @return string      Header block.
+     * Accessor for raw header information.
+     *
+     * @return string      Header block.
      */
     public function getHeaders()
     {
@@ -804,8 +820,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for raw page information.
-     *    @return string      Original text content of web page.
+     * Accessor for raw page information.
+     *
+     * @return string      Original text content of web page.
      */
     public function getContent()
     {
@@ -813,8 +830,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for plain text version of the page.
-     *    @return string      Normalised text representation.
+     * Accessor for plain text version of the page.
+     *
+     * @return string      Normalised text representation.
      */
     public function getContentAsText()
     {
@@ -822,8 +840,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for parsed title.
-     *    @return string     Title or false if no title is present.
+     * Accessor for parsed title.
+     *
+     * @return string     Title or false if no title is present.
      */
     public function getTitle()
     {
@@ -831,9 +850,9 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for a list of all links in current page.
-     *    @return array   List of urls with scheme of
-     *                    http or https and hostname.
+     * Accessor for a list of all links in current page.
+     *
+     * @return array   List of urls with scheme of http or https and hostname.
      */
     public function getUrls()
     {
@@ -841,10 +860,12 @@ class SimpleBrowser
     }
 
     /**
-     *    Sets all form fields with that name.
-     *    @param string $label   Name or label of field in forms.
-     *    @param string $value   New value of field.
-     *    @return boolean        True if field exists, otherwise false.
+     * Sets all form fields with that name.
+     *
+     * @param string $label   Name or label of field in forms.
+     * @param string $value   New value of field.
+     *
+     * @return bool        True if field exists, otherwise false.
      */
     public function setField($label, $value, $position=false)
     {
@@ -852,11 +873,13 @@ class SimpleBrowser
     }
 
     /**
-     *    Sets all form fields with that name. Will use label if
-     *    one is available (not yet implemented).
-     *    @param string $name    Name of field in forms.
-     *    @param string $value   New value of field.
-     *    @return boolean        True if field exists, otherwise false.
+     * Sets all form fields with that name. Will use label if one is available (not yet
+     * implemented).
+     *
+     * @param string $name    Name of field in forms.
+     * @param string $value   New value of field.
+     *
+     * @return bool        True if field exists, otherwise false.
      */
     public function setFieldByName($name, $value, $position=false)
     {
@@ -864,10 +887,12 @@ class SimpleBrowser
     }
 
     /**
-     *    Sets all form fields with that id attribute.
-     *    @param string/integer $id   Id of field in forms.
-     *    @param string $value        New value of field.
-     *    @return boolean             True if field exists, otherwise false.
+     * Sets all form fields with that id attribute.
+     *
+     * @param string/integer $id   Id of field in forms.
+     * @param string $value        New value of field.
+     *
+     * @return bool             True if field exists, otherwise false.
      */
     public function setFieldById($id, $value)
     {
@@ -875,12 +900,13 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for a form element value within the page.
-     *    Finds the first match.
-     *    @param string $label       Field label.
-     *    @return string/boolean     A value if the field is
-     *                               present, false if unchecked
-     *                               and null if missing.
+     * Accessor for a form element value within the page.
+     * Finds the first match.
+     *
+     * @param string $label       Field label.
+     *
+     * @return string/boolean     A value if the field is present, false if unchecked and null if
+     * missing.
      */
     public function getField($label)
     {
@@ -888,12 +914,12 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for a form element value within the page.
-     *    Finds the first match.
-     *    @param string $name        Field name.
-     *    @return string/boolean     A string if the field is
-     *                               present, false if unchecked
-     *                               and null if missing.
+     * Accessor for a form element value within the page. Finds the first match.
+     *
+     * @param string $name        Field name.
+     *
+     * @return string/boolean     A string if the field is present, false if unchecked and null if
+     * missing.
      */
     public function getFieldByName($name)
     {
@@ -901,11 +927,12 @@ class SimpleBrowser
     }
 
     /**
-     *    Accessor for a form element value within the page.
-     *    @param string/integer $id  Id of field in forms.
-     *    @return string/boolean     A string if the field is
-     *                               present, false if unchecked
-     *                               and null if missing.
+     * Accessor for a form element value within the page.
+     *
+     * @param string/integer $id  Id of field in forms.
+     *
+     * @return string/boolean     A string if the field is present, false if unchecked and null if
+     * missing.
      */
     public function getFieldById($id)
     {
@@ -913,12 +940,12 @@ class SimpleBrowser
     }
 
     /**
-     *    Clicks the submit button by label. The owning
-     *    form will be submitted by this.
-     *    @param string $label    Button label. An unlabeled
-     *                            button can be triggered by 'Submit'.
-     *    @param hash $additional Additional form data.
-     *    @return string/boolean  Page on success.
+     * Clicks the submit button by label. The owning form will be submitted by this.
+     *
+     * @param string $label    Button label. An unlabeled button can be triggered by 'Submit'.
+     * @param hash $additional Additional form data.
+     *
+     * @return string/boolean  Page on success.
      */
     public function clickSubmit($label = 'Submit', $additional = false)
     {
@@ -933,11 +960,12 @@ class SimpleBrowser
     }
 
     /**
-     *    Clicks the submit button by name attribute. The owning
-     *    form will be submitted by this.
-     *    @param string $name     Button name.
-     *    @param hash $additional Additional form data.
-     *    @return string/boolean  Page on success.
+     * Clicks the submit button by name attribute. The owning form will be submitted by this.
+     *
+     * @param string $name     Button name.
+     * @param hash $additional Additional form data.
+     *
+     * @return string/boolean  Page on success.
      */
     public function clickSubmitByName($name, $additional = false)
     {
@@ -952,11 +980,13 @@ class SimpleBrowser
     }
 
     /**
-     *    Clicks the submit button by ID attribute of the button
-     *    itself. The owning form will be submitted by this.
-     *    @param string $id       Button ID.
-     *    @param hash $additional Additional form data.
-     *    @return string/boolean  Page on success.
+     * Clicks the submit button by ID attribute of the button itself. The owning form will be
+     * submitted by this.
+     *
+     * @param string $id       Button ID.
+     * @param hash $additional Additional form data.
+     *
+     * @return string/boolean  Page on success.
      */
     public function clickSubmitById($id, $additional = false)
     {
@@ -971,10 +1001,11 @@ class SimpleBrowser
     }
 
     /**
-     *    Tests to see if a submit button exists with this
-     *    label.
-     *    @param string $label    Button label.
-     *    @return boolean         True if present.
+     * Tests to see if a submit button exists with this label.
+     *
+     * @param string $label    Button label.
+     *
+     * @return bool         True if present.
      */
     public function isSubmit($label)
     {
@@ -982,16 +1013,17 @@ class SimpleBrowser
     }
 
     /**
-     *    Clicks the submit image by some kind of label. Usually
-     *    the alt tag or the nearest equivalent. The owning
-     *    form will be submitted by this. Clicking outside of
-     *    the boundary of the coordinates will result in
-     *    a failure.
-     *    @param string $label    ID attribute of button.
-     *    @param integer $x       X-coordinate of imaginary click.
-     *    @param integer $y       Y-coordinate of imaginary click.
-     *    @param hash $additional Additional form data.
-     *    @return string/boolean  Page on success.
+     * Clicks the submit image by some kind of label.
+     * Usually the alt tag or the nearest equivalent.
+     * The owning form will be submitted by this.
+     * Clicking outside of the boundary of the coordinates will result in a failure.
+     *
+     * @param string $label    ID attribute of button.
+     * @param int $x       X-coordinate of imaginary click.
+     * @param int $y       Y-coordinate of imaginary click.
+     * @param hash $additional Additional form data.
+     *
+     * @return string/boolean  Page on success.
      */
     public function clickImage($label, $x = 1, $y = 1, $additional = false)
     {
@@ -1006,16 +1038,17 @@ class SimpleBrowser
     }
 
     /**
-     *    Clicks the submit image by the name. Usually
-     *    the alt tag or the nearest equivalent. The owning
-     *    form will be submitted by this. Clicking outside of
-     *    the boundary of the coordinates will result in
-     *    a failure.
-     *    @param string $name     Name attribute of button.
-     *    @param integer $x       X-coordinate of imaginary click.
-     *    @param integer $y       Y-coordinate of imaginary click.
-     *    @param hash $additional Additional form data.
-     *    @return string/boolean  Page on success.
+     * Clicks the submit image by the name.
+     * Usually the alt tag or the nearest equivalent.
+     * The owning form will be submitted by this.
+     * Clicking outside of the boundary of the coordinates will result in a failure.
+     *
+     * @param string $name     Name attribute of button.
+     * @param int $x       X-coordinate of imaginary click.
+     * @param int $y       Y-coordinate of imaginary click.
+     * @param hash $additional Additional form data.
+     *
+     * @return string/boolean  Page on success.
      */
     public function clickImageByName($name, $x = 1, $y = 1, $additional = false)
     {
@@ -1030,15 +1063,16 @@ class SimpleBrowser
     }
 
     /**
-     *    Clicks the submit image by ID attribute. The owning
-     *    form will be submitted by this. Clicking outside of
-     *    the boundary of the coordinates will result in
-     *    a failure.
-     *    @param integer/string $id    ID attribute of button.
-     *    @param integer $x            X-coordinate of imaginary click.
-     *    @param integer $y            Y-coordinate of imaginary click.
-     *    @param hash $additional      Additional form data.
-     *    @return string/boolean       Page on success.
+     * Clicks the submit image by ID attribute.
+     * The owning form will be submitted by this.
+     * Clicking outside of the boundary of the coordinates will result in a failure.
+     *
+     * @param integer/string $id    ID attribute of button.
+     * @param int $x            X-coordinate of imaginary click.
+     * @param int $y            Y-coordinate of imaginary click.
+     * @param hash $additional      Additional form data.
+     *
+     * @return string/boolean       Page on success.
      */
     public function clickImageById($id, $x = 1, $y = 1, $additional = false)
     {
@@ -1053,10 +1087,11 @@ class SimpleBrowser
     }
 
     /**
-     *    Tests to see if an image exists with this
-     *    title or alt text.
-     *    @param string $label    Image text.
-     *    @return boolean         True if present.
+     * Tests to see if an image exists with this title or alt text.
+     *
+     * @param string $label    Image text.
+     *
+     * @return bool         True if present.
      */
     public function isImage($label)
     {
@@ -1064,10 +1099,11 @@ class SimpleBrowser
     }
 
     /**
-     *    Submits a form by the ID.
-     *    @param string $id       The form ID. No submit button value
-     *                            will be sent.
-     *    @return string/boolean  Page on success.
+     * Submits a form by the ID.
+     *
+     * @param string $id       The form ID. No submit button value will be sent.
+     *
+     * @return string/boolean  Page on success.
      */
     public function submitFormById($id, $additional = false)
     {
@@ -1082,13 +1118,13 @@ class SimpleBrowser
     }
 
     /**
-     *    Finds a URL by label. Will find the first link
-     *    found with this link text by default, or a later
-     *    one if an index is given. The match ignores case and
-     *    white space issues.
-     *    @param string $label     Text between the anchor tags.
-     *    @param integer $index    Link position counting from zero.
-     *    @return string/boolean   URL on success.
+     * Finds a URL by label. Will find the first link found with this link text by default,
+     * or a later one if an index is given. The match ignores case and white space issues.
+     *
+     * @param string $label     Text between the anchor tags.
+     * @param int $index    Link position counting from zero.
+     *
+     * @return string/boolean   URL on success.
      */
     public function getLink($label, $index = 0)
     {
@@ -1104,29 +1140,34 @@ class SimpleBrowser
     }
 
     /**
-     *    Follows a link by label. Will click the first link
-     *    found with this link text by default, or a later
-     *    one if an index is given. The match ignores case and
-     *    white space issues.
-     *    @param string $label     Text between the anchor tags.
-     *    @param integer $index    Link position counting from zero.
-     *    @return string/boolean   Page on success.
+     * Follows a link by label.
+     * Will click the first link found with this link text by default,
+     * or a later one, if an index is given.
+     * The match ignores case and white space issues.
+     *
+     * @param string $label     Text between the anchor tags.
+     * @param int $index    Link position counting from zero.
+     *
+     * @return boolean   True on success.
      */
     public function clickLink($label, $index = 0)
     {
-        $url = $this->getLink($label, $index);
+        $url = $this->getLink($label, $index);        
         if ($url === false) {
             return false;
         }
+        
         $this->load($url, new SimpleGetEncoding());
 
-        return $this->getContent();
+        return (bool) $this->getContent();
     }
 
     /**
-     *    Finds a link by id attribute.
-     *    @param string $id        ID attribute value.
-     *    @return string/boolean   URL on success.
+     * Finds a link by id attribute.
+     *
+     * @param string $id        ID attribute value.
+     *
+     * @return string/boolean   URL on success.
      */
     public function getLinkById($id)
     {
@@ -1134,9 +1175,11 @@ class SimpleBrowser
     }
 
     /**
-     *    Follows a link by id attribute.
-     *    @param string $id        ID attribute value.
-     *    @return string/boolean   Page on success.
+     * Follows a link by id attribute.
+     *
+     * @param string $id        ID attribute value.
+     *
+     * @return string/boolean   Page on success.
      */
     public function clickLinkById($id)
     {
@@ -1149,10 +1192,11 @@ class SimpleBrowser
     }
 
     /**
-     *    Clicks a visible text item. Will first try buttons,
-     *    then links and then images.
-     *    @param string $label        Visible text or alt text.
-     *    @return string/boolean      Raw page or false.
+     * Clicks a visible text item. Will first try buttons, then links and then images.
+     *
+     * @param string $label        Visible text or alt text.
+     *
+     * @return string/boolean      Raw page or false.
      */
     public function click($label)
     {
@@ -1168,9 +1212,11 @@ class SimpleBrowser
     }
 
     /**
-     *    Tests to see if a click target exists.
-     *    @param string $label    Visible text or alt text.
-     *    @return boolean         True if target present.
+     * Tests to see if a click target exists.
+     *
+     * @param string $label    Visible text or alt text.
+     *
+     * @return bool         True if target present.
      */
     public function isClickable($label)
     {

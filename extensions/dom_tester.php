@@ -1,23 +1,18 @@
 <?php
-/**
- *	@package	SimpleTest
- *	@subpackage	Extensions
- *  @author     Perrick Penet <perrick@noparking.net>
- */
 
-require_once dirname(__FILE__).'/../web_tester.php';
-require_once dirname(__FILE__).'/dom_tester/css_selector.php';
+require_once dirname(__FILE__) . '/../web_tester.php';
+require_once dirname(__FILE__) . '/dom_tester/css_selector.php';
 
 /**
  * CssSelectorExpectation
- * 
+ *
  * Create a CSS Selector expectactation
- * 
- * @package	SimpleTest
- * @subpackage	Extensions
+ *
+ * @author     Perrick Penet <perrick@noparking.net>
+ *
  * @param DomDocument $_dom
- * @param string $_selector
- * @param array $_value
+ * @param string      $_selector
+ * @param array       $_value
  */
 class CssSelectorExpectation extends SimpleExpectation
 {
@@ -26,26 +21,28 @@ class CssSelectorExpectation extends SimpleExpectation
     protected $value;
 
     /**
-     *    Sets the dom tree and the css selector to compare against
-     *    @param mixed $dom          Dom tree to search into.
-     *    @param mixed $selector     Css selector to match element.
-     *    @param string $message     Customised message on failure.
+     * Sets the dom tree and the css selector to compare against
+     *
+     * @param mixed $dom          Dom tree to search into.
+     * @param mixed $selector     Css selector to match element.
+     * @param string $message     Customised message on failure.
      */
     public function __construct($dom, $selector, $message = '%s')
     {
         parent::__construct($message);
-        $this->dom = $dom;
+        $this->dom      = $dom;
         $this->selector = $selector;
 
         $css_selector = new CssSelector($this->dom);
-        $this->value = $css_selector->getTexts($this->selector);
+        $this->value  = $css_selector->getTexts($this->selector);
     }
 
     /**
-     *    Tests the expectation. True if it matches the
-     *    held value.
-     *    @param mixed $compare        Comparison value.
-     *    @return boolean              True if correct.
+     * Tests the expectation. True if it matches the held value.
+     *
+     * @param mixed $compare        Comparison value.
+     *
+     * @return bool              True if correct.
      */
     public function test($compare)
     {
@@ -53,10 +50,11 @@ class CssSelectorExpectation extends SimpleExpectation
     }
 
     /**
-     *    Returns a human readable test message.
-     *    @param mixed $compare      Comparison value.
-     *    @return string             Description of success
-     *                               or failure.
+     * Returns a human readable test message.
+     *
+     * @param mixed $compare      Comparison value.
+     *
+     * @return string             Description of success or failure.
      */
     public function testMessage($compare)
     {
@@ -65,11 +63,11 @@ class CssSelectorExpectation extends SimpleExpectation
             sort($compare);
         }
         if ($this->test($compare)) {
-            return 'CSS selector expectation [' . $dumper->describeValue($this->value) . ']'.
+            return 'CSS selector expectation [' . $dumper->describeValue($this->value) . ']' .
                     ' using [' . $dumper->describeValue($this->selector) . ']';
         } else {
-            return 'CSS selector expectation [' . $dumper->describeValue($this->value) . ']'.
-                    ' using [' . $dumper->describeValue($this->selector) . ']'.
+            return 'CSS selector expectation [' . $dumper->describeValue($this->value) . ']' .
+                    ' using [' . $dumper->describeValue($this->selector) . ']' .
                     ' fails with [' .
                     $dumper->describeValue($compare) . '] ' .
                     $dumper->describeDifference($this->value, $compare);
@@ -79,12 +77,9 @@ class CssSelectorExpectation extends SimpleExpectation
 
 /**
  * DomTestCase
- * 
- * Extend Web test case with DOM related assertions,
- * CSS selectors in particular
- * 
- * @package	SimpleTest
- * @subpackage	Extensions
+ *
+ * Extend Web test case with DOM related assertions, CSS selectors in particular
+ *
  * @param DomDocument $dom
  */
 class DomTestCase extends WebTestCase
@@ -93,7 +88,7 @@ class DomTestCase extends WebTestCase
 
     public function loadDom()
     {
-        $this->dom = new DomDocument('1.0', 'utf-8');
+        $this->dom                  = new DomDocument('1.0', 'utf-8');
         $this->dom->validateOnParse = true;
         $this->dom->loadHTML($this->_browser->getContent());
     }

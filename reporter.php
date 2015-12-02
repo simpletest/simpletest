@@ -1,27 +1,20 @@
 <?php
-/**
- *  base include file for SimpleTest
- *  @package    SimpleTest
- *  @subpackage UnitTester
- */
 
 require_once dirname(__FILE__) . '/scorer.php';
 //require_once dirname(__FILE__) . '/arguments.php';
 
 /**
- *    Sample minimal test displayer. Generates only
- *    failure messages and a pass count.
- *    @package SimpleTest
- *    @subpackage UnitTester
+ * Sample minimal test displayer.
+ * Generates only failure messages and a pass count.
  */
 class HtmlReporter extends SimpleReporter
 {
     private $character_set;
 
     /**
-     *    Does nothing yet. The first output will
-     *    be sent on the first test start. For use
-     *    by a web browser.
+     * Does nothing yet.
+     * The first output will be sent on the first test start.
+     * For use by a web browser.
      */
     public function __construct($character_set = 'ISO-8859-1')
     {
@@ -30,9 +23,9 @@ class HtmlReporter extends SimpleReporter
     }
 
     /**
-     *    Paints the top of the web page setting the
-     *    title to the name of the starting test.
-     *    @param string $test_name      Name class of test.
+     * Paints the top of the web page setting the title to the name of the starting test.
+     *
+     * @param string $test_name      Name class of test.
      */
     public function paintHeader($test_name)
     {
@@ -50,9 +43,8 @@ class HtmlReporter extends SimpleReporter
     }
 
     /**
-     *    Send the headers necessary to ensure the page is
-     *    reloaded on every request. Otherwise you could be
-     *    scratching your head over out of date test data.
+     * Send the headers necessary to ensure the page is reloaded on every request.
+     * Otherwise you could be scratching your head over out of date test data.
      */
     public static function sendNoCacheHeaders()
     {
@@ -66,8 +58,9 @@ class HtmlReporter extends SimpleReporter
     }
 
     /**
-     *    Paints the CSS. Add additional styles here.
-     *    @return string            CSS code as text.
+     * Paints the CSS. Add additional styles here.
+     *
+     * @return string            CSS code as text.
      */
     protected function getCss()
     {
@@ -77,9 +70,9 @@ class HtmlReporter extends SimpleReporter
     }
 
     /**
-     *    Paints the end of the test with a summary of
-     *    the passes and failures.
-     *    @param string $test_name        Name class of test.
+     * Paints the end of the test with a summary of the passes and failures.
+     *
+     * @param string $test_name        Name class of test.
      */
     public function paintFooter($test_name)
     {
@@ -97,11 +90,10 @@ class HtmlReporter extends SimpleReporter
     }
 
     /**
-     *    Paints the test failure with a breadcrumbs
-     *    trail of the nesting test suites below the
-     *    top level test.
-     *    @param string $message    Failure message displayed in
-     *                              the context of the other tests.
+     * Paints the test failure with a breadcrumbs trail
+     * of the nesting test suites below the top level test.
+     *
+     * @param string $message    Failure message displayed in the context of the other tests.
      */
     public function paintFail($message)
     {
@@ -114,8 +106,9 @@ class HtmlReporter extends SimpleReporter
     }
 
     /**
-     *    Paints a PHP error.
-     *    @param string $message        Message is ignored.
+     * Paints a PHP error.
+     *
+     * @param string $message        Message is ignored.
      */
     public function paintError($message)
     {
@@ -128,8 +121,9 @@ class HtmlReporter extends SimpleReporter
     }
 
     /**
-     *    Paints a PHP exception.
-     *    @param Exception $exception        Exception to display.
+     * Paints a PHP exception.
+     *
+     * @param Exception $exception        Exception to display.
      */
     public function paintException($exception)
     {
@@ -139,15 +133,16 @@ class HtmlReporter extends SimpleReporter
         array_shift($breadcrumb);
         print implode(' -&gt; ', $breadcrumb);
         $message = 'Unexpected exception of type [' . get_class($exception) .
-                '] with message ['. $exception->getMessage() .
-                '] in ['. $exception->getFile() .
+                '] with message [' . $exception->getMessage() .
+                '] in [' . $exception->getFile() .
                 ' line ' . $exception->getLine() . ']';
         print ' -&gt; <strong>' . $this->htmlEntities($message) . "</strong><br />\n";
     }
 
     /**
-     *    Prints the message for skipping tests.
-     *    @param string $message    Text of skip condition.
+     * Prints the message for skipping tests.
+     *
+     * @param string $message    Text of skip condition.
      */
     public function paintSkip($message)
     {
@@ -160,8 +155,9 @@ class HtmlReporter extends SimpleReporter
     }
 
     /**
-     *    Paints formatted text such as dumped privateiables.
-     *    @param string $message        Text to show.
+     * Paints formatted text such as dumped privateiables.
+     *
+     * @param string $message        Text to show.
      */
     public function paintFormattedMessage($message)
     {
@@ -169,9 +165,11 @@ class HtmlReporter extends SimpleReporter
     }
 
     /**
-     *    Character set adjusted entity conversion.
-     *    @param string $message    Plain text or Unicode message.
-     *    @return string            Browser readable message.
+     * Character set adjusted entity conversion.
+     *
+     * @param string $message    Plain text or Unicode message.
+     *
+     * @return string            Browser readable message.
      */
     protected function htmlEntities($message)
     {
@@ -180,19 +178,17 @@ class HtmlReporter extends SimpleReporter
 }
 
 /**
- *    Sample minimal test displayer. Generates only
- *    failure messages and a pass count. For command
- *    line use. I've tried to make it look like JUnit,
- *    but I wanted to output the errors as they arrived
- *    which meant dropping the dots.
- *    @package SimpleTest
- *    @subpackage UnitTester
+ * Sample minimal test displayer.
+ * Generates only failure messages and a pass count.
+ * For command line use.
+ *
+ * Note: I've tried to make it look like JUnit,
+ *       but I wanted to output the errors as they arrived, which meant dropping the dots.
  */
 class TextReporter extends SimpleReporter
 {
     /**
-     *    Does nothing yet. The first output will
-     *    be sent on the first test start.
+     * Does nothing yet. The first output will be sent on the first test start.
      */
     public function __construct()
     {
@@ -200,8 +196,9 @@ class TextReporter extends SimpleReporter
     }
 
     /**
-     *    Paints the title only.
-     *    @param string $test_name        Name class of test.
+     * Paints the title only.
+     *
+     * @param string $test_name        Name class of test.
      */
     public function paintHeader($test_name)
     {
@@ -213,9 +210,9 @@ class TextReporter extends SimpleReporter
     }
 
     /**
-     *    Paints the end of the test with a summary of
-     *    the passes and failures.
-     *    @param string $test_name        Name class of test.
+     * Paints the end of the test with a summary of the passes and failures.
+     *
+     * @param string $test_name        Name class of test.
      */
     public function paintFooter($test_name)
     {
@@ -232,9 +229,9 @@ class TextReporter extends SimpleReporter
     }
 
     /**
-     *    Paints the test failure as a stack trace.
-     *    @param string $message    Failure message displayed in
-     *                              the context of the other tests.
+     * Paints the test failure as a stack trace.
+     *
+     * @param string $message    Failure message displayed in the context of the other tests.
      */
     public function paintFail($message)
     {
@@ -247,9 +244,11 @@ class TextReporter extends SimpleReporter
     }
 
     /**
-     *    Paints a PHP error or exception.
-     *    @param string $message        Message to be shown.
-     *    @abstract
+     * Paints a PHP error or exception.
+     *
+     * @param string $message        Message to be shown.
+     *
+     * @abstract
      */
     public function paintError($message)
     {
@@ -262,16 +261,18 @@ class TextReporter extends SimpleReporter
     }
 
     /**
-     *    Paints a PHP error or exception.
-     *    @param Exception $exception      Exception to describe.
-     *    @abstract
+     * Paints a PHP error or exception.
+     *
+     * @param Exception $exception      Exception to describe.
+     *
+     * @abstract
      */
     public function paintException($exception)
     {
         parent::paintException($exception);
         $message = 'Unexpected exception of type [' . get_class($exception) .
-                '] with message ['. $exception->getMessage() .
-                '] in ['. $exception->getFile() .
+                '] with message [' . $exception->getMessage() .
+                '] in [' . $exception->getFile() .
                 ' line ' . $exception->getLine() . ']';
         print 'Exception ' . $this->getExceptionCount() . "!\n$message\n";
         $breadcrumb = $this->getTestList();
@@ -281,8 +282,9 @@ class TextReporter extends SimpleReporter
     }
 
     /**
-     *    Prints the message for skipping tests.
-     *    @param string $message    Text of skip condition.
+     * Prints the message for skipping tests.
+     *
+     * @param string $message    Text of skip condition.
      */
     public function paintSkip($message)
     {
@@ -291,8 +293,9 @@ class TextReporter extends SimpleReporter
     }
 
     /**
-     *    Paints formatted text such as dumped privateiables.
-     *    @param string $message        Text to show.
+     * Paints formatted text such as dumped privateiables.
+     *
+     * @param string $message        Text to show.
      */
     public function paintFormattedMessage($message)
     {
@@ -302,10 +305,7 @@ class TextReporter extends SimpleReporter
 }
 
 /**
- *    Runs just a single test group, a single case or
- *    even a single test within that case.
- *    @package SimpleTest
- *    @subpackage UnitTester
+ * Runs just a single test group, a single case or even a single test within that case.
  */
 class SelectiveReporter extends SimpleReporterDecorator
 {
@@ -314,11 +314,11 @@ class SelectiveReporter extends SimpleReporterDecorator
     private $on;
 
     /**
-     *    Selects the test case or group to be run,
-     *    and optionally a specific test.
-     *    @param SimpleScorer $reporter    Reporter to receive events.
-     *    @param string $just_this_case    Only this case or group will run.
-     *    @param string $just_this_test    Only this test method will run.
+     * Selects the test case or group to be run, and optionally a specific test.
+     *
+     * @param SimpleScorer $reporter    Reporter to receive events.
+     * @param string $just_this_case    Only this case or group will run.
+     * @param string $just_this_test    Only this test method will run.
      */
     public function __construct($reporter, $just_this_case = false, $just_this_test = false)
     {
@@ -335,9 +335,11 @@ class SelectiveReporter extends SimpleReporterDecorator
     }
 
     /**
-     *    Compares criteria to actual the case/group name.
-     *    @param string $test_case    The incoming test.
-     *    @return boolean             True if matched.
+     * Compares criteria to actual the case/group name.
+     *
+     * @param string $test_case    The incoming test.
+     *
+     * @return bool             True if matched.
      */
     protected function matchesTestCase($test_case)
     {
@@ -345,11 +347,12 @@ class SelectiveReporter extends SimpleReporterDecorator
     }
 
     /**
-     *    Compares criteria to actual the test name. If no
-     *    name was specified at the beginning, then all tests
-     *    can run.
-     *    @param string $method       The incoming test method.
-     *    @return boolean             True if matched.
+     * Compares criteria to actual the test name.
+     * If no name was specified at the beginning, then all tests can run.
+     *
+     * @param string $method       The incoming test method.
+     *
+     * @return bool             True if matched.
      */
     protected function shouldRunTest($test_case, $method)
     {
@@ -365,7 +368,7 @@ class SelectiveReporter extends SimpleReporterDecorator
     }
 
     /**
-     *    Switch on testing for the group or subgroup.
+     * Switch on testing for the group or subgroup.
      */
     protected function on()
     {
@@ -373,7 +376,7 @@ class SelectiveReporter extends SimpleReporterDecorator
     }
 
     /**
-     *    Switch off testing for the group or subgroup.
+     * Switch off testing for the group or subgroup.
      */
     protected function off()
     {
@@ -381,8 +384,9 @@ class SelectiveReporter extends SimpleReporterDecorator
     }
 
     /**
-     *    Is this group actually being tested?
-     *    @return boolean     True if the current test group is active.
+     * Is this group actually being tested?
+     *
+     * @return bool     True if the current test group is active.
      */
     protected function isOn()
     {
@@ -390,10 +394,12 @@ class SelectiveReporter extends SimpleReporterDecorator
     }
 
     /**
-     *    Veto everything that doesn't match the method wanted.
-     *    @param string $test_case       Name of test case.
-     *    @param string $method          Name of test method.
-     *    @return boolean                True if test should be run.
+     * Veto everything that doesn't match the method wanted.
+     *
+     * @param string $test_case       Name of test case.
+     * @param string $method          Name of test method.
+     *
+     * @return bool                True if test should be run.
      */
     public function shouldInvoke($test_case, $method)
     {
@@ -405,9 +411,10 @@ class SelectiveReporter extends SimpleReporterDecorator
     }
 
     /**
-     *    Paints the start of a group test.
-     *    @param string $test_case     Name of test or other label.
-     *    @param integer $size         Number of test cases starting.
+     * Paints the start of a group test.
+     *
+     * @param string $test_case     Name of test or other label.
+     * @param int $size         Number of test cases starting.
      */
     public function paintGroupStart($test_case, $size)
     {
@@ -418,8 +425,9 @@ class SelectiveReporter extends SimpleReporterDecorator
     }
 
     /**
-     *    Paints the end of a group test.
-     *    @param string $test_case     Name of test or other label.
+     * Paints the end of a group test.
+     *
+     * @param string $test_case     Name of test or other label.
      */
     public function paintGroupEnd($test_case)
     {
@@ -431,15 +439,14 @@ class SelectiveReporter extends SimpleReporterDecorator
 }
 
 /**
- *    Suppresses skip messages.
- *    @package SimpleTest
- *    @subpackage UnitTester
+ * Suppresses skip messages.
  */
 class NoSkipsReporter extends SimpleReporterDecorator
 {
     /**
-     *    Does nothing.
-     *    @param string $message    Text of skip condition.
+     * Does nothing.
+     *
+     * @param string $message    Text of skip condition.
      */
     public function paintSkip($message)
     {

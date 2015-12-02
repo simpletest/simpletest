@@ -1,14 +1,10 @@
 <?php
 /**
  *	Extension for a TestDox reporter
- *	@package	SimpleTest
- *	@subpackage	Extensions
  */
 
 /**
- * 	TestDox reporter 
- *	@package	SimpleTest
- *	@subpackage	Extensions
+ * TestDox reporter
  */
 class TestDoxReporter extends SimpleReporter
 {

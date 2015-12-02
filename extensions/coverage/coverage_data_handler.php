@@ -1,17 +1,10 @@
 <?php
 
 /**
- * @package        SimpleTest
- * @subpackage     Extensions
- */
-
-/**
  * Persists code coverage data into SQLite database and aggregate data for convienent
  * interpretation in report generator.  Be sure to not to keep an instance longer
  * than you have, otherwise you risk overwriting database edits from another process
  * also trying to make updates.
- * @package        SimpleTest
- * @subpackage     Extensions
  */
 class CoverageDataHandler
 {
@@ -20,7 +13,7 @@ class CoverageDataHandler
     public function __construct($filename)
     {
         $this->filename = $filename;
-        $this->db = new SQLite3($filename);
+        $this->db       = new SQLite3($filename);
         if (empty($this->db)) {
             throw new Exception('Could not create SQLite DB ' . $filename);
         }
@@ -35,7 +28,7 @@ class CoverageDataHandler
     public function &getFilenames()
     {
         $filenames = array();
-        $cursor = $this->db->query('SELECT DISTINCT name FROM coverage');
+        $cursor    = $this->db->query('SELECT DISTINCT name FROM coverage');
         while ($row = $cursor->fetchArray()) {
             $filenames[] = $row[0];
         }
@@ -48,7 +41,7 @@ class CoverageDataHandler
         foreach ($coverage as $file => $lines) {
             $coverageStr      = serialize($lines);
             $relativeFilename = self::ltrim(getcwd() . '/', $file);
-            $sql = "INSERT INTO coverage (name, coverage) VALUES ('$relativeFilename', '$coverageStr')";
+            $sql              = "INSERT INTO coverage (name, coverage) VALUES ('$relativeFilename', '$coverageStr')";
             # if this fails, check you have write permission
             $this->db->query($sql);
         }
@@ -67,8 +60,8 @@ class CoverageDataHandler
     public function &readFile($file)
     {
         $aggregate = array();
-        $sql = "SELECT coverage FROM coverage WHERE name = '$file'";
-        $result = $this->db->query($sql);
+        $sql       = "SELECT coverage FROM coverage WHERE name = '$file'";
+        $result    = $this->db->query($sql);
         while ($row = $result->fetchArray()) {
             $this->aggregateCoverage($aggregate, unserialize($row[0]));
         }
@@ -114,14 +107,14 @@ class CoverageDataHandler
     public function writeUntouchedFile($file)
     {
         $relativeFile = self::ltrim('./', $file);
-        $sql = "INSERT INTO untouched values ('$relativeFile')";
+        $sql          = "INSERT INTO untouched values ('$relativeFile')";
         $this->db->query($sql);
     }
 
     public function &readUntouchedFiles()
     {
         $untouched = array();
-        $result = $this->db->query('SELECT filename FROM untouched ORDER BY filename');
+        $result    = $this->db->query('SELECT filename FROM untouched ORDER BY filename');
         while ($row = $result->fetchArray()) {
             $untouched[] = $row[0];
         }

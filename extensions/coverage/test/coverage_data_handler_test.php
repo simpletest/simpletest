@@ -14,7 +14,7 @@ class CoverageDataHandlerTest extends UnitTestCase
 
     public function setUp()
     {
-        require_once dirname(__FILE__) .'/../coverage_data_handler.php';
+        require_once dirname(__FILE__) . '/../coverage_data_handler.php';
     }
 
     public function testAggregateCoverageCode()
@@ -36,7 +36,7 @@ class CoverageDataHandlerTest extends UnitTestCase
         $coverage = array(10 => -2, 20 => -1, 30 => 0, 40 => 1);
         $handler->write(array('file' => $coverage));
 
-        $actual = $handler->readFile('file');
+        $actual   = $handler->readFile('file');
         $expected = array(10 => -2, 20 => -1, 30 => 0, 40 => 1);
         $this->assertEqual($expected, $actual);
     }

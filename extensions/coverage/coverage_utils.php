@@ -1,12 +1,5 @@
 <?php
-/**
- * @package        SimpleTest
- * @subpackage     Extensions
- */
-/**
- * @package        SimpleTest
- * @subpackage     Extensions
- */
+
 class CoverageUtils
 {
     public static function mkdir($dir)
@@ -15,7 +8,7 @@ class CoverageUtils
             mkdir($dir, 0777, true);
         } else {
             if (!is_dir($dir)) {
-                throw new Exception($dir .' exists as a file, not a directory');
+                throw new Exception($dir . ' exists as a file, not a directory');
             }
         }
     }
@@ -52,11 +45,12 @@ class CoverageUtils
      *
      * @param unknown_type $argv
      * @param supportMutliValue - will store 2nd copy of value in an array with key "foo[]"
+     *
      * @return unknown
      */
     public static function parseArguments($argv, $mutliValueMode = false)
     {
-        $args = array();
+        $args                   = array();
         $args['extraArguments'] = array();
         array_shift($argv); // scriptname
         foreach ($argv as $arg) {
@@ -66,7 +60,7 @@ class CoverageUtils
                     self::addItemAsArray($args, $reg[1], $reg[2]);
                 }
             } elseif (preg_match('#^[-]{1,2}([^[:blank:]]+)#', $arg, $reg)) {
-                $nonnull = '';
+                $nonnull       = '';
                 $args[$reg[1]] = $nonnull;
                 if ($mutliValueMode) {
                     self::addItemAsArray($args, $reg[1], $nonnull);
@@ -87,7 +81,7 @@ class CoverageUtils
      */
     public static function addItemAsArray(&$array, $key, $item)
     {
-        $array_key = $key .'[]';
+        $array_key = $key . '[]';
         if (array_key_exists($array_key, $array)) {
             $array[$array_key][] = $item;
         } else {
@@ -102,6 +96,7 @@ class CoverageUtils
      *
      * @param unknown_type $val
      * @param unknown_type $default
+     *
      * @return first value unless value is not set then returns 2nd arg or null if no 2nd arg
      */
     public static function issetOr(&$val, $default = null)

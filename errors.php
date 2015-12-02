@@ -1,25 +1,18 @@
 <?php
-/**
- *  base include file for SimpleTest
- *  @package    SimpleTest
- *  @subpackage UnitTester 
- */
 
-// Includes SimpleTest files.
 require_once dirname(__FILE__) . '/invoker.php';
 require_once dirname(__FILE__) . '/test_case.php';
 require_once dirname(__FILE__) . '/expectation.php';
 
 /**
- *    Extension that traps errors into an error queue.
- *    @package SimpleTest
- *    @subpackage UnitTester
+ * Extension that traps errors into an error queue.
  */
 class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator
 {
     /**
-     *    Stores the invoker to wrap.
-     *    @param SimpleInvoker $invoker  Test method runner.
+     * Stores the invoker to wrap.
+     *
+     * @param SimpleInvoker $invoker  Test method runner.
      */
     public function __construct($invoker)
     {
@@ -27,10 +20,10 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator
     }
 
     /**
-     *    Invokes a test method and dispatches any
-     *    untrapped errors. Called back from
-     *    the visiting runner.
-     *    @param string $method    Test method to call.
+     * Invokes a test method and dispatches any untrapped errors.
+     * Called back from the visiting runner.
+     *
+     * @param string $method    Test method to call.
      */
     public function invoke($method)
     {
@@ -42,14 +35,15 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator
     }
 
     /**
-     *    Wires up the error queue for a single test.
-     *    @return SimpleErrorQueue    Queue connected to the test.
+     * Wires up the error queue for a single test.
+     *
+     * @return SimpleErrorQueue    Queue connected to the test.
      */
     protected function createErrorQueue()
     {
         $context = SimpleTest::getContext();
-        $test = $this->getTestCase();
-        $queue = $context->get('SimpleErrorQueue');
+        $test    = $this->getTestCase();
+        $queue   = $context->get('SimpleErrorQueue');
         $queue->setTestCase($test);
 
         return $queue;
@@ -57,10 +51,7 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator
 }
 
 /**
- *    Error queue used to record trapped
- *    errors.
- *    @package  SimpleTest
- *    @subpackage   UnitTester
+ * Error queue used to record trapped errors.
  */
 class SimpleErrorQueue
 {
@@ -69,7 +60,7 @@ class SimpleErrorQueue
     private $test;
 
     /**
-     *    Starts with an empty queue.
+     * Starts with an empty queue.
      */
     public function __construct()
     {
@@ -77,17 +68,18 @@ class SimpleErrorQueue
     }
 
     /**
-     *    Discards the contents of the error queue.
+     * Discards the contents of the error queue.
      */
     public function clear()
     {
-        $this->queue = array();
+        $this->queue             = array();
         $this->expectation_queue = array();
     }
 
     /**
-     *    Sets the currently running test case.
-     *    @param SimpleTestCase $test    Test case to send messages to.
+     * Sets the currently running test case.
+     *
+     * @param SimpleTestCase $test    Test case to send messages to.
      */
     public function setTestCase($test)
     {
@@ -95,12 +87,12 @@ class SimpleErrorQueue
     }
 
     /**
-     *    Sets up an expectation of an error. If this is
-     *    not fulfilled at the end of the test, a failure
-     *    will occour. If the error does happen, then this
-     *    will cancel it out and send a pass message.
-     *    @param SimpleExpectation $expected    Expected error match.
-     *    @param string $message                Message to display.
+     * Sets up an expectation of an error.
+     * If this is not fulfilled at the end of the test, a failure will occour.
+     * If the error does happen, then this will cancel it out and send a pass message.
+     *
+     * @param SimpleExpectation $expected    Expected error match.
+     * @param string $message                Message to display.
      */
     public function expectError($expected, $message)
     {
@@ -108,11 +100,12 @@ class SimpleErrorQueue
     }
 
     /**
-     *    Adds an error to the front of the queue.
-     *    @param integer $severity       PHP error code.
-     *    @param string $content         Text of error.
-     *    @param string $filename        File error occoured in.
-     *    @param integer $line           Line number of error.
+     * Adds an error to the front of the queue.
+     *
+     * @param int $severity       PHP error code.
+     * @param string $content         Text of error.
+     * @param string $filename        File error occoured in.
+     * @param int $line           Line number of error.
      */
     public function add($severity, $content, $filename, $line)
     {
@@ -121,8 +114,8 @@ class SimpleErrorQueue
     }
 
     /**
-     *    Any errors still in the queue are sent to the test
-     *    case. Any unfulfilled expectations trigger failures.
+     * Any errors still in the queue are sent to the test case.
+     * Any unfulfilled expectations trigger failures.
      */
     public function tally()
     {
@@ -136,12 +129,12 @@ class SimpleErrorQueue
     }
 
     /**
-     *    Tests the error against the most recent expected
-     *    error.
-     *    @param integer $severity       PHP error code.
-     *    @param string $content         Text of error.
-     *    @param string $filename        File error occoured in.
-     *    @param integer $line           Line number of error.
+     * Tests the error against the most recent expected error.
+     *
+     * @param int $severity       PHP error code.
+     * @param string $content         Text of error.
+     * @param string $filename        File error occoured in.
+     * @param int $line           Line number of error.
      */
     protected function testLatestError($severity, $content, $filename, $line)
     {
@@ -160,12 +153,16 @@ class SimpleErrorQueue
     }
 
     /**
-     *    Pulls the earliest error from the queue.
-     *    @return  mixed    False if none, or a list of error
-     *                      information. Elements are: severity
-     *                      as the PHP error code, the error message,
-     *                      the file with the error, the line number
-     *                      and a list of PHP super global arrays.
+     * Pulls the earliest error from the queue.
+     *
+     * The list of error informations contains:
+     *  - severity as the PHP error code,
+     *  - the error message,
+     *  - the file with the error,
+     *  - the line number and
+     *  - a list of PHP super global arrays.
+     *
+     * @return  mixed    False if none, or a list of error information.
      */
     public function extract()
     {
@@ -177,8 +174,9 @@ class SimpleErrorQueue
     }
 
     /**
-     *    Pulls the earliest expectation from the queue.
-     *    @return     SimpleExpectation    False if none.
+     * Pulls the earliest expectation from the queue.
+     *
+     * @return     SimpleExpectation    False if none.
      */
     protected function extractExpectation()
     {
@@ -191,9 +189,10 @@ class SimpleErrorQueue
 
     /**
      * Converts an error code into it's string representation.
-     * 
+     *
      * @param $severity  PHP integer error code.
-     * @return           String version of error code.
+     *
+     * @return String version of error code.
      */
     public static function getSeverityAsString($severity)
     {
@@ -227,14 +226,15 @@ class SimpleErrorQueue
 }
 
 /**
- *    Error handler that simply stashes any errors into the global
- *    error queue. Simulates the existing behaviour with respect to
- *    logging errors, but this feature may be removed in future.
- *    @param $severity        PHP error code.
- *    @param $message         Text of error.
- *    @param $filename        File error occoured in.
- *    @param $line            Line number of error.
- *    @param $super_globals   Hash of PHP super global arrays.
+ * Error handler that simply stashes any errors into the global error queue.
+ * Simulates the existing behaviour with respect to logging errors,
+ * but this feature may be removed in future.
+ *
+ * @param $severity        PHP error code.
+ * @param $message         Text of error.
+ * @param $filename        File error occoured in.
+ * @param $line            Line number of error.
+ * @param $super_globals   Hash of PHP super global arrays.
  */
 function SimpleTestErrorHandler($severity, $message, $filename = null, $line = null, $super_globals = null, $mask = null)
 {
@@ -256,10 +256,11 @@ function SimpleTestErrorHandler($severity, $message, $filename = null, $line = n
 }
 
 /**
- *  Certain messages can be caused by the unit tester itself.
- *  These have to be filtered.
- *  @param string $message      Message to filter.
- *  @return boolean             True if genuine failure.
+ * Certain messages can be caused by the unit tester itself. These have to be filtered.
+ *
+ * @param string $message      Message to filter.
+ *
+ * @return bool             True if genuine failure.
  */
 function IsNotCausedBySimpleTest($message)
 {
@@ -267,10 +268,11 @@ function IsNotCausedBySimpleTest($message)
 }
 
 /**
- *  Certain messages caused by PHP are just noise.
- *  These have to be filtered.
- *  @param string $message      Message to filter.
- *  @return boolean             True if genuine failure.
+ * Certain messages caused by PHP are just noise. These have to be filtered.
+ *
+ * @param string $message      Message to filter.
+ *
+ * @return bool             True if genuine failure.
  */
 function IsNotTimeZoneNag($message)
 {

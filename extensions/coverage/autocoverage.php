@@ -1,13 +1,9 @@
 <?php
+
 /**
- * @package        SimpleTest
- * @subpackage     Extensions
+ * Include this in any file to start coverage, coverage will automatically end when process dies.
  */
-/**
- * Include this in any file to start coverage, coverage will automatically end
- * when process dies.
- */
-require_once dirname(__FILE__) .'/coverage.php';
+require_once dirname(__FILE__) . '/coverage.php';
 
 if (CodeCoverage::isCoverageOn()) {
     $coverage = CodeCoverage::getInstance();

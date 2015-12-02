@@ -14,7 +14,7 @@ class CoverageReporterTest extends UnitTestCase
 
     public function setUp()
     {
-        require_once dirname(__FILE__) .'/../coverage_reporter.php';
+        require_once dirname(__FILE__) . '/../coverage_reporter.php';
         new CoverageReporter();
     }
 

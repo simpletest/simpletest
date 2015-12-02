@@ -1,16 +1,9 @@
 <?php
-/**
-* @package        SimpleTest
-* @subpackage     Extensions
-*/
 
 require_once dirname(__FILE__) . '/coverage_data_handler.php';
 
 /**
  * SimpleTest Extension - CodeCoverage
- * 
- * @package        SimpleTest
- * @subpackage     Extensions
  */
 class CodeCoverage
 {
@@ -20,7 +13,7 @@ class CodeCoverage
     public $excludes;
     public $directoryDepth;
     public $maxDirectoryDepth = 20; // reasonable, otherwise arbitrary
-    public $title = 'Code Coverage';
+    public $title             = 'Code Coverage';
 
     # NOTE: This assumes all code shares the same current working directory.
     public $settingsFile = './code-coverage-settings.dat';
@@ -29,7 +22,7 @@ class CodeCoverage
 
     public function writeUntouched()
     {
-        $touched = array_flip($this->getTouchedFiles());
+        $touched   = array_flip($this->getTouchedFiles());
         $untouched = array();
         $this->getUntouchedFiles($untouched, $touched, '.', '.');
         $this->includeUntouchedFiles($untouched);
@@ -63,7 +56,7 @@ class CodeCoverage
                     }
                 }
             } elseif ($this->isFileIncluded($path)) {
-                $relativePath = CoverageDataHandler::ltrim($rootPath .'/', $path);
+                $relativePath = CoverageDataHandler::ltrim($rootPath . '/', $path);
                 if (!array_key_exists($relativePath, $touched)) {
                     $untouched[] = $relativePath;
                 }
@@ -77,11 +70,11 @@ class CodeCoverage
         error_log('reseting log');
         $new_file = fopen($this->log, 'w');
         if (!$new_file) {
-            throw new Exception('Could not create '. $this->log);
+            throw new Exception('Could not create ' . $this->log);
         }
         fclose($new_file);
         if (!chmod($this->log, 0666)) {
-            throw new Exception('Could not change ownership on file  '. $this->log);
+            throw new Exception('Could not change ownership on file  ' . $this->log);
         }
         $handler = new CoverageDataHandler($this->log);
         $handler->createSchema();
@@ -115,7 +108,7 @@ class CodeCoverage
         if (file_exists($this->settingsFile)) {
             $this->setSettings(file_get_contents($this->settingsFile));
         } else {
-            error_log('Could not find settings file '. $this->settingsFile);
+            error_log('Could not find settings file ' . $this->settingsFile);
         }
     }
 
@@ -137,8 +130,8 @@ class CodeCoverage
 
     public function setSettings($settings)
     {
-        $data = unserialize($settings);
-        $this->log = $data['log'];
+        $data           = unserialize($settings);
+        $this->log      = $data['log'];
         $this->includes = $data['includes'];
         $this->excludes = $data['excludes'];
     }

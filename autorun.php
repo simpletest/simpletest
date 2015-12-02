@@ -2,7 +2,6 @@
 /**
  *  Autorunner which runs all tests cases found in a file
  *  that includes this module.
- *  @package    SimpleTest
  */
 
 // include simpletest files
@@ -12,7 +11,7 @@ require_once dirname(__FILE__) . '/collector.php';
 require_once dirname(__FILE__) . '/default_reporter.php';
 
 $GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_CLASSES'] = get_declared_classes();
-$GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_PATH'] = getcwd();
+$GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_PATH']    = getcwd();
 register_shutdown_function('simpletest_autorun');
 
 /**
@@ -46,8 +45,8 @@ function run_local_tests()
             return;
         }
         $candidates = capture_new_classes();
-        $loader = new SimpleFileLoader();
-        $suite = $loader->createSuiteFromClasses(
+        $loader     = new SimpleFileLoader();
+        $suite      = $loader->createSuiteFromClasses(
                 basename(initial_file()),
                 $loader->selectRunnableTests($candidates));
 
@@ -61,7 +60,8 @@ function run_local_tests()
 
 /**
  * Checks the current test context to see if a test has ever been run.
- * @return boolean True if tests have run.
+ *
+ * @return bool True if tests have run.
  */
 function tests_have_run()
 {
@@ -75,6 +75,7 @@ function tests_have_run()
 
 /**
  * The first autorun file.
+ *
  * @return string Filename of first autorun script.
  */
 function initial_file()
@@ -85,7 +86,7 @@ function initial_file()
             $file = $_SERVER['SCRIPT_FILENAME'];
         } else {
             $included_files = get_included_files();
-            $file = reset($included_files);
+            $file           = reset($included_files);
         }
     }
 
@@ -95,6 +96,7 @@ function initial_file()
 /**
  * Every class since the first autorun include.
  * This is safe enough if require_once() is always used.
+ *
  * @return array Class names.
  */
 function capture_new_classes()

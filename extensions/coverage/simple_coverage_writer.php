@@ -1,17 +1,9 @@
 <?php
-/**
- *  SimpleCoverageWriter class file
- *  @package    SimpleTest
- *  @subpackage UnitTester
- */
 
-// base coverage writer class
-require_once dirname(__FILE__) .'/coverage_writer.php';
+require_once dirname(__FILE__) . '/coverage_writer.php';
 
 /**
  *  SimpleCoverageWriter class
- *  @package    SimpleTest
- *  @subpackage UnitTester
  */
 class SimpleCoverageWriter implements CoverageWriter
 {

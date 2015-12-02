@@ -1,22 +1,12 @@
 <?php
-/**
- *	@package	SimpleTest
- *	@subpackage	Extensions
- *  @author Patrice Neff - mailinglists@patrice.ch (original code)
- */
+
+require_once dirname(__FILE__) . '/../reporter.php';
 
 /**
- * include SimpleTest reporter
- */
-require_once dirname(__FILE__).'/../reporter.php';
-
-/**
- * Reporter which outputs test results in a format compatible
- * with JUnit / Maven XML output. Can be used for integrating
- * test suite with continuous integration servers such as
- * Atlassian Bamboo.
- * @package	SimpleTest
- * @subpackage	Extensions
+ * Reporter which outputs test results in a format compatible with JUnit / Maven XML output.
+ * Can be used for integrating test suite with CI servers such as Atlassian Bamboo.
+ *
+ * @author Patrice Neff - mailinglists@patrice.ch (original code)
  */
 class JUnitXMLReporter extends SimpleReporter
 {
@@ -41,9 +31,9 @@ class JUnitXMLReporter extends SimpleReporter
     }
 
     /**
-     *    Paints the end of the test with a summary of
-     *    the passes and failures.
-     *    @param string $test_name        Name class of test.
+     * Paints the end of the test with a summary of the passes and failures.
+     *
+     * @param string $test_name        Name class of test.
      */
     public function paintFooter($test_name)
     {
@@ -57,7 +47,7 @@ class JUnitXMLReporter extends SimpleReporter
         $this->root->setAttribute('time', $duration);
 
         $this->doc->formatOutput = true;
-        $xml = $this->doc->saveXML();
+        $xml                     = $this->doc->saveXML();
         // Cut out XML declaration
         echo preg_replace('/<\?[^>]*\?>/', '', $xml);
         echo "\n";
@@ -79,7 +69,7 @@ class JUnitXMLReporter extends SimpleReporter
         echo "  - test start: $test\n";
 
         $this->methodStart = microtime(true);
-        $this->currCase = $this->doc->createElement('testcase');
+        $this->currCase    = $this->doc->createElement('testcase');
     }
 
     public function paintMethodEnd($test)
@@ -116,7 +106,7 @@ class JUnitXMLReporter extends SimpleReporter
             return;
         }
 
-        $ch = $this->doc->createElement('failure');
+        $ch         = $this->doc->createElement('failure');
         $breadcrumb = $this->getTestList();
         $ch->setAttribute('message', $breadcrumb[count($breadcrumb)-1]);
         $ch->setAttribute('type', $breadcrumb[count($breadcrumb)-1]);

@@ -12,7 +12,7 @@ class TestOfLiveCssSelectors extends DomTestCase
 
     public function testGet()
     {
-        $url = 'file://'.dirname(__FILE__).'/support/dom_tester.html';
+        $url = 'file://' . dirname(__FILE__) . '/support/dom_tester.html';
         $this->assertTrue($this->get($url));
         $this->assertElementsBySelector('h1', array('Test page'));
         $this->assertElementsBySelector('ul#list li a[href]', array('link'));
@@ -25,8 +25,8 @@ class TestOfCssSelectors extends UnitTestCase
 {
     public function TestOfCssSelectors()
     {
-        $html = file_get_contents(dirname(__FILE__) . '/support/dom_tester.html');
-        $this->dom = new DomDocument('1.0', 'utf-8');
+        $html                       = file_get_contents(dirname(__FILE__) . '/support/dom_tester.html');
+        $this->dom                  = new DomDocument('1.0', 'utf-8');
         $this->dom->validateOnParse = true;
         $this->dom->loadHTML($html);
     }
@@ -192,8 +192,8 @@ class TestsOfChildAndAdjacentSelectors extends DomTestCase
 {
     public function TestsOfChildAndAdjacentSelectors()
     {
-        $html = file_get_contents(dirname(__FILE__) . '/support/child_adjacent.html');
-        $this->dom = new DomDocument('1.0', 'utf-8');
+        $html                       = file_get_contents(dirname(__FILE__) . '/support/child_adjacent.html');
+        $this->dom                  = new DomDocument('1.0', 'utf-8');
         $this->dom->validateOnParse = true;
         $this->dom->loadHTML($html);
     }

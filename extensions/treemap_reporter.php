@@ -1,18 +1,10 @@
 <?php
-/**
- *	Extension file for SimpleTest
- *  @package        SimpleTest
- *  @subpackage     Extensions
- */
 
 require_once dirname(__FILE__) . '/../scorer.php';
 require_once dirname(__FILE__) . '/treemap_reporter/treemap_recorder.php';
 
 /**
  * Constructs and renders a treemap visualization of a test run
- *
- * @package SimpleTest
- * @subpackage Extensions
  */
 class TreemapReporter extends SimpleReporterDecorator
 {
@@ -23,6 +15,7 @@ class TreemapReporter extends SimpleReporterDecorator
 
     /**
      * basic CSS for floating nested divs
+     *
      * @todo checkout some weird border bugs
      */
     public function _getCss()
@@ -64,9 +57,9 @@ class TreemapReporter extends SimpleReporterDecorator
      */
     public function paintRectangleStart($node, $horiz, $vert)
     {
-        $name = $node->getName();
+        $name        = $node->getName();
         $description = $node->getDescription();
-        $status = $node->getStatus();
+        $status      = $node->getStatus();
         echo "<div title=\"$name: $description\" class=\"$status\" style=\"width:{$horiz}%;height:{$vert}%\">";
     }
 
@@ -80,6 +73,7 @@ class TreemapReporter extends SimpleReporterDecorator
 
     /**
      * paints wrapping treemap divs
+     *
      * @todo how to configure aspect and other parameters?
      */
     public function paintFooter($group)
@@ -95,15 +89,15 @@ class TreemapReporter extends SimpleReporterDecorator
     /**
      * divides the test results based on a slice and dice algorithm
      *
-     * @param TreemapNode $map sorted 
-     * @param boolean $aspect flips the aspect between horizontal and vertical
+     * @param TreemapNode $map    sorted
+     * @param bool        $aspect flips the aspect between horizontal and vertical
      * @private
      */
     public function divideMapNodes($map, $aspect)
     {
-        $aspect = !$aspect;
+        $aspect    = !$aspect;
         $divisions = $map->getSize();
-        $total = $map->getTotalSize();
+        $total     = $map->getTotalSize();
         foreach ($map->getChildren() as $node) {
             if (!$node->isLeaf()) {
                 $dist = $node->getTotalSize() / $total * 100;
@@ -112,10 +106,10 @@ class TreemapReporter extends SimpleReporterDecorator
             }
             if ($aspect) {
                 $horiz = $dist;
-                $vert = 100;
+                $vert  = 100;
             } else {
                 $horiz = 100;
-                $vert = $dist;
+                $vert  = $dist;
             }
             $this->paintRectangleStart($node, $horiz, $vert);
             $this->divideMapNodes($node, $aspect);

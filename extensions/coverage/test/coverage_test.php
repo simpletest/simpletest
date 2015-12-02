@@ -15,7 +15,7 @@ class CodeCoverageTest extends UnitTestCase
 
     public function setUp()
     {
-        require_once dirname(__FILE__) .'/../coverage.php';
+        require_once dirname(__FILE__) . '/../coverage.php';
     }
 
     public function testIsFileIncluded()
@@ -32,7 +32,7 @@ class CodeCoverageTest extends UnitTestCase
 
     public function testIsFileIncludedRegexp()
     {
-        $coverage = new CodeCoverage();
+        $coverage           = new CodeCoverage();
         $coverage->includes = array('modules/.*\.php$');
         $coverage->excludes = array('bad-bunny.php');
         $this->assertFalse($coverage->isFileIncluded('modules/a.test'));
@@ -44,7 +44,7 @@ class CodeCoverageTest extends UnitTestCase
 
     public function testIsDirectoryIncludedPastMaxDepth()
     {
-        $coverage = new CodeCoverage();
+        $coverage                    = new CodeCoverage();
         $coverage->maxDirectoryDepth = 5;
         $this->assertTrue($coverage->isDirectoryIncluded('aaa', 1));
         $this->assertFalse($coverage->isDirectoryIncluded('aaa', 5));
@@ -64,8 +64,8 @@ class CodeCoverageTest extends UnitTestCase
 
     public function testFilter()
     {
-        $coverage = new CodeCoverage();
-        $data = array('a' => 0, 'b' => 0, 'c' => 0);
+        $coverage           = new CodeCoverage();
+        $data               = array('a' => 0, 'b' => 0, 'c' => 0);
         $coverage->includes = array('b');
         $coverage->filter($data);
         $this->assertEqual(array('b' => 0), $data);
@@ -73,18 +73,18 @@ class CodeCoverageTest extends UnitTestCase
 
     public function testUntouchedFiles()
     {
-        $coverage = new CodeCoverage();
-        $touched = array_flip(array('test/coverage_test.php'));
-        $actual = array();
+        $coverage           = new CodeCoverage();
+        $touched            = array_flip(array('test/coverage_test.php'));
+        $actual             = array();
         $coverage->includes = array('coverage_test\.php$');
-        $parentDir = realpath(dirname(__FILE__));
+        $parentDir          = realpath(dirname(__FILE__));
         $coverage->getUntouchedFiles($actual, $touched, $parentDir, $parentDir);
         $this->assertEqual(array('coverage_test.php'), $actual);
     }
 
     public function testResetLog()
     {
-        $coverage = new CodeCoverage();
+        $coverage      = new CodeCoverage();
         $coverage->log = tempnam(null, 'php.xdebug.coverage.test.');
         $coverage->resetLog();
         $this->assertTrue(file_exists($coverage->log));
@@ -92,11 +92,11 @@ class CodeCoverageTest extends UnitTestCase
 
     public function testSettingsSerialization()
     {
-        $coverage = new CodeCoverage();
-        $coverage->log = sys_get_temp_dir();
+        $coverage           = new CodeCoverage();
+        $coverage->log      = sys_get_temp_dir();
         $coverage->includes = array('apple', 'orange');
         $coverage->excludes = array('tomato', 'pea');
-        $data = $coverage->getSettings();
+        $data               = $coverage->getSettings();
         $this->assertNotNull($data);
 
         $actual = new CodeCoverage();
@@ -110,12 +110,12 @@ class CodeCoverageTest extends UnitTestCase
     {
         $settings_file = '0-coverage-settings-test.dat';
 
-        $coverage = new CodeCoverage();
-        $coverage->log = sys_get_temp_dir();
+        $coverage               = new CodeCoverage();
+        $coverage->log          = sys_get_temp_dir();
         $coverage->settingsFile = $settings_file;
         $coverage->writeSettings();
 
-        $actual = new CodeCoverage();
+        $actual               = new CodeCoverage();
         $actual->settingsFile = $settings_file;
         $actual->readSettings();
         $this->assertEqual(sys_get_temp_dir(), $actual->log);
