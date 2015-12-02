@@ -16,8 +16,9 @@ matrix:
 
 script:
  # start PHP5.4 built-in server in background
- - nohup php -S localhost:80 -t test/site > /dev/null 2>&1 &
+ - nohup php -S localhost:80 -t ./test/site/ > php-server.log 2>&1 &
  - php test/all_tests.php
+ - cat php-server.log
 
 # disable notifications
 notifications:
