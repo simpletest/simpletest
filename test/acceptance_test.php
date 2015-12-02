@@ -687,7 +687,7 @@ class TestOfLiveCookies extends AcceptanceTest
         $this->assertText('Test cookie c');
         $this->assertCookie('a');
         $this->assertCookie('b', 'Test cookie b');
-        $this->assertTrue($this->getCookie('c') == 'Test cookie c');
+        $this->assertTrue($this->getCookie('c') === 'Test cookie c');
     }
 
     public function testNoCookieSetWhenCookiesDisabled()

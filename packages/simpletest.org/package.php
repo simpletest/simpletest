@@ -178,7 +178,7 @@ class SimpleTestXMLElement extends SimpleXMLElement
                         }
                         $content .= "<dt".$status.">[".$type."] ".trim($element)."</dt>";
                         foreach ($element->attributes() as $name => $value) {
-                            if ($name == "tracker" and $type == "bug") {
+                            if ($name === "tracker" and $type === "bug") {
                                 $value = $this->as_tracker_link($value);
                             }
                             $content .= "<dd>".$name." : ".$value."</dd>";

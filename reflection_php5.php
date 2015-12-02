@@ -248,7 +248,7 @@ class SimpleReflection
      */
     protected function isConstructor($name)
     {
-        return ($name == '__construct') || ($name == $this->interface);
+        return ($name === '__construct') || ($name == $this->interface);
     }
 
     /**
@@ -301,16 +301,16 @@ class SimpleReflection
      */
     public function getSignature($name)
     {
-        if ($name == '__set') {
+        if ($name === '__set') {
             return 'function __set($key, $value)';
         }
-        if ($name == '__call') {
+        if ($name === '__call') {
             return 'function __call($method, $arguments)';
         }
-        if (in_array($name, array('__get', '__isset', $name == '__unset'))) {
+        if (in_array($name, array('__get', '__isset', $name === '__unset'))) {
             return "function {$name}(\$key)";
         }
-        if ($name == '__toString') {
+        if ($name === '__toString') {
             return "function $name()";
         }
 

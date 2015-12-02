@@ -56,7 +56,7 @@ class ParallelRegex
      */
     public function match($subject, &$match)
     {
-        if (count($this->patterns) == 0) {
+        if (count($this->patterns) === 0) {
             return false;
         }
         if (! preg_match($this->getCompoundedRegex(), $subject, $matches)) {
@@ -82,7 +82,7 @@ class ParallelRegex
      */
     protected function getCompoundedRegex()
     {
-        if ($this->regex == null) {
+        if ($this->regex === null) {
             for ($i = 0, $count = count($this->patterns); $i < $count; $i++) {
                 $this->patterns[$i] = '(' . str_replace(
                         array('/', '(', ')'),
@@ -150,7 +150,7 @@ class SimpleStateStack
      */
     public function leave()
     {
-        if (count($this->stack) == 1) {
+        if (count($this->stack) === 1) {
             return false;
         }
         array_pop($this->stack);
@@ -595,7 +595,7 @@ class SimpleHtmlSaxParser
 
             return $success;
         }
-        if ($token != '=') {
+        if ($token !== '=') {
             $this->current_attribute                    = strtolower(html_entity_decode($token, ENT_QUOTES));
             $this->attributes[$this->current_attribute] = '';
         }
@@ -781,23 +781,23 @@ class SimplePhpPageBuilder
         if (! $tag) {
             return true;
         }
-        if ($tag->getTagName() == 'label') {
+        if ($tag->getTagName() === 'label') {
             $this->acceptLabelStart($tag);
             $this->openTag($tag);
 
             return true;
         }
-        if ($tag->getTagName() == 'form') {
+        if ($tag->getTagName() === 'form') {
             $this->acceptFormStart($tag);
 
             return true;
         }
-        if ($tag->getTagName() == 'frameset') {
+        if ($tag->getTagName() === 'frameset') {
             $this->acceptFramesetStart($tag);
 
             return true;
         }
-        if ($tag->getTagName() == 'frame') {
+        if ($tag->getTagName() === 'frame') {
             $this->acceptFrame($tag);
 
             return true;
@@ -824,17 +824,17 @@ class SimplePhpPageBuilder
      */
     public function endElement($name)
     {
-        if ($name == 'label') {
+        if ($name === 'label') {
             $this->acceptLabelEnd();
 
             return true;
         }
-        if ($name == 'form') {
+        if ($name === 'form') {
             $this->acceptFormEnd();
 
             return true;
         }
-        if ($name == 'frameset') {
+        if ($name === 'frameset') {
             $this->acceptFramesetEnd();
 
             return true;
@@ -938,11 +938,11 @@ class SimplePhpPageBuilder
      */
     protected function acceptTag($tag)
     {
-        if ($tag->getTagName() == 'a') {
+        if ($tag->getTagName() === 'a') {
             $this->page->addLink($tag);
-        } elseif ($tag->getTagName() == 'base') {
+        } elseif ($tag->getTagName() === 'base') {
             $this->page->setBase($tag->getAttribute('href'));
-        } elseif ($tag->getTagName() == 'title') {
+        } elseif ($tag->getTagName() === 'title') {
             $this->page->setTitle($tag);
         } elseif ($this->isFormElement($tag->getTagName())) {
             for ($i = 0; $i < count($this->open_forms); $i++) {

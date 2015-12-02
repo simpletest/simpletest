@@ -89,7 +89,7 @@ class SimpleDumper
             }
         }
         $type = $this->getType($first);
-        if ($type == 'Unknown') {
+        if ($type === 'Unknown') {
             return 'with unknown type';
         }
         $method = 'describe' . $type . 'Difference';

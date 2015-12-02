@@ -49,8 +49,8 @@ class SimpleForm
      */
     protected function setEncodingClass($tag)
     {
-        if (strtolower($tag->getAttribute('method')) == 'post') {
-            if (strtolower($tag->getAttribute('enctype')) == 'multipart/form-data') {
+        if (strtolower($tag->getAttribute('method')) === 'post') {
+            if (strtolower($tag->getAttribute('enctype')) === 'multipart/form-data') {
                 return 'SimpleMultipartEncoding';
             }
 
@@ -108,7 +108,7 @@ class SimpleForm
         if ($this->default_target && ! $url->getTarget()) {
             $url->setTarget($this->default_target);
         }
-        if ($this->getMethod() == 'get') {
+        if ($this->getMethod() === 'get') {
             $url->clearRequest();
         }
 
@@ -148,9 +148,9 @@ class SimpleForm
      */
     public function addWidget($tag)
     {
-        if (strtolower($tag->getAttribute('type')) == 'submit') {
+        if (strtolower($tag->getAttribute('type')) === 'submit') {
             $this->buttons[] = $tag;
-        } elseif (strtolower($tag->getAttribute('type')) == 'image') {
+        } elseif (strtolower($tag->getAttribute('type')) === 'image') {
             $this->images[] = $tag;
         } elseif ($tag->getName()) {
             $this->setWidget($tag);
@@ -164,9 +164,9 @@ class SimpleForm
      */
     protected function setWidget($tag)
     {
-        if (strtolower($tag->getAttribute('type')) == 'radio') {
+        if (strtolower($tag->getAttribute('type')) === 'radio') {
             $this->addRadioButton($tag);
-        } elseif (strtolower($tag->getAttribute('type')) == 'checkbox') {
+        } elseif (strtolower($tag->getAttribute('type')) === 'checkbox') {
             $this->addCheckbox($tag);
         } else {
             $this->widgets[] = &$tag;

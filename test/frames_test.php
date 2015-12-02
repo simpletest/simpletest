@@ -275,10 +275,10 @@ class TestOfFramesetPageInterface extends UnitTestCase
     {
         $methods = array();
         foreach (get_class_methods('SimplePage') as $method) {
-            if (strtolower($method) == strtolower('SimplePage')) {
+            if (strtolower($method) === strtolower('SimplePage')) {
                 continue;
             }
-            if (strtolower($method) == strtolower('getFrameset')) {
+            if (strtolower($method) === strtolower('getFrameset')) {
                 continue;
             }
             if (strncmp($method, '_', 1) == 0) {
@@ -297,7 +297,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
     {
         $methods = array();
         foreach (get_class_methods('SimpleFrameset') as $method) {
-            if (strtolower($method) == strtolower('SimpleFrameset')) {
+            if (strtolower($method) === strtolower('SimpleFrameset')) {
                 continue;
             }
             if (strncmp($method, '_', 1) == 0) {

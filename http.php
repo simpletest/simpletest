@@ -69,7 +69,7 @@ class SimpleRoute
      */
     public function createConnection($method, $timeout)
     {
-        $default_port = ('https' == $this->url->getScheme()) ? 443 : 80;
+        $default_port = ('https' === $this->url->getScheme()) ? 443 : 80;
         $socket       = $this->createSocket(
                 $this->url->getScheme() ? $this->url->getScheme() : 'http',
                 $this->url->getHost(),
@@ -540,7 +540,7 @@ class SimpleHttpResponse extends SimpleStickyError
         if (! $raw) {
             $this->setError('Nothing fetched');
             $this->headers = new SimpleHttpHeaders('');
-        } elseif ('file' == $this->url->getScheme()) {
+        } elseif ('file' === $this->url->getScheme()) {
             $this->headers = new SimpleHttpHeaders('');
             $this->content = $raw;
         } elseif (! strstr($raw, "\r\n\r\n")) {

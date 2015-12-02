@@ -52,15 +52,13 @@ class TestOfSpl extends UnitTestCase
             return;
         }
         foreach (spl_classes() as $class) {
-            if ($class == 'SplHeap' or $class = 'SplFileObject') {
+            if ($class === 'SplHeap' or $class === 'SplFileObject') {
                 continue;
             }
-            if (version_compare(PHP_VERSION, '5.1', '<') &&
-                $class == 'CachingIterator' ||
-                $class == 'CachingRecursiveIterator' ||
-                $class == 'FilterIterator' ||
-                $class == 'LimitIterator' ||
-                $class == 'ParentIterator') {
+            // @todo deprecate
+            if (version_compare(PHP_VERSION, '5.1', '<') && in_array($class, array(
+                    'CachingIterator', 'CachingRecursiveIterator', 'FilterIterator',
+                    'LimitIterator', 'ParentIterator'))) {
                 // These iterators require an iterator be passed to them during
                 // construction in PHP 5.0; there is no way for SimpleTest
                 // to supply such an iterator, however, so support for it is

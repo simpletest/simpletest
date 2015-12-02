@@ -421,7 +421,7 @@ class SimpleReporter extends SimpleScorer
      */
     public static function inCli()
     {
-        return php_sapi_name() == 'cli';
+        return php_sapi_name() === 'cli';
     }
 }
 

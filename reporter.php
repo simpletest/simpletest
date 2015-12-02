@@ -216,7 +216,7 @@ class TextReporter extends SimpleReporter
      */
     public function paintFooter($test_name)
     {
-        if ($this->getFailCount() + $this->getExceptionCount() == 0) {
+        if ($this->getFailCount() + $this->getExceptionCount() === 0) {
             print "OK\n";
         } else {
             print "FAILURES!!!\n";

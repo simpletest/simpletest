@@ -59,7 +59,7 @@ class SimpleFrameset
         } else {
             $index = $name - 1;
         }
-        if (count($path) == 0) {
+        if (count($path) === 0) {
             $this->frames[$index] = &$page;
 
             return;

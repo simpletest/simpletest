@@ -17,7 +17,7 @@ class TestOfPearAdapter extends PHPUnit_TestCase
 
     public function testName()
     {
-        $this->assertTrue($this->getName() == get_class($this));
+        $this->assertTrue($this->getName() === get_class($this));
     }
 
     public function testPass()

@@ -1347,7 +1347,7 @@ class WebTestCase extends SimpleTestCase
                     $this->browser->getAuthentication() . ']');
 
             return $this->assertTrue(
-                    strtolower($this->browser->getAuthentication()) == strtolower($authentication),
+                    strtolower($this->browser->getAuthentication()) === strtolower($authentication),
                     $message);
         }
     }

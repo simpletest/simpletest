@@ -26,7 +26,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             }
             fclose($data);
 
-            if ($content == '<a><b>c</b></a>') {
+            if ($content === '<a><b>c</b></a>') {
                 header('HTTP/1.1 201 Created');
                 header('Content-Type: text/xml');
                 echo strip_tags($content);

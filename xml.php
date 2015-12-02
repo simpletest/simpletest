@@ -584,11 +584,11 @@ class SimpleTestXmlParser
     protected function startElement($expat, $tag, $attributes)
     {
         $this->attributes = $attributes;
-        if ($tag == 'GROUP') {
+        if ($tag === 'GROUP') {
             $this->pushNestingTag(new NestingGroupTag($attributes));
-        } elseif ($tag == 'CASE') {
+        } elseif ($tag === 'CASE') {
             $this->pushNestingTag(new NestingCaseTag($attributes));
-        } elseif ($tag == 'TEST') {
+        } elseif ($tag === 'TEST') {
             $this->pushNestingTag(new NestingMethodTag($attributes));
         } elseif ($this->isLeaf($tag)) {
             $this->in_content_tag = true;
@@ -608,25 +608,25 @@ class SimpleTestXmlParser
         if (in_array($tag, array('GROUP', 'CASE', 'TEST'))) {
             $nesting_tag = $this->popNestingTag();
             $nesting_tag->paintEnd($this->listener);
-        } elseif ($tag == 'NAME') {
+        } elseif ($tag === 'NAME') {
             $nesting_tag = &$this->getCurrentNestingTag();
             $nesting_tag->setName($this->content);
             $nesting_tag->paintStart($this->listener);
-        } elseif ($tag == 'PASS') {
+        } elseif ($tag === 'PASS') {
             $this->listener->paintPass($this->content);
-        } elseif ($tag == 'FAIL') {
+        } elseif ($tag === 'FAIL') {
             $this->listener->paintFail($this->content);
-        } elseif ($tag == 'EXCEPTION') {
+        } elseif ($tag === 'EXCEPTION') {
             $this->listener->paintError($this->content);
-        } elseif ($tag == 'SKIP') {
+        } elseif ($tag === 'SKIP') {
             $this->listener->paintSkip($this->content);
-        } elseif ($tag == 'SIGNAL') {
+        } elseif ($tag === 'SIGNAL') {
             $this->listener->paintSignal(
                     $this->attributes['TYPE'],
                     unserialize($this->content));
-        } elseif ($tag == 'MESSAGE') {
+        } elseif ($tag === 'MESSAGE') {
             $this->listener->paintMessage($this->content);
-        } elseif ($tag == 'FORMATTED') {
+        } elseif ($tag === 'FORMATTED') {
             $this->listener->paintFormattedMessage($this->content);
         }
     }

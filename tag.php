@@ -36,9 +36,9 @@ class SimpleTagBuilder
             $tag_class = $map[$name];
 
             return new $tag_class($attributes);
-        } elseif ($name == 'select') {
+        } elseif ($name === 'select') {
             return $this->createSelectionTag($attributes);
-        } elseif ($name == 'input') {
+        } elseif ($name === 'input') {
             return $this->createInputTag($attributes);
         }
 
@@ -498,7 +498,7 @@ class SimpleTextTag extends SimpleWidget
      */
     public function setValue($value)
     {
-        if ($this->getAttribute('type') == 'hidden') {
+        if ($this->getAttribute('type') === 'hidden') {
             return false;
         }
 
@@ -758,7 +758,7 @@ class SimpleTextAreaTag extends SimpleWidget
     {
         if ($this->getAttribute('cols')) {
             $wrap = $this->getAttribute('wrap');
-            if (($wrap == 'physical') || ($wrap == 'hard')) {
+            if (($wrap === 'physical') || ($wrap === 'hard')) {
                 return true;
             }
         }
@@ -873,7 +873,7 @@ class SimpleSelectionTag extends SimpleWidget
      */
     public function addTag($tag)
     {
-        if ($tag->getTagName() == 'option') {
+        if ($tag->getTagName() === 'option') {
             $this->options[] = $tag;
         }
     }
@@ -969,7 +969,7 @@ class MultipleSelectionTag extends SimpleWidget
      */
     public function addTag($tag)
     {
-        if ($tag->getTagName() == 'option') {
+        if ($tag->getTagName() === 'option') {
             $this->options[] = &$tag;
         }
     }

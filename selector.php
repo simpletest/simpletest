@@ -38,7 +38,7 @@ class SimpleByName
      */
     public function isMatch($widget)
     {
-        return ($widget->getName() == $this->name);
+        return ($widget->getName() === $this->name);
     }
 }
 

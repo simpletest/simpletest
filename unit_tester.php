@@ -378,7 +378,7 @@ class UnitTestCase extends SimpleTestCase
      */
     protected function coerceExpectation($expected)
     {
-        if ($expected == false) {
+        if ($expected === false) {
             return new TrueExpectation();
         }
         if (is_a($expected, 'SimpleExpectation')) {
