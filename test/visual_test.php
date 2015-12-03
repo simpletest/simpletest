@@ -20,7 +20,7 @@ class TestDisplayClass
 {
     private $a;
 
-    public function TestDisplayClass($a)
+    public function __construct($a)
     {
         $this->a = $a;
     }
@@ -309,7 +309,7 @@ class FailingUnitTestCaseOutput extends UnitTestCase
 
 class Dummy
 {
-    public function Dummy()
+    public function __construct()
     {
     }
 
