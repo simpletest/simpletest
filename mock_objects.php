@@ -1609,7 +1609,7 @@ class MockGenerator
         $code .= "    }\n";
         $code .= "    function returnsByValue(\$method, \$value, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked('$method');
-        $code .= "        \$this->mock->setReturnValue(\$method, \$value, \$args);\n";
+        $code .= "        \$this->mock->returns(\$method, \$value, \$args);\n";
         $code .= "    }\n";
         $code .= "    function returnsByValueAt(\$timing, \$method, \$value, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked('$method');
@@ -1625,7 +1625,7 @@ class MockGenerator
         $code .= "    }\n";
         $code .= "    function setReturnValue(\$method, \$value, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked('$method');
-        $code .= "        \$this->mock->setReturnValue(\$method, \$value, \$args);\n";
+        $code .= "        \$this->mock->returns(\$method, \$value, \$args);\n";
         $code .= "    }\n";
         $code .= "    function setReturnValueAt(\$timing, \$method, \$value, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked('$method');
