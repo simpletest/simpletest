@@ -22,7 +22,9 @@
         ?>
         <h1>Raw GET data</h1>
         <?php
-            print '[' . $_SERVER['QUERY_STRING'] . ']';
+            if(!empty($_SERVER['QUERY_STRING'])) {
+                echo '[' . $_SERVER['QUERY_STRING'] . ']';
+            }
         ?>
         <h1>GET data</h1>
         <?php
