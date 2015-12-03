@@ -587,6 +587,6 @@ class SimplePage
         $text = html_entity_decode($text, ENT_QUOTES);
         $text = preg_replace('#\s+#', ' ', $text);
 
-        return trim(trim($text), "\xA0");        // TODO: The \xAO is a &nbsp;. Add a test for this.
+        return trim(trim($text), "\xA0");        // @todo The \xAO is a &nbsp;. Add a test for this.
     }
 }

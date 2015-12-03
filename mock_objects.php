@@ -1,7 +1,5 @@
 <?php
-/**
- *  base include file for SimpleTest
- */
+
 require_once dirname(__FILE__) . '/expectation.php';
 require_once dirname(__FILE__) . '/simpletest.php';
 require_once dirname(__FILE__) . '/dumper.php';
@@ -1546,7 +1544,7 @@ class MockGenerator
         $code .= $this->addMethodList($methods);
         $code .= "\n";
 
-        // TODO: switch from calling function mock_class to constructor calls
+        // @todo switch from calling function mock_class to constructor calls
         //$code .= "    function __construct() {\n";
 
         $code .= '    function ' . $this->mock_class . "() {\n";
