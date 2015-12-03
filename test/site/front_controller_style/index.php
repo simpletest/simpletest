@@ -1,16 +1,4 @@
 <?php
-   /*if (count($HTTP_COOKIE_VARS) > 0) {
-        $_COOKIE = $HTTP_COOKIE_VARS;
-    }
-    if (count($HTTP_GET_VARS) > 0) {
-        $_GET = $HTTP_GET_VARS;
-    }
-    if (count($HTTP_POST_VARS) > 0) {
-        $_POST = $HTTP_POST_VARS;
-    }
-    if (! isset($_SERVER)) {
-        $_SERVER = $HTTP_SERVER_VARS;
-    }*/
     global $HTTP_RAW_POST_DATA;
 
     require_once '../page_request.php';

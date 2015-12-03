@@ -1,17 +1,4 @@
 <?php
-    /* @todo $HTTP_* stuff is deprecated */
-    /*if (isset($HTTP_COOKIE_VARS) and count($HTTP_COOKIE_VARS) > 0) {
-        $_COOKIE = $HTTP_COOKIE_VARS;
-    }
-    if (isset($HTTP_GET_VARS) and count($HTTP_GET_VARS) > 0) {
-        $_GET = $HTTP_GET_VARS;
-    }
-    if (isset($HTTP_POST_VARS) and count($HTTP_POST_VARS) > 0) {
-        $_POST = $HTTP_POST_VARS;
-    }
-    if (! isset($_SERVER)) {
-        $_SERVER = $HTTP_SERVER_VARS;
-    }*/
     global $HTTP_RAW_POST_DATA;
 
     require_once 'page_request.php';
