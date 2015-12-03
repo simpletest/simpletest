@@ -20,15 +20,10 @@ class SimpleReflection
     /**
      * Checks that a class has been declared.
      *
-     * @todo  Versions before PHP5.0.2 need a check that it's not really an interface.
-     *
      * @return bool            True if defined.
      */
     public function classExists()
     {
-        if (! class_exists($this->interface)) {
-            return false;
-        }
         $reflection = new ReflectionClass($this->interface);
 
         return ! $reflection->isInterface();
