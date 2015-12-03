@@ -351,7 +351,7 @@ class TestOfForm extends UnitTestCase
         $this->assertIdentical($form->getValue(new SimpleByName('a')), 'me');
     }
 
-    public function TODO_testRemoveGetParamsFromAction()
+    public function testRemoveGetParamsFromAction()
     {
         Mock::generatePartial('SimplePage', 'MockPartialSimplePage', array('getUrl'));
         $page = new MockPartialSimplePage();

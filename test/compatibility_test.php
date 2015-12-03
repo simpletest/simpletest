@@ -32,7 +32,7 @@ class TestOfCompatibility extends UnitTestCase
         $this->assertIdentical($object1, $object2);
     }
 
-    public function TODO_testReferences()
+    public function testReferences()
     {
         $thing           = 'Hello';
         $thing_reference = &$thing;
