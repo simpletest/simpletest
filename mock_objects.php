@@ -901,12 +901,6 @@ class SimpleMock
         $this->actions->register($method, $args, new SimpleByReference($reference));
     }
 
-    /** @deprecated */
-    public function setReturnReference($method, &$reference, $args = false)
-    {
-        $this->returnsByReference($method, $reference, $args);
-    }
-
     /**
      * Sets a return for a parameter list that
      * will be passed by value only when the required call count is reached.
