@@ -148,8 +148,8 @@ class IteratorTest extends UnitTestCase() {
     function testASequence() {
         $iterator = &amp;new MockIterator($this);
         $iterator-&gt;setReturnValue('next', false);
-        $iterator-&gt;setReturnValueAt(0, 'next', 'First string');
-        $iterator-&gt;setReturnValueAt(1, 'next', 'Second string');
+        $iterator-&gt;returnsByValueAt(0, 'next', 'First string');
+        $iterator-&gt;returnsByValueAt(1, 'next', 'Second string');
         ...
     }
 }

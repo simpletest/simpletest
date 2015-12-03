@@ -104,8 +104,8 @@ Stub::generate('Iterator');
 
 $iterator = new StubIterator();
 $iterator-&gt;setReturnValue('next', false);
-$iterator-&gt;setReturnValueAt(0, 'next', 'First string');
-$iterator-&gt;setReturnValueAt(1, 'next', 'Second string');
+$iterator-&gt;returnsByValueAt(0, 'next', 'First string');
+$iterator-&gt;returnsByValueAt(1, 'next', 'Second string');
 </programlisting>
                 When <span class="new_code">next()</span> is called on the
                 stub iterator it will first return "First string",
@@ -250,9 +250,9 @@ class DatabaseTest extends UnitTestCase {
     function testUserFinder() {
         $result = &amp;new StubResultIterator();
         $result-&gt;setReturnValue('next', false);
-        $result-&gt;setReturnValueAt(0, 'next', array(1, 'tom'));
-        $result-&gt;setReturnValueAt(1, 'next', array(3, 'dick'));
-        $result-&gt;setReturnValueAt(2, 'next', array(6, 'harry'));
+        $result-&gt;returnsByValueAt(0, 'next', array(1, 'tom'));
+        $result-&gt;returnsByValueAt(1, 'next', array(3, 'dick'));
+        $result-&gt;returnsByValueAt(2, 'next', array(6, 'harry'));
         
         $connection = &amp;new StubDatabaseConnection();
         $connection-&gt;setReturnValue('query', false);
