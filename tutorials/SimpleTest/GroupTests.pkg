@@ -101,7 +101,7 @@
     require_once('simpletest/reporter.php');
 
     $test = &amp;new GroupTest('All file tests');
-    $test-&gt;addTestFile('file_test.php');
+    $test-&gt;addFile'file_test.php');
     $test-&gt;run(new HtmlReporter());
 ?&amp;gt;
 </programlisting>
@@ -127,7 +127,7 @@
                         placed in the group test and run also.
                         You will need to add a <span class="new_code">SimpleTestOptions::ignore()</span>
                         directive for these classes or make sure that they are included
-                        before the <span class="new_code">GroupTest::addTestFile()</span>
+                        before the <span class="new_code">GroupTest::addFile)</span>
                         line.
                     </li>
                 </ol>
@@ -151,7 +151,7 @@
     class FileGroupTest extends GroupTest {
         function FileGroupTest() {
             $this-&gt;GroupTest('All file tests');
-            $this-&gt;addTestFile('file_test.php');
+            $this-&gt;addFile'file_test.php');
         }
     }
 ?&gt;
@@ -188,7 +188,7 @@
     class FileGroupTest extends GroupTest {
         function FileGroupTest() {
             $this-&gt;GroupTest('All file tests');
-            $test-&gt;addTestFile('file_test.php');
+            $test-&gt;addFile'file_test.php');
         }
     }
     
@@ -217,14 +217,14 @@
 ?&gt;
 </programlisting>
                 As with the normal test cases, a <span class="new_code">GroupTest</span> can
-                be loaded with the <span class="new_code">GroupTest::addTestFile()</span> method.
+                be loaded with the <span class="new_code">GroupTest::addFile)</span> method.
 <programlisting role="php">
 &lt;?php
     define('RUNNER', true);
 
     $test = &amp;new BigGroupTest('Big group');
-    $test-&gt;addTestFile('file_group_test.php');
-    $test-&gt;addTestFile(...);
+    $test-&gt;addFile'file_group_test.php');
+    $test-&gt;addFile...);
     $test-&gt;run(new HtmlReporter());
 ?&gt;
 </programlisting>
@@ -265,7 +265,7 @@ class ConfigFileTest extends TestCase {
     require_once('simpletest/adapters/phpunit_test_case.php');
 
     $test = &amp;new GroupTest('All file tests');
-    $test-&gt;addTestFile('config_test.php');
+    $test-&gt;addFile'config_test.php');
     $test-&gt;run(new HtmlReporter());
 ?&gt;
 </programlisting>
@@ -279,7 +279,7 @@ class ConfigFileTest extends TestCase {
     require_once('simpletest/adapters/pear_test_case.php');
 
     $test = &amp;new GroupTest('All file tests');
-    $test-&gt;addTestFile('some_pear_test_cases.php');
+    $test-&gt;addFile'some_pear_test_cases.php');
     $test-&gt;run(new HtmlReporter());
 ?&gt;
 </programlisting>

@@ -223,7 +223,7 @@ class Clock {<strong>
                 depuis chaque fichier inclus.
                 C'est possible de les enlever mais avec les précautions suivantes.
                 La classe <code>GroupTest</code> inclue une méthode bien pratique
-                appelée <code>addTestFile()</code> qui prend un fichier PHP comme paramètre.
+                appelée <code>addFile)</code> qui prend un fichier PHP comme paramètre.
                 Ce mécanisme prend note de toutes les classes :
                 elle inclut le fichier et ensuite regarde toutes les classes
                 nouvellement créées. S'il y a des filles de <code>SimpleTestCase</code>

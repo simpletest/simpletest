@@ -51,7 +51,7 @@ class TestOfLastcraft extends WebTestCase {
     require_once('simpletest/reporter.php');
     
     $test = &amp;new GroupTest('Web site tests');
-    $test-&gt;addTestFile('lastcraft_test.php');
+    $test-&gt;addFile'lastcraft_test.php');
     exit ($test-&gt;run(new TextReporter()) ? 0 : 1);
 ?&gt;
 </programlisting>

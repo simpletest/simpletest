@@ -298,7 +298,7 @@ class MyDisplay extends SimpleReporter {
     require_once('simpletest/reporter.php');
 
     $test = &amp;new GroupTest('File test');
-    $test-&gt;addTestFile('tests/file_test.php');
+    $test-&gt;addFile'tests/file_test.php');
     $test-&gt;run(new TextReporter());
 ?&gt;
 </programlisting>
@@ -340,7 +340,7 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
     require_once('simpletest/reporter.php');
 
     $test = &amp;new GroupTest('File test');
-    $test-&gt;addTestFile('tests/file_test.php');
+    $test-&gt;addFile'tests/file_test.php');
     exit ($test-&gt;run(new TextReporter()) ? 0 : 1);
 ?&gt;
 </programlisting>
@@ -354,7 +354,7 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
     require_once('simpletest/reporter.php');
 
     $test = &amp;new GroupTest('File test');
-    $test-&gt;addTestFile('tests/file_test.php');
+    $test-&gt;addFile'tests/file_test.php');
     if (TextReporter::inCli()) {
         exit ($test-&gt;run(new TextReporter()) ? 0 : 1);
     }

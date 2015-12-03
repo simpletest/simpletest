@@ -214,7 +214,7 @@ class AllTests extends <strong>TestSuite</strong> {
                 will include the test case file and read any new classes
                 that are descended from <code>SimpleTestCase</code>.
 
-                Cette méthode <code>TestSuite::addTestFile()</code> va
+                Cette méthode <code>TestSuite::addFile)</code> va
                 inclure le fichier de scénarios de test et lire parmi
                 toutes les nouvelles classes créées celles qui sont issues
                 de <code>SimpleTestCase</code>.
