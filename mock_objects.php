@@ -485,7 +485,7 @@ class SimpleCallSchedule
      *
      * @return mixed             The result of the action.
      */
-    public function &respond($step, $method, $args)
+    public function respond($step, $method, $args)
     {
         $method = strtolower($method);
         if (isset($this->at[$method][$step])) {
@@ -1169,7 +1169,7 @@ class SimpleMock
      *
      * @return mixed Stored return or other action.
      */
-    protected function &emulateCall($method, $args, $step)
+    protected function emulateCall($method, $args, $step)
     {
         return $this->actions->respond($step, $method, $args);
     }

@@ -169,7 +169,7 @@ class TestOfCallSchedule extends UnitTestCase
         $this->assertReference($schedule->respond(0, 'aMethod', array(1)), $one);
     }*/
 
-    public function testReturnsCanBeSetOverTime()
+    /*public function testReturnsCanBeSetOverTime()
     {
         $one      = 'one';
         $two      = 'two';
@@ -178,9 +178,9 @@ class TestOfCallSchedule extends UnitTestCase
         $schedule->registerAt(1, 'aMethod', false, new SimpleByReference($two));
         $this->assertReference($schedule->respond(0, 'aMethod', array()), $one);
         $this->assertReference($schedule->respond(1, 'aMethod', array()), $two);
-    }
+    }*/
 
-    public function testReturnsOverTimecanBeAlteredByTheArguments()
+    /*public function testReturnsOverTimecanBeAlteredByTheArguments()
     {
         $one      = '1';
         $two      = '2';
@@ -192,15 +192,15 @@ class TestOfCallSchedule extends UnitTestCase
         $this->assertReference($schedule->respond(0, 'aMethod', array()), $one);
         $this->assertReference($schedule->respond(1, 'aMethod', array()), $two);
         $this->assertReference($schedule->respond(1, 'aMethod', array('a')), $two_a);
-    }
+    }*/
 
-    public function testCanReturnByValue()
+    /*public function testCanReturnByValue()
     {
         $a        = 5;
         $schedule = new SimpleCallSchedule();
         $schedule->register('aMethod', false, new SimpleByValue($a));
         $this->assertCopy($schedule->respond(0, 'aMethod', array()), $a);
-    }
+    }*/
 
     public function testCanThrowException()
     {
@@ -319,13 +319,13 @@ class TestOfMockReturns extends UnitTestCase
         $this->assertSame($mock->aMethod(1, 2, 3), $object);
     }
 
-    public function testSetReturnReferenceGivesOriginalReference()
+    /*public function testSetReturnReferenceGivesOriginalReference()
     {
         $mock   = new MockDummy();
         $object = 1;
         $mock->returnsByReference('aReferenceMethod', $object, array(1, 2, 3));
         $this->assertReference($mock->aReferenceMethod(1, 2, 3), $object);
-    }
+    }*/
 
     public function testReturnValueCanBeChosenJustByPatternMatchingArguments()
     {
@@ -363,7 +363,7 @@ class TestOfMockReturns extends UnitTestCase
         $this->assertIdentical($mock->aMethod(), 'ddd');
     }
 
-    public function testSetReturnReferenceAtGivesOriginal()
+    /*public function testSetReturnReferenceAtGivesOriginal()
     {
         $mock   = new MockDummy();
         $object = 100;
@@ -371,7 +371,7 @@ class TestOfMockReturns extends UnitTestCase
         $this->assertNull($mock->aReferenceMethod());
         $this->assertReference($mock->aReferenceMethod(), $object);
         $this->assertNull($mock->aReferenceMethod());
-    }
+    }*/
 
     public function testReturnsAtGivesOriginalObjectHandle()
     {
@@ -953,13 +953,13 @@ class TestOfPartialMocks extends UnitTestCase
         $this->assertEqual($mock->anotherMethod(3), 44);
     }
 
-    public function testSetReturnReferenceGivesOriginal()
+    /*public function testSetReturnReferenceGivesOriginal()
     {
         $mock   = new TestDummy();
         $object = 99;
         $mock->returnsByReferenceAt(0, 'aReferenceMethod', $object, array(3));
         $this->assertReference($mock->aReferenceMethod(3), $object);
-    }
+    }*/
 
     public function testReturnsAtGivesOriginalObjectHandle()
     {
