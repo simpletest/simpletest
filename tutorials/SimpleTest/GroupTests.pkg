@@ -70,7 +70,7 @@
     require_once('file_test.php');
 
     $test = &amp;new GroupTest('All file tests');
-    $test-&gt;addTestCase(new FileTestCase());
+    $test-&gt;addTest(new FileTestCase());
     $test-&gt;run(new HtmlReporter());
 ?&gt;
 </programlisting>
@@ -174,8 +174,8 @@
     require_once('file_group_test.php');
     
     $test = &amp;new BigGroupTest('Big group');
-    $test-&gt;addTestCase(new FileGroupTest());
-    $test-&gt;addTestCase(...);
+    $test-&gt;addTest(new FileGroupTest());
+    $test-&gt;addTest(...);
     $test-&gt;run(new HtmlReporter());
 ?&gt;
 </programlisting>
@@ -211,8 +211,8 @@
     require_once('file_group_test.php');
 
     $test = &amp;new BigGroupTest('Big group');
-    $test-&gt;addTestCase(new FileGroupTest());
-    $test-&gt;addTestCase(...);
+    $test-&gt;addTest(new FileGroupTest());
+    $test-&gt;addTest(...);
     $test-&gt;run(new HtmlReporter());
 ?&gt;
 </programlisting>

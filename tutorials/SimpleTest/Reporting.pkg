@@ -435,7 +435,7 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
     $dry_url = ...;
     
     $test = &amp;new GroupTest('Remote tests');
-    $test-&gt;addTestCase(new RemoteTestCase($test_url, $dry_url));
+    $test-&gt;addTest(new RemoteTestCase($test_url, $dry_url));
     $test-&gt;run(new HtmlReporter());
 ?&gt;
 </programlisting>
