@@ -106,7 +106,7 @@ class MySiteTest extends WebTestCase {
         $this-&gt;assertTitle('My Home Page');
         $this-&gt;clickLink('Contact');
         $this-&gt;assertTitle('Contact me');
-        $this-&gt;assertWantedPattern('/Email me at/');
+        $this-&gt;assertPattern('/Email me at/');
     }
 }
 ?&gt;

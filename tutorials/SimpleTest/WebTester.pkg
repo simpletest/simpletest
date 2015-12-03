@@ -101,7 +101,7 @@ class TestOfLastcraft extends WebTestCase {
     
     function testHomepage() {
         $this-&gt;get('http://www.lastcraft.com/');
-        $this-&gt;assertWantedPattern('/why the last craft/i');
+        $this-&gt;assertPattern('/why the last craft/i');
     }
 }
 </programlisting>
@@ -121,7 +121,7 @@ class TestOfLastcraft extends WebTestCase {
 </row>
                     <row>
 <entry>
-<span class="new_code">assertWantedPattern($pattern)</span>
+<span class="new_code">assertPattern($pattern)</span>
 </entry>
 <entry>A Perl pattern match against the page content</entry>
 </row>

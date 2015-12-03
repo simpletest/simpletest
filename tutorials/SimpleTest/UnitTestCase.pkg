@@ -164,7 +164,7 @@ class FileTestCase extends UnitTestCase {
 </row>
                     <row>
 <entry>
-<span class="new_code">assertWantedPattern($p, $x)</span>
+<span class="new_code">assertPattern($p, $x)</span>
 </entry>
 <entry>Fail unless the regex $p matches $x</entry>
 </row>
@@ -228,7 +228,7 @@ $this-&gt;assertReference($a, $b);
 </programlisting>
                 Will fail as the variable <span class="new_code">$a</span> is a copy of <span class="new_code">$b</span>.
 <programlisting role="php">
-$this-&gt;assertWantedPattern('/hello/i', 'Hello world');
+$this-&gt;assertPattern('/hello/i', 'Hello world');
 </programlisting>
                 This will pass as using a case insensitive match the string
                 <span class="new_code">hello</span> is contained in <span class="new_code">Hello world</span>.

@@ -107,7 +107,7 @@ class TestOfLastcraft extends WebTestCase {
     
     function testHomepage() {<strong>
         $this->get('http://www.lastcraft.com/');
-        $this->assertWantedPattern('/why the last craft/i');</strong>
+        $this->assertPattern('/why the last craft/i');</strong>
     }
 }
 ]]></php>
@@ -120,7 +120,7 @@ class TestOfLastcraft extends WebTestCase {
             <p>
                 Voici une liste possible d'assertions sur le contenu...
                 <table><tbody>
-                    <tr><td><code>assertWantedPattern($pattern)</code></td><td>Vérifier une correspondance sur le contenu via une expression rationnelle Perl</td></tr>
+                    <tr><td><code>assertPattern($pattern)</code></td><td>Vérifier une correspondance sur le contenu via une expression rationnelle Perl</td></tr>
                     <tr><td><code>assertNoUnwantedPattern($pattern)</code></td><td>Une expression rationnelle Perl pour vérifier une absence</td></tr>
                     <tr><td><code>assertTitle($title)</code></td><td>Passe si le titre de la page correspond exactement</td></tr>
                     <tr><td><code>assertLink($label)</code></td><td>Passe si un lien avec ce texte est présent</td></tr>

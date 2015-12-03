@@ -201,7 +201,7 @@ class LogInTest extends WebTestCase {
         $this->setField('u', 'Me');
         $this->setField('p', 'Secret');
         $this->clickSubmit('Log in');
-        $this->assertWantedPattern('/Welcome Me/');
+        $this->assertPattern('/Welcome Me/');
         $this->assertCookie('SID', $session);</strong>
     }
 }
@@ -219,7 +219,7 @@ class LogInTest extends WebTestCase {
         $this->get('http://www.my-site.com/login.php');<strong>
         $this->setCookie('SID', 'Some other session');
         $this->get('http://www.my-site.com/restricted.php');</strong>
-        $this->assertWantedPattern('/Access denied/');
+        $this->assertPattern('/Access denied/');
     }
 }
 ]]></php>
@@ -239,11 +239,11 @@ class LogInTest extends WebTestCase {
         $this->setField('u', 'Me');
         $this->setField('p', 'Secret');
         $this->clickSubmit('Log in');
-        $this->assertWantedPattern('/Welcome Me/');<strong>
+        $this->assertPattern('/Welcome Me/');<strong>
         
         $this->restart();
         $this->get('http://www.my-site.com/restricted.php');
-        $this->assertWantedPattern('/Access denied/');</strong>
+        $this->assertPattern('/Access denied/');</strong>
     }
 }
 ]]></php>
@@ -270,12 +270,12 @@ class LogInTest extends WebTestCase {
         $this->setField('u', 'Me');
         $this->setField('p', 'Secret');
         $this->clickSubmit('Log in');
-        $this->assertWantedPattern('/Welcome Me/');
+        $this->assertPattern('/Welcome Me/');
         <strong>
         $this->ageCookies(3600);</strong>
         $this->restart();
         $this->get('http://www.my-site.com/restricted.php');
-        $this->assertWantedPattern('/Access denied/');
+        $this->assertPattern('/Access denied/');
     }
 }
 ]]></php>

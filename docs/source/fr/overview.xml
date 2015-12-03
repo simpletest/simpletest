@@ -42,7 +42,7 @@ class <strong>MySiteTest</strong> extends WebTestCase {
         $this->assertTitle('My Home Page');
         $this->clickLink('Contact');
         $this->assertTitle('Contact me');
-        $this->assertWantedPattern('/Email me at/');
+        $this->assertPattern('/Email me at/');
     }</strong>
 }
 ]]></php>
