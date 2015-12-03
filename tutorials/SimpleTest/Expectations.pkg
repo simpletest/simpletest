@@ -198,11 +198,11 @@ class TestOfNewsService extends UnitTestCase {
 Stub::generate('Authorisation');
 
 $authorisation = new StubAuthorisation();
-$authorisation-&gt;setReturnValue(
+$authorisation-&gt;returns(
         'isAllowed',
         true,
         array(new IsAExpectation('Session', 'Must be a session')));
-$authorisation-&gt;setReturnValue('isAllowed', false);
+$authorisation-&gt;returns('isAllowed', false);
 </programlisting>
                 We have set the default stub behaviour to return false when
                 <span class="new_code">isAllowed</span> is called.

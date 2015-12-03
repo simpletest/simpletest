@@ -107,7 +107,7 @@ class MyTestCase extends UnitTestCase {
                 legal.
                 As with stubs we can replace the default null return values...
 <programlisting role="php">
-$connection-&gt;setReturnValue('query', 37);
+$connection-&gt;returns('query', 37);
 </programlisting>
                 Now every time we call
                 <span class="new_code">$connection-&gt;query()</span> we get
@@ -147,7 +147,7 @@ class IteratorTest extends UnitTestCase() {
     
     function testASequence() {
         $iterator = &amp;new MockIterator($this);
-        $iterator-&gt;setReturnValue('next', false);
+        $iterator-&gt;returns('next', false);
         $iterator-&gt;returnsByValueAt(0, 'next', 'First string');
         $iterator-&gt;returnsByValueAt(1, 'next', 'Second string');
         ...
@@ -184,9 +184,9 @@ class Configuration {
                 Luckily the mocks have a filter system...
 <programlisting role="php">
 $config = &amp;new MockConfiguration($this);
-$config-&gt;setReturnValue('getValue', 'primary', array('db_host'));
-$config-&gt;setReturnValue('getValue', 'admin', array('db_user'));
-$config-&gt;setReturnValue('getValue', 'secret', array('db_password'));
+$config-&gt;returns('getValue', 'primary', array('db_host'));
+$config-&gt;returns('getValue', 'admin', array('db_user'));
+$config-&gt;returns('getValue', 'secret', array('db_password'));
 </programlisting>
                 The extra parameter is a list of arguments to attempt
                 to match.

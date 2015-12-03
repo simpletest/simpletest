@@ -63,7 +63,7 @@ $connection = new StubDatabaseConnection();
                 The return value will be <span class="new_code">null</span>,
                 but we can change that with...
 <programlisting role="php">
-$connection-&gt;setReturnValue('query', 37)
+$connection-&gt;returns('query', 37)
 </programlisting>
                 Now every time we call
                 <span class="new_code">$connection-&gt;query()</span> we get
@@ -103,7 +103,7 @@ class Iterator {
 Stub::generate('Iterator');
 
 $iterator = new StubIterator();
-$iterator-&gt;setReturnValue('next', false);
+$iterator-&gt;returns('next', false);
 $iterator-&gt;returnsByValueAt(0, 'next', 'First string');
 $iterator-&gt;returnsByValueAt(1, 'next', 'Second string');
 </programlisting>
@@ -142,9 +142,9 @@ class Configuration {
 Stub::generate('Configuration');
 
 $config = &amp;new StubConfiguration();
-$config-&gt;setReturnValue('getValue', 'primary', array('db_host'));
-$config-&gt;setReturnValue('getValue', 'admin', array('db_user'));
-$config-&gt;setReturnValue('getValue', 'secret', array('db_password'));
+$config-&gt;returns('getValue', 'primary', array('db_host'));
+$config-&gt;returns('getValue', 'admin', array('db_user'));
+$config-&gt;returns('getValue', 'secret', array('db_password'));
 </programlisting>
                 The extra parameter is a list of arguments to attempt
                 to match.
@@ -164,12 +164,12 @@ $config-&gt;getValue('db_user');
             <para>
                 You can set a default argument argument like so...
 <programlisting role="php">
-$config-&gt;setReturnValue('getValue', false, array('*'));
+$config-&gt;returns('getValue', false, array('*'));
 </programlisting>
                 This is not the same as setting the return value without
                 any argument requirements like this...
 <programlisting role="php">
-$config-&gt;setReturnValue('getValue', false);
+$config-&gt;returns('getValue', false);
 </programlisting>
                 In the first case it will accept any single argument,
                 but exactly one is required.
@@ -222,7 +222,7 @@ $vector-&gt;returnsByReference('get', $thing, array(12));
 <programlisting role="php">
 $complex = &amp;new StubComplexThing();
 $stuff = new Stuff();
-$complex-&gt;setReturnReferenceAt(3, 'get', $stuff, array('*', 1));
+$complex-&gt;returnsByReferenceAt(3, 'get', $stuff, array('*', 1));
 </programlisting>
                 This will return the <span class="new_code">$stuff</span> only on the third
                 call and only if two parameters were set the second of
@@ -249,13 +249,13 @@ class DatabaseTest extends UnitTestCase {
     
     function testUserFinder() {
         $result = &amp;new StubResultIterator();
-        $result-&gt;setReturnValue('next', false);
+        $result-&gt;returns('next', false);
         $result-&gt;returnsByValueAt(0, 'next', array(1, 'tom'));
         $result-&gt;returnsByValueAt(1, 'next', array(3, 'dick'));
         $result-&gt;returnsByValueAt(2, 'next', array(6, 'harry'));
         
         $connection = &amp;new StubDatabaseConnection();
-        $connection-&gt;setReturnValue('query', false);
+        $connection-&gt;returns('query', false);
         $connection-&gt;returnsByReference(
                 'query',
                 $result,
@@ -299,7 +299,7 @@ class Iterator {
 }
 Stub::generate('Iterator', 'PrototypeIterator', array('next', 'isError'));
 $iterator = &amp;new PrototypeIterator();
-$iterator-&gt;setReturnValue('next', 0);
+$iterator-&gt;returns('next', 0);
 
 </programlisting>
                 The <span class="new_code">next()</span> and
@@ -312,7 +312,7 @@ $iterator-&gt;setReturnValue('next', 0);
 <programlisting role="php">
 Stub::generate('Connection');
 $iterator = &amp;new StubConnection('wild');
-$iterator-&gt;setReturnValue('query', array('id' =&gt; 33), array('wild'));
+$iterator-&gt;returns('query', array('id' =&gt; 33), array('wild'));
 
 </programlisting>
                 The only reason to do this is if you genuinely wanted to test
