@@ -10,7 +10,7 @@
         <dl>
             <dt>Protocol version</dt><dd><?php print $_SERVER['SERVER_PROTOCOL']; ?></dd>
             <dt>Request method</dt><dd><?php print $_SERVER['REQUEST_METHOD']; ?></dd>
-            <dt>Accept header</dt><dd><?php print $_SERVER['HTTP_ACCEPT']; ?></dd>
+            <dt>Accept header</dt><dd><?php echo (isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : ''); ?></dd>
         </dl>
         <h1>Cookies</h1>
         <?php
