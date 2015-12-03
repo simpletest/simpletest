@@ -882,12 +882,6 @@ class SimpleMock
         $this->actions->registerAt($timing, $method, $args, new SimpleByValue($value));
     }
 
-    /** @deprecated */
-    public function setReturnValueAt($timing, $method, $value, $args = false)
-    {
-        $this->returnsByValueAt($timing, $method, $value, $args);
-    }
-
     /**
      * Sets a return for a parameter list that will be passed by reference for all calls.
      *

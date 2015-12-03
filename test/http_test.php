@@ -438,8 +438,8 @@ class TestOfHttpResponse extends UnitTestCase
     public function testBadSocketDuringResponse()
     {
         $socket = new MockSimpleSocket();
-        $socket->setReturnValueAt(0, 'read', "HTTP/1.1 200 OK\r\n");
-        $socket->setReturnValueAt(1, 'read', "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+        $socket->returnsByValueAt(0, 'read', "HTTP/1.1 200 OK\r\n");
+        $socket->returnsByValueAt(1, 'read', "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
         $socket->setReturnValue('read', '');
         $socket->setReturnValue('getSent', 'HTTP/1.1 ...');
 
@@ -452,9 +452,9 @@ class TestOfHttpResponse extends UnitTestCase
     public function testIncompleteHeader()
     {
         $socket = new MockSimpleSocket();
-        $socket->setReturnValueAt(0, 'read', "HTTP/1.1 200 OK\r\n");
-        $socket->setReturnValueAt(1, 'read', "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
-        $socket->setReturnValueAt(2, 'read', "Content-Type: text/plain\r\n");
+        $socket->returnsByValueAt(0, 'read', "HTTP/1.1 200 OK\r\n");
+        $socket->returnsByValueAt(1, 'read', "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+        $socket->returnsByValueAt(2, 'read', "Content-Type: text/plain\r\n");
         $socket->setReturnValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
@@ -465,11 +465,11 @@ class TestOfHttpResponse extends UnitTestCase
     public function testParseOfResponseHeadersWhenChunked()
     {
         $socket = new MockSimpleSocket();
-        $socket->setReturnValueAt(0, 'read', "HTTP/1.1 200 OK\r\nDate: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
-        $socket->setReturnValueAt(1, 'read', "Content-Type: text/plain\r\n");
-        $socket->setReturnValueAt(2, 'read', "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\nConne");
-        $socket->setReturnValueAt(3, 'read', "ction: close\r\n\r\nthis is a test file\n");
-        $socket->setReturnValueAt(4, 'read', "with two lines in it\n");
+        $socket->returnsByValueAt(0, 'read', "HTTP/1.1 200 OK\r\nDate: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
+        $socket->returnsByValueAt(1, 'read', "Content-Type: text/plain\r\n");
+        $socket->returnsByValueAt(2, 'read', "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\nConne");
+        $socket->returnsByValueAt(3, 'read', "ction: close\r\n\r\nthis is a test file\n");
+        $socket->returnsByValueAt(4, 'read', "with two lines in it\n");
         $socket->setReturnValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
@@ -488,11 +488,11 @@ class TestOfHttpResponse extends UnitTestCase
     public function testRedirect()
     {
         $socket = new MockSimpleSocket();
-        $socket->setReturnValueAt(0, 'read', "HTTP/1.1 301 OK\r\n");
-        $socket->setReturnValueAt(1, 'read', "Content-Type: text/plain\r\n");
-        $socket->setReturnValueAt(2, 'read', "Location: http://www.somewhere-else.com/\r\n");
-        $socket->setReturnValueAt(3, 'read', "Connection: close\r\n");
-        $socket->setReturnValueAt(4, 'read', "\r\n");
+        $socket->returnsByValueAt(0, 'read', "HTTP/1.1 301 OK\r\n");
+        $socket->returnsByValueAt(1, 'read', "Content-Type: text/plain\r\n");
+        $socket->returnsByValueAt(2, 'read', "Location: http://www.somewhere-else.com/\r\n");
+        $socket->returnsByValueAt(3, 'read', "Connection: close\r\n");
+        $socket->returnsByValueAt(4, 'read', "\r\n");
         $socket->setReturnValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
@@ -504,11 +504,11 @@ class TestOfHttpResponse extends UnitTestCase
     public function testRedirectWithPort()
     {
         $socket = new MockSimpleSocket();
-        $socket->setReturnValueAt(0, 'read', "HTTP/1.1 301 OK\r\n");
-        $socket->setReturnValueAt(1, 'read', "Content-Type: text/plain\r\n");
-        $socket->setReturnValueAt(2, 'read', "Location: http://www.somewhere-else.com:80/\r\n");
-        $socket->setReturnValueAt(3, 'read', "Connection: close\r\n");
-        $socket->setReturnValueAt(4, 'read', "\r\n");
+        $socket->returnsByValueAt(0, 'read', "HTTP/1.1 301 OK\r\n");
+        $socket->returnsByValueAt(1, 'read', "Content-Type: text/plain\r\n");
+        $socket->returnsByValueAt(2, 'read', "Location: http://www.somewhere-else.com:80/\r\n");
+        $socket->returnsByValueAt(3, 'read', "Connection: close\r\n");
+        $socket->returnsByValueAt(4, 'read', "\r\n");
         $socket->setReturnValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
