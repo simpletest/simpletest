@@ -595,7 +595,7 @@ class SimplePage
             '',
         );
         
-        $text = preg_replace($rules, $replace, $text);
+        $text = preg_replace($rules, $replace, $html);
         $text = html_entity_decode($text, ENT_QUOTES);
         $text = preg_replace('#\s+#', ' ', $text);
 
