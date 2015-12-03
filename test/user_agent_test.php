@@ -16,7 +16,7 @@ class TestOfFetchingUrlParameters extends UnitTestCase
     {
         $this->headers  = new MockSimpleHttpHeaders();
         $this->response = new MockSimpleHttpResponse();
-        $this->response->setReturnValue('isError', false);
+        $this->response->returnsByValue('isError', false);
         $this->response->returns('getHeaders', new MockSimpleHttpHeaders());
         $this->request = new MockSimpleHttpRequest();
         $this->request->returns('fetch', $this->response);
@@ -64,8 +64,8 @@ class TestOfBrowserCookies extends UnitTestCase
     private function createStandardResponse()
     {
         $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('isError', false);
-        $response->setReturnValue('getContent', 'stuff');
+        $response->returnsByValue('isError', false);
+        $response->returnsByValue('getContent', 'stuff');
         $response->returnsByReference('getHeaders', new MockSimpleHttpHeaders());
 
         return $response;
@@ -75,9 +75,9 @@ class TestOfBrowserCookies extends UnitTestCase
     {
         $headers  = new SimpleHttpHeaders($header_lines);
         $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('isError', false);
+        $response->returnsByValue('isError', false);
         $response->returnsByReference('getHeaders', $headers);
-        $response->setReturnValue('getContent', 'stuff');
+        $response->returnsByValue('getContent', 'stuff');
         $request = new MockSimpleHttpRequest();
         $request->returnsByReference('fetch', $response);
 
@@ -216,10 +216,10 @@ class TestOfHttpRedirects extends UnitTestCase
     public function createRedirect($content, $redirect)
     {
         $headers = new MockSimpleHttpHeaders();
-        $headers->setReturnValue('isRedirect', (boolean) $redirect);
-        $headers->setReturnValue('getLocation', $redirect);
+        $headers->returnsByValue('isRedirect', (boolean) $redirect);
+        $headers->returnsByValue('getLocation', $redirect);
         $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent', $content);
+        $response->returnsByValue('getContent', $content);
         $response->returnsByReference('getHeaders', $headers);
         $request = new MockSimpleHttpRequest();
         $request->returnsByReference('fetch', $response);
@@ -330,9 +330,9 @@ class TestOfBadHosts extends UnitTestCase
     private function createSimulatedBadHost()
     {
         $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('isError', true);
-        $response->setReturnValue('getError', 'Bad socket');
-        $response->setReturnValue('getContent', false);
+        $response->returnsByValue('isError', true);
+        $response->returnsByValue('getError', 'Bad socket');
+        $response->returnsByValue('getContent', false);
         $request = new MockSimpleHttpRequest();
         $request->returnsByReference('fetch', $response);
 

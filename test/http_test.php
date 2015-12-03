@@ -426,7 +426,7 @@ class TestOfHttpResponse extends UnitTestCase
     public function testBadRequest()
     {
         $socket = new MockSimpleSocket();
-        $socket->setReturnValue('getSent', '');
+        $socket->returnsByValue('getSent', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
         $this->assertTrue($response->isError());
@@ -440,8 +440,8 @@ class TestOfHttpResponse extends UnitTestCase
         $socket = new MockSimpleSocket();
         $socket->returnsByValueAt(0, 'read', "HTTP/1.1 200 OK\r\n");
         $socket->returnsByValueAt(1, 'read', "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
-        $socket->setReturnValue('read', '');
-        $socket->setReturnValue('getSent', 'HTTP/1.1 ...');
+        $socket->returnsByValue('read', '');
+        $socket->returnsByValue('getSent', 'HTTP/1.1 ...');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
         $this->assertTrue($response->isError());
@@ -455,7 +455,7 @@ class TestOfHttpResponse extends UnitTestCase
         $socket->returnsByValueAt(0, 'read', "HTTP/1.1 200 OK\r\n");
         $socket->returnsByValueAt(1, 'read', "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n");
         $socket->returnsByValueAt(2, 'read', "Content-Type: text/plain\r\n");
-        $socket->setReturnValue('read', '');
+        $socket->returnsByValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
         $this->assertTrue($response->isError());
@@ -470,7 +470,7 @@ class TestOfHttpResponse extends UnitTestCase
         $socket->returnsByValueAt(2, 'read', "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\nConne");
         $socket->returnsByValueAt(3, 'read', "ction: close\r\n\r\nthis is a test file\n");
         $socket->returnsByValueAt(4, 'read', "with two lines in it\n");
-        $socket->setReturnValue('read', '');
+        $socket->returnsByValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
         $this->assertFalse($response->isError());
@@ -493,7 +493,7 @@ class TestOfHttpResponse extends UnitTestCase
         $socket->returnsByValueAt(2, 'read', "Location: http://www.somewhere-else.com/\r\n");
         $socket->returnsByValueAt(3, 'read', "Connection: close\r\n");
         $socket->returnsByValueAt(4, 'read', "\r\n");
-        $socket->setReturnValue('read', '');
+        $socket->returnsByValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
         $headers  = $response->getHeaders();
@@ -509,7 +509,7 @@ class TestOfHttpResponse extends UnitTestCase
         $socket->returnsByValueAt(2, 'read', "Location: http://www.somewhere-else.com:80/\r\n");
         $socket->returnsByValueAt(3, 'read', "Connection: close\r\n");
         $socket->returnsByValueAt(4, 'read', "\r\n");
-        $socket->setReturnValue('read', '');
+        $socket->returnsByValue('read', '');
 
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
         $headers  = $response->getHeaders();

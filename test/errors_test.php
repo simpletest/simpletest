@@ -32,7 +32,7 @@ class TestOfErrorQueue extends UnitTestCase
                 new IdenticalExpectation(new AnythingExpectation()),
                 'B',
                 'a message'));
-        $test->setReturnValue('assert', true);
+        $test->returnsByValue('assert', true);
         $test->expectNever('error');
         $queue = new SimpleErrorQueue();
         $queue->setTestCase($test);

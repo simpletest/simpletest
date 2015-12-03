@@ -29,12 +29,12 @@ class TestOfHtmlSaxParserWithDifferentCharset extends UnitTestCase
     public function &createParser()
     {
         $parser = &new MockSimpleHtmlSaxParser();
-        $parser->setReturnValue('acceptStartToken', true);
-        $parser->setReturnValue('acceptEndToken', true);
-        $parser->setReturnValue('acceptAttributeToken', true);
-        $parser->setReturnValue('acceptEntityToken', true);
-        $parser->setReturnValue('acceptTextToken', true);
-        $parser->setReturnValue('ignore', true);
+        $parser->returnsByValue('acceptStartToken', true);
+        $parser->returnsByValue('acceptEndToken', true);
+        $parser->returnsByValue('acceptAttributeToken', true);
+        $parser->returnsByValue('acceptEntityToken', true);
+        $parser->returnsByValue('acceptTextToken', true);
+        $parser->returnsByValue('ignore', true);
 
         return $parser;
     }

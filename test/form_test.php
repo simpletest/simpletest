@@ -32,7 +32,7 @@ class TestOfForm extends UnitTestCase
     {
         $page = new MockSimplePage();
         $page->expectOnce('expandUrl', array(new SimpleUrl('here.php')));
-        $page->setReturnValue('expandUrl', new SimpleUrl('http://host/here.php'));
+        $page->returnsByValue('expandUrl', new SimpleUrl('http://host/here.php'));
         $tag  = new SimpleFormTag(array('method' => 'GET', 'action' => 'here.php'));
         $form = new SimpleForm($tag, $page);
         $this->assertEqual($form->getAction(), new SimpleUrl('http://host/here.php'));
@@ -60,7 +60,7 @@ class TestOfForm extends UnitTestCase
     {
         $page = new MockSimplePage();
         $page->expectOnce('expandUrl', array(new SimpleUrl('/')));
-        $page->setReturnValue('expandUrl', new SimpleUrl('http://host/'));
+        $page->returnsByValue('expandUrl', new SimpleUrl('http://host/'));
         $tag  = new SimpleFormTag(array('method' => 'GET', 'action' => '/'));
         $form = new SimpleForm($tag, $page);
         $this->assertEqual(
@@ -72,7 +72,7 @@ class TestOfForm extends UnitTestCase
     {
         $page = new MockSimplePage();
         $page->expectOnce('expandUrl', array(new SimpleUrl('here.php')));
-        $page->setReturnValue('expandUrl', new SimpleUrl('http://host/here.php'));
+        $page->returnsByValue('expandUrl', new SimpleUrl('http://host/here.php'));
         $tag  = new SimpleFormTag(array('method' => 'GET', 'action' => 'here.php'));
         $form = new SimpleForm($tag, $page);
         $form->setDefaultTarget('frame');

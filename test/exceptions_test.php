@@ -58,9 +58,9 @@ class TestOfExceptionTrap extends UnitTestCase
     public function testMatchingExceptionGivesTrue()
     {
         $expectation = new MockSimpleExpectation();
-        $expectation->setReturnValue('test', true);
+        $expectation->returnsByValue('test', true);
         $test = new MockSimpleTestCase();
-        $test->setReturnValue('assert', true);
+        $test->returnsByValue('assert', true);
         $queue = new SimpleExceptionTrap();
         $queue->expectException($expectation, 'message');
         $this->assertTrue($queue->isExpected($test, new Exception()));

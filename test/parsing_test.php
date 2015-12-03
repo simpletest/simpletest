@@ -665,8 +665,8 @@ class TestOfParsingUsingPhpParser extends TestOfParsing
     public function whenVisiting($url, $content)
     {
         $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent', $content);
-        $response->setReturnValue('getUrl', new SimpleUrl($url));
+        $response->returnsByValue('getContent', $content);
+        $response->returnsByValue('getUrl', new SimpleUrl($url));
         $builder = new SimplePhpPageBuilder();
 
         return $builder->parse($response);
@@ -697,8 +697,8 @@ class TestOfParsingUsingTidyParser extends TestOfParsing
     public function whenVisiting($url, $content)
     {
         $response = new MockSimpleHttpResponse();
-        $response->setReturnValue('getContent', $content);
-        $response->setReturnValue('getUrl', new SimpleUrl($url));
+        $response->returnsByValue('getContent', $content);
+        $response->returnsByValue('getUrl', new SimpleUrl($url));
         $builder = new SimpleTidyPageBuilder();
 
         return $builder->parse($response);

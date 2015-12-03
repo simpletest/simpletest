@@ -19,7 +19,7 @@ class TestOfEclipse extends UnitTestCase
         $expected = "{status:\"pass\",message:\"pass1 at [$testpath line 4]\",group:\"$testpath\",case:\"test1\",method:\"test_pass\"}";
         //this should work...but it doesn't so the next line and the last line are the hacks
         //$listener->expectOnce('write',array($expected));
-        $listener->setReturnValue('write', -1);
+        $listener->returnsByValue('write', -1);
 
         $pathparts = pathinfo($fullpath);
         $filename  = $pathparts['basename'];

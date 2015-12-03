@@ -186,15 +186,15 @@ class TestOfParsedPageAccess extends UnitTestCase
     public function testParse()
     {
         $page = new MockSimplePage();
-        $page->setReturnValue('getRequest', "GET here.html\r\n\r\n");
-        $page->setReturnValue('getRaw', 'Raw HTML');
-        $page->setReturnValue('getTitle', 'Here');
-        $page->setReturnValue('getFrameFocus', 'Frame');
-        $page->setReturnValue('getMimeType', 'text/html');
-        $page->setReturnValue('getResponseCode', 200);
-        $page->setReturnValue('getAuthentication', 'Basic');
-        $page->setReturnValue('getRealm', 'Somewhere');
-        $page->setReturnValue('getTransportError', 'Ouch!');
+        $page->returnsByValue('getRequest', "GET here.html\r\n\r\n");
+        $page->returnsByValue('getRaw', 'Raw HTML');
+        $page->returnsByValue('getTitle', 'Here');
+        $page->returnsByValue('getFrameFocus', 'Frame');
+        $page->returnsByValue('getMimeType', 'text/html');
+        $page->returnsByValue('getResponseCode', 200);
+        $page->returnsByValue('getAuthentication', 'Basic');
+        $page->returnsByValue('getRealm', 'Somewhere');
+        $page->returnsByValue('getTransportError', 'Ouch!');
 
         $browser = $this->loadPage($page);
         $this->assertEqual($browser->getRequest(), "GET here.html\r\n\r\n");
@@ -211,7 +211,7 @@ class TestOfParsedPageAccess extends UnitTestCase
     public function testLinkAffirmationWhenPresent()
     {
         $page = new MockSimplePage();
-        $page->setReturnValue('getUrlsByLabel', array('http://www.nowhere.com'));
+        $page->returnsByValue('getUrlsByLabel', array('http://www.nowhere.com'));
         $page->expectOnce('getUrlsByLabel', array('a link label'));
         $browser = $this->loadPage($page);
         $this->assertIdentical($browser->getLink('a link label'), 'http://www.nowhere.com');
@@ -220,8 +220,8 @@ class TestOfParsedPageAccess extends UnitTestCase
     public function testLinkAffirmationByIdWhenPresent()
     {
         $page = new MockSimplePage();
-        $page->setReturnValue('getUrlById', 'a_page.com', array(99));
-        $page->setReturnValue('getUrlById', false, array('*'));
+        $page->returnsByValue('getUrlById', 'a_page.com', array(99));
+        $page->returnsByValue('getUrlById', false, array('*'));
         $browser = $this->loadPage($page);
         $this->assertIdentical($browser->getLinkById(99), 'a_page.com');
         $this->assertFalse($browser->getLinkById(98));
@@ -231,7 +231,7 @@ class TestOfParsedPageAccess extends UnitTestCase
     {
         $page = new MockSimplePage();
         $page->expectOnce('setField', array(new SimpleByLabelOrName('key'), 'Value', false));
-        $page->setReturnValue('getField', 'Value');
+        $page->returnsByValue('getField', 'Value');
         $browser = $this->loadPage($page);
         $this->assertEqual($browser->getField('key'), 'Value');
         $browser->setField('key', 'Value');
@@ -301,9 +301,9 @@ class TestOfBrowserNavigation extends UnitTestCase
         $agent->expectCallCount('fetchResponse', 2);
 
         $page = new MockSimplePage();
-        $page->setReturnValue('getUrlsByLabel', array(new SimpleUrl('http://this.com/new.html')));
+        $page->returnsByValue('getUrlsByLabel', array(new SimpleUrl('http://this.com/new.html')));
         $page->expectOnce('getUrlsByLabel', array('New'));
-        $page->setReturnValue('getRaw', 'A page');
+        $page->returnsByValue('getRaw', 'A page');
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
@@ -330,10 +330,10 @@ class TestOfBrowserNavigation extends UnitTestCase
         $parsed_url->setTarget('missing');
 
         $page = new MockSimplePage();
-        $page->setReturnValue('getUrlsByLabel', array($parsed_url));
-        $page->setReturnValue('hasFrames', false);
+        $page->returnsByValue('getUrlsByLabel', array($parsed_url));
+        $page->returnsByValue('hasFrames', false);
         $page->expectOnce('getUrlsByLabel', array('New'));
-        $page->setReturnValue('getRaw', 'A page');
+        $page->returnsByValue('getRaw', 'A page');
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
@@ -346,8 +346,8 @@ class TestOfBrowserNavigation extends UnitTestCase
         $agent->returns('fetchResponse', new MockSimpleHttpResponse());
 
         $page = new MockSimplePage();
-        $page->setReturnValue('getUrlsByLabel', array());
-        $page->setReturnValue('getRaw', 'stuff');
+        $page->returnsByValue('getUrlsByLabel', array());
+        $page->returnsByValue('getRaw', 'stuff');
 
         $browser = $this->createBrowser($agent, $page);
         $this->assertTrue($browser->get('http://this.com/page.html'));
@@ -365,10 +365,10 @@ class TestOfBrowserNavigation extends UnitTestCase
         $agent->expectCallCount('fetchResponse', 2);
 
         $page = new MockSimplePage();
-        $page->setReturnValue(
+        $page->returnsByValue(
                 'getUrlsByLabel',
                 array(new SimpleUrl('0.html'), new SimpleUrl('1.html')));
-        $page->setReturnValue('getRaw', 'A page');
+        $page->returnsByValue('getRaw', 'A page');
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
@@ -385,9 +385,9 @@ class TestOfBrowserNavigation extends UnitTestCase
         $agent->expectCallCount('fetchResponse', 2);
 
         $page = new MockSimplePage();
-        $page->setReturnValue('getUrlById', new SimpleUrl('http://this.com/link.html'));
+        $page->returnsByValue('getUrlById', new SimpleUrl('http://this.com/link.html'));
         $page->expectOnce('getUrlById', array(2));
-        $page->setReturnValue('getRaw', 'A page');
+        $page->returnsByValue('getRaw', 'A page');
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
@@ -400,7 +400,7 @@ class TestOfBrowserNavigation extends UnitTestCase
         $agent->returns('fetchResponse', new MockSimpleHttpResponse());
 
         $page = new MockSimplePage();
-        $page->setReturnValue('getUrlById', false);
+        $page->returnsByValue('getUrlById', false);
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
@@ -417,15 +417,15 @@ class TestOfBrowserNavigation extends UnitTestCase
         $agent->expectCallCount('fetchResponse', 2);
 
         $form = new MockSimpleForm();
-        $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
-        $form->setReturnValue('getMethod', 'post');
-        $form->setReturnValue('submitButton', new SimplePostEncoding(array('a' => 'A')));
+        $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
+        $form->returnsByValue('getMethod', 'post');
+        $form->returnsByValue('submitButton', new SimplePostEncoding(array('a' => 'A')));
         $form->expectOnce('submitButton', array(new SimpleByLabel('Go'), false));
 
         $page = new MockSimplePage();
         $page->returns('getFormBySubmit', $form);
         $page->expectOnce('getFormBySubmit', array(new SimpleByLabel('Go')));
-        $page->setReturnValue('getRaw', 'stuff');
+        $page->returnsByValue('getRaw', 'stuff');
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
@@ -442,15 +442,15 @@ class TestOfBrowserNavigation extends UnitTestCase
         $agent->expectCallCount('fetchResponse', 2);
 
         $form = new MockSimpleForm();
-        $form->setReturnValue('getAction', new SimpleUrl('http://this.com/page.html'));
-        $form->setReturnValue('getMethod', 'get');
-        $form->setReturnValue('submitButton', new SimpleGetEncoding(array('a' => 'A')));
+        $form->returnsByValue('getAction', new SimpleUrl('http://this.com/page.html'));
+        $form->returnsByValue('getMethod', 'get');
+        $form->returnsByValue('submitButton', new SimpleGetEncoding(array('a' => 'A')));
 
         $page = new MockSimplePage();
         $page->returns('getFormBySubmit', $form);
         $page->expectOnce('getFormBySubmit', array(new SimpleByLabel('Submit')));
-        $page->setReturnValue('getRaw', 'stuff');
-        $page->setReturnValue('getUrl', new SimpleUrl('http://this.com/page.html'));
+        $page->returnsByValue('getRaw', 'stuff');
+        $page->returnsByValue('getUrl', new SimpleUrl('http://this.com/page.html'));
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
@@ -463,14 +463,14 @@ class TestOfBrowserNavigation extends UnitTestCase
         $agent->returns('fetchResponse', new MockSimpleHttpResponse());
 
         $form = new MockSimpleForm();
-        $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
-        $form->setReturnValue('getMethod', 'post');
-        $form->setReturnValue('submitButton', new SimplePostEncoding(array('a' => 'A')));
+        $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
+        $form->returnsByValue('getMethod', 'post');
+        $form->returnsByValue('submitButton', new SimplePostEncoding(array('a' => 'A')));
 
         $page = new MockSimplePage();
         $page->returns('getFormBySubmit', $form);
         $page->expectOnce('getFormBySubmit', array(new SimpleByName('me')));
-        $page->setReturnValue('getRaw', 'stuff');
+        $page->returnsByValue('getRaw', 'stuff');
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
@@ -483,15 +483,15 @@ class TestOfBrowserNavigation extends UnitTestCase
         $agent->returns('fetchResponse', new MockSimpleHttpResponse());
 
         $form = new MockSimpleForm();
-        $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
-        $form->setReturnValue('getMethod', 'post');
-        $form->setReturnValue('submitButton', new SimplePostEncoding(array('a' => 'A')));
+        $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
+        $form->returnsByValue('getMethod', 'post');
+        $form->returnsByValue('submitButton', new SimplePostEncoding(array('a' => 'A')));
         $form->expectOnce('submitButton', array(new SimpleById(99), false));
 
         $page = new MockSimplePage();
         $page->returns('getFormBySubmit', $form);
         $page->expectOnce('getFormBySubmit', array(new SimpleById(99)));
-        $page->setReturnValue('getRaw', 'stuff');
+        $page->returnsByValue('getRaw', 'stuff');
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
@@ -504,15 +504,15 @@ class TestOfBrowserNavigation extends UnitTestCase
         $agent->returns('fetchResponse', new MockSimpleHttpResponse());
 
         $form = new MockSimpleForm();
-        $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
-        $form->setReturnValue('getMethod', 'post');
-        $form->setReturnValue('submitImage', new SimplePostEncoding(array('a' => 'A')));
+        $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
+        $form->returnsByValue('getMethod', 'post');
+        $form->returnsByValue('submitImage', new SimplePostEncoding(array('a' => 'A')));
         $form->expectOnce('submitImage', array(new SimpleByLabel('Go!'), 10, 11, false));
 
         $page = new MockSimplePage();
         $page->returns('getFormByImage', $form);
         $page->expectOnce('getFormByImage', array(new SimpleByLabel('Go!')));
-        $page->setReturnValue('getRaw', 'stuff');
+        $page->returnsByValue('getRaw', 'stuff');
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
@@ -525,15 +525,15 @@ class TestOfBrowserNavigation extends UnitTestCase
         $agent->returns('fetchResponse', new MockSimpleHttpResponse());
 
         $form = new MockSimpleForm();
-        $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
-        $form->setReturnValue('getMethod', 'post');
-        $form->setReturnValue('submitImage', new SimplePostEncoding(array('a' => 'A')));
+        $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
+        $form->returnsByValue('getMethod', 'post');
+        $form->returnsByValue('submitImage', new SimplePostEncoding(array('a' => 'A')));
         $form->expectOnce('submitImage', array(new SimpleByName('a'), 10, 11, false));
 
         $page = new MockSimplePage();
         $page->returns('getFormByImage', $form);
         $page->expectOnce('getFormByImage', array(new SimpleByName('a')));
-        $page->setReturnValue('getRaw', 'stuff');
+        $page->returnsByValue('getRaw', 'stuff');
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
@@ -546,15 +546,15 @@ class TestOfBrowserNavigation extends UnitTestCase
         $agent->returns('fetchResponse', new MockSimpleHttpResponse());
 
         $form = new MockSimpleForm();
-        $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
-        $form->setReturnValue('getMethod', 'post');
-        $form->setReturnValue('submitImage', new SimplePostEncoding(array('a' => 'A')));
+        $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
+        $form->returnsByValue('getMethod', 'post');
+        $form->returnsByValue('submitImage', new SimplePostEncoding(array('a' => 'A')));
         $form->expectOnce('submitImage', array(new SimpleById(99), 10, 11, false));
 
         $page = new MockSimplePage();
         $page->returns('getFormByImage', $form);
         $page->expectOnce('getFormByImage', array(new SimpleById(99)));
-        $page->setReturnValue('getRaw', 'stuff');
+        $page->returnsByValue('getRaw', 'stuff');
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
@@ -571,14 +571,14 @@ class TestOfBrowserNavigation extends UnitTestCase
         $agent->expectCallCount('fetchResponse', 2);
 
         $form = new MockSimpleForm();
-        $form->setReturnValue('getAction', new SimpleUrl('http://this.com/handler.html'));
-        $form->setReturnValue('getMethod', 'post');
-        $form->setReturnValue('submit', new SimplePostEncoding(array('a' => 'A')));
+        $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
+        $form->returnsByValue('getMethod', 'post');
+        $form->returnsByValue('submit', new SimplePostEncoding(array('a' => 'A')));
 
         $page = new MockSimplePage();
         $page->returns('getFormById', $form);
         $page->expectOnce('getFormById', array(33));
-        $page->setReturnValue('getRaw', 'stuff');
+        $page->returnsByValue('getRaw', 'stuff');
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
@@ -603,8 +603,8 @@ class TestOfBrowserFrames extends UnitTestCase
         foreach ($pages as $url => $raw) {
             $url      = new SimpleUrl($url);
             $response = new MockSimpleHttpResponse();
-            $response->setReturnValue('getUrl', $url);
-            $response->setReturnValue('getContent', $raw);
+            $response->returnsByValue('getUrl', $url);
+            $response->returnsByValue('getContent', $raw);
             $agent->returns('fetchResponse', $response, array($url, '*'));
         }
 

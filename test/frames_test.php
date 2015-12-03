@@ -12,7 +12,7 @@ class TestOfFrameset extends UnitTestCase
     public function testTitleReadFromFramesetPage()
     {
         $page = new MockSimplePage();
-        $page->setReturnValue('getTitle', 'This page');
+        $page->returnsByValue('getTitle', 'This page');
         $frameset = new SimpleFrameset($page);
         $this->assertEqual($frameset->getTitle(), 'This page');
     }
@@ -20,12 +20,12 @@ class TestOfFrameset extends UnitTestCase
     public function testHeadersReadFromFramesetByDefault()
     {
         $page = new MockSimplePage();
-        $page->setReturnValue('getHeaders', 'Header: content');
-        $page->setReturnValue('getMimeType', 'text/xml');
-        $page->setReturnValue('getResponseCode', 401);
-        $page->setReturnValue('getTransportError', 'Could not parse headers');
-        $page->setReturnValue('getAuthentication', 'Basic');
-        $page->setReturnValue('getRealm', 'Safe place');
+        $page->returnsByValue('getHeaders', 'Header: content');
+        $page->returnsByValue('getMimeType', 'text/xml');
+        $page->returnsByValue('getResponseCode', 401);
+        $page->returnsByValue('getTransportError', 'Could not parse headers');
+        $page->returnsByValue('getAuthentication', 'Basic');
+        $page->returnsByValue('getRealm', 'Safe place');
 
         $frameset = new SimpleFrameset($page);
 
@@ -40,7 +40,7 @@ class TestOfFrameset extends UnitTestCase
     public function testEmptyFramesetHasNoContent()
     {
         $page = new MockSimplePage();
-        $page->setReturnValue('getRaw', 'This content');
+        $page->returnsByValue('getRaw', 'This content');
         $frameset = new SimpleFrameset($page);
         $this->assertEqual($frameset->getRaw(), '');
     }
@@ -51,7 +51,7 @@ class TestOfFrameset extends UnitTestCase
         $page->expectNever('getRaw');
 
         $frame = new MockSimplePage();
-        $frame->setReturnValue('getRaw', 'Stuff');
+        $frame->returnsByValue('getRaw', 'Stuff');
 
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame($frame);
@@ -64,10 +64,10 @@ class TestOfFrameset extends UnitTestCase
         $page->expectNever('getRaw');
 
         $frame1 = new MockSimplePage();
-        $frame1->setReturnValue('getRaw', 'Stuff1');
+        $frame1->returnsByValue('getRaw', 'Stuff1');
 
         $frame2 = new MockSimplePage();
-        $frame2->setReturnValue('getRaw', 'Stuff2');
+        $frame2->returnsByValue('getRaw', 'Stuff2');
 
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame($frame1);
@@ -81,7 +81,7 @@ class TestOfFrameset extends UnitTestCase
         $page->expectNever('getText');
 
         $frame = new MockSimplePage();
-        $frame->setReturnValue('getText', 'Stuff');
+        $frame->returnsByValue('getText', 'Stuff');
 
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame($frame);
@@ -94,10 +94,10 @@ class TestOfFrameset extends UnitTestCase
         $page->expectNever('getText');
 
         $frame1 = new MockSimplePage();
-        $frame1->setReturnValue('getText', 'Stuff1');
+        $frame1->returnsByValue('getText', 'Stuff1');
 
         $frame2 = new MockSimplePage();
-        $frame2->setReturnValue('getText', 'Stuff2');
+        $frame2->returnsByValue('getText', 'Stuff2');
 
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame($frame1);
@@ -108,11 +108,11 @@ class TestOfFrameset extends UnitTestCase
     public function testFieldFoundIsFirstInFramelist()
     {
         $frame1 = new MockSimplePage();
-        $frame1->setReturnValue('getField', null);
+        $frame1->returnsByValue('getField', null);
         $frame1->expectOnce('getField', array(new SimpleByName('a')));
 
         $frame2 = new MockSimplePage();
-        $frame2->setReturnValue('getField', 'A');
+        $frame2->returnsByValue('getField', 'A');
         $frame2->expectOnce('getField', array(new SimpleByName('a')));
 
         $frame3 = new MockSimplePage();
@@ -132,10 +132,10 @@ class TestOfFrameset extends UnitTestCase
         $page->expectNever('getRaw');
 
         $frame1 = new MockSimplePage();
-        $frame1->setReturnValue('getRaw', 'Stuff1');
+        $frame1->returnsByValue('getRaw', 'Stuff1');
 
         $frame2 = new MockSimplePage();
-        $frame2->setReturnValue('getRaw', 'Stuff2');
+        $frame2->returnsByValue('getRaw', 'Stuff2');
 
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame($frame1);
@@ -149,10 +149,10 @@ class TestOfFrameset extends UnitTestCase
         $page->expectNever('getRaw');
 
         $frame1 = new MockSimplePage();
-        $frame1->setReturnValue('getRaw', 'Stuff1');
+        $frame1->returnsByValue('getRaw', 'Stuff1');
 
         $frame2 = new MockSimplePage();
-        $frame2->setReturnValue('getRaw', 'Stuff2');
+        $frame2->returnsByValue('getRaw', 'Stuff2');
 
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame($frame1, 'a');
@@ -177,8 +177,8 @@ class TestOfFrameNavigation extends UnitTestCase
         $page->expectNever('getRaw');
 
         $frame = new MockSimplePage();
-        $frame->setReturnValue('getFrameFocus', array());
-        $frame->setReturnValue('getRaw', 'Stuff');
+        $frame->returnsByValue('getFrameFocus', array());
+        $frame->returnsByValue('getRaw', 'Stuff');
 
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame($frame);
@@ -195,12 +195,12 @@ class TestOfFrameNavigation extends UnitTestCase
         $page = new MockSimplePage();
 
         $frame1 = new MockSimplePage();
-        $frame1->setReturnValue('getRaw', 'Stuff1');
-        $frame1->setReturnValue('getFrameFocus', array());
+        $frame1->returnsByValue('getRaw', 'Stuff1');
+        $frame1->returnsByValue('getFrameFocus', array());
 
         $frame2 = new MockSimplePage();
-        $frame2->setReturnValue('getRaw', 'Stuff2');
-        $frame2->setReturnValue('getFrameFocus', array());
+        $frame2->returnsByValue('getRaw', 'Stuff2');
+        $frame2->returnsByValue('getFrameFocus', array());
 
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame($frame1);
@@ -226,12 +226,12 @@ class TestOfFrameNavigation extends UnitTestCase
         $page = new MockSimplePage();
 
         $frame1 = new MockSimplePage();
-        $frame1->setReturnValue('getRaw', 'Stuff1');
-        $frame1->setReturnValue('getFrameFocus', array());
+        $frame1->returnsByValue('getRaw', 'Stuff1');
+        $frame1->returnsByValue('getFrameFocus', array());
 
         $frame2 = new MockSimplePage();
-        $frame2->setReturnValue('getRaw', 'Stuff2');
-        $frame2->setReturnValue('getFrameFocus', array());
+        $frame2->returnsByValue('getRaw', 'Stuff2');
+        $frame2->returnsByValue('getFrameFocus', array());
 
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame($frame1, 'A');
@@ -328,17 +328,17 @@ class TestOfFramesetPageInterface extends UnitTestCase
     public function testHeadersReadFromFrameIfInFocus()
     {
         $frame = new MockSimplePage();
-        $frame->setReturnValue('getUrl', new SimpleUrl('http://localhost/stuff'));
+        $frame->returnsByValue('getUrl', new SimpleUrl('http://localhost/stuff'));
 
-        $frame->setReturnValue('getRequest', 'POST stuff');
-        $frame->setReturnValue('getMethod', 'POST');
-        $frame->setReturnValue('getRequestData', array('a' => 'A'));
-        $frame->setReturnValue('getHeaders', 'Header: content');
-        $frame->setReturnValue('getMimeType', 'text/xml');
-        $frame->setReturnValue('getResponseCode', 401);
-        $frame->setReturnValue('getTransportError', 'Could not parse headers');
-        $frame->setReturnValue('getAuthentication', 'Basic');
-        $frame->setReturnValue('getRealm', 'Safe place');
+        $frame->returnsByValue('getRequest', 'POST stuff');
+        $frame->returnsByValue('getMethod', 'POST');
+        $frame->returnsByValue('getRequestData', array('a' => 'A'));
+        $frame->returnsByValue('getHeaders', 'Header: content');
+        $frame->returnsByValue('getMimeType', 'text/xml');
+        $frame->returnsByValue('getResponseCode', 401);
+        $frame->returnsByValue('getTransportError', 'Could not parse headers');
+        $frame->returnsByValue('getAuthentication', 'Basic');
+        $frame->returnsByValue('getRealm', 'Safe place');
 
         $frameset = new SimpleFrameset(new MockSimplePage());
         $frameset->addFrame($frame);
@@ -365,12 +365,12 @@ class TestOfFramesetPageInterface extends UnitTestCase
         $page->expectNever('getUrls');
 
         $frame1 = new MockSimplePage();
-        $frame1->setReturnValue(
+        $frame1->returnsByValue(
                 'getUrls',
                 array('http://www.lastcraft.com/', 'http://myserver/'));
 
         $frame2 = new MockSimplePage();
-        $frame2->setReturnValue(
+        $frame2->returnsByValue(
                 'getUrls',
                 array('http://www.lastcraft.com/', 'http://test/'));
 
@@ -385,13 +385,13 @@ class TestOfFramesetPageInterface extends UnitTestCase
     public function testLabelledUrlsComeFromBothFrames()
     {
         $frame1 = new MockSimplePage();
-        $frame1->setReturnValue(
+        $frame1->returnsByValue(
                 'getUrlsByLabel',
                 array(new SimpleUrl('goodbye.php')),
                 array('a'));
 
         $frame2 = new MockSimplePage();
-        $frame2->setReturnValue(
+        $frame2->returnsByValue(
                 'getUrlsByLabel',
                 array(new SimpleUrl('hello.php')),
                 array('a'));
@@ -412,12 +412,12 @@ class TestOfFramesetPageInterface extends UnitTestCase
     public function testUrlByIdComesFromFirstFrameToRespond()
     {
         $frame1 = new MockSimplePage();
-        $frame1->setReturnValue('getUrlById', new SimpleUrl('four.php'), array(4));
-        $frame1->setReturnValue('getUrlById', false, array(5));
+        $frame1->returnsByValue('getUrlById', new SimpleUrl('four.php'), array(4));
+        $frame1->returnsByValue('getUrlById', false, array(5));
 
         $frame2 = new MockSimplePage();
-        $frame2->setReturnValue('getUrlById', false, array(4));
-        $frame2->setReturnValue('getUrlById', new SimpleUrl('five.php'), array(5));
+        $frame2->returnsByValue('getUrlById', false, array(4));
+        $frame2->returnsByValue('getUrlById', new SimpleUrl('five.php'), array(5));
 
         $frameset = new SimpleFrameset(new MockSimplePage());
         $frameset->addFrame($frame1);
@@ -434,9 +434,9 @@ class TestOfFramesetPageInterface extends UnitTestCase
     public function testReadUrlsFromFrameInFocus()
     {
         $frame1 = new MockSimplePage();
-        $frame1->setReturnValue('getUrls', array('a'));
-        $frame1->setReturnValue('getUrlsByLabel', array(new SimpleUrl('l')));
-        $frame1->setReturnValue('getUrlById', new SimpleUrl('i'));
+        $frame1->returnsByValue('getUrls', array('a'));
+        $frame1->returnsByValue('getUrlsByLabel', array(new SimpleUrl('l')));
+        $frame1->returnsByValue('getUrlById', new SimpleUrl('i'));
 
         $frame2 = new MockSimplePage();
         $frame2->expectNever('getUrls');
@@ -463,11 +463,11 @@ class TestOfFramesetPageInterface extends UnitTestCase
 
         $by_label = new SimpleUrl('l');
         $by_label->setTarget('L');
-        $frame->setReturnValue('getUrlsByLabel', array($by_label));
+        $frame->returnsByValue('getUrlsByLabel', array($by_label));
 
         $by_id = new SimpleUrl('i');
         $by_id->setTarget('I');
-        $frame->setReturnValue('getUrlById', $by_id);
+        $frame->returnsByValue('getUrlById', $by_id);
 
         $frameset = new SimpleFrameset(new MockSimplePage());
         $frameset->addFrame($frame, 'A');
@@ -569,7 +569,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
     public function testOnlyGettingFieldFromFocusedFrame()
     {
         $frame1 = new MockSimplePage();
-        $frame1->setReturnValue('getField', 'f', array(new SimpleByName('a')));
+        $frame1->returnsByValue('getField', 'f', array(new SimpleByName('a')));
 
         $frame2 = new MockSimplePage();
         $frame2->expectNever('getField');

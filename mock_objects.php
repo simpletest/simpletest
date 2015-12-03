@@ -860,12 +860,6 @@ class SimpleMock
         $this->actions->register($method, $args, new SimpleByValue($value));
     }
 
-    /** @deprecated */
-    public function setReturnValue($method, $value, $args = false)
-    {
-        $this->returnsByValue($method, $value, $args);
-    }
-
     /**
      * Sets a return for a parameter list that
      * will be passed by value only when the required call count is reached.
