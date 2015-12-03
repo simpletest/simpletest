@@ -32,7 +32,7 @@
         ?>
         <h1>Raw POST data</h1>
         <?php
-            print '[' . $HTTP_RAW_POST_DATA . ']';
+            print '[' . file_get_contents( 'php://input' ) . ']';
         ?>
         <pre><?php print_r(PageRequest::post()); ?></pre>
         <h1>POST data</h1>

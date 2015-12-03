@@ -64,8 +64,7 @@ class PageRequest
 
     public static function post()
     {
-        global $HTTP_RAW_POST_DATA;
-        $request = new self($HTTP_RAW_POST_DATA);
+        $request = new self(file_get_contents('php://input'));
 
         return $request->getAll();
     }

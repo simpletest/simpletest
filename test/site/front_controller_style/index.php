@@ -1,6 +1,4 @@
 <?php
-    global $HTTP_RAW_POST_DATA;
-
     require_once '../page_request.php';
 ?><html>
     <head><title>Simple test front controller</title></head>

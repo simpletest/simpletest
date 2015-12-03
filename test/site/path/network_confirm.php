@@ -1,6 +1,4 @@
 <?php
-    global $HTTP_RAW_POST_DATA;
-
     require_once '../page_request.php';
 ?><html>
     <head><title>Simple test target file in folder</title></head>
@@ -40,7 +38,7 @@
         ?>
         <h1>Raw POST data</h1>
         <?php
-            print '[' . $HTTP_RAW_POST_DATA . ']';
+            print '[' . file_get_contents('php://input') . ']';
         ?>
         <pre><?php print_r(PageRequest::post()); ?></pre>
         <h1>POST data</h1>
