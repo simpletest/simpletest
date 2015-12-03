@@ -17,7 +17,7 @@ class TestOfFrameset extends UnitTestCase
         $this->assertEqual($frameset->getTitle(), 'This page');
     }
 
-    public function TestHeadersReadFromFramesetByDefault()
+    public function testHeadersReadFromFramesetByDefault()
     {
         $page = new MockSimplePage();
         $page->setReturnValue('getHeaders', 'Header: content');
