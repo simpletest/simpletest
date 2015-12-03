@@ -147,6 +147,7 @@ class TestOfSimpleSignatureMap extends UnitTestCase
 
 class TestOfCallSchedule extends UnitTestCase
 {
+    /* @todo
     public function testCanBeSetToAlwaysReturnTheSameReference()
     {
         $a        = 5;
@@ -154,8 +155,9 @@ class TestOfCallSchedule extends UnitTestCase
         $schedule->register('aMethod', false, new SimpleByReference($a));
         $this->assertReference($schedule->respond(0, 'aMethod', array()), $a);
         $this->assertReference($schedule->respond(1, 'aMethod', array()), $a);
-    }
+    }*/
 
+    /* @todo
     public function testSpecificSignaturesOverrideTheAlwaysCase()
     {
         $any      = 'any';
@@ -165,7 +167,7 @@ class TestOfCallSchedule extends UnitTestCase
         $schedule->register('aMethod', false, new SimpleByReference($any));
         $this->assertReference($schedule->respond(0, 'aMethod', array(2)), $any);
         $this->assertReference($schedule->respond(0, 'aMethod', array(1)), $one);
-    }
+    }*/
 
     public function testReturnsCanBeSetOverTime()
     {
