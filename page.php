@@ -580,10 +580,21 @@ class SimplePage
      */
     public static function normalise($html)
     {
-        $text = preg_replace('#<!--.*?-->#si', '', $html);
-        $text = preg_replace('#<(script|option|textarea)[^>]*>.*?</\1>#si', '', $text);
-        $text = preg_replace('#<img[^>]*alt\s*=\s*("([^"]*)"|\'([^\']*)\'|([a-zA-Z_]+))[^>]*>#', ' \2\3\4 ', $text);
-        $text = preg_replace('#<[^>]*>#', '', $text);
+        $rules = array(
+            '#<!--.*?-->#si',
+            '#<(script|option|textarea)[^>]*>.*?</\1>#si',
+            '#<img[^>]*alt\s*=\s*("([^"]*)"|\'([^\']*)\'|([a-zA-Z_]+))[^>]*>#',
+            '#<[^>]*>#',
+        );
+        
+        $replace = array(
+            '',
+            '',
+            ' \2\3\4 ',
+            '',
+        );
+        
+        $text = preg_replace($rules, $replace, $text);
         $text = html_entity_decode($text, ENT_QUOTES);
         $text = preg_replace('#\s+#', ' ', $text);
 
