@@ -6,7 +6,7 @@
     <body>
         <p>
             A target for the
-            <a href="http://localhost/simple_test.php">SimpleTest</a>
+            <a href="http://localhost:8080/simple_test.php">SimpleTest</a>
             test suite.
         </p>
         <ul>

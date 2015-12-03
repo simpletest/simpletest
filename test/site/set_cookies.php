@@ -11,7 +11,7 @@
     <body>
         <p>
             A target for the
-            <a href="http://localhost/simple_test.php">SimpleTest</a>
+            <a href="http://localhost:8080/simple_test.php">SimpleTest</a>
             test suite.
             All it does is set some cookies which you can see
             <a href="network_confirm.php">here</a>.

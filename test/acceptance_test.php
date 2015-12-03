@@ -10,7 +10,7 @@ class AcceptanceTest extends WebTestCase
 {
     public static function host()
     {
-        return 'http://localhost/';
+        return 'http://localhost:8080/';
     }
 }
 
@@ -369,7 +369,7 @@ class TestOfLinkFollowing extends AcceptanceTest
     public function testAbsoluteUrlBehavesAbsolutely()
     {
         $this->get($this->host() . 'link_confirm.php');
-        $this->get('http://localhost/');
+        $this->get('http://localhost:8080/');
         $this->assertText('serious testing headache');
     }
 
@@ -587,7 +587,7 @@ class TestOfLiveHeaders extends AcceptanceTest
 
     public function testConfirmingHeaderExistence()
     {
-        $this->get('http://localhost/');
+        $this->get('http://localhost:8080/');
         $this->assertHeader('content-type');
         $this->assertHeader('content-type', 'text/html; charset=UTF-8');
         $this->assertHeader('content-type', new PatternExpectation('/HTML/i'));
