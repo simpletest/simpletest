@@ -224,7 +224,7 @@ class Vector {
 <programlisting role="php">
 $thing = new Thing();
 $vector = &amp;new MockVector($this);
-$vector-&gt;setReturnReference('get', $thing, array(12));
+$vector-&gt;returnsByReference('get', $thing, array(12));
 </programlisting>
                 With this arrangement you know that every time
                 <span class="new_code">$vector-&gt;get(12)</span> is
@@ -333,7 +333,7 @@ class LoggingSessionPoolTest extends UnitTestCase {
     function testFindSessionLogging() {
         $session = &amp;new MockSession($this);
         $pool = &amp;new MockSessionPool($this);
-        $pool-&gt;setReturnReference('findSession', $session);
+        $pool-&gt;returnsByReference('findSession', $session);
         $pool-&gt;expectOnce('findSession', array('abc'));
         
         $log = &amp;new MockLog($this);

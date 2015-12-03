@@ -208,7 +208,7 @@ Stub::generate('Vector');
 
 $thing = new Thing();
 $vector = &amp;new StubVector();
-$vector-&gt;setReturnReference('get', $thing, array(12));
+$vector-&gt;returnsByReference('get', $thing, array(12));
 </programlisting>
                 With this arrangement you know that every time
                 <span class="new_code">$vector-&gt;get(12)</span> is
@@ -256,7 +256,7 @@ class DatabaseTest extends UnitTestCase {
         
         $connection = &amp;new StubDatabaseConnection();
         $connection-&gt;setReturnValue('query', false);
-        $connection-&gt;setReturnReference(
+        $connection-&gt;returnsByReference(
                 'query',
                 $result,
                 array('select id, name from users'));

@@ -164,7 +164,7 @@ class TelnetTest extends UnitTestCase {
         $socket = &amp;new MockSocket($this);
         ...
         $network = &amp;new MockNetwork($this);
-        $network-&gt;setReturnReference('createSocket', $socket);
+        $network-&gt;returnsByReference('createSocket', $socket);
         $telnet = &amp;new Telnet($network);
         $telnet-&gt;connect('127.0.0.1', 21, 'Me', 'Secret');
         ...
@@ -281,7 +281,7 @@ class TelnetTest extends UnitTestCase {
         $socket = &amp;new MockSocket($this);
         ...
         $telnet = &amp;new TelnetTestVersion($this);
-        $telnet-&gt;setReturnReference('_createSocket', $socket);
+        $telnet-&gt;returnsByReference('_createSocket', $socket);
         $telnet-&gt;Telnet();
         $telnet-&gt;connect('127.0.0.1', 21, 'Me', 'Secret');
         ...
@@ -324,7 +324,7 @@ class TelnetTest extends UnitTestCase {
         $socket = &amp;new MockSocket($this);
         ...
         $telnet = &amp;new TelnetTestVersion($this);
-        $telnet-&gt;setReturnReference('_createSocket', $socket);
+        $telnet-&gt;returnsByReference('_createSocket', $socket);
         $telnet-&gt;expectOnce('_createSocket', array('127.0.0.1', 21));
         $telnet-&gt;Telnet();
         $telnet-&gt;connect('127.0.0.1', 21, 'Me', 'Secret');

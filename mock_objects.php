@@ -1617,7 +1617,7 @@ class MockGenerator
         $code .= "    }\n";
         $code .= "    function returnsByReference(\$method, &\$ref, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked('$method');
-        $code .= "        \$this->mock->setReturnReference(\$method, \$ref, \$args);\n";
+        $code .= "        \$this->mock->returnsByReference(\$method, \$ref, \$args);\n";
         $code .= "    }\n";
         $code .= "    function returnsByReferenceAt(\$timing, \$method, &\$ref, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked('$method');
@@ -1631,9 +1631,9 @@ class MockGenerator
         $code .= $this->bailOutIfNotMocked('$method');
         $code .= "        \$this->mock->setReturnValueAt(\$timing, \$method, \$value, \$args);\n";
         $code .= "    }\n";
-        $code .= "    function setReturnReference(\$method, &\$ref, \$args = false) {\n";
+        $code .= "    function returnsByReference(\$method, &\$ref, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked('$method');
-        $code .= "        \$this->mock->setReturnReference(\$method, \$ref, \$args);\n";
+        $code .= "        \$this->mock->returnsByReference(\$method, \$ref, \$args);\n";
         $code .= "    }\n";
         $code .= "    function setReturnReferenceAt(\$timing, \$method, &\$ref, \$args = false) {\n";
         $code .= $this->bailOutIfNotMocked('$method');
