@@ -322,8 +322,8 @@ class SimplePage
      * Accessor for frame name and source URL for every frame that will need to be loaded.
      * Immediate children only.
      *
-     * @return boolean/array     False if no frameset or otherwise a hash of frame URLs. The key is
-     * either a numerical base one index or the name attribute.
+     * @return boolean/array     False if no frameset or otherwise a hash of frame URLs.
+     *                           The key is either a numerical base one index or the name attribute.
      */
     public function getFrameset()
     {
@@ -332,9 +332,10 @@ class SimplePage
         }
         $urls = array();
         for ($i = 0; $i < count($this->frames); $i++) {
-            $name                         = $this->frames[$i]->getAttribute('name');
-            $url                          = new SimpleUrl($this->frames[$i]->getAttribute('src'));
-            $urls[$name ? $name : $i + 1] = $this->expandUrl($url);
+            $name       = $this->frames[$i]->getAttribute('name');
+            $url        = new SimpleUrl($this->frames[$i]->getAttribute('src'));
+            $key        = $name ? $name : $i + 1;
+            $urls[$key] = $this->expandUrl($url);
         }
 
         return $urls;
@@ -369,8 +370,8 @@ class SimplePage
     }
 
     /**
-     * Accessor for URLs by the link label. Label will match regardess of whitespace issues and
-     * case.
+     * Accessor for URLs by the link label.
+     * Label will match regardess of whitespace issues and case.
      *
      * @param string $label    Text of link.
      *
