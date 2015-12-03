@@ -911,12 +911,6 @@ class SimpleMock
         $this->actions->registerAt($timing, $method, $args, new SimpleByReference($reference));
     }
 
-    /** @deprecated */
-    public function setReturnReferenceAt($timing, $method, &$reference, $args = false)
-    {
-        $this->returnsByReferenceAt($timing, $method, $reference, $args);
-    }
-
     /**
      * Sets up an expected call with a set of expected parameters in that call.
      * All calls will be compared to these expectations regardless of when the call is made.
