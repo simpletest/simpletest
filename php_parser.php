@@ -1,11 +1,12 @@
 <?php
 
 // Lexer mode stack constants
-foreach (array('LEXER_ENTER', 'LEXER_MATCHED', 'LEXER_UNMATCHED',
-    'LEXER_EXIT', 'LEXER_SPECIAL') as $i => $constant) {
-    if (!defined($constant)) {
-        define($constant, $i + 1);
-    }
+if ( ! defined('LEXER_ENTER')) {
+    define('LEXER_ENTER',     1);
+    define('LEXER_MATCHED',   2);
+    define('LEXER_UNMATCHED', 3);
+    define('LEXER_EXIT',      4);
+    define('LEXER_SPECIAL',   5);
 }
 
 /**
