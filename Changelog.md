@@ -18,5 +18,5 @@
 * issue #12 - fix double constructor
 * issue #11 - fix reference expectation
 
-[Unreleased]: https://github.com/simpletest/simpletest/v1.1.7...HEAD
-[1.1.7]: https://github.com/simpletest/simpletest/v1.1.7...v1.1.6
+[Unreleased]: https://github.com/simpletest/simpletest/compare/v1.1.7...HEAD
+[1.1.7]: https://github.com/simpletest/simpletest/compare/v1.1.7...v1.1.6
