@@ -570,9 +570,8 @@ class SimpleFrameset
                 return $form;
             }
         }
-        $null = null;
 
-        return $null;
+        return;
     }
 
     /**
