@@ -1143,7 +1143,7 @@ class SimpleMock
         $this->checkExpectations($method, $args, $step);
         $was = $this->disableEStrict();
         try {
-            $result = &$this->emulateCall($method, $args, $step);
+            $result = $this->emulateCall($method, $args, $step);
         } catch (Exception $e) {
             $this->restoreEStrict($was);
             throw $e;
@@ -1457,10 +1457,10 @@ class MockGenerator
         // @todo switch from calling function mock_class to constructor calls
         //$code .= "    function __construct() {\n";
 
-        /*$code .= '    function ' . $this->mock_class . "() {\n";
+        $code .= '    function ' . $this->mock_class . "() {\n";
         $code .= '        $this->mock = new ' . $this->mock_base . "();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
-        $code .= "    }\n";*/
+        $code .= "    }\n";
         $code .= $this->createConstructorCode();
         $code .= $this->chainMockReturns();
         $code .= $this->chainMockExpectations();

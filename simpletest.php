@@ -34,7 +34,7 @@ class SimpleTest
      */
     public static function ignore($class)
     {
-        $registry                                   = SimpleTest::getRegistry();
+        $registry                                   = self::getRegistry();
         $registry['IgnoreList'][strtolower($class)] = true;
     }
 
@@ -52,11 +52,11 @@ class SimpleTest
     public static function ignoreParentsIfIgnored($classes)
     {
         foreach ($classes as $class) {
-            if (SimpleTest::isIgnored($class)) {
+            if (self::isIgnored($class)) {
                 $reflection = new SimpleReflection($class);
                 $parent     = $reflection->getParent();
                 if ($parent) {
-                    SimpleTest::ignore($parent);
+                    self::ignore($parent);
                 }
             }
         }
@@ -73,7 +73,7 @@ class SimpleTest
      */
     public static function prefer($object)
     {
-        $registry                = SimpleTest::getRegistry();
+        $registry                = self::getRegistry();
         $registry['Preferred'][] = $object;
     }
 
@@ -92,7 +92,7 @@ class SimpleTest
         if (! is_array($classes)) {
             $classes = array($classes);
         }
-        $registry = SimpleTest::getRegistry();
+        $registry = self::getRegistry();
         for ($i = count($registry['Preferred']) - 1; $i >= 0; $i--) {
             foreach ($classes as $class) {
                 if (is_a($registry['Preferred'][$i], $class)) {
@@ -115,7 +115,7 @@ class SimpleTest
      */
     public static function isIgnored($class)
     {
-        $registry = SimpleTest::getRegistry();
+        $registry = self::getRegistry();
 
         return isset($registry['IgnoreList'][strtolower($class)]);
     }
@@ -130,7 +130,7 @@ class SimpleTest
      */
     public static function useProxy($proxy, $username = false, $password = false)
     {
-        $registry                         = SimpleTest::getRegistry();
+        $registry                         = self::getRegistry();
         $registry['DefaultProxy']         = $proxy;
         $registry['DefaultProxyUsername'] = $username;
         $registry['DefaultProxyPassword'] = $password;
@@ -143,7 +143,7 @@ class SimpleTest
      */
     public static function getDefaultProxy()
     {
-        $registry = SimpleTest::getRegistry();
+        $registry = self::getRegistry();
 
         return $registry['DefaultProxy'];
     }
@@ -155,7 +155,7 @@ class SimpleTest
      */
     public static function getDefaultProxyUsername()
     {
-        $registry = SimpleTest::getRegistry();
+        $registry = self::getRegistry();
 
         return $registry['DefaultProxyUsername'];
     }
@@ -167,7 +167,7 @@ class SimpleTest
      */
     public static function getDefaultProxyPassword()
     {
-        $registry = SimpleTest::getRegistry();
+        $registry = self::getRegistry();
 
         return $registry['DefaultProxyPassword'];
     }
@@ -179,7 +179,7 @@ class SimpleTest
      */
     public static function getParsers()
     {
-        $registry = SimpleTest::getRegistry();
+        $registry = self::getRegistry();
 
         return $registry['Parsers'];
     }
@@ -191,7 +191,7 @@ class SimpleTest
      */
     public static function setParsers($parsers)
     {
-        $registry            = SimpleTest::getRegistry();
+        $registry            = self::getRegistry();
         $registry['Parsers'] = $parsers;
     }
 
@@ -200,11 +200,11 @@ class SimpleTest
      *
      * @return hash All stored values.
      */
-    protected static function &getRegistry()
+    protected static function getRegistry()
     {
         static $registry = false;
         if (! $registry) {
-            $registry = SimpleTest::getDefaults();
+            $registry = self::getDefaults();
         }
 
         return $registry;
@@ -252,7 +252,7 @@ class SimpleTest
      */
     public static function setMockBaseClass($mock_base)
     {
-        $registry                  = SimpleTest::getRegistry();
+        $registry                  = self::getRegistry();
         $registry['MockBaseClass'] = $mock_base;
     }
 
@@ -261,7 +261,7 @@ class SimpleTest
      */
     public static function getMockBaseClass()
     {
-        $registry = SimpleTest::getRegistry();
+        $registry = self::getRegistry();
 
         return $registry['MockBaseClass'];
     }
@@ -428,16 +428,12 @@ class SimpleStackTrace
     }
 
     /**
-     * Grabs a current stack trace.
+     * Returns current stack trace.
      *
-     * @return array        Fulle trace.
+     * @return array        Full trace.
      */
     protected function captureTrace()
     {
-        if (function_exists('debug_backtrace')) {
-            return array_reverse(debug_backtrace());
-        }
-
-        return array();
+        return array_reverse(debug_backtrace());
     }
 }
