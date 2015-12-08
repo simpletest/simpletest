@@ -488,9 +488,9 @@ class SimpleTestXmlParser
     {
         $this->attributes     = array();
         $this->content        = '';
-        $this->expat          = &$this->createParser();
+        $this->expat          = $this->createParser();
         $this->in_content_tag = false;
-        $this->listener       = &$listener;
+        $this->listener       = $listener;
         $this->tag_stack      = array();
     }
 
@@ -609,7 +609,7 @@ class SimpleTestXmlParser
             $nesting_tag = $this->popNestingTag();
             $nesting_tag->paintEnd($this->listener);
         } elseif ($tag === 'NAME') {
-            $nesting_tag = &$this->getCurrentNestingTag();
+            $nesting_tag = $this->getCurrentNestingTag();
             $nesting_tag->setName($this->content);
             $nesting_tag->paintStart($this->listener);
         } elseif ($tag === 'PASS') {

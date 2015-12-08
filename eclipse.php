@@ -19,7 +19,7 @@ class EclipseReporter extends SimpleScorer
      */
     public function __construct(&$listener, $cc=false)
     {
-        $this->listener = &$listener;
+        $this->listener = $listener;
         $this->SimpleScorer();
         $this->case   = '';
         $this->group  = '';
@@ -273,8 +273,10 @@ class EclipseReporter extends SimpleScorer
                 }
             }
         }
-        $this->listener->write('{status:"coverage",message:"' .
-                                self::escapeVal($cc) . '"}');
+
+        $this->listener->write(
+            '{status:"coverage",message:"' . self::escapeVal($cc) . '"}'
+        );
     }
 }
 
@@ -285,7 +287,7 @@ class EclipseInvoker extends SimpleInvokerDecorator
 {
     public function __construct(&$invoker, &$listener)
     {
-        $this->listener = &$listener;
+        $this->listener = $listener;
         $this->SimpleInvokerDecorator($invoker);
     }
 
@@ -311,8 +313,9 @@ class EclipseInvoker extends SimpleInvokerDecorator
         $output = ob_get_contents();
         ob_end_clean();
         if ($output !== '') {
-            $result = $this->listener->write('{status:"info",message:"' .
-                                              EclipseReporter::escapeVal($output) . '"}');
+            $result = $this->listener->write
+                '{status:"info",message:"' . EclipseReporter::escapeVal($output) . '"}'
+            );
         }
     }
 }

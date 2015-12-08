@@ -804,7 +804,7 @@ class SimplePhpPageBuilder
             return true;
         }
         if ($tag->isPrivateContent() && ! isset($this->private_content_tag)) {
-            $this->private_content_tag = &$tag;
+            $this->private_content_tag = $tag;
         }
         if ($tag->expectEndTag()) {
             $this->openTag($tag);

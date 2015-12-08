@@ -120,7 +120,7 @@ class TestOfAuthenticator extends UnitTestCase
     {
         $request = new MockSimpleHttpRequest();
         $request->expectNever('addHeaderLine');
-        $authenticator = &$this->createSingleRealm();
+        $authenticator = $this->createSingleRealm();
         $authenticator->addHeaders(
                 $request,
                 new SimpleUrl('http://www.here.com/hello.html'));
@@ -130,7 +130,7 @@ class TestOfAuthenticator extends UnitTestCase
     {
         $request = new MockSimpleHttpRequest();
         $request->expectOnce('addHeaderLine');
-        $authenticator = &$this->createSingleRealm();
+        $authenticator = $this->createSingleRealm();
         $authenticator->addHeaders(
                 $request,
                 new SimpleUrl('http://www.here.com/path/more/hello.html'));
@@ -140,7 +140,7 @@ class TestOfAuthenticator extends UnitTestCase
     {
         $request = new MockSimpleHttpRequest();
         $request->expectNever('addHeaderLine');
-        $authenticator = &$this->createSingleRealm();
+        $authenticator = $this->createSingleRealm();
         $authenticator->restartSession();
         $authenticator->addHeaders(
                 $request,
@@ -151,7 +151,7 @@ class TestOfAuthenticator extends UnitTestCase
     {
         $request = new MockSimpleHttpRequest();
         $request->expectNever('addHeaderLine');
-        $authenticator = &$this->createSingleRealm();
+        $authenticator = $this->createSingleRealm();
         $authenticator->addHeaders(
                 $request,
                 new SimpleUrl('http://here.com/path/hello.html'));

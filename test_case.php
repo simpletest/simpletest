@@ -224,7 +224,7 @@ class SimpleTestCase
      */
     public function tell($observer)
     {
-        $this->observers[] = &$observer;
+        $this->observers[] = $observer;
     }
 
     /**
