@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../autorun.php';
-require_once dirname(__FILE__) . '/../extensions/pear_test_case.php';
+require_once dirname(__FILE__) . '/../../../autorun.php';
+require_once dirname(__FILE__) . '/../pear_test_case.php';
 
 class SameTestClass
 {

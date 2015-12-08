@@ -5,7 +5,7 @@ require_once dirname(__FILE__) . '/../unit_tester.php';
 require_once dirname(__FILE__) . '/../shell_tester.php';
 require_once dirname(__FILE__) . '/../mock_objects.php';
 require_once dirname(__FILE__) . '/../web_tester.php';
-require_once dirname(__FILE__) . '/../extensions/pear_test_case.php';
+require_once dirname(__FILE__) . '/../extensions/pear/tests/adapter_test.php';
 
 class UnitTests extends TestSuite
 {

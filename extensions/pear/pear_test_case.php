@@ -2,10 +2,10 @@
 /**
  * Adapter for SimpleTest to use PEAR PHPUnit test cases
  */
-require_once dirname(__FILE__) . '/../dumper.php';
-require_once dirname(__FILE__) . '/../compatibility.php';
-require_once dirname(__FILE__) . '/../test_case.php';
-require_once dirname(__FILE__) . '/../expectation.php';
+require_once dirname(__FILE__) . '/../../dumper.php';
+require_once dirname(__FILE__) . '/../../compatibility.php';
+require_once dirname(__FILE__) . '/../../test_case.php';
+require_once dirname(__FILE__) . '/../../expectation.php';
 
 /**
  * Adapter for PEAR PHPUnit test case to allow
