@@ -174,12 +174,12 @@ class SimpleSocket extends SimpleStickyError
     private $handle;
     private $is_open = false;
     private $sent    = '';
-    private $lock_size;
+    private $block_size;
 
     /**
      * Opens a socket for reading and writing.
      *
-     * @param string $host          Hostname to send request to.
+     * @param string $host      Hostname to send request to.
      * @param int $port         Port on remote machine to open.
      * @param int $timeout      Connection timeout in seconds.
      * @param int $block_size   Size of chunk to read.
