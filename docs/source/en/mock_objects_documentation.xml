@@ -107,17 +107,17 @@ class MockDatabaseConnection extends DatabaseConnection {
     ...
     function DatabaseConnection() {
         $args = func_get_args();
-        $result = &$this->mock->invoke("DatabaseConnection", $args);
+        $result = $this->mock->invoke("DatabaseConnection", $args);
         return $result;
     }
     function query($sql) {
         $args = func_get_args();
-        $result = &$this->mock->invoke("query", $args);
+        $result = $this->mock->invoke("query", $args);
         return $result;
     }
     function selectQuery($sql) {
         $args = func_get_args();
-        $result = &$this->mock->invoke("selectQuery", $args);
+        $result = $this->mock->invoke("selectQuery", $args);
         return $result;
     }
 }

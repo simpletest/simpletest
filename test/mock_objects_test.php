@@ -147,7 +147,7 @@ class TestOfSimpleSignatureMap extends UnitTestCase
 
 class TestOfCallSchedule extends UnitTestCase
 {
-    /* @todo
+
     public function testCanBeSetToAlwaysReturnTheSameReference()
     {
         $a        = 5;
@@ -155,9 +155,8 @@ class TestOfCallSchedule extends UnitTestCase
         $schedule->register('aMethod', false, new SimpleByReference($a));
         $this->assertReference($schedule->respond(0, 'aMethod', array()), $a);
         $this->assertReference($schedule->respond(1, 'aMethod', array()), $a);
-    }*/
+    }
 
-    /* @todo
     public function testSpecificSignaturesOverrideTheAlwaysCase()
     {
         $any      = 'any';
@@ -167,9 +166,9 @@ class TestOfCallSchedule extends UnitTestCase
         $schedule->register('aMethod', false, new SimpleByReference($any));
         $this->assertReference($schedule->respond(0, 'aMethod', array(2)), $any);
         $this->assertReference($schedule->respond(0, 'aMethod', array(1)), $one);
-    }*/
+    }
 
-    /*public function testReturnsCanBeSetOverTime()
+    public function testReturnsCanBeSetOverTime()
     {
         $one      = 'one';
         $two      = 'two';
@@ -178,9 +177,9 @@ class TestOfCallSchedule extends UnitTestCase
         $schedule->registerAt(1, 'aMethod', false, new SimpleByReference($two));
         $this->assertReference($schedule->respond(0, 'aMethod', array()), $one);
         $this->assertReference($schedule->respond(1, 'aMethod', array()), $two);
-    }*/
+    }
 
-    /*public function testReturnsOverTimecanBeAlteredByTheArguments()
+    public function testReturnsOverTimecanBeAlteredByTheArguments()
     {
         $one      = '1';
         $two      = '2';
@@ -192,15 +191,15 @@ class TestOfCallSchedule extends UnitTestCase
         $this->assertReference($schedule->respond(0, 'aMethod', array()), $one);
         $this->assertReference($schedule->respond(1, 'aMethod', array()), $two);
         $this->assertReference($schedule->respond(1, 'aMethod', array('a')), $two_a);
-    }*/
+    }
 
-    /*public function testCanReturnByValue()
+    public function testCanReturnByValue()
     {
         $a        = 5;
         $schedule = new SimpleCallSchedule();
         $schedule->register('aMethod', false, new SimpleByValue($a));
         $this->assertCopy($schedule->respond(0, 'aMethod', array()), $a);
-    }*/
+    }
 
     public function testCanThrowException()
     {
@@ -953,13 +952,13 @@ class TestOfPartialMocks extends UnitTestCase
         $this->assertEqual($mock->anotherMethod(3), 44);
     }
 
-    /*public function testSetReturnReferenceGivesOriginal()
+    public function testSetReturnReferenceGivesOriginal()
     {
         $mock   = new TestDummy();
         $object = 99;
         $mock->returnsByReferenceAt(0, 'aReferenceMethod', $object, array(3));
         $this->assertReference($mock->aReferenceMethod(3), $object);
-    }*/
+    }
 
     public function testReturnsAtGivesOriginalObjectHandle()
     {
@@ -997,15 +996,6 @@ class ConstructorSuperClass
 class ConstructorSubClass extends ConstructorSuperClass
 {
 }
-
-/*class TestOfPHP4StyleSuperClassConstruct extends UnitTestCase {
-    function testBasicConstruct() {
-        Mock::generate('ConstructorSubClass');
-        $mock = new MockConstructorSubClass();
-        $this->assertIsA($mock, 'ConstructorSubClass');
-        $this->assertTrue(method_exists($mock, 'ConstructorSuperClass'));
-    }
-}*/
 
 class TestOfPHP5StaticMethodMocking extends UnitTestCase
 {
@@ -1124,6 +1114,7 @@ class DummyWithProtected
 }
 
 Mock::generatePartial('DummyWithProtected', 'TestDummyWithProtected', array('aProtectedMethod'));
+
 class TestOfProtectedMethodPartialMocks extends UnitTestCase
 {
     public function testProtectedMethodExists()

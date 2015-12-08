@@ -345,15 +345,14 @@ class SimpleSignatureMap
      *
      * @return object              Object held in the first matching slot, otherwise null.
      */
-    public function &findFirstAction($parameters)
+    public function findFirstAction($parameters)
     {
         $slot = $this->findFirstSlot($parameters);
         if (isset($slot) && isset($slot['content'])) {
             return $slot['content'];
         }
-        $null = null;
 
-        return $null;
+        return;
     }
 
     /**
@@ -387,7 +386,7 @@ class SimpleSignatureMap
      *
      * @return array               Reference to slot or null.
      */
-    public function &findFirstSlot($parameters)
+    public function findFirstSlot($parameters)
     {
         $count = count($this->map);
         for ($i = 0; $i < $count; $i++) {
@@ -395,9 +394,8 @@ class SimpleSignatureMap
                 return $this->map[$i];
             }
         }
-        $null = null;
 
-        return $null;
+        return;
     }
 }
 
@@ -502,9 +500,8 @@ class SimpleCallSchedule
                 return $action->act();
             }
         }
-        $null = null;
 
-        return $null;
+        return;
     }
 
     /**
@@ -611,11 +608,9 @@ class SimpleByValue
      *
      * @return mixed    Whatever was stashed.
      */
-    public function &act()
+    public function act()
     {
-        $dummy = $this->value;
-
-        return $dummy;
+        return $this->value;
     }
 }
 
@@ -669,12 +664,11 @@ class SimpleErrorThrower
     /**
      * Triggers the stashed error.
      */
-    public function &act()
+    public function act()
     {
         trigger_error($this->error, $this->severity);
-        $null = null;
 
-        return $null;
+        return;
     }
 }
 
@@ -1141,7 +1135,7 @@ class SimpleMock
      *
      * @return mixed Stored return.
      */
-    public function &invoke($method, $args)
+    public function invoke($method, $args)
     {
         $method = strtolower($method);
         $step   = $this->getCallCount($method);
@@ -1463,10 +1457,10 @@ class MockGenerator
         // @todo switch from calling function mock_class to constructor calls
         //$code .= "    function __construct() {\n";
 
-        $code .= '    function ' . $this->mock_class . "() {\n";
+        /*$code .= '    function ' . $this->mock_class . "() {\n";
         $code .= '        $this->mock = new ' . $this->mock_base . "();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
-        $code .= "    }\n";
+        $code .= "    }\n";*/
         $code .= $this->createConstructorCode();
         $code .= $this->chainMockReturns();
         $code .= $this->chainMockExpectations();
@@ -1498,7 +1492,7 @@ class MockGenerator
             }
             $code .= '    ' . $this->reflection->getSignature($method) . " {\n";
             $code .= "        \$args = func_get_args();\n";
-            $code .= "        \$result = &\$this->invoke(\"$method\", \$args);\n";
+            $code .= "        \$result = \$this->invoke(\"$method\", \$args);\n";
             $code .= "        return \$result;\n";
             $code .= "    }\n";
         }
@@ -1526,7 +1520,7 @@ class MockGenerator
             }
             $code .= '    ' . $this->reflection->getSignature($method) . " {\n";
             $code .= "        \$args = func_get_args();\n";
-            $code .= "        \$result = &\$this->mock->invoke(\"$method\", \$args);\n";
+            $code .= "        \$result = \$this->mock->invoke(\"$method\", \$args);\n";
             $code .= "        return \$result;\n";
             $code .= "    }\n";
         }
@@ -1571,15 +1565,14 @@ class MockGenerator
     {
         $code  = "        if (! in_array(strtolower($alias), \$this->mocked_methods)) {\n";
         $code .= "            trigger_error(\"Method [$alias] is not mocked\");\n";
-        $code .= "            \$null = null;\n";
-        $code .= "            return \$null;\n";
+        $code .= "            return;\n";
         $code .= "        }\n";
 
         return $code;
     }
 
     /**
-     * Creates source code for late calling the constructor of the compositied mock object.
+     * Creates source code for late calling the constructor of the composited mock object.
      *
      * @return string Code for late calls.
      */
@@ -1713,7 +1706,7 @@ class MockGenerator
             }
             $code .= '    ' . $this->reflection->getSignature($method) . " {\n";
             $code .= "        \$args = func_get_args();\n";
-            $code .= "        \$result = &\$this->mock->invoke(\"$method\", \$args);\n";
+            $code .= "        \$result = \$this->mock->invoke(\"$method\", \$args);\n";
             $code .= "        return \$result;\n";
             $code .= "    }\n";
         }

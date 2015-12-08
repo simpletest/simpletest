@@ -44,7 +44,7 @@
                 Il doit remplacer exactement un composant dans un système
                 en vue d'effectuer des tests ou un prototypage,
                 tout en restant ultra-léger.
-                Il permet aux tests de s'exécuter plus rapidement, ou 
+                Il permet aux tests de s'exécuter plus rapidement, ou
                 si la classe simulée n'a pas encore été écrite,
                 de se lancer tout court.
             </p>
@@ -124,17 +124,17 @@ class MockDatabaseConnection extends DatabaseConnection {
     ...
     function DatabaseConnection() {
         $args = func_get_args();
-        $result = &$this->mock->invoke("DatabaseConnection", $args);
+        $result = $this->mock->invoke("DatabaseConnection", $args);
         return $result;
     }
     function query($sql) {
         $args = func_get_args();
-        $result = &$this->mock->invoke("query", $args);
+        $result = $this->mock->invoke("query", $args);
         return $result;
     }
     function selectQuery($sql) {
         $args = func_get_args();
-        $result = &$this->mock->invoke("selectQuery", $args);
+        $result = $this->mock->invoke("selectQuery", $args);
         return $result;
     }
 }
@@ -322,7 +322,7 @@ $config->returns('get', false);</strong>
                 Il y a des moments où vous souhaitez qu'une référence
                 bien spécifique soit servie par l'objet fantaisie plutôt
                 qu'une copie.
-                C'est plutôt rare pour dire le moins, mais vous pourriez 
+                C'est plutôt rare pour dire le moins, mais vous pourriez
                 être en train de simuler un conteneur qui détiendrait
                 des primitives, tels des chaînes de caractères.
                 Par exemple.
@@ -606,7 +606,7 @@ class Alert {
                 Portons notre attention à la méthode <code>makePayment()</code>.
 				Si nous n'inscrivons pas un numéro &quot;CVV2&quot; (celui à trois
 				chiffre au dos de la carte bleue), nous souhaitons afficher
-				une erreur plutôt que d'essayer de traiter le paiement. 
+				une erreur plutôt que d'essayer de traiter le paiement.
 				En mode test...
 <php><![CDATA[
 <?php
