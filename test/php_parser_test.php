@@ -311,7 +311,7 @@ class TestOfLexerHandlers extends UnitTestCase
 
 class TestOfSimpleHtmlLexer extends UnitTestCase
 {
-    public function &createParser()
+    public function createParser()
     {
         $parser = new MockSimpleHtmlSaxParser();
         $parser->returnsByValue('acceptStartToken', true);
