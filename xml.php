@@ -518,7 +518,7 @@ class SimpleTestXmlParser
      *
      * @return resource        Expat handle.
      */
-    protected function &createParser()
+    protected function createParser()
     {
         $expat = xml_parser_create();
         xml_set_object($expat, $this);
@@ -544,7 +544,7 @@ class SimpleTestXmlParser
      *
      * @return NestedXmlTag     The group, case or method tag being parsed.
      */
-    protected function &getCurrentNestingTag()
+    protected function getCurrentNestingTag()
     {
         return $this->tag_stack[0];
     }

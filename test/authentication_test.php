@@ -104,7 +104,7 @@ class TestOfAuthenticator extends UnitTestCase
         $authenticator->addHeaders($request, new SimpleUrl('http://here.com/'));
     }
 
-    public function &createSingleRealm()
+    public function createSingleRealm()
     {
         $authenticator = new SimpleAuthenticator();
         $authenticator->addRealm(

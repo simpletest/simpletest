@@ -25,7 +25,7 @@ class CoverageDataHandler
         $this->db->query('CREATE TABLE coverage (name text, coverage text)');
     }
 
-    public function &getFilenames()
+    public function getFilenames()
     {
         $filenames = array();
         $cursor    = $this->db->query('SELECT DISTINCT name FROM coverage');
@@ -57,7 +57,7 @@ class CoverageDataHandler
         return $coverage;
     }
 
-    public function &readFile($file)
+    public function readFile($file)
     {
         $aggregate = array();
         $sql       = "SELECT coverage FROM coverage WHERE name = '$file'";
@@ -111,7 +111,7 @@ class CoverageDataHandler
         $this->db->query($sql);
     }
 
-    public function &readUntouchedFiles()
+    public function readUntouchedFiles()
     {
         $untouched = array();
         $result    = $this->db->query('SELECT filename FROM untouched ORDER BY filename');

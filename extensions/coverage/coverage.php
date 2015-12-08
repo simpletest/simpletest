@@ -28,7 +28,7 @@ class CodeCoverage
         $this->includeUntouchedFiles($untouched);
     }
 
-    public function &getTouchedFiles()
+    public function getTouchedFiles()
     {
         $handler = new CoverageDataHandler($this->log);
         $touched = $handler->getFilenames();
