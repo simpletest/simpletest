@@ -26,8 +26,7 @@ class UnitTests extends TestSuite
         $this->addFile($path . '/mock_objects_test.php');
         $this->addFile($path . '/interfaces_test.php');
         $this->addFile($path . '/collector_test.php');
-        $this->addFile($path . '/recorder_test.php');
-        $this->addFile($path . '/adapter_test.php');
+        $this->addFile($path . '/recorder_test.php');        
         $this->addFile($path . '/socket_test.php');
         $this->addFile($path . '/encoding_test.php');
         $this->addFile($path . '/url_test.php');
@@ -45,6 +44,8 @@ class UnitTests extends TestSuite
         $this->addFile($path . '/web_tester_test.php');
         $this->addFile($path . '/shell_tester_test.php');
         $this->addFile($path . '/xml_test.php');
+
+        $this->addFile($path . '/../extensions/pear/tests/adapter_test.php');
         $this->addFile($path . '/../extensions/testdox/test.php');
     }
 }
