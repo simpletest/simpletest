@@ -45,7 +45,7 @@ class PassingUnitTestCaseOutput extends UnitTestCase
 
     public function testExpectation()
     {
-        $expectation = &new EqualExpectation(25, 'My expectation message: %s');
+        $expectation = new EqualExpectation(25, 'My expectation message: %s');
         $this->assert($expectation, 25, 'My assert message : %s');
     }
 
@@ -142,13 +142,31 @@ class PassingUnitTestCaseOutput extends UnitTestCase
         $this->assertReference($a, $b, '%s -> Pass');
     }
 
-    public function testCloneOnDifferentObjects()
+    /*public function testCloneOnDifferentObjects()
     {
-        $a = 'fred';
-        $b = $a;
-        $c = 'Hello';
-        $this->assertClone($a, $b, '%s -> Pass');
-    }
+        // test for copy object; both objects represent the same memory address
+        $object1 = new stdClass;
+        $object1->name = 'Object 1';
+        $object2 = $object1; // copy the object
+
+        $this->assertSame($object1, $object2);
+        $this->assertSame($object1->name, 'Object 1');
+        $this->assertSame($object2->name, 'Object 1');
+
+        // test for clone object; both objects are independent
+        $object3 = clone $object1;
+        // after clone they still have equal values
+        $this->assertSame($object1->name, 'Object 1');
+        $this->assertSame($object3->name, 'Object 1');
+        // modify values
+        $object1->name = 'Still Object 1';
+        $object3->name = 'Object 3';
+        // test for values
+        $this->assertSame($object1->name, 'Still Object 1');
+        $this->assertSame($object3->name, 'Object 3');
+        // finally, test difference of cloned objects
+        $this->assertClone($object1, $object2, '%s -> Pass');
+    }*/
 
     public function testPatterns()
     {
@@ -185,7 +203,7 @@ class FailingUnitTestCaseOutput extends UnitTestCase
 
     public function testExpectation()
     {
-        $expectation = &new EqualExpectation(25, 'My expectation message: %s');
+        $expectation = new EqualExpectation(25, 'My expectation message: %s');
         $this->assert($expectation, 24, 'My assert message : %s');        // Fail.
     }
 
@@ -323,7 +341,7 @@ class TestOfMockObjectsOutput extends UnitTestCase
 {
     public function testCallCounts()
     {
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expectCallCount('a', 1, 'My message: %s');
         $dummy->a();
         $dummy->a();
@@ -331,7 +349,7 @@ class TestOfMockObjectsOutput extends UnitTestCase
 
     public function testMinimumCallCounts()
     {
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expectMinimumCallCount('a', 2, 'My message: %s');
         $dummy->a();
         $dummy->a();
@@ -339,7 +357,7 @@ class TestOfMockObjectsOutput extends UnitTestCase
 
     public function testEmptyMatching()
     {
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expect('a', array());
         $dummy->a();
         $dummy->a(null);        // Fail.
@@ -347,7 +365,7 @@ class TestOfMockObjectsOutput extends UnitTestCase
 
     public function testEmptyMatchingWithCustomMessage()
     {
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expect('a', array(), 'My expectation message: %s');
         $dummy->a();
         $dummy->a(null);        // Fail.
@@ -355,7 +373,7 @@ class TestOfMockObjectsOutput extends UnitTestCase
 
     public function testNullMatching()
     {
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expect('a', array(null));
         $dummy->a(null);
         $dummy->a();        // Fail.
@@ -363,7 +381,7 @@ class TestOfMockObjectsOutput extends UnitTestCase
 
     public function testBooleanMatching()
     {
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expect('a', array(true, false));
         $dummy->a(true, false);
         $dummy->a(true, true);        // Fail.
@@ -371,7 +389,7 @@ class TestOfMockObjectsOutput extends UnitTestCase
 
     public function testIntegerMatching()
     {
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expect('a', array(32, 33));
         $dummy->a(32, 33);
         $dummy->a(32, 34);        // Fail.
@@ -379,7 +397,7 @@ class TestOfMockObjectsOutput extends UnitTestCase
 
     public function testFloatMatching()
     {
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expect('a', array(3.2, 3.3));
         $dummy->a(3.2, 3.3);
         $dummy->a(3.2, 3.4);        // Fail.
@@ -387,7 +405,7 @@ class TestOfMockObjectsOutput extends UnitTestCase
 
     public function testStringMatching()
     {
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expect('a', array('32', '33'));
         $dummy->a('32', '33');
         $dummy->a('32', '34');        // Fail.
@@ -395,7 +413,7 @@ class TestOfMockObjectsOutput extends UnitTestCase
 
     public function testEmptyMatchingWithCustomExpectationMessage()
     {
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expect(
                 'a',
                 array(new EqualExpectation('A', 'My part expectation message: %s')),
@@ -406,7 +424,7 @@ class TestOfMockObjectsOutput extends UnitTestCase
 
     public function testArrayMatching()
     {
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expect('a', array(array(32), array(33)));
         $dummy->a(array(32), array(33));
         $dummy->a(array(32), array('33'));        // Fail.
@@ -418,7 +436,7 @@ class TestOfMockObjectsOutput extends UnitTestCase
         $a->a  = 'a';
         $b     = new Dummy();
         $b->b  = 'b';
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expect('a', array($a, $b));
         $dummy->a($a, $b);
         $dummy->a($a, $a);        // Fail.
@@ -426,7 +444,7 @@ class TestOfMockObjectsOutput extends UnitTestCase
 
     public function testBigList()
     {
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expect('a', array(false, 0, 1, 1.0));
         $dummy->a(false, 0, 1, 1.0);
         $dummy->a(true, false, 2, 2.0);        // Fail.
@@ -443,7 +461,7 @@ class TestOfPastBugs extends UnitTestCase
 
     public function testMockWildcards()
     {
-        $dummy = &new MockDummy();
+        $dummy = new MockDummy();
         $dummy->expect('a', array('*', array(33)));
         $dummy->a(array(32), array(33));
         $dummy->a(array(32), array('33'));        // Fail.
@@ -484,7 +502,7 @@ class PassesAsWellReporter extends HtmlReporter
         print ' -&gt; ' . htmlentities($message) . "<br />\n";
     }
 
-    public function paintSignal($type, &$payload)
+    public function paintSignal($type, $payload)
     {
         print "<span class=\"fail\">$type</span>: ";
         $breadcrumb = $this->getTestList();
@@ -553,7 +571,7 @@ class TestThatShouldNotBeSkipped extends UnitTestCase
     }
 }
 
-$test = &new TestSuite('Visual test with 46 passes, 47 fails and 0 exceptions');
+$test = new TestSuite('Visual test with 46 passes, 47 fails and 0 exceptions');
 $test->add(new PassingUnitTestCaseOutput());
 $test->add(new FailingUnitTestCaseOutput());
 $test->add(new TestOfMockObjectsOutput());
