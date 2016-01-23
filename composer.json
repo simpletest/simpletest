@@ -46,7 +46,7 @@
         }
     ],
     "require": {
-        "php": ">=5.0.5"
+        "php": "^5.4 || ^7.0"
     },
     "replace": {
         "vierbergenlars/simpletest": "self.version",
