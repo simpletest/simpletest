@@ -9,17 +9,17 @@ require_once dirname(__FILE__) . '/scorer.php';
  */
 class HtmlReporter extends SimpleReporter
 {
-    private $character_set;
+    private $charset;
 
     /**
      * Does nothing yet.
      * The first output will be sent on the first test start.
      * For use by a web browser.
      */
-    public function __construct($character_set = 'ISO-8859-1')
+    public function __construct($charset = 'utf-8')
     {
         parent::__construct();
-        $this->character_set = $character_set;
+        $this->charset = $charset;
     }
 
     /**
@@ -32,8 +32,7 @@ class HtmlReporter extends SimpleReporter
         $this->sendNoCacheHeaders();
         print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
         print "<html>\n<head>\n<title>$test_name</title>\n";
-        print '<meta http-equiv="Content-Type" content="text/html; charset=' .
-                $this->character_set . "\">\n";
+        print '<meta http-equiv="Content-Type" content="text/html; charset=' . $this->charset . "\">\n";
         print "<style type=\"text/css\">\n";
         print $this->getCss() . "\n";
         print "</style>\n";
@@ -173,7 +172,7 @@ class HtmlReporter extends SimpleReporter
      */
     protected function htmlEntities($message)
     {
-        return htmlentities($message, ENT_COMPAT, $this->character_set);
+        return htmlentities($message, ENT_COMPAT, $this->charset);
     }
 }
 

@@ -5,6 +5,7 @@
 **currently working on: fixing mock objects & references**
 
 ### Changes
+* HtmlReporter: renamed $character_set to $charset and set "utf-8" as default charset
 * cleanup of reference handling
   - removed explicit assign-new-object-by-reference ampersands
   - removed explicit assign-object-by-reference ampersands
