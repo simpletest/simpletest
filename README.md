@@ -1,6 +1,45 @@
 SimpleTest [![Build Status](https://travis-ci.org/simpletest/simpletest.svg)](https://travis-ci.org/simpletest/simpletest) [![Latest Stable Version](https://img.shields.io/packagist/v/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest) [![Total Downloads](https://img.shields.io/packagist/dt/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest) [![Latest Unstable Version](https://poser.pugx.org/simpletest/simpletest/v/unstable)](https://packagist.org/packages/simpletest/simpletest) 
 ==========
 
+SimpleTest is a framework for unit testing, web site testing and
+mock objects for PHP.
+
+### Installation
+
+#### Downloads
+
+All downloads are stored on Github Releases.
+
+You may find the zip of the "latest released/tagged version" here:
+
+https://github.com/simpletest/simpletest/releases/latest
+
+You may find the zip archive of the "dev-master" branch here:
+
+https://github.com/simpletest/simpletest/archive/master.zip
+
+#### Composer
+
+You may also install the extension through Composer into the `/vendor` folder of your project.
+
+Either run
+
+    php composer.phar require --prefer-dist simpletest/simpletest "^1.1"
+
+or add
+
+    "simpletest/simpletest": "^1.1"
+
+to the require section of your `composer.json` file, followed by running `composer install`.
+
+### Issues
+
+Please report all issues you encounter over at Github Issues:
+
+https://github.com/simpletest/simpletest/issues
+
+-----
+
 You probably got this package from:
 
     http://simpletest.org/en/download.html
