@@ -26,17 +26,43 @@ Either run
 
     php composer.phar require --prefer-dist simpletest/simpletest "^1.1"
 
-or add
+or add the package `simpletest/simpletest` to the require section of your `composer.json` file:
 
-    "simpletest/simpletest": "^1.1"
+    {
+        "require": {
+            "simpletest/simpletest": "^1.1"
+        }
+    }
 
-to the require section of your `composer.json` file, followed by running `composer install`.
+followed by running `composer install`.
 
 ### Issues
 
-Please report all issues you encounter over at Github Issues:
+Please report all issues you encounter at [Github Issues](https://github.com/simpletest/simpletest/issues).
 
-https://github.com/simpletest/simpletest/issues
+### Community
+
+Feel free to [ask a new question on Stack Overflow](https://stackoverflow.com/questions/ask?tags=simpletest+php) or at [Github Issues](https://github.com/simpletest/simpletest/issues).
+
+StackOverflow offers also a good collection of [SimpleTest related questions](https://stackoverflow.com/questions/tagged/simpletest).
+
+### Requirements
+
+PHP 5.4+
+
+### Authors
+
+- Marcus Baker
+- Jason Sweat
+- Travis Swicegood
+- Perrick Penet
+- Edward Z. Yang
+- Jens A. Koch
+- [Contributors on Github](https://github.com/simpletest/simpletest/graphs/contributors)
+
+### License
+
+GNU LGPL v2.1 
 
 -----
 
