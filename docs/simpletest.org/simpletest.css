@@ -13,6 +13,7 @@ td { vertical-align : top; }
 #content { position : absolute; top : 20px; left : 400px; padding-bottom : 50px; width : 491px; }
 #news { border : 2px solid #009933; padding : 20px; font-weight : bold; font-size : 18pt; width : 451px; }
 #news a { color : #009933; }
+.old-news { border : 2px solid #009933; padding : 20px; font-weight : bold; width : 451px; }
 #internal { background: url('images/simpletest-internal-middle.png') repeat-y; margin-top : 2em; width : 306px; }
 #external { background: url('images/simpletest-external-middle.png') repeat-y; width : 306px; }
 #internal > div , #external > div { padding : 0 0.5em 0 0.5em; }
