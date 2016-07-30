@@ -1,15 +1,13 @@
 <?php
-/**
- * Adapter for SimpleTest to use PEAR PHPUnit test cases
- */
+
 require_once dirname(__FILE__) . '/../../dumper.php';
 require_once dirname(__FILE__) . '/../../compatibility.php';
 require_once dirname(__FILE__) . '/../../test_case.php';
 require_once dirname(__FILE__) . '/../../expectation.php';
 
 /**
- * Adapter for PEAR PHPUnit test case to allow
- * legacy PEAR test cases to be used with SimpleTest.
+ * Bridge Adapter for a PHPUnit test case class.
+ * This allows PHPUnit tests to be used with SimpleTest.
  */
 class PHPUnit_TestCase extends SimpleTestCase
 {
