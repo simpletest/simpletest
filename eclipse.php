@@ -313,7 +313,7 @@ class EclipseInvoker extends SimpleInvokerDecorator
         $output = ob_get_contents();
         ob_end_clean();
         if ($output !== '') {
-            $result = $this->listener->write
+            $result = $this->listener->write(
                 '{status:"info",message:"' . EclipseReporter::escapeVal($output) . '"}'
             );
         }
