@@ -1,13 +1,13 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../../autorun.php';
-require_once dirname(__FILE__) . '/../PHPUnitTestCase.php';
+require_once __DIR__ . '/../../../autorun.php';
+require_once __DIR__ . '/../PHPUnitTestCase.php';
 
 class SameTestClass
 {
 }
 
-class TestOfPHPUnitAdapter extends PHPUnit_TestCase
+class TestOfPHPUnitAdapter extends PHPUnitTestCase
 {
     public function testBoolean()
     {

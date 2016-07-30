@@ -1,9 +1,9 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../dumper.php';
-require_once dirname(__FILE__) . '/../../compatibility.php';
-require_once dirname(__FILE__) . '/../../test_case.php';
-require_once dirname(__FILE__) . '/../../expectation.php';
+require_once __DIR__ . '/../../dumper.php';
+require_once __DIR__ . '/../../compatibility.php';
+require_once __DIR__ . '/../../test_case.php';
+require_once __DIR__ . '/../../expectation.php';
 
 /**
  * Bridge Adapter for a PHPUnit test case class.
