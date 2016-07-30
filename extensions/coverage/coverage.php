@@ -85,7 +85,7 @@ class CodeCoverage
         $this->root = getcwd();
         if (!extension_loaded('xdebug')) {
             throw new Exception('Could not load xdebug extension');
-        };
+        }
         xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
     }
 
