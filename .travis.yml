@@ -13,11 +13,12 @@ addons:
     packages:
       - parallel
 
-php: [5.4, 5.5, 5.6, 7, hhvm]
+php: [5.5, 5.6, 7, 7.1, hhvm]
 
 matrix:
     allow_failures:
         - php: hhvm
+    fast_finish: true
 
 script:
   # PHP lint
