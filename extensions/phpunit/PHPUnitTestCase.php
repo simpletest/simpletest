@@ -9,7 +9,7 @@ require_once dirname(__FILE__) . '/../../expectation.php';
  * Bridge Adapter for a PHPUnit test case class.
  * This allows PHPUnit tests to be used with SimpleTest.
  */
-class PHPUnit_TestCase extends SimpleTestCase
+class PHPUnitTestCase extends SimpleTestCase
 {
     private $_loosely_typed;
 
