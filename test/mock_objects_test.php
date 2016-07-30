@@ -771,13 +771,12 @@ class ClassWithSpecialMethods
 }
 Mock::generate('ClassWithSpecialMethods');
 
+
+/**
+ * __isset and __unset overloading - PHP 5.1+
+ */
 class TestOfSpecialMethodsAfterPHP51 extends UnitTestCase
 {
-    public function skip()
-    {
-        $this->skipIf(version_compare(phpversion(), '5.1', '<'), '__isset and __unset overloading not tested unless PHP 5.1+');
-    }
-
     public function testCanEmulateIsset()
     {
         $mock = new MockClassWithSpecialMethods();
