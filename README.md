@@ -26,7 +26,7 @@ Either run
 
     php composer.phar require --dev --prefer-dist simpletest/simpletest "^1.1"
 
-or add the package `simpletest/simpletest` to the require section of your `composer.json` file:
+or add the package `simpletest/simpletest` to the require-dev section of your `composer.json` file:
 
     {
         "require-dev": {
