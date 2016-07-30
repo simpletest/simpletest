@@ -8,6 +8,11 @@ language: php
 # use container based infrastructure (no sudo possible)
 sudo: false
 
+addons:
+  apt:
+    packages:
+      - parallel
+
 php: [5.4, 5.5, 5.6, 7, hhvm]
 
 matrix:
@@ -15,10 +20,15 @@ matrix:
         - php: hhvm
 
 script:
- # start PHP5.4 built-in server in background
- - nohup php -S localhost:8080 -t test/site > php-server.log 2>&1 &
- - php test/all_tests.php
- - cat php-server.log
+  # PHP lint
+  - >
+    echo;
+    echo "Running PHP lint";
+    find . -name \*.php ! -path "./vendor/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+  # start PHP5.4 built-in server in background
+  - nohup php -S localhost:8080 -t test/site > php-server.log 2>&1 &
+  - php test/all_tests.php
+  - cat php-server.log
 
 # disable notifications
 notifications:
