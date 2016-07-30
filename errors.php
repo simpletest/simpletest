@@ -235,36 +235,12 @@ function SimpleTestErrorHandler($severity, $message, $filename = null, $line = n
     $severity = $severity & error_reporting();
     if ($severity) {
         restore_error_handler();
-        if (IsNotCausedBySimpleTest($message) && IsNotTimeZoneNag($message)) {
-            $queue = SimpleTest::getContext()->get('SimpleErrorQueue');
-            $queue->add($severity, $message, $filename, $line);
-        }
+        
+        $queue = SimpleTest::getContext()->get('SimpleErrorQueue');
+        $queue->add($severity, $message, $filename, $line);
+
         set_error_handler('SimpleTestErrorHandler');
     }
 
     return true;
-}
-
-/**
- * Certain messages can be caused by the unit tester itself. These have to be filtered.
- *
- * @param string $message      Message to filter.
- *
- * @return bool             True if genuine failure.
- */
-function IsNotCausedBySimpleTest($message)
-{
-    return ! preg_match('/returned by reference/', $message);
-}
-
-/**
- * Certain messages caused by PHP are just noise. These have to be filtered.
- *
- * @param string $message      Message to filter.
- *
- * @return bool             True if genuine failure.
- */
-function IsNotTimeZoneNag($message)
-{
-    return ! preg_match('/not safe to rely .* timezone settings/', $message);
 }
