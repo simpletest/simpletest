@@ -1,10 +1,9 @@
 <?php
-/**
- *	Extension for a TestDox reporter
- */
+
+require_once dirname(__FILE__) . '/../reporter.php';
 
 /**
- * TestDox reporter
+ *	Extension for a TestDox reporter
  */
 class TestDoxReporter extends SimpleReporter
 {
