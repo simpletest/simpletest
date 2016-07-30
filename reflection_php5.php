@@ -365,7 +365,7 @@ class SimpleReflection
         foreach ($method->getParameters() as $parameter) {
             $signature = '';
             $type      = $parameter->getClass();
-            if (is_null($type) && version_compare(phpversion(), '5.1.0', '>=') && $parameter->isArray()) {
+            if (is_null($type) && $parameter->isArray()) {
                 $signature .= 'array ';
             } elseif (!is_null($type)) {
                 $signature .= $type->getName() . ' ';
