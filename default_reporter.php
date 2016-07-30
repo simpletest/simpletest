@@ -15,11 +15,14 @@ class SimpleCommandLineParser
             'case' => 'case', 'c' => 'case',
             'test' => 'test', 't' => 'test',
     );
-    private $case     = '';
-    private $test     = '';
-    private $xml      = false;
-    private $help     = false;
-    private $no_skips = false;
+    private $case           = '';
+    private $test           = '';
+    private $xml            = false;
+    private $junit          = false;
+    private $help           = false;
+    private $no_skips       = false;    
+    private $excludes       = array();
+    private $doCodeCoverage = false;
 
     /**
      * Parses raw command line arguments into object properties.
@@ -40,8 +43,20 @@ class SimpleCommandLineParser
                 if (isset($arguments[$i + 1])) {
                     $this->$property = $arguments[$i + 1];
                 }
+            } elseif (preg_match('/^--?(cx)=(.+)$/', $argument, $matches)) {
+//                 $property = $this->to_property[$matches[1]];
+                $this->excludes[] = $matches[2];
+            } elseif (preg_match('/^--?(cx)$/', $argument, $matches)) {
+//                 $property = $this->to_property[$matches[1]];
+                if (isset($arguments[$i + 1])) {
+                    $this->excludes[] = $arguments[$i + 1];
+                }
             } elseif (preg_match('/^--?(xml|x)$/', $argument)) {
                 $this->xml = true;
+            } elseif (preg_match('/^--?(junit|j)$/', $argument)) {
+                $this->junit = true;
+            } elseif (preg_match('/^--?(codecoverage|cc)$/', $argument)) {
+                $this->doCodeCoverage = true;
             } elseif (preg_match('/^--?(no-skip|no-skips|s)$/', $argument)) {
                 $this->no_skips = true;
             } elseif (preg_match('/^--?(help|h)$/', $argument)) {
@@ -81,6 +96,34 @@ class SimpleCommandLineParser
     }
 
     /**
+     * Output should be JUnit or not.
+     *
+     * @return boolean True if JUnit desired.
+     */
+    public function isJUnit()
+    {
+        return $this->junit;
+    }
+
+    /**
+     *    Should code coverage be run or not.
+     *    @return boolean        True if code coverage should be run.
+     */
+    public function doCodeCoverage()
+    {
+        return $this->doCodeCoverage;
+    }
+
+    /**
+     *    Array of excluded folders.
+     *    @return array        Array of strings to exclude from code coverage.
+     */
+    public function getExcludes()
+    {
+        return $this->excludes;
+    }
+
+    /**
      * Output should suppress skip messages.
      *
      * @return bool        True for no skips.
@@ -97,7 +140,7 @@ class SimpleCommandLineParser
      */
     public function help()
     {
-        return $this->help && ! $this->xml;
+        return $this->help && ! ($this->xml || $this->junit);
     }
 
     /**
@@ -115,6 +158,9 @@ Usage: php <test_file> [args...]
     -t <method>     Run only the test method <method>
     -s              Suppress skip messages
     -x              Return test results in XML
+    -j              Return test results in JUnit format
+    -cc             Generate code coverage reports
+    -cx             Code coverage exclude folder (may have multiple)
     -h              Display this help message
 
 HELP;
@@ -127,6 +173,9 @@ HELP;
  */
 class DefaultReporter extends SimpleReporterDecorator
 {
+    public $doCodeCoverage = false;
+    public $excludes;
+
     /**
      * Assembles the appropriate reporter for the environment.
      */
@@ -134,11 +183,16 @@ class DefaultReporter extends SimpleReporterDecorator
     {
         if (SimpleReporter::inCli()) {
             $parser     = new SimpleCommandLineParser($_SERVER['argv']);
-            $interfaces = $parser->isXml() ? array('XmlReporter') : array('TextReporter');
+            $this->doCodeCoverage = $parser->doCodeCoverage();
+            $this->excludes = $parser->getExcludes();
+            if ($parser->isXml()) {
+            	$interfaces = array('XmlReporter');
+            } else if ($parser->isJUnit()) {
+            	$interfaces = array('JUnitXmlReporter');
+            } else {
+            	$interfaces = array('TextReporter');
+            }
             if ($parser->help()) {
-                /**
-                 * @todo I'm not sure if we should do the echo'ing here -- ezyang
-                 */
                 echo $parser->getHelpText();
                 exit(1);
             }
@@ -152,9 +206,7 @@ class DefaultReporter extends SimpleReporterDecorator
             }
         } else {
             $reporter = new SelectiveReporter(
-                    SimpleTest::preferred('HtmlReporter'),
-                    @$_GET['c'],
-                    @$_GET['t']);
+                    SimpleTest::preferred('HtmlReporter'), @$_GET['c'], @$_GET['t']);
             if (@$_GET['skips'] === 'no' || @$_GET['show-skips'] === 'no') {
                 $reporter = new NoSkipsReporter($reporter);
             }
