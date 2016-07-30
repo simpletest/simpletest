@@ -379,7 +379,7 @@ class SimpleReflection
                 $signature .= '...';
             }
             $signature .= '$' . $this->suppressSpurious($parameter->getName());
-            if (!$isVariadic && $this->isOptional($parameter)) {
+            if (!$isVariadic && $parameter->isOptional()) {
                 $signature .= ' = null';
             }
             $signatures[] = $signature;
@@ -401,18 +401,6 @@ class SimpleReflection
     protected function suppressSpurious($name)
     {
         return str_replace(array('[', ']', ' '), '', $name);
-    }
-
-    /**
-     * Test of a reflection parameter being optional.
-     *
-     * @param reflectionParameter $parameter    Is this optional.
-     *
-     * @return bool                          True if optional.
-     */
-    protected function isOptional($parameter)
-    {
-        return $parameter->isOptional();
     }
 
 }
