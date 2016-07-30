@@ -8,14 +8,40 @@ require_once dirname(__FILE__) . '/../unit_tester.php';
 
 class AcceptanceTest extends WebTestCase
 {
+    protected static $host = 'localhost';
+    protected static $port = '8080';
+
+    function skip()
+    {
+        $socket = new SimpleSocket(self::$host, self::$port, 5, 8);
+
+        parent::skipIf(
+            ! $socket->isOpen(),
+            sprintf('The AcceptanceTest requires that a webserver runs at %s:%s', self::$host, self::$port)
+        );
+    }
+
     public static function host()
     {
-        return 'http://localhost:8080/';
+        return 'http://'.self::$host.':'.self::$port.'/';
     }
 }
 
 class TestOfLiveBrowser extends UnitTestCase
 {
+    protected $host = 'localhost';
+    protected $port = '8080';
+
+    function skip()
+    {
+        $socket = new SimpleSocket($this->host, $this->port, 5, 8);
+
+        parent::skipIf(
+            ! $socket->isOpen(),
+            sprintf('The LiveHttpTestCase requires that a webserver runs at %s:%s', $this->host, $this->port)
+        );
+    }
+
     public function host()
     {
         return AcceptanceTest::host();
@@ -47,11 +73,11 @@ class TestOfLiveBrowser extends UnitTestCase
         $browser = new SimpleBrowser();
         $browser->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
         $browser->get($this->host() . 'link_confirm.php');
-        $this->assertTrue($browser->clickLink('Absolute'));        
+        $this->assertTrue($browser->clickLink('Absolute'));
         $this->assertPattern('/target for the SimpleTest/', $browser->getContent());
     }
 
-    /* @todo 
+    /* @todo
     public function testRelativeEncodedLinkFollowing()
     {
         $browser = new SimpleBrowser();
@@ -140,6 +166,19 @@ class TestOfLocalFileBrowser extends UnitTestCase
 
 class TestOfRequestMethods extends UnitTestCase
 {
+    protected $host = 'localhost';
+    protected $port = '8080';
+
+    function skip()
+    {
+        $socket = new SimpleSocket($this->host, $this->port, 5, 8);
+
+        parent::skipIf(
+            ! $socket->isOpen(),
+            sprintf('The LiveHttpTestCase requires that a webserver runs at %s:%s', $this->host, $this->port)
+        );
+    }
+
     public function host()
     {
         return AcceptanceTest::host();
@@ -766,7 +805,7 @@ class TestOfLiveCookies extends AcceptanceTest
     /*public function testCookiePath()
     {
         $this->get($this->host() . 'set_cookies.php');
-        $this->assertNoCookie('path_cookie', 'D');        
+        $this->assertNoCookie('path_cookie', 'D');
         $this->get($this->host() . 'network_confirm.php');
         $this->assertText('short_cookie');
         $this->assertCookie('path_cookie', 'D');
@@ -1449,13 +1488,17 @@ class TestOfLiveHistoryNavigation extends AcceptanceTest
         $this->assertText('a=[1, 2]');
     }
 }
-/**
- * @todo
- * This class is disabled, because the built in PHP development 
- * server isn't capable of handling authentication. -- jakoch
- *
+
 class TestOfLiveAuthentication extends AcceptanceTest
 {
+    public function skip()
+    {
+        $this->skipIf('always',
+            'TestOfLiveAuthentication is skipped, because PHP\'s built in '
+            . 'development server isn\'t capable of handling authentication.'
+        );
+    }
+
     public function setUp()
     {
         $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
@@ -1537,7 +1580,7 @@ class TestOfLiveAuthentication extends AcceptanceTest
         $this->get($this->host() . 'protected/');
         $this->assertResponse(401);
     }
-}*/
+}
 
 class TestOfLoadingFrames extends AcceptanceTest
 {

@@ -14,6 +14,16 @@ class LiveHttpTestCase extends UnitTestCase
     protected $host = 'localhost';
     protected $port = '8080';
 
+    function skip()
+    {
+        $socket = new SimpleSocket($this->host, $this->port, 15, 8);
+
+        parent::skipIf(
+            ! $socket->isOpen(),
+            sprintf('The LiveHttpTestCase requires that a webserver runs at %s:%s', $this->host, $this->port)
+        );
+    }
+
     public function testBadSocket()
     {
         $socket = new SimpleSocket('bad_url', 111, 5);
