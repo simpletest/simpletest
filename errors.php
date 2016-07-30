@@ -197,29 +197,23 @@ class SimpleErrorQueue
     public static function getSeverityAsString($severity)
     {
         static $map = array(
-            E_ERROR           => 'E_ERROR',
-            E_WARNING         => 'E_WARNING',
-            E_PARSE           => 'E_PARSE',
-            E_NOTICE          => 'E_NOTICE',
-            E_CORE_ERROR      => 'E_CORE_ERROR',
-            E_CORE_WARNING    => 'E_CORE_WARNING',
-            E_COMPILE_ERROR   => 'E_COMPILE_ERROR',
-            E_COMPILE_WARNING => 'E_COMPILE_WARNING',
-            E_USER_ERROR      => 'E_USER_ERROR',
-            E_USER_WARNING    => 'E_USER_WARNING',
-            E_USER_NOTICE     => 'E_USER_NOTICE',
-            E_STRICT          => 'E_STRICT',
-            E_ALL             => 'E_ALL'
+            E_ERROR             => 'E_ERROR',
+            E_WARNING           => 'E_WARNING',
+            E_PARSE             => 'E_PARSE',
+            E_NOTICE            => 'E_NOTICE',
+            E_CORE_ERROR        => 'E_CORE_ERROR',
+            E_CORE_WARNING      => 'E_CORE_WARNING',
+            E_COMPILE_ERROR     => 'E_COMPILE_ERROR',
+            E_COMPILE_WARNING   => 'E_COMPILE_WARNING',
+            E_USER_ERROR        => 'E_USER_ERROR',
+            E_USER_WARNING      => 'E_USER_WARNING',
+            E_USER_NOTICE       => 'E_USER_NOTICE',
+            E_STRICT            => 'E_STRICT',
+            E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',   # PHP 5.2
+            E_DEPRECATED        => 'E_DEPRECATED',          # PHP 5.3
+            E_USER_DEPRECATED   => 'E_USER_DEPRECATED',     # PHP 5.3
+            E_ALL               => 'E_ALL'
         );
-
-        if (defined('E_RECOVERABLE_ERROR')) {
-            $map[E_RECOVERABLE_ERROR] = 'E_RECOVERABLE_ERROR';
-        }
-
-        if (defined('E_DEPRECATED')) {
-            $map[E_DEPRECATED]      = 'E_DEPRECATED';
-            $map[E_USER_DEPRECATED] = 'E_USER_DEPRECATED';
-        }
 
         return $map[$severity];
     }
@@ -242,7 +236,7 @@ function SimpleTestErrorHandler($severity, $message, $filename = null, $line = n
     if ($severity) {
         restore_error_handler();
         // disabled filtering of errors caused by SimpleTest itself. too many things hidden for debugging. -- jakoch
-        if (/*IsNotCausedBySimpleTest($message) &&*/ IsNotTimeZoneNag($message)) {
+        if (IsNotCausedBySimpleTest($message) && IsNotTimeZoneNag($message)) {
             if (ini_get('log_errors')) {
                 $label = SimpleErrorQueue::getSeverityAsString($severity);
                 error_log("$label: $message in $filename on line $line");
