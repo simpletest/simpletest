@@ -30,12 +30,12 @@ function simpletest_autorun()
 }
 
 /**
- * Run all recent test cases if no test has so far been run. 
- * Uses the DefaultReporter which can have it's output 
+ * Run all recent test cases if no test has so far been run.
+ * Uses the DefaultReporter which can have it's output
  * controlled with SimpleTest::prefer().
- * 
+ *
  * @return boolean/null false, if there were test failures,
- *                      true, if there were no failures, 
+ *                      true, if there were no failures,
  *                      null, if tests are already running
  */
 function run_local_tests()
@@ -74,7 +74,7 @@ function run_local_tests()
             $writer->process($coverage, '/tmp/coverage');
         }
 
-        return true;
+        return $result;
     } catch (Exception $stack_frame_fix) {
         print $stack_frame_fix->getMessage();
 
