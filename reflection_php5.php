@@ -400,7 +400,6 @@ class SimpleReflection
 
     /**
      * Test of a reflection parameter being optional.
-     * That works with early versions of PHP5.
      *
      * @param reflectionParameter $parameter    Is this optional.
      *
@@ -408,10 +407,7 @@ class SimpleReflection
      */
     protected function isOptional($parameter)
     {
-        if (method_exists($parameter, 'isOptional')) {
-            return $parameter->isOptional();
-        }
-
-        return false;
+        return $parameter->isOptional();
     }
+
 }
