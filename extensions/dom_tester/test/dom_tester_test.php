@@ -23,7 +23,7 @@ class TestOfLiveCssSelectors extends DomTestCase
 
 class TestOfCssSelectors extends UnitTestCase
 {
-    public function TestOfCssSelectors()
+    public function __construct()
     {
         $html                       = file_get_contents(dirname(__FILE__) . '/support/dom_tester.html');
         $this->dom                  = new DomDocument('1.0', 'utf-8');
@@ -190,7 +190,7 @@ class TestOfCssSelectors extends UnitTestCase
 
 class TestsOfChildAndAdjacentSelectors extends DomTestCase
 {
-    public function TestsOfChildAndAdjacentSelectors()
+    public function __construct()
     {
         $html                       = file_get_contents(dirname(__FILE__) . '/support/child_adjacent.html');
         $this->dom                  = new DomDocument('1.0', 'utf-8');

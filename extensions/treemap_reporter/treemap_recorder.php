@@ -11,7 +11,7 @@ class TreemapRecorder extends SimpleReporter
     public $_stack;
     public $_title;
 
-    public function TreemapRecorder()
+    public function __construct()
     {
         $this->SimpleReporter();
         $this->_stack = new TreemapStack();
@@ -170,7 +170,7 @@ class TreemapNode
     public $_parent;
     public $_size;
 
-    public function TreemapNode($name, $description, $status=true)
+    public function __construct($name, $description, $status=true)
     {
         $this->_name        = $name;
         $this->_description = $description;
@@ -286,7 +286,7 @@ class TreemapStack
 {
     public $_list;
 
-    public function TreemapStack()
+    public function __construct()
     {
         $this->_list = array();
     }
