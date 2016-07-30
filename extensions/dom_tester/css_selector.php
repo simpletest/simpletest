@@ -16,7 +16,7 @@
  */
 class CssSelector
 {
-    protected $dom = null;
+    protected $dom;
 
     public function __construct($dom)
     {

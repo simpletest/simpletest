@@ -17,7 +17,7 @@ class SeleniumTestCase extends UnitTestCase
     protected $port       = '4444';
     protected $timeout    = 30000;
 
-    protected $selenium            = null;
+    protected $selenium;
     protected $newInstanceEachTest = true;
 
     public function __construct($name = 'Selenium Test Case')

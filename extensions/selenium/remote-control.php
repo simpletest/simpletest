@@ -14,7 +14,7 @@ class SimpleSeleniumRemoteControl
     private $_host       = 'localhost';
     private $_port       = 4444;
     private $_timeout    = 30000;
-    private $_sessionId  = null;
+    private $_sessionId;
 
     private $_commandMap = array(
         'bool' => array(
