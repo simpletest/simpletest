@@ -68,11 +68,11 @@ class CodeCoverage
     public function resetLog()
     {
         error_log('reseting log');
-        $new_file = fopen($this->log, 'w');
-        if (!$new_file) {
+        $file = fopen($this->log, 'w');
+        if (!$file) {
             throw new Exception('Could not create ' . $this->log);
         }
-        fclose($new_file);
+        fclose($file);
         if (!chmod($this->log, 0666)) {
             throw new Exception('Could not change ownership on file  ' . $this->log);
         }

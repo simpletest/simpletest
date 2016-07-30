@@ -5,7 +5,7 @@ class CoverageCalculator
     public function coverageByFileVariables($file, $coverage)
     {
         $hnd = fopen($file, 'r');
-        if ($hnd == null) {
+        if (!$hnd) {
             throw new Exception("File $file is missing");
         }
         $lines = array();
