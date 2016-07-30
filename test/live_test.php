@@ -11,6 +11,9 @@ if (SimpleTest::getDefaultProxy()) {
 
 class LiveHttpTestCase extends UnitTestCase
 {
+    protected $host = 'localhost';
+    protected $port = '8080';
+
     public function testBadSocket()
     {
         $socket = new SimpleSocket('bad_url', 111, 5);
@@ -24,26 +27,26 @@ class LiveHttpTestCase extends UnitTestCase
 
     public function testSocketClosure()
     {
-        $socket = new SimpleSocket('www.lastcraft.com', 80, 15, 8);
+        $socket = new SimpleSocket($this->host, $this->port, 15, 8);
         $this->assertTrue($socket->isOpen());
-        $this->assertTrue($socket->write("GET /test/network_confirm.php HTTP/1.0\r\n"));
-        $socket->write("Host: www.lastcraft.com\r\n");
+        $this->assertTrue($socket->write("GET /network_confirm.php HTTP/1.0\r\n"));
+        $socket->write("Host: $this->host\r\n");
         $socket->write("Connection: close\r\n\r\n");
-        $this->assertEqual($socket->read(), 'HTTP/1.1');
+        $this->assertEqual($socket->read(), 'HTTP/1.0');
         $socket->close();
         $this->assertIdentical($socket->read(), false);
     }
 
     public function testRecordOfSentCharacters()
     {
-        $socket = new SimpleSocket('www.lastcraft.com', 80, 15);
-        $this->assertTrue($socket->write("GET /test/network_confirm.php HTTP/1.0\r\n"));
-        $socket->write("Host: www.lastcraft.com\r\n");
+        $socket = new SimpleSocket($this->host, $this->port, 15);
+        $this->assertTrue($socket->write("GET /network_confirm.php HTTP/1.0\r\n"));
+        $socket->write("Host: $this->host\r\n");
         $socket->write("Connection: close\r\n\r\n");
         $socket->close();
         $this->assertEqual($socket->getSent(),
-                "GET /test/network_confirm.php HTTP/1.0\r\n" .
-                "Host: www.lastcraft.com\r\n" .
+                "GET /network_confirm.php HTTP/1.0\r\n" .
+                "Host: $this->host\r\n" .
                 "Connection: close\r\n\r\n");
     }
 }
