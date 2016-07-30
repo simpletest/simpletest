@@ -42,15 +42,39 @@ function run_local_tests()
 {
     try {
         if (tests_have_run()) {
-            return;
+            return true;
         }
         $candidates = capture_new_classes();
         $loader     = new SimpleFileLoader();
-        $suite      = $loader->createSuiteFromClasses(
-                basename(initial_file()),
-                $loader->selectRunnableTests($candidates));
 
-        return $suite->run(new DefaultReporter());
+        $suite = $loader->createSuiteFromClasses(
+            basename(initial_file()),
+            $loader->selectRunnableTests($candidates)
+        );
+
+        $reporter = new DefaultReporter();
+
+        if ($reporter->doCodeCoverage) {
+            $coverage = new PHP_CodeCoverage;
+            $filter   = $coverage->filter();
+
+            foreach ($reporter->excludes as $folderPath) {
+                $filter->addDirectoryToBlacklist($folderPath);
+            }
+
+            $coverage->start($_SERVER['SCRIPT_FILENAME']);
+        }
+
+        $result = $suite->run($reporter);
+
+        if ($reporter->doCodeCoverage) {
+            $coverage->stop();
+
+            $writer = new PHP_CodeCoverage_Report_HTML;
+            $writer->process($coverage, '/tmp/coverage');
+        }
+
+        return true;
     } catch (Exception $stack_frame_fix) {
         print $stack_frame_fix->getMessage();
 

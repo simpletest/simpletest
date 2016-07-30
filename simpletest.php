@@ -6,6 +6,7 @@
 require_once dirname(__FILE__) . '/reflection_php5.php';
 require_once dirname(__FILE__) . '/default_reporter.php';
 require_once dirname(__FILE__) . '/compatibility.php';
+require_once dirname(__FILE__) . '/extensions/junit_xml_reporter.php';
 
 /**
  * Registry and test context.
@@ -239,11 +240,12 @@ class SimpleTest
             'DefaultProxy'         => false,
             'DefaultProxyUsername' => false,
             'DefaultProxyPassword' => false,
-            'Preferred'            => array(
-                new HtmlReporter(),
-                new TextReporter(),
-                new XmlReporter()
-            )
+                'Preferred' => array(
+                    new HtmlReporter(), 
+                    new TextReporter(), 
+                    new XmlReporter(), 
+                    new JUnitXMLReporter()
+                )
         ));
     }
 
