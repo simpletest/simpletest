@@ -1480,7 +1480,7 @@ class MockGenerator
         $code    = '';
         $methods = array_merge($methods, $this->reflection->getMethods());
         foreach ($methods as $method) {
-            if ($this->isConstructor($method)) {
+            if ($this->isConstructorOrDeconstructor($method)) {
                 continue;
             }
             $mock_reflection = new SimpleReflection($this->mock_base);
@@ -1506,7 +1506,7 @@ class MockGenerator
     {
         $code = '';
         foreach ($methods as $method) {
-            if ($this->isConstructor($method)) {
+            if ($this->isConstructorOrDeconstructor($method)) {
                 continue;
             }
             $mock_reflection = new SimpleReflection($this->mock_base);
@@ -1528,7 +1528,7 @@ class MockGenerator
      *
      * @return bool True if special.
      */
-    protected function isConstructor($method)
+    protected function isConstructorOrDeconstructor($method)
     {
         return in_array(strtolower($method), array('__construct', '__destruct'));
     }
@@ -1694,7 +1694,7 @@ class MockGenerator
     {
         $code = '';
         foreach ($methods as $method) {
-            if ($this->isConstructor($method)) {
+            if ($this->isConstructorOrDeconstructor($method)) {
                 continue;
             }
             $code .= '    ' . $this->reflection->getSignature($method) . " {\n";
