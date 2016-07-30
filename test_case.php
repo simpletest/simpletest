@@ -306,6 +306,8 @@ class SimpleTestCase
      */
     public function assert($expectation, $compare, $message = '%s')
     {
+        $message = str_replace('%', '%%', $message); // escape percentage sign
+
         if ($expectation->test($compare)) {
             return $this->pass(
                 sprintf($message, $expectation->overlayMessage($compare, $this->reporter->getDumper()))
