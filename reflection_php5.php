@@ -302,13 +302,18 @@ class SimpleReflection
         if ($name === '__call') {
             return 'function __call($method, $arguments)';
         }
-        if (in_array($name, array('__get', '__isset', $name === '__unset'))) {
-            return "function {$name}(\$key)";
+        if ($name === '__get') {
+            return 'function __get($key)';
+        }
+        if ($name ===  '__isset') {
+            return 'function __isset($key)';
+        }
+        if ($name ===  '__unset') {
+            return 'function __unset($key)';
         }
         if ($name === '__toString') {
-            return "function $name()";
+            return 'function __toString()';
         }
-
 
         /**
          * @todo
