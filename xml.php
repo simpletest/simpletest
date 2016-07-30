@@ -504,8 +504,15 @@ class SimpleTestXmlParser
     public function parse($chunk)
     {
         if (! xml_parse($this->expat, $chunk)) {
-            trigger_error('XML parse error with ' .
-                    xml_error_string(xml_get_error_code($this->expat)));
+            $errormessage = sprintf(
+                "XML parse error %d '%s' at line %d, column %d (byte %d).",
+                xml_get_error_code($this->expat),
+                xml_error_string(xml_get_error_code($this->expat)),
+                xml_get_current_line_number($this->expat),
+                xml_get_current_column_number($this->expat),
+                xml_get_current_byte_index($this->expat)
+            );
+            trigger_error($errormessage);
 
             return false;
         }
