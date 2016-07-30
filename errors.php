@@ -235,12 +235,7 @@ function SimpleTestErrorHandler($severity, $message, $filename = null, $line = n
     $severity = $severity & error_reporting();
     if ($severity) {
         restore_error_handler();
-        // disabled filtering of errors caused by SimpleTest itself. too many things hidden for debugging. -- jakoch
         if (IsNotCausedBySimpleTest($message) && IsNotTimeZoneNag($message)) {
-            if (ini_get('log_errors')) {
-                $label = SimpleErrorQueue::getSeverityAsString($severity);
-                error_log("$label: $message in $filename on line $line");
-            }
             $queue = SimpleTest::getContext()->get('SimpleErrorQueue');
             $queue->add($severity, $message, $filename, $line);
         }
