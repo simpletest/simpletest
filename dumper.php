@@ -82,8 +82,11 @@ class SimpleDumper
     {
         if ($identical) {
             if (! $this->isTypeMatch($first, $second)) {
-                return 'with type mismatch as [' . $this->describeValue($first) .
-                    '] does not match [' . $this->describeValue($second) . ']';
+                return sprintf(
+                    'with type mismatch as [%s] does not match [%s]',
+                    $this->describeValue($first),
+                    $this->describeValue($second)
+                );
             }
         }
         $type = $this->getType($first);
@@ -144,9 +147,9 @@ class SimpleDumper
      */
     protected function describeGenericDifference($first, $second)
     {
-        return 'as [' . $this->describeValue($first) .
-                '] does not match [' .
-                $this->describeValue($second) . ']';
+        return sprintf(
+            'as [%s] does not match [%s]', $this->describeValue($first), $this->describeValue($second)
+        );
     }
 
     /**
@@ -194,12 +197,13 @@ class SimpleDumper
             return $this->describeGenericDifference($first, $second);
         }
         $position = $this->stringDiffersAt($first, $second);
-        $message  = "at character $position";
-        $message .= ' with [' .
-                $this->clipString($first, 200, $position) . '] and [' .
-                $this->clipString($second, 200, $position) . ']';
 
-        return $message;
+        return sprintf(
+            'at character %s with [%s] and [%s]',
+            $position,
+            $this->clipString($first, 200, $position),
+            $this->clipString($second, 200, $position)
+        );
     }
 
     /**
@@ -218,10 +222,12 @@ class SimpleDumper
             return $this->describeGenericDifference($first, $second);
         }
 
-        return 'because [' . $this->describeValue($first) .
-                '] differs from [' .
-                $this->describeValue($second) . '] by ' .
-                abs($first - $second);
+        return sprintf(
+            'because [%s] differs from [%s] by %s',
+            $this->describeValue($first),
+            $this->describeValue($second),
+            abs($first - $second)
+        );
     }
 
     /**
@@ -240,10 +246,12 @@ class SimpleDumper
             return $this->describeGenericDifference($first, $second);
         }
 
-        return 'because [' . $this->describeValue($first) .
-                '] differs from [' .
-                $this->describeValue($second) . '] by ' .
-                abs($first - $second);
+        return sprintf(
+            'because [%s] differs from [%s] by %s',
+            $this->describeValue($first),
+            $this->describeValue($second),
+            abs($first - $second)
+        );
     }
 
     /**
@@ -261,9 +269,11 @@ class SimpleDumper
             return $this->describeGenericDifference($first, $second);
         }
         if (! $this->isMatchingKeys($first, $second, $identical)) {
-            return 'as key list [' .
-                    implode(', ', array_keys($first)) . '] does not match key list [' .
-                    implode(', ', array_keys($second)) . ']';
+            return sprintf(
+                'as key list [%s] does not match key list [%s]',
+                implode(', ', array_keys($first)),
+                implode(', ', array_keys($second))
+            );
         }
         foreach (array_keys($first) as $key) {
             if ($identical && ($first[$key] === $second[$key])) {
@@ -273,10 +283,11 @@ class SimpleDumper
                 continue;
             }
 
-            return "with member [$key] " . $this->describeDifference(
-                    $first[$key],
-                    $second[$key],
-                    $identical);
+            return sprintf(
+                'with member [%s] %s',
+                $key,
+                $this->describeDifference($first[$key], $second[$key], $identical)
+            );
         }
 
         return '';
