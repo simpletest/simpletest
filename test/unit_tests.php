@@ -22,7 +22,7 @@ class UnitTests extends TestSuite
         $this->addFile($path . '/dumper_test.php');
         $this->addFile($path . '/expectation_test.php');
         $this->addFile($path . '/unit_tester_test.php');
-        $this->addFile($path . '/reflection_php5_test.php');
+        $this->addFile($path . '/reflection_test.php');
         $this->addFile($path . '/mock_objects_test.php');
         $this->addFile($path . '/interfaces_test.php');
         $this->addFile($path . '/collector_test.php');

@@ -3,7 +3,7 @@
 require_once dirname(__FILE__) . '/expectation.php';
 require_once dirname(__FILE__) . '/simpletest.php';
 require_once dirname(__FILE__) . '/dumper.php';
-require_once dirname(__FILE__) . '/reflection_php5.php';
+require_once dirname(__FILE__) . '/reflection.php';
 
 /*
  * Default character simpletest will substitute for any value

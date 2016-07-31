@@ -8,7 +8,7 @@ require_once dirname(__FILE__) . '/expectation.php';
 require_once dirname(__FILE__) . '/dumper.php';
 require_once dirname(__FILE__) . '/simpletest.php';
 require_once dirname(__FILE__) . '/exceptions.php';
-require_once dirname(__FILE__) . '/reflection_php5.php';
+require_once dirname(__FILE__) . '/reflection.php';
 
  // define root constant for dependent libraries
 if (! defined('SIMPLE_TEST')) {
