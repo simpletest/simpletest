@@ -34,7 +34,7 @@ class SimpleDumper
             case 'String':
                 return 'String: ' . $this->clipString($value, 200);
             default:
-                return "$type: $value";
+                return $type . ': ' . $value;
         }
 
         return 'Unknown';
