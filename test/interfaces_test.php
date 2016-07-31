@@ -42,20 +42,17 @@ class TestOfSpl extends UnitTestCase
 {
     public function testCanMockAllSplClasses()
     {
+        static $classesToExclude = [
+            'SplHeap' // the method compare() is missing
+        ];
+
         foreach (spl_classes() as $class) {
-            if ($class === 'SplHeap' or $class === 'SplFileObject') {
+
+            // exclude classes
+            if (in_array($class, $classesToExclude)) {
                 continue;
             }
-            // @todo deprecate
-            if (version_compare(PHP_VERSION, '5.1', '<') && in_array($class, array(
-                    'CachingIterator', 'CachingRecursiveIterator', 'FilterIterator',
-                    'LimitIterator', 'ParentIterator'))) {
-                // These iterators require an iterator be passed to them during
-                // construction in PHP 5.0; there is no way for SimpleTest
-                // to supply such an iterator, however, so support for it is
-                // disabled.
-                continue;
-            }
+            
             $mock_class = "Mock$class";
             Mock::generate($class);
             $this->assertIsA(new $mock_class(), $mock_class);
