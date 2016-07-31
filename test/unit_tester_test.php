@@ -73,4 +73,12 @@ class TestOfUnitTester extends UnitTestCase
         $b = 25;
         $this->assertCopy($a, $b);
     }
+
+    public function testEscapePercentageSignsExceptFirst()
+    {
+        $a = 'http://www.domain.com/some%20long%%20name.html';
+        $b = $this->escapePercentageSignsExceptFirst('http://www.domain.com/some%20long%20name.html');
+        $this->assertEqual($a, $b);
+    }
+
 }

@@ -306,7 +306,7 @@ class SimpleTestCase
      */
     public function assert($expectation, $compare, $message = '%s')
     {
-        $message = str_replace('%', '%%', $message); // escape percentage sign
+        $message = $this->escapePercentageSignsExceptFirst($message);
 
         if ($expectation->test($compare)) {
             return $this->pass(
@@ -317,6 +317,26 @@ class SimpleTestCase
                 sprintf($message, $expectation->overlayMessage($compare, $this->reporter->getDumper()))
             );
         }
+    }
+
+    /**
+     * Escapes all percentage signs, except the first.
+     *
+     * Get the position of the first percentage sign.
+     * Skip over escaping, if none is found.
+     * Else escape part of string after first percentage sign.
+     * Then concat unescaped first part and escaped part.
+     *
+     * @param string $string
+     * @return string
+     */
+    protected function escapePercentageSignsExceptFirst($string)
+    {
+        $pos = strpos($string, '%');
+        if($pos !== false) {
+            return substr($string, 0, $pos + 1) . str_replace('%', '%%', substr($string, $pos + 1));
+        }
+        return $string;
     }
 
     /**
