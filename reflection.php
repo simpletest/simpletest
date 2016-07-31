@@ -69,10 +69,8 @@ class SimpleReflection
      */
     protected function classOrInterfaceExistsWithAutoload($interface, $autoload)
     {
-        if (function_exists('interface_exists')) {
-            if (interface_exists($interface, $autoload)) {
-                return true;
-            }
+        if (interface_exists($interface, $autoload)) {
+            return true;
         }
 
         return class_exists($interface, $autoload);
