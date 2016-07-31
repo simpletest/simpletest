@@ -684,7 +684,8 @@ class MultipleReporter
      */
     public function makeDry($is_dry = true)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->makeDry($is_dry);
         }
     }
@@ -698,7 +699,8 @@ class MultipleReporter
      */
     public function getStatus()
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             if (! $this->reporters[$i]->getStatus()) {
                 return false;
             }
@@ -716,7 +718,8 @@ class MultipleReporter
      */
     public function shouldInvoke($test_case_name, $method)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             if (! $this->reporters[$i]->shouldInvoke($test_case_name, $method)) {
                 return false;
             }
@@ -734,21 +737,12 @@ class MultipleReporter
      */
     public function createInvoker($invoker)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $invoker = $this->reporters[$i]->createInvoker($invoker);
         }
 
         return $invoker;
-    }
-
-    /**
-     * Gets the formatter for privateiables and other small generic data items.
-     *
-     * @return SimpleDumper          Formatter.
-     */
-    public function getDumper()
-    {
-        return new SimpleDumper();
     }
 
     /**
@@ -759,7 +753,8 @@ class MultipleReporter
      */
     public function paintGroupStart($test_name, $size)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintGroupStart($test_name, $size);
         }
     }
@@ -771,7 +766,8 @@ class MultipleReporter
      */
     public function paintGroupEnd($test_name)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintGroupEnd($test_name);
         }
     }
@@ -783,7 +779,8 @@ class MultipleReporter
      */
     public function paintCaseStart($test_name)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintCaseStart($test_name);
         }
     }
@@ -795,7 +792,8 @@ class MultipleReporter
      */
     public function paintCaseEnd($test_name)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintCaseEnd($test_name);
         }
     }
@@ -807,7 +805,8 @@ class MultipleReporter
      */
     public function paintMethodStart($test_name)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintMethodStart($test_name);
         }
     }
@@ -819,7 +818,8 @@ class MultipleReporter
      */
     public function paintMethodEnd($test_name)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintMethodEnd($test_name);
         }
     }
@@ -831,7 +831,8 @@ class MultipleReporter
      */
     public function paintPass($message)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintPass($message);
         }
     }
@@ -843,7 +844,8 @@ class MultipleReporter
      */
     public function paintFail($message)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintFail($message);
         }
     }
@@ -855,7 +857,8 @@ class MultipleReporter
      */
     public function paintError($message)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintError($message);
         }
     }
@@ -867,7 +870,8 @@ class MultipleReporter
      */
     public function paintException($exception)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintException($exception);
         }
     }
@@ -879,7 +883,8 @@ class MultipleReporter
      */
     public function paintSkip($message)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintSkip($message);
         }
     }
@@ -891,7 +896,8 @@ class MultipleReporter
      */
     public function paintMessage($message)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintMessage($message);
         }
     }
@@ -903,7 +909,8 @@ class MultipleReporter
      */
     public function paintFormattedMessage($message)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintFormattedMessage($message);
         }
     }
@@ -919,8 +926,19 @@ class MultipleReporter
      */
     public function paintSignal($type, $payload)
     {
-        for ($i = 0; $i < count($this->reporters); $i++) {
+        $numberOfReporters = count($this->reporters);
+        for ($i = 0; $i < $numberOfReporters; $i++) {
             $this->reporters[$i]->paintSignal($type, $payload);
         }
+    }
+
+    /**
+     * Gets the formatter for privateiables and other small generic data items.
+     *
+     * @return SimpleDumper          Formatter.
+     */
+    public function getDumper()
+    {
+        return new SimpleDumper();
     }
 }
