@@ -737,7 +737,8 @@ class SimpleMock
     protected function checkArgumentsIsArray($args, $task)
     {
         if (! is_array($args)) {
-            trigger_error("Cannot $task as \$args parameter is not an array", E_USER_ERROR);
+            $errormsg = sprintf('Cannot %s. Parameter %s is not an array.', $task, $args);
+            trigger_error($errormsg, E_USER_ERROR);
         }
     }
 
@@ -750,10 +751,8 @@ class SimpleMock
     protected function dieOnNoMethod($method, $task)
     {
         if ($this->is_strict && ! method_exists($this, $method)) {
-            trigger_error(
-                "Cannot $task as no ${method}() in class " . get_class($this),
-                E_USER_ERROR
-            );
+            $errormsg = sprintf('Cannot %s. Method %s() not in class %s.', $task, $method, get_class($this));
+            trigger_error($errormsg, E_USER_ERROR);
         }
     }
 
@@ -1393,7 +1392,9 @@ class MockGenerator
     {
         $implements = '';
         $interfaces = $this->reflection->getInterfaces();
-        $interfaces = array_diff($interfaces, array('Traversable'));
+
+        // exclude interfaces
+        $interfaces = array_diff($interfaces, ['Traversable', 'Throwable']);
 
         if (count($interfaces) > 0) {
             $implements = 'implements ' . implode(', ', $interfaces);

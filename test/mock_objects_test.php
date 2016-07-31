@@ -726,7 +726,7 @@ class TestOfMockExpectations extends UnitTestCase
     public function testNonArrayForExpectedParametersGivesError()
     {
         $mock = new MockDummyWithInjectedTestCase();
-        $this->expectError(new PatternExpectation('/\$args.*not an array/i'));
+        $this->expectError(new PatternExpectation('/foo is not an array/i'));
         $mock->expect('aMethod', 'foo');
         $mock->aMethod();
         $mock->mock->atTestEnd('testSomething', $this->test);
