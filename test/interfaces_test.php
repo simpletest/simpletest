@@ -41,16 +41,8 @@ class TestOfMockInterfaces extends UnitTestCase
 
 class TestOfSpl extends UnitTestCase
 {
-    public function skip()
-    {
-        $this->skipUnless(function_exists('spl_classes'), 'No SPL module loaded');
-    }
-
     public function testCanMockAllSplClasses()
     {
-        if (! function_exists('spl_classes')) {
-            return;
-        }
         foreach (spl_classes() as $class) {
             if ($class === 'SplHeap' or $class === 'SplFileObject') {
                 continue;

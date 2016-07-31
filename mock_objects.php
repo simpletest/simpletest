@@ -1393,9 +1393,8 @@ class MockGenerator
     {
         $implements = '';
         $interfaces = $this->reflection->getInterfaces();
-        if (function_exists('spl_classes')) {
-            $interfaces = array_diff($interfaces, array('Traversable'));
-        }
+        $interfaces = array_diff($interfaces, array('Traversable'));
+
         if (count($interfaces) > 0) {
             $implements = 'implements ' . implode(', ', $interfaces);
         }
