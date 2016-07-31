@@ -18,8 +18,9 @@ class CoverageReporterTest extends UnitTestCase
         new CoverageReporter();
     }
 
-    public function testreportFilename()
+    public function testReportFilename()
     {
+        $this->assertEqual('C__Oh_No_parula.php.html', CoverageReporter::reportFilename('C:\Oh\No\parula.php'));
         $this->assertEqual('parula.php.html', CoverageReporter::reportFilename('parula.php'));
         $this->assertEqual('warbler_parula.php.html', CoverageReporter::reportFilename('warbler/parula.php'));
         $this->assertEqual('warbler_parula.php.html', CoverageReporter::reportFilename('warbler\\parula.php'));

@@ -58,6 +58,6 @@ class CoverageReporter
 
     public static function reportFilename($filename)
     {
-        return preg_replace('|[/\\\\]|', '_', $filename) . '.html';
+        return preg_replace('|[:/\\\\]|i', '_', $filename) . '.html';
     }
 }
