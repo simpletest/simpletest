@@ -36,8 +36,6 @@ class SimpleDumper
             default:
                 return $type . ': ' . $value;
         }
-
-        return 'Unknown';
     }
 
     /**
