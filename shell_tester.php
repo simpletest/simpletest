@@ -200,9 +200,12 @@ class ShellTestCase extends SimpleTestCase
      */
     public function assertExitCode($status, $message = '%s')
     {
-        $message = sprintf($message, "Expected status code of [$status] from [" .
-                $this->last_command . '], but got [' .
-                $this->last_status . ']');
+        $errormsg = sprintf(
+            'Expected status code of [%s] from [%s], but got [%s]',
+            $status, $this->last_command, $this->last_status
+        );
+
+        $message = sprintf($message, $errormsg);
 
         return $this->assertTrue($status === $this->last_status, $message);
     }
@@ -272,7 +275,9 @@ class ShellTestCase extends SimpleTestCase
      */
     public function assertFileExists($path, $message = '%s')
     {
-        $message = sprintf($message, "File [$path] should exist");
+        $errormsg = sprintf('File [%s] should exist', $path);
+
+        $message = sprintf($message, $errormsg);
 
         return $this->assertTrue(file_exists($path), $message);
     }
@@ -287,7 +292,9 @@ class ShellTestCase extends SimpleTestCase
      */
     public function assertFileNotExists($path, $message = '%s')
     {
-        $message = sprintf($message, "File [$path] should not exist");
+        $errormsg = sprintf('File [%s] should not exist', $path);
+
+        $message = sprintf($message, $errormsg);
 
         return $this->assertFalse(file_exists($path), $message);
     }
