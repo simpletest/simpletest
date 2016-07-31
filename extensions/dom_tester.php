@@ -78,36 +78,35 @@ class CssSelectorExpectation extends SimpleExpectation
 /**
  * DomTestCase
  *
- * Extend Web test case with DOM related assertions, CSS selectors in particular
- *
- * @param DomDocument $dom
+ * Extend Web test case with DOM related assertions, CSS selectors in particular.
  */
 class DomTestCase extends WebTestCase
 {
+   /*
+    * @param DomDocument $dom
+    */
     public $dom;
 
     public function loadDom()
     {
         $this->dom                  = new DomDocument('1.0', 'utf-8');
         $this->dom->validateOnParse = true;
-        $this->dom->loadHTML($this->_browser->getContent());
+        $this->dom->loadHTML($this->browser->getContent());
     }
 
     public function getElementsBySelector($selector)
     {
         $this->loadDom();
+        
         $css_selector = new CssSelectorExpectation($this->dom, $selector);
 
-        return $css_selector->_value;
+        return $css_selector->value;
     }
 
     public function assertElementsBySelector($selector, $elements, $message = '%s')
     {
         $this->loadDom();
 
-        return $this->assert(
-                new CssSelectorExpectation($this->dom, $selector),
-                $elements,
-                $message);
+        return $this->assert(new CssSelectorExpectation($this->dom, $selector), $elements, $message);
     }
 }
