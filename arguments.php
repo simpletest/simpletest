@@ -186,7 +186,8 @@ class SimpleHelp
     {
         $tab_stop = $this->longestFlag($this->flag_sets) + 4;
         $text     = $this->overview . "\n";
-        for ($i = 0; $i < count($this->flag_sets); $i++) {
+        $numberOfFlags = count($this->flag_sets);
+        for ($i = 0; $i < $numberOfFlags; $i++) {
             $text .= $this->renderFlagSet($this->flag_sets[$i], $this->explanations[$i], $tab_stop);
         }
 
