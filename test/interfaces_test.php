@@ -2,7 +2,6 @@
 
 require_once dirname(__FILE__) . '/../autorun.php';
 include(dirname(__FILE__) . '/support/spl_examples.php');
-include(dirname(__FILE__) . '/interfaces_test_php5_1.php');
 
 interface DummyInterface
 {
@@ -133,5 +132,20 @@ class TestOfSampleInterfaceWithClone extends UnitTestCase
     public function testCanMockWithoutErrors()
     {
         Mock::generate('SampleInterfaceWithClone');
+    }
+}
+
+interface SampleInterfaceWithHintInSignature
+{
+    public function method(array $hinted);
+}
+
+class TestOfInterfaceMocksWithHintInSignature extends UnitTestCase
+{
+    public function testBasicConstructOfAnInterfaceWithHintInSignature()
+    {
+        Mock::generate('SampleInterfaceWithHintInSignature');
+        $mock = new MockSampleInterfaceWithHintInSignature();
+        $this->assertIsA($mock, 'SampleInterfaceWithHintInSignature');
     }
 }
