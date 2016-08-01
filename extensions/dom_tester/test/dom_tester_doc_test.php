@@ -3,7 +3,7 @@
 require_once dirname(__FILE__) . '/../../../autorun.php';
 require_once dirname(__FILE__) . '/../../dom_tester.php';
 
-SimpleTest :: prefer(new TextReporter());
+SimpleTest::prefer(new TextReporter());
 
 class TestOfLiveCssSelectors extends DomTestCase
 {

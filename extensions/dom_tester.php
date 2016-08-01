@@ -16,9 +16,9 @@ require_once dirname(__FILE__) . '/dom_tester/css_selector.php';
  */
 class CssSelectorExpectation extends SimpleExpectation
 {
-    protected $dom;
-    protected $selector;
-    protected $value;
+    public $dom;
+    public $selector;
+    public $value;
 
     /**
      * Sets the dom tree and the css selector to compare against
@@ -97,7 +97,7 @@ class DomTestCase extends WebTestCase
     public function getElementsBySelector($selector)
     {
         $this->loadDom();
-        
+
         $css_selector = new CssSelectorExpectation($this->dom, $selector);
 
         return $css_selector->value;

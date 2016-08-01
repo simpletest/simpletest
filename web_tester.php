@@ -448,7 +448,7 @@ class NoTextExpectation extends TextExpectation
  */
 class WebTestCase extends SimpleTestCase
 {
-    private $browser;
+    public $browser;
     private $ignore_errors = false;
 
     /**
