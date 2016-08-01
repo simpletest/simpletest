@@ -109,11 +109,11 @@ class TestOfFrameset extends UnitTestCase
     {
         $frame1 = new MockSimplePage();
         $frame1->returnsByValue('getField', null);
-        $frame1->expectOnce('getField', array(new SimpleByName('a')));
+        $frame1->expectOnce('getField', array(new SelectByName('a')));
 
         $frame2 = new MockSimplePage();
         $frame2->returnsByValue('getField', 'A');
-        $frame2->expectOnce('getField', array(new SimpleByName('a')));
+        $frame2->expectOnce('getField', array(new SelectByName('a')));
 
         $frame3 = new MockSimplePage();
         $frame3->expectNever('getField');
@@ -123,7 +123,7 @@ class TestOfFrameset extends UnitTestCase
         $frameset->addFrame($frame1);
         $frameset->addFrame($frame2);
         $frameset->addFrame($frame3);
-        $this->assertIdentical($frameset->getField(new SimpleByName('a')), 'A');
+        $this->assertIdentical($frameset->getField(new SelectByName('a')), 'A');
     }
 
     public function testFrameReplacementByIndex()
@@ -502,18 +502,18 @@ class TestOfFramesetPageInterface extends UnitTestCase
         $frame->returns(
                 'getFormBySubmit',
                 $form,
-                array(new SimpleByLabel('a')));
+                array(new SelectByLabel('a')));
 
         $frameset = new SimpleFrameset(new MockSimplePage());
         $frameset->addFrame(new MockSimplePage(), 'A');
         $frameset->addFrame($frame, 'B');
-        $this->assertSame($frameset->getFormBySubmit(new SimpleByLabel('a')), $form);
+        $this->assertSame($frameset->getFormBySubmit(new SelectByLabel('a')), $form);
 
         $frameset->setFrameFocus('A');
-        $this->assertNull($frameset->getFormBySubmit(new SimpleByLabel('a')));
+        $this->assertNull($frameset->getFormBySubmit(new SelectByLabel('a')));
 
         $frameset->setFrameFocus('B');
-        $this->assertSame($frameset->getFormBySubmit(new SimpleByLabel('a')), $form);
+        $this->assertSame($frameset->getFormBySubmit(new SelectByLabel('a')), $form);
     }
 
     public function testFindingFormsByImage()
@@ -523,38 +523,38 @@ class TestOfFramesetPageInterface extends UnitTestCase
         $frame->returns(
                 'getFormByImage',
                 $form,
-                array(new SimpleByLabel('a')));
+                array(new SelectByLabel('a')));
 
         $frameset = new SimpleFrameset(new MockSimplePage());
         $frameset->addFrame(new MockSimplePage(), 'A');
         $frameset->addFrame($frame, 'B');
-        $this->assertSame($frameset->getFormByImage(new SimpleByLabel('a')), $form);
+        $this->assertSame($frameset->getFormByImage(new SelectByLabel('a')), $form);
 
         $frameset->setFrameFocus('A');
-        $this->assertNull($frameset->getFormByImage(new SimpleByLabel('a')));
+        $this->assertNull($frameset->getFormByImage(new SelectByLabel('a')));
 
         $frameset->setFrameFocus('B');
-        $this->assertSame($frameset->getFormByImage(new SimpleByLabel('a')), $form);
+        $this->assertSame($frameset->getFormByImage(new SelectByLabel('a')), $form);
     }
 
     public function testSettingAllFrameFieldsWhenNoFrameFocus()
     {
         $frame1 = new MockSimplePage();
-        $frame1->expectOnce('setField', array(new SimpleById(22), 'A'));
+        $frame1->expectOnce('setField', array(new SelectById(22), 'A'));
 
         $frame2 = new MockSimplePage();
-        $frame2->expectOnce('setField', array(new SimpleById(22), 'A'));
+        $frame2->expectOnce('setField', array(new SelectById(22), 'A'));
 
         $frameset = new SimpleFrameset(new MockSimplePage());
         $frameset->addFrame($frame1, 'A');
         $frameset->addFrame($frame2, 'B');
-        $frameset->setField(new SimpleById(22), 'A');
+        $frameset->setField(new SelectById(22), 'A');
     }
 
     public function testOnlySettingFieldFromFocusedFrame()
     {
         $frame1 = new MockSimplePage();
-        $frame1->expectOnce('setField', array(new SimpleByLabelOrName('a'), 'A'));
+        $frame1->expectOnce('setField', array(new SelectByLabelOrName('a'), 'A'));
 
         $frame2 = new MockSimplePage();
         $frame2->expectNever('setField');
@@ -563,13 +563,13 @@ class TestOfFramesetPageInterface extends UnitTestCase
         $frameset->addFrame($frame1, 'A');
         $frameset->addFrame($frame2, 'B');
         $frameset->setFrameFocus('A');
-        $frameset->setField(new SimpleByLabelOrName('a'), 'A');
+        $frameset->setField(new SelectByLabelOrName('a'), 'A');
     }
 
     public function testOnlyGettingFieldFromFocusedFrame()
     {
         $frame1 = new MockSimplePage();
-        $frame1->returnsByValue('getField', 'f', array(new SimpleByName('a')));
+        $frame1->returnsByValue('getField', 'f', array(new SelectByName('a')));
 
         $frame2 = new MockSimplePage();
         $frame2->expectNever('getField');
@@ -578,6 +578,6 @@ class TestOfFramesetPageInterface extends UnitTestCase
         $frameset->addFrame($frame1, 'A');
         $frameset->addFrame($frame2, 'B');
         $frameset->setFrameFocus('A');
-        $this->assertIdentical($frameset->getField(new SimpleByName('a')), 'f');
+        $this->assertIdentical($frameset->getField(new SelectByName('a')), 'f');
     }
 }

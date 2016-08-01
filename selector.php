@@ -12,7 +12,7 @@ interface SelectorInterface
  * Used to extract form elements for testing against.
  * Searches by name attribute.
  */
-class SimpleByName implements SelectorInterface
+class SelectByName implements SelectorInterface
 {
     private $name;
 
@@ -51,7 +51,7 @@ class SimpleByName implements SelectorInterface
  * Used to extract form elements for testing against.
  * Searches by visible label or alt text.
  */
-class SimpleByLabel implements SelectorInterface
+class SelectByLabel implements SelectorInterface
 {
     private $label;
 
@@ -84,7 +84,7 @@ class SimpleByLabel implements SelectorInterface
  * Used to extract form elements for testing against.
  * Searches dy id attribute.
  */
-class SimpleById implements SelectorInterface
+class SelectById implements SelectorInterface
 {
     private $id;
 
@@ -113,7 +113,7 @@ class SimpleById implements SelectorInterface
  * Used to extract form elements for testing against.
  * Searches by visible label, name or alt text.
  */
-class SimpleByLabelOrName implements SelectorInterface
+class SelectByLabelOrName implements SelectorInterface
 {
     private $label;
 

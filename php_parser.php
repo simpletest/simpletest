@@ -1070,7 +1070,7 @@ class SimplePhpPageBuilder
         foreach ($this->left_over_labels as $label) {
             for ($i = 0, $count = count($this->complete_forms); $i < $count; $i++) {
                 $this->complete_forms[$i]->attachLabelBySelector(
-                        new SimpleById($label->getFor()), $label->getText());
+                        new SelectById($label->getFor()), $label->getText());
             }
         }
         $this->page->setForms($this->complete_forms);

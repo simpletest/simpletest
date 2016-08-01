@@ -869,7 +869,7 @@ class SimpleBrowser
      */
     public function setField($label, $value, $position=false)
     {
-        return $this->page->setField(new SimpleByLabelOrName($label), $value, $position);
+        return $this->page->setField(new SelectByLabelOrName($label), $value, $position);
     }
 
     /**
@@ -883,7 +883,7 @@ class SimpleBrowser
      */
     public function setFieldByName($name, $value, $position=false)
     {
-        return $this->page->setField(new SimpleByName($name), $value, $position);
+        return $this->page->setField(new SelectByName($name), $value, $position);
     }
 
     /**
@@ -896,7 +896,7 @@ class SimpleBrowser
      */
     public function setFieldById($id, $value)
     {
-        return $this->page->setField(new SimpleById($id), $value);
+        return $this->page->setField(new SelectById($id), $value);
     }
 
     /**
@@ -910,7 +910,7 @@ class SimpleBrowser
      */
     public function getField($label)
     {
-        return $this->page->getField(new SimpleByLabelOrName($label));
+        return $this->page->getField(new SelectByLabelOrName($label));
     }
 
     /**
@@ -923,7 +923,7 @@ class SimpleBrowser
      */
     public function getFieldByName($name)
     {
-        return $this->page->getField(new SimpleByName($name));
+        return $this->page->getField(new SelectByName($name));
     }
 
     /**
@@ -936,7 +936,7 @@ class SimpleBrowser
      */
     public function getFieldById($id)
     {
-        return $this->page->getField(new SimpleById($id));
+        return $this->page->getField(new SelectById($id));
     }
 
     /**
@@ -949,12 +949,12 @@ class SimpleBrowser
      */
     public function clickSubmit($label = 'Submit', $additional = false)
     {
-        if (! ($form = $this->page->getFormBySubmit(new SimpleByLabel($label)))) {
+        if (! ($form = $this->page->getFormBySubmit(new SelectByLabel($label)))) {
             return false;
         }
         $success = $this->load(
                 $form->getAction(),
-                $form->submitButton(new SimpleByLabel($label), $additional));
+                $form->submitButton(new SelectByLabel($label), $additional));
 
         return ($success ? $this->getContent() : $success);
     }
@@ -969,12 +969,12 @@ class SimpleBrowser
      */
     public function clickSubmitByName($name, $additional = false)
     {
-        if (! ($form = $this->page->getFormBySubmit(new SimpleByName($name)))) {
+        if (! ($form = $this->page->getFormBySubmit(new SelectByName($name)))) {
             return false;
         }
         $success = $this->load(
                 $form->getAction(),
-                $form->submitButton(new SimpleByName($name), $additional));
+                $form->submitButton(new SelectByName($name), $additional));
 
         return ($success ? $this->getContent() : $success);
     }
@@ -990,12 +990,12 @@ class SimpleBrowser
      */
     public function clickSubmitById($id, $additional = false)
     {
-        if (! ($form = $this->page->getFormBySubmit(new SimpleById($id)))) {
+        if (! ($form = $this->page->getFormBySubmit(new SelectById($id)))) {
             return false;
         }
         $success = $this->load(
                 $form->getAction(),
-                $form->submitButton(new SimpleById($id), $additional));
+                $form->submitButton(new SelectById($id), $additional));
 
         return ($success ? $this->getContent() : $success);
     }
@@ -1009,7 +1009,7 @@ class SimpleBrowser
      */
     public function isSubmit($label)
     {
-        return (boolean) $this->page->getFormBySubmit(new SimpleByLabel($label));
+        return (boolean) $this->page->getFormBySubmit(new SelectByLabel($label));
     }
 
     /**
@@ -1027,12 +1027,12 @@ class SimpleBrowser
      */
     public function clickImage($label, $x = 1, $y = 1, $additional = false)
     {
-        if (! ($form = $this->page->getFormByImage(new SimpleByLabel($label)))) {
+        if (! ($form = $this->page->getFormByImage(new SelectByLabel($label)))) {
             return false;
         }
         $success = $this->load(
                 $form->getAction(),
-                $form->submitImage(new SimpleByLabel($label), $x, $y, $additional));
+                $form->submitImage(new SelectByLabel($label), $x, $y, $additional));
 
         return ($success ? $this->getContent() : $success);
     }
@@ -1052,12 +1052,12 @@ class SimpleBrowser
      */
     public function clickImageByName($name, $x = 1, $y = 1, $additional = false)
     {
-        if (! ($form = $this->page->getFormByImage(new SimpleByName($name)))) {
+        if (! ($form = $this->page->getFormByImage(new SelectByName($name)))) {
             return false;
         }
         $success = $this->load(
                 $form->getAction(),
-                $form->submitImage(new SimpleByName($name), $x, $y, $additional));
+                $form->submitImage(new SelectByName($name), $x, $y, $additional));
 
         return ($success ? $this->getContent() : $success);
     }
@@ -1076,12 +1076,12 @@ class SimpleBrowser
      */
     public function clickImageById($id, $x = 1, $y = 1, $additional = false)
     {
-        if (! ($form = $this->page->getFormByImage(new SimpleById($id)))) {
+        if (! ($form = $this->page->getFormByImage(new SelectById($id)))) {
             return false;
         }
         $success = $this->load(
                 $form->getAction(),
-                $form->submitImage(new SimpleById($id), $x, $y, $additional));
+                $form->submitImage(new SelectById($id), $x, $y, $additional));
 
         return ($success ? $this->getContent() : $success);
     }
@@ -1095,7 +1095,7 @@ class SimpleBrowser
      */
     public function isImage($label)
     {
-        return (boolean) $this->page->getFormByImage(new SimpleByLabel($label));
+        return (boolean) $this->page->getFormByImage(new SelectByLabel($label));
     }
 
     /**
