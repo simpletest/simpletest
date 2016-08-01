@@ -211,11 +211,11 @@ class SimpleForm
     /**
      * Extracts current value from form.
      *
-     * @param SimpleSelector $selector   Criteria to apply.
+     * @param $selector Criteria to apply.
      *
-     * @return string/array              Value(s) as string or null if not set.
+     * @return string/array Value(s) as string or null if not set.
      */
-    public function getValue($selector)
+    public function getValue(SelectorInterface $selector)
     {
         for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
             if ($selector->isMatch($this->widgets[$i])) {
@@ -234,13 +234,13 @@ class SimpleForm
     /**
      * Sets a widget value within the form.
      *
-     * @param SimpleSelector $selector   Criteria to apply.
-     * @param string $value              Value to input into the widget.
+     * @param $selector   Criteria to apply.
+     * @param string $value Value to input into the widget.
      *
      * @return bool                   True if value is legal, false otherwise.
      * If the field is not present, nothing will be set.
      */
-    public function setField($selector, $value, $position=false)
+    public function setField(SelectorInterface $selector, $value, $position=false)
     {
         $success   = false;
         $_position = 0;
@@ -261,9 +261,9 @@ class SimpleForm
     /**
      * Used by the page object to set widgets labels to external label tags.
      *
-     * @param SimpleSelector $selector   Criteria to apply.
+     * @param $selector   Criteria to apply.
      */
-    public function attachLabelBySelector($selector, $label)
+    public function attachLabelBySelector(SelectorInterface $selector, $label)
     {
         for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
             if ($selector->isMatch($this->widgets[$i])) {
@@ -279,11 +279,11 @@ class SimpleForm
     /**
      * Test to see if a form has a submit button.
      *
-     * @param SimpleSelector $selector   Criteria to apply.
+     * @param $selector Criteria to apply.
      *
-     * @return bool                   True if present.
+     * @return bool True if present.
      */
-    public function hasSubmit($selector)
+    public function hasSubmit(SelectorInterface $selector)
     {
         foreach ($this->buttons as $button) {
             if ($selector->isMatch($button)) {
@@ -297,11 +297,11 @@ class SimpleForm
     /**
      * Test to see if a form has an image control.
      *
-     * @param SimpleSelector $selector   Criteria to apply.
+     * @param $selector Criteria to apply.
      *
-     * @return bool                   True if present.
+     * @return bool True if present.
      */
-    public function hasImage($selector)
+    public function hasImage(SelectorInterface $selector)
     {
         foreach ($this->images as $image) {
             if ($selector->isMatch($image)) {
@@ -315,13 +315,13 @@ class SimpleForm
     /**
      * Gets the submit values for a selected button.
      *
-     * @param SimpleSelector $selector   Criteria to apply.
-     * @param hash $additional           Additional data for the form.
+     * @param $selector Criteria to apply.
+     * @param hash $additional Additional data for the form.
      *
-     * @return SimpleEncoding            Submitted values or false if there is no such button in the
+     * @return SimpleEncoding Submitted values or false if there is no such button in the
      * form.
      */
-    public function submitButton($selector, $additional = false)
+    public function submitButton(SelectorInterface $selector, $additional = false)
     {
         $additional = $additional ? $additional : array();
         foreach ($this->buttons as $button) {
@@ -342,15 +342,14 @@ class SimpleForm
     /**
      * Gets the submit values for an image.
      *
-     * @param SimpleSelector $selector   Criteria to apply.
-     * @param int $x                 X-coordinate of click.
-     * @param int $y                 Y-coordinate of click.
-     * @param hash $additional           Additional data for the form.
+     * @param $selector Criteria to apply.
+     * @param int $x X-coordinate of click.
+     * @param int $y Y-coordinate of click.
+     * @param hash $additional  Additional data for the form.
      *
-     * @return SimpleEncoding            Submitted values or false if there is no such button in the
-     * form.
+     * @return SimpleEncoding Submitted values or false if there is no such button in the form.
      */
-    public function submitImage($selector, $x, $y, $additional = false)
+    public function submitImage(SelectorInterface $selector, $x, $y, $additional = false)
     {
         $additional = $additional ? $additional : array();
         foreach ($this->images as $image) {

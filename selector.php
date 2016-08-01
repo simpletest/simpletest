@@ -3,11 +3,16 @@
 require_once dirname(__FILE__) . '/tag.php';
 require_once dirname(__FILE__) . '/encoding.php';
 
+interface SelectorInterface
+{
+
+}
+
 /**
  * Used to extract form elements for testing against.
  * Searches by name attribute.
  */
-class SimpleByName
+class SimpleByName implements SelectorInterface
 {
     private $name;
 
@@ -46,7 +51,7 @@ class SimpleByName
  * Used to extract form elements for testing against.
  * Searches by visible label or alt text.
  */
-class SimpleByLabel
+class SimpleByLabel implements SelectorInterface
 {
     private $label;
 
@@ -79,7 +84,7 @@ class SimpleByLabel
  * Used to extract form elements for testing against.
  * Searches dy id attribute.
  */
-class SimpleById
+class SimpleById implements SelectorInterface
 {
     private $id;
 
@@ -108,7 +113,7 @@ class SimpleById
  * Used to extract form elements for testing against.
  * Searches by visible label, name or alt text.
  */
-class SimpleByLabelOrName
+class SimpleByLabelOrName implements SelectorInterface
 {
     private $label;
 
