@@ -144,11 +144,13 @@ class SimpleErrorQueue
             $this->test->error($severity, $content, $filename, $line);
         } else {
             list($expected, $message) = $expectation;
-            $this->test->assert($expected, $content, sprintf(
-                $message,
-                    "%s -> PHP error [$content] severity [" .
-                            $this->getSeverityAsString($severity) .
-                            "] in [$filename] line [$line]"));
+
+            $errorMessage = sprintf(
+                'PHP error [%s] severity [%s] in [%s] line [%s]',
+                $content, $this->getSeverityAsString($severity), $filename, $line
+            );
+
+            $this->test->assert($expected, $content, sprintf($message, '%s' . $errorMessage));
         }
     }
 
@@ -224,20 +226,20 @@ class SimpleErrorQueue
  * Simulates the existing behaviour with respect to logging errors,
  * but this feature may be removed in future.
  *
- * @param $severity        PHP error code.
- * @param $message         Text of error.
- * @param $filename        File error occoured in.
- * @param $line            Line number of error.
- * @param $super_globals   Hash of PHP super global arrays.
+ * @param $severity    PHP error code.
+ * @param $message     Text of error.
+ * @param $file        File error occoured in.
+ * @param $line        Line number of error.
+ * @param $context     Error Context.
  */
-function SimpleTestErrorHandler($severity, $message, $filename = null, $line = null, $super_globals = null, $mask = null)
+function SimpleTestErrorHandler($severity, $message, $file = null, $line = null, $context = null )
 {
     $severity = $severity & error_reporting();
     if ($severity) {
         restore_error_handler();
-        
+
         $queue = SimpleTest::getContext()->get('SimpleErrorQueue');
-        $queue->add($severity, $message, $filename, $line);
+        $queue->add($severity, $message, $file, $line);
 
         set_error_handler('SimpleTestErrorHandler');
     }
