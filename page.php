@@ -13,8 +13,8 @@ class SimplePage
 {
     private $links = array();
     private $title = false;
-    private $last_widget;
-    private $label;
+    private $last_widget;        // TODO
+    private $label;              // TODO
     private $forms  = array();
     private $frames = array();
     private $transport_error;
@@ -244,6 +244,7 @@ class SimplePage
      */
     public function setFrameFocusByIndex($choice)
     {
+        // TODO
         return false;
     }
 
@@ -256,6 +257,7 @@ class SimplePage
      */
     public function setFrameFocus($name)
     {
+        // TODO
         return false;
     }
 
@@ -410,7 +412,7 @@ class SimplePage
     /**
      * Converts a link tag into a target URL.
      *
-     * @param SimpleAnchor $link    Parsed link.
+     * @param SimpleAnchorTag $link    Parsed link.
      *
      * @return SimpleUrl            URL with frame target if any.
      */
@@ -496,7 +498,7 @@ class SimplePage
     /**
      * Finds a held form by image using a selector. Will only search correctly built forms.
      *
-     * @param SimpleSelector $selector  Image finder.
+     * @param  SelectorInterface $selector  Image finder.
      *
      * @return SimpleForm               Form object containing the image.
      */
@@ -587,14 +589,14 @@ class SimplePage
             '#<img[^>]*alt\s*=\s*("([^"]*)"|\'([^\']*)\'|([a-zA-Z_]+))[^>]*>#',
             '#<[^>]*>#',
         );
-        
+
         $replace = array(
             '',
             '',
             ' \2\3\4 ',
             '',
         );
-        
+
         $text = preg_replace($rules, $replace, $html);
         $text = html_entity_decode($text, ENT_QUOTES);
         $text = preg_replace('#\s+#', ' ', $text);

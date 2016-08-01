@@ -337,7 +337,7 @@ class ShellTestCase extends SimpleTestCase
     /**
      * Accessor for current shell. Used for testing the the tester itself.
      *
-     * @return Shell        Current shell.
+     * @return SimpleShell Current shell.
      */
     protected function getShell()
     {
@@ -347,7 +347,7 @@ class ShellTestCase extends SimpleTestCase
     /**
      * Factory for the shell to run the command on.
      *
-     * @return Shell        New shell object.
+     * @return SimpleShell New shell object.
      */
     protected function createShell()
     {

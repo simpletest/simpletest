@@ -605,7 +605,7 @@ class SimpleHttpResponse extends SimpleStickyError
     /**
      * Accessor for header block. The response is the combination of this and the content.
      *
-     * @return SimpleHeaders        Wrapped header block.
+     * @return SimpleHttpHeaders        Wrapped header block.
      */
     public function getHeaders()
     {
