@@ -372,7 +372,7 @@ class SimpleReflection
                 $signature .= '&';
             }
             // Variadic methods only supported in PHP 5.6+, so guard the call
-            $isVariadic = version_compare(phpversion(), '5.6.0', '>=') && $parameter->isVariadic();
+            $isVariadic = (PHP_VERSION_ID >= 50600) && $parameter->isVariadic();
             if ($isVariadic) {
                 $signature .= '...';
             }
