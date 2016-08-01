@@ -84,7 +84,7 @@ class SimpleForm
      * Combined action attribute with current location to get an absolute form target.
      *
      * @param string $action    Action attribute from form tag.
-     * @param SimpleUrl $base   Page location.
+     * @param $page   Page location.
      *
      * @return SimpleUrl        Absolute form target.
      */
