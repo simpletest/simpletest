@@ -13,7 +13,7 @@ class TestOfNestingTags extends UnitTestCase
 {
     public function testGroupSize()
     {
-        $nesting = new NestingGroupTag(array('SIZE' => 2));
+        $nesting = new NestedGroupTag(array('SIZE' => 2));
         $this->assertEqual($nesting->getSize(), 2);
     }
 }

@@ -293,7 +293,7 @@ class XmlReporter extends SimpleReporter
  * Accumulator for incoming tag.
  * Holds the incoming test structure information for later dispatch to the reporter.
  */
-class NestingXmlTag
+class NestedXmlTag
 {
     private $attributes;
     private $name;
@@ -344,7 +344,7 @@ class NestingXmlTag
  * Accumulator for incoming method tag.
  * Holds the incoming test structure information for later dispatch to the reporter.
  */
-class NestingMethodTag extends NestingXmlTag
+class NestedMethodTag extends NestedXmlTag
 {
     /**
      * Sets the basic test information except the name.
@@ -381,7 +381,7 @@ class NestingMethodTag extends NestingXmlTag
  * Accumulator for incoming case tag.
  * Holds the incoming test structure information for later dispatch to the reporter.
  */
-class NestingCaseTag extends NestingXmlTag
+class NestedCaseTag extends NestedXmlTag
 {
     /**
      * Sets the basic test information except the name.
@@ -418,7 +418,7 @@ class NestingCaseTag extends NestingXmlTag
  * Accumulator for incoming group tag.
  * Holds the incoming test structure information for later dispatch to the reporter.
  */
-class NestingGroupTag extends NestingXmlTag
+class NestedGroupTag extends NestedXmlTag
 {
     /**
      * Sets the basic test information except the name.
@@ -592,11 +592,11 @@ class SimpleTestXmlParser
     {
         $this->attributes = $attributes;
         if ($tag === 'GROUP') {
-            $this->pushNestingTag(new NestingGroupTag($attributes));
+            $this->pushNestingTag(new NestedGroupTag($attributes));
         } elseif ($tag === 'CASE') {
-            $this->pushNestingTag(new NestingCaseTag($attributes));
+            $this->pushNestingTag(new NestedCaseTag($attributes));
         } elseif ($tag === 'TEST') {
-            $this->pushNestingTag(new NestingMethodTag($attributes));
+            $this->pushNestingTag(new NestedMethodTag($attributes));
         } elseif ($this->isLeaf($tag)) {
             $this->in_content_tag = true;
             $this->content        = '';
