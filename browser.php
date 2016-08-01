@@ -177,7 +177,7 @@ class SimpleBrowser
     /**
      * Creates the underlying user agent.
      *
-     * @return SimpleFetcher    Content fetcher.
+     * @return SimpleUserAgent    Content fetcher.
      */
     protected function createUserAgent()
     {
@@ -1152,11 +1152,11 @@ class SimpleBrowser
      */
     public function clickLink($label, $index = 0)
     {
-        $url = $this->getLink($label, $index);        
+        $url = $this->getLink($label, $index);
         if ($url === false) {
             return false;
         }
-        
+
         $this->load($url, new SimpleGetEncoding());
 
         return (bool) $this->getContent();
