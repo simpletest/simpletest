@@ -30,7 +30,7 @@ class HtmlReporter extends SimpleReporter
     public function paintHeader($test_name)
     {
         $this->sendNoCacheHeaders();
-        print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
+        print '<!DOCTYPE html>';
         print "<html>\n<head>\n<title>$test_name</title>\n";
         print '<meta http-equiv="Content-Type" content="text/html; charset=' . $this->charset . "\">\n";
         print "<style type=\"text/css\">\n";
