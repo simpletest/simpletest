@@ -260,6 +260,16 @@ class SimpleHttpRequest
     }
 
     /**
+     * Get the headers to be sent with the request.
+     *
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    /**
      *    Adds a header line to the request.
      *
      *    @param string $header_line    Text of full header line.

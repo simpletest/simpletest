@@ -296,14 +296,21 @@ class SimpleBrowser
      * Fetches a page.
      * Jointly recursive with the parse() method as it descends a frameset.
      *
-     * @param string/SimpleUrl $url          Target to fetch.
-     * @param SimpleEncoding $encoding       GET/POST parameters.
+     * @param string/SimpleUrl $url      Target to fetch.
+     * @param SimpleEncoding $encoding   GET/POST parameters.
      * @param int $depth                 Nested frameset depth protection.
      *
-     * @return SimplePage                    Parsed page.
+     * @return SimplePage                Parsed page.
      */
     protected function fetch($url, $encoding, $depth = 0)
     {
+        $http_referer = $this->history->getUrl();        
+        if ($http_referer) {
+            $this->user_agent->setReferer($http_referer->asString());
+        } else {
+            $this->user_agent->setReferer(null);
+        }
+
         $response = $this->user_agent->fetchResponse($url, $encoding);
         if ($response->isError()) {
             return new SimplePage($response);

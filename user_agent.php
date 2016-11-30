@@ -22,10 +22,11 @@ class SimpleUserAgent
     private $connection_timeout = DEFAULT_CONNECTION_TIMEOUT;
     private $cookie_jar;
     private $cookies_enabled    = true;
-    private $max_redirects      = DEFAULT_MAX_REDIRECTS;
+    private $http_referer;
     private $proxy              = false;
     private $proxy_password     = false;
-    private $proxy_username     = false;
+    private $proxy_username     = false; 
+    private $max_redirects      = DEFAULT_MAX_REDIRECTS;  
 
     /**
      * Starts with no cookies, realms or proxies.
@@ -47,6 +48,7 @@ class SimpleUserAgent
     {
         $this->cookie_jar->restartSession($date);
         $this->authenticator->restartSession();
+        $this->http_referer = null;
     }
 
     /**
@@ -57,6 +59,17 @@ class SimpleUserAgent
     public function addHeader($header)
     {
         $this->additional_headers[] = $header;
+    }
+
+    /**
+     * Sets the referrer to send with the request, as long as
+     * it is not set explicitely via {@link addHeader()}.
+     *
+     * @param string $referer   Referer URI to add to every request until cleared.
+     */
+    public function setReferer($referer)
+    {
+        $this->http_referer = $referer;
     }
 
     /**
@@ -288,6 +301,23 @@ class SimpleUserAgent
             $request->readCookiesFromJar($this->cookie_jar, $url);
         }
         $this->authenticator->addHeaders($request, $url);
+
+        // Add referer header, if not set explicitly
+        if($this->http_referer) {
+            $headers = $request->getHeaders();
+            if(is_array($headers)) {
+                $custom_referer = false;
+                foreach ($headers as $header) {
+                    if (preg_match('~^referer:~i', $header)) {
+                        $custom_referer = true;
+                        break;
+                    }
+                }
+                if (! $custom_referer) {
+                    $request->addHeaderLine('Referer: ' . $this->http_referer);
+                }
+            }
+        }
 
         return $request;
     }
