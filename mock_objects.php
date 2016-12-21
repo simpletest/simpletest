@@ -708,7 +708,10 @@ class SimpleMock
         $this->max_counts = array();
         $this->expected_args = array();
         $this->expected_args_at = array();
-        $this->getCurrentTestCase()->tell($this);
+        $current_test_case = $this->getCurrentTestCase();
+        if ($current_test_case) {
+            $current_test_case->tell($this);
+        }
     }
 
     /**
