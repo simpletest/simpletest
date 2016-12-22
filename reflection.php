@@ -110,7 +110,8 @@ class SimpleReflection
     public function getInterfaceMethods()
     {
         $methods = array();
-        foreach ($this->getInterfaces() as $interface) {
+        $interfaces = $this->getInterfaces();
+        foreach ($interfaces as $interface) {
             $methods = array_merge($methods, get_class_methods($interface));
         }
 
@@ -178,7 +179,8 @@ class SimpleReflection
     public function hasFinal()
     {
         $reflection = new ReflectionClass($this->interface);
-        foreach ($reflection->getMethods() as $method) {
+        $methods = $reflection->getMethods();
+        foreach ($methods as $method) {
             if ($method->isFinal()) {
                 return true;
             }
@@ -251,7 +253,7 @@ class SimpleReflection
      *
      * @return bool true if method is abstract in parent, else false
      */
-    protected function isAbstractMethodInParents($name)
+    public function isAbstractMethodInParents($name)
     {
         $interface = new ReflectionClass($this->interface);
         $parent    = $interface->getParentClass();
@@ -286,7 +288,7 @@ class SimpleReflection
     }
 
     /**
-     * Writes the source code matching the declaration of a method.
+     * Returns the source code matching the declaration of a method.
      *
      * @param string $name    Method name.
      *
@@ -294,111 +296,90 @@ class SimpleReflection
      */
     public function getSignature($name)
     {
-        if ($name === '__set') {
-            return 'function __set($key, $value)';
-        }
-        if ($name === '__call') {
-            return 'function __call($method, $arguments)';
-        }
-        if ($name === '__get') {
-            return 'function __get($key)';
-        }
-        if ($name ===  '__isset') {
-            return 'function __isset($key)';
-        }
-        if ($name ===  '__unset') {
-            return 'function __unset($key)';
-        }
-        if ($name === '__toString') {
-            return 'function __toString()';
-        }
-
-        /**
-         * @todo
-         * 1) This wonky try-catch is a work around for a faulty method_exists()
-         *    in early versions of PHP 5 which would return false for static methods.
-         * 2) The Reflection classes work fine, but hasMethod() doesn't exist prior to PHP 5.1.0,
-         *    so we need to use a more crude detection method.
-         */
-        try {
-            $interface = new ReflectionClass($this->interface);
-            $interface->getMethod($name);
-        } catch (ReflectionException $e) {
-            return "function $name()";
-        }
-
-        return $this->getFullSignature($name);
-    }
-
-    /**
-     * For a signature specified in an interface,
-     * full details must be replicated to be a valid implementation.
-     *
-     * @param string $name    Method name.
-     *
-     * @return string         Method signature up to last bracket.
-     */
-    protected function getFullSignature($name)
-    {
         $interface = new ReflectionClass($this->interface);
-        $method    = $interface->getMethod($name);
-        $reference = $method->returnsReference() ? '&' : '';
-        $static    = $method->isStatic() ? 'static ' : '';
+        $method = $interface->getMethod($name);
 
-        return "{$static}function $reference$name(" .
-                implode(', ', $this->getParameterSignatures($method)) .
-                ')';
+        $abstract = ''; //($method->isAbstract() && ! $this->isAbstractMethodInParents($name)) ? 'abstract ' : '';
+
+        if ($method->isPublic()) {
+            $visibility = 'public';
+        } elseif ($method->isProtected()) {
+            $visibility = 'protected';
+        } else {
+            $visibility = 'private';
+        }
+
+        $static     = $method->isStatic() ? 'static ' : '';
+        $reference  = $method->returnsReference() ? '&' : '';
+        $params     = $this->getParameterSignatures($method);
+        $returnType = $method->getReturnType() ? sprintf(': %s', $type) : '';
+
+        return "{$abstract}$visibility {$static}function $reference$name($params){$returnType}";
     }
 
     /**
-     * Gets the source code for each parameter.
+     * Get the source code for the parameters of a method.
      *
      * @param ReflectionMethod $method   Method object from reflection API
      *
-     * @return array                     List of strings, each a snippet of code.
+     * @return string The Parameters string for a method.
      */
     protected function getParameterSignatures($method)
     {
-        $signatures = array();
-        foreach ($method->getParameters() as $parameter) {
+        $signatures = [];
+        $parameters = $method->getParameters();
+        foreach ($parameters as $parameter) {
             $signature = '';
-            $type      = $parameter->getClass();
-            if (is_null($type) && $parameter->isArray()) {
-                $signature .= 'array ';
-            } elseif (!is_null($type)) {
-                $signature .= $type->getName() . ' ';
-            }
+            $signature .= $this->getParameterTypeHint($parameter);
             if ($parameter->isPassedByReference()) {
                 $signature .= '&';
             }
-            // Variadic methods only supported in PHP 5.6+, so guard the call
+            // Guard: Variadic methods only supported by PHP 5.6+
             $isVariadic = (PHP_VERSION_ID >= 50600) && $parameter->isVariadic();
             if ($isVariadic) {
                 $signature .= '...';
             }
-            $signature .= '$' . $this->suppressSpurious($parameter->getName());
-            if (!$isVariadic && $parameter->isOptional()) {
-                $signature .= ' = null';
+            $signature .= '$' . $parameter->getName();
+            if (!$isVariadic) {
+                if ($parameter->isDefaultValueAvailable()) {
+                    $signature .= ' = ' . var_export($parameter->getDefaultValue(), true);
+                } elseif ($parameter->isOptional()) {
+                    $signature .= ' = null';
+                }
             }
+
             $signatures[] = $signature;
         }
 
-        return $signatures;
+        return implode(', ', $signatures);
     }
 
-    /**
-     * The SPL library has problems with the Reflection library.
-     * In particular, you can get extra characters in parameter names :(.
-     *
-     * @todo check compatibility
-     *
-     * @param string $name    Parameter name.
-     *
-     * @return string         Cleaner name.
-     */
-    protected function suppressSpurious($name)
+    protected function getParameterTypeHint(ReflectionParameter $parameter)
     {
-        return str_replace(array('[', ']', ' '), '', $name);
+        // Guard: parameter types only supported by PHP7.0+
+        if ((PHP_VERSION_ID >= 70000) && $parameter->hasType()) {
+            $typeHint = (string) $parameter->getType();
+        } 
+        elseif($parameter->isArray()) {
+            $typeHint = 'array';
+        }
+       
+        if(empty($typeHint)) {
+            return '';
+        }
+
+        $typeHints = [
+            'self', 'array', 'callable',
+            // PHP 7
+            'bool', 'float', 'int', 'string'
+        ];
+
+        // prefix a slash, on "class" or "interface" typehints
+        if (!in_array($typeHint, $typeHints)) {
+            $typeHint = '\\'.$typeHint;
+        }
+
+        return $typeHint .= ' ';
     }
 
 }
