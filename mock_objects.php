@@ -1323,7 +1323,7 @@ class MockGenerator
         if ($mock_reflection->classExistsSansAutoload()) {
             return false;
         }
-        $code = $this->createClassCode($methods ? $methods : array());
+        $code = $this->createCodeForClass($methods ? $methods : array());
 
         return eval("$code return \$code;");
     }
@@ -1349,11 +1349,11 @@ class MockGenerator
             return false;
         }
         if ($this->reflection->isInterface() || $this->reflection->hasFinal()) {
-            $code = $this->createClassCode($methods ? $methods : array());
+            $code = $this->createCodeForClass($methods ? $methods : array());
 
             return eval("$code return \$code;");
         } else {
-            $code = $this->createSubclassCode($methods ? $methods : array());
+            $code = $this->createCodeForSubclass($methods ? $methods : array());
 
             return eval("$code return \$code;");
         }
@@ -1388,7 +1388,7 @@ class MockGenerator
      *
      * @return string Code for new mock class.
      */
-    protected function createClassCode($methods)
+    protected function createCodeForClass($methods)
     {
         $implements = '';
         $interfaces = $this->reflection->getInterfaces();
@@ -1403,9 +1403,14 @@ class MockGenerator
         $code .= "    function __construct() {\n";
         $code .= "        parent::__construct();\n";
         $code .= "    }\n";
-        $code .= $this->createConstructorCode();
-        $code .= $this->createHandlerCode($methods);
+        $code .= $this->createCodeForConstructor();
+        $code .= $this->createCodeForMethods($methods);
         $code .= "}\n";
+
+        // TODO Reminder, uncomment to see the code of the generated Mock object.
+        //if($this->mock_class === 'MockDummyInterface') {
+        //    var_dump($code);
+        //}
 
         return $code;
     }
@@ -1418,7 +1423,7 @@ class MockGenerator
      *
      * @return string Code for new mock class.
      */
-    protected function createSubclassCode($methods)
+    protected function createCodeForSubclass($methods)
     {
         $code  = 'class ' . $this->mock_class . ' extends ' . $this->class . " {\n";
         $code .= "    public \$mock;\n";
@@ -1428,12 +1433,12 @@ class MockGenerator
         $code .= '        $this->mock = new ' . $this->mock_base . "();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
-        $code .= $this->createConstructorCode();
+        $code .= $this->createCodeForConstructor();
         $code .= $this->chainMockReturns();
         $code .= $this->chainMockExpectations();
         $code .= $this->chainThrowMethods();
-        $code .= $this->overrideMethods($this->reflection->getMethods());
-        $code .= $this->createNewMethodCode($methods);
+        $code .= $this->createCodeForOverridenMethods($this->reflection->getMethods());
+        $code .= $this->createCodeForNewMethod($methods);
         $code .= "}\n";
 
         return $code;
@@ -1458,11 +1463,11 @@ class MockGenerator
         $code .= '        $this->mock = new ' . $this->mock_base . "();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
-        $code .= $this->createConstructorCode();
+        $code .= $this->createCodeForConstructor();
         $code .= $this->chainMockReturns();
         $code .= $this->chainMockExpectations();
         $code .= $this->chainThrowMethods();
-        $code .= $this->overrideMethods($methods);
+        $code .= $this->createCodeForOverridenMethods($methods);
         $code .= "}\n";
 
         return $code;
@@ -1470,15 +1475,17 @@ class MockGenerator
 
     /**
      * Creates code within a class to generate replaced methods.
-     * All methods call the invoke() handler with the method name
-     * and the arguments in an array.
+     *
+     * All methods (except abstract ones) call the invoke() handler
+     * with the method name and the arguments in an array.
      *
      * @param array $methods Additional methods.
      */
-    protected function createHandlerCode($methods)
+    protected function createCodeForMethods($methods)
     {
         $code    = '';
         $methods = array_merge($methods, $this->reflection->getMethods());
+
         foreach ($methods as $method) {
             if ($this->isConstructorOrDeconstructor($method)) {
                 continue;
@@ -1487,9 +1494,18 @@ class MockGenerator
             if (in_array($method, $mock_reflection->getMethods())) {
                 continue;
             }
-            $code .= '    ' . $this->reflection->getSignature($method) . " {\n";
-            $code .= "        return \$this->invoke(\"$method\", func_get_args());\n";
-            $code .= "    }\n";
+
+            $code .= '    ' . $this->reflection->getSignature($method);
+
+            if($mock_reflection->isAbstract()) {
+                // abstract function has no body. end the signature statement.
+                $code .= ";\n";
+            } else {
+                $code .= " {\n";
+                $code .= "        return \$this->invoke(\"$method\", func_get_args());\n";
+                $code .= "    }\n";
+            }
+
         }
 
         return $code;
@@ -1502,7 +1518,7 @@ class MockGenerator
      *
      * @param array $methods Additional methods.
      */
-    protected function createNewMethodCode($methods)
+    protected function createCodeForNewMethod($methods)
     {
         $code = '';
         foreach ($methods as $method) {
@@ -1569,7 +1585,7 @@ class MockGenerator
      *
      * @return string Code for late calls.
      */
-    protected function createConstructorCode()
+    protected function createCodeForConstructor()
     {
         $code  = "    function __constructor() {\n";
         $code .= "        call_user_func_array('parent::__construct', func_get_args());\n";
@@ -1690,7 +1706,7 @@ class MockGenerator
      *
      * @return string Code for overridden chains.
      */
-    protected function overrideMethods($methods)
+    protected function createCodeForOverridenMethods($methods)
     {
         $code = '';
         foreach ($methods as $method) {
