@@ -312,14 +312,7 @@ class SimpleReflection
         $static     = $method->isStatic() ? 'static ' : '';
         $reference  = $method->returnsReference() ? '&' : '';
         $params     = $this->getParameterSignatures($method);
-
-        // Guard: method getReturnType() is only supported by PHP7.0+
-        if (PHP_VERSION_ID >= 70000) {
-            $returnType = $method->getReturnType() ? sprintf(': %s', $type) : '';
-        } else {
-            // the return type is empty for version below PHP7 
-            $returnType = '';
-        }
+        $returnType = $this->getReturnType($method); 
 
         return "{$abstract}$visibility {$static}function $reference$name($params){$returnType}";
     }
@@ -359,6 +352,37 @@ class SimpleReflection
         }
 
         return implode(', ', $signatures);
+    }
+
+    /**
+     * getReturnType
+     *
+     * @param ReflectionMethod $method   Method object from reflection API
+     *
+     * @return string The Parameters string for a method.
+     */
+    protected function getReturnType($method)
+    {
+        // Guard: method getReturnType() is only supported by PHP7.0+
+        if (PHP_VERSION_ID >= 70000) {
+            $returnType = (string) $method->getReturnType();
+
+            if('self' === $returnType) {
+                $returnType = "\\".$this->method->getDeclaringClass()->getName();
+            }
+
+            // Guard: method getReturnType()->allowsNull() is only supported by PHP7.1+
+            if(PHP_VERSION_ID >= 70100) {
+                $returnType = '?'.$returnType;
+            }
+
+            if($returnType != '') {
+                return ': '. $returnType;
+            }
+        } 
+            
+        // the return type feature doesn't exist below PHP7, return empty string
+        return '';        
     }
 
     protected function getParameterTypeHint(ReflectionParameter $parameter)
