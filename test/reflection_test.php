@@ -142,10 +142,11 @@ class TestOfReflection extends UnitTestCase
 
     public function testDetectionOfFinalMethods()
     {
-        $reflection = new SimpleReflection('AnyOldClass');
-        $this->assertFalse($reflection->hasFinal());
-        $reflection = new SimpleReflection('AnyOldLeafClassWithAFinal');
-        $this->assertTrue($reflection->hasFinal());
+        $reflectionA = new SimpleReflection('AnyOldClass');
+        $this->assertFalse($reflectionA->hasFinal());
+
+        $reflectionB = new SimpleReflection('AnyOldLeafClassWithAFinal');
+        $this->assertTrue($reflectionB->hasFinal());
     }
 
     public function testFindingParentClass()
@@ -222,21 +223,21 @@ class TestOfReflection extends UnitTestCase
     {
         $reflection = new SimpleReflection('AnyOldArgumentClass');
         $function   = $reflection->getSignature('aMethod');
-        $this->assertEqual('function aMethod($argument)', $function);
+        $this->assertEqual('public function aMethod($argument)', $function);
     }
 
     public function testParameterCreationWithoutTypeHinting()
     {
         $reflection = new SimpleReflection('AnyOldArgumentImplementation');
         $function   = $reflection->getSignature('aMethod');
-        $this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
+        $this->assertEqual('public function aMethod(\AnyOldInterface $argument)', $function);
     }
 
     public function testParameterCreationForTypeHinting()
     {
         $reflection = new SimpleReflection('AnyOldTypeHintedClass');
         $function   = $reflection->getSignature('aMethod');
-        $this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
+        $this->assertEqual('public function aMethod(\AnyOldInterface $argument)', $function);
     }
 
     public function testIssetFunctionSignature()
@@ -264,15 +265,19 @@ class TestOfReflection extends UnitTestCase
     public function testCreatingSignatureForAbstractMethod()
     {
         $reflection = new SimpleReflection('AnotherOldAbstractClass');
-        $this->assertEqual($reflection->getSignature('aMethod'), 'function aMethod(AnyOldInterface $argument)');
+        $this->assertEqual(
+            $reflection->getSignature('aMethod'),
+            // non abstract method - with body 
+            'protected function aMethod(\AnyOldInterface $argument)'
+        );
     }
 
     public function testCanProperlyGenerateStaticMethodSignatures()
     {
         $reflection = new SimpleReflection('AnyOldClassWithStaticMethods');
-        $this->assertEqual('static function aStatic()', $reflection->getSignature('aStatic'));
+        $this->assertEqual('public static function aStatic()', $reflection->getSignature('aStatic'));
         $this->assertEqual(
-            'static function aStaticWithParameters($arg1, $arg2)',
+            'public static function aStaticWithParameters($arg1, $arg2)',
             $reflection->getSignature('aStaticWithParameters')
         );
     }
@@ -284,13 +289,13 @@ class TestOfReflectionWithTypeHints extends UnitTestCase
     {
         eval('interface AnyOldArrayTypeHintedInterface {
 				  function amethod(array $argument);
-			  } 
+			  }
 			  class AnyOldArrayTypeHintedClass implements AnyOldArrayTypeHintedInterface {
 				  function amethod(array $argument) {}
 			  }');
         $reflection = new SimpleReflection('AnyOldArrayTypeHintedClass');
         $function   = $reflection->getSignature('amethod');
-        $this->assertEqual('function amethod(array $argument)', $function);
+        $this->assertEqual('public function amethod(array $argument)', $function);
     }
 }
 
@@ -300,15 +305,15 @@ class TestOfAbstractsWithAbstractMethods extends UnitTestCase
     {
         $reflection = new SimpleReflection('AnyOldAbstractClassWithAbstractMethods');
         $this->assertEqual(
-            'function anAbstract()',
+            'abstract public function anAbstract()',
             $reflection->getSignature('anAbstract')
         );
         $this->assertEqual(
-            'function anAbstractWithParameter($foo)',
+            'abstract public function anAbstractWithParameter($foo)',
             $reflection->getSignature('anAbstractWithParameter')
         );
         $this->assertEqual(
-            'function anAbstractWithMultipleParameters($foo, $bar)',
+            'abstract public function anAbstractWithMultipleParameters($foo, $bar)',
             $reflection->getSignature('anAbstractWithMultipleParameters')
         );
     }
