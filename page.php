@@ -466,7 +466,7 @@ class SimplePage
     /**
      * Accessor for parsed title.
      *
-     * @return string     Title or false if no title is present.
+     * @return string|bool    Title or false if no title is present.
      */
     public function getTitle()
     {
