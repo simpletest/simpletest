@@ -312,7 +312,14 @@ class SimpleReflection
         $static     = $method->isStatic() ? 'static ' : '';
         $reference  = $method->returnsReference() ? '&' : '';
         $params     = $this->getParameterSignatures($method);
-        $returnType = $method->getReturnType() ? sprintf(': %s', $type) : '';
+
+        // Guard: method getReturnType() is only supported by PHP7.0+
+        if (PHP_VERSION_ID >= 70000) {
+            $returnType = $method->getReturnType() ? sprintf(': %s', $type) : '';
+        } else {
+            // the return type is empty for version below PHP7 
+            $returnType = '';
+        }
 
         return "{$abstract}$visibility {$static}function $reference$name($params){$returnType}";
     }
