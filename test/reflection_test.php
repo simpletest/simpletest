@@ -244,14 +244,14 @@ class TestOfReflection extends UnitTestCase
     {
         $reflection = new SimpleReflection('AnyOldOverloadedClass');
         $function   = $reflection->getSignature('__isset');
-        $this->assertEqual('function __isset($key)', $function);
+        $this->assertEqual('public function __isset($key)', $function);
     }
 
     public function testUnsetFunctionSignature()
     {
         $reflection = new SimpleReflection('AnyOldOverloadedClass');
         $function   = $reflection->getSignature('__unset');
-        $this->assertEqual('function __unset($key)', $function);
+        $this->assertEqual('public function __unset($key)', $function);
     }
 
     public function testProperlyReflectsTheFinalInterfaceWhenObjectImplementsAnExtendedInterface()
@@ -299,6 +299,11 @@ class TestOfReflectionWithTypeHints extends UnitTestCase
     }
 }
 
+/**
+ * Abstract method's are public or protected.
+ *
+ * @link http://php.net/manual/en/language.oop5.abstract.php
+ */
 class TestOfAbstractsWithAbstractMethods extends UnitTestCase
 {
     public function testCanProperlyGenerateAbstractMethods()
