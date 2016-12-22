@@ -122,7 +122,7 @@ class TestOfReflection extends UnitTestCase
     {
         $reflection = new SimpleReflection('AnyOldLeafClass');
         $this->assertTrue($reflection->classOrInterfaceExists());
-        $this->assertTrue($reflection->classOrInterfaceExistsSansAutoload());
+        $this->assertTrue($reflection->classOrInterfaceExistsWithoutAutoload());
         $this->assertFalse($reflection->isAbstract());
         $this->assertFalse($reflection->isInterface());
     }
@@ -131,7 +131,7 @@ class TestOfReflection extends UnitTestCase
     {
         $reflection = new SimpleReflection('UnknownThing');
         $this->assertFalse($reflection->classOrInterfaceExists());
-        $this->assertFalse($reflection->classOrInterfaceExistsSansAutoload());
+        $this->assertFalse($reflection->classOrInterfaceExistsWithoutAutoload());
     }
 
     public function testDetectionOfAbstractClass()
@@ -158,7 +158,7 @@ class TestOfReflection extends UnitTestCase
     {
         $reflection = new SimpleReflection('AnyOldInterface');
         $this->assertTrue($reflection->classOrInterfaceExists());
-        $this->assertTrue($reflection->classOrInterfaceExistsSansAutoload());
+        $this->assertTrue($reflection->classOrInterfaceExistsWithoutAutoload());
         $this->assertTrue($reflection->isInterface());
     }
 

@@ -1323,7 +1323,7 @@ class MockGenerator
             return false;
         }
         $mock_reflection = new SimpleReflection($this->mock_class);
-        if ($mock_reflection->classExistsSansAutoload()) {
+        if ($mock_reflection->classExistsWithoutAutoload()) {
             return false;
         }
         $code = $this->createCodeForClass($methods ? $methods : array());
@@ -1348,7 +1348,7 @@ class MockGenerator
             return false;
         }
         $mock_reflection = new SimpleReflection($this->mock_class);
-        if ($mock_reflection->classExistsSansAutoload()) {
+        if ($mock_reflection->classExistsWithoutAutoload()) {
             return false;
         }
         if ($this->reflection->isInterface() || $this->reflection->hasFinal()) {
@@ -1374,7 +1374,7 @@ class MockGenerator
             return false;
         }
         $mock_reflection = new SimpleReflection($this->mock_class);
-        if ($mock_reflection->classExistsSansAutoload()) {
+        if ($mock_reflection->classExistsWithoutAutoload()) {
             trigger_error('Partial mock class [' . $this->mock_class . '] already exists');
 
             return false;

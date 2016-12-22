@@ -34,7 +34,7 @@ class SimpleReflection
      *
      * @return bool        True if defined.
      */
-    public function classExistsSansAutoload()
+    public function classExistsWithoutAutoload()
     {
         return class_exists($this->interface, false);
     }
@@ -54,7 +54,7 @@ class SimpleReflection
      *
      * @return bool        True if defined.
      */
-    public function classOrInterfaceExistsSansAutoload()
+    public function classOrInterfaceExistsWithoutAutoload()
     {
         return $this->classOrInterfaceExistsWithAutoload($this->interface, false);
     }
@@ -62,12 +62,12 @@ class SimpleReflection
     /**
      * Needed to select the autoload feature in PHP5 for classes created dynamically.
      *
-     * @param string $interface       Class or interface name.
-     * @param bool $autoload       True totriggerautoload.
+     * @param string $interface    Class or interface name.
+     * @param bool $autoload       True, to trigger autoloading. Default: true.
      *
      * @return bool                True if interface defined.
      */
-    protected function classOrInterfaceExistsWithAutoload($interface, $autoload)
+    protected function classOrInterfaceExistsWithAutoload($interface, $autoload = true)
     {
         if (interface_exists($interface, $autoload)) {
             return true;
