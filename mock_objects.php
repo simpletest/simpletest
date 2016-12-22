@@ -1394,7 +1394,7 @@ class MockGenerator
      */
     protected function createCodeForClass($methods)
     {
-        $implements = '';
+        $implements = '';        
         $interfaces = $this->reflection->getInterfaces();
 
         // exclude interfaces
@@ -1403,7 +1403,8 @@ class MockGenerator
         if (count($interfaces) > 0) {
             $implements = 'implements ' . implode(', ', $interfaces);
         }
-        $code = 'class ' . $this->mock_class . ' extends ' . $this->mock_base . " $implements {\n";
+
+        $code = 'class ' . $this->mock_class . ' extends ' . $this->mock_base . ' ' . $implements . " {\n";
         $code .= "    function __construct() {\n";
         $code .= "        parent::__construct();\n";
         $code .= "    }\n";

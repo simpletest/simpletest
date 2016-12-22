@@ -54,7 +54,10 @@ abstract class AnyAbstractImplementation implements AnyOldInterface
 
 abstract class AnotherOldAbstractClass
 {
-    abstract protected function aMethod(AnyOldInterface $argument);
+    protected function aMethod(AnyOldInterface $argument)
+    {
+        
+    }
 }
 
 class AnyOldSubclass extends AnyOldImplementation

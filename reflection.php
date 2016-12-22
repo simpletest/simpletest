@@ -299,7 +299,7 @@ class SimpleReflection
         $interface = new ReflectionClass($this->interface);
         $method = $interface->getMethod($name);
 
-        $abstract = ($method->isAbstract() && ! $this->isAbstractMethodInParents($name)) ? 'abstract ' : '';
+        $abstract = ($method->isAbstract() && ! $interface->isInterface() && ! $this->isAbstractMethodInParents($name)) ? 'abstract ' : '';
 
         if ($method->isPublic()) {
             $visibility = 'public';

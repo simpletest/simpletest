@@ -10,7 +10,7 @@ require_once dirname(__FILE__) . '/simpletest.php';
 require_once dirname(__FILE__) . '/exceptions.php';
 require_once dirname(__FILE__) . '/reflection.php';
 
- // define root constant for dependent libraries
+// define root constant for dependent libraries
 if (! defined('SIMPLE_TEST')) {
     define('SIMPLE_TEST', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 }
