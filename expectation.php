@@ -264,12 +264,14 @@ class EqualExpectation extends SimpleExpectation
      * @return string             Description of success or failure.
      */
     public function testMessage($compare)
-    {
+    {   
+        $dumper = $this->getDumper();
+
         if ($this->test($compare)) {
-            return 'Equal expectation [' . $this->dumper->describeValue($this->value) . ']';
+            return 'Equal expectation [' . $dumper->describeValue($this->value) . ']';
         } else {
             return 'Equal expectation fails ' .
-                    $this->dumper->describeDifference($this->value, $compare);
+                    $dumper->describeDifference($this->value, $compare);
         }
     }
 
@@ -391,8 +393,10 @@ class WithinMarginExpectation extends SimpleExpectation
      */
     protected function withinMessage($compare)
     {
-        return 'Within expectation [' . $this->dumper->describeValue($this->lower) . '] and [' .
-                $this->dumper->describeValue($this->upper) . ']';
+        $dumper = $this->getDumper();
+
+        return 'Within expectation [' . $dumper->describeValue($this->lower) . '] and [' .
+                $dumper->describeValue($this->upper) . ']';
     }
 
     /**
@@ -402,12 +406,14 @@ class WithinMarginExpectation extends SimpleExpectation
      */
     protected function outsideMessage($compare)
     {
+        $dumper = $this->getDumper();
+
         if ($compare > $this->upper) {
             return 'Outside expectation ' .
-                    $this->dumper->describeDifference($compare, $this->upper);
+                    $dumper->describeDifference($compare, $this->upper);
         } else {
             return 'Outside expectation ' .
-                    $this->dumper->describeDifference($compare, $this->lower);
+                    $dumper->describeDifference($compare, $this->lower);
         }
     }
 }
