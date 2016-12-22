@@ -632,7 +632,7 @@ class SimpleThrower
     }
 
     /**
-     * Throws the exceptins stashed earlier.
+     * Throws the exceptions stashed earlier.
      */
     public function act()
     {
@@ -704,7 +704,7 @@ class SimpleMock
         $this->max_counts       = array();
         $this->expected_args    = array();
         $this->expected_args_at = array();
-        $current_test_case = $this->getCurrentTestCase();
+        $current_test_case      = $this->getCurrentTestCase();        
         if ($current_test_case) {
             $current_test_case->tell($this);
         }
@@ -1223,7 +1223,8 @@ class SimpleMock
 }
 
 /**
- * Static methods only service class for code generation of mock objects.
+ * The mock class is a service class.
+ * It provides static methods only for code generation of mock objects.
  */
 class Mock
 {
@@ -1236,7 +1237,7 @@ class Mock
     }
 
     /**
-     * Clones a class' interface and creates a mock version
+     * Clones the interface of a class and creates a mock version
      * that can have return values and expectations set.
      *
      * @param string $class      Class to clone.
