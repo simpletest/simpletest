@@ -331,7 +331,7 @@ class SimpleAnchorTag extends SimpleTag
     /**
      * Accessor for URL as string.
      *
-     * @return string    Coerced as string.
+     * @return string    Forced to string.
      */
     public function getHref()
     {
@@ -1359,7 +1359,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
             }
         }
 
-        return $this->coerceValues($values);
+        return $this->forceValues($values);
     }
 
     /**
@@ -1377,7 +1377,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
             }
         }
 
-        return $this->coerceValues($values);
+        return $this->forceValues($values);
     }
 
     /**
@@ -1437,7 +1437,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
      *
      * @return string/array/boolean   Expected format for a tag.
      */
-    protected function coerceValues($values)
+    protected function forceValues($values)
     {
         if (count($values) == 0) {
             return false;

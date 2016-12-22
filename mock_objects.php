@@ -66,7 +66,7 @@ class ParametersExpectation extends SimpleExpectation
      */
     protected function testParameter($parameter, $expected)
     {
-        $comparison = $this->coerceToExpectation($expected);
+        $comparison = $this->forceToExpectation($expected);
 
         return $comparison->test($parameter);
     }
@@ -112,7 +112,7 @@ class ParametersExpectation extends SimpleExpectation
         }
         $messages = array();
         for ($i = 0; $i < count($expected); $i++) {
-            $comparison = $this->coerceToExpectation($expected[$i]);
+            $comparison = $this->forceToExpectation($expected[$i]);
             if (! $comparison->test($parameters[$i])) {
                 $messages[] = 'parameter ' . ($i + 1) . ' with [' .
                         $comparison->overlayMessage($parameters[$i], $this->getDumper()) . ']';
@@ -129,7 +129,7 @@ class ParametersExpectation extends SimpleExpectation
      *
      * @return SimpleExpectation   Expectation object.
      */
-    protected function coerceToExpectation($expected)
+    protected function forceToExpectation($expected)
     {
         if (SimpleExpectation::isExpectation($expected)) {
             return $expected;

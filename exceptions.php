@@ -153,7 +153,7 @@ class SimpleExceptionTrap
      */
     public function expectException($expected = false, $message = '%s')
     {
-        $this->expected = $this->coerceToExpectation($expected);
+        $this->expected = $this->forceToExpectation($expected);
         $this->message  = $message;
     }
 
@@ -165,7 +165,7 @@ class SimpleExceptionTrap
      */
     public function ignoreException($ignored)
     {
-        $this->ignored[] = $this->coerceToExpectation($ignored);
+        $this->ignored[] = $this->forceToExpectation($ignored);
     }
 
     /**
@@ -198,7 +198,7 @@ class SimpleExceptionTrap
      *
      * @return SimpleExpectation    Expectation that will match the exception.
      */
-    private function coerceToExpectation($exception)
+    private function forceToExpectation($exception)
     {
         if ($exception === false) {
             return new AnythingExpectation();

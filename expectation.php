@@ -821,7 +821,7 @@ class IsAExpectation extends SimpleExpectation
     }
 
     /**
-     * Coerces type name into a is_*() match.
+     * forces type name into a is_*() match.
      *
      * @param string $type        User type.
      *
