@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../../autorun.php';
-require_once dirname(__FILE__) . '/../../../mock_objects.php';
+require_once __DIR__ . '/../../../autorun.php';
+require_once __DIR__ . '/../../../mock_objects.php';
 
 class CodeCoverageTest extends UnitTestCase
 {
@@ -15,7 +15,7 @@ class CodeCoverageTest extends UnitTestCase
 
     public function setUp()
     {
-        require_once dirname(__FILE__) . '/../coverage.php';
+        require_once __DIR__ . '/../coverage.php';
     }
 
     public function testIsFileIncluded()
@@ -77,7 +77,7 @@ class CodeCoverageTest extends UnitTestCase
         $touched            = array_flip(array('test/coverage_test.php'));
         $actual             = array();
         $coverage->includes = array('coverage_test\.php$');
-        $parentDir          = realpath(dirname(__FILE__));
+        $parentDir          = realpath(__DIR__);
         $coverage->getUntouchedFiles($actual, $touched, $parentDir, $parentDir);
         $this->assertEqual(array('coverage_test.php'), $actual);
     }

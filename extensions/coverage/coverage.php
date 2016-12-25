@@ -1,9 +1,9 @@
 <?php
 
-require_once dirname(__FILE__) . '/coverage_data_handler.php';
+require_once __DIR__ . '/coverage_data_handler.php';
 
 /**
- * SimpleTest Extension - CodeCoverage
+ * SimpleTest - CodeCoverage
  */
 class CodeCoverage
 {
@@ -16,14 +16,14 @@ class CodeCoverage
     public $title             = 'Code Coverage';
 
     # NOTE: This assumes all code shares the same current working directory.
-    public $settingsFile = './code-coverage-settings.dat';
+    public $settingsFile = './coverage-settings.json';
 
     public static $instance;
 
     public function writeUntouched()
     {
         $touched   = array_flip($this->getTouchedFiles());
-        $untouched = array();
+        $untouched = [];
         $this->getUntouchedFiles($untouched, $touched, '.', '.');
         $this->includeUntouchedFiles($untouched);
     }
@@ -67,7 +67,6 @@ class CodeCoverage
 
     public function resetLog()
     {
-        error_log('reseting log');
         $file = fopen($this->log, 'w');
         if (!$file) {
             throw new Exception('Could not create ' . $this->log);
@@ -105,32 +104,29 @@ class CodeCoverage
 
     public function readSettings()
     {
-        if (file_exists($this->settingsFile)) {
-            $this->setSettings(file_get_contents($this->settingsFile));
-        } else {
+        if (!file_exists($this->settingsFile)) {
             error_log('Could not find settings file ' . $this->settingsFile);
         }
+
+        $this->setSettings(json_decode(file_get_contents($this->settingsFile), true));
     }
 
     public function writeSettings()
     {
-        file_put_contents($this->settingsFile, $this->getSettings());
+        file_put_contents($this->settingsFile, json_encode($this->getSettings(), JSON_PRETTY_PRINT));
     }
 
     public function getSettings()
     {
-        $data = array(
+        return [
             'log'      => realpath($this->log),
             'includes' => $this->includes,
             'excludes' => $this->excludes
-        );
-
-        return serialize($data);
+        ];
     }
 
-    public function setSettings($settings)
+    public function setSettings($data)
     {
-        $data           = unserialize($settings);
         $this->log      = $data['log'];
         $this->includes = $data['includes'];
         $this->excludes = $data['excludes'];
@@ -187,11 +183,9 @@ class CodeCoverage
     public static function isCoverageOn()
     {
         $coverage = self::getInstance();
-        $coverage->readSettings();
-        if (empty($coverage->log) || !file_exists($coverage->log)) {
-            trigger_error('No coverage log');
 
-            return false;
+        if (empty($coverage->log) || !file_exists($coverage->log)) {
+            throw new Exception('Could not find the coverage log file.');
         }
 
         return true;

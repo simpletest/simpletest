@@ -1,8 +1,8 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../../autorun.php';
+require_once __DIR__ . '/../../../autorun.php';
 
-class SimpleCoverageWriterTest extends UnitTestCase
+class CoverageWriterTest extends UnitTestCase
 {
     public function skip()
     {
@@ -14,66 +14,63 @@ class SimpleCoverageWriterTest extends UnitTestCase
 
     public function setUp()
     {
-        require_once dirname(__FILE__) . '/../simple_coverage_writer.php';
-        require_once dirname(__FILE__) . '/../coverage_calculator.php';
+        require_once __DIR__ . '/../coverage_writer.php';
+        require_once __DIR__ . '/../coverage_calculator.php';
     }
 
     public function testGenerateSummaryReport()
     {
-        $writer             = new SimpleCoverageWriter();
+        $writer             = new CoverageWriter();
         $coverage           = array('file' => array(0, 1));
         $untouched          = array('missed-file');
         $calc               = new CoverageCalculator();
         $variables          = $calc->variables($coverage, $untouched);
-        $variables['title'] = 'coverage';
-        $out                = fopen('php://memory', 'w');
-        $writer->writeSummary($out, $variables);
-        $dom = self::getDom($out);
+        $variables['title'] = 'Coverage Summary';
+        $reportFile         = __DIR__ . '/summaryReport.html';
+
+        $contents = $writer->writeSummaryReport($reportFile, $variables);
+
+        $dom = new SimpleXMLElement($contents);
 
         $totalPercentCoverage = $dom->xpath("//span[@class='totalPercentCoverage']");
         $this->assertEqual('50%', (string) $totalPercentCoverage[0]);
 
-        $fileLinks    = $dom->xpath("//a[@class='byFileReportLink']");
+        $fileLinks    = $dom->xpath("//a[@class='fileReportLink']");
         $fileLinkAttr = $fileLinks[0]->attributes();
         $this->assertEqual('file.html', $fileLinkAttr['href']);
         $this->assertEqual('file', (string) ($fileLinks[0]));
 
         $untouchedFile = $dom->xpath("//span[@class='untouchedFile']");
         $this->assertEqual('missed-file', (string) $untouchedFile[0]);
+
+        unlink($reportFile);
     }
 
     public function testGenerateCoverageByFile()
     {
-        $writer             = new SimpleCoverageWriter();
+        $writer             = new CoverageWriter();
         $cov                = array(3 => 1, 4 => -2); // 2 comments, 1 code, 1 dead  (1-based indexes)
-        $out                = fopen('php://memory', 'w');
-        $file               = dirname(__FILE__) . '/sample/code.php';
+        $coverageSampleFile = __DIR__ . '/sample/code.php';
         $calc               = new CoverageCalculator();
-        $variables          = $calc->coverageByFileVariables($file, $cov);
-        $variables['title'] = 'coverage';
-        $writer->writeByFile($out, $variables);
-        $dom = self::getDom($out);
+        $variables          = $calc->coverageByFileVariables($coverageSampleFile, $cov);
+        $variables['title'] = 'File Coverage';
+        $reportFile         = __DIR__ . '/sampleFileReport.html';
+
+        $contents = $writer->writeFileReport($reportFile, $variables);
+
+        $dom = new SimpleXMLElement($contents);
 
         $cells = $dom->xpath("//table[@id='code']/tbody/tr/td/span");
         $this->assertEqual('comment code', self::getAttribute($cells[1], 'class'));
         $this->assertEqual('comment code', self::getAttribute($cells[3], 'class'));
         $this->assertEqual('covered code', self::getAttribute($cells[5], 'class'));
         $this->assertEqual('dead code', self::getAttribute($cells[7], 'class'));
+
+        unlink($reportFile);
     }
 
     public static function getAttribute($element, $attribute)
     {
-        $a = $element->attributes();
-
-        return $a[$attribute];
-    }
-
-    public static function getDom($stream)
-    {
-        rewind($stream);
-        $doc = new DOMDocument();
-        $doc->loadHTML(stream_get_contents($stream));
-
-        return new SimpleXMLElement($doc->saveHTML());
+        return $element->attributes()[$attribute];
     }
 }

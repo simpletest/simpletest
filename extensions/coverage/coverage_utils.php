@@ -2,6 +2,11 @@
 
 class CoverageUtils
 {
+    public static function reportFilename($file)
+    {
+        return preg_replace('|[:/\\\\]|i', '_', $file) . '.html';
+    }
+
     public static function mkdir($dir)
     {
         if (!file_exists($dir)) {
@@ -99,7 +104,7 @@ class CoverageUtils
      *
      * @return first value unless value is not set then returns 2nd arg or null if no 2nd arg
      */
-    public static function issetOr(&$val, $default = null)
+    public static function issetOrDefault(&$val, $default = null)
     {
         return isset($val) ? $val : $default;
     }

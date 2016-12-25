@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../../autorun.php';
+require_once __DIR__ . '/../../../autorun.php';
 
 class CoverageUtilsTest extends UnitTestCase
 {
@@ -14,12 +14,20 @@ class CoverageUtilsTest extends UnitTestCase
 
     public function setUp()
     {
-        require_once dirname(__FILE__) . '/../coverage_utils.php';
+        require_once __DIR__ . '/../coverage_utils.php';
+    }
+
+    public function testReportFilename()
+    {
+        $this->assertEqual('C__Oh_No_parula.php.html', CoverageUtils::reportFilename('C:\Oh\No\parula.php'));
+        $this->assertEqual('parula.php.html', CoverageUtils::reportFilename('parula.php'));
+        $this->assertEqual('warbler_parula.php.html', CoverageUtils::reportFilename('warbler/parula.php'));
+        $this->assertEqual('warbler_parula.php.html', CoverageUtils::reportFilename('warbler\\parula.php'));
     }
 
     public function testMkdir()
     {
-        CoverageUtils::mkdir(dirname(__FILE__));
+        CoverageUtils::mkdir(__DIR__);
         try {
             CoverageUtils::mkdir(__FILE__);
             $this->fail('Should give error about cannot create dir of a file');
@@ -29,7 +37,7 @@ class CoverageUtilsTest extends UnitTestCase
 
     public function testIsPackageClassAvailable()
     {
-        $coverageSource = dirname(__FILE__) . '/../coverage_calculator.php';
+        $coverageSource = __DIR__ . '/../coverage_calculator.php';
         $this->assertTrue(CoverageUtils::isPackageClassAvailable($coverageSource, 'CoverageCalculator'));
         $this->assertFalse(CoverageUtils::isPackageClassAvailable($coverageSource, 'BogusCoverage'));
         $this->assertFalse(CoverageUtils::isPackageClassAvailable('bogus-file', 'BogusCoverage'));
@@ -73,10 +81,10 @@ class CoverageUtilsTest extends UnitTestCase
         $this->assertEqual(array('bird[]' => array('duck', 'pigeon')), $actual);
     }
 
-    public function testIssetOr()
+    public function testIssetOrDefault()
     {
         $data = array('bird' => 'gull');
-        $this->assertEqual('lab', CoverageUtils::issetOr($data['dog'], 'lab'));
-        $this->assertEqual('gull', CoverageUtils::issetOr($data['bird'], 'sparrow'));
+        $this->assertEqual('lab', CoverageUtils::issetOrDefault($data['dog'], 'lab'));
+        $this->assertEqual('gull', CoverageUtils::issetOrDefault($data['bird'], 'sparrow'));
     }
 }

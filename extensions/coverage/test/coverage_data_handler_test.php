@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../../autorun.php';
+require_once __DIR__ . '/../../../autorun.php';
 
 class CoverageDataHandlerTest extends UnitTestCase
 {
@@ -14,7 +14,7 @@ class CoverageDataHandlerTest extends UnitTestCase
 
     public function setUp()
     {
-        require_once dirname(__FILE__) . '/../coverage_data_handler.php';
+        require_once __DIR__ . '/../coverage_data_handler.php';
     }
 
     public function testAggregateCoverageCode()
