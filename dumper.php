@@ -114,26 +114,33 @@ class SimpleDumper
     /**
      * Clips a string to a maximum length.
      *
-     * @param string $value         String to truncate.
+     * @param string $string     String to truncate.
      * @param int $size         Minimum string size to show.
      * @param int $position     Centre of string section.
      *
      * @return string               Shortened version.
      */
-    public function clipString($value, $size, $position = 0)
+    public function clipString($string, $size, $position = 0)
     {
-        $length = strlen($value);
-        if ($length <= $size) {
-            return $value;
+        $utf8 = false;
+        if (function_exists('mb_detect_encoding') && mb_detect_encoding($string) == 'UTF-8') {
+            $utf8 = true;   
         }
+
+        $length = ($utf8 == true) ? mb_strlen($string, "UTF-8") : strlen($string);
+
+        if ($length <= $size) {
+            return $string;
+        }
+
         $position = min($position, $length);
         $start    = ($size/2 > $position ? 0 : $position - $size/2);
         if ($start + $size > $length) {
             $start = $length - $size;
         }
-        $value = substr($value, $start, $size);
+        $string = ($utf8 == true) ? mb_substr($string, $start, $size) : substr($string, $start, $size);
 
-        return ($start > 0 ? '...' : '') . $value . ($start + $size < $length ? '...' : '');
+        return ($start > 0 ? '...' : '') . $string . ($start + $size < $length ? '...' : '');
     }
 
     /**

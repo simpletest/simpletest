@@ -11,34 +11,15 @@ class TestOfTextFormatting extends UnitTestCase
     public function testClipping()
     {
         $dumper = new SimpleDumper();
-        $this->assertEqual(
-                $dumper->clipString('Hello', 6),
-                'Hello',
-                'Hello, 6->%s');
-        $this->assertEqual(
-                $dumper->clipString('Hello', 5),
-                'Hello',
-                'Hello, 5->%s');
-        $this->assertEqual(
-                $dumper->clipString('Hello world', 3),
-                'Hel...',
-                'Hello world, 3->%s');
-        $this->assertEqual(
-                $dumper->clipString('Hello world', 6, 3),
-                'Hello ...',
-                'Hello world, 6, 3->%s');
-        $this->assertEqual(
-                $dumper->clipString('Hello world', 3, 6),
-                '...o w...',
-                'Hello world, 3, 6->%s');
-        $this->assertEqual(
-                $dumper->clipString('Hello world', 4, 11),
-                '...orld',
-                'Hello world, 4, 11->%s');
-        $this->assertEqual(
-                $dumper->clipString('Hello world', 4, 12),
-                '...orld',
-                'Hello world, 4, 12->%s');
+        $this->assertEqual($dumper->clipString('Hello', 6), 'Hello', 'Hello, 6->%s');
+        $this->assertEqual($dumper->clipString('Hello', 5), 'Hello', 'Hello, 5->%s');
+        $this->assertEqual($dumper->clipString('Hello world', 3), 'Hel...', 'Hello world, 3->%s');
+        $this->assertEqual($dumper->clipString('Hello world', 6, 3), 'Hello ...', 'Hello world, 6, 3->%s');
+        $this->assertEqual($dumper->clipString('Hello world', 3, 6), '...o w...', 'Hello world, 3, 6->%s');
+        $this->assertEqual($dumper->clipString('Hello world', 4, 11), '...orld', 'Hello world, 4, 11->%s');
+        $this->assertEqual($dumper->clipString('Hello world', 4, 12), '...orld', 'Hello world, 4, 12->%s');
+        $this->assertEqual($dumper->clipString('Seine Majestät, der König von Zamunda', 31), 
+            'Seine Majestät, der König von...', 'Seine Majestät, der König von Zamunda, 31, 31->%s');
     }
 
     public function testDescribeNull()
