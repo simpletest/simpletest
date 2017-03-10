@@ -20,7 +20,7 @@ class SimpleCommandLineParser
     private $xml            = false;
     private $junit          = false;
     private $help           = false;
-    private $no_skips       = false;    
+    private $no_skips       = false;
     private $excludes       = array();
     private $doCodeCoverage = false;
 
@@ -174,7 +174,7 @@ HELP;
 class DefaultReporter extends SimpleReporterDecorator
 {
     public $doCodeCoverage = false;
-    public $excludes;
+    public $excludes = array();
 
     /**
      * Assembles the appropriate reporter for the environment.
@@ -186,11 +186,11 @@ class DefaultReporter extends SimpleReporterDecorator
             $this->doCodeCoverage = $parser->doCodeCoverage();
             $this->excludes = $parser->getExcludes();
             if ($parser->isXml()) {
-            	$interfaces = array('XmlReporter');
+                $interfaces = array('XmlReporter');
             } else if ($parser->isJUnit()) {
-            	$interfaces = array('JUnitXmlReporter');
+               $interfaces = array('JUnitXmlReporter');
             } else {
-            	$interfaces = array('TextReporter');
+               $interfaces = array('TextReporter');
             }
             if ($parser->help()) {
                 echo $parser->getHelpText();
