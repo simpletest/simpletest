@@ -478,7 +478,7 @@ class SimpleFileLoader
      */
     public function createSuiteFromClasses($title, $classes)
     {
-        if (count($classes) === 0) {
+        if (count($classes) == 0) {
             $suite = new BadTestSuite($title, "No runnable test cases in [$title]");
 
             return $suite;
@@ -524,7 +524,7 @@ class TestSuite
     {
         if (! $this->label) {
             return ($this->getSize() === 1) ?
-                    @get_class($this->test_cases[0]) : get_class($this);
+                    get_class($this->test_cases[0]) : get_class($this);
         } else {
             return $this->label;
         }
