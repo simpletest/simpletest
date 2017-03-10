@@ -4,6 +4,15 @@ require_once dirname(__FILE__) . '/../autorun.php';
 
 class ReferenceForTesting
 {
+    private $reference;
+    public function setReference(&$reference)
+    {
+        $this->reference = $reference;
+    }
+    public function &getReference()
+    {
+        return $this->reference;
+    }
 }
 
 class TestOfUnitTester extends UnitTestCase
@@ -46,6 +55,15 @@ class TestOfUnitTester extends UnitTestCase
         $a = 25;
         $b = &$a; // reference is a pointer to a scalar
         $this->assertReference($a, $b);
+    }
+
+    public function testReferenceAssertionOnObject()
+    {
+        $refValue = 5;
+        $a = new ReferenceForTesting();
+        $a->setReference($refValue);
+        $b = &$a->getReference(); // $b is a reference to $a->reference, which is 5.
+        $this->assertReference($a->getReference(), $b);
     }
 
     public function testCloneOnObjects()
