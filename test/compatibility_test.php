@@ -45,9 +45,9 @@ class TestOfCompatibility extends UnitTestCase
     public function testObjectReferences()
     {
         $object            = new ComparisonClass();
-        $object_reference  = $object;
-        $object_copy       = new ComparisonClass();
-        $object_assignment = $object;
+        $object_reference  = &$object;
+        $object_copy       = clone $object;
+        $object_assignment = &$object;
         $this->assertTrue(SimpleTestCompatibility::isReference(
                 $object,
                 $object));
