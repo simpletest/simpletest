@@ -45,6 +45,7 @@ class TestOfSpl extends UnitTestCase
         static $classesToExclude = [
             'SplHeap', // the method compare() is missing
             'FilterIterator', // the method accept() is missing
+            'RecursiveFilterIterator' // the method hasChildren() must contain body
         ];
 
         foreach (spl_classes() as $class) {
@@ -53,7 +54,7 @@ class TestOfSpl extends UnitTestCase
             if (in_array($class, $classesToExclude)) {
                 continue;
             }
-            
+
             $mock_class = "Mock$class";
             Mock::generate($class);
             $this->assertIsA(new $mock_class(), $mock_class);
