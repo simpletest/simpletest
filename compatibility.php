@@ -71,22 +71,17 @@ class SimpleTestCompatibility
      */
     public static function isReference(&$first, &$second)
     {
-        if (is_object($first)) {
-            return ($first === $second);
+        if($first !== $second){
+            return false;
         }
-        if (is_object($first) && is_object($second)) {
-            $id         = uniqid(mt_rand());
-            $first->$id = true;
-            $is_ref     = isset($second->$id);
-            unset($first->$id);
-
-            return $is_ref;
-        }
-        $temp   = $first;
-        $first  = uniqid(mt_rand());
+        $temp_first = $first;
+        // modify $first
+        $first = ($first === true) ? false : true;
+        // after modifying $first, $second will not be equal to $first,
+        // unless $second and $first points to the same variable.
         $is_ref = ($first === $second);
-        $first  = $temp;
-
+         // unmodify $first
+        $first = $temp_first;
         return $is_ref;
     }
 }
