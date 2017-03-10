@@ -220,15 +220,12 @@ class UnitTestCase extends SimpleTestCase
     public function assertReference(&$first, &$second, $message = '%s')
     {
         $dumper  = new SimpleDumper();
-        $message = sprintf(
-                $message,
-                '[' . $dumper->describeValue($first) .
-                        '] and [' . $dumper->describeValue($second) .
-                        '] should reference the same object');
+        $args = '[' . $dumper->describeValue($first) . '] '
+            . 'and [' . $dumper->describeValue($second) .'] '
+            . 'should reference the same object';
+        $isReference = SimpleTestCompatibility::isReference($first, $second);
 
-        return $this->assertTrue(
-                SimpleTestCompatibility::isReference($first, $second),
-                $message);
+        return $this->assertTrue($isReference, sprintf($message, $args));
     }
 
     /**
@@ -269,8 +266,8 @@ class UnitTestCase extends SimpleTestCase
     public function assertClone($first, $second, $message = '%s')
     {
         $dumper  = new SimpleDumper();
-        $message = sprintf($message, 
-            '[' . $dumper->describeValue($first) . '] and [' . 
+        $message = sprintf($message,
+            '[' . $dumper->describeValue($first) . '] and [' .
             $dumper->describeValue($second) .'] should not be the same object'
         );
         $identical = new IdenticalExpectation($first);
