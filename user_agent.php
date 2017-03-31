@@ -97,6 +97,45 @@ class SimpleUserAgent
     }
 
     /**
+     *    Get current list of cookies
+     *    @access public
+     *    @return array
+     */
+    public function getCookies()
+    {
+        $lstCookies = $this->cookie_jar->getCookies();
+        $aCookies = [];
+        foreach($lstCookies as $oCookies) {
+            $aCookies[] = [
+                'name'=>$oCookies->getName(),
+                'value'=>$oCookies->getValue(),
+                'host'=>$oCookies->getHost(),
+                'path'=>$oCookies->getPath(),
+                'expiry'=>$oCookies->getExpiry(),
+            ];
+        }
+        return $aCookies;
+    }
+
+    /**
+     *    Import a list of cookies
+     *    @access public
+     *    @param array
+     */
+    public function setCookies(array $lstCookies)
+    {
+        foreach($lstCookies as $aCookies) {
+                $this->cookie_jar->setCookie(
+                $aCookies['name'],
+                $aCookies['value'],
+                $aCookies['host'],
+                $aCookies['path'],
+                $aCookies['expiry']
+            );
+        }
+    }
+
+    /**
      * Reads the most specific cookie value from the browser cookies.
      *
      * @param string $host        Host to search.

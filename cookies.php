@@ -288,6 +288,16 @@ class SimpleCookieJar
     }
 
     /**
+     *    Return a list of the current cookies
+     *    @access public
+     *    @return array
+     */
+    public function getCookies()
+    {
+        return $this->cookies;
+    }
+
+    /**
      * Finds a matching cookie to write over or the first empty slot if none.
      *
      * @param SimpleCookie $cookie Cookie to write into jar.
