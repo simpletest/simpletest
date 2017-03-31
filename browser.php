@@ -248,12 +248,34 @@ class SimpleBrowser
     }
 
     /**
-     * Switches back on the cookie sending and recieving.
+     *    Switches back on the cookie sending and recieving.
+     *    @access public
      */
     public function useCookies()
     {
         $this->user_agent->useCookies();
     }
+
+    /**
+     *    Get current list of cookies
+     *    @access public
+     *    @return array
+     */
+    public function getCookies()
+    {
+        return $this->user_agent->getCookies();
+    }
+
+    /**
+     *    Import a list of cookies
+     *    @access public
+     *    @param array
+     */
+    public function setCookies(array $lstCookies)
+    {
+        return $this->user_agent->setCookies($lstCookies);
+    }
+
 
     /**
      * Parses the raw content into a page.
