@@ -4,7 +4,11 @@
 
 **currently working on: fixing mock objects & references**
 
-### Changes
+* [PR#46] added import / export cookies functions
+   - Browser: getCookies() & setCookies($cookies)
+   - UserAgent: getCookies() & setCookies($cookies)
+   - Cookies: getCookies()
+* made dumper->clipString() multibyte safe (fixed #44)
 * added configuration file for Phan (Static Analyzer)
 * HtmlReporter: renamed $character_set to $charset and set "utf-8" as default charset
 * cleanup of reference handling
@@ -23,7 +27,7 @@
 * fixed #14 - Add support for mocking variadic methods (@36degrees)
 
 ## [1.1.7] - 2015-09-21
-### Changes
+
 * issue #12 - fix double constructor
 * issue #11 - fix reference expectation
 * removed PHP4 reflection support
@@ -31,3 +35,5 @@
 
 [Unreleased]: https://github.com/simpletest/simpletest/compare/v1.1.7...HEAD
 [1.1.7]: https://github.com/simpletest/simpletest/compare/v1.1.7...v1.1.6
+
+[PR#46]: https://github.com/simpletest/simpletest/pull/46
