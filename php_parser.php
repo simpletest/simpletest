@@ -842,7 +842,7 @@ class SimplePhpPageBuilder
         }
         if ($this->hasNamedTagOnOpenTagStack($name)) {
             $tag = array_pop($this->tags[$name]);
-            if ($tag->isPrivateContent() && $this->private_content_tag->getTagName() == $name) {
+            if ($tag->isPrivateContent() && is_object($this->private_content_tag) && $this->private_content_tag->getTagName() == $name) {
                 unset($this->private_content_tag);
             }
             $this->addContentTagToOpenTags($tag);
