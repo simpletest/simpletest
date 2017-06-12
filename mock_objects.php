@@ -1290,6 +1290,7 @@ class MockGenerator
     private $mock_class;
     private $mock_base;
     private $reflection;
+    protected $namespace;
 
     /**
      * Builds initial reflection object.
@@ -1300,13 +1301,16 @@ class MockGenerator
      */
     public function __construct($class, $mock_class)
     {
-        $this->class      = $class;
+        $reflectionClass = new \ReflectionClass($class);
+        $this->namespace = $reflectionClass->getNamespaceName();
+        $this->class     = $reflectionClass->getShortName();
+
         $this->mock_class = $mock_class;
         if (! $this->mock_class) {
-            $this->mock_class = 'Mock' . $this->class;
+            $this->mock_class .= 'Mock' . $this->class;
         }
         $this->mock_base  = SimpleTest::getMockBaseClass();
-        $this->reflection = new SimpleReflection($this->class);
+        $this->reflection = new SimpleReflection($class);
     }
 
     /**
@@ -1348,7 +1352,12 @@ class MockGenerator
         if (! $this->reflection->classOrInterfaceExists()) {
             return false;
         }
-        $mock_reflection = new SimpleReflection($this->mock_class);
+        $mock_class = "";
+        if (!empty($this->namespace)) {
+            $mock_class .= $this->namespace . '\\';
+        }
+        $mock_class .= $this->mock_class;
+        $mock_reflection = new SimpleReflection($mock_class);
         if ($mock_reflection->classExistsWithoutAutoload()) {
             return false;
         }
@@ -1430,12 +1439,16 @@ class MockGenerator
      */
     protected function createCodeForSubclass($methods)
     {
-        $code  = 'class ' . $this->mock_class . ' extends ' . $this->class . " {\n";
+        $code = "";
+        if (!empty($this->namespace)) {
+            $code  .= 'namespace ' . $this->namespace . ";\n";
+        }
+        $code .= 'class ' . $this->mock_class . ' extends ' . $this->class . " {\n";
         $code .= "    public \$mock;\n";
         $code .= $this->addMethodList(array_merge($methods, $this->reflection->getMethods()));
         $code .= "\n";
         $code .= "    function __construct() {\n";
-        $code .= '        $this->mock = new ' . $this->mock_base . "();\n";
+        $code .= '        $this->mock = new \\' . $this->mock_base . "();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
         $code .= $this->createCodeForConstructor();
