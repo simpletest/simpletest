@@ -56,7 +56,7 @@ require_once('file_test.php');
 ?>
 ]]></php>
                 This will work, but create a purely flat hierarchy.
-                INstead we create a test suite file.
+                Instead we create a test suite file.
                 Our top level test suite can look like this...
 <php><![CDATA[
 <?php
