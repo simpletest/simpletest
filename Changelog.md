@@ -25,6 +25,7 @@
 * fixed #17 - Access to original constructor in mocks (@mal)
 * fixed return "exit code" of true/1, when tests are passing
 * fixed #14 - Add support for mocking variadic methods (@36degrees)
+* added support for inputs of type date and time
 
 ## [1.1.7] - 2015-09-21
 
