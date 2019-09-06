@@ -371,12 +371,12 @@ class SimpleReflection
                 $returnType = "\\".$this->method->getDeclaringClass()->getName();
             }
 
-            // Guard: method getReturnType()->allowsNull() is only supported by PHP7.1+
-            if(PHP_VERSION_ID >= 70100) {
-                $returnType = '?'.$returnType;
-            }
-
             if($returnType != '') {
+                // Guard: method getReturnType()->allowsNull() is only supported by PHP7.1+
+                if(PHP_VERSION_ID >= 70100) {
+                    $returnType = '?'.$returnType;
+                }
+
                 return ': '. $returnType;
             }
         } 
