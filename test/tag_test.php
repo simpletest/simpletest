@@ -95,6 +95,53 @@ class TestOfWidget extends UnitTestCase
         $this->assertEqual($tag->getValue(), 'aaa');
     }
 
+    public function testDateDefault()
+    {
+        $tag = new SimpleDateTag(array('value' => '2019-09-06'));
+        $this->assertEqual($tag->getDefault(), '2019-09-06');
+        $this->assertEqual($tag->getValue(), '2019-09-06');
+    }
+
+    public function testSettingDateValue()
+    {
+        $tag = new SimpleDateTag(array('value' => '2019-09-06'));
+        $this->assertTrue($tag->setValue('2011-11-11'));
+        $this->assertEqual($tag->getValue(), '2011-11-11');
+        $tag->resetValue();
+        $this->assertEqual($tag->getValue(), '2019-09-06');
+    }
+
+    public function testTimeDefault()
+    {
+        $tag = new SimpleTimeTag(array('value' => '10:33:42'));
+        $this->assertEqual($tag->getDefault(), '10:33:42');
+        $this->assertEqual($tag->getValue(), '10:33:42');
+    }
+
+    public function testSettingTimeValue()
+    {
+        $tag = new SimpleTimeTag(array('value' => '10:33'));
+        $tag->setValue('11:11');
+        $this->assertEqual($tag->getValue(), '11:11');
+        $tag->resetValue();
+        $this->assertEqual($tag->getValue(), '10:33');
+    }
+
+    public function testTimeStepAttribute()
+    {
+        $tag = new SimpleTimeTag(array());
+        $this->assertFalse($tag->setValue('10:33:42'));
+        $this->assertTrue($tag->setValue('10:33'));
+        $this->assertTrue($tag->setValue('10:33:00'));
+        $this->assertEqual($tag->getValue(), '10:33');
+
+        $tag = new SimpleTimeTag(array('step' => '5'));
+        $this->assertEqual($tag->getAttribute('step'), '5');
+        $this->assertFalse($tag->setValue('10:33:42'));
+        $this->assertTrue($tag->setValue('10:33:45'));
+        $this->assertEqual($tag->getValue(), '10:33:45');
+    }
+
     public function testFailToSetHiddenValue()
     {
         $tag = new SimpleTextTag(array('value' => 'aaa', 'type' => 'hidden'));

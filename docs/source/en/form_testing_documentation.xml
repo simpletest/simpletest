@@ -126,6 +126,8 @@ class SimpleFormTests extends WebTestCase {
                     <li>Drop down selections, including multiple selects.</li>
                     <li>Radio buttons.</li>
                     <li>Images.</li>
+                    <li>Date fields.</li>
+                    <li>Time fields, including the step attribute.</li>
                 </ul>
             </p>
             <p>
@@ -225,7 +227,7 @@ class SimpleFormTests extends WebTestCase {
 ]]></php>
                 Bear in mind that in doing this you're effectively stubbing out a
                 part of your software (the javascript code in the form), and
-                perhaps you might be better off using something like 
+                perhaps you might be better off using something like
                 <a href="http://selenium.openqa.org/">Selenium</a> to ensure a complete
                 test.
             </p>
@@ -237,7 +239,7 @@ class SimpleFormTests extends WebTestCase {
                 form submission by hand.
 <php><![CDATA[
 class SimpleFormTests extends WebTestCase {
-    ...<strong>    
+    ...<strong>
     function testAttemptedHack() {
         $this->post(
                 'http://www.my-site.com/add_user.php',
