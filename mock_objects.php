@@ -704,7 +704,7 @@ class SimpleMock
         $this->max_counts       = array();
         $this->expected_args    = array();
         $this->expected_args_at = array();
-        $current_test_case      = $this->getCurrentTestCase();        
+        $current_test_case      = $this->getCurrentTestCase();
         if ($current_test_case) {
             $current_test_case->tell($this);
         }
@@ -742,7 +742,9 @@ class SimpleMock
         if (! is_array($args)) {
             $errormsg = sprintf('Cannot %s. Parameter %s is not an array.', $task, $args);
             trigger_error($errormsg, E_USER_ERROR);
+            return false;
         }
+        return true;
     }
 
     /**
@@ -756,7 +758,9 @@ class SimpleMock
         if ($this->is_strict && ! method_exists($this, $method)) {
             $errormsg = sprintf('Cannot %s. Method %s() not in class %s.', $task, $method, get_class($this));
             trigger_error($errormsg, E_USER_ERROR);
+            return false;
         }
+        return true;
     }
 
     /**
@@ -911,8 +915,12 @@ class SimpleMock
      */
     public function expect($method, $args, $message = '%s')
     {
-        $this->dieOnNoMethod($method, 'set expected arguments');
-        $this->checkArgumentsIsArray($args, 'set expected arguments');
+        $ok = true;
+        $ok = $ok && $this->dieOnNoMethod($method, 'set expected arguments');
+        $ok = $ok && $this->checkArgumentsIsArray($args, 'set expected arguments');
+        if (!$ok) {
+            return;
+        }
         $this->expectations->expectArguments($method, $args, $message);
         $args = $this->replaceWildcards($args);
         $message .= Mock::getExpectationLine();
@@ -1403,7 +1411,7 @@ class MockGenerator
      */
     protected function createCodeForClass($methods)
     {
-        $implements = '';        
+        $implements = '';
         $interfaces = $this->reflection->getInterfaces();
 
         // exclude interfaces
