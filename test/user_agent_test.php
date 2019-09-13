@@ -43,7 +43,8 @@ class TestOfAdditionalHeaders extends UnitTestCase
     public function testAdditionalHeaderAddedToRequest()
     {
         $response = new MockSimpleHttpResponse();
-        $response->returnsByReference('getHeaders', new MockSimpleHttpHeaders());
+        $mockHeaders = new MockSimpleHttpHeaders();
+        $response->returnsByReference('getHeaders', $mockHeaders);
 
         $request = new MockSimpleHttpRequest();
         $request->returnsByReference('fetch', $response);
@@ -66,8 +67,8 @@ class TestOfBrowserCookies extends UnitTestCase
         $response = new MockSimpleHttpResponse();
         $response->returnsByValue('isError', false);
         $response->returnsByValue('getContent', 'stuff');
-        $response->returnsByReference('getHeaders', new MockSimpleHttpHeaders());
-
+        $mockHeaders = new MockSimpleHttpHeaders();
+        $response->returnsByReference('getHeaders', $mockHeaders);
         return $response;
     }
 
@@ -357,7 +358,8 @@ class TestOfAuthorisation extends UnitTestCase
     public function testAuthenticateHeaderAdded()
     {
         $response = new MockSimpleHttpResponse();
-        $response->returnsByReference('getHeaders', new MockSimpleHttpHeaders());
+        $mockHeaders = new MockSimpleHttpHeaders();
+        $response->returnsByReference('getHeaders', $mockHeaders);
 
         $request = new MockSimpleHttpRequest();
         $request->returns('fetch', $response);
