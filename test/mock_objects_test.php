@@ -535,6 +535,7 @@ SimpleTest::setMockBaseClass('MockWithInjectedTestCase');
 Mock::generate('Dummy', 'MockDummyWithInjectedTestCase');
 SimpleTest::setMockBaseClass('SimpleMock');
 Mock::generate('SimpleTestCase');
+SimpleTest::ignore('MockSimpleTestCase');
 
 class LikeExpectation extends IdenticalExpectation
 {

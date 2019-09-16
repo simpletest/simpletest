@@ -18,8 +18,10 @@ class TestOfTextFormatting extends UnitTestCase
         $this->assertEqual($dumper->clipString('Hello world', 3, 6), '...o w...', 'Hello world, 3, 6->%s');
         $this->assertEqual($dumper->clipString('Hello world', 4, 11), '...orld', 'Hello world, 4, 11->%s');
         $this->assertEqual($dumper->clipString('Hello world', 4, 12), '...orld', 'Hello world, 4, 12->%s');
-        $this->assertEqual($dumper->clipString('Seine Majestät, der König von Zamunda', 31), 
-            'Seine Majestät, der König von...', 'Seine Majestät, der König von Zamunda, 31, 31->%s');
+        $this->assertEqual($dumper->clipString('Seine Majestät, der König von Zamunda', 29),
+            'Seine Majestät, der König von...', 'Seine Majestät, der König von Zamunda, 29, 29->%s');
+        $this->assertEqual($dumper->clipString('Seine Majestet, der Konig von Zamunda', 29),
+            'Seine Majestet, der Konig von...', 'Seine Majestat, der Konig von Zamunda, 29, 29->%s');
     }
 
     public function testDescribeNull()

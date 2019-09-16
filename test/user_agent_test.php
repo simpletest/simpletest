@@ -29,7 +29,7 @@ class TestOfFetchingUrlParameters extends UnitTestCase
 
         $agent = new MockRequestUserAgent();
         $agent->returns('createHttpRequest', $this->request);
-        $agent->__construct();
+        $agent->__constructor();
 
         $response = $agent->fetchResponse(
                 new SimpleUrl('http://test:secret@this.com/page.html'),
@@ -43,7 +43,8 @@ class TestOfAdditionalHeaders extends UnitTestCase
     public function testAdditionalHeaderAddedToRequest()
     {
         $response = new MockSimpleHttpResponse();
-        $response->returnsByReference('getHeaders', new MockSimpleHttpHeaders());
+        $mockHeaders = new MockSimpleHttpHeaders();
+        $response->returnsByReference('getHeaders', $mockHeaders);
 
         $request = new MockSimpleHttpRequest();
         $request->returnsByReference('fetch', $response);
@@ -53,7 +54,7 @@ class TestOfAdditionalHeaders extends UnitTestCase
 
         $agent = new MockRequestUserAgent();
         $agent->returnsByReference('createHttpRequest', $request);
-        $agent->__construct();
+        $agent->__constructor();
         $agent->addHeader('User-Agent: SimpleTest');
         $response = $agent->fetchResponse(new SimpleUrl('http://this.host/'), new SimpleGetEncoding());
     }
@@ -66,8 +67,8 @@ class TestOfBrowserCookies extends UnitTestCase
         $response = new MockSimpleHttpResponse();
         $response->returnsByValue('isError', false);
         $response->returnsByValue('getContent', 'stuff');
-        $response->returnsByReference('getHeaders', new MockSimpleHttpHeaders());
-
+        $mockHeaders = new MockSimpleHttpHeaders();
+        $response->returnsByReference('getHeaders', $mockHeaders);
         return $response;
     }
 
@@ -88,7 +89,7 @@ class TestOfBrowserCookies extends UnitTestCase
     {
         $agent = new MockRequestUserAgent();
         $agent->returnsByReference('createHttpRequest', $request);
-        $agent->__construct();
+        $agent->__constructor();
 
         return $agent;
     }
@@ -234,7 +235,7 @@ class TestOfHttpRedirects extends UnitTestCase
                 'createHttpRequest',
                 $this->createRedirect('stuff', 'there.html'));
         $agent->expectOnce('createHttpRequest');
-        $agent->__construct();
+        $agent->__constructor();
         $agent->setMaximumRedirects(0);
         $response = $agent->fetchResponse(new SimpleUrl('here.html'), new SimpleGetEncoding());
         $this->assertEqual($response->getContent(), 'stuff');
@@ -252,7 +253,7 @@ class TestOfHttpRedirects extends UnitTestCase
                 'createHttpRequest',
                 $this->createRedirect('second', 'three.html'));
         $agent->expectCallCount('createHttpRequest', 2);
-        $agent->__construct();
+        $agent->__constructor();
 
         $agent->setMaximumRedirects(1);
         $response = $agent->fetchResponse(new SimpleUrl('one.html'), new SimpleGetEncoding());
@@ -275,7 +276,7 @@ class TestOfHttpRedirects extends UnitTestCase
                 'createHttpRequest',
                 $this->createRedirect('third', 'four.html'));
         $agent->expectCallCount('createHttpRequest', 3);
-        $agent->__construct();
+        $agent->__constructor();
 
         $agent->setMaximumRedirects(2);
         $response = $agent->fetchResponse(new SimpleUrl('one.html'), new SimpleGetEncoding());
@@ -298,7 +299,7 @@ class TestOfHttpRedirects extends UnitTestCase
                 'createHttpRequest',
                 $this->createRedirect('third', 'four.html'));
         $agent->expectCallCount('createHttpRequest', 2);
-        $agent->__construct();
+        $agent->__constructor();
 
         $agent->setMaximumRedirects(2);
         $response = $agent->fetchResponse(new SimpleUrl('one.html'), new SimpleGetEncoding());
@@ -319,7 +320,7 @@ class TestOfHttpRedirects extends UnitTestCase
                 $this->createRedirect('second', 'three.html'));
         $agent->expectAt(1, 'createHttpRequest', array('*', new IsAExpectation('SimpleGetEncoding')));
         $agent->expectCallCount('createHttpRequest', 2);
-        $agent->__construct();
+        $agent->__constructor();
         $agent->setMaximumRedirects(1);
         $response = $agent->fetchResponse(new SimpleUrl('one.html'), new SimplePostEncoding());
     }
@@ -344,7 +345,7 @@ class TestOfBadHosts extends UnitTestCase
         $request = $this->createSimulatedBadHost();
         $agent   = new MockRequestUserAgent();
         $agent->returnsByReference('createHttpRequest', $request);
-        $agent->__construct();
+        $agent->__constructor();
         $response = $agent->fetchResponse(
                 new SimpleUrl('http://this.host/this/path/page.html'),
                 new SimpleGetEncoding());
@@ -357,7 +358,8 @@ class TestOfAuthorisation extends UnitTestCase
     public function testAuthenticateHeaderAdded()
     {
         $response = new MockSimpleHttpResponse();
-        $response->returnsByReference('getHeaders', new MockSimpleHttpHeaders());
+        $mockHeaders = new MockSimpleHttpHeaders();
+        $response->returnsByReference('getHeaders', $mockHeaders);
 
         $request = new MockSimpleHttpRequest();
         $request->returns('fetch', $response);
@@ -367,7 +369,7 @@ class TestOfAuthorisation extends UnitTestCase
 
         $agent = new MockRequestUserAgent();
         $agent->returns('createHttpRequest', $request);
-        $agent->__construct();
+        $agent->__constructor();
         $response = $agent->fetchResponse(
                 new SimpleUrl('http://test:secret@this.host'),
                 new SimpleGetEncoding());
