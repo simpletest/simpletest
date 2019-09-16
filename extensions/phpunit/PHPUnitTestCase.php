@@ -70,7 +70,7 @@ class PHPUnitTestCase extends SimpleTestCase
      * @param $second         Hopefully the same handle.
      * @param $message        Message to display.
      */
-    public function assertSame($first, $second, $message = '%s')
+    public function assertSame(&$first, &$second, $message = '%s')
     {
         $dumper  = new SimpleDumper();
         $message = sprintf(
