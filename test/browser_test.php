@@ -401,6 +401,7 @@ class TestOfBrowserNavigation extends UnitTestCase
 
         $page = new MockSimplePage();
         $page->returnsByValue('getUrlById', false);
+        $page->returnsByValue('getUrlsByLabel', array());
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
