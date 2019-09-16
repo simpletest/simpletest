@@ -8,11 +8,6 @@ language: php
 # use container based infrastructure (no sudo possible)
 sudo: false
 
-addons:
-  apt:
-    packages:
-      - parallel
-
 php: [7.1, 7.2, 7.3]
 
 matrix:
