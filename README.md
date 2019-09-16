@@ -1,4 +1,4 @@
-SimpleTest [![Build Status](https://travis-ci.org/simpletest/simpletest.svg)](https://travis-ci.org/simpletest/simpletest) [![Latest Stable Version](https://img.shields.io/packagist/v/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest) [![Total Downloads](https://img.shields.io/packagist/dt/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest) [![Latest Unstable Version](https://poser.pugx.org/simpletest/simpletest/v/unstable)](https://packagist.org/packages/simpletest/simpletest) 
+SimpleTest [![Build Status](https://travis-ci.org/simpletest/simpletest.svg)](https://travis-ci.org/simpletest/simpletest) [![Latest Stable Version](https://img.shields.io/packagist/v/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest) [![Total Downloads](https://img.shields.io/packagist/dt/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest) [![Latest Unstable Version](https://poser.pugx.org/simpletest/simpletest/v/unstable)](https://packagist.org/packages/simpletest/simpletest)
 ==========
 
 SimpleTest is a framework for unit testing, web site testing and mock objects for PHP.
@@ -47,7 +47,7 @@ StackOverflow offers also a good collection of [SimpleTest related questions](ht
 
 ### Requirements
 
-PHP 5.4+
+PHP 7.1+
 
 ### Authors
 
@@ -61,12 +61,12 @@ PHP 5.4+
 
 ### License
 
-GNU LGPL v2.1 
+GNU LGPL v2.1
 
 ### Tests
 
 The unit tests for SimpleTest itself can be run here:
- 
+
     test/all_tests.php
 
 The acceptance tests require a running server:
