@@ -8,7 +8,7 @@ require_once __DIR__.'/../../browser.php';
 /**
  * @see https://github.com/simpletest/simpletest/issues/34
  */
-class Issue34 extends UnitTestCase
+class issue34 extends UnitTestCase
 {
     public function testShouldAccessWebsiteURLUsingTLS11()
     {

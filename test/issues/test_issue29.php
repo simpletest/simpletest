@@ -6,7 +6,7 @@ require_once __DIR__.'/../../test_case.php';
 /**
  * @see https://github.com/simpletest/simpletest/issues/29
  */
-class Issue29 extends UnitTestCase
+class issue29 extends UnitTestCase
 {
     public function testShouldEscapePercentSignInMessageContainingAnUnescapedURL()
     {
