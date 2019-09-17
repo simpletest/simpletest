@@ -988,7 +988,6 @@ class MemberExpectation extends IdenticalExpectation
     /**
      * Returns a human readable test message.
      *
-     *
      * @return string             Description of success or failure.
      */
     public function testMessage($actual)

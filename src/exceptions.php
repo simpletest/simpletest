@@ -116,7 +116,6 @@ class ExceptionExpectation extends SimpleExpectation
     /**
      * Summary of an Exception object.
      *
-     *
      * @return string                Text description.
      */
     protected function describeException($exception)

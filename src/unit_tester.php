@@ -179,7 +179,6 @@ class UnitTestCase extends SimpleTestCase
     /**
      * Will trigger a pass if the two parameters have the same value and same type.
      *
-     *
      * @param mixed $first           Value to compare.
      * @param mixed $second          Value to compare.
      * @param string $message        Message to display.

@@ -72,7 +72,6 @@ class ParametersExpectation extends SimpleExpectation
     /**
      * Returns a human readable test message.
      *
-     *
      * @return string             Description of success or failure.
      */
     public function testMessage($parameters)

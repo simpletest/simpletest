@@ -151,7 +151,6 @@ class SimpleProxyRoute extends SimpleRoute
     /**
      * Creates the host part of the request.
      *
-     *
      * @return string          Host line content.
      */
     public function getHostLine()
