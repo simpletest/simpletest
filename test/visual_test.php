@@ -579,14 +579,14 @@ $test->add(new TestOfSkippingOrElse());
 $test->add(new TestOfSkippingTwiceOver());
 $test->add(new TestThatShouldNotBeSkipped());
 
-if (isset($_GET['xml']) || in_array('xml', (isset($argv) ? $argv : []))) {
+if (isset($_GET['xml']) || in_array('xml', ($argv ?? []))) {
     $reporter = new XmlReporter();
 } elseif (TextReporter::inCli()) {
     $reporter = new TextReporter();
 } else {
     $reporter = new PassesAsWellReporter();
 }
-if (isset($_GET['dry']) || in_array('dry', (isset($argv) ? $argv : []))) {
+if (isset($_GET['dry']) || in_array('dry', ($argv ?? []))) {
     $reporter->makeDry();
 }
 exit($test->run($reporter) ? 0 : 1);
