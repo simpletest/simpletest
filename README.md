@@ -23,7 +23,7 @@ You may also install the extension through Composer into the `/vendor` folder of
 
 Either run
 
-    php composer.phar require --dev --prefer-dist simpletest/simpletest "^1.1"
+    php composer.phar require --prefer-dist simpletest/simpletest "^1.1"
 
 or add the package `simpletest/simpletest` to the require-dev section of your `composer.json` file:
 
