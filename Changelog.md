@@ -4,6 +4,19 @@
 
 **Currently working on: ...**
 
+* new folder structure
+  - moved source files into "src/", adjusted file includes accordingly
+* updated php-cs-fixer config file (`.php_cs`)
+* incremental code-style refactorings
+  - use short array syntax, "array() => []"
+  - removed superfluous phpdoc tags
+  - trim blank lines on phpdoc blocks
+  - removed @access declarations from phpdoc blocks
+  - space after exclamation mark, "! $value"
+  - renamed phpdoc type name boolean to shorter bool, "boolean => bool"
+  - switch from post to pre increments on loops, "$i++ => ++$i"
+* added `.editorconfig`
+
 ## [1.2.0] - 2019-09-17
 
 * [PR#46] added import / export cookies functions
