@@ -1,8 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../php_parser.php';
-require_once __DIR__ . '/../tag.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/php_parser.php';
+require_once __DIR__ . '/../src/tag.php';
+
 Mock::generate('SimplePage');
 Mock::generate('SimplePhpPageBuilder');
 Mock::generate('SimpleHttpResponse');

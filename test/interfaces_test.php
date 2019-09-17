@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
+require_once __DIR__ . '/../src/autorun.php';
 include(__DIR__ . '/support/spl_examples.php');
 
 interface DummyInterface

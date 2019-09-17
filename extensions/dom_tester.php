@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../web_tester.php';
+require_once __DIR__ . '/../src/web_tester.php';
 require_once __DIR__ . '/dom_tester/css_selector.php';
 
 /**

@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../compatibility.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/compatibility.php';
 
 class ComparisonClass
 {

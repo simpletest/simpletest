@@ -1,7 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../xml.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/xml.php';
+
 Mock::generate('SimpleScorer');
 
 if (! function_exists('xml_parser_create')) {

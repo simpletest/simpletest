@@ -4,17 +4,14 @@
 // Some of these tests are designed to fail! Do not be alarmed.
 //                         ----------------
 
-// The following tests are a bit hacky. Whilst Kent Beck tried to
-// build a unit tester with a unit tester, I am not that brave.
-// Instead I have just hacked together odd test scripts until
-// I have enough of a tester to procede more formally.
 //
 // The proper tests start in all_tests.php
-require_once '../unit_tester.php';
-require_once '../shell_tester.php';
-require_once '../mock_objects.php';
-require_once '../reporter.php';
-require_once '../xml.php';
+//
+require_once __DIR__ . '/../src/unit_tester.php';
+require_once __DIR__ . '/../src/shell_tester.php';
+require_once __DIR__ . '/../src/mock_objects.php';
+require_once __DIR__ . '/../src/reporter.php';
+require_once __DIR__ . '/../src/xml.php';
 
 class TestDisplayClass
 {

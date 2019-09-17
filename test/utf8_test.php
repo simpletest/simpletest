@@ -1,9 +1,9 @@
 <?php
 // Handle with care : this file is UTF8.
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../php_parser.php';
-require_once __DIR__ . '/../url.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/php_parser.php';
+require_once __DIR__ . '/../src/url.php';
 
 Mock::generate('SimpleHtmlSaxParser');
 Mock::generate('SimplePhpPageBuilder');

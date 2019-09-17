@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../../../autorun.php';
-require_once __DIR__ . '/../../../mock_objects.php';
+require_once __DIR__ . '/../../../src/autorun.php';
+require_once __DIR__ . '/../../../src/mock_objects.php';
 
 class CodeCoverageTest extends UnitTestCase
 {

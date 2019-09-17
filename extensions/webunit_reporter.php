@@ -1,11 +1,7 @@
 <?php
 
-if (!defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', 'simpletest/');
-}
-
-require_once SIMPLE_TEST . 'runner.php';
-require_once SIMPLE_TEST . 'reporter.php';
+require_once __DIR__ . '/../runner.php';
+require_once __DIR__ . '/../reporter.php';
 
 /**
  * Main sprintf template for the start of the page.

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../scorer.php';
+require_once __DIR__ . '/../src/scorer.php';
 require_once __DIR__ . '/treemap_reporter/treemap_recorder.php';
 
 /**

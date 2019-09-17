@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../socket.php';
-require_once __DIR__ . '/../http.php';
-require_once __DIR__ . '/../compatibility.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/socket.php';
+require_once __DIR__ . '/../src/http.php';
+require_once __DIR__ . '/../src/compatibility.php';
 
 if (SimpleTest::getDefaultProxy()) {
     SimpleTest::ignore('LiveHttpTestCase');

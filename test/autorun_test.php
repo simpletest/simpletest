@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
+require_once __DIR__ . '/../src/autorun.php';
 require_once __DIR__ . '/support/test1.php';
 
 class TestOfAutorun extends UnitTestCase

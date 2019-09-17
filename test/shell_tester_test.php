@@ -1,7 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../shell_tester.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/shell_tester.php';
+
 Mock::generate('SimpleShell');
 
 class TestOfShellTestCase extends ShellTestCase

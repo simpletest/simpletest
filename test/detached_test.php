@@ -1,7 +1,7 @@
 <?php
 
-require_once '../detached.php';
-require_once '../reporter.php';
+require_once __DIR__ . '/../src/detached.php';
+require_once __DIR__ . '/../src/reporter.php';
 
 // The following URL will depend on your own installation.
 $command = 'php ' . __DIR__ . '/visual_test.php xml';

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../unit_tester.php';
+require_once __DIR__ . '/../src/unit_tester.php';
 require_once __DIR__ . '/selenium/remote-control.php';
 
 /**

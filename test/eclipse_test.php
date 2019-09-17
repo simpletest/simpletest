@@ -5,7 +5,8 @@
 //eclipse.php file below otherwise you end up with two "different" eclipse.php
 //files included and that does not work...
 
-include_once(__DIR__ . '/../eclipse.php');
+include_once(__DIR__ . '/../src/eclipse.php');
+
 Mock::generate('SimpleSocket');
 
 class TestOfEclipse extends UnitTestCase

@@ -1,10 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../encoding.php';
-require_once __DIR__ . '/../http.php';
-require_once __DIR__ . '/../socket.php';
-require_once __DIR__ . '/../cookies.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/encoding.php';
+require_once __DIR__ . '/../src/http.php';
+require_once __DIR__ . '/../src/socket.php';
+require_once __DIR__ . '/../src/cookies.php';
 
 Mock::generate('SimpleSocket');
 Mock::generate('SimpleCookieJar');

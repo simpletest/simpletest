@@ -1,9 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../tag.php';
-require_once __DIR__ . '/../page.php';
-require_once __DIR__ . '/../frames.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/tag.php';
+require_once __DIR__ . '/../src/page.php';
+require_once __DIR__ . '/../src/frames.php';
+
 Mock::generate('SimplePage');
 Mock::generate('SimpleForm');
 

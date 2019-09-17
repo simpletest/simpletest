@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../arguments.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/arguments.php';
 
 class TestOfCommandLineArgumentParsing extends UnitTestCase
 {

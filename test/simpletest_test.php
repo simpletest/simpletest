@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../simpletest.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/simpletest.php';
 
 SimpleTest::ignore('ShouldNeverBeRunEither');
 

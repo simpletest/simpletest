@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../errors.php';
-require_once __DIR__ . '/../expectation.php';
-require_once __DIR__ . '/../test_case.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/errors.php';
+require_once __DIR__ . '/../src/expectation.php';
+require_once __DIR__ . '/../src/test_case.php';
 
 Mock::generate('SimpleTestCase');
 Mock::generate('SimpleExpectation');

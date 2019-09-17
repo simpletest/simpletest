@@ -1,10 +1,11 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../user_agent.php';
-require_once __DIR__ . '/../authentication.php';
-require_once __DIR__ . '/../http.php';
-require_once __DIR__ . '/../encoding.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/user_agent.php';
+require_once __DIR__ . '/../src/authentication.php';
+require_once __DIR__ . '/../src/http.php';
+require_once __DIR__ . '/../src/encoding.php';
+
 Mock::generate('SimpleHttpRequest');
 Mock::generate('SimpleHttpResponse');
 Mock::generate('SimpleHttpHeaders');

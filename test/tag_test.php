@@ -1,8 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../tag.php';
-require_once __DIR__ . '/../encoding.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/tag.php';
+require_once __DIR__ . '/../src/encoding.php';
+
 Mock::generate('SimpleMultipartEncoding');
 
 class TestOfTag extends UnitTestCase

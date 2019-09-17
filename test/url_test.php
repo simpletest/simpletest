@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../url.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/url.php';
 
 class TestOfUrl extends UnitTestCase
 {

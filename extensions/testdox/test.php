@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../autorun.php';
+require_once __DIR__ . '/../../src/autorun.php';
 require_once __DIR__ . '/../testdox.php';
 
 // uncomment to see test dox in action

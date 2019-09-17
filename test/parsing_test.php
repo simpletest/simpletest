@@ -1,9 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../page.php';
-require_once __DIR__ . '/../php_parser.php';
-require_once __DIR__ . '/../tidy_parser.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/page.php';
+require_once __DIR__ . '/../src/php_parser.php';
+require_once __DIR__ . '/../src/tidy_parser.php';
+
 Mock::generate('SimpleHttpResponse');
 
 abstract class TestOfParsing extends UnitTestCase

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../../autorun.php';
+require_once __DIR__ . '/../../../src/autorun.php';
 require_once __DIR__ . '/../../dom_tester.php';
 
 class TestOfLiveCssSelectors extends DomTestCase

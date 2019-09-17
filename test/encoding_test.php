@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../url.php';
-require_once __DIR__ . '/../socket.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/url.php';
+require_once __DIR__ . '/../src/socket.php';
 
 Mock::generate('SimpleSocket');
 

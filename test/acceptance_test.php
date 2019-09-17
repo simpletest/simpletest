@@ -1,10 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../compatibility.php';
-require_once __DIR__ . '/../browser.php';
-require_once __DIR__ . '/../web_tester.php';
-require_once __DIR__ . '/../unit_tester.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/compatibility.php';
+require_once __DIR__ . '/../src/browser.php';
+require_once __DIR__ . '/../src/web_tester.php';
+require_once __DIR__ . '/../src/unit_tester.php';
 
 class AcceptanceTest extends WebTestCase
 {

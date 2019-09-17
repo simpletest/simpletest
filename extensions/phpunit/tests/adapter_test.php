@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../../autorun.php';
+require_once __DIR__ . '/../../../src/autorun.php';
 require_once __DIR__ . '/../PHPUnitTestCase.php';
 
 class SameTestClass

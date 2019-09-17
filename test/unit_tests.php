@@ -1,10 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../autorun.php';
-require_once __DIR__ . '/../unit_tester.php';
-require_once __DIR__ . '/../shell_tester.php';
-require_once __DIR__ . '/../mock_objects.php';
-require_once __DIR__ . '/../web_tester.php';
+require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__ . '/../src/unit_tester.php';
+require_once __DIR__ . '/../src/shell_tester.php';
+require_once __DIR__ . '/../src/mock_objects.php';
+require_once __DIR__ . '/../src/web_tester.php';
 require_once __DIR__ . '/../extensions/phpunit/tests/adapter_test.php';
 
 class UnitTests extends TestSuite
