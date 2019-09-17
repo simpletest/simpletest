@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/scorer.php';
-//require_once dirname(__FILE__) . '/arguments.php';
+require_once __DIR__ . '/scorer.php';
+//require_once __DIR__ . '/arguments.php';
 
 /**
  * Sample minimal test displayer.

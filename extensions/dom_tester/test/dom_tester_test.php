@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../../autorun.php';
-require_once dirname(__FILE__) . '/../../dom_tester.php';
+require_once __DIR__ . '/../../../autorun.php';
+require_once __DIR__ . '/../../dom_tester.php';
 
 class TestOfLiveCssSelectors extends DomTestCase
 {
@@ -195,7 +195,7 @@ class TestsOfChildAndAdjacentSelectors extends DomTestCase
 {
     public function __construct()
     {
-        $html                       = file_get_contents(dirname(__FILE__) . '/support/child_adjacent.html');
+        $html                       = file_get_contents(__DIR__ . '/support/child_adjacent.html');
         $this->dom                  = new DomDocument('1.0', 'utf-8');
         $this->dom->validateOnParse = true;
         $this->dom->loadHTML($html);

@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../autorun.php';
-require_once dirname(__FILE__) . '/../expectation.php';
+require_once __DIR__ . '/../autorun.php';
+require_once __DIR__ . '/../expectation.php';
 
 class TestOfEquality extends UnitTestCase
 {

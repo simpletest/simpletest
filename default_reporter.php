@@ -1,9 +1,9 @@
 <?php
 
-require_once dirname(__FILE__) . '/simpletest.php';
-require_once dirname(__FILE__) . '/scorer.php';
-require_once dirname(__FILE__) . '/reporter.php';
-require_once dirname(__FILE__) . '/xml.php';
+require_once __DIR__ . '/simpletest.php';
+require_once __DIR__ . '/scorer.php';
+require_once __DIR__ . '/reporter.php';
+require_once __DIR__ . '/xml.php';
 
 /**
  * Parser for command line arguments.

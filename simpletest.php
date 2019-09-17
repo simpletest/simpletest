@@ -3,10 +3,10 @@
  * Global state for SimpleTest and kicker script in future versions.
  */
 
-require_once dirname(__FILE__) . '/reflection.php';
-require_once dirname(__FILE__) . '/default_reporter.php';
-require_once dirname(__FILE__) . '/compatibility.php';
-require_once dirname(__FILE__) . '/extensions/junit_xml_reporter.php';
+require_once __DIR__ . '/reflection.php';
+require_once __DIR__ . '/default_reporter.php';
+require_once __DIR__ . '/compatibility.php';
+require_once __DIR__ . '/extensions/junit_xml_reporter.php';
 
 /**
  * Registry and test context.
@@ -22,7 +22,7 @@ class SimpleTest
      */
     public static function getVersion()
     {
-        $content = file(dirname(__FILE__) . '/VERSION');
+        $content = file(__DIR__ . '/VERSION');
 
         return trim($content[0]);
     }

@@ -1,14 +1,14 @@
 <?php
 
-require_once dirname(__FILE__) . '/simpletest.php';
-require_once dirname(__FILE__) . '/http.php';
-require_once dirname(__FILE__) . '/encoding.php';
-require_once dirname(__FILE__) . '/page.php';
-require_once dirname(__FILE__) . '/php_parser.php';
-require_once dirname(__FILE__) . '/tidy_parser.php';
-require_once dirname(__FILE__) . '/selector.php';
-require_once dirname(__FILE__) . '/frames.php';
-require_once dirname(__FILE__) . '/user_agent.php';
+require_once __DIR__ . '/simpletest.php';
+require_once __DIR__ . '/http.php';
+require_once __DIR__ . '/encoding.php';
+require_once __DIR__ . '/page.php';
+require_once __DIR__ . '/php_parser.php';
+require_once __DIR__ . '/tidy_parser.php';
+require_once __DIR__ . '/selector.php';
+require_once __DIR__ . '/frames.php';
+require_once __DIR__ . '/user_agent.php';
 
 if (! SimpleTest::getParsers()) {
     SimpleTest::setParsers(array(new SimpleTidyPageBuilder(), new SimplePHPPageBuilder()));

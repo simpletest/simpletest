@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../autorun.php';
-require_once dirname(__FILE__) . '/../socket.php';
+require_once __DIR__ . '/../autorun.php';
+require_once __DIR__ . '/../socket.php';
 Mock::generate('SimpleSocket');
 
 class TestOfSimpleStickyError extends UnitTestCase

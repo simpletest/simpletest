@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/xml.php';
-require_once dirname(__FILE__) . '/shell_tester.php';
+require_once __DIR__ . '/xml.php';
+require_once __DIR__ . '/shell_tester.php';
 
 /**
  * Runs an XML formated test in a separate process.

@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../autorun.php';
-require_once dirname(__FILE__) . '/../default_reporter.php';
+require_once __DIR__ . '/../autorun.php';
+require_once __DIR__ . '/../default_reporter.php';
 
 class TestOfCommandLineParsing extends UnitTestCase
 {

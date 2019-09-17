@@ -1,10 +1,10 @@
 <?php
 
-require_once dirname(__FILE__) . '/../autorun.php';
-require_once dirname(__FILE__) . '/../url.php';
-require_once dirname(__FILE__) . '/../form.php';
-require_once dirname(__FILE__) . '/../page.php';
-require_once dirname(__FILE__) . '/../encoding.php';
+require_once __DIR__ . '/../autorun.php';
+require_once __DIR__ . '/../url.php';
+require_once __DIR__ . '/../form.php';
+require_once __DIR__ . '/../page.php';
+require_once __DIR__ . '/../encoding.php';
 
 Mock::generate('SimplePage');
 

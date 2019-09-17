@@ -1,8 +1,8 @@
 <?php
 
-require_once dirname(__FILE__) . '/tag.php';
-require_once dirname(__FILE__) . '/encoding.php';
-require_once dirname(__FILE__) . '/selector.php';
+require_once __DIR__ . '/tag.php';
+require_once __DIR__ . '/encoding.php';
+require_once __DIR__ . '/selector.php';
 
 /**
  * Form tag class to hold widget values.

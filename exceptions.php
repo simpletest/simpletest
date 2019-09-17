@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/invoker.php';
-require_once dirname(__FILE__) . '/expectation.php';
+require_once __DIR__ . '/invoker.php';
+require_once __DIR__ . '/expectation.php';
 
 /**
  * Extension that traps exceptions and turns them into an error message. PHP5 only.

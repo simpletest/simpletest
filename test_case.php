@@ -1,18 +1,18 @@
 <?php
 
-require_once dirname(__FILE__) . '/invoker.php';
-require_once dirname(__FILE__) . '/errors.php';
-require_once dirname(__FILE__) . '/compatibility.php';
-require_once dirname(__FILE__) . '/scorer.php';
-require_once dirname(__FILE__) . '/expectation.php';
-require_once dirname(__FILE__) . '/dumper.php';
-require_once dirname(__FILE__) . '/simpletest.php';
-require_once dirname(__FILE__) . '/exceptions.php';
-require_once dirname(__FILE__) . '/reflection.php';
+require_once __DIR__ . '/invoker.php';
+require_once __DIR__ . '/errors.php';
+require_once __DIR__ . '/compatibility.php';
+require_once __DIR__ . '/scorer.php';
+require_once __DIR__ . '/expectation.php';
+require_once __DIR__ . '/dumper.php';
+require_once __DIR__ . '/simpletest.php';
+require_once __DIR__ . '/exceptions.php';
+require_once __DIR__ . '/reflection.php';
 
 // define root constant for dependent libraries
 if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+    define('SIMPLE_TEST', __DIR__ . DIRECTORY_SEPARATOR);
 }
 
 /**

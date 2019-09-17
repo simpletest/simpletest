@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/test_case.php';
-require_once dirname(__FILE__) . '/dumper.php';
+require_once __DIR__ . '/test_case.php';
+require_once __DIR__ . '/dumper.php';
 
 /**
  * Standard unit test class for day to day testing of PHP code XP style.

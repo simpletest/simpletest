@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../autorun.php';
-include(dirname(__FILE__) . '/support/spl_examples.php');
+require_once __DIR__ . '/../autorun.php';
+include(__DIR__ . '/support/spl_examples.php');
 
 interface DummyInterface
 {

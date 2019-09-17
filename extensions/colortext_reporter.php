@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/../reporter.php';
+require_once __DIR__ . '/../reporter.php';
 
 /**
  * Provides an ANSI-colored {@link TextReporter} for viewing test results.

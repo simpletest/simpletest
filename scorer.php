@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/invoker.php';
+require_once __DIR__ . '/invoker.php';
 
 /**
  * Can receive test events and display them.

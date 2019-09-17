@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/page.php';
-require_once dirname(__FILE__) . '/user_agent.php';
+require_once __DIR__ . '/page.php';
+require_once __DIR__ . '/user_agent.php';
 
 /**
  * A composite page.

@@ -1,8 +1,8 @@
 <?php
 
-require_once dirname(__FILE__) . '/../autorun.php';
-require_once dirname(__FILE__) . '/../tag.php';
-require_once dirname(__FILE__) . '/../encoding.php';
+require_once __DIR__ . '/../autorun.php';
+require_once __DIR__ . '/../tag.php';
+require_once __DIR__ . '/../encoding.php';
 Mock::generate('SimpleMultipartEncoding');
 
 class TestOfTag extends UnitTestCase
@@ -620,8 +620,8 @@ class TestOfUploadWidget extends UnitTestCase
     public function testValueIsFilePath()
     {
         $upload = new SimpleUploadTag(array('name' => 'a'));
-        $upload->setValue(dirname(__FILE__) . '/support/upload_sample.txt');
-        $this->assertEqual($upload->getValue(), dirname(__FILE__) . '/support/upload_sample.txt');
+        $upload->setValue(__DIR__ . '/support/upload_sample.txt');
+        $this->assertEqual($upload->getValue(), __DIR__ . '/support/upload_sample.txt');
     }
 
     public function testSubmitsFileContents()
@@ -632,7 +632,7 @@ class TestOfUploadWidget extends UnitTestCase
                 'Sample for testing file upload',
                 'upload_sample.txt'));
         $upload = new SimpleUploadTag(array('name' => 'a'));
-        $upload->setValue(dirname(__FILE__) . '/support/upload_sample.txt');
+        $upload->setValue(__DIR__ . '/support/upload_sample.txt');
         $upload->write($encoding);
     }
 }

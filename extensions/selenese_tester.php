@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../unit_tester.php';
-require_once dirname(__FILE__) . '/selenium/remote-control.php';
+require_once __DIR__ . '/../unit_tester.php';
+require_once __DIR__ . '/selenium/remote-control.php';
 
 /**
  * SeleneseTestCase

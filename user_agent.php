@@ -1,9 +1,9 @@
 <?php
 
-require_once dirname(__FILE__) . '/cookies.php';
-require_once dirname(__FILE__) . '/http.php';
-require_once dirname(__FILE__) . '/encoding.php';
-require_once dirname(__FILE__) . '/authentication.php';
+require_once __DIR__ . '/cookies.php';
+require_once __DIR__ . '/http.php';
+require_once __DIR__ . '/encoding.php';
+require_once __DIR__ . '/authentication.php';
 
 if (! defined('DEFAULT_MAX_REDIRECTS')) {
     define('DEFAULT_MAX_REDIRECTS', 3);

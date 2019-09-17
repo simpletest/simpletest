@@ -1,8 +1,8 @@
 <?php
 
-require_once dirname(__FILE__) . '/socket.php';
-require_once dirname(__FILE__) . '/cookies.php';
-require_once dirname(__FILE__) . '/url.php';
+require_once __DIR__ . '/socket.php';
+require_once __DIR__ . '/cookies.php';
+require_once __DIR__ . '/url.php';
 
 /**
  * Creates HTTP headers for the end point of a HTTP request.

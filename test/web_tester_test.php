@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../autorun.php';
-require_once dirname(__FILE__) . '/../web_tester.php';
+require_once __DIR__ . '/../autorun.php';
+require_once __DIR__ . '/../web_tester.php';
 
 class TestOfFieldExpectation extends UnitTestCase
 {

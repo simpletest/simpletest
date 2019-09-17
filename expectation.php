@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/dumper.php';
-require_once dirname(__FILE__) . '/compatibility.php';
+require_once __DIR__ . '/dumper.php';
+require_once __DIR__ . '/compatibility.php';
 
 /**
  * Assertion that can display failure information. Also includes various helper methods.

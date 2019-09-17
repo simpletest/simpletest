@@ -5,10 +5,10 @@
  */
 
 // include simpletest files
-require_once dirname(__FILE__) . '/unit_tester.php';
-require_once dirname(__FILE__) . '/mock_objects.php';
-require_once dirname(__FILE__) . '/collector.php';
-require_once dirname(__FILE__) . '/default_reporter.php';
+require_once __DIR__ . '/unit_tester.php';
+require_once __DIR__ . '/mock_objects.php';
+require_once __DIR__ . '/collector.php';
+require_once __DIR__ . '/default_reporter.php';
 
 $GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_CLASSES'] = get_declared_classes();
 $GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_PATH']    = getcwd();

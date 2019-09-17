@@ -1,10 +1,10 @@
 <?php
 
-require_once dirname(__FILE__) . '/http.php';
-require_once dirname(__FILE__) . '/php_parser.php';
-require_once dirname(__FILE__) . '/tag.php';
-require_once dirname(__FILE__) . '/form.php';
-require_once dirname(__FILE__) . '/selector.php';
+require_once __DIR__ . '/http.php';
+require_once __DIR__ . '/php_parser.php';
+require_once __DIR__ . '/tag.php';
+require_once __DIR__ . '/form.php';
+require_once __DIR__ . '/selector.php';
 
 /**
  * A wrapper for a web page.

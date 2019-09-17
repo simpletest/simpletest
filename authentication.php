@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/http.php';
+require_once __DIR__ . '/http.php';
 
 /**
  * Represents a single security realm's identity.

@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/socket.php';
+require_once __DIR__ . '/socket.php';
 
 /**
  * Single post parameter.

@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/encoding.php';
+require_once __DIR__ . '/encoding.php';
 
 /**
  * URL parser to replace parse_url() PHP function which got broken in PHP 4.3.0.

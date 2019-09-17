@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/page.php';
-require_once dirname(__FILE__) . '/encoding.php';
+require_once __DIR__ . '/page.php';
+require_once __DIR__ . '/encoding.php';
 
 /**
  * Creates tags and widgets given HTML tag attributes.

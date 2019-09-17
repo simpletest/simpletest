@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../autorun.php';
-require_once dirname(__FILE__) . '/../cookies.php';
+require_once __DIR__ . '/../autorun.php';
+require_once __DIR__ . '/../cookies.php';
 
 class TestOfCookie extends UnitTestCase
 {

@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../../autorun.php';
-require_once dirname(__FILE__) . '/../../treemap_reporter.php';
+require_once __DIR__ . '/../../../autorun.php';
+require_once __DIR__ . '/../../treemap_reporter.php';
 
 class TestOfTreemapDataTypes extends UnitTestCase
 {

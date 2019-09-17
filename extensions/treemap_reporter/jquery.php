@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/../treemap_reporter.php';
+require_once __DIR__ . '/../treemap_reporter.php';
 
 /**
  * Outputs unordered list representing treemap of test report,

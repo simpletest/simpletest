@@ -1,8 +1,8 @@
 <?php
 
-require_once dirname(__FILE__) . '/../autorun.php';
-require_once dirname(__FILE__) . '/../expectation.php';
-require_once dirname(__FILE__) . '/../mock_objects.php';
+require_once __DIR__ . '/../autorun.php';
+require_once __DIR__ . '/../expectation.php';
+require_once __DIR__ . '/../mock_objects.php';
 
 class TestOfAnythingExpectation extends UnitTestCase
 {

@@ -25,6 +25,6 @@
         <form method="post"><input type="submit" name="action" value="No action post"></form>
         <form method="post" action=".."><input type="submit" name="action" value="Down one post"></form>
         
-        <?php include dirname(__FILE__) . '/show_request.php'; ?>
+        <?php include __DIR__ . '/show_request.php'; ?>
     </body>
 </html>

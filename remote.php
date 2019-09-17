@@ -1,8 +1,8 @@
 <?php
 
-require_once dirname(__FILE__) . '/browser.php';
-require_once dirname(__FILE__) . '/xml.php';
-require_once dirname(__FILE__) . '/test_case.php';
+require_once __DIR__ . '/browser.php';
+require_once __DIR__ . '/xml.php';
+require_once __DIR__ . '/test_case.php';
 
 /**
  * Runs an XML formated test on a remote server.

@@ -1,10 +1,10 @@
 <?php
 
-require_once dirname(__FILE__) . '/../autorun.php';
-require_once dirname(__FILE__) . '/../compatibility.php';
-require_once dirname(__FILE__) . '/../browser.php';
-require_once dirname(__FILE__) . '/../web_tester.php';
-require_once dirname(__FILE__) . '/../unit_tester.php';
+require_once __DIR__ . '/../autorun.php';
+require_once __DIR__ . '/../compatibility.php';
+require_once __DIR__ . '/../browser.php';
+require_once __DIR__ . '/../web_tester.php';
+require_once __DIR__ . '/../unit_tester.php';
 
 class AcceptanceTest extends WebTestCase
 {
@@ -149,7 +149,7 @@ class TestOfLocalFileBrowser extends UnitTestCase
 {
     public function host()
     {
-        return 'file://' . dirname(__FILE__) . '/site/';
+        return 'file://' . __DIR__ . '/site/';
     }
 
     public function testGet()
@@ -1382,8 +1382,8 @@ class TestOfLiveMultiValueWidgets extends AcceptanceTest
     {
         $this->get($this->host() . 'upload_form.html');
         $this->assertTrue($this->setField('Content:',
-                dirname(__FILE__) . '/support/upload_sample.txt'));
-        $this->assertField('Content:', dirname(__FILE__) . '/support/upload_sample.txt');
+                __DIR__ . '/support/upload_sample.txt'));
+        $this->assertField('Content:', __DIR__ . '/support/upload_sample.txt');
         $this->click('Go!');
         $this->assertText('Sample for testing file upload');
     }
@@ -1392,11 +1392,11 @@ class TestOfLiveMultiValueWidgets extends AcceptanceTest
     {
         $this->get($this->host() . 'upload_form.html');
         $this->assertTrue($this->setField('Content:',
-                dirname(__FILE__) . '/support/upload_sample.txt'));
+                __DIR__ . '/support/upload_sample.txt'));
         $this->assertTrue($this->setField('Supplemental:',
-                dirname(__FILE__) . '/support/supplementary_upload_sample.txt'));
+                __DIR__ . '/support/supplementary_upload_sample.txt'));
         $this->assertField('Supplemental:',
-                dirname(__FILE__) . '/support/supplementary_upload_sample.txt');
+                __DIR__ . '/support/supplementary_upload_sample.txt');
         $this->click('Go!');
         $this->assertText('Sample for testing file upload');
         $this->assertText('Some more text content');
@@ -1406,10 +1406,10 @@ class TestOfLiveMultiValueWidgets extends AcceptanceTest
     {
         $this->get($this->host() . 'upload_form.html');
         $this->assertTrue($this->setField('Content:',
-                dirname(__FILE__) . '/support/latin1_sample'));
+                __DIR__ . '/support/latin1_sample'));
         $this->click('Go!');
         $this->assertText(
-                implode('', file(dirname(__FILE__) . '/support/latin1_sample')));
+                implode('', file(__DIR__ . '/support/latin1_sample')));
     }
 }*/
 

@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../autorun.php';
-require_once dirname(__FILE__) . '/../reflection.php';
+require_once __DIR__ . '/../autorun.php';
+require_once __DIR__ . '/../reflection.php';
 
 class AnyOldLeafClass
 {

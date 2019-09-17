@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../scorer.php';
+require_once __DIR__ . '/../../scorer.php';
 
 /**
  * Collects SimpleReporter messages and constructs a TreemapNode graph.

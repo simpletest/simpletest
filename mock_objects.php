@@ -1,9 +1,9 @@
 <?php
 
-require_once dirname(__FILE__) . '/expectation.php';
-require_once dirname(__FILE__) . '/simpletest.php';
-require_once dirname(__FILE__) . '/dumper.php';
-require_once dirname(__FILE__) . '/reflection.php';
+require_once __DIR__ . '/expectation.php';
+require_once __DIR__ . '/simpletest.php';
+require_once __DIR__ . '/dumper.php';
+require_once __DIR__ . '/reflection.php';
 
 /*
  * Default character simpletest will substitute for any value

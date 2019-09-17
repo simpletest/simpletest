@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(__FILE__) . '/../web_tester.php';
-require_once dirname(__FILE__) . '/dom_tester/css_selector.php';
+require_once __DIR__ . '/../web_tester.php';
+require_once __DIR__ . '/dom_tester/css_selector.php';
 
 /**
  * CssSelectorExpectation

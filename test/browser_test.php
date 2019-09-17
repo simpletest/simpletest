@@ -1,11 +1,11 @@
 <?php
 
-require_once dirname(__FILE__) . '/../autorun.php';
-require_once dirname(__FILE__) . '/../browser.php';
-require_once dirname(__FILE__) . '/../user_agent.php';
-require_once dirname(__FILE__) . '/../http.php';
-require_once dirname(__FILE__) . '/../page.php';
-require_once dirname(__FILE__) . '/../encoding.php';
+require_once __DIR__ . '/../autorun.php';
+require_once __DIR__ . '/../browser.php';
+require_once __DIR__ . '/../user_agent.php';
+require_once __DIR__ . '/../http.php';
+require_once __DIR__ . '/../page.php';
+require_once __DIR__ . '/../encoding.php';
 
 Mock::generate('SimpleHttpResponse');
 Mock::generate('SimplePage');
