@@ -82,9 +82,11 @@ class CodeCoverage
     public function startCoverage()
     {
         $this->root = getcwd();
+
         if (!extension_loaded('xdebug')) {
-            throw new Exception('Could not load xdebug extension');
+            throw new Exception('The PHP extension XDebug is not loaded. It is required for CodeCoverage to work! Please adjust your php.ini.');
         }
+    
         xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
     }
 
