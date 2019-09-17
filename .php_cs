@@ -1,72 +1,67 @@
 <?php
 
 // php-cs-fixer configuration
+// https://mlocati.github.io/php-cs-fixer-configurator/
 
-$finder = Symfony\CS\Finder\DefaultFinder::create()
-    ->files()->name('*.php')
-    ->in(__DIR__)
-        ->exclude('docs')
-        ->exclude('packages')
-        ->exclude('tutorials');
+if (!file_exists(__DIR__.'/src')) {
+    exit(0);
+}
 
-
-return Symfony\CS\Config\Config::create()
-    ->setUsingCache(true)
-    ->level(\Symfony\CS\FixerInterface::NONE_LEVEL)
-    ->fixers(
-        array(
-            'align_double_arrow',
-            'align_equals',
-            'braces',
-            'concat_with_spaces',
-            'duplicate_semicolon',
-            'elseif',
-            'empty_return',
-            'encoding',
-            'eof_ending',
-            'extra_empty_lines',
-            'function_call_space',
-            'function_declaration',
-            'indentation',
-            'join_function',
-            'line_after_namespace',
-            'linefeed',
-            'list_commas',
-            'lowercase_constants',
-            'lowercase_keywords',
-            'method_argument_space',
-            'multiple_use',
-            'namespace_no_leading_whitespace',
-            'no_blank_lines_after_class_opening',
-            'no_empty_lines_after_phpdocs',
-            'parenthesis',
-            'php_closing_tag',
-            'phpdoc_indent',
-            'phpdoc_no_access',
-            'phpdoc_no_empty_return',
-            'phpdoc_no_package',
-            'phpdoc_params',
-            'phpdoc_scalar',
-            'phpdoc_separation',
-            'phpdoc_to_comment',
-            'phpdoc_trim',
-            'phpdoc_types',
-            'phpdoc_var_without_name',
-            'remove_lines_between_uses',
-            'return',
-            'self_accessor',
-            'short_array_syntax',
-            'short_tag',
-            'single_line_after_imports',
-            'single_quote',
-            'spaces_before_semicolon',
-            'spaces_cast',
-            'ternary_spaces',
-            'trailing_spaces',
-            'trim_array_spaces',
-            'unused_use',
-            'visibility',
-            'whitespacy_lines'
-        )
-    )
-    ->finder($finder);
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        '@PHP71Migration' => true,
+        '@PSR2' => true,
+        //'@PHP73Migration' => true, (heredoc identation)
+        'array_syntax' => ['syntax' => 'short'],
+        'combine_nested_dirname' => true,
+        'fopen_flags' => false,
+        'no_superfluous_phpdoc_tags' => ['allow_mixed' => true],
+        'ordered_imports' => true,
+        'phpdoc_no_empty_return' => false, // triggers almost always false positive
+        'phpdoc_trim_consecutive_blank_line_separation' => true,
+        'phpdoc_types_order' => ['null_adjustment' => 'always_last', 'sort_algorithm' => 'none'],
+        'protected_to_private' => false,
+        'cast_spaces' => ['space' => 'single'],
+        'class_attributes_separation' => ['elements' => ['method']],
+        'no_blank_lines_after_class_opening' => true,
+        'no_blank_lines_after_phpdoc' => true,
+        'no_empty_statement' => true,
+        'no_extra_consecutive_blank_lines' => true,
+        'no_leading_import_slash' => true,
+        'no_leading_namespace_whitespace' => true,
+        'no_trailing_comma_in_singleline_array' => true,
+        'no_unused_imports' => true,
+        'no_whitespace_in_blank_line' => true,
+        'object_operator_without_whitespace' => true,
+        'phpdoc_align' => true,
+        'phpdoc_indent' => true,
+        'phpdoc_no_access' => true,
+        'phpdoc_no_package' => true,
+        'phpdoc_order' => true,
+        'phpdoc_scalar' => true,
+        'phpdoc_trim' => true,
+        'phpdoc_types' => true,
+        'psr0' => true,
+        'single_blank_line_before_namespace' => true,
+        'standardize_not_equals' => true,
+        'ternary_operator_spaces' => true,
+        'trailing_comma_in_multiline_array' => false
+    ])
+    ->setRiskyAllowed(true)
+    ->setUsingCache(false)
+    ->setFinder(
+        PhpCsFixer\Finder::create()
+        ->files()
+        ->in(__DIR__.'/src')
+        ->in(__DIR__.'/test')
+        ->name('*.php')
+        // exclude folders by regexp pattern
+        ->notPath('#/docs/#')
+        ->notPath('#/packages/#')
+        ->notPath('#/tutorials/#')
+        // exclude file by regexp pattern
+        ->notPath('#test_with_parse_error.php#')
+        // this file itself
+        ->append([__FILE__])
+    );
