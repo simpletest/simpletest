@@ -28,10 +28,10 @@ class TestOfErrorQueue extends UnitTestCase
     public function testExpectationMatchCancelsIncomingError()
     {
         $test = new MockSimpleTestCase();
-        $test->expectOnce('assert', array(
+        $test->expectOnce('assert', [
                 new IdenticalExpectation(new AnythingExpectation()),
                 'B',
-                'a message'));
+                'a message']);
         $test->returnsByValue('assert', true);
         $test->expectNever('error');
         $queue = new SimpleErrorQueue();

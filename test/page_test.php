@@ -21,7 +21,7 @@ class TestOfPageInterface extends UnitTestCase
         $this->assertIdentical($page->getAuthentication(), false);
         $this->assertIdentical($page->getRealm(), false);
         $this->assertFalse($page->hasFrames());
-        $this->assertIdentical($page->getUrls(), array());
+        $this->assertIdentical($page->getUrls(), []);
         $this->assertIdentical($page->getTitle(), false);
     }
 }
@@ -36,12 +36,12 @@ class TestOfPageHeaders extends UnitTestCase
         $response->returnsByValue('getHeaders', $headers);
         $response->returnsByValue('getMethod', 'POST');
         $response->returnsByValue('getUrl', new SimpleUrl('here'));
-        $response->returnsByValue('getRequestData', array('a' => 'A'));
+        $response->returnsByValue('getRequestData', ['a' => 'A']);
 
         $page = new SimplePage($response);
         $this->assertEqual($page->getMethod(), 'POST');
         $this->assertEqual($page->getUrl(), new SimpleUrl('here'));
-        $this->assertEqual($page->getRequestData(), array('a' => 'A'));
+        $this->assertEqual($page->getRequestData(), ['a' => 'A']);
     }
 
     public function testTransportError()

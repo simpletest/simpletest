@@ -72,8 +72,8 @@ class SimpleErrorQueue
      */
     public function clear()
     {
-        $this->queue             = array();
-        $this->expectation_queue = array();
+        $this->queue             = [];
+        $this->expectation_queue = [];
     }
 
     /**
@@ -96,7 +96,7 @@ class SimpleErrorQueue
      */
     public function expectError($expected, $message)
     {
-        array_push($this->expectation_queue, array($expected, $message));
+        array_push($this->expectation_queue, [$expected, $message]);
     }
 
     /**
@@ -198,7 +198,7 @@ class SimpleErrorQueue
      */
     public static function getSeverityAsString($severity)
     {
-        static $map = array(
+        static $map = [
             E_ERROR             => 'E_ERROR',
             E_WARNING           => 'E_WARNING',
             E_PARSE             => 'E_PARSE',
@@ -215,7 +215,7 @@ class SimpleErrorQueue
             E_DEPRECATED        => 'E_DEPRECATED',          # PHP 5.3
             E_USER_DEPRECATED   => 'E_USER_DEPRECATED',     # PHP 5.3
             E_ALL               => 'E_ALL'
-        );
+        ];
 
         return $map[$severity];
     }

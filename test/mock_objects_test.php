@@ -19,69 +19,69 @@ class TestOfParametersExpectation extends UnitTestCase
 {
     public function testEmptyMatch()
     {
-        $expectation = new ParametersExpectation(array());
-        $this->assertTrue($expectation->test(array()));
-        $this->assertFalse($expectation->test(array(33)));
+        $expectation = new ParametersExpectation([]);
+        $this->assertTrue($expectation->test([]));
+        $this->assertFalse($expectation->test([33]));
     }
 
     public function testSingleMatch()
     {
-        $expectation = new ParametersExpectation(array(0));
-        $this->assertFalse($expectation->test(array(1)));
-        $this->assertTrue($expectation->test(array(0)));
+        $expectation = new ParametersExpectation([0]);
+        $this->assertFalse($expectation->test([1]));
+        $this->assertTrue($expectation->test([0]));
     }
 
     public function testAnyMatch()
     {
         $expectation = new ParametersExpectation(false);
-        $this->assertTrue($expectation->test(array()));
-        $this->assertTrue($expectation->test(array(1, 2)));
+        $this->assertTrue($expectation->test([]));
+        $this->assertTrue($expectation->test([1, 2]));
     }
 
     public function testMissingParameter()
     {
-        $expectation = new ParametersExpectation(array(0));
-        $this->assertFalse($expectation->test(array()));
+        $expectation = new ParametersExpectation([0]);
+        $this->assertFalse($expectation->test([]));
     }
 
     public function testNullParameter()
     {
-        $expectation = new ParametersExpectation(array(null));
-        $this->assertTrue($expectation->test(array(null)));
-        $this->assertFalse($expectation->test(array()));
+        $expectation = new ParametersExpectation([null]);
+        $this->assertTrue($expectation->test([null]));
+        $this->assertFalse($expectation->test([]));
     }
 
     public function testAnythingExpectations()
     {
-        $expectation = new ParametersExpectation(array(new AnythingExpectation()));
-        $this->assertFalse($expectation->test(array()));
-        $this->assertIdentical($expectation->test(array(null)), true);
-        $this->assertIdentical($expectation->test(array(13)), true);
+        $expectation = new ParametersExpectation([new AnythingExpectation()]);
+        $this->assertFalse($expectation->test([]));
+        $this->assertIdentical($expectation->test([null]), true);
+        $this->assertIdentical($expectation->test([13]), true);
     }
 
     public function testOtherExpectations()
     {
         $expectation = new ParametersExpectation(
-                array(new PatternExpectation('/hello/i')));
-        $this->assertFalse($expectation->test(array('Goodbye')));
-        $this->assertTrue($expectation->test(array('hello')));
-        $this->assertTrue($expectation->test(array('Hello')));
+                [new PatternExpectation('/hello/i')]);
+        $this->assertFalse($expectation->test(['Goodbye']));
+        $this->assertTrue($expectation->test(['hello']));
+        $this->assertTrue($expectation->test(['Hello']));
     }
 
     public function testIdentityOnly()
     {
-        $expectation = new ParametersExpectation(array('0'));
-        $this->assertFalse($expectation->test(array(0)));
-        $this->assertTrue($expectation->test(array('0')));
+        $expectation = new ParametersExpectation(['0']);
+        $this->assertFalse($expectation->test([0]));
+        $this->assertTrue($expectation->test(['0']));
     }
 
     public function testLongList()
     {
         $expectation = new ParametersExpectation(
-                array('0', 0, new AnythingExpectation(), false));
-        $this->assertTrue($expectation->test(array('0', 0, 37, false)));
-        $this->assertFalse($expectation->test(array('0', 0, 37, true)));
-        $this->assertFalse($expectation->test(array('0', 0, 37)));
+                ['0', 0, new AnythingExpectation(), false]);
+        $this->assertTrue($expectation->test(['0', 0, 37, false]));
+        $this->assertFalse($expectation->test(['0', 0, 37, true]));
+        $this->assertFalse($expectation->test(['0', 0, 37]));
     }
 }
 
@@ -90,8 +90,8 @@ class TestOfSimpleSignatureMap extends UnitTestCase
     public function testEmpty()
     {
         $map = new SimpleSignatureMap();
-        $this->assertFalse($map->isMatch('any', array()));
-        $this->assertNull($map->findFirstAction('any', array()));
+        $this->assertFalse($map->isMatch('any', []));
+        $this->assertNull($map->findFirstAction('any', []));
     }
 
     public function testDifferentCallSignaturesCanHaveDifferentReferences()
@@ -99,49 +99,49 @@ class TestOfSimpleSignatureMap extends UnitTestCase
         $map  = new SimpleSignatureMap();
         $fred = 'Fred';
         $jim  = 'jim';
-        $map->add(array(0), $fred);
-        $map->add(array('0'), $jim);
-        $this->assertSame($fred, $map->findFirstAction(array(0)));
-        $this->assertSame($jim, $map->findFirstAction(array('0')));
+        $map->add([0], $fred);
+        $map->add(['0'], $jim);
+        $this->assertSame($fred, $map->findFirstAction([0]));
+        $this->assertSame($jim, $map->findFirstAction(['0']));
     }
 
     public function testWildcard()
     {
         $fred = 'Fred';
         $map  = new SimpleSignatureMap();
-        $map->add(array(new AnythingExpectation(), 1, 3), $fred);
-        $this->assertTrue($map->isMatch(array(2, 1, 3)));
-        $this->assertSame($map->findFirstAction(array(2, 1, 3)), $fred);
+        $map->add([new AnythingExpectation(), 1, 3], $fred);
+        $this->assertTrue($map->isMatch([2, 1, 3]));
+        $this->assertSame($map->findFirstAction([2, 1, 3]), $fred);
     }
 
     public function testAllWildcard()
     {
         $fred = 'Fred';
         $map  = new SimpleSignatureMap();
-        $this->assertFalse($map->isMatch(array(2, 1, 3)));
+        $this->assertFalse($map->isMatch([2, 1, 3]));
         $map->add('', $fred);
-        $this->assertTrue($map->isMatch(array(2, 1, 3)));
-        $this->assertSame($map->findFirstAction(array(2, 1, 3)), $fred);
+        $this->assertTrue($map->isMatch([2, 1, 3]));
+        $this->assertSame($map->findFirstAction([2, 1, 3]), $fred);
     }
 
     public function testOrdering()
     {
         $map = new SimpleSignatureMap();
-        $map->add(array(1, 2), new SimpleByValue('1, 2'));
-        $map->add(array(1, 3), new SimpleByValue('1, 3'));
-        $map->add(array(1), new SimpleByValue('1'));
-        $map->add(array(1, 4), new SimpleByValue('1, 4'));
-        $map->add(array(new AnythingExpectation()), new SimpleByValue('Any'));
-        $map->add(array(2), new SimpleByValue('2'));
+        $map->add([1, 2], new SimpleByValue('1, 2'));
+        $map->add([1, 3], new SimpleByValue('1, 3'));
+        $map->add([1], new SimpleByValue('1'));
+        $map->add([1, 4], new SimpleByValue('1, 4'));
+        $map->add([new AnythingExpectation()], new SimpleByValue('Any'));
+        $map->add([2], new SimpleByValue('2'));
         $map->add('', new SimpleByValue('Default'));
-        $map->add(array(), new SimpleByValue('None'));
-        $this->assertEqual($map->findFirstAction(array(1, 2)), new SimpleByValue('1, 2'));
-        $this->assertEqual($map->findFirstAction(array(1, 3)), new SimpleByValue('1, 3'));
-        $this->assertEqual($map->findFirstAction(array(1, 4)), new SimpleByValue('1, 4'));
-        $this->assertEqual($map->findFirstAction(array(1)), new SimpleByValue('1'));
-        $this->assertEqual($map->findFirstAction(array(2)), new SimpleByValue('Any'));
-        $this->assertEqual($map->findFirstAction(array(3)), new SimpleByValue('Any'));
-        $this->assertEqual($map->findFirstAction(array()), new SimpleByValue('Default'));
+        $map->add([], new SimpleByValue('None'));
+        $this->assertEqual($map->findFirstAction([1, 2]), new SimpleByValue('1, 2'));
+        $this->assertEqual($map->findFirstAction([1, 3]), new SimpleByValue('1, 3'));
+        $this->assertEqual($map->findFirstAction([1, 4]), new SimpleByValue('1, 4'));
+        $this->assertEqual($map->findFirstAction([1]), new SimpleByValue('1'));
+        $this->assertEqual($map->findFirstAction([2]), new SimpleByValue('Any'));
+        $this->assertEqual($map->findFirstAction([3]), new SimpleByValue('Any'));
+        $this->assertEqual($map->findFirstAction([]), new SimpleByValue('Default'));
     }
 }
 
@@ -153,8 +153,8 @@ class TestOfCallSchedule extends UnitTestCase
         $a        = 5;
         $schedule = new SimpleCallSchedule();
         $schedule->register('aMethod', false, new SimpleByReference($a));
-        $this->assertReference($schedule->respond(0, 'aMethod', array()), $a);
-        $this->assertReference($schedule->respond(1, 'aMethod', array()), $a);
+        $this->assertReference($schedule->respond(0, 'aMethod', []), $a);
+        $this->assertReference($schedule->respond(1, 'aMethod', []), $a);
     }
 
     public function testSpecificSignaturesOverrideTheAlwaysCase()
@@ -162,10 +162,10 @@ class TestOfCallSchedule extends UnitTestCase
         $any      = 'any';
         $one      = 'two';
         $schedule = new SimpleCallSchedule();
-        $schedule->register('aMethod', array(1), new SimpleByReference($one));
+        $schedule->register('aMethod', [1], new SimpleByReference($one));
         $schedule->register('aMethod', false, new SimpleByReference($any));
-        $this->assertReference($schedule->respond(0, 'aMethod', array(2)), $any);
-        $this->assertReference($schedule->respond(0, 'aMethod', array(1)), $one);
+        $this->assertReference($schedule->respond(0, 'aMethod', [2]), $any);
+        $this->assertReference($schedule->respond(0, 'aMethod', [1]), $one);
     }
 
     public function testReturnsCanBeSetOverTime()
@@ -175,8 +175,8 @@ class TestOfCallSchedule extends UnitTestCase
         $schedule = new SimpleCallSchedule();
         $schedule->registerAt(0, 'aMethod', false, new SimpleByReference($one));
         $schedule->registerAt(1, 'aMethod', false, new SimpleByReference($two));
-        $this->assertReference($schedule->respond(0, 'aMethod', array()), $one);
-        $this->assertReference($schedule->respond(1, 'aMethod', array()), $two);
+        $this->assertReference($schedule->respond(0, 'aMethod', []), $one);
+        $this->assertReference($schedule->respond(1, 'aMethod', []), $two);
     }
 
     public function testReturnsOverTimecanBeAlteredByTheArguments()
@@ -186,11 +186,11 @@ class TestOfCallSchedule extends UnitTestCase
         $two_a    = '2a';
         $schedule = new SimpleCallSchedule();
         $schedule->registerAt(0, 'aMethod', false, new SimpleByReference($one));
-        $schedule->registerAt(1, 'aMethod', array('a'), new SimpleByReference($two_a));
+        $schedule->registerAt(1, 'aMethod', ['a'], new SimpleByReference($two_a));
         $schedule->registerAt(1, 'aMethod', false, new SimpleByReference($two));
-        $this->assertReference($schedule->respond(0, 'aMethod', array()), $one);
-        $this->assertReference($schedule->respond(1, 'aMethod', array()), $two);
-        $this->assertReference($schedule->respond(1, 'aMethod', array('a')), $two_a);
+        $this->assertReference($schedule->respond(0, 'aMethod', []), $one);
+        $this->assertReference($schedule->respond(1, 'aMethod', []), $two);
+        $this->assertReference($schedule->respond(1, 'aMethod', ['a']), $two_a);
     }
 
     public function testCanReturnByValue()
@@ -198,7 +198,7 @@ class TestOfCallSchedule extends UnitTestCase
         $a        = 5;
         $schedule = new SimpleCallSchedule();
         $schedule->register('aMethod', false, new SimpleByValue($a));
-        $this->assertCopy($schedule->respond(0, 'aMethod', array()), $a);
+        $this->assertCopy($schedule->respond(0, 'aMethod', []), $a);
     }
 
     public function testCanThrowException()
@@ -206,7 +206,7 @@ class TestOfCallSchedule extends UnitTestCase
         $schedule = new SimpleCallSchedule();
         $schedule->register('aMethod', false, new SimpleThrower(new Exception('Ouch')));
         $this->expectException(new Exception('Ouch'));
-        $schedule->respond(0, 'aMethod', array());
+        $schedule->respond(0, 'aMethod', []);
     }
 
     public function testCanEmitError()
@@ -214,7 +214,7 @@ class TestOfCallSchedule extends UnitTestCase
         $schedule = new SimpleCallSchedule();
         $schedule->register('aMethod', false, new SimpleErrorThrower('Ouch', E_USER_WARNING));
         $this->expectError('Ouch');
-        $schedule->respond(0, 'aMethod', array());
+        $schedule->respond(0, 'aMethod', []);
     }
 }
 
@@ -244,7 +244,7 @@ class Dummy
 }
 Mock::generate('Dummy');
 Mock::generate('Dummy', 'AnotherMockDummy');
-Mock::generate('Dummy', 'MockDummyWithExtraMethods', array('extraMethod'));
+Mock::generate('Dummy', 'MockDummyWithExtraMethods', ['extraMethod']);
 
 class TestOfConstructorCreation extends UnitTestCase
 {
@@ -305,7 +305,7 @@ class TestOfMockReturns extends UnitTestCase
     public function testParameteredReturn()
     {
         $mock = new MockDummy();
-        $mock->returnsByValue('aMethod', 'aaa', array(1, 2, 3));
+        $mock->returnsByValue('aMethod', 'aaa', [1, 2, 3]);
         $this->assertNull($mock->aMethod());
         $this->assertIdentical($mock->aMethod(1, 2, 3), 'aaa');
     }
@@ -314,7 +314,7 @@ class TestOfMockReturns extends UnitTestCase
     {
         $mock   = new MockDummy();
         $object = new Dummy();
-        $mock->returns('aMethod', $object, array(1, 2, 3));
+        $mock->returns('aMethod', $object, [1, 2, 3]);
         $this->assertSame($mock->aMethod(1, 2, 3), $object);
     }
 
@@ -332,7 +332,7 @@ class TestOfMockReturns extends UnitTestCase
         $mock->returnsByValue(
                 'aMethod',
                 'aaa',
-                array(new PatternExpectation('/hello/i')));
+                [new PatternExpectation('/hello/i')]);
         $this->assertIdentical($mock->aMethod('Hello'), 'aaa');
         $this->assertNull($mock->aMethod('Goodbye'));
     }
@@ -340,10 +340,10 @@ class TestOfMockReturns extends UnitTestCase
     public function testMultipleMethods()
     {
         $mock = new MockDummy();
-        $mock->returnsByValue('aMethod', 100, array(1));
-        $mock->returnsByValue('aMethod', 200, array(2));
-        $mock->returnsByValue('anotherMethod', 10, array(1));
-        $mock->returnsByValue('anotherMethod', 20, array(2));
+        $mock->returnsByValue('aMethod', 100, [1]);
+        $mock->returnsByValue('aMethod', 200, [2]);
+        $mock->returnsByValue('anotherMethod', 10, [1]);
+        $mock->returnsByValue('anotherMethod', 20, [2]);
         $this->assertIdentical($mock->aMethod(1), 100);
         $this->assertIdentical($mock->anotherMethod(1), 10);
         $this->assertIdentical($mock->aMethod(2), 200);
@@ -386,11 +386,11 @@ class TestOfMockReturns extends UnitTestCase
     {
         $mock   = new MockDummy();
         $object = new Dummy();
-        $mock->returnsAt(1, 'aMethod', 'aaa', array('a'));
+        $mock->returnsAt(1, 'aMethod', 'aaa', ['a']);
         $mock->returnsAt(1, 'aMethod', 'bbb');
-        $mock->returnsAt(2, 'aMethod', $object, array('*', 2));
-        $mock->returnsAt(2, 'aMethod', 'value', array('*', 3));
-        $mock->returns('aMethod', 3, array(3));
+        $mock->returnsAt(2, 'aMethod', $object, ['*', 2]);
+        $mock->returnsAt(2, 'aMethod', 'value', ['*', 3]);
+        $mock->returns('aMethod', 3, [3]);
         $this->assertNull($mock->aMethod());
         $this->assertEqual($mock->aMethod('a'), 'aaa');
         $this->assertSame($mock->aMethod(1, 2), $object);
@@ -414,8 +414,8 @@ class TestOfMockReturns extends UnitTestCase
     public function testSequenceFallback()
     {
         $mock = new MockDummy();
-        $mock->returnsByValueAt(0, 'aMethod', 'aaa', array('a'));
-        $mock->returnsByValueAt(1, 'aMethod', 'bbb', array('a'));
+        $mock->returnsByValueAt(0, 'aMethod', 'aaa', ['a']);
+        $mock->returnsByValueAt(1, 'aMethod', 'bbb', ['a']);
         $mock->returnsByValue('aMethod', 'AAA');
         $this->assertIdentical($mock->aMethod('a'), 'aaa');
         $this->assertIdentical($mock->aMethod('b'), 'AAA');
@@ -436,7 +436,7 @@ class TestOfMockExpectationsThatPass extends UnitTestCase
     public function testAnyArgument()
     {
         $mock = new MockDummy();
-        $mock->expect('aMethod', array('*'));
+        $mock->expect('aMethod', ['*']);
         $mock->aMethod(1);
         $mock->aMethod('hello');
     }
@@ -444,29 +444,29 @@ class TestOfMockExpectationsThatPass extends UnitTestCase
     public function testAnyTwoArguments()
     {
         $mock = new MockDummy();
-        $mock->expect('aMethod', array('*', '*'));
+        $mock->expect('aMethod', ['*', '*']);
         $mock->aMethod(1, 2);
     }
 
     public function testSpecificArgument()
     {
         $mock = new MockDummy();
-        $mock->expect('aMethod', array(1));
+        $mock->expect('aMethod', [1]);
         $mock->aMethod(1);
     }
 
     public function testExpectation()
     {
         $mock = new MockDummy();
-        $mock->expect('aMethod', array(new IsAExpectation('Dummy')));
+        $mock->expect('aMethod', [new IsAExpectation('Dummy')]);
         $mock->aMethod(new Dummy());
     }
 
     public function testArgumentsInSequence()
     {
         $mock = new MockDummy();
-        $mock->expectAt(0, 'aMethod', array(1, 2));
-        $mock->expectAt(1, 'aMethod', array(3, 4));
+        $mock->expectAt(0, 'aMethod', [1, 2]);
+        $mock->expectAt(1, 'aMethod', [3, 4]);
         $mock->aMethod(1, 2);
         $mock->aMethod(3, 4);
     }
@@ -583,7 +583,7 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testMaxCallsDetectsOverrun()
     {
-        $this->test->expectOnce('assert', array(new MemberExpectation('count', 2), 3));
+        $this->test->expectOnce('assert', [new MemberExpectation('count', 2), 3]);
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectMaximumCallCount('aMethod', 2);
         $mock->aMethod();
@@ -594,7 +594,7 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testTallyOnMaxCallsSendsPassOnUnderrun()
     {
-        $this->test->expectOnce('assert', array(new MemberExpectation('count', 2), 2));
+        $this->test->expectOnce('assert', [new MemberExpectation('count', 2), 2]);
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectMaximumCallCount('aMethod', 2);
         $mock->aMethod();
@@ -604,7 +604,7 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testExpectNeverDetectsOverrun()
     {
-        $this->test->expectOnce('assert', array(new MemberExpectation('count', 0), 1));
+        $this->test->expectOnce('assert', [new MemberExpectation('count', 0), 1]);
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectNever('aMethod');
         $mock->aMethod();
@@ -613,7 +613,7 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testTallyOnExpectNeverStillSendsPassOnUnderrun()
     {
-        $this->test->expectOnce('assert', array(new MemberExpectation('count', 0), 0));
+        $this->test->expectOnce('assert', [new MemberExpectation('count', 0), 0]);
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectNever('aMethod');
         $mock->mock->atTestEnd('testSomething', $this->test);
@@ -621,7 +621,7 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testMinCalls()
     {
-        $this->test->expectOnce('assert', array(new MemberExpectation('count', 2), 2));
+        $this->test->expectOnce('assert', [new MemberExpectation('count', 2), 2]);
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectMinimumCallCount('aMethod', 2);
         $mock->aMethod();
@@ -631,7 +631,7 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testFailedNever()
     {
-        $this->test->expectOnce('assert', array(new MemberExpectation('count', 0), 1));
+        $this->test->expectOnce('assert', [new MemberExpectation('count', 0), 1]);
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectNever('aMethod');
         $mock->aMethod();
@@ -640,7 +640,7 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testUnderOnce()
     {
-        $this->test->expectOnce('assert', array(new MemberExpectation('count', 1), 0));
+        $this->test->expectOnce('assert', [new MemberExpectation('count', 1), 0]);
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectOnce('aMethod');
         $mock->mock->atTestEnd('testSomething', $this->test);
@@ -648,7 +648,7 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testOverOnce()
     {
-        $this->test->expectOnce('assert', array(new MemberExpectation('count', 1), 2));
+        $this->test->expectOnce('assert', [new MemberExpectation('count', 1), 2]);
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectOnce('aMethod');
         $mock->aMethod();
@@ -658,7 +658,7 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testUnderAtLeastOnce()
     {
-        $this->test->expectOnce('assert', array(new MemberExpectation('count', 1), 0));
+        $this->test->expectOnce('assert', [new MemberExpectation('count', 1), 0]);
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectAtLeastOnce('aMethod');
         $mock->mock->atTestEnd('testSomething', $this->test);
@@ -667,9 +667,9 @@ class TestOfMockExpectations extends UnitTestCase
     public function testZeroArguments()
     {
         $this->test->expectOnce('assert',
-                                array(new MemberExpectation('expected', array()), array(), '*'));
+                                [new MemberExpectation('expected', []), [], '*']);
         $mock = new MockDummyWithInjectedTestCase();
-        $mock->expect('aMethod', array());
+        $mock->expect('aMethod', []);
         $mock->aMethod();
         $mock->mock->atTestEnd('testSomething', $this->test);
     }
@@ -677,9 +677,9 @@ class TestOfMockExpectations extends UnitTestCase
     public function testExpectedArguments()
     {
         $this->test->expectOnce('assert',
-                                array(new MemberExpectation('expected', array(1, 2, 3)), array(1, 2, 3), '*'));
+                                [new MemberExpectation('expected', [1, 2, 3]), [1, 2, 3], '*']);
         $mock = new MockDummyWithInjectedTestCase();
-        $mock->expect('aMethod', array(1, 2, 3));
+        $mock->expect('aMethod', [1, 2, 3]);
         $mock->aMethod(1, 2, 3);
         $mock->mock->atTestEnd('testSomething', $this->test);
     }
@@ -687,9 +687,9 @@ class TestOfMockExpectations extends UnitTestCase
     public function testFailedArguments()
     {
         $this->test->expectOnce('assert',
-                                array(new MemberExpectation('expected', array('this')), array('that'), '*'));
+                                [new MemberExpectation('expected', ['this']), ['that'], '*']);
         $mock = new MockDummyWithInjectedTestCase();
-        $mock->expect('aMethod', array('this'));
+        $mock->expect('aMethod', ['this']);
         $mock->aMethod('that');
         $mock->mock->atTestEnd('testSomething', $this->test);
     }
@@ -697,13 +697,13 @@ class TestOfMockExpectations extends UnitTestCase
     public function testWildcardsAreTranslatedToAnythingExpectations()
     {
         $this->test->expectOnce('assert',
-                                array(new MemberExpectation('expected',
-                                                            array(new AnythingExpectation(),
+                                [new MemberExpectation('expected',
+                                                            [new AnythingExpectation(),
                                                                   123,
-                                                                  new AnythingExpectation())),
-                                      array(100, 123, 101), '*'));
+                                                                  new AnythingExpectation()]),
+                                      [100, 123, 101], '*']);
         $mock = new MockDummyWithInjectedTestCase($this);
-        $mock->expect('aMethod', array('*', 123, '*'));
+        $mock->expect('aMethod', ['*', 123, '*']);
         $mock->aMethod(100, 123, 101);
         $mock->mock->atTestEnd('testSomething', $this->test);
     }
@@ -711,12 +711,12 @@ class TestOfMockExpectations extends UnitTestCase
     public function testSpecificPassingSequence()
     {
         $this->test->expectAt(0, 'assert',
-                              array(new MemberExpectation('expected', array(1, 2, 3)), array(1, 2, 3), '*'));
+                              [new MemberExpectation('expected', [1, 2, 3]), [1, 2, 3], '*']);
         $this->test->expectAt(1, 'assert',
-                              array(new MemberExpectation('expected', array('Hello')), array('Hello'), '*'));
+                              [new MemberExpectation('expected', ['Hello']), ['Hello'], '*']);
         $mock = new MockDummyWithInjectedTestCase();
-        $mock->expectAt(1, 'aMethod', array(1, 2, 3));
-        $mock->expectAt(2, 'aMethod', array('Hello'));
+        $mock->expectAt(1, 'aMethod', [1, 2, 3]);
+        $mock->expectAt(2, 'aMethod', ['Hello']);
         $mock->aMethod();
         $mock->aMethod(1, 2, 3);
         $mock->aMethod('Hello');
@@ -788,7 +788,7 @@ class TestOfSpecialMethodsAfterPHP51 extends UnitTestCase
     public function testCanExpectUnset()
     {
         $mock = new MockClassWithSpecialMethods();
-        $mock->expectOnce('__unset', array('a'));
+        $mock->expectOnce('__unset', ['a']);
         unset($mock->a);
     }
 }
@@ -803,8 +803,8 @@ class TestOfSpecialMethods extends UnitTestCase
     public function testReturnFromSpecialAccessor()
     {
         $mock = new MockClassWithSpecialMethods();
-        $mock->returnsByValue('__get', '1st Return', array('first'));
-        $mock->returnsByValue('__get', '2nd Return', array('second'));
+        $mock->returnsByValue('__get', '1st Return', ['first']);
+        $mock->returnsByValue('__get', '2nd Return', ['second']);
         $this->assertEqual($mock->first, '1st Return');
         $this->assertEqual($mock->second, '2nd Return');
     }
@@ -812,14 +812,14 @@ class TestOfSpecialMethods extends UnitTestCase
     public function testcanExpectTheSettingOfValue()
     {
         $mock = new MockClassWithSpecialMethods();
-        $mock->expectOnce('__set', array('a', 'A'));
+        $mock->expectOnce('__set', ['a', 'A']);
         $mock->a = 'A';
     }
 
     public function testCanSimulateAnOverloadmethod()
     {
         $mock = new MockClassWithSpecialMethods();
-        $mock->expectOnce('__call', array('amOverloaded', array('A')));
+        $mock->expectOnce('__call', ['amOverloaded', ['A']]);
         $mock->returnsByValue('__call', 'aaa');
         $this->assertIdentical($mock->amOverloaded('A'), 'aaa');
     }
@@ -881,7 +881,7 @@ class TestOfThrowingExceptionsFromMocks extends UnitTestCase
     public function testThrowsOnlyWhenCallSignatureMatches()
     {
         $mock = new MockDummy();
-        $mock->throwOn('aMethod', new MockTestException(), array(3));
+        $mock->throwOn('aMethod', new MockTestException(), [3]);
         $mock->aMethod(1);
         $mock->aMethod(2);
         $this->expectException();
@@ -912,7 +912,7 @@ class TestOfThrowingErrorsFromMocks extends UnitTestCase
     public function testGeneratesErrorOnlyWhenCallSignatureMatches()
     {
         $mock = new MockDummy();
-        $mock->errorOn('aMethod', 'Ouch!', array(3));
+        $mock->errorOn('aMethod', 'Ouch!', [3]);
         $mock->aMethod(1);
         $mock->aMethod(2);
         $this->expectError();
@@ -930,7 +930,7 @@ class TestOfThrowingErrorsFromMocks extends UnitTestCase
     }
 }
 
-Mock::generatePartial('Dummy', 'TestDummy', array('anotherMethod', 'aReferenceMethod'));
+Mock::generatePartial('Dummy', 'TestDummy', ['anotherMethod', 'aReferenceMethod']);
 
 class TestOfPartialMocks extends UnitTestCase
 {
@@ -944,9 +944,9 @@ class TestOfPartialMocks extends UnitTestCase
     public function testSettingReturns()
     {
         $mock = new TestDummy();
-        $mock->returnsByValue('anotherMethod', 33, array(3));
+        $mock->returnsByValue('anotherMethod', 33, [3]);
         $mock->returnsByValue('anotherMethod', 22);
-        $mock->returnsByValueAt(2, 'anotherMethod', 44, array(3));
+        $mock->returnsByValueAt(2, 'anotherMethod', 44, [3]);
         $this->assertEqual($mock->anotherMethod(), 22);
         $this->assertEqual($mock->anotherMethod(3), 33);
         $this->assertEqual($mock->anotherMethod(3), 44);
@@ -956,7 +956,7 @@ class TestOfPartialMocks extends UnitTestCase
     {
         $mock   = new TestDummy();
         $object = 99;
-        $mock->returnsByReferenceAt(0, 'aReferenceMethod', $object, array(3));
+        $mock->returnsByReferenceAt(0, 'aReferenceMethod', $object, [3]);
         $this->assertReference($mock->aReferenceMethod(3), $object);
     }
 
@@ -964,7 +964,7 @@ class TestOfPartialMocks extends UnitTestCase
     {
         $mock   = new TestDummy();
         $object = new Dummy();
-        $mock->returnsAt(0, 'anotherMethod', $object, array(3));
+        $mock->returnsAt(0, 'anotherMethod', $object, [3]);
         $this->assertSame($mock->anotherMethod(3), $object);
     }
 
@@ -972,8 +972,8 @@ class TestOfPartialMocks extends UnitTestCase
     {
         $mock = new TestDummy();
         $mock->expectCallCount('anotherMethod', 2);
-        $mock->expect('anotherMethod', array(77));
-        $mock->expectAt(1, 'anotherMethod', array(66));
+        $mock->expect('anotherMethod', [77]);
+        $mock->expectAt(1, 'anotherMethod', [66]);
         $mock->anotherMethod(77);
         $mock->anotherMethod(66);
     }
@@ -1113,7 +1113,7 @@ class DummyWithProtected
     }
 }
 
-Mock::generatePartial('DummyWithProtected', 'TestDummyWithProtected', array('aProtectedMethod'));
+Mock::generatePartial('DummyWithProtected', 'TestDummyWithProtected', ['aProtectedMethod']);
 
 class TestOfProtectedMethodPartialMocks extends UnitTestCase
 {

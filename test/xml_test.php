@@ -14,7 +14,7 @@ class TestOfNestingTags extends UnitTestCase
 {
     public function testGroupSize()
     {
-        $nesting = new NestedGroupTag(array('SIZE' => 2));
+        $nesting = new NestedGroupTag(['SIZE' => 2]);
         $this->assertEqual($nesting->getSize(), 2);
     }
 }
@@ -37,8 +37,8 @@ class TestOfXmlStructureParsing extends UnitTestCase
     public function testEmptyGroup()
     {
         $listener = new MockSimpleScorer();
-        $listener->expectOnce('paintGroupStart', array('a_group', 7));
-        $listener->expectOnce('paintGroupEnd', array('a_group'));
+        $listener->expectOnce('paintGroupStart', ['a_group', 7]);
+        $listener->expectOnce('paintGroupEnd', ['a_group']);
         $parser = new SimpleTestXmlParser($listener);
         $parser->parse("<?xml version=\"1.0\"?>\n");
         $parser->parse("<run>\n");
@@ -51,8 +51,8 @@ class TestOfXmlStructureParsing extends UnitTestCase
     public function testEmptyCase()
     {
         $listener = new MockSimpleScorer();
-        $listener->expectOnce('paintCaseStart', array('a_case'));
-        $listener->expectOnce('paintCaseEnd', array('a_case'));
+        $listener->expectOnce('paintCaseStart', ['a_case']);
+        $listener->expectOnce('paintCaseEnd', ['a_case']);
         $parser = new SimpleTestXmlParser($listener);
         $parser->parse("<?xml version=\"1.0\"?>\n");
         $parser->parse("<run>\n");
@@ -65,10 +65,10 @@ class TestOfXmlStructureParsing extends UnitTestCase
     public function testEmptyMethod()
     {
         $listener = new MockSimpleScorer();
-        $listener->expectOnce('paintCaseStart', array('a_case'));
-        $listener->expectOnce('paintCaseEnd', array('a_case'));
-        $listener->expectOnce('paintMethodStart', array('a_method'));
-        $listener->expectOnce('paintMethodEnd', array('a_method'));
+        $listener->expectOnce('paintCaseStart', ['a_case']);
+        $listener->expectOnce('paintCaseEnd', ['a_case']);
+        $listener->expectOnce('paintMethodStart', ['a_method']);
+        $listener->expectOnce('paintMethodEnd', ['a_method']);
         $parser = new SimpleTestXmlParser($listener);
         $parser->parse("<?xml version=\"1.0\"?>\n");
         $parser->parse("<run>\n");
@@ -84,11 +84,11 @@ class TestOfXmlStructureParsing extends UnitTestCase
     public function testNestedGroup()
     {
         $listener = new MockSimpleScorer();
-        $listener->expectAt(0, 'paintGroupStart', array('a_group', 7));
-        $listener->expectAt(1, 'paintGroupStart', array('b_group', 3));
+        $listener->expectAt(0, 'paintGroupStart', ['a_group', 7]);
+        $listener->expectAt(1, 'paintGroupStart', ['b_group', 3]);
         $listener->expectCallCount('paintGroupStart', 2);
-        $listener->expectAt(0, 'paintGroupEnd', array('b_group'));
-        $listener->expectAt(1, 'paintGroupEnd', array('a_group'));
+        $listener->expectAt(0, 'paintGroupEnd', ['b_group']);
+        $listener->expectAt(1, 'paintGroupEnd', ['a_group']);
         $listener->expectCallCount('paintGroupEnd', 2);
 
         $parser = new SimpleTestXmlParser($listener);
@@ -132,7 +132,7 @@ class TestOfXmlResultsParsing extends UnitTestCase
     public function testPass()
     {
         $listener = new MockSimpleScorer();
-        $listener->expectOnce('paintPass', array('a_message'));
+        $listener->expectOnce('paintPass', ['a_message']);
         $parser = new SimpleTestXmlParser($listener);
         $this->sendValidStart($parser);
         $this->assertTrue($parser->parse("<pass>a_message</pass>\n"));
@@ -142,7 +142,7 @@ class TestOfXmlResultsParsing extends UnitTestCase
     public function testFail()
     {
         $listener = new MockSimpleScorer();
-        $listener->expectOnce('paintFail', array('a_message'));
+        $listener->expectOnce('paintFail', ['a_message']);
         $parser = new SimpleTestXmlParser($listener);
         $this->sendValidStart($parser);
         $this->assertTrue($parser->parse("<fail>a_message</fail>\n"));
@@ -152,7 +152,7 @@ class TestOfXmlResultsParsing extends UnitTestCase
     public function testException()
     {
         $listener = new MockSimpleScorer();
-        $listener->expectOnce('paintError', array('a_message'));
+        $listener->expectOnce('paintError', ['a_message']);
         $parser = new SimpleTestXmlParser($listener);
         $this->sendValidStart($parser);
         $this->assertTrue($parser->parse("<exception>a_message</exception>\n"));
@@ -162,7 +162,7 @@ class TestOfXmlResultsParsing extends UnitTestCase
     public function testSkip()
     {
         $listener = new MockSimpleScorer();
-        $listener->expectOnce('paintSkip', array('a_message'));
+        $listener->expectOnce('paintSkip', ['a_message']);
         $parser = new SimpleTestXmlParser($listener);
         $this->sendValidStart($parser);
         $this->assertTrue($parser->parse("<skip>a_message</skip>\n"));
@@ -174,7 +174,7 @@ class TestOfXmlResultsParsing extends UnitTestCase
         $signal        = new AnyOldSignal();
         $signal->stuff = 'Hello';
         $listener      = new MockSimpleScorer();
-        $listener->expectOnce('paintSignal', array('a_signal', $signal));
+        $listener->expectOnce('paintSignal', ['a_signal', $signal]);
         $parser = new SimpleTestXmlParser($listener);
         $this->sendValidStart($parser);
         $this->assertTrue($parser->parse(
@@ -186,7 +186,7 @@ class TestOfXmlResultsParsing extends UnitTestCase
     public function testMessage()
     {
         $listener = new MockSimpleScorer();
-        $listener->expectOnce('paintMessage', array('a_message'));
+        $listener->expectOnce('paintMessage', ['a_message']);
         $parser = new SimpleTestXmlParser($listener);
         $this->sendValidStart($parser);
         $this->assertTrue($parser->parse("<message>a_message</message>\n"));
@@ -196,7 +196,7 @@ class TestOfXmlResultsParsing extends UnitTestCase
     public function testFormattedMessage()
     {
         $listener = new MockSimpleScorer();
-        $listener->expectOnce('paintFormattedMessage', array("\na\tmessage\n"));
+        $listener->expectOnce('paintFormattedMessage', ["\na\tmessage\n"]);
         $parser = new SimpleTestXmlParser($listener);
         $this->sendValidStart($parser);
         $this->assertTrue($parser->parse("<formatted><![CDATA[\na\tmessage\n]]></formatted>\n"));

@@ -169,33 +169,33 @@ class TestOfReflection extends UnitTestCase
     public function testMethodsListFromClass()
     {
         $reflection = new SimpleReflection('AnyOldClass');
-        $this->assertIdentical($reflection->getMethods(), array('aMethod'));
+        $this->assertIdentical($reflection->getMethods(), ['aMethod']);
     }
 
     public function testMethodsListFromInterface()
     {
         $reflection = new SimpleReflection('AnyOldInterface');
-        $this->assertIdentical($reflection->getMethods(), array('aMethod'));
-        $this->assertIdentical($reflection->getInterfaceMethods(), array('aMethod'));
+        $this->assertIdentical($reflection->getMethods(), ['aMethod']);
+        $this->assertIdentical($reflection->getInterfaceMethods(), ['aMethod']);
     }
 
     public function testMethodsComeFromDescendentInterfacesASWell()
     {
         $reflection = new SimpleReflection('AnyDescendentInterface');
-        $this->assertIdentical($reflection->getMethods(), array('aMethod'));
+        $this->assertIdentical($reflection->getMethods(), ['aMethod']);
     }
 
     public function testCanSeparateInterfaceMethodsFromOthers()
     {
         $reflection = new SimpleReflection('AnyOldImplementation');
-        $this->assertIdentical($reflection->getMethods(), array('aMethod', 'extraMethod'));
-        $this->assertIdentical($reflection->getInterfaceMethods(), array('aMethod'));
+        $this->assertIdentical($reflection->getMethods(), ['aMethod', 'extraMethod']);
+        $this->assertIdentical($reflection->getInterfaceMethods(), ['aMethod']);
     }
 
     public function testMethodsComeFromDescendentInterfacesInAbstractClass()
     {
         $reflection = new SimpleReflection('AnyAbstractImplementation');
-        $this->assertIdentical($reflection->getMethods(), array('aMethod'));
+        $this->assertIdentical($reflection->getMethods(), ['aMethod']);
     }
 
     public function testInterfaceHasOnlyItselfToImplement()
@@ -203,7 +203,7 @@ class TestOfReflection extends UnitTestCase
         $reflection = new SimpleReflection('AnyOldInterface');
         $this->assertEqual(
                 $reflection->getInterfaces(),
-                array('AnyOldInterface'));
+                ['AnyOldInterface']);
     }
 
     public function testInterfacesListedForClass()
@@ -211,7 +211,7 @@ class TestOfReflection extends UnitTestCase
         $reflection = new SimpleReflection('AnyOldImplementation');
         $this->assertEqual(
                 $reflection->getInterfaces(),
-                array('AnyOldInterface'));
+                ['AnyOldInterface']);
     }
 
     public function testInterfacesListedForSubclass()
@@ -219,7 +219,7 @@ class TestOfReflection extends UnitTestCase
         $reflection = new SimpleReflection('AnyOldSubclass');
         $this->assertEqual(
                 $reflection->getInterfaces(),
-                array('AnyOldInterface'));
+                ['AnyOldInterface']);
     }
 
     public function testNoParameterCreationWhenNoInterface()

@@ -7,7 +7,7 @@ class PageRequest
     public function __construct($raw)
     {
         $statements   = explode('&', $raw);
-        $this->parsed = array();
+        $this->parsed = [];
         foreach ($statements as $statement) {
             if (strpos($statement, '=') === false) {
                 continue;
@@ -23,7 +23,7 @@ class PageRequest
         if (preg_match('/(.*)\[\]$/', $key, $matches)) {
             $key = $matches[1];
             if (! isset($this->parsed[$key])) {
-                $this->parsed[$key] = array();
+                $this->parsed[$key] = [];
             }
             $this->addValue($key, $value);
         } elseif (isset($this->parsed[$key])) {
@@ -36,7 +36,7 @@ class PageRequest
     private function addValue($key, $value)
     {
         if (! is_array($this->parsed[$key])) {
-            $this->parsed[$key] = array($this->parsed[$key]);
+            $this->parsed[$key] = [$this->parsed[$key]];
         }
         $this->parsed[$key][] = urldecode($value);
     }
@@ -59,7 +59,7 @@ class PageRequest
             return $request->getAll();
         }
         
-        return array();
+        return [];
     }
 
     public static function post()

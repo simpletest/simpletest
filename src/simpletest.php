@@ -91,7 +91,7 @@ class SimpleTest
     public static function preferred($classes)
     {
         if (! is_array($classes)) {
-            $classes = array($classes);
+            $classes = [$classes];
         }
         $registry = self::getRegistry();
         for ($i = count($registry['Preferred']) - 1; $i >= 0; $i--) {
@@ -233,20 +233,20 @@ class SimpleTest
      */
     protected static function getDefaults()
     {
-        return new ArrayObject(array(
+        return new ArrayObject([
             'Parsers'              => false,
             'MockBaseClass'        => 'SimpleMock',
-            'IgnoreList'           => array(),
+            'IgnoreList'           => [],
             'DefaultProxy'         => false,
             'DefaultProxyUsername' => false,
             'DefaultProxyPassword' => false,
-                'Preferred' => array(
+                'Preferred' => [
                     new HtmlReporter(), 
                     new TextReporter(), 
                     new XmlReporter(), 
                     new JUnitXMLReporter()
-                )
-        ));
+                ]
+        ]);
     }
 
     /**
@@ -287,7 +287,7 @@ class SimpleTestContext
      */
     public function clear()
     {
-        $this->resources = array();
+        $this->resources = [];
     }
 
     /**

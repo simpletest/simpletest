@@ -11,12 +11,12 @@ require_once __DIR__ . '/selector.php';
  */
 class SimplePage
 {
-    private $links = array();
+    private $links = [];
     private $title = false;
     private $last_widget;        // TODO
     private $label;              // TODO
-    private $forms  = array();
-    private $frames = array();
+    private $forms  = [];
+    private $frames = [];
     private $transport_error;
     private $raw;
     private $text = false;
@@ -232,7 +232,7 @@ class SimplePage
      */
     public function getFrameFocus()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -332,7 +332,7 @@ class SimplePage
         if (! $this->hasFrames()) {
             return false;
         }
-        $urls = array();
+        $urls = [];
         for ($i = 0; $i < count($this->frames); $i++) {
             $name       = $this->frames[$i]->getAttribute('name');
             $url        = new SimpleUrl($this->frames[$i]->getAttribute('src'));
@@ -362,7 +362,7 @@ class SimplePage
      */
     public function getUrls()
     {
-        $all = array();
+        $all = [];
         foreach ($this->links as $link) {
             $url   = $this->getUrlFromLink($link);
             $all[] = $url->asString();
@@ -381,7 +381,7 @@ class SimplePage
      */
     public function getUrlsByLabel($label)
     {
-        $matches = array();
+        $matches = [];
         foreach ($this->links as $link) {
             if ($link->getText() == $label) {
                 $matches[] = $this->getUrlFromLink($link);
@@ -583,19 +583,19 @@ class SimplePage
      */
     public static function normalise($html)
     {
-        $rules = array(
+        $rules = [
             '#<!--.*?-->#si',
             '#<(script|option|textarea)[^>]*>.*?</\1>#si',
             '#<img[^>]*alt\s*=\s*("([^"]*)"|\'([^\']*)\'|([a-zA-Z_]+))[^>]*>#',
             '#<[^>]*>#',
-        );
+        ];
 
-        $replace = array(
+        $replace = [
             '',
             '',
             ' \2\3\4 ',
             '',
-        );
+        ];
 
         $text = preg_replace($rules, $replace, $html);
         $text = html_entity_decode($text, ENT_QUOTES);

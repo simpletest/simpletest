@@ -17,7 +17,7 @@ if (! defined('DEFAULT_CONNECTION_TIMEOUT')) {
  */
 class SimpleUserAgent
 {
-    private $additional_headers = array();
+    private $additional_headers = [];
     private $authenticator;
     private $connection_timeout = DEFAULT_CONNECTION_TIMEOUT;
     private $cookie_jar;
@@ -261,7 +261,7 @@ class SimpleUserAgent
      */
     public function fetchResponse($url, $encoding)
     {
-        if (!in_array($encoding->getMethod(), array('POST', 'PUT'))) {
+        if (!in_array($encoding->getMethod(), ['POST', 'PUT'])) {
             $url->addRequestParameters($encoding);
             $encoding->clear();
         }

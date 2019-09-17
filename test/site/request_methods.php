@@ -13,7 +13,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'POST':
     case 'PUT':
-        $acceptedContentTypes = array('text/xml', 'application/xml');       
+        $acceptedContentTypes = ['text/xml', 'application/xml'];       
         if (
             (isset($_SERVER['CONTENT_TYPE']) && in_array($_SERVER['CONTENT_TYPE'], $acceptedContentTypes)) 
             // https://bugs.php.net/bug.php?id=66606

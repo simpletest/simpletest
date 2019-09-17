@@ -96,7 +96,7 @@ class SimpleReflection
     {
         $reflection = new ReflectionClass($this->interface);
         if ($reflection->isInterface()) {
-            return array($this->interface);
+            return [$this->interface];
         }
 
         return $this->onlyParents($reflection->getInterfaces());
@@ -109,7 +109,7 @@ class SimpleReflection
      */
     public function getInterfaceMethods()
     {
-        $methods = array();
+        $methods = [];
         $interfaces = $this->getInterfaces();
         foreach ($interfaces as $interface) {
             $methods = array_merge($methods, get_class_methods($interface));
@@ -198,8 +198,8 @@ class SimpleReflection
      */
     protected function onlyParents($interfaces)
     {
-        $parents   = array();
-        $blacklist = array();
+        $parents   = [];
+        $blacklist = [];
         foreach ($interfaces as $interface) {
             foreach ($interfaces as $possible_parent) {
                 if ($interface->getName() == $possible_parent->getName()) {

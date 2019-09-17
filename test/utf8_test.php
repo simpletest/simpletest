@@ -42,16 +42,16 @@ class TestOfHtmlSaxParserWithDifferentCharset extends UnitTestCase
     public function testTagWithAttributesInUTF8()
     {
         $parser = $this->createParser();
-        $parser->expectOnce('acceptTextToken', array('label', '*'));
-        $parser->expectAt(0, 'acceptStartToken', array('<a', '*'));
-        $parser->expectAt(1, 'acceptStartToken', array('href', '*'));
-        $parser->expectAt(2, 'acceptStartToken', array('>', '*'));
+        $parser->expectOnce('acceptTextToken', ['label', '*']);
+        $parser->expectAt(0, 'acceptStartToken', ['<a', '*']);
+        $parser->expectAt(1, 'acceptStartToken', ['href', '*']);
+        $parser->expectAt(2, 'acceptStartToken', ['>', '*']);
         $parser->expectCallCount('acceptStartToken', 3);
-        $parser->expectAt(0, 'acceptAttributeToken', array('= "', '*'));
-        $parser->expectAt(1, 'acceptAttributeToken', array('hère.html', '*'));
-        $parser->expectAt(2, 'acceptAttributeToken', array('"', '*'));
+        $parser->expectAt(0, 'acceptAttributeToken', ['= "', '*']);
+        $parser->expectAt(1, 'acceptAttributeToken', ['hère.html', '*']);
+        $parser->expectAt(2, 'acceptAttributeToken', ['"', '*']);
         $parser->expectCallCount('acceptAttributeToken', 3);
-        $parser->expectOnce('acceptEndToken', array('</a>', '*'));
+        $parser->expectOnce('acceptEndToken', ['</a>', '*']);
         $lexer = new SimpleHtmlLexer($parser);
         $this->assertTrue($lexer->parse('<a href = "hère.html">label</a>'));
     }
@@ -59,16 +59,16 @@ class TestOfHtmlSaxParserWithDifferentCharset extends UnitTestCase
     public function testTagWithAttributesInLatin1()
     {
         $parser = $this->createParser();
-        $parser->expectOnce('acceptTextToken', array('label', '*'));
-        $parser->expectAt(0, 'acceptStartToken', array('<a', '*'));
-        $parser->expectAt(1, 'acceptStartToken', array('href', '*'));
-        $parser->expectAt(2, 'acceptStartToken', array('>', '*'));
+        $parser->expectOnce('acceptTextToken', ['label', '*']);
+        $parser->expectAt(0, 'acceptStartToken', ['<a', '*']);
+        $parser->expectAt(1, 'acceptStartToken', ['href', '*']);
+        $parser->expectAt(2, 'acceptStartToken', ['>', '*']);
         $parser->expectCallCount('acceptStartToken', 3);
-        $parser->expectAt(0, 'acceptAttributeToken', array('= "', '*'));
-        $parser->expectAt(1, 'acceptAttributeToken', array(utf8_decode('hère.html'), '*'));
-        $parser->expectAt(2, 'acceptAttributeToken', array('"', '*'));
+        $parser->expectAt(0, 'acceptAttributeToken', ['= "', '*']);
+        $parser->expectAt(1, 'acceptAttributeToken', [utf8_decode('hère.html'), '*']);
+        $parser->expectAt(2, 'acceptAttributeToken', ['"', '*']);
         $parser->expectCallCount('acceptAttributeToken', 3);
-        $parser->expectOnce('acceptEndToken', array('</a>', '*'));
+        $parser->expectOnce('acceptEndToken', ['</a>', '*']);
         $lexer = new SimpleHtmlLexer($parser);
         $this->assertTrue($lexer->parse(utf8_decode('<a href = "hère.html">label</a>')));
     }

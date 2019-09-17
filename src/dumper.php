@@ -370,7 +370,7 @@ class SimpleDumper
     protected function getMembers($object)
     {
         $reflection = new ReflectionObject($object);
-        $members    = array();
+        $members    = [];
         foreach ($reflection->getProperties() as $property) {
             if (method_exists($property, 'setAccessible')) {
                 $property->setAccessible(true);
@@ -431,7 +431,7 @@ class SimpleDumper
             return 0;
         }
         if (strlen($first) < strlen($second)) {
-            list($first, $second) = array($second, $first);
+            list($first, $second) = [$second, $first];
         }
         $position = 0;
         $step     = strlen($first);

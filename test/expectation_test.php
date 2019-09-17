@@ -35,22 +35,22 @@ class TestOfEquality extends UnitTestCase
 
     public function testArray()
     {
-        $colours = new EqualExpectation(array('r', 'g', 'b'));
-        $this->assertTrue($colours->test(array('r', 'g', 'b')));
-        $this->assertFalse($colours->test(array('g', 'b', 'r')));
+        $colours = new EqualExpectation(['r', 'g', 'b']);
+        $this->assertTrue($colours->test(['r', 'g', 'b']));
+        $this->assertFalse($colours->test(['g', 'b', 'r']));
     }
 
     public function testHash()
     {
-        $is_blue = new EqualExpectation(array('r' => 0, 'g' => 0, 'b' => 255));
-        $this->assertTrue($is_blue->test(array('r' => 0, 'g' => 0, 'b' => 255)));
-        $this->assertFalse($is_blue->test(array('r' => 0, 'g' => 255, 'b' => 0)));
+        $is_blue = new EqualExpectation(['r' => 0, 'g' => 0, 'b' => 255]);
+        $this->assertTrue($is_blue->test(['r' => 0, 'g' => 0, 'b' => 255]));
+        $this->assertFalse($is_blue->test(['r' => 0, 'g' => 255, 'b' => 0]));
     }
 
     public function testHashWithOutOfOrderKeysShouldStillMatch()
     {
-        $any_order = new EqualExpectation(array('a' => 1, 'b' => 2));
-        $this->assertTrue($any_order->test(array('b' => 2, 'a' => 1)));
+        $any_order = new EqualExpectation(['a' => 1, 'b' => 2]);
+        $this->assertTrue($any_order->test(['b' => 2, 'a' => 1]));
     }
 }
 
@@ -155,18 +155,18 @@ class TestOfIdentity extends UnitTestCase
 
     public function testCanComparePrivateMembersOfObjectsInArrays()
     {
-        $expectFive = new IdenticalExpectation(array(new OpaqueContainer(5)));
-        $this->assertTrue($expectFive->test(array(new OpaqueContainer(5))));
-        $this->assertFalse($expectFive->test(array(new OpaqueContainer(6))));
+        $expectFive = new IdenticalExpectation([new OpaqueContainer(5)]);
+        $this->assertTrue($expectFive->test([new OpaqueContainer(5)]));
+        $this->assertFalse($expectFive->test([new OpaqueContainer(6)]));
     }
 
     public function testCanComparePrivateMembersOfObjectsWherePrivateMemberOfBaseClassIsObscured()
     {
-        $expectFive = new IdenticalExpectation(array(new DerivedOpaqueContainer(1, 2)));
-        $this->assertTrue($expectFive->test(array(new DerivedOpaqueContainer(1, 2))));
-        $this->assertFalse($expectFive->test(array(new DerivedOpaqueContainer(0, 2))));
-        $this->assertFalse($expectFive->test(array(new DerivedOpaqueContainer(0, 9))));
-        $this->assertFalse($expectFive->test(array(new DerivedOpaqueContainer(1, 0))));
+        $expectFive = new IdenticalExpectation([new DerivedOpaqueContainer(1, 2)]);
+        $this->assertTrue($expectFive->test([new DerivedOpaqueContainer(1, 2)]));
+        $this->assertFalse($expectFive->test([new DerivedOpaqueContainer(0, 2)]));
+        $this->assertFalse($expectFive->test([new DerivedOpaqueContainer(0, 9)]));
+        $this->assertFalse($expectFive->test([new DerivedOpaqueContainer(1, 0)]));
     }
 }
 
@@ -335,7 +335,7 @@ class TestOfIsA extends UnitTestCase
     {
         $expectation = new IsAExpectation('scalar');
         $this->assertTrue($expectation->test(5));
-        $this->assertFalse($expectation->test(array(5)));
+        $this->assertFalse($expectation->test([5]));
     }
 
     public function testNumeric()

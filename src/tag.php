@@ -19,7 +19,7 @@ class SimpleTagBuilder
      */
     public function createTag($name, $attributes)
     {
-        static $map = array(
+        static $map = [
             'a'        => 'SimpleAnchorTag',
             'title'    => 'SimpleTitleTag',
             'base'     => 'SimpleBaseTag',
@@ -29,7 +29,7 @@ class SimpleTagBuilder
             'label'    => 'SimpleLabelTag',
             'form'     => 'SimpleFormTag',
             'frame'    => 'SimpleFrameTag'
-        );
+        ];
 
         $attributes = $this->keysToLowerCase($attributes);
         if (array_key_exists($name, $map)) {
@@ -74,7 +74,7 @@ class SimpleTagBuilder
             return new SimpleTextTag($attributes);
         }
         $type = strtolower(trim($attributes['type']));
-        $map  = array(
+        $map  = [
             'submit'   => 'SimpleSubmitTag',
             'image'    => 'SimpleImageSubmitTag',
             'checkbox' => 'SimpleCheckboxTag',
@@ -85,7 +85,7 @@ class SimpleTagBuilder
             'date'     => 'SimpleDateTag',
             'time'     => 'SimpleTimeTag',
             'file'     => 'SimpleUploadTag'
-        );
+        ];
         if (array_key_exists($type, $map)) {
             $tag_class = $map[$type];
 
@@ -104,7 +104,7 @@ class SimpleTagBuilder
      */
     protected function keysToLowerCase($map)
     {
-        $lower = array();
+        $lower = [];
         foreach ($map as $key => $value) {
             $lower[strtolower($key)] = $value;
         }
@@ -207,7 +207,7 @@ class SimpleTag
      */
     public function getChildElements()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -864,7 +864,7 @@ class SimpleSelectionTag extends SimpleWidget
     public function __construct($attributes)
     {
         parent::__construct('select', $attributes);
-        $this->options = array();
+        $this->options = [];
         $this->choice  = false;
     }
 
@@ -960,7 +960,7 @@ class MultipleSelectionTag extends SimpleWidget
     public function __construct($attributes)
     {
         parent::__construct('select', $attributes);
-        $this->options = array();
+        $this->options = [];
         $this->values  = false;
     }
 
@@ -993,7 +993,7 @@ class MultipleSelectionTag extends SimpleWidget
      */
     public function getDefault()
     {
-        $default = array();
+        $default = [];
         for ($i = 0, $count = count($this->options); $i < $count; $i++) {
             if ($this->options[$i]->getAttribute('selected') !== false) {
                 $default[] = $this->options[$i]->getDefault();
@@ -1013,7 +1013,7 @@ class MultipleSelectionTag extends SimpleWidget
      */
     public function setValue($desired)
     {
-        $achieved = array();
+        $achieved = [];
         foreach ($desired as $value) {
             $success = false;
             for ($i = 0, $count = count($this->options); $i < $count; $i++) {
@@ -1328,7 +1328,7 @@ class SimpleTimeTag extends SimpleTextTag
  */
 class SimpleTagGroup
 {
-    private $widgets = array();
+    private $widgets = [];
 
     /**
      * Adds a tag to the group.
@@ -1433,7 +1433,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
      */
     public function getValue()
     {
-        $values  = array();
+        $values  = [];
         $widgets = $this->getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if ($widgets[$i]->getValue() !== false) {
@@ -1451,7 +1451,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
      */
     public function getDefault()
     {
-        $values  = array();
+        $values  = [];
         $widgets = $this->getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             if ($widgets[$i]->getDefault() !== false) {
@@ -1498,7 +1498,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
      */
     protected function valuesArePossible($values)
     {
-        $matches = array();
+        $matches = [];
         $widgets = &$this->getWidgets();
         for ($i = 0, $count = count($widgets); $i < $count; $i++) {
             $possible = $widgets[$i]->getAttribute('value');
@@ -1541,10 +1541,10 @@ class SimpleCheckboxGroup extends SimpleTagGroup
     protected function makeArray($value)
     {
         if ($value === false) {
-            return array();
+            return [];
         }
         if (is_string($value)) {
-            return array($value);
+            return [$value];
         }
 
         return $value;

@@ -96,9 +96,9 @@ class SimpleRoute
      */
     protected function createSocket($scheme, $host, $port, $timeout)
     {
-        if (in_array($scheme, array('file'))) {
+        if (in_array($scheme, ['file'])) {
             return new SimpleFileSocket($this->url);
-        } elseif (in_array($scheme, array('https'))) {
+        } elseif (in_array($scheme, ['https'])) {
             return new SimpleSecureSocket($host, $port, $timeout);
         } else {
             return new SimpleSocket($host, $port, $timeout);
@@ -215,9 +215,9 @@ class SimpleHttpRequest
      */
     public function __construct($route, $encoding)
     {
-        $this->cookies  = array();
+        $this->cookies  = [];
         $this->encoding = $encoding;
-        $this->headers  = array();
+        $this->headers  = [];
         $this->route    = $route;
     }
 
@@ -331,7 +331,7 @@ class SimpleHttpHeaders
     public function __construct($headers)
     {
         $this->authentication = false;
-        $this->cookies        = array();
+        $this->cookies        = [];
         $this->http_version   = false;
         $this->location       = false;
         $this->mime_type      = '';
@@ -390,7 +390,7 @@ class SimpleHttpHeaders
      */
     public function isRedirect()
     {
-        return in_array($this->response_code, array(301, 302, 303, 307)) &&
+        return in_array($this->response_code, [301, 302, 303, 307]) &&
                 (boolean) $this->getLocation();
     }
 
@@ -490,7 +490,7 @@ class SimpleHttpHeaders
     protected function parseCookie($cookie_line)
     {
         $parts  = explode(';', $cookie_line);
-        $cookie = array();
+        $cookie = [];
         preg_match('/\s*(.*?)\s*=(.*)/', array_shift($parts), $cookie);
         foreach ($parts as $part) {
             if (preg_match('/\s*(.*?)\s*=(.*)/', $part, $matches)) {

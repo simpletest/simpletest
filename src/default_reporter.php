@@ -11,17 +11,17 @@ require_once __DIR__ . '/xml.php';
  */
 class SimpleCommandLineParser
 {
-    private $to_property = array(
+    private $to_property = [
             'case' => 'case', 'c' => 'case',
             'test' => 'test', 't' => 'test',
-    );
+    ];
     private $case           = '';
     private $test           = '';
     private $xml            = false;
     private $junit          = false;
     private $help           = false;
     private $no_skips       = false;
-    private $excludes       = array();
+    private $excludes       = [];
     private $doCodeCoverage = false;
 
     /**
@@ -174,7 +174,7 @@ HELP;
 class DefaultReporter extends SimpleReporterDecorator
 {
     public $doCodeCoverage = false;
-    public $excludes = array();
+    public $excludes = [];
 
     /**
      * Assembles the appropriate reporter for the environment.
@@ -186,11 +186,11 @@ class DefaultReporter extends SimpleReporterDecorator
             $this->doCodeCoverage = $parser->doCodeCoverage();
             $this->excludes = $parser->getExcludes();
             if ($parser->isXml()) {
-                $interfaces = array('XmlReporter');
+                $interfaces = ['XmlReporter'];
             } else if ($parser->isJUnit()) {
-               $interfaces = array('JUnitXmlReporter');
+               $interfaces = ['JUnitXmlReporter'];
             } else {
-               $interfaces = array('TextReporter');
+               $interfaces = ['TextReporter'];
             }
             if ($parser->help()) {
                 echo $parser->getHelpText();

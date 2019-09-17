@@ -11,7 +11,7 @@ require_once __DIR__ . '/frames.php';
 require_once __DIR__ . '/user_agent.php';
 
 if (! SimpleTest::getParsers()) {
-    SimpleTest::setParsers(array(new SimpleTidyPageBuilder(), new SimplePHPPageBuilder()));
+    SimpleTest::setParsers([new SimpleTidyPageBuilder(), new SimplePHPPageBuilder()]);
     //SimpleTest::setParsers(array(new SimplePHPPageBuilder()));
 }
 
@@ -24,7 +24,7 @@ if (! defined('DEFAULT_MAX_NESTED_FRAMES')) {
  */
 class SimpleBrowserHistory
 {
-    private $sequence = array();
+    private $sequence = [];
     private $position = -1;
 
     /**
@@ -68,7 +68,7 @@ class SimpleBrowserHistory
         $this->dropFuture();
         array_push(
                 $this->sequence,
-                array('url' => $url, 'parameters' => $parameters));
+                ['url' => $url, 'parameters' => $parameters]);
         $this->position++;
     }
 
@@ -356,7 +356,7 @@ class SimpleBrowser
             return $this->loadPage($url, $parameters);
         }
 
-        return $this->loadFrame(array($frame), $url, $parameters);
+        return $this->loadFrame([$frame], $url, $parameters);
     }
 
     /**

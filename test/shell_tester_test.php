@@ -24,7 +24,7 @@ class TestOfShellTestCase extends ShellTestCase
     {
         $this->mock_shell = new MockSimpleShell();
         $this->mock_shell->returnsByValue('execute', 0);
-        $this->mock_shell->expectOnce('execute', array('ls'));
+        $this->mock_shell->expectOnce('execute', ['ls']);
         $this->assertTrue($this->execute('ls'));
         $this->assertExitCode(0);
     }
