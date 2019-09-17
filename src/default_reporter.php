@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . '/simpletest.php';
-require_once __DIR__ . '/scorer.php';
-require_once __DIR__ . '/reporter.php';
-require_once __DIR__ . '/xml.php';
+require_once __DIR__.'/simpletest.php';
+require_once __DIR__.'/scorer.php';
+require_once __DIR__.'/reporter.php';
+require_once __DIR__.'/xml.php';
 
 /**
  * Parser for command line arguments.
@@ -15,28 +15,28 @@ class SimpleCommandLineParser
             'case' => 'case', 'c' => 'case',
             'test' => 'test', 't' => 'test',
     ];
-    private $case           = '';
-    private $test           = '';
-    private $xml            = false;
-    private $junit          = false;
-    private $help           = false;
-    private $no_skips       = false;
-    private $excludes       = [];
+    private $case = '';
+    private $test = '';
+    private $xml = false;
+    private $junit = false;
+    private $help = false;
+    private $no_skips = false;
+    private $excludes = [];
     private $doCodeCoverage = false;
 
     /**
      * Parses raw command line arguments into object properties.
      *
-     * @param string $arguments        Raw commend line arguments.
+     * @param string $arguments Raw commend line arguments.
      */
     public function __construct($arguments)
     {
-        if (! is_array($arguments)) {
+        if (!is_array($arguments)) {
             return;
         }
         foreach ($arguments as $i => $argument) {
             if (preg_match('/^--?(test|case|t|c)=(.+)$/', $argument, $matches)) {
-                $property        = $this->to_property[$matches[1]];
+                $property = $this->to_property[$matches[1]];
                 $this->$property = $matches[2];
             } elseif (preg_match('/^--?(test|case|t|c)$/', $argument, $matches)) {
                 $property = $this->to_property[$matches[1]];
@@ -68,7 +68,7 @@ class SimpleCommandLineParser
     /**
      * Run only this test.
      *
-     * @return string        Test name to run.
+     * @return string Test name to run.
      */
     public function getTest()
     {
@@ -78,7 +78,7 @@ class SimpleCommandLineParser
     /**
      * Run only this test suite.
      *
-     * @return string        Test class name to run.
+     * @return string Test class name to run.
      */
     public function getTestCase()
     {
@@ -88,7 +88,7 @@ class SimpleCommandLineParser
     /**
      * Output should be XML or not.
      *
-     * @return bool        True if XML desired.
+     * @return bool True if XML desired.
      */
     public function isXml()
     {
@@ -98,7 +98,7 @@ class SimpleCommandLineParser
     /**
      * Output should be JUnit or not.
      *
-     * @return boolean True if JUnit desired.
+     * @return bool True if JUnit desired.
      */
     public function isJUnit()
     {
@@ -107,7 +107,8 @@ class SimpleCommandLineParser
 
     /**
      *    Should code coverage be run or not.
-     *    @return boolean        True if code coverage should be run.
+     *
+     *    @return bool        True if code coverage should be run.
      */
     public function doCodeCoverage()
     {
@@ -116,6 +117,7 @@ class SimpleCommandLineParser
 
     /**
      *    Array of excluded folders.
+     *
      *    @return array        Array of strings to exclude from code coverage.
      */
     public function getExcludes()
@@ -126,7 +128,7 @@ class SimpleCommandLineParser
     /**
      * Output should suppress skip messages.
      *
-     * @return bool        True for no skips.
+     * @return bool True for no skips.
      */
     public function noSkips()
     {
@@ -136,17 +138,17 @@ class SimpleCommandLineParser
     /**
      * Output should be a help message. Disabled during XML mode.
      *
-     * @return bool        True if help message desired.
+     * @return bool True if help message desired.
      */
     public function help()
     {
-        return $this->help && ! ($this->xml || $this->junit);
+        return $this->help && !($this->xml || $this->junit);
     }
 
     /**
      * Returns plain-text help message for command line runner.
      *
-     * @return string         String help message
+     * @return string String help message
      */
     public function getHelpText()
     {
@@ -182,15 +184,15 @@ class DefaultReporter extends SimpleReporterDecorator
     public function __construct()
     {
         if (SimpleReporter::inCli()) {
-            $parser     = new SimpleCommandLineParser($_SERVER['argv']);
+            $parser = new SimpleCommandLineParser($_SERVER['argv']);
             $this->doCodeCoverage = $parser->doCodeCoverage();
             $this->excludes = $parser->getExcludes();
             if ($parser->isXml()) {
                 $interfaces = ['XmlReporter'];
-            } else if ($parser->isJUnit()) {
-               $interfaces = ['JUnitXmlReporter'];
+            } elseif ($parser->isJUnit()) {
+                $interfaces = ['JUnitXmlReporter'];
             } else {
-               $interfaces = ['TextReporter'];
+                $interfaces = ['TextReporter'];
             }
             if ($parser->help()) {
                 echo $parser->getHelpText();
@@ -207,7 +209,7 @@ class DefaultReporter extends SimpleReporterDecorator
         } else {
             $reporter = new SelectiveReporter(
                     SimpleTest::preferred('HtmlReporter'), @$_GET['c'], @$_GET['t']);
-            if (@$_GET['skips'] === 'no' || @$_GET['show-skips'] === 'no') {
+            if ('no' === @$_GET['skips'] || 'no' === @$_GET['show-skips']) {
                 $reporter = new NoSkipsReporter($reporter);
             }
         }

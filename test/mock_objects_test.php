@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/expectation.php';
-require_once __DIR__ . '/../src/mock_objects.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/expectation.php';
+require_once __DIR__.'/../src/mock_objects.php';
 
 class TestOfAnythingExpectation extends UnitTestCase
 {
@@ -96,9 +96,9 @@ class TestOfSimpleSignatureMap extends UnitTestCase
 
     public function testDifferentCallSignaturesCanHaveDifferentReferences()
     {
-        $map  = new SimpleSignatureMap();
+        $map = new SimpleSignatureMap();
         $fred = 'Fred';
-        $jim  = 'jim';
+        $jim = 'jim';
         $map->add([0], $fred);
         $map->add(['0'], $jim);
         $this->assertSame($fred, $map->findFirstAction([0]));
@@ -108,7 +108,7 @@ class TestOfSimpleSignatureMap extends UnitTestCase
     public function testWildcard()
     {
         $fred = 'Fred';
-        $map  = new SimpleSignatureMap();
+        $map = new SimpleSignatureMap();
         $map->add([new AnythingExpectation(), 1, 3], $fred);
         $this->assertTrue($map->isMatch([2, 1, 3]));
         $this->assertSame($map->findFirstAction([2, 1, 3]), $fred);
@@ -117,7 +117,7 @@ class TestOfSimpleSignatureMap extends UnitTestCase
     public function testAllWildcard()
     {
         $fred = 'Fred';
-        $map  = new SimpleSignatureMap();
+        $map = new SimpleSignatureMap();
         $this->assertFalse($map->isMatch([2, 1, 3]));
         $map->add('', $fred);
         $this->assertTrue($map->isMatch([2, 1, 3]));
@@ -147,10 +147,9 @@ class TestOfSimpleSignatureMap extends UnitTestCase
 
 class TestOfCallSchedule extends UnitTestCase
 {
-
     public function testCanBeSetToAlwaysReturnTheSameReference()
     {
-        $a        = 5;
+        $a = 5;
         $schedule = new SimpleCallSchedule();
         $schedule->register('aMethod', false, new SimpleByReference($a));
         $this->assertReference($schedule->respond(0, 'aMethod', []), $a);
@@ -159,8 +158,8 @@ class TestOfCallSchedule extends UnitTestCase
 
     public function testSpecificSignaturesOverrideTheAlwaysCase()
     {
-        $any      = 'any';
-        $one      = 'two';
+        $any = 'any';
+        $one = 'two';
         $schedule = new SimpleCallSchedule();
         $schedule->register('aMethod', [1], new SimpleByReference($one));
         $schedule->register('aMethod', false, new SimpleByReference($any));
@@ -170,8 +169,8 @@ class TestOfCallSchedule extends UnitTestCase
 
     public function testReturnsCanBeSetOverTime()
     {
-        $one      = 'one';
-        $two      = 'two';
+        $one = 'one';
+        $two = 'two';
         $schedule = new SimpleCallSchedule();
         $schedule->registerAt(0, 'aMethod', false, new SimpleByReference($one));
         $schedule->registerAt(1, 'aMethod', false, new SimpleByReference($two));
@@ -181,9 +180,9 @@ class TestOfCallSchedule extends UnitTestCase
 
     public function testReturnsOverTimecanBeAlteredByTheArguments()
     {
-        $one      = '1';
-        $two      = '2';
-        $two_a    = '2a';
+        $one = '1';
+        $two = '2';
+        $two_a = '2a';
         $schedule = new SimpleCallSchedule();
         $schedule->registerAt(0, 'aMethod', false, new SimpleByReference($one));
         $schedule->registerAt(1, 'aMethod', ['a'], new SimpleByReference($two_a));
@@ -195,7 +194,7 @@ class TestOfCallSchedule extends UnitTestCase
 
     public function testCanReturnByValue()
     {
-        $a        = 5;
+        $a = 5;
         $schedule = new SimpleCallSchedule();
         $schedule->register('aMethod', false, new SimpleByValue($a));
         $this->assertCopy($schedule->respond(0, 'aMethod', []), $a);
@@ -312,7 +311,7 @@ class TestOfMockReturns extends UnitTestCase
 
     public function testSetReturnGivesObjectReference()
     {
-        $mock   = new MockDummy();
+        $mock = new MockDummy();
         $object = new Dummy();
         $mock->returns('aMethod', $object, [1, 2, 3]);
         $this->assertSame($mock->aMethod(1, 2, 3), $object);
@@ -374,7 +373,7 @@ class TestOfMockReturns extends UnitTestCase
 
     public function testReturnsAtGivesOriginalObjectHandle()
     {
-        $mock   = new MockDummy();
+        $mock = new MockDummy();
         $object = new Dummy();
         $mock->returnsAt(1, 'aMethod', $object);
         $this->assertNull($mock->aMethod());
@@ -384,7 +383,7 @@ class TestOfMockReturns extends UnitTestCase
 
     public function testComplicatedReturnSequence()
     {
-        $mock   = new MockDummy();
+        $mock = new MockDummy();
         $object = new Dummy();
         $mock->returnsAt(1, 'aMethod', 'aaa', ['a']);
         $mock->returnsAt(1, 'aMethod', 'bbb');
@@ -700,8 +699,8 @@ class TestOfMockExpectations extends UnitTestCase
                                 [new MemberExpectation('expected',
                                                             [new AnythingExpectation(),
                                                                   123,
-                                                                  new AnythingExpectation()]),
-                                      [100, 123, 101], '*']);
+                                                                  new AnythingExpectation(), ]),
+                                      [100, 123, 101], '*', ]);
         $mock = new MockDummyWithInjectedTestCase($this);
         $mock->expect('aMethod', ['*', 123, '*']);
         $mock->aMethod(100, 123, 101);
@@ -754,27 +753,31 @@ class ClassWithSpecialMethods
     public function __get($name)
     {
     }
+
     public function __set($name, $value)
     {
     }
+
     public function __isset($name)
     {
     }
+
     public function __unset($name)
     {
     }
+
     public function __call($method, $arguments)
     {
     }
+
     public function __toString()
     {
     }
 }
 Mock::generate('ClassWithSpecialMethods');
 
-
 /**
- * __isset and __unset overloading - PHP 5.1+
+ * __isset and __unset overloading - PHP 5.1+.
  */
 class TestOfSpecialMethodsAfterPHP51 extends UnitTestCase
 {
@@ -830,7 +833,7 @@ class TestOfSpecialMethods extends UnitTestCase
         $mock->expectOnce('__toString');
         $mock->returnsByValue('__toString', 'AAA');
         ob_start();
-        print $mock;
+        echo $mock;
         $output = ob_get_contents();
         ob_end_clean();
         $this->assertEqual($output, 'AAA');
@@ -849,9 +852,9 @@ class TestOfMockingClassesWithStaticMethods extends UnitTestCase
 {
     public function testStaticMethodIsMockedAsStatic()
     {
-        $mock       = new WithStaticMethod();
+        $mock = new WithStaticMethod();
         $reflection = new ReflectionClass($mock);
-        $method     = $reflection->getMethod('aStaticMethod');
+        $method = $reflection->getMethod('aStaticMethod');
         $this->assertTrue($method->isStatic());
     }
 }
@@ -954,7 +957,7 @@ class TestOfPartialMocks extends UnitTestCase
 
     public function testSetReturnReferenceGivesOriginal()
     {
-        $mock   = new TestDummy();
+        $mock = new TestDummy();
         $object = 99;
         $mock->returnsByReferenceAt(0, 'aReferenceMethod', $object, [3]);
         $this->assertReference($mock->aReferenceMethod(3), $object);
@@ -962,7 +965,7 @@ class TestOfPartialMocks extends UnitTestCase
 
     public function testReturnsAtGivesOriginalObjectHandle()
     {
-        $mock   = new TestDummy();
+        $mock = new TestDummy();
         $object = new Dummy();
         $mock->returnsAt(0, 'anotherMethod', $object, [3]);
         $this->assertSame($mock->anotherMethod(3), $object);
@@ -1025,19 +1028,19 @@ class TestOfPHP5AbstractMethodMocking extends UnitTestCase
         $this->assertTrue(
             method_exists(
                 // Testing with class name alone does not work in PHP 5.0
-                new MockSimpleAbstractClassContainingAbstractMethods,
+                new MockSimpleAbstractClassContainingAbstractMethods(),
                 'anAbstract'
             )
         );
         $this->assertTrue(
             method_exists(
-                new MockSimpleAbstractClassContainingAbstractMethods,
+                new MockSimpleAbstractClassContainingAbstractMethods(),
                 'anAbstractWithParameter'
             )
         );
         $this->assertTrue(
             method_exists(
-                new MockSimpleAbstractClassContainingAbstractMethods,
+                new MockSimpleAbstractClassContainingAbstractMethods(),
                 'anAbstractWithMultipleParameters'
             )
         );
@@ -1063,38 +1066,38 @@ class TestOfPHP5AbstractMethodMocking extends UnitTestCase
         Mock::generate('SimpleChildAbstractClassContainingAbstractMethods');
         $this->assertTrue(
             method_exists(
-                new MockSimpleChildAbstractClassContainingAbstractMethods,
+                new MockSimpleChildAbstractClassContainingAbstractMethods(),
                 'anAbstract'
             )
         );
         $this->assertTrue(
             method_exists(
-                new MockSimpleChildAbstractClassContainingAbstractMethods,
+                new MockSimpleChildAbstractClassContainingAbstractMethods(),
                 'anAbstractWithParameter'
             )
         );
         $this->assertTrue(
             method_exists(
-                new MockSimpleChildAbstractClassContainingAbstractMethods,
+                new MockSimpleChildAbstractClassContainingAbstractMethods(),
                 'anAbstractWithMultipleParameters'
             )
         );
         Mock::generate('EvenDeeperEmptyChildClass');
         $this->assertTrue(
             method_exists(
-                new MockEvenDeeperEmptyChildClass,
+                new MockEvenDeeperEmptyChildClass(),
                 'anAbstract'
             )
         );
         $this->assertTrue(
             method_exists(
-                new MockEvenDeeperEmptyChildClass,
+                new MockEvenDeeperEmptyChildClass(),
                 'anAbstractWithParameter'
             )
         );
         $this->assertTrue(
             method_exists(
-                new MockEvenDeeperEmptyChildClass,
+                new MockEvenDeeperEmptyChildClass(),
                 'anAbstractWithMultipleParameters'
             )
         );
@@ -1107,6 +1110,7 @@ class DummyWithProtected
     {
         return $this->aProtectedMethod();
     }
+
     protected function aProtectedMethod()
     {
         return true;
@@ -1121,7 +1125,7 @@ class TestOfProtectedMethodPartialMocks extends UnitTestCase
     {
         $this->assertTrue(
             method_exists(
-                new TestDummyWithProtected,
+                new TestDummyWithProtected(),
                 'aProtectedMethod'
             )
         );

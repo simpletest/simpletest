@@ -10,7 +10,7 @@
             test suite.
         </p>
         <ul>
-            <li><a href="<?=my_path()?>network_confirm.php">Absolute</a></li>
+            <li><a href="<?=my_path(); ?>network_confirm.php">Absolute</a></li>
             <li><a href="network_confirm.php">Relative</a></li>
             <li><a href="network_confirm.php" id="1">Id</a></li>
             <li><a href="network_confirm.php">m&auml;rc&ecirc;l kiek&#039;eboe</a></li>

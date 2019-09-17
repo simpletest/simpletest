@@ -2,11 +2,10 @@
 /**
  * Global state for SimpleTest and kicker script in future versions.
  */
-
-require_once __DIR__ . '/reflection.php';
-require_once __DIR__ . '/default_reporter.php';
-require_once __DIR__ . '/compatibility.php';
-require_once __DIR__ . '/../extensions/junit_xml_reporter.php';
+require_once __DIR__.'/reflection.php';
+require_once __DIR__.'/default_reporter.php';
+require_once __DIR__.'/compatibility.php';
+require_once __DIR__.'/../extensions/junit_xml_reporter.php';
 
 /**
  * Registry and test context.
@@ -22,20 +21,20 @@ class SimpleTest
      */
     public static function getVersion()
     {
-        $content = file(__DIR__ . '/../VERSION');
+        $content = file(__DIR__.'/../VERSION');
 
         return trim($content[0]);
     }
 
     /**
      * Sets the name of a test case to ignore, usually
-     * because the class is an abstract case that should
+     * because the class is an abstract case that should.
      *
      * @param string $class Add a class to ignore.
      */
     public static function ignore($class)
     {
-        $registry                                   = self::getRegistry();
+        $registry = self::getRegistry();
         $registry['IgnoreList'][strtolower($class)] = true;
     }
 
@@ -55,7 +54,7 @@ class SimpleTest
         foreach ($classes as $class) {
             if (self::isIgnored($class)) {
                 $reflection = new SimpleReflection($class);
-                $parent     = $reflection->getParent();
+                $parent = $reflection->getParent();
                 if ($parent) {
                     self::ignore($parent);
                 }
@@ -74,7 +73,7 @@ class SimpleTest
      */
     public static function prefer($object)
     {
-        $registry                = self::getRegistry();
+        $registry = self::getRegistry();
         $registry['Preferred'][] = $object;
     }
 
@@ -90,11 +89,11 @@ class SimpleTest
      */
     public static function preferred($classes)
     {
-        if (! is_array($classes)) {
+        if (!is_array($classes)) {
             $classes = [$classes];
         }
         $registry = self::getRegistry();
-        for ($i = count($registry['Preferred']) - 1; $i >= 0; $i--) {
+        for ($i = count($registry['Preferred']) - 1; $i >= 0; --$i) {
             foreach ($classes as $class) {
                 if (is_a($registry['Preferred'][$i], $class)) {
                     return $registry['Preferred'][$i];
@@ -131,8 +130,8 @@ class SimpleTest
      */
     public static function useProxy($proxy, $username = false, $password = false)
     {
-        $registry                         = self::getRegistry();
-        $registry['DefaultProxy']         = $proxy;
+        $registry = self::getRegistry();
+        $registry['DefaultProxy'] = $proxy;
         $registry['DefaultProxyUsername'] = $username;
         $registry['DefaultProxyPassword'] = $password;
     }
@@ -192,7 +191,7 @@ class SimpleTest
      */
     public static function setParsers($parsers)
     {
-        $registry            = self::getRegistry();
+        $registry = self::getRegistry();
         $registry['Parsers'] = $parsers;
     }
 
@@ -204,7 +203,7 @@ class SimpleTest
     protected static function getRegistry()
     {
         static $registry = false;
-        if (! $registry) {
+        if (!$registry) {
             $registry = self::getDefaults();
         }
 
@@ -219,7 +218,7 @@ class SimpleTest
     public static function getContext()
     {
         static $context = false;
-        if (! $context) {
+        if (!$context) {
             $context = new SimpleTestContext();
         }
 
@@ -234,18 +233,18 @@ class SimpleTest
     protected static function getDefaults()
     {
         return new ArrayObject([
-            'Parsers'              => false,
-            'MockBaseClass'        => 'SimpleMock',
-            'IgnoreList'           => [],
-            'DefaultProxy'         => false,
+            'Parsers' => false,
+            'MockBaseClass' => 'SimpleMock',
+            'IgnoreList' => [],
+            'DefaultProxy' => false,
             'DefaultProxyUsername' => false,
             'DefaultProxyPassword' => false,
                 'Preferred' => [
-                    new HtmlReporter(), 
-                    new TextReporter(), 
-                    new XmlReporter(), 
-                    new JUnitXMLReporter()
-                ]
+                    new HtmlReporter(),
+                    new TextReporter(),
+                    new XmlReporter(),
+                    new JUnitXMLReporter(),
+                ],
         ]);
     }
 
@@ -254,7 +253,7 @@ class SimpleTest
      */
     public static function setMockBaseClass($mock_base)
     {
-        $registry                  = self::getRegistry();
+        $registry = self::getRegistry();
         $registry['MockBaseClass'] = $mock_base;
     }
 
@@ -337,11 +336,11 @@ class SimpleTestContext
     /**
      * Accessor for the Singleton resource.
      *
-     * @return object       Global resource.
+     * @return object Global resource.
      */
     public function get($resource)
     {
-        if (! isset($this->resources[$resource])) {
+        if (!isset($this->resources[$resource])) {
             $this->resources[$resource] = new $resource();
         }
 
@@ -359,7 +358,7 @@ class SimpleStackTrace
     /**
      * Stashes the list of target prefixes.
      *
-     * @param array $prefixes      List of method prefixes to search for.
+     * @param array $prefixes List of method prefixes to search for.
      */
     public function __construct($prefixes)
     {
@@ -370,9 +369,9 @@ class SimpleStackTrace
      * Extracts the last method name that was not within Simpletest itself.
      * Captures a stack trace if none given.
      *
-     * @param array $stack      List of stack frames.
+     * @param array $stack List of stack frames.
      *
-     * @return string           Snippet of test report with line number and file.
+     * @return string Snippet of test report with line number and file.
      */
     public function traceMethod($stack = false)
     {
@@ -383,7 +382,7 @@ class SimpleStackTrace
                 continue;
             }
             if ($this->frameMatchesPrefix($frame)) {
-                return ' at [' . $frame['file'] . ' line ' . $frame['line'] . ']';
+                return ' at ['.$frame['file'].' line '.$frame['line'].']';
             }
         }
 
@@ -393,15 +392,15 @@ class SimpleStackTrace
     /**
      * Test to see if error is generated by SimpleTest itself.
      *
-     * @param array $frame     PHP stack frame.
+     * @param array $frame PHP stack frame.
      *
-     * @return bool         True if a SimpleTest file.
+     * @return bool True if a SimpleTest file.
      */
     protected function frameLiesWithinSimpleTestFolder($frame)
     {
         if (isset($frame['file'])) {
             $path = substr(SIMPLE_TEST, 0, -1);
-            if (strpos($frame['file'], $path) === 0) {
+            if (0 === strpos($frame['file'], $path)) {
                 if (dirname($frame['file']) == $path) {
                     return true;
                 }
@@ -414,14 +413,14 @@ class SimpleStackTrace
     /**
      * Tries to determine if the method call is an assert, etc.
      *
-     * @param array $frame     PHP stack frame.
+     * @param array $frame PHP stack frame.
      *
-     * @return bool         True if matches a target.
+     * @return bool True if matches a target.
      */
     protected function frameMatchesPrefix($frame)
     {
         foreach ($this->prefixes as $prefix) {
-            if (strncmp($frame['function'], $prefix, strlen($prefix)) == 0) {
+            if (0 == strncmp($frame['function'], $prefix, strlen($prefix))) {
                 return true;
             }
         }
@@ -432,7 +431,7 @@ class SimpleStackTrace
     /**
      * Returns current stack trace.
      *
-     * @return array        Full trace.
+     * @return array Full trace.
      */
     protected function captureTrace()
     {

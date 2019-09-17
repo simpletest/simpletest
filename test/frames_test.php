@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/tag.php';
-require_once __DIR__ . '/../src/page.php';
-require_once __DIR__ . '/../src/frames.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/tag.php';
+require_once __DIR__.'/../src/page.php';
+require_once __DIR__.'/../src/frames.php';
 
 Mock::generate('SimplePage');
 Mock::generate('SimpleForm');
@@ -119,7 +119,7 @@ class TestOfFrameset extends UnitTestCase
         $frame3 = new MockSimplePage();
         $frame3->expectNever('getField');
 
-        $page     = new MockSimplePage();
+        $page = new MockSimplePage();
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame($frame1);
         $frameset->addFrame($frame2);
@@ -166,7 +166,7 @@ class TestOfFrameNavigation extends UnitTestCase
 {
     public function testStartsWithoutFrameFocus()
     {
-        $page     = new MockSimplePage();
+        $page = new MockSimplePage();
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame(new MockSimplePage());
         $this->assertFalse($frameset->getFrameFocus());
@@ -261,7 +261,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
     public function __construct()
     {
         parent::__construct();
-        $this->page_interface     = $this->getPageMethods();
+        $this->page_interface = $this->getPageMethods();
         $this->frameset_interface = $this->getFramesetMethods();
     }
 
@@ -282,7 +282,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
             if (strtolower($method) === strtolower('getFrameset')) {
                 continue;
             }
-            if (strncmp($method, '_', 1) == 0) {
+            if (0 == strncmp($method, '_', 1)) {
                 continue;
             }
             if (in_array($method, ['setTitle', 'setBase', 'setForms', 'normalise', 'setFrames', 'addLink'])) {
@@ -301,10 +301,10 @@ class TestOfFramesetPageInterface extends UnitTestCase
             if (strtolower($method) === strtolower('SimpleFrameset')) {
                 continue;
             }
-            if (strncmp($method, '_', 1) == 0) {
+            if (0 == strncmp($method, '_', 1)) {
                 continue;
             }
-            if (strncmp($method, 'add', 3) == 0) {
+            if (0 == strncmp($method, 'add', 3)) {
                 continue;
             }
             $methods[] = $method;
@@ -317,7 +317,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
     {
         $difference = [];
         foreach ($this->page_interface as $method) {
-            if (! in_array($method, $this->frameset_interface)) {
+            if (!in_array($method, $this->frameset_interface)) {
                 $this->fail("No [$method] in Frameset class");
 
                 return;
@@ -481,7 +481,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
     public function testFindingFormsById()
     {
         $frame = new MockSimplePage();
-        $form  = new MockSimpleForm();
+        $form = new MockSimpleForm();
         $frame->returns('getFormById', $form, ['a']);
 
         $frameset = new SimpleFrameset(new MockSimplePage());
@@ -499,7 +499,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
     public function testFindingFormsBySubmit()
     {
         $frame = new MockSimplePage();
-        $form  = new MockSimpleForm();
+        $form = new MockSimpleForm();
         $frame->returns(
                 'getFormBySubmit',
                 $form,
@@ -520,7 +520,7 @@ class TestOfFramesetPageInterface extends UnitTestCase
     public function testFindingFormsByImage()
     {
         $frame = new MockSimplePage();
-        $form  = new MockSimpleForm();
+        $form = new MockSimpleForm();
         $frame->returns(
                 'getFormByImage',
                 $form,

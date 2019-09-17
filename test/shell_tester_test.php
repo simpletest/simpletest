@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/shell_tester.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/shell_tester.php';
 
 Mock::generate('SimpleShell');
 

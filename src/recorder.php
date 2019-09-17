@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/scorer.php';
+require_once __DIR__.'/scorer.php';
 
 /**
  * A single test result.
@@ -56,7 +56,7 @@ class Recorder extends SimpleReporterDecorator
     /**
      * Stashes the pass as a SimpleResultOfPass for later retrieval.
      *
-     * @param string $message    Pass message to be displayed eventually.
+     * @param string $message Pass message to be displayed eventually.
      */
     public function paintPass($message)
     {
@@ -68,7 +68,7 @@ class Recorder extends SimpleReporterDecorator
     /**
      * Stashes the fail as a SimpleResultOfFail for later retrieval.
      *
-     * @param string $message    Failure message to be displayed eventually.
+     * @param string $message Failure message to be displayed eventually.
      */
     public function paintFail($message)
     {
@@ -80,7 +80,7 @@ class Recorder extends SimpleReporterDecorator
     /**
      * Stashes the exception as a SimpleResultOfException for later retrieval.
      *
-     * @param string $message    Exception message to be displayed eventually.
+     * @param string $message Exception message to be displayed eventually.
      */
     public function paintException($message)
     {

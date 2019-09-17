@@ -1,11 +1,10 @@
 <?php
 
-require_once __DIR__ . '/tag.php';
-require_once __DIR__ . '/encoding.php';
+require_once __DIR__.'/tag.php';
+require_once __DIR__.'/encoding.php';
 
 interface SelectorInterface
 {
-
 }
 
 /**
@@ -19,7 +18,7 @@ class SelectByName implements SelectorInterface
     /**
      * Stashes the name for later comparison.
      *
-     * @param string $name     Name attribute to match.
+     * @param string $name Name attribute to match.
      */
     public function __construct($name)
     {
@@ -39,11 +38,11 @@ class SelectByName implements SelectorInterface
     /**
      * Compares with name attribute of widget.
      *
-     * @param SimpleWidget $widget    Control to compare.
+     * @param SimpleWidget $widget Control to compare.
      */
     public function isMatch($widget)
     {
-        return ($widget->getName() === $this->name);
+        return $widget->getName() === $this->name;
     }
 }
 
@@ -58,7 +57,7 @@ class SelectByLabel implements SelectorInterface
     /**
      * Stashes the name for later comparison.
      *
-     * @param string $label     Visible text to match.
+     * @param string $label Visible text to match.
      */
     public function __construct($label)
     {
@@ -68,11 +67,11 @@ class SelectByLabel implements SelectorInterface
     /**
      * Comparison. Compares visible text of widget or related label.
      *
-     * @param SimpleWidget $widget    Control to compare.
+     * @param SimpleWidget $widget Control to compare.
      */
     public function isMatch($widget)
     {
-        if (! method_exists($widget, 'isLabel')) {
+        if (!method_exists($widget, 'isLabel')) {
             return false;
         }
 
@@ -91,7 +90,7 @@ class SelectById implements SelectorInterface
     /**
      * Stashes the name for later comparison.
      *
-     * @param string $id     ID atribute to match.
+     * @param string $id ID atribute to match.
      */
     public function __construct($id)
     {
@@ -101,7 +100,7 @@ class SelectById implements SelectorInterface
     /**
      * Comparison. Compares id attribute of widget.
      *
-     * @param SimpleWidget $widget    Control to compare.
+     * @param SimpleWidget $widget Control to compare.
      */
     public function isMatch($widget)
     {
@@ -120,7 +119,7 @@ class SelectByLabelOrName implements SelectorInterface
     /**
      * Stashes the name/label for later comparison.
      *
-     * @param string $label     Visible text to match.
+     * @param string $label Visible text to match.
      */
     public function __construct($label)
     {
@@ -130,7 +129,7 @@ class SelectByLabelOrName implements SelectorInterface
     /**
      * Comparison. Compares visible text of widget or related label or name.
      *
-     * @param SimpleWidget $widget    Control to compare.
+     * @param SimpleWidget $widget Control to compare.
      */
     public function isMatch($widget)
     {
@@ -140,6 +139,6 @@ class SelectByLabelOrName implements SelectorInterface
             }
         }
 
-        return ($widget->getName() == $this->label);
+        return $widget->getName() == $this->label;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/collector.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/collector.php';
 
 SimpleTest::ignore('MockTestSuite');
 Mock::generate('TestSuite');
@@ -29,7 +29,7 @@ class TestOfCollector extends UnitTestCase
                 'addFile',
                 [new PatternExpectation('/collectable\\.(1|2)$/')]);
         $collector = new SimpleCollector();
-        $collector->collect($suite, __DIR__ . '/support/collector/');
+        $collector->collect($suite, __DIR__.'/support/collector/');
     }
 }
 
@@ -43,15 +43,15 @@ class TestOfPatternCollector extends UnitTestCase
                 'addFile',
                 [new PatternExpectation('/collectable\\.(1|2)$/')]);
         $collector = new SimplePatternCollector('/.*/');
-        $collector->collect($suite, __DIR__ . '/support/collector/');
+        $collector->collect($suite, __DIR__.'/support/collector/');
     }
 
     public function testOnlyMatchedFilesAreAddedToGroup()
     {
         $suite = new MockTestSuite();
         $suite->expectOnce('addFile', [new PathEqualExpectation(
-                __DIR__ . '/support/collector/collectable.1')]);
+                __DIR__.'/support/collector/collectable.1')]);
         $collector = new SimplePatternCollector('/1$/');
-        $collector->collect($suite, __DIR__ . '/support/collector/');
+        $collector->collect($suite, __DIR__.'/support/collector/');
     }
 }

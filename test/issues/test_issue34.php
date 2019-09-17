@@ -1,12 +1,12 @@
 <?php
 
-require_once __DIR__ . '/../../autorun.php';
-require_once __DIR__ . '/../../test_case.php';
+require_once __DIR__.'/../../autorun.php';
+require_once __DIR__.'/../../test_case.php';
 
-require_once __DIR__ . '/../../browser.php';
+require_once __DIR__.'/../../browser.php';
 
 /**
- * @link https://github.com/simpletest/simpletest/issues/34
+ * @see https://github.com/simpletest/simpletest/issues/34
  */
 class Issue34 extends UnitTestCase
 {
@@ -28,7 +28,7 @@ class Issue34 extends UnitTestCase
         // TLSv1.2 request:
         fsockopen('tlsv1.2://tls1test.salesforce.com', 443, $errno, $errstr, 30);
         $this->assertEqual($errno, '');
-        $this->assertEqual($errstr, '');        
+        $this->assertEqual($errstr, '');
     }
 
     /*public function testDebuggingHelper()

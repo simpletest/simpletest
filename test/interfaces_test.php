@@ -1,12 +1,14 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-include(__DIR__ . '/support/spl_examples.php');
+require_once __DIR__.'/../src/autorun.php';
+include __DIR__.'/support/spl_examples.php';
 
 interface DummyInterface
 {
     public function aMethod();
+
     public function anotherMethod($a);
+
     public function &referenceMethod(&$a);
 }
 
@@ -49,11 +51,10 @@ class TestOfSpl extends UnitTestCase
         static $classesToExclude = [
             'SplHeap', // the method compare() is missing
             'FilterIterator', // the method accept() is missing
-            'RecursiveFilterIterator' // the method hasChildren() must contain body
+            'RecursiveFilterIterator', // the method hasChildren() must contain body
         ];
 
         foreach (spl_classes() as $class) {
-
             // exclude classes
             if (in_array($class, $classesToExclude)) {
                 continue;
@@ -90,12 +91,15 @@ class ImplementsDummy implements DummyInterface
     public function aMethod()
     {
     }
+
     public function anotherMethod($a)
     {
     }
+
     public function &referenceMethod(&$a)
     {
     }
+
     public function extraMethod($a = false)
     {
     }
@@ -106,14 +110,14 @@ class TestOfImplementations extends UnitTestCase
 {
     public function testMockedInterfaceCanPassThroughTypeHint()
     {
-        $mock   = new MockDummyInterface();
+        $mock = new MockDummyInterface();
         $hinter = new WithHint();
         $hinter->hinted($mock);
     }
 
     public function testImplementedInterfacesAreCarried()
     {
-        $mock   = new MockImplementsDummy();
+        $mock = new MockImplementsDummy();
         $hinter = new WithHint();
         $hinter->hinted($mock);
     }

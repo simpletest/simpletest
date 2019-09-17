@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/url.php';
-require_once __DIR__ . '/../src/socket.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/url.php';
+require_once __DIR__.'/../src/socket.php';
 
 Mock::generate('SimpleSocket');
 
@@ -27,7 +27,7 @@ class TestOfEncodedParts extends UnitTestCase
         $part = new SimpleAttachment('a', 'A', 'aaa.txt');
         $this->assertEqual(
                 $part->asMime(),
-                "Content-Disposition: form-data; name=\"a\"; filename=\"aaa.txt\"\r\n" .
+                "Content-Disposition: form-data; name=\"a\"; filename=\"aaa.txt\"\r\n".
                         "Content-Type: text/plain\r\n\r\nA");
     }
 }
@@ -76,7 +76,7 @@ class TestOfEncoding extends UnitTestCase
 
     public function testPrefilledWithTwoLevels()
     {
-        $query    = ['a' => ['aa' => 'aaa']];
+        $query = ['a' => ['aa' => 'aaa']];
         $encoding = new SimplePostEncoding($query);
         $this->assertTrue($encoding->hasMoreThanOneLevel($query));
         $this->assertEqual($encoding->rewriteArrayWithMultipleLevels($query), ['a[aa]' => 'aaa']);
@@ -86,7 +86,7 @@ class TestOfEncoding extends UnitTestCase
 
     public function testPrefilledWithThreeLevels()
     {
-        $query    = ['a' => ['aa' => ['aaa' => 'aaaa']]];
+        $query = ['a' => ['aa' => ['aaa' => 'aaaa']]];
         $encoding = new SimplePostEncoding($query);
         $this->assertTrue($encoding->hasMoreThanOneLevel($query));
         $this->assertEqual($encoding->rewriteArrayWithMultipleLevels($query), ['a[aa][aaa]' => 'aaaa']);
@@ -103,7 +103,7 @@ class TestOfEncoding extends UnitTestCase
 
     public function testMultiplePrefilled()
     {
-        $query    = ['a' => ['a1', 'a2']];
+        $query = ['a' => ['a1', 'a2']];
         $encoding = new SimplePostEncoding($query);
         $this->assertTrue($encoding->hasMoreThanOneLevel($query));
         $this->assertEqual($encoding->rewriteArrayWithMultipleLevels($query), ['a[0]' => 'a1', 'a[1]' => 'a2']);
@@ -196,10 +196,10 @@ class TestOfEncoding extends UnitTestCase
         $encoding = new SimpleMultipartEncoding(['a' => 'aaa'], 'boundary');
         $this->assertIdentical($encoding->getValue('a'), 'aaa');
         $this->assertwritten($encoding,
-                "--boundary\r\n" .
-                "Content-Disposition: form-data; name=\"a\"\r\n" .
-                "\r\n" .
-                "aaa\r\n" .
+                "--boundary\r\n".
+                "Content-Disposition: form-data; name=\"a\"\r\n".
+                "\r\n".
+                "aaa\r\n".
                 "--boundary--\r\n");
     }
 
@@ -209,11 +209,11 @@ class TestOfEncoding extends UnitTestCase
         $encoding->attach('a', 'aaa', 'aaa.txt');
         $this->assertIdentical($encoding->getValue('a'), 'aaa.txt');
         $this->assertwritten($encoding,
-                "--boundary\r\n" .
-                "Content-Disposition: form-data; name=\"a\"; filename=\"aaa.txt\"\r\n" .
-                "Content-Type: text/plain\r\n" .
-                "\r\n" .
-                "aaa\r\n" .
+                "--boundary\r\n".
+                "Content-Disposition: form-data; name=\"a\"; filename=\"aaa.txt\"\r\n".
+                "Content-Type: text/plain\r\n".
+                "\r\n".
+                "aaa\r\n".
                 "--boundary--\r\n");
     }
 

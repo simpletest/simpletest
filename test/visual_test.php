@@ -7,11 +7,11 @@
 //
 // The proper tests start in all_tests.php
 //
-require_once __DIR__ . '/../src/unit_tester.php';
-require_once __DIR__ . '/../src/shell_tester.php';
-require_once __DIR__ . '/../src/mock_objects.php';
-require_once __DIR__ . '/../src/reporter.php';
-require_once __DIR__ . '/../src/xml.php';
+require_once __DIR__.'/../src/unit_tester.php';
+require_once __DIR__.'/../src/shell_tester.php';
+require_once __DIR__.'/../src/mock_objects.php';
+require_once __DIR__.'/../src/reporter.php';
+require_once __DIR__.'/../src/xml.php';
 
 class TestDisplayClass
 {
@@ -174,7 +174,7 @@ class PassingUnitTestCaseOutput extends UnitTestCase
     public function testLongStrings()
     {
         $text = '';
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $text .= '0123456789';
         }
         $this->assertEqual($text, $text);
@@ -315,10 +315,10 @@ class FailingUnitTestCaseOutput extends UnitTestCase
     public function testLongStrings()
     {
         $text = '';
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $text .= '0123456789';
         }
-        $this->assertEqual($text . $text, $text . 'a' . $text);        // Fail.
+        $this->assertEqual($text.$text, $text.'a'.$text);        // Fail.
     }
 }
 
@@ -429,10 +429,10 @@ class TestOfMockObjectsOutput extends UnitTestCase
 
     public function testObjectMatching()
     {
-        $a     = new Dummy();
-        $a->a  = 'a';
-        $b     = new Dummy();
-        $b->b  = 'b';
+        $a = new Dummy();
+        $a->a = 'a';
+        $b = new Dummy();
+        $b->b = 'b';
         $dummy = new MockDummy();
         $dummy->expect('a', [$a, $b]);
         $dummy->a($a, $b);
@@ -486,26 +486,26 @@ class PassesAsWellReporter extends HtmlReporter
 {
     protected function getCss()
     {
-        return parent::getCss() . ' .pass { color: darkgreen; }';
+        return parent::getCss().' .pass { color: darkgreen; }';
     }
 
     public function paintPass($message)
     {
         parent::paintPass($message);
-        print '<span class="pass">Pass</span>: ';
+        echo '<span class="pass">Pass</span>: ';
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
-        print implode(' -&gt; ', $breadcrumb);
-        print ' -&gt; ' . htmlentities($message) . "<br />\n";
+        echo implode(' -&gt; ', $breadcrumb);
+        echo ' -&gt; '.htmlentities($message)."<br />\n";
     }
 
     public function paintSignal($type, $payload)
     {
-        print "<span class=\"fail\">$type</span>: ";
+        echo "<span class=\"fail\">$type</span>: ";
         $breadcrumb = $this->getTestList();
         array_shift($breadcrumb);
-        print implode(' -&gt; ', $breadcrumb);
-        print ' -&gt; ' . htmlentities(serialize($payload)) . "<br />\n";
+        echo implode(' -&gt; ', $breadcrumb);
+        echo ' -&gt; '.htmlentities(serialize($payload))."<br />\n";
     }
 }
 

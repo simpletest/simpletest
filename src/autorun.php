@@ -5,17 +5,17 @@
  */
 
 // include simpletest files
-require_once __DIR__ . '/unit_tester.php';
-require_once __DIR__ . '/mock_objects.php';
-require_once __DIR__ . '/collector.php';
-require_once __DIR__ . '/default_reporter.php';
+require_once __DIR__.'/unit_tester.php';
+require_once __DIR__.'/mock_objects.php';
+require_once __DIR__.'/collector.php';
+require_once __DIR__.'/default_reporter.php';
 
 $GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_CLASSES'] = get_declared_classes();
-$GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_PATH']    = getcwd();
+$GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_PATH'] = getcwd();
 register_shutdown_function('simpletest_autorun');
 
 /**
- * Exit handler to run all recent test cases and exit system if in CLI
+ * Exit handler to run all recent test cases and exit system if in CLI.
  */
 function simpletest_autorun()
 {
@@ -45,7 +45,7 @@ function run_local_tests()
             return true;
         }
         $candidates = capture_new_classes();
-        $loader     = new SimpleFileLoader();
+        $loader = new SimpleFileLoader();
 
         $suite = $loader->createSuiteFromClasses(
             basename(initial_file()),
@@ -55,8 +55,8 @@ function run_local_tests()
         $reporter = new DefaultReporter();
 
         if ($reporter->doCodeCoverage) {
-            $coverage = new PHP_CodeCoverage;
-            $filter   = $coverage->filter();
+            $coverage = new PHP_CodeCoverage();
+            $filter = $coverage->filter();
 
             foreach ($reporter->excludes as $folderPath) {
                 $filter->addDirectoryToBlacklist($folderPath);
@@ -70,13 +70,13 @@ function run_local_tests()
         if ($reporter->doCodeCoverage) {
             $coverage->stop();
 
-            $writer = new PHP_CodeCoverage_Report_HTML;
+            $writer = new PHP_CodeCoverage_Report_HTML();
             $writer->process($coverage, '/tmp/coverage');
         }
 
         return $result;
     } catch (Exception $stack_frame_fix) {
-        print $stack_frame_fix->getMessage();
+        echo $stack_frame_fix->getMessage();
 
         return false;
     }
@@ -91,7 +91,7 @@ function tests_have_run()
 {
     $context = SimpleTest::getContext();
     if ($context) {
-        return (boolean) $context->getTest();
+        return (bool) $context->getTest();
     }
 
     return false;
@@ -105,12 +105,12 @@ function tests_have_run()
 function initial_file()
 {
     static $file = false;
-    if (! $file) {
+    if (!$file) {
         if (isset($_SERVER, $_SERVER['SCRIPT_FILENAME'])) {
             $file = $_SERVER['SCRIPT_FILENAME'];
         } else {
             $included_files = get_included_files();
-            $file           = reset($included_files);
+            $file = reset($included_files);
         }
     }
 

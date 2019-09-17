@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/authentication.php';
-require_once __DIR__ . '/../src/http.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/authentication.php';
+require_once __DIR__.'/../src/http.php';
 
 Mock::generate('SimpleHttpRequest');
 

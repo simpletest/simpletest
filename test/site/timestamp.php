@@ -1,2 +1,3 @@
 <?php
-    print time();
+
+    echo time();

@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/tag.php';
-require_once __DIR__ . '/../src/encoding.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/tag.php';
+require_once __DIR__.'/../src/encoding.php';
 
 Mock::generate('SimpleMultipartEncoding');
 
@@ -273,7 +273,7 @@ class TestOfSelection extends UnitTestCase
 
     public function testSingle()
     {
-        $tag    = new SimpleSelectionTag(['name' => 'a']);
+        $tag = new SimpleSelectionTag(['name' => 'a']);
         $option = new SimpleOptionTag([]);
         $option->addContent('AAA');
         $tag->addTag($option);
@@ -282,7 +282,7 @@ class TestOfSelection extends UnitTestCase
 
     public function testSingleDefault()
     {
-        $tag    = new SimpleSelectionTag(['name' => 'a']);
+        $tag = new SimpleSelectionTag(['name' => 'a']);
         $option = new SimpleOptionTag(['selected' => '']);
         $option->addContent('AAA');
         $tag->addTag($option);
@@ -291,7 +291,7 @@ class TestOfSelection extends UnitTestCase
 
     public function testSingleMappedDefault()
     {
-        $tag    = new SimpleSelectionTag(['name' => 'a']);
+        $tag = new SimpleSelectionTag(['name' => 'a']);
         $option = new SimpleOptionTag(['selected' => '', 'value' => 'aaa']);
         $option->addContent('AAA');
         $tag->addTag($option);
@@ -301,7 +301,7 @@ class TestOfSelection extends UnitTestCase
     public function testStartsWithDefault()
     {
         $tag = new SimpleSelectionTag(['name' => 'a']);
-        $a   = new SimpleOptionTag([]);
+        $a = new SimpleOptionTag([]);
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag(['selected' => '']);
@@ -316,7 +316,7 @@ class TestOfSelection extends UnitTestCase
     public function testSettingOption()
     {
         $tag = new SimpleSelectionTag(['name' => 'a']);
-        $a   = new SimpleOptionTag([]);
+        $a = new SimpleOptionTag([]);
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag(['selected' => '']);
@@ -331,7 +331,7 @@ class TestOfSelection extends UnitTestCase
     public function testSettingMappedOption()
     {
         $tag = new SimpleSelectionTag(['name' => 'a']);
-        $a   = new SimpleOptionTag(['value' => 'aaa']);
+        $a = new SimpleOptionTag(['value' => 'aaa']);
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag(['value' => 'bbb', 'selected' => '']);
@@ -349,7 +349,7 @@ class TestOfSelection extends UnitTestCase
     public function testSelectionDespiteSpuriousWhitespace()
     {
         $tag = new SimpleSelectionTag(['name' => 'a']);
-        $a   = new SimpleOptionTag([]);
+        $a = new SimpleOptionTag([]);
         $a->addContent(' AAA ');
         $tag->addTag($a);
         $b = new SimpleOptionTag(['selected' => '']);
@@ -366,7 +366,7 @@ class TestOfSelection extends UnitTestCase
     public function testFailToSetIllegalOption()
     {
         $tag = new SimpleSelectionTag(['name' => 'a']);
-        $a   = new SimpleOptionTag([]);
+        $a = new SimpleOptionTag([]);
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag(['selected' => '']);
@@ -382,7 +382,7 @@ class TestOfSelection extends UnitTestCase
     public function testNastyOptionValuesThatLookLikeFalse()
     {
         $tag = new SimpleSelectionTag(['name' => 'a']);
-        $a   = new SimpleOptionTag(['value' => '1']);
+        $a = new SimpleOptionTag(['value' => '1']);
         $a->addContent('One');
         $tag->addTag($a);
         $b = new SimpleOptionTag(['value' => '0']);
@@ -396,7 +396,7 @@ class TestOfSelection extends UnitTestCase
     public function testBlankOption()
     {
         $tag = new SimpleSelectionTag(['name' => 'A']);
-        $a   = new SimpleOptionTag([]);
+        $a = new SimpleOptionTag([]);
         $tag->addTag($a);
         $b = new SimpleOptionTag([]);
         $b->addContent('b');
@@ -411,7 +411,7 @@ class TestOfSelection extends UnitTestCase
     public function testMultipleDefaultWithNoSelections()
     {
         $tag = new MultipleSelectionTag(['name' => 'a', 'multiple' => '']);
-        $a   = new SimpleOptionTag([]);
+        $a = new SimpleOptionTag([]);
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag([]);
@@ -424,7 +424,7 @@ class TestOfSelection extends UnitTestCase
     public function testMultipleDefaultWithSelections()
     {
         $tag = new MultipleSelectionTag(['name' => 'a', 'multiple' => '']);
-        $a   = new SimpleOptionTag(['selected' => '']);
+        $a = new SimpleOptionTag(['selected' => '']);
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag(['selected' => '']);
@@ -437,7 +437,7 @@ class TestOfSelection extends UnitTestCase
     public function testSettingMultiple()
     {
         $tag = new MultipleSelectionTag(['name' => 'a', 'multiple' => '']);
-        $a   = new SimpleOptionTag(['selected' => '']);
+        $a = new SimpleOptionTag(['selected' => '']);
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag([]);
@@ -456,7 +456,7 @@ class TestOfSelection extends UnitTestCase
     public function testFailToSetIllegalOptionsInMultiple()
     {
         $tag = new MultipleSelectionTag(['name' => 'a', 'multiple' => '']);
-        $a   = new SimpleOptionTag(['selected' => '']);
+        $a = new SimpleOptionTag(['selected' => '']);
         $a->addContent('AAA');
         $tag->addTag($a);
         $b = new SimpleOptionTag([]);
@@ -531,7 +531,7 @@ class TestOfRadioGroup extends UnitTestCase
 
     public function testIsLabelMatchesAnyWidgetInSet()
     {
-        $group   = new SimpleRadioGroup();
+        $group = new SimpleRadioGroup();
         $button1 = new SimpleRadioButtonTag(['value' => 'A']);
         $button1->setLabel('one');
         $group->addWidget($button1);
@@ -621,8 +621,8 @@ class TestOfUploadWidget extends UnitTestCase
     public function testValueIsFilePath()
     {
         $upload = new SimpleUploadTag(['name' => 'a']);
-        $upload->setValue(__DIR__ . '/support/upload_sample.txt');
-        $this->assertEqual($upload->getValue(), __DIR__ . '/support/upload_sample.txt');
+        $upload->setValue(__DIR__.'/support/upload_sample.txt');
+        $this->assertEqual($upload->getValue(), __DIR__.'/support/upload_sample.txt');
     }
 
     public function testSubmitsFileContents()
@@ -631,9 +631,9 @@ class TestOfUploadWidget extends UnitTestCase
         $encoding->expectOnce('attach', [
                 'a',
                 'Sample for testing file upload',
-                'upload_sample.txt']);
+                'upload_sample.txt', ]);
         $upload = new SimpleUploadTag(['name' => 'a']);
-        $upload->setValue(__DIR__ . '/support/upload_sample.txt');
+        $upload->setValue(__DIR__.'/support/upload_sample.txt');
         $upload->write($encoding);
     }
 }

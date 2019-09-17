@@ -6,22 +6,22 @@
         A target for the SimpleTest test suite.
         <h1>Request</h1>
         <dl>
-            <dt>Protocol version</dt><dd><?php print $_SERVER['SERVER_PROTOCOL']; ?></dd>
-            <dt>Request method</dt><dd><?php print $_SERVER['REQUEST_METHOD']; ?></dd>
-            <dt>Accept header</dt><dd><?php print isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : ''; ?></dd>
+            <dt>Protocol version</dt><dd><?php echo $_SERVER['SERVER_PROTOCOL']; ?></dd>
+            <dt>Request method</dt><dd><?php echo $_SERVER['REQUEST_METHOD']; ?></dd>
+            <dt>Accept header</dt><dd><?php echo isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : ''; ?></dd>
         </dl>
         <h1>Cookies</h1>
         <?php
             if (count($_COOKIE) > 0) {
                 foreach ($_COOKIE as $key => $value) {
-                    print $key . '=[' . $value . "]<br />\n";
+                    echo $key.'=['.$value."]<br />\n";
                 }
             }
         ?>
         <h1>Raw GET data</h1>
         <?php
-            if(!empty($_SERVER['QUERY_STRING'])) {
-                echo '[' . $_SERVER['QUERY_STRING'] . ']';
+            if (!empty($_SERVER['QUERY_STRING'])) {
+                echo '['.$_SERVER['QUERY_STRING'].']';
             }
         ?>
         <h1>GET data</h1>
@@ -32,26 +32,26 @@
                     if (is_array($value)) {
                         $value = implode(', ', $value);
                     }
-                    print $key . '=[' . $value . "]<br />\n";
+                    echo $key.'=['.$value."]<br />\n";
                 }
             }
         ?>
         <h1>Raw POST data</h1>
         <?php
-            print '[' . file_get_contents('php://input') . ']';
+            echo '['.file_get_contents('php://input').']';
         ?>
         <pre><?php print_r(PageRequest::post()); ?></pre>
         <h1>POST data</h1>
         <?php
             if (count($_POST) > 0) {
                 foreach ($_POST as $key => $value) {
-                    print $key . '=[';
+                    echo $key.'=[';
                     if (is_array($value)) {
-                        print implode(', ', $value);
+                        echo implode(', ', $value);
                     } else {
-                        print $value;
+                        echo $value;
                     }
-                    print "]<br />\n";
+                    echo "]<br />\n";
                 }
             }
         ?>

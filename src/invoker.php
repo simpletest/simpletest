@@ -1,14 +1,14 @@
 <?php
 
-require_once __DIR__ . '/errors.php';
-require_once __DIR__ . '/compatibility.php';
-require_once __DIR__ . '/scorer.php';
-require_once __DIR__ . '/expectation.php';
-require_once __DIR__ . '/dumper.php';
+require_once __DIR__.'/errors.php';
+require_once __DIR__.'/compatibility.php';
+require_once __DIR__.'/scorer.php';
+require_once __DIR__.'/expectation.php';
+require_once __DIR__.'/dumper.php';
 
 // define the root constant for dependent libraries.
-if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', __DIR__ . '/');
+if (!defined('SIMPLE_TEST')) {
+    define('SIMPLE_TEST', __DIR__.'/');
 }
 
 /**
@@ -22,7 +22,7 @@ class SimpleInvoker
     /**
      * Stashes the test case for later.
      *
-     * @param SimpleTestCase $test_case  Test case to run.
+     * @param SimpleTestCase $test_case Test case to run.
      */
     public function __construct($test_case)
     {
@@ -32,7 +32,7 @@ class SimpleInvoker
     /**
      * Accessor for test case being run.
      *
-     * @return SimpleTestCase    Test case.
+     * @return SimpleTestCase Test case.
      */
     public function getTestCase()
     {
@@ -42,7 +42,7 @@ class SimpleInvoker
     /**
      * Runs test level set up. Used for changing the mechanics of base test cases.
      *
-     * @param string $method    Test method to call.
+     * @param string $method Test method to call.
      */
     public function before($method)
     {
@@ -52,7 +52,7 @@ class SimpleInvoker
     /**
      * Invokes a test method and buffered with setUp() and tearDown() calls.
      *
-     * @param string $method    Test method to call.
+     * @param string $method Test method to call.
      */
     public function invoke($method)
     {
@@ -64,7 +64,7 @@ class SimpleInvoker
     /**
      * Runs test level clean up. Used for changing the mechanics of base test cases.
      *
-     * @param string $method    Test method to call.
+     * @param string $method Test method to call.
      */
     public function after($method)
     {
@@ -82,7 +82,7 @@ class SimpleInvokerDecorator
     /**
      * Stores the invoker to wrap.
      *
-     * @param SimpleInvoker $invoker  Test method runner.
+     * @param SimpleInvoker $invoker Test method runner.
      */
     public function __construct($invoker)
     {
@@ -92,7 +92,7 @@ class SimpleInvokerDecorator
     /**
      * Accessor for test case being run.
      *
-     * @return SimpleTestCase    Test case.
+     * @return SimpleTestCase Test case.
      */
     public function getTestCase()
     {
@@ -102,7 +102,7 @@ class SimpleInvokerDecorator
     /**
      * Runs test level set up. Used for changing the mechanics of base test cases.
      *
-     * @param string $method    Test method to call.
+     * @param string $method Test method to call.
      */
     public function before($method)
     {
@@ -112,7 +112,7 @@ class SimpleInvokerDecorator
     /**
      * Invokes a test method and buffered with setUp() and tearDown() calls.
      *
-     * @param string $method    Test method to call.
+     * @param string $method Test method to call.
      */
     public function invoke($method)
     {
@@ -122,7 +122,7 @@ class SimpleInvokerDecorator
     /**
      * Runs test level clean up. Used for changing the mechanics of base test cases.
      *
-     * @param string $method    Test method to call.
+     * @param string $method Test method to call.
      */
     public function after($method)
     {

@@ -1,11 +1,11 @@
 <?php
 
-require_once __DIR__ . '/url.php';
+require_once __DIR__.'/url.php';
 
 /**
  * Cookie data holder.
  * Cookie rules are full of pretty arbitary stuff
- * I have used: http://www.cookiecentral.com/faq/
+ * I have used: http://www.cookiecentral.com/faq/.
  */
 class SimpleCookie
 {
@@ -27,10 +27,10 @@ class SimpleCookie
      */
     public function __construct($name, $value = false, $path = false, $expiry = false, $is_secure = false)
     {
-        $this->host   = false;
-        $this->name   = $name;
-        $this->value  = $value;
-        $this->path   = ($path ? $this->fixPath($path) : '/');
+        $this->host = false;
+        $this->name = $name;
+        $this->value = $value;
+        $this->path = ($path ? $this->fixPath($path) : '/');
         $this->expiry = false;
         if (is_string($expiry)) {
             $this->expiry = strtotime($expiry);
@@ -79,7 +79,7 @@ class SimpleCookie
      */
     public function isValidHost($host)
     {
-        return ($this->truncateHost($host) === $this->getHost());
+        return $this->truncateHost($host) === $this->getHost();
     }
 
     /**
@@ -92,7 +92,7 @@ class SimpleCookie
     protected function truncateHost($host)
     {
         $tlds = SimpleUrl::getAllTopLevelDomains();
-        if (preg_match('/[a-z\-]+\.(' . $tlds . ')$/i', $host, $matches)) {
+        if (preg_match('/[a-z\-]+\.('.$tlds.')$/i', $host, $matches)) {
             return $matches[0];
         } elseif (preg_match('/[a-z\-]+\.[a-z\-]+\.[a-z\-]+$/i', $host, $matches)) {
             return $matches[0];
@@ -141,7 +141,7 @@ class SimpleCookie
      */
     public function isValidPath($path)
     {
-        return (strncmp($this->fixPath($path), $this->getPath(), strlen($this->getPath())) == 0);
+        return 0 == strncmp($this->fixPath($path), $this->getPath(), strlen($this->getPath()));
     }
 
     /**
@@ -151,11 +151,11 @@ class SimpleCookie
      */
     public function getExpiry()
     {
-        if (! $this->expiry) {
+        if (!$this->expiry) {
             return false;
         }
 
-        return gmdate('D, d M Y H:i:s', $this->expiry) . ' GMT';
+        return gmdate('D, d M Y H:i:s', $this->expiry).' GMT';
     }
 
     /**
@@ -168,14 +168,14 @@ class SimpleCookie
      */
     public function isExpired($now)
     {
-        if (! $this->expiry) {
+        if (!$this->expiry) {
             return true;
         }
         if (is_string($now)) {
             $now = strtotime($now);
         }
 
-        return ($this->expiry < $now);
+        return $this->expiry < $now;
     }
 
     /**
@@ -207,10 +207,10 @@ class SimpleCookie
      */
     protected function fixPath($path)
     {
-        if (substr($path, 0, 1) != '/') {
-            $path = '/' . $path;
+        if ('/' != substr($path, 0, 1)) {
+            $path = '/'.$path;
         }
-        if (substr($path, -1, 1) != '/') {
+        if ('/' != substr($path, -1, 1)) {
             $path .= '/';
         }
 
@@ -241,11 +241,11 @@ class SimpleCookieJar
     public function restartSession($date = false)
     {
         $surviving_cookies = [];
-        for ($i = 0; $i < count($this->cookies); $i++) {
-            if (! $this->cookies[$i]->getValue()) {
+        for ($i = 0; $i < count($this->cookies); ++$i) {
+            if (!$this->cookies[$i]->getValue()) {
                 continue;
             }
-            if (! $this->cookies[$i]->getExpiry()) {
+            if (!$this->cookies[$i]->getExpiry()) {
                 continue;
             }
             if ($date && $this->cookies[$i]->isExpired($date)) {
@@ -264,7 +264,7 @@ class SimpleCookieJar
      */
     public function agePrematurely($interval)
     {
-        for ($i = 0; $i < count($this->cookies); $i++) {
+        for ($i = 0; $i < count($this->cookies); ++$i) {
             $this->cookies[$i]->agePrematurely($interval);
         }
     }
@@ -288,8 +288,8 @@ class SimpleCookieJar
     }
 
     /**
-     *    Return a list of the current cookies
-     *    @access public
+     *    Return a list of the current cookies.
+     *
      *    @return array
      */
     public function getCookies()
@@ -306,7 +306,7 @@ class SimpleCookieJar
      */
     protected function findFirstMatch($cookie)
     {
-        for ($i = 0; $i < count($this->cookies); $i++) {
+        for ($i = 0; $i < count($this->cookies); ++$i) {
             $is_match = $this->isMatch(
                     $cookie,
                     $this->cookies[$i]->getHost(),
@@ -336,13 +336,13 @@ class SimpleCookieJar
         foreach ($this->cookies as $cookie) {
             if ($this->isMatch($cookie, $host, $path, $name)) {
                 if (strlen($cookie->getPath()) > strlen($longest_path)) {
-                    $value        = $cookie->getValue();
+                    $value = $cookie->getValue();
                     $longest_path = $cookie->getPath();
                 }
             }
         }
 
-        return (isset($value) ? $value : false);
+        return isset($value) ? $value : false;
     }
 
     /**
@@ -360,10 +360,10 @@ class SimpleCookieJar
         if ($cookie->getName() != $name) {
             return false;
         }
-        if ($host && $cookie->getHost() && ! $cookie->isValidHost($host)) {
+        if ($host && $cookie->getHost() && !$cookie->isValidHost($host)) {
             return false;
         }
-        if (! $cookie->isValidPath($path)) {
+        if (!$cookie->isValidPath($path)) {
             return false;
         }
 
@@ -383,7 +383,7 @@ class SimpleCookieJar
         $pairs = [];
         foreach ($this->cookies as $cookie) {
             if ($this->isMatch($cookie, $url->getHost(), $url->getPath(), $cookie->getName())) {
-                $pairs[] = $cookie->getName() . '=' . $cookie->getValue();
+                $pairs[] = $cookie->getName().'='.$cookie->getValue();
             }
         }
 

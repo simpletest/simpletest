@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/socket.php';
-require_once __DIR__ . '/../src/http.php';
-require_once __DIR__ . '/../src/compatibility.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/socket.php';
+require_once __DIR__.'/../src/http.php';
+require_once __DIR__.'/../src/compatibility.php';
 
 if (SimpleTest::getDefaultProxy()) {
     SimpleTest::ignore('LiveHttpTestCase');
@@ -14,12 +14,12 @@ class LiveHttpTestCase extends UnitTestCase
     protected $host = 'localhost';
     protected $port = '8080';
 
-    function skip()
+    public function skip()
     {
         $socket = new SimpleSocket($this->host, $this->port, 15, 8);
 
         parent::skipIf(
-            ! $socket->isOpen(),
+            !$socket->isOpen(),
             sprintf('The LiveHttpTestCase requires that a webserver runs at %s:%s', $this->host, $this->port)
         );
     }
@@ -55,8 +55,8 @@ class LiveHttpTestCase extends UnitTestCase
         $socket->write("Connection: close\r\n\r\n");
         $socket->close();
         $this->assertEqual($socket->getSent(),
-                "GET /network_confirm.php HTTP/1.0\r\n" .
-                "Host: $this->host\r\n" .
+                "GET /network_confirm.php HTTP/1.0\r\n".
+                "Host: $this->host\r\n".
                 "Connection: close\r\n\r\n");
     }
 }

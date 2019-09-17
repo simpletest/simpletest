@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/reflection.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/reflection.php';
 
 class AnyOldLeafClass
 {
@@ -43,6 +43,7 @@ class AnyOldImplementation implements AnyOldInterface
     public function aMethod()
     {
     }
+
     public function extraMethod()
     {
     }
@@ -56,7 +57,6 @@ abstract class AnotherOldAbstractClass
 {
     protected function aMethod(AnyOldInterface $argument)
     {
-        
     }
 }
 
@@ -97,6 +97,7 @@ class AnyOldOverloadedClass
     public function __isset($key)
     {
     }
+
     public function __unset($key)
     {
     }
@@ -107,6 +108,7 @@ class AnyOldClassWithStaticMethods
     public static function aStatic()
     {
     }
+
     public static function aStaticWithParameters($arg1, $arg2)
     {
     }
@@ -115,7 +117,9 @@ class AnyOldClassWithStaticMethods
 abstract class AnyOldAbstractClassWithAbstractMethods
 {
     abstract public function anAbstract();
+
     abstract public function anAbstractWithParameter($foo);
+
     abstract public function anAbstractWithMultipleParameters($foo, $bar);
 }
 
@@ -225,35 +229,35 @@ class TestOfReflection extends UnitTestCase
     public function testNoParameterCreationWhenNoInterface()
     {
         $reflection = new SimpleReflection('AnyOldArgumentClass');
-        $function   = $reflection->getSignature('aMethod');
+        $function = $reflection->getSignature('aMethod');
         $this->assertEqual('public function aMethod($argument)', $function);
     }
 
     public function testParameterCreationWithoutTypeHinting()
     {
         $reflection = new SimpleReflection('AnyOldArgumentImplementation');
-        $function   = $reflection->getSignature('aMethod');
+        $function = $reflection->getSignature('aMethod');
         $this->assertEqual('public function aMethod(\AnyOldInterface $argument)', $function);
     }
 
     public function testParameterCreationForTypeHinting()
     {
         $reflection = new SimpleReflection('AnyOldTypeHintedClass');
-        $function   = $reflection->getSignature('aMethod');
+        $function = $reflection->getSignature('aMethod');
         $this->assertEqual('public function aMethod(\AnyOldInterface $argument)', $function);
     }
 
     public function testIssetFunctionSignature()
     {
         $reflection = new SimpleReflection('AnyOldOverloadedClass');
-        $function   = $reflection->getSignature('__isset');
+        $function = $reflection->getSignature('__isset');
         $this->assertEqual('public function __isset($key)', $function);
     }
 
     public function testUnsetFunctionSignature()
     {
         $reflection = new SimpleReflection('AnyOldOverloadedClass');
-        $function   = $reflection->getSignature('__unset');
+        $function = $reflection->getSignature('__unset');
         $this->assertEqual('public function __unset($key)', $function);
     }
 
@@ -270,7 +274,7 @@ class TestOfReflection extends UnitTestCase
         $reflection = new SimpleReflection('AnotherOldAbstractClass');
         $this->assertEqual(
             $reflection->getSignature('aMethod'),
-            // non abstract method - with body 
+            // non abstract method - with body
             'protected function aMethod(\AnyOldInterface $argument)'
         );
     }
@@ -297,7 +301,7 @@ class TestOfReflectionWithTypeHints extends UnitTestCase
 				  function amethod(array $argument) {}
 			  }');
         $reflection = new SimpleReflection('AnyOldArrayTypeHintedClass');
-        $function   = $reflection->getSignature('amethod');
+        $function = $reflection->getSignature('amethod');
         $this->assertEqual('public function amethod(array $argument)', $function);
     }
 }
@@ -305,7 +309,7 @@ class TestOfReflectionWithTypeHints extends UnitTestCase
 /**
  * Abstract method's are public or protected.
  *
- * @link http://php.net/manual/en/language.oop5.abstract.php
+ * @see http://php.net/manual/en/language.oop5.abstract.php
  */
 class TestOfAbstractsWithAbstractMethods extends UnitTestCase
 {

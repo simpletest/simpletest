@@ -1,18 +1,18 @@
 <?php
 
-require_once __DIR__ . '/invoker.php';
-require_once __DIR__ . '/errors.php';
-require_once __DIR__ . '/compatibility.php';
-require_once __DIR__ . '/scorer.php';
-require_once __DIR__ . '/expectation.php';
-require_once __DIR__ . '/dumper.php';
-require_once __DIR__ . '/simpletest.php';
-require_once __DIR__ . '/exceptions.php';
-require_once __DIR__ . '/reflection.php';
+require_once __DIR__.'/invoker.php';
+require_once __DIR__.'/errors.php';
+require_once __DIR__.'/compatibility.php';
+require_once __DIR__.'/scorer.php';
+require_once __DIR__.'/expectation.php';
+require_once __DIR__.'/dumper.php';
+require_once __DIR__.'/simpletest.php';
+require_once __DIR__.'/exceptions.php';
+require_once __DIR__.'/reflection.php';
 
 // define root constant for dependent libraries
-if (! defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', __DIR__ . DIRECTORY_SEPARATOR);
+if (!defined('SIMPLE_TEST')) {
+    define('SIMPLE_TEST', __DIR__.DIRECTORY_SEPARATOR);
 }
 
 /**
@@ -65,15 +65,15 @@ class SimpleTestCase
      */
     public function skipIf($should_skip, $message = '%s')
     {
-        if ($should_skip && ! $this->should_skip) {
+        if ($should_skip && !$this->should_skip) {
             $this->should_skip = true;
-            $message           = sprintf($message, 'Skipping [' . get_class($this) . ']');
-            $this->reporter->paintSkip($message . $this->getAssertionLine());
+            $message = sprintf($message, 'Skipping ['.get_class($this).']');
+            $this->reporter->paintSkip($message.$this->getAssertionLine());
         }
     }
 
     /**
-     * Accessor for the private variable $_shoud_skip
+     * Accessor for the private variable $_shoud_skip.
      */
     public function shouldSkip()
     {
@@ -88,7 +88,7 @@ class SimpleTestCase
      */
     public function skipUnless($shouldnt_skip, $message = false)
     {
-        $this->skipIf(! $shouldnt_skip, $message);
+        $this->skipIf(!$shouldnt_skip, $message);
     }
 
     /**
@@ -116,14 +116,14 @@ class SimpleTestCase
         $context->setTest($this);
         $context->setReporter($reporter);
         $this->reporter = $reporter;
-        $started        = false;
+        $started = false;
         foreach ($this->getTests() as $method) {
             if ($reporter->shouldInvoke($this->getLabel(), $method)) {
                 $this->skip();
                 if ($this->should_skip) {
                     break;
                 }
-                if (! $started) {
+                if (!$started) {
                     $reporter->paintCaseStart($this->getLabel());
                     $started = true;
                 }
@@ -170,8 +170,8 @@ class SimpleTestCase
      */
     protected function isTest($method)
     {
-        if (strtolower(substr($method, 0, 4)) === 'test') {
-            return ! is_a($this, strtolower($method));
+        if ('test' === strtolower(substr($method, 0, 4))) {
+            return !is_a($this, strtolower($method));
         }
 
         return false;
@@ -211,7 +211,7 @@ class SimpleTestCase
      */
     public function after($method)
     {
-        for ($i = 0; $i < count($this->observers); $i++) {
+        for ($i = 0; $i < count($this->observers); ++$i) {
             $this->observers[$i]->atTestEnd($method, $this);
         }
         $this->reporter->paintMethodEnd($method);
@@ -232,10 +232,10 @@ class SimpleTestCase
      */
     public function pass($message = 'Pass')
     {
-        if (! isset($this->reporter)) {
+        if (!isset($this->reporter)) {
             trigger_error('Can only make assertions within test methods');
         }
-        $this->reporter->paintPass($message . $this->getAssertionLine());
+        $this->reporter->paintPass($message.$this->getAssertionLine());
 
         return true;
     }
@@ -247,10 +247,10 @@ class SimpleTestCase
      */
     public function fail($message = 'Fail')
     {
-        if (! isset($this->reporter)) {
+        if (!isset($this->reporter)) {
             trigger_error('Can only make assertions within test methods');
         }
-        $this->reporter->paintFail($message . $this->getAssertionLine());
+        $this->reporter->paintFail($message.$this->getAssertionLine());
 
         return false;
     }
@@ -265,7 +265,7 @@ class SimpleTestCase
      */
     public function error($severity, $message, $file, $line)
     {
-        if (! isset($this->reporter)) {
+        if (!isset($this->reporter)) {
             trigger_error('Can only make assertions within test methods');
         }
         $this->reporter->paintError("Unexpected PHP Error [$message] severity [$severity] in [$file line $line]");
@@ -289,7 +289,7 @@ class SimpleTestCase
      */
     public function signal($type, $payload)
     {
-        if (! isset($this->reporter)) {
+        if (!isset($this->reporter)) {
             trigger_error('Can only make assertions within test methods');
         }
         $this->reporter->paintSignal($type, $payload);
@@ -328,14 +328,16 @@ class SimpleTestCase
      * Then concat unescaped first part and escaped part.
      *
      * @param string $string
+     *
      * @return string
      */
     protected function escapePercentageSignsExceptFirst($string)
     {
         $pos = strpos($string, '%');
-        if($pos !== false) {
-            return substr($string, 0, $pos + 1) . str_replace('%', '%%', substr($string, $pos + 1));
+        if (false !== $pos) {
+            return substr($string, 0, $pos + 1).str_replace('%', '%%', substr($string, $pos + 1));
         }
+
         return $string;
     }
 
@@ -361,10 +363,10 @@ class SimpleTestCase
      */
     public function dump($variable, $message = false)
     {
-        $dumper    = $this->reporter->getDumper();
+        $dumper = $this->reporter->getDumper();
         $formatted = $dumper->dump($variable);
         if ($message) {
-            $formatted = $message . "\n" . $formatted;
+            $formatted = $message."\n".$formatted;
         }
         $this->reporter->paintFormattedMessage($formatted);
 
@@ -399,8 +401,8 @@ class SimpleFileLoader
     {
         $existing_classes = get_declared_classes();
         $existing_globals = get_defined_vars();
-        echo $test_file . PHP_EOL;
-        include_once($test_file);
+        echo $test_file.PHP_EOL;
+        include_once $test_file;
         $new_globals = get_defined_vars();
         $this->makeFileVariablesGlobal($existing_globals, $new_globals);
         $new_classes = array_diff(get_declared_classes(), $existing_classes);
@@ -479,7 +481,7 @@ class SimpleFileLoader
      */
     public function createSuiteFromClasses($title, $classes)
     {
-        if (count($classes) == 0) {
+        if (0 == count($classes)) {
             $suite = new BadTestSuite($title, "No runnable test cases in [$title]");
 
             return $suite;
@@ -487,7 +489,7 @@ class SimpleFileLoader
         SimpleTest::ignoreParentsIfIgnored($classes);
         $suite = new TestSuite($title);
         foreach ($classes as $class) {
-            if (! SimpleTest::isIgnored($class)) {
+            if (!SimpleTest::isIgnored($class)) {
                 $suite->add($class);
             }
         }
@@ -523,8 +525,8 @@ class TestSuite
      */
     public function getLabel()
     {
-        if (! $this->label) {
-            return ($this->getSize() === 1) ?
+        if (!$this->label) {
+            return (1 === $this->getSize()) ?
                     get_class($this->test_cases[0]) : get_class($this);
         } else {
             return $this->label;
@@ -540,9 +542,9 @@ class TestSuite
      */
     public function add($test_case)
     {
-        if (! is_string($test_case)) {
+        if (!is_string($test_case)) {
             $this->test_cases[] = $test_case;
-        } elseif (self::getBaseTestCase($test_case) === 'testsuite') {
+        } elseif ('testsuite' === self::getBaseTestCase($test_case)) {
             $this->test_cases[] = new $test_case();
         } else {
             $this->test_cases[] = $test_case;
@@ -580,10 +582,10 @@ class TestSuite
     public function run($reporter)
     {
         $reporter->paintGroupStart($this->getLabel(), $this->getSize());
-        for ($i = 0, $count = count($this->test_cases); $i < $count; $i++) {
+        for ($i = 0, $count = count($this->test_cases); $i < $count; ++$i) {
             if (is_string($this->test_cases[$i])) {
                 $class = $this->test_cases[$i];
-                $test  = new $class();
+                $test = new $class();
                 $test->run($reporter);
                 unset($test);
             } else {
@@ -605,8 +607,8 @@ class TestSuite
         $count = 0;
         foreach ($this->test_cases as $case) {
             if (is_string($case)) {
-                if (! SimpleTest::isIgnored($case)) {
-                    $count++;
+                if (!SimpleTest::isIgnored($case)) {
+                    ++$count;
                 }
             } else {
                 $count += $case->getSize();
@@ -625,7 +627,7 @@ class TestSuite
     {
         while ($class = get_parent_class($class)) {
             $class = strtolower($class);
-            if ($class === 'simpletestcase' || $class === 'testsuite') {
+            if ('simpletestcase' === $class || 'testsuite' === $class) {
                 return $class;
             }
         }
@@ -672,7 +674,7 @@ class BadTestSuite
     {
         $reporter->paintGroupStart($this->getLabel(), $this->getSize());
         $reporter->paintFail(
-            'Bad TestSuite [' . $this->getLabel() . '] with error [' . $this->error . ']'
+            'Bad TestSuite ['.$this->getLabel().'] with error ['.$this->error.']'
         );
         $reporter->paintGroupEnd($this->getLabel());
 

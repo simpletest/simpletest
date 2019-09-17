@@ -1,10 +1,10 @@
 <?php
     $parts = parse_url($_SERVER['PHP_SELF']);
-    $path  = pathinfo($parts['path']);
+    $path = pathinfo($parts['path']);
     setcookie('session_cookie', 'A');
     setcookie('short_cookie', 'B', time() + 100, '/');
     setcookie('day_cookie', 'C', time() + 24 * 3600, '/');
-    setcookie('path_cookie', 'D', time() + 100, $path['dirname'] . '/path/');
+    setcookie('path_cookie', 'D', time() + 100, $path['dirname'].'/path/');
     setcookie('hour_cookie', 'E', time() + 3600, '/');
 ?><html>
     <head><title>SimpleTest testing links</title></head>

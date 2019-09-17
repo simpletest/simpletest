@@ -1,7 +1,6 @@
 <?php
 
 switch ($_SERVER['REQUEST_METHOD']) {
-
     case 'HEAD':
         header('HTTP/1.1 202 Accepted');
     break;
@@ -13,20 +12,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'POST':
     case 'PUT':
-        $acceptedContentTypes = ['text/xml', 'application/xml'];       
+        $acceptedContentTypes = ['text/xml', 'application/xml'];
         if (
-            (isset($_SERVER['CONTENT_TYPE']) && in_array($_SERVER['CONTENT_TYPE'], $acceptedContentTypes)) 
+            (isset($_SERVER['CONTENT_TYPE']) && in_array($_SERVER['CONTENT_TYPE'], $acceptedContentTypes))
             // https://bugs.php.net/bug.php?id=66606
             || in_array($_SERVER['HTTP_CONTENT_TYPE'], $acceptedContentTypes)
         ) {
-            $data    = fopen('php://input', 'r');
+            $data = fopen('php://input', 'r');
             $content = '';
             while ($chunk = fread($data, 1024)) {
                 $content .= $chunk;
             }
             fclose($data);
 
-            if ($content === '<a><b>c</b></a>') {
+            if ('<a><b>c</b></a>' === $content) {
                 header('HTTP/1.1 201 Created');
                 header('Content-Type: text/xml');
                 echo strip_tags($content);
@@ -43,5 +42,4 @@ switch ($_SERVER['REQUEST_METHOD']) {
         header('Content-Type: text/plain');
         echo 'Method Not Allowed';
     break;
-
 }

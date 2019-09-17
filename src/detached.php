@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/xml.php';
-require_once __DIR__ . '/shell_tester.php';
+require_once __DIR__.'/xml.php';
+require_once __DIR__.'/shell_tester.php';
 
 /**
  * Runs an XML formated test in a separate process.
@@ -15,20 +15,20 @@ class DetachedTestCase
     /**
      * Sets the location of the remote test.
      *
-     * @param string $command       Test script.
-     * @param string $dry_command   Script for dry run.
+     * @param string $command     Test script.
+     * @param string $dry_command Script for dry run.
      */
     public function __construct($command, $dry_command = false)
     {
-        $this->command     = $command;
+        $this->command = $command;
         $this->dry_command = $dry_command ? $dry_command : $command;
-        $this->size        = false;
+        $this->size = false;
     }
 
     /**
      * Accessor for the test name for subclasses.
      *
-     * @return string       Name of the test.
+     * @return string Name of the test.
      */
     public function getLabel()
     {
@@ -40,7 +40,7 @@ class DetachedTestCase
      * Currently reads the data as a single chunk.
      * I'll fix this once I have added iteration to the browser.
      *
-     * @param SimpleReporter $reporter    Target of test results.
+     * @param SimpleReporter $reporter Target of test results.
      *
      * @returns boolean                   True if no failures.
      */
@@ -49,8 +49,8 @@ class DetachedTestCase
         $shell = new SimpleShell();
         $shell->execute($this->command);
         $parser = $this->createParser($reporter);
-        if (! $parser->parse($shell->getOutput())) {
-            trigger_error('Cannot parse incoming XML from [' . $this->command . ']');
+        if (!$parser->parse($shell->getOutput())) {
+            trigger_error('Cannot parse incoming XML from ['.$this->command.']');
 
             return false;
         }
@@ -61,17 +61,17 @@ class DetachedTestCase
     /**
      * Accessor for the number of subtests.
      *
-     * @return int       Number of test cases.
+     * @return int Number of test cases.
      */
     public function getSize()
     {
-        if ($this->size === false) {
+        if (false === $this->size) {
             $shell = new SimpleShell();
             $shell->execute($this->dry_command);
             $reporter = new SimpleReporter();
-            $parser   = $this->createParser($reporter);
-            if (! $parser->parse($shell->getOutput())) {
-                trigger_error('Cannot parse incoming XML from [' . $this->dry_command . ']');
+            $parser = $this->createParser($reporter);
+            if (!$parser->parse($shell->getOutput())) {
+                trigger_error('Cannot parse incoming XML from ['.$this->dry_command.']');
 
                 return false;
             }
@@ -84,9 +84,9 @@ class DetachedTestCase
     /**
      * Creates the XML parser.
      *
-     * @param SimpleReporter $reporter    Target of test results.
+     * @param SimpleReporter $reporter Target of test results.
      *
-     * @return SimpleTestXmlListener      XML reader.
+     * @return SimpleTestXmlListener XML reader.
      */
     protected function createParser(&$reporter)
     {

@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/compatibility.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/compatibility.php';
 
 class ComparisonClass
 {
@@ -34,9 +34,9 @@ class TestOfCompatibility extends UnitTestCase
 
     public function testReferences()
     {
-        $thing           = 'Hello';
+        $thing = 'Hello';
         $thing_reference = &$thing;
-        $thing_copy      = $thing;
+        $thing_copy = $thing;
         $this->assertTrue(SimpleTestCompatibility::isReference($thing, $thing));
         //$this->assertFalse(SimpleTestCompatibility::isReference($thing, $thing_reference)); // fails
         $this->assertFalse(SimpleTestCompatibility::isReference($thing, $thing_copy));
@@ -44,9 +44,9 @@ class TestOfCompatibility extends UnitTestCase
 
     public function testObjectReferences()
     {
-        $object            = new ComparisonClass();
-        $object_reference  = &$object;
-        $object_copy       = clone $object;
+        $object = new ComparisonClass();
+        $object_reference = &$object;
+        $object_copy = clone $object;
         $object_assignment = &$object;
         $this->assertTrue(SimpleTestCompatibility::isReference(
                 $object,

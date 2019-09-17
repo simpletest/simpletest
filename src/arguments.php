@@ -41,7 +41,7 @@ class SimpleArguments
     {
         if ($this->$key === false) {
             $this->all[$key] = $value;
-        } elseif (! is_array($this->$key)) {
+        } elseif (!is_array($this->$key)) {
             $this->all[$key] = [$this->$key, $value];
         } else {
             $this->all[$key][] = $value;
@@ -77,7 +77,7 @@ class SimpleArguments
      * It won't use what it thinks is a flag.
      *
      * @param array $arguments Remaining arguments to be parsed. This variable
-     * is modified if there is a value to be extracted.
+     *                         is modified if there is a value to be extracted.
      *
      * @return string/boolean The next value unless it's a flag.
      */
@@ -96,7 +96,7 @@ class SimpleArguments
      */
     public function valueIsNext($arguments)
     {
-        return isset($arguments[0]) && ! $this->isFlag($arguments[0]);
+        return isset($arguments[0]) && !$this->isFlag($arguments[0]);
     }
 
     /**
@@ -108,7 +108,7 @@ class SimpleArguments
      */
     public function isFlag($argument)
     {
-        return strncmp($argument, '-', 1) == 0;
+        return 0 == strncmp($argument, '-', 1);
     }
 
     /**
@@ -148,7 +148,7 @@ class SimpleArguments
 class SimpleHelp
 {
     private $overview;
-    private $flag_sets    = [];
+    private $flag_sets = [];
     private $explanations = [];
 
     /**
@@ -172,8 +172,8 @@ class SimpleHelp
      */
     public function explainFlag($flags, $explanation)
     {
-        $flags                = is_array($flags) ? $flags : [$flags];
-        $this->flag_sets[]    = $flags;
+        $flags = is_array($flags) ? $flags : [$flags];
+        $this->flag_sets[] = $flags;
         $this->explanations[] = $explanation;
     }
 
@@ -185,9 +185,9 @@ class SimpleHelp
     public function render()
     {
         $tab_stop = $this->longestFlag($this->flag_sets) + 4;
-        $text     = $this->overview . "\n";
+        $text = $this->overview."\n";
         $numberOfFlags = count($this->flag_sets);
-        for ($i = 0; $i < $numberOfFlags; $i++) {
+        for ($i = 0; $i < $numberOfFlags; ++$i) {
             $text .= $this->renderFlagSet($this->flag_sets[$i], $this->explanations[$i], $tab_stop);
         }
 
@@ -219,9 +219,9 @@ class SimpleHelp
     private function renderFlagSet($flags, $explanation, $tab_stop)
     {
         $flag = array_shift($flags);
-        $text = str_pad($this->renderFlag($flag), $tab_stop, ' ') . $explanation . "\n";
+        $text = str_pad($this->renderFlag($flag), $tab_stop, ' ').$explanation."\n";
         foreach ($flags as $flag) {
-            $text .= '  ' . $this->renderFlag($flag) . "\n";
+            $text .= '  '.$this->renderFlag($flag)."\n";
         }
 
         return $text;
@@ -235,7 +235,7 @@ class SimpleHelp
      */
     private function renderFlag($flag)
     {
-        return (strlen($flag) == 1 ? '-' : '--') . $flag;
+        return (1 == strlen($flag) ? '-' : '--').$flag;
     }
 
     /**

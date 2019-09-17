@@ -1,11 +1,11 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/xml.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/xml.php';
 
 Mock::generate('SimpleScorer');
 
-if (! function_exists('xml_parser_create')) {
+if (!function_exists('xml_parser_create')) {
     SimpleTest::ignore('TestOfXmlStructureParsing');
     SimpleTest::ignore('TestOfXmlResultsParsing');
 }
@@ -171,15 +171,15 @@ class TestOfXmlResultsParsing extends UnitTestCase
 
     public function testSignal()
     {
-        $signal        = new AnyOldSignal();
+        $signal = new AnyOldSignal();
         $signal->stuff = 'Hello';
-        $listener      = new MockSimpleScorer();
+        $listener = new MockSimpleScorer();
         $listener->expectOnce('paintSignal', ['a_signal', $signal]);
         $parser = new SimpleTestXmlParser($listener);
         $this->sendValidStart($parser);
         $this->assertTrue($parser->parse(
-                '<signal type="a_signal"><![CDATA[' .
-                serialize($signal) . "]]></signal>\n"));
+                '<signal type="a_signal"><![CDATA['.
+                serialize($signal)."]]></signal>\n"));
         $this->sendValidEnd($parser);
     }
 

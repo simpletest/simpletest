@@ -1,14 +1,16 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
+require_once __DIR__.'/../src/autorun.php';
 
 class ReferenceForTesting
 {
     private $reference;
+
     public function setReference(&$reference)
     {
         $this->reference = $reference;
     }
+
     public function &getReference()
     {
         return $this->reference;
@@ -98,5 +100,4 @@ class TestOfUnitTester extends UnitTestCase
         $b = $this->escapePercentageSignsExceptFirst('http://www.domain.com/some%20long%20name.html');
         $this->assertEqual($a, $b);
     }
-
 }

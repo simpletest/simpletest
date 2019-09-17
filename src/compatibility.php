@@ -7,10 +7,10 @@ class SimpleTestCompatibility
     /**
      * Recursive type test.
      *
-     * @param mixed $first    Test subject.
-     * @param mixed $second   Comparison object.
+     * @param mixed $first  Test subject.
+     * @param mixed $second Comparison object.
      *
-     * @return bool        True if same type.
+     * @return bool True if same type.
      */
     public static function isIdentical($first, $second)
     {
@@ -39,10 +39,10 @@ class SimpleTestCompatibility
     /**
      * Recursive type test for each element of an array.
      *
-     * @param mixed $first    Test subject.
-     * @param mixed $second   Comparison object.
+     * @param mixed $first  Test subject.
+     * @param mixed $second Comparison object.
      *
-     * @return bool        True if identical.
+     * @return bool True if identical.
      */
     protected static function isArrayOfIdenticalTypes($first, $second)
     {
@@ -53,7 +53,7 @@ class SimpleTestCompatibility
             $is_identical = self::isIdentical(
                     $first[$key],
                     $second[$key]);
-            if (! $is_identical) {
+            if (!$is_identical) {
                 return false;
             }
         }
@@ -64,24 +64,25 @@ class SimpleTestCompatibility
     /**
      * Test for two variables being aliases.
      *
-     * @param mixed $first    Test subject.
-     * @param mixed $second   Comparison object.
+     * @param mixed $first  Test subject.
+     * @param mixed $second Comparison object.
      *
-     * @return bool        True if same.
+     * @return bool True if same.
      */
     public static function isReference(&$first, &$second)
     {
-        if($first !== $second){
+        if ($first !== $second) {
             return false;
         }
         $temp_first = $first;
         // modify $first
-        $first = ($first === true) ? false : true;
+        $first = (true === $first) ? false : true;
         // after modifying $first, $second will not be equal to $first,
         // unless $second and $first points to the same variable.
         $is_ref = ($first === $second);
-         // unmodify $first
+        // unmodify $first
         $first = $temp_first;
+
         return $is_ref;
     }
 }

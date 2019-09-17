@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/php_parser.php';
-require_once __DIR__ . '/../src/tag.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/php_parser.php';
+require_once __DIR__.'/../src/tag.php';
 
 Mock::generate('SimplePage');
 Mock::generate('SimplePhpPageBuilder');
@@ -165,8 +165,8 @@ class TestOfLexer extends UnitTestCase
     public function testMultiplePattern()
     {
         $handler = new MockTestParser();
-        $target  = ['a', 'b', 'a', 'bb', 'x', 'b', 'a', 'xxxxxx', 'a', 'x'];
-        for ($i = 0; $i < count($target); $i++) {
+        $target = ['a', 'b', 'a', 'bb', 'x', 'b', 'a', 'xxxxxx', 'a', 'x'];
+        for ($i = 0; $i < count($target); ++$i) {
             $handler->expectAt($i, 'accept', [$target[$i], '*']);
         }
         $handler->expectCallCount('accept', count($target));

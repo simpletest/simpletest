@@ -6,10 +6,10 @@ class PageRequest
 
     public function __construct($raw)
     {
-        $statements   = explode('&', $raw);
+        $statements = explode('&', $raw);
         $this->parsed = [];
         foreach ($statements as $statement) {
-            if (strpos($statement, '=') === false) {
+            if (false === strpos($statement, '=')) {
                 continue;
             }
             $this->parseStatement($statement);
@@ -19,10 +19,10 @@ class PageRequest
     private function parseStatement($statement)
     {
         list($key, $value) = explode('=', $statement);
-        $key               = urldecode($key);
+        $key = urldecode($key);
         if (preg_match('/(.*)\[\]$/', $key, $matches)) {
             $key = $matches[1];
-            if (! isset($this->parsed[$key])) {
+            if (!isset($this->parsed[$key])) {
                 $this->parsed[$key] = [];
             }
             $this->addValue($key, $value);
@@ -35,7 +35,7 @@ class PageRequest
 
     private function addValue($key, $value)
     {
-        if (! is_array($this->parsed[$key])) {
+        if (!is_array($this->parsed[$key])) {
             $this->parsed[$key] = [$this->parsed[$key]];
         }
         $this->parsed[$key][] = urldecode($value);
@@ -53,12 +53,12 @@ class PageRequest
 
     public static function get()
     {
-        if(isset($_SERVER['QUERY_STRING'])) {
+        if (isset($_SERVER['QUERY_STRING'])) {
             $request = new self($_SERVER['QUERY_STRING']);
 
             return $request->getAll();
         }
-        
+
         return [];
     }
 

@@ -7,7 +7,7 @@
  */
 
 /**
- * The basic collector for {@link GroupTest}
+ * The basic collector for {@link GroupTest}.
  *
  * @see collect(), GroupTest::collect()
  */
@@ -22,9 +22,9 @@ class SimpleCollector
      */
     protected function removeTrailingSlash($path)
     {
-        if (substr($path, -1) == DIRECTORY_SEPARATOR) {
+        if (DIRECTORY_SEPARATOR == substr($path, -1)) {
             return substr($path, 0, -1);
-        } elseif (substr($path, -1) == '/') {
+        } elseif ('/' == substr($path, -1)) {
             return substr($path, 0, -1);
         } else {
             return $path;
@@ -43,11 +43,11 @@ class SimpleCollector
     {
         $path = $this->removeTrailingSlash($path);
         if ($handle = opendir($path)) {
-            while (($entry = readdir($handle)) !== false) {
+            while (false !== ($entry = readdir($handle))) {
                 if ($this->isHidden($entry)) {
                     continue;
                 }
-                $this->handle($test, $path . DIRECTORY_SEPARATOR . $entry);
+                $this->handle($test, $path.DIRECTORY_SEPARATOR.$entry);
             }
             closedir($handle);
         }
@@ -61,7 +61,7 @@ class SimpleCollector
      * such as pattern matching, recursive matching, etc.  For an example, see
      * {@link SimplePatternCollector::_handle()}.
      *
-     * @param object $test     Group test with {@link GroupTest::addFile)} method.
+     * @param object $test Group test with {@link GroupTest::addFile)} method.
      *
      * @see collect()
      */
@@ -77,13 +77,13 @@ class SimpleCollector
      * Tests for hidden files so as to skip them.
      * Currently only tests for Unix hidden files.
      *
-     * @param string $filename        Plain filename.
+     * @param string $filename Plain filename.
      *
-     * @return bool                True if hidden file.
+     * @return bool True if hidden file.
      */
     protected function isHidden($filename)
     {
-        return strncmp($filename, '.', 1) == 0;
+        return 0 == strncmp($filename, '.', 1);
     }
 }
 

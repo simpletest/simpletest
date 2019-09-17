@@ -6,5 +6,5 @@
     setcookie('count', $count);
 ?><html>
     <head><title>Cookie Counter</title></head>
-    <body><?php print 'Count: ' . $count; ?></body>
+    <body><?php echo 'Count: '.$count; ?></body>
 </html>

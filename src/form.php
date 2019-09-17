@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/tag.php';
-require_once __DIR__ . '/encoding.php';
-require_once __DIR__ . '/selector.php';
+require_once __DIR__.'/tag.php';
+require_once __DIR__.'/encoding.php';
+require_once __DIR__.'/selector.php';
 
 /**
  * Form tag class to hold widget values.
@@ -23,34 +23,34 @@ class SimpleForm
     /**
      * Starts with no held controls/widgets.
      *
-     * @param SimpleTag $tag        Form tag to read.
-     * @param SimplePage $page      Holding page.
+     * @param SimpleTag  $tag  Form tag to read.
+     * @param SimplePage $page Holding page.
      */
     public function __construct($tag, $page)
     {
-        $this->action         = $this->createAction($tag->getAttribute('action'), $page);
-        $this->buttons        = [];
-        $this->checkboxes     = [];
+        $this->action = $this->createAction($tag->getAttribute('action'), $page);
+        $this->buttons = [];
+        $this->checkboxes = [];
         $this->default_target = false;
-        $this->encoding       = $this->setEncodingClass($tag);
-        $this->id             = $tag->getAttribute('id');
-        $this->images         = [];
-        $this->method         = $tag->getAttribute('method');
-        $this->radios         = [];
-        $this->widgets        = [];
+        $this->encoding = $this->setEncodingClass($tag);
+        $this->id = $tag->getAttribute('id');
+        $this->images = [];
+        $this->method = $tag->getAttribute('method');
+        $this->radios = [];
+        $this->widgets = [];
     }
 
     /**
      * Creates the request packet to be sent by the form.
      *
-     * @param SimpleTag $tag        Form tag to read.
+     * @param SimpleTag $tag Form tag to read.
      *
-     * @return string               Packet class.
+     * @return string Packet class.
      */
     protected function setEncodingClass($tag)
     {
-        if (strtolower($tag->getAttribute('method')) === 'post') {
-            if (strtolower($tag->getAttribute('enctype')) === 'multipart/form-data') {
+        if ('post' === strtolower($tag->getAttribute('method'))) {
+            if ('multipart/form-data' === strtolower($tag->getAttribute('enctype'))) {
                 return 'SimpleMultipartEncoding';
             }
 
@@ -63,7 +63,7 @@ class SimpleForm
     /**
      * Sets the frame target within a frameset.
      *
-     * @param string $frame        Name of frame.
+     * @param string $frame Name of frame.
      */
     public function setDefaultTarget($frame)
     {
@@ -73,24 +73,24 @@ class SimpleForm
     /**
      * Accessor for method of form submission.
      *
-     * @return string           Either get or post.
+     * @return string Either get or post.
      */
     public function getMethod()
     {
-        return ($this->method ? strtolower($this->method) : 'get');
+        return $this->method ? strtolower($this->method) : 'get';
     }
 
     /**
      * Combined action attribute with current location to get an absolute form target.
      *
-     * @param string $action    Action attribute from form tag.
+     * @param string $action Action attribute from form tag.
      * @param $page   Page location.
      *
-     * @return SimpleUrl        Absolute form target.
+     * @return SimpleUrl Absolute form target.
      */
     protected function createAction($action, $page)
     {
-        if (($action === '') || ($action === false)) {
+        if (('' === $action) || (false === $action)) {
             return $page->expandUrl($page->getUrl());
         }
 
@@ -100,15 +100,15 @@ class SimpleForm
     /**
      * Absolute URL of the target.
      *
-     * @return SimpleUrl           URL target.
+     * @return SimpleUrl URL target.
      */
     public function getAction()
     {
         $url = $this->action;
-        if ($this->default_target && ! $url->getTarget()) {
+        if ($this->default_target && !$url->getTarget()) {
             $url->setTarget($this->default_target);
         }
-        if ($this->getMethod() === 'get') {
+        if ('get' === $this->getMethod()) {
             $url->clearRequest();
         }
 
@@ -118,13 +118,13 @@ class SimpleForm
     /**
      * Creates the encoding for the current values in the form.
      *
-     * @return SimpleFormEncoding    Request to submit.
+     * @return SimpleFormEncoding Request to submit.
      */
     protected function encode()
     {
-        $class    = $this->encoding;
+        $class = $this->encoding;
         $encoding = new $class();
-        for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
+        for ($i = 0, $count = count($this->widgets); $i < $count; ++$i) {
             $this->widgets[$i]->write($encoding);
         }
 
@@ -134,7 +134,7 @@ class SimpleForm
     /**
      * ID field of form for unique identification.
      *
-     * @return string           Unique tag ID.
+     * @return string Unique tag ID.
      */
     public function getId()
     {
@@ -144,13 +144,13 @@ class SimpleForm
     /**
      * Adds a tag contents to the form.
      *
-     * @param SimpleWidget $tag        Input tag to add.
+     * @param SimpleWidget $tag Input tag to add.
      */
     public function addWidget($tag)
     {
-        if (strtolower($tag->getAttribute('type')) === 'submit') {
+        if ('submit' === strtolower($tag->getAttribute('type'))) {
             $this->buttons[] = $tag;
-        } elseif (strtolower($tag->getAttribute('type')) === 'image') {
+        } elseif ('image' === strtolower($tag->getAttribute('type'))) {
             $this->images[] = $tag;
         } elseif ($tag->getName()) {
             $this->setWidget($tag);
@@ -160,13 +160,13 @@ class SimpleForm
     /**
      * Sets the widget into the form, grouping radio buttons if any.
      *
-     * @param SimpleWidget $tag   Incoming form control.
+     * @param SimpleWidget $tag Incoming form control.
      */
     protected function setWidget($tag)
     {
-        if (strtolower($tag->getAttribute('type')) === 'radio') {
+        if ('radio' === strtolower($tag->getAttribute('type'))) {
             $this->addRadioButton($tag);
-        } elseif (strtolower($tag->getAttribute('type')) === 'checkbox') {
+        } elseif ('checkbox' === strtolower($tag->getAttribute('type'))) {
             $this->addCheckbox($tag);
         } else {
             $this->widgets[] = $tag;
@@ -176,12 +176,12 @@ class SimpleForm
     /**
      * Adds a radio button, building a group if necessary.
      *
-     * @param SimpleRadioButtonTag $tag   Incoming form control.
+     * @param SimpleRadioButtonTag $tag Incoming form control.
      */
     protected function addRadioButton($tag)
     {
-        if (! isset($this->radios[$tag->getName()])) {
-            $this->widgets[]               = new SimpleRadioGroup();
+        if (!isset($this->radios[$tag->getName()])) {
+            $this->widgets[] = new SimpleRadioGroup();
             $this->radios[$tag->getName()] = count($this->widgets) - 1;
         }
         $this->widgets[$this->radios[$tag->getName()]]->addWidget($tag);
@@ -190,17 +190,17 @@ class SimpleForm
     /**
      * Adds a checkbox, making it a group on a repeated name.
      *
-     * @param SimpleCheckboxTag $tag   Incoming form control.
+     * @param SimpleCheckboxTag $tag Incoming form control.
      */
     protected function addCheckbox($tag)
     {
-        if (! isset($this->checkboxes[$tag->getName()])) {
-            $this->widgets[]                   = $tag;
+        if (!isset($this->checkboxes[$tag->getName()])) {
+            $this->widgets[] = $tag;
             $this->checkboxes[$tag->getName()] = count($this->widgets) - 1;
         } else {
             $index = $this->checkboxes[$tag->getName()];
-            if (! is_a($this->widgets[$index], 'SimpleCheckboxGroup')) {
-                $previous              = $this->widgets[$index];
+            if (!is_a($this->widgets[$index], 'SimpleCheckboxGroup')) {
+                $previous = $this->widgets[$index];
                 $this->widgets[$index] = new SimpleCheckboxGroup();
                 $this->widgets[$index]->addWidget($previous);
             }
@@ -217,7 +217,7 @@ class SimpleForm
      */
     public function getValue(SelectorInterface $selector)
     {
-        for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
+        for ($i = 0, $count = count($this->widgets); $i < $count; ++$i) {
             if ($selector->isMatch($this->widgets[$i])) {
                 return $this->widgets[$i]->getValue();
             }
@@ -237,17 +237,17 @@ class SimpleForm
      * @param $selector   Criteria to apply.
      * @param string $value Value to input into the widget.
      *
-     * @return bool                   True if value is legal, false otherwise.
-     * If the field is not present, nothing will be set.
+     * @return bool True if value is legal, false otherwise.
+     *              If the field is not present, nothing will be set.
      */
-    public function setField(SelectorInterface $selector, $value, $position=false)
+    public function setField(SelectorInterface $selector, $value, $position = false)
     {
-        $success   = false;
+        $success = false;
         $_position = 0;
-        for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
+        for ($i = 0, $count = count($this->widgets); $i < $count; ++$i) {
             if ($selector->isMatch($this->widgets[$i])) {
-                $_position++;
-                if ($position === false or $_position === (int) $position) {
+                ++$_position;
+                if (false === $position or $_position === (int) $position) {
                     if ($this->widgets[$i]->setValue($value)) {
                         $success = true;
                     }
@@ -265,7 +265,7 @@ class SimpleForm
      */
     public function attachLabelBySelector(SelectorInterface $selector, $label)
     {
-        for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
+        for ($i = 0, $count = count($this->widgets); $i < $count; ++$i) {
             if ($selector->isMatch($this->widgets[$i])) {
                 if (method_exists($this->widgets[$i], 'setLabel')) {
                     $this->widgets[$i]->setLabel($label);
@@ -319,7 +319,7 @@ class SimpleForm
      * @param hash $additional Additional data for the form.
      *
      * @return SimpleEncoding Submitted values or false if there is no such button in the
-     * form.
+     *                        form.
      */
     public function submitButton(SelectorInterface $selector, $additional = false)
     {
@@ -343,9 +343,9 @@ class SimpleForm
      * Gets the submit values for an image.
      *
      * @param $selector Criteria to apply.
-     * @param int $x X-coordinate of click.
-     * @param int $y Y-coordinate of click.
-     * @param hash $additional  Additional data for the form.
+     * @param int  $x          X-coordinate of click.
+     * @param int  $y          Y-coordinate of click.
+     * @param hash $additional Additional data for the form.
      *
      * @return SimpleEncoding Submitted values or false if there is no such button in the form.
      */
@@ -371,7 +371,7 @@ class SimpleForm
      * Simply submits the form without the submit button value.
      * Used when there is only one button or it is unimportant.
      *
-     * @return hash           Submitted values.
+     * @return hash Submitted values.
      */
     public function submit($additional = false)
     {

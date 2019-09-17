@@ -10,7 +10,7 @@ class SimpleReflection
     /**
      * Stashes the class/interface.
      *
-     * @param string $interface    Class or interface to inspect.
+     * @param string $interface Class or interface to inspect.
      */
     public function __construct($interface)
     {
@@ -20,19 +20,19 @@ class SimpleReflection
     /**
      * Checks that a class has been declared.
      *
-     * @return bool            True if defined.
+     * @return bool True if defined.
      */
     public function classExists()
     {
         $reflection = new ReflectionClass($this->interface);
 
-        return ! $reflection->isInterface();
+        return !$reflection->isInterface();
     }
 
     /**
      * Needed to kill the autoload feature in PHP5 for classes created dynamically.
      *
-     * @return bool        True if defined.
+     * @return bool True if defined.
      */
     public function classExistsWithoutAutoload()
     {
@@ -42,7 +42,7 @@ class SimpleReflection
     /**
      * Checks that a class or interface has been declared.
      *
-     * @return bool            True if defined.
+     * @return bool True if defined.
      */
     public function classOrInterfaceExists()
     {
@@ -52,7 +52,7 @@ class SimpleReflection
     /**
      * Needed to kill the autoload feature in PHP5 for classes created dynamically.
      *
-     * @return bool        True if defined.
+     * @return bool True if defined.
      */
     public function classOrInterfaceExistsWithoutAutoload()
     {
@@ -62,10 +62,10 @@ class SimpleReflection
     /**
      * Needed to select the autoload feature in PHP5 for classes created dynamically.
      *
-     * @param string $interface    Class or interface name.
-     * @param bool $autoload       True, to trigger autoloading. Default: true.
+     * @param string $interface Class or interface name.
+     * @param bool   $autoload  True, to trigger autoloading. Default: true.
      *
-     * @return bool                True if interface defined.
+     * @return bool True if interface defined.
      */
     protected function classOrInterfaceExistsWithAutoload($interface, $autoload = true)
     {
@@ -121,7 +121,7 @@ class SimpleReflection
     /**
      * Checks to see if the method signature has to be tightly specified.
      *
-     * @param string $method        Method name.
+     * @param string $method Method name.
      *
      * @returns boolean             True if enforced.
      */
@@ -138,7 +138,7 @@ class SimpleReflection
     public function getParent()
     {
         $reflection = new ReflectionClass($this->interface);
-        $parent     = $reflection->getParentClass();
+        $parent = $reflection->getParentClass();
         if ($parent) {
             return $parent->getName();
         }
@@ -192,13 +192,13 @@ class SimpleReflection
     /**
      * Whittles a list of interfaces down to only the necessary top level parents.
      *
-     * @param array $interfaces     Reflection API interfaces to reduce.
+     * @param array $interfaces Reflection API interfaces to reduce.
      *
-     * @return array               List of parent interface names.
+     * @return array List of parent interface names.
      */
     protected function onlyParents($interfaces)
     {
-        $parents   = [];
+        $parents = [];
         $blacklist = [];
         foreach ($interfaces as $interface) {
             foreach ($interfaces as $possible_parent) {
@@ -227,7 +227,7 @@ class SimpleReflection
     protected function isAbstractMethod($name)
     {
         $interface = new ReflectionClass($this->interface);
-        if (! $interface->hasMethod($name)) {
+        if (!$interface->hasMethod($name)) {
             return false;
         }
 
@@ -243,7 +243,7 @@ class SimpleReflection
      */
     protected function isConstructor($name)
     {
-        return ($name === '__construct') || ($name == $this->interface);
+        return ('__construct' === $name) || ($name == $this->interface);
     }
 
     /**
@@ -256,9 +256,9 @@ class SimpleReflection
     public function isAbstractMethodInParents($name)
     {
         $interface = new ReflectionClass($this->interface);
-        $parent    = $interface->getParentClass();
+        $parent = $interface->getParentClass();
         while ($parent) {
-            if (! $parent->hasMethod($name)) {
+            if (!$parent->hasMethod($name)) {
                 return false;
             }
             if ($parent->getMethod($name)->isAbstract()) {
@@ -280,7 +280,7 @@ class SimpleReflection
     protected function isStaticMethod($name)
     {
         $interface = new ReflectionClass($this->interface);
-        if (! $interface->hasMethod($name)) {
+        if (!$interface->hasMethod($name)) {
             return false;
         }
 
@@ -290,16 +290,16 @@ class SimpleReflection
     /**
      * Returns the source code matching the declaration of a method.
      *
-     * @param string $name    Method name.
+     * @param string $name Method name.
      *
-     * @return string         Method signature up to last bracket.
+     * @return string Method signature up to last bracket.
      */
     public function getSignature($name)
     {
         $interface = new ReflectionClass($this->interface);
         $method = $interface->getMethod($name);
 
-        $abstract = ($method->isAbstract() && ! $interface->isInterface() && ! $this->isAbstractMethodInParents($name)) ? 'abstract ' : '';
+        $abstract = ($method->isAbstract() && !$interface->isInterface() && !$this->isAbstractMethodInParents($name)) ? 'abstract ' : '';
 
         if ($method->isPublic()) {
             $visibility = 'public';
@@ -309,10 +309,10 @@ class SimpleReflection
             $visibility = 'private';
         }
 
-        $static     = $method->isStatic() ? 'static ' : '';
-        $reference  = $method->returnsReference() ? '&' : '';
-        $params     = $this->getParameterSignatures($method);
-        $returnType = $this->getReturnType($method); 
+        $static = $method->isStatic() ? 'static ' : '';
+        $reference = $method->returnsReference() ? '&' : '';
+        $params = $this->getParameterSignatures($method);
+        $returnType = $this->getReturnType($method);
 
         return "{$abstract}$visibility {$static}function $reference$name($params){$returnType}";
     }
@@ -320,7 +320,7 @@ class SimpleReflection
     /**
      * Get the source code for the parameters of a method.
      *
-     * @param ReflectionMethod $method   Method object from reflection API
+     * @param ReflectionMethod $method Method object from reflection API
      *
      * @return string The Parameters string for a method.
      */
@@ -339,10 +339,10 @@ class SimpleReflection
             if ($isVariadic) {
                 $signature .= '...';
             }
-            $signature .= '$' . $parameter->getName();
+            $signature .= '$'.$parameter->getName();
             if (!$isVariadic) {
                 if ($parameter->isDefaultValueAvailable()) {
-                    $signature .= ' = ' . var_export($parameter->getDefaultValue(), true);
+                    $signature .= ' = '.var_export($parameter->getDefaultValue(), true);
                 } elseif ($parameter->isOptional()) {
                     $signature .= ' = null';
                 }
@@ -355,9 +355,9 @@ class SimpleReflection
     }
 
     /**
-     * getReturnType
+     * getReturnType.
      *
-     * @param ReflectionMethod $method   Method object from reflection API
+     * @param ReflectionMethod $method Method object from reflection API
      *
      * @return string The Parameters string for a method.
      */
@@ -367,22 +367,22 @@ class SimpleReflection
         if (PHP_VERSION_ID >= 70000) {
             $returnType = (string) $method->getReturnType();
 
-            if('self' === $returnType) {
-                $returnType = "\\".$this->method->getDeclaringClass()->getName();
+            if ('self' === $returnType) {
+                $returnType = '\\'.$this->method->getDeclaringClass()->getName();
             }
 
-            if($returnType != '') {
+            if ('' != $returnType) {
                 // Guard: method getReturnType()->allowsNull() is only supported by PHP7.1+
-                if(PHP_VERSION_ID >= 70100) {
+                if (PHP_VERSION_ID >= 70100) {
                     $returnType = '?'.$returnType;
                 }
 
-                return ': '. $returnType;
+                return ': '.$returnType;
             }
-        } 
-            
+        }
+
         // the return type feature doesn't exist below PHP7, return empty string
-        return '';        
+        return '';
     }
 
     protected function getParameterTypeHint(ReflectionParameter $parameter)
@@ -390,19 +390,18 @@ class SimpleReflection
         // Guard: parameter types only supported by PHP7.0+
         if ((PHP_VERSION_ID >= 70000) && $parameter->hasType()) {
             $typeHint = (string) $parameter->getType();
-        } 
-        elseif($parameter->isArray()) {
+        } elseif ($parameter->isArray()) {
             $typeHint = 'array';
         }
-       
-        if(empty($typeHint)) {
+
+        if (empty($typeHint)) {
             return '';
         }
 
         $typeHints = [
             'self', 'array', 'callable',
             // PHP 7
-            'bool', 'float', 'int', 'string'
+            'bool', 'float', 'int', 'string',
         ];
 
         // prefix a slash, on "class" or "interface" typehints
@@ -412,5 +411,4 @@ class SimpleReflection
 
         return $typeHint .= ' ';
     }
-
 }

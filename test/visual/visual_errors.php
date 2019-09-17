@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../../shell_tester.php';
-require_once __DIR__ . '/../../mock_objects.php';
-require_once __DIR__ . '/../../xml.php';
-require_once __DIR__ . '/../../autorun.php';
+require_once __DIR__.'/../../shell_tester.php';
+require_once __DIR__.'/../../mock_objects.php';
+require_once __DIR__.'/../../xml.php';
+require_once __DIR__.'/../../autorun.php';
 
 class VisualTestOfErrors extends UnitTestCase
 {

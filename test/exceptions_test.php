@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/exceptions.php';
-require_once __DIR__ . '/../src/expectation.php';
-require_once __DIR__ . '/../src/test_case.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/exceptions.php';
+require_once __DIR__.'/../src/expectation.php';
+require_once __DIR__.'/../src/test_case.php';
 
 Mock::generate('SimpleTestCase');
 Mock::generate('SimpleExpectation');
@@ -73,7 +73,7 @@ class TestOfExceptionTrap extends UnitTestCase
         $test->expectOnce('assert', [
                 '*',
                 new ExceptionExpectation(new Exception()),
-                'message']);
+                'message', ]);
         $queue = new SimpleExceptionTrap();
         $queue->expectException(new ExceptionExpectation(new Exception()), 'message');
         $queue->isExpected($test, new Exception());
@@ -149,12 +149,12 @@ class TestOfCallingTearDownAfterExceptions extends UnitTestCase
 
     public function tearDown()
     {
-        $this->debri--;
+        --$this->debri;
     }
 
     public function testLeaveSomeDebri()
     {
-        $this->debri++;
+        ++$this->debri;
         $this->expectException();
         throw new Exception(__FUNCTION__);
     }

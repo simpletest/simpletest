@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../src/autorun.php';
-require_once __DIR__ . '/../src/simpletest.php';
+require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__.'/../src/simpletest.php';
 
 SimpleTest::ignore('ShouldNeverBeRunEither');
 
@@ -24,9 +24,9 @@ class TestOfStackTrace extends UnitTestCase
         $trace = new SimpleStackTrace(['assert']);
         $this->assertEqual(
                 $trace->traceMethod([[
-                        'file'     => '/my_test.php',
-                        'line'     => 24,
-                        'function' => 'assertSomething']]),
+                        'file' => '/my_test.php',
+                        'line' => 24,
+                        'function' => 'assertSomething', ]]),
                 ' at [/my_test.php line 24]');
     }
 }
@@ -60,7 +60,7 @@ class TestOfContext extends UnitTestCase
 
     public function testClearingContextResetsResources()
     {
-        $context  = new SimpleTestContext();
+        $context = new SimpleTestContext();
         $resource = $context->get('DummyResource');
         $context->clear();
         $this->assertClone($resource, $context->get('DummyResource'));
