@@ -52,6 +52,7 @@
         "php": "^7.1"
     },
     "autoload": {
-        "classmap": ["."]
+        "classmap": ["src/"],
+        "exclude-from-classmap": [ "/test" ]
     }
 }
