@@ -31,7 +31,7 @@ class SimpleScorer
      * Signals that the next evaluation will be a dry run.
      * That is, the structure events will be recorded, but no tests will be run.
      *
-     * @param bool $is_dry Dry run if true.
+     * @param bool $is_dry dry run if true
      */
     public function makeDry($is_dry = true)
     {
@@ -41,8 +41,8 @@ class SimpleScorer
     /**
      * The reporter has a veto on what should be run.
      *
-     * @param string $test_case_name name of test case.
-     * @param string $method         Name of test method.
+     * @param string $test_case_name name of test case
+     * @param string $method         name of test method
      */
     public function shouldInvoke($test_case_name, $method)
     {
@@ -52,9 +52,9 @@ class SimpleScorer
     /**
      * Can wrap the invoker in preperation for running a test.
      *
-     * @param SimpleInvoker $invoker Individual test runner.
+     * @param SimpleInvoker $invoker individual test runner
      *
-     * @return SimpleInvoker Wrapped test runner.
+     * @return SimpleInvoker wrapped test runner
      */
     public function createInvoker($invoker)
     {
@@ -66,7 +66,7 @@ class SimpleScorer
      * Will be false if there have been any failures or exceptions.
      * Used for command line tools.
      *
-     * @return bool True if no failures.
+     * @return bool true if no failures
      */
     public function getStatus()
     {
@@ -80,8 +80,8 @@ class SimpleScorer
     /**
      * Paints the start of a group test.
      *
-     * @param string $test_name Name of test or other label.
-     * @param int    $size      Number of test cases starting.
+     * @param string $test_name name of test or other label
+     * @param int    $size      number of test cases starting
      */
     public function paintGroupStart($test_name, $size)
     {
@@ -90,7 +90,7 @@ class SimpleScorer
     /**
      * Paints the end of a group test.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintGroupEnd($test_name)
     {
@@ -99,7 +99,7 @@ class SimpleScorer
     /**
      * Paints the start of a test case.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintCaseStart($test_name)
     {
@@ -108,7 +108,7 @@ class SimpleScorer
     /**
      * Paints the end of a test case.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintCaseEnd($test_name)
     {
@@ -117,7 +117,7 @@ class SimpleScorer
     /**
      * Paints the start of a test method.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintMethodStart($test_name)
     {
@@ -126,7 +126,7 @@ class SimpleScorer
     /**
      * Paints the end of a test method.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintMethodEnd($test_name)
     {
@@ -135,7 +135,7 @@ class SimpleScorer
     /**
      * Increments the pass count.
      *
-     * @param string $message Message is ignored.
+     * @param string $message message is ignored
      */
     public function paintPass($message)
     {
@@ -145,7 +145,7 @@ class SimpleScorer
     /**
      * Increments the fail count.
      *
-     * @param string $message Message is ignored.
+     * @param string $message message is ignored
      */
     public function paintFail($message)
     {
@@ -155,7 +155,7 @@ class SimpleScorer
     /**
      * Deals with PHP 4 throwing an error.
      *
-     * @param string $message Text of error formatted by the test case.
+     * @param string $message text of error formatted by the test case
      */
     public function paintError($message)
     {
@@ -165,7 +165,7 @@ class SimpleScorer
     /**
      * Deals with PHP 5 throwing an exception.
      *
-     * @param Exception $exception The actual exception thrown.
+     * @param Exception $exception the actual exception thrown
      */
     public function paintException($exception)
     {
@@ -175,7 +175,7 @@ class SimpleScorer
     /**
      * Prints the message for skipping tests.
      *
-     * @param string $message Text of skip condition.
+     * @param string $message text of skip condition
      */
     public function paintSkip($message)
     {
@@ -184,7 +184,7 @@ class SimpleScorer
     /**
      * Accessor for the number of passes so far.
      *
-     * @return int Number of passes.
+     * @return int number of passes
      */
     public function getPassCount()
     {
@@ -194,7 +194,7 @@ class SimpleScorer
     /**
      * Accessor for the number of fails so far.
      *
-     * @return int Number of fails.
+     * @return int number of fails
      */
     public function getFailCount()
     {
@@ -204,7 +204,7 @@ class SimpleScorer
     /**
      * Accessor for the number of untrapped errors so far.
      *
-     * @return int Number of exceptions.
+     * @return int number of exceptions
      */
     public function getExceptionCount()
     {
@@ -214,7 +214,7 @@ class SimpleScorer
     /**
      * Paints a simple supplementary message.
      *
-     * @param string $message Text to display.
+     * @param string $message text to display
      */
     public function paintMessage($message)
     {
@@ -223,7 +223,7 @@ class SimpleScorer
     /**
      * Paints a formatted ASCII message such as a privateiable dump.
      *
-     * @param string $message Text to display.
+     * @param string $message text to display
      */
     public function paintFormattedMessage($message)
     {
@@ -232,8 +232,8 @@ class SimpleScorer
     /**
      * By default just ignores user generated events.
      *
-     * @param string $type    Event type as text.
-     * @param mixed  $payload Message or object.
+     * @param string $type    event type as text
+     * @param mixed  $payload message or object
      */
     public function paintSignal($type, $payload)
     {
@@ -265,7 +265,7 @@ class SimpleReporter extends SimpleScorer
     /**
      * Gets the formatter for small generic data items.
      *
-     * @return SimpleDumper Formatter.
+     * @return SimpleDumper formatter
      */
     public function getDumper()
     {
@@ -277,8 +277,8 @@ class SimpleReporter extends SimpleScorer
      * Will also paint the page header and footer if this is the first test.
      * Will stash the size if the first start.
      *
-     * @param string $test_name Name of test that is starting.
-     * @param int    $size      Number of test cases starting.
+     * @param string $test_name name of test that is starting
+     * @param int    $size      number of test cases starting
      */
     public function paintGroupStart($test_name, $size)
     {
@@ -295,7 +295,7 @@ class SimpleReporter extends SimpleScorer
      * Paints the end of a group test.
      * Will paint the page footer if the stack of tests has unwound.
      *
-     * @param string $test_name Name of test that is ending.
+     * @param string $test_name name of test that is ending
      */
     public function paintGroupEnd($test_name)
     {
@@ -310,7 +310,7 @@ class SimpleReporter extends SimpleScorer
      * Will also paint the page header and footer if this is the first test.
      * Will stash the size if the first start.
      *
-     * @param string $test_name Name of test that is starting.
+     * @param string $test_name name of test that is starting
      */
     public function paintCaseStart($test_name)
     {
@@ -327,7 +327,7 @@ class SimpleReporter extends SimpleScorer
      * Paints the end of a test case.
      * Will paint the page footer if the stack of tests has unwound.
      *
-     * @param string $test_name Name of test that is ending.
+     * @param string $test_name name of test that is ending
      */
     public function paintCaseEnd($test_name)
     {
@@ -341,7 +341,7 @@ class SimpleReporter extends SimpleScorer
     /**
      * Paints the start of a test method.
      *
-     * @param string $test_name Name of test that is starting.
+     * @param string $test_name name of test that is starting
      */
     public function paintMethodStart($test_name)
     {
@@ -352,7 +352,7 @@ class SimpleReporter extends SimpleScorer
      * Paints the end of a test method.
      * Will paint the page footer if the stack of tests has unwound.
      *
-     * @param string $test_name Name of test that is ending.
+     * @param string $test_name name of test that is ending
      */
     public function paintMethodEnd($test_name)
     {
@@ -362,7 +362,7 @@ class SimpleReporter extends SimpleScorer
     /**
      * Paints the test document header.
      *
-     * @param string $test_name First test top level to start.
+     * @param string $test_name first test top level to start
      *
      * @abstract
      */
@@ -373,7 +373,7 @@ class SimpleReporter extends SimpleScorer
     /**
      * Paints the test document footer.
      *
-     * @param string $test_name The top level test.
+     * @param string $test_name the top level test
      *
      * @abstract
      */
@@ -385,7 +385,7 @@ class SimpleReporter extends SimpleScorer
      * Accessor for internal test stack.
      * For subclasses that need to see the whole test history for display purposes.
      *
-     * @return array List of methods in nesting order.
+     * @return array list of methods in nesting order
      */
     public function getTestList()
     {
@@ -396,7 +396,7 @@ class SimpleReporter extends SimpleScorer
      * Accessor for total test size in number of test cases.
      * Null until the first test is started.
      *
-     * @return int Total number of cases at start.
+     * @return int total number of cases at start
      */
     public function getTestCaseCount()
     {
@@ -406,7 +406,7 @@ class SimpleReporter extends SimpleScorer
     /**
      * Accessor for the number of test cases completed so far.
      *
-     * @return int Number of ended cases.
+     * @return int number of ended cases
      */
     public function getTestCaseProgress()
     {
@@ -416,7 +416,7 @@ class SimpleReporter extends SimpleScorer
     /**
      * Static check for running in the comand line.
      *
-     * @return bool True if CLI.
+     * @return bool true if CLI
      */
     public static function inCli()
     {
@@ -434,7 +434,7 @@ class SimpleReporterDecorator
     /**
      * Mediates between the reporter and the test case.
      *
-     * @param SimpleScorer $reporter Reporter to receive events.
+     * @param SimpleScorer $reporter reporter to receive events
      */
     public function __construct($reporter)
     {
@@ -445,7 +445,7 @@ class SimpleReporterDecorator
      * Signals that the next evaluation will be a dry run.
      * That is, the structure events will be recorded, but no tests will be run.
      *
-     * @param bool $is_dry Dry run if true.
+     * @param bool $is_dry dry run if true
      */
     public function makeDry($is_dry = true)
     {
@@ -457,7 +457,7 @@ class SimpleReporterDecorator
      * Will be false if there have been any failures or exceptions.
      * Used for command line tools.
      *
-     * @return bool True if no failures.
+     * @return bool true if no failures
      */
     public function getStatus()
     {
@@ -467,7 +467,7 @@ class SimpleReporterDecorator
     /**
      * The nesting of the test cases so far. Not all reporters have this facility.
      *
-     * @return array Test list if accessible.
+     * @return array test list if accessible
      */
     public function getTestList()
     {
@@ -481,10 +481,10 @@ class SimpleReporterDecorator
     /**
      * The reporter has a veto on what should be run.
      *
-     * @param string $test_case_name Name of test case.
-     * @param string $method         Name of test method.
+     * @param string $test_case_name name of test case
+     * @param string $method         name of test method
      *
-     * @return bool True if test should be run.
+     * @return bool true if test should be run
      */
     public function shouldInvoke($test_case_name, $method)
     {
@@ -494,9 +494,9 @@ class SimpleReporterDecorator
     /**
      * Can wrap the invoker in preparation for running a test.
      *
-     * @param SimpleInvoker $invoker Individual test runner.
+     * @param SimpleInvoker $invoker individual test runner
      *
-     * @return SimpleInvoker Wrapped test runner.
+     * @return SimpleInvoker wrapped test runner
      */
     public function createInvoker($invoker)
     {
@@ -506,7 +506,7 @@ class SimpleReporterDecorator
     /**
      * Gets the formatter for privateiables and other small generic data items.
      *
-     * @return SimpleDumper Formatter.
+     * @return SimpleDumper formatter
      */
     public function getDumper()
     {
@@ -516,8 +516,8 @@ class SimpleReporterDecorator
     /**
      * Paints the start of a group test.
      *
-     * @param string $test_name Name of test or other label.
-     * @param int    $size      Number of test cases starting.
+     * @param string $test_name name of test or other label
+     * @param int    $size      number of test cases starting
      */
     public function paintGroupStart($test_name, $size)
     {
@@ -527,7 +527,7 @@ class SimpleReporterDecorator
     /**
      * Paints the end of a group test.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintGroupEnd($test_name)
     {
@@ -537,7 +537,7 @@ class SimpleReporterDecorator
     /**
      * Paints the start of a test case.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintCaseStart($test_name)
     {
@@ -547,7 +547,7 @@ class SimpleReporterDecorator
     /**
      * Paints the end of a test case.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintCaseEnd($test_name)
     {
@@ -557,7 +557,7 @@ class SimpleReporterDecorator
     /**
      * Paints the start of a test method.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintMethodStart($test_name)
     {
@@ -567,7 +567,7 @@ class SimpleReporterDecorator
     /**
      * Paints the end of a test method.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintMethodEnd($test_name)
     {
@@ -577,7 +577,7 @@ class SimpleReporterDecorator
     /**
      * Chains to the wrapped reporter.
      *
-     * @param string $message Message is ignored.
+     * @param string $message message is ignored
      */
     public function paintPass($message)
     {
@@ -587,7 +587,7 @@ class SimpleReporterDecorator
     /**
      * Chains to the wrapped reporter.
      *
-     * @param string $message Message is ignored.
+     * @param string $message message is ignored
      */
     public function paintFail($message)
     {
@@ -597,7 +597,7 @@ class SimpleReporterDecorator
     /**
      * Chains to the wrapped reporter.
      *
-     * @param string $message Text of error formatted by the test case.
+     * @param string $message text of error formatted by the test case
      */
     public function paintError($message)
     {
@@ -607,7 +607,7 @@ class SimpleReporterDecorator
     /**
      * Chains to the wrapped reporter.
      *
-     * @param Exception $exception Exception to show.
+     * @param Exception $exception exception to show
      */
     public function paintException($exception)
     {
@@ -617,7 +617,7 @@ class SimpleReporterDecorator
     /**
      * Prints the message for skipping tests.
      *
-     * @param string $message Text of skip condition.
+     * @param string $message text of skip condition
      */
     public function paintSkip($message)
     {
@@ -627,7 +627,7 @@ class SimpleReporterDecorator
     /**
      * Chains to the wrapped reporter.
      *
-     * @param string $message Text to display.
+     * @param string $message text to display
      */
     public function paintMessage($message)
     {
@@ -637,7 +637,7 @@ class SimpleReporterDecorator
     /**
      * Chains to the wrapped reporter.
      *
-     * @param string $message Text to display.
+     * @param string $message text to display
      */
     public function paintFormattedMessage($message)
     {
@@ -647,10 +647,10 @@ class SimpleReporterDecorator
     /**
      * Chains to the wrapped reporter.
      *
-     * @param string $type    Event type as text.
-     * @param mixed  $payload Message or object.
+     * @param string $type    event type as text
+     * @param mixed  $payload message or object
      *
-     * @return bool Should return false, if this type of signal should fail the test suite.
+     * @return bool should return false, if this type of signal should fail the test suite
      */
     public function paintSignal($type, $payload)
     {
@@ -668,7 +668,7 @@ class MultipleReporter
     /**
      * Adds a reporter to the subscriber list.
      *
-     * @param SimpleScorer $reporter Reporter to receive events.
+     * @param SimpleScorer $reporter reporter to receive events
      */
     public function attachReporter($reporter)
     {
@@ -679,7 +679,7 @@ class MultipleReporter
      * Signals that the next evaluation will be a dry run.
      * That is, the structure events will be recorded, but no tests will be run.
      *
-     * @param bool $is_dry Dry run if true.
+     * @param bool $is_dry dry run if true
      */
     public function makeDry($is_dry = true)
     {
@@ -694,7 +694,7 @@ class MultipleReporter
      * Will be false if there have been any failures or exceptions.
      * If any reporter reports a failure, the whole suite fails.
      *
-     * @return bool True if no failures.
+     * @return bool true if no failures
      */
     public function getStatus()
     {
@@ -712,8 +712,8 @@ class MultipleReporter
      * The reporter has a veto on what should be run.
      * It requires all reporters to want to run the method.
      *
-     * @param string $test_case_name name of test case.
-     * @param string $method         Name of test method.
+     * @param string $test_case_name name of test case
+     * @param string $method         name of test method
      */
     public function shouldInvoke($test_case_name, $method)
     {
@@ -730,9 +730,9 @@ class MultipleReporter
     /**
      * Every reporter gets a chance to wrap the invoker.
      *
-     * @param SimpleInvoker $invoker Individual test runner.
+     * @param SimpleInvoker $invoker individual test runner
      *
-     * @return SimpleInvoker Wrapped test runner.
+     * @return SimpleInvoker wrapped test runner
      */
     public function createInvoker($invoker)
     {
@@ -747,8 +747,8 @@ class MultipleReporter
     /**
      * Paints the start of a group test.
      *
-     * @param string $test_name Name of test or other label.
-     * @param int    $size      Number of test cases starting.
+     * @param string $test_name name of test or other label
+     * @param int    $size      number of test cases starting
      */
     public function paintGroupStart($test_name, $size)
     {
@@ -761,7 +761,7 @@ class MultipleReporter
     /**
      * Paints the end of a group test.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintGroupEnd($test_name)
     {
@@ -774,7 +774,7 @@ class MultipleReporter
     /**
      * Paints the start of a test case.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintCaseStart($test_name)
     {
@@ -787,7 +787,7 @@ class MultipleReporter
     /**
      * Paints the end of a test case.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintCaseEnd($test_name)
     {
@@ -800,7 +800,7 @@ class MultipleReporter
     /**
      * Paints the start of a test method.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintMethodStart($test_name)
     {
@@ -813,7 +813,7 @@ class MultipleReporter
     /**
      * Paints the end of a test method.
      *
-     * @param string $test_name Name of test or other label.
+     * @param string $test_name name of test or other label
      */
     public function paintMethodEnd($test_name)
     {
@@ -826,7 +826,7 @@ class MultipleReporter
     /**
      * Chains to the wrapped reporter.
      *
-     * @param string $message Message is ignored.
+     * @param string $message message is ignored
      */
     public function paintPass($message)
     {
@@ -839,7 +839,7 @@ class MultipleReporter
     /**
      * Chains to the wrapped reporter.
      *
-     * @param string $message Message is ignored.
+     * @param string $message message is ignored
      */
     public function paintFail($message)
     {
@@ -852,7 +852,7 @@ class MultipleReporter
     /**
      * Chains to the wrapped reporter.
      *
-     * @param string $message Text of error formatted by the test case.
+     * @param string $message text of error formatted by the test case
      */
     public function paintError($message)
     {
@@ -865,7 +865,7 @@ class MultipleReporter
     /**
      * Chains to the wrapped reporter.
      *
-     * @param Exception $exception Exception to display.
+     * @param Exception $exception exception to display
      */
     public function paintException($exception)
     {
@@ -878,7 +878,7 @@ class MultipleReporter
     /**
      * Prints the message for skipping tests.
      *
-     * @param string $message Text of skip condition.
+     * @param string $message text of skip condition
      */
     public function paintSkip($message)
     {
@@ -891,7 +891,7 @@ class MultipleReporter
     /**
      * Chains to the wrapped reporter.
      *
-     * @param string $message Text to display.
+     * @param string $message text to display
      */
     public function paintMessage($message)
     {
@@ -904,7 +904,7 @@ class MultipleReporter
     /**
      * Chains to the wrapped reporter.
      *
-     * @param string $message Text to display.
+     * @param string $message text to display
      */
     public function paintFormattedMessage($message)
     {
@@ -917,11 +917,11 @@ class MultipleReporter
     /**
      * Chains to the wrapped reporter.
      *
-     * @param string $type    Event type as text.
-     * @param mixed  $payload Message or object.
+     * @param string $type    event type as text
+     * @param mixed  $payload message or object
      *
-     * @return bool Should return false if this type of signal should fail the test
-     *              suite.
+     * @return bool should return false if this type of signal should fail the test
+     *              suite
      */
     public function paintSignal($type, $payload)
     {
@@ -934,7 +934,7 @@ class MultipleReporter
     /**
      * Gets the formatter for privateiables and other small generic data items.
      *
-     * @return SimpleDumper Formatter.
+     * @return SimpleDumper formatter
      */
     public function getDumper()
     {

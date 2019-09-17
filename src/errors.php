@@ -12,7 +12,7 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator
     /**
      * Stores the invoker to wrap.
      *
-     * @param SimpleInvoker $invoker Test method runner.
+     * @param SimpleInvoker $invoker test method runner
      */
     public function __construct($invoker)
     {
@@ -23,7 +23,7 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator
      * Invokes a test method and dispatches any untrapped errors.
      * Called back from the visiting runner.
      *
-     * @param string $method Test method to call.
+     * @param string $method test method to call
      */
     public function invoke($method)
     {
@@ -37,7 +37,7 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator
     /**
      * Wires up the error queue for a single test.
      *
-     * @return SimpleErrorQueue Queue connected to the test.
+     * @return SimpleErrorQueue queue connected to the test
      */
     protected function createErrorQueue()
     {
@@ -79,7 +79,7 @@ class SimpleErrorQueue
     /**
      * Sets the currently running test case.
      *
-     * @param SimpleTestCase $test Test case to send messages to.
+     * @param SimpleTestCase $test test case to send messages to
      */
     public function setTestCase($test)
     {
@@ -91,8 +91,8 @@ class SimpleErrorQueue
      * If this is not fulfilled at the end of the test, a failure will occour.
      * If the error does happen, then this will cancel it out and send a pass message.
      *
-     * @param SimpleExpectation $expected Expected error match.
-     * @param string            $message  Message to display.
+     * @param SimpleExpectation $expected expected error match
+     * @param string            $message  message to display
      */
     public function expectError($expected, $message)
     {
@@ -102,10 +102,10 @@ class SimpleErrorQueue
     /**
      * Adds an error to the front of the queue.
      *
-     * @param int    $severity PHP error code.
-     * @param string $content  Text of error.
-     * @param string $filename File error occoured in.
-     * @param int    $line     Line number of error.
+     * @param int    $severity PHP error code
+     * @param string $content  text of error
+     * @param string $filename file error occoured in
+     * @param int    $line     line number of error
      */
     public function add($severity, $content, $filename, $line)
     {
@@ -131,10 +131,10 @@ class SimpleErrorQueue
     /**
      * Tests the error against the most recent expected error.
      *
-     * @param int    $severity PHP error code.
-     * @param string $content  Text of error.
-     * @param string $filename File error occoured in.
-     * @param int    $line     Line number of error.
+     * @param int    $severity PHP error code
+     * @param string $content  text of error
+     * @param string $filename file error occoured in
+     * @param int    $line     line number of error
      */
     protected function testLatestError($severity, $content, $filename, $line)
     {
@@ -164,7 +164,7 @@ class SimpleErrorQueue
      *  - the line number and
      *  - a list of PHP super global arrays.
      *
-     * @return mixed False if none, or a list of error information.
+     * @return mixed false if none, or a list of error information
      */
     public function extract()
     {
@@ -178,7 +178,7 @@ class SimpleErrorQueue
     /**
      * Pulls the earliest expectation from the queue.
      *
-     * @return SimpleExpectation False if none.
+     * @return SimpleExpectation false if none
      */
     protected function extractExpectation()
     {
@@ -192,9 +192,9 @@ class SimpleErrorQueue
     /**
      * Converts an error code into it's string representation.
      *
-     * @param $severity  PHP integer error code.
+     * @param $severity  PHP integer error code
      *
-     * @return string version of error code.
+     * @return string version of error code
      */
     public static function getSeverityAsString($severity)
     {
@@ -226,11 +226,11 @@ class SimpleErrorQueue
  * Simulates the existing behaviour with respect to logging errors,
  * but this feature may be removed in future.
  *
- * @param $severity    PHP error code.
- * @param $message     Text of error.
- * @param $file        File error occoured in.
- * @param $line        Line number of error.
- * @param $context     Error Context.
+ * @param $severity    PHP error code
+ * @param $message     text of error
+ * @param $file        file error occoured in
+ * @param $line        line number of error
+ * @param $context     error Context
  */
 function SimpleTestErrorHandler($severity, $message, $file = null, $line = null, $context = null)
 {

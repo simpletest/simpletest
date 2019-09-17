@@ -16,9 +16,9 @@ class SimpleCollector
     /**
      * Strips off any kind of slash at the end so as to normalise the path.
      *
-     * @param string $path Path to normalise.
+     * @param string $path path to normalise
      *
-     * @return string Path without trailing slash.
+     * @return string path without trailing slash
      */
     protected function removeTrailingSlash($path)
     {
@@ -34,8 +34,8 @@ class SimpleCollector
     /**
      * Scans the directory and adds what it can.
      *
-     * @param object $test Group test with {@link GroupTest::addFile)} method.
-     * @param string $path Directory to scan.
+     * @param object $test group test with {@link GroupTest::addFile)} method
+     * @param string $path directory to scan
      *
      * @see _attemptToAdd()
      */
@@ -61,7 +61,7 @@ class SimpleCollector
      * such as pattern matching, recursive matching, etc.  For an example, see
      * {@link SimplePatternCollector::_handle()}.
      *
-     * @param object $test Group test with {@link GroupTest::addFile)} method.
+     * @param object $test group test with {@link GroupTest::addFile)} method
      *
      * @see collect()
      */
@@ -77,9 +77,9 @@ class SimpleCollector
      * Tests for hidden files so as to skip them.
      * Currently only tests for Unix hidden files.
      *
-     * @param string $filename Plain filename.
+     * @param string $filename plain filename
      *
-     * @return bool True if hidden file.
+     * @return bool true if hidden file
      */
     protected function isHidden($filename)
     {
@@ -112,7 +112,7 @@ class SimplePatternCollector extends SimpleCollector
      *
      * @see SimpleCollector::_handle()
      *
-     * @param object $test Group test with {@link GroupTest::addFile)} method.
+     * @param object $test group test with {@link GroupTest::addFile)} method
      */
     protected function handle(&$test, $filename)
     {

@@ -21,9 +21,9 @@ class SimpleShell
      * Actually runs the command.
      * Does not trap the error stream output as this need PHP 4.3+.
      *
-     * @param string $command The actual command line to run.
+     * @param string $command the actual command line to run
      *
-     * @return int Exit code.
+     * @return int exit code
      */
     public function execute($command)
     {
@@ -36,7 +36,7 @@ class SimpleShell
     /**
      * Accessor for the last output.
      *
-     * @return string Output as text.
+     * @return string output as text
      */
     public function getOutput()
     {
@@ -46,7 +46,7 @@ class SimpleShell
     /**
      * Accessor for the last output.
      *
-     * @return array Output as array of lines.
+     * @return array output as array of lines
      */
     public function getOutputAsList()
     {
@@ -81,9 +81,9 @@ class ShellTestCase extends SimpleTestCase
     /**
      * Executes a command and buffers the results.
      *
-     * @param string $command Command to run.
+     * @param string $command command to run
      *
-     * @return bool True if zero exit code.
+     * @return bool true if zero exit code
      */
     public function execute($command)
     {
@@ -105,7 +105,7 @@ class ShellTestCase extends SimpleTestCase
     /**
      * Accessor for the last output.
      *
-     * @return string Output as text.
+     * @return string output as text
      */
     public function getOutput()
     {
@@ -117,7 +117,7 @@ class ShellTestCase extends SimpleTestCase
     /**
      * Accessor for the last output.
      *
-     * @return array Output as array of lines.
+     * @return array output as array of lines
      */
     public function getOutputAsList()
     {
@@ -129,8 +129,8 @@ class ShellTestCase extends SimpleTestCase
     /**
      * Called from within the test methods to register passes and failures.
      *
-     * @param bool   $result  Pass on true.
-     * @param string $message Message to display describing the test state.
+     * @param bool   $result  pass on true
+     * @param string $message message to display describing the test state
      *
      * @return bool True on pass
      */
@@ -144,8 +144,8 @@ class ShellTestCase extends SimpleTestCase
      * False is the PHP definition of false, so that null,
      * empty strings, zero and an empty array all count as false.
      *
-     * @param bool   $result  Pass on false.
-     * @param string $message Message to display.
+     * @param bool   $result  pass on false
+     * @param string $message message to display
      *
      * @return bool True on pass
      */
@@ -158,11 +158,11 @@ class ShellTestCase extends SimpleTestCase
      * Will trigger a pass if the two parameters have the same value only.
      * This is for testing hand extracted text, etc.
      *
-     * @param mixed  $first   Value to compare.
-     * @param mixed  $second  Value to compare.
-     * @param string $message Message to display.
+     * @param mixed  $first   value to compare
+     * @param mixed  $second  value to compare
+     * @param string $message message to display
      *
-     * @return bool True on pass, Otherwise a fail.
+     * @return bool true on pass, Otherwise a fail
      */
     public function assertEqual($first, $second, $message = '%s')
     {
@@ -176,11 +176,11 @@ class ShellTestCase extends SimpleTestCase
      * Will trigger a pass if the two parameters have a different value.
      * This is for testing hand extracted text, etc.
      *
-     * @param mixed  $first   Value to compare.
-     * @param mixed  $second  Value to compare.
-     * @param string $message Message to display.
+     * @param mixed  $first   value to compare
+     * @param mixed  $second  value to compare
+     * @param string $message message to display
      *
-     * @return bool True on pass, Otherwise a fail.
+     * @return bool true on pass, Otherwise a fail
      */
     public function assertNotEqual($first, $second, $message = '%s')
     {
@@ -193,10 +193,10 @@ class ShellTestCase extends SimpleTestCase
     /**
      * Tests the last status code from the shell.
      *
-     * @param int    $status  Expected status of last command.
-     * @param string $message Message to display.
+     * @param int    $status  expected status of last command
+     * @param string $message message to display
      *
-     * @return bool True if pass.
+     * @return bool true if pass
      */
     public function assertExitCode($status, $message = '%s')
     {
@@ -213,10 +213,10 @@ class ShellTestCase extends SimpleTestCase
     /**
      * Attempt to exactly match the combined STDERR and STDOUT output.
      *
-     * @param string $expected Expected output.
-     * @param string $message  Message to display.
+     * @param string $expected expected output
+     * @param string $message  message to display
      *
-     * @return bool True if pass.
+     * @return bool true if pass
      */
     public function assertOutput($expected, $message = '%s')
     {
@@ -231,10 +231,10 @@ class ShellTestCase extends SimpleTestCase
     /**
      * Scans the output for a Perl regex. If found anywhere it passes, else it fails.
      *
-     * @param string $pattern Regex to search for.
-     * @param string $message Message to display.
+     * @param string $pattern regex to search for
+     * @param string $message message to display
      *
-     * @return bool True if pass.
+     * @return bool true if pass
      */
     public function assertOutputPattern($pattern, $message = '%s')
     {
@@ -250,10 +250,10 @@ class ShellTestCase extends SimpleTestCase
      * If a Perl regex is found anywhere in the current output
      * then a failure is generated, else a pass.
      *
-     * @param string $pattern Regex to search for.
-     * @param $message           Message to display.
+     * @param string $pattern regex to search for
+     * @param $message           message to display
      *
-     * @return bool True if pass.
+     * @return bool true if pass
      */
     public function assertNoOutputPattern($pattern, $message = '%s')
     {
@@ -268,10 +268,10 @@ class ShellTestCase extends SimpleTestCase
     /**
      * File existence check.
      *
-     * @param string $path    Full filename and path.
-     * @param string $message Message to display.
+     * @param string $path    full filename and path
+     * @param string $message message to display
      *
-     * @return bool True if pass.
+     * @return bool true if pass
      */
     public function assertFileExists($path, $message = '%s')
     {
@@ -285,10 +285,10 @@ class ShellTestCase extends SimpleTestCase
     /**
      * File non-existence check.
      *
-     * @param string $path    Full filename and path.
-     * @param string $message Message to display.
+     * @param string $path    full filename and path
+     * @param string $message message to display
      *
-     * @return bool True if pass.
+     * @return bool true if pass
      */
     public function assertFileNotExists($path, $message = '%s')
     {
@@ -302,11 +302,11 @@ class ShellTestCase extends SimpleTestCase
     /**
      * Scans a file for a Perl regex. If found anywhere it passes, else it fails.
      *
-     * @param string $pattern Regex to search for.
-     * @param string $path    Full filename and path.
-     * @param string $message Message to display.
+     * @param string $pattern regex to search for
+     * @param string $path    full filename and path
+     * @param string $message message to display
      *
-     * @return bool True if pass.
+     * @return bool true if pass
      */
     public function assertFilePattern($pattern, $path, $message = '%s')
     {
@@ -320,11 +320,11 @@ class ShellTestCase extends SimpleTestCase
      * If a Perl regex is found anywhere in the named file
      * then a failure is generated, else a pass.
      *
-     * @param string $pattern Regex to search for.
-     * @param string $path    Full filename and path.
-     * @param string $message Message to display.
+     * @param string $pattern regex to search for
+     * @param string $path    full filename and path
+     * @param string $message message to display
      *
-     * @return bool True if pass.
+     * @return bool true if pass
      */
     public function assertNoFilePattern($pattern, $path, $message = '%s')
     {
@@ -337,7 +337,7 @@ class ShellTestCase extends SimpleTestCase
     /**
      * Accessor for current shell. Used for testing the the tester itself.
      *
-     * @return SimpleShell Current shell.
+     * @return SimpleShell current shell
      */
     protected function getShell()
     {
@@ -347,7 +347,7 @@ class ShellTestCase extends SimpleTestCase
     /**
      * Factory for the shell to run the command on.
      *
-     * @return SimpleShell New shell object.
+     * @return SimpleShell new shell object
      */
     protected function createShell()
     {

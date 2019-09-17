@@ -85,7 +85,7 @@ function run_local_tests()
 /**
  * Checks the current test context to see if a test has ever been run.
  *
- * @return bool True if tests have run.
+ * @return bool true if tests have run
  */
 function tests_have_run()
 {
@@ -100,7 +100,7 @@ function tests_have_run()
 /**
  * The first autorun file.
  *
- * @return string Filename of first autorun script.
+ * @return string filename of first autorun script
  */
 function initial_file()
 {
@@ -121,7 +121,7 @@ function initial_file()
  * Every class since the first autorun include.
  * This is safe enough if require_once() is always used.
  *
- * @return array Class names.
+ * @return array class names
  */
 function capture_new_classes()
 {

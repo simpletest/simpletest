@@ -15,8 +15,8 @@ class DetachedTestCase
     /**
      * Sets the location of the remote test.
      *
-     * @param string $command     Test script.
-     * @param string $dry_command Script for dry run.
+     * @param string $command     test script
+     * @param string $dry_command script for dry run
      */
     public function __construct($command, $dry_command = false)
     {
@@ -28,7 +28,7 @@ class DetachedTestCase
     /**
      * Accessor for the test name for subclasses.
      *
-     * @return string Name of the test.
+     * @return string name of the test
      */
     public function getLabel()
     {
@@ -40,7 +40,7 @@ class DetachedTestCase
      * Currently reads the data as a single chunk.
      * I'll fix this once I have added iteration to the browser.
      *
-     * @param SimpleReporter $reporter Target of test results.
+     * @param SimpleReporter $reporter target of test results
      *
      * @returns boolean                   True if no failures.
      */
@@ -61,7 +61,7 @@ class DetachedTestCase
     /**
      * Accessor for the number of subtests.
      *
-     * @return int Number of test cases.
+     * @return int number of test cases
      */
     public function getSize()
     {
@@ -84,9 +84,9 @@ class DetachedTestCase
     /**
      * Creates the XML parser.
      *
-     * @param SimpleReporter $reporter Target of test results.
+     * @param SimpleReporter $reporter target of test results
      *
-     * @return SimpleTestXmlListener XML reader.
+     * @return simpleTestXmlListener XML reader
      */
     protected function createParser(&$reporter)
     {

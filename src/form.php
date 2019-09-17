@@ -23,8 +23,8 @@ class SimpleForm
     /**
      * Starts with no held controls/widgets.
      *
-     * @param SimpleTag  $tag  Form tag to read.
-     * @param SimplePage $page Holding page.
+     * @param SimpleTag  $tag  form tag to read
+     * @param SimplePage $page holding page
      */
     public function __construct($tag, $page)
     {
@@ -43,9 +43,9 @@ class SimpleForm
     /**
      * Creates the request packet to be sent by the form.
      *
-     * @param SimpleTag $tag Form tag to read.
+     * @param SimpleTag $tag form tag to read
      *
-     * @return string Packet class.
+     * @return string packet class
      */
     protected function setEncodingClass($tag)
     {
@@ -63,7 +63,7 @@ class SimpleForm
     /**
      * Sets the frame target within a frameset.
      *
-     * @param string $frame Name of frame.
+     * @param string $frame name of frame
      */
     public function setDefaultTarget($frame)
     {
@@ -73,7 +73,7 @@ class SimpleForm
     /**
      * Accessor for method of form submission.
      *
-     * @return string Either get or post.
+     * @return string either get or post
      */
     public function getMethod()
     {
@@ -83,10 +83,10 @@ class SimpleForm
     /**
      * Combined action attribute with current location to get an absolute form target.
      *
-     * @param string $action Action attribute from form tag.
-     * @param $page   Page location.
+     * @param string $action action attribute from form tag
+     * @param $page   page location
      *
-     * @return SimpleUrl Absolute form target.
+     * @return SimpleUrl absolute form target
      */
     protected function createAction($action, $page)
     {
@@ -100,7 +100,7 @@ class SimpleForm
     /**
      * Absolute URL of the target.
      *
-     * @return SimpleUrl URL target.
+     * @return simpleUrl URL target
      */
     public function getAction()
     {
@@ -118,7 +118,7 @@ class SimpleForm
     /**
      * Creates the encoding for the current values in the form.
      *
-     * @return SimpleFormEncoding Request to submit.
+     * @return SimpleFormEncoding request to submit
      */
     protected function encode()
     {
@@ -134,7 +134,7 @@ class SimpleForm
     /**
      * ID field of form for unique identification.
      *
-     * @return string Unique tag ID.
+     * @return string unique tag ID
      */
     public function getId()
     {
@@ -144,7 +144,7 @@ class SimpleForm
     /**
      * Adds a tag contents to the form.
      *
-     * @param SimpleWidget $tag Input tag to add.
+     * @param SimpleWidget $tag input tag to add
      */
     public function addWidget($tag)
     {
@@ -160,7 +160,7 @@ class SimpleForm
     /**
      * Sets the widget into the form, grouping radio buttons if any.
      *
-     * @param SimpleWidget $tag Incoming form control.
+     * @param SimpleWidget $tag incoming form control
      */
     protected function setWidget($tag)
     {
@@ -176,7 +176,7 @@ class SimpleForm
     /**
      * Adds a radio button, building a group if necessary.
      *
-     * @param SimpleRadioButtonTag $tag Incoming form control.
+     * @param SimpleRadioButtonTag $tag incoming form control
      */
     protected function addRadioButton($tag)
     {
@@ -190,7 +190,7 @@ class SimpleForm
     /**
      * Adds a checkbox, making it a group on a repeated name.
      *
-     * @param SimpleCheckboxTag $tag Incoming form control.
+     * @param SimpleCheckboxTag $tag incoming form control
      */
     protected function addCheckbox($tag)
     {
@@ -211,9 +211,9 @@ class SimpleForm
     /**
      * Extracts current value from form.
      *
-     * @param $selector Criteria to apply.
+     * @param $selector criteria to apply
      *
-     * @return string/array Value(s) as string or null if not set.
+     * @return string/array Value(s) as string or null if not set
      */
     public function getValue(SelectorInterface $selector)
     {
@@ -234,8 +234,8 @@ class SimpleForm
     /**
      * Sets a widget value within the form.
      *
-     * @param $selector   Criteria to apply.
-     * @param string $value Value to input into the widget.
+     * @param $selector   criteria to apply
+     * @param string $value value to input into the widget
      *
      * @return bool True if value is legal, false otherwise.
      *              If the field is not present, nothing will be set.
@@ -261,7 +261,7 @@ class SimpleForm
     /**
      * Used by the page object to set widgets labels to external label tags.
      *
-     * @param $selector   Criteria to apply.
+     * @param $selector   criteria to apply
      */
     public function attachLabelBySelector(SelectorInterface $selector, $label)
     {
@@ -279,9 +279,9 @@ class SimpleForm
     /**
      * Test to see if a form has a submit button.
      *
-     * @param $selector Criteria to apply.
+     * @param $selector criteria to apply
      *
-     * @return bool True if present.
+     * @return bool true if present
      */
     public function hasSubmit(SelectorInterface $selector)
     {
@@ -297,9 +297,9 @@ class SimpleForm
     /**
      * Test to see if a form has an image control.
      *
-     * @param $selector Criteria to apply.
+     * @param $selector criteria to apply
      *
-     * @return bool True if present.
+     * @return bool true if present
      */
     public function hasImage(SelectorInterface $selector)
     {
@@ -315,11 +315,11 @@ class SimpleForm
     /**
      * Gets the submit values for a selected button.
      *
-     * @param $selector Criteria to apply.
-     * @param hash $additional Additional data for the form.
+     * @param $selector criteria to apply
+     * @param hash $additional additional data for the form
      *
-     * @return SimpleEncoding Submitted values or false if there is no such button in the
-     *                        form.
+     * @return SimpleEncoding submitted values or false if there is no such button in the
+     *                        form
      */
     public function submitButton(SelectorInterface $selector, $additional = false)
     {
@@ -342,12 +342,12 @@ class SimpleForm
     /**
      * Gets the submit values for an image.
      *
-     * @param $selector Criteria to apply.
-     * @param int  $x          X-coordinate of click.
-     * @param int  $y          Y-coordinate of click.
-     * @param hash $additional Additional data for the form.
+     * @param $selector criteria to apply
+     * @param int  $x          X-coordinate of click
+     * @param int  $y          Y-coordinate of click
+     * @param hash $additional additional data for the form
      *
-     * @return SimpleEncoding Submitted values or false if there is no such button in the form.
+     * @return SimpleEncoding submitted values or false if there is no such button in the form
      */
     public function submitImage(SelectorInterface $selector, $x, $y, $additional = false)
     {
@@ -371,7 +371,7 @@ class SimpleForm
      * Simply submits the form without the submit button value.
      * Used when there is only one button or it is unimportant.
      *
-     * @return hash Submitted values.
+     * @return hash submitted values
      */
     public function submit($additional = false)
     {

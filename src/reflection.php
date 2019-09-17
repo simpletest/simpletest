@@ -10,7 +10,7 @@ class SimpleReflection
     /**
      * Stashes the class/interface.
      *
-     * @param string $interface Class or interface to inspect.
+     * @param string $interface class or interface to inspect
      */
     public function __construct($interface)
     {
@@ -20,7 +20,7 @@ class SimpleReflection
     /**
      * Checks that a class has been declared.
      *
-     * @return bool True if defined.
+     * @return bool true if defined
      */
     public function classExists()
     {
@@ -32,7 +32,7 @@ class SimpleReflection
     /**
      * Needed to kill the autoload feature in PHP5 for classes created dynamically.
      *
-     * @return bool True if defined.
+     * @return bool true if defined
      */
     public function classExistsWithoutAutoload()
     {
@@ -42,7 +42,7 @@ class SimpleReflection
     /**
      * Checks that a class or interface has been declared.
      *
-     * @return bool True if defined.
+     * @return bool true if defined
      */
     public function classOrInterfaceExists()
     {
@@ -52,7 +52,7 @@ class SimpleReflection
     /**
      * Needed to kill the autoload feature in PHP5 for classes created dynamically.
      *
-     * @return bool True if defined.
+     * @return bool true if defined
      */
     public function classOrInterfaceExistsWithoutAutoload()
     {
@@ -62,10 +62,10 @@ class SimpleReflection
     /**
      * Needed to select the autoload feature in PHP5 for classes created dynamically.
      *
-     * @param string $interface Class or interface name.
+     * @param string $interface class or interface name
      * @param bool   $autoload  True, to trigger autoloading. Default: true.
      *
-     * @return bool True if interface defined.
+     * @return bool true if interface defined
      */
     protected function classOrInterfaceExistsWithAutoload($interface, $autoload = true)
     {
@@ -121,7 +121,7 @@ class SimpleReflection
     /**
      * Checks to see if the method signature has to be tightly specified.
      *
-     * @param string $method Method name.
+     * @param string $method method name
      *
      * @returns boolean             True if enforced.
      */
@@ -192,9 +192,9 @@ class SimpleReflection
     /**
      * Whittles a list of interfaces down to only the necessary top level parents.
      *
-     * @param array $interfaces Reflection API interfaces to reduce.
+     * @param array $interfaces reflection API interfaces to reduce
      *
-     * @return array List of parent interface names.
+     * @return array list of parent interface names
      */
     protected function onlyParents($interfaces)
     {
@@ -220,7 +220,7 @@ class SimpleReflection
     /**
      * Checks whether a method is abstract or not.
      *
-     * @param string $name Method name.
+     * @param string $name method name
      *
      * @return bool true if method is abstract, else false
      */
@@ -237,7 +237,7 @@ class SimpleReflection
     /**
      * Checks whether a method is the constructor.
      *
-     * @param string $name Method name.
+     * @param string $name method name
      *
      * @return bool true if method is the constructor
      */
@@ -249,7 +249,7 @@ class SimpleReflection
     /**
      * Checks whether a method is abstract in all parents or not.
      *
-     * @param string $name Method name.
+     * @param string $name method name
      *
      * @return bool true if method is abstract in parent, else false
      */
@@ -290,9 +290,9 @@ class SimpleReflection
     /**
      * Returns the source code matching the declaration of a method.
      *
-     * @param string $name Method name.
+     * @param string $name method name
      *
-     * @return string Method signature up to last bracket.
+     * @return string method signature up to last bracket
      */
     public function getSignature($name)
     {
@@ -322,7 +322,7 @@ class SimpleReflection
      *
      * @param ReflectionMethod $method Method object from reflection API
      *
-     * @return string The Parameters string for a method.
+     * @return string the Parameters string for a method
      */
     protected function getParameterSignatures($method)
     {
@@ -359,7 +359,7 @@ class SimpleReflection
      *
      * @param ReflectionMethod $method Method object from reflection API
      *
-     * @return string The Parameters string for a method.
+     * @return string the Parameters string for a method
      */
     protected function getReturnType($method)
     {

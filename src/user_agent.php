@@ -54,7 +54,7 @@ class SimpleUserAgent
     /**
      * Adds a header to every fetch.
      *
-     * @param string $header Header line to add to every request until cleared.
+     * @param string $header header line to add to every request until cleared
      */
     public function addHeader($header)
     {
@@ -65,7 +65,7 @@ class SimpleUserAgent
      * Sets the referrer to send with the request, as long as
      * it is not set explicitely via {@link addHeader()}.
      *
-     * @param string $referer Referer URI to add to every request until cleared.
+     * @param string $referer referer URI to add to every request until cleared
      */
     public function setReferer($referer)
     {
@@ -75,7 +75,7 @@ class SimpleUserAgent
     /**
      * Ages the cookies by the specified time.
      *
-     * @param int $interval Amount in seconds.
+     * @param int $interval amount in seconds
      */
     public function ageCookies($interval)
     {
@@ -85,11 +85,11 @@ class SimpleUserAgent
     /**
      * Sets an additional cookie. If a cookie has the same name and path it is replaced.
      *
-     * @param string $name   Cookie key.
-     * @param string $value  Value of cookie.
-     * @param string $host   Host upon which the cookie is valid.
-     * @param string $path   Cookie path if not host wide.
-     * @param string $expiry Expiry date.
+     * @param string $name   cookie key
+     * @param string $value  value of cookie
+     * @param string $host   host upon which the cookie is valid
+     * @param string $path   cookie path if not host wide
+     * @param string $expiry expiry date
      */
     public function setCookie($name, $value, $host = false, $path = '/', $expiry = false)
     {
@@ -139,11 +139,11 @@ class SimpleUserAgent
     /**
      * Reads the most specific cookie value from the browser cookies.
      *
-     * @param string $host Host to search.
-     * @param string $path Applicable path.
-     * @param string $name Name of cookie to read.
+     * @param string $host host to search
+     * @param string $path applicable path
+     * @param string $name name of cookie to read
      *
-     * @return string False if not present, else the value as a string.
+     * @return string false if not present, else the value as a string
      */
     public function getCookieValue($host, $path, $name)
     {
@@ -153,10 +153,10 @@ class SimpleUserAgent
     /**
      * Reads the current cookies within the base URL.
      *
-     * @param string    $name Key of cookie to find.
-     * @param SimpleUrl $base Base URL to search from.
+     * @param string    $name key of cookie to find
+     * @param SimpleUrl $base base URL to search from
      *
-     * @return string/boolean Null if there is no base URL, false if the cookie is not set.
+     * @return string/boolean Null if there is no base URL, false if the cookie is not set
      */
     public function getBaseCookieValue($name, $base)
     {
@@ -186,7 +186,7 @@ class SimpleUserAgent
     /**
      * Sets the socket timeout for opening a connection.
      *
-     * @param int $timeout Maximum time in seconds.
+     * @param int $timeout maximum time in seconds
      */
     public function setConnectionTimeout($timeout)
     {
@@ -196,7 +196,7 @@ class SimpleUserAgent
     /**
      * Sets the maximum number of redirects before a page will be loaded anyway.
      *
-     * @param int $max Most hops allowed.
+     * @param int $max most hops allowed
      */
     public function setMaximumRedirects($max)
     {
@@ -207,9 +207,9 @@ class SimpleUserAgent
      * Sets proxy to use on all requests for when testing from behind a firewall.
      * Set URL to false to disable.
      *
-     * @param string $proxy    Proxy URL.
-     * @param string $username Proxy username for authentication.
-     * @param string $password Proxy password for authentication.
+     * @param string $proxy    proxy URL
+     * @param string $username proxy username for authentication
+     * @param string $password proxy password for authentication
      */
     public function useProxy($proxy, $username, $password)
     {
@@ -229,9 +229,9 @@ class SimpleUserAgent
     /**
      * Test to see if the redirect limit is passed.
      *
-     * @param int $redirects Count so far.
+     * @param int $redirects count so far
      *
-     * @return bool True if over.
+     * @return bool true if over
      */
     protected function isTooManyRedirects($redirects)
     {
@@ -241,10 +241,10 @@ class SimpleUserAgent
     /**
      * Sets the identity for the current realm.
      *
-     * @param string $host     Host to which realm applies.
-     * @param string $realm    Full name of realm.
-     * @param string $username Username for realm.
-     * @param string $password Password for realm.
+     * @param string $host     host to which realm applies
+     * @param string $realm    full name of realm
+     * @param string $username username for realm
+     * @param string $password password for realm
      */
     public function setIdentity($host, $realm, $username, $password)
     {
@@ -255,10 +255,10 @@ class SimpleUserAgent
      * Fetches a URL as a response object. Will keep trying if redirected.
      * It will also collect authentication realm information.
      *
-     * @param string/SimpleUrl $url      Target to fetch.
-     * @param SimpleEncoding   $encoding Additional parameters for request.
+     * @param string/SimpleUrl $url      Target to fetch
+     * @param SimpleEncoding   $encoding additional parameters for request
      *
-     * @return SimpleHttpResponse Hopefully the target page.
+     * @return SimpleHttpResponse hopefully the target page
      */
     public function fetchResponse($url, $encoding)
     {
@@ -282,10 +282,10 @@ class SimpleUserAgent
     /**
      * Fetches the page until no longer redirected or until the redirect limit runs out.
      *
-     * @param SimpleUrl          $url      Target to fetch.
-     * @param SimpelFormEncoding $encoding Additional parameters for request.
+     * @param SimpleUrl          $url      target to fetch
+     * @param SimpelFormEncoding $encoding additional parameters for request
      *
-     * @return SimpleHttpResponse Hopefully the target page.
+     * @return SimpleHttpResponse hopefully the target page
      */
     protected function fetchWhileRedirected($url, $encoding)
     {
@@ -313,10 +313,10 @@ class SimpleUserAgent
     /**
      * Actually make the web request.
      *
-     * @param SimpleUrl          $url      Target to fetch.
-     * @param SimpleFormEncoding $encoding Additional parameters for request.
+     * @param SimpleUrl          $url      target to fetch
+     * @param SimpleFormEncoding $encoding additional parameters for request
      *
-     * @return SimpleHttpResponse Headers and hopefully content.
+     * @return SimpleHttpResponse headers and hopefully content
      */
     protected function fetch($url, $encoding)
     {
@@ -328,10 +328,10 @@ class SimpleUserAgent
     /**
      * Creates a full page request.
      *
-     * @param SimpleUrl          $url      Target to fetch as url object.
-     * @param SimpleFormEncoding $encoding POST/GET parameters.
+     * @param SimpleUrl          $url      target to fetch as url object
+     * @param simpleFormEncoding $encoding POST/GET parameters
      *
-     * @return SimpleHttpRequest New request.
+     * @return SimpleHttpRequest new request
      */
     protected function createRequest($url, $encoding)
     {
@@ -365,9 +365,9 @@ class SimpleUserAgent
     /**
      * Builds the appropriate HTTP request object.
      *
-     * @param SimpleUrl $url Target to fetch as url object.
+     * @param SimpleUrl $url target to fetch as url object
      *
-     * @return SimpleHttpRequest New request object.
+     * @return SimpleHttpRequest new request object
      */
     protected function createHttpRequest($url, $encoding)
     {
@@ -377,9 +377,9 @@ class SimpleUserAgent
     /**
      * Sets up either a direct route or via a proxy.
      *
-     * @param SimpleUrl $url Target to fetch as url object.
+     * @param SimpleUrl $url target to fetch as url object
      *
-     * @return SimpleRoute Route to take to fetch URL.
+     * @return SimpleRoute route to take to fetch URL
      */
     protected function createRoute($url)
     {
@@ -397,7 +397,7 @@ class SimpleUserAgent
     /**
      * Adds additional manual headers.
      *
-     * @param SimpleHttpRequest $request Outgoing request.
+     * @param SimpleHttpRequest $request outgoing request
      */
     protected function addAdditionalHeaders(&$request)
     {

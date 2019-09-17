@@ -7,10 +7,10 @@ class SimpleTestCompatibility
     /**
      * Recursive type test.
      *
-     * @param mixed $first  Test subject.
-     * @param mixed $second Comparison object.
+     * @param mixed $first  test subject
+     * @param mixed $second comparison object
      *
-     * @return bool True if same type.
+     * @return bool true if same type
      */
     public static function isIdentical($first, $second)
     {
@@ -39,10 +39,10 @@ class SimpleTestCompatibility
     /**
      * Recursive type test for each element of an array.
      *
-     * @param mixed $first  Test subject.
-     * @param mixed $second Comparison object.
+     * @param mixed $first  test subject
+     * @param mixed $second comparison object
      *
-     * @return bool True if identical.
+     * @return bool true if identical
      */
     protected static function isArrayOfIdenticalTypes($first, $second)
     {
@@ -64,10 +64,10 @@ class SimpleTestCompatibility
     /**
      * Test for two variables being aliases.
      *
-     * @param mixed $first  Test subject.
-     * @param mixed $second Comparison object.
+     * @param mixed $first  test subject
+     * @param mixed $second comparison object
      *
-     * @return bool True if same.
+     * @return bool true if same
      */
     public static function isReference(&$first, &$second)
     {

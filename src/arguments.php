@@ -17,7 +17,7 @@ class SimpleArguments
      * -f           (true)
      * --flag       (true)
      *
-     * @param array $arguments Normally the PHP $argv.
+     * @param array $arguments normally the PHP $argv
      */
     public function __construct($arguments)
     {
@@ -33,9 +33,9 @@ class SimpleArguments
      * the same key, the key will give an array value in the order they were
      * added.
      *
-     * @param string $key The variable to assign to.
+     * @param string $key the variable to assign to
      * @param string value   The value that would norally be colected on the
-     * command line.
+     * command line
      */
     public function assign($key, $value)
     {
@@ -79,7 +79,7 @@ class SimpleArguments
      * @param array $arguments Remaining arguments to be parsed. This variable
      *                         is modified if there is a value to be extracted.
      *
-     * @return string/boolean The next value unless it's a flag.
+     * @return string/boolean The next value unless it's a flag
      */
     private function nextNonFlagElseTrue(&$arguments)
     {
@@ -102,9 +102,9 @@ class SimpleArguments
     /**
      * It's a flag if it starts with "-" or "--".
      *
-     * @param string $argument Value to be tested.
+     * @param string $argument value to be tested
      *
-     * @return bool True if it's a flag.
+     * @return bool true if it's a flag
      */
     public function isFlag($argument)
     {
@@ -114,13 +114,13 @@ class SimpleArguments
     /**
      * The arguments are available as individual member variables on the object.
      *
-     * @param string $key Argument name.
+     * @param string $key argument name
      *
      * @return string/array/boolean Either false for no value,
      *                              the value as a string or
      *                              a list of multiple values if
      *                              the flag had been specified more
-     *                              than once.
+     *                              than once
      */
     public function __get($key)
     {
@@ -134,7 +134,7 @@ class SimpleArguments
     /**
      * The entire argument set as a hash.
      *
-     * @return hash Each argument and it's value(s).
+     * @return hash each argument and it's value(s)
      */
     public function all()
     {
@@ -154,7 +154,7 @@ class SimpleHelp
     /**
      * Sets up the top level explanation for the program.
      *
-     * @param string $overview Summary of program.
+     * @param string $overview summary of program
      */
     public function __construct($overview = '')
     {
@@ -168,7 +168,7 @@ class SimpleHelp
      * @param string/array $flags       Flag and alternates. Don't
      *                                  worry about leading dashes
      *                                  as these are inserted automatically.
-     * @param string       $explanation What that flag group does.
+     * @param string       $explanation what that flag group does
      */
     public function explainFlag($flags, $explanation)
     {
@@ -197,7 +197,7 @@ class SimpleHelp
     /**
      * Works out the longest flag for formatting purposes.
      *
-     * @param array $flag_sets The internal flag set list.
+     * @param array $flag_sets the internal flag set list
      */
     private function longestFlag($flag_sets)
     {
@@ -230,7 +230,7 @@ class SimpleHelp
     /**
      * Generates the flag name including leading dashes.
      *
-     * @param string $flag Just the name.
+     * @param string $flag just the name
      * @returns                     Fag with apropriate dashes.
      */
     private function renderFlag($flag)
@@ -242,7 +242,7 @@ class SimpleHelp
      * Converts multiple new lines into a single new line.
      * Just there to trap accidental duplicate new lines.
      *
-     * @param string $text Text to clean up.
+     * @param string $text text to clean up
      * @returns string          Text with no blank lines.
      */
     private function noDuplicateNewLines($text)
