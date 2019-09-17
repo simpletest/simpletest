@@ -365,7 +365,6 @@ class SimpleUserAgent
      * Builds the appropriate HTTP request object.
      *
      * @param SimpleUrl $url                  Target to fetch as url object.
-     * @param SimpleFormEncoding $parameters  POST/GET parameters.
      *
      * @return SimpleHttpRequest              New request object.
      */

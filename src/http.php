@@ -135,7 +135,6 @@ class SimpleProxyRoute extends SimpleRoute
      * Creates the first line which is the actual request.
      *
      * @param string $method   HTTP request method, usually GET.
-     * @param SimpleUrl $url   URL as object.
      *
      * @return string          Request line content.
      */
@@ -152,7 +151,6 @@ class SimpleProxyRoute extends SimpleRoute
     /**
      * Creates the host part of the request.
      *
-     * @param SimpleUrl $url   URL as object.
      *
      * @return string          Host line content.
      */
@@ -243,7 +241,6 @@ class SimpleHttpRequest
      * Sends the headers.
      *
      * @param SimpleSocket $socket           Open socket.
-     * @param string $method                 HTTP request method, usually GET.
      * @param SimpleFormEncoding $encoding   Content to send with request.
      */
     protected function dispatchRequest($socket, $encoding)

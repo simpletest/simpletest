@@ -296,7 +296,6 @@ class SimpleReporter extends SimpleScorer
      * Will paint the page footer if the stack of tests has unwound.
      *
      * @param string $test_name   Name of test that is ending.
-     * @param int $progress   Number of test cases ending.
      */
     public function paintGroupEnd($test_name)
     {

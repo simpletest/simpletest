@@ -129,7 +129,6 @@ class XmlReporter extends SimpleReporter
      * Paints the end of a test method.
      *
      * @param string $test_name   Name of test that is ending.
-     * @param int $progress   Number of test cases ending.
      */
     public function paintMethodEnd($test_name)
     {

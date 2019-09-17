@@ -79,7 +79,6 @@ class ParallelRegex
      * Compounds the patterns into a single regular expression separated with the "or" operator.
      * Caches the regex. Will automatically escape (, ) and / tokens.
      *
-     * @param array $patterns    List of patterns in order.
      */
     protected function getCompoundedRegex()
     {

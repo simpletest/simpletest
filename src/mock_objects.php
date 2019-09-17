@@ -22,8 +22,6 @@ class ParametersExpectation extends SimpleExpectation
     /**
      * Sets the expected parameter list.
      *
-     * @param array $parameters  Array of parameters including those that are wildcarded. If the
-     * value is not an array then it is considered to match any.
      * @param string $message    Customised message on failure.
      */
     public function __construct($expected = false, $message = '%s')
@@ -74,7 +72,6 @@ class ParametersExpectation extends SimpleExpectation
     /**
      * Returns a human readable test message.
      *
-     * @param array $comparison   Incoming parameter list.
      *
      * @return string             Description of success or failure.
      */

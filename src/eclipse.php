@@ -134,7 +134,6 @@ class EclipseReporter extends SimpleScorer
     /**
      * Stash the first exception. Clicking the test item goes to first message.
      *
-     * @param string $message    Test message, but we only wnat the first.
      */
     public function paintException($exception)
     {
@@ -172,7 +171,6 @@ class EclipseReporter extends SimpleScorer
     /**
      * Paints nothing at the start of a test method, but stash the method name for later.
      *
-     * @param string $test_name   Name of test that is starting.
      */
     public function paintMethodStart($method)
     {
@@ -185,7 +183,6 @@ class EclipseReporter extends SimpleScorer
     /**
      * Only send one message if the test passes, after that suppress the message.
      *
-     * @param string $test_name   Name of test that is ending.
      */
     public function paintMethodEnd($method)
     {
@@ -201,7 +198,6 @@ class EclipseReporter extends SimpleScorer
     /**
      * Stashes the test case name for the later failure message.
      *
-     * @param string $test_name     Name of test or other label.
      */
     public function paintCaseStart($case)
     {
@@ -211,7 +207,6 @@ class EclipseReporter extends SimpleScorer
     /**
      * Drops the name.
      *
-     * @param string $test_name     Name of test or other label.
      */
     public function paintCaseEnd($case)
     {

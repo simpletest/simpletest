@@ -116,7 +116,6 @@ class ExceptionExpectation extends SimpleExpectation
     /**
      * Summary of an Exception object.
      *
-     * @param Exception $compare     Exception to describe.
      *
      * @return string                Text description.
      */

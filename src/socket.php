@@ -158,7 +158,6 @@ class SimpleFileSocket extends SimpleStickyError
      *
      * @param SimpleUrl $file       SimpleUrl file target.
      * @param string $error         Recipient of error message.
-     * @param int $timeout      Maximum time to wait for connection.
      */
     protected function openFile($file, &$error)
     {

@@ -962,8 +962,6 @@ class MemberExpectation extends IdenticalExpectation
     /**
      * Sets the value to compare against.
      *
-     * @param string $method     Method to check.
-     * @param string $message    Customised message on failure.
      */
     public function __construct($name, $expected)
     {
@@ -990,7 +988,6 @@ class MemberExpectation extends IdenticalExpectation
     /**
      * Returns a human readable test message.
      *
-     * @param mixed $compare      Comparison value.
      *
      * @return string             Description of success or failure.
      */

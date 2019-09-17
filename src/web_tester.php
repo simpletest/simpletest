@@ -1171,7 +1171,6 @@ class WebTestCase extends SimpleTestCase
     /**
      * Sets all form fields with that label, or name if there is no label attached.
      *
-     * @param string $name    Name of field in forms.
      * @param string $value   New value of field.
      *
      * @return bool        True if field exists, otherwise false.
@@ -1212,7 +1211,6 @@ class WebTestCase extends SimpleTestCase
      * A missing form will always fail.
      * If no value is given then only the existence of the field is checked.
      *
-     * @param string $name       Name of field in forms.
      * @param mixed $expected    Expected string/array value or false for unset fields.
      * @param string $message    Message to display. Default can be embedded with %s.
      *
