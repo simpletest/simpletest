@@ -49,7 +49,7 @@
         }
     ],
     "require": {
-        "php": "^5.4 || ^7.0"
+        "php": "^7.1"
     },
     "autoload": {
         "classmap": ["."]
