@@ -44,9 +44,11 @@ class SimpleTidyPageBuilder
     public function parse($response)
     {
         $this->page = new SimplePage($response);
-        $tidied = tidy_parse_string($input = $this->insertGuards($response->getContent()),
-                                    ['output-xml' => false, 'wrap' => '0', 'indent' => 'no'],
-                                    'latin1');
+        $tidied = tidy_parse_string(
+            $input = $this->insertGuards($response->getContent()),
+            ['output-xml' => false, 'wrap' => '0', 'indent' => 'no'],
+            'latin1'
+        );
         $this->walkTree($tidied->html());
         $this->attachLabels($this->widgets_by_id, $this->labels);
         $this->page->setForms($this->forms);
@@ -91,9 +93,11 @@ class SimpleTidyPageBuilder
      */
     private function insertEmptyTagGuards($html)
     {
-        return preg_replace('#<(option|textarea)([^>]*)>(\s*)</(option|textarea)>#is',
-                            '<\1\2>___EMPTY___\3</\4>',
-                            $html);
+        return preg_replace(
+            '#<(option|textarea)([^>]*)>(\s*)</(option|textarea)>#is',
+            '<\1\2>___EMPTY___\3</\4>',
+            $html
+        );
     }
 
     /**
@@ -121,9 +125,11 @@ class SimpleTidyPageBuilder
      */
     private function insertTextareaSimpleWhitespaceGuards($html)
     {
-        return preg_replace_callback('#<textarea([^>]*)>(.*?)</textarea>#is',
-                                     [$this, 'insertWhitespaceGuards'],
-                                     $html);
+        return preg_replace_callback(
+            '#<textarea([^>]*)>(.*?)</textarea>#is',
+            [$this, 'insertWhitespaceGuards'],
+            $html
+        );
     }
 
     /**
@@ -136,9 +142,11 @@ class SimpleTidyPageBuilder
     private function insertWhitespaceGuards($matches)
     {
         return '<textarea'.$matches[1].'>'.
-                str_replace(["\n", "\r", "\t", ' '],
-                            ['___NEWLINE___', '___CR___', '___TAB___', '___SPACE___'],
-                            $matches[2]).
+                str_replace(
+                    ["\n", "\r", "\t", ' '],
+                    ['___NEWLINE___', '___CR___', '___TAB___', '___SPACE___'],
+                    $matches[2]
+                ).
                 '</textarea>';
     }
 
@@ -151,9 +159,11 @@ class SimpleTidyPageBuilder
      */
     private function stripTextareaWhitespaceGuards($html)
     {
-        return str_replace(['___NEWLINE___', '___CR___', '___TAB___', '___SPACE___'],
-                           ["\n", "\r", "\t", ' '],
-                           $html);
+        return str_replace(
+            ['___NEWLINE___', '___CR___', '___TAB___', '___SPACE___'],
+            ["\n", "\r", "\t", ' '],
+            $html
+        );
     }
 
     /**

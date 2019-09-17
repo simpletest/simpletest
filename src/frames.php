@@ -80,8 +80,9 @@ class SimpleFrameset
         }
 
         return array_merge(
-                [$this->getPublicNameFromIndex($this->focus)],
-                $this->frames[$this->focus]->getFrameFocus());
+            [$this->getPublicNameFromIndex($this->focus)],
+            $this->frames[$this->focus]->getFrameFocus()
+        );
     }
 
     /**
@@ -444,16 +445,19 @@ class SimpleFrameset
     {
         if (is_integer($this->focus)) {
             return $this->tagUrlsWithFrame(
-                    $this->frames[$this->focus]->getUrlsByLabel($label),
-                    $this->focus);
+                $this->frames[$this->focus]->getUrlsByLabel($label),
+                $this->focus
+            );
         }
         $urls = [];
         foreach ($this->frames as $index => $frame) {
             $urls = array_merge(
-                    $urls,
-                    $this->tagUrlsWithFrame(
-                                $frame->getUrlsByLabel($label),
-                                $index));
+                $urls,
+                $this->tagUrlsWithFrame(
+                        $frame->getUrlsByLabel($label),
+                        $index
+                    )
+            );
         }
 
         return $urls;
@@ -555,17 +559,19 @@ class SimpleFrameset
     {
         if (is_integer($this->focus)) {
             return $this->findFormInFrame(
-                    $this->frames[$this->focus],
-                    $this->focus,
-                    $method,
-                    $attribute);
+                $this->frames[$this->focus],
+                $this->focus,
+                $method,
+                $attribute
+            );
         }
         for ($i = 0; $i < count($this->frames); ++$i) {
             $form = $this->findFormInFrame(
-                    $this->frames[$i],
-                    $i,
-                    $method,
-                    $attribute);
+                $this->frames[$i],
+                $i,
+                $method,
+                $attribute
+            );
             if ($form) {
                 return $form;
             }

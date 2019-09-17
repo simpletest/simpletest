@@ -71,10 +71,11 @@ class SimpleRoute
     {
         $default_port = ('https' === $this->url->getScheme()) ? 443 : 80;
         $socket = $this->createSocket(
-                $this->url->getScheme() ? $this->url->getScheme() : 'http',
-                $this->url->getHost(),
-                $this->url->getPort() ? $this->url->getPort() : $default_port,
-                $timeout);
+            $this->url->getScheme() ? $this->url->getScheme() : 'http',
+            $this->url->getHost(),
+            $this->url->getPort() ? $this->url->getPort() : $default_port,
+            $timeout
+        );
         if (!$socket->isError()) {
             $socket->write($this->getRequestLine($method)."\r\n");
             $socket->write($this->getHostLine()."\r\n");
@@ -172,10 +173,11 @@ class SimpleProxyRoute extends SimpleRoute
     public function createConnection($method, $timeout)
     {
         $socket = $this->createSocket(
-                $this->proxy->getScheme() ? $this->proxy->getScheme() : 'http',
-                $this->proxy->getHost(),
-                $this->proxy->getPort() ? $this->proxy->getPort() : 8080,
-                $timeout);
+            $this->proxy->getScheme() ? $this->proxy->getScheme() : 'http',
+            $this->proxy->getHost(),
+            $this->proxy->getPort() ? $this->proxy->getPort() : 8080,
+            $timeout
+        );
         if ($socket->isError()) {
             return $socket;
         }
@@ -296,9 +298,10 @@ class SimpleHttpRequest
     protected function createResponse($socket)
     {
         $response = new SimpleHttpResponse(
-                $socket,
-                $this->route->getUrl(),
-                $this->encoding);
+            $socket,
+            $this->route->getUrl(),
+            $this->encoding
+        );
         $socket->close();
 
         return $response;
@@ -442,11 +445,12 @@ class SimpleHttpHeaders
     {
         foreach ($this->cookies as $cookie) {
             $jar->setCookie(
-                    $cookie->getName(),
-                    $cookie->getValue(),
-                    $url->getHost(),
-                    $cookie->getPath(),
-                    $cookie->getExpiry());
+                $cookie->getName(),
+                $cookie->getValue(),
+                $url->getHost(),
+                $cookie->getPath(),
+                $cookie->getExpiry()
+            );
         }
     }
 
@@ -495,10 +499,11 @@ class SimpleHttpHeaders
         }
 
         return new SimpleCookie(
-                $cookie[1],
-                trim($cookie[2]),
-                $cookie['path'] ?? '',
-                $cookie['expires'] ?? false);
+            $cookie[1],
+            trim($cookie[2]),
+            $cookie['path'] ?? '',
+            $cookie['expires'] ?? false
+        );
     }
 }
 

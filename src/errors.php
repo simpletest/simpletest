@@ -147,7 +147,10 @@ class SimpleErrorQueue
 
             $errorMessage = sprintf(
                 'PHP error [%s] severity [%s] in [%s] line [%s]',
-                $content, $this->getSeverityAsString($severity), $filename, $line
+                $content,
+                $this->getSeverityAsString($severity),
+                $filename,
+                $line
             );
 
             $this->test->assert($expected, $content, sprintf($message, '%s'.$errorMessage));

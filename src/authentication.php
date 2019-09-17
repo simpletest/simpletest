@@ -231,7 +231,8 @@ class SimpleAuthenticator
     {
         if ($username && $password) {
             $request->addHeaderLine(
-                'Authorization: Basic '.base64_encode("$username:$password"));
+                'Authorization: Basic '.base64_encode("$username:$password")
+            );
         }
     }
 }

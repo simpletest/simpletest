@@ -143,7 +143,7 @@ class EclipseReporter extends SimpleScorer
                     $exception->getFile().' line '.$exception->getLine().']';
             $this->message = self::escapeVal($message);
             $this->listener->write(
-                    '{status:"error",message:"'.$this->message.'",group:"'.$this->group.
+                '{status:"error",message:"'.$this->message.'",group:"'.$this->group.
                     '",case:"'.$this->case.'",method:"'.$this->method.'"}'
             );
         }
@@ -186,9 +186,10 @@ class EclipseReporter extends SimpleScorer
         if ($this->fail || $this->error || !$this->pass) {
         } else {
             $this->listener->write(
-                        '{status:"pass",message:"'.$this->message.'",group:"'.
+                '{status:"pass",message:"'.$this->message.'",group:"'.
                         $this->group.'",case:"'.$this->case.'",method:"'.
-                        $this->method.'"}');
+                        $this->method.'"}'
+            );
         }
     }
 

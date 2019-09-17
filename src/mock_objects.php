@@ -79,8 +79,8 @@ class ParametersExpectation extends SimpleExpectation
         if ($this->test($parameters)) {
             return sprintf(
                 'Expectation of %s arguments of [%s] is correct',
-                    count($this->expected),
-                    $this->renderArguments($this->expected)
+                count($this->expected),
+                $this->renderArguments($this->expected)
             );
         } else {
             return $this->describeDifference($this->expected, $parameters);
@@ -100,10 +100,10 @@ class ParametersExpectation extends SimpleExpectation
         if (count($expected) != count($parameters)) {
             return sprintf(
                 'Expected %s arguments of [%s], but got %s arguments of [%s]',
-                    count($expected),
-                    $this->renderArguments($expected),
-                    count($parameters),
-                    $this->renderArguments($parameters)
+                count($expected),
+                $this->renderArguments($expected),
+                count($parameters),
+                $this->renderArguments($parameters)
             );
         }
         $messages = [];
@@ -199,7 +199,10 @@ class CallCountExpectation extends SimpleExpectation
     public function testMessage($compare)
     {
         return sprintf(
-            'Expected call count for [%s] was [%s] got [%s]', $this->method, $this->count, $compare
+            'Expected call count for [%s] was [%s] got [%s]',
+            $this->method,
+            $this->count,
+            $compare
         );
     }
 }
@@ -248,7 +251,10 @@ class MinimumCallCountExpectation extends SimpleExpectation
     public function testMessage($compare)
     {
         return sprintf(
-            'Minimum call count for [%s] was [%s] got [%s]', $this->method, $this->count, $compare
+            'Minimum call count for [%s] was [%s] got [%s]',
+            $this->method,
+            $this->count,
+            $compare
         );
     }
 }
@@ -297,7 +303,10 @@ class MaximumCallCountExpectation extends SimpleExpectation
     public function testMessage($compare)
     {
         return sprintf(
-            'Maximum call count for [%s] was [%s] got [%s]', $this->method, $this->count, $compare
+            'Maximum call count for [%s] was [%s] got [%s]',
+            $this->method,
+            $this->count,
+            $compare
         );
     }
 }
@@ -1048,8 +1057,11 @@ class SimpleMock
     public function throwOn($method, $exception = false, $args = false)
     {
         $this->dieOnNoMethod($method, 'throw on');
-        $this->actions->register($method, $args,
-                new SimpleThrower($exception ? $exception : new Exception()));
+        $this->actions->register(
+            $method,
+            $args,
+            new SimpleThrower($exception ? $exception : new Exception())
+        );
     }
 
     /**
@@ -1068,8 +1080,12 @@ class SimpleMock
     public function throwAt($timing, $method, $exception = false, $args = false)
     {
         $this->dieOnNoMethod($method, 'throw at');
-        $this->actions->registerAt($timing, $method, $args,
-                new SimpleThrower($exception ? $exception : new Exception()));
+        $this->actions->registerAt(
+            $timing,
+            $method,
+            $args,
+            new SimpleThrower($exception ? $exception : new Exception())
+        );
     }
 
     /**
@@ -1192,14 +1208,16 @@ class SimpleMock
         }
         if (isset($this->expected_args_at[$timing][$method])) {
             $test->assert(
-                    $this->expected_args_at[$timing][$method],
-                    $args,
-                    "Mock method [$method] at [$timing] -> %s");
+                $this->expected_args_at[$timing][$method],
+                $args,
+                "Mock method [$method] at [$timing] -> %s"
+            );
         } elseif (isset($this->expected_args[$method])) {
             $test->assert(
-                    $this->expected_args[$method],
-                    $args,
-                    "Mock method [$method] -> %s");
+                $this->expected_args[$method],
+                $args,
+                "Mock method [$method] -> %s"
+            );
         }
     }
 

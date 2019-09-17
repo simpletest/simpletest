@@ -84,9 +84,10 @@ class ParallelRegex
         if (null === $this->regex) {
             for ($i = 0, $count = count($this->patterns); $i < $count; ++$i) {
                 $this->patterns[$i] = '('.str_replace(
-                        ['/', '(', ')'],
-                        ['\/', '\(', '\)'],
-                        $this->patterns[$i]).')';
+                    ['/', '(', ')'],
+                    ['\/', '\(', '\)'],
+                    $this->patterns[$i]
+                ).')';
             }
             $this->regex = '/'.implode('|', $this->patterns).'/'.$this->getPerlMatchingFlags();
         }
@@ -587,8 +588,9 @@ class SimpleHtmlSaxParser
         }
         if (LEXER_EXIT == $event) {
             $success = $this->listener->startElement(
-                    $this->tag,
-                    $this->attributes);
+                $this->tag,
+                $this->attributes
+            );
             $this->tag = '';
             $this->attributes = [];
 
@@ -1068,7 +1070,9 @@ class SimplePhpPageBuilder
         foreach ($this->left_over_labels as $label) {
             for ($i = 0, $count = count($this->complete_forms); $i < $count; ++$i) {
                 $this->complete_forms[$i]->attachLabelBySelector(
-                        new SelectById($label->getFor()), $label->getText());
+                    new SelectById($label->getFor()),
+                    $label->getText()
+                );
             }
         }
         $this->page->setForms($this->complete_forms);

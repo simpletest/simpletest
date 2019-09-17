@@ -63,8 +63,9 @@ class UnitTestCase extends SimpleTestCase
     {
         $dumper = new SimpleDumper();
         $message = sprintf(
-                $message,
-                '['.$dumper->describeValue($value).'] should be null');
+            $message,
+            '['.$dumper->describeValue($value).'] should be null'
+        );
 
         return $this->assertTrue(!isset($value), $message);
     }
@@ -81,8 +82,9 @@ class UnitTestCase extends SimpleTestCase
     {
         $dumper = new SimpleDumper();
         $message = sprintf(
-                $message,
-                '['.$dumper->describeValue($value).'] should not be null');
+            $message,
+            '['.$dumper->describeValue($value).'] should not be null'
+        );
 
         return $this->assertTrue(isset($value), $message);
     }
@@ -244,10 +246,11 @@ class UnitTestCase extends SimpleTestCase
     {
         $dumper = new SimpleDumper();
         $message = sprintf(
-                $message,
-                '['.$dumper->describeValue($first).
+            $message,
+            '['.$dumper->describeValue($first).
                         '] and ['.$dumper->describeValue($second).
-                        '] should reference the same object');
+                        '] should reference the same object'
+        );
 
         return $this->assertTrue($first === $second, $message);
     }
@@ -265,7 +268,8 @@ class UnitTestCase extends SimpleTestCase
     public function assertClone($first, $second, $message = '%s')
     {
         $dumper = new SimpleDumper();
-        $message = sprintf($message,
+        $message = sprintf(
+            $message,
             '['.$dumper->describeValue($first).'] and ['.
             $dumper->describeValue($second).'] should not be the same object'
         );
@@ -289,14 +293,16 @@ class UnitTestCase extends SimpleTestCase
     {
         $dumper = new SimpleDumper();
         $message = sprintf(
-                $message,
-                '['.$dumper->describeValue($first).
+            $message,
+            '['.$dumper->describeValue($first).
                         '] and ['.$dumper->describeValue($second).
-                        '] should not be the same object');
+                        '] should not be the same object'
+        );
 
         return $this->assertFalse(
-                SimpleTestCompatibility::isReference($first, $second),
-                $message);
+            SimpleTestCompatibility::isReference($first, $second),
+            $message
+        );
     }
 
     /**

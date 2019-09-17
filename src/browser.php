@@ -67,8 +67,9 @@ class SimpleBrowserHistory
     {
         $this->dropFuture();
         array_push(
-                $this->sequence,
-                ['url' => $url, 'parameters' => $parameters]);
+            $this->sequence,
+            ['url' => $url, 'parameters' => $parameters]
+        );
         ++$this->position;
     }
 
@@ -165,9 +166,10 @@ class SimpleBrowser
     {
         $this->user_agent = $this->createUserAgent();
         $this->user_agent->useProxy(
-                SimpleTest::getDefaultProxy(),
-                SimpleTest::getDefaultProxyUsername(),
-                SimpleTest::getDefaultProxyPassword());
+            SimpleTest::getDefaultProxy(),
+            SimpleTest::getDefaultProxyUsername(),
+            SimpleTest::getDefaultProxyPassword()
+        );
         $this->page = new SimplePage();
         $this->history = $this->createHistory();
         $this->ignore_frames = false;
@@ -369,8 +371,9 @@ class SimpleBrowser
     {
         $this->page = $this->fetch($url, $parameters);
         $this->history->recordEntry(
-                $this->page->getUrl(),
-                $this->page->getRequestData());
+            $this->page->getUrl(),
+            $this->page->getRequestData()
+        );
 
         return $this->page->getRaw();
     }
@@ -618,9 +621,10 @@ class SimpleBrowser
         $frames = $this->page->getFrameFocus();
         if (count($frames) > 0) {
             $this->loadFrame(
-                    $frames,
-                    $this->page->getUrl(),
-                    $this->page->getRequestData());
+                $frames,
+                $this->page->getUrl(),
+                $this->page->getRequestData()
+            );
 
             return $this->page->getRaw();
         }
@@ -691,10 +695,11 @@ class SimpleBrowser
             return false;
         }
         $this->user_agent->setIdentity(
-                $url->getHost(),
-                $this->page->getRealm(),
-                $username,
-                $password);
+            $url->getHost(),
+            $this->page->getRealm(),
+            $username,
+            $password
+        );
 
         return $this->retry();
     }
@@ -980,8 +985,9 @@ class SimpleBrowser
             return false;
         }
         $success = $this->load(
-                $form->getAction(),
-                $form->submitButton(new SelectByLabel($label), $additional));
+            $form->getAction(),
+            $form->submitButton(new SelectByLabel($label), $additional)
+        );
 
         return $success ? $this->getContent() : $success;
     }
@@ -1000,8 +1006,9 @@ class SimpleBrowser
             return false;
         }
         $success = $this->load(
-                $form->getAction(),
-                $form->submitButton(new SelectByName($name), $additional));
+            $form->getAction(),
+            $form->submitButton(new SelectByName($name), $additional)
+        );
 
         return $success ? $this->getContent() : $success;
     }
@@ -1021,8 +1028,9 @@ class SimpleBrowser
             return false;
         }
         $success = $this->load(
-                $form->getAction(),
-                $form->submitButton(new SelectById($id), $additional));
+            $form->getAction(),
+            $form->submitButton(new SelectById($id), $additional)
+        );
 
         return $success ? $this->getContent() : $success;
     }
@@ -1058,8 +1066,9 @@ class SimpleBrowser
             return false;
         }
         $success = $this->load(
-                $form->getAction(),
-                $form->submitImage(new SelectByLabel($label), $x, $y, $additional));
+            $form->getAction(),
+            $form->submitImage(new SelectByLabel($label), $x, $y, $additional)
+        );
 
         return $success ? $this->getContent() : $success;
     }
@@ -1083,8 +1092,9 @@ class SimpleBrowser
             return false;
         }
         $success = $this->load(
-                $form->getAction(),
-                $form->submitImage(new SelectByName($name), $x, $y, $additional));
+            $form->getAction(),
+            $form->submitImage(new SelectByName($name), $x, $y, $additional)
+        );
 
         return $success ? $this->getContent() : $success;
     }
@@ -1107,8 +1117,9 @@ class SimpleBrowser
             return false;
         }
         $success = $this->load(
-                $form->getAction(),
-                $form->submitImage(new SelectById($id), $x, $y, $additional));
+            $form->getAction(),
+            $form->submitImage(new SelectById($id), $x, $y, $additional)
+        );
 
         return $success ? $this->getContent() : $success;
     }
@@ -1138,8 +1149,9 @@ class SimpleBrowser
             return false;
         }
         $success = $this->load(
-                $form->getAction(),
-                $form->submit($additional));
+            $form->getAction(),
+            $form->submit($additional)
+        );
 
         return $success ? $this->getContent() : $success;
     }

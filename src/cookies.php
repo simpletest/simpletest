@@ -308,10 +308,11 @@ class SimpleCookieJar
     {
         for ($i = 0; $i < count($this->cookies); ++$i) {
             $is_match = $this->isMatch(
-                    $cookie,
-                    $this->cookies[$i]->getHost(),
-                    $this->cookies[$i]->getPath(),
-                    $this->cookies[$i]->getName());
+                $cookie,
+                $this->cookies[$i]->getHost(),
+                $this->cookies[$i]->getPath(),
+                $this->cookies[$i]->getName()
+            );
             if ($is_match) {
                 return $i;
             }

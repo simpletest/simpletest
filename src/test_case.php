@@ -99,7 +99,8 @@ class SimpleTestCase
     public function createInvoker()
     {
         return new SimpleErrorTrappingInvoker(
-                new SimpleExceptionTrappingInvoker(new SimpleInvoker($this)));
+            new SimpleExceptionTrappingInvoker(new SimpleInvoker($this))
+        );
     }
 
     /**

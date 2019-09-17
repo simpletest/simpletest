@@ -155,7 +155,9 @@ class SimpleDumper
     protected function describeGenericDifference($first, $second)
     {
         return sprintf(
-            'as [%s] does not match [%s]', $this->describeValue($first), $this->describeValue($second)
+            'as [%s] does not match [%s]',
+            $this->describeValue($first),
+            $this->describeValue($second)
         );
     }
 
@@ -354,9 +356,10 @@ class SimpleDumper
         }
 
         return $this->describeArrayDifference(
-                $this->getMembers($first),
-                $this->getMembers($second),
-                $identical);
+            $this->getMembers($first),
+            $this->getMembers($second),
+            $identical
+        );
     }
 
     /**

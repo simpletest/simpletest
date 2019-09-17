@@ -23,8 +23,9 @@ class SimpleTestCompatibility
             }
 
             return self::isArrayOfIdenticalTypes(
-                    (array) $first,
-                    (array) $second);
+                (array) $first,
+                (array) $second
+            );
         }
         if (is_array($first) && is_array($second)) {
             return self::isArrayOfIdenticalTypes($first, $second);
@@ -51,8 +52,9 @@ class SimpleTestCompatibility
         }
         foreach (array_keys($first) as $key) {
             $is_identical = self::isIdentical(
-                    $first[$key],
-                    $second[$key]);
+                $first[$key],
+                $second[$key]
+            );
             if (!$is_identical) {
                 return false;
             }

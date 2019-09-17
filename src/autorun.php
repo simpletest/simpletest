@@ -127,7 +127,9 @@ function capture_new_classes()
 {
     global $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES;
 
-    return array_map('strtolower', array_diff(get_declared_classes(),
-                            $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES ?
-                            $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES : []));
+    return array_map('strtolower', array_diff(
+        get_declared_classes(),
+        $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES ?
+                            $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES : []
+    ));
 }

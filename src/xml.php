@@ -33,8 +33,9 @@ class XmlReporter extends SimpleReporter
     protected function getIndent($offset = 0)
     {
         return str_repeat(
-                $this->indent,
-                count($this->getTestList()) + $offset);
+            $this->indent,
+            count($this->getTestList()) + $offset
+        );
     }
 
     /**
@@ -47,9 +48,10 @@ class XmlReporter extends SimpleReporter
     public function toParsedXml($text)
     {
         return str_replace(
-                ['&', '<', '>', '"', '\''],
-                ['&amp;', '&lt;', '&gt;', '&quot;', '&apos;'],
-                $text);
+            ['&', '<', '>', '"', '\''],
+            ['&amp;', '&lt;', '&gt;', '&quot;', '&apos;'],
+            $text
+        );
     }
 
     /**
@@ -628,8 +630,9 @@ class SimpleTestXmlParser
             $this->listener->paintSkip($this->content);
         } elseif ('SIGNAL' === $tag) {
             $this->listener->paintSignal(
-                    $this->attributes['TYPE'],
-                    unserialize($this->content));
+                $this->attributes['TYPE'],
+                unserialize($this->content)
+            );
         } elseif ('MESSAGE' === $tag) {
             $this->listener->paintMessage($this->content);
         } elseif ('FORMATTED' === $tag) {

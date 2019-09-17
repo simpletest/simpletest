@@ -200,7 +200,9 @@ class DefaultReporter extends SimpleReporterDecorator
             }
 
             $reporter = new SelectiveReporter(
-                SimpleTest::preferred($interfaces), $parser->getTestCase(), $parser->getTest()
+                SimpleTest::preferred($interfaces),
+                $parser->getTestCase(),
+                $parser->getTest()
             );
 
             if ($parser->noSkips()) {
@@ -208,7 +210,10 @@ class DefaultReporter extends SimpleReporterDecorator
             }
         } else {
             $reporter = new SelectiveReporter(
-                    SimpleTest::preferred('HtmlReporter'), @$_GET['c'], @$_GET['t']);
+                SimpleTest::preferred('HtmlReporter'),
+                @$_GET['c'],
+                @$_GET['t']
+            );
             if ('no' === @$_GET['skips'] || 'no' === @$_GET['show-skips']) {
                 $reporter = new NoSkipsReporter($reporter);
             }

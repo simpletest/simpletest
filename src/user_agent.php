@@ -270,9 +270,10 @@ class SimpleUserAgent
         if ($headers = $response->getHeaders()) {
             if ($headers->isChallenge()) {
                 $this->authenticator->addRealm(
-                        $url,
-                        $headers->getAuthentication(),
-                        $headers->getRealm());
+                    $url,
+                    $headers->getAuthentication(),
+                    $headers->getRealm()
+                );
             }
         }
 
@@ -385,10 +386,11 @@ class SimpleUserAgent
     {
         if ($this->proxy) {
             return new SimpleProxyRoute(
-                    $url,
-                    $this->proxy,
-                    $this->proxy_username,
-                    $this->proxy_password);
+                $url,
+                $this->proxy,
+                $this->proxy_username,
+                $this->proxy_password
+            );
         }
 
         return new SimpleRoute($url);
