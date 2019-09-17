@@ -11,87 +11,109 @@ class TestOfRealm extends UnitTestCase
     public function testWithinSameUrl()
     {
         $realm = new SimpleRealm(
-                'Basic',
-                new SimpleUrl('http://www.here.com/path/hello.html'));
+            'Basic',
+            new SimpleUrl('http://www.here.com/path/hello.html')
+        );
         $this->assertTrue($realm->isWithin(
-                new SimpleUrl('http://www.here.com/path/hello.html')));
+            new SimpleUrl('http://www.here.com/path/hello.html')
+        ));
     }
 
     public function testInsideWithLongerUrl()
     {
         $realm = new SimpleRealm(
-                'Basic',
-                new SimpleUrl('http://www.here.com/path/'));
+            'Basic',
+            new SimpleUrl('http://www.here.com/path/')
+        );
         $this->assertTrue($realm->isWithin(
-                new SimpleUrl('http://www.here.com/path/hello.html')));
+            new SimpleUrl('http://www.here.com/path/hello.html')
+        ));
     }
 
     public function testBelowRootIsOutside()
     {
         $realm = new SimpleRealm(
-                'Basic',
-                new SimpleUrl('http://www.here.com/path/'));
+            'Basic',
+            new SimpleUrl('http://www.here.com/path/')
+        );
         $this->assertTrue($realm->isWithin(
-                new SimpleUrl('http://www.here.com/path/more/hello.html')));
+            new SimpleUrl('http://www.here.com/path/more/hello.html')
+        ));
     }
 
     public function testOldNetscapeDefinitionIsOutside()
     {
         $realm = new SimpleRealm(
-                'Basic',
-                new SimpleUrl('http://www.here.com/path/'));
+            'Basic',
+            new SimpleUrl('http://www.here.com/path/')
+        );
         $this->assertFalse($realm->isWithin(
-                new SimpleUrl('http://www.here.com/pathmore/hello.html')));
+            new SimpleUrl('http://www.here.com/pathmore/hello.html')
+        ));
     }
 
     public function testInsideWithMissingTrailingSlash()
     {
         $realm = new SimpleRealm(
-                'Basic',
-                new SimpleUrl('http://www.here.com/path/'));
+            'Basic',
+            new SimpleUrl('http://www.here.com/path/')
+        );
         $this->assertTrue($realm->isWithin(
-                new SimpleUrl('http://www.here.com/path')));
+            new SimpleUrl('http://www.here.com/path')
+        ));
     }
 
     public function testDifferentPageNameStillInside()
     {
         $realm = new SimpleRealm(
-                'Basic',
-                new SimpleUrl('http://www.here.com/path/hello.html'));
+            'Basic',
+            new SimpleUrl('http://www.here.com/path/hello.html')
+        );
         $this->assertTrue($realm->isWithin(
-                new SimpleUrl('http://www.here.com/path/goodbye.html')));
+            new SimpleUrl('http://www.here.com/path/goodbye.html')
+        ));
     }
 
     public function testNewUrlInSameDirectoryDoesNotChangeRealm()
     {
         $realm = new SimpleRealm(
-                'Basic',
-                new SimpleUrl('http://www.here.com/path/hello.html'));
+            'Basic',
+            new SimpleUrl('http://www.here.com/path/hello.html')
+        );
         $realm->stretch(new SimpleUrl('http://www.here.com/path/goodbye.html'));
         $this->assertTrue($realm->isWithin(
-                new SimpleUrl('http://www.here.com/path/index.html')));
+            new SimpleUrl('http://www.here.com/path/index.html')
+        ));
         $this->assertFalse($realm->isWithin(
-                new SimpleUrl('http://www.here.com/index.html')));
+            new SimpleUrl('http://www.here.com/index.html')
+        ));
     }
 
     public function testNewUrlMakesRealmTheCommonPath()
     {
         $realm = new SimpleRealm(
-                'Basic',
-                new SimpleUrl('http://www.here.com/path/here/hello.html'));
+            'Basic',
+            new SimpleUrl('http://www.here.com/path/here/hello.html')
+        );
         $realm->stretch(new SimpleUrl('http://www.here.com/path/there/goodbye.html'));
         $this->assertTrue($realm->isWithin(
-                new SimpleUrl('http://www.here.com/path/here/index.html')));
+            new SimpleUrl('http://www.here.com/path/here/index.html')
+        ));
         $this->assertTrue($realm->isWithin(
-                new SimpleUrl('http://www.here.com/path/there/index.html')));
+            new SimpleUrl('http://www.here.com/path/there/index.html')
+        ));
         $this->assertTrue($realm->isWithin(
-                new SimpleUrl('http://www.here.com/path/index.html')));
+            new SimpleUrl('http://www.here.com/path/index.html')
+        ));
         $this->assertFalse($realm->isWithin(
-                new SimpleUrl('http://www.here.com/index.html')));
+            new SimpleUrl('http://www.here.com/index.html')
+        ));
         $this->assertFalse($realm->isWithin(
-                new SimpleUrl('http://www.here.com/paths/index.html')));
+            new SimpleUrl('http://www.here.com/paths/index.html')
+        ));
         $this->assertFalse($realm->isWithin(
-                new SimpleUrl('http://www.here.com/pathindex.html')));
+            new SimpleUrl('http://www.here.com/pathindex.html')
+        ));
     }
 }
 
@@ -109,9 +131,10 @@ class TestOfAuthenticator extends UnitTestCase
     {
         $authenticator = new SimpleAuthenticator();
         $authenticator->addRealm(
-                new SimpleUrl('http://www.here.com/path/hello.html'),
-                'Basic',
-                'Sanctuary');
+            new SimpleUrl('http://www.here.com/path/hello.html'),
+            'Basic',
+            'Sanctuary'
+        );
         $authenticator->setIdentityForRealm('www.here.com', 'Sanctuary', 'test', 'secret');
 
         return $authenticator;
@@ -123,8 +146,9 @@ class TestOfAuthenticator extends UnitTestCase
         $request->expectNever('addHeaderLine');
         $authenticator = $this->createSingleRealm();
         $authenticator->addHeaders(
-                $request,
-                new SimpleUrl('http://www.here.com/hello.html'));
+            $request,
+            new SimpleUrl('http://www.here.com/hello.html')
+        );
     }
 
     public function testWithinRealm()
@@ -133,8 +157,9 @@ class TestOfAuthenticator extends UnitTestCase
         $request->expectOnce('addHeaderLine');
         $authenticator = $this->createSingleRealm();
         $authenticator->addHeaders(
-                $request,
-                new SimpleUrl('http://www.here.com/path/more/hello.html'));
+            $request,
+            new SimpleUrl('http://www.here.com/path/more/hello.html')
+        );
     }
 
     public function testRestartingClearsRealm()
@@ -144,8 +169,9 @@ class TestOfAuthenticator extends UnitTestCase
         $authenticator = $this->createSingleRealm();
         $authenticator->restartSession();
         $authenticator->addHeaders(
-                $request,
-                new SimpleUrl('http://www.here.com/hello.html'));
+            $request,
+            new SimpleUrl('http://www.here.com/hello.html')
+        );
     }
 
     public function testDifferentHostIsOutsideRealm()
@@ -154,7 +180,8 @@ class TestOfAuthenticator extends UnitTestCase
         $request->expectNever('addHeaderLine');
         $authenticator = $this->createSingleRealm();
         $authenticator->addHeaders(
-                $request,
-                new SimpleUrl('http://here.com/path/hello.html'));
+            $request,
+            new SimpleUrl('http://here.com/path/hello.html')
+        );
     }
 }

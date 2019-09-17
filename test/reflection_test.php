@@ -206,24 +206,27 @@ class TestOfReflection extends UnitTestCase
     {
         $reflection = new SimpleReflection('AnyOldInterface');
         $this->assertEqual(
-                $reflection->getInterfaces(),
-                ['AnyOldInterface']);
+            $reflection->getInterfaces(),
+            ['AnyOldInterface']
+        );
     }
 
     public function testInterfacesListedForClass()
     {
         $reflection = new SimpleReflection('AnyOldImplementation');
         $this->assertEqual(
-                $reflection->getInterfaces(),
-                ['AnyOldInterface']);
+            $reflection->getInterfaces(),
+            ['AnyOldInterface']
+        );
     }
 
     public function testInterfacesListedForSubclass()
     {
         $reflection = new SimpleReflection('AnyOldSubclass');
         $this->assertEqual(
-                $reflection->getInterfaces(),
-                ['AnyOldInterface']);
+            $reflection->getInterfaces(),
+            ['AnyOldInterface']
+        );
     }
 
     public function testNoParameterCreationWhenNoInterface()

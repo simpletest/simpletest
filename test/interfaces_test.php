@@ -70,12 +70,14 @@ class TestOfSpl extends UnitTestCase
     {
         Mock::generate('IteratorImplementation');
         $this->assertIsA(
-                new IteratorImplementation(),
-                'IteratorImplementation');
+            new IteratorImplementation(),
+            'IteratorImplementation'
+        );
         Mock::generate('IteratorAggregateImplementation');
         $this->assertIsA(
-                new IteratorAggregateImplementation(),
-                'IteratorAggregateImplementation');
+            new IteratorAggregateImplementation(),
+            'IteratorAggregateImplementation'
+        );
     }
 }
 

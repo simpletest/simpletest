@@ -367,35 +367,40 @@ class TestOfFramesetPageInterface extends UnitTestCase
 
         $frame1 = new MockSimplePage();
         $frame1->returnsByValue(
-                'getUrls',
-                ['http://www.lastcraft.com/', 'http://myserver/']);
+            'getUrls',
+            ['http://www.lastcraft.com/', 'http://myserver/']
+        );
 
         $frame2 = new MockSimplePage();
         $frame2->returnsByValue(
-                'getUrls',
-                ['http://www.lastcraft.com/', 'http://test/']);
+            'getUrls',
+            ['http://www.lastcraft.com/', 'http://test/']
+        );
 
         $frameset = new SimpleFrameset($page);
         $frameset->addFrame($frame1);
         $frameset->addFrame($frame2);
         $this->assertListInAnyOrder(
-                $frameset->getUrls(),
-                ['http://www.lastcraft.com/', 'http://myserver/', 'http://test/']);
+            $frameset->getUrls(),
+            ['http://www.lastcraft.com/', 'http://myserver/', 'http://test/']
+        );
     }
 
     public function testLabelledUrlsComeFromBothFrames()
     {
         $frame1 = new MockSimplePage();
         $frame1->returnsByValue(
-                'getUrlsByLabel',
-                [new SimpleUrl('goodbye.php')],
-                ['a']);
+            'getUrlsByLabel',
+            [new SimpleUrl('goodbye.php')],
+            ['a']
+        );
 
         $frame2 = new MockSimplePage();
         $frame2->returnsByValue(
-                'getUrlsByLabel',
-                [new SimpleUrl('hello.php')],
-                ['a']);
+            'getUrlsByLabel',
+            [new SimpleUrl('hello.php')],
+            ['a']
+        );
 
         $frameset = new SimpleFrameset(new MockSimplePage());
         $frameset->addFrame($frame1);
@@ -406,8 +411,9 @@ class TestOfFramesetPageInterface extends UnitTestCase
         $expected2 = new SimpleUrl('hello.php');
         $expected2->setTarget('Two');
         $this->assertEqual(
-                $frameset->getUrlsByLabel('a'),
-                [$expected1, $expected2]);
+            $frameset->getUrlsByLabel('a'),
+            [$expected1, $expected2]
+        );
     }
 
     public function testUrlByIdComesFromFirstFrameToRespond()
@@ -501,9 +507,10 @@ class TestOfFramesetPageInterface extends UnitTestCase
         $frame = new MockSimplePage();
         $form = new MockSimpleForm();
         $frame->returns(
-                'getFormBySubmit',
-                $form,
-                [new SelectByLabel('a')]);
+            'getFormBySubmit',
+            $form,
+            [new SelectByLabel('a')]
+        );
 
         $frameset = new SimpleFrameset(new MockSimplePage());
         $frameset->addFrame(new MockSimplePage(), 'A');
@@ -522,9 +529,10 @@ class TestOfFramesetPageInterface extends UnitTestCase
         $frame = new MockSimplePage();
         $form = new MockSimpleForm();
         $frame->returns(
-                'getFormByImage',
-                $form,
-                [new SelectByLabel('a')]);
+            'getFormByImage',
+            $form,
+            [new SelectByLabel('a')]
+        );
 
         $frameset = new SimpleFrameset(new MockSimplePage());
         $frameset->addFrame(new MockSimplePage(), 'A');

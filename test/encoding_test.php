@@ -18,17 +18,19 @@ class TestOfEncodedParts extends UnitTestCase
     {
         $pair = new SimpleEncodedPair('a', 'A');
         $this->assertEqual(
-                $pair->asMime(),
-                "Content-Disposition: form-data; name=\"a\"\r\n\r\nA");
+            $pair->asMime(),
+            "Content-Disposition: form-data; name=\"a\"\r\n\r\nA"
+        );
     }
 
     public function testAttachmentEncodedAsHeadersWithDispositionAndContent()
     {
         $part = new SimpleAttachment('a', 'A', 'aaa.txt');
         $this->assertEqual(
-                $part->asMime(),
-                "Content-Disposition: form-data; name=\"a\"; filename=\"aaa.txt\"\r\n".
-                        "Content-Type: text/plain\r\n\r\nA");
+            $part->asMime(),
+            "Content-Disposition: form-data; name=\"a\"; filename=\"aaa.txt\"\r\n".
+                        "Content-Type: text/plain\r\n\r\nA"
+        );
     }
 }
 
@@ -195,12 +197,14 @@ class TestOfEncoding extends UnitTestCase
     {
         $encoding = new SimpleMultipartEncoding(['a' => 'aaa'], 'boundary');
         $this->assertIdentical($encoding->getValue('a'), 'aaa');
-        $this->assertwritten($encoding,
-                "--boundary\r\n".
+        $this->assertwritten(
+            $encoding,
+            "--boundary\r\n".
                 "Content-Disposition: form-data; name=\"a\"\r\n".
                 "\r\n".
                 "aaa\r\n".
-                "--boundary--\r\n");
+                "--boundary--\r\n"
+        );
     }
 
     public function testAttachment()
@@ -208,13 +212,15 @@ class TestOfEncoding extends UnitTestCase
         $encoding = new SimpleMultipartEncoding([], 'boundary');
         $encoding->attach('a', 'aaa', 'aaa.txt');
         $this->assertIdentical($encoding->getValue('a'), 'aaa.txt');
-        $this->assertwritten($encoding,
-                "--boundary\r\n".
+        $this->assertwritten(
+            $encoding,
+            "--boundary\r\n".
                 "Content-Disposition: form-data; name=\"a\"; filename=\"aaa.txt\"\r\n".
                 "Content-Type: text/plain\r\n".
                 "\r\n".
                 "aaa\r\n".
-                "--boundary--\r\n");
+                "--boundary--\r\n"
+        );
     }
 
     public function testEntityEncodingDefaultContentType()

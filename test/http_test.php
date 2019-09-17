@@ -111,8 +111,9 @@ class TestOfProxyRoute extends UnitTestCase
         $route = new PartialSimpleProxyRoute();
         $route->returnsByReference('createSocket', $socket);
         $route->__constructor(
-        new SimpleUrl('http://a.valid.host/here.html'),
-        new SimpleUrl('http://my-proxy'));
+            new SimpleUrl('http://a.valid.host/here.html'),
+            new SimpleUrl('http://my-proxy')
+        );
         $route->createConnection('GET', 15);
     }
 
@@ -127,8 +128,9 @@ class TestOfProxyRoute extends UnitTestCase
         $route = new PartialSimpleProxyRoute();
         $route->returnsByReference('createSocket', $socket);
         $route->__constructor(
-        new SimpleUrl('http://a.valid.host/here.html'),
-        new SimpleUrl('http://my-proxy'));
+            new SimpleUrl('http://a.valid.host/here.html'),
+            new SimpleUrl('http://my-proxy')
+        );
         $route->createConnection('POST', 15);
     }
 
@@ -143,8 +145,9 @@ class TestOfProxyRoute extends UnitTestCase
         $route = new PartialSimpleProxyRoute();
         $route->returnsByReference('createSocket', $socket);
         $route->__constructor(
-        new SimpleUrl('http://a.valid.host:81/here.html'),
-        new SimpleUrl('http://my-proxy:8081'));
+            new SimpleUrl('http://a.valid.host:81/here.html'),
+            new SimpleUrl('http://my-proxy:8081')
+        );
         $route->createConnection('GET', 15);
     }
 
@@ -159,8 +162,9 @@ class TestOfProxyRoute extends UnitTestCase
         $route = new PartialSimpleProxyRoute();
         $route->returnsByReference('createSocket', $socket);
         $route->__constructor(
-        new SimpleUrl('http://a.valid.host/here.html?a=1&b=2'),
-        new SimpleUrl('http://my-proxy'));
+            new SimpleUrl('http://a.valid.host/here.html?a=1&b=2'),
+            new SimpleUrl('http://my-proxy')
+        );
         $route->createConnection('GET', 15);
     }
 
@@ -178,10 +182,11 @@ class TestOfProxyRoute extends UnitTestCase
         $route = new PartialSimpleProxyRoute();
         $route->returnsByReference('createSocket', $socket);
         $route->__constructor(
-        new SimpleUrl('http://a.valid.host/here.html'),
-        new SimpleUrl('http://my-proxy'),
-                'Me',
-                'Secret');
+            new SimpleUrl('http://a.valid.host/here.html'),
+            new SimpleUrl('http://my-proxy'),
+            'Me',
+            'Secret'
+        );
         $route->createConnection('GET', 15);
     }
 }
@@ -315,8 +320,9 @@ class TestOfHttpPostRequest extends UnitTestCase
         $route->expect('createConnection', ['POST', 15]);
 
         $request = new SimpleHttpRequest(
-        $route,
-        new SimplePostEncoding(['a' => 'A']));
+            $route,
+            new SimplePostEncoding(['a' => 'A'])
+        );
         $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
     }
 
@@ -333,8 +339,9 @@ class TestOfHttpPostRequest extends UnitTestCase
         $route->expect('createConnection', ['POST', 15]);
 
         $request = new SimpleHttpRequest(
-        $route,
-        new SimplePostEncoding('raw body'));
+            $route,
+            new SimplePostEncoding('raw body')
+        );
         $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
     }
 
@@ -351,8 +358,9 @@ class TestOfHttpPostRequest extends UnitTestCase
         $route->expect('createConnection', ['POST', 15]);
 
         $request = new SimpleHttpRequest(
-        $route,
-        new SimplePostEncoding('<a><b>one</b><c>two</c></a>', 'text/xml'));
+            $route,
+            new SimplePostEncoding('<a><b>one</b><c>two</c></a>', 'text/xml')
+        );
         $this->assertIsA($request->fetch(15), 'SimpleHttpResponse');
     }
 }
@@ -362,11 +370,12 @@ class TestOfHttpHeaders extends UnitTestCase
     public function testParseBasicHeaders()
     {
         $headers = new SimpleHttpHeaders(
-                "HTTP/1.1 200 OK\r\n".
+            "HTTP/1.1 200 OK\r\n".
                 "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n".
                 "Content-Type: text/plain\r\n".
                 "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n".
-                'Connection: close');
+                'Connection: close'
+        );
         $this->assertIdentical($headers->getHttpVersion(), '1.1');
         $this->assertIdentical($headers->getResponseCode(), 200);
         $this->assertEqual($headers->getMimeType(), 'text/plain');
@@ -375,8 +384,9 @@ class TestOfHttpHeaders extends UnitTestCase
     public function testNonStandardResponseHeader()
     {
         $headers = new SimpleHttpHeaders(
-                "HTTP/1.1 302 (HTTP-Version SP Status-Code CRLF)\r\n".
-                'Connection: close');
+            "HTTP/1.1 302 (HTTP-Version SP Status-Code CRLF)\r\n".
+                'Connection: close'
+        );
         $this->assertIdentical($headers->getResponseCode(), 302);
     }
 
@@ -387,13 +397,14 @@ class TestOfHttpHeaders extends UnitTestCase
         $jar->expectAt(1, 'setCookie', ['b', 'bbb', 'host', '/', false]);
 
         $headers = new SimpleHttpHeaders(
-                "HTTP/1.1 200 OK\r\n".
+            "HTTP/1.1 200 OK\r\n".
                 "Date: Mon, 18 Nov 2002 15:50:29 GMT\r\n".
                 "Content-Type: text/plain\r\n".
                 "Server: Apache/1.3.24 (Win32) PHP/4.2.3\r\n".
                 "Set-Cookie: a=aaa; expires=Wed, 25-Dec-02 04:24:20 GMT; path=/here/\r\n".
                 "Set-Cookie: b=bbb\r\n".
-                'Connection: close');
+                'Connection: close'
+        );
         $headers->writeCookiesToJar($jar, new SimpleUrl('http://host'));
     }
 
@@ -475,8 +486,9 @@ class TestOfHttpResponse extends UnitTestCase
         $response = new SimpleHttpResponse($socket, new SimpleUrl('here'), new SimpleGetEncoding());
         $this->assertFalse($response->isError());
         $this->assertEqual(
-        $response->getContent(),
-                "this is a test file\nwith two lines in it\n");
+            $response->getContent(),
+            "this is a test file\nwith two lines in it\n"
+        );
         $headers = $response->getHeaders();
         $this->assertIdentical($headers->getHttpVersion(), '1.1');
         $this->assertIdentical($headers->getResponseCode(), 200);

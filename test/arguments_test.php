@@ -52,8 +52,10 @@ class TestOfCommandLineArgumentParsing extends UnitTestCase
     public function testGetsFullSetOfResultsAsHash()
     {
         $arguments = new SimpleArguments(['me', '-a', '-b=1', '-b', '2', '--aa=AA', '--bb', 'BB', '-c']);
-        $this->assertEqual($arguments->all(),
-                           ['a' => true, 'b' => ['1', '2'], 'aa' => 'AA', 'bb' => 'BB', 'c' => true]);
+        $this->assertEqual(
+            $arguments->all(),
+            ['a' => true, 'b' => ['1', '2'], 'aa' => 'AA', 'bb' => 'BB', 'c' => true]
+        );
     }
 }
 
@@ -83,8 +85,10 @@ class TestOfHelpOutput extends UnitTestCase
         $help = new SimpleHelp('Cool program');
         $help->explainFlag('a', 'Enables A');
         $help->explainFlag('long', 'Enables Long');
-        $this->assertEqual($help->render(),
-                           "Cool program\n-a        Enables A\n--long    Enables Long\n");
+        $this->assertEqual(
+            $help->render(),
+            "Cool program\n-a        Enables A\n--long    Enables Long\n"
+        );
     }
 
     public function testCanDisplaysMultipleFlagsForEachOption()

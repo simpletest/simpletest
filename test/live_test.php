@@ -29,8 +29,9 @@ class LiveHttpTestCase extends UnitTestCase
         $socket = new SimpleSocket('bad_url', 111, 5);
         $this->assertTrue($socket->isError());
         $this->assertPattern(
-                '/Cannot open \\[bad_url:111\\] with \\[/',
-                $socket->getError());
+            '/Cannot open \\[bad_url:111\\] with \\[/',
+            $socket->getError()
+        );
         $this->assertFalse($socket->isOpen());
         $this->assertFalse($socket->write('A message'));
     }
@@ -54,9 +55,11 @@ class LiveHttpTestCase extends UnitTestCase
         $socket->write("Host: $this->host\r\n");
         $socket->write("Connection: close\r\n\r\n");
         $socket->close();
-        $this->assertEqual($socket->getSent(),
-                "GET /network_confirm.php HTTP/1.0\r\n".
+        $this->assertEqual(
+            $socket->getSent(),
+            "GET /network_confirm.php HTTP/1.0\r\n".
                 "Host: $this->host\r\n".
-                "Connection: close\r\n\r\n");
+                "Connection: close\r\n\r\n"
+        );
     }
 }

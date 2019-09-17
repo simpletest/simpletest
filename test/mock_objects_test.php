@@ -62,7 +62,8 @@ class TestOfParametersExpectation extends UnitTestCase
     public function testOtherExpectations()
     {
         $expectation = new ParametersExpectation(
-                [new PatternExpectation('/hello/i')]);
+            [new PatternExpectation('/hello/i')]
+        );
         $this->assertFalse($expectation->test(['Goodbye']));
         $this->assertTrue($expectation->test(['hello']));
         $this->assertTrue($expectation->test(['Hello']));
@@ -78,7 +79,8 @@ class TestOfParametersExpectation extends UnitTestCase
     public function testLongList()
     {
         $expectation = new ParametersExpectation(
-                ['0', 0, new AnythingExpectation(), false]);
+            ['0', 0, new AnythingExpectation(), false]
+        );
         $this->assertTrue($expectation->test(['0', 0, 37, false]));
         $this->assertFalse($expectation->test(['0', 0, 37, true]));
         $this->assertFalse($expectation->test(['0', 0, 37]));
@@ -329,9 +331,10 @@ class TestOfMockReturns extends UnitTestCase
     {
         $mock = new MockDummy();
         $mock->returnsByValue(
-                'aMethod',
-                'aaa',
-                [new PatternExpectation('/hello/i')]);
+            'aMethod',
+            'aaa',
+            [new PatternExpectation('/hello/i')]
+        );
         $this->assertIdentical($mock->aMethod('Hello'), 'aaa');
         $this->assertNull($mock->aMethod('Goodbye'));
     }
@@ -665,8 +668,10 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testZeroArguments()
     {
-        $this->test->expectOnce('assert',
-                                [new MemberExpectation('expected', []), [], '*']);
+        $this->test->expectOnce(
+            'assert',
+            [new MemberExpectation('expected', []), [], '*']
+        );
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expect('aMethod', []);
         $mock->aMethod();
@@ -675,8 +680,10 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testExpectedArguments()
     {
-        $this->test->expectOnce('assert',
-                                [new MemberExpectation('expected', [1, 2, 3]), [1, 2, 3], '*']);
+        $this->test->expectOnce(
+            'assert',
+            [new MemberExpectation('expected', [1, 2, 3]), [1, 2, 3], '*']
+        );
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expect('aMethod', [1, 2, 3]);
         $mock->aMethod(1, 2, 3);
@@ -685,8 +692,10 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testFailedArguments()
     {
-        $this->test->expectOnce('assert',
-                                [new MemberExpectation('expected', ['this']), ['that'], '*']);
+        $this->test->expectOnce(
+            'assert',
+            [new MemberExpectation('expected', ['this']), ['that'], '*']
+        );
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expect('aMethod', ['this']);
         $mock->aMethod('that');
@@ -695,12 +704,16 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testWildcardsAreTranslatedToAnythingExpectations()
     {
-        $this->test->expectOnce('assert',
-                                [new MemberExpectation('expected',
-                                                            [new AnythingExpectation(),
+        $this->test->expectOnce(
+            'assert',
+            [new MemberExpectation(
+                                    'expected',
+                                    [new AnythingExpectation(),
                                                                   123,
-                                                                  new AnythingExpectation(), ]),
-                                      [100, 123, 101], '*', ]);
+                                                                  new AnythingExpectation(), ]
+                                ),
+                                      [100, 123, 101], '*', ]
+        );
         $mock = new MockDummyWithInjectedTestCase($this);
         $mock->expect('aMethod', ['*', 123, '*']);
         $mock->aMethod(100, 123, 101);
@@ -709,10 +722,16 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testSpecificPassingSequence()
     {
-        $this->test->expectAt(0, 'assert',
-                              [new MemberExpectation('expected', [1, 2, 3]), [1, 2, 3], '*']);
-        $this->test->expectAt(1, 'assert',
-                              [new MemberExpectation('expected', ['Hello']), ['Hello'], '*']);
+        $this->test->expectAt(
+            0,
+            'assert',
+            [new MemberExpectation('expected', [1, 2, 3]), [1, 2, 3], '*']
+        );
+        $this->test->expectAt(
+            1,
+            'assert',
+            [new MemberExpectation('expected', ['Hello']), ['Hello'], '*']
+        );
         $mock = new MockDummyWithInjectedTestCase();
         $mock->expectAt(1, 'aMethod', [1, 2, 3]);
         $mock->expectAt(2, 'aMethod', ['Hello']);

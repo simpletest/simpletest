@@ -167,7 +167,8 @@ class TestOfWidget extends UnitTestCase
     public function testPopulatedSubmit()
     {
         $tag = new SimpleSubmitTag(
-                ['type' => 'submit', 'name' => 's', 'value' => 'Ok!']);
+            ['type' => 'submit', 'name' => 's', 'value' => 'Ok!']
+        );
         $this->assertEqual($tag->getName(), 's');
         $this->assertEqual($tag->getValue(), 'Ok!');
         $this->assertEqual($tag->getLabel(), 'Ok!');
@@ -180,7 +181,8 @@ class TestOfWidget extends UnitTestCase
     public function testImageSubmit()
     {
         $tag = new SimpleImageSubmitTag(
-                ['type' => 'image', 'name' => 's', 'alt' => 'Label']);
+            ['type' => 'image', 'name' => 's', 'alt' => 'Label']
+        );
         $this->assertEqual($tag->getName(), 's');
         $this->assertEqual($tag->getLabel(), 'Label');
 
@@ -193,14 +195,16 @@ class TestOfWidget extends UnitTestCase
     public function testImageSubmitTitlePreferredOverAltForLabel()
     {
         $tag = new SimpleImageSubmitTag(
-                ['type' => 'image', 'name' => 's', 'alt' => 'Label', 'title' => 'Title']);
+            ['type' => 'image', 'name' => 's', 'alt' => 'Label', 'title' => 'Title']
+        );
         $this->assertEqual($tag->getLabel(), 'Title');
     }
 
     public function testButton()
     {
         $tag = new SimpleButtonTag(
-                ['type' => 'submit', 'name' => 's', 'value' => 'do']);
+            ['type' => 'submit', 'name' => 's', 'value' => 'do']
+        );
         $tag->addContent('I am a button');
         $this->assertEqual($tag->getName(), 's');
         $this->assertEqual($tag->getValue(), 'do');
@@ -227,12 +231,14 @@ class TestOfTextArea extends UnitTestCase
         $tag = new SimpleTextAreaTag(['cols' => '10', 'wrap' => 'physical']);
         $tag->addContent("Lot's of text that should be wrapped");
         $this->assertEqual(
-                $tag->getDefault(),
-                "Lot's of\r\ntext that\r\nshould be\r\nwrapped");
+            $tag->getDefault(),
+            "Lot's of\r\ntext that\r\nshould be\r\nwrapped"
+        );
         $tag->setValue("New long text\r\nwith two lines");
         $this->assertEqual(
-                $tag->getValue(),
-                "New long\r\ntext\r\nwith two\r\nlines");
+            $tag->getValue(),
+            "New long\r\ntext\r\nwith two\r\nlines"
+        );
     }
 
     public function testWrappingRemovesLeadingcariageReturn()
@@ -482,7 +488,8 @@ class TestOfRadioGroup extends UnitTestCase
     {
         $group = new SimpleRadioGroup();
         $group->addWidget(new SimpleRadioButtonTag(
-                ['value' => 'A', 'checked' => '']));
+            ['value' => 'A', 'checked' => '']
+        ));
         $this->assertIdentical($group->getDefault(), 'A');
         $this->assertIdentical($group->getValue(), 'A');
     }
@@ -491,9 +498,11 @@ class TestOfRadioGroup extends UnitTestCase
     {
         $group = new SimpleRadioGroup();
         $group->addWidget(new SimpleRadioButtonTag(
-                ['value' => 'A']));
+            ['value' => 'A']
+        ));
         $group->addWidget(new SimpleRadioButtonTag(
-                ['value' => 'B', 'checked' => '']));
+            ['value' => 'B', 'checked' => '']
+        ));
         $this->assertIdentical($group->getDefault(), 'B');
         $this->assertIdentical($group->getValue(), 'B');
     }
@@ -510,9 +519,11 @@ class TestOfRadioGroup extends UnitTestCase
     {
         $group = new SimpleRadioGroup();
         $group->addWidget(new SimpleRadioButtonTag(
-                ['value' => 'A']));
+            ['value' => 'A']
+        ));
         $group->addWidget(new SimpleRadioButtonTag(
-                ['value' => 'B', 'checked' => '']));
+            ['value' => 'B', 'checked' => '']
+        ));
         $this->assertTrue($group->setValue('A'));
         $this->assertIdentical($group->getValue(), 'A');
     }
@@ -521,9 +532,11 @@ class TestOfRadioGroup extends UnitTestCase
     {
         $group = new SimpleRadioGroup();
         $group->addWidget(new SimpleRadioButtonTag(
-                ['value' => 'A', 'id' => 'i1']));
+            ['value' => 'A', 'id' => 'i1']
+        ));
         $group->addWidget(new SimpleRadioButtonTag(
-                ['value' => 'B', 'id' => 'i2']));
+            ['value' => 'B', 'id' => 'i2']
+        ));
         $this->assertFalse($group->isId('i0'));
         $this->assertTrue($group->isId('i1'));
         $this->assertTrue($group->isId('i2'));
@@ -551,7 +564,8 @@ class TestOfTagGroup extends UnitTestCase
         $group = new SimpleCheckboxGroup();
         $group->addWidget(new SimpleCheckboxTag(['value' => 'A']));
         $group->addWidget(new SimpleCheckboxTag(
-                ['value' => 'B', 'checked' => '']));
+            ['value' => 'B', 'checked' => '']
+        ));
         $this->assertIdentical($group->getDefault(), 'B');
         $this->assertIdentical($group->getValue(), 'B');
     }
@@ -569,9 +583,11 @@ class TestOfTagGroup extends UnitTestCase
     {
         $group = new SimpleCheckboxGroup();
         $group->addWidget(new SimpleCheckboxTag(
-                ['value' => 'A', 'checked' => '']));
+            ['value' => 'A', 'checked' => '']
+        ));
         $group->addWidget(new SimpleCheckboxTag(
-                ['value' => 'B', 'checked' => '']));
+            ['value' => 'B', 'checked' => '']
+        ));
         $this->assertIdentical($group->getDefault(), ['A', 'B']);
         $this->assertIdentical($group->getValue(), ['A', 'B']);
     }

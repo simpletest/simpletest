@@ -8,9 +8,10 @@ Mock::generate('SimplePage');
 Mock::generate('SimplePhpPageBuilder');
 Mock::generate('SimpleHttpResponse');
 Mock::generatePartial(
-        'SimplePhpPageBuilder',
-        'PartialSimplePhpPageBuilder',
-        ['createPage', 'createParser']);
+    'SimplePhpPageBuilder',
+    'PartialSimplePhpPageBuilder',
+    ['createPage', 'createParser']
+);
 Mock::generate('SimpleHtmlSaxParser');
 Mock::generate('SimplePhpPageBuilder');
 
@@ -428,8 +429,9 @@ class TestOfHtmlSaxParser extends UnitTestCase
     {
         $listener = $this->createListener();
         $listener->expectOnce(
-                'startElement',
-                ['input', ['name' => 'a.b.c', 'value' => 'd']]);
+            'startElement',
+            ['input', ['name' => 'a.b.c', 'value' => 'd']]
+        );
         $parser = new SimpleHtmlSaxParser($listener);
         $this->assertTrue($parser->parse('<input name=a.b.c value = d>'));
     }
@@ -488,8 +490,9 @@ class TestOfHtmlSaxParser extends UnitTestCase
     {
         $listener = $this->createListener();
         $listener->expectOnce(
-                'startElement',
-                ['option', ['value' => '', 'selected' => '']]);
+            'startElement',
+            ['option', ['value' => '', 'selected' => '']]
+        );
         $listener->expectOnce('addContent', ['label']);
         $listener->expectOnce('endElement', ['option']);
         $parser = new SimpleHtmlSaxParser($listener);
@@ -500,8 +503,9 @@ class TestOfHtmlSaxParser extends UnitTestCase
     {
         $listener = $this->createListener();
         $listener->expectOnce(
-                'startElement',
-                ['a', ['href' => 'here.html', 'style' => "'cool'"]]);
+            'startElement',
+            ['a', ['href' => 'here.html', 'style' => "'cool'"]]
+        );
         $listener->expectOnce('addContent', ['label']);
         $listener->expectOnce('endElement', ['a']);
         $parser = new SimpleHtmlSaxParser($listener);
@@ -512,8 +516,9 @@ class TestOfHtmlSaxParser extends UnitTestCase
     {
         $listener = $this->createListener();
         $listener->expectOnce(
-                'startElement',
-                ['input', ['type' => 'submit', 'name' => 'N', 'value' => 'V']]);
+            'startElement',
+            ['input', ['type' => 'submit', 'name' => 'N', 'value' => 'V']]
+        );
         $parser = new SimpleHtmlSaxParser($listener);
         $this->assertTrue($parser->parse('<input type="submit" name="N" value="V" />'));
     }
@@ -528,6 +533,7 @@ class TestOfHtmlSaxParser extends UnitTestCase
         $listener->expectOnce('endElement', ['frameset']);
         $parser = new SimpleHtmlSaxParser($listener);
         $this->assertTrue($parser->parse(
-                '<frameset><frame src="frame.html"><noframes>Hello</noframes></frameset>'));
+            '<frameset><frame src="frame.html"><noframes>Hello</noframes></frameset>'
+        ));
     }
 }

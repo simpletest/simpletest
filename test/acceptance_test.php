@@ -472,8 +472,9 @@ class TestOfLivePageLinkingWithMinimalLinks extends AcceptanceTest
         $this->get($this->host().'front_controller_style/a_page.php');
         $this->clickLink('Current directory');
         $this->assertTitle(
-                'Simple test front controller',
-                '%s -> index.php needs to be set as a default web server home page');
+            'Simple test front controller',
+            '%s -> index.php needs to be set as a default web server home page'
+        );
     }
 
     public function testClickBackADirectoryLevel()
@@ -788,8 +789,9 @@ class TestOfLiveCookies extends AcceptanceTest
         $this->get($this->host().'set_cookies.php');
         $this->restart(time() + 200);
         $this->assertNoCookie(
-                'short_cookie',
-                '%s -> Please check your computer clock setting if you are not using NTP');
+            'short_cookie',
+            '%s -> Please check your computer clock setting if you are not using NTP'
+        );
     }
 
     public function testNoClockUnderDriftBy100Seconds()
@@ -797,9 +799,10 @@ class TestOfLiveCookies extends AcceptanceTest
         $this->get($this->host().'set_cookies.php');
         $this->restart(time() + 0);
         $this->assertCookie(
-                'short_cookie',
-                'B',
-                '%s -> Please check your computer clock setting if you are not using NTP');
+            'short_cookie',
+            'B',
+            '%s -> Please check your computer clock setting if you are not using NTP'
+        );
     }
 
     /*public function testCookiePath()
@@ -1445,7 +1448,8 @@ class TestOfLiveHistoryNavigation extends AcceptanceTest
     public function testGetRetryResubmitsData()
     {
         $this->assertTrue($this->get(
-                $this->host().'network_confirm.php?a=aaa'));
+            $this->host().'network_confirm.php?a=aaa'
+        ));
         $this->assertPattern('/Request method.*?<dd>GET<\/dd>/');
         $this->assertText('a=[aaa]');
         $this->retry();
@@ -1456,8 +1460,9 @@ class TestOfLiveHistoryNavigation extends AcceptanceTest
     public function testGetRetryResubmitsExtraData()
     {
         $this->assertTrue($this->get(
-                $this->host().'network_confirm.php',
-                ['a' => 'aaa']));
+            $this->host().'network_confirm.php',
+            ['a' => 'aaa']
+        ));
         $this->assertPattern('/Request method.*?<dd>GET<\/dd>/');
         $this->assertText('a=[aaa]');
         $this->retry();
@@ -1468,8 +1473,9 @@ class TestOfLiveHistoryNavigation extends AcceptanceTest
     public function testPostRetryResubmitsData()
     {
         $this->assertTrue($this->post(
-                $this->host().'network_confirm.php',
-                ['a' => 'aaa']));
+            $this->host().'network_confirm.php',
+            ['a' => 'aaa']
+        ));
         $this->assertPattern('/Request method.*?<dd>POST<\/dd>/');
         $this->assertText('a=[aaa]');
         $this->retry();
@@ -1480,7 +1486,8 @@ class TestOfLiveHistoryNavigation extends AcceptanceTest
     public function testGetRetryResubmitsRepeatedData()
     {
         $this->assertTrue($this->get(
-                $this->host().'network_confirm.php?a=1&a=2'));
+            $this->host().'network_confirm.php?a=1&a=2'
+        ));
         $this->assertPattern('/Request method.*?<dd>GET<\/dd>/');
         $this->assertText('a=[1, 2]');
         $this->retry();
@@ -1493,7 +1500,8 @@ class TestOfLiveAuthentication extends AcceptanceTest
 {
     public function skip()
     {
-        $this->skipIf('always',
+        $this->skipIf(
+            'always',
             'TestOfLiveAuthentication is skipped, because PHP\'s built in '
             .'development server isn\'t capable of handling authentication.'
         );

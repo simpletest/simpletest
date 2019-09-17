@@ -49,17 +49,21 @@ class TestOfCompatibility extends UnitTestCase
         $object_copy = clone $object;
         $object_assignment = &$object;
         $this->assertTrue(SimpleTestCompatibility::isReference(
-                $object,
-                $object));
+            $object,
+            $object
+        ));
         $this->assertTrue(SimpleTestCompatibility::isReference(
-                $object,
-                $object_reference));
+            $object,
+            $object_reference
+        ));
         $this->assertFalse(SimpleTestCompatibility::isReference(
-                $object,
-                $object_copy));
+            $object,
+            $object_copy
+        ));
         $this->assertTrue(SimpleTestCompatibility::isReference(
-                $object,
-                $object_assignment));
+            $object,
+            $object_assignment
+        ));
     }
 
     public function testInteraceComparison()
