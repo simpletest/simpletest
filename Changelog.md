@@ -2,7 +2,9 @@
 
 ## [Unreleased]
 
-**currently working on: fixing mock objects & references**
+**Currently working on: ...**
+
+## [1.2.0] - 2019-09-17
 
 * [PR#46] added import / export cookies functions
    - Browser: getCookies() & setCookies($cookies)
@@ -34,7 +36,8 @@
 * removed PHP4 reflection support
 * removed PHP4 compatibility layer
 
-[Unreleased]: https://github.com/simpletest/simpletest/compare/v1.1.7...HEAD
-[1.1.7]: https://github.com/simpletest/simpletest/compare/v1.1.7...v1.1.6
+[Unreleased]: https://github.com/simpletest/simpletest/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/simpletest/simpletest/compare/v1.1.7...v1.2.0
+[1.1.7]: https://github.com/simpletest/simpletest/compare/v1.1.6...v1.1.7
 
 [PR#46]: https://github.com/simpletest/simpletest/pull/46
