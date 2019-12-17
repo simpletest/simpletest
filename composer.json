@@ -49,7 +49,12 @@
         }
     ],
     "require": {
-        "php": "^7.1"
+        "php": "^7.1",
+    },
+    "require-dev" : {
+        "ext-dom": "*",
+        "ext-mbstring": "*",
+        "ext-tidy": "*"
     },
     "autoload": {
         "classmap": ["src/"],
