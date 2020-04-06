@@ -134,7 +134,7 @@ class ShellTestCase extends SimpleTestCase
      *
      * @return bool True on pass
      */
-    public function assertTrue($result, $message = false)
+    public function assertTrue($result, $message = '%s')
     {
         return $this->assert(new TrueExpectation(), $result, $message);
     }
