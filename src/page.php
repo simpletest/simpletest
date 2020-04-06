@@ -574,7 +574,7 @@ class SimplePage
 
     /**
      * Turns HTML into text browser visible text.
-     * Images are converted to their alt text and tags are supressed.
+     * Images are converted to their alt text and tags are suppressed.
      * Entities are converted to their visible representation.
      *
      * @param string $html HTML to convert
