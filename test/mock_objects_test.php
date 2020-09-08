@@ -246,6 +246,7 @@ class Dummy
 Mock::generate('Dummy');
 Mock::generate('Dummy', 'AnotherMockDummy');
 Mock::generate('Dummy', 'MockDummyWithExtraMethods', ['extraMethod']);
+Mock::generatePartial('Dummy', 'MockPartialDummyWithExtraMethods', ['extraMethod']);
 
 class TestOfConstructorCreation extends UnitTestCase
 {
@@ -269,6 +270,12 @@ class TestOfConstructorCreation extends UnitTestCase
         $mock = new AnotherMockDummy();
         $this->assertTrue(method_exists($mock, '__constructor'));
     }
+
+    public function testExtendingWithExtraMethod()
+    {
+        $mock = new MockPartialDummyWithExtraMethods();
+        $this->assertTrue(method_exists($mock, '__constructor'));
+    }
 }
 
 class TestOfMockGeneration extends UnitTestCase
@@ -290,6 +297,12 @@ class TestOfMockGeneration extends UnitTestCase
     {
         $mock = new AnotherMockDummy();
         $this->assertTrue(method_exists($mock, 'aMethod'));
+    }
+
+    public function testExtendingWithExtraMethod()
+    {
+        $mock = new MockPartialDummyWithExtraMethods();
+        $this->assertTrue(method_exists($mock, 'extraMethod'));
     }
 }
 
