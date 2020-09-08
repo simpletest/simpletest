@@ -242,6 +242,16 @@ class Dummy
     {
         return true;
     }
+
+    protected function aProtectedMethod()
+    {
+        return true;
+    }
+
+    private function aPrivateMethod()
+    {
+        return true;
+    }
 }
 Mock::generate('Dummy');
 Mock::generate('Dummy', 'AnotherMockDummy');
@@ -293,6 +303,18 @@ class TestOfMockGeneration extends UnitTestCase
         $this->assertTrue(method_exists($mock, 'extraMethod'));
     }
 
+    public function testCloningWithProtectedMethod()
+    {
+        $mock = new MockDummyWithExtraMethods();
+        $this->assertTrue(method_exists($mock, 'aProtectedMethod'));
+    }
+
+    public function testCloningWithPrivateMethod()
+    {
+        $mock = new MockDummyWithExtraMethods();
+        $this->assertTrue(method_exists($mock, 'aPrivateMethod'));
+    }
+
     public function testCloningWithChosenClassName()
     {
         $mock = new AnotherMockDummy();
@@ -303,6 +325,18 @@ class TestOfMockGeneration extends UnitTestCase
     {
         $mock = new MockPartialDummyWithExtraMethods();
         $this->assertTrue(method_exists($mock, 'extraMethod'));
+    }
+
+    public function testExtendingWithProtectedMethod()
+    {
+        $mock = new MockPartialDummyWithExtraMethods();
+        $this->assertTrue(method_exists($mock, 'aProtectedMethod'));
+    }
+
+    public function testExtendingWithPrivateMethod()
+    {
+        $mock = new MockPartialDummyWithExtraMethods();
+        $this->assertTrue(method_exists($mock, 'aPrivateMethod'));
     }
 }
 

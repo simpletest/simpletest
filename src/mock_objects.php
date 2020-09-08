@@ -1508,8 +1508,8 @@ class MockGenerator
         $code .= $this->chainMockReturns();
         $code .= $this->chainMockExpectations();
         $code .= $this->chainThrowMethods();
-        $code .= $this->createCodeForOverridenMethods(array_intersect($methods, $this->reflection->getMethods()));
-        $code .= $this->createCodeForNewMethod($methods);
+        $code .= $this->createCodeForOverridenMethods(array_intersect($methods, $this->reflection->getAllMethods()));
+        $code .= $this->createCodeForNewMethod(array_diff($methods, $this->reflection->getAllMethods()));
         $code .= "}\n";
 
         return $code;

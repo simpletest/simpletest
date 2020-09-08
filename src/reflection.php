@@ -87,6 +87,21 @@ class SimpleReflection
     }
 
     /**
+     * Gets the list of all methods in a class or interface, including
+     * non-visible.
+     *
+     * @returns array              List of method names.
+     */
+    public function getAllMethods()
+    {
+        $reflection = new ReflectionClass($this->interface);
+
+        return array_map(function($method) {
+            return $method->getName();
+        }, $reflection->getMethods());
+    }
+
+    /**
      * Gets the list of interfaces from a class.
      * If the class name is actually an interface then just that interface is returned.
      *
