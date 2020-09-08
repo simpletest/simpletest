@@ -1495,7 +1495,13 @@ class MockGenerator
      */
     protected function extendClassCode($methods)
     {
-        $code = 'class '.$this->mock_class.' extends '.$this->class." {\n";
+        $code = '';
+
+        if (!empty($this->namespace)) {
+            $code .= 'namespace '.$this->namespace.";\n";
+        }
+
+        $code .= 'class '.$this->mock_class.' extends '.$this->class." {\n";
         $code .= "    protected \$mock;\n";
         $code .= $this->addMethodList($methods);
         $code .= "\n";
