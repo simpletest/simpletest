@@ -1507,7 +1507,7 @@ class MockGenerator
         $code .= "\n";
 
         $code .= "    function __construct() {\n";
-        $code .= '        $this->mock = new '.$this->mock_base."();\n";
+        $code .= '        $this->mock = new \\'.$this->mock_base."();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
         $code .= $this->createCodeForConstructor();
