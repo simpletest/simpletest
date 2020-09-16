@@ -1514,7 +1514,8 @@ class MockGenerator
         $code .= $this->chainMockReturns();
         $code .= $this->chainMockExpectations();
         $code .= $this->chainThrowMethods();
-        $code .= $this->createCodeForOverridenMethods($methods);
+        $code .= $this->createCodeForOverridenMethods(array_intersect($methods, $this->reflection->getAllMethods()));
+        $code .= $this->createCodeForNewMethod(array_diff($methods, $this->reflection->getAllMethods()));
         $code .= "}\n";
 
         return $code;
@@ -1575,7 +1576,7 @@ class MockGenerator
             if (in_array($method, $mock_reflection->getMethods())) {
                 continue;
             }
-            $code .= '    '.$this->reflection->getSignature($method)." {\n";
+            $code .= "    public function {$method}() {\n";
             $code .= "        return \$this->mock->invoke(\"$method\", func_get_args());\n";
             $code .= "    }\n";
         }

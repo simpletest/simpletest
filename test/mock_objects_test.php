@@ -243,10 +243,21 @@ class Dummy
     {
         return true;
     }
+
+    protected function aProtectedMethod()
+    {
+        return true;
+    }
+
+    private function aPrivateMethod()
+    {
+        return true;
+    }
 }
 Mock::generate('Dummy');
 Mock::generate('Dummy', 'AnotherMockDummy');
 Mock::generate('Dummy', 'MockDummyWithExtraMethods', ['extraMethod']);
+Mock::generatePartial('Dummy', 'MockPartialDummyWithExtraMethods', ['extraMethod']);
 
 class TestOfConstructorCreation extends UnitTestCase
 {
@@ -270,6 +281,12 @@ class TestOfConstructorCreation extends UnitTestCase
         $mock = new AnotherMockDummy();
         $this->assertTrue(method_exists($mock, '__constructor'));
     }
+
+    public function testExtendingWithExtraMethod()
+    {
+        $mock = new MockPartialDummyWithExtraMethods();
+        $this->assertTrue(method_exists($mock, '__constructor'));
+    }
 }
 
 class TestOfMockGeneration extends UnitTestCase
@@ -287,10 +304,40 @@ class TestOfMockGeneration extends UnitTestCase
         $this->assertTrue(method_exists($mock, 'extraMethod'));
     }
 
+    public function testCloningWithProtectedMethod()
+    {
+        $mock = new MockDummyWithExtraMethods();
+        $this->assertTrue(method_exists($mock, 'aProtectedMethod'));
+    }
+
+    public function testCloningWithPrivateMethod()
+    {
+        $mock = new MockDummyWithExtraMethods();
+        $this->assertTrue(method_exists($mock, 'aPrivateMethod'));
+    }
+
     public function testCloningWithChosenClassName()
     {
         $mock = new AnotherMockDummy();
         $this->assertTrue(method_exists($mock, 'aMethod'));
+    }
+
+    public function testExtendingWithExtraMethod()
+    {
+        $mock = new MockPartialDummyWithExtraMethods();
+        $this->assertTrue(method_exists($mock, 'extraMethod'));
+    }
+
+    public function testExtendingWithProtectedMethod()
+    {
+        $mock = new MockPartialDummyWithExtraMethods();
+        $this->assertTrue(method_exists($mock, 'aProtectedMethod'));
+    }
+
+    public function testExtendingWithPrivateMethod()
+    {
+        $mock = new MockPartialDummyWithExtraMethods();
+        $this->assertTrue(method_exists($mock, 'aPrivateMethod'));
     }
 }
 
