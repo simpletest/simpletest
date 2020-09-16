@@ -3,6 +3,7 @@
 require_once __DIR__.'/../src/autorun.php';
 require_once __DIR__.'/../src/expectation.php';
 require_once __DIR__.'/../src/mock_objects.php';
+require_once __DIR__.'/support/dummy_namespace.php';
 
 class TestOfAnythingExpectation extends UnitTestCase
 {
@@ -1161,5 +1162,17 @@ class TestOfProtectedMethodPartialMocks extends UnitTestCase
         $object = new TestDummyWithProtected();
         $object->returnsByValue('aProtectedMethod', false);
         $this->assertFalse($object->aMethodCallsProtected());
+    }
+}
+
+Mock::generate('DummyNS\DummyWithNamespace', 'TestFullDummyWithNamespace');
+Mock::generatePartial('DummyNS\DummyWithNamespace', 'TestPartialDummyWithNamespace', ['aMethod']);
+
+class TestOfNamespacedPartialMocks extends UnitTestCase
+{
+    public function testsMockExistsUnderNamespace()
+    {
+        $this->assertTrue(class_exists('DummyNS\TestFullDummyWithNamespace'));
+        $this->assertTrue(class_exists('DummyNS\TestPartialDummyWithNamespace'));
     }
 }

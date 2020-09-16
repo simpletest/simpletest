@@ -1495,13 +1495,19 @@ class MockGenerator
      */
     protected function extendClassCode($methods)
     {
-        $code = 'class '.$this->mock_class.' extends '.$this->class." {\n";
+        $code = '';
+
+        if (!empty($this->namespace)) {
+            $code .= 'namespace '.$this->namespace.";\n";
+        }
+
+        $code .= 'class '.$this->mock_class.' extends '.$this->class." {\n";
         $code .= "    protected \$mock;\n";
         $code .= $this->addMethodList($methods);
         $code .= "\n";
 
         $code .= "    function __construct() {\n";
-        $code .= '        $this->mock = new '.$this->mock_base."();\n";
+        $code .= '        $this->mock = new \\'.$this->mock_base."();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
         $code .= "    }\n";
         $code .= $this->createCodeForConstructor();
