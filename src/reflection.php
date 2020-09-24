@@ -404,7 +404,12 @@ class SimpleReflection
     {
         // Guard: parameter types only supported by PHP7.0+
         if ((PHP_VERSION_ID >= 70000) && $parameter->hasType()) {
-            $typeHint = (string) $parameter->getType();
+            $typeHint = $parameter->getType();
+            if ($typeHint && PHP_VERSION_ID >= 70100) {
+                $typeHint = $typeHint->getName();
+            } else {
+                $typeHint = (string) $typeHint;
+            }
         } elseif ($parameter->isArray()) {
             $typeHint = 'array';
         }
