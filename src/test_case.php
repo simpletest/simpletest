@@ -401,7 +401,6 @@ class SimpleFileLoader
     {
         $existing_classes = get_declared_classes();
         $existing_globals = get_defined_vars();
-        echo $test_file.PHP_EOL;
         include_once $test_file;
         $new_globals = get_defined_vars();
         $this->makeFileVariablesGlobal($existing_globals, $new_globals);
