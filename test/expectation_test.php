@@ -310,13 +310,6 @@ class TestOfIsA extends UnitTestCase
         $this->assertFalse($expectation->test(5));
     }
 
-    public function testReal()
-    {
-        $expectation = new IsAExpectation('real');
-        $this->assertTrue($expectation->test(5.0));
-        $this->assertFalse($expectation->test(5));
-    }
-
     public function testInteger()
     {
         $expectation = new IsAExpectation('integer');
