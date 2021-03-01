@@ -410,8 +410,13 @@ class SimpleReflection
             } else {
                 $typeHint = (string) $typeHint;
             }
-        } elseif ($parameter->isArray()) {
+        } 
+        // Guard: parameter is array only supported by <PHP8
+        elseif((PHP_VERSION_ID < 80000) && $parameter->isArray()) {
             $typeHint = 'array';
+        }
+        else {
+            $typeHint = '';
         }
 
         if (empty($typeHint)) {
