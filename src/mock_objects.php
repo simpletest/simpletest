@@ -1760,7 +1760,9 @@ class MockGenerator
             if ($this->isConstructorOrDeconstructor($method)) {
                 continue;
             }
-            $code .= '    '.$this->reflection->getSignature($method)." {\n";
+
+            $signature = trim(str_replace('abstract', '', $this->reflection->getSignature($method)));
+            $code .= '    '.$signature." {\n";
             $code .= "        return \$this->mock->invoke(\"$method\", func_get_args());\n";
             $code .= "    }\n";
         }
