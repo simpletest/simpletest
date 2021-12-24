@@ -359,11 +359,23 @@ class SimpleReflection
         $signatures = array();
         foreach ($method->getParameters() as $parameter) {
             $signature = '';
-            $type      = $parameter->getClass();
-            if (is_null($type) && version_compare(phpversion(), '5.1.0', '>=') && $parameter->isArray()) {
-                $signature .= 'array ';
-            } elseif (!is_null($type)) {
-                $signature .= $type->getName() . ' ';
+            if (version_compare(phpversion(), '8.0.0', '>=')) {
+                $type = $parameter->getType() && ! $parameter->getType()->isBuiltin()
+                    ? new ReflectionClass($parameter->getType()->getName())
+                    : null;
+
+                if ($type && $type->getName() === 'array') {
+                    $signature .= 'array ';
+                } elseif ($type) {
+                    $signature .= $type->getName() . ' ';
+                }
+            } else {
+                $type = $parameter->getClass();
+                if (is_null($type) && version_compare(phpversion(), '5.1.0', '>=') && $parameter->isArray()) {
+                    $signature .= 'array ';
+                } elseif (!is_null($type)) {
+                    $signature .= $type->getName() . ' ';
+                }
             }
             if ($parameter->isPassedByReference()) {
                 $signature .= '&';
