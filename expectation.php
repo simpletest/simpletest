@@ -465,6 +465,7 @@ class OutsideMarginExpectation extends WithinMarginExpectation
 class ReferenceExpectation
 {
     private $value;
+    private $message;
 
     /**
      * Sets the reference value to compare against.
