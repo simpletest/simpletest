@@ -411,6 +411,8 @@ class SimpleCallSchedule
     private $always;
     private $at;
 
+    public $expected_args;
+
     /**
      * Sets up an empty response schedule. Creates an empty call map.
      */
