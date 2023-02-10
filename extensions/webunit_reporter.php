@@ -14,7 +14,7 @@ require_once __DIR__ . '/../reporter.php';
  * - title - string
  * - image path - string
  */
-define('SIMPLETEST_WEBUNIT_HEAD', <<<EOS
+define('SIMPLETEST_WEBUNIT_HEAD_TPL', <<<EOS
 <html>
 <head>
 <title>%s</title>
@@ -91,7 +91,14 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
         {
             $this->sendNoCacheHeaders();
             echo sprintf(
-                SIMPLETEST_WEBUNIT_HEAD, $test_name, $this->path . 'js/', $this->path . 'js/', $this->path . 'css/', $this->_getCss(), $test_name, $this->path . 'img/'
+                SIMPLETEST_WEBUNIT_HEAD_TPL,
+                $test_name,
+                $this->path . 'webunit/js/',
+                $this->path . 'webunit/js/',
+                $this->path . 'webunit/css/',
+                $this->_getCss(),
+                $test_name,
+                $this->path . 'webunit/img/'
                 );
             flush();
         }
