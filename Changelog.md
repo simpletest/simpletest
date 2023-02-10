@@ -4,6 +4,7 @@
 
 **Currently working on: ...**
 
+* deleted `.travis.yml` (Travis CI)
 * new folder structure
   - moved source files into "src/", adjusted file includes accordingly
 * updated php-cs-fixer config file (`.php_cs`)
@@ -41,7 +42,7 @@
 * fixed return "exit code" of true/1, when tests are passing
 * fixed #14 - Add support for mocking variadic methods (@36degrees)
 * added support for inputs of type date and time
-* changed minimum PHP requirement to 7.1+ (dropped support for PHP 5) 
+* changed minimum PHP requirement to 7.1+ (dropped support for PHP 5)
 
 ## [1.1.7] - 2015-09-21
 
