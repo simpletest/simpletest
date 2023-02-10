@@ -1,4 +1,4 @@
-SimpleTest [![Build Status](https://travis-ci.org/simpletest/simpletest.svg)](https://travis-ci.org/simpletest/simpletest) [![Latest Stable Version](https://img.shields.io/packagist/v/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest) [![Total Downloads](https://img.shields.io/packagist/dt/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest) 
+SimpleTest [![Build Status](https://travis-ci.org/simpletest/simpletest.svg)](https://travis-ci.org/simpletest/simpletest) [![Latest Stable Version](https://img.shields.io/packagist/v/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest) [![Total Downloads](https://img.shields.io/packagist/dt/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest)
 ==========
 
 SimpleTest is a framework for unit testing, web site testing and mock objects for PHP.
@@ -9,13 +9,13 @@ SimpleTest is a framework for unit testing, web site testing and mock objects fo
 
 All downloads are stored on Github Releases.
 
-You may find the zip of the "latest released/tagged version" here:
+You may find the zip of the "latest released version" here:
 
 https://github.com/simpletest/simpletest/releases/latest
 
-You may find the zip archive of the "dev-master" branch here:
+You may find the zip archive of the "main" development branch here:
 
-https://github.com/simpletest/simpletest/archive/master.zip
+https://github.com/simpletest/simpletest/archive/main.zip
 
 #### Composer
 
@@ -23,13 +23,13 @@ You may also install the extension through Composer into the `/vendor` folder of
 
 Either run
 
-    php composer.phar require --prefer-dist simpletest/simpletest "^1.1"
+    php composer.phar require --prefer-dist simpletest/simpletest "^1.2"
 
 or add the package `simpletest/simpletest` to the require-dev section of your `composer.json` file:
 
     {
         "require-dev": {
-            "simpletest/simpletest": "^1.1"
+            "simpletest/simpletest": "^1.2"
         }
     }
 
@@ -67,13 +67,13 @@ GNU LGPL v2.1
 
 The unit tests for SimpleTest itself can be run here:
 
-    test/all_tests.php
+    tests/all_tests.php
 
 The acceptance tests require a running server:
 
-    - php -S localhost:8080 -t test/site
-    - test/acceptance_test.php
+    - php -S localhost:8080 -t tests/site
+    - tests/acceptance_test.php
 
 # Docs
 
-    http://simpletest.org/en/first_test_tutorial.html
+    https://simpletest.org/en/first_test_tutorial.html
