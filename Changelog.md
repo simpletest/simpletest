@@ -9,6 +9,10 @@
 * deleted `.travis.yml` (Travis CI)
 * new folder structure
   - moved source files into "src/", adjusted file includes accordingly
+  - renamed folder "test" to "tests"
+  - moved static website data into "build/website/simpletest.org-static"
+  - moved xml sources for en docs into "build/docs/source"
+* dropped doc translations for IT and FR (only keeping EN as source)
 * updated php-cs-fixer config file (`.php_cs`)
 * incremental code-style refactorings
   - use short array syntax, "array() => []"
