@@ -10,6 +10,7 @@ jobs:
   test:
   
     strategy:
+      fail-fast: false
       matrix:
         version: ['7.3', '7.4', '8.0', '8.1', '8.2']
         
@@ -26,6 +27,7 @@ jobs:
           php-version: ${{matrix.version}}
           extensions: dom, mbstring, tidy
           ini-values: memory_limit=-1
+          tools: none
 
       - name: PHP lint
         run: find . -path ./vendor -prune -o -type f -name '*.php' ! -name "test_with_parse_error.php" -print0 | xargs -0 -n1 -P4 php -l -n | (! grep -v "No syntax errors detected" )
