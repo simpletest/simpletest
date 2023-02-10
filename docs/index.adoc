@@ -1,0 +1,3 @@
+[[user-manual]]
+= SimpleTest User Manual
+Marcus Baker; Jason Sweat; Travis Swicegood; Perrick Penet; Edward Z. Yang; Jens A. Koch
