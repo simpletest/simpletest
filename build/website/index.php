@@ -1,62 +1,55 @@
 <?php
-/**
- *  index file for test site
- *  @package    SimpleTest
- *  @version    $Id$
- */
 
-/**
- * include package.php
- */
-require_once(dirname(__FILE__).'/package.php');
+require_once __DIR__ . '/package.php';
 
-$source_path = dirname(__FILE__).'/../../docs/source/';
-$destination_path = dirname(__FILE__).'/../../docs/simpletest.org/';
+$source_path = realpath(__DIR__ . '/../docs/source') .'/';
 
-$languages = array("en/", "fr/", "it/", "../../");
+$destination_path = realpath(__DIR__ . '/../../out/simpletest.org') .'/';
 
-foreach ($languages as $language) {
-    $dir = opendir($source_path.$language);
+#var_dump($source_path, $destination_path);
 
-    while (($file = readdir($dir)) !== false) {
-        if (is_file($source_path.$language.$file) and preg_match("/\.xml$/", $file)) {
-            $source = simplexml_load_file($source_path.$language.$file, "SimpleTestXMLElement");
-            $destination = $source->destination(dirname(__FILE__).'/map.xml');
+$dir = opendir($source_path);
 
-            if (!empty($destination)) {
-                $page = file_get_contents(dirname(__FILE__).'/template.html');
+while (($file = readdir($dir)) !== false) {
 
-                $page = str_replace('KEYWORDS', $source->keywords(), $page);
-                $page = str_replace('TITLE', $source->title(), $page);
-                $page = str_replace('CONTENT', $source->content(), $page);
-                $page = str_replace('INTERNAL', $source->internal(), $page);
-                $page = str_replace('EXTERNAL', $source->external(), $page);
-                
-                $links = $source->links(dirname(__FILE__).'/map.xml');
-                foreach ($links as $category => $link) {
-                    $page = str_replace("LINKS_".strtoupper($category), $link, $page);
-                }
-                
-                $destination_dir = dirname($destination_path.$destination);
-                if (!is_dir($destination_dir)) {
-                    mkdir($destination_dir);
-                }
+    if (is_file($source_path . $file) and preg_match("/\.xml$/", $file)) {
+        $source = simplexml_load_file($source_path . $file, "SimpleTestXMLElement");
+        $destination = $source->destination(__DIR__ . '/map.xml');
 
-                $ok = file_put_contents($destination_path.$destination, $page);
-                touch($destination_path.$destination, filemtime($source_path.$language.$file));
+        if (!empty($destination)) {
+            $page = file_get_contents(__DIR__ . '/template.html');
 
-                if ($ok) {
-                    $result = "OK";
-                } else {
-                    $result = "KO";
-                }
+            $page = str_replace('KEYWORDS', $source->keywords(), $page);
+            $page = str_replace('TITLE', $source->title(), $page);
+            $page = str_replace('CONTENT', $source->content(), $page);
+            $page = str_replace('INTERNAL', $source->internal(), $page);
+            $page = str_replace('EXTERNAL', $source->external(), $page);
 
-                $synchronisation = new PackagingSynchronisation($source_path.$language.$file);
-                $result .= " ".$synchronisation->result();
-
-                echo $destination." : ".$result."\n";
+            $links = $source->links(__DIR__ . '/map.xml');
+            foreach ($links as $category => $link) {
+                $page = str_replace("LINKS_" . strtoupper($category), $link, $page);
             }
+
+            $destination_dir = dirname($destination_path . $destination);
+            if (!is_dir($destination_dir)) {
+                mkdir($destination_dir, 0777, true);
+            }
+
+            $ok = file_put_contents($destination_path . $destination, $page);
+            touch($destination_path . $destination, filemtime($source_path . $file));
+
+            if ($ok) {
+                $result = "OK";
+            } else {
+                $result = "FAIL";
+            }
+
+            $synchronisation = new PackagingSynchronisation($source_path . $file);
+            $result .= " " . $synchronisation->result();
+
+            echo $result . " : " . $destination . "\n";
         }
     }
-    closedir($dir);
 }
+
+closedir($dir);
