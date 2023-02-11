@@ -4,6 +4,7 @@
 
 **Currently working on: ...**
 
+* renamed branch "master" to "main"
 * added old changelog entries to this file
 * enabled building/testing on Github Actions
 * deleted `.travis.yml` (Travis CI)
