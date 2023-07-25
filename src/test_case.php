@@ -466,7 +466,6 @@ class SimpleFileLoader
                 }
             }
         }
-
         return $classes;
     }
 
@@ -636,7 +635,7 @@ class TestSuite
 }
 
 /**
- * This is a failing group test for when a test suite hasn'tloaded properly.
+ * This is a failing group test for when a test suite hasn't loaded properly.
  */
 class BadTestSuite
 {

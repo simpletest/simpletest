@@ -12,10 +12,11 @@ class AllTests extends TestSuite
 
         /*
          * The "live" and "acceptance" tests require a running local webserver on "localhost:8080".
-         * We are using PHP's built-in webserver to serve the "test/site".
-         * The start command for the server is: `php -S localhost:8080 -t test/site`.
+         * We are using PHP's built-in webserver to serve the "tests/site".
+         * The start command for the server is: `php -S localhost:8080 -t tests/site`.
          */
         $this->addFile(__DIR__.'/live_test.php');
         $this->addFile(__DIR__.'/acceptance_test.php');
+
     }
 }
