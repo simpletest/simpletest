@@ -391,7 +391,13 @@ class SimpleReflection
 
             if ('' != $returnTypeString) {
                 // Guard: method getReturnType()->allowsNull() is only supported by PHP7.1+
-                if (PHP_VERSION_ID >= 70100 && $returnType->allowsNull()) {
+                if (PHP_VERSION_ID >= 70100
+                    &&
+                    $returnType->allowsNull()
+                    &&
+                    // getReturnType->__toString() for Throwable
+                    // already return question mark ("?Throwable"), so check it
+                    !str_starts_with($returnTypeString, "?")) {
                     $returnTypeString = '?'.$returnTypeString;
                 }
 
@@ -408,7 +414,15 @@ class SimpleReflection
         if ((PHP_VERSION_ID >= 70000) && $parameter->hasType()) {
             $typeHint = $parameter->getType();
             if ($typeHint && PHP_VERSION_ID >= 70100) {
-                $typeHint = $typeHint->getName();
+                if (get_class($typeHint) === 'ReflectionNamedType') {
+                    $typeHint = $typeHint->getName();
+                }
+                elseif (get_class($typeHint) === 'ReflectionUnionType') {
+                    $typeHint = implode("|", $typeHint->getTypes());
+                }
+                elseif (get_class($typeHint) === 'ReflectionIntersectionType') {
+                    $typeHint = implode("&", $typeHint->getTypes());
+                }
             } else {
                 $typeHint = (string) $typeHint;
             }
@@ -428,11 +442,13 @@ class SimpleReflection
         $typeHints = [
             'self', 'array', 'callable',
             // PHP 7
-            'bool', 'float', 'int', 'string',
+            'bool', 'float', 'int', 'string', 'object',
+            // PHP 8
+            'mixed',
         ];
 
         // prefix a slash, on "class" or "interface" typehints
-        if (!in_array($typeHint, $typeHints)) {
+        if (!in_array($typeHint, $typeHints) && !str_contains($typeHint, "|") && !str_contains($typeHint, "&")) {
             $typeHint = '\\'.$typeHint;
         }
 
