@@ -376,28 +376,30 @@ class SimpleReflection
      *
      * @return string the Parameters string for a method
      */
-    protected function getReturnType($method)
+    protected function getReturnType($method): string
     {
+        // the return type feature doesn't exist below PHP7, return empty string by default
+        $returnTypeString = '';
         // Guard: method getReturnType() is only supported by PHP7.0+
         if (PHP_VERSION_ID >= 70000) {
-            $returnType = (string) $method->getReturnType();
+            $returnType = $method->getReturnType();
+            $returnTypeString = (string) $returnType;
 
-            if ('self' === $returnType) {
-                $returnType = '\\'.$this->method->getDeclaringClass()->getName();
+            if ('self' === $returnTypeString) {
+                $returnTypeString = '\\'.$this->method->getDeclaringClass()->getName();
             }
 
-            if ('' != $returnType) {
+            if ('' != $returnTypeString) {
                 // Guard: method getReturnType()->allowsNull() is only supported by PHP7.1+
-                if (PHP_VERSION_ID >= 70100) {
-                    $returnType = '?'.$returnType;
+                if (PHP_VERSION_ID >= 70100 && $returnType->allowsNull()) {
+                    $returnTypeString = '?'.$returnTypeString;
                 }
 
-                return ': '.$returnType;
+                $returnTypeString = ': '.$returnTypeString;
             }
         }
 
-        // the return type feature doesn't exist below PHP7, return empty string
-        return '';
+        return $returnTypeString;
     }
 
     protected function getParameterTypeHint(ReflectionParameter $parameter)
@@ -410,7 +412,7 @@ class SimpleReflection
             } else {
                 $typeHint = (string) $typeHint;
             }
-        } 
+        }
         // Guard: parameter is array only supported by <PHP8
         elseif((PHP_VERSION_ID < 80000) && $parameter->isArray()) {
             $typeHint = 'array';
