@@ -1390,7 +1390,6 @@ class MockGenerator
             return eval("$code return \$code;");
         } else {
             $code = $this->createCodeForSubclass($methods ? $methods : []);
-
             return eval("$code return \$code;");
         }
     }
@@ -1435,8 +1434,11 @@ class MockGenerator
         if (count($interfaces) > 0) {
             $implements = 'implements '.implode(', ', $interfaces);
         }
-
-        $code = 'class '.$this->mock_class.' extends '.$this->mock_base.' '.$implements." {\n";
+        $code = "";
+        if (!empty($this->namespace)) {
+            $code  .= 'namespace ' . $this->namespace . ";\n";
+        }
+        $code .= 'class ' . $this->mock_class . ' extends \\' . $this->mock_base . ' ' . $implements . " {\n";
         $code .= "    function __construct() {\n";
         $code .= "        parent::__construct();\n";
         $code .= "    }\n";
