@@ -1545,8 +1545,11 @@ class MockGenerator
                 continue;
             }
 
-            $code .= '    '.$this->reflection->getSignature($method);
-
+            $signature = '    '.$this->reflection->getSignature($method);
+            if (PHP_VERSION_ID >= 80100) {
+                $code .= '#[\ReturnTypeWillChange]' . "\n";
+            }
+            $code .= "    " . $signature;
             if ($mock_reflection->isAbstract()) {
                 // abstract function has no body. end the signature statement.
                 $code .= ";\n";
@@ -1764,6 +1767,9 @@ class MockGenerator
             }
 
             $signature = trim(str_replace('abstract', '', $this->reflection->getSignature($method)));
+            if (PHP_VERSION_ID >= 80100) {
+                $code .= '#[\ReturnTypeWillChange]' . "\n";
+            }
             $code .= '    '.$signature." {\n";
             $code .= "        return \$this->mock->invoke(\"$method\", func_get_args());\n";
             $code .= "    }\n";
