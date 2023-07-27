@@ -412,6 +412,7 @@ class SimpleCallSchedule
     private $wildcard = MOCK_ANYTHING;
     private $always;
     private $at;
+    private $expected_args;
 
     /**
      * Sets up an empty response schedule. Creates an empty call map.
