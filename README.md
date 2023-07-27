@@ -1,4 +1,4 @@
-SimpleTest ![Build Status](https://github.com/simpletest/simpletest/actions/workflows/ci.yml/badge.svg?branch=main) [![Latest Stable Version](https://img.shields.io/packagist/v/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest) [![Total Downloads](https://img.shields.io/packagist/dt/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest)
+SimpleTest [![Build Status](https://github.com/simpletest/simpletest/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/simpletest/simpletest/actions/workflows/ci.yml) [![Latest Stable Version](https://img.shields.io/packagist/v/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest) [![Total Downloads](https://img.shields.io/packagist/dt/simpletest/simpletest.svg?style=flat-square)](https://packagist.org/packages/simpletest/simpletest)
 ==========
 
 SimpleTest is a framework for unit testing, web site testing and mock objects for PHP.
