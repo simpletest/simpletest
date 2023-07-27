@@ -344,8 +344,7 @@ class SimpleReflection
         $signatures = [];
         $parameters = $method->getParameters();
         foreach ($parameters as $parameter) {
-            $signature = '';
-            $signature .= $this->getParameterTypeHint($parameter);
+            $signature = $this->getParameterTypeHint($parameter);
             if ($parameter->isPassedByReference()) {
                 $signature .= '&';
             }
@@ -378,26 +377,34 @@ class SimpleReflection
      */
     protected function getReturnType($method)
     {
+        // the return type feature doesn't exist below PHP7, return empty string by default
+        $returnTypeString = '';
         // Guard: method getReturnType() is only supported by PHP7.0+
         if (PHP_VERSION_ID >= 70000) {
-            $returnType = (string) $method->getReturnType();
+            $returnType = $method->getReturnType();
+            $returnTypeString = (string) $returnType;
 
-            if ('self' === $returnType) {
-                $returnType = '\\'.$this->method->getDeclaringClass()->getName();
+            if ('self' === $returnTypeString) {
+                $returnTypeString = '\\'.$this->method->getDeclaringClass()->getName();
             }
 
-            if ('' != $returnType) {
+            if ('' != $returnTypeString) {
                 // Guard: method getReturnType()->allowsNull() is only supported by PHP7.1+
-                if (PHP_VERSION_ID >= 70100) {
-                    $returnType = '?'.$returnType;
+                if (PHP_VERSION_ID >= 70100
+                    &&
+                    $returnType->allowsNull()
+                    &&
+                    // getReturnType->__toString() for Throwable
+                    // already return question mark ("?Throwable"), so check it.
+                    // Using strpos() instead of str_starts_with() for backward compatibility
+                    strpos($returnTypeString, "?") !== 0) {
+                    $returnTypeString = '?'.$returnTypeString;
                 }
-
-                return ': '.$returnType;
+                $returnTypeString = ': ' . $returnTypeString;
             }
         }
 
-        // the return type feature doesn't exist below PHP7, return empty string
-        return '';
+        return $returnTypeString;
     }
 
     protected function getParameterTypeHint(ReflectionParameter $parameter)
@@ -406,11 +413,19 @@ class SimpleReflection
         if ((PHP_VERSION_ID >= 70000) && $parameter->hasType()) {
             $typeHint = $parameter->getType();
             if ($typeHint && PHP_VERSION_ID >= 70100) {
-                $typeHint = $typeHint->getName();
+                if (get_class($typeHint) === 'ReflectionNamedType') {
+                    $typeHint = $typeHint->getName();
+                }
+                elseif (get_class($typeHint) === 'ReflectionUnionType') {
+                    $typeHint = implode("|", $typeHint->getTypes());
+                }
+                elseif (get_class($typeHint) === 'ReflectionIntersectionType') {
+                    $typeHint = implode("&", $typeHint->getTypes());
+                }
             } else {
                 $typeHint = (string) $typeHint;
             }
-        } 
+        }
         // Guard: parameter is array only supported by <PHP8
         elseif((PHP_VERSION_ID < 80000) && $parameter->isArray()) {
             $typeHint = 'array';
@@ -423,14 +438,20 @@ class SimpleReflection
             return '';
         }
 
-        $typeHints = [
+        $typesThatDontRequirePrefixSlash = [
             'self', 'array', 'callable',
             // PHP 7
-            'bool', 'float', 'int', 'string',
+            'bool', 'float', 'int', 'string', 'object',
+            // PHP 8
+            'mixed',
         ];
 
         // prefix a slash, on "class" or "interface" typehints
-        if (!in_array($typeHint, $typeHints)) {
+        if (!in_array($typeHint, $typesThatDontRequirePrefixSlash)
+            &&
+            // Union or intersection type don't need to prefix a slash
+            // using strpos() instead of str_contains() for backward compatibility
+            strpos($typeHint, "|") === false && strpos($typeHint, "&") === false) {
             $typeHint = '\\'.$typeHint;
         }
 

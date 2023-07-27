@@ -13,6 +13,10 @@ Mock::generatePartial('SimpleUserAgent', 'MockRequestUserAgent', ['createHttpReq
 
 class TestOfFetchingUrlParameters extends UnitTestCase
 {
+    private $headers;
+    private $request;
+    private $response;
+
     public function setUp()
     {
         $this->headers = new MockSimpleHttpHeaders();

@@ -412,6 +412,7 @@ class SimpleCallSchedule
     private $wildcard = MOCK_ANYTHING;
     private $always;
     private $at;
+    private $expected_args;
 
     /**
      * Sets up an empty response schedule. Creates an empty call map.
@@ -1386,11 +1387,9 @@ class MockGenerator
         }
         if ($this->reflection->isInterface() || $this->reflection->hasFinal()) {
             $code = $this->createCodeForClass($methods ? $methods : []);
-
             return eval("$code return \$code;");
         } else {
             $code = $this->createCodeForSubclass($methods ? $methods : []);
-
             return eval("$code return \$code;");
         }
     }
@@ -1435,8 +1434,11 @@ class MockGenerator
         if (count($interfaces) > 0) {
             $implements = 'implements '.implode(', ', $interfaces);
         }
-
-        $code = 'class '.$this->mock_class.' extends '.$this->mock_base.' '.$implements." {\n";
+        $code = "";
+        if (!empty($this->namespace)) {
+            $code  .= 'namespace ' . $this->namespace . ";\n";
+        }
+        $code .= 'class ' . $this->mock_class . ' extends \\' . $this->mock_base . ' ' . $implements . " {\n";
         $code .= "    function __construct() {\n";
         $code .= "        parent::__construct();\n";
         $code .= "    }\n";
@@ -1543,13 +1545,16 @@ class MockGenerator
                 continue;
             }
 
-            $code .= '    '.$this->reflection->getSignature($method);
-
+            $signature = $this->reflection->getSignature($method);
+            if (PHP_VERSION_ID >= 80100) {
+                $code .= '    #[\ReturnTypeWillChange]' . "\n";
+            }
+            $code .= "    " . $signature;
             if ($mock_reflection->isAbstract()) {
                 // abstract function has no body. end the signature statement.
                 $code .= ";\n";
             } else {
-                $code .= " {\n";
+                $code .= "\n    {\n";
                 $code .= "        return \$this->invoke(\"$method\", func_get_args());\n";
                 $code .= "    }\n";
             }
@@ -1635,7 +1640,13 @@ class MockGenerator
     protected function createCodeForConstructor()
     {
         $code = "    function __constructor() {\n";
-        $code .= "        call_user_func_array('parent::__construct', func_get_args());\n";
+        if (PHP_VERSION_ID >= 80200) {
+            // Use of "parent" in callables is deprecated since PHP 8.2
+            $code .= "        call_user_func_array('" . $this->class . "::__construct', func_get_args());\n";
+        }
+        else {
+            $code .= "        call_user_func_array('parent::__construct', func_get_args());\n";
+        }
         $code .= "    }\n";
 
         return $code;
@@ -1762,8 +1773,16 @@ class MockGenerator
             }
 
             $signature = trim(str_replace('abstract', '', $this->reflection->getSignature($method)));
-            $code .= '    '.$signature." {\n";
-            $code .= "        return \$this->mock->invoke(\"$method\", func_get_args());\n";
+            if (PHP_VERSION_ID >= 80100) {
+                $code .= '    #[\ReturnTypeWillChange]' . "\n";
+            }
+            $code .= '    '.$signature."\n    {\n";
+            if (PHP_VERSION_ID >= 80200 && strpos($signature, ': void') !== false) {
+                $code .= "        \$this->mock->invoke(\"$method\", func_get_args());\n";
+            }
+            else {
+                $code .= "        return \$this->mock->invoke(\"$method\", func_get_args());\n";
+            }
             $code .= "    }\n";
         }
 
