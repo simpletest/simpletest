@@ -96,9 +96,11 @@ class SimpleReflection
     {
         $reflection = new ReflectionClass($this->interface);
 
-        return array_map(function($method) {
+        $callable = function($method) {
             return $method->getName();
-        }, $reflection->getMethods());
+        };
+
+        return array_map($callable, $reflection->getMethods());
     }
 
     /**
