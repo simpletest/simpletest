@@ -1207,6 +1207,19 @@ class WebTestCase extends SimpleTestCase
     }
 
     /**
+     * Sets all form fields with that label.
+     *
+     * @param string $label   Label of field in forms.
+     * @param string $value   New value of field.
+     *
+     * @return bool        True if field exists, otherwise false.
+     */
+    public function setFieldByLabel($label, $value, $position=false)
+    {
+        return $this->browser->setFieldByLabel($label, $value, $position);
+    }
+    
+    /**
      * Sets all form fields with that id.
      *
      * @param string/integer $id    Id of field in forms

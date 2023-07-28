@@ -134,7 +134,7 @@ class SimpleDumper
         }
 
         $position = min($position, $length);
-        $start = ($size / 2 > $position ? 0 : $position - $size / 2);
+        $start = (int)($size / 2 > $position ? 0 : $position - $size / 2);
         if ($start + $size > $length) {
             $start = $length - $size;
         }

@@ -724,6 +724,26 @@ class TestOfParsingUsingPhpParser extends TestOfParsing
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SelectByLabel('startend')), 'stuff');
     }
+
+    public function testSetFieldValueByLabelWithoutForAttribute()
+    {
+        $label = 'justLabel';
+        $value = 'another stuff';
+        $raw = '<form><label>'.$label.'<input type="text" id="3" name="justName" value="stuff"></label></form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $page->setField(new SelectByLabel($label), $value, false);
+        $this->assertEqual($page->getField(new SelectByLabel($label)), $value);
+    }
+
+    public function testSetFieldValueByLabelWithForAttribute()
+    {
+        $label = 'justLabel';
+        $value = 'another stuff';
+        $raw = '<form><label for="3" >'.$label.'</label><br><input type="text" id="3" name="justName" value="stuff"></form>';
+        $page = $this->whenVisiting('http://host', $raw);
+        $page->setField(new SelectByLabel($label), $value, false);
+        $this->assertEqual($page->getField(new SelectByLabel($label)), $value);
+    }
 }
 
 class TestOfParsingUsingTidyParser extends TestOfParsing

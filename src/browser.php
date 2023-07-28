@@ -892,7 +892,7 @@ class SimpleBrowser
     }
 
     /**
-     * Sets all form fields with that name.
+     * Sets all form fields with that name or label.
      *
      * @param string $label name or label of field in forms
      * @param string $value new value of field
@@ -916,6 +916,20 @@ class SimpleBrowser
     public function setFieldByName($name, $value, $position = false)
     {
         return $this->page->setField(new SelectByName($name), $value, $position);
+    }
+
+
+    /**
+     * Sets all form fields with that label.
+     *
+     * @param string $label   Label of field in forms.
+     * @param string $value   New value of field.
+     *
+     * @return bool        True if field exists, otherwise false.
+     */
+    public function setFieldByLabel($label, $value, $position=false): bool
+    {
+        return $this->page->setField(new SelectByLabel($label), $value, $position);
     }
 
     /**
