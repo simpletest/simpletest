@@ -62,10 +62,11 @@ class UnitTestCase extends SimpleTestCase
     public function assertNull($value, $message = '%s')
     {
         $dumper = new SimpleDumper();
-        $message = sprintf(
-            $message,
-            '['.$dumper->describeValue($value).'] should be null'
-        );
+
+        $msg_tpl = '[%s] should  be null';
+        $msg_tpl = sprintf($msg_tpl, $dumper->describeValue($value));
+
+        $message = sprintf($message, $msg_tpl);
 
         return $this->assertTrue(!isset($value), $message);
     }
@@ -81,10 +82,11 @@ class UnitTestCase extends SimpleTestCase
     public function assertNotNull($value, $message = '%s')
     {
         $dumper = new SimpleDumper();
-        $message = sprintf(
-            $message,
-            '['.$dumper->describeValue($value).'] should not be null'
-        );
+
+        $msg_tpl = '[%s] should not be null';
+        $msg_tpl = sprintf($msg_tpl, $dumper->describeValue($value));
+
+        $message = sprintf($message, $msg_tpl);
 
         return $this->assertTrue(isset($value), $message);
     }
@@ -221,12 +223,15 @@ class UnitTestCase extends SimpleTestCase
     public function assertReference(&$first, &$second, $message = '%s')
     {
         $dumper = new SimpleDumper();
-        $args = '['.$dumper->describeValue($first).'] '
-            .'and ['.$dumper->describeValue($second).'] '
-            .'should reference the same object';
+
+        $msg_tpl = '[%s] and [%s] should reference the same object';
+        $msg_tpl = sprintf($msg_tpl, $dumper->describeValue($first), $dumper->describeValue($second));
+
+        $message = sprintf($message, $msg_tpl);
+
         $isReference = SimpleTestCompatibility::isReference($first, $second);
 
-        return $this->assertTrue($isReference, sprintf($message, $args));
+        return $this->assertTrue($isReference, $message);
     }
 
     /**
@@ -245,12 +250,11 @@ class UnitTestCase extends SimpleTestCase
     public function assertSame($first, $second, $message = '%s')
     {
         $dumper = new SimpleDumper();
-        $message = sprintf(
-            $message,
-            '['.$dumper->describeValue($first).
-                        '] and ['.$dumper->describeValue($second).
-                        '] should reference the same object'
-        );
+
+        $msg_tpl = '[%s] and [%s] should reference the same object';
+        $msg_tpl = sprintf($msg_tpl, $dumper->describeValue($first), $dumper->describeValue($second));
+
+        $message = sprintf($message, $msg_tpl);
 
         return $this->assertTrue($first === $second, $message);
     }
@@ -268,11 +272,12 @@ class UnitTestCase extends SimpleTestCase
     public function assertClone($first, $second, $message = '%s')
     {
         $dumper = new SimpleDumper();
-        $message = sprintf(
-            $message,
-            '['.$dumper->describeValue($first).'] and ['.
-            $dumper->describeValue($second).'] should not be the same object'
-        );
+
+        $msg_tpl = '[%s] and [%s] should not be the same object';
+        $msg_tpl = sprintf($msg_tpl, $dumper->describeValue($first), $dumper->describeValue($second));
+
+        $message = sprintf($message, $msg_tpl);
+
         $identical = new IdenticalExpectation($first);
 
         return $this->assertTrue($identical->test($second) && !($first === $second), $message);
@@ -292,12 +297,11 @@ class UnitTestCase extends SimpleTestCase
     public function assertCopy(&$first, &$second, $message = '%s')
     {
         $dumper = new SimpleDumper();
-        $message = sprintf(
-            $message,
-            '['.$dumper->describeValue($first).
-                        '] and ['.$dumper->describeValue($second).
-                        '] should not be the same object'
-        );
+
+        $msg_tpl = '[%s] and [%s] should reference the same object';
+        $msg_tpl = sprintf($msg_tpl, $dumper->describeValue($first), $dumper->describeValue($second));
+
+        $message = sprintf($message, $msg_tpl);
 
         return $this->assertFalse(
             SimpleTestCompatibility::isReference($first, $second),
@@ -393,8 +397,12 @@ class UnitTestCase extends SimpleTestCase
             return $expected;
         }
 
-        return new EqualExpectation(
-            is_string($expected) ? str_replace('%', '%%', $expected) : $expected
-        );
+        if(is_string($expected)) {
+            $v = str_replace('%', '%%', $expected);
+        } else {
+            $v = $expected;
+        }
+
+        return new EqualExpectation($v);
     }
 }

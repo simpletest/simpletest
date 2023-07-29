@@ -8,6 +8,7 @@ class SimpleTidyPageBuilder
     private $forms = [];
     /** @var array */
     private $labels = [];
+    /** @var SimplePage */
     private $page;
     /** @var array */
     private $widgets_by_id = [];
@@ -42,18 +43,25 @@ class SimpleTidyPageBuilder
     /**
      * Reads the raw content the page using HTML Tidy.
      *
-     * @param $response SimpleHttpResponse  Fetched response
+     * @param SimpleHttpResponse $response SimpleHttpResponse  Fetched response
      *
      * @return SimplePage newly parsed page
      */
     public function parse($response)
     {
         $this->page = new SimplePage($response);
-        $tidied = tidy_parse_string(
-            $input = $this->insertGuards($response->getContent()),
-            ['output-xml' => false, 'wrap' => '0', 'indent' => 'no'],
-            'latin1'
-        );
+
+        $tidy_input = $this->insertGuards($response->getContent());
+
+        $tidy_config = [
+            'output-xml' => false,
+            'wrap' => '0',
+            'indent' => 'no'
+        ];
+
+        /** @var object $tidied */
+        $tidied = tidy_parse_string($tidy_input, $tidy_config, 'latin1');
+
         $this->walkTree($tidied->html());
         $this->attachLabels($this->widgets_by_id, $this->labels);
         $this->page->setForms($this->forms);
@@ -225,13 +233,20 @@ class SimpleTidyPageBuilder
      */
     private function createEmptyForm($node)
     {
-        return new SimpleForm($this->tags()->createTag($node->name, (array) $node->attribute), $this->page);
+        /** @var SimpleTag */
+        $tag = $this->tags()->createTag($node->name, (array) $node->attribute);
+
+        return new SimpleForm($tag, $this->page);
     }
 
     /**
      * Visits the given node and all children.
      *
      * @param object $node tidy XML node
+     * @param object $form
+     * @param string $enclosing_label
+     *
+     * @return object|SimpleForm
      */
     private function walkForm($node, $form, $enclosing_label = '')
     {
@@ -280,6 +295,7 @@ class SimpleTidyPageBuilder
      */
     private function addWidgetToForm($node, $form, $enclosing_label)
     {
+        /** @var object|SimpleTag */
         $widget = $this->tags()->createTag($node->name, $this->attributes($node));
         if (!$widget) {
             return;

@@ -357,7 +357,7 @@ class SimpleTestCase
      * Sends a formatted dump of a variable to the test suite for those emergency debugging situations.
      *
      * @param mixed  $variable variable to display
-     * @param string $message  Message to display.     *
+     * @param bool|string $message  Message to display.
      *
      * @return mixed the original variable
      */
@@ -395,7 +395,7 @@ class SimpleFileLoader
      *
      * @param string $test_file file name of library with test case classes
      *
-     * @return TestSuite the new test suite
+     * @return TestSuite|BadTestSuite the new test suite
      */
     public function load($test_file)
     {
@@ -416,8 +416,8 @@ class SimpleFileLoader
     /**
      * Imports new variables into the global namespace.
      *
-     * @param hash $existing variables before the file was loaded
-     * @param hash $new      variables after the file was loaded
+     * @param array $existing variables before the file was loaded
+     * @param array $new      variables after the file was loaded
      */
     protected function makeFileVariablesGlobal($existing, $new)
     {
@@ -475,7 +475,7 @@ class SimpleFileLoader
      * @param string $title   title of new group
      * @param array  $classes test classes
      *
-     * @return TestSuite group loaded with the new test cases
+     * @return TestSuite|BadTestSuite group loaded with the new test cases
      */
     public function createSuiteFromClasses($title, $classes)
     {
@@ -502,7 +502,9 @@ class SimpleFileLoader
  */
 class TestSuite
 {
+    /** @var false|string */
     private $label = '';
+    /** @var array */
     private $test_cases = [];
 
     /**
@@ -537,6 +539,8 @@ class TestSuite
      *
      * @param SimpleTestCase $test_case suite or individual test
      *                                  case implementing the runnable test interface
+     *
+     * @return void
      */
     public function add($test_case)
     {
@@ -554,6 +558,8 @@ class TestSuite
      * The new suite is composed into this one.
      *
      * @param string $test_file file name of library with test case classes
+     *
+     * @return void
      */
     public function addFile($test_file)
     {
@@ -566,6 +572,8 @@ class TestSuite
      *
      * @param string          $path      path to scan from
      * @param SimpleCollector $collector directory scanner
+     *
+     * @return void
      */
     public function collect($path, $collector)
     {
@@ -576,6 +584,8 @@ class TestSuite
      * Invokes run() on all of the held test cases, instantiating them if necessary.
      *
      * @param SimpleReporter $reporter current test reporter
+     *
+     * @return bool
      */
     public function run($reporter)
     {
@@ -620,6 +630,8 @@ class TestSuite
      * Test to see if a class is derived from the SimpleTestCase class.
      *
      * @param string $class class name
+     *
+     * @return mixed|bool|SimpleTestCase|TestSuite
      */
     public static function getBaseTestCase($class)
     {
@@ -639,13 +651,16 @@ class TestSuite
  */
 class BadTestSuite
 {
+    /** @var string */
     private $label;
+    /** @var mixed */
     private $error;
 
     /**
      *  Sets the name of the test suite and error message.
      *
      * @param string $label name sent at the start and end of the test
+     * @param string $error
      */
     public function __construct($label, $error)
     {
@@ -670,11 +685,14 @@ class BadTestSuite
      */
     public function run($reporter)
     {
-        $reporter->paintGroupStart($this->getLabel(), $this->getSize());
-        $reporter->paintFail(
-            'Bad TestSuite ['.$this->getLabel().'] with error ['.$this->error.']'
-        );
-        $reporter->paintGroupEnd($this->getLabel());
+        $label = $this->getLabel();
+
+        $msg_tpl = 'Bad TestSuite [%s] with error [%s]';
+        $message = sprintf($msg_tpl, $label, $this->error);
+
+        $reporter->paintGroupStart($label, $this->getSize());
+        $reporter->paintFail($message);
+        $reporter->paintGroupEnd($label);
 
         return $reporter->getStatus();
     }

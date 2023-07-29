@@ -66,7 +66,7 @@ class SimpleTagBuilder
      *
      * @param array $attributes element attributes
      *
-     * @return SimpleTag tag object
+     * @return mixed|false|SimpleTag tag object
      */
     protected function createInputTag($attributes)
     {
@@ -89,6 +89,7 @@ class SimpleTagBuilder
         if (array_key_exists($type, $map)) {
             $tag_class = $map[$type];
 
+            /** @var object $tag_class SimpleTag */
             return new $tag_class($attributes);
         }
 
@@ -98,18 +99,20 @@ class SimpleTagBuilder
     /**
      * Make the keys lower case for case insensitive look-ups.
      *
-     * @param hash $map hash to convert
+     * @param array $map
      *
-     * @return hash unchanged values, but keys lower case
+     * @return array array with lowercased keys
      */
     protected function keysToLowerCase($map)
     {
-        $lower = [];
+        $array = [];
         foreach ($map as $key => $value) {
-            $lower[strtolower($key)] = $value;
+            // reduce unnecessary conversions by checking if already lowercase
+            $lowercase_key = $key === strtolower($key) ? $key : strtolower($key);
+            $array[$lowercase_key] = $value;
         }
 
-        return $lower;
+        return $array;
     }
 }
 
@@ -631,7 +634,7 @@ class SimpleImageSubmitTag extends SimpleWidget
     /**
      * Value of browser visible text.
      *
-     * @return string visible label
+     * @return string If a "title" exists, returns the title, else "alt".
      */
     public function getLabel()
     {
@@ -665,9 +668,11 @@ class SimpleImageSubmitTag extends SimpleWidget
      */
     public function write($encoding, $x = 1, $y = 1)
     {
-        if ($this->getName()) {
-            $encoding->add($this->getName().'.x', $x);
-            $encoding->add($this->getName().'.y', $y);
+        $name = $this->getName();
+
+        if ($name) {
+            $encoding->add($name.'.x', $x);
+            $encoding->add($name.'.y', $y);
         } else {
             $encoding->add('x', $x);
             $encoding->add('y', $y);
@@ -793,8 +798,8 @@ class SimpleTextAreaTag extends SimpleWidget
     /**
      * Performs the formatting that is peculiar to this tag.
      *
-     * @todo  There is strange behaviour in this one, including stripping a leading new line.
-     *        Go figure. I am using Firefox as a guide.
+     * @todo TODO There is strange behaviour in this one, including stripping a leading new line.
+     *       Go figure. I am using Firefox as a guide.
      *
      * @param string $text text to wrap
      *
@@ -858,17 +863,21 @@ class SimpleUploadTag extends SimpleWidget
      * Dispatches the value into the form encoded packet.
      *
      * @param SimpleEncoding $encoding form packet
+     *
+     * @return void
      */
     public function write($encoding)
     {
-        if (!file_exists($this->getValue())) {
+        /** @var string */
+        $filename = $this->getValue();
+
+        if (!file_exists($filename)) {
             return;
         }
-        $encoding->attach(
-            $this->getName(),
-            implode('', file($this->getValue())),
-            basename($this->getValue())
-        );
+
+        $content = implode('', file($filename));
+
+        $encoding->attach($this->getName(), $content, basename($filename));
     }
 }
 
@@ -879,7 +888,7 @@ class SimpleSelectionTag extends SimpleWidget
 {
     /** @var array */
     private $options;
-    /** @var bool */
+    /** @var mixed|bool|int */
     private $choice;
 
     /**
@@ -927,11 +936,14 @@ class SimpleSelectionTag extends SimpleWidget
      */
     public function getDefault()
     {
-        for ($i = 0, $count = count($this->options); $i < $count; ++$i) {
+        $count = count($this->options);
+
+        for ($i = 0, $count; $i < $count; ++$i) {
             if (false !== $this->options[$i]->getAttribute('selected')) {
                 return $this->options[$i]->getDefault();
             }
         }
+
         if ($count > 0) {
             return $this->options[0]->getDefault();
         }
@@ -948,7 +960,9 @@ class SimpleSelectionTag extends SimpleWidget
      */
     public function setValue($value)
     {
-        for ($i = 0, $count = count($this->options); $i < $count; ++$i) {
+        $count = count($this->options);
+
+        for ($i = 0, $count; $i < $count; ++$i) {
             if ($this->options[$i]->isValue($value)) {
                 $this->choice = $i;
 
@@ -1032,7 +1046,8 @@ class MultipleSelectionTag extends SimpleWidget
     public function getDefault()
     {
         $default = [];
-        for ($i = 0, $count = count($this->options); $i < $count; ++$i) {
+        $count = count($this->options);
+        for ($i = 0, $count; $i < $count; ++$i) {
             if (false !== $this->options[$i]->getAttribute('selected')) {
                 $default[] = $this->options[$i]->getDefault();
             }
@@ -1054,7 +1069,8 @@ class MultipleSelectionTag extends SimpleWidget
         $achieved = [];
         foreach ($desired as $value) {
             $success = false;
-            for ($i = 0, $count = count($this->options); $i < $count; ++$i) {
+            $count = count($this->options);
+            for ($i = 0, $count; $i < $count; ++$i) {
                 if ($this->options[$i]->isValue($value)) {
                     $achieved[] = $this->options[$i]->getValue();
                     $success = true;

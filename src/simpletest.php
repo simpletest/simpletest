@@ -289,12 +289,17 @@ class SimpleTest
  */
 class SimpleTestContext
 {
+    /** @var SimpleTestCase */
     private $test;
+    /** @var mixed|SimpleReporter */
     private $reporter;
+    /** @var mixed */
     private $resources;
 
     /**
      * Clears down the current context.
+     *
+     * @return void
      */
     public function clear()
     {
@@ -351,6 +356,8 @@ class SimpleTestContext
 
     /**
      * Accessor for the Singleton resource.
+     *
+     * @param string $resource classname
      *
      * @return object global resource
      */

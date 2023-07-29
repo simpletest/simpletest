@@ -7,6 +7,7 @@ require_once __DIR__.'/test_case.php';
  */
 class SimpleShell
 {
+    /** @var mixed|array|bool */
     private $output;
 
     /**
@@ -23,14 +24,14 @@ class SimpleShell
      *
      * @param string $command the actual command line to run
      *
-     * @return int exit code
+     * @return int exec result_code
      */
     public function execute($command)
     {
         $this->output = false;
-        exec($command, $this->output, $ret);
+        exec($command, $this->output, $result_code);
 
-        return $ret;
+        return $result_code;
     }
 
     /**
@@ -60,8 +61,11 @@ class SimpleShell
  */
 class ShellTestCase extends SimpleTestCase
 {
+    /** @var SimpleShell */
     private $current_shell;
+    /** @var bool */
     private $last_status;
+    /** @var string */
     private $last_command;
 
     /**
@@ -96,6 +100,8 @@ class ShellTestCase extends SimpleTestCase
 
     /**
      * Dumps the output of the last command.
+     *
+     * @return void
      */
     public function dumpOutput()
     {

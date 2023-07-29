@@ -86,12 +86,19 @@ class SimpleFileSocket extends SimpleStickyError
     public function __construct($file, $block_size = 1024)
     {
         parent::__construct();
-        if (!($this->handle = $this->openFile($file, $error))) {
+
+        $this->handle = $this->openFile($file);
+
+        if ($this->handle === false) {
             $file_string = $file->asString();
-            $this->setError("Cannot open [$file_string] with [$error]");
+            /** @var array */
+            $last_error = error_get_last();
+            $last_error_message = $last_error['message'];
+            $this->setError("Cannot open [$file_string] with [$last_error_message]");
 
             return;
         }
+
         $this->is_open = true;
         $this->block_size = $block_size;
     }
@@ -165,12 +172,11 @@ class SimpleFileSocket extends SimpleStickyError
     /**
      * Actually opens the low level socket.
      *
-     * @param SimpleUrl $file  simpleUrl file target
-     * @param string    $error recipient of error message
+     * @param SimpleUrl $file
      *
      * @return false|resource
      */
-    protected function openFile($file, &$error)
+    protected function openFile($file)
     {
         return @fopen($file->asString(), 'r');
     }
@@ -181,13 +187,13 @@ class SimpleFileSocket extends SimpleStickyError
  */
 class SimpleSocket extends SimpleStickyError
 {
-    /** @var false|resource */
+    /** @var mixed|resource */
     private $handle;
     /** @var bool */
     private $is_open = false;
     /** @var string */
     private $sent = '';
-    /** @var int|null */
+    /** @var mixed|int|null */
     private $block_size;
 
     /**
