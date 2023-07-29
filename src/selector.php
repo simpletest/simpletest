@@ -13,6 +13,7 @@ interface SelectorInterface
  */
 class SelectByName implements SelectorInterface
 {
+    /** @var string */
     private $name;
 
     /**
@@ -28,7 +29,7 @@ class SelectByName implements SelectorInterface
     /**
      * Accessor for name.
      *
-     * @returns string $name       Name to match.
+     * @return string $name       Name to match.
      */
     public function getName()
     {
@@ -52,6 +53,7 @@ class SelectByName implements SelectorInterface
  */
 class SelectByLabel implements SelectorInterface
 {
+    /** @var string */
     private $label;
 
     /**
@@ -85,6 +87,7 @@ class SelectByLabel implements SelectorInterface
  */
 class SelectById implements SelectorInterface
 {
+    /** @var string */
     private $id;
 
     /**
@@ -114,6 +117,7 @@ class SelectById implements SelectorInterface
  */
 class SelectByLabelOrName implements SelectorInterface
 {
+    /** @var string */
     private $label;
 
     /**
@@ -130,6 +134,8 @@ class SelectByLabelOrName implements SelectorInterface
      * Comparison. Compares visible text of widget or related label or name.
      *
      * @param SimpleWidget $widget control to compare
+     *
+     * @return bool
      */
     public function isMatch($widget)
     {

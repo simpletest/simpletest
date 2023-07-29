@@ -4,6 +4,7 @@
  */
 class SimpleArguments
 {
+    /** @var array */
     private $all = [];
 
     /**
@@ -34,8 +35,9 @@ class SimpleArguments
      * added.
      *
      * @param string $key the variable to assign to
-     * @param string value   The value that would norally be colected on the
-     * command line
+     * @param string $value The value that would be collected on the CLI.
+     *
+     * @return void
      */
     public function assign($key, $value)
     {
@@ -79,7 +81,7 @@ class SimpleArguments
      * @param array $arguments Remaining arguments to be parsed. This variable
      *                         is modified if there is a value to be extracted.
      *
-     * @return string/boolean The next value unless it's a flag
+     * @return string|bool The next value unless it's a flag
      */
     private function nextNonFlagElseTrue(&$arguments)
     {
@@ -92,7 +94,7 @@ class SimpleArguments
      *
      * @param array $arguments Remaining arguments to be parsed.
      *                         Not affected by this call.
-     *                         boolean                    True if valid value.
+     * @return bool True if valid value.
      */
     public function valueIsNext($arguments)
     {
@@ -116,7 +118,7 @@ class SimpleArguments
      *
      * @param string $key argument name
      *
-     * @return string/array/boolean Either false for no value,
+     * @return string|array|bool Either false for no value,
      *                              the value as a string or
      *                              a list of multiple values if
      *                              the flag had been specified more
@@ -132,9 +134,9 @@ class SimpleArguments
     }
 
     /**
-     * The entire argument set as a hash.
+     * Get all arguments.
      *
-     * @return hash each argument and it's value(s)
+     * @return array Array of arguments and values.
      */
     public function all()
     {
@@ -147,8 +149,11 @@ class SimpleArguments
  */
 class SimpleHelp
 {
+    /** @var string */
     private $overview;
+    /** @var array */
     private $flag_sets = [];
+    /** @var array */
     private $explanations = [];
 
     /**
@@ -165,10 +170,11 @@ class SimpleHelp
      * Adds the explanation for a group of flags that all
      * have the same function.
      *
-     * @param string/array $flags       Flag and alternates. Don't
+     * @param string|array $flags       Flag and alternates. Don't
      *                                  worry about leading dashes
      *                                  as these are inserted automatically.
      * @param string       $explanation what that flag group does
+     * @return void
      */
     public function explainFlag($flags, $explanation)
     {
@@ -180,7 +186,7 @@ class SimpleHelp
     /**
      * Generates the help text.
      *
-     * @returns string      The complete formatted text.
+     * @return string The complete formatted text.
      */
     public function render()
     {
@@ -198,6 +204,7 @@ class SimpleHelp
      * Works out the longest flag for formatting purposes.
      *
      * @param array $flag_sets the internal flag set list
+     * @return mixed 0 or longest flag.
      */
     private function longestFlag($flag_sets)
     {
@@ -214,7 +221,11 @@ class SimpleHelp
     /**
      * Generates the text for a single flag and it's alternate flags.
      *
-     * @returns string           Help text for that flag group.
+     * @param array $flags Array of flags.
+     * @param string $explanation Text of the flag
+     * @param int $tab_stop Number of tab_stop's to render.
+     *
+     * @return string Help text for that flag group.
      */
     private function renderFlagSet($flags, $explanation, $tab_stop)
     {
@@ -231,7 +242,7 @@ class SimpleHelp
      * Generates the flag name including leading dashes.
      *
      * @param string $flag just the name
-     * @returns                     Fag with apropriate dashes.
+     * @return string Flag with apropriate dashes.
      */
     private function renderFlag($flag)
     {
@@ -243,7 +254,7 @@ class SimpleHelp
      * Just there to trap accidental duplicate new lines.
      *
      * @param string $text text to clean up
-     * @returns string          Text with no blank lines.
+     * @return string Text with no blank lines.
      */
     private function noDuplicateNewLines($text)
     {

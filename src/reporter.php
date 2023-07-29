@@ -9,12 +9,15 @@ require_once __DIR__.'/scorer.php';
  */
 class HtmlReporter extends SimpleReporter
 {
+    /** @var string */
     private $charset;
 
     /**
      * Does nothing yet.
      * The first output will be sent on the first test start.
      * For use by a web browser.
+     *
+     * @param string $charset
      */
     public function __construct($charset = 'utf-8')
     {
@@ -44,6 +47,8 @@ class HtmlReporter extends SimpleReporter
     /**
      * Send the headers necessary to ensure the page is reloaded on every request.
      * Otherwise you could be scratching your head over out of date test data.
+     *
+     * @return void
      */
     public static function sendNoCacheHeaders()
     {
@@ -72,6 +77,8 @@ class HtmlReporter extends SimpleReporter
      * Paints the end of the test with a summary of the passes and failures.
      *
      * @param string $test_name name class of test
+     *
+     * @return void
      */
     public function paintFooter($test_name)
     {
@@ -93,6 +100,8 @@ class HtmlReporter extends SimpleReporter
      * of the nesting test suites below the top level test.
      *
      * @param string $message failure message displayed in the context of the other tests
+     *
+     * @return void
      */
     public function paintFail($message)
     {
@@ -108,6 +117,8 @@ class HtmlReporter extends SimpleReporter
      * Paints a PHP error.
      *
      * @param string $message message is ignored
+     *
+     * @return void
      */
     public function paintError($message)
     {
@@ -123,6 +134,8 @@ class HtmlReporter extends SimpleReporter
      * Paints a PHP exception.
      *
      * @param Exception $exception exception to display
+     *
+     * @return void
      */
     public function paintException($exception)
     {
@@ -142,6 +155,8 @@ class HtmlReporter extends SimpleReporter
      * Prints the message for skipping tests.
      *
      * @param string $message text of skip condition
+     *
+     * @return void
      */
     public function paintSkip($message)
     {
@@ -157,6 +172,8 @@ class HtmlReporter extends SimpleReporter
      * Paints formatted text such as dumped privateiables.
      *
      * @param string $message text to show
+     *
+     * @return void
      */
     public function paintFormattedMessage($message)
     {
@@ -198,6 +215,8 @@ class TextReporter extends SimpleReporter
      * Paints the title only.
      *
      * @param string $test_name name class of test
+     *
+     * @return void
      */
     public function paintHeader($test_name)
     {
@@ -212,6 +231,8 @@ class TextReporter extends SimpleReporter
      * Paints the end of the test with a summary of the passes and failures.
      *
      * @param string $test_name name class of test
+     *
+     * @return void
      */
     public function paintFooter($test_name)
     {
@@ -231,6 +252,8 @@ class TextReporter extends SimpleReporter
      * Paints the test failure as a stack trace.
      *
      * @param string $message failure message displayed in the context of the other tests
+     *
+     * @return void
      */
     public function paintFail($message)
     {
@@ -248,6 +271,8 @@ class TextReporter extends SimpleReporter
      * @param string $message message to be shown
      *
      * @abstract
+     *
+     * @return void
      */
     public function paintError($message)
     {
@@ -265,6 +290,8 @@ class TextReporter extends SimpleReporter
      * @param Exception $exception exception to describe
      *
      * @abstract
+     *
+     * @return void
      */
     public function paintException($exception)
     {
@@ -284,6 +311,8 @@ class TextReporter extends SimpleReporter
      * Prints the message for skipping tests.
      *
      * @param string $message text of skip condition
+     *
+     * @return void
      */
     public function paintSkip($message)
     {
@@ -295,6 +324,8 @@ class TextReporter extends SimpleReporter
      * Paints formatted text such as dumped privateiables.
      *
      * @param string $message text to show
+     *
+     * @return void
      */
     public function paintFormattedMessage($message)
     {
@@ -308,16 +339,19 @@ class TextReporter extends SimpleReporter
  */
 class SelectiveReporter extends SimpleReporterDecorator
 {
+    /** @var bool|string */
     private $just_this_case = false;
+    /** @var bool|string */
     private $just_this_test = false;
+    /** @var bool */
     private $on;
 
     /**
      * Selects the test case or group to be run, and optionally a specific test.
      *
-     * @param SimpleScorer $reporter       reporter to receive events
-     * @param string       $just_this_case only this case or group will run
-     * @param string       $just_this_test only this test method will run
+     * @param SimpleReporter $reporter Reporter to receive events
+     * @param bool|string    $just_this_case only this case or group will run
+     * @param bool|string    $just_this_test only this test method will run
      */
     public function __construct($reporter, $just_this_case = false, $just_this_test = false)
     {
@@ -349,6 +383,7 @@ class SelectiveReporter extends SimpleReporterDecorator
      * Compares criteria to actual the test name.
      * If no name was specified at the beginning, then all tests can run.
      *
+     * @param string $test_case
      * @param string $method the incoming test method
      *
      * @return bool true if matched
@@ -368,6 +403,8 @@ class SelectiveReporter extends SimpleReporterDecorator
 
     /**
      * Switch on testing for the group or subgroup.
+     *
+     * @return void
      */
     protected function on()
     {
@@ -376,6 +413,8 @@ class SelectiveReporter extends SimpleReporterDecorator
 
     /**
      * Switch off testing for the group or subgroup.
+     *
+     * @return void
      */
     protected function off()
     {
@@ -446,6 +485,8 @@ class NoSkipsReporter extends SimpleReporterDecorator
      * Does nothing.
      *
      * @param string $message text of skip condition
+     *
+     * @return void
      */
     public function paintSkip($message)
     {

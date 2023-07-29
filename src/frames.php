@@ -91,7 +91,7 @@ class SimpleFrameset
      *
      * @param int $subject internal index
      *
-     * @return integer/string Public name
+     * @return integer|string Public name
      */
     protected function getPublicNameFromIndex($subject)
     {
@@ -155,6 +155,8 @@ class SimpleFrameset
 
     /**
      * Clears the frame focus.
+     *
+     * @return void
      */
     public function clearFrameFocus()
     {
@@ -164,6 +166,8 @@ class SimpleFrameset
 
     /**
      * Clears the frame focus for any nested frames.
+     *
+     * @return void
      */
     protected function clearNestedFramesFocus()
     {
@@ -185,7 +189,7 @@ class SimpleFrameset
     /**
      * Accessor for frames information.
      *
-     * @return array/string Recursive hash of frame URL strings. The key is either a numerical
+     * @return array|string Recursive hash of frame URL strings. The key is either a numerical
      *                      index or the name attribute.
      */
     public function getFrames()
@@ -625,7 +629,7 @@ class SimpleFrameset
      *
      * @param SimpleSelector $selector field finder
      *
-     * @return string/boolean A string if the field is present, false if unchecked and
+     * @return string|bool A string if the field is present, false if unchecked and
      *                        null if missing
      */
     public function getField($selector)

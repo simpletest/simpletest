@@ -17,6 +17,7 @@ if (!defined('DEFAULT_CONNECTION_TIMEOUT')) {
  */
 class SimpleUserAgent
 {
+    /** @var array */
     private $additional_headers = [];
     private $authenticator;
     private $connection_timeout = DEFAULT_CONNECTION_TIMEOUT;
@@ -26,6 +27,7 @@ class SimpleUserAgent
     private $proxy = false;
     private $proxy_password = false;
     private $proxy_username = false;
+    /** @var int */
     private $max_redirects = DEFAULT_MAX_REDIRECTS;
 
     /**
@@ -41,8 +43,10 @@ class SimpleUserAgent
      * Removes expired and temporary cookies as if the browser was closed and re-opened.
      * Authorisation has to be obtained again as well.
      *
-     * @param string/integer $date Time when session restarted. If omitted then all persistent
+     * @param string|int $date Time when session restarted. If omitted then all persistent
      *                             cookies are kept.
+     *
+     * @return void
      */
     public function restart($date = false)
     {
@@ -55,6 +59,8 @@ class SimpleUserAgent
      * Adds a header to every fetch.
      *
      * @param string $header header line to add to every request until cleared
+     *
+     * @return void
      */
     public function addHeader($header)
     {
@@ -66,6 +72,8 @@ class SimpleUserAgent
      * it is not set explicitely via {@link addHeader()}.
      *
      * @param string $referer referer URI to add to every request until cleared
+     *
+     * @return void
      */
     public function setReferer($referer)
     {
@@ -76,6 +84,8 @@ class SimpleUserAgent
      * Ages the cookies by the specified time.
      *
      * @param int $interval amount in seconds
+     *
+     * @return void
      */
     public function ageCookies($interval)
     {
@@ -85,11 +95,13 @@ class SimpleUserAgent
     /**
      * Sets an additional cookie. If a cookie has the same name and path it is replaced.
      *
-     * @param string $name   cookie key
-     * @param string $value  value of cookie
-     * @param string $host   host upon which the cookie is valid
-     * @param string $path   cookie path if not host wide
-     * @param string $expiry expiry date
+     * @param string            $name   cookie key
+     * @param string            $value  value of cookie
+     * @param string|false      $host   host upon which the cookie is valid
+     * @param string            $path   cookie path if not host wide
+     * @param bool|int|string   $expiry expiry date
+     *
+     * @return void
      */
     public function setCookie($name, $value, $host = false, $path = '/', $expiry = false)
     {
@@ -97,9 +109,9 @@ class SimpleUserAgent
     }
 
     /**
-     *    Get current list of cookies.
+     * Get current list of cookies.
      *
-     *    @return array
+     * @return array
      */
     public function getCookies()
     {
@@ -119,9 +131,11 @@ class SimpleUserAgent
     }
 
     /**
-     *    Import a list of cookies.
+     * Import a list of cookies.
      *
-     *    @param array
+     * @param array $lstCookies
+     *
+     * @return void
      */
     public function setCookies(array $lstCookies)
     {
@@ -156,7 +170,7 @@ class SimpleUserAgent
      * @param string    $name key of cookie to find
      * @param SimpleUrl $base base URL to search from
      *
-     * @return string/boolean Null if there is no base URL, false if the cookie is not set
+     * @return string|bool Null if there is no base URL, false if the cookie is not set
      */
     public function getBaseCookieValue($name, $base)
     {
@@ -169,6 +183,8 @@ class SimpleUserAgent
 
     /**
      * Switches off cookie sending and recieving.
+     *
+     * @return void
      */
     public function ignoreCookies()
     {
@@ -177,6 +193,8 @@ class SimpleUserAgent
 
     /**
      * Switches back on the cookie sending and recieving.
+     *
+     * @return void
      */
     public function useCookies()
     {
@@ -187,6 +205,8 @@ class SimpleUserAgent
      * Sets the socket timeout for opening a connection.
      *
      * @param int $timeout maximum time in seconds
+     *
+     * @return void
      */
     public function setConnectionTimeout($timeout)
     {
@@ -197,6 +217,8 @@ class SimpleUserAgent
      * Sets the maximum number of redirects before a page will be loaded anyway.
      *
      * @param int $max most hops allowed
+     *
+     * @return void
      */
     public function setMaximumRedirects($max)
     {
@@ -210,6 +232,8 @@ class SimpleUserAgent
      * @param string $proxy    proxy URL
      * @param string $username proxy username for authentication
      * @param string $password proxy password for authentication
+     *
+     * @return void
      */
     public function useProxy($proxy, $username, $password)
     {
@@ -245,6 +269,8 @@ class SimpleUserAgent
      * @param string $realm    full name of realm
      * @param string $username username for realm
      * @param string $password password for realm
+     *
+     * @return void
      */
     public function setIdentity($host, $realm, $username, $password)
     {
@@ -255,7 +281,7 @@ class SimpleUserAgent
      * Fetches a URL as a response object. Will keep trying if redirected.
      * It will also collect authentication realm information.
      *
-     * @param string/SimpleUrl $url      Target to fetch
+     * @param string|SimpleUrl $url      Target to fetch
      * @param SimpleEncoding   $encoding additional parameters for request
      *
      * @return SimpleHttpResponse hopefully the target page
@@ -330,7 +356,7 @@ class SimpleUserAgent
      * Creates a full page request.
      *
      * @param SimpleUrl          $url      target to fetch as url object
-     * @param simpleFormEncoding $encoding POST/GET parameters
+     * @param SimpleFormEncoding $encoding POST/GET parameters
      *
      * @return SimpleHttpRequest new request
      */
@@ -367,6 +393,7 @@ class SimpleUserAgent
      * Builds the appropriate HTTP request object.
      *
      * @param SimpleUrl $url target to fetch as url object
+     * @param SimpleFormEncoding $encoding Encoding
      *
      * @return SimpleHttpRequest new request object
      */
@@ -400,6 +427,8 @@ class SimpleUserAgent
      * Adds additional manual headers.
      *
      * @param SimpleHttpRequest $request outgoing request
+     *
+     * @return void
      */
     protected function addAdditionalHeaders(&$request)
     {

@@ -39,7 +39,7 @@ class TestOfTextFormatting extends UnitTestCase
     public function testDescribeBoolean()
     {
         $dumper = new SimpleDumper();
-        $this->assertPattern('/boolean/i', $dumper->describeValue(true));
+        $this->assertPattern('/bool/i', $dumper->describeValue(true));
         $this->assertPattern('/true/i', $dumper->describeValue(true));
         $this->assertPattern('/false/i', $dumper->describeValue(false));
     }

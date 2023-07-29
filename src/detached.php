@@ -8,20 +8,23 @@ require_once __DIR__.'/shell_tester.php';
  */
 class DetachedTestCase
 {
+    /** @var string */
     private $command;
+    /** @var string */
     private $dry_command;
+    /** @var false|int */
     private $size;
 
     /**
      * Sets the location of the remote test.
      *
-     * @param string $command     test script
+     * @param string $command test script
      * @param string $dry_command script for dry run
      */
-    public function __construct($command, $dry_command = false)
+    public function __construct($command, $dry_command = '')
     {
         $this->command = $command;
-        $this->dry_command = $dry_command ? $dry_command : $command;
+        $this->dry_command = empty($dry_command) ? $command : $dry_command;
         $this->size = false;
     }
 
@@ -42,7 +45,7 @@ class DetachedTestCase
      *
      * @param SimpleReporter $reporter target of test results
      *
-     * @returns boolean                   True if no failures.
+     * @return bool True, if no failures.
      */
     public function run(&$reporter)
     {
@@ -61,7 +64,7 @@ class DetachedTestCase
     /**
      * Accessor for the number of subtests.
      *
-     * @return int number of test cases
+     * @return bool|int number of test cases
      */
     public function getSize()
     {
@@ -86,7 +89,7 @@ class DetachedTestCase
      *
      * @param SimpleReporter $reporter target of test results
      *
-     * @return simpleTestXmlListener XML reader
+     * @return SimpleTestXmlParser XML reader
      */
     protected function createParser(&$reporter)
     {

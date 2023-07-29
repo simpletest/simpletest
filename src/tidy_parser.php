@@ -4,9 +4,12 @@
  */
 class SimpleTidyPageBuilder
 {
+    /** @var array */
     private $forms = [];
+    /** @var array */
     private $labels = [];
     private $page;
+    /** @var array */
     private $widgets_by_id = [];
 
     public function __destruct()
@@ -16,6 +19,8 @@ class SimpleTidyPageBuilder
 
     /**
      * Frees up any references so as to allow the PHP garbage collection from unset() to work.
+     *
+     * @return void
      */
     private function free()
     {
@@ -37,7 +42,7 @@ class SimpleTidyPageBuilder
     /**
      * Reads the raw content the page using HTML Tidy.
      *
-     * @param $response simpleHttpResponse  Fetched response
+     * @param $response SimpleHttpResponse  Fetched response
      *
      * @return SimplePage newly parsed page
      */
@@ -61,7 +66,7 @@ class SimpleTidyPageBuilder
     /**
      * Stops HTMLTidy stripping content that we wish to preserve.
      *
-     * @param string      the raw html
+     * @param string $html the raw html
      *
      * @return string the html with guard tags inserted
      */
@@ -74,7 +79,7 @@ class SimpleTidyPageBuilder
      * Removes the extra content added during the parse stage in order to preserve content we don't
      * want stripped out by HTMLTidy.
      *
-     * @param string      the raw html
+     * @param string $html the raw html
      *
      * @return string the html with guard tags removed
      */
@@ -87,7 +92,7 @@ class SimpleTidyPageBuilder
      * HTML tidy strips out empty tags such as <option> which we need to preserve.
      * This method inserts an additional marker.
      *
-     * @param string      the raw html
+     * @param string $html the raw html
      *
      * @return string the html with guards inserted
      */
@@ -106,7 +111,7 @@ class SimpleTidyPageBuilder
      * to the tidy output used to make the tags non-empty.
      * This ensures their preservation.
      *
-     * @param string      the raw html
+     * @param string $html the raw html
      *
      * @return string the html with guards removed
      */
@@ -119,7 +124,7 @@ class SimpleTidyPageBuilder
      * By parsing the XML output of tidy, we lose some whitespace information in textarea tags.
      * We temporarily recode this data ourselves so as not to lose it.
      *
-     * @param string      the raw html
+     * @param string $html the raw html
      *
      * @return string the html with guards inserted
      */
@@ -153,7 +158,7 @@ class SimpleTidyPageBuilder
     /**
      * Removes the whitespace preserving guards we added before parsing.
      *
-     * @param string      the raw html
+     * @param string $html the raw html
      *
      * @return string the html with guards removed
      */
@@ -170,6 +175,8 @@ class SimpleTidyPageBuilder
      * Visits the given node and all children.
      *
      * @param object $node tidy XML node
+     *
+     * @return void
      */
     private function walkTree($node)
     {
@@ -197,6 +204,8 @@ class SimpleTidyPageBuilder
      * Helper method for traversing the XML tree.
      *
      * @param object $node tidy XML node
+     *
+     * @return void
      */
     private function walkChildren($node)
     {
@@ -266,6 +275,8 @@ class SimpleTidyPageBuilder
      * @param object     $node            tidy XML node of widget
      * @param SimpleForm $form            form to add it to
      * @param string     $enclosing_label the label of any label tag we might be in
+     *
+     * @return void
      */
     private function addWidgetToForm($node, $form, $enclosing_label)
     {
@@ -286,6 +297,8 @@ class SimpleTidyPageBuilder
      * Fills the widget cache to speed up searching.
      *
      * @param SimpleTag $widget parsed widget to cache
+     *
+     * @return void
      */
     private function indexWidgetById($widget)
     {
@@ -434,6 +447,8 @@ class SimpleTidyPageBuilder
      *
      * @param array $widgets_by_id cached SimpleTag hash
      * @param array $labels        simpleTag label elements
+     *
+     * @return void
      */
     private function attachLabels($widgets_by_id, $labels)
     {

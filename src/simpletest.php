@@ -31,6 +31,8 @@ class SimpleTest
      * because the class is an abstract case that should.
      *
      * @param string $class add a class to ignore
+     *
+     * @return void
      */
     public static function ignore($class)
     {
@@ -48,6 +50,8 @@ class SimpleTest
      * actual declarations.
      *
      * @param array $classes class names of interest
+     *
+     * @return void
      */
     public static function ignoreParentsIfIgnored($classes)
     {
@@ -70,6 +74,8 @@ class SimpleTest
      * @param object $object Preferred object
      *
      * @see preferred()
+     *
+     * @return void
      */
     public static function prefer($object)
     {
@@ -127,6 +133,8 @@ class SimpleTest
      * @param string $proxy    proxy host as URL
      * @param string $username proxy username for authentication
      * @param string $password proxy password for authentication
+     *
+     * @return void
      */
     public static function useProxy($proxy, $username = false, $password = false)
     {
@@ -228,7 +236,7 @@ class SimpleTest
     /**
      * Constant default values.
      *
-     * @return hash all registry defaults
+     * @return ArrayObject all registry defaults
      */
     protected static function getDefaults()
     {
@@ -250,6 +258,8 @@ class SimpleTest
 
     /**
      * @deprecated
+     *
+     * @return void
      */
     public static function setMockBaseClass($mock_base)
     {
@@ -259,6 +269,8 @@ class SimpleTest
 
     /**
      * @deprecated
+     *
+     * @return void
      */
     public static function getMockBaseClass()
     {
@@ -294,6 +306,8 @@ class SimpleTestContext
      * This global instance can be used by the mock objects to send message to the test cases.
      *
      * @param SimpleTestCase $test test case to register
+     *
+     * @return void
      */
     public function setTest($test)
     {
@@ -316,6 +330,8 @@ class SimpleTestContext
      * This global instance can be used by the mock objects to send messages.
      *
      * @param SimpleReporter $reporter reporter to register
+     *
+     * @return void
      */
     public function setReporter($reporter)
     {
@@ -353,6 +369,7 @@ class SimpleTestContext
  */
 class SimpleStackTrace
 {
+    /** @var array */
     private $prefixes;
 
     /**

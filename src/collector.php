@@ -38,6 +38,8 @@ class SimpleCollector
      * @param string $path directory to scan
      *
      * @see _attemptToAdd()
+     *
+     * @return void
      */
     public function collect(&$test, $path)
     {
@@ -62,8 +64,11 @@ class SimpleCollector
      * {@link SimplePatternCollector::_handle()}.
      *
      * @param object $test group test with {@link GroupTest::addFile)} method
+     * @param string $file
      *
      * @see collect()
+     *
+     * @return void
      */
     protected function handle(&$test, $file)
     {
@@ -97,6 +102,7 @@ class SimpleCollector
  */
 class SimplePatternCollector extends SimpleCollector
 {
+    /** @var string */
     private $pattern;
 
     /**
@@ -113,11 +119,14 @@ class SimplePatternCollector extends SimpleCollector
      * @see SimpleCollector::_handle()
      *
      * @param object $test group test with {@link GroupTest::addFile)} method
+     * @param string $file
+     *
+     * @return void
      */
-    protected function handle(&$test, $filename)
+    protected function handle(&$test, $file)
     {
-        if (preg_match($this->pattern, $filename)) {
-            parent::handle($test, $filename);
+        if (preg_match($this->pattern, $file)) {
+            parent::handle($test, $file);
         }
     }
 }

@@ -162,7 +162,7 @@ class FailedExpectation extends SimpleExpectation
 }
 
 /**
- * An expectation that passes on boolean true.
+ * An expectation that passes on bool true.
  */
 class TrueExpectation extends SimpleExpectation
 {
@@ -194,7 +194,7 @@ class TrueExpectation extends SimpleExpectation
 }
 
 /**
- * An expectation that passes on boolean false.
+ * An expectation that passes on bool false.
  */
 class FalseExpectation extends SimpleExpectation
 {
@@ -648,6 +648,7 @@ class NotIdenticalExpectation extends IdenticalExpectation
  */
 class PatternExpectation extends SimpleExpectation
 {
+    /** @var string */
     private $pattern;
 
     /**
@@ -673,11 +674,12 @@ class PatternExpectation extends SimpleExpectation
     }
 
     /**
-     * Tests the expectation. True if the Perl regex matches the comparison value.
+     * Tests the expectation.
+     * True, if the Perl regex matches the comparison value.
      *
      * @param string $compare comparison value
      *
-     * @return bool true if correct
+     * @return bool True, if correct
      */
     public function test($compare)
     {
@@ -707,6 +709,8 @@ class PatternExpectation extends SimpleExpectation
      *
      * @param string $pattern regex to match against
      * @param string $subject subject to search
+     *
+     * @return string
      */
     protected function describePatternMatch($pattern, $subject)
     {
@@ -775,6 +779,7 @@ class NoPatternExpectation extends PatternExpectation
  */
 class IsAExpectation extends SimpleExpectation
 {
+    /** @var string */
     private $type;
 
     /**

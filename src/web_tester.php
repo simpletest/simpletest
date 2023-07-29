@@ -67,7 +67,7 @@ class FieldExpectation extends SimpleExpectation
      *
      * @param mixed $compare string to test against
      *
-     * @returns boolean         True if matching.
+     * @return bool         True if matching.
      */
     protected function testSingle($compare)
     {
@@ -86,7 +86,7 @@ class FieldExpectation extends SimpleExpectation
      *
      * @param mixed $compare list in any order to test against
      *
-     * @returns boolean         True if matching.
+     * @return bool         True if matching.
      */
     protected function testMultiple($compare)
     {
@@ -163,7 +163,8 @@ class HttpHeaderExpectation extends SimpleExpectation
      * Removes whitespace at ends and case variations.
      *
      * @param string $header name of header
-     * @param string            trimmed and lowecased header name
+     *
+     * @return string trimmed and lowecased header name
      */
     protected function normaliseHeader($header)
     {
@@ -188,7 +189,7 @@ class HttpHeaderExpectation extends SimpleExpectation
      *
      * @param mixed $compare raw header block to search
      *
-     * @return string matching header line
+     * @return bool|string matching header line
      */
     protected function findHeader($compare)
     {
@@ -320,6 +321,7 @@ class NoHttpHeaderExpectation extends HttpHeaderExpectation
  */
 class TextExpectation extends SimpleExpectation
 {
+    /** @var string */
     private $substring;
 
     /**
@@ -381,6 +383,8 @@ class TextExpectation extends SimpleExpectation
      *
      * @param string $substring text to search for
      * @param string $subject   subject to search
+     *
+     * @return string
      */
     protected function describeTextMatch($substring, $subject)
     {
@@ -448,7 +452,9 @@ class NoTextExpectation extends TextExpectation
  */
 class WebTestCase extends SimpleTestCase
 {
+    /** @var SimpleBrowser */
     public $browser;
+    /** @var bool */
     private $ignore_errors = false;
 
     /**
@@ -466,6 +472,8 @@ class WebTestCase extends SimpleTestCase
      * Announces the start of the test.
      *
      * @param string $method test method just started
+     *
+     * @return void
      */
     public function before($method)
     {
@@ -477,6 +485,8 @@ class WebTestCase extends SimpleTestCase
      * Announces the end of the test. Includes private clean up.
      *
      * @param string $method test method just finished
+     *
+     * @return void
      */
     public function after($method)
     {
@@ -500,6 +510,8 @@ class WebTestCase extends SimpleTestCase
      * setting special expectations or for detailed examination of page fetches.
      *
      * @param SimpleBrowser $browser new test browser object
+     *
+     * @return SimpleBrowser
      */
     public function setBrowser($browser)
     {
@@ -509,7 +521,9 @@ class WebTestCase extends SimpleTestCase
     /**
      * Sets the HTML parser to use within this browser.
      *
-     * @param object         the parser, one of SimplePHPPageBuilder or SimpleTidyPageBuilder
+     * @param SimplePhpPageBuilder|SimpleTidyPageBuilder $parser A HTML parser.
+     *
+     * @return void
      */
     public function setParser($parser)
     {
@@ -518,6 +532,8 @@ class WebTestCase extends SimpleTestCase
 
     /**
      * Clears the current browser reference to help the PHP garbage collector.
+     *
+     * @return void
      */
     public function unsetBrowser()
     {
@@ -525,9 +541,10 @@ class WebTestCase extends SimpleTestCase
     }
 
     /**
-     * Creates a new default web browser object. Will be cleared at the end of the test method.
+     * Creates a new default web browser object.
+     * Will be cleared at the end of the test method.
      *
-     * @return TestBrowser new browser
+     * @return SimpleBrowser A new browser.
      */
     public function createBrowser()
     {
@@ -556,6 +573,8 @@ class WebTestCase extends SimpleTestCase
 
     /**
      * Dumps the current request for debugging.
+     *
+     * @return void
      */
     public function showRequest()
     {
@@ -564,6 +583,8 @@ class WebTestCase extends SimpleTestCase
 
     /**
      * Dumps the current HTTP headers for debugging.
+     *
+     * @return void
      */
     public function showHeaders()
     {
@@ -572,6 +593,8 @@ class WebTestCase extends SimpleTestCase
 
     /**
      * Dumps the current HTML source for debugging.
+     *
+     * @return void
      */
     public function showSource()
     {
@@ -580,6 +603,8 @@ class WebTestCase extends SimpleTestCase
 
     /**
      * Dumps the visible text only for debugging.
+     *
+     * @return void
      */
     public function showText()
     {
@@ -591,8 +616,10 @@ class WebTestCase extends SimpleTestCase
      * Temporary cookies will be discarded and
      * timed cookies will be expired if later than the specified time.
      *
-     * @param string/integer $date Time when session restarted. If ommitted then all persistent
+     * @param string|int|false $date Time when session restarted. If ommitted then all persistent
      *                             cookies are kept. Time is either Cookie format string or timestamp.
+     *
+     * @return void
      */
     public function restart($date = false)
     {
@@ -607,6 +634,8 @@ class WebTestCase extends SimpleTestCase
      * Useful for testing timeouts and expiries.
      *
      * @param int $interval amount to age in seconds
+     *
+     * @return void
      */
     public function ageCookies($interval)
     {
@@ -616,6 +645,8 @@ class WebTestCase extends SimpleTestCase
     /**
      * Disables frames support.
      * Frames will not be fetched and the frameset page will be used instead.
+     *
+     * @return void
      */
     public function ignoreFrames()
     {
@@ -624,6 +655,8 @@ class WebTestCase extends SimpleTestCase
 
     /**
      * Switches off cookie sending and recieving.
+     *
+     * @return void
      */
     public function ignoreCookies()
     {
@@ -633,6 +666,8 @@ class WebTestCase extends SimpleTestCase
     /**
      * Skips errors for the next request only.
      * You might want to confirm that a page is unreachable for example.
+     *
+     * @return void
      */
     public function ignoreErrors()
     {
@@ -643,9 +678,9 @@ class WebTestCase extends SimpleTestCase
      * Issues a fail if there is a transport error anywhere in the current frameset.
      * Only one such error is reported.
      *
-     * @param string/boolean $result HTML or failure
+     * @param string|bool $result HTML or failure
      *
-     * @return string/boolean $result  Passes through result
+     * @return string|bool $result  Passes through result
      */
     protected function failOnError($result)
     {
@@ -663,6 +698,8 @@ class WebTestCase extends SimpleTestCase
      * Adds a header to every fetch.
      *
      * @param string $header header line to add to every request until cleared
+     *
+     * @return void
      */
     public function addHeader($header)
     {
@@ -673,6 +710,8 @@ class WebTestCase extends SimpleTestCase
      * Sets the maximum number of redirects before the web page is loaded regardless.
      *
      * @param int $max maximum hops
+     *
+     * @return void
      */
     public function setMaximumRedirects($max)
     {
@@ -689,6 +728,8 @@ class WebTestCase extends SimpleTestCase
      * information.
      *
      * @param int $timeout maximum time in seconds
+     *
+     * @return void
      */
     public function setConnectionTimeout($timeout)
     {
@@ -702,6 +743,8 @@ class WebTestCase extends SimpleTestCase
      * @param string $proxy    proxy URL
      * @param string $username proxy username for authentication
      * @param string $password proxy password for authentication
+     *
+     * @return void
      */
     public function useProxy($proxy, $username = false, $password = false)
     {
@@ -716,7 +759,7 @@ class WebTestCase extends SimpleTestCase
      * @param string $url        URL to fetch
      * @param hash   $parameters optional additional GET data
      *
-     * @return boolean/string Raw page on success
+     * @return bool|string Raw page on success
      */
     public function get($url, $parameters = false)
     {
@@ -732,7 +775,7 @@ class WebTestCase extends SimpleTestCase
      * @param mixed  $parameters   Optional POST parameters or content body to send
      * @param string $content_type Content type of provided body
      *
-     * @return boolean/string Raw page on success
+     * @return bool|string Raw page on success
      */
     public function post($url, $parameters = false, $content_type = false)
     {
@@ -748,7 +791,7 @@ class WebTestCase extends SimpleTestCase
      * @param mixed  $body         Optional content body to send
      * @param string $content_type Content type of provided body
      *
-     * @return boolean/string Raw page on success
+     * @return bool|string Raw page on success
      */
     public function put($url, $body = false, $content_type = false)
     {
@@ -761,7 +804,7 @@ class WebTestCase extends SimpleTestCase
      * @param string $url        URL to fetch
      * @param hash   $parameters optional additional parameters
      *
-     * @return boolean/string Raw page on success
+     * @return bool|string Raw page on success
      */
     public function delete($url, $parameters = false)
     {
@@ -819,7 +862,7 @@ class WebTestCase extends SimpleTestCase
      * @param string $username username for realm
      * @param string $password password for realm
      *
-     * @return boolean/string HTML on successful fetch.
+     * @return bool|string HTML on successful fetch.
      *                        Note that authentication may still have failed.
      */
     public function authenticate($username, $password)
@@ -858,7 +901,7 @@ class WebTestCase extends SimpleTestCase
     /**
      * Accessor for current frame focus. Will be false if no frame has focus.
      *
-     * @return integer/string/boolean Label if any,
+     * @return int|string|bool Label if any,
      *                                otherwise the position in the frameset or false if none
      */
     public function getFrameFocus()
@@ -903,7 +946,7 @@ class WebTestCase extends SimpleTestCase
      *
      * @param string $label visible text or alt text
      *
-     * @return string/boolean Raw page or false
+     * @return string|bool Raw page or false
      */
     public function click($label)
     {
@@ -932,7 +975,7 @@ class WebTestCase extends SimpleTestCase
      * @param string $label      Button label. An unlabeled button can be triggered by 'Submit'.
      * @param hash   $additional additional form values
      *
-     * @return boolean/string Page on success, else false
+     * @return bool|string Page on success, else false
      */
     public function clickSubmit($label = 'Submit', $additional = false)
     {
@@ -948,7 +991,7 @@ class WebTestCase extends SimpleTestCase
      * @param string $name       name attribute of button
      * @param hash   $additional additional form values
      *
-     * @return boolean/string Page on success
+     * @return bool|string Page on success
      */
     public function clickSubmitByName($name, $additional = false)
     {
@@ -964,7 +1007,7 @@ class WebTestCase extends SimpleTestCase
      * @param string $id         ID attribute of button
      * @param hash   $additional additional form values
      *
-     * @return boolean/string Page on success
+     * @return bool|string Page on success
      */
     public function clickSubmitById($id, $additional = false)
     {
@@ -999,7 +1042,7 @@ class WebTestCase extends SimpleTestCase
      * @param int    $y          Y-coordinate of imaginary click
      * @param hash   $additional additional form values
      *
-     * @return boolean/string Page on success
+     * @return bool|string Page on success
      */
     public function clickImage($label, $x = 1, $y = 1, $additional = false)
     {
@@ -1019,7 +1062,7 @@ class WebTestCase extends SimpleTestCase
      * @param int    $y          Y-coordinate of imaginary click
      * @param hash   $additional additional form values
      *
-     * @return boolean/string Page on success
+     * @return bool|string Page on success
      */
     public function clickImageByName($name, $x = 1, $y = 1, $additional = false)
     {
@@ -1033,12 +1076,12 @@ class WebTestCase extends SimpleTestCase
      * The owning form will be submitted by this.
      * Clicking outside of the boundary of the coordinates will result in a failure.
      *
-     * @param integer/string $id         ID attribute of button
+     * @param int|string $id         ID attribute of button
      * @param int            $x          X-coordinate of imaginary click
      * @param int            $y          Y-coordinate of imaginary click
      * @param hash           $additional additional form values
      *
-     * @return boolean/string Page on success
+     * @return bool|string Page on success
      */
     public function clickImageById($id, $x = 1, $y = 1, $additional = false)
     {
@@ -1067,7 +1110,7 @@ class WebTestCase extends SimpleTestCase
      *
      * @param string $id Form ID. No button information is submitted this way.
      *
-     * @return boolean/string Page on success
+     * @return bool|string Page on success
      */
     public function submitFormById($id, $additional = false)
     {
@@ -1083,7 +1126,7 @@ class WebTestCase extends SimpleTestCase
      * @param string $label text between the anchor tags
      * @param int    $index link position counting from zero
      *
-     * @return boolean/string Page on success
+     * @return bool|string Page on success
      */
     public function clickLink($label, $index = 0)
     {
@@ -1095,7 +1138,7 @@ class WebTestCase extends SimpleTestCase
      *
      * @param string $id ID attribute value
      *
-     * @return boolean/string Page on success
+     * @return bool|string Page on success
      */
     public function clickLinkById($id)
     {
@@ -1218,12 +1261,12 @@ class WebTestCase extends SimpleTestCase
     {
         return $this->browser->setFieldByLabel($label, $value, $position);
     }
-    
+
     /**
      * Sets all form fields with that id.
      *
-     * @param string/integer $id    Id of field in forms
-     * @param string         $value new value of field
+     * @param string|int $id    Id of field in forms
+     * @param string     $value new value of field
      *
      * @return bool true if field exists, otherwise false
      */
@@ -1272,9 +1315,9 @@ class WebTestCase extends SimpleTestCase
      * A missing form will always fail.
      * If no ID is given then only the existence of the field is checked.
      *
-     * @param string/integer $id       Name of field in forms
-     * @param mixed          $expected expected string/array value or false for unset fields
-     * @param string         $message  Message to display. Default can be embedded with %s.
+     * @param string|int $id       Name of field in forms
+     * @param mixed      $expected expected string/array value or false for unset fields
+     * @param string     $message  Message to display. Default can be embedded with %s.
      *
      * @return bool true if pass
      */

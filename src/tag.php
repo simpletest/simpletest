@@ -13,9 +13,9 @@ class SimpleTagBuilder
      * Creates the appropriate tag object for the incoming tag name and attributes.
      *
      * @param string $name       HTML tag name
-     * @param hash   $attributes element attributes
+     * @param array  $attributes element attributes
      *
-     * @return SimpleTag tag object
+     * @return object|SimpleTag tag object
      */
     public function createTag($name, $attributes)
     {
@@ -48,7 +48,7 @@ class SimpleTagBuilder
     /**
      * Factory for selection fields.
      *
-     * @param hash $attributes element attributes
+     * @param array $attributes element attributes
      *
      * @return SimpleTag tag object
      */
@@ -64,7 +64,7 @@ class SimpleTagBuilder
     /**
      * Factory for input tags.
      *
-     * @param hash $attributes element attributes
+     * @param array $attributes element attributes
      *
      * @return SimpleTag tag object
      */
@@ -118,15 +118,18 @@ class SimpleTagBuilder
  */
 class SimpleTag
 {
+    /** @var string */
     private $name;
+    /** @var array */
     private $attributes;
+    /** @var string */
     private $content;
 
     /**
      * Starts with a named tag with attributes only.
      *
      * @param string $name       tag name
-     * @param hash   $attributes Attribute names and string values. Note that the keys must have
+     * @param array  $attributes Attribute names and string values. Note that the keys must have
      *                           been converted to lower case.
      */
     public function __construct($name, $attributes)
@@ -160,7 +163,9 @@ class SimpleTag
     /**
      * Appends string content to the current content.
      *
-     * @param string $content additional text
+     * @param string $content Text to append.
+     *
+     * @return SimpleTag
      */
     public function addContent($content)
     {
@@ -173,15 +178,20 @@ class SimpleTag
      * Adds an enclosed tag to the content.
      *
      * @param SimpleTag $tag new tag
+     *
+     * @return void
      */
     public function addTag($tag)
     {
+        // TODO
     }
 
     /**
      * Adds multiple enclosed tags to the content.
      *
-     * @param array            list of SimpleTag objects to be added
+     * @param array $tags list of SimpleTag objects to be added
+     *
+     * @return void
      */
     public function addTags($tags)
     {
@@ -215,7 +225,7 @@ class SimpleTag
      *
      * @param string $label attribute name
      *
-     * @return string attribute value
+     * @return false|string attribute value
      */
     public function getAttribute($label)
     {
@@ -231,8 +241,9 @@ class SimpleTag
      * Sets an attribute.
      *
      * @param string $label attribute name
+     * @param string $value value
      *
-     * @return string $value   new attribute value
+     * @return void
      */
     protected function setAttribute($label, $value)
     {
@@ -281,7 +292,7 @@ class SimpleBaseTag extends SimpleTag
     /**
      * Starts with a named tag with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {
@@ -307,7 +318,7 @@ class SimpleTitleTag extends SimpleTag
     /**
      * Starts with a named tag with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {
@@ -323,7 +334,7 @@ class SimpleAnchorTag extends SimpleTag
     /**
      * Starts with a named tag with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {
@@ -351,15 +362,18 @@ class SimpleAnchorTag extends SimpleTag
  */
 class SimpleWidget extends SimpleTag
 {
+    /** @var bool */
     private $is_set;
+    /** @var string */
     private $label;
+    /** @var string */
     private $value;
 
     /**
      * Starts with a named tag with attributes only.
      *
      * @param string $name       tag name
-     * @param hash   $attributes attribute names and string values
+     * @param array  $attributes attribute names and string values
      */
     public function __construct($name, $attributes)
     {
@@ -372,7 +386,7 @@ class SimpleWidget extends SimpleTag
     /**
      * Accessor for name submitted as the key in GET/POST privateiables hash.
      *
-     * @return string parsed value
+     * @return false|string parsed value
      */
     public function getName()
     {
@@ -382,7 +396,7 @@ class SimpleWidget extends SimpleTag
     /**
      * Accessor for default value parsed with the tag.
      *
-     * @return string parsed value
+     * @return false|string parsed value
      */
     public function getDefault()
     {
@@ -392,7 +406,7 @@ class SimpleWidget extends SimpleTag
     /**
      * Accessor for currently set value or default if none.
      *
-     * @return string value set by form or default if none
+     * @return false|string value set by form or default if none
      */
     public function getValue()
     {
@@ -420,6 +434,8 @@ class SimpleWidget extends SimpleTag
 
     /**
      * Resets the form element value back to the default.
+     *
+     * @return void
      */
     public function resetValue()
     {
@@ -430,6 +446,8 @@ class SimpleWidget extends SimpleTag
      * Allows setting of a label externally, say by a label tag.
      *
      * @param string $label label to attach
+     *
+     * @return SimpleWidget
      */
     public function setLabel($label)
     {
@@ -454,6 +472,8 @@ class SimpleWidget extends SimpleTag
      * Dispatches the value into the form encoded packet.
      *
      * @param SimpleEncoding $encoding form packet
+     *
+     * @return void
      */
     public function write($encoding)
     {
@@ -471,7 +491,7 @@ class SimpleTextTag extends SimpleWidget
     /**
      * Starts with a named tag with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {
@@ -516,7 +536,7 @@ class SimpleSubmitTag extends SimpleWidget
     /**
      * Starts with a named tag with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {
@@ -579,7 +599,7 @@ class SimpleImageSubmitTag extends SimpleWidget
     /**
      * Starts with a named tag with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {
@@ -640,6 +660,8 @@ class SimpleImageSubmitTag extends SimpleWidget
      * @param SimpleEncoding $encoding form packet
      * @param int            $x        x coordinate of click
      * @param int            $y        y coordinate of click
+     *
+     * @return void
      */
     public function write($encoding, $x = 1, $y = 1)
     {
@@ -662,7 +684,7 @@ class SimpleButtonTag extends SimpleWidget
      * Starts with a named tag with attributes only.
      * Defaults are very browser dependent.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {
@@ -722,7 +744,7 @@ class SimpleTextAreaTag extends SimpleWidget
     /**
      * Starts with a named tag with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {
@@ -815,7 +837,7 @@ class SimpleUploadTag extends SimpleWidget
     /**
      * Starts with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {
@@ -855,13 +877,15 @@ class SimpleUploadTag extends SimpleWidget
  */
 class SimpleSelectionTag extends SimpleWidget
 {
+    /** @var array */
     private $options;
+    /** @var bool */
     private $choice;
 
     /**
      * Starts with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {
@@ -874,6 +898,8 @@ class SimpleSelectionTag extends SimpleWidget
      * Adds an option tag to a selection field.
      *
      * @param SimpleOptionTag $tag new option
+     *
+     * @return void
      */
     public function addTag($tag)
     {
@@ -886,6 +912,8 @@ class SimpleSelectionTag extends SimpleWidget
      * Text within the selection element is ignored.
      *
      * @param string $content ignored
+     *
+     * @return void
      */
     public function addContent($content)
     {
@@ -951,13 +979,17 @@ class SimpleSelectionTag extends SimpleWidget
  */
 class MultipleSelectionTag extends SimpleWidget
 {
+    /** @var array */
     private $options;
+    /** @var false|array */
     private $values;
 
     /**
      * Starts with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
+     *
+     * @return void
      */
     public function __construct($attributes)
     {
@@ -970,6 +1002,8 @@ class MultipleSelectionTag extends SimpleWidget
      * Adds an option tag to a selection field.
      *
      * @param SimpleOptionTag $tag new option
+     *
+     * @return void
      */
     public function addTag($tag)
     {
@@ -982,6 +1016,8 @@ class MultipleSelectionTag extends SimpleWidget
      * Text within the selection element is ignored.
      *
      * @param string $content ignored
+     *
+     * @return MultipleSelectionTag
      */
     public function addContent($content)
     {
@@ -1186,7 +1222,7 @@ class SimpleCheckboxTag extends SimpleWidget
     /**
      * Starts with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {
@@ -1416,6 +1452,8 @@ class SimpleTagGroup
      * Dispatches the value into the form encoded packet.
      *
      * @param SimpleEncoding $encoding form packet
+     *
+     * @return void
      */
     public function write($encoding)
     {
@@ -1431,7 +1469,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
     /**
      * Accessor for current selected widget or false if none.
      *
-     * @return string/array Widget values or false if none
+     * @return string|array Widget values or false if none
      */
     public function getValue()
     {
@@ -1449,7 +1487,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
     /**
      * Accessor for starting value that is active.
      *
-     * @return string/array Widget values or false if none
+     * @return string|array Widget values or false if none
      */
     public function getDefault()
     {
@@ -1467,7 +1505,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
     /**
      * Accessor for current set values.
      *
-     * @param string/array/boolean $values Either a single string, a hash or false for nothing
+     * @param string/array/bool $values Either a single string, a hash or false for nothing
      *                                     set
      *
      * @return bool true if all values can be set
@@ -1494,7 +1532,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
     /**
      * Tests to see if a possible value set is legal.
      *
-     * @param string/array/boolean $values Either a single string, a hash or false for nothing set
+     * @param string/array/bool $values Either a single string, a hash or false for nothing set
      *
      * @return bool false if trying to set a missing value
      */
@@ -1519,7 +1557,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
      *
      * @param array $values list of values of widgets
      *
-     * @return string/array/boolean Expected format for a tag
+     * @return string/array/bool Expected format for a tag
      */
     protected function forceValues($values)
     {
@@ -1535,7 +1573,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
     /**
      * Converts false or string into array. The opposite of the coercian method.
      *
-     * @param string/array/boolean $value A single item is converted to a one item list. False
+     * @param string/array/bool $value A single item is converted to a one item list. False
      *                                    gives an empty list.
      *
      * @return array list of values, possibly empty
@@ -1605,7 +1643,7 @@ class SimpleRadioGroup extends SimpleTagGroup
     /**
      * Accessor for current selected widget or false if none.
      *
-     * @return string/boolean Value attribute or content of opton
+     * @return string|bool Value attribute or content of opton
      */
     public function getValue()
     {
@@ -1622,7 +1660,7 @@ class SimpleRadioGroup extends SimpleTagGroup
     /**
      * Accessor for starting value that is active.
      *
-     * @return string/boolean Value of first checked widget or false if none
+     * @return string|bool Value of first checked widget or false if none
      */
     public function getDefault()
     {
@@ -1645,7 +1683,7 @@ class SimpleLabelTag extends SimpleTag
     /**
      * Starts with a named tag with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {
@@ -1671,7 +1709,7 @@ class SimpleFormTag extends SimpleTag
     /**
      * Starts with a named tag with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {
@@ -1687,7 +1725,7 @@ class SimpleFrameTag extends SimpleTag
     /**
      * Starts with a named tag with attributes only.
      *
-     * @param hash $attributes attribute names and string values
+     * @param array $attributes attribute names and string values
      */
     public function __construct($attributes)
     {

@@ -11,11 +11,14 @@ require_once __DIR__.'/selector.php';
  */
 class SimplePage
 {
+    /** @var array */
     private $links = [];
     private $title = false;
     private $last_widget;        // TODO
     private $label;              // TODO
+        /** @var array */
     private $forms = [];
+    /** @var array */
     private $frames = [];
     private $transport_error;
     private $raw;
@@ -30,7 +33,7 @@ class SimplePage
     /**
      * Parses a page ready to access it's contents.
      *
-     * @param SimpleHttpResponse $response result of HTTP fetch
+     * @param SimpleHttpResponse|false $response result of HTTP fetch
      */
     public function __construct($response = false)
     {
@@ -45,6 +48,8 @@ class SimplePage
      * Extracts all of the response information.
      *
      * @param SimpleHttpResponse $response response being parsed
+     *
+     * @return void
      */
     protected function extractResponse($response)
     {
@@ -59,6 +64,8 @@ class SimplePage
 
     /**
      * Sets up a missing response.
+     *
+     * @return void
      */
     protected function noResponse()
     {
@@ -108,7 +115,7 @@ class SimplePage
     /**
      * Accessor for raw headers of page.
      *
-     * @return string header block as text
+     * @return false|string header block as text
      */
     public function getHeaders()
     {
@@ -142,7 +149,7 @@ class SimplePage
     /**
      * Base URL if set via BASE tag page url otherwise.
      *
-     * @return SimpleUrl base url
+     * @return false|SimpleUrl base url
      */
     public function getBaseUrl()
     {
@@ -172,7 +179,7 @@ class SimplePage
     /**
      * Accessor for current MIME type.
      *
-     * @return string MIME type as string; e.g. 'text/html'
+     * @return false|string MIME type as string; e.g. 'text/html'
      */
     public function getMimeType()
     {
@@ -186,7 +193,7 @@ class SimplePage
     /**
      * Accessor for HTTP response code.
      *
-     * @return int HTTP response code received
+     * @return false|int HTTP response code received
      */
     public function getResponseCode()
     {
@@ -200,7 +207,7 @@ class SimplePage
     /**
      * Accessor for last Authentication type. Only valid straight after a challenge (401).
      *
-     * @return string description of challenge type
+     * @return false|string description of challenge type
      */
     public function getAuthentication()
     {
@@ -214,7 +221,7 @@ class SimplePage
     /**
      * Accessor for last Authentication realm. Only valid straight after a challenge (401).
      *
-     * @return string name of security realm
+     * @return false|string name of security realm
      */
     public function getRealm()
     {
@@ -263,13 +270,20 @@ class SimplePage
 
     /**
      * Clears the frame focus. Does nothing for a leaf page.
+     *
+     * @return void
      */
     public function clearFrameFocus()
     {
+        // TODO
     }
 
     /**
-     * @todo docs
+     * Set Frames
+     *
+     * @param array $frames The frames to set.
+     *
+     * @return void
      */
     public function setFrames($frames)
     {
@@ -287,13 +301,15 @@ class SimplePage
     {
         $parsed = new SimpleUrl($url);
 
-        return (bool) ($parsed->getScheme() && $parsed->getHost());
+        return ($parsed->getScheme() && $parsed->getHost());
     }
 
     /**
      * Adds a link to the page.
      *
      * @param SimpleAnchorTag $tag link to accept
+     *
+     * @return void
      */
     public function addLink($tag)
     {
@@ -304,6 +320,8 @@ class SimplePage
      * Set the forms.
      *
      * @param array $forms An array of SimpleForm objects
+     *
+     * @return void
      */
     public function setForms($forms)
     {
@@ -324,7 +342,7 @@ class SimplePage
      * Accessor for frame name and source URL for every frame that will need to be loaded.
      * Immediate children only.
      *
-     * @return boolean/array False if no frameset or otherwise a hash of frame URLs.
+     * @return bool|array False if no frameset or otherwise a hash of frame URLs.
      *                       The key is either a numerical base one index or the name attribute.
      */
     public function getFrameset()
@@ -346,7 +364,7 @@ class SimplePage
     /**
      * Fetches a list of loaded frames.
      *
-     * @return array/string Just the URL for a single page
+     * @return string Just the URL for a single page
      */
     public function getFrames()
     {
@@ -396,7 +414,7 @@ class SimplePage
      *
      * @param string $id id attribute of link
      *
-     * @return simpleUrl URL with that id of false if none
+     * @return false|SimpleUrl URL with that id of false if none
      */
     public function getUrlById($id)
     {
@@ -414,7 +432,7 @@ class SimplePage
      *
      * @param SimpleAnchorTag $link parsed link
      *
-     * @return simpleUrl URL with frame target if any
+     * @return SimpleUrl URL with frame target if any
      */
     protected function getUrlFromLink($link)
     {
@@ -429,9 +447,9 @@ class SimplePage
     /**
      * Expands expandomatic URLs into fully qualified URLs.
      *
-     * @param SimpleUrl $url relative URL
+     * @param SimpleUrl|string $url relative URL
      *
-     * @return SimpleUrl absolute URL
+     * @return SimpleUrl|string absolute URL
      */
     public function expandUrl($url)
     {
@@ -557,7 +575,7 @@ class SimplePage
      *
      * @param SimpleSelector $selector field finder
      *
-     * @return string/boolean A string if the field is present, false if unchecked and
+     * @return string|bool A string if the field is present, false if unchecked and
      *                        null if missing
      */
     public function getField($selector)

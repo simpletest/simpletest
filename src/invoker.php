@@ -17,6 +17,7 @@ if (!defined('SIMPLE_TEST')) {
  */
 class SimpleInvoker
 {
+    /** @var SimpleTestCase */
     private $test_case;
 
     /**
@@ -43,6 +44,8 @@ class SimpleInvoker
      * Runs test level set up. Used for changing the mechanics of base test cases.
      *
      * @param string $method test method to call
+     *
+     * @return void
      */
     public function before($method)
     {
@@ -53,6 +56,8 @@ class SimpleInvoker
      * Invokes a test method and buffered with setUp() and tearDown() calls.
      *
      * @param string $method test method to call
+     *
+     * @return void
      */
     public function invoke($method)
     {
@@ -65,6 +70,8 @@ class SimpleInvoker
      * Runs test level clean up. Used for changing the mechanics of base test cases.
      *
      * @param string $method test method to call
+     *
+     * @return void
      */
     public function after($method)
     {

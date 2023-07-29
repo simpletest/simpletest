@@ -25,8 +25,8 @@ class SimpleDumper
         switch ($type) {
             case 'Null':
                 return 'NULL';
-            case 'Boolean':
-                return 'Boolean: '.($value ? 'true' : 'false');
+            case 'bool':
+                return 'bool: '.($value ? 'true' : 'false');
             case 'Array':
                 return 'Array: '.count($value).' items';
             case 'Object':
@@ -50,7 +50,7 @@ class SimpleDumper
         if (!isset($value)) {
             return 'Null';
         } elseif (is_bool($value)) {
-            return 'Boolean';
+            return 'bool';
         } elseif (is_string($value)) {
             return 'String';
         } elseif (is_integer($value)) {
@@ -135,7 +135,7 @@ class SimpleDumper
 
         $position = min($position, $length);
         $half_size = (int) $size / 2;
-        $start = ($half_size > $position ? 0 : $position - $half_size);
+        $start = (int) ($half_size > $position ? 0 : $position - $half_size);
         if ($start + $size > $length) {
             $start = $length - $size;
         }
@@ -148,7 +148,7 @@ class SimpleDumper
      * Creates a human readable description of the difference between two variables.
      * The minimal version.
      *
-     * @param null  $first  first value
+     * @param mixed $first  first value
      * @param mixed $second value to compare with
      *
      * @return string human readable description
@@ -177,16 +177,16 @@ class SimpleDumper
     }
 
     /**
-     * Creates a human readable description of the difference between a boolean and another
+     * Creates a human readable description of the difference between a bool and another
      * variable.
      *
-     * @param bool  $first     first boolean
-     * @param mixed $second    boolean to compare with
+     * @param bool  $first     first bool
+     * @param mixed $second    bool to compare with
      * @param bool  $identical if true then type anomolies count
      *
      * @return string human readable description
      */
-    protected function describeBooleanDifference($first, $second, $identical)
+    protected function describeboolDifference($first, $second, $identical)
     {
         return $this->describeGenericDifference($first, $second);
     }

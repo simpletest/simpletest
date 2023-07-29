@@ -57,6 +57,7 @@ class SimpleExceptionTrappingInvoker extends SimpleInvokerDecorator
  */
 class ExceptionExpectation extends SimpleExpectation
 {
+    /** @var mixed */
     private $expected;
 
     /**
@@ -79,7 +80,7 @@ class ExceptionExpectation extends SimpleExpectation
     /**
      * Carry out the test.
      *
-     * @param Exception $compare value to check
+     * @param mixed|Exception $compare value to check
      *
      * @return bool true if matched
      */
@@ -98,7 +99,7 @@ class ExceptionExpectation extends SimpleExpectation
     /**
      * Create the message to display describing the test.
      *
-     * @param Exception $compare exception to match
+     * @param mixed|Exception $compare exception to match
      *
      * @return string final message
      */
@@ -116,6 +117,8 @@ class ExceptionExpectation extends SimpleExpectation
 
     /**
      * Summary of an Exception object.
+     *
+     * @param Exception $exception object
      *
      * @return string text description
      */
@@ -149,6 +152,8 @@ class SimpleExceptionTrap
      *
      * @param SimpleExpectation $expected expected exception to match
      * @param string            $message  message to display
+     *
+     * @return void
      */
     public function expectException($expected = false, $message = '%s')
     {

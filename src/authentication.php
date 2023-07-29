@@ -7,9 +7,13 @@ require_once __DIR__.'/http.php';
  */
 class SimpleRealm
 {
+    /** @var string */
     private $type;
+    /** @var string */
     private $root;
+    /** @var string */
     private $username;
+    /** @var string */
     private $password;
 
     /**
@@ -23,14 +27,16 @@ class SimpleRealm
     {
         $this->type = $type;
         $this->root = $url->getBasePath();
-        $this->username = false;
-        $this->password = false;
+        $this->username = '';
+        $this->password = '';
     }
 
     /**
      * Adds another location to the realm.
      *
      * @param SimpleUrl $url somewhere in realm
+     *
+     * @return void
      */
     public function stretch($url)
     {
@@ -62,7 +68,9 @@ class SimpleRealm
      * Sets the identity to try within this realm.
      *
      * @param string $username username in authentication dialog
-     * @param string $username password in authentication dialog
+     * @param string $password password in authentication dialog
+     *
+     * @return void
      */
     public function setIdentity($username, $password)
     {
@@ -93,7 +101,7 @@ class SimpleRealm
     /**
      * Test to see if the URL is within the directory tree of the realm.
      *
-     * @param simpleUrl $url URL to test
+     * @param SimpleUrl $url URL to test
      *
      * @return bool true if subpath
      */
@@ -182,9 +190,9 @@ class SimpleAuthenticator
     /**
      * Finds the name of the realm by comparing URLs.
      *
-     * @param simpleUrl $url URL to test
+     * @param SimpleUrl $url URL to test
      *
-     * @return SimpleRealm name of realm
+     * @return bool|SimpleRealm name of realm
      */
     protected function findRealmFromUrl($url)
     {
@@ -205,6 +213,8 @@ class SimpleAuthenticator
      *
      * @param SimpleHttpRequest $request request to modify
      * @param SimpleUrl         $url     base of realm
+     *
+     * @return void
      */
     public function addHeaders($request, $url)
     {
@@ -226,6 +236,8 @@ class SimpleAuthenticator
      * @param SimpleHttpRequest $request  request to modify
      * @param string            $username username for realm
      * @param string            $password password for realm
+     *
+     * @return void
      */
     public static function addBasicHeaders(&$request, $username, $password)
     {

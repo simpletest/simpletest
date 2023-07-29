@@ -337,8 +337,10 @@ class UnitTestCase extends SimpleTestCase
      * Prepares for an error. If the error mismatches it passes through, otherwise it is swallowed.
      * Any left over errors trigger failures.
      *
-     * @param simpleExpectation/string $expected The error to match
-     * @param string                   $message  message on failure
+     * @param mixed  $expected The error to match
+     * @param string $message  message on failure
+     *
+     * @return void
      */
     public function expectError($expected = false, $message = '%s')
     {
@@ -350,8 +352,10 @@ class UnitTestCase extends SimpleTestCase
      * Prepares for an exception. If the error mismatches it passes through, otherwise it is
      * swallowed. Any left over errors trigger failures.
      *
-     * @param simpleExpectation/Exception $expected The error to match
-     * @param string                      $message  message on failure
+     * @param mixed $expected The error to match
+     * @param string $message  message on failure
+     *
+     * @return void
      */
     public function expectException($expected = false, $message = '%s')
     {
@@ -364,7 +368,9 @@ class UnitTestCase extends SimpleTestCase
      * Tells SimpleTest to ignore an upcoming exception as not relevant to the current test.
      * It doesn't affect the test, whether thrown or not.
      *
-     * @param simpleExpectation/Exception $ignored The error to ignore
+     * @param mixed $ignored The error to ignore
+     *
+     * @return void
      */
     public function ignoreException($ignored = false)
     {

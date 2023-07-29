@@ -87,7 +87,7 @@ class SimpleCookie
      *
      * @param string $host host name to truncate
      *
-     * @return string domain or false on a bad host
+     * @return false|string domain or false on a bad host
      */
     protected function truncateHost($host)
     {
@@ -145,9 +145,9 @@ class SimpleCookie
     }
 
     /**
-     * Accessor for expiry.
+     * Accessor for expiry date.
      *
-     * @return string expiry string
+     * @return false|string Expiry date string. False, if expiry isnt set.
      */
     public function getExpiry()
     {
@@ -162,9 +162,10 @@ class SimpleCookie
      * Test to see if cookie is expired against the cookie format time or timestamp.
      * Will give true for a session cookie.
      *
-     * @param integer/string $now Time to test against. Result will be false if this time
+     * @param int|string $now Time to test against. Result will be false if this time
      *                            is later than the cookie expiry. Can be either a timestamp
      *                            integer or a cookie format date.
+     * @return bool
      */
     public function isExpired($now)
     {
@@ -182,6 +183,8 @@ class SimpleCookie
      * Ages the cookie by the specified number of seconds.
      *
      * @param int $interval in seconds
+     *
+     * @return void
      */
     public function agePrematurely($interval)
     {
@@ -204,6 +207,8 @@ class SimpleCookie
      * Adds a trailing and leading slash to the path if missing.
      *
      * @param string $path path to fix
+     *
+     * @return string
      */
     protected function fixPath($path)
     {
@@ -223,6 +228,7 @@ class SimpleCookie
  */
 class SimpleCookieJar
 {
+    /** @var array */
     private $cookies;
 
     /**
@@ -236,7 +242,9 @@ class SimpleCookieJar
     /**
      * Removes expired and temporary cookies as if the browser was closed and re-opened.
      *
-     * @param string/integer $date Time to test expiry against
+     * @param string|int $date Time to test expiry against
+     *
+     * @return void
      */
     public function restartSession($date = false)
     {
@@ -261,6 +269,8 @@ class SimpleCookieJar
      *
      * @param int $interval The old session is moved into the past by this number
      *                      of seconds. Cookies now over age will be removed.
+     *
+     * @return void
      */
     public function agePrematurely($interval)
     {
@@ -277,6 +287,8 @@ class SimpleCookieJar
      * @param string $host   host upon which the cookie is valid
      * @param string $path   cookie path if not host wide
      * @param string $expiry expiry date
+     *
+     * @return void
      */
     public function setCookie($name, $value, $host = false, $path = '/', $expiry = false)
     {
@@ -288,9 +300,9 @@ class SimpleCookieJar
     }
 
     /**
-     *    Return a list of the current cookies.
+     * Return a list of the current cookies.
      *
-     *    @return array
+     * @return array
      */
     public function getCookies()
     {

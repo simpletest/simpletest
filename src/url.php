@@ -27,9 +27,9 @@ class SimpleUrl
     private $y;
 
     /**
-     *    Constructor. Parses URL into sections.
+     * Constructor. Parses URL into sections.
      *
-     *    @param string $url        incoming URL
+     * @param string $url Incoming URL
      */
     public function __construct($url = '')
     {
@@ -86,7 +86,7 @@ class SimpleUrl
      *
      * @param string $url URL so far. The scheme will be removed.
      *
-     * @return string scheme part or false
+     * @return false|string scheme part or false
      */
     protected function chompScheme(&$url)
     {
@@ -133,7 +133,7 @@ class SimpleUrl
      *
      * @param string $url URL so far. The host will be removed.
      *
-     * @return string host part guess or false
+     * @return false|string host part guess or false
      */
     protected function chompHost(&$url)
     {
@@ -199,7 +199,7 @@ class SimpleUrl
      *
      * @param string $raw raw request
      *
-     * @return SimpleFormEncoding parsed data
+     * @return SimpleGetEncoding parsed data
      */
     protected function parseRequest($raw)
     {
@@ -219,9 +219,9 @@ class SimpleUrl
     /**
      * Accessor for protocol part.
      *
-     * @param string $default value to use if not present
+     * @param false|string $default value to use if not present
      *
-     * @return string Scheme name, e.g "http".
+     * @return false|string Scheme name, e.g "http".
      */
     public function getScheme($default = false)
     {
@@ -251,9 +251,9 @@ class SimpleUrl
     /**
      * Accessor for hostname and port.
      *
-     * @param string $default value to use if not present
+     * @param false|string $default value to use if not present
      *
-     * @return string hostname only
+     * @return false|string hostname only
      */
     public function getHost($default = false)
     {
@@ -263,7 +263,7 @@ class SimpleUrl
     /**
      * Accessor for top level domain.
      *
-     * @return string last part of host
+     * @return string|false last part of host
      */
     public function getTld()
     {
@@ -299,7 +299,7 @@ class SimpleUrl
     /**
      * Accessor for page if any. This may be a directory name if ambiguious.
      *
-     * @return Page name
+     * @return false|string name
      */
     public function getPage()
     {
@@ -313,7 +313,7 @@ class SimpleUrl
     /**
      * Gets the path to the page.
      *
-     * @return string path less the page
+     * @return false|string path less the page
      */
     public function getBasePath()
     {
@@ -339,6 +339,8 @@ class SimpleUrl
      *
      * @param int $x horizontal position
      * @param int $y vertical position
+     *
+     * @return void
      */
     public function setCoordinates($x = false, $y = false)
     {
@@ -397,6 +399,8 @@ class SimpleUrl
      *
      * @param string $key   name of parameter
      * @param string $value value as string
+     *
+     * @return void
      */
     public function addRequestParameter($key, $value)
     {
@@ -407,7 +411,9 @@ class SimpleUrl
     /**
      * Adds additional parameters to the request.
      *
-     * @param hash/SimpleFormEncoding $parameters Additional parameters
+     * @param array $parameters Additional parameters
+     *
+     * @return void
      */
     public function addRequestParameters($parameters)
     {
@@ -417,6 +423,8 @@ class SimpleUrl
 
     /**
      * Clears down all parameters.
+     *
+     * @return void
      */
     public function clearRequest()
     {
@@ -429,7 +437,7 @@ class SimpleUrl
      * Although not strictly part of the URL specification it acts
      * as similarily to the browser.
      *
-     * @return boolean/string Frame name or false if none
+     * @return bool|string Frame name or false if none
      */
     public function getTarget()
     {
@@ -440,6 +448,8 @@ class SimpleUrl
      * Attaches a frame target.
      *
      * @param string $frame name of frame
+     *
+     * @return void
      */
     public function setTarget($frame)
     {
@@ -487,7 +497,9 @@ class SimpleUrl
      * Replaces unknown sections to turn a relative URL into an absolute one.
      * The base URL can be either a string or a SimpleUrl object.
      *
-     * @param string/SimpleUrl $base Base URL
+     * @param string|SimpleUrl $base Base URL
+     *
+     * @return void
      */
     public function makeAbsolute($base)
     {
@@ -519,8 +531,9 @@ class SimpleUrl
     /**
      * Replaces unknown sections of the path with base parts to return a complete absolute one.
      *
-     * @param string/SimpleUrl $base Base URL
-     * @param string                       absolute path
+     * @param string|SimpleUrl $base Base URL
+     *
+     * @return  string absolute path
      */
     protected function extractAbsolutePath($base)
     {
@@ -552,7 +565,7 @@ class SimpleUrl
     /**
      * Extracts the username and password for use in rendering a URL.
      *
-     * @return string/boolean Form of username:password or false
+     * @return string|bool Form of username:password or false
      */
     public function getIdentity()
     {

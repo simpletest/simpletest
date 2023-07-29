@@ -317,7 +317,7 @@ class SimpleLexer
      *
      * @param string $unmatched unmatched leading portion
      * @param string $matched   actual token match
-     * @param string $mode      Mode after match. A boolean false mode causes no change.
+     * @param string $mode      Mode after match. A bool false mode causes no change.
      *
      * @return bool false if there was any error from the parser
      */
@@ -412,7 +412,7 @@ class SimpleLexer
      *
      * @param string $raw The subject to parse. This is the content that will be eaten.
      *
-     * @return array/boolean Three item list of unparsed content followed by the recognised
+     * @return array/bool Three item list of unparsed content followed by the recognised
      *                       token and finally the action the parser is to take. True if no match, false if there is a
      *                       parsing error.
      */

@@ -9,15 +9,18 @@ require_once __DIR__.'/test_case.php';
  */
 class RemoteTestCase
 {
+    /** @var string */
     private $url;
+    /** @var string */
     private $dry_url;
+    /** @var false */
     private $size;
 
     /**
      * Sets the location of the remote test.
      *
      * @param string $url     test location
-     * @param string $dry_url location for dry run
+     * @param false|string $dry_url location for dry run
      */
     public function __construct($url, $dry_url = false)
     {
@@ -44,7 +47,7 @@ class RemoteTestCase
      *
      * @param SimpleReporter $reporter target of test results
      *
-     * @returns boolean                   True if no failures.
+     * @return bool                   True if no failures.
      */
     public function run($reporter)
     {
@@ -80,7 +83,7 @@ class RemoteTestCase
      *
      * @param SimpleReporter $reporter target of test results
      *
-     * @return simpleTestXmlListener XML reader
+     * @return SimpleTestXmlParser XML parser
      */
     protected function createParser($reporter)
     {
@@ -90,7 +93,7 @@ class RemoteTestCase
     /**
      * Accessor for the number of subtests.
      *
-     * @return int number of test cases
+     * @return int|mixed|false Number of test cases, or false.
      */
     public function getSize()
     {

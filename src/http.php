@@ -9,12 +9,13 @@ require_once __DIR__.'/url.php';
  */
 class SimpleRoute
 {
+    /** @var SimpleUrl */
     private $url;
 
     /**
      * Sets the target URL.
      *
-     * @param simpleUrl $url URL as object
+     * @param SimpleUrl $url URL as object
      */
     public function __construct($url)
     {
@@ -440,6 +441,8 @@ class SimpleHttpHeaders
      *
      * @param SimpleCookieJar $jar jar to write to
      * @param SimpleUrl       $url host and path to write under
+     *
+     * @return void
      */
     public function writeCookiesToJar($jar, $url)
     {

@@ -16,6 +16,8 @@ register_shutdown_function('simpletest_autorun');
 
 /**
  * Exit handler to run all recent test cases and exit system if in CLI.
+ *
+ * @return null|true
  */
 function simpletest_autorun()
 {
@@ -34,7 +36,7 @@ function simpletest_autorun()
  * Uses the DefaultReporter which can have it's output
  * controlled with SimpleTest::prefer().
  *
- * @return boolean/null false, if there were test failures,
+ * @return bool|null false, if there were test failures,
  *                      true, if there were no failures,
  *                      null, if tests are already running
  */
@@ -127,9 +129,10 @@ function capture_new_classes()
 {
     global $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES;
 
-    return array_map('strtolower', array_diff(
-        get_declared_classes(),
+    $diff = array_diff(get_declared_classes(),
         $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES ?
-                            $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES : []
-    ));
+        $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES : []
+    );
+
+    return array_map('strtolower', $diff);
 }

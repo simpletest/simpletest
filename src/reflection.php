@@ -79,7 +79,7 @@ class SimpleReflection
     /**
      * Gets the list of methods on a class or interface.
      *
-     * @returns array              List of method names.
+     * @return array              List of method names.
      */
     public function getMethods()
     {
@@ -90,7 +90,7 @@ class SimpleReflection
      * Gets the list of all methods in a class or interface, including
      * non-visible.
      *
-     * @returns array              List of method names.
+     * @return array              List of method names.
      */
     public function getAllMethods()
     {
@@ -107,7 +107,7 @@ class SimpleReflection
      * Gets the list of interfaces from a class.
      * If the class name is actually an interface then just that interface is returned.
      *
-     * @returns array          List of interfaces.
+     * @return array          List of interfaces.
      */
     public function getInterfaces()
     {
@@ -122,7 +122,7 @@ class SimpleReflection
     /**
      * Gets the list of methods for the implemented interfaces only.
      *
-     * @returns array      List of enforced method signatures.
+     * @return array      List of enforced method signatures.
      */
     public function getInterfaceMethods()
     {
@@ -140,7 +140,7 @@ class SimpleReflection
      *
      * @param string $method method name
      *
-     * @returns boolean             True if enforced.
+     * @return bool             True if enforced.
      */
     protected function isInterfaceMethod($method)
     {
@@ -150,7 +150,7 @@ class SimpleReflection
     /**
      * Finds the parent class name.
      *
-     * @returns string      Parent class name.
+     * @return string|false Parent class name, or false.
      */
     public function getParent()
     {
@@ -166,7 +166,7 @@ class SimpleReflection
     /**
      * Trivially determines if the class is abstract.
      *
-     * @returns boolean      True if abstract.
+     * @return bool      True if abstract.
      */
     public function isAbstract()
     {
@@ -178,7 +178,7 @@ class SimpleReflection
     /**
      * Trivially determines if the class is an interface.
      *
-     * @returns boolean      True if interface.
+     * @return bool      True if interface.
      */
     public function isInterface()
     {
@@ -191,7 +191,7 @@ class SimpleReflection
      * Scans for final methods, as they screw up inherited mocks
      * by not allowing you to override them.
      *
-     * @returns boolean   True if the class has a final method.
+     * @return bool   True if the class has a final method.
      */
     public function hasFinal()
     {

@@ -11,17 +11,24 @@ require_once __DIR__.'/xml.php';
  */
 class SimpleCommandLineParser
 {
+    /** @var array */
     private $to_property = [
             'case' => 'case', 'c' => 'case',
             'test' => 'test', 't' => 'test',
     ];
     private $case = '';
     private $test = '';
+    /** @var bool */
     private $xml = false;
+    /** @var bool */
     private $junit = false;
+    /** @var bool */
     private $help = false;
+    /** @var bool */
     private $no_skips = false;
+    /** @var array */
     private $excludes = [];
+    /** @var bool */
     private $doCodeCoverage = false;
 
     /**
@@ -106,9 +113,9 @@ class SimpleCommandLineParser
     }
 
     /**
-     *    Should code coverage be run or not.
+     * Should code coverage be run or not.
      *
-     *    @return bool        true if code coverage should be run
+     * @return bool true if code coverage should be run
      */
     public function doCodeCoverage()
     {
@@ -116,9 +123,9 @@ class SimpleCommandLineParser
     }
 
     /**
-     *    Array of excluded folders.
+     * Array of excluded folders.
      *
-     *    @return array        array of strings to exclude from code coverage
+     * @return array array of strings to exclude from code coverage
      */
     public function getExcludes()
     {
@@ -175,7 +182,9 @@ HELP;
  */
 class DefaultReporter extends SimpleReporterDecorator
 {
+    /** @var bool */
     public $doCodeCoverage = false;
+    /** @var array */
     public $excludes = [];
 
     /**

@@ -9,6 +9,7 @@ require_once __DIR__.'/compatibility.php';
  */
 class SimpleStickyError
 {
+    /** @var string */
     private $error = 'Constructor not chained';
 
     /**
@@ -42,7 +43,9 @@ class SimpleStickyError
     /**
      * Sets the internal error.
      *
-     * @param string       error message to stash
+     * @param string $error Error Message
+     *
+     * @return void
      */
     public function setError($error)
     {
@@ -51,6 +54,8 @@ class SimpleStickyError
 
     /**
      * Resets the error state to no error.
+     *
+     * @return void
      */
     public function clearError()
     {
@@ -63,9 +68,13 @@ class SimpleStickyError
  */
 class SimpleFileSocket extends SimpleStickyError
 {
+    /** @var false|resource */
     private $handle;
+    /** @var bool */
     private $is_open = false;
+    /** @var string */
     private $sent = '';
+    /** @var int|null */
     private $block_size;
 
     /**
@@ -105,7 +114,7 @@ class SimpleFileSocket extends SimpleStickyError
      * @todo The error suppression is a workaround for PHP4
      * always throwing a warning with a secure socket.
      *
-     * @return integer/boolean Incoming bytes. False on error.
+     * @return false|string False on error. The read string.
      */
     public function read()
     {
@@ -158,6 +167,8 @@ class SimpleFileSocket extends SimpleStickyError
      *
      * @param SimpleUrl $file  simpleUrl file target
      * @param string    $error recipient of error message
+     *
+     * @return false|resource
      */
     protected function openFile($file, &$error)
     {
@@ -170,9 +181,13 @@ class SimpleFileSocket extends SimpleStickyError
  */
 class SimpleSocket extends SimpleStickyError
 {
+    /** @var false|resource */
     private $handle;
+    /** @var bool */
     private $is_open = false;
+    /** @var string */
     private $sent = '';
+    /** @var int|null */
     private $block_size;
 
     /**
@@ -226,10 +241,7 @@ class SimpleSocket extends SimpleStickyError
     /**
      * Reads data from the socket.
      *
-     * @todo  The error suppresion is a workaround for PHP4 always throwing a
-     * warning with a secure socket.
-     *
-     * @return integer/boolean Incoming bytes. False on error.
+     * @return false|string Incoming bytes. False on error.
      */
     public function read()
     {
@@ -288,6 +300,8 @@ class SimpleSocket extends SimpleStickyError
      * @param int    $error_number recipient of error code
      * @param string $error        recipoent of error message
      * @param int    $timeout      maximum time to wait for connection
+     *
+     * @return false|resource
      */
     protected function openSocket($host, $port, &$error_number, &$error, $timeout)
     {

@@ -18,7 +18,7 @@ class TestOfRecorder extends UnitTestCase
         $this->assertIsA($recorder->results[1], 'SimpleResultOfFail');
         $this->assertEqual('testFalseIsTrue', array_pop($recorder->results[1]->breadcrumb));
         $this->assertPattern(
-            "/Expected false, got \[Boolean: true\] at \[.*\Wrecorder_sample\.php line 14\]/",
+            "/Expected false, got \[bool: true\] at \[.*\Wrecorder_sample\.php line 14\]/",
             $recorder->results[1]->message
         );
     }
