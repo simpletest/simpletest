@@ -224,7 +224,7 @@ class SimpleEncoding
      * Adds a parameter to the query.
      *
      * @param string       $key   key to add value to
-     * @param string/array $value New data
+     * @param string|array $value New data
      */
     public function add($key, $value)
     {
@@ -244,7 +244,7 @@ class SimpleEncoding
      * Adds a new value into the request.
      *
      * @param string       $key   key to add value to
-     * @param string/array $value New data
+     * @param string|array $value New data
      */
     protected function addPair($key, $value)
     {
@@ -282,7 +282,7 @@ class SimpleEncoding
     /**
      * Accessor for single value.
      *
-     * @return string/array False if missing, string if present and array if multiple entries
+     * @return string|array False if missing, string if present and array if multiple entries
      */
     public function getValue($key)
     {

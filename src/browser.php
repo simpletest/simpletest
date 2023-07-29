@@ -783,6 +783,8 @@ class SimpleBrowser
 
     /**
      * Clears the frame focus. All frames will be searched for content.
+     *
+     * @return mixed|bool
      */
     public function clearFrameFocus()
     {
@@ -1150,10 +1152,10 @@ class SimpleBrowser
      * The owning form will be submitted by this.
      * Clicking outside of the boundary of the coordinates will result in a failure.
      *
-     * @param int|string     $id         ID attribute of button
-     * @param int            $x          X-coordinate of imaginary click
-     * @param int            $y          Y-coordinate of imaginary click
-     * @param hash           $additional additional form data
+     * @param int|string       $id         ID attribute of button
+     * @param int              $x          X-coordinate of imaginary click
+     * @param int              $y          Y-coordinate of imaginary click
+     * @param mixed|array|bool $additional additional form data
      *
      * @return string|bool Page on success
      */

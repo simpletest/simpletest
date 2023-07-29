@@ -412,7 +412,7 @@ class SimpleLexer
      *
      * @param string $raw The subject to parse. This is the content that will be eaten.
      *
-     * @return array/bool Three item list of unparsed content followed by the recognised
+     * @return array|bool Three item list of unparsed content followed by the recognised
      *                       token and finally the action the parser is to take. True if no match, false if there is a
      *                       parsing error.
      */

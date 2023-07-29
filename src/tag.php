@@ -364,9 +364,9 @@ class SimpleWidget extends SimpleTag
 {
     /** @var bool */
     private $is_set;
-    /** @var string */
+    /** @var string|false */
     private $label;
-    /** @var string */
+    /** @var string|false */
     private $value;
 
     /**
@@ -1505,7 +1505,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
     /**
      * Accessor for current set values.
      *
-     * @param string/array/bool $values Either a single string, a hash or false for nothing
+     * @param string|array|bool $values Either a single string, a hash or false for nothing
      *                                     set
      *
      * @return bool true if all values can be set
@@ -1532,7 +1532,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
     /**
      * Tests to see if a possible value set is legal.
      *
-     * @param string/array/bool $values Either a single string, a hash or false for nothing set
+     * @param string|array|bool $values Either a single string, a hash or false for nothing set
      *
      * @return bool false if trying to set a missing value
      */
@@ -1557,7 +1557,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
      *
      * @param array $values list of values of widgets
      *
-     * @return string/array/bool Expected format for a tag
+     * @return string|array|bool Expected format for a tag
      */
     protected function forceValues($values)
     {
@@ -1573,7 +1573,7 @@ class SimpleCheckboxGroup extends SimpleTagGroup
     /**
      * Converts false or string into array. The opposite of the coercian method.
      *
-     * @param string/array/bool $value A single item is converted to a one item list. False
+     * @param string|array|bool $value A single item is converted to a one item list. False
      *                                    gives an empty list.
      *
      * @return array list of values, possibly empty

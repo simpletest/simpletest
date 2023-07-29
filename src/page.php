@@ -271,7 +271,7 @@ class SimplePage
     /**
      * Clears the frame focus. Does nothing for a leaf page.
      *
-     * @return void
+     * @return void mixed|bool (should return a bool on clear?)
      */
     public function clearFrameFocus()
     {

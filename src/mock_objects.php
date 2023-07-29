@@ -17,11 +17,13 @@ if (!defined('MOCK_ANYTHING')) {
  */
 class ParametersExpectation extends SimpleExpectation
 {
+    /** @var mixed|false */
     private $expected;
 
     /**
      * Sets the expected parameter list.
      *
+     * @param mixed $expected
      * @param string $message customised message on failure
      */
     public function __construct($expected = false, $message = '%s')
@@ -212,7 +214,9 @@ class CallCountExpectation extends SimpleExpectation
  */
 class MinimumCallCountExpectation extends SimpleExpectation
 {
+    /** @var string */
     private $method;
+    /** @var int */
     private $count;
 
     /**
@@ -264,7 +268,9 @@ class MinimumCallCountExpectation extends SimpleExpectation
  */
 class MaximumCallCountExpectation extends SimpleExpectation
 {
+    /** @var string */
     private $method;
+    /** @var int */
     private $count;
 
     /**
@@ -316,6 +322,7 @@ class MaximumCallCountExpectation extends SimpleExpectation
  */
 class SimpleSignatureMap
 {
+    /** @var array */
     private $map;
 
     /**
@@ -409,9 +416,13 @@ class SimpleSignatureMap
  */
 class SimpleCallSchedule
 {
+    /** @var mixed|int */
     private $wildcard = MOCK_ANYTHING;
+    /** @var array */
     private $always;
+    /** @var array */
     private $at;
+    /** @var mixed */
     private $expected_args;
 
     /**
@@ -430,6 +441,8 @@ class SimpleCallSchedule
      * @param string       $method method name
      * @param array        $args   calling parameters
      * @param SimpleAction $action actually simpleByValue, etc
+     *
+     * @return void
      */
     public function register($method, $args, $action)
     {
@@ -448,6 +461,8 @@ class SimpleCallSchedule
      * @param string       $method method name
      * @param array        $args   calling parameters
      * @param SimpleAction $action actually SimpleByValue, etc
+     *
+     * @return void
      */
     public function registerAt($step, $method, $args, $action)
     {
@@ -468,6 +483,8 @@ class SimpleCallSchedule
      * @param string $method  method to test
      * @param array  $args    bare arguments or list of expectation objects
      * @param string $message failure message
+     *
+     * @return void
      */
     public function expectArguments($method, $args, $message)
     {
@@ -536,6 +553,7 @@ class SimpleCallSchedule
  */
 class SimpleReturn
 {
+    /** @var mixed */
     private $value;
 
     /**
@@ -565,6 +583,7 @@ class SimpleReturn
  */
 class SimpleByReference
 {
+    /** @var mixed */
     private $reference;
 
     /**
@@ -594,6 +613,7 @@ class SimpleByReference
  */
 class SimpleByValue
 {
+    /** @var mixed */
     private $value;
 
     /**
@@ -622,6 +642,7 @@ class SimpleByValue
  */
 class SimpleThrower
 {
+    /** @var mixed */
     private $exception;
 
     /**
@@ -649,7 +670,9 @@ class SimpleThrower
  */
 class SimpleErrorThrower
 {
+    /** @var string */
     private $error;
+    /** @var mixed|int E_USER constants */
     private $severity;
 
     /**
@@ -686,7 +709,9 @@ class SimpleMock
 {
     private $actions;
     private $expectations;
+    /** @var string */
     private $wildcard = MOCK_ANYTHING;
+    /** @var bool */
     private $is_strict = true;
     private $call_counts;
     private $expected_counts;
@@ -716,6 +741,8 @@ class SimpleMock
     /**
      * Disables a name check when setting expectations.
      * This hack is needed for the partial mocks.
+     *
+     * @return void
      */
     public function disableExpectationNameChecks()
     {
@@ -738,7 +765,7 @@ class SimpleMock
      * @param mixed  $args the arguments value to be checked
      * @param string $task description of task attempt
      *
-     * @return bool Valid arguments
+     * @return bool
      */
     protected function checkArgumentsIsArray($args, $task)
     {
@@ -757,6 +784,8 @@ class SimpleMock
      *
      * @param string $method name of method
      * @param string $task   description of task attempt
+     *
+     * @return bool
      */
     protected function dieOnNoMethod($method, $task)
     {
@@ -796,6 +825,8 @@ class SimpleMock
      *
      * @param string $method method called
      * @param array  $args   arguments as an array
+     *
+     * @return void
      */
     protected function addCall($method, $args)
     {
@@ -830,6 +861,8 @@ class SimpleMock
      * @param string $method method name
      * @param mixed  $value  result of call by value/handle
      * @param array  $args   list of parameters to match including wildcards
+     *
+     * @return void
      */
     public function returns($method, $value, $args = false)
     {
@@ -846,6 +879,8 @@ class SimpleMock
      * @param string $method method name
      * @param mixed  $value  result of call passed
      * @param array  $args   list of parameters to match including wildcards
+     *
+     * @return void
      */
     public function returnsAt($timing, $method, $value, $args = false)
     {
@@ -860,6 +895,8 @@ class SimpleMock
      * @param string $method method name
      * @param mixed  $value  result of call passed by value
      * @param array  $args   list of parameters to match including wildcards
+     *
+     * @return void
      */
     public function returnsByValue($method, $value, $args = false)
     {
@@ -876,6 +913,8 @@ class SimpleMock
      * @param string $method method name
      * @param mixed  $value  result of call passed by value
      * @param array  $args   list of parameters to match including wildcards
+     *
+     * @return void
      */
     public function returnsByValueAt($timing, $method, $value, $args = false)
     {
@@ -888,7 +927,9 @@ class SimpleMock
      *
      * @param string $method    method name
      * @param mixed  $reference result of the call will be this object
-     * @param array  $args      list of parameters to match including wildcards
+     * @param mixed  $args      list of parameters to match including wildcards
+     *
+     * @return void
      */
     public function returnsByReference($method, &$reference, $args = false)
     {
@@ -905,6 +946,8 @@ class SimpleMock
      * @param string $method    method name
      * @param mixed  $reference result of the call will be this object
      * @param array  $args      list of parameters to match including wildcards
+     *
+     * @return void
      */
     public function returnsByReferenceAt($timing, $method, &$reference, $args = false)
     {
@@ -919,6 +962,8 @@ class SimpleMock
      * @param string $method  method call to test
      * @param array  $args    expected parameters for the call including wildcards
      * @param string $message overridden message
+     *
+     * @return void
      */
     public function expect($method, $args, $message = '%s')
     {
@@ -943,6 +988,8 @@ class SimpleMock
      * @param string $method  method call to test
      * @param array  $args    expected parameters for the call including wildcards
      * @param string $message overridden message
+     *
+     * @return void
      */
     public function expectAt($timing, $method, $args, $message = '%s')
     {
@@ -965,6 +1012,8 @@ class SimpleMock
      * @param string $method  method call to test
      * @param int    $count   number of times it should have been called at tally
      * @param string $message overridden message
+     *
+     * @return void
      */
     public function expectCallCount($method, $count, $message = '%s')
     {
@@ -980,6 +1029,8 @@ class SimpleMock
      * @param string $method  method call to test
      * @param int    $count   most number of times it should have been called
      * @param string $message overridden message
+     *
+     * @return void
      */
     public function expectMaximumCallCount($method, $count, $message = '%s')
     {
@@ -995,6 +1046,8 @@ class SimpleMock
      * @param string $method  method call to test
      * @param int    $count   least number of times it should have been called
      * @param string $message overridden message
+     *
+     * @return void
      */
     public function expectMinimumCallCount($method, $count, $message = '%s')
     {
@@ -1009,6 +1062,8 @@ class SimpleMock
      *
      * @param string $method  method call to ban
      * @param string $message overridden message
+     *
+     * @return void
      */
     public function expectNever($method, $message = '%s')
     {
@@ -1021,6 +1076,8 @@ class SimpleMock
      * @param string $method  method call to track
      * @param array  $args    expected argument list or false for any arguments
      * @param string $message overridden message
+     *
+     * @return void
      */
     public function expectOnce($method, $args = false, $message = '%s')
     {
@@ -1036,6 +1093,8 @@ class SimpleMock
      * @param string $method  method call to track
      * @param array  $args    expected argument list or false for any arguments
      * @param string $message overridden message
+     *
+     * @return void
      */
     public function expectAtLeastOnce($method, $args = false, $message = '%s')
     {
@@ -1054,6 +1113,8 @@ class SimpleMock
      * @param array  $args      Optional argument list filter.
      *                          If given then the exception will only
      *                          be thrown if the method call matches the arguments.
+     *
+     * @return void
      */
     public function throwOn($method, $exception = false, $args = false)
     {
@@ -1077,6 +1138,8 @@ class SimpleMock
      * @param array  $args      Optional argument list filter.
      *                          If given then the exception will only be thrown
      *                          if the method call matches the arguments.
+     *
+     * @return void
      */
     public function throwAt($timing, $method, $exception = false, $args = false)
     {
@@ -1099,6 +1162,8 @@ class SimpleMock
      *                         will only be thrown if the
      *                         method call matches the arguments.
      * @param int    $severity The PHP severity level. Defaults to E_USER_ERROR.
+     *
+     * @return void
      */
     public function errorOn($method, $error = 'A mock error', $args = false, $severity = E_USER_ERROR)
     {
@@ -1122,6 +1187,8 @@ class SimpleMock
      *                         will only be thrown if the
      *                         method call matches the arguments.
      * @param int    $severity The PHP severity level. Defaults to E_USER_ERROR.
+     *
+     * @return void
      */
     public function errorAt($timing, $method, $error = 'A mock error', $args = false, $severity = E_USER_ERROR)
     {
@@ -1136,6 +1203,8 @@ class SimpleMock
      *
      * @param string         $test_method current method name
      * @param SimpleTestCase $test        test to send message to
+     *
+     * @return void
      */
     public function atTestEnd($test_method, &$test)
     {
@@ -1198,6 +1267,8 @@ class SimpleMock
      * @param string $method method to check
      * @param array  $args   argument list to match
      * @param int    $timing the position of this call in the call history
+     *
+     * @return void
      */
     protected function checkExpectations($method, $args, $timing)
     {
@@ -1226,6 +1297,8 @@ class SimpleMock
      * Our mock has to be able to return anything, including variable references.
      * To allow for these mixed returns we have to disable the E_STRICT warnings,
      * while the method calls are emulated.
+     *
+     * @return int error reporting level
      */
     private function disableEStrict()
     {
@@ -1239,6 +1312,8 @@ class SimpleMock
      * Restores the E_STRICT level if it was previously set.
      *
      * @param int $was previous error reporting level
+     *
+     * @return void
      */
     private function restoreEStrict($was)
     {

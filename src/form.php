@@ -64,6 +64,8 @@ class SimpleForm
      * Sets the frame target within a frameset.
      *
      * @param string $frame name of frame
+     *
+     * @return void
      */
     public function setDefaultTarget($frame)
     {
@@ -84,7 +86,7 @@ class SimpleForm
      * Combined action attribute with current location to get an absolute form target.
      *
      * @param string $action action attribute from form tag
-     * @param $page   page location
+     * @param mixed  $page page location
      *
      * @return SimpleUrl absolute form target
      */
@@ -118,7 +120,7 @@ class SimpleForm
     /**
      * Creates the encoding for the current values in the form.
      *
-     * @return SimpleFormEncoding request to submit
+     * @return object|SimpleFormEncoding request to submit
      */
     protected function encode()
     {
@@ -145,6 +147,8 @@ class SimpleForm
      * Adds a tag contents to the form.
      *
      * @param SimpleWidget $tag input tag to add
+     *
+     * @return void
      */
     public function addWidget($tag)
     {
@@ -161,6 +165,8 @@ class SimpleForm
      * Sets the widget into the form, grouping radio buttons if any.
      *
      * @param SimpleWidget $tag incoming form control
+     *
+     * @return void
      */
     protected function setWidget($tag)
     {
@@ -177,6 +183,8 @@ class SimpleForm
      * Adds a radio button, building a group if necessary.
      *
      * @param SimpleRadioButtonTag $tag incoming form control
+     *
+     * @return void
      */
     protected function addRadioButton($tag)
     {
@@ -191,6 +199,8 @@ class SimpleForm
      * Adds a checkbox, making it a group on a repeated name.
      *
      * @param SimpleCheckboxTag $tag incoming form control
+     *
+     * @return void
      */
     protected function addCheckbox($tag)
     {
@@ -213,7 +223,7 @@ class SimpleForm
      *
      * @param $selector criteria to apply
      *
-     * @return string/array Value(s) as string or null if not set
+     * @return string|array Value(s) as string or null if not set
      */
     public function getValue(SelectorInterface $selector)
     {
@@ -343,11 +353,11 @@ class SimpleForm
      * Gets the submit values for an image.
      *
      * @param $selector criteria to apply
-     * @param int  $x          X-coordinate of click
-     * @param int  $y          Y-coordinate of click
-     * @param hash $additional additional data for the form
+     * @param int $x X-coordinate of click
+     * @param int $y Y-coordinate of click
+     * @param mixed|array|bool $additional additional data for the form
      *
-     * @return SimpleEncoding submitted values or false if there is no such button in the form
+     * @return SimpleFormEncoding|false submitted values or false if there is no such button in the form
      */
     public function submitImage(SelectorInterface $selector, $x, $y, $additional = false)
     {
@@ -370,6 +380,8 @@ class SimpleForm
     /**
      * Simply submits the form without the submit button value.
      * Used when there is only one button or it is unimportant.
+     *
+     * @param false|mixed $additional
      *
      * @return hash submitted values
      */

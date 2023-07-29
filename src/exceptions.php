@@ -136,6 +136,7 @@ class SimpleExceptionTrap
 {
     private $expected;
     private $ignored;
+    /** @var string */
     private $message;
 
     /**
@@ -166,6 +167,8 @@ class SimpleExceptionTrap
      * This is the list of exceptions that when thrown do not affect the test.
      *
      * @param SimpleExpectation $ignored exception to skip
+     *
+     * @return void
      */
     public function ignoreException($ignored)
     {
@@ -217,7 +220,7 @@ class SimpleExceptionTrap
     /**
      * Tests for any left over exception.
      *
-     * @return string/false The failure message or false if none
+     * @return string|false The failure message or false if none
      */
     public function getOutstanding()
     {
