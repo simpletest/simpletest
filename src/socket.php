@@ -74,7 +74,7 @@ class SimpleFileSocket extends SimpleStickyError
     private $is_open = false;
     /** @var string */
     private $sent = '';
-    /** @var int|null */
+    /** @var int */
     private $block_size;
 
     /**
@@ -193,7 +193,7 @@ class SimpleSocket extends SimpleStickyError
     private $is_open = false;
     /** @var string */
     private $sent = '';
-    /** @var mixed|int|null */
+    /** @var int */
     private $block_size;
 
     /**

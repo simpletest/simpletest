@@ -443,11 +443,11 @@ class SimpleReporter extends SimpleScorer
      * Get total number of test cases.
      * Null until the first test is started.
      *
-     * @return int|null total number of cases at start
+     * @return int total number of cases at start
      */
     public function getTestCaseCount()
     {
-        return $this->size;
+        return (int) $this->size;
     }
 
     /**

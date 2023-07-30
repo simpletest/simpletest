@@ -7,7 +7,9 @@ require_once __DIR__.'/socket.php';
  */
 class SimpleEncodedPair
 {
+    /** @var string */
     private $key;
+    /** @var string */
     private $value;
 
     /**
@@ -84,8 +86,11 @@ class SimpleEncodedPair
  */
 class SimpleAttachment
 {
+    /** @var string */
     private $key;
+    /** @var string */
     private $content;
+    /** @var string */
     private $filename;
 
     /**
@@ -93,7 +98,7 @@ class SimpleAttachment
      *
      * @param string $key      key to add value to
      * @param string $content  raw data
-     * @param hash   $filename original filename
+     * @param string $filename original filename
      */
     public function __construct($key, $content, $filename)
     {
@@ -145,12 +150,16 @@ class SimpleAttachment
     /**
      * Tests each character is in the range 0-127.
      *
-     * @param string $ascii string to test
+     * @param string $string string to test
+     *
+     * @return bool
      */
-    protected function isOnlyAscii($ascii)
+    protected function isOnlyAscii($string)
     {
-        for ($i = 0, $length = strlen($ascii); $i < $length; ++$i) {
-            if (ord($ascii[$i]) > 127) {
+        $length = strlen($string);
+
+        for ($i = 0; $i < $length; ++$i) {
+            if (ord($string[$i]) > 127) {
                 return false;
             }
         }
@@ -196,6 +205,7 @@ class SimpleAttachment
  */
 class SimpleEncoding
 {
+    /** @var array */
     private $request;
 
     /**
@@ -214,6 +224,8 @@ class SimpleEncoding
 
     /**
      * Empties the request of parameters.
+     *
+     * @return void
      */
     public function clear()
     {
@@ -224,7 +236,9 @@ class SimpleEncoding
      * Adds a parameter to the query.
      *
      * @param string       $key   key to add value to
-     * @param string|array $value New data
+     * @param bool|string|array $value New data
+     *
+     * @return void
      */
     public function add($key, $value)
     {
@@ -245,6 +259,8 @@ class SimpleEncoding
      *
      * @param string       $key   key to add value to
      * @param string|array $value New data
+     *
+     * @return void
      */
     protected function addPair($key, $value)
     {
@@ -257,6 +273,8 @@ class SimpleEncoding
      * @param string $key      key to add value to
      * @param string $content  raw data
      * @param hash   $filename original filename
+     *
+     * @return void
      */
     public function attach($key, $content, $filename)
     {
@@ -266,7 +284,9 @@ class SimpleEncoding
     /**
      * Adds a set of parameters to this query.
      *
-     * @param array/SimpleQueryString $query Multiple values are as lists on a single key
+     * @param array|SimpleQueryString $query Multiple values are as lists on a single key
+     *
+     * @return void
      */
     public function merge($query)
     {
@@ -282,7 +302,9 @@ class SimpleEncoding
     /**
      * Accessor for single value.
      *
-     * @return string|array False if missing, string if present and array if multiple entries
+     * @param string $key
+     *
+     * @return false|string|array False if missing, string if present and array if multiple entries.
      */
     public function getValue($key)
     {
@@ -337,7 +359,7 @@ class SimpleGetEncoding extends SimpleEncoding
     /**
      * Starts empty.
      *
-     * @param array $query Hash of parameters. Multiple values are as lists on a single key.
+     * @param mixed|array $query Hash of parameters. Multiple values are as lists on a single key.
      */
     public function __construct($query = false)
     {
@@ -358,6 +380,8 @@ class SimpleGetEncoding extends SimpleEncoding
      * Writes no extra headers.
      *
      * @param SimpleSocket $socket socket to write to
+     *
+     * @return void
      */
     public function writeHeadersTo(&$socket)
     {
@@ -367,6 +391,8 @@ class SimpleGetEncoding extends SimpleEncoding
      * No data is sent to the socket as the data is encoded into the URL.
      *
      * @param SimpleSocket $socket socket to write to
+     *
+     * @return void
      */
     public function writeTo(&$socket)
     {
@@ -391,7 +417,7 @@ class SimpleHeadEncoding extends SimpleGetEncoding
     /**
      * Starts empty.
      *
-     * @param array $query Hash of parameters. Multiple values are as lists on a single key.
+     * @param mixed|array $query Hash of parameters. Multiple values are as lists on a single key.
      */
     public function __construct($query = false)
     {
@@ -417,7 +443,7 @@ class SimpleDeleteEncoding extends SimpleGetEncoding
     /**
      * Starts empty.
      *
-     * @param array $query Hash of parameters. Multiple values are as lists on a single key.
+     * @param mixed|array $query Hash of parameters. Multiple values are as lists on a single key.
      */
     public function __construct($query = false)
     {
@@ -440,7 +466,9 @@ class SimpleDeleteEncoding extends SimpleGetEncoding
  */
 class SimpleEntityEncoding extends SimpleEncoding
 {
+    /** @var mixed|bool|string */
     private $content_type;
+    /** @var mixed|bool|string */
     private $body;
 
     public function __construct($query = false, $content_type = false)
@@ -472,10 +500,13 @@ class SimpleEntityEncoding extends SimpleEncoding
      * Dispatches the form headers down the socket.
      *
      * @param SimpleSocket $socket socket to write to
+     *
+     * @return void
      */
     public function writeHeadersTo(&$socket)
     {
-        $socket->write('Content-Length: '.(int) strlen($this->encode())."\r\n");
+        $content_length = strlen($this->encode());
+        $socket->write('Content-Length: '.$content_length."\r\n");
         $socket->write('Content-Type: '.$this->getContentType()."\r\n");
     }
 
@@ -518,6 +549,13 @@ class SimplePostEncoding extends SimpleEntityEncoding
         parent::__construct($query, $content_type);
     }
 
+    /**
+     * Check, if query has more than one level.
+     *
+     * @param array $query
+     *
+     * @return bool
+     */
     public function hasMoreThanOneLevel($query)
     {
         foreach ($query as $key => $value) {
@@ -529,6 +567,13 @@ class SimplePostEncoding extends SimpleEntityEncoding
         return false;
     }
 
+    /**
+     * Rewrites array with mulitple levels.
+     *
+     * @param array $query
+     *
+     * @return array
+     */
     public function rewriteArrayWithMultipleLevels($query)
     {
         $query_ = [];
@@ -578,6 +623,7 @@ class SimplePutEncoding extends SimpleEntityEncoding
      * Starts empty.
      *
      * @param array $query Hash of parameters. Multiple values are as lists on a single key.
+     * @param false|string $content_type
      */
     public function __construct($query = false, $content_type = false)
     {
@@ -600,12 +646,16 @@ class SimplePutEncoding extends SimpleEntityEncoding
  */
 class SimpleMultipartEncoding extends SimplePostEncoding
 {
+    /** @var false|string */
     private $boundary;
 
     /**
      * Starts empty.
      *
-     * @param array $query Hash of parameters. Multiple values are as lists on a single key.
+     * @param mixed|array $query Hash of parameters. Multiple values are as lists on a single key.
+     * @param bool $boundary
+     *
+     * @return void
      */
     public function __construct($query = false, $boundary = false)
     {
@@ -617,10 +667,13 @@ class SimpleMultipartEncoding extends SimplePostEncoding
      * Dispatches the form headers down the socket.
      *
      * @param SimpleSocket $socket socket to write to
+     *
+     * @return void
      */
     public function writeHeadersTo(&$socket)
     {
-        $socket->write('Content-Length: '.(int) strlen($this->encode())."\r\n");
+        $content_length = strlen($this->encode());
+        $socket->write('Content-Length: '.$content_length."\r\n");
         $socket->write('Content-Type: multipart/form-data; boundary='.$this->boundary."\r\n");
     }
 
@@ -628,6 +681,8 @@ class SimpleMultipartEncoding extends SimplePostEncoding
      * Dispatches the form data down the socket.
      *
      * @param SimpleSocket $socket socket to write to
+     *
+     * @return void
      */
     public function writeTo(&$socket)
     {

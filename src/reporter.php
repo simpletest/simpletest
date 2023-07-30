@@ -29,6 +29,8 @@ class HtmlReporter extends SimpleReporter
      * Paints the top of the web page setting the title to the name of the starting test.
      *
      * @param string $test_name name class of test
+     *
+     * @return void
      */
     public function paintHeader($test_name)
     {
