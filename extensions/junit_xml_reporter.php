@@ -12,6 +12,10 @@ class JUnitXMLReporter extends SimpleReporter
 {
     private $doc;
     private $root;
+    private $testsStart;
+    private $currentCaseName;
+    private $methodStart;
+    private $currCase;
 
     public function __construct()
     {
