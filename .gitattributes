@@ -6,3 +6,4 @@
 /.phan              export-ignore
 /build              export-ignore
 /docs               export-ignore
+/tests              export-ignore
