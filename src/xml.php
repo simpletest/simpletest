@@ -550,7 +550,7 @@ class SimpleTestXmlParser
      */
     public function parse($chunk)
     {
-        if (!xml_parse($this->expat, $chunk)) {
+        if (xml_parse($this->expat, $chunk) === 0) {
             $code = xml_get_error_code($this->expat);
             $message = sprintf(
                 "XML parse error %d '%s' at line %d, column %d (byte %d).",

@@ -236,7 +236,7 @@ class SimpleSocket extends SimpleStickyError
         }
         $count = \fwrite($this->handle, $message);
 
-        if (!$count) {
+        if ($count === 0 || $count === false) {
             if (false === $count) {
                 $this->setError('Cannot write to socket');
                 $this->close();

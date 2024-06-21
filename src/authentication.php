@@ -106,7 +106,7 @@ class SimpleRealm
      */
     protected function getCommonPath(string $first, string $second) /* : string */
     {
-        if (empty($first) || empty($second)) {
+        if ($first === '' || $first === '0' || ($second === '' || $second === '0')) {
             return '';
         }
 
@@ -123,7 +123,13 @@ class SimpleRealm
             $commonParts[] = $firstParts[$i];
         }
 
-        return \implode('/', $commonParts) . (empty($commonParts) ? '' : '/');
+        $path = \implode('/', $commonParts);
+
+        if ($commonParts !== []) {
+            $path .= '/';
+        }
+
+        return $path;
     }
 
     /**

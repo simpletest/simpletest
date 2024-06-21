@@ -425,7 +425,7 @@ class SimpleFileLoader
         $this->makeFileVariablesGlobal($existing_globals, $new_globals);
         $new_classes = \array_diff(\get_declared_classes(), $existing_classes);
 
-        if (empty($new_classes)) {
+        if ($new_classes === []) {
             $new_classes = $this->scrapeClassesFromFile($test_file);
         }
         $classes = $this->selectRunnableTests($new_classes);

@@ -176,7 +176,7 @@ class SimpleErrorQueue
      */
     public function extract()
     {
-        if (\count($this->queue)) {
+        if (\count($this->queue) !== 0) {
             return \array_shift($this->queue);
         }
 
@@ -219,7 +219,7 @@ class SimpleErrorQueue
      */
     protected function extractExpectation()
     {
-        if (\count($this->expectation_queue)) {
+        if (\count($this->expectation_queue) !== 0) {
             return \array_shift($this->expectation_queue);
         }
 
@@ -242,7 +242,7 @@ function SimpleTestErrorHandler($severity, $message, $file = null, $line = null,
 {
     $severity = $severity & \error_reporting();
 
-    if ($severity) {
+    if ($severity !== 0) {
         \restore_error_handler();
 
         $queue = SimpleTest::getContext()->get('SimpleErrorQueue');

@@ -37,7 +37,7 @@ class ColorTextReporter extends TextReporter
         parent::paintFooter($test_name);
         $output = \trim(\ob_get_clean());
 
-        if ($output) {
+        if ($output !== '') {
             if (($this->getFailCount() + $this->getExceptionCount()) == 0) {
                 $color = $this->_passColor;
             } else {

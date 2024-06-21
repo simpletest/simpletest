@@ -645,12 +645,16 @@ class SimpleHttpResponse extends SimpleStickyError
         } elseif ('file' === $this->url->getScheme()) {
             $this->headers = new SimpleHttpHeaders('');
             $this->content = $raw;
-        } elseif (!\strstr($raw, "\r\n\r\n")) {
-            $this->setError('Could not split headers from content');
-            $this->headers = new SimpleHttpHeaders($raw);
         } else {
-            [$headers, $this->content] = \explode("\r\n\r\n", $raw, 2);
-            $this->headers             = new SimpleHttpHeaders($headers);
+            $splitPos = \strstr($raw, "\r\n\r\n");
+
+            if ($splitPos === '' || $splitPos === '0' || $splitPos === false) {
+                $this->setError('Could not split headers from content');
+                $this->headers = new SimpleHttpHeaders($raw);
+            } else {
+                [$headers, $this->content] = \explode("\r\n\r\n", $raw, 2);
+                $this->headers             = new SimpleHttpHeaders($headers);
+            }
         }
     }
 
