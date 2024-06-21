@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../dom_tester.php';
 
 class TestOfLiveCssSelectors extends DomTestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
     }
@@ -25,7 +25,7 @@ class TestOfCssSelectors extends UnitTestCase
 {
     public $dom;
 
-    public function setup()
+    protected function setUp()
     {
         $html                       = file_get_contents(__DIR__ . '/support/dom_tester.html');
         $this->dom                  = new DomDocument('1.0', 'utf-8');

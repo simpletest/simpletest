@@ -7,7 +7,7 @@ SimpleTest::prefer(new TextReporter());
 
 class TestOfLiveCssSelectors extends DomTestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
     }

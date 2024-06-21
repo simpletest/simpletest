@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/page.php';
-require_once __DIR__.'/user_agent.php';
+require_once __DIR__ . '/page.php';
+
+require_once __DIR__ . '/user_agent.php';
 
 /**
  * A composite page.
@@ -25,9 +26,9 @@ class SimpleFrameset
     public function __construct($page)
     {
         $this->frameset = $page;
-        $this->frames = [];
-        $this->focus = false;
-        $this->names = [];
+        $this->frames   = [];
+        $this->focus    = false;
+        $this->names    = [];
     }
 
     /**
@@ -36,11 +37,12 @@ class SimpleFrameset
      * @param SimplePage $page frame page
      * @param string     $name name of frame in frameset
      */
-    public function addFrame($page, $name = false)
+    public function addFrame($page, $name = false): void
     {
         $this->frames[] = $page;
+
         if ($name) {
-            $this->names[$name] = count($this->frames) - 1;
+            $this->names[$name] = \count($this->frames) - 1;
         }
     }
 
@@ -51,15 +53,17 @@ class SimpleFrameset
      * @param array      $path path of frame in frameset
      * @param SimplePage $page frame source
      */
-    public function setFrame($path, $page)
+    public function setFrame($path, $page): void
     {
-        $name = array_shift($path);
+        $name = \array_shift($path);
+
         if (isset($this->names[$name])) {
             $index = $this->names[$name];
         } else {
             $index = $name - 1;
         }
-        if (0 === count($path)) {
+
+        if (0 === \count($path)) {
             $this->frames[$index] = $page;
 
             return;
@@ -79,29 +83,10 @@ class SimpleFrameset
             return [];
         }
 
-        return array_merge(
+        return \array_merge(
             [$this->getPublicNameFromIndex($this->focus)],
-            $this->frames[$this->focus]->getFrameFocus()
+            $this->frames[$this->focus]->getFrameFocus(),
         );
-    }
-
-    /**
-     * Turns an internal array index into the frames list,
-     * into a public name, or if none, then a one offset index.
-     *
-     * @param int $subject internal index
-     *
-     * @return integer|string Public name
-     */
-    protected function getPublicNameFromIndex($subject)
-    {
-        foreach ($this->names as $name => $index) {
-            if ($subject == $index) {
-                return $name;
-            }
-        }
-
-        return $subject + 1;
     }
 
     /**
@@ -115,12 +100,13 @@ class SimpleFrameset
      */
     public function setFrameFocusByIndex($choice)
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             if ($this->frames[$this->focus]->hasFrames()) {
                 return $this->frames[$this->focus]->setFrameFocusByIndex($choice);
             }
         }
-        if (($choice < 1) || ($choice > count($this->frames))) {
+
+        if (($choice < 1) || ($choice > \count($this->frames))) {
             return false;
         }
         $this->focus = $choice - 1;
@@ -139,12 +125,13 @@ class SimpleFrameset
      */
     public function setFrameFocus($name)
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             if ($this->frames[$this->focus]->hasFrames()) {
                 return $this->frames[$this->focus]->setFrameFocus($name);
             }
         }
-        if (in_array($name, array_keys($this->names))) {
+
+        if (\in_array($name, \array_keys($this->names), true)) {
             $this->focus = $this->names[$name];
 
             return true;
@@ -155,25 +142,11 @@ class SimpleFrameset
 
     /**
      * Clears the frame focus.
-     *
-     * @return void
      */
-    public function clearFrameFocus()
+    public function clearFrameFocus(): void
     {
         $this->focus = false;
         $this->clearNestedFramesFocus();
-    }
-
-    /**
-     * Clears the frame focus for any nested frames.
-     *
-     * @return void
-     */
-    protected function clearNestedFramesFocus()
-    {
-        for ($i = 0; $i < count($this->frames); ++$i) {
-            $this->frames[$i]->clearFrameFocus();
-        }
     }
 
     /**
@@ -195,7 +168,8 @@ class SimpleFrameset
     public function getFrames()
     {
         $report = [];
-        for ($i = 0; $i < count($this->frames); ++$i) {
+
+        for ($i = 0; $i < \count($this->frames); $i++) {
             $report[$this->getPublicNameFromIndex($i)] = $this->frames[$i]->getFrames();
         }
 
@@ -209,11 +183,12 @@ class SimpleFrameset
      */
     public function getRaw()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->frames[$this->focus]->getRaw();
         }
         $raw = '';
-        for ($i = 0; $i < count($this->frames); ++$i) {
+
+        for ($i = 0; $i < \count($this->frames); $i++) {
             $raw .= $this->frames[$i]->getRaw();
         }
 
@@ -227,15 +202,16 @@ class SimpleFrameset
      */
     public function getText()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->frames[$this->focus]->getText();
         }
         $raw = '';
-        for ($i = 0; $i < count($this->frames); ++$i) {
-            $raw .= ' '.$this->frames[$i]->getText();
+
+        for ($i = 0; $i < \count($this->frames); $i++) {
+            $raw .= ' ' . $this->frames[$i]->getText();
         }
 
-        return trim($raw);
+        return \trim($raw);
     }
 
     /**
@@ -245,7 +221,7 @@ class SimpleFrameset
      */
     public function getTransportError()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->frames[$this->focus]->getTransportError();
         }
 
@@ -259,7 +235,7 @@ class SimpleFrameset
      */
     public function getMethod()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->frames[$this->focus]->getMethod();
         }
 
@@ -273,7 +249,7 @@ class SimpleFrameset
      */
     public function getUrl()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             $url = $this->frames[$this->focus]->getUrl();
             $url->setTarget($this->getPublicNameFromIndex($this->focus));
         } else {
@@ -290,7 +266,7 @@ class SimpleFrameset
      */
     public function getBaseUrl()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             $url = $this->frames[$this->focus]->getBaseUrl();
         } else {
             $url = $this->frameset->getBaseUrl();
@@ -318,7 +294,7 @@ class SimpleFrameset
      */
     public function getRequestData()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->frames[$this->focus]->getRequestData();
         }
 
@@ -332,7 +308,7 @@ class SimpleFrameset
      */
     public function getMimeType()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->frames[$this->focus]->getMimeType();
         }
 
@@ -346,7 +322,7 @@ class SimpleFrameset
      */
     public function getResponseCode()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->frames[$this->focus]->getResponseCode();
         }
 
@@ -360,7 +336,7 @@ class SimpleFrameset
      */
     public function getAuthentication()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->frames[$this->focus]->getAuthentication();
         }
 
@@ -374,7 +350,7 @@ class SimpleFrameset
      */
     public function getRealm()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->frames[$this->focus]->getRealm();
         }
 
@@ -388,7 +364,7 @@ class SimpleFrameset
      */
     public function getRequest()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->frames[$this->focus]->getRequest();
         }
 
@@ -402,7 +378,7 @@ class SimpleFrameset
      */
     public function getHeaders()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->frames[$this->focus]->getHeaders();
         }
 
@@ -426,15 +402,16 @@ class SimpleFrameset
      */
     public function getUrls()
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->frames[$this->focus]->getUrls();
         }
         $urls = [];
+
         foreach ($this->frames as $frame) {
-            $urls = array_merge($urls, $frame->getUrls());
+            $urls = \array_merge($urls, $frame->getUrls());
         }
 
-        return array_values(array_unique($urls));
+        return \array_values(\array_unique($urls));
     }
 
     /**
@@ -447,20 +424,21 @@ class SimpleFrameset
      */
     public function getUrlsByLabel($label)
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->tagUrlsWithFrame(
                 $this->frames[$this->focus]->getUrlsByLabel($label),
-                $this->focus
+                $this->focus,
             );
         }
         $urls = [];
+
         foreach ($this->frames as $index => $frame) {
-            $urls = array_merge(
+            $urls = \array_merge(
                 $urls,
                 $this->tagUrlsWithFrame(
-                        $frame->getUrlsByLabel($label),
-                        $index
-                    )
+                    $frame->getUrlsByLabel($label),
+                    $index,
+                ),
             );
         }
 
@@ -489,27 +467,6 @@ class SimpleFrameset
         }
 
         return false;
-    }
-
-    /**
-     * Attaches the intended frame index to a list of URLs.
-     *
-     * @param array  $urls  list of SimpleUrls
-     * @param string $frame name of frame or index
-     *
-     * @return array list of tagged URLs
-     */
-    protected function tagUrlsWithFrame($urls, $frame)
-    {
-        $tagged = [];
-        foreach ($urls as $url) {
-            if (!$url->getTarget()) {
-                $url->setTarget($this->getPublicNameFromIndex($frame));
-            }
-            $tagged[] = $url;
-        }
-
-        return $tagged;
     }
 
     /**
@@ -552,6 +509,96 @@ class SimpleFrameset
     }
 
     /**
+     * Sets a field on each form in which the field is available.
+     *
+     * @param SimpleSelector $selector field finder
+     * @param string         $value    value to set field to
+     *
+     * @return bool true if value is valid
+     */
+    public function setField($selector, $value)
+    {
+        if (\is_int($this->focus)) {
+            $this->frames[$this->focus]->setField($selector, $value);
+        } else {
+            for ($i = 0; $i < \count($this->frames); $i++) {
+                $this->frames[$i]->setField($selector, $value);
+            }
+        }
+    }
+
+    /**
+     * Accessor for a form element value within a page.
+     *
+     * @param SimpleSelector $selector field finder
+     *
+     * @return bool|string A string if the field is present, false if unchecked and
+     *                     null if missing
+     */
+    public function getField($selector)
+    {
+        for ($i = 0; $i < \count($this->frames); $i++) {
+            $value = $this->frames[$i]->getField($selector);
+
+            if (isset($value)) {
+                return $value;
+            }
+        }
+
+    }
+
+    /**
+     * Turns an internal array index into the frames list,
+     * into a public name, or if none, then a one offset index.
+     *
+     * @param int $subject internal index
+     *
+     * @return int|string Public name
+     */
+    protected function getPublicNameFromIndex($subject)
+    {
+        foreach ($this->names as $name => $index) {
+            if ($subject == $index) {
+                return $name;
+            }
+        }
+
+        return $subject + 1;
+    }
+
+    /**
+     * Clears the frame focus for any nested frames.
+     */
+    protected function clearNestedFramesFocus(): void
+    {
+        for ($i = 0; $i < \count($this->frames); $i++) {
+            $this->frames[$i]->clearFrameFocus();
+        }
+    }
+
+    /**
+     * Attaches the intended frame index to a list of URLs.
+     *
+     * @param array  $urls  list of SimpleUrls
+     * @param string $frame name of frame or index
+     *
+     * @return array list of tagged URLs
+     */
+    protected function tagUrlsWithFrame($urls, $frame)
+    {
+        $tagged = [];
+
+        foreach ($urls as $url) {
+            if (!$url->getTarget()) {
+                $url->setTarget($this->getPublicNameFromIndex($frame));
+            }
+            $tagged[] = $url;
+        }
+
+        return $tagged;
+    }
+
+    /**
      * General form finder. Will search all the frames or just the one in focus.
      *
      * @param string $method    method to use to find in a page
@@ -561,27 +608,28 @@ class SimpleFrameset
      */
     protected function findForm($method, $attribute)
     {
-        if (is_integer($this->focus)) {
+        if (\is_int($this->focus)) {
             return $this->findFormInFrame(
                 $this->frames[$this->focus],
                 $this->focus,
                 $method,
-                $attribute
+                $attribute,
             );
         }
-        for ($i = 0; $i < count($this->frames); ++$i) {
+
+        for ($i = 0; $i < \count($this->frames); $i++) {
             $form = $this->findFormInFrame(
                 $this->frames[$i],
                 $i,
                 $method,
-                $attribute
+                $attribute,
             );
+
             if ($form) {
                 return $form;
             }
         }
 
-        return;
     }
 
     /**
@@ -597,50 +645,12 @@ class SimpleFrameset
      */
     protected function findFormInFrame($page, $index, $method, $attribute)
     {
-        $form = $this->frames[$index]->$method($attribute);
+        $form = $this->frames[$index]->{$method}($attribute);
+
         if (isset($form)) {
             $form->setDefaultTarget($this->getPublicNameFromIndex($index));
         }
 
         return $form;
-    }
-
-    /**
-     * Sets a field on each form in which the field is available.
-     *
-     * @param SimpleSelector $selector field finder
-     * @param string         $value    value to set field to
-     *
-     * @return bool true if value is valid
-     */
-    public function setField($selector, $value)
-    {
-        if (is_integer($this->focus)) {
-            $this->frames[$this->focus]->setField($selector, $value);
-        } else {
-            for ($i = 0; $i < count($this->frames); ++$i) {
-                $this->frames[$i]->setField($selector, $value);
-            }
-        }
-    }
-
-    /**
-     * Accessor for a form element value within a page.
-     *
-     * @param SimpleSelector $selector field finder
-     *
-     * @return string|bool A string if the field is present, false if unchecked and
-     *                        null if missing
-     */
-    public function getField($selector)
-    {
-        for ($i = 0; $i < count($this->frames); ++$i) {
-            $value = $this->frames[$i]->getField($selector);
-            if (isset($value)) {
-                return $value;
-            }
-        }
-
-        return;
     }
 }

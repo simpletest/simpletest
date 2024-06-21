@@ -1,5 +1,5 @@
 <?php
-    require_once '../page_request.php';
+require_once '../page_request.php';
 ?><html>
     <head><title>Simple test page with links</title></head>
     <body>
@@ -18,6 +18,6 @@
         <form action=""><input type="submit" name="action" value="Empty action"></form>
         <form><input type="submit" name="action" value="No action"></form>
         <form action=".."><input type="submit" name="action" value="Down one"></form>
-        <?php include __DIR__.'/show_request.php'; ?>
+        <?php include __DIR__ . '/show_request.php'; ?>
     </body>
 </html>

@@ -4,9 +4,9 @@
         A target for the SimpleTest test suite that displays cookies.
         <h1>Cookies</h1>
         <?php
-            if (count($_COOKIE) > 0) {
+            if (\count($_COOKIE) > 0) {
                 foreach ($_COOKIE as $key => $value) {
-                    echo $key.'='.$value.';';
+                    print $key . '=' . $value . ';';
                 }
             }
         ?>

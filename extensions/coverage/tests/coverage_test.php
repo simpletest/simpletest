@@ -13,7 +13,7 @@ class CodeCoverageTest extends UnitTestCase
         );
     }
 
-    public function setUp()
+    protected function setUp()
     {
         require_once __DIR__ . '/../coverage.php';
     }

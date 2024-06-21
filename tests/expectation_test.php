@@ -1,53 +1,54 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/../src/autorun.php';
-require_once __DIR__.'/../src/expectation.php';
+require_once __DIR__ . '/../src/autorun.php';
+
+require_once __DIR__ . '/../src/expectation.php';
 
 class TestOfEquality extends UnitTestCase
 {
-    public function testBoolean()
+    public function testBoolean(): void
     {
         $is_true = new EqualExpectation(true);
         $this->assertTrue($is_true->test(true));
         $this->assertFalse($is_true->test(false));
     }
 
-    public function testStringMatch()
+    public function testStringMatch(): void
     {
         $hello = new EqualExpectation('Hello');
         $this->assertTrue($hello->test('Hello'));
         $this->assertFalse($hello->test('Goodbye'));
     }
 
-    public function testInteger()
+    public function testInteger(): void
     {
         $fifteen = new EqualExpectation(15);
         $this->assertTrue($fifteen->test(15));
         $this->assertFalse($fifteen->test(14));
     }
 
-    public function testFloat()
+    public function testFloat(): void
     {
         $pi = new EqualExpectation(3.14);
         $this->assertTrue($pi->test(3.14));
         $this->assertFalse($pi->test(3.15));
     }
 
-    public function testArray()
+    public function testArray(): void
     {
         $colours = new EqualExpectation(['r', 'g', 'b']);
         $this->assertTrue($colours->test(['r', 'g', 'b']));
         $this->assertFalse($colours->test(['g', 'b', 'r']));
     }
 
-    public function testHash()
+    public function testHash(): void
     {
         $is_blue = new EqualExpectation(['r' => 0, 'g' => 0, 'b' => 255]);
         $this->assertTrue($is_blue->test(['r' => 0, 'g' => 0, 'b' => 255]));
         $this->assertFalse($is_blue->test(['r' => 0, 'g' => 255, 'b' => 0]));
     }
 
-    public function testHashWithOutOfOrderKeysShouldStillMatch()
+    public function testHashWithOutOfOrderKeysShouldStillMatch(): void
     {
         $any_order = new EqualExpectation(['a' => 1, 'b' => 2]);
         $this->assertTrue($any_order->test(['b' => 2, 'a' => 1]));
@@ -56,7 +57,7 @@ class TestOfEquality extends UnitTestCase
 
 class TestOfWithin extends UnitTestCase
 {
-    public function testWithinFloatingPointMargin()
+    public function testWithinFloatingPointMargin(): void
     {
         $within = new WithinMarginExpectation(1.0, 0.2);
         $this->assertFalse($within->test(0.7));
@@ -67,7 +68,7 @@ class TestOfWithin extends UnitTestCase
         $this->assertFalse($within->test(1.3));
     }
 
-    public function testOutsideFloatingPointMargin()
+    public function testOutsideFloatingPointMargin(): void
     {
         $within = new OutsideMarginExpectation(1.0, 0.2);
         $this->assertTrue($within->test(0.7));
@@ -79,7 +80,7 @@ class TestOfWithin extends UnitTestCase
 
 class TestOfInequality extends UnitTestCase
 {
-    public function testStringMismatch()
+    public function testStringMismatch(): void
     {
         $not_hello = new NotEqualExpectation('Hello');
         $this->assertTrue($not_hello->test('Goodbye'));
@@ -127,7 +128,7 @@ class DerivedOpaqueContainer extends OpaqueContainer
 
 class TestOfIdentity extends UnitTestCase
 {
-    public function testType()
+    public function testType(): void
     {
         $string = new IdenticalExpectation('37');
         $this->assertTrue($string->test('37'));
@@ -135,32 +136,32 @@ class TestOfIdentity extends UnitTestCase
         $this->assertFalse($string->test('38'));
     }
 
-    public function _testNastyPhp5Bug()
+    public function _testNastyPhp5Bug(): void
     {
-        $this->assertFalse(new RecursiveNasty() != new RecursiveNasty());
+        $this->assertFalse(new RecursiveNasty != new RecursiveNasty);
     }
 
-    public function _testReallyHorribleRecursiveStructure()
+    public function _testReallyHorribleRecursiveStructure(): void
     {
-        $hopeful = new IdenticalExpectation(new RecursiveNasty());
-        $this->assertTrue($hopeful->test(new RecursiveNasty()));
+        $hopeful = new IdenticalExpectation(new RecursiveNasty);
+        $this->assertTrue($hopeful->test(new RecursiveNasty));
     }
 
-    public function testCanComparePrivateMembers()
+    public function testCanComparePrivateMembers(): void
     {
         $expectFive = new IdenticalExpectation(new OpaqueContainer(5));
         $this->assertTrue($expectFive->test(new OpaqueContainer(5)));
         $this->assertFalse($expectFive->test(new OpaqueContainer(6)));
     }
 
-    public function testCanComparePrivateMembersOfObjectsInArrays()
+    public function testCanComparePrivateMembersOfObjectsInArrays(): void
     {
         $expectFive = new IdenticalExpectation([new OpaqueContainer(5)]);
         $this->assertTrue($expectFive->test([new OpaqueContainer(5)]));
         $this->assertFalse($expectFive->test([new OpaqueContainer(6)]));
     }
 
-    public function testCanComparePrivateMembersOfObjectsWherePrivateMemberOfBaseClassIsObscured()
+    public function testCanComparePrivateMembersOfObjectsWherePrivateMemberOfBaseClassIsObscured(): void
     {
         $expectFive = new IdenticalExpectation([new DerivedOpaqueContainer(1, 2)]);
         $this->assertTrue($expectFive->test([new DerivedOpaqueContainer(1, 2)]));
@@ -182,21 +183,21 @@ class TransparentContainer
 
 class TestOfMemberComparison extends UnitTestCase
 {
-    public function testMemberExpectationCanMatchPublicMember()
+    public function testMemberExpectationCanMatchPublicMember(): void
     {
         $expect_five = new MemberExpectation('value', 5);
         $this->assertTrue($expect_five->test(new TransparentContainer(5)));
         $this->assertFalse($expect_five->test(new TransparentContainer(8)));
     }
 
-    public function testMemberExpectationCanMatchPrivateMember()
+    public function testMemberExpectationCanMatchPrivateMember(): void
     {
         $expect_five = new MemberExpectation('value', 5);
         $this->assertTrue($expect_five->test(new OpaqueContainer(5)));
         $this->assertFalse($expect_five->test(new OpaqueContainer(8)));
     }
 
-    public function testMemberExpectationCanMatchPrivateMemberObscuredByDerivedClass()
+    public function testMemberExpectationCanMatchPrivateMemberObscuredByDerivedClass(): void
     {
         $expect_five = new MemberExpectation('value', 5);
         $this->assertTrue($expect_five->test(new DerivedOpaqueContainer(5, 8)));
@@ -212,12 +213,12 @@ class DummyReferencedObject
 
 class TestOfReference extends UnitTestCase
 {
-    public function testReference()
+    public function testReference(): void
     {
-        $foo = 'foo';
-        $ref = &$foo;
+        $foo     = 'foo';
+        $ref     = &$foo;
         $not_ref = $foo;
-        $bar = 'bar';
+        $bar     = 'bar';
 
         $expect = new ReferenceExpectation($foo);
         $this->assertTrue($expect->test($ref));
@@ -228,7 +229,7 @@ class TestOfReference extends UnitTestCase
 
 class TestOfNonIdentity extends UnitTestCase
 {
-    public function testType()
+    public function testType(): void
     {
         $string = new NotIdenticalExpectation('37');
         $this->assertTrue($string->test('38'));
@@ -239,14 +240,14 @@ class TestOfNonIdentity extends UnitTestCase
 
 class TestOfPatterns extends UnitTestCase
 {
-    public function testWanted()
+    public function testWanted(): void
     {
         $pattern = new PatternExpectation('/hello/i');
         $this->assertTrue($pattern->test('Hello world'));
         $this->assertFalse($pattern->test('Goodbye world'));
     }
 
-    public function testUnwanted()
+    public function testUnwanted(): void
     {
         $pattern = new NoPatternExpectation('/hello/i');
         $this->assertFalse($pattern->test('Hello world'));
@@ -256,16 +257,16 @@ class TestOfPatterns extends UnitTestCase
 
 class ExpectedMethodTarget
 {
-    public function hasThisMethod()
+    public function hasThisMethod(): void
     {
     }
 }
 
 class TestOfMethodExistence extends UnitTestCase
 {
-    public function testHasMethod()
+    public function testHasMethod(): void
     {
-        $instance = new ExpectedMethodTarget();
+        $instance    = new ExpectedMethodTarget;
         $expectation = new MethodExistsExpectation('hasThisMethod');
         $this->assertTrue($expectation->test($instance));
         $expectation = new MethodExistsExpectation('doesNotHaveThisMethod');
@@ -275,70 +276,70 @@ class TestOfMethodExistence extends UnitTestCase
 
 class TestOfIsA extends UnitTestCase
 {
-    public function testString()
+    public function testString(): void
     {
         $expectation = new IsAExpectation('string');
         $this->assertTrue($expectation->test('Hello'));
         $this->assertFalse($expectation->test(5));
     }
 
-    public function testBoolean()
+    public function testBoolean(): void
     {
         $expectation = new IsAExpectation('boolean');
         $this->assertTrue($expectation->test(true));
         $this->assertFalse($expectation->test(1));
     }
 
-    public function testBool()
+    public function testBool(): void
     {
         $expectation = new IsAExpectation('bool');
         $this->assertTrue($expectation->test(true));
         $this->assertFalse($expectation->test(1));
     }
 
-    public function testDouble()
+    public function testDouble(): void
     {
         $expectation = new IsAExpectation('double');
         $this->assertTrue($expectation->test(5.0));
         $this->assertFalse($expectation->test(5));
     }
 
-    public function testFloat()
+    public function testFloat(): void
     {
         $expectation = new IsAExpectation('float');
         $this->assertTrue($expectation->test(5.0));
         $this->assertFalse($expectation->test(5));
     }
 
-    public function testInteger()
+    public function testInteger(): void
     {
         $expectation = new IsAExpectation('integer');
         $this->assertTrue($expectation->test(5));
         $this->assertFalse($expectation->test(5.0));
     }
 
-    public function testInt()
+    public function testInt(): void
     {
         $expectation = new IsAExpectation('int');
         $this->assertTrue($expectation->test(5));
         $this->assertFalse($expectation->test(5.0));
     }
 
-    public function testScalar()
+    public function testScalar(): void
     {
         $expectation = new IsAExpectation('scalar');
         $this->assertTrue($expectation->test(5));
         $this->assertFalse($expectation->test([5]));
     }
 
-    public function testNumeric()
+    public function testNumeric(): void
     {
         $expectation = new IsAExpectation('numeric');
         $this->assertTrue($expectation->test(5));
         $this->assertFalse($expectation->test('string'));
     }
 
-    public function testNull()
+    public function testNull(): void
     {
         $expectation = new IsAExpectation('null');
         $this->assertTrue($expectation->test(null));
@@ -348,7 +349,7 @@ class TestOfIsA extends UnitTestCase
 
 class TestOfNotA extends UnitTestCase
 {
-    public function testString()
+    public function testString(): void
     {
         $expectation = new NotAExpectation('string');
         $this->assertFalse($expectation->test('Hello'));

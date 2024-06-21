@@ -619,7 +619,7 @@ class TestOfMockExpectations extends UnitTestCase
 {
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new MockSimpleTestCase();
     }

@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /**
  * Static methods for compatibility between different PHP versions.
  */
@@ -14,50 +15,27 @@ class SimpleTestCompatibility
      */
     public static function isIdentical($first, $second)
     {
-        if (gettype($first) != gettype($second)) {
+        if (\gettype($first) != \gettype($second)) {
             return false;
         }
-        if (is_object($first) && is_object($second)) {
-            if (get_class($first) != get_class($second)) {
+
+        if (\is_object($first) && \is_object($second)) {
+            if ($first::class != $second::class) {
                 return false;
             }
 
             return self::isArrayOfIdenticalTypes(
                 (array) $first,
-                (array) $second
+                (array) $second,
             );
         }
-        if (is_array($first) && is_array($second)) {
+
+        if (\is_array($first) && \is_array($second)) {
             return self::isArrayOfIdenticalTypes($first, $second);
         }
+
         if ($first !== $second) {
             return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Recursive type test for each element of an array.
-     *
-     * @param mixed $first  test subject
-     * @param mixed $second comparison object
-     *
-     * @return bool true if identical
-     */
-    protected static function isArrayOfIdenticalTypes($first, $second)
-    {
-        if (array_keys($first) != array_keys($second)) {
-            return false;
-        }
-        foreach (array_keys($first) as $key) {
-            $is_identical = self::isIdentical(
-                $first[$key],
-                $second[$key]
-            );
-            if (!$is_identical) {
-                return false;
-            }
         }
 
         return true;
@@ -86,5 +64,33 @@ class SimpleTestCompatibility
         $first = $temp_first;
 
         return $is_ref;
+    }
+
+    /**
+     * Recursive type test for each element of an array.
+     *
+     * @param mixed $first  test subject
+     * @param mixed $second comparison object
+     *
+     * @return bool true if identical
+     */
+    protected static function isArrayOfIdenticalTypes($first, $second)
+    {
+        if (\array_keys($first) != \array_keys($second)) {
+            return false;
+        }
+
+        foreach (\array_keys($first) as $key) {
+            $is_identical = self::isIdentical(
+                $first[$key],
+                $second[$key],
+            );
+
+            if (!$is_identical) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

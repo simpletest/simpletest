@@ -1,11 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/../src/autorun.php';
-require_once __DIR__.'/../src/browser.php';
-require_once __DIR__.'/../src/user_agent.php';
-require_once __DIR__.'/../src/http.php';
-require_once __DIR__.'/../src/page.php';
-require_once __DIR__.'/../src/encoding.php';
+require_once __DIR__ . '/../src/autorun.php';
+
+require_once __DIR__ . '/../src/browser.php';
+
+require_once __DIR__ . '/../src/user_agent.php';
+
+require_once __DIR__ . '/../src/http.php';
+
+require_once __DIR__ . '/../src/page.php';
+
+require_once __DIR__ . '/../src/encoding.php';
 
 Mock::generate('SimpleHttpResponse');
 Mock::generate('SimplePage');
@@ -14,159 +19,159 @@ Mock::generate('SimpleUserAgent');
 Mock::generatePartial(
     'SimpleBrowser',
     'MockParseSimpleBrowser',
-    ['createUserAgent', 'parse']
+    ['createUserAgent', 'parse'],
 );
 Mock::generatePartial(
     'SimpleBrowser',
     'MockUserAgentSimpleBrowser',
-    ['createUserAgent']
+    ['createUserAgent'],
 );
 
 class TestOfHistory extends UnitTestCase
 {
-    public function testEmptyHistoryHasFalseContents()
+    public function testEmptyHistoryHasFalseContents(): void
     {
-        $history = new SimpleBrowserHistory();
+        $history = new SimpleBrowserHistory;
         $this->assertIdentical($history->getUrl(), false);
         $this->assertIdentical($history->getParameters(), false);
     }
 
-    public function testCannotMoveInEmptyHistory()
+    public function testCannotMoveInEmptyHistory(): void
     {
-        $history = new SimpleBrowserHistory();
+        $history = new SimpleBrowserHistory;
         $this->assertFalse($history->back());
         $this->assertFalse($history->forward());
     }
 
-    public function testCurrentTargetAccessors()
+    public function testCurrentTargetAccessors(): void
     {
-        $history = new SimpleBrowserHistory();
+        $history = new SimpleBrowserHistory;
         $history->recordEntry(
             new SimpleUrl('http://www.here.com/'),
-            new SimpleGetEncoding()
+            new SimpleGetEncoding,
         );
         $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.here.com/'));
-        $this->assertIdentical($history->getParameters(), new SimpleGetEncoding());
+        $this->assertIdentical($history->getParameters(), new SimpleGetEncoding);
     }
 
-    public function testSecondEntryAccessors()
+    public function testSecondEntryAccessors(): void
     {
-        $history = new SimpleBrowserHistory();
+        $history = new SimpleBrowserHistory;
         $history->recordEntry(
             new SimpleUrl('http://www.first.com/'),
-            new SimpleGetEncoding()
+            new SimpleGetEncoding,
         );
         $history->recordEntry(
             new SimpleUrl('http://www.second.com/'),
-            new SimplePostEncoding(['a' => 1])
+            new SimplePostEncoding(['a' => 1]),
         );
         $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.second.com/'));
         $this->assertIdentical(
             $history->getParameters(),
-            new SimplePostEncoding(['a' => 1])
+            new SimplePostEncoding(['a' => 1]),
         );
     }
 
-    public function testGoingBackwards()
+    public function testGoingBackwards(): void
     {
-        $history = new SimpleBrowserHistory();
+        $history = new SimpleBrowserHistory;
         $history->recordEntry(
             new SimpleUrl('http://www.first.com/'),
-            new SimpleGetEncoding()
+            new SimpleGetEncoding,
         );
         $history->recordEntry(
             new SimpleUrl('http://www.second.com/'),
-            new SimplePostEncoding(['a' => 1])
+            new SimplePostEncoding(['a' => 1]),
         );
         $this->assertTrue($history->back());
         $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.first.com/'));
-        $this->assertIdentical($history->getParameters(), new SimpleGetEncoding());
+        $this->assertIdentical($history->getParameters(), new SimpleGetEncoding);
     }
 
-    public function testGoingBackwardsOffBeginning()
+    public function testGoingBackwardsOffBeginning(): void
     {
-        $history = new SimpleBrowserHistory();
+        $history = new SimpleBrowserHistory;
         $history->recordEntry(
             new SimpleUrl('http://www.first.com/'),
-            new SimpleGetEncoding()
+            new SimpleGetEncoding,
         );
         $this->assertFalse($history->back());
         $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.first.com/'));
-        $this->assertIdentical($history->getParameters(), new SimpleGetEncoding());
+        $this->assertIdentical($history->getParameters(), new SimpleGetEncoding);
     }
 
-    public function testGoingForwardsOffEnd()
+    public function testGoingForwardsOffEnd(): void
     {
-        $history = new SimpleBrowserHistory();
+        $history = new SimpleBrowserHistory;
         $history->recordEntry(
             new SimpleUrl('http://www.first.com/'),
-            new SimpleGetEncoding()
+            new SimpleGetEncoding,
         );
         $this->assertFalse($history->forward());
         $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.first.com/'));
-        $this->assertIdentical($history->getParameters(), new SimpleGetEncoding());
+        $this->assertIdentical($history->getParameters(), new SimpleGetEncoding);
     }
 
-    public function testGoingBackwardsAndForwards()
+    public function testGoingBackwardsAndForwards(): void
     {
-        $history = new SimpleBrowserHistory();
+        $history = new SimpleBrowserHistory;
         $history->recordEntry(
             new SimpleUrl('http://www.first.com/'),
-            new SimpleGetEncoding()
+            new SimpleGetEncoding,
         );
         $history->recordEntry(
             new SimpleUrl('http://www.second.com/'),
-            new SimplePostEncoding(['a' => 1])
+            new SimplePostEncoding(['a' => 1]),
         );
         $this->assertTrue($history->back());
         $this->assertTrue($history->forward());
         $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.second.com/'));
         $this->assertIdentical(
             $history->getParameters(),
-            new SimplePostEncoding(['a' => 1])
+            new SimplePostEncoding(['a' => 1]),
         );
     }
 
-    public function testNewEntryReplacesNextOne()
+    public function testNewEntryReplacesNextOne(): void
     {
-        $history = new SimpleBrowserHistory();
+        $history = new SimpleBrowserHistory;
         $history->recordEntry(
             new SimpleUrl('http://www.first.com/'),
-            new SimpleGetEncoding()
+            new SimpleGetEncoding,
         );
         $history->recordEntry(
             new SimpleUrl('http://www.second.com/'),
-            new SimplePostEncoding(['a' => 1])
+            new SimplePostEncoding(['a' => 1]),
         );
         $history->back();
         $history->recordEntry(
             new SimpleUrl('http://www.third.com/'),
-            new SimpleGetEncoding()
+            new SimpleGetEncoding,
         );
         $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.third.com/'));
-        $this->assertIdentical($history->getParameters(), new SimpleGetEncoding());
+        $this->assertIdentical($history->getParameters(), new SimpleGetEncoding);
     }
 
-    public function testNewEntryDropsFutureEntries()
+    public function testNewEntryDropsFutureEntries(): void
     {
-        $history = new SimpleBrowserHistory();
+        $history = new SimpleBrowserHistory;
         $history->recordEntry(
             new SimpleUrl('http://www.first.com/'),
-            new SimpleGetEncoding()
+            new SimpleGetEncoding,
         );
         $history->recordEntry(
             new SimpleUrl('http://www.second.com/'),
-            new SimpleGetEncoding()
+            new SimpleGetEncoding,
         );
         $history->recordEntry(
             new SimpleUrl('http://www.third.com/'),
-            new SimpleGetEncoding()
+            new SimpleGetEncoding,
         );
         $history->back();
         $history->back();
         $history->recordEntry(
             new SimpleUrl('http://www.fourth.com/'),
-            new SimpleGetEncoding()
+            new SimpleGetEncoding,
         );
         $this->assertIdentical($history->getUrl(), new SimpleUrl('http://www.fourth.com/'));
         $this->assertFalse($history->forward());
@@ -181,7 +186,7 @@ class TestOfParsedPageAccess extends UnitTestCase
     public function loadPage(&$page)
     {
         $response = new MockSimpleHttpResponse($this);
-        $agent = new MockSimpleUserAgent($this);
+        $agent    = new MockSimpleUserAgent($this);
         $agent->returns('fetchResponse', $response);
 
         $browser = new MockParseSimpleBrowser($this);
@@ -194,18 +199,18 @@ class TestOfParsedPageAccess extends UnitTestCase
         return $browser;
     }
 
-    public function testAccessorsWhenNoPage()
+    public function testAccessorsWhenNoPage(): void
     {
-        $agent = new MockSimpleUserAgent($this);
+        $agent   = new MockSimpleUserAgent($this);
         $browser = new MockParseSimpleBrowser($this);
         $browser->returns('createUserAgent', $agent);
         $browser->__constructor();
         $this->assertEqual($browser->getContent(), '');
     }
 
-    public function testParse()
+    public function testParse(): void
     {
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returnsByValue('getRequest', "GET here.html\r\n\r\n");
         $page->returnsByValue('getRaw', 'Raw HTML');
         $page->returnsByValue('getTitle', 'Here');
@@ -228,18 +233,18 @@ class TestOfParsedPageAccess extends UnitTestCase
         $this->assertEqual($browser->getTransportError(), 'Ouch!');
     }
 
-    public function testLinkAffirmationWhenPresent()
+    public function testLinkAffirmationWhenPresent(): void
     {
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returnsByValue('getUrlsByLabel', ['http://www.nowhere.com']);
         $page->expectOnce('getUrlsByLabel', ['a link label']);
         $browser = $this->loadPage($page);
         $this->assertIdentical($browser->getLink('a link label'), 'http://www.nowhere.com');
     }
 
-    public function testLinkAffirmationByIdWhenPresent()
+    public function testLinkAffirmationByIdWhenPresent(): void
     {
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returnsByValue('getUrlById', 'a_page.com', [99]);
         $page->returnsByValue('getUrlById', false, ['*']);
         $browser = $this->loadPage($page);
@@ -247,9 +252,9 @@ class TestOfParsedPageAccess extends UnitTestCase
         $this->assertFalse($browser->getLinkById(98));
     }
 
-    public function testSettingFieldIsPassedToPage()
+    public function testSettingFieldIsPassedToPage(): void
     {
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->expectOnce('setField', [new SelectByLabelOrName('key'), 'Value', false]);
         $page->returnsByValue('getField', 'Value');
         $browser = $this->loadPage($page);
@@ -262,7 +267,7 @@ class TestOfBrowserNavigation extends UnitTestCase
 {
     public function createBrowser($agent, $page)
     {
-        $browser = new MockParseSimpleBrowser();
+        $browser = new MockParseSimpleBrowser;
         $browser->returns('createUserAgent', $agent);
         $browser->returns('parse', $page);
         $browser->__constructor();
@@ -270,38 +275,38 @@ class TestOfBrowserNavigation extends UnitTestCase
         return $browser;
     }
 
-    public function testBrowserRequestMethods()
+    public function testBrowserRequestMethods(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
         $agent->expectAt(
             0,
             'fetchResponse',
-            [new SimpleUrl('http://this.com/get.req'), new SimpleGetEncoding()]
+            [new SimpleUrl('http://this.com/get.req'), new SimpleGetEncoding],
         );
         $agent->expectAt(
             1,
             'fetchResponse',
-            [new SimpleUrl('http://this.com/post.req'), new SimplePostEncoding()]
+            [new SimpleUrl('http://this.com/post.req'), new SimplePostEncoding],
         );
         $agent->expectAt(
             2,
             'fetchResponse',
-            [new SimpleUrl('http://this.com/put.req'), new SimplePutEncoding()]
+            [new SimpleUrl('http://this.com/put.req'), new SimplePutEncoding],
         );
         $agent->expectAt(
             3,
             'fetchResponse',
-            [new SimpleUrl('http://this.com/delete.req'), new SimpleDeleteEncoding()]
+            [new SimpleUrl('http://this.com/delete.req'), new SimpleDeleteEncoding],
         );
         $agent->expectAt(
             4,
             'fetchResponse',
-            [new SimpleUrl('http://this.com/head.req'), new SimpleHeadEncoding()]
+            [new SimpleUrl('http://this.com/head.req'), new SimpleHeadEncoding],
         );
         $agent->expectCallCount('fetchResponse', 5);
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/get.req');
@@ -311,23 +316,23 @@ class TestOfBrowserNavigation extends UnitTestCase
         $browser->head('http://this.com/head.req');
     }
 
-    public function testClickLinkRequestsPage()
+    public function testClickLinkRequestsPage(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
         $agent->expectAt(
             0,
             'fetchResponse',
-            [new SimpleUrl('http://this.com/page.html'), new SimpleGetEncoding()]
+            [new SimpleUrl('http://this.com/page.html'), new SimpleGetEncoding],
         );
         $agent->expectAt(
             1,
             'fetchResponse',
-            [new SimpleUrl('http://this.com/new.html'), new SimpleGetEncoding()]
+            [new SimpleUrl('http://this.com/new.html'), new SimpleGetEncoding],
         );
         $agent->expectCallCount('fetchResponse', 2);
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returnsByValue('getUrlsByLabel', [new SimpleUrl('http://this.com/new.html')]);
         $page->expectOnce('getUrlsByLabel', ['New']);
         $page->returnsByValue('getRaw', 'A page');
@@ -337,28 +342,28 @@ class TestOfBrowserNavigation extends UnitTestCase
         $this->assertTrue($browser->clickLink('New'));
     }
 
-    public function testClickLinkWithUnknownFrameStillRequestsWholePage()
+    public function testClickLinkWithUnknownFrameStillRequestsWholePage(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
         $agent->expectAt(
             0,
             'fetchResponse',
-            [new SimpleUrl('http://this.com/page.html'), new SimpleGetEncoding()]
+            [new SimpleUrl('http://this.com/page.html'), new SimpleGetEncoding],
         );
         $target = new SimpleUrl('http://this.com/new.html');
         $target->setTarget('missing');
         $agent->expectAt(
             1,
             'fetchResponse',
-            [$target, new SimpleGetEncoding()]
+            [$target, new SimpleGetEncoding],
         );
         $agent->expectCallCount('fetchResponse', 2);
 
         $parsed_url = new SimpleUrl('http://this.com/new.html');
         $parsed_url->setTarget('missing');
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returnsByValue('getUrlsByLabel', [$parsed_url]);
         $page->returnsByValue('hasFrames', false);
         $page->expectOnce('getUrlsByLabel', ['New']);
@@ -369,12 +374,12 @@ class TestOfBrowserNavigation extends UnitTestCase
         $this->assertTrue($browser->clickLink('New'));
     }
 
-    public function testClickingMissingLinkFails()
+    public function testClickingMissingLinkFails(): void
     {
         $agent = new MockSimpleUserAgent($this);
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returnsByValue('getUrlsByLabel', []);
         $page->returnsByValue('getRaw', 'stuff');
 
@@ -383,21 +388,21 @@ class TestOfBrowserNavigation extends UnitTestCase
         $this->assertFalse($browser->clickLink('New'));
     }
 
-    public function testClickIndexedLink()
+    public function testClickIndexedLink(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
         $agent->expectAt(
             1,
             'fetchResponse',
-            [new SimpleUrl('1.html'), new SimpleGetEncoding()]
+            [new SimpleUrl('1.html'), new SimpleGetEncoding],
         );
         $agent->expectCallCount('fetchResponse', 2);
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returnsByValue(
             'getUrlsByLabel',
-            [new SimpleUrl('0.html'), new SimpleUrl('1.html')]
+            [new SimpleUrl('0.html'), new SimpleUrl('1.html')],
         );
         $page->returnsByValue('getRaw', 'A page');
 
@@ -406,16 +411,16 @@ class TestOfBrowserNavigation extends UnitTestCase
         $this->assertTrue($browser->clickLink('New', 1));
     }
 
-    public function testClinkLinkById()
+    public function testClinkLinkById(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
         $agent->expectAt(1, 'fetchResponse', [
-                new SimpleUrl('http://this.com/link.html'),
-                new SimpleGetEncoding(), ]);
+            new SimpleUrl('http://this.com/link.html'),
+            new SimpleGetEncoding, ]);
         $agent->expectCallCount('fetchResponse', 2);
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returnsByValue('getUrlById', new SimpleUrl('http://this.com/link.html'));
         $page->expectOnce('getUrlById', [2]);
         $page->returnsByValue('getRaw', 'A page');
@@ -425,12 +430,12 @@ class TestOfBrowserNavigation extends UnitTestCase
         $this->assertTrue($browser->clickLinkById(2));
     }
 
-    public function testClickingMissingLinkIdFails()
+    public function testClickingMissingLinkIdFails(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returnsByValue('getUrlById', false);
         $page->returnsByValue('getUrlsByLabel', []);
 
@@ -439,22 +444,22 @@ class TestOfBrowserNavigation extends UnitTestCase
         $this->assertFalse($browser->clickLink(0));
     }
 
-    public function testSubmitFormByLabel()
+    public function testSubmitFormByLabel(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
         $agent->expectAt(1, 'fetchResponse', [
-                new SimpleUrl('http://this.com/handler.html'),
-                new SimplePostEncoding(['a' => 'A']), ]);
+            new SimpleUrl('http://this.com/handler.html'),
+            new SimplePostEncoding(['a' => 'A']), ]);
         $agent->expectCallCount('fetchResponse', 2);
 
-        $form = new MockSimpleForm();
+        $form = new MockSimpleForm;
         $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
         $form->returnsByValue('getMethod', 'post');
         $form->returnsByValue('submitButton', new SimplePostEncoding(['a' => 'A']));
         $form->expectOnce('submitButton', [new SelectByLabel('Go'), false]);
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returns('getFormBySubmit', $form);
         $page->expectOnce('getFormBySubmit', [new SelectByLabel('Go')]);
         $page->returnsByValue('getRaw', 'stuff');
@@ -464,21 +469,21 @@ class TestOfBrowserNavigation extends UnitTestCase
         $this->assertTrue($browser->clickSubmit('Go'));
     }
 
-    public function testDefaultSubmitFormByLabel()
+    public function testDefaultSubmitFormByLabel(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
         $agent->expectAt(1, 'fetchResponse', [
-                new SimpleUrl('http://this.com/page.html'),
-                new SimpleGetEncoding(['a' => 'A']), ]);
+            new SimpleUrl('http://this.com/page.html'),
+            new SimpleGetEncoding(['a' => 'A']), ]);
         $agent->expectCallCount('fetchResponse', 2);
 
-        $form = new MockSimpleForm();
+        $form = new MockSimpleForm;
         $form->returnsByValue('getAction', new SimpleUrl('http://this.com/page.html'));
         $form->returnsByValue('getMethod', 'get');
         $form->returnsByValue('submitButton', new SimpleGetEncoding(['a' => 'A']));
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returns('getFormBySubmit', $form);
         $page->expectOnce('getFormBySubmit', [new SelectByLabel('Submit')]);
         $page->returnsByValue('getRaw', 'stuff');
@@ -489,17 +494,17 @@ class TestOfBrowserNavigation extends UnitTestCase
         $this->assertTrue($browser->clickSubmit());
     }
 
-    public function testSubmitFormByName()
+    public function testSubmitFormByName(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
 
-        $form = new MockSimpleForm();
+        $form = new MockSimpleForm;
         $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
         $form->returnsByValue('getMethod', 'post');
         $form->returnsByValue('submitButton', new SimplePostEncoding(['a' => 'A']));
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returns('getFormBySubmit', $form);
         $page->expectOnce('getFormBySubmit', [new SelectByName('me')]);
         $page->returnsByValue('getRaw', 'stuff');
@@ -509,18 +514,18 @@ class TestOfBrowserNavigation extends UnitTestCase
         $this->assertTrue($browser->clickSubmitByName('me'));
     }
 
-    public function testSubmitFormById()
+    public function testSubmitFormById(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
 
-        $form = new MockSimpleForm();
+        $form = new MockSimpleForm;
         $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
         $form->returnsByValue('getMethod', 'post');
         $form->returnsByValue('submitButton', new SimplePostEncoding(['a' => 'A']));
         $form->expectOnce('submitButton', [new SelectById(99), false]);
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returns('getFormBySubmit', $form);
         $page->expectOnce('getFormBySubmit', [new SelectById(99)]);
         $page->returnsByValue('getRaw', 'stuff');
@@ -530,18 +535,18 @@ class TestOfBrowserNavigation extends UnitTestCase
         $this->assertTrue($browser->clickSubmitById(99));
     }
 
-    public function testSubmitFormByImageLabel()
+    public function testSubmitFormByImageLabel(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
 
-        $form = new MockSimpleForm();
+        $form = new MockSimpleForm;
         $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
         $form->returnsByValue('getMethod', 'post');
         $form->returnsByValue('submitImage', new SimplePostEncoding(['a' => 'A']));
         $form->expectOnce('submitImage', [new SelectByLabel('Go!'), 10, 11, false]);
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returns('getFormByImage', $form);
         $page->expectOnce('getFormByImage', [new SelectByLabel('Go!')]);
         $page->returnsByValue('getRaw', 'stuff');
@@ -551,18 +556,18 @@ class TestOfBrowserNavigation extends UnitTestCase
         $this->assertTrue($browser->clickImage('Go!', 10, 11));
     }
 
-    public function testSubmitFormByImageName()
+    public function testSubmitFormByImageName(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
 
-        $form = new MockSimpleForm();
+        $form = new MockSimpleForm;
         $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
         $form->returnsByValue('getMethod', 'post');
         $form->returnsByValue('submitImage', new SimplePostEncoding(['a' => 'A']));
         $form->expectOnce('submitImage', [new SelectByName('a'), 10, 11, false]);
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returns('getFormByImage', $form);
         $page->expectOnce('getFormByImage', [new SelectByName('a')]);
         $page->returnsByValue('getRaw', 'stuff');
@@ -572,18 +577,18 @@ class TestOfBrowserNavigation extends UnitTestCase
         $this->assertTrue($browser->clickImageByName('a', 10, 11));
     }
 
-    public function testSubmitFormByImageId()
+    public function testSubmitFormByImageId(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
 
-        $form = new MockSimpleForm();
+        $form = new MockSimpleForm;
         $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
         $form->returnsByValue('getMethod', 'post');
         $form->returnsByValue('submitImage', new SimplePostEncoding(['a' => 'A']));
         $form->expectOnce('submitImage', [new SelectById(99), 10, 11, false]);
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returns('getFormByImage', $form);
         $page->expectOnce('getFormByImage', [new SelectById(99)]);
         $page->returnsByValue('getRaw', 'stuff');
@@ -593,21 +598,21 @@ class TestOfBrowserNavigation extends UnitTestCase
         $this->assertTrue($browser->clickImageById(99, 10, 11));
     }
 
-    public function testSubmitFormByFormId()
+    public function testSubmitFormByFormId(): void
     {
-        $agent = new MockSimpleUserAgent();
-        $agent->returns('fetchResponse', new MockSimpleHttpResponse());
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
         $agent->expectAt(1, 'fetchResponse', [
-                new SimpleUrl('http://this.com/handler.html'),
-                new SimplePostEncoding(['a' => 'A']), ]);
+            new SimpleUrl('http://this.com/handler.html'),
+            new SimplePostEncoding(['a' => 'A']), ]);
         $agent->expectCallCount('fetchResponse', 2);
 
-        $form = new MockSimpleForm();
+        $form = new MockSimpleForm;
         $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
         $form->returnsByValue('getMethod', 'post');
         $form->returnsByValue('submit', new SimplePostEncoding(['a' => 'A']));
 
-        $page = new MockSimplePage();
+        $page = new MockSimplePage;
         $page->returns('getFormById', $form);
         $page->expectOnce('getFormById', [33]);
         $page->returnsByValue('getRaw', 'stuff');
@@ -622,7 +627,7 @@ class TestOfBrowserFrames extends UnitTestCase
 {
     public function createBrowser($agent)
     {
-        $browser = new MockUserAgentSimpleBrowser();
+        $browser = new MockUserAgentSimpleBrowser;
         $browser->returns('createUserAgent', $agent);
         $browser->__constructor();
 
@@ -631,10 +636,11 @@ class TestOfBrowserFrames extends UnitTestCase
 
     public function createUserAgent($pages)
     {
-        $agent = new MockSimpleUserAgent();
+        $agent = new MockSimpleUserAgent;
+
         foreach ($pages as $url => $raw) {
-            $url = new SimpleUrl($url);
-            $response = new MockSimpleHttpResponse();
+            $url      = new SimpleUrl($url);
+            $response = new MockSimpleHttpResponse;
             $response->returnsByValue('getUrl', $url);
             $response->returnsByValue('getContent', $raw);
             $agent->returns('fetchResponse', $response, [$url, '*']);
@@ -643,92 +649,92 @@ class TestOfBrowserFrames extends UnitTestCase
         return $agent;
     }
 
-    public function testSimplePageHasNoFrames()
+    public function testSimplePageHasNoFrames(): void
     {
         $browser = $this->createBrowser($this->createUserAgent(
-            ['http://site.with.no.frames/' => 'A non-framed page']
+            ['http://site.with.no.frames/' => 'A non-framed page'],
         ));
         $this->assertEqual(
             $browser->get('http://site.with.no.frames/'),
-            'A non-framed page'
+            'A non-framed page',
         );
         $this->assertIdentical($browser->getFrames(), 'http://site.with.no.frames/');
     }
 
-    public function testFramesetWithSingleFrame()
+    public function testFramesetWithSingleFrame(): void
     {
         $frameset = '<frameset><frame name="a" src="frame.html"></frameset>';
-        $browser = $this->createBrowser($this->createUserAgent([
-                'http://site.with.one.frame/' => $frameset,
-                'http://site.with.one.frame/frame.html' => 'A frame', ]));
+        $browser  = $this->createBrowser($this->createUserAgent([
+            'http://site.with.one.frame/'           => $frameset,
+            'http://site.with.one.frame/frame.html' => 'A frame', ]));
         $this->assertEqual($browser->get('http://site.with.one.frame/'), 'A frame');
         $this->assertIdentical(
             $browser->getFrames(),
-            ['a' => 'http://site.with.one.frame/frame.html']
+            ['a' => 'http://site.with.one.frame/frame.html'],
         );
     }
 
-    public function testTitleTakenFromFramesetPage()
+    public function testTitleTakenFromFramesetPage(): void
     {
-        $frameset = '<title>Frameset title</title>'.
+        $frameset = '<title>Frameset title</title>' .
                 '<frameset><frame name="a" src="frame.html"></frameset>';
         $browser = $this->createBrowser($this->createUserAgent([
-                'http://site.with.one.frame/' => $frameset,
-                'http://site.with.one.frame/frame.html' => '<title>Page title</title>', ]));
+            'http://site.with.one.frame/'           => $frameset,
+            'http://site.with.one.frame/frame.html' => '<title>Page title</title>', ]));
         $browser->get('http://site.with.one.frame/');
         $this->assertEqual($browser->getTitle(), 'Frameset title');
     }
 
-    public function testFramesetWithSingleUnnamedFrame()
+    public function testFramesetWithSingleUnnamedFrame(): void
     {
         $frameset = '<frameset><frame src="frame.html"></frameset>';
-        $browser = $this->createBrowser($this->createUserAgent([
-                'http://site.with.one.frame/' => $frameset,
-                'http://site.with.one.frame/frame.html' => 'One frame', ]));
+        $browser  = $this->createBrowser($this->createUserAgent([
+            'http://site.with.one.frame/'           => $frameset,
+            'http://site.with.one.frame/frame.html' => 'One frame', ]));
         $this->assertEqual(
             $browser->get('http://site.with.one.frame/'),
-            'One frame'
+            'One frame',
         );
         $this->assertIdentical(
             $browser->getFrames(),
-            [1 => 'http://site.with.one.frame/frame.html']
+            [1 => 'http://site.with.one.frame/frame.html'],
         );
     }
 
-    public function testFramesetWithMultipleFrames()
+    public function testFramesetWithMultipleFrames(): void
     {
-        $frameset = '<frameset>'.
-                '<frame name="a" src="frame_a.html">'.
-                '<frame name="b" src="frame_b.html">'.
-                '<frame name="c" src="frame_c.html">'.
+        $frameset = '<frameset>' .
+                '<frame name="a" src="frame_a.html">' .
+                '<frame name="b" src="frame_b.html">' .
+                '<frame name="c" src="frame_c.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent([
-                'http://site.with.frames/' => $frameset,
-                'http://site.with.frames/frame_a.html' => 'A frame',
-                'http://site.with.frames/frame_b.html' => 'B frame',
-                'http://site.with.frames/frame_c.html' => 'C frame', ]));
+            'http://site.with.frames/'             => $frameset,
+            'http://site.with.frames/frame_a.html' => 'A frame',
+            'http://site.with.frames/frame_b.html' => 'B frame',
+            'http://site.with.frames/frame_c.html' => 'C frame', ]));
         $this->assertEqual(
             $browser->get('http://site.with.frames/'),
-            'A frameB frameC frame'
+            'A frameB frameC frame',
         );
         $this->assertIdentical($browser->getFrames(), [
-                'a' => 'http://site.with.frames/frame_a.html',
-                'b' => 'http://site.with.frames/frame_b.html',
-                'c' => 'http://site.with.frames/frame_c.html', ]);
+            'a' => 'http://site.with.frames/frame_a.html',
+            'b' => 'http://site.with.frames/frame_b.html',
+            'c' => 'http://site.with.frames/frame_c.html', ]);
     }
 
-    public function testFrameFocusByName()
+    public function testFrameFocusByName(): void
     {
-        $frameset = '<frameset>'.
-                '<frame name="a" src="frame_a.html">'.
-                '<frame name="b" src="frame_b.html">'.
-                '<frame name="c" src="frame_c.html">'.
+        $frameset = '<frameset>' .
+                '<frame name="a" src="frame_a.html">' .
+                '<frame name="b" src="frame_b.html">' .
+                '<frame name="c" src="frame_c.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent([
-                'http://site.with.frames/' => $frameset,
-                'http://site.with.frames/frame_a.html' => 'A frame',
-                'http://site.with.frames/frame_b.html' => 'B frame',
-                'http://site.with.frames/frame_c.html' => 'C frame', ]));
+            'http://site.with.frames/'             => $frameset,
+            'http://site.with.frames/frame_a.html' => 'A frame',
+            'http://site.with.frames/frame_b.html' => 'B frame',
+            'http://site.with.frames/frame_c.html' => 'C frame', ]));
         $browser->get('http://site.with.frames/');
         $browser->setFrameFocus('a');
         $this->assertEqual($browser->getContent(), 'A frame');
@@ -738,45 +744,45 @@ class TestOfBrowserFrames extends UnitTestCase
         $this->assertEqual($browser->getContent(), 'C frame');
     }
 
-    public function testFramesetWithSomeNamedFrames()
+    public function testFramesetWithSomeNamedFrames(): void
     {
-        $frameset = '<frameset>'.
-                '<frame name="a" src="frame_a.html">'.
-                '<frame src="frame_b.html">'.
-                '<frame name="c" src="frame_c.html">'.
-                '<frame src="frame_d.html">'.
+        $frameset = '<frameset>' .
+                '<frame name="a" src="frame_a.html">' .
+                '<frame src="frame_b.html">' .
+                '<frame name="c" src="frame_c.html">' .
+                '<frame src="frame_d.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent([
-                'http://site.with.frames/' => $frameset,
-                'http://site.with.frames/frame_a.html' => 'A frame',
-                'http://site.with.frames/frame_b.html' => 'B frame',
-                'http://site.with.frames/frame_c.html' => 'C frame',
-                'http://site.with.frames/frame_d.html' => 'D frame', ]));
+            'http://site.with.frames/'             => $frameset,
+            'http://site.with.frames/frame_a.html' => 'A frame',
+            'http://site.with.frames/frame_b.html' => 'B frame',
+            'http://site.with.frames/frame_c.html' => 'C frame',
+            'http://site.with.frames/frame_d.html' => 'D frame', ]));
         $this->assertEqual(
             $browser->get('http://site.with.frames/'),
-            'A frameB frameC frameD frame'
+            'A frameB frameC frameD frame',
         );
         $this->assertIdentical($browser->getFrames(), [
-                'a' => 'http://site.with.frames/frame_a.html',
-                2 => 'http://site.with.frames/frame_b.html',
-                'c' => 'http://site.with.frames/frame_c.html',
-                4 => 'http://site.with.frames/frame_d.html', ]);
+            'a' => 'http://site.with.frames/frame_a.html',
+            2   => 'http://site.with.frames/frame_b.html',
+            'c' => 'http://site.with.frames/frame_c.html',
+            4   => 'http://site.with.frames/frame_d.html', ]);
     }
 
-    public function testFrameFocusWithMixedNamesAndIndexes()
+    public function testFrameFocusWithMixedNamesAndIndexes(): void
     {
-        $frameset = '<frameset>'.
-                '<frame name="a" src="frame_a.html">'.
-                '<frame src="frame_b.html">'.
-                '<frame name="c" src="frame_c.html">'.
-                '<frame src="frame_d.html">'.
+        $frameset = '<frameset>' .
+                '<frame name="a" src="frame_a.html">' .
+                '<frame src="frame_b.html">' .
+                '<frame name="c" src="frame_c.html">' .
+                '<frame src="frame_d.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent([
-                'http://site.with.frames/' => $frameset,
-                'http://site.with.frames/frame_a.html' => 'A frame',
-                'http://site.with.frames/frame_b.html' => 'B frame',
-                'http://site.with.frames/frame_c.html' => 'C frame',
-                'http://site.with.frames/frame_d.html' => 'D frame', ]));
+            'http://site.with.frames/'             => $frameset,
+            'http://site.with.frames/frame_a.html' => 'A frame',
+            'http://site.with.frames/frame_b.html' => 'B frame',
+            'http://site.with.frames/frame_c.html' => 'C frame',
+            'http://site.with.frames/frame_d.html' => 'D frame', ]));
         $browser->get('http://site.with.frames/');
         $browser->setFrameFocus('a');
         $this->assertEqual($browser->getContent(), 'A frame');
@@ -790,43 +796,43 @@ class TestOfBrowserFrames extends UnitTestCase
         $this->assertEqual($browser->getContent(), 'A frameB frameC frameD frame');
     }
 
-    public function testNestedFrameset()
+    public function testNestedFrameset(): void
     {
-        $inner = '<frameset>'.
-                '<frame name="page" src="page.html">'.
+        $inner = '<frameset>' .
+                '<frame name="page" src="page.html">' .
                 '</frameset>';
-        $outer = '<frameset>'.
-                '<frame name="inner" src="inner.html">'.
+        $outer = '<frameset>' .
+                '<frame name="inner" src="inner.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent([
-                'http://site.with.nested.frame/' => $outer,
-                'http://site.with.nested.frame/inner.html' => $inner,
-                'http://site.with.nested.frame/page.html' => 'The page', ]));
+            'http://site.with.nested.frame/'           => $outer,
+            'http://site.with.nested.frame/inner.html' => $inner,
+            'http://site.with.nested.frame/page.html'  => 'The page', ]));
         $this->assertEqual(
             $browser->get('http://site.with.nested.frame/'),
-            'The page'
+            'The page',
         );
         $this->assertIdentical($browser->getFrames(), [
-                'inner' => [
-                        'page' => 'http://site.with.nested.frame/page.html', ], ]);
+            'inner' => [
+                'page' => 'http://site.with.nested.frame/page.html', ], ]);
     }
 
-    public function testCanNavigateToNestedFrame()
+    public function testCanNavigateToNestedFrame(): void
     {
-        $inner = '<frameset>'.
-                '<frame name="one" src="one.html">'.
-                '<frame name="two" src="two.html">'.
+        $inner = '<frameset>' .
+                '<frame name="one" src="one.html">' .
+                '<frame name="two" src="two.html">' .
                 '</frameset>';
-        $outer = '<frameset>'.
-                '<frame name="inner" src="inner.html">'.
-                '<frame name="three" src="three.html">'.
+        $outer = '<frameset>' .
+                '<frame name="inner" src="inner.html">' .
+                '<frame name="three" src="three.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent([
-                'http://site.with.nested.frames/' => $outer,
-                'http://site.with.nested.frames/inner.html' => $inner,
-                'http://site.with.nested.frames/one.html' => 'Page one',
-                'http://site.with.nested.frames/two.html' => 'Page two',
-                'http://site.with.nested.frames/three.html' => 'Page three', ]));
+            'http://site.with.nested.frames/'           => $outer,
+            'http://site.with.nested.frames/inner.html' => $inner,
+            'http://site.with.nested.frames/one.html'   => 'Page one',
+            'http://site.with.nested.frames/two.html'   => 'Page two',
+            'http://site.with.nested.frames/three.html' => 'Page three', ]));
 
         $browser->get('http://site.with.nested.frames/');
         $this->assertEqual($browser->getContent(), 'Page onePage twoPage three');
@@ -850,22 +856,22 @@ class TestOfBrowserFrames extends UnitTestCase
         $this->assertEqual($browser->getContent(), 'Page onePage two');
     }
 
-    public function testCanNavigateToNestedFrameByIndex()
+    public function testCanNavigateToNestedFrameByIndex(): void
     {
-        $inner = '<frameset>'.
-                '<frame src="one.html">'.
-                '<frame src="two.html">'.
+        $inner = '<frameset>' .
+                '<frame src="one.html">' .
+                '<frame src="two.html">' .
                 '</frameset>';
-        $outer = '<frameset>'.
-                '<frame src="inner.html">'.
-                '<frame src="three.html">'.
+        $outer = '<frameset>' .
+                '<frame src="inner.html">' .
+                '<frame src="three.html">' .
                 '</frameset>';
         $browser = $this->createBrowser($this->createUserAgent([
-                'http://site.with.nested.frames/' => $outer,
-                'http://site.with.nested.frames/inner.html' => $inner,
-                'http://site.with.nested.frames/one.html' => 'Page one',
-                'http://site.with.nested.frames/two.html' => 'Page two',
-                'http://site.with.nested.frames/three.html' => 'Page three', ]));
+            'http://site.with.nested.frames/'           => $outer,
+            'http://site.with.nested.frames/inner.html' => $inner,
+            'http://site.with.nested.frames/one.html'   => 'Page one',
+            'http://site.with.nested.frames/two.html'   => 'Page two',
+            'http://site.with.nested.frames/three.html' => 'Page three', ]));
 
         $browser->get('http://site.with.nested.frames/');
         $this->assertEqual($browser->getContent(), 'Page onePage twoPage three');

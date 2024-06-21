@@ -61,9 +61,17 @@ class SimpleInvoker
      */
     public function invoke($method)
     {
-        $this->test_case->setUp();
+        //$this->test_case->setUp();
+        $r_setUp = new ReflectionMethod($this->test_case::class, 'setUp');
+        $r_setUp->setAccessible(true);
+        $r_setUp->invoke($this->test_case);
+
         $this->test_case->$method();
-        $this->test_case->tearDown();
+
+        //$this->test_case->tearDown();
+        $r_tearDown = new ReflectionMethod($this->test_case::class, 'tearDown');
+        $r_tearDown->setAccessible(true);
+        $r_tearDown->invoke($this->test_case);
     }
 
     /**

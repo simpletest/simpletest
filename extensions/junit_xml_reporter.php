@@ -25,7 +25,7 @@ class JUnitXMLReporter extends SimpleReporter
         $this->root = $this->doc->documentElement;
     }
 
-    public function paintHeader($test_name)
+    public function paintHeader($test_name): void
     {
         $this->testsStart = microtime(true);
 
@@ -42,7 +42,7 @@ class JUnitXMLReporter extends SimpleReporter
      *
      * @param string $test_name        Name class of test.
      */
-    public function paintFooter($test_name)
+    public function paintFooter($test_name): void
     {
         echo "-->\n";
 
@@ -60,18 +60,18 @@ class JUnitXMLReporter extends SimpleReporter
         echo "\n";
     }
 
-    public function paintCaseStart($case)
+    public function paintCaseStart($case): void
     {
         echo "- case start $case\n";
         $this->currentCaseName = $case;
     }
 
-    public function paintCaseEnd($case)
+    public function paintCaseEnd($case): void
     {
         // No output here
     }
 
-    public function paintMethodStart($test)
+    public function paintMethodStart($test): void
     {
         echo "  - test start: $test\n";
 
@@ -79,7 +79,7 @@ class JUnitXMLReporter extends SimpleReporter
         $this->currCase    = $this->doc->createElement('testcase');
     }
 
-    public function paintMethodEnd($test)
+    public function paintMethodEnd($test): void
     {
         $duration = microtime(true) - $this->methodStart;
 
@@ -89,7 +89,7 @@ class JUnitXMLReporter extends SimpleReporter
         $this->root->appendChild($this->currCase);
     }
 
-    public function paintFail($message)
+    public function paintFail($message): void
     {
         parent::paintFail($message);
 
@@ -97,7 +97,7 @@ class JUnitXMLReporter extends SimpleReporter
         $this->terminateAbnormally($message);
     }
 
-    public function paintException($exception)
+    public function paintException($exception): void
     {
         parent::paintException($exception);
 

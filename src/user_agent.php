@@ -1,15 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/cookies.php';
-require_once __DIR__.'/http.php';
-require_once __DIR__.'/encoding.php';
-require_once __DIR__.'/authentication.php';
+require_once __DIR__ . '/cookies.php';
 
-if (!defined('DEFAULT_MAX_REDIRECTS')) {
-    define('DEFAULT_MAX_REDIRECTS', 3);
+require_once __DIR__ . '/http.php';
+
+require_once __DIR__ . '/encoding.php';
+
+require_once __DIR__ . '/authentication.php';
+
+if (!\defined('DEFAULT_MAX_REDIRECTS')) {
+    \define('DEFAULT_MAX_REDIRECTS', 3);
 }
-if (!defined('DEFAULT_CONNECTION_TIMEOUT')) {
-    define('DEFAULT_CONNECTION_TIMEOUT', 15);
+
+if (!\defined('DEFAULT_CONNECTION_TIMEOUT')) {
+    \define('DEFAULT_CONNECTION_TIMEOUT', 15);
 }
 
 /**
@@ -24,9 +28,10 @@ class SimpleUserAgent
     private $cookie_jar;
     private $cookies_enabled = true;
     private $http_referer;
-    private $proxy = false;
+    private $proxy          = false;
     private $proxy_password = false;
     private $proxy_username = false;
+
     /** @var int */
     private $max_redirects = DEFAULT_MAX_REDIRECTS;
 
@@ -35,20 +40,18 @@ class SimpleUserAgent
      */
     public function __construct()
     {
-        $this->cookie_jar = new SimpleCookieJar();
-        $this->authenticator = new SimpleAuthenticator();
+        $this->cookie_jar    = new SimpleCookieJar;
+        $this->authenticator = new SimpleAuthenticator;
     }
 
     /**
      * Removes expired and temporary cookies as if the browser was closed and re-opened.
      * Authorisation has to be obtained again as well.
      *
-     * @param string|int $date Time when session restarted. If omitted then all persistent
-     *                             cookies are kept.
-     *
-     * @return void
+     * @param int|string $date Time when session restarted. If omitted then all persistent
+     *                         cookies are kept.
      */
-    public function restart($date = false)
+    public function restart($date = false): void
     {
         $this->cookie_jar->restartSession($date);
         $this->authenticator->restartSession();
@@ -59,10 +62,8 @@ class SimpleUserAgent
      * Adds a header to every fetch.
      *
      * @param string $header header line to add to every request until cleared
-     *
-     * @return void
      */
-    public function addHeader($header)
+    public function addHeader($header): void
     {
         $this->additional_headers[] = $header;
     }
@@ -72,10 +73,8 @@ class SimpleUserAgent
      * it is not set explicitely via {@link addHeader()}.
      *
      * @param string $referer referer URI to add to every request until cleared
-     *
-     * @return void
      */
-    public function setReferer($referer)
+    public function setReferer($referer): void
     {
         $this->http_referer = $referer;
     }
@@ -84,10 +83,8 @@ class SimpleUserAgent
      * Ages the cookies by the specified time.
      *
      * @param int $interval amount in seconds
-     *
-     * @return void
      */
-    public function ageCookies($interval)
+    public function ageCookies($interval): void
     {
         $this->cookie_jar->agePrematurely($interval);
     }
@@ -95,15 +92,13 @@ class SimpleUserAgent
     /**
      * Sets an additional cookie. If a cookie has the same name and path it is replaced.
      *
-     * @param string            $name   cookie key
-     * @param string            $value  value of cookie
-     * @param string|false      $host   host upon which the cookie is valid
-     * @param string            $path   cookie path if not host wide
-     * @param bool|int|string   $expiry expiry date
-     *
-     * @return void
+     * @param string          $name   cookie key
+     * @param string          $value  value of cookie
+     * @param false|string    $host   host upon which the cookie is valid
+     * @param string          $path   cookie path if not host wide
+     * @param bool|int|string $expiry expiry date
      */
-    public function setCookie($name, $value, $host = false, $path = '/', $expiry = false)
+    public function setCookie($name, $value, $host = false, $path = '/', $expiry = false): void
     {
         $this->cookie_jar->setCookie($name, $value, $host, $path, $expiry);
     }
@@ -116,13 +111,14 @@ class SimpleUserAgent
     public function getCookies()
     {
         $lstCookies = $this->cookie_jar->getCookies();
-        $aCookies = [];
+        $aCookies   = [];
+
         foreach ($lstCookies as $oCookies) {
             $aCookies[] = [
-                'name' => $oCookies->getName(),
-                'value' => $oCookies->getValue(),
-                'host' => $oCookies->getHost(),
-                'path' => $oCookies->getPath(),
+                'name'   => $oCookies->getName(),
+                'value'  => $oCookies->getValue(),
+                'host'   => $oCookies->getHost(),
+                'path'   => $oCookies->getPath(),
                 'expiry' => $oCookies->getExpiry(),
             ];
         }
@@ -132,12 +128,8 @@ class SimpleUserAgent
 
     /**
      * Import a list of cookies.
-     *
-     * @param array $lstCookies
-     *
-     * @return void
      */
-    public function setCookies(array $lstCookies)
+    public function setCookies(array $lstCookies): void
     {
         foreach ($lstCookies as $aCookies) {
             $this->cookie_jar->setCookie(
@@ -145,7 +137,7 @@ class SimpleUserAgent
                 $aCookies['value'],
                 $aCookies['host'],
                 $aCookies['path'],
-                $aCookies['expiry']
+                $aCookies['expiry'],
             );
         }
     }
@@ -170,7 +162,7 @@ class SimpleUserAgent
      * @param string    $name key of cookie to find
      * @param SimpleUrl $base base URL to search from
      *
-     * @return string|bool Null if there is no base URL, false if the cookie is not set
+     * @return bool|string Null if there is no base URL, false if the cookie is not set
      */
     public function getBaseCookieValue($name, $base)
     {
@@ -183,20 +175,16 @@ class SimpleUserAgent
 
     /**
      * Switches off cookie sending and recieving.
-     *
-     * @return void
      */
-    public function ignoreCookies()
+    public function ignoreCookies(): void
     {
         $this->cookies_enabled = false;
     }
 
     /**
      * Switches back on the cookie sending and recieving.
-     *
-     * @return void
      */
-    public function useCookies()
+    public function useCookies(): void
     {
         $this->cookies_enabled = true;
     }
@@ -205,10 +193,8 @@ class SimpleUserAgent
      * Sets the socket timeout for opening a connection.
      *
      * @param int $timeout maximum time in seconds
-     *
-     * @return void
      */
-    public function setConnectionTimeout($timeout)
+    public function setConnectionTimeout($timeout): void
     {
         $this->connection_timeout = $timeout;
     }
@@ -217,10 +203,8 @@ class SimpleUserAgent
      * Sets the maximum number of redirects before a page will be loaded anyway.
      *
      * @param int $max most hops allowed
-     *
-     * @return void
      */
-    public function setMaximumRedirects($max)
+    public function setMaximumRedirects($max): void
     {
         $this->max_redirects = $max;
     }
@@ -232,22 +216,64 @@ class SimpleUserAgent
      * @param string $proxy    proxy URL
      * @param string $username proxy username for authentication
      * @param string $password proxy password for authentication
-     *
-     * @return void
      */
-    public function useProxy($proxy, $username, $password)
+    public function useProxy($proxy, $username, $password): void
     {
         if (!$proxy) {
             $this->proxy = false;
 
             return;
         }
-        if ((0 != strncmp($proxy, 'http://', 7)) && (0 != strncmp($proxy, 'https://', 8))) {
-            $proxy = 'http://'.$proxy;
+
+        if ((0 != \strncmp($proxy, 'http://', 7)) && (0 != \strncmp($proxy, 'https://', 8))) {
+            $proxy = 'http://' . $proxy;
         }
-        $this->proxy = new SimpleUrl($proxy);
+        $this->proxy          = new SimpleUrl($proxy);
         $this->proxy_username = $username;
         $this->proxy_password = $password;
+    }
+
+    /**
+     * Sets the identity for the current realm.
+     *
+     * @param string $host     host to which realm applies
+     * @param string $realm    full name of realm
+     * @param string $username username for realm
+     * @param string $password password for realm
+     */
+    public function setIdentity($host, $realm, $username, $password): void
+    {
+        $this->authenticator->setIdentityForRealm($host, $realm, $username, $password);
+    }
+
+    /**
+     * Fetches a URL as a response object. Will keep trying if redirected.
+     * It will also collect authentication realm information.
+     *
+     * @param SimpleUrl|string $url      Target to fetch
+     * @param SimpleEncoding   $encoding additional parameters for request
+     *
+     * @return SimpleHttpResponse hopefully the target page
+     */
+    public function fetchResponse($url, $encoding)
+    {
+        if (!\in_array($encoding->getMethod(), ['POST', 'PUT'], true)) {
+            $url->addRequestParameters($encoding);
+            $encoding->clear();
+        }
+        $response = $this->fetchWhileRedirected($url, $encoding);
+
+        if ($headers = $response->getHeaders()) {
+            if ($headers->isChallenge()) {
+                $this->authenticator->addRealm(
+                    $url,
+                    $headers->getAuthentication(),
+                    $headers->getRealm(),
+                );
+            }
+        }
+
+        return $response;
     }
 
     /**
@@ -263,50 +289,6 @@ class SimpleUserAgent
     }
 
     /**
-     * Sets the identity for the current realm.
-     *
-     * @param string $host     host to which realm applies
-     * @param string $realm    full name of realm
-     * @param string $username username for realm
-     * @param string $password password for realm
-     *
-     * @return void
-     */
-    public function setIdentity($host, $realm, $username, $password)
-    {
-        $this->authenticator->setIdentityForRealm($host, $realm, $username, $password);
-    }
-
-    /**
-     * Fetches a URL as a response object. Will keep trying if redirected.
-     * It will also collect authentication realm information.
-     *
-     * @param string|SimpleUrl $url      Target to fetch
-     * @param SimpleEncoding   $encoding additional parameters for request
-     *
-     * @return SimpleHttpResponse hopefully the target page
-     */
-    public function fetchResponse($url, $encoding)
-    {
-        if (!in_array($encoding->getMethod(), ['POST', 'PUT'])) {
-            $url->addRequestParameters($encoding);
-            $encoding->clear();
-        }
-        $response = $this->fetchWhileRedirected($url, $encoding);
-        if ($headers = $response->getHeaders()) {
-            if ($headers->isChallenge()) {
-                $this->authenticator->addRealm(
-                    $url,
-                    $headers->getAuthentication(),
-                    $headers->getRealm()
-                );
-            }
-        }
-
-        return $response;
-    }
-
-    /**
      * Fetches the page until no longer redirected or until the redirect limit runs out.
      *
      * @param SimpleUrl          $url      target to fetch
@@ -317,21 +299,25 @@ class SimpleUserAgent
     protected function fetchWhileRedirected($url, $encoding)
     {
         $redirects = 0;
+
         do {
             $response = $this->fetch($url, $encoding);
+
             if ($response->isError()) {
                 return $response;
             }
             $headers = $response->getHeaders();
+
             if ($this->cookies_enabled) {
                 $headers->writeCookiesToJar($this->cookie_jar, $url);
             }
+
             if (!$headers->isRedirect()) {
                 break;
             }
             $location = new SimpleUrl($headers->getLocation());
-            $url = $location->makeAbsolute($url);
-            $encoding = new SimpleGetEncoding();
+            $url      = $location->makeAbsolute($url);
+            $encoding = new SimpleGetEncoding;
         } while (!$this->isTooManyRedirects(++$redirects));
 
         return $response;
@@ -364,6 +350,7 @@ class SimpleUserAgent
     {
         $request = $this->createHttpRequest($url, $encoding);
         $this->addAdditionalHeaders($request);
+
         if ($this->cookies_enabled) {
             $request->readCookiesFromJar($this->cookie_jar, $url);
         }
@@ -372,16 +359,20 @@ class SimpleUserAgent
         // Add referer header, if not set explicitly
         if ($this->http_referer) {
             $headers = $request->getHeaders();
-            if (is_array($headers)) {
+
+            if (\is_array($headers)) {
                 $custom_referer = false;
+
                 foreach ($headers as $header) {
-                    if (preg_match('~^referer:~i', $header)) {
+                    if (\preg_match('~^referer:~i', $header)) {
                         $custom_referer = true;
+
                         break;
                     }
                 }
+
                 if (!$custom_referer) {
-                    $request->addHeaderLine('Referer: '.$this->http_referer);
+                    $request->addHeaderLine('Referer: ' . $this->http_referer);
                 }
             }
         }
@@ -392,7 +383,7 @@ class SimpleUserAgent
     /**
      * Builds the appropriate HTTP request object.
      *
-     * @param SimpleUrl $url target to fetch as url object
+     * @param SimpleUrl          $url      target to fetch as url object
      * @param SimpleFormEncoding $encoding Encoding
      *
      * @return SimpleHttpRequest new request object
@@ -416,7 +407,7 @@ class SimpleUserAgent
                 $url,
                 $this->proxy,
                 $this->proxy_username,
-                $this->proxy_password
+                $this->proxy_password,
             );
         }
 
@@ -427,10 +418,8 @@ class SimpleUserAgent
      * Adds additional manual headers.
      *
      * @param SimpleHttpRequest $request outgoing request
-     *
-     * @return void
      */
-    protected function addAdditionalHeaders(&$request)
+    protected function addAdditionalHeaders(&$request): void
     {
         foreach ($this->additional_headers as $header) {
             $request->addHeaderLine($header);

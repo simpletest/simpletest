@@ -12,7 +12,7 @@ class CoverageReporterTest extends UnitTestCase
         );
     }
 
-    public function setUp()
+    protected function setUp()
     {
         require_once __DIR__ . '/../coverage_reporter.php';
         new CoverageReporter();

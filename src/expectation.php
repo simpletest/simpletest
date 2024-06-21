@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/dumper.php';
-require_once __DIR__.'/compatibility.php';
+require_once __DIR__ . '/dumper.php';
+
+require_once __DIR__ . '/compatibility.php';
 
 /**
  * Assertion that can display failure information. Also includes various helper methods.
@@ -12,6 +13,21 @@ class SimpleExpectation
 {
     protected $dumper = false;
     private $message;
+
+    /**
+     * Test to see if a value is an expectation object. A useful utility method.
+     *
+     * @param mixed $expectation hopefully an Expectation class
+     *
+     * @return bool true if descended from this class
+     */
+    public static function isExpectation($expectation)
+    {
+        return \is_object($expectation) && (
+            \is_a($expectation, 'SimpleExpectation') ||
+            \is_a($expectation, 'ReferenceExpectation')
+        );
+    }
 
     /**
      * Creates a dumper for displaying values and sets the test message.
@@ -62,7 +78,7 @@ class SimpleExpectation
     {
         $this->dumper = $dumper;
 
-        return sprintf($this->message, $this->testMessage($compare));
+        return \sprintf($this->message, $this->testMessage($compare));
     }
 
     /**
@@ -73,27 +89,10 @@ class SimpleExpectation
     protected function getDumper()
     {
         if (!$this->dumper) {
-            $dumper = new SimpleDumper();
-
-            return $dumper;
+            return new SimpleDumper;
         }
 
         return $this->dumper;
-    }
-
-    /**
-     * Test to see if a value is an expectation object. A useful utility method.
-     *
-     * @param mixed $expectation hopefully an Expectation class
-     *
-     * @return bool true if descended from this class
-     */
-    public static function isExpectation($expectation)
-    {
-        return is_object($expectation) && (
-            is_a($expectation, 'SimpleExpectation') ||
-            is_a($expectation, 'ReferenceExpectation')
-        );
     }
 }
 
@@ -125,7 +124,7 @@ class AnythingExpectation extends SimpleExpectation
     {
         $dumper = $this->getDumper();
 
-        return 'Anything always matches ['.$dumper->describeValue($compare).']';
+        return 'Anything always matches [' . $dumper->describeValue($compare) . ']';
     }
 }
 
@@ -157,7 +156,7 @@ class FailedExpectation extends SimpleExpectation
     {
         $dumper = $this->getDumper();
 
-        return 'Failed expectation never matches ['.$dumper->describeValue($compare).']';
+        return 'Failed expectation never matches [' . $dumper->describeValue($compare) . ']';
     }
 }
 
@@ -189,7 +188,7 @@ class TrueExpectation extends SimpleExpectation
     {
         $dumper = $this->getDumper();
 
-        return 'Expected true, got ['.$dumper->describeValue($compare).']';
+        return 'Expected true, got [' . $dumper->describeValue($compare) . ']';
     }
 }
 
@@ -221,7 +220,7 @@ class FalseExpectation extends SimpleExpectation
     {
         $dumper = $this->getDumper();
 
-        return 'Expected false, got ['.$dumper->describeValue($compare).']';
+        return 'Expected false, got [' . $dumper->describeValue($compare) . ']';
     }
 }
 
@@ -268,11 +267,12 @@ class EqualExpectation extends SimpleExpectation
         $dumper = $this->getDumper();
 
         if ($this->test($compare)) {
-            return 'Equal expectation ['.$dumper->describeValue($this->value).']';
-        } else {
-            return 'Equal expectation fails '.
-                    $dumper->describeDifference($this->value, $compare);
+            return 'Equal expectation [' . $dumper->describeValue($this->value) . ']';
         }
+
+        return 'Equal expectation fails ' .
+                $dumper->describeDifference($this->value, $compare);
+
     }
 
     /**
@@ -324,14 +324,16 @@ class NotEqualExpectation extends EqualExpectation
     public function testMessage($compare)
     {
         $dumper = $this->getDumper();
+
         if ($this->test($compare)) {
-            return 'Not equal expectation passes '.
+            return 'Not equal expectation passes ' .
                     $dumper->describeDifference($this->getValue(), $compare);
-        } else {
-            return 'Not equal expectation fails ['.
-                    $dumper->describeValue($this->getValue()).
-                    '] matches';
         }
+
+        return 'Not equal expectation fails [' .
+                $dumper->describeValue($this->getValue()) .
+                '] matches';
+
     }
 }
 
@@ -381,9 +383,10 @@ class WithinMarginExpectation extends SimpleExpectation
     {
         if ($this->test($compare)) {
             return $this->withinMessage($compare);
-        } else {
-            return $this->outsideMessage($compare);
         }
+
+        return $this->outsideMessage($compare);
+
     }
 
     /**
@@ -395,8 +398,8 @@ class WithinMarginExpectation extends SimpleExpectation
     {
         $dumper = $this->getDumper();
 
-        return 'Within expectation ['.$dumper->describeValue($this->lower).'] and ['.
-                $dumper->describeValue($this->upper).']';
+        return 'Within expectation [' . $dumper->describeValue($this->lower) . '] and [' .
+                $dumper->describeValue($this->upper) . ']';
     }
 
     /**
@@ -409,12 +412,13 @@ class WithinMarginExpectation extends SimpleExpectation
         $dumper = $this->getDumper();
 
         if ($compare > $this->upper) {
-            return 'Outside expectation '.
+            return 'Outside expectation ' .
                     $dumper->describeDifference($compare, $this->upper);
-        } else {
-            return 'Outside expectation '.
-                    $dumper->describeDifference($compare, $this->lower);
         }
+
+        return 'Outside expectation ' .
+                $dumper->describeDifference($compare, $this->lower);
+
     }
 }
 
@@ -459,9 +463,10 @@ class OutsideMarginExpectation extends WithinMarginExpectation
     {
         if (!$this->test($compare)) {
             return $this->withinMessage($compare);
-        } else {
-            return $this->outsideMessage($compare);
         }
+
+        return $this->outsideMessage($compare);
+
     }
 }
 
@@ -482,7 +487,7 @@ class ReferenceExpectation
     public function __construct(&$value, $message = '%s')
     {
         $this->message = $message;
-        $this->value = &$value;
+        $this->value   = &$value;
     }
 
     /**
@@ -507,11 +512,12 @@ class ReferenceExpectation
     public function testMessage($compare)
     {
         if ($this->test($compare)) {
-            return 'Reference expectation ['.$this->dumper->describeValue($this->value).']';
-        } else {
-            return 'Reference expectation fails '.
-                    $this->dumper->describeDifference($this->value, $compare);
+            return 'Reference expectation [' . $this->dumper->describeValue($this->value) . ']';
         }
+
+        return 'Reference expectation fails ' .
+                $this->dumper->describeDifference($this->value, $compare);
+
     }
 
     /**
@@ -527,7 +533,7 @@ class ReferenceExpectation
     {
         $this->dumper = $dumper;
 
-        return sprintf($this->message, $this->testMessage($compare));
+        return \sprintf($this->message, $this->testMessage($compare));
     }
 
     /**
@@ -538,9 +544,7 @@ class ReferenceExpectation
     protected function getDumper()
     {
         if (!$this->dumper) {
-            $dumper = new SimpleDumper();
-
-            return $dumper;
+            return new SimpleDumper;
         }
 
         return $this->dumper;
@@ -585,14 +589,16 @@ class IdenticalExpectation extends EqualExpectation
     public function testMessage($compare)
     {
         $dumper = $this->getDumper();
+
         if ($this->test($compare)) {
-            return 'Identical expectation ['.$dumper->describeValue($this->getValue()).']';
-        } else {
-            return 'Identical expectation ['.$dumper->describeValue($this->getValue()).
-                    '] fails with ['.
-                    $dumper->describeValue($compare).'] '.
-                    $dumper->describeDifference($this->getValue(), $compare, TYPE_MATTERS);
+            return 'Identical expectation [' . $dumper->describeValue($this->getValue()) . ']';
         }
+
+        return 'Identical expectation [' . $dumper->describeValue($this->getValue()) .
+                '] fails with [' .
+                $dumper->describeValue($compare) . '] ' .
+                $dumper->describeDifference($this->getValue(), $compare, TYPE_MATTERS);
+
     }
 }
 
@@ -634,12 +640,14 @@ class NotIdenticalExpectation extends IdenticalExpectation
     public function testMessage($compare)
     {
         $dumper = $this->getDumper();
+
         if ($this->test($compare)) {
-            return 'Not identical expectation passes '.
+            return 'Not identical expectation passes ' .
                     $dumper->describeDifference($this->getValue(), $compare, TYPE_MATTERS);
-        } else {
-            return 'Not identical expectation ['.$dumper->describeValue($this->getValue()).'] matches';
         }
+
+        return 'Not identical expectation [' . $dumper->describeValue($this->getValue()) . '] matches';
+
     }
 }
 
@@ -664,16 +672,6 @@ class PatternExpectation extends SimpleExpectation
     }
 
     /**
-     * Accessor for the pattern.
-     *
-     * @return string perl regex as string
-     */
-    protected function getPattern()
-    {
-        return $this->pattern;
-    }
-
-    /**
      * Tests the expectation.
      * True, if the Perl regex matches the comparison value.
      *
@@ -683,7 +681,7 @@ class PatternExpectation extends SimpleExpectation
      */
     public function test($compare)
     {
-        return (bool) preg_match($this->getPattern(), $compare);
+        return (bool) \preg_match($this->getPattern(), $compare);
     }
 
     /**
@@ -697,11 +695,21 @@ class PatternExpectation extends SimpleExpectation
     {
         if ($this->test($compare)) {
             return $this->describePatternMatch($this->getPattern(), $compare);
-        } else {
-            $dumper = $this->getDumper();
-
-            return 'Pattern ['.$this->getPattern().'] not detected in ['.$dumper->describeValue($compare).']';
         }
+        $dumper = $this->getDumper();
+
+        return 'Pattern [' . $this->getPattern() . '] not detected in [' . $dumper->describeValue($compare) . ']';
+
+    }
+
+    /**
+     * Accessor for the pattern.
+     *
+     * @return string perl regex as string
+     */
+    protected function getPattern()
+    {
+        return $this->pattern;
     }
 
     /**
@@ -714,14 +722,14 @@ class PatternExpectation extends SimpleExpectation
      */
     protected function describePatternMatch($pattern, $subject)
     {
-        preg_match($pattern, $subject, $matches);
-        $position = strpos($subject, $matches[0]);
-        $dumper = $this->getDumper();
+        \preg_match($pattern, $subject, $matches);
+        $position = \strpos($subject, $matches[0]);
+        $dumper   = $this->getDumper();
 
-        return "Pattern [$pattern] detected at character [$position] in [".
-                $dumper->describeValue($subject).'] as ['.
-                $matches[0].'] in region ['.
-                $dumper->clipString($subject, 100, $position).']';
+        return "Pattern [{$pattern}] detected at character [{$position}] in [" .
+                $dumper->describeValue($subject) . '] as [' .
+                $matches[0] . '] in region [' .
+                $dumper->clipString($subject, 100, $position) . ']';
     }
 }
 
@@ -765,12 +773,13 @@ class NoPatternExpectation extends PatternExpectation
         if ($this->test($compare)) {
             $dumper = $this->getDumper();
 
-            return 'Pattern ['.$this->getPattern().
-                    '] not detected in ['.
-                    $dumper->describeValue($compare).']';
-        } else {
-            return $this->describePatternMatch($this->getPattern(), $compare);
+            return 'Pattern [' . $this->getPattern() .
+                    '] not detected in [' .
+                    $dumper->describeValue($compare) . ']';
         }
+
+        return $this->describePatternMatch($this->getPattern(), $compare);
+
     }
 }
 
@@ -795,16 +804,6 @@ class IsAExpectation extends SimpleExpectation
     }
 
     /**
-     * Accessor for type to check against.
-     *
-     * @return string type or class name
-     */
-    protected function getType()
-    {
-        return $this->type;
-    }
-
-    /**
      * Tests the expectation. True if the type or class matches the string value.
      *
      * @param string $compare comparison value
@@ -813,34 +812,17 @@ class IsAExpectation extends SimpleExpectation
      */
     public function test($compare)
     {
-        if (is_object($compare)) {
-            return is_a($compare, $this->type);
-        } else {
-            $function = 'is_'.$this->canonicalType($this->type);
-            if (is_callable($function)) {
-                return $function($compare);
-            }
-
-            return false;
+        if (\is_object($compare)) {
+            return \is_a($compare, $this->type);
         }
-    }
+        $function = 'is_' . $this->canonicalType($this->type);
 
-    /**
-     * forces type name into a is_*() match.
-     *
-     * @param string $type user type
-     *
-     * @return string simpler type
-     */
-    protected function canonicalType($type)
-    {
-        $type = strtolower($type);
-        $map = ['boolean' => 'bool'];
-        if (isset($map[$type])) {
-            $type = $map[$type];
+        if (\is_callable($function)) {
+            return $function($compare);
         }
 
-        return $type;
+        return false;
+
     }
 
     /**
@@ -854,8 +836,37 @@ class IsAExpectation extends SimpleExpectation
     {
         $dumper = $this->getDumper();
 
-        return 'Value ['.$dumper->describeValue($compare).
-                '] should be type ['.$this->type.']';
+        return 'Value [' . $dumper->describeValue($compare) .
+                '] should be type [' . $this->type . ']';
+    }
+
+    /**
+     * Accessor for type to check against.
+     *
+     * @return string type or class name
+     */
+    protected function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * forces type name into a is_*() match.
+     *
+     * @param string $type user type
+     *
+     * @return string simpler type
+     */
+    protected function canonicalType($type)
+    {
+        $type = \strtolower($type);
+        $map  = ['boolean' => 'bool'];
+
+        if (isset($map[$type])) {
+            $type = $map[$type];
+        }
+
+        return $type;
     }
 }
 
@@ -901,8 +912,8 @@ class NotAExpectation extends IsAExpectation
     {
         $dumper = $this->getDumper();
 
-        return 'Value ['.$dumper->describeValue($compare).
-                '] should not be type ['.$this->getType().']';
+        return 'Value [' . $dumper->describeValue($compare) .
+                '] should not be type [' . $this->getType() . ']';
     }
 }
 
@@ -934,7 +945,7 @@ class MethodExistsExpectation extends SimpleExpectation
      */
     public function test($compare)
     {
-        return (bool) (is_object($compare) && method_exists($compare, $this->method));
+        return (bool) (\is_object($compare) && \method_exists($compare, $this->method));
     }
 
     /**
@@ -947,13 +958,14 @@ class MethodExistsExpectation extends SimpleExpectation
     public function testMessage($compare)
     {
         $dumper = $this->getDumper();
-        if (!is_object($compare)) {
-            return 'No method on non-object ['.$dumper->describeValue($compare).']';
+
+        if (!\is_object($compare)) {
+            return 'No method on non-object [' . $dumper->describeValue($compare) . ']';
         }
         $method = $this->method;
 
-        return 'Object ['.$dumper->describeValue($compare).
-                "] should contain method [$method]";
+        return 'Object [' . $dumper->describeValue($compare) .
+                "] should contain method [{$method}]";
     }
 }
 
@@ -982,7 +994,7 @@ class MemberExpectation extends IdenticalExpectation
      */
     public function test($actual)
     {
-        if (!is_object($actual)) {
+        if (!\is_object($actual)) {
             return false;
         }
 
@@ -1000,6 +1012,20 @@ class MemberExpectation extends IdenticalExpectation
     }
 
     /**
+     * Removes crud from property name after it's been converted to an array.
+     *
+     * @param string $mangled name from array cast
+     *
+     * @return string cleaned up name
+     */
+    public function unmangle($mangled)
+    {
+        $parts = \preg_split('/[^a-zA-Z0-9_\x7f-\xff]+/', $mangled);
+
+        return \array_pop($parts);
+    }
+
+    /**
      * Extracts the member value even if private using reflection.
      *
      * @param string $name   property name
@@ -1010,10 +1036,12 @@ class MemberExpectation extends IdenticalExpectation
     private function getProperty($name, $object)
     {
         $reflection = new ReflectionObject($object);
-        $property = $reflection->getProperty($name);
-        if (method_exists($property, 'setAccessible')) {
+        $property   = $reflection->getProperty($name);
+
+        if (\method_exists($property, 'setAccessible')) {
             $property->setAccessible(true);
         }
+
         try {
             return $property->getValue($object);
         } catch (ReflectionException $e) {
@@ -1036,19 +1064,5 @@ class MemberExpectation extends IdenticalExpectation
                 return $value;
             }
         }
-    }
-
-    /**
-     * Removes crud from property name after it's been converted to an array.
-     *
-     * @param string $mangled name from array cast
-     *
-     * @return string cleaned up name
-     */
-    public function unmangle($mangled)
-    {
-        $parts = preg_split('/[^a-zA-Z0-9_\x7f-\xff]+/', $mangled);
-
-        return array_pop($parts);
     }
 }

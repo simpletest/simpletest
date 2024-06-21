@@ -12,7 +12,7 @@ class CoverageWriterTest extends UnitTestCase
         );
     }
 
-    public function setUp()
+    protected function setUp()
     {
         require_once __DIR__ . '/../coverage_writer.php';
         require_once __DIR__ . '/../coverage_calculator.php';
