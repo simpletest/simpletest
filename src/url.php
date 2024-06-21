@@ -85,7 +85,7 @@ class SimpleUrl
      */
     public function getScheme($default = false)
     {
-        return $this->scheme ? $this->scheme : $default;
+        return $this->scheme ?: $default;
     }
 
     /**
@@ -529,7 +529,7 @@ class SimpleUrl
         if (\preg_match('/(.*?)(\?|#|$)(.*)/', $url, $matches)) {
             $url = $matches[2] . $matches[3];
 
-            return $matches[1] ? $matches[1] : '';
+            return $matches[1] ?: '';
         }
 
         return '';

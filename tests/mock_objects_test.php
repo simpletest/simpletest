@@ -1220,8 +1220,10 @@ class TestOfProtectedMethodPartialMocks extends UnitTestCase
     }
 }
 
-Mock::generate('DummyNS\DummyWithNamespace', 'TestFullDummyWithNamespace');
-Mock::generatePartial('DummyNS\DummyWithNamespace', 'TestPartialDummyWithNamespace', ['aMethod']);
+//Mock::generate('DummyNS\DummyWithNamespace', 'TestFullDummyWithNamespace');
+//Mock::generatePartial('DummyNS\DummyWithNamespace', 'TestPartialDummyWithNamespace', ['aMethod']);
+Mock::generate(\DummyNS\DummyWithNamespace::class, 'TestFullDummyWithNamespace');
+Mock::generatePartial(\DummyNS\DummyWithNamespace::class, 'TestPartialDummyWithNamespace', ['aMethod']);
 
 class TestOfNamespacedPartialMocks extends UnitTestCase
 {

@@ -27,7 +27,7 @@ class CoverageDataHandler
 
     public function getFilenames()
     {
-        $filenames = array();
+        $filenames = [];
         $cursor    = $this->db->query('SELECT DISTINCT name FROM coverage');
         while ($row = $cursor->fetchArray()) {
             $filenames[] = $row[0];
@@ -59,7 +59,7 @@ class CoverageDataHandler
 
     public function readFile($file)
     {
-        $aggregate = array();
+        $aggregate = [];
         $sql       = "SELECT coverage FROM coverage WHERE name = '$file'";
         $result    = $this->db->query($sql);
         while ($row = $result->fetchArray()) {
@@ -113,7 +113,7 @@ class CoverageDataHandler
 
     public function readUntouchedFiles()
     {
-        $untouched = array();
+        $untouched = [];
         $result    = $this->db->query('SELECT filename FROM untouched ORDER BY filename');
         while ($row = $result->fetchArray()) {
             $untouched[] = $row[0];

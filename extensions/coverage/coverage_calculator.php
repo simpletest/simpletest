@@ -65,7 +65,7 @@ class CoverageCalculator
 
     public function totalCoverage($total, $coverage)
     {
-        return $total + array_reduce($coverage, array($this, 'lineCoverage'));
+        return $total + array_reduce($coverage, [$this, 'lineCoverage']);
     }
 
     public function percentCoverageForFile($file, $coverage)
@@ -76,7 +76,7 @@ class CoverageCalculator
         if ($loc == 0) {
             return 0;
         }
-        $lineCoverage      = array_reduce($coverage, array($this, 'lineCoverage'));
+        $lineCoverage      = array_reduce($coverage, [$this, 'lineCoverage']);
         $percentage        = 100 * ($lineCoverage / $loc);
         return ['fileReport' => $fileReport, 'percentage' => $percentage];
     }
@@ -91,7 +91,7 @@ class CoverageCalculator
         $totalLinesOfCode = array_reduce($coverage, [$this, 'totalLinesOfCode']);
 
         if ($totalLinesOfCode > 0) {
-            $totalLinesOfCoverage = array_reduce($coverage, array($this, 'totalCoverage'));
+            $totalLinesOfCoverage = array_reduce($coverage, [$this, 'totalCoverage']);
             $totalPercentCoverage = 100 * ($totalLinesOfCoverage / $totalLinesOfCode);
         }
 

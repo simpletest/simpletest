@@ -16,17 +16,17 @@ class SimpleSeleniumRemoteControl
     private $_timeout    = 30000;
     private $_sessionId;
 
-    private $_commandMap = array(
-        'bool' => array(
+    private $_commandMap = [
+        'bool' => [
             'verify',
             'verifyTextPresent',
             'verifyTextNotPresent',
             'verifyValue'
-        ),
-        'string' => array(
+        ],
+        'string' => [
             'getNewBrowserSession',
-        ),
-    );
+        ],
+    ];
 
     public function __construct($browser, $browserUrl, $host = 'localhost', $port = 4444, $timeout = 30000)
     {
@@ -44,7 +44,7 @@ class SimpleSeleniumRemoteControl
 
     public function start()
     {
-        $response         = $this->cmd('getNewBrowserSession', array($this->_browser, $this->_browserUrl));
+        $response         = $this->cmd('getNewBrowserSession', [$this->_browser, $this->_browserUrl]);
         $this->_sessionId = $this->sessionIdParser($response);
     }
 
@@ -82,11 +82,9 @@ class SimpleSeleniumRemoteControl
         return "http://{$this->_host}:{$this->_port}/selenium-server/driver/";
     }
 
-    public function buildUrlCmd($method, $arguments = array())
+    public function buildUrlCmd($method, $arguments = [])
     {
-        $params = array(
-            'cmd=' . urlencode($method),
-        );
+        $params = ['cmd=' . urlencode($method)];
         $i = 1;
         foreach ($arguments as $param) {
             $params[] = $i++ . '=' . urlencode(trim($param));
@@ -98,7 +96,7 @@ class SimpleSeleniumRemoteControl
         return $this->_server() . '?' . implode('&', $params);
     }
 
-    public function cmd($method, $arguments = array())
+    public function cmd($method, $arguments = [])
     {
         $url      = $this->buildUrlCmd($method, $arguments);
         $response = $this->_sendRequest($url);

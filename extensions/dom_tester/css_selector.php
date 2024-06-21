@@ -25,7 +25,7 @@ class CssSelector
 
     public function getTexts($selector)
     {
-        $texts = array();
+        $texts = [];
         foreach ($this->getElements($selector) as $element) {
             $texts[] = $element->nodeValue;
         }
@@ -35,9 +35,9 @@ class CssSelector
 
     public function getElements($selector)
     {
-        $all_nodes = array();
+        $all_nodes = [];
         foreach ($this->tokenize_selectors($selector) as $selector) {
-            $nodes = array($this->dom);
+            $nodes = [$this->dom];
             foreach ($this->tokenize($selector) as $token) {
                 $combinator = $token['combinator'];
                 $token      = trim($token['name']);
@@ -50,11 +50,11 @@ class CssSelector
                     $element = $xpath->query(sprintf("//*[@id = '%s']", $id))->item(0);
                     if (!$element || ($tagName && strtolower($element->nodeName) != $tagName)) {
                         // tag with that ID not found
-            return array();
+            return [];
                     }
 
           // Set nodes to contain just this element
-          $nodes = array($element);
+          $nodes = [$element];
 
                     continue; // Skip to next token
                 }
@@ -70,7 +70,7 @@ class CssSelector
 
           // Get elements matching tag, filter them for class selector
           $founds          = $this->getElementsByTagName($nodes, $tagName, $combinator);
-                    $nodes = array();
+                    $nodes = [];
                     foreach ($founds as $found) {
                         if (preg_match('/\b' . $className . '\b/', $found->getAttribute('class'))) {
                             $nodes[] = $found;
@@ -82,7 +82,7 @@ class CssSelector
 
         // Code to deal with attribute selectors
         if (preg_match('/^(\w*)(\[.+\])$/', $token, $matches)) {
-            $tagName = $matches[1] ? $matches[1] : '*';
+            $tagName = $matches[1] ?: '*';
             preg_match_all('/
             \[
               (\w+)                 # attribute
@@ -98,7 +98,7 @@ class CssSelector
 
           // Grab all of the tagName elements within current node
           $founds  = $this->getElementsByTagName($nodes, $tagName, $combinator);
-            $nodes = array();
+            $nodes = [];
             foreach ($founds as $found) {
                 $ok = false;
                 foreach ($matches as $match) {
@@ -144,8 +144,8 @@ class CssSelector
         }
 
                 if (preg_match('/^(\w*)(:first-child)$/', $token, $matches)) {
-                    $token      = $matches[1] ? $matches[1] : '*';
-                    $combinator = $matches[2] ? $matches[2] : '';
+                    $token      = $matches[1] ?: '*';
+                    $combinator = $matches[2] ?: '';
                 }
 
         // If we get here, token is JUST an element (not a class or ID selector)
@@ -169,7 +169,7 @@ class CssSelector
 
     protected function getElementsByTagName($nodes, $tagName, $combinator = ' ')
     {
-        $founds = array();
+        $founds = [];
         foreach ($nodes as $node) {
             switch ($combinator) {
         case ' ':
@@ -209,7 +209,7 @@ class CssSelector
     protected function tokenize_selectors($selector)
     {
         // split tokens by , except in an attribute selector
-    $tokens     = array();
+    $tokens     = [];
         $quoted = false;
         $token  = '';
         for ($i = 0, $max = strlen($selector); $i < $max; $i++) {
@@ -233,10 +233,10 @@ class CssSelector
     protected function tokenize($selector)
     {
         // split tokens by space except if space is in an attribute selector
-    $tokens          = array();
-        $combinators = array(' ', '>', '+');
+    $tokens          = [];
+        $combinators = [' ', '>', '+'];
         $quoted      = false;
-        $token       = array('combinator' => ' ', 'name' => '');
+        $token       = ['combinator' => ' ', 'name' => ''];
         for ($i = 0, $max = strlen($selector); $i < $max; $i++) {
             if (in_array($selector[$i], $combinators) && !$quoted) {
                 // remove all whitespaces around the combinator
@@ -248,7 +248,7 @@ class CssSelector
                 }
 
                 $tokens[] = $token;
-                $token    = array('combinator' => $combinator, 'name' => '');
+                $token    = ['combinator' => $combinator, 'name' => ''];
             } elseif ('"' == $selector[$i]) {
                 $token['name'] .= $selector[$i];
                 $quoted = $quoted ? false : true;

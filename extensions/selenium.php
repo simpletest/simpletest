@@ -66,17 +66,14 @@ class SeleniumTestCase extends UnitTestCase
         if (substr($method, 0, 6) == 'verify') {
             return $this->assertTrue(
                 call_user_func_array(
-                    array($this->selenium, $method),
+                    [$this->selenium, $method],
                     $arguments
                 ),
                 sprintf('%s failed', $method)
             );
         }
 
-        return call_user_func_array(
-            array($this->selenium, $method),
-            $arguments
-        );
+        return call_user_func_array([$this->selenium, $method], $arguments);
     }
 
     public function verifyText($text)

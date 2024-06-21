@@ -266,8 +266,6 @@ define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
         {
             $cr = ($preserveCr) ? '\\n' : '';
 
-            return str_replace(
-                array('"', "\n"), array('\"', "$cr\"\n\t+\""), $str
-                );
+            return str_replace(['"', "\n"], ['\"', "$cr\"\n\t+\""], $str);
         }
     }

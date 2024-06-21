@@ -333,7 +333,7 @@ class SimpleForm
      */
     public function submitButton(SelectorInterface $selector, $additional = false)
     {
-        $additional = $additional ? $additional : [];
+        $additional = $additional ?: [];
         foreach ($this->buttons as $button) {
             if ($selector->isMatch($button)) {
                 $encoding = $this->encode();
@@ -361,7 +361,7 @@ class SimpleForm
      */
     public function submitImage(SelectorInterface $selector, $x, $y, $additional = false)
     {
-        $additional = $additional ? $additional : [];
+        $additional = $additional ?: [];
         foreach ($this->images as $image) {
             if ($selector->isMatch($image)) {
                 $encoding = $this->encode();

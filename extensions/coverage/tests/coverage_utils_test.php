@@ -46,44 +46,44 @@ class CoverageUtilsTest extends UnitTestCase
 
     public function testParseArgumentsMultiValue()
     {
-        $actual   = CoverageUtils::parseArguments(array('scriptname', '--a=b', '--a=c'), true);
-        $expected = array('extraArguments' => array(), 'a' => 'c', 'a[]' => array('b', 'c'));
+        $actual   = CoverageUtils::parseArguments(['scriptname', '--a=b', '--a=c'], true);
+        $expected = ['extraArguments' => [], 'a' => 'c', 'a[]' => ['b', 'c']];
         $this->assertEqual($expected, $actual);
     }
 
     public function testParseArguments()
     {
-        $actual   = CoverageUtils::parseArguments(array('scriptname', '--a=b', '-c', 'xxx'));
-        $expected = array('a' => 'b', 'c' => '', 'extraArguments' => array('xxx'));
+        $actual   = CoverageUtils::parseArguments(['scriptname', '--a=b', '-c', 'xxx']);
+        $expected = ['a' => 'b', 'c' => '', 'extraArguments' => ['xxx']];
         $this->assertEqual($expected, $actual);
     }
 
     public function testParseDoubleDashNoArguments()
     {
-        $actual = CoverageUtils::parseArguments(array('scriptname', '--aa'));
+        $actual = CoverageUtils::parseArguments(['scriptname', '--aa']);
         $this->assertTrue(isset($actual['aa']));
     }
 
     public function testParseHyphenedExtraArguments()
     {
-        $actual   = CoverageUtils::parseArguments(array('scriptname', '--alpha-beta=b', 'gamma-lambda'));
-        $expected = array('alpha-beta' => 'b', 'extraArguments' => array('gamma-lambda'));
+        $actual   = CoverageUtils::parseArguments(['scriptname', '--alpha-beta=b', 'gamma-lambda']);
+        $expected = ['alpha-beta' => 'b', 'extraArguments' => ['gamma-lambda']];
         $this->assertEqual($expected, $actual);
     }
 
     public function testAddItemAsArray()
     {
-        $actual = array();
+        $actual = [];
         CoverageUtils::addItemAsArray($actual, 'bird', 'duck');
-        $this->assertEqual(array('bird[]' => array('duck')), $actual);
+        $this->assertEqual(['bird[]' => ['duck']], $actual);
 
         CoverageUtils::addItemAsArray($actual, 'bird', 'pigeon');
-        $this->assertEqual(array('bird[]' => array('duck', 'pigeon')), $actual);
+        $this->assertEqual(['bird[]' => ['duck', 'pigeon']], $actual);
     }
 
     public function testIssetOrDefault()
     {
-        $data = array('bird' => 'gull');
+        $data = ['bird' => 'gull'];
         $this->assertEqual('lab', CoverageUtils::issetOrDefault($data['dog'], 'lab'));
         $this->assertEqual('gull', CoverageUtils::issetOrDefault($data['bird'], 'sparrow'));
     }

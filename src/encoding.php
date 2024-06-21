@@ -523,7 +523,7 @@ class SimpleEntityEncoding extends SimpleEncoding
      */
     protected function encode()
     {
-        return ($this->body) ? $this->body : parent::encode();
+        return $this->body ?: parent::encode();
     }
 }
 

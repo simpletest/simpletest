@@ -1122,7 +1122,7 @@ class SimpleMock
         $this->actions->register(
             $method,
             $args,
-            new SimpleThrower($exception ? $exception : new Exception())
+            new SimpleThrower($exception ?: new Exception())
         );
     }
 
@@ -1148,7 +1148,7 @@ class SimpleMock
             $timing,
             $method,
             $args,
-            new SimpleThrower($exception ? $exception : new Exception())
+            new SimpleThrower($exception ?: new Exception())
         );
     }
 
@@ -1430,7 +1430,7 @@ class MockGenerator
         if ($mock_reflection->classExistsWithoutAutoload()) {
             return false;
         }
-        $code = $this->createCodeForClass($methods ? $methods : []);
+        $code = $this->createCodeForClass($methods ?: []);
 
         return eval("$code return \$code;");
     }
@@ -1461,10 +1461,10 @@ class MockGenerator
             return false;
         }
         if ($this->reflection->isInterface() || $this->reflection->hasFinal()) {
-            $code = $this->createCodeForClass($methods ? $methods : []);
+            $code = $this->createCodeForClass($methods ?: []);
             return eval("$code return \$code;");
         } else {
-            $code = $this->createCodeForSubclass($methods ? $methods : []);
+            $code = $this->createCodeForSubclass($methods ?: []);
             return eval("$code return \$code;");
         }
     }

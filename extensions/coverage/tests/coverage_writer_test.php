@@ -21,8 +21,8 @@ class CoverageWriterTest extends UnitTestCase
     public function testGenerateSummaryReport()
     {
         $writer             = new CoverageWriter();
-        $coverage           = array('file' => array(0, 1));
-        $untouched          = array('missed-file');
+        $coverage           = ['file' => [0, 1]];
+        $untouched          = ['missed-file'];
         $calc               = new CoverageCalculator();
         $variables          = $calc->variables($coverage, $untouched);
         $variables['title'] = 'Coverage Summary';
@@ -49,7 +49,7 @@ class CoverageWriterTest extends UnitTestCase
     public function testGenerateCoverageByFile()
     {
         $writer             = new CoverageWriter();
-        $cov                = array(3 => 1, 4 => -2); // 2 comments, 1 code, 1 dead  (1-based indexes)
+        $cov                = [3 => 1, 4 => -2]; // 2 comments, 1 code, 1 dead (1-based indexes)
         $coverageSampleFile = __DIR__ . '/sample/code.php';
         $calc               = new CoverageCalculator();
         $variables          = $calc->coverageByFileVariables($coverageSampleFile, $cov);

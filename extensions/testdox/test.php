@@ -60,7 +60,7 @@ class TestOfTestDoxReporter extends UnitTestCase
         $this->assertEqual('- some great test case', $buffer);
         unset($buffer);
 
-        $random = rand(100, 200);
+        $random = random_int(100, 200);
         ob_start();
         $dox->paintMethodStart("testRandomNumberIs{$random}");
         $buffer = ob_get_clean();

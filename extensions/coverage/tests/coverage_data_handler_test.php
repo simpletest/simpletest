@@ -33,11 +33,11 @@ class CoverageDataHandlerTest extends UnitTestCase
     {
         $handler = new CoverageDataHandler($this->tempdb());
         $handler->createSchema();
-        $coverage = array(10 => -2, 20 => -1, 30 => 0, 40 => 1);
-        $handler->write(array('file' => $coverage));
+        $coverage = [10 => -2, 20 => -1, 30 => 0, 40 => 1];
+        $handler->write(['file' => $coverage]);
 
         $actual   = $handler->readFile('file');
-        $expected = array(10 => -2, 20 => -1, 30 => 0, 40 => 1);
+        $expected = [10 => -2, 20 => -1, 30 => 0, 40 => 1];
         $this->assertEqual($expected, $actual);
     }
 
@@ -45,18 +45,10 @@ class CoverageDataHandlerTest extends UnitTestCase
     {
         $handler = new CoverageDataHandler($this->tempdb());
         $handler->createSchema();
-        $handler->write(array(
-        'file1' => array(-2, -1, 1),
-        'file2' => array(-2, -1, 1)
-        ));
-        $handler->write(array(
-        'file1' => array(-2, -1, 1)
-        ));
+        $handler->write(['file1' => [-2, -1, 1], 'file2' => [-2, -1, 1]]);
+        $handler->write(['file1' => [-2, -1, 1]]);
 
-        $expected = array(
-        'file1' => array(-2, -1, 2),
-        'file2' => array(-2, -1, 1)
-        );
+        $expected = ['file1' => [-2, -1, 2], 'file2' => [-2, -1, 1]];
         $actual = $handler->read();
         $this->assertEqual($expected, $actual);
     }
@@ -65,10 +57,10 @@ class CoverageDataHandlerTest extends UnitTestCase
     {
         $handler = new CoverageDataHandler($this->tempdb());
         $handler->createSchema();
-        $rawCoverage = array('file0' => array(), 'file1' => array());
+        $rawCoverage = ['file0' => [], 'file1' => []];
         $handler->write($rawCoverage);
         $actual = $handler->getFilenames();
-        $this->assertEqual(array('file0', 'file1'), $actual);
+        $this->assertEqual(['file0', 'file1'], $actual);
     }
 
     public function testWriteUntouchedFiles()
@@ -77,7 +69,7 @@ class CoverageDataHandlerTest extends UnitTestCase
         $handler->createSchema();
         $handler->writeUntouchedFile('bluejay');
         $handler->writeUntouchedFile('robin');
-        $this->assertEqual(array('bluejay', 'robin'), $handler->readUntouchedFiles());
+        $this->assertEqual(['bluejay', 'robin'], $handler->readUntouchedFiles());
     }
 
     public function testLtrim()

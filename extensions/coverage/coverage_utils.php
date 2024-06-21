@@ -48,15 +48,15 @@ class CoverageUtils
      *  $args['exclude'] will equal c
      *  $args['include'] will equal b   NOTE: only keeps last value
      *
-     * @param unknown_type $argv
+     * @param array $argv
      * @param supportMutliValue - will store 2nd copy of value in an array with key "foo[]"
      *
-     * @return unknown
+     * @return array
      */
     public static function parseArguments($argv, $mutliValueMode = false)
     {
-        $args                   = array();
-        $args['extraArguments'] = array();
+        $args                   = [];
+        $args['extraArguments'] = [];
         array_shift($argv); // scriptname
         foreach ($argv as $arg) {
             if (preg_match('#^--([^=]+)=(.*)#', $arg, $reg)) {
@@ -90,7 +90,7 @@ class CoverageUtils
         if (array_key_exists($array_key, $array)) {
             $array[$array_key][] = $item;
         } else {
-            $array[$array_key] = array($item);
+            $array[$array_key] = [$item];
         }
     }
 
@@ -106,6 +106,6 @@ class CoverageUtils
      */
     public static function issetOrDefault(&$val, $default = null)
     {
-        return isset($val) ? $val : $default;
+        return $val ?? $default;
     }
 }

@@ -1709,7 +1709,7 @@ class TestOfLoadingFrames extends AcceptanceTest
         $this->assertText('Count: 2');
 
         // TODO clear frame focus by name
-        //$this->clearFrameFocus('a');
+        // $this->clearFrameFocus('a');
         $this->clearFrameFocus();
         $this->retry();
 

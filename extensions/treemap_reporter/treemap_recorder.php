@@ -176,7 +176,7 @@ class TreemapNode
         $this->_name        = $name;
         $this->_description = $description;
         $this->_status      = $status;
-        $this->_children    = array();
+        $this->_children    = [];
     }
 
     /**
@@ -208,7 +208,7 @@ class TreemapNode
      */
     public function getChildren()
     {
-        @uksort($this->_new_children, array($this, 'compareChildren'));
+        @uksort($this->_new_children, [$this, 'compareChildren']);
 
         return $this->_children;
     }
@@ -289,7 +289,7 @@ class TreemapStack
 
     public function __construct()
     {
-        $this->_list = array();
+        $this->_list = [];
     }
 
     /**

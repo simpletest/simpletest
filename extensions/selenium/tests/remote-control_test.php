@@ -36,8 +36,8 @@ class TestOfSimpleSeleniumRemoteControlWhenItIsUp extends UnitTestCase
     {
         $remote_control = new SimpleSeleniumRemoteControl('tester', 'http://simpletest.org/');
         $this->assertEqual($remote_control->buildUrlCmd('test'), 'http://localhost:4444/selenium-server/driver/?cmd=test');
-        $this->assertEqual($remote_control->buildUrlCmd('test', array('next')), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=next');
-        $this->assertEqual($remote_control->buildUrlCmd('test', array('�t�')), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=%C3%A9t%C3%A9');
-        $this->assertEqual($remote_control->buildUrlCmd('test', array('next', 'then')), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=next&2=then');
+        $this->assertEqual($remote_control->buildUrlCmd('test', ['next']), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=next');
+        $this->assertEqual($remote_control->buildUrlCmd('test', ['�t�']), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=%C3%A9t%C3%A9');
+        $this->assertEqual($remote_control->buildUrlCmd('test', ['next', 'then']), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=next&2=then');
     }
 }

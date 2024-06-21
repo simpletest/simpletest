@@ -20,13 +20,13 @@ class CoverageCalculatorTest extends UnitTestCase
 
     public function testVariables()
     {
-        $coverage  = array('file' => array(1,1,1,1));
-        $untouched = array('missed-file');
+        $coverage  = ['file' => [1, 1, 1, 1]];
+        $untouched = ['missed-file'];
         $variables = $this->calc->variables($coverage, $untouched);
         $this->assertEqual(4, $variables['totalLinesOfCode']);
         $this->assertEqual(4, $variables['totalLinesOfCoverage']);
         $this->assertEqual(100, $variables['totalPercentCoverage']);
-        $expected = array('file' => array('fileReport' => 'file.html', 'percentage' => 100));
+        $expected = ['file' => ['fileReport' => 'file.html', 'percentage' => 100]];
         $this->assertEqual($expected, $variables['coverageByFile']);
         $this->assertEqual(50, $variables['filesTouchedPercentage']);
         $this->assertEqual($untouched, $variables['untouched']);
@@ -40,9 +40,9 @@ class CoverageCalculatorTest extends UnitTestCase
         $this->assertEqual('file.html', $result['fileReport']);
     }
 
-    public function testtotalLinesOfCode()
+    public function testTotalLinesOfCode()
     {
-        $this->assertEqual(13, $this->calc->totalLinesOfCode(10, array(1, 2, 3)));
+        $this->assertEqual(13, $this->calc->totalLinesOfCode(10, [1, 2, 3]));
     }
 
     public function testLineCoverage()

@@ -22,19 +22,19 @@ class CodeCoverageTest extends UnitTestCase
     {
         $coverage = new CodeCoverage();
         $this->assertTrue($coverage->isFileIncluded('aaa'));
-        $coverage->includes = array('a');
+        $coverage->includes = ['a'];
         $this->assertTrue($coverage->isFileIncluded('aaa'));
-        $coverage->includes = array('x');
+        $coverage->includes = ['x'];
         $this->assertFalse($coverage->isFileIncluded('aaa'));
-        $coverage->excludes = array('aa');
+        $coverage->excludes = ['aa'];
         $this->assertFalse($coverage->isFileIncluded('aaa'));
     }
 
     public function testIsFileIncludedRegexp()
     {
         $coverage           = new CodeCoverage();
-        $coverage->includes = array('modules/.*\.php$');
-        $coverage->excludes = array('bad-bunny.php');
+        $coverage->includes = ['modules/.*\.php$'];
+        $coverage->excludes = ['bad-bunny.php'];
         $this->assertFalse($coverage->isFileIncluded('modules/a.test'));
         $this->assertFalse($coverage->isFileIncluded('modules/bad-bunny.test'));
         $this->assertTrue($coverage->isFileIncluded('modules/test.php'));
@@ -54,32 +54,32 @@ class CodeCoverageTest extends UnitTestCase
     {
         $coverage = new CodeCoverage();
         $this->assertTrue($coverage->isDirectoryIncluded('aaa', 0));
-        $coverage->excludes = array('b$');
+        $coverage->excludes = ['b$'];
         $this->assertTrue($coverage->isDirectoryIncluded('aaa', 0));
-        $coverage->includes = array('a$'); // includes are ignore, all dirs are included unless excluded
+        $coverage->includes = ['a$']; // includes are ignore, all dirs are included unless excluded
         $this->assertTrue($coverage->isDirectoryIncluded('aaa', 0));
-        $coverage->excludes = array('.*a$');
+        $coverage->excludes = ['.*a$'];
         $this->assertFalse($coverage->isDirectoryIncluded('aaa', 0));
     }
 
     public function testFilter()
     {
         $coverage           = new CodeCoverage();
-        $data               = array('a' => 0, 'b' => 0, 'c' => 0);
-        $coverage->includes = array('b');
+        $data               = ['a' => 0, 'b' => 0, 'c' => 0];
+        $coverage->includes = ['b'];
         $coverage->filter($data);
-        $this->assertEqual(array('b' => 0), $data);
+        $this->assertEqual(['b' => 0], $data);
     }
 
     public function testUntouchedFiles()
     {
         $coverage           = new CodeCoverage();
-        $touched            = array_flip(array('test/coverage_test.php'));
-        $actual             = array();
-        $coverage->includes = array('coverage_test\.php$');
+        $touched            = array_flip(['test/coverage_test.php']);
+        $actual             = [];
+        $coverage->includes = ['coverage_test\.php$'];
         $parentDir          = realpath(__DIR__);
         $coverage->getUntouchedFiles($actual, $touched, $parentDir, $parentDir);
-        $this->assertEqual(array('coverage_test.php'), $actual);
+        $this->assertEqual(['coverage_test.php'], $actual);
     }
 
     public function testResetLog()
@@ -94,16 +94,16 @@ class CodeCoverageTest extends UnitTestCase
     {
         $coverage           = new CodeCoverage();
         $coverage->log      = sys_get_temp_dir();
-        $coverage->includes = array('apple', 'orange');
-        $coverage->excludes = array('tomato', 'pea');
+        $coverage->includes = ['apple', 'orange'];
+        $coverage->excludes = ['tomato', 'pea'];
         $data               = $coverage->getSettings();
         $this->assertNotNull($data);
 
         $actual = new CodeCoverage();
         $actual->setSettings($data);
         $this->assertEqual(sys_get_temp_dir(), $actual->log);
-        $this->assertEqual(array('apple', 'orange'), $actual->includes);
-        $this->assertEqual(array('tomato', 'pea'), $actual->excludes);
+        $this->assertEqual(['apple', 'orange'], $actual->includes);
+        $this->assertEqual(['tomato', 'pea'], $actual->excludes);
     }
 
     public function testSettingsCanBeReadWrittenToDisk()

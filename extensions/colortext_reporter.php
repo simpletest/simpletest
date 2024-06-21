@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../src/reporter.php';
 
@@ -14,7 +14,7 @@ class ColorTextReporter extends TextReporter
     public $_passColor = 42;
 
     /**
-     * Handle initialization
+     * Handle initialization.
      *
      * @param {@link TextReporter}
      */
@@ -31,11 +31,12 @@ class ColorTextReporter extends TextReporter
      *
      * @see TextReporter
      */
-    public function paintFooter($test_name)
+    public function paintFooter($test_name): void
     {
-        ob_start();
+        \ob_start();
         parent::paintFooter($test_name);
-        $output = trim(ob_get_clean());
+        $output = \trim(\ob_get_clean());
+
         if ($output) {
             if (($this->getFailCount() + $this->getExceptionCount()) == 0) {
                 $color = $this->_passColor;
@@ -44,25 +45,25 @@ class ColorTextReporter extends TextReporter
             }
 
             $this->_setColor($color);
-            echo $output;
+            print $output;
             $this->_resetColor();
         }
     }
 
     /**
-     * Sets the terminal to an ANSI-standard $color
+     * Sets the terminal to an ANSI-standard $color.
      *
      * @param int
      */
-    public function _setColor($color)
+    public function _setColor($color): void
     {
-        printf("%s[%sm\n", chr(27), $color);
+        \printf("%s[%sm\n", \chr(27), $color);
     }
 
     /**
      * Resets the color back to normal.
      */
-    public function _resetColor()
+    public function _resetColor(): void
     {
         $this->_setColor(0);
     }

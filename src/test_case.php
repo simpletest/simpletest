@@ -70,7 +70,7 @@ class SimpleTestCase
      */
     public function getLabel()
     {
-        return $this->label ? $this->label : static::class;
+        return $this->label ?: static::class;
     }
 
     /**
