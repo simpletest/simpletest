@@ -62,13 +62,21 @@ class SimpleErrorQueue
     private $test;
 
     /**
+     * Starts with an empty queue.
+     */
+    public function __construct()
+    {
+        $this->clear();
+    }
+
+    /**
      * Converts an error code into it's string representation.
      *
      * @param $severity PHP integer error code
      *
      * @return string version of error code
      */
-    public static function getSeverityAsString($severity)
+    public function getSeverityAsString($severity)
     {
         static $map = [
             E_ERROR             => 'E_ERROR',
@@ -90,14 +98,6 @@ class SimpleErrorQueue
         ];
 
         return $map[$severity];
-    }
-
-    /**
-     * Starts with an empty queue.
-     */
-    public function __construct()
-    {
-        $this->clear();
     }
 
     /**

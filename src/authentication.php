@@ -148,27 +148,27 @@ class SimpleAuthenticator
     private $realms;
 
     /**
+     * Clears the realms.
+     */
+    public function __construct()
+    {
+        $this->restartSession();
+    }
+
+    /**
      * Presents the appropriate headers for this location for basic authentication.
      *
      * @param SimpleHttpRequest $request  request to modify
      * @param string            $username username for realm
      * @param string            $password password for realm
      */
-    public static function addBasicHeaders(&$request, $username, $password): void
+    public function addBasicHeaders(&$request, $username, $password): void
     {
         if ($username && $password) {
             $request->addHeaderLine(
                 'Authorization: Basic ' . \base64_encode("{$username}:{$password}"),
             );
         }
-    }
-
-    /**
-     * Clears the realms.
-     */
-    public function __construct()
-    {
-        $this->restartSession();
     }
 
     /**

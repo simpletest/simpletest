@@ -44,11 +44,7 @@ class SimpleArguments
      */
     public function __get($key)
     {
-        if (isset($this->all[$key])) {
-            return $this->all[$key];
-        }
-
-        return false;
+        return $this->all[$key] ?? false;
     }
 
     /**

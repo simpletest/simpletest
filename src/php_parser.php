@@ -563,7 +563,7 @@ class SimpleHtmlSaxParser
      *
      * @return SimpleLexer lexer suitable for this parser
      */
-    public static function createLexer(&$parser)
+    public function createLexer(&$parser)
     {
         return new SimpleHtmlLexer($parser);
     }

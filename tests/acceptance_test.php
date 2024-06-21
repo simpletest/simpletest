@@ -17,7 +17,7 @@ class AcceptanceTest extends WebTestCase
 
     public static function host()
     {
-        return sprintf('http://%s:%s/', self::$host, self::$port);
+        return \sprintf('http://%s:%s/', self::$host, self::$port);
     }
 
     public function skip(): void

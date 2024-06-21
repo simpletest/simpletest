@@ -13,21 +13,6 @@ class HtmlReporter extends SimpleReporter
     private $charset;
 
     /**
-     * Send the headers necessary to ensure the page is reloaded on every request.
-     * Otherwise you could be scratching your head over out of date test data.
-     */
-    public static function sendNoCacheHeaders(): void
-    {
-        if (!\headers_sent()) {
-            \header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-            \header('Last-Modified: ' . \gmdate('D, d M Y H:i:s') . ' GMT');
-            \header('Cache-Control: no-store, no-cache, must-revalidate');
-            \header('Cache-Control: post-check=0, pre-check=0', false);
-            \header('Pragma: no-cache');
-        }
-    }
-
-    /**
      * Does nothing yet.
      * The first output will be sent on the first test start.
      * For use by a web browser.
@@ -38,6 +23,21 @@ class HtmlReporter extends SimpleReporter
     {
         parent::__construct();
         $this->charset = $charset;
+    }
+
+    /**
+     * Send the headers necessary to ensure the page is reloaded on every request.
+     * Otherwise you could be scratching your head over out of date test data.
+     */
+    public function sendNoCacheHeaders(): void
+    {
+        if (!\headers_sent()) {
+            \header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+            \header('Last-Modified: ' . \gmdate('D, d M Y H:i:s') . ' GMT');
+            \header('Cache-Control: no-store, no-cache, must-revalidate');
+            \header('Cache-Control: post-check=0, pre-check=0', false);
+            \header('Pragma: no-cache');
+        }
     }
 
     /**
@@ -122,8 +122,8 @@ class HtmlReporter extends SimpleReporter
         $breadcrumb = $this->getTestList();
         \array_shift($breadcrumb);
         print \implode(' -&gt; ', $breadcrumb);
-        $exceptionClass = get_class($exception);
-        $message = 'Unexpected exception of type [' . $exceptionClass .
+        $exceptionClass = $exception::class;
+        $message        = 'Unexpected exception of type [' . $exceptionClass .
                 '] with message [' . $exception->getMessage() .
                 '] in [' . $exception->getFile() .
                 ' line ' . $exception->getLine() . ']';
@@ -273,8 +273,8 @@ class TextReporter extends SimpleReporter
     public function paintException($exception): void
     {
         parent::paintException($exception);
-        $exceptionClass = \get_class($exception);
-        $message = 'Unexpected exception of type [' . $exceptionClass .
+        $exceptionClass = $exception::class;
+        $message        = 'Unexpected exception of type [' . $exceptionClass .
                 '] with message [' . $exception->getMessage() .
                 '] in [' . $exception->getFile() .
                 ' line ' . $exception->getLine() . ']';
