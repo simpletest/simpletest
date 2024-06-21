@@ -273,7 +273,8 @@ class TextReporter extends SimpleReporter
     public function paintException($exception): void
     {
         parent::paintException($exception);
-        $message = 'Unexpected exception of type [' . $exception::class .
+        $exceptionClass = \get_class($exception);
+        $message = 'Unexpected exception of type [' . $exceptionClass .
                 '] with message [' . $exception->getMessage() .
                 '] in [' . $exception->getFile() .
                 ' line ' . $exception->getLine() . ']';
