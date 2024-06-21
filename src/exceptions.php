@@ -44,7 +44,9 @@ class SimpleExceptionTrappingInvoker extends SimpleInvokerDecorator
         if ($has_thrown) {
             try {
                 //parent::getTestCase()->tearDown();
-                $p_tearDown = new ReflectionMethod(parent::getTestCase()::class, 'tearDown');
+                $testCase = parent::getTestCase();
+                $testCaseClass = get_class($testCase);
+                $p_tearDown = new ReflectionMethod($testCaseClass, 'tearDown');
                 $p_tearDown->setAccessible(true);
                 $p_tearDown->invoke(parent::getTestCase());
             } catch (Exception $e) {

@@ -122,7 +122,8 @@ class HtmlReporter extends SimpleReporter
         $breadcrumb = $this->getTestList();
         \array_shift($breadcrumb);
         print \implode(' -&gt; ', $breadcrumb);
-        $message = 'Unexpected exception of type [' . $exception::class .
+        $exceptionClass = get_class($exception);
+        $message = 'Unexpected exception of type [' . $exceptionClass .
                 '] with message [' . $exception->getMessage() .
                 '] in [' . $exception->getFile() .
                 ' line ' . $exception->getLine() . ']';
