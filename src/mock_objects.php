@@ -1477,7 +1477,8 @@ class MockGenerator
      */
     public function generatePartial($methods)
     {
-        if (!$this->reflection->classExists($this->class)) {
+        // if (!$this->reflection->classExists($this->class)) {
+        if (!$this->reflection->classExists()) {
             return false;
         }
         $mock_reflection = new SimpleReflection($this->mock_class);
