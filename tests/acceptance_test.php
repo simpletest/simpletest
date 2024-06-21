@@ -1053,7 +1053,7 @@ class LiveTestOfForms extends AcceptanceTest
     public function testButtonSubmissionByLabel(): void
     {
         $this->get($this->host() . 'form.html');
-        $this->assertTrue($this->clickSubmit('Button go!', 10, 12));
+        $this->assertTrue($this->clickSubmit('Button go!'));
         $this->assertPattern('/go=\[ButtonGo\]/s');
     }
 
@@ -1708,7 +1708,9 @@ class TestOfLoadingFrames extends AcceptanceTest
         $this->setFrameFocus('b');
         $this->assertText('Count: 2');
 
-        $this->clearFrameFocus('a');
+        // TODO clear frame focus by name
+        //$this->clearFrameFocus('a');
+        $this->clearFrameFocus();
         $this->retry();
 
         $this->assertTitle('Frameset for testing of SimpleTest');

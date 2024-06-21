@@ -862,8 +862,8 @@ class SimpleBrowser
     /**
      * Clicks the submit button by label. The owning form will be submitted by this.
      *
-     * @param string $label      Button label. An unlabeled button can be triggered by 'Submit'.
-     * @param hash   $additional additional form data
+     * @param string     $label      Button label. An unlabeled button can be triggered by 'Submit'.
+     * @param array|bool $additional additional form data
      *
      * @return bool|string Page on success
      */

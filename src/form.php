@@ -326,7 +326,7 @@ class SimpleForm
      * Gets the submit values for a selected button.
      *
      * @param $selector criteria to apply
-     * @param hash $additional additional data for the form
+     * @param array|bool $additional additional data for the form
      *
      * @return SimpleEncoding submitted values or false if there is no such button in the
      *                        form

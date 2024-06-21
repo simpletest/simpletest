@@ -93,8 +93,8 @@ class TestOfSimpleSignatureMap extends UnitTestCase
     public function testEmpty()
     {
         $map = new SimpleSignatureMap();
-        $this->assertFalse($map->isMatch('any', []));
-        $this->assertNull($map->findFirstAction('any', []));
+        $this->assertFalse($map->isMatch('any'));
+        $this->assertNull($map->findFirstAction('any'));
     }
 
     public function testDifferentCallSignaturesCanHaveDifferentReferences()
@@ -810,7 +810,7 @@ class TestOfMockComparisons extends UnitTestCase
     public function testEqualComparisonOfMocksDoesNotCrash()
     {
         $expectation = new EqualExpectation(new MockDummy());
-        $this->assertTrue($expectation->test(new MockDummy(), true));
+        $this->assertTrue($expectation->test(new MockDummy()));
     }
 
     public function testIdenticalComparisonOfMocksDoesNotCrash()

@@ -946,7 +946,7 @@ class WebTestCase extends SimpleTestCase
      * The owning form will be submitted by this.
      *
      * @param string $label      Button label. An unlabeled button can be triggered by 'Submit'.
-     * @param hash   $additional additional form values
+     * @param array|bool   $additional additional form values
      *
      * @return bool|string Page on success, else false
      */
