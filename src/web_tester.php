@@ -282,7 +282,7 @@ class HttpHeaderExpectation extends SimpleExpectation
             return $expected->test(\trim($value));
         }
 
-        return \trim($value) == \trim($expected);
+        return \trim($value) === \trim($expected);
     }
 }
 
@@ -1693,7 +1693,7 @@ class WebTestCase extends SimpleTestCase
         }
 
         if (!SimpleExpectation::isExpectation($expected)) {
-            $identifier = \str_replace('%', '%%', $identifier);
+            $identifier = \str_replace('%', '%%', (string) $identifier);
             $expected   = new FieldExpectation(
                 $expected,
                 "Field [{$identifier}] should match with [%s]",
