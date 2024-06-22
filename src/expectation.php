@@ -475,6 +475,7 @@ class OutsideMarginExpectation extends WithinMarginExpectation
  */
 class ReferenceExpectation
 {
+    public $dumper;
     private $message;
     private $value;
 
@@ -1064,5 +1065,6 @@ class MemberExpectation extends IdenticalExpectation
                 return $value;
             }
         }
+        return null;
     }
 }

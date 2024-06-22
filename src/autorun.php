@@ -27,9 +27,6 @@ function simpletest_autorun()
 {
     \chdir($GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_PATH']);
 
-    if (tests_have_run()) {
-        return true;
-    }
     $result = run_local_tests();
 
     if (SimpleReporter::inCli()) {

@@ -171,10 +171,10 @@ class SimpleBrowser
     private $history;
 
     /** @var bool */
-    private $ignore_frames;
+    private $ignore_frames = false;
 
     /** @var int */
-    private $maximum_nested_frames;
+    private $maximum_nested_frames = DEFAULT_MAX_NESTED_FRAMES;
 
     /** @var mixed */
     private $parser;
@@ -193,8 +193,6 @@ class SimpleBrowser
         );
         $this->page                  = new SimplePage;
         $this->history               = $this->createHistory();
-        $this->ignore_frames         = false;
-        $this->maximum_nested_frames = DEFAULT_MAX_NESTED_FRAMES;
     }
 
     /**
@@ -1192,6 +1190,7 @@ class SimpleBrowser
                 return $parser;
             }
         }
+        return null;
     }
 
     /**
@@ -1274,7 +1273,7 @@ class SimpleBrowser
     {
         $frame = $url->getTarget();
 
-        if (!$frame || !$this->page->hasFrames() || ('_top' == \strtolower($frame))) {
+        if (!$frame || !$this->page->hasFrames() || ('_top' === \strtolower($frame))) {
             return $this->loadPage($url, $parameters);
         }
 

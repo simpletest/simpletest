@@ -131,6 +131,7 @@ class SimpleArguments
         if (\preg_match('/^--(\w+)$/', $argument, $matches)) {
             return [$matches[1], $this->nextNonFlagElseTrue($arguments)];
         }
+        return null;
     }
 
     /**

@@ -115,8 +115,7 @@ class SimpleTagBuilder
         $array = [];
 
         foreach ($map as $key => $value) {
-            // reduce unnecessary conversions by checking if already lowercase
-            $lowercase_key         = $key === \strtolower($key) ? $key : \strtolower($key);
+            $lowercase_key         = \strtolower($key);
             $array[$lowercase_key] = $value;
         }
 
@@ -136,7 +135,7 @@ class SimpleTag
     private $attributes;
 
     /** @var string */
-    private $content;
+    private $content = '';
 
     /**
      * Starts with a named tag with attributes only.
@@ -149,7 +148,6 @@ class SimpleTag
     {
         $this->name       = \strtolower(\trim($name));
         $this->attributes = $attributes;
-        $this->content    = '';
     }
 
     /**
@@ -372,13 +370,13 @@ class SimpleAnchorTag extends SimpleTag
 class SimpleWidget extends SimpleTag
 {
     /** @var bool */
-    private $is_set;
+    private $is_set = false;
 
     /** @var false|string */
-    private $label;
+    private $label = false;
 
     /** @var false|string */
-    private $value;
+    private $value = false;
 
     /**
      * Starts with a named tag with attributes only.
@@ -389,9 +387,6 @@ class SimpleWidget extends SimpleTag
     public function __construct($name, $attributes)
     {
         parent::__construct($name, $attributes);
-        $this->is_set = false;
-        $this->label  = false;
-        $this->value  = false;
     }
 
     /**
@@ -474,7 +469,7 @@ class SimpleWidget extends SimpleTag
      */
     public function isLabel($label)
     {
-        return $this->label == \trim($label);
+        return $this->label === \trim($label);
     }
 
     /**
@@ -484,8 +479,9 @@ class SimpleWidget extends SimpleTag
      */
     public function write($encoding): void
     {
-        if ($this->getName()) {
-            $encoding->add($this->getName(), $this->getValue());
+        $name = $this->getName();
+        if ($name) {
+            $encoding->add($name, $this->getValue());
         }
     }
 }
@@ -596,7 +592,7 @@ class SimpleSubmitTag extends SimpleWidget
      */
     public function isLabel($label)
     {
-        return \trim($label) == \trim($this->getLabel());
+        return \trim($label) === \trim($this->getLabel());
     }
 }
 
@@ -660,7 +656,7 @@ class SimpleImageSubmitTag extends SimpleWidget
      */
     public function isLabel($label)
     {
-        return \trim($label) == \trim($this->getLabel());
+        return \trim($label) === \trim($this->getLabel());
     }
 
     /**
@@ -741,7 +737,7 @@ class SimpleButtonTag extends SimpleWidget
      */
     public function isLabel($label)
     {
-        return \trim($label) == \trim($this->getLabel());
+        return \trim($label) === \trim($this->getLabel());
     }
 }
 
@@ -892,10 +888,10 @@ class SimpleUploadTag extends SimpleWidget
 class SimpleSelectionTag extends SimpleWidget
 {
     /** @var array */
-    private $options;
+    private $options = [];
 
     /** @var bool|int|mixed */
-    private $choice;
+    private $choice = false;
 
     /**
      * Starts with attributes only.
@@ -905,8 +901,6 @@ class SimpleSelectionTag extends SimpleWidget
     public function __construct($attributes)
     {
         parent::__construct('select', $attributes);
-        $this->options = [];
-        $this->choice  = false;
     }
 
     /**
@@ -996,10 +990,10 @@ class SimpleSelectionTag extends SimpleWidget
 class MultipleSelectionTag extends SimpleWidget
 {
     /** @var array */
-    private $options;
+    private $options = [];
 
     /** @var array|false */
-    private $values;
+    private $values = false;
 
     /**
      * Starts with attributes only.
@@ -1009,8 +1003,6 @@ class MultipleSelectionTag extends SimpleWidget
     public function __construct($attributes)
     {
         parent::__construct('select', $attributes);
-        $this->options = [];
-        $this->values  = false;
     }
 
     /**
@@ -1139,13 +1131,13 @@ class SimpleOptionTag extends SimpleWidget
      */
     public function isValue($compare)
     {
-        $compare = \trim($compare);
+        $compare = \trim((string)$compare);
 
-        if (\trim($this->getValue()) == $compare) {
+        if (\trim($this->getValue()) === $compare) {
             return true;
         }
 
-        return \trim(\strip_tags($this->getContent())) == $compare;
+        return \trim(\strip_tags($this->getContent())) === $compare;
     }
 
     /**
@@ -1365,21 +1357,13 @@ class SimpleTimeTag extends SimpleTextTag
             }
             $step = $this->getAttribute('step');
 
-            if (false === $step) {
-                $step = 60;
-            } else {
-                $step = (int) $step;
-            }
+            $step = false === $step ? 60 : (int) $step;
 
             if ($time % $step > 0) {
                 return false;
             }
 
-            if (0 === $step % 60) {
-                $value = \date('H:i', $time);
-            } else {
-                $value = \date('H:i:s', $time);
-            }
+            $value = 0 === $step % 60 ? \date('H:i', $time) : \date('H:i:s', $time);
 
         }
 
@@ -1426,6 +1410,7 @@ class SimpleTagGroup
         if (\count($this->widgets) > 0) {
             return $this->widgets[0]->getName();
         }
+        return null;
     }
 
     /**

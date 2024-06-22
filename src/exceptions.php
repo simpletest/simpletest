@@ -94,7 +94,7 @@ class ExceptionExpectation extends SimpleExpectation
         if (is_string($this->expected)) {
             return $compare instanceof $this->expected;
         }
-        if (get_class($compare) != get_class($this->expected)) {
+        if (get_class($compare) !== get_class($this->expected)) {
             return false;
         }
 

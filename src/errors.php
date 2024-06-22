@@ -240,7 +240,7 @@ class SimpleErrorQueue
  */
 function SimpleTestErrorHandler($severity, $message, $file = null, $line = null, $context = null)
 {
-    $severity = $severity & \error_reporting();
+    $severity &= \error_reporting();
 
     if ($severity !== 0) {
         \restore_error_handler();

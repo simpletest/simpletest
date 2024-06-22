@@ -10,7 +10,7 @@ require_once __DIR__ . '/compatibility.php';
 class SimpleStickyError
 {
     /** @var string */
-    private $error = 'Constructor not chained';
+    private $error = 'Unknown Error';
 
     /**
      * Sets the error to empty.

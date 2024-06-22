@@ -167,7 +167,7 @@ class SimpleUserAgent
     public function getBaseCookieValue($name, $base)
     {
         if (!$base) {
-            return;
+            return null;
         }
 
         return $this->getCookieValue($base->getHost(), $base->getPath(), $name);
