@@ -289,7 +289,7 @@ class SimpleLexer
         }
         $length = strlen($raw);
         while (is_array($parsed = $this->reduce($raw))) {
-            list($raw, $unmatched, $matched, $mode) = $parsed;
+            [$raw, $unmatched, $matched, $mode] = $parsed;
             if (!$this->dispatchTokens($unmatched, $matched, $mode)) {
                 return false;
             }
@@ -535,7 +535,7 @@ class SimpleHtmlSaxParser
     public function __construct($listener)
     {
         $this->listener = $listener;
-        $this->lexer = $this->createLexer($this);
+        $this->lexer = static::createLexer($this);
     }
 
     /**
