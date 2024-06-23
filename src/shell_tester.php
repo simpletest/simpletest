@@ -8,14 +8,13 @@ require_once __DIR__ . '/test_case.php';
 class SimpleShell
 {
     /** @var array|bool|mixed */
-    private $output;
+    private $output = false;
 
     /**
      * Executes the shell comand and stashes the output.
      */
     public function __construct()
     {
-        $this->output = false;
     }
 
     /**
@@ -65,10 +64,10 @@ class ShellTestCase extends SimpleTestCase
     private $current_shell;
 
     /** @var bool */
-    private $last_status;
+    private $last_status = false;
 
     /** @var string */
-    private $last_command;
+    private $last_command = '';
 
     /**
      * Creates an empty test case.
@@ -80,8 +79,6 @@ class ShellTestCase extends SimpleTestCase
     {
         parent::__construct($label);
         $this->current_shell = $this->createShell();
-        $this->last_status   = false;
-        $this->last_command  = '';
     }
 
     /**

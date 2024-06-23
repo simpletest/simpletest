@@ -102,11 +102,11 @@ class SimpleRoute
      */
     protected function createSocket($scheme, $host, $port, $timeout)
     {
-        if (\in_array($scheme, ['file'], true)) {
+        if ($scheme === 'file') {
             return new SimpleFileSocket($this->url);
         }
 
-        if (\in_array($scheme, ['https'], true)) {
+        if ($scheme === 'https') {
             return new SimpleSecureSocket($host, $port, $timeout);
         }
 
@@ -209,9 +209,9 @@ class SimpleProxyRoute extends SimpleRoute
  */
 class SimpleHttpRequest
 {
-    private $cookies;
+    private $cookies = [];
     private $encoding;
-    private $headers;
+    private $headers = [];
     private $route;
 
     /**
@@ -224,9 +224,7 @@ class SimpleHttpRequest
      */
     public function __construct($route, $encoding)
     {
-        $this->cookies  = [];
         $this->encoding = $encoding;
-        $this->headers  = [];
         $this->route    = $route;
     }
 
@@ -325,16 +323,16 @@ class SimpleHttpRequest
  */
 class SimpleHttpHeaders
 {
-    private $authentication;
-    private $cookies;
-    private $http_version;
-    private $location;
-    private $mime_type;
+    private $authentication = false;
+    private $cookies = [];
+    private $http_version = false;
+    private $location = false;
+    private $mime_type = '';
     private $raw_headers;
-    private $realm;
+    private $realm = false;
 
     /** @var int */
-    private $response_code;
+    private $response_code = 200;
 
     /**
      * Parses the incoming header block.
@@ -343,14 +341,7 @@ class SimpleHttpHeaders
      */
     public function __construct($headers)
     {
-        $this->authentication = false;
-        $this->cookies        = [];
-        $this->http_version   = false;
-        $this->location       = false;
-        $this->mime_type      = '';
         $this->raw_headers    = $headers;
-        $this->realm          = false;
-        $this->response_code  = 200;
 
         foreach (\explode("\r\n", $headers) as $header_line) {
             $this->parseHeaderLine($header_line);
@@ -535,7 +526,7 @@ class SimpleHttpResponse extends SimpleStickyError
     private $url;
     private $encoding;
     private $sent;
-    private $content;
+    private $content = false;
     private $headers;
 
     /**
@@ -551,7 +542,6 @@ class SimpleHttpResponse extends SimpleStickyError
         $this->url      = $url;
         $this->encoding = $encoding;
         $this->sent     = $socket->getSent();
-        $this->content  = false;
         $raw            = $this->readAll($socket);
 
         if ($socket->isError()) {

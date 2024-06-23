@@ -12,26 +12,22 @@ require_once __DIR__ . '/invoker.php';
 class SimpleScorer
 {
     /** @var int */
-    private $passes;
+    private $passes = 0;
 
     /** @var int */
-    private $fails;
+    private $fails = 0;
 
     /** @var int */
-    private $exceptions;
+    private $exceptions = 0;
 
     /** @var bool */
-    private $is_dry_run;
+    private $is_dry_run = false;
 
     /**
      * Starts the test run with no results.
      */
     public function __construct()
     {
-        $this->passes     = 0;
-        $this->fails      = 0;
-        $this->exceptions = 0;
-        $this->is_dry_run = false;
     }
 
     /**
@@ -79,11 +75,7 @@ class SimpleScorer
      */
     public function getStatus()
     {
-        if ($this->exceptions + $this->fails > 0) {
-            return false;
-        }
-
-        return true;
+        return !($this->exceptions + $this->fails > 0);
     }
 
     /**
@@ -257,13 +249,13 @@ class SimpleScorer
 class SimpleReporter extends SimpleScorer
 {
     /** @var array */
-    private $test_stack;
+    private $test_stack = [];
 
     /** @var null|int */
-    private $size;
+    private $size = null;
 
     /** @var int */
-    private $progress;
+    private $progress = 0;
 
     /**
      * Static check for running in the comand line.
@@ -281,9 +273,6 @@ class SimpleReporter extends SimpleScorer
     public function __construct()
     {
         parent::__construct();
-        $this->test_stack = [];
-        $this->size       = null;
-        $this->progress   = 0;
     }
 
     /**
@@ -306,7 +295,7 @@ class SimpleReporter extends SimpleScorer
      */
     public function paintGroupStart($test_name, $size): void
     {
-        if (!isset($this->size)) {
+        if ($this->size === null) {
             $this->size = $size;
         }
 
@@ -340,7 +329,7 @@ class SimpleReporter extends SimpleScorer
      */
     public function paintCaseStart($test_name): void
     {
-        if (!isset($this->size)) {
+        if ($this->size === null) {
             $this->size = 1;
         }
 

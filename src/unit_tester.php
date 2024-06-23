@@ -281,7 +281,7 @@ class UnitTestCase extends SimpleTestCase
 
         $identical = new IdenticalExpectation($first);
 
-        return $this->assertTrue($identical->test($second) && !($first === $second), $message);
+        return $this->assertTrue($identical->test($second) && $first !== $second, $message);
     }
 
     /**

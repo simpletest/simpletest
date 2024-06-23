@@ -331,7 +331,7 @@ class NestedXmlTag
     /** @var array */
     private $attributes;
     /** @var string|false */
-    private $name;
+    private $name = false;
 
     /**
      * Sets the basic test information except the name.
@@ -340,7 +340,6 @@ class NestedXmlTag
      */
     public function __construct($attributes)
     {
-        $this->name = false;
         $this->attributes = $attributes;
     }
 
@@ -514,17 +513,17 @@ class NestedGroupTag extends NestedXmlTag
 class SimpleTestXmlParser
 {
     /** @var array */
-    private $attributes;
+    private $attributes = [];
     /** @var string */
-    private $content;
+    private $content = '';
     /** @var mixed */
     private $expat;
     /** @var bool */
-    private $in_content_tag;
+    private $in_content_tag = false;
     /** @var SimpleReporter */
     private $listener;
     /** @var array */
-    private $tag_stack;
+    private $tag_stack = [];
 
     /**
      * Loads a listener with the SimpleReporter interface.
@@ -533,12 +532,8 @@ class SimpleTestXmlParser
      */
     public function __construct(&$listener)
     {
-        $this->attributes = [];
-        $this->content = '';
         $this->expat = $this->createParser();
-        $this->in_content_tag = false;
         $this->listener = $listener;
-        $this->tag_stack = [];
     }
 
     /**

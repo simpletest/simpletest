@@ -53,7 +53,7 @@ class SimpleDumper
             return 'bool';
         } elseif (is_string($value)) {
             return 'String';
-        } elseif (is_integer($value)) {
+        } elseif (is_int($value)) {
             return 'Integer';
         } elseif (is_float($value)) {
             return 'Float';
@@ -323,7 +323,7 @@ class SimpleDumper
         sort($first_keys);
         sort($second_keys);
 
-        return $first_keys == $second_keys;
+        return $first_keys === $second_keys;
     }
 
     /**
@@ -405,6 +405,7 @@ class SimpleDumper
                 return $value;
             }
         }
+        return null;
     }
 
     /**
