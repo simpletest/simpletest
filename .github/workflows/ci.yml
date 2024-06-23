@@ -12,7 +12,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
+        # https://www.php.net/supported-versions.php
+        version: ['8.1', '8.2', '8.3', '8.4']
 
     # ubuntu-latest = ubuntu-22.04 (06-2024)
     # https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
