@@ -9,8 +9,8 @@ require_once __DIR__ . '/url.php';
  */
 class SimpleCookie
 {
-    private $expiry;
-    private $host;
+    private $expiry = false;
+    private $host = false;
     private $is_secure;
     private $name;
     private $path;
@@ -27,11 +27,9 @@ class SimpleCookie
      */
     public function __construct($name, $value = false, $path = false, $expiry = false, $is_secure = false)
     {
-        $this->host   = false;
         $this->name   = $name;
         $this->value  = $value;
         $this->path   = ($path ? $this->fixPath($path) : '/');
-        $this->expiry = false;
 
         if (\is_string($expiry)) {
             $this->expiry = \strtotime($expiry);
@@ -216,11 +214,11 @@ class SimpleCookie
      */
     protected function fixPath($path)
     {
-        if ('/' != \substr($path, 0, 1)) {
+        if ('/' !== \substr($path, 0, 1)) {
             $path = '/' . $path;
         }
 
-        if ('/' != \substr($path, -1, 1)) {
+        if ('/' !== \substr($path, -1, 1)) {
             $path .= '/';
         }
 
@@ -234,14 +232,13 @@ class SimpleCookie
 class SimpleCookieJar
 {
     /** @var array */
-    private $cookies;
+    private $cookies = [];
 
     /**
      * Constructor. Jar starts empty.
      */
     public function __construct()
     {
-        $this->cookies = [];
     }
 
     /**
@@ -406,11 +403,6 @@ class SimpleCookieJar
         if ($host && $cookie->getHost() && !$cookie->isValidHost($host)) {
             return false;
         }
-
-        if (!$cookie->isValidPath($path)) {
-            return false;
-        }
-
-        return true;
+        return (bool) $cookie->isValidPath($path);
     }
 }

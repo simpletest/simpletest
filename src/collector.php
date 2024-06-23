@@ -45,11 +45,11 @@ class SimpleCollector
      */
     protected function removeTrailingSlash($path)
     {
-        if (DIRECTORY_SEPARATOR == \substr($path, -1)) {
+        if (DIRECTORY_SEPARATOR === \substr($path, -1)) {
             return \substr($path, 0, -1);
         }
 
-        if ('/' == \substr($path, -1)) {
+        if ('/' === \substr($path, -1)) {
             return \substr($path, 0, -1);
         }
 

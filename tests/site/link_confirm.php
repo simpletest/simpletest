@@ -1,5 +1,5 @@
 <?php
-require_once 'self.php';
+require_once __DIR__ . '/self.php';
 ?>
 <html>
     <head><title>SimpleTest testing links</title></head>

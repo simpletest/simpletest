@@ -58,7 +58,7 @@ class SimpleUrl
         $this->host                        = $this->chompHost($url);
         $this->port                        = false;
 
-        if ((bool) $this->host !== false) {
+        if ((bool) $this->host) {
             if (\preg_match('/(.*?):(.*)/', $this->host, $host_parts)) {
                 if ('file' === $this->scheme && 2 === \strlen($this->host)) {
                     // DOS drive was placed in authority; promote it to path.
@@ -239,18 +239,14 @@ class SimpleUrl
 
     /**
      * Accessor for current request parameters in URL string form.
-     * Will return teh original request
+     * Will return the original request
      * if at all possible even if it doesn't make much sense.
      *
      * @return string form is string "?a=1&b=2", etc
      */
     public function getEncodedRequest()
     {
-        if ($this->raw) {
-            $encoded = $this->raw;
-        } else {
-            $encoded = $this->request->asUrlRequest();
-        }
+        $encoded = $this->raw ? $this->raw : $this->request->asUrlRequest();
 
         if ($encoded) {
             return '?' . \preg_replace('/^\?/', '', $encoded);
@@ -328,7 +324,7 @@ class SimpleUrl
             $identity = $this->username . ':' . $this->password . '@';
         }
 
-        if ($this->getHost()) {
+        if ($this->getHost() !== '' && $this->getHost() !== '0') {
             $scheme = $this->getScheme() ?: 'http';
             $scheme .= '://';
             $host = $this->getHost();
@@ -339,11 +335,12 @@ class SimpleUrl
             $scheme = 'file://';
         }
 
+        // TODO why do we exclude port 80 here?
         if ($this->getPort() && 80 != $this->getPort()) {
             $port = ':' . $this->getPort();
         }
 
-        if ('/' == \substr($this->path, 0, 1)) {
+        if ('/' === \substr($this->path, 0, 1)) {
             $path = $this->normalisePath($this->path);
         }
         $encoded  = $this->getEncodedRequest();
@@ -365,13 +362,13 @@ class SimpleUrl
             $base = new self($base);
         }
 
-        if ($this->getHost()) {
+        if ($this->getHost() !== '' && $this->getHost() !== '0') {
             $scheme   = $this->getScheme();
             $host     = $this->getHost();
             $port     = $this->getPort() ? ':' . $this->getPort() : '';
             $identity = $this->getIdentity() ? $this->getIdentity() . '@' : '';
 
-            if (!$identity) {
+            if ($identity === '' || $identity === '0') {
                 $identity = $base->getIdentity() ? $base->getIdentity() . '@' : '';
             }
         } else {
@@ -568,7 +565,7 @@ class SimpleUrl
         foreach (\explode('&', $raw) as $pair) {
             if (\preg_match('/(.*?)=(.*)/', $pair, $matches)) {
                 $request->add(\urldecode($matches[1]), \urldecode($matches[2]));
-            } elseif ($pair) {
+            } elseif ($pair !== '' && $pair !== '0') {
                 $request->add(\urldecode($pair), '');
             }
         }
@@ -585,7 +582,7 @@ class SimpleUrl
      */
     protected function extractAbsolutePath($base)
     {
-        if ($this->getHost()) {
+        if ($this->getHost() !== '' && $this->getHost() !== '0') {
             return $this->path;
         }
 
@@ -609,6 +606,6 @@ class SimpleUrl
      */
     protected function isRelativePath($path)
     {
-        return '/' != \substr($path, 0, 1);
+        return '/' !== \substr($path, 0, 1);
     }
 }

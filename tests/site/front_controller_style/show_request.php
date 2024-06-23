@@ -6,7 +6,7 @@
         </dl>
         <h1>Cookies</h1>
         <?php
-            if (\count($_COOKIE) > 0) {
+            if ($_COOKIE !== []) {
                 foreach ($_COOKIE as $key => $value) {
                     print "{$key}=[{$value}]<br />\n";
                 }
@@ -38,7 +38,7 @@
         <pre><?php \print_r(PageRequest::post()); ?></pre>
         <h1>POST data</h1>
         <?php
-                if (\count($_POST) > 0) {
+                if ($_POST !== []) {
                     foreach ($_POST as $key => $value) {
                         print $key . '=[';
 

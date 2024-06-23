@@ -2,7 +2,7 @@
 
 class PageRequest
 {
-    private $parsed;
+    private $parsed = [];
 
     public static function get()
     {
@@ -24,8 +24,7 @@ class PageRequest
 
     public function __construct($raw)
     {
-        $statements   = \explode('&', $raw);
-        $this->parsed = [];
+        $statements = \explode('&', $raw);
 
         foreach ($statements as $statement) {
             if (!\str_contains($statement, '=')) {

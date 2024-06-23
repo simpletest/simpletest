@@ -6,6 +6,7 @@ $path  = \pathinfo($parts['path']);
 \setcookie('day_cookie', 'C', \time() + 24 * 3600, '/');
 \setcookie('path_cookie', 'D', \time() + 100, $path['dirname'] . '/path/');
 \setcookie('hour_cookie', 'E', \time() + 3600, '/');
+\setcookie('mydomain_cookie', 'is_accessible_on_subdomain', \time() + 3600, '/', '.localhost');
 ?><html>
     <head><title>SimpleTest testing links</title></head>
     <body>

@@ -16,7 +16,7 @@ class DetachedTestCase
     private $dry_command;
 
     /** @var false|int */
-    private $size;
+    private $size = false;
 
     /**
      * Sets the location of the remote test.
@@ -28,7 +28,6 @@ class DetachedTestCase
     {
         $this->command     = $command;
         $this->dry_command = empty($dry_command) ? $command : $dry_command;
-        $this->size        = false;
     }
 
     /**

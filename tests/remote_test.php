@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-require_once '../src/remote.php';
+require_once __DIR__ . '../src/remote.php';
 
-require_once '../src/reporter.php';
+require_once __DIR__ . '../src/reporter.php';
 
 // The following URL will depend on your own installation.
 if (isset($_SERVER['SCRIPT_URI'])) {

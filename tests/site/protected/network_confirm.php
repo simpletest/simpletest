@@ -1,5 +1,5 @@
 <?php
-require_once '../page_request.php';
+require_once __DIR__ . '/../page_request.php';
 ?><html>
     <head><title>Simple test target file</title></head>
     <body>
@@ -12,7 +12,7 @@ require_once '../page_request.php';
         </dl>
         <h1>Cookies</h1>
         <?php
-            if (\count($_COOKIE) > 0) {
+            if ($_COOKIE !== []) {
                 foreach ($_COOKIE as $key => $value) {
                     print $key . '=[' . $value . "]<br />\n";
                 }
@@ -44,7 +44,7 @@ if (\count($get) > 0) {
         <pre><?php \print_r(PageRequest::post()); ?></pre>
         <h1>POST data</h1>
         <?php
-    if (\count($_POST) > 0) {
+    if ($_POST !== []) {
         foreach ($_POST as $key => $value) {
             print $key . '=[';
 

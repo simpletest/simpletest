@@ -18,7 +18,7 @@ class RemoteTestCase
     private $dry_url;
 
     /** @var false */
-    private $size;
+    private $size = false;
 
     /**
      * Sets the location of the remote test.
@@ -30,7 +30,6 @@ class RemoteTestCase
     {
         $this->url     = $url;
         $this->dry_url = $dry_url ?: $url;
-        $this->size    = false;
     }
 
     /**

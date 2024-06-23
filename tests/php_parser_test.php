@@ -167,7 +167,8 @@ class TestOfLexer extends UnitTestCase
     {
         $handler = new MockTestParser();
         $target = ['a', 'b', 'a', 'bb', 'x', 'b', 'a', 'xxxxxx', 'a', 'x'];
-        for ($i = 0; $i < count($target); ++$i) {
+        $counter = count($target);
+        for ($i = 0; $i < $counter; $i++) {
             $handler->expectAt($i, 'accept', [$target[$i], '*']);
         }
         $handler->expectCallCount('accept', count($target));

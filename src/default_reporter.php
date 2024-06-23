@@ -160,7 +160,7 @@ class SimpleCommandLineParser
      */
     public function help()
     {
-        return $this->help && !($this->xml || $this->junit);
+        return $this->help && (!$this->xml && !$this->junit);
     }
 
     /**

@@ -14,10 +14,10 @@ class SimpleRealm
     private $root;
 
     /** @var string */
-    private $username;
+    private $username = '';
 
     /** @var string */
-    private $password;
+    private $password = '';
 
     /**
      * Starts with the initial entry directory.
@@ -30,8 +30,6 @@ class SimpleRealm
     {
         $this->type     = $type;
         $this->root     = $url->getBasePath();
-        $this->username = '';
-        $this->password = '';
     }
 
     /**
@@ -88,12 +86,7 @@ class SimpleRealm
         if ($this->isIn($this->root, $url->getBasePath())) {
             return true;
         }
-
-        if ($this->isIn($this->root, $url->getBasePath() . $url->getPage() . '/')) {
-            return true;
-        }
-
-        return false;
+        return $this->isIn($this->root, $url->getBasePath() . $url->getPage() . '/');
     }
 
     /**

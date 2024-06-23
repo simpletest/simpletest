@@ -1,5 +1,5 @@
 <?php
-require_once '../page_request.php';
+require_once __DIR__ . '/../page_request.php';
 ?><html>
     <head><title>Simple test front controller</title></head>
     <body>
