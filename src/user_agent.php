@@ -13,7 +13,9 @@ if (!\defined('DEFAULT_MAX_REDIRECTS')) {
 }
 
 if (!\defined('DEFAULT_CONNECTION_TIMEOUT')) {
-    \define('DEFAULT_CONNECTION_TIMEOUT', 15);
+    // Ensure to always have a socket timeout of at least 90 seconds (default 60).
+    // https://www.php.net/manual/en/filesystem.configuration.php
+    \define('DEFAULT_CONNECTION_TIMEOUT', \max((int) \ini_get("default_socket_timeout"), 90));
 }
 
 /**
