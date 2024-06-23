@@ -196,8 +196,6 @@ class SimpleTidyPageBuilder
         } elseif ('title' === $node->name) {
             $this->page->setTitle($this->tags()->createTag($node->name, (array) $node->attribute)
                 ->addContent($this->innerHtml($node)));
-        } elseif ('frameset' === $node->name) {
-            $this->page->setFrames($this->collectFrames($node));
         } elseif ('form' === $node->name) {
             $this->forms[] = $this->walkForm($node, $this->createEmptyForm($node));
         } elseif ('label' === $node->name) {
@@ -406,30 +404,6 @@ class SimpleTidyPageBuilder
         }
 
         return $quoted;
-    }
-
-    /**
-     * Collects frame information inside a frameset tag.
-     *
-     * @param object $node tidy XML node
-     *
-     * @return array list of SimpleTag frame descriptions
-     */
-    private function collectFrames($node)
-    {
-        $frames = [];
-
-        if ('frame' === $node->name) {
-            $frames = [$this->tags()->createTag($node->name, (array) $node->attribute)];
-        } elseif ($node->hasChildren()) {
-            $frames = [];
-
-            foreach ($node->child as $child) {
-                $frames = \array_merge($frames, $this->collectFrames($child));
-            }
-        }
-
-        return $frames;
     }
 
     /**

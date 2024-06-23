@@ -10,7 +10,7 @@ require_once __DIR__ . '/url.php';
 class SimpleCookie
 {
     private $expiry = false;
-    private $host = false;
+    private $host   = false;
     private $is_secure;
     private $name;
     private $path;
@@ -27,9 +27,9 @@ class SimpleCookie
      */
     public function __construct($name, $value = false, $path = false, $expiry = false, $is_secure = false)
     {
-        $this->name   = $name;
-        $this->value  = $value;
-        $this->path   = ($path ? $this->fixPath($path) : '/');
+        $this->name  = $name;
+        $this->value = $value;
+        $this->path  = ($path ? $this->fixPath($path) : '/');
 
         if (\is_string($expiry)) {
             $this->expiry = \strtotime($expiry);
@@ -403,6 +403,7 @@ class SimpleCookieJar
         if ($host && $cookie->getHost() && !$cookie->isValidHost($host)) {
             return false;
         }
+
         return (bool) $cookie->isValidPath($path);
     }
 }

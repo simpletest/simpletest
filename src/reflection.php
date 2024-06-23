@@ -5,6 +5,7 @@
  */
 class SimpleReflection
 {
+    public $method;
     private $interface;
 
     /**
@@ -407,7 +408,7 @@ class SimpleReflection
                 $returnTypeString = '\\' . $this->method->getDeclaringClass()->getName();
             }
 
-            if ('' != $returnTypeString) {
+            if ('' !== $returnTypeString) {
                 // Guard: method getReturnType()->allowsNull() is only supported by PHP7.1+
                 if (PHP_VERSION_ID >= 70100 &&
                     $returnType->allowsNull() &&

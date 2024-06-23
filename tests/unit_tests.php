@@ -44,7 +44,6 @@ class UnitTests extends TestSuite
         $this->addFile($path . '/tag_test.php');
         $this->addFile($path . '/form_test.php');
         $this->addFile($path . '/page_test.php');
-        $this->addFile($path . '/frames_test.php');
         $this->addFile($path . '/browser_test.php');
         $this->addFile($path . '/web_tester_test.php');
         $this->addFile($path . '/shell_tester_test.php');

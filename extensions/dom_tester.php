@@ -1,10 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../src/web_tester.php';
+
 require_once __DIR__ . '/dom_tester/css_selector.php';
 
 /**
- * CssSelectorExpectation
+ * CssSelectorExpectation.
  *
  * Create a CSS Selector expectactation
  *
@@ -21,11 +22,11 @@ class CssSelectorExpectation extends SimpleExpectation
     public $value;
 
     /**
-     * Sets the dom tree and the css selector to compare against
+     * Sets the dom tree and the css selector to compare against.
      *
-     * @param mixed $dom          Dom tree to search into.
-     * @param mixed $selector     Css selector to match element.
-     * @param string $message     Customised message on failure.
+     * @param mixed  $dom      dom tree to search into
+     * @param mixed  $selector css selector to match element
+     * @param string $message  customised message on failure
      */
     public function __construct($dom, $selector, $message = '%s')
     {
@@ -40,54 +41,57 @@ class CssSelectorExpectation extends SimpleExpectation
     /**
      * Tests the expectation. True if it matches the held value.
      *
-     * @param mixed $compare        Comparison value.
+     * @param mixed $compare comparison value
      *
-     * @return bool              True if correct.
+     * @return bool true if correct
      */
     public function test($compare)
     {
-        return (($this->value == $compare) && ($compare == $this->value));
+        return ($this->value == $compare) && ($compare == $this->value);
     }
 
     /**
      * Returns a human readable test message.
      *
-     * @param mixed $compare      Comparison value.
+     * @param mixed $compare comparison value
      *
-     * @return string             Description of success or failure.
+     * @return string description of success or failure
      */
     public function testMessage($compare)
     {
         $dumper = $this->getDumper();
-        if (is_array($compare)) {
-            sort($compare);
+
+        if (\is_array($compare)) {
+            \sort($compare);
         }
+
         if ($this->test($compare)) {
             return 'CSS selector expectation [' . $dumper->describeValue($this->value) . ']' .
                     ' using [' . $dumper->describeValue($this->selector) . ']';
-        } else {
-            return 'CSS selector expectation [' . $dumper->describeValue($this->value) . ']' .
-                    ' using [' . $dumper->describeValue($this->selector) . ']' .
-                    ' fails with [' .
-                    $dumper->describeValue($compare) . '] ' .
-                    $dumper->describeDifference($this->value, $compare);
         }
+
+        return 'CSS selector expectation [' . $dumper->describeValue($this->value) . ']' .
+                ' using [' . $dumper->describeValue($this->selector) . ']' .
+                ' fails with [' .
+                $dumper->describeValue($compare) . '] ' .
+                $dumper->describeDifference($this->value, $compare);
+
     }
 }
 
 /**
- * DomTestCase
+ * DomTestCase.
  *
  * Extend Web test case with DOM related assertions, CSS selectors in particular.
  */
 class DomTestCase extends WebTestCase
 {
-   /*
-    * @param DomDocument $dom
-    */
+    /*
+     * @param DomDocument $dom
+     */
     public $dom;
 
-    public function loadDom()
+    public function loadDom(): void
     {
         $this->dom                  = new DomDocument('1.0', 'utf-8');
         $this->dom->validateOnParse = true;

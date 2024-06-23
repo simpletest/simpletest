@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 require_once __DIR__ . '/compatibility.php';
 
@@ -328,15 +330,72 @@ class SimpleSocket extends SimpleStickyError
 class SimpleSecureSocket extends SimpleSocket
 {
     /**
+     * @var string The transport protocol to use
+     */
+    private $transport = 'tlsv1.2';
+
+    /**
+     * @var array config for stream_context_create()
+     */
+    private $stream_config = [
+        'ssl' => [
+            'cafile'            => '/etc/ssl/certs/ca-certificates.crt',
+            'verify_peer'       => true,
+            'verify_peer_name'  => true,
+            'capture_peer_cert' => true,
+        ],
+    ];
+
+    /**
      * Opens a secure socket for reading and writing.
      *
-     * @param string $host    hostname to send request to
-     * @param int    $port    port on remote machine to open
-     * @param int    $timeout connection timeout in seconds
+     * @param string $host      hostname to send request to
+     * @param int    $port      port on remote machine to open
+     * @param int    $timeout   connection timeout in seconds
+     * @param string $transport transport protocol to use
      */
-    public function __construct($host, $port, $timeout)
+    public function __construct($host, $port, $timeout, $transport = 'tlsv1.2')
     {
         parent::__construct($host, $port, $timeout);
+        $this->transport = $transport;
+    }
+
+    /**
+     * Sets the transport protocol.
+     *
+     * @param string $transport transport protocol to use
+     *
+     * @throws InvalidArgumentException if the transport protocol is not supported
+     */
+    public function setTransport($transport): void
+    {
+        $possibleTransportProtocols = \stream_get_transports();
+
+        if (!\in_array($transport, $possibleTransportProtocols, true)) {
+            throw new InvalidArgumentException("Transport protocol '{$transport}' is not supported.");
+        }
+        $this->transport = $transport;
+    }
+
+    public function disableConnectionVerification(): void
+    {
+        $this->stream_config['ssl']['verify_peer']       = false;
+        $this->stream_config['ssl']['verify_peer_name']  = false;
+        $this->stream_config['ssl']['verify_host']       = false;
+        $this->stream_config['ssl']['allow_self_signed'] = true;
+        $this->stream_config['ssl']['sni_enabled']       = true;
+        // $this->stream_config['ssl']['local_cert'] =
+        // $this->stream_config['ssl']['local_pk'] =
+    }
+
+    /**
+     * Set the stream config for stream_context_create().
+     *
+     * @return array
+     */
+    public function setStreamConfig(array $stream_config): void
+    {
+        $this->stream_config = $stream_config;
     }
 
     /**
@@ -350,6 +409,15 @@ class SimpleSecureSocket extends SimpleSocket
      */
     public function openSocket($host, $port, &$error_number, &$error, $timeout)
     {
-        return parent::openSocket("tls://{$host}", $port, $error_number, $error, $timeout);
+        $context = \stream_context_create($this->stream_config);
+
+        $r = \stream_socket_client("{$this->transport}://{$host}:{$port}", $error_number, $error, DEFAULT_CONNECTION_TIMEOUT, STREAM_CLIENT_CONNECT, $context);
+
+        if (!$r) {
+            throw new Exception("Cannot connect to server '{$host}': {$error_number} {$error}");
+        }
+
+        return $r;
+        // return parent::openSocket("{$this->transport}://{$host}", $port, $error_number, $error, $timeout);
     }
 }

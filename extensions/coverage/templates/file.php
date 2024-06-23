@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title><?php echo $title ?></title>
+    <title><?php print $title; ?></title>
     <style type="text/css">
       body {
           font-family: "Gill Sans MT", "Gill Sans", GillSans, Arial, Helvetica, sans-serif;
@@ -33,13 +33,13 @@
     </style>
   </head>
   <body>
-    <h1 id="title"><?php echo $title ?></h1>
+    <h1 id="title"><?php print $title; ?></h1>
     <table id="code">
       <tbody>
           <?php foreach ($lines as $lineNo => $line) { ?>
             <tr>
-              <td><span class="lineNo"><?php echo $lineNo ?></span></td>
-              <td><span class="<?php echo $line['lineCoverage'] ?> code"><?php echo htmlentities($line['code']) ?></span></td>
+              <td><span class="lineNo"><?php print $lineNo; ?></span></td>
+              <td><span class="<?php print $line['lineCoverage']; ?> code"><?php print \htmlentities($line['code']); ?></span></td>
             </tr>
         <?php } ?>
       </tbody>

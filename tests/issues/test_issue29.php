@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-require_once __DIR__ . '/../../autorun.php';
+require_once \dirname(__DIR__, 2) . '/src/autorun.php';
 
-require_once __DIR__ . '/../../test_case.php';
+require_once \dirname(__DIR__, 2) . '/test_case.php';
 
 /**
  * @see https://github.com/simpletest/simpletest/issues/29

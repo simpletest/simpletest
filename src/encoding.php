@@ -28,11 +28,11 @@ class SimpleEncodedPair
     /**
      * This method returns the key and value as a URL-encoded string in the format "key=value".
      *
-     * @return string The URL-encoded key-value pair.
+     * @return string the URL-encoded key-value pair
      */
     public function asRequest()
     {
-        return \urlencode((string)$this->key) . '=' . \urlencode((string)$this->value);
+        return \urlencode((string) $this->key) . '=' . \urlencode((string) $this->value);
     }
 
     /**

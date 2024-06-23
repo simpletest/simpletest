@@ -75,19 +75,6 @@ class TestOfForm extends UnitTestCase
         );
     }
 
-    public function testDefaultFrameTargetOnForm(): void
-    {
-        $page = new MockSimplePage;
-        $page->expectOnce('expandUrl', [new SimpleUrl('here.php')]);
-        $page->returnsByValue('expandUrl', new SimpleUrl('http://host/here.php'));
-        $tag  = new SimpleFormTag(['method' => 'GET', 'action' => 'here.php']);
-        $form = new SimpleForm($tag, $page);
-        $form->setDefaultTarget('frame');
-        $expected = new SimpleUrl('http://host/here.php');
-        $expected->setTarget('frame');
-        $this->assertEqual($form->getAction(), $expected);
-    }
-
     public function testTextWidget(): void
     {
         $form = new SimpleForm(new SimpleFormTag([]), $this->page('htp://host'));

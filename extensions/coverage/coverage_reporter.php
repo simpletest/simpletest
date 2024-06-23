@@ -1,7 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/coverage_calculator.php';
+
 require_once __DIR__ . '/coverage_utils.php';
+
 require_once __DIR__ . '/coverage_writer.php';
 
 /**
@@ -19,15 +21,15 @@ class CoverageReporter
 
     public function __construct()
     {
-        $this->writer     = new CoverageWriter();
-        $this->calculator = new CoverageCalculator();
+        $this->writer     = new CoverageWriter;
+        $this->calculator = new CoverageCalculator;
 
         $this->summaryFile = $this->reportDir . '/index.html';
     }
 
-    public function generate()
+    public function generate(): void
     {
-        echo 'Generating Code Coverage Report';
+        print 'Generating Code Coverage Report';
 
         CoverageUtils::mkdir($this->reportDir);
 
@@ -37,10 +39,10 @@ class CoverageReporter
             $this->generateCoverageByFile($file, $cov);
         }
 
-        echo "Report generated: $this->summaryFile\n";
+        print "Report generated: {$this->summaryFile}\n";
     }
 
-    public function generateSummaryReport()
+    public function generateSummaryReport(): void
     {
         $variables          = $this->calculator->variables($this->coverage, $this->untouched);
         $variables['title'] = $this->title;
@@ -48,7 +50,7 @@ class CoverageReporter
         $this->writer->writeSummaryReport($this->summaryFile, $variables);
     }
 
-    public function generateCoverageByFile($file, $cov)
+    public function generateCoverageByFile($file, $cov): void
     {
         $reportFile = $this->reportDir . '/' . CoverageUtils::reportFilename($file);
 

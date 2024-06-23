@@ -38,12 +38,7 @@ class ColorTextReporter extends TextReporter
         $output = \trim(\ob_get_clean());
 
         if ($output !== '') {
-            if (($this->getFailCount() + $this->getExceptionCount()) == 0) {
-                $color = $this->_passColor;
-            } else {
-                $color = $this->_failColor;
-            }
-
+            $color = ($this->getFailCount() + $this->getExceptionCount()) == 0 ? $this->_passColor : $this->_failColor;
             $this->_setColor($color);
             print $output;
             $this->_resetColor();

@@ -14,17 +14,11 @@ require_once __DIR__ . '/tidy_parser.php';
 
 require_once __DIR__ . '/selector.php';
 
-require_once __DIR__ . '/frames.php';
-
 require_once __DIR__ . '/user_agent.php';
 
 if (!SimpleTest::getParsers()) {
     SimpleTest::setParsers([new SimpleTidyPageBuilder, new SimplePhpPageBuilder]);
-    // SimpleTest::setParsers(array(new SimplePhpPageBuilder()));
-}
-
-if (!\defined('DEFAULT_MAX_NESTED_FRAMES')) {
-    \define('DEFAULT_MAX_NESTED_FRAMES', 3);
+    // SimpleTest::setParsers([new SimplePhpPageBuilder()]);
 }
 
 /**
@@ -174,7 +168,7 @@ class SimpleBrowser
     private $ignore_frames = false;
 
     /** @var int */
-    private $maximum_nested_frames = DEFAULT_MAX_NESTED_FRAMES;
+    private $maximum_nested_frames = 1;
 
     /** @var mixed */
     private $parser;
@@ -191,8 +185,8 @@ class SimpleBrowser
             SimpleTest::getDefaultProxyUsername(),
             SimpleTest::getDefaultProxyPassword(),
         );
-        $this->page                  = new SimplePage;
-        $this->history               = $this->createHistory();
+        $this->page    = new SimplePage;
+        $this->history = $this->createHistory();
     }
 
     /**
@@ -203,23 +197,6 @@ class SimpleBrowser
     public function setParser($parser): void
     {
         $this->parser = $parser;
-    }
-
-    /**
-     * Disables frames support.
-     * Frames will not be fetched and the frameset page will be used instead.
-     */
-    public function ignoreFrames(): void
-    {
-        $this->ignore_frames = true;
-    }
-
-    /**
-     * Enables frames support. Frames will be fetched from now on.
-     */
-    public function useFrames(): void
-    {
-        $this->ignore_frames = false;
     }
 
     /**
@@ -338,16 +315,6 @@ class SimpleBrowser
     public function setMaximumRedirects($max): void
     {
         $this->user_agent->setMaximumRedirects($max);
-    }
-
-    /**
-     * Sets the maximum number of nesting of framed pages within a framed page to prevent loops.
-     *
-     * @param int $max highest depth allowed
-     */
-    public function setMaximumNestedFrames($max): void
-    {
-        $this->maximum_nested_frames = $max;
     }
 
     /**
@@ -484,18 +451,6 @@ class SimpleBrowser
      */
     public function retry()
     {
-        $frames = $this->page->getFrameFocus();
-
-        if (\count($frames) > 0) {
-            $this->loadFrame(
-                $frames,
-                $this->page->getUrl(),
-                $this->page->getRequestData(),
-            );
-
-            return $this->page->getRaw();
-        }
-
         if ($url = $this->history->getUrl()) {
             $this->page = $this->fetch($url, $this->history->getParameters());
 
@@ -573,61 +528,6 @@ class SimpleBrowser
         );
 
         return $this->retry();
-    }
-
-    /**
-     * Accessor for a breakdown of the frameset.
-     *
-     * @return array hash tree of frames by name or index if no name
-     */
-    public function getFrames()
-    {
-        return $this->page->getFrames();
-    }
-
-    /**
-     * Accessor for current frame focus. Will be false if no frame has focus.
-     *
-     * @return bool|int|string Label if any, otherwise the position in the frameset or
-     *                         false if none
-     */
-    public function getFrameFocus()
-    {
-        return $this->page->getFrameFocus();
-    }
-
-    /**
-     * Sets the focus by index. The integer index starts from 1.
-     *
-     * @param int $choice chosen frame
-     *
-     * @return bool true if frame exists
-     */
-    public function setFrameFocusByIndex($choice)
-    {
-        return $this->page->setFrameFocusByIndex($choice);
-    }
-
-    /**
-     * Sets the focus by name.
-     *
-     * @param string $name chosen frame
-     *
-     * @return bool true if frame exists
-     */
-    public function setFrameFocus($name)
-    {
-        return $this->page->setFrameFocus($name);
-    }
-
-    /**
-     * Clears the frame focus. All frames will be searched for content.
-     *
-     * @return bool|mixed
-     */
-    public function clearFrameFocus()
-    {
-        return $this->page->clearFrameFocus();
     }
 
     /**
@@ -1190,33 +1090,20 @@ class SimpleBrowser
                 return $parser;
             }
         }
+
         return null;
     }
 
     /**
      * Parses the raw content into a page.
-     * Will load further frame pages unless frames are disabled.
      *
      * @param SimpleHttpResponse $response response from fetch
-     * @param int                $depth    nested frameset depth
      *
-     * @return SimpleFrameset|SimplePage parsed HTML
+     * @return SimplePage parsed HTML
      */
-    protected function parse($response, $depth = 0)
+    protected function parse($response)
     {
-        $page = $this->buildPage($response);
-
-        if ($this->ignore_frames || !$page->hasFrames() || ($depth > $this->maximum_nested_frames)) {
-            return $page;
-        }
-        $frameset = new SimpleFrameset($page);
-
-        foreach ($page->getFrameset() as $key => $url) {
-            $frame = $this->fetch($url, new SimpleGetEncoding, $depth + 1);
-            $frameset->addFrame($frame, $key);
-        }
-
-        return $frameset;
+        return $this->buildPage($response);
     }
 
     /**
@@ -1238,11 +1125,10 @@ class SimpleBrowser
      *
      * @param SimpleUrl|string $url      Target to fetch
      * @param SimpleEncoding   $encoding GET/POST parameters
-     * @param int              $depth    nested frameset depth protection
      *
      * @return SimplePage parsed page
      */
-    protected function fetch($url, $encoding, $depth = 0)
+    protected function fetch($url, $encoding)
     {
         $http_referer = $this->history->getUrl();
 
@@ -1258,11 +1144,11 @@ class SimpleBrowser
             return new SimplePage($response);
         }
 
-        return $this->parse($response, $depth);
+        return $this->parse($response);
     }
 
     /**
-     * Fetches a page or a single frame if that is the current focus.
+     * Fetches a page.
      *
      * @param SimpleUrl      $url        target to fetch
      * @param simpleEncoding $parameters GET/POST parameters
@@ -1271,13 +1157,7 @@ class SimpleBrowser
      */
     protected function load($url, $parameters)
     {
-        $frame = $url->getTarget();
-
-        if (!$frame || !$this->page->hasFrames() || ('_top' === \strtolower($frame))) {
-            return $this->loadPage($url, $parameters);
-        }
-
-        return $this->loadFrame([$frame], $url, $parameters);
+        return $this->loadPage($url, $parameters);
     }
 
     /**
@@ -1297,22 +1177,5 @@ class SimpleBrowser
         );
 
         return $this->page->getRaw();
-    }
-
-    /**
-     * Fetches a frame into the existing frameset replacing the original.
-     *
-     * @param array              $frames     list of names to drill down
-     * @param simpleFormEncoding $parameters POST parameters
-     * @param string/SimpleUrl   $url        Target to fetch as string
-     *
-     * @return string raw content of page
-     */
-    protected function loadFrame($frames, $url, $parameters)
-    {
-        $page = $this->fetch($url, $parameters);
-        $this->page->setFrame($frames, $page);
-
-        return $page->getRaw();
     }
 }

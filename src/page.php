@@ -25,7 +25,6 @@ class SimplePage
     private $forms = [];
 
     /** @var array */
-    private $frames = [];
     private $transport_error;
     private $raw;
     private $text = false;
@@ -237,60 +236,6 @@ class SimplePage
     }
 
     /**
-     * Accessor for current frame focus. Will be false as no frames.
-     *
-     * @return array always empty
-     */
-    public function getFrameFocus()
-    {
-        return [];
-    }
-
-    /**
-     * Sets the focus by index. The integer index starts from 1.
-     *
-     * @param int $choice chosen frame
-     *
-     * @return bool always false
-     */
-    public function setFrameFocusByIndex($choice)
-    {
-        // TODO
-        return false;
-    }
-
-    /**
-     * Sets the focus by name. Always fails for a leaf page.
-     *
-     * @param string $name chosen frame
-     *
-     * @return bool false as no frames
-     */
-    public function setFrameFocus($name)
-    {
-        // TODO
-        return false;
-    }
-
-    /**
-     * Clears the frame focus. Does nothing for a leaf page.
-     */
-    public function clearFrameFocus(): void
-    {
-        // TODO
-    }
-
-    /**
-     * Set Frames.
-     *
-     * @param array $frames the frames to set
-     */
-    public function setFrames($frames): void
-    {
-        $this->frames = $frames;
-    }
-
-    /**
      * Adds a link to the page.
      *
      * @param SimpleAnchorTag $tag link to accept
@@ -308,40 +253,6 @@ class SimplePage
     public function setForms($forms): void
     {
         $this->forms = $forms;
-    }
-
-    /**
-     * Test for the presence of a frameset.
-     *
-     * @return bool true if frameset
-     */
-    public function hasFrames()
-    {
-        return \count($this->frames) > 0;
-    }
-
-    /**
-     * Accessor for frame name and source URL for every frame that will need to be loaded.
-     * Immediate children only.
-     *
-     * @return array|bool False if no frameset or otherwise a hash of frame URLs.
-     *                    The key is either a numerical base one index or the name attribute.
-     */
-    public function getFrameset()
-    {
-        if (!$this->hasFrames()) {
-            return false;
-        }
-        $urls = [];
-
-        for ($i = 0; $i < \count($this->frames); $i++) {
-            $name       = $this->frames[$i]->getAttribute('name');
-            $url        = new SimpleUrl($this->frames[$i]->getAttribute('src'));
-            $key        = $name ?: $i + 1;
-            $urls[$key] = $this->expandUrl($url);
-        }
-
-        return $urls;
     }
 
     /**
@@ -472,12 +383,15 @@ class SimplePage
      */
     public function getFormBySubmit($selector)
     {
-        for ($i = 0; $i < \count($this->forms); $i++) {
+        $counter = \count($this->forms);
+
+        for ($i = 0; $i < $counter; $i++) {
             if ($this->forms[$i]->hasSubmit($selector)) {
                 return $this->forms[$i];
             }
         }
 
+        return null;
     }
 
     /**
@@ -489,12 +403,15 @@ class SimplePage
      */
     public function getFormByImage($selector)
     {
-        for ($i = 0; $i < \count($this->forms); $i++) {
+        $counter = \count($this->forms);
+
+        for ($i = 0; $i < $counter; $i++) {
             if ($this->forms[$i]->hasImage($selector)) {
                 return $this->forms[$i];
             }
         }
 
+        return null;
     }
 
     /**
@@ -507,12 +424,15 @@ class SimplePage
      */
     public function getFormById($id)
     {
-        for ($i = 0; $i < \count($this->forms); $i++) {
+        $counter = \count($this->forms);
+
+        for ($i = 0; $i < $counter; $i++) {
             if ($this->forms[$i]->getId() == $id) {
                 return $this->forms[$i];
             }
         }
 
+        return null;
     }
 
     /**
@@ -525,9 +445,10 @@ class SimplePage
      */
     public function setField($selector, $value, $position = false)
     {
-        $is_set = false;
+        $is_set  = false;
+        $counter = \count($this->forms);
 
-        for ($i = 0; $i < \count($this->forms); $i++) {
+        for ($i = 0; $i < $counter; $i++) {
             if ($this->forms[$i]->setField($selector, $value, $position)) {
                 $is_set = true;
             }
@@ -546,14 +467,15 @@ class SimplePage
      */
     public function getField($selector)
     {
-        for ($i = 0; $i < \count($this->forms); $i++) {
-            $value = $this->forms[$i]->getValue($selector);
+        foreach ($this->forms as $form) {
+            $value = $form->getValue($selector);
 
             if (isset($value)) {
                 return $value;
             }
         }
 
+        return null;
     }
 
     /**

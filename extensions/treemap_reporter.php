@@ -1,20 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../src/scorer.php';
+
 require_once __DIR__ . '/treemap_reporter/treemap_recorder.php';
 
 /**
- * Constructs and renders a treemap visualization of a test run
+ * Constructs and renders a treemap visualization of a test run.
  */
 class TreemapReporter extends SimpleReporterDecorator
 {
+    public $_reporter;
+
     public function __construct()
     {
-        parent::__construct(new TreemapRecorder());
+        parent::__construct(new TreemapRecorder);
     }
 
     /**
-     * basic CSS for floating nested divs
+     * basic CSS for floating nested divs.
      *
      * @todo checkout some weird border bugs
      */
@@ -31,52 +34,52 @@ class TreemapReporter extends SimpleReporterDecorator
     }
 
     /**
-     * paints the HTML header and sets up results
+     * paints the HTML header and sets up results.
      */
-    public function paintResultsHeader()
+    public function paintResultsHeader(): void
     {
         $title = $this->_reporter->getTitle();
-        echo '<html><head>';
-        echo "<title>{$title}</title>";
-        echo '<style type="text/css">' . $this->_getCss() . '</style>';
-        echo '</head><body>';
-        echo "<h1>{$title}</h1>";
+        print '<html><head>';
+        print "<title>{$title}</title>";
+        print '<style type="text/css">' . $this->_getCss() . '</style>';
+        print '</head><body>';
+        print "<h1>{$title}</h1>";
     }
 
     /**
-     * places a clearing break below the end of the test nodes
+     * places a clearing break below the end of the test nodes.
      */
-    public function paintResultsFooter()
+    public function paintResultsFooter(): void
     {
-        echo '<br clear="all">';
-        echo '</body></html>';
+        print '<br clear="all">';
+        print '</body></html>';
     }
 
     /**
-     * paints start tag for div representing a test node
+     * paints start tag for div representing a test node.
      */
-    public function paintRectangleStart($node, $horiz, $vert)
+    public function paintRectangleStart($node, $horiz, $vert): void
     {
         $name        = $node->getName();
         $description = $node->getDescription();
         $status      = $node->getStatus();
-        echo "<div title=\"$name: $description\" class=\"$status\" style=\"width:{$horiz}%;height:{$vert}%\">";
+        print "<div title=\"{$name}: {$description}\" class=\"{$status}\" style=\"width:{$horiz}%;height:{$vert}%\">";
     }
 
     /**
-     * paints end tag for test node div
+     * paints end tag for test node div.
      */
-    public function paintRectangleEnd()
+    public function paintRectangleEnd(): void
     {
-        echo '</div>';
+        print '</div>';
     }
 
     /**
-     * paints wrapping treemap divs
+     * paints wrapping treemap divs.
      *
      * @todo how to configure aspect and other parameters?
      */
-    public function paintFooter($group)
+    public function paintFooter($group): void
     {
         $aspect = 1;
         $this->paintResultsHeader();
@@ -87,23 +90,22 @@ class TreemapReporter extends SimpleReporterDecorator
     }
 
     /**
-     * divides the test results based on a slice and dice algorithm
+     * divides the test results based on a slice and dice algorithm.
      *
      * @param TreemapNode $map    sorted
      * @param bool        $aspect flips the aspect between horizontal and vertical
+     *
      * @private
      */
-    public function divideMapNodes($map, $aspect)
+    public function divideMapNodes($map, $aspect): void
     {
         $aspect    = !$aspect;
         $divisions = $map->getSize();
         $total     = $map->getTotalSize();
+
         foreach ($map->getChildren() as $node) {
-            if (!$node->isLeaf()) {
-                $dist = $node->getTotalSize() / $total * 100;
-            } else {
-                $dist = 1 / $total * 100;
-            }
+            $dist = $node->isLeaf() ? 1 / $total * 100 : $node->getTotalSize() / $total * 100;
+
             if ($aspect) {
                 $horiz = $dist;
                 $vert  = 100;
@@ -117,9 +119,10 @@ class TreemapReporter extends SimpleReporterDecorator
         }
     }
 
-    public function paintGroupEnd($group)
+    public function paintGroupEnd($group): void
     {
         $this->_reporter->paintGroupEnd($group);
+
         if ($this->_reporter->isComplete()) {
             $this->paintFooter($group);
         }

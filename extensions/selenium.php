@@ -1,6 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../src/unit_tester.php';
+
 require_once __DIR__ . '/selenium/remote-control.php';
 
 /**
@@ -9,14 +10,13 @@ require_once __DIR__ . '/selenium/remote-control.php';
 class SeleniumTestCase extends UnitTestCase
 {
     /**
-     * Selenium instantiation variables
+     * Selenium instantiation variables.
      */
     protected $browser    = '';
     protected $browserUrl = '';
     protected $host       = 'localhost';
     protected $port       = '4444';
     protected $timeout    = 30000;
-
     protected $selenium;
     protected $newInstanceEachTest = true;
 
@@ -25,33 +25,50 @@ class SeleniumTestCase extends UnitTestCase
         parent::__construct($name);
 
         if (empty($this->browser)) {
-            trigger_error('browser property must be set in ' . get_class($this));
+            \trigger_error('browser property must be set in ' . static::class);
+
             exit;
         }
 
         if (empty($this->browserUrl)) {
-            trigger_error('browserUrl property must be set in ' . get_class($this));
+            \trigger_error('browserUrl property must be set in ' . static::class);
+
             exit;
         }
     }
 
-    protected function setUp()
+    public function __call($method, $arguments)
+    {
+        if (\substr($method, 0, 6) === 'verify') {
+            return $this->assertTrue(
+                \call_user_func_array(
+                    [$this->selenium, $method],
+                    $arguments,
+                ),
+                \sprintf('%s failed', $method),
+            );
+        }
+
+        return \call_user_func_array([$this->selenium, $method], $arguments);
+    }
+
+    protected function setUp(): void
     {
         parent::setUp();
 
-        if (is_null($this->selenium)) {
+        if (null === $this->selenium) {
             $this->selenium = new SimpleSeleniumRemoteControl(
                 $this->browser,
                 $this->browserUrl,
                 $this->host,
                 $this->port,
-                $this->timeout
+                $this->timeout,
             );
             $this->selenium->start();
         }
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -61,29 +78,14 @@ class SeleniumTestCase extends UnitTestCase
         }
     }
 
-    public function __call($method, $arguments)
-    {
-        if (substr($method, 0, 6) == 'verify') {
-            return $this->assertTrue(
-                call_user_func_array(
-                    [$this->selenium, $method],
-                    $arguments
-                ),
-                sprintf('%s failed', $method)
-            );
-        }
-
-        return call_user_func_array([$this->selenium, $method], $arguments);
-    }
-
     public function verifyText($text)
     {
         return $this->assertTrue(
             $this->selenium->verifyText($text),
-            sprintf(
+            \sprintf(
                 'verifyText failed when on [%s]',
-                $text
-            )
+                $text,
+            ),
         );
     }
 
@@ -91,10 +93,10 @@ class SeleniumTestCase extends UnitTestCase
     {
         return $this->assertTrue(
             $this->selenium->verifyTextPresent($text),
-            sprintf(
+            \sprintf(
                 'verifyTextPresent failed when on [%s]',
-                $text
-            )
+                $text,
+            ),
         );
     }
 
@@ -102,10 +104,10 @@ class SeleniumTestCase extends UnitTestCase
     {
         return $this->assertTrue(
             $this->selenium->verifyTextNotPresent($text),
-            sprintf(
+            \sprintf(
                 'verifyTextNotPresent failed on [%s]',
-                $text
-            )
+                $text,
+            ),
         );
     }
 
@@ -113,11 +115,11 @@ class SeleniumTestCase extends UnitTestCase
     {
         return $this->assertTrue(
             $this->selenium->verifyValue($selector, $value),
-            sprintf(
+            \sprintf(
                 'verifyValue failed on [%s] == [%s]',
                 $selector,
-                $value
-            )
+                $value,
+            ),
         );
     }
 
@@ -125,10 +127,10 @@ class SeleniumTestCase extends UnitTestCase
     {
         return $this->assertTrue(
             $this->selenium->verifyTitle($pattern),
-            sprintf(
+            \sprintf(
                 'verifyTitle failed on [%s]',
-                $pattern
-            )
+                $pattern,
+            ),
         );
     }
 }

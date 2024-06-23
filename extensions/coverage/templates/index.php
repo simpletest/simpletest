@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title><?php echo $title ?></title>
+    <title><?php print $title; ?></title>
     <style type="text/css">
       h1 {
           font-size: medium;
@@ -29,21 +29,21 @@
     </style>
   </head>
   <body>
-    <h1 id="title"><?php echo $title ?></h1>
+    <h1 id="title"><?php print $title; ?></h1>
     <table>
       <caption>Summary</caption>
       <tbody>
         <tr>
           <td>Total Coverage (<a href="#total-coverage">?</a>) :</td>
-          <td class="percentage"><span class="totalPercentCoverage"><?php echo number_format($totalPercentCoverage, 0) ?>%</span></td>
+          <td class="percentage"><span class="totalPercentCoverage"><?php print \number_format($totalPercentCoverage, 0); ?>%</span></td>
         </tr>
         <tr>
           <td>Total Files Covered (<a href="#total-files-covered">?</a>) :</td>
-          <td class="percentage"><span class="filesTouchedPercentage"><?php echo number_format($filesTouchedPercentage, 0) ?>%</span></td>
+          <td class="percentage"><span class="filesTouchedPercentage"><?php print \number_format($filesTouchedPercentage, 0); ?>%</span></td>
         </tr>
         <tr>
           <td>Report Generation Date :</td>
-          <td><?php echo $now ?></td>
+          <td><?php print $now; ?></td>
         </tr>
       </tbody>
     </table>
@@ -58,8 +58,8 @@
       <tbody>
           <?php foreach ($coverageByFile as $file => $coverage) { ?>
             <tr>
-              <td><a class="fileReportLink" href="<?php echo $coverage['fileReport'] ?>"><?php echo $file ?></a></td>
-              <td class="percentage"><span class="percentCoverage"><?php echo number_format($coverage['percentage'], 0) ?>%</span></td>
+              <td><a class="fileReportLink" href="<?php print $coverage['fileReport']; ?>"><?php print $file; ?></a></td>
+              <td class="percentage"><span class="percentCoverage"><?php print \number_format($coverage['percentage'], 0); ?>%</span></td>
             </tr>
         <?php } ?>
       </tbody>
@@ -69,7 +69,7 @@
       <tbody>
           <?php foreach ($untouched as $key => $file) { ?>
             <tr>
-              <td><span class="untouchedFile"><?php echo $file ?></span></td>
+              <td><span class="untouchedFile"><?php print $file; ?></span></td>
             </tr>
         <?php } ?>
       </tbody>

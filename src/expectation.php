@@ -1065,6 +1065,7 @@ class MemberExpectation extends IdenticalExpectation
                 return $value;
             }
         }
+
         return null;
     }
 }

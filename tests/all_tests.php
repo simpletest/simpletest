@@ -15,8 +15,8 @@ class AllTests extends TestSuite
          * We are using PHP's built-in webserver to serve the "tests/site".
          * The start command for the server is: `php -S localhost:8080 -t tests/site`.
          */
-        //$this->addFile(__DIR__ . '/live_test.php');
-        //$this->addFile(__DIR__ . '/acceptance_test.php');
+        // $this->addFile(__DIR__ . '/live_test.php');
+        // $this->addFile(__DIR__ . '/acceptance_test.php');
 
     }
 }

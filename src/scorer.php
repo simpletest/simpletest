@@ -252,7 +252,7 @@ class SimpleReporter extends SimpleScorer
     private $test_stack = [];
 
     /** @var null|int */
-    private $size = null;
+    private $size;
 
     /** @var int */
     private $progress = 0;

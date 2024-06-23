@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../../src/scorer.php';
 
@@ -13,13 +13,12 @@ class TreemapRecorder extends SimpleReporter
 
     public function __construct()
     {
-        $this->SimpleReporter();
-        $this->_stack = new TreemapStack();
-        $this->_graph = null;
+        parent::__construct();
+        $this->_stack = new TreemapStack;
     }
 
     /**
-     * returns a reference to the root node of the collected treemap graph
+     * returns a reference to the root node of the collected treemap graph.
      */
     public function getGraph()
     {
@@ -31,11 +30,11 @@ class TreemapRecorder extends SimpleReporter
      */
     public function isComplete()
     {
-        return ($this->_graph != null);
+        return $this->_graph != null;
     }
 
     /**
-     * returns the title of the test
+     * returns the title of the test.
      */
     public function getTitle()
     {
@@ -43,22 +42,22 @@ class TreemapRecorder extends SimpleReporter
     }
 
     /**
-     * stashes the title of the test
+     * stashes the title of the test.
      */
-    public function paintHeader($title)
+    public function paintHeader($title): void
     {
         $this->_title = $title;
     }
 
-    public function paintFormattedMessage($message)
+    public function paintFormattedMessage($message): void
     {
-        ;
+
     }
 
     /**
-     * acceptor for start of test group node
+     * acceptor for start of test group node.
      */
-    public function paintGroupStart($message, $size)
+    public function paintGroupStart($message, $size): void
     {
         parent::paintGroupStart($message, $size);
         $node = new TreemapNode('Group', $message);
@@ -66,9 +65,9 @@ class TreemapRecorder extends SimpleReporter
     }
 
     /**
-     * acceptor for start of test case node
+     * acceptor for start of test case node.
      */
-    public function paintCaseStart($message)
+    public function paintCaseStart($message): void
     {
         parent::paintCaseStart($message);
         $node = new TreemapNode('TestCase', $message);
@@ -76,9 +75,9 @@ class TreemapRecorder extends SimpleReporter
     }
 
     /**
-     * acceptor for start of test method node
+     * acceptor for start of test method node.
      */
-    public function paintMethodStart($message)
+    public function paintMethodStart($message): void
     {
         parent::paintMethodStart($message);
         $node = new TreemapNode('Method', $message);
@@ -86,24 +85,25 @@ class TreemapRecorder extends SimpleReporter
     }
 
     /**
-     * acceptor for passing assertion node
+     * acceptor for passing assertion node.
      */
-    public function paintPass($message)
+    public function paintPass($message): void
     {
         parent::paintPass($message);
         $node    = new TreemapNode('Assertion', $message, true);
         $current = $this->_stack->peek();
+
         if ($current) {
             $current->putChild($node);
         } else {
-            echo 'no current node';
+            print 'no current node';
         }
     }
 
     /**
-     * acceptor for failing assertion node
+     * acceptor for failing assertion node.
      */
-    public function paintFail($message)
+    public function paintFail($message): void
     {
         parent::paintFail($message);
         $node    = new TreemapNode('Assertion', $message, false);
@@ -113,13 +113,14 @@ class TreemapRecorder extends SimpleReporter
     }
 
     /**
-     * acceptor for end of method node
+     * acceptor for end of method node.
      */
-    public function paintMethodEnd($message)
+    public function paintMethodEnd($message): void
     {
         parent::paintCaseEnd($message);
         $node    = $this->_stack->pop();
         $current = $this->_stack->peek();
+
         if ($node->isFailed()) {
             $current->fail();
         }
@@ -127,13 +128,14 @@ class TreemapRecorder extends SimpleReporter
     }
 
     /**
-     * acceptor for end of test case
+     * acceptor for end of test case.
      */
-    public function paintCaseEnd($message)
+    public function paintCaseEnd($message): void
     {
         parent::paintCaseEnd($message);
         $node    = $this->_stack->pop();
         $current = $this->_stack->peek();
+
         if ($node->isFailed()) {
             $current->fail();
         }
@@ -144,10 +146,11 @@ class TreemapRecorder extends SimpleReporter
      * acceptor for end of test group.
      * final group pops the collected treemap nodes and assigns it to the internal graph property.
      */
-    public function paintGroupEnd($message)
+    public function paintGroupEnd($message): void
     {
         $node    = $this->_stack->pop();
         $current = $this->_stack->peek();
+
         if ($current) {
             if ($node->isFailed()) {
                 $current->fail();
@@ -165,18 +168,19 @@ class TreemapRecorder extends SimpleReporter
  */
 class TreemapNode
 {
+    public $_children = [];
+    public $_new_children;
     public $_name;
     public $_description;
     public $_status;
     public $_parent;
     public $_size;
 
-    public function __construct($name, $description, $status=true)
+    public function __construct($name, $description, $status = true)
     {
         $this->_name        = $name;
         $this->_description = $description;
         $this->_status      = $status;
-        $this->_children    = [];
     }
 
     /**
@@ -208,7 +212,7 @@ class TreemapNode
      */
     public function getChildren()
     {
-        @uksort($this->_new_children, [$this, 'compareChildren']);
+        @\uksort($this->_new_children, [$this, 'compareChildren']);
 
         return $this->_children;
     }
@@ -216,7 +220,7 @@ class TreemapNode
     /**
      * Comparator method to rank child nodes by total weight.
      */
-    public function compareChildren($a, $b)
+    public function compareChildren($a, $b): void
     {
         if ($this->_children[$a]->getTotalSize() > $this->_children[$b]->getTotalSize()) {
             $node_a              = $this->_children[$a];
@@ -231,7 +235,7 @@ class TreemapNode
      */
     public function getSize()
     {
-        return count($this->_children);
+        return \count($this->_children);
     }
 
     /**
@@ -240,8 +244,9 @@ class TreemapNode
      */
     public function getTotalSize()
     {
-        if (!isset($this->_size)) {
+        if ($this->_size === null) {
             $size = $this->getSize();
+
             if (!$this->isLeaf()) {
                 foreach ($this->getChildren() as $child) {
                     $size += $child->getTotalSize();
@@ -256,7 +261,7 @@ class TreemapNode
     /**
      * Fail this node.
      */
-    public function fail()
+    public function fail(): void
     {
         $this->_status = false;
     }
@@ -264,11 +269,11 @@ class TreemapNode
     /** Is this node failed? */
     public function isFailed()
     {
-        return ($this->_status == false);
+        return $this->_status == false;
     }
 
     /** Add an edge to a child node */
-    public function putChild($node)
+    public function putChild($node): void
     {
         $this->_children[] = $node;
     }
@@ -276,26 +281,25 @@ class TreemapNode
     /** Is this node a leaf node? */
     public function isLeaf()
     {
-        return (count($this->_children) == 0);
+        return \count($this->_children) == 0;
     }
 }
 
 /**
- * provides LIFO stack semantics
+ * provides LIFO stack semantics.
  */
 class TreemapStack
 {
-    public $_list;
+    public $_list = [];
 
     public function __construct()
     {
-        $this->_list = [];
     }
 
     /**
      * Push an element onto the stack.
      */
-    public function push($node)
+    public function push($node): void
     {
         $this->_list[] = $node;
     }
@@ -305,7 +309,7 @@ class TreemapStack
      */
     public function size()
     {
-        return count($this->_list);
+        return \count($this->_list);
     }
 
     /**
@@ -314,7 +318,7 @@ class TreemapStack
      */
     public function peek()
     {
-        return end($this->_list);
+        return \end($this->_list);
     }
 
     /**
@@ -322,6 +326,6 @@ class TreemapStack
      */
     public function pop()
     {
-        return array_pop($this->_list);
+        return \array_pop($this->_list);
     }
 }

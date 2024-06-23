@@ -1,28 +1,26 @@
-<?php
+<?php declare(strict_types=1);
 
 class CoverageUtils
 {
     public static function reportFilename($file)
     {
-        return preg_replace('|[:/\\\\]|i', '_', $file) . '.html';
+        return \preg_replace('|[:/\\\\]|i', '_', $file) . '.html';
     }
 
-    public static function mkdir($dir)
+    public static function mkdir($dir): void
     {
-        if (!file_exists($dir)) {
-            mkdir($dir, 0777, true);
-        } else {
-            if (!is_dir($dir)) {
-                throw new Exception($dir . ' exists as a file, not a directory');
-            }
+        if (!\file_exists($dir)) {
+            \mkdir($dir, 0o777, true);
+        } elseif (!\is_dir($dir)) {
+            throw new Exception($dir . ' exists as a file, not a directory');
         }
     }
 
     public static function isPackageClassAvailable($file, $class)
     {
-        @include_once($file);
+        @include_once $file;
 
-        return class_exists($class);
+        return \class_exists($class);
     }
 
     /**
@@ -57,16 +55,19 @@ class CoverageUtils
     {
         $args                   = [];
         $args['extraArguments'] = [];
-        array_shift($argv); // scriptname
+        \array_shift($argv); // scriptname
+
         foreach ($argv as $arg) {
-            if (preg_match('#^--([^=]+)=(.*)#', $arg, $reg)) {
+            if (\preg_match('#^--([^=]+)=(.*)#', $arg, $reg)) {
                 $args[$reg[1]] = $reg[2];
+
                 if ($mutliValueMode) {
                     self::addItemAsArray($args, $reg[1], $reg[2]);
                 }
-            } elseif (preg_match('#^[-]{1,2}([^[:blank:]]+)#', $arg, $reg)) {
+            } elseif (\preg_match('#^[-]{1,2}([^[:blank:]]+)#', $arg, $reg)) {
                 $nonnull       = '';
                 $args[$reg[1]] = $nonnull;
+
                 if ($mutliValueMode) {
                     self::addItemAsArray($args, $reg[1], $nonnull);
                 }
@@ -79,15 +80,16 @@ class CoverageUtils
     }
 
     /**
-     * Adds a value as an array of one, or appends to an existing array elements
+     * Adds a value as an array of one, or appends to an existing array elements.
      *
      * @param unknown_type $array
      * @param unknown_type $item
      */
-    public static function addItemAsArray(&$array, $key, $item)
+    public static function addItemAsArray(&$array, $key, $item): void
     {
         $array_key = $key . '[]';
-        if (array_key_exists($array_key, $array)) {
+
+        if (\array_key_exists($array_key, $array)) {
             $array[$array_key][] = $item;
         } else {
             $array[$array_key] = [$item];
@@ -95,7 +97,7 @@ class CoverageUtils
     }
 
     /**
-     * isset function with default value
+     * isset function with default value.
      *
      * Example:  $z = CoverageUtils::issetOr($array[$key], 'no value given')
      *

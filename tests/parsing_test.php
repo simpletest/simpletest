@@ -10,8 +10,18 @@ require_once __DIR__ . '/../src/tidy_parser.php';
 
 Mock::generate('SimpleHttpResponse');
 
-abstract class TestOfParsing extends UnitTestCase
+class TestOfParsing extends UnitTestCase
 {
+    public function whenVisiting($url, $content)
+    {
+        $response = new MockSimpleHttpResponse;
+        $response->returnsByValue('getContent', $content);
+        $response->returnsByValue('getUrl', new SimpleUrl($url));
+        $builder = new SimplePhpPageBuilder;
+
+        return $builder->parse($response);
+    }
+
     public function testRawAccessor(): void
     {
         $page = $this->whenVisiting('http://host/', 'Raw HTML');
@@ -22,13 +32,6 @@ abstract class TestOfParsing extends UnitTestCase
     {
         $page = $this->whenVisiting('http://host/', '<b>Some</b> &quot;messy&quot; HTML');
         $this->assertEqual($page->getText(), 'Some "messy" HTML');
-    }
-
-    public function testFramesetAbsence(): void
-    {
-        $page = $this->whenVisiting('http://here/', '');
-        $this->assertFalse($page->hasFrames());
-        $this->assertIdentical($page->getFrameset(), false);
     }
 
     public function testPageWithNoUrlsGivesEmptyArrayOfLinks(): void
@@ -170,92 +173,6 @@ abstract class TestOfParsing extends UnitTestCase
             '<html><head><Title>Me&amp;Me</TITLE></head></html>',
         );
         $this->assertEqual($page->getTitle(), 'Me&Me');
-    }
-
-    public function testOnlyFramesInFramesetAreRecognised(): void
-    {
-        $raw = '<frameset>' .
-            '  <frame src="2.html"></frame>' .
-            '  <frame src="3.html"></frame>' .
-            '</frameset>' .
-            '<frame src="4.html"></frame>';
-        $page = $this->whenVisiting('http://here', $raw);
-        $this->assertTrue($page->hasFrames());
-        $this->assertSameFrameset($page->getFrameset(), [
-            1 => new SimpleUrl('http://here/2.html'),
-            2 => new SimpleUrl('http://here/3.html'), ]);
-    }
-
-    public function testReadsNamesInFrames(): void
-    {
-        $raw = '<frameset>' .
-            '  <frame src="1.html"></frame>' .
-            '  <frame src="2.html" name="A"></frame>' .
-            '  <frame src="3.html" name="B"></frame>' .
-            '  <frame src="4.html"></frame>' .
-            '</frameset>';
-        $page = $this->whenVisiting('http://here', $raw);
-        $this->assertTrue($page->hasFrames());
-        $this->assertSameFrameset($page->getFrameset(), [
-            1   => new SimpleUrl('http://here/1.html'),
-            'A' => new SimpleUrl('http://here/2.html'),
-            'B' => new SimpleUrl('http://here/3.html'),
-            4   => new SimpleUrl('http://here/4.html'), ]);
-    }
-
-    public function testRelativeFramesRespectBaseTag(): void
-    {
-        $raw  = '<base href="https://there.com/stuff/"><frameset><frame src="1.html"></frameset>';
-        $page = $this->whenVisiting('http://here', $raw);
-        $this->assertSameFrameset(
-            $page->getFrameset(),
-            [1 => new SimpleUrl('https://there.com/stuff/1.html')],
-        );
-    }
-
-    public function testSingleFrameInNestedFrameset(): void
-    {
-        $raw = '<html><frameset><frameset>' .
-                '<frame src="a.html">' .
-                '</frameset></frameset></html>';
-        $page = $this->whenVisiting('http://host', $raw);
-        $this->assertTrue($page->hasFrames());
-        $this->assertIdentical(
-            $page->getFrameset(),
-            [1 => new SimpleUrl('http://host/a.html')],
-        );
-    }
-
-    public function testFramesCollectedWithNestedFramesetTags(): void
-    {
-        $raw = '<html><frameset>' .
-                '<frame src="a.html">' .
-                '<frameset><frame src="b.html"></frameset>' .
-                '<frame src="c.html">' .
-                '</frameset></html>';
-        $page = $this->whenVisiting('http://host', $raw);
-        $this->assertTrue($page->hasFrames());
-        $this->assertIdentical($page->getFrameset(), [
-            1 => new SimpleUrl('http://host/a.html'),
-            2 => new SimpleUrl('http://host/b.html'),
-            3 => new SimpleUrl('http://host/c.html'), ]);
-    }
-
-    public function testNamedFrames(): void
-    {
-        $raw = '<html><frameset>' .
-                '<frame src="a.html">' .
-                '<frame name="_one" src="b.html">' .
-                '<frame src="c.html">' .
-                '<frame src="d.html" name="_two">' .
-                '</frameset></html>';
-        $page = $this->whenVisiting('http://host', $raw);
-        $this->assertTrue($page->hasFrames());
-        $this->assertIdentical($page->getFrameset(), [
-            1      => new SimpleUrl('http://host/a.html'),
-            '_one' => new SimpleUrl('http://host/b.html'),
-            3      => new SimpleUrl('http://host/c.html'),
-            '_two' => new SimpleUrl('http://host/d.html'), ]);
     }
 
     public function testCanReadElementOfCompleteForm(): void
@@ -478,7 +395,7 @@ abstract class TestOfParsing extends UnitTestCase
         $this->assertEqual($page->getField(new SelectByLabel('Stuff')), 'aaa');
     }
 
-    public function testReadingTextArea(): void
+    public function testReadingTextarea(): void
     {
         $raw = '<html><head><form>' .
                 '<textarea name="a">aaa</textarea>' .
@@ -495,21 +412,21 @@ abstract class TestOfParsing extends UnitTestCase
         $this->assertEqual($page->getField(new SelectByName('a')), '&\'"<>');
     }
 
-    public function testNewlinesPreservedInTextArea(): void
+    public function testNewlinesPreservedInTextarea(): void
     {
         $raw  = "<form><textarea name=\"a\">hello\r\nworld</textarea></form>";
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SelectByName('a')), "hello\r\nworld");
     }
 
-    public function testWhitespacePreservedInTextArea(): void
+    public function testWhitespacePreservedInTextarea(): void
     {
         $raw  = '<form><textarea name="a">     </textarea></form>';
         $page = $this->whenVisiting('http://host', $raw);
         $this->assertEqual($page->getField(new SelectByName('a')), '     ');
     }
 
-    public function testComplexWhitespaceInTextArea(): void
+    public function testComplexWhitespaceInTextarea(): void
     {
         $raw = "<html>\n" .
                 "    <head><title></title></head>\n" .
@@ -526,7 +443,7 @@ abstract class TestOfParsing extends UnitTestCase
         $this->assertEqual($page->getField(new SelectByName('c')), '                ');
     }
 
-    public function testSettingTextArea(): void
+    public function testSettingTextarea(): void
     {
         $raw = '<form>' .
                 '<textarea name="a">aaa</textarea>' .
@@ -537,11 +454,14 @@ abstract class TestOfParsing extends UnitTestCase
         $this->assertEqual($page->getField(new SelectByName('a')), 'AAA');
     }
 
-    public function testDontIncludeTextAreaContentInLabel(): void
+    public function testDontIncludeTextareaContentInLabel(): void
     {
-        $raw  = '<form><label>Text area C<textarea id=3 name="c">mouse</textarea></label></form>';
-        $page = $this->whenVisiting('http://host', $raw);
-        $this->assertEqual($page->getField(new SelectByLabel('Text area C')), 'mouse');
+        \opcache_invalidate(__FILE__, true);
+        $raw      = '<form><label>Text area C<textarea id=3 name="c">mouse</textarea></label></form>';
+        $page     = $this->whenVisiting('http://host', $raw);
+        $selector = new SelectByLabel('Text area C');
+        $field    = $page->getField($selector);
+        $this->assertEqual($field, 'mouse');
     }
 
     public function testSettingSelectionField(): void
@@ -721,9 +641,11 @@ class TestOfParsingUsingPhpParser extends TestOfParsing
 
     public function testLabelShouldStopAtClosingLabelTag(): void
     {
-        $raw  = '<form><label>start<textarea id=3 name="c" wrap="hard">stuff</textarea>end</label>stuff</form>';
-        $page = $this->whenVisiting('http://host', $raw);
-        $this->assertEqual($page->getField(new SelectByLabel('startend')), 'stuff');
+        $raw      = '<form><label>start<textarea id=3 name="c" wrap="hard">stuff</textarea>end</label>stuff</form>';
+        $page     = $this->whenVisiting('http://host', $raw);
+        $selector = new SelectByLabel('startend');
+        $field    = $page->getField($selector);
+        $this->assertEqual($field, 'stuff');
     }
 
     public function testSetFieldValueByLabelWithoutForAttribute(): void

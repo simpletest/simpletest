@@ -1,24 +1,26 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../../../src/autorun.php';
 
 class CoverageCalculatorTest extends UnitTestCase
 {
-    public function skip()
+    public $calc;
+
+    protected function setUp(): void
+    {
+        require_once __DIR__ . '/../coverage_calculator.php';
+        $this->calc = new CoverageCalculator;
+    }
+
+    public function skip(): void
     {
         $this->skipIf(
-            !extension_loaded('sqlite3'),
-            'The Coverage extension requires the PHP extension "php_sqlite3".'
+            !\extension_loaded('sqlite3'),
+            'The Coverage extension requires the PHP extension "php_sqlite3".',
         );
     }
 
-    protected function setUp()
-    {
-        require_once __DIR__ . '/../coverage_calculator.php';
-        $this->calc = new CoverageCalculator();
-    }
-
-    public function testVariables()
+    public function testVariables(): void
     {
         $coverage  = ['file' => [1, 1, 1, 1]];
         $untouched = ['missed-file'];
@@ -32,27 +34,27 @@ class CoverageCalculatorTest extends UnitTestCase
         $this->assertEqual($untouched, $variables['untouched']);
     }
 
-    public function testPercentageCoverageForFile()
+    public function testPercentageCoverageForFile(): void
     {
-        $coverage = [0,0,0,1,1,1];
-        $result = $this->calc->percentCoverageForFile('file', $coverage);
+        $coverage = [0, 0, 0, 1, 1, 1];
+        $result   = $this->calc->percentCoverageForFile('file', $coverage);
         $this->assertEqual(50, $result['percentage']);
         $this->assertEqual('file.html', $result['fileReport']);
     }
 
-    public function testTotalLinesOfCode()
+    public function testTotalLinesOfCode(): void
     {
         $this->assertEqual(13, $this->calc->totalLinesOfCode(10, [1, 2, 3]));
     }
 
-    public function testLineCoverage()
+    public function testLineCoverage(): void
     {
         $this->assertEqual(10, $this->calc->lineCoverage(10, -1));
         $this->assertEqual(10, $this->calc->lineCoverage(10, 0));
         $this->assertEqual(11, $this->calc->lineCoverage(10, 1));
     }
 
-    public function testTotalCoverage()
+    public function testTotalCoverage(): void
     {
         $this->assertEqual(11, $this->calc->totalCoverage(10, [-1, 1]));
     }

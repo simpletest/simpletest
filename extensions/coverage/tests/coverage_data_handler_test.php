@@ -1,23 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../../../src/autorun.php';
 
 class CoverageDataHandlerTest extends UnitTestCase
 {
-    public function skip()
-    {
-        $this->skipIf(
-            !extension_loaded('sqlite3'),
-            'The Coverage extension requires the PHP extension "php_sqlite3".'
-        );
-    }
-
-    protected function setUp()
+    protected function setUp(): void
     {
         require_once __DIR__ . '/../coverage_data_handler.php';
     }
 
-    public function testAggregateCoverageCode()
+    public function skip(): void
+    {
+        $this->skipIf(
+            !\extension_loaded('sqlite3'),
+            'The Coverage extension requires the PHP extension "php_sqlite3".',
+        );
+    }
+
+    public function testAggregateCoverageCode(): void
     {
         $handler = new CoverageDataHandler($this->tempdb());
         $this->assertEqual(-2, $handler->aggregateCoverageCode(-2, -2));
@@ -29,7 +29,7 @@ class CoverageDataHandlerTest extends UnitTestCase
         $this->assertEqual(20, $handler->aggregateCoverageCode(10, 10));
     }
 
-    public function testSimpleWriteRead()
+    public function testSimpleWriteRead(): void
     {
         $handler = new CoverageDataHandler($this->tempdb());
         $handler->createSchema();
@@ -41,7 +41,7 @@ class CoverageDataHandlerTest extends UnitTestCase
         $this->assertEqual($expected, $actual);
     }
 
-    public function testMultiFileWriteRead()
+    public function testMultiFileWriteRead(): void
     {
         $handler = new CoverageDataHandler($this->tempdb());
         $handler->createSchema();
@@ -49,11 +49,11 @@ class CoverageDataHandlerTest extends UnitTestCase
         $handler->write(['file1' => [-2, -1, 1]]);
 
         $expected = ['file1' => [-2, -1, 2], 'file2' => [-2, -1, 1]];
-        $actual = $handler->read();
+        $actual   = $handler->read();
         $this->assertEqual($expected, $actual);
     }
 
-    public function testGetfilenames()
+    public function testGetfilenames(): void
     {
         $handler = new CoverageDataHandler($this->tempdb());
         $handler->createSchema();
@@ -63,7 +63,7 @@ class CoverageDataHandlerTest extends UnitTestCase
         $this->assertEqual(['file0', 'file1'], $actual);
     }
 
-    public function testWriteUntouchedFiles()
+    public function testWriteUntouchedFiles(): void
     {
         $handler = new CoverageDataHandler($this->tempdb());
         $handler->createSchema();
@@ -72,7 +72,7 @@ class CoverageDataHandlerTest extends UnitTestCase
         $this->assertEqual(['bluejay', 'robin'], $handler->readUntouchedFiles());
     }
 
-    public function testLtrim()
+    public function testLtrim(): void
     {
         $this->assertEqual('ber', CoverageDataHandler::ltrim('goo', 'goober'));
         $this->assertEqual('some/file', CoverageDataHandler::ltrim('./', './some/file'));
@@ -81,6 +81,6 @@ class CoverageDataHandlerTest extends UnitTestCase
 
     public function tempdb()
     {
-        return tempnam(null, 'coverage.test.db');
+        return \tempnam(null, 'coverage.test.db');
     }
 }

@@ -1,6 +1,7 @@
-<?php
+<?php declare(strict_types=1);
+
 /**
- * Selenium Remote Control Class
+ * Selenium Remote Control Class.
  *
  * Based on the Domain51_Testing_Selenium class available at
  * http://domain51.googlecode.com/svn/Domain51/trunk/
@@ -15,13 +16,12 @@ class SimpleSeleniumRemoteControl
     private $_port       = 4444;
     private $_timeout    = 30000;
     private $_sessionId;
-
     private $_commandMap = [
         'bool' => [
             'verify',
             'verifyTextPresent',
             'verifyTextNotPresent',
-            'verifyValue'
+            'verifyValue',
         ],
         'string' => [
             'getNewBrowserSession',
@@ -37,38 +37,23 @@ class SimpleSeleniumRemoteControl
         $this->_timeout    = $timeout;
     }
 
-    public function sessionIdParser($response)
-    {
-        return substr($response, 3);
-    }
-
-    public function start()
-    {
-        $response         = $this->cmd('getNewBrowserSession', [$this->_browser, $this->_browserUrl]);
-        $this->_sessionId = $this->sessionIdParser($response);
-    }
-
-    public function stop()
-    {
-        $this->cmd('testComplete');
-        $this->_sessionId = null;
-    }
-
     public function __call($method, $arguments)
     {
         $response = $this->cmd($method, $arguments);
 
         foreach ($this->_commandMap as $type => $commands) {
-            if (!in_array($method, $commands)) {
+            if (!\in_array($method, $commands, true)) {
                 continue;
                 $type = null;
             }
+
             break;
         }
 
         switch ($type) {
             case 'bool' :
-                return substr($response, 0, 2) == 'OK' ? true : false;
+                return \substr($response, 0, 2) === 'OK';
+
                 break;
 
             case 'string' :
@@ -77,48 +62,67 @@ class SimpleSeleniumRemoteControl
         }
     }
 
+    public function sessionIdParser($response)
+    {
+        return \substr($response, 3);
+    }
+
+    public function start(): void
+    {
+        $response         = $this->cmd('getNewBrowserSession', [$this->_browser, $this->_browserUrl]);
+        $this->_sessionId = $this->sessionIdParser($response);
+    }
+
+    public function stop(): void
+    {
+        $this->cmd('testComplete');
+        $this->_sessionId = null;
+    }
+
+    public function buildUrlCmd($method, $arguments = [])
+    {
+        $params = ['cmd=' . \urlencode($method)];
+        $i      = 1;
+
+        foreach ($arguments as $param) {
+            $params[] = $i++ . '=' . \urlencode(\trim($param));
+        }
+
+        if ($this->_sessionId !== null) {
+            $params[] = 'sessionId=' . $this->_sessionId;
+        }
+
+        return $this->_server() . '?' . \implode('&', $params);
+    }
+
+    public function cmd($method, $arguments = [])
+    {
+        $url = $this->buildUrlCmd($method, $arguments);
+
+        return $this->_sendRequest($url);
+    }
+
+    public function isUp()
+    {
+        return (bool) @\fsockopen($this->_host, $this->_port, $errno, $errstr, 30);
+    }
+
     private function _server()
     {
         return "http://{$this->_host}:{$this->_port}/selenium-server/driver/";
     }
 
-    public function buildUrlCmd($method, $arguments = [])
-    {
-        $params = ['cmd=' . urlencode($method)];
-        $i = 1;
-        foreach ($arguments as $param) {
-            $params[] = $i++ . '=' . urlencode(trim($param));
-        }
-        if (isset($this->_sessionId)) {
-            $params[] = 'sessionId=' . $this->_sessionId;
-        }
-
-        return $this->_server() . '?' . implode('&', $params);
-    }
-
-    public function cmd($method, $arguments = [])
-    {
-        $url      = $this->buildUrlCmd($method, $arguments);
-        $response = $this->_sendRequest($url);
-
-        return $response;
-    }
-
-    public function isUp()
-    {
-        return (bool) @fsockopen($this->_host, $this->_port, $errno, $errstr, 30);
-    }
-
     private function _initCurl($url)
     {
-        if (!function_exists('curl_init')) {
+        if (!\function_exists('curl_init')) {
             throw new Exception('this code currently requires the curl extension');
         }
-        if (!$ch = curl_init($url)) {
+
+        if (!$ch = \curl_init($url)) {
             throw new Exception('Unable to setup curl');
         }
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, floor($this->_timeout));
+        \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        \curl_setopt($ch, CURLOPT_TIMEOUT, \floor($this->_timeout));
 
         return $ch;
     }
@@ -126,11 +130,12 @@ class SimpleSeleniumRemoteControl
     private function _sendRequest($url)
     {
         $ch     = $this->_initCurl($url);
-        $result = curl_exec($ch);
-        if (($errno = curl_errno($ch)) != 0) {
-            throw new Exception('Curl returned non-null errno ' . $errno . ':' . curl_error($ch));
+        $result = \curl_exec($ch);
+
+        if (($errno = \curl_errno($ch)) != 0) {
+            throw new Exception('Curl returned non-null errno ' . $errno . ':' . \curl_error($ch));
         }
-        curl_close($ch);
+        \curl_close($ch);
 
         return $result;
     }

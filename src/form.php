@@ -10,15 +10,15 @@ require_once __DIR__.'/selector.php';
 class SimpleForm
 {
     private $action;
-    private $buttons;
-    private $checkboxes;
-    private $default_target;
+    private $buttons = [];
+    private $checkboxes = [];
+
     private $encoding;
     private $id;
-    private $images;
+    private $images = [];
     private $method;
-    private $radios;
-    private $widgets;
+    private $radios = [];
+    private $widgets = [];
 
     /**
      * Starts with no held controls/widgets.
@@ -29,15 +29,9 @@ class SimpleForm
     public function __construct($tag, $page)
     {
         $this->action = $this->createAction($tag->getAttribute('action'), $page);
-        $this->buttons = [];
-        $this->checkboxes = [];
-        $this->default_target = false;
         $this->encoding = $this->setEncodingClass($tag);
         $this->id = $tag->getAttribute('id');
-        $this->images = [];
         $this->method = $tag->getAttribute('method');
-        $this->radios = [];
-        $this->widgets = [];
     }
 
     /**
@@ -58,18 +52,6 @@ class SimpleForm
         }
 
         return 'SimpleGetEncoding';
-    }
-
-    /**
-     * Sets the frame target within a frameset.
-     *
-     * @param string $frame name of frame
-     *
-     * @return void
-     */
-    public function setDefaultTarget($frame)
-    {
-        $this->default_target = $frame;
     }
 
     /**
@@ -107,9 +89,7 @@ class SimpleForm
     public function getAction()
     {
         $url = $this->action;
-        if ($this->default_target && !$url->getTarget()) {
-            $url->setTarget($this->default_target);
-        }
+
         if ('get' === $this->getMethod()) {
             $url->clearRequest();
         }
@@ -126,10 +106,9 @@ class SimpleForm
     {
         $class = $this->encoding;
         $encoding = new $class();
-        for ($i = 0, $count = count($this->widgets); $i < $count; ++$i) {
-            $this->widgets[$i]->write($encoding);
+        foreach($this->widgets as $widget) {
+            $widget->write($encoding);
         }
-
         return $encoding;
     }
 
@@ -227,9 +206,9 @@ class SimpleForm
      */
     public function getValue(SelectorInterface $selector)
     {
-        for ($i = 0, $count = count($this->widgets); $i < $count; ++$i) {
-            if ($selector->isMatch($this->widgets[$i])) {
-                return $this->widgets[$i]->getValue();
+        foreach ($this->widgets as $widget) {
+            if ($selector->isMatch($widget)) {
+                return $widget->getValue();
             }
         }
         foreach ($this->buttons as $button) {
@@ -238,7 +217,7 @@ class SimpleForm
             }
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -254,11 +233,11 @@ class SimpleForm
     {
         $success = false;
         $_position = 0;
-        for ($i = 0, $count = count($this->widgets); $i < $count; ++$i) {
-            if ($selector->isMatch($this->widgets[$i])) {
+       foreach($this->widgets as $widget) {
+            if ($selector->isMatch($widget)) {
                 ++$_position;
-                if (false === $position or $_position === (int) $position) {
-                    if ($this->widgets[$i]->setValue($value)) {
+                if (false === $position || $_position === (int) $position) {
+                    if ($widget->setValue($value)) {
                         $success = true;
                     }
                 }
@@ -275,10 +254,10 @@ class SimpleForm
      */
     public function attachLabelBySelector(SelectorInterface $selector, $label)
     {
-        for ($i = 0, $count = count($this->widgets); $i < $count; ++$i) {
-            if ($selector->isMatch($this->widgets[$i])) {
-                if (method_exists($this->widgets[$i], 'setLabel')) {
-                    $this->widgets[$i]->setLabel($label);
+        foreach($this->widgets as $widget) {
+            if ($selector->isMatch($widget)) {
+                if (method_exists($widget, 'setLabel')) {
+                    $widget->setLabel($label);
 
                     return;
                 }

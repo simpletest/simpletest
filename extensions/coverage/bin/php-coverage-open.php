@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /**
  * Initialize code coverage data collection, next step is to run your tests
  * with ini setting auto_prepend_file=autocoverage.php ...
@@ -12,13 +13,13 @@
 # Example:
 # php-coverage-open.php --include='.*\.php$' --include='.*\.inc$' --exclude='.*/tests/.*'
 
-
-//include coverage files
+// include coverage files
 
 require_once __DIR__ . '/../coverage_utils.php';
+
 require_once __DIR__ . '/../coverage.php';
 
-$cc                    = new CodeCoverage();
+$cc                    = new CodeCoverage;
 $cc->log               = 'coverage.sqlite';
 $args                  = CoverageUtils::parseArguments($_SERVER['argv'], true);
 $cc->includes          = CoverageUtils::issetOrDefault($args['include[]'], ['.*\.php$']);

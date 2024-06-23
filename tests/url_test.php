@@ -521,17 +521,6 @@ class TestOfAbsoluteUrls extends UnitTestCase
     }
 }
 
-class TestOfFrameUrl extends UnitTestCase
-{
-    public function testTargetAttachment(): void
-    {
-        $url = new SimpleUrl('http://www.site.com/home.html');
-        $this->assertIdentical($url->getTarget(), false);
-        $url->setTarget('A frame');
-        $this->assertIdentical($url->getTarget(), 'A frame');
-    }
-}
-
 /**
  * @note Based off of http://www.mozilla.org/quality/networking/testing/filetests.html
  */

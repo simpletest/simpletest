@@ -246,7 +246,7 @@ class SimpleUrl
      */
     public function getEncodedRequest()
     {
-        $encoded = $this->raw ? $this->raw : $this->request->asUrlRequest();
+        $encoded = $this->raw ?: $this->request->asUrlRequest();
 
         if ($encoded) {
             return '?' . \preg_replace('/^\?/', '', $encoded);
@@ -288,11 +288,9 @@ class SimpleUrl
     }
 
     /**
-     * Gets the frame target if present.
-     * Although not strictly part of the URL specification it acts
-     * as similarily to the browser.
+     * Gets the browsing context if present.
      *
-     * @return bool|string Frame name or false if none
+     * @return bool|string browsing context, false if none
      */
     public function getTarget()
     {
@@ -300,14 +298,15 @@ class SimpleUrl
     }
 
     /**
-     * Attaches a frame target.
+     * Sets the browsing context (_self, _blank, _parent, _top).
+     * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#target.
      *
-     * @param string $frame name of frame
+     * @param string $target target browser context
      */
-    public function setTarget($frame): void
+    public function setTarget($target): void
     {
         $this->raw    = false;
-        $this->target = $frame;
+        $this->target = $target;
     }
 
     /**

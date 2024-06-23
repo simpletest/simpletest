@@ -15,12 +15,12 @@ class SimpleTestCompatibility
      */
     public static function isIdentical($first, $second)
     {
-        if (\gettype($first) != \gettype($second)) {
+        if (\gettype($first) !== \gettype($second)) {
             return false;
         }
 
         if (\is_object($first) && \is_object($second)) {
-            if ($first::class != $second::class) {
+            if ($first::class !== $second::class) {
                 return false;
             }
 
@@ -34,11 +34,7 @@ class SimpleTestCompatibility
             return self::isArrayOfIdenticalTypes($first, $second);
         }
 
-        if ($first !== $second) {
-            return false;
-        }
-
-        return true;
+        return $first === $second;
     }
 
     /**
@@ -56,7 +52,7 @@ class SimpleTestCompatibility
         }
         $temp_first = $first;
         // modify $first
-        $first = (true === $first) ? false : true;
+        $first = true !== $first;
         // after modifying $first, $second will not be equal to $first,
         // unless $second and $first points to the same variable.
         $is_ref = ($first === $second);
@@ -76,7 +72,7 @@ class SimpleTestCompatibility
      */
     protected static function isArrayOfIdenticalTypes($first, $second)
     {
-        if (\array_keys($first) != \array_keys($second)) {
+        if (\array_keys($first) !== \array_keys($second)) {
             return false;
         }
 

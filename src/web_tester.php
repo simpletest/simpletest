@@ -869,51 +869,6 @@ class WebTestCase extends SimpleTestCase
     }
 
     /**
-     * Accessor for current frame focus. Will be false if no frame has focus.
-     *
-     * @return bool|int|string Label if any,
-     *                         otherwise the position in the frameset or false if none
-     */
-    public function getFrameFocus()
-    {
-        return $this->browser->getFrameFocus();
-    }
-
-    /**
-     * Sets the focus by index. The integer index starts from 1.
-     *
-     * @param int $choice chosen frame
-     *
-     * @return bool true if frame exists
-     */
-    public function setFrameFocusByIndex($choice)
-    {
-        return $this->browser->setFrameFocusByIndex($choice);
-    }
-
-    /**
-     * Sets the focus by name.
-     *
-     * @param string $name chosen frame
-     *
-     * @return bool true if frame exists
-     */
-    public function setFrameFocus($name)
-    {
-        return $this->browser->setFrameFocus($name);
-    }
-
-    /**
-     * Clears the frame focus. All frames will be searched for content.
-     *
-     * @return bool|mixed
-     */
-    public function clearFrameFocus()
-    {
-        return $this->browser->clearFrameFocus();
-    }
-
-    /**
      * Clicks a visible text item. Will first try buttons, then links and then images.
      *
      * @param string $label visible text or alt text

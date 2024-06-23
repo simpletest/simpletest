@@ -208,8 +208,8 @@ class SimpleTestCase
      */
     public function after($method): void
     {
-        for ($i = 0; $i < \count($this->observers); $i++) {
-            $this->observers[$i]->atTestEnd($method, $this);
+        foreach ($this->observers as $observer) {
+            $observer->atTestEnd($method, $this);
         }
         $this->reporter->paintMethodEnd($method);
     }
@@ -229,7 +229,7 @@ class SimpleTestCase
      */
     public function pass($message = 'Pass')
     {
-        if (!isset($this->reporter)) {
+        if ($this->reporter === null) {
             \trigger_error('Can only make assertions within test methods');
         }
         $this->reporter->paintPass($message . $this->getAssertionLine());
@@ -244,7 +244,7 @@ class SimpleTestCase
      */
     public function fail($message = 'Fail')
     {
-        if (!isset($this->reporter)) {
+        if ($this->reporter === null) {
             \trigger_error('Can only make assertions within test methods');
         }
         $this->reporter->paintFail($message . $this->getAssertionLine());
@@ -262,7 +262,7 @@ class SimpleTestCase
      */
     public function error($severity, $message, $file, $line): void
     {
-        if (!isset($this->reporter)) {
+        if ($this->reporter === null) {
             \trigger_error('Can only make assertions within test methods');
         }
         $this->reporter->paintError("Unexpected PHP Error [{$message}] severity [{$severity}] in [{$file} line {$line}]");
@@ -286,7 +286,7 @@ class SimpleTestCase
      */
     public function signal($type, $payload): void
     {
-        if (!isset($this->reporter)) {
+        if ($this->reporter === null) {
             \trigger_error('Can only make assertions within test methods');
         }
         $this->reporter->paintSignal($type, $payload);

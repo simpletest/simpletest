@@ -393,11 +393,7 @@ class UnitTestCase extends SimpleTestCase
             return $expected;
         }
 
-        if (\is_string($expected)) {
-            $v = \str_replace('%', '%%', $expected);
-        } else {
-            $v = $expected;
-        }
+        $v = \is_string($expected) ? \str_replace('%', '%%', $expected) : $expected;
 
         return new EqualExpectation($v);
     }

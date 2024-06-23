@@ -469,7 +469,7 @@ class SimpleWidget extends SimpleTag
      */
     public function isLabel($label)
     {
-        return $this->label === \trim($label);
+        return $this->label == \trim($label);
     }
 
     /**
@@ -480,6 +480,7 @@ class SimpleWidget extends SimpleTag
     public function write($encoding): void
     {
         $name = $this->getName();
+
         if ($name) {
             $encoding->add($name, $this->getValue());
         }
@@ -1131,7 +1132,7 @@ class SimpleOptionTag extends SimpleWidget
      */
     public function isValue($compare)
     {
-        $compare = \trim((string)$compare);
+        $compare = \trim((string) $compare);
 
         if (\trim($this->getValue()) === $compare) {
             return true;
@@ -1410,6 +1411,7 @@ class SimpleTagGroup
         if (\count($this->widgets) > 0) {
             return $this->widgets[0]->getName();
         }
+
         return null;
     }
 
@@ -1440,8 +1442,8 @@ class SimpleTagGroup
      */
     public function isLabel($label)
     {
-        for ($i = 0, $count = \count($this->widgets); $i < $count; $i++) {
-            if ($this->widgets[$i]->isLabel($label)) {
+        foreach ($this->widgets as $widget) {
+            if ($widget->isLabel($label)) {
                 return true;
             }
         }

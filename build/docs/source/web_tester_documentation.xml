@@ -97,7 +97,7 @@ Test cases run: 1/1, Failures: 0, Exceptions: 0
                 page we are on, we need to verify the page content.
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
-    
+
     function testHomepage() {<strong>
         $this->get('http://www.lastcraft.com/');
         $this->assertText('Why the last craft');</strong>
@@ -157,7 +157,7 @@ class TestOfLastcraft extends WebTestCase {
                 is in a list of allowed values...
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
-    
+
     function testRedirects() {
         $this->get('http://www.lastcraft.com/test/redirect.php');
         $this->assertResponse(200);</strong>
@@ -177,7 +177,7 @@ class TestOfLastcraft extends WebTestCase {
                 be disabled...
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
-    
+
     function testHomepage() {<strong>
         $this->setMaximumRedirects(0);</strong>
         $this->get('http://www.lastcraft.com/test/redirect.php');
@@ -198,7 +198,7 @@ Test cases run: 1/1, Failures: 1, Exceptions: 0
                 We can modify the test to correctly assert redirects with...
 <php><![CDATA[
 class TestOfLastcraft extends WebTestCase {
-    
+
     function testHomepage() {
         $this->setMaximumRedirects(0);
         $this->get('http://www.lastcraft.com/test/redirect.php');
@@ -264,9 +264,6 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>submitFormById($id)</code></td><td>Submit a form without the submit value</td></tr>
                     <tr><td><code>clickLink($label, $index)</code></td><td>Click an anchor by the visible label text</td></tr>
                     <tr><td><code>clickLinkById($id)</code></td><td>Click an anchor by the ID attribute</td></tr>
-                    <tr><td><code>getFrameFocus()</code></td><td>The name of the currently selected frame</td></tr>
-                    <tr><td><code>setFrameFocusByIndex($choice)</code></td><td>Focus on a frame counting from 1</td></tr>
-                    <tr><td><code>setFrameFocus($name)</code></td><td>Focus on a frame by name</td></tr>
                 </tbody></table>
             </p>
             <p>

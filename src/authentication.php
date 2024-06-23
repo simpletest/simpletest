@@ -28,8 +28,8 @@ class SimpleRealm
      */
     public function __construct($type, $url)
     {
-        $this->type     = $type;
-        $this->root     = $url->getBasePath();
+        $this->type = $type;
+        $this->root = $url->getBasePath();
     }
 
     /**
@@ -86,6 +86,7 @@ class SimpleRealm
         if ($this->isIn($this->root, $url->getBasePath())) {
             return true;
         }
+
         return $this->isIn($this->root, $url->getBasePath() . $url->getPage() . '/');
     }
 

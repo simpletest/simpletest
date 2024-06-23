@@ -107,6 +107,7 @@ class SimpleTest
             }
         }
 
+        return null;
     }
 
     /**
@@ -418,7 +419,7 @@ class SimpleStackTrace
             $path = \substr(SIMPLE_TEST, 0, -1);
 
             if (\str_starts_with($frame['file'], $path)) {
-                if (\dirname($frame['file']) == $path) {
+                if (\dirname($frame['file']) === $path) {
                     return true;
                 }
             }

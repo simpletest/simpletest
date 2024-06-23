@@ -324,10 +324,10 @@ class SimpleHttpRequest
 class SimpleHttpHeaders
 {
     private $authentication = false;
-    private $cookies = [];
-    private $http_version = false;
-    private $location = false;
-    private $mime_type = '';
+    private $cookies        = [];
+    private $http_version   = false;
+    private $location       = false;
+    private $mime_type      = '';
     private $raw_headers;
     private $realm = false;
 
@@ -341,7 +341,7 @@ class SimpleHttpHeaders
      */
     public function __construct($headers)
     {
-        $this->raw_headers    = $headers;
+        $this->raw_headers = $headers;
 
         foreach (\explode("\r\n", $headers) as $header_line) {
             $this->parseHeaderLine($header_line);

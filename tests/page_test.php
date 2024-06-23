@@ -23,7 +23,6 @@ class TestOfPageInterface extends UnitTestCase
         $this->assertIdentical($page->getResponseCode(), false);
         $this->assertIdentical($page->getAuthentication(), false);
         $this->assertIdentical($page->getRealm(), false);
-        $this->assertFalse($page->hasFrames());
         $this->assertIdentical($page->getUrls(), []);
         $this->assertIdentical($page->getTitle(), false);
     }

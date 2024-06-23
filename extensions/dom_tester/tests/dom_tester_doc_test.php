@@ -1,18 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../../../src/autorun.php';
+
 require_once __DIR__ . '/../../dom_tester.php';
 
-SimpleTest::prefer(new TextReporter());
+SimpleTest::prefer(new TextReporter);
 
 class TestOfLiveCssSelectors extends DomTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addHeader('User-Agent: SimpleTest ' . SimpleTest::getVersion());
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $url = 'http://simpletest.org/';
         $this->assertTrue($this->get($url));
