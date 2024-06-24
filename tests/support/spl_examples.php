@@ -1,37 +1,37 @@
-<?php
+<?php declare(strict_types=1);
 
 class IteratorImplementation implements Iterator
 {
-    #[\ReturnTypeWillChange]
-    public function current()
+    #[ReturnTypeWillChange]
+    public function current(): void
     {
     }
 
-    #[\ReturnTypeWillChange]
-    public function next()
+    #[ReturnTypeWillChange]
+    public function next(): void
     {
     }
 
-    #[\ReturnTypeWillChange]
-    public function key()
+    #[ReturnTypeWillChange]
+    public function key(): void
     {
     }
 
-    #[\ReturnTypeWillChange]
-    public function valid()
+    #[ReturnTypeWillChange]
+    public function valid(): void
     {
     }
 
-    #[\ReturnTypeWillChange]
-    public function rewind()
+    #[ReturnTypeWillChange]
+    public function rewind(): void
     {
     }
 }
 
 class IteratorAggregateImplementation implements IteratorAggregate
 {
-    #[\ReturnTypeWillChange]
-    public function getIterator()
+    #[ReturnTypeWillChange]
+    public function getIterator(): void
     {
     }
 }

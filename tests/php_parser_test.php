@@ -167,7 +167,8 @@ class TestOfLexer extends UnitTestCase
     {
         $handler = new MockTestParser();
         $target = ['a', 'b', 'a', 'bb', 'x', 'b', 'a', 'xxxxxx', 'a', 'x'];
-        for ($i = 0; $i < count($target); ++$i) {
+        $counter = count($target);
+        for ($i = 0; $i < $counter; $i++) {
             $handler->expectAt($i, 'accept', [$target[$i], '*']);
         }
         $handler->expectCallCount('accept', count($target));
@@ -319,7 +320,6 @@ class TestOfSimpleHtmlLexer extends UnitTestCase
         $parser->returnsByValue('acceptStartToken', true);
         $parser->returnsByValue('acceptEndToken', true);
         $parser->returnsByValue('acceptAttributeToken', true);
-        $parser->returnsByValue('acceptEntityToken', true);
         $parser->returnsByValue('acceptTextToken', true);
         $parser->returnsByValue('ignore', true);
 
@@ -332,7 +332,6 @@ class TestOfSimpleHtmlLexer extends UnitTestCase
         $parser->expectNever('acceptStartToken');
         $parser->expectNever('acceptEndToken');
         $parser->expectNever('acceptAttributeToken');
-        $parser->expectNever('acceptEntityToken');
         $parser->expectNever('acceptTextToken');
         $lexer = new SimpleHtmlLexer($parser);
         $this->assertTrue($lexer->parse(''));
@@ -413,16 +412,6 @@ class TestOfHtmlSaxParser extends UnitTestCase
         $listener->returnsByValue('endElement', true);
 
         return $listener;
-    }
-
-    public function testFramesetTag()
-    {
-        $listener = $this->createListener();
-        $listener->expectOnce('startElement', ['frameset', []]);
-        $listener->expectOnce('addContent', ['Frames']);
-        $listener->expectOnce('endElement', ['frameset']);
-        $parser = new SimpleHtmlSaxParser($listener);
-        $this->assertTrue($parser->parse('<frameset>Frames</frameset>'));
     }
 
     public function testTagWithUnquotedAttributes()
@@ -521,19 +510,5 @@ class TestOfHtmlSaxParser extends UnitTestCase
         );
         $parser = new SimpleHtmlSaxParser($listener);
         $this->assertTrue($parser->parse('<input type="submit" name="N" value="V" />'));
-    }
-
-    public function testNestedFrameInFrameset()
-    {
-        $listener = $this->createListener();
-        $listener->expectAt(0, 'startElement', ['frameset', []]);
-        $listener->expectAt(1, 'startElement', ['frame', ['src' => 'frame.html']]);
-        $listener->expectCallCount('startElement', 2);
-        $listener->expectOnce('addContent', ['<noframes>Hello</noframes>']);
-        $listener->expectOnce('endElement', ['frameset']);
-        $parser = new SimpleHtmlSaxParser($listener);
-        $this->assertTrue($parser->parse(
-            '<frameset><frame src="frame.html"><noframes>Hello</noframes></frameset>'
-        ));
     }
 }

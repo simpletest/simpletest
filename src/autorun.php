@@ -1,18 +1,22 @@
-<?php
+<?php declare(strict_types=1);
+
 /**
  *  Autorunner which runs all tests cases found in a file
  *  that includes this module.
  */
 
 // include simpletest files
-require_once __DIR__.'/unit_tester.php';
-require_once __DIR__.'/mock_objects.php';
-require_once __DIR__.'/collector.php';
-require_once __DIR__.'/default_reporter.php';
+require_once __DIR__ . '/unit_tester.php';
 
-$GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_CLASSES'] = get_declared_classes();
-$GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_PATH'] = getcwd();
-register_shutdown_function('simpletest_autorun');
+require_once __DIR__ . '/mock_objects.php';
+
+require_once __DIR__ . '/collector.php';
+
+require_once __DIR__ . '/default_reporter.php';
+
+$GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_CLASSES'] = \get_declared_classes();
+$GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_PATH']    = \getcwd();
+\register_shutdown_function('simpletest_autorun');
 
 /**
  * Exit handler to run all recent test cases and exit system if in CLI.
@@ -21,11 +25,10 @@ register_shutdown_function('simpletest_autorun');
  */
 function simpletest_autorun()
 {
-    chdir($GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_PATH']);
-    if (tests_have_run()) {
-        return true;
-    }
+    \chdir($GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_PATH']);
+
     $result = run_local_tests();
+
     if (SimpleReporter::inCli()) {
         exit($result ? 0 : 1);
     }
@@ -36,9 +39,9 @@ function simpletest_autorun()
  * Uses the DefaultReporter which can have it's output
  * controlled with SimpleTest::prefer().
  *
- * @return bool|null false, if there were test failures,
- *                      true, if there were no failures,
- *                      null, if tests are already running
+ * @return null|bool false, if there were test failures,
+ *                   true, if there were no failures,
+ *                   null, if tests are already running
  */
 function run_local_tests()
 {
@@ -47,18 +50,18 @@ function run_local_tests()
             return true;
         }
         $candidates = capture_new_classes();
-        $loader = new SimpleFileLoader();
+        $loader     = new SimpleFileLoader;
 
         $suite = $loader->createSuiteFromClasses(
-            basename(initial_file()),
-            $loader->selectRunnableTests($candidates)
+            \basename(initial_file()),
+            $loader->selectRunnableTests($candidates),
         );
 
-        $reporter = new DefaultReporter();
+        $reporter = new DefaultReporter;
 
         if ($reporter->doCodeCoverage) {
-            $coverage = new PHP_CodeCoverage();
-            $filter = $coverage->filter();
+            $coverage = new PHP_CodeCoverage;
+            $filter   = $coverage->filter();
 
             foreach ($reporter->excludes as $folderPath) {
                 $filter->addDirectoryToBlacklist($folderPath);
@@ -72,13 +75,13 @@ function run_local_tests()
         if ($reporter->doCodeCoverage) {
             $coverage->stop();
 
-            $writer = new PHP_CodeCoverage_Report_HTML();
+            $writer = new PHP_CodeCoverage_Report_HTML;
             $writer->process($coverage, '/tmp/coverage');
         }
 
         return $result;
     } catch (Exception $stack_frame_fix) {
-        echo $stack_frame_fix->getMessage();
+        print $stack_frame_fix->getMessage();
 
         return false;
     }
@@ -92,6 +95,7 @@ function run_local_tests()
 function tests_have_run()
 {
     $context = SimpleTest::getContext();
+
     if ($context) {
         return (bool) $context->getTest();
     }
@@ -107,12 +111,13 @@ function tests_have_run()
 function initial_file()
 {
     static $file = false;
+
     if (!$file) {
         if (isset($_SERVER, $_SERVER['SCRIPT_FILENAME'])) {
             $file = $_SERVER['SCRIPT_FILENAME'];
         } else {
-            $included_files = get_included_files();
-            $file = reset($included_files);
+            $included_files = \get_included_files();
+            $file           = \reset($included_files);
         }
     }
 
@@ -129,10 +134,10 @@ function capture_new_classes()
 {
     global $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES;
 
-    $diff = array_diff(get_declared_classes(),
-        $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES ?
-        $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES : []
+    $diff = \array_diff(
+        \get_declared_classes(),
+        $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES ?: [],
     );
 
-    return array_map('strtolower', $diff);
+    return \array_map('strtolower', $diff);
 }

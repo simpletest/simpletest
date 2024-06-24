@@ -1,26 +1,24 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/test_case.php';
+require_once __DIR__ . '/test_case.php';
 
 /**
  * Wrapper for exec() functionality.
  */
 class SimpleShell
 {
-    /** @var mixed|array|bool */
-    private $output;
+    /** @var array|bool|mixed */
+    private $output = false;
 
     /**
      * Executes the shell comand and stashes the output.
      */
     public function __construct()
     {
-        $this->output = false;
     }
 
     /**
      * Actually runs the command.
-     * Does not trap the error stream output as this need PHP 4.3+.
      *
      * @param string $command the actual command line to run
      *
@@ -29,7 +27,7 @@ class SimpleShell
     public function execute($command)
     {
         $this->output = false;
-        exec($command, $this->output, $result_code);
+        \exec($command, $this->output, $result_code);
 
         return $result_code;
     }
@@ -41,7 +39,7 @@ class SimpleShell
      */
     public function getOutput()
     {
-        return implode("\n", $this->output);
+        return \implode("\n", $this->output);
     }
 
     /**
@@ -63,10 +61,12 @@ class ShellTestCase extends SimpleTestCase
 {
     /** @var SimpleShell */
     private $current_shell;
+
     /** @var bool */
-    private $last_status;
+    private $last_status = false;
+
     /** @var string */
-    private $last_command;
+    private $last_command = '';
 
     /**
      * Creates an empty test case.
@@ -78,8 +78,6 @@ class ShellTestCase extends SimpleTestCase
     {
         parent::__construct($label);
         $this->current_shell = $this->createShell();
-        $this->last_status = false;
-        $this->last_command = '';
     }
 
     /**
@@ -91,8 +89,8 @@ class ShellTestCase extends SimpleTestCase
      */
     public function execute($command)
     {
-        $shell = $this->getShell();
-        $this->last_status = $shell->execute($command);
+        $shell              = $this->getShell();
+        $this->last_status  = $shell->execute($command);
         $this->last_command = $command;
 
         return 0 === $this->last_status;
@@ -100,10 +98,8 @@ class ShellTestCase extends SimpleTestCase
 
     /**
      * Dumps the output of the last command.
-     *
-     * @return void
      */
-    public function dumpOutput()
+    public function dumpOutput(): void
     {
         $this->dump($this->getOutput());
     }
@@ -142,7 +138,7 @@ class ShellTestCase extends SimpleTestCase
      */
     public function assertTrue($result, $message = '%s')
     {
-        return $this->assert(new TrueExpectation(), $result, $message);
+        return $this->assert(new TrueExpectation, $result, $message);
     }
 
     /**
@@ -157,7 +153,7 @@ class ShellTestCase extends SimpleTestCase
      */
     public function assertFalse($result, $message = '%s')
     {
-        return $this->assert(new FalseExpectation(), $result, $message);
+        return $this->assert(new FalseExpectation, $result, $message);
     }
 
     /**
@@ -175,7 +171,7 @@ class ShellTestCase extends SimpleTestCase
         return $this->assert(
             new EqualExpectation($first),
             $second,
-            $message
+            $message,
         );
     }
 
@@ -194,7 +190,7 @@ class ShellTestCase extends SimpleTestCase
         return $this->assert(
             new NotEqualExpectation($first),
             $second,
-            $message
+            $message,
         );
     }
 
@@ -208,14 +204,14 @@ class ShellTestCase extends SimpleTestCase
      */
     public function assertExitCode($status, $message = '%s')
     {
-        $errormsg = sprintf(
+        $errormsg = \sprintf(
             'Expected status code of [%s] from [%s], but got [%s]',
             $status,
             $this->last_command,
-            $this->last_status
+            $this->last_status,
         );
 
-        $message = sprintf($message, $errormsg);
+        $message = \sprintf($message, $errormsg);
 
         return $this->assertTrue($status === $this->last_status, $message);
     }
@@ -235,7 +231,7 @@ class ShellTestCase extends SimpleTestCase
         return $this->assert(
             new EqualExpectation($expected),
             $shell->getOutput(),
-            $message
+            $message,
         );
     }
 
@@ -254,7 +250,7 @@ class ShellTestCase extends SimpleTestCase
         return $this->assert(
             new PatternExpectation($pattern),
             $shell->getOutput(),
-            $message
+            $message,
         );
     }
 
@@ -263,7 +259,7 @@ class ShellTestCase extends SimpleTestCase
      * then a failure is generated, else a pass.
      *
      * @param string $pattern regex to search for
-     * @param $message           message to display
+     * @param        $message message to display
      *
      * @return bool true if pass
      */
@@ -274,7 +270,7 @@ class ShellTestCase extends SimpleTestCase
         return $this->assert(
             new NoPatternExpectation($pattern),
             $shell->getOutput(),
-            $message
+            $message,
         );
     }
 
@@ -288,11 +284,11 @@ class ShellTestCase extends SimpleTestCase
      */
     public function assertFileExists($path, $message = '%s')
     {
-        $errormsg = sprintf('File [%s] should exist', $path);
+        $errormsg = \sprintf('File [%s] should exist', $path);
 
-        $message = sprintf($message, $errormsg);
+        $message = \sprintf($message, $errormsg);
 
-        return $this->assertTrue(file_exists($path), $message);
+        return $this->assertTrue(\file_exists($path), $message);
     }
 
     /**
@@ -305,11 +301,11 @@ class ShellTestCase extends SimpleTestCase
      */
     public function assertFileNotExists($path, $message = '%s')
     {
-        $errormsg = sprintf('File [%s] should not exist', $path);
+        $errormsg = \sprintf('File [%s] should not exist', $path);
 
-        $message = sprintf($message, $errormsg);
+        $message = \sprintf($message, $errormsg);
 
-        return $this->assertFalse(file_exists($path), $message);
+        return $this->assertFalse(\file_exists($path), $message);
     }
 
     /**
@@ -325,8 +321,8 @@ class ShellTestCase extends SimpleTestCase
     {
         return $this->assert(
             new PatternExpectation($pattern),
-            implode('', file($path)),
-            $message
+            \implode('', \file($path)),
+            $message,
         );
     }
 
@@ -344,8 +340,8 @@ class ShellTestCase extends SimpleTestCase
     {
         return $this->assert(
             new NoPatternExpectation($pattern),
-            implode('', file($path)),
-            $message
+            \implode('', \file($path)),
+            $message,
         );
     }
 
@@ -366,6 +362,6 @@ class ShellTestCase extends SimpleTestCase
      */
     protected function createShell()
     {
-        return new SimpleShell();
+        return new SimpleShell;
     }
 }

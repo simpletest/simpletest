@@ -1,29 +1,35 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../../../src/autorun.php';
 
 class CoverageWriterTest extends UnitTestCase
 {
-    public function skip()
+    public static function getAttribute($element, $attribute)
     {
-        $this->skipIf(
-            !extension_loaded('sqlite3'),
-            'The Coverage extension requires the PHP extension "php_sqlite3".'
-        );
+        return $element->attributes()[$attribute];
     }
 
-    public function setUp()
+    protected function setUp(): void
     {
         require_once __DIR__ . '/../coverage_writer.php';
+
         require_once __DIR__ . '/../coverage_calculator.php';
     }
 
-    public function testGenerateSummaryReport()
+    public function skip(): void
     {
-        $writer             = new CoverageWriter();
-        $coverage           = array('file' => array(0, 1));
-        $untouched          = array('missed-file');
-        $calc               = new CoverageCalculator();
+        $this->skipIf(
+            !\extension_loaded('sqlite3'),
+            'The Coverage extension requires the PHP extension "php_sqlite3".',
+        );
+    }
+
+    public function testGenerateSummaryReport(): void
+    {
+        $writer             = new CoverageWriter;
+        $coverage           = ['file' => [0, 1]];
+        $untouched          = ['missed-file'];
+        $calc               = new CoverageCalculator;
         $variables          = $calc->variables($coverage, $untouched);
         $variables['title'] = 'Coverage Summary';
         $reportFile         = __DIR__ . '/summaryReport.html';
@@ -43,15 +49,15 @@ class CoverageWriterTest extends UnitTestCase
         $untouchedFile = $dom->xpath("//span[@class='untouchedFile']");
         $this->assertEqual('missed-file', (string) $untouchedFile[0]);
 
-        unlink($reportFile);
+        \unlink($reportFile);
     }
 
-    public function testGenerateCoverageByFile()
+    public function testGenerateCoverageByFile(): void
     {
-        $writer             = new CoverageWriter();
-        $cov                = array(3 => 1, 4 => -2); // 2 comments, 1 code, 1 dead  (1-based indexes)
+        $writer             = new CoverageWriter;
+        $cov                = [3 => 1, 4 => -2]; // 2 comments, 1 code, 1 dead (1-based indexes)
         $coverageSampleFile = __DIR__ . '/sample/code.php';
-        $calc               = new CoverageCalculator();
+        $calc               = new CoverageCalculator;
         $variables          = $calc->coverageByFileVariables($coverageSampleFile, $cov);
         $variables['title'] = 'File Coverage';
         $reportFile         = __DIR__ . '/sampleFileReport.html';
@@ -66,11 +72,6 @@ class CoverageWriterTest extends UnitTestCase
         $this->assertEqual('covered code', self::getAttribute($cells[5], 'class'));
         $this->assertEqual('dead code', self::getAttribute($cells[7], 'class'));
 
-        unlink($reportFile);
-    }
-
-    public static function getAttribute($element, $attribute)
-    {
-        return $element->attributes()[$attribute];
+        \unlink($reportFile);
     }
 }

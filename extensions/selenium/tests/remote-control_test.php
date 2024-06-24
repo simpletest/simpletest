@@ -1,23 +1,24 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../../../src/autorun.php';
+
 require_once __DIR__ . '/../remote-control.php';
 
 class TestOfSimpleSeleniumRemoteControl extends UnitTestCase
 {
-    public function testSesssionIdShouldBePreserved()
+    public function testSesssionIdShouldBePreserved(): void
     {
         $remote_control = new SimpleSeleniumRemoteControl('tester', 'http://simpletest.org/');
         $this->assertEqual($remote_control->sessionIdParser('OK,123456789123456789'), '123456789123456789');
     }
 
-    public function testIsUpReturnsFalseWhenDirectedToLocalhostDown()
+    public function testIsUpReturnsFalseWhenDirectedToLocalhostDown(): void
     {
         $remote_control = new SimpleSeleniumRemoteControl('tester', 'http://simpletest.org/', 'localhost-down');
         $this->assertFalse($remote_control->isUp());
     }
 
-    public function testIsUpReturnsTrueWhenDirectedToLocalhostOnPort80()
+    public function testIsUpReturnsTrueWhenDirectedToLocalhostOnPort80(): void
     {
         $remote_control = new SimpleSeleniumRemoteControl('tester', 'http://simpletest.org/', 'localhost', '80');
         $this->assertTrue($remote_control->isUp());
@@ -26,18 +27,18 @@ class TestOfSimpleSeleniumRemoteControl extends UnitTestCase
 
 class TestOfSimpleSeleniumRemoteControlWhenItIsUp extends UnitTestCase
 {
-    public function skip()
+    public function skip(): void
     {
         $remote_control = new SimpleSeleniumRemoteControl('*custom opera -nosession', 'http://simpletest.org/');
         $this->skipUnless($remote_control->isUp(), 'Remote control tests desperatly need a working Selenium Server.');
     }
 
-    public function testOfCommandCreation()
+    public function testOfCommandCreation(): void
     {
         $remote_control = new SimpleSeleniumRemoteControl('tester', 'http://simpletest.org/');
         $this->assertEqual($remote_control->buildUrlCmd('test'), 'http://localhost:4444/selenium-server/driver/?cmd=test');
-        $this->assertEqual($remote_control->buildUrlCmd('test', array('next')), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=next');
-        $this->assertEqual($remote_control->buildUrlCmd('test', array('�t�')), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=%C3%A9t%C3%A9');
-        $this->assertEqual($remote_control->buildUrlCmd('test', array('next', 'then')), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=next&2=then');
+        $this->assertEqual($remote_control->buildUrlCmd('test', ['next']), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=next');
+        $this->assertEqual($remote_control->buildUrlCmd('test', ['�t�']), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=%C3%A9t%C3%A9');
+        $this->assertEqual($remote_control->buildUrlCmd('test', ['next', 'then']), 'http://localhost:4444/selenium-server/driver/?cmd=test&1=next&2=then');
     }
 }

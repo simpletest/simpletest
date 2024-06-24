@@ -1,10 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/http.php';
-require_once __DIR__.'/php_parser.php';
-require_once __DIR__.'/tag.php';
-require_once __DIR__.'/form.php';
-require_once __DIR__.'/selector.php';
+require_once __DIR__ . '/http.php';
+
+require_once __DIR__ . '/php_parser.php';
+
+require_once __DIR__ . '/tag.php';
+
+require_once __DIR__ . '/form.php';
+
+require_once __DIR__ . '/selector.php';
 
 /**
  * A wrapper for a web page.
@@ -16,10 +20,11 @@ class SimplePage
     private $title = false;
     private $last_widget;        // TODO
     private $label;              // TODO
-        /** @var array */
-    private $forms = [];
+
     /** @var array */
-    private $frames = [];
+    private $forms = [];
+
+    /** @var array */
     private $transport_error;
     private $raw;
     private $text = false;
@@ -31,9 +36,41 @@ class SimplePage
     private $request_data;
 
     /**
+     * Turns HTML into text browser visible text.
+     * Images are converted to their alt text and tags are suppressed.
+     * Entities are converted to their visible representation.
+     *
+     * @param string $html HTML to convert
+     *
+     * @return string plain text
+     */
+    public static function normalise($html)
+    {
+        $rules = [
+            '#<!--.*?-->#si',
+            '#<(script|option|textarea)[^>]*>.*?</\1>#si',
+            '#<img[^>]*alt\s*=\s*("([^"]*)"|\'([^\']*)\'|([a-zA-Z_]+))[^>]*>#',
+            '#<[^>]*>#',
+        ];
+
+        $replace = [
+            '',
+            '',
+            ' \2\3\4 ',
+            '',
+        ];
+
+        $text = \preg_replace($rules, $replace, $html);
+        $text = \html_entity_decode($text, ENT_QUOTES);
+        $text = \preg_replace('#\s+#', ' ', $text);
+
+        return \trim(\trim($text), "\xA0");        // @todo The \xAO is a &nbsp;. Add a test for this.
+    }
+
+    /**
      * Parses a page ready to access it's contents.
      *
-     * @param SimpleHttpResponse|false $response result of HTTP fetch
+     * @param false|SimpleHttpResponse $response result of HTTP fetch
      */
     public function __construct($response = false)
     {
@@ -42,40 +79,6 @@ class SimplePage
         } else {
             $this->noResponse();
         }
-    }
-
-    /**
-     * Extracts all of the response information.
-     *
-     * @param SimpleHttpResponse $response response being parsed
-     *
-     * @return void
-     */
-    protected function extractResponse($response)
-    {
-        $this->transport_error = $response->getError();
-        $this->raw = $response->getContent();
-        $this->sent = $response->getSent();
-        $this->headers = $response->getHeaders();
-        $this->method = $response->getMethod();
-        $this->url = $response->getUrl();
-        $this->request_data = $response->getRequestData();
-    }
-
-    /**
-     * Sets up a missing response.
-     *
-     * @return void
-     */
-    protected function noResponse()
-    {
-        $this->transport_error = 'No page fetched yet';
-        $this->raw = false;
-        $this->sent = false;
-        $this->headers = false;
-        $this->method = 'GET';
-        $this->url = false;
-        $this->request_data = false;
     }
 
     /**
@@ -233,85 +236,11 @@ class SimplePage
     }
 
     /**
-     * Accessor for current frame focus. Will be false as no frames.
-     *
-     * @return array always empty
-     */
-    public function getFrameFocus()
-    {
-        return [];
-    }
-
-    /**
-     * Sets the focus by index. The integer index starts from 1.
-     *
-     * @param int $choice chosen frame
-     *
-     * @return bool always false
-     */
-    public function setFrameFocusByIndex($choice)
-    {
-        // TODO
-        return false;
-    }
-
-    /**
-     * Sets the focus by name. Always fails for a leaf page.
-     *
-     * @param string $name chosen frame
-     *
-     * @return bool false as no frames
-     */
-    public function setFrameFocus($name)
-    {
-        // TODO
-        return false;
-    }
-
-    /**
-     * Clears the frame focus. Does nothing for a leaf page.
-     *
-     * @return void mixed|bool (should return a bool on clear?)
-     */
-    public function clearFrameFocus()
-    {
-        // TODO
-    }
-
-    /**
-     * Set Frames
-     *
-     * @param array $frames The frames to set.
-     *
-     * @return void
-     */
-    public function setFrames($frames)
-    {
-        $this->frames = $frames;
-    }
-
-    /**
-     * Test to see if link is an absolute one.
-     *
-     * @param string $url url to test
-     *
-     * @return bool true if absolute
-     */
-    protected function linkIsAbsolute($url)
-    {
-        $parsed = new SimpleUrl($url);
-
-        return ($parsed->getScheme() && $parsed->getHost());
-    }
-
-    /**
      * Adds a link to the page.
      *
      * @param SimpleAnchorTag $tag link to accept
-     *
-     * @return void
      */
-    public function addLink($tag)
+    public function addLink($tag): void
     {
         $this->links[] = $tag;
     }
@@ -320,45 +249,10 @@ class SimplePage
      * Set the forms.
      *
      * @param array $forms An array of SimpleForm objects
-     *
-     * @return void
      */
-    public function setForms($forms)
+    public function setForms($forms): void
     {
         $this->forms = $forms;
-    }
-
-    /**
-     * Test for the presence of a frameset.
-     *
-     * @return bool true if frameset
-     */
-    public function hasFrames()
-    {
-        return count($this->frames) > 0;
-    }
-
-    /**
-     * Accessor for frame name and source URL for every frame that will need to be loaded.
-     * Immediate children only.
-     *
-     * @return bool|array False if no frameset or otherwise a hash of frame URLs.
-     *                       The key is either a numerical base one index or the name attribute.
-     */
-    public function getFrameset()
-    {
-        if (!$this->hasFrames()) {
-            return false;
-        }
-        $urls = [];
-        for ($i = 0; $i < count($this->frames); ++$i) {
-            $name = $this->frames[$i]->getAttribute('name');
-            $url = new SimpleUrl($this->frames[$i]->getAttribute('src'));
-            $key = $name ? $name : $i + 1;
-            $urls[$key] = $this->expandUrl($url);
-        }
-
-        return $urls;
     }
 
     /**
@@ -381,8 +275,9 @@ class SimplePage
     public function getUrls()
     {
         $all = [];
+
         foreach ($this->links as $link) {
-            $url = $this->getUrlFromLink($link);
+            $url   = $this->getUrlFromLink($link);
             $all[] = $url->asString();
         }
 
@@ -400,6 +295,7 @@ class SimplePage
     public function getUrlsByLabel($label)
     {
         $matches = [];
+
         foreach ($this->links as $link) {
             if ($link->getText() == $label) {
                 $matches[] = $this->getUrlFromLink($link);
@@ -428,23 +324,6 @@ class SimplePage
     }
 
     /**
-     * Converts a link tag into a target URL.
-     *
-     * @param SimpleAnchorTag $link parsed link
-     *
-     * @return SimpleUrl URL with frame target if any
-     */
-    protected function getUrlFromLink($link)
-    {
-        $url = $this->expandUrl($link->getHref());
-        if ($link->getAttribute('target')) {
-            $url->setTarget($link->getAttribute('target'));
-        }
-
-        return $url;
-    }
-
-    /**
      * Expands expandomatic URLs into fully qualified URLs.
      *
      * @param SimpleUrl|string $url relative URL
@@ -453,10 +332,10 @@ class SimplePage
      */
     public function expandUrl($url)
     {
-        if (!is_object($url)) {
+        if (!\is_object($url)) {
             $url = new SimpleUrl($url);
         }
-        $location = $this->getBaseUrl() ? $this->getBaseUrl() : new SimpleUrl();
+        $location = $this->getBaseUrl() ?: new SimpleUrl;
 
         return $url->makeAbsolute($location->makeAbsolute($this->getUrl()));
     }
@@ -466,7 +345,7 @@ class SimplePage
      *
      * @param string $url base URL for page
      */
-    public function setBase($url)
+    public function setBase($url): void
     {
         $this->base = new SimpleUrl($url);
     }
@@ -476,7 +355,7 @@ class SimplePage
      *
      * @param SimpleTitleTag $tag title of page
      */
-    public function setTitle($tag)
+    public function setTitle($tag): void
     {
         $this->title = $tag;
     }
@@ -484,7 +363,7 @@ class SimplePage
     /**
      * Accessor for parsed title.
      *
-     * @return string|bool title or false if no title is present
+     * @return bool|string title or false if no title is present
      */
     public function getTitle()
     {
@@ -504,13 +383,15 @@ class SimplePage
      */
     public function getFormBySubmit($selector)
     {
-        for ($i = 0; $i < count($this->forms); ++$i) {
+        $counter = \count($this->forms);
+
+        for ($i = 0; $i < $counter; $i++) {
             if ($this->forms[$i]->hasSubmit($selector)) {
                 return $this->forms[$i];
             }
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -522,13 +403,15 @@ class SimplePage
      */
     public function getFormByImage($selector)
     {
-        for ($i = 0; $i < count($this->forms); ++$i) {
+        $counter = \count($this->forms);
+
+        for ($i = 0; $i < $counter; $i++) {
             if ($this->forms[$i]->hasImage($selector)) {
                 return $this->forms[$i];
             }
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -541,13 +424,15 @@ class SimplePage
      */
     public function getFormById($id)
     {
-        for ($i = 0; $i < count($this->forms); ++$i) {
+        $counter = \count($this->forms);
+
+        for ($i = 0; $i < $counter; $i++) {
             if ($this->forms[$i]->getId() == $id) {
                 return $this->forms[$i];
             }
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -560,8 +445,10 @@ class SimplePage
      */
     public function setField($selector, $value, $position = false)
     {
-        $is_set = false;
-        for ($i = 0; $i < count($this->forms); ++$i) {
+        $is_set  = false;
+        $counter = \count($this->forms);
+
+        for ($i = 0; $i < $counter; $i++) {
             if ($this->forms[$i]->setField($selector, $value, $position)) {
                 $is_set = true;
             }
@@ -575,50 +462,81 @@ class SimplePage
      *
      * @param SimpleSelector $selector field finder
      *
-     * @return string|bool A string if the field is present, false if unchecked and
-     *                        null if missing
+     * @return bool|string A string if the field is present, false if unchecked and
+     *                     null if missing
      */
     public function getField($selector)
     {
-        for ($i = 0; $i < count($this->forms); ++$i) {
-            $value = $this->forms[$i]->getValue($selector);
+        foreach ($this->forms as $form) {
+            $value = $form->getValue($selector);
+
             if (isset($value)) {
                 return $value;
             }
         }
 
-        return;
+        return null;
     }
 
     /**
-     * Turns HTML into text browser visible text.
-     * Images are converted to their alt text and tags are suppressed.
-     * Entities are converted to their visible representation.
+     * Extracts all of the response information.
      *
-     * @param string $html HTML to convert
-     *
-     * @return string plain text
+     * @param SimpleHttpResponse $response response being parsed
      */
-    public static function normalise($html)
+    protected function extractResponse($response): void
     {
-        $rules = [
-            '#<!--.*?-->#si',
-            '#<(script|option|textarea)[^>]*>.*?</\1>#si',
-            '#<img[^>]*alt\s*=\s*("([^"]*)"|\'([^\']*)\'|([a-zA-Z_]+))[^>]*>#',
-            '#<[^>]*>#',
-        ];
+        $this->transport_error = $response->getError();
+        $this->raw             = $response->getContent();
+        $this->sent            = $response->getSent();
+        $this->headers         = $response->getHeaders();
+        $this->method          = $response->getMethod();
+        $this->url             = $response->getUrl();
+        $this->request_data    = $response->getRequestData();
+    }
 
-        $replace = [
-            '',
-            '',
-            ' \2\3\4 ',
-            '',
-        ];
+    /**
+     * Sets up a missing response.
+     */
+    protected function noResponse(): void
+    {
+        $this->transport_error = 'No page fetched yet';
+        $this->raw             = false;
+        $this->sent            = false;
+        $this->headers         = false;
+        $this->method          = 'GET';
+        $this->url             = false;
+        $this->request_data    = false;
+    }
 
-        $text = preg_replace($rules, $replace, $html);
-        $text = html_entity_decode($text, ENT_QUOTES);
-        $text = preg_replace('#\s+#', ' ', $text);
+    /**
+     * Test to see if link is an absolute one.
+     *
+     * @param string $url url to test
+     *
+     * @return bool true if absolute
+     */
+    protected function linkIsAbsolute($url)
+    {
+        $parsed = new SimpleUrl($url);
 
-        return trim(trim($text), "\xA0");        // @todo The \xAO is a &nbsp;. Add a test for this.
+        return $parsed->getScheme() && $parsed->getHost();
+    }
+
+    /**
+     * Converts a link tag into a target URL.
+     *
+     * @param SimpleAnchorTag $link parsed link
+     *
+     * @return SimpleUrl URL with frame target if any
+     */
+    protected function getUrlFromLink($link)
+    {
+        $url = $this->expandUrl($link->getHref());
+
+        if ($link->getAttribute('target')) {
+            $url->setTarget($link->getAttribute('target'));
+        }
+
+        return $url;
     }
 }

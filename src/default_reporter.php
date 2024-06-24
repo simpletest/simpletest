@@ -1,9 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/simpletest.php';
-require_once __DIR__.'/scorer.php';
-require_once __DIR__.'/reporter.php';
-require_once __DIR__.'/xml.php';
+require_once __DIR__ . '/simpletest.php';
+
+require_once __DIR__ . '/scorer.php';
+
+require_once __DIR__ . '/reporter.php';
+
+require_once __DIR__ . '/xml.php';
 
 /**
  * Parser for command line arguments.
@@ -13,21 +16,27 @@ class SimpleCommandLineParser
 {
     /** @var array */
     private $to_property = [
-            'case' => 'case', 'c' => 'case',
-            'test' => 'test', 't' => 'test',
+        'case' => 'case', 'c' => 'case',
+        'test' => 'test', 't' => 'test',
     ];
     private $case = '';
     private $test = '';
+
     /** @var bool */
     private $xml = false;
+
     /** @var bool */
     private $junit = false;
+
     /** @var bool */
     private $help = false;
+
     /** @var bool */
     private $no_skips = false;
+
     /** @var array */
     private $excludes = [];
+
     /** @var bool */
     private $doCodeCoverage = false;
 
@@ -38,35 +47,37 @@ class SimpleCommandLineParser
      */
     public function __construct($arguments)
     {
-        if (!is_array($arguments)) {
+        if (!\is_array($arguments)) {
             return;
         }
+
         foreach ($arguments as $i => $argument) {
-            if (preg_match('/^--?(test|case|t|c)=(.+)$/', $argument, $matches)) {
+            if (\preg_match('/^--?(test|case|t|c)=(.+)$/', $argument, $matches)) {
+                $property          = $this->to_property[$matches[1]];
+                $this->{$property} = $matches[2];
+            } elseif (\preg_match('/^--?(test|case|t|c)$/', $argument, $matches)) {
                 $property = $this->to_property[$matches[1]];
-                $this->$property = $matches[2];
-            } elseif (preg_match('/^--?(test|case|t|c)$/', $argument, $matches)) {
-                $property = $this->to_property[$matches[1]];
+
                 if (isset($arguments[$i + 1])) {
-                    $this->$property = $arguments[$i + 1];
+                    $this->{$property} = $arguments[$i + 1];
                 }
-            } elseif (preg_match('/^--?(cx)=(.+)$/', $argument, $matches)) {
-//                 $property = $this->to_property[$matches[1]];
+            } elseif (\preg_match('/^--?(cx)=(.+)$/', $argument, $matches)) {
+                //                 $property = $this->to_property[$matches[1]];
                 $this->excludes[] = $matches[2];
-            } elseif (preg_match('/^--?(cx)$/', $argument, $matches)) {
-//                 $property = $this->to_property[$matches[1]];
+            } elseif (\preg_match('/^--?(cx)$/', $argument, $matches)) {
+                //                 $property = $this->to_property[$matches[1]];
                 if (isset($arguments[$i + 1])) {
                     $this->excludes[] = $arguments[$i + 1];
                 }
-            } elseif (preg_match('/^--?(xml|x)$/', $argument)) {
+            } elseif (\preg_match('/^--?(xml|x)$/', $argument)) {
                 $this->xml = true;
-            } elseif (preg_match('/^--?(junit|j)$/', $argument)) {
+            } elseif (\preg_match('/^--?(junit|j)$/', $argument)) {
                 $this->junit = true;
-            } elseif (preg_match('/^--?(codecoverage|cc)$/', $argument)) {
+            } elseif (\preg_match('/^--?(codecoverage|cc)$/', $argument)) {
                 $this->doCodeCoverage = true;
-            } elseif (preg_match('/^--?(no-skip|no-skips|s)$/', $argument)) {
+            } elseif (\preg_match('/^--?(no-skip|no-skips|s)$/', $argument)) {
                 $this->no_skips = true;
-            } elseif (preg_match('/^--?(help|h)$/', $argument)) {
+            } elseif (\preg_match('/^--?(help|h)$/', $argument)) {
                 $this->help = true;
             }
         }
@@ -149,7 +160,7 @@ class SimpleCommandLineParser
      */
     public function help()
     {
-        return $this->help && !($this->xml || $this->junit);
+        return $this->help && (!$this->xml && !$this->junit);
     }
 
     /**
@@ -159,7 +170,7 @@ class SimpleCommandLineParser
      */
     public function getHelpText()
     {
-        return <<<HELP
+        return <<<'HELP'
 SimpleTest command line default reporter (autorun)
 Usage: php <test_file> [args...]
 
@@ -184,6 +195,7 @@ class DefaultReporter extends SimpleReporterDecorator
 {
     /** @var bool */
     public $doCodeCoverage = false;
+
     /** @var array */
     public $excludes = [];
 
@@ -193,9 +205,10 @@ class DefaultReporter extends SimpleReporterDecorator
     public function __construct()
     {
         if (SimpleReporter::inCli()) {
-            $parser = new SimpleCommandLineParser($_SERVER['argv']);
+            $parser               = new SimpleCommandLineParser($_SERVER['argv']);
             $this->doCodeCoverage = $parser->doCodeCoverage();
-            $this->excludes = $parser->getExcludes();
+            $this->excludes       = $parser->getExcludes();
+
             if ($parser->isXml()) {
                 $interfaces = ['XmlReporter'];
             } elseif ($parser->isJUnit()) {
@@ -203,15 +216,17 @@ class DefaultReporter extends SimpleReporterDecorator
             } else {
                 $interfaces = ['TextReporter'];
             }
+
             if ($parser->help()) {
-                echo $parser->getHelpText();
+                print $parser->getHelpText();
+
                 exit(1);
             }
 
             $reporter = new SelectiveReporter(
                 SimpleTest::preferred($interfaces),
                 $parser->getTestCase(),
-                $parser->getTest()
+                $parser->getTest(),
             );
 
             if ($parser->noSkips()) {
@@ -221,8 +236,9 @@ class DefaultReporter extends SimpleReporterDecorator
             $reporter = new SelectiveReporter(
                 SimpleTest::preferred('HtmlReporter'),
                 @$_GET['c'],
-                @$_GET['t']
+                @$_GET['t'],
             );
+
             if ('no' === @$_GET['skips'] || 'no' === @$_GET['show-skips']) {
                 $reporter = new NoSkipsReporter($reporter);
             }

@@ -1,23 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../../../src/autorun.php';
 
 class CoverageDataHandlerTest extends UnitTestCase
 {
-    public function skip()
-    {
-        $this->skipIf(
-            !extension_loaded('sqlite3'),
-            'The Coverage extension requires the PHP extension "php_sqlite3".'
-        );
-    }
-
-    public function setUp()
+    protected function setUp(): void
     {
         require_once __DIR__ . '/../coverage_data_handler.php';
     }
 
-    public function testAggregateCoverageCode()
+    public function skip(): void
+    {
+        $this->skipIf(
+            !\extension_loaded('sqlite3'),
+            'The Coverage extension requires the PHP extension "php_sqlite3".',
+        );
+    }
+
+    public function testAggregateCoverageCode(): void
     {
         $handler = new CoverageDataHandler($this->tempdb());
         $this->assertEqual(-2, $handler->aggregateCoverageCode(-2, -2));
@@ -29,58 +29,50 @@ class CoverageDataHandlerTest extends UnitTestCase
         $this->assertEqual(20, $handler->aggregateCoverageCode(10, 10));
     }
 
-    public function testSimpleWriteRead()
+    public function testSimpleWriteRead(): void
     {
         $handler = new CoverageDataHandler($this->tempdb());
         $handler->createSchema();
-        $coverage = array(10 => -2, 20 => -1, 30 => 0, 40 => 1);
-        $handler->write(array('file' => $coverage));
+        $coverage = [10 => -2, 20 => -1, 30 => 0, 40 => 1];
+        $handler->write(['file' => $coverage]);
 
         $actual   = $handler->readFile('file');
-        $expected = array(10 => -2, 20 => -1, 30 => 0, 40 => 1);
+        $expected = [10 => -2, 20 => -1, 30 => 0, 40 => 1];
         $this->assertEqual($expected, $actual);
     }
 
-    public function testMultiFileWriteRead()
+    public function testMultiFileWriteRead(): void
     {
         $handler = new CoverageDataHandler($this->tempdb());
         $handler->createSchema();
-        $handler->write(array(
-        'file1' => array(-2, -1, 1),
-        'file2' => array(-2, -1, 1)
-        ));
-        $handler->write(array(
-        'file1' => array(-2, -1, 1)
-        ));
+        $handler->write(['file1' => [-2, -1, 1], 'file2' => [-2, -1, 1]]);
+        $handler->write(['file1' => [-2, -1, 1]]);
 
-        $expected = array(
-        'file1' => array(-2, -1, 2),
-        'file2' => array(-2, -1, 1)
-        );
-        $actual = $handler->read();
+        $expected = ['file1' => [-2, -1, 2], 'file2' => [-2, -1, 1]];
+        $actual   = $handler->read();
         $this->assertEqual($expected, $actual);
     }
 
-    public function testGetfilenames()
+    public function testGetfilenames(): void
     {
         $handler = new CoverageDataHandler($this->tempdb());
         $handler->createSchema();
-        $rawCoverage = array('file0' => array(), 'file1' => array());
+        $rawCoverage = ['file0' => [], 'file1' => []];
         $handler->write($rawCoverage);
         $actual = $handler->getFilenames();
-        $this->assertEqual(array('file0', 'file1'), $actual);
+        $this->assertEqual(['file0', 'file1'], $actual);
     }
 
-    public function testWriteUntouchedFiles()
+    public function testWriteUntouchedFiles(): void
     {
         $handler = new CoverageDataHandler($this->tempdb());
         $handler->createSchema();
         $handler->writeUntouchedFile('bluejay');
         $handler->writeUntouchedFile('robin');
-        $this->assertEqual(array('bluejay', 'robin'), $handler->readUntouchedFiles());
+        $this->assertEqual(['bluejay', 'robin'], $handler->readUntouchedFiles());
     }
 
-    public function testLtrim()
+    public function testLtrim(): void
     {
         $this->assertEqual('ber', CoverageDataHandler::ltrim('goo', 'goober'));
         $this->assertEqual('some/file', CoverageDataHandler::ltrim('./', './some/file'));
@@ -89,6 +81,6 @@ class CoverageDataHandlerTest extends UnitTestCase
 
     public function tempdb()
     {
-        return tempnam(null, 'coverage.test.db');
+        return \tempnam(null, 'coverage.test.db');
     }
 }

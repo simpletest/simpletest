@@ -7,8 +7,8 @@ require_once __DIR__.'/expectation.php';
 require_once __DIR__.'/dumper.php';
 
 // define the root constant for dependent libraries.
-if (!defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', __DIR__.'/');
+if (!\defined('SIMPLE_TEST')) {
+    \define('SIMPLE_TEST', __DIR__ . DIRECTORY_SEPARATOR);
 }
 
 /**
@@ -61,9 +61,17 @@ class SimpleInvoker
      */
     public function invoke($method)
     {
-        $this->test_case->setUp();
+        //$this->test_case->setUp();
+        $r_setUp = new ReflectionMethod($this->test_case::class, 'setUp');
+        $r_setUp->setAccessible(true);
+        $r_setUp->invoke($this->test_case);
+
         $this->test_case->$method();
-        $this->test_case->tearDown();
+
+        //$this->test_case->tearDown();
+        $r_tearDown = new ReflectionMethod($this->test_case::class, 'tearDown');
+        $r_tearDown->setAccessible(true);
+        $r_tearDown->invoke($this->test_case);
     }
 
     /**

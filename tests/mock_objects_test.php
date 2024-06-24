@@ -93,8 +93,8 @@ class TestOfSimpleSignatureMap extends UnitTestCase
     public function testEmpty()
     {
         $map = new SimpleSignatureMap();
-        $this->assertFalse($map->isMatch('any', []));
-        $this->assertNull($map->findFirstAction('any', []));
+        $this->assertFalse($map->isMatch('any'));
+        $this->assertNull($map->findFirstAction('any'));
     }
 
     public function testDifferentCallSignaturesCanHaveDifferentReferences()
@@ -619,7 +619,7 @@ class TestOfMockExpectations extends UnitTestCase
 {
     private $test;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->test = new MockSimpleTestCase();
     }
@@ -810,7 +810,7 @@ class TestOfMockComparisons extends UnitTestCase
     public function testEqualComparisonOfMocksDoesNotCrash()
     {
         $expectation = new EqualExpectation(new MockDummy());
-        $this->assertTrue($expectation->test(new MockDummy(), true));
+        $this->assertTrue($expectation->test(new MockDummy()));
     }
 
     public function testIdenticalComparisonOfMocksDoesNotCrash()
@@ -1220,8 +1220,10 @@ class TestOfProtectedMethodPartialMocks extends UnitTestCase
     }
 }
 
-Mock::generate('DummyNS\DummyWithNamespace', 'TestFullDummyWithNamespace');
-Mock::generatePartial('DummyNS\DummyWithNamespace', 'TestPartialDummyWithNamespace', ['aMethod']);
+//Mock::generate('DummyNS\DummyWithNamespace', 'TestFullDummyWithNamespace');
+//Mock::generatePartial('DummyNS\DummyWithNamespace', 'TestPartialDummyWithNamespace', ['aMethod']);
+Mock::generate(\DummyNS\DummyWithNamespace::class, 'TestFullDummyWithNamespace');
+Mock::generatePartial(\DummyNS\DummyWithNamespace::class, 'TestPartialDummyWithNamespace', ['aMethod']);
 
 class TestOfNamespacedPartialMocks extends UnitTestCase
 {

@@ -1,0 +1,7 @@
+parameters:
+    level: 0
+    excludePaths:
+        - ../../vendor/
+    paths:
+        - ../../src/
+       #- ../../tests/

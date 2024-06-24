@@ -62,7 +62,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintGroupStart($test_name, $size)
+    public function paintGroupStart($test_name, $size):void
     {
         parent::paintGroupStart($test_name, $size);
         echo $this->getIndent();
@@ -80,7 +80,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintGroupEnd($test_name)
+    public function paintGroupEnd($test_name): void
     {
         echo $this->getIndent();
         echo '</'.$this->namespace."group>\n";
@@ -94,7 +94,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintCaseStart($test_name)
+    public function paintCaseStart($test_name): void
     {
         parent::paintCaseStart($test_name);
         echo $this->getIndent();
@@ -112,7 +112,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintCaseEnd($test_name)
+    public function paintCaseEnd($test_name): void
     {
         echo $this->getIndent();
         echo '</'.$this->namespace."case>\n";
@@ -126,7 +126,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintMethodStart($test_name)
+    public function paintMethodStart($test_name): void
     {
         parent::paintMethodStart($test_name);
         echo $this->getIndent();
@@ -144,7 +144,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintMethodEnd($test_name)
+    public function paintMethodEnd($test_name): void
     {
         echo $this->getIndent();
         echo '</'.$this->namespace."test>\n";
@@ -158,7 +158,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintPass($message)
+    public function paintPass($message): void
     {
         parent::paintPass($message);
         echo $this->getIndent(1);
@@ -174,7 +174,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintFail($message)
+    public function paintFail($message): void
     {
         parent::paintFail($message);
         echo $this->getIndent(1);
@@ -190,7 +190,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintError($message)
+    public function paintError($message): void
     {
         parent::paintError($message);
         echo $this->getIndent(1);
@@ -206,7 +206,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintException($exception)
+    public function paintException($exception): void
     {
         parent::paintException($exception);
         echo $this->getIndent(1);
@@ -226,7 +226,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintSkip($message)
+    public function paintSkip($message): void
     {
         parent::paintSkip($message);
         echo $this->getIndent(1);
@@ -242,7 +242,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintMessage($message)
+    public function paintMessage($message): void
     {
         parent::paintMessage($message);
         echo $this->getIndent(1);
@@ -258,7 +258,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintFormattedMessage($message)
+    public function paintFormattedMessage($message): void
     {
         parent::paintFormattedMessage($message);
         echo $this->getIndent(1);
@@ -275,7 +275,7 @@ class XmlReporter extends SimpleReporter
      *
      * @return void
      */
-    public function paintSignal($type, $payload)
+    public function paintSignal($type, $payload): void
     {
         parent::paintSignal($type, $payload);
         echo $this->getIndent(1);
@@ -289,11 +289,9 @@ class XmlReporter extends SimpleReporter
      *
      * @param string $test_name first test top level to start
      *
-     * @abstract
-     *
      * @return void
      */
-    public function paintHeader($test_name)
+    public function paintHeader($test_name): void
     {
         if (!SimpleReporter::inCli()) {
             header('Content-type: text/xml');
@@ -312,11 +310,9 @@ class XmlReporter extends SimpleReporter
      *
      * @param string $test_name the top level test
      *
-     * @abstract
-     *
      * @return void
      */
-    public function paintFooter($test_name)
+    public function paintFooter($test_name): void
     {
         echo '</'.$this->namespace."run>\n";
     }
@@ -331,7 +327,7 @@ class NestedXmlTag
     /** @var array */
     private $attributes;
     /** @var string|false */
-    private $name;
+    private $name = false;
 
     /**
      * Sets the basic test information except the name.
@@ -340,7 +336,6 @@ class NestedXmlTag
      */
     public function __construct($attributes)
     {
-        $this->name = false;
         $this->attributes = $attributes;
     }
 
@@ -514,17 +509,17 @@ class NestedGroupTag extends NestedXmlTag
 class SimpleTestXmlParser
 {
     /** @var array */
-    private $attributes;
+    private $attributes = [];
     /** @var string */
-    private $content;
+    private $content = '';
     /** @var mixed */
     private $expat;
     /** @var bool */
-    private $in_content_tag;
+    private $in_content_tag = false;
     /** @var SimpleReporter */
     private $listener;
     /** @var array */
-    private $tag_stack;
+    private $tag_stack = [];
 
     /**
      * Loads a listener with the SimpleReporter interface.
@@ -533,12 +528,8 @@ class SimpleTestXmlParser
      */
     public function __construct(&$listener)
     {
-        $this->attributes = [];
-        $this->content = '';
         $this->expat = $this->createParser();
-        $this->in_content_tag = false;
         $this->listener = $listener;
-        $this->tag_stack = [];
     }
 
     /**
@@ -550,7 +541,7 @@ class SimpleTestXmlParser
      */
     public function parse($chunk)
     {
-        if (!xml_parse($this->expat, $chunk)) {
+        if (xml_parse($this->expat, $chunk) === 0) {
             $code = xml_get_error_code($this->expat);
             $message = sprintf(
                 "XML parse error %d '%s' at line %d, column %d (byte %d).",

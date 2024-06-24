@@ -22,7 +22,6 @@
   - removed @access declarations from phpdoc blocks
   - space after exclamation mark, "! $value"
   - renamed phpdoc type name boolean to shorter bool, "boolean => bool"
-  - switch from post to pre increments on loops, "$i++ => ++$i"
 * added `.editorconfig`
 
 ## [1.2.0] - 2019-09-17

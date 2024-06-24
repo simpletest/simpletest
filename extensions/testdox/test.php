@@ -1,117 +1,118 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../../src/autorun.php';
+
 require_once __DIR__ . '/../testdox.php';
 
 // uncomment to see test dox in action
-//SimpleTest::prefer(new TestDoxReporter());
+// SimpleTest::prefer(new TestDoxReporter());
 
 class TestOfTestDoxReporter extends UnitTestCase
 {
-    public function testIsAnInstanceOfSimpleScorerAndReporter()
+    public function testIsAnInstanceOfSimpleScorerAndReporter(): void
     {
-        $dox = new TestDoxReporter();
+        $dox = new TestDoxReporter;
         $this->assertIsA($dox, 'SimpleScorer');
         $this->assertIsA($dox, 'SimpleReporter');
     }
 
-    public function testOutputsNameOfTestCase()
+    public function testOutputsNameOfTestCase(): void
     {
-        $dox = new TestDoxReporter();
-        ob_start();
+        $dox = new TestDoxReporter;
+        \ob_start();
         $dox->paintCaseStart('TestOfTestDoxReporter');
-        $buffer = ob_get_clean();
+        $buffer = \ob_get_clean();
         $this->assertPattern('/^TestDoxReporter/', $buffer);
     }
 
-    public function testOutputOfTestCaseNameFilteredByConstructParameter()
+    public function testOutputOfTestCaseNameFilteredByConstructParameter(): void
     {
         $dox = new TestDoxReporter('/^(.*)Test$/');
-        ob_start();
+        \ob_start();
         $dox->paintCaseStart('SomeGreatWidgetTest');
-        $buffer = ob_get_clean();
+        $buffer = \ob_get_clean();
         $this->assertPattern('/^SomeGreatWidget/', $buffer);
     }
 
-    public function testIfTest_case_patternIsEmptyAssumeEverythingMatches()
+    public function testIfTest_case_patternIsEmptyAssumeEverythingMatches(): void
     {
         $dox = new TestDoxReporter('');
-        ob_start();
+        \ob_start();
         $dox->paintCaseStart('TestOfTestDoxReporter');
-        $buffer = ob_get_clean();
+        $buffer = \ob_get_clean();
         $this->assertPattern('/^TestOfTestDoxReporter/', $buffer);
     }
 
-    public function testEmptyLineInsertedWhenCaseEnds()
+    public function testEmptyLineInsertedWhenCaseEnds(): void
     {
-        $dox = new TestDoxReporter();
-        ob_start();
+        $dox = new TestDoxReporter;
+        \ob_start();
         $dox->paintCaseEnd('TestOfTestDoxReporter');
-        $buffer = ob_get_clean();
+        $buffer = \ob_get_clean();
         $this->assertEqual("\n", $buffer);
     }
 
-    public function testPaintsTestMethodInTestDoxFormat()
+    public function testPaintsTestMethodInTestDoxFormat(): void
     {
-        $dox = new TestDoxReporter();
-        ob_start();
+        $dox = new TestDoxReporter;
+        \ob_start();
         $dox->paintMethodStart('testSomeGreatTestCase');
-        $buffer = ob_get_clean();
+        $buffer = \ob_get_clean();
         $this->assertEqual('- some great test case', $buffer);
         unset($buffer);
 
-        $random = rand(100, 200);
-        ob_start();
+        $random = \random_int(100, 200);
+        \ob_start();
         $dox->paintMethodStart("testRandomNumberIs{$random}");
-        $buffer = ob_get_clean();
+        $buffer = \ob_get_clean();
         $this->assertEqual("- random number is {$random}", $buffer);
     }
 
-    public function testDoesNotOutputAnythingOnNoneTestMethods()
+    public function testDoesNotOutputAnythingOnNoneTestMethods(): void
     {
-        $dox = new TestDoxReporter();
-        ob_start();
+        $dox = new TestDoxReporter;
+        \ob_start();
         $dox->paintMethodStart('nonMatchingMethod');
-        $buffer = ob_get_clean();
+        $buffer = \ob_get_clean();
         $this->assertEqual('', $buffer);
     }
 
-    public function testPaintMethodAddLineBreak()
+    public function testPaintMethodAddLineBreak(): void
     {
-        $dox = new TestDoxReporter();
-        ob_start();
+        $dox = new TestDoxReporter;
+        \ob_start();
         $dox->paintMethodEnd('someMethod');
-        $buffer = ob_get_clean();
+        $buffer = \ob_get_clean();
         $this->assertEqual("\n", $buffer);
     }
 
-    public function testProperlySpacesSingleLettersInMethodName()
+    public function testProperlySpacesSingleLettersInMethodName(): void
     {
-        $dox = new TestDoxReporter();
-        ob_start();
+        $dox = new TestDoxReporter;
+        \ob_start();
         $dox->paintMethodStart('testAVerySimpleAgainAVerySimpleMethod');
-        $buffer = ob_get_clean();
+        $buffer = \ob_get_clean();
         $this->assertEqual('- a very simple again a very simple method', $buffer);
     }
 
-    public function testOnFailureThisPrintsFailureNotice()
+    public function testOnFailureThisPrintsFailureNotice(): void
     {
-        $dox = new TestDoxReporter();
-        ob_start();
+        $dox = new TestDoxReporter;
+        \ob_start();
         $dox->paintFail('');
-        $buffer = ob_get_clean();
+        $buffer = \ob_get_clean();
         $this->assertEqual(' [FAILED]', $buffer);
     }
 
-    public function testWhenMatchingMethodNamesTestPrefixIsCaseInsensitive()
+    public function testWhenMatchingMethodNamesTestPrefixIsCaseInsensitive(): void
     {
-        $dox = new TestDoxReporter();
-        ob_start();
+        $dox = new TestDoxReporter;
+        \ob_start();
         $dox->paintMethodStart('TESTSupportsAllUppercaseTestPrefixEvenThoughIDoNotKnowWhyYouWouldDoThat');
-        $buffer = ob_get_clean();
+        $buffer = \ob_get_clean();
         $this->assertEqual(
             '- supports all uppercase test prefix even though i do not know why you would do that',
-            $buffer
+            $buffer,
         );
     }
 }

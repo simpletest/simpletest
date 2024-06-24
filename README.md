@@ -77,3 +77,7 @@ The acceptance tests require a running server:
 # Docs
 
     https://simpletest.org/en/first_test_tutorial.html
+
+# Fun Fact
+
+The [first SimpleTest commit](https://github.com/simpletest/simpletest/commit/79ef564f77) was on Mar 18, 2003.

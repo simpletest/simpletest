@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file contains the following classes: {@link SimpleCollector},
  * {@link SimplePatternCollector}.
@@ -14,6 +14,29 @@
 class SimpleCollector
 {
     /**
+     * Scans the directory and adds what it can.
+     *
+     * @param object $test group test with {@link GroupTest::addFile)} method
+     * @param string $path directory to scan
+     *
+     * @see _attemptToAdd()
+     */
+    public function collect(&$test, $path): void
+    {
+        $path = $this->removeTrailingSlash($path);
+
+        if ($handle = \opendir($path)) {
+            while (false !== ($entry = \readdir($handle))) {
+                if ($this->isHidden($entry)) {
+                    continue;
+                }
+                $this->handle($test, $path . DIRECTORY_SEPARATOR . $entry);
+            }
+            \closedir($handle);
+        }
+    }
+
+    /**
      * Strips off any kind of slash at the end so as to normalise the path.
      *
      * @param string $path path to normalise
@@ -22,37 +45,16 @@ class SimpleCollector
      */
     protected function removeTrailingSlash($path)
     {
-        if (DIRECTORY_SEPARATOR == substr($path, -1)) {
-            return substr($path, 0, -1);
-        } elseif ('/' == substr($path, -1)) {
-            return substr($path, 0, -1);
-        } else {
-            return $path;
+        if (DIRECTORY_SEPARATOR === \substr($path, -1)) {
+            return \substr($path, 0, -1);
         }
-    }
 
-    /**
-     * Scans the directory and adds what it can.
-     *
-     * @param object $test group test with {@link GroupTest::addFile)} method
-     * @param string $path directory to scan
-     *
-     * @see _attemptToAdd()
-     *
-     * @return void
-     */
-    public function collect(&$test, $path)
-    {
-        $path = $this->removeTrailingSlash($path);
-        if ($handle = opendir($path)) {
-            while (false !== ($entry = readdir($handle))) {
-                if ($this->isHidden($entry)) {
-                    continue;
-                }
-                $this->handle($test, $path.DIRECTORY_SEPARATOR.$entry);
-            }
-            closedir($handle);
+        if ('/' === \substr($path, -1)) {
+            return \substr($path, 0, -1);
         }
+
+        return $path;
+
     }
 
     /**
@@ -67,12 +69,10 @@ class SimpleCollector
      * @param string $file
      *
      * @see collect()
-     *
-     * @return void
      */
-    protected function handle(&$test, $file)
+    protected function handle(&$test, $file): void
     {
-        if (is_dir($file)) {
+        if (\is_dir($file)) {
             return;
         }
         $test->addFile($file);
@@ -88,7 +88,7 @@ class SimpleCollector
      */
     protected function isHidden($filename)
     {
-        return 0 == strncmp($filename, '.', 1);
+        return 0 == \strncmp($filename, '.', 1);
     }
 }
 
@@ -120,12 +120,10 @@ class SimplePatternCollector extends SimpleCollector
      *
      * @param object $test group test with {@link GroupTest::addFile)} method
      * @param string $file
-     *
-     * @return void
      */
-    protected function handle(&$test, $file)
+    protected function handle(&$test, $file): void
     {
-        if (preg_match($this->pattern, $file)) {
+        if (\preg_match($this->pattern, $file)) {
             parent::handle($test, $file);
         }
     }

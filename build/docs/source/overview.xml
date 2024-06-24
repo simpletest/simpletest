@@ -128,7 +128,7 @@ class <strong>TestOfLogging</strong> extends UnitTestCase {
                 The <a local="web_tester_documentation">WebTestCase</a> class tests web
                 pages.
                 It simulates a web browser requesting a page, complete with
-                cookies, proxies, secure connections, authentication, forms, frames and most
+                cookies, proxies, secure connections, authentication, forms and most
                 navigation elements.
                 With this type of test case, the developer can assert that
                 information is present in the page and that forms and
@@ -264,11 +264,6 @@ class <strong>MySiteTest</strong> extends WebTestCase {
                     <tr>
                         <td>Proxy support</td>
                         <td>Can connect via. common proxies</td>
-                        <td style="color: green;">1.0</td>
-                    </tr>
-                    <tr>
-                        <td>Frames support</td>
-                        <td>Handling of frames in web test cases</td>
                         <td style="color: green;">1.0</td>
                     </tr>
                     <tr>

@@ -1,15 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/../../src/autorun.php';
+require_once __DIR__ . '/../../src/autorun.php';
 
 class SampleTestForRecorder extends UnitTestCase
 {
-    public function testTrueIsTrue()
+    public function testTrueIsTrue(): void
     {
         $this->assertTrue(true);
     }
 
-    public function testFalseIsTrue()
+    public function testFalseIsTrue(): void
     {
         $this->assertFalse(true);
     }

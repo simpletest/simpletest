@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /**
  * Parses the command line arguments.
  */
@@ -22,11 +23,28 @@ class SimpleArguments
      */
     public function __construct($arguments)
     {
-        array_shift($arguments);
-        while (count($arguments) > 0) {
-            list($key, $value) = $this->parseArgument($arguments);
+        \array_shift($arguments);
+
+        while (\count($arguments) > 0) {
+            [$key, $value] = $this->parseArgument($arguments);
             $this->assign($key, $value);
         }
+    }
+
+    /**
+     * The arguments are available as individual member variables on the object.
+     *
+     * @param string $key argument name
+     *
+     * @return array|bool|string Either false for no value,
+     *                           the value as a string or
+     *                           a list of multiple values if
+     *                           the flag had been specified more
+     *                           than once
+     */
+    public function __get($key)
+    {
+        return $this->all[$key] ?? false;
     }
 
     /**
@@ -34,58 +52,18 @@ class SimpleArguments
      * the same key, the key will give an array value in the order they were
      * added.
      *
-     * @param string $key the variable to assign to
-     * @param string $value The value that would be collected on the CLI.
-     *
-     * @return void
+     * @param string $key   the variable to assign to
+     * @param string $value the value that would be collected on the CLI
      */
-    public function assign($key, $value)
+    public function assign($key, $value): void
     {
-        if ($this->$key === false) {
+        if ($this->{$key} === false) {
             $this->all[$key] = $value;
-        } elseif (!is_array($this->$key)) {
-            $this->all[$key] = [$this->$key, $value];
+        } elseif (!\is_array($this->{$key})) {
+            $this->all[$key] = [$this->{$key}, $value];
         } else {
             $this->all[$key][] = $value;
         }
-    }
-
-    /**
-     * Extracts the next key and value from the argument list.
-     *
-     * @param array $arguments The remaining arguments to be parsed.
-     *                         The argument list will be reduced.
-     *
-     * @return array Two item array of key and value.
-     *               If no value can be found it will
-     *               have the value true assigned instead.
-     */
-    private function parseArgument(&$arguments)
-    {
-        $argument = array_shift($arguments);
-        if (preg_match('/^-(\w)=(.+)$/', $argument, $matches)) {
-            return [$matches[1], $matches[2]];
-        } elseif (preg_match('/^-(\w)$/', $argument, $matches)) {
-            return [$matches[1], $this->nextNonFlagElseTrue($arguments)];
-        } elseif (preg_match('/^--(\w+)=(.+)$/', $argument, $matches)) {
-            return [$matches[1], $matches[2]];
-        } elseif (preg_match('/^--(\w+)$/', $argument, $matches)) {
-            return [$matches[1], $this->nextNonFlagElseTrue($arguments)];
-        }
-    }
-
-    /**
-     * Attempts to use the next argument as a value.
-     * It won't use what it thinks is a flag.
-     *
-     * @param array $arguments Remaining arguments to be parsed. This variable
-     *                         is modified if there is a value to be extracted.
-     *
-     * @return string|bool The next value unless it's a flag
-     */
-    private function nextNonFlagElseTrue(&$arguments)
-    {
-        return $this->valueIsNext($arguments) ? array_shift($arguments) : true;
     }
 
     /**
@@ -94,7 +72,8 @@ class SimpleArguments
      *
      * @param array $arguments Remaining arguments to be parsed.
      *                         Not affected by this call.
-     * @return bool True if valid value.
+     *
+     * @return bool true if valid value
      */
     public function valueIsNext($arguments)
     {
@@ -110,37 +89,64 @@ class SimpleArguments
      */
     public function isFlag($argument)
     {
-        return 0 == strncmp($argument, '-', 1);
-    }
-
-    /**
-     * The arguments are available as individual member variables on the object.
-     *
-     * @param string $key argument name
-     *
-     * @return string|array|bool Either false for no value,
-     *                              the value as a string or
-     *                              a list of multiple values if
-     *                              the flag had been specified more
-     *                              than once
-     */
-    public function __get($key)
-    {
-        if (isset($this->all[$key])) {
-            return $this->all[$key];
-        }
-
-        return false;
+        return 0 == \strncmp($argument, '-', 1);
     }
 
     /**
      * Get all arguments.
      *
-     * @return array Array of arguments and values.
+     * @return array array of arguments and values
      */
     public function all()
     {
         return $this->all;
+    }
+
+    /**
+     * Extracts the next key and value from the argument list.
+     *
+     * @param array $arguments The remaining arguments to be parsed.
+     *                         The argument list will be reduced.
+     *
+     * @return array Two item array of key and value.
+     *               If no value can be found it will
+     *               have the value true assigned instead.
+     */
+    private function parseArgument(&$arguments)
+    {
+        $argument = \array_shift($arguments);
+
+        if (\preg_match('/^-(\w)=(.+)$/', $argument, $matches)) {
+            return [$matches[1], $matches[2]];
+        }
+
+        if (\preg_match('/^-(\w)$/', $argument, $matches)) {
+            return [$matches[1], $this->nextNonFlagElseTrue($arguments)];
+        }
+
+        if (\preg_match('/^--(\w+)=(.+)$/', $argument, $matches)) {
+            return [$matches[1], $matches[2]];
+        }
+
+        if (\preg_match('/^--(\w+)$/', $argument, $matches)) {
+            return [$matches[1], $this->nextNonFlagElseTrue($arguments)];
+        }
+
+        return null;
+    }
+
+    /**
+     * Attempts to use the next argument as a value.
+     * It won't use what it thinks is a flag.
+     *
+     * @param array $arguments Remaining arguments to be parsed. This variable
+     *                         is modified if there is a value to be extracted.
+     *
+     * @return bool|string The next value unless it's a flag
+     */
+    private function nextNonFlagElseTrue(&$arguments)
+    {
+        return $this->valueIsNext($arguments) ? \array_shift($arguments) : true;
     }
 }
 
@@ -151,8 +157,10 @@ class SimpleHelp
 {
     /** @var string */
     private $overview;
+
     /** @var array */
     private $flag_sets = [];
+
     /** @var array */
     private $explanations = [];
 
@@ -170,30 +178,30 @@ class SimpleHelp
      * Adds the explanation for a group of flags that all
      * have the same function.
      *
-     * @param string|array $flags       Flag and alternates. Don't
+     * @param array|string $flags       Flag and alternates. Don't
      *                                  worry about leading dashes
      *                                  as these are inserted automatically.
      * @param string       $explanation what that flag group does
-     * @return void
      */
-    public function explainFlag($flags, $explanation)
+    public function explainFlag($flags, $explanation): void
     {
-        $flags = is_array($flags) ? $flags : [$flags];
-        $this->flag_sets[] = $flags;
+        $flags                = \is_array($flags) ? $flags : [$flags];
+        $this->flag_sets[]    = $flags;
         $this->explanations[] = $explanation;
     }
 
     /**
      * Generates the help text.
      *
-     * @return string The complete formatted text.
+     * @return string the complete formatted text
      */
     public function render()
     {
-        $tab_stop = $this->longestFlag($this->flag_sets) + 4;
-        $text = $this->overview."\n";
-        $numberOfFlags = count($this->flag_sets);
-        for ($i = 0; $i < $numberOfFlags; ++$i) {
+        $tab_stop      = $this->longestFlag($this->flag_sets) + 4;
+        $text          = $this->overview . "\n";
+        $numberOfFlags = \count($this->flag_sets);
+
+        for ($i = 0; $i < $numberOfFlags; $i++) {
             $text .= $this->renderFlagSet($this->flag_sets[$i], $this->explanations[$i], $tab_stop);
         }
 
@@ -204,14 +212,16 @@ class SimpleHelp
      * Works out the longest flag for formatting purposes.
      *
      * @param array $flag_sets the internal flag set list
-     * @return mixed 0 or longest flag.
+     *
+     * @return mixed 0 or longest flag
      */
     private function longestFlag($flag_sets)
     {
         $longest = 0;
+
         foreach ($flag_sets as $flags) {
             foreach ($flags as $flag) {
-                $longest = max($longest, strlen($this->renderFlag($flag)));
+                $longest = \max($longest, \strlen($this->renderFlag($flag)));
             }
         }
 
@@ -221,18 +231,19 @@ class SimpleHelp
     /**
      * Generates the text for a single flag and it's alternate flags.
      *
-     * @param array $flags Array of flags.
+     * @param array  $flags       array of flags
      * @param string $explanation Text of the flag
-     * @param int $tab_stop Number of tab_stop's to render.
+     * @param int    $tab_stop    number of tab_stop's to render
      *
-     * @return string Help text for that flag group.
+     * @return string help text for that flag group
      */
     private function renderFlagSet($flags, $explanation, $tab_stop)
     {
-        $flag = array_shift($flags);
-        $text = str_pad($this->renderFlag($flag), $tab_stop, ' ').$explanation."\n";
+        $flag = \array_shift($flags);
+        $text = \str_pad($this->renderFlag($flag), $tab_stop, ' ') . $explanation . "\n";
+
         foreach ($flags as $flag) {
-            $text .= '  '.$this->renderFlag($flag)."\n";
+            $text .= '  ' . $this->renderFlag($flag) . "\n";
         }
 
         return $text;
@@ -242,11 +253,12 @@ class SimpleHelp
      * Generates the flag name including leading dashes.
      *
      * @param string $flag just the name
-     * @return string Flag with apropriate dashes.
+     *
+     * @return string flag with apropriate dashes
      */
     private function renderFlag($flag)
     {
-        return (1 == strlen($flag) ? '-' : '--').$flag;
+        return (1 == \strlen($flag) ? '-' : '--') . $flag;
     }
 
     /**
@@ -254,10 +266,11 @@ class SimpleHelp
      * Just there to trap accidental duplicate new lines.
      *
      * @param string $text text to clean up
-     * @return string Text with no blank lines.
+     *
+     * @return string text with no blank lines
      */
     private function noDuplicateNewLines($text)
     {
-        return preg_replace('/(\n+)/', "\n", $text);
+        return \preg_replace('/(\n+)/', "\n", $text);
     }
 }

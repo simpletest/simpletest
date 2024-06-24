@@ -1,29 +1,37 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/invoker.php';
-require_once __DIR__.'/errors.php';
-require_once __DIR__.'/compatibility.php';
-require_once __DIR__.'/scorer.php';
-require_once __DIR__.'/expectation.php';
-require_once __DIR__.'/dumper.php';
-require_once __DIR__.'/simpletest.php';
-require_once __DIR__.'/exceptions.php';
-require_once __DIR__.'/reflection.php';
+require_once __DIR__ . '/invoker.php';
+
+require_once __DIR__ . '/errors.php';
+
+require_once __DIR__ . '/compatibility.php';
+
+require_once __DIR__ . '/scorer.php';
+
+require_once __DIR__ . '/expectation.php';
+
+require_once __DIR__ . '/dumper.php';
+
+require_once __DIR__ . '/simpletest.php';
+
+require_once __DIR__ . '/exceptions.php';
+
+require_once __DIR__ . '/reflection.php';
 
 // define root constant for dependent libraries
-if (!defined('SIMPLE_TEST')) {
-    define('SIMPLE_TEST', __DIR__.DIRECTORY_SEPARATOR);
+if (!\defined('SIMPLE_TEST')) {
+    \define('SIMPLE_TEST', __DIR__ . DIRECTORY_SEPARATOR);
 }
 
 /**
  * Basic test case. This is the smallest unit of a test suite.
- * It searches for all methods that start with the the string "test" and runs them.
+ * It searches for all methods that start with the string "test" and runs them.
  * Working test cases extend this class.
  */
 class SimpleTestCase
 {
-    private $label = false;
     protected $reporter;
+    private $label = false;
     private $observers;
     private $should_skip = false;
 
@@ -40,20 +48,36 @@ class SimpleTestCase
     }
 
     /**
+     * Sets up unit test wide variables at the start of each test method.
+     * To be overridden in actual user test cases.
+     */
+    protected function setUp(): void
+    {
+    }
+
+    /**
+     * Clears the data set in the setUp() method call.
+     * To be overridden by the user in actual user test cases.
+     */
+    protected function tearDown(): void
+    {
+    }
+
+    /**
      * Accessor for the test name for subclasses.
      *
      * @return string name of the test
      */
     public function getLabel()
     {
-        return $this->label ? $this->label : get_class($this);
+        return $this->label ?: static::class;
     }
 
     /**
      * This is a placeholder for skipping tests.
      * In this method you place skipIf() and skipUnless() calls to set the skipping state.
      */
-    public function skip()
+    public function skip(): void
     {
     }
 
@@ -63,12 +87,12 @@ class SimpleTestCase
      * @param string $should_skip condition causing the tests to be skipped
      * @param string $message     text of skip condition
      */
-    public function skipIf($should_skip, $message = '%s')
+    public function skipIf($should_skip, $message = '%s'): void
     {
         if ($should_skip && !$this->should_skip) {
             $this->should_skip = true;
-            $message = sprintf($message, 'Skipping ['.get_class($this).']');
-            $this->reporter->paintSkip($message.$this->getAssertionLine());
+            $message           = \sprintf($message, 'Skipping [' . static::class . ']');
+            $this->reporter->paintSkip($message . $this->getAssertionLine());
         }
     }
 
@@ -86,7 +110,7 @@ class SimpleTestCase
      * @param string $shouldnt_skip condition causing the tests to be run
      * @param string $message       text of skip condition
      */
-    public function skipUnless($shouldnt_skip, $message = false)
+    public function skipUnless($shouldnt_skip, $message = false): void
     {
         $this->skipIf(!$shouldnt_skip, $message);
     }
@@ -99,7 +123,7 @@ class SimpleTestCase
     public function createInvoker()
     {
         return new SimpleErrorTrappingInvoker(
-            new SimpleExceptionTrappingInvoker(new SimpleInvoker($this))
+            new SimpleExceptionTrappingInvoker(new SimpleInvoker($this)),
         );
     }
 
@@ -117,13 +141,16 @@ class SimpleTestCase
         $context->setTest($this);
         $context->setReporter($reporter);
         $this->reporter = $reporter;
-        $started = false;
+        $started        = false;
+
         foreach ($this->getTests() as $method) {
             if ($reporter->shouldInvoke($this->getLabel(), $method)) {
                 $this->skip();
+
                 if ($this->should_skip) {
                     break;
                 }
+
                 if (!$started) {
                     $reporter->paintCaseStart($this->getLabel());
                     $started = true;
@@ -134,10 +161,11 @@ class SimpleTestCase
                 $invoker->after($method);
             }
         }
+
         if ($started) {
             $reporter->paintCaseEnd($this->getLabel());
         }
-        unset($this->reporter);
+        $this->reporter = null;
         $context->setTest(null);
 
         return $reporter->getStatus();
@@ -152,7 +180,8 @@ class SimpleTestCase
     public function getTests()
     {
         $methods = [];
-        foreach (get_class_methods(get_class($this)) as $method) {
+
+        foreach (\get_class_methods(static::class) as $method) {
             if ($this->isTest($method)) {
                 $methods[] = $method;
             }
@@ -162,47 +191,14 @@ class SimpleTestCase
     }
 
     /**
-     * Tests to see if the method is a test that should be run.
-     * Currently any method that starts with 'test' is a candidate unless it is the constructor.
-     *
-     * @param string $method method name to try
-     *
-     * @return bool true if test method
-     */
-    protected function isTest($method)
-    {
-        if ('test' === strtolower(substr($method, 0, 4))) {
-            return !is_a($this, strtolower($method));
-        }
-
-        return false;
-    }
-
-    /**
      * Announces the start of the test.
      *
      * @param string $method test method just started
      */
-    public function before($method)
+    public function before($method): void
     {
         $this->reporter->paintMethodStart($method);
         $this->observers = [];
-    }
-
-    /**
-     * Sets up unit test wide variables at the start of each test method.
-     * To be overridden in actual user test cases.
-     */
-    public function setUp()
-    {
-    }
-
-    /**
-     * Clears the data set in the setUp() method call.
-     * To be overridden by the user in actual user test cases.
-     */
-    public function tearDown()
-    {
     }
 
     /**
@@ -210,10 +206,10 @@ class SimpleTestCase
      *
      * @param string $method test method just finished
      */
-    public function after($method)
+    public function after($method): void
     {
-        for ($i = 0; $i < count($this->observers); ++$i) {
-            $this->observers[$i]->atTestEnd($method, $this);
+        foreach ($this->observers as $observer) {
+            $observer->atTestEnd($method, $this);
         }
         $this->reporter->paintMethodEnd($method);
     }
@@ -223,7 +219,7 @@ class SimpleTestCase
      *
      * @param object $observer must have atTestEnd() method
      */
-    public function tell($observer)
+    public function tell($observer): void
     {
         $this->observers[] = $observer;
     }
@@ -233,10 +229,10 @@ class SimpleTestCase
      */
     public function pass($message = 'Pass')
     {
-        if (!isset($this->reporter)) {
-            trigger_error('Can only make assertions within test methods');
+        if ($this->reporter === null) {
+            \trigger_error('Can only make assertions within test methods');
         }
-        $this->reporter->paintPass($message.$this->getAssertionLine());
+        $this->reporter->paintPass($message . $this->getAssertionLine());
 
         return true;
     }
@@ -248,10 +244,10 @@ class SimpleTestCase
      */
     public function fail($message = 'Fail')
     {
-        if (!isset($this->reporter)) {
-            trigger_error('Can only make assertions within test methods');
+        if ($this->reporter === null) {
+            \trigger_error('Can only make assertions within test methods');
         }
-        $this->reporter->paintFail($message.$this->getAssertionLine());
+        $this->reporter->paintFail($message . $this->getAssertionLine());
 
         return false;
     }
@@ -264,12 +260,12 @@ class SimpleTestCase
      * @param string $file     file error occoured in
      * @param int    $line     line number of error
      */
-    public function error($severity, $message, $file, $line)
+    public function error($severity, $message, $file, $line): void
     {
-        if (!isset($this->reporter)) {
-            trigger_error('Can only make assertions within test methods');
+        if ($this->reporter === null) {
+            \trigger_error('Can only make assertions within test methods');
         }
-        $this->reporter->paintError("Unexpected PHP Error [$message] severity [$severity] in [$file line $line]");
+        $this->reporter->paintError("Unexpected PHP Error [{$message}] severity [{$severity}] in [{$file} line {$line}]");
     }
 
     /**
@@ -277,7 +273,7 @@ class SimpleTestCase
      *
      * @param Exception $exception object thrown
      */
-    public function exception($exception)
+    public function exception($exception): void
     {
         $this->reporter->paintException($exception);
     }
@@ -288,10 +284,10 @@ class SimpleTestCase
      * @param string $type    tag for sorting the signals
      * @param mixed  $payload extra user specific information
      */
-    public function signal($type, $payload)
+    public function signal($type, $payload): void
     {
-        if (!isset($this->reporter)) {
-            trigger_error('Can only make assertions within test methods');
+        if ($this->reporter === null) {
+            \trigger_error('Can only make assertions within test methods');
         }
         $this->reporter->paintSignal($type, $payload);
     }
@@ -311,34 +307,14 @@ class SimpleTestCase
 
         if ($expectation->test($compare)) {
             return $this->pass(
-                sprintf($message, $expectation->overlayMessage($compare, $this->reporter->getDumper()))
-            );
-        } else {
-            return $this->fail(
-                sprintf($message, $expectation->overlayMessage($compare, $this->reporter->getDumper()))
+                \sprintf($message, $expectation->overlayMessage($compare, $this->reporter->getDumper())),
             );
         }
-    }
 
-    /**
-     * Escapes all percentage signs so *printf functions don't do any special processing...
-     * ... except for the first one if it forms %s, which is used to reference the auto-generated assert message
-     *
-     * Get the position of the first percentage sign.
-     * Skip over escaping, if none is found.
-     * Else escape part of string after first percentage sign.
-     * Then concat unescaped first part and escaped part.
-     *
-     * @param string $string
-     * @return string
-     */
-    protected function escapeIncidentalPrintfSyntax($string)
-    {
-        $pos = strpos($string, '%s');
-        if($pos !== false) {
-            return substr($string, 0, $pos + 2) . str_replace('%', '%%', substr($string, $pos + 2));
-        }
-        return str_replace('%', '%%', $string);
+        return $this->fail(
+            \sprintf($message, $expectation->overlayMessage($compare, $this->reporter->getDumper())),
+        );
+
     }
 
     /**
@@ -356,17 +332,18 @@ class SimpleTestCase
     /**
      * Sends a formatted dump of a variable to the test suite for those emergency debugging situations.
      *
-     * @param mixed  $variable variable to display
-     * @param bool|string $message  Message to display.
+     * @param mixed       $variable variable to display
+     * @param bool|string $message  message to display
      *
      * @return mixed the original variable
      */
     public function dump($variable, $message = false)
     {
-        $dumper = $this->reporter->getDumper();
+        $dumper    = $this->reporter->getDumper();
         $formatted = $dumper->dump($variable);
+
         if ($message) {
-            $formatted = $message."\n".$formatted;
+            $formatted = $message . "\n" . $formatted;
         }
         $this->reporter->paintFormattedMessage($formatted);
 
@@ -382,6 +359,47 @@ class SimpleTestCase
     {
         return 1;
     }
+
+    /**
+     * Tests to see if the method is a test that should be run.
+     * Currently any method that starts with 'test' is a candidate unless it is the constructor.
+     *
+     * @param string $method method name to try
+     *
+     * @return bool true if test method
+     */
+    protected function isTest($method)
+    {
+        if ('test' === \strtolower(\substr($method, 0, 4))) {
+            return !\is_a($this, \strtolower($method));
+        }
+
+        return false;
+    }
+
+    /**
+     * Escapes all percentage signs so *printf functions don't do any special processing...
+     * ... except for the first one if it forms %s, which is used to reference the auto-generated assert message.
+     *
+     * Get the position of the first percentage sign.
+     * Skip over escaping, if none is found.
+     * Else escape part of string after first percentage sign.
+     * Then concat unescaped first part and escaped part.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    protected function escapeIncidentalPrintfSyntax($string)
+    {
+        $pos = \strpos($string, '%s');
+
+        if ($pos !== false) {
+            return \substr($string, 0, $pos + 2) . \str_replace('%', '%%', \substr($string, $pos + 2));
+        }
+
+        return \str_replace('%', '%%', $string);
+    }
 }
 
 /**
@@ -395,17 +413,19 @@ class SimpleFileLoader
      *
      * @param string $test_file file name of library with test case classes
      *
-     * @return TestSuite|BadTestSuite the new test suite
+     * @return BadTestSuite|TestSuite the new test suite
      */
     public function load($test_file)
     {
-        $existing_classes = get_declared_classes();
-        $existing_globals = get_defined_vars();
+        $existing_classes = \get_declared_classes();
+        $existing_globals = \get_defined_vars();
+
         include_once $test_file;
-        $new_globals = get_defined_vars();
+        $new_globals = \get_defined_vars();
         $this->makeFileVariablesGlobal($existing_globals, $new_globals);
-        $new_classes = array_diff(get_declared_classes(), $existing_classes);
-        if (empty($new_classes)) {
+        $new_classes = \array_diff(\get_declared_classes(), $existing_classes);
+
+        if ($new_classes === []) {
             $new_classes = $this->scrapeClassesFromFile($test_file);
         }
         $classes = $this->selectRunnableTests($new_classes);
@@ -414,14 +434,66 @@ class SimpleFileLoader
     }
 
     /**
+     * Calculates the incoming test cases. Skips abstract and ignored classes.
+     *
+     * @param array $candidates candidate classes
+     *
+     * @return array new classes which are test cases that shouldn't be ignored
+     */
+    public function selectRunnableTests($candidates)
+    {
+        $classes = [];
+
+        foreach ($candidates as $class) {
+            if (TestSuite::getBaseTestCase($class)) {
+                $reflection = new SimpleReflection($class);
+
+                if ($reflection->isAbstract()) {
+                    SimpleTest::ignore($class);
+                } else {
+                    $classes[] = $class;
+                }
+            }
+        }
+
+        return $classes;
+    }
+
+    /**
+     * Builds a test suite from a class list.
+     *
+     * @param string $title   title of new group
+     * @param array  $classes test classes
+     *
+     * @return BadTestSuite|TestSuite group loaded with the new test cases
+     */
+    public function createSuiteFromClasses($title, $classes)
+    {
+        if (0 == \count($classes)) {
+            return new BadTestSuite($title, "No runnable test cases in [{$title}]");
+        }
+        SimpleTest::ignoreParentsIfIgnored($classes);
+        $suite = new TestSuite($title);
+
+        foreach ($classes as $class) {
+            if (!SimpleTest::isIgnored($class)) {
+                $suite->add($class);
+            }
+        }
+
+        return $suite;
+    }
+
+    /**
      * Imports new variables into the global namespace.
      *
      * @param array $existing variables before the file was loaded
      * @param array $new      variables after the file was loaded
      */
-    protected function makeFileVariablesGlobal($existing, $new)
+    protected function makeFileVariablesGlobal($existing, $new): void
     {
-        $globals = array_diff(array_keys($new), array_keys($existing));
+        $globals = \array_diff(\array_keys($new), \array_keys($existing));
+
         foreach ($globals as $global) {
             $GLOBALS[$global] = $new[$global];
         }
@@ -440,59 +512,10 @@ class SimpleFileLoader
      */
     protected function scrapeClassesFromFile($file)
     {
-        $content = file_get_contents($file);
-        preg_match_all('~^\s*class\s+(\w+)(\s+(extends|implements)\s+\w+)*\s*\{~mi', $content, $matches);
+        $content = \file_get_contents($file);
+        \preg_match_all('~^\s*class\s+(\w+)(\s+(extends|implements)\s+\w+)*\s*\{~mi', $content, $matches);
 
         return $matches[1];
-    }
-
-    /**
-     * Calculates the incoming test cases. Skips abstract and ignored classes.
-     *
-     * @param array $candidates candidate classes
-     *
-     * @return array new classes which are test cases that shouldn't be ignored
-     */
-    public function selectRunnableTests($candidates)
-    {
-        $classes = [];
-        foreach ($candidates as $class) {
-            if (TestSuite::getBaseTestCase($class)) {
-                $reflection = new SimpleReflection($class);
-                if ($reflection->isAbstract()) {
-                    SimpleTest::ignore($class);
-                } else {
-                    $classes[] = $class;
-                }
-            }
-        }
-        return $classes;
-    }
-
-    /**
-     * Builds a test suite from a class list.
-     *
-     * @param string $title   title of new group
-     * @param array  $classes test classes
-     *
-     * @return TestSuite|BadTestSuite group loaded with the new test cases
-     */
-    public function createSuiteFromClasses($title, $classes)
-    {
-        if (0 == count($classes)) {
-            $suite = new BadTestSuite($title, "No runnable test cases in [$title]");
-
-            return $suite;
-        }
-        SimpleTest::ignoreParentsIfIgnored($classes);
-        $suite = new TestSuite($title);
-        foreach ($classes as $class) {
-            if (!SimpleTest::isIgnored($class)) {
-                $suite->add($class);
-            }
-        }
-
-        return $suite;
     }
 }
 
@@ -504,8 +527,29 @@ class TestSuite
 {
     /** @var false|string */
     private $label = '';
+
     /** @var array */
     private $test_cases = [];
+
+    /**
+     * Test to see if a class is derived from the SimpleTestCase class.
+     *
+     * @param string $class class name
+     *
+     * @return bool|mixed|SimpleTestCase|TestSuite
+     */
+    public static function getBaseTestCase($class)
+    {
+        while ($class = \get_parent_class($class)) {
+            $class = \strtolower($class);
+
+            if ('simpletestcase' === $class || 'testsuite' === $class) {
+                return $class;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * Sets the name of the test suite.
@@ -527,10 +571,11 @@ class TestSuite
     {
         if (!$this->label) {
             return (1 === $this->getSize()) ?
-                    get_class($this->test_cases[0]) : get_class($this);
-        } else {
-            return $this->label;
+                    \get_class($this->test_cases[0]) : static::class;
         }
+
+        return $this->label;
+
     }
 
     /**
@@ -539,15 +584,13 @@ class TestSuite
      *
      * @param SimpleTestCase $test_case suite or individual test
      *                                  case implementing the runnable test interface
-     *
-     * @return void
      */
-    public function add($test_case)
+    public function add($test_case): void
     {
-        if (!is_string($test_case)) {
+        if (!\is_string($test_case)) {
             $this->test_cases[] = $test_case;
         } elseif ('testsuite' === self::getBaseTestCase($test_case)) {
-            $this->test_cases[] = new $test_case();
+            $this->test_cases[] = new $test_case;
         } else {
             $this->test_cases[] = $test_case;
         }
@@ -558,12 +601,10 @@ class TestSuite
      * The new suite is composed into this one.
      *
      * @param string $test_file file name of library with test case classes
-     *
-     * @return void
      */
-    public function addFile($test_file)
+    public function addFile($test_file): void
     {
-        $extractor = new SimpleFileLoader();
+        $extractor = new SimpleFileLoader;
         $this->add($extractor->load($test_file));
     }
 
@@ -572,10 +613,8 @@ class TestSuite
      *
      * @param string          $path      path to scan from
      * @param SimpleCollector $collector directory scanner
-     *
-     * @return void
      */
-    public function collect($path, $collector)
+    public function collect($path, $collector): void
     {
         $collector->collect($this, $path);
     }
@@ -590,10 +629,11 @@ class TestSuite
     public function run($reporter)
     {
         $reporter->paintGroupStart($this->getLabel(), $this->getSize());
-        for ($i = 0, $count = count($this->test_cases); $i < $count; ++$i) {
-            if (is_string($this->test_cases[$i])) {
+
+        for ($i = 0, $count = \count($this->test_cases); $i < $count; $i++) {
+            if (\is_string($this->test_cases[$i])) {
                 $class = $this->test_cases[$i];
-                $test = new $class();
+                $test  = new $class;
                 $test->run($reporter);
                 unset($test);
             } else {
@@ -613,10 +653,11 @@ class TestSuite
     public function getSize()
     {
         $count = 0;
+
         foreach ($this->test_cases as $case) {
-            if (is_string($case)) {
+            if (\is_string($case)) {
                 if (!SimpleTest::isIgnored($case)) {
-                    ++$count;
+                    $count++;
                 }
             } else {
                 $count += $case->getSize();
@@ -624,25 +665,6 @@ class TestSuite
         }
 
         return $count;
-    }
-
-    /**
-     * Test to see if a class is derived from the SimpleTestCase class.
-     *
-     * @param string $class class name
-     *
-     * @return mixed|bool|SimpleTestCase|TestSuite
-     */
-    public static function getBaseTestCase($class)
-    {
-        while ($class = get_parent_class($class)) {
-            $class = strtolower($class);
-            if ('simpletestcase' === $class || 'testsuite' === $class) {
-                return $class;
-            }
-        }
-
-        return false;
     }
 }
 
@@ -653,6 +675,7 @@ class BadTestSuite
 {
     /** @var string */
     private $label;
+
     /** @var mixed */
     private $error;
 
@@ -688,7 +711,7 @@ class BadTestSuite
         $label = $this->getLabel();
 
         $msg_tpl = 'Bad TestSuite [%s] with error [%s]';
-        $message = sprintf($msg_tpl, $label, $this->error);
+        $message = \sprintf($msg_tpl, $label, $this->error);
 
         $reporter->paintGroupStart($label, $this->getSize());
         $reporter->paintFail($message);

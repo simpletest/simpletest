@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/scorer.php';
+require_once __DIR__ . '/scorer.php';
 
 /**
  * A single test result.
@@ -19,8 +19,7 @@ abstract class SimpleResult
      */
     public function __construct($breadcrumb, $message)
     {
-        list($this->time, $this->breadcrumb, $this->message) =
-                [time(), $breadcrumb, $message];
+        [$this->time, $this->breadcrumb, $this->message] = [\time(), $breadcrumb, $message];
     }
 }
 
@@ -58,7 +57,7 @@ class Recorder extends SimpleReporterDecorator
      *
      * @param string $message pass message to be displayed eventually
      */
-    public function paintPass($message)
+    public function paintPass($message): void
     {
         parent::paintPass($message);
 
@@ -70,7 +69,7 @@ class Recorder extends SimpleReporterDecorator
      *
      * @param string $message failure message to be displayed eventually
      */
-    public function paintFail($message)
+    public function paintFail($message): void
     {
         parent::paintFail($message);
 
@@ -82,7 +81,7 @@ class Recorder extends SimpleReporterDecorator
      *
      * @param string $message exception message to be displayed eventually
      */
-    public function paintException($message)
+    public function paintException($message): void
     {
         parent::paintException($message);
 

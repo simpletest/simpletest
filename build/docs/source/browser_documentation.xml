@@ -59,14 +59,14 @@ print $matches[1];
                     <tr><td><code>click($label)</code></td><td>Clicks visible link or button text</td></tr>
                     <tr><td><code>clickLink($label)</code></td><td>Follows a link by label</td></tr>
                     <tr><td><code>clickLinkById($id)</code></td><td>Follows a link by attribute</td></tr>
-                    <tr><td><code>getUrl()</code></td><td>Current URL of page or frame</td></tr>
+                    <tr><td><code>getUrl()</code></td><td>Current URL of page</td></tr>
                     <tr><td><code>getTitle()</code></td><td>Page title</td></tr>
-                    <tr><td><code>getContent()</code></td><td>Raw page or frame</td></tr>
+                    <tr><td><code>getContent()</code></td><td>Raw page</td></tr>
                     <tr><td><code>getContentAsText()</code></td><td>HTML removed except for alt text</td></tr>
                     <tr><td><code>retry()</code></td><td>Repeat the last request</td></tr>
                     <tr><td><code>back()</code></td><td>Use the browser back button</td></tr>
                     <tr><td><code>forward()</code></td><td>Use the browser forward button</td></tr>
-                    <tr><td><code>authenticate($username, $password)</code></td><td>Retry page or frame after a 401 response</td></tr>
+                    <tr><td><code>authenticate($username, $password)</code></td><td>Retry page after a 401 response</td></tr>
                     <tr><td><code>restart($date)</code></td><td>Restarts the browser for a new session</td></tr>
                     <tr><td><code>ageCookies($interval)</code></td><td>Ages the cookies by the specified time</td></tr>
                     <tr><td><code>setCookie($name, $value)</code></td><td>Sets an additional cookie</td></tr>
@@ -106,28 +106,6 @@ print $matches[1];
                 </tbody></table>
                 This will be expanded in later versions of SimpleTest.
             </p>
-            <p>
-                Frames are a rather esoteric feature these days, but SimpleTest has
-                retained support for them.
-            </p>
-            <p>
-                Within a page, individual frames can be selected.
-                If no selection is made then all the frames are merged together
-                in one large conceptual page.
-                The content of the current page will be a concatenation of all of the
-                frames in the order that they were specified in the &quot;frameset&quot;
-                tags.
-                <table><tbody>
-                    <tr><td><code>getFrames()</code></td><td>A dump of the current frame structure</td></tr>
-                    <tr><td><code>getFrameFocus()</code></td><td>Current frame label or index</td></tr>
-                    <tr><td><code>setFrameFocusByIndex($choice)</code></td><td>Select a frame numbered from 1</td></tr>
-                    <tr><td><code>setFrameFocus($name)</code></td><td>Select frame by label</td></tr>
-                    <tr><td><code>clearFrameFocus()</code></td><td>Treat all the frames as a single page</td></tr>
-                </tbody></table>
-                When focused on a single frame, the content will come from
-                that frame only.
-                This includes links to click and forms to submit.
-            </p>
         </section>
         <section name="debug" title="What went wrong?">
             <p>
@@ -138,34 +116,22 @@ print $matches[1];
                 <table><tbody>
                     <tr><td><code>setConnectionTimeout($timeout)</code></td><td>Close the socket on overrun</td></tr>
                     <tr><td><code>getUrl()</code></td><td>Url of most recent page fetched</td></tr>
-                    <tr><td><code>getRequest()</code></td><td>Raw request header of page or frame</td></tr>
-                    <tr><td><code>getHeaders()</code></td><td>Raw response header of page or frame</td></tr>
+                    <tr><td><code>getRequest()</code></td><td>Raw request header of page</td></tr>
+                    <tr><td><code>getHeaders()</code></td><td>Raw response header of page</td></tr>
                     <tr><td><code>getTransportError()</code></td><td>Any socket level errors in the last fetch</td></tr>
-                    <tr><td><code>getResponseCode()</code></td><td>HTTP response of page or frame</td></tr>
-                    <tr><td><code>getMimeType()</code></td><td>Mime type of page or frame</td></tr>
+                    <tr><td><code>getResponseCode()</code></td><td>HTTP response of page </td></tr>
+                    <tr><td><code>getMimeType()</code></td><td>Mime type of page</td></tr>
                     <tr><td><code>getAuthentication()</code></td><td>Authentication type in 401 challenge header</td></tr>
                     <tr><td><code>getRealm()</code></td><td>Authentication realm in 401 challenge header</td></tr>
                     <tr><td><code>getBaseUrl()</code></td><td>Base url only of most recent page fetched</td></tr>
-                    <tr><td><code>setMaximumRedirects($max)</code></td><td>Number of redirects before page is loaded anyway</td></tr>
-                    <tr><td><code>setMaximumNestedFrames($max)</code></td><td>Protection against recursive framesets</td></tr>
-                    <tr><td><code>ignoreFrames()</code></td><td>Disables frames support</td></tr>
-                    <tr><td><code>useFrames()</code></td><td>Enables frames support</td></tr>
                     <tr><td><code>ignoreCookies()</code></td><td>Disables sending and receiving of cookies</td></tr>
                     <tr><td><code>useCookies()</code></td><td>Enables cookie support</td></tr>
                 </tbody></table>
                 The methods <code>SimpleBrowser::setConnectionTimeout()</code>
                 <code>SimpleBrowser::setMaximumRedirects()</code>,
-                <code>SimpleBrowser::setMaximumNestedFrames()</code>,
-                <code>SimpleBrowser::ignoreFrames()</code>,
-                <code>SimpleBrowser::useFrames()</code>,
                 <code>SimpleBrowser::ignoreCookies()</code> and
                 <code>SimpleBrowser::useCokies()</code> continue to apply
                 to every subsequent request.
-                The other methods are frames aware.
-                This means that if you have an individual frame that is not
-                loading, navigate to it using <code>SimpleBrowser::setFrameFocus()</code>
-                and you can then use <code>SimpleBrowser::getRequest()</code>, etc to
-                see what happened.
             </p>
         </section>
         <section name="unit" title="Complex unit tests with multiple browsers">
@@ -213,7 +179,7 @@ class TestOfSecurity extends UnitTestCase {
         $first_attempt->setField('password', 'Secret');
         $first_attempt->click('Enter');
         $this->assertEqual($first_attempt->getTitle(), 'Welcome');
-        
+
         $second_attempt = new SimpleBrowser();
         $second_attempt->get('http://my-site.com/login.php');
         $second_attempt->setField('name', 'Me');

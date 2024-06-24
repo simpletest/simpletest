@@ -1,18 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../../../src/autorun.php';
+
 require_once __DIR__ . '/../../treemap_reporter.php';
 
 class TestOfTreemapDataTypes extends UnitTestCase
 {
-    public function testEmptyRootNode()
+    public function testEmptyRootNode(): void
     {
         $node = new TreemapNode('test', 'test graph');
         $this->assertEqual($node->getSize(), 0);
         $this->assertEqual($node->getTotalSize(), 0);
     }
 
-    public function testChildNodeDepth()
+    public function testChildNodeDepth(): void
     {
         $root = new TreemapNode('root', 'test');
         $root->putChild(new TreemapNode('child', 'test'));
@@ -25,7 +26,7 @@ class TestOfTreemapDataTypes extends UnitTestCase
         $this->assertEqual($root->getTotalSize(), 4);
     }
 
-    public function testGraphDepthSpread()
+    public function testGraphDepthSpread(): void
     {
         $root = new TreemapNode('root', 'test');
         $root->putChild(new TreemapNode('child', 'test'));
@@ -51,9 +52,9 @@ class TestOfTreemapDataTypes extends UnitTestCase
         $this->assertEqual($root->getTotalSize(), 7);
     }
 
-    public function testMutableStack()
+    public function testMutableStack(): void
     {
-        $stack = new TreemapStack();
+        $stack = new TreemapStack;
         $this->assertEqual($stack->size(), 0);
         $stack->push(new TreemapNode('a', 'one'));
         $this->assertEqual($stack->size(), 1);

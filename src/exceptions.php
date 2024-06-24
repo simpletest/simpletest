@@ -43,7 +43,12 @@ class SimpleExceptionTrappingInvoker extends SimpleInvokerDecorator
         }
         if ($has_thrown) {
             try {
-                parent::getTestCase()->tearDown();
+                //parent::getTestCase()->tearDown();
+                $testCase = parent::getTestCase();
+                $testCaseClass = get_class($testCase);
+                $p_tearDown = new ReflectionMethod($testCaseClass, 'tearDown');
+                $p_tearDown->setAccessible(true);
+                $p_tearDown->invoke(parent::getTestCase());
             } catch (Exception $e) {
             }
         }
@@ -89,7 +94,7 @@ class ExceptionExpectation extends SimpleExpectation
         if (is_string($this->expected)) {
             return $compare instanceof $this->expected;
         }
-        if (get_class($compare) != get_class($this->expected)) {
+        if (get_class($compare) !== get_class($this->expected)) {
             return false;
         }
 

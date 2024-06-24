@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__.'/compatibility.php';
+declare(strict_types=1);
+
+require_once __DIR__ . '/compatibility.php';
 
 /**
  * Stashes an error for later.
@@ -10,7 +12,7 @@ require_once __DIR__.'/compatibility.php';
 class SimpleStickyError
 {
     /** @var string */
-    private $error = 'Constructor not chained';
+    private $error = 'Unknown Error';
 
     /**
      * Sets the error to empty.
@@ -44,20 +46,16 @@ class SimpleStickyError
      * Sets the internal error.
      *
      * @param string $error Error Message
-     *
-     * @return void
      */
-    public function setError($error)
+    public function setError($error): void
     {
         $this->error = $error;
     }
 
     /**
      * Resets the error state to no error.
-     *
-     * @return void
      */
-    public function clearError()
+    public function clearError(): void
     {
         $this->setError('');
     }
@@ -70,10 +68,13 @@ class SimpleFileSocket extends SimpleStickyError
 {
     /** @var false|resource */
     private $handle;
+
     /** @var bool */
     private $is_open = false;
+
     /** @var string */
     private $sent = '';
+
     /** @var int */
     private $block_size;
 
@@ -91,15 +92,16 @@ class SimpleFileSocket extends SimpleStickyError
 
         if ($this->handle === false) {
             $file_string = $file->asString();
+
             /** @var array */
-            $last_error = error_get_last();
+            $last_error         = \error_get_last();
             $last_error_message = $last_error['message'];
-            $this->setError("Cannot open [$file_string] with [$last_error_message]");
+            $this->setError("Cannot open [{$file_string}] with [{$last_error_message}]");
 
             return;
         }
 
-        $this->is_open = true;
+        $this->is_open    = true;
         $this->block_size = $block_size;
     }
 
@@ -125,7 +127,8 @@ class SimpleFileSocket extends SimpleStickyError
      */
     public function read()
     {
-        $raw = @fread($this->handle, $this->block_size);
+        $raw = @\fread($this->handle, $this->block_size);
+
         if (false === $raw) {
             $this->setError('Cannot read from socket');
             $this->close();
@@ -156,7 +159,7 @@ class SimpleFileSocket extends SimpleStickyError
         }
         $this->is_open = false;
 
-        return fclose($this->handle);
+        return \fclose($this->handle);
     }
 
     /**
@@ -178,7 +181,7 @@ class SimpleFileSocket extends SimpleStickyError
      */
     protected function openFile($file)
     {
-        return @fopen($file->asString(), 'r');
+        return @\fopen($file->asString(), 'r');
     }
 }
 
@@ -189,10 +192,13 @@ class SimpleSocket extends SimpleStickyError
 {
     /** @var mixed|resource */
     private $handle;
+
     /** @var bool */
     private $is_open = false;
+
     /** @var string */
     private $sent = '';
+
     /** @var int */
     private $block_size;
 
@@ -207,14 +213,15 @@ class SimpleSocket extends SimpleStickyError
     public function __construct($host, $port, $timeout, $block_size = 255)
     {
         parent::__construct();
+
         if (!($this->handle = $this->openSocket($host, $port, $error_number, $error, $timeout))) {
-            $this->setError("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
+            $this->setError("Cannot open [{$host}:{$port}] with [{$error}] within [{$timeout}] seconds");
 
             return;
         }
-        $this->is_open = true;
+        $this->is_open    = true;
         $this->block_size = $block_size;
-        stream_set_timeout($this->handle, $timeout, 0);
+        \stream_set_timeout($this->handle, $timeout, 0);
     }
 
     /**
@@ -229,8 +236,9 @@ class SimpleSocket extends SimpleStickyError
         if ($this->isError() || !$this->isOpen()) {
             return false;
         }
-        $count = fwrite($this->handle, $message);
-        if (!$count) {
+        $count = \fwrite($this->handle, $message);
+
+        if ($count === 0 || $count === false) {
             if (false === $count) {
                 $this->setError('Cannot write to socket');
                 $this->close();
@@ -238,7 +246,7 @@ class SimpleSocket extends SimpleStickyError
 
             return false;
         }
-        fflush($this->handle);
+        \fflush($this->handle);
         $this->sent .= $message;
 
         return true;
@@ -254,7 +262,8 @@ class SimpleSocket extends SimpleStickyError
         if ($this->isError() || !$this->isOpen()) {
             return false;
         }
-        $raw = @fread($this->handle, $this->block_size);
+        $raw = @\fread($this->handle, $this->block_size);
+
         if (false === $raw) {
             $this->setError('Cannot read from socket');
             $this->close();
@@ -266,7 +275,7 @@ class SimpleSocket extends SimpleStickyError
     /**
      *    Accessor for socket open state.
      *
-     *    @return bool           true if open
+     * @return bool true if open
      */
     public function isOpen()
     {
@@ -285,7 +294,7 @@ class SimpleSocket extends SimpleStickyError
         }
         $this->is_open = false;
 
-        return fclose($this->handle);
+        return \fclose($this->handle);
     }
 
     /**
@@ -311,7 +320,7 @@ class SimpleSocket extends SimpleStickyError
      */
     protected function openSocket($host, $port, &$error_number, &$error, $timeout)
     {
-        return @fsockopen($host, $port, $error_number, $error, $timeout);
+        return @\fsockopen($host, $port, $error_number, $error, $timeout);
     }
 }
 
@@ -321,15 +330,72 @@ class SimpleSocket extends SimpleStickyError
 class SimpleSecureSocket extends SimpleSocket
 {
     /**
+     * @var string The transport protocol to use
+     */
+    private $transport = 'tlsv1.2';
+
+    /**
+     * @var array config for stream_context_create()
+     */
+    private $stream_config = [
+        'ssl' => [
+            'cafile'            => '/etc/ssl/certs/ca-certificates.crt',
+            'verify_peer'       => true,
+            'verify_peer_name'  => true,
+            'capture_peer_cert' => true,
+        ],
+    ];
+
+    /**
      * Opens a secure socket for reading and writing.
      *
-     * @param string $host    hostname to send request to
-     * @param int    $port    port on remote machine to open
-     * @param int    $timeout connection timeout in seconds
+     * @param string $host      hostname to send request to
+     * @param int    $port      port on remote machine to open
+     * @param int    $timeout   connection timeout in seconds
+     * @param string $transport transport protocol to use
      */
-    public function __construct($host, $port, $timeout)
+    public function __construct($host, $port, $timeout, $transport = 'tlsv1.2')
     {
         parent::__construct($host, $port, $timeout);
+        $this->transport = $transport;
+    }
+
+    /**
+     * Sets the transport protocol.
+     *
+     * @param string $transport transport protocol to use
+     *
+     * @throws InvalidArgumentException if the transport protocol is not supported
+     */
+    public function setTransport($transport): void
+    {
+        $possibleTransportProtocols = \stream_get_transports();
+
+        if (!\in_array($transport, $possibleTransportProtocols, true)) {
+            throw new InvalidArgumentException("Transport protocol '{$transport}' is not supported.");
+        }
+        $this->transport = $transport;
+    }
+
+    public function disableConnectionVerification(): void
+    {
+        $this->stream_config['ssl']['verify_peer']       = false;
+        $this->stream_config['ssl']['verify_peer_name']  = false;
+        $this->stream_config['ssl']['verify_host']       = false;
+        $this->stream_config['ssl']['allow_self_signed'] = true;
+        $this->stream_config['ssl']['sni_enabled']       = true;
+        // $this->stream_config['ssl']['local_cert'] =
+        // $this->stream_config['ssl']['local_pk'] =
+    }
+
+    /**
+     * Set the stream config for stream_context_create().
+     *
+     * @return array
+     */
+    public function setStreamConfig(array $stream_config): void
+    {
+        $this->stream_config = $stream_config;
     }
 
     /**
@@ -343,6 +409,15 @@ class SimpleSecureSocket extends SimpleSocket
      */
     public function openSocket($host, $port, &$error_number, &$error, $timeout)
     {
-        return parent::openSocket("tls://$host", $port, $error_number, $error, $timeout);
+        $context = \stream_context_create($this->stream_config);
+
+        $r = \stream_socket_client("{$this->transport}://{$host}:{$port}", $error_number, $error, DEFAULT_CONNECTION_TIMEOUT, STREAM_CLIENT_CONNECT, $context);
+
+        if (!$r) {
+            throw new Exception("Cannot connect to server '{$host}': {$error_number} {$error}");
+        }
+
+        return $r;
+        // return parent::openSocket("{$this->transport}://{$host}", $port, $error_number, $error, $timeout);
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/../src/reporter.php';
 
@@ -20,33 +20,33 @@ class JUnitXMLReporter extends SimpleReporter
     public function __construct()
     {
         parent::__construct();
-        $this->doc = new DOMDocument();
+        $this->doc = new DOMDocument;
         $this->doc->loadXML('<testsuite/>');
         $this->root = $this->doc->documentElement;
     }
 
-    public function paintHeader($test_name)
+    public function paintHeader($test_name): void
     {
-        $this->testsStart = microtime(true);
+        $this->testsStart = \microtime(true);
 
         $this->root->setAttribute('name', $test_name);
-        $this->root->setAttribute('timestamp', date('c'));
+        $this->root->setAttribute('timestamp', \date('c'));
         $this->root->setAttribute('hostname', 'localhost');
 
-        echo "<?xml version=\"1.0\"?>\n";
-        echo "<!-- starting test suite $test_name\n";
+        print "<?xml version=\"1.0\"?>\n";
+        print "<!-- starting test suite {$test_name}\n";
     }
 
     /**
      * Paints the end of the test with a summary of the passes and failures.
      *
-     * @param string $test_name        Name class of test.
+     * @param string $test_name name class of test
      */
-    public function paintFooter($test_name)
+    public function paintFooter($test_name): void
     {
-        echo "-->\n";
+        print "-->\n";
 
-        $duration = microtime(true) - $this->testsStart;
+        $duration = \microtime(true) - $this->testsStart;
 
         $this->root->setAttribute('tests', $this->getPassCount() + $this->getFailCount() + $this->getExceptionCount());
         $this->root->setAttribute('failures', $this->getFailCount());
@@ -56,32 +56,32 @@ class JUnitXMLReporter extends SimpleReporter
         $this->doc->formatOutput = true;
         $xml                     = $this->doc->saveXML();
         // Cut out XML declaration
-        echo preg_replace('/<\?[^>]*\?>/', '', $xml);
-        echo "\n";
+        print \preg_replace('/<\?[^>]*\?>/', '', $xml);
+        print "\n";
     }
 
-    public function paintCaseStart($case)
+    public function paintCaseStart($case): void
     {
-        echo "- case start $case\n";
+        print "- case start {$case}\n";
         $this->currentCaseName = $case;
     }
 
-    public function paintCaseEnd($case)
+    public function paintCaseEnd($case): void
     {
         // No output here
     }
 
-    public function paintMethodStart($test)
+    public function paintMethodStart($test): void
     {
-        echo "  - test start: $test\n";
+        print "  - test start: {$test}\n";
 
-        $this->methodStart = microtime(true);
+        $this->methodStart = \microtime(true);
         $this->currCase    = $this->doc->createElement('testcase');
     }
 
-    public function paintMethodEnd($test)
+    public function paintMethodEnd($test): void
     {
-        $duration = microtime(true) - $this->methodStart;
+        $duration = \microtime(true) - $this->methodStart;
 
         $this->currCase->setAttribute('name', $test);
         $this->currCase->setAttribute('classname', $this->currentCaseName);
@@ -89,36 +89,36 @@ class JUnitXMLReporter extends SimpleReporter
         $this->root->appendChild($this->currCase);
     }
 
-    public function paintFail($message)
+    public function paintFail($message): void
     {
         parent::paintFail($message);
 
-        error_log('Failure: ' . $message);
+        \error_log('Failure: ' . $message);
         $this->terminateAbnormally($message);
     }
 
-    public function paintException($exception)
+    public function paintException($exception): void
     {
         parent::paintException($exception);
 
-        error_log('Exception: ' . $exception);
+        \error_log('Exception: ' . $exception);
         $this->terminateAbnormally($exception);
     }
 
-    public function terminateAbnormally($message)
+    public function terminateAbnormally($message): void
     {
         if (!$this->currCase) {
-            error_log('!! currCase was not set.');
+            \error_log('!! currCase was not set.');
 
             return;
         }
 
         $ch         = $this->doc->createElement('failure');
         $breadcrumb = $this->getTestList();
-        $ch->setAttribute('message', $breadcrumb[count($breadcrumb)-1]);
-        $ch->setAttribute('type', $breadcrumb[count($breadcrumb)-1]);
+        $ch->setAttribute('message', $breadcrumb[\count($breadcrumb) - 1]);
+        $ch->setAttribute('type', $breadcrumb[\count($breadcrumb) - 1]);
 
-        $message = implode(' -> ', $breadcrumb) . "\n\n\n" . $message;
+        $message = \implode(' -> ', $breadcrumb) . "\n\n\n" . $message;
         $content = $this->doc->createTextNode($message);
         $ch->appendChild($content);
 

@@ -15,9 +15,9 @@ if (!defined('LEXER_ENTER')) {
  */
 class ParallelRegex
 {
-    private $patterns;
-    private $labels;
-    private $regex;
+    private $patterns = [];
+    private $labels = [];
+    private $regex = null;
     private $case;
 
     /**
@@ -28,9 +28,6 @@ class ParallelRegex
     public function __construct($case)
     {
         $this->case = $case;
-        $this->patterns = [];
-        $this->labels = [];
-        $this->regex = null;
     }
 
     /**
@@ -66,7 +63,8 @@ class ParallelRegex
             return false;
         }
         $match = $matches[0];
-        for ($i = 1; $i < count($matches); ++$i) {
+        $counter = count($matches);
+        for ($i = 1; $i < $counter; $i++) {
             if ($matches[$i]) {
                 return $this->labels[$i - 1];
             }
@@ -82,7 +80,8 @@ class ParallelRegex
     protected function getCompoundedRegex()
     {
         if (null === $this->regex) {
-            for ($i = 0, $count = count($this->patterns); $i < $count; ++$i) {
+            $counter = count($this->patterns);
+            for ($i = 0; $i < $counter; $i++) {
                 $this->patterns[$i] = '('.str_replace(
                     ['/', '(', ')'],
                     ['\/', '\(', '\)'],
@@ -140,7 +139,7 @@ class SimpleStateStack
      */
     public function enter($state)
     {
-        array_push($this->stack, $state);
+        $this->stack[] = $state;
     }
 
     /**
@@ -166,7 +165,7 @@ class SimpleStateStack
  */
 class SimpleLexer
 {
-    private $regexes;
+    private $regexes = [];
     private $parser;
     private $mode;
     private $mode_handlers;
@@ -182,7 +181,6 @@ class SimpleLexer
     public function __construct($parser, $start = 'accept', $case = false)
     {
         $this->case = $case;
-        $this->regexes = [];
         $this->parser = $parser;
         $this->mode = new SimpleStateStack($start);
         $this->mode_handlers = [$start => $start];
@@ -287,19 +285,19 @@ class SimpleLexer
      */
     public function parse($raw)
     {
-        if (!isset($this->parser)) {
+        if ($this->parser === null) {
             return false;
         }
         $length = strlen($raw);
         while (is_array($parsed = $this->reduce($raw))) {
-            list($raw, $unmatched, $matched, $mode) = $parsed;
+            [$raw, $unmatched, $matched, $mode] = $parsed;
             if (!$this->dispatchTokens($unmatched, $matched, $mode)) {
                 return false;
             }
             if ('' === $raw) {
                 return true;
             }
-            if (strlen($raw) == $length) {
+            if (strlen($raw) === $length) {
                 return false;
             }
             $length = strlen($raw);
@@ -459,7 +457,7 @@ class SimpleHtmlLexer extends SimpleLexer
     protected function getParsedTags()
     {
         return ['a', 'base', 'title', 'form', 'input', 'button', 'textarea', 'select',
-                'option', 'frameset', 'frame', 'label', ];
+                'option', 'label', ];
     }
 
     /**
@@ -526,9 +524,9 @@ class SimpleHtmlSaxParser
 {
     private $lexer;
     private $listener;
-    private $tag;
-    private $attributes;
-    private $current_attribute;
+    private $tag = '';
+    private $attributes = [];
+    private $current_attribute = '';
 
     /**
      * Sets the listener.
@@ -538,10 +536,7 @@ class SimpleHtmlSaxParser
     public function __construct($listener)
     {
         $this->listener = $listener;
-        $this->lexer = $this->createLexer($this);
-        $this->tag = '';
-        $this->attributes = [];
-        $this->current_attribute = '';
+        $this->lexer = static::createLexer($this);
     }
 
     /**
@@ -646,18 +641,6 @@ class SimpleHtmlSaxParser
     }
 
     /**
-     * A character entity.
-     *
-     * @param string $token incoming characters
-     * @param int    $event lexer event type
-     *
-     * @return bool false if parse error
-     */
-    public function acceptEntityToken($token, $event)
-    {
-    }
-
-    /**
      * Character data between tags regarded as important.
      *
      * @param string $token incoming characters
@@ -694,9 +677,6 @@ class SimplePhpPageBuilder
     private $private_content_tag;
     private $open_forms = [];
     private $complete_forms = [];
-    private $frameset = false;
-    private $loading_frames = [];
-    private $frameset_nesting_level = 0;
     private $left_over_labels = [];
 
     private $last_widget;
@@ -709,12 +689,9 @@ class SimplePhpPageBuilder
     {
         unset($this->tags);
         unset($this->page);
-        unset($this->private_content_tags);
+        unset($this->private_content_tag);
         $this->open_forms = [];
         $this->complete_forms = [];
-        $this->frameset = false;
-        $this->loading_frames = [];
-        $this->frameset_nesting_level = 0;
         $this->left_over_labels = [];
     }
 
@@ -796,17 +773,7 @@ class SimplePhpPageBuilder
 
             return true;
         }
-        if ('frameset' === $tag->getTagName()) {
-            $this->acceptFramesetStart($tag);
-
-            return true;
-        }
-        if ('frame' === $tag->getTagName()) {
-            $this->acceptFrame($tag);
-
-            return true;
-        }
-        if ($tag->isPrivateContent() && !isset($this->private_content_tag)) {
+        if ($tag->isPrivateContent() && (property_exists($this, 'private_content_tag') || $this->private_content_tag === null)) {
             $this->private_content_tag = $tag;
         }
         if ($tag->expectEndTag()) {
@@ -835,11 +802,6 @@ class SimplePhpPageBuilder
         }
         if ('form' === $name) {
             $this->acceptFormEnd();
-
-            return true;
-        }
-        if ('frameset' === $name) {
-            $this->acceptFramesetEnd();
 
             return true;
         }
@@ -895,7 +857,8 @@ class SimplePhpPageBuilder
     protected function addContentToAllOpenTags($text)
     {
         foreach (array_keys($this->tags) as $name) {
-            for ($i = 0, $count = count($this->tags[$name]); $i < $count; ++$i) {
+            $count = count($this->tags[$name]);
+            for ($i = 0; $i < $count; $i++) {
                 $this->tags[$name][$i]->addContent($text);
             }
         }
@@ -914,7 +877,8 @@ class SimplePhpPageBuilder
             return;
         }
         foreach (array_keys($this->tags) as $name) {
-            for ($i = 0, $count = count($this->tags[$name]); $i < $count; ++$i) {
+            $counter = count($this->tags[$name]);
+            for ($i = 0; $i < $counter; $i++) {
                 $this->tags[$name][$i]->addTag($tag);
             }
         }
@@ -949,7 +913,8 @@ class SimplePhpPageBuilder
         } elseif (('title' === $tag->getTagName()) && ($this->page->getTitle() === false)) {
             $this->page->setTitle($tag);
         } elseif ($this->isFormElement($tag->getTagName())) {
-            for ($i = 0; $i < count($this->open_forms); ++$i) {
+            $counter = count($this->open_forms);
+            for ($i = 0; $i < $counter; $i++) {
                 $this->open_forms[$i]->addWidget($tag);
             }
             $this->last_widget = $tag;
@@ -975,11 +940,11 @@ class SimplePhpPageBuilder
         if (isset($this->label)) {
             if (isset($this->last_widget)) {
                 $this->last_widget->setLabel($this->label->getText());
-                unset($this->last_widget);
+                $this->last_widget = null;
             } else {
                 $this->left_over_labels[] = (clone $this->label);
             }
-            unset($this->label);
+            $this->label = null;
         }
     }
 
@@ -1010,56 +975,9 @@ class SimplePhpPageBuilder
      */
     protected function acceptFormEnd()
     {
-        if (count($this->open_forms)) {
+        if (count($this->open_forms) > 0) {
             $this->complete_forms[] = array_pop($this->open_forms);
         }
-    }
-
-    /**
-     * Opens a frameset. A frameset may contain nested frameset tags.
-     *
-     * @param SimpleFramesetTag $tag tag to accept
-     */
-    protected function acceptFramesetStart($tag)
-    {
-        if (!$this->isLoadingFrames()) {
-            $this->frameset = $tag;
-        }
-        ++$this->frameset_nesting_level;
-    }
-
-    /**
-     * Closes the most recently opened frameset.
-     */
-    protected function acceptFramesetEnd()
-    {
-        if ($this->isLoadingFrames()) {
-            --$this->frameset_nesting_level;
-        }
-    }
-
-    /**
-     * Takes a single frame tag and stashes it in the current frame set.
-     *
-     * @param SimpleFrameTag $tag tag to accept
-     */
-    protected function acceptFrame($tag)
-    {
-        if ($this->isLoadingFrames()) {
-            if ($tag->getAttribute('src')) {
-                $this->loading_frames[] = $tag;
-            }
-        }
-    }
-
-    /**
-     * Test to see if in the middle of reading a frameset.
-     *
-     * @return bool true if inframeset
-     */
-    protected function isLoadingFrames()
-    {
-        return $this->frameset and $this->frameset_nesting_level > 0;
     }
 
     /**
@@ -1071,7 +989,8 @@ class SimplePhpPageBuilder
             $this->complete_forms[] = array_pop($this->open_forms);
         }
         foreach ($this->left_over_labels as $label) {
-            for ($i = 0, $count = count($this->complete_forms); $i < $count; ++$i) {
+            $counter = count($this->complete_forms);
+            for ($i = 0; $i < $counter; $i++) {
                 $this->complete_forms[$i]->attachLabelBySelector(
                     new SelectById($label->getFor()),
                     $label->getText()
@@ -1079,6 +998,5 @@ class SimplePhpPageBuilder
             }
         }
         $this->page->setForms($this->complete_forms);
-        $this->page->setFrames($this->loading_frames);
     }
 }

@@ -1,12 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/../src/autorun.php';
+require_once __DIR__ . '/../src/autorun.php';
 
 class ReferenceForTesting
 {
     private $reference;
 
-    public function setReference(&$reference)
+    public function setReference(&$reference): void
     {
         $this->reference = $reference;
     }
@@ -19,59 +19,59 @@ class ReferenceForTesting
 
 class TestOfUnitTester extends UnitTestCase
 {
-    public function testAssertTrueReturnsAssertionAsBoolean()
+    public function testAssertTrueReturnsAssertionAsBoolean(): void
     {
         $this->assertTrue($this->assertTrue(true));
     }
 
-    public function testAssertFalseReturnsAssertionAsBoolean()
+    public function testAssertFalseReturnsAssertionAsBoolean(): void
     {
         $this->assertTrue($this->assertFalse(false));
     }
 
-    public function testAssertEqualReturnsAssertionAsBoolean()
+    public function testAssertEqualReturnsAssertionAsBoolean(): void
     {
         $this->assertTrue($this->assertEqual(5, 5));
     }
 
-    public function testAssertIdenticalReturnsAssertionAsBoolean()
+    public function testAssertIdenticalReturnsAssertionAsBoolean(): void
     {
         $this->assertTrue($this->assertIdentical(5, 5));
     }
 
-    public function testCoreAssertionsDoNotThrowErrors()
+    public function testCoreAssertionsDoNotThrowErrors(): void
     {
         $this->assertIsA($this, 'UnitTestCase');
         $this->assertNotA($this, 'WebTestCase');
     }
 
-    public function testReferenceAssertionOnObjects()
+    public function testReferenceAssertionOnObjects(): void
     {
-        $a = new ReferenceForTesting();
+        $a = new ReferenceForTesting;
         $b = $a;
         $this->assertSame($a, $b);
     }
 
-    public function testReferenceAssertionOnScalars()
+    public function testReferenceAssertionOnScalars(): void
     {
         $a = 25;
         $b = &$a; // reference is a pointer to a scalar
         $this->assertReference($a, $b);
     }
 
-    public function testReferenceAssertionOnObject()
+    public function testReferenceAssertionOnObject(): void
     {
         $refValue = 5;
-        $a = new ReferenceForTesting();
+        $a        = new ReferenceForTesting;
         $a->setReference($refValue);
         $b = &$a->getReference(); // $b is a reference to $a->reference, which is 5.
         $this->assertReference($a->getReference(), $b);
     }
 
-    public function testCloneOnObjects()
+    public function testCloneOnObjects(): void
     {
-        $a = new ReferenceForTesting();
-        $b = new ReferenceForTesting();
+        $a = new ReferenceForTesting;
+        $b = new ReferenceForTesting;
         $this->assertClone($a, $b);
     }
 
@@ -87,14 +87,14 @@ class TestOfUnitTester extends UnitTestCase
         $this->assertClone(true, true);   // bool
     }*/
 
-    public function testCopyOnScalars()
+    public function testCopyOnScalars(): void
     {
         $a = 25;
         $b = 25;
         $this->assertCopy($a, $b);
     }
 
-    public function testEscapeIncidentalPrintfSyntax()
+    public function testEscapeIncidentalPrintfSyntax(): void
     {
         // Incidentals are escaped
         $a = 'http://www.domain.com/some%%20long%%20name.html';

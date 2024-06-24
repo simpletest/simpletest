@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/../src/autorun.php';
-include __DIR__.'/support/spl_examples.php';
+require_once __DIR__ . '/../src/autorun.php';
+
+include __DIR__ . '/support/spl_examples.php';
 
 interface DummyInterface
 {
@@ -9,7 +10,8 @@ interface DummyInterface
 
     public function anotherMethod($a);
 
-    public function &referenceMethod(&$a);
+    // Deprecated: Returning by reference from a void function is deprecated
+    // public function &referenceMethod(&$a);
 }
 
 Mock::generate('DummyInterface');
@@ -17,92 +19,94 @@ Mock::generatePartial('DummyInterface', 'PartialDummyInterface', []);
 
 class TestOfMockInterfaces extends UnitTestCase
 {
-    public function testCanMockAnInterface()
+    public function testCanMockAnInterface(): void
     {
-        $mock = new MockDummyInterface();
+        $mock = new MockDummyInterface;
         $this->assertIsA($mock, 'SimpleMock');
         $this->assertIsA($mock, 'MockDummyInterface');
-        $this->assertTrue(method_exists($mock, 'aMethod'));
-        $this->assertTrue(method_exists($mock, 'anotherMethod'));
+        $this->assertTrue(\method_exists($mock, 'aMethod'));
+        $this->assertTrue(\method_exists($mock, 'anotherMethod'));
         $this->assertNull($mock->aMethod());
     }
 
-    public function testMockedInterfaceExpectsParameters()
+    public function testMockedInterfaceExpectsParameters(): void
     {
-        $mock = new MockDummyInterface();
+        $mock = new MockDummyInterface;
         $this->expectError();
+
         try {
             $mock->anotherMethod();
         } catch (Error $e) {
-            trigger_error($e->getMessage());
+            \trigger_error($e->getMessage());
         }
     }
 
-    public function testCannotPartiallyMockAnInterface()
+    public function testCannotPartiallyMockAnInterface(): void
     {
-        $this->assertFalse(class_exists('PartialDummyInterface'));
+        $this->assertFalse(\class_exists('PartialDummyInterface'));
     }
 }
 
 class TestOfSpl extends UnitTestCase
 {
-    public function testCanMockAllSplClasses()
+    public function testCanMockAllSplClasses(): void
     {
         static $classesToExclude = [
-            'SplHeap', // the method compare() is missing
-            'FilterIterator', // the method accept() is missing
-            'RecursiveFilterIterator', // the method hasChildren() must contain body
+            'SplHeap', // the method compare() is missing (protected)
+            // 'FilterIterator', // the method accept() is missing
+            // 'RecursiveFilterIterator', // the method hasChildren() must contain body
         ];
 
-        foreach (spl_classes() as $class) {
+        foreach (\spl_classes() as $class) {
             // exclude classes
-            if (in_array($class, $classesToExclude)) {
+            if (\in_array($class, $classesToExclude, true)) {
                 continue;
             }
 
-            $mock_class = "Mock$class";
+            $mock_class = "Mock{$class}";
             Mock::generate($class);
-            $this->assertIsA(new $mock_class(), $mock_class);
+            $this->assertIsA(new $mock_class, $mock_class);
         }
     }
 
-    public function testExtensionOfCommonSplClasses()
+    public function testExtensionOfCommonSplClasses(): void
     {
         Mock::generate('IteratorImplementation');
         $this->assertIsA(
-            new IteratorImplementation(),
-            'IteratorImplementation'
+            new IteratorImplementation,
+            'IteratorImplementation',
         );
         Mock::generate('IteratorAggregateImplementation');
         $this->assertIsA(
-            new IteratorAggregateImplementation(),
-            'IteratorAggregateImplementation'
+            new IteratorAggregateImplementation,
+            'IteratorAggregateImplementation',
         );
     }
 }
 
 class WithHint
 {
-    public function hinted(DummyInterface $object)
+    public function hinted(DummyInterface $object): void
     {
     }
 }
 
 class ImplementsDummy implements DummyInterface
 {
-    public function aMethod()
+    public function aMethod(): void
     {
     }
 
-    public function anotherMethod($a)
+    public function anotherMethod($a): void
     {
     }
 
-    public function &referenceMethod(&$a)
+    // Deprecated: Returning by reference from a void function is deprecated
+    /*public function &referenceMethod(&$a): void
     {
-    }
+    }*/
 
-    public function extraMethod($a = false)
+    public function extraMethod($a = false): void
     {
     }
 }
@@ -110,23 +114,23 @@ Mock::generate('ImplementsDummy');
 
 class TestOfImplementations extends UnitTestCase
 {
-    public function testMockedInterfaceCanPassThroughTypeHint()
+    public function testMockedInterfaceCanPassThroughTypeHint(): void
     {
-        $mock = new MockDummyInterface();
-        $hinter = new WithHint();
+        $mock   = new MockDummyInterface;
+        $hinter = new WithHint;
         $hinter->hinted($mock);
     }
 
-    public function testImplementedInterfacesAreCarried()
+    public function testImplementedInterfacesAreCarried(): void
     {
-        $mock = new MockImplementsDummy();
-        $hinter = new WithHint();
+        $mock   = new MockImplementsDummy;
+        $hinter = new WithHint;
         $hinter->hinted($mock);
     }
 
-    public function testNoSpuriousWarningsWhenSkippingDefaultedParameter()
+    public function testNoSpuriousWarningsWhenSkippingDefaultedParameter(): void
     {
-        $mock = new MockImplementsDummy();
+        $mock = new MockImplementsDummy;
         $mock->extraMethod();
     }
 }
@@ -138,7 +142,7 @@ interface SampleInterfaceWithClone
 
 class TestOfSampleInterfaceWithClone extends UnitTestCase
 {
-    public function testCanMockWithoutErrors()
+    public function testCanMockWithoutErrors(): void
     {
         Mock::generate('SampleInterfaceWithClone');
     }
@@ -151,10 +155,10 @@ interface SampleInterfaceWithHintInSignature
 
 class TestOfInterfaceMocksWithHintInSignature extends UnitTestCase
 {
-    public function testBasicConstructOfAnInterfaceWithHintInSignature()
+    public function testBasicConstructOfAnInterfaceWithHintInSignature(): void
     {
         Mock::generate('SampleInterfaceWithHintInSignature');
-        $mock = new MockSampleInterfaceWithHintInSignature();
+        $mock = new MockSampleInterfaceWithHintInSignature;
         $this->assertIsA($mock, 'SampleInterfaceWithHintInSignature');
     }
 }

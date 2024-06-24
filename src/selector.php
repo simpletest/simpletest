@@ -1,10 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/tag.php';
-require_once __DIR__.'/encoding.php';
+require_once __DIR__ . '/tag.php';
+
+require_once __DIR__ . '/encoding.php';
 
 interface SelectorInterface
 {
+    public function isMatch($widget);
 }
 
 /**
@@ -29,7 +31,7 @@ class SelectByName implements SelectorInterface
     /**
      * Accessor for name.
      *
-     * @return string $name       Name to match.
+     * @return string $name       name to match
      */
     public function getName()
     {
@@ -73,7 +75,7 @@ class SelectByLabel implements SelectorInterface
      */
     public function isMatch($widget)
     {
-        if (!method_exists($widget, 'isLabel')) {
+        if (!\method_exists($widget, 'isLabel')) {
             return false;
         }
 
@@ -139,7 +141,7 @@ class SelectByLabelOrName implements SelectorInterface
      */
     public function isMatch($widget)
     {
-        if (method_exists($widget, 'isLabel')) {
+        if (\method_exists($widget, 'isLabel')) {
             if ($widget->isLabel($this->label)) {
                 return true;
             }

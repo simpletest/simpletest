@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/xml.php';
-require_once __DIR__.'/shell_tester.php';
+require_once __DIR__ . '/xml.php';
+
+require_once __DIR__ . '/shell_tester.php';
 
 /**
  * Runs an XML formated test in a separate process.
@@ -10,22 +11,23 @@ class DetachedTestCase
 {
     /** @var string */
     private $command;
+
     /** @var string */
     private $dry_command;
+
     /** @var false|int */
-    private $size;
+    private $size = false;
 
     /**
      * Sets the location of the remote test.
      *
-     * @param string $command test script
+     * @param string $command     test script
      * @param string $dry_command script for dry run
      */
     public function __construct($command, $dry_command = '')
     {
-        $this->command = $command;
+        $this->command     = $command;
         $this->dry_command = empty($dry_command) ? $command : $dry_command;
-        $this->size = false;
     }
 
     /**
@@ -45,15 +47,16 @@ class DetachedTestCase
      *
      * @param SimpleReporter $reporter target of test results
      *
-     * @return bool True, if no failures.
+     * @return bool true, if no failures
      */
     public function run(&$reporter)
     {
-        $shell = new SimpleShell();
+        $shell = new SimpleShell;
         $shell->execute($this->command);
         $parser = $this->createParser($reporter);
+
         if (!$parser->parse($shell->getOutput())) {
-            trigger_error('Cannot parse incoming XML from ['.$this->command.']');
+            \trigger_error('Cannot parse incoming XML from [' . $this->command . ']');
 
             return false;
         }
@@ -69,12 +72,13 @@ class DetachedTestCase
     public function getSize()
     {
         if (false === $this->size) {
-            $shell = new SimpleShell();
+            $shell = new SimpleShell;
             $shell->execute($this->dry_command);
-            $reporter = new SimpleReporter();
-            $parser = $this->createParser($reporter);
+            $reporter = new SimpleReporter;
+            $parser   = $this->createParser($reporter);
+
             if (!$parser->parse($shell->getOutput())) {
-                trigger_error('Cannot parse incoming XML from ['.$this->dry_command.']');
+                \trigger_error('Cannot parse incoming XML from [' . $this->dry_command . ']');
 
                 return false;
             }

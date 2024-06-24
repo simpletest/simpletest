@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-require_once __DIR__.'/test_case.php';
-require_once __DIR__.'/dumper.php';
+require_once __DIR__ . '/test_case.php';
+
+require_once __DIR__ . '/dumper.php';
 
 /**
  * Standard unit test class for day to day testing of PHP code XP style.
@@ -18,7 +19,7 @@ class UnitTestCase extends SimpleTestCase
     public function __construct($label = false)
     {
         if (!$label) {
-            $label = get_class($this);
+            $label = static::class;
         }
         parent::__construct($label);
     }
@@ -33,7 +34,7 @@ class UnitTestCase extends SimpleTestCase
      */
     public function assertTrue($result, $message = '%s')
     {
-        return $this->assert(new TrueExpectation(), $result, $message);
+        return $this->assert(new TrueExpectation, $result, $message);
     }
 
     /**
@@ -48,7 +49,7 @@ class UnitTestCase extends SimpleTestCase
      */
     public function assertFalse($result, $message = '%s')
     {
-        return $this->assert(new FalseExpectation(), $result, $message);
+        return $this->assert(new FalseExpectation, $result, $message);
     }
 
     /**
@@ -61,12 +62,12 @@ class UnitTestCase extends SimpleTestCase
      */
     public function assertNull($value, $message = '%s')
     {
-        $dumper = new SimpleDumper();
+        $dumper = new SimpleDumper;
 
         $msg_tpl = '[%s] should  be null';
-        $msg_tpl = sprintf($msg_tpl, $dumper->describeValue($value));
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($value));
 
-        $message = sprintf($message, $msg_tpl);
+        $message = \sprintf($message, $msg_tpl);
 
         return $this->assertTrue(!isset($value), $message);
     }
@@ -81,12 +82,12 @@ class UnitTestCase extends SimpleTestCase
      */
     public function assertNotNull($value, $message = '%s')
     {
-        $dumper = new SimpleDumper();
+        $dumper = new SimpleDumper;
 
         $msg_tpl = '[%s] should not be null';
-        $msg_tpl = sprintf($msg_tpl, $dumper->describeValue($value));
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($value));
 
-        $message = sprintf($message, $msg_tpl);
+        $message = \sprintf($message, $msg_tpl);
 
         return $this->assertTrue(isset($value), $message);
     }
@@ -222,12 +223,12 @@ class UnitTestCase extends SimpleTestCase
      */
     public function assertReference(&$first, &$second, $message = '%s')
     {
-        $dumper = new SimpleDumper();
+        $dumper = new SimpleDumper;
 
         $msg_tpl = '[%s] and [%s] should reference the same object';
-        $msg_tpl = sprintf($msg_tpl, $dumper->describeValue($first), $dumper->describeValue($second));
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($first), $dumper->describeValue($second));
 
-        $message = sprintf($message, $msg_tpl);
+        $message = \sprintf($message, $msg_tpl);
 
         $isReference = SimpleTestCompatibility::isReference($first, $second);
 
@@ -249,12 +250,12 @@ class UnitTestCase extends SimpleTestCase
      */
     public function assertSame($first, $second, $message = '%s')
     {
-        $dumper = new SimpleDumper();
+        $dumper = new SimpleDumper;
 
         $msg_tpl = '[%s] and [%s] should reference the same object';
-        $msg_tpl = sprintf($msg_tpl, $dumper->describeValue($first), $dumper->describeValue($second));
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($first), $dumper->describeValue($second));
 
-        $message = sprintf($message, $msg_tpl);
+        $message = \sprintf($message, $msg_tpl);
 
         return $this->assertTrue($first === $second, $message);
     }
@@ -271,16 +272,16 @@ class UnitTestCase extends SimpleTestCase
      */
     public function assertClone($first, $second, $message = '%s')
     {
-        $dumper = new SimpleDumper();
+        $dumper = new SimpleDumper;
 
         $msg_tpl = '[%s] and [%s] should not be the same object';
-        $msg_tpl = sprintf($msg_tpl, $dumper->describeValue($first), $dumper->describeValue($second));
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($first), $dumper->describeValue($second));
 
-        $message = sprintf($message, $msg_tpl);
+        $message = \sprintf($message, $msg_tpl);
 
         $identical = new IdenticalExpectation($first);
 
-        return $this->assertTrue($identical->test($second) && !($first === $second), $message);
+        return $this->assertTrue($identical->test($second) && $first !== $second, $message);
     }
 
     /**
@@ -296,16 +297,16 @@ class UnitTestCase extends SimpleTestCase
      */
     public function assertCopy(&$first, &$second, $message = '%s')
     {
-        $dumper = new SimpleDumper();
+        $dumper = new SimpleDumper;
 
         $msg_tpl = '[%s] and [%s] should reference the same object';
-        $msg_tpl = sprintf($msg_tpl, $dumper->describeValue($first), $dumper->describeValue($second));
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($first), $dumper->describeValue($second));
 
-        $message = sprintf($message, $msg_tpl);
+        $message = \sprintf($message, $msg_tpl);
 
         return $this->assertFalse(
             SimpleTestCompatibility::isReference($first, $second),
-            $message
+            $message,
         );
     }
 
@@ -343,10 +344,8 @@ class UnitTestCase extends SimpleTestCase
      *
      * @param mixed  $expected The error to match
      * @param string $message  message on failure
-     *
-     * @return void
      */
-    public function expectError($expected = false, $message = '%s')
+    public function expectError($expected = false, $message = '%s'): void
     {
         $queue = SimpleTest::getContext()->get('SimpleErrorQueue');
         $queue->expectError($this->forceExpectation($expected), $message);
@@ -356,16 +355,14 @@ class UnitTestCase extends SimpleTestCase
      * Prepares for an exception. If the error mismatches it passes through, otherwise it is
      * swallowed. Any left over errors trigger failures.
      *
-     * @param mixed $expected The error to match
+     * @param mixed  $expected The error to match
      * @param string $message  message on failure
-     *
-     * @return void
      */
-    public function expectException($expected = false, $message = '%s')
+    public function expectException($expected = false, $message = '%s'): void
     {
         $queue = SimpleTest::getContext()->get('SimpleExceptionTrap');
-        $line = $this->getAssertionLine();
-        $queue->expectException($expected, $message.$line);
+        $line  = $this->getAssertionLine();
+        $queue->expectException($expected, $message . $line);
     }
 
     /**
@@ -373,10 +370,8 @@ class UnitTestCase extends SimpleTestCase
      * It doesn't affect the test, whether thrown or not.
      *
      * @param mixed $ignored The error to ignore
-     *
-     * @return void
      */
-    public function ignoreException($ignored = false)
+    public function ignoreException($ignored = false): void
     {
         SimpleTest::getContext()->get('SimpleExceptionTrap')->ignoreException($ignored);
     }
@@ -391,17 +386,14 @@ class UnitTestCase extends SimpleTestCase
     protected function forceExpectation($expected)
     {
         if (false === $expected) {
-            return new TrueExpectation();
+            return new TrueExpectation;
         }
-        if (is_a($expected, 'SimpleExpectation')) {
+
+        if (\is_a($expected, 'SimpleExpectation')) {
             return $expected;
         }
 
-        if(is_string($expected)) {
-            $v = str_replace('%', '%%', $expected);
-        } else {
-            $v = $expected;
-        }
+        $v = \is_string($expected) ? \str_replace('%', '%%', $expected) : $expected;
 
         return new EqualExpectation($v);
     }

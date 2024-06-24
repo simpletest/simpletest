@@ -53,7 +53,7 @@ class SimpleDumper
             return 'bool';
         } elseif (is_string($value)) {
             return 'String';
-        } elseif (is_integer($value)) {
+        } elseif (is_int($value)) {
             return 'Integer';
         } elseif (is_float($value)) {
             return 'Float';
@@ -74,11 +74,11 @@ class SimpleDumper
      *
      * @param mixed $first     first variable
      * @param mixed $second    value to compare with
-     * @param bool  $identical if true then type anomolies count
+     * @param bool  $identical if true then type anomalies count
      *
      * @return string description of difference
      */
-    public function describeDifference($first, $second, $identical = false)
+    public function describeDifference($first, $second, $identical = true)
     {
         if ($identical) {
             if (!$this->isTypeMatch($first, $second)) {
@@ -108,7 +108,8 @@ class SimpleDumper
      */
     protected function isTypeMatch($first, $second)
     {
-        return $this->getType($first) == $this->getType($second);
+        return \gettype($first) === \gettype($second);
+        //return $this->getType($first) === $this->getType($second);
     }
 
     /**
@@ -323,7 +324,7 @@ class SimpleDumper
         sort($first_keys);
         sort($second_keys);
 
-        return $first_keys == $second_keys;
+        return $first_keys === $second_keys;
     }
 
     /**
@@ -405,6 +406,7 @@ class SimpleDumper
                 return $value;
             }
         }
+        return null;
     }
 
     /**
@@ -435,7 +437,7 @@ class SimpleDumper
             return 0;
         }
         if (strlen($first) < strlen($second)) {
-            list($first, $second) = [$second, $first];
+            [$first, $second] = [$second, $first];
         }
         $position = 0;
         $step = strlen($first);

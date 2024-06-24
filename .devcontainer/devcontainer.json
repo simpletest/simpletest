@@ -1,0 +1,44 @@
+{
+	"name": "PHP VSCode DevContainer",
+	"build": {
+		"dockerfile": "./Dockerfile",
+		"context": "."
+	},
+	// Add features: https://containers.dev/features.
+ 	//"features": {
+	//	"ghcr.io/devcontainers/features/php:1": {
+	//		"version": "8.3",           // default = latest
+	//		"installComposer": "true"   // default = true
+	//	}
+	//},
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "zsh",
+				"terminal.integrated.profiles.linux": {
+					"zsh": {
+						"path": "/bin/zsh"
+					}
+				}
+			},
+			"vscode": {
+				"extensions": [
+					"xdebug.php-debug",
+					"xdebug.php-pack",
+					"devsense.phptools-vscode"
+				]
+			}
+		}
+	},
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// 8080 webserver
+	// 9003 xdebug3 port
+	"forwardPorts": [
+		8080, 9003
+	],
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "sudo chmod a+x \"$(pwd)\" && sudo rm -rf /var/www/html && sudo ln -s \"$(pwd)\" /var/www/html"
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	"remoteUser": "root"
+}
