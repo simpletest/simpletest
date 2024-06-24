@@ -252,8 +252,6 @@ class TextReporter extends SimpleReporter
      * Paints a PHP error or exception.
      *
      * @param string $message message to be shown
-     *
-     * @abstract
      */
     public function paintError($message): void
     {
@@ -269,8 +267,6 @@ class TextReporter extends SimpleReporter
      * Paints a PHP error or exception.
      *
      * @param Exception $exception exception to describe
-     *
-     * @abstract
      */
     public function paintException($exception): void
     {

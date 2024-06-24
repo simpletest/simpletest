@@ -35,7 +35,6 @@ class TestOfHtmlSaxParserWithDifferentCharset extends UnitTestCase
         $parser->returnsByValue('acceptStartToken', true);
         $parser->returnsByValue('acceptEndToken', true);
         $parser->returnsByValue('acceptAttributeToken', true);
-        $parser->returnsByValue('acceptEntityToken', true);
         $parser->returnsByValue('acceptTextToken', true);
         $parser->returnsByValue('ignore', true);
 

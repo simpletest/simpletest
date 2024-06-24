@@ -448,7 +448,7 @@ class SimpleReflection
         elseif ((PHP_VERSION_ID < 80000) && $parameter->isArray()) {
             $typeHint = 'array';
         }
-        // Guard: PHP8.0.0+ use functional replacement for parameter->isArray()
+        // Guard: use functional replacement for parameter->isArray() on PHP8+
         elseif ((PHP_VERSION_ID >= 80000) && $this->declaresArray($parameter)) {
             $typeHint = 'array';
         } else {

@@ -1374,9 +1374,11 @@ class SimpleTimeTag extends SimpleTextTag
 /**
  * A group of multiple widgets with some shared behaviour.
  */
-class SimpleTagGroup
+abstract class SimpleTagGroup
 {
     private $widgets = [];
+
+    abstract public function getValue();
 
     /**
      * Adds a tag to the group.

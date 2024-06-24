@@ -6,10 +6,8 @@ require_once __DIR__ . '/compatibility.php';
 
 /**
  * Assertion that can display failure information. Also includes various helper methods.
- *
- * @abstract
  */
-class SimpleExpectation
+abstract class SimpleExpectation
 {
     protected $dumper = false;
     private $message;
@@ -45,12 +43,8 @@ class SimpleExpectation
      * @param mixed $compare comparison value
      *
      * @return bool true if correct
-     *
-     * @abstract
      */
-    public function test($compare)
-    {
-    }
+    abstract public function test($compare);
 
     /**
      * Returns a human readable test message.
@@ -58,12 +52,8 @@ class SimpleExpectation
      * @param mixed $compare comparison value
      *
      * @return string description of success or failure
-     *
-     * @abstract
      */
-    public function testMessage($compare)
-    {
-    }
+    abstract public function testMessage($compare);
 
     /**
      * Overlays the generated message onto the stored user message.

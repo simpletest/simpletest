@@ -641,18 +641,6 @@ class SimpleHtmlSaxParser
     }
 
     /**
-     * A character entity.
-     *
-     * @param string $token incoming characters
-     * @param int    $event lexer event type
-     *
-     * @return bool false if parse error
-     */
-    public function acceptEntityToken($token, $event)
-    {
-    }
-
-    /**
      * Character data between tags regarded as important.
      *
      * @param string $token incoming characters

@@ -6,8 +6,6 @@ require_once __DIR__ . '/invoker.php';
  * Can receive test events and display them.
  * Display is achieved by making display methods available
  * and visiting the incoming event.
- *
- * @abstract
  */
 class SimpleScorer
 {
@@ -154,7 +152,7 @@ class SimpleScorer
     }
 
     /**
-     * Deals with PHP 4 throwing an error.
+     * Deals with throwing an error.
      *
      * @param string $message text of error formatted by the test case
      */
@@ -164,7 +162,7 @@ class SimpleScorer
     }
 
     /**
-     * Deals with PHP 5 throwing an exception.
+     * Deals with throwing an exception.
      *
      * @param Exception $exception the actual exception thrown
      */
@@ -380,22 +378,20 @@ class SimpleReporter extends SimpleScorer
      * Paints the test document header.
      *
      * @param string $test_name first test top level to start
-     *
-     * @abstract
      */
     public function paintHeader($test_name): void
     {
+        // abstract method
     }
 
     /**
      * Paints the test document footer.
      *
      * @param string $test_name the top level test
-     *
-     * @abstract
      */
     public function paintFooter($test_name): void
     {
+        // abstract method
     }
 
     /**

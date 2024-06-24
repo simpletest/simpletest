@@ -19,7 +19,6 @@ class SimpleShell
 
     /**
      * Actually runs the command.
-     * Does not trap the error stream output as this need PHP 4.3+.
      *
      * @param string $command the actual command line to run
      *

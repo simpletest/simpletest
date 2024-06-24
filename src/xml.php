@@ -289,8 +289,6 @@ class XmlReporter extends SimpleReporter
      *
      * @param string $test_name first test top level to start
      *
-     * @abstract
-     *
      * @return void
      */
     public function paintHeader($test_name): void
@@ -311,8 +309,6 @@ class XmlReporter extends SimpleReporter
      * Paints the test document footer.
      *
      * @param string $test_name the top level test
-     *
-     * @abstract
      *
      * @return void
      */

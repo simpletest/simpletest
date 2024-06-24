@@ -320,7 +320,6 @@ class TestOfSimpleHtmlLexer extends UnitTestCase
         $parser->returnsByValue('acceptStartToken', true);
         $parser->returnsByValue('acceptEndToken', true);
         $parser->returnsByValue('acceptAttributeToken', true);
-        $parser->returnsByValue('acceptEntityToken', true);
         $parser->returnsByValue('acceptTextToken', true);
         $parser->returnsByValue('ignore', true);
 
@@ -333,7 +332,6 @@ class TestOfSimpleHtmlLexer extends UnitTestCase
         $parser->expectNever('acceptStartToken');
         $parser->expectNever('acceptEndToken');
         $parser->expectNever('acceptAttributeToken');
-        $parser->expectNever('acceptEntityToken');
         $parser->expectNever('acceptTextToken');
         $lexer = new SimpleHtmlLexer($parser);
         $this->assertTrue($lexer->parse(''));
