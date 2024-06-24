@@ -6,6 +6,7 @@ require_once __DIR__ . '/encoding.php';
 
 interface SelectorInterface
 {
+    public function isMatch($widget);
 }
 
 /**

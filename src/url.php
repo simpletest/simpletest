@@ -22,8 +22,6 @@ class SimpleUrl
     private $scheme;
     private $target;
     private $username;
-    private $x;
-    private $y;
 
     /**
      * A pipe seperated list of all TLDs that result in two part domain names.
@@ -42,8 +40,6 @@ class SimpleUrl
      */
     public function __construct($url = '')
     {
-        [$x, $y] = $this->chompCoordinates($url);
-        $this->setCoordinates($x, $y);
         $this->scheme = $this->chompScheme($url);
 
         if ('file' === $this->scheme) {
@@ -201,43 +197,6 @@ class SimpleUrl
     }
 
     /**
-     * Sets image coordinates. Set to false to clear them.
-     *
-     * @param int $x horizontal position
-     * @param int $y vertical position
-     */
-    public function setCoordinates($x = false, $y = false): void
-    {
-        if ((false === $x) || (false === $y)) {
-            $this->x = $this->y = false;
-
-            return;
-        }
-        $this->x = (int) $x;
-        $this->y = (int) $y;
-    }
-
-    /**
-     * Accessor for horizontal image coordinate.
-     *
-     * @return int x value
-     */
-    public function getX()
-    {
-        return $this->x;
-    }
-
-    /**
-     * Accessor for vertical image coordinate.
-     *
-     * @return int y value
-     */
-    public function getY()
-    {
-        return $this->y;
-    }
-
-    /**
      * Accessor for current request parameters in URL string form.
      * Will return the original request
      * if at all possible even if it doesn't make much sense.
@@ -344,9 +303,8 @@ class SimpleUrl
         }
         $encoded  = $this->getEncodedRequest();
         $fragment = $this->getFragment() ? '#' . $this->getFragment() : '';
-        $coords   = false === $this->getX() ? '' : '?' . $this->getX() . ',' . $this->getY();
 
-        return "{$scheme}{$identity}{$host}{$port}{$path}{$encoded}{$fragment}{$coords}";
+        return "{$scheme}{$identity}{$host}{$port}{$path}{$encoded}{$fragment}";
     }
 
     /**
@@ -379,9 +337,8 @@ class SimpleUrl
         $path     = $this->normalisePath($this->extractAbsolutePath($base));
         $encoded  = $this->getEncodedRequest();
         $fragment = $this->getFragment() ? '#' . $this->getFragment() : '';
-        $coords   = false === $this->getX() ? '' : '?' . $this->getX() . ',' . $this->getY();
 
-        return new self("{$scheme}://{$identity}{$host}{$port}{$path}{$encoded}{$fragment}{$coords}");
+        return new self("{$scheme}://{$identity}{$host}{$port}{$path}{$encoded}{$fragment}");
     }
 
     /**
@@ -410,24 +367,6 @@ class SimpleUrl
         $path = \preg_replace('|/\./|', '/', $path);
 
         return \preg_replace('|/[^/]+/\.\./|', '/', $path);
-    }
-
-    /**
-     * Extracts the X, Y coordinate pair from an image map.
-     *
-     * @param string $url URL so far. The coordinates will be removed.
-     *
-     * @return array X, Y as a pair of integers
-     */
-    protected function chompCoordinates(&$url)
-    {
-        if (\preg_match('/(.*)\?(\d+),(\d+)$/', $url, $matches)) {
-            $url = $matches[1];
-
-            return [(int) $matches[2], (int) $matches[3]];
-        }
-
-        return [false, false];
     }
 
     /**

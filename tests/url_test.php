@@ -122,46 +122,6 @@ class TestOfUrl extends UnitTestCase
         $this->assertEqual($url->getEncodedRequest(), '?url=http://www.google.com/moo/');
     }
 
-    public function testSettingCordinates(): void
-    {
-        $url = new SimpleUrl('');
-        $url->setCoordinates('32', '45');
-        $this->assertIdentical($url->getX(), 32);
-        $this->assertIdentical($url->getY(), 45);
-        $this->assertEqual($url->getEncodedRequest(), '');
-    }
-
-    public function testParseCordinates(): void
-    {
-        $url = new SimpleUrl('?32,45');
-        $this->assertIdentical($url->getX(), 32);
-        $this->assertIdentical($url->getY(), 45);
-    }
-
-    public function testClearingCordinates(): void
-    {
-        $url = new SimpleUrl('?32,45');
-        $url->setCoordinates();
-        $this->assertIdentical($url->getX(), false);
-        $this->assertIdentical($url->getY(), false);
-    }
-
-    public function testParsingParameterCordinateMixture(): void
-    {
-        $url = new SimpleUrl('?a=A&b=&c?32,45');
-        $this->assertIdentical($url->getX(), 32);
-        $this->assertIdentical($url->getY(), 45);
-        $this->assertEqual($url->getEncodedRequest(), '?a=A&b=&c');
-    }
-
-    public function testParsingParameterWithBadCordinates(): void
-    {
-        $url = new SimpleUrl('?a=A&b=&c?32');
-        $this->assertIdentical($url->getX(), false);
-        $this->assertIdentical($url->getY(), false);
-        $this->assertEqual($url->getEncodedRequest(), '?a=A&b=&c?32');
-    }
-
     public function testPageSplitting(): void
     {
         $url = new SimpleUrl('./here/../there/somewhere.php');
@@ -247,29 +207,27 @@ class TestOfUrl extends UnitTestCase
             ['a' => '1'],
         );
         $this->assertUrl(
-            'username:password@somewhere.com:243?1,2',
+            'username:password@somewhere.com:243',
             [false, 'username', 'password', 'somewhere.com', 243, '/', 'com', '', false],
-            [],
-            [1, 2],
+            []
         );
         $this->assertUrl(
             'https://www.somewhere.com',
-            ['https', false, false, 'www.somewhere.com', false, '/', 'com', '', false],
+            ['https', false, false, 'www.somewhere.com', false, '/', 'com', '', false]
         );
         $this->assertUrl(
             'username@www.somewhere.com:243#anchor',
-            [false, 'username', false, 'www.somewhere.com', 243, '/', 'com', '', 'anchor'],
+            [false, 'username', false, 'www.somewhere.com', 243, '/', 'com', '', 'anchor']
         );
         $this->assertUrl(
-            '/this/that/here.php?a=1&b=2?3,4',
+            '/this/that/here.php?a=1&b=2',
             [false, false, false, '', false, '/this/that/here.php', false, '?a=1&b=2', false],
-            ['a' => '1', 'b' => '2'],
-            [3, 4],
+            ['a' => '1', 'b' => '2']
         );
         $this->assertUrl(
             'username@/here.php?a=1&b=2',
             [false, 'username', false, '', false, '/here.php', false, '?a=1&b=2', false],
-            ['a' => '1', 'b' => '2'],
+            ['a' => '1', 'b' => '2']
         );
     }
 
@@ -343,7 +301,7 @@ class TestOfUrl extends UnitTestCase
         $this->assertEqual($url->getEncodedRequest(), '?foo%5B%5D%3Dbar=');
     }
 
-    public function assertUrl($raw, $parts, $params = false, $coords = false): void
+    public function assertUrl($raw, $parts, $params = false): void
     {
         if (!\is_array($params)) {
             $params = [];
@@ -358,11 +316,6 @@ class TestOfUrl extends UnitTestCase
         $this->assertIdentical($url->getTld(), $parts[6], "[{$raw}] tld -> %s");
         $this->assertIdentical($url->getEncodedRequest(), $parts[7], "[{$raw}] encoded -> %s");
         $this->assertIdentical($url->getFragment(), $parts[8], "[{$raw}] fragment -> %s");
-
-        if ($coords) {
-            $this->assertIdentical($url->getX(), $coords[0], "[{$raw}] x -> %s");
-            $this->assertIdentical($url->getY(), $coords[1], "[{$raw}] y -> %s");
-        }
     }
 
     public function assertPreserved($string): void
@@ -459,18 +412,6 @@ class TestOfAbsoluteUrls extends UnitTestCase
         $this->assertEqual($absolute->getPath(), '/here.html');
         $this->assertEqual($absolute->getUsername(), 'test');
         $this->assertEqual($absolute->getPassword(), 'secret');
-    }
-
-    public function testMakingCoordinateUrlAbsolute(): void
-    {
-        $url = new SimpleUrl('?1,2');
-        $this->assertEqual($url->getPath(), '');
-        $absolute = $url->makeAbsolute('http://host.com/I/am/here/');
-        $this->assertEqual($absolute->getScheme(), 'http');
-        $this->assertEqual($absolute->getHost(), 'host.com');
-        $this->assertEqual($absolute->getPath(), '/I/am/here/');
-        $this->assertEqual($absolute->getX(), 1);
-        $this->assertEqual($absolute->getY(), 2);
     }
 
     public function testMakingAbsoluteAppendedPath(): void
