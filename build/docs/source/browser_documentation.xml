@@ -59,14 +59,14 @@ print $matches[1];
                     <tr><td><code>click($label)</code></td><td>Clicks visible link or button text</td></tr>
                     <tr><td><code>clickLink($label)</code></td><td>Follows a link by label</td></tr>
                     <tr><td><code>clickLinkById($id)</code></td><td>Follows a link by attribute</td></tr>
-                    <tr><td><code>getUrl()</code></td><td>Current URL of page or frame</td></tr>
+                    <tr><td><code>getUrl()</code></td><td>Current URL of page</td></tr>
                     <tr><td><code>getTitle()</code></td><td>Page title</td></tr>
-                    <tr><td><code>getContent()</code></td><td>Raw page or frame</td></tr>
+                    <tr><td><code>getContent()</code></td><td>Raw page</td></tr>
                     <tr><td><code>getContentAsText()</code></td><td>HTML removed except for alt text</td></tr>
                     <tr><td><code>retry()</code></td><td>Repeat the last request</td></tr>
                     <tr><td><code>back()</code></td><td>Use the browser back button</td></tr>
                     <tr><td><code>forward()</code></td><td>Use the browser forward button</td></tr>
-                    <tr><td><code>authenticate($username, $password)</code></td><td>Retry page or frame after a 401 response</td></tr>
+                    <tr><td><code>authenticate($username, $password)</code></td><td>Retry page after a 401 response</td></tr>
                     <tr><td><code>restart($date)</code></td><td>Restarts the browser for a new session</td></tr>
                     <tr><td><code>ageCookies($interval)</code></td><td>Ages the cookies by the specified time</td></tr>
                     <tr><td><code>setCookie($name, $value)</code></td><td>Sets an additional cookie</td></tr>
@@ -116,11 +116,11 @@ print $matches[1];
                 <table><tbody>
                     <tr><td><code>setConnectionTimeout($timeout)</code></td><td>Close the socket on overrun</td></tr>
                     <tr><td><code>getUrl()</code></td><td>Url of most recent page fetched</td></tr>
-                    <tr><td><code>getRequest()</code></td><td>Raw request header of page or frame</td></tr>
-                    <tr><td><code>getHeaders()</code></td><td>Raw response header of page or frame</td></tr>
+                    <tr><td><code>getRequest()</code></td><td>Raw request header of page</td></tr>
+                    <tr><td><code>getHeaders()</code></td><td>Raw response header of page</td></tr>
                     <tr><td><code>getTransportError()</code></td><td>Any socket level errors in the last fetch</td></tr>
-                    <tr><td><code>getResponseCode()</code></td><td>HTTP response of page or frame</td></tr>
-                    <tr><td><code>getMimeType()</code></td><td>Mime type of page or frame</td></tr>
+                    <tr><td><code>getResponseCode()</code></td><td>HTTP response of page </td></tr>
+                    <tr><td><code>getMimeType()</code></td><td>Mime type of page</td></tr>
                     <tr><td><code>getAuthentication()</code></td><td>Authentication type in 401 challenge header</td></tr>
                     <tr><td><code>getRealm()</code></td><td>Authentication realm in 401 challenge header</td></tr>
                     <tr><td><code>getBaseUrl()</code></td><td>Base url only of most recent page fetched</td></tr>
@@ -129,15 +129,9 @@ print $matches[1];
                 </tbody></table>
                 The methods <code>SimpleBrowser::setConnectionTimeout()</code>
                 <code>SimpleBrowser::setMaximumRedirects()</code>,
-                <code>SimpleBrowser::setMaximumNestedFrames()</code>,
                 <code>SimpleBrowser::ignoreCookies()</code> and
                 <code>SimpleBrowser::useCokies()</code> continue to apply
                 to every subsequent request.
-                The other methods are frames aware.
-                This means that if you have an individual frame that is not
-                loading, navigate to it using <code>SimpleBrowser::setFrameFocus()</code>
-                and you can then use <code>SimpleBrowser::getRequest()</code>, etc to
-                see what happened.
             </p>
         </section>
         <section name="unit" title="Complex unit tests with multiple browsers">

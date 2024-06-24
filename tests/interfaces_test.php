@@ -52,9 +52,9 @@ class TestOfSpl extends UnitTestCase
     public function testCanMockAllSplClasses(): void
     {
         static $classesToExclude = [
-            'SplHeap', // the method compare() is missing
-            'FilterIterator', // the method accept() is missing
-            'RecursiveFilterIterator', // the method hasChildren() must contain body
+            'SplHeap', // the method compare() is missing (protected)
+            // 'FilterIterator', // the method accept() is missing
+            // 'RecursiveFilterIterator', // the method hasChildren() must contain body
         ];
 
         foreach (\spl_classes() as $class) {

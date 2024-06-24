@@ -80,7 +80,8 @@ class ParallelRegex
     protected function getCompoundedRegex()
     {
         if (null === $this->regex) {
-            for ($i = 0, $count = count($this->patterns); $i < $count; ++$i) {
+            $counter = count($this->patterns);
+            for ($i = 0; $i < $counter; $i++) {
                 $this->patterns[$i] = '('.str_replace(
                     ['/', '(', ')'],
                     ['\/', '\(', '\)'],
@@ -456,7 +457,7 @@ class SimpleHtmlLexer extends SimpleLexer
     protected function getParsedTags()
     {
         return ['a', 'base', 'title', 'form', 'input', 'button', 'textarea', 'select',
-                'option', 'frameset', 'frame', 'label', ];
+                'option', 'label', ];
     }
 
     /**
@@ -816,11 +817,6 @@ class SimplePhpPageBuilder
 
             return true;
         }
-        if ('frameset' === $name) {
-            $this->acceptFramesetEnd();
-
-            return true;
-        }
         if ($this->hasNamedTagOnOpenTagStack($name)) {
             $tag = array_pop($this->tags[$name]);
             if ($tag->isPrivateContent() && $this->private_content_tag->getTagName() == $name) {
@@ -893,7 +889,8 @@ class SimplePhpPageBuilder
             return;
         }
         foreach (array_keys($this->tags) as $name) {
-            for ($i = 0, $count = count($this->tags[$name]); $i < $count; ++$i) {
+            $counter = count($this->tags[$name]);
+            for ($i = 0; $i < $counter; $i++) {
                 $this->tags[$name][$i]->addTag($tag);
             }
         }
@@ -929,7 +926,7 @@ class SimplePhpPageBuilder
             $this->page->setTitle($tag);
         } elseif ($this->isFormElement($tag->getTagName())) {
             $counter = count($this->open_forms);
-            for ($i = 0; $i < $counter; ++$i) {
+            for ($i = 0; $i < $counter; $i++) {
                 $this->open_forms[$i]->addWidget($tag);
             }
             $this->last_widget = $tag;
@@ -1004,7 +1001,8 @@ class SimplePhpPageBuilder
             $this->complete_forms[] = array_pop($this->open_forms);
         }
         foreach ($this->left_over_labels as $label) {
-            for ($i = 0, $count = count($this->complete_forms); $i < $count; ++$i) {
+            $counter = count($this->complete_forms);
+            for ($i = 0; $i < $counter; $i++) {
                 $this->complete_forms[$i]->attachLabelBySelector(
                     new SelectById($label->getFor()),
                     $label->getText()

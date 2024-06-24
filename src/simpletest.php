@@ -1,8 +1,5 @@
 <?php declare(strict_types=1);
 
-/**
- * Global state for SimpleTest and kicker script in future versions.
- */
 require_once __DIR__ . '/reflection.php';
 
 require_once __DIR__ . '/default_reporter.php';
@@ -14,7 +11,8 @@ require_once __DIR__ . '/../extensions/junit_xml_reporter.php';
 /**
  * Registry and test context.
  *
- * @todo Includes a few global options that I'm slowly getting rid of.
+ * @todo move remaining global options into SimpleConfig
+ * @todo stop instantiating the reporters
  */
 class SimpleTest
 {
@@ -38,7 +36,8 @@ class SimpleTest
      */
     public static function ignore($class): void
     {
-        $registry                                    = self::getRegistry();
+        $registry = self::getRegistry();
+
         $registry['IgnoreList'][\strtolower($class)] = true;
     }
 
@@ -69,40 +68,40 @@ class SimpleTest
 
     /**
      * Puts the object to the global pool of 'preferred' objects
-     * which can be retrieved with SimpleTest :: preferred() method.
+     * which can be retrieved with SimpleTest::preferred() method.
      * Instances of the same class are overwritten.
      *
      * @param object $object Preferred object
-     *
-     * @see preferred()
      */
     public static function prefer($object): void
     {
-        $registry                = self::getRegistry();
+        $registry = self::getRegistry();
+
         $registry['Preferred'][] = $object;
     }
 
     /**
-     * Retrieves 'preferred' objects from global pool. Class filter
-     * can be applied in order to retrieve the object of the specific class.
+     * Retrieves 'preferred' objects from the global pool.
+     * A class filter can be applied to retrieve the object of the specific class.
      *
      * @param array|string $classes allowed classes or interfaces
      *
-     * @return null|array|object
-     *
-     * @see prefer()
+     * @return null|object
      */
     public static function preferred($classes)
     {
         if (!\is_array($classes)) {
             $classes = [$classes];
         }
-        $registry = self::getRegistry();
 
-        for ($i = \count($registry['Preferred']) - 1; $i >= 0; $i--) {
+        $registry                 = self::getRegistry();
+        $preferredObjects         = $registry['Preferred'] ?? [];
+        $reversedPreferredObjects = \array_reverse($preferredObjects);
+
+        foreach ($reversedPreferredObjects as $preferred) {
             foreach ($classes as $class) {
-                if (\is_a($registry['Preferred'][$i], $class)) {
-                    return $registry['Preferred'][$i];
+                if (\is_a($preferred, $class)) {
+                    return $preferred;
                 }
             }
         }
@@ -277,11 +276,7 @@ class SimpleTest
 }
 
 /**
- *    Container for all components for a specific
- *    test run. Makes things like error queues
- *    available to PHP event handlers, and also
- *    gets around some nasty reference issues in
- *    the mocks.
+ * Container for all components for a specific test run.
  */
 class SimpleTestContext
 {
@@ -339,7 +334,7 @@ class SimpleTestContext
     /**
      * Accessor for current reporter.
      *
-     * @return SimpleReporter current reporter
+     * @return SimpleReporter the current reporter
      */
     public function getReporter()
     {
@@ -349,7 +344,7 @@ class SimpleTestContext
     /**
      * Accessor for the Singleton resource.
      *
-     * @param string $resource classname
+     * @param string $resource classname of the resource
      *
      * @return object global resource
      */
@@ -429,7 +424,7 @@ class SimpleStackTrace
     }
 
     /**
-     * Tries to determine if the method call is an assert, etc.
+     * Tries to determine if the method call matches any of the specified prefixes.
      *
      * @param array $frame PHP stack frame
      *
@@ -447,9 +442,10 @@ class SimpleStackTrace
     }
 
     /**
-     * Returns current stack trace.
+     * Captures and returns the current stack trace.
+     * The trace is reversed to have steps line up chronologically.
      *
-     * @return array full trace
+     * @return array The full stack trace
      */
     protected function captureTrace()
     {

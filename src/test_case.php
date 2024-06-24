@@ -25,7 +25,7 @@ if (!\defined('SIMPLE_TEST')) {
 
 /**
  * Basic test case. This is the smallest unit of a test suite.
- * It searches for all methods that start with the the string "test" and runs them.
+ * It searches for all methods that start with the string "test" and runs them.
  * Working test cases extend this class.
  */
 class SimpleTestCase

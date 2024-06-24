@@ -1517,11 +1517,6 @@ class MockGenerator
         $code .= $this->createCodeForMethods($methods);
         $code .= "}\n";
 
-        // TODO Reminder, uncomment to see the code of the generated Mock object.
-        //if($this->mock_class === 'MockDummyInterface') {
-        //    var_dump($code);
-        //}
-
         return $code;
     }
 
@@ -1570,16 +1565,13 @@ class MockGenerator
     protected function extendClassCode($methods)
     {
         $code = '';
-
         if (!empty($this->namespace)) {
             $code .= 'namespace '.$this->namespace.";\n";
         }
-
         $code .= 'class '.$this->mock_class.' extends '.$this->class." {\n";
         $code .= "    protected \$mock;\n";
         $code .= $this->addMethodList($methods);
         $code .= "\n";
-
         $code .= "    function __construct() {\n";
         $code .= '        $this->mock = new \\'.$this->mock_base."();\n";
         $code .= "        \$this->mock->disableExpectationNameChecks();\n";
@@ -1619,6 +1611,8 @@ class MockGenerator
             }
 
             $signature = $this->reflection->getSignature($method);
+            // Guard: silence deprecation notices, when return type is not declared
+            // https://www.php.net/manual/en/class.returntypewillchange.php
             if (PHP_VERSION_ID >= 80100) {
                 $code .= '    #[\ReturnTypeWillChange]' . "\n";
             }
@@ -1698,7 +1692,6 @@ class MockGenerator
      */
     protected function createCodeForisMockedMethod()
     {
-        // private?
         $code =  "    function __isMockedMethod(\$method) {\n";
         $code .= "        if (!in_array(strtolower(\$method), \$this->mocked_methods)) {\n";
         $code .= "            trigger_error(\"Method [\$method] is not mocked\", E_USER_WARNING);\n";
@@ -1718,8 +1711,8 @@ class MockGenerator
     protected function createCodeForConstructor()
     {
         $code = "    function __constructor() {\n";
+        // Guard: Use of "parent" in callables is deprecated since PHP 8.2
         if (PHP_VERSION_ID >= 80200) {
-            // Use of "parent" in callables is deprecated since PHP 8.2
             $code .= "        call_user_func_array('" . $this->class . "::__construct', func_get_args());\n";
         }
         else {
@@ -1869,10 +1862,14 @@ class MockGenerator
             }
 
             $signature = trim(str_replace('abstract', '', $this->reflection->getSignature($method)));
+
+            // Guard: silence deprecation notices, when return type is not declared
+            // https://www.php.net/manual/en/class.returntypewillchange.php
             if (PHP_VERSION_ID >= 80100) {
                 $code .= '    #[\ReturnTypeWillChange]' . "\n";
             }
             $code .= '    '.$signature."\n    {\n";
+            // Guard: a void function must not return a value
             if (PHP_VERSION_ID >= 80200 && strpos($signature, ': void') !== false) {
                 $code .= "        \$this->mock->invoke(\"$method\", func_get_args());\n";
             }

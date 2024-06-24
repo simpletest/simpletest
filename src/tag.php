@@ -29,7 +29,6 @@ class SimpleTagBuilder
             'option'   => 'SimpleOptionTag',
             'label'    => 'SimpleLabelTag',
             'form'     => 'SimpleFormTag',
-            'frame'    => 'SimpleFrameTag',
         ];
 
         $attributes = $this->keysToLowerCase($attributes);
@@ -1740,31 +1739,5 @@ class SimpleFormTag extends SimpleTag
     public function __construct($attributes)
     {
         parent::__construct('form', $attributes);
-    }
-}
-
-/**
- * Tag to aid parsing the frames in a page.
- */
-class SimpleFrameTag extends SimpleTag
-{
-    /**
-     * Starts with a named tag with attributes only.
-     *
-     * @param array $attributes attribute names and string values
-     */
-    public function __construct($attributes)
-    {
-        parent::__construct('frame', $attributes);
-    }
-
-    /**
-     * Tag contains no content.
-     *
-     * @return bool false
-     */
-    public function expectEndTag()
-    {
-        return false;
     }
 }

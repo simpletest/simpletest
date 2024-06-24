@@ -254,7 +254,6 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>restart()</code></td><td>Restarts the browser as if a new session</td></tr>
                     <tr><td><code>getCookie($name)</code></td><td>Gets the cookie value for the current context</td></tr>
                     <tr><td><code>ageCookies($interval)</code></td><td>Ages current cookies prior to a restart</td></tr>
-                    <tr><td><code>clearFrameFocus()</code></td><td>Go back to treating all frames as one page</td></tr>
                     <tr><td><code>clickSubmit($label)</code></td><td>Click the first button with this label</td></tr>
                     <tr><td><code>clickSubmitByName($name)</code></td><td>Click the button with this name attribute</td></tr>
                     <tr><td><code>clickSubmitById($id)</code></td><td>Click the button with this ID attribute</td></tr>
@@ -283,19 +282,6 @@ class TestOfLastcraft extends WebTestCase {
                 back button on your forms.
             </p>
             <p>
-                The frame methods need a little explanation.
-                By default a framed page is treated just like any other.
-                Content will be searced for throughout the entire frameset,
-                so clicking a link will work no matter which frame
-                the anchor tag is in.
-                You can override this behaviour by focusing on a single
-                frame.
-                If you do that, all searches and actions will apply to that
-                frame alone, such as authentication and retries.
-                If a link or button is not in a focused frame then it cannot
-                be clicked.
-            </p>
-            <p>
                 Testing navigation on fixed pages only tells you when you
                 have broken an entire script.
                 For highly dynamic pages, such as for bulletin boards, this can
@@ -318,7 +304,6 @@ class TestOfLastcraft extends WebTestCase {
                     <tr><td><code>showRequest()</code></td><td>Dump the outgoing request</td></tr>
                     <tr><td><code>showHeaders()</code></td><td>Dump the incoming headers</td></tr>
                     <tr><td><code>showSource()</code></td><td>Dump the raw HTML page content</td></tr>
-                    <tr><td><code>ignoreFrames()</code></td><td>Do not load framesets</td></tr>
                     <tr><td><code>setCookie($name, $value)</code></td><td>Set a cookie from now on</td></tr>
                     <tr><td><code>addHeader($header)</code></td><td>Always add this header to the request</td></tr>
                     <tr><td><code>setMaximumRedirects($max)</code></td><td>Stop after this many redirects</td></tr>

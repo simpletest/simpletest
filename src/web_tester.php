@@ -647,15 +647,6 @@ class WebTestCase extends SimpleTestCase
     }
 
     /**
-     * Disables frames support.
-     * Frames will not be fetched and the frameset page will be used instead.
-     */
-    public function ignoreFrames(): void
-    {
-        $this->browser->ignoreFrames();
-    }
-
-    /**
      * Switches off cookie sending and recieving.
      */
     public function ignoreCookies(): void
@@ -1609,7 +1600,7 @@ class WebTestCase extends SimpleTestCase
     }
 
     /**
-     * Issues a fail if there is a transport error anywhere in the current frameset.
+     * Issues a fail if there is a transport error anywhere in the current page.
      * Only one such error is reported.
      *
      * @param bool|string $result HTML or failure

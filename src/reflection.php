@@ -443,8 +443,13 @@ class SimpleReflection
                 $typeHint = (string) $typeHint;
             }
         }
-        // Guard: parameter is array only supported by <PHP8
+        // Guard: parameter->isArray() only supported by <PHP8
+        // https://www.php.net/manual/en/reflectionparameter.isarray.php
         elseif ((PHP_VERSION_ID < 80000) && $parameter->isArray()) {
+            $typeHint = 'array';
+        }
+        // Guard: PHP8.0.0+ use functional replacement for parameter->isArray()
+        elseif ((PHP_VERSION_ID >= 80000) && $this->declaresArray($parameter)) {
             $typeHint = 'array';
         } else {
             $typeHint = '';
@@ -471,5 +476,28 @@ class SimpleReflection
         }
 
         return $typeHint .= ' ';
+    }
+
+    /**
+     * Substitute for deprecated parameter->isArray().
+     * https://www.php.net/manual/en/reflectionparameter.isarray.php.
+     *
+     * @return bool true, if parameter declares an array
+     */
+    protected function declaresArray(ReflectionParameter $reflectionParameter): bool
+    {
+        $reflectionType = $reflectionParameter->getType();
+
+        if (!$reflectionType) {
+            return false;
+        }
+
+        $types = $reflectionType instanceof ReflectionUnionType
+            ? $reflectionType->getTypes()
+            : [$reflectionType];
+
+        $callable = static fn (ReflectionNamedType $t) => $t->getName();
+
+        return \in_array('array', \array_map($callable, $types), true);
     }
 }

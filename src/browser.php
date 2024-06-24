@@ -164,12 +164,6 @@ class SimpleBrowser
     /** @var SimpleBrowserHistory */
     private $history;
 
-    /** @var bool */
-    private $ignore_frames = false;
-
-    /** @var int */
-    private $maximum_nested_frames = 1;
-
     /** @var mixed */
     private $parser;
 
@@ -581,9 +575,9 @@ class SimpleBrowser
     }
 
     /**
-     * Accessor for current URL of page or frame if focused.
+     * Accessor for current URL of page if focused.
      *
-     * @return string location of current page or frame as a string
+     * @return string location of current page as a string
      */
     public function getUrl()
     {
