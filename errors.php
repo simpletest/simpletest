@@ -208,7 +208,6 @@ class SimpleErrorQueue
             E_USER_ERROR      => 'E_USER_ERROR',
             E_USER_WARNING    => 'E_USER_WARNING',
             E_USER_NOTICE     => 'E_USER_NOTICE',
-            E_STRICT          => 'E_STRICT',
             E_ALL             => 'E_ALL'
         );
 

@@ -1199,20 +1199,15 @@ class SimpleMock
     }
 
     /**
-     * Our mock has to be able to return anything, including variable references.
-     * To allow for these mixed returns we have to disable the E_STRICT warnings,
-     * while the method calls are emulated.
+     * Does nothing now.
      */
     private function disableEStrict()
     {
-        $was = error_reporting();
-        error_reporting($was & ~E_STRICT);
-
-        return $was;
+        return error_reporting();
     }
 
     /**
-     * Restores the E_STRICT level if it was previously set.
+     * Does nothing now.
      *
      * @param int $was Previous error reporting level.
      */
