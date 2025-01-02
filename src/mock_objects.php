@@ -1303,7 +1303,9 @@ class SimpleMock
     private function disableEStrict()
     {
         $was = error_reporting();
-        error_reporting($was & ~E_STRICT);
+        if (PHP_VERSION_ID < 80400) {
+            error_reporting($was & ~E_STRICT);
+        }
 
         return $was;
     }

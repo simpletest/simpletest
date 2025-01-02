@@ -213,12 +213,15 @@ class SimpleErrorQueue
             E_USER_ERROR => 'E_USER_ERROR',
             E_USER_WARNING => 'E_USER_WARNING',
             E_USER_NOTICE => 'E_USER_NOTICE',
-            E_STRICT => 'E_STRICT',
             E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',   // PHP 5.2
             E_DEPRECATED => 'E_DEPRECATED',          // PHP 5.3
             E_USER_DEPRECATED => 'E_USER_DEPRECATED',     // PHP 5.3
             E_ALL => 'E_ALL',
         ];
+
+        if (PHP_VERSION_ID < 80400) {
+            $map[E_STRICT] = 'E_STRICT';    // deprecated since PHP 8.4
+        }
 
         return $map[$severity];
     }
