@@ -34,7 +34,7 @@ class TestOfMockInterfaces extends UnitTestCase
         try {
             $mock->anotherMethod();
         } catch (Error $e) {
-            trigger_error($e->getMessage());
+            simpletest_trigger_error($e->getMessage());
         }
     }
 

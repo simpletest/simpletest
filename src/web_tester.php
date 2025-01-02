@@ -716,7 +716,7 @@ class WebTestCase extends SimpleTestCase
     public function setMaximumRedirects($max)
     {
         if (!$this->browser) {
-            trigger_error(
+            simpletest_trigger_error(
                 'Can only set maximum redirects in a test method, setUp() or tearDown()'
             );
         }

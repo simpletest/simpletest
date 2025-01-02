@@ -54,13 +54,13 @@ class RemoteTestCase
         $browser = $this->createBrowser();
         $xml = $browser->get($this->url);
         if (!$xml) {
-            trigger_error('Cannot read remote test URL ['.$this->url.']');
+            simpletest_trigger_error('Cannot read remote test URL ['.$this->url.']');
 
             return false;
         }
         $parser = $this->createParser($reporter);
         if (!$parser->parse($xml)) {
-            trigger_error('Cannot parse incoming XML from ['.$this->url.']');
+            simpletest_trigger_error('Cannot parse incoming XML from ['.$this->url.']');
 
             return false;
         }
@@ -101,14 +101,14 @@ class RemoteTestCase
             $browser = $this->createBrowser();
             $xml = $browser->get($this->dry_url);
             if (!$xml) {
-                trigger_error('Cannot read remote test URL ['.$this->dry_url.']');
+                simpletest_trigger_error('Cannot read remote test URL ['.$this->dry_url.']');
 
                 return false;
             }
             $reporter = new SimpleReporter();
             $parser = $this->createParser($reporter);
             if (!$parser->parse($xml)) {
-                trigger_error('Cannot parse incoming XML from ['.$this->dry_url.']');
+                simpletest_trigger_error('Cannot parse incoming XML from ['.$this->dry_url.']');
 
                 return false;
             }

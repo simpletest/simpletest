@@ -560,7 +560,7 @@ class SimpleTestXmlParser
                 xml_get_current_column_number($this->expat),
                 xml_get_current_byte_index($this->expat)
             );
-            trigger_error($message);
+            simpletest_trigger_error($message);
 
             return false;
         }
