@@ -297,7 +297,7 @@ function SimpleTestErrorHandler($severity, $message, $file = null, $line = null,
  *
  * @throws ErrorException when running under PHP 8.4 or later and $errorLevel is E_USER_ERROR
  */
-function simpletest_trigger_error(string $message, int $errorLevel): void
+function simpletest_trigger_error(string $message, int $errorLevel = E_USER_NOTICE): void
 {
     if (\PHP_VERSION_ID >= 80400 && \E_USER_ERROR === $errorLevel) {
         throw new ErrorException($message, $errorLevel);
